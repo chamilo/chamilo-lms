@@ -76,7 +76,6 @@ function import_exercise($file)
     }
 
     $uploadPath = '/';
-
     // set some default values for the new exercise
     $exercise_info = array();
     $exercise_info['name'] = preg_replace('/.zip$/i', '', $file);
@@ -85,10 +84,8 @@ function import_exercise($file)
 
     // create parser and array to retrieve info from manifest
     $element_pile = array(); //pile to known the depth in which we are
-    //$module_info = array (); //array to store the info we need
 
     // if file is not a .zip, then we cancel all
-
     if (!preg_match('/.zip$/i', $file)) {
         return 'UplZipCorrupt';
     }
@@ -100,9 +97,7 @@ function import_exercise($file)
 
     // find the different manifests for each question and parse them.
     $exerciseHandle = opendir($baseWorkDir);
-    //$question_number = 0;
     $file_found = false;
-    $operation = false;
     $result = false;
     $filePath = null;
     $resourcesLinks = array();
@@ -161,7 +156,7 @@ function import_exercise($file)
     $exercise = new Exercise();
     $exercise->exercise = $exercise_info['name'];
     if (!empty($exercise_info['description'])) {
-        $exercise->updateDescription($exercise_info['description']);
+        $exercise->updateDescription(formatText(strip_tags($exercise_info['description'])));
     }
 
     $exercise->save();
@@ -602,14 +597,14 @@ function elementDataQti2($parser, $data)
 
     switch ($current_element) {
         case 'SIMPLECHOICE':
-            if (!isset ($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'])) {
+            if (!isset($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'])) {
                 $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'] = trim($data);
             } else {
                 $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'] .= ''.trim($data);
             }
             break;
         case 'FEEDBACKINLINE':
-            if (!isset ($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['feedback'])) {
+            if (!isset($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['feedback'])) {
                 $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['feedback'] = trim($data);
             } else {
                 $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['feedback'] .= ' '.trim($data);

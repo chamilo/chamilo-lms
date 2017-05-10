@@ -160,6 +160,15 @@ function import_exercise($file)
     // 1. Create exercise.
     $exercise = new Exercise();
     $exercise->exercise = $exercise_info['name'];
+
+    // Random QTI support
+    if (isset($exercise_info['order_type'])) {
+        if ($exercise_info['order_type'] == 'Random') {
+            $exercise->setQuestionSelectionType(2);
+            $exercise->random = -1;
+        }
+    }
+
     if (!empty($exercise_info['description'])) {
         $exercise->updateDescription(formatText(strip_tags($exercise_info['description'])));
     }
@@ -501,6 +510,11 @@ function startElementQti2($parser, $name, $attributes)
             break;
         case 'IMG':
             $exercise_info['question'][$current_question_ident]['attached_file_url'] = $attributes['SRC'];
+            break;
+        case 'ORDER':
+            if (isset($attributes['ORDER_TYPE'])) {
+                $exercise_info['order_type'] = $attributes['ORDER_TYPE'];
+            }
             break;
     }
 }

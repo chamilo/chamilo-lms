@@ -2,13 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	FILE UPLOAD LIBRARY
+ * FILE UPLOAD LIBRARY
  *
- *	This is the file upload library for Chamilo.
- *	Include/require it in your code to use its functionality.
+ * This is the file upload library for Chamilo.
+ * Include/require it in your code to use its functionality.
  *
- *	@package chamilo.library
- *	@todo test and reorganise
+ * @package chamilo.library
+ * @todo test and reorganise
  */
 
 /**
@@ -267,7 +267,8 @@ function handle_uploaded_document(
             $maxSpace,
             $sessionId,
             $groupId,
-            $output
+            $output,
+            $onlyUploadFile
         );
     } elseif ($unzip == 1 && !preg_match('/.zip$/', strtolower($uploadedFile['name']))) {
         // We can only unzip ZIP files (no gz, tar,...)
@@ -1036,14 +1037,15 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
  * @param array  $courseInfo
  * @param array  $userInfo
  * @param array  $uploaded_file - follows the $_FILES Structure
- * @param string $upload_path   - destination of the upload.
+ * @param string $uploadPath   - destination of the upload.
  *                               This path is to append to $base_work_dir
  * @param string $base_work_dir  - base working directory of the module
  * @param int    $maxFilledSpace  - amount of bytes to not exceed in the base
  *                                working directory
  * @param int $sessionId
  * @param int $groupId group.id
- * @param boolean $output Optional. If no output not wanted on success, set to false.
+ * @param bool $output Optional. If no output not wanted on success, set to false.
+ * @param bool $onlyUploadFile
  *
  * @return boolean true if it succeeds false otherwise
  */
@@ -1056,7 +1058,8 @@ function unzip_uploaded_document(
     $maxFilledSpace,
     $sessionId = 0,
     $groupId = 0,
-    $output = true
+    $output = true,
+    $onlyUploadFile = false
 ) {
     $zip = new PclZip($uploaded_file['tmp_name']);
 
@@ -1087,17 +1090,23 @@ function unzip_uploaded_document(
         PCLZIP_OPT_REPLACE_NEWER
     );
 
-    // Add all documents in the unzipped folder to the database
-    add_all_documents_in_folder_to_database(
-        $courseInfo,
-        $userInfo,
-        $base_work_dir,
-        $destinationDir,
-        $sessionId,
-        $groupId,
-        $output,
-        array('path' => $uploadPath)
-    );
+    if ($onlyUploadFile === false) {
+        // Add all documents in the unzipped folder to the database
+        add_all_documents_in_folder_to_database(
+            $courseInfo,
+            $userInfo,
+            $base_work_dir,
+            $destinationDir,
+            $sessionId,
+            $groupId,
+            $output,
+            array('path' => $uploadPath)
+        );
+    } else {
+        // Copy result
+        $fs = new \Symfony\Component\Filesystem\Filesystem();
+        $fs->mirror($destinationDir, $base_work_dir.$uploadPath, null, ['overwrite']);
+    }
 
     if (is_dir($destinationDir)) {
         rmdirr($destinationDir);

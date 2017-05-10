@@ -43,7 +43,7 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
             1,
             null,
             null,
-            null,
+            true,
             null,
             null,
             false
@@ -69,13 +69,18 @@ function import_exercise($file)
     global $questionTempDir;
     global $resourcesLinks;
 
-    $baseWorkDir = api_get_path(SYS_ARCHIVE_PATH).'qti2';
+    $baseWorkDir = api_get_path(SYS_ARCHIVE_PATH).'qti2/';
 
     if (!is_dir($baseWorkDir)) {
         mkdir($baseWorkDir, api_get_permissions_for_new_directories(), true);
     }
 
-    $uploadPath = '/';
+    $uploadPath = api_get_unique_id().'/';
+
+    if (!is_dir($baseWorkDir.$uploadPath)) {
+        mkdir($baseWorkDir.$uploadPath, api_get_permissions_for_new_directories(), true);
+    }
+
     // set some default values for the new exercise
     $exercise_info = array();
     $exercise_info['name'] = preg_replace('/.zip$/i', '', $file);

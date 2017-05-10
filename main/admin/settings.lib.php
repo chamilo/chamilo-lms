@@ -1374,7 +1374,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         'textarea',
                         $row['variable'],
                         array(get_lang($row['title']), get_lang($row['comment'])),
-                        array('rows'=>'10', 'id' => $row['variable']),
+                        array('rows' => '10', 'id' => $row['variable']),
                         $hideme
                     );
                     $default_values[$row['variable']] = $value;
@@ -1388,7 +1388,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         'textarea',
                         $row['variable'],
                         array(get_lang($row['title']), get_lang($row['comment'])),
-                        array('rows'=>'10', 'id' => $row['variable']),
+                        array('rows' => '10', 'id' => $row['variable']),
                         $hideme
                     );
                     $default_values[$row['variable']] = $value;
@@ -1398,7 +1398,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         $row['variable'],
                         array(get_lang($row['title']),
                         get_lang($row['comment'])),
-                        array('rows'=>'10', 'id' => $row['variable']),
+                        array('rows' => '10', 'id' => $row['variable']),
                         $hideme
                     );
                     $default_values[$row['variable']] = $row['selected_value'];

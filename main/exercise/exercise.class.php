@@ -3676,19 +3676,14 @@ class Exercise
                         if (!$switchableAnswerSet) {
                             // not switchable answer, must be in the same place than teacher order
                             for ($i = 0; $i < count($listCorrectAnswers['tabwords']); $i++) {
-                                $studentAnswer = isset($choice[$i]) ? trim($choice[$i]) : '';
+                                $studentAnswer = isset($choice[$i]) ? $choice[$i] : '';
                                 $correctAnswer = $listCorrectAnswers['tabwords'][$i];
 
                                 // This value is the user input, not escaped while correct answer is escaped by fckeditor
                                 // Works with cyrillic alphabet and when using ">" chars see #7718 #7610 #7618
                                 // ENT_QUOTES is used in order to transform ' to &#039;
                                 if (!$from_database) {
-                                    $studentAnswer = htmlentities(
-                                        api_utf8_encode($studentAnswer),
-                                        ENT_QUOTES
-                                    );
-                                    // fix apostrophe
-                                    $studentAnswer = str_replace('&#039;', '&#39;', $studentAnswer);
+                                    $studentAnswer = FillBlanks::clearStudentAnswer($studentAnswer);
                                 }
 
                                 $isAnswerCorrect = 0;

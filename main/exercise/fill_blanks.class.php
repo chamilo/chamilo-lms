@@ -1322,4 +1322,18 @@ class FillBlanks extends Question
 
         return $isCorrect;
     }
+
+    /**
+     * Clear the answer entered by student
+     * @param string $answer
+     * @return string
+     */
+    public static function clearStudentAnswer($answer)
+    {
+        $answer = htmlentities(api_utf8_encode($answer), ENT_QUOTES);
+        $answer = str_replace('&#039;', '&#39;', $answer); // fix apostrophe
+        $answer = api_preg_replace('/\s\s+/', ' ', $answer); // replace excess white spaces
+
+        return trim($answer);
+    }
 }

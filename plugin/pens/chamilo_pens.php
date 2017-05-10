@@ -112,7 +112,6 @@ class ChamiloPens extends Plugin
     /**
      * Constructor. Takes a PENSRequest as an argument
      * @param object $request Request
-     * @return ChamiloPens
      */
     public function __construct($request)
     {

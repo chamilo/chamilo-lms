@@ -24,8 +24,8 @@ $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 $tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
-$isStudentView = (int)$_REQUEST['isStudentView'];
-$learnpath_id = (int)$_REQUEST['lp_id'];
+$isStudentView = (int) $_REQUEST['isStudentView'];
+$learnpath_id = (int) $_REQUEST['lp_id'];
 $submit = $_POST['submit_button'];
 
 /* MAIN CODE */
@@ -65,8 +65,8 @@ if (!empty($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array (
-        'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
+    $interbreadcrumb[] = array(
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
     );
 }
@@ -74,7 +74,7 @@ $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => g
 $interbreadcrumb[] = array('url' => '#', "name" => $therow['name']);
 
 // Theme calls.
-$lp_theme_css=$_SESSION['oLP']->get_theme();
+$lp_theme_css = $_SESSION['oLP']->get_theme();
 $show_learn_path = true;
 Display::display_header('', 'Path');
 $suredel = trim(get_lang('AreYouSureToDeleteJS'));
@@ -143,15 +143,15 @@ echo '</div>';
 
 function show_block($link, $title, $subtitle, $icon) {
     $html = '<li class="col-md-4">';
-    $html .=  '<div class="thumbnail">';
-    $html .=  '<a href="'.$link.'" title="'.$title.'">';
-    $html .=  Display::return_icon($icon, $title, array(), ICON_SIZE_BIG);
-    $html .=  '</a>';
-    $html .=  '<div class="caption">';
-    $html .=  '<strong>'.$title.'</strong></a> '.$subtitle;
-    $html .=  '</div>';
-    $html .=  '</div>';
-    $html .=  '</li>';
+    $html .= '<div class="thumbnail">';
+    $html .= '<a href="'.$link.'" title="'.$title.'">';
+    $html .= Display::return_icon($icon, $title, array(), ICON_SIZE_BIG);
+    $html .= '</a>';
+    $html .= '<div class="caption">';
+    $html .= '<strong>'.$title.'</strong></a> '.$subtitle;
+    $html .= '</div>';
+    $html .= '</div>';
+    $html .= '</li>';
     return $html;
 }
 

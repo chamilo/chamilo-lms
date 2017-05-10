@@ -114,7 +114,7 @@ abstract class ImageWrapper
             return false;
         }
         $this->path = $path;
-        $this->set_image_wrapper();  //Creates image obj
+        $this->set_image_wrapper(); //Creates image obj
     }
 
     abstract function set_image_wrapper();
@@ -156,7 +156,7 @@ class ImagickWrapper extends ImageWrapper
         if ($this->debug) error_log('Image::set_image_wrapper loaded');
         try {
             if (file_exists($this->path)) {
-                $this->image     = new Imagick($this->path);
+                $this->image = new Imagick($this->path);
 
                 if ($this->image) {
                     $this->fill_image_info(); //Fills height, width and type
@@ -164,7 +164,7 @@ class ImagickWrapper extends ImageWrapper
             } else {
                 if ($this->debug) error_log('Image::image does not exist');
             }
-        } catch(ImagickException $e) {
+        } catch (ImagickException $e) {
             if ($this->debug) error_log($e->getMessage());
         }
     }
@@ -185,7 +185,7 @@ class ImagickWrapper extends ImageWrapper
 
 	public function get_image_size()
     {
-		$imagesize = array('width'=>0,'height'=>0);
+		$imagesize = array('width'=>0, 'height'=>0);
 	    if ($this->image_validated) {
             $imagesize = $this->image->getImageGeometry();
 	    }
@@ -202,8 +202,8 @@ class ImagickWrapper extends ImageWrapper
             $height = $thumbh;
         } else {
             $scale  = ($this->width > 0 && $this->height > 0) ? min($thumbw / $this->width, $thumbh / $this->height) : 0;
-            $width  = (int)($this->width * $scale);
-            $height = (int)($this->height * $scale);
+            $width  = (int) ($this->width * $scale);
+            $height = (int) ($this->height * $scale);
         }
 		$result = $this->image->resizeImage($width, $height, $this->filter, 1);
 		$this->width  = $thumbw;
@@ -249,7 +249,7 @@ class ImagickWrapper extends ImageWrapper
 		$result = false;
 		try {
 		    $result = $this->image->writeImage($file);
-		} catch(ImagickException $e) {
+		} catch (ImagickException $e) {
             if ($this->debug) error_log($e->getMessage());
         }
 
@@ -310,9 +310,9 @@ class GDWrapper extends ImageWrapper
 
     public function get_image_size()
     {
-        $return_array = array('width'=>0,'height'=>0);
+        $return_array = array('width'=>0, 'height'=>0);
         if ($this->image_validated) {
-	        $return_array = array('width'=>$this->width,'height'=>$this->height);
+	        $return_array = array('width'=>$this->width, 'height'=>$this->height);
         }
         return $return_array;
 	}
@@ -320,7 +320,7 @@ class GDWrapper extends ImageWrapper
     public function fill_image_info()
     {
     	if (file_exists($this->path)) {
-	        $image_info     = getimagesize($this->path);
+	        $image_info = getimagesize($this->path);
 			$this->width    = $image_info[0];
 			$this->height   = $image_info[1];
 			$this->type     = $image_info[2];
@@ -340,11 +340,11 @@ class GDWrapper extends ImageWrapper
                 $height = $thumbh;
             } else {
                 $scale = min($thumbw / $this->width, $thumbh / $this->height);
-                $width = (int)($this->width * $scale);
-                $height = (int)($this->height * $scale);
+                $width = (int) ($this->width * $scale);
+                $height = (int) ($this->height * $scale);
             }
-			$deltaw = (int)(($thumbw - $width) / 2);
-			$deltah = (int)(($thumbh - $height) / 2);
+			$deltaw = (int) (($thumbw - $width) / 2);
+			$deltah = (int) (($thumbh - $height) / 2);
 			$dst_img = @ImageCreateTrueColor($thumbw, $thumbh);
             		@imagealphablending($dst_img, false);
 		        @imagesavealpha($dst_img, true);
@@ -359,8 +359,8 @@ class GDWrapper extends ImageWrapper
                 $height = $thumbh;
             } else {
                 $scale = ($this->width > 0 && $this->height > 0) ? min($thumbw / $this->width, $thumbh / $this->height) : 0;
-                $width  = (int)($this->width * $scale);
-                $height = (int)($this->height * $scale);
+                $width  = (int) ($this->width * $scale);
+                $height = (int) ($this->height * $scale);
             }
 			$deltaw = 0;
 			$deltah = 0;
@@ -419,7 +419,7 @@ class GDWrapper extends ImageWrapper
 	public function send_image($file = '', $compress = -1, $convert_file_to = null)
     {
 	    if (!$this->image_validated) return false;
-        $compress = (int)$compress;
+        $compress = (int) $compress;
         $type = $this->type;
         if (!empty($convert_file_to) && in_array($convert_file_to, $this->allowed_extensions)) {
             $type = $convert_file_to;
@@ -464,11 +464,11 @@ class GDWrapper extends ImageWrapper
          * so that we can use black (0,0,0) as transparent, which is what
          * the image is filled with when created.
          */
-        $transparent = imagecolorallocate($dest_img, 0,0,0);
+        $transparent = imagecolorallocate($dest_img, 0, 0, 0);
         imagealphablending($dest_img, false);
         imagesavealpha($dest_img, true);
         imagecolortransparent($dest_img, $transparent);
-        imagecopy($dest_img, $this->bg, 0,0, 0, 0,imagesx($this->bg), imagesx($this->bg));
+        imagecopy($dest_img, $this->bg, 0, 0, 0, 0, imagesx($this->bg), imagesx($this->bg));
         imagefilter($dest_img, IMG_FILTER_GRAYSCALE);
         $this->bg = $dest_img;
 

@@ -4,13 +4,13 @@
 use ChamiloSession as Session;
 
 /**
- *	Class MultipleAnswer
+ * Class MultipleAnswer
  *
- *	This class allows to instantiate an object of type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER),
- *	extending the class question
+ * This class allows to instantiate an object of type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER),
+ * extending the class question
  *
- *	@author Eric Marguin
- *	@package chamilo.exercise
+ * @author Eric Marguin
+ * @package chamilo.exercise
  **/
 class MultipleAnswer extends Question
 {
@@ -80,7 +80,6 @@ class MultipleAnswer extends Question
 
         for ($i = 1; $i <= $nb_answers; ++$i) {
             $form->addHtml('<tr>');
-
             if (is_object($answer)) {
                 $defaults['answer[' . $i . ']'] = $answer->answer[$i];
                 $defaults['comment[' . $i . ']'] = $answer->comment[$i];
@@ -182,12 +181,11 @@ class MultipleAnswer extends Question
         $form->setConstants(array('nb_answers' => $nb_answers));
     }
 
-
-	/**
-	 * abstract function which creates the form to create / edit the answers of the question
-	 * @param the formvalidator instance
-	 * @param the answers number to display
-	 */
+    /**
+     * abstract function which creates the form to create / edit the answers of the question
+     * @param the formvalidator instance
+     * @param the answers number to display
+     */
 	function processAnswersCreation($form)
     {
         $questionWeighting = $nbrGoodAnswers = 0;
@@ -226,18 +224,16 @@ class MultipleAnswer extends Question
         $this->save();
 	}
 
-	function return_header($feedback_type = null, $counter = null, $score = null)
+    function return_header($feedback_type = null, $counter = null, $score = null)
     {
-	    $header = parent::return_header($feedback_type, $counter, $score);
-	    $header .= '<table class="'.$this->question_table_class .'">
-			<tr>
-				<th>'.get_lang("Choice").'</th>
-				<th>'. get_lang("ExpectedChoice").'</th>
-				<th>'. get_lang("Answer").'</th>';
+        $header = parent::return_header($feedback_type, $counter, $score);
+        $header .= '<table class="'.$this->question_table_class .'">
+            <tr>
+                <th>'.get_lang("Choice").'</th>
+                <th>'. get_lang("ExpectedChoice").'</th>
+                <th>'. get_lang("Answer").'</th>';
         $header .= '<th>'.get_lang("Comment").'</th>';
         $header .= '</tr>';
         return $header;
-	}
-
-
+    }
 }

@@ -117,7 +117,7 @@ if (empty($choice_value)) {
 }
 
 $choice = array();
-$questionid= $questionList[$questionNum];
+$questionid = $questionList[$questionNum];
 // $choice_value => value of the user selection
 $choice[$questionid] = isset($choice_value) ? $choice_value : null;
 
@@ -193,9 +193,9 @@ if (!empty($choice_value)) {
         $numAnswer = $objAnswerTmp->selectAutoId($answerId);
 
         //delineation
-        $delineation_cord  = $objAnswerTmp->selectHotspotCoordinates(1);
+        $delineation_cord = $objAnswerTmp->selectHotspotCoordinates(1);
         $answer_delineation_destination = $objAnswerTmp->selectDestination(1);
-        if ($dbg_local>0) { error_log(__LINE__.' answerId: '.$answerId.'('.$answerType.') - user delineation_cord: '.$delineation_cord.' - $answer_delineation_destination: '.$answer_delineation_destination,0);}
+        if ($dbg_local > 0) { error_log(__LINE__.' answerId: '.$answerId.'('.$answerType.') - user delineation_cord: '.$delineation_cord.' - $answer_delineation_destination: '.$answer_delineation_destination, 0); }
 
         switch ($answerType) {
             // for unique answer
@@ -230,7 +230,7 @@ if (!empty($choice_value)) {
             }
         } elseif ($answerType == HOT_SPOT_DELINEATION) {
             if ($next) {
-                if ($dbg_local>0) { error_log(__LINE__.' - next',0);}
+                if ($dbg_local > 0) { error_log(__LINE__.' - next', 0); }
                 $hot_spot_load = true; //apparently the script is called twice
                 $user_answer = $user_array;
                 $_SESSION['exerciseResultCoordinates'][$questionid] = $user_answer; //needed for exercise_result.php
@@ -265,7 +265,7 @@ if (!empty($choice_value)) {
                 }
 
                 //$overlap = round(polygons_overlap($poly_answer,$poly_user)); //this is an area in pixels
-                if ($dbg_local>0) { error_log(__LINE__.' - Polygons results are '.print_r($poly_results,1),0);}
+                if ($dbg_local > 0) { error_log(__LINE__.' - Polygons results are '.print_r($poly_results, 1), 0); }
                 if ($overlap < 1) {
                     //shortcut to avoid complicated calculations
                     $final_overlap = 0;
@@ -273,14 +273,14 @@ if (!empty($choice_value)) {
                     $final_excess  = 100;
                 } else {
                     // the final overlap is the percentage of the initial polygon that is overlapped by the user's polygon
-                    $final_overlap = round(((float)$overlap / (float)$poly_answer_area)*100);
-                    if ($dbg_local>1) { error_log(__LINE__.' - Final overlap is '.$final_overlap,0);}
+                    $final_overlap = round(((float) $overlap / (float) $poly_answer_area) * 100);
+                    if ($dbg_local > 1) { error_log(__LINE__.' - Final overlap is '.$final_overlap, 0); }
                     // the final missing area is the percentage of the initial polygon that is not overlapped by the user's polygon
                     $final_missing = 100 - $final_overlap;
-                    if ($dbg_local>1) { error_log(__LINE__.' - Final missing is '.$final_missing,0);}
+                    if ($dbg_local > 1) { error_log(__LINE__.' - Final missing is '.$final_missing, 0); }
                     // the final excess area is the percentage of the initial polygon's size that is covered by the user's polygon outside of the initial polygon
-                    $final_excess = round((((float)$poly_user_area-(float)$overlap)/(float)$poly_answer_area)*100);
-                    if ($dbg_local>1) { error_log(__LINE__.' - Final excess is '.$final_excess,0);}
+                    $final_excess = round((((float) $poly_user_area - (float) $overlap) / (float) $poly_answer_area) * 100);
+                    if ($dbg_local > 1) { error_log(__LINE__.' - Final excess is '.$final_excess, 0); }
                 }
 
                 $destination_items = explode('@@', $answerDestination);
@@ -288,10 +288,10 @@ if (!empty($choice_value)) {
                 $threadhold_items = explode(';', $threadhold_total);
                 $threadhold1 = $threadhold_items[0]; // overlap
                 $threadhold2 = $threadhold_items[1]; // excess
-                $threadhold3 = $threadhold_items[2];     //missing
+                $threadhold3 = $threadhold_items[2]; //missing
 
                 // if is delineation
-                if ($answerId===1) {
+                if ($answerId === 1) {
                     //setting colors
                     if ($final_overlap >= $threadhold1) {
                         $overlap_color = true; //echo 'a';
@@ -307,11 +307,11 @@ if (!empty($choice_value)) {
 
                     // if pass
                     //if ($final_overlap>=$threadhold1 && $final_missing<=$threadhold2 && $final_excess<=$threadhold3) {
-                    if ($final_overlap>=$threadhold1 && $final_missing<=$threadhold3 && $final_excess<=$threadhold2) {
-                        $next=1; //go to the oars
-                        $result_comment=get_lang('Acceptable');
+                    if ($final_overlap >= $threadhold1 && $final_missing <= $threadhold3 && $final_excess <= $threadhold2) {
+                        $next = 1; //go to the oars
+                        $result_comment = get_lang('Acceptable');
                     } else {
-                        $next=1; //Go to the oars. If $next =  0 we will show this message: "One (or more) area at risk has been hit" instead of the table resume with the results
+                        $next = 1; //Go to the oars. If $next =  0 we will show this message: "One (or more) area at risk has been hit" instead of the table resume with the results
                         $wrong_results = true;
                         $result_comment = get_lang('Unacceptable');
                         $special_comment = $comment = $answerDestination = $objAnswerTmp->selectComment(1);
@@ -324,12 +324,12 @@ if (!empty($choice_value)) {
                     }
                 } elseif ($answerId > 1) {
                     if ($objAnswerTmp->selectHotspotType($answerId) == 'noerror') {
-                        if ($dbg_local>0) { error_log(__LINE__.' - answerId is of type noerror',0);}
+                        if ($dbg_local > 0) { error_log(__LINE__.' - answerId is of type noerror', 0); }
                         //type no error shouldn't be treated
                         $next = 1;
                         continue;
                     }
-                    if ($dbg_local>0) { error_log(__LINE__.' - answerId is >1 so we\'re probably in OAR',0);}
+                    if ($dbg_local > 0) { error_log(__LINE__.' - answerId is >1 so we\'re probably in OAR', 0); }
                     //check the intersection between the oar and the user
                     //echo 'user';	print_r($x_user_list);		print_r($y_user_list);
                     //echo 'official';print_r($x_list);print_r($y_list);
@@ -353,7 +353,7 @@ if (!empty($choice_value)) {
                             $poly_user,
                             $max_coord,
                             $test
-                        );//$poly_user is already set when answerid = 1
+                        ); //$poly_user is already set when answerid = 1
                         $poly_answer_compiled = poly_compile(
                             $poly_answer,
                             $max_coord,
@@ -395,7 +395,7 @@ if (!empty($choice_value)) {
                 }
             } else {
                 // the first delineation feedback
-                if ($dbg_local>0) { error_log(__LINE__.' first',0);}
+                if ($dbg_local > 0) { error_log(__LINE__.' first', 0); }
             }
         }
     }
@@ -440,18 +440,18 @@ if (!empty($choice_value)) {
 	<tr class="row_even">
 		<td><b>'.get_lang('Overlap').'</b></td>
 		<td>'.get_lang('Min').' '.$threadhold1.'</td>
-		<td><div style="color:'.$overlap_color.'">'.(($final_overlap < 0)?0:intval($final_overlap)).'</div></td>
+		<td><div style="color:'.$overlap_color.'">'.(($final_overlap < 0) ? 0 : intval($final_overlap)).'</div></td>
 	</tr>
 	<tr>
 		<td><b>'.get_lang('Excess').'</b></td>
 		<td>'.get_lang('Max').' '.$threadhold2.'</td>
-		<td><div style="color:'.$excess_color.'">'.(($final_excess < 0)?0:intval($final_excess)).'</div></td>
+		<td><div style="color:'.$excess_color.'">'.(($final_excess < 0) ? 0 : intval($final_excess)).'</div></td>
 	</tr>
 
 	<tr class="row_even">
 		<td><b>'.get_lang('Missing').'</b></td>
 		<td>'.get_lang('Max').' '.$threadhold3.'</td>
-		<td><div style="color:'.$missing_color.'">'.(($final_missing < 0)?0:intval($final_missing)).'</div></td>
+		<td><div style="color:'.$missing_color.'">'.(($final_missing < 0) ? 0 : intval($final_missing)).'</div></td>
 	</tr>
 	</table>';
 }
@@ -499,7 +499,7 @@ if ($answerType != HOT_SPOT_DELINEATION) {
 }
 
 // the link to retry the question
-if (isset($try) && $try==1) {
+if (isset($try) && $try == 1) {
     $num_value_array = array_keys($questionList, $questionid);
     $links .= Display:: return_icon(
         'reload.gif',
@@ -510,7 +510,7 @@ if (isset($try) && $try==1) {
 
 // the link to theory (a learning path)
 if (!empty($lp)) {
-	$lp_url= api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp;
+	$lp_url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp;
 	$list = new LearnpathList(api_get_user_id());
 	$flat_list = $list->get_flat_list();
     $links .= Display:: return_icon(
@@ -539,10 +539,10 @@ if ($destinationid == -1) {
         ).'<a onclick="SendEx(-1);" href="#">'.get_lang('EndActivity').'</a><br /><br />';
 } else {
 	// the link to other question
-	if (in_array($destinationid,$questionList)) {
+	if (in_array($destinationid, $questionList)) {
 		$objQuestionTmp = Question :: read($destinationid);
-		$questionName=$objQuestionTmp->selectTitle();
-		$num_value_array= (array_keys($questionList, $destinationid));
+		$questionName = $objQuestionTmp->selectTitle();
+		$num_value_array = (array_keys($questionList, $destinationid));
         $links .= Display:: return_icon(
                 'quiz.png',
                 '',
@@ -570,15 +570,15 @@ if ($links != '') {
 		if ($organs_at_risk_hit > 0) {
 			//$message='<p>'.get_lang('YourDelineation').'</p>';
 			//$message.=$table_resume;
-			$message.='<br />'.get_lang('ResultIs').' <b>'.get_lang('Unacceptable').'</b><br />';
+			$message .= '<br />'.get_lang('ResultIs').' <b>'.get_lang('Unacceptable').'</b><br />';
 			//if ($wrong_results) { }
-			$message.='<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
-			$message.='<p>'.$comment.'</p>';
+			$message .= '<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
+			$message .= '<p>'.$comment.'</p>';
 		} else {
-			$message='<p>'.get_lang('YourDelineation').'</p>';
-			$message.=$table_resume;
-			$message.='<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
-			$message.='<p>'.$comment.'</p>';
+			$message = '<p>'.get_lang('YourDelineation').'</p>';
+			$message .= $table_resume;
+			$message .= '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
+			$message .= '<p>'.$comment.'</p>';
 		}
 		echo $message;
 	} else {

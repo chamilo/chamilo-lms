@@ -2,13 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	@package chamilo.survey
- * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
- * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
- *	@author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code
- * 	@version $Id: survey_list.php 21933 2009-07-09 06:08:22Z ivantcholakov $
+ * @package chamilo.survey
+ * @author unknown, the initial survey that did not make it in 1.8 because of bad code
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
+ * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code
+ * @version $Id: survey_list.php 21933 2009-07-09 06:08:22Z ivantcholakov $
  *
- * 	@todo use quickforms for the forms
+ * @todo use quickforms for the forms
  */
 if (!isset($_GET['cidReq'])) {
     $_GET['cidReq'] = 'none'; // Prevent sql errors

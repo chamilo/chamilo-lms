@@ -78,15 +78,18 @@ class Agenda
                 $groupId = api_get_group_id();
                 if (!empty($groupId)) {
                     $groupInfo = GroupManager::get_group_properties($groupId);
-                    $isGroupAccess = GroupManager::user_has_access(
-                            api_get_user_id(),
-                            $groupInfo['iid'],
-                            GroupManager::GROUP_TOOL_CALENDAR
-                        ) &&
-                        GroupManager::is_tutor_of_group(
-                            api_get_user_id(),
-                            $groupInfo
-                        );
+
+                    $userHasAccess = GroupManager::user_has_access(
+                        api_get_user_id(),
+                        $groupInfo['iid'],
+                        GroupManager::GROUP_TOOL_CALENDAR
+                    );
+                    $isTutor = GroupManager::is_tutor_of_group(
+                        api_get_user_id(),
+                        $groupInfo
+                    );
+
+                    $isGroupAccess = $userHasAccess || $isTutor;
                     if ($isGroupAccess) {
                         $isAllowToEdit = true;
                     } else {
@@ -264,19 +267,15 @@ class Agenda
                     Database::query($sql);
 
                     $groupId = api_get_group_id();
-                    $groupIid = 0;
+                    $groupInfo = [];
                     if ($groupId) {
                         $groupInfo = GroupManager::get_group_properties(
                             $groupId
                         );
-                        if ($groupInfo) {
-                            $groupIid = $groupInfo['iid'];
-                        }
                     }
 
                     if (!empty($usersToSend)) {
                         $sendTo = $this->parseSendToArray($usersToSend);
-
                         if ($sendTo['everyone']) {
                             api_item_property_update(
                                 $this->course,
@@ -284,7 +283,7 @@ class Agenda
                                 $id,
                                 'AgendaAdded',
                                 $senderId,
-                                $groupIid,
+                                $groupInfo,
                                 '',
                                 $start,
                                 $end,
@@ -296,7 +295,7 @@ class Agenda
                                 $id,
                                 'visible',
                                 $senderId,
-                                $groupIid,
+                                $groupInfo,
                                 '',
                                 $start,
                                 $end,
@@ -306,13 +305,13 @@ class Agenda
                             // Storing the selected groups
                             if (!empty($sendTo['groups'])) {
                                 foreach ($sendTo['groups'] as $group) {
-                                    $groupIidItem = 0;
+                                    $groupInfoItem = [];
                                     if ($group) {
-                                        $groupInfo = GroupManager::get_group_properties(
+                                        $groupInfoItem = GroupManager::get_group_properties(
                                             $group
                                         );
-                                        if ($groupInfo) {
-                                            $groupIidItem = $groupInfo['iid'];
+                                        if ($groupInfoItem) {
+                                            $groupIidItem = $groupInfoItem['iid'];
                                         }
                                     }
 
@@ -322,7 +321,7 @@ class Agenda
                                         $id,
                                         'AgendaAdded',
                                         $senderId,
-                                        $groupIidItem,
+                                        $groupInfoItem,
                                         0,
                                         $start,
                                         $end,
@@ -335,7 +334,7 @@ class Agenda
                                         $id,
                                         'visible',
                                         $senderId,
-                                        $groupIidItem,
+                                        $groupInfoItem,
                                         0,
                                         $start,
                                         $end,
@@ -353,7 +352,7 @@ class Agenda
                                         $id,
                                         'AgendaAdded',
                                         $senderId,
-                                        $groupIid,
+                                        $groupInfo,
                                         $userId,
                                         $start,
                                         $end,
@@ -366,7 +365,7 @@ class Agenda
                                         $id,
                                         'visible',
                                         $senderId,
-                                        $groupIid,
+                                        $groupInfo,
                                         $userId,
                                         $start,
                                         $end,
@@ -808,11 +807,11 @@ class Agenda
                                 foreach ($eventInfo['send_to']['groups'] as $group) {
                                     $groupIidItem = 0;
                                     if ($group) {
-                                        $groupInfo = GroupManager::get_group_properties(
+                                        $groupInfoItem = GroupManager::get_group_properties(
                                             $group
                                         );
-                                        if ($groupInfo) {
-                                            $groupIidItem = $groupInfo['iid'];
+                                        if ($groupInfoItem) {
+                                            $groupIidItem = $groupInfoItem['iid'];
                                         }
                                     }
 
@@ -850,7 +849,7 @@ class Agenda
                                 $id,
                                 'visible',
                                 $authorId,
-                                $groupIid,
+                                $groupInfo,
                                 null,
                                 $start,
                                 $end,
@@ -870,14 +869,11 @@ class Agenda
                             // Add groups
                             if (!empty($groupToAdd)) {
                                 foreach ($groupToAdd as $group) {
-                                    $groupIidItem = 0;
+                                    $groupInfoItem = [];
                                     if ($group) {
-                                        $groupInfo = GroupManager::get_group_properties(
+                                        $groupInfoItem = GroupManager::get_group_properties(
                                             $group
                                         );
-                                        if ($groupInfo) {
-                                            $groupIidItem = $groupInfo['iid'];
-                                        }
                                     }
 
                                     api_item_property_update(
@@ -886,7 +882,7 @@ class Agenda
                                         $id,
                                         'visible',
                                         $authorId,
-                                        $groupIidItem,
+                                        $groupInfoItem,
                                         0,
                                         $start,
                                         $end,
@@ -899,12 +895,13 @@ class Agenda
                             if (!empty($groupsToDelete)) {
                                 foreach ($groupsToDelete as $group) {
                                     $groupIidItem = 0;
+                                    $groupInfoItem = [];
                                     if ($group) {
-                                        $groupInfo = GroupManager::get_group_properties(
+                                        $groupInfoItem = GroupManager::get_group_properties(
                                             $group
                                         );
-                                        if ($groupInfo) {
-                                            $groupIidItem = $groupInfo['iid'];
+                                        if ($groupInfoItem) {
+                                            $groupIidItem = $groupInfoItem['iid'];
                                         }
                                     }
 
@@ -928,7 +925,7 @@ class Agenda
                                         $id,
                                         'visible',
                                         $authorId,
-                                        $groupIid,
+                                        $groupInfo,
                                         $userId,
                                         $start,
                                         $end,
@@ -945,7 +942,7 @@ class Agenda
                                         TOOL_CALENDAR_EVENT,
                                         $id,
                                         $userId,
-                                        $groupIid,
+                                        $groupInfo,
                                         $this->sessionId
                                     );
                                 }
@@ -1662,6 +1659,7 @@ class Agenda
             }
         }
 
+        $group_memberships = [];
         if (!empty($groupId)) {
             if (!api_is_allowed_to_edit()) {
                 $user_id = api_get_user_id();
@@ -1686,12 +1684,14 @@ class Agenda
                     $user_id
                 );
             } else {
-                // If no group was defined and I am a teacher/admin reviewing
-                // someone else's agenda, we should fetch this person's groups
-                $group_memberships = GroupManager::get_group_ids(
-                    $course_id,
-                    $user_id
-                );
+                if (empty($user_id)) {
+                    // If no group was defined and I am a teacher/admin reviewing
+                    // someone else's agenda, we should fetch all groups
+                    $groupList = GroupManager::get_group_list();
+                    if (!empty($groupList)) {
+                        $group_memberships = array_column($groupList, 'id');
+                    }
+                }
             }
         }
 
@@ -1705,28 +1705,16 @@ class Agenda
         if (is_array($group_memberships) && count($group_memberships) > 0) {
             if (api_is_allowed_to_edit()) {
                 if (!empty($groupId)) {
-                    $where_condition = "( ip.to_group_id IN (".implode(
-                            ", ",
-                            $group_memberships
-                        ).") ) ";
+                    $where_condition = "( ip.to_group_id IN (".implode(", ", $group_memberships).") ) ";
                 } else {
                     if (!empty($user_id)) {
-                        $where_condition = "( ip.to_user_id = $user_id OR ip.to_user_id IS NULL OR (ip.to_group_id IN (0, ".implode(
-                                ", ",
-                                $group_memberships
-                            ).")) ) ";
+                        $where_condition = "( ip.to_user_id = $user_id OR ip.to_user_id IS NULL OR (ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ) ";
                     } else {
-                        $where_condition = "( ip.to_group_id IN (0, ".implode(
-                                ", ",
-                                $group_memberships
-                            ).") ) ";
+                        $where_condition = "( ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
                     }
                 }
             } else {
-                $where_condition = "( ip.to_user_id = $user_id OR ip.to_user_id IS NULL OR (ip.to_group_id IN (0, ".implode(
-                        ", ",
-                        $group_memberships
-                    ).")) ) ";
+                $where_condition = "( ip.to_user_id = $user_id OR ip.to_user_id IS NULL OR (ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ) ";
             }
 
             if (empty($session_id)) {
@@ -2335,8 +2323,8 @@ class Agenda
         if (isset($groupId) && !empty($groupId)) {
             $form->addElement(
                 'hidden',
-                'selected_form[0]',
-                "GROUP:'.$groupId.'"
+                'users_to_send[]',
+                "GROUP:$groupId"
             );
             $form->addElement('hidden', 'to', 'true');
         } else {
@@ -3137,12 +3125,12 @@ class Agenda
                     $end->format('e')
                 );
                 $title = api_convert_encoding(
-                    (string)$event->summary,
+                    (string) $event->summary,
                     $charset,
                     'UTF-8'
                 );
                 $description = api_convert_encoding(
-                    (string)$event->description,
+                    (string) $event->description,
                     $charset,
                     'UTF-8'
                 );

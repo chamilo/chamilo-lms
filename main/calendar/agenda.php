@@ -120,6 +120,7 @@ if ($allowToEdit) {
                 $attachmentList = $sendAttachment ? $_FILES : null;
                 $attachmentCommentList = isset($values['legend']) ? $values['legend'] : null;
                 $comment = isset($values['comment']) ? $values['comment'] : null;
+                $usersToSend = isset($values['users_to_send']) ? $values['users_to_send'] : '';
 
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
@@ -130,7 +131,7 @@ if ($allowToEdit) {
                     $allDay,
                     $values['title'],
                     $values['content'],
-                    $values['users_to_send'],
+                    $usersToSend,
                     $sendEmail,
                     null,
                     $attachmentList,

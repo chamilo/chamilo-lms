@@ -40,10 +40,10 @@ class MultipleAnswerCombination extends Question
         $html = '<table class="table table-striped table-hover">';
         $html .= '<thead>';
         $html .= '<tr>';
-        $html .= '<th width="10">' . get_lang('Number') . '</th>';
-        $html .= '<th width="10">' . get_lang('True') . '</th>';
-        $html .= '<th width="50%">' . get_lang('Answer') . '</th>';
-        $html .= '<th width="50%">' . get_lang('Comment') . '</th>';
+        $html .= '<th width="10">'.get_lang('Number').'</th>';
+        $html .= '<th width="10">'.get_lang('True').'</th>';
+        $html .= '<th width="50%">'.get_lang('Answer').'</th>';
+        $html .= '<th width="50%">'.get_lang('Comment').'</th>';
         $html .= '</tr>';
         $html .= '</thead>';
         $html .= '<tbody>';
@@ -75,10 +75,10 @@ class MultipleAnswerCombination extends Question
             $form->addHtml('<tr>');
 
             if (is_object($answer)) {
-                $defaults['answer[' . $i . ']'] = $answer->answer[$i];
-                $defaults['comment[' . $i . ']'] = $answer->comment[$i];
-                $defaults['weighting[' . $i . ']'] = float_format($answer->weighting[$i], 1);
-                $defaults['correct[' . $i . ']'] = $answer->correct[$i];
+                $defaults['answer['.$i.']'] = $answer->answer[$i];
+                $defaults['comment['.$i.']'] = $answer->comment[$i];
+                $defaults['weighting['.$i.']'] = float_format($answer->weighting[$i], 1);
+                $defaults['correct['.$i.']'] = $answer->correct[$i];
             } else {
                 $defaults['answer[1]'] = get_lang('DefaultMultipleAnswer2');
                 $defaults['comment[1]'] = get_lang('DefaultMultipleComment2');
@@ -94,22 +94,22 @@ class MultipleAnswerCombination extends Question
 
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'correct[' . $i . ']'
+                'correct['.$i.']'
             );
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'counter[' . $i . ']'
+                'counter['.$i.']'
             );
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'answer[' . $i . ']'
+                'answer['.$i.']'
             );
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'comment[' . $i . ']'
+                'comment['.$i.']'
             );
 
-            $answer_number = $form->addElement('text', 'counter[' . $i . ']', null, 'value="' . $i . '"');
+            $answer_number = $form->addElement('text', 'counter['.$i.']', null, 'value="'.$i.'"');
             $answer_number->freeze();
 
             $form->addElement(
@@ -119,20 +119,20 @@ class MultipleAnswerCombination extends Question
                 null,
                 'class="checkbox" style="margin-left: 0em;"'
             );
-            $boxes_names[] = 'correct[' . $i . ']';
+            $boxes_names[] = 'correct['.$i.']';
 
             $form->addElement(
                 'html_editor',
-                'answer[' . $i . ']',
+                'answer['.$i.']',
                 null,
                 array(),
                 array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100')
             );
-            $form->addRule('answer[' . $i . ']', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
             $form->addElement(
                 'html_editor',
-                'comment[' . $i . ']',
+                'comment['.$i.']',
                 null,
                 array(),
                 array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100')
@@ -225,7 +225,7 @@ class MultipleAnswerCombination extends Question
     function return_header($feedback_type = null, $counter = null, $score = null)
     {
         $header = parent::return_header($feedback_type, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class .'">
+        $header .= '<table class="'.$this->question_table_class.'">
             <tr>
                 <th>'.get_lang("Choice").'</th>
                 <th>'. get_lang("ExpectedChoice").'</th>

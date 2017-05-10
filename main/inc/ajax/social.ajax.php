@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  * Responses to AJAX calls
  */
@@ -125,7 +128,7 @@ switch ($action) {
         }
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
-        $user_id = intval($_SESSION['social_user_id']);
+        $user_id = Session::read('social_user_id');
 
         if ($_POST['action']) {
             $action = $_POST['action'];

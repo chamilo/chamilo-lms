@@ -56,7 +56,7 @@ if ($nano_user_id != api_get_user_id() || api_get_user_id() == 0 || $nano_user_i
 }
 
 // Do not use here check Fileinfo method because return: text/plain
-
+$groupInfo = GroupManager::get_group_properties($nano_group_id);
 if (!file_exists($documentPath)) {
     //add document to disk
     move_uploaded_file($_FILES['voicefile']['tmp_name'], $documentPath);
@@ -73,7 +73,7 @@ if (!file_exists($documentPath)) {
         $doc_id,
         'DocumentAdded',
         $nano_user_id,
-        $groupId,
+        $groupInfo,
         null,
         null,
         null,

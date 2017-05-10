@@ -149,7 +149,7 @@ if (isset($_REQUEST['comments']) &&
     foreach ($_POST as $key_index => $key_value) {
         $my_post_info = explode('_', $key_index);
 
-        $post_content_id[] = $my_post_info[1];
+        $post_content_id[] = isset($my_post_info[1]) ? $my_post_info[1] : null;
 
         if ($my_post_info[0] == 'comments') {
             $comments_exist = true;

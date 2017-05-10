@@ -1045,7 +1045,7 @@ class Display
             $lis .= self::tag('li', $item, $ul_attributes);
             $i++;
         }
-        $ul = self::tag('ul', $lis, ['class' => 'nav nav-tabs', 'role'=> 'tablist', 'id' => 'ul_'.$id]);
+        $ul = self::tag('ul', $lis, ['class' => 'nav nav-tabs tabs-margin', 'role'=> 'tablist', 'id' => 'ul_'.$id]);
 
         $i = 1;
         $divs = '';
@@ -2341,9 +2341,11 @@ class Display
      */
     public static function contentPanel($content)
     {
-        return '<div class="panel-body">
-                '.$content.'
-                </div>';
+        if (empty($content)) {
+            return '';
+        }
+
+        return '<div class="panel-body">'.$content.'</div>';
     }
 
     /**

@@ -152,18 +152,34 @@ class OpenofficePresentation extends OpenofficeDocument
             );
 
             if ($document_id) {
-
                 // Put the document in item_property update.
-                api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', api_get_user_id(), 0, 0, null, null, api_get_session_id());
+                api_item_property_update(
+                    $_course,
+                    TOOL_DOCUMENT,
+                    $document_id,
+                    'DocumentAdded',
+                    api_get_user_id(),
+                    0,
+                    0,
+                    null,
+                    null,
+                    api_get_session_id()
+                );
 
-                $previous = $this->add_item(0, $previous, 'document', $document_id, $slide_name, '');
+                $previous = $this->add_item(
+                    0,
+                    $previous,
+                    'document',
+                    $document_id,
+                    $slide_name,
+                    ''
+                );
                 if ($this->first_item == 0) {
                     $this->first_item = $previous;
                 }
             }
             // Code for text indexing.
             if (api_get_setting('search_enabled') == 'true') {
-
                 if (isset($_POST['index_document']) && $_POST['index_document']) {
                     $di = new ChamiloIndexer();
                     isset($_POST['language']) ? $lang = Database::escape_string($_POST['language']) : $lang = 'english';

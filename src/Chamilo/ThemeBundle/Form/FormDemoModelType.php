@@ -13,7 +13,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class FormDemoModelType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $options = array(

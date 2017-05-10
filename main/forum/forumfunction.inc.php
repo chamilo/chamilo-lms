@@ -628,6 +628,11 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
     } else {
         $group_id = api_get_group_id();
     }
+    $groupIid = 0;
+    if (!empty($group_id)) {
+        $groupInfo = GroupManager::get_group_properties($group_id);
+        $groupIid = $groupInfo['iid'];
+    }
 
     $table_forums = Database::get_course_table(TABLE_FORUM);
 
@@ -732,7 +737,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             Database::escape_string($values['forum_id']),
             'ForumUpdated',
             api_get_user_id(),
-            $group_id
+            $groupInfo
         );
 
         $return_message = get_lang('ForumEdited');
@@ -775,7 +780,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
                 $last_id,
                 'ForumAdded',
                 api_get_user_id(),
-                $group_id
+                $groupInfo
             );
 
             api_set_default_visibility(
@@ -821,6 +826,7 @@ function deleteForumCategoryThread($content, $id)
     $table_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
     $course_id = api_get_course_int_id();
     $groupId = api_get_group_id();
+    $groupInfo = GroupManager::get_group_properties($groupId);
     $userId = api_get_user_id();
     $id = intval($id);
 
@@ -890,7 +896,7 @@ function deleteForumCategoryThread($content, $id)
         $id,
         'delete',
         $userId,
-        $groupId
+        $groupInfo
     );
 
     // Check if this returns a true and if so => return $return_message, if not => return false;
@@ -2517,18 +2523,20 @@ function updateThread($values)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function store_thread($current_forum, $values, $courseInfo = array(), $showMessage = true, $userId = 0, $sessionId = 0)
-{
+function store_thread(
+    $current_forum,
+    $values,
+    $courseInfo = array(),
+    $showMessage = true,
+    $userId = 0,
+    $sessionId = 0
+) {
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
     $userId = $userId ?: api_get_user_id();
     $course_id = $courseInfo['real_id'];
     $courseCode = $courseInfo['code'];
     $groupId = api_get_group_id();
     $groupInfo = GroupManager::get_group_properties($groupId);
-    $groupIid = null;
-    if (!empty($groupInfo)) {
-        $groupIid = $groupInfo['iid'];
-    }
     $sessionId = $sessionId ?: api_get_session_id();
 
     $em = Database::getManager();
@@ -2546,7 +2554,11 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
     if (!$upload_ok) {
         if ($showMessage) {
             Display::addFlash(
-                Display::return_message(get_lang('UplNoFileUploaded'), 'error', false)
+                Display::return_message(
+                    get_lang('UplNoFileUploaded'),
+                    'error',
+                    false
+                )
             );
         }
 
@@ -2560,9 +2572,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
     } else {
         $visible = 1;
     }
-
     $clean_post_title = $values['post_title'];
-
     // We first store an entry in the forum_thread table because the thread_id is used in the forum_post table.
 
     $lastThread = new CForumThread();
@@ -2590,7 +2600,6 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
     $em->flush();
 
     // Add option gradebook qualify.
-
     if (isset($values['thread_qualify_gradebook']) &&
         1 == $values['thread_qualify_gradebook']
     ) {
@@ -2600,7 +2609,6 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         $resourcename = stripslashes($values['calification_notebook_title']);
         $maxqualify = $values['numeric_calification'];
         $weigthqualify = $values['weight_calification'];
-        $resourcedescription = '';
         GradebookUtils::add_resource_to_course_gradebook(
             $values['category_id'],
             $courseCode,
@@ -2609,7 +2617,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
             $resourcename,
             $weigthqualify,
             $maxqualify,
-            $resourcedescription,
+            '',
             0,
             $sessionId
         );
@@ -2627,7 +2635,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
             $lastThread->getIid(),
             'ForumThreadAdded',
             $userId,
-            $groupIid,
+            $groupInfo,
             null,
             null,
             null,
@@ -2645,7 +2653,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         api_set_default_visibility(
             $lastThread->getIid(),
             TOOL_FORUM_THREAD,
-            $groupIid,
+            $groupId,
             $courseInfo,
             $sessionId,
             $userId
@@ -2658,8 +2666,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
                 $lastThread->getIid(),
                 'invisible',
                 $userId,
-                $groupIid
-
+                $groupInfo
             );
             $visible = 1;
         }
@@ -2691,10 +2698,10 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
     $em->persist($lastPost);
     $em->flush();
 
-    $last_post_id = $lastPost->getIid();
+    $lastPostId = $lastPost->getIid();
 
-    if ($last_post_id) {
-        $lastPost->setPostId($last_post_id);
+    if ($lastPostId) {
+        $lastPost->setPostId($lastPostId);
         $em->merge($lastPost);
         $em->flush();
     }
@@ -2705,7 +2712,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
             editAttachedFile(
                 array(
                     'comment' => $_POST['file_comments'][$key],
-                    'post_id' => $last_post_id
+                    'post_id' => $lastPostId
                 ),
                 $id
             );
@@ -2715,12 +2722,20 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
     // Now we have to update the thread table to fill the thread_last_post
     // field (so that we know when the thread has been updated for the last time).
     $sql = "UPDATE $table_threads
-            SET thread_last_post = '".Database::escape_string($last_post_id)."'
+            SET thread_last_post = '".Database::escape_string($lastPostId)."'
             WHERE
                 c_id = $course_id AND
                 thread_id='".Database::escape_string($lastThread->getIid())."'";
     $result = Database::query($sql);
     $message = get_lang('NewThreadStored');
+
+    // Overwrite default message.
+    if ($current_forum['moderated'] &&
+        !api_is_allowed_to_edit(null, true)
+    ) {
+        $message = get_lang('MessageHasToBeApproved');
+    }
+
     // Storing the attachments if any.
     if ($has_attachment) {
         // Try to add an extension to the file if it hasn't one.
@@ -2740,7 +2755,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
             if ($result) {
                 add_forum_attachment_file(
                     isset($values['file_comment']) ? $values['file_comment'] : null,
-                    $last_post_id
+                    $lastPostId
                 );
             }
         }
@@ -2748,7 +2763,9 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         $message .= '<br />';
     }
 
-    if ($current_forum['approval_direct_post'] == '1' && !api_is_allowed_to_edit(null, true)) {
+    if ($current_forum['approval_direct_post'] == '1' &&
+        !api_is_allowed_to_edit(null, true)
+    ) {
         $message .= get_lang('MessageHasToBeApproved').'<br />';
         $message .= get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'">'.
             get_lang('Forum').'</a><br />';
@@ -2758,7 +2775,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         $message .= get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&gradebook='.$gradebook.'&thread='.$lastThread->getIid().'">'.
             get_lang('Message').'</a>';
     }
-    $reply_info['new_post_id'] = $last_post_id;
+    $reply_info['new_post_id'] = $lastPostId;
     $my_post_notification = isset($values['post_notification']) ? $values['post_notification'] : null;
 
     if ($my_post_notification == 1) {
@@ -3452,7 +3469,10 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
         Display::addFlash(Display::return_message($message, 'confirmation', false));
     } else {
         Display::addFlash(
-            Display::return_message(get_lang('UplNoFileUploaded').' '.get_lang('UplSelectFileFirst'), 'error')
+            Display::return_message(
+                get_lang('UplNoFileUploaded').' '.get_lang('UplSelectFileFirst'),
+                'error'
+            )
         );
     }
 
@@ -3769,7 +3789,8 @@ function increase_thread_view($thread_id)
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $course_id = api_get_course_int_id();
 
-    $sql = "UPDATE $table_threads SET thread_views=thread_views+1
+    $sql = "UPDATE $table_threads 
+            SET thread_views = thread_views + 1
             WHERE 
                 c_id = $course_id AND  
                 thread_id = '".intval($thread_id)."'";
@@ -3781,38 +3802,21 @@ function increase_thread_view($thread_id)
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
- * @param string $last_post_id
+ * @param string $lastPostId
  * @param string $post_date
  */
-function updateThreadInfo($thread_id, $last_post_id, $post_date)
+function updateThreadInfo($thread_id, $lastPostId, $post_date)
 {
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $course_id = api_get_course_int_id();
     $sql = "UPDATE $table_threads SET 
             thread_replies = thread_replies+1,
-            thread_last_post = '".Database::escape_string($last_post_id)."',
+            thread_last_post = '".Database::escape_string($lastPostId)."',
             thread_date = '".Database::escape_string($post_date)."'
             WHERE 
                 c_id = $course_id AND  
                 thread_id='".Database::escape_string($thread_id)."'"; // this needs to be cleaned first
     Database::query($sql);
-}
-
-/**
- * This function is called when the user is not allowed in this forum/thread/...
- * @return bool display message of "not allowed"
- *
- * @deprecated use api_not_allowed()
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version february 2006, dokeos 1.8
- */
-function forum_not_allowed_here()
-{
-    Display::addFlash(Display::return_message(get_lang('NotAllowedHere'), 'error'));
-    Display :: display_footer();
-
-    return false;
 }
 
 /**
@@ -4775,7 +4779,13 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
                 $sql = "UPDATE $table_forum_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', post_id = '$safe_post_id', size ='".$attachment['size']."'
                        WHERE c_id = $course_id AND id = '$safe_id_attach'";
                 Database::query($sql);
-                api_item_property_update($_course, TOOL_FORUM_ATTACH, $safe_id_attach, 'ForumAttachmentUpdated', api_get_user_id());
+                api_item_property_update(
+                    $_course,
+                    TOOL_FORUM_ATTACH,
+                    $safe_id_attach,
+                    'ForumAttachmentUpdated',
+                    api_get_user_id()
+                );
             }
         }
     }
@@ -4872,7 +4882,13 @@ function delete_attachment($post_id, $id_attach = 0, $display = true)
     }
 
     // Update item_property.
-    api_item_property_update($_course, TOOL_FORUM_ATTACH, $id_attach, 'ForumAttachmentDelete', api_get_user_id());
+    api_item_property_update(
+        $_course,
+        TOOL_FORUM_ATTACH,
+        $id_attach,
+        'ForumAttachmentDelete',
+        api_get_user_id()
+    );
 
     if (!empty($result) && !empty($id_attach) && $display) {
         $message = get_lang('AttachmentFileDeleteSuccess');

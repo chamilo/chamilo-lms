@@ -15,7 +15,7 @@
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_COURSE_SETTING;
+$current_course_tool = TOOL_COURSE_SETTING;
 $this_section = SECTION_COURSES;
 
 $nameTools = get_lang('ModifInfo');
@@ -106,7 +106,7 @@ $form->addHtml('
             <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-course-settings" aria-expanded="true" aria-controls="collapse-course-settings">
 ');
 $form->addHtml(
-    Display::return_icon('settings.png', get_lang('CourseSettings')) . ' ' . get_lang('CourseSettings')
+    Display::return_icon('settings.png', get_lang('CourseSettings')).' '.get_lang('CourseSettings')
 );
 $form->addHtml('
             </a>
@@ -120,11 +120,11 @@ $form->addHtml('
 
 $image = '';
 // Display course picture
-$course_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository;   // course path
+$course_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository; // course path
 if (file_exists($course_path.'/course-pic85x85.png')) {
-    $course_web_path = api_get_path(WEB_COURSE_PATH).$currentCourseRepository;   // course web path
+    $course_web_path = api_get_path(WEB_COURSE_PATH).$currentCourseRepository; // course web path
     $course_medium_image = $course_web_path.'/course-pic85x85.png?'.rand(1, 1000); // redimensioned image 85x85
-    $image =  '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label> 
+    $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label> 
                     <div class="col-md-8"><img src="'.$course_medium_image.'" /></div></div>';
 }
 $form->addHtml($image);
@@ -176,11 +176,11 @@ $form->addRule(
 $form->addElement('checkbox', 'delete_picture', null, get_lang('DeletePicture'));
 
 if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
-    $url =  PDF::get_watermark($course_code);
+    $url = PDF::get_watermark($course_code);
     $form->addText('pdf_export_watermark_text', get_lang('PDFExportWatermarkTextTitle'), false, array('size' => '60'));
     $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
     if ($url != false) {
-        $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.png',get_lang('DelImage')).'</a>';
+        $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.png', get_lang('DelImage')).'</a>';
         $form->addElement('html', '<div class="row"><div class="formw"><a href="'.$url.'">'.$url.' '.$delete_url.'</a></div></div>');
     }
     $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
@@ -198,7 +198,7 @@ if (api_get_setting('allow_course_theme') == 'true') {
 }
 
 $form->addElement('label', get_lang('DocumentQuota'), format_file_size(DocumentManager::get_course_quota()));
-$form->addButtonSave(get_lang('SaveSettings'),'submit_save');
+$form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
 $form->addHtml('
         </div>
     </div>
@@ -214,7 +214,7 @@ $form->addHtml('
 ');
 $form->addElement(
     'html',
-    Display::return_icon('course.png', get_lang('CourseAccess')) . ' ' . get_lang('CourseAccess')
+    Display::return_icon('course.png', get_lang('CourseAccess')).' '.get_lang('CourseAccess')
 );
 $form->addHtml('
             </a>
@@ -228,13 +228,13 @@ $form->addHtml('
 ');
 
 $group = array();
-$group[]= $form->createElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
-$group[]= $form->createElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
-$group[]= $form->createElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
-$group[]= $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
+$group[] = $form->createElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
+$group[] = $form->createElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
+$group[] = $form->createElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
+$group[] = $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
 // The "hidden" visibility is only available to portal admins
 if (api_is_platform_admin()) {
-    $group[]= $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityHidden'), COURSE_VISIBILITY_HIDDEN);
+    $group[] = $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityHidden'), COURSE_VISIBILITY_HIDDEN);
 }
 $form->addGroup($group, '', array(get_lang("CourseAccess"), get_lang("CourseAccessConfigTip")));
 
@@ -243,13 +243,13 @@ $url = Display::url($url, $url);
 $form->addElement('label', get_lang('DirectLink'), sprintf(get_lang('CourseSettingsRegisterDirectLink'), $url));
 
 $group = array();
-$group[]=$form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
-$group[]=$form->createElement('radio', 'subscribe', null, get_lang('Denied'), 0);
+$group[] = $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
+$group[] = $form->createElement('radio', 'subscribe', null, get_lang('Denied'), 0);
 $form->addGroup($group, '', array(get_lang("Subscription")));
 
 $group = array();
-$group[]=$form->createElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
-$group[]=$form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
+$group[] = $form->createElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
+$group[] = $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
 $form->addGroup($group, '', array(get_lang("Unsubscription")));
 
 $form->addText('course_registration_password', get_lang('CourseRegistrationPassword'), false, array('size' => '60'));
@@ -272,7 +272,7 @@ $form->addHtml('
             <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-documents" aria-expanded="false" aria-controls="collapse-documents">
 ');
 $form->addHtml(
-    Display::return_icon('folder.png', get_lang('Documents')) . ' ' . get_lang('Documents')
+    Display::return_icon('folder.png', get_lang('Documents')).' '.get_lang('Documents')
 );
 $form->addHtml('
                 </a>
@@ -313,7 +313,7 @@ $form->addHtml('
             <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-email-notifications" aria-expanded="false" aria-controls="collapse-email-notifications">
 ');
 $form->addHtml(
-    Display::return_icon('mail.png', get_lang('EmailNotifications')) . ' ' . get_lang('EmailNotifications')
+    Display::return_icon('mail.png', get_lang('EmailNotifications')).' '.get_lang('EmailNotifications')
 );
 $form->addHtml('
             </a>
@@ -325,31 +325,31 @@ $form->addHtml('
         <div class="panel-body">
 ');
 $group = array();
-$group[]=$form->createElement('radio', 'email_alert_to_teacher_on_new_user_in_course', get_lang('NewUserEmailAlert'), get_lang('NewUserEmailAlertEnable'), 1);
-$group[]=$form->createElement('radio', 'email_alert_to_teacher_on_new_user_in_course', null, get_lang('NewUserEmailAlertToTeacharAndTutor'), 2);
-$group[]=$form->createElement('radio', 'email_alert_to_teacher_on_new_user_in_course', null, get_lang('NewUserEmailAlertDisable'), 0);
+$group[] = $form->createElement('radio', 'email_alert_to_teacher_on_new_user_in_course', get_lang('NewUserEmailAlert'), get_lang('NewUserEmailAlertEnable'), 1);
+$group[] = $form->createElement('radio', 'email_alert_to_teacher_on_new_user_in_course', null, get_lang('NewUserEmailAlertToTeacharAndTutor'), 2);
+$group[] = $form->createElement('radio', 'email_alert_to_teacher_on_new_user_in_course', null, get_lang('NewUserEmailAlertDisable'), 0);
 $form->addGroup($group, '', array(get_lang("NewUserEmailAlert")));
 
 $group = array();
-$group[]=$form->createElement('radio', 'email_alert_students_on_new_homework', get_lang('NewHomeworkEmailAlert'), get_lang('NewHomeworkEmailAlertEnable'), 1);
-$group[]=$form->createElement('radio', 'email_alert_students_on_new_homework', null, get_lang('NewHomeworkEmailAlertDisable'), 0);
+$group[] = $form->createElement('radio', 'email_alert_students_on_new_homework', get_lang('NewHomeworkEmailAlert'), get_lang('NewHomeworkEmailAlertEnable'), 1);
+$group[] = $form->createElement('radio', 'email_alert_students_on_new_homework', null, get_lang('NewHomeworkEmailAlertDisable'), 0);
 $form->addGroup($group, '', array(get_lang("NewHomeworkEmailAlert")));
 
 $group = array();
-$group[]=$form->createElement('radio', 'email_alert_manager_on_new_doc', null, get_lang('WorkEmailAlertActivateOnlyForTeachers'), 3);
-$group[]=$form->createElement('radio', 'email_alert_manager_on_new_doc', null, get_lang('WorkEmailAlertActivateOnlyForStudents'), 2);
-$group[]=$form->createElement('radio', 'email_alert_manager_on_new_doc', get_lang('WorkEmailAlert'), get_lang('WorkEmailAlertActivate'), 1);
-$group[]=$form->createElement('radio', 'email_alert_manager_on_new_doc', null, get_lang('WorkEmailAlertDeactivate'), 0);
+$group[] = $form->createElement('radio', 'email_alert_manager_on_new_doc', null, get_lang('WorkEmailAlertActivateOnlyForTeachers'), 3);
+$group[] = $form->createElement('radio', 'email_alert_manager_on_new_doc', null, get_lang('WorkEmailAlertActivateOnlyForStudents'), 2);
+$group[] = $form->createElement('radio', 'email_alert_manager_on_new_doc', get_lang('WorkEmailAlert'), get_lang('WorkEmailAlertActivate'), 1);
+$group[] = $form->createElement('radio', 'email_alert_manager_on_new_doc', null, get_lang('WorkEmailAlertDeactivate'), 0);
 $form->addGroup($group, '', array(get_lang("WorkEmailAlert")));
 
 $group = array();
-$group[]=$form->createElement('radio', 'email_alert_on_new_doc_dropbox', get_lang('DropboxEmailAlert'), get_lang('DropboxEmailAlertActivate'), 1);
-$group[]=$form->createElement('radio', 'email_alert_on_new_doc_dropbox', null, get_lang('DropboxEmailAlertDeactivate'), 0);
+$group[] = $form->createElement('radio', 'email_alert_on_new_doc_dropbox', get_lang('DropboxEmailAlert'), get_lang('DropboxEmailAlertActivate'), 1);
+$group[] = $form->createElement('radio', 'email_alert_on_new_doc_dropbox', null, get_lang('DropboxEmailAlertDeactivate'), 0);
 $form->addGroup($group, '', array(get_lang("DropboxEmailAlert")));
 
 $group = array();
-$group[]=$form->createElement('radio', 'email_alert_manager_on_new_quiz', get_lang('QuizEmailAlert'), get_lang('QuizEmailAlertActivate'), 1);
-$group[]=$form->createElement('radio', 'email_alert_manager_on_new_quiz', null, get_lang('QuizEmailAlertDeactivate'), 0);
+$group[] = $form->createElement('radio', 'email_alert_manager_on_new_quiz', get_lang('QuizEmailAlert'), get_lang('QuizEmailAlertActivate'), 1);
+$group[] = $form->createElement('radio', 'email_alert_manager_on_new_quiz', null, get_lang('QuizEmailAlertDeactivate'), 0);
 $form->addGroup($group, '', array(get_lang("QuizEmailAlert")));
 $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
 
@@ -367,7 +367,7 @@ $form->addHtml('
             <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-user-right" aria-expanded="false" aria-controls="collapse-user-right">
 ');
 $form->addHtml(
-    Display::return_icon('user.png', get_lang('UserRights')) . ' ' . get_lang('UserRights')
+    Display::return_icon('user.png', get_lang('UserRights')).' '.get_lang('UserRights')
 );
 $form->addHtml('
             </a>
@@ -380,23 +380,23 @@ $form->addHtml('
 ');
 
 $group = array();
-$group[]=$form->createElement('radio', 'allow_user_edit_agenda', get_lang('AllowUserEditAgenda'), get_lang('AllowUserEditAgendaActivate'), 1);
-$group[]=$form->createElement('radio', 'allow_user_edit_agenda', null, get_lang('AllowUserEditAgendaDeactivate'), 0);
+$group[] = $form->createElement('radio', 'allow_user_edit_agenda', get_lang('AllowUserEditAgenda'), get_lang('AllowUserEditAgendaActivate'), 1);
+$group[] = $form->createElement('radio', 'allow_user_edit_agenda', null, get_lang('AllowUserEditAgendaDeactivate'), 0);
 $form->addGroup($group, '', array(get_lang("AllowUserEditAgenda")));
 
 $group = array();
-$group[]=$form->createElement('radio', 'allow_user_edit_announcement', get_lang('AllowUserEditAnnouncement'), get_lang('AllowUserEditAnnouncementActivate'), 1);
-$group[]=$form->createElement('radio', 'allow_user_edit_announcement', null, get_lang('AllowUserEditAnnouncementDeactivate'), 0);
+$group[] = $form->createElement('radio', 'allow_user_edit_announcement', get_lang('AllowUserEditAnnouncement'), get_lang('AllowUserEditAnnouncementActivate'), 1);
+$group[] = $form->createElement('radio', 'allow_user_edit_announcement', null, get_lang('AllowUserEditAnnouncementDeactivate'), 0);
 $form->addGroup($group, '', array(get_lang("AllowUserEditAnnouncement")));
 
 $group = array();
-$group[]=$form->createElement('radio', 'allow_user_image_forum', get_lang('AllowUserImageForum'), get_lang('AllowUserImageForumActivate'), 1);
-$group[]=$form->createElement('radio', 'allow_user_image_forum', null, get_lang('AllowUserImageForumDeactivate'), 0);
+$group[] = $form->createElement('radio', 'allow_user_image_forum', get_lang('AllowUserImageForum'), get_lang('AllowUserImageForumActivate'), 1);
+$group[] = $form->createElement('radio', 'allow_user_image_forum', null, get_lang('AllowUserImageForumDeactivate'), 0);
 $form->addGroup($group, '', array(get_lang("AllowUserImageForum")));
 
 $group = array();
-$group[]=$form->createElement('radio', 'allow_user_view_user_list', get_lang('AllowUserViewUserList'), get_lang('AllowUserViewUserListActivate'), 1);
-$group[]=$form->createElement('radio', 'allow_user_view_user_list', null, get_lang('AllowUserViewUserListDeactivate'), 0);
+$group[] = $form->createElement('radio', 'allow_user_view_user_list', get_lang('AllowUserViewUserList'), get_lang('AllowUserViewUserListActivate'), 1);
+$group[] = $form->createElement('radio', 'allow_user_view_user_list', null, get_lang('AllowUserViewUserListDeactivate'), 0);
 $form->addGroup($group, '', array(get_lang("AllowUserViewUserList")));
 $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
 $form->addHtml('
@@ -413,7 +413,7 @@ $form->addHtml('
             <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-chat-settings" aria-expanded="false" aria-controls="collapse-chat-settings">
 ');
 $form->addHtml(
-    Display::return_icon('chat.png', get_lang('ConfigChat'),'',ICON_SIZE_SMALL).' '.get_lang('ConfigChat')
+    Display::return_icon('chat.png', get_lang('ConfigChat'), '', ICON_SIZE_SMALL).' '.get_lang('ConfigChat')
 );
 $form->addHtml('
             </a>
@@ -426,8 +426,8 @@ $form->addHtml('
 ');
 
 $group = array();
-$group[]=$form->createElement('radio', 'allow_open_chat_window', get_lang('AllowOpenchatWindow'), get_lang('AllowOpenChatWindowActivate'), 1);
-$group[]=$form->createElement('radio', 'allow_open_chat_window', null, get_lang('AllowOpenChatWindowDeactivate'), 0);
+$group[] = $form->createElement('radio', 'allow_open_chat_window', get_lang('AllowOpenchatWindow'), get_lang('AllowOpenChatWindowActivate'), 1);
+$group[] = $form->createElement('radio', 'allow_open_chat_window', null, get_lang('AllowOpenChatWindowDeactivate'), 0);
 $form->addGroup($group, '', array(get_lang("AllowOpenchatWindow")));
 $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
 
@@ -459,16 +459,16 @@ $form->addHtml('
 
 // Auto launch LP
 $group = array();
-$group[]=$form->createElement('radio', 'enable_lp_auto_launch', get_lang('LPAutoLaunch'), get_lang('RedirectToALearningPath'), 1);
-$group[]=$form->createElement('radio', 'enable_lp_auto_launch', get_lang('LPAutoLaunch'), get_lang('RedirectToTheLearningPathList'), 2);
-$group[]=$form->createElement('radio', 'enable_lp_auto_launch', null, get_lang('Deactivate'), 0);
+$group[] = $form->createElement('radio', 'enable_lp_auto_launch', get_lang('LPAutoLaunch'), get_lang('RedirectToALearningPath'), 1);
+$group[] = $form->createElement('radio', 'enable_lp_auto_launch', get_lang('LPAutoLaunch'), get_lang('RedirectToTheLearningPathList'), 2);
+$group[] = $form->createElement('radio', 'enable_lp_auto_launch', null, get_lang('Deactivate'), 0);
 $form->addGroup($group, '', array(get_lang("LPAutoLaunch")));
 
 if (api_get_setting('allow_course_theme') == 'true') {
     // Allow theme into Learning path
     $group = array();
-    $group[]=$form->createElement('radio', 'allow_learning_path_theme', get_lang('AllowLearningPathTheme'), get_lang('AllowLearningPathThemeAllow'), 1);
-    $group[]=$form->createElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDisallow'), 0);
+    $group[] = $form->createElement('radio', 'allow_learning_path_theme', get_lang('AllowLearningPathTheme'), get_lang('AllowLearningPathThemeAllow'), 1);
+    $group[] = $form->createElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDisallow'), 0);
     $form->addGroup($group, '', array(get_lang("AllowLearningPathTheme")));
 }
 
@@ -544,7 +544,7 @@ $form->addHtml(
     Display::return_icon(
         'course_progress.png',
         get_lang('ThematicAdvanceConfiguration')
-    ) . ' ' . get_lang('ThematicAdvanceConfiguration')
+    ).' '.get_lang('ThematicAdvanceConfiguration')
 );
 $form->addHtml('
             </a>
@@ -557,10 +557,10 @@ $form->addHtml('
 ');
 
 $group = array();
-$group[]=$form->createElement('radio', 'display_info_advance_inside_homecourse', get_lang('InfoAboutAdvanceInsideHomeCourse'), get_lang('DisplayAboutLastDoneAdvance'), 1);
-$group[]=$form->createElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DisplayAboutNextAdvanceNotDone'), 2);
-$group[]=$form->createElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance'), 3);
-$group[]=$form->createElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DoNotDisplayAnyAdvance'), 0);
+$group[] = $form->createElement('radio', 'display_info_advance_inside_homecourse', get_lang('InfoAboutAdvanceInsideHomeCourse'), get_lang('DisplayAboutLastDoneAdvance'), 1);
+$group[] = $form->createElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DisplayAboutNextAdvanceNotDone'), 2);
+$group[] = $form->createElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance'), 3);
+$group[] = $form->createElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DoNotDisplayAnyAdvance'), 0);
 $form->addGroup($group, '', array(get_lang("InfoAboutAdvanceInsideHomeCourse")));
 $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
 $form->addHtml('
@@ -570,7 +570,7 @@ $form->addHtml('
 $form->addHtml('</div>');
 
 // Certificate settings
-if (api_get_setting('allow_public_certificates')=='true') {
+if (api_get_setting('allow_public_certificates') == 'true') {
     $form->addHtml('<div class="panel panel-default">');
     $form->addHtml('
         <div class="panel-heading" role="tab" id="heading-certificate-settings">
@@ -578,7 +578,7 @@ if (api_get_setting('allow_public_certificates')=='true') {
                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-certificate-settings" aria-expanded="false" aria-controls="collapse-certificate-settings">
     ');
     $form->addHtml(
-        Display::return_icon('certificate.png', get_lang('Certificates')) . ' ' . get_lang('Certificates')
+        Display::return_icon('certificate.png', get_lang('Certificates')).' '.get_lang('Certificates')
     );
     $form->addHtml('
                 </a>
@@ -591,8 +591,8 @@ if (api_get_setting('allow_public_certificates')=='true') {
     ');
 
     $group = array();
-    $group[]=$form->createElement('radio', 'allow_public_certificates', get_lang('AllowPublicCertificates'), get_lang('Yes'), 1);
-    $group[]=$form->createElement('radio', 'allow_public_certificates', null, get_lang('No'), 0);
+    $group[] = $form->createElement('radio', 'allow_public_certificates', get_lang('AllowPublicCertificates'), get_lang('Yes'), 1);
+    $group[] = $form->createElement('radio', 'allow_public_certificates', null, get_lang('No'), 0);
     $form->addGroup($group, '', array(get_lang('AllowPublicCertificates')));
     $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
     $form->addHtml('
@@ -610,7 +610,7 @@ $form->addHtml('
             <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-forum-settings" aria-expanded="false" aria-controls="collapse-forum-settings">
 ');
 $form->addHtml(
-    Display::return_icon('forum.png', get_lang('Forum')) . ' ' . get_lang('Forum')
+    Display::return_icon('forum.png', get_lang('Forum')).' '.get_lang('Forum')
 );
 $form->addHtml('
             </a>

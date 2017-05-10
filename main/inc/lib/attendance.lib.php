@@ -449,7 +449,7 @@ class Attendance
                         $_course,
                         TOOL_ATTENDANCE,
                         $id,
-                        "restore",
+                        'restore',
                         $user_id
                     );
                 }
@@ -466,7 +466,7 @@ class Attendance
                     $_course,
                     TOOL_ATTENDANCE,
                     $attendance_id,
-                    "restore",
+                    'restore',
                     $user_id
                 );
             }
@@ -556,7 +556,13 @@ class Attendance
                 $affected_rows = Database::affected_rows($result);
                 if (!empty($affected_rows)) {
                     // update row item property table
-                    api_item_property_update($_course, TOOL_ATTENDANCE, $id, $action, $user_id);
+                    api_item_property_update(
+                        $_course,
+                        TOOL_ATTENDANCE,
+                        $id,
+                        $action,
+                        $user_id
+                    );
                 }
             }
         } else {

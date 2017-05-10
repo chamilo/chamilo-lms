@@ -195,8 +195,9 @@ echo Display::url(
 echo '</h1>';
 echo '<p class="forum_description">'.prepare4display($current_forum['forum_comment']).'</p>';
 echo '</div>';
-
-$form->display();
+if ($form) {
+    $form->display();
+}
 
 if ($origin == 'learnpath') {
     Display::display_reduced_footer();

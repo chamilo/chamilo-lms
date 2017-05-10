@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * List sessions in an efficient and usable way
  * @package chamilo.admin

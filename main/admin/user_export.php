@@ -29,16 +29,16 @@ $allCoursesFromSessions = SessionManager::getAllCoursesFromAllSessions();
 
 $coursesSessions = array_merge($coursesSessions, $allCoursesFromSessions);
 
-$courses = array ();
+$courses = array();
 $courses[''] = '--';
 $sql = "SELECT code,visual_code,title FROM $course_table ORDER BY visual_code";
 
 global $_configuration;
 
 if (api_is_multiple_url_enabled()) {
-	$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+	$tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 	$access_url_id = api_get_current_access_url_id();
-	if ($access_url_id != -1){
+	if ($access_url_id != -1) {
 	$sql = "SELECT code,visual_code,title
 		FROM $course_table as c
 		INNER JOIN $tbl_course_rel_access_url as course_rel_url
@@ -53,11 +53,11 @@ while ($course = Database::fetch_object($result)) {
 }
 $form = new FormValidator('export_users');
 $form->addElement('header', $tool_name);
-$form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'XML','xml');
+$form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'XML', 'xml');
 $form->addElement('radio', 'file_type', null, 'CSV', 'csv');
 $form->addElement('radio', 'file_type', null, 'XLS', 'xls');
 
-$form->addElement('checkbox', 'addcsvheader', get_lang('AddCSVHeader'), get_lang('YesAddCSVHeader'),'1');
+$form->addElement('checkbox', 'addcsvheader', get_lang('AddCSVHeader'), get_lang('YesAddCSVHeader'), '1');
 $form->addElement('select', 'course_code', get_lang('OnlyUsersFromCourse'), $courses);
 $form->addElement('select', 'course_session', get_lang('OnlyUsersFromCourseSession'), $coursesSessions);
 $form->addButtonExport(get_lang('Export'));
@@ -79,7 +79,7 @@ if ($form->validate()) {
 	if (is_array($courseSessionValue) && isset($courseSessionValue[1])) {
         $courseSessionCode = $courseSessionValue[0];
         $sessionId = $courseSessionValue[1];
-        $courseSessionInfo= api_get_course_info($courseSessionCode);
+        $courseSessionInfo = api_get_course_info($courseSessionCode);
         $courseSessionId = $courseSessionInfo['real_id'];
         $sessionInfo = api_get_session_info($sessionId);
     }
@@ -90,7 +90,7 @@ if ($form->validate()) {
 				u.firstname 	AS FirstName,
 				u.email 		AS Email,
 				u.username	AS UserName,
-				".(($_configuration['password_encryption']!='none')?" ":"u.password AS Password, ")."
+				".(($_configuration['password_encryption'] != 'none') ? " " : "u.password AS Password, ")."
 				u.auth_source	AS AuthSource,
 				u.status		AS Status,
 				u.official_code	AS OfficialCode,
@@ -114,10 +114,10 @@ if ($form->validate()) {
         $filename = 'export_users_'.$courseSessionCode.'_'.$sessionInfo['name'].'_'.api_get_local_time();
     } else {
 		if (api_is_multiple_url_enabled()) {
-			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+			$tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
-			$sql.= " FROM $user_table u
+			$sql .= " FROM $user_table u
 					INNER JOIN $tbl_user_rel_access_url as user_rel_url
 				ON (u.user_id= user_rel_url.user_id)
 				WHERE access_url_id = $access_url_id
@@ -129,58 +129,61 @@ if ($form->validate()) {
 		$filename = 'export_users_'.api_get_local_time();
 	}
 	$data = array();
-	$extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC',false);
-	if ($export['addcsvheader']=='1' AND $export['file_type']=='csv') {
+	$extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false);
+        
+        if (!empty($export['addcsvheader'])) {  
+	if ($export['addcsvheader'] == '1' && ($export['file_type'] == 'csv' || $export['file_type'] == 'xls' )) {
 		if ($_configuration['password_encryption'] != 'none') {
 			$data[] = array(
-				'UserId',
-				'LastName',
-				'FirstName',
-				'Email',
-				'UserName',
-				'AuthSource',
-				'Status',
-				'OfficialCode',
-				'PhoneNumber',
-                'RegistrationDate'
+                            'UserId',
+                            'LastName',
+                            'FirstName',
+                            'Email',
+                            'UserName',
+                            'AuthSource',
+                            'Status',
+                            'OfficialCode',
+                            'PhoneNumber',
+                            'RegistrationDate'
 			);
 		} else {
 			$data[] = array(
-				'UserId',
-				'LastName',
-				'FirstName',
-				'Email',
-				'UserName',
-				'Password',
-				'AuthSource',
-				'Status',
-				'OfficialCode',
-				'PhoneNumber',
-                'RegistrationDate'
+                            'UserId',
+                            'LastName',
+                            'FirstName',
+                            'Email',
+                            'UserName',
+                            'Password',
+                            'AuthSource',
+                            'Status',
+                            'OfficialCode',
+                            'PhoneNumber',
+                            'RegistrationDate'
 			);
 		}
 
-		foreach($extra_fields as $extra) {
-			$data[0][]=$extra[1];
+		foreach ($extra_fields as $extra) {
+			$data[0][] = $extra[1];
 		}
-	}
+            }
+        }
 
 	$res = Database::query($sql);
-	while($user = Database::fetch_array($res,'ASSOC')) {
+	while ($user = Database::fetch_array($res, 'ASSOC')) {
 		$student_data = UserManager:: get_extra_user_data(
 			$user['UserId'],
 			true,
 			false
 		);
-		foreach($student_data as $key=>$value) {
+		foreach ($student_data as $key=>$value) {
 			$key = substr($key, 6);
 			if (is_array($value)) {
-				$user[$key] = $value['extra_' . $key];
+				$user[$key] = $value['extra_'.$key];
 			} else {
 				$user[$key] = $value;
 			}
 		}
-		$data[] = $user	;
+		$data[] = $user;
 	}
 
 	switch ($file_type) {

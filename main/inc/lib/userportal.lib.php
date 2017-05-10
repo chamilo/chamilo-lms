@@ -102,7 +102,6 @@ class IndexManager
      */
     public function return_announcements($show_slide = true)
     {
-        // Display System announcements
         $hideAnnouncements = api_get_setting('hide_global_announcements_when_not_connected');
         $currentUserId = api_get_user_id();
         if ($hideAnnouncements == 'true' && empty($currentUserId)) {
@@ -112,26 +111,26 @@ class IndexManager
         $announcement = intval($announcement);
 
         if (!api_is_anonymous() && $this->user_id) {
-            $visibility = api_is_allowed_to_create_course() ? SystemAnnouncementManager::VISIBLE_TEACHER : SystemAnnouncementManager::VISIBLE_STUDENT;
+            $visibility = SystemAnnouncementManager::getCurrentUserVisibility();
             if ($show_slide) {
-                $announcements = SystemAnnouncementManager:: display_announcements_slider(
+                $announcements = SystemAnnouncementManager::displayAnnouncementsSlider(
                     $visibility,
                     $announcement
                 );
             } else {
-                $announcements = SystemAnnouncementManager:: display_all_announcements(
+                $announcements = SystemAnnouncementManager::displayAllAnnouncements(
                     $visibility,
                     $announcement
                 );
             }
         } else {
             if ($show_slide) {
-                $announcements = SystemAnnouncementManager:: display_announcements_slider(
+                $announcements = SystemAnnouncementManager::displayAnnouncementsSlider(
                     SystemAnnouncementManager::VISIBLE_GUEST,
                     $announcement
                 );
             } else {
-                $announcements = SystemAnnouncementManager:: display_all_announcements(
+                $announcements = SystemAnnouncementManager::displayAllAnnouncements(
                     SystemAnnouncementManager::VISIBLE_GUEST,
                     $announcement
                 );

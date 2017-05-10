@@ -34,7 +34,6 @@ $interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidreq(), 'name' => get
 /*	Ensure all private groups // Juan Carlos Raña Trabado */
 
 $forums_of_groups = get_forums_of_group($current_group);
-
 if (!GroupManager::userHasAccessToBrowse($user_id, $current_group, api_get_session_id())) {
     api_not_allowed(true);
 }
@@ -58,10 +57,15 @@ if (!empty($_GET['selfUnReg']) &&
     GroupManager :: is_self_unregistration_allowed($user_id, $current_group)
 ) {
     GroupManager::unsubscribe_users($user_id, $current_group);
-    Display::addFlash(Display::return_message(get_lang('StudentDeletesHimself'), 'normal'));
+    Display::addFlash(
+        Display::return_message(get_lang('StudentDeletesHimself'), 'normal')
+    );
 }
 
-Display::display_header($nameTools.' '.Security::remove_XSS($current_group['name']), 'Group');
+Display::display_header(
+    $nameTools.' '.Security::remove_XSS($current_group['name']),
+    'Group'
+);
 
 /*	Introduction section (editable by course admin) */
 Display::display_introduction_section(TOOL_GROUP);
@@ -111,7 +115,6 @@ if (!empty($current_group['description'])) {
 /*
  * Group Tools
  */
-
 // If the user is subscribed to the group or the user is a tutor of the group then
 if (api_is_allowed_to_edit(false, true) ||
     GroupManager::is_user_in_group(api_get_user_id(), $current_group)
@@ -128,7 +131,6 @@ if (api_is_allowed_to_edit(false, true) ||
                     !empty($user_is_tutor) ||
                     api_is_allowed_to_edit(false, true)
                 ) {
-
                     $actions_array[] = array(
                         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$value['forum_id'].'&'.api_get_cidreq().'&origin=group',
                         'content' => Display::return_icon(
@@ -221,7 +223,6 @@ if (api_is_allowed_to_edit(false, true) ||
     }
 } else {
     $actions_array = array();
-
     // Link to the forum of this group
     $forums_of_groups = get_forums_of_group($current_group);
 
@@ -302,7 +303,6 @@ if (api_is_allowed_to_edit(false, true) ||
  * List all the tutors of the current group
  */
 $tutors = GroupManager::get_subscribed_tutors($current_group);
-
 $tutor_info = '';
 if (count($tutors) == 0) {
     $tutor_info = get_lang('GroupNoneMasc');
@@ -314,10 +314,7 @@ if (count($tutors) == 0) {
         $completeName = $userInfo['complete_name'];
         $photo = '<img src="'.$userInfo['avatar'].'" alt="'.$completeName.'" width="32" height="32" title="'.$completeName.'" />';
         $tutor_info .= '<li>';
-        $tutor_info .= Display::url(
-            $userInfo['complete_name'],
-            $userInfo['profile_url']
-        );
+        $tutor_info .= $userInfo['complete_name_with_message_link'];
         $tutor_info .= '</li>';
     }
     $tutor_info .= '</ul>';

@@ -1762,10 +1762,10 @@ class GroupManager
         if (empty($groupInfo)) {
             return false;
         }
+
         $table_group_tutor = Database::get_course_table(TABLE_GROUP_TUTOR);
         $user_id = intval($user_id);
         $group_id = intval($groupInfo['id']);
-
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT * FROM $table_group_tutor
@@ -1821,21 +1821,21 @@ class GroupManager
 
         $sql = "SELECT group_id FROM $tbl_group
                 WHERE c_id = $course_id AND user_id = '$user_id'";
-        $groupres = Database::query($sql);
+        $result = Database::query($sql);
 
-        if ($groupres) {
-            while ($myrow = Database::fetch_array($groupres)) {
-                $groups[] = $myrow['group_id'];
+        if ($result) {
+            while ($row = Database::fetch_array($result)) {
+                $groups[] = $row['group_id'];
             }
         }
 
         //Also loading if i'm the tutor
         $sql = "SELECT group_id FROM $tbl_group_tutor
                 WHERE c_id = $course_id AND user_id = '$user_id'";
-        $groupres = Database::query($sql);
-        if ($groupres) {
-            while ($myrow = Database::fetch_array($groupres)) {
-                $groups[] = $myrow['group_id'];
+        $result = Database::query($sql);
+        if ($result) {
+            while ($row = Database::fetch_array($result)) {
+                $groups[] = $row['group_id'];
             }
         }
         if (!empty($groups)) {
@@ -2518,6 +2518,29 @@ class GroupManager
                     $tutorIdList = array();
                     foreach ($tutors as $tutor) {
                         $userInfo = api_get_user_info_from_username($tutor);
+
+                        if (!$userInfo) {
+                            continue;
+                        }
+
+                        if (
+                            !CourseManager::is_user_subscribed_in_course(
+                                $userInfo['user_id'],
+                                $courseCode,
+                                !empty($sessionId),
+                                $sessionId
+                            )
+                        ) {
+                            Display::addFlash(
+                                Display::return_message(
+                                    sprintf(get_lang('TutorXIsNotSubscribedToCourse'), $userInfo['complete_name']),
+                                    'warning'
+                                )
+                            );
+
+                            continue;
+                        }
+
                         $tutorIdList[] = $userInfo['user_id'];
                     }
                     self::subscribe_tutors($tutorIdList, $groupInfo);

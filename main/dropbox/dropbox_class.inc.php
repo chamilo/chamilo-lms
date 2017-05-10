@@ -59,13 +59,12 @@ class Dropbox_Work
      * Constructor calls private functions to create a new work or retreive an existing work from DB
      * depending on the number of parameters
      *
-     * @param unknown_type $arg1
-     * @param unknown_type $arg2
-     * @param unknown_type $arg3
-     * @param unknown_type $arg4
-     * @param unknown_type $arg5
-     * @param unknown_type $arg6
-     * @return Dropbox_Work
+     * @param int $arg1
+     * @param string $arg2
+     * @param string $arg3
+     * @param string $arg4
+     * @param string $arg5
+     * @param int $arg6
      */
     public function __construct($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null)
     {
@@ -263,14 +262,13 @@ class Dropbox_SentWork extends Dropbox_Work
 	 * Constructor calls private functions to create a new work or retreive an existing work from DB
 	 * depending on the number of parameters
 	 *
-	 * @param unknown_type $arg1
-	 * @param unknown_type $arg2
-	 * @param unknown_type $arg3
-	 * @param unknown_type $arg4
-	 * @param unknown_type $arg5
-	 * @param unknown_type $arg6
-	 * @param unknown_type $arg7
-	 * @return Dropbox_SentWork
+	 * @param int $arg1
+	 * @param string $arg2
+	 * @param string $arg3
+	 * @param string $arg4
+	 * @param string $arg5
+	 * @param int $arg6
+	 * @param array $arg7
 	 */
 	public function __construct($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null)
     {
@@ -438,7 +436,6 @@ class Dropbox_Person
 	 * @param int $userId
 	 * @param bool $isCourseAdmin
 	 * @param bool $isCourseTutor
-	 * @return Dropbox_Person
 	 */
 	public function __construct($userId, $isCourseAdmin, $isCourseTutor)
     {

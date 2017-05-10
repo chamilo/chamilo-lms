@@ -162,7 +162,6 @@ class ImsSection
     /**
      * Constructor.
      * @param Exercise $exe The Exercise instance to export
-     * @return ImsSection
      * @author Amand Tihon <amand@alrj.org>
      */
     public function __construct($exe)
@@ -311,8 +310,7 @@ class ImsItem
     /**
     * Constructor.
     *
-    * @param $question The Question object we want to export.
-    * @return ImsItem
+    * @param Question $question The Question object we want to export.
     * @author Anamd Tihon
     */
     public function __construct($question)

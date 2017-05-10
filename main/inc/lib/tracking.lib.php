@@ -775,6 +775,7 @@ class Tracking
                             </tr>';
                     } else {
                         $correct_test_link = '-';
+                        $showRowspan = false;
                         if ($row['item_type'] == 'quiz') {
                             $my_url_suffix = '&course='.$courseCode.'&student_id='.$user_id.'&lp_id='.intval($row['mylpid']).'&origin='.$origin;
                             $sql = 'SELECT * FROM '.$tbl_stats_exercices.'
@@ -790,12 +791,14 @@ class Tracking
 
                             $resultLastAttempt = Database::query($sql);
                             $num = Database::num_rows($resultLastAttempt);
+                            $showRowspan = false;
                             if ($num > 0) {
                                 $linkId = 'link_'.$my_id;
                                 if ($extendedAttempt == 1 &&
                                     $lp_id == $my_lp_id &&
                                     $lp_item_id == $my_id
                                 ) {
+                                    $showRowspan = true;
                                     $correct_test_link = Display::url(
                                         Display::return_icon(
                                             'view_less_stats.gif',
@@ -822,7 +825,7 @@ class Tracking
                         $title = Security::remove_XSS($title);
                         $action = null;
                         if ($type == 'classic') {
-                            $action = '<td>'.$correct_test_link.'</td>';
+                            $action = '<td '.($showRowspan ? 'rowspan="2"' : '').'>'.$correct_test_link.'</td>';
                         }
 
                         if ($lp_id == $my_lp_id && false) {

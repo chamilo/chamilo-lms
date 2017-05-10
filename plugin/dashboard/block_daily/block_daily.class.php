@@ -72,19 +72,19 @@ class BlockDaily extends Block
         $data = array();
         $content = $this->get_content_html();
         $html = '<div class="panel panel-default" id="intro">
-		                <div class="panel-heading">' . get_lang('GradebookAndAttendances') . '
+		                <div class="panel-heading">' . get_lang('GradebookAndAttendances').'
 		                    <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\'' . addslashes(
                 api_htmlentities(
                     get_lang('ConfirmYourChoice'),
                     ENT_QUOTES,
                     $charset
                 )
-            ) . '\')) return false;" href="index.php?action=disable_block&path=' . $this->path . '">
+            ).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
                     <em class="fa fa-times"></em>
                         </a></div>
 		                </div>
 		                <div class="panel-body">
-		                   ' . $content . '
+		                   ' . $content.'
 		                </div>
 		            </div>
 				';
@@ -102,17 +102,17 @@ class BlockDaily extends Block
     {
         $course_data = $this->get_course_information_data();
         //$content = '<div style="margin:10px;">';
-        $content = '<h4>' . get_lang(
+        $content = '<h4>'.get_lang(
                 'YourCourseList'
-            ) . '</h4>';
+            ).'</h4>';
         $data_table = null;
         if (!empty($course_data)) {
             $data_table .= '<table class="data_table" width:"95%">';
             $data_table .= '<tr>
-	    						<th>' . get_lang('CourseTitle') . '</th>
-	    						<th width="20%">' . get_lang('NbStudents') . '</th>
-	    						<th width="20%">' . get_lang('Evaluation') . '</th>
-	    						<th width="20%">' . get_lang('ToolAttendance') . '</th>
+	    						<th>' . get_lang('CourseTitle').'</th>
+	    						<th width="20%">' . get_lang('NbStudents').'</th>
+	    						<th width="20%">' . get_lang('Evaluation').'</th>
+	    						<th width="20%">' . get_lang('ToolAttendance').'</th>
 	    					</tr>';
             $i = 1;
             foreach ($course_data as $course) {
@@ -121,12 +121,12 @@ class BlockDaily extends Block
                 } else {
                     $class_tr = 'row_even';
                 }
-                $data_table .= '<tr class="' . $class_tr . '">';
+                $data_table .= '<tr class="'.$class_tr.'">';
                 if (!isset($course[3])) {
                     $course[3] = get_lang('NotAvailable');
                 }
                 foreach ($course as $cell) {
-                    $data_table .= '<td align="right">' . $cell . '</td>';
+                    $data_table .= '<td align="right">'.$cell.'</td>';
                 }
                 $data_table .= '</tr>';
                 $i++;
@@ -138,7 +138,7 @@ class BlockDaily extends Block
         $content .= $data_table;
         if (!empty($course_data)) {
             $content .= '<div style="text-align:right;margin-top:10px;">
-            <a href="' . api_get_path(WEB_CODE_PATH) . 'mySpace/course.php">' . get_lang('SeeMore') . '</a></div>';
+            <a href="' . api_get_path(WEB_CODE_PATH).'mySpace/course.php">'.get_lang('SeeMore').'</a></div>';
         }
         //$content .= '</div>';
         return $content;
@@ -176,7 +176,7 @@ class BlockDaily extends Block
             $table_course = Database::get_course_table(TABLE_ATTENDANCE);
 
             $sql = "SELECT id, name, attendance_qualify_max FROM $table_course
-                    WHERE c_id = " . $course_info['real_id'] . " AND active = 1 AND session_id = 0";
+                    WHERE c_id = ".$course_info['real_id']." AND active = 1 AND session_id = 0";
             $rs = Database::query($sql);
             $attendance = array();
             $attendances = array();
@@ -188,7 +188,7 @@ class BlockDaily extends Block
                 $attendance['course_code'] = $course_info['code'];
 
                 if ($attendance['done'] != '0') {
-                    $attendances[] = '<a href="' . api_get_path(WEB_PATH).'main/attendance/index.php?cidReq=' . $attendance['course_code'] . '&action=attendance_sheet_print&attendance_id=' . $attendance['id']. '">' . Display::return_icon('printmgr.gif', get_lang('Print')).'</a>';
+                    $attendances[] = '<a href="'.api_get_path(WEB_PATH).'main/attendance/index.php?cidReq='.$attendance['course_code'].'&action=attendance_sheet_print&attendance_id='.$attendance['id'].'">'.Display::return_icon('printmgr.gif', get_lang('Print')).'</a>';
                 } else {
                     $attendances[] = get_lang("NotAvailable");
                 }
@@ -200,7 +200,7 @@ class BlockDaily extends Block
             // Number of students
 
             $sql = "SELECT user_id FROM $tbl_course_user as course_rel_user
-                    WHERE course_rel_user.status=" . STUDENT . " AND course_rel_user.c_id=$courseId";
+                    WHERE course_rel_user.status=".STUDENT." AND course_rel_user.c_id=$courseId";
             $rs = Database::query($sql);
             $users = array();
             while ($row = Database::fetch_array($rs)) {
@@ -211,11 +211,11 @@ class BlockDaily extends Block
             }
 
             if (!empty($tematic_advance)) {
-                $tematic_advance_progress = '<a title="' . get_lang(
+                $tematic_advance_progress = '<a title="'.get_lang(
                         'GoToThematicAdvance'
-                    ) . '" href="' . api_get_path(
+                    ).'" href="'.api_get_path(
                         WEB_CODE_PATH
-                    ) . 'attendance/index.php?cidReq=' . $course_code . '&action=attendance_sheet_print&attendance_id=">' . $tematic_advance . '%</a>';
+                    ).'attendance/index.php?cidReq='.$course_code.'&action=attendance_sheet_print&attendance_id=">'.$tematic_advance.'%</a>';
             } else {
                 $tematic_advance_progress = '0%';
             }
@@ -224,8 +224,8 @@ class BlockDaily extends Block
             $tbl_grade_categories = Database::get_main_table(
                 TABLE_MAIN_GRADEBOOK_CATEGORY
             );
-            $sql = "SELECT id from " . $tbl_grade_categories . "
-                    WHERE course_code ='" . $course_code . "'";
+            $sql = "SELECT id from ".$tbl_grade_categories."
+                    WHERE course_code ='" . $course_code."'";
             $rs = Database::query($sql);
             $category = null;
             while ($row = Database::fetch_array($rs)) {
@@ -238,7 +238,7 @@ class BlockDaily extends Block
                 if (count($eval) > 0) {
                     $i = 0;
                     foreach ($eval as $item) {
-                        $score .= '<a href="' . api_get_path(WEB_PATH).'main/gradebook/gradebook_view_result.php?export=pdf&cat_code=' . $cat[0]->get_id() . '&official_code=' . $cat[0]->get_course_code() . '&selecteval=' . $item->get_id(). '">' . $item->get_name() . '</a>';
+                        $score .= '<a href="'.api_get_path(WEB_PATH).'main/gradebook/gradebook_view_result.php?export=pdf&cat_code='.$cat[0]->get_id().'&official_code='.$cat[0]->get_course_code().'&selecteval='.$item->get_id().'">'.$item->get_name().'</a>';
                         if (count($eval) - 1 != $i) {
                             $score .= ', ';
                         }

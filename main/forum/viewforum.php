@@ -25,7 +25,7 @@ use Chamilo\CourseBundle\Entity\CForumPost;
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_FORUM;
+$current_course_tool = TOOL_FORUM;
 
 // Notification for unauthorized people.
 api_protect_course_script(true);
@@ -87,7 +87,7 @@ if (!empty($groupId)) {
 
     // Course
     if (
-        !api_is_allowed_to_edit(false, true) &&  //is a student
+        !api_is_allowed_to_edit(false, true) && //is a student
         (($current_forum_category && $current_forum_category['visibility'] == 0) ||
         $current_forum['visibility'] == 0 || !$user_has_access_in_group)
     ) {
@@ -96,7 +96,7 @@ if (!empty($groupId)) {
 } else {
     //Course
     if (
-        !api_is_allowed_to_edit(false, true) &&  //is a student
+        !api_is_allowed_to_edit(false, true) && //is a student
         (
             ($current_forum_category && $current_forum_category['visibility'] == 0) ||
             $current_forum['visibility'] == 0
@@ -112,12 +112,12 @@ $my_search = isset($_GET['search']) ? $_GET['search'] : '';
 $my_action = isset($_GET['action']) ? $_GET['action'] : '';
 
 $gradebook = null;
-if (isset($_SESSION['gradebook'])){
+if (isset($_SESSION['gradebook'])) {
     $gradebook = $_SESSION['gradebook'];
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array (
+    $interbreadcrumb[] = array(
         'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
     );
@@ -127,25 +127,25 @@ $forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
 
 if (!empty($groupId)) {
     $interbreadcrumb[] = array(
-        'url' => api_get_path(WEB_CODE_PATH) . 'group/group.php?'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups')
     );
     $interbreadcrumb[] = array(
-        'url' => api_get_path(WEB_CODE_PATH) . 'group/group_space.php?' . api_get_cidreq(),
-        'name' => get_lang('GroupSpace') . ' ' . $group_properties['name']
+        'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
+        'name' => get_lang('GroupSpace').' '.$group_properties['name']
     );
     $interbreadcrumb[] = array(
         'url' => '#',
-        'name' => get_lang('Forum') . ' ' . Security::remove_XSS($current_forum['forum_title'])
+        'name' => get_lang('Forum').' '.Security::remove_XSS($current_forum['forum_title'])
     );
 } else {
     $interbreadcrumb[] = array(
-        'url' => $forumUrl . 'index.php?search=' . Security::remove_XSS($my_search),
+        'url' => $forumUrl.'index.php?search='.Security::remove_XSS($my_search),
         'name' => get_lang('ForumCategories')
     );
     $interbreadcrumb[] = array(
-        'url' => $forumUrl . 'viewforumcategory.php?forumcategory=' . $current_forum_category['cat_id']
-            . '&search=' . Security::remove_XSS(urlencode($my_search)),
+        'url' => $forumUrl.'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id']
+            . '&search='.Security::remove_XSS(urlencode($my_search)),
         'name' => prepare4display($current_forum_category['cat_title'])
     );
     $interbreadcrumb[] = array(
@@ -253,24 +253,24 @@ if (
             break;
     }
 
-    $table_list = Display::page_subheader(get_lang('ThreadUsersList') . ': ' . get_name_thread_by_id($_GET['id']));
+    $table_list = Display::page_subheader(get_lang('ThreadUsersList').': '.get_name_thread_by_id($_GET['id']));
 
     if ($nrorow3 > 0 || $nrorow3 == -2) {
-        $url = api_get_cidreq() .'&forum=' . $my_forum . '&action='
-            . Security::remove_XSS($_GET['action']) . '&content='
-            . Security::remove_XSS($_GET['content'], STUDENT) . '&id=' . intval($_GET['id']);
+        $url = api_get_cidreq().'&forum='.$my_forum.'&action='
+            . Security::remove_XSS($_GET['action']).'&content='
+            . Security::remove_XSS($_GET['content'], STUDENT).'&id='.intval($_GET['id']);
         $tabs = array(
             array(
                 'content' =>  get_lang('AllStudents'),
-                'url' => $forumUrl . 'viewforum.php?' . $url . '&list=all'
+                'url' => $forumUrl.'viewforum.php?'.$url.'&list=all'
             ),
             array(
                 'content' =>  get_lang('StudentsQualified'),
-                'url' => $forumUrl . 'viewforum.php?' . $url . '&list=qualify'
+                'url' => $forumUrl.'viewforum.php?'.$url.'&list=qualify'
             ),
             array(
                 'content' =>  get_lang('StudentsNotQualified'),
-                'url' => $forumUrl . 'viewforum.php?' . $url . '&list=notqualify'
+                'url' => $forumUrl.'viewforum.php?'.$url.'&list=notqualify'
             ),
         );
         $table_list .= Display::tabsOnlyLink($tabs, $active);
@@ -279,32 +279,32 @@ if (
         $table_list .= '<center><br /><table class="data_table" style="width:50%">';
         // The column headers (TODO: Make this sortable).
         $table_list .= '<tr >';
-        $table_list .= '<th height="24">' . get_lang('NamesAndLastNames') . '</th>';
+        $table_list .= '<th height="24">'.get_lang('NamesAndLastNames').'</th>';
 
         if ($listType == 'qualify') {
-            $table_list .= '<th>' . get_lang('Qualification') . '</th>';
+            $table_list .= '<th>'.get_lang('Qualification').'</th>';
         }
         if (api_is_allowed_to_edit(null, true)) {
-            $table_list .= '<th>' . get_lang('Qualify') . '</th>';
+            $table_list .= '<th>'.get_lang('Qualify').'</th>';
         }
         $table_list .= '</tr>';
         $max_qualify = showQualify('2', $userId, $_GET['id']);
         $counter_stdlist = 0;
 
         if (Database::num_rows($student_list) > 0) {
-            while ($row_student_list=Database::fetch_array($student_list)) {
+            while ($row_student_list = Database::fetch_array($student_list)) {
                 $userInfo = api_get_user_info($row_student_list['id']);
                 if ($counter_stdlist % 2 == 0) {
                     $class_stdlist = 'row_odd';
                 } else {
                     $class_stdlist = 'row_even';
                 }
-                $table_list .= '<tr class="' . $class_stdlist . '"><td>';
+                $table_list .= '<tr class="'.$class_stdlist.'"><td>';
                 $table_list .= UserManager::getUserProfileLink($userInfo);
 
                 $table_list .= '</td>';
                 if ($listType == 'qualify') {
-                    $table_list .= '<td>' . $row_student_list['qualify'] . '/' . $max_qualify . '</td>';
+                    $table_list .= '<td>'.$row_student_list['qualify'].'/'.$max_qualify.'</td>';
                 }
                 if (api_is_allowed_to_edit(null, true)) {
                     $current_qualify_thread = showQualify(
@@ -313,20 +313,20 @@ if (
                         $_GET['id']
                     );
                     $table_list .= '<td>
-                        <a href="' . $forumUrl . 'forumqualify.php?' . api_get_cidreq()
-                        . '&forum=' . intval($my_forum) . '&thread='
-                        . intval($_GET['id']) . '&user=' . $row_student_list['id']
-                        . '&user_id=' . $row_student_list['id'] . '&idtextqualify='
+                        <a href="' . $forumUrl.'forumqualify.php?'.api_get_cidreq()
+                        . '&forum='.intval($my_forum).'&thread='
+                        . intval($_GET['id']).'&user='.$row_student_list['id']
+                        . '&user_id='.$row_student_list['id'].'&idtextqualify='
                         . $current_qualify_thread.'">'
-                        . Display::return_icon($icon_qualify, get_lang('Qualify')) . '</a></td></tr>';
+                        . Display::return_icon($icon_qualify, get_lang('Qualify')).'</a></td></tr>';
                 }
                 $counter_stdlist++;
             }
         } else {
             if ($listType === 'qualify') {
-                $table_list .= '<tr><td colspan="2">' . get_lang('ThereIsNotQualifiedLearners') . '</td></tr>';
+                $table_list .= '<tr><td colspan="2">'.get_lang('ThereIsNotQualifiedLearners').'</td></tr>';
             } else {
-                $table_list .= '<tr><td colspan="2">' . get_lang('ThereIsNotUnqualifiedLearners') . '</td></tr>';
+                $table_list .= '<tr><td colspan="2">'.get_lang('ThereIsNotUnqualifiedLearners').'</td></tr>';
             }
         }
 
@@ -353,13 +353,13 @@ echo '<div class="actions">';
 
 if ($origin != 'learnpath') {
     if (!empty($groupId)) {
-        echo '<a href="' . api_get_path(WEB_CODE_PATH) . 'group/group_space.php?'
-            . api_get_cidreq() . '&gradebook=' . $gradebook . '">'
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'group/group_space.php?'
+            . api_get_cidreq().'&gradebook='.$gradebook.'">'
             . Display::return_icon('back.png', get_lang('BackTo')
-            . ' ' . get_lang('Groups'), '', ICON_SIZE_MEDIUM) . '</a>';
+            . ' '.get_lang('Groups'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         echo '<span style="float:right;">'.search_link().'</span>';
-        echo '<a href="' . $forumUrl . 'index.php?' . api_get_cidreq() . '">'
+        echo '<a href="'.$forumUrl.'index.php?'.api_get_cidreq().'">'
             . Display::return_icon('back.png', get_lang('BackToForumOverview'), '', ICON_SIZE_MEDIUM)
             . '</a>';
     }
@@ -377,13 +377,13 @@ if (
     if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
         if (!api_is_anonymous() && !api_is_invitee()) {
             if ($my_forum == strval(intval($my_forum))) {
-                echo '<a href="' . $forumUrl . 'newthread.php?' . api_get_cidreq() . '&forum='
+                echo '<a href="'.$forumUrl.'newthread.php?'.api_get_cidreq().'&forum='
                     . Security::remove_XSS($my_forum).'">'
                     . Display::return_icon('new_thread.png', get_lang('NewTopic'), '', ICON_SIZE_MEDIUM)
                     . '</a>';
             } else {
                 $my_forum = strval(intval($my_forum));
-                echo '<a href="' . $forumUrl . 'newthread.php?' . api_get_cidreq()
+                echo '<a href="'.$forumUrl.'newthread.php?'.api_get_cidreq()
                     . '&forum='.$my_forum.'">'
                     . Display::return_icon('new_thread.png', get_lang('NewTopic'), '', ICON_SIZE_MEDIUM)
                     . '</a>';
@@ -411,7 +411,7 @@ $html .= '<div class="topic-forum">';
 if ($origin != 'learnpath') {
     $html .= Display::tag(
         'h3',
-        $iconForum .' '. $titleForum,
+        $iconForum.' '.$titleForum,
         array(
             'class' => 'title-forum')
     );
@@ -452,19 +452,19 @@ if (is_array($threads)) {
             }
 
             if (is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
-                $newPost = ' ' . Display::return_icon('alert.png', get_lang('Forum'), null, ICON_SIZE_SMALL);
+                $newPost = ' '.Display::return_icon('alert.png', get_lang('Forum'), null, ICON_SIZE_SMALL);
             } else {
                 $newPost = '';
             }
 
             $name = api_get_person_name($row['firstname'], $row['lastname']);
 
-            $linkPostForum = '<a href="viewthread.php?' . api_get_cidreq() . '&forum=' . $my_forum
+            $linkPostForum = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$my_forum
                 . "&thread={$row['thread_id']}&search="
-                . Security::remove_XSS(urlencode($my_search)) . '">'
-                . $row['thread_title'] . '</a>';
+                . Security::remove_XSS(urlencode($my_search)).'">'
+                . $row['thread_title'].'</a>';
             $html = '';
-            $html .= '<div class="panel panel-default forum '.($row['thread_sticky']?'sticky':'').'">';
+            $html .= '<div class="panel panel-default forum '.($row['thread_sticky'] ? 'sticky' : '').'">';
             $html .= '<div class="panel-body">';
             $html .= '<div class="row">';
             $html .= '<div class="col-md-6">';
@@ -496,7 +496,7 @@ if (is_array($threads)) {
                 );
             }
 
-            $html .= '<div class="thumbnail">' . display_user_image($row['user_id'], $name, $origin) . '</div>';
+            $html .= '<div class="thumbnail">'.display_user_image($row['user_id'], $name, $origin).'</div>';
             $html .= '</div>';
             $html .= '<div class="col-md-10">';
             $html .= Display::tag(
@@ -506,8 +506,8 @@ if (is_array($threads)) {
                     'class' => 'title'
                 )
             );
-            $html .= '<p>'. get_lang('By') .' ' .$authorName.'</p>';
-            $html .= '<p>' . api_convert_and_format_date($row['insert_date']) . '</p>';
+            $html .= '<p>'.get_lang('By').' '.$authorName.'</p>';
+            $html .= '<p>'.api_convert_and_format_date($row['insert_date']).'</p>';
 
             if ($current_forum['moderated'] == 1 && api_is_allowed_to_edit(false, true)) {
                 $waitingCount = getCountPostsWithStatus(
@@ -517,7 +517,7 @@ if (is_array($threads)) {
                 );
                 if (!empty($waitingCount)) {
                     $html .= Display::label(
-                        get_lang('PostsPendingModeration'). ': '.$waitingCount,
+                        get_lang('PostsPendingModeration').': '.$waitingCount,
                         'warning'
                     );
                 }
@@ -531,13 +531,13 @@ if (is_array($threads)) {
             $html .= '<div class="row">';
             $html .= '<div class="col-md-4">'
                 . Display::return_icon('post-forum.png', null, null, ICON_SIZE_SMALL)
-                . " {$row['thread_replies']} " . get_lang('Replies') . '<br>';
-            $html .=  Display::return_icon(
+                . " {$row['thread_replies']} ".get_lang('Replies').'<br>';
+            $html .= Display::return_icon(
                     'post-forum.png',
                     null,
                     null,
                     ICON_SIZE_SMALL
-                ) . ' ' . $row['thread_views'] . ' ' . get_lang('Views') . '<br>' . $newPost;
+                ).' '.$row['thread_views'].' '.get_lang('Views').'<br>'.$newPost;
             $html .= '</div>';
 
             $last_post_info = get_last_post_by_thread(
@@ -551,7 +551,7 @@ if (is_array($threads)) {
             if ($last_post_info) {
                 $poster_info = api_get_user_info($last_post_info['poster_id']);
                 $post_date = api_convert_and_format_date($last_post_info['post_date']);
-                $last_post = $post_date . '<br>' . get_lang('By') . ' ' . display_user_link(
+                $last_post = $post_date.'<br>'.get_lang('By').' '.display_user_link(
                     $last_post_info['poster_id'],
                     $poster_info['complete_name'],
                     '',
@@ -561,7 +561,7 @@ if (is_array($threads)) {
 
             $html .= '<div class="col-md-5">'
                 . Display::return_icon('post-item.png', null, null, ICON_SIZE_TINY)
-                . ' ' . $last_post;
+                . ' '.$last_post;
             $html .= '</div>';
             $html .= '<div class="col-md-3">';
             $cidreq = api_get_cidreq();
@@ -576,11 +576,11 @@ if (is_array($threads)) {
                 if (api_is_allowed_to_edit(false, true) &&
                     !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
                 ) {
-                    $iconsEdit .= '<a href="' . $forumUrl . 'editthread.php?' . $cidreq
-                        . '&forum=' . $my_forum . '&thread='
+                    $iconsEdit .= '<a href="'.$forumUrl.'editthread.php?'.$cidreq
+                        . '&forum='.$my_forum.'&thread='
                         . intval($row['thread_id'])
-                        . '&id_attach=' . $id_attach . '">'
-                        . Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL) . '</a>';
+                        . '&id_attach='.$id_attach.'">'
+                        . Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
                     if (api_resource_is_locked_by_gradebook($row['thread_id'], LINK_FORUM_THREAD)) {
                         $iconsEdit .= Display::return_icon(
                             'delete_na.png',
@@ -589,12 +589,12 @@ if (is_array($threads)) {
                             ICON_SIZE_SMALL
                         );
                     } else {
-                        $iconsEdit.= '<a href="' . api_get_self() . '?' . $cidreq . '&forum='
-                            . $my_forum . '&action=delete&content=thread&id='
-                            . $row['thread_id'] . "\" onclick=\"javascript:if(!confirm('"
+                        $iconsEdit .= '<a href="'.api_get_self().'?'.$cidreq.'&forum='
+                            . $my_forum.'&action=delete&content=thread&id='
+                            . $row['thread_id']."\" onclick=\"javascript:if(!confirm('"
                             . addslashes(api_htmlentities(get_lang('DeleteCompleteThread'), ENT_QUOTES))
                             . "')) return false;\">"
-                            . Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
+                            . Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
                     }
 
                     $iconsEdit .= return_visible_invisible_icon(
@@ -615,9 +615,9 @@ if (is_array($threads)) {
                             'gidReq' => api_get_group_id()
                         )
                     );
-                    $iconsEdit .= '<a href="viewforum.php?' . $cidreq . '&forum='
+                    $iconsEdit .= '<a href="viewforum.php?'.$cidreq.'&forum='
                         . $my_forum
-                        . '&action=move&thread=' . $row['thread_id'].'">'
+                        . '&action=move&thread='.$row['thread_id'].'">'
                         . Display::return_icon('move.png', get_lang('MoveThread'), array(), ICON_SIZE_SMALL)
                         . '</a>';
                 }
@@ -634,17 +634,17 @@ if (is_array($threads)) {
             }
             $icon_liststd = 'user.png';
             if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
-                $iconsEdit .= '<a href="' . api_get_self() . '?' . $cidreq . '&forum='
+                $iconsEdit .= '<a href="'.api_get_self().'?'.$cidreq.'&forum='
                     . $my_forum
                     . "&action=notify&content=thread&id={$row['thread_id']}"
-                    . '">' . Display::return_icon($iconnotify, get_lang('NotifyMe')) . '</a>';
+                    . '">'.Display::return_icon($iconnotify, get_lang('NotifyMe')).'</a>';
             }
 
             if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
-                $iconsEdit .= '<a href="' . api_get_self() . '?' . $cidreq . '&forum='
+                $iconsEdit .= '<a href="'.api_get_self().'?'.$cidreq.'&forum='
                     . $my_forum
                     . "&action=liststd&content=thread&id={$row['thread_id']}"
-                    . '">' . Display::return_icon($icon_liststd, get_lang('StudentList'), array(), ICON_SIZE_SMALL)
+                    . '">'.Display::return_icon($icon_liststd, get_lang('StudentList'), array(), ICON_SIZE_SMALL)
                     . '</a>';
             }
             $html .= $iconsEdit;

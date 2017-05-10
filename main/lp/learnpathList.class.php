@@ -32,11 +32,9 @@ class LearnpathList
      * @param	string	$course_code Optional course code (otherwise we use api_get_course_id())
      * @param   int		$session_id Optional session id (otherwise we use api_get_session_id())
      * @param   string  $order_by
-     * @param   string  $check_publication_dates
+     * @param   bool  $check_publication_dates
      * @param   int     $categoryId
      * @param bool $ignoreCategoryFilter
-     *
-     * @return	void
      */
     public function __construct(
         $user_id,

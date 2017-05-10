@@ -164,7 +164,7 @@ if ($showCourses && $action != 'display_sessions') {
             $userRegisterdInCourse = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
             $userRegisterdInCourseAsTeacher = CourseManager::is_course_teacher($user_id, $course['code']);
             $userRegisterd = ($userRegisterdInCourse && $userRegisterdInCourseAsTeacher);
-            
+
             $course_public = ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD);
             $course_open = ($course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM);
             $course_private = ($course['visibility'] == COURSE_VISIBILITY_REGISTERED);
@@ -284,7 +284,7 @@ function returnThumbnail($course, $registeredUser)
     $html = '';
     $title = cut($course['title'], 70);
     $linkCourse = api_get_course_url($course['code']);
-    
+
     // course path
     $course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];
 
@@ -296,7 +296,7 @@ function returnThumbnail($course, $registeredUser)
     }
 
     $html .= '<div class="image">';
-    
+
     if (!$registeredUser) {
         $html .= '<img class="img-responsive"'
                 .' src="'.$course_medium_image.'" '
@@ -306,13 +306,13 @@ function returnThumbnail($course, $registeredUser)
                 .'<img class="img-responsive" src="'.$course_medium_image.'" '
                 .'alt="'.api_htmlentities($title).'"/></a>';
     }
-    
+
     $categoryTitle = isset($course['category_title']) ? $course['category_title'] : '';
     if (!empty($categoryTitle)) {
         $html .= '<span class="category">'.$categoryTitle.'</span>';
         $html .= '<div class="cribbon"></div>';
     }
-    
+
     $html .= '<div class="user-actions">';
     $html .= return_description_button($course);
     $html .= '</div></div>';
@@ -357,22 +357,26 @@ function return_title($course, $registeredUser)
     $html = '';
     $linkCourse = api_get_course_url($course['code']);
     $title = cut($course['title'], 45);
-    $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
-    $rating = Display::return_rating_system(
-        'star_'.$course['real_id'],
-        $ajax_url.'&course_id='.$course['real_id'],
-        $course['point_info']
-        );
+
     $html .= '<div class="block-title"><h4 class="title">';
-    
+
     if (!$registeredUser) {
         $html .= $title;
     } else {
         $html .= '<a title="'.$title.'" href="' . $linkCourse . '">' . $title . '</a>';
     }
-    
+
     $html .= '</h4></div>';
-    $html .= '<div class="ranking">'. $rating . '</div>';
+
+    if (api_get_configuration_value('hide_course_rating') === false) {
+        $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
+        $rating = Display::return_rating_system(
+            'star_'.$course['real_id'],
+            $ajax_url.'&course_id='.$course['real_id'],
+            $course['point_info']
+        );
+        $html .= '<div class="ranking">'.$rating.'</div>';
+    }
 
     return $html;
 }

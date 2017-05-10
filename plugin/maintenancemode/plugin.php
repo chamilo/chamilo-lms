@@ -145,6 +145,7 @@ RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
         $newFileContent .= PHP_EOL;
         $newFileContent .= $contentNoBlock;
 
+        $newFileContent = str_replace('\\r', '', $newFileContent);
         file_put_contents($file, $newFileContent);
 
         $handle = curl_init(api_get_path(WEB_PATH));
@@ -161,6 +162,7 @@ RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
                     'warning'
                 )
             );
+            $originalContent = str_replace('\\r', '', $originalContent);
             file_put_contents($file, $originalContent);
         } else {
             $result = file_put_contents($maintenanceHtml, $content);
@@ -176,6 +178,7 @@ RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
 
         if ($active == false) {
             Display::addFlash(Display::return_message($plugin->get_lang('MaintenanceModeIsOff')));
+            $contentNoBlock = str_replace('\\r', '', $contentNoBlock);
             file_put_contents($file, $contentNoBlock);
         } else {
             Display::addFlash(Display::return_message($plugin->get_lang('MaintenanceModeIsOn')));

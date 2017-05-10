@@ -447,9 +447,9 @@ class aicc extends learnpath
         foreach ($files_found as $file_name => $file_exts) {
             $temp = (
                 !empty($files_found[$file_name]['crs'])
-                AND !empty($files_found[$file_name]['au'])
-                AND !empty($files_found[$file_name]['des'])
-                AND !empty($files_found[$file_name]['cst'])
+                && !empty($files_found[$file_name]['au'])
+                && !empty($files_found[$file_name]['des'])
+                && !empty($files_found[$file_name]['cst'])
             );
             if ($temp) {
                 if ($this->debug > 1) { error_log('New LP - aicc::import_package() - Found all config files for '.$file_name, 0); }

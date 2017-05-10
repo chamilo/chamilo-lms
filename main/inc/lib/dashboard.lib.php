@@ -264,7 +264,7 @@ class DashboardManager
         $dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
         $handle = @opendir($dashboard_pluginpath);
         while (false !== ($file = readdir($handle))) {
-            if ($file <> '.' AND $file <> '..' AND is_dir($dashboard_pluginpath.$file)) {
+            if ($file <> '.' && $file <> '..' && is_dir($dashboard_pluginpath.$file)) {
                 $possiblePlugins[] = $file;
             }
         }

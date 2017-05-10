@@ -931,7 +931,6 @@ abstract class Question
                 'extra' => $extra,
                 'level' => $level,
             ];
-
             Database::update(
                 $TBL_QUESTIONS,
                 $params,

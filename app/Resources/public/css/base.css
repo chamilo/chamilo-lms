@@ -4191,9 +4191,11 @@ ul.holder li.bit-box{
   min-height: 2em;
   min-width: 100%;
 }
+ul.exercise-draggable-answer.list-inline li {
+    float: left;
+}
 ul.exercise-draggable-answer li {
   cursor: move;
-  float: left;
   margin: 0 20px 20px 0;
   padding: 5px 20px;
   text-align: center;

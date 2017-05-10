@@ -47,7 +47,7 @@ $form->addText(
     get_lang('Title'),
     true,
     array(
-        'id' => 'title'
+        'aria-label' => get_lang('Title')
     )
 );
 $form->applyFilter('title', 'html_filter');

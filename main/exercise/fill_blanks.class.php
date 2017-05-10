@@ -1333,6 +1333,7 @@ class FillBlanks extends Question
         $answer = htmlentities(api_utf8_encode($answer), ENT_QUOTES);
         $answer = str_replace('&#039;', '&#39;', $answer); // fix apostrophe
         $answer = api_preg_replace('/\s\s+/', ' ', $answer); // replace excess white spaces
+        $answer = strtr($answer, array_flip(get_html_translation_table(HTML_ENTITIES, ENT_QUOTES)));
 
         return trim($answer);
     }

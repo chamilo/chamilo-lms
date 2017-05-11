@@ -902,11 +902,13 @@ class Rest extends WebService
                     ];
                 }
 
+                $sessionBox = Display::get_session_title_box($sessions['session_id']);
+
                 $categorySessions[] = [
-                    'name' => $sessions['session_name'],
+                    'name' => $sessionBox['title'],
                     'id' => $sessions['session_id'],
-                    'accessStartDate' => api_format_date($sessions['access_start_date'], DATE_TIME_FORMAT_SHORT),
-                    'accessEndDate' => api_format_date($sessions['access_end_date'], DATE_TIME_FORMAT_SHORT),
+                    'date' => $sessionBox['dates'],
+                    'duration' => isset($sessionBox['duration']) ? $sessionBox['duration'] : null,
                     'courses' => $sessionCourses
                 ];
             }

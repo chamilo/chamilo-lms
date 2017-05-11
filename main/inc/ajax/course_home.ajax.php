@@ -48,13 +48,13 @@ switch ($action) {
                 $na_image = CourseHome::getCustomWebIconPath().CourseHome::getDisableIcon($tool_info['custom_icon']);
             }
 
-            $requested_image = ($tool_visibility == 0) ? $tool_image : $na_image;
-            $requested_class = ($tool_visibility == 0) ? '' : 'text-muted';
-            $requested_message = ($tool_visibility == 0) ? 'is_active' : 'is_inactive';
-            $requested_view = ($tool_visibility == 0) ? 'visible.png' : 'invisible.png';
-            $requested_visible = ($tool_visibility == 0) ? 1 : 0;
-            $requested_view = ($tool_visibility == 0) ? 'visible.png' : 'invisible.png';
-            $requested_visible = ($tool_visibility == 0) ? 1 : 0;
+            $requested_image = $tool_visibility == 0 ? $tool_image : $na_image;
+            $requested_class = $tool_visibility == 0 ? '' : 'text-muted';
+            $requested_message = $tool_visibility == 0 ? 'is_active' : 'is_inactive';
+            $requested_view = $tool_visibility == 0 ? 'visible.png' : 'invisible.png';
+            $requested_visible = $tool_visibility == 0 ? 1 : 0;
+            $requested_view = $tool_visibility == 0 ? 'visible.png' : 'invisible.png';
+            $requested_visible = $tool_visibility == 0 ? 1 : 0;
 
             // HIDE AND REACTIVATE TOOL
             if ($_GET["id"] == strval(intval($_GET["id"]))) {
@@ -79,8 +79,7 @@ switch ($action) {
         $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
         $course_info = api_get_course_info($_GET['code']);
 
-        if (
-            api_get_setting('course_catalog_hide_private') === 'true' &&
+        if (api_get_setting('course_catalog_hide_private') === 'true' &&
             $course_info['visibility'] == COURSE_VISIBILITY_REGISTERED
         ) {
             echo get_lang('PrivateAccess');
@@ -459,7 +458,7 @@ switch ($action) {
                     $date = '-';
                 }
 
-                 //Checking LP publicated and expired_on dates
+                // Checking LP publicated and expired_on dates
                 if (!empty($lp_item['publicated_on'])) {
                     if ($now < api_strtotime($lp_item['publicated_on'], 'UTC')) {
                         continue;
@@ -478,7 +477,6 @@ switch ($action) {
                 $temp[$count]['course'] = strip_tags($item['title']);
                 $temp[$count]['lp'] = $lp_item['lp_name'];
                 $temp[$count]['date'] = $lp_item['publicated_on'];
-
                 $count++;
             }
         }

@@ -343,7 +343,6 @@ foreach ($questionList as $questionId) {
 $counter = 1;
 $exercise_content = null;
 $category_list = array();
-
 $useAdvancedEditor = true;
 
 if (!empty($maxEditors) && count($questionList) > $maxEditors) {
@@ -938,13 +937,17 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
     );
     $emailForm->addHtml('</span>');
 
-    $url = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.api_get_session_id();
+    if (empty($track_exercise_info['orig_lp_id']) || empty($track_exercise_info['orig_lp_item_id'])) {
+        // Default url
+        $url = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.api_get_session_id();
+    } else {
+        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view&item_id='.$track_exercise_info['orig_lp_item_id'].'&lp_id='.$track_exercise_info['orig_lp_id'].'&'.api_get_cidreq().'&id_session='.api_get_session_id();
+    }
 
     $content = ExerciseLib::getEmailNotification(
         $currentUserId,
         api_get_course_info(),
         $track_exercise_info['title'],
-        $track_exercise_info['orig_lp_id'],
         $url
     );
     $emailForm->setDefaults(['notification_content' => $content]);

@@ -96,8 +96,8 @@ class SessionManager
      * @param   string  $displayEndDate (YYYY-MM-DD hh:mm:ss)
      * @param   string  $coachStartDate (YYYY-MM-DD hh:mm:ss)
      * @param   string  $coachEndDate (YYYY-MM-DD hh:mm:ss)
-     * @param   mixed   $coachId If integer, this is the session coach id, if string, the coach ID will be looked for from the user table
      * @param   integer $sessionCategoryId ID of the session category in which this session is registered
+     * @param   mixed   $coachId If integer, this is the session coach id, if string, the coach ID will be looked for from the user table
      * @param   integer $visibility Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
      * @param   bool    $fixSessionNameIfExists
      * @param   string  $duration
@@ -293,7 +293,7 @@ class SessionManager
      *
      * @return bool
      */
-    public static function session_name_exists($name)
+    public static function sessionNameExists($name)
     {
         $name = Database::escape_string($name);
         $sql = "SELECT COUNT(*) as count FROM ".Database::get_main_table(TABLE_MAIN_SESSION)."
@@ -345,8 +345,8 @@ class SessionManager
             $where_condition = str_replace('category_name', 'sc.name', $where_condition);
             $where_condition = str_replace(
                 array("AND session_active = '1'  )", " AND (  session_active = '1'  )"),
-                array(') GROUP BY s.name HAVING session_active = 1 ', " GROUP BY s.name HAVING session_active = 1 ")
-                , $where_condition
+                array(') GROUP BY s.name HAVING session_active = 1 ', " GROUP BY s.name HAVING session_active = 1 "),
+                $where_condition
             );
             $where_condition = str_replace(
                 array("AND session_active = '0'  )", " AND (  session_active = '0'  )"),
@@ -387,7 +387,6 @@ class SessionManager
                 $where $where_condition ) as session_table";
 
         if (api_is_multiple_url_enabled()) {
-
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $where .= " AND ar.access_url_id = $access_url_id ";
@@ -1365,16 +1364,16 @@ class SessionManager
     /**
      * Creates a new course code based in given code
      *
-     * @param string	$session_name
+     * @param string $session_name
      * <code>
      * $wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return: course3
      * if the course code doest not exist in the DB the same course code will be returned
      * </code>
-     * @return string	wanted unused code
+     * @return string wanted unused code
      */
     public static function generateNextSessionName($session_name)
     {
-        $session_name_ok = !self::session_name_exists($session_name);
+        $session_name_ok = !self::sessionNameExists($session_name);
         if (!$session_name_ok) {
             $table = Database::get_main_table(TABLE_MAIN_SESSION);
             $session_name = Database::escape_string($session_name);
@@ -1385,7 +1384,7 @@ class SessionManager
                 $row = Database::fetch_array($result);
                 $count = $row['count'] + 1;
                 $session_name = $session_name.'_'.$count;
-                $result = self::session_name_exists($session_name);
+                $result = self::sessionNameExists($session_name);
                 if (!$result) {
                     return $session_name;
                 }

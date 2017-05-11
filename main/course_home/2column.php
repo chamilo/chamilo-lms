@@ -4,13 +4,13 @@
 /**
  *  HOME PAGE FOR EACH COURSE
  *
- *	This page, included in every course's index.php is the home
- *	page. To make administration simple, the teacher edits his
- *	course from the home page. Only the login detects that the
- *	visitor is allowed to activate, deactivate home page links,
- *	access to the teachers tools (statistics, edit forums...).
+ *  This page, included in every course's index.php is the home
+ *  page. To make administration simple, the teacher edits his
+ *  course from the home page. Only the login detects that the
+ *  visitor is allowed to activate, deactivate home page links,
+ *  access to the teachers tools (statistics, edit forums...).
  *
- *	@package chamilo.course_home
+ * @package chamilo.course_home
  */
 
 /* 	Work with data post askable by admin of course (franglais, clean this) */
@@ -24,7 +24,6 @@ if (api_is_allowed_to_edit(null, true)) {
     /*
      * Display message to confirm that a tool must be hidden from the list of available tools (visibility 0,1->2)
      */
-
     if (isset($_GET['remove']) && $_GET['remove']) {
         $msgDestroy = get_lang('DelLk').'<br />';
         $msgDestroy .= '<a href="'.api_get_self().'">'.get_lang('No').'</a>&nbsp;|&nbsp;';
@@ -100,7 +99,6 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
             "</tr>";
 
     $content .= CourseHome::show_tool_2column(TOOL_PUBLIC_BUT_HIDDEN);
-
     $content .= "</table>";
     $content .= "</div> ";
 }

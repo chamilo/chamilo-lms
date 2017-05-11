@@ -276,13 +276,13 @@ if ($show_autolaunch_lp_warning) {
 }
 
 if (api_get_setting('homepage_view') === 'activity' || api_get_setting('homepage_view') === 'activity_big') {
-	require 'activity.php';
+    require 'activity.php';
 } elseif (api_get_setting('homepage_view') === '2column') {
-	require '2column.php';
+    require '2column.php';
 } elseif (api_get_setting('homepage_view') === '3column') {
-	require '3column.php';
+    require '3column.php';
 } elseif (api_get_setting('homepage_view') === 'vertical_activity') {
-	require 'vertical_activity.php';
+    require 'vertical_activity.php';
 }
 
 $content = '<div id="course_tools">'.$content.'</div>';
@@ -293,7 +293,6 @@ $tpl->assign('content', $content);
 
 // Direct login to course
 $tpl->assign('course_code', $course_code);
-
 $tpl->display_one_col_template();
 
 // Deleting the objects

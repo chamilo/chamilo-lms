@@ -19,18 +19,18 @@ function reports_template_Generic_getSQL()
 
     // Nom, prenom
     $query = 'select u.lastname as "Last name", u.firstname as "First name" ';
-    $query .= 'from ' . Database::get_main_table(TABLE_MAIN_USER) . ' u ';
-    $query .= ' where u.user_id in (' . reports_getVisibilitySQL() . ') ';
+    $query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
+    $query .= ' where u.user_id in ('.reports_getVisibilitySQL().') ';
     $query .= ' order by u.user_id ';
     $queries[0] = $query;
 
     // Custom Field
     foreach (array(10 => "description") as $k => $v) {
-        $query = 'select ufv.value  as "' . $v . '" ';
-        $query .= 'from ' . Database::get_main_table(TABLE_MAIN_USER) . ' u ';
-        $query .= 'left outer join ' . Database::get_main_table(TABLE_EXTRA_FIELD_VALUES) . ' ufv ';
-        $query .= ' on ufv.item_id = u.user_id and ufv.field_id = ' . $k;
-        $query .= ' where u.user_id in (' . reports_getVisibilitySQL() . ') ';
+        $query = 'select ufv.value  as "'.$v.'" ';
+        $query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
+        $query .= 'left outer join '.Database::get_main_table(TABLE_EXTRA_FIELD_VALUES).' ufv ';
+        $query .= ' on ufv.item_id = u.user_id and ufv.field_id = '.$k;
+        $query .= ' where u.user_id in ('.reports_getVisibilitySQL().') ';
         $query .= ' order by u.user_id ';
         $queries[] = $query;
     }
@@ -38,21 +38,21 @@ function reports_template_Generic_getSQL()
     // Stored Value
     $sv = array();
     foreach ($sv as $k => $v) {
-        $query = 'select sec_to_time(sv.sv_value) as "' . $v . '" ';
-        $query .= 'from ' . Database::get_main_table(TABLE_MAIN_USER) . ' u ';
-        $query .= ' left outer join ' . Database::get_main_table(TABLE_TRACK_STORED_VALUES) . ' sv ';
-        $query .= 'on sv.user_id = u.user_id and sv_key = "' . $k . '" ';
-        $query .= ' where u.user_id in (' . reports_getVisibilitySQL() . ') ';
+        $query = 'select sec_to_time(sv.sv_value) as "'.$v.'" ';
+        $query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
+        $query .= ' left outer join '.Database::get_main_table(TABLE_TRACK_STORED_VALUES).' sv ';
+        $query .= 'on sv.user_id = u.user_id and sv_key = "'.$k.'" ';
+        $query .= ' where u.user_id in ('.reports_getVisibilitySQL().') ';
         $query .= ' order by u.user_id ';
         $queries[] = $query;
     }
 
     // premiere connexion
     $query = 'select min(tel.login_date) as "First connection", max(tel.logout_date) as "Latest connection"  ';
-    $query .= 'from ' . Database::get_main_table(TABLE_MAIN_USER) . ' u ';
-    $query .= 'left outer join ' . Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN) . ' tel ';
+    $query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
+    $query .= 'left outer join '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN).' tel ';
     $query .= ' on tel.login_user_id = u.user_id ';
-    $query .= ' where u.user_id in (' . reports_getVisibilitySQL() . ') ';
+    $query .= ' where u.user_id in ('.reports_getVisibilitySQL().') ';
     $query .= ' group by u.user_id ';
     $query .= ' order by u.user_id ';
     $queries[] = $query;

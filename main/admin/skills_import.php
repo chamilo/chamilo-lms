@@ -277,7 +277,7 @@ $toolbar .= Display::url(
     );
 
 
-$actions = '<div class="actions">' . $toolbar . '</div>';
+$actions = '<div class="actions">'.$toolbar.'</div>';
 
 echo $actions;
 

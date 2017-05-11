@@ -34,7 +34,7 @@ class UserManager
     const USER_FIELD_TYPE_TIMEZONE = 11;
     const USER_FIELD_TYPE_SOCIAL_PROFILE = 12;
     const USER_FIELD_TYPE_FILE = 13;
-    const USER_FIELD_TYPE_MOBILE_PHONE_NUMBER  = 14;
+    const USER_FIELD_TYPE_MOBILE_PHONE_NUMBER = 14;
 
     private static $encryptionMethod;
 
@@ -562,7 +562,7 @@ class UserManager
         $res = Database::query($sql);
         while ($course = Database::fetch_object($res)) {
             $sql = "SELECT id FROM $table_course_user
-                    WHERE status=1 AND c_id = " . intval($course->c_id);
+                    WHERE status=1 AND c_id = ".intval($course->c_id);
             $res2 = Database::query($sql);
             if (Database::num_rows($res2) == 1) {
                 return false;
@@ -769,7 +769,7 @@ class UserManager
         );
         $cacheAvailable = api_get_configuration_value('apc');
         if ($cacheAvailable === true) {
-            $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $user_id;
+            $apcVar = api_get_configuration_value('apc_prefix').'userinfo_'.$user_id;
             if (apcu_exists($apcVar)) {
                 apcu_delete($apcVar);
             }
@@ -1096,7 +1096,7 @@ class UserManager
 
         $cacheAvailable = api_get_configuration_value('apc');
         if ($cacheAvailable === true) {
-            $apcVar = api_get_configuration_value('apc_prefix') . 'userinfo_' . $user_id;
+            $apcVar = api_get_configuration_value('apc_prefix').'userinfo_'.$user_id;
             if (apcu_exists($apcVar)) {
                 apcu_delete($apcVar);
             }
@@ -1305,7 +1305,7 @@ class UserManager
             // into ASCII letters in order they not to be totally removed.
             // 2. Applying the strict purifier.
             // 3. Length limitation.
-            $return  = api_get_setting('login_is_email') === 'true' ? substr(preg_replace(USERNAME_PURIFIER_MAIL, '', $username), 0, USERNAME_MAX_LENGTH) : substr(preg_replace(USERNAME_PURIFIER, '', $username), 0, USERNAME_MAX_LENGTH);
+            $return = api_get_setting('login_is_email') === 'true' ? substr(preg_replace(USERNAME_PURIFIER_MAIL, '', $username), 0, USERNAME_MAX_LENGTH) : substr(preg_replace(USERNAME_PURIFIER, '', $username), 0, USERNAME_MAX_LENGTH);
             $return = URLify::transliterate($return);
 
             return $return;
@@ -1398,12 +1398,12 @@ class UserManager
 
         if (!is_null($order)) {
             $order = Database::escape_string($order);
-            $sql .= ' ORDER BY ' . $order;
+            $sql .= ' ORDER BY '.$order;
         }
 
         if (!is_null($limit)) {
             $limit = Database::escape_string($limit);
-            $sql .= ' LIMIT ' . $limit;
+            $sql .= ' LIMIT '.$limit;
         }
 
         $rs = Database::query($sql);
@@ -1505,11 +1505,11 @@ class UserManager
             }
 
             if (api_is_multiple_url_enabled()) {
-                $sql_query .= ' AND auru.access_url_id = ' . api_get_current_access_url_id();
+                $sql_query .= ' AND auru.access_url_id = '.api_get_current_access_url_id();
             }
         } else {
             if (api_is_multiple_url_enabled()) {
-                $sql_query .= ' WHERE auru.access_url_id = ' . api_get_current_access_url_id();
+                $sql_query .= ' WHERE auru.access_url_id = '.api_get_current_access_url_id();
             }
         }
         if (count($order_by) > 0) {
@@ -1682,7 +1682,7 @@ class UserManager
             // directory might not have been created. Make sure it is before
             // going further.
 
-            $rootPath = api_get_path(SYS_UPLOAD_PATH) . 'users/' . substr((string) $id, 0, 1);
+            $rootPath = api_get_path(SYS_UPLOAD_PATH).'users/'.substr((string) $id, 0, 1);
             if (!is_dir($rootPath)) {
                 $perm = api_get_permissions_for_new_directories();
                 try {
@@ -1944,7 +1944,7 @@ class UserManager
         $path_info = self::get_user_picture_path_by_id($user_id, 'system');
         $path = $path_info['dir'];
         if (!empty($extra_field)) {
-            $path .= $extra_field . '/';
+            $path .= $extra_field.'/';
         }
         // If this directory does not exist - we create it.
         if (!file_exists($path)) {
@@ -2208,10 +2208,10 @@ class UserManager
         if (count($extra_files) > 0) {
             $extra_file_list = '<div class="files-production"><ul id="productions">';
             foreach ($extra_files as $file) {
-                $filename = substr($file,strlen($extra_field)+1);
+                $filename = substr($file, strlen($extra_field) + 1);
                 $extra_file_list .= '<li>'.Display::return_icon('archive.png').'<a href="'.$path.$extra_field.'/'.urlencode($filename).'" target="_blank">'.htmlentities($filename).'</a> ';
                 if ($showDelete) {
-                    $extra_file_list .= '<input style="width:16px;" type="image" name="remove_extra_' . $extra_field . '['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($filename).'" onclick="javascript: return confirmation(\''.htmlentities($filename).'\');" /></li>';
+                    $extra_file_list .= '<input style="width:16px;" type="image" name="remove_extra_'.$extra_field.'['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($filename).'" onclick="javascript: return confirmation(\''.htmlentities($filename).'\');" /></li>';
                 }
             }
             $extra_file_list .= '</ul></div>';
@@ -2861,7 +2861,7 @@ class UserManager
         // Getting sessions that are related to a coach in the session_rel_course_rel_user table
         if (api_is_allowed_to_create_course()) {
             $sessionListFromCourseCoach = array();
-            $sql =" SELECT DISTINCT session_id
+            $sql = " SELECT DISTINCT session_id
                     FROM $tbl_session_course_user
                     WHERE user_id = $user_id AND status = 2 ";
 
@@ -2869,7 +2869,7 @@ class UserManager
             if (Database::num_rows($result)) {
                 $result = Database::store_result($result);
                 foreach ($result as $session) {
-                    $sessionListFromCourseCoach[]= $session['session_id'];
+                    $sessionListFromCourseCoach[] = $session['session_id'];
                 }
             }
             if (!empty($sessionListFromCourseCoach)) {
@@ -2901,7 +2901,7 @@ class UserManager
         ";
 
         $result = Database::query($sql);
-        if (Database::num_rows($result)>0) {
+        if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_assoc($result)) {
                 $sessions[$row['id']] = $row;
             }
@@ -2917,7 +2917,7 @@ class UserManager
                 ORDER BY access_start_date, access_end_date, name";
 
         $result = Database::query($sql);
-        if (Database::num_rows($result)>0) {
+        if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_assoc($result)) {
                 if (empty($sessions[$row['id']])) {
                     $sessions[$row['id']] = $row;
@@ -3922,13 +3922,13 @@ class UserManager
         $useExtraFields = false;
         $extraFields = self::get_extra_filtrable_fields();
         $extraFieldResult = array();
-        if (is_array($extraFields) && count($extraFields)>0 ) {
+        if (is_array($extraFields) && count($extraFields) > 0) {
             foreach ($extraFields as $extraField) {
                 $varName = 'field_'.$extraField['variable'];
                 if (self::is_extra_field_available($extraField['variable'])) {
-                    if (isset($_GET[$varName]) && $_GET[$varName]!='0') {
+                    if (isset($_GET[$varName]) && $_GET[$varName] != '0') {
                         $useExtraFields = true;
-                        $extraFieldResult[]= self::get_extra_user_data_by_value(
+                        $extraFieldResult[] = self::get_extra_user_data_by_value(
                             $extraField['variable'],
                             $_GET[$varName]
                         );
@@ -3939,17 +3939,17 @@ class UserManager
 
         if ($useExtraFields) {
             $finalResult = array();
-            if (count($extraFieldResult)>1) {
-                for ($i=0; $i < count($extraFieldResult) -1; $i++) {
-                if (is_array($extraFieldResult[$i]) && is_array($extraFieldResult[$i+1])) {
-                        $finalResult  = array_intersect($extraFieldResult[$i], $extraFieldResult[$i+1]);
+            if (count($extraFieldResult) > 1) {
+                for ($i = 0; $i < count($extraFieldResult) - 1; $i++) {
+                if (is_array($extraFieldResult[$i]) && is_array($extraFieldResult[$i + 1])) {
+                        $finalResult = array_intersect($extraFieldResult[$i], $extraFieldResult[$i + 1]);
                     }
                 }
             } else {
                 $finalResult = $extraFieldResult[0];
             }
 
-            if (is_array($finalResult) && count($finalResult)>0) {
+            if (is_array($finalResult) && count($finalResult) > 0) {
                 $whereFilter = " AND u.id IN  ('".implode("','", $finalResult)."') ";
             } else {
                 //no results
@@ -4128,7 +4128,7 @@ class UserManager
             $sql = 'DELETE FROM '.$tbl_my_friend.'
                     WHERE relation_type <> '.USER_RELATION_TYPE_RRHH.' AND friend_user_id='.$friend_id.' '.$extra_condition;
             Database::query($sql);
-            $sql= 'DELETE FROM '.$tbl_my_friend.'
+            $sql = 'DELETE FROM '.$tbl_my_friend.'
                    WHERE relation_type <> '.USER_RELATION_TYPE_RRHH.' AND user_id='.$friend_id.' '.$extra_condition;
             Database::query($sql);
         } else {
@@ -4329,7 +4329,7 @@ class UserManager
 
         if (!empty($lastConnectionDate)) {
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
-            $userConditions .=  " AND u.last_login <= '$lastConnectionDate' ";
+            $userConditions .= " AND u.last_login <= '$lastConnectionDate' ";
         }
 
         $courseConditions = null;
@@ -4397,7 +4397,7 @@ class UserManager
                 ;
                 break;
             case STUDENT_BOSS:
-                $drhConditions = " AND friend_user_id = $userId AND relation_type = " . USER_RELATION_TYPE_BOSS;
+                $drhConditions = " AND friend_user_id = $userId AND relation_type = ".USER_RELATION_TYPE_BOSS;
                 break;
         }
 
@@ -4492,7 +4492,7 @@ class UserManager
                     WHERE 
                         friend_user_id = $userId AND 
                         relation_type = $relationType AND 
-                        access_url_id = " . api_get_current_access_url_id();
+                        access_url_id = ".api_get_current_access_url_id();
         } else {
             $sql = "SELECT user_id FROM $userRelUserTable 
                     WHERE friend_user_id = $userId 
@@ -4777,7 +4777,7 @@ class UserManager
         if (empty($years)) {
             $years = 1;
         }
-        $inactive_time = $years * 31536000;  //1 year
+        $inactive_time = $years * 31536000; //1 year
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
             if ($last_login_date = Database::result($rs, 0, 0)) {
@@ -4911,7 +4911,7 @@ class UserManager
                         'extra_'.$field_details[1],
                         $field_details[3],
                         $options,
-                        array('id' => 'extra_' . $field_details[1])
+                        array('id' => 'extra_'.$field_details[1])
                     );
 
                     if (!$admin_permissions) {
@@ -5065,7 +5065,7 @@ EOF;
                     $extra_field = 'extra_'.$field_details[1];
                     $form->addElement('file', $extra_field, $field_details[3], null, '');
                     if ($extra_file_list = self::build_user_extra_file_list($user_id, $field_details[1], '', true)) {
-                        $form->addElement('static', $extra_field . '_list', null, $extra_file_list);
+                        $form->addElement('static', $extra_field.'_list', null, $extra_file_list);
                     }
                     if ($field_details[7] == 0) {
                         $form->freeze($extra_field);
@@ -5237,7 +5237,7 @@ EOF;
         $direction = null,
         $active = null,
         $lastConnectionDate = null
-    ){
+    ) {
         return self::getUsersFollowedByUser(
             $userId,
             $userStatus,
@@ -5464,12 +5464,12 @@ EOF;
         if (!empty($_SERVER['HTTPS'])) {
             $url = 'https://secure.gravatar.com/avatar/';
         }
-        $url .= md5( strtolower( trim( $email ) ) );
+        $url .= md5(strtolower(trim($email)));
         $url .= "?s=$s&d=$d&r=$r";
-        if ( $img ) {
-            $url = '<img src="' . $url . '"';
-            foreach ( $atts as $key => $val )
-                $url .= ' ' . $key . '="' . $val . '"';
+        if ($img) {
+            $url = '<img src="'.$url.'"';
+            foreach ($atts as $key => $val)
+                $url .= ' '.$key.'="'.$val.'"';
             $url .= ' />';
         }
         return $url;

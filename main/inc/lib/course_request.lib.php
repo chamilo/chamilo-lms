@@ -65,8 +65,8 @@ class CourseRequestManager
         $exemplary_content
     ) {
         $wanted_code = trim($wanted_code);
-        $user_id = (int)$user_id;
-        $exemplary_content = (bool)$exemplary_content ? 1 : 0;
+        $user_id = (int) $user_id;
+        $exemplary_content = (bool) $exemplary_content ? 1 : 0;
 
         if ($wanted_code == '') {
             return false;
@@ -252,10 +252,10 @@ class CourseRequestManager
         $user_id,
         $exemplary_content
     ) {
-        $id = (int)$id;
+        $id = (int) $id;
         $wanted_code = trim($wanted_code);
-        $user_id = (int)$user_id;
-        $exemplary_content = (bool)$exemplary_content ? 1 : 0;
+        $user_id = (int) $user_id;
+        $exemplary_content = (bool) $exemplary_content ? 1 : 0;
 
         if ($wanted_code == '') {
             return false;
@@ -358,7 +358,7 @@ class CourseRequestManager
      */
     public static function delete_course_request($id)
     {
-        $id = (int)$id;
+        $id = (int) $id;
         $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
                 WHERE id = ".$id;
         $result = Database::query($sql);
@@ -376,7 +376,7 @@ class CourseRequestManager
         if (is_null($status)) {
             $sql = "SELECT COUNT(id) AS number FROM ".$course_table;
         } else {
-            $status = (int)$status;
+            $status = (int) $status;
             $sql = "SELECT COUNT(id) AS number FROM ".$course_table."
                     WHERE status = ".$status;
         }
@@ -395,7 +395,7 @@ class CourseRequestManager
      */
     public static function get_course_request_info($id)
     {
-        $id = (int)$id;
+        $id = (int) $id;
         $sql = "SELECT *
                 FROM ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
                 WHERE id = ".$id;
@@ -413,7 +413,7 @@ class CourseRequestManager
      */
     public static function get_course_request_code($id)
     {
-        $id = (int)$id;
+        $id = (int) $id;
         $sql = "SELECT code
                 FROM ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
                 WHERE id = ".$id;
@@ -434,7 +434,7 @@ class CourseRequestManager
      */
     public static function accept_course_request($id)
     {
-        $id = (int)$id;
+        $id = (int) $id;
 
         // Retrieve request's data
         $course_request_info = self::get_course_request_info($id);
@@ -447,7 +447,7 @@ class CourseRequestManager
             return false;
         }*/
 
-        $user_id = (int)$course_request_info['user_id'];
+        $user_id = (int) $course_request_info['user_id'];
         if ($user_id <= 0) {
             return false;
         }
@@ -538,7 +538,7 @@ class CourseRequestManager
      */
     public static function reject_course_request($id)
     {
-        $id = (int)$id;
+        $id = (int) $id;
         // Retrieve request's data
         $course_request_info = self::get_course_request_info($id);
         if (!is_array($course_request_info)) {
@@ -616,7 +616,7 @@ class CourseRequestManager
      */
     public static function ask_for_additional_info($id)
     {
-        $id = (int)$id;
+        $id = (int) $id;
 
         // Retrieve request's data
         $course_request_info = self::get_course_request_info($id);
@@ -707,7 +707,7 @@ class CourseRequestManager
      */
     public static function additional_info_asked($id)
     {
-        $id = (int)$id;
+        $id = (int) $id;
         $sql = "SELECT id FROM ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
                 WHERE (id = ".$id." AND info > 0)";
         $result = Database::num_rows(Database::query($sql));

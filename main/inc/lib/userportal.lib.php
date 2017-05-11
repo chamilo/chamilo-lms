@@ -489,7 +489,7 @@ class IndexManager
                         ON (url_rel_course.c_id = course.id)
                         WHERE
                             access_url_id = $url_access_id AND
-                            category_code = '".Database::escape_string($_GET['category'])."'
+                            category_code = '".$category."'
                         ORDER BY title, UPPER(visual_code)";
             }
         }

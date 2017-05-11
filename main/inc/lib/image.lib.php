@@ -183,19 +183,19 @@ class ImagickWrapper extends ImageWrapper
         }
     }
 
-	public function get_image_size()
+    public function get_image_size()
     {
-		$imagesize = array('width'=>0, 'height'=>0);
-	    if ($this->image_validated) {
+        $imagesize = array('width'=>0, 'height'=>0);
+        if ($this->image_validated) {
             $imagesize = $this->image->getImageGeometry();
-	    }
-	    return $imagesize;
-	}
+        }
+        return $imagesize;
+    }
 
-	//@todo implement border logic case for Imagick
-	public function resize($thumbw, $thumbh, $border, $specific_size = false)
+    //@todo implement border logic case for Imagick
+    public function resize($thumbw, $thumbh, $border, $specific_size = false)
     {
-	    if (!$this->image_validated) return false;
+        if (!$this->image_validated) return false;
 
         if ($specific_size) {
             $width = $thumbw;
@@ -205,10 +205,10 @@ class ImagickWrapper extends ImageWrapper
             $width  = (int) ($this->width * $scale);
             $height = (int) ($this->height * $scale);
         }
-		$result = $this->image->resizeImage($width, $height, $this->filter, 1);
-		$this->width  = $thumbw;
-		$this->height = $thumbh;
-	}
+        $result = $this->image->resizeImage($width, $height, $this->filter, 1);
+        $this->width  = $thumbw;
+        $this->height = $thumbh;
+    }
 
     /**
      * @author José Loguercio <jose.loguercio@beeznest.com>
@@ -219,51 +219,62 @@ class ImagickWrapper extends ImageWrapper
      * @param int $src_width the source width of the original image
      * @param int $src_height the source height of the original image
      */
-
-    public function crop($x, $y, $width, $height, $src_width, $src_height) {
-        if (!$this->image_validated) return false;
+    public function crop($x, $y, $width, $height, $src_width, $src_height)
+    {
+        if (!$this->image_validated) {
+            return false;
+        }
         $this->image->cropimage($width, $height, $x, $y);
-		$this->width  = $width;
-		$this->height = $height;
+        $this->width = $width;
+        $this->height = $height;
     }
 
     public function send_image($file = '', $compress = -1, $convert_file_to = null)
     {
-        if (!$this->image_validated) return false;
+        if (!$this->image_validated) {
+            return false;
+        }
         $type = $this->type;
         if (!empty($convert_file_to) && in_array($convert_file_to, $this->allowed_extensions)) {
             $type = $convert_file_to;
         }
-		switch ($type) {
-		    case 'jpeg':
-			case 'jpg':
-				if (!$file) header("Content-type: image/jpeg");
-				break;
-			case 'png':
-				if (!$file) header("Content-type: image/png");
-				break;
-			case 'gif':
-				if (!$file) header("Content-type: image/gif");
-				break;
-		}
-		$result = false;
-		try {
-		    $result = $this->image->writeImage($file);
-		} catch (ImagickException $e) {
-            if ($this->debug) error_log($e->getMessage());
+        switch ($type) {
+            case 'jpeg':
+            case 'jpg':
+                if (!$file) {
+                    header("Content-type: image/jpeg");
+                }
+                break;
+            case 'png':
+                if (!$file) {
+                    header("Content-type: image/png");
+                }
+                break;
+            case 'gif':
+                if (!$file) {
+                    header("Content-type: image/gif");
+                }
+                break;
+        }
+        $result = false;
+        try {
+            $result = $this->image->writeImage($file);
+        } catch (ImagickException $e) {
+            if ($this->debug) {
+                error_log($e->getMessage());
+            }
         }
 
-		if (!$file) {
-		    echo $this->image;
-		    $this->image->clear();
+        if (!$file) {
+            echo $this->image;
+            $this->image->clear();
             $this->image->destroy();
-		} else {
-		    $this->image->clear();
+        } else {
+            $this->image->clear();
             $this->image->destroy();
-		    return $result;
-		}
-	}
-
+            return $result;
+        }
+    }
 }
 
 /**
@@ -273,8 +284,8 @@ class ImagickWrapper extends ImageWrapper
 class GDWrapper extends ImageWrapper
 {
     public $bg;
-
-    function __construct($path) {
+    public function __construct($path)
+    {
         parent::__construct($path);
     }
 
@@ -284,21 +295,21 @@ class GDWrapper extends ImageWrapper
         $this->fill_image_info();
 
         switch ($this->type) {
-        	case 0:
-        		$handler = false;
-        		break;
-		    case 1 :
+            case 0:
+                $handler = false;
+                break;
+            case 1:
                 $handler = @imagecreatefromgif($this->path);
                 $this->type = 'gif';
                 break;
-		    case 2 :
+            case 2:
                 $handler = @imagecreatefromjpeg($this->path);
                 $this->type = 'jpg';
                 break;
-		    case 3 :
-		        $handler = @imagecreatefrompng($this->path);
-		        $this->type = 'png';
-		        break;
+            case 3:
+                $handler = @imagecreatefrompng($this->path);
+                $this->type = 'png';
+                break;
         }
         if ($handler) {
             $this->image_validated = true;
@@ -312,29 +323,31 @@ class GDWrapper extends ImageWrapper
     {
         $return_array = array('width'=>0, 'height'=>0);
         if ($this->image_validated) {
-	        $return_array = array('width'=>$this->width, 'height'=>$this->height);
+            $return_array = array('width'=>$this->width, 'height'=>$this->height);
         }
         return $return_array;
-	}
+    }
 
     public function fill_image_info()
     {
-    	if (file_exists($this->path)) {
-	        $image_info = getimagesize($this->path);
-			$this->width    = $image_info[0];
-			$this->height   = $image_info[1];
-			$this->type     = $image_info[2];
-    	} else {
-    		$this->width    = 0;
-    		$this->height   = 0;
-    		$this->type     = 0;
-    	}
+        if (file_exists($this->path)) {
+            $image_info = getimagesize($this->path);
+            $this->width = $image_info[0];
+            $this->height = $image_info[1];
+            $this->type = $image_info[2];
+        } else {
+            $this->width = 0;
+            $this->height = 0;
+            $this->type = 0;
+        }
     }
 
     public function resize($thumbw, $thumbh, $border, $specific_size = false)
     {
-        if (!$this->image_validated) return false;
-		if ($border == 1) {
+        if (!$this->image_validated) {
+            return false;
+        }
+        if ($border == 1) {
             if ($specific_size) {
                 $width = $thumbw;
                 $height = $thumbh;
@@ -343,17 +356,17 @@ class GDWrapper extends ImageWrapper
                 $width = (int) ($this->width * $scale);
                 $height = (int) ($this->height * $scale);
             }
-			$deltaw = (int) (($thumbw - $width) / 2);
-			$deltah = (int) (($thumbh - $height) / 2);
-			$dst_img = @ImageCreateTrueColor($thumbw, $thumbh);
-            		@imagealphablending($dst_img, false);
-		        @imagesavealpha($dst_img, true);
-			if (!empty($this->color)) {
-				@imagefill($dst_img, 0, 0, $this->color);
-			}
-			$this->width = $thumbw;
-			$this->height = $thumbh;
-		} elseif ($border == 0) {
+            $deltaw = (int) (($thumbw - $width) / 2);
+            $deltah = (int) (($thumbh - $height) / 2);
+            $dst_img = @ImageCreateTrueColor($thumbw, $thumbh);
+                    @imagealphablending($dst_img, false);
+                @imagesavealpha($dst_img, true);
+            if (!empty($this->color)) {
+                @imagefill($dst_img, 0, 0, $this->color);
+            }
+            $this->width = $thumbw;
+            $this->height = $thumbh;
+        } elseif ($border == 0) {
             if ($specific_size) {
                 $width = $thumbw;
                 $height = $thumbh;
@@ -362,19 +375,30 @@ class GDWrapper extends ImageWrapper
                 $width  = (int) ($this->width * $scale);
                 $height = (int) ($this->height * $scale);
             }
-			$deltaw = 0;
-			$deltah = 0;
-			$dst_img = @ImageCreateTrueColor($width, $height);
-            		@imagealphablending($dst_img, false);
-		        @imagesavealpha($dst_img, true);
-			$this->width = $width;
-			$this->height = $height;
-		}
-		$src_img = $this->bg;
-		@ImageCopyResampled($dst_img, $src_img, $deltaw, $deltah, 0, 0, $width, $height, ImageSX($src_img), ImageSY($src_img));
-		$this->bg = $dst_img;
-		@imagedestroy($src_img);
-	}
+            $deltaw = 0;
+            $deltah = 0;
+            $dst_img = @ImageCreateTrueColor($width, $height);
+                    @imagealphablending($dst_img, false);
+                @imagesavealpha($dst_img, true);
+            $this->width = $width;
+            $this->height = $height;
+        }
+        $src_img = $this->bg;
+        @ImageCopyResampled(
+            $dst_img,
+            $src_img,
+            $deltaw,
+            $deltah,
+            0,
+            0,
+            $width,
+            $height,
+            ImageSX($src_img),
+            ImageSY($src_img)
+        );
+        $this->bg = $dst_img;
+        @imagedestroy($src_img);
+    }
 
     /**
      * @author José Loguercio <jose.loguercio@beeznest.com>
@@ -385,30 +409,33 @@ class GDWrapper extends ImageWrapper
      * @param int $src_width the source width of the original image
      * @param int $src_height the source height of the original image
      */
-    public function crop($x, $y, $width, $height, $src_width, $src_height) {
-        if (!$this->image_validated) return false;
+    public function crop($x, $y, $width, $height, $src_width, $src_height)
+    {
+        if (!$this->image_validated) {
+            return false;
+        }
         $this->width = $width;
-		$this->height = $height;
+        $this->height = $height;
         $src = null;
         $dest = @imagecreatetruecolor($width, $height);
         $type = $this->type;
         switch ($type) {
-            case 'jpeg' :
-            case 'jpg' :
+            case 'jpeg':
+            case 'jpg':
                 $src = @imagecreatefromjpeg($this->path);
                 @imagecopy($dest, $src, 0, 0, $x, $y, $src_width, $src_height);
                 @imagejpeg($dest, $this->path);
                 break;
-		    case 'png' :
+            case 'png':
                 $src = @imagecreatefrompng($this->path);
                 @imagecopy($dest, $src, 0, 0, $x, $y, $src_width, $src_height);
                 @imagepng($dest, $this->path);
                 break;
-		    case 'gif' :
-		        $src = @imagecreatefromgif($this->path);
+            case 'gif':
+                $src = @imagecreatefromgif($this->path);
                 @imagecopy($dest, $src, 0, 0, $x, $y, $src_width, $src_height);
                 @imagegif($dest, $this->path);
-		        break;
+                break;
             default:
                 return 0;
         }
@@ -416,48 +443,63 @@ class GDWrapper extends ImageWrapper
         @imagedestroy($src);
     }
 
-	public function send_image($file = '', $compress = -1, $convert_file_to = null)
+    public function send_image($file = '', $compress = -1, $convert_file_to = null)
     {
-	    if (!$this->image_validated) return false;
+        if (!$this->image_validated) {
+            return false;
+        }
         $compress = (int) $compress;
         $type = $this->type;
         if (!empty($convert_file_to) && in_array($convert_file_to, $this->allowed_extensions)) {
             $type = $convert_file_to;
         }
-		switch ($type) {
-		    case 'jpeg':
-			case 'jpg':
-				if (!$file) header("Content-type: image/jpeg");
-				if ($compress == -1) $compress = 100;
-				return imagejpeg($this->bg, $file, $compress);
-				break;
-			case 'png':
-				if (!$file) header("Content-type: image/png");
-				if ($compress != -1) {
-					@imagetruecolortopalette($this->bg, true, $compress);
-				}
-				return imagepng($this->bg, $file, $compress);
-				break;
-			case 'gif':
-				if (!$file) header("Content-type: image/gif");
-				if ($compress != -1) {
-					@imagetruecolortopalette($this->bg, true, $compress);
-				}
-				return imagegif($this->bg, $file, $compress);
-				break;
-			default:
-			    return 0;
-		}
-		// TODO: Occupied memory is not released, because the following fragment of code is actually dead.
-		@imagedestroy($this->bg);
-	}
+        switch ($type) {
+            case 'jpeg':
+            case 'jpg':
+                if (!$file) {
+                    header("Content-type: image/jpeg");
+                }
+                if ($compress == -1) {
+                    $compress = 100;
+                }
+
+                return imagejpeg($this->bg, $file, $compress);
+                break;
+            case 'png':
+                if (!$file) {
+                    header("Content-type: image/png");
+                }
+                if ($compress != -1) {
+                    @imagetruecolortopalette($this->bg, true, $compress);
+                }
+
+                return imagepng($this->bg, $file, $compress);
+                break;
+            case 'gif':
+                if (!$file) {
+                    header("Content-type: image/gif");
+                }
+                if ($compress != -1) {
+                    @imagetruecolortopalette($this->bg, true, $compress);
+                }
+
+                return imagegif($this->bg, $file, $compress);
+                break;
+            default:
+                return 0;
+        }
+        // TODO: Occupied memory is not released, because the following fragment of code is actually dead.
+        @imagedestroy($this->bg);
+    }
 
     /**
      * Convert image to black & white
      */
     function convert2bw()
     {
-        if (!$this->image_validated) return false;
+        if (!$this->image_validated) {
+            return false;
+        }
 
         $dest_img = imagecreatetruecolor(imagesx($this->bg), imagesy($this->bg));
         /* copy ignore the transparent color

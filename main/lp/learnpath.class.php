@@ -5707,27 +5707,31 @@ class learnpath
                             $previewImage,
                             $urlPreviewLink,
                             array(
-                                'class' => 'btn btn-default ajax',
+                                'target' => '_blank',
+                                'class' => 'btn btn-default',
                                 'data-title' => $arrLP[$i]['title']
                             )
                         );
                         break;
                     case TOOL_THREAD:
                     case TOOL_FORUM:
+                    case TOOL_QUIZ:
+                    case TOOL_STUDENTPUBLICATION:
                     case TOOL_LP_FINAL_ITEM:
                     case TOOL_LINK:
-                        $target = '';
-                        $class = 'btn btn-default ajax';
-                        if ($arrLP[$i]['item_type'] == TOOL_LINK) {
-                            $class = 'btn btn-default';
-                            $target = '_blank';
-                        }
+                        //$target = '';
+                        //$class = 'btn btn-default ajax';
+                        //if ($arrLP[$i]['item_type'] == TOOL_LINK) {
+                        $class = 'btn btn-default';
+                        $target = '_blank';
+                        //}
 
                         $link = self::rl_get_resource_link_for_learnpath(
                             $this->course_int_id,
                             $this->lp_id,
                             $arrLP[$i]['id'],
-                            0
+                            0,
+                            ''
                         );
                         $previewIcon = Display::url(
                             $previewImage,
@@ -5742,14 +5746,20 @@ class learnpath
                     default:
                         $previewIcon = Display::url(
                             $previewImage,
-                            $url.'&action=view_item', ['class' => 'btn btn-default']
+                            $url.'&action=view_item',
+                            ['class' => 'btn btn-default', 'target' => '_blank']
                         );
                         break;
                 }
 
                 if ($arrLP[$i]['item_type'] != 'dir') {
                     $prerequisities_icon = Display::url(
-                        Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_TINY),
+                        Display::return_icon(
+                            'accept.png',
+                            get_lang('LearnpathPrerequisites'),
+                            array(),
+                            ICON_SIZE_TINY
+                        ),
                         $url.'&action=edit_item_prereq', ['class' => 'btn btn-default']
                     );
                     if ($arrLP[$i]['item_type'] != 'final_item') {
@@ -11490,18 +11500,21 @@ EOD;
      * The function is a big switch on tool type.
      * In each case, we query the corresponding table for information and build the link
      * with that information.
-     * @author	Yannick Warnier <ywarnier@beeznest.org> - rebranding based on previous work (display_addedresource_link_in_learnpath())
-     * @param	int	$course_id Course code
-     * @param	int $learningPathId The learning path ID (in lp table)
-     * @param   int $id_in_path the unique index in the items table
-     * @param   int $lpViewId
+     * @author Yannick Warnier <ywarnier@beeznest.org> - rebranding based on
+     * previous work (display_addedresource_link_in_learnpath())
+     * @param int	$course_id Course code
+     * @param int $learningPathId The learning path ID (in lp table)
+     * @param int $id_in_path the unique index in the items table
+     * @param int $lpViewId
+     * @param string $origin
      * @return string
      */
     public static function rl_get_resource_link_for_learnpath(
         $course_id,
         $learningPathId,
         $id_in_path,
-        $lpViewId
+        $lpViewId,
+        $origin = 'learnpath'
     ) {
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $course_info = api_get_course_info_by_id($course_id);
@@ -11511,9 +11524,7 @@ EOD;
         $learningPathId = intval($learningPathId);
         $id_in_path = intval($id_in_path);
         $lpViewId = intval($lpViewId);
-
         $em = Database::getManager();
-
         $sql = "SELECT * FROM $tbl_lp_item
                  WHERE
                     c_id = $course_id AND
@@ -11531,7 +11542,7 @@ EOD;
         $sql = "SELECT * FROM $item_view_table
                 WHERE
                     c_id = $course_id AND
-                    lp_item_id = " . $row_item['id'] . " AND
+                    lp_item_id = ".$row_item['id']." AND
                     lp_view_id = $lpViewId
                 ORDER BY view_count DESC";
         $learnpathItemViewResult = Database::query($sql);
@@ -11543,23 +11554,22 @@ EOD;
 
         $type = strtolower($row_item['item_type']);
         $id = (strcmp($row_item['path'], '') == 0) ? '0' : $row_item['path'];
-        $origin = 'learnpath';
         $main_dir_path = api_get_path(WEB_CODE_PATH);
         $main_course_path = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
         $link = '';
-
+        $extraParams = "origin=$origin&cidReq=$course_code&session_id=$session_id&id_session=$session_id";
         switch ($type) {
             case 'dir':
-                $link .= $main_dir_path . 'lp/blank.php';
+                $link .= $main_dir_path.'lp/blank.php';
                 break;
             case TOOL_CALENDAR_EVENT:
-                $link .= $main_dir_path.'calendar/agenda.php?origin='.$origin.'&agenda_id='.$id;
+                $link .= $main_dir_path.'calendar/agenda.php?agenda_id='.$id.'&'.$extraParams;
                 break;
             case TOOL_ANNOUNCEMENT:
-                $link .= $main_dir_path.'announcements/announcements.php?origin='.$origin.'&ann_id='.$id;
+                $link .= $main_dir_path.'announcements/announcements.php?ann_id='.$id.'&'.$extraParams;
                 break;
             case TOOL_LINK:
-                $link .= $main_dir_path.'link/link_goto.php?'.api_get_cidreq().'&link_id='.$id;
+                $link .= $main_dir_path.'link/link_goto.php?link_id='.$id.'&'.$extraParams;
                 break;
             case TOOL_QUIZ:
                 if (!empty($id)) {
@@ -11570,7 +11580,7 @@ EOD;
                     if ($row_item['title'] != '') {
                         $myrow['title'] = $row_item['title'];
                     }
-                    $link .= $main_dir_path . 'exercise/overview.php?cidReq='.$course_code.'&session_id='.$session_id.'&lp_init=1&origin='.$origin.'&learnpath_item_view_id='.$learnpathItemViewId.'&learnpath_id='.$learningPathId.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
+                    $link .= $main_dir_path.'exercise/overview.php?lp_init=1&learnpath_item_view_id='.$learnpathItemViewId.'&learnpath_id='.$learningPathId.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id.'&'.$extraParams;
                 }
                 break;
             case TOOL_HOTPOTATOES: //lowercase because of strtolower above
@@ -11578,11 +11588,10 @@ EOD;
                 $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND id=$id");
                 $myrow = Database::fetch_array($result);
                 $path = $myrow['path'];
-                $link .= $main_dir_path . 'exercise/showinframes.php?file='.$path.'&origin='.$origin.'&cid='.$course_code.'&uid='.api_get_user_id().'' .
-                        '&learnpath_id='.$learningPathId.'&learnpath_item_id='.$id_in_path.'&lp_view_id='.$lpViewId;
+                $link .= $main_dir_path.'exercise/showinframes.php?file='.$path.'&cid='.$course_code.'&uid='.api_get_user_id().'&learnpath_id='.$learningPathId.'&learnpath_item_id='.$id_in_path.'&lp_view_id='.$lpViewId.'&'.$extraParams;
                 break;
             case TOOL_FORUM:
-                $link .= $main_dir_path.'forum/viewforum.php?forum='.$id.'&lp=true&origin=learnpath';
+                $link .= $main_dir_path.'forum/viewforum.php?forum='.$id.'&lp=true&'.$extraParams;
                 break;
             case TOOL_THREAD:  //forum post
                 $tbl_topics = Database::get_course_table(TABLE_FORUM_THREAD);
@@ -11590,14 +11599,14 @@ EOD;
                     $sql = "SELECT * FROM $tbl_topics WHERE c_id = $course_id AND thread_id=$id";
                     $result = Database::query($sql);
                     $myrow = Database::fetch_array($result);
-                    $link .= $main_dir_path.'forum/viewthread.php?origin=learnpath&thread='.$id.'&forum='.$myrow['forum_id'].'&lp=true';
+                    $link .= $main_dir_path.'forum/viewthread.php?thread='.$id.'&forum='.$myrow['forum_id'].'&lp=true&'.$extraParams;
                 }
                 break;
             case TOOL_POST:
                 $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
                 $result = Database::query("SELECT * FROM $tbl_post WHERE c_id = $course_id AND post_id=$id");
                 $myrow = Database::fetch_array($result);
-                $link .= $main_dir_path.'forum/viewthread.php?post='.$id.'&thread='.$myrow['thread_id'].'&forum='.$myrow['forum_id'].'&lp=true';
+                $link .= $main_dir_path.'forum/viewthread.php?post='.$id.'&thread='.$myrow['thread_id'].'&forum='.$myrow['forum_id'].'&lp=true&'.$extraParams;
                 break;
             case TOOL_DOCUMENT:
                 $document = $em
@@ -11614,13 +11623,9 @@ EOD;
                 $showDirectUrl = !in_array($extension, $jplayer_supported_files);
 
                 if ($showDirectUrl) {
-                    $link = $main_course_path . 'document' . $document->getPath() . '?' . api_get_cidreq();
+                    $link = $main_course_path.'document'.$document->getPath().'?'.$extraParams;
                 } else {
-                    $link = api_get_path(WEB_CODE_PATH) . 'document/showinframes.php?' . http_build_query([
-                        'cidReq' => $course_code,
-                        'id' => $id,
-                        'origin' => 'learnpathitem'
-                    ]);
+                    $link = api_get_path(WEB_CODE_PATH).'document/showinframes.php?id='.$id.'&'.$extraParams;
                 }
 
                 $openmethod = 2;
@@ -11629,36 +11634,32 @@ EOD;
                 Session::write('officedoc',$officedoc);
                 break;
             case TOOL_LP_FINAL_ITEM:
-                $link .= api_get_path(WEB_CODE_PATH) . 'lp/lp_final_item.php?'.api_get_cidreq().'&id='.$id.'&lp_id='.$learningPathId;
+                $link .= api_get_path(WEB_CODE_PATH).'lp/lp_final_item.php?&id='.$id.'&lp_id='.$learningPathId.'&'.$extraParams;
                 break;
             case 'assignments':
-                $link .= $main_dir_path.'work/work.php?origin='.$origin;
+                $link .= $main_dir_path.'work/work.php?'.$extraParams;
                 break;
             case TOOL_DROPBOX:
-                $link .= $main_dir_path.'dropbox/index.php?origin=learnpath';
+                $link .= $main_dir_path.'dropbox/index.php?'.$extraParams;
                 break;
             case 'introduction_text': //DEPRECATED
                 $link .= '';
                 break;
             case TOOL_COURSE_DESCRIPTION:
-                $link .= $main_dir_path.'course_description?origin=learnpath';
+                $link .= $main_dir_path.'course_description?'.$extraParams;
                 break;
             case TOOL_GROUP:
-                $link .= $main_dir_path.'group/group.php?origin='.$origin;
+                $link .= $main_dir_path.'group/group.php?'.$extraParams;
                 break;
             case TOOL_USER:
-                $link .= $main_dir_path.'user/user.php?origin='.$origin;
+                $link .= $main_dir_path.'user/user.php?'.$extraParams;
                 break;
             case TOOL_STUDENTPUBLICATION:
                 if (!empty($row_item['path'])) {
-                    $link .= $main_dir_path.'work/work_list.php?'.api_get_cidreq().'&id='.$row_item['path'].'&origin=learnpath';
+                    $link .= $main_dir_path.'work/work_list.php?id='.$row_item['path'].'&'.$extraParams;
                     break;
                 }
-
-                $link .= $main_dir_path . 'work/work.php?' . api_get_cidreq() . '&' . http_build_query([
-                        'id' => $row_item['path'],
-                        'origin' => 'learnpath'
-                    ]);
+                $link .= $main_dir_path.'work/work.php?'.api_get_cidreq().'&id='.$row_item['path'].'&'.$extraParams;
                 break;
         } //end switch
 

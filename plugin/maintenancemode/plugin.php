@@ -128,9 +128,12 @@ RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
         $block = $default;
     }
 
-    $form->setDefaults(
-        ['text' => $block, 'maintenance' => $content, 'ip' => $ip, 'active' => $isActive]
-    );
+    $form->setDefaults([
+        'text' => $block,
+        'maintenance' => $content,
+        'ip' => $ip,
+        'active' => $isActive,
+    ]);
 
     if ($form->validate()) {
         $values = $form->getSubmitValues();
@@ -144,8 +147,8 @@ RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
         $newFileContent .= $endLine;
         $newFileContent .= PHP_EOL;
         $newFileContent .= $contentNoBlock;
-
-        $newFileContent = str_replace('\\r', '', $newFileContent);
+        // Remove ^m chars
+        $newFileContent = str_ireplace("\x0D", '', $newFileContent);
         file_put_contents($file, $newFileContent);
 
         $handle = curl_init(api_get_path(WEB_PATH));
@@ -162,7 +165,7 @@ RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
                     'warning'
                 )
             );
-            $originalContent = str_replace('\\r', '', $originalContent);
+            $originalContent = str_replace("\x0D", '', $originalContent);
             file_put_contents($file, $originalContent);
         } else {
             $result = file_put_contents($maintenanceHtml, $content);
@@ -177,12 +180,13 @@ RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
         }
 
         if ($active == false) {
-            Display::addFlash(Display::return_message($plugin->get_lang('MaintenanceModeIsOff')));
-            $contentNoBlock = str_replace('\\r', '', $contentNoBlock);
+            $message = $plugin->get_lang('MaintenanceModeIsOff');
+            $contentNoBlock = str_replace("\x0D", '', $contentNoBlock);
             file_put_contents($file, $contentNoBlock);
         } else {
-            Display::addFlash(Display::return_message($plugin->get_lang('MaintenanceModeIsOn')));
+            $message = $plugin->get_lang('MaintenanceModeIsOn');
         }
+        Display::addFlash(Display::return_message($message));
     }
     $plugin_info['settings_form'] = $form;
 }

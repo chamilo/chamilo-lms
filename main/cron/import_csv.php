@@ -574,6 +574,7 @@ class ImportCsv
             $expirationDateOnUpdate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserUpdate)."years"));
 
             $counter = 1;
+            $secondsInYear = 365 * 24 * 60 * 60;
 
             foreach ($data as $row) {
                 $row = $this->cleanUserRow($row);
@@ -636,7 +637,7 @@ class ImportCsv
 
                     if (isset($row['action']) && $row['action'] === 'delete') {
                         // Inactive one year later
-                        $userInfo['expiration_date'] = api_get_utc_datetime(api_strtotime(time() + 365 * 24 * 60 * 60));
+                        $userInfo['expiration_date'] = api_get_utc_datetime(api_strtotime(time() + $secondsInYear));
                     }
 
                     $password = $row['password']; // change password

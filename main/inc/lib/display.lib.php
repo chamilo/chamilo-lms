@@ -56,7 +56,7 @@ class Display
      * @param string Optional help file name
      * @param string $page_header
      */
-    public static function display_header($tool_name ='', $help = null, $page_header = null)
+    public static function display_header($tool_name = '', $help = null, $page_header = null)
     {
         $origin = api_get_origin();
         $showHeader = true;
@@ -345,7 +345,7 @@ class Display
         $grid_class = array(),
         $elementCount = 0
     ) {
-        $column =  0;
+        $column = 0;
         $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
 
         $table = new SortableTableFromArray($content, $column, $default_items_per_page, $name);
@@ -507,7 +507,7 @@ class Display
      * @param string $type
      * @param bool $filter
      */
-    public static function return_message_and_translate($message, $type='normal', $filter = true)
+    public static function return_message_and_translate($message, $type = 'normal', $filter = true)
     {
         $message = get_lang($message);
         echo self::return_message($message, $type, $filter);
@@ -574,14 +574,14 @@ class Display
         }
         // Encrypt email
         $hmail = '';
-        for ($i = 0; $i < strlen($email); $i ++) {
+        for ($i = 0; $i < strlen($email); $i++) {
             $hmail .= '&#'.ord($email {
             $i }).';';
         }
         $hclickable_text = null;
         // Encrypt clickable text if @ is present
         if (strpos($clickable_text, '@')) {
-            for ($i = 0; $i < strlen($clickable_text); $i ++) {
+            for ($i = 0; $i < strlen($clickable_text); $i++) {
                 $hclickable_text .= '&#'.ord($clickable_text {
                 $i }).';';
             }
@@ -613,7 +613,7 @@ class Display
         }
         // Encrypt email
         $hmail = '';
-        for ($i = 0; $i < strlen($email); $i ++) {
+        for ($i = 0; $i < strlen($email); $i++) {
             $hmail .= '&#'.ord($email {
             $i }).';';
         }
@@ -633,7 +633,7 @@ class Display
     public static function get_alphabet_options($selected_letter = '')
     {
         $result = '';
-        for ($i = 65; $i <= 90; $i ++) {
+        for ($i = 65; $i <= 90; $i++) {
             $letter = chr($i);
             $result .= '<option value="'.$letter.'"';
             if ($selected_letter == $letter) {
@@ -654,7 +654,7 @@ class Display
     public static function get_numeric_options($min, $max, $selected_num = 0)
     {
         $result = '';
-        for ($i = $min; $i <= $max; $i ++) {
+        for ($i = $min; $i <= $max; $i++) {
             $result .= '<option value="'.$i.'"';
             if (is_int($selected_num)) {
                 if ($selected_num == $i) {
@@ -725,8 +725,8 @@ class Display
         // important to use the public path (i.e. web/css/) rather than the
         // internal path (/app/Resource/public/css/) because the path used
         // in the end must be the public path
-        $alternateCssPath = api_get_path(SYS_PUBLIC_PATH) . 'css/';
-        $alternateWebCssPath = api_get_path(WEB_PUBLIC_PATH) . 'css/';
+        $alternateCssPath = api_get_path(SYS_PUBLIC_PATH).'css/';
+        $alternateWebCssPath = api_get_path(WEB_PUBLIC_PATH).'css/';
 
         $image = trim($image);
 
@@ -736,7 +736,7 @@ class Display
             $size = ICON_SIZE_SMALL;
         }
 
-        $size_extra = $size . '/';
+        $size_extra = $size.'/';
 
         // Checking the img/ folder
         $icon = $w_code_path.'img/'.$image;
@@ -744,7 +744,7 @@ class Display
         $theme = 'themes/chamilo/icons/';
 
         if ($loadThemeIcon) {
-            $theme = 'themes/' . api_get_visual_theme() . '/icons/';
+            $theme = 'themes/'.api_get_visual_theme().'/icons/';
             // Checking the theme icons folder example: app/Resources/public/css/themes/chamilo/icons/XXX
             if (is_file($alternateCssPath.$theme.$size_extra.$image)) {
                 $icon = $alternateWebCssPath.$theme.$size_extra.$image;
@@ -766,11 +766,11 @@ class Display
         // ask for the SVG version directly
         $svgIcons = api_get_setting('icons_mode_svg');
         if ($svgIcons == 'true' && $return_only_path == false) {
-            $svgImage = substr($image, 0, -3) . 'svg';
-            if (is_file($code_path . $theme . 'svg/' . $svgImage)) {
-                $icon = $w_code_path . $theme . 'svg/' . $svgImage;
-            } elseif (is_file($code_path . 'img/icons/svg/' . $svgImage)) {
-                $icon = $w_code_path . 'img/icons/svg/' . $svgImage;
+            $svgImage = substr($image, 0, -3).'svg';
+            if (is_file($code_path.$theme.'svg/'.$svgImage)) {
+                $icon = $w_code_path.$theme.'svg/'.$svgImage;
+            } elseif (is_file($code_path.'img/icons/svg/'.$svgImage)) {
+                $icon = $w_code_path.'img/icons/svg/'.$svgImage;
             }
 
             if (empty($additional_attributes['height'])) {
@@ -862,7 +862,7 @@ class Display
             }
         }
         //some tags don't have this </XXX>
-        if (in_array($tag, array('img','input','br'))) {
+        if (in_array($tag, array('img', 'input', 'br'))) {
             $return_value = '<'.$tag.' '.$attribute_list.' />';
         } else {
             $return_value = '<'.$tag.' '.$attribute_list.' >'.$content.'</'.$tag.'>';
@@ -915,13 +915,13 @@ class Display
     public static function input($type, $name, $value, $attributes = array())
     {
          if (isset($type)) {
-             $attributes['type']= $type;
+             $attributes['type'] = $type;
          }
          if (isset($name)) {
-             $attributes['name']= $name;
+             $attributes['name'] = $name;
          }
          if (isset($value)) {
-             $attributes['value']= $value;
+             $attributes['value'] = $value;
         }
         return self::tag('input', '', $attributes);
     }
@@ -954,14 +954,14 @@ class Display
     ) {
         $html = '';
         $extra = '';
-        $default_id = 'id="' . $name . '" ';
+        $default_id = 'id="'.$name.'" ';
         foreach ($extra_attributes as $key => $parameter) {
             if ($key == 'id') {
                 $default_id = '';
             }
-            $extra .= $key . '="' . $parameter . '" ';
+            $extra .= $key.'="'.$parameter.'" ';
         }
-        $html .= '<select name="' . $name . '" ' . $default_id . ' ' . $extra . '>';
+        $html .= '<select name="'.$name.'" '.$default_id.' '.$extra.'>';
 
         if ($show_blank_item) {
             if (empty($blank_item_text)) {
@@ -969,14 +969,14 @@ class Display
             } else {
                 $blank_item_text = Security::remove_XSS($blank_item_text);
             }
-            $html .= self::tag('option', '-- ' . $blank_item_text . ' --', array('value' => '-1'));
+            $html .= self::tag('option', '-- '.$blank_item_text.' --', array('value' => '-1'));
         }
         if ($values) {
             foreach ($values as $key => $value) {
                 if (is_array($value) && isset($value['name'])) {
                     $value = $value['name'];
                 }
-                $html .= '<option value="' . $key . '"';
+                $html .= '<option value="'.$key.'"';
 
                 if (is_array($default)) {
                     foreach ($default as $item) {
@@ -991,7 +991,7 @@ class Display
                     }
                 }
 
-                $html .= '>' . $value . '</option>';
+                $html .= '>'.$value.'</option>';
             }
         }
         $html .= '</select>';
@@ -1019,7 +1019,7 @@ class Display
      */
     public static function tabs($headers, $items, $id = 'tabs', $attributes = array(), $ul_attributes = array())
     {
-        if (empty($headers) || count($headers) == 0 ) {
+        if (empty($headers) || count($headers) == 0) {
             return '';
         }
 
@@ -1072,7 +1072,7 @@ class Display
             $attributes
         );
 
-        return $main_div ;
+        return $main_div;
     }
 
     /**
@@ -1120,8 +1120,8 @@ class Display
      */
     public static function grid_html($div_id)
     {
-        $table = self::tag('table','', array('id' => $div_id));
-        $table .= self::tag('div','', array('id' => $div_id.'_pager'));
+        $table = self::tag('table', '', array('id' => $div_id));
+        $table .= self::tag('div', '', array('id' => $div_id.'_pager'));
         return $table;
     }
 
@@ -1182,7 +1182,7 @@ class Display
         $obj->colNames      = $column_names;
         $obj->colModel      = $column_model;
         $obj->pager         = '#'.$div_id.'_pager';
-        $obj->datatype  = 'json';
+        $obj->datatype = 'json';
         $obj->viewrecords = 'true';
 
         $all_value = 10000000;
@@ -1243,10 +1243,10 @@ class Display
         // Adding static data.
         if (!empty($data)) {
             $data_var = $div_id.'_data';
-            $json.=' var '.$data_var.' = '.json_encode($data).';';
+            $json .= ' var '.$data_var.' = '.json_encode($data).';';
             $obj->data = $data_var;
             $obj->datatype = 'local';
-            $json.="\n";
+            $json .= "\n";
         }
 
         $obj->end = 'end';
@@ -1260,12 +1260,12 @@ class Display
         }
 
         // Fixing true/false js values that doesn't need the ""
-        $json_encode = str_replace(':"true"',':true',$json_encode);
+        $json_encode = str_replace(':"true"', ':true', $json_encode);
         // wrap_cell is not a valid jqgrid attributes is a hack to wrap a text
         $json_encode = str_replace('"wrap_cell":true', 'cellattr : function(rowId, value, rowObject, colModel, arrData) { return \'class = "jqgrid_whitespace"\'; }', $json_encode);
-        $json_encode = str_replace(':"false"',':false',$json_encode);
+        $json_encode = str_replace(':"false"', ':false', $json_encode);
         $json_encode = str_replace('"formatter":"action_formatter"', 'formatter:action_formatter', $json_encode);
-        $json_encode = str_replace(array('{"first":"first",','"end":"end"}'), '', $json_encode);
+        $json_encode = str_replace(array('{"first":"first",', '"end":"end"}'), '', $json_encode);
 
         // Creating the jqgrid element.
         $json .= '$("#'.$div_id.'").jqGrid({';
@@ -1280,22 +1280,22 @@ class Display
             $groups = '';
             foreach ($extra_params['groupHeaders'] as $group) {
                 //{ "startColumnName" : "courses", "numberOfColumns" : 1, "titleText" : "Order Info" },
-                $groups .= '{ "startColumnName" : "' . $group['startColumnName'] . '", "numberOfColumns" : ' . $group['numberOfColumns'] . ', "titleText" : "' . $group['titleText']  . '" },';
+                $groups .= '{ "startColumnName" : "'.$group['startColumnName'].'", "numberOfColumns" : '.$group['numberOfColumns'].', "titleText" : "'.$group['titleText'].'" },';
 
             }
             $json .= '$("#'.$div_id.'").jqGrid("setGroupHeaders", {
                 "useColSpanStyle" : false,
                 "groupHeaders"    : [
-                    ' . $groups . '
+                    ' . $groups.'
                 ]
             });';
         }
 
         $all_text = addslashes(get_lang('All'));
         $json .= '$("'.$obj->pager.' option[value='.$all_value.']").text("'.$all_text.'");';
-        $json.= "\n";
+        $json .= "\n";
         // Adding edit/delete icons.
-        $json.= $formatter;
+        $json .= $formatter;
 
         return $json;
     }
@@ -1326,7 +1326,7 @@ class Display
         }
 
         if (!empty($rows)) {
-	        foreach($rows as $content) {
+	        foreach ($rows as $content) {
 	            $table->setCellContents($row, $column, $content);
                 $row++;
             }
@@ -1439,7 +1439,7 @@ class Display
                             lastedit_user_id != $user_id $sessionCondition AND
                             visibility != 2 AND
                             (to_user_id IN ('$user_id', '0') OR to_user_id IS NULL) AND
-                            (to_group_id IN ('".implode("','",$group_ids)."') OR to_group_id IS NULL)
+                            (to_group_id IN ('".implode("','", $group_ids)."') OR to_group_id IS NULL)
                         ORDER BY lastedit_date DESC
                         LIMIT 1";
                 $result = Database::query($sql);
@@ -1457,9 +1457,8 @@ class Display
         $return = '&nbsp;';
         foreach ($notifications as $notification) {
             $toolName = $notification['tool'];
-            if (!
-                (
-                    $notification['visibility'] == '1'  ||
+            if (!(
+                    $notification['visibility'] == '1' ||
                     ($status == '1' && $notification['visibility'] == '0') ||
                     !isset($notification['visibility'])
                 )
@@ -1543,9 +1542,9 @@ class Display
             $main_user_table = Database::get_main_table(TABLE_MAIN_USER);
             $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
             // Request for the name of the general coach
-            $sql ='SELECT tu.lastname, tu.firstname, ts.*
+            $sql = 'SELECT tu.lastname, tu.firstname, ts.*
                     FROM '.$tbl_session.' ts
-                    LEFT JOIN '.$main_user_table .' tu
+                    LEFT JOIN '.$main_user_table.' tu
                     ON ts.id_coach = tu.user_id
                     WHERE ts.id = '.intval($session_id);
             $rs = Database::query($sql);
@@ -1557,7 +1556,7 @@ class Display
             $session['title'] = $session_info['name'];
             $session['id_coach'] = $session_info['id_coach'];
             $session['coach'] = '';
-            $session['dates'] =  '';
+            $session['dates'] = '';
 
             if (api_get_setting('show_session_coach') === 'true') {
                 $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info['firstname'], $session_info['lastname']);
@@ -1617,7 +1616,7 @@ class Display
                 $session['dates'] = $dates['access'];
 
 
-                if (api_get_setting('show_session_coach') === 'true' ) {
+                if (api_get_setting('show_session_coach') === 'true') {
                     $session['coach'] = api_get_person_name(
                         $session_info['firstname'],
                         $session_info['lastname']
@@ -1675,9 +1674,9 @@ class Display
 		$percentage = isset($point_info['point_average']) ? $point_info['point_average'] : 0;
 
 		if (!empty($percentage)) {
-            $percentage = $percentage*125/100;
+            $percentage = $percentage * 125 / 100;
         }
-		$accesses =  isset($point_info['accesses']) ? $point_info['accesses'] : 0;
+		$accesses = isset($point_info['accesses']) ? $point_info['accesses'] : 0;
 		$star_label = sprintf(get_lang('XStarsOutOf5'), $point_info['point_average_star']);
 
         $html = '<ul id="'.$id.'" class="star-rating">
@@ -1691,15 +1690,15 @@ class Display
 
 		$labels = array();
 
-		$labels[]= $number_of_users_who_voted == 1 ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');
-		$labels[]= $accesses == 1 ? $accesses.' '.get_lang('Visit') : $accesses.' '.get_lang('Visits');
-		$labels[]= $point_info['user_vote']  ? get_lang('YourVote').' ['.$point_info['user_vote'].']' : get_lang('YourVote'). ' [?] ';
+		$labels[] = $number_of_users_who_voted == 1 ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');
+		$labels[] = $accesses == 1 ? $accesses.' '.get_lang('Visit') : $accesses.' '.get_lang('Visits');
+		$labels[] = $point_info['user_vote'] ? get_lang('YourVote').' ['.$point_info['user_vote'].']' : get_lang('YourVote').' [?] ';
 
 		if (!$add_div_wrapper && api_is_anonymous()) {
-			$labels[]= self::tag('span', get_lang('LoginToVote'), array('class' => 'error'));
+			$labels[] = self::tag('span', get_lang('LoginToVote'), array('class' => 'error'));
 		}
 
-        $html .= self::div(implode(' | ', $labels) , array('id' =>  'vote_label_'.$id, 'class' => 'vote_label_info'));
+        $html .= self::div(implode(' | ', $labels), array('id' =>  'vote_label_'.$id, 'class' => 'vote_label_info'));
         $html .= ' '.self::span(' ', array('id' =>  'vote_label2_'.$id));
 
         if ($add_div_wrapper) {
@@ -1772,8 +1771,8 @@ class Display
         if (!empty($list)) {
             $html = '<dl class="dl-horizontal">';
             foreach ($list as $item) {
-                $html .= '<dt>' . $item['title'] . '</dt>';
-                $html .= '<dd>' . $item['content'] . '</dd>';
+                $html .= '<dt>'.$item['title'].'</dt>';
+                $html .= '<dd>'.$item['content'].'</dd>';
             }
             $html .= '</dl>';
         }
@@ -1815,7 +1814,7 @@ class Display
      * @param string $type
      * @return null|string
      */
-    public static function badge($count, $type ="warning")
+    public static function badge($count, $type = "warning")
     {
         $class = '';
 
@@ -1891,7 +1890,7 @@ class Display
         if (!empty($content)) {
             $html = '<span class="label '.$class.'">';
             $html .= $content;
-            $html .='</span>';
+            $html .= '</span>';
         }
 
         return $html;
@@ -1912,7 +1911,7 @@ class Display
                     $class = 'class ="active"';
                 }
 
-                if (basename($_SERVER['REQUEST_URI']) == basename($value['url']) ) {
+                if (basename($_SERVER['REQUEST_URI']) == basename($value['url'])) {
                     $class = 'class ="active"';
                 }
                 $html .= "<li $class >";
@@ -2010,7 +2009,7 @@ class Display
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 '.$title.'
                 <span class="caret"></span></button>
-                <ul class="dropdown-menu ' . ($alignToRight ? 'dropdown-menu-right' : '') . '">';
+                <ul class="dropdown-menu ' . ($alignToRight ? 'dropdown-menu-right' : '').'">';
         foreach ($elements as $item) {
             $html .= self::tag('li', self::url($item['title'], $item['href']));
         }
@@ -2189,7 +2188,7 @@ class Display
         }
         $label = $nextValue + $localCounter + 1;
         if ($isMedia) {
-            $label = ($fixedValue + 1) .' '.chr(97 + $localCounter);
+            $label = ($fixedValue + 1).' '.chr(97 + $localCounter);
             $link_to_show = $link.$fixedValue.'#questionanchor'.$itemId;
         }
         $link = self::url($label.' ', $link_to_show, $linkAttributes);
@@ -2373,7 +2372,7 @@ class Display
         $attributes['title'] = isset($attributes['title']) ? $attributes['title'] : $text;
 
         if (!$includeText) {
-            $text = '<span class="sr-only">' . $text . '</span>';
+            $text = '<span class="sr-only">'.$text.'</span>';
         }
 
         return self::url("$icon $text", $url, $attributes);
@@ -2392,7 +2391,7 @@ class Display
         if (!$colsWidth) {
             $width = 12 / $col;
 
-            array_walk($content, function () use ($width, &$colsWidth) {
+            array_walk($content, function() use ($width, &$colsWidth) {
                 $colsWidth[] = $width;
             });
         }
@@ -2404,7 +2403,7 @@ class Display
             $class = 'col-sm-'.$colsWidth[$i];
 
             if ($col > 1) {
-                if ($i > 0 && $i < count($content) -1) {
+                if ($i > 0 && $i < count($content) - 1) {
                     $class .= ' text-center';
                 } elseif ($i === count($content) - 1) {
                     $class .= ' text-right';
@@ -2515,9 +2514,9 @@ HTML;
             $params['class'] = 'panel panel-default';
             $html = null;
             if (!empty($title)) {
-                $html .= '<div class="panel-heading">'.$title.'</div>' . PHP_EOL;
+                $html .= '<div class="panel-heading">'.$title.'</div>'.PHP_EOL;
             }
-            $html.= '<div class="panel-body">'.$content.'</div>' . PHP_EOL;
+            $html .= '<div class="panel-body">'.$content.'</div>'.PHP_EOL;
             $html = self::div($html, $params);
         }
         return $html;
@@ -2552,7 +2551,7 @@ HTML;
      *
      * @return string
      */
-    public static function getUserCard($userInfo, $status= '', $toolbar = '')
+    public static function getUserCard($userInfo, $status = '', $toolbar = '')
     {
         if (empty($userInfo)) {
             return '';

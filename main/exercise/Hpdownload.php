@@ -16,7 +16,7 @@ $this_section = SECTION_COURSES;
 
 $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
 
-$doc_url = str_replace(array('../','\\..','\\0','..\\'),array('','','',''),urldecode($_GET['doc_url']));
+$doc_url = str_replace(array('../', '\\..', '\\0', '..\\'), array('', '', '', ''), urldecode($_GET['doc_url']));
 $filename = basename($doc_url);
 
 // launch event
@@ -33,14 +33,14 @@ if (!is_file($full_file_name)) {
 	exit;
 }
 
-if (!Security::check_abs_path($full_file_name, $course_path . '/')) {
+if (!Security::check_abs_path($full_file_name, $course_path.'/')) {
     exit;
 }
 
 $extension = explode('.', $filename);
 $extension = strtolower($extension[sizeof($extension) - 1]);
 
-switch($extension) {
+switch ($extension) {
 	case 'gz':
 		$content_type = 'application/x-gzip';
 		break;
@@ -73,10 +73,10 @@ switch($extension) {
 		break;
 }
 
-header('Content-disposition: filename=' . $filename);
-header('Content-Type: ' . $content_type);
-header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 10) . ' GMT');
-header('Last-Modified: ' . gmdate('D, d M Y H:i:s', time() + 10) . ' GMT');
+header('Content-disposition: filename='.$filename);
+header('Content-Type: '.$content_type);
+header('Expires: '.gmdate('D, d M Y H:i:s', time() + 10).' GMT');
+header('Last-Modified: '.gmdate('D, d M Y H:i:s', time() + 10).' GMT');
 
 /*
 	Dynamic parsing section
@@ -90,21 +90,21 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s', time() + 10) . ' GMT');
 if ($content_type == 'text/html') {
 	$directory_name = dirname($full_file_name);
     $coursePath = api_get_path(SYS_COURSE_PATH);
-	$dir=str_replace(array('\\', $coursePath . $_course['path'] . '/document'), array('/', ''), $directory_name);
+	$dir = str_replace(array('\\', $coursePath.$_course['path'].'/document'), array('/', ''), $directory_name);
 
-	if ($dir[strlen($dir)-1] != '/') {
+	if ($dir[strlen($dir) - 1] != '/') {
 		$dir .= '/';
 	}
 
 
 	//Parse whole file at one
 	$fp = fopen($full_file_name, "r");
-	$file_content = fread ($fp, filesize ($full_file_name));
+	$file_content = fread($fp, filesize($full_file_name));
 	fclose($fp);
     $exercisePath = api_get_self();
   	$exfile = explode('/', $exercisePath);
   	$exfile = $exfile[sizeof($exfile) - 1];
-  	$exercisePath = substr($exercisePath,0,strpos($exercisePath, $exfile));
+  	$exercisePath = substr($exercisePath, 0, strpos($exercisePath, $exfile));
 
     $content = $file_content;
     $mit = "function Finish(){";
@@ -131,7 +131,7 @@ if ($content_type == 'text/html') {
     $newcontent = str_replace($mit, $js_content, $content);
 
     $prehref = "javascript:void(0);";
-    $posthref = api_get_path(WEB_CODE_PATH) . "main/exercise/Hpdownload.php?doc_url=" . $doc_url . "&cid=" . $cid . "&uid=" . $uid;
+    $posthref = api_get_path(WEB_CODE_PATH)."main/exercise/Hpdownload.php?doc_url=".$doc_url."&cid=".$cid."&uid=".$uid;
     $newcontent = str_replace($prehref, $posthref, $newcontent);
 
 

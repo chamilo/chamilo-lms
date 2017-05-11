@@ -36,7 +36,7 @@ class ScormDocument extends Resource
         echo $path;
         if (!empty($this->title)) {
             if (strpos($path, $this->title) === false) {
-                echo " - " . $this->title;
+                echo " - ".$this->title;
             }
         }
     }

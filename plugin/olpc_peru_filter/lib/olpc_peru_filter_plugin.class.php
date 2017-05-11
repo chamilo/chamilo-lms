@@ -31,7 +31,7 @@ class OLPC_Peru_FilterPlugin extends Plugin
         $list = $this->get_blacklist_options();
         foreach ($list as $k => $v) {
             $this->course_settings[] =
-              array('group'=> 'olpc_peru_filter_filter', 'name' => $k,  'type' => 'checkbox', 'init_value' => $v);
+              array('group'=> 'olpc_peru_filter_filter', 'name' => $k, 'type' => 'checkbox', 'init_value' => $v);
         }
         require_once __DIR__.'/../config.php';
         if (!empty($blacklist_enabled_file)) {
@@ -63,7 +63,7 @@ class OLPC_Peru_FilterPlugin extends Plugin
     }
 
     function course_settings_updated($values = array()) {
-        if (!is_array($values) or count($values)==0) {
+        if (!is_array($values) or count($values) == 0) {
             return false;
         }
         $this->set_blacklist_options($values['olpc_peru_filter_filter']);
@@ -84,7 +84,7 @@ class OLPC_Peru_FilterPlugin extends Plugin
         }
         $list = scandir($this->blacklists_dir);
         foreach ($list as $file) {
-            if (substr($file,0,1) == '.' or $file == 'custom_blacklist' or is_dir($this->blacklists_dir.'/'.$file)) {
+            if (substr($file, 0, 1) == '.' or $file == 'custom_blacklist' or is_dir($this->blacklists_dir.'/'.$file)) {
                 continue;
             }
             $categories[] = $file;
@@ -119,7 +119,7 @@ class OLPC_Peru_FilterPlugin extends Plugin
                 $new_blacklist .= $k."\n";
             }
         }
-        $r = @file_put_contents($this->blacklist_enabled_file,$new_blacklist);
+        $r = @file_put_contents($this->blacklist_enabled_file, $new_blacklist);
         //todo check the value or $r in $php_errormsg
         return true;
     }

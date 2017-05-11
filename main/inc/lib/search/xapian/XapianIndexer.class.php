@@ -130,7 +130,7 @@ abstract class XapianIndexer
                     if (!empty($chunk->terms)) {
                         foreach ($chunk->terms as $term) {
                             /* FIXME: think of getting weight */
-                            $doc->add_term($term['flag'] . $term['name'], 1);
+                            $doc->add_term($term['flag'].$term['name'], 1);
                         }
                     }
 
@@ -215,7 +215,7 @@ abstract class XapianIndexer
         $doc->clear_terms();
         foreach ($terms as $term) {
             //add directly
-            $doc->add_term($prefix . $term, 1);
+            $doc->add_term($prefix.$term, 1);
         }
         $this->db->replace_document($did, $doc);
         $this->db->flush();

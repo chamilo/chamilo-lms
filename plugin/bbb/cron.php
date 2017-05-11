@@ -22,7 +22,7 @@ if (file_exists(__DIR__.'/config.vm.php')) {
             if (empty($activeSessions)) {
                 $vm->runCron();
             } else {
-                echo "Can't run cron active sessions found: " . $activeSessions;
+                echo "Can't run cron active sessions found: ".$activeSessions;
             }
         }
     }

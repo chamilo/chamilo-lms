@@ -388,7 +388,7 @@ function lp_upload_quiz_action_handling()
                                     $comment = isset($feedbackTrueList[$i]) ? $feedbackTrueList[$i] : '';
                                 } else {
                                     $comment = isset($feedbackFalseList[$i]) ? $feedbackFalseList[$i] : '';
-                                    $floatVal = (float)$answer_data['extra'];
+                                    $floatVal = (float) $answer_data['extra'];
                                     if (is_numeric($floatVal)) {
                                         $score = $answer_data['extra'];
                                     }

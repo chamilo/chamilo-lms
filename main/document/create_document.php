@@ -642,7 +642,7 @@ if ($form->validate()) {
             $str_info .= $info_value.'<br/>';
         }
         $create_certificate = get_lang('CreateCertificateWithTags');
-        Display::addFlash(Display::return_message($create_certificate.': <br /><br/>'.$str_info, 'normal', false));
+        echo Display::return_message($create_certificate.': <br /><br/>'.$str_info, 'normal', false);
     }
 
     // HTML-editor

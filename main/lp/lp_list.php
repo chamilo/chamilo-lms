@@ -721,23 +721,23 @@ foreach ($categories as $item) {
                     if ($details['lp_display_order'] == 1 && $max != 1) {
                         $dsp_order .= Display::url(
                             Display::return_icon('down.png', get_lang('MoveDown'), '', ICON_SIZE_SMALL),
-                            "lp_controller.php?".api_get_cidreq()."&action=move_lp_down&lp_id=$id"
+                            "lp_controller.php?".api_get_cidreq()."&action=move_lp_down&lp_id=$id&category_id=$categoryId"
                         );
                     } elseif ($current == $max - 1 && $max != 1) {
                         $dsp_order .= Display::url(
                             Display::return_icon('up.png', get_lang('MoveUp'), '', ICON_SIZE_SMALL),
-                            "lp_controller.php?".api_get_cidreq()."&action=move_lp_up&lp_id=$id"
+                            "lp_controller.php?".api_get_cidreq()."&action=move_lp_up&lp_id=$id&category_id=$categoryId"
                         );
                     } elseif ($max == 1) {
                         $dsp_order = '';
                     } else {
                         $dsp_order .= Display::url(
                             Display::return_icon('down.png', get_lang('MoveDown'), '', ICON_SIZE_SMALL),
-                            "lp_controller.php?".api_get_cidreq()."&action=move_lp_down&lp_id=$id"
+                            "lp_controller.php?".api_get_cidreq()."&action=move_lp_down&lp_id=$id&category_id=$categoryId"
                         );
                         $dsp_order .= Display::url(
                             Display::return_icon('up.png', get_lang('MoveUp'), '', ICON_SIZE_SMALL),
-                            "lp_controller.php?".api_get_cidreq()."&action=move_lp_up&lp_id=$id"
+                            "lp_controller.php?".api_get_cidreq()."&action=move_lp_up&lp_id=$id&category_id=$categoryId"
                         );
                     }
                 }

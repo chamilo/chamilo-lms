@@ -3854,20 +3854,29 @@ class learnpath
 
     /**
      * Move a LP up (display_order)
-     * @param integer $lp_id Learnpath ID
+     * @param int $lp_id Learnpath ID
+     * @param int $categoryId
      * @return bool
      */
-    public static function move_up($lp_id)
+    public static function move_up($lp_id, $categoryId = 0)
     {
         $courseId = api_get_course_int_id();
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+
+        $categoryCondition = '';
+        if (!empty($categoryId)) {
+            $categoryId = (int) $categoryId;
+            $categoryCondition = " AND category_id = $categoryId";
+        }
         $sql = "SELECT * FROM $lp_table
                 WHERE c_id = $courseId
+                $categoryCondition
                 ORDER BY display_order";
         $res = Database::query($sql);
         if ($res === false) {
             return false;
         }
+
         $lps = [];
         $lp_order = [];
         $num = Database::num_rows($res);
@@ -3904,15 +3913,24 @@ class learnpath
 
     /**
      * Move a learnpath down (display_order)
-     * @param integer $lp_id Learnpath ID
+     * @param int $lp_id Learnpath ID
+     * @param int $categoryId
      * @return bool
      */
-    public static function move_down($lp_id)
+    public static function move_down($lp_id, $categoryId = 0)
     {
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+
+        $categoryCondition = '';
+        if (!empty($categoryId)) {
+            $categoryId = (int) $categoryId;
+            $categoryCondition = " AND category_id = $categoryId";
+        }
+
         $sql = "SELECT * FROM $lp_table
-                WHERE c_id = $course_id
+                WHERE c_id = $courseId
+                $categoryCondition
                 ORDER BY display_order";
         $res = Database::query($sql);
         if ($res === false) {
@@ -3931,7 +3949,7 @@ class learnpath
                 if ($row['display_order'] != $i) { // If we find a gap in the order, we need to fix it.
                     $need_fix = true;
                     $sql_u = "UPDATE $lp_table SET display_order = $i
-                              WHERE c_id = ".$course_id." AND id = ".$row['id'];
+                              WHERE c_id = ".$courseId." AND id = ".$row['id'];
                     Database::query($sql_u);
                 }
                 $row['display_order'] = $i;
@@ -3944,10 +3962,10 @@ class learnpath
             $order = $lps[$lp_id]['display_order'];
             if ($order < $max) { // If it's the first element, no need to move up.
                 $sql_u1 = "UPDATE $lp_table SET display_order = $order
-                           WHERE c_id = ".$course_id." AND id = ".$lp_order[$order + 1];
+                           WHERE c_id = ".$courseId." AND id = ".$lp_order[$order + 1];
                 Database::query($sql_u1);
                 $sql_u2 = "UPDATE $lp_table SET display_order = ".($order + 1)."
-                           WHERE c_id = ".$course_id." AND id = ".$lp_id;
+                           WHERE c_id = ".$courseId." AND id = ".$lp_id;
                 Database::query($sql_u2);
             }
         }

@@ -886,7 +886,8 @@ switch ($action) {
             error_log('New LP - No learnpath given for publish', 0);
             require 'lp_list.php';
         } else {
-            learnpath::move_up($_REQUEST['lp_id']);
+            learnpath::move_up($_REQUEST['lp_id'], $_REQUEST['category_id']);
+            Display::addFlash(Display::return_message(get_lang('Updated')));
             require 'lp_list.php';
         }
         break;
@@ -899,7 +900,8 @@ switch ($action) {
             error_log('New LP - No learnpath given for publish', 0);
             require 'lp_list.php';
         } else {
-            learnpath::move_down($_REQUEST['lp_id']);
+            learnpath::move_down($_REQUEST['lp_id'], $_REQUEST['category_id']);
+            Display::addFlash(Display::return_message(get_lang('Updated')));
             require 'lp_list.php';
         }
         break;
@@ -968,9 +970,9 @@ switch ($action) {
             $_SESSION['oLP']->setAccumulateScormTime($accumulateScormTime);
 
             if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {
-            	$publicated_on = $_REQUEST['publicated_on'];
+                $publicated_on = $_REQUEST['publicated_on'];
             } else {
-            	$publicated_on = null;
+                $publicated_on = null;
             }
 
             if (isset($_REQUEST['activate_end_date_check']) && $_REQUEST['activate_end_date_check'] == 1) {

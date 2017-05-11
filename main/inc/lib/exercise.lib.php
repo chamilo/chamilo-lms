@@ -4090,15 +4090,13 @@ HOTSPOT;
      * @param int $senderId
      * @param array $course_info
      * @param string $test
-     * @param int $lp_id
      * @param string $url
      *
      * @return string
      */
-    public static function getEmailNotification($senderId, $course_info, $test, $lp_id, $url)
+    public static function getEmailNotification($senderId, $course_info, $test, $url)
     {
         $teacher_info = api_get_user_info($senderId);
-
         $from_name = api_get_person_name(
             $teacher_info['firstname'],
             $teacher_info['lastname'],
@@ -4109,12 +4107,7 @@ HOTSPOT;
         $message = '<p>'.get_lang('DearStudentEmailIntroduction').'</p><p>'.get_lang('AttemptVCC');
         $message .= '<h3>'.get_lang('CourseName').'</h3><p>'.Security::remove_XSS($course_info['name']).'';
         $message .= '<h3>'.get_lang('Exercise').'</h3><p>'.Security::remove_XSS($test);
-
-        // Only for exercises not in a LP
-        if ($lp_id == 0) {
-            $message .= '<p>'.get_lang('ClickLinkToViewComment').' <br /><a href="#url#">#url#</a><br />';
-        }
-
+        $message .= '<p>'.get_lang('ClickLinkToViewComment').' <br /><a href="#url#">#url#</a><br />';
         $message .= '<p>'.get_lang('Regards').'</p>';
         $message .= $from_name;
         $message = str_replace("#test#", Security::remove_XSS($test), $message);

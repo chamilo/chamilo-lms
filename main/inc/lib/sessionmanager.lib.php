@@ -551,14 +551,27 @@ class SessionManager
                 return $sessions[0]['total_rows'];
             }
 
+            $activeIcon = Display::return_icon(
+                'accept.png',
+                get_lang('Active'),
+                array(),
+                ICON_SIZE_SMALL
+            );
+            $inactiveIcon = Display::return_icon(
+                'error.png',
+                get_lang('Inactive'),
+                array(),
+                ICON_SIZE_SMALL
+            );
+
             foreach ($sessions as $session) {
                 $session_id = $session['id'];
                 $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
 
                 if (isset($session['session_active']) && $session['session_active'] == 1) {
-                    $session['session_active'] = Display::return_icon('accept.png', get_lang('Active'), array(), ICON_SIZE_SMALL);
+                    $session['session_active'] = $activeIcon;
                 } else {
-                    $session['session_active'] = Display::return_icon('error.png', get_lang('Inactive'), array(), ICON_SIZE_SMALL);
+                    $session['session_active'] = $inactiveIcon;
                 }
 
                 $session = self::convert_dates_to_local($session, true);

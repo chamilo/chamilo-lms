@@ -527,7 +527,7 @@ class Rest extends WebService
                 'lastPost' => null
             ];
 
-            $lastPostInfo = get_last_post_information($forumId, false, $this->course->getId());
+            $lastPostInfo = get_last_post_information($forumId, false, $this->course->getId(), $sessionId);
 
             if ($lastPostInfo) {
                 $forum['lastPost'] = [
@@ -576,7 +576,8 @@ class Rest extends WebService
     {
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
-        $forumInfo = get_forums($forumId, $this->course->getCode());
+        $sessionId = $this->session ? $this->session->getId() : 0;
+        $forumInfo = get_forums($forumId, $this->course->getCode(), true, $sessionId);
 
         if (!isset($forumInfo['iid'])) {
             throw new Exception(get_lang('NoForum'));
@@ -591,7 +592,7 @@ class Rest extends WebService
             'threads' => []
         ];
 
-        $threads = get_threads($forumInfo['iid'], $this->course->getId());
+        $threads = get_threads($forumInfo['iid'], $this->course->getId(), $sessionId);
 
         foreach ($threads as $thread) {
             $forum['threads'][] = [
@@ -616,7 +617,8 @@ class Rest extends WebService
     {
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
-        $threadInfo = get_thread_information($forumId, $threadId);
+        $sessionId = $this->session ? $this->session->getId() : 0;
+        $threadInfo = get_thread_information($forumId, $threadId, $sessionId);
 
         $thread = [
             'id' => intval($threadInfo['iid']),
@@ -626,7 +628,7 @@ class Rest extends WebService
             'posts' => []
         ];
 
-        $forumInfo = get_forums($threadInfo['forum_id'], $this->course->getCode());
+        $forumInfo = get_forums($threadInfo['forum_id'], $this->course->getCode(), true, $sessionId);
 
         $postsInfo = getPosts($forumInfo, $threadInfo['iid'], 'ASC');
 
@@ -1003,9 +1005,9 @@ class Rest extends WebService
     {
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
-        $forum = get_forums($forumId, $this->course->getCode());
-        $courseInfo = api_get_course_info($this->course->getCode());
         $sessionId = $this->session ? $this->session->getId() : 0;
+        $forum = get_forums($forumId, $this->course->getCode(), true, $sessionId);
+        $courseInfo = api_get_course_info($this->course->getCode());
 
         $id = store_thread($forum, $values, $courseInfo, false, $this->user->getId(), $sessionId);
 

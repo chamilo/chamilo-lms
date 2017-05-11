@@ -1698,23 +1698,23 @@ function get_last_post_by_thread($course_id, $thread_id, $forum_id, $show_visibl
 /**
  * This function gets all the last post information of a certain forum
  *
- * @param int   $forum_id the id of the forum we want to know the last post information of.
- * @param bool  $show_invisibles
+ * @param int $forum_id the id of the forum we want to know the last post information of.
+ * @param bool $show_invisibles
  * @param string course db name
+ * @param int $sessionId Optional. The session id
  * @return array containing all the information about the last post
  * (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)
- *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function get_last_post_information($forum_id, $show_invisibles = false, $course_id = null)
+function get_last_post_information($forum_id, $show_invisibles = false, $course_id = null, $sessionId = 0)
 {
     if (!isset($course_id)) {
         $course_id = api_get_course_int_id();
     } else {
         $course_id = intval($course_id);
     }
-    $sessionId = api_get_session_id();
+    $sessionId = $sessionId ? intval($sessionId) : api_get_session_id();
 
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);

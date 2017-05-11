@@ -628,10 +628,9 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
     } else {
         $group_id = api_get_group_id();
     }
-    $groupIid = 0;
+    $groupInfo = [];
     if (!empty($group_id)) {
         $groupInfo = GroupManager::get_group_properties($group_id);
-        $groupIid = $groupInfo['iid'];
     }
 
     $table_forums = Database::get_course_table(TABLE_FORUM);

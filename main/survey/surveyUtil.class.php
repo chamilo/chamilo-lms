@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This class offers a series of general utility functions for survey querying and display
  * @package chamilo.survey
@@ -80,7 +81,7 @@ class SurveyUtil
      * @param integer Question id
      * @param integer Option id
      * @param string  Option value
-     * @param array	  Survey data settings
+     * @param array $survey_data Survey data settings
      * @return bool False if insufficient data, true otherwise
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -187,7 +188,13 @@ class SurveyUtil
         if ($error) {
             $tool_name = get_lang('Reporting');
 
-            Display::addFlash(Display::return_message(get_lang('Error').': '.$error, 'error', false));
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('Error').': '.$error,
+                    'error',
+                    false
+                )
+            );
             Display::display_header($tool_name);
             Display::display_footer();
             exit;
@@ -663,7 +670,6 @@ class SurveyUtil
         }
         if (isset($_GET['viewoption'])) {
             echo '<div class="answered-people">';
-
             echo '<h4>'.get_lang('PeopleWhoAnswered').': '.strip_tags($options[Security::remove_XSS($_GET['viewoption'])]['option_text']).'</h4>';
 
             if (is_numeric($_GET['value'])) {
@@ -792,7 +798,7 @@ class SurveyUtil
 
     /**
      * This functions displays the complete reporting
-     * @return	string	HTML code
+     * @return string    HTML code
      * @todo open questions are not in the complete report yet.
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
@@ -2861,7 +2867,7 @@ class SurveyUtil
         $last_version_surveys = $survey_tree->surveylist;
         $list = array();
         foreach ($last_version_surveys as & $survey) {
-            $list[]=$survey['id'];
+            $list[] = $survey['id'];
         }
         if (count($list) > 0) {
             $list_condition = " AND survey.survey_id IN (".implode(',',$list).") ";
@@ -2879,7 +2885,6 @@ class SurveyUtil
         $table_survey = Database::get_course_table(TABLE_SURVEY);
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
-
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT 
@@ -3333,7 +3338,7 @@ class SurveyUtil
     {
         $tableSurveyAnswer = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $courseId = api_get_course_int_id();
-        $surveyId = (int)$surveyId;
+        $surveyId = (int) $surveyId;
 
         if (empty($courseId) || empty($surveyId)) {
             return false;

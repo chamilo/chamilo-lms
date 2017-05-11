@@ -3141,11 +3141,11 @@ class learnpath
             $list['id'] = $item['id'];
             $list['status'] = $item['status'];
             $cssStatus = null;
-            
+
             if (isset($classStatus[$item['status']])) {
                 $cssStatus = $classStatus[$item['status']];
             }
-            
+
             $classStyle = ' ';
             $dirTypes = self::getChapterTypes();
 
@@ -3162,13 +3162,13 @@ class learnpath
                 $title = self::rl_get_resource_name(api_get_course_id(), $this->get_id(), $item['id']);
             }
             $title = Security::remove_XSS($item['title']);
-            
+
             if (empty($item['description'])) {
                 $list['description'] = $title;
             } else {
                 $list['description'] = $item['description'];
             }
-            
+
             $list['class'] =  $classStyle.' '.$cssStatus;
             $list['level'] = $item['level'];
             $list['type'] = $item['type'];
@@ -3190,7 +3190,7 @@ class learnpath
             }
             $arrayList[] = $list;
         }
-        
+
         return $arrayList;
     }
 
@@ -3853,22 +3853,23 @@ class learnpath
     }
 
     /**
-     * Move a learnpath up (display_order)
-     * @param	integer	$lp_id Learnpath ID
+     * Move a LP up (display_order)
+     * @param integer $lp_id Learnpath ID
+     * @return bool
      */
     public static function move_up($lp_id)
     {
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $lp_table
-                WHERE c_id = $course_id
+                WHERE c_id = $courseId
                 ORDER BY display_order";
         $res = Database::query($sql);
         if ($res === false) {
             return false;
         }
-        $lps = array ();
-        $lp_order = array();
+        $lps = [];
+        $lp_order = [];
         $num = Database::num_rows($res);
         // First check the order is correct, globally (might be wrong because
         // of versions < 1.8.4)
@@ -3876,10 +3877,9 @@ class learnpath
             $i = 1;
             while ($row = Database::fetch_array($res)) {
                 if ($row['display_order'] != $i) { // If we find a gap in the order, we need to fix it.
-                    $need_fix = true;
-                    $sql_u = "UPDATE $lp_table SET display_order = $i
-                              WHERE c_id = ".$course_id." AND id = " . $row['id'];
-                    Database::query($sql_u);
+                    $sql = "UPDATE $lp_table SET display_order = $i
+                            WHERE c_id = $courseId AND id = ".$row['id'];
+                    Database::query($sql);
                 }
                 $row['display_order'] = $i;
                 $lps[$row['id']] = $row;
@@ -3890,19 +3890,22 @@ class learnpath
         if ($num > 1) { // If there's only one element, no need to sort.
             $order = $lps[$lp_id]['display_order'];
             if ($order > 1) { // If it's the first element, no need to move up.
-                $sql_u1 = "UPDATE $lp_table SET display_order = $order
-                           WHERE c_id = ".$course_id." AND id = " . $lp_order[$order - 1];
-                Database::query($sql_u1);
-                $sql_u2 = "UPDATE $lp_table SET display_order = " . ($order - 1) . "
-                           WHERE c_id = ".$course_id." AND id = " . $lp_id;
-                Database::query($sql_u2);
+                $sql = "UPDATE $lp_table SET display_order = $order
+                        WHERE c_id = $courseId AND id = ".$lp_order[$order - 1];
+                Database::query($sql);
+                $sql = "UPDATE $lp_table SET display_order = ".($order - 1)."
+                        WHERE c_id = $courseId AND id = ".$lp_id;
+                Database::query($sql);
             }
         }
+
+        return true;
     }
 
     /**
      * Move a learnpath down (display_order)
-     * @param	integer	$lp_id Learnpath ID
+     * @param integer $lp_id Learnpath ID
+     * @return bool
      */
     public static function move_down($lp_id)
     {
@@ -3915,8 +3918,8 @@ class learnpath
         if ($res === false) {
             return false;
         }
-        $lps = array();
-        $lp_order = array();
+        $lps = [];
+        $lp_order = [];
         $num = Database::num_rows($res);
         $max = 0;
         // First check the order is correct, globally (might be wrong because
@@ -3928,7 +3931,7 @@ class learnpath
                 if ($row['display_order'] != $i) { // If we find a gap in the order, we need to fix it.
                     $need_fix = true;
                     $sql_u = "UPDATE $lp_table SET display_order = $i
-                              WHERE c_id = ".$course_id." AND id = " . $row['id'];
+                              WHERE c_id = ".$course_id." AND id = ".$row['id'];
                     Database::query($sql_u);
                 }
                 $row['display_order'] = $i;
@@ -3941,13 +3944,15 @@ class learnpath
             $order = $lps[$lp_id]['display_order'];
             if ($order < $max) { // If it's the first element, no need to move up.
                 $sql_u1 = "UPDATE $lp_table SET display_order = $order
-                           WHERE c_id = ".$course_id." AND id = " . $lp_order[$order + 1];
+                           WHERE c_id = ".$course_id." AND id = ".$lp_order[$order + 1];
                 Database::query($sql_u1);
-                $sql_u2 = "UPDATE $lp_table SET display_order = " . ($order + 1) . "
-                           WHERE c_id = ".$course_id." AND id = " . $lp_id;
+                $sql_u2 = "UPDATE $lp_table SET display_order = ".($order + 1)."
+                           WHERE c_id = ".$course_id." AND id = ".$lp_id;
                 Database::query($sql_u2);
             }
         }
+
+        return true;
     }
 
     /**
@@ -8785,7 +8790,7 @@ class learnpath
         $return .= '<div class="radio learnpath"><label for="idNone">';
         $return .= '<input checked="checked" id="idNone" name="prerequisites" type="radio" />';
         $return .= get_lang('None') . '</label>';
-        $return .= '</div>'; 
+        $return .= '</div>';
         $return .= '</tr>';
 
         $sql = "SELECT * FROM $tbl_lp_item
@@ -8839,7 +8844,7 @@ class learnpath
             $return .= '<div style="margin-left:' . $item['depth'] * 20 . 'px;" class="radio learnpath">';
             $return .= '<label for="id' . $item['id'] . '">';
             $return .= '<input' . (in_array($prerequisiteId, array($item['id'], $item['ref'])) ? ' checked="checked" ' : '') . ($item['item_type'] == 'dir' ? ' disabled="disabled" ' : ' ') . 'id="id' . $item['id'] . '" name="prerequisites"  type="radio" value="' . $item['id'] . '" />';
-            
+
             $icon_name = str_replace(' ', '', $item['item_type']);
 
             if (file_exists('../img/lp_' . $icon_name . '.png')) {

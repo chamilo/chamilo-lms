@@ -11,10 +11,10 @@ $cidReset = true;
 $from_myspace = false;
 $from_link = '';
 if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
-	$from_link = '&from=myspace';
-	$this_section = SECTION_TRACKING;
+    $from_link = '&from=myspace';
+    $this_section = SECTION_TRACKING;
 } else {
-	$this_section = SECTION_COURSES;
+    $this_section = SECTION_COURSES;
 }
 
 $session_id = isset($_REQUEST['id_session']) && !empty($_REQUEST['id_session']) ? intval($_REQUEST['id_session']) : api_get_session_id();
@@ -42,15 +42,15 @@ if (!api_is_platform_admin(true) &&
 }
 
 if ($origin == 'user_course') {
-	$interbreadcrumb[] = array("url" => api_get_path(WEB_COURSE_PATH).$course_info['directory'], 'name' => $course_info['name']);
-	$interbreadcrumb[] = array("url" => "../user/user.php?cidReq=".$courseCode, "name" => get_lang("Users"));
+    $interbreadcrumb[] = array("url" => api_get_path(WEB_COURSE_PATH).$course_info['directory'], 'name' => $course_info['name']);
+    $interbreadcrumb[] = array("url" => "../user/user.php?cidReq=".$courseCode, "name" => get_lang("Users"));
 } else if ($origin == 'tracking_course') {
-	$interbreadcrumb[] = array("url" => "../tracking/courseLog.php?cidReq=".$courseCode.'&id_session='.$session_id, "name" => get_lang("Tracking"));
+    $interbreadcrumb[] = array("url" => "../tracking/courseLog.php?cidReq=".$courseCode.'&id_session='.$session_id, "name" => get_lang("Tracking"));
 } else {
-	$interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('MySpace'));
-	$interbreadcrumb[] = array("url" => "student.php", "name" => get_lang("MyStudents"));
- 	$interbreadcrumb[] = array("url" => "myStudents.php?student=".$user_id, "name" => get_lang("StudentDetails"));
- 	$nameTools = get_lang("DetailsStudentInCourse");
+    $interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('MySpace'));
+    $interbreadcrumb[] = array("url" => "student.php", "name" => get_lang("MyStudents"));
+    $interbreadcrumb[] = array("url" => "myStudents.php?student=".$user_id, "name" => get_lang("StudentDetails"));
+    $nameTools = get_lang("DetailsStudentInCourse");
 }
 
 $interbreadcrumb[] = array(

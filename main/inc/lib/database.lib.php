@@ -115,8 +115,7 @@ class Database
      */
     public static function getUTCDateTimeTypeClass()
     {
-        return isset(self::$utcDateTimeClass) ? self::$utcDateTimeClass :
-        'Application\DoctrineExtensions\DBAL\Types\UTCDateTimeType';
+        return isset(self::$utcDateTimeClass) ? self::$utcDateTimeClass : 'Application\DoctrineExtensions\DBAL\Types\UTCDateTimeType';
     }
 
     /**
@@ -163,7 +162,7 @@ class Database
         );*/
 
         AnnotationRegistry::registerLoader(
-            function ($class) use ($sysPath) {
+            function($class) use ($sysPath) {
                 $file = str_replace("\\", DIRECTORY_SEPARATOR, $class).".php";
                 $file = str_replace('Symfony/Component/Validator', '', $file);
                 $file = $sysPath.'vendor/symfony/validator'.$file;
@@ -432,7 +431,7 @@ class Database
 
         if (!empty($params)) {
             $sql = 'INSERT INTO '.$table_name.' ('.implode(',', $params).')
-                    VALUES (:'.implode(', :' ,$params).')';
+                    VALUES (:'.implode(', :', $params).')';
 
             $statement = self::getManager()->getConnection()->prepare($sql);
             $result = $statement->execute($attributes);
@@ -471,11 +470,11 @@ class Database
 
             foreach ($attributes as $key => $value) {
                 if ($showQuery) {
-                    echo $key . ': ' . $value . PHP_EOL;
+                    echo $key.': '.$value.PHP_EOL;
                 }
                 $updateSql .= "$key = :$key ";
                 if ($count < count($attributes)) {
-                    $updateSql.= ', ';
+                    $updateSql .= ', ';
                 }
                 $count++;
             }
@@ -530,7 +529,7 @@ class Database
             if ($columns == '*') {
                 $clean_columns = '*';
             } else {
-                $clean_columns = (string)$columns;
+                $clean_columns = (string) $columns;
             }
         }
 
@@ -577,7 +576,7 @@ class Database
                             $clean_values = array();
                             foreach ($value_array as $item) {
                                 $item = self::escape_string($item);
-                                $clean_values[]= $item;
+                                $clean_values[] = $item;
                             }
                         } else {
                             $value_array = self::escape_string($value_array);
@@ -601,7 +600,7 @@ class Database
                     }
 
                     if (!empty($where_return)) {
-                        $return_value = " WHERE $where_return" ;
+                        $return_value = " WHERE $where_return";
                     }
                     break;
                 case 'order':
@@ -624,10 +623,10 @@ class Database
                                 if (in_array($element[1], array('desc', 'asc'))) {
                                     $order = $element[1];
                                 }
-                                $temp_value[]= $element[0].' '.$order.' ';
+                                $temp_value[] = $element[0].' '.$order.' ';
                             } else {
                                 //by default DESC
-                                $temp_value[]= $element[0].' DESC ';
+                                $temp_value[] = $element[0].' DESC ';
                             }
                         }
                         if (!empty($temp_value)) {

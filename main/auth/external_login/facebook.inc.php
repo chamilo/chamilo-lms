@@ -32,19 +32,19 @@ function facebookConnect()
 
     try {
         $accessToken = $helper->getAccessToken();
-    } catch(Facebook\Exceptions\FacebookResponseException $e) {
+    } catch (Facebook\Exceptions\FacebookResponseException $e) {
         Display::addFlash(
-            Display::return_message('Facebook Graph returned an error: ' . $e->getMessage(), 'error')
+            Display::return_message('Facebook Graph returned an error: '.$e->getMessage(), 'error')
         );
 
-        header('Location: ' . api_get_path(WEB_PATH));
+        header('Location: '.api_get_path(WEB_PATH));
         exit;
-    } catch(Facebook\Exceptions\FacebookSDKException $e) {
+    } catch (Facebook\Exceptions\FacebookSDKException $e) {
         Display::addFlash(
-            Display::return_message('Facebook SDK returned an error: ' . $e->getMessage(), 'error')
+            Display::return_message('Facebook SDK returned an error: '.$e->getMessage(), 'error')
         );
 
-        header('Location: ' . api_get_path(WEB_PATH));
+        header('Location: '.api_get_path(WEB_PATH));
         exit;
     }
 
@@ -58,17 +58,17 @@ function facebookConnect()
         }
 
         $error = implode('<br>', [
-            'Error: ' . $helper->getError(),
-            'Error Code: ' . $helper->getErrorCode(),
-            'Error Reason: ' . $helper->getErrorReason(),
-            'Error Description: ' . $helper->getErrorDescription()
+            'Error: '.$helper->getError(),
+            'Error Code: '.$helper->getErrorCode(),
+            'Error Reason: '.$helper->getErrorReason(),
+            'Error Description: '.$helper->getErrorDescription()
         ]);
 
         Display::addFlash(
             Display::return_message($error, 'error', false)
         );
 
-        header('Location: ' . api_get_path(WEB_PATH));
+        header('Location: '.api_get_path(WEB_PATH));
         exit;
     }
 
@@ -82,29 +82,29 @@ function facebookConnect()
             $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
         } catch (Facebook\Exceptions\FacebookSDKException $e) {
             Display::addFlash(
-                Display::return_message('Error getting long-lived access token: ' . $e->getMessage(), 'error')
+                Display::return_message('Error getting long-lived access token: '.$e->getMessage(), 'error')
             );
 
-            header('Location: ' . api_get_path(WEB_PATH));
+            header('Location: '.api_get_path(WEB_PATH));
             exit;
         }
     }
 
     try {
         $response = $fb->get('/me?fields=id,first_name,last_name,locale,email', $accessToken->getValue());
-    } catch(Facebook\Exceptions\FacebookResponseException $e) {
+    } catch (Facebook\Exceptions\FacebookResponseException $e) {
         Display::addFlash(
-            Display::return_message('Graph returned an error: ' . $e->getMessage(), 'error')
+            Display::return_message('Graph returned an error: '.$e->getMessage(), 'error')
         );
 
-        header('Location: ' . api_get_path(WEB_PATH));
+        header('Location: '.api_get_path(WEB_PATH));
         exit;
-    } catch(Facebook\Exceptions\FacebookSDKException $e) {
+    } catch (Facebook\Exceptions\FacebookSDKException $e) {
         Display::addFlash(
-            Display::return_message('Facebook SDK returned an error: ' . $e->getMessage(), 'error')
+            Display::return_message('Facebook SDK returned an error: '.$e->getMessage(), 'error')
         );
 
-        header('Location: ' . api_get_path(WEB_PATH));
+        header('Location: '.api_get_path(WEB_PATH));
         exit;
     }
 
@@ -140,14 +140,14 @@ function facebookConnect()
                 Display::return_message(get_lang('UserNotRegistered'), 'error')
             );
 
-            header('Location: ' . api_get_path(WEB_PATH));
+            header('Location: '.api_get_path(WEB_PATH));
             exit;
         }
 
         $_user['user_id'] = $chamilo_uid;
         $_SESSION['_user'] = $_user;
 
-        header('Location: ' . api_get_path(WEB_PATH));
+        header('Location: '.api_get_path(WEB_PATH));
         exit();
     }
 
@@ -158,7 +158,7 @@ function facebookConnect()
     $_user['user_id'] = $chamilo_uid;
     $_SESSION['_user'] = $_user;
 
-    header('Location: ' . api_get_path(WEB_PATH));
+    header('Location: '.api_get_path(WEB_PATH));
     exit();
 }
 
@@ -175,7 +175,7 @@ function facebookGetLoginUrl()
     ]);
 
     $helper = $fb->getRedirectLoginHelper();
-    $loginUrl = $helper->getLoginUrl(api_get_path(WEB_PATH) . '?action=fbconnect', [
+    $loginUrl = $helper->getLoginUrl(api_get_path(WEB_PATH).'?action=fbconnect', [
         'email'
     ]);
 

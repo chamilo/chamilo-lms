@@ -80,7 +80,7 @@ class SurveyLink extends AbstractLink
             $links[] = array(
                 $data['survey_id'],
                 api_trunc_str(
-                    $data['code'] . ': ' . self::html_to_text($data['title']),
+                    $data['code'].': '.self::html_to_text($data['title']),
                     80
                 )
             );

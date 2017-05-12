@@ -158,7 +158,7 @@ echo Display::input('hidden', 'id', $id);
 echo Display::input('hidden', 'form_sent', '1');
 echo Display::input('hidden', 'add_type', null);
 if (!empty($errorMsg)) {
-    Display::addFlash(Display::return_message($errorMsg, 'normal')); //main API
+    echo Display::return_message($errorMsg, 'normal'); //main API
 }
 ?>
 

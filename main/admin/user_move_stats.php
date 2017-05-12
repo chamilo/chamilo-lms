@@ -598,13 +598,11 @@ function get_courses_list_by_user_id_based_in_exercises($user_id) {
     return $course_list;
 }
 
-
+Display::addFlash(Display::return_message(get_lang('CompareUserResultsBetweenCoursesAndCoursesInASession'), 'normal', false));
 Display::display_header(get_lang('MoveUserStats'));
 echo  '<div class="actions">';
 echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
-Display::addFlash(Display::return_message(get_lang('CompareUserResultsBetweenCoursesAndCoursesInASession'), 'normal', false));
-
 
 // Some pagination
 $page = 1;

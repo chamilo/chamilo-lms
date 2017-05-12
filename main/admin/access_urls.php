@@ -35,18 +35,18 @@ if (isset($_GET['action'])) {
         case 'delete_url':
             $result = UrlManager::delete($url_id);
             if ($result) {
-                Display::addFlash(Display::return_message(get_lang('URLDeleted'), 'normal'));
+                echo Display::return_message(get_lang('URLDeleted'), 'normal');
             } else {
-                Display :: display_error_message(get_lang('CannotDeleteURL'));
+                echo Display::return_message(get_lang('CannotDeleteURL'), 'error');
             }
             break;
         case 'lock':
             UrlManager::set_url_status('lock', $url_id);
-            Display::addFlash(Display::return_message(get_lang('URLInactive'), 'normal'));
+            echo Display::return_message(get_lang('URLInactive'), 'normal');
             break;
         case 'unlock':
             UrlManager::set_url_status('unlock', $url_id);
-            Display::addFlash(Display::return_message(get_lang('URLActive'), 'normal'));
+            echo Display::return_message(get_lang('URLActive'), 'normal');
             break;
         case 'register':
             // we are going to register the admin
@@ -59,12 +59,10 @@ if (isset($_GET['action'])) {
                             $url_str .= $my_url['url'].' <br />';
                         }
                     }
-                    Display::addFlash(
-                        Display::return_message(
-                            get_lang('AdminUserRegisteredToThisURL').': '.$url_str.'<br />',
-                            'normal',
-                            false
-                        )
+                    echo Display::return_message(
+                        get_lang('AdminUserRegisteredToThisURL').': '.$url_str.'<br />',
+                        'normal',
+                        false
                     );
                 }
             }
@@ -83,16 +81,18 @@ foreach ($url_list as $my_url) {
     }
 }
 if (!empty($url_string)) {
-    Display:: display_warning_message(
+    echo Display::return_message(
         get_lang('AdminShouldBeRegisterInSite').'<br />'.$url_string,
+        'warning',
         false
     );
 }
 
 // checking the current installation
 if ($current_access_url_id == -1) {
-    Display::display_warning_message(
-        get_lang('URLNotConfiguredPleaseChangedTo').': '.api_get_path(WEB_PATH)
+    echo Display::return_message(
+        get_lang('URLNotConfiguredPleaseChangedTo').': '.api_get_path(WEB_PATH),
+        'warning'
     );
 } elseif (api_is_platform_admin()) {
     $quant = UrlManager::relation_url_user_exist(
@@ -100,8 +100,9 @@ if ($current_access_url_id == -1) {
         $current_access_url_id
     );
     if ($quant == 0) {
-        Display:: display_warning_message(
+        echo Display::return_message(
             '<a href="'.api_get_self().'?action=register&sec_token='.$parameters['sec_token'].'">'.get_lang('ClickToRegisterAdmin').'</a>',
+            'warning',
             false
         );
     }

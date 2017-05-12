@@ -32,7 +32,7 @@ echo Display::tag('h2', $thematic_data['title']);
 echo $thematic_data['content'];
 
 if (isset($message) && $message == 'ok') {
-    Display::addFlash(Display::return_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'), 'normal'));
+    echo Display::return_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'), 'normal');
 }
 
 if ($action === 'thematic_plan_list') {

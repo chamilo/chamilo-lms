@@ -204,7 +204,6 @@ $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdm
 $interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
 
 $tool_name = get_lang('ReviewCourseRequests');
-Display :: display_header($tool_name);
 
 // Display confirmation or error message.
 if (!empty($message)) {
@@ -214,6 +213,8 @@ if (!empty($message)) {
         Display::addFlash(Display::return_message($message, 'normal', false));
     }
 }
+
+Display::display_header($tool_name);
 
 if (!$course_validation_feature) {
     Display :: display_footer();

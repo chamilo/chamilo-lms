@@ -37,7 +37,7 @@ Display::display_header($nameTools);
 echo Display::page_header($nameTools);
 
 if (count($_POST) == 0) {
-    Display::addFlash(Display::return_message(get_lang('SpecialExportsIntroduction')));
+    echo Display::return_message(get_lang('SpecialExportsIntroduction'));
 }
 $error = 0;
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -64,7 +64,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 
         $zip_folder = new PclZip($FileZip['TEMP_FILE_ZIP']);
         if (!isset($_POST['resource']) || count($_POST['resource']) == 0) {
-            Display::addFlash(Display::return_message(get_lang('ErrorMsgSpecialExport'), 'error'));
+            echo Display::return_message(get_lang('ErrorMsgSpecialExport'), 'error');
         } else {
             $Resource = $_POST['resource'];
 
@@ -130,7 +130,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 }
 
 if ($export && $name) {
-    Display::addFlash(Display::return_message(get_lang('BackupCreated'), 'confirm'));
+    echo Display::return_message(get_lang('BackupCreated'), 'confirm');
     echo '<br /><a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive='.urlencode($name).'">'.get_lang('Download').'</a>';
 } else {
     // Display forms especial export
@@ -138,10 +138,10 @@ if ($export && $name) {
         $cb = new CourseBuilder();
         $course = $cb->build_session_course();
         if ($course === false) {
-            Display::addFlash(Display::return_message(get_lang('ErrorMsgSpecialExport'), 'error'));
+            echo Display::return_message(get_lang('ErrorMsgSpecialExport'), 'error');
             form_special_export();
         } else {
-            Display::addFlash(Display::return_message(get_lang('ToExportSpecialSelect'), 'normal'));
+            echo Display::return_message(get_lang('ToExportSpecialSelect'), 'normal');
             CourseSelectForm :: display_form_session_export($course);
         }
     } else {

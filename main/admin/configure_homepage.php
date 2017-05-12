@@ -49,7 +49,7 @@ function home_tabs($file_logged_in)
 }
 
 $cidReset = true;
-require_once __DIR__ . '/../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 $_SESSION['this_section'] = $this_section;
@@ -150,8 +150,8 @@ if (api_is_multiple_url_enabled()) {
         $clean_url .= '/';
 
         $homep = $homePath; //homep for Home Path
-        $homep_new = $homePath . $clean_url; //homep for Home Path added the url
-        $new_url_dir = $homePath . $clean_url;
+        $homep_new = $homePath.$clean_url; //homep for Home Path added the url
+        $new_url_dir = $homePath.$clean_url;
         //we create the new dir for the new sites
         if (!is_dir($new_url_dir)) {
             mkdir($new_url_dir, api_get_permissions_for_new_directories());
@@ -175,18 +175,18 @@ $homef = array($menuf, $newsf, $topf, $noticef, $menutabs, $mtloggedin);
 // If language-specific file does not exist, create it by copying default file
 foreach ($homef as $my_file) {
     if (api_is_multiple_url_enabled()) {
-        if (!file_exists($homep_new . $my_file . '_' . $lang . $ext)) {
-            if (!file_exists($homep . $my_file . $ext)) {
-                touch($homep . $my_file . $ext);
+        if (!file_exists($homep_new.$my_file.'_'.$lang.$ext)) {
+            if (!file_exists($homep.$my_file.$ext)) {
+                touch($homep.$my_file.$ext);
             }
-            @copy($homep . $my_file . $ext, $homep_new . $my_file . '_' . $lang . $ext);
+            @copy($homep.$my_file.$ext, $homep_new.$my_file.'_'.$lang.$ext);
         }
     } else {
-        if (!file_exists($homep . $my_file . '_' . $lang . $ext)) {
-            if (!file_exists($homep . $my_file . $ext)) {
-                touch($homep . $my_file . $ext);
+        if (!file_exists($homep.$my_file.'_'.$lang.$ext)) {
+            if (!file_exists($homep.$my_file.$ext)) {
+                touch($homep.$my_file.$ext);
             }
-            @copy($homep . $my_file . $ext, $homep . $my_file . '_' . $lang . $ext);
+            @copy($homep.$my_file.$ext, $homep.$my_file.'_'.$lang.$ext);
         }
     }
 }
@@ -224,8 +224,8 @@ if (!empty($action)) {
                 // Write
                 if (is_writable($homep)) {
                     // Default
-                    if (is_writable($homep . $topf . '_' . $lang . $ext)) {
-                        $fp = fopen($homep . $topf . '_' . $lang . $ext, 'w');
+                    if (is_writable($homep.$topf.'_'.$lang.$ext)) {
+                        $fp = fopen($homep.$topf.'_'.$lang.$ext, 'w');
                         fputs($fp, $home_top);
                         fclose($fp);
 
@@ -233,7 +233,7 @@ if (!empty($action)) {
                         foreach ($_languages['name'] as $key => $value) {
                             $lang_name = $_languages['folder'][$key];
                             if (isset($_POST[$lang_name])) {
-                                $fp = fopen($homep . $topf . '_' . $lang_name . $ext, 'w');
+                                $fp = fopen($homep.$topf.'_'.$lang_name.$ext, 'w');
                                 fputs($fp, $home_top);
                                 fclose($fp);
                             }
@@ -243,15 +243,15 @@ if (!empty($action)) {
                     }
                 } else {
                     //File does not exist
-                    $fp = fopen($homep . $topf . '_' . $lang . $ext, 'w');
+                    $fp = fopen($homep.$topf.'_'.$lang.$ext, 'w');
                     fputs($fp, $home_top);
                     fclose($fp);
 
                     foreach ($_languages['name'] as $key => $value) {
                         $lang_name = $_languages['folder'][$key];
                         if (isset($_POST[$lang_name])) {
-                            if (file_exists($homep . $topf . '_' . $lang_name . $ext)) {
-                                $fp = fopen($homep . $topf . '_' . $lang_name . $ext, 'w');
+                            if (file_exists($homep.$topf.'_'.$lang_name.$ext)) {
+                                $fp = fopen($homep.$topf.'_'.$lang_name.$ext, 'w');
                                 fputs($fp, $home_top);
                                 fclose($fp);
                             }
@@ -278,18 +278,18 @@ if (!empty($action)) {
                     $errorMsg = get_lang('NoticeWillBeNotDisplayed');
                 }
                 // Write
-                if (file_exists($homep . $noticef . '_' . $lang . $ext)) {
-                    if (is_writable($homep . $noticef . '_' . $lang . $ext)) {
-                        $fp = fopen($homep . $noticef . '_' . $lang . $ext, 'w');
+                if (file_exists($homep.$noticef.'_'.$lang.$ext)) {
+                    if (is_writable($homep.$noticef.'_'.$lang.$ext)) {
+                        $fp = fopen($homep.$noticef.'_'.$lang.$ext, 'w');
                         if ($errorMsg == '') {
                             fputs($fp, "<h5>$notice_title</h5><p>\n$notice_text");
 
                             foreach ($_languages['name'] as $key => $value) {
                                 $lang_name = $_languages['folder'][$key];
                                 if (isset($_POST[$lang_name])) {
-                                    if (file_exists($homep . $noticef . '_' . $lang_name . $ext)) {
-                                        if (is_writable($homep . $noticef . '_' . $lang_name . $ext)) {
-                                            $fp = fopen($homep . $noticef . '_' . $lang_name . $ext, 'w');
+                                    if (file_exists($homep.$noticef.'_'.$lang_name.$ext)) {
+                                        if (is_writable($homep.$noticef.'_'.$lang_name.$ext)) {
+                                            $fp = fopen($homep.$noticef.'_'.$lang_name.$ext, 'w');
                                             fputs($fp, "<h5>$notice_title</h5><p>\n$notice_text");
                                             fclose($fp);
                                         }
@@ -302,8 +302,8 @@ if (!empty($action)) {
                             foreach ($_languages['name'] as $key => $value) {
                                 $lang_name = $_languages['folder'][$key];
                                 if (isset($_POST[$lang_name])) {
-                                    if (file_exists($homep . $noticef . '_' . $lang_name . $ext)) {
-                                        $fp1 = fopen($homep . $noticef . '_' . $lang_name . $ext, 'w');
+                                    if (file_exists($homep.$noticef.'_'.$lang_name.$ext)) {
+                                        $fp1 = fopen($homep.$noticef.'_'.$lang_name.$ext, 'w');
                                         fputs($fp1, '');
                                         fclose($fp1);
                                     }
@@ -312,11 +312,11 @@ if (!empty($action)) {
                         }
                         fclose($fp);
                     } else {
-                        $errorMsg .= "<br/>\n" . get_lang('HomePageFilesNotWritable');
+                        $errorMsg .= "<br/>\n".get_lang('HomePageFilesNotWritable');
                     }
                 } else {
                     //File does not exist
-                    $fp = fopen($homep . $noticef . '_' . $lang . $ext, 'w');
+                    $fp = fopen($homep.$noticef.'_'.$lang.$ext, 'w');
                     fputs($fp, "<h5>$notice_title</h5><p>\n$notice_text");
                     fclose($fp);
                 }
@@ -334,9 +334,9 @@ if (!empty($action)) {
 
                 //Write
                 if ($s_languages_news != 'all') {
-                    if (file_exists($homep . $newsf . '_' . $s_languages_news . $ext)) {
-                        if (is_writable($homep . $newsf . '_' . $s_languages_news . $ext)) {
-                            $fp = fopen($homep . $newsf . '_' . $s_languages_news . $ext, 'w');
+                    if (file_exists($homep.$newsf.'_'.$s_languages_news.$ext)) {
+                        if (is_writable($homep.$newsf.'_'.$s_languages_news.$ext)) {
+                            $fp = fopen($homep.$newsf.'_'.$s_languages_news.$ext, 'w');
                             fputs($fp, $home_news);
                             fclose($fp);
                         } else {
@@ -344,7 +344,7 @@ if (!empty($action)) {
                         }
                     } else {
                         // File does not exist
-                        $fp = fopen($homep . $newsf . '_' . $s_languages_news . $ext, 'w');
+                        $fp = fopen($homep.$newsf.'_'.$s_languages_news.$ext, 'w');
                         fputs($fp, $home_news);
                         fclose($fp);
                     }
@@ -352,9 +352,9 @@ if (!empty($action)) {
                     // We update all the news file
                     foreach ($_languages['name'] as $key => $value) {
                         $english_name = $_languages['folder'][$key];
-                        if (file_exists($homep . $newsf . '_' . $english_name . $ext)) {
-                            if (is_writable($homep . $newsf . '_' . $english_name . $ext)) {
-                                $fp = fopen($homep . $newsf . '_' . $english_name . $ext, 'w');
+                        if (file_exists($homep.$newsf.'_'.$english_name.$ext)) {
+                            if (is_writable($homep.$newsf.'_'.$english_name.$ext)) {
+                                $fp = fopen($homep.$newsf.'_'.$english_name.$ext, 'w');
                                 fputs($fp, $home_news);
                                 fclose($fp);
                             } else {
@@ -362,7 +362,7 @@ if (!empty($action)) {
                             }
                         } else {
                             // File does not exist
-                            $fp = fopen($homep . $newsf . '_' . $english_name . $ext, 'w');
+                            $fp = fopen($homep.$newsf.'_'.$english_name.$ext, 'w');
                             fputs($fp, $home_news);
                             fclose($fp);
                         }
@@ -392,18 +392,18 @@ if (!empty($action)) {
                 if ($link_url == 'http://' || $link_url == 'https://') {
                     $link_url = '';
                 } elseif (!empty($link_url) && !strstr($link_url, '://')) {
-                    $link_url = 'http://' . $link_url;
+                    $link_url = 'http://'.$link_url;
                 }
                 $menuf = ($action == 'insert_tabs' || $action == 'edit_tabs') ? $mtloggedin : $menuf;
 
-                if (!is_writable($homep . $menuf . '_' . $lang . $ext)) {
+                if (!is_writable($homep.$menuf.'_'.$lang.$ext)) {
                     $errorMsg = get_lang('HomePageFilesNotWritable');
                 } elseif (empty($link_name)) {
                     $errorMsg = get_lang('PleaseEnterLinkName');
                 } else {
                     // New links are added as new files in the home/ directory
                     if ($action == 'insert_link' || $action == 'insert_tabs' || empty($filename) || strstr($filename, '/') || !strstr($filename, '.html')) {
-                        $filename = api_replace_dangerous_char($link_name) . '.html';
+                        $filename = api_replace_dangerous_char($link_name).'.html';
                     }
 
                     // "home_" prefix for links are renamed to "user_" prefix (to avoid name clash with existing home page files)
@@ -412,12 +412,12 @@ if (!empty($action)) {
                     }
                     // If the typical language suffix is not found in the file name,
                     // replace the ".html" suffix by "_en.html" or the active menu language
-                    if (!strstr($filename, '_' . $lang . $ext)) {
-                        $filename = str_replace($ext, '_' . $lang . $ext, $filename);
+                    if (!strstr($filename, '_'.$lang.$ext)) {
+                        $filename = str_replace($ext, '_'.$lang.$ext, $filename);
                     }
                     // Get the contents of home_menu_en.html (or active menu language
                     // version) into $home_menu as an array of one entry per line
-                    $home_menu = file($homep . $menuf . '_' . $lang . $ext);
+                    $home_menu = file($homep.$menuf.'_'.$lang.$ext);
                     $home_menu = implode("\n", $home_menu);
                     $home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
                     $home_menu = explode("\n", $home_menu);
@@ -435,18 +435,18 @@ if (!empty($action)) {
                     // If the given link url is empty, then replace the link url by a link to the link file created
 
                     if (empty($link_url) || $link_url == 'http://' || $link_url == 'https://') {
-                        $link_url = api_get_path(WEB_PATH) . 'index.php?include=' . urlencode($filename);
+                        $link_url = api_get_path(WEB_PATH).'index.php?include='.urlencode($filename);
                         // If the file doesn't exist, then create it and
                         // fill it with default text
 
-                        $fp = @fopen($homep . $filename, 'w');
+                        $fp = @fopen($homep.$filename, 'w');
                         if ($fp) {
                             if (empty($link_html)) {
                                 fputs($fp, get_lang('MyTextHere'));
-                                home_tabs($homep . $filename);
+                                home_tabs($homep.$filename);
                             } else {
                                 fputs($fp, $link_html);
-                                home_tabs($homep . $filename);
+                                home_tabs($homep.$filename);
                             }
                             fclose($fp);
                         }
@@ -454,10 +454,10 @@ if (!empty($action)) {
                     // If the requested action is to edit a link, open the file and
                     // write to it (if the file doesn't exist, create it)
                     if (in_array($action, array('edit_link')) && !empty($link_html)) {
-                        $fp = @fopen($homep . $filename, 'w');
+                        $fp = @fopen($homep.$filename, 'w');
                         if ($fp) {
                             fputs($fp, $link_html);
-                            home_tabs($homep . $filename);
+                            home_tabs($homep.$filename);
                             fclose($fp);
                         }
                     }
@@ -480,36 +480,36 @@ if (!empty($action)) {
                                 break;
                             }
                         }
-                        $home_menu[$insert_where + 1] = '<li ' . $class_add_in_tab . '><a href="' . $link_url . '" target="' . ($target_blank ? '_blank' : '_self') . '">' . $link_name . '</a></li>';
+                        $home_menu[$insert_where + 1] = '<li '.$class_add_in_tab.'><a href="'.$link_url.'" target="'.($target_blank ? '_blank' : '_self').'">'.$link_name.'</a></li>';
                     } else {
                         // If the request is about a link edition, change the link
-                        $home_menu[$link_index] = '<li ' . $class_add_in_tab . '><a href="' . $link_url . '" target="' . ($target_blank ? '_blank' : '_self') . '">' . $link_name . '</a></li>';
+                        $home_menu[$link_index] = '<li '.$class_add_in_tab.'><a href="'.$link_url.'" target="'.($target_blank ? '_blank' : '_self').'">'.$link_name.'</a></li>';
                     }
                     // Re-build the file from the home_menu array
                     $home_menu = implode("\n", $home_menu);
                     // Write
-                    if (file_exists($homep . $menuf . '_' . $lang . $ext)) {
-                        if (is_writable($homep . $menuf . '_' . $lang . $ext)) {
-                            $fp = fopen($homep . $menuf . '_' . $lang . $ext, 'w');
+                    if (file_exists($homep.$menuf.'_'.$lang.$ext)) {
+                        if (is_writable($homep.$menuf.'_'.$lang.$ext)) {
+                            $fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');
                             fputs($fp, $home_menu);
-                            home_tabs($homep . $menuf . '_' . $lang . $ext);
+                            home_tabs($homep.$menuf.'_'.$lang.$ext);
                             fclose($fp);
 
                             foreach ($_languages['name'] as $key => $value) {
                                 $lang_name = $_languages['folder'][$key];
                                 if (isset($_POST[$lang_name])) {
-                                    $fp = fopen($homep . $menuf . '_' . $lang_name . $ext, 'w');
+                                    $fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
                                     fputs($fp, $home_menu);
-                                    home_tabs($homep . $menuf . '_' . $lang_name . $ext);
+                                    home_tabs($homep.$menuf.'_'.$lang_name.$ext);
                                     fclose($fp);
                                 }
                             }
 
-                            if (file_exists($homep . $menuf . $ext)) {
-                                if (is_writable($homep . $menuf . $ext)) {
-                                    $fpo = fopen($homep . $menuf . $ext, 'w');
+                            if (file_exists($homep.$menuf.$ext)) {
+                                if (is_writable($homep.$menuf.$ext)) {
+                                    $fpo = fopen($homep.$menuf.$ext, 'w');
                                     fputs($fpo, $home_menu);
-                                    home_tabs($homep . $menuf . $ext);
+                                    home_tabs($homep.$menuf.$ext);
                                     fclose($fpo);
                                 }
                             }
@@ -518,17 +518,17 @@ if (!empty($action)) {
                         }
                     } else {
                         //File does not exist
-                        $fp = fopen($homep . $menuf . '_' . $lang . $ext, 'w');
+                        $fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');
                         fputs($fp, $home_menu);
-                        home_tabs($homep . $menuf . '_' . $lang . $ext);
+                        home_tabs($homep.$menuf.'_'.$lang.$ext);
                         fclose($fp);
 
                         foreach ($_languages['name'] as $key => $value) {
                             $lang_name = $_languages['folder'][$key];
                             if (isset($_POST[$lang_name])) {
-                                $fp = fopen($homep . $menuf . '_' . $lang_name . $ext, 'w');
+                                $fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
                                 fputs($fp, $home_menu);
-                                home_tabs($homep . $menuf . '_' . $lang_name . $ext);
+                                home_tabs($homep.$menuf.'_'.$lang_name.$ext);
                                 fclose($fp);
                             }
                         }
@@ -537,7 +537,7 @@ if (!empty($action)) {
                 Event::addEvent(
                     LOG_HOMEPAGE_CHANGED,
                     $action,
-                    cut($link_name . ':' . $link_url, 254),
+                    cut($link_name.':'.$link_url, 254),
                     api_get_utc_datetime(),
                     api_get_user_id()
                 );
@@ -545,7 +545,7 @@ if (!empty($action)) {
         } //end of switch($action)
 
         if (empty($errorMsg)) {
-            header('Location: ' . $selfUrl . '?language=' . $languageGet);
+            header('Location: '.$selfUrl.'?language='.$languageGet);
             exit();
         }
     } else {
@@ -561,7 +561,7 @@ if (!empty($action)) {
                 // link and re-writing the array to the file
                 $link_index = intval($_GET['link_index']);
                 $menuf = ($action == 'delete_tabs') ? $mtloggedin : $menuf;
-                $home_menu = @file($homep . $menuf . '_' . $lang . $ext);
+                $home_menu = @file($homep.$menuf.'_'.$lang.$ext);
                 if (empty($home_menu)) {
                     $home_menu = array();
                 }
@@ -575,28 +575,28 @@ if (!empty($action)) {
                 $home_menu = implode("\n", $home_menu);
                 $home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
 
-                $fp = fopen($homep . $menuf . '_' . $lang . $ext, 'w');
+                $fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');
                 fputs($fp, $home_menu);
-                home_tabs($homep . $menuf . '_' . $lang . $ext);
+                home_tabs($homep.$menuf.'_'.$lang.$ext);
                 fclose($fp);
-                if (file_exists($homep . $menuf . $ext)) {
-                    if (is_writable($homep . $menuf . $ext)) {
-                        $fpo = fopen($homep . $menuf . $ext, 'w');
+                if (file_exists($homep.$menuf.$ext)) {
+                    if (is_writable($homep.$menuf.$ext)) {
+                        $fpo = fopen($homep.$menuf.$ext, 'w');
                         fputs($fpo, $home_menu);
-                        home_tabs($homep . $menuf . $ext);
+                        home_tabs($homep.$menuf.$ext);
                         fclose($fpo);
                     }
                 }
-                header('Location: ' . $selfUrl);
+                header('Location: '.$selfUrl);
                 exit();
                 break;
             case 'edit_top':
                 // This request is only the preparation for the update of the home_top
                 $home_top = '';
-                if (is_file($homep . $topf . '_' . $lang . $ext) && is_readable($homep . $topf . '_' . $lang . $ext)) {
-                    $home_top = @(string)file_get_contents($homep . $topf . '_' . $lang . $ext);
-                } elseif (is_file($homep . $topf . $lang . $ext) && is_readable($homep . $topf . $lang . $ext)) {
-                    $home_top = @(string)file_get_contents($homep . $topf . $lang . $ext);
+                if (is_file($homep.$topf.'_'.$lang.$ext) && is_readable($homep.$topf.'_'.$lang.$ext)) {
+                    $home_top = @(string) file_get_contents($homep.$topf.'_'.$lang.$ext);
+                } elseif (is_file($homep.$topf.$lang.$ext) && is_readable($homep.$topf.$lang.$ext)) {
+                    $home_top = @(string) file_get_contents($homep.$topf.$lang.$ext);
                 } else {
                     $errorMsg = get_lang('HomePageFilesNotReadable');
                 }
@@ -605,10 +605,10 @@ if (!empty($action)) {
             case 'edit_notice':
                 // This request is only the preparation for the update of the home_notice
                 $home_notice = '';
-                if (is_file($homep . $noticef . '_' . $lang . $ext) && is_readable($homep . $noticef . '_' . $lang . $ext)) {
-                    $home_notice = @file($homep . $noticef . '_' . $lang . $ext);
-                } elseif (is_file($homep . $noticef . $lang . $ext) && is_readable($homep . $noticef . $lang . $ext)) {
-                    $home_notice = @file($homep . $noticef . $lang . $ext);
+                if (is_file($homep.$noticef.'_'.$lang.$ext) && is_readable($homep.$noticef.'_'.$lang.$ext)) {
+                    $home_notice = @file($homep.$noticef.'_'.$lang.$ext);
+                } elseif (is_file($homep.$noticef.$lang.$ext) && is_readable($homep.$noticef.$lang.$ext)) {
+                    $home_notice = @file($homep.$noticef.$lang.$ext);
                 } else {
                     $errorMsg = get_lang('HomePageFilesNotReadable');
                 }
@@ -623,10 +623,10 @@ if (!empty($action)) {
             case 'edit_news':
                 // This request is the preparation for the update of the home_news page
                 $home_news = '';
-                if (is_file($homep . $newsf . '_' . $lang . $ext) && is_readable($homep . $newsf . '_' . $lang . $ext)) {
-                    $home_news = @(string)file_get_contents($homep . $newsf . '_' . $lang . $ext);
-                } elseif (is_file($homep . $newsf . $lang . $ext) && is_readable($homep . $newsf . $lang . $ext)) {
-                    $home_news = @(string)file_get_contents($homep . $newsf . $lang . $ext);
+                if (is_file($homep.$newsf.'_'.$lang.$ext) && is_readable($homep.$newsf.'_'.$lang.$ext)) {
+                    $home_news = @(string) file_get_contents($homep.$newsf.'_'.$lang.$ext);
+                } elseif (is_file($homep.$newsf.$lang.$ext) && is_readable($homep.$newsf.$lang.$ext)) {
+                    $home_news = @(string) file_get_contents($homep.$newsf.$lang.$ext);
                 } else {
                     $errorMsg = get_lang('HomePageFilesNotReadable');
                 }
@@ -636,10 +636,10 @@ if (!empty($action)) {
                 // This request is the preparation for the addition of an item in home_menu
                 $home_menu = '';
                 $menuf = ($action == 'edit_tabs') ? $mtloggedin : $menuf;
-                if (is_file($homep . $menuf . '_' . $lang . $ext) && is_readable($homep . $menuf . '_' . $lang . $ext)) {
-                    $home_menu = @file($homep . $menuf . '_' . $lang . $ext);
-                } elseif (is_file($homep . $menuf . $lang . $ext) && is_readable($homep . $menuf . $lang . $ext)) {
-                    $home_menu = @file($homep . $menuf . $lang . $ext);
+                if (is_file($homep.$menuf.'_'.$lang.$ext) && is_readable($homep.$menuf.'_'.$lang.$ext)) {
+                    $home_menu = @file($homep.$menuf.'_'.$lang.$ext);
+                } elseif (is_file($homep.$menuf.$lang.$ext) && is_readable($homep.$menuf.$lang.$ext)) {
+                    $home_menu = @file($homep.$menuf.$lang.$ext);
                 } else {
                     $errorMsg = get_lang('HomePageFilesNotReadable');
                 }
@@ -656,12 +656,12 @@ if (!empty($action)) {
             case 'insert_tabs':
                 // This request is the preparation for the addition of an item in home_menu
                 $home_menu = '';
-                if (is_file($homep . $mtloggedin . '_' . $lang . $ext) && is_readable($homep . $mtloggedin . '_' . $lang . $ext)) {
-                    $home_menu = @file($homep . $mtloggedin . '_' . $lang . $ext);
-                } elseif (is_file($homep . $mtloggedin . $lang . $ext) && is_readable($homep . $mtloggedin . $lang . $ext)) {
-                    $home_menu = @file($homep . $mtloggedin . $lang . $ext);
-                } elseif (touch($homep . $mtloggedin . '_' . $lang . $ext)) {
-                    $home_menu = @file($homep . $mtloggedin . '_' . $lang . $ext);
+                if (is_file($homep.$mtloggedin.'_'.$lang.$ext) && is_readable($homep.$mtloggedin.'_'.$lang.$ext)) {
+                    $home_menu = @file($homep.$mtloggedin.'_'.$lang.$ext);
+                } elseif (is_file($homep.$mtloggedin.$lang.$ext) && is_readable($homep.$mtloggedin.$lang.$ext)) {
+                    $home_menu = @file($homep.$mtloggedin.$lang.$ext);
+                } elseif (touch($homep.$mtloggedin.'_'.$lang.$ext)) {
+                    $home_menu = @file($homep.$mtloggedin.'_'.$lang.$ext);
                 } else {
                     $errorMsg = get_lang('HomePageFilesNotReadable');
                 }
@@ -680,17 +680,17 @@ if (!empty($action)) {
                 // This request is the preparation for the edition of the links array
                 $home_menu = '';
                 $menuf = ($action == 'edit_tabs') ? $mtloggedin : $menuf;
-                if (is_file($homep . $menuf . '_' . $lang . $ext) && is_readable($homep . $menuf . '_' . $lang . $ext)) {
-                    $home_menu = @file($homep . $menuf . '_' . $lang . $ext);
-                } elseif (is_file($homep . $menuf . $lang . $ext) && is_readable($homep . $menuf . $lang . $ext)) {
-                    $home_menu = @file($homep . $menuf . $lang . $ext);
+                if (is_file($homep.$menuf.'_'.$lang.$ext) && is_readable($homep.$menuf.'_'.$lang.$ext)) {
+                    $home_menu = @file($homep.$menuf.'_'.$lang.$ext);
+                } elseif (is_file($homep.$menuf.$lang.$ext) && is_readable($homep.$menuf.$lang.$ext)) {
+                    $home_menu = @file($homep.$menuf.$lang.$ext);
                 } else {
                     $errorMsg = get_lang('HomePageFilesNotReadable');
                 }
 
                 if (empty($home_menu)) {
-                    if (file_exists($homep . $menutabs . '_' . $lang . $ext)) {
-                        $home_menu = @file($homep . $menutabs . '_' . $lang . $ext);
+                    if (file_exists($homep.$menutabs.'_'.$lang.$ext)) {
+                        $home_menu = @file($homep.$menutabs.'_'.$lang.$ext);
                     }
                 }
 
@@ -757,7 +757,7 @@ if (!empty($action)) {
 
                             if (!strstr($filename, '/') && strstr($filename, '.html')) {
                                 // Get oonly the contents of the link file
-                                $link_html = @file($homep . $filename);
+                                $link_html = @file($homep.$filename);
                                 $link_html = implode('', $link_html);
                                 $link_url = '';
                             } else {
@@ -783,7 +783,7 @@ switch ($action) {
     case 'open_link':
         if (!empty($link)) {
             // $link is only set in case of action=open_link and is filtered
-            $open = @(string)file_get_contents($homep . $link);
+            $open = @(string) file_get_contents($homep.$link);
             $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
             echo $open;
         }
@@ -850,8 +850,8 @@ switch ($action) {
             Display::addFlash(Display::return_message($errorMsg, 'normal'));
         }
         $default = array();
-        $form = new FormValidator('configure_homepage_' . $action, 'post', $selfUrl . '?action=' . $action, '', array('style' => 'margin: 0px;'));
-        $renderer =& $form->defaultRenderer();
+        $form = new FormValidator('configure_homepage_'.$action, 'post', $selfUrl.'?action='.$action, '', array('style' => 'margin: 0px;'));
+        $renderer = & $form->defaultRenderer();
 
         $form->addElement('header', '', $tool_name);
         $form->addElement('hidden', 'formSent', '1');
@@ -863,7 +863,7 @@ switch ($action) {
             $default['link_name'] = $link_name;
         }
         $default['link_url'] = empty($link_url) ? 'http://' : api_htmlentities($link_url, ENT_QUOTES);
-        $linkUrlComment = ($action == 'insert_tabs') ? get_lang('Optional') . '<br />' . get_lang('GlobalLinkUseDoubleColumnPrivateToShowPrivately') : '';
+        $linkUrlComment = ($action == 'insert_tabs') ? get_lang('Optional').'<br />'.get_lang('GlobalLinkUseDoubleColumnPrivateToShowPrivately') : '';
         $form->addElement('text', 'link_url', array(get_lang('LinkURL'), $linkUrlComment), array('size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;'));
 
         $options = array('-1' => get_lang('FirstPlace'));
@@ -875,7 +875,7 @@ switch ($action) {
             if (is_array($home_menu)) {
                 foreach ($home_menu as $key => $enreg) {
                     if (strlen($enreg = trim(strip_tags($enreg))) > 0) {
-                        $options[$key] = get_lang('After') . ' &quot;' . $enreg . '&quot;';
+                        $options[$key] = get_lang('After').' &quot;'.$enreg.'&quot;';
                         $formSentCheck = (!empty($_POST['formSent']) ? true : false);
                         $selected = $formSentCheck && $insert_where == $key ? $key : '';
                     }
@@ -913,7 +913,7 @@ switch ($action) {
                 $i++;
                 $lang_name = $_languages['folder'][$key];
                 $html_langs = '<td width="300">';
-                $html_langs .= '<label><input type="checkbox" id="lang" name="' . $lang_name . '" />&nbsp;' . $lang_name . '<label/>';
+                $html_langs .= '<label><input type="checkbox" id="lang" name="'.$lang_name.'" />&nbsp;'.$lang_name.'<label/>';
                 $html_langs .= '</td>';
                 if ($i % 5 == 0) {
                     $html_langs .= '</tr><tr>';
@@ -935,7 +935,7 @@ switch ($action) {
             $open = $home_top;
         } else {
             $name = $newsf;
-            $open = @(string)file_get_contents($homep . $newsf . '_' . $lang . $ext);
+            $open = @(string) file_get_contents($homep.$newsf.'_'.$lang.$ext);
         }
         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 
@@ -945,13 +945,13 @@ switch ($action) {
 
         $default = array();
         $form = new FormValidator(
-            'configure_homepage_' . $action,
+            'configure_homepage_'.$action,
             'post',
-            $selfUrl . '?action=' . $action,
+            $selfUrl.'?action='.$action,
             '',
             array('style' => 'margin: 0px;')
         );
-        $renderer =& $form->defaultRenderer();
+        $renderer = & $form->defaultRenderer();
         $renderer->setHeaderTemplate('');
         $renderer->setFormTemplate('<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>');
         $renderer->setCustomElementTemplate('<tr><td>{element}</td></tr>');
@@ -960,15 +960,15 @@ switch ($action) {
 
         if ($action == 'edit_news') {
             $_languages = api_get_languages();
-            $html = '<tr><td>' . get_lang('ChooseNewsLanguage') . ' : ';
+            $html = '<tr><td>'.get_lang('ChooseNewsLanguage').' : ';
             $html .= '<select name="news_languages">';
-            $html .= '<option value="all">' . get_lang('ApplyAllLanguages') . '</option>';
+            $html .= '<option value="all">'.get_lang('ApplyAllLanguages').'</option>';
             foreach ($_languages['name'] as $key => $value) {
                 $english_name = $_languages['folder'][$key];
                 if ($language == $english_name) {
-                    $html .= '<option value="' . $english_name . '" selected="selected">' . $value . '</option>';
+                    $html .= '<option value="'.$english_name.'" selected="selected">'.$value.'</option>';
                 } else {
-                    $html .= '<option value="' . $english_name . '">' . $value . '</option>';
+                    $html .= '<option value="'.$english_name.'">'.$value.'</option>';
                 }
             }
             $html .= '</select></td></tr>';
@@ -991,7 +991,7 @@ switch ($action) {
                 $checked = "checked";
             }
             $html_langs = '<td width="300">';
-            $html_langs .= '<label><input type="checkbox" ' . $checked . ' id="lang" name="' . $lang_name . '" />&nbsp;' . $value . '<label/>';
+            $html_langs .= '<label><input type="checkbox" '.$checked.' id="lang" name="'.$lang_name.'" />&nbsp;'.$value.'<label/>';
             $html_langs .= '</td>';
             if ($i % 5 == 0) {
                 $html_langs .= '</tr><tr>';
@@ -1056,10 +1056,10 @@ switch ($action) {
                                 <div class="panel-body">
                                     <?php
                                     $home_notice = '';
-                                    if (file_exists($homep . $noticef . '_' . $lang . $ext)) {
-                                        $home_notice = @(string)file_get_contents($homep . $noticef . '_' . $lang . $ext);
+                                    if (file_exists($homep.$noticef.'_'.$lang.$ext)) {
+                                        $home_notice = @(string) file_get_contents($homep.$noticef.'_'.$lang.$ext);
                                     } else {
-                                        $home_notice = @(string)file_get_contents($homep . $noticef . $ext);
+                                        $home_notice = @(string) file_get_contents($homep.$noticef.$ext);
                                     }
                                     $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
                                     echo '<div class="homepage_notice">';
@@ -1086,15 +1086,15 @@ switch ($action) {
                             <div id="links-list" class="panel-collapse collapse in" role="tabpanel"
                                  aria-labelledby="headingOne">
                                 <div class="panel-body">
-                                    <a href="<?php echo $selfUrl; ?>?action=insert_link"><?php echo Display::return_icon('add.png', get_lang('InsertLink')) . '&nbsp;' . get_lang('InsertLink'); ?>
+                                    <a href="<?php echo $selfUrl; ?>?action=insert_link"><?php echo Display::return_icon('add.png', get_lang('InsertLink')).'&nbsp;'.get_lang('InsertLink'); ?>
                                     </a>
                                     <ul class="menulist">
                                         <?php
                                         $home_menu = '';
-                                        if (file_exists($homep . $menuf . '_' . $lang . $ext)) {
-                                            $home_menu = @file($homep . $menuf . '_' . $lang . $ext);
+                                        if (file_exists($homep.$menuf.'_'.$lang.$ext)) {
+                                            $home_menu = @file($homep.$menuf.'_'.$lang.$ext);
                                         } else {
-                                            $home_menu = @file($homep . $menuf . $ext);
+                                            $home_menu = @file($homep.$menuf.$ext);
                                         }
                                         if (empty($home_menu)) {
                                             $home_menu = array();
@@ -1108,9 +1108,9 @@ switch ($action) {
                                         foreach ($home_menu as $enreg) {
                                             $enreg = trim($enreg);
                                             if (!empty($enreg)) {
-                                                $edit_link = '<a href="' . $selfUrl . '?action=edit_link&amp;link_index=' . $i . '">' . Display::return_icon('edit.png', get_lang('Edit')) . '</a>';
-                                                $delete_link = '<a href="' . $selfUrl . '?action=delete_link&amp;link_index=' . $i . '" onclick="javascript:if(!confirm(\'' . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)) . '\')) return false;">' . Display::return_icon('delete.png', get_lang('Delete')) . '</a>';
-                                                echo str_replace(array('href="' . api_get_path(WEB_PATH) . 'index.php?include=', '</li>'), array('href="' . api_get_path(WEB_CODE_PATH) . 'admin/' . basename($selfUrl) . '?action=open_link&link=', $edit_link . ' ' . $delete_link . '</li>'), $enreg);
+                                                $edit_link = '<a href="'.$selfUrl.'?action=edit_link&amp;link_index='.$i.'">'.Display::return_icon('edit.png', get_lang('Edit')).'</a>';
+                                                $delete_link = '<a href="'.$selfUrl.'?action=delete_link&amp;link_index='.$i.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>';
+                                                echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($selfUrl).'?action=open_link&link=', $edit_link.' '.$delete_link.'</li>'), $enreg);
                                                 $i++;
                                             }
                                         }
@@ -1125,16 +1125,16 @@ switch ($action) {
                 <div class="col-md-9">
                     <div class="actions">
                         <a href="<?php echo $selfUrl; ?>?action=edit_top&language=<?php echo $languageGet; ?>">
-                            <?php echo Display::return_icon('edit.png', get_lang('EditHomePage'), null, ICON_SIZE_SMALL) . '&nbsp;' . get_lang('EditHomePage'); ?>
+                            <?php echo Display::return_icon('edit.png', get_lang('EditHomePage'), null, ICON_SIZE_SMALL).'&nbsp;'.get_lang('EditHomePage'); ?>
                         </a>
                     </div>
                     <section id="homepage-home">
                         <?php
                         //print home_top contents
-                        if (file_exists($homep . $topf . '_' . $lang . $ext)) {
-                            $home_top_temp = @(string)file_get_contents($homep . $topf . '_' . $lang . $ext);
+                        if (file_exists($homep.$topf.'_'.$lang.$ext)) {
+                            $home_top_temp = @(string) file_get_contents($homep.$topf.'_'.$lang.$ext);
                         } else {
-                            $home_top_temp = @(string)file_get_contents($homep . $topf . $ext);
+                            $home_top_temp = @(string) file_get_contents($homep.$topf.$ext);
                         }
                         $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
                         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
@@ -1151,14 +1151,14 @@ switch ($action) {
 
                     if ($access_url_id == 1) {
                         echo '<div class="actions">';
-                        echo '<a href="course_category.php">' . Display::return_icon('edit.png', get_lang('Edit')) . '&nbsp;' . get_lang('EditCategories') . '</a>';
+                        echo '<a href="course_category.php">'.Display::return_icon('edit.png', get_lang('Edit')).'&nbsp;'.get_lang('EditCategories').'</a>';
                         echo '</div>';
                     }
                     echo '<ul class="list-group">';
                     if ($access_url_id == 1) {
                         if (sizeof($Categories)) {
                             foreach ($Categories as $enreg) {
-                                echo '<li class="list-group-item">' . Display::return_icon('folder.png', $enreg['name']) . '&nbsp;' . $enreg['name'] . '</li>';
+                                echo '<li class="list-group-item">'.Display::return_icon('folder.png', $enreg['name']).'&nbsp;'.$enreg['name'].'</li>';
                             }
                             unset($Categories);
                         } else {
@@ -1169,12 +1169,12 @@ switch ($action) {
                     ?>
 
                     <?php
-                    if (file_exists($homep . $newsf . '_' . $lang . $ext)) {
-                        $open = @(string)file_get_contents($homep . $newsf . '_' . $lang . $ext);
+                    if (file_exists($homep.$newsf.'_'.$lang.$ext)) {
+                        $open = @(string) file_get_contents($homep.$newsf.'_'.$lang.$ext);
                         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
                         echo $open;
                     } else {
-                        $open = @(string)file_get_contents($homep . $newsf . $ext);
+                        $open = @(string) file_get_contents($homep.$newsf.$ext);
                         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
                         echo $open;
                     }
@@ -1183,14 +1183,14 @@ switch ($action) {
                     <?php
                     // Add new page
                     $home_menu = '';
-                    if (file_exists($homep . $mtloggedin . '_' . $lang . $ext)) {
-                        $home_menu = @file($homep . $mtloggedin . '_' . $lang . $ext);
+                    if (file_exists($homep.$mtloggedin.'_'.$lang.$ext)) {
+                        $home_menu = @file($homep.$mtloggedin.'_'.$lang.$ext);
                     } else {
-                        $home_menu = @file($homep . $mtloggedin . $ext);
+                        $home_menu = @file($homep.$mtloggedin.$ext);
                     }
                     if (empty($home_menu)) {
-                        if (file_exists($homep . $menutabs . '_' . $lang . $ext)) {
-                            $home_menu = @file($homep . $menutabs . '_' . $lang . $ext);
+                        if (file_exists($homep.$menutabs.'_'.$lang.$ext)) {
+                            $home_menu = @file($homep.$menutabs.'_'.$lang.$ext);
                         }
                     }
                     if (empty($home_menu)) {
@@ -1206,11 +1206,11 @@ switch ($action) {
                     foreach ($home_menu as $enreg) {
                         $enreg = trim($enreg);
                         if (!empty($enreg)) {
-                            $edit_link = ' <a href="' . $selfUrl . '?action=edit_tabs&amp;link_index=' . $tab_counter . '" ><span>' . Display::return_icon('edit.png', get_lang('Edit')) . '</span></a>';
-                            $delete_link = ' <a href="' . $selfUrl . '?action=delete_tabs&amp;link_index=' . $tab_counter . '"  onclick="javascript: if(!confirm(\'' . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)) . '\')) return false;"><span>' . Display::return_icon('delete.png', get_lang('Delete')) . '</span></a>';
+                            $edit_link = ' <a href="'.$selfUrl.'?action=edit_tabs&amp;link_index='.$tab_counter.'" ><span>'.Display::return_icon('edit.png', get_lang('Edit')).'</span></a>';
+                            $delete_link = ' <a href="'.$selfUrl.'?action=delete_tabs&amp;link_index='.$tab_counter.'"  onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;"><span>'.Display::return_icon('delete.png', get_lang('Delete')).'</span></a>';
                             $tab_string = str_replace(
-                                array('href="' . api_get_path(WEB_PATH) . 'index.php?include=', '</li>'),
-                                array('href="' . api_get_path(WEB_CODE_PATH) . 'admin/' . basename($selfUrl) . '?action=open_link&link=', $edit_link . $delete_link . '</li>'),
+                                array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'),
+                                array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($selfUrl).'?action=open_link&link=', $edit_link.$delete_link.'</li>'),
                                 $enreg
                             );
                             $tab_string = str_replace([' class="hide_menu"', ' class="show_menu"'], '', $tab_string);
@@ -1222,7 +1222,7 @@ switch ($action) {
                     ?>
                     <div class="actions">
                         <a href="<?php echo $selfUrl; ?>?action=insert_tabs">
-                            <?php echo Display::return_icon('add.png', get_lang('InsertLink')) . '&nbsp;' . get_lang('InsertLink'); ?>
+                            <?php echo Display::return_icon('add.png', get_lang('InsertLink')).'&nbsp;'.get_lang('InsertLink'); ?>
                         </a>
                     </div>
                     <?php

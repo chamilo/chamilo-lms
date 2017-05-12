@@ -639,7 +639,7 @@ class FillBlanks extends Question
                 // the answer must be one of the choice made
                 $listSeveral = self::getFillTheBlankSeveralAnswers($correctAnswer);
 
-                $listSeveral = array_map(function ($item) {
+                $listSeveral = array_map(function($item) {
                     return self::trimOption($item);
                 }, $listSeveral);
 

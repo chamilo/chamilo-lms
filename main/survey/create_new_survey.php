@@ -2,14 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * 	@package chamilo.survey
- * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
+ * @package chamilo.survey
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
  *  refactoring and rewriting large parts (if not all) of the code
- * 	@author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality
+ * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality
  * Test modification and rewriting large parts of the code
- * 	@version $Id: create_new_survey.php 22297 2009-07-22 22:08:30Z cfasanando $
+ * @version $Id: create_new_survey.php 22297 2009-07-22 22:08:30Z cfasanando $
  *
- * 	@todo only the available platform languages should be used => need an
+ * @todo only the available platform languages should be used => need an
  *  api get_languages and and api_get_available_languages (or a parameter)
  */
 

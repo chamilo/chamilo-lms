@@ -16,14 +16,39 @@ use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $debug = false;
-if (empty($origin)) {
-    $origin = isset($_REQUEST['origin']) ? $_REQUEST['origin'] : null;
+$origin = api_get_origin();
+$currentUserId = api_get_user_id();
+$printHeaders = $origin == 'learnpath';
+$id = intval($_REQUEST['id']); //exe id
+
+if (empty($id)) {
+    api_not_allowed(true);
 }
 
-if ($origin == 'learnpath') {
-    api_protect_course_script(false, false, true);
+// Getting results from the exe_id. This variable also contain all the information about the exercise
+$track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
+
+//No track info
+if (empty($track_exercise_info)) {
+    api_not_allowed($printHeaders);
+}
+
+$exercise_id = $track_exercise_info['id'];
+$exercise_date = $track_exercise_info['start_date'];
+$student_id = $track_exercise_info['exe_user_id'];
+$learnpath_id = $track_exercise_info['orig_lp_id'];
+$learnpath_item_id = $track_exercise_info['orig_lp_item_id'];
+$lp_item_view_id = $track_exercise_info['orig_lp_item_view_id'];
+$isBossOfStudent = false;
+if (api_is_student_boss()) {
+    // Check if boss has access to user info.
+    if (UserManager::userIsBossOfStudent($currentUserId, $student_id)) {
+        $isBossOfStudent = true;
+    } else {
+        api_not_allowed($printHeaders);
+    }
 } else {
-    api_protect_course_script(true, false, true);
+    api_protect_course_script($printHeaders, false, true);
 }
 
 // Database table definitions
@@ -68,49 +93,30 @@ if (empty($action)) {
     $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 }
 
-$id = intval($_REQUEST['id']); //exe id
-
-if (empty($id)) {
-    api_not_allowed(true);
-}
-
-$current_user_id = api_get_user_id();
 $courseInfo = api_get_course_info();
+$sessionId = api_get_session_id();
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_course_tutor() || api_is_session_admin() || api_is_drh() || api_is_student_boss();
 
-if (api_is_course_session_coach(
-    $current_user_id,
-    api_get_course_int_id(),
-    api_get_session_id()
-)) {
-    if (!api_coach_can_edit_view_results(api_get_course_int_id(), api_get_session_id())) {
-        api_not_allowed(true);
+if (!empty($sessionId) && !$is_allowedToEdit) {
+    if (api_is_course_session_coach(
+        $currentUserId,
+        api_get_course_int_id(),
+        $sessionId
+    )) {
+        if (!api_coach_can_edit_view_results(api_get_course_int_id(), $sessionId)
+        ) {
+            api_not_allowed($printHeaders);
+        }
     }
 }
 
 $allowCoachFeedbackExercises = api_get_setting('allow_coach_feedback_exercises') === 'true';
-
 $maxEditors = intval(api_get_setting('exercise_max_ckeditors_in_page'));
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || $is_courseTutor || api_is_session_admin() || api_is_drh() || api_is_student_boss();
 $isCoachAllowedToEdit = api_is_allowed_to_edit(false, true);
 $isFeedbackAllowed = false;
 
-//Getting results from the exe_id. This variable also contain all the information about the exercise
-$track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
-
-//No track info
-if (empty($track_exercise_info)) {
-    api_not_allowed(true);
-}
-
-$exercise_id = $track_exercise_info['id'];
-$exercise_date = $track_exercise_info['start_date'];
-$student_id = $track_exercise_info['exe_user_id'];
-$learnpath_id = $track_exercise_info['orig_lp_id'];
-$learnpath_item_id = $track_exercise_info['orig_lp_item_id'];
-$lp_item_view_id = $track_exercise_info['orig_lp_item_view_id'];
-
 if (api_is_excluded_user_type(true, $student_id)) {
-    api_not_allowed(true);
+    api_not_allowed($printHeaders);
 }
 
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
@@ -123,8 +129,8 @@ $feedback_type = $objExercise->feedback_type;
 
 //Only users can see their own results
 if (!$is_allowedToEdit) {
-    if ($student_id != $current_user_id) {
-        api_not_allowed(true);
+    if ($student_id != $currentUserId) {
+        api_not_allowed($printHeaders);
     }
 }
 
@@ -162,7 +168,6 @@ if ($origin != 'learnpath') {
 ?>
     <script>
         var maxEditors = <?php echo intval($maxEditors); ?>;
-
         function showfck(sid, marksid) {
             document.getElementById(sid).style.display = 'block';
             document.getElementById(marksid).style.display = 'block';
@@ -218,13 +223,13 @@ if (!empty($track_exercise_info)) {
             $show_results = false;
             $show_only_total_score = true;
             if ($origin != 'learnpath') {
-                if ($current_user_id == $student_id) {
+                if ($currentUserId == $student_id) {
                     echo Display::return_message(get_lang('ThankYouForPassingTheTest'), 'warning', false);
                 }
             }
         } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
             $attempts = Event::getExerciseResultsByUser(
-                $current_user_id,
+                $currentUserId,
                 $objExercise->id,
                 api_get_course_int_id(),
                 api_get_session_id(),
@@ -279,7 +284,6 @@ if ($debug > 0) {
 
 $arrques = array();
 $arrans = array();
-
 $user_restriction = $is_allowedToEdit ? '' : "AND user_id=".intval($student_id)." ";
 $sql = "SELECT attempts.question_id, answer
         FROM $TBL_TRACK_ATTEMPT as attempts
@@ -297,9 +301,7 @@ $sql = "SELECT attempts.question_id, answer
         WHERE
             attempts.exe_id = " . intval($id)." $user_restriction
 		GROUP BY quizz_rel_questions.question_order, attempts.question_id";
-
 $result = Database::query($sql);
-
 $question_list_from_database = array();
 $exerciseResult = array();
 
@@ -341,7 +343,6 @@ foreach ($questionList as $questionId) {
 $counter = 1;
 $exercise_content = null;
 $category_list = array();
-
 $useAdvancedEditor = true;
 
 if (!empty($maxEditors) && count($questionList) > $maxEditors) {
@@ -395,6 +396,8 @@ foreach ($questionList as $questionId) {
         case MATCHING:
             //no break
         case DRAGGABLE:
+            //no break
+        case READING_COMPREHENSION:
             //no break
         case MATCHING_DRAGGABLE:
             $question_result = $objExercise->manage_answer(
@@ -491,7 +494,6 @@ foreach ($questionList as $questionId) {
             $threadhold3 = $question_result['extra']['threadhold3'];
 
             if ($show_results) {
-
                 if ($overlap_color) {
                     $overlap_color = 'green';
                 } else {
@@ -594,7 +596,6 @@ foreach ($questionList as $questionId) {
                 $totalScore += $questionScore;
                 $relPath = api_get_path(REL_PATH);
                 echo '</table></td></tr>';
-
                 echo "
                         <tr>
                             <td colspan=\"2\">
@@ -657,22 +658,22 @@ foreach ($questionList as $questionId) {
     }
 
     $comnt = null;
-
     if ($show_results) {
-        if (
-            $is_allowedToEdit &&
+        if ($is_allowedToEdit &&
             $locked == false &&
             !api_is_drh() &&
-            !api_is_student_boss() &&
             $isCoachAllowedToEdit
         ) {
             $isFeedbackAllowed = true;
-        } else if (!$isCoachAllowedToEdit && $allowCoachFeedbackExercises) {
+        } elseif (!$isCoachAllowedToEdit && $allowCoachFeedbackExercises) {
             $isFeedbackAllowed = true;
+        }
+        // Boss cannot edit exercise result
+        if ($isBossOfStudent) {
+            $isFeedbackAllowed = false;
         }
 
         $marksname = '';
-
         if ($isFeedbackAllowed) {
             $name = "fckdiv".$questionId;
             $marksname = "marksName".$questionId;
@@ -686,7 +687,14 @@ foreach ($questionList as $questionId) {
                 }
             }
             echo '<br />';
-            echo Display::url($url_name, 'javascript://', array('class' => 'btn', 'onclick' => "showfck('".$name."', '".$marksname."');"));
+            echo Display::url(
+                $url_name,
+                'javascript://',
+                array(
+                    'class' => 'btn',
+                    'onclick' => "showfck('".$name."', '".$marksname."');",
+                )
+            );
             echo '<br />';
 
             echo '<div id="feedback_'.$name.'" style="width:100%">';
@@ -929,35 +937,36 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
     );
     $emailForm->addHtml('</span>');
 
-    $url = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.api_get_session_id();
+    if (empty($track_exercise_info['orig_lp_id']) || empty($track_exercise_info['orig_lp_item_id'])) {
+        // Default url
+        $url = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.api_get_session_id();
+    } else {
+        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view&item_id='.$track_exercise_info['orig_lp_item_id'].'&lp_id='.$track_exercise_info['orig_lp_id'].'&'.api_get_cidreq().'&id_session='.api_get_session_id();
+    }
 
     $content = ExerciseLib::getEmailNotification(
-        $current_user_id,
+        $currentUserId,
         api_get_course_info(),
         $track_exercise_info['title'],
-        $track_exercise_info['orig_lp_id'],
         $url
     );
-
     $emailForm->setDefaults(['notification_content' => $content]);
-
-
     $emailForm->addButtonSend(
         get_lang('CorrectTest'),
         'submit',
         false,
         ['onclick' => "getFCK('$strids', '$marksid')"]
     );
-
     echo $emailForm->returnForm();
 }
 
 //Came from lpstats in a lp
 if ($origin == 'student_progress') { ?>
     <button type="button" class="back" onclick="window.history.go(-1);" value="<?php echo get_lang('Back'); ?>">
-        <?php echo get_lang('Back'); ?></button>
+    <?php echo get_lang('Back'); ?>
+    </button>
     <?php
-} else if ($origin == 'myprogress') {
+} elseif ($origin == 'myprogress') {
     ?>
     <button type="button" class="save"
             onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id() ?>'"

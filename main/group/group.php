@@ -4,23 +4,22 @@
 use ChamiloSession as Session;
 
 /**
- *	Main page for the group module.
- *	This script displays the general group settings,
- *	and a list of groups with buttons to view, edit...
+ * Main page for the group module.
+ * This script displays the general group settings,
+ * and a list of groups with buttons to view, edit...
  *
- *	@author Thomas Depraetere, Hugues Peeters, Christophe Gesche: initial versions
- *	@author Bert Vanderkimpen, improved self-unsubscribe for cvs
- *	@author Patrick Cool, show group comment under the group name
- *	@author Roan Embrechts, initial self-unsubscribe code, code cleaning, virtual course support
- *	@author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
- *	@author Isaac Flores, code cleaning and improvements
- *	@package chamilo.group
+ * @author Thomas Depraetere, Hugues Peeters, Christophe Gesche: initial versions
+ * @author Bert Vanderkimpen, improved self-unsubscribe for cvs
+ * @author Patrick Cool, show group comment under the group name
+ * @author Roan Embrechts, initial self-unsubscribe code, code cleaning, virtual course support
+ * @author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
+ * @author Isaac Flores, code cleaning and improvements
+ * @package chamilo.group
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $is_allowed_in_course = api_is_allowed_in_course();
 $userId = api_get_user_id();
-
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
 
@@ -50,7 +49,6 @@ $my_get_id2 = isset($_GET['id2']) ? Security::remove_XSS($_GET['id2']) : null;
 $my_get_id  = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
 
 $currentUrl = api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq();
-
 $groupInfo = GroupManager::get_group_properties($my_group_id);
 
 if (isset($_GET['action']) && $is_allowed_in_course) {
@@ -97,7 +95,6 @@ if (isset($_GET['action']) && $is_allowed_in_course) {
 /*
  * Group-admin functions
  */
-
 if (api_is_allowed_to_edit(false, true)) {
     // Post-actions
     if (isset($_POST['action'])) {
@@ -236,19 +233,21 @@ if (api_get_setting('allow_group_categories') === 'true') {
         }
 
         $label = Display::label(count($group_list).' '.get_lang('ExistingGroups'), 'info');
-
         $actions = null;
         if (api_is_allowed_to_edit(false, true) && !empty($categoryId)) {
+            // Edit
             $actions .= '<a href="group_category.php?'.api_get_cidreq().'&id='.$categoryId.'" title="'.get_lang('Edit').'">'.
                 Display::return_icon('edit.png', get_lang('EditGroup'), '', ICON_SIZE_SMALL).'</a>';
-            $actions .=
-                Display::url(
-                    Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL),
-                    'group.php?'.api_get_cidreq().'&action=delete_category&id='.$categoryId,
-                    array(
-                        'onclick' => 'javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;'
-                    )
-                );
+
+            // Delete
+            $actions .= Display::url(
+                Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL),
+                'group.php?'.api_get_cidreq().'&action=delete_category&id='.$categoryId,
+                array(
+                    'onclick' => 'javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;'
+                )
+            );
+            // Move
             if ($index != 0) {
                 $actions .= ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&id1='.$categoryId.'&id2='.$group_cats[$index - 1]['id'].'">'.
                     Display::return_icon('up.png', '&nbsp;', '', ICON_SIZE_SMALL).'</a>';

@@ -70,7 +70,7 @@ class CourseBuilder
         'thematic',
         'wiki',
         'works',
-        'gradebook'
+        'gradebook',
     );
 
     /* With this array you can filter wich elements of the tools are going
@@ -488,6 +488,7 @@ class CourseBuilder
                     $item['category_id'],
                     $item['on_homepage']
                 );
+                $link->target = $item['target'];
                 $this->course->add_resource($link);
                 $this->course->resources[RESOURCE_LINK][$item['id']]->add_linked_resource(
                     RESOURCE_LINKCATEGORY,
@@ -777,7 +778,7 @@ class CourseBuilder
             $obj = array(
                 'id' => -1,
                 'title' => get_lang('OrphanQuestions', ''),
-                'type' => 2
+                'type' => 2,
             );
             $newQuiz = new Quiz((object) $obj);
             if (!empty($orphanQuestionIds)) {
@@ -1577,7 +1578,19 @@ class CourseBuilder
             $session_id
         );
 
-        $obj = new GradeBookBackup($cats);
-        $this->course->add_resource($obj);
+        if (!empty($cats)) {
+            /** @var Category $cat */
+            foreach ($cats as $cat) {
+                $cat->evaluations = $cat->get_evaluations(null, false);
+                $cat->links = $cat->get_links(null, false);
+                $cat->subCategories = $cat->get_subcategories(
+                    null,
+                    $courseCode,
+                    $session_id
+                );
+            }
+            $obj = new GradeBookBackup($cats);
+            $this->course->add_resource($obj);
+        }
     }
 }

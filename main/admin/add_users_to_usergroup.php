@@ -18,8 +18,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // setting breadcrumbs
-$interbreadcrumb[]= array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]= array('url' => 'usergroups.php','name' => get_lang('Classes'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'usergroups.php', 'name' => get_lang('Classes'));
 
 // Database Table Definitions
 
@@ -90,7 +90,7 @@ function change_select(val) {
 
 </script>';
 
-$form_sent  = 0;
+$form_sent = 0;
 
 $extra_field_list = UserManager::get_extra_fields();
 $new_field_list = array();
@@ -144,7 +144,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'export') {
         foreach ($users as $user) {
             $data[] = array($user['username'], $groupInfo['name']);
         }
-        $filename = 'export_user_class_' . api_get_local_time();
+        $filename = 'export_user_class_'.api_get_local_time();
         Export::arrayToCsv($data, $filename);
         exit;
     }
@@ -157,7 +157,7 @@ if (is_array($extra_field_list)) {
         foreach ($new_field_list as $new_field) {
             $varname = 'field_'.$new_field['variable'];
             if (UserManager::is_extra_field_available($new_field['variable'])) {
-                if (isset($_POST[$varname]) && $_POST[$varname]!='0') {
+                if (isset($_POST[$varname]) && $_POST[$varname] != '0') {
                     $use_extra_fields = true;
                     $extra_field_result[] = UserManager::get_extra_user_data_by_value(
                         $new_field['variable'],
@@ -171,10 +171,10 @@ if (is_array($extra_field_list)) {
 
 if ($use_extra_fields) {
     $final_result = array();
-    if (count($extra_field_result)>1) {
-        for ($i=0; $i<count($extra_field_result)-1; $i++) {
-            if (is_array($extra_field_result[$i+1])) {
-                $final_result = array_intersect($extra_field_result[$i], $extra_field_result[$i+1]);
+    if (count($extra_field_result) > 1) {
+        for ($i = 0; $i < count($extra_field_result) - 1; $i++) {
+            if (is_array($extra_field_result[$i + 1])) {
+                $final_result = array_intersect($extra_field_result[$i], $extra_field_result[$i + 1]);
             }
         }
     } else {
@@ -193,7 +193,7 @@ $filters = array(
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
 $searchForm->addHeader(get_lang('AdvancedSearch'));
-$renderer =& $searchForm->defaultRenderer();
+$renderer = & $searchForm->defaultRenderer();
 
 $searchForm->addElement('hidden', 'id', $id);
 foreach ($filters as $param) {
@@ -341,12 +341,12 @@ echo '<div id="advanced_search_options" style="display:none">';
 $searchForm->display();
 echo '</div>';
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;">
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) echo '&add=true'; ?>" style="margin:0px;">
 <?php
 echo '<legend>'.$tool_name.': '.$data['name'].'</legend>';
 
 if (is_array($extra_field_list)) {
-    if (is_array($new_field_list) && count($new_field_list)>0) {
+    if (is_array($new_field_list) && count($new_field_list) > 0) {
         echo '<h3>'.get_lang('FilterByUser').'</h3>';
         foreach ($new_field_list as $new_field) {
             echo $new_field['name'];
@@ -354,7 +354,7 @@ if (is_array($extra_field_list)) {
             echo '&nbsp;<select name="'.$varname.'">';
             echo '<option value="0">--'.get_lang('Select').'--</option>';
             foreach ($new_field['data'] as $option) {
-                $checked='';
+                $checked = '';
                 if (isset($_POST[$varname])) {
                     if ($_POST[$varname] == $option[1]) {
                         $checked = 'selected="true"';
@@ -380,15 +380,15 @@ echo Display::input('hidden', 'add_type', null);
         <?php if ($data['group_type'] == UserGroup::SOCIAL_CLASS) { ?>
         <select name="relation" id="relation">
             <option value=""><?php echo get_lang('SelectARelationType')?></option>
-            <option value="<?php echo GROUP_USER_PERMISSION_ADMIN ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_ADMIN)?'selected=selected':'') ?> >
+            <option value="<?php echo GROUP_USER_PERMISSION_ADMIN ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_ADMIN) ? 'selected=selected' : '') ?> >
                 <?php echo get_lang('Admin') ?></option>
-            <option value="<?php echo GROUP_USER_PERMISSION_READER ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_READER)?'selected=selected':'') ?> >
+            <option value="<?php echo GROUP_USER_PERMISSION_READER ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_READER) ? 'selected=selected' : '') ?> >
                 <?php echo get_lang('Reader') ?></option>
-            <option value="<?php echo GROUP_USER_PERMISSION_PENDING_INVITATION ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_PENDING_INVITATION)?'selected=selected':'') ?> >
+            <option value="<?php echo GROUP_USER_PERMISSION_PENDING_INVITATION ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_PENDING_INVITATION) ? 'selected=selected' : '') ?> >
                 <?php echo get_lang('PendingInvitation') ?></option>
-            <option value="<?php echo GROUP_USER_PERMISSION_MODERATOR ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_MODERATOR)?'selected=selected':'') ?> >
+            <option value="<?php echo GROUP_USER_PERMISSION_MODERATOR ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_MODERATOR) ? 'selected=selected' : '') ?> >
                 <?php echo get_lang('Moderator') ?></option>
-            <option value="<?php echo GROUP_USER_PERMISSION_HRM ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_HRM)?'selected=selected':'') ?> >
+            <option value="<?php echo GROUP_USER_PERMISSION_HRM ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_HRM) ? 'selected=selected' : '') ?> >
                 <?php echo get_lang('Drh') ?></option>
         </select>
         <?php } ?>
@@ -419,7 +419,7 @@ echo Display::input('hidden', 'add_type', null);
     ?>
     <br />
       <label class="control-label">
-          <input type="checkbox" <?php if ($user_with_any_group) echo 'checked="checked"';?> onchange="checked_in_no_group(this.checked);" name="user_with_any_group" id="user_with_any_group_id">
+          <input type="checkbox" <?php if ($user_with_any_group) echo 'checked="checked"'; ?> onchange="checked_in_no_group(this.checked);" name="user_with_any_group" id="user_with_any_group_id">
           <?php echo get_lang('UsersRegisteredInAnyGroup'); ?>
       </label>
     </div>

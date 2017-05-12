@@ -365,5 +365,13 @@ $_configuration['agenda_legend'] = [
 // $_configuration['save_titles_as_html'] = false;
 // Show the full toolbar set to all CKEditor
 //$_configuration['full_ckeditor_toolbar_set'] = false;
-// Allow change the orientation when export a single (course progress) thematic to pdf. Portrait or landscape
-//$_configuration['single_thematic_pdf_orientation'] = 'landscape';
+// Allow change the orientation when export a (course progress) thematic to pdf. Portrait or landscape
+//$_configuration['thematic_pdf_orientation'] = 'landscape';
+// Show number of users in session list
+//$_configuration['session_list_show_count_users'] = false;
+// Session admin access to all course content
+//$_configuration['session_admins_access_all_content'] = false;
+// Adds roles to the system announcements (requires DB change BT#12476)
+//$_configuration['system_announce_extra_roles'] = false;
+// Course tools visibility edition in sessions
+//$_configuration['allow_edit_tool_visibility_in_session'] = false;

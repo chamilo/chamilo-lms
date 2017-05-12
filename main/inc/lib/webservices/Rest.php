@@ -238,7 +238,7 @@ class Rest extends WebService
             'urlPicture' => $this->course->getPicturePath(true),
             'teachers' => $teachers,
             'tools' => array_map(
-                function ($tool) {
+                function($tool) {
                     return ['type' => $tool['name']];
                 },
                 $tools
@@ -261,7 +261,7 @@ class Rest extends WebService
             $results[] = [
                 'id' => $description->get_description_type(),
                 'title' => $description->get_title(),
-                'content' => str_replace('src="/', 'src="' . api_get_path(WEB_PATH), $description->get_content())
+                'content' => str_replace('src="/', 'src="'.api_get_path(WEB_PATH), $description->get_content())
             ];
         }
 
@@ -294,7 +294,7 @@ class Rest extends WebService
 
             $path = $directory['path'];
         }
-        require_once api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php';
+        require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 
         $courseInfo = api_get_course_info_by_id($this->course->getId());
         $documents = DocumentManager::get_all_document_data(
@@ -309,7 +309,7 @@ class Rest extends WebService
         $results = [];
 
         if (is_array($documents)) {
-            $webPath = api_get_path(WEB_CODE_PATH) . 'document/document.php?';
+            $webPath = api_get_path(WEB_CODE_PATH).'document/document.php?';
 
             /** @var array $document */
             foreach ($documents as $document) {
@@ -326,7 +326,7 @@ class Rest extends WebService
                     'type' => $document['filetype'],
                     'title' => $document['title'],
                     'path' => $document['path'],
-                    'url' => $webPath . http_build_query([
+                    'url' => $webPath.http_build_query([
                         'username' => $this->user->getUsername(),
                         'api_key' => $this->apiKey,
                         'cidReq' => $this->course->getCode(),
@@ -370,7 +370,7 @@ class Rest extends WebService
             $sessionId
         );
 
-        $announcements = array_map(function ($announcement) {
+        $announcements = array_map(function($announcement) {
             return [
                 'id' => intval($announcement['id']),
                 'title' => strip_tags($announcement['title']),
@@ -456,11 +456,11 @@ class Rest extends WebService
         $webPath = api_get_path(WEB_PATH);
 
         return array_map(
-            function ($event) use ($webPath) {
+            function($event) use ($webPath) {
                 return [
                     'id' => intval($event['unique_id']),
                     'title' => $event['title'],
-                    'content' => str_replace('src="/', 'src="' . $webPath, $event['description']),
+                    'content' => str_replace('src="/', 'src="'.$webPath, $event['description']),
                     'startDate' => $event['start_date_localtime'],
                     'endDate' => $event['end_date_localtime'],
                     'isAllDay' => $event['allDay'] ? true : false
@@ -482,7 +482,7 @@ class Rest extends WebService
         $notebooks = $notebooksRepo->findByUser($this->user, $this->course, $this->session);
 
         return array_map(
-            function (\Chamilo\CourseBundle\Entity\CNotebook $notebook) {
+            function(\Chamilo\CourseBundle\Entity\CNotebook $notebook) {
                 return [
                     'id' => $notebook->getIid(),
                     'title' => $notebook->getTitle(),
@@ -506,9 +506,9 @@ class Rest extends WebService
     public function getCourseForumCategories()
     {
         $sessionId = $this->session ? $this->session->getId() : 0;
-        $webCoursePath = api_get_path(WEB_COURSE_PATH) . $this->course->getDirectory() . '/upload/forum/images/';
+        $webCoursePath = api_get_path(WEB_COURSE_PATH).$this->course->getDirectory().'/upload/forum/images/';
 
-        require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $categoriesFullData = get_forum_categories('', $this->course->getId(), $sessionId);
         $categories = [];
@@ -522,12 +522,12 @@ class Rest extends WebService
                 'catId' => intval($forumInfo['forum_category']),
                 'title' => $forumInfo['forum_title'],
                 'description' => $forumInfo['forum_comment'],
-                'image' => $forumInfo['forum_image'] ? ($webCoursePath . $forumInfo['forum_image']) : '',
+                'image' => $forumInfo['forum_image'] ? ($webCoursePath.$forumInfo['forum_image']) : '',
                 'numberOfThreads' => isset($forumInfo['number_of_threads']) ? intval($forumInfo['number_of_threads']) : 0,
                 'lastPost' => null
             ];
 
-            $lastPostInfo = get_last_post_information($forumId, false, $this->course->getId());
+            $lastPostInfo = get_last_post_information($forumId, false, $this->course->getId(), $sessionId);
 
             if ($lastPostInfo) {
                 $forum['lastPost'] = [
@@ -545,7 +545,7 @@ class Rest extends WebService
         foreach ($categoriesFullData as $category) {
             $categoryForums = array_filter(
                 $forums,
-                function (array $forum) use ($category) {
+                function(array $forum) use ($category) {
                     if ($forum['catId'] != $category['cat_id']) {
                         return false;
                     }
@@ -574,24 +574,25 @@ class Rest extends WebService
      */
     public function getCourseForum($forumId)
     {
-        require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
-        $forumInfo = get_forums($forumId, $this->course->getCode());
+        $sessionId = $this->session ? $this->session->getId() : 0;
+        $forumInfo = get_forums($forumId, $this->course->getCode(), true, $sessionId);
 
         if (!isset($forumInfo['iid'])) {
             throw new Exception(get_lang('NoForum'));
         }
 
-        $webCoursePath = api_get_path(WEB_COURSE_PATH) . $this->course->getDirectory() . '/upload/forum/images/';
+        $webCoursePath = api_get_path(WEB_COURSE_PATH).$this->course->getDirectory().'/upload/forum/images/';
         $forum = [
             'id' => $forumInfo['iid'],
             'title' => $forumInfo['forum_title'],
             'description' => $forumInfo['forum_comment'],
-            'image' => $forumInfo['forum_image'] ? ($webCoursePath . $forumInfo['forum_image']) : '',
+            'image' => $forumInfo['forum_image'] ? ($webCoursePath.$forumInfo['forum_image']) : '',
             'threads' => []
         ];
 
-        $threads = get_threads($forumInfo['iid'], $this->course->getId());
+        $threads = get_threads($forumInfo['iid'], $this->course->getId(), $sessionId);
 
         foreach ($threads as $thread) {
             $forum['threads'][] = [
@@ -614,9 +615,10 @@ class Rest extends WebService
      */
     public function getCourseForumThread($forumId, $threadId)
     {
-        require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
-        $threadInfo = get_thread_information($forumId, $threadId);
+        $sessionId = $this->session ? $this->session->getId() : 0;
+        $threadInfo = get_thread_information($forumId, $threadId, $sessionId);
 
         $thread = [
             'id' => intval($threadInfo['iid']),
@@ -626,7 +628,7 @@ class Rest extends WebService
             'posts' => []
         ];
 
-        $forumInfo = get_forums($threadInfo['forum_id'], $this->course->getCode());
+        $forumInfo = get_forums($threadInfo['forum_id'], $this->course->getCode(), true, $sessionId);
 
         $postsInfo = getPosts($forumInfo, $threadInfo['iid'], 'ASC');
 
@@ -652,7 +654,7 @@ class Rest extends WebService
         $pictureInfo = UserManager::get_user_picture_path_by_id($this->user->getId(), 'web');
 
         $result = [
-            'pictureUri' => $pictureInfo['dir'] . $pictureInfo['file'],
+            'pictureUri' => $pictureInfo['dir'].$pictureInfo['file'],
             'fullName' => $this->user->getCompleteName(),
             'username' => $this->user->getUsername(),
             'officialCode' => $this->user->getOfficialCode(),
@@ -762,7 +764,7 @@ class Rest extends WebService
                     'id' => $lpId,
                     'title' => Security::remove_XSS($lpDetails['lp_name']),
                     'progress' => intval($progress),
-                    'url' => api_get_path(WEB_CODE_PATH) . 'webservices/api/v2.php?' . http_build_query([
+                    'url' => api_get_path(WEB_CODE_PATH).'webservices/api/v2.php?'.http_build_query([
                         'hash' => $this->encodeParams([
                             'action' => 'course_learnpath',
                             'lp_id' => $lpId,
@@ -809,7 +811,7 @@ class Rest extends WebService
      * @param string $encoded
      * @return array
      */
-    public static function decodeParams($encoded){
+    public static function decodeParams($encoded) {
         $decoded = str_replace(['-', '_', '.'], ['+', '/', '='], $encoded);
         $mod4 = strlen($decoded) % 4;
 
@@ -837,7 +839,7 @@ class Rest extends WebService
         ChamiloSession::write('_user', $loggedUser);
         Login::init_user($this->user->getId(), true);
 
-        $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . http_build_query([
+        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.http_build_query([
             'cidReq' => $this->course->getCode(),
             'id_session' => $sessionId,
             'gidReq' => 0,
@@ -859,7 +861,7 @@ class Rest extends WebService
      */
     public function saveForumPost(array $postValues, $forumId)
     {
-        require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $forum = get_forums($forumId, $this->course->getCode());
 
@@ -902,11 +904,13 @@ class Rest extends WebService
                     ];
                 }
 
+                $sessionBox = Display::get_session_title_box($sessions['session_id']);
+
                 $categorySessions[] = [
-                    'name' => $sessions['session_name'],
+                    'name' => $sessionBox['title'],
                     'id' => $sessions['session_id'],
-                    'accessStartDate' => api_format_date($sessions['access_start_date'], DATE_TIME_FORMAT_SHORT),
-                    'accessEndDate' => api_format_date($sessions['access_end_date'], DATE_TIME_FORMAT_SHORT),
+                    'date' => $sessionBox['dates'],
+                    'duration' => isset($sessionBox['duration']) ? $sessionBox['duration'] : null,
                     'courses' => $sessionCourses
                 ];
             }
@@ -999,11 +1003,11 @@ class Rest extends WebService
      */
     public function saveForumThread(array $values, $forumId)
     {
-        require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
-        $forum = get_forums($forumId, $this->course->getCode());
-        $courseInfo = api_get_course_info($this->course->getCode());
         $sessionId = $this->session ? $this->session->getId() : 0;
+        $forum = get_forums($forumId, $this->course->getCode(), true, $sessionId);
+        $courseInfo = api_get_course_info($this->course->getCode());
 
         $id = store_thread($forum, $values, $courseInfo, false, $this->user->getId(), $sessionId);
 

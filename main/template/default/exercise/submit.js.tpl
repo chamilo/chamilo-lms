@@ -28,14 +28,20 @@ var DraggableAnswer = {
         });
     },
     recycleItem: function (item) {
+        var droppedId = item.attr('id'),
+            originSelectId = 'window_' + droppedId + '_select',
+            idParts = droppedId.split('_'),
+            questionId = parseInt(idParts[0]) || 0;
+
+        if (!questionId) {
+            return;
+        }
+
         item.fadeOut(function () {
             item
-                .appendTo(DraggableAnswer.gallery)
+                .appendTo(DraggableAnswer.gallery.filter('[data-question="' + questionId + '"]'))
                 .fadeIn();
         });
-
-        var droppedId = item.attr('id'),
-            originSelectId = 'window_' + droppedId + '_select';
 
         $('#' + originSelectId + ' option').prop('selected', false);
         $('#' + originSelectId + ' option:first').prop('selected', true);

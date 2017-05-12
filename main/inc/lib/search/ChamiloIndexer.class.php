@@ -47,7 +47,7 @@ class ChamiloIndexer extends XapianIndexer
             return false;
         }
 
-        require_once api_get_path(LIBRARY_PATH) . 'search/xapian/XapianQuery.php';
+        require_once api_get_path(LIBRARY_PATH).'search/xapian/XapianQuery.php';
 
         // compare terms
         $doc = $this->get_document($search_did);
@@ -64,10 +64,10 @@ class ChamiloIndexer extends XapianIndexer
 
         // save it to search engine
         foreach ($missing_terms as $term) {
-            $this->add_term_to_doc($prefix . $term, $doc);
+            $this->add_term_to_doc($prefix.$term, $doc);
         }
         foreach ($deprecated_terms as $term) {
-            $this->remove_term_from_doc($prefix . $term, $doc);
+            $this->remove_term_from_doc($prefix.$term, $doc);
         }
 
         // don't do anything if no change
@@ -84,7 +84,7 @@ class ChamiloIndexer extends XapianIndexer
      */
     function get_terms_on_db($prefix, $course_code, $tool_id, $ref_id)
     {
-        require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
+        require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
         $terms = get_specific_field_values_list_by_prefix($prefix, $course_code, $tool_id, $ref_id);
         $prefix_terms = array();
         foreach ($terms as $term) {

@@ -19,7 +19,7 @@ if (!api_get_multiple_access_url()) {
     exit;
 }
 
-$interbreadcrumb[] = array ("url" => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array("url" => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $tool_name = get_lang('MultipleAccessURLs');
 Display :: display_header($tool_name);
 
@@ -51,12 +51,12 @@ if (isset($_GET['action'])) {
         case 'register':
             // we are going to register the admin
             if (api_is_platform_admin()) {
-                if ($current_access_url_id!=-1) {
+                if ($current_access_url_id != -1) {
                     $url_str = '';
                     foreach ($url_list as $my_url) {
                         if (!in_array($my_url['id'], $my_user_url_list)) {
                             UrlManager::add_user_to_url(api_get_user_id(), $my_url['id']);
-                            $url_str.=$my_url['url'].' <br />';
+                            $url_str .= $my_url['url'].' <br />';
                         }
                     }
                     Display::addFlash(
@@ -155,7 +155,7 @@ foreach ($sortable_data as $row) {
         $image = 'wrong';
     }
     // you cannot lock the default
-    if ($row['id']=='1') {
+    if ($row['id'] == '1') {
         $status = Display::return_icon($image.'.gif', get_lang(ucfirst($action)));
     } else {
         $status = '<a href="access_urls.php?action='.$action.'&amp;url_id='.$row['id'].'">'.
@@ -165,7 +165,7 @@ foreach ($sortable_data as $row) {
     $url_id = $row['id'];
     $actions = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "access_url_edit.php?url_id=$url_id");
     if ($url_id != '1') {
-        $actions .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.
+        $actions .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;">'.
             Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
     }
     $urls[] = array($url, $description, $status, $actions);

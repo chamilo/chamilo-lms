@@ -169,7 +169,7 @@ class CourseArchiver
                 }
 
                 if (is_dir($course->path.$asset->path)) {
-                    copyDirTo($course->path.$asset->path, $doc_dir);
+                    copyDirTo($course->path.$asset->path, $doc_dir, false);
                     continue;
                 }
 

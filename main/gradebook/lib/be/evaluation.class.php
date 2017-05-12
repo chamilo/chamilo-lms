@@ -440,6 +440,7 @@ class Evaluation implements GradebookItem
      * Check if an evaluation name (with the same parent category) already exists
      * @param $name name to check (if not given, the name property of this object will be checked)
      * @param $parent parent category
+     * @return bool
      */
     public function does_name_exist($name, $parent)
     {
@@ -487,17 +488,18 @@ class Evaluation implements GradebookItem
     /**
      * Are there any results for this evaluation yet ?
      * The 'max' property should not be changed then.
+     * @return bool
      */
     public function has_results()
     {
-        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
         $sql = 'SELECT count(id) AS number
-                FROM '.$tbl_grade_results.'
+                FROM '.$table.'
                 WHERE evaluation_id = '.intval($this->id);
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
-        return ($number[0] != 0);
+        return $number[0] != 0;
     }
 
     /**
@@ -505,8 +507,8 @@ class Evaluation implements GradebookItem
      */
     public function delete_results()
     {
-        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-        $sql = 'DELETE FROM '.$tbl_grade_results.'
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $sql = 'DELETE FROM '.$table.'
                 WHERE evaluation_id = '.intval($this->id);
         Database::query($sql);
     }

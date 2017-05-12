@@ -83,7 +83,7 @@ class TicketManager
         $sql = "SELECT id, name, description, total_tickets
                 FROM $table";
 
-        if (!in_array($direction, array('ASC','DESC'))) {
+        if (!in_array($direction, array('ASC', 'DESC'))) {
             $direction = 'ASC';
         }
         $column = intval($column);
@@ -255,7 +255,7 @@ class TicketManager
     public static function get_all_tickets_status()
     {
         $table = Database::get_main_table(TABLE_TICKET_STATUS);
-        $sql = "SELECT * FROM " . $table;
+        $sql = "SELECT * FROM ".$table;
         $result = Database::query($sql);
         $types = array();
         while ($row = Database::fetch_assoc($result)) {
@@ -369,7 +369,7 @@ class TicketManager
         $ticketId = Database::insert($table_support_tickets, $params);
 
         if ($ticketId) {
-            $ticket_code = "A" . str_pad($ticketId, 11, '0', STR_PAD_LEFT);
+            $ticket_code = "A".str_pad($ticketId, 11, '0', STR_PAD_LEFT);
             $titleCreated = sprintf(
                 get_lang('TicketXCreated'),
                 $ticket_code
@@ -431,32 +431,32 @@ class TicketManager
             $helpDeskMessage =
                 '<table>
                         <tr>
-                            <td width="100px"><b>' . get_lang('User') . '</b></td>
-                            <td width="400px">' . $currentUserInfo['complete_name']. '</td>
+                            <td width="100px"><b>' . get_lang('User').'</b></td>
+                            <td width="400px">' . $currentUserInfo['complete_name'].'</td>
                         </tr>
                         <tr>
-                            <td width="100px"><b>' . get_lang('Username') . '</b></td>
-                            <td width="400px">' . $currentUserInfo['username'] . '</td>
+                            <td width="100px"><b>' . get_lang('Username').'</b></td>
+                            <td width="400px">' . $currentUserInfo['username'].'</td>
                         </tr>
                         <tr>
-                            <td width="100px"><b>' . get_lang('Email') . '</b></td>
-                            <td width="400px">' . $currentUserInfo['email'] . '</td>
+                            <td width="100px"><b>' . get_lang('Email').'</b></td>
+                            <td width="400px">' . $currentUserInfo['email'].'</td>
                         </tr>
                         <tr>
-                            <td width="100px"><b>' . get_lang('Phone') . '</b></td>
-                            <td width="400px">' . $currentUserInfo['phone'] . '</td>
+                            <td width="100px"><b>' . get_lang('Phone').'</b></td>
+                            <td width="400px">' . $currentUserInfo['phone'].'</td>
                         </tr>
                         <tr>
-                            <td width="100px"><b>' . get_lang('Date') . '</b></td>
-                            <td width="400px">' . api_convert_and_format_date($now, DATE_TIME_FORMAT_LONG) . '</td>
+                            <td width="100px"><b>' . get_lang('Date').'</b></td>
+                            <td width="400px">' . api_convert_and_format_date($now, DATE_TIME_FORMAT_LONG).'</td>
                         </tr>
                         <tr>
-                            <td width="100px"><b>' . get_lang('Title') . '</b></td>
-                            <td width="400px">' . $subject . '</td>
+                            <td width="100px"><b>' . get_lang('Title').'</b></td>
+                            <td width="400px">' . $subject.'</td>
                         </tr>
                         <tr>
-                            <td width="100px"><b>' . get_lang('Description') . '</b></td>
-                            <td width="400px">' . $content . '</td>
+                            <td width="100px"><b>' . get_lang('Description').'</b></td>
+                            <td width="400px">' . $content.'</td>
                         </tr>
                     </table>';
 
@@ -635,10 +635,10 @@ class TicketManager
         $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         if ($sendConfirmation) {
-            $form = '<form action="ticket_details.php?ticket_id=' . $ticketId . '" id="confirmticket" method="POST" >
-                         <p>' . get_lang('TicketWasThisAnswerSatisfying') . '</p>
-                         <button class="btn btn-primary responseyes" name="response" id="responseyes" value="1">' . get_lang('Yes') . '</button>
-                         <button class="btn btn-danger responseno" name="response" id="responseno" value="0">' . get_lang('No') . '</button>
+            $form = '<form action="ticket_details.php?ticket_id='.$ticketId.'" id="confirmticket" method="POST" >
+                         <p>' . get_lang('TicketWasThisAnswerSatisfying').'</p>
+                         <button class="btn btn-primary responseyes" name="response" id="responseyes" value="1">' . get_lang('Yes').'</button>
+                         <button class="btn btn-danger responseno" name="response" id="responseno" value="0">' . get_lang('No').'</button>
                      </form>';
             $content .= $form;
         }
@@ -719,11 +719,11 @@ class TicketManager
         } else {
             $new_file_name = uniqid('');
             $path_attachment = api_get_path(SYS_ARCHIVE_PATH);
-            $path_message_attach = $path_attachment . 'plugin_ticket_messageattch/';
+            $path_message_attach = $path_attachment.'plugin_ticket_messageattch/';
             if (!file_exists($path_message_attach)) {
                 @mkdir($path_message_attach, api_get_permissions_for_new_directories(), true);
             }
-            $new_path = $path_message_attach . $new_file_name;
+            $new_path = $path_message_attach.$new_file_name;
             if (is_uploaded_file($file_attach['tmp_name'])) {
                 @copy($file_attach['tmp_name'], $new_path);
             }
@@ -744,7 +744,7 @@ class TicketManager
                     '$safe_new_file_name',
                     '$ticketId',
                     '$message_id',
-                    '" . $file_attach['size'] . "',
+                    '".$file_attach['size']."',
                     '$userId',
                     '$now',
                     '$userId',
@@ -753,7 +753,7 @@ class TicketManager
             Database::query($sql);
 
             return array(
-                'path' => $path_message_attach . $safe_new_file_name,
+                'path' => $path_message_attach.$safe_new_file_name,
                 'filename' => $safe_file_name,
             );
         }
@@ -944,23 +944,23 @@ class TicketManager
             $unread = Database::fetch_object($result_unread)->unread;*/
 
             $userInfo = api_get_user_info($row['sys_insert_user_id']);
-            $hrefUser = $webPath . 'main/admin/user_information.php?user_id=' . $userInfo['user_id'];
+            $hrefUser = $webPath.'main/admin/user_information.php?user_id='.$userInfo['user_id'];
             $name = "<a href='$hrefUser'> {$userInfo['complete_name_with_username']} </a>";
             $actions = '';
 
             if ($row['assigned_last_user'] != 0) {
                 $assignedUserInfo = api_get_user_info($row['assigned_last_user']);
                 if (!empty($assignedUserInfo)) {
-                    $hrefResp = $webPath . 'main/admin/user_information.php?user_id=' . $assignedUserInfo['user_id'];
+                    $hrefResp = $webPath.'main/admin/user_information.php?user_id='.$assignedUserInfo['user_id'];
                     $row['assigned_last_user'] = "<a href='$hrefResp'> {$assignedUserInfo['complete_name_with_username']} </a>";
                 } else {
                     $row['assigned_last_user'] = get_lang('UnknownUser');
                 }
             } else {
                 if ($row['status_id'] !== self::STATUS_FORWARDED) {
-                    $row['assigned_last_user'] = '<span style="color:#ff0000;">' . get_lang('ToBeAssigned') . '</span>';
+                    $row['assigned_last_user'] = '<span style="color:#ff0000;">'.get_lang('ToBeAssigned').'</span>';
                 } else {
-                    $row['assigned_last_user'] = '<span style="color:#00ff00;">' . get_lang('MessageResent') . '</span>';
+                    $row['assigned_last_user'] = '<span style="color:#00ff00;">'.get_lang('MessageResent').'</span>';
                 }
             }
 
@@ -982,7 +982,7 @@ class TicketManager
             $row['start_date'] = Display::dateToStringAgoAndLongDate($row['start_date']);
             $row['sys_lastedit_datetime'] = Display::dateToStringAgoAndLongDate($row['sys_lastedit_datetime']);
 
-            $icon = Display::return_icon($img_source, get_lang('Info')).'<a href="ticket_details.php?ticket_id=' . $row['id'] . '">' . $row['code'] . '</a>';
+            $icon = Display::return_icon($img_source, get_lang('Info')).'<a href="ticket_details.php?ticket_id='.$row['id'].'">'.$row['code'].'</a>';
 
             if ($isAdmin) {
                 $ticket = array(
@@ -1023,9 +1023,9 @@ class TicketManager
                                 </a>';
             }*/
             if ($isAdmin) {
-                $ticket['0'] .= '&nbsp;&nbsp;<a  href="javascript:void(0)" onclick="load_history_ticket(\'div_' . $row['ticket_id'] . '\',' . $row['ticket_id'] . ')">
-					<img onclick="load_course_list(\'div_' . $row['ticket_id'] . '\',' . $row['ticket_id'] . ')" onmouseover="clear_course_list (\'div_' . $row['ticket_id'] . '\')" src="' . Display::returnIconPath('history.gif') . '" title="' . get_lang('Historial') . '" alt="' . get_lang('Historial') . '"/>
-					<div class="blackboard_hide" id="div_' . $row['ticket_id'] . '">&nbsp;&nbsp;</div>
+                $ticket['0'] .= '&nbsp;&nbsp;<a  href="javascript:void(0)" onclick="load_history_ticket(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')">
+					<img onclick="load_course_list(\'div_' . $row['ticket_id'].'\','.$row['ticket_id'].')" onmouseover="clear_course_list (\'div_'.$row['ticket_id'].'\')" src="'.Display::returnIconPath('history.gif').'" title="'.get_lang('Historial').'" alt="'.get_lang('Historial').'"/>
+					<div class="blackboard_hide" id="div_' . $row['ticket_id'].'">&nbsp;&nbsp;</div>
 					</a>&nbsp;&nbsp;';
             }
             $tickets[] = $ticket;
@@ -1227,8 +1227,8 @@ class TicketManager
                 }
 
                 $userInfo = api_get_user_info($row['sys_insert_user_id']);
-                $row['user_url'] = '<a href="' . api_get_path(WEB_PATH) . 'main/admin/user_information.php?user_id=' . $userInfo['user_id'] . '">
-                ' . $userInfo['complete_name']. '</a>';
+                $row['user_url'] = '<a href="'.api_get_path(WEB_PATH).'main/admin/user_information.php?user_id='.$userInfo['user_id'].'">
+                ' . $userInfo['complete_name'].'</a>';
                 $ticket['usuario'] = $userInfo;
                 $ticket['ticket'] = $row;
             }
@@ -1246,19 +1246,19 @@ class TicketManager
             while ($row = Database::fetch_assoc($result)) {
                 $message = $row;
                 $completeName = api_get_person_name($row['firstname'], $row['lastname']);
-                $href = $webPath . 'main/admin/user_information.php?user_id=' . $row['user_id'];
+                $href = $webPath.'main/admin/user_information.php?user_id='.$row['user_id'];
                 $message['admin'] = UserManager::is_admin($message['user_id']);
                 $message['user_created'] = "<a href='$href'> $completeName </a>";
                 $sql = "SELECT *
                         FROM $table_support_message_attachments
                         WHERE
-                            message_id = " . $row['message_id'] . " AND
+                            message_id = ".$row['message_id']." AND
                             ticket_id = $ticketId";
 
                 $result_attach = Database::query($sql);
                 while ($row2 = Database::fetch_assoc($result_attach)) {
-                    $archiveURL = $archiveURL = $webPath . 'ticket/download.php?ticket_id=' . $ticketId . '&file=';
-                    $row2['attachment_link'] = $attach_icon . '&nbsp;<a href="' . $archiveURL . $row2['path'] . '&title=' . $row2['filename'] . '">' . $row2['filename'] . '</a>&nbsp;(' . $row2['size'] . ')';
+                    $archiveURL = $archiveURL = $webPath.'ticket/download.php?ticket_id='.$ticketId.'&file=';
+                    $row2['attachment_link'] = $attach_icon.'&nbsp;<a href="'.$archiveURL.$row2['path'].'&title='.$row2['filename'].'">'.$row2['filename'].'</a>&nbsp;('.$row2['size'].')';
                     $message['attachments'][] = $row2;
                 }
                 $ticket['messages'][] = $message;
@@ -1285,8 +1285,8 @@ class TicketManager
         $sql = "UPDATE $table_support_messages
                 SET
                     status = 'LEI',
-                    sys_lastedit_user_id ='" . api_get_user_id() . "',
-                    sys_lastedit_datetime ='" . $now . "'
+                    sys_lastedit_user_id ='".api_get_user_id()."',
+                    sys_lastedit_datetime ='" . $now."'
                 WHERE ticket_id ='$ticketId' ";
 
         if (api_is_platform_admin()) {
@@ -1424,7 +1424,7 @@ class TicketManager
                 SET
                     status_id = '$status_id',
                     sys_lastedit_user_id ='$userId',
-                    sys_lastedit_datetime ='" . $now . "'
+                    sys_lastedit_datetime ='".$now."'
                 WHERE id ='$ticketId'";
         $result = Database::query($sql);
 
@@ -1509,7 +1509,7 @@ class TicketManager
         $sql = "UPDATE $table_support_tickets SET
                     status_id = '".self::STATUS_CLOSE."',
                     sys_lastedit_user_id ='$userId',
-                    sys_lastedit_datetime ='" . $now . "',
+                    sys_lastedit_datetime ='".$now."',
                     end_date ='$now'
                 WHERE id ='$ticketId'";
         Database::query($sql);
@@ -1561,15 +1561,15 @@ class TicketManager
         while ($row = Database::fetch_assoc($result)) {
             if ($row['user_id'] != 0) {
                 $assignuser = api_get_user_info($row['user_id']);
-                $row['assignuser'] = '<a href="' . $webpath . 'main/admin/user_information.php?user_id=' . $row['user_id'] . '"  target="_blank">' .
-                $assignuser['username'] . '</a>';
+                $row['assignuser'] = '<a href="'.$webpath.'main/admin/user_information.php?user_id='.$row['user_id'].'"  target="_blank">'.
+                $assignuser['username'].'</a>';
             } else {
                 $row['assignuser'] = get_lang('Unassign');
             }
             $row['assigned_date'] = date_to_str_ago($row['assigned_date']);
             $insertuser = api_get_user_info($row['sys_insert_user_id']);
-            $row['insertuser'] = '<a href="' . $webpath . 'main/admin/user_information.php?user_id=' . $row['sys_insert_user_id'] . '"  target="_blank">' .
-                $insertuser['username'] . '</a>';
+            $row['insertuser'] = '<a href="'.$webpath.'main/admin/user_information.php?user_id='.$row['sys_insert_user_id'].'"  target="_blank">'.
+                $insertuser['username'].'</a>';
             $history[] = $row;
         }
         return $history;
@@ -1768,7 +1768,7 @@ class TicketManager
         while ($row = Database::fetch_assoc($result)) {
             if ($row['responsable'] != 0) {
                 $row['responsable'] = api_get_user_info($row['responsable']);
-                $row['responsable'] = $row['responsable']['firstname'] . ' ' . $row['responsable']['lastname'];
+                $row['responsable'] = $row['responsable']['firstname'].' '.$row['responsable']['lastname'];
             }
             $row['sys_insert_datetime'] = api_format_date(
                     $row['sys_insert_datetime'], '%d/%m/%y - %I:%M:%S %p'

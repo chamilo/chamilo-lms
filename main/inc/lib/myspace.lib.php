@@ -134,7 +134,7 @@ class MySpace
         $sessionId = (int) $sessionId;
 
         $sql = 'SELECT login_course_date, logout_course_date
-                FROM ' . $tbl_track_course . '
+                FROM ' . $tbl_track_course.'
                 WHERE
                     user_id = '.$userId.' AND
                     c_id = '.$courseId.' AND
@@ -176,7 +176,7 @@ class MySpace
         foreach ($course_list as $course_item) {
             $courseInfo = api_get_course_info($course_item['code']);
             $courseId = $courseInfo['real_id'];
-            $new_course_list[] =  '"'.$courseId.'"';
+            $new_course_list[] = '"'.$courseId.'"';
         }
         $course_list = implode(', ', $new_course_list);
 
@@ -184,7 +184,7 @@ class MySpace
             return false;
         }
         $sql = 'SELECT login_course_date, logout_course_date, c_id
-                FROM ' . $tbl_track_course . '
+                FROM ' . $tbl_track_course.'
                 WHERE
                     user_id = '.$user_id.' AND
                     c_id IN ('.$course_list.') AND
@@ -246,7 +246,7 @@ class MySpace
             // student score
             $avg_score = Tracking::get_avg_student_score($user_id, $courseCode);
             if (is_numeric($avg_score)) {
-                $avg_score = round($avg_score,2);
+                $avg_score = round($avg_score, 2);
             } else {
                 $$avg_score = '-';
             }
@@ -309,7 +309,7 @@ class MySpace
         }
         $table->set_header(3, get_lang('LoginName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
         $table->set_header(4, $t_head, false, array('style' => 'width:90%;border:0;padding:0;font-size:7.5pt;'), array('style' => 'width:90%;padding:0;font-size:7.5pt;'));
-        $table->set_column_filter(4, array('MySpace','course_info_tracking_filter'));
+        $table->set_column_filter(4, array('MySpace', 'course_info_tracking_filter'));
         $table->display();
     }
 
@@ -369,7 +369,7 @@ class MySpace
         $table -> set_header(7, get_lang('Sessions'), false);
 
         if ($is_western_name_order) {
-            $csv_header[] = array (
+            $csv_header[] = array(
                 get_lang('FirstName'),
                 get_lang('LastName'),
                 get_lang('TimeSpentOnThePlatform'),
@@ -379,7 +379,7 @@ class MySpace
                 get_lang('NumberOfSessions')
             );
         } else {
-            $csv_header[] = array (
+            $csv_header[] = array(
                 get_lang('LastName'),
                 get_lang('FirstName'),
                 get_lang('TimeSpentOnThePlatform'),
@@ -519,9 +519,9 @@ class MySpace
 
         if ($tracking_column != 3) {
             if ($tracking_direction == 'DESC') {
-                usort($all_datas, array('MySpace','rsort_users'));
+                usort($all_datas, array('MySpace', 'rsort_users'));
             } else {
-                usort($all_datas, array('MySpace','sort_users'));
+                usort($all_datas, array('MySpace', 'sort_users'));
             }
         }
 
@@ -583,7 +583,7 @@ class MySpace
         /**
          * Column config
          */
-        $column_model   = array(
+        $column_model = array(
             array(
                 'name' => 'username',
                 'index' => 'username',
@@ -624,7 +624,7 @@ class MySpace
 
         $action_links = '';
         // jqgrid will use this URL to do the selects
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_lp_progress&session_id=' . $sessionId . '&course_id=' . $courseId . '&date_to=' . $date_to . '&date_from=' . $date_from;
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_lp_progress&session_id='.$sessionId.'&course_id='.$courseId.'&date_to='.$date_to.'&date_from='.$date_from;
 
         //Table Id
         $tableId = 'lpProgress';
@@ -646,11 +646,11 @@ class MySpace
             true
         );
 
-        $return = '<script>$(function() {'. $table .
+        $return = '<script>$(function() {'.$table.
             'jQuery("#'.$tableId.'").jqGrid("navGrid","#'.$tableId.'_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
                 jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{
                        caption:"",
-                       title:"' . get_lang('ExportExcel') . '",
+                       title:"' . get_lang('ExportExcel').'",
                        onClickButton : function () {
                            jQuery("#'.$tableId.'").jqGrid("excelExport",{"url":"'.$url.'&export_format=xls"});
                        }
@@ -700,7 +700,7 @@ class MySpace
         /**
          * Column config
          */
-        $column_model   = array(
+        $column_model = array(
             array('name'=>'session', 'index'=>'session', 'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
             array('name'=>'exercise_id', 'index'=>'exercise_id', 'align'=>'left', 'search' => 'true'),
             array('name'=>'quiz_title', 'index'=>'quiz_title', 'align'=>'left', 'search' => 'true'),
@@ -717,7 +717,7 @@ class MySpace
         //get dynamic column names
 
         // jqgrid will use this URL to do the selects
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_progress&session_id=' . $sessionId . '&course_id=' . $courseId  . '&exercise_id=' . $exerciseId . '&date_to=' . $date_to . '&date_from=' . $date_from;
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_progress&session_id='.$sessionId.'&course_id='.$courseId.'&exercise_id='.$exerciseId.'&date_to='.$date_to.'&date_from='.$date_from;
 
         // Autowidth
         $extra_params['autowidth'] = 'true';
@@ -728,11 +728,11 @@ class MySpace
         $tableId = 'exerciseProgressOverview';
         $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), '', true);
 
-        $return = '<script>$(function() {'. $table .
+        $return = '<script>$(function() {'.$table.
             'jQuery("#'.$tableId.'").jqGrid("navGrid","#'.$tableId.'_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
                 jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{
                        caption:"",
-                       title:"' . get_lang('ExportExcel') . '",
+                       title:"' . get_lang('ExportExcel').'",
                        onClickButton : function () {
                            jQuery("#'.$tableId.'").jqGrid("excelExport",{"url":"'.$url.'&export_format=xls"});
                        }
@@ -799,7 +799,7 @@ class MySpace
                 // adding the fields that are checked to the session
                 $message = '';
                 foreach ($values as $field_ids => $value) {
-                    if ($value == 1 && strstr($field_ids,'extra_export_field')) {
+                    if ($value == 1 && strstr($field_ids, 'extra_export_field')) {
                         $_SESSION['additional_export_fields'][] = str_replace('extra_export_field', '', $field_ids);
                     }
                 }
@@ -814,7 +814,7 @@ class MySpace
                 // Displaying a feedback message
                 if (!empty($_SESSION['additional_export_fields'])) {
                     Display::display_confirmation_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>', false);
-                } else  {
+                } else {
                     Display::display_confirmation_message(get_lang('NoAdditionalFieldsWillBeExported'), false);
                 }
             } else {
@@ -863,7 +863,7 @@ class MySpace
         $table->set_header(0, '', false, null, array('style' => 'display: none'));
         $table->set_header(1, get_lang('Course'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
         $table->set_header(2, $t_head, false, array('style' => 'width:90%;border:0;padding:0;font-size:7.5pt;'), array('style' => 'width:90%;padding:0;font-size:7.5pt;'));
-        $table->set_column_filter(2, array('MySpace','course_tracking_filter'));
+        $table->set_column_filter(2, array('MySpace', 'course_tracking_filter'));
         $table->display();
     }
 
@@ -957,18 +957,18 @@ class MySpace
             $progress += $progress_tmp[0];
             $nb_progress_lp += $progress_tmp[1];
             $score_tmp = Tracking::get_avg_student_score($row->user_id, $course_code, array(), null, true);
-            if(is_array($score_tmp)) {
+            if (is_array($score_tmp)) {
                 $score += $score_tmp[0];
                 $nb_score_lp += $score_tmp[1];
             }
             $nb_messages += Tracking::count_student_messages($row->user_id, $course_code);
             $nb_assignments += Tracking::count_student_assignments($row->user_id, $course_code);
             $last_login_date_tmp = Tracking::get_last_connection_date_on_the_course($row->user_id, $courseInfo, null, false);
-            if($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned
+            if ($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned
                 $last_login_date = $last_login_date_tmp;
-            } else if($last_login_date_tmp != false && $last_login_date != false) { // TODO: Repeated previous condition. To be cleaned.
+            } else if ($last_login_date_tmp != false && $last_login_date != false) { // TODO: Repeated previous condition. To be cleaned.
                 // Find the max and assign it to first_login_date
-                if(strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
+                if (strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
                     $last_login_date = $last_login_date_tmp;
                 }
             }
@@ -1106,7 +1106,7 @@ class MySpace
                 $progress += $progress_tmp[0];
                 $nb_progress_lp += $progress_tmp[1];
                 $score_tmp = Tracking::get_avg_student_score($row->user_id, $course_code, array(), null, true);
-                if(is_array($score_tmp)) {
+                if (is_array($score_tmp)) {
                     $score += $score_tmp[0];
                     $nb_score_lp += $score_tmp[1];
                 }
@@ -1114,11 +1114,11 @@ class MySpace
                 $nb_assignments += Tracking::count_student_assignments($row->user_id, $course_code);
 
                 $last_login_date_tmp = Tracking::get_last_connection_date_on_the_course($row->user_id, $courseInfo, null, false);
-                if($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned.
+                if ($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned.
                     $last_login_date = $last_login_date_tmp;
-                } else if($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition. To be cleaned.
+                } else if ($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition. To be cleaned.
                     // Find the max and assign it to first_login_date
-                    if(strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
+                    if (strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
                         $last_login_date = $last_login_date_tmp;
                     }
                 }
@@ -1128,22 +1128,22 @@ class MySpace
                 $total_score_possible += $exercise_results_tmp['score_possible'];
                 $total_questions_answered += $exercise_results_tmp['questions_answered'];
             }
-            if($nb_progress_lp > 0) {
+            if ($nb_progress_lp > 0) {
                 $avg_progress = round($progress / $nb_progress_lp, 2);
             } else {
                 $avg_progress = 0;
             }
-            if($nb_score_lp > 0) {
+            if ($nb_score_lp > 0) {
                 $avg_score = round($score / $nb_score_lp, 2);
             } else {
                 $avg_score = '-';
             }
-            if($last_login_date) {
+            if ($last_login_date) {
                 $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT, date_default_timezone_get());
             } else {
                 $last_login_date = '-';
             }
-            if($total_score_possible > 0) {
+            if ($total_score_possible > 0) {
                 $total_score_percentage = round($total_score_obtained / $total_score_possible * 100, 2);
             } else {
                 $total_score_percentage = 0;
@@ -1321,10 +1321,10 @@ class MySpace
                 if ($last_login_date_tmp != false && $last_login_date == false) {
                     // TODO: To be cleaned.
                     $last_login_date = $last_login_date_tmp;
-                } else if($last_login_date_tmp != false && $last_login_date != false) {
+                } else if ($last_login_date_tmp != false && $last_login_date != false) {
                     // TODO: Repeated previous condition! To be cleaned.
                     // Find the max and assign it to first_login_date
-                    if(strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
+                    if (strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
                         $last_login_date = $last_login_date_tmp;
                     }
                 }
@@ -1465,7 +1465,7 @@ class MySpace
                 $total_score_obtained = 0;
                 $total_score_possible = 0;
                 $total_questions_answered = 0;
-                while($row_user = Database::fetch_object($result_users)) {
+                while ($row_user = Database::fetch_object($result_users)) {
                     // get time spent in the course and session
                     $time_spent += Tracking::get_time_spent_on_the_course($row_user->user_id, $courseId, $session_id);
                     $progress_tmp = Tracking::get_avg_student_progress($row_user->user_id, $row->code, array(), $session_id, true);
@@ -1494,11 +1494,11 @@ class MySpace
                         $session_id,
                         false
                     );
-                    if($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned.
+                    if ($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned.
                         $last_login_date = $last_login_date_tmp;
-                    } else if($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition. To be cleaned.
+                    } else if ($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition. To be cleaned.
                         // Find the max and assign it to first_login_date
-                        if(strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
+                        if (strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
                             $last_login_date = $last_login_date_tmp;
                         }
                     }
@@ -1508,27 +1508,27 @@ class MySpace
                     $total_score_possible += $exercise_results_tmp['score_possible'];
                     $total_questions_answered += $exercise_results_tmp['questions_answered'];
                 }
-                if($nb_progress_lp > 0) {
+                if ($nb_progress_lp > 0) {
                     $avg_progress = round($progress / $nb_progress_lp, 2);
                 } else {
                     $avg_progress = 0;
                 }
-                if($nb_score_lp > 0) {
+                if ($nb_score_lp > 0) {
                     $avg_score = round($score / $nb_score_lp, 2);
                 } else {
                     $avg_score = '-';
                 }
-                if($last_login_date) {
+                if ($last_login_date) {
                     $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT, date_default_timezone_get());
                 } else {
                     $last_login_date = '-';
                 }
-                if($total_score_possible > 0) {
+                if ($total_score_possible > 0) {
                     $total_score_percentage = round($total_score_obtained / $total_score_possible * 100, 2);
                 } else {
                     $total_score_percentage = 0;
                 }
-                if($total_score_percentage > 0) {
+                if ($total_score_percentage > 0) {
                     $total_score = $total_score_obtained.'/'.$total_score_possible.' ('.$total_score_percentage.' %)';
                 } else {
                     $total_score = '-';
@@ -1588,7 +1588,7 @@ class MySpace
         while ($row = Database::fetch_array($result)) {
             $score_obtained += $row['exe_result'];
             $score_possible += $row['exe_weighting'];
-            $questions_answered ++;
+            $questions_answered++;
         }
 
         if ($score_possible != 0) {
@@ -1707,9 +1707,9 @@ class MySpace
                     }
                 }
                 // time spent in the course
-                $csv_row[] = api_time_to_hms(Tracking::get_time_spent_on_the_course ($user[4], $courseId));
+                $csv_row[] = api_time_to_hms(Tracking::get_time_spent_on_the_course($user[4], $courseId));
                 // student progress in course
-                $csv_row[] = round(Tracking::get_avg_student_progress ($user[4], $row[0]), 2);
+                $csv_row[] = round(Tracking::get_avg_student_progress($user[4], $row[0]), 2);
                 // student score
                 $csv_row[] = round(Tracking::get_avg_student_score($user[4], $row[0]), 2);
                 // student tes score
@@ -1717,7 +1717,7 @@ class MySpace
                 // student messages
                 $csv_row[] = Tracking::count_student_messages($user[4], $row[0]);
                 // student assignments
-                $csv_row[] = Tracking::count_student_assignments ($user[4], $row[0]);
+                $csv_row[] = Tracking::count_student_assignments($user[4], $row[0]);
                 // student exercises results
                 $exercises_results = self::exercises_results($user[4], $row[0]);
                 $csv_row[] = $exercises_results['score_obtained'];
@@ -1725,7 +1725,7 @@ class MySpace
                 $csv_row[] = $exercises_results['questions_answered'];
                 $csv_row[] = $exercises_results['percentage'];
                 // first connection
-                $csv_row[] = Tracking::get_first_connection_date_on_the_course ($user[4], $courseId);
+                $csv_row[] = Tracking::get_first_connection_date_on_the_course($user[4], $courseId);
                 // last connection
                 $csv_row[] = strip_tags(Tracking::get_last_connection_date_on_the_course($user[4], $courseInfo));
 
@@ -1759,9 +1759,9 @@ class MySpace
         // get all courses with limit
         $sql = "SELECT course.code as col1, course.title as col2
                 FROM $tbl_course course
-                WHERE course.code IN (".implode(',',$courses_code).")";
+                WHERE course.code IN (".implode(',', $courses_code).")";
 
-        if (!in_array($direction, array('ASC','DESC'))) $direction = 'ASC';
+        if (!in_array($direction, array('ASC', 'DESC'))) $direction = 'ASC';
 
         $column = intval($column);
         $from = intval($from);
@@ -1830,7 +1830,7 @@ class MySpace
             $table_row[] = $avg_assignments_in_course;
 
             //set the "from" value to know if I access the Reporting by the chamilo tab or the course link
-            $table_row[] = '<center><a href="../../tracking/courseLog.php?cidReq=' .$course_code.'&from=myspace&id_session='.$session_id.'">
+            $table_row[] = '<center><a href="../../tracking/courseLog.php?cidReq='.$course_code.'&from=myspace&id_session='.$session_id.'">
                              '.Display::return_icon('2rightarrow.png').'
                              </a>
                             </center>';
@@ -1839,7 +1839,7 @@ class MySpace
                 $nb_students_in_course,
                 $avg_time_spent_in_course,
                 is_null($avg_progress_in_course) ? null : $avg_progress_in_course.'%',
-                is_null($avg_score_in_course) ? null : is_numeric($avg_score_in_course) ? $avg_score_in_course.'%' : $avg_score_in_course ,
+                is_null($avg_score_in_course) ? null : is_numeric($avg_score_in_course) ? $avg_score_in_course.'%' : $avg_score_in_course,
                 is_null($avg_score_in_exercise) ? null : $avg_score_in_exercise.'%',
                 $avg_messages_in_course,
                 $avg_assignments_in_course,
@@ -1967,7 +1967,7 @@ class MySpace
                     $i++;
                 }
             }
-            $username_array = array('username' => $desired_username , 'sufix' => $sufix);
+            $username_array = array('username' => $desired_username, 'sufix' => $sufix);
             return $username_array;
         } else {
             $username_array = array('username' => $username, 'sufix' => '');
@@ -2244,7 +2244,7 @@ class MySpace
         foreach ($users as $index => $user) {
             $userid = $user['id'];
             $sql_insert = "INSERT IGNORE INTO $tbl_session_rel_user(session_id, user_id, registered_at)
-                           VALUES ('$id_session','$userid', '" . api_get_utc_datetime() . "')";
+                           VALUES ('$id_session','$userid', '".api_get_utc_datetime()."')";
             Database::query($sql_insert);
             $user['added_at_session'] = 1;
             $new_users[] = $user;
@@ -2278,10 +2278,10 @@ class MySpace
                 );
                 $userInfo = api_get_user_info($user['id']);
 
-                if (($user['added_at_platform'] == 1  && $user['added_at_session'] == 1) || $user['added_at_session'] == 1) {
+                if (($user['added_at_platform'] == 1 && $user['added_at_session'] == 1) || $user['added_at_session'] == 1) {
                     if ($user['added_at_platform'] == 1) {
                         $addedto = get_lang('UserCreatedPlatform');
-                    } else  {
+                    } else {
                         $addedto = '          ';
                     }
 
@@ -2346,7 +2346,7 @@ class MySpace
         global $current_tag;
         switch ($data) {
             case 'Contact' :
-                $user = array ();
+                $user = array();
                 break;
             default:
                 $current_tag = $data;
@@ -2393,9 +2393,9 @@ class MySpace
         global $current_value;
         global $user;
         global $users;
-        $users = array ();
+        $users = array();
         $parser = xml_parser_create('UTF-8');
-        xml_set_element_handler($parser, array('MySpace','element_start'), array('MySpace','element_end'));
+        xml_set_element_handler($parser, array('MySpace', 'element_start'), array('MySpace', 'element_end'));
         xml_set_character_data_handler($parser, "character_data");
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
         xml_parse($parser, api_utf8_encode_xml(file_get_contents($file)));
@@ -2441,7 +2441,7 @@ class MySpace
             get_lang('SearchCourse'),
             $courseList,
             [
-                'url' => api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?' . http_build_query([
+                'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?'.http_build_query([
                     'a' => 'search_course_by_session_all',
                     'session_id' => $sessionId
                 ])
@@ -2460,7 +2460,7 @@ class MySpace
                             course_id: $('#course_id').val() || 0
                         });
 
-                        return '" . api_get_path(WEB_AJAX_PATH) . "session.ajax.php?' + params;
+                        return '" . api_get_path(WEB_AJAX_PATH)."session.ajax.php?' + params;
                     }
                 "
             ]
@@ -2491,7 +2491,7 @@ class MySpace
                             course_id: $('#course_id').val()
                         });
 
-                        return '" . api_get_path(WEB_AJAX_PATH) . "course.ajax.php?' + params;
+                        return '" . api_get_path(WEB_AJAX_PATH)."course.ajax.php?' + params;
                     }
                 "
             ]
@@ -2592,7 +2592,7 @@ class MySpace
                     " : "
                         u.lastname AS col2,
                         u.firstname AS col3,
-                " ) . "
+                " )."
                 a.logout_course_date,
                 c.title,
                 c.code,
@@ -2603,7 +2603,7 @@ class MySpace
 
         if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
             $sessionId = intval($_GET['session_id']);
-            $sql .= " WHERE a.session_id = " . $sessionId;
+            $sql .= " WHERE a.session_id = ".$sessionId;
         }
 
         $sql .= " ORDER BY col$column $orderDirection ";
@@ -2707,13 +2707,13 @@ class MySpace
 function get_stats($user_id, $courseId, $start_date = null, $end_date = null)
 {
     // Database table definitions
-    $tbl_track_course   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+    $tbl_track_course = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
     $course_info = api_get_course_info_by_id($courseId);
     if (!empty($course_info)) {
         $strg_sd = '';
         $strg_ed = '';
-        if ($start_date != null && $end_date != null){
+        if ($start_date != null && $end_date != null) {
             $end_date = add_day_to($end_date);
             $strg_sd = "AND login_course_date BETWEEN '$start_date' AND '$end_date'";
             $strg_ed = "AND logout_course_date BETWEEN '$start_date' AND '$end_date'";
@@ -2722,10 +2722,10 @@ function get_stats($user_id, $courseId, $start_date = null, $end_date = null)
                 SEC_TO_TIME(avg(time_to_sec(timediff(logout_course_date,login_course_date)))) as avrg,
                 SEC_TO_TIME(sum(time_to_sec(timediff(logout_course_date,login_course_date)))) as total,
                 count(user_id) as times
-                FROM ' . $tbl_track_course . '
+                FROM ' . $tbl_track_course.'
                 WHERE
-                    user_id = ' . intval($user_id) . ' AND
-                    c_id = ' . intval($courseId) . ' '.$strg_sd.' '.$strg_ed.' '.'
+                    user_id = ' . intval($user_id).' AND
+                    c_id = ' . intval($courseId).' '.$strg_sd.' '.$strg_ed.' '.'
                 ORDER BY login_course_date ASC';
 
         $rs = Database::query($sql);
@@ -2743,7 +2743,7 @@ function get_stats($user_id, $courseId, $start_date = null, $end_date = null)
 }
 
 function add_day_to($end_date) {
-    $foo_date = strtotime( $end_date );
+    $foo_date = strtotime($end_date);
     $foo_date = strtotime(" +1 day", $foo_date);
     $foo_date = date("Y-m-d", $foo_date);
     return $foo_date;
@@ -2802,10 +2802,10 @@ function convert_to_string($sql_result)
  */
 function grapher($sql_result, $start_date, $end_date, $type = "")
 {
-    if (empty($start_date)) { $start_date =""; }
-    if (empty($end_date)) { $end_date =""; }
-    if ($type == ""){ $type = 'day'; }
-    $main_year  = $main_month_year = $main_day = [];
+    if (empty($start_date)) { $start_date = ""; }
+    if (empty($end_date)) { $end_date = ""; }
+    if ($type == "") { $type = 'day'; }
+    $main_year = $main_month_year = $main_day = [];
 
     $period = new DatePeriod(
         new DateTime($start_date),
@@ -2864,7 +2864,7 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
         /* Create and populate the pData object */
         $myData = new pData();
         $myData->addPoints($main_date, 'Serie1');
-        if (count($main_date)!= 1) {
+        if (count($main_date) != 1) {
             $myData->addPoints($labels, 'Labels');
             $myData->setSerieDescription('Labels', 'Months');
             $myData->setAbscissa('Labels');
@@ -2872,7 +2872,7 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
         $myData->setSerieWeight('Serie1', 1);
         $myData->setSerieDescription('Serie1', get_lang('MyResults'));
         $myData->setAxisName(0, get_lang('Minutes'));
-        $myData->loadPalette(api_get_path(SYS_CODE_PATH) . 'palettes/pchart/default.color', true);
+        $myData->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
 
         // Cache definition
         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
@@ -2881,9 +2881,9 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
 
         if ($myCache->isInCache($chartHash)) {
             //if we already created the img
-            $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+            $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
             $myCache->saveFromCache($chartHash, $imgPath);
-            $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+            $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
         } else {
             /* Define width, height and angle */
             $mainWidth = 760;
@@ -2912,7 +2912,7 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
             /* Set the default font */
             $myPicture->setFontProperties(
                 array(
-                    "FontName" => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                    "FontName" => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
                     "FontSize" => 10)
             );
             /* Write the chart title */
@@ -2929,7 +2929,7 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
             /* Set the default font */
             $myPicture->setFontProperties(
                 array(
-                    "FontName" => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                    "FontName" => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
                     "FontSize" => 8
                 )
             );
@@ -2971,7 +2971,7 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
             /* Draw the line chart */
             $myPicture->setFontProperties(
                 array(
-                    "FontName" => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                    "FontName" => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
                     "FontSize" => 10
                 )
             );
@@ -2990,15 +2990,15 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
 
             /* Write and save into cache */
             $myCache->writeToCache($chartHash, $myPicture);
-            $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+            $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
             $myCache->saveFromCache($chartHash, $imgPath);
-            $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+            $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
         }
-        $html = '<img src="' . $imgPath . '">';
+        $html = '<img src="'.$imgPath.'">';
 
         return $html;
     } else {
-        $foo_img = api_convert_encoding('<div id="messages" class="warning-message">'.get_lang('GraphicNotAvailable').'</div>','UTF-8');
+        $foo_img = api_convert_encoding('<div id="messages" class="warning-message">'.get_lang('GraphicNotAvailable').'</div>', 'UTF-8');
 
         return $foo_img;
     }

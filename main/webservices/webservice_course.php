@@ -330,13 +330,13 @@ class WSCourse extends WS
                 $attributes['course_language'] = $language;
             }
             if ($visibility != '') {
-                $attributes['visibility'] = (int)$visibility;
+                $attributes['visibility'] = (int) $visibility;
             }
             if ($subscribe != '') {
-                $attributes['subscribe'] = (int)$subscribe;
+                $attributes['subscribe'] = (int) $subscribe;
             }
             if ($unsubscribe != '') {
-                $attributes['unsubscribe'] = (int)$unsubscribe;
+                $attributes['unsubscribe'] = (int) $unsubscribe;
             }
             if (!empty($visual_code)) {
                 $attributes['visual_code'] = $visual_code;

@@ -81,11 +81,11 @@ if (empty($_POST['security-key']) || empty($_POST['visibility'])) {
     $courses_list = courses_list($_POST['security-key'], $_POST['visibility']);
     foreach ($courses_list as $code => $cd) {
         echo '<course>';
-        echo '<code>' , $code , '</code>';
-        echo '<title>' , $cd['title'] , '</title>';
-        echo '<url>' , $cd['url'] , '</url>';
-        echo '<teacher>' , $cd['teacher'] , '</teacher>';
-        echo '<language>' , $cd['language'] , '</language>';
+        echo '<code>', $code, '</code>';
+        echo '<title>', $cd['title'], '</title>';
+        echo '<url>', $cd['url'], '</url>';
+        echo '<teacher>', $cd['teacher'], '</teacher>';
+        echo '<language>', $cd['language'], '</language>';
         echo '</course>';
     }
 }

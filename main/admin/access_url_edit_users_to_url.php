@@ -57,7 +57,7 @@ function add_user_to_url(code, content) {
 function send() {
 	if (document.formulaire.access_url_id.value!=0) {
 		document.formulaire.form_sent.value=0;
-		document.formulaire.add_type.value=\'' . $add_type . '\';
+		document.formulaire.add_type.value=\'' . $add_type.'\';
 		document.formulaire.submit();
 	}
 }
@@ -93,17 +93,17 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             $result = UrlManager::update_urls_rel_user($UserList, $access_url_id);
             $url_info = UrlManager::get_url_data_from_id($access_url_id);
             if (!empty($result)) {
-                $message .= 'URL: ' . $url_info['url'] . '<br />';
+                $message .= 'URL: '.$url_info['url'].'<br />';
             }
 
             if (!empty($result['users_added'])) {
-                $message .= '<h4>' . get_lang('UsersAdded') . ':</h4>';
+                $message .= '<h4>'.get_lang('UsersAdded').':</h4>';
                 $i = 1;
                 $user_added_list = array();
                 foreach ($result['users_added'] as $user) {
                     $user_info = api_get_user_info($user);
                     if (!empty($user_info)) {
-                        $user_added_list[] = $i . '. ' . api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, null, null, $user_info['username']);
+                        $user_added_list[] = $i.'. '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, null, null, $user_info['username']);
                         $i++;
                     }
                 }
@@ -113,13 +113,13 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             }
 
             if (!empty($result['users_deleted'])) {
-                $message .= '<br /><h4>' . get_lang('UsersDeleted') . ': </h4>';
+                $message .= '<br /><h4>'.get_lang('UsersDeleted').': </h4>';
                 $user_deleted_list = array();
                 $i = 1;
                 foreach ($result['users_deleted'] as $user) {
                     $user_info = api_get_user_info($user);
                     if (!empty($user_info)) {
-                        $user_deleted_list [] = $i . '. ' . api_get_person_name($user_info['firstname'], $user_info['lastname']);
+                        $user_deleted_list [] = $i.'. '.api_get_person_name($user_info['firstname'], $user_info['lastname']);
                         $i++;
                     }
                 }
@@ -140,7 +140,7 @@ if (!empty($message)) {
 echo '<div class="actions">';
 echo Display::url(
     Display::return_icon('view_more_stats.gif', get_lang('AddUserToURL'), ''),
-    api_get_path(WEB_CODE_PATH) . 'admin/access_url_add_users_to_url.php'
+    api_get_path(WEB_CODE_PATH).'admin/access_url_add_users_to_url.php'
 );
 echo '</div>';
 
@@ -165,7 +165,7 @@ if ($ajax_search) {
     }
 
     $sql = "SELECT u.user_id, lastname, firstname, username
-	  	  	FROM $tbl_user u WHERE status <> " . ANONYMOUS . " " .
+	  	  	FROM $tbl_user u WHERE status <> ".ANONYMOUS." ".
             $order_clause;
     $result = Database::query($sql);
     $Users = Database::store_result($result);
@@ -178,11 +178,11 @@ if ($ajax_search) {
 }
 
 if ($add_type == 'multiple') {
-    $link_add_type_unique = '<a href="' . api_get_self() . '?add_type=unique&access_url_id=' . $access_url_id . '">' . get_lang('SessionAddTypeUnique') . '</a>';
+    $link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique&access_url_id='.$access_url_id.'">'.get_lang('SessionAddTypeUnique').'</a>';
     $link_add_type_multiple = get_lang('SessionAddTypeMultiple');
 } else {
     $link_add_type_unique = get_lang('SessionAddTypeUnique');
-    $link_add_type_multiple = '<a href="' . api_get_self() . '?add_type=multiple&access_url_id=' . $access_url_id . '">' . get_lang('SessionAddTypeMultiple') . '</a>';
+    $link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple&access_url_id='.$access_url_id.'">'.get_lang('SessionAddTypeMultiple').'</a>';
 }
 $url_list = UrlManager::get_url_data();
 ?>
@@ -194,7 +194,7 @@ $url_list = UrlManager::get_url_data();
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;" <?php if ($ajax_search) {
     echo ' onsubmit="valide();"';
 } ?> >
-    <?php echo get_lang('SelectUrl') . ' : '; ?>
+    <?php echo get_lang('SelectUrl').' : '; ?>
 <select name="access_url_id" onchange="javascript:send();">
 <option value="0"> <?php echo get_lang('SelectUrl') ?></option>
         <?php
@@ -230,7 +230,7 @@ if (!empty($errorMsg)) {
     <td>
     <h3>
     <?php
-        $total_users = count($nosessionUsersList) +  count($sessionUsersList);
+        $total_users = count($nosessionUsersList) + count($sessionUsersList);
         echo get_lang('TotalAvailableUsers').' '.$total_users;
     ?>
     </h3>
@@ -240,7 +240,7 @@ if (!empty($errorMsg)) {
   <td align="center"><b><?php echo get_lang('UserListInPlatform') ?> : <?php echo count($nosessionUsersList); ?></b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('UserListIn') . ' ' . $url_selected; ?> : <?php echo count($sessionUsersList); ?></b></td>
+  <td align="center"><b><?php echo get_lang('UserListIn').' '.$url_selected; ?> : <?php echo count($sessionUsersList); ?></b></td>
 </tr>
 <tr>
   <td align="center">
@@ -300,9 +300,9 @@ if (!empty($errorMsg)) {
 		<br />
         <?php
         if (isset($_GET['add'])) {
-            echo '<button class="save" type="button" onclick="valide()" >' . get_lang('AddUsersToURL') . '</button>';
+            echo '<button class="save" type="button" onclick="valide()" >'.get_lang('AddUsersToURL').'</button>';
         } else {
-            echo '<button class="save" type="button" onclick="valide()" >' . get_lang('EditUsersToURL') . '</button>';
+            echo '<button class="save" type="button" onclick="valide()" >'.get_lang('EditUsersToURL').'</button>';
         }
         ?>
 	</td>

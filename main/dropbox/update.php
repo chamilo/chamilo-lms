@@ -8,7 +8,7 @@ if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
     api_not_allowed(true);
 }
 
-$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 if (empty($id)) {
     api_not_allowed(true);
 }

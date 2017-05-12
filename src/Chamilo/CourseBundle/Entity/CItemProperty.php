@@ -98,9 +98,9 @@ class CItemProperty
     protected $insertUser;
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="visibility", type="boolean", nullable=false)
+     * @ORM\Column(name="visibility", type="integer", nullable=false)
      */
     private $visibility;
 
@@ -130,6 +130,7 @@ class CItemProperty
      */
     public function __construct(Course $course)
     {
+        $this->visibility = 1;
         $this->course = $course;
         $this->insertDate = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->lasteditDate = new \DateTime('now', new \DateTimeZone('UTC'));
@@ -282,7 +283,7 @@ class CItemProperty
     /**
      * Set visibility
      *
-     * @param boolean $visibility
+     * @param int $visibility
      *
      * @return CItemProperty
      */
@@ -296,7 +297,7 @@ class CItemProperty
     /**
      * Get visibility
      *
-     * @return boolean
+     * @return int
      */
     public function getVisibility()
     {

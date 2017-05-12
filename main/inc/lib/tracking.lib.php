@@ -775,6 +775,7 @@ class Tracking
                             </tr>';
                     } else {
                         $correct_test_link = '-';
+                        $showRowspan = false;
                         if ($row['item_type'] == 'quiz') {
                             $my_url_suffix = '&course='.$courseCode.'&student_id='.$user_id.'&lp_id='.intval($row['mylpid']).'&origin='.$origin;
                             $sql = 'SELECT * FROM '.$tbl_stats_exercices.'
@@ -790,12 +791,14 @@ class Tracking
 
                             $resultLastAttempt = Database::query($sql);
                             $num = Database::num_rows($resultLastAttempt);
+                            $showRowspan = false;
                             if ($num > 0) {
                                 $linkId = 'link_'.$my_id;
                                 if ($extendedAttempt == 1 &&
                                     $lp_id == $my_lp_id &&
                                     $lp_item_id == $my_id
                                 ) {
+                                    $showRowspan = true;
                                     $correct_test_link = Display::url(
                                         Display::return_icon(
                                             'view_less_stats.gif',
@@ -822,7 +825,7 @@ class Tracking
                         $title = Security::remove_XSS($title);
                         $action = null;
                         if ($type == 'classic') {
-                            $action = '<td>'.$correct_test_link.'</td>';
+                            $action = '<td '.($showRowspan ? 'rowspan="2"' : '').'>'.$correct_test_link.'</td>';
                         }
 
                         if ($lp_id == $my_lp_id && false) {
@@ -1587,7 +1590,7 @@ class Tracking
                         //If the last connection is > than 7 days, the text is red
                         //345600 = 7 days in seconds
                         if ($currentTimestamp - $timestamp > 604800) {
-                            return '<span style="color: #F00;">' . api_format_date($last_login_date, DATE_FORMAT_SHORT) . '</span>';
+                            return '<span style="color: #F00;">'.api_format_date($last_login_date, DATE_FORMAT_SHORT).'</span>';
                         } else {
                             return api_format_date($last_login_date, DATE_FORMAT_SHORT);
                         }
@@ -1727,7 +1730,7 @@ class Tracking
                               '.Display::return_icon('messagebox_warning.gif').'
                              </a>'
                             : null;
-                        return $icon. Display::label($last_login_date, 'warning');
+                        return $icon.Display::label($last_login_date, 'warning');
                     } else {
                         return $last_login_date;
                     }
@@ -1823,14 +1826,14 @@ class Tracking
         $tbl_session_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $sql = 'SELECT DISTINCT c_id
-                FROM ' . $tbl_course_rel_user . '
+                FROM ' . $tbl_course_rel_user.'
                 WHERE user_id = ' . $user_id.' AND relation_type<>'.COURSE_RELATION_TYPE_RRHH;
         $rs = Database::query($sql);
         $nb_courses = Database::num_rows($rs);
 
         if ($include_sessions) {
             $sql = 'SELECT DISTINCT c_id
-                    FROM ' . $tbl_session_course_rel_user . '
+                    FROM ' . $tbl_session_course_rel_user.'
                     WHERE user_id = ' . $user_id;
             $rs = Database::query($sql);
             $nb_courses += Database::num_rows($rs);
@@ -1877,7 +1880,7 @@ class Tracking
             $condition_quiz = "";
             if (!empty($exercise_id)) {
                 $exercise_id = intval($exercise_id);
-                $condition_quiz =" AND id = $exercise_id ";
+                $condition_quiz = " AND id = $exercise_id ";
             }
 
             // Compose a filter based on optional session id given
@@ -4890,7 +4893,8 @@ class Tracking
 
                 $html .= '<thead><tr>';
                 foreach ($columnHeaders as $key => $columnSetting) {
-                    if (in_array($key, $trackingColumns['course_session']) &&
+                    if (isset($trackingColumns['course_session']) &&
+                        in_array($key, $trackingColumns['course_session']) &&
                         $trackingColumns['course_session'][$key]
                     ) {
                         $settings = isset($columnSetting[1]) ? $columnSetting[1] : [];
@@ -7774,7 +7778,7 @@ class TrackingUserLogCSV
     public function display_document_tracking_info($view, $user_id, $courseCode, $session_id = 0)
     {
         // protect data
-        $user_id     = intval($user_id);
+        $user_id = intval($user_id);
         $courseId = api_get_course_int_id($courseCode);
         $session_id = intval($session_id);
 

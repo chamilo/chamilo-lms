@@ -478,7 +478,7 @@ class ImportCsv
                     $result = UserManager::update_user(
                         $userInfo['user_id'],
                         $row['firstname'], // <<-- changed
-                        $row['lastname'],  // <<-- changed
+                        $row['lastname'], // <<-- changed
                         $userInfo['username'],
                         null, //$password = null,
                         $row['auth_source'],
@@ -636,7 +636,7 @@ class ImportCsv
 
                     if (isset($row['action']) && $row['action'] === 'delete') {
                         // Inactive one year later
-                        $userInfo['expiration_date'] = api_get_utc_datetime(api_strtotime(time() + 365*24*60*60));
+                        $userInfo['expiration_date'] = api_get_utc_datetime(api_strtotime(time() + 365 * 24 * 60 * 60));
                     }
 
                     $password = $row['password']; // change password
@@ -698,8 +698,8 @@ class ImportCsv
                     $result = UserManager::update_user(
                         $userInfo['user_id'],
                         $row['firstname'], // <<-- changed
-                        $row['lastname'],  // <<-- changed
-                        $row['username'],  // <<-- changed
+                        $row['lastname'], // <<-- changed
+                        $row['username'], // <<-- changed
                         $password, //$password = null,
                         $row['auth_source'],
                         $email,
@@ -750,7 +750,7 @@ class ImportCsv
         }
 
         $timeEnd = microtime(true);
-        $executionTime = round(($timeEnd - $timeStart)/60, 2);
+        $executionTime = round(($timeEnd - $timeStart) / 60, 2);
         $this->logger->addInfo("Execution Time for process students: $executionTime Min");
 
         if ($moveFile) {
@@ -959,9 +959,13 @@ class ImportCsv
                 $event['update'] = $update;
                 $event['item'] = $item;
 
+                $calendarEvent = null;
                 /* Check if event changed of course code */
-                /** @var CCalendarEvent $calendarEvent */
-                $calendarEvent = $em->getRepository('ChamiloCourseBundle:CCalendarEvent')->find($item['item_id']);
+                if (!empty($item) && isset($item['item_id']) && !empty($item['item_id'])) {
+                    /** @var CCalendarEvent $calendarEvent */
+                    $calendarEvent = $em->getRepository('ChamiloCourseBundle:CCalendarEvent')->find($item['item_id']);
+                }
+
                 if ($calendarEvent) {
                     $this->logger->addInfo('Calendar event found '.$item['item_id']);
                     if ($calendarEvent->getCId() != $courseInfo['real_id']) {
@@ -1084,7 +1088,7 @@ class ImportCsv
                             api_format_date($start, TIME_NO_SEC_FORMAT).' '.
                             api_format_date($end, TIME_NO_SEC_FORMAT).')';
                     } else {
-                        $date = api_format_date($start,DATE_TIME_FORMAT_LONG_24H).' - '.
+                        $date = api_format_date($start, DATE_TIME_FORMAT_LONG_24H).' - '.
                                 api_format_date($end, DATE_TIME_FORMAT_LONG_24H);
                     }
 
@@ -1143,7 +1147,7 @@ class ImportCsv
 
                         if ($announcementId) {
                             $this->logger->addInfo(
-                                "Announcement added: ".(int)($announcementId)." in $info"
+                                "Announcement added: ".(int) ($announcementId)." in $info"
                             );
                             $this->logger->addInfo(
                                 "<<--SENDING MAIL-->>"
@@ -1531,7 +1535,7 @@ class ImportCsv
                 );
 
                 $this->logger->addError(
-                    "User '$chamiloUserName' was remove from Session: #$chamiloSessionId - Course: " . $courseInfo['code']
+                    "User '$chamiloUserName' was remove from Session: #$chamiloSessionId - Course: ".$courseInfo['code']
                 );
 
             }
@@ -1605,7 +1609,7 @@ class ImportCsv
                 }
 
                 $this->logger->addError(
-                    "User '$chamiloUserName' with status $type was added to session: #$chamiloSessionId - Course: " . $courseInfo['code']
+                    "User '$chamiloUserName' with status $type was added to session: #$chamiloSessionId - Course: ".$courseInfo['code']
                 );
             }
         }
@@ -1643,7 +1647,7 @@ class ImportCsv
                     );
                 }
                 if (!in_array('SessionName', $tag_names) ||
-                    !in_array('DateStart',$tag_names) || !in_array('DateEnd', $tag_names)
+                    !in_array('DateStart', $tag_names) || !in_array('DateEnd', $tag_names)
                 ) {
                     $error_message = get_lang('NoNeededData');
                     break;
@@ -1940,7 +1944,7 @@ class ImportCsv
         $data = Import::csv_reader($file);
 
         if (!empty($data)) {
-            $this->logger->addInfo(count($data) . " records found.");
+            $this->logger->addInfo(count($data)." records found.");
             foreach ($data as $row) {
                 $chamiloUserName = $row['UserName'];
                 $chamiloCourseCode = $row['CourseCode'];
@@ -1987,7 +1991,7 @@ class ImportCsv
                 }
 
                 $this->logger->addError(
-                    "User '$chamiloUserName' with status $type was added to session: #$chamiloSessionId - Course: " . $courseInfo['code']
+                    "User '$chamiloUserName' with status $type was added to session: #$chamiloSessionId - Course: ".$courseInfo['code']
                 );
             }
         }
@@ -2006,7 +2010,7 @@ class ImportCsv
         $data = Import::csv_reader($file);
 
         if (!empty($data)) {
-            $this->logger->addInfo(count($data) . " records found.");
+            $this->logger->addInfo(count($data)." records found.");
             foreach ($data as $row) {
                 $chamiloUserName = $row['UserName'];
                 $chamiloCourseCode = $row['CourseCode'];

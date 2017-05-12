@@ -29,10 +29,10 @@ class BlockGlobalInfo extends Block
     /**
      * Constructor
      */
-    public function __construct ($user_id)
+    public function __construct($user_id)
     {
-        $this->user_id 		= $user_id;
-        $this->path 		= 'block_global_info';
+        $this->user_id = $user_id;
+        $this->path = 'block_global_info';
         if ($this->is_block_visible_for_user($user_id)) {
             //$this->courses = CourseManager::get_courses_followed_by_drh($user_id);
         }
@@ -69,7 +69,7 @@ class BlockGlobalInfo extends Block
     	$html = '
     	            <div class="panel panel-default" id="intro">
     	                <div class="panel-heading">'.get_lang('GlobalPlatformInformation').'
-    	                    <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
+    	                    <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
     	                    <em class="fa fa-times"></em>
     	                    </a></div>
     	                </div>
@@ -98,7 +98,7 @@ class BlockGlobalInfo extends Block
              $data_table = '<table class="table table-bordered" width="95%">';
              $i = 1;
              foreach ($global_data as $data) {
-                 if ($i%2 == 0) {
+                 if ($i % 2 == 0) {
                      $class_tr = 'row_odd';
                  } else {
                      $class_tr = 'row_even';

@@ -118,8 +118,8 @@ if (count($friends) == 0) {
         while ($j < $number_friends) {
             if (isset($friends[$j])) {
                 $friend = $friends[$j];
-                $toolBar = '<button class="btn btn-danger" onclick="delete_friend(this)" id=img_' . $friend['friend_user_id'] . '>
-                    ' . get_lang('Delete') . '
+                $toolBar = '<button class="btn btn-danger" onclick="delete_friend(this)" id=img_'.$friend['friend_user_id'].'>
+                    ' . get_lang('Delete').'
                 </button>';
                 $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$friend['friend_user_id'];
                 $friend['user_info']['complete_name'] = Display::url($friend['user_info']['complete_name'], $url);

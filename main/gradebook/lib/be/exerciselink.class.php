@@ -466,7 +466,7 @@ class ExerciseLink extends AbstractLink
                 $sql = 'SELECT * FROM '.$tbl_exercise.'
                         WHERE
                             c_id = '.$this->course_id.' AND
-                            id = '.$ref_id.' ';
+                            id = '.$ref_id;
             }
             $result = Database::query($sql);
             $this->exercise_data = Database::fetch_array($result);

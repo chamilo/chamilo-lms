@@ -62,7 +62,7 @@ function loginWSAuthenticate($username, $password, $wsUrl)
     $key = '-+*%$({[]})$%*+-';
     // Complete password con PKCS7-specific padding
     $blockSize = 16;
-    $padding = $blockSize - (strlen($password)%$blockSize);
+    $padding = $blockSize - (strlen($password) % $blockSize);
     $password .= str_repeat(chr($padding), $padding);
     $cipher = new Crypt_AES(CRYPT_AES_MODE_CFB);
     $cipher->setKeyLength(128);

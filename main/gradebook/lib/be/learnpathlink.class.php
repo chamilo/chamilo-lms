@@ -35,12 +35,12 @@ class LearnpathLink extends AbstractLink
 
         $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
-        $sql = 'SELECT id, name FROM ' . $this->get_learnpath_table() . ' lp
-				WHERE c_id = ' . $this->course_id . ' AND id NOT IN '
-            . ' (SELECT ref_id FROM ' . $tbl_grade_links
-            . ' WHERE type = ' . LINK_LEARNPATH
-            . " AND course_code = '" . $this->get_course_code() . "'"
-            . ') AND lp.session_id=' . api_get_session_id() . '';
+        $sql = 'SELECT id, name FROM '.$this->get_learnpath_table().' lp
+				WHERE c_id = ' . $this->course_id.' AND id NOT IN '
+            . ' (SELECT ref_id FROM '.$tbl_grade_links
+            . ' WHERE type = '.LINK_LEARNPATH
+            . " AND course_code = '".$this->get_course_code()."'"
+            . ') AND lp.session_id='.api_get_session_id().'';
 
         $result = Database::query($sql);
 
@@ -69,8 +69,8 @@ class LearnpathLink extends AbstractLink
             $session_condition = api_get_session_condition($session_id, true, true);
         }
 
-        $sql = 'SELECT id, name FROM ' . $this->get_learnpath_table() . '
-                WHERE c_id = ' . $this->course_id . ' ' . $session_condition . ' ';
+        $sql = 'SELECT id, name FROM '.$this->get_learnpath_table().'
+                WHERE c_id = ' . $this->course_id.' '.$session_condition.' ';
         $result = Database::query($sql);
 
         $cats = array();
@@ -89,7 +89,7 @@ class LearnpathLink extends AbstractLink
     {
         $tbl_stats = Database::get_course_table(TABLE_LP_VIEW);
         $sql = "SELECT count(id) AS number FROM $tbl_stats
-				WHERE c_id = " . $this->course_id . " AND lp_id = " . $this->get_ref_id();
+				WHERE c_id = ".$this->course_id." AND lp_id = ".$this->get_ref_id();
         $result = Database::query($sql);
         $number = Database::fetch_array($result, 'NUM');
         return ($number[0] != 0);
@@ -109,12 +109,12 @@ class LearnpathLink extends AbstractLink
 
         $sql = "SELECT * FROM $tbl_stats
                 WHERE
-                	c_id = " . $this->course_id . " AND
-                    lp_id = " . $this->get_ref_id() . " AND
+                	c_id = ".$this->course_id." AND
+                    lp_id = " . $this->get_ref_id()." AND
                     session_id = $session_id ";
 
         if (isset($stud_id)) {
-            $sql .= ' AND user_id = ' . intval($stud_id);
+            $sql .= ' AND user_id = '.intval($stud_id);
         }
 
         // order by id, that way the student's first attempt is accessed first
@@ -130,7 +130,7 @@ class LearnpathLink extends AbstractLink
             }
         } else {
             // all students -> get average
-            $students = array();  // user list, needed to make sure we only
+            $students = array(); // user list, needed to make sure we only
             // take first attempts into account
             $rescount = 0;
             $sum = 0;
@@ -177,13 +177,13 @@ class LearnpathLink extends AbstractLink
     public function get_link()
     {
         $session_id = api_get_session_id();
-        $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . api_get_cidreq_params($this->get_course_code(),
-                $session_id) . '&gradebook=view';
+        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq_params($this->get_course_code(),
+                $session_id).'&gradebook=view';
 
         if (!api_is_allowed_to_edit() || $this->calc_score(api_get_user_id()) == null) {
-            $url .= '&action=view&lp_id=' . $this->get_ref_id();
+            $url .= '&action=view&lp_id='.$this->get_ref_id();
         } else {
-            $url .= '&action=build&lp_id=' . $this->get_ref_id();
+            $url .= '&action=build&lp_id='.$this->get_ref_id();
         }
         return $url;
     }
@@ -211,8 +211,8 @@ class LearnpathLink extends AbstractLink
      */
     public function is_valid_link()
     {
-        $sql = 'SELECT count(id) FROM ' . $this->get_learnpath_table() . '
-                WHERE c_id = ' . $this->course_id . ' AND id = ' . $this->get_ref_id() . ' ';
+        $sql = 'SELECT count(id) FROM '.$this->get_learnpath_table().'
+                WHERE c_id = ' . $this->course_id.' AND id = '.$this->get_ref_id().' ';
         $result = Database::query($sql);
         $number = Database::fetch_row($result, 'NUM');
         return ($number[0] != 0);
@@ -260,8 +260,8 @@ class LearnpathLink extends AbstractLink
     private function get_learnpath_data()
     {
         if (!isset($this->learnpath_data)) {
-            $sql = 'SELECT * FROM ' . $this->get_learnpath_table() . '
-                    WHERE c_id = ' . $this->course_id . ' AND id = ' . $this->get_ref_id() . ' ';
+            $sql = 'SELECT * FROM '.$this->get_learnpath_table().'
+                    WHERE c_id = ' . $this->course_id.' AND id = '.$this->get_ref_id().' ';
             $result = Database::query($sql);
             $this->learnpath_data = Database::fetch_array($result);
         }

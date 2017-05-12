@@ -14,7 +14,7 @@ use Symfony\Component\Filesystem\Exception\IOException;
  * current configuration file.
  * @package chamilo.install
  */
-error_log("Starting " . basename(__FILE__));
+error_log("Starting ".basename(__FILE__));
 
 global $debug;
 
@@ -143,12 +143,12 @@ if (defined('SYSTEM_INSTALLATION')) {
 
     $list = scandir($langPath);
     foreach ($list as $entry) {
-        if (is_dir($langPath . $entry) &&
+        if (is_dir($langPath.$entry) &&
             in_array($entry, $officialLanguages)
         ) {
             foreach ($filesToDelete as $file) {
-                if (is_file($langPath . $entry . '/' . $file . '.inc.php')) {
-                    unlink($langPath . $entry . '/' . $file . '.inc.php');
+                if (is_file($langPath.$entry.'/'.$file.'.inc.php')) {
+                    unlink($langPath.$entry.'/'.$file.'.inc.php');
                 }
             }
         }
@@ -173,12 +173,12 @@ if (defined('SYSTEM_INSTALLATION')) {
 
     // Move dirs into new structures.
     $movePathList = [
-        api_get_path(SYS_CODE_PATH).'upload/users/groups' => api_get_path(SYS_UPLOAD_PATH) . 'groups',
-        api_get_path(SYS_CODE_PATH).'upload/users' => api_get_path(SYS_UPLOAD_PATH) . 'users',
-        api_get_path(SYS_CODE_PATH).'upload/badges' => api_get_path(SYS_UPLOAD_PATH) . 'badges',
-        api_get_path(SYS_PATH).'courses' => api_get_path(SYS_APP_PATH) . 'courses',
+        api_get_path(SYS_CODE_PATH).'upload/users/groups' => api_get_path(SYS_UPLOAD_PATH).'groups',
+        api_get_path(SYS_CODE_PATH).'upload/users' => api_get_path(SYS_UPLOAD_PATH).'users',
+        api_get_path(SYS_CODE_PATH).'upload/badges' => api_get_path(SYS_UPLOAD_PATH).'badges',
+        api_get_path(SYS_PATH).'courses' => api_get_path(SYS_APP_PATH).'courses',
         api_get_path(SYS_PATH).'searchdb' => api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/',
-        api_get_path(SYS_PATH).'home' => api_get_path(SYS_APP_PATH) . 'home'
+        api_get_path(SYS_PATH).'home' => api_get_path(SYS_APP_PATH).'home'
     ];
 
     if ($debug) {
@@ -199,7 +199,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                 $fs->remove($origin);
             } catch (IOException $e) {
                 // If removing the directory doesn't work, just log an error and continue
-                error_log('Could not move ' . $origin . ' to ' . $destination . '(' . $e->getMessage() . '). Please move it manually.');
+                error_log('Could not move '.$origin.' to '.$destination.'('.$e->getMessage().'). Please move it manually.');
             }
         }
     }
@@ -246,5 +246,5 @@ if (defined('SYSTEM_INSTALLATION')) {
     @rrmdir(api_get_path(SYS_PATH).'archive');
 
 } else {
-    echo 'You are not allowed here !'. __FILE__;
+    echo 'You are not allowed here !'.__FILE__;
 }

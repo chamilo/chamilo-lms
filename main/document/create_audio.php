@@ -328,34 +328,33 @@ function downloadMP3_google($filepath, $dir)
     $clean_title = trim($_POST['title']);
     $clean_text = trim($_POST['text']);
     if (empty($clean_title) || empty($clean_text)) {
-        echo '<script>window.location.href="' . $location . '"</script>';
+        echo '<script>window.location.href="'.$location.'"</script>';
 
         return;
     }
     $clean_title = Security::remove_XSS($clean_title);
     $clean_title = Database::escape_string($clean_title);
-    $clean_title = str_replace(' ', '_', $clean_title);//compound file names
+    $clean_title = str_replace(' ', '_', $clean_title); //compound file names
 
     $clean_text = Security::remove_XSS($clean_text);
     $clean_lang = Security::remove_XSS($_POST['lang']);
 
     $extension = 'mp3';
-    $audio_filename = $clean_title . '.' . $extension;
+    $audio_filename = $clean_title.'.'.$extension;
     $audio_title = str_replace('_', ' ', $clean_title);
 
     //prevent duplicates
-    if (file_exists($filepath . '/' . $clean_title . '.' . $extension)) {
+    if (file_exists($filepath.'/'.$clean_title.'.'.$extension)) {
         $i = 1;
-        while (file_exists($filepath . '/' . $clean_title . '_' . $i . '.' . $extension)) {
+        while (file_exists($filepath.'/'.$clean_title.'_'.$i.'.'.$extension)) {
             $i++;
         }
-        $audio_filename = $clean_title . '_' . $i . '.' . $extension;
-        $audio_title = $clean_title . '_' . $i . '.' . $extension;
+        $audio_filename = $clean_title.'_'.$i.'.'.$extension;
+        $audio_title = $clean_title.'_'.$i.'.'.$extension;
         $audio_title = str_replace('_', ' ', $audio_title);
     }
 
-    $documentPath = $filepath . '/' . $audio_filename;
-
+    $documentPath = $filepath.'/'.$audio_filename;
     $clean_text = api_replace_dangerous_char($clean_text);
 
     // adding the file
@@ -380,6 +379,7 @@ function downloadMP3_google($filepath, $dir)
     // add document to database
     $current_session_id = api_get_session_id();
     $groupId = api_get_group_id();
+    $groupInfo = GroupManager::get_group_properties($groupId);
     $relativeUrlPath = $dir;
     $doc_id = add_document(
         $_course,
@@ -394,7 +394,7 @@ function downloadMP3_google($filepath, $dir)
         $doc_id,
         'DocumentAdded',
         $_user['user_id'],
-        $groupId,
+        $groupInfo,
         null,
         null,
         null,
@@ -495,6 +495,7 @@ function downloadMP3_pediaphon($filepath, $dir)
     //add document to database
     $current_session_id = api_get_session_id();
     $groupId = api_get_group_id();
+    $groupInfo = GroupManager::get_group_properties($groupId);
     $relativeUrlPath = $dir;
     $doc_id = add_document(
         $_course,
@@ -509,7 +510,7 @@ function downloadMP3_pediaphon($filepath, $dir)
         $doc_id,
         'DocumentAdded',
         $_user['user_id'],
-        $groupId,
+        $groupInfo,
         null,
         null,
         null,

@@ -115,7 +115,7 @@ class CourseChatUtils
         $isMaster = (bool) api_is_course_admin();
         $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
         $basepath_chat = '/chat_files';
-
+        $group_info = [];
         if (!$this->groupId) {
             $group_info = GroupManager::get_group_properties($this->groupId);
             $basepath_chat = $group_info['directory'].'/chat_files';
@@ -162,7 +162,7 @@ class CourseChatUtils
                     $doc_id,
                     $logType,
                     $this->userId,
-                    $this->groupId,
+                    $group_info,
                     null,
                     null,
                     null,
@@ -1511,7 +1511,7 @@ class CourseChatUtils
         $isMaster = (bool) api_is_course_admin();
         $basepath_chat = '/chat_files';
         $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
-
+        $group_info = [];
         if ($this->groupId) {
             $group_info = GroupManager:: get_group_properties($this->groupId);
             $basepath_chat = $group_info['directory'].'/chat_files';
@@ -1535,7 +1535,7 @@ class CourseChatUtils
                         $doc_id,
                         'FolderCreated',
                         null,
-                        $this->groupId,
+                        $group_info,
                         null,
                         null,
                         null
@@ -1568,7 +1568,7 @@ class CourseChatUtils
                     $doc_id,
                     'DocumentAdded',
                     $this->userId,
-                    $this->groupId,
+                    $group_info,
                     null,
                     null,
                     null,
@@ -1580,7 +1580,7 @@ class CourseChatUtils
                     $doc_id,
                     'invisible',
                     $this->userId,
-                    $this->groupId,
+                    $group_info,
                     null,
                     null,
                     null,
@@ -1591,7 +1591,6 @@ class CourseChatUtils
         }
 
         $basename_chat = 'messages-'.$date_now;
-
         if ($this->groupId && !$friendId) {
             $basename_chat = 'messages-'.$date_now.'_gid-'.$this->groupId;
         } else if ($this->sessionId && !$friendId) {
@@ -1605,9 +1604,7 @@ class CourseChatUtils
         }
 
         if ($reset && $isMaster) {
-
             $i = 1;
-
             while (file_exists($chat_path.$basename_chat.'-'.$i.'.log.html')) {
                 $i++;
             }
@@ -1629,7 +1626,7 @@ class CourseChatUtils
                 $doc_id,
                 'DocumentAdded',
                 $this->userId,
-                $this->groupId,
+                $group_info,
                 null,
                 null,
                 null,
@@ -1641,19 +1638,17 @@ class CourseChatUtils
                 $doc_id,
                 'invisible',
                 $this->userId,
-                $this->groupId,
+                $group_info,
                 null,
                 null,
                 null,
                 $this->sessionId
             );
             item_property_update_on_folder($courseInfo, $basepath_chat, $this->userId);
-
             $doc_id = DocumentManager::get_document_id(
                 $courseInfo,
                 $basepath_chat.'/'.$basename_chat.'.log.html'
             );
-
             update_existing_document($courseInfo, $doc_id, 0);
         }
 
@@ -1678,11 +1673,9 @@ class CourseChatUtils
         }
 
         $history = '<div id="content-chat">';
-
         foreach ($content as $this_line) {
             $history .= $this_line;
         }
-
         $history .= '</div>';
 
         if ($isMaster || $GLOBALS['is_courseCoach']) {

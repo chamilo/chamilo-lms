@@ -11,7 +11,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-$htmlHeadXtra[] ='<script>
+$htmlHeadXtra[] = '<script>
  $(document).ready(function() {
     $(".save").click(function() {
         var button_name=$(this).attr("name");
@@ -36,20 +36,20 @@ $htmlHeadXtra[] ='<script>
                     \'new_language\': is_new_language,
                     \'variable_language\': is_variable_language,
                     \'file_id\': file_id,
-                    \'id\': ' . intval($_REQUEST['id']) . ',
-                    \'sub\': ' . intval($_REQUEST['sub_language_id']) . ',
-                    \'sub_language_id\': ' . intval($_REQUEST['sub_language_id']) . '
+                    \'id\': ' . intval($_REQUEST['id']).',
+                    \'sub\': ' . intval($_REQUEST['sub_language_id']).',
+                    \'sub_language_id\': ' . intval($_REQUEST['sub_language_id']).'
                 },
                 success: function(datos) {
                     if (datos == "1") {
-                        $("#div_message_information_id").html(\'' . Display::return_message(get_lang('TheNewWordHasBeenAdded'), 'success') . '\');
+                        $("#div_message_information_id").html(\'' . Display::return_message(get_lang('TheNewWordHasBeenAdded'), 'success').'\');
                     } else {
                         $("#div_message_information_id").html("<div class=\"alert alert-warning\">" + datos +"</div>");
                     }
                 }
             });
         } else {
-            $("#div_message_information_id").html(\'' . Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error') . '\');
+            $("#div_message_information_id").html(\'' . Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error').'\');
         }
     });
 });
@@ -61,14 +61,14 @@ $htmlHeadXtra[] ='<script>
 // setting the name of the tool
 $tool_name = get_lang('CreateSubLanguage');
 // setting breadcrumbs
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array ('url' => 'languages.php', 'name' => get_lang('PlatformLanguages'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'languages.php', 'name' => get_lang('PlatformLanguages'));
 
 $sublanguage_folder_error = false;
 
 if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
-    $language_name = SubLanguageManager::get_name_of_language_by_id ($_GET['id']);
-    $sub_language_name = SubLanguageManager::get_name_of_language_by_id ($_GET['sub_language_id']);
+    $language_name = SubLanguageManager::get_name_of_language_by_id($_GET['id']);
+    $sub_language_name = SubLanguageManager::get_name_of_language_by_id($_GET['sub_language_id']);
     $all_data_of_language = SubLanguageManager::get_all_information_of_language($_GET['id']);
     $all_data_of_sublanguage = SubLanguageManager::get_all_information_of_language($_GET['sub_language_id']);
     $sub_language_file = api_get_path(SYS_LANG_PATH).$all_data_of_sublanguage['dokeos_folder'];
@@ -76,20 +76,20 @@ if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
     if (!file_exists($sub_language_file) || !is_writable($sub_language_file)) {
         $sublanguage_folder_error = $sub_language_file.' '.get_lang('IsNotWritable');
     }
-    if (SubLanguageManager::check_if_exist_language_by_id($_GET['id'])===true) {
+    if (SubLanguageManager::check_if_exist_language_by_id($_GET['id']) === true) {
         $language_id_exist = true;
     } else {
         $language_id_exist = false;
     }
 } else {
-    $language_name='';
-    $language_id_exist=false;
+    $language_name = '';
+    $language_id_exist = false;
 }
 
 $intro = sprintf(get_lang('RegisterTermsOfSubLanguageForX'), strtolower($sub_language_name));
 $path_folder = api_get_path(SYS_LANG_PATH).$all_data_of_language['dokeos_folder'];
 
-if (!is_dir($path_folder) || strlen($all_data_of_language['dokeos_folder'])==0) {
+if (!is_dir($path_folder) || strlen($all_data_of_language['dokeos_folder']) == 0) {
     api_not_allowed(true);
 }
 
@@ -102,16 +102,16 @@ printf(get_lang('ParentLanguageX'), $language_name);
 echo '</div>';
 echo '<br />';
 $txt_search_word = (!empty($_REQUEST['txt_search_word']) ? Security::remove_XSS($_REQUEST['txt_search_word']) : '');
-$html ='<div style="float:left" class="actions">';
-$html.='<form style="float:left"  id="Searchlanguage" name="Searchlanguage" method="GET" action="sub_language.php">';
-$html.='&nbsp;'.get_lang('OriginalName').'&nbsp; :&nbsp;';
+$html = '<div style="float:left" class="actions">';
+$html .= '<form style="float:left"  id="Searchlanguage" name="Searchlanguage" method="GET" action="sub_language.php">';
+$html .= '&nbsp;'.get_lang('OriginalName').'&nbsp; :&nbsp;';
 
-$html.='<input name="id" type="hidden"  id="id" value="'.Security::remove_XSS($_REQUEST['id']).'" />';
-$html.='<input name="sub_language_id" type="hidden"  id="id" value="'.Security::remove_XSS($_REQUEST['sub_language_id']).'" />';
-$html.='<input name="txt_search_word" type="text" size="50"  id="txt_search_word" value="'.$txt_search_word.'" />';
-$html.="&nbsp;".'<button name="SubmitSearchLanguage" class="search" type="submit">'.get_lang('Search').'</button>';
-$html.='</form>';
-$html.='</div>';
+$html .= '<input name="id" type="hidden"  id="id" value="'.Security::remove_XSS($_REQUEST['id']).'" />';
+$html .= '<input name="sub_language_id" type="hidden"  id="id" value="'.Security::remove_XSS($_REQUEST['sub_language_id']).'" />';
+$html .= '<input name="txt_search_word" type="text" size="50"  id="txt_search_word" value="'.$txt_search_word.'" />';
+$html .= "&nbsp;".'<button name="SubmitSearchLanguage" class="search" type="submit">'.get_lang('Search').'</button>';
+$html .= '</form>';
+$html .= '</div>';
 echo $html;
 echo '<br /><br /><br />';
 if (!empty($sublanguage_folder_error)) {
@@ -147,7 +147,7 @@ function search_language_term(
     $language_files_to_load_keys = array_flip($language_files_to_load);
     $array_to_search = $parent_language_array;
     $list_info = array();
-    $term='/'.Security::remove_XSS(trim($_REQUEST['txt_search_word'])).'/i';
+    $term = '/'.Security::remove_XSS(trim($_REQUEST['txt_search_word'])).'/i';
     //@todo optimize this foreach
     foreach ($language_files_to_load as $lang_file) {
         //searching in parent language of the sub language
@@ -176,11 +176,11 @@ function search_language_term(
                         $size =4;
                     }*/
 
-                    $obj_text='<textarea rows="10" cols="40" name="txt|'.$parent_name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="txtid_'.$language_files_to_load_keys[$lang_file].'_'.$parent_name_variable.'" >'.$sub_language_name_variable.'</textarea>';
-                    $obj_button='<button class="save" type="button" name="btn|'.$parent_name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="btnid_'.$parent_name_variable.'"  />'.get_lang('Save').'</button>';
+                    $obj_text = '<textarea rows="10" cols="40" name="txt|'.$parent_name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="txtid_'.$language_files_to_load_keys[$lang_file].'_'.$parent_name_variable.'" >'.$sub_language_name_variable.'</textarea>';
+                    $obj_button = '<button class="save" type="button" name="btn|'.$parent_name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="btnid_'.$parent_name_variable.'"  />'.get_lang('Save').'</button>';
 
                     $list_info[] = array(
-                        $lang_file . '.inc.php',
+                        $lang_file.'.inc.php',
                         $parent_name_variable,
                         $english_name_variable,
                         $parent_variable_value,
@@ -231,16 +231,16 @@ function search_language_term(
                         $parent_variable_value = $parent_language_array[$lang_file][$name_variable];
                     }
                     //config buttons
-                    $obj_text='<textarea rows="10" cols="40" name="txt|'.$name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="txtid_'.$language_files_to_load_keys[$lang_file].'_'.$name_variable.'" >'.
+                    $obj_text = '<textarea rows="10" cols="40" name="txt|'.$name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="txtid_'.$language_files_to_load_keys[$lang_file].'_'.$name_variable.'" >'.
                         $sub_language_name_variable.'
                         </textarea>';
-                    $obj_button='<button class="save" type="button" name="btn|'.$name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="btnid_'.$name_variable.'"  />'.get_lang('Save').'</button>';
+                    $obj_button = '<button class="save" type="button" name="btn|'.$name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="btnid_'.$name_variable.'"  />'.get_lang('Save').'</button>';
 
                     //loading variable from the english array
                     $english_name_variable = $english_language_array[$lang_file][$name_variable];
 
                     $list_info[] = array(
-                        $lang_file . '.inc.php',
+                        $lang_file.'.inc.php',
                         $name_variable,
                         $english_name_variable,
                         $parent_variable_value,
@@ -273,15 +273,15 @@ function search_language_term(
                     $sub_language_name_variable = $sub_language_array[$lang_file][$name_variable];
                     $parent_variable_value = $parent_language_array[$lang_file][$name_variable];
                     //config buttons
-                    $obj_text='<textarea rows="10" cols="40" name="txt|'.$name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="txtid_'.$language_files_to_load_keys[$lang_file].'_'.$name_variable.'" >'.$sub_language_name_variable.'</textarea>';
-                    $obj_button='<button class="save" type="button" name="btn|'.$name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="btnid_'.$name_variable.'"  />'.get_lang('Save').'</button>';
+                    $obj_text = '<textarea rows="10" cols="40" name="txt|'.$name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="txtid_'.$language_files_to_load_keys[$lang_file].'_'.$name_variable.'" >'.$sub_language_name_variable.'</textarea>';
+                    $obj_button = '<button class="save" type="button" name="btn|'.$name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="btnid_'.$name_variable.'"  />'.get_lang('Save').'</button>';
 
                     //loading variable from the english array
                     $english_name_variable = $english_language_array[$lang_file][$name_variable];
-                    $list_info[]=array($lang_file.'.inc.php',
+                    $list_info[] = array($lang_file.'.inc.php',
                         $name_variable,
                         $english_name_variable,
-                        $parent_variable_value,$obj_text,$obj_button);
+                        $parent_variable_value, $obj_text, $obj_button);
                 }
             }
         }
@@ -295,7 +295,7 @@ function search_language_term(
 $list_info = array();
 if (isset($_REQUEST['txt_search_word'])) {
     //@todo fix to accept a char with 1 char
-    if (strlen(trim($_REQUEST['txt_search_word']))>2) {
+    if (strlen(trim($_REQUEST['txt_search_word'])) > 2) {
         $list_info = search_language_term(
             $_REQUEST['txt_search_word'],
             true,

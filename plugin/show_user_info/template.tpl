@@ -17,7 +17,7 @@
     
     3. Portal settings    
         You can access the portal settings using:
-        {{ "siteName"|get_setting }}
+        {{ "siteName"|api_get_setting }}
         For more settings check the settings_current database table
     4. Read more
         You can also see more examples in main/template/default/layout

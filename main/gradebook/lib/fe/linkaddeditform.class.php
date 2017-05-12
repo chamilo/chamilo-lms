@@ -152,7 +152,16 @@ class LinkAddEditForm extends FormValidator
             } else {
                 $this->addText('max', get_lang('QualificationNumeric'), true, array('size' => '4', 'maxlength' => '5'));
                 $this->addRule('max', get_lang('OnlyNumbers'), 'numeric');
-                $this->addRule('max', get_lang('NegativeValue'), 'compare', '>=');
+                $this->addRule(
+                    'max',
+                    get_lang('NegativeValue'),
+                    'compare',
+                    '>=',
+                    'server',
+                    false,
+                    false,
+                    0
+                );
             }
             if ($form_type == self::TYPE_EDIT) {
                 $defaults['max'] = $link->get_max();

@@ -92,9 +92,9 @@ $code = isset($code) ? $code : null;
 		        $pageLength = (!empty($_REQUEST['pageLength']) ? intval($_REQUEST['pageLength']) : 10);
 		        $pageCurrent = (!empty($_REQUEST['pageCurrent']) ? intval($_REQUEST['pageCurrent']) : 1);
 		        $form = '<form action="'.$webAction.'" method="GET" >';
-		        $form .= '<input type="hidden" name="action" value="' . $action . '">';
-		        $form .= '<input type="hidden" name="pageCurrent" value="' . $pageCurrent . '">';
-		        $form .= '<input type="hidden" name="pageLength" value="' . $pageLength . '">';
+		        $form .= '<input type="hidden" name="action" value="'.$action.'">';
+		        $form .= '<input type="hidden" name="pageCurrent" value="'.$pageCurrent.'">';
+		        $form .= '<input type="hidden" name="pageLength" value="'.$pageLength.'">';
 		        $form .= '<div class="form-group">';
 				$form .= '<label>'.get_lang('CourseCategories').'</label>';
 		        $form .= '<select name="category_code" onchange="submit();" class="selectpicker show-tick form-control">';
@@ -102,11 +102,11 @@ $code = isset($code) ? $code : null;
 		        foreach ($browse_course_categories[0] as $category) {
 		            $categoryCode = $category['code'];
 		            $countCourse = $category['count_courses'];
-		            $form .= '<option '. ($categoryCode == $codeType? 'selected="selected" ':'') .' value="' . $category['code'] . '">' . $category['name'] . ' ( '. $countCourse .' ) </option>';
+		            $form .= '<option '.($categoryCode == $codeType ? 'selected="selected" ' : '').' value="'.$category['code'].'">'.$category['name'].' ( '.$countCourse.' ) </option>';
 		            if (!empty($browse_course_categories[$categoryCode])) {
-		                foreach ($browse_course_categories[$categoryCode] as $subCategory){
+		                foreach ($browse_course_categories[$categoryCode] as $subCategory) {
 		                    $subCategoryCode = $subCategory['code'];
-		                    $form .= '<option '. ($subCategoryCode == $codeType ? 'selected="selected" ':'') .' value="' . $subCategory['code'] . '"> ---' . $subCategory['name'] . ' ( '. $subCategory['count_courses'] .' ) </option>';
+		                    $form .= '<option '.($subCategoryCode == $codeType ? 'selected="selected" ' : '').' value="'.$subCategory['code'].'"> ---'.$subCategory['name'].' ( '.$subCategory['count_courses'].' ) </option>';
 		                }
 		            }
 		        }
@@ -164,7 +164,7 @@ if ($showCourses && $action != 'display_sessions') {
             $userRegisterdInCourse = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
             $userRegisterdInCourseAsTeacher = CourseManager::is_course_teacher($user_id, $course['code']);
             $userRegisterd = ($userRegisterdInCourse && $userRegisterdInCourseAsTeacher);
-            
+
             $course_public = ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD);
             $course_open = ($course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM);
             $course_private = ($course['visibility'] == COURSE_VISIBILITY_REGISTERED);
@@ -284,7 +284,7 @@ function returnThumbnail($course, $registeredUser)
     $html = '';
     $title = cut($course['title'], 70);
     $linkCourse = api_get_course_url($course['code']);
-    
+
     // course path
     $course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];
 
@@ -296,7 +296,7 @@ function returnThumbnail($course, $registeredUser)
     }
 
     $html .= '<div class="image">';
-    
+
     if (!$registeredUser) {
         $html .= '<img class="img-responsive"'
                 .' src="'.$course_medium_image.'" '
@@ -306,13 +306,13 @@ function returnThumbnail($course, $registeredUser)
                 .'<img class="img-responsive" src="'.$course_medium_image.'" '
                 .'alt="'.api_htmlentities($title).'"/></a>';
     }
-    
+
     $categoryTitle = isset($course['category_title']) ? $course['category_title'] : '';
     if (!empty($categoryTitle)) {
         $html .= '<span class="category">'.$categoryTitle.'</span>';
         $html .= '<div class="cribbon"></div>';
     }
-    
+
     $html .= '<div class="user-actions">';
     $html .= return_description_button($course);
     $html .= '</div></div>';
@@ -330,17 +330,17 @@ function return_teacher($course)
     $html .= '<div class="block-author">';
     $length = count($teachers);
     foreach ($teachers as $value) {
-        $name = $value['firstname'].' ' . $value['lastname'];
+        $name = $value['firstname'].' '.$value['lastname'];
 
         if ($length > 2) {
              $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">
-                    <img src="'.$value['avatar'].'" alt="'.$name.' ' .get_lang('Profile').'"/></a>';
+                    <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
         } else {
             $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">
-                    <img src="'.$value['avatar'].'" alt="'.$name.' ' .get_lang('Profile').'"/></a>';
+                    <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
             $html .= '<div class="teachers-details"><h5>
                     <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
-                    . $name . '</a></h5><p>'. get_lang('Teacher').'</p></div>';
+                    . $name.'</a></h5><p>'.get_lang('Teacher').'</p></div>';
         }
     }
     $html .= '</div>';
@@ -357,22 +357,26 @@ function return_title($course, $registeredUser)
     $html = '';
     $linkCourse = api_get_course_url($course['code']);
     $title = cut($course['title'], 45);
-    $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
-    $rating = Display::return_rating_system(
-        'star_'.$course['real_id'],
-        $ajax_url.'&course_id='.$course['real_id'],
-        $course['point_info']
-        );
+
     $html .= '<div class="block-title"><h4 class="title">';
-    
+
     if (!$registeredUser) {
         $html .= $title;
     } else {
-        $html .= '<a title="'.$title.'" href="' . $linkCourse . '">' . $title . '</a>';
+        $html .= '<a title="'.$title.'" href="'.$linkCourse.'">'.$title.'</a>';
     }
-    
+
     $html .= '</h4></div>';
-    $html .= '<div class="ranking">'. $rating . '</div>';
+
+    if (api_get_configuration_value('hide_course_rating') === false) {
+        $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
+        $rating = Display::return_rating_system(
+            'star_'.$course['real_id'],
+            $ajax_url.'&course_id='.$course['real_id'],
+            $course['point_info']
+        );
+        $html .= '<div class="ranking">'.$rating.'</div>';
+    }
 
     return $html;
 }
@@ -392,7 +396,7 @@ function return_description_button($course)
             api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'],
             array(
                 'class' => 'ajax btn btn-default btn-sm',
-                'data-title' => $title,'title' => get_lang('Description'),
+                'data-title' => $title, 'title' => get_lang('Description'),
                 'aria-label' => get_lang('Description')
             )
         );
@@ -408,7 +412,7 @@ function return_description_button($course)
  */
 function return_goto_button($course)
 {
-    $title=get_lang('GoToCourse');
+    $title = get_lang('GoToCourse');
     $html = Display::url(
         Display::returnFontAwesomeIcon('share'),
         api_get_course_url($course['code']),
@@ -434,7 +438,7 @@ function return_already_registered_label($in_status)
 
     $html = Display::tag(
         'span',
-        $icon . ' ' . $title,
+        $icon.' '.$title,
         array('id' => 'register', 'class' => 'label-subscribed text-success', 'title' => $title, 'aria-label' => $title)
     );
 
@@ -454,8 +458,8 @@ function return_register_button($course, $stok, $code, $search_term)
 {
     $title = get_lang('Subscribe');
     $html = Display::url(
-        Display::returnFontAwesomeIcon('check') . ' ' . $title,
-        api_get_self() . '?action=subscribe_course&sec_token=' . $stok.
+        Display::returnFontAwesomeIcon('check').' '.$title,
+        api_get_self().'?action=subscribe_course&sec_token='.$stok.
         '&subscribe_course='.$course['code'].'&search_term='.$search_term.'&category_code='.$code,
         array('class' => 'btn btn-success btn-sm', 'title' => $title, 'aria-label' => $title)
     );
@@ -476,7 +480,7 @@ function return_unregister_button($course, $stok, $search_term, $code)
     $title = get_lang('UnsubscriptionAllowed');
     $html = Display::url(
         Display::returnFontAwesomeIcon('sign-in').' '.$title,
-        api_get_self() . '?action=unsubscribe&sec_token='.$stok
+        api_get_self().'?action=unsubscribe&sec_token='.$stok
         .'&unsubscribe='.$course['code'].'&search_term='.$search_term.'&category_code='.$code,
         array('class' => 'btn btn-danger btn-sm', 'title' => $title, 'aria-label' => $title)
     );

@@ -67,7 +67,7 @@ class BlockTeacher extends Block
                 <div class="panel panel-default" id="intro">
                     <div class="panel-heading">
                         '.get_lang('TeachersInformationsList').'
-                        <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
+                        <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
                         <em class="fa fa-times"></em>
                         </a></div>
                     </div>
@@ -151,7 +151,7 @@ class BlockTeacher extends Block
         $teachers_table = null;
         if (count($teachers) > 0) {
             $a_last_week = get_last_week();
-            $last_week = date('Y-m-d',$a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
+            $last_week = date('Y-m-d', $a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
 
             $teachers_table .= '<table class="data_table" width:"95%">';
             $teachers_table .= '

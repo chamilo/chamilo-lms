@@ -60,12 +60,12 @@ class SearchCourseWidget
         $url = self::server('REQUEST_URI');
         $url = explode('?', $url);
         $url = reset($url);
-        $url = self::server('SERVER_NAME') . $url;
+        $url = self::server('SERVER_NAME').$url;
 
         $root = api_get_path('WEB_PATH');
         $root = str_replace('https://', '', $root);
         $root = str_replace('http://', '', $root);
-        $index_url = $root . 'index.php';
+        $index_url = $root.'index.php';
 
         return $url == $index_url || $url == $root;
     }
@@ -80,12 +80,12 @@ class SearchCourseWidget
         $url = self::server('REQUEST_URI');
         $url = explode('?', $url);
         $url = reset($url);
-        $url = self::server('SERVER_NAME') . $url;
+        $url = self::server('SERVER_NAME').$url;
 
         $root = api_get_path('WEB_PATH');
         $root = str_replace('https://', '', $root);
         $root = str_replace('http://', '', $root);
-        $index_url = $root . 'user_portal.php';
+        $index_url = $root.'user_portal.php';
 
         return $url == $index_url || $url == $root;
     }
@@ -153,8 +153,8 @@ class SearchCourseWidget
             $parameters[self::PARAM_ACTION] = $action;
         }
         $parameters = implode('&', $parameters);
-        $parameters = $parameters ? '?' . $parameters : '';
-        return $self . $parameters;
+        $parameters = $parameters ? '?'.$parameters : '';
+        return $self.$parameters;
     }
 
     /**
@@ -241,8 +241,8 @@ EOT;
             $details = implode(' - ', $details);
             $title = $course['title'];
 
-            $href = api_get_path(WEB_COURSE_PATH).$course['code'] .'/index.php';
-            echo '<tr><td><b><a href="' . $href . '">' . "$title</a></b><br/>$details</td><td>";
+            $href = api_get_path(WEB_COURSE_PATH).$course['code'].'/index.php';
+            echo '<tr><td><b><a href="'.$href.'">'."$title</a></b><br/>$details</td><td>";
             if (!api_is_anonymous()) {
                 if ($course['registration_code']) {
                     Display::display_icon(
@@ -333,13 +333,13 @@ EOT;
 
         if (api_is_anonymous())
         {
-            $course_fiter = 'visibility = ' . COURSE_VISIBILITY_OPEN_WORLD;
+            $course_fiter = 'visibility = '.COURSE_VISIBILITY_OPEN_WORLD;
         }
         else
         {
-            $course_fiter = 'visibility = ' . COURSE_VISIBILITY_OPEN_WORLD . ' OR ';
-            $course_fiter .= 'visibility = ' . COURSE_VISIBILITY_OPEN_PLATFORM . ' OR ';
-            $course_fiter .= '(visibility = ' . COURSE_VISIBILITY_REGISTERED . ' AND subscribe = 1)';
+            $course_fiter = 'visibility = '.COURSE_VISIBILITY_OPEN_WORLD.' OR ';
+            $course_fiter .= 'visibility = '.COURSE_VISIBILITY_OPEN_PLATFORM.' OR ';
+            $course_fiter .= '(visibility = '.COURSE_VISIBILITY_REGISTERED.' AND subscribe = 1)';
         }
 
         $sql = <<<EOT

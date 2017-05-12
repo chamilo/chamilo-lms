@@ -20,7 +20,7 @@ if (api_get_setting('allow_skills_tool') != 'true') {
 }
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
-$skillId = isset($_GET['id']) ? intval($_GET['id']): 0;
+$skillId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 $entityManager = Database::getManager();
 
@@ -55,7 +55,7 @@ switch ($action) {
             );
         }
 
-        header('Location: ' . api_get_self());
+        header('Location: '.api_get_self());
         exit;
         break;
     case 'disable':
@@ -108,13 +108,13 @@ switch ($action) {
             );
         }
 
-        header('Location: ' . api_get_self());
+        header('Location: '.api_get_self());
         exit;
         break;
     case 'list':
         //no break
     default:
-        $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+        $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
         
         $toolbar = Display::url(
             Display::return_icon(
@@ -122,7 +122,7 @@ switch ($action) {
                 get_lang('CreateSkill'),
                 null,
                 ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH) . 'admin/skill_create.php',
+            api_get_path(WEB_CODE_PATH).'admin/skill_create.php',
             ['title' => get_lang('CreateSkill')]
             );
         

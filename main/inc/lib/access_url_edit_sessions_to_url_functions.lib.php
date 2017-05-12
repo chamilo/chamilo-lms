@@ -43,17 +43,17 @@ class Accessurleditsessionstourl
                     ORDER BY name, id
                     LIMIT 11';
             $rs = Database::query($sql);
-            $i=0;
+            $i = 0;
             while ($session = Database::fetch_array($rs)) {
                 $i++;
-                if ($i<=10) {
+                if ($i <= 10) {
                      $return .= '<a href="#" onclick="add_user_to_url(\''.addslashes($session['id']).'\',\''.addslashes($session['name']).' ('.addslashes($session['id']).')'.'\')">'.$session['name'].' </a><br />';
                 } else {
                     $return .= '...<br />';
                 }
             }
         }
-        $xajax_response -> addAssign('ajax_list_courses','innerHTML',api_utf8_encode($return));
+        $xajax_response -> addAssign('ajax_list_courses', 'innerHTML', api_utf8_encode($return));
         return $xajax_response;
     }
 }

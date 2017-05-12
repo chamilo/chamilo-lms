@@ -28,7 +28,7 @@ $this_section = SECTION_MYAGENDA;
 
 if (!empty($currentCourseId) && $currentCourseId != -1) {
     // Agenda is inside a course tool
-    $url = api_get_self() . '?' . api_get_cidreq();
+    $url = api_get_self().'?'.api_get_cidreq();
     $this_section = SECTION_COURSES;
 
     // Order by start date
@@ -51,7 +51,7 @@ if (!empty($currentCourseId) && $currentCourseId != -1) {
     if (!empty($events)) {
         foreach ($events as &$event) {
             $courseId = isset($event['course_id']) ? $event['course_id'] : '';
-            $event['url'] = api_get_self() . '?cid=' . $courseId . '&type=' . $event['type'];
+            $event['url'] = api_get_self().'?cid='.$courseId.'&type='.$event['type'];
         }
     }
 }
@@ -77,7 +77,7 @@ if (api_is_allowed_to_edit()) {
         } else {
             $courseCondition = '&'.api_get_cidreq();
         }
-        header('Location: '. api_get_self().'?type='.$agenda->type.$courseCondition);
+        header('Location: '.api_get_self().'?type='.$agenda->type.$courseCondition);
         exit;
     }
 }

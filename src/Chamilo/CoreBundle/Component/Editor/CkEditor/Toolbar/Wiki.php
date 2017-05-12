@@ -56,11 +56,11 @@ class Wiki extends Basic
                 '-',
                 'Find'
             ],
-            ['Wikilink','Link','Unlink','Anchor'],
-            ['Image','Video','Flash','Oembed','Youtube','Audio','Asciimath'],
-            ['Table','HorizontalRule','Smiley','SpecialChar','leaflet'],
-            ['Format','Font','FontSize'],
-            ['Bold','Italic','Underline'],
+            ['Wikilink', 'Link', 'Unlink', 'Anchor'],
+            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio', 'Asciimath'],
+            ['Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'leaflet'],
+            ['Format', 'Font', 'FontSize'],
+            ['Bold', 'Italic', 'Underline'],
             [
                 'Subscript',
                 'Superscript',
@@ -94,10 +94,10 @@ class Wiki extends Basic
         return [
             $this->getNewPageBlock(),
             ['Undo', 'Redo'],
-            ['Wikilink', 'Link', 'Image', 'Video', 'Flash', 'Audio', 'Table',  'Asciimath', 'Asciisvg'],
+            ['Wikilink', 'Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Styles','Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
             api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Toolbarswitch']
         ];

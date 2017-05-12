@@ -24,7 +24,6 @@ class ClockworksmsPlugin extends SmsPlugin
 
     /**
      * Constructor
-     * @return  void
      */
     public function __construct()
     {

@@ -71,7 +71,7 @@ echo '<h2>'.get_lang('GroupSingle').': '.$group_properties['name'].'</h2>';
 
 if ((
         $group_properties['doc_state'] == 2 &&
-        ($is_allowed_to_edit || GroupManager :: is_user_in_group($_user['user_id'], $group_properties['iid']))) || $group_properties['doc_state'] == 1
+        ($is_allowed_to_edit || GroupManager :: is_user_in_group($_user['user_id'], $group_properties))) || $group_properties['doc_state'] == 1
 ){
 
 	if (!empty($png_svg_files)) {

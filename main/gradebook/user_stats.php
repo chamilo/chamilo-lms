@@ -16,7 +16,7 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 if (!$isDrhOfCourse) {
     GradebookUtils::block_students();
 }
-$interbreadcrumb[]= array (
+$interbreadcrumb[] = array(
     'url' => $_SESSION['gradebook_dest'],
     'name' => get_lang('Gradebook'
 ));
@@ -27,12 +27,12 @@ $allevals = $category[0]->get_evaluations($my_user_id, true);
 $alllinks = $category[0]->get_links($my_user_id, true);
 
 if ($_GET['selectcat'] != null) {
-    $addparams= array (
+    $addparams = array(
         'userid' => $my_user_id,
         'selectcat' => Security::remove_XSS($_GET['selectcat'])
     );
 } else {
-    $addparams= array (
+    $addparams = array(
         'userid' => $my_user_id,
         'selecteval' => Security::remove_XSS($_GET['selecteval'])
     );
@@ -49,7 +49,7 @@ if (isset ($_GET['exportpdf'])) {
         $newarray[] = array_slice($data, 1);
     }
     $userinfo = api_get_user_info($my_user_id);
-    $html .= get_lang('Results').' : '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).' ('. api_convert_and_format_date(null, DATE_FORMAT_SHORT). ' ' . api_convert_and_format_date(null, TIME_NO_SEC_FORMAT) .')';
+    $html .= get_lang('Results').' : '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).' ('.api_convert_and_format_date(null, DATE_FORMAT_SHORT).' '.api_convert_and_format_date(null, TIME_NO_SEC_FORMAT).')';
 
     if ($displayscore->is_custom()) {
         $header_names = array(
@@ -95,23 +95,23 @@ if (isset ($_GET['exportpdf'])) {
 $actions = '<div class="actions">';
 
 if (isset($_GET['selectcat'])) {
-    $interbreadcrumb[]= array ('url' => 'gradebook_flatview.php?selectcat=' . Security::remove_XSS($_GET['selectcat']), 'name' => get_lang('FlatView'));
-    $actions.= '<a href=gradebook_flatview.php?selectcat=' .Security::remove_XSS($_GET['selectcat']) . '>' . Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('FlatView'),'',ICON_SIZE_MEDIUM).'</a>';
+    $interbreadcrumb[] = array('url' => 'gradebook_flatview.php?selectcat='.Security::remove_XSS($_GET['selectcat']), 'name' => get_lang('FlatView'));
+    $actions .= '<a href=gradebook_flatview.php?selectcat='.Security::remove_XSS($_GET['selectcat']).'>'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('FlatView'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 if (isset ($_GET['selecteval'])) {
-    $interbreadcrumb[]= array (
-        'url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']),
+    $interbreadcrumb[] = array(
+        'url' => 'gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']),
         'name' => get_lang('ViewResult'
     ));
-    $actions.= '<a href=gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '>
-	'.Display::return_icon('back.png', get_lang('BackToEvaluation'),'',ICON_SIZE_MEDIUM).'</a>';
+    $actions .= '<a href=gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'>
+	'.Display::return_icon('back.png', get_lang('BackToEvaluation'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
-$actions.= '<a href="' . api_get_self() . '?exportpdf=&userid='.Security::remove_XSS($_GET['userid']).'&selectcat=' . $category[0]->get_id() . '" target="_blank">
-' . Display::return_icon('pdf.png', get_lang('ExportPDF'),'',ICON_SIZE_MEDIUM).'</a>';
+$actions .= '<a href="'.api_get_self().'?exportpdf=&userid='.Security::remove_XSS($_GET['userid']).'&selectcat='.$category[0]->get_id().'" target="_blank">
+' . Display::return_icon('pdf.png', get_lang('ExportPDF'), '', ICON_SIZE_MEDIUM).'</a>';
 
-$actions.='</div>';
+$actions .= '</div>';
 
 Display :: display_header(get_lang('ResultsPerUser'));
 echo $actions;

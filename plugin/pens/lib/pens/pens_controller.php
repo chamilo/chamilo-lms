@@ -26,7 +26,7 @@
  * @licence http://www.gnu.org/licenses/gpl.txt
  */
 
-require_once(dirname(__FILE__)."/pens_request_factory.php");
+require_once __DIR__.'/pens_request_factory.php';
 
 /**
  * PENSController

@@ -23,8 +23,8 @@ function validate_data($classes) {
             // 2. Check whether class doesn't exist yet.
             if ($usergroup->usergroup_exists($class['name'])) {
                 $class['line'] = $index + 2;
-                $class['error'] = get_lang('ClassNameExists') .
-                    ': <strong>' .$class['name'] . '</strong>';
+                $class['error'] = get_lang('ClassNameExists').
+                    ': <strong>'.$class['name'].'</strong>';
                 $errors[] = $class;
             }
         }
@@ -102,7 +102,7 @@ $group[] = $form->createElement(
     'radio',
     'file_type',
     '',
-    'CSV (<a href="example_class.csv" target="_blank">' . get_lang('ExampleCSVFile') . '</a>)',
+    'CSV (<a href="example_class.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)',
     'csv'
 );
 $form->addGroup($group, '', get_lang('FileType'), null);
@@ -113,23 +113,23 @@ if ($form->validate()) {
     $errors = validate_data($classes);
     if (count($errors) == 0) {
         $number_of_added_classes = save_data($classes);
-        Display::display_normal_message($number_of_added_classes . ' ' . get_lang('Added'));
+        Display::addFlash(Display::return_message($number_of_added_classes.' '.get_lang('Added'), 'normal'));
     } else {
         $error_message = get_lang('ErrorsWhenImportingFile');
         $error_message .= '<ul>';
         foreach ($errors as $index => $error_class) {
-            $error_message .= '<li>' . $error_class['error'] . ' (' . get_lang('Line') . ' ' . $error_class['line'] . ')';
+            $error_message .= '<li>'.$error_class['error'].' ('.get_lang('Line').' '.$error_class['line'].')';
             $error_message .= '</li>';
         }
         $error_message .= '</ul>';
         $error_message .= get_lang('Error');
-        Display :: display_error_message($error_message, false);
+        Display::addFlash(Display::return_message($error_message, 'error', false));
     }
 }
 
 $form->display();
 ?>
-<p><?php echo get_lang('CSVMustLookLike') . ' (' . get_lang('MandatoryFields') . ')'; ?> :</p>
+<p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 
 <pre>
 <b>name;description;</b>users

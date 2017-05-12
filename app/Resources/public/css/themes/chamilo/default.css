@@ -35,7 +35,7 @@ body {
 }
  
 a {
-  color: #07578A;
+  color: #0099FF;
   text-decoration: none;
 }
 a:hover,
@@ -103,8 +103,9 @@ a:focus {
   color:white;
 }
 .navbar-default .navbar-collapse, .navbar-default .navbar-form{
-  border-color: #00677C;
+  border-color: #2C5B8E;
 }
+
 .navbar-default .navbar-toggle{
   border-color: #00677C;
 }
@@ -112,7 +113,7 @@ a:focus {
   background-color: #ffffff;
 }
 .navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover{
-  background-color: #00677C;
+  background-color: #2C5B8E;
 }
 .badge-warning{
   background-color: #FD6600;

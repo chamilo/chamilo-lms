@@ -16,32 +16,29 @@ $htmlHeadXtra[] = "
 body { background: none;}
 </style>
 ";
-Display::display_reduced_header();
+
+$message = null;
 
 if (isset($_GET['error'])) {
-    switch ($_GET['error']){
+    switch ($_GET['error']) {
         case 'document_deleted':
-            echo '<br /><br />';
-            Display::display_error_message(get_lang('DocumentHasBeenDeleted'));
+            $message = Display::return_message(get_lang('DocumentHasBeenDeleted'), 'error');
             break;
         case 'prerequisites':
-            echo '<br /><br />';
-            Display::display_warning_message(get_lang('LearnpathPrereqNotCompleted'));
+            $message = Display::return_message(get_lang('LearnpathPrereqNotCompleted'), 'warning');
             break;
         case 'document_not_found':
-            echo '<br /><br />';
-            Display::display_warning_message(get_lang('FileNotFound'));
+            $message = Display::return_message(get_lang('FileNotFound'), 'warning');
             break;
         case 'reached_one_attempt':
-            echo '<br /><br />';
-            Display::display_warning_message(get_lang('ReachedOneAttempt'));
+            $message = Display::return_message(get_lang('ReachedOneAttempt'), 'warning');
             break;
         case 'x_frames_options':
             $src = Session::read('x_frame_source');
             if (!empty($src)) {
-                $icon = '<em class="icon-play-sign icon-2x"></em>&nbsp;';
+                $icon = '<em class="icon-play-sign icon-2x" aria-hidden="true"></em> ';
 
-                echo Display::return_message(
+                $message = Display::return_message(
                     Display::url($icon.$src, $src, ['class' => 'btn generated', 'target' => '_blank']),
                     'normal',
                     false
@@ -53,9 +50,15 @@ if (isset($_GET['error'])) {
             break;
     }
 } elseif (isset($_GET['msg']) && $_GET['msg'] == 'exerciseFinished') {
-    echo '<br /><br />';
-    Display::display_normal_message(get_lang('ExerciseFinished'));
+    Display::addFlash(
+        Display::return_message(get_lang('ExerciseFinished'))
+    );
 }
+
+if (!empty($message)) {
+    Display::addFlash($message);
+}
+
+Display::display_reduced_header();
+Display::display_reduced_footer();
 ?>
-</body>
-</html>

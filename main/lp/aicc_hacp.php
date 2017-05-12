@@ -57,7 +57,7 @@ if ($debug > 2) { error_log('New LP - '.__FILE__.','.__LINE__.' - Current sessio
 //$_user							= $_SESSION['_user'];
 $file = Session::read('file');
 $oLP = unserialize(Session::read('lpobject'));
-$oItem =& $oLP->items[$oLP->current];
+$oItem = & $oLP->items[$oLP->current];
 if (!is_object($oItem)) {
     error_log('New LP - aicc_hacp - Could not load oItem item', 0);
     exit;
@@ -71,8 +71,8 @@ $result = array(
     'evaluation' => array(),
     'student_data' => array(),
 );
-$convert_enc = array('%25','%0D','%0A','%09','%20','%2D','%2F','%3B','%3F','%7B','%7D','%7C','%5C','%5E','%7E','%5B','%5D','%60','%23','%3E','%3C','%22');
-$convert_dec = array('%',"\r","\n","\t",' ','-','/',';','?','{','}','|','\\','^','~','[',']','`','#','>','<','"');
+$convert_enc = array('%25', '%0D', '%0A', '%09', '%20', '%2D', '%2F', '%3B', '%3F', '%7B', '%7D', '%7C', '%5C', '%5E', '%7E', '%5B', '%5D', '%60', '%23', '%3E', '%3C', '%22');
+$convert_dec = array('%', "\r", "\n", "\t", ' ', '-', '/', ';', '?', '{', '}', '|', '\\', '^', '~', '[', ']', '`', '#', '>', '<', '"');
 $crlf = "\r\n";
 //$tab = "\t";
 $tab = "";

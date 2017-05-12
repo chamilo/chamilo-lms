@@ -38,7 +38,7 @@ class ResultsDataGenerator
     /**
      * Get total number of results (rows)
      */
-    public function get_total_results_count ()
+    public function get_total_results_count()
     {
         return count($this->results);
     }
@@ -54,24 +54,24 @@ class ResultsDataGenerator
      * 4 ['score']     : student's score
      * 5 ['display']   : custom score display (only if custom scoring enabled)
      */
-    public function get_data ($sorting = 0, $start = 0, $count = null, $ignore_score_color = false, $pdf=false)
+    public function get_data($sorting = 0, $start = 0, $count = null, $ignore_score_color = false, $pdf = false)
     {
         // do some checks on count, redefine if invalid value
         $number_decimals = api_get_setting('gradebook_number_decimals');
         if (!isset($count)) {
-            $count = count ($this->results) - $start;
+            $count = count($this->results) - $start;
         }
         if ($count < 0) {
             $count = 0;
         }
-        $scoredisplay = ScoreDisplay :: instance();
+        $scoredisplay = ScoreDisplay::instance();
         // generate actual data array
         $table = array();
-        foreach($this->results as $result) {
+        foreach ($this->results as $result) {
             $user = array();
             $info = api_get_user_info($result->get_user_id());
             $user['id'] = $result->get_user_id();
-            if ($pdf){
+            if ($pdf) {
                 $user['username'] = $info['username'];
             }
             $user['result_id'] = $result->get_id();
@@ -93,7 +93,7 @@ class ResultsDataGenerator
                 true
             )
             );
-            if ($pdf && $number_decimals == null){
+            if ($pdf && $number_decimals == null) {
                 $user['scoreletter'] = $result->get_score();
             }
             if ($scoredisplay->is_custom()) {
@@ -108,16 +108,16 @@ class ResultsDataGenerator
 
 
         // sort array
-        if ($sorting & self :: RDG_SORT_LASTNAME) {
+        if ($sorting & self::RDG_SORT_LASTNAME) {
             usort($table, array('ResultsDataGenerator', 'sort_by_last_name'));
-        } elseif ($sorting & self :: RDG_SORT_FIRSTNAME) {
+        } elseif ($sorting & self::RDG_SORT_FIRSTNAME) {
             usort($table, array('ResultsDataGenerator', 'sort_by_first_name'));
-        } elseif ($sorting & self :: RDG_SORT_SCORE) {
+        } elseif ($sorting & self::RDG_SORT_SCORE) {
             usort($table, array('ResultsDataGenerator', 'sort_by_score'));
-        } elseif ($sorting & self :: RDG_SORT_MASK) {
+        } elseif ($sorting & self::RDG_SORT_MASK) {
             usort($table, array('ResultsDataGenerator', 'sort_by_mask'));
         }
-        if ($sorting & self :: RDG_SORT_DESC) {
+        if ($sorting & self::RDG_SORT_DESC) {
             $table = array_reverse($table);
         }
         $return = array_slice($table, $start, $count);
@@ -134,13 +134,13 @@ class ResultsDataGenerator
      * @param boolean $realscore
      * @result string The score as we want to show it
      */
-    private function get_score_display ($score, $realscore, $ignore_score_color = false)
+    private function get_score_display($score, $realscore, $ignore_score_color = false)
     {
         if ($score != null) {
-            $scoredisplay = ScoreDisplay :: instance();
+            $scoredisplay = ScoreDisplay::instance();
             $type = SCORE_CUSTOM;
             if ($realscore === true) {
-                $type = SCORE_DIV_PERCENT ;
+                $type = SCORE_DIV_PERCENT;
             }
 
             return $scoredisplay->display_score(
@@ -174,10 +174,10 @@ class ResultsDataGenerator
         }
     }
 
-    function sort_by_mask ($item1, $item2)
+    function sort_by_mask($item1, $item2)
     {
-        $score1 = (isset($item1['score']) ? array($item1['score'],$this->evaluation->get_max()) : null);
-        $score2 = (isset($item2['score']) ? array($item2['score'],$this->evaluation->get_max()) : null);
-        return ScoreDisplay :: compare_scores_by_custom_display($score1, $score2);
+        $score1 = (isset($item1['score']) ? array($item1['score'], $this->evaluation->get_max()) : null);
+        $score2 = (isset($item2['score']) ? array($item2['score'], $this->evaluation->get_max()) : null);
+        return ScoreDisplay::compare_scores_by_custom_display($score1, $score2);
     }
 }

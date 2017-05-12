@@ -13,24 +13,25 @@ api_protect_admin_script();
 // Should default to '', and start with a '/' and end without it, if defined
 $subDir = '';
 $tool_name = get_lang('ImportPDFIntroToCourses');
+$errors = [];
 
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 if ($_POST['formSent']) {
     if (empty($_FILES['import_file']['tmp_name'])) {
         $error_message = get_lang('UplUploadFailed');
-        Display :: display_error_message($error_message, false);
+        Display::addFlash(Display::return_message($error_message, 'error', false));
     } else {
         $allowed_file_mimetype = array('zip');
         $ext_import_file = substr($_FILES['import_file']['name'], (strrpos($_FILES['import_file']['name'], '.') + 1));
 
         if (!in_array($ext_import_file, $allowed_file_mimetype)) {
-            Display :: display_error_message(get_lang('YouMustImportAZipFile'));
+            Display::addFlash(Display::return_message(get_lang('YouMustImportAZipFile'), 'error'));
         } else {
-            $errors = import_pdfs($courses, $subDir);
+            $errors = import_pdfs($subDir);
             if (count($errors) == 0) {
                 error_log('Course intros imported successfully in '.__FILE__.', line '.__LINE__);
             }
@@ -44,13 +45,13 @@ if (count($errors) != 0) {
         $error_message .= '<li>'.get_lang('Course').': '.$error_course['Title'].' ('.$error_course['Code'].')</li>';
     }
     $error_message .= '</ul>';
-    Display :: display_normal_message($error_message, false);
+    Display::addFlash(Display::return_message($error_message, 'normal', false));
 } elseif ($_POST['formSent']) {
-    Display :: display_confirmation_message('CourseIntroductionsAllImportesSuccessfully', false);
+    Display::addFlash(Display::return_message('CourseIntroductionsAllImportesSuccessfully', 'confirmation', false));
 }
 ?>
-    <form method="post" action="<?php echo api_get_self(); ?>" enctype="multipart/form-data" style="margin: 0px;">
-        <legend><?php echo $tool_name; ?></legend>
+    <form method="post" action="<?php echo api_get_self(); ?>" enctype="multipart/form-data" style="margin: 0;">
+        <h3><?php echo $tool_name; ?></h3>
         <div class="control-group">
             <label><?php echo get_lang('ImportZipFileLocation'); ?></label>
             <div class="control">
@@ -71,44 +72,44 @@ if (count($errors) != 0) {
 <pre>
 <strong>CourseCode</strong>_<strong>NameOfDocument</strong>_<strong>CourseName</strong>.pdf
 e.g.
-MAT101_Introduction_Mathematics-101.pdf
-MAT102_Introduction_Mathematics-102.pdf
-ENG101_Introduction_English-101.pdf
+MAT101_Introduction_to_Mathematics-101.pdf
+MAT102_Introduction_to_Mathematics-102.pdf
+ENG101_Introduction_to_English-101.pdf
 </pre>
     </blockquote>
 
 <?php
-Display :: display_footer();
+Display::display_footer();
 
 /**
  * Import PDFs
- * @param   string  Filename
- * @param   string  The subdirectory in which to put the files in each course
+ * @param   string $subDir  The subdirectory in which to put the files in each course
+ * @return array List of possible errors found
  */
-function import_pdfs($file, $subDir = '/')
+function import_pdfs($subDir = '/')
 {
     $baseDir = api_get_path(SYS_ARCHIVE_PATH);
     $uploadPath = 'pdfimport/';
-    $errors = array ();
+    $errors = array();
     if (!is_dir($baseDir.$uploadPath)) {
         @mkdir($baseDir.$uploadPath);
     }
-    if (!unzip_uploaded_file($_FILES['import_file'], $uploadPath, $baseDir, 1024*1024*1024)) {
+    if (!unzip_uploaded_file($_FILES['import_file'], $uploadPath, $baseDir, 1024 * 1024 * 1024)) {
         error_log('Could not unzip uploaded file in '.__FILE__.', line '.__LINE__);
         return $errors;
     }
     $list = scandir($baseDir.$uploadPath);
     $i = 0;
     foreach ($list as $file) {
-        if (substr($file,0,1) == '.' or !is_file($baseDir.$uploadPath.$file)) {
+        if (substr($file, 0, 1) == '.' or !is_file($baseDir.$uploadPath.$file)) {
             continue;
         }
-        $parts = preg_split('/_/',$file);
+        $parts = preg_split('/_/', $file);
         $course = api_get_course_info($parts[0]);
         if (count($course) > 0) {
             // Build file info because handle_uploaded_document() needs it (name, type, size, tmp_name)
             $fileSize = filesize($baseDir.$uploadPath.$file);
-            $docId = add_document($course, $subDir.'/'.$file, 'file', $fileSize, $parts[1].' '.substr($parts[2],0,-4));
+            $docId = add_document($course, $subDir.'/'.$file, 'file', $fileSize, $parts[1].' '.substr($parts[2], 0, -4));
             if ($docId > 0) {
                 if (!is_file($baseDir.$uploadPath.$file)) {
                     error_log($baseDir.$uploadPath.$file.' does not exists in '.__FILE__);
@@ -120,7 +121,7 @@ function import_pdfs($file, $subDir = '/')
                     error_log('Destination '.api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$subDir.' is NOT writeable in '.__FILE__);
                 }
                 // Place each file in its folder in each course
-                $move = rename($baseDir.$uploadPath.$file, api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$subDir.'/'.$file);
+                rename($baseDir.$uploadPath.$file, api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$subDir.'/'.$file);
                 api_item_property_update($course, TOOL_DOCUMENT, $docId, 'DocumentAdded', api_get_user_id());
                 // Redo visibility
                 api_set_default_visibility($docId, TOOL_DOCUMENT);
@@ -134,7 +135,7 @@ function import_pdfs($file, $subDir = '/')
                 $session_id = api_get_session_id();
                 $course_description->set_course_id($course['real_id']);
                 $course_description->set_session_id($session_id);
-                $course_description->set_title('Presentación de la asignatura');
+                $course_description->set_title('Course presentation');
                 $course_description->set_content($link);
                 $course_description->set_description_type(1);
                 $course_description->insert();

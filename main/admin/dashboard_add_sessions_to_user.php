@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	Interface for assigning sessions to Human Resources Manager
- *	@package chamilo.admin
+ *  Interface for assigning sessions to Human Resources Manager
+ *  @package chamilo.admin
  */
 // resetting the course id
 $cidReset = true;
@@ -46,7 +46,7 @@ if (UserManager::is_admin($user_id)) {
 }
 
 $add_type = 'multiple';
-if (isset($_GET['add_type']) && $_GET['add_type']!='') {
+if (isset($_GET['add_type']) && $_GET['add_type'] != '') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -82,13 +82,17 @@ function search_sessions($needle, $type)
             $sql = "SELECT s.id, s.name FROM $tbl_session s
                     WHERE  s.name LIKE '$needle%' $without_assigned_sessions ";
         }
-        $rs	= Database::query($sql);
+        $rs = Database::query($sql);
         $return .= '<select class="form-control" id="origin" name="NoAssignedSessionsList[]" multiple="multiple" size="20">';
-        while($session = Database :: fetch_array($rs)) {
-            $return .= '<option value="'.$session['id'].'" title="'.htmlspecialchars($session['name'],ENT_QUOTES).'">'.$session['name'].'</option>';
+        while ($session = Database :: fetch_array($rs)) {
+            $return .= '<option value="'.$session['id'].'" title="'.htmlspecialchars($session['name'], ENT_QUOTES).'">'.$session['name'].'</option>';
         }
         $return .= '</select>';
-        $xajax_response->addAssign('ajax_list_sessions_multiple','innerHTML',api_utf8_encode($return));
+        $xajax_response->addAssign(
+            'ajax_list_sessions_multiple',
+            'innerHTML',
+            api_utf8_encode($return)
+        );
     }
 
     return $xajax_response;
@@ -96,8 +100,7 @@ function search_sessions($needle, $type)
 
 $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
@@ -147,7 +150,7 @@ function remove_item(origin) {
 }
 </script>';
 
-$formSent=0;
+$formSent = 0;
 $firstLetterSession = isset($_POST['firstLetterSession']) ? $_POST['firstLetterSession'] : null;
 $errorMsg = '';
 $UserList = array();
@@ -171,13 +174,14 @@ Display::display_header($tool_name);
 
 // Actions
 if ($user_info['status'] != SESSIONADMIN) {
-    $actionsLeft = '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">' .
-        Display::return_icon('add-user.png', get_lang('AssignUsers'), null, ICON_SIZE_MEDIUM ) . '</a>';
-    $actionsLeft .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">' .
-        Display::return_icon('course-add.png', get_lang('AssignCourses'), null, ICON_SIZE_MEDIUM) . '</a>';
+    $actionsLeft = '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.
+        Display::return_icon('add-user.png', get_lang('AssignUsers'), null, ICON_SIZE_MEDIUM).'</a>';
+    $actionsLeft .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.
+        Display::return_icon('course-add.png', get_lang('AssignCourses'), null, ICON_SIZE_MEDIUM).'</a>';
+
+    echo Display::toolbarAction('toolbar-dashboard', array($actionsLeft));
 }
 
-echo Display::toolbarAction('toolbar-dashboard', array($actionsLeft));
 echo Display::page_header(
     sprintf(get_lang('AssignSessionsToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])),
     null,
@@ -189,7 +193,7 @@ $assigned_sessions_id = array_keys($assigned_sessions_to_hrm);
 
 $without_assigned_sessions = '';
 if (count($assigned_sessions_id) > 0) {
-    $without_assigned_sessions = " AND s.id NOT IN (".implode(',',$assigned_sessions_id).") ";
+    $without_assigned_sessions = " AND s.id NOT IN (".implode(',', $assigned_sessions_id).") ";
 }
 
 $needle = '%';
@@ -210,9 +214,9 @@ if (api_is_multiple_url_enabled()) {
 		    WHERE  s.name LIKE '$needle%' $without_assigned_sessions
             ORDER BY s.name";
 }
-$result	= Database::query($sql);
+$result = Database::query($sql);
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" style="margin:0px;" <?php if($ajax_search){ echo ' onsubmit="valide();"';}?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" style="margin:0px;" <?php if ($ajax_search) { echo ' onsubmit="valide();"'; }?>>
     <input type="hidden" name="formSent" value="1" />
 
     <div class="row">
@@ -223,7 +227,7 @@ $result	= Database::query($sql);
                     <?php
                     while ($enreg = Database::fetch_array($result)) {
                     ?>
-                        <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"';?>>
+                        <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'], ENT_QUOTES).'"'; ?>>
                             <?php echo $enreg['name']; ?>
                         </option>
                     <?php } ?>
@@ -233,7 +237,7 @@ $result	= Database::query($sql);
         <div class="col-md-4">
             <div class="code-course">
                 <?php if ($add_type == 'multiple') { ?>
-                <p><?php echo get_lang('FirstLetterSession');?> :</p>
+                <p><?php echo get_lang('FirstLetterSession'); ?> :</p>
                 <select class="selectpicker form-control" name="firstLetterSession" onchange = "xajax_search_sessions(this.value, 'multiple')">
                     <option value="%">--</option>
                         <?php  echo Display :: get_alphabet_options($firstLetterSession); ?>
@@ -282,9 +286,9 @@ $result	= Database::query($sql);
              <select id='destination' name="SessionsList[]" multiple="multiple" size="20" style="width:320px;">
                 <?php
                 if (is_array($assigned_sessions_to_hrm)) {
-                    foreach($assigned_sessions_to_hrm as $enreg) {
+                    foreach ($assigned_sessions_to_hrm as $enreg) {
                         ?>
-                        <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"'; ?>>
+                        <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'], ENT_QUOTES).'"'; ?>>
                             <?php echo $enreg['name'] ?>
                         </option>
                 <?php }

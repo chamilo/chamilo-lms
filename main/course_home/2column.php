@@ -4,13 +4,13 @@
 /**
  *  HOME PAGE FOR EACH COURSE
  *
- *	This page, included in every course's index.php is the home
- *	page. To make administration simple, the teacher edits his
- *	course from the home page. Only the login detects that the
- *	visitor is allowed to activate, deactivate home page links,
- *	access to the teachers tools (statistics, edit forums...).
+ *  This page, included in every course's index.php is the home
+ *  page. To make administration simple, the teacher edits his
+ *  course from the home page. Only the login detects that the
+ *  visitor is allowed to activate, deactivate home page links,
+ *  access to the teachers tools (statistics, edit forums...).
  *
- *	@package chamilo.course_home
+ * @package chamilo.course_home
  */
 
 /* 	Work with data post askable by admin of course (franglais, clean this) */
@@ -24,7 +24,6 @@ if (api_is_allowed_to_edit(null, true)) {
     /*
      * Display message to confirm that a tool must be hidden from the list of available tools (visibility 0,1->2)
      */
-
     if (isset($_GET['remove']) && $_GET['remove']) {
         $msgDestroy = get_lang('DelLk').'<br />';
         $msgDestroy .= '<a href="'.api_get_self().'">'.get_lang('No').'</a>&nbsp;|&nbsp;';
@@ -56,7 +55,7 @@ if (api_is_platform_admin()) {
     // Show message to confirm that a tool it to be hidden from available tools
     // visibility 0,1->2
     if (!empty($_GET['askDelete'])) {
-        $content .='<div id="toolhide">'.get_lang('DelLk').'<br />&nbsp;&nbsp;&nbsp;
+        $content .= '<div id="toolhide">'.get_lang('DelLk').'<br />&nbsp;&nbsp;&nbsp;
             <a href="'.api_get_self().'">'.get_lang('No').'</a>&nbsp;|&nbsp;
             <a href="'.api_get_self().'?delete=yes&id='.intval($_GET['id']).'">'.get_lang('Yes').'</a>
         </div>';
@@ -92,7 +91,7 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 
     /*	INACTIVE TOOLS - HIDDEN (GREY) LINKS */
 
-    $content .=	"<tr><td colspan=\"4\"><hr style='color:\"#4171B5\"' noshade=\"noshade\" size=\"1\" /></td></tr>\n".
+    $content .= "<tr><td colspan=\"4\"><hr style='color:\"#4171B5\"' noshade=\"noshade\" size=\"1\" /></td></tr>\n".
             "<tr>\n".
             "<td colspan=\"4\">\n".
             "<div style=\"margin-bottom: 10px;\"><font color=\"#808080\">\n".get_lang('InLnk')."</font></div>".
@@ -100,15 +99,14 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
             "</tr>";
 
     $content .= CourseHome::show_tool_2column(TOOL_PUBLIC_BUT_HIDDEN);
-
-    $content .=	"</table>";
-    $content .=	"</div> ";
+    $content .= "</table>";
+    $content .= "</div> ";
 }
 
 /*	Tools for platform admin only */
 
 if (api_is_platform_admin() && api_is_allowed_to_edit(null, true) && !api_is_coach()) {
-    $content .='<div class="platformadminview">
+    $content .= '<div class="platformadminview">
     <span class="viewcaption">'.get_lang('PlatformAdminOnly').'</span>
     <table width="100%">
         '.CourseHome::show_tool_2column(TOOL_PLATFORM_ADMIN).'

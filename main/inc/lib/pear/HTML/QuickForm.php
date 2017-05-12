@@ -585,6 +585,12 @@ class HTML_QuickForm extends HTML_Common
             $this->_elementIndex[$elementName] = end($elKeys);
         }
 
+        $elId = $elementObject->getAttribute('id');
+
+        if (empty($elId)) {
+            $elementObject->setAttribute('id', "{$this->getAttribute('name')}_$elementName");
+        }
+
         if ($this->_freezeAll) {
             $elementObject->freeze();
         }
@@ -1003,6 +1009,7 @@ class HTML_QuickForm extends HTML_Common
      * @param    string $validation (optional)Where to perform validation: "server", "client"
      * @param    boolean $reset Client-side validation: reset the form element to its original value if there is an error?
      * @param    boolean $force Force the rule to be applied, even if the target form element does not exist
+     * @param array|string $dependent needed when comparing values
      * @since    1.0
      * @access   public
      */
@@ -1452,14 +1459,14 @@ class HTML_QuickForm extends HTML_Common
                 if (!$this->isElementRequired($target)) {
                     if (!isset($submitValue) || '' == $submitValue) {
                         continue 2;
-                    // Fix for bug #3501: we shouldn't validate not uploaded files, either.
-                    // Unfortunately, we can't just use $element->isUploadedFile() since
-                    // the element in question can be buried in group. Thus this hack.
-                    // See also bug #12014, we should only consider a file that has
-                    // status UPLOAD_ERR_NO_FILE as not uploaded, in all other cases
-                    // validation should be performed, so that e.g. 'maxfilesize' rule
-                    // will display an error if status is UPLOAD_ERR_INI_SIZE
-                    // or UPLOAD_ERR_FORM_SIZE
+                        // Fix for bug #3501: we shouldn't validate not uploaded files, either.
+                        // Unfortunately, we can't just use $element->isUploadedFile() since
+                        // the element in question can be buried in group. Thus this hack.
+                        // See also bug #12014, we should only consider a file that has
+                        // status UPLOAD_ERR_NO_FILE as not uploaded, in all other cases
+                        // validation should be performed, so that e.g. 'maxfilesize' rule
+                        // will display an error if status is UPLOAD_ERR_INI_SIZE
+                        // or UPLOAD_ERR_FORM_SIZE
                     } elseif (is_array($submitValue)) {
                         if (false === ($pos = strpos($target, '['))) {
                             $isUpload = !empty($this->_submitFiles[$target]);
@@ -1480,16 +1487,30 @@ class HTML_QuickForm extends HTML_Common
                     }
                 }
 
-                if (isset($rule['dependent']) && is_array($rule['dependent'])) {
+                if (isset($rule['dependent'])) {
                     $values = array($submitValue);
-                    foreach ($rule['dependent'] as $elName) {
-                        $values[] = $this->getSubmitValue($elName);
+                    if (is_array($rule['dependent'])) {
+                        foreach ($rule['dependent'] as $elName) {
+                            $values[] = $this->getSubmitValue($elName);
+                        }
+                    } else {
+                        $values[] = $rule['dependent'];
                     }
-                    $result = $registry->validate($rule['type'], $values, $rule['format'], true);
+                    $result = $registry->validate(
+                        $rule['type'],
+                        $values,
+                        $rule['format'],
+                        true
+                    );
                 } elseif (is_array($submitValue) && !isset($rule['howmany'])) {
                     $result = $registry->validate($rule['type'], $submitValue, $rule['format'], true);
                 } else {
-                    $result = $registry->validate($rule['type'], $submitValue, $rule['format'], false);
+                    $result = $registry->validate(
+                        $rule['type'],
+                        $submitValue,
+                        $rule['format'],
+                        false
+                    );
                 }
 
                 if (!$result || (!empty($rule['howmany']) && $rule['howmany'] > (int)$result)) {
@@ -1519,7 +1540,7 @@ class HTML_QuickForm extends HTML_Common
     /**
      * Displays elements without HTML input tags
      *
-     * @param    mixed   $elementList       array or string of element(s) to be frozen
+     * @param    mixed $elementList array or string of element(s) to be frozen
      * @since     1.0
      * @access   public
      * @throws   HTML_QuickForm_Error

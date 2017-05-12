@@ -121,7 +121,7 @@ class SkillRelUser
 
     /**
      * Get user
-     * @return \User
+     * @return User
      */
     public function getUser()
     {
@@ -339,7 +339,7 @@ class SkillRelUser
      */
     public function getIssueUrl()
     {
-        return api_get_path(WEB_PATH) . "badge/{$this->id}";
+        return api_get_path(WEB_PATH)."badge/{$this->id}";
     }
 
     /**
@@ -348,7 +348,7 @@ class SkillRelUser
      */
     public function getIssueUrlAll()
     {
-        return api_get_path(WEB_PATH) . "skill/{$this->skill->getId()}/user/{$this->user->getId()}";
+        return api_get_path(WEB_PATH)."skill/{$this->skill->getId()}/user/{$this->user->getId()}";
     }
 
     /**
@@ -357,7 +357,7 @@ class SkillRelUser
      */
     public function getAssertionUrl()
     {
-        $url = api_get_path(WEB_CODE_PATH) . "badge/assertion.php?";
+        $url = api_get_path(WEB_CODE_PATH)."badge/assertion.php?";
 
         $url .= http_build_query(array(
             'user' => $this->user->getId(),
@@ -390,7 +390,7 @@ class SkillRelUser
 
     /**
      * Calculate the average value from the feedback comments
-     * @return int
+     * @return string
      */
     public function getAverage()
     {

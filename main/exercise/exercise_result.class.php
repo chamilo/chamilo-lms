@@ -50,7 +50,7 @@ class ExerciseResult
         $TBL_TABLE_LP_MAIN = Database::get_course_table(TABLE_LP_MAIN);
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
         $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $TBL_TRACK_ATTEMPT_RECORDING = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
         $cid = api_get_course_id();
         $course_id = api_get_course_int_id();
@@ -179,7 +179,7 @@ class ExerciseResult
                             FROM $TBL_TRACK_ATTEMPT_RECORDING
                             WHERE 
                                 author != '' AND 
-                                exe_id = ".Database :: escape_string($result['exid'])."
+                                exe_id = ".Database::escape_string($result['exid'])."
                             LIMIT 1";
                 $query = Database::query($sql_exe);
 
@@ -374,7 +374,7 @@ class ExerciseResult
 
             // Email
             $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';
-            $data .= str_replace("\r\n",'  ',implode(", ", GroupManager :: get_user_group_name($row['user_id']))).';';
+            $data .= str_replace("\r\n",'  ',implode(", ", GroupManager::get_user_group_name($row['user_id']))).';';
 
             if ($export_user_fields) {
                 //show user fields data, if any, for this user

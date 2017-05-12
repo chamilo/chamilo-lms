@@ -2,11 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * 	File containing the FreeAnswer class.
- * 	This class allows to instantiate an object of type FREE_ANSWER,
- * 	extending the class question
- * 	@package chamilo.exercise
- * 	@author Eric Marguin
+ * File containing the FreeAnswer class.
+ * This class allows to instantiate an object of type FREE_ANSWER,
+ * extending the class question
+ * @package chamilo.exercise
+ * @author Eric Marguin
  */
 class FreeAnswer extends Question
 {
@@ -59,9 +59,9 @@ class FreeAnswer extends Question
             $score['revised'] = false;
         }
         $header = parent::return_header($feedback_type, $counter, $score);
-        $header .= '<table class="' . $this->question_table_class . '" >
+        $header .= '<table class="'.$this->question_table_class.'" >
         <tr>
-        <th>' . get_lang("Answer") . '</th>
+        <th>' . get_lang("Answer").'</th>
         </tr>';
 
         return $header;

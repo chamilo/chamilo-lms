@@ -45,10 +45,8 @@ $htmlHeadXtra[] = '
 function add_user_to_url(code, content) {
 	document.getElementById("course_to_add").value = "";
 	document.getElementById("ajax_list_courses").innerHTML = "";
-
 	destination = document.getElementById("destination_users");
 	destination.options[destination.length] = new Option(content,code);
-
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
 }
@@ -56,7 +54,7 @@ function add_user_to_url(code, content) {
 function send() {
 	if (document.formulaire.access_url_id.value!=0) {
 		document.formulaire.form_sent.value=0;
-		document.formulaire.add_type.value=\'' . $add_type . '\';
+		document.formulaire.add_type.value=\'' . $add_type.'\';
 		document.formulaire.submit();
 	}
 }
@@ -102,7 +100,7 @@ Display::display_header($tool_name);
 echo '<div class="actions">';
 echo Display::url(
     Display::return_icon('view_more_stats.gif', get_lang('AddUserGroupToURL'), ''),
-    api_get_path(WEB_CODE_PATH) . 'admin/access_url_add_usergroup_to_url.php'
+    api_get_path(WEB_CODE_PATH).'admin/access_url_add_usergroup_to_url.php'
 );
 echo '</div>';
 
@@ -140,7 +138,7 @@ if ($add_type == 'multiple') {
             <?php
             echo Display::toolbarButton(
                 get_lang('SessionAddTypeUnique'),
-                api_get_self() . '?' . http_build_query([
+                api_get_self().'?'.http_build_query([
                     'add_type' => 'unique',
                     'access_url_id' => $access_url_id
                 ]),
@@ -150,7 +148,7 @@ if ($add_type == 'multiple') {
             );
             echo Display::toolbarButton(
                 get_lang('SessionAddTypeMultiple'),
-                api_get_self() . '?' . http_build_query([
+                api_get_self().'?'.http_build_query([
                     'add_type' => 'multiple',
                     'access_url_id' => $access_url_id
                 ]),
@@ -204,7 +202,7 @@ $url_list = UrlManager::get_url_data();
         <input type="hidden" name="add_type" value="<?php echo $add_type ?>"/>
         <?php
         if (!empty($errorMsg)) {
-            Display::display_normal_message($errorMsg); //main API
+            Display::addFlash(Display::return_message($errorMsg, 'normal')); //main API
         }
         ?>
         <div class="row">

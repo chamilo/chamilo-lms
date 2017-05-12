@@ -18,9 +18,9 @@ class SurveyTree
     public function __construct()
     {
         // Database table definitions
-        $table_survey = Database :: get_course_table(TABLE_SURVEY);
-        $table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
-        $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+        $table_survey = Database::get_course_table(TABLE_SURVEY);
+        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+        $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
         // searching
         $search_restriction = SurveyUtil::survey_search_restriction();
@@ -47,20 +47,20 @@ class SurveyTree
         $res = Database::query($sql);
         $refs = array();
         $list = array();
-        $plain_array=array();
+        $plain_array = array();
 
         while ($survey = Database::fetch_array($res, 'ASSOC')) {
-            $plain_array[$survey['survey_id']]=$survey;
-            $surveys_parents[]=$survey['survey_version'];
-            $thisref = &$refs[ $survey['survey_id'] ];
+            $plain_array[$survey['survey_id']] = $survey;
+            $surveys_parents[] = $survey['survey_version'];
+            $thisref = &$refs[$survey['survey_id']];
             $thisref['parent_id'] = $survey['parent_id'];
             $thisref['name'] = $survey['name'];
             $thisref['id'] = $survey['survey_id'];
             $thisref['survey_version'] = $survey['survey_version'];
             if ($survey['parent_id'] == 0) {
-                $list[ $survey['survey_id'] ] = &$thisref;
+                $list[$survey['survey_id']] = &$thisref;
             } else {
-                $refs[ $survey['parent_id'] ]['children'][ $survey['survey_id'] ] = &$thisref;
+                $refs[$survey['parent_id']]['children'][$survey['survey_id']] = &$thisref;
             }
         }
         $this->surveylist = $list;
@@ -79,7 +79,7 @@ class SurveyTree
     public function getParentId($id)
     {
         $node = $this->plainsurveylist[$id];
-        if (is_array($node)&& !empty($node['parent_id'])) {
+        if (is_array($node) && !empty($node['parent_id'])) {
             return $node['parent_id'];
         } else {
             return -1;
@@ -99,12 +99,12 @@ class SurveyTree
         if (is_array($list)) {
             foreach ($list as $key => $node) {
                 if (isset($node['children']) && is_array($node['children'])) {
-                    $result[$key]= $node['name'];
+                    $result[$key] = $node['name'];
                     $re = self::createList($node['children']);
                     if (!empty($re)) {
                         if (is_array($re)) {
                             foreach ($re as $key => $r) {
-                                $result[$key] = '' . $r;
+                                $result[$key] = ''.$r;
                             }
                         } else {
                             $result[] = $re;

@@ -98,7 +98,7 @@ class scormOrganization
         foreach ($this->items as $id => $dummy) {
             $abs_order = 0;
             // Passes the array as a pointer so it is modified in $list directly.
-            $this->items[$id]->get_flat_list($list,$abs_order, $i, 0);
+            $this->items[$id]->get_flat_list($list, $abs_order, $i, 0);
             $i++;
         }
 

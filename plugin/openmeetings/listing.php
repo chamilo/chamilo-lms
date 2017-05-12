@@ -8,7 +8,7 @@
  */
 
 $course_plugin = 'openmeetings'; //needed in order to load the plugin lang variables
-require_once dirname(__FILE__).'/config.php';
+require_once __DIR__.'/config.php';
 $plugin = \OpenMeetingsPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 $tpl = new Template($tool_name);

@@ -550,17 +550,17 @@ class AttendanceController
             }
         }
         $max_cols_per_page = 12; //10 dates + 2 name and number
-        $max_dates_per_page = $max_dates_per_page_original = $max_cols_per_page - 2;//10
+        $max_dates_per_page = $max_dates_per_page_original = $max_cols_per_page - 2; //10
         $rows = count($data_table);
 
         if ($cols > $max_cols_per_page) {
-            $number_tables = round(($cols-2)/$max_dates_per_page);
+            $number_tables = round(($cols - 2) / $max_dates_per_page);
             $headers = $data_table[0];
             $all = array();
             $tables = array();
             $changed = 1;
 
-            for ($i= 0; $i <= $rows; $i++) {
+            for ($i = 0; $i <= $rows; $i++) {
                 $row = isset($data_table[$i]) ? $data_table[$i] : null;
                 $key = 1;
                 $max_dates_per_page = 10;
@@ -571,7 +571,7 @@ class AttendanceController
                     foreach ($item as $value) {
                         if ($count_j >= $max_dates_per_page) {
                             $key++;
-                            $max_dates_per_page = $max_dates_per_page_original*$key;
+                            $max_dates_per_page = $max_dates_per_page_original * $key;
                             //magic hack
                             $tables[$key][$i][] = $tables[1][$i][0];
                             $tables[$key][$i][] = $tables[1][$i][1];
@@ -599,7 +599,7 @@ class AttendanceController
             'filename' => get_lang('Attendance').'-'.api_get_local_time(),
             'pdf_title' => $courseInfo['title'],
             'course_code' => $courseInfo['code'],
-            'add_signatures' => true,
+            'add_signatures' => ['Drh', 'Teacher', 'Date'],
             'orientation' => 'landscape',
             'pdf_teachers' => $teacherName,
             'pdf_course_category' => $courseCategory['name'],
@@ -628,8 +628,8 @@ class AttendanceController
             $form = new FormValidator(
                 'search',
                 'post',
-                api_get_self() . '?' . api_get_cidreq(
-                ) . '&action=calendar_logins'
+                api_get_self().'?'.api_get_cidreq(
+                ).'&action=calendar_logins'
             );
             $form->addDateRangePicker('range', get_lang('DateRange'));
             $form->addButton('submit', get_lang('Submit'));
@@ -642,11 +642,11 @@ class AttendanceController
             }
             $formToDisplay = $form->returnForm();
         } else {
-           if (!empty($sessionId)) {
-               $sessionInfo = api_get_session_info($sessionId);
-               $startDate = $sessionInfo['access_start_date'];
-               $endDate = $sessionInfo['access_end_date'];
-           }
+            if (!empty($sessionId)) {
+                $sessionInfo = api_get_session_info($sessionId);
+                $startDate = $sessionInfo['access_start_date'];
+                $endDate = $sessionInfo['access_end_date'];
+            }
         }
 
         $attendance = new Attendance();

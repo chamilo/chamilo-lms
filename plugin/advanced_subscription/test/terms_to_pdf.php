@@ -5,7 +5,7 @@
  * @package chamilo.plugin.advanced_subscription
  */
 
-require_once __DIR__ . '/../config.php';
+require_once __DIR__.'/../config.php';
 
 // Protect test
 api_protect_admin_script();
@@ -39,9 +39,9 @@ if (!empty($data['sessionId']) && !empty($data['studentUserId'])) {
         $tpl->assign('termsContent', $termsAndConditions);
         $termsAndConditions = $tpl->fetch('/advanced_subscription/views/terms_and_conditions_to_pdf.tpl');
         $pdf = new PDF();
-        $filename = 'terms' . sha1(rand(0,99999));
+        $filename = 'terms'.sha1(rand(0, 99999));
         $pdf->content_to_pdf($termsAndConditions, null, $filename, null, 'F');
-        $fileDir = api_get_path(WEB_ARCHIVE_PATH) . $filename . '.pdf';
+        $fileDir = api_get_path(WEB_ARCHIVE_PATH).$filename.'.pdf';
         echo '<pre>', print_r($fileDir, 1), '</pre>';
     }
 }

@@ -123,7 +123,7 @@ class EventsMail
 
                 // If the mail only need to be send once (we know that thanks to the events.conf), we log it in the table
                 if ($event_config[$event_name]["sending_mail_once"]) {
-                    $sql = 'INSERT INTO ' . Database::get_main_table(TABLE_EVENT_SENT) . ' (user_from, user_to, event_type_name)
+                    $sql = 'INSERT INTO '.Database::get_main_table(TABLE_EVENT_SENT).' (user_from, user_to, event_type_name)
                             VALUES ('.$event_data["user_id"].', '.$id.' ,"'.Database::escape_string($event_name).'")
                     ';
                     Database::query($sql);
@@ -134,9 +134,9 @@ class EventsMail
         // Second, we send to people linked to the event
         // So, we get everyone
         $sql = 'SELECT u.user_id, u.language, u.email, u.firstname, u.lastname
-                FROM ' . Database::get_main_table(TABLE_EVENT_TYPE_REL_USER) . ' ue
+                FROM ' . Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' ue
                 INNER JOIN '.Database::get_main_table(TABLE_MAIN_USER).' u ON u.user_id = ue.user_id
-                WHERE event_type_name = "' . $event_name . '"';
+                WHERE event_type_name = "' . $event_name.'"';
         $result = Database::store_result(Database::query($sql), 'ASSOC');
         // for each of the linked users
         foreach ($result as $key => $value) {
@@ -176,7 +176,7 @@ class EventsMail
 
             // If the mail only need to be send once (we know that thanks to the events.conf, we log it in the table
             if ($event_config[$event_name]["sending_mail_once"]) {
-                $sql = 'INSERT INTO ' . Database::get_main_table(TABLE_EVENT_SENT) . '
+                $sql = 'INSERT INTO '.Database::get_main_table(TABLE_EVENT_SENT).'
                     (user_from, user_to, event_type_name)
                     VALUES ('.$event_data["user_id"].', '.$value["user_id"].' , "'.Database::escape_string($event_name).'");
                     ';
@@ -201,16 +201,16 @@ class EventsMail
         $current_language = api_get_interface_language();
 
         $sql = 'SELECT COUNT(*) as total
-                FROM ' . Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE) . ' em
-                INNER JOIN ' . Database::get_main_table(TABLE_MAIN_LANGUAGE) . ' l
+                FROM ' . Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).' em
+                INNER JOIN ' . Database::get_main_table(TABLE_MAIN_LANGUAGE).' l
                 ON em.language_id = l.id
                 WHERE
-                    em.event_type_name = "' . $event_name . '" and
+                    em.event_type_name = "' . $event_name.'" and
                     l.dokeos_folder = "'.$current_language.'" and
                     em.activated = 1';
 
         $exists = Database::store_result(Database::query($sql), 'ASSOC');
-        if ($exists[0]["total"])  {
+        if ($exists[0]["total"]) {
             return true;
         } else {
             return false;
@@ -227,12 +227,12 @@ class EventsMail
     private static function getMessage($event_name, $language)
     {
         $sql = 'SELECT message, subject, l.dokeos_folder
-                FROM ' . Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE) . ' em
-                INNER JOIN ' . Database::get_main_table(TABLE_MAIN_LANGUAGE) . ' l
+                FROM ' . Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).' em
+                INNER JOIN ' . Database::get_main_table(TABLE_MAIN_LANGUAGE).' l
                 ON em.language_id = l.id
                 WHERE
-                    em.event_type_name = "' . $event_name . '" AND
-                    (l.dokeos_folder = "' . $language . '" OR l.dokeos_folder = "english") AND
+                    em.event_type_name = "' . $event_name.'" AND
+                    (l.dokeos_folder = "' . $language.'" OR l.dokeos_folder = "english") AND
                     em.message <> ""
                 ';
         return Database::store_result(Database::query($sql), 'ASSOC');
@@ -273,8 +273,8 @@ class EventsMail
     private static function formatMessage(&$message, &$subject, $event_config, $event_name, &$event_data)
     {
         foreach ($event_config[$event_name]["available_keyvars"] as $key => $word) {
-            $message = str_replace('((' . $key . '))', $event_data[$word], $message);
-            $subject = str_replace('((' . $key . '))', $event_data[$word], $subject);
+            $message = str_replace('(('.$key.'))', $event_data[$word], $message);
+            $subject = str_replace('(('.$key.'))', $event_data[$word], $subject);
         }
     }
 }

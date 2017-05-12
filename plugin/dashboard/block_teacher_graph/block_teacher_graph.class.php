@@ -29,10 +29,10 @@ class BlockTeacherGraph extends Block
 	/**
 	 * Controller
 	 */
-    public function __construct ($user_id)
+    public function __construct($user_id)
     {
-    	$this->user_id  = $user_id;
-    	$this->path 	= 'block_teacher_graph';
+    	$this->user_id = $user_id;
+    	$this->path = 'block_teacher_graph';
     	if ($this->is_block_visible_for_user($user_id)) {
             $this->teachers = UserManager::get_users_followed_by_drh($user_id, COURSEMANAGER);
     	}
@@ -68,7 +68,7 @@ class BlockTeacherGraph extends Block
 		$html = '
                 <div class="panel panel-default" id="intro">
                     <div class="panel-heading">'.get_lang('TeachersInformationsGraph').'
-                        <div class="pull-right"><a class="btn btn-danger btn-xs"  onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
+                        <div class="pull-right"><a class="btn btn-danger btn-xs"  onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
                         <em class="fa fa-times"></em>
                         </a></div>
                     </div>
@@ -107,7 +107,7 @@ class BlockTeacherGraph extends Block
 				foreach ($a_last_week as $day) {
 					// day is received as y-m-d 12:00:00
 					$start_date = api_get_utc_datetime($day);
-					$end_date = api_get_utc_datetime($day+(3600*24-1));
+					$end_date = api_get_utc_datetime($day + (3600 * 24 - 1));
 
 					$time_on_platform_by_day = Tracking::get_time_spent_on_the_platform($user_id, 'custom', $start_date, $end_date);
 					$hours = floor($time_on_platform_by_day / 3600);
@@ -117,26 +117,26 @@ class BlockTeacherGraph extends Block
 				$dataSet->addPoints($time_by_days, $username);
 			}
 
-			$last_week 	 = date('Y-m-d',$a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
+			$last_week = date('Y-m-d', $a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
 			$days_on_week = array();
 			foreach ($a_last_week as $weekday) {
-				$days_on_week[] = date('d/m',$weekday);
+				$days_on_week[] = date('d/m', $weekday);
 			}
 
 			$dataSet->addPoints($days_on_week, 'Days');
 			$dataSet->setAbscissaName($last_week);
 			$dataSet->setAxisName(0, get_lang('Minutes'));
             $dataSet->setAbscissa('Days');
-            $dataSet->loadPalette(api_get_path(SYS_CODE_PATH) . 'palettes/pchart/default.color', true);
+            $dataSet->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
 
             // Cache definition
             $cachePath = api_get_path(SYS_ARCHIVE_PATH);
             $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
             $chartHash = $myCache->getHash($dataSet);
             if ($myCache->isInCache($chartHash)) {
-                $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+                $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
                 $myCache->saveFromCache($chartHash, $imgPath);
-                $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+                $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
             } else {
 
                 /* Create the pChart object */
@@ -153,7 +153,7 @@ class BlockTeacherGraph extends Block
                 $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array('R' => 0, 'G' => 0, 'B' => 0));
 
                 /* Set the default font */
-                $myPicture->setFontProperties(array('FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf', 'FontSize' => 10));
+                $myPicture->setFontProperties(array('FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf', 'FontSize' => 10));
 
                 /* Do NOT Write the chart title */
 
@@ -189,11 +189,11 @@ class BlockTeacherGraph extends Block
 
                 /* Write and save into cache */
                 $myCache->writeToCache($chartHash, $myPicture);
-                $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+                $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
                 $myCache->saveFromCache($chartHash, $imgPath);
-                $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+                $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
             }
-            $graph = '<img src="' . $imgPath . '" >';
+            $graph = '<img src="'.$imgPath.'" >';
 		} else {
 			$graph = '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'), 'UTF-8').'</p>';
 		}

@@ -22,13 +22,13 @@ $interbreadcrumb[] = array(
     'name' => get_lang('SocialNetwork'),
 );
 
-$query = isset($_GET['q']) ? Security::remove_XSS($_GET['q']): null;
-$query_search_type = isset($_GET['search_type']) && in_array($_GET['search_type'], array('0','1','2')) ? $_GET['search_type'] : null;
+$query = isset($_GET['q']) ? Security::remove_XSS($_GET['q']) : null;
+$query_search_type = isset($_GET['search_type']) && in_array($_GET['search_type'], array('0', '1', '2')) ? $_GET['search_type'] : null;
 $extra_fields = UserManager::get_extra_filtrable_fields();
 $query_vars = array('q' => $query, 'search_type' => $query_search_type);
 if (!empty($extra_fields)) {
     foreach ($extra_fields as $extra_field) {
-        $field_name = 'field_' . $extra_field['variable'];
+        $field_name = 'field_'.$extra_field['variable'];
         if (isset($_GET[$field_name]) && $_GET[$field_name] != '0') {
             $query_vars[$field_name] = $_GET[$field_name];
         }
@@ -47,10 +47,10 @@ $totalUsers = array();
 $usergroup = new UserGroup();
 
 // I'm searching something
-if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2)) {
+if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2)) {
     $itemPerPage = 6;
 
-    if ($_GET['search_type']=='0' || $_GET['search_type']=='1') {
+    if ($_GET['search_type'] == '0' || $_GET['search_type'] == '1') {
         $page = isset($_GET['users_page_nr']) ? intval($_GET['users_page_nr']) : 1;
         $totalUsers = UserManager::get_all_user_tags(
             $_GET['q'],
@@ -65,7 +65,7 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2)) {
         $users = UserManager::get_all_user_tags($_GET['q'], 0, $from, $itemPerPage);
     }
 
-    if ($_GET['search_type']=='0' || $_GET['search_type']=='2') {
+    if ($_GET['search_type'] == '0' || $_GET['search_type'] == '2') {
         $pageGroup = isset($_GET['groups_page_nr']) ? intval($_GET['groups_page_nr']) : 1;
         // Groups
         $fromGroups = intval(($pageGroup - 1) * $itemPerPage);
@@ -90,7 +90,7 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2)) {
 
             // Show send invitation icon if they are not friends yet
             if ($relation_type != 3 && $relation_type != 4 && $user_info['user_id'] != api_get_user_id()) {
-                $sendInvitation = '<a href="#" class="'.$buttonClass.' btn-to-send-invitation" data-send-to="' . $user_info['user_id'] . '">
+                $sendInvitation = '<a href="#" class="'.$buttonClass.' btn-to-send-invitation" data-send-to="'.$user_info['user_id'].'">
                              <em class="fa fa-user"></em> '.get_lang('SendInvitation').'</a>';
             }
 
@@ -186,7 +186,7 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2)) {
             $tags = null;
             $group['picture'] = '<img class="img-responsive img-circle" src="'.$picture['file'].'" />';
 
-            $members = Display::returnFontAwesomeIcon('user') . '( ' .$count_users_group . ' )';
+            $members = Display::returnFontAwesomeIcon('user').'( '.$count_users_group.' )';
             $item_1  = Display::tag('p', $url_open.$name.$url_close);
 
             $block_groups .= '
@@ -197,10 +197,10 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2)) {
                         </div>
                         <div class="user-info">
                             '.$item_1.'
-                            <p>' . $members . '</p>    
-                            <p>' . $group['description'] . '</p>
-                            <p>' . $tags . '</p>
-                            <p>' . $url_open.get_lang('SeeMore') . $url_close . '</p>
+                            <p>' . $members.'</p>    
+                            <p>' . $group['description'].'</p>
+                            <p>' . $tags.'</p>
+                            <p>' . $url_open.get_lang('SeeMore').$url_close.'</p>
                         </div>
                     </div>
                 </div>';
@@ -240,7 +240,7 @@ $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_search', $block_search);
 $tpl->assign('search_form', $searchForm);
 
-$formModalTpl =  new Template();
+$formModalTpl = new Template();
 $formModalTpl->assign('invitation_form', MessageManager::generate_invitation_form('send_invitation'));
 $template = $formModalTpl->get_template('social/form_modals.tpl');
 $formModals = $formModalTpl->fetch($template);

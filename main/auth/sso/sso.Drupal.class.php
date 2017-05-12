@@ -22,11 +22,11 @@ use ChamiloSession as Session;
  */
 class ssoDrupal
 {
-    public $protocol;   // 'http://',
-    public $domain;     // 'localhost/project/drupal',
-    public $auth_uri;   // '/?q=user',
+    public $protocol; // 'http://',
+    public $domain; // 'localhost/project/drupal',
+    public $auth_uri; // '/?q=user',
     public $deauth_uri; // '/?q=logout',
-    public $referer;    // http://my.chamilo.com/main/auth/profile.php
+    public $referer; // http://my.chamilo.com/main/auth/profile.php
 
     /**
      * Instanciates the object, initializing all relevant URL strings
@@ -123,9 +123,9 @@ class ssoDrupal
                     && ($sso['username'] == $uData['username'])) {
 
                     //Check if the account is active (not locked)
-                    if ($uData['active']=='1') {
+                    if ($uData['active'] == '1') {
                         // check if the expiration date has not been reached
-                        if (empty($uData['expiration_date']) OR $uData['expiration_date'] > date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
+                        if (empty($uData['expiration_date']) OR $uData['expiration_date'] > date('Y-m-d H:i:s') OR $uData['expiration_date'] == '0000-00-00 00:00:00') {
 
                             //If Multiple URL is enabled
                             if (api_get_multiple_access_url()) {
@@ -158,11 +158,11 @@ class ssoDrupal
                                             // the user credentials are OK, which
                                             // should be protection enough
                                             // against evil URL spoofing...
-                                            $sso_target = api_get_path(WEB_PATH) . base64_decode($sso['ruri']);
+                                            $sso_target = api_get_path(WEB_PATH).base64_decode($sso['ruri']);
                                         } else {
-                                            $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) . 'index.php';
+                                            $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH).'index.php';
                                         }
-                                        header('Location: '. $sso_target);
+                                        header('Location: '.$sso_target);
                                         exit;
                                     } else {
                                         // user does not have permission for this site
@@ -279,12 +279,12 @@ class ssoDrupal
         // If this is an administrator, allow him to make some changes in
         // the Chamilo profile
         if ($asAdmin && api_is_platform_admin(true)) {
-            return api_get_path(WEB_CODE_PATH) . "admin/user_edit.php?user_id=$userId";
+            return api_get_path(WEB_CODE_PATH)."admin/user_edit.php?user_id=$userId";
         }
         // If the user doesn't match a Drupal user, give the normal profile
         // link
         if ($drupalUserIdData === false) {
-            return api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+            return api_get_path(WEB_CODE_PATH).'auth/profile.php';
         }
         // In all other cases, generate a link to the Drupal profile edition
         $drupalUserId = $drupalUserIdData['value'];

@@ -58,12 +58,17 @@ class QuizQuestion extends Resource
     public $question_category;
 
     /**
-     * Create a new QuizQuestion
+     * QuizQuestion constructor.
+     * @param int $id
      * @param string $question
      * @param string $description
      * @param int $ponderation
-     * @param int $type
-     * @param int $position
+     * @param $type
+     * @param $position
+     * @param $picture
+     * @param $level
+     * @param $extra
+     * @param int $question_category
      */
     public function __construct(
         $id,
@@ -92,6 +97,14 @@ class QuizQuestion extends Resource
 
     /**
      * Add an answer to this QuizQuestion
+     * @param int $answer_id
+     * @param string $answer_text
+     * @param string $correct
+     * @param string $comment
+     * @param string $ponderation
+     * @param string $position
+     * @param string $hotspot_coordinates
+     * @param string $hotspot_type
      */
     public function add_answer(
         $answer_id,

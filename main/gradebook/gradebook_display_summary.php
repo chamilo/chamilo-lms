@@ -9,7 +9,7 @@ use ChamiloSession as Session;
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_GRADEBOOK;
+$current_course_tool = TOOL_GRADEBOOK;
 
 api_protect_course_script();
 
@@ -21,7 +21,7 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
-$cat_id = isset($_GET['selectcat']) ? (int)$_GET['selectcat'] : null;
+$cat_id = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : null;
 $action = isset($_GET['action']) && $_GET['action'] ? $_GET['action'] : null;
 
 $userList = CourseManager::get_user_list_from_course_code(
@@ -31,7 +31,6 @@ $userList = CourseManager::get_user_list_from_course_code(
 
 switch ($action) {
     case 'export_all':
-
         $params = array();
         $pdf = new PDF('A4', 'P', $params);
 
@@ -62,7 +61,6 @@ switch ($action) {
             'course_info' => '',
             'pdf_date' => '',
             'course_code' => api_get_course_id(),
-            'add_signatures' => false,
             'student_info' => null,
             'show_grade_generated_date' => true,
             'show_real_course_teachers' => false,
@@ -113,8 +111,8 @@ switch ($action) {
 
 $course_code = api_get_course_id();
 
-$interbreadcrumb[] = array('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?',	'name' => get_lang('Gradebook'));
-$interbreadcrumb[] = array('url' => '#','name' => get_lang('GradebookListOfStudentsReports'));
+$interbreadcrumb[] = array('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?', 'name' => get_lang('Gradebook'));
+$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('GradebookListOfStudentsReports'));
 
 $this_section = SECTION_COURSES;
 
@@ -131,7 +129,7 @@ if (count($userList) > 0) {
 }
 echo '</div>';
 
-if (count($userList) == 0 ) {
+if (count($userList) == 0) {
     echo Display::display_warning_message(get_lang('NoResultsAvailable'));
 } else {
     echo '<br /><br /><table class="data_table">';

@@ -27,11 +27,12 @@ class Promotion
     private $description;
 
     /**
-     * @var integer
+     * @var Career
      *
-     * @ORM\Column(name="career_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Career")
+     * @ORM\JoinColumn(name="career_id", referencedColumnName="id")
      */
-    private $careerId;
+    private $career;
 
     /**
      * @var integer
@@ -112,26 +113,26 @@ class Promotion
     }
 
     /**
-     * Set careerId
+     * Set career
      *
-     * @param integer $careerId
+     * @param Career $career
      * @return Promotion
      */
-    public function setCareerId($careerId)
+    public function setCareer($career)
     {
-        $this->careerId = $careerId;
+        $this->career = $career;
 
         return $this;
     }
 
     /**
-     * Get careerId
+     * Get career
      *
-     * @return integer
+     * @return Career
      */
-    public function getCareerId()
+    public function getCareer()
     {
-        return $this->careerId;
+        return $this->career;
     }
 
     /**

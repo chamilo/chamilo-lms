@@ -20,7 +20,7 @@ if (api_get_setting('gradebook_enable_grade_model') != 'true') {
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
@@ -28,16 +28,16 @@ $check = Security::check_token('request');
 $token = Security::get_token();
 
 if ($action === 'add') {
-    $interbreadcrumb[]=array('url' => 'grade_models.php','name' => get_lang('GradeModel'));
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
+    $interbreadcrumb[] = array('url' => 'grade_models.php', 'name' => get_lang('GradeModel'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Add'));
 } elseif ($action == 'edit') {
-    $interbreadcrumb[]=array('url' => 'grade_models.php','name' => get_lang('GradeModel'));
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
+    $interbreadcrumb[] = array('url' => 'grade_models.php', 'name' => get_lang('GradeModel'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
 } else {
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('GradeModel'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('GradeModel'));
 }
 
-$htmlHeadXtra[]= '<script>
+$htmlHeadXtra[] = '<script>
 function plusItem(item) {
     if (item != 1) {
 		document.getElementById(item).style.display = "inline";
@@ -111,8 +111,8 @@ $extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-     return \'<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
-     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
+     return \'<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
+     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
      '\';
 }';
 ?>
@@ -157,7 +157,7 @@ switch ($action) {
             $obj->display();
         } else {
             echo '<div class="actions">';
-            echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
+            echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             echo '</div>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
@@ -179,7 +179,7 @@ switch ($action) {
             $obj->display();
         } else {
             echo '<div class="actions">';
-            echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
+            echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             echo '</div>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));

@@ -10,7 +10,7 @@ use Chamilo\CourseBundle\Entity\CForumPost;
  */
 
 require_once __DIR__.'/../global.inc.php';
-require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
 // First, protect this script
 api_protect_course_script(false);
@@ -60,13 +60,13 @@ if (!empty($action)) {
                     break;
                 }
                 // If pass all previous control, user can edit post
-                $courseId = isset($_REQUEST['c_id'])? intval($_REQUEST['c_id']) : api_get_course_int_id();
+                $courseId = isset($_REQUEST['c_id']) ? intval($_REQUEST['c_id']) : api_get_course_int_id();
                 $json['courseId'] = $courseId;
-                $forumId = isset($_REQUEST['forum'])? intval($_REQUEST['forum']) : null;
+                $forumId = isset($_REQUEST['forum']) ? intval($_REQUEST['forum']) : null;
                 $json['forum'] = $forumId;
-                $threadId = isset($_REQUEST['thread'])? intval($_REQUEST['thread']) : null;
+                $threadId = isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : null;
                 $json['thread'] = $threadId;
-                $postId = isset($_REQUEST['postId'])? intval($_REQUEST['postId']) : null;
+                $postId = isset($_REQUEST['postId']) ? intval($_REQUEST['postId']) : null;
                 $json['postId'] = $postId;
 
                 if (!empty($courseId) &&
@@ -136,7 +136,7 @@ if (!empty($action)) {
                 $groupInfo = GroupManager::get_group_properties($group_id);
                 if (!api_is_allowed_to_edit(null, true) &&
                     $current_forum['allow_edit'] == 0 &&
-                    ($group_id && !GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo['iid']))
+                    ($group_id && !GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo))
                 ) {
                     $json['errorMessage'] = '4. if editing of replies is not allowed';
                     break;

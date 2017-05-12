@@ -78,7 +78,7 @@ class Shibboleth
 
     public static function sys_path()
     {
-        $path = dirname(__FILE__) . '/../';
+        $path = __DIR__.'/../';
         return $path;
     }
 

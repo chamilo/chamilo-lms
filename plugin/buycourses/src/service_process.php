@@ -13,7 +13,7 @@ $cidReset = true;
 require_once '../config.php';
 
 if (!isset($_REQUEST['t'], $_REQUEST['i'])) {
-    header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_catalog.php');
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php');
 }
 
 $currentUserId = api_get_user_id();
@@ -38,8 +38,8 @@ if ($includeServices !== 'true') {
 $typeUser = intval($_REQUEST['t']) === BuyCoursesPlugin::SERVICE_TYPE_USER;
 $typeCourse = intval($_REQUEST['t']) === BuyCoursesPlugin::SERVICE_TYPE_COURSE;
 $typeSession = intval($_REQUEST['t']) === BuyCoursesPlugin::SERVICE_TYPE_SESSION;
-$typeFinalLp= intval($_REQUEST['t']) === BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM;
-$queryString = 'i=' . intval($_REQUEST['i']) . '&t=' . intval($_REQUEST['t']).$additionalQueryString;
+$typeFinalLp = intval($_REQUEST['t']) === BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM;
+$queryString = 'i='.intval($_REQUEST['i']).'&t='.intval($_REQUEST['t']).$additionalQueryString;
 
 $serviceInfo = $plugin->getServices(intval($_REQUEST['i']));
 $userInfo = api_get_user_info($currentUserId);
@@ -53,7 +53,7 @@ if ($form->validate()) {
         Display::addFlash(
             Display::return_message($plugin->get_lang('NeedToSelectPaymentType'), 'error', false)
         );
-        header('Location:' . api_get_self() . '?' . $queryString);
+        header('Location:'.api_get_self().'?'.$queryString);
         exit;
     }
 
@@ -61,7 +61,7 @@ if ($form->validate()) {
         Display::addFlash(
             Display::return_message($plugin->get_lang('AdditionalInfoRequired'), 'error', false)
         );
-        header('Location:' . api_get_self() . '?' . $queryString);
+        header('Location:'.api_get_self().'?'.$queryString);
         exit;
     }
     
@@ -70,7 +70,7 @@ if ($form->validate()) {
     if ($serviceSaleId !== false) {
         $_SESSION['bc_service_sale_id'] = $serviceSaleId;
 
-        header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_process_confirm.php');
+        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_process_confirm.php');
     }
 
     exit;
@@ -101,7 +101,7 @@ $selectOptions = [
 
 if ($typeUser) {
     $users = $em->getRepository('ChamiloUserBundle:User')->findAll();
-    $selectOptions[$userInfo['user_id']] = api_get_person_name($userInfo['firstname'], $userInfo['lastname']) . ' (' . get_lang('Myself') . ')';
+    $selectOptions[$userInfo['user_id']] = api_get_person_name($userInfo['firstname'], $userInfo['lastname']).' ('.get_lang('Myself').')';
     if (!empty($users)) {
         foreach ($users as $user) {
             if (intval($userInfo['user_id']) !== intval($user->getId())) {
@@ -146,7 +146,7 @@ if ($typeUser) {
         $thisLpList = $em->getRepository('ChamiloCourseBundle:CLp')->findBy(['cId' => $course->getCourse()->getId()]);
         foreach ($thisLpList as $lp) {
 
-            $courseLpList[$lp->getCId()] = $lp->getName() . ' (' . $course->getCourse()->getTitle() . ')';;
+            $courseLpList[$lp->getCId()] = $lp->getName().' ('.$course->getCourse()->getTitle().')'; ;
         }
     }
 
@@ -163,7 +163,7 @@ if ($typeUser) {
                 //Now only we need the final item and return the current LP
                 if ($item->getItemType() == TOOL_LP_FINAL_ITEM) {
                     $checker = true;
-                    $sessionLpList[$lp->getCId()] = $lp->getName() . ' (' . $session->getSession()->getName() . ')';
+                    $sessionLpList[$lp->getCId()] = $lp->getName().' ('.$session->getSession()->getName().')';
                 }
             }
         }
@@ -178,7 +178,7 @@ if ($typeUser) {
                 //Now only we need the final item and return the current LP
                 if ($item->getItemType() == TOOL_LP_FINAL_ITEM) {
                     $checker = true;
-                    $sessionLpList[$lp->getCId()] = $lp->getName() . ' (' . $session->getSession()->getName() . ')';
+                    $sessionLpList[$lp->getCId()] = $lp->getName().' ('.$session->getSession()->getName().')';
                 }
             }
         }

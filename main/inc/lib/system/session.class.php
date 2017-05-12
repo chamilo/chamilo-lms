@@ -13,18 +13,29 @@ namespace System;
  */
 class Session implements \ArrayAccess
 {
-
-    static function read($variable, $default = null)
+    /**
+     * @param string $variable
+     * @param null $default
+     * @return mixed
+     */
+    public static function read($variable, $default = null)
     {
         return isset($_SESSION[$variable]) ? $_SESSION[$variable] : $default;
     }
 
-    static function write($variable, $value)
+    /**
+     * @param string $variable
+     * @param string $value
+     */
+    public static function write($variable, $value)
     {
         $_SESSION[$variable] = $value;
     }
 
-    static function erase($variable)
+    /**
+     * @param string $variable
+     */
+    public static function erase($variable)
     {
         $variable = (string) $variable;
         if (isset($GLOBALS[$variable])) {
@@ -39,21 +50,27 @@ class Session implements \ArrayAccess
      * Returns true if session has variable set up, false otherwise.
      *
      * @param string $variable
-     * @return mixed value
+     * @return bool
      */
-    static function has($variable)
+    public static function has($variable)
     {
         return isset($_SESSION[$variable]);
     }
 
-    static function clear()
+    /**
+     * Clear session
+     */
+    public static function clear()
     {
         session_regenerate_id();
         session_unset();
         $_SESSION = array();
     }
 
-    static function destroy()
+    /**
+     * Destroy session
+     */
+    public static function destroy()
     {
         session_unset();
         $_SESSION = array();
@@ -63,7 +80,6 @@ class Session implements \ArrayAccess
     /*
      * ArrayAccess
      */
-
     public function offsetExists($offset)
     {
         return isset($_SESSION[$offset]);
@@ -74,7 +90,7 @@ class Session implements \ArrayAccess
      * If offset does not exists returns null. Do not trigger a warning.
      *
      * @param string $offset
-     * @return any
+     * @return mixed
      */
     public function offsetGet($offset)
     {
@@ -92,15 +108,17 @@ class Session implements \ArrayAccess
     }
 
     /**
-     * Magical methods
-     *
+     * @param string $name
      */
-
     public function __unset($name)
     {
         unset($_SESSION[$name]);
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     public function __isset($name)
     {
         return self::has($name);
@@ -111,10 +129,10 @@ class Session implements \ArrayAccess
      * If offset does not exists returns null. Do not trigger a warning.
      *
      * @param string $name
-     * @return any
+     * @return mixed
      *
      */
-    function __get($name)
+    public function __get($name)
     {
         return self::read($name);
     }
@@ -122,11 +140,10 @@ class Session implements \ArrayAccess
     /**
      *
      * @param string $name
-     * @param any $value
+     * @param mixed $value
      */
-    function __set($name, $value)
+    public function __set($name, $value)
     {
         self::write($name, $value);
     }
-
 }

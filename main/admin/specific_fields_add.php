@@ -32,18 +32,18 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit') {
 // Create the form
 $form = new FormValidator('specific_fields_add');
 // Field variable name
-$form->addElement('hidden','field_id', $fieldId);
-$form->addElement('text','field_name',get_lang('FieldName'));
-$form->applyFilter('field_name','html_filter');
-$form->applyFilter('field_name','trim');
+$form->addElement('hidden', 'field_id', $fieldId);
+$form->addElement('text', 'field_name', get_lang('FieldName'));
+$form->applyFilter('field_name', 'html_filter');
+$form->applyFilter('field_name', 'trim');
 $form->addRule('field_name', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('field_name', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
-$form->addRule('field_name', '', 'maxlength',20);
+$form->addRule('field_name', '', 'maxlength', 20);
 
 // Set default values (only not empty when editing)
 $defaults = array();
 if ($fieldId) {
-    $form_information = get_specific_field_list(array( 'id' => $fieldId ));
+    $form_information = get_specific_field_list(array('id' => $fieldId));
     $defaults['field_name'] = $form_information[0]['name'];
 }
 $form->setDefaults($defaults);
@@ -54,7 +54,7 @@ $form->addButtonCreate(get_lang('Add'), 'submit');
 if ($form->validate()) {
     $field = $form->exportValues();
     $field_name = $field['field_name'];
-    if (is_numeric($field['field_id']) && $field['field_id']<>0 && !empty($field['field_id'])) {
+    if (is_numeric($field['field_id']) && $field['field_id'] <> 0 && !empty($field['field_id'])) {
         edit_specific_field($field['field_id'], $field['field_name']);
         $message = get_lang('FieldEdited');
     } else {

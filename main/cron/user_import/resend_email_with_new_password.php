@@ -34,13 +34,13 @@ foreach ($list as $mail) {
             FROM $users WHERE email = '$mail'\n";
     $res = Database::query($sql);
     if ($res === false) {
-        echo 'Error in database with email ' . $mail . "\n";
+        echo 'Error in database with email '.$mail."\n";
     }
     if (Database::num_rows($res) == 0) {
-        echo '[Error] Email not found in database: ' . $row['email'] . "\n";
+        echo '[Error] Email not found in database: '.$row['email']."\n";
     } else {
         $row = Database::fetch_assoc($res);
-        $pass = api_substr($row['username'], 0, 4) . rand(0, 9) . rand(0, 9);
+        $pass = api_substr($row['username'], 0, 4).rand(0, 9).rand(0, 9);
 
         if ($user) {
 
@@ -71,8 +71,8 @@ foreach ($list as $mail) {
             null,
             PERSON_NAME_EMAIL_ADDRESS
         );
-        $emailsubject = '[' . api_get_setting('siteName') . '] ' . get_lang('YourReg', null, $l) . ' ' . api_get_setting('siteName');
-        $emailbody = get_lang('Dear', null, $l) . ' ' . api_get_person_name($user['FirstName'], $user['LastName']) . ",\n\n" . get_lang('YouAreReg', null, $l) . " " . api_get_setting('siteName') . " " . get_lang('WithTheFollowingSettings', null, $l) . "\n\n" . get_lang('Username', null, $l) . " : " . $user['UserName'] . "\n" . get_lang('Pass', null, $l) . " : " . $user['Password'] . "\n\n" . get_lang('Address', null, $l) . " " . api_get_setting('siteName') . " " . get_lang('Is', null, $l) . " : " . api_get_path(WEB_PATH) . " \n\n" . get_lang('Problem', null, $l) . "\n\n" . get_lang('Formula', null, $l) . ",\n\n" . api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')) . "\n" . get_lang('Manager', null, $l) . " " . api_get_setting('siteName') . "\nT. " . api_get_setting('administratorTelephone') . "\n" . get_lang('Email', null, $l) . " : " . api_get_setting('emailAdministrator') . "";
+        $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg', null, $l).' '.api_get_setting('siteName');
+        $emailbody = get_lang('Dear', null, $l).' '.api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".get_lang('YouAreReg', null, $l)." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings', null, $l)."\n\n".get_lang('Username', null, $l)." : ".$user['UserName']."\n".get_lang('Pass', null, $l)." : ".$user['Password']."\n\n".get_lang('Address', null, $l)." ".api_get_setting('siteName')." ".get_lang('Is', null, $l)." : ".api_get_path(WEB_PATH)." \n\n".get_lang('Problem', null, $l)."\n\n".get_lang('Formula', null, $l).",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager', null, $l)." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email', null, $l)." : ".api_get_setting('emailAdministrator')."";
         $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
         $email_admin = api_get_setting('emailAdministrator');
         @api_mail_html(

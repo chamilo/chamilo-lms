@@ -471,9 +471,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                 $this->setName($myName);
             }
 
-
             $strHtml .= $tabs . '<select ' . $attrString . ">\n";
-
             $strValues = is_array($this->_values)? array_map('strval', $this->_values): array();
 
             foreach ($this->_options as $option) {
@@ -501,7 +499,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             return $strHtml . $tabs . '</select>';
         }
     }
-
 
     /**
      * Returns the value of field without HTML tags
@@ -627,13 +624,16 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:
                 return '
-                <div class="form-group {error_class}">
+                <div class="input-group">
                     <label {label-for} >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                         {label}
-                    </label>
-                    {element}
-                </div>';
+                    </label>     
+                </div>
+                <div class="input-group {error_class}">                               
+                    {element}                     
+                </div>
+                ';
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:
                 return '

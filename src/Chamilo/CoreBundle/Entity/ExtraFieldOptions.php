@@ -59,7 +59,7 @@ class ExtraFieldOptions
      */
     protected $priorityMessage;
 
-     /**
+    /**
      * @var integer
      *
      * @ORM\Column(name="option_order", type="integer", nullable=true)

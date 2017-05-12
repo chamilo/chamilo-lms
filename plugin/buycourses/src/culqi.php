@@ -1,5 +1,5 @@
 <?php
-
+/* For license terms, see /license.txt */
 /**
  * CULQI PHP SDK
  *
@@ -14,15 +14,15 @@
  */
 
 // Errors
-include_once(dirname(__FILE__). '/Culqi/Error/Errors.php');
-include_once(dirname(__FILE__). '/Culqi/AuthBearer.php');
-include_once dirname(__FILE__).'/Culqi/Client.php';
-include_once dirname(__FILE__).'/Culqi/Resource.php';
+include_once __DIR__.'/Culqi/Error/Errors.php';
+include_once __DIR__.'/Culqi/AuthBearer.php';
+include_once __DIR__.'/Culqi/Client.php';
+include_once __DIR__.'/Culqi/Resource.php';
 
 // Culqi API
-include_once dirname(__FILE__).'/Culqi/Tokens.php';
-include_once dirname(__FILE__).'/Culqi/Cargos.php';
-include_once dirname(__FILE__).'/Culqi/Devoluciones.php';
-include_once dirname(__FILE__).'/Culqi/Suscripciones.php';
-include_once dirname(__FILE__).'/Culqi/Planes.php';
-include_once dirname(__FILE__).'/Culqi/Culqi.php';
+include_once __DIR__.'/Culqi/Tokens.php';
+include_once __DIR__.'/Culqi/Cargos.php';
+include_once __DIR__.'/Culqi/Devoluciones.php';
+include_once __DIR__.'/Culqi/Suscripciones.php';
+include_once __DIR__.'/Culqi/Planes.php';
+include_once __DIR__.'/Culqi/Culqi.php';

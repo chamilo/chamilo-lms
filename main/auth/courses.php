@@ -95,7 +95,7 @@ if (isset($_GET['move'])) {
             $_GET['category']
         );
     }
-    if (isset($_GET['category']) && !$_GET['course']) {
+    if (isset($_GET['category']) && !isset($_GET['course'])) {
         $courses_controller->move_category($_GET['move'], $_GET['category']);
     }
 }
@@ -195,8 +195,9 @@ switch ($action) {
         if (!$user_can_view_page) {
             api_not_allowed(true);
         }
-
-        if (!CoursesAndSessionsCatalog::is(CATALOG_SESSIONS)) {
+        header('Location: '.api_get_self());
+        exit;
+        /* if (!CoursesAndSessionsCatalog::is(CATALOG_SESSIONS)) {
             $courses_controller->courses_categories(
                 $action,
                 $categoryCode,
@@ -208,7 +209,7 @@ switch ($action) {
         } else {
             header('Location: ' . api_get_self());
             exit;
-        }
+        }*/
         break;
     case 'display_random_courses':
         if (!$user_can_view_page) {
@@ -282,7 +283,7 @@ switch ($action) {
                 $continueWithSubscription = SequenceResourceManager::checkSequenceAreCompleted($requirementsData);
 
                 if (!$continueWithSubscription) {
-                    header('Location: ' .  api_get_path(WEB_CODE_PATH) . 'auth/courses.php');
+                    header('Location: '.api_get_path(WEB_CODE_PATH).'auth/courses.php');
                     exit;
                 }
             }
@@ -300,16 +301,16 @@ switch ($action) {
 
             if ($count <= 0) {
                 // no course in session -> return to catalog
-                $url = api_get_path(WEB_CODE_PATH) . 'auth/courses.php';
+                $url = api_get_path(WEB_CODE_PATH).'auth/courses.php';
             } elseif ($count == 1) {
                 // only one course, so redirect directly to this course
                 foreach ($coursesList as $course) {
-                    $url = api_get_path(WEB_COURSE_PATH) . $course['directory'] . '/index.php?id_session=' . intval($_GET['session_id']);
+                    $url = api_get_path(WEB_COURSE_PATH).$course['directory'].'/index.php?id_session='.intval($_GET['session_id']);
                 }
             } else {
-                $url = api_get_path(WEB_CODE_PATH) . 'session/index.php?session_id=' . intval($_GET['session_id']);
+                $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.intval($_GET['session_id']);
             }
-            header('Location: ' . $url);
+            header('Location: '.$url);
             exit;
         }
         //else show error message?

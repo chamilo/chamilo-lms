@@ -14,11 +14,11 @@ $this_section = SECTION_MYGRADEBOOK;
 api_block_anonymous_users();
 GradebookUtils::block_students();
 
-$evaluation= Evaluation :: load($_GET['selecteval']);
+$evaluation = Evaluation :: load($_GET['selecteval']);
 $newstudents = $evaluation[0]->get_not_subscribed_students();
 
 if (count($newstudents) == '0') {
-	header('Location: gradebook_view_result.php?nouser=&selecteval=' . Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq());
+	header('Location: gradebook_view_result.php?nouser=&selecteval='.Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq());
 	exit;
 }
 $add_user_form = new EvalForm(
@@ -65,16 +65,16 @@ if (isset($_POST['submit_button'])) {
     }
 }
 
-$interbreadcrumb[]= array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']),'name' => get_lang('Gradebook'));
-$interbreadcrumb[]= array(
-	'url' => 'gradebook_view_result.php?selecteval=' .Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq(),
+$interbreadcrumb[] = array('url' => Security::remove_XSS($_SESSION['gradebook_dest']), 'name' => get_lang('Gradebook'));
+$interbreadcrumb[] = array(
+	'url' => 'gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq(),
 	'name' => get_lang('ViewResult')
 );
 Display :: display_header(get_lang('AddUserToEval'));
-if (isset ($_GET['erroroneuser'])){
-	Display :: display_warning_message(get_lang('AtLeastOneUser'),false);
+if (isset ($_GET['erroroneuser'])) {
+	Display :: display_warning_message(get_lang('AtLeastOneUser'), false);
 }
-DisplayGradebook :: display_header_result($evaluation[0], null, 0,0);
+DisplayGradebook :: display_header_result($evaluation[0], null, 0, 0);
 echo '<div class="main">';
 echo $add_user_form->toHtml();
 echo '</div>';

@@ -11,15 +11,15 @@ GradebookUtils::block_students();
 
 $selectCat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 
-$interbreadcrumb[] = array (
+$interbreadcrumb[] = array(
     'url' => $_SESSION['gradebook_dest'].'?',
     'name' => get_lang('Gradebook'
 ));
-$interbreadcrumb[] = array (
+$interbreadcrumb[] = array(
     'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectCat,
     'name' => get_lang('Details'
 ));
-$interbreadcrumb[] = array (
+$interbreadcrumb[] = array(
     'url' => 'gradebook_showlog_eval.php?visiblelog='.Security::remove_XSS($_GET['visiblelog']).'&amp;selectcat='.$selectCat,
     'name' => get_lang('GradebookQualifyLog')
 );
@@ -28,9 +28,9 @@ Display :: display_header('');
 
 echo Display::page_header(get_lang('GradebookQualifyLog'));
 
-$t_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
-$t_user = Database :: get_main_table(TABLE_MAIN_USER);
-$visible_log=Security::remove_XSS($_GET['visiblelog']);
+$t_linkeval_log = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
+$t_user = Database::get_main_table(TABLE_MAIN_USER);
+$visible_log = Security::remove_XSS($_GET['visiblelog']);
 
 $evaledit = Evaluation :: load($visible_log);
 $sql = "SELECT le.name,le.description,le.weight,le.visible,le.type,le.created_at,us.username
@@ -45,8 +45,8 @@ while ($row = Database::fetch_row($result)) {
 }
 
 foreach ($list_info as $key => $info_log) {
-    $list_info[$key][5]=($info_log[5]) ? api_convert_and_format_date($info_log[5]) : 'N/A';
-    $list_info[$key][3]=($info_log[3]==1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
+    $list_info[$key][5] = ($info_log[5]) ? api_convert_and_format_date($info_log[5]) : 'N/A';
+    $list_info[$key][3] = ($info_log[3] == 1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
 }
 
 $parameters = array(

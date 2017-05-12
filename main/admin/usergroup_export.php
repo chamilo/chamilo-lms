@@ -13,8 +13,8 @@ api_protect_admin_script();
 
 $tool_name = get_lang('Export');
 
-$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array ('url' => 'usergroups.php', 'name' => get_lang('Classes'));
+$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'usergroups.php', 'name' => get_lang('Classes'));
 
 set_time_limit(0);
 

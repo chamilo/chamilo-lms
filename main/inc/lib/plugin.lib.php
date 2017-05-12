@@ -175,9 +175,9 @@ class AppPlugin
     }
 
     /**
-    * @param string $pluginName
-    * @param int    $urlId
-    */
+     * @param string $pluginName
+     * @param int    $urlId
+     */
     public function uninstall($pluginName, $urlId = null)
     {
         if (empty($urlId)) {
@@ -254,12 +254,12 @@ class AppPlugin
     }
 
     /**
-    * @param string $region
-    * @param string $template
-    * @param bool   $forced
-    *
-    * @return null|string
-    */
+     * @param string $region
+     * @param string $template
+     * @param bool   $forced
+     *
+     * @return null|string
+     */
     public function load_region($region, $template, $forced = false)
     {
         if ($region == 'course_tool_plugin') {
@@ -426,7 +426,7 @@ class AppPlugin
             // Extra options
             $plugin_settings = api_get_settings_params(
                 array(
-                    "subkey = ? AND category = ? AND type = ? " => array($plugin_name, 'Plugins','setting')
+                    "subkey = ? AND category = ? AND type = ? " => array($plugin_name, 'Plugins', 'setting')
                 )
             );
 
@@ -532,7 +532,7 @@ class AppPlugin
             if (!empty($obj->course_settings)) {
                 if (is_file(api_get_path(SYS_CODE_PATH).'img/icons/'.ICON_SIZE_SMALL.'/'.$plugin_name.'.png')) {
                     $icon = Display::return_icon(
-                        $plugin_name . '.png',
+                        $plugin_name.'.png',
                         Security::remove_XSS($pluginTitle),
                         '',
                         ICON_SIZE_SMALL
@@ -548,18 +548,18 @@ class AppPlugin
 
                 $form->addHtml('<div class="panel panel-default">');
                 $form->addHtml('
-                    <div class="panel-heading" role="tab" id="heading-' . $plugin_name . '-settings">
+                    <div class="panel-heading" role="tab" id="heading-' . $plugin_name.'-settings">
                         <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-' . $plugin_name . '-settings" aria-expanded="false" aria-controls="collapse-' . $plugin_name . '-settings">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-' . $plugin_name.'-settings" aria-expanded="false" aria-controls="collapse-'.$plugin_name.'-settings">
                 ');
-                $form->addHtml($icon . ' ' . $pluginTitle);
+                $form->addHtml($icon.' '.$pluginTitle);
                 $form->addHtml('
                             </a>
                         </h4>
                     </div>
                 ');
                 $form->addHtml('
-                    <div id="collapse-' . $plugin_name . '-settings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-' . $plugin_name . '-settings">
+                    <div id="collapse-' . $plugin_name.'-settings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-'.$plugin_name.'-settings">
                         <div class="panel-body">
                 ');
 

@@ -2,13 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	FILE UPLOAD LIBRARY
+ * FILE UPLOAD LIBRARY
  *
- *	This is the file upload library for Chamilo.
- *	Include/require it in your code to use its functionality.
+ * This is the file upload library for Chamilo.
+ * Include/require it in your code to use its functionality.
  *
- *	@package chamilo.library
- *	@todo test and reorganise
+ * @package chamilo.library
+ * @todo test and reorganise
  */
 
 /**
@@ -94,7 +94,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
                 if ($show_output) {
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('UplExceedMaxPostSize'). format_file_size($max_file_size),
+                            get_lang('UplExceedMaxPostSize').format_file_size($max_file_size),
                             'error'
                         )
                     );
@@ -118,7 +118,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
                 if ($show_output) {
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('UplNoFileUploaded').' '. get_lang('UplSelectFileFirst'),
+                            get_lang('UplNoFileUploaded').' '.get_lang('UplSelectFileFirst'),
                             'error'
                         )
                     );
@@ -239,10 +239,9 @@ function handle_uploaded_document(
         $sessionId = intval($sessionId);
     }
 
-    $groupIid = 0;
+    $groupInfo = [];
     if (!empty($groupId)) {
         $groupInfo = GroupManager::get_group_properties($groupId);
-        $groupIid = $groupInfo['iid'];
     }
 
     // Just in case process_uploaded_file is not called
@@ -268,7 +267,8 @@ function handle_uploaded_document(
             $maxSpace,
             $sessionId,
             $groupId,
-            $output
+            $output,
+            $onlyUploadFile
         );
     } elseif ($unzip == 1 && !preg_match('/.zip$/', strtolower($uploadedFile['name']))) {
         // We can only unzip ZIP files (no gz, tar,...)
@@ -281,7 +281,6 @@ function handle_uploaded_document(
         return false;
     } else {
         // Clean up the name, only ASCII characters should stay. (and strict)
-
         $cleanName = api_replace_dangerous_char($uploadedFile['name'], $treat_spaces_as_hyphens);
 
         // No "dangerous" files
@@ -416,7 +415,7 @@ function handle_uploaded_document(
                                     $documentId,
                                     'DocumentUpdated',
                                     $userId,
-                                    $groupIid,
+                                    $groupInfo,
                                     $toUserId,
                                     null,
                                     null,
@@ -455,7 +454,7 @@ function handle_uploaded_document(
                                         $documentId,
                                         'DocumentAdded',
                                         $userId,
-                                        $groupIid,
+                                        $groupInfo,
                                         $toUserId,
                                         null,
                                         null,
@@ -463,7 +462,12 @@ function handle_uploaded_document(
                                     );
 
                                     // Redo visibility
-                                    api_set_default_visibility($documentId, TOOL_DOCUMENT, null, $courseInfo);
+                                    api_set_default_visibility(
+                                        $documentId,
+                                        TOOL_DOCUMENT,
+                                        null,
+                                        $courseInfo
+                                    );
                                 }
                             }
 
@@ -473,7 +477,7 @@ function handle_uploaded_document(
                             if ($output) {
                                 Display::addFlash(
                                     Display::return_message(
-                                        get_lang('UplUploadSucceeded') . '<br /> ' . $documentTitle . ' ' . get_lang('UplFileOverwritten'),
+                                        get_lang('UplUploadSucceeded').'<br /> '.$documentTitle.' '.get_lang('UplFileOverwritten'),
                                         'confirmation',
                                         false
                                     )
@@ -504,7 +508,7 @@ function handle_uploaded_document(
                                     $documentId,
                                     'DocumentAdded',
                                     $userId,
-                                    $groupIid,
+                                    $groupInfo,
                                     $toUserId,
                                     null,
                                     null,
@@ -592,7 +596,7 @@ function handle_uploaded_document(
                                 $documentId,
                                 'DocumentAdded',
                                 $userId,
-                                $groupId,
+                                $groupInfo,
                                 $toUserId,
                                 null,
                                 null,
@@ -610,7 +614,7 @@ function handle_uploaded_document(
                         if ($output) {
                             Display::addFlash(
                                 Display::return_message(
-                                    get_lang('UplUploadSucceeded') . '<br />' . get_lang('UplFileSavedAs') . ' ' . $documentTitle,
+                                    get_lang('UplUploadSucceeded').'<br />'.get_lang('UplFileSavedAs').' '.$documentTitle,
                                     'success',
                                     false
                                 )
@@ -666,7 +670,7 @@ function handle_uploaded_document(
                                     $documentId,
                                     'DocumentAdded',
                                     $userId,
-                                    $groupId,
+                                    $groupInfo,
                                     $toUserId,
                                     null,
                                     null,
@@ -687,7 +691,7 @@ function handle_uploaded_document(
                             if ($output) {
                                 Display::addFlash(
                                     Display::display_confirmation_message(
-                                        get_lang('UplUploadSucceeded') . '<br /> ' . $documentTitle,
+                                        get_lang('UplUploadSucceeded').'<br /> '.$documentTitle,
                                         false,
                                         true
                                     )
@@ -773,12 +777,12 @@ function enough_size($file_size, $dir, $max_dir_space)
 function dir_total_space($dir_path)
 {
     $save_dir = getcwd();
-    chdir($dir_path) ;
+    chdir($dir_path);
     $handle = opendir($dir_path);
     $sumSize = 0;
     $dirList = array();
     while ($element = readdir($handle)) {
-        if ( $element == '.' || $element == '..') {
+        if ($element == '.' || $element == '..') {
             continue; // Skip the current and parent directories
         }
         if (is_file($element)) {
@@ -789,11 +793,11 @@ function dir_total_space($dir_path)
         }
     }
 
-    closedir($handle) ;
+    closedir($handle);
 
     if (sizeof($dirList) > 0) {
         foreach ($dirList as $j) {
-            $sizeDir = dir_total_space($j);	// Recursivity
+            $sizeDir = dir_total_space($j); // Recursivity
             $sumSize += $sizeDir;
         }
     }
@@ -827,63 +831,63 @@ function add_ext_on_mime($file_name, $file_type)
 
         static $mime_type = array();
 
-        $mime_type[] = 'application/msword';             $extension[] = '.doc';
-        $mime_type[] = 'application/rtf';                $extension[] = '.rtf';
-        $mime_type[] = 'application/vnd.ms-powerpoint';  $extension[] = '.ppt';
-        $mime_type[] = 'application/vnd.ms-excel';       $extension[] = '.xls';
-        $mime_type[] = 'application/pdf';                $extension[] = '.pdf';
-        $mime_type[] = 'application/postscript';         $extension[] = '.ps';
-        $mime_type[] = 'application/mac-binhex40';       $extension[] = '.hqx';
-        $mime_type[] = 'application/x-gzip';             $extension[] = 'tar.gz';
-        $mime_type[] = 'application/x-shockwave-flash';  $extension[] = '.swf';
-        $mime_type[] = 'application/x-stuffit';          $extension[] = '.sit';
-        $mime_type[] = 'application/x-tar';              $extension[] = '.tar';
-        $mime_type[] = 'application/zip';                $extension[] = '.zip';
-        $mime_type[] = 'application/x-tar';              $extension[] = '.tar';
-        $mime_type[] = 'text/html';                      $extension[] = '.html';
-        $mime_type[] = 'text/plain';                     $extension[] = '.txt';
-        $mime_type[] = 'text/rtf';                       $extension[] = '.rtf';
-        $mime_type[] = 'img/gif';                        $extension[] = '.gif';
-        $mime_type[] = 'img/jpeg';                       $extension[] = '.jpg';
-        $mime_type[] = 'img/png';                        $extension[] = '.png';
-        $mime_type[] = 'audio/midi';                     $extension[] = '.mid';
-        $mime_type[] = 'audio/mpeg';                     $extension[] = '.mp3';
-        $mime_type[] = 'audio/x-aiff';                   $extension[] = '.aif';
-        $mime_type[] = 'audio/x-pn-realaudio';           $extension[] = '.rm';
-        $mime_type[] = 'audio/x-pn-realaudio-plugin';    $extension[] = '.rpm';
-        $mime_type[] = 'audio/x-wav';                    $extension[] = '.wav';
-        $mime_type[] = 'video/mpeg';                     $extension[] = '.mpg';
-        $mime_type[] = 'video/mpeg4-generic';            $extension[] = '.mp4';
-        $mime_type[] = 'video/quicktime';                $extension[] = '.mov';
-        $mime_type[] = 'video/x-msvideo';                $extension[] = '.avi';
+        $mime_type[] = 'application/msword'; $extension[] = '.doc';
+        $mime_type[] = 'application/rtf'; $extension[] = '.rtf';
+        $mime_type[] = 'application/vnd.ms-powerpoint'; $extension[] = '.ppt';
+        $mime_type[] = 'application/vnd.ms-excel'; $extension[] = '.xls';
+        $mime_type[] = 'application/pdf'; $extension[] = '.pdf';
+        $mime_type[] = 'application/postscript'; $extension[] = '.ps';
+        $mime_type[] = 'application/mac-binhex40'; $extension[] = '.hqx';
+        $mime_type[] = 'application/x-gzip'; $extension[] = 'tar.gz';
+        $mime_type[] = 'application/x-shockwave-flash'; $extension[] = '.swf';
+        $mime_type[] = 'application/x-stuffit'; $extension[] = '.sit';
+        $mime_type[] = 'application/x-tar'; $extension[] = '.tar';
+        $mime_type[] = 'application/zip'; $extension[] = '.zip';
+        $mime_type[] = 'application/x-tar'; $extension[] = '.tar';
+        $mime_type[] = 'text/html'; $extension[] = '.html';
+        $mime_type[] = 'text/plain'; $extension[] = '.txt';
+        $mime_type[] = 'text/rtf'; $extension[] = '.rtf';
+        $mime_type[] = 'img/gif'; $extension[] = '.gif';
+        $mime_type[] = 'img/jpeg'; $extension[] = '.jpg';
+        $mime_type[] = 'img/png'; $extension[] = '.png';
+        $mime_type[] = 'audio/midi'; $extension[] = '.mid';
+        $mime_type[] = 'audio/mpeg'; $extension[] = '.mp3';
+        $mime_type[] = 'audio/x-aiff'; $extension[] = '.aif';
+        $mime_type[] = 'audio/x-pn-realaudio'; $extension[] = '.rm';
+        $mime_type[] = 'audio/x-pn-realaudio-plugin'; $extension[] = '.rpm';
+        $mime_type[] = 'audio/x-wav'; $extension[] = '.wav';
+        $mime_type[] = 'video/mpeg'; $extension[] = '.mpg';
+        $mime_type[] = 'video/mpeg4-generic'; $extension[] = '.mp4';
+        $mime_type[] = 'video/quicktime'; $extension[] = '.mov';
+        $mime_type[] = 'video/x-msvideo'; $extension[] = '.avi';
 
-        $mime_type[] = 'video/x-ms-wmv';                 $extension[] = '.wmv';
-        $mime_type[] = 'video/x-flv';                    $extension[] = '.flv';
-        $mime_type[] = 'image/svg+xml';                  $extension[] = '.svg';
-        $mime_type[] = 'image/svg+xml';                  $extension[] = '.svgz';
-        $mime_type[] = 'video/ogg';                  	 $extension[] = '.ogv';
-        $mime_type[] = 'audio/ogg';                  	 $extension[] = '.oga';
-        $mime_type[] = 'application/ogg';                $extension[] = '.ogg';
-        $mime_type[] = 'application/ogg';                $extension[] = '.ogx';
-        $mime_type[] = 'application/x-freemind';         $extension[] = '.mm';
+        $mime_type[] = 'video/x-ms-wmv'; $extension[] = '.wmv';
+        $mime_type[] = 'video/x-flv'; $extension[] = '.flv';
+        $mime_type[] = 'image/svg+xml'; $extension[] = '.svg';
+        $mime_type[] = 'image/svg+xml'; $extension[] = '.svgz';
+        $mime_type[] = 'video/ogg'; $extension[] = '.ogv';
+        $mime_type[] = 'audio/ogg'; $extension[] = '.oga';
+        $mime_type[] = 'application/ogg'; $extension[] = '.ogg';
+        $mime_type[] = 'application/ogg'; $extension[] = '.ogx';
+        $mime_type[] = 'application/x-freemind'; $extension[] = '.mm';
 
-        $mime_type[] = 'application/vnd.ms-word.document.macroEnabled.12';							$extension[] = '.docm';
-        $mime_type[] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';	$extension[] = '.docx';
-        $mime_type[] = 'application/vnd.ms-word.template.macroEnabled.12';							$extension[] = '.dotm';
-        $mime_type[] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.template';	$extension[] = '.dotx';
-        $mime_type[] = 'application/vnd.ms-powerpoint.template.macroEnabled.12';					$extension[] = '.potm';
-        $mime_type[] = 'application/vnd.openxmlformats-officedocument.presentationml.template';		$extension[] = '.potx';
-        $mime_type[] = 'application/vnd.ms-powerpoint.addin.macroEnabled.12';						$extension[] = '.ppam';
-        $mime_type[] = 'application/vnd.ms-powerpoint.slideshow.macroEnabled.12';					$extension[] = '.ppsm';
-        $mime_type[] = 'application/vnd.openxmlformats-officedocument.presentationml.slideshow';	$extension[] = '.ppsx';
-        $mime_type[] = 'application/vnd.ms-powerpoint.presentation.macroEnabled.12';				$extension[] = '.pptm';
-        $mime_type[] = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';	$extension[] = '.pptx';
-        $mime_type[] = 'application/vnd.ms-excel.addin.macroEnabled.12';							$extension[] = '.xlam';
-        $mime_type[] = 'application/vnd.ms-excel.sheet.binary.macroEnabled.12';						$extension[] = '.xlsb';
-        $mime_type[] = 'application/vnd.ms-excel.sheet.macroEnabled.12';							$extension[] = '.xlsm';
-        $mime_type[] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';			$extension[] = '.xlsx';
-        $mime_type[] = 'application/vnd.ms-excel.template.macroEnabled.12';							$extension[] = '.xltm';
-        $mime_type[] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.template';		$extension[] = '.xltx';
+        $mime_type[] = 'application/vnd.ms-word.document.macroEnabled.12'; $extension[] = '.docm';
+        $mime_type[] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'; $extension[] = '.docx';
+        $mime_type[] = 'application/vnd.ms-word.template.macroEnabled.12'; $extension[] = '.dotm';
+        $mime_type[] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.template'; $extension[] = '.dotx';
+        $mime_type[] = 'application/vnd.ms-powerpoint.template.macroEnabled.12'; $extension[] = '.potm';
+        $mime_type[] = 'application/vnd.openxmlformats-officedocument.presentationml.template'; $extension[] = '.potx';
+        $mime_type[] = 'application/vnd.ms-powerpoint.addin.macroEnabled.12'; $extension[] = '.ppam';
+        $mime_type[] = 'application/vnd.ms-powerpoint.slideshow.macroEnabled.12'; $extension[] = '.ppsm';
+        $mime_type[] = 'application/vnd.openxmlformats-officedocument.presentationml.slideshow'; $extension[] = '.ppsx';
+        $mime_type[] = 'application/vnd.ms-powerpoint.presentation.macroEnabled.12'; $extension[] = '.pptm';
+        $mime_type[] = 'application/vnd.openxmlformats-officedocument.presentationml.presentation'; $extension[] = '.pptx';
+        $mime_type[] = 'application/vnd.ms-excel.addin.macroEnabled.12'; $extension[] = '.xlam';
+        $mime_type[] = 'application/vnd.ms-excel.sheet.binary.macroEnabled.12'; $extension[] = '.xlsb';
+        $mime_type[] = 'application/vnd.ms-excel.sheet.macroEnabled.12'; $extension[] = '.xlsm';
+        $mime_type[] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; $extension[] = '.xlsx';
+        $mime_type[] = 'application/vnd.ms-excel.template.macroEnabled.12'; $extension[] = '.xltm';
+        $mime_type[] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.template'; $extension[] = '.xltx';
 
         // Test on PC (files with no extension get application/octet-stream)
         //$mime_type[] = 'application/octet-stream';      $extension[] = '.ext';
@@ -892,7 +896,7 @@ function add_ext_on_mime($file_name, $file_type)
 
         foreach ($mime_type as $key => & $type) {
             if ($type == $file_type) {
-                $file_name .=  $extension[$key];
+                $file_name .= $extension[$key];
                 break;
             }
         }
@@ -968,12 +972,12 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
         }
 
         // It happens on Linux that $upload_path sometimes doesn't start with '/'
-        if ($upload_path[0] != '/' && substr($base_work_dir,-1,1) != '/') {
+        if ($upload_path[0] != '/' && substr($base_work_dir, -1, 1) != '/') {
             $upload_path = '/'.$upload_path;
         }
 
         if ($upload_path[strlen($upload_path) - 1] == '/') {
-            $upload_path=substr($upload_path, 0, -1);
+            $upload_path = substr($upload_path, 0, -1);
         }
 
         /*	Uncompressing phase */
@@ -985,15 +989,15 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
             - add it to the database
             - parse & change relative html links
         */
-        if (PHP_OS == 'Linux' && ! get_cfg_var('safe_mode') && false) { // *** UGent, changed by OC ***
+        if (PHP_OS == 'Linux' && !get_cfg_var('safe_mode') && false) { // *** UGent, changed by OC ***
             // Shell Method - if this is possible, it gains some speed
-            exec("unzip -d \"".$base_work_dir.$upload_path."/\"".$uploaded_file['name']." " .$uploaded_file['tmp_name']);
+            exec("unzip -d \"".$base_work_dir.$upload_path."/\"".$uploaded_file['name']." ".$uploaded_file['tmp_name']);
         } else {
             // PHP method - slower...
             $save_dir = getcwd();
             chdir($base_work_dir.$upload_path);
             $unzippingState = $zip_file->extract();
-            for ($j=0; $j < count($unzippingState); $j++) {
+            for ($j = 0; $j < count($unzippingState); $j++) {
                 $state = $unzippingState[$j];
 
                 // Fix relative links in html files
@@ -1007,8 +1011,8 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
                         if (is_dir($base_work_dir.$upload_path.'/'.$file)) $filetype = 'folder';
 
                         $safe_file = api_replace_dangerous_char($file);
-                        @rename($base_work_dir.$upload_path.'/'.$file,$base_work_dir.$upload_path.'/'.$safe_file);
-                        set_default_settings($upload_path, $safe_file,$filetype);
+                        @rename($base_work_dir.$upload_path.'/'.$file, $base_work_dir.$upload_path.'/'.$safe_file);
+                        set_default_settings($upload_path, $safe_file, $filetype);
                     }
                 }
 
@@ -1033,14 +1037,15 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
  * @param array  $courseInfo
  * @param array  $userInfo
  * @param array  $uploaded_file - follows the $_FILES Structure
- * @param string $upload_path   - destination of the upload.
+ * @param string $uploadPath   - destination of the upload.
  *                               This path is to append to $base_work_dir
  * @param string $base_work_dir  - base working directory of the module
  * @param int    $maxFilledSpace  - amount of bytes to not exceed in the base
  *                                working directory
  * @param int $sessionId
  * @param int $groupId group.id
- * @param boolean $output Optional. If no output not wanted on success, set to false.
+ * @param bool $output Optional. If no output not wanted on success, set to false.
+ * @param bool $onlyUploadFile
  *
  * @return boolean true if it succeeds false otherwise
  */
@@ -1053,12 +1058,13 @@ function unzip_uploaded_document(
     $maxFilledSpace,
     $sessionId = 0,
     $groupId = 0,
-    $output = true
+    $output = true,
+    $onlyUploadFile = false
 ) {
     $zip = new PclZip($uploaded_file['tmp_name']);
 
     // Check the zip content (real size and file extension)
-    $zip_content_array = (array)$zip->listContent();
+    $zip_content_array = (array) $zip->listContent();
 
     $realSize = 0;
     foreach ($zip_content_array as & $this_content) {
@@ -1084,17 +1090,23 @@ function unzip_uploaded_document(
         PCLZIP_OPT_REPLACE_NEWER
     );
 
-    // Add all documents in the unzipped folder to the database
-    add_all_documents_in_folder_to_database(
-        $courseInfo,
-        $userInfo,
-        $base_work_dir,
-        $destinationDir,
-        $sessionId,
-        $groupId,
-        $output,
-        array('path' => $uploadPath)
-    );
+    if ($onlyUploadFile === false) {
+        // Add all documents in the unzipped folder to the database
+        add_all_documents_in_folder_to_database(
+            $courseInfo,
+            $userInfo,
+            $base_work_dir,
+            $destinationDir,
+            $sessionId,
+            $groupId,
+            $output,
+            array('path' => $uploadPath)
+        );
+    } else {
+        // Copy result
+        $fs = new \Symfony\Component\Filesystem\Filesystem();
+        $fs->mirror($destinationDir, $base_work_dir.$uploadPath, null, ['overwrite']);
+    }
 
     if (is_dir($destinationDir)) {
         rmdirr($destinationDir);
@@ -1160,7 +1172,7 @@ function clean_up_path($path)
 function filter_extension(&$filename)
 {
     if (substr($filename, -1) == '/') {
-        return 1;  // Authorize directories
+        return 1; // Authorize directories
     }
     $blacklist = api_get_setting('upload_extensions_list_type');
     if ($blacklist != 'whitelist') { // if = blacklist
@@ -1393,9 +1405,9 @@ function set_default_settings($upload_path, $filename, $filetype = 'file')
     $upload_path = str_replace('//', '/', $upload_path);
 
     if ($upload_path == '/') {
-        $upload_path='';
+        $upload_path = '';
     } elseif (!empty($upload_path) && $upload_path[0] != '/') {
-        $upload_path="/$upload_path";
+        $upload_path = "/$upload_path";
     }
 
     $endchar = substr($filename, strlen($filename) - 1, 1);
@@ -1433,7 +1445,7 @@ function search_img_from_html($html_file) {
     $img_path_list = array();
 
     if (!$fp = fopen($html_file, 'r')) {
-        return ;
+        return;
     }
 
     // Aearch and store occurences of the <img> tag in an array
@@ -1453,7 +1465,7 @@ function search_img_from_html($html_file) {
         $img_tag_list = $matches[0];
     }
 
-    fclose ($fp);
+    fclose($fp);
     unset($buffer);
 
     // Search the image file path from all the <IMG> tag detected
@@ -1552,7 +1564,7 @@ function create_unexisting_directory(
 
     if (!is_dir($base_work_dir.$systemFolderName)) {
         $result = mkdir(
-            $base_work_dir . $systemFolderName,
+            $base_work_dir.$systemFolderName,
             api_get_permissions_for_new_directories(),
             true
         );
@@ -1565,14 +1577,13 @@ function create_unexisting_directory(
                     WHERE
                         c_id = $course_id AND
                         (
-                            path = '" . Database::escape_string($systemFolderName). "'
+                            path = '".Database::escape_string($systemFolderName)."'
                         )
             ";
 
-            $groupIid = 0;
+            $groupInfo = [];
             if (!empty($to_group_id)) {
                 $groupInfo = GroupManager::get_group_properties($to_group_id);
-                $groupIid = $groupInfo['iid'];
             }
 
             $rs = Database::query($sql);
@@ -1605,7 +1616,7 @@ function create_unexisting_directory(
                             $document_id,
                             $visibilities[$visibility],
                             $user_id,
-                            $groupIid,
+                            $groupInfo,
                             $to_user_id,
                             null,
                             null,
@@ -1618,7 +1629,7 @@ function create_unexisting_directory(
                             $document_id,
                             'FolderCreated',
                             $user_id,
-                            $groupIid,
+                            $groupInfo,
                             $to_user_id,
                             null,
                             null,
@@ -1722,7 +1733,7 @@ function replace_img_path_in_html_file($original_img_path, $new_img_path, $html_
 
     // Fix the image tags
 
-    for ($i = 0, $fileNb = count($original_img_path); $i < $fileNb ; $i++) {
+    for ($i = 0, $fileNb = count($original_img_path); $i < $fileNb; $i++) {
         $replace_what = $original_img_path[$i];
         // We only need the directory and the filename /path/to/file_html_files/missing_file.gif -> file_html_files/missing_file.gif
         $exploded_file_path = explode('/', $new_img_path[$i]);
@@ -1763,7 +1774,7 @@ function create_link_file($file_path, $url)
         .'</body>'
         .'</html>';
     if (file_exists($file_path)) {
-        if (!($fp = fopen ($file_path, 'w'))) {
+        if (!($fp = fopen($file_path, 'w'))) {
             return false;
         }
         return fwrite($fp, $file_content);
@@ -1800,7 +1811,7 @@ function build_missing_files_form($missing_files, $upload_path, $file_name)
 {
     // Do we need a / or not?
     $added_slash = ($upload_path == '/') ? '' : '/';
-    $folder_id      = DocumentManager::get_document_id(api_get_course_info(), $upload_path);
+    $folder_id = DocumentManager::get_document_id(api_get_course_info(), $upload_path);
     // Build the form
     $form = "<p><strong>".get_lang('MissingImagesDetected')."</strong></p>"
         ."<form method=\"post\" action=\"".api_get_self()."\" enctype=\"multipart/form-data\">"

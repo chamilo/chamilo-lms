@@ -72,7 +72,7 @@ echo '<a href="resume_session.php?id_session='.$session_id.'">'.
 echo '</div>';
 
 if (!empty($error_message)) {
-    Display::display_normal_message($error_message, false);
+    echo Display::return_message($error_message, 'normal', false);
 }
 
 $form = new FormValidator(

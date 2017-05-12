@@ -14,15 +14,15 @@ if (!$is_locked_attendance || api_is_platform_admin()) {
     echo '<div class="actions">';
     if ($action == 'calendar_add') {
         echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.'">'.
-            Display::return_icon('back.png',get_lang('AttendanceCalendar'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('AttendanceCalendar'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         echo '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id.'">'.
-            Display::return_icon('back.png',get_lang('AttendanceSheet'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('AttendanceSheet'), '', ICON_SIZE_MEDIUM).'</a>';
         if (api_is_allowed_to_edit()) {
             echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_add&attendance_id='.$attendance_id.'">'.
-                Display::return_icon('add.png',get_lang('AddDateAndTime'),'',ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('add.png', get_lang('AddDateAndTime'), '', ICON_SIZE_MEDIUM).'</a>';
             echo '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDeleteAllDates').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_all_delete&attendance_id='.$attendance_id.'">'.
-                Display::return_icon('clean.png',get_lang('CleanCalendar'),'',ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('clean.png', get_lang('CleanCalendar'), '', ICON_SIZE_MEDIUM).'</a>';
         }
     }
     echo '</div>';
@@ -33,17 +33,17 @@ $message_information = get_lang('AttendanceCalendarDescription');
 if (!empty($message_information)) {
     $message = '<strong>'.get_lang('Information').'</strong><br />';
     $message .= $message_information;
-    Display::display_normal_message($message, false);
+    Display::addFlash(Display::return_message($message, 'normal', false));
 }
 
 if (isset($error_repeat_date) && $error_repeat_date) {
     $message = get_lang('EndDateMustBeMoreThanStartDate');
-    Display::display_error_message($message, false);
+    Display::addFlash(Display::return_message($message, 'error', false));
 }
 
 if (isset($error_checkdate) && $error_checkdate) {
     $message = get_lang('InvalidDate');
-    Display::display_error_message($message, false);
+    Display::addFlash(Display::return_message($message, 'error', false));
 }
 
 if (isset($action) && $action == 'calendar_add') {
@@ -57,7 +57,7 @@ if (isset($action) && $action == 'calendar_add') {
     $form = new FormValidator(
         'attendance_calendar_add',
         'POST',
-        'index.php?action=calendar_add&attendance_id='.$attendance_id.'&' . api_get_cidreq(),
+        'index.php?action=calendar_add&attendance_id='.$attendance_id.'&'.api_get_cidreq(),
         ''
     );
     $form->addElement('header', get_lang('AddADateTime'));
@@ -92,7 +92,7 @@ if (isset($action) && $action == 'calendar_add') {
         'weekly' => get_lang('RepeatWeekly'),
         'monthlyByDate' => get_lang('RepeatMonthlyByDate')
     );
-    $form->addElement('select', 'repeat_type', get_lang('RepeatType') , $a_repeat_type);
+    $form->addElement('select', 'repeat_type', get_lang('RepeatType'), $a_repeat_type);
 
     $form->addElement(
         'date_picker',
@@ -133,7 +133,7 @@ if (isset($action) && $action == 'calendar_add') {
                 $form = new FormValidator(
                     'attendance_calendar_edit',
                     'POST',
-                    'index.php?action=calendar_edit&attendance_id=' . $attendance_id . '&calendar_id=' . $calendar_id . '&' . api_get_cidreq(),
+                    'index.php?action=calendar_edit&attendance_id='.$attendance_id.'&calendar_id='.$calendar_id.'&'.api_get_cidreq(),
                     ''
                 );
                 $form->addDateTimePicker(
@@ -154,7 +154,7 @@ if (isset($action) && $action == 'calendar_add') {
                     get_lang('DateTime'),
                         null,
                         ICON_SIZE_MEDIUM
-                ).' '.substr($calendar['date_time'], 0, strlen($calendar['date_time'])- 3) .'&nbsp;';
+                ).' '.substr($calendar['date_time'], 0, strlen($calendar['date_time']) - 3).'&nbsp;';
 
                 if (isset($calendar['groups']) && !empty($calendar['groups'])) {
                     foreach ($calendar['groups'] as $group) {

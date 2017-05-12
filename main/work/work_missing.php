@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_STUDENTPUBLICATION;
+$current_course_tool = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
 
@@ -106,7 +106,7 @@ $output = '';
 if (!empty($workId)) {
     if (empty($_GET['list']) or Security::remove_XSS($_GET['list']) == 'with') {
         $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$workId.'&list=without">'.
-            Display::return_icon('exercice_uncheck.png', get_lang('ViewUsersWithoutTask'),'',ICON_SIZE_MEDIUM)."</a>";
+            Display::return_icon('exercice_uncheck.png', get_lang('ViewUsersWithoutTask'), '', ICON_SIZE_MEDIUM)."</a>";
     } else {
         if (!isset($_GET['action']) || (isset($_GET['action']) && $_GET['action'] != 'send_mail')) {
             $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$workId.'&list=without&action=send_mail&sec_token='.$token.'">'.

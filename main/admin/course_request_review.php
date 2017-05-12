@@ -33,7 +33,6 @@ $is_error_message = isset($_GET['is_error_message']) ? !empty($_GET['is_error_me
 $keyword = isset($_GET['keyword']) ? Database::escape_string(trim($_GET['keyword'])) : '';
 
 if ($course_validation_feature) {
-
     /**
      * Course acceptance and creation.
      */
@@ -127,7 +126,7 @@ function get_number_of_requests()
 function get_request_data($from, $number_of_items, $column, $direction)
 {
     global $keyword;
-    $course_request_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
+    $course_request_table = Database::get_main_table(TABLE_MAIN_COURSE_REQUEST);
 
     if (DELETE_ACTION_ENABLED) {
         $sql = "SELECT id AS col0,
@@ -176,7 +175,7 @@ function get_request_data($from, $number_of_items, $column, $direction)
  */
 function email_filter($teacher)
 {
-    $sql = "SELECT user_id FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." WHERE tutor_name LIKE '".$teacher."'";
+    $sql = "SELECT user_id FROM ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)." WHERE tutor_name LIKE '".$teacher."'";
     $res = Database::query($sql);
     $info = Database::fetch_array($res);
     return '<a href="./user_information.php?user_id='.$info[0].'">'.$teacher.'</a>';
@@ -189,8 +188,8 @@ function modify_filter($id)
 {
     $code = CourseRequestManager::get_course_request_code($id);
     $result = '<a href="course_request_edit.php?id='.$id.'&caller=0">'.Display::return_icon('edit.png', get_lang('Edit'), array('style' => 'vertical-align: middle;')).'</a>'.
-        '&nbsp;<a href="?accept_course_request='.$id.'">'.Display::return_icon('accept.png', get_lang('AcceptThisCourseRequest'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ANewCourseWillBeCreated'), $code), ENT_QUOTES)).'\')) return false;'),16).'</a>'.
-        '&nbsp;<a href="?reject_course_request='.$id.'">'.Display::return_icon('error.png', get_lang('RejectThisCourseRequest'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ACourseRequestWillBeRejected'), $code), ENT_QUOTES)).'\')) return false;'),16).'</a>';
+        '&nbsp;<a href="?accept_course_request='.$id.'">'.Display::return_icon('accept.png', get_lang('AcceptThisCourseRequest'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ANewCourseWillBeCreated'), $code), ENT_QUOTES)).'\')) return false;'), 16).'</a>'.
+        '&nbsp;<a href="?reject_course_request='.$id.'">'.Display::return_icon('error.png', get_lang('RejectThisCourseRequest'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ACourseRequestWillBeRejected'), $code), ENT_QUOTES)).'\')) return false;'), 16).'</a>';
     if (!CourseRequestManager::additional_info_asked($id)) {
         $result .= '&nbsp;<a href="?request_info='.$id.'">'.Display::return_icon('request_info.gif', get_lang('AskAdditionalInfo'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('AdditionalInfoWillBeAsked'), $code), ENT_QUOTES)).'\')) return false;')).'</a>';
     }
@@ -210,9 +209,9 @@ Display :: display_header($tool_name);
 // Display confirmation or error message.
 if (!empty($message)) {
     if ($is_error_message) {
-        Display::display_error_message($message, false);
+        Display::addFlash(Display::return_message($message, 'error', false));
     } else {
-        Display::display_normal_message($message, false);
+        Display::addFlash(Display::return_message($message, 'normal', false));
     }
 }
 

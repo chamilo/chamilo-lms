@@ -8,7 +8,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 $_in_course = true;
 $course_code = api_get_course_id();
-if (empty($course_code )) {
+if (empty($course_code)) {
     $_in_course = false;
 }
 
@@ -23,7 +23,7 @@ $catadd = new Category();
 $my_user_id = api_get_user_id();
 $catadd->set_user_id($my_user_id);
 $catadd->set_parent_id($get_select_cat);
-$catcourse = Category :: load ($get_select_cat);
+$catcourse = Category :: load($get_select_cat);
 
 if ($_in_course) {
     $catadd->set_course_code($course_code);
@@ -37,12 +37,12 @@ $form = new CatForm(
     $catadd,
     'add_cat_form',
     null,
-    api_get_self() . '?selectcat='.$get_select_cat.'&'.api_get_cidreq()
+    api_get_self().'?selectcat='.$get_select_cat.'&'.api_get_cidreq()
 );
 
 if ($form->validate()) {
     $values = $form->exportValues();
-    $select_course=isset($values['select_course']) ? $values['select_course'] : array();
+    $select_course = isset($values['select_course']) ? $values['select_course'] : array();
     $cat = new Category();
     if ($values['hid_parent_id'] == '0') {
         if ($select_course == 'COURSEINDEPENDENT') {
@@ -89,12 +89,12 @@ if ($form->validate()) {
     }
     $cat->set_visible($visible);
     $result = $cat->add();
-    header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?addcat=&selectcat=' . $cat->get_parent_id().'&'.api_get_cidreq());
+    header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?addcat=&selectcat='.$cat->get_parent_id().'&'.api_get_cidreq());
     exit;
 }
 
 if (!$_in_course) {
-    $interbreadcrumb[] = array (
+    $interbreadcrumb[] = array(
         'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$get_select_cat.'&'.api_get_cidreq(),
         'name' => get_lang('Gradebook')
     );

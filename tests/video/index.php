@@ -1,4 +1,5 @@
 <?php
+/* For license terms, see /license.txt */
 /**
  * Script to convert videos to several formats
  * Put a comment before the exit(); line to enable.
@@ -34,8 +35,8 @@ ini_set('post_max_size',0);
 <?php
 if (!empty($_FILES['video'])) {
   error_log($_FILES['video']['name']);
-  $orig = dirname(__FILE__).'/upload/'.md5(uniqid(rand(),true)).'-'.$_FILES['video']['name'];
-  $dest = dirname(__FILE__).'/upload/'.md5(uniqid(rand(),true)).'-'.substr($_FILES['video']['name'],0,-3).(($_POST['codec']!='ogv')?'webm':'ogv');
+  $orig = __DIR__.'/upload/'.md5(uniqid(rand(),true)).'-'.$_FILES['video']['name'];
+  $dest = __DIR__.'/upload/'.md5(uniqid(rand(),true)).'-'.substr($_FILES['video']['name'],0,-3).(($_POST['codec']!='ogv')?'webm':'ogv');
   error_log($dest);
   $res = @move_uploaded_file($_FILES['video']['tmp_name'],$orig);
   if ($res === false) { error_log("Error moving video file: ".$php_error_msg); }
@@ -48,7 +49,7 @@ if (!empty($_FILES['video'])) {
 <p>
 <?php
 echo "Files on server:<br />";
-$list = scandir(dirname(__FILE__).'/upload');
+$list = scandir(__DIR__.'/upload');
 if (is_array($list)) {
   foreach ($list as $file) {
     if (substr($file,0,1) == '.') {

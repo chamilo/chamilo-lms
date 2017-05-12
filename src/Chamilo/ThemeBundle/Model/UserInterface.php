@@ -8,7 +8,8 @@
 namespace Chamilo\ThemeBundle\Model;
 
 
-interface UserInterface {
+interface UserInterface
+{
     public function getAvatar();
     public function getUsername();
     public function getMemberSince();

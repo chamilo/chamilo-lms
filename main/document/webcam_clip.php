@@ -35,9 +35,9 @@ $document_id = $document_data['id'];
 $dir = $document_data['path'];
 
 //make some vars
-$webcamdir=$dir;
-if($webcamdir=="/"){
- $webcamdir="";
+$webcamdir = $dir;
+if ($webcamdir == "/") {
+ $webcamdir = "";
 }
 
 
@@ -71,7 +71,7 @@ if (!is_dir($filepath)) {
 $groupId = api_get_group_id();
 
 if (!empty($groupId)) {
-	$interbreadcrumb[] = array ("url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace'));
+	$interbreadcrumb[] = array("url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace'));
 	$noPHP_SELF = true;
 	$group = GroupManager :: get_group_properties($groupId);
 	$path = explode('/', $dir);
@@ -80,14 +80,14 @@ if (!empty($groupId)) {
 	}
 }
 
-$interbreadcrumb[] = array ("url" => "./document.php?id=".$document_id."&".api_get_cidreq(), "name" => get_lang('Documents'));
+$interbreadcrumb[] = array("url" => "./document.php?id=".$document_id."&".api_get_cidreq(), "name" => get_lang('Documents'));
 
 if (!api_is_allowed_in_course()) {
 	api_not_allowed(true);
 }
 
 if (!($is_allowed_to_edit || $groupRights ||
-	DocumentManager::is_my_shared_folder(api_get_user_id(), Security::remove_XSS($dir),api_get_session_id()))) {
+	DocumentManager::is_my_shared_folder(api_get_user_id(), Security::remove_XSS($dir), api_get_session_id()))) {
 	api_not_allowed(true);
 }
 
@@ -97,15 +97,15 @@ Event::event_access_tool(TOOL_DOCUMENT);
 $display_dir = $dir;
 if (isset ($group)) {
 	$display_dir = explode('/', $dir);
-	unset ($display_dir[0]);
-	unset ($display_dir[1]);
+	unset($display_dir[0]);
+	unset($display_dir[1]);
 	$display_dir = implode('/', $display_dir);
 }
 
 // Interbreadcrumb for the current directory root path
 $counter = 0;
 if (isset($document_data['parents'])) {
-    foreach($document_data['parents'] as $document_sub_data) {
+    foreach ($document_data['parents'] as $document_sub_data) {
         //fixing double group folder in breadcrumb
         if (api_get_group_id()) {
             if ($counter == 0) {
@@ -119,12 +119,12 @@ if (isset($document_data['parents'])) {
 }
 
 //make some vars
-$webcamuserid=api_get_user_id();
+$webcamuserid = api_get_user_id();
 
 Display :: display_header($nameTools, 'Doc');
 echo '<div class="actions">';
 echo '<a href="document.php?id='.$document_id.'">'.
-	Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+	Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 ?>
 

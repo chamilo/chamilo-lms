@@ -230,3 +230,8 @@ blockquote p {
 .alert-danger .alert-link {
   color: #843534;
 }
+.img-responsive {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}

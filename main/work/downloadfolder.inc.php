@@ -9,7 +9,7 @@
 
 $work_id = $_GET['id'];
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_STUDENTPUBLICATION;
+$current_course_tool = TOOL_STUDENTPUBLICATION;
 $_course = api_get_course_info();
 
 // Protection
@@ -185,10 +185,10 @@ while ($not_deleted_file = Database::fetch_assoc($query)) {
 if (!empty($files)) {
     $fileName = api_replace_dangerous_char($work_data['title']);
     // Logging
-    Event::event_download($fileName .'.zip (folder)');
+    Event::event_download($fileName.'.zip (folder)');
 
     //start download of created file
-    $name = $fileName .'.zip';
+    $name = $fileName.'.zip';
 
     if (Security::check_abs_path($temp_zip_file, api_get_path(SYS_ARCHIVE_PATH))) {
         DocumentManager::file_send_for_download($temp_zip_file, true, $name);

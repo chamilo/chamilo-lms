@@ -29,7 +29,7 @@ function validate_data($users_courses)
             // 2.1 Check whethher code has been allready used by this CVS-file.
             if (!isset($coursecodes[$user_course['CourseCode']])) {
                 // 2.1.1 Check whether course with this code exists in the system.
-                $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
+                $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
                 $sql = "SELECT * FROM $course_table
                         WHERE code = '".Database::escape_string($user_course['CourseCode'])."'";
                 $res = Database::query($sql);
@@ -99,8 +99,8 @@ function save_data($users_courses)
             foreach ($to_subscribe as $courseId) {
                 $courseInfo = api_get_course_info_by_id($courseId);
                 $course_code = $courseInfo['code'];
-                if (CourseManager :: course_exists($course_code)) {
-                    $course_info = CourseManager::get_course_information($course_code);
+                if (CourseManager::course_exists($course_code)) {
+                    $course_info = api_get_course_info($course_code);
                     $inserted_in_course[$course_code] = $course_info['title'];
 
                     CourseManager::subscribe_user(
@@ -117,9 +117,9 @@ function save_data($users_courses)
             foreach ($to_unsubscribe as $courseId) {
                 $courseInfo = api_get_course_info_by_id($courseId);
                 $course_code = $courseInfo['code'];
-                if (CourseManager :: course_exists($course_code)) {
+                if (CourseManager::course_exists($course_code)) {
                     CourseManager::unsubscribe_user($user_id, $course_code);
-                    $course_info = CourseManager::get_course_information($course_code);
+                    $course_info = api_get_course_info($course_code);
                     CourseManager::unsubscribe_user($user_id, $course_code);
                     $inserted_in_course[$course_info['code']] = $course_info['title'];
                 }
@@ -137,7 +137,7 @@ function save_data($users_courses)
  */
 function parse_csv_data($file)
 {
-    $courses = Import :: csvToArray($file);
+    $courses = Import::csv_reader($file);
     return $courses;
 }
 
@@ -198,7 +198,7 @@ if ($form->validate()) {
 }
 
 // Displaying the header.
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 if (count($errors) != 0) {
     $error_message = '<ul>';
@@ -208,7 +208,7 @@ if (count($errors) != 0) {
         $error_message .= '</li>';
     }
     $error_message .= '</ul>';
-    Display :: display_error_message($error_message, false);
+    echo Display::return_message($error_message, 'error', false);
 }
 
 // Displaying the form.
@@ -229,4 +229,4 @@ echo STUDENT.': '.get_lang('Student').'<br />';
 </blockquote>
 <?php
 
-Display :: display_footer();
+Display::display_footer();

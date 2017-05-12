@@ -25,9 +25,9 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'display';
 // setting breadcrumbs
 
 $tool_name = get_lang('SkillsAndGradebooks');
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 if ($action == 'add_skill') {
-    $interbreadcrumb[]=array('url' => 'skills_gradebook.php','name' => get_lang('SkillsAndGradebooks'));
+    $interbreadcrumb[] = array('url' => 'skills_gradebook.php', 'name' => get_lang('SkillsAndGradebooks'));
     $tool_name = get_lang('Add');
 }
 
@@ -86,9 +86,9 @@ $extra_params['height'] = 'auto';
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
                         //certificates
                         if (rowObject[4] == 1) {
-                            return \'<a href="?action=add_skill&id=\'+options.rowId+\'">'.Display::return_icon('add.png', get_lang('AddSkill'),'',ICON_SIZE_SMALL).'</a>'.'\';
+                            return \'<a href="?action=add_skill&id=\'+options.rowId+\'">'.Display::return_icon('add.png', get_lang('AddSkill'), '', ICON_SIZE_SMALL).'</a>'.'\';
                         } else {
-                            return \''.Display::return_icon('add_na.png', get_lang('YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill'),'',ICON_SIZE_SMALL).''.'\';
+                            return \''.Display::return_icon('add_na.png', get_lang('YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill'), '', ICON_SIZE_SMALL).''.'\';
                         }
                  }';
 ?>
@@ -96,7 +96,7 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 $(function() {
 <?php
     // grid definition see the $career->display() function
-    echo Display::grid_js('gradebooks', $url, $columns, $column_model, $extra_params, array(), $action_links,true);
+    echo Display::grid_js('gradebooks', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 ?>
 });
 </script>
@@ -111,7 +111,7 @@ switch ($action) {
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
         $gradebook_info = $gradebook->get($id);
         $url  = api_get_self().'?action='.$action.'&id='.$id;
-        $form =  $gradebook->show_skill_form($id, $url, $gradebook_info['name']);
+        $form = $gradebook->show_skill_form($id, $url, $gradebook_info['name']);
         if ($form->validate()) {
             $values = $form->exportValues();
             $res    = $gradebook->update_skills_to_gradebook($values['id'], $values['skill']);

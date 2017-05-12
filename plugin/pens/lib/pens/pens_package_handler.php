@@ -26,7 +26,7 @@
  * @licence http://www.gnu.org/licenses/gpl.txt
  */
 
-require_once(dirname(__FILE__)."/pens_config.php");
+require_once __DIR__.'/pens_config.php';
 
 /**
  * PENSPackageHandler

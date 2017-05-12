@@ -32,14 +32,14 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
         );
         $number_friends = count($friends);
         $friend_html = '';
-        $friend_html .= '<div><h3>' . get_lang('SocialFriend') . '</h3></div>';
+        $friend_html .= '<div><h3>'.get_lang('SocialFriend').'</h3></div>';
         $friend_html .= '<div id="friend-container" class="social-friend-container">';
         $friend_html .= '<div id="friend-header" >';
 
         if ($number_friends == 1) {
-            $friend_html .= '<div style="float:left;width:80%">' . $number_friends . ' ' . get_lang('Friend') . '</div>';
+            $friend_html .= '<div style="float:left;width:80%">'.$number_friends.' '.get_lang('Friend').'</div>';
         } else {
-            $friend_html .= '<div style="float:left;width:80%">' . $number_friends . ' ' . get_lang('Friends') . '</div>';
+            $friend_html .= '<div style="float:left;width:80%">'.$number_friends.' '.get_lang('Friends').'</div>';
         }
 
         $friend_html .= '</div>'; // close div friend-header
@@ -51,14 +51,14 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                     $friend['firstName'],
                     $friend['lastName']
                 );
-                $friend_html .= '<div id=div_' . $friend['friend_user_id'] . ' class="image_friend_network" ><span><center>';
+                $friend_html .= '<div id=div_'.$friend['friend_user_id'].' class="image_friend_network" ><span><center>';
 
                 $userPicture = UserManager::getUserPicture($friend['friend_user_id']);
 
-                $friend_html .= '<a href="profile.php?u=' . $friend['friend_user_id'].'">';
-                $friend_html .= '<img src="' . $userPicture . '" id="imgfriend_' . $friend['friend_user_id'] . '" title="' . $name_user . '" />';
+                $friend_html .= '<a href="profile.php?u='.$friend['friend_user_id'].'">';
+                $friend_html .= '<img src="'.$userPicture.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" />';
                 $friend_html .= '</center></span>';
-                $friend_html .= '<center class="friend">' . $name_user . '</a></center>';
+                $friend_html .= '<center class="friend">'.$name_user.'</a></center>';
                 $friend_html .= '</div>';
             }
         }
@@ -73,7 +73,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
             $i = 1;
             foreach ($results as $result) {
                 $id = $result['id'];
-                $url_open = '<a href="group_view.php?id=' . $id . '">';
+                $url_open = '<a href="group_view.php?id='.$id.'">';
                 $url_close = '</a>';
                 $icon = '';
                 $name = cut($result['name'], 20, true);
@@ -94,11 +94,11 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                     $userGroup->get_all_users_by_group($id)
                 );
                 if ($count_users_group == 1) {
-                    $count_users_group = $count_users_group . ' ' . get_lang(
+                    $count_users_group = $count_users_group.' '.get_lang(
                             'Member'
                         );
                 } else {
-                    $count_users_group = $count_users_group . ' ' . get_lang(
+                    $count_users_group = $count_users_group.' '.get_lang(
                             'Members'
                         );
                 }
@@ -107,40 +107,40 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                     $result['picture_uri'],
                     80
                 );
-                $item_name = '<div class="box_shared_profile_group_title">' . $url_open . api_xml_http_response_encode($name) . $icon . $url_close . '</div>';
+                $item_name = '<div class="box_shared_profile_group_title">'.$url_open.api_xml_http_response_encode($name).$icon.$url_close.'</div>';
                 $item_description = '';
                 if (!empty($result['description'])) {
                     $item_description = '<div class="box_shared_profile_group_description">
                         <span class="social-groups-text2">' .
-                        api_xml_http_response_encode(get_lang('Description')) . '</span><p class="social-groups-text4">' .
-                        cut(api_xml_http_response_encode($result['description']), 120, true ) . '</p></div>';
+                        api_xml_http_response_encode(get_lang('Description')).'</span><p class="social-groups-text4">'.
+                        cut(api_xml_http_response_encode($result['description']), 120, true).'</p></div>';
                 }
 
                 $result['picture_uri'] = '<div class="box_shared_profile_group_image">
-                                          <img class="social-groups-image" src="' . $picture['file'] . '" /></div>';
+                                          <img class="social-groups-image" src="' . $picture['file'].'" /></div>';
                 $item_actions = '';
                 if (api_get_user_id() == $user_id) {
-                    $item_actions = '<div class="box_shared_profile_group_actions"><a href="group_view.php?id=' . $id . '">' .
-                        get_lang('SeeMore') . $url_close . '</div>';
+                    $item_actions = '<div class="box_shared_profile_group_actions"><a href="group_view.php?id='.$id.'">'.
+                        get_lang('SeeMore').$url_close.'</div>';
                 }
                 $grid_my_groups[] = array(
                     $item_name,
-                    $url_open . $result['picture_uri'] . $url_close,
-                    $item_description . $item_actions
+                    $url_open.$result['picture_uri'].$url_close,
+                    $item_description.$item_actions
                 );
                 $i++;
             }
         }
         if (count($grid_my_groups) > 0) {
             echo '<div style="margin-top:20px">';
-            echo '<div><h3>' . get_lang('MyGroups') . '</h3></div>';
+            echo '<div><h3>'.get_lang('MyGroups').'</h3></div>';
             $count_groups = 0;
             if (count($results) == 1) {
-                $count_groups = count($results) . ' ' . get_lang('Group');
+                $count_groups = count($results).' '.get_lang('Group');
             } else {
-                $count_groups = count($results) . ' ' . get_lang('Groups');
+                $count_groups = count($results).' '.get_lang('Groups');
             }
-            echo '<div>' . $count_groups . '</div>';
+            echo '<div>'.$count_groups.'</div>';
 
             Display::display_sortable_grid(
                 'shared_profile_mygroups',

@@ -9,7 +9,7 @@
  * Code
  */
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 require_once('../inc/global.inc.php');
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -17,11 +17,11 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 require('../auth/ldap/authldap.php');
 
-$annee_base=date('Y');
+$annee_base = date('Y');
 
 $tool_name = get_lang('LDAPImport');
 // setting breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 var buttoncheck = 1;
@@ -64,7 +64,7 @@ if (empty($annee) && empty($id_session))
 		echo '</div>';
 
 }
-elseif(!empty($annee) && empty($id_session))
+elseif (!empty($annee) && empty($id_session))
 {
 	Display::display_header($tool_name);
 	echo '<div style="align:center">';
@@ -75,14 +75,14 @@ elseif(!empty($annee) && empty($id_session))
 	echo '<select name="id_session">';
 
 	$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-	$sql = "SELECT id,name,nbr_courses,access_start_date,access_end_date " .
+	$sql = "SELECT id,name,nbr_courses,access_start_date,access_end_date ".
 		" FROM $tbl_session ".
 		" ORDER BY name";
 	$result = Database::query($sql);
 
-	$sessions=Database::store_result($result);
-	$nbr_results=count($sessions);
-	foreach($sessions as $row) {
+	$sessions = Database::store_result($result);
+	$nbr_results = count($sessions);
+	foreach ($sessions as $row) {
 		echo '<option value="'.$row['id'].'">'.api_htmlentities($row['name']).' ('.$row['access_start_date'].' - '.$row['access_end_date'].')</option>';
 	}
 	echo '</select>';
@@ -114,7 +114,7 @@ elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed']))
 
 		$info = ldap_get_entries($ds, $sr);
 
-		for ($key = 0; $key < $info["count"]; $key ++) {
+		for ($key = 0; $key < $info["count"]; $key++) {
 			$nom_form[] = $info[$key]["sn"][0];
 			$prenom_form[] = $info[$key]["givenname"][0];
 			$email_form[] = $info[$key]["mail"][0];
@@ -134,7 +134,7 @@ elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed']))
 		asort($nom_form);
 		reset($nom_form);
 
-		$statut=5;
+		$statut = 5;
 		include ('ldap_form_add_users_group.php');
 	} else {
 		echo '<h4>'.get_lang('UnableToConnectTo').' '.$host.'</h4>';
@@ -145,24 +145,24 @@ elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed']))
     echo '</div>';
 
 }
-elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed']=='yes'))
+elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed'] == 'yes'))
 {
-	$id=$_POST['username_form'];
-	$UserList=array();
+	$id = $_POST['username_form'];
+	$UserList = array();
 	$userid_match_login = array();
 	foreach ($id as $form_index=>$user_id)
 	{
-		if(is_array($_POST['checkboxes']) && in_array($form_index,array_values($_POST['checkboxes'])))
+		if (is_array($_POST['checkboxes']) && in_array($form_index, array_values($_POST['checkboxes'])))
 		{
 			$tmp = ldap_add_user($user_id);
-			$UserList[]= $tmp;
+			$UserList[] = $tmp;
 			$userid_match_login[$tmp] = $user_id;
 		}
 	}
 	if (!empty($_POST['id_session'])) {
 		$num = 0;
 		$tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-		$tbl_session	  = Database::get_main_table(TABLE_MAIN_SESSION);
+		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 		foreach ($UserList as $user_id) {
                     $res_user = Database::insert(
                         $tbl_session_user,
@@ -177,7 +177,7 @@ elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed']=='yes'))
                     }
 		}
 
-		if($num>0) {
+		if ($num > 0) {
 			$sql = 'UPDATE '.$tbl_session.' SET nbr_users = (nbr_users + '.$num.') WHERE id = '.intval($id_session);
 			$res = Database::query($sql);
 		}
@@ -199,14 +199,14 @@ elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed']=='yes'))
 		{
 			$message=get_lang('NoUserAdded');
 		}
-		Display :: display_normal_message($message,false);
+		Display::addFlash(Display::return_message($message, 'normal', false));
 	}
 	*/
 	else
 	{
 		Display::display_header($tool_name);
-		$message=get_lang('NoUserAdded');
-		Display :: display_normal_message($message,false);
+		$message = get_lang('NoUserAdded');
+		Display::addFlash(Display::return_message($message, 'normal', false));
 	}
 	echo '<br /><br />';
     echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('BackToNewSearch').'</a>';

@@ -10,14 +10,16 @@ namespace Chamilo\ThemeBundle\Twig;
 
 use Twig_Environment;
 
-class WidgetExtension extends \Twig_Extension {
+class WidgetExtension extends \Twig_Extension
+{
 
     /**
      * @var Twig_Environment
      */
     protected $env;
 
-    public function renderWidget() {
+    public function renderWidget()
+    {
 
     }
 

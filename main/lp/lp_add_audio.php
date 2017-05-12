@@ -13,15 +13,15 @@ api_protect_course_script();
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$isStudentView = isset($_REQUEST['isStudentView']) ? (int)$_REQUEST['isStudentView'] : null;
-$learnpath_id = (int)$_REQUEST['lp_id'];
+$isStudentView = isset($_REQUEST['isStudentView']) ? (int) $_REQUEST['isStudentView'] : null;
+$learnpath_id = (int) $_REQUEST['lp_id'];
 $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 
 $type = isset($_GET['type']) ? $_GET['type'] : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
-    error_log('New LP - User not authorized in lp_add_item.php');
+    error_log('New LP - User not authorized in lp_add_audio.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
 }
@@ -32,7 +32,7 @@ if (isset($_SESSION['gradebook'])) {
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array (
+    $interbreadcrumb[] = array(
         'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
     );
@@ -56,12 +56,12 @@ switch ($type) {
         );
         break;
     default:
-        $interbreadcrumb[]= array('url' => '#', 'name' => get_lang('NewStep'));
+        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewStep'));
         break;
 }
 
 if ($action == 'add_item' && $type == 'document') {
-    $interbreadcrumb[]= array ('url' => '#', 'name' => get_lang('NewDocumentCreated'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewDocumentCreated'));
 }
 
 // Theme calls.
@@ -77,7 +77,7 @@ $lp_item = new learnpathItem($lp_item_id);
 $form = new FormValidator(
     'add_audio',
     'post',
-    api_get_self() . '?action=add_audio&id=' . $lp_item_id . '&' . api_get_cidreq().'&lp_id='.$learnpath_id,
+    api_get_self().'?action=add_audio&id='.$lp_item_id.'&'.api_get_cidreq().'&lp_id='.$learnpath_id,
     null,
     array('enctype' => 'multipart/form-data')
 );
@@ -91,8 +91,8 @@ if (isset($lp_item->audio) && !empty($lp_item->audio)) {
     $urlFile = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$lp_item->audio.'?'.api_get_cidreq();
 
     if (!file_exists($file)) {
-        $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$lpPathInfo['dir'] . '/' . $lp_item->audio;
-        $urlFile = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$lpPathInfo['dir'] . '/' . $lp_item->audio.'?'.api_get_cidreq();
+        $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$lpPathInfo['dir'].'/'.$lp_item->audio;
+        $urlFile = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$lpPathInfo['dir'].'/'.$lp_item->audio.'?'.api_get_cidreq();
     }
 }
 
@@ -108,10 +108,10 @@ $recordVoiceForm = Display::page_subheader(get_lang('RecordYourVoice'));
 
 $page .= '<div id="doc_form" class="col-md-8">';
 
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'rtc/RecordRTC.js"></script>';
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'wami-recorder/recorder.js"></script>';
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'wami-recorder/gui.js"></script>';
-$htmlHeadXtra[] = '<script type="text/javascript" src="' . api_get_path(WEB_LIBRARY_PATH) . 'swfobject/swfobject.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordRTC.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/recorder.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/gui.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfobject.js"></script>';
 
 $tpl = new Template(null);
 $tpl->assign('unique_file_id', api_get_unique_id());
@@ -133,7 +133,7 @@ if (!empty($file)) {
         Display::getMediaPlayer($file, array('url' => $urlFile)).
         "</div>";
     $form->addElement('label', get_lang('Listen'), $audioPlayer);
-    $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?lp_id='.$_SESSION['oLP']->get_id().'&action=add_audio&id='.$lp_item_id.'&delete_file=1&'.api_get_cidreq();
+    $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?lp_id='.$_SESSION['oLP']->get_id().'&action=add_audio&id='.$lp_item_id.'&delete_file=1&'.api_get_cidreq();
     $form->addElement('label', null, Display::url(get_lang('RemoveAudio'), $url, array('class' => 'btn btn-danger')));
 } else {
     $form->addElement('file', 'file');

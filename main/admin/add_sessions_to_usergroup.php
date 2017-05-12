@@ -21,16 +21,16 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // setting breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Classes'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'usergroups.php', 'name' => get_lang('Classes'));
 
 // Database Table Definitions
 
 // setting the name of the tool
-$tool_name=get_lang('SubscribeClassToSessions');
+$tool_name = get_lang('SubscribeClassToSessions');
 
 $add_type = 'multiple';
-if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
+if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -65,10 +65,10 @@ function remove_item(origin) {
 function display_advanced_search () {
         if ($("#advancedSearch").css("display") == "none") {
                 $("#advancedSearch").css("display","block");
-                $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
+                $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
         } else {
                 $("#advancedSearch").css("display","none");
-                $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
+                $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
         }
 }
 
@@ -82,7 +82,7 @@ function validate_filter() {
 
 $form_sent  = 0;
 $errorMsg   = '';
-$sessions=array();
+$sessions = array();
 $usergroup = new UserGroup();
 $id = intval($_GET['id']);
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
@@ -98,15 +98,13 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         exit;
     }
 }
-$data               = $usergroup->get($id);
-$session_list_in    = $usergroup->get_sessions_by_usergroup($id);
-$session_list       = SessionManager::get_sessions_list(array(), array('name'));
-
-//api_display_tool_title($tool_name.' ('.$session_info['name'].')');
-$elements_not_in = $elements_in= array();
+$data = $usergroup->get($id);
+$session_list_in = $usergroup->get_sessions_by_usergroup($id);
+$session_list = SessionManager::get_sessions_list(array(), array('name'));
+$elements_not_in = $elements_in = array();
 
 if (!empty($session_list)) {
-    foreach($session_list as $session) {
+    foreach ($session_list as $session) {
         if (in_array($session['id'], $session_list_in)) {
             $elements_in[$session['id']] = $session['name'];
         } else {
@@ -119,32 +117,33 @@ $ajax_search = $add_type == 'unique' ? true : false;
 
 //checking for extra field with filter on
 
-function search_usergroup_sessions($needle,$type) {
+function search_usergroup_sessions($needle, $type) {
     global $elements_in;
     $xajax_response = new xajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
-        if ($type == 'single') {
-        } else if ($type == 'searchbox') {
+        if ($type == 'searchbox') {
             $session_list = SessionManager::get_sessions_list(
                 array('s.name' => array('operator' => 'LIKE', 'value' => "%$needle%"))
             );
-        } else {
+        } elseif ($type != 'single') {
             $session_list = SessionManager::get_sessions_list(
                 array('s.name' => array('operator' => 'LIKE', 'value' => "$needle%"))
             );
         }
-        $i=0;
         if ($type != 'single') {
             $return .= '<select id="elements_not_in" name="elements_not_in_name[]" multiple="multiple" size="15" style="width:360px;">';
-
-            foreach ($session_list as $row ) {
+            foreach ($session_list as $row) {
                 if (!in_array($row['id'], array_keys($elements_in))) {
                     $return .= '<option value="'.$row['id'].'">'.$row['name'].'</option>';
                 }
             }
             $return .= '</select>';
-            $xajax_response -> addAssign('ajax_list_multiple','innerHTML',api_utf8_encode($return));
+            $xajax_response->addAssign(
+                'ajax_list_multiple',
+                'innerHTML',
+                api_utf8_encode($return)
+            );
         }
     }
 
@@ -156,31 +155,31 @@ Display::display_header($tool_name);
 
 $add = (empty($_GET['add']) ? '' : Security::remove_XSS($_GET['add']));
 if ($add_type == 'multiple') {
-    $link_add_type_unique = '<a href="' . api_get_self() . '?add=' . $add . '&add_type=unique">'.
+    $link_add_type_unique = '<a href="'.api_get_self().'?add='.$add.'&add_type=unique">'.
         Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
     $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
 } else {
     $link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
-    $link_add_type_multiple = '<a href="' . api_get_self() . '?add=' . $add . '&add_type=multiple">'.
+    $link_add_type_multiple = '<a href="'.api_get_self().'?add='.$add.'&add_type=multiple">'.
         Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
 
 echo '<div class="actions">';
-echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="usergroups.php">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '<a href="javascript://" class="advanced_parameters" style="margin-top: 8px" onclick="display_advanced_search();"><span id="img_plus_and_minus">&nbsp;'.
-    Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedSearch').'</span></a>';
+    Display::return_icon('div_show.gif', get_lang('Show'), array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedSearch').'</span></a>';
 echo '</div>';
-echo '<div id="advancedSearch" style="display: none">'. get_lang('SearchSessions'); ?> :
+echo '<div id="advancedSearch" style="display: none">'.get_lang('SearchSessions'); ?> :
      <input name="SearchSession" onchange = "xajax_search_usergroup_sessions(this.value,'searchbox')" onkeyup="this.onchange()">
      </div>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) echo '&add=true'; ?>" style="margin:0px;" <?php if ($ajax_search) {echo ' onsubmit="valide();"'; }?>>
 <?php
 echo '<legend>'.$data['name'].': '.$tool_name.'</legend>';
-echo Display::input('hidden','id',$id);
-echo Display::input('hidden','form_sent','1');
-echo Display::input('hidden','add_type',null);
-if(!empty($errorMsg)) {
-    Display::display_normal_message($errorMsg); //main API
+echo Display::input('hidden', 'id', $id);
+echo Display::input('hidden', 'form_sent', '1');
+echo Display::input('hidden', 'add_type', null);
+if (!empty($errorMsg)) {
+    Display::addFlash(Display::return_message($errorMsg, 'normal')); //main API
 }
 ?>
 
@@ -192,7 +191,7 @@ if(!empty($errorMsg)) {
   <td align="center"><b><?php echo get_lang('SessionsInGroup') ?> :</b></td>
 </tr>
 
-<?php if ($add_type=='multiple') { ?>
+<?php if ($add_type == 'multiple') { ?>
 <tr>
 <td align="center">
 <?php echo get_lang('FirstLetterSessions'); ?> :
@@ -211,7 +210,7 @@ if(!empty($errorMsg)) {
   <td align="center">
   <div id="content_source">
       <?php
-      if (!($add_type=='multiple')) {
+      if (!($add_type == 'multiple')) {
         ?>
         <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
         <div id="ajax_list_users_single"></div>
@@ -219,7 +218,7 @@ if(!empty($errorMsg)) {
       } else {
       ?>
       <div id="ajax_list_multiple">
-        <?php echo Display::select('elements_not_in_name',$elements_not_in, '',array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?>
+        <?php echo Display::select('elements_not_in_name', $elements_not_in, '', array('style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'elements_not_in', 'size'=>'15px'), false); ?>
       </div>
     <?php
       }
@@ -250,7 +249,7 @@ if(!empty($errorMsg)) {
   </td>
   <td align="center">
 <?php
-    echo Display::select('elements_in_name[]', $elements_in, '', array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_in','size'=>'15px'),false );
+    echo Display::select('elements_in_name[]', $elements_in, '', array('style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'elements_in', 'size'=>'15px'), false);
     unset($sessionUsersList);
 ?>
  </td>
@@ -266,7 +265,7 @@ if(!empty($errorMsg)) {
 </table>
 </form>
 
-<script type="text/javascript">
+<script>
 function moveItem(origin , destination) {
     for(var i = 0 ; i<origin.options.length ; i++) {
         if(origin.options[i].selected) {

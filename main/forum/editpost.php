@@ -165,7 +165,7 @@ $group_id = api_get_group_id();
 
 if (!api_is_allowed_to_edit(null, true) &&
     $current_forum['allow_edit'] == 0 &&
-    !GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties['iid'])
+    !GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties)
 ) {
     api_not_allowed(true);
 }

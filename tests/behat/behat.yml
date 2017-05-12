@@ -1,7 +1,7 @@
 default:
     extensions:
         Behat\MinkExtension:
-          base_url: http://localhost/
+          base_url: http://localhost
           goutte: ~
           show_cmd: 'open %s'
           selenium2:

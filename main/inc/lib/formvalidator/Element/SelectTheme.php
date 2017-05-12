@@ -21,8 +21,8 @@ class SelectTheme extends HTML_QuickForm_select
         $this->_options = array();
         $this->_values = array();
         $this->addOption('--', ''); // no theme select
-        for ($i = 0; $i < count($themes[0]); $i++) {
-            $this->addOption($themes[1][$i], $themes[0][$i]);
+        foreach ($themes as $themeValue => $themeName) {
+            $this->addOption($themeName, $themeValue);
         }
     }
 }

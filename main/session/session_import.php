@@ -24,7 +24,7 @@ $tbl_session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE
 $tool_name = get_lang('ImportSessionListXMLCSV');
 
 //$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
 
 set_time_limit(0);
 
@@ -40,7 +40,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $form_sent = $_POST['formSent'];
         $file_type = isset($_POST['file_type']) ? $_POST['file_type'] : null;
         $send_mail = isset($_POST['sendMail']) && $_POST['sendMail'] ? 1 : 0;
-        $isOverwrite = isset($_POST['overwrite']) && $_POST['overwrite'] ? true: false;
+        $isOverwrite = isset($_POST['overwrite']) && $_POST['overwrite'] ? true : false;
         $deleteUsersNotInList = isset($_POST['delete_users_not_in_list']) ? true : false;
         $sessions = array();
         $session_counter = 0;
@@ -79,7 +79,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 case 'teacher' :
                                     $status = 1;
                                     break;
-                                default :
+                                default:
                                     $status = 5;
                                     $error_message .= get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
                             }
@@ -318,7 +318,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 $sql = "INSERT IGNORE INTO $tbl_session_user SET
                                         user_id ='$user_id',
                                         session_id = '$session_id',
-                                        registered_at = '" . api_get_utc_datetime() . "'";
+                                        registered_at = '".api_get_utc_datetime()."'";
                                 $rs_user = Database::query($sql);
                                 $user_counter++;
                             }
@@ -371,7 +371,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                         $sql = "INSERT IGNORE INTO $tbl_session_user SET
                                                 user_id ='$user_id',
                                                 session_id = '$session_id',
-                                                registered_at = '" . api_get_utc_datetime() . "'";
+                                                registered_at = '".api_get_utc_datetime()."'";
                                         $rs_user = Database::query($sql);
                                         $user_counter++;
                                         // Adding to session_rel_user_rel_course table.
@@ -463,16 +463,16 @@ if (count($inserted_in_course) > 1) {
         $msg .= ' '.$title.' ('.$title.'),';
     }
     $msg = substr($msg, 0, -1);
-    Display::display_warning_message($msg);
+    echo Display::return_message($msg, 'warning');
 }
 
 echo '<div class="actions">';
 echo '<a href="../session/session_list.php">'.
-    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 if (!empty($error_message)) {
-    Display::display_normal_message($error_message, false);
+    echo Display::return_message($error_message, 'normal', false);
 }
 
 $form = new FormValidator('import_sessions', 'post', api_get_self(), null, array('enctype' => 'multipart/form-data'));
@@ -485,7 +485,7 @@ $form->addElement(
         get_lang('FileType'),
         Display::url(
             get_lang('ExampleCSVFile'),
-            api_get_path(WEB_CODE_PATH) . 'admin/example_session.csv',
+            api_get_path(WEB_CODE_PATH).'admin/example_session.csv',
             ['target' => '_blank']
         )
     ],
@@ -499,7 +499,7 @@ $form->addElement(
         null,
         Display::url(
             get_lang('ExampleXMLFile'),
-            api_get_path(WEB_CODE_PATH) . 'admin/example_session.xml',
+            api_get_path(WEB_CODE_PATH).'admin/example_session.xml',
             ['target' => '_blank']
         )
     ],
@@ -514,10 +514,10 @@ $form->addElement('checkbox', 'add_me_as_coach', null, get_lang('AddMeAsCoach'))
 $form->addElement('checkbox', 'sendMail', null, get_lang('SendMailToUsers'));
 $form->addButtonImport(get_lang('ImportSession'));
 
-$defaults = array('sendMail' => 'true','file_type' => 'csv');
+$defaults = array('sendMail' => 'true', 'file_type' => 'csv');
 $form->setDefaults($defaults);
 
-Display::display_normal_message(get_lang('TheXMLImportLetYouAddMoreInfoAndCreateResources'));
+Display::return_message(get_lang('TheXMLImportLetYouAddMoreInfoAndCreateResources'));
 $form->display();
 
 ?>

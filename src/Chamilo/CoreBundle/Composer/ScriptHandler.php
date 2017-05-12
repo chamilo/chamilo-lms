@@ -83,8 +83,9 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/pchart/',
             __DIR__.'/../../../../main/inc/lib/pclzip/',
             __DIR__.'/../../../../main/inc/lib/htmlpurifier',
+            __DIR__.'/../../../../main/pear/excelreader/',
             __DIR__.'/../../../../main/resourcelinker',
-            //Remove from 1.10
+            // Remove from 1.10
             __DIR__.'/../../../../plugin/ticket',
             __DIR__.'/../../../../plugin/skype',
             __DIR__.'/../../../../main/newscorm',
@@ -172,7 +173,6 @@ class ScriptHandler
             __DIR__.'/../../../../main/install/install.class.php',
             __DIR__.'/../../../../main/inc/latex.php',
             __DIR__.'/../../../../main/inc/lib/formvalidator/Element/calendar_popup.php',
-            __DIR__.'/../../../../main/inc/lib/formvalidator/Element/datepicker.php',
             __DIR__.'/../../../../main/inc/lib/formvalidator/Element/datepickerdate.php',
             __DIR__.'/../../../../main/inc/lib/formvalidator/Element/html_editor.php',
             __DIR__.'/../../../../main/inc/lib/formvalidator/Element/select_language.php',

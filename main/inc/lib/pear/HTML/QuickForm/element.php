@@ -79,6 +79,8 @@ class HTML_QuickForm_element extends HTML_Common
      */
     var $_persistantFreeze = false;
 
+    protected $columnsSize;
+
     /**
      * Class constructor
      *
@@ -107,6 +109,22 @@ class HTML_QuickForm_element extends HTML_Common
             }
             $this->setLabel($elementLabel, $labelFor);
         }
+    }
+
+     /**
+     * @return null
+     */
+    public function getColumnsSize()
+    {
+        return $this->columnsSize;
+    }
+
+    /**
+     * @param null $columnsSize
+     */
+    public function setColumnsSize($columnsSize)
+    {
+        $this->columnsSize = $columnsSize;
     }
 
     /**

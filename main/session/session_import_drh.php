@@ -16,7 +16,7 @@ $form_sent = 0;
 $tool_name = get_lang('ImportSessionDrhList');
 
 //$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
 
 set_time_limit(0);
 
@@ -27,11 +27,11 @@ Display::display_header($tool_name);
 
 echo '<div class="actions">';
 echo '<a href="../session/session_list.php">'.
-    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 if (!empty($error_message)) {
-    Display::display_normal_message($error_message, false);
+    echo Display::return_message($error_message, 'normal', false);
 }
 
 $form = new FormValidator('import_sessions', 'post', api_get_self(), null, array('enctype' => 'multipart/form-data'));

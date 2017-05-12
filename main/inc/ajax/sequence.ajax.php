@@ -42,7 +42,7 @@ switch ($action) {
                     try {
                         $graphImage = $graphviz->createImageHtml($graph);
                     } catch (UnexpectedValueException $e) {
-                        error_log($e->getMessage() . ' - Graph could not be rendered in resources sequence because GraphViz command "dot" could not be executed - Make sure graphviz is installed.');
+                        error_log($e->getMessage().' - Graph could not be rendered in resources sequence because GraphViz command "dot" could not be executed - Make sure graphviz is installed.');
                         $graphImage = '<p class="text-center"><small>'.get_lang('MissingChartLibraryPleaseCheckLog').'</small></p>';
                     }
                     echo $graphImage;
@@ -88,11 +88,11 @@ switch ($action) {
                         );
                     }
 
-                    $link = '<div class="parent" data-id="' . $id . '">';
+                    $link = '<div class="parent" data-id="'.$id.'">';
                     $link .= '<div class="big-icon">';
                     $link .= $image;
-                    $link .= '<div class="sequence-course">' . $sessionInfo['name'] . '</div>';
-                    $link .= '<a href="#" class="sequence-id">' . $id . '</a>';
+                    $link .= '<div class="sequence-course">'.$sessionInfo['name'].'</div>';
+                    $link .= '<a href="#" class="sequence-id">'.$id.'</a>';
                     $link .= $linkDelete;
                     $link .= $linkUndo;
                     $link .= '</div></div>';

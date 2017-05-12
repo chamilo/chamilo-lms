@@ -63,7 +63,7 @@ class Promotion extends Model
                     case 'updated_at':
                         break;
                     case 'name':
-                        $val .= ' ' . get_lang('CopyLabelSuffix');
+                        $val .= ' '.get_lang('CopyLabelSuffix');
                         $new[$key] = $val;
                         break;
                     case 'created_at':
@@ -72,7 +72,7 @@ class Promotion extends Model
                         break;
                     case 'career_id':
                         if (!empty($career_id)) {
-                            $val = (int)$career_id;
+                            $val = (int) $career_id;
                         }
                         $new[$key] = $val;
                         break;
@@ -160,22 +160,22 @@ class Promotion extends Model
     {
         // Action links
         echo '<div class="actions" style="margin-bottom:20px">';
-        echo '<a href="career_dashboard.php">' . Display::return_icon('back.png',
-                get_lang('Back'), '', '32') . '</a>';
-        echo '<a href="' . api_get_self() . '?action=add">' .
+        echo '<a href="career_dashboard.php">'.Display::return_icon('back.png',
+                get_lang('Back'), '', '32').'</a>';
+        echo '<a href="'.api_get_self().'?action=add">'.
             Display::return_icon(
                 'new_promotion.png',
                 get_lang('Add'),
                 '',
                 '32'
-            ) . '</a>';
-        echo '<a href="' . api_get_path(WEB_CODE_PATH) . 'session/session_add.php">' .
+            ).'</a>';
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.
             Display::return_icon(
                 'new_session.png',
                 get_lang('AddSession'),
                 '',
                 '32'
-            ) . '</a>';
+            ).'</a>';
         echo '</div>';
         echo Display::grid_html('promotions');
     }
@@ -239,11 +239,11 @@ class Promotion extends Model
         foreach ($careers as $item) {
             $career_list[$item['id']] = $item['name'];
         }
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'career_id',
             get_lang('Career'),
-            $career_list
+            $career_list,
+            ['id' => 'career_id']
         );
         $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);

@@ -63,19 +63,19 @@ class BlockCourse extends Block
         $content = $this->get_content_html();
         $html = '
 		            <div class="panel panel-default" id="intro">
-		                <div class="panel-heading">' . get_lang('CoursesInformation') . '
+		                <div class="panel-heading">' . get_lang('CoursesInformation').'
 		                    <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\'' . addslashes(
                 api_htmlentities(
                     get_lang('ConfirmYourChoice'),
                     ENT_QUOTES,
                     $charset
                 )
-            ) . '\')) return false;" href="index.php?action=disable_block&path=' . $this->path . '">
+            ).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
                 <em class="fa fa-times"></em>
                 </a></div>
 		                </div>
 		                <div class="panel-body">
-		                   ' . $content . '
+		                   ' . $content.'
 		                </div>
 		            </div>
 				';
@@ -93,17 +93,17 @@ class BlockCourse extends Block
     {
         $course_data = $this->get_course_information_data();
         //$content = '<div style="margin:10px;">';
-        $content = '<h4>' . get_lang(
+        $content = '<h4>'.get_lang(
                 'YourCourseList'
-            ) . '</h4>';
+            ).'</h4>';
         $data_table = null;
         if (!empty($course_data)) {
             $data_table .= '<table class="data_table" width:"95%">';
             $data_table .= '<tr>
-	    						<th>' . get_lang('CourseTitle') . '</th>
-	    						<th width="20%">' . get_lang('NbStudents') . '</th>
-	    						<th width="20%">' . get_lang('AvgTimeSpentInTheCourse') . '</th>
-	    						<th width="20%">' . get_lang('ThematicAdvance') . '</th>
+	    						<th>' . get_lang('CourseTitle').'</th>
+	    						<th width="20%">' . get_lang('NbStudents').'</th>
+	    						<th width="20%">' . get_lang('AvgTimeSpentInTheCourse').'</th>
+	    						<th width="20%">' . get_lang('ThematicAdvance').'</th>
 	    					</tr>';
             $i = 1;
             foreach ($course_data as $course) {
@@ -112,12 +112,12 @@ class BlockCourse extends Block
                 } else {
                     $class_tr = 'row_even';
                 }
-                $data_table .= '<tr class="' . $class_tr . '">';
+                $data_table .= '<tr class="'.$class_tr.'">';
                 if (!isset($course[2])) {
                     $course[2] = '0:00:00';
                 }
                 foreach ($course as $cell) {
-                    $data_table .= '<td align="right">' . $cell . '</td>';
+                    $data_table .= '<td align="right">'.$cell.'</td>';
                 }
                 $data_table .= '</tr>';
                 $i++;
@@ -128,7 +128,7 @@ class BlockCourse extends Block
         }
         $content .= $data_table;
         if (!empty($course_data)) {
-            $content .= '<div style="text-align:right;margin-top:10px;"><a href="' . api_get_path(WEB_CODE_PATH) . 'mySpace/course.php?follow">' . get_lang('SeeMore') . '</a></div>';
+            $content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/course.php?follow">'.get_lang('SeeMore').'</a></div>';
         }
         //$content .= '</div>';
 
@@ -163,7 +163,7 @@ class BlockCourse extends Block
 
             // students directly subscribed to the course
             $sql = "SELECT user_id FROM $tbl_course_user as course_rel_user
-                    WHERE course_rel_user.status=" . STUDENT . " AND course_rel_user.c_id='$courseId'";
+                    WHERE course_rel_user.status=".STUDENT." AND course_rel_user.c_id='$courseId'";
             $rs = Database::query($sql);
             $users = array();
             while ($row = Database::fetch_array($rs)) {
@@ -182,7 +182,7 @@ class BlockCourse extends Block
             );
 
             if (!empty($tematic_advance)) {
-                $tematic_advance_progress = '<a title="' . get_lang('GoToThematicAdvance') . '" href="' . api_get_path(WEB_CODE_PATH) . 'course_progress/index.php?cidReq=' . $course_code . '&action=thematic_details">' . $tematic_advance . '%</a>';
+                $tematic_advance_progress = '<a title="'.get_lang('GoToThematicAdvance').'" href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?cidReq='.$course_code.'&action=thematic_details">'.$tematic_advance.'%</a>';
             } else {
                 $tematic_advance_progress = '0%';
             }

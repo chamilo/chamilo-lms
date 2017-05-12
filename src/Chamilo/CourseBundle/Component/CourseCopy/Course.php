@@ -24,7 +24,7 @@ class Course
      */
     public function __construct()
     {
-        $this->resources = array();
+        $this->resources = [];
         $this->code = '';
         $this->path = '';
         $this->backup_path = '';
@@ -43,7 +43,7 @@ class Course
                     if ($resource->links_to($resource_to_check)) {
                         return true;
                     }
-                    if ($type == RESOURCE_LEARNPATH && get_class($resource)=='CourseCopyLearnpath') {
+                    if ($type == RESOURCE_LEARNPATH && get_class($resource) == 'CourseCopyLearnpath') {
                         if ($resource->has_item($resource_to_check)) {
                             return true;
                         }
@@ -67,6 +67,7 @@ class Course
      * @param int $resource_type Check if this course has resources of the
      * given type. If no type is given, check if course has resources of any
      * type.
+     * @return boolean
      */
     public function has_resources($resource_type = null)
     {
@@ -85,13 +86,12 @@ class Course
      */
     public function show()
     {
-
     }
 
     /**
      * Returns sample text based on the imported course content.
      * This sample text is to be used for course language or encoding detection if there is missing (meta)data in the archive.
-     * @return string	The resulting sample text extracted from some common resources' data fields.
+     * @return string    The resulting sample text extracted from some common resources' data fields.
      */
     public function get_sample_text()
     {
@@ -339,9 +339,11 @@ class Course
     }
 
     /**
-    * Unserialize the course with the best serializer available
-    * @param string $course
-    */
+     * Unserialize the course with the best serializer available
+     *
+     * @param string $course
+     * @return Course
+     */
     public static function unserialize($course)
     {
         if (extension_loaded('igbinary')) {

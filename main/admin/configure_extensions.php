@@ -17,56 +17,56 @@ $tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 $message = '';
 
 if (isset($_POST['activeExtension'])) {
-	switch ($_POST['extension_code']) {
-		case 'ppt2lp':
-			$sql = 'UPDATE '.$tbl_settings_current.' SET
-					selected_value="true"
-					WHERE variable="service_ppt2lp"
-					AND subkey="active"';
+    switch ($_POST['extension_code']) {
+        case 'ppt2lp':
+            $sql = 'UPDATE '.$tbl_settings_current.' SET
+                    selected_value="true"
+                    WHERE variable="service_ppt2lp"
+                    AND subkey="active"';
 
-			$rs = Database::query($sql);
+            $rs = Database::query($sql);
 
-			if (Database::affected_rows($rs)>0){
-				$message = get_lang('ServiceActivated');
-			}
+            if (Database::affected_rows($rs) > 0) {
+                $message = get_lang('ServiceActivated');
+            }
 
-			$sql = 'UPDATE '.$tbl_settings_current.' SET
-					selected_value="'.addslashes($_POST['host']).'"
-					WHERE variable="service_ppt2lp"
-					AND subkey="host"';
-			Database::query($sql);
+            $sql = 'UPDATE '.$tbl_settings_current.' SET
+                    selected_value="'.addslashes($_POST['host']).'"
+                    WHERE variable="service_ppt2lp"
+                    AND subkey="host"';
+            Database::query($sql);
 
-			$sql = 'UPDATE '.$tbl_settings_current.' SET
-					selected_value="'.addslashes($_POST['port']).'"
-					WHERE variable="service_ppt2lp"
-					AND subkey="port"';
-			Database::query($sql);
+            $sql = 'UPDATE '.$tbl_settings_current.' SET
+                    selected_value="'.addslashes($_POST['port']).'"
+                    WHERE variable="service_ppt2lp"
+                    AND subkey="port"';
+            Database::query($sql);
 
-			$sql = 'UPDATE '.$tbl_settings_current.' SET
-					selected_value="'.addslashes($_POST['ftp_password']).'"
-					WHERE variable="service_ppt2lp"
-					AND subkey="ftp_password"';
-			Database::query($sql);
+            $sql = 'UPDATE '.$tbl_settings_current.' SET
+                    selected_value="'.addslashes($_POST['ftp_password']).'"
+                    WHERE variable="service_ppt2lp"
+                    AND subkey="ftp_password"';
+            Database::query($sql);
 
-			$sql = 'UPDATE '.$tbl_settings_current.' SET
-					selected_value="'.addslashes($_POST['user']).'"
-					WHERE variable="service_ppt2lp"
-					AND subkey="user"';
-			Database::query($sql);
+            $sql = 'UPDATE '.$tbl_settings_current.' SET
+                    selected_value="'.addslashes($_POST['user']).'"
+                    WHERE variable="service_ppt2lp"
+                    AND subkey="user"';
+            Database::query($sql);
 
-			$sql = 'UPDATE '.$tbl_settings_current.' SET
-					selected_value="'.addslashes($_POST['path_to_lzx']).'"
-					WHERE variable="service_ppt2lp"
-					AND subkey="path_to_lzx"';
-			Database::query($sql);
+            $sql = 'UPDATE '.$tbl_settings_current.' SET
+                    selected_value="'.addslashes($_POST['path_to_lzx']).'"
+                    WHERE variable="service_ppt2lp"
+                    AND subkey="path_to_lzx"';
+            Database::query($sql);
 
-			$sql = 'UPDATE '.$tbl_settings_current.' SET
-					selected_value="'.addslashes($_POST['size']).'"
-					WHERE variable="service_ppt2lp"
-					AND subkey="size"';
-			Database::query($sql);
-			break;
-	}
+            $sql = 'UPDATE '.$tbl_settings_current.' SET
+                    selected_value="'.addslashes($_POST['size']).'"
+                    WHERE variable="service_ppt2lp"
+                    AND subkey="size"';
+            Database::query($sql);
+            break;
+    }
 }
 
 $listActiveServices = array();
@@ -76,18 +76,18 @@ $sql = 'SELECT variable FROM '.$tbl_settings_current.'
 		WHERE variable LIKE "service_%" AND subkey="active" and selected_value="true"';
 
 $rs = Database::query($sql);
-while($row = Database::fetch_array($rs)){
-	$listActiveServices[] = $row['variable'];
+while ($row = Database::fetch_array($rs)) {
+    $listActiveServices[] = $row['variable'];
 }
 
 // javascript to handle accordion behaviour
 $javascript_message = '';
-if(!empty($message)){
-	$javascript_message = '
-	document.getElementById("message").style.display = "block";
-	var timer = setTimeout(hideMessage, 5000);';
+if (!empty($message)) {
+    $javascript_message = '
+    document.getElementById("message").style.display = "block";
+    var timer = setTimeout(hideMessage, 5000);';
 }
-$htmlHeadXtra[]= '<script>
+$htmlHeadXtra[] = '<script>
 var listeDiv;
 var extensionsHeader = new Array();
 var extensionsContent = new Array();
@@ -135,8 +135,9 @@ Display::display_header($nameTool);
 ?>
 <div id="message" style="display: none">
 	<?php
-	if(!empty($message))
-		Display::display_normal_message($message)
+	if (!empty($message)) {
+        Display::addFlash(Display::return_message($message, 'normal'));
+    }
 	?>
 </div>
 

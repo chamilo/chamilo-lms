@@ -26,11 +26,11 @@ function validate_data($users_courses)
         }
 
         // 2. Check whether coursecode exists.
-        if (isset ($user_course['CourseCode']) && strlen($user_course['CourseCode']) != 0) {
+        if (isset($user_course['CourseCode']) && strlen($user_course['CourseCode']) != 0) {
             // 2.1 Check whethher code has been allready used by this CVS-file.
             if (!isset($coursecodes[$user_course['CourseCode']])) {
                 // 2.1.1 Check whether course with this code exists in the system.
-                $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
+                $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
                 $sql = "SELECT * FROM $course_table
                         WHERE code = '".Database::escape_string($user_course['CourseCode'])."'";
                 $res = Database::query($sql);
@@ -44,7 +44,7 @@ function validate_data($users_courses)
         }
 
         // 3. Check whether username exists.
-        if (isset ($user_course['UserName']) && strlen($user_course['UserName']) != 0) {
+        if (isset($user_course['UserName']) && strlen($user_course['UserName']) != 0) {
             if (UserManager::is_username_available($user_course['UserName'])) {
                 $user_course['error'] = get_lang('UnknownUser');
                 $errors[]             = $user_course;
@@ -52,7 +52,7 @@ function validate_data($users_courses)
         }
 
         // 4. Check whether status is valid.
-        if (isset ($user_course['Status']) && strlen($user_course['Status']) != 0) {
+        if (isset($user_course['Status']) && strlen($user_course['Status']) != 0) {
             if ($user_course['Status'] != COURSEMANAGER && $user_course['Status'] != STUDENT) {
                 $user_course['error'] = get_lang('UnknownStatus');
                 $errors[]             = $user_course;

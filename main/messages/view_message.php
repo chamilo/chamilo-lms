@@ -6,22 +6,22 @@
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
-if (api_get_setting('allow_message_tool')!='true') {
+if (api_get_setting('allow_message_tool') != 'true') {
 	api_not_allowed();
 }
 
 if (isset($_REQUEST['f']) && $_REQUEST['f'] == 'social') {
 	$this_section = SECTION_SOCIAL;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));
-	$interbreadcrumb[]= array ('url' => 'inbox.php?f=social','name' => get_lang('Inbox'));
+	$interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'main/social/home.php', 'name' => get_lang('Social'));
+	$interbreadcrumb[] = array('url' => 'inbox.php?f=social', 'name' => get_lang('Inbox'));
 } else {
 	$this_section = SECTION_MYPROFILE;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
+	$interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'main/auth/profile.php', 'name' => get_lang('Profile'));
 }
 
 $social_right_content = '';
 
-if (isset($_GET['f']) && $_GET['f']=='social') {
+if (isset($_GET['f']) && $_GET['f'] == 'social') {
 	$social_parameter = '?f=social';
 } else {
 	if (api_get_setting('extended_profile') == 'true') {
@@ -33,11 +33,11 @@ if (isset($_GET['f']) && $_GET['f']=='social') {
 		}
 		if (api_get_setting('allow_message_tool') === 'true') {
 		    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
-                Display::return_icon('message_new.png',get_lang('ComposeMessage')).'</a>';
+                Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';
             $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
-                Display::return_icon('inbox.png',get_lang('Inbox')).'</a>';
+                Display::return_icon('inbox.png', get_lang('Inbox')).'</a>';
             $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
-                Display::return_icon('outbox.png',get_lang('Outbox')).'</a>';
+                Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
 		}
 		$social_right_content .= '</div>';
 	}
@@ -53,7 +53,7 @@ if (empty($_GET['id'])) {
     $show_menu = 'messages_inbox';
 }
 
-$message  = '';
+$message = '';
 
 // LEFT COLUMN
 if (api_get_setting('allow_social_tool') === 'true') {

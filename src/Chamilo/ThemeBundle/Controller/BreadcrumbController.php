@@ -58,7 +58,7 @@ class BreadcrumbController extends Controller {
         $list = array();
         if ($active) {
             $list[] = $active;
-            while(null !== ($item = $active->getActiveChild())) {
+            while (null !== ($item = $active->getActiveChild())) {
                 $list[] = $item;
                 $active = $item;
             }

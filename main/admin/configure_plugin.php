@@ -24,7 +24,7 @@ if (!in_array($pluginName, $installedPlugins) || empty($pluginInfo)) {
 
 global $_configuration;
 $content = '';
-$currentUrl = api_get_self() . "?name=$pluginName";
+$currentUrl = api_get_self()."?name=$pluginName";
 
 if (isset($pluginInfo['settings_form'])) {
     /** @var FormValidator $form */
@@ -67,7 +67,7 @@ if (isset($form)) {
             $value = trim($value);
             api_add_setting(
                 $value,
-                Database::escape_string($pluginName . '_' . $key),
+                Database::escape_string($pluginName.'_'.$key),
                 $pluginName,
                 'setting',
                 'Plugins',
@@ -97,11 +97,11 @@ if (isset($form)) {
 }
 
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH) . 'admin/index.php',
+    'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
     'name' => get_lang('PlatformAdmin')
 );
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH) . 'admin/settings.php?category=Plugins',
+    'url' => api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins',
     'name' => get_lang('Plugins')
 );
 

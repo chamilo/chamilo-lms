@@ -22,7 +22,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
     $form = new FormValidator(
         'thematic_advance',
         'POST',
-        api_get_self() . '?' . api_get_cidreq()
+        api_get_self().'?'.api_get_cidreq()
     );
     $form->addElement('header', $header_form);
     //$form->addElement('hidden', 'thematic_advance_token',$token);
@@ -165,7 +165,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
 
         // set default values
         $default['content'] = isset($thematic_advance_data['content']) ? $thematic_advance_data['content'] : null;
-        $default['duration_in_hours'] = isset($thematic_advance_data['duration']) ? $thematic_advance_data['duration'] : null;
+        $default['duration_in_hours'] = isset($thematic_advance_data['duration']) ? $thematic_advance_data['duration'] : 1;
         if (empty($thematic_advance_data['attendance_id'])) {
             $default['start_date_type'] = 1;
             $default['custom_start_date'] = null;
@@ -189,9 +189,13 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
     if ($form->validate()) {
         $values = $form->exportValues();
 
+        if (isset($_POST['start_date_by_attendance'])) {
+            $values['start_date_by_attendance'] = $_POST['start_date_by_attendance'];
+        }
+
         $thematic = new Thematic();
         $thematic->set_thematic_advance_attributes(
-            isset($values['thematic_advance_id']) ? $values['thematic_advance_id']: null,
+            isset($values['thematic_advance_id']) ? $values['thematic_advance_id'] : null,
             $values['thematic_id'],
             $values['start_date_type'] == 1 && isset($values['attendance_select']) ? $values['attendance_select'] : 0,
             $values['content'],
@@ -210,13 +214,13 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
             }
         }
 
-        $redirectUrlParams = 'course_progress/index.php?' .  api_get_cidreq() . '&' .
+        $redirectUrlParams = 'course_progress/index.php?'.api_get_cidreq().'&'.
             http_build_query([
                 'action' => 'thematic_advance_list',
                 'thematic_id' => $values['thematic_id']
             ]);
 
-        header('Location: ' . api_get_path(WEB_CODE_PATH) . $redirectUrlParams);
+        header('Location: '.api_get_path(WEB_CODE_PATH).$redirectUrlParams);
         exit;
     }
 
@@ -226,10 +230,10 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
     // thematic advance list
     echo '<div class="actions">';
     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=thematic_details">'.
-            Display::return_icon('back.png', get_lang("BackTo"),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang("BackTo"), '', ICON_SIZE_MEDIUM).'</a>';
     if (api_is_allowed_to_edit(false, true)) {
         echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=thematic_advance_add&amp;thematic_id='.$thematic_id.'"> '.
-            Display::return_icon('add.png', get_lang('NewThematicAdvance'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('add.png', get_lang('NewThematicAdvance'), '', ICON_SIZE_MEDIUM).'</a>';
     }
     echo '</div>';
     $table = new SortableTable(

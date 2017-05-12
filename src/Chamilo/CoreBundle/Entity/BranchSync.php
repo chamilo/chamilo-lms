@@ -533,7 +533,7 @@ class BranchSync
      /**
      * Set sslPubKey
      *
-     * @param string $sslPubKey
+     * @param string $branchType
      * @return BranchSync
      */
     public function setBranchType($branchType)

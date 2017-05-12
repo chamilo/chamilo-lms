@@ -285,12 +285,16 @@ switch ($action) {
         }
         break;
     case 'calendar_add':
+        //no break
     case 'calendar_edit':
+        //no break
     case 'calendar_all_delete':
+        //no break
     case 'calendar_delete':
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed();
         }
+        //no break
     case 'calendar_list':
         $attendanceController->attendance_calendar($action, $attendance_id, $calendar_id);
         break;

@@ -39,14 +39,14 @@ class DateTimePicker extends HTML_QuickForm_text
         return '
             <div class="input-group">
                 <span class="input-group-addon cursor-pointer">
-                    <input ' . $this->_getAttrString($this->_attributes) . '>
+                    <input ' . $this->_getAttrString($this->_attributes).'>
                 </span>
-                <p class="form-control disabled" id="' . $id . '_alt_text">' . $value . '</p>
-                <input class="form-control" type="hidden" id="' . $id . '_alt" value="' . $value . '">
+                <p class="form-control disabled" id="' . $id.'_alt_text">'.$value.'</p>
+                <input class="form-control" type="hidden" id="' . $id.'_alt" value="'.$value.'">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button">
                         <span class="fa fa-times text-danger" aria-hidden="true"></span>
-                        <span class="sr-only">' . get_lang('Reset') . '</span>
+                        <span class="sr-only">' . get_lang('Reset').'</span>
                     </button>
                 </span>
             </div>
@@ -85,18 +85,18 @@ class DateTimePicker extends HTML_QuickForm_text
                 txtDateTime
                     .hide()
                     .datetimepicker({
-                        defaultDate: '" . $this->getValue() . "',
+                        defaultDate: '".$this->getValue()."',
                         dateFormat: 'yy-mm-dd',
                         timeFormat: 'HH:mm',
                         altField: '#{$id}_alt',
-                        altFormat: \"" . get_lang('DateFormatLongNoDayJS') . "\",
-                        altTimeFormat: \"" . get_lang('TimeFormatNoSecJS') . "\",
-                        altSeparator: \" " . get_lang('AtTime') . " \",
+                        altFormat: \"".get_lang('DateFormatLongNoDayJS')."\",
+                        altTimeFormat: \"" . get_lang('TimeFormatNoSecJS')."\",
+                        altSeparator: \" " . get_lang('AtTime')." \",
                         altFieldTimeOnly: false,
                         showOn: 'both',
-                        buttonImage: '" . Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true) . "',
+                        buttonImage: '" . Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true)."',
                         buttonImageOnly: true,
-                        buttonText: '" . get_lang('SelectDate') . "',
+                        buttonText: '" . get_lang('SelectDate')."',
                         changeMonth: true,
                         changeYear: true
                     })

@@ -139,7 +139,7 @@ class CourseRelUser
     }
 
     /**
-     * @param $user
+     * @param User $user
      * @return $this
      */
     public function setUser($user)

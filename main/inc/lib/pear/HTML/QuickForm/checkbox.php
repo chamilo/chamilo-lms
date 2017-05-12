@@ -155,10 +155,81 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
         }
 
         return HTML_QuickForm_input::toHtml() . $label;
-    } //end func toHtml
+    }
 
-    // }}}
-    // {{{ getFrozenHtml()
+    /**
+     * @param string $layout
+     *
+     * @return string
+     */
+    public function getTemplate($layout)
+    {
+        $size = $this->getColumnsSize();
+
+        if (empty($size)) {
+            $size = array(2, 8, 2);
+        } else {
+            if (is_array($size)) {
+                if (count($size) == 1) {
+                    $size = array(2, intval($size[0]), 2);
+                } elseif (count($size) != 3) {
+                    $size = array(2, 8, 2);
+                }
+                // else just keep the $size array as received
+            } else {
+                $size = array(2, intval($size), 2);
+            }
+        }
+
+        switch ($layout) {
+            case FormValidator::LAYOUT_INLINE:
+                return '
+                <div class="input-group">
+                    <label {label-for} >
+                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                        {label}
+                    </label>     
+                </div>
+                <div class="input-group {error_class}">                               
+                    {element}                     
+                </div>
+                ';
+                break;
+            case FormValidator::LAYOUT_HORIZONTAL:
+                return '
+                <div class="form-group {error_class}">
+                    <label {label-for}  class="col-sm-'.$size[0].' control-label  {extra_label_class}" >
+                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                        {label}
+                    </label>
+                    <div class="col-sm-'.$size[1].'">
+                        {icon}
+                        {element}
+
+                        <!-- BEGIN label_2 -->
+                            <p class="help-block">{label_2}</p>
+                        <!-- END label_2 -->
+
+                        <!-- BEGIN error -->
+                            <span class="help-inline">{error}</span>
+                        <!-- END error -->
+                    </div>
+                    <div class="col-sm-'.$size[2].'">
+                        <!-- BEGIN label_3 -->
+                            {label_3}
+                        <!-- END label_3 -->
+                    </div>
+                </div>';
+                break;
+            case FormValidator::LAYOUT_BOX_NO_LABEL:
+                return '
+                        <div class="input-group">
+                            {icon}
+                            {element}
+                        </div>';
+                break;
+        }
+    }
 
     /**
      * Returns the value of field without HTML tags

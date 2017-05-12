@@ -33,13 +33,13 @@ if ($_GET['answerId'] == "0") { // click is NOT on a hotspot
 }
 
 //round-up the coordinates
-$coords = explode('/',$coordinates);
+$coords = explode('/', $coordinates);
 $coordinates = '';
 foreach ($coords as $coord) {
-    list($x,$y) = explode(';',$coord);
+    list($x, $y) = explode(';', $coord);
     $coordinates .= round($x).';'.round($y).'/';
 }
-$coordinates = substr($coordinates,0,-1);
+$coordinates = substr($coordinates, 0, -1);
 
 $TBL_TRACK_E_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 

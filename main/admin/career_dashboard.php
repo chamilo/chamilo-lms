@@ -18,12 +18,20 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('CareersAndPromotions'));
+$interbreadcrumb[] = array(
+    'url' => 'index.php',
+    'name' => get_lang('PlatformAdmin')
+);
+$interbreadcrumb[] = array(
+    'url' => 'career_dashboard.php',
+    'name' => get_lang('CareersAndPromotions')
+);
+$tpl = new Template(get_lang('CareersAndPromotions'));
 
 Display :: display_header(null);
 
-$form = new FormValidator('filter_form','GET', api_get_self());
+$html = null;
+$form = new FormValidator('filter_form', 'GET', api_get_self());
 
 $career = new Career();
 
@@ -52,36 +60,56 @@ $form->addSelect(
 $form->addButtonSearch(get_lang('Filter'));
 
 // action links
-echo '<div class="actions" style="margin-bottom:20px">';
-    echo  '<a href="../admin/index.php">'.
-            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
-    echo '<a href="careers.php">'.
-            Display::return_icon('career.png',get_lang('Careers'),'',ICON_SIZE_MEDIUM).'</a>';
-    echo '<a href="promotions.php">'.
-            Display::return_icon('promotion.png',get_lang('Promotions'),'',ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
+$actionLeft = Display::url(
+    Display::return_icon(
+        'back.png',
+        get_lang('BackTo').' '.get_lang('PlatformAdmin'),
+        null,
+        ICON_SIZE_MEDIUM
+    ),
+    '../admin/index.php'
+);
+$actionLeft .= Display::url(
+    Display::return_icon(
+        'career.png',
+        get_lang('Careers'),
+        null,
+        ICON_SIZE_MEDIUM
+    ),
+    'careers.php'
+);
+$actionLeft .= Display::url(
+    Display::return_icon(
+        'promotion.png',
+        get_lang('Promotions'),
+        null,
+        ICON_SIZE_MEDIUM
+    ),
+    'promotions.php'
+);
 
-$form->display();
-
+$actions = Display::toolbarAction('toolbar-career', array($actionLeft));
+$html .= $form->returnForm();
 $careers = $career->get_all($condition); //only status =1
 
 $column_count = 3;
 $i = 0;
 $grid_js = '';
 $career_array = array();
+
 if (!empty($careers)) {
     foreach ($careers as $career_item) {
         $promotion = new Promotion();
         // Getting all promotions
         $promotions = $promotion->get_all_promotions_by_career_id(
             $career_item['id'],
-            'name DESC'
+            'name ASC'
         );
         $career_content = '';
         $promotion_array = array();
         if (!empty($promotions)) {
             foreach ($promotions as $promotion_item) {
-                if (!$promotion_item['status']) {
+                if ($promotion_item['status'] == 0) {
                     continue; //avoid status = 0
                 }
 
@@ -89,7 +117,6 @@ if (!empty($careers)) {
                 $sessions = SessionManager::get_all_sessions_by_promotion(
                     $promotion_item['id']
                 );
-
                 $session_list = array();
                 foreach ($sessions as $session_item) {
                     $course_list = SessionManager::get_course_list_by_session_id(
@@ -101,6 +128,7 @@ if (!empty($careers)) {
                     );
                 }
                 $promotion_array[$promotion_item['id']] = array(
+                    'id' => $promotion_item['id'],
                     'name' => $promotion_item['name'],
                     'sessions' => $session_list,
                 );
@@ -110,67 +138,17 @@ if (!empty($careers)) {
             'name' => $career_item['name'],
             'promotions' => $promotion_array,
         );
+        $careerList = array(
+            'promotions' => $promotion_array,
+        );
+        $careers[$career_item['id']]['career'] = $careerList;
     }
 }
 
-echo '<table class="data_table">';
+$tpl->assign('actions', $actions);
+$tpl->assign('form_filter', $html);
+$tpl->assign('data', $careers);
+$layout = $tpl->get_template('admin/career_dashboard.tpl');
+$tpl->display($layout);
 
-if (!empty($career_arrayer)) {
-    foreach ($career_array as $career_id => $data) {
-        $career = $data['name'];
-        $promotions = $data['promotions'];
-        $career = Display::url($career, 'careers.php?action=edit&id=' . $career_id);
-        $career = Display::tag('h4', $career);
-        echo '<tr><td style="background-color:#ECF0F1" colspan="3">' . $career . '</td></tr>';
-        if (!empty($promotions)) {
-            foreach ($promotions as $promotion_id => $promotion) {
-                $promotion_name = $promotion['name'];
-                $promotion_url = Display::url($promotion_name, 'promotions.php?action=edit&id=' . $promotion_id);
-                $sessions = $promotion['sessions'];
-                echo '<tr>';
-                $count = count($sessions);
-                $rowspan = '';
-                if (!empty($count)) {
-                    $count++;
-                    $rowspan = 'rowspan="' . $count . '"';
-                }
-                echo '<td ' . $rowspan . '>';
-                echo Display::tag('h5', $promotion_url);
-                echo '</td>';
-                echo '</tr>';
-
-                if (!empty($sessions)) {
-                    foreach ($sessions as $session) {
-                        $course_list = $session['courses'];
-
-                        $url = Display::url($session['data']['name'],
-                            '../session/resume_session.php?id_session=' . $session['data']['id']);
-                        echo '<tr>';
-                        //Session name
-                        echo Display::tag('td', $url);
-                        echo '<td>';
-                        //Courses
-                        echo '<table>';
-                        if (!empty($course_list)) {
-                            foreach ($course_list as $course) {
-                                echo '<tr>';
-
-                                $url = Display::url(
-                                    $course['title'],
-                                    api_get_path(WEB_COURSE_PATH) . $course['directory'] . '/index.php?id_session=' . $session['data']['id']
-                                );
-                                echo Display::tag('td', $url);
-                                echo '</tr>';
-                            }
-                            echo '</table>';
-                            echo '</td>';
-                            echo '</tr>';
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-echo '</table>';
 Display::display_footer();

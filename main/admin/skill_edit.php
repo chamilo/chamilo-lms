@@ -85,7 +85,7 @@ $jquery_ready_content = $returnParams['jquery_ready_content'];
 if (!empty($jquery_ready_content)) {
     $htmlHeadXtra[] = '<script>
     $(document).ready(function(){
-        ' . $jquery_ready_content . '
+        ' . $jquery_ready_content.'
     });
     </script>';
 }
@@ -114,7 +114,7 @@ if ($editForm->validate()) {
         );
     }
 
-    header('Location: '.api_get_path(WEB_CODE_PATH) . 'admin/skill_list.php');
+    header('Location: '.api_get_path(WEB_CODE_PATH).'admin/skill_list.php');
     exit;
 }
 

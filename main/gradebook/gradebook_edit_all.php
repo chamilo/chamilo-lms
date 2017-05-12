@@ -30,8 +30,8 @@ $course_id = GradebookUtils::get_course_id_by_link_id($my_selectcat);
 
 $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-$tbl_forum_thread = Database:: get_course_table(TABLE_FORUM_THREAD);
-$tbl_attendance = Database:: get_course_table(TABLE_ATTENDANCE);
+$tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
+$tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
 
 $table_evaluated[LINK_EXERCISE] = array(
     TABLE_QUIZ_TEST,

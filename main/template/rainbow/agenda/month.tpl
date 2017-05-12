@@ -764,6 +764,13 @@ $(document).ready(function() {
         {{ form_add }}
 	</div>
 </div>
+
+{% if legend_list %}
+    {% for color, text in legend_list %}
+        <span style="background-color: {{ color }}" class="label label-default">&nbsp;</span> {{ text }} &nbsp;&nbsp;
+    {% endfor %}
+    <br /><br />
+{% endif %}
 <div id="loading" style="margin-left:150px;position:absolute;display:none">
     {{ "Loading" | get_lang }}...
 </div>

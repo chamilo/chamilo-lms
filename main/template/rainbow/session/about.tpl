@@ -1,8 +1,14 @@
 <div id="about-session">
     <div class="row">
         <div class="col-xs-12">
-            <p><em class="fa fa-clock-o"></em> <em>{{ session_date.display }}</em></p>
-
+            <p>
+                <em class="fa fa-clock-o" aria-hidden="true"></em>
+                {% if session.duration %}
+                    <em>{{ 'SessionDurationXDaysLeft'|get_lang|format(session.duration) }}</em>
+                {% else %}
+                    <em>{{ session_date.display }}</em>
+                {% endif %}
+            </p>
             {% if show_tutor %}
                 <p>
                     <em class="fa fa-user"></em> {{ 'SessionGeneralCoach'|get_lang }}: <em>{{ session.generalCoach.getCompleteName() }}</em>
@@ -49,6 +55,10 @@
     {% if is_subscribed %}
         <div class="alert alert-info">
             {{ 'AlreadyRegisteredToSession'|get_lang }}
+        </div>
+    {% elseif is_subscribed and user_session_time < 1 %}
+        <div class="alert alert-warning">
+            {{ 'YourSessionTimeIsExpired'|get_lang }}
         </div>
     {% endif %}
 
@@ -106,6 +116,53 @@
                                     {{ course_data.topics.getContent }}
                                 </div>
                             </div>
+                        {% endif %}
+
+                        {% if course_data.methodology %}
+                            <div class="topics">
+                                <h4 class="title-info"><em class="fa fa-book"></em> {{ course_data.methodology.getTitle }}</h4>
+                                <div class="content-info">
+                                    {{ course_data.methodology.getContent }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if course_data.material %}
+                            <div class="topics">
+                                <h4 class="title-info"><em class="fa fa-book"></em> {{ course_data.material.getTitle }}</h4>
+                                <div class="content-info">
+                                    {{ course_data.material.getContent }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if course_data.resources %}
+                            <div class="topics">
+                                <h4 class="title-info"><em class="fa fa-book"></em> {{ course_data.resources.getTitle }}</h4>
+                                <div class="content-info">
+                                    {{ course_data.resources.getContent }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if course_data.assessment %}
+                            <div class="topics">
+                                <h4 class="title-info"><em class="fa fa-book"></em> {{ course_data.assessment.getTitle }}</h4>
+                                <div class="content-info">
+                                    {{ course_data.assessment.getContent }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if course_data.custom %}
+                            {% for custom in course_data.custom %}
+                                <div class="topics">
+                                    <h4 class="title-info"><em class="fa fa-book"></em> {{ custom.getTitle }}</h4>
+                                    <div class="content-info">
+                                        {{ custom.getContent }}
+                                    </div>
+                                </div>
+                            {% endfor %}
                         {% endif %}
                     </div>
                 </div>

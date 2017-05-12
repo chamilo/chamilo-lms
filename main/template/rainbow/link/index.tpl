@@ -131,7 +131,7 @@ function switch_li_visibility(name, btn)
     var id = li.attr('data-id');
     var c_id = li.attr('data-c_id');
 
-    var is_visible = !li.hasClass('invisible')
+    var is_visible = !li.hasClass('text-muted')
 
     var f = function(data){
         if(data.success){
@@ -139,12 +139,12 @@ function switch_li_visibility(name, btn)
             if(is_visible){
                 btn.addClass('show');
                 btn.removeClass('hide');
-                li.addClass('invisible');
+                li.addClass('text-muted');
                 li.removeClass('visible');
             }else{
                 btn.removeClass('show');
                 btn.addClass('hide');
-                li.removeClass('invisible');
+                li.removeClass('text-muted');
                 li.addClass('visible');
             }
         }

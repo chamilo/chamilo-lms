@@ -127,6 +127,25 @@ class CTool
     private $customIcon;
 
     /**
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
+
+    /**
+     * @param int $iid
+     * @return CTool
+     */
+    public function setIid($iid)
+    {
+        $this->iid = $iid;
+
+        return $this;
+    }
+
+    /**
      * Set name
      *
      * @param string $name

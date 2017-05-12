@@ -459,7 +459,12 @@ class CourseHome
         // Condition for the session
         $session_id = $sessionId ?: api_get_session_id();
         $course_id = $courseId ?: api_get_course_int_id();
-        $condition_session = api_get_session_condition($session_id, true, true, 't.session_id');
+        $condition_session = api_get_session_condition(
+            $session_id,
+            true,
+            true,
+            't.session_id'
+        );
 
         switch ($course_tool_category) {
             case TOOL_STUDENT_VIEW:
@@ -698,11 +703,15 @@ class CourseHome
         $web_code_path = api_get_path(WEB_CODE_PATH);
         $session_id = api_get_session_id();
         $is_platform_admin = api_is_platform_admin();
+        $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
 
         if ($session_id == 0) {
             $is_allowed_to_edit = api_is_allowed_to_edit(null, true) && api_is_course_admin();
         } else {
             $is_allowed_to_edit = api_is_allowed_to_edit(null, true) && !api_is_coach();
+            if ($allowEditionInSession) {
+                $is_allowed_to_edit = api_is_allowed_to_edit(null,true) && api_is_coach($session_id, api_get_course_int_id());
+            }
         }
 
         $i = 0;
@@ -711,12 +720,10 @@ class CourseHome
 
         if (isset($all_tools_list)) {
             $lnk = '';
-
             foreach ($all_tools_list as & $tool) {
                 $item = array();
                 $studentview = false;
                 $tool['original_link'] = $tool['link'];
-
                 if ($tool['image'] == 'scormbuilder.gif') {
                     // check if the published learnpath is visible for student
                     $published_lp_id = self::get_published_lp_id_from_link($tool['link']);
@@ -772,6 +779,51 @@ class CourseHome
                                 $lnk[] = $link;
                             }
                         }
+                    } elseif ($allowEditionInSession) {
+                        $criteria = [
+                            'cId' => api_get_course_int_id(),
+                            'name' => $tool['name'],
+                            'sessionId' => $session_id
+                        ];
+                        /** @var \Chamilo\CourseBundle\Entity\CTool $tool */
+                        $toolObj = Database::getManager()->getRepository('ChamiloCourseBundle:CTool')->findOneBy($criteria);
+                        if ($toolObj) {
+                            $visibility = $toolObj->getVisibility();
+                            switch ($visibility) {
+                                case '0':
+                                    $link['name'] = Display::return_icon(
+                                        'invisible.png',
+                                        get_lang('Activate'),
+                                        array('id' => 'linktool_'.$tool['id']),
+                                        ICON_SIZE_SMALL,
+                                        false
+                                    );
+                                    $link['cmd'] = 'restore=yes';
+                                    $lnk[] = $link;
+                                    break;
+                                case '1':
+                                    $link['name'] = Display::return_icon(
+                                        'visible.png',
+                                        get_lang('Deactivate'),
+                                        array('id' => 'linktool_'.$tool['id']),
+                                        ICON_SIZE_SMALL,
+                                        false
+                                    );
+                                    $link['cmd'] = 'hide=yes';
+                                    $lnk[] = $link;
+                                    break;
+                            }
+                        } else {
+                            $link['name'] = Display::return_icon(
+                                'visible.png',
+                                get_lang('Deactivate'),
+                                array('id' => 'linktool_'.$tool['id']),
+                                ICON_SIZE_SMALL,
+                                false
+                            );
+                            $link['cmd'] = 'hide=yes';
+                            $lnk[] = $link;
+                        }
                     }
                     if (!empty($tool['adminlink'])) {
                         $item['extra'] = '<a href="'.$tool['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
@@ -789,7 +841,7 @@ class CourseHome
                 if (isset($lnk) && is_array($lnk)) {
                     foreach ($lnk as $this_link) {
                         if (empty($tool['adminlink'])) {
-                            $item['visibility'] .= '<a class="make_visible_and_invisible" href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$tool['id'].'&amp;'.$this_link['cmd'].'">'.
+                            $item['visibility'] .= '<a class="make_visible_and_invisible" href="'.api_get_self().'?'.api_get_cidreq().'&id='.$tool['id'].'&'.$this_link['cmd'].'">'.
                                 $this_link['name'].'</a>';
                         }
                     }

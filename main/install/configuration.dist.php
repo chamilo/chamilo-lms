@@ -373,3 +373,5 @@ $_configuration['agenda_legend'] = [
 //$_configuration['session_admins_access_all_content'] = false;
 // Adds roles to the system announcements (requires DB change BT#12476)
 //$_configuration['system_announce_extra_roles'] = false;
+// Course tools visibility edition in sessions
+//$_configuration['allow_edit_tool_visibility_in_session'] = false;

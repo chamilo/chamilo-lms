@@ -3003,7 +3003,8 @@ class learnpath
                 'type' => $this->items[$item_id]->get_type(),
                 'description' => $this->items[$item_id]->get_description(),
                 'path' => $this->items[$item_id]->get_path(),
-            );
+                'parent' => $this->items[$item_id]->get_parent(),
+            ); 
         }
         if ($this->debug > 2) {
             error_log('New LP - In learnpath::get_toc() - TOC array: ' . print_r($toc, true), 0);
@@ -3138,10 +3139,10 @@ class learnpath
         $dirTypes = self::getChapterTypes();
         $myCurrentId = $this->get_current_item_id();
         $listParent = [];
-        $listChildren = null;
+        $listChildren = [];
         $listNotParent = [];
         $list = [];
-        foreach ($tree as $key => $subtree) {
+        foreach ($tree as $subtree) {
             if (in_array($subtree['type'], $dirTypes)){
                 $listChildren = $this->getChildrenToc($tree, $subtree['id']);
                 $subtree['children'] = $listChildren;
@@ -3176,7 +3177,6 @@ class learnpath
                 if (empty ($title)) {
                     $title = self::rl_get_resource_name(api_get_course_id(), $this->get_id(), $subtree['id']);
                 }
-
                 $classStyle = null;
                 if ($subtree['id'] == $this->current) {
                     $classStyle = 'scorm_item_normal '. $classStyle . 'scorm_highlight';
@@ -3190,6 +3190,7 @@ class learnpath
                 $listNotParent[] = $subtree;
             }
         }
+        
         $list['are_parents'] = $listParent;
         $list['not_parents'] = $listNotParent;
         
@@ -3222,9 +3223,9 @@ class learnpath
                 'browsed' => 'scorm_completed',
             ];
 
-        foreach ($tree as $key => $subtree) {
+        foreach ($tree as $subtree) {
             
-            $subtree['tree'] = null;
+                $subtree['tree'] = null;
 
                 if (!in_array($subtree['type'], $dirTypes) && $subtree['parent'] == $id ) {
                     if ($subtree['id'] == $this->current) {

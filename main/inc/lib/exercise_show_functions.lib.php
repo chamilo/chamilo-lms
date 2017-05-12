@@ -309,11 +309,11 @@ class ExerciseShowFunctions
             }
         }
 
-        $icon = in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION)) ? 'radio':'checkbox';
-        $icon .= $studentChoice?'_on':'_off';
+        $icon = in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION)) ? 'radio' : 'checkbox';
+        $icon .= $studentChoice ? '_on' : '_off';
         $icon .= '.gif';
-        $iconAnswer = in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION)) ? 'radio':'checkbox';
-        $iconAnswer .= $answerCorrect?'_on':'_off';
+        $iconAnswer = in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION)) ? 'radio' : 'checkbox';
+        $iconAnswer .= $answerCorrect ? '_on' : '_off';
         $iconAnswer .= '.gif';
 
         ?>

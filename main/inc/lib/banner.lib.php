@@ -455,9 +455,9 @@ function menuArray()
     $pageContent = '';
     // Get the extra page content, containing the links to add to the tabs
     if (is_file($homepath.$menuTabs.'_'.$lang.$ext) && is_readable($homepath.$menuTabs.'_'.$lang.$ext)) {
-        $pageContent = @(string)file_get_contents($homepath.$menuTabs.'_'.$lang.$ext);
+        $pageContent = @(string) file_get_contents($homepath.$menuTabs.'_'.$lang.$ext);
     } elseif (is_file($homepath.$menuTabs.$lang.$ext) && is_readable($homepath.$menuTabs.$lang.$ext)) {
-        $pageContent = @(string)file_get_contents($homepath.$menuTabs.$lang.$ext);
+        $pageContent = @(string) file_get_contents($homepath.$menuTabs.$lang.$ext);
     }
     // Sanitize page content
     $pageContent = api_to_system_encoding($pageContent, api_detect_encoding(strip_tags($pageContent)));
@@ -471,13 +471,13 @@ function menuArray()
                 $homepath.$menuTabsLoggedIn.'_'.$lang.$ext
             )
         ) {
-            $pageContent = @(string)file_get_contents($homepath.$menuTabsLoggedIn.'_'.$lang.$ext);
+            $pageContent = @(string) file_get_contents($homepath.$menuTabsLoggedIn.'_'.$lang.$ext);
             $pageContent = str_replace('::private', '', $pageContent);
         } elseif (is_file($homepath.$menuTabsLoggedIn.$lang.$ext) && is_readable(
                 $homepath.$menuTabsLoggedIn.$lang.$ext
             )
         ) {
-            $pageContent = @(string)file_get_contents($homepath.$menuTabsLoggedIn.$lang.$ext);
+            $pageContent = @(string) file_get_contents($homepath.$menuTabsLoggedIn.$lang.$ext);
             $pageContent = str_replace('::private', '', $pageContent);
         }
 
@@ -738,7 +738,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             /** @var learnpath $learnPath */
             $learnPath = Session::read('oLP');
             if (!empty($learnPath) && !empty($view_as_student_link)) {
-                if ((int)$learnPath->get_lp_session_id() != (int)api_get_session_id()) {
+                if ((int) $learnPath->get_lp_session_id() != (int) api_get_session_id()) {
                     $view_as_student_link = '';
                 }
             }
@@ -788,7 +788,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         }
     }
 
-    return $html . $additonalBlocks;
+    return $html.$additonalBlocks;
 }
 
 /**

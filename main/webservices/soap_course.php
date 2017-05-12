@@ -51,10 +51,10 @@ $s->register(
     'WSCourse.DeleteCourse',
     array('secret_key' => 'xsd:string', 'course_id_field_name' => 'xsd:string', 'course_id_value' => 'xsd:string'),
     array(),
-    'urn:WSService',                               // namespace
-    'urn:WSService#WSCourse.DeleteCourse',         // soapaction
-    'rpc',                                         // style
-    'encoded',                                     // use
+    'urn:WSService', // namespace
+    'urn:WSService#WSCourse.DeleteCourse', // soapaction
+    'rpc', // style
+    'encoded', // use
     'Delete a course in chamilo'                   // documentation
 
 );

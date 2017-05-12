@@ -27,7 +27,7 @@ $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 /* MAIN CODE */
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
     error_log('New LP - User not authorized in lp_edit_item_prereq.php');
-    header('location:lp_controller.php?action=view&lp_id=' . $learnpath_id);
+    header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
 }
 
@@ -45,7 +45,7 @@ if (isset($_SESSION['gradebook'])) {
 
 if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
     );
 }

@@ -66,10 +66,10 @@ $(function () {
         var l = $(this);
         var id = l.closest("tr").attr("id");
         var filename = l.closest("tr").find(".attachFilename").html();
-        if (confirm("' . get_lang('AreYouSureToDeleteJS') . '", filename)) {
+        if (confirm("' . get_lang('AreYouSureToDeleteJS').'", filename)) {
             $.ajax({
                 type: "POST",
-                url: "'.api_get_path(WEB_AJAX_PATH) . 'forum.ajax.php?'.api_get_cidreq().'&a=delete_file&attachId=" + id +"&thread='.$threadId .'&forum='.$forumId .'",
+                url: "'.api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq().'&a=delete_file&attachId=" + id +"&thread='.$threadId.'&forum='.$forumId.'",
                 dataType: "json",
                 success: function(data) {
                     if (data.error == false) {
@@ -181,7 +181,7 @@ function handle_forum_and_forumcategories($lp_id = null)
  */
 function show_add_forumcategory_form($inputvalues = array(), $lp_id)
 {
-    $form = new FormValidator('forumcategory', 'post', 'index.php?' . api_get_cidreq());
+    $form = new FormValidator('forumcategory', 'post', 'index.php?'.api_get_cidreq());
     // hidden field if from learning path
     $form->addElement('hidden', 'lp_id', $lp_id);
     // Setting the form elements.
@@ -230,7 +230,7 @@ function show_add_forumcategory_form($inputvalues = array(), $lp_id)
 function show_add_forum_form($inputvalues = array(), $lp_id)
 {
     $_course = api_get_course_info();
-    $form = new FormValidator('forumcategory', 'post', 'index.php?' . api_get_cidreq());
+    $form = new FormValidator('forumcategory', 'post', 'index.php?'.api_get_cidreq());
 
     // The header for the form
     if (!empty($inputvalues)) {
@@ -347,9 +347,9 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     // Forum image
     $form->addProgress();
     if (!empty($inputvalues['forum_image'])) {
-        $baseImagePath = api_get_course_path() . '/upload/forum/images/' . $inputvalues['forum_image'];
-        $image_path = api_get_path(WEB_COURSE_PATH) . $baseImagePath;
-        $sysImagePath = api_get_path(SYS_COURSE_PATH) . $baseImagePath;
+        $baseImagePath = api_get_course_path().'/upload/forum/images/'.$inputvalues['forum_image'];
+        $image_path = api_get_path(WEB_COURSE_PATH).$baseImagePath;
+        $sysImagePath = api_get_path(SYS_COURSE_PATH).$baseImagePath;
 
         if (file_exists($sysImagePath)) {
             $show_preview_image = Display::img($image_path, null, ['class' => 'img-responsive']);
@@ -1017,24 +1017,24 @@ function return_visible_invisible_icon($content, $id, $current_visibility_status
     $html = '';
     $id = Security::remove_XSS($id);
     if ($current_visibility_status == '1') {
-        $html .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&';
+        $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
-                $html .= $key . '=' . $value . '&';
+                $html .= $key.'='.$value.'&';
             }
         }
-        $html.='action=invisible&content='.$content.'&id='.$id.'">'.
+        $html .= 'action=invisible&content='.$content.'&id='.$id.'">'.
             Display::return_icon('visible.png', get_lang('MakeInvisible'), array(), ICON_SIZE_SMALL).'</a>';
     }
     if ($current_visibility_status == '0') {
-        $html .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&';
+        $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
-                $html .= $key . '=' . $value . '&';
+                $html .= $key.'='.$value.'&';
             }
         }
-        $html .= 'action=visible&content=' . $content . '&id=' . $id . '">' .
-            Display::return_icon('invisible.png', get_lang('MakeVisible'), array(), ICON_SIZE_SMALL) . '</a>';
+        $html .= 'action=visible&content='.$content.'&id='.$id.'">'.
+            Display::return_icon('invisible.png', get_lang('MakeVisible'), array(), ICON_SIZE_SMALL).'</a>';
     }
     return $html;
 }
@@ -1062,21 +1062,21 @@ function return_lock_unlock_icon($content, $id, $current_lock_status, $additiona
         $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
-                $html .= $key . '=' . $value . '&';
+                $html .= $key.'='.$value.'&';
             }
         }
-        $html.= 'action=unlock&content='.$content.'&id='.$id.'">'.
+        $html .= 'action=unlock&content='.$content.'&id='.$id.'">'.
             Display::return_icon('lock.png', get_lang('Unlock'), array(), ICON_SIZE_SMALL).'</a>';
     }
     if ($current_lock_status == '0') {
         $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
-                $html .= $key . '=' . $value . '&';
+                $html .= $key.'='.$value.'&';
             }
         }
-        $html .= 'action=lock&content=' . $content . '&id=' . $id . '">' .
-            Display::return_icon('unlock.png', get_lang('Lock'), array(), ICON_SIZE_SMALL) . '</a>';
+        $html .= 'action=lock&content='.$content.'&id='.$id.'">'.
+            Display::return_icon('unlock.png', get_lang('Lock'), array(), ICON_SIZE_SMALL).'</a>';
     }
 
     return $html;
@@ -1255,7 +1255,7 @@ function move_up_down($content, $direction, $id)
         $sort_column = 'forum_order';
         // We also need the forum_category of this forum.
         $sql = "SELECT forum_category FROM $table_forums
-                WHERE c_id = $course_id AND forum_id = " . intval($id);
+                WHERE c_id = $course_id AND forum_id = ".intval($id);
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $forum_category = $row['forum_category'];
@@ -1280,7 +1280,7 @@ function move_up_down($content, $direction, $id)
                     forum_categories.c_id = $course_id AND
                     item_properties.c_id = $course_id AND
                     forum_categories.cat_id=item_properties.ref AND
-                    item_properties.tool='" . TOOL_FORUM_CATEGORY . "'
+                    item_properties.tool='".TOOL_FORUM_CATEGORY."'
                 ORDER BY forum_categories.cat_order $sort_direction";
     }
     if ($content == 'forum') {
@@ -1288,7 +1288,7 @@ function move_up_down($content, $direction, $id)
             FROM $table
             WHERE
                 c_id = $course_id AND
-                forum_category='" . Database::escape_string($forum_category) . "'
+                forum_category='".Database::escape_string($forum_category)."'
             ORDER BY forum_order $sort_direction";
     }
     // Finding the items that need to be switched.
@@ -1312,16 +1312,16 @@ function move_up_down($content, $direction, $id)
     // We do an extra check if we do not have illegal values. If your remove this if statment you will
     // be able to mess with the sorting by refreshing the page over and over again.
     if ($this_sort != '' && $next_sort != '' && $next_id != '' && $this_id != '') {
-        $sql = "UPDATE $table SET $sort_column='" . Database::escape_string($this_sort) . "'
-                WHERE c_id = $course_id AND $id_column='" . Database::escape_string($next_id) . "'";
+        $sql = "UPDATE $table SET $sort_column='".Database::escape_string($this_sort)."'
+                WHERE c_id = $course_id AND $id_column='".Database::escape_string($next_id)."'";
         Database::query($sql);
 
-        $sql = "UPDATE $table SET $sort_column='" . Database::escape_string($next_sort) . "'
-                WHERE c_id = $course_id AND $id_column='" . Database::escape_string($this_id) . "'";
+        $sql = "UPDATE $table SET $sort_column='".Database::escape_string($next_sort)."'
+                WHERE c_id = $course_id AND $id_column='".Database::escape_string($this_id)."'";
         Database::query($sql);
     }
 
-    return get_lang(ucfirst($content) . 'Moved');
+    return get_lang(ucfirst($content).'Moved');
 }
 
 /**
@@ -1582,7 +1582,7 @@ function get_forums(
                 INNER JOIN $table_forums forum
                 ON (forum.forum_id = item_properties.ref AND forum.c_id = item_properties.c_id)
                 WHERE
-                    forum.forum_id = " . intval($id) . " AND
+                    forum.forum_id = ".intval($id)." AND
                     forum.c_id = $course_id AND
                     item_properties.visibility != 2 AND
                     item_properties.tool = '".TOOL_FORUM."'
@@ -1592,7 +1592,7 @@ function get_forums(
         $sql2 = "SELECT count(*) AS number_of_threads, forum_id
                 FROM $table_threads
                 WHERE
-                    forum_id = " . intval($id) . "
+                    forum_id = ".intval($id)."
                 GROUP BY forum_id";
     }
 
@@ -1825,7 +1825,7 @@ function get_threads($forum_id, $courseId = null, $sessionId = null)
 
     if (!empty($groupInfo)) {
         $groupIid = $groupInfo['iid'];
-        $groupCondition =  " AND item_properties.to_group_id = '$groupIid' ";
+        $groupCondition = " AND item_properties.to_group_id = '$groupIid' ";
     }
 
     $sessionCondition = api_get_session_condition(
@@ -2334,7 +2334,7 @@ function get_forum_information($forum_id, $courseId = 0)
 {
     $table_forums = Database::get_course_table(TABLE_FORUM);
     $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $courseId = empty($courseId) ? api_get_course_int_id(): intval($courseId);
+    $courseId = empty($courseId) ? api_get_course_int_id() : intval($courseId);
     $forum_id = intval($forum_id);
 
     $sql = "SELECT *
@@ -2822,13 +2822,13 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
     $my_post = isset($_GET['post']) ? (int) $_GET['post'] : '';
     $my_gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : '';
 
-    $url = api_get_self() . '?' . http_build_query([
+    $url = api_get_self().'?'.http_build_query([
         'action' => $action,
         'forum' => $forumId,
         'gradebook' => $my_gradebook,
         'thread' => $myThread,
         'post' => $my_post
-    ]) . '&' . api_get_cidreq();
+    ]).'&'.api_get_cidreq();
 
     $form = new FormValidator(
         'thread',
@@ -3122,7 +3122,7 @@ function saveThreadScore(
 
             if ($row[0] == 0) {
                 $sql = "INSERT INTO $table_threads_qualify (c_id, user_id, thread_id,qualify,qualify_user_id,qualify_time,session_id)
-                        VALUES (".$course_id.", '".$user_id."','".$thread_id."',".(float)$thread_qualify.", '".$currentUserId."','".$qualify_time."','".$session_id."')";
+                        VALUES (".$course_id.", '".$user_id."','".$thread_id."',".(float) $thread_qualify.", '".$currentUserId."','".$qualify_time."','".$session_id."')";
                 Database::query($sql);
 
                 $insertId = Database::insert_id();
@@ -4662,9 +4662,9 @@ function add_forum_attachment_file($file_comment, $last_id)
             continue;
         }
 
-        $course_dir = $_course['path'] . '/upload/forum';
+        $course_dir = $_course['path'].'/upload/forum';
         $sys_course_path = api_get_path(SYS_COURSE_PATH);
-        $updir = $sys_course_path . $course_dir;
+        $updir = $sys_course_path.$course_dir;
 
         // Try to add an extension to the file if it hasn't one.
         $new_file_name = add_ext_on_mime(
@@ -4681,7 +4681,7 @@ function add_forum_attachment_file($file_comment, $last_id)
         }
 
         $new_file_name = uniqid('');
-        $new_path = $updir . '/' . $new_file_name;
+        $new_path = $updir.'/'.$new_file_name;
         $result = @move_uploaded_file($attachment['tmp_name'], $new_path);
         $safe_file_comment = Database::escape_string($file_comment);
         $safe_file_name = Database::escape_string($file_name);
@@ -4857,16 +4857,16 @@ function delete_attachment($post_id, $id_attach = 0, $display = true)
     $forum_table_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $course_id = api_get_course_int_id();
 
-    $cond = (!empty($id_attach)) ? " iid = " . (int) $id_attach . "" : " post_id = " . (int) $post_id . "";
+    $cond = (!empty($id_attach)) ? " iid = ".(int) $id_attach."" : " post_id = ".(int) $post_id."";
     $sql = "SELECT path FROM $forum_table_attachment WHERE c_id = $course_id AND $cond";
     $res = Database::query($sql);
     $row = Database::fetch_array($res);
 
-    $course_dir = $_course['path'] . '/upload/forum';
+    $course_dir = $_course['path'].'/upload/forum';
     $sys_course_path = api_get_path(SYS_COURSE_PATH);
-    $updir = $sys_course_path . $course_dir;
+    $updir = $sys_course_path.$course_dir;
     $my_path = isset($row['path']) ? $row['path'] : null;
-    $file = $updir . '/' . $my_path;
+    $file = $updir.'/'.$my_path;
     if (Security::check_abs_path($file, $updir)) {
         @unlink($file);
     }
@@ -5444,37 +5444,37 @@ function get_all_post_from_user($user_id, $course_code)
                         $post_list = get_thread_user_post_limit($course_code, $thread['thread_id'], $user_id, 1);
                         $post_counter = count($post_list);
                         if (is_array($post_list) && count($post_list) > 0) {
-                            $hand_forums.= '<div id="social-thread">';
-                            $hand_forums.= Display::return_icon('thread.png', get_lang('Thread'), '', ICON_SIZE_MEDIUM);
-                            $hand_forums.= '&nbsp;'.Security::remove_XSS($thread['thread_title'], STUDENT);
-                            $hand_forums.= '</div>';
+                            $hand_forums .= '<div id="social-thread">';
+                            $hand_forums .= Display::return_icon('thread.png', get_lang('Thread'), '', ICON_SIZE_MEDIUM);
+                            $hand_forums .= '&nbsp;'.Security::remove_XSS($thread['thread_title'], STUDENT);
+                            $hand_forums .= '</div>';
 
                             foreach ($post_list as $posts) {
-                                $hand_forums.= '<div id="social-post">';
-                                $hand_forums.= '<strong>'.Security::remove_XSS($posts['post_title'], STUDENT).'</strong>';
-                                $hand_forums.= '<br / >';
-                                $hand_forums.= Security::remove_XSS($posts['post_text'], STUDENT);
-                                $hand_forums.= '</div>';
-                                $hand_forums.= '<br / >';
+                                $hand_forums .= '<div id="social-post">';
+                                $hand_forums .= '<strong>'.Security::remove_XSS($posts['post_title'], STUDENT).'</strong>';
+                                $hand_forums .= '<br / >';
+                                $hand_forums .= Security::remove_XSS($posts['post_text'], STUDENT);
+                                $hand_forums .= '</div>';
+                                $hand_forums .= '<br / >';
                             }
                         }
                     }
                     $i++;
                 }
-                $forum_results .='<div id="social-forum">';
-                $forum_results .='<div class="clear"></div><br />';
-                $forum_results .='<div id="social-forum-title">'.
+                $forum_results .= '<div id="social-forum">';
+                $forum_results .= '<div class="clear"></div><br />';
+                $forum_results .= '<div id="social-forum-title">'.
                     Display::return_icon('forum.gif', get_lang('Forum')).'&nbsp;'.Security::remove_XSS($forum['forum_title'], STUDENT).
                     '<div style="float:right;margin-top:-35px">
                         <a href="../forum/viewforum.php?'.api_get_cidreq_params($course_code).'&forum='.$forum['forum_id'].' " >'.
                             get_lang('SeeForum').'    
                         </a>
                      </div></div>';
-                $forum_results .='<br / >';
+                $forum_results .= '<br / >';
                 if ($post_counter > 0) {
-                    $forum_results .=$hand_forums;
+                    $forum_results .= $hand_forums;
                 }
-                $forum_results .='</div>';
+                $forum_results .= '</div>';
             }$j++;
         }
     }
@@ -5615,16 +5615,16 @@ function editAttachedFile($array, $id, $courseId = null) {
     $courseId = intval($courseId);
     if (empty($courseId)) {
         // $courseId can be null, use api method
-        $courseId= api_get_course_int_id();
+        $courseId = api_get_course_int_id();
     }
     /*
      * Check if Attachment ID and Course ID are greater than zero
      * and array of field values is not empty
      */
     if ($id > 0 && $courseId > 0 && !empty($array) && is_array($array)) {
-        foreach($array as $key => &$item) {
+        foreach ($array as $key => &$item) {
             $item = Database::escape_string($item);
-            $setString .= $key . ' = "' .$item . '", ';
+            $setString .= $key.' = "'.$item.'", ';
         }
         // Delete last comma
         $setString = substr($setString, 0, strlen($setString) - 2);
@@ -5684,10 +5684,10 @@ function getAttachmentsAjaxTable($postId = 0)
         foreach ($uploadedFiles as $k => $uploadedFile) {
             if (!empty($uploadedFile) && in_array($uploadedFile['id'], $attachIds)) {
                 // Buil html table including an input with attachmentID
-                $fileDataContent .= '<tr id="' . $uploadedFile['id'] . '" ><td>' . $uploadedFile['name'] . '</td><td>' . $uploadedFile['size'] . '</td><td>&nbsp;' . $uploadedFile['result'] .
-                    ' </td><td> <input style="width:90%;" type="text" value="' . $uploadedFile['comment'] . '" name="file_comments[]"> </td><td>' .
-                    $uploadedFile['delete'] . '</td>' .
-                    '<input type="hidden" value="' . $uploadedFile['id'] .'" name="file_ids[]">' . '</tr>';
+                $fileDataContent .= '<tr id="'.$uploadedFile['id'].'" ><td>'.$uploadedFile['name'].'</td><td>'.$uploadedFile['size'].'</td><td>&nbsp;'.$uploadedFile['result'].
+                    ' </td><td> <input style="width:90%;" type="text" value="'.$uploadedFile['comment'].'" name="file_comments[]"> </td><td>'.
+                    $uploadedFile['delete'].'</td>'.
+                    '<input type="hidden" value="'.$uploadedFile['id'].'" name="file_ids[]">'.'</tr>';
             } else {
                 /*
                  * If attachment data is empty, then delete it from $_SESSION
@@ -5700,7 +5700,7 @@ function getAttachmentsAjaxTable($postId = 0)
     $style = empty($fileDataContent) ? 'display: none;' : '';
     // Forum attachment Ajax table
     $fileData = '
-    <div class="control-group " style="'. $style . '">
+    <div class="control-group " style="'. $style.'">
         <label class="control-label">'.get_lang('AttachmentList').'</label>
         <div class="controls">
             <table id="attachmentFileList" class="files data_table span10">
@@ -5772,7 +5772,7 @@ function getAttachedFiles($forumId, $threadId, $postId = 0, $attachId = 0, $cour
             // name contains an URL to download attachment file and its filename
             $json['name'] = Display::url(
                 api_htmlentities($row['filename']),
-                api_get_path(WEB_CODE_PATH) . 'forum/download.php?file='.$row['path'].'&'.api_get_cidreq(),
+                api_get_path(WEB_CODE_PATH).'forum/download.php?file='.$row['path'].'&'.api_get_cidreq(),
                 array('target'=>'_blank', 'class' => 'attachFilename')
             );
             $json['id'] = $row['iid'];
@@ -5783,9 +5783,9 @@ function getAttachedFiles($forumId, $threadId, $postId = 0, $attachId = 0, $cour
             if (!empty($row) && is_array($row)) {
                 // Set result as success and bring delete URL
                 $json['result'] = Display::return_icon('accept.png', get_lang('Uploaded'));
-                $url = api_get_path(WEB_CODE_PATH) . 'forum/viewthread.php?' . api_get_cidreq() . '&action=delete_attach&forum=' . $forumId . '&thread=' . $threadId.'&id_attach=' . $row['iid'];
+                $url = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&action=delete_attach&forum='.$forumId.'&thread='.$threadId.'&id_attach='.$row['iid'];
                 $json['delete'] = Display::url(
-                    Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL),
+                    Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL),
                     $url,
                     array('class' => 'deleteLink')
                 );
@@ -5874,7 +5874,7 @@ function getAttachmentIdsByPostId($postId, $courseId = null)
                 WHERE c_id = $courseId AND post_id = $postId";
         $result = Database::query($sql);
         if ($result !== false && Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result,'ASSOC')) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $array[] = $row['id'];
             }
         }

@@ -54,7 +54,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      * @access    private
      */
     protected $_values;
-    private $columnsSize;
 
     /**
      * Class constructor
@@ -78,17 +77,11 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             if (!empty($attributes['class'])) {
                 $oldClass = $attributes['class'];
             }
-
+            if (empty($attributes)) {
+                $attributes = []; // Initialize variable to avoid warning in PHP 7.1
+            }
             $attributes['class'] = $oldClass . ' selectpicker show-tick form-control';
             $attributes['data-live-search'] = 'true';
-            // Ofaj
-            if (isset($attributes['disable_select_effect']) && $attributes['disable_select_effect']) {
-                $attributes['class'] = 'form-control';
-            }
-            // Ofaj
-            if (isset($attributes['select_chosen']) && $attributes['select_chosen']) {
-                $attributes['class'] = 'chzn-select';
-            }
 
             if (isset($attributes['placeholder'])) {
                 $addBlank =  $attributes['placeholder'];
@@ -336,21 +329,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
     // }}}
     // {{{ setMultiple()
 
-    /**
-     * @return null
-     */
-    public function getColumnsSize()
-    {
-        return $this->columnsSize;
-    }
-
-    /**
-     * @param null $columnsSize
-     */
-    public function setColumnsSize($columnsSize)
-    {
-        $this->columnsSize = $columnsSize;
-    }
 
     /**
      * Sets the select mutiple attribute

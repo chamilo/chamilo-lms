@@ -466,6 +466,7 @@ class SessionManager
         $limit = $conditions['limit'];
 
         $isMakingOrder = false;
+        $showCountUsers = false;
 
         if ($get_count == true) {
             $select = " SELECT count(DISTINCT s.id) as total_rows";

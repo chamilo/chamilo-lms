@@ -458,7 +458,7 @@ body{
     }
     #learning_path_main.lp-view-include-breadcrumb #learning_path_left_zone,
     #learning_path_main.lp-view-include-breadcrumb #learning_path_right_zone {
-        top: 40px;
+        top: 0;
     }
     #learning_path_left_zone .lp-view-zone-container,
     #learning_path_right_zone .lp-view-zone-container {

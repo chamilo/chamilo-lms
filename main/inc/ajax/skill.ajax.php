@@ -37,13 +37,17 @@ switch ($action) {
         }
         break;
     case 'find_skills':
-        $skills = $skill->find('all', array('where' => array('name LIKE %?% '=>$_REQUEST['tag'])));
-        $return_skills = array();
+        $skills = $skill->find('all', array('where' => array('name LIKE %?% '=>$_REQUEST['q'])));
+        $return_skills = array([
+            'items' => []
+        ]);
         foreach ($skills as $skill) {
-            $skill['key'] = $skill['name'];
-            $skill['value'] = $skill['id'];
-            $return_skills[] = $skill;
+            $return_skills['items'][] = [
+                'id' => $skill['id'],
+                'text' => $skill['name']
+            ];
         }
+        header('Content-Type: application/json');
         echo json_encode($return_skills);
         break;
     case 'get_gradebooks':

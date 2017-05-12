@@ -8869,7 +8869,7 @@ class learnpath
 
             $return .= '<tr>';
             $return .= '<td '.(($item['item_type'] != TOOL_QUIZ && $item['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '').'>';
-            $return .= '<div style="margin-left:'.$item['depth'] * 20.'px;" class="radio learnpath">';
+            $return .= '<div style="margin-left:'.($item['depth'] * 20).'px;" class="radio learnpath">';
             $return .= '<label for="id'.$item['id'].'">';
             $return .= '<input'.(in_array($prerequisiteId, array($item['id'], $item['ref'])) ? ' checked="checked" ' : '').($item['item_type'] == 'dir' ? ' disabled="disabled" ' : ' ').'id="id'.$item['id'].'" name="prerequisites"  type="radio" value="'.$item['id'].'" />';
 

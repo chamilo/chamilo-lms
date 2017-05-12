@@ -19,7 +19,7 @@ echo "Starting tool\n";
 echo "Chamilo Bulk Nodes Creation v.1.0\n";
 echo "=================================\n";
 require_once('../../../main/inc/global.inc.php');
-require_once('clilib.php');       // cli only functions
+require_once('clilib.php'); // cli only functions
 // Ensure errors are well explained
 ini_set('debug_display', 1);
 ini_set('debug_level', E_ALL);
@@ -91,26 +91,40 @@ if (!empty($options['config'])) {
     }
 }
 
-require_once($_configuration['root_sys'].'local/classes/database.class.php');       // cli only functions
-if ($options['verbose']) echo "loaded dbclass\n";
-require_once($_configuration['root_sys'].'local/classes/textlib.class.php');       // cli only functions
-if ($options['verbose']) echo "loaded textlib\n";
-require_once($_configuration['root_sys'].'local/classes/mootochamlib.php');       // moodle like API
-if ($options['verbose']) echo "loaded moodle wrapping\n";
-require_once($_configuration['root_sys'] . '/plugin/vchamilo/lib/vchamilo_plugin.class.php');
-if ($options['verbose']) echo "loaded vchamilo plugin\n";
+require_once($_configuration['root_sys'].'local/classes/database.class.php'); // cli only functions
+if ($options['verbose']) {
+    echo "loaded dbclass\n";
+}
+require_once($_configuration['root_sys'].'local/classes/textlib.class.php'); // cli only functions
+if ($options['verbose']) {
+    echo "loaded textlib\n";
+}
+require_once($_configuration['root_sys'].'local/classes/mootochamlib.php'); // moodle like API
+if ($options['verbose']) {
+    echo "loaded moodle wrapping\n";
+}
+require_once($_configuration['root_sys'].'/plugin/vchamilo/lib/vchamilo_plugin.class.php');
+if ($options['verbose']) {
+    echo "loaded vchamilo plugin\n";
+}
 
 global $DB;
-if ($options['verbose']) echo "building database manager\n";
+if ($options['verbose']) {
+    echo "building database manager\n";
+}
 $DB = new DatabaseManager();
-if ($options['verbose']) echo "building plugin vchamilo\n";
+if ($options['verbose']) {
+    echo "building plugin vchamilo\n";
+}
 $plugin = VChamiloPlugin::create();
 
 if (empty($options['nodes'])) {
     cli_error(get_string('climissingnodes', 'block_vmoodle'));
 }
 
-if ($options['verbose']) echo "parsing nodelist\n";
+if ($options['verbose']) {
+    echo "parsing nodelist\n";
+}
 $nodes = vchamilo_parse_csv_nodelist($options['nodes'], $plugin);
 
 if ($options['lint']) {

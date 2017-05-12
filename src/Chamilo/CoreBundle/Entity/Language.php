@@ -231,7 +231,7 @@ class Language
     /**
      * Get id
      *
-     * @return boolean
+     * @return integer
      */
     public function getId()
     {

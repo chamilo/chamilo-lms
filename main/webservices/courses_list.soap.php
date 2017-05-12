@@ -22,18 +22,23 @@ $server->configureWSDL('WSCourseList', 'urn:WSCourseList');
 // Register the data structures used by the service
 
 $server->wsdl->addComplexType(
-        'courseDetails',
-        'complexType',
-        'struct',
-        'all',
-        '',
-        array(
-          'name'=>'code'  , 'type'=>'xsd:string',
-          'name'=>'title'  , 'type'=>'xsd:string',
-          'name'=>'url'    , 'type'=>'xsd:string',
-          'name'=>'teacher', 'type'=>'xsd:string',
-          'name'=>'language','type'=>'xsd:string',
-        )
+    'courseDetails',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'name' => 'code',
+        'type' => 'xsd:string',
+        'name' => 'title',
+        'type' => 'xsd:string',
+        'name' => 'url',
+        'type' => 'xsd:string',
+        'name' => 'teacher',
+        'type' => 'xsd:string',
+        'name' => 'language',
+        'type' => 'xsd:string',
+    )
 );
 
 $server->wsdl->addComplexType(
@@ -51,15 +56,15 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSCourseList',         // method name
+$server->register('WSCourseList', // method name
     array('username' => 'xsd:string',
           'signature' => 'xsd:string',
-          'visibilities' => 'xsd:string'),      // input parameters
-    array('return' => 'xsd:Array'),             // output parameters
-    'urn:WSCourseList',                         // namespace
-    'urn:WSCourseList#WSCourseList',      // soapaction
-    'rpc',                                      // style
-    'encoded',                                  // use
+          'visibilities' => 'xsd:string'), // input parameters
+    array('return' => 'xsd:Array'), // output parameters
+    'urn:WSCourseList', // namespace
+    'urn:WSCourseList#WSCourseList', // soapaction
+    'rpc', // style
+    'encoded', // use
     'This service returns a list of courses'    // documentation
 );
 
@@ -72,14 +77,17 @@ $server->register('WSCourseList',         // method name
  * @param mixed  Array or string. Type of visibility of course (public, public-registered, private, closed)
  * @return array Courses list (code=>[title=>'title',url='http://...',teacher=>'...',language=>''],code=>[...],...)
  */
-function WSCourseList($username, $signature, $visibilities = 'public') {
+function WSCourseList($username, $signature, $visibilities = 'public')
+{
     if (empty($username) or empty($signature)) { return -1; }
 
     global $_configuration;
 
     $info = api_get_user_info_from_username($username);
     $user_id = $info['user_id'];
-    if (!UserManager::is_admin($user_id)) { return -1; }
+    if (!UserManager::is_admin($user_id)) {
+        return -1;
+    }
 
     $list = UserManager::get_api_keys($user_id, 'dokeos');
     $key = '';
@@ -97,19 +105,31 @@ function WSCourseList($username, $signature, $visibilities = 'public') {
 
     $courses_list = array();
 
-	if (!is_array($visibilities)) {
-		$visibilities = split(',', $visibilities);
-	}
-	foreach ($visibilities as $visibility) {
-		if (!in_array($visibility, array_keys($vis))) {
-   			return array('error_msg' => 'Security check failed');
-		}
-		$courses_list_tmp = CourseManager::get_courses_list(null, null, null, null, $vis[$visibility]);
-		foreach ($courses_list_tmp as $index => $course) {
-			$course_info = CourseManager::get_course_information($course['code']);
-			$courses_list[] = array('code' => $course['code'], 'title' => api_utf8_encode($course_info['title']), 'url' => api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/', 'teacher' => api_utf8_encode($course_info['tutor_name']), 'language' => $course_info['course_language']);
-		}
-	}
+    if (!is_array($visibilities)) {
+        $visibilities = split(',', $visibilities);
+    }
+    foreach ($visibilities as $visibility) {
+        if (!in_array($visibility, array_keys($vis))) {
+            return array('error_msg' => 'Security check failed');
+        }
+        $courses_list_tmp = CourseManager::get_courses_list(
+            null,
+            null,
+            null,
+            null,
+            $vis[$visibility]
+        );
+        foreach ($courses_list_tmp as $index => $course) {
+            $course_info = CourseManager::get_course_information($course['code']);
+            $courses_list[] = array(
+                'code' => $course['code'],
+                'title' => api_utf8_encode($course_info['title']),
+                'url' => api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/',
+                'teacher' => api_utf8_encode($course_info['tutor_name']),
+                'language' => $course_info['course_language'],
+            );
+        }
+    }
     return $courses_list;
 }
 

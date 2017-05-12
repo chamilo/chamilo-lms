@@ -56,7 +56,7 @@ class Scaffolder
 
 
         ob_start();
-        include dirname(__FILE__) . '/template/model.php';
+        include __DIR__.'/template/model.php';
         $result = ob_get_clean();
         return $result;
     }

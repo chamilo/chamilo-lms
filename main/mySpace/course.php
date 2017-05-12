@@ -15,7 +15,7 @@ $this_section = SECTION_TRACKING;
 $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
 
 api_block_anonymous_users();
-$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+$interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('MySpace'));
 
 if (isset($_GET["id_session"]) && $_GET["id_session"] != "") {
     $interbreadcrumb[] = array("url" => "session.php", "name" => get_lang('Sessions'));
@@ -55,7 +55,8 @@ if (api_get_setting('add_users_by_coach') == 'true') {
 
 Display :: display_header(get_lang('Courses'));
 $user_id = 0;
-$a_courses = array();
+$a_courses = [];
+$menu_items = [];
 if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
     $title = '';
     if (empty($sessionId)) {
@@ -63,7 +64,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
             $user_id = intval($_GET['user_id']);
             $user_info = api_get_user_info($user_id);
             $title = get_lang('AssignedCoursesTo').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']);
-            $courses  = CourseManager::get_course_list_of_user_as_course_admin($user_id);
+            $courses = CourseManager::get_course_list_of_user_as_course_admin($user_id);
         } else {
             $title = get_lang('YourCourseList');
             $courses = CourseManager::get_courses_followed_by_drh(api_get_user_id());
@@ -78,7 +79,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 
     if (!api_is_session_admin()) {
         $menu_items[] = Display::url(
-            Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),
+            Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
         );
         $menu_items[] = Display::url(
@@ -303,10 +304,10 @@ $table = new SortableTable(
 
 $table->set_header(0, get_lang('CourseTitle'), false);
 $table->set_header(1, get_lang('NbStudents'), false);
-$table->set_header(2, get_lang('TimeSpentInTheCourse').Display :: return_icon('info.png', get_lang('TimeOfActiveByTraining'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
+$table->set_header(2, get_lang('TimeSpentInTheCourse').Display::return_icon('info.png', get_lang('TimeOfActiveByTraining'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
 $table->set_header(3, get_lang('ThematicAdvance'), false);
-$table->set_header(4, get_lang('AvgStudentsProgress').Display :: return_icon('info.png', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
-$table->set_header(5, get_lang('AvgCourseScore').Display :: return_icon('info.png', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
+$table->set_header(4, get_lang('AvgStudentsProgress').Display::return_icon('info.png', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
+$table->set_header(5, get_lang('AvgCourseScore').Display::return_icon('info.png', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
 $table->set_header(6, get_lang('AvgMessages'), false);
 $table->set_header(7, get_lang('AvgAssignments'), false);
 $table->set_header(8, get_lang('Attendances'), false);

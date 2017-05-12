@@ -34,7 +34,7 @@ class LinkForm extends FormValidator
         $action = null,
         $extra = null
     ) {
-        parent :: __construct($form_name, $method, $action);
+        parent::__construct($form_name, $method, $action);
 
         if (isset ($category_object)) {
             $this->category_object = $category_object;
@@ -47,16 +47,16 @@ class LinkForm extends FormValidator
         if (isset($extra)) {
             $this->extra = $extra;
         }
-        if ($form_type == self :: TYPE_CREATE) {
+        if ($form_type == self::TYPE_CREATE) {
             $this->build_create();
-        } elseif ($form_type == self :: TYPE_MOVE) {
+        } elseif ($form_type == self::TYPE_MOVE) {
             $this->build_move();
         }
     }
 
     protected function build_move()
     {
-        $renderer =& $this->defaultRenderer();
+        $renderer = & $this->defaultRenderer();
         $renderer->setCustomElementTemplate('<span>{element}</span> ');
         $this->addElement(
             'static',
@@ -145,7 +145,7 @@ class LinkForm extends FormValidator
         $link = LinkFactory::create($link);
         if (!empty($courseCode)) {
             $link->set_course_code($courseCode);
-        } elseif(!empty($_GET['course_code'])) {
+        } elseif (!empty($_GET['course_code'])) {
             $link->set_course_code(Database::escape_string($_GET['course_code'], null, false));
         }
 

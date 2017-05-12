@@ -20,7 +20,14 @@ switch ($action) {
             $tool_image = $tool_info['image'];
 
             if (api_get_setting('homepage_view') != 'activity_big') {
-                $tool_image = Display::return_icon($tool_image, null, null, null, null, true);
+                $tool_image = Display::return_icon(
+                    $tool_image,
+                    null,
+                    null,
+                    null,
+                    null,
+                    true
+                );
                 $na_image = str_replace('.gif', '_na.gif', $tool_image);
             } else {
                 // Display::return_icon() also checks in the app/Resources/public/css/themes/{theme}/icons folder
@@ -41,20 +48,19 @@ switch ($action) {
                 $na_image = CourseHome::getCustomWebIconPath().CourseHome::getDisableIcon($tool_info['custom_icon']);
             }
 
-            $requested_image = ($tool_visibility == 0 ) ? $tool_image : $na_image;
-            $requested_class = ($tool_visibility == 0 ) ? '' : 'text-muted';
-            $requested_message = ($tool_visibility == 0 ) ? 'is_active' : 'is_inactive';
-            $requested_view = ($tool_visibility == 0 ) ? 'visible.png' : 'invisible.png';
-            $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
-
-            $requested_view = ($tool_visibility == 0 ) ? 'visible.png' : 'invisible.png';
-            $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
+            $requested_image = $tool_visibility == 0 ? $tool_image : $na_image;
+            $requested_class = $tool_visibility == 0 ? '' : 'text-muted';
+            $requested_message = $tool_visibility == 0 ? 'is_active' : 'is_inactive';
+            $requested_view = $tool_visibility == 0 ? 'visible.png' : 'invisible.png';
+            $requested_visible = $tool_visibility == 0 ? 1 : 0;
+            $requested_view = $tool_visibility == 0 ? 'visible.png' : 'invisible.png';
+            $requested_visible = $tool_visibility == 0 ? 1 : 0;
 
             // HIDE AND REACTIVATE TOOL
             if ($_GET["id"] == strval(intval($_GET["id"]))) {
                 $sql = "UPDATE $tool_table SET
                         visibility = $requested_visible
-                        WHERE c_id = $course_id AND id='" . intval($_GET['id']) . "'";
+                        WHERE c_id = $course_id AND id='".intval($_GET['id'])."'";
                 Database::query($sql);
             }
             $response_data = array(
@@ -73,8 +79,7 @@ switch ($action) {
         $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
         $course_info = api_get_course_info($_GET['code']);
 
-        if (
-            api_get_setting('course_catalog_hide_private') === 'true' &&
+        if (api_get_setting('course_catalog_hide_private') === 'true' &&
             $course_info['visibility'] == COURSE_VISIBILITY_REGISTERED
         ) {
             echo get_lang('PrivateAccess');
@@ -106,12 +111,12 @@ switch ($action) {
          */
         require_once __DIR__.'/../global.inc.php';
         $now = time();
-        $page  = intval($_REQUEST['page']);     //page
-        $limit = intval($_REQUEST['rows']);     // quantity of rows
+        $page  = intval($_REQUEST['page']); //page
+        $limit = intval($_REQUEST['rows']); // quantity of rows
         //index to filter
         $sidx  = isset($_REQUEST['sidx']) && !empty($_REQUEST['sidx']) ? $_REQUEST['sidx'] : 'id';
-        $sord  = $_REQUEST['sord'];    //asc or desc
-        if (!in_array($sord, array('asc','desc'))) {
+        $sord  = $_REQUEST['sord']; //asc or desc
+        if (!in_array($sord, array('asc', 'desc'))) {
             $sord = 'desc';
         }
         $session_id  = intval($_REQUEST['session_id']);
@@ -120,17 +125,18 @@ switch ($action) {
         //Filter users that does not belong to the session
         if (!api_is_platform_admin()) {
             $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
-            $my_session_list  = array();
+            $my_session_list = array();
             foreach ($new_session_list as $item) {
-                if (!empty($item['id_session']))
-                    $my_session_list[] = $item['id_session'];
+                if (!empty($item['session_id'])) {
+                    $my_session_list[] = $item['session_id'];
+                }
             }
             if (!in_array($session_id, $my_session_list)) {
                 break;
             }
         }
 
-        $start = $limit*$page - $limit;
+        $start = $limit * $page - $limit;
         $course_list = SessionManager::get_course_list_by_session_id($session_id);
         $count = 0;
         $temp = array();
@@ -142,14 +148,14 @@ switch ($action) {
             $item['title'] = Display::url($item['title'], $course_url, array('target' => SESSION_LINK_TARGET));
 
             foreach ($flat_list as $lp_id => $lp_item) {
-                $temp[$count]['id']= $lp_id;
+                $temp[$count]['id'] = $lp_id;
 
                 $lp = new learnpath($item['code'], $lp_id, api_get_user_id());
                 if ($lp->progress_db == 100) {
                     continue;
                 }
 
-                $lp_url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
+                $lp_url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
 
                 $last_date = Tracking::get_last_connection_date_on_the_course(
                     api_get_user_id(),
@@ -205,27 +211,25 @@ switch ($action) {
         }
         $temp = msort($temp, $sidx, $sord);
 
-        $i =0;
+        $i = 0;
         $response = new stdClass();
-        foreach ($temp as $key=>$row) {
+        foreach ($temp as $key => $row) {
             $row = $row['cell'];
             if (!empty($row)) {
-                if ($key >= $start  && $key < ($start + $limit)) {
-                    $response->rows[$i]['id']= $key;
-                    $response->rows[$i]['cell']=array($row[0], $row[1], $row[2]);
+                if ($key >= $start && $key < ($start + $limit)) {
+                    $response->rows[$i]['id'] = $key;
+                    $response->rows[$i]['cell'] = array($row[0], $row[1], $row[2]);
                     $i++;
                 }
             }
         }
-
+        $total_pages = 0;
         if ($count > 0 && $limit > 0) {
-            $total_pages = ceil($count/$limit);
-        } else {
-            $total_pages = 0;
+            $total_pages = ceil($count / $limit);
         }
-        $response->total    = $total_pages;
+        $response->total = $total_pages;
         if ($page > $total_pages) {
-            $response->page= $total_pages;
+            $response->page = $total_pages;
         } else {
             $response->page = $page;
         }
@@ -235,27 +239,25 @@ switch ($action) {
     case 'session_courses_lp_by_week':
         require_once __DIR__.'/../global.inc.php';
         $now = time();
-
-        $page  = intval($_REQUEST['page']);     //page
-        $limit = intval($_REQUEST['rows']);     // quantity of rows
-        $sidx  = isset($_REQUEST['sidx']) && !empty($_REQUEST['sidx']) ? $_REQUEST['sidx'] : 'course';
+        $page = intval($_REQUEST['page']); //page
+        $limit = intval($_REQUEST['rows']); // quantity of rows
+        $sidx = isset($_REQUEST['sidx']) && !empty($_REQUEST['sidx']) ? $_REQUEST['sidx'] : 'course';
         $sidx = str_replace(array('week desc,', ' '), '', $sidx);
-
-        $sord  = $_REQUEST['sord'];    //asc or desc
-        if (!in_array($sord, array('asc','desc'))) {
+        $sord = $_REQUEST['sord']; //asc or desc
+        if (!in_array($sord, array('asc', 'desc'))) {
             $sord = 'desc';
         }
 
-        $session_id  = intval($_REQUEST['session_id']);
-        $course_id   = intval($_REQUEST['course_id']);
+        $session_id = intval($_REQUEST['session_id']);
+        $course_id = intval($_REQUEST['course_id']);
 
         //Filter users that does not belong to the session
         if (!api_is_platform_admin()) {
             $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
-            $my_session_list  = array();
+            $my_session_list = array();
             foreach ($new_session_list as $item) {
-                if (!empty($item['id_session'])) {
-                    $my_session_list[] = $item['id_session'];
+                if (!empty($item['session_id'])) {
+                    $my_session_list[] = $item['session_id'];
                 }
             }
             if (!in_array($session_id, $my_session_list)) {
@@ -263,7 +265,7 @@ switch ($action) {
             }
         }
 
-        $start = $limit*$page - $limit;
+        $start = $limit * $page - $limit;
         $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
         $count = 0;
@@ -290,8 +292,8 @@ switch ($action) {
             );
 
             foreach ($flat_list as $lp_id => $lp_item) {
-                $temp[$count]['id']= $lp_id;
-                $lp_url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
+                $temp[$count]['id'] = $lp_id;
+                $lp_url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
 
                 $last_date = Tracking::get_last_connection_date_on_the_course(
                     api_get_user_id(),
@@ -353,22 +355,20 @@ switch ($action) {
         }
 
         $response = new stdClass();
-        $i =0;
-        foreach($temp as $key=>$row) {
+        $i = 0;
+        foreach ($temp as $key => $row) {
             $row = $row['cell'];
             if (!empty($row)) {
-                if ($key >= $start  && $key < ($start + $limit)) {
-                    $response->rows[$i]['id']= $key;
-                    $response->rows[$i]['cell']=array($row[0], $row[1], $row[2],$row[3]);
+                if ($key >= $start && $key < ($start + $limit)) {
+                    $response->rows[$i]['id'] = $key;
+                    $response->rows[$i]['cell'] = array($row[0], $row[1], $row[2], $row[3]);
                     $i++;
                 }
             }
         }
-
+        $total_pages = 0;
         if ($count > 0 && $limit > 0) {
-            $total_pages = ceil($count/$limit);
-        } else {
-            $total_pages = 0;
+            $total_pages = ceil($count / $limit);
         }
         $response->total = $total_pages;
         if ($page > $total_pages) {
@@ -382,12 +382,12 @@ switch ($action) {
     case 'session_courses_lp_by_course':
         require_once __DIR__.'/../global.inc.php';
         $now = time();
-        $page  = intval($_REQUEST['page']);     //page
-        $limit = intval($_REQUEST['rows']);     // quantity of rows
+        $page  = intval($_REQUEST['page']); //page
+        $limit = intval($_REQUEST['rows']); // quantity of rows
         $sidx = isset($_REQUEST['sidx']) && !empty($_REQUEST['sidx']) ? $_REQUEST['sidx'] : 'id';
         $sidx = str_replace(array('course asc,', ' '), '', $sidx);
 
-        $sord = $_REQUEST['sord'];    //asc or desc
+        $sord = $_REQUEST['sord']; //asc or desc
         if (!in_array($sord, array('asc', 'desc'))) {
             $sord = 'desc';
         }
@@ -397,17 +397,18 @@ switch ($action) {
         //Filter users that does not belong to the session
         if (!api_is_platform_admin()) {
             $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
-            $my_session_list  = array();
-            foreach($new_session_list as $item) {
-                if (!empty($item['id_session']))
-                    $my_session_list[] = $item['id_session'];
+            $my_session_list = array();
+            foreach ($new_session_list as $item) {
+                if (!empty($item['session_id'])) {
+                    $my_session_list[] = $item['session_id'];
+                }
             }
             if (!in_array($session_id, $my_session_list)) {
                 break;
             }
         }
 
-        $start = $limit*$page - $limit;
+        $start = $limit * $page - $limit;
         $course_list = SessionManager::get_course_list_by_session_id($session_id);
         $count = 0;
 
@@ -418,16 +419,20 @@ switch ($action) {
                 }
             }
 
-            $list = new LearnpathList(api_get_user_id(),$item['code'],$session_id);
+            $list = new LearnpathList(
+                api_get_user_id(),
+                $item['code'],
+                $session_id
+            );
             $flat_list = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
             $item['title'] = Display::url(
                 $item['title'],
                 api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id, array('target'=>SESSION_LINK_TARGET)
             );
-            foreach($flat_list as $lp_id => $lp_item) {
-                $temp[$count]['id']= $lp_id;
-                $lp_url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
+            foreach ($flat_list as $lp_id => $lp_item) {
+                $temp[$count]['id'] = $lp_id;
+                $lp_url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
                 $last_date = Tracking::get_last_connection_date_on_the_course(
                     api_get_user_id(),
                     $item,
@@ -453,7 +458,7 @@ switch ($action) {
                     $date = '-';
                 }
 
-                 //Checking LP publicated and expired_on dates
+                // Checking LP publicated and expired_on dates
                 if (!empty($lp_item['publicated_on'])) {
                     if ($now < api_strtotime($lp_item['publicated_on'], 'UTC')) {
                         continue;
@@ -472,36 +477,31 @@ switch ($action) {
                 $temp[$count]['course'] = strip_tags($item['title']);
                 $temp[$count]['lp'] = $lp_item['lp_name'];
                 $temp[$count]['date'] = $lp_item['publicated_on'];
-
                 $count++;
             }
         }
 
         $temp = msort($temp, $sidx, $sord);
-
         $response = new stdClass();
-        $i =0;
+        $i = 0;
         foreach ($temp as $key => $row) {
             $row = $row['cell'];
             if (!empty($row)) {
-                if ($key >= $start  && $key < ($start + $limit)) {
-                    $response->rows[$i]['id']= $key;
-                    $response->rows[$i]['cell']=array($row[0], $row[1], $row[2]);
+                if ($key >= $start && $key < ($start + $limit)) {
+                    $response->rows[$i]['id'] = $key;
+                    $response->rows[$i]['cell'] = array($row[0], $row[1], $row[2]);
                     $i++;
                 }
             }
         }
-
+        $total_pages = 0;
         if ($count > 0 && $limit > 0) {
             $total_pages = ceil($count / $limit);
-        } else {
-            $total_pages = 0;
         }
         $response->total = $total_pages;
+        $response->page = $page;
         if ($page > $total_pages) {
             $response->page = $total_pages;
-        } else {
-            $response->page = $page;
         }
         $response->records = $count;
 

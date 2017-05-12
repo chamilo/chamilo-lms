@@ -7,7 +7,7 @@
 
 //exit;
 
-require_once __DIR__ . '/../../config.php';
+require_once __DIR__.'/../../config.php';
 
 api_protect_admin_script();
 

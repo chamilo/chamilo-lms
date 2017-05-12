@@ -7942,4 +7942,10 @@ $NewPasswordRequirementMaxXLowercase = "Maximum %s caractère(s) alphabétique(s
 $NewPasswordRequirementMaxXUppercase = "Maximum %s caractère(s) alphabétique(s) en majuscule";
 $NewPasswordRequirementMaxXNumeric = "Maximum %s caractère(s) numérique(s) (0-9)";
 $NewPasswordRequirementMaxXLength = "Maximum %s caractère(s) au total";
+$YouCantNotEditThisQuestionBecauseAlreadyExistAnswers = "L'édition de cette question a été désactivée parce que des utilisateurs y ont déjà répondu";
+$Avatar = "Avatar";
+$StudyCycle = "Semestre";
+$ReadingComprehension = "Compréhension à la lecture";
+$ReadingQuestionCongratsSpeedXNotReachedForYWords = "Désolé, il semblerait que la vitesse de %s mots/minute soit trop rapide pour vous pour l'instant, selon cette tentative sur un texte de %s mots.";
+$ReadingQuestionCongratsSpeedXReachedForYWords = "Félicitacions, vous avez atteint la vitesse de %s mots/minute en comprenant correctement un texte de %s mots.";
 ?>

@@ -36,7 +36,7 @@ class ThemeManager
     function __construct($container, $resolverClass = null)
     {
         $this->container     = $container;
-        $this->resolverClass = $resolverClass?: 'Chamilo\ThemeBundle\Util\DependencyResolver';
+        $this->resolverClass = $resolverClass ?: 'Chamilo\ThemeBundle\Util\DependencyResolver';
     }
 
     public function registerScript($id, $src, $deps = array(), $location = "bottom")
@@ -52,8 +52,9 @@ class ThemeManager
 
     }
 
-    public function registerStyle($id, $src, $deps = array()) {
-        if(!isset($this->stylesheets[$id])) {
+    public function registerStyle($id, $src, $deps = array())
+    {
+        if (!isset($this->stylesheets[$id])) {
             $this->stylesheets[$id] = array(
                 'src'      => $src,
                 'deps'     => $deps,
@@ -61,26 +62,28 @@ class ThemeManager
         }
     }
 
-    public function getScripts($location = 'bottom') {
+    public function getScripts($location = 'bottom')
+    {
 
         $unsorted = array(); $srcList = array(); $assetList = array();
-        foreach($this->javascripts as $id => $scriptDefinition) {
-            if($scriptDefinition['location'] == $location) {
+        foreach ($this->javascripts as $id => $scriptDefinition) {
+            if ($scriptDefinition['location'] == $location) {
                 $unsorted[$id] = $scriptDefinition;
             }
         }
 
         $queue = $this->getResolver()->register($unsorted)->resolveAll();
-        foreach($queue as $def){
+        foreach ($queue as $def) {
             $srcList[] = $def['src'];
         }
         return $srcList;
     }
 
-    public function getStyles() {
+    public function getStyles()
+    {
         $srcList = array();
         $queue = $this->getResolver()->register($this->stylesheets)->resolveAll();
-        foreach($queue as $def){
+        foreach ($queue as $def) {
             $srcList[] = $def['src'];
         }
         return $srcList;
@@ -89,7 +92,8 @@ class ThemeManager
     /**
      * @return DependencyResolverInterface
      */
-    protected function getResolver() {
+    protected function getResolver()
+    {
         $class = $this->resolverClass;
         return new $class;
     }
@@ -97,7 +101,8 @@ class ThemeManager
     /**
      * @return FileLocator
      */
-    protected function getLocator() {
+    protected function getLocator()
+    {
         return $this->container->get('file_locator');
     }
 

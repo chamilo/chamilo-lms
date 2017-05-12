@@ -7,8 +7,8 @@
 class DateRangePicker extends HTML_QuickForm_text
 {
     /**
-    * Constructor
-    */
+     * Constructor
+     */
     public function __construct($elementName = null, $elementLabel = null, $attributes = null)
     {
         if (!isset($attributes['id'])) {
@@ -88,7 +88,7 @@ class DateRangePicker extends HTML_QuickForm_text
         }
 
         $timePicker = 'true';
-        $timePickerValue =  $this->getAttribute('timePicker');
+        $timePickerValue = $this->getAttribute('timePicker');
         if (!empty($timePickerValue)) {
             $timePicker = $timePickerValue;
         }
@@ -154,10 +154,10 @@ class DateRangePicker extends HTML_QuickForm_text
     }
 
     /**
-    * @param array $dates result of parseDateRange()
-    *
-    * @return bool
-    */
+     * @param array $dates result of parseDateRange()
+     *
+     * @return bool
+     */
     public function validateDates($dates, $format = null)
     {
         if (empty($dates['start']) || empty($dates['end'])) {

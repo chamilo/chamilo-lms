@@ -18,8 +18,8 @@ unset($_SESSION['this_section']);
 
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
-    $( "#keyword_start_date_start" ).datepicker({ dateFormat: ' . "'yy-mm-dd'" . ' });
-    $( "#keyword_start_date_end" ).datepicker({ dateFormat: ' . "'yy-mm-dd'" . ' });
+    $( "#keyword_start_date_start" ).datepicker({ dateFormat: ' . "'yy-mm-dd'".' });
+    $( "#keyword_start_date_end" ).datepicker({ dateFormat: ' . "'yy-mm-dd'".' });
 });
 
 function validate() {
@@ -90,7 +90,7 @@ $tools['forum'] = array('id' => 'forum', 'name' => get_lang('Forum'));
  */
 function js_str($s)
 {
-    return '"' . addcslashes($s, "\0..\37\"\\") . '"';
+    return '"'.addcslashes($s, "\0..\37\"\\").'"';
 }
 /**
  * This function is to show the ticket form
@@ -100,29 +100,29 @@ function show_form()
 {
     global $tools;
     echo '<div class="ticket-form">';
-    echo '<form enctype="multipart/form-data" action="' . api_get_self() . '" method="post" name="send_ticket" id="send_ticket"
+    echo '<form enctype="multipart/form-data" action="'.api_get_self().'" method="post" name="send_ticket" id="send_ticket"
  	onsubmit="return validate()" style="width:100%">';
     $select_course = '<div id="user_request" >
 	 </div>';
     echo $select_course;
     //select status
     $select_tool = '<div class="row"  >
-	<div class="label2"  >' . get_lang('Tool') .':</div>
+	<div class="label2"  >' . get_lang('Tool').':</div>
 	<div class="formw2">';
     $select_tool .= '<select style="width: 95%; " name = "tool" id="tool" >';
 
     foreach ($tools as $tool) {
-        $select_tool .= "<option value = '" . $tool['id'] . "' selected >" . $tool['name'] . "</option>";
+        $select_tool .= "<option value = '".$tool['id']."' selected >".$tool['name']."</option>";
     }
     $select_tool .= "</select>";
     $select_tool .= '</div></div>';
     echo $select_tool;
     echo '<div class="row">
-	      <div class="label2">' . get_lang('From') . ':</div>
+	      <div class="label2">' . get_lang('From').':</div>
               <div class="formw2"><input id="keyword_start_date_start" name="keyword_start_date_start" type="text"></div>
           </div>
 	  <div class="row">
-	      <div class="label2"> ' . get_lang('To') . '</div>
+	      <div class="label2"> ' . get_lang('To').'</div>
 	      <div class="formw2"><input id="keyword_start_date_end" name="keyword_start_date_end" type="text"></div>
 	  </div>';
     echo '</div>';
@@ -130,7 +130,7 @@ function show_form()
 		<div class="label2">
 		</div>
 		<div class="formw2">
-			<button class="save" name="report" type="submit" id="btnsubmit" disabled="disabled">' . get_lang('CompleteReport') .'</button>
+			<button class="save" name="report" type="submit" id="btnsubmit" disabled="disabled">' . get_lang('CompleteReport').'</button>
 		</div>
 	</div>';
 }
@@ -141,11 +141,11 @@ function show_form()
  */
 function get_number_of_users()
 {
-    $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+    $user_table = Database::get_main_table(TABLE_MAIN_USER);
     $sql = "SELECT COUNT(u.user_id) AS total_number_of_items FROM $user_table u";
     if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
-        $access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
+        $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $sql .= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
     }
     if (isset($_GET['keyword'])) {
         $keyword = Database::escape_string(trim($_GET['keyword']));
@@ -172,7 +172,7 @@ function get_number_of_users()
  */
 function get_user_data($from, $number_of_items, $column, $direction)
 {
-    $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+    $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
     if (api_is_western_name_order()) {
         $col34 = "u.firstname AS col3,
@@ -220,10 +220,10 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $webPath = api_get_path(WEB_PATH);
     while ($user = Database::fetch_row($res)) {
         $userPicture = UserManager::getUserPicture($user[0]);
-        $photo = '<img src="' . $userPicture . '" alt="' . api_get_person_name($user[2], $user[3]) . '" title="' . api_get_person_name($user[2], $user[3]) . '" />';
+        $photo = '<img src="'.$userPicture.'" alt="'.api_get_person_name($user[2], $user[3]).'" title="'.api_get_person_name($user[2], $user[3]).'" />';
         $user_id = $user[0];
-        $button = '<a  href="javascript:void(0)" onclick="load_course_list(\'div_' . $user_id . '\',' . $user_id . ')">
-					<img onclick="load_course_list(\'div_' . $user_id . '\',' . $user_id . ')"  src="' . $webPath . 'img/view_more_stats.gif" title="' . get_lang('Courses') . '" alt="' . get_lang('Courses') . '"/>
+        $button = '<a  href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')">
+					<img onclick="load_course_list(\'div_' . $user_id.'\','.$user_id.')"  src="'.$webPath.'img/view_more_stats.gif" title="'.get_lang('Courses').'" alt="'.get_lang('Courses').'"/>
 					</a>&nbsp;&nbsp;';
         $users[] = array(
             $photo,
@@ -241,7 +241,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
 Display::display_header('Reports');
 echo '<div class="actions">
-    <form action="' . api_get_self() . '" method="get" name="search_simple" id="search_simple">
+    <form action="' . api_get_self().'" method="get" name="search_simple" id="search_simple">
         <input name="user_id_request" id="user_id_request" type="hidden" value="">
         <span><label for="keyword">B&uacute;squeda del usuario: </label><input size="25" name="keyword" type="text" id="keyword"></span>
         <span><button class="search" name="submit" type="submit">Buscar</button></span>
@@ -275,12 +275,12 @@ if (isset($_POST['report'])) {
                 u.username , CONCAT(u.lastname, ' ', u.firstname) AS fullname,
                 DATE_SUB(access.access_date,INTERVAL 5 HOUR) AS  access_date,
                 c.title AS course, access_tool AS tool
-            FROM  " . Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS) . " access
-            LEFT JOIN  " . Database::get_main_table(TABLE_MAIN_USER) . " u ON access.access_user_id = u.user_id
-            LEFT JOIN  " . Database::get_main_table(TABLE_MAIN_COURSE) . " c ON access.c_id = c.id
-            WHERE access.c_id = " . $course_info['real_id'] . " AND u.user_id = $user_id ";
+            FROM  " . Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS)." access
+            LEFT JOIN  " . Database::get_main_table(TABLE_MAIN_USER)." u ON access.access_user_id = u.user_id
+            LEFT JOIN  " . Database::get_main_table(TABLE_MAIN_COURSE)." c ON access.c_id = c.id
+            WHERE access.c_id = " . $course_info['real_id']." AND u.user_id = $user_id ";
     if ($tool != '') {
-        $sql.="AND access.access_tool = '$tool' ";
+        $sql .= "AND access.access_tool = '$tool' ";
     }
 
     $start_date = Database::escape_string($_POST['keyword_start_date_start']);
@@ -291,7 +291,7 @@ if (isset($_POST['report'])) {
         if ($start_date != '')
             $sql .= "  access_date >= '$start_date'   ";
         if ($end_date != '') {
-            $sql = ($start_date == '') ? $sql : ($sql . " AND ");
+            $sql = ($start_date == '') ? $sql : ($sql." AND ");
             $sql .= "  access_date <= '$end_date'   ";
         }
     }

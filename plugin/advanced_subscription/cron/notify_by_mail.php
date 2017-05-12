@@ -9,7 +9,7 @@
  * Init
  */
 
-require_once __DIR__ . '/../config.php';
+require_once __DIR__.'/../config.php';
 $plugin = AdvancedSubscriptionPlugin::create();
 $now = api_get_utc_datetime();
 $weekAgo = api_get_utc_datetime('-1 week');
@@ -18,10 +18,10 @@ $sessionExtraFieldValue = new ExtraFieldValue('session');
 /**
  * Get session list
  */
-$joinTables = Database::get_main_table(TABLE_MAIN_SESSION) . ' s INNER JOIN ' .
-    Database::get_main_table(TABLE_MAIN_SESSION_USER) . ' su ON s.id = su.session_id INNER JOIN ' .
-    Database::get_main_table(TABLE_MAIN_USER_REL_USER) . ' uu ON su.user_id = uu.user_id INNER JOIN ' .
-    Database::get_main_table(TABLE_ADVANCED_SUBSCRIPTION_QUEUE) . ' asq ON su.session_id = asq.session_id AND su.user_id = asq.user_id';
+$joinTables = Database::get_main_table(TABLE_MAIN_SESSION).' s INNER JOIN '.
+    Database::get_main_table(TABLE_MAIN_SESSION_USER).' su ON s.id = su.session_id INNER JOIN '.
+    Database::get_main_table(TABLE_MAIN_USER_REL_USER).' uu ON su.user_id = uu.user_id INNER JOIN '.
+    Database::get_main_table(TABLE_ADVANCED_SUBSCRIPTION_QUEUE).' asq ON su.session_id = asq.session_id AND su.user_id = asq.user_id';
 $columns = 's.id AS session_id, uu.friend_user_id AS superior_id, uu.user_id AS student_id, asq.id AS queue_id, asq.status AS status';
 $conditions = array(
     'where' => array(
@@ -133,8 +133,7 @@ $admins = UserManager::get_all_administrators();
 $isWesternNameOrder = api_is_western_name_order();
 foreach ($admins as &$admin) {
     $admin['complete_name'] = $isWesternNameOrder ?
-        $admin['firstname'] . ', ' . $admin['lastname'] :
-        $admin['lastname'] . ', ' . $admin['firstname']
+        $admin['firstname'].', '.$admin['lastname'] : $admin['lastname'].', '.$admin['firstname']
     ;
 }
 unset($admin);
@@ -149,8 +148,8 @@ $data = array(
 );
 foreach ($queueByAdmin as $sessionId => $studentInfo) {
     $data['sessionId'] = $sessionId;
-    $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) .
-        'advanced_subscription/src/admin_view.php?s=' . $data['sessionId'];
+    $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH).
+        'advanced_subscription/src/admin_view.php?s='.$data['sessionId'];
     $data['session'] = $sessionInfoList[$sessionId];
     $data['students'] = $studentInfo['students'];
     $plugin->sendMail($data, ADVANCED_SUBSCRIPTION_ACTION_REMINDER_ADMIN);

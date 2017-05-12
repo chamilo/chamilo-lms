@@ -21,11 +21,16 @@ $_SESSION['whereami'] = 'lp/view';
 $this_section = SECTION_COURSES;
 
 if ($lp_controller_touched != 1) {
-    header('location: lp_controller.php?action=view&item_id=' . intval($_REQUEST['item_id']));
+    header('location: lp_controller.php?action=view&item_id='.intval($_REQUEST['item_id']));
     exit;
 }
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+if (isset($_REQUEST['origin']) && $_REQUEST['origin'] === 'learnpath') {
+    $_REQUEST['origin'] = '';
+}
+
 //To prevent the template class
 $show_learnpath = true;
 
@@ -54,7 +59,9 @@ $visibility = api_get_item_visibility(
     $sessionId
 );
 
-if (!api_is_allowed_to_edit(false, true, false, false) && intval($visibility) == 0) {
+if (!api_is_allowed_to_edit(false, true, false, false) &&
+    intval($visibility) == 0
+) {
     api_not_allowed(true);
 }
 
@@ -63,7 +70,6 @@ if (empty($_SESSION['oLP'])) {
 }
 
 $debug = 0;
-
 if ($debug) {
     error_log('------ Entering lp_view.php -------');
 }
@@ -96,7 +102,7 @@ $user_id = api_get_user_id();
 $platform_theme = api_get_setting('stylesheets'); // Platform's css.
 $my_style = $platform_theme;
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 <!--
 var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
 -->
@@ -115,10 +121,10 @@ if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_fra
     $htmlHeadXtra[] = '';
 }
 
-//Impress js
+// Impress js
 if ($_SESSION['oLP']->mode == 'impress') {
     $lp_id = $_SESSION['oLP']->get_id();
-    $url = api_get_path(WEB_CODE_PATH) . "lp/lp_impress.php?lp_id=$lp_id&" . api_get_cidreq();
+    $url = api_get_path(WEB_CODE_PATH)."lp/lp_impress.php?lp_id=$lp_id&".api_get_cidreq();
     header("Location: $url");
     exit;
 }
@@ -136,15 +142,15 @@ if (isset($exerciseResult) || isset($_SESSION['exerciseResult'])) {
 
 // additional APIs
 $htmlHeadXtra[] = '<script>
-chamilo_courseCode = "' . $course_code . '";
+chamilo_courseCode = "' . $course_code.'";
 </script>';
 // Document API
 $htmlHeadXtra[] = '<script src="js/documentapi.js" type="text/javascript" language="javascript"></script>';
 // Storage API
 $htmlHeadXtra[] = '<script>
-var sv_user = \'' . api_get_user_id() . '\';
+var sv_user = \'' . api_get_user_id().'\';
 var sv_course = chamilo_courseCode;
-var sv_sco = \'' . $lp_id . '\';
+var sv_sco = \'' . $lp_id.'\';
 </script>'; // FIXME fetch sco and userid from a more reliable source directly in sotrageapi.js
 $htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></script>';
 
@@ -157,8 +163,6 @@ if ($debug) {
 }
 
 $get_toc_list = $_SESSION['oLP']->get_toc();
-
-
 $get_teacher_buttons = $_SESSION['oLP']->get_teacher_toc_buttons();
 
 $type_quiz = false;
@@ -167,6 +171,7 @@ foreach ($get_toc_list as $toc) {
         $type_quiz = true;
     }
 }
+
 if (!isset($src)) {
     $src = null;
     switch ($lpType) {
@@ -188,8 +193,7 @@ if (!isset($src)) {
                     $file_info = pathinfo($file_info['path']);
                 }
 
-                if (
-                    isset($file_info['extension']) &&
+                if (isset($file_info['extension']) &&
                     api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')
                 ) {
                     $src = api_get_path(WEB_CODE_PATH).'lp/lp_view_item.php?lp_item_id='.$lp_item_id.'&'.api_get_cidreq();
@@ -217,7 +221,7 @@ if (!isset($src)) {
         case 3:
             // aicc
             $_SESSION['oLP']->stop_previous_item(); // save status manually if asset
-            $htmlHeadXtra[] = '<script src="' . $_SESSION['oLP']->get_js_lib().'" type="text/javascript" language="javascript"></script>';
+            $htmlHeadXtra[] = '<script src="'.$_SESSION['oLP']->get_js_lib().'" type="text/javascript" language="javascript"></script>';
             $preReqCheck = $_SESSION['oLP']->prerequisites_match($lp_item_id);
             if ($preReqCheck === true) {
                 $src = $_SESSION['oLP']->get_link(
@@ -239,14 +243,13 @@ $autostart = 'true';
 // Update status, total_time from lp_item_view table when you finish the exercises in learning path.
 
 if ($debug) {
-    error_log('$type_quiz: ' . $type_quiz);
-    error_log('$_REQUEST[exeId]: ' . intval($_REQUEST['exeId']));
-    error_log('$lp_id: ' . $lp_id);
-    error_log('$_GET[lp_item_id]: ' . intval($_GET['lp_item_id']));
+    error_log('$type_quiz: '.$type_quiz);
+    error_log('$_REQUEST[exeId]: '.intval($_REQUEST['exeId']));
+    error_log('$lp_id: '.$lp_id);
+    error_log('$_GET[lp_item_id]: '.intval($_GET['lp_item_id']));
 }
 
-if (
-    !empty($_REQUEST['exeId']) &&
+if (!empty($_REQUEST['exeId']) &&
     isset($lp_id) &&
     isset($_GET['lp_item_id'])
 ) {
@@ -260,12 +263,11 @@ if (
     $safe_id = $lp_id;
     $safe_exe_id = intval($_REQUEST['exeId']);
 
-    if (
-        $safe_id == strval(intval($safe_id)) &&
+    if ($safe_id == strval(intval($safe_id)) &&
         $safe_item_id == strval(intval($safe_item_id))
     ) {
         $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting, exe_exo_id
-                FROM ' . $TBL_TRACK_EXERCICES . '
+                FROM ' . $TBL_TRACK_EXERCICES.'
                 WHERE exe_id = ' . $safe_exe_id;
         $res = Database::query($sql);
         $row_dates = Database::fetch_array($res);
@@ -279,14 +281,14 @@ if (
 
         $sql = "UPDATE $TBL_LP_ITEM SET
                     max_score = '$max_score'
-                WHERE c_id = $course_id AND id = '" . $safe_item_id . "'";
+                WHERE c_id = $course_id AND id = '".$safe_item_id."'";
         Database::query($sql);
 
         $sql = "SELECT id FROM $TBL_LP_ITEM_VIEW
                 WHERE
                     c_id = $course_id AND
                     lp_item_id = '$safe_item_id' AND
-                    lp_view_id = '" . $_SESSION['oLP']->lp_view_id . "'
+                    lp_view_id = '".$_SESSION['oLP']->lp_view_id."'
                 ORDER BY id DESC
                 LIMIT 1";
         $res_last_attempt = Database::query($sql);
@@ -315,7 +317,7 @@ if (
                         status = '$status',
                         score = $score,
                         total_time = $mytime
-                    WHERE id='" . $lp_item_view_id . "' AND c_id = $course_id ";
+                    WHERE id='".$lp_item_view_id."' AND c_id = $course_id ";
 
             if ($debug) {
                 error_log($sql);
@@ -325,17 +327,16 @@ if (
 
             $sql = "UPDATE $TBL_TRACK_EXERCICES SET
                         orig_lp_item_view_id = $lp_item_view_id
-                    WHERE exe_id = " . $safe_exe_id;
+                    WHERE exe_id = ".$safe_exe_id;
             Database::query($sql);
         }
     }
     if (intval($_GET['fb_type']) > 0) {
         $src = 'blank.php?msg=exerciseFinished';
     } else {
-        $src = api_get_path(WEB_CODE_PATH) . 'exercise/result.php?origin=learnpath&id=' . $safe_exe_id.'&'.api_get_cidreq();
-
+        $src = api_get_path(WEB_CODE_PATH).'exercise/result.php?origin=learnpath&id='.$safe_exe_id.'&'.api_get_cidreq();
         if ($debug) {
-            error_log('Calling URL: ' . $src);
+            error_log('Calling URL: '.$src);
         }
     }
     $autostart = 'false';
@@ -350,7 +351,6 @@ $_setting['show_navigation_menu'] = 'false';
 $scorm_css_header = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
 // Sets the css theme of the LP this call is also use at the frames (toc, nav, message).
-
 if ($_SESSION['oLP']->mode == 'fullscreen') {
     $htmlHeadXtra[] = "<script>window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";
 }
@@ -370,7 +370,6 @@ $display_none = '';
 $margin_left = '340px';
 
 //Media player code
-
 $display_mode = $_SESSION['oLP']->mode;
 $scorm_css_header = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
@@ -388,13 +387,13 @@ if (!api_is_invitee()) {
 }
 $navigation_bar = $_SESSION['oLP']->get_navigation_bar();
 $navigation_bar_bottom = $_SESSION['oLP']->get_navigation_bar("control-bottom", "display:none");
-$mediaplayer = $_SESSION['oLP']->get_mediaplayer($autostart);
+$mediaplayer = $_SESSION['oLP']->get_mediaplayer($_SESSION['oLP']->current, $autostart);
 
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 $show_audioplayer = false;
 // Getting all the information about the item.
-$sql = "SELECT audio FROM " . $tbl_lp_item . "
-        WHERE c_id = $course_id AND lp_id = '" . $_SESSION['oLP']->lp_id . "'";
+$sql = "SELECT audio FROM ".$tbl_lp_item."
+        WHERE c_id = $course_id AND lp_id = '".$_SESSION['oLP']->lp_id."'";
 $res_media = Database::query($sql);
 
 if (Database::num_rows($res_media) > 0) {
@@ -415,7 +414,7 @@ if ($is_allowed_to_edit) {
         'name' => get_lang('LearningPaths')
     );
     $interbreadcrumb[] = array(
-        'url' => api_get_self() . "?action=add_item&type=step&lp_id={$_SESSION['oLP']->lp_id}&isStudentView=false&".api_get_cidreq(true, true, 'course'),
+        'url' => api_get_self()."?action=add_item&type=step&lp_id={$_SESSION['oLP']->lp_id}&isStudentView=false&".api_get_cidreq(true, true, 'course'),
         'name' => $_SESSION['oLP']->get_name()
     );
 
@@ -427,12 +426,12 @@ if ($is_allowed_to_edit) {
 
 // Return to course home.
 if ($is_allowed_to_edit) {
-    $buttonHomeUrl = 'lp_controller.php?' . api_get_cidreq(true, true, 'course') . '&' . http_build_query([
+    $buttonHomeUrl = 'lp_controller.php?'.api_get_cidreq(true, true, 'course').'&'.http_build_query([
         'isStudentView' => 'false',
         'action' => 'return_to_course_homepage'
     ]);
 } else {
-    $buttonHomeUrl = 'lp_controller.php?' . api_get_cidreq(true, true, 'course') . '&' . http_build_query([
+    $buttonHomeUrl = 'lp_controller.php?'.api_get_cidreq(true, true, 'course').'&'.http_build_query([
         'action' => 'return_to_course_homepage'
     ]);
 }
@@ -456,14 +455,20 @@ if ($_SESSION['oLP']->get_preview_image()) {
 }
 
 if ($_SESSION['oLP']->current == $_SESSION['oLP']->get_last()) {
-    $categories = Category::load(null, null, $course_code, null, null, $sessionId);
+    $categories = Category::load(
+        null,
+        null,
+        $course_code,
+        null,
+        null,
+        $sessionId
+    );
 
     if (!empty($categories)) {
         $gradebookEvaluations = $categories[0]->get_evaluations();
         $gradebookLinks = $categories[0]->get_links();
 
-        if (
-            count($gradebookEvaluations) === 0 &&
+        if (count($gradebookEvaluations) === 0 &&
             count($gradebookLinks) === 1 &&
             $gradebookLinks[0]->get_type() == LINK_LEARNPATH &&
             $gradebookLinks[0]->get_ref_id() == $_SESSION['oLP']->lp_id

@@ -77,6 +77,7 @@ coding_style:
                 opening: end-of-line
             try:
                 opening: end-of-line
+
         upper_lower_casing:
             keywords:
                 general: lower
@@ -134,7 +135,8 @@ filter:
         - 'app/Resources/*'
         - 'main/admin/db.php'
         - 'main/auth/cas/lib/CAS/*'
-        - 'main/auth/shibboleth'
+        - 'main/auth/shibboleth/*'
+        - 'main/auth/openid/*'
         - 'main/inc/lib/browser/*'
         - 'main/inc/lib/freemindflashbrowser/*'
         - 'main/inc/lib/internationalization_database/*'
@@ -162,6 +164,10 @@ filter:
         - 'plugin/buycourses/src/Requests/*'
         - 'plugin/kannelsms/vendor/*'
         - 'plugin/clockworksms/vendor/*'
+        - 'plugin/pens/lib/'
+        - 'plugin/bbb/lib/bbb_api.php'
+        - 'plugin/ims_lti/OAuthSimple.php'
+        - 'plugin/buycourses/src/Requests.php'
         - 'tests/*'
         - 'vendor/*'
         - 'web/*'

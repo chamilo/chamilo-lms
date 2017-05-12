@@ -39,8 +39,8 @@
 
 use ChamiloSession as Session;
 
-require_once dirname(__FILE__) . '/ldap.inc.php';
-require_once dirname(__FILE__) . '/functions.inc.php';
+require_once __DIR__.'/ldap.inc.php';
+require_once __DIR__.'/functions.inc.php';
 
 $ldap_user = extldap_authenticate($login, $password);
 if ($ldap_user !== false) {

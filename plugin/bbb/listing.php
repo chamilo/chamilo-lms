@@ -11,14 +11,14 @@ $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 
 $htmlHeadXtra[] = api_get_js_simple(
-    api_get_path(WEB_PLUGIN_PATH) . 'bbb/resources/utils.js'
+    api_get_path(WEB_PLUGIN_PATH).'bbb/resources/utils.js'
 );
-$htmlHeadXtra[] = "<script>var _p = {web_plugin: '" . api_get_path(WEB_PLUGIN_PATH). "'}</script>";
+$htmlHeadXtra[] = "<script>var _p = {web_plugin: '".api_get_path(WEB_PLUGIN_PATH)."'}</script>";
 
 $tpl = new Template($tool_name);
 
 $isGlobal = isset($_GET['global']) ? true : false;
-$isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id']: false;
+$isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
 
 $bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);
 $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -80,22 +80,22 @@ if ($conferenceManager) {
         case 'end':
             $bbb->endMeeting($_GET['id']);
             $message = Display::return_message(
-                $plugin->get_lang('MeetingClosed') . '<br />' . $plugin->get_lang(
+                $plugin->get_lang('MeetingClosed').'<br />'.$plugin->get_lang(
                     'MeetingClosedComment'
                 ),
                 'success',
                 false
             );
 
-            if (file_exists(__DIR__ . '/config.vm.php')) {
-                require __DIR__ . '/../../vendor/autoload.php';
+            if (file_exists(__DIR__.'/config.vm.php')) {
+                require __DIR__.'/../../vendor/autoload.php';
 
-                require __DIR__ . '/lib/vm/AbstractVM.php';
-                require __DIR__ . '/lib/vm/VMInterface.php';
-                require __DIR__ . '/lib/vm/DigitalOceanVM.php';
-                require __DIR__ . '/lib/VM.php';
+                require __DIR__.'/lib/vm/AbstractVM.php';
+                require __DIR__.'/lib/vm/VMInterface.php';
+                require __DIR__.'/lib/vm/DigitalOceanVM.php';
+                require __DIR__.'/lib/VM.php';
 
-                $config = require __DIR__ . '/config.vm.php';
+                $config = require __DIR__.'/config.vm.php';
 
                 $vm = new VM($config);
                 $vm->resizeToMinLimit();
@@ -189,16 +189,17 @@ $listing_tpl = 'bbb/listing.tpl';
 $content = $tpl->fetch($listing_tpl);
 
 if (api_is_platform_admin()) {
-    $actionLinks = [
-        Display::toolbarButton(
-            $plugin->get_lang('AdminView'),
-            api_get_path(WEB_PLUGIN_PATH) . 'bbb/admin.php',
-            'list',
-            'primary'
-        )
-    ];
+    $actionLinks = Display::toolbarButton(
+        $plugin->get_lang('AdminView'),
+        api_get_path(WEB_PLUGIN_PATH).'bbb/admin.php',
+        'list',
+        'primary'
+    );
 
-    $tpl->assign('actions', implode(PHP_EOL, $actionLinks));
+    $tpl->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$actionLinks])
+    );
 }
 
 $tpl->assign('content', $content);

@@ -14,7 +14,7 @@ class GradeBookResult
     /**
      * constructor of the class
      */
-    public function __construct($get_questions=false,$get_answers=false)
+    public function __construct($get_questions = false, $get_answers = false)
     {
     }
 
@@ -37,7 +37,7 @@ class GradeBookResult
 
         foreach ($dato[0] as $header_col) {
             if (!empty($header_col)) {
-                $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($header_col))).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($header_col))).';';
             }
         }
 
@@ -46,10 +46,10 @@ class GradeBookResult
 
         for ($i = 0; $i < $cant_students; $i++) {
             $column = 0;
-            foreach($dato[1][$i] as $col_name) {
-                $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($col_name))).';';
+            foreach ($dato[1][$i] as $col_name) {
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($col_name))).';';
             }
-            $data .="\r\n";
+            $data .= "\r\n";
         }
 
         //output the results
@@ -86,7 +86,7 @@ class GradeBookResult
         $worksheet = $spreadsheet->getActiveSheet();
 
         $line = 0;
-        $column = 0; //skip the first column (row titles)
+        $column = 1;
 
         //headers
         foreach ($data[0] as $header_col) {
@@ -124,7 +124,7 @@ class GradeBookResult
      */
     public function exportCompleteReportDOC($data)
     {
-        $filename = 'gradebook_results_'.api_get_local_time() . '.docx';
+        $filename = 'gradebook_results_'.api_get_local_time().'.docx';
 
         $doc = new \PhpOffice\PhpWord\PhpWord();
         $section = $doc->addSection(['orientation' => 'landscape']);
@@ -143,7 +143,7 @@ class GradeBookResult
             }
         }
 
-        $file = api_get_path(SYS_ARCHIVE_PATH) . api_replace_dangerous_char($filename);
+        $file = api_get_path(SYS_ARCHIVE_PATH).api_replace_dangerous_char($filename);
         $doc->save($file, 'Word2007');
 
         DocumentManager::file_send_for_download($file, true, $filename);

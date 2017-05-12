@@ -51,7 +51,7 @@ class PNGImageBaker
             foreach (array_keys($this->_chunks[$type]) as $typekey) {
                 list($key, $data) = explode("\0", $this->_chunks[$type][$typekey]);
                 if (strcmp($key, $check) == 0) {
-                    echo 'Key "' . $check . '" already exists in "' . $type . '" chunk.';
+                    echo 'Key "'.$check.'" already exists in "'.$type.'" chunk.';
                     return false;
                 }
             }
@@ -70,11 +70,11 @@ class PNGImageBaker
      */
     public function addChunk($chunkType, $key, $value) {
         
-        $chunkData = $key . "\0" . $value;
-        $crc = pack("N", crc32($chunkType . $chunkData));
+        $chunkData = $key."\0".$value;
+        $crc = pack("N", crc32($chunkType.$chunkData));
         $len = pack("N", strlen($chunkData));
         
-        $newChunk = $len . $chunkType . $chunkData . $crc;
+        $newChunk = $len.$chunkType.$chunkData.$crc;
         $result = substr($this->_contents, 0, $this->_size - 12)
                 . $newChunk
                 . substr($this->_contents, $this->_size - 12, 12);
@@ -92,30 +92,30 @@ class PNGImageBaker
      */
     public function removeChunks($chunkType, $key, $png) {
         // Read the magic bytes and verify
-        $retval = substr($png,0,8);
+        $retval = substr($png, 0, 8);
         $ipos = 8;
         if ($retval != "\x89PNG\x0d\x0a\x1a\x0a")
             throw new Exception('Is not a valid PNG image');
         // Loop through the chunks. Byte 0-3 is length, Byte 4-7 is type
-        $chunkHeader = substr($png,$ipos,8);
+        $chunkHeader = substr($png, $ipos, 8);
         $ipos = $ipos + 8;
         while ($chunkHeader) {
             // Extract length and type from binary data
             $chunk = @unpack('Nsize/a4type', $chunkHeader);
             $skip = false;
-            if ( $chunk['type'] == $chunkType ) {
-                $data = substr($png,$ipos,$chunk['size']);
+            if ($chunk['type'] == $chunkType) {
+                $data = substr($png, $ipos, $chunk['size']);
                 $sections = explode("\0", $data);
                 print_r($sections);
-                if ( $sections[0] == $key ) $skip = true;
+                if ($sections[0] == $key) $skip = true;
             }
             // Extract the data and the CRC
-            $data = substr($png,$ipos,$chunk['size']+4);
+            $data = substr($png, $ipos, $chunk['size'] + 4);
             $ipos = $ipos + $chunk['size'] + 4;
             // Add in the header, data, and CRC
-            if ( ! $skip ) $retval = $retval . $chunkHeader . $data;
+            if (!$skip) $retval = $retval.$chunkHeader.$data;
             // Read next chunk header
-            $chunkHeader = substr($png,$ipos,8);
+            $chunkHeader = substr($png, $ipos, 8);
             $ipos = $ipos + 8;
         }
         return $retval;
@@ -131,34 +131,34 @@ class PNGImageBaker
      * If there is PNG information that matches the key an array is returned
      * 
      */
-    public function extractBadgeInfo($png, $key='openbadges') {
+    public function extractBadgeInfo($png, $key = 'openbadges') {
         // Read the magic bytes and verify
-        $retval = substr($png,0,8);
+        $retval = substr($png, 0, 8);
         $ipos = 8;
         if ($retval != "\x89PNG\x0d\x0a\x1a\x0a") {
             return false;
         }
 
         // Loop through the chunks. Byte 0-3 is length, Byte 4-7 is type
-        $chunkHeader = substr($png,$ipos,8);
+        $chunkHeader = substr($png, $ipos, 8);
         $ipos = $ipos + 8;
         while ($chunkHeader) {
             // Extract length and type from binary data
             $chunk = @unpack('Nsize/a4type', $chunkHeader);
             $skip = false;
             if ($chunk['type'] == 'tEXt') {
-                $data = substr($png,$ipos,$chunk['size']);
+                $data = substr($png, $ipos, $chunk['size']);
                 $sections = explode("\0", $data);
                 if ($sections[0] == $key) {
                    return $sections;
                 }
             }
             // Extract the data and the CRC
-            $data = substr($png,$ipos,$chunk['size']+4);
+            $data = substr($png, $ipos, $chunk['size'] + 4);
             $ipos = $ipos + $chunk['size'] + 4;
 
             // Read next chunk header
-            $chunkHeader = substr($png,$ipos,8);
+            $chunkHeader = substr($png, $ipos, 8);
             $ipos = $ipos + 8;
         }
     }

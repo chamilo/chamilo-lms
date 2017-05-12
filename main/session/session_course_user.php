@@ -16,7 +16,7 @@ $id_session = intval($_GET['id_session']);
 SessionManager::protectSession($id_session);
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
 $interbreadcrumb[] = array(
     'url' => 'resume_session.php?id_session='.$id_session,
     'name' => get_lang('SessionOverview'),
@@ -40,10 +40,10 @@ if (empty($id_user) || empty($id_session)) {
 
 if (!api_is_platform_admin()) {
     $sql = 'SELECT session_admin_id
-            FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).'
+            FROM '.Database::get_main_table(TABLE_MAIN_SESSION).'
             WHERE id='.$id_session;
     $rs = Database::query($sql);
-    if (Database::result($rs,0,0)!=$_user['user_id']) {
+    if (Database::result($rs, 0, 0) != $_user['user_id']) {
         api_not_allowed(true);
     }
 }
@@ -88,9 +88,9 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
     foreach ($CourseList as $enreg_course) {
         $exists = false;
-        foreach($existingCourses as $existingCourse) {
+        foreach ($existingCourses as $existingCourse) {
             if ($enreg_course == $existingCourse['id']) {
-                $exists=true;
+                $exists = true;
             }
         }
 
@@ -110,7 +110,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     }
 
     foreach ($existingCourses as $existingCourse) {
-        if (!in_array($existingCourse['id'], $CourseList)){
+        if (!in_array($existingCourse['id'], $CourseList)) {
             $existingCourse = Database::escape_string($existingCourse['id']);
             $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id,c_id,user_id)
                     VALUES ('$id_session','$existingCourse','$id_user')";
@@ -146,7 +146,7 @@ $sql = "SELECT course.id, code, title, visual_code, srcru.session_id
         WHERE srcru.user_id = $id_user AND session_id = $id_session";
 
 //all
-$sql_all="SELECT course.id, code, title, visual_code, src.session_id
+$sql_all = "SELECT course.id, code, title, visual_code, src.session_id
         FROM $tbl_course course
         INNER JOIN $tbl_session_rel_course  as src
         ON course.id = src.c_id AND session_id = $id_session";
@@ -163,9 +163,9 @@ foreach ($Courses as $course) {
 
 foreach ($CoursesAll as $course) {
     if (in_array($course['id'], $course_temp)) {
-        $nosessionCourses[$course['id']] = $course ;
+        $nosessionCourses[$course['id']] = $course;
     } else {
-        $sessionCourses[$course['id']] = $course ;
+        $sessionCourses[$course['id']] = $course;
     }
 }
 unset($Courses);
@@ -184,9 +184,9 @@ unset($Courses);
             <td width="45%" align="center">
                 <div id="ajax_list_courses_multiple">
                     <select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" style="width:320px;"> <?php
-                        foreach($nosessionCourses as $enreg) {
+                        foreach ($nosessionCourses as $enreg) {
                             ?>
-                            <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES).'"'; if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
+                            <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')', ENT_QUOTES).'"'; if (in_array($enreg['code'], $CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
                         <?php
                         }
                         ?> </select></div> <?php
@@ -211,9 +211,9 @@ unset($Courses);
             <td width="45%" align="center">
                 <select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" style="width:320px;">
             <?php
-            foreach($sessionCourses as $enreg) {
+            foreach ($sessionCourses as $enreg) {
                 ?>
-                <option value="<?php echo $enreg['id']; ?>" title="<?php echo htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES); ?>"><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
+                <option value="<?php echo $enreg['id']; ?>" title="<?php echo htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')', ENT_QUOTES); ?>"><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
             <?php
             }
             unset($sessionCourses);

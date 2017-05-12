@@ -59,17 +59,16 @@ class Draggable extends Question
 
             if (count($answer->nbrAnswers) > 0) {
                 $nb_matches = $nb_options = 0;
-
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     if ($answer->isCorrect($i)) {
                         $nb_matches++;
-                        $defaults['answer[' . $nb_matches . ']'] = $answer->selectAnswer($i);
-                        $defaults['weighting[' . $nb_matches . ']'] = float_format($answer->selectWeighting($i), 1);
+                        $defaults['answer['.$nb_matches.']'] = $answer->selectAnswer($i);
+                        $defaults['weighting['.$nb_matches.']'] = float_format($answer->selectWeighting($i), 1);
                         $answerInfo = $answer->getAnswerByAutoId($answer->correct[$i]);
-                        $defaults['matches[' . $nb_matches . ']'] = isset($answerInfo['answer']) ? $answerInfo['answer'] : '';
+                        $defaults['matches['.$nb_matches.']'] = isset($answerInfo['answer']) ? $answerInfo['answer'] : '';
                     } else {
                         $nb_options++;
-                        $defaults['option[' . $nb_options . ']'] = $answer->selectAnswer($i);
+                        $defaults['option['.$nb_options.']'] = $answer->selectAnswer($i);
                     }
                 }
             }
@@ -99,9 +98,9 @@ class Draggable extends Question
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th width="85%">' . get_lang('Answer') . '</th>
-                    <th width="15%">' . get_lang('MatchesTo') . '</th>
-                    <th width="10">' . get_lang('Weighting') . '</th>
+                    <th width="85%">' . get_lang('Answer').'</th>
+                    <th width="15%">' . get_lang('MatchesTo').'</th>
+                    <th width="10">' . get_lang('Weighting').'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -111,12 +110,11 @@ class Draggable extends Question
 
         if ($nb_matches < 1) {
             $nb_matches = 1;
-            Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+            echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'), 'normal');
         }
 
         for ($i = 1; $i <= $nb_matches; ++$i) {
             $renderer = &$form->defaultRenderer();
-
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
                 "answer[$i]"
@@ -199,9 +197,9 @@ class Draggable extends Question
         for ($i = 1; $i <= $nb_matches; ++$i) {
             $position++;
 
-            $answer = $form->getSubmitValue('answer[' . $i . ']');
-            $matches = $form->getSubmitValue('matches[' . $i . ']');
-            $weighting = $form->getSubmitValue('weighting[' . $i . ']');
+            $answer = $form->getSubmitValue('answer['.$i.']');
+            $matches = $form->getSubmitValue('matches['.$i.']');
+            $weighting = $form->getSubmitValue('weighting['.$i.']');
             $this->weighting += $weighting;
             $objAnswer->createAnswer(
                 $answer,

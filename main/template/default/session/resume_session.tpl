@@ -8,11 +8,11 @@
 <table id="session-properties" class="data_table">
     <tr>
         <td>{{ 'CreatedBy'|get_lang }}</td>
-        <td>{{ session_admin.complete_name }}</td>
+        <td>{{ session_admin.complete_name_with_username }}</td>
     </tr>
     <tr>
         <td>{{ 'GeneralCoach' | get_lang}} :</td>
-        <td>{{ general_coach.complete_name }}</td>
+        <td>{{ general_coach.complete_name_with_username }}</td>
     </tr>
     {% if session_category  %}
     <tr>
@@ -65,14 +65,28 @@
             {{ session_visibility }}
         </td>
     </tr>
+    {% if promotion %}
+        <tr>
+            <td>{{ 'Career' | get_lang}}</td>
+            <td>
+                <a href="{{ _p.web_main }}admin/career_dashboard.php?filter={{ promotion.career.id }}&submit=&_qf__filter_form=">{{ promotion.career.name }}</a>
+            </td>
+        </tr>
+        <tr>
+            <td>{{ 'Promotion' | get_lang}}</td>
+            <td>
+                <a href="{{ _p.web_main }}admin/promotions.php?action=edit&id={{ promotion.id }}">{{ promotion.name }}</a>
+            </td>
+        </tr>
+    {% endif %}
     {% if url_list %}
         <tr>
             <td>URL</td>
-        <td>
-        {% for url in url_list %}
-            {{ url.url }}
-        {% endfor %}
-        </td>
+            <td>
+            {% for url in url_list %}
+                {{ url.url }}
+            {% endfor %}
+            </td>
         </tr>
     {% endif %}
 

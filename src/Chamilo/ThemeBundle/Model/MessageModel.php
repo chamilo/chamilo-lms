@@ -51,11 +51,11 @@ class MessageModel implements MessageInterface
      * @param null          $sentAt
      * @param UserInterface $to
      */
-    function __construct(UserInterface $from = null, $subject= '', $sentAt = null, UserInterface $to = null)
+    function __construct(UserInterface $from = null, $subject = '', $sentAt = null, UserInterface $to = null)
     {
         $this->to      = $to;
         $this->subject = $subject;
-        $this->sentAt  = $sentAt ? : new \DateTime();
+        $this->sentAt  = $sentAt ?: new \DateTime();
         $this->from    = $from;
     }
 
@@ -157,7 +157,8 @@ class MessageModel implements MessageInterface
      *
      * @return string
      */
-    public function getIdentifier() {
+    public function getIdentifier()
+    {
         return $this->getSubject();
     }
 

@@ -80,7 +80,7 @@
                                             <h4 class="title">
                                                 <a href="{{ _p.web ~ 'session/' ~ session.id ~ '/about/' }}">{{ session.name }}</a>
                                             </h4>
-                                            {% if 'show_session_coach'|get_setting == 'true' %}
+                                            {% if 'show_session_coach'|api_get_setting == 'true' %}
                                                 <p><em class="fa fa-user fa-fw"></em> {{ session.coach }}</p>
                                             {% endif %}
                                             <p><em class="fa fa-calendar fa-fw"></em> {{ session.dates.display }}</p>

@@ -33,7 +33,7 @@ $allowed_extensions = array(
     'html',
     'htm',
 );
-$courses_list =  CourseManager::get_courses_list();
+$courses_list = CourseManager::get_courses_list();
 
 // Simulating empty specific fields (this is necessary for indexing)
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -49,7 +49,7 @@ foreach ($courses_list as $course) {
     $title = Database::escape_string($_GET['doc']);
     $sql = "SELECT id, path, session_id FROM $td WHERE c_id = ".$course['id']." AND path LIKE '%$title%' or title LIKE '%$title%'";
     $res = Database::query($sql);
-    if (Database::num_rows($res)>0) {
+    if (Database::num_rows($res) > 0) {
     while ($row = Database::fetch_array($res)) {
         $doc_path = api_get_path(SYS_COURSE_PATH).$course_dir.$row['path'];
         $extensions = preg_split("/[\/\\.]/", $doc_path);

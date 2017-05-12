@@ -33,7 +33,7 @@ if ($form->validate()) {
         Display::return_message($plugin->get_lang('ToolAdded'), 'success')
     );
 
-    header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'ims_lti/list.php');
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/list.php');
     exit;
 }
 

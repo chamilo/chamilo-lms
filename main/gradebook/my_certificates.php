@@ -37,7 +37,7 @@ if (api_get_setting('allow_public_certificates') === 'true') {
         'actions',
         Display::toolbarButton(
             get_lang('SearchCertificates'),
-            api_get_path(WEB_CODE_PATH) . "gradebook/search.php",
+            api_get_path(WEB_CODE_PATH)."gradebook/search.php",
             'search',
             'info'
         )

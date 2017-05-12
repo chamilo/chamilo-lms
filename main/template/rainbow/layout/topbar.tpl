@@ -11,7 +11,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="{{ _p.web }}">
-                    {{ "siteName" | get_setting }}
+                    {{ "siteName" | api_get_setting }}
                 </a>
             </div>
 

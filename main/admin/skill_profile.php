@@ -17,7 +17,7 @@ $list = $em->getRepository('ChamiloSkillBundle:Profile')->findAll();
 
 $listAction = api_get_self();
 
-$action =  '';
+$action = '';
 if (isset($_GET['action']) && in_array($_GET['action'], ['add', 'edit', 'delete', 'move_up', 'move_down'])) {
     $action = $_GET['action'];
 }
@@ -43,9 +43,11 @@ if (!empty($item)) {
 }
 $formToDisplay = $form->returnForm();
 
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array ('url' => 'skill.php', 'name' => get_lang('ManageSkillsLevels'));
-$interbreadcrumb[] = array ('url' =>  api_get_self(), 'name' => get_lang('SkillProfile'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'skill.php', 'name' => get_lang('ManageSkillsLevels'));
+$interbreadcrumb[] = array('url' =>  api_get_self(), 'name' => get_lang('SkillProfile'));
+
+$toolbar = null;
 
 $tpl = new Template($action);
 switch ($action) {
@@ -56,7 +58,7 @@ switch ($action) {
         $position = $item->getPosition();
 
         if (!empty($position)) {
-            $item->setPosition($position-1);
+            $item->setPosition($position - 1);
         }
         $em->persist($item);
         $em->flush();
@@ -69,7 +71,7 @@ switch ($action) {
 
         $position = $item->getPosition();
 
-        $item->setPosition($position+1);
+        $item->setPosition($position + 1);
 
         $em->persist($item);
         $em->flush();
@@ -87,11 +89,29 @@ switch ($action) {
             header('Location: '.$listAction);
             exit;
         }
-        $tpl->assign('actions', Display::url(get_lang('List'), $listAction));
+        $toolbar = Display::url(
+            Display::return_icon(
+                'list_badges.png',
+                get_lang('List'),
+                null,
+                ICON_SIZE_MEDIUM
+                ),
+            $listAction,
+            ['title' => get_lang('List')]
+            );
         break;
     case 'edit':
         $tpl->assign('form', $formToDisplay);
-        $tpl->assign('actions', Display::url(get_lang('List'), $listAction));
+        $toolbar = Display::url(
+            Display::return_icon(
+                'list_badges.png',
+                get_lang('List'),
+                null,
+                ICON_SIZE_MEDIUM
+                ),
+            $listAction,
+            ['title' => get_lang('List')]
+            );
 
         if ($form->validate()) {
             $values = $form->exportValues();
@@ -104,7 +124,16 @@ switch ($action) {
 
         break;
     case 'delete':
-        $tpl->assign('actions', Display::url(get_lang('List'), $listAction));
+        $toolbar = Display::url(
+            Display::return_icon(
+                'list_badges.png',
+                get_lang('List'),
+                null,
+                ICON_SIZE_MEDIUM
+                ),
+            $listAction,
+            ['title' => get_lang('List')]
+            );
         $em->remove($item);
         $em->flush();
         header('Location: '.$listAction);
@@ -112,11 +141,28 @@ switch ($action) {
 
         break;
     default:
-        $tpl->assign('actions', Display::url(get_lang('Add'), api_get_self().'?action=add'));
+        $toolbar = Display::url(
+            Display::return_icon(
+                'add.png',
+                get_lang('Add'),
+                null,
+                ICON_SIZE_MEDIUM
+                ),
+            api_get_self().'?action=add',
+            ['title' => get_lang('Add')]
+            );
 }
 
 $tpl->assign('list', $list);
 $templateName = $tpl->get_template('admin/skill_profile.tpl');
 $contentTemplate = $tpl->fetch($templateName);
+
+if ($toolbar) {
+    $tpl->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$toolbar])
+    );
+}
+
 $tpl->assign('content', $contentTemplate);
 $tpl->display_one_col_template();

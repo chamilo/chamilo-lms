@@ -33,7 +33,7 @@ $assertions = array();
 foreach ($userSkills as $skill) {
     $skillId = current($skill);
 
-    $assertionUrl = api_get_path(WEB_CODE_PATH) . "badge/assertion.php?";
+    $assertionUrl = api_get_path(WEB_CODE_PATH)."badge/assertion.php?";
     $assertionUrl .= http_build_query(array(
         'user' => $userId,
         'skill' => $skillId,
@@ -51,7 +51,7 @@ if (strcmp($backpack, $configBackpack) !== 0) {
     $backpack = $configBackpack;
 }
 
-$htmlHeadXtra[] = '<script src="' . $backpack . 'issuer.js"></script>';
+$htmlHeadXtra[] = '<script src="'.$backpack.'issuer.js"></script>';
 
 $tpl = new Template(get_lang('Badges'), false, false);
 
@@ -59,7 +59,7 @@ $tpl->assign(
     'content',
     "<script>
     $(document).on('ready', function (){ 
-        OpenBadges.issue_no_modal(" . json_encode($assertions) . "); 
+        OpenBadges.issue_no_modal(" . json_encode($assertions)."); 
     });
     </script>"
 );

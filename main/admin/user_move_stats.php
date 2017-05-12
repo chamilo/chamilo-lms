@@ -225,7 +225,7 @@ if (isset($_REQUEST['load_ajax'])) {
                             $sql = "UPDATE $TBL_TRACK_E_LAST_ACCESS SET access_session_id = $new_session_id WHERE access_id = $id";
                             if ($debug) echo $sql;
                             $res = Database::query($sql);
-                            if ($debug) var_dump($res);
+                            //if ($debug) var_dump($res);
                             $result_message[$TBL_TRACK_E_LAST_ACCESS]++;
                         }
                     }
@@ -603,7 +603,7 @@ Display::display_header(get_lang('MoveUserStats'));
 echo  '<div class="actions">';
 echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
-echo Display::display_normal_message(get_lang('CompareUserResultsBetweenCoursesAndCoursesInASession'),false);
+Display::addFlash(Display::return_message(get_lang('CompareUserResultsBetweenCoursesAndCoursesInASession'), 'normal', false));
 
 
 // Some pagination

@@ -29,7 +29,7 @@ class ch_multipleresponse extends survey_question
             }
         }
 
-        parent :: addRemoveButtons($formData);
+        parent::addRemoveButtons($formData);
     }
 
     /**

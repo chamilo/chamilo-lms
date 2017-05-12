@@ -1,17 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	@package chamilo.admin
-*	@author Julio Montoya <gugli100@gmail.com>
-*/
+ * @package chamilo.admin
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
 
 // resetting the course id
 $cidReset = true;
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $xajax = new xajax();
-$xajax->registerFunction(array('searchCourseCategoryAjax', 'UrlManager', 'searchCourseCategoryAjax'));
+$xajax->registerFunction(
+    array('searchCourseCategoryAjax', 'UrlManager', 'searchCourseCategoryAjax')
+);
 
 // Setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -97,7 +98,6 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 }
 
 Display::display_header($tool_name);
-
 api_display_tool_title($tool_name);
 
 $noUserGroupList = $userGroupList = array();
@@ -113,7 +113,7 @@ if ($ajax_search) {
 
     foreach ($userGroups as $item) {
         if ($item['access_url_id'] == $access_url_id) {
-            $userGroupList[$item['id']] = $item ;
+            $userGroupList[$item['id']] = $item;
         }
     }
     $noUserGroupList = CourseCategory::getCourseCategoryNotInList(array_keys($userGroupList));
@@ -151,11 +151,11 @@ $url_list = UrlManager::get_url_data();
         if (!empty($access_url_id)) {
             if ($url_obj[0] == $access_url_id) {
                 $checked = 'selected=true';
-                $url_selected=$url_obj[1];
+                $url_selected = $url_obj[1];
             }
         }
-        if ($url_obj['active']==1) { ?>
-            <option <?php echo $checked;?> value="<?php echo $url_obj[0]; ?>"> <?php echo $url_obj[1]; ?>
+        if ($url_obj['active'] == 1) { ?>
+            <option <?php echo $checked; ?> value="<?php echo $url_obj[0]; ?>"> <?php echo $url_obj[1]; ?>
             </option>
         <?php
         }
@@ -171,7 +171,7 @@ $url_list = UrlManager::get_url_data();
   <td align="center"><b><?php echo get_lang('CourseCategoryInPlatform') ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php printf(get_lang('CourseCategoryListInX'),$url_selected); ?></b></td>
+  <td align="center"><b><?php printf(get_lang('CourseCategoryListInX'), $url_selected); ?></b></td>
 </tr>
 
 <tr>
@@ -208,7 +208,7 @@ $url_list = UrlManager::get_url_data();
   <td align="center">
   <select id="destination_users" name="course_list[]" multiple="multiple" size="15" style="width:380px;">
 <?php
-foreach($userGroupList as $item) {
+foreach ($userGroupList as $item) {
 ?>
 	<option value="<?php echo $item['id']; ?>">
         <?php echo $item['name']; ?>
@@ -223,10 +223,11 @@ foreach($userGroupList as $item) {
 	<td colspan="3" align="center">
 		<br />
 		<?php
-		if(isset($_GET['add']))
-			echo '<button class="save" onclick="valide()" >'.get_lang('Add').'</button>';
-		else
-			echo '<button class="save" onclick="valide()" >'.get_lang('Edit').'</button>';
+        if (isset($_GET['add'])) {
+            echo '<button class="save" onclick="valide()" >'.get_lang('Add').'</button>';
+        } else {
+            echo '<button class="save" onclick="valide()" >'.get_lang('Edit').'</button>';
+        }
 		?>
 	</td>
 </tr>
@@ -275,10 +276,8 @@ function valide(){
 	document.forms.formulaire.submit();
 }
 
-function loadUsersInSelect(select){
-
+function loadUsersInSelect(select) {
 	var xhr_object = null;
-
 	if(window.XMLHttpRequest) // Firefox
 		xhr_object = new XMLHttpRequest();
 	else if(window.ActiveXObject) // Internet Explorer
@@ -293,7 +292,6 @@ function loadUsersInSelect(select){
 	nosessionClasses = makepost(document.getElementById('origin_classes'));
 	sessionClasses = makepost(document.getElementById('destination_classes'));
 	xhr_object.send("nosessionusers="+nosessionUsers+"&sessionusers="+sessionUsers+"&nosessionclasses="+nosessionClasses+"&sessionclasses="+sessionClasses);
-
 	xhr_object.onreadystatechange = function() {
 		if(xhr_object.readyState == 4) {
 			document.getElementById('content_source').innerHTML = result = xhr_object.responseText;

@@ -18,7 +18,7 @@ if (api_is_anonymous()) {
     // the comm
     $comm_label = api_htmlentities(
         $plugin_info['settings']['add_cas_login_button_cas_button_comment']
-    );;
+    );
     // URL of the image
     $url_label = $plugin_info['settings']['add_cas_login_button_cas_image_url'];
 

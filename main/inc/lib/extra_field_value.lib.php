@@ -245,7 +245,7 @@ class ExtraFieldValue extends Model
                             break;
                     }
 
-                    $fileName = ExtraField::FIELD_TYPE_FILE_IMAGE . "_{$params['item_id']}.png";
+                    $fileName = ExtraField::FIELD_TYPE_FILE_IMAGE."_{$params['item_id']}.png";
 
                     if (!file_exists($fileDir)) {
                         mkdir($fileDir, $dirPermissions, true);
@@ -254,15 +254,15 @@ class ExtraFieldValue extends Model
                     if ($value['error'] == 0) {
                         //Crop the image to adjust 16:9 ratio
                         $crop = new Image($value['tmp_name']);
-                        $crop->crop($params['extra_' . $field_variable . '_crop_result']);
+                        $crop->crop($params['extra_'.$field_variable.'_crop_result']);
 
                         $imageExtraField = new Image($value['tmp_name']);
                         $imageExtraField->resize(400);
-                        $imageExtraField->send_image($fileDir . $fileName, -1, 'png');
+                        $imageExtraField->send_image($fileDir.$fileName, -1, 'png');
                         $newParams = array(
                             'item_id' => $params['item_id'],
                             'field_id' => $extraFieldInfo['id'],
-                            'value' => $fileDirStored . $fileName,
+                            'value' => $fileDirStored.$fileName,
                             'comment' => $comment
                         );
                         self::save($newParams);
@@ -287,18 +287,18 @@ class ExtraFieldValue extends Model
                     }
 
                     $cleanedName = api_replace_dangerous_char($value['name']);
-                    $fileName = ExtraField::FIELD_TYPE_FILE . "_{$params['item_id']}_$cleanedName";
+                    $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
                     if (!file_exists($fileDir)) {
                         mkdir($fileDir, $dirPermissions, true);
                     }
 
                     if ($value['error'] == 0) {
-                        moveUploadedFile($value, $fileDir . $fileName);
+                        moveUploadedFile($value, $fileDir.$fileName);
 
                         $new_params = array(
                             'item_id' => $params['item_id'],
                             'field_id' => $extraFieldInfo['id'],
-                            'value' => $fileDirStored . $fileName
+                            'value' => $fileDirStored.$fileName
                         );
 
                         if ($this->type !== 'session' && $this->type !== 'course') {
@@ -380,7 +380,7 @@ class ExtraFieldValue extends Model
         if (is_array($value)) {
             $value_to_insert = implode(';', $value);
         } else {
-            $value_to_insert = Database::escape_string($value);
+            $value_to_insert = $value;
         }
 
         $params['value'] = $value_to_insert;
@@ -522,7 +522,7 @@ class ExtraFieldValue extends Model
                 */
                 if (false) {
                     global $app;
-                    switch($this->type) {
+                    switch ($this->type) {
                         case 'question':
                             $extraFieldValue = $app['orm.ems']['db_write']->getRepository('ChamiloLMS\Entity\QuestionFieldValues')->find($field_values['id']);
                             $extraFieldValue->setUserId(api_get_user_id());
@@ -672,7 +672,8 @@ class ExtraFieldValue extends Model
      * @param int $item_id Item ID from the original table
      * @param string $field_variable The name of the field we are looking for
      * @param bool $transform
-     * @param bool $allVisibility
+     * @param bool $filterByVisibility
+     * @param int $visibility
      *
      * @return mixed Array of results, or false on error or not found
      * @assert (-1,'') === false
@@ -780,6 +781,7 @@ class ExtraFieldValue extends Model
     }
 
     /**
+     * Get all the values stored for one specific field
      * @param int $fieldId
      *
      * @return array|bool

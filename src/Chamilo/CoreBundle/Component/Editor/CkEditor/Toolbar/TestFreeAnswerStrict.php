@@ -5,7 +5,7 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * TestFreeAnswerStrict toolbar configuration
- * 
+ *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class TestFreeAnswerStrict extends Basic
@@ -24,9 +24,7 @@ class TestFreeAnswerStrict extends Basic
         }
 
         $config['fullPage'] = false;
-
         $config['extraPlugins'] = 'wordcount';
-
         $config['wordcount'] = array(
             // Whether or not you want to show the Word Count
             'showWordCount' => true,

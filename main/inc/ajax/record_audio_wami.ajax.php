@@ -50,7 +50,7 @@ if ($ext != 'wav') {
 // Do not use here check Fileinfo method because return: text/plain
 
 $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-$saveDir = $dirBaseDocuments . $wamidir;
+$saveDir = $dirBaseDocuments.$wamidir;
 
 if (!is_dir($saveDir)) {
     DocumentManager::createDefaultAudioFolder($_course);
@@ -90,7 +90,7 @@ $output = true;
 ob_start();
 
 // Strangely the file path changes with a double extension
-copy($documentPath, $documentPath . '.wav');
+copy($documentPath, $documentPath.'.wav');
 
 $documentData = DocumentManager::upload_document(
     $file,

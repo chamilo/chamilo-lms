@@ -39,7 +39,7 @@ $doc_url = str_replace('///', '&', $doc_url);
 $doc_url = str_replace(' ', '+', $doc_url);
 $doc_url = str_replace(array('../', '\\..', '\\0', '..\\'), array('', '', '', ''), $doc_url); //echo $doc_url;
 
-if (strpos($doc_url,'../') || strpos($doc_url,'/..')) {
+if (strpos($doc_url, '../') || strpos($doc_url, '/..')) {
     $doc_url = '';
 }
 

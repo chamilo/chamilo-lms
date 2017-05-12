@@ -10,7 +10,7 @@
 
 use ChamiloSession as Session;
 
-require_once(dirname(__FILE__) . '/functions.inc.php');
+require_once __DIR__.'/functions.inc.php';
 
 //MAIN CODE
 //$login and $password variables are setted in main/inc/local.inc.php

@@ -21,7 +21,7 @@ class CourseCategory
             return Database::fetch_array($result, 'ASSOC');
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -39,7 +39,7 @@ class CourseCategory
             return Database::fetch_array($result, 'ASSOC');
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -295,7 +295,7 @@ class CourseCategory
     /**
      * Counts the number of children categories a category has
      * @param int $categoryId The ID of the category of which we want to count the children
-     * @param int $count The number of subcategories we counted this far
+     *
      * @return mixed The number of subcategories this category has
      */
     public static function courseCategoryChildrenCount($categoryId)
@@ -332,7 +332,7 @@ class CourseCategory
         $sql = "SELECT code, id FROM $tbl_category 
                 WHERE parent_id = '$categoryCode'";
         $result = Database::query($sql);
-        $children = array();
+        $children = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $children[] = $row;
             $subChildren = self::getChildren($row['code']);
@@ -350,7 +350,7 @@ class CourseCategory
     public static function getParents($categoryCode)
     {
         if (empty($categoryCode)) {
-            return array();
+            return [];
         }
 
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
@@ -359,7 +359,7 @@ class CourseCategory
             WHERE code = '$categoryCode'";
 
         $result = Database::query($sql);
-        $children = array();
+        $children = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $parent = self::getCategory($row['parent_id']);
             $children[] = $row;
@@ -380,7 +380,7 @@ class CourseCategory
 
         if (!empty($parents)) {
             $parents = array_reverse($parents);
-            $categories = array();
+            $categories = [];
             foreach ($parents as $category) {
                 $categories[] = $category['code'];
             }
@@ -419,9 +419,24 @@ class CourseCategory
             $row++;
             $mainUrl = api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$categorySource;
 
-            $editIcon = Display::return_icon('edit.png', get_lang('EditNode'), null, ICON_SIZE_SMALL);
-            $deleteIcon = Display::return_icon('delete.png', get_lang('DeleteNode'), null, ICON_SIZE_SMALL);
-            $moveIcon = Display::return_icon('up.png', get_lang('UpInSameLevel'), null, ICON_SIZE_SMALL);
+            $editIcon = Display::return_icon(
+                'edit.png',
+                get_lang('EditNode'),
+                null,
+                ICON_SIZE_SMALL
+            );
+            $deleteIcon = Display::return_icon(
+                'delete.png',
+                get_lang('DeleteNode'),
+                null,
+                ICON_SIZE_SMALL
+            );
+            $moveIcon = Display::return_icon(
+                'up.png',
+                get_lang('UpInSameLevel'),
+                null,
+                ICON_SIZE_SMALL
+            );
 
             foreach ($categories as $category) {
                 $editUrl = $mainUrl.'&id='.$category['code'].'&action=edit';
@@ -541,7 +556,7 @@ class CourseCategory
 
         $countCourses = CourseManager::countAvailableCourses($url_access_id);
 
-        $categories = array();
+        $categories = [];
         $categories[0][0] = array(
             'id' => 0,
             'name' => get_lang('DisplayAll'),
@@ -652,7 +667,7 @@ class CourseCategory
      * This array should contains 'start' and 'length' keys
      * @return array
      */
-    public static function browseCoursesInCategory($category_code, $random_value = null, $limit = array())
+    public static function browseCoursesInCategory($category_code, $random_value = null, $limit = [])
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $specialCourseList = CourseManager::get_special_course_list();
@@ -710,7 +725,7 @@ class CourseCategory
                 }
             }
             if ($id_in === null) {
-                return array();
+                return [];
             }
             $sql = "SELECT * FROM $tbl_course WHERE id IN($id_in)";
         } else {
@@ -763,7 +778,7 @@ class CourseCategory
         }
 
         $result = Database::query($sql);
-        $courses = array();
+        $courses = [];
         while ($row = Database::fetch_array($result)) {
             $row['registration_code'] = !empty($row['registration_code']);
             $count_users = CourseManager::get_users_count_in_course($row['code']);
@@ -898,7 +913,7 @@ class CourseCategory
     public static function searchCategoryById($list)
     {
         if (empty($list)) {
-            return array();
+            return [];
         } else {
             $list = array_map('intval', $list);
             $list = implode("','", $list);
@@ -976,7 +991,7 @@ class CourseCategory
             if ($i === $pageCurrent) {
                 $pageItemAttributes = array('class' => 'active');
             } else {
-                $pageItemAttributes = array();
+                $pageItemAttributes = [];
             }
             $pageDiv .= self::getPageNumberItem($i, $pageLength, $pageItemAttributes);
         }
@@ -1062,7 +1077,7 @@ class CourseCategory
     public static function getPageNumberItem(
         $pageNumber,
         $pageLength,
-        $liAttributes = array(),
+        $liAttributes = [],
         $content = ''
     ) {
         // Get page URL

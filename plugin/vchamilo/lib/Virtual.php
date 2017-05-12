@@ -28,7 +28,7 @@ class Virtual
         self::getHostName($_configuration);
 
         // We are on physical chamilo. Let original config play
-        $virtualChamiloWebRoot = rtrim($_configuration['vchamilo_web_root'], '/') . '/';
+        $virtualChamiloWebRoot = rtrim($_configuration['vchamilo_web_root'], '/').'/';
 
         $virtualChamilo = [];
         if ($_configuration['root_web'] == $virtualChamiloWebRoot) {
@@ -38,7 +38,7 @@ class Virtual
         // pre hook to chamilo main table and get alternate configuration.
         // sure Database object is not set up. Soo use bootstrap connection
         /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = Virtual::bootConnection($_configuration);
+        $connection = self::bootConnection($_configuration);
 
         $query = "SELECT * FROM vchamilo WHERE root_web = '$virtualChamiloWebRoot'";
         $result = $connection->executeQuery($query);
@@ -55,7 +55,6 @@ class Virtual
             $archivePath = '';
             $uploadPath = '';
             $passwordEncryption = '';
-
             foreach ($virtualSettings as $setting) {
                 switch ($setting['variable']) {
                     case 'vchamilo_upload_real_root':
@@ -110,15 +109,15 @@ class Virtual
 
                 // Instance cannot have multiple urls
                 $_configuration['multiple_access_urls'] = false;
-
+                $_configuration['virtual_css_theme_folder'] = '';
+                if (isset($data['css_theme_folder']) && !empty($data['css_theme_folder'])) {
+                    $_configuration['virtual_css_theme_folder'] = $data['css_theme_folder'];
+                }
                 $virtualChamilo = $data;
             } else {
                 exit("This portal is disabled. Please contact your administrator");
             }
-        } else {
-            // Platform was not configured yet
-            //die("VChamilo : Could not fetch virtual chamilo configuration");
-        }
+        } // otherwise it means the plugin was not configured yet
     }
 
     /**
@@ -235,7 +234,7 @@ class Virtual
         if (preg_match('#https?://#', $url)) {
             header('location: '.$url);
         } else {
-            header('location: ' . api_get_path(WEB_PATH).$url);
+            header('location: '.api_get_path(WEB_PATH).$url);
         }
         exit;
     }
@@ -361,7 +360,7 @@ class Virtual
         $databaseName = $params->main_database;
         unset($params->main_database);
 
-        $connection = Virtual::getConnectionFromInstance($params);
+        $connection = self::getConnectionFromInstance($params);
         if ($connection) {
             $databaseList = $connection->getSchemaManager()->listDatabases();
 
@@ -403,7 +402,7 @@ class Virtual
         }
 
         // Retrieves the host configuration (more secure).
-        $vchamilodata = empty($vchamilodata) ? Virtual::makeThis() : $vchamilodata;
+        $vchamilodata = empty($vchamilodata) ? self::makeThis() : $vchamilodata;
         if (strstr($vchamilodata->db_host, ':') !== false) {
             list($vchamilodata->db_host, $vchamilodata->db_port) = explode(
                 ':',
@@ -418,7 +417,7 @@ class Virtual
         }
 
         // Making the command line (see 'vconfig.php' file for defining the right paths).
-        $sqlcmd = $pgm.' -h'.$vchamilodata->db_host.(isset($vchamilodata->db_port) ? ' -P'.$vchamilodata->db_port.' ' : ' ' );
+        $sqlcmd = $pgm.' -h'.$vchamilodata->db_host.(isset($vchamilodata->db_port) ? ' -P'.$vchamilodata->db_port.' ' : ' ');
         $sqlcmd .= '-u'.$vchamilodata->db_user.' '.$databasePassword;
         $sqlcmd .= '%DATABASE% < ';
 
@@ -439,7 +438,7 @@ class Virtual
         $templatefoldername = 'plugin'.$separator.'vchamilo'.$separator.'templates';
         $absolute_datadir = $_configuration['root_sys'].$templatefoldername.$separator.$template.$separator.'dump.sql';
 
-        if (!$sqlcmd = Virtual::getDatabaseDumpCmd($vchamilo)) {
+        if (!$sqlcmd = self::getDatabaseDumpCmd($vchamilo)) {
             return false;
         }
 
@@ -495,14 +494,14 @@ class Virtual
 
         // Making the commands for each database.
         $cmds = array();
+        // Windows environments are not supported for this plugin at this time
         //if ($CFG->ostype == 'WINDOWS') {
-        if (false) {
-            $cmd_main = "-h{$host} -P{$port} -u{$vchamilo->db_user} {$pass} {$vchamilo->main_database}";
-            $cmds[] = $cmd_main . ' > ' . $outputfilerad;
-        } else {
-            $cmd_main = "-h{$host} -P{$port} -u{$vchamilo->db_user} {$pass} {$vchamilo->main_database}";
-            $cmds[] = $cmd_main . ' > ' . escapeshellarg($outputfilerad);
-        }
+        //    $cmd_main = "-h{$host} -P{$port} -u{$vchamilo->db_user} {$pass} {$vchamilo->main_database}";
+        //    $cmds[] = $cmd_main . ' > ' . $outputfilerad;
+        //} else {
+        $cmd_main = "-h{$host} -P{$port} -u{$vchamilo->db_user} {$pass} {$vchamilo->main_database}";
+        $cmds[] = $cmd_main.' > '.escapeshellarg($outputfilerad);
+        //}
 
         $mysqldumpcmd = self::getConfig('vchamilo', 'cmd_mysqldump', true);
 
@@ -950,12 +949,12 @@ class Virtual
                 Display::return_message('You cannot use the same database as the chamilo master', 'error')
             );
 
-            return ;
+            return;
         }
 
         $databaseName = $data->main_database;
         $data->main_database = '';
-        $connection = Virtual::getConnectionFromInstance($data);
+        $connection = self::getConnectionFromInstance($data);
         $data->main_database = $databaseName;
         if (!$connection) {
             Display::addFlash(
@@ -964,7 +963,7 @@ class Virtual
                     'error'
                 )
             );
-            return ;
+            return;
         }
 
         $data->root_web = api_add_trailing_slash($data->root_web);
@@ -989,12 +988,12 @@ class Virtual
             $virtualInfo = Database::fetch_array($result);
             $slug = $virtualInfo['slug'];
         } else {
-            $slug = $data->slug = Virtual::getSlugFromUrl($data->root_web);
+            $slug = $data->slug = self::getSlugFromUrl($data->root_web);
             if (empty($slug)) {
                 Display::addFlash(
                     Display::return_message('Cannot create slug from url: '.$data->root_web, 'error')
                 );
-                return ;
+                return;
             }
             Database::insert($tablename, (array) $data);
         }
@@ -1002,7 +1001,7 @@ class Virtual
         if ($registeronly) {
             // Stop it now.
             self::ctrace('Registering only. out.');
-            Virtual::redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
+            self::redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
         }
 
         // or we continue with physical creation
@@ -1011,15 +1010,15 @@ class Virtual
         if (!$template) {
             // Create empty database for install
             self::ctrace("Creating database");
-            Virtual::createDatabase($data);
+            self::createDatabase($data);
         } else {
             // Deploy template database
             self::ctrace("Creating databases from template '$template'");
-            Virtual::createDatabase($data);
+            self::createDatabase($data);
             self::ctrace("Loading data template '$template'");
-            Virtual::loadDbTemplate($data, $template);
+            self::loadDbTemplate($data, $template);
             self::ctrace("Coying files from template '$template'");
-            Virtual::loadFilesFromTemplate($data, $template);
+            self::loadFilesFromTemplate($data, $template);
         }
 
         // pluging in site name institution
@@ -1121,7 +1120,7 @@ class Virtual
             return false;
         } else {
             /** @var EntityManager $em */
-            $em = Virtual::getConnectionFromInstance($data, true);
+            $em = self::getConnectionFromInstance($data, true);
             if ($em) {
                 $connection = $em->getConnection();
                 $statement = $connection->query('SELECT * FROM settings_current');
@@ -1135,14 +1134,15 @@ class Virtual
                 $siteName = $settings['siteName'];
                 $newDatabase->sitename = $siteName;
                 $newDatabase->institution = $institution;
-                $slug = $newDatabase->slug = $data->slug = Virtual::getSlugFromUrl($data->root_web);
-                $id = Database::insert($table, (array)$newDatabase);
+                $slug = $newDatabase->slug = $data->slug = self::getSlugFromUrl($data->root_web);
+                $id = Database::insert($table, (array) $newDatabase);
             }
         }
 
         if (!$id) {
-            var_dump($data);
-            throw new Exception('Was not registered');
+            // Show data detail to help debug
+            //var_dump($data);
+            throw new Exception('New/Imported instance was not registered - edit '.__FILE__.' on line '.__LINE__.'to var_dump');
         }
 
         if (empty($slug)) {
@@ -1150,7 +1150,7 @@ class Virtual
         }
 
         self::createDirsFromSlug($slug);
-        $databaseCreated = Virtual::createDatabase($newDatabase);
+        $databaseCreated = self::createDatabase($newDatabase);
         if (!$databaseCreated) {
             Display::addFlash(
                 Display::return_message('Error while creating a DB', 'error')
@@ -1164,9 +1164,9 @@ class Virtual
 
         $dumpFile = api_get_path(SYS_ARCHIVE_PATH).uniqid($data->main_database.'_dump_', true).'.sql';
         self::ctrace('Create backup from "'.$data->main_database.'" here: '.$dumpFile.' ');
-        Virtual::backupDatabase($data, $dumpFile);
+        self::backupDatabase($data, $dumpFile);
 
-        $sqlcmd = Virtual::getDatabaseDumpCmd($newDatabase);
+        $sqlcmd = self::getDatabaseDumpCmd($newDatabase);
         $sqlcmd = str_replace('%DATABASE%', $newDatabase->main_database, $sqlcmd);
         $import = $sqlcmd.$dumpFile;
 
@@ -1257,7 +1257,7 @@ class Virtual
 
         // Create course directory for operations.
         // this is very important here (DO NOT USE api_get_path() !!) because storage may be remotely located
-        $absAlternateCourse = Virtual::getConfig('vchamilo', 'course_real_root');
+        $absAlternateCourse = self::getConfig('vchamilo', 'course_real_root');
         $courseDir = $absAlternateCourse.'/'.$slug;
 
         if (!is_dir($courseDir)) {
@@ -1275,9 +1275,9 @@ class Virtual
             }
         }
 
-        $absAlternateHome = Virtual::getConfig('vchamilo', 'home_real_root');
-        $absAlternateArchive = Virtual::getConfig('vchamilo', 'archive_real_root');
-        $absAlternateUpload = Virtual::getConfig('vchamilo', 'upload_real_root');
+        $absAlternateHome = self::getConfig('vchamilo', 'home_real_root');
+        $absAlternateArchive = self::getConfig('vchamilo', 'archive_real_root');
+        $absAlternateUpload = self::getConfig('vchamilo', 'upload_real_root');
 
         // absalternatehome is a vchamilo config setting that tells where the
         // real physical storage for home pages are.
@@ -1313,7 +1313,7 @@ class Virtual
             $id = (int) $id;
             $sql = "SELECT * FROM vchamilo WHERE id = $id";
             $result = Database::query($sql);
-            $vhost =  (object) Database::fetch_array($result, 'ASSOC');
+            $vhost = (object) Database::fetch_array($result, 'ASSOC');
         }
 
         return $vhost;
@@ -1326,7 +1326,7 @@ class Virtual
      */
     public static function canBeUpgraded($instance)
     {
-        $connection = Virtual::getConnectionFromInstance($instance);
+        $connection = self::getConnectionFromInstance($instance);
         if ($connection) {
             $sql = 'SELECT * FROM settings_current WHERE variable = "chamilo_database_version"';
             $statement = $connection->query($sql);

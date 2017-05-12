@@ -61,11 +61,8 @@ $htmlHeadXtra[] = '<script>
 $(function() {
     $("#all_langs").change(function() {
         var checkboxes = $(this).closest("form").find("#table_langs").find(":checkbox");
-        if($(this).is(":checked")) {
-            checkboxes.attr("checked", "checked");
-        } else {
-            checkboxes.removeAttr("checked");
-        }
+        
+        checkboxes.prop("checked", $(this).is(":checked"));
     });
 });
 </script>';
@@ -799,7 +796,7 @@ switch ($action) {
             <input type="hidden" name="formSent" value="1"/>
             <?php
             if (!empty($errorMsg)) {
-                Display::display_normal_message($errorMsg);
+                Display::addFlash(Display::return_message($errorMsg, 'normal'));
             }
             ?>
             <div class="row">
@@ -850,7 +847,7 @@ switch ($action) {
     case 'edit_link':
         $menuf = ($action == 'insert_tabs' || $action == 'edit_tabs') ? $mtloggedin : $menuf;
         if (!empty($errorMsg)) {
-            Display::display_normal_message($errorMsg);
+            Display::addFlash(Display::return_message($errorMsg, 'normal'));
         }
         $default = array();
         $form = new FormValidator('configure_homepage_' . $action, 'post', $selfUrl . '?action=' . $action, '', array('style' => 'margin: 0px;'));
@@ -943,7 +940,7 @@ switch ($action) {
         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 
         if (!empty($errorMsg)) {
-            Display::display_normal_message($errorMsg); //main API
+            Display::addFlash(Display::return_message($errorMsg, 'normal')); //main API
         }
 
         $default = array();
@@ -1236,6 +1233,7 @@ switch ($action) {
                 </div>
             </div>
         </section>
-        <?php break;
+        <?php
+        break;
 }
 Display::display_footer();

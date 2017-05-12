@@ -234,23 +234,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
      * @access     private
      * @since      0.4.0
      */
-    var $_elementCSS = '
-#qfams_{id} {
-  font: 13.3px sans-serif;
-  background-color: #fff;
-  overflow: auto;
-  height: 14.3em;
-  width: 12em;
-  border-left:   1px solid #404040;
-  border-top:    1px solid #404040;
-  border-bottom: 1px solid #d4d0c8;
-  border-right:  1px solid #d4d0c8;
-}
-#qfams_{id} label {
-  padding-right: 3px;
-  display: block;
-}
-';
+    var $_elementCSS = '';
 
     /**
      * Class constructor
@@ -581,12 +565,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
 
         if ($raw !== true) {
             $css = '<style type="text/css">' . PHP_EOL
-                // Modified by Chamilo team, 16-MAR-2010.
-                //. '<!--' . $css . '// -->'  . PHP_EOL
-                . '/*<![CDATA[*/' . PHP_EOL
                 . $css . PHP_EOL
-                . '/*]]>*/'  . PHP_EOL
-                //
                 . '</style>';
         }
         return $css;
@@ -1036,15 +1015,11 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         );
 
         if ($this->selectAllCheckBox) {
-            $strHtml .= '
-                    <div class="col-sm-8">
-
-                    <label >'.get_lang('SelectAll').'
-                    <input type="checkbox" class="advmultiselect_checkbox" id="'.$selectId.'_select_all'.'">
-                    </label>
-
-                    </div>
-            ';
+            $strHtml .= '<div class="col-sm-8">
+                            <label >'.get_lang('SelectAll').'
+                            <input type="checkbox" class="advmultiselect_checkbox" id="'.$selectId.'_select_all'.'">
+                            </label>
+                         </div>';
         }
 
         $strHtml = str_replace($placeHolders, $htmlElements, $strHtml);
@@ -1071,12 +1046,6 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
     function getElementJs($raw = true, $min = true)
     {
         $js = api_get_path(LIBRARY_PATH).'javascript'.DIRECTORY_SEPARATOR.'pear'.DIRECTORY_SEPARATOR;
-
-        /*if ($min) {
-            $js .= 'qfamsHandler-min.js';
-        } else {
-            $js .= 'qfamsHandler.js';
-        }*/
         $js .= 'qfamsHandler.js';
 
         if (file_exists($js)) {
@@ -1086,12 +1055,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         }
 
         if ($raw !== true) {
-            $js = '<script type="text/javascript">'
-                . PHP_EOL . '//<![CDATA['
-                . PHP_EOL . $js
-                . PHP_EOL . '//]]>'
-                . PHP_EOL . '</script>'
-                . PHP_EOL;
+            $js = '<script>'.PHP_EOL.$js.PHP_EOL.'</script>'.PHP_EOL;
         }
 
         return $js;

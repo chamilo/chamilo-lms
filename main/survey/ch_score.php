@@ -38,7 +38,7 @@ class ch_score extends survey_question
             $options = array(
                 '--' => '--'
             );
-            for ($i=1; $i <= $questionData['maximum_score']; $i++) {
+            for ($i = 1; $i <= $questionData['maximum_score']; $i++) {
                 $options[$i] = $i;
             }
 

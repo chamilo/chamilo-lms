@@ -17,7 +17,7 @@ class Version20150522112023 extends AbstractMigrationChamilo
     public function up(Schema $schema)
     {
         // Set 0 if there's no group category.
-        $this->addSql('UPDATE c_group_info SET category_id = 0 WHERE category_id = 2');
+        //$this->addSql('UPDATE c_group_info SET category_id = 0 WHERE category_id = 2');
 
         $this->addSql('ALTER TABLE usergroup ADD group_type INT NOT NULL, ADD created_at DATETIME NOT NULL, ADD updated_at DATETIME NOT NULL');
         $this->addSql('ALTER TABLE usergroup ADD picture VARCHAR(255) DEFAULT NULL, ADD url VARCHAR(255) DEFAULT NULL, ADD visibility VARCHAR(255) NOT NULL, ADD allow_members_leave_group INT NOT NULL, CHANGE description description LONGTEXT');

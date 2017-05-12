@@ -27,11 +27,10 @@ class HtmlEditor extends HTML_QuickForm_textarea
     public function __construct(
         $name = null,
         $elementLabel = null,
-        $attributes = null,
-        $config = array()
+        $attributes = [],
+        $config = []
     ) {
         if (empty($name)) {
-            
             return false;
         }
 
@@ -58,7 +57,6 @@ class HtmlEditor extends HTML_QuickForm_textarea
 
         if ($this->editor) {
             if ($this->editor->getConfigAttribute('fullPage')) {
-
                 if (strlen(trim($value)) == 0) {
                     // TODO: To be considered whether here to be added DOCTYPE,
                     // language and character set declarations.
@@ -73,11 +71,10 @@ class HtmlEditor extends HTML_QuickForm_textarea
             return $this->getFrozenHtml();
         } else {
             $styleCss = $this->editor->getConfigAttribute('style');
-
             if ($styleCss) {
-               $style = true;
+                $style = true;
             } else {
-               $style = false;
+                $style = false;
             }
 
             return $this->buildEditor($style);
@@ -104,7 +101,6 @@ class HtmlEditor extends HTML_QuickForm_textarea
         if ($this->editor) {
             $this->editor->value = $this->getValue();
             $this->editor->setName($this->getName());
-
             if ($style == true) {
                 $result = $this->editor->createHtmlStyle();
             } else {

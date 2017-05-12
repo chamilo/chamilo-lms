@@ -5,8 +5,8 @@
  */
 
 // Database table definitions
-$table_sf = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
-$table_sf_val = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
+$table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
+$table_sf_val = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
 
 /**
  * Add a specific field
@@ -14,7 +14,7 @@ $table_sf_val = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
  */
 function add_specific_field($name)
 {
-    $table_sf = Database:: get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
+    $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
     $name = trim($name);
     if (empty($name)) {
         return false;
@@ -41,7 +41,7 @@ function add_specific_field($name)
  */
 function delete_specific_field($id)
 {
-    $table_sf = Database:: get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
+    $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
     $id = (int)$id;
     if (!is_numeric($id)) {
         return false;
@@ -59,7 +59,7 @@ function delete_specific_field($id)
  */
 function edit_specific_field($id, $name)
 {
-    $table_sf = Database:: get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
+    $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
     $id = (int)$id;
     if (!is_numeric($id)) {
         return false;
@@ -76,7 +76,7 @@ function edit_specific_field($id, $name)
  */
 function get_specific_field_list($conditions = array(), $order_by = array())
 {
-    $table_sf = Database:: get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
+    $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
     $return_array = array();
     $sql = "SELECT * FROM $table_sf";
     if (count($conditions) > 0) {
@@ -107,7 +107,7 @@ function get_specific_field_values_list(
     $conditions = array(),
     $order_by = array()
 ) {
-    $table_sfv = Database:: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
+    $table_sfv = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
     $return_array = array();
     $sql = "SELECT * FROM $table_sfv";
     if (count($conditions) > 0) {
@@ -154,8 +154,8 @@ function get_specific_field_values_list_by_prefix(
     $tool_id,
     $ref_id
 ) {
-    $table_sf = Database:: get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
-    $table_sfv = Database:: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
+    $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
+    $table_sfv = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
     $sql = 'SELECT sfv.value FROM %s sf LEFT JOIN %s sfv ON sf.id = sfv.field_id'.
         ' WHERE sf.code = \'%s\' AND sfv.c_id = \'%s\' AND tool_id = \'%s\' AND sfv.ref_id = %s';
     $sql = sprintf(
@@ -190,7 +190,7 @@ function add_specific_field_value(
     $ref_id,
     $value
 ) {
-    $table_sf_values = Database:: get_main_table(
+    $table_sf_values = Database::get_main_table(
         TABLE_MAIN_SPECIFIC_FIELD_VALUES
     );
     $value = trim($value);
@@ -223,7 +223,7 @@ function add_specific_field_value(
  * @param int $ref_id intern id inside specific tool table
  */
 function delete_all_specific_field_value($course_id, $id_specific_field, $tool_id, $ref_id) {
-    $table_sf_values = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
+    $table_sf_values = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
     $sql = 'DELETE FROM %s WHERE course_code = \'%s\' AND tool_id = \'%s\' AND ref_id = %s AND field_id = %s';
     $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id, $id_specific_field);
     Database::query($sql);
@@ -237,7 +237,7 @@ function delete_all_specific_field_value($course_id, $id_specific_field, $tool_i
  * @param   int     Internal ID used in specific tool table
  */
 function delete_all_values_for_item($course_id, $tool_id, $ref_id) {
-  $table_sf_values = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
+  $table_sf_values = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
   $sql = 'DELETE FROM %s WHERE course_code = \'%s\' AND tool_id = \'%s\' AND ref_id = %s';
   $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id);
   Database::query($sql);
@@ -278,7 +278,7 @@ function get_specific_field_code_from_name($name) {
         'X',
         'Y',
     );
-    $table_sf = Database:: get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
+    $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
     $sql = "SELECT code FROM $table_sf ORDER BY code";
     $res = Database::query($sql);
     $code = strtoupper(substr($name, 0, 1));

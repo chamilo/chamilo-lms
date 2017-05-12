@@ -13,7 +13,7 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
-$current_course_tool  = TOOL_GROUP;
+$current_course_tool = TOOL_GROUP;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
@@ -25,7 +25,7 @@ $nameTools = get_lang('EditGroup');
 $interbreadcrumb[] = array('url' => 'group.php', 'name' => get_lang('Groups'));
 $interbreadcrumb[] = array('url' => 'group_space.php?'.api_get_cidreq(), 'name' => $current_group['name']);
 
-$is_group_member = GroupManager::is_tutor_of_group(api_get_user_id(), $current_group['iid']);
+$is_group_member = GroupManager::is_tutor_of_group(api_get_user_id(), $current_group);
 
 if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
     api_not_allowed(true);
@@ -122,11 +122,15 @@ $(document).ready( function() {
  </script>';
 
 // Build form
-$form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidreq());
+$form = new FormValidator(
+    'group_edit',
+    'post',
+    api_get_self().'?'.api_get_cidreq()
+);
 $form->addElement('hidden', 'action');
 $form->addElement('hidden', 'max_student', $current_group['max_student']);
-$complete_user_list = GroupManager::fill_groups_list($current_group['iid']);
-$subscribedTutors = GroupManager::getTutors($current_group['iid']);
+$complete_user_list = GroupManager::fill_groups_list($current_group);
+$subscribedTutors = GroupManager::getTutors($current_group);
 if ($subscribedTutors) {
     $subscribedTutors = array_column($subscribedTutors, 'user_id');
 }
@@ -165,9 +169,9 @@ if (!empty($complete_user_list)) {
 }
 
 // Group members
-$group_member_list = GroupManager::get_subscribed_users($current_group['iid']);
+$group_member_list = GroupManager::get_subscribed_users($current_group);
 
-$selected_users = array ();
+$selected_users = array();
 if (!empty($group_member_list)) {
     foreach ($group_member_list as $index => $user) {
         $selected_users[] = $user['user_id'];
@@ -178,8 +182,7 @@ $group_members_element = $form->addElement(
     'advmultiselect',
     'group_members',
     get_lang('GroupMembers'),
-    $possible_users,
-    'style="width: 280px;"'
+    $possible_users
 );
 $form->addFormRule('check_group_members');
 
@@ -190,12 +193,12 @@ if ($form->validate()) {
     $values = $form->exportValues();
 
     // Storing the users (we first remove all users and then add only those who were selected)
-    GroupManager:: unsubscribe_all_users($current_group['iid']);
+    GroupManager:: unsubscribe_all_users($current_group);
 
     if (isset($_POST['group_members']) && count($_POST['group_members']) > 0) {
         GroupManager:: subscribe_users(
             $values['group_members'],
-            $current_group['iid']
+            $current_group
         );
     }
 
@@ -218,7 +221,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 switch ($action) {
     case 'empty':
         if (api_is_allowed_to_edit(false, true)) {
-            GroupManager:: unsubscribe_all_users($current_group['iid']);
+            GroupManager:: unsubscribe_all_users($current_group);
             Display :: display_confirmation_message(get_lang('GroupEmptied'));
         }
         break;

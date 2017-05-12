@@ -7,7 +7,7 @@ if (!api_is_anonymous() &&
     api_get_setting('cas_activate') == 'true' &&
     $_user['auth_source'] == CAS_AUTH_SOURCE
 ) {
-    $_template['show_message']   = true;
+    $_template['show_message'] = true;
     // the link URL
     $link_url = "#";
     if (!empty($plugin_info['settings']['ext_auth_chamilo_logout_button_behaviour_eaclbb_form_link_url'])) {

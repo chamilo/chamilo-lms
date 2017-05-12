@@ -1,3 +1,9 @@
+### 7.1.3
+- fixes issue in returnObject tree called with options including ns: [react-i18next #240](https://github.com/i18next/react-i18next/issues/240)
+
+### 7.1.2
+- remove regex escape from format separators [#896](https://github.com/i18next/i18next/pull/896)
+
 ### 7.1.1
 - change to named plugins for 3rd party - just calling init
 

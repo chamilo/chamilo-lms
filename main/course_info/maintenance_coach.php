@@ -27,12 +27,12 @@ Display :: display_header($nameTools);
 echo Display::page_subheader(
     Display::return_icon(
         'save_import.gif', get_lang('Backup')
-    ) . '&nbsp;&nbsp;' . get_lang('Backup')
+    ).'&nbsp;&nbsp;'.get_lang('Backup')
 );
 
 $url = api_get_path(
         WEB_CODE_PATH
-    ) . 'coursecopy/copy_course_session_selected.php?' . api_get_cidreq();
+    ).'coursecopy/copy_course_session_selected.php?'.api_get_cidreq();
 
 $link = Display::url(get_lang('CopyCourse'), $url);
 ?>

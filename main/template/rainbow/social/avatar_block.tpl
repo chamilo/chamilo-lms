@@ -18,7 +18,7 @@
             </div>
         {% elseif show_user %}
             <a href="{{ user_image.big }}" class="expand-image">
-                <img class="img-responsive img-circle" src="{{ user_image.big }}">
+                <img class="img-responsive img-circle" src="{{ user_image.big }}" alt="{{ 'UserPicture'|get_lang }}">
             </a>
         {% endif %}
     </div>

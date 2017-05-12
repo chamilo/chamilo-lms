@@ -5,7 +5,7 @@ use ChamiloSession as Session;
 use Symfony\Component\Finder\Finder;
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_STUDENTPUBLICATION;
+$current_course_tool = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
 
@@ -81,7 +81,7 @@ if ($form->validate()) {
     if ($upload) {
         $zip = new PclZip($_FILES['file']['tmp_name']);
         // Check the zip content (real size and file extension)
-        $zipFileList = (array)$zip->listContent();
+        $zipFileList = (array) $zip->listContent();
 
         $realSize = 0;
         foreach ($zipFileList as & $this_content) {
@@ -128,7 +128,7 @@ if ($form->validate()) {
         foreach ($result as $item) {
             $title = $item['title_clean'];
             $insert_date = str_replace(array(':', '-', ' '), '_', api_get_local_time($item['sent_date_from_db']));
-            $title =  api_replace_dangerous_char($insert_date.'_'.$item['username'].'_'.$title);
+            $title = api_replace_dangerous_char($insert_date.'_'.$item['username'].'_'.$title);
             $finalResult[$title] = $item['id'];
         }
 
@@ -138,7 +138,7 @@ if ($form->validate()) {
 
         $finder = new Finder();
         $finder->files()->in($destinationDir);
-        $table = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
+        $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
         //var_dump($finalResult);
         /** @var SplFileInfo $file */
         foreach ($finder as $file) {

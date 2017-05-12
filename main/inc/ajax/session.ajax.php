@@ -10,12 +10,12 @@ $action = $_REQUEST['a'];
 
 switch ($action) {
     case 'get_user_sessions':
-        if (api_is_platform_admin()) {
+        if (api_is_platform_admin() || api_is_session_admin()) {
             $user_id = intval($_POST['user_id']);
             $list_sessions = SessionManager::get_sessions_by_user($user_id, true);
             if (!empty($list_sessions)) {
                 foreach ($list_sessions as $session_item) {
-                    echo $session_item['session_name'] . '<br />';
+                    echo $session_item['session_name'].'<br />';
                 }
             } else {
                 echo get_lang('NoSessionsForThisUser');
@@ -29,7 +29,7 @@ switch ($action) {
                 [
                     's.name' => [
                         'operator' => 'LIKE',
-                        'value' => "%" . $_REQUEST['q'] . "%"
+                        'value' => "%".$_REQUEST['q']."%"
                     ]
                 ]
             );

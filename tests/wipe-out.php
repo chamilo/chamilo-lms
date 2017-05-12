@@ -26,12 +26,12 @@ if (!isset($argv[1]) || $argv[1] != '--i-am-sure') {
        "  parameter. You've been warned. Don't come complaining!\n";
   exit;
 }
-if (!file_exists(dirname(__FILE__).'/../main/inc/global.inc.php')) {
+if (!file_exists(__DIR__.'/../main/inc/global.inc.php')) {
     echo "  This script needs to be run from the tests/ directory inside a Chamilo\n", "  installation. Please make sure main/inc/global.inc.php exists, then run this\n", "  script again.\n";
     exit;
 }
 
-if (!is_file(dirname(__FILE__).'/../main/inc/conf/configuration.php')) {
+if (!is_file(__DIR__.'/../main/inc/conf/configuration.php')) {
     echo "  This script will only work on an already installed version of Chamilo. The \n", "main/inc/conf/configuration.php file could not be found, which is understood\n", "as Chamilo not being installed.\n";
     exit;
 }
@@ -42,7 +42,7 @@ if (!is_file(dirname(__FILE__).'/../main/inc/conf/configuration.php')) {
 ini_set('track_errors',1);
 $_SERVER['SERVER_NAME'] = '';
 $_SERVER['HTTP_HOST'] = 'localhost';
-$root = dirname(__FILE__).'/../';
+$root = __DIR__.'/../';
 require $root.'main/inc/global.inc.php';
 
 $global_db = Database::get_main_database();

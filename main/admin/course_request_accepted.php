@@ -14,9 +14,7 @@
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
-
 $this_section = SECTION_PLATFORM_ADMIN;
-
 api_protect_admin_script();
 
 // A check whether the course validation feature is enabled.
@@ -28,7 +26,6 @@ $message = isset($_GET['message']) ? trim(Security::remove_XSS(stripslashes(urld
 $is_error_message = !empty($_GET['is_error_message']);
 
 if ($course_validation_feature) {
-
     /**
      * Deletion of a course request.
      */
@@ -42,15 +39,13 @@ if ($course_validation_feature) {
             $message = sprintf(get_lang('CourseRequestDeletionFailed'), $course_request_code);
             $is_error_message = true;
         }
-    }
-
-    /**
-     * Form actions: delete.
-     */
-    elseif (isset($_POST['action'])) {
+    } elseif (isset($_POST['action'])) {
+        /**
+         * Form actions: delete.
+         */
         switch ($_POST['action']) {
             // Delete selected courses
-            case 'delete_course_requests' :
+            case 'delete_course_requests':
                 $course_requests = $_POST['course_request'];
                 if (is_array($_POST['course_request']) && !empty($_POST['course_request'])) {
                     $success = true;
@@ -72,7 +67,8 @@ if ($course_validation_feature) {
 /**
  * Get the number of courses which will be displayed.
  */
-function get_number_of_requests() {
+function get_number_of_requests()
+{
     return CourseRequestManager::count_course_requests(COURSE_REQUEST_ACCEPTED);
 }
 
@@ -82,12 +78,12 @@ function get_number_of_requests() {
 function get_request_data($from, $number_of_items, $column, $direction)
 {
     $keyword = isset($_GET['keyword']) ? Database::escape_string(trim($_GET['keyword'])) : null;
-    $course_request_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
+    $course_request_table = Database::get_main_table(TABLE_MAIN_COURSE_REQUEST);
 
     $from = intval($from);
     $number_of_items = intval($number_of_items);
     $column = intval($column);
-    $direction = !in_array(strtolower(trim($direction)), ['asc','desc']) ? 'asc' : $direction;
+    $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
 
     $sql = "SELECT
                 id AS col0,
@@ -144,7 +140,7 @@ if (!empty($message)) {
     if ($is_error_message) {
         Display::display_error_message($message, false);
     } else {
-        Display::display_normal_message($message, false);
+        Display::addFlash(Display::return_message($message, 'normal', false));
     }
 }
 

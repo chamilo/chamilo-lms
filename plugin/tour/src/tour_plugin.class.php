@@ -129,8 +129,8 @@ class Tour extends Plugin
      */
     public function getTourConfig()
     {
-        $pluginPath = api_get_path(SYS_PLUGIN_PATH) . 'tour/';
-        $jsonContent = file_get_contents($pluginPath . 'config/tour.json');
+        $pluginPath = api_get_path(SYS_PLUGIN_PATH).'tour/';
+        $jsonContent = file_get_contents($pluginPath.'config/tour.json');
         $jsonData = json_decode($jsonContent, true);
 
         return $jsonData;

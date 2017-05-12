@@ -25,7 +25,7 @@ function validate_data($user_classes) {
 
         foreach ($mandatory_fields as $field) {
             if (!isset($user_class[$field]) || strlen($user_class[$field]) == 0) {
-                $user_class['error'] = get_lang($field . 'Mandatory');
+                $user_class['error'] = get_lang($field.'Mandatory');
                 $errors[] = $user_class;
             }
         }
@@ -37,7 +37,7 @@ function validate_data($user_classes) {
                 // 2.1.1 Check whether code exists in DB
                 $exists = $usergroup->usergroup_exists($user_class['ClassName']);
                 if (!$exists) {
-                    $user_class['error'] = get_lang('CodeDoesNotExists') . ': ' . $user_class['ClassName'];
+                    $user_class['error'] = get_lang('CodeDoesNotExists').': '.$user_class['ClassName'];
                     $errors[] = $user_class;
                 } else {
                     $classcodes[$user_class['CourseCode']] = 1;
@@ -49,14 +49,14 @@ function validate_data($user_classes) {
         if (!UserManager::is_username_empty($user_class['UserName'])) {
             // 3.1. Check whether username is too long.
             if (UserManager::is_username_too_long($user_class['UserName'])) {
-                $user_class['error'] = get_lang('UserNameTooLong') . ': ' . $user_class['UserName'];
+                $user_class['error'] = get_lang('UserNameTooLong').': '.$user_class['UserName'];
                 $errors[] = $user_class;
             }
 
             $username = UserManager::purify_username($user_class['UserName'], $purification_option_for_usernames);
             // 3.2. Check whether username exists.
             if (UserManager::is_username_available($username)) {
-                $user_class['error'] = get_lang('UnknownUser') . ': ' . $username;
+                $user_class['error'] = get_lang('UnknownUser').': '.$username;
                 $errors[] = $user_class;
             }
         }
@@ -72,7 +72,7 @@ function save_data($users_classes, $deleteUsersNotInList = false) {
     global $purification_option_for_usernames;
 
     // Table definitions.
-    $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+    $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
     $usergroup = new UserGroup();
 
@@ -105,8 +105,8 @@ function save_data($users_classes, $deleteUsersNotInList = false) {
             $class_name = $user_data['class_name'];
             $user_list_name = $user_data['user_list_name'];
             $usergroup->subscribe_users_to_usergroup($class_id, $user_list, $deleteUsersNotInList);
-            $message .= Display::return_message(get_lang('Class') . ': ' . $class_name . '<br />', 'normal', false);
-            $message .= Display::return_message(get_lang('Users') . ': ' . implode(', ', $user_list_name));
+            $message .= Display::return_message(get_lang('Class').': '.$class_name.'<br />', 'normal', false);
+            $message .= Display::return_message(get_lang('Users').': '.implode(', ', $user_list_name));
         }
     }
     return $message;
@@ -128,7 +128,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
-$tool_name = get_lang('AddUsersToAClass') . ' CSV';
+$tool_name = get_lang('AddUsersToAClass').' CSV';
 
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'usergroups.php', 'name' => get_lang('Classes'));
@@ -164,7 +164,7 @@ if (isset($return) && $return) {
 if (count($errors) != 0) {
     $error_message = "\n";
     foreach ($errors as $index => $error_class_user) {
-        $error_message .= get_lang('Line') . ' ' . $error_class_user['line'] . ': ' . $error_class_user['error'] . '</b>';
+        $error_message .= get_lang('Line').' '.$error_class_user['line'].': '.$error_class_user['error'].'</b>';
         $error_message .= "<br />";
     }
     $error_message .= "\n";
@@ -172,7 +172,7 @@ if (count($errors) != 0) {
 }
 $form->display();
 ?>
-<p><?php echo get_lang('CSVMustLookLike') . ' (' . get_lang('MandatoryFields') . ')'; ?> :</p>
+<p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 <pre>
 <b>UserName</b>;<b>ClassName</b>
 jdoe;class01

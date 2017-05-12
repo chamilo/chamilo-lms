@@ -18,6 +18,15 @@ Once the plugin is fully setup, you will be able to create new Chamilo instances
 Changelog
 =========
 
+*Version 1.6*
+
+Database upgrade needed:
+
+  ALTER TABLE vchamilo ADD COLUMN archive_url varchar(255);
+  ALTER TABLE vchamilo ADD COLUMN home_url varchar(255);
+  ALTER TABLE vchamilo ADD COLUMN upload_url varchar(255);
+  ALTER TABLE vchamilo ADD COLUMN course_url varchar(255);
+
 *Version 1.5*
 
 Improved usability and added validations. No DB update required.
@@ -96,7 +105,18 @@ up observing issues of files not appearing while uploading files on the instance
 Note that the domain of the instance, in the last part of the path, will be transformed 
 from dot-separated domain (beeznest.chamilo.net) to dash-separated-domain (beeznest-chamilo-net).
 
-7. Finally, go to the "Instances manager" and create new instances. Once an instance 
+7. Finally, go to the "Instances manager" and create new instances. Once an instance has been 
+created, make sure you edit it and set the "Archive URL", "Home URL" and "Upload URL". These should
+have the form of the "Web root" of the instance + the common directory + {archive|home|upload} + the 
+instance domain with dots changed to hyphens.
+
+For example, if you have used "var/" as a common directory and your instance URL (Web Root) is 
+https://chamilo1.beeznest.com/, then your "Archive URL" would look like this:
+
+  https://chamilo1.beeznest.com/var/archive/chamilo1-beeznest-com/
+
+These settings might seem complex to setup at first, but once you've created your first instance,
+creating a hundred more should be easy.
 
 Important note about file system permissions
 -------------
@@ -104,3 +124,11 @@ Important note about file system permissions
 vChamilo instances *need* a central directory where to store all their files. You should create
 that directory (as mentioned in point 3 above) and make sure it has the right permissions. 
 The plugin/vchamilo/templates/ directory also needs to be writeable by the web server.
+
+Additional notes
+-------------
+
+The vChamilo plugin can work in combination with the "Chamilo Shell":https://github.com/chamilo/chamilo-lms 
+(or "chash") to ensure a good level of automatization of heavy processes, like upgrading to a higher version.
+Although upgrading still has a manual process (in part), it will certainly save you dozens of hours if
+upgrading dozens of portals.

@@ -27,6 +27,7 @@ class FeatureContext extends MinkContext
         $this->pressButton('submitAuth');
         $this->getSession()->back();
     }
+
     /**
      * @Given /^I am a session administrator$/
      */
@@ -40,6 +41,7 @@ class FeatureContext extends MinkContext
         ]));
         $this->pressButton('submitAuth');
     }
+
     /**
      * @Given /^I am a teacher$/
      */
@@ -51,6 +53,7 @@ class FeatureContext extends MinkContext
         $this->fillField('password', 'mmosquera');
         $this->pressButton('submitAuth');
     }
+
     /**
      * @Given /^I am a teacher in course "([^"]*)"$/
      * @Todo implement
@@ -61,6 +64,7 @@ class FeatureContext extends MinkContext
         //$result = ...
         //if ($result !== false) { ... }
     }
+
     /**
      * @Given /^I am a student$/
      */
@@ -68,10 +72,11 @@ class FeatureContext extends MinkContext
     {
         $this->visit('/index.php?logout=logout');
         $this->iAmOnHomepage();
-        $this->fillField('login', 'mbrandybuck');
-        $this->fillField('password', 'mbrandybuck');
+        $this->fillField('login', 'acostea');
+        $this->fillField('password', 'acostea');
         $this->pressButton('submitAuth');
     }
+
     /**
      * @Given /^I am an HR manager$/
      */
@@ -83,6 +88,7 @@ class FeatureContext extends MinkContext
         $this->fillField('password', 'ptook');
         $this->pressButton('submitAuth');
     }
+
     /**
      * @Given /^I am a student boss$/
      */
@@ -94,6 +100,7 @@ class FeatureContext extends MinkContext
         $this->fillField('password', 'abaggins');
         $this->pressButton('submitAuth');
     }
+
     /**
      * @Given /^I am an invitee$/
      */
@@ -105,6 +112,7 @@ class FeatureContext extends MinkContext
         $this->fillField('password', 'bproudfoot');
         $this->pressButton('submitAuth');
     }
+
     /**
      * @Given /^course "([^"]*)" exists$/
      */
@@ -114,6 +122,7 @@ class FeatureContext extends MinkContext
         $this->visit('/main/admin/course_list.php?keyword=' . $argument);
         $this->assertPageContainsText($argument);
     }
+
     /**
      * @Given /^course "([^"]*)" is deleted$/
      */
@@ -123,6 +132,7 @@ class FeatureContext extends MinkContext
         $this->visit('/main/admin/course_list.php?keyword=' . $argument);
         $this->clickLink('Delete');
     }
+
     /**
      * @Given /^I am in course "([^"]*)"$/
      * @Todo redefine function to be different from I am on course TEMP homepage
@@ -132,6 +142,7 @@ class FeatureContext extends MinkContext
         $this->visit('/main/course_home/course_home.php?cDir=' . $argument);
         $this->assertElementNotOnPage('.alert-danger');
     }
+
     /**
      * @Given /^I am on course "([^"]*)" homepage$/
      */
@@ -140,6 +151,7 @@ class FeatureContext extends MinkContext
         $this->visit('/main/course_home/course_home.php?cDir=' . $argument);
         $this->assertElementNotOnPage('.alert-danger');
     }
+
     /**
      * @Given /^I am a "([^"]*)" user$/
      */
@@ -243,6 +255,7 @@ class FeatureContext extends MinkContext
         $this->selectOption('show_admin_toolbar', 'do_not_show');
         $this->pressButton('submit');
     }
+
     /**
      * @Given /^Admin top bar is enabled$/
      */
@@ -277,8 +290,8 @@ class FeatureContext extends MinkContext
     }
 
     /**
-   * @Then /^I fill in ckeditor field "([^"]*)" with "([^"]*)"$/
-   */
+     * @Then /^I fill in ckeditor field "([^"]*)" with "([^"]*)"$/
+     */
     public function iFillInWysiwygOnFieldWith($locator, $value)
     {
         // Just in case wait that ckeditor is loaded
@@ -429,5 +442,19 @@ class FeatureContext extends MinkContext
     {
         $input = $this->getSession()->getPage()->findField($input);
         $input->focus();
+    }
+
+    /**
+     * @Given /^I check the "([^"]*)" radio button with "([^"]*)" value$/
+     */
+    public function iCheckTheRadioButtonWithValue($element, $value)
+    {
+        $this->getSession()->executeScript("
+            $(function() {
+                $('input[type=\"radio\"][name=".$element."][value=".$value."]').prop('checked', true);
+            });
+        ");
+
+        return true;
     }
 }

@@ -26,7 +26,7 @@ $interbreadcrumb[] = array(
 );
 $interbreadcrumb[] = array(
     "url" => "admin.php?exerciseId=$exercise_id&".api_get_cidreq(),
-    "name" => $objExercise->name,
+    "name" => $objExercise->selectTitle(true),
 );
 
 //Add the JS needed to use the jqgrid
@@ -41,7 +41,7 @@ $minutes = 60;
 $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=get_live_stats&exercise_id='.$objExercise->id.'&minutes='.$minutes;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns        = array(get_lang('FirstName'), get_lang('LastName'), get_lang('Time'), get_lang('QuestionsAlreadyAnswered'), get_lang('Score'));
+$columns = array(get_lang('FirstName'), get_lang('LastName'), get_lang('Time'), get_lang('QuestionsAlreadyAnswered'), get_lang('Score'));
 
 //Column config
 $column_model = array(
@@ -93,15 +93,24 @@ function refreshGrid() {
 
 $(function() {
     <?php
-        echo Display::grid_js('live_stats',  $url, $columns, $column_model, $extra_params, array(), null, true);
+    echo Display::grid_js(
+        'live_stats',
+        $url,
+        $columns,
+        $column_model,
+        $extra_params,
+        array(),
+        null,
+        true
+    );
     ?>
     refreshGrid();
 });
 </script>
 <?php
 
-$actions = '<a href="exercise_report.php?exerciseId='.intval($_GET['exerciseId']).'&'.api_get_cidreq().'">' .
-    Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
+$actions = '<a href="exercise_report.php?exerciseId='.intval($_GET['exerciseId']).'&'.api_get_cidreq().'">'.
+    Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
 echo $actions = Display::div($actions, array('class'=> 'actions'));
 
 echo Display::grid_html('live_stats');

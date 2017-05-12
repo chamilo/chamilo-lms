@@ -73,7 +73,7 @@ $geolocalization = $gMapsPlugin->get('enable_api') === 'true';
 
 if ($geolocalization) {
 	$gmapsApiKey = $gMapsPlugin->get('api_key');
-	$htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='. $gmapsApiKey . '" ></script>';
+	$htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$gmapsApiKey.'" ></script>';
 }
 
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
@@ -153,7 +153,7 @@ if (api_get_setting('registration', 'email') == 'true') {
 }
 
 if (api_get_setting('login_is_email') == 'true') {
-    $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
     $form->addRule('email', get_lang('UserTaken'), 'username_available', $user_data['username']);
 }
 
@@ -187,7 +187,7 @@ if (strlen($user_data['picture_uri']) > 0) {
 if (api_get_setting('login_is_email') != 'true') {
 	$form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
     $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
     $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
 }
@@ -224,14 +224,16 @@ if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0
 }
 $form->addElement('radio', 'reset_password', null, get_lang('AutoGeneratePassword'), 1);
 $group = array();
-$group[] =$form->createElement('radio', 'reset_password', null, get_lang('EnterPassword'), 2);
+$group[] = $form->createElement('radio', 'reset_password', null, get_lang('EnterPassword'), 2);
 $group[] = $form->createElement(
     'password',
     'password',
     null,
     array('onkeydown' => 'javascript: password_switch_radio_button();')
 );
+
 $form->addGroup($group, 'password', null, null, false);
+$form->addPasswordRule('password', 'password');
 
 // Status
 $status = array();
@@ -258,10 +260,10 @@ $display = isset($user_data['status']) && ($user_data['status'] == STUDENT || (i
 // Platform admin
 if (api_is_platform_admin()) {
 	$group = array();
-	$group[] =$form->createElement('radio', 'platform_admin', null, get_lang('Yes'), 1);
-	$group[] =$form->createElement('radio', 'platform_admin', null, get_lang('No'), 0);
+	$group[] = $form->createElement('radio', 'platform_admin', null, get_lang('Yes'), 1);
+	$group[] = $form->createElement('radio', 'platform_admin', null, get_lang('No'), 0);
 
-	$user_data['status'] == 1 ? $display = 'block':$display = 'none';
+	$user_data['status'] == 1 ? $display = 'block' : $display = 'none';
 
 	$form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.'">');
 	$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), null, false);
@@ -285,7 +287,7 @@ $form->addElement('label', get_lang('RegistrationDate'), $date);
 if (!$user_data['platform_admin']) {
 	// Expiration Date
 	$form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
-	$group = array ();
+	$group = array();
 	$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
 	$group[] = $form->createElement('DateTimePicker', 'expiration_date', null, array('onchange' => 'javascript: enable_expiration_date();'));
 	$form->addGroup($group, 'max_member_group', null, null, false);
@@ -303,7 +305,7 @@ $studentBossToSelect = [];
 if ($studentBoss) {
     foreach ($studentBoss as $bossId => $userData) {
         $bossInfo = api_get_user_info($userData['user_id']);
-        $studentBossToSelect[$bossInfo['user_id']] =  $bossInfo['complete_name_with_username'];
+        $studentBossToSelect[$bossInfo['user_id']] = $bossInfo['complete_name_with_username'];
     }
 }
 
@@ -316,11 +318,20 @@ $form->addElement('advmultiselect', 'student_boss', get_lang('StudentBoss'), $st
 
 // EXTRA FIELDS
 $extraField = new ExtraField('user');
-$returnParams = $extraField->addElements($form, $user_data['user_id']);
+$returnParams = $extraField->addElements(
+    $form,
+    $user_data['user_id'],
+    [],
+    false,
+    false,
+    [],
+    [],
+    true
+);
 $jquery_ready_content = $returnParams['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
-$htmlHeadXtra[] ='<script>
+$htmlHeadXtra[] = '<script>
 $(document).ready(function(){
 	'.$jquery_ready_content.'
 });

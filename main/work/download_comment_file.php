@@ -41,7 +41,7 @@ if (!empty($workData)) {
     ) {
         if (Security::check_abs_path(
             $workData['file_path'],
-            api_get_path(SYS_COURSE_PATH) . api_get_course_path() . '/'
+            api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'
         )
         ) {
             DocumentManager::file_send_for_download(

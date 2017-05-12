@@ -832,7 +832,7 @@ class xajax
 			$realJsFile = $sJsFullFilename;
 		}
 		else {
-			$realPath = realpath(dirname(__FILE__));
+			$realPath = realpath(__DIR__);
 			$realJsFile = $realPath . "/". $sJsFile;
 		}
 
@@ -842,7 +842,7 @@ class xajax
 			if (!file_exists($srcFile)) {
 				trigger_error("The xajax uncompressed Javascript file could not be found in the <b>" . dirname($realJsFile) . "</b> folder. Error ", E_USER_ERROR);
 			}
-			require(dirname(__FILE__)."/xajaxCompress.php");
+			require __DIR__."/xajaxCompress.php";
 			$javaScript = implode('', file($srcFile));
 			$compressedScript = xajaxCompressJavascript($javaScript);
 			$fH = @fopen($realJsFile, "w");

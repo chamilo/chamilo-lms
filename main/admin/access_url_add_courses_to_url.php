@@ -10,7 +10,7 @@
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-$this_section=SECTION_PLATFORM_ADMIN;
+$this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_global_admin_script();
 
@@ -21,19 +21,19 @@ if (!api_get_multiple_access_url()) {
 
 $form_sent = 0;
 $first_letter_course = '';
-$courses = array ();
+$courses = array();
 $url_list = array();
 $users = array();
 
-$tbl_access_url_rel_course = Database:: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-$tbl_access_url = Database:: get_main_table(TABLE_MAIN_ACCESS_URL);
-$tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
-$tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
+$tbl_access_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+$tbl_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 /*	Header   */
 $tool_name = get_lang('AddCoursesToURL');
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
 
 Display :: display_header($tool_name);
 
@@ -48,8 +48,8 @@ api_display_tool_title($tool_name);
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    $courses = is_array($_POST['course_list']) ? $_POST['course_list'] : array() ;
-    $url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : array() ;
+    $courses = is_array($_POST['course_list']) ? $_POST['course_list'] : array();
+    $url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : array();
     $first_letter_course = $_POST['first_letter_course'];
 
     foreach ($users as $key => $value) {
@@ -58,10 +58,10 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     if ($form_sent == 1) {
         if (count($courses) == 0 || count($url_list) == 0) {
-            Display :: display_error_message(get_lang('AtLeastOneCourseAndOneURL'));
+            Display::addFlash(Display::return_message(get_lang('AtLeastOneCourseAndOneURL'), 'error'));
         } else {
             UrlManager::add_courses_to_urls($courses, $url_list);
-            Display :: display_confirmation_message(get_lang('CourseBelongURL'));
+            Display::addFlash(Display::return_message(get_lang('CourseBelongURL'), 'confirm'));
         }
     }
 }
@@ -70,7 +70,7 @@ if (empty($first_letter_user)) {
     $sql = "SELECT count(*) as num_courses FROM $tbl_course";
     $result = Database::query($sql);
     $num_row = Database::fetch_array($result);
-    if ($num_row['num_courses']>1000) {
+    if ($num_row['num_courses'] > 1000) {
         //if there are too much num_courses to gracefully handle with the HTML select list,
         // assign a default filter on users names
         $first_letter_user = 'A';
@@ -106,7 +106,7 @@ unset($result);
       <option value="">--</option>
       <?php
         echo Display :: get_alphabet_options($first_letter_course);
-        echo Display :: get_numeric_options(0,9,$first_letter_course);
+        echo Display :: get_numeric_options(0, 9, $first_letter_course);
       ?>
      </select>
     </td>
@@ -119,7 +119,7 @@ unset($result);
     <td width="40%" align="center">
      <select name="course_list[]" multiple="multiple" size="20" style="width:400px;">
 		<?php foreach ($db_courses as $course) { ?>
-			<option value="<?php echo $course['code']; ?>" <?php if(in_array($course['code'],$courses)) echo 'selected="selected"'; ?>><?php echo $course['title'].' ('.$course['code'].')'; ?>
+			<option value="<?php echo $course['code']; ?>" <?php if (in_array($course['code'], $courses)) echo 'selected="selected"'; ?>><?php echo $course['title'].' ('.$course['code'].')'; ?>
             </option>
         <?php } ?>
     </select>
@@ -130,7 +130,7 @@ unset($result);
    <td width="40%" align="center">
     <select name="url_list[]" multiple="multiple" size="20" style="width:300px;">
 		<?php foreach ($db_urls as $url_obj) { ?>
-        <option value="<?php echo $url_obj['id']; ?>" <?php if(in_array($url_obj['id'],$url_list)) echo 'selected="selected"'; ?>><?php echo $url_obj['url']; ?>
+        <option value="<?php echo $url_obj['id']; ?>" <?php if (in_array($url_obj['id'], $url_list)) echo 'selected="selected"'; ?>><?php echo $url_obj['url']; ?>
         </option>
 		<?php } ?>
     </select>

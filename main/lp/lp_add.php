@@ -59,7 +59,7 @@ if (isset($_SESSION['gradebook'])) {
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[]= array (
+    $interbreadcrumb[] = array(
         'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
     );
@@ -74,16 +74,16 @@ echo '<a href="lp_controller.php?'.api_get_cidreq().'">'.
         Display::return_icon('back.png', get_lang('ReturnToLearningPaths'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
-Display::display_normal_message(get_lang('AddLpIntro'), false);
+echo Display::return_message(get_lang('AddLpIntro'), 'normal', false);
 
 if ($_POST && empty($_REQUEST['lp_name'])) {
-    Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'), false);
+    echo Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error', false);
 }
 
 $form = new FormValidator(
     'lp_add',
     'post',
-    api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?'.api_get_cidreq()
+    api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq()
 );
 
 // Form title
@@ -112,17 +112,17 @@ $form->addElement(
 
 // Start date
 $form->addElement('checkbox', 'activate_start_date_check', null, get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
-$form->addElement('html','<div id="start_date_div" style="display:block;">');
+$form->addElement('html', '<div id="start_date_div" style="display:block;">');
 $form->addDatePicker('publicated_on', get_lang('PublicationDate'));
-$form->addElement('html','</div>');
+$form->addElement('html', '</div>');
 
 //End date
 $form->addElement('checkbox', 'activate_end_date_check', null, get_lang('EnableEndTime'), array('onclick' => 'activate_end_date()'));
-$form->addElement('html','<div id="end_date_div" style="display:none;">');
+$form->addElement('html', '<div id="end_date_div" style="display:none;">');
 $form->addDatePicker('expired_on', get_lang('ExpirationDate'));
-$form->addElement('html','</div>');
+$form->addElement('html', '</div>');
 
-$form->addElement('html','</div>');
+$form->addElement('html', '</div>');
 
 $defaults['activate_start_date_check']  = 1;
 
@@ -133,7 +133,7 @@ if (api_get_setting('scorm_cumulative_session_time') == 'true') {
 }
 
 $defaults['publicated_on'] = date('Y-m-d 08:00:00');
-$defaults['expired_on'] = date('Y-m-d 08:00:00',time()+86400);
+$defaults['expired_on'] = date('Y-m-d 08:00:00', time() + 86400);
 
 $form->setDefaults($defaults);
 $form->addButtonCreate(get_lang('CreateLearningPath'));

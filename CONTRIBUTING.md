@@ -33,6 +33,14 @@ In short, we expect contributions to be sent through Pull Requests, a very clean
 We recommend you follow this guide to understand a little more about the way it works: 
 https://guides.github.com/activities/contributing-to-open-source/
 
+## Testing new features
+
+As new major features are added, automated tests should be added that ensure that the feature continues to work in the foreseeable future.
+
+In Chamilo, we rely on "Behat":http://docs.behat.org/en/latest/ to do Automated Behaviour Testing. You can find examples and information on how to run Behat tests in the tests/behat/ folder of your Chamilo installation.
+
+Tests are run automatically for every new contribution, courtesy of "Travis-CI":https://travis-ci.org/, so you can follow your feature in time and see whether something breaks it. Check the Chamilo tests URL here: https://travis-ci.org/chamilo/chamilo-lms
+
 # Making changes to the database
 
 If your changes require database changes, here are a few instructions on how to

@@ -168,7 +168,7 @@ if ($form->validate()) {
     exit;
 } else {
     $headers = [get_lang('SubscribeUsersToLp'), get_lang('SubscribeGroupsToLp')];
-    $tabs = Display::tabs($headers, [$formUsers->toHtml(),$form->toHtml()]);
+    $tabs = Display::tabs($headers, [$formUsers->toHtml(), $form->toHtml()]);
     $tpl->assign('tabs', $tabs);
 }
 

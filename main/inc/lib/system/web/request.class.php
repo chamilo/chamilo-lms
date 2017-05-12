@@ -2,7 +2,6 @@
 
 /**
  * Provides access to various HTTP request elements: GET, POST, FILE, etc paramaters.
-
  * @license see /license.txt
  * @deprecated
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
@@ -15,7 +14,7 @@ class Request
         return isset($_REQUEST[$key]) ? $_REQUEST[$key] : $default;
     }
 
-    public static function has($key){
+    public static function has($key) {
         return isset($_REQUEST[$key]);
     }
 

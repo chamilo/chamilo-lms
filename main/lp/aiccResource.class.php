@@ -4,9 +4,9 @@
 /**
  * Class defining the elements from an AICC Descriptor file.
  * Container for the aiccResource class that deals with elemens from AICC Descriptor file
- * @package	chamilo.learnpath
- * @author	Yannick Warnier <ywarnier@beeznest.org>
- * @license	GNU/GPL
+ * @package chamilo.learnpath
+ * @author  Yannick Warnier <ywarnier@beeznest.org>
+ * @license GNU/GPL
  */
 class aiccResource
 {
@@ -18,16 +18,16 @@ class aiccResource
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormResource
      * object from database records or from the array given as second param
-     * @param	string	Type of construction needed ('db' or 'config', default = 'config')
-     * @param	mixed	Depending on the type given, DB id for the lp_item or parameters array
+     * @param    string $type Type of construction needed ('db' or 'config', default = 'config')
+     * @param    mixed  $params Depending on the type given, DB id for the lp_item or parameters array
      */
-    public function aiccResource($type = 'config', $params)
+    public function __construct($type = 'config', $params)
     {
         if (isset($params)) {
             switch ($type) {
                 case 'db':
                     // TODO: Implement this way of object creation.
-                    return false;
+                    break;
                 case 'config': // Do the same as the default.
                 default:
                     foreach ($params as $a => $value) {
@@ -37,6 +37,7 @@ class aiccResource
                                 break;
                             case 'title':
                                 $this->title = $value;
+                                // no break - @todo check this, not sure the intention is to have description=title
                             case 'description':
                                 $this->description = $value;
                                 break;
@@ -45,11 +46,7 @@ class aiccResource
                                 break;
                         }
                     }
-
-                    return true;
             }
         }
-
-        return false;
     }
 }

@@ -41,7 +41,7 @@ if (isset($_POST['glossary_id']) &&
         $glossary_all_data = implode('[|.|_|.|-|.|]', $glossary_all_data);
         echo api_xml_http_response_encode($glossary_all_data);
     }
-} elseif(isset($_POST['glossary_name'])) {
+} elseif (isset($_POST['glossary_name'])) {
     $my_glossary_name = Security::remove_XSS($_POST['glossary_name']);
     $my_glossary_name = api_convert_encoding($my_glossary_name, $charset, 'UTF-8');
     $my_glossary_name = trim($my_glossary_name);

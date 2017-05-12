@@ -20,8 +20,8 @@ unset($_SESSION['this_section']);
 api_block_anonymous_users();
 
 if (api_get_setting('allow_social_tool') != 'true') {
-    $url = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
-    header('Location: ' . $url);
+    $url = api_get_path(WEB_CODE_PATH).'auth/profile.php';
+    header('Location: '.$url);
     exit;
 }
 
@@ -45,10 +45,10 @@ if (api_get_setting('profile', 'picture') == 'true') {
     $allowed_picture_types = api_get_supported_image_extensions();
     $form->addRule(
         'picture',
-        get_lang('OnlyImagesAllowed') . ' (' . implode(
+        get_lang('OnlyImagesAllowed').' ('.implode(
             ',',
             $allowed_picture_types
-        ) . ')',
+        ).')',
         'filetype',
         $allowed_picture_types
     );
@@ -63,12 +63,12 @@ if (api_get_setting('profile', 'picture') == 'true') {
                 $_FILES['picture']['name'],
                 $_FILES['picture']['tmp_name']
             )) {
-                $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+                $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
                 $sql = "UPDATE $table_user
                         SET 
                             picture_uri = '$new_picture' 
-                        WHERE user_id =  " . api_get_user_id();
+                        WHERE user_id =  ".api_get_user_id();
 
                 $result = Database::query($sql);
             }
@@ -95,9 +95,9 @@ if (!empty($results)) {
         $result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
 
         if ($result['count'] == 1) {
-            $result['count'] = '1 ' . get_lang('Member');
+            $result['count'] = '1 '.get_lang('Member');
         } else {
-            $result['count'] = $result['count'] . ' ' . get_lang('Members');
+            $result['count'] = $result['count'].' '.get_lang('Members');
         }
 
         $group_url = "group_view.php?id=$id";
@@ -117,9 +117,9 @@ if (!empty($results)) {
             GROUP_IMAGE_SIZE_BIG
         );
 
-        $result['picture'] = '<img class="img-responsive" src="' . $picture['file'] . '" />';
-        $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-2">' . get_lang('SeeMore') . '</a></div>';
-        $group_info= '<div class="description"><p>' . cut($result['description'], 120, true) . "</p></div>";
+        $result['picture'] = '<img class="img-responsive" src="'.$picture['file'].'" />';
+        $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-2">'.get_lang('SeeMore').'</a></div>';
+        $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";
         $groups_newest[] = array(
             Display::url(
                 $result['picture'],
@@ -146,9 +146,9 @@ foreach ($results as $result) {
     $group_url = "group_view.php?id=$id";
 
     if ($result['count'] == 1) {
-        $result['count'] = '1 ' . get_lang('Member');
+        $result['count'] = '1 '.get_lang('Member');
     } else {
-        $result['count'] = $result['count'] . ' ' . get_lang('Members');
+        $result['count'] = $result['count'].' '.get_lang('Members');
     }
     $result['name'] = '<div class="group-name">'.Display::url(
             api_ucwords(cut($result['name'], 40, true)), $group_url)
@@ -160,42 +160,42 @@ foreach ($results as $result) {
         null,
         GROUP_IMAGE_SIZE_BIG
     );
-    $result['picture_uri'] = '<img class="img-responsive" src="' . $picture['file'] . '" />';
-    $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-3">' . get_lang('SeeMore') . '</a></div>';
-    $group_info= '<div class="description"><p>' . cut($result['description'], 120, true) . "</p></div>";
+    $result['picture_uri'] = '<img class="img-responsive" src="'.$picture['file'].'" />';
+    $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-3">'.get_lang('SeeMore').'</a></div>';
+    $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";
     $groups_pop[] = array(
         Display::url($result['picture_uri'], $group_url),
-        $result['name'],$group_info. $group_actions
+        $result['name'], $group_info.$group_actions
     );
 }
 
-$list=count($groups_newest);
+$list = count($groups_newest);
 $social_group_block = null;
 if ($list > 0) {
     $social_group_block .= '<div class="list-group-newest">';
-    $social_group_block .= '<div class="group-title">' . get_lang('Newest') . '</div>';
+    $social_group_block .= '<div class="group-title">'.get_lang('Newest').'</div>';
     for ($i = 0; $i < $list; $i++) {
-        $social_group_block.='<div class="row">';
-        $social_group_block.='<div class="col-md-3">' . $groups_newest[$i][0] . '</div>';
-        $social_group_block.='<div class="col-md-9">' . $groups_newest[$i][1];
-        $social_group_block.= $groups_newest[$i][2] . '</div>';
-        $social_group_block.="</div>";
+        $social_group_block .= '<div class="row">';
+        $social_group_block .= '<div class="col-md-3">'.$groups_newest[$i][0].'</div>';
+        $social_group_block .= '<div class="col-md-9">'.$groups_newest[$i][1];
+        $social_group_block .= $groups_newest[$i][2].'</div>';
+        $social_group_block .= "</div>";
     }
-    $social_group_block.= "</div>";
+    $social_group_block .= "</div>";
 }
-$list=count($groups_pop);
+$list = count($groups_pop);
 if ($list > 0) {
     $social_group_block .= '<div class="list-group-newest">';
-    $social_group_block .= '<div class="group-title">' . get_lang('Popular') . '</div>';
+    $social_group_block .= '<div class="group-title">'.get_lang('Popular').'</div>';
 
     for ($i = 0; $i < $list; $i++) {
-        $social_group_block.='<div class="row">';
-        $social_group_block.='<div class="col-md-3">' . $groups_pop[$i][0] . '</div>';
-        $social_group_block.='<div class="col-md-9">' . $groups_pop[$i][1];
-        $social_group_block.= $groups_pop[$i][2] . '</div>';
-        $social_group_block.="</div>";
+        $social_group_block .= '<div class="row">';
+        $social_group_block .= '<div class="col-md-3">'.$groups_pop[$i][0].'</div>';
+        $social_group_block .= '<div class="col-md-9">'.$groups_pop[$i][1];
+        $social_group_block .= $groups_pop[$i][2].'</div>';
+        $social_group_block .= "</div>";
     }
-    $social_group_block.= "</div>";
+    $social_group_block .= "</div>";
 }
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock(

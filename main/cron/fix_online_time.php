@@ -6,7 +6,7 @@
  * @package chamilo.cron
  * @author Imanol Losada <imanol.losada@beeznest.com>
  */
-require_once __DIR__ . '/../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 /**
  * Get ids of COURSEMANAGERs that are inside a course right now
@@ -15,9 +15,9 @@ require_once __DIR__ . '/../inc/global.inc.php';
 function getTeachersInCourseIds()
 {
     $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-    $joinStatement = ' JOIN ' . Database::get_main_table(TABLE_MAIN_USER) . ' ON login_user_id = user_id';
+    $joinStatement = ' JOIN '.Database::get_main_table(TABLE_MAIN_USER).' ON login_user_id = user_id';
     return Database::select(
-        'login_user_id', $table . $joinStatement,
+        'login_user_id', $table.$joinStatement,
         array(
             'where' => array(
                 'c_id IS NOT NULL AND status = ?' => array(
@@ -44,7 +44,7 @@ function updateTeachersInCourseIdleForTimeLimit($teachersInCourseIds)
     $dataBaseCurrentHour = array_shift($utcResult);
     $maximumIdleTimeInCourse = date(
         'Y-m-d H:i:s',
-        strtotime($dataBaseCurrentHour . ' ' . $timeLimit)
+        strtotime($dataBaseCurrentHour.' '.$timeLimit)
     );
     $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
     $onLineTrackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
@@ -69,7 +69,7 @@ function updateTeachersInCourseIdleForTimeLimit($teachersInCourseIds)
             array(
                 'logout_course_date' => date(
                     'Y-m-d H:i:s',
-                    strtotime($currentTeacherData['logout_course_date'] . ' ' . $extraTime)
+                    strtotime($currentTeacherData['logout_course_date'].' '.$extraTime)
                 )
             ),
             array(

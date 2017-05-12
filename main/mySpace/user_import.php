@@ -31,7 +31,7 @@ if (api_get_setting('add_users_by_coach') === 'true') {
     if (!api_is_platform_admin()) {
         if (isset($_REQUEST['id_session'])) {
             $id_session = intval($_REQUEST['id_session']);
-            $sql = 'SELECT id_coach FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).'
+            $sql = 'SELECT id_coach FROM '.Database::get_main_table(TABLE_MAIN_SESSION).'
                     WHERE id='.$id_session;
             $rs = Database::query($sql);
             if (Database::result($rs, 0, 0) != $_user['user_id']) {

@@ -72,8 +72,8 @@ if (!empty($items)) {
         $usersAdded[] = $myUserId;
         $userInfo = api_get_user_info($myUserId);
         $url = api_get_path(WEB_CODE_PATH).'work/add_user.php?action=delete&id='.$workId.'&user_id='.$myUserId;
-        $link = Display::url('<em class="fa fa-trash"></em> ' . get_lang('Delete'), $url, array('class' => 'btn btn-danger btn-sm'));
-        echo '<li class="list-group-item">' . $userInfo['complete_name_with_username'] . '<div class="pull-right">' . $link . '</div></li>';
+        $link = Display::url('<em class="fa fa-trash"></em> '.get_lang('Delete'), $url, array('class' => 'btn btn-danger btn-sm'));
+        echo '<li class="list-group-item">'.$userInfo['complete_name_with_username'].'<div class="pull-right">'.$link.'</div></li>';
     }
     echo '</ul>';
 }
@@ -106,8 +106,8 @@ if (!empty($userToAddList)) {
     foreach ($userToAddList as $user) {
         $userName = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
         $url = api_get_path(WEB_CODE_PATH).'work/add_user.php?action=add&id='.$workId.'&user_id='.$user['user_id'];
-        $link = Display::url('<em class="fa fa-plus"></em> ' . get_lang('Add'), $url, array('class' => 'btn btn-primary btn-sm'));
-        echo '<li class="list-group-item">' . $userName . '<div class="pull-right"> ' . $link . '</div></li>';
+        $link = Display::url('<em class="fa fa-plus"></em> '.get_lang('Add'), $url, array('class' => 'btn btn-primary btn-sm'));
+        echo '<li class="list-group-item">'.$userName.'<div class="pull-right"> '.$link.'</div></li>';
     }
     echo '</ul>';
 } else {

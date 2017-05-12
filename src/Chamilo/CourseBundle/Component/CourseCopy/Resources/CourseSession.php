@@ -18,7 +18,7 @@ class CourseSession extends Resource
      * @param int $id
      * @param string $title
      */
-    public function __construct($id,$title)
+    public function __construct($id, $title)
     {
         parent::__construct($id, RESOURCE_SESSION_COURSE);
         $this->title = $title;

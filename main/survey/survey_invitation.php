@@ -2,11 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	@package chamilo.survey
- * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
- * 	@version $Id: survey_invite.php 10680 2007-01-11 21:26:23Z pcool $
+ * @package chamilo.survey
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
+ * @version $Id: survey_invite.php 10680 2007-01-11 21:26:23Z pcool $
  *
- * 	@todo the answered column
+ * @todo the answered column
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -16,12 +16,12 @@ if (!api_is_allowed_to_edit(false, true)) {
 }
 
 // Database table definitions
-$table_survey = Database:: get_course_table(TABLE_SURVEY);
-$table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option = Database:: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database:: get_main_table(TABLE_MAIN_USER);
-$table_survey_invitation = Database:: get_course_table(TABLE_SURVEY_INVITATION);
+$table_survey = Database::get_course_table(TABLE_SURVEY);
+$table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+$table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
+$table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
 $tool_name = get_lang('SurveyInvitations');
 
 // Getting the survey information
@@ -47,12 +47,12 @@ Display::display_header($tool_name);
 // Getting all the people who have filled this survey
 $answered_data = SurveyManager::get_people_who_filled_survey($survey_id);
 if ($survey_data['anonymous'] == 1) {
-	Display::display_normal_message(get_lang('AnonymousSurveyCannotKnowWhoAnswered').' '.count($answered_data).' '.get_lang('PeopleAnswered'));
+	echo Display::return_message(get_lang('AnonymousSurveyCannotKnowWhoAnswered').' '.count($answered_data).' '.get_lang('PeopleAnswered'));
 	$answered_data = array();
 }
 
 if (!isset($_GET['view']) || $_GET['view'] == 'invited') {
-	echo get_lang('ViewInvited'). ' | ';
+	echo get_lang('ViewInvited').' | ';
 } else {
 	echo '	<a href="'.api_get_self().'?survey_id='.$survey_id.'&amp;view=invited">'.get_lang('ViewInvited').'</a> |';
 }
@@ -86,32 +86,31 @@ $sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email
 
 $res = Database::query($sql);
 while ($row = Database::fetch_assoc($res)) {
-	if (!$_GET['view'] ||
-		$_GET['view'] == 'invited' ||
+    if (!$_GET['view'] || $_GET['view'] == 'invited' ||
         ($_GET['view'] == 'answered' && in_array($row['user'], $answered_data)) ||
         ($_GET['view'] == 'unanswered' && !in_array($row['user'], $answered_data))
     ) {
-		echo '<tr>';
-		if (is_numeric($row['user'])) {
+        echo '<tr>';
+        if (is_numeric($row['user'])) {
             $userInfo = api_get_user_info($row['user']);
-			echo '<td>';
+            echo '<td>';
             echo UserManager::getUserProfileLink($userInfo);
             echo '</td>';
-		} else {
+        } else {
             echo '<td>'.$row['user'].'</td>';
-		}
-		echo '	<td>'.$row['invitation_date'].'</td>';
-		echo '	<td>';
+        }
+        echo '	<td>'.$row['invitation_date'].'</td>';
+        echo '	<td>';
 
-		if (in_array($row['user'], $answered_data)) {
-			echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&amp;survey_id='.$survey_id.'&amp;user='.$row['user'].'">'.get_lang('ViewAnswers').'</a>';
-		} else {
-			echo '-';
-		}
+        if (in_array($row['user'], $answered_data)) {
+            echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&amp;survey_id='.$survey_id.'&amp;user='.$row['user'].'">'.get_lang('ViewAnswers').'</a>';
+        } else {
+            echo '-';
+        }
 
-		echo '	</td>';
-		echo '</tr>';
-	}
+        echo '	</td>';
+        echo '</tr>';
+    }
 }
 
 // Closing the table

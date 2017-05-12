@@ -41,9 +41,9 @@ $defaults['option2'] = api_get_plugin_setting('before_login', 'option2');
 $defaults['option1_url'] = api_get_plugin_setting('before_login', 'option1_url');
 $defaults['option2_url'] = api_get_plugin_setting('before_login', 'option2_url');
 
-$plugin_info['templates']   = array('template.tpl');
+$plugin_info['templates'] = array('template.tpl');
 if (file_exists(__DIR__.'/custom.template.tpl')) {
-    $plugin_info['templates']   = array( 'custom.template.tpl');
+    $plugin_info['templates'] = array('custom.template.tpl');
 }
 $form->setDefaults($defaults);
 

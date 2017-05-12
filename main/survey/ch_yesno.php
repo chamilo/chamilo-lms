@@ -43,7 +43,7 @@ class ch_yesno extends survey_question
                 $class = 'radio-inline';
             }
 
-            $name = 'question' . $questionData['question_id'];
+            $name = 'question'.$questionData['question_id'];
 
             $form->addRadio(
                 $name,

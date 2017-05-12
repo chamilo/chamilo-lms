@@ -7,4 +7,4 @@
 // directly to exercise.php. This redirection is enabled for 1.10.x (2015-04-21)
 // The final goal of this file is to be removed in a few years time, if
 // considered realistically not harmful
-require __DIR__ . '/exercise.php';
+require __DIR__.'/exercise.php';

@@ -628,8 +628,8 @@ class bbb
         );
         $isGlobal = $this->isGlobalConference();
         $newMeetingList = array();
-        $item = array();
         foreach ($meetingList as $meetingDB) {
+            $item = array();
             $courseId = $meetingDB['c_id'];
             $courseInfo = api_get_course_info_by_id($courseId);
             $courseCode = $courseInfo['code'];
@@ -722,8 +722,13 @@ class bbb
 
                 $actionLinks = $this->getActionLinks($meetingDB, $record, $isGlobal, $isAdminReport);
                 $item['show_links']  = $recordLink;
-                $item['action_links'] = implode(PHP_EOL, $actionLinks);
+            } else {
+                $actionLinks = $this->getActionLinks($meetingDB, [], $isGlobal, $isAdminReport);
+
+                $item['show_links'] = get_lang('NoRecording');
             }
+
+            $item['action_links'] = implode(PHP_EOL, $actionLinks);
 
             $item['created_at'] = api_convert_and_format_date($meetingDB['created_at']);
             // created_at
@@ -978,6 +983,11 @@ class bbb
         $result = $this->api->deleteRecordingsWithXmlResponseArray($recordingParams);
 
         if (!empty($result) && isset($result['deleted']) && $result['deleted'] === 'true') {
+            Database::delete(
+                'plugin_bbb_room',
+                array('meeting_id = ?' => array($id))
+            );
+
             Database::delete(
                 $this->table,
                 array('id = ?' => array($id))
@@ -1288,14 +1298,27 @@ class bbb
         $links = [];
 
         if (empty($recordInfo)) {
-            $links[] = $linkVisibility;
+            if (!$isAdminReport) {
+                $links[] = Display::url(
+                    Display::return_icon('delete.png', get_lang('Delete')),
+                    $this->deleteRecordUrl($meetingInfo)
+                );
+                $links[] = $linkVisibility;
 
-            return $links;
+                return $links;
+            } else {
+                $links[] = Display::url(
+                    Display::return_icon('course_home.png', get_lang('GoToCourse')),
+                    $this->getListingUrl()
+                );
+
+                return $links;
+            }
         }
 
         if (!$isGlobal) {
             $links[] = Display::url(
-                Display::return_icon('link.gif', get_lang('CopyToLinkTool')),
+                Display::return_icon('link.gif', get_lang('UrlMeetingToShare')),
                 $this->copyToRecordToLinkTool($meetingInfo)
             );
             $links[] = Display::url(

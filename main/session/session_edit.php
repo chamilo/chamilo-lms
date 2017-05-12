@@ -56,8 +56,8 @@ $id_coach = $sessionInfo['id_coach'];
 $tool_name = get_lang('EditSession');
 
 //$interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => "session_list.php","name" => get_lang('SessionList'));
-$interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id,"name" => get_lang('SessionOverview'));
+$interbreadcrumb[] = array('url' => "session_list.php", "name" => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id, "name" => get_lang('SessionOverview'));
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = 1;
@@ -71,7 +71,7 @@ $sql = "SELECT user_id,lastname,firstname,username
         WHERE status='1'".$order_clause;
 
 if (api_is_multiple_url_enabled()) {
-	$table_access_url_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+	$table_access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1) {
 		$sql = "SELECT DISTINCT u.user_id,lastname,firstname,username
@@ -87,7 +87,7 @@ $coaches = Database::store_result($result);
 $thisYear = date('Y');
 
 $coachesOption = array(
-    '' => '----- ' . get_lang('None') . ' -----'
+    '' => '----- '.get_lang('None').' -----'
 );
 
 foreach ($coaches as $coach) {
@@ -107,7 +107,7 @@ if ($categoriesList != false) {
     }
 }
 
-$formAction = api_get_self() . '?';
+$formAction = api_get_self().'?';
 $formAction .= http_build_query(array(
     'page' => Security::remove_XSS($_GET['page']),
     'id' => $id
@@ -158,7 +158,7 @@ if ($form->validate()) {
         $duration = null;
     }
     $description = $params['description'];
-    $showDescription = isset($params['show_description']) ? 1: 0;
+    $showDescription = isset($params['show_description']) ? 1 : 0;
     $sendSubscriptionNotification = isset($params['send_subscription_notification']);
     $isThisImageCropped = isset($params['picture_crop_result']);
 
@@ -195,7 +195,7 @@ if ($form->validate()) {
 
     if ($return) {
         Display::addFlash(Display::return_message(get_lang('Updated')));
-        header('Location: resume_session.php?id_session=' . $return);
+        header('Location: resume_session.php?id_session='.$return);
         exit();
     }
 }

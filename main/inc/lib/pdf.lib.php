@@ -33,10 +33,9 @@ class PDF
         /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=mPDF
          * mPDF ([ string $mode [, mixed $format [, float $default_font_size [, string $default_font [, float $margin_left , float $margin_right , float $margin_top , float $margin_bottom , float $margin_header , float $margin_footer [, string $orientation ]]]]]])
          */
-        if (!in_array($orientation, array('P','L'))) {
+        if (!in_array($orientation, array('P', 'L'))) {
             $orientation = 'P';
         }
-        //$this->pdf = $pdf = new mPDF('UTF-8', $pageFormat, '', '', 30, 20, 27, 25, 16, 13, $orientation);
         //left, right, top, bottom, margin_header, margin footer
 
         $params['left'] = isset($params['left']) ? $params['left'] : 15;
@@ -73,10 +72,8 @@ class PDF
             8,
             $orientation
         );
-        // No needed
-        //$this->pdf->SetFont('CourierSans-Light');
 
-         // Default value is 96 set in the mpdf library file config.php
+        // Default value is 96 set in the mpdf library file config.php
         $value = api_get_configuration_value('pdf_img_dpi');
         if (!empty($value)) {
             $this->pdf->img_dpi = (int) $value;
@@ -249,7 +246,7 @@ class PDF
             // then print the title in the PDF
             if (is_array($file) && isset($file['title'])) {
                 $html_title = $file['title'];
-                $file  = $file['path'];
+                $file = $file['path'];
             } else {
                 //we suppose we've only been sent a file path
                 $html_title = basename($file);
@@ -279,7 +276,7 @@ class PDF
             //it's not a chapter but the file exists, print its title
             if ($print_title) {
                 $this->pdf->WriteHTML(
-                    '<html><body><h3>' . $html_title . '</h3></body></html>'
+                    '<html><body><h3>'.$html_title.'</h3></body></html>'
                 );
             }
 
@@ -305,7 +302,7 @@ class PDF
                 $document_html = str_replace('href="./css/frames.css"', $absolute_css_path, $document_html);
 
                 if (!empty($course_data['path'])) {
-                    $document_html= str_replace('../', '', $document_html);
+                    $document_html = str_replace('../', '', $document_html);
                     $document_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/';
 
                     $doc = new DOMDocument();
@@ -382,7 +379,7 @@ class PDF
                 if (!empty($document_html)) {
                     $this->pdf->WriteHTML($document_html.$page_break);
                 }
-            } elseif (in_array($extension, array('jpg','jpeg','png','gif'))) {
+            } elseif (in_array($extension, array('jpg', 'jpeg', 'png', 'gif'))) {
                 //Images
                 $image = Display::img($file);
                 $this->pdf->WriteHTML('<html><body>'.$image.'</body></html>'.$page_break);
@@ -445,7 +442,7 @@ class PDF
 
         //absolute path for frames.css //TODO: necessary?
         $absolute_css_path = api_get_path(WEB_CSS_PATH).api_get_setting('stylesheets').'/frames.css';
-        $document_html = str_replace('href="./css/frames.css"','href="'.$absolute_css_path.'"', $document_html);
+        $document_html = str_replace('href="./css/frames.css"', 'href="'.$absolute_css_path.'"', $document_html);
 
         $document_html = str_replace('../../', '', $document_html);
         $document_html = str_replace('../', '', $document_html);
@@ -473,7 +470,7 @@ class PDF
                                 $old_src_fixed = str_replace(api_get_path(REL_COURSE_PATH).$course_data['path'].'/document/', '', $old_src);
                                 $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src_fixed);
                                 $new_path = $document_path.$old_src_fixed;
-                                $document_html= str_replace($old_src, $new_path, $document_html);
+                                $document_html = str_replace($old_src, $new_path, $document_html);
 
                             }
                         }
@@ -514,7 +511,7 @@ class PDF
         //$this->pdf->Output($output_file, $outputMode); // F to save the pdf in a file
 
         if ($outputMode == 'F') {
-            $output_file = api_get_path(SYS_ARCHIVE_PATH) . $output_file;
+            $output_file = api_get_path(SYS_ARCHIVE_PATH).$output_file;
         }
 
         if ($saveInFile) {
@@ -547,12 +544,12 @@ class PDF
         $web_path = false;
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
             $course_info = api_get_course_info($course_code);
-            $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path
+            $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png'; // course path
             if (file_exists($store_path)) {
                 $web_path = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';
             }
         } else {
-            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path
+            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png'; // course path
             if (file_exists($store_path))
                 $web_path = api_get_path(WEB_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';
         }
@@ -593,10 +590,10 @@ class PDF
     {
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
             $course_info = api_get_course_info($course_code);
-            $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'];   // course path
+            $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path']; // course path
             $web_path   = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/pdf_watermark.png';
         } else {
-            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images';   // course path
+            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images'; // course path
             $web_path   = api_get_path(WEB_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';
         }
         $course_image = $store_path.'/'.api_get_current_access_url_id().'_pdf_watermark.png';
@@ -820,7 +817,7 @@ class PDF
         $this->pdf->directionality = api_get_text_direction();
         $this->pdf->useOnlyCoreFonts = false;
         // Use different Odd/Even headers and footers and mirror margins
-        $this->pdf->mirrorMargins       = 1;
+        $this->pdf->mirrorMargins = 1;
 
         // Add decoration only if not stated otherwise
         if ($complete) {

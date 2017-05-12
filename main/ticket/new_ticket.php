@@ -8,7 +8,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 if (!api_is_platform_admin() && api_get_setting('ticket_allow_student_add') != 'true') {
-    header('location:' . api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
+    header('location:'.api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
     exit;
 }
 
@@ -91,7 +91,7 @@ function add_image_form() {
     });
 
     img_remove = $("<img/>", {
-        src: "' . Display::returnIconPath('delete.png') . '"
+        src: "' . Display::returnIconPath('delete.png').'"
     });
 
     new_filepath_id = $("#filepath_" + counter_image);
@@ -110,10 +110,10 @@ $projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : '';
 
 $types = TicketManager::get_all_tickets_categories($projectId, 'category.name ASC');
 $htmlHeadXtra[] = '<script language="javascript">
-    var projects = ' . js_array($types, 'projects', 'project_id') . '
-    var course_required = ' . js_array($types, 'course_required', 'course_required') . '
-    var other_area = ' . js_array($types, 'other_area', 'other_area') . '
-    var email = ' . js_array($types, 'email', 'email') .
+    var projects = ' . js_array($types, 'projects', 'project_id').'
+    var course_required = ' . js_array($types, 'course_required', 'course_required').'
+    var other_area = ' . js_array($types, 'other_area', 'other_area').'
+    var email = ' . js_array($types, 'email', 'email').
 '</script>';
 
 /**
@@ -122,7 +122,7 @@ $htmlHeadXtra[] = '<script language="javascript">
  */
 function js_str($s)
 {
-    return '"' . addcslashes($s, "\0..\37\"\\") . '"';
+    return '"'.addcslashes($s, "\0..\37\"\\").'"';
 }
 
 /**
@@ -135,7 +135,7 @@ function js_array($array, $name, $key)
 {
     $return = "new Array(); ";
     foreach ($array as $value) {
-        $return .= $name . "['" . $value['category_id'] . "'] ='" . $value[$key] . "'; ";
+        $return .= $name."['".$value['category_id']."'] ='".$value[$key]."'; ";
     }
 
     return $return;
@@ -148,7 +148,7 @@ function save_ticket()
 {
     $content = $_POST['content'];
     if ($_POST['phone'] != '') {
-        $content .= '<p style="color:red">&nbsp;' . get_lang('Phone') . ': ' . $_POST['phone']. '</p>';
+        $content .= '<p style="color:red">&nbsp;'.get_lang('Phone').': '.$_POST['phone'].'</p>';
     }
     $course_id = isset($_POST['course_id']) ? $_POST['course_id'] : '';
     $sessionId = isset($_POST['session_id']) ? $_POST['session_id'] : '';
@@ -179,7 +179,7 @@ function save_ticket()
         $status,
         $user_id
     )) {
-        header('Location:' . api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
+        header('Location:'.api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
         exit;
     } else {
         Display::addFlash(Display::return_message(get_lang('ThereWasAnErrorRegisteringTheTicket')));
@@ -363,7 +363,7 @@ $form->addElement(
 $form->addElement(
     'text',
     'phone',
-    get_lang('Phone') . ' (' . get_lang('Optional') . ')',
+    get_lang('Phone').' ('.get_lang('Optional').')',
     array(
         'id' => 'phone'
     )
@@ -401,7 +401,7 @@ $form->addLabel('', '<span id="filepaths"><div id="filepath_1"></div></span>');
 $form->addLabel(
     '',
     '<span id="link-more-attach">
-         <span class="btn btn-success" onclick="return add_image_form()">' . get_lang('AddOneMoreFile') . '</span>
+         <span class="btn btn-success" onclick="return add_image_form()">' . get_lang('AddOneMoreFile').'</span>
          </span>
          ('.sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))).')
     '
@@ -434,7 +434,7 @@ Display::display_header(get_lang('ComposeMessage'));
 echo '<div class="actions">';
 echo Display::url(
     Display::return_icon('back.png', get_lang('Tickets'), [], ICON_SIZE_MEDIUM),
-    api_get_path(WEB_CODE_PATH) . 'ticket/tickets.php'
+    api_get_path(WEB_CODE_PATH).'ticket/tickets.php'
 );
 echo '</div>';
 

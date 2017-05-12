@@ -58,9 +58,9 @@ abstract class OpenofficeDocument extends learnpath
         ///learning_path/ppt_dirname directory
         $this->created_dir = $result['dir'];
         if (substr($this->created_dir, -1, 1) == '/') {
-            $this->file_path = $this->created_dir . api_replace_dangerous_char($file['name']);
+            $this->file_path = $this->created_dir.api_replace_dangerous_char($file['name']);
         } else {
-            $this->file_path = $this->created_dir . '/' . api_replace_dangerous_char($file['name']);
+            $this->file_path = $this->created_dir.'/'.api_replace_dangerous_char($file['name']);
         }
 
         //var_dump($this->file_name, $this->file_path, $this->base_work_dir, $this->created_dir);
@@ -104,18 +104,18 @@ abstract class OpenofficeDocument extends learnpath
             $perm = api_get_setting('permissions_for_new_files');
 
             if (IS_WINDOWS_OS) { // IS_WINDOWS_OS has been defined in main_api.lib.php
-                $converter_path = str_replace('/', '\\', api_get_path(SYS_PATH) . 'main/inc/lib/ppt2png');
-                $class_path = $converter_path . ';' . $converter_path . '/jodconverter-2.2.2.jar;' . $converter_path . '/jodconverter-cli-2.2.2.jar';
+                $converter_path = str_replace('/', '\\', api_get_path(SYS_PATH).'main/inc/lib/ppt2png');
+                $class_path = $converter_path.';'.$converter_path.'/jodconverter-2.2.2.jar;'.$converter_path.'/jodconverter-cli-2.2.2.jar';
                 //$cmd = 'java -cp "'.$class_path.'" DokeosConverter';
-                $cmd = 'java -Dfile.encoding=UTF-8 -cp "' . $class_path . '" DokeosConverter';
+                $cmd = 'java -Dfile.encoding=UTF-8 -cp "'.$class_path.'" DokeosConverter';
             } else {
-                $converter_path = api_get_path(SYS_PATH) . 'main/inc/lib/ppt2png';
+                $converter_path = api_get_path(SYS_PATH).'main/inc/lib/ppt2png';
                 //$class_path = '-cp .:jodconverter-2.2.1.jar:jodconverter-cli-2.2.1.jar';
                 $class_path = ' -Dfile.encoding=UTF-8 -cp .:jodconverter-2.2.2.jar:jodconverter-cli-2.2.2.jar';
-                $cmd = 'cd ' . $converter_path . ' && java ' . $class_path . ' DokeosConverter';
+                $cmd = 'cd '.$converter_path.' && java '.$class_path.' DokeosConverter';
             }
 
-            $cmd .= ' -p ' . api_get_setting('service_ppt2lp', 'port');
+            $cmd .= ' -p '.api_get_setting('service_ppt2lp', 'port');
             // Call to the function implemented by child.
             $cmd .= $this->add_command_parameters();
             // To allow openoffice to manipulate docs.
@@ -124,7 +124,7 @@ abstract class OpenofficeDocument extends learnpath
             @chmod($this->base_work_dir.$this->file_path, 0777);
 
             $locale = $this->original_locale; // TODO: Improve it because we're not sure this locale is present everywhere.
-            putenv('LC_ALL=' . $locale);
+            putenv('LC_ALL='.$locale);
 
             $files = array();
             $return = 0;
@@ -132,14 +132,17 @@ abstract class OpenofficeDocument extends learnpath
 
             if ($return != 0) { // If the java application returns an error code.
                 switch ($return) {
-                    // Can't connect to openoffice.
-                    case 1: $this->error = get_lang('CannotConnectToOpenOffice');
+                    case 1:
+                        // Can't connect to openoffice.
+                        $this->error = get_lang('CannotConnectToOpenOffice');
                         break;
-                    // Conversion failed in openoffice.
-                    case 2: $this->error = get_lang('OogieConversionFailed');
+                    case 2:
+                        // Conversion failed in openoffice.
+                        $this->error = get_lang('OogieConversionFailed');
                         break;
-                    // Conversion can't be launch because command failed.
-                    case 255: $this->error = get_lang('OogieUnknownError');
+                    case 255:
+                        // Conversion can't be launch because command failed.
+                        $this->error = get_lang('OogieUnknownError');
                         break;
                 }
                 DocumentManager::delete_document($_course, $this->created_dir, $this->base_work_dir);
@@ -150,12 +153,12 @@ abstract class OpenofficeDocument extends learnpath
             $result = $this->_get_remote_ppt2lp_files($file, $size);
             $result = unserialize($result);
             // Save remote images to server
-            chmod($this->base_work_dir . $this->created_dir, api_get_permissions_for_new_directories());
+            chmod($this->base_work_dir.$this->created_dir, api_get_permissions_for_new_directories());
             if (!empty($result['images'])) {
                 foreach ($result['images'] as $image => $img_data) {
                     $image_path = $this->base_work_dir.$this->created_dir;
-                    @file_put_contents($image_path . '/' . $image, base64_decode($img_data));
-                    @chmod($image_path . '/' . $image, 0777);
+                    @file_put_contents($image_path.'/'.$image, base64_decode($img_data));
+                    @chmod($image_path.'/'.$image, 0777);
                 }
             }
 
@@ -199,7 +202,7 @@ abstract class OpenofficeDocument extends learnpath
         $uri = '';
         $result = preg_match('/^([a-zA-Z0-9]*):\/\/([^\/]*)\//', $ppt2lp_host, $matches);
         if ($result) {
-            $uri = $matches[1] . '://' . $matches[2] . '/';
+            $uri = $matches[1].'://'.$matches[2].'/';
         } else {
             $uri = $ppt2lp_host;
         }
@@ -218,7 +221,7 @@ abstract class OpenofficeDocument extends learnpath
             'compression' => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP | 9,
         );
         if (substr($ppt2lp_host, 0, 5) === 'https') {
-            $options['ssl_method'] =  SOAP_SSL_METHOD_TLS;
+            $options['ssl_method'] = SOAP_SSL_METHOD_TLS;
             // If using SSL, please note that *not* supporting the SSLv2
             // (broken in terms of security), the server tends to generate
             // the following issue:
@@ -243,7 +246,7 @@ abstract class OpenofficeDocument extends learnpath
             //error_log('['.time().'] Calling wsConvertPpt webservice on ' . $ppt2lp_host);
             $result = $client->__call('wsConvertPpt', array('pptData' => $params));
         } catch (Exception $e) {
-            error_log('['.time().'] Chamilo SOAP call error: ' . $e->getMessage());
+            error_log('['.time().'] Chamilo SOAP call error: '.$e->getMessage());
         }
         // Make sure we destroy the SOAP client as it may generate SSL connection
         // binding issue (if using SSL)
@@ -276,49 +279,52 @@ abstract class OpenofficeDocument extends learnpath
         $ppt2lpHost = api_get_setting('service_ppt2lp', 'host');
         $permissionFile = api_get_permissions_for_new_files();
         $permissionFolder = api_get_permissions_for_new_directories();
-        if (file_exists($this->base_work_dir . '/' . $this->created_dir)) {
+        if (file_exists($this->base_work_dir.'/'.$this->created_dir)) {
 
             return $ids;
         }
 
         if ($ppt2lpHost == 'localhost') {
             if (IS_WINDOWS_OS) { // IS_WINDOWS_OS has been defined in main_api.lib.php
-                $converterPath = str_replace('/', '\\', api_get_path(SYS_PATH) . 'main/inc/lib/ppt2png');
-                $classPath = $converterPath . ';' . $converterPath . '/jodconverter-2.2.2.jar;' . $converterPath . '/jodconverter-cli-2.2.2.jar';
-                $cmd = 'java -Dfile.encoding=UTF-8 -jar "' . $classPath . '/jodconverter-2.2.2.jar"';
+                $converterPath = str_replace('/', '\\', api_get_path(SYS_PATH).'main/inc/lib/ppt2png');
+                $classPath = $converterPath.';'.$converterPath.'/jodconverter-2.2.2.jar;'.$converterPath.'/jodconverter-cli-2.2.2.jar';
+                $cmd = 'java -Dfile.encoding=UTF-8 -jar "'.$classPath.'/jodconverter-2.2.2.jar"';
             } else {
-                $converterPath = api_get_path(SYS_PATH) . 'main/inc/lib/ppt2png';
+                $converterPath = api_get_path(SYS_PATH).'main/inc/lib/ppt2png';
                 $classPath = ' -Dfile.encoding=UTF-8 -jar jodconverter-cli-2.2.2.jar';
-                $cmd = 'cd ' . $converterPath . ' && java ' . $classPath . ' ';
+                $cmd = 'cd '.$converterPath.' && java '.$classPath.' ';
             }
 
-            $cmd .= ' -p ' . api_get_setting('service_ppt2lp', 'port');
+            $cmd .= ' -p '.api_get_setting('service_ppt2lp', 'port');
             // Call to the function implemented by child.
-            $cmd .= ' "' . $this->base_work_dir . '/' . $this->file_path . '"  "' . $this->base_work_dir . '/' . $this->created_dir . '"';
+            $cmd .= ' "'.$this->base_work_dir.'/'.$this->file_path.'"  "'.$this->base_work_dir.'/'.$this->created_dir.'"';
             // To allow openoffice to manipulate docs.
             @chmod($this->base_work_dir, $permissionFolder);
-            @chmod($this->base_work_dir . '/' . $this->file_path, $permissionFile);
+            @chmod($this->base_work_dir.'/'.$this->file_path, $permissionFile);
 
             $locale = $this->original_locale; // TODO: Improve it because we're not sure this locale is present everywhere.
-            putenv('LC_ALL=' . $locale);
+            putenv('LC_ALL='.$locale);
 
             $files = array();
             $return = 0;
             $shell = exec($cmd, $files, $return);
             // TODO: Chown is not working, root keep user privileges, should be www-data
-            @chown($this->base_work_dir . '/' . $this->created_dir, 'www-data');
-            @chmod($this->base_work_dir . '/' . $this->created_dir, $permissionFile);
+            @chown($this->base_work_dir.'/'.$this->created_dir, 'www-data');
+            @chmod($this->base_work_dir.'/'.$this->created_dir, $permissionFile);
 
             if ($return != 0) { // If the java application returns an error code.
                 switch ($return) {
-                    // Can't connect to openoffice.
-                    case 1: $this->error = get_lang('CannotConnectToOpenOffice');
+                    case 1:
+                        // Can't connect to openoffice.
+                        $this->error = get_lang('CannotConnectToOpenOffice');
                         break;
-                    // Conversion failed in openoffice.
-                    case 2: $this->error = get_lang('OogieConversionFailed');
+                    case 2:
+                        // Conversion failed in openoffice.
+                        $this->error = get_lang('OogieConversionFailed');
                         break;
-                    // Conversion can't be launch because command failed.
-                    case 255: $this->error = get_lang('OogieUnknownError');
+                    case 255:
+                        // Conversion can't be launch because command failed.
+                        $this->error = get_lang('OogieUnknownError');
                         break;
                 }
                 DocumentManager::delete_document($_course, $this->created_dir, $this->base_work_dir);
@@ -346,14 +352,14 @@ abstract class OpenofficeDocument extends learnpath
             */
         }
 
-        if (file_exists($this->base_work_dir . '/' . $this->created_dir)) {
+        if (file_exists($this->base_work_dir.'/'.$this->created_dir)) {
 
             // Register Files to Document tool
             $ids[] = add_document(
                 $_course,
-                '/' . $this->created_dir,
+                '/'.$this->created_dir,
                 'file',
-                filesize($this->base_work_dir . '/' . $this->created_dir),
+                filesize($this->base_work_dir.'/'.$this->created_dir),
                 $convertedTitle,
                 sprintf(
                     get_lang('FileConvertedFromXToY'),

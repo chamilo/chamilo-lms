@@ -8,40 +8,52 @@
     position: absolute;
 }
 
-.input-group.hotspot-0 .fa-square {
+.input-group.hotspot-0 .fa-square,
+.hotspot-color-0.fa.fa-square {
    color: rgb(66, 113, 181);
 }
-.input-group.hotspot-1 .fa-square {
+.input-group.hotspot-1 .fa-square,
+.hotspot-color-1.fa.fa-square {
    color: rgb(254, 142, 22);
 }
-.input-group.hotspot-2 .fa-square {
+.input-group.hotspot-2 .fa-square,
+.hotspot-color-2.fa.fa-square {
    color: rgb(69, 199, 240);
 }
-.input-group.hotspot-3 .fa-square {
+.input-group.hotspot-3 .fa-square,
+.hotspot-color-3.fa.fa-square {
    color: rgb(188, 214, 49);
 }
-.input-group.hotspot-4 .fa-square {
+.input-group.hotspot-4 .fa-square,
+.hotspot-color-4.fa.fa-square {
    color: rgb(214, 49, 115);
 }
-.input-group.hotspot-5 .fa-square {
+.input-group.hotspot-5 .fa-square,
+.hotspot-color-5.fa.fa-square {
    color: rgb(215, 215, 215);
 }
-.input-group.hotspot-6 .fa-square {
+.input-group.hotspot-6 .fa-square,
+.hotspot-color-6.fa.fa-square {
    color: rgb(144, 175, 221);
 }
-.input-group.hotspot-7 .fa-square {
+.input-group.hotspot-7 .fa-square,
+.hotspot-color-7.fa.fa-square {
    color: rgb(175, 134, 64);
 }
-.input-group.hotspot-8 .fa-square {
+.input-group.hotspot-8 .fa-square,
+.hotspot-color-8.fa.fa-square {
    color: rgb(79, 146, 66);
 }
-.input-group.hotspot-9 .fa-square {
+.input-group.hotspot-9 .fa-square,
+.hotspot-color-9.fa.fa-square {
    color: rgb(244, 235, 36);
 }
-.input-group.hotspot-10 .fa-square {
+.input-group.hotspot-10 .fa-square,
+.hotspot-color-10.fa.fa-square {
    color: rgb(237, 32, 36);
 }
-.input-group.hotspot-11 .fa-square {
+.input-group.hotspot-11 .fa-square,
+.hotspot-color-11.fa.fa-square {
    color: rgb(59, 59, 59);
 }
 

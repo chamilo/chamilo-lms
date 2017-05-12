@@ -28,7 +28,7 @@ if (empty($sessionId) || empty($userId)) {
 }
 
 
-$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
 $interbreadcrumb[] = array(
     'url' => "resume_session.php?id_session=".$sessionId,
     "name" => get_lang('SessionOverview')
@@ -36,7 +36,6 @@ $interbreadcrumb[] = array(
 
 $form = new FormValidator('edit', 'post', api_get_self().'?session_id='.$sessionId.'&user_id='.$userId);
 $form->addHeader(get_lang('EditUserSessionDuration'));
-$data = SessionManager::getUserSession($userId, $sessionId);
 $userInfo = api_get_user_info($userId);
 
 // Show current end date for the session for this user, if any
@@ -50,17 +49,20 @@ if (count($userAccess) == 0) {
     $msg = sprintf(get_lang('UserNeverAccessedSessionDefaultDurationIsX'), $sessionInfo['duration']);
 } else {
     // The user already accessed the session. Show a clear detail of the days count.
-    $duration = $sessionInfo['duration'];
-    if (!empty($data['duration'])) {
-        $duration = $duration + $data['duration'];
-    }
-    $days = SessionManager::getDayLeftInSession($sessionId, $userId, $duration);
+    $days = SessionManager::getDayLeftInSession($sessionInfo, $userId);
     $firstAccess = api_strtotime($userAccess['login_course_date'], 'UTC');
     $firstAccessString = api_convert_and_format_date($userAccess['login_course_date'], DATE_FORMAT_SHORT, 'UTC');
     if ($days > 0) {
+        $userSubscription = SessionManager::getUserSession($userId, $sessionId);
+        $duration = $sessionInfo['duration'];
+
+        if (!empty($userSubscription['duration'])) {
+            $duration = $duration + $userSubscription['duration'];
+        }
+
         $msg = sprintf(get_lang('FirstAccessWasXSessionDurationYEndDateInZDays'), $firstAccessString, $duration, $days);
     } else {
-        $endDateInSeconds = $firstAccess + $duration * 24*60*60;
+        $endDateInSeconds = $firstAccess + $duration * 24 * 60 * 60;
         $last = api_convert_and_format_date($endDateInSeconds, DATE_FORMAT_SHORT);
         $msg = sprintf(get_lang('FirstAccessWasXSessionDurationYEndDateWasZ'), $firstAccessString, $duration, $last);
     }
@@ -72,10 +74,7 @@ $form->addElement('html', $msg);
 $form->addElement('text', 'duration', array(get_lang('ExtraDurationForUser'), null, get_lang('Days')));
 $form->addButtonSave(get_lang('Save'));
 
-if (empty($data['duration'])) {
-    $data['duration'] = 0;
-}
-$form->setDefaults($data);
+$form->setDefaults(['duration' => 0]);
 $message = null;
 if ($form->validate()) {
     $duration = $form->getSubmitValue('duration');

@@ -100,7 +100,7 @@ class DigitalOceanVM extends AbstractVM implements VirtualMachineInterface
                         break;
                 }
             } else {
-                throw new \Exception(" Id " . $this->vmId . " doesn't exists.");
+                throw new \Exception(" Id ".$this->vmId." doesn't exists.");
             }
         } catch (Exception $e) {
             die($e->getMessage());
@@ -118,22 +118,22 @@ class DigitalOceanVM extends AbstractVM implements VirtualMachineInterface
 
         $powerOff = $droplets->powerOff($this->vmId);
 
-        $this->addMessage('Power off droplet #' . $this->vmId);
+        $this->addMessage('Power off droplet #'.$this->vmId);
 
         $this->waitForEvent($powerOff->event_id);
 
-        $this->addMessage('Current status: ' . $dropletInfo->droplet->status);
+        $this->addMessage('Current status: '.$dropletInfo->droplet->status);
 
         $resizeDroplet = $droplets->resize(
             $this->vmId,
             array('size_id' => intval($sizeId))
         );
-        $this->addMessage('Resize droplet to size id: ' . $sizeId);
+        $this->addMessage('Resize droplet to size id: '.$sizeId);
         $this->waitForEvent($resizeDroplet->event_id);
 
         $powerOn = $droplets->powerOn($this->vmId);
         $this->waitForEvent($powerOn->event_id);
-        $this->addMessage('Power on droplet #' . $this->vmId);
+        $this->addMessage('Power on droplet #'.$this->vmId);
 
     }
 

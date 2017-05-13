@@ -16,8 +16,8 @@ if (api_get_setting('allow_social_tool') !== 'true') {
 
 $this_section = SECTION_SOCIAL;
 
-$interbreadcrumb[] = array ('url' =>'profile.php','name' => get_lang('SocialNetwork'));
-$interbreadcrumb[] = array ('url' =>'#','name' => get_lang('Invitations'));
+$interbreadcrumb[] = array('url' =>'profile.php', 'name' => get_lang('SocialNetwork'));
+$interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('Invitations'));
 
 $userGroupModel = new UserGroup();
 
@@ -64,7 +64,7 @@ if (is_array($_GET) && count($_GET) > 0) {
                     Display::return_message(get_lang('UserIsNotSubscribedToThisGroup'), 'warning')
                 );
 
-                header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/invitations.php');
+                header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
                 exit;
                 break;
             case 'deny':
@@ -74,7 +74,7 @@ if (is_array($_GET) && count($_GET) > 0) {
                     Display::return_message(get_lang('GroupInvitationWasDeny'))
                 );
 
-                header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/invitations.php');
+                header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
                 exit;
         }
     }
@@ -130,24 +130,24 @@ if ($number_loop != 0) {
         $invitationHtml .= '<div class="btn-group btn-group-sm" role="group">';
         $invitationHtml .= Display::toolbarButton(
             null,
-            api_get_path(WEB_AJAX_PATH) . 'social.ajax.php?' . http_build_query([
+            api_get_path(WEB_AJAX_PATH).'social.ajax.php?'.http_build_query([
                 'a' => 'add_friend',
                 'friend_id' => $sender_user_id,
                 'is_my_friend' => 'friend'
             ]),
             'check',
             'default',
-            ['id' => 'btn-accept-' . $sender_user_id]
+            ['id' => 'btn-accept-'.$sender_user_id]
         );
         $invitationHtml .= Display::toolbarButton(
             null,
-            api_get_path(WEB_AJAX_PATH) . 'social.ajax.php?' . http_build_query([
+            api_get_path(WEB_AJAX_PATH).'social.ajax.php?'.http_build_query([
                 'a' => 'deny_friend',
                 'denied_friend_id' => $sender_user_id,
             ]),
             'times',
             'default',
-            ['id' => 'btn-deny-' . $sender_user_id]
+            ['id' => 'btn-deny-'.$sender_user_id]
         );
         $invitationHtml .= '</div>';
         $invitationHtml .= '</div>';
@@ -184,7 +184,7 @@ if (count($list_get_invitation_sent) > 0) {
         $invitationSentHtml .= '<div class="col-md-9">';
         $invitationSentHtml .= '<h4 class="title-profile"><a class="profile_link" href="profile.php?u='.$sender_user_id.'">'.$user_info['complete_name'].'</a></h4>';
         $invitationSentHtml .= '<div class="content-invitation">'.$title.' : '.$content.'</div>';
-        $invitationSentHtml .= '<div class="date-invitation">'. get_lang('DateSend').' : '.$date.'</div>';
+        $invitationSentHtml .= '<div class="date-invitation">'.get_lang('DateSend').' : '.$date.'</div>';
         $invitationSentHtml .= '</div>';
         $invitationSentHtml .= '</div></div>';
     }
@@ -203,9 +203,9 @@ if (count($pending_invitations) > 0) {
         );
         $img = '<img class="img-responsive" src="'.$picture['file'].'" />';
         $invitation['picture_uri'] = '<a href="group_view.php?id='.$invitation['id'].'">'.$img.'</a>';
-        $invitation['name'] = '<a href="group_view.php?id='.$invitation['id'].'">'.cut($invitation['name'],120,true).'</a>';
+        $invitation['name'] = '<a href="group_view.php?id='.$invitation['id'].'">'.cut($invitation['name'], 120, true).'</a>';
         $invitation['description'] = cut($invitation['description'], 220, true);
-        $new_invitation[]=$invitation;
+        $new_invitation[] = $invitation;
         $waitingInvitation .= '<div class="panel-invitations"><div class="row">';
         $waitingInvitation .= '<div class="col-md-3">'.$invitation['picture_uri'].'</div>';
         $waitingInvitation .= '<div class="col-md-9">';
@@ -214,19 +214,19 @@ if (count($pending_invitations) > 0) {
         $waitingInvitation .= '<div class="btn-group" role="group">';
         $waitingInvitation .= Display::toolbarButton(
             get_lang('AcceptInvitation'),
-            api_get_path(WEB_CODE_PATH) . 'social/invitations.php?' . http_build_query(['accept' => $invitation['id']]),
+            api_get_path(WEB_CODE_PATH).'social/invitations.php?'.http_build_query(['accept' => $invitation['id']]),
             'check',
             'success',
-            ['id' => 'accept-invitation-' . $invitation['id']]
+            ['id' => 'accept-invitation-'.$invitation['id']]
         );
         $waitingInvitation .= Display::toolbarButton(
             get_lang('DenyInvitation'),
-            api_get_path(WEB_CODE_PATH) . 'social/invitations.php?' . http_build_query(['deny' => $invitation['id']]),
+            api_get_path(WEB_CODE_PATH).'social/invitations.php?'.http_build_query(['deny' => $invitation['id']]),
             'times',
             'danger',
-            ['id' => 'deny-invitation-' . $invitation['id']]
+            ['id' => 'deny-invitation-'.$invitation['id']]
         );
-        $waitingInvitation .='</div>';
+        $waitingInvitation .= '</div>';
         $waitingInvitation .= '</div></div>';
     }
     $socialInvitationsBlock .= Display::panel($waitingInvitation, get_lang('GroupsWaitingApproval'));

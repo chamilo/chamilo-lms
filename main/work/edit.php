@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_STUDENTPUBLICATION;
+$current_course_tool = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
 
@@ -48,7 +48,7 @@ $check = Security::check_token('post');
 $token = Security::get_token();
 
 $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
-$has_ended   = false;
+$has_ended = false;
 $is_author = false;
 $work_item = get_work_data_by_id($item_id);
 
@@ -217,7 +217,7 @@ $form->addButtonUpdate($text);
 
 $form->setDefaults($defaults);
 $_course = api_get_course_info();
-$currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$_course['path'] . '/';
+$currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$_course['path'].'/';
 
 $succeed = false;
 if ($form->validate()) {
@@ -238,7 +238,7 @@ if ($form->validate()) {
             $description = isset($_POST['description']) ? $_POST['description'] : $work_data['description'];
 
             $add_to_update = null;
-            if ($is_allowed_to_edit && ($_POST['qualification'] !='' )) {
+            if ($is_allowed_to_edit && ($_POST['qualification'] != '')) {
                 /*$add_to_update = ', qualificator_id ='."'".api_get_user_id()."', ";
                 $add_to_update .= ' qualification = '."'".api_float_val($_POST['qualification'])."',";
                 $add_to_update .= ' date_of_qualification = '."'".api_get_utc_datetime()."'";*/
@@ -264,7 +264,7 @@ if ($form->validate()) {
                     'error'
                 ));
             } else {
-                $sql = "UPDATE  " . $work_table . "
+                $sql = "UPDATE  ".$work_table."
                         SET	title = '".Database::escape_string($title)."',
                             description = '".Database::escape_string($description)."'
                             ".$add_to_update."

@@ -56,7 +56,7 @@ class ExerciseResult
         $course_id = api_get_course_int_id();
         $user_id = intval($user_id);
         $sessionId = api_get_session_id();
-        $session_id_and = ' AND te.session_id = ' . $sessionId . ' ';
+        $session_id_and = ' AND te.session_id = '.$sessionId.' ';
         $exercise_id = intval($exercise_id);
 
         if (!empty($exercise_id)) {
@@ -92,7 +92,7 @@ class ExerciseResult
                     te.c_id = ce.c_id $user_id_and  $session_id_and AND
                     ce.active <>-1";
         } else {
-            $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
+            $user_id_and = ' AND te.exe_user_id = '.api_get_user_id().' ';
             // get only this user's results
             $sql = "SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").",
                         official_code,
@@ -349,7 +349,7 @@ class ExerciseResult
         $data .= get_lang('Title').';';
         $data .= get_lang('StartDate').';';
         $data .= get_lang('EndDate').';';
-        $data .= get_lang('Duration'). ' ('.get_lang('MinMinutes').') ;';
+        $data .= get_lang('Duration').' ('.get_lang('MinMinutes').') ;';
         $data .= get_lang('Score').';';
         $data .= get_lang('Total').';';
         $data .= get_lang('Status').';';
@@ -360,11 +360,11 @@ class ExerciseResult
         //results
         foreach ($this->results as $row) {
             if (api_is_western_name_order()) {
-                $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
-                $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
             } else {
-                $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
-                $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
             }
 
             // Official code
@@ -373,8 +373,8 @@ class ExerciseResult
             }
 
             // Email
-            $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';
-            $data .= str_replace("\r\n",'  ',implode(", ", GroupManager::get_user_group_name($row['user_id']))).';';
+            $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';
+            $data .= str_replace("\r\n", '  ', implode(", ", GroupManager::get_user_group_name($row['user_id']))).';';
 
             if ($export_user_fields) {
                 //show user fields data, if any, for this user
@@ -386,14 +386,14 @@ class ExerciseResult
                     true
                 );
                 if (!empty($user_fields_values)) {
-                    foreach($user_fields_values as $value) {
-                        $data .= '"'.str_replace('"','""',api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset)).'";';
+                    foreach ($user_fields_values as $value) {
+                        $data .= '"'.str_replace('"', '""', api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset)).'";';
                     }
                 }
             }
             $duration = !empty($row['duration']) ? round($row['duration'] / 60) : 0;
 
-            $data .= str_replace("\r\n",'  ', api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset)).';';
+            $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset)).';';
             $data .= str_replace("\r\n", '  ', $row['start_date']).';';
             $data .= str_replace("\r\n", '  ', $row['end_date']).';';
             $data .= str_replace("\r\n", '  ', $duration).';';

@@ -353,10 +353,10 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 } elseif (isset($_POST['copy_option']) && $_POST['copy_option'] == 'select_items') {
     // Else, if a CourseSelectForm is requested, show it
     if (api_get_setting('show_glossary_in_documents') != 'none') {
-        Display::addFlash(Display::return_message(
+        echo Display::return_message(
             get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'),
             'normal'
-        ));
+        );
     }
 
     $arrCourseDestination = array();
@@ -370,10 +370,10 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
     }
 
     if (!empty($destinationSession)) {
-        Display::addFlash(Display::return_message(
+        echo Display::return_message(
             get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'),
             'normal'
-        ));
+        );
 
         $cb = new CourseBuilder('', $courseInfo);
         $course = $cb->build($sessionId, $courseCode);

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 /**
  * Upload quiz: This script shows the upload quiz feature
@@ -58,7 +58,6 @@ function lp_upload_quiz_actions()
         ).'</a>';
     return $return;
 }
-
 
 function lp_upload_quiz_main()
 {
@@ -127,7 +126,6 @@ function lp_upload_quiz_main()
  */
 function lp_upload_quiz_action_handling()
 {
-    global $debug;
     $_course = api_get_course_info();
     $courseId = $_course['real_id'];
 
@@ -265,7 +263,6 @@ function lp_upload_quiz_action_handling()
 
         // Quiz object
         $exercise = new Exercise();
-
         $quiz_id = $exercise->createExercise(
             $quizTitle,
             $expired_time,
@@ -370,7 +367,7 @@ function lp_upload_quiz_action_handling()
                         if (is_array($myAnswerList) && !empty($myAnswerList) && !empty($question_id)) {
                             $id = 1;
                             $objAnswer = new Answer($question_id, $courseId);
-                            $globalScore = $scoreList[$i];
+                            $globalScore = isset($scoreList[$i]) ? $scoreList[$i] : null;
 
                             // Calculate the number of correct answers to divide the
                             // score between them when importing from CSV
@@ -387,11 +384,11 @@ function lp_upload_quiz_action_handling()
                                 $score = 0;
                                 if (strtolower($answer_data['extra']) == 'x') {
                                     $correct = 1;
-                                    $score = $scoreList[$i];
+                                    $score = isset($scoreList[$i]) ? $scoreList[$i] : null;
                                     $comment = isset($feedbackTrueList[$i]) ? $feedbackTrueList[$i] : '';
                                 } else {
                                     $comment = isset($feedbackFalseList[$i]) ? $feedbackFalseList[$i] : '';
-                                    $floatVal = (float)$answer_data['extra'];
+                                    $floatVal = (float) $answer_data['extra'];
                                     if (is_numeric($floatVal)) {
                                         $score = $answer_data['extra'];
                                     }
@@ -408,15 +405,18 @@ function lp_upload_quiz_action_handling()
                                 // Fixing scores:
                                 switch ($detectQuestionType) {
                                     case GLOBAL_MULTIPLE_ANSWER:
-                                        if (isset($noNegativeScoreList[$i][3])) {
-                                            if (!(strtolower($noNegativeScoreList[$i]) == 'x') &&
-                                                !$correct
-                                            ) {
-                                                $score = $scoreList[$i] * -1;
+                                        if (!$correct) {
+                                            if (isset($noNegativeScoreList[$i])) {
+                                                if (strtolower($noNegativeScoreList[$i]) == 'x') {
+                                                    $score = 0;
+                                                } else {
+                                                    $score = $scoreList[$i] * -1;
+                                                }
                                             }
                                         } else {
-                                            $score = $scoreList[$i] * -1;
+                                            $score = $scoreList[$i];
                                         }
+
                                         $score /= $numberRightAnswers;
                                         break;
                                     case UNIQUE_ANSWER:
@@ -463,7 +463,7 @@ function lp_upload_quiz_action_handling()
                         }
                         break;
                     case FREE_ANSWER:
-                        $globalScore = $scoreList[$i];
+                        $globalScore = isset($scoreList[$i]) ? $scoreList[$i] : null;
                         $questionObj = Question::read($question_id, $courseId);
                         if ($questionObj) {
                             $questionObj->updateWeighting($globalScore);
@@ -471,17 +471,17 @@ function lp_upload_quiz_action_handling()
                         }
                         break;
                     case FILL_IN_BLANKS:
-                        $scoreList = [];
+                        $fillInScoreList = [];
                         $size = [];
                         $globalScore = 0;
                         foreach ($myAnswerList as $data) {
                             $score = isset($data['extra']) ? $data['extra'] : 0;
                             $globalScore += $score;
-                            $scoreList[] = $score;
+                            $fillInScoreList[] = $score;
                             $size[] = 200;
                         }
 
-                        $scoreToString = implode(',', $scoreList);
+                        $scoreToString = implode(',', $fillInScoreList);
                         $sizeToString = implode(',', $size);
 
                         //<p>Texte long avec les [mots] à [remplir] mis entre [crochets]</p>::10,10,10:200.36363999999998,200,200:0@'
@@ -504,7 +504,7 @@ function lp_upload_quiz_action_handling()
                         }
                         break;
                     case MATCHING:
-                        $globalScore = $scoreList[$i];
+                        $globalScore = isset($scoreList[$i]) ? $scoreList[$i] : null;
                         $position = 1;
 
                         $objAnswer = new Answer($question_id, $courseId);
@@ -527,9 +527,7 @@ function lp_upload_quiz_action_handling()
                             );
                             $counter++;
                         }
-
                         $objAnswer->save();
-
                         $questionObj = Question::read($question_id, $courseId);
                         if ($questionObj) {
                             $questionObj->updateWeighting($globalScore);

@@ -25,7 +25,7 @@ class EvalForm extends FormValidator
     /**
      * Builds a form containing form items based on a given parameter
      * @param int $form_type 1=add, 2=edit,3=move,4=result_add
-     * @param obj $evaluation_object the category object
+     * @param Evaluation $evaluation_object the category object
      * @param obj $result_object the result object
      * @param string $form_name
      * @param string $method
@@ -114,8 +114,7 @@ class EvalForm extends FormValidator
             )
         );
         foreach ($this->evaluation_object->get_not_subscribed_students() as $user) {
-            if ((!isset($this->extra)) || empty($this->extra) || api_strtoupper(api_substr($user[1], 0,
-                    1)) == $this->extra
+            if ((!isset($this->extra)) || empty($this->extra) || api_strtoupper(api_substr($user[1], 0, 1)) == $this->extra
             ) {
                 $select->addoption($user[1].' '.$user[2].' ('.$user[3].')', $user[0]);
             }
@@ -556,7 +555,16 @@ class EvalForm extends FormValidator
         $this->addRule('hid_category_id', get_lang('ThisFieldIsRequired'), 'required');
         $this->addElement('checkbox', 'visible', null, get_lang('Visible'));
         $this->addRule('max', get_lang('OnlyNumbers'), 'numeric');
-        $this->addRule('max', get_lang('NegativeValue'), 'compare', '>=');
+        $this->addRule(
+            'max',
+            get_lang('NegativeValue'),
+            'compare',
+            '>=',
+            'server',
+            false,
+            false,
+            0
+        );
         $setting = api_get_setting('tool_visible_by_default_at_creation');
         $visibility_default = 1;
         if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {

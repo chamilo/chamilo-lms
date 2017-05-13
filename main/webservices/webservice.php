@@ -212,7 +212,7 @@ class WS
     protected function getSessionId($session_id_field_name, $session_id_value)
     {
         if ($session_id_field_name == "chamilo_session_id") {
-            $session = SessionManager::fetch((int)$session_id_value);
+            $session = SessionManager::fetch((int) $session_id_value);
             if (!empty($session)) {
                 return intval($session_id_value);
             } else {

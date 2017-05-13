@@ -90,8 +90,6 @@ class SidebarMenuKnpEvent extends ThemeEvent
                 return $child;
             }
         }
-
         return null;
     }
-
 }

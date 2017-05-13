@@ -161,7 +161,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     private $authSource;
 
     /**
-     * @var boolean
+     * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
@@ -901,7 +901,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     /**
      * Get status
      *
-     * @return boolean
+     * @return int
      */
     public function getStatus()
     {

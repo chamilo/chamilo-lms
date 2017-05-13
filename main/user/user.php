@@ -2,15 +2,16 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	This script displays a list of the users of the current course.
- *	Course admins can change user permissions, subscribe and unsubscribe users...
+ * This script displays a list of the users of the current course.
+ * Course admins can change user permissions, subscribe and unsubscribe users...
  *
- *	- show users registered in courses;
+ * show users registered in courses
  *
- *	@author Roan Embrechts
- *	@author Julio Montoya Armas, Several fixes
- *	@package chamilo.user
+ * @author Roan Embrechts
+ * @author Julio Montoya, Several fixes
+ * @package chamilo.user
  */
+
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_USER;
@@ -39,12 +40,14 @@ $courseCode = $course_info['code'];
 $courseId = $course_info['real_id'];
 $type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
 
+$canEditUsers = api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' || api_is_platform_admin();
+
 //Can't auto unregister from a session
 if (!empty($sessionId)) {
     $course_info['unsubscribe'] = 0;
 }
 
-/* Unregistering a user section	*/
+/* Un registering a user section	*/
 if (api_is_allowed_to_edit(null, true)) {
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
@@ -507,6 +510,7 @@ $indexList['groups'] = $header_nr;
 $table->set_header($header_nr++, get_lang('GroupSingle'), false);
 
 $hideFields = api_get_configuration_value('hide_user_field_from_list');
+
 if (!empty($hideFields)) {
     foreach ($hideFields as $fieldToHide) {
         if (isset($indexList[$fieldToHide])) {
@@ -515,10 +519,13 @@ if (!empty($hideFields)) {
     }
 }
 
+$table->setHideColumn('is_tutor');
+$table->setHideColumn('user_status_in_course');
+
 if (api_is_allowed_to_edit(null, true)) {
     $table->set_header($header_nr++, get_lang('Status'), false);
     $table->set_header($header_nr++, get_lang('Active'), false);
-    if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
+    if ($canEditUsers) {
         $table->set_column_filter(8, 'active_filter');
     } else {
         $table->set_column_filter(8, 'active_filter');
@@ -532,7 +539,7 @@ if (api_is_allowed_to_edit(null, true)) {
     $table->set_header($header_nr++, get_lang('Action'), false);
     $table->set_column_filter($header_nr - 1, 'modify_filter');
 
-    if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
+    if ($canEditUsers) {
         $table->set_form_actions(array('unsubscribe' => get_lang('Unreg')), 'user');
     }
 } else {
@@ -566,7 +573,6 @@ $selectedTab = 1;
 
 if (api_is_allowed_to_edit(null, true)) {
     echo '<div class="actions">';
-
     switch ($type) {
         case STUDENT:
             $selectedTab = 1;
@@ -594,9 +600,7 @@ if (api_is_allowed_to_edit(null, true)) {
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=xls&type='.$type.'">'.
         Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a> ';
 
-    if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' ||
-        api_is_platform_admin()
-    ) {
+    if ($canEditUsers) {
         $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import">'.
             Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'), '', ICON_SIZE_MEDIUM).'</a> ';
     }
@@ -645,7 +649,6 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
 if (!isset($origin) || $origin != 'learnpath') {
     Display::display_footer();
 }
-
 
 /* Helper functions for the users lists in course */
 /**
@@ -729,8 +732,7 @@ function get_number_of_users()
  */
 function searchUserKeyword($firstname, $lastname, $username, $official_code, $keyword)
 {
-    if (
-        api_strripos($firstname, $keyword) !== false ||
+    if (api_strripos($firstname, $keyword) !== false ||
         api_strripos($lastname, $keyword) !== false ||
         api_strripos($username, $keyword) !== false ||
         api_strripos($official_code, $keyword) !== false
@@ -748,7 +750,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 {
     global $is_western_name_order;
     global $extraFields;
-
+    $canEditUsers = api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' || api_is_platform_admin();
     $type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
     $course_info = api_get_course_info();
     $sessionId = api_get_session_id();
@@ -823,8 +825,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
     );
 
     foreach ($a_course_users as $user_id => $o_course_user) {
-        if ((
-                isset($_GET['keyword']) &&
+        if ((isset($_GET['keyword']) &&
                 searchUserKeyword(
                     $o_course_user['firstname'],
                     $o_course_user['lastname'],
@@ -834,7 +835,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 )
             ) || !isset($_GET['keyword']) || empty($_GET['keyword'])
         ) {
-
             $groupsNameList = GroupManager::getAllGroupPerUserSubscription($user_id);
             $groupsNameListParsed = [];
             if (!empty($groupsNameList)) {
@@ -845,7 +845,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
             if (api_is_allowed_to_edit(null, true)) {
                 $userInfo = api_get_user_info($user_id);
                 $photo = Display::img($userInfo['avatar_small'], $userInfo['complete_name'], [], false);
-
                 $temp[] = $user_id;
                 $temp[] = $photo;
                 $temp[] = $o_course_user['official_code'];
@@ -899,7 +898,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
                 $photo = '<img src="'.$userPicture.'" alt="'.$userInfo['complete_name'].'" width="22" height="22" title="'.$userInfo['complete_name'].'" />';
 
-                $temp[] = $user_id;
+                $temp[] = '';
                 $temp[] = $photo;
                 $temp[] = $o_course_user['official_code'];
 
@@ -910,6 +909,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     $temp[] = $o_course_user['lastname'];
                     $temp[] = $o_course_user['firstname'];
                 }
+
                 $temp[] = $o_course_user['username'];
                 // Group.
                 $temp[] = implode(', ', $groupsNameListParsed);
@@ -968,6 +968,7 @@ function active_filter($active, $urlParams, $row)
 function modify_filter($user_id, $row, $data)
 {
     global $charset;
+    $canEditUsers = api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' || api_is_platform_admin();
 
     $is_allowed_to_track = api_is_allowed_to_edit(true, true);
 
@@ -1011,15 +1012,15 @@ function modify_filter($user_id, $row, $data)
 
             if ($data['user_status_in_course'] == STUDENT) {
                 $result .= Display::url(
-                        $text,
-                        'user.php?'.api_get_cidreq().'&action=set_tutor&is_tutor='.$isTutor.'&user_id='.$user_id.'&type='.$type,
-                        array('class' => 'btn btn-default '.$disabled)
-                    ).'&nbsp;';
+                    $text,
+                    'user.php?'.api_get_cidreq().'&action=set_tutor&is_tutor='.$isTutor.'&user_id='.$user_id.'&type='.$type,
+                    array('class' => 'btn btn-default '.$disabled)
+                ).'&nbsp;';
             }
         }
 
         // edit
-        if (api_get_setting('allow_user_course_subscription_by_course_admin') === 'true' or api_is_platform_admin()) {
+        if ($canEditUsers) {
             // unregister
             if ($user_id != $current_user_id || api_is_platform_admin()) {
                 $result .= '<a class="btn btn-small btn-danger" href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;">'.

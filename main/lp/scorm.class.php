@@ -393,7 +393,7 @@ class scorm extends learnpath
                 $path = '';
                 $type = 'dir';
                 if (isset($this->resources[$item['identifierref']])) {
-                    $oRes =& $this->resources[$item['identifierref']];
+                    $oRes = & $this->resources[$item['identifierref']];
                     $path = @$oRes->get_path();
                     if (!empty($path)) {
                         $temptype = $oRes->get_scorm_type();
@@ -444,7 +444,7 @@ class scorm extends learnpath
                 $item['parameters'] = Database::escape_string($item['parameters']);
 
                 $sql = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order,launch_data, parameters)
-                        VALUES ($courseId, $lp_id, '$type', '$identifier', '$title', '$path' , 0, $max_score, $value_add $parent, $previous, 0, '$prereq', ".$item['rel_order'] .", '".$item['datafromlms']."', '".$item['parameters']."' )";
+                        VALUES ($courseId, $lp_id, '$type', '$identifier', '$title', '$path' , 0, $max_score, $value_add $parent, $previous, 0, '$prereq', ".$item['rel_order'].", '".$item['datafromlms']."', '".$item['parameters']."' )";
 
                 Database::query($sql);
                 if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting item : '.$sql, 0); }
@@ -478,7 +478,7 @@ class scorm extends learnpath
                     foreach ($specific_fields as $specific_field) {
                         if (isset($_REQUEST[$specific_field['code']])) {
                             $sterms = trim($_REQUEST[$specific_field['code']]);
-                            $all_specific_terms .= ' '. $sterms;
+                            $all_specific_terms .= ' '.$sterms;
                             if (!empty($sterms)) {
                                 $sterms = explode(',', $sterms);
                                 foreach ($sterms as $sterm) {
@@ -487,7 +487,7 @@ class scorm extends learnpath
                             }
                         }
                     }
-                    $body_to_index = $all_specific_terms .' '. $title;
+                    $body_to_index = $all_specific_terms.' '.$title;
                     $ic_slide->addValue("content", $body_to_index);
                     // TODO: Add a comment to say terms separated by commas.
                     $courseid = api_get_course_id();
@@ -497,7 +497,7 @@ class scorm extends learnpath
                         SE_COURSE_ID => $courseid,
                         SE_TOOL_ID => TOOL_LEARNPATH,
                         SE_DATA => array('lp_id' => $lp_id, 'lp_item'=> $previous, 'document_id' => ''), // TODO: Unify with other lp types.
-                        SE_USER => (int)api_get_user_id(),
+                        SE_USER => (int) api_get_user_id(),
                     );
                     $ic_slide->xapian_data = serialize($xapian_data);
                     $di->addChunk($ic_slide);
@@ -543,7 +543,7 @@ class scorm extends learnpath
     public function import_package($zip_file_info, $current_dir = '', $courseInfo = array())
     {
         if ($this->debug > 0) {
-            error_log('In scorm::import_package('.print_r($zip_file_info,true).',"'.$current_dir.'") method', 0);
+            error_log('In scorm::import_package('.print_r($zip_file_info, true).',"'.$current_dir.'") method', 0);
         }
 
         $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
@@ -554,7 +554,7 @@ class scorm extends learnpath
         $zip_file_name = $zip_file_info['name'];
 
         if ($this->debug > 1) {
-            error_log('New LP - import_package() - zip file path = ' . $zip_file_path . ', zip file name = ' . $zip_file_name, 0);
+            error_log('New LP - import_package() - zip file path = '.$zip_file_path.', zip file name = '.$zip_file_name, 0);
         }
 
         $course_rel_dir = api_get_course_path($courseInfo['code']).'/scorm'; // scorm dir web path starting from /courses
@@ -562,7 +562,7 @@ class scorm extends learnpath
         $current_dir = api_replace_dangerous_char(trim($current_dir)); // Current dir we are in, inside scorm/
 
         if ($this->debug > 1) {
-            error_log( 'New LP - import_package() - current_dir = ' . $current_dir, 0);
+            error_log('New LP - import_package() - current_dir = '.$current_dir, 0);
         }
 
         // Get name of the zip file without the extension.
@@ -570,7 +570,7 @@ class scorm extends learnpath
         $file_info = pathinfo($zip_file_name);
         $filename = $file_info['basename'];
         $extension = $file_info['extension'];
-        $file_base_name = str_replace('.'.$extension,'',$filename); // Filename without its extension.
+        $file_base_name = str_replace('.'.$extension, '', $filename); // Filename without its extension.
         $this->zipname = $file_base_name; // Save for later in case we don't have a title.
 
         if ($this->debug > 1) { error_log("New LP - base file name is : ".$file_base_name, 0); }
@@ -616,7 +616,7 @@ class scorm extends learnpath
         $slash_count = substr_count($shortest_path, '/');
         foreach ($manifest_list as $manifest_path) {
             $tmp_slash_count = substr_count($manifest_path, '/');
-            if ($tmp_slash_count<$slash_count) {
+            if ($tmp_slash_count < $slash_count) {
                 $shortest_path = $manifest_path;
                 $slash_count = $tmp_slash_count;
             }
@@ -625,7 +625,7 @@ class scorm extends learnpath
         $this->subdir .= '/'.dirname($shortest_path); // Do not concatenate because already done above.
         $manifest = $shortest_path;
         if ($this->debug > 1) { error_log('New LP - Package type is now '.$package_type, 0); }
-        if ($package_type== '') {
+        if ($package_type == '') {
             // && defined('CHECK_FOR_SCORM') && CHECK_FOR_SCORM)
             if ($this->debug > 1) { error_log('New LP - Package type is empty', 0); }
 
@@ -650,8 +650,8 @@ class scorm extends learnpath
             $new_dir = '/'.$new_dir;
         }
 
-        if ($new_dir[strlen($new_dir)-1] == '/') {
-            $new_dir = substr($new_dir,0,-1);
+        if ($new_dir[strlen($new_dir) - 1] == '/') {
+            $new_dir = substr($new_dir, 0, -1);
         }
 
         /* Uncompressing phase */
@@ -692,7 +692,7 @@ class scorm extends learnpath
                     if ($file != '.' && $file != '..') {
                         $filetype = 'file';
 
-                        if (is_dir($course_sys_dir . $new_dir . $file)) {
+                        if (is_dir($course_sys_dir.$new_dir.$file)) {
                             $filetype = 'folder';
                         }
 
@@ -721,7 +721,7 @@ class scorm extends learnpath
                                     }
                                 }
                             }
-                            @rename($course_sys_dir.$new_dir.$file,$course_sys_dir.$new_dir.$safe_file);
+                            @rename($course_sys_dir.$new_dir.$file, $course_sys_dir.$new_dir.$safe_file);
                             if ($this->debug >= 1) { error_log('New LP - Renaming '.$course_sys_dir.$new_dir.$file.' to '.$course_sys_dir.$new_dir.$safe_file, 0); }
                         }
                     }
@@ -908,7 +908,7 @@ class scorm extends learnpath
         if ($this->debug > 0) { error_log('In scorm::get_res_path('.$id.') method', 0); }
         $path = '';
         if (isset($this->resources[$id])) {
-            $oRes =& $this->resources[$id];
+            $oRes = & $this->resources[$id];
             $path = @$oRes->get_path();
         }
         return $path;
@@ -924,7 +924,7 @@ class scorm extends learnpath
         if ($this->debug > 0) { error_log('In scorm::get_res_type('.$id.') method', 0); }
         $type = '';
         if (isset($this->resources[$id])) {
-            $oRes =& $this->resources[$id];
+            $oRes = & $this->resources[$id];
             $temptype = $oRes->get_scorm_type();
             if (!empty($temptype)) {
                 $type = $temptype;
@@ -943,9 +943,9 @@ class scorm extends learnpath
         $title = '';
         if (isset($this->manifest['organizations']['default'])) {
             $title = $this->organizations[$this->manifest['organizations']['default']]->get_name();
-        } elseif (count($this->organizations)==1) {
+        } elseif (count($this->organizations) == 1) {
             // This will only get one title but so we don't need to know the index.
-            foreach($this->organizations as $id => $value) {
+            foreach ($this->organizations as $id => $value) {
                 $title = $this->organizations[$id]->get_name();
                 break;
             }

@@ -20,7 +20,6 @@ class Clockworksms implements SmsPluginLibraryInterface
     /**
      * Constructor (generates a connection to the API)
      * @param   string  Clockworksms API key required to use the plugin
-     * @return  void
      */
     public function __construct($apiKey = null)
     {

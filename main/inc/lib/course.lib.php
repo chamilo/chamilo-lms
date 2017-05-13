@@ -5704,8 +5704,8 @@ class CourseManager
      */
     public static function separateUsersGroups($to)
     {
-        $grouplist = array();
-        $userlist = array();
+        $groupList = array();
+        $userList = array();
 
         foreach ($to as $to_item) {
             if (!empty($to_item)) {
@@ -5715,17 +5715,17 @@ class CourseManager
 
                 switch ($type) {
                     case 'GROUP':
-                        $grouplist[] = intval($id);
+                        $groupList[] = intval($id);
                         break;
                     case 'USER':
-                        $userlist[] = intval($id);
+                        $userList[] = intval($id);
                         break;
                 }
             }
         }
 
-        $send_to['groups'] = $grouplist;
-        $send_to['users'] = $userlist;
+        $send_to['groups'] = $groupList;
+        $send_to['users'] = $userList;
 
         return $send_to;
     }

@@ -27,19 +27,19 @@ class ExtraField extends Model
     );
 
     public $ops = array(
-        'eq' => '=',        //equal
-        'ne' => '<>',       //not equal
-        'lt' => '<',        //less than
-        'le' => '<=',       //less than or equal
-        'gt' => '>',        //greater than
-        'ge' => '>=',       //greater than or equal
-        'bw' => 'LIKE',     //begins with
+        'eq' => '=', //equal
+        'ne' => '<>', //not equal
+        'lt' => '<', //less than
+        'le' => '<=', //less than or equal
+        'gt' => '>', //greater than
+        'ge' => '>=', //greater than or equal
+        'bw' => 'LIKE', //begins with
         'bn' => 'NOT LIKE', //doesn't begin with
-        'in' => 'LIKE',     //is in
+        'in' => 'LIKE', //is in
         'ni' => 'NOT LIKE', //is not in
-        'ew' => 'LIKE',     //ends with
+        'ew' => 'LIKE', //ends with
         'en' => 'NOT LIKE', //doesn't end with
-        'cn' => 'LIKE',     //contains
+        'cn' => 'LIKE', //contains
         'nc' => 'NOT LIKE'  //doesn't contain
     );
 
@@ -392,7 +392,7 @@ class ExtraField extends Model
      */
     public static function get_extra_fields_by_handler($handler)
     {
-        $types= array();
+        $types = array();
         $types[self::FIELD_TYPE_TEXT] = get_lang('FieldTypeText');
         $types[self::FIELD_TYPE_TEXTAREA] = get_lang('FieldTypeTextarea');
         $types[self::FIELD_TYPE_RADIO] = get_lang('FieldTypeRadio');
@@ -1093,7 +1093,7 @@ class ExtraField extends Model
                         // chzn-select doesn't work for sessions??
                         $form->addElement(
                             'select',
-                            'extra_' . $field_details['variable'],
+                            'extra_'.$field_details['variable'],
                             $field_details['display_text'],
                             $options,
                             array('id' => 'extra_'.$field_details['variable'])
@@ -1218,7 +1218,7 @@ class ExtraField extends Model
                             }
                         });';
 
-                        $first_id  = null;
+                        $first_id = null;
                         if (!empty($extraData)) {
                             if (isset($extraData['extra_'.$field_details['variable']])) {
                                 $first_id = $extraData['extra_'.$field_details['variable']]['extra_'.$field_details['variable']];
@@ -1274,7 +1274,7 @@ class ExtraField extends Model
                             <div class="form-group ">
                                 <div class="col-sm-12">
                                     <div class="panel-separator">
-                                       <h4 id="' . $field_details['variable'] . '" class="form-separator">' . $field_details['display_text'] . '</h4>
+                                       <h4 id="' . $field_details['variable'].'" class="form-separator">'.$field_details['display_text'].'</h4>
                                     </div>
                                 </div>
                             </div>    
@@ -1470,9 +1470,9 @@ EOF;
                         ];
 
                         if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
-                            if (file_exists(api_get_path(SYS_UPLOAD_PATH) . $extraData[$fieldVariable])) {
+                            if (file_exists(api_get_path(SYS_UPLOAD_PATH).$extraData[$fieldVariable])) {
                                 $fieldTexts[] = Display::img(
-                                    api_get_path(WEB_UPLOAD_PATH) . $extraData[$fieldVariable],
+                                    api_get_path(WEB_UPLOAD_PATH).$extraData[$fieldVariable],
                                     $field_details['display_text'],
                                     ['width' => '300']
                                 );
@@ -1495,7 +1495,7 @@ EOF;
                         $allowed_picture_types = ['jpg', 'jpeg', 'png', 'gif'];
                         $form->addRule(
                             'extra_'.$field_details['variable'],
-                            get_lang('OnlyImagesAllowed') . ' ('.implode(',', $allowed_picture_types).')',
+                            get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
                             'filetype',
                             $allowed_picture_types
                         );
@@ -1529,10 +1529,10 @@ EOF;
                         if (is_array($extraData) &&
                             array_key_exists($fieldVariable, $extraData)
                         ) {
-                            if (file_exists(api_get_path(SYS_UPLOAD_PATH) . $extraData[$fieldVariable])) {
+                            if (file_exists(api_get_path(SYS_UPLOAD_PATH).$extraData[$fieldVariable])) {
                                 $fieldTexts[] = Display::url(
-                                    api_get_path(WEB_UPLOAD_PATH) . $extraData[$fieldVariable],
-                                    api_get_path(WEB_UPLOAD_PATH) . $extraData[$fieldVariable],
+                                    api_get_path(WEB_UPLOAD_PATH).$extraData[$fieldVariable],
+                                    api_get_path(WEB_UPLOAD_PATH).$extraData[$fieldVariable],
                                     array(
                                         'title' => $field_details['display_text'],
                                         'target' => '_blank'
@@ -1571,7 +1571,7 @@ EOF;
                             "extra_{$field_details['variable']}",
                             $field_details['display_text']
                         );
-                        $form->applyFilter('extra_' . $field_details['variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
 
                         if ($freezeElement) {
                             $form->freeze('extra_'.$field_details['variable']);
@@ -1583,7 +1583,7 @@ EOF;
                             $field_details['display_text']
                         );
                         $form->applyFilter(
-                            'extra_' . $field_details['variable'],
+                            'extra_'.$field_details['variable'],
                             'stripslashes'
                         );
                         if ($freezeElement) {
@@ -1595,7 +1595,7 @@ EOF;
                             "extra_{$field_details['variable']}",
                             $field_details['display_text']
                         );
-                        $form->applyFilter('extra_' . $field_details['variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
 
                         if ($freezeElement) {
                             $form->freeze('extra_'.$field_details['variable']);
@@ -1607,7 +1607,7 @@ EOF;
                             $field_details['display_text']
                         );
                         $form->applyFilter(
-                            'extra_' . $field_details['variable'],
+                            'extra_'.$field_details['variable'],
                             'stripslashes'
                         );
                         if ($freezeElement) {
@@ -1634,7 +1634,7 @@ EOF;
                             '<script>
                                 $(document).ready(function() {                                    
                                     if (typeof google === "object") {                                        
-                                        var address = "' . $dataValue . '";
+                                        var address = "' . $dataValue.'";
                                         initializeGeo'.$field_details['variable'].'(address, false);
     
                                         $("#geolocalization_extra_'.$field_details['variable'].'").on("click", function() {
@@ -1656,7 +1656,7 @@ EOF;
                                         });
                                         
                                     } else {
-                                        $("#map_extra_'.$field_details['variable'].'").html("<div class=\"alert alert-info\">' . get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap') . '</div>");
+                                        $("#map_extra_'.$field_details['variable'].'").html("<div class=\"alert alert-info\">'.get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap').'</div>");
                                     }                                    
                                 });
 
@@ -1670,7 +1670,7 @@ EOF;
                                         };
 
                                         var geoError = function(error) {
-                                            alert("Geocode ' . get_lang('Error') . ': " + error);
+                                            alert("Geocode ' . get_lang('Error').': " + error);
                                         };
 
                                         var geoOptions = {
@@ -1721,11 +1721,11 @@ EOF;
                                                         infowindow.open(map_'.$field_details['variable'].', marker);
                                                     });
                                                 } else {
-                                                    alert("' . get_lang("NotFound") . '");
+                                                    alert("' . get_lang("NotFound").'");
                                                 }
 
                                             } else {
-                                                alert("Geocode ' . get_lang('Error') . ': ' . get_lang("AddressField") . ' ' . get_lang("NotFound") . '");
+                                                alert("Geocode ' . get_lang('Error').': '.get_lang("AddressField").' '.get_lang("NotFound").'");
                                             }
                                         });
                                     }
@@ -1785,8 +1785,8 @@ EOF;
                                 $(document).ready(function() {
                                     if (typeof google === "object") {
                                         
-                                        var lat = "' . $lat . '";
-                                        var lng = "' . $lng . '";
+                                        var lat = "' . $lat.'";
+                                        var lng = "' . $lng.'";
                                         var latLng = new google.maps.LatLng(lat, lng);
                                         initializeGeo'.$field_details['variable'].'(false, latLng);
     
@@ -1811,7 +1811,7 @@ EOF;
                                             }
                                         });
                                     } else {
-                                        $("#map_extra_'.$field_details['variable'].'").html("<div class=\"alert alert-info\">' . get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap') . '</div>");
+                                        $("#map_extra_'.$field_details['variable'].'").html("<div class=\"alert alert-info\">'.get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap').'</div>");
                                     }
                                     
                                 });
@@ -1826,7 +1826,7 @@ EOF;
                                         };
 
                                         var geoError = function(error) {
-                                            alert("Geocode ' . get_lang('Error') . ': " + error);
+                                            alert("Geocode ' . get_lang('Error').': " + error);
                                         };
 
                                         var geoOptions = {
@@ -1877,11 +1877,11 @@ EOF;
                                                         infowindow.open(map_'.$field_details['variable'].', marker);
                                                     });
                                                 } else {
-                                                    alert("' . get_lang("NotFound") . '");
+                                                    alert("' . get_lang("NotFound").'");
                                                 }
 
                                             } else {
-                                                alert("Geocode ' . get_lang('Error') . ': " + status);
+                                                alert("Geocode ' . get_lang('Error').': " + status);
                                             }
                                         });
                                     }
@@ -2076,7 +2076,7 @@ EOF;
         $form->addElement('header', $header);
 
         if ($action == 'edit') {
-            $translateUrl = api_get_path(WEB_CODE_PATH) . 'extrafield/translate.php?' . http_build_query([
+            $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'.http_build_query([
                 'extra_field' => $id
             ]);
             $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
@@ -2415,7 +2415,7 @@ JAVASCRIPT;
                 foreach ($extra_fields as $extra_info) {
                     $extra_field_info = $extra_info['extra_field_info'];
                     $inject_joins .= " INNER JOIN $this->table_field_values fv$counter
-                                       ON (s." . $this->primaryKey . " = fv$counter." . $this->handler_id . ") ";
+                                       ON (s.".$this->primaryKey." = fv$counter.".$this->handler_id.") ";
                     // Add options
                     if (isset($extra_field_info['field_type']) && in_array(
                             $extra_field_info['field_type'],
@@ -2428,7 +2428,7 @@ JAVASCRIPT;
                     ) {
                         $options['where'] = str_replace(
                             $extra_info['field'],
-                            'fv' . $counter . '.field_id = ' . $extra_info['id'] . ' AND fvo' . $counter . '.option_value',
+                            'fv'.$counter.'.field_id = '.$extra_info['id'].' AND fvo'.$counter.'.option_value',
                             $options['where']
                         );
                         $inject_joins .= "
@@ -2443,13 +2443,13 @@ JAVASCRIPT;
                     ) {
                         $options['where'] = str_replace(
                             $extra_info['field'],
-                            'tag' . $counter . '.tag ',
+                            'tag'.$counter.'.tag ',
                             $options['where']
                         );
 
                         $inject_joins .= "
                             INNER JOIN $this->table_field_rel_tag tag_rel$counter
-                            ON (tag_rel$counter.field_id = ".$extra_info['id']." AND tag_rel$counter.item_id = s." . $this->primaryKey.")
+                            ON (tag_rel$counter.field_id = ".$extra_info['id']." AND tag_rel$counter.item_id = s.".$this->primaryKey.")
                             INNER JOIN $this->table_field_tag tag$counter
                             ON (tag$counter.id =  tag_rel$counter.tag_id)
                         ";
@@ -2655,19 +2655,19 @@ JAVASCRIPT;
                         break;
                     }
 
-                    if (!file_exists(api_get_path(SYS_UPLOAD_PATH) . $valueData['value'])) {
+                    if (!file_exists(api_get_path(SYS_UPLOAD_PATH).$valueData['value'])) {
                         break;
                     }
 
                     $image = Display::img(
-                        api_get_path(WEB_UPLOAD_PATH) . $valueData['value'],
+                        api_get_path(WEB_UPLOAD_PATH).$valueData['value'],
                         $field['display_text'],
                         array('width' => '300')
                     );
 
                     $displayedValue = Display::url(
                         $image,
-                        api_get_path(WEB_UPLOAD_PATH) . $valueData['value'],
+                        api_get_path(WEB_UPLOAD_PATH).$valueData['value'],
                         array('target' => '_blank')
                     );
                     break;
@@ -2676,13 +2676,13 @@ JAVASCRIPT;
                         break;
                     }
 
-                    if (!file_exists(api_get_path(SYS_UPLOAD_PATH) . $valueData['value'])) {
+                    if (!file_exists(api_get_path(SYS_UPLOAD_PATH).$valueData['value'])) {
                         break;
                     }
 
                     $displayedValue = Display::url(
                         get_lang('Download'),
-                        api_get_path(WEB_UPLOAD_PATH) . $valueData['value'],
+                        api_get_path(WEB_UPLOAD_PATH).$valueData['value'],
                         array(
                             'title' => $field['display_text'],
                             'target' => '_blank'

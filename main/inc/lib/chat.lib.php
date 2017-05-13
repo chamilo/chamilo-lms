@@ -23,7 +23,6 @@ class Chat extends Model
 
     /**
      * The contructor sets the chat table name and the window_list attribute
-     * @return object Object reference
      */
     public function __construct()
     {

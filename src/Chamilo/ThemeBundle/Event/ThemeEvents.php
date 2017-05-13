@@ -7,15 +7,12 @@
 
 namespace Chamilo\ThemeBundle\Event;
 
-
 /**
  * Holds all events used by the theme
  *
  */
 class ThemeEvents
 {
-
-
     /**
      * Used to receive notification data
      */
@@ -57,5 +54,4 @@ class ThemeEvents
      *
      */
     const THEME_SIDEBAR_ACTIVATE_MENU = 'theme.sidebar_activate_menu';
-
 }

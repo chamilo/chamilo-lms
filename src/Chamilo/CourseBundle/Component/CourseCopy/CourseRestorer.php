@@ -355,6 +355,9 @@ class CourseRestorer
                         $toUserId = isset($document->item_properties[0]['to_user_id']) ? $document->item_properties[0]['to_user_id'] : null;
                         $toUserId = $this->checkUserId($toUserId, true);
 
+                        $groupId = isset($document->item_properties[0]['to_group_id']) ? $document->item_properties[0]['to_group_id'] : null;
+                        $groupInfo = $this->checkGroupId($groupId);
+
                         // if folder exists then just refresh it
                         api_item_property_update(
                             $course_info,
@@ -362,7 +365,7 @@ class CourseRestorer
                             $documentData,
                             'FolderUpdated',
                             $insertUserId,
-                            $document->item_properties[0]['to_group_id'],
+                            $groupInfo,
                             $toUserId,
                             null,
                             null,
@@ -406,7 +409,7 @@ class CourseRestorer
                             $insertUserId = isset($itemProperty['insert_user_id']) ? $itemProperty['insert_user_id'] : api_get_user_id();
                             $toGroupId = isset($itemProperty['to_group_id']) ? $itemProperty['to_group_id'] : 0;
                             $toUserId = isset($itemProperty['to_user_id']) ? $itemProperty['to_user_id'] : null;
-
+                            $groupInfo = $this->checkGroupId($toGroupId);
                             $insertUserId = $this->checkUserId($insertUserId);
                             $toUserId = $this->checkUserId($toUserId, true);
 
@@ -416,7 +419,7 @@ class CourseRestorer
                                 $document_id,
                                 'FolderCreated',
                                 $insertUserId,
-                                $toGroupId,
+                                $groupInfo,
                                 $toUserId,
                                 null,
                                 null,
@@ -468,6 +471,7 @@ class CourseRestorer
 
                                     $insertUserId = $this->checkUserId($insertUserId);
                                     $toUserId = $this->checkUserId($toUserId, true);
+                                    $groupInfo = $this->checkGroupId($toGroupId);
 
                                     api_item_property_update(
                                         $course_info,
@@ -475,7 +479,7 @@ class CourseRestorer
                                         $document_id,
                                         'DocumentAdded',
                                         $insertUserId,
-                                        $toGroupId,
+                                        $groupInfo,
                                         $toUserId,
                                         null,
                                         null,
@@ -514,6 +518,7 @@ class CourseRestorer
 
                                     $insertUserId = $this->checkUserId($insertUserId);
                                     $toUserId = $this->checkUserId($toUserId, true);
+                                    $groupInfo = $this->checkGroupId($toGroupId);
 
                                     api_item_property_update(
                                         $course_info,
@@ -521,7 +526,7 @@ class CourseRestorer
                                         $obj->id,
                                         'default',
                                         $insertUserId,
-                                        $toGroupId,
+                                        $groupInfo,
                                         $toUserId,
                                         null,
                                         null,
@@ -694,6 +699,7 @@ class CourseRestorer
 
                                     $insertUserId = $this->checkUserId($insertUserId);
                                     $toUserId = $this->checkUserId($toUserId, true);
+                                    $groupInfo = $this->checkGroupId($toGroupId);
 
                                     api_item_property_update(
                                         $course_info,
@@ -701,7 +707,7 @@ class CourseRestorer
                                         $document_id,
                                         'DocumentAdded',
                                         $insertUserId,
-                                        $toGroupId,
+                                        $groupInfo,
                                         $toUserId,
                                         null,
                                         null,
@@ -755,6 +761,7 @@ class CourseRestorer
 
                                         $insertUserId = $this->checkUserId($insertUserId);
                                         $toUserId = $this->checkUserId($toUserId, true);
+                                        $groupInfo = $this->checkGroupId($toGroupId);
 
                                         api_item_property_update(
                                             $course_info,
@@ -762,7 +769,7 @@ class CourseRestorer
                                             $document_id,
                                             'DocumentAdded',
                                             $insertUserId,
-                                            $toGroupId,
+                                            $groupInfo,
                                             $toUserId,
                                             null,
                                             null,
@@ -821,6 +828,7 @@ class CourseRestorer
 
                                 $insertUserId = $this->checkUserId($insertUserId);
                                 $toUserId = $this->checkUserId($toUserId, true);
+                                $groupInfo = $this->checkGroupId($toGroupId);
 
                                 api_item_property_update(
                                     $course_info,
@@ -828,7 +836,7 @@ class CourseRestorer
                                     $document_id,
                                     'DocumentAdded',
                                     $insertUserId,
-                                    $toGroupId,
+                                    $groupInfo,
                                     $toUserId,
                                     null,
                                     null,
@@ -897,6 +905,7 @@ class CourseRestorer
 
                         $insertUserId = $this->checkUserId($insertUserId);
                         $toUserId = $this->checkUserId($toUserId, true);
+                        $groupInfo = $this->checkGroupId($toGroupId);
 
                         api_item_property_update(
                             $course_info,
@@ -904,7 +913,7 @@ class CourseRestorer
                             $document_id,
                             'DocumentAdded',
                             $insertUserId,
-                            $toGroupId,
+                            $groupInfo,
                             $toUserId,
                             null,
                             null,
@@ -939,7 +948,7 @@ class CourseRestorer
                     'path' => $document->path,
                     'title' => $document->title,
                     'source_id' => $document->source_id,
-                    'destination_id' => $document->destination_id
+                    'destination_id' => $document->destination_id,
                 ];
             }
         } // end for each
@@ -961,7 +970,6 @@ class CourseRestorer
 
         if ($this->course->has_resources(RESOURCE_SCORM)) {
             $resources = $this->course->resources;
-
             foreach ($resources[RESOURCE_SCORM] as $document) {
                 $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
                 @mkdir(dirname($path.$document->path), $perm, true);
@@ -1291,6 +1299,7 @@ class CourseRestorer
                 $params['category_id'] = $cat_id;
                 $params['on_homepage'] = $link->on_homepage;
                 $params['display_order'] = $max_order + 1;
+                $params['target'] = $link->target;
 
                 $id = Database::insert($link_table, $params);
 
@@ -3115,7 +3124,6 @@ class CourseRestorer
                         );
 
                         if ($my_id) {
-
                             $sql = "UPDATE $table_thematic_advance SET id = iid WHERE iid = $my_id";
                             Database::query($sql);
 
@@ -3137,7 +3145,6 @@ class CourseRestorer
                         $my_id = Database::insert($table_thematic_plan, $thematic_plan, false);
 
                         if ($my_id) {
-
                             $sql = "UPDATE $table_thematic_plan SET id = iid WHERE iid = $my_id";
                             Database::query($sql);
 
@@ -3167,7 +3174,6 @@ class CourseRestorer
 
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_ATTENDANCE] as $id => $obj) {
-
                 // check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $obj->params['description'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $obj->params['description'],
@@ -3185,6 +3191,8 @@ class CourseRestorer
                 if (is_numeric($last_id)) {
                     $sql = "UPDATE $table_attendance SET id = iid WHERE iid = $last_id";
                     Database::query($sql);
+
+                    $this->course->resources[RESOURCE_ATTENDANCE][$id]->destination_id = $last_id;
 
                     api_item_property_update(
                         $this->destination_course_info,
@@ -3315,22 +3323,43 @@ class CourseRestorer
     }
 
     /**
-     * Restore Works
+     * Restore gradebook
      * @param int $sessionId
+     * @return  bool
      */
     public function restore_gradebook($sessionId = 0)
     {
+        if (in_array($this->file_option, [FILE_SKIP, FILE_RENAME])) {
+            return false;
+        }
+        // if overwrite
         if ($this->course->has_resources(RESOURCE_GRADEBOOK)) {
             $resources = $this->course->resources;
-            /**
-             * @var GradeBookBackup $obj
-             */
+            $destinationCourseCode = $this->destination_course_info['code'];
+            // Delete destination gradebook
+            $cats = \Category:: load(
+                null,
+                null,
+                $destinationCourseCode,
+                null,
+                null,
+                $sessionId
+            );
+
+            if (!empty($cats)) {
+                /** @var \Category $cat */
+                foreach ($cats as $cat) {
+                    $cat->delete_all();
+                }
+            }
+
+            /** @var GradeBookBackup $obj */
             foreach ($resources[RESOURCE_GRADEBOOK] as $id => $obj) {
                 if (!empty($obj->categories)) {
                     $categoryIdList = [];
-                    /** @var Category $cat */
+                    /** @var \Category $cat */
                     foreach ($obj->categories as $cat) {
-                        $cat->set_course_code($this->destination_course_info['code']);
+                        $cat->set_course_code($destinationCourseCode);
                         $cat->set_session_id($sessionId);
 
                         $parentId = $cat->get_parent_id();
@@ -3342,6 +3371,65 @@ class CourseRestorer
                         $oldId = $cat->get_id();
                         $categoryId = $cat->add();
                         $categoryIdList[$oldId] = $categoryId;
+                        if (!empty($cat->evaluations)) {
+                            /** @var \Evaluation $evaluation */
+                            foreach ($cat->evaluations as $evaluation) {
+                                $evaluation->set_category_id($categoryId);
+                                $evaluation->set_course_code($destinationCourseCode);
+                                $evaluation->setSessionId($sessionId);
+                                $evaluation->add();
+                            }
+                        }
+
+                        if (!empty($cat->links)) {
+                            /** @var \AbstractLink $link */
+                            foreach ($cat->links as $link) {
+                                $link->set_category_id($categoryId);
+                                $link->set_course_code($destinationCourseCode);
+                                $link->set_session_id($sessionId);
+                                $import = false;
+                                $itemId = $link->get_ref_id();
+                                switch ($link->get_type()) {
+                                    case LINK_EXERCISE:
+                                        $type = RESOURCE_QUIZ;
+                                        break;
+                                    /*case LINK_DROPBOX:
+                                        break;*/
+                                    case LINK_STUDENTPUBLICATION:
+                                        $type = RESOURCE_WORK;
+                                        break;
+                                    case LINK_LEARNPATH:
+                                        $type = RESOURCE_LEARNPATH;
+                                        break;
+                                    case LINK_FORUM_THREAD:
+                                        $type = RESOURCE_FORUMTOPIC;
+                                        break;
+                                    case LINK_ATTENDANCE:
+                                        $type = RESOURCE_ATTENDANCE;
+                                        break;
+                                    case LINK_SURVEY:
+                                        $type = RESOURCE_ATTENDANCE;
+                                        break;
+                                    case LINK_HOTPOTATOES:
+                                        $type = RESOURCE_QUIZ;
+                                        break;
+                                }
+
+                                 if ($this->course->has_resources($type) &&
+                                    isset($this->course->resources[$type][$itemId])
+                                ) {
+                                    $item = $this->course->resources[$type][$itemId];
+                                    if ($item && $item->is_restored()) {
+                                        $link->set_ref_id($item->destination_id);
+                                        $import = true;
+                                    }
+                                }
+
+                                if ($import) {
+                                    $link->add();
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -3417,6 +3505,15 @@ class CourseRestorer
         } else {
             return $array;
         }
+    }
+
+    /**
+     * @param int $groupId
+     * @return array
+     */
+    public function checkGroupId($groupId)
+    {
+        return \GroupManager::get_group_properties($groupId);
     }
 
     /**

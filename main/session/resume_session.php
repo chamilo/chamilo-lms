@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	@author Bart Mollet, Julio Montoya lot of fixes
-*	@package chamilo.admin
-*/
+ * @author Bart Mollet, Julio Montoya lot of fixes
+ * @package chamilo.admin
+ */
 
 use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
@@ -14,7 +14,10 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('Sessions'));
+$interbreadcrumb[] = array(
+    'url' => 'session_list.php',
+    'name' => get_lang('Sessions'),
+);
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -28,8 +31,6 @@ if (empty($sessionId)) {
 SessionManager::protectSession($sessionId);
 
 $tool_name = get_lang('SessionOverview');
-
-//$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
 
 $orig_param = '&origin=resume_session';
@@ -157,7 +158,7 @@ if ($sessionInfo['nbr_courses'] == 0) {
     $courses = $sessionRepository->getCoursesOrderedByPosition($session);
 
     foreach ($courses as $course) {
-        //select the number of users
+        // Select the number of users
         $sql = "SELECT count(*)
                 FROM $tbl_session_rel_user sru,
                 $tbl_session_rel_course_rel_user srcru
@@ -185,10 +186,7 @@ if ($sessionInfo['nbr_courses'] == 0) {
         $coachs = array();
         if (Database::num_rows($rs) > 0) {
             while ($info_coach = Database::fetch_array($rs)) {
-                $coachs[] = api_get_person_name(
-                        $info_coach['firstname'],
-                        $info_coach['lastname']
-                    ).' ('.$info_coach['username'].')';
+                $coachs[] = api_get_person_name($info_coach['firstname'], $info_coach['lastname']).' ('.$info_coach['username'].')';
             }
         } else {
             $coach = get_lang('None');
@@ -281,9 +279,7 @@ $url .= Display::url(
     "/main/user/user_export.php?file_type=csv&session=$sessionId&addcsvheader=1"
 );
 
-
 $userListToShow = Display::page_subheader(get_lang('UserList').$url);
-
 $userList = SessionManager::get_users_by_session($sessionId);
 
 if (!empty($userList)) {
@@ -369,7 +365,10 @@ if (!empty($userList)) {
 
 /** @var SequenceRepository $repo */
 $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
-$requirementAndDependencies = $repo->getRequirementAndDependencies($sessionId, SequenceResource::SESSION_TYPE);
+$requirementAndDependencies = $repo->getRequirementAndDependencies(
+    $sessionId,
+    SequenceResource::SESSION_TYPE
+);
 
 $requirements = '';
 if (!empty($requirementAndDependencies['requirements'])) {

@@ -13,7 +13,7 @@ use Symfony\Component\Finder\Finder;
  * current configuration file.
  * @package chamilo.install
  */
-error_log("Starting " . basename(__FILE__));
+error_log("Starting ".basename(__FILE__));
 
 global $debug;
 
@@ -24,16 +24,16 @@ if (defined('SYSTEM_INSTALLATION')) {
     // The main/exercice path was moved to main/exercise, so the code from 1.11
     // should just create the new directory, and we should delete the previous
     // one to avoid the web server to use the old
-    $exercisePath = api_get_path(SYS_CODE_PATH) . 'exercice';
+    $exercisePath = api_get_path(SYS_CODE_PATH).'exercice';
     if (is_dir($exercisePath)) {
         @rrmdir($exercisePath);
     }
     // Same with main/newscorm, renamed main/lp
-    $lpPath = api_get_path(SYS_CODE_PATH) . 'newscorm';
+    $lpPath = api_get_path(SYS_CODE_PATH).'newscorm';
     if (is_dir($lpPath)) {
         @rrmdir($lpPath);
     }
-    $ticketPluginPath = api_get_path(SYS_PLUGIN_PATH) . 'ticket';
+    $ticketPluginPath = api_get_path(SYS_PLUGIN_PATH).'ticket';
     if (is_dir($ticketPluginPath)) {
         @rrmdir($ticketPluginPath);
     }
@@ -42,5 +42,5 @@ if (defined('SYSTEM_INSTALLATION')) {
         error_log('Folders cleaned up');
     }
 } else {
-    echo 'You are not allowed here !'. __FILE__;
+    echo 'You are not allowed here !'.__FILE__;
 }

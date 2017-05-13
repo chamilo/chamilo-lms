@@ -43,22 +43,22 @@ class Accessurledituserstourl
                    ' WHERE (username LIKE "'.$needle.'%" '.
                    ' OR firstname LIKE "'.$needle.'%" '.
                    ' OR lastname LIKE "'.$needle.'%") '.
-                    $order_clause .
+                    $order_clause.
                    ' LIMIT 11';
 
             $rs = Database::query($sql);
-            $i=0;
+            $i = 0;
 
             while ($user = Database::fetch_array($rs)) {
                 $i++;
-                if ($i<=10) {
+                if ($i <= 10) {
                     $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_url(\''.addslashes($user['user_id']).'\',\''.api_get_person_name(addslashes($user['firstname']), addslashes($user['lastname'])).' ('.addslashes($user['username']).')'.'\')">'.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')</a><br />';
                 } else {
                     $return .= '...<br />';
                 }
             }
         }
-        $xajax_response -> addAssign('ajax_list_users','innerHTML',api_utf8_encode($return));
+        $xajax_response -> addAssign('ajax_list_users', 'innerHTML', api_utf8_encode($return));
         return $xajax_response;
     }
 }

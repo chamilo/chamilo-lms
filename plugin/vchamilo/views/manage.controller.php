@@ -112,9 +112,9 @@ switch ($action) {
         $vid = isset($_REQUEST['vid']) ? $_REQUEST['vid'] : '';
         if ($vid) {
             $vhosts = Database::select('*', 'vchamilo', array('where' => array('id = ?' => $vid)));
-            $vhost = (object)array_pop($vhosts);
+            $vhost = (object) array_pop($vhosts);
         } else {
-            $vhost = (object)$_configuration;
+            $vhost = (object) $_configuration;
             $vhost->slug = Virtual::getSlugFromUrl($vhost->root_web);
             $vhost->id = 0;
         }
@@ -305,10 +305,10 @@ switch ($action) {
                 $vid = isset($_REQUEST['vid']) ? $_REQUEST['vid'] : 0;
                 if ($vid) {
                     $vhosts = Database::select('*', 'vchamilo', array('where' => array('id = ?' => $vid)));
-                    $vhost = (object)array_pop($vhosts);
+                    $vhost = (object) array_pop($vhosts);
                     $toclear[$vhost->id] = $vhost;
                 } else {
-                    $toclear[0] = (object)$_configuration;
+                    $toclear[0] = (object) $_configuration;
                 }
             }
         } else {
@@ -331,7 +331,7 @@ switch ($action) {
                 //$uploadPath = Virtual::getConfig('vchamilo', 'upload_real_root');
 
                 // Get instance archive
-                $archivepath = api_get_path(SYS_ARCHIVE_PATH, (array)$instance);
+                $archivepath = api_get_path(SYS_ARCHIVE_PATH, (array) $instance);
                 $templatepath = $archivePath.'/'.$instance['slug'].'/twig';
                 Display::addFlash(Display::return_message("Deleting cache $templatepath \n"));
                 removeDir($templatepath);

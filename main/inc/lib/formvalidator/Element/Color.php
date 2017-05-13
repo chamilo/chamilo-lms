@@ -34,7 +34,7 @@ class Color extends HTML_QuickForm_text
      */
     public function toHtml()
     {
-        return parent::toHtml() . <<<JS
+        return parent::toHtml().<<<JS
             <script>
                 $(document).on('ready', function () {
                     var txtColor = $('#{$this->getAttribute('id')}'),

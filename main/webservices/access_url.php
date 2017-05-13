@@ -20,7 +20,8 @@ define('WS_ERROR_SETTING', 4);
 /**
  * @param integer $code
  */
-function return_error($code) {
+function return_error($code)
+{
     $fault = null;
     switch ($code) {
         case WS_ERROR_SECRET_KEY:

@@ -129,9 +129,7 @@ if (!empty($documentData)) {
             $lp->set_modified_on();
             $lpItem = new learnpathItem($lpItemId);
             $lpItem->add_audio_from_documents($newDocId);
-            Display::addFlash(
-                Display::return_message(get_lang('Updated'), 'info')
-            );
+            echo Display::return_message(get_lang('Updated'), 'info');
         }
     }
 
@@ -139,5 +137,5 @@ if (!empty($documentData)) {
     // Remove file with one extension
     unlink($documentPath);
 } else {
-    Display::addFlash($contents);
+    echo $contents;
 }

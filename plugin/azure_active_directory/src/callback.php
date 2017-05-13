@@ -5,7 +5,7 @@ require __DIR__.'/../../../main/inc/global.inc.php';
 require_once __DIR__.'/../../../main/auth/external_login/functions.inc.php';
 
 if (isset($_POST['error']) || empty($_REQUEST)) {
-    header('Location: ' . api_get_path(WEB_PATH) . 'index.php?logout=logout');
+    header('Location: '.api_get_path(WEB_PATH).'index.php?logout=logout');
     exit;
 }
 
@@ -27,7 +27,7 @@ $u = array(
     'username' => $jwtPayload->emails[0],
     'language' => 'en',
     'password' => 'azure_active_directory',
-    'auth_source' => 'azure_active_directory ' . $jwtPayload->idp,
+    'auth_source' => 'azure_active_directory '.$jwtPayload->idp,
     'extra' => array()
 );
 
@@ -53,5 +53,5 @@ if ($userInfo === false) {
     $_SESSION['_user'] = $_user;
 }
 
-header('Location: ' . api_get_path(WEB_PATH));
+header('Location: '.api_get_path(WEB_PATH));
 exit;

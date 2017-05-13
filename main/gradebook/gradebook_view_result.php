@@ -175,7 +175,6 @@ if (isset($_GET['import'])) {
                 }
             }
         } else {
-            header('Location: '.api_get_self().'?import=&selecteval='.$select_eval.'&importnofile=');
             Display::addFlash(
                 Display::return_message(
                     get_lang('ImportNoFile'),
@@ -183,16 +182,17 @@ if (isset($_GET['import'])) {
                     false
                 )
             );
+            header('Location: '.api_get_self().'?import=&selecteval='.$select_eval.'&importnofile=');
 
             exit;
         }
         if ($overwritescore != 0) {
-            header('Location: '.api_get_self().'?selecteval='.$select_eval.'&importoverwritescore='.$overwritescore);
             Display::addFlash(
                 Display::return_message(
                     get_lang('ImportOverWriteScore').' '.$overwritescore
                 )
             );
+            header('Location: '.api_get_self().'?selecteval='.$select_eval.'&importoverwritescore='.$overwritescore);
             exit;
         }
         if ($nr_results_added == 0) {
@@ -470,29 +470,29 @@ if (!isset($_GET['export']) && (!isset($_GET['import']))) {
     Display :: display_header('');
 }
 if (isset($_GET['addresultnostudents'])) {
-    Display::addFlash(Display::return_message(get_lang('AddResultNoStudents'), 'warning', false));
+    echo Display::return_message(get_lang('AddResultNoStudents'), 'warning', false);
 }
 
 if (isset($_GET['addresult'])) {
-    Display::addFlash(Display::return_message(get_lang('ResultAdded'), 'confirmation', false));
+    echo Display::return_message(get_lang('ResultAdded'), 'confirmation', false);
 }
 
 if (isset($_GET['adduser'])) {
-    Display::addFlash(Display::return_message(get_lang('UserAdded'), 'confirmation', false));
+    echo Display::return_message(get_lang('UserAdded'), 'confirmation', false);
 }
 
 if (isset($_GET['incorrectdata'])) {
-    Display::addFlash(Display::return_message(get_lang('IncorrectData'), 'warning', false));
+    echo Display::return_message(get_lang('IncorrectData'), 'warning', false);
 }
 
 if (isset($_GET['massdelete'])) {
-    Display::addFlash(Display::return_message(get_lang('ResultsDeleted'), 'confirmation', false));
+    echo Display::return_message(get_lang('ResultsDeleted'), 'confirmation', false);
 }
 if (isset($_GET['nouser'])) {
-    Display::addFlash(Display::return_message(get_lang('NoUser'), 'warning', false));
+    echo Display::return_message(get_lang('NoUser'), 'warning', false);
 }
 if (isset($_GET['overwritemax'])) {
-    Display::addFlash(Display::return_message(get_lang('OverWriteMax'), 'warning', false));
+    echo Display::return_message(get_lang('OverWriteMax'), 'warning', false);
 }
 
 if (isset($_GET['import_user_error'])) {
@@ -503,7 +503,7 @@ if (isset($_GET['import_user_error'])) {
 }
 if (isset($_GET['import_score_error'])) {
     $userinfo = api_get_user_info($_GET['import_score_error']);
-    Display::addFlash(Display::return_message(get_lang('ScoreDoesNotMatch'). ' ' . api_get_person_name($userinfo['firstname'], $userinfo['lastname']), 'warning'));
+    echo Display::return_message(get_lang('ScoreDoesNotMatch').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']), 'warning');
 }
 if ($file_type == null) {
     //show the result header

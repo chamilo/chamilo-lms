@@ -6,6 +6,7 @@
  * and names
  * @package chamilo.admin
  */
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -252,7 +253,8 @@ function modify_courses_filter($code)
 /**
  * Return an icon representing the visibility of the course
  */
-function get_course_visibility_icon($v) {
+function get_course_visibility_icon($v)
+{
     $style = 'margin-bottom:0;margin-right:5px;';
     switch ($v) {
         case 0:
@@ -294,13 +296,11 @@ $content = '';
 $message = '';
 $actions = '';
 
-if (isset ($_GET['search']) && $_GET['search'] === 'advanced') {
+if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     // Get all course categories
     $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
     $interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
     $tool_name = get_lang('SearchACourse');
-
-    //api_display_tool_title($tool_name);
     $form = new FormValidator('advanced_course_search', 'get');
     $form->addElement('header', $tool_name);
     $form->addText('keyword_code', get_lang('CourseCode'), false);
@@ -350,7 +350,14 @@ if (isset ($_GET['search']) && $_GET['search'] === 'advanced') {
 
     }
     // Create a search-box
-    $form = new FormValidator('search_simple', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
+    $form = new FormValidator(
+        'search_simple',
+        'get',
+        '',
+        '',
+        array(),
+        FormValidator::LAYOUT_INLINE
+    );
     $form->addElement(
         'text',
         'keyword',
@@ -411,17 +418,30 @@ if (isset ($_GET['search']) && $_GET['search'] === 'advanced') {
 
     if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
         // Create a sortable table with the course data filtered by session
-        $table = new SortableTable('courses', 'get_number_of_courses', 'get_course_data_by_session', 2);
+        $table = new SortableTable(
+            'courses',
+            'get_number_of_courses',
+            'get_course_data_by_session',
+            2
+        );
     } else {
         // Create a sortable table with the course data
-        $table = new SortableTable('courses', 'get_number_of_courses', 'get_course_data', 2, 20, 'ASC', 'course-list');
+        $table = new SortableTable(
+            'courses',
+            'get_number_of_courses',
+            'get_course_data',
+            2,
+            20,
+            'ASC',
+            'course-list'
+        );
     }
 
     $parameters = array();
 
-    if (isset ($_GET['keyword'])) {
+    if (isset($_GET['keyword'])) {
         $parameters = array('keyword' => Security::remove_XSS($_GET['keyword']));
-    } elseif (isset ($_GET['keyword_code'])) {
+    } elseif (isset($_GET['keyword_code'])) {
         $parameters['keyword_code'] = Security::remove_XSS($_GET['keyword_code']);
         $parameters['keyword_title'] = Security::remove_XSS($_GET['keyword_title']);
         $parameters['keyword_category'] = Security::remove_XSS($_GET['keyword_category']);
@@ -441,10 +461,18 @@ if (isset ($_GET['search']) && $_GET['search'] === 'advanced') {
     $table->set_header(5, get_lang('SubscriptionAllowed'), true, 'width="60px"');
     $table->set_header(6, get_lang('UnsubscriptionAllowed'), false, 'width="50px"');
 
-    //$table->set_header(7, get_lang('Teacher'));
-    $table->set_header(7, get_lang('Action'), false, null, array('class'=>'td_actions'));
+    $table->set_header(
+        7,
+        get_lang('Action'),
+        false,
+        null,
+        array('class' => 'td_actions')
+    );
     $table->set_column_filter(7, 'modify_courses_filter');
-    $table->set_form_actions(array('delete_courses' => get_lang('DeleteCourse')), 'course');
+    $table->set_form_actions(
+        array('delete_courses' => get_lang('DeleteCourse')),
+        'course'
+    );
     $content .= $table->return_table();
 }
 

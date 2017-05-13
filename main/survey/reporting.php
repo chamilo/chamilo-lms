@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	@package chamilo.survey
- * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
- * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
- * 	@version $Id: reporting.php 21652 2009-06-27 17:07:35Z herodoto $
+ * @package chamilo.survey
+ * @author unknown, the initial survey that did not make it in 1.8 because of bad code
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
+ * @version $Id: reporting.php 21652 2009-06-27 17:07:35Z herodoto $
  *
- * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
+ * @todo The question has to be more clearly indicated (same style as when filling the survey)
  */
 
 require_once __DIR__.'/../inc/global.inc.php';

@@ -28,7 +28,7 @@ class Virtual
         self::getHostName($_configuration);
 
         // We are on physical chamilo. Let original config play
-        $virtualChamiloWebRoot = rtrim($_configuration['vchamilo_web_root'], '/') . '/';
+        $virtualChamiloWebRoot = rtrim($_configuration['vchamilo_web_root'], '/').'/';
 
         $virtualChamilo = [];
         if ($_configuration['root_web'] == $virtualChamiloWebRoot) {
@@ -234,7 +234,7 @@ class Virtual
         if (preg_match('#https?://#', $url)) {
             header('location: '.$url);
         } else {
-            header('location: ' . api_get_path(WEB_PATH).$url);
+            header('location: '.api_get_path(WEB_PATH).$url);
         }
         exit;
     }
@@ -417,7 +417,7 @@ class Virtual
         }
 
         // Making the command line (see 'vconfig.php' file for defining the right paths).
-        $sqlcmd = $pgm.' -h'.$vchamilodata->db_host.(isset($vchamilodata->db_port) ? ' -P'.$vchamilodata->db_port.' ' : ' ' );
+        $sqlcmd = $pgm.' -h'.$vchamilodata->db_host.(isset($vchamilodata->db_port) ? ' -P'.$vchamilodata->db_port.' ' : ' ');
         $sqlcmd .= '-u'.$vchamilodata->db_user.' '.$databasePassword;
         $sqlcmd .= '%DATABASE% < ';
 
@@ -500,7 +500,7 @@ class Virtual
         //    $cmds[] = $cmd_main . ' > ' . $outputfilerad;
         //} else {
         $cmd_main = "-h{$host} -P{$port} -u{$vchamilo->db_user} {$pass} {$vchamilo->main_database}";
-        $cmds[] = $cmd_main . ' > ' . escapeshellarg($outputfilerad);
+        $cmds[] = $cmd_main.' > '.escapeshellarg($outputfilerad);
         //}
 
         $mysqldumpcmd = self::getConfig('vchamilo', 'cmd_mysqldump', true);
@@ -949,7 +949,7 @@ class Virtual
                 Display::return_message('You cannot use the same database as the chamilo master', 'error')
             );
 
-            return ;
+            return;
         }
 
         $databaseName = $data->main_database;
@@ -963,7 +963,7 @@ class Virtual
                     'error'
                 )
             );
-            return ;
+            return;
         }
 
         $data->root_web = api_add_trailing_slash($data->root_web);
@@ -993,7 +993,7 @@ class Virtual
                 Display::addFlash(
                     Display::return_message('Cannot create slug from url: '.$data->root_web, 'error')
                 );
-                return ;
+                return;
             }
             Database::insert($tablename, (array) $data);
         }
@@ -1135,14 +1135,14 @@ class Virtual
                 $newDatabase->sitename = $siteName;
                 $newDatabase->institution = $institution;
                 $slug = $newDatabase->slug = $data->slug = self::getSlugFromUrl($data->root_web);
-                $id = Database::insert($table, (array)$newDatabase);
+                $id = Database::insert($table, (array) $newDatabase);
             }
         }
 
         if (!$id) {
             // Show data detail to help debug
             //var_dump($data);
-            throw new Exception('New/Imported instance was not registered - edit ' . __FILE__ . ' on line ' . __LINE__ . 'to var_dump');
+            throw new Exception('New/Imported instance was not registered - edit '.__FILE__.' on line '.__LINE__.'to var_dump');
         }
 
         if (empty($slug)) {
@@ -1313,7 +1313,7 @@ class Virtual
             $id = (int) $id;
             $sql = "SELECT * FROM vchamilo WHERE id = $id";
             $result = Database::query($sql);
-            $vhost =  (object) Database::fetch_array($result, 'ASSOC');
+            $vhost = (object) Database::fetch_array($result, 'ASSOC');
         }
 
         return $vhost;

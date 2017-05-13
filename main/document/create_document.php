@@ -97,7 +97,7 @@ if (!empty($sessionId) && empty($document_data)) {
     );
 }
 $groupIid = 0;
-
+$group_properties = [];
 if (!empty($groupId)) {
     $group_properties = GroupManager::get_group_properties($groupId);
     $groupIid = $group_properties['iid'];
@@ -193,7 +193,6 @@ if (!is_dir($filepath)) {
     $dir = '/';
 }
 
-$to_group_id = 0;
 if (!$is_certificate_mode) {
     if (api_is_in_group()) {
         $interbreadcrumb[] = array(
@@ -201,7 +200,6 @@ if (!$is_certificate_mode) {
             "name" => get_lang('GroupSpace'),
         );
         $noPHP_SELF = true;
-        $to_group_id = $group_properties['iid'];
         $path = explode('/', $dir);
         if ('/'.$path[1] != $group_properties['directory']) {
             api_not_allowed(true);
@@ -501,8 +499,8 @@ if ($form->validate()) {
     // Don't create file with the same name.
 
     if (file_exists($filepath.$filename.'.'.$extension)) {
-        Display:: display_header($nameTools, 'Doc');
         Display::addFlash(Display::return_message(get_lang('FileExists').' '.$title, 'error', false));
+        Display:: display_header($nameTools, 'Doc');
         Display:: display_footer();
         exit;
     }
@@ -518,8 +516,6 @@ if ($form->validate()) {
         fputs($fp, $content);
         fclose($fp);
         chmod($filepath.$filename.'.'.$extension, api_get_permissions_for_new_files());
-
-
         $file_size = filesize($filepath.$filename.'.'.$extension);
         $save_file_path = $dir.$filename.'.'.$extension;
 
@@ -540,7 +536,7 @@ if ($form->validate()) {
                 $document_id,
                 'DocumentAdded',
                 $userId,
-                $to_group_id,
+                $group_properties,
                 null,
                 null,
                 null,
@@ -585,13 +581,13 @@ if ($form->validate()) {
             header('Location: document.php?'.api_get_cidreq().'&id='.$folder_id.$selectcat.$certificate_condition);
             exit();
         } else {
-            Display :: display_header($nameTools, 'Doc');
             Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
+            Display :: display_header($nameTools, 'Doc');
             Display :: display_footer();
         }
     } else {
-        Display :: display_header($nameTools, 'Doc');
         Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
+        Display :: display_header($nameTools, 'Doc');
         Display :: display_footer();
     }
 } else {
@@ -646,7 +642,7 @@ if ($form->validate()) {
             $str_info .= $info_value.'<br/>';
         }
         $create_certificate = get_lang('CreateCertificateWithTags');
-        Display::addFlash(Display::return_message($create_certificate.': <br /><br/>'.$str_info, 'normal', false));
+        echo Display::return_message($create_certificate.': <br /><br/>'.$str_info, 'normal', false);
     }
 
     // HTML-editor

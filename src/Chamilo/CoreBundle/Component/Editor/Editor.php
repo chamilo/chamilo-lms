@@ -131,7 +131,7 @@ class Editor
             case 'integer':
                 //no break
             case 'double':
-                return (string)$var;
+                return (string) $var;
                 //no break
             case 'resource':
                 //no break

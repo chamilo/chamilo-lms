@@ -106,51 +106,51 @@ function showResults($courseInfo, $weeksCount, $page)
     $lineHeaderExport = array(null, null);
     $lineHeaderExport2 = array(null, ull);
     while ($rowe = Database::fetch_assoc($resultHeader)) {
-        $lineHeaderExport[] = utf8_decode('Work' . $rowe['week_id']);
-        $lineHeaderExport[] = utf8_decode('Forum' . $rowe['week_id']);
+        $lineHeaderExport[] = utf8_decode('Work'.$rowe['week_id']);
+        $lineHeaderExport[] = utf8_decode('Forum'.$rowe['week_id']);
         //$fila_export_encabezado[] =  utf8_decode('Eval'.$rowe['week_id']);
         //$fila_export_encabezado[] =  utf8_decode('PC'.$rowe['week_id']);
         $lineHeaderExport2[] = utf8_decode($rowe['work_title']);
         $lineHeaderExport2[] = utf8_decode($rowe['thread_title']);
         //$fila_export_encabezado2[] = utf8_decode($rowe['eval_title']);
         //$fila_export_encabezado2[] = utf8_decode($rowe['pc_title']);
-        $fila_export = array('Work' . $rowe['week_id'], 'Forum' . $rowe['week_id'], 'Eval' . $rowe['week_id'], 'PC' . $rowe['week_id']);
+        $fila_export = array('Work'.$rowe['week_id'], 'Forum'.$rowe['week_id'], 'Eval'.$rowe['week_id'], 'PC'.$rowe['week_id']);
         if ($rowe['week_id'] > (($page - 1) * 7) && $rowe['week_id'] <= (7 * $page)) {
             $ids[$rowe['week_id']] = $rowe['id'];
-            $line.='<th>
-                <a href="#" onClick="showContent(' . "'tarea" . $rowe['week_id'] . "'" . ');">Work' . $rowe['week_id'] . '
-                        <div class="blackboard_hide" id="tarea' . $rowe['week_id'] . '">' . $rowe['work_title'] . '</div>
+            $line .= '<th>
+                <a href="#" onClick="showContent(' . "'tarea".$rowe['week_id']."'".');">Work'.$rowe['week_id'].'
+                        <div class="blackboard_hide" id="tarea' . $rowe['week_id'].'">'.$rowe['work_title'].'</div>
                 </a></th>';
-            $line.= '<th>
-                <a href="#" onClick="showContent(' . "'foro" . $rowe['week_id'] . "'" . ');">Forum' . $rowe['week_id'] . '
-                        <div class="blackboard_hide" id="foro' . $rowe['week_id'] . '">' . $rowe['thread_title'] . '</div>
+            $line .= '<th>
+                <a href="#" onClick="showContent(' . "'foro".$rowe['week_id']."'".');">Forum'.$rowe['week_id'].'
+                        <div class="blackboard_hide" id="foro' . $rowe['week_id'].'">'.$rowe['thread_title'].'</div>
                 </a>
                 </th>';
         }
     }
     $tableExport[] = $lineHeaderExport;
     $tableExport[] = $lineHeaderExport2;
-    $line.= '</tr>';
+    $line .= '</tr>';
 
     $html = '<form action="tutor.php" name="semanas" id="semanas" method="POST">
             <div class="row">
-            ' . get_lang('SelectWeeksSpan') . '
+            ' . get_lang('SelectWeeksSpan').'
             <select name="weeksNumber" id="weeksNumber" onChange="submit();">
-            <option value="7" ' . (($weeksCount == 7) ? 'selected="selected"' : "") . '>7 weeks</option>
-            <option value="14" ' . (($weeksCount == 14) ? 'selected="selected"' : "") . '>14 weeks</option>
+            <option value="7" ' . (($weeksCount == 7) ? 'selected="selected"' : "").'>7 weeks</option>
+            <option value="14" ' . (($weeksCount == 14) ? 'selected="selected"' : "").'>14 weeks</option>
             </select>';
 
     if ($weeksCount == 14) {
-        $html .= '<span style="float:right;"><a href="tutor.php?page=' . (($page == 1) ? 2 : 1) . '">' . (($page == 1) ? "Siguiente" : "Anterior") . '</a></span>';
+        $html .= '<span style="float:right;"><a href="tutor.php?page='.(($page == 1) ? 2 : 1).'">'.(($page == 1) ? "Siguiente" : "Anterior").'</a></span>';
     }
-    $html .= '<span style="float:right;"><a href="' . api_get_self() . '?action=export' . $get_parameter . $get_parameter2 . '">' . Display::return_icon('export_excel.png', get_lang('Export'), '', '32') . '</a></span>';
+    $html .= '<span style="float:right;"><a href="'.api_get_self().'?action=export'.$get_parameter.$get_parameter2.'">'.Display::return_icon('export_excel.png', get_lang('Export'), '', '32').'</a></span>';
 
     $html .= '</form>';
     $html .= '<table class="reports">';
     $html .= '<tr>
             <th ></th>';
     for ($i = (7 * $page - 6); $i <= $page * 7; $i++) {
-        $html .= '<th colspan="2">Week ' . $i . '<a href="assign_tickets.php?id=' . $ids[$i] . '" class="ajax">' . Display::return_icon('edit.png', get_lang('Edit'), array('width' => '16', 'height' => '16'), 22) . '</a></th>';
+        $html .= '<th colspan="2">Week '.$i.'<a href="assign_tickets.php?id='.$ids[$i].'" class="ajax">'.Display::return_icon('edit.png', get_lang('Edit'), array('width' => '16', 'height' => '16'), 22).'</a></th>';
     }
     $html .= '</tr>';
     $html .= $line;
@@ -190,12 +190,12 @@ function showStudentResult($datos, $pagina)
     $inicio = (7 * $pagina - 6);
     $fila = '<tr>';
 
-    $fila.= '<td><a href="' . api_get_path(WEB_CODE_PATH) . 'user/userInfo.php?' . api_get_cidreq() . '&uInfo=' . $datos[$inicio]['user_id'] . '">' . $datos[$inicio]['username'] . '</a></td>';
+    $fila .= '<td><a href="'.api_get_path(WEB_CODE_PATH).'user/userInfo.php?'.api_get_cidreq().'&uInfo='.$datos[$inicio]['user_id'].'">'.$datos[$inicio]['username'].'</a></td>';
     foreach ($datos as $dato) {
-        $fila.= '<td align="center">' . (($dato['work_ok'] == 1) ? Display::return_icon('check.png') : Display::return_icon('aspa.png')) . '</td>';
-        $fila.= '<td align="center">' . (($dato['thread_ok'] == 1) ? Display::return_icon('check.png') : Display::return_icon('aspa.png')) . '</td>';
+        $fila .= '<td align="center">'.(($dato['work_ok'] == 1) ? Display::return_icon('check.png') : Display::return_icon('aspa.png')).'</td>';
+        $fila .= '<td align="center">'.(($dato['thread_ok'] == 1) ? Display::return_icon('check.png') : Display::return_icon('aspa.png')).'</td>';
     }
-    $fila.= '</tr>';
+    $fila .= '</tr>';
 
     return $fila;
 }

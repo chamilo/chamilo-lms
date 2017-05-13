@@ -302,7 +302,7 @@ class Template
                 $content = '<div class="help">';
                 $content .= Display::url(
                     Display::return_icon('help.large.png', get_lang('Help')),
-                    api_get_path(WEB_CODE_PATH) . 'help/help.php?open=' . $help,
+                    api_get_path(WEB_CODE_PATH).'help/help.php?open='.$help,
                     [
                         'class' => 'ajax',
                         'data-title' => get_lang('Help')
@@ -537,7 +537,7 @@ class Template
             'web_course' => api_get_path(WEB_COURSE_PATH),
             'web_main' => api_get_path(WEB_CODE_PATH),
             'web_css' => api_get_path(WEB_CSS_PATH),
-            'web_css_theme' => api_get_path(WEB_CSS_PATH) . $this->themeDir,
+            'web_css_theme' => api_get_path(WEB_CSS_PATH).$this->themeDir,
             'web_ajax' => api_get_path(WEB_AJAX_PATH),
             'web_img' => api_get_path(WEB_IMG_PATH),
             'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
@@ -595,11 +595,11 @@ class Template
             $css[] = api_get_path(WEB_PATH).'web/assets/'.$file;
         }
 
-        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css';
-        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/style.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css';
 
         if (api_is_global_chat_enabled()) {
-            $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chat/css/chat.css';
+            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
         }
         $css_file_to_string = '';
         foreach ($css as $file) {
@@ -701,10 +701,10 @@ class Template
     {
         global $disable_js_and_css_files, $htmlHeadXtra;
         $isoCode = api_get_language_isocode();
-        $selectLink = 'bootstrap-select/dist/js/i18n/defaults-' . $isoCode . '_' . strtoupper($isoCode) . '.min.js';
+        $selectLink = 'bootstrap-select/dist/js/i18n/defaults-'.$isoCode.'_'.strtoupper($isoCode).'.min.js';
 
         if ($isoCode == 'en') {
-            $selectLink = 'bootstrap-select/dist/js/i18n/defaults-' . $isoCode . '_US.min.js';
+            $selectLink = 'bootstrap-select/dist/js/i18n/defaults-'.$isoCode.'_US.min.js';
         }
         // JS files
         $js_files = array(
@@ -753,12 +753,12 @@ class Template
         }
 
         if (api_get_setting('include_asciimathml_script') == 'true') {
-            $bowerJsFiles[] = 'MathJax/MathJax.js?config=AM_HTMLorMML';
+            $bowerJsFiles[] = 'MathJax/MathJax.js?config=TeX-AMS_HTML';
         }
 
         if ($isoCode != 'en') {
-            $bowerJsFiles[] = 'jqueryui-timepicker-addon/dist/i18n/jquery-ui-timepicker-' . $isoCode . '.js';
-            $bowerJsFiles[] = 'jquery-ui/ui/minified/i18n/datepicker-' . $isoCode . '.min.js';
+            $bowerJsFiles[] = 'jqueryui-timepicker-addon/dist/i18n/jquery-ui-timepicker-'.$isoCode.'.js';
+            $bowerJsFiles[] = 'jquery-ui/ui/minified/i18n/datepicker-'.$isoCode.'.min.js';
         }
 
         foreach ($bowerJsFiles as $file) {
@@ -1069,13 +1069,13 @@ class Template
         $socialMeta = '';
         $metaTitle = api_get_setting('meta_title');
         if (!empty($metaTitle)) {
-            $socialMeta .= '<meta name="twitter:card" content="summary" />' . "\n";
+            $socialMeta .= '<meta name="twitter:card" content="summary" />'."\n";
             $metaSite = api_get_setting('meta_twitter_site');
             if (!empty($metaSite)) {
-                $socialMeta .= '<meta name="twitter:site" content="' . $metaSite . '" />' . "\n";
+                $socialMeta .= '<meta name="twitter:site" content="'.$metaSite.'" />'."\n";
                 $metaCreator = api_get_setting('meta_twitter_creator');
                 if (!empty($metaCreator)) {
-                    $socialMeta .= '<meta name="twitter:creator" content="' . $metaCreator . '" />' . "\n";
+                    $socialMeta .= '<meta name="twitter:creator" content="'.$metaCreator.'" />'."\n";
                 }
             }
 
@@ -1087,19 +1087,19 @@ class Template
             if (!$userId && !$skillId) {
                 // no combination of user and skill ID has been defined,
                 // so print the normal OpenGraph meta tags
-                $socialMeta .= '<meta property="og:title" content="' . $metaTitle . '" />' . "\n";
-                $socialMeta .= '<meta property="og:url" content="' . api_get_path(WEB_PATH) . '" />' . "\n";
+                $socialMeta .= '<meta property="og:title" content="'.$metaTitle.'" />'."\n";
+                $socialMeta .= '<meta property="og:url" content="'.api_get_path(WEB_PATH).'" />'."\n";
 
                 $metaDescription = api_get_setting('meta_description');
                 if (!empty($metaDescription)) {
-                    $socialMeta .= '<meta property="og:description" content="' . $metaDescription . '" />' . "\n";
+                    $socialMeta .= '<meta property="og:description" content="'.$metaDescription.'" />'."\n";
                 }
 
                 $metaImage = api_get_setting('meta_image_path');
                 if (!empty($metaImage)) {
-                    if (is_file(api_get_path(SYS_PATH) . $metaImage)) {
-                        $path = api_get_path(WEB_PATH) . $metaImage;
-                        $socialMeta .= '<meta property="og:image" content="' . $path . '" />' . "\n";
+                    if (is_file(api_get_path(SYS_PATH).$metaImage)) {
+                        $path = api_get_path(WEB_PATH).$metaImage;
+                        $socialMeta .= '<meta property="og:image" content="'.$path.'" />'."\n";
                     }
                 }
             }
@@ -1149,7 +1149,7 @@ class Template
         // Tutor name
         if (api_get_setting('show_tutor_data') == 'true') {
             // Course manager
-            $courseId  = api_get_course_int_id();
+            $courseId = api_get_course_int_id();
             $id_session = api_get_session_id();
             if (!empty($courseId)) {
                 $tutor_data = '';
@@ -1181,7 +1181,7 @@ class Template
             $courseId = api_get_course_int_id();
             if (!empty($courseId)) {
                 $teacher_data = '';
-                $mail= CourseManager::get_emails_of_tutors_to_course($courseId);
+                $mail = CourseManager::get_emails_of_tutors_to_course($courseId);
                 if (!empty($mail)) {
                     $teachers_parsed = array();
                     foreach ($mail as $value) {
@@ -1449,7 +1449,7 @@ class Template
                     'sessionVar'   => basename(__FILE__, '.php'),
                     'imageOptions' => array(
                         'font_size' => 20,
-                        'font_path' => api_get_path(SYS_FONTS_PATH) . 'opensans/',
+                        'font_path' => api_get_path(SYS_FONTS_PATH).'opensans/',
                         'font_file' => 'OpenSans-Regular.ttf',
                         //'output' => 'gif'
                     )

@@ -6,12 +6,12 @@ exit;
 * @param string $location
 *
 */
-function vchamilo_parse_csv_nodelist($nodelistlocation = '', $plugin = null){
+function vchamilo_parse_csv_nodelist($nodelistlocation = '', $plugin = null) {
     global $_configuration;
 
     $vnodes = array();
 
-    if (empty($nodelistlocation)){
+    if (empty($nodelistlocation)) {
         $nodelistlocation = $_configuratioh['root_sys'].'/plugin/vchamilo/nodelist.csv';
     }
 
@@ -70,7 +70,7 @@ function vchamilo_parse_csv_nodelist($nodelistlocation = '', $plugin = null){
     // Jump any empty or comment line
     $text = fgets($fp, 1024);
     $i = 0;
-    while(vchamilo_is_empty_line_or_format($text, $i == 0)){
+    while (vchamilo_is_empty_line_or_format($text, $i == 0)) {
         $text = fgets($fp, 1024);
         $i++;
     }
@@ -80,7 +80,7 @@ function vchamilo_parse_csv_nodelist($nodelistlocation = '', $plugin = null){
     // Check for valid field names
     foreach ($headers as $h) {
         $header[] = trim($h);
-        $patternized = implode('|', $patterns) . "\\d+";
+        $patternized = implode('|', $patterns)."\\d+";
         $metapattern = implode('|', $metas);
         if (!(isset($required[$h]) ||
                 isset($optionalDefaults[$h]) ||
@@ -109,7 +109,7 @@ function vchamilo_parse_csv_nodelist($nodelistlocation = '', $plugin = null){
     $linenum = 2; // Since header is line 1.
 
     // Take some from admin profile, other fixed by hardcoded defaults.
-    while (!feof ($fp)) {
+    while (!feof($fp)) {
 
         // Make a new base record.
         $vnode = new StdClass();
@@ -196,7 +196,7 @@ function vchamilo_is_empty_line_or_format(&$text, $resetfirst = false) {
  * @param bool $casesensitive true if options are case sensitive
  * @return string entered text
  */
-function cli_input($prompt, $default='', array $options=null, $casesensitiveoptions=false) {
+function cli_input($prompt, $default = '', array $options = null, $casesensitiveoptions = false) {
     echo $prompt;
     echo "\n: ";
     $input = fread(STDIN, 2048);
@@ -222,8 +222,8 @@ function cli_input($prompt, $default='', array $options=null, $casesensitiveopti
  * @param array $shortmapping array describing mapping of short to long style options ex:('h'=>'help', 'v'=>'verbose')
  * @return array array of arrays, options, unrecognised as optionlongname=>value
  */
-function cli_get_params(array $longoptions, array $shortmapping=null) {
-    $shortmapping = (array)$shortmapping;
+function cli_get_params(array $longoptions, array $shortmapping = null) {
+    $shortmapping = (array) $shortmapping;
     $options      = array();
     $unrecognized = array();
 
@@ -292,7 +292,7 @@ function cli_get_params(array $longoptions, array $shortmapping=null) {
  * @param bool $return false means print, true return as string
  * @return mixed void or string
  */
-function cli_separator($return=false) {
+function cli_separator($return = false) {
     $separator = str_repeat('-', 79)."\n";
     if ($return) {
         return $separator;
@@ -307,7 +307,7 @@ function cli_separator($return=false) {
  * @param bool $return false means print, true return as string
  * @return mixed void or string
  */
-function cli_heading($string, $return=false) {
+function cli_heading($string, $return = false) {
     $string = "== $string ==\n";
     if ($return) {
         return $string;

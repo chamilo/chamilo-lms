@@ -80,7 +80,10 @@ $form_search = new FormValidator(
     array(),
     FormValidator::LAYOUT_INLINE
 );
-$form_search->addElement('text', 'search_field');
+$form_search->addElement('text', 'search_field', null, array(
+    'id' => 'search_field',
+    'aria-label' => get_lang('Search')
+));
 $form_search->addElement('hidden', 'category', 'search_setting');
 $form_search->addButtonSearch(get_lang('Search'), 'submit_button');
 $form_search->setDefaults(

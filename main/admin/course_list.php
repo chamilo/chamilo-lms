@@ -358,7 +358,12 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         array(),
         FormValidator::LAYOUT_INLINE
     );
-    $form->addElement('text', 'keyword', null, array('id' => 'course-search-keyword'));
+    $form->addElement(
+        'text',
+        'keyword',
+        null,
+        array('id' => 'course-search-keyword', 'aria-label' => get_lang('SearchCourse'))
+    );
     $form->addButtonSearch(get_lang('SearchCourse'));
     $advanced = '<a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'admin/course_list.php?search=advanced"><em class="fa fa-search"></em> '.get_lang('AdvancedSearch').'</a>';
 

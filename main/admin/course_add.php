@@ -42,7 +42,14 @@ $form = new FormValidator('update_course');
 $form->addElement('header', $tool_name);
 
 // Title
-$form->addText('title', get_lang('Title'), true);
+$form->addText(
+    'title',
+    get_lang('Title'),
+    true,
+    array(
+        'aria-label' => get_lang('Title')
+    )
+);
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
@@ -57,7 +64,8 @@ $form->addText(
     [
         'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
         'pattern' => '[a-zA-Z0-9]+',
-        'title' => get_lang('OnlyLettersAndNumbers')
+        'title' => get_lang('OnlyLettersAndNumbers'),
+        'id' => 'visual_code'
     ]
 );
 
@@ -92,12 +100,22 @@ $form->addElement(
 );
 
 // Course department
-$form->addText('department_name', get_lang('CourseDepartment'), false, array('size' => '60'));
+$form->addText(
+    'department_name',
+    get_lang('CourseDepartment'),
+    false,
+    array('size' => '60', 'id' => 'department_name')
+);
 $form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
 
 // Department URL
-$form->addText('department_url', get_lang('CourseDepartmentURL'), false, array('size' => '60'));
+$form->addText(
+    'department_url',
+    get_lang('CourseDepartmentURL'),
+    false,
+    array('size' => '60', 'id' => 'department_url')
+);
 $form->applyFilter('department_url', 'html_filter');
 
 // Course language.
@@ -148,7 +166,9 @@ $group[] = $form->createElement('radio', 'unsubscribe', get_lang('Unsubscription
 $group[] = $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
 $form->addGroup($group, '', get_lang('Unsubscription'));
 
-$form->addElement('text', 'disk_quota', array(get_lang('CourseQuota'), null, get_lang('MB')));
+$form->addElement('text', 'disk_quota', array(get_lang('CourseQuota'), null, get_lang('MB')), array(
+    'id' => 'disk_quota'
+));
 $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 
 $obj = new GradeModel();

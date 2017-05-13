@@ -7182,7 +7182,7 @@ class SessionManager
             'name',
             get_lang('SessionName'),
             true,
-            ['maxlength' => 150]
+            ['maxlength' => 150, 'aria-label' => get_lang('SessionName')]
         );
         $form->addRule('name', get_lang('SessionNameAlreadyExists'), 'callback', 'check_session_name');
 

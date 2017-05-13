@@ -9,7 +9,6 @@ if (!ctype_alnum($token)) {
     $token = '';
 }
 
-$tpl = new Template(null);
 
 // Build the form
 $form = new FormValidator('reset', 'POST', api_get_self().'?token='.$token);
@@ -62,6 +61,7 @@ if ($form->validate()) {
     }
 }
 
+$tpl = new Template(null);
 $tpl->assign('form', $form->toHtml());
 $content = $tpl->get_template('auth/set_temp_password.tpl');
 $tpl->assign('content', $tpl->fetch($content));

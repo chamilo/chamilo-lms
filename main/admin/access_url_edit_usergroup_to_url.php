@@ -202,7 +202,7 @@ $url_list = UrlManager::get_url_data();
         <input type="hidden" name="add_type" value="<?php echo $add_type ?>"/>
         <?php
         if (!empty($errorMsg)) {
-            Display::addFlash(Display::return_message($errorMsg, 'normal')); //main API
+            echo Display::return_message($errorMsg, 'normal'); //main API
         }
         ?>
         <div class="row">

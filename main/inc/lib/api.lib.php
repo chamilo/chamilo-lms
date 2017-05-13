@@ -6017,20 +6017,6 @@ function api_check_term_condition($user_id)
  * @param int The tool id
  * @return array
  */
-function api_get_tool_information($tool_id)
-{
-    $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
-    $course_id = api_get_course_int_id();
-    $sql = "SELECT * FROM $t_tool WHERE c_id = $course_id AND id = ".intval($tool_id);
-    $rs  = Database::query($sql);
-    return Database::fetch_array($rs);
-}
-
-/**
- * Gets all information of a tool into course
- * @param int The tool id
- * @return array
- */
 function api_get_tool_information_by_name($name)
 {
     $t_tool = Database::get_course_table(TABLE_TOOL_LIST);

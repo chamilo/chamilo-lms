@@ -4893,7 +4893,8 @@ class Tracking
 
                 $html .= '<thead><tr>';
                 foreach ($columnHeaders as $key => $columnSetting) {
-                    if (in_array($key, $trackingColumns['course_session']) &&
+                    if (isset($trackingColumns['course_session']) &&
+                        in_array($key, $trackingColumns['course_session']) &&
                         $trackingColumns['course_session'][$key]
                     ) {
                         $settings = isset($columnSetting[1]) ? $columnSetting[1] : [];

@@ -17,7 +17,7 @@ $courses_without_category = isset($courses_in_category[0]) ? $courses_in_categor
 <div id="actions" class="actions">
     <?php if ($action != 'createcoursecategory') { ?>
 	<a href="<?php echo api_get_self(); ?>?action=createcoursecategory">
-        <?php echo Display::return_icon('new_folder.png', get_lang('CreateCourseCategory'),'','32'); ?></a>
+        <?php echo Display::return_icon('new_folder.png', get_lang('CreateCourseCategory'), '', '32'); ?></a>
     <?php } ?>
 </div>
 <?php
@@ -45,25 +45,25 @@ if (!empty($user_course_categories)) {
         $max_category_key = count($user_course_categories);
         if ($action != 'unsubscribe') { ?>
             <a href="courses.php?action=sortmycourses&amp;categoryid=<?php echo $row['id']; ?>&amp;sec_token=<?php echo $stok; ?>#category<?php echo $row['id']; ?>">
-            <?php echo Display::display_icon('edit.png', get_lang('Edit'),'',22); ?>
+            <?php echo Display::display_icon('edit.png', get_lang('Edit'), '', 22); ?>
             </a>
             <?php if (0 != $counter) { ?>
                     <a href="courses.php?action=<?php echo $action ?>&amp;move=up&amp;category=<?php echo $row['id']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                    <?php echo Display::return_icon('up.png', get_lang('Up'),'',22); ?>
+                    <?php echo Display::return_icon('up.png', get_lang('Up'), '', 22); ?>
                     </a>
             <?php } else { ?>
-                <?php echo Display::return_icon('up_na.png', get_lang('Up'),'',22); ?>
+                <?php echo Display::return_icon('up_na.png', get_lang('Up'), '', 22); ?>
            <?php } ?>
 
             <?php if ($row['id'] != $last['id']) { ?>
                 <a href="courses.php?action=<?php echo $action; ?>&amp;move=down&amp;category=<?php echo $row['id']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                <?php echo Display::return_icon('down.png', get_lang('Down'),'',22); ?>
+                <?php echo Display::return_icon('down.png', get_lang('Down'), '', 22); ?>
                 </a>
             <?php } else { ?>
-                <?php echo Display::return_icon('down_na.png', get_lang('Down'),'',22); ?>
+                <?php echo Display::return_icon('down_na.png', get_lang('Down'), '', 22); ?>
             <?php } ?>
             <a href="courses.php?action=deletecoursecategory&amp;id=<?php echo $row['id']; ?>&amp;sec_token=<?php echo $stok; ?>">
-            <?php echo Display::display_icon('delete.png', get_lang('Delete'), array('onclick' => "javascript: if (!confirm('".addslashes(api_htmlentities(get_lang("CourseCategoryAbout2bedeleted"), ENT_QUOTES, api_get_system_encoding()))."')) return false;"),22) ?>
+            <?php echo Display::display_icon('delete.png', get_lang('Delete'), array('onclick' => "javascript: if (!confirm('".addslashes(api_htmlentities(get_lang("CourseCategoryAbout2bedeleted"), ENT_QUOTES, api_get_system_encoding()))."')) return false;"), 22) ?>
             </a>
         <?php }
         $counter++;
@@ -116,35 +116,35 @@ if (!empty($user_course_categories)) {
                 <div style="float:left;width:110px;">
                 <?php
                     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-                        $icon_title = get_lang('CourseDetails') . ' - ' . $course['title'];
+                        $icon_title = get_lang('CourseDetails').' - '.$course['title'];
                 ?>
                 <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>inc/ajax/course_home.ajax.php?a=show_course_information&code=<?php echo $course['code'] ?>" data-title="<?php echo $icon_title ?>" title="<?php echo $icon_title ?>" class="ajax">
-                    <?php echo Display::return_icon('info.png', $icon_title,'','22') ?>
+                    <?php echo Display::return_icon('info.png', $icon_title, '', '22') ?>
                    <?php } ?>
                 </a>
 
                 <?php if (isset($_GET['edit']) && $course['code'] == $_GET['edit']) { ?>
-                      <?php echo Display::display_icon('edit_na.png', get_lang('Edit'),'',22); ?>
+                      <?php echo Display::display_icon('edit_na.png', get_lang('Edit'), '', 22); ?>
                 <?php } else { ?>
                     <a href="courses.php?action=<?php echo $action; ?>&amp;edit=<?php echo $course['code']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                        <?php echo Display::display_icon('edit.png', get_lang('Edit'),'',22); ?>
+                        <?php echo Display::display_icon('edit.png', get_lang('Edit'), '', 22); ?>
                         </a>
                 <?php } ?>
 
                 <?php if ($key > 0) { ?>
                     <a href="courses.php?action=<?php echo $action; ?>&amp;move=up&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                    <?php echo Display::display_icon('up.png', get_lang('Up'),'',22); ?>
+                    <?php echo Display::display_icon('up.png', get_lang('Up'), '', 22); ?>
                     </a>
                 <?php } else { ?>
-                    <?php echo Display::display_icon('up_na.png', get_lang('Up'),'',22); ?>
+                    <?php echo Display::display_icon('up_na.png', get_lang('Up'), '', 22); ?>
                 <?php } ?>
 
                 <?php if ($key < $number_of_courses - 1) { ?>
                     <a href="courses.php?action=<?php echo $action; ?>&amp;move=down&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                    <?php echo Display::display_icon('down.png', get_lang('Down'),'',22); ?>
+                    <?php echo Display::display_icon('down.png', get_lang('Down'), '', 22); ?>
                     </a>
                 <?php } else { ?>
-                    <?php echo Display::display_icon('down_na.png', get_lang('Down'),'',22); ?>
+                    <?php echo Display::display_icon('down_na.png', get_lang('Down'), '', 22); ?>
                 <?php } ?>
 
               </div>
@@ -213,36 +213,36 @@ if (!empty($courses_without_category)) {
             <div style="float:left; width:110px">
             <?php
             if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-            $icon_title = get_lang('CourseDetails') . ' - ' . $course['title'];
+            $icon_title = get_lang('CourseDetails').' - '.$course['title'];
             ?>
             <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>inc/ajax/course_home.ajax.php?a=show_course_information&code=<?php echo $course['code'] ?>" data-title="<?php echo $icon_title ?>" title="<?php echo $icon_title ?>" class="ajax">
-                <?php echo Display::return_icon('info.png', $icon_title, '','22'); ?>
+                <?php echo Display::return_icon('info.png', $icon_title, '', '22'); ?>
             </a>
             <?php } ?>
 
              <?php if (isset($_GET['edit']) && $course['code'] == $_GET['edit']) {   ?>
-                    <?php echo Display::display_icon('edit_na.png', get_lang('Edit'),'',22); ?>
+                    <?php echo Display::display_icon('edit_na.png', get_lang('Edit'), '', 22); ?>
                   <?php } else { ?>
                     <a href="courses.php?action=<?php echo $action; ?>&amp;edit=<?php echo $course['code']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                    <?php echo Display::display_icon('edit.png', get_lang('Edit'),'',22); ?>
+                    <?php echo Display::display_icon('edit.png', get_lang('Edit'), '', 22); ?>
                     </a>
              <?php } ?>
 
             <!-- up /down icons-->
             <?php if ($key > 0) { ?>
                     <a href="courses.php?action=<?php echo $action; ?>&amp;move=up&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                    <?php echo Display::display_icon('up.png', get_lang('Up'),'',22) ?>
+                    <?php echo Display::display_icon('up.png', get_lang('Up'), '', 22) ?>
                     </a>
             <?php } else {
-                    echo Display::display_icon('up_na.png', get_lang('Up'),'',22);
+                    echo Display::display_icon('up_na.png', get_lang('Up'), '', 22);
                     }
 
                     if ($key < $number_of_courses - 1) { ?>
                     <a href="courses.php?action=<?php echo $action; ?>&amp;move=down&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                    <?php echo Display::display_icon('down.png', get_lang('Down'),'',22); ?>
+                    <?php echo Display::display_icon('down.png', get_lang('Down'), '', 22); ?>
                     </a>
             <?php } else {
-                    echo Display::display_icon('down_na.png', get_lang('Down'),'',22);
+                    echo Display::display_icon('down_na.png', get_lang('Down'), '', 22);
                     }?>
                 </div>
                  <div style="float:left; margin-right:10px;">

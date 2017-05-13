@@ -902,7 +902,7 @@ if ($objExercise->review_answers) {
 }
 
 if (!empty($error)) {
-    Display::addFlash(Display::return_message($error, 'error', false));
+    echo Display::return_message($error, 'error', false);
 } else {
     if (!empty ($exercise_sound)) {
         echo "<a href=\"../document/download.php?doc_url=%2Faudio%2F".Security::remove_XSS($exercise_sound)."\" target=\"_blank\">", "<img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=", get_lang('Sound')."\" /></a>";

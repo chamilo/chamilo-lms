@@ -2,15 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *   HOME PAGE FOR EACH COURSE
+ *  HOME PAGE FOR EACH COURSE
  *
- *	This page, included in every course's index.php is the home
- *	page. To make administration simple, the teacher edits his
- *	course from the home page. Only the login detects that the
- *	visitor is allowed to activate, deactivate home page links,
- *	access to the teachers tools (statistics, edit forums...).
+ *  This page, included in every course's index.php is the home
+ *  page. To make administration simple, the teacher edits his
+ *  course from the home page. Only the login detects that the
+ *  visitor is allowed to activate, deactivate home page links,
+ *  access to the teachers tools (statistics, edit forums...).
  *
- *	@package chamilo.course_home
+ * @package chamilo.course_home
  */
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : null;

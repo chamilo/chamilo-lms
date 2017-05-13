@@ -499,8 +499,8 @@ if ($form->validate()) {
     // Don't create file with the same name.
 
     if (file_exists($filepath.$filename.'.'.$extension)) {
-        Display:: display_header($nameTools, 'Doc');
         Display::addFlash(Display::return_message(get_lang('FileExists').' '.$title, 'error', false));
+        Display:: display_header($nameTools, 'Doc');
         Display:: display_footer();
         exit;
     }
@@ -581,13 +581,13 @@ if ($form->validate()) {
             header('Location: document.php?'.api_get_cidreq().'&id='.$folder_id.$selectcat.$certificate_condition);
             exit();
         } else {
-            Display :: display_header($nameTools, 'Doc');
             Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
+            Display :: display_header($nameTools, 'Doc');
             Display :: display_footer();
         }
     } else {
-        Display :: display_header($nameTools, 'Doc');
         Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
+        Display :: display_header($nameTools, 'Doc');
         Display :: display_footer();
     }
 } else {
@@ -642,7 +642,7 @@ if ($form->validate()) {
             $str_info .= $info_value.'<br/>';
         }
         $create_certificate = get_lang('CreateCertificateWithTags');
-        Display::addFlash(Display::return_message($create_certificate.': <br /><br/>'.$str_info, 'normal', false));
+        echo Display::return_message($create_certificate.': <br /><br/>'.$str_info, 'normal', false);
     }
 
     // HTML-editor

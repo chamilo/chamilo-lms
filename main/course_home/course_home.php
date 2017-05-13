@@ -32,7 +32,7 @@ use ChamiloSession as Session;
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-$htmlHeadXtra[] ='<script>
+$htmlHeadXtra[] = '<script>
 /* option show/hide thematic-block */
 $(document).ready(function(){
     $("#thematic-show").click(function(){
@@ -192,13 +192,13 @@ if (!empty($auto_launch)) {
         $course_id = api_get_course_int_id();
         $condition = '';
         if (!empty($session_id)) {
-            $condition =  api_get_session_condition($session_id);
+            $condition = api_get_session_condition($session_id);
             $sql = "SELECT id FROM $lp_table
                     WHERE c_id = $course_id AND autolaunch = 1 $condition
                     LIMIT 1";
             $result = Database::query($sql);
             // If we found nothing in the session we just called the session_id =  0 autolaunch
-            if (Database::num_rows($result) ==  0) {
+            if (Database::num_rows($result) == 0) {
                 $condition = '';
             }
         }
@@ -207,7 +207,7 @@ if (!empty($auto_launch)) {
                 WHERE c_id = $course_id AND autolaunch = 1 $condition
                 LIMIT 1";
         $result = Database::query($sql);
-        if (Database::num_rows($result) >  0) {
+        if (Database::num_rows($result) > 0) {
             $lp_data = Database::fetch_array($result, 'ASSOC');
             if (!empty($lp_data['id'])) {
                 if (api_is_platform_admin() || api_is_allowed_to_edit()) {
@@ -276,13 +276,13 @@ if ($show_autolaunch_lp_warning) {
 }
 
 if (api_get_setting('homepage_view') === 'activity' || api_get_setting('homepage_view') === 'activity_big') {
-	require 'activity.php';
+    require 'activity.php';
 } elseif (api_get_setting('homepage_view') === '2column') {
-	require '2column.php';
+    require '2column.php';
 } elseif (api_get_setting('homepage_view') === '3column') {
-	require '3column.php';
+    require '3column.php';
 } elseif (api_get_setting('homepage_view') === 'vertical_activity') {
-	require 'vertical_activity.php';
+    require 'vertical_activity.php';
 }
 
 $content = '<div id="course_tools">'.$content.'</div>';
@@ -293,7 +293,6 @@ $tpl->assign('content', $content);
 
 // Direct login to course
 $tpl->assign('course_code', $course_code);
-
 $tpl->display_one_col_template();
 
 // Deleting the objects

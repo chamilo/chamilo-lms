@@ -42,7 +42,7 @@ function add_specific_field($name)
 function delete_specific_field($id)
 {
     $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
-    $id = (int)$id;
+    $id = (int) $id;
     if (!is_numeric($id)) {
         return false;
     }
@@ -60,7 +60,7 @@ function delete_specific_field($id)
 function edit_specific_field($id, $name)
 {
     $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
-    $id = (int)$id;
+    $id = (int) $id;
     if (!is_numeric($id)) {
         return false;
     }

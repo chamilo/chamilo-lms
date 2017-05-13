@@ -132,7 +132,7 @@ if ($form->validate()) {
 	$extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false);
         
         if (!empty($export['addcsvheader'])) {  
-	if ($export['addcsvheader'] == '1' && ($export['file_type'] == 'csv' || $export['file_type'] == 'xls' )) {
+	if ($export['addcsvheader'] == '1' && ($export['file_type'] == 'csv' || $export['file_type'] == 'xls')) {
 		if ($_configuration['password_encryption'] != 'none') {
 			$data[] = array(
                             'UserId',

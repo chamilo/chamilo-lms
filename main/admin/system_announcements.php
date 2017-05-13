@@ -116,7 +116,7 @@ switch ($action) {
         $values['content'] = $announcement->content;
         $values['start'] = api_get_local_time($announcement->date_start);
         $values['end'] = api_get_local_time($announcement->date_end);
-        $values['range'] =substr(api_get_local_time($announcement->date_start), 0, 16).' / '.
+        $values['range'] = substr(api_get_local_time($announcement->date_start), 0, 16).' / '.
             substr(api_get_local_time($announcement->date_end), 0, 16);
 
         $data = (array) $announcement;

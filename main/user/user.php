@@ -745,6 +745,11 @@ function searchUserKeyword($firstname, $lastname, $username, $official_code, $ke
 
 /**
  * Get the users to display on the current page.
+ * @param   int $from Offset
+ * @param   int $number_of_items
+ * @param   int $column The column on which to sort
+ * @param   string $direction ASC or DESC, for the sort order of the query results
+ * @return  array
  */
 function get_user_data($from, $number_of_items, $column, $direction)
 {

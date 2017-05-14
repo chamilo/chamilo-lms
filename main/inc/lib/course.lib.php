@@ -473,6 +473,16 @@ class CourseManager
                     WHERE session_id = '$session_id' AND c_id = '$course_id'";
             Database::query($sql);
 
+            Event::addEvent(
+                LOG_UNSUBSCRIBE_USER_FROM_COURSE,
+                LOG_COURSE_CODE,
+                $course_code,
+                api_get_utc_datetime(),
+                $user_id,
+                $course_id,
+                $session_id
+            );
+
         } else {
             $sql = "DELETE FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
                     WHERE
@@ -489,7 +499,8 @@ class CourseManager
                 LOG_COURSE_CODE,
                 $course_code,
                 api_get_utc_datetime(),
-                $user_id
+                $user_id,
+                $course_id
             );
 
             foreach ($user_list as $userId) {
@@ -499,7 +510,8 @@ class CourseManager
                     LOG_USER_OBJECT,
                     $userInfo,
                     api_get_utc_datetime(),
-                    $user_id
+                    $user_id,
+                    $course_id
                 );
             }
         }
@@ -570,6 +582,27 @@ class CourseManager
 
         if (!empty($session_id)) {
             SessionManager::subscribe_users_to_session_course(array($user_id), $session_id, $courseCode);
+            // Add event to the system log
+            Event::addEvent(
+                LOG_SUBSCRIBE_USER_TO_COURSE,
+                LOG_COURSE_CODE,
+                $course_code,
+                api_get_utc_datetime(),
+                api_get_user_id(),
+                $courseId,
+                $session_id
+            );
+            $user_info = api_get_user_info($user_id);
+            Event::addEvent(
+                LOG_SUBSCRIBE_USER_TO_COURSE,
+                LOG_USER_OBJECT,
+                $user_info,
+                api_get_utc_datetime(),
+                api_get_user_id(),
+                $courseId,
+                $session_id
+            );
+
         } else {
             self::add_user_to_course(
                 $user_id,
@@ -584,7 +617,8 @@ class CourseManager
                 LOG_COURSE_CODE,
                 $course_code,
                 api_get_utc_datetime(),
-                api_get_user_id()
+                api_get_user_id(),
+                $courseId
             );
 
             $user_info = api_get_user_info($user_id);
@@ -593,7 +627,8 @@ class CourseManager
                 LOG_USER_OBJECT,
                 $user_info,
                 api_get_utc_datetime(),
-                api_get_user_id()
+                api_get_user_id(),
+                $courseId
             );
         }
 

@@ -277,7 +277,8 @@ class SurveyLink extends AbstractLink
     }
 
     /**
-     * @return array|bool|mixed
+     * Get the survey data from the c_survey table with the current object id
+     * @return mixed
      */
     private function get_survey_data()
     {
@@ -291,13 +292,17 @@ class SurveyLink extends AbstractLink
                     WHERE
                         c_id = '.$this->course_id.' AND
                         survey_id = '.intval($this->get_ref_id()).' AND
-                        session_id='.intval($session_id);
+                        session_id = '.intval($session_id);
             $query = Database::query($sql);
             $this->survey_data = Database::fetch_array($query);
         }
         return $this->survey_data;
     }
 
+    /**
+     * Get the name of the icon for this tool
+     * @return string
+     */
     public function get_icon_name()
     {
         return 'survey';

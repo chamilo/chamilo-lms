@@ -189,8 +189,8 @@ class LearnpathList
             );
             $names[$row->getName()] = $row->getIid();
         }
-
-        $this->alpha_list = asort($names);
+        asort($names);
+        $this->alpha_list = $names;
     }
 
     /**

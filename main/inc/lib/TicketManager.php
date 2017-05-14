@@ -1309,8 +1309,8 @@ class TicketManager
     }
 
     /**
+     * Send notification to a user through the internal messaging system
      * @param int $ticketId
-     * @param int $userId
      * @param string $title
      * @param string $message
      * @param int $onlyToUserId

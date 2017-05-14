@@ -441,7 +441,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     {
         $this->status = self::STUDENT;
         $this->salt = sha1(uniqid(null, true));
-        $this->active = 1;
+        $this->active = true;
         $this->registrationDate = new \DateTime();
         $this->authSource = 'platform';
         $this->courses = new ArrayCollection();

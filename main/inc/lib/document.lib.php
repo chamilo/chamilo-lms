@@ -1124,12 +1124,12 @@ class DocumentManager
      * This deletes a document by changing visibility to 2, renaming it to filename_DELETED_#id
      * Files/folders that are inside a deleted folder get visibility 2
      *
-     * @param array $_course
-     * @param string $path, path stored in the database
-     * @param string $base_work_dir, path to the documents folder (if not defined, $documentId must be used)
-     * @param int   $sessionId The ID of the session, if any
-     * @param int   $documentId The document id, if available
-     * @param int $groupId iid
+     * @param array  $_course
+     * @param string $path Path stored in the database
+     * @param string $base_work_dir Path to the documents folder (if not defined, $documentId must be used)
+     * @param int    $sessionId The ID of the session, if any
+     * @param int    $documentId The document id, if available
+     * @param int    $groupId iid
      * @return boolean true/false
      * @todo now only files/folders in a folder get visibility 2, we should rename them too.
      * @todo We should be able to get rid of this later when using only documentId (check further usage)

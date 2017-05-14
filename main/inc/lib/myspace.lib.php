@@ -1978,7 +1978,7 @@ class MySpace
     /**
      * Checks if there are repeted users in a given array
      * @param  array $usernames list of the usernames in the uploaded file
-     * @param  array $user_array['username'] and $user_array['sufix'] where sufix is the number part in a login i.e -> jmontoya2
+     * @param  array $user_array $user_array['username'] and $user_array['sufix'] where sufix is the number part in a login i.e -> jmontoya2
      * @return array with the $usernames array and the $user_array array
      * @author Julio Montoya
      */

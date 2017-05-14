@@ -145,7 +145,7 @@ function checkAccessUrl()
  * Returns a textual value ('ON' or 'OFF') based on a requester 2-state ini- configuration setting.
  *
  * @param string $val a php ini value
- * @return boolean: ON or OFF
+ * @return bool ON or OFF
  * @author Joomla <http://www.joomla.org>
  */
 function getPhpSetting($val)

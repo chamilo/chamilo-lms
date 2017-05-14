@@ -2,17 +2,18 @@
 exit;
 
 /**
-* Opens and parses/checks a VChamilo instance definition file
-* @param string $location
-*
-*/
+ * Opens and parses/checks a VChamilo instance definition file
+ * @param string $nodelistlocation
+ * @param string $plugin
+ * @return mixed
+ */
 function vchamilo_parse_csv_nodelist($nodelistlocation = '', $plugin = null) {
     global $_configuration;
 
     $vnodes = array();
 
     if (empty($nodelistlocation)) {
-        $nodelistlocation = $_configuratioh['root_sys'].'/plugin/vchamilo/nodelist.csv';
+        $nodelistlocation = $_configuration['root_sys'].'/plugin/vchamilo/nodelist.csv';
     }
 
     // decode file
@@ -162,9 +163,12 @@ function vchamilo_parse_csv_nodelist($nodelistlocation = '', $plugin = null) {
 }
 
 /**
-* Check a CSV input line format for empty or commented lines
-* Ensures compatbility to UTF-8 BOM or unBOM formats
-*/
+ * Check a CSV input line format for empty or commented lines
+ * Ensures compatbility to UTF-8 BOM or unBOM formats
+ * @param resource $text
+ * @param bool $resetfirst
+ * @return bool
+ */
 function vchamilo_is_empty_line_or_format(&$text, $resetfirst = false) {
     global $CFG;
 
@@ -193,7 +197,7 @@ function vchamilo_is_empty_line_or_format(&$text, $resetfirst = false) {
  * @param string $prompt text prompt, should include possible options
  * @param string $default default value when enter pressed
  * @param array $options list of allowed options, empty means any text
- * @param bool $casesensitive true if options are case sensitive
+ * @param bool $casesensitiveoptions true if options are case sensitive
  * @return string entered text
  */
 function cli_input($prompt, $default = '', array $options = null, $casesensitiveoptions = false) {
@@ -329,11 +333,11 @@ function cli_problem($text) {
  * Write to standard out and error with exit in error.
  *
  * @param string $text
- * @param int $errorcode
+ * @param int $errorCode
  * @return void (does not return)
  */
-function cli_error($text, $errorcode = 1) {
+function cli_error($text, $errorCode = 1) {
     fwrite(STDERR, $text);
     fwrite(STDERR, "\n");
-    die($errorcode);
+    die($errorCode);
 }

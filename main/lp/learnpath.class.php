@@ -57,7 +57,7 @@ class learnpath
     public $progress_bar_mode = '%';
 
     // Percentage progress as saved in the db.
-    public $progress_db = '0';
+    public $progress_db = 0;
     public $proximity; // Wether the content is distant or local or unknown.
     public $refs_list = array(); //list of items by ref => db_id. Used only for prerequisites match.
     // !!!This array (refs_list) is built differently depending on the nature of the LP.
@@ -394,6 +394,7 @@ class learnpath
                         }
                     }
                 }
+
 
                 $this->ordered_items = self::get_flat_ordered_items_list(
                     $this->get_id(),
@@ -2185,6 +2186,7 @@ class learnpath
     /**
      * Gets the progress value from the progress_db attribute
      * @return	integer	Current progress value
+     * @deprecated This method does not seem to be used as of 20170514
      */
     public function get_progress()
     {
@@ -3068,7 +3070,7 @@ class learnpath
      * This method can be used as abstract and is recursive
      * @param	integer	Learnpath ID
      * @param	integer	Parent ID of the items to look for
-     * @return	mixed	Ordered list of item IDs or false on error
+     * @return	array	Ordered list of item IDs (empty array on error)
      */
     public static function get_flat_ordered_items_list($lp, $parent = 0, $course_id = null)
     {
@@ -3080,7 +3082,7 @@ class learnpath
         $list = array();
 
         if (empty($lp)) {
-            return false;
+            return $list;
         }
 
         $lp = intval($lp);

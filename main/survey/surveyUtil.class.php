@@ -3010,8 +3010,7 @@ class SurveyUtil
      * Creates a multi array with the user fields that we can show. We look the visibility with the api_get_setting function
      * The username is always NOT able to change it.
      * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification
-     * @return array[value_name][name]
-     * 		   array[value_name][visibilty]
+     * @return array  array[value_name][name], array[value_name][visibilty]
      */
     public static function make_field_list()
     {
@@ -3155,10 +3154,9 @@ class SurveyUtil
 
     /**
      * @author Isaac Flores Paz <florespaz@bidsoftperu.com>
-     * @param int $user_id - User ID
+     * @param int $user_id User ID
      * @param string $survey_code
-     * @param int $user_id_answer - User in survey answer table (user id or anonymus)
-     *
+     * @param int $user_answer User in survey answer table (user id or anonymous)
      * @return boolean
      */
     public static function show_link_available($user_id, $survey_code, $user_answer)

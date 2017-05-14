@@ -17,10 +17,10 @@ use Symfony\Component\Translation\Translator;
  */
 class Connector
 {
-    /** @var Course */
+    /** @var array */
     public $course;
 
-    /** @var User */
+    /** @var array */
     public $user;
 
     /** @var Translator */

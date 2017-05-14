@@ -1817,7 +1817,7 @@ class UserManager
      * @see     UserManager::delete_user_picture() as the prefered way for deletion.
      * @param   string $source_file The full system name of the image from which user photos will be created.
      * @param   string $cropParameters Optional string that contents "x,y,width,height" of a cropped image format
-     * @return  string/bool Returns the resulting common file name of created images which usually should be stored in database.
+     * @return  mixed Returns the resulting common file name of created images which usually should be stored in database.
      * When deletion is requested returns empty string. In case of internal error or negative validation returns FALSE.
      */
     public static function update_user_picture($user_id, $file = null, $source_file = null, $cropParameters = '')
@@ -1967,8 +1967,8 @@ class UserManager
     /**
      * Deletes user photos.
      * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php
-     * @param int $user_id            The user internal identitfication number.
-     * @return string/bool            Returns empty string on success, FALSE on error.
+     * @param int $user_id            The user internal identification number.
+     * @return mixed            Returns empty string on success, FALSE on error.
      */
     public static function delete_user_picture($user_id)
     {

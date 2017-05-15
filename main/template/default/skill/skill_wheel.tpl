@@ -383,18 +383,6 @@
         }).on('change', function () {
             check_skills_sidebar();
         });
-        {#$("#skill_id").fcbkcomplete({#}
-            {#json_url: "{{ url }}&a=find_skills",#}
-            {#cache: false,#}
-            {#filter_case: false,#}
-            {#filter_hide: true,#}
-            {#complete_text: "{{ 'EnterTheSkillNameToSearch' | get_lang }}",#}
-            {#firstselected: true,#}
-            {#//onremove: "testme",#}
-            {#onselect: "check_skills_sidebar",#}
-            {#filter_selected: true,#}
-            {#newel: true#}
-        {#});#}
 
         load_nodes(0, main_depth);
 

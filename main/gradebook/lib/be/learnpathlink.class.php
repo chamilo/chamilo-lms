@@ -107,6 +107,9 @@ class LearnpathLink extends AbstractLink
     {
         $tbl_stats = Database::get_course_table(TABLE_LP_VIEW);
         $session_id = $this->get_session_id();
+        if (empty($session_id)) {
+            $session_id = api_get_session_id();
+        }
 
         $sql = "SELECT * FROM $tbl_stats
                 WHERE

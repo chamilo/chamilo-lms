@@ -74,7 +74,12 @@ if ($allowCaptcha) {
         )
     );
     
-    $captcha_question =  $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
+    $captcha_question = $form->addElement(
+        'CAPTCHA_Image',
+        'captcha_question',
+        '',
+        $options
+    );
     $form->addElement('static', null, null, get_lang('ClickOnTheImageForANewOne'));
     
     $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'), array('size' => 40));

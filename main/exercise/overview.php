@@ -67,7 +67,8 @@ if ($origin != 'learnpath') {
     ";
     Display::display_reduced_header();
 }
-
+$tpl = new Template('Overview');
+$list = array();
 $html = '';
 $message = '';
 $html .= '<div class="exercise">';
@@ -336,5 +337,9 @@ $html .= Display::tag(
 );
 $html .= '</div>';
 echo $html;
+
+$tpl->assign('data',$list);
+$layout = $tpl->get_template('exercise/overview.tpl');
+$tpl->display($layout);
 
 Display::display_footer();

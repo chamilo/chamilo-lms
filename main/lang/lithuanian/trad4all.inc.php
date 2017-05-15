@@ -111,7 +111,6 @@ $Forbidden = "Neleidžiama";
 $CourseAccessConfigTip = " Pagal nutylėjimą jūsų kursas yra viešas, bet galite nurodyti saugumo lygius aukščiau.";
 $OpenToTheWorld = "Viešas priėjimas visiems lankytojams";
 $OpenToThePlatform = " Atviras priėjimas vartotojams, priregistruotiems sistemoje";
-$OpenToThePlatform = "Atvira - priėjimas leidžiamas prisiregistravusiems sistemoje vartotojams";
 $TipLang = "Ši kalba bus prieinama kiekvienam jūsų kurso lankytojui.";
 $Vid = "Video";
 $Work = "Bendradarbiavimas";

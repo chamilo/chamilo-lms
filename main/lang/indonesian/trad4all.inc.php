@@ -82,7 +82,6 @@ $Forbidden = "Terlarang";
 $CourseAccessConfigTip = "Secara default mata kuliah anda tersedia untuk publik. Tetapi anda dapat menentukan level akses di atas.";
 $OpenToTheWorld = "Terbuka - akses diijinkan untuk seluruh dunia";
 $OpenToThePlatform = "Terbuka - akses diijinkan untuk user yang terdaftar pada platform ini";
-$OpenToThePlatform = "Terbuka - akses diijikan untuk user yang terdaftar di platform ini";
 $TipLang = "Bahasa ini akan digunakan untuk semua pengunjung situs mata kuliah anda.";
 $Vid = "Video";
 $Work = "Tugad";

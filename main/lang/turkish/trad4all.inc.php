@@ -134,7 +134,6 @@ $Forbidden = "İzinli değil";
 $CourseAccessConfigTip = "Varsayılan olarak bu ders genel erişime açıktır.Erişim seviyesini yukarıda belirleyebilirsiniz.";
 $OpenToTheWorld = "Açık - Genel Erişim";
 $OpenToThePlatform = "Açık - Platform üyelerine erişim izni";
-$OpenToThePlatform = "Açık - sadece platforma kayıtlı kullanıcılara erişim hakkı";
 $TipLang = "Seçtiğiniz dil her ziyaretçi için geçerli olacaktır.";
 $Vid = "Video";
 $Work = "Öğrenci Yazıları";

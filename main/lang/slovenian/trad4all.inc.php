@@ -575,7 +575,6 @@ $Forbidden = "Ni dovoljeno";
 $CourseAccessConfigTip = "Privzeto je vaš tečaj javen. Nivo zaupnosti oz. dostopa lahko definirate z možnostmi zgoraj.";
 $OpenToTheWorld = "Odprt - dostop dovoljen vsem brez omejitev";
 $OpenToThePlatform = "Odprt - dostop dovoljen registriranim uporabnikom platforme";
-$OpenToThePlatform = " Odprt - dostop dovoljen vsem uporabnikom, registriranim v portal";
 $TipLang = "Ta jezik bo veljaven za vsakega obiskovalca spletnih strani tvojega tečaja.";
 $Vid = "Video";
 $Work = "Prispevki";

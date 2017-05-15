@@ -110,7 +110,6 @@ $Forbidden = "禁止";
 $CourseAccessConfigTip = "課程預設為開放. 你可以自定義開放級別.";
 $OpenToTheWorld = "開放 - 允許任何人訪問";
 $OpenToThePlatform = "開放 - 僅供本平台已註冊的使用者";
-$OpenToThePlatform = "開放 - 允許已於本平台註冊人士進入";
 $TipLang = "將此語言設為課程的預設語言。";
 $Vid = "視頻";
 $Work = "作業論文";

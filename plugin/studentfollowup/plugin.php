@@ -17,6 +17,8 @@ $form->addButtonSave(get_lang('Save'));
 if ($form->validate()) {
 }
 
+
+$plugin_info['templates'] = array('view/post.html.twig');
 $plugin_info['settings_form'] = $form;
 
 

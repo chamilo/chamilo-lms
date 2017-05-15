@@ -1,11 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Symfony\Component\Filesystem\Filesystem;
+
 /**
  * Class StudentFollowUpPlugin
  */
 class StudentFollowUpPlugin extends Plugin
 {
+    public $hasEntity = true;
+
     /**
      * @return StudentFollowUpPlugin
      */
@@ -34,7 +38,23 @@ class StudentFollowUpPlugin extends Plugin
      */
     public function install()
     {
+        $pluginEntityPath = $this->getEntityPath();
+        if (!is_dir($pluginEntityPath)) {
+            mkdir($pluginEntityPath, api_get_permissions_for_new_directories());
+        }
 
+        $fs = new Filesystem();
+        $fs->mirror(__DIR__.'/Entity/', $pluginEntityPath, null, ['override']);
+
+        $table = Database::get_main_table('sfu_post');
+        $sql = "CREATE TABLE sfu_post (id INT AUTO_INCREMENT NOT NULL, insert_user_id INT NOT NULL, user_id INT NOT NULL, parent_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, content LONGTEXT DEFAULT NULL, external_care_id INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, private TINYINT(1) NOT NULL, external_source TINYINT(1) NOT NULL, tags LONGTEXT NOT NULL COMMENT '(DC2Type:array)', attachment VARCHAR(255) NOT NULL, lft INT DEFAULT NULL, rgt INT DEFAULT NULL, lvl INT DEFAULT NULL, root INT DEFAULT NULL, INDEX IDX_35F9473C9C859CC3 (insert_user_id), INDEX IDX_35F9473CA76ED395 (user_id), INDEX IDX_35F9473C727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;";
+        Database::query($sql);
+        $sql = "ALTER TABLE sfu_post ADD CONSTRAINT FK_35F9473C9C859CC3 FOREIGN KEY (insert_user_id) REFERENCES user (id);";
+        Database::query($sql);
+        $sql = "ALTER TABLE sfu_post ADD CONSTRAINT FK_35F9473CA76ED395 FOREIGN KEY (user_id) REFERENCES user (id);";
+        Database::query($sql);
+        $sql = "ALTER TABLE sfu_post ADD CONSTRAINT FK_35F9473C727ACA70 FOREIGN KEY (parent_id) REFERENCES sfu_post (id) ON DELETE SET NULL;";
+        Database::query($sql);
     }
 
     /**
@@ -42,6 +62,21 @@ class StudentFollowUpPlugin extends Plugin
      */
     public function uninstall()
     {
+        $pluginEntityPath = $this->getEntityPath();
+        $fs = new Filesystem();
+        if ($fs->exists($pluginEntityPath)) {
+            $fs->remove($pluginEntityPath);
+        }
+        $table = Database::get_main_table('sfu_post');
+        $sql = "DROP TABLE $table";
+        Database::query($sql);
+    }
 
+    /**
+     * @return string
+     */
+    public function getEntityPath()
+    {
+        return api_get_path(SYS_PATH).'src/Chamilo/PluginBundle/Entity/'.$this->getCamelCaseName();
     }
 }

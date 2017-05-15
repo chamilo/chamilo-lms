@@ -1,0 +1,45 @@
+<h1>Care detail view</h1>
+{% if posts %}
+    {% for post in posts %}
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.content }}</p>
+        <p>{{ post.createdAt |date('d/m/Y') }}</p>
+
+        {% if post.private %}
+            <p><span class="label label-warning">Private</span></p>
+        {% endif %}
+
+        <p>{{ post.insertUser.completeName }}</p>
+
+        {% if post.tags %}
+            {% for tag in post.tags %}
+                {{ tag }}
+                {% if not loop.last	 %}
+                    ,
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        {% if post.parent %}
+            <h3>Parent</h3>
+            <a href="{{ current_url }}&post_id={{ post.parent.id }}">
+                {{ post.parent.title }}
+            </a>
+        {% endif %}
+
+        {% if post.children.count %}
+            <h3>Children</h3>
+            {% for child in post.children %}
+                <p>
+                <a href="{{ current_url }}&post_id={{ child.id }}">
+                {{ child.title }}
+                </a>
+                </p>
+            {% endfor %}
+        {% endif %}
+
+    {% endfor %}
+    <div>
+    {{ pagination }}
+    </div>
+{% endif %}

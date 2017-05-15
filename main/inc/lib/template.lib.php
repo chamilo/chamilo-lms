@@ -588,7 +588,8 @@ class Template
             'bootstrap/dist/css/bootstrap.min.css',
             'jquery.scrollbar/jquery.scrollbar.css',
             'bootstrap-daterangepicker/daterangepicker.css',
-            'bootstrap-select/dist/css/bootstrap-select.min.css'
+            'bootstrap-select/dist/css/bootstrap-select.min.css',
+            'select2/dist/css/select2.min.css'
         ];
 
         foreach ($bowerCSSFiles as $file) {
@@ -746,7 +747,9 @@ class Template
             'jquery.scrollbar/jquery.scrollbar.min.js',
             'readmore-js/readmore.min.js',
             'bootstrap-select/dist/js/bootstrap-select.min.js',
-            $selectLink
+            $selectLink,
+            'select2/dist/js/select2.min.js',
+            "select2/dist/js/i18n/$isoCode.js"
         ];
         if (CHAMILO_LOAD_WYSIWYG == true) {
             $bowerJsFiles[] = 'ckeditor/ckeditor.js';

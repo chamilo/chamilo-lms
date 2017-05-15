@@ -16,18 +16,6 @@ if (api_get_setting('allow_skills_tool') != 'true') {
     api_not_allowed();
 }
 
-$htmlHeadXtra[] = api_get_asset('select2/dist/js/select2.min.js');
-
-$iso = api_get_language_isocode(api_get_interface_language());
-$languageCondition = '';
-
-if (file_exists(api_get_path(SYS_PATH)."web/assets/select2/dist/js/i18n/$iso.js")) {
-    $htmlHeadXtra[]= api_get_asset("select2/dist/js/i18n/$iso.js");
-//    $languageCondition = "language: '$iso',";
-}
-
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PATH).'web/assets/select2/dist/css/select2.min.css');
-
 //Adds the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_js('d3/d3.v3.5.4.min.js');
 $htmlHeadXtra[] = api_get_js('d3/colorbrewer.js');

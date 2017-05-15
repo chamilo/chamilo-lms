@@ -597,7 +597,6 @@ class Template
         }
 
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
-        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css';
 
         if (api_is_global_chat_enabled()) {
             $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
@@ -727,9 +726,6 @@ class Template
         if (api_get_setting('accessibility_font_resize') == 'true') {
             $js_files[] = 'fontresize.js';
         }
-
-        // Do not use minified version - generates errors (at least in the skills wheel)
-        $js_files[] = 'tag/jquery.fcbkcomplete.js';
 
         $js_file_to_string = null;
 

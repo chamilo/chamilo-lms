@@ -1110,14 +1110,17 @@ if (!empty($student_id)) {
                     if (api_is_allowed_to_edit()) {
                         echo '<td>';
                         if ($any_result === true) {
-                            echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.$course_code.'&course='.$course_code.'&details='.Security::remove_XSS($_GET['details']).'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student='.$user_info['user_id'].'&details=true&id_session='.$sessionId.'">';
-                            echo Display::return_icon(
+                            $url = 'myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.$course_code.'&course='.$course_code.'&details='.Security::remove_XSS($_GET['details']).'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student='.$user_info['user_id'].'&details=true&id_session='.$sessionId;
+                            echo Display::url(
+                                Display::return_icon(
                                     'clean.png',
                                     get_lang('Clean'),
                                     '',
                                     ICON_SIZE_SMALL
-                                ).'</a>';
-                            echo '</a>';
+                                ),
+                                $url,
+                                ['onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDelete')))."')) return false;"]
+                            );
                         }
                         echo '</td>';
                         echo '</tr>';

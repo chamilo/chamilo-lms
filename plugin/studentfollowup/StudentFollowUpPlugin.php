@@ -86,6 +86,20 @@ class StudentFollowUpPlugin extends Plugin
      */
     public static function getPermissions($studentId, $currentUserId)
     {
+        $params = ['variable = ? AND subkey = ?' => ['status', 'studentfollowup']];
+        $result = api_get_settings_params_simple($params);
+        $installed = false;
+        if (!empty($result) && $result['selected_value'] === 'installed') {
+            $installed = true;
+        }
+
+        if ($installed == false) {
+            return [
+                'is_allow' => false,
+                'show_private' => false,
+            ];
+        }
+
         $isAllow = false;
         $showPrivate = false;
         if ($studentId === $currentUserId) {

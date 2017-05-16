@@ -62,9 +62,7 @@ if ($post && !empty($post->getParent())) {
     ;
     $query = $qb->getQuery();
     $relatedPosts = $query->getResult();
-
 }
-
 
 $tpl = new Template($plugin->get_lang('plugin_title'));
 $tpl->assign('post', $post);

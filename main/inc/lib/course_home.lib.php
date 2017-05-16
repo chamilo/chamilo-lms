@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CTool;
+
 /**
  * Class CourseHome
  */
@@ -537,6 +539,8 @@ class CourseHome
             }
         }
 
+        $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
+
         while ($temp_row = Database::fetch_assoc($result)) {
             $add = false;
             if ($check) {
@@ -545,6 +549,22 @@ class CourseHome
                 }
             } else {
                 $add = true;
+            }
+
+            if ($allowEditionInSession) {
+                // Checking if exist row in session
+                $criteria = [
+                    'cId' => $course_id,
+                    'name' => $temp_row['name'],
+                    'sessionId' => $session_id,
+                ];
+                /** @var CTool $tool */
+                $toolObj = Database::getManager()->getRepository('ChamiloCourseBundle:CTool')->findOneBy($criteria);
+                if ($toolObj) {
+                    if ($toolObj->getVisibility() == 0) {
+                        continue;
+                    }
+                }
             }
 
             if ($temp_row['image'] == 'scormbuilder.gif') {
@@ -785,7 +805,7 @@ class CourseHome
                             'name' => $tool['name'],
                             'sessionId' => $session_id
                         ];
-                        /** @var \Chamilo\CourseBundle\Entity\CTool $tool */
+                        /** @var CTool $tool */
                         $toolObj = Database::getManager()->getRepository('ChamiloCourseBundle:CTool')->findOneBy($criteria);
                         if ($toolObj) {
                             $visibility = $toolObj->getVisibility();

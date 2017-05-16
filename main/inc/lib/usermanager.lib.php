@@ -389,10 +389,11 @@ class UserManager
                 UrlManager::add_user_to_url($userId, 1);
             }
 
+            $extra['item_id'] = $userId;
+
             if (is_array($extra) && count($extra) > 0) {
-                foreach ($extra as $fname => $fvalue) {
-                    self::update_extra_field_value($userId, $fname, $fvalue);
-                }
+                $courseFieldValue = new ExtraFieldValue('user');
+                $courseFieldValue->saveFieldValues($extra);
             } else {
                 // Create notify settings by default
                 self::update_extra_field_value($userId, 'mail_notify_invitation', '1');
@@ -3475,7 +3476,7 @@ class UserManager
         $return = array();
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                $return[] = array('key' => $row['tag'], 'value' => $row['tag']);
+                $return[] = array('id' => $row['tag'], 'text' => $row['tag']);
             }
         }
         if ($return_format === 'json') {

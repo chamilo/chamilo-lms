@@ -4888,7 +4888,8 @@ div#chat-remote-video video {
 	margin: 0;
 	padding: 0;
 }
-.grid-courses .items .image{
+.grid-courses .items .image {
+    height: 174px;
     position: relative;
 }
 .grid-courses .items .image .pin{

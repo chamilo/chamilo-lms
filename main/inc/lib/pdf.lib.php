@@ -53,7 +53,10 @@ class PDF
         $this->params['student_info'] = isset($params['student_info']) ? $params['student_info'] : false;
         $this->params['show_grade_generated_date'] = isset($params['show_grade_generated_date']) ? $params['show_grade_generated_date'] : false;
         $this->params['show_teacher_as_myself'] = isset($params['show_teacher_as_myself']) ? $params['show_teacher_as_myself'] : true;
-        $this->params['pdf_date'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date(api_get_local_time(), DATE_TIME_FORMAT_LONG);
+        $localTime = api_get_local_time();
+        $this->params['pdf_date'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_TIME_FORMAT_LONG);
+        $this->params['pdf_date_only'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_FORMAT_LONG);
+
 
         $this->pdf = new mPDF(
             'UTF-8',
@@ -127,6 +130,7 @@ class PDF
         $tpl->assign('pdf_course_info', $this->params['course_info']);
         $tpl->assign('pdf_session_info', $this->params['session_info']);
         $tpl->assign('pdf_date', $this->params['pdf_date']);
+        $tpl->assign('pdf_date_only', $this->params['pdf_date_only']);
         $tpl->assign('pdf_teachers', $teacher_list);
         $tpl->assign('pdf_title', $this->params['pdf_title']);
         $tpl->assign('pdf_student_info', $this->params['student_info']);

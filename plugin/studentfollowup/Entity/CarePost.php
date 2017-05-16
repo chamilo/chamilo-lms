@@ -41,7 +41,7 @@ class CarePost
     /**
      * @var string
      *
-     * @ORM\Column(name="external_care_id", type="integer", nullable=true)
+     * @ORM\Column(name="external_care_id", type="bigint", nullable=true)
      */
     protected $externalCareId;
 
@@ -59,13 +59,13 @@ class CarePost
 
     /**
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime")
+     * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
     protected $createdAt;
 
     /**
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated_at", type="datetime")
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     protected $updatedAt;
 
@@ -316,6 +316,14 @@ class CarePost
         $this->parent = $parent;
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function hasParent()
+    {
+        return !empty($this->parent) ? 1 : 0;
     }
 
     /**

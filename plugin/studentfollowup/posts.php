@@ -10,12 +10,11 @@ $plugin = StudentFollowUpPlugin::create();
 
 $currentUserId = api_get_user_id();
 $studentId = isset($_GET['student_id']) ? (int) $_GET['student_id'] : api_get_user_id();
-$postId = isset($_GET['post_id']) ? (int) $_GET['post_id'] : 1;
+$currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 
 if (empty($studentId)) {
     api_not_allowed(true);
 }
-
 $permissions = StudentFollowUpPlugin::getPermissions($studentId, $currentUserId);
 $isAllow = $permissions['is_allow'];
 $showPrivate = $permissions['show_private'];
@@ -33,31 +32,46 @@ if ($showPrivate == false) {
     $criteria->andWhere(Criteria::expr()->eq('private', false));
 }
 
-$criteria->andWhere(Criteria::expr()->eq('id', $postId));
+$pageSize = 2;
+
 $qb
     ->select('p')
     ->from('ChamiloPluginBundle:StudentFollowUp\CarePost', 'p')
     ->addCriteria($criteria)
-    ->setMaxResults(1)
+    ->setFirstResult($pageSize * ($currentPage-1))
+    ->setMaxResults($pageSize)
+    ->orderBy('p.createdAt', 'desc')
 ;
 
 $query = $qb->getQuery();
-$post = $query->getOneOrNullResult();
+
+$posts = new Paginator($query, $fetchJoinCollection = true);
+
+$totalItems = count($posts);
+$pagesCount = ceil($totalItems / $pageSize);
+$pagination = '';
+$url = api_get_self().'?student_id='.$studentId;
+$pagination .= '<ul class="pagination">';
+for ($i = 0; $i < $pagesCount; $i++) {
+    $newPage = $i + 1;
+    if ($currentPage == $newPage) {
+        $pagination .= '<li class="active"><a href="'.$url.'&page='.$newPage.'">'.$newPage.'</a></li>';
+    } else {
+        $pagination .= '<li><a href="'.$url.'&page='.$newPage.'">'.$newPage.'</a></li>';
+    }
+}
+$pagination .= '</ul>';
 
 $tpl = new Template($plugin->get_lang('plugin_title'));
-$tpl->assign('post', $post);
-$url = api_get_path(WEB_PLUGIN_PATH).'/studentfollowup/post.php?student_id='.$studentId;
+$tpl->assign('posts', $posts);
+$tpl->assign('current_url', $url);
+
+$url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/post.php?student_id='.$studentId;
 $tpl->assign('post_url', $url);
-$tpl->assign(
-    'back_link',
-    Display::url(
-        Display::return_icon('back.png'),
-        api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php?student_id='.$studentId
-    )
-);
 $tpl->assign('information_icon', Display::return_icon('info.png'));
 
-$content = $tpl->fetch('/'.$plugin->get_name().'/view/post.html.twig');
+$tpl->assign('pagination', $pagination);
+$content = $tpl->fetch('/'.$plugin->get_name().'/view/posts.html.twig');
 // Assign into content
 $tpl->assign('content', $content);
 // Display

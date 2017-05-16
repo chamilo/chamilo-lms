@@ -5,7 +5,6 @@ use CpChart\Chart\Data as pData;
 use CpChart\Chart\Image as pImage;
 use CpChart\Chart\Cache as pCache;
 
-
 /**
  * Class BlockEvaluationGraph
  * This class is used like controller for this evaluations graph block plugin,
@@ -23,59 +22,59 @@ use CpChart\Chart\Cache as pCache;
 class BlockEvaluationGraph extends Block
 {
     private $user_id;
-	private $courses;
-	private $sessions;
-	private $path;
-	private $permission = array(DRH, SESSIONADMIN);
+    private $courses;
+    private $sessions;
+    private $path;
+    private $permission = array(DRH, SESSIONADMIN);
 
-	/**
-	 * Constructor
-	 */
+    /**
+     * Constructor
+     */
     public function __construct($user_id)
     {
-    	$this->path = 'block_evaluation_graph';
-    	$this->user_id 	= $user_id;
-    	$this->bg_width = 450;
-    	$this->bg_height = 350;
-    	if ($this->is_block_visible_for_user($user_id)) {
+        $this->path = 'block_evaluation_graph';
+        $this->user_id = $user_id;
+        $this->bg_width = 450;
+        $this->bg_height = 350;
+        if ($this->is_block_visible_for_user($user_id)) {
             if (!api_is_session_admin()) {
                 $this->courses = CourseManager::get_courses_followed_by_drh($user_id);
             }
             $this->sessions = SessionManager::get_sessions_followed_by_drh($user_id);
-    	}
-    }
-
-	/**
-	 * This method check if a user is allowed to see the block inside dashboard interface
-	 * @param	int		User id
-	 * @return	bool	Is block visible for user
-	 */
-    public function is_block_visible_for_user($user_id)
-    {
-    	$user_info = api_get_user_info($user_id);
-		$user_status = $user_info['status'];
-		$is_block_visible_for_user = false;
-    	if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
-    		$is_block_visible_for_user = true;
-    	}
-    	return $is_block_visible_for_user;
+        }
     }
 
     /**
-     * This method return content html containing information about sessions and its position for showing it inside dashboard interface
+     * This method check if a user is allowed to see the block inside dashboard interface
+     * @param int        User id
+     * @return bool    Is block visible for user
+     */
+    public function is_block_visible_for_user($user_id)
+    {
+        $user_info = api_get_user_info($user_id);
+        $user_status = $user_info['status'];
+        $is_block_visible_for_user = false;
+        if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
+            $is_block_visible_for_user = true;
+        }
+        return $is_block_visible_for_user;
+    }
+
+    /**
+     * This method return content html containing
+     * information about sessions and its position for showing it inside dashboard interface
      * it's important to use the name 'get_block' for beeing used from dashboard controller
      * @return array   column and content html
      */
     public function get_block()
     {
-		global $charset;
-    	$column = 1;
-    	$data   = array();
+        global $charset;
+        $column = 1;
+        $data = array();
+        $evaluations_base_courses_graph = $this->get_evaluations_base_courses_graph();
+        $evaluations_courses_in_sessions_graph = $this->get_evaluations_courses_in_sessions_graph();
 
-		$evaluations_base_courses_graph         = $this->get_evaluations_base_courses_graph();
-		$evaluations_courses_in_sessions_graph  = $this->get_evaluations_courses_in_sessions_graph();
-
-		$html = '<div class="panel panel-default" id="intro">
+        $html = '<div class="panel panel-default" id="intro">
                     <div class="panel-heading">
                         '.get_lang('EvaluationsGraph').'
                         <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
@@ -105,43 +104,51 @@ class BlockEvaluationGraph extends Block
                 }
             }
         }
-		$html .= '</div>
-			     </div>';
+        $html .= '</div>
+                 </div>';
 
-    	$data['column'] = $column;
-    	$data['content_html'] = $html;
+        $data['column'] = $column;
+        $data['content_html'] = $html;
 
-    	return $data;
-	}
+        return $data;
+    }
 
     /**
- 	 * This method return a graph containing informations about evaluations
+     * This method return a graph containing informations about evaluations
      * inside base courses, it's used inside get_block method for showing
      * it inside dashboard interface
- 	 * @return string  img html
- 	 */
+     * @return string  img html
+     */
     public function get_evaluations_base_courses_graph()
     {
-		$graphs = array();
-		if (!empty($this->courses)) {
-			$courses_code = array_keys($this->courses);
-			foreach ($courses_code as $course_code) {
-				$cats = Category::load(null, null, $course_code, null, null, null, false);
+        $graphs = array();
+        if (!empty($this->courses)) {
+            $courses_code = array_keys($this->courses);
+            foreach ($courses_code as $course_code) {
+                $cats = Category::load(
+                    null,
+                    null,
+                    $course_code,
+                    null,
+                    null,
+                    null,
+                    false
+                );
 
-				if (isset($cats) && isset($cats[0])) {
-					$alleval = $cats[0]->get_evaluations(null, true, $course_code);
-					$alllinks = $cats[0]->get_links(null, true);
-					$users = GradebookUtils::get_all_users($alleval, $alllinks);
-					$datagen = new FlatViewDataGenerator($users, $alleval, $alllinks);
-					$evaluation_sumary = $datagen->get_evaluation_sumary_results();
-					if (!empty($evaluation_sumary)) {
-						$items = array_keys($evaluation_sumary);
-						$max = $min = $avg = array();
-						foreach ($evaluation_sumary as $evaluation) {
-							$max[] = $evaluation['max'];
+                if (isset($cats) && isset($cats[0])) {
+                    $alleval = $cats[0]->get_evaluations(null, true, $course_code);
+                    $alllinks = $cats[0]->get_links(null, true);
+                    $users = GradebookUtils::get_all_users($alleval, $alllinks);
+                    $datagen = new FlatViewDataGenerator($users, $alleval, $alllinks);
+                    $evaluation_sumary = $datagen->get_evaluation_sumary_results();
+                    if (!empty($evaluation_sumary)) {
+                        $items = array_keys($evaluation_sumary);
+                        $max = $min = $avg = array();
+                        foreach ($evaluation_sumary as $evaluation) {
+                            $max[] = $evaluation['max'];
                             $min[] = !empty($evaluation['min']) ? $evaluation['min'] : 0;
-							$avg[] = $evaluation['avg'];
-						}
+                            $avg[] = $evaluation['avg'];
+                        }
                         // Dataset definition
                         $dataSet = new pData();
                         $dataSet->addPoints($min, 'Serie3');
@@ -283,43 +290,43 @@ class BlockEvaluationGraph extends Block
                         if (!empty($imgPath)) {
                             $courses_graph[$course_code] = '<img src="'.$imgPath.'">';
                         }
-					}
-				}
-			} // end for
-		}
-    	return $graphs;
- 	}
+                    }
+                }
+            } // end for
+        }
+        return $graphs;
+    }
 
-	/**
- 	 * This method return a graph containing information about evaluations
+    /**
+     * This method return a graph containing information about evaluations
      * inside courses in sessions, it's used inside get_block method for
      * showing it inside dashboard interface
- 	 * @return string  img html
- 	 */
+     * @return string  img html
+     */
     public function get_evaluations_courses_in_sessions_graph()
     {
-		$graphs = array();
-		if (!empty($this->sessions)) {
-			$session_ids = array_keys($this->sessions);
-			foreach ($session_ids as $session_id) {
-				$courses_code = array_keys(Tracking::get_courses_list_from_session($session_id));
-				$courses_graph = array();
-				foreach ($courses_code as $course_code) {
-					$cats = Category::load(null, null, $course_code, null, null, $session_id);
-					if (isset($cats) && isset($cats[0])) {
-						$alleval = $cats[0]->get_evaluations(null, true, $course_code);
-						$alllinks = $cats[0]->get_links(null, true);
-						$users = GradebookUtils::get_all_users($alleval, $alllinks);
-						$datagen = new FlatViewDataGenerator($users, $alleval, $alllinks);
-						$evaluation_sumary = $datagen->get_evaluation_sumary_results();
-						if (!empty($evaluation_sumary)) {
-							$items = array_keys($evaluation_sumary);
-							$max = $min = $avg = array();
-							foreach ($evaluation_sumary as $evaluation) {
-								$max[] = $evaluation['max'];
-								$min[] = $evaluation['min'];
-								$avg[] = $evaluation['avg'];
-							}
+        $graphs = array();
+        if (!empty($this->sessions)) {
+            $session_ids = array_keys($this->sessions);
+            foreach ($session_ids as $session_id) {
+                $courses_code = array_keys(Tracking::get_courses_list_from_session($session_id));
+                $courses_graph = array();
+                foreach ($courses_code as $course_code) {
+                    $cats = Category::load(null, null, $course_code, null, null, $session_id);
+                    if (isset($cats) && isset($cats[0])) {
+                        $alleval = $cats[0]->get_evaluations(null, true, $course_code);
+                        $alllinks = $cats[0]->get_links(null, true);
+                        $users = GradebookUtils::get_all_users($alleval, $alllinks);
+                        $datagen = new FlatViewDataGenerator($users, $alleval, $alllinks);
+                        $evaluation_sumary = $datagen->get_evaluation_sumary_results();
+                        if (!empty($evaluation_sumary)) {
+                            $items = array_keys($evaluation_sumary);
+                            $max = $min = $avg = array();
+                            foreach ($evaluation_sumary as $evaluation) {
+                                $max[] = $evaluation['max'];
+                                $min[] = $evaluation['min'];
+                                $avg[] = $evaluation['avg'];
+                            }
                             // Dataset definition
                             $dataSet = new pData();
                             $dataSet->addPoints($min, 'Serie3');
@@ -331,16 +338,21 @@ class BlockEvaluationGraph extends Block
                             $dataSet->setSerieDescription('Serie2', get_lang('Avg'));
                             $dataSet->setSerieDescription('Serie3', get_lang('Min'));
                             $dataSet->setAbscissa('Labels');
-
                             $dataSet->setAbscissaName(get_lang('EvaluationName'));
-
                             $dataSet->normalize(100, '%');
-
                             $dataSet->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
 
                             // Cache definition
                             $cachePath = api_get_path(SYS_ARCHIVE_PATH);
-                            $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
+                            $myCache = new pCache(
+                                array(
+                                    'CacheFolder' => substr(
+                                        $cachePath,
+                                        0,
+                                        strlen($cachePath) - 1
+                                    ),
+                                )
+                            );
                             $chartHash = $myCache->getHash($dataSet);
                             if ($myCache->isInCache($chartHash)) {
                                 $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
@@ -455,14 +467,14 @@ class BlockEvaluationGraph extends Block
                             if (!empty($imgPath)) {
                                 $courses_graph[$course_code] = '<img src="'.$imgPath.'">';
                             }
-						}
-					}
-				}
-				if (!empty($courses_graph)) {
-					$graphs[$session_id] = $courses_graph;
-				}
-			}
-		}
-    	return $graphs;
- 	}
+                        }
+                    }
+                }
+                if (!empty($courses_graph)) {
+                    $graphs[$session_id] = $courses_graph;
+                }
+            }
+        }
+        return $graphs;
+    }
 }

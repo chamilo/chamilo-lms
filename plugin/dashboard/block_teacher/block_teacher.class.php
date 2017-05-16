@@ -62,7 +62,6 @@ class BlockTeacher extends Block
         $column = 1;
         $data = array();
         $teacher_content_html = $this->get_teachers_content_html_for_drh();
-
         $html = '
                 <div class="panel panel-default" id="intro">
                     <div class="panel-heading">
@@ -138,8 +137,6 @@ class BlockTeacher extends Block
             $content .= '<div style="text-align:right;margin-top:10px;">
             <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin">'.get_lang('SeeMore').'</a></div>';
         }
-
-        //$content .= '</div>';
 
         return $content;
     }

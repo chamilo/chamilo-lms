@@ -40,84 +40,84 @@ class BlockGlobalInfo extends Block
 
     /**
      * This method check if a user is allowed to see the block inside dashboard interface
-     * @param	int		User id
-     * @return	bool	Is block visible for user
+     * @param int        User id
+     * @return bool    Is block visible for user
      */
     public function is_block_visible_for_user($user_id)
     {
-    	$user_info = api_get_user_info($user_id);
-    	$user_status = $user_info['status'];
-    	$is_block_visible_for_user = false;
-    	if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
-    		$is_block_visible_for_user = true;
-    	}
-    	return $is_block_visible_for_user;
+        $user_info = api_get_user_info($user_id);
+        $user_status = $user_info['status'];
+        $is_block_visible_for_user = false;
+        if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
+            $is_block_visible_for_user = true;
+        }
+        return $is_block_visible_for_user;
     }
 
 
     /**
-     * This method return content html containing information about courses and its position for showing it inside dashboard interface
+     * This method return content html containing information
+     * about courses and its position for showing it inside dashboard interface
      * it's important to use the name 'get_block' for beeing used from dashboard controller
      * @return array   column and content html
      */
     public function get_block()
     {
-    	global $charset;
-    	$column = 2;
-    	$data   = array();
+        global $charset;
+        $column = 2;
+        $data = array();
         $content = $this->get_content_html();
-    	$html = '
-    	            <div class="panel panel-default" id="intro">
-    	                <div class="panel-heading">'.get_lang('GlobalPlatformInformation').'
-    	                    <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
-    	                    <em class="fa fa-times"></em>
-    	                    </a></div>
-    	                </div>
-    	                <div class="panel-body">
-    	                   '.$content.'
-    	                </div>
-    	            </div>
-    			';
-    	$data['column'] = $column;
-    	$data['content_html'] = $html;
+        $html = '<div class="panel panel-default" id="intro">
+                    <div class="panel-heading">'.get_lang('GlobalPlatformInformation').'
+                        <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
+                        <em class="fa fa-times"></em>
+                        </a></div>
+                    </div>
+                    <div class="panel-body">
+                       '.$content.'
+                    </div>
+                </div>
+                ';
+        $data['column'] = $column;
+        $data['content_html'] = $html;
 
-    	return $data;
+        return $data;
     }
 
     /**
- 	 * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
- 	 * @return string  content html
- 	 */
-     public function get_content_html()
-     {
-         $global_data = $this->get_global_information_data();
-         //$content = '<div style="margin:10px;">';
-         $content = '<h4>'.get_lang('GlobalPlatformInformation').'</h4>';
-         $data_table = null;
-         if (!empty($global_data)) {
-             $data_table = '<table class="table table-bordered" width="95%">';
-             $i = 1;
-             foreach ($global_data as $data) {
-                 if ($i % 2 == 0) {
-                     $class_tr = 'row_odd';
-                 } else {
-                     $class_tr = 'row_even';
-                 }
-                 $data_table .= '<tr class="'.$class_tr.'">';
-                 foreach ($data as $cell) {
-                     $data_table .= '<td align="right">'.$cell.'</td>';
-                 }
-                 $data_table .= '</tr>';
-                 $i++;
-             }
-             $data_table .= '</table>';
-         } else {
-             $data_table .= get_lang('ThereIsNoInformationAboutThePlatform');
-         }
-         $content .= $data_table;
-         //$content .= '</div>';
+     * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
+     * @return string  content html
+     */
+    public function get_content_html()
+    {
+        $global_data = $this->get_global_information_data();
+        $content = '<h4>'.get_lang('GlobalPlatformInformation').'</h4>';
+        $data_table = null;
+        if (!empty($global_data)) {
+            $data_table = '<table class="table table-bordered" width="95%">';
+            $i = 1;
+            foreach ($global_data as $data) {
+                if ($i % 2 == 0) {
+                    $class_tr = 'row_odd';
+                } else {
+                    $class_tr = 'row_even';
+                }
+                $data_table .= '<tr class="'.$class_tr.'">';
+                foreach ($data as $cell) {
+                    $data_table .= '<td align="right">'.$cell.'</td>';
+                }
+                $data_table .= '</tr>';
+                $i++;
+            }
+            $data_table .= '</table>';
+        } else {
+            $data_table .= get_lang('ThereIsNoInformationAboutThePlatform');
+        }
+        $content .= $data_table;
 
-         return $content;
+        //$content .= '</div>';
+
+        return $content;
     }
 
     /**

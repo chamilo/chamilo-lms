@@ -551,7 +551,7 @@ class CourseHome
                 $add = true;
             }
 
-            if ($allowEditionInSession) {
+            if ($allowEditionInSession && !empty($session_id)) {
                 // Checking if exist row in session
                 $criteria = [
                     'cId' => $course_id,

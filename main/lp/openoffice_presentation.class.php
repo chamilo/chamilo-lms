@@ -175,7 +175,7 @@ class OpenofficePresentation extends OpenofficeDocument
                     ''
                 );
                 if ($this->first_item == 0) {
-                    $this->first_item = $previous;
+                    $this->first_item = intval($previous);
                 }
             }
             // Code for text indexing.

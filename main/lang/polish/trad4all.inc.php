@@ -185,7 +185,6 @@ $Forbidden = "Niedostępny";
 $CourseAccessConfigTip = "Standardowo Twój kurs jest upubliczniony. Możesz zmienić poziom dostępności powyżej.";
 $OpenToTheWorld = "Dostęp dla całego świata";
 $OpenToThePlatform = "Dostęp dla zarejestrowanych użytkowników platformy";
-$OpenToThePlatform = "Dostęp otwarty dla użytkowników zarejestrowanych w platformie";
 $TipLang = "Ten język będzie obowiązywał wszystkich użytkowników tego kursu.";
 $Vid = "Wideo";
 $Work = "Prace studentów";

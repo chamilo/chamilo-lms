@@ -2870,7 +2870,7 @@ class CourseRestorer
     * @param boolean Option Overwrite
     * @param string $source
     * @param string $dest
-    * @return void()
+    * @return void
     * @deprecated
     */
     public function allow_create_all_directory($source, $dest, $overwrite = false)

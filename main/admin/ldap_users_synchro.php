@@ -62,7 +62,7 @@ Display::display_header($tool_name);
 if (isset($action) && ($action == "synchro")) {
 	$included = true;
 	require('ldap_synchro.php');
-	Display::addFlash(Display::return_message($message, 'normal', false));
+	echo Display::return_message($message, 'normal', false);
 }
 Display::display_footer();
 ?>

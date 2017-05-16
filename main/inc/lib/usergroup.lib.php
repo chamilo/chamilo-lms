@@ -1087,7 +1087,7 @@ class UserGroup extends Model
      * If an empty name is provided, then old user photos are deleted only,
      * @see UserManager::delete_user_picture() as the prefered way for deletion.
      * @param	string		$source_file	The full system name of the image from which user photos will be created.
-     * @return	string/bool	Returns the resulting common file name of created images which usually should be stored in database.
+     * @return	mixed	Returns the resulting common file name of created images which usually should be stored in database.
      * When an image is removed the function returns an empty string. In case of internal error or negative validation it returns FALSE.
      */
     public function update_group_picture($group_id, $file = null, $source_file = null)

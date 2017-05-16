@@ -22,12 +22,20 @@ switch ($action) {
         }
         break;
     case 'search_tags':
+        header('Content-Type: application/json');
+
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
         $fieldId = isset($_REQUEST['field_id']) ? $_REQUEST['field_id'] : null;
-        $tag = isset($_REQUEST['tag']) ? $_REQUEST['tag'] : null;
+        $tag = isset($_REQUEST['q']) ? $_REQUEST['q'] : null;
+        $result = [];
+
+        if (empty($tag)) {
+            echo json_encode(['items' => $result]);
+            exit;
+        }
+
         $extraFieldOption = new ExtraFieldOption($type);
 
-        $result = [];
         $tags = Database::getManager()
             ->getRepository('ChamiloCoreBundle:Tag')
             ->createQueryBuilder('t')
@@ -41,12 +49,12 @@ switch ($action) {
         /** @var Tag $tag */
         foreach ($tags as $tag) {
             $result[] = [
-                'key' => $tag->getTag(),
-                'value' => $tag->getTag()
+                'id' => $tag->getTag(),
+                'text' => $tag->getTag()
             ];
         }
 
-        echo json_encode($result);
+        echo json_encode(['items' => $result]);
         break;
     default:
         exit;

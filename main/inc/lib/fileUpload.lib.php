@@ -194,7 +194,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  * @param string $uploadPath Example: /folder1/folder2/
  * @param int $userId
  * @param int $groupId group.id
- * @param int $toUserId, NULL for everybody
+ * @param int $toUserId User ID, or NULL for everybody
  * @param int $unzip 1/0
  * @param string $whatIfFileExists overwrite, rename or warn if exists (default)
  * @param boolean $output Optional output parameter.

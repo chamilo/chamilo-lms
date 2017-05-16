@@ -736,6 +736,7 @@ class Agenda
 
                 $groupId = api_get_group_id();
                 $groupIid = 0;
+                $groupInfo = [];
                 if ($groupId) {
                     $groupInfo = GroupManager::get_group_properties($groupId);
                     if ($groupInfo) {

@@ -3,6 +3,7 @@
 
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CItemProperty;
+use Chamilo\PluginBundle\Entity\StudentFollowUp\CarePost;
 
 if (PHP_SAPI != 'cli') {
     die('Run this script through the command line or comment this line in the code');
@@ -141,8 +142,7 @@ class ImportCsv
                     }
 
                     if (method_exists($this, $method)) {
-                        if (
-                            (
+                        if ((
                                 $method == 'importSubscribeStatic' ||
                                 $method == 'importSubscribeUserToCourse'
                             ) ||
@@ -184,7 +184,8 @@ class ImportCsv
                 'sessions',
                 'subscribe-static',
                 'courseinsert-static',
-                'unsubscribe-static'
+                'unsubscribe-static',
+                'care',
             );
 
             foreach ($sections as $section) {
@@ -574,6 +575,7 @@ class ImportCsv
             $expirationDateOnUpdate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserUpdate)."years"));
 
             $counter = 1;
+            $secondsInYear = 365 * 24 * 60 * 60;
 
             foreach ($data as $row) {
                 $row = $this->cleanUserRow($row);
@@ -636,7 +638,7 @@ class ImportCsv
 
                     if (isset($row['action']) && $row['action'] === 'delete') {
                         // Inactive one year later
-                        $userInfo['expiration_date'] = api_get_utc_datetime(api_strtotime(time() + 365 * 24 * 60 * 60));
+                        $userInfo['expiration_date'] = api_get_utc_datetime(api_strtotime(time() + $secondsInYear));
                     }
 
                     $password = $row['password']; // change password
@@ -2061,6 +2063,133 @@ class ImportCsv
         if ($moveFile) {
             $this->moveFile($file);
         }
+    }
+
+    /**
+     * @param $file
+     * @param bool $moveFile
+     */
+    public function importCare($file, $moveFile = false)
+    {
+        $data = Import::csv_reader($file);
+        $counter = 1;
+        $batchSize = $this->batchSize;
+        $em = Database::getManager();
+
+        if (!empty($data)) {
+            $this->logger->addInfo(count($data)." records found.");
+            $items = [];
+            foreach ($data as $list) {
+                $post = [];
+                foreach ($list as $key => $value) {
+                    $key = (string) trim($key);
+                    // Remove utf8 bom
+                    $key = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $key);
+                    $post[$key] = $value;
+                }
+
+                if (empty($post)) {
+                    continue;
+                }
+
+                $externalId = $post['External_care_id'];
+                $items[$externalId] = $post;
+            }
+            ksort($items);
+
+            foreach ($items as $row) {
+                // Insert user
+                $insertUserInfo = api_get_user_info_from_username($row['Added_by']);
+                if (empty($insertUserInfo)) {
+                    $this->logger->addInfo("User does '".$row['Added_by']."' not exists skip this entry.");
+                    continue;
+                }
+                $insertUserInfo = api_get_user_entity($insertUserInfo['user_id']);
+
+                // User about the post
+                $userId = UserManager::get_user_id_from_original_id(
+                    $row['External_user_id'],
+                    $this->extraFieldIdNameList['user']
+                );
+
+                if (empty($userId)) {
+                    if (empty($userInfo)) {
+                        $this->logger->addInfo("User does '".$row['External_user_id']."' not exists skip this entry.");
+                        continue;
+                    }
+                }
+                $userInfo = api_get_user_entity($userId);
+
+                // Dates
+                $createdAt = $this->createDateTime($row['Added_On']);
+                $updatedAt = $this->createDateTime($row['Edited_on']);
+
+                // Parent
+                $parent = null;
+                if (!empty($row['Parent_id'])) {
+                    $parentId = $items[$row['Parent_id']];
+                    $criteria = [
+                        'externalCareId' => $parentId
+                    ];
+                    $parent = $em->getRepository('ChamiloPluginBundle:StudentFollowUp\CarePost')->findOneBy($criteria);
+                }
+
+                // Tags
+                $tags = explode(',', $row['Tags']);
+
+                // Check if post already was added:
+                $criteria = [
+                    'externalCareId' => $row['External_care_id']
+                ];
+                var_dump($criteria);
+                $post = $em->getRepository('ChamiloPluginBundle:StudentFollowUp\CarePost')->findOneBy($criteria);
+
+                if (empty($post)) {
+                    var_dump('empty');
+                    $post = new CarePost();
+                }
+
+                $post
+                    ->setTitle($row['Title'])
+                    ->setContent($row['Article'])
+                    ->setExternalCareId($row['External_care_id'])
+                    ->setCreatedAt($createdAt)
+                    ->setUpdatedAt($updatedAt)
+                    ->setPrivate((int) $row['Private'])
+                    ->setInsertUser($insertUserInfo)
+                    ->setExternalSource((int) $row['Source_is_external'])
+                    ->setParent($parent)
+                    ->setTags($tags)
+                    ->setUser($userInfo)
+                ;
+                $em->persist($post);
+                $em->flush();
+
+                if (($counter % $batchSize) === 0) {
+                    $em->flush();
+                    $em->clear(); // Detaches all objects from Doctrine!
+                }
+                $counter++;
+            }
+
+            $em->clear(); // Detaches all objects from Doctrine!
+        }
+    }
+
+    /**
+     * 23/4/2017 to datetime
+     * @param $string
+     * @return mixed
+     */
+    private function createDateTime($string)
+    {
+        if (empty($string)) {
+            return null;
+        }
+
+        $date = DateTime::createFromFormat('j/m/Y', $string);
+
+        return $date;
     }
 
     /**

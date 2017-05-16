@@ -895,7 +895,9 @@ class ExtraField extends Model
                             'text',
                             'extra_'.$field_details['variable'],
                             $field_details['display_text'],
-                            array()
+                            array(
+                                'id' => 'extra_'.$field_details['variable']
+                            )
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
@@ -909,7 +911,12 @@ class ExtraField extends Model
                             $field_details['display_text'],
                             false,
                             false,
-                            array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130')
+                            array(
+                                'ToolbarSet' => 'Profile',
+                                'Width' => '100%',
+                                'Height' => '130',
+                                'id' => 'extra_'.$field_details['variable']
+                            )
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
@@ -1279,7 +1286,9 @@ class ExtraField extends Model
 
                         $tagsSelect = $form->addSelect(
                             "extra_{$field_details['variable']}",
-                            $field_details['display_text']
+                            $field_details['display_text'],
+                            [],
+                            ['style' => 'width: 100%;']
                         );
 
                         if ($useTagAsSelect == false) {
@@ -1289,6 +1298,8 @@ class ExtraField extends Model
                         $tagsSelect->setAttribute('id', "extra_{$field_details['variable']}");
                         $tagsSelect->setMultiple(true);
 
+                        $selectedOptions = [];
+
                         if ($this->type === 'user') {
                             // The magic should be here
                             $user_tags = UserManager::get_user_tags($itemId, $field_details['id']);
@@ -1297,9 +1308,10 @@ class ExtraField extends Model
                                 foreach ($user_tags as $tag) {
                                     $tagsSelect->addOption(
                                         $tag['tag'],
-                                        $tag['tag'],
-                                        ['selected' => 'selected', 'class' => 'selected']
+                                        $tag['tag']
                                     );
+
+                                    $selectedOptions[] = $tag['tag'];
                                 }
                             }
                             $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
@@ -1312,7 +1324,9 @@ class ExtraField extends Model
                                     'fieldId' => $field_id,
                                     'itemId' => $itemId
                                 ]);
+                            /** @var \Chamilo\CoreBundle\Entity\ExtraFieldRelTag $fieldTag */
                             foreach ($fieldTags as $fieldTag) {
+                                /** @var \Chamilo\CoreBundle\Entity\Tag $tag */
                                 $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
 
                                 if (empty($tag)) {
@@ -1320,9 +1334,9 @@ class ExtraField extends Model
                                 }
                                 $tagsSelect->addOption(
                                     $tag->getTag(),
-                                    $tag->getTag(),
-                                    ['selected' => 'selected', 'class' => 'selected']
+                                    $tag->getTag()
                                 );
+                                $selectedOptions[] = $tag->getTag();
                             }
 
                             if ($useTagAsSelect) {
@@ -1359,22 +1373,27 @@ class ExtraField extends Model
                             $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php';
                         }
 
-                        if ($useTagAsSelect == false) {
-                            $complete_text = get_lang('StartToType');
-                            //if cache is set to true the jquery will be called 1 time
+                        $form->setDefaults([
+                            'extra_'.$field_details['variable'] => $selectedOptions
+                        ]);
 
-                            $jquery_ready_content .= <<<EOF
-                                $("#extra_$variable").fcbkcomplete({
-                                    json_url: "$url?a=search_tags&field_id=$field_id&type={$this->type}",
+                        if ($useTagAsSelect == false) {
+                            $jquery_ready_content .= "
+                                $('#extra_$variable').select2({
+                                    ajax: {
+                                        url: '$url?a=search_tags&field_id=$field_id&type={$this->type}',
+                                        processResults: function (data) {
+                                            return {
+                                                results: data.items
+                                            }
+                                        }
+                                    },
                                     cache: false,
-                                    filter_case: true,
-                                    filter_hide: true,
-                                    complete_text:"$complete_text",
-                                    firstselected: false,
-                                    filter_selected: true,                        
-                                    newel: true
+                                    tags: true,
+                                    tokenSeparators: [','],
+                                    placeholder: '".get_lang('StartToType')."'
                                 });
-EOF;
+                            ";
                         }
                         break;
                     case self::FIELD_TYPE_TIMEZONE:

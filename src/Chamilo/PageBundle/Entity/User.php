@@ -129,7 +129,7 @@ class User extends BaseUser
     private $authSource;
 
     /**
-     * @var boolean
+     * @var integer
      *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
@@ -234,7 +234,7 @@ class User extends BaseUser
     private $expirationDate;
 
     /**
-     * @var boolean
+     * @var int
      *
      * @ORM\Column(name="active", type="boolean", nullable=false, unique=false)
      */

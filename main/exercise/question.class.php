@@ -1606,14 +1606,32 @@ abstract class Question
             switch ($this->type) {
                 case UNIQUE_ANSWER:
                     $buttonGroup = array();
-                    $buttonGroup[] = $form->addButton('convertAnswer', get_lang('ConvertToMultipleAnswer'), 'dot-circle-o', 'default', null, null, null, true);
                     $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
+                    $buttonGroup[] = $form->addButton(
+                        'convertAnswer',
+                        get_lang('ConvertToMultipleAnswer'),
+                        'dot-circle-o',
+                        'default',
+                        null,
+                        null,
+                        null,
+                        true
+                    );
                     $form->addGroup($buttonGroup);
                     break;
                 case MULTIPLE_ANSWER:
                     $buttonGroup = array();
-                    $buttonGroup[] = $form->addButton('convertAnswer', get_lang('ConvertToUniqueAnswer'), 'check-square-o', 'default');
                     $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
+                    $buttonGroup[] = $form->addButton(
+                        'convertAnswer',
+                        get_lang('ConvertToUniqueAnswer'),
+                        'check-square-o',
+                        'default',
+                        null,
+                        null,
+                        null,
+                        true
+                    );
                     $form->addGroup($buttonGroup);
                     break;
             }

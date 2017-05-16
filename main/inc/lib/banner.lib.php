@@ -339,6 +339,18 @@ function return_navigation_array()
             $menu_navigation['dashboard'] = isset($possible_tabs['dashboard']) ? $possible_tabs['dashboard'] : null;
         }
 
+        ///if (api_is_student()) {
+        if (true) {
+            $params = array('variable = ? AND subkey = ?' => ['status', 'studentfollowup']);
+            $result = api_get_settings_params_simple($params);
+            if (!empty($result) && $result['selected_value'] === 'installed') {
+                $navigation['follow_up']['url'] = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/post.php';
+                $navigation['follow_up']['title'] = get_lang('CareSystem');
+                $navigation['follow_up']['key'] = 'homepage';
+                $navigation['follow_up']['icon'] = 'homepage.png';
+            }
+        }
+
         // Administration
         if (api_is_platform_admin(true)) {
             if (api_get_setting('show_tabs', 'platform_administration') == 'true') {
@@ -388,7 +400,7 @@ function return_navigation_array()
         if (!empty($customTabs)) {
             foreach ($customTabs as $tab) {
                 if (api_get_setting($tab['variable'], $tab['subkey']) == 'true' &&
-                    isset($possible_tabs[$tab['subkey']]) && 
+                    isset($possible_tabs[$tab['subkey']]) &&
                     api_get_plugin_setting(strtolower(str_replace('Tabs', '', $tab['subkeytext'])), 'public_main_menu_tab') == 'true'
                 ) {
                     $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH).$possible_tabs[$tab['subkey']]['url'];

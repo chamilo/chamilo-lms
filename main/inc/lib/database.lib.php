@@ -147,7 +147,8 @@ class Database
                 'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
                 'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
-                'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity'
+                'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity',
+                'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity'
             )
         );
 
@@ -162,7 +163,7 @@ class Database
         );*/
 
         AnnotationRegistry::registerLoader(
-            function($class) use ($sysPath) {
+            function ($class) use ($sysPath) {
                 $file = str_replace("\\", DIRECTORY_SEPARATOR, $class).".php";
                 $file = str_replace('Symfony/Component/Validator', '', $file);
                 $file = $sysPath.'vendor/symfony/validator'.$file;
@@ -700,6 +701,7 @@ class Database
             $path.'src/Chamilo/CourseBundle/Entity',
             $path.'src/Chamilo/TicketBundle/Entity',
             $path.'src/Chamilo/SkillBundle/Entity',
+            $path.'src/Chamilo/PluginBundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Model',
             //$path.'vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Entity',

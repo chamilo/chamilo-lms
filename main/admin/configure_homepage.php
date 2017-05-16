@@ -796,7 +796,7 @@ switch ($action) {
             <input type="hidden" name="formSent" value="1"/>
             <?php
             if (!empty($errorMsg)) {
-                Display::addFlash(Display::return_message($errorMsg, 'normal'));
+                echo Display::return_message($errorMsg, 'normal');
             }
             ?>
             <div class="row">
@@ -847,7 +847,7 @@ switch ($action) {
     case 'edit_link':
         $menuf = ($action == 'insert_tabs' || $action == 'edit_tabs') ? $mtloggedin : $menuf;
         if (!empty($errorMsg)) {
-            Display::addFlash(Display::return_message($errorMsg, 'normal'));
+            echo Display::return_message($errorMsg, 'normal');
         }
         $default = array();
         $form = new FormValidator('configure_homepage_'.$action, 'post', $selfUrl.'?action='.$action, '', array('style' => 'margin: 0px;'));
@@ -940,7 +940,7 @@ switch ($action) {
         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 
         if (!empty($errorMsg)) {
-            Display::addFlash(Display::return_message($errorMsg, 'normal')); //main API
+            echo Display::return_message($errorMsg, 'normal'); //main API
         }
 
         $default = array();

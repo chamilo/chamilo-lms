@@ -160,6 +160,10 @@ class ExtraFieldValue extends Model
                     $tags = [];
 
                     foreach ($tagValues as $tagValue) {
+                        if (empty($tagValue)) {
+                            continue;
+                        }
+
                         $tagsResult = $em->getRepository('ChamiloCoreBundle:Tag')
                             ->findBy([
                                 'tag' => $tagValue,

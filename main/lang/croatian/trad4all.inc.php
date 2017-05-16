@@ -131,7 +131,6 @@ $Forbidden = "Zabranjeno";
 $CourseAccessConfigTip = "Prema izvornoj postavci kolegij je javan. No stupanj povjerljivosti možete odrediti gore.";
 $OpenToTheWorld = "Otvoreno - pristup omogućen svima";
 $OpenToThePlatform = "Otvoreno - pristup omogućen korisnicima registriranim na platformu";
-$OpenToThePlatform = "Otvoreno - pristup omogućen korisnicima registriranima na platformu";
 $TipLang = "Ovaj će jezik vrijediti za sve posjetioce web stranica kolegija";
 $Vid = "Video";
 $Work = "Studentski radovi";

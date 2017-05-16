@@ -310,9 +310,9 @@ elseif (!empty($annee) && !empty($course) && ($_POST['confirmed'] == 'yes'))
 	*/
 	else
 	{
-		Display::display_header($tool_name);
 		$message = get_lang('NoUserAdded');
 		Display::addFlash(Display::return_message($message, 'normal', false));
+        Display::display_header($tool_name);
 	}
 	echo '<br /><br />';
     echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('BackToNewSearch').'</a>';

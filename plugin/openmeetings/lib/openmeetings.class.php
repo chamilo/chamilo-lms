@@ -178,7 +178,7 @@ class OpenMeetings
             //$room->roomtypes_id = $room->roomtypes_id;
             $room->comment = urlencode(get_lang('Course').': '.$params['meeting_name'].' - '.$_configuration['software_name']);
             //$room->numberOfPartizipants = $room->numberOfPartizipants;
-            $room->ispublic = $room->getString('isPublic', 'false');
+            $room->ispublic = boolval($room->getString('isPublic', 'false'));
             //$room->appointment = $room->getString('appointment');
             //$room->isDemoRoom = $room->getString('isDemoRoom');
             //$room->demoTime = $room->demoTime;

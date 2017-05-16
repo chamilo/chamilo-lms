@@ -286,7 +286,8 @@ abstract class XapianIndexer
      * Replace a document in the actual db
      *
      * @param XapianDocument $doc xapian document to push into the db
-     * @param Xapian::docid $did xapian document id of the document to replace
+     * @param int $did xapian document id of the document to replace
+     * @return mixed
      */
     function replace_document($doc, $did)
     {

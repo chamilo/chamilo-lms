@@ -98,6 +98,7 @@ class LearnpathLink extends AbstractLink
     /**
      * Get the progress of this learnpath. Only the last attempt are taken into account.
      * @param $stud_id student id (default: all students who have results - then the average is returned)
+     * @param $type The type of score we want to get: best|average|ranking
      * @return    array (score, max) if student is given
      *            array (sum of scores, number of scores) otherwise
      *            or null if no scores available
@@ -105,7 +106,10 @@ class LearnpathLink extends AbstractLink
     public function calc_score($stud_id = null, $type = null)
     {
         $tbl_stats = Database::get_course_table(TABLE_LP_VIEW);
-        $session_id = api_get_session_id();
+        $session_id = $this->get_session_id();
+        if (empty($session_id)) {
+            $session_id = api_get_session_id();
+        }
 
         $sql = "SELECT * FROM $tbl_stats
                 WHERE

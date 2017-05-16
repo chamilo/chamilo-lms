@@ -61,7 +61,6 @@ $PrivOpen = "Accès privat, enregistrament dobèrt";
 $Forbidden = "Accès defendut";
 $OpenToTheWorld = "Dobèrt en totei";
 $OpenToThePlatform = "Dobèrt - accès autorizat autorizat ais usanciers de la plataforma";
-$OpenToThePlatform = "Dobèrt - accès autorizat ais usanciers enregistrats de la plataforma";
 $TipLang = "Aquesta serà la lenga que totei leis visitaires dau cors veiràn.";
 $Work = "Trabalhs deis estudiants";
 $UplPage = "Mandar una pagina e la liar amb la principala";

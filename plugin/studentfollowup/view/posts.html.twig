@@ -3,9 +3,7 @@
 <h1>Care detail view</h1>
 {% if posts %}
     {% for post in posts %}
-        {{ template.post_template(post, information_icon, post_url, current_url) }}
-
-
+        {{ template.post_template('simple', post, information_icon, post_url, current_url) }}
     {% endfor %}
     <div>
     {{ pagination }}

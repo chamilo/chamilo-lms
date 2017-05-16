@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\Tools\Pagination\Paginator;
+use Chamilo\PluginBundle\Entity\StudentFollowUp\CarePost;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -40,12 +40,35 @@ $qb
     ->addCriteria($criteria)
     ->setMaxResults(1)
 ;
-
 $query = $qb->getQuery();
+/** @var CarePost $post */
 $post = $query->getOneOrNullResult();
+
+// Get related posts (post with same parent)
+$relatedPosts = [];
+if ($post && !empty($post->getParent())) {
+    $qb = $em->createQueryBuilder();
+    $criteria = Criteria::create();
+    if ($showPrivate == false) {
+        $criteria->andWhere(Criteria::expr()->eq('private', false));
+    }
+    $criteria->andWhere(Criteria::expr()->eq('parent', $post->getParent()));
+    $criteria->andWhere(Criteria::expr()->neq('id', $post->getId()));
+    $qb
+        ->select('p')
+        ->from('ChamiloPluginBundle:StudentFollowUp\CarePost', 'p')
+        ->addCriteria($criteria)
+        ->orderBy('p.createdAt', 'desc')
+    ;
+    $query = $qb->getQuery();
+    $relatedPosts = $query->getResult();
+
+}
+
 
 $tpl = new Template($plugin->get_lang('plugin_title'));
 $tpl->assign('post', $post);
+$tpl->assign('related_posts', $relatedPosts);
 $url = api_get_path(WEB_PLUGIN_PATH).'/studentfollowup/post.php?student_id='.$studentId;
 $tpl->assign('post_url', $url);
 $tpl->assign(

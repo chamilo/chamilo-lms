@@ -2141,11 +2141,9 @@ class ImportCsv
                 $criteria = [
                     'externalCareId' => $row['External_care_id']
                 ];
-                var_dump($criteria);
                 $post = $em->getRepository('ChamiloPluginBundle:StudentFollowUp\CarePost')->findOneBy($criteria);
 
                 if (empty($post)) {
-                    var_dump('empty');
                     $post = new CarePost();
                 }
 

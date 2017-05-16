@@ -7,7 +7,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ *
  * CarePost
+ *
+ * When installing the plugin, this fill will be move inside:
+ * src/Chamilo/PluginBundle/Entity/StudentFollowUp/
+ * in order that Chamilo/Doctrine register it before using
+ *
  *
  * @ORM\Table(name="sfu_post")
  * @ORM\Entity
@@ -106,7 +112,7 @@ class CarePost
 
      /**
      * @ORM\OneToMany(targetEntity="CarePost", mappedBy="parent")
-     * @ORM\OrderBy({"lft" = "ASC"})
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $children;
 
@@ -420,7 +426,4 @@ class CarePost
 
         return $this;
     }
-
-
-
 }

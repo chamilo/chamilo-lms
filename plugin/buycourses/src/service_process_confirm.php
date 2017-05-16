@@ -83,7 +83,14 @@ switch ($serviceSale['payment_type']) {
     case BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER:
         $transferAccounts = $plugin->getTransferAccounts();
 
-        $form = new FormValidator('success', 'POST', api_get_self(), null, null, FormValidator::LAYOUT_INLINE);
+        $form = new FormValidator(
+            'success',
+            'POST',
+            api_get_self(),
+            null,
+            null,
+            FormValidator::LAYOUT_INLINE
+        );
 
         if ($form->validate()) {
             $formValues = $form->getSubmitValues();

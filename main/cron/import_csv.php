@@ -3,6 +3,7 @@
 
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CItemProperty;
+use Chamilo\PluginBundle\Entity\StudentFollowUp\CarePost;
 
 if (PHP_SAPI != 'cli') {
     die('Run this script through the command line or comment this line in the code');
@@ -2097,14 +2098,15 @@ class ImportCsv
             ksort($items);
 
             foreach ($items as $row) {
+                // Insert user
                 $insertUserInfo = api_get_user_info_from_username($row['Added_by']);
                 if (empty($insertUserInfo)) {
                     $this->logger->addInfo("User does '".$row['Added_by']."' not exists skip this entry.");
                     continue;
                 }
-
                 $insertUserInfo = api_get_user_entity($insertUserInfo['user_id']);
 
+                // User about the post
                 $userId = UserManager::get_user_id_from_original_id(
                     $row['External_user_id'],
                     $this->extraFieldIdNameList['user']
@@ -2117,8 +2119,12 @@ class ImportCsv
                     }
                 }
                 $userInfo = api_get_user_entity($userId);
+
+                // Dates
                 $createdAt = $this->createDateTime($row['Added_On']);
                 $updatedAt = $this->createDateTime($row['Edited_on']);
+
+                // Parent
                 $parent = null;
                 if (!empty($row['Parent_id'])) {
                     $parentId = $items[$row['Parent_id']];
@@ -2128,8 +2134,19 @@ class ImportCsv
                     $parent = $em->getRepository('ChamiloPluginBundle:StudentFollowUp\CarePost')->findOneBy($criteria);
                 }
 
+                // Tags
                 $tags = explode(',', $row['Tags']);
-                $post = new \Chamilo\PluginBundle\Entity\StudentFollowUp\CarePost();
+
+                // Check if post already was added:
+                $criteria = [
+                    'externalCareId' => $row['External_care_id']
+                ];
+                $post = $em->getRepository('ChamiloPluginBundle:StudentFollowUp\CarePost')->findOneBy($criteria);
+
+                if (empty($post)) {
+                    $post = new CarePost();
+                }
+
                 $post
                     ->setTitle($row['Title'])
                     ->setContent($row['Article'])
@@ -2145,6 +2162,7 @@ class ImportCsv
                 ;
                 $em->persist($post);
                 $em->flush();
+
                 if (($counter % $batchSize) === 0) {
                     $em->flush();
                     $em->clear(); // Detaches all objects from Doctrine!

@@ -62,19 +62,22 @@ function WSHelperVerifyKey($params)
         list($ip1, $ip2) = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
         $ip = trim($ip1);
     }
-    if ($debug)
+    if ($debug) {
         error_log("ip: $ip");
+    }
     // Check if a file that limits access from webservices exists and contains
     // the restraining check
     if (is_file('webservice-auth-ip.conf.php')) {
         include 'webservice-auth-ip.conf.php';
-        if ($debug)
+        if ($debug) {
             error_log("webservice-auth-ip.conf.php file included");
+        }
         if (!empty($ws_auth_ip)) {
             $check_ip = true;
             $ip_matches = api_check_ip_in_range($ip, $ws_auth_ip);
-            if ($debug)
+            if ($debug) {
                 error_log("ip_matches: $ip_matches");
+            }
         }
     }
 
@@ -91,8 +94,9 @@ function WSHelperVerifyKey($params)
 
     $result = api_is_valid_secret_key($secret_key, $security_key);
     //error_log($secret_key.'-'.$security_key);
-    if ($debug)
+    if ($debug) {
         error_log('WSHelperVerifyKey result: '.intval($result));
+    }
     return $result;
 }
 
@@ -114,8 +118,6 @@ $server->soap_defencoding = 'UTF-8';
 // Initialize WSDL support
 $server->configureWSDL('WSAccessUrl', 'urn:WSAccessUrl');
 
-
-
 $server->wsdl->addComplexType(
     'portalItem',
     'complexType',
@@ -135,7 +137,13 @@ $server->wsdl->addComplexType(
     '',
     'SOAP-ENC:Array',
     array(),
-    array(array('ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:portalItem[]')), 'tns:portalItem'
+    array(
+        array(
+            'ref' => 'SOAP-ENC:arrayType',
+            'wsdl:arrayType' => 'tns:portalItem[]',
+        ),
+    ),
+    'tns:portalItem'
 );
 
 $server->wsdl->addComplexType(
@@ -197,7 +205,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSAddUserToPortal', // method name
+$server->register(
+    'WSAddUserToPortal', // method name
     array('addUserToPortal' => 'tns:AddUserToPortal'), // input parameters
     array('return' => 'xsd:string'), // output parameters
     'urn:WSAccessUrl', // namespace
@@ -228,7 +237,8 @@ function WSAddUserToPortal($params)
 }
 
 // Register the method to expose
-$server->register('WSRemoveUserFromPortal', // method name
+$server->register(
+    'WSRemoveUserFromPortal', // method name
     array('removeUserFromPortal' => 'tns:AddUserToPortal'), // input parameters
     array('return' => 'xsd:string'), // output parameters
     'urn:WSAccessUrl', // namespace
@@ -271,7 +281,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSGetPortalListFromUser', // method name
+$server->register(
+    'WSGetPortalListFromUser', // method name
     array('getPortalListFromUser' => 'tns:getPortalListFromUser'), // input parameters
     array('return' => 'tns:portalList'), // output parameters
     'urn:WSAccessUrl', // namespace
@@ -315,7 +326,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSGetPortalListFromCourse', // method name
+$server->register(
+    'WSGetPortalListFromCourse', // method name
     array('getPortalListFromCourse' => 'tns:getPortalListFromCourse'), // input parameters
     array('return' => 'tns:portalList'), // output parameters
     'urn:WSAccessUrl', // namespace

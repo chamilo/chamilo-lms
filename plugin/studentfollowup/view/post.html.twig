@@ -1,6 +1,5 @@
-<h1>Care detail view</h1>
-{% if posts %}
-    {% for post in posts %}
+{% macro post_template(type, post, information_icon, post_url, current_url, related_posts) %}
+    {% if post %}
         <h2>{{ post.title }}</h2>
         <p>{{ post.content }}</p>
         <p>{{ post.createdAt |date('d/m/Y') }}</p>
@@ -20,26 +19,56 @@
             {% endfor %}
         {% endif %}
 
-        {% if post.parent %}
-            <h3>Parent</h3>
-            <a href="{{ current_url }}&post_id={{ post.parent.id }}">
-                {{ post.parent.title }}
+        {% set countElements = post.hasParent  + post.children.count %}
+
+        {% if countElements %}
+            <a href="{{ post_url }}&post_id={{ post.id }}">
+            {% if countElements > 1 %}
+                {{ information_icon }} + {{ countElements }}
+            {% else %}
+                {{ information_icon }}
+            {% endif %}
             </a>
         {% endif %}
 
-        {% if post.children.count %}
-            <h3>Children</h3>
-            {% for child in post.children %}
-                <p>
-                <a href="{{ current_url }}&post_id={{ child.id }}">
-                {{ child.title }}
-                </a>
-                </p>
-            {% endfor %}
-        {% endif %}
 
-    {% endfor %}
-    <div>
-    {{ pagination }}
-    </div>
-{% endif %}
+        {% if type == 'all' %}
+            {% if post.parent %}
+                <h3>Parent</h3>
+                <a href="{{ post_url }}&post_id={{ post.parent.id }}">
+                    {{ post.parent.title }}
+                </a>
+            {% endif %}
+
+            {% if post.children.count %}
+                <h3>Children</h3>
+                {% for child in post.children %}
+                    <p>
+                        <a href="{{ post_url }}&post_id={{ child.id }}">
+                        {{ child.title }}
+                        </a>
+                    </p>
+                {% endfor %}
+            {% endif %}
+
+            {% if related_posts %}
+                <h3>Related</h3>
+                 {% for post in related_posts %}
+                    <p>
+                        <a href="{{ post_url }}&post_id={{ post.id }}">
+                        {{ post.title }}
+                        </a>
+                    </p>
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+
+{% import _self as template %}
+
+<div class="actions">
+    {{ back_link }}
+</div>
+<h1>Care detail view</h1>
+{{ template.post_template('all', post, information_icon, post_url, current_url, related_posts) }}

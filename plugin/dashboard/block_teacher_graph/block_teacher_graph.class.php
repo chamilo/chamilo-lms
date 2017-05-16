@@ -26,32 +26,32 @@ class BlockTeacherGraph extends Block
     private $path;
     private $permission = array(DRH);
 
-	/**
-	 * Controller
-	 */
+    /**
+     * Controller
+     */
     public function __construct($user_id)
     {
-    	$this->user_id = $user_id;
-    	$this->path = 'block_teacher_graph';
-    	if ($this->is_block_visible_for_user($user_id)) {
+        $this->user_id = $user_id;
+        $this->path = 'block_teacher_graph';
+        if ($this->is_block_visible_for_user($user_id)) {
             $this->teachers = UserManager::get_users_followed_by_drh($user_id, COURSEMANAGER);
-    	}
+        }
     }
 
     /**
-	 * This method check if a user is allowed to see the block inside dashboard interface
-	 * @param	int		User id
-	 * @return	bool	Is block visible for user
-	 */
+     * This method check if a user is allowed to see the block inside dashboard interface
+     * @param int        User id
+     * @return bool    Is block visible for user
+     */
     public function is_block_visible_for_user($user_id)
     {
-    	$user_info = api_get_user_info($user_id);
-		$user_status = $user_info['status'];
-		$is_block_visible_for_user = false;
-    	if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
-    		$is_block_visible_for_user = true;
-    	}
-    	return $is_block_visible_for_user;
+        $user_info = api_get_user_info($user_id);
+        $user_status = $user_info['status'];
+        $is_block_visible_for_user = false;
+        if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
+            $is_block_visible_for_user = true;
+        }
+        return $is_block_visible_for_user;
     }
 
     /**
@@ -61,11 +61,11 @@ class BlockTeacherGraph extends Block
      */
     public function get_block()
     {
-    	global $charset;
-    	$column = 1;
-    	$data   = array();
-		$teacher_information_graph = $this->get_teachers_information_graph();
-		$html = '
+        global $charset;
+        $column = 1;
+        $data   = array();
+        $teacher_information_graph = $this->get_teachers_information_graph();
+        $html = '
                 <div class="panel panel-default" id="intro">
                     <div class="panel-heading">'.get_lang('TeachersInformationsGraph').'
                         <div class="pull-right"><a class="btn btn-danger btn-xs"  onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
@@ -77,55 +77,58 @@ class BlockTeacherGraph extends Block
                         '.$teacher_information_graph.'
                     </div>
                 </div>
-				';
+                ';
 
-    	$data['column'] = $column;
-    	$data['content_html'] = $html;
+        $data['column'] = $column;
+        $data['content_html'] = $html;
 
-    	return $data;
-
+        return $data;
     }
 
     /**
- 	 * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
- 	 * @return string  content html
- 	 */
+     * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
+     * @return string  content html
+     */
     public function get_teachers_information_graph()
     {
-	 	$teachers = $this->teachers;
-		$graph = '';
+        $teachers = $this->teachers;
+        $graph = '';
+        $user_ids = array_keys($teachers);
+        $a_last_week = get_last_week();
 
- 		$user_ids = array_keys($teachers);
- 		$a_last_week = get_last_week();
+        if (is_array($user_ids) && count($user_ids) > 0) {
+            $dataSet = new pData;
+            foreach ($user_ids as $user_id) {
+                $teacher_info = api_get_user_info($user_id);
+                $username = $teacher_info['username'];
+                $time_by_days = array();
+                foreach ($a_last_week as $day) {
+                    // day is received as y-m-d 12:00:00
+                    $start_date = api_get_utc_datetime($day);
+                    $end_date = api_get_utc_datetime($day + (3600 * 24 - 1));
 
-		if (is_array($user_ids) && count($user_ids) > 0) {
-			$dataSet = new pData;
-			foreach ($user_ids as $user_id) {
-				$teacher_info = api_get_user_info($user_id);
-				$username = $teacher_info['username'];
-				$time_by_days = array();
-				foreach ($a_last_week as $day) {
-					// day is received as y-m-d 12:00:00
-					$start_date = api_get_utc_datetime($day);
-					$end_date = api_get_utc_datetime($day + (3600 * 24 - 1));
+                    $time_on_platform_by_day = Tracking::get_time_spent_on_the_platform(
+                        $user_id,
+                        'custom',
+                        $start_date,
+                        $end_date
+                    );
+                    $hours = floor($time_on_platform_by_day / 3600);
+                    $min = floor(($time_on_platform_by_day - ($hours * 3600)) / 60);
+                    $time_by_days[] = $min;
+                }
+                $dataSet->addPoints($time_by_days, $username);
+            }
 
-					$time_on_platform_by_day = Tracking::get_time_spent_on_the_platform($user_id, 'custom', $start_date, $end_date);
-					$hours = floor($time_on_platform_by_day / 3600);
-					$min = floor(($time_on_platform_by_day - ($hours * 3600)) / 60);
-					$time_by_days[] = $min;
-				}
-				$dataSet->addPoints($time_by_days, $username);
-			}
+            $last_week = date('Y-m-d', $a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
+            $days_on_week = array();
+            foreach ($a_last_week as $weekday) {
+                $days_on_week[] = date('d/m', $weekday);
+            }
 
-			$last_week = date('Y-m-d', $a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
-			$days_on_week = array();
-			foreach ($a_last_week as $weekday) {
-				$days_on_week[] = date('d/m', $weekday);
-			}
-
-			$dataSet->addPoints($days_on_week, 'Days');
-			$dataSet->setAbscissaName($last_week);
-			$dataSet->setAxisName(0, get_lang('Minutes'));
+            $dataSet->addPoints($days_on_week, 'Days');
+            $dataSet->setAbscissaName($last_week);
+            $dataSet->setAxisName(0, get_lang('Minutes'));
             $dataSet->setAbscissa('Days');
             $dataSet->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
 
@@ -138,12 +141,10 @@ class BlockTeacherGraph extends Block
                 $myCache->saveFromCache($chartHash, $imgPath);
                 $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
             } else {
-
                 /* Create the pChart object */
                 $widthSize = 440;
                 $heightSize = 350;
                 $angle = 50;
-
                 $myPicture = new pImage($widthSize, $heightSize, $dataSet);
 
                 /* Turn of Antialiasing */
@@ -194,20 +195,20 @@ class BlockTeacherGraph extends Block
                 $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
             }
             $graph = '<img src="'.$imgPath.'" >';
-		} else {
-			$graph = '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'), 'UTF-8').'</p>';
-		}
+        } else {
+            $graph = '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'), 'UTF-8').'</p>';
+        }
 
- 		return $graph;
-	}
+        return $graph;
+    }
 
     /**
-	 * Get number of teachers
-	 * @return int
-	 */
-	function get_number_of_teachers()
+     * Get number of teachers
+     * @return int
+     */
+    function get_number_of_teachers()
     {
-		return count($this->teachers);
-	}
+        return count($this->teachers);
+    }
 
 }

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CTool;
+
 /**
  * Class CourseHome
  */
@@ -537,6 +539,8 @@ class CourseHome
             }
         }
 
+        $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
+
         while ($temp_row = Database::fetch_assoc($result)) {
             $add = false;
             if ($check) {
@@ -547,6 +551,22 @@ class CourseHome
                 $add = true;
             }
 
+            if ($allowEditionInSession && !empty($session_id)) {
+                // Checking if exist row in session
+                $criteria = [
+                    'cId' => $course_id,
+                    'name' => $temp_row['name'],
+                    'sessionId' => $session_id,
+                ];
+                /** @var CTool $tool */
+                $toolObj = Database::getManager()->getRepository('ChamiloCourseBundle:CTool')->findOneBy($criteria);
+                if ($toolObj) {
+                    if ($toolObj->getVisibility() == 0) {
+                        continue;
+                    }
+                }
+            }
+
             if ($temp_row['image'] == 'scormbuilder.gif') {
                 $lp_id = self::get_published_lp_id_from_link($temp_row['link']);
                 $lp = new learnpath(
@@ -555,7 +575,7 @@ class CourseHome
                     api_get_user_id()
                 );
                 $path = $lp->get_preview_image_path(ICON_SIZE_BIG);
-                $add = $lp->is_lp_visible_for_student(
+                $add = learnpath::is_lp_visible_for_student(
                     $lp_id,
                     api_get_user_id(),
                     api_get_course_id(),
@@ -785,7 +805,7 @@ class CourseHome
                             'name' => $tool['name'],
                             'sessionId' => $session_id
                         ];
-                        /** @var \Chamilo\CourseBundle\Entity\CTool $tool */
+                        /** @var CTool $tool */
                         $toolObj = Database::getManager()->getRepository('ChamiloCourseBundle:CTool')->findOneBy($criteria);
                         if ($toolObj) {
                             $visibility = $toolObj->getVisibility();

@@ -48,8 +48,12 @@ $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
-/* FUNCTIONS */
-
+/**
+ * @param string $name
+ * @param array $sessions
+ * @param array $attr
+ * @return string
+ */
 function make_select_session_list($name, $sessions, $attr = array())
 {
     $attributes = '';
@@ -83,6 +87,9 @@ function make_select_session_list($name, $sessions, $attr = array())
     return $output;
 }
 
+/**
+ * @return string
+ */
 function display_form()
 {
     $html = '';
@@ -138,6 +145,11 @@ function display_form()
     echo $html;
 }
 
+/**
+ * @param int $id_session
+ * @param string $type
+ * @return xajaxResponse
+ */
 function search_courses($id_session, $type)
 {
     global $tbl_course, $tbl_session_rel_course, $course_list;
@@ -221,12 +233,12 @@ function search_courses($id_session, $type)
             );
         }
     }
+
     return $xajax_response;
 }
 $xajax->processRequests();
 
 /* HTML head extra */
-
 $htmlHeadXtra[] = $xajax->getJavascript(api_get_path(WEB_LIBRARY_PATH).'xajax/');
 $htmlHeadXtra[] = '<script>
 function checkSelected(id_select,id_radio,id_title,id_destination) {
@@ -278,7 +290,7 @@ if (Security::check_token('post') && (
     // Clear token
     Security::clear_token();
     $destination_course = $origin_course = $destination_session = $origin_session = '';
-    if (isset ($_POST['action']) && $_POST['action'] == 'course_select_form') {
+    if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
         $destination_course = $_POST['destination_course'];
         $origin_course = $_POST['origin_course'];
         $destination_session = $_POST['destination_session'];

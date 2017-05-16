@@ -575,7 +575,7 @@ class CourseHome
                     api_get_user_id()
                 );
                 $path = $lp->get_preview_image_path(ICON_SIZE_BIG);
-                $add = $lp->is_lp_visible_for_student(
+                $add = learnpath::is_lp_visible_for_student(
                     $lp_id,
                     api_get_user_id(),
                     api_get_course_id(),

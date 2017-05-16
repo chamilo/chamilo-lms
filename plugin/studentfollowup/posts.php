@@ -38,7 +38,7 @@ $qb
     ->select('p')
     ->from('ChamiloPluginBundle:StudentFollowUp\CarePost', 'p')
     ->addCriteria($criteria)
-    ->setFirstResult($pageSize * ($currentPage-1))
+    ->setFirstResult($pageSize * ($currentPage - 1))
     ->setMaxResults($pageSize)
     ->orderBy('p.createdAt', 'desc')
 ;

@@ -113,7 +113,7 @@ if ($user_already_registered_show_terms === false) {
             'email',
             sprintf(
                 get_lang('UsernameMaxXCharacters'),
-                (string)USERNAME_MAX_LENGTH
+                (string) USERNAME_MAX_LENGTH
             ),
             'maxlength',
             USERNAME_MAX_LENGTH
@@ -163,7 +163,7 @@ if ($user_already_registered_show_terms === false) {
             'username',
             sprintf(
                 get_lang('UsernameMaxXCharacters'),
-                (string)USERNAME_MAX_LENGTH
+                (string) USERNAME_MAX_LENGTH
             ),
             'maxlength',
             USERNAME_MAX_LENGTH

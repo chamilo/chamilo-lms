@@ -123,15 +123,24 @@ $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'
 $htmlHeadXtra[] = to_javascript_work();
 Display :: display_header(null);
 
-$headers = array(
-    get_lang('Upload'),
-    get_lang('Upload').' ('.get_lang('Simple').')',
-);
+// Only text
+if ($workInfo['allow_text_assignment'] == 1) {
+    $tabs = $form->returnForm();
+} else {
+    $headers = array(
+        get_lang('Upload'),
+        get_lang('Upload').' ('.get_lang('Simple').')',
+    );
 
-$multipleForm = new FormValidator('post');
-$multipleForm->addMultipleUpload($url);
+    $multipleForm = new FormValidator('post');
+    $multipleForm->addMultipleUpload($url);
 
-$tabs = Display::tabs($headers, array($multipleForm->returnForm(), $form->returnForm()), 'tabs');
+    $tabs = Display::tabs(
+        $headers,
+        array($multipleForm->returnForm(), $form->returnForm()),
+        'tabs'
+    );
+}
 
 if (!empty($work_id)) {
     echo $validationStatus['message'];

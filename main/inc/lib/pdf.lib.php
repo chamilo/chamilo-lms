@@ -142,8 +142,11 @@ class PDF
         $html = $tpl->fetch($tableTemplate);
         $html = api_utf8_encode($html);
 
-        $css_file = api_get_path(SYS_CSS_PATH).'/print.css';
-        $css = file_exists($css_file) ? @file_get_contents($css_file) : '';
+        $css_file = api_get_path(SYS_CSS_PATH).'themes/'.$tpl->theme.'/print.css';
+        if (!file_exists($css_file)) {
+            $css_file = api_get_path(SYS_CSS_PATH).'print.css';
+        }
+        $css = file_get_contents($css_file);
 
         $html = self::content_to_pdf(
             $html,

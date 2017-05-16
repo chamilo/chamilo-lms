@@ -62,73 +62,71 @@ $code = isset($code) ? $code : null;
     });
 </script>
 <div class="row">
-	<div class="col-md-12">
-		<h2 class="title-courses"><?php echo get_lang('CourseManagement'); ?></h2>
-		<div class="search-courses">
-			<div class="row">
-		    <div class="col-md-6">
-		        <?php
-		        if ($showCourses) {
-		            if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) { ?>
-		            <form method="post" action="<?php echo CourseCategory::getCourseCategoryUrl(1, $pageLength, 'ALL', 0, 'subscribe'); ?>">
-		                <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
-		                <input type="hidden" name="search_course" value="1" />
-		                <label><?php echo get_lang('Search'); ?></label>
-		                <div class="input-group">
-		                    <input class="form-control" type="text" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
-		                    <div class="input-group-btn">
-		                        <button class="btn btn-default" type="submit">
-		                            <em class="fa fa-search"></em> <?php echo get_lang('Search'); ?>
-		                        </button>
-		                    </div>
-		                </div>
-		            </form>
-		        <?php } ?>
-		    </div>
-		    <div class="col-md-6">
-		        <?php
-		        $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
-		        $action = (!empty($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : 'display_courses');
-		        $pageLength = (!empty($_REQUEST['pageLength']) ? intval($_REQUEST['pageLength']) : 10);
-		        $pageCurrent = (!empty($_REQUEST['pageCurrent']) ? intval($_REQUEST['pageCurrent']) : 1);
-		        $form = '<form action="'.$webAction.'" method="GET" >';
-		        $form .= '<input type="hidden" name="action" value="'.$action.'">';
-		        $form .= '<input type="hidden" name="pageCurrent" value="'.$pageCurrent.'">';
-		        $form .= '<input type="hidden" name="pageLength" value="'.$pageLength.'">';
-		        $form .= '<div class="form-group">';
-				$form .= '<label>'.get_lang('CourseCategories').'</label>';
-		        $form .= '<select name="category_code" onchange="submit();" class="selectpicker show-tick form-control">';
-		        $codeType = isset($_REQUEST['category_code']) ? Security::remove_XSS($_REQUEST['category_code']) : '';
-		        foreach ($browse_course_categories[0] as $category) {
-		            $categoryCode = $category['code'];
-		            $countCourse = $category['count_courses'];
-		            $form .= '<option '.($categoryCode == $codeType ? 'selected="selected" ' : '').' value="'.$category['code'].'">'.$category['name'].' ( '.$countCourse.' ) </option>';
-		            if (!empty($browse_course_categories[$categoryCode])) {
-		                foreach ($browse_course_categories[$categoryCode] as $subCategory) {
-		                    $subCategoryCode = $subCategory['code'];
-		                    $form .= '<option '.($subCategoryCode == $codeType ? 'selected="selected" ' : '').' value="'.$subCategory['code'].'"> ---'.$subCategory['name'].' ( '.$subCategory['count_courses'].' ) </option>';
-		                }
-		            }
-		        }
-		        $form .= '</select>';
-		        $form .= '</form>';
-		        echo $form;
-		    ?>
-		    </div>
-		    </div>
-		</div>
-
-	</div>
-	<?php  if ($showSessions) { ?>
-	    <div class="return-catalog">
-	        <a class="btn btn-default btn-lg btn-block" href="<?php echo CourseCategory::getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>">
-	            <em class="fa fa-arrow-right"></em> <?php echo get_lang('SessionList'); ?>
-	        </a>
-	    </div>
-	<?php } ?>
+    <div class="col-md-12">
+        <h2 class="title-courses"><?php echo get_lang('CourseManagement'); ?></h2>
+        <div class="search-courses">
+            <div class="row">
+            <div class="col-md-6">
+                <?php
+                if ($showCourses) {
+                    if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) { ?>
+                    <form method="post" action="<?php echo CourseCategory::getCourseCategoryUrl(1, $pageLength, 'ALL', 0, 'subscribe'); ?>">
+                        <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
+                        <input type="hidden" name="search_course" value="1" />
+                        <label><?php echo get_lang('Search'); ?></label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit">
+                                    <em class="fa fa-search"></em> <?php echo get_lang('Search'); ?>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                <?php } ?>
+            </div>
+            <div class="col-md-6">
+                <?php
+                $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
+                $action = (!empty($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : 'display_courses');
+                $pageLength = (!empty($_REQUEST['pageLength']) ? intval($_REQUEST['pageLength']) : CoursesAndSessionsCatalog::PAGE_LENGTH);
+                $pageCurrent = (!empty($_REQUEST['pageCurrent']) ? intval($_REQUEST['pageCurrent']) : 1);
+                $form = '<form action="'.$webAction.'" method="GET" >';
+                $form .= '<input type="hidden" name="action" value="'.$action.'">';
+                $form .= '<input type="hidden" name="pageCurrent" value="'.$pageCurrent.'">';
+                $form .= '<input type="hidden" name="pageLength" value="'.$pageLength.'">';
+                $form .= '<div class="form-group">';
+                $form .= '<label>'.get_lang('CourseCategories').'</label>';
+                $form .= '<select name="category_code" onchange="submit();" class="selectpicker show-tick form-control">';
+                $codeType = isset($_REQUEST['category_code']) ? Security::remove_XSS($_REQUEST['category_code']) : '';
+                foreach ($browse_course_categories[0] as $category) {
+                    $categoryCode = $category['code'];
+                    $countCourse = $category['count_courses'];
+                    $form .= '<option '.($categoryCode == $codeType ? 'selected="selected" ' : '').' value="'.$category['code'].'">'.$category['name'].' ( '.$countCourse.' ) </option>';
+                    if (!empty($browse_course_categories[$categoryCode])) {
+                        foreach ($browse_course_categories[$categoryCode] as $subCategory) {
+                            $subCategoryCode = $subCategory['code'];
+                            $form .= '<option '.($subCategoryCode == $codeType ? 'selected="selected" ' : '').' value="'.$subCategory['code'].'"> ---'.$subCategory['name'].' ( '.$subCategory['count_courses'].' ) </option>';
+                        }
+                    }
+                }
+                $form .= '</select>';
+                $form .= '</form>';
+                echo $form;
+            ?>
+            </div>
+            </div>
+        </div>
+    </div>
+    <?php  if ($showSessions) { ?>
+        <div class="return-catalog">
+            <a class="btn btn-default btn-lg btn-block" href="<?php echo CourseCategory::getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>">
+                <em class="fa fa-arrow-right"></em> <?php echo get_lang('SessionList'); ?>
+            </a>
+        </div>
+    <?php } ?>
 </div>
-
- <?php  } ?>
+<?php  } ?>
 <div class="grid-courses">
 <div class="row">
 <?php

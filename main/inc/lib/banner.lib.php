@@ -344,8 +344,8 @@ function return_navigation_array()
             $params = array('variable = ? AND subkey = ?' => ['status', 'studentfollowup']);
             $result = api_get_settings_params_simple($params);
             if (!empty($result) && $result['selected_value'] === 'installed') {
-                $navigation['follow_up']['url'] = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/post.php';
-                $navigation['follow_up']['title'] = get_lang('CareSystem');
+                $navigation['follow_up']['url'] = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php';
+                $navigation['follow_up']['title'] = get_lang('MyDossier');
                 $navigation['follow_up']['key'] = 'homepage';
                 $navigation['follow_up']['icon'] = 'homepage.png';
             }

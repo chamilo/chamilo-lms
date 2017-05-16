@@ -159,14 +159,14 @@ if ($showCourses && $action != 'display_sessions') {
                 continue;
             }
 
-            $userRegisterdInCourse = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
-            $userRegisterdInCourseAsTeacher = CourseManager::is_course_teacher($user_id, $course['code']);
-            $userRegisterd = ($userRegisterdInCourse && $userRegisterdInCourseAsTeacher);
+            $userRegisteredInCourse = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
+            $userRegisteredInCourseAsTeacher = CourseManager::is_course_teacher($user_id, $course['code']);
+            $userRegistered = $userRegisteredInCourse && $userRegisteredInCourseAsTeacher;
 
-            $course_public = ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD);
-            $course_open = ($course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM);
-            $course_private = ($course['visibility'] == COURSE_VISIBILITY_REGISTERED);
-            $course_closed = ($course['visibility'] == COURSE_VISIBILITY_CLOSED);
+            $course_public = $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD;
+            $course_open = $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM;
+            $course_private = $course['visibility'] == COURSE_VISIBILITY_REGISTERED;
+            $course_closed = $course['visibility'] == COURSE_VISIBILITY_CLOSED;
 
             $course_subscribe_allowed = ($course['subscribe'] == 1);
             $course_unsubscribe_allowed = ($course['unsubscribe'] == 1);
@@ -183,7 +183,7 @@ if ($showCourses && $action != 'display_sessions') {
             }
 
             // display thumbnail
-            $html .= returnThumbnail($course, $userRegisterd);
+            $html .= returnThumbnail($course, $userRegistered);
 
             $separator = '<div class="separator">&nbsp;</div>';
             $subscribeButton = return_register_button($course, $stok, $code, $search_term);
@@ -211,7 +211,7 @@ if ($showCourses && $action != 'display_sessions') {
 
             // display course title and button bloc
             $html .= '<div class="description">';
-            $html .= return_title($course, $userRegisterdInCourse);
+            $html .= return_title($course, $userRegisteredInCourse);
             $html .= return_teacher($course);
 
             // display button line
@@ -222,20 +222,18 @@ if ($showCourses && $action != 'display_sessions') {
             $html .= '<div class="right">';
             $html .= '<div class="btn-group">';
             // if user registered as student
-            if ($userRegisterdInCourse) {
+            if ($userRegisteredInCourse) {
                 $html .= return_already_registered_label('student');
                 if (!$course_closed) {
                     if ($course_unsubscribe_allowed) {
                         $html .= return_unregister_button($course, $stok, $search_term, $code);
                     }
                 }
-            } elseif ($userRegisterdInCourseAsTeacher) {
+            } elseif ($userRegisteredInCourseAsTeacher) {
                 // if user registered as teacher
                 if ($course_unsubscribe_allowed) {
                     $html .= return_unregister_button($course, $stok, $search_term, $code);
                 }
-                //$html .= return_already_registered_label('teacher');
-
             } else {
                 // if user not registered in the course
                 if (!$course_closed) {
@@ -245,7 +243,6 @@ if ($showCourses && $action != 'display_sessions') {
                         }
                     }
                 }
-
             }
             $html .= '</div>';
             $html .= '</div>';
@@ -290,11 +287,17 @@ function returnThumbnail($course, $registeredUser)
         $course_medium_image = api_get_path(WEB_COURSE_PATH).$course['directory'].'/course-pic.png'; // redimensioned image 85x85
     } else {
         // without picture
-        $course_medium_image = Display::return_icon('session_default.png', null, null, null, null, true);
+        $course_medium_image = Display::return_icon(
+            'session_default.png',
+            null,
+            null,
+            null,
+            null,
+            true
+        );
     }
 
     $html .= '<div class="image">';
-
     if (!$registeredUser) {
         $html .= '<img class="img-responsive"'
                 .' src="'.$course_medium_image.'" '
@@ -320,16 +323,13 @@ function returnThumbnail($course, $registeredUser)
 
 function return_teacher($course)
 {
-    //Info course
     $courseInfo = api_get_course_info($course['code']);
     $teachers = CourseManager::getTeachersFromCourse($courseInfo['real_id']);
-    //$count = 0;
     $html = null;
     $html .= '<div class="block-author">';
     $length = count($teachers);
     foreach ($teachers as $value) {
         $name = $value['firstname'].' '.$value['lastname'];
-
         if ($length > 2) {
              $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">
                     <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
@@ -342,6 +342,7 @@ function return_teacher($course)
         }
     }
     $html .= '</div>';
+
     return $html;
 }
 
@@ -414,7 +415,11 @@ function return_goto_button($course)
     $html = Display::url(
         Display::returnFontAwesomeIcon('share'),
         api_get_course_url($course['code']),
-        array('class' => 'btn btn-default btn-sm', 'title' => $title, 'aria-label' => $title)
+        array(
+            'class' => 'btn btn-default btn-sm',
+            'title' => $title,
+            'aria-label' => $title,
+        )
     );
     return $html;
 }
@@ -437,7 +442,12 @@ function return_already_registered_label($in_status)
     $html = Display::tag(
         'span',
         $icon.' '.$title,
-        array('id' => 'register', 'class' => 'label-subscribed text-success', 'title' => $title, 'aria-label' => $title)
+        array(
+            'id' => 'register',
+            'class' => 'label-subscribed text-success',
+            'title' => $title,
+            'aria-label' => $title,
+        )
     );
 
     return $html;
@@ -482,5 +492,6 @@ function return_unregister_button($course, $stok, $search_term, $code)
         .'&unsubscribe='.$course['code'].'&search_term='.$search_term.'&category_code='.$code,
         array('class' => 'btn btn-danger btn-sm', 'title' => $title, 'aria-label' => $title)
     );
+
     return $html;
 }

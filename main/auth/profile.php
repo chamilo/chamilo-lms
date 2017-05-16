@@ -230,7 +230,7 @@ if (api_get_setting('profile', 'language') !== 'true') {
     $form->freeze('language');
 }
 
-//THEME
+// THEME
 if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
     $form->addElement('SelectTheme', 'theme', get_lang('Theme'));
     if (api_get_setting('profile', 'theme') !== 'true') {

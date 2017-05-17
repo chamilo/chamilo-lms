@@ -134,6 +134,9 @@ if ($showImportIcon) {
     echo "</div><br />";
 }
 
+/**
+ * @return int
+ */
 function get_count_courses()
 {
     $userId = api_get_user_id();
@@ -165,22 +168,40 @@ function get_count_courses()
     }
 
     if ($drhLoaded == false) {
-        $count = CourseManager::getCoursesFollowedByUser(
-            $userId,
-            COURSEMANAGER,
-            null,
-            null,
-            null,
-            null,
-            true,
-            $keyword,
+        $isGeneralCoach = SessionManager::user_is_general_coach(
+            api_get_user_id(),
             $sessionId
         );
+
+        if ($isGeneralCoach) {
+            $courseList = SessionManager::getCoursesInSession($sessionId);
+            $count = count($courseList);
+        } else {
+            $count = CourseManager::getCoursesFollowedByUser(
+                $userId,
+                COURSEMANAGER,
+                null,
+                null,
+                null,
+                null,
+                true,
+                $keyword,
+                $sessionId
+            );
+        }
     }
 
     return $count;
 }
 
+/**
+ * @param $from
+ * @param $limit
+ * @param $column
+ * @param $direction
+ *
+ * @return array
+ */
 function get_courses($from, $limit, $column, $direction)
 {
     $userId = api_get_user_id();
@@ -205,18 +226,37 @@ function get_courses($from, $limit, $column, $direction)
     }
 
     if ($drhLoaded == false) {
-        $courses = CourseManager::getCoursesFollowedByUser(
-            $userId,
-            COURSEMANAGER,
-            $from,
-            $limit,
-            $column,
-            $direction,
-            false,
-            $keyword,
-            $sessionId,
-            $follow
+        $isGeneralCoach = SessionManager::user_is_general_coach(
+            api_get_user_id(),
+            $sessionId
         );
+
+        // General coach can see all reports
+        if ($isGeneralCoach) {
+            $courseList = SessionManager::getCoursesInSession($sessionId);
+            $courses = [];
+            if (!empty($courseList)) {
+                foreach ($courseList as $courseId) {
+                    $courses[] = api_get_course_info_by_id($courseId);
+                }
+            }
+        } else {
+            $courses = CourseManager::getCoursesFollowedByUser(
+                $userId,
+                COURSEMANAGER,
+                $from,
+                $limit,
+                $column,
+                $direction,
+                false,
+                $keyword,
+                $sessionId,
+                $follow
+            );
+        }
+
+
+
     }
 
     $courseList = array();

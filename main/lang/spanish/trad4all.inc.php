@@ -8022,4 +8022,5 @@ $ReadingQuestionCongratsSpeedXReachedForYWords = "Felicitaciones, ha alcanzado l
 $ReadingComprehensionLevelX = "%s palabras por minuto";
 $TutorXIsNotSubscribedToCourse = "El tutor %s no está inscrito a este curso";
 $UpdateTitleInLps = "Actualizar este título en las lecciones";
+$WebRTCDialogHelp = "Para habilitar la el video chat en tu navegador (si este lo soporta), asegúrese de hacer click en el ícono de información en la izquierda de la URL para autorizar el uso de su cámara web y micrófono.";
 ?>

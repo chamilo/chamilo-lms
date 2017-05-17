@@ -7954,4 +7954,5 @@ $ReadingQuestionCongratsSpeedXReachedForYWords = "Félicitacions, vous avez atte
 $ReadingComprehensionLevelX = "%s mots par minute";
 $TutorXIsNotSubscribedToCourse = "Le coach %s n'est pas inscrit dans ce cours";
 $UpdateTitleInLps = "Mettre ce titre à jour dans les parcours";
+$WebRTCDialogHelp = "Pour activer le vidéochat dans votre navigateur (s'il le supporte), assurez-vous de bien cliquer sur l'icône d'information dans la partie gauche de la barre d'adresse du navigateur, et d'ensuite autoriser l'utilisation de la webcam et du micro.";
 ?>

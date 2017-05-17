@@ -44,23 +44,24 @@ $qb
 ;
 
 $query = $qb->getQuery();
-
 $posts = new Paginator($query, $fetchJoinCollection = true);
 
 $totalItems = count($posts);
 $pagesCount = ceil($totalItems / $pageSize);
 $pagination = '';
 $url = api_get_self().'?student_id='.$studentId;
-$pagination .= '<ul class="pagination">';
-for ($i = 0; $i < $pagesCount; $i++) {
-    $newPage = $i + 1;
-    if ($currentPage == $newPage) {
-        $pagination .= '<li class="active"><a href="'.$url.'&page='.$newPage.'">'.$newPage.'</a></li>';
-    } else {
-        $pagination .= '<li><a href="'.$url.'&page='.$newPage.'">'.$newPage.'</a></li>';
+if ($totalItems > 1) {
+    $pagination .= '<ul class="pagination">';
+    for ($i = 0; $i < $pagesCount; $i++) {
+        $newPage = $i + 1;
+        if ($currentPage == $newPage) {
+            $pagination .= '<li class="active"><a href="'.$url.'&page='.$newPage.'">'.$newPage.'</a></li>';
+        } else {
+            $pagination .= '<li><a href="'.$url.'&page='.$newPage.'">'.$newPage.'</a></li>';
+        }
     }
+    $pagination .= '</ul>';
 }
-$pagination .= '</ul>';
 
 $tpl = new Template($plugin->get_lang('plugin_title'));
 $tpl->assign('posts', $posts);

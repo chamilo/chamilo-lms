@@ -100,7 +100,6 @@ class StudentFollowUpPlugin extends Plugin
             ];
         }
 
-        $isAllow = false;
         $showPrivate = false;
         if ($studentId === $currentUserId) {
             $isAllow = true;
@@ -112,9 +111,15 @@ class StudentFollowUpPlugin extends Plugin
             $sessions = SessionManager::get_sessions_by_user($studentId);
 
             $isCourseCoach = false;
+            $isDrhSession = false;
             if (!empty($sessions)) {
                 foreach ($sessions as $session) {
                     $sessionId = $session['session_id'];
+                    $sessionDrhInfo = SessionManager::getSessionFollowedByDrh($currentUserId, $sessionId);
+                    if (!empty($sessionDrhInfo)) {
+                        $isDrhSession = true;
+                        break;
+                    }
                     foreach ($session['courses'] as $course) {
                         //$isCourseCoach = api_is_coach($sessionId, $course['real_id']);
                         $coachList = SessionManager::getCoachesByCourseSession($sessionId, $course['real_id']);
@@ -126,7 +131,7 @@ class StudentFollowUpPlugin extends Plugin
                 }
             }
 
-            $isAllow = $isAdminOrDrh || $isCourseCoach;
+            $isAllow = $isAdminOrDrh || $isCourseCoach || $isDrhSession;
             $showPrivate = $isAdminOrDrh;
         }
 

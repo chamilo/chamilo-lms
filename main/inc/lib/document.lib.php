@@ -2982,8 +2982,11 @@ class DocumentManager
                             }
                         }*/
 
-                        if (!empty($title)) {
-                            $params['title'] = $title;
+                        // Don't need to rename the title it's already added inside handle_uploaded_document
+                        if ($if_exists !== 'rename') {
+                            if (!empty($title)) {
+                                $params['title'] = $title;
+                            }
                         }
 
                         if (!empty($comment)) {

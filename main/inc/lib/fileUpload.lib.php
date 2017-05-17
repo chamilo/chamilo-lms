@@ -568,7 +568,7 @@ function handle_uploaded_document(
                         $groupId
                     );
 
-                    $documentTitle = get_document_title($cleanName);
+                    $documentTitle = disable_dangerous_file($cleanName);
                     $fullPath = $whereToSave.$fileSystemName;
                     $filePath = $uploadPath.$fileSystemName;
 

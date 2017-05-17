@@ -9018,7 +9018,7 @@ class learnpath
                 'radio',
                 'if_exists',
                 get_lang("UplWhatIfFileExists"),
-                get_lang('Yes'),
+                get_lang('UplDoNothing'),
                 'nothing'
             ),
             $form->createElement(

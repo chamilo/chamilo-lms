@@ -308,7 +308,6 @@ class SurveyUtil
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-
         $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
 
         // Actions bar
@@ -475,8 +474,8 @@ class SurveyUtil
      * You can then click on the name of the person and you will then go to the report by user where you see all the
      * answers of that user.
      *
-     * @param 	array 	All the survey data
-     * @return 	string	html code that displays the report by question
+     * @param    array    All the survey data
+     * @return   string    html code that displays the report by question
      * @todo allow switching between horizontal and vertical.
      * @todo multiple response: percentage are probably not OK
      * @todo the question and option text have to be shortened and should expand when the user clicks on it.
@@ -695,9 +694,9 @@ class SurveyUtil
 
     /**
      * Display score data about a survey question
-     * @param	array	Question info
-     * @param	integer	The offset of results shown
-     * @return	void 	(direct output)
+     * @param    array    Question info
+     * @param    integer    The offset of results shown
+     * @return   void    (direct output)
      */
     public static function display_question_report_score($survey_data, $question, $offset)
     {
@@ -839,8 +838,7 @@ class SurveyUtil
         // Getting the number of options per question
         echo '	<tr>';
         echo '		<th>';
-        if (
-            (isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
+        if ((isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
             (isset($_POST['export_report']) && $_POST['export_report'])
         ) {
             echo '<button class="cancel" type="submit" name="reset_question_filter" value="'.get_lang('ResetQuestionFilter').'">'.get_lang('ResetQuestionFilter').'</button>';
@@ -1024,10 +1022,10 @@ class SurveyUtil
      * This function displays a row (= a user and his/her answers) in the table of the complete report.
      *
      * @param array $survey_data
-     * @param array	Possible options
-     * @param array 	User answers
-     * @param mixed	User ID or user details string
-     * @param boolean	Whether to show extra user fields or not
+     * @param array    Possible options
+     * @param array    User answers
+     * @param mixed    User ID or user details string
+     * @param boolean  Whether to show extra user fields or not
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007 - Updated March 2008
      */
@@ -1060,7 +1058,13 @@ class SurveyUtil
 
         if ($display_extra_user_fields) {
             // Show user fields data, if any, for this user
-            $user_fields_values = UserManager::get_extra_user_data(intval($user), false, false, false, true);
+            $user_fields_values = UserManager::get_extra_user_data(
+                intval($user),
+                false,
+                false,
+                false,
+                true
+            );
             foreach ($user_fields_values as & $value) {
                 echo '<td align="center">'.$value.'</td>';
             }
@@ -1080,18 +1084,16 @@ class SurveyUtil
                                 echo $answers_of_user[$question_id][$option_id]['value'];
                                 echo "</td>";
                             }
-                        }
-                        else {
+                        } else {
                             echo '<td align="center">';
                             if (!empty($answers_of_user[$question_id][$option_id])) {
                                 if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
                                     echo $answers_of_user[$question_id][$option_id]['value'];
-                                }
-                                else {
+                                } else {
                                     echo 'v';
                                 }
                             }
-                        } // </hub>
+                        }
                     }
                 }
             }
@@ -1103,7 +1105,7 @@ class SurveyUtil
      * Quite similar to display_complete_report(), returns an HTML string
      * that can be used in a csv file
      * @todo consider merging this function with display_complete_report
-     * @return	string	The contents of a csv file
+     * @return    string    The contents of a csv file
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      */
@@ -1820,9 +1822,8 @@ class SurveyUtil
                         }
                         $tableHtml .= '</tr>';
                     }
-                }
-                // The Y axis is NOT a score question type so the number of rows = the number of options
-                else {
+                } else {
+                    // The Y axis is NOT a score question type so the number of rows = the number of options
                     $tableHtml .= '<tr>';
                     for ($ii = 0; $ii <= count($question_x['answers']); $ii++) {
                         if ($question_x['type'] == 'score') {
@@ -2106,7 +2107,6 @@ class SurveyUtil
         $counter = 0; // Nr of invitations "sent" (if sendmail option)
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
-
         $result = CourseManager::separateUsersGroups($users_array);
 
         $groupList = $result['groups'];
@@ -2156,7 +2156,6 @@ class SurveyUtil
             $new_user = false; // User not already invited
             // Store the invitation if user_id not in $already_invited['course_users'] OR email is not in $already_invited['additional_users']
             $addit_users_array = isset($already_invited['additional_users']) && !empty($already_invited['additional_users']) ? explode(';', $already_invited['additional_users']) : array();
-
             $my_alredy_invited = $already_invited['course_users'] == null ? array() : $already_invited['course_users'];
             if ((is_numeric($value) && !in_array($value, $my_alredy_invited)) ||
                 (!is_numeric($value) && !in_array($value, $addit_users_array))
@@ -2205,7 +2204,6 @@ class SurveyUtil
         ) {
             $insertId = Database::insert($table, $params);
             if ($insertId) {
-
                 $sql = "UPDATE $table SET survey_invitation_id = $insertId
                         WHERE iid = $insertId";
                 Database::query($sql);
@@ -2736,6 +2734,7 @@ class SurveyUtil
 		        FROM ".$table_survey.' '.$search_restriction;
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
+
         return $obj->total_number_of_items;
     }
 

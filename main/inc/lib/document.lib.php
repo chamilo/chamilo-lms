@@ -3,12 +3,12 @@
 
 /**
  *  Class DocumentManager
- * 	This is the document library for Chamilo.
- * 	It is / will be used to provide a service layer to all document-using tools.
- * 	and eliminate code duplication fro group documents, scorm documents, main documents.
- * 	Include/require it in your code to use its functionality.
+ *  This is the document library for Chamilo.
+ *  It is / will be used to provide a service layer to all document-using tools.
+ *  and eliminate code duplication fro group documents, scorm documents, main documents.
+ *  Include/require it in your code to use its functionality.
  *
- * 	@package chamilo.library
+ * @package chamilo.library
  */
 class DocumentManager
 {
@@ -47,14 +47,14 @@ class DocumentManager
     }
 
     /**
-     * 	Get the content type of a file by checking the extension
-     * 	We could use mime_content_type() with php-versions > 4.3,
-     * 	but this doesn't work as it should on Windows installations
+     * Get the content type of a file by checking the extension
+     * We could use mime_content_type() with php-versions > 4.3,
+     * but this doesn't work as it should on Windows installations
      *
-     * 	@param string $filename or boolean TRUE to return complete array
-     * 	@author ? first version
-     * 	@author Bert Vanderkimpen
-     *  @return string
+     * @param string $filename or boolean TRUE to return complete array
+     * @author ? first version
+     * @author Bert Vanderkimpen
+     * @return string
      *
      */
     public static function file_get_mime_type($filename)
@@ -273,12 +273,12 @@ class DocumentManager
     }
 
     /**
-     *  @param string
-     *  @param string
-     * 	@return true if the user is allowed to see the document, false otherwise
-     * 	@author Sergio A Kessler, first version
-     * 	@author Roan Embrechts, bugfix
-     *  @todo not only check if a file is visible, but also check if the user is allowed to see the file??
+     * @param string
+     * @param string
+     * @return true if the user is allowed to see the document, false otherwise
+     * @author Sergio A Kessler, first version
+     * @author Roan Embrechts, bugfix
+     * @todo not only check if a file is visible, but also check if the user is allowed to see the file??
      */
     public static function file_visible_to_user($this_course, $doc_url)
     {
@@ -1428,7 +1428,6 @@ class DocumentManager
         $www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $id = intval($id);
-
         $sessionCondition = api_get_session_condition($session_id, true, true);
 
         $sql = "SELECT * FROM $TABLE_DOCUMENT
@@ -1512,8 +1511,14 @@ class DocumentManager
      * @param int $user_id
      * @return bool
      */
-    public static function set_document_as_template($title, $description, $document_id_for_template, $course_code, $user_id, $image)
-    {
+    public static function set_document_as_template(
+        $title,
+        $description,
+        $document_id_for_template,
+        $course_code,
+        $user_id,
+        $image
+    ) {
         // Database table definition
         $table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
         $params = [
@@ -1565,7 +1570,7 @@ class DocumentManager
      * Return true if the documentpath have visibility=1 as
      * item_property (you should use the is_visible_by_id)
      *
-     * @param string $document_path the relative complete path of the document
+     * @param string $doc_path the relative complete path of the document
      * @param array  $course the _course array info of the document's course
      * @param int
      * @param string
@@ -1911,7 +1916,7 @@ class DocumentManager
         $user_id = intval($user_id);
         $course_info = api_get_course_info($course_id);
 
-        // Portal infor
+        // Portal info
         $organization_name = api_get_setting('Institution');
         $portal_name = api_get_setting('siteName');
 
@@ -2150,11 +2155,11 @@ class DocumentManager
      * The list will generally include pictures, flash objects, java applets, or any other
      * stuff included in the source of the current item. The current item is expected
      * to be an HTML file or string html. If it is not, then the function will return and empty list.
-     * @param	string  source html (content or path)
-     * @param	bool  	is file or string html
-     * @param	string	type (one of the app tools) - optional (otherwise takes the current item's type)
-     * @param	int		level of recursivity we're in
-     * @return	array	List of file paths. An additional field containing 'local' or 'remote' helps determine
+     * @param    string  source html (content or path)
+     * @param    bool    is file or string html
+     * @param    string    type (one of the app tools) - optional (otherwise takes the current item's type)
+     * @param    int        level of recursivity we're in
+     * @return   array    List of file paths. An additional field containing 'local' or 'remote' helps determine
      * if the file should be copied into the zip or just linked
      */
     public static function get_resources_from_source_html($source_html, $is_file = false, $type = null, $recursivity = 1)
@@ -2306,7 +2311,12 @@ class DocumentManager
                                                 $dir = dirname($abs_path).'/';
                                             }
                                             $new_abs_path = realpath($dir.$second_part);
-                                            $in_files_list[] = self::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity + 1);
+                                            $in_files_list[] = self::get_resources_from_source_html(
+                                                $new_abs_path,
+                                                true,
+                                                TOOL_DOCUMENT,
+                                                $recursivity + 1
+                                            );
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
@@ -2331,7 +2341,12 @@ class DocumentManager
                                         if (substr($source, 0, 1) === '/') {
                                             //link starts with a /, making it absolute (relative to DocumentRoot)
                                             $files_list[] = array($source, 'local', 'abs');
-                                            $in_files_list[] = self::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity + 1);
+                                            $in_files_list[] = self::get_resources_from_source_html(
+                                                $source,
+                                                true,
+                                                TOOL_DOCUMENT,
+                                                $recursivity + 1
+                                            );
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
@@ -3368,6 +3383,7 @@ class DocumentManager
      * @param bool $showInvisibleFiles
      * @param bool $showOnlyFolders
      * @param int $folderId
+     *
      * @return string
      */
     public static function get_document_preview(
@@ -3814,7 +3830,7 @@ class DocumentManager
         $onclick = '';
 
         // if in LP, hidden folder are displayed in grey
-        $folder_class_hidden = "";
+        $folder_class_hidden = '';
         if ($lp_id) {
             if (isset($resource['visible']) && $resource['visible'] == 0) {
                 $folder_class_hidden = "doc_folder_hidden"; // in base.css
@@ -4026,7 +4042,26 @@ class DocumentManager
 
             // mime_content_type does not detect correctly some formats that are going to be supported for index, so an extensions array is used for the moment
             if (empty($doc_mime)) {
-                $allowed_extensions = array('doc', 'docx', 'ppt', 'pptx', 'pps', 'ppsx', 'xls', 'xlsx', 'odt', 'odp', 'ods', 'pdf', 'txt', 'rtf', 'msg', 'csv', 'html', 'htm');
+                $allowed_extensions = array(
+                    'doc',
+                    'docx',
+                    'ppt',
+                    'pptx',
+                    'pps',
+                    'ppsx',
+                    'xls',
+                    'xlsx',
+                    'odt',
+                    'odp',
+                    'ods',
+                    'pdf',
+                    'txt',
+                    'rtf',
+                    'msg',
+                    'csv',
+                    'html',
+                    'htm',
+                );
                 $extensions = preg_split("/[\/\\.]/", $doc_path);
                 $doc_ext = strtolower($extensions[count($extensions) - 1]);
                 if (in_array($doc_ext, $allowed_extensions)) {

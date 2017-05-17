@@ -100,9 +100,9 @@ class StudentFollowUpPlugin extends Plugin
             ];
         }
 
-        $showPrivate = false;
         if ($studentId === $currentUserId) {
             $isAllow = true;
+            $showPrivate = true;
         } else {
             // Only admins and DRH that follow the user
             $isAdminOrDrh = UserManager::is_user_followed_by_drh($studentId, $currentUserId) || api_is_platform_admin();
@@ -132,7 +132,7 @@ class StudentFollowUpPlugin extends Plugin
             }
 
             $isAllow = $isAdminOrDrh || $isCourseCoach || $isDrhSession;
-            $showPrivate = $isAdminOrDrh;
+            $showPrivate = $isAdminOrDrh || $isDrhSession;
         }
 
         return [

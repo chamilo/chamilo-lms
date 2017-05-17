@@ -160,7 +160,12 @@ class UserGroup extends Model
      */
     public function get_id_by_name($name)
     {
-        $row = Database::select('id', $this->table, array('where' => array('name = ?' => $name)), 'first');
+        $row = Database::select(
+            'id',
+            $this->table,
+            array('where' => array('name = ?' => $name)),
+            'first'
+        );
 
         return $row['id'];
     }
@@ -745,8 +750,12 @@ class UserGroup extends Model
      * @param bool $delete_users_not_present_in_list
      * @param array $relationType
      */
-    public function subscribe_users_to_usergroup($usergroup_id, $list, $delete_users_not_present_in_list = true, $relationType = '')
-    {
+    public function subscribe_users_to_usergroup(
+        $usergroup_id,
+        $list,
+        $delete_users_not_present_in_list = true,
+        $relationType = ''
+    ) {
         $current_list = self::get_users_by_usergroup($usergroup_id);
         $course_list = self::get_courses_by_usergroup($usergroup_id);
         $session_list = self::get_sessions_by_usergroup($usergroup_id);
@@ -1080,14 +1089,14 @@ class UserGroup extends Model
     /**
      * Creates new group pictures in various sizes of a user, or deletes user pfotos.
      * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php
-     * @param	int	The group id
-     * @param	string $file			The common file name for the newly created photos.
+     * @param    int    The group id
+     * @param    string $file The common file name for the newly created photos.
      * It will be checked and modified for compatibility with the file system.
      * If full name is provided, path component is ignored.
      * If an empty name is provided, then old user photos are deleted only,
      * @see UserManager::delete_user_picture() as the prefered way for deletion.
-     * @param	string		$source_file	The full system name of the image from which user photos will be created.
-     * @return	mixed	Returns the resulting common file name of created images which usually should be stored in database.
+     * @param    string $source_file The full system name of the image from which user photos will be created.
+     * @return   mixed    Returns the resulting common file name of created images which usually should be stored in database.
      * When an image is removed the function returns an empty string. In case of internal error or negative validation it returns FALSE.
      */
     public function update_group_picture($group_id, $file = null, $source_file = null)
@@ -1233,7 +1242,7 @@ class UserGroup extends Model
                 WHERE usergroup_id = $id";
         Database::query($sql);*/
 
-        $result = parent::delete($id);
+        parent::delete($id);
     }
 
     /**
@@ -1401,8 +1410,13 @@ class UserGroup extends Model
      * @param string style css
      * @return array with the file and the style of an image i.e $array['file'] $array['style']
      */
-    public function get_picture_group($id, $picture_file, $height, $size_picture = GROUP_IMAGE_SIZE_MEDIUM, $style = '')
-    {
+    public function get_picture_group(
+        $id,
+        $picture_file,
+        $height,
+        $size_picture = GROUP_IMAGE_SIZE_MEDIUM,
+        $style = ''
+    ) {
         $picture = array();
         //$picture['style'] = $style;
         if ($picture_file === 'unknown.jpg') {
@@ -1457,11 +1471,11 @@ class UserGroup extends Model
      * with dirname() or the file with basename(). This also works for the
      * functions dealing with the user's productions, as they are located in
      * the same directory.
-     * @param	integer	User ID
-     * @param	string	Type of path to return (can be 'none', 'system', 'rel', 'web')
-     * @param	bool	Whether we want to have the directory name returned 'as if' there was a file or not (in the case we want to know which directory to create - otherwise no file means no split subdir)
-     * @param	bool	If we want that the function returns the /main/img/unknown.jpg image set it at true
-     * @return	array 	Array of 2 elements: 'dir' and 'file' which contain the dir and file as the name implies if image does not exist it will return the unknow image if anonymous parameter is true if not it returns an empty er's
+     * @param    integer    User ID
+     * @param    string    Type of path to return (can be 'none', 'system', 'rel', 'web')
+     * @param    bool    Whether we want to have the directory name returned 'as if' there was a file or not (in the case we want to know which directory to create - otherwise no file means no split subdir)
+     * @param    bool    If we want that the function returns the /main/img/unknown.jpg image set it at true
+     * @return   array    Array of 2 elements: 'dir' and 'file' which contain the dir and file as the name implies if image does not exist it will return the unknow image if anonymous parameter is true if not it returns an empty er's
      */
     public function get_group_picture_path_by_id($id, $type = 'none', $preview = false, $anonymous = false)
     {
@@ -1664,8 +1678,9 @@ class UserGroup extends Model
      * @author Julio Montoya
      * @param array $user_list
      * @param array $group_list
-     * @param int   $relation_type
-     * */
+     * @param int $relation_type
+     * @return array
+     **/
     public function add_users_to_groups($user_list, $group_list, $relation_type = GROUP_USER_PERMISSION_READER)
     {
         $table_url_rel_group = $this->usergroup_rel_user_table;
@@ -1693,7 +1708,7 @@ class UserGroup extends Model
                 }
             }
         }
-        return 	$result_array;
+        return $result_array;
     }
 
     /**
@@ -1721,9 +1736,9 @@ class UserGroup extends Model
      * @param  int $user_id
      * @param  int $group_id
      * @param  int $relation_type
-     *
+    *
      * @return boolean true if success
-     * */
+     **/
     public function add_user_to_group($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER)
     {
         $table_url_rel_group = $this->usergroup_rel_user_table;
@@ -1752,7 +1767,6 @@ class UserGroup extends Model
      * @param int $user_id
      * @param int $group_id
      * @param int $relation_type
-     *
      **/
     public function update_user_role($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER)
     {
@@ -2011,7 +2025,7 @@ class UserGroup extends Model
      * Shows the left column of the group page
      * @param int group id
      * @param int user id
-     *
+     * @return string
      */
     public function show_group_column_information($group_id, $user_id, $show = '')
     {
@@ -2095,6 +2109,10 @@ class UserGroup extends Model
         return $html;
     }
 
+    /**
+     * @param int $group_id
+     * @param int $topic_id
+     */
     public function delete_topic($group_id, $topic_id)
     {
         $table_message = Database::get_main_table(TABLE_MESSAGE);

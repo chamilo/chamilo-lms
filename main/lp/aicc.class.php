@@ -330,7 +330,7 @@ class aicc extends learnpath
      * @param string    Current path (optional)
      * @return string    Absolute path to the AICC description files or empty string on error
      */
-    function import_local_package($file_path, $current_dir = '')
+    public function import_local_package($file_path, $current_dir = '')
     {
         // TODO: Prepare info as given by the $_FILES[''] vector.
         $file_info = array();
@@ -345,7 +345,7 @@ class aicc extends learnpath
      * @param    string    Zip file info as given by $_FILES['userFile']
      * @return    string    Absolute path to the AICC config files directory or empty string on error
      */
-    function import_package($zip_file_info, $current_dir = '')
+    public function import_package($zip_file_info, $current_dir = '')
     {
         if ($this->debug > 0) { error_log('In aicc::import_package('.print_r($zip_file_info, true).',"'.$current_dir.'") method', 0); }
         //ini_set('error_log', 'E_ALL');
@@ -854,7 +854,8 @@ class aicc extends learnpath
      * Static function to parse AICC ini strings.
      * Based on work by sinedeo at gmail dot com published on php.net (parse_ini_file()).
      * @param		string	INI File string
-     * @param		array	List of names of sections that should be considered as containing only hard string data (no variables), provided in lower case
+     * @param		array	List of names of sections that should be considered
+     * as containing only hard string data (no variables), provided in lower case
      * @return	array	Structured array
      */
     function parse_ini_string_quotes_safe($s, $pure_strings = array())
@@ -936,15 +937,17 @@ class aicc extends learnpath
                     if ($enclosed && $data{$i + 1} == $enclosure) {
                         $fldval .= $chr;
                         ++$i; // Skip the next character.
-                    } else
+                    } else {
                         $enclosed = !$enclosed;
+                    }
                     break;
                 case $delim:
                     if (!$enclosed) {
                         $ret_array[$linecount][$fldcount++] = $fldval;
                         $fldval = '';
-                    } else
+                    } else {
                         $fldval .= $chr;
+                    }
                     break;
                 case "\r":
                     if (!$enclosed && $data{$i + 1} == "\n") {
@@ -956,8 +959,9 @@ class aicc extends learnpath
                         $ret_array[$linecount++][$fldcount] = $fldval;
                         $fldcount = 0;
                         $fldval = '';
-                    } else
+                    } else {
                         $fldval .= $chr;
+                    }
                     break;
                 case "\\r":
                     if (!$enclosed && $data{$i + 1} == "\\n") {
@@ -969,8 +973,9 @@ class aicc extends learnpath
                         $ret_array[$linecount++][$fldcount] = $fldval;
                         $fldcount = 0;
                         $fldval = '';
-                    } else
+                    } else {
                         $fldval .= $chr;
+                    }
                     break;
                 default:
                     $fldval .= $chr;

@@ -131,21 +131,16 @@ if ($form->validate()) {
     $values = $form->getSubmitValues();
 
     if (isset($values['delete_service'])) {
-
         $plugin->deleteService($serviceId);
         Display::addFlash(
             Display::return_message($plugin->get_lang('ServiceDeleted'), 'error')
         );
     } else {
-
         $plugin->updateService($values, $serviceId);
         Display::addFlash(
             Display::return_message($plugin->get_lang('ServiceEdited'), 'success')
         );
     }
-
-
-
     header('Location: configuration.php');
     exit;
 }

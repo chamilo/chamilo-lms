@@ -41,7 +41,7 @@ class CarePost
     /**
      * @var string
      *
-     * @ORM\Column(name="external_care_id", type="bigint", nullable=true)
+     * @ORM\Column(name="external_care_id", type="string", nullable=true)
      */
     protected $externalCareId;
 
@@ -58,13 +58,11 @@ class CarePost
     private $user;
 
     /**
-     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
     protected $createdAt;
 
     /**
-     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     protected $updatedAt;
@@ -106,7 +104,7 @@ class CarePost
 
      /**
      * @ORM\OneToMany(targetEntity="CarePost", mappedBy="parent")
-     * @ORM\OrderBy({"lft" = "ASC"})
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $children;
 
@@ -420,7 +418,5 @@ class CarePost
 
         return $this;
     }
-
-
 
 }

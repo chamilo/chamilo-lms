@@ -355,18 +355,18 @@ class MySpace
         $parameters['view'] = 'admin';
         $table->set_additional_parameters($parameters);
         if ($is_western_name_order) {
-            $table -> set_header(0, get_lang('FirstName'), true);
-            $table -> set_header(1, get_lang('LastName'), true);
+            $table->set_header(0, get_lang('FirstName'), true);
+            $table->set_header(1, get_lang('LastName'), true);
         } else {
-            $table -> set_header(0, get_lang('LastName'), true);
-            $table -> set_header(1, get_lang('FirstName'), true);
+            $table->set_header(0, get_lang('LastName'), true);
+            $table->set_header(1, get_lang('FirstName'), true);
         }
-        $table -> set_header(2, get_lang('TimeSpentOnThePlatform'), false);
-        $table -> set_header(3, get_lang('LastConnexion'), false);
-        $table -> set_header(4, get_lang('NbStudents'), false);
-        $table -> set_header(5, get_lang('CountCours'), false);
-        $table -> set_header(6, get_lang('NumberOfSessions'), false);
-        $table -> set_header(7, get_lang('Sessions'), false);
+        $table->set_header(2, get_lang('TimeSpentOnThePlatform'), false);
+        $table->set_header(3, get_lang('LastConnexion'), false);
+        $table->set_header(4, get_lang('NbStudents'), false);
+        $table->set_header(5, get_lang('CountCours'), false);
+        $table->set_header(6, get_lang('NumberOfSessions'), false);
+        $table->set_header(7, get_lang('Sessions'), false);
 
         if ($is_western_name_order) {
             $csv_header[] = array(
@@ -1052,7 +1052,12 @@ class MySpace
             $direction = 'ASC';
         }
 
-        $course_data = self::get_course_data_tracking_overview($from, 1000, $orderby, $direction);
+        $course_data = self::get_course_data_tracking_overview(
+            $from,
+            1000,
+            $orderby,
+            $direction
+        );
 
         $csv_content = array();
 
@@ -1745,9 +1750,9 @@ class MySpace
         global $courses, $csv_content, $charset, $session_id;
 
         // definition database tables
-        $tbl_course                 = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tbl_course_user            = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $course_data = array();
         $courses_code = array_keys($courses);
@@ -1798,19 +1803,18 @@ class MySpace
 
             if (count($users) > 0) {
                 $nb_students_in_course = count($users);
-                $avg_assignments_in_course  = Tracking::count_student_assignments($users, $course_code, $session_id);
-                $avg_messages_in_course     = Tracking::count_student_messages($users, $course_code, $session_id);
-                $avg_progress_in_course     = Tracking::get_avg_student_progress($users, $course_code, array(), $session_id);
-                $avg_score_in_course        = Tracking::get_avg_student_score($users, $course_code, array(), $session_id);
-                $avg_score_in_exercise      = Tracking::get_avg_student_exercise_score($users, $course_code, 0, $session_id);
-                $avg_time_spent_in_course   = Tracking::get_time_spent_on_the_course($users, $courseInfo['real_id'], $session_id);
+                $avg_assignments_in_course = Tracking::count_student_assignments($users, $course_code, $session_id);
+                $avg_messages_in_course = Tracking::count_student_messages($users, $course_code, $session_id);
+                $avg_progress_in_course = Tracking::get_avg_student_progress($users, $course_code, array(), $session_id);
+                $avg_score_in_course = Tracking::get_avg_student_score($users, $course_code, array(), $session_id);
+                $avg_score_in_exercise = Tracking::get_avg_student_exercise_score($users, $course_code, 0, $session_id);
+                $avg_time_spent_in_course = Tracking::get_time_spent_on_the_course($users, $courseInfo['real_id'], $session_id);
 
                 $avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course, 2);
                 if (is_numeric($avg_score_in_course)) {
                     $avg_score_in_course = round($avg_score_in_course / $nb_students_in_course, 2);
                 }
                 $avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
-
             } else {
                 $avg_time_spent_in_course = null;
                 $avg_progress_in_course = null;
@@ -1868,6 +1872,7 @@ class MySpace
      * @param int $numberItems
      * @param int $column
      * @param string $direction
+     * @return array
      */
     public static function get_user_data_tracking_overview($from, $numberItems, $column, $direction)
     {
@@ -1934,6 +1939,7 @@ class MySpace
         $extra_data = UserManager::get_extra_user_data($user_id, true);
         return $extra_data;
     }
+
     /**
      * Checks if a username exist in the DB otherwise it create a "double"
      * i.e. if we look into for jmontoya but the user's name already exist we create the user jmontoya2
@@ -2116,7 +2122,7 @@ class MySpace
 
     /**
      * Validates imported data.
-     * @param list of users
+     * @param $users list of users
      */
     function validate_data($users, $id_session = null)
     {
@@ -2356,7 +2362,8 @@ class MySpace
     /**
      * XML-parser: the handler at the end of element.
      */
-    function element_end($parser, $data) {
+    function element_end($parser, $data)
+    {
         $data = api_utf8_decode($data);
         global $user;
         global $users;
@@ -2377,7 +2384,8 @@ class MySpace
     /**
      * XML-parser: the handler for character data.
      */
-    function character_data($parser, $data) {
+    function character_data($parser, $data)
+    {
         $data = trim(api_utf8_decode($data));
         global $current_value;
         $current_value = $data;
@@ -2388,7 +2396,8 @@ class MySpace
      * @param string $file Path to the XML-file
      * @return array All userinformation read from the file
      */
-    function parse_xml_data($file) {
+    function parse_xml_data($file)
+    {
         global $current_tag;
         global $current_value;
         global $user;
@@ -2537,7 +2546,9 @@ class MySpace
             $table->set_header(6, get_lang('TimeLoggedIn'), false);
         }
 
-        $template = new Template(null, false, false, false, false, false, false);
+        $template = new Template(
+            null, false, false, false, false, false, false
+        );
         $template->assign('form', $form->returnForm());
         $template->assign('table', $table ? $table->return_table() : null);
 

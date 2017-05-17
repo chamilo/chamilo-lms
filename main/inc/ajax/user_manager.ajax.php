@@ -90,13 +90,22 @@ switch ($action) {
         }
         break;
     case 'search_tags':
+        header('Content-Type: application/json');
+
+        $result = ['items' => []];
+
         if (api_is_anonymous()) {
-            echo '';
-        } else {
-            if (isset($_GET['tag']) && isset($_GET['field_id'])) {
-                echo UserManager::get_tags($_GET['tag'], $_GET['field_id'], 'json', '10');
-            }
+            echo json_encode($result);
+            break;
         }
+
+        if (!isset($_GET['q'], $_GET['field_id'])) {
+            echo json_encode($result);
+            break;
+        }
+
+        $result['items'] = UserManager::get_tags($_GET['q'], $_GET['field_id'], null, '10');
+        echo json_encode($result);
         break;
     case 'generate_api_key':
         if (api_is_anonymous()) {
@@ -174,4 +183,3 @@ switch ($action) {
         echo '';
 }
 exit;
-

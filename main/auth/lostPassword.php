@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * SCRIPT PURPOSE :
  *
@@ -9,11 +10,11 @@
  *
  * Special case : If the password are encrypted in the database, we have
  * to generate a new one.
-*
-*	@todo refactor, move relevant functions to code libraries
-*
-*	@package chamilo.auth
-*/
+ *
+ * @todo refactor, move relevant functions to code libraries
+ *
+ * @package chamilo.auth
+ */
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -53,8 +54,13 @@ if ($reset && $userId) {
 
 $form = new FormValidator('lost_password');
 $form->addHeader($tool_name);
-$form->addText('user', [get_lang('LoginOrEmailAddress'), get_lang('EnterEmailUserAndWellSendYouPassword')], true);
-
+$form->addText('user',
+    [
+        get_lang('LoginOrEmailAddress'),
+        get_lang('EnterEmailUserAndWellSendYouPassword'),
+    ],
+    true
+);
 
 $captcha = api_get_setting('allow_captcha');
 $allowCaptcha = $captcha === 'true';

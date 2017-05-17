@@ -144,7 +144,14 @@ if (isset($_POST['create_course_category']) &&
 // search courses
 if (isset($_REQUEST['search_course'])) {
     if ($ctok == $_REQUEST['sec_token']) {
-        $courses_controller->search_courses($_REQUEST['search_term'], null, null, null, $limit, true);
+        $courses_controller->search_courses(
+            $_REQUEST['search_term'],
+            null,
+            null,
+            null,
+            $limit,
+            true
+        );
     }
 }
 
@@ -163,7 +170,11 @@ if (isset($_REQUEST['subscribe_course'])) {
 if (isset($_GET['unsubscribe'])) {
     $search_term = isset($_GET['search_term']) ? $_GET['search_term'] : null;
     if ($ctok == $_GET['sec_token']) {
-        $courses_controller->unsubscribe_user_from_course($_GET['unsubscribe'], $search_term, $categoryCode);
+        $courses_controller->unsubscribe_user_from_course(
+            $_GET['unsubscribe'],
+            $search_term,
+            $categoryCode
+        );
     }
 }
 

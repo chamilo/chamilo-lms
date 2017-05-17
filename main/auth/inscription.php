@@ -109,7 +109,15 @@ if ($user_already_registered_show_terms === false) {
         if (api_get_setting('registration', 'email') != 'true') {
             $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
         }
-        $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+        $form->addRule(
+            'email',
+            sprintf(
+                get_lang('UsernameMaxXCharacters'),
+                (string) USERNAME_MAX_LENGTH
+            ),
+            'maxlength',
+            USERNAME_MAX_LENGTH
+        );
         $form->addRule('email', get_lang('UserTaken'), 'username_available');
     }
 
@@ -151,7 +159,15 @@ if ($user_already_registered_show_terms === false) {
         );
         $form->applyFilter('username', 'trim');
         $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
-        $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+        $form->addRule(
+            'username',
+            sprintf(
+                get_lang('UsernameMaxXCharacters'),
+                (string) USERNAME_MAX_LENGTH
+            ),
+            'maxlength',
+            USERNAME_MAX_LENGTH
+        );
         $form->addRule('username', get_lang('UsernameWrong'), 'username');
         $form->addRule('username', get_lang('UserTaken'), 'username_available');
     }
@@ -253,10 +269,25 @@ if ($user_already_registered_show_terms === false) {
         );
         $form->addElement('static', null, null, get_lang('ClickOnTheImageForANewOne'));
 
-        $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'), array('size' => 40));
-        $form->addRule('captcha', get_lang('EnterTheCharactersYouReadInTheImage'), 'required', null, 'client');
-
-        $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
+        $form->addElement(
+            'text',
+            'captcha',
+            get_lang('EnterTheLettersYouSee'),
+            array('size' => 40)
+        );
+        $form->addRule(
+            'captcha',
+            get_lang('EnterTheCharactersYouReadInTheImage'),
+            'required',
+            null,
+            'client'
+        );
+        $form->addRule(
+            'captcha',
+            get_lang('TheTextYouEnteredDoesNotMatchThePicture'),
+            'CAPTCHA',
+            $captcha_question
+        );
     }
 
     // EXTENDED FIELDS
@@ -570,7 +601,7 @@ if ($form->validate()) {
             $form
         );
 
-        //update the extra fields
+        // Update the extra fields
         $count_extra_field = count($extras);
         if ($count_extra_field > 0 && is_integer($user_id)) {
             foreach ($extras as $key => $value) {

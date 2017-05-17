@@ -19,8 +19,11 @@ CKEDITOR.dialog.add('audio', function(editor)
                 break;
             case 'autoplay':
                 if (value === true) {
-                    audioNode.setAttribute('autoplay', '');
+                    audioNode.setAttribute('autoplay', 'autoplay');
+                    break;
                 }
+
+                audioNode.removeAttribute('autoplay');
                 break;
         }
     }
@@ -36,11 +39,21 @@ CKEDITOR.dialog.add('audio', function(editor)
 
     function loadValue(audioNode) {
         if (audioNode) {
-            this.setValue(audioNode.getAttribute(this.id));
-        } else {
-            if (this.id == 'id') {
-                this.setValue(generateId());
+            var value = audioNode.getAttribute(this.id);
+
+            if (this.id != 'autoplay') {
+                this.setValue(value);
+
+                return;
             }
+
+            this.setValue(value === 'autoplay');
+
+            return;
+        }
+
+        if (this.id == 'id') {
+            this.setValue(generateId());
         }
     }
 
@@ -250,7 +263,8 @@ CKEDITOR.dialog.add('audio', function(editor)
                                 type: 'checkbox',
                                 label: lang.autoPlay,
                                 'default': false,
-                                commit: commitValue
+                                commit: commitValue,
+                                setup: loadValue
                             }
                         ]
                     }

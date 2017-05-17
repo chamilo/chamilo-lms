@@ -172,6 +172,9 @@ blockquote p {
   border: 1px solid transparent;
   border-radius: 4px;
 }
+.alert-dismissible {
+    padding-right: 35px;
+}
 .alert h4 {
   margin-top: 0;
   color: inherit;

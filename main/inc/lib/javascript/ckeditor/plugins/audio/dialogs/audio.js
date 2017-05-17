@@ -9,35 +9,18 @@ CKEDITOR.dialog.add('audio', function(editor)
             value = generateId();
         }
 
-        if (this.id !== 'autoplay') {
-            audioNode.setAttribute(this.id, value);
-            
-            switch (this.id) {
-                case 'width':
-                    audioNode.setAttribute('style', 'width:' + value + 'px;');
-                    break;
-                case 'height':
-                    var styleAttr = audioNode.getAttribute('style');
-
-                    audioNode.setAttribute('style', styleAttr + 'height:' + value + 'px;');
-                    break;
-            }
-        } else {
-            if (value === true) {
-                audioNode.setAttribute(this.id, '');
-            }
-        }
-
-        if (!value) {
-            return;
-        }
-
         switch (this.id) {
             case 'width':
+                audioNode.setAttribute('style', 'width:' + value + 'px;');
                 extraStyles.width = value + 'px';
+                //no break
+            case 'id':
+                audioNode.setAttribute(this.id, value);
                 break;
-            case 'height':
-                extraStyles.height = value + 'px';
+            case 'autoplay':
+                if (value === true) {
+                    audioNode.setAttribute('autoplay', '');
+                }
                 break;
         }
     }
@@ -165,7 +148,7 @@ CKEDITOR.dialog.add('audio', function(editor)
                 elements: [
                     {
                         type: 'hbox',
-                        widths: ['33%', '33%', '33%'],
+                        widths: ['20%', '80%'],
                         children: [
                             {
                                 type: 'text',
@@ -173,15 +156,6 @@ CKEDITOR.dialog.add('audio', function(editor)
                                 label: editor.lang.common.width,
                                 'default': 400,
                                 validate: CKEDITOR.dialog.validate.notEmpty(lang.widthRequired),
-                                commit: commitValue,
-                                setup: loadValue
-                            },
-                            {
-                                type: 'text',
-                                id: 'height',
-                                label: editor.lang.common.height,
-                                'default': 300,
-                                validate: CKEDITOR.dialog.validate.notEmpty(lang.heightRequired),
                                 commit: commitValue,
                                 setup: loadValue
                             },

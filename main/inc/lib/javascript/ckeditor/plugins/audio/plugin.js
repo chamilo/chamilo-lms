@@ -118,7 +118,7 @@
                                 }
                             }
 
-                            var fakeElement = editor.createFakeParserElement(realElement, 'cke_video', 'audio', false),
+                            var fakeElement = editor.createFakeParserElement(realElement, 'cke_audio', 'audio', false),
                                     fakeStyle = fakeElement.attributes.style || '';
 
                             var width = realElement.attributes.width,

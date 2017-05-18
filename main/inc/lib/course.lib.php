@@ -4868,8 +4868,8 @@ class CourseManager
 
             }
 
-            if ($access_link && in_array('enter',
-                    $access_link) || $course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
+            if ($access_link && in_array('enter',$access_link) ||
+                $course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
             ) {
                 $my_course['go_to_course_button'] = Display::url(
                     get_lang('GoToCourse').' '.
@@ -4918,21 +4918,16 @@ class CourseManager
 
             //Description
             $my_course['description_button'] = '';
-            /* if ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || in_array($course_info['real_id'],
-                    $my_course_code_list)
-            ) { */
-                $my_course['description_button'] = Display::url(
-                    Display::returnFontAwesomeIcon('info-circle'),
-                    api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=show_course_information&code='.$course_info['code'],
-                    [
-                        'class' => 'btn btn-default btn-sm ajax',
-                        'data-title' => get_lang('Description'),
-                        'title' => get_lang('Description'),
-                        'aria-label' => get_lang('Description')
-                    ]
-                );
-            //}
-            /* get_lang('Description') */
+            $my_course['description_button'] = Display::url(
+                Display::returnFontAwesomeIcon('info-circle'),
+                api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=show_course_information&code='.$course_info['code'],
+                [
+                    'class' => 'btn btn-default btn-sm ajax',
+                    'data-title' => get_lang('Description'),
+                    'title' => get_lang('Description'),
+                    'aria-label' => get_lang('Description')
+                ]
+            );
             $my_course['teachers'] = self::getTeachersFromCourse($course_info['real_id'], true);
             $point_info = self::get_course_ranking($course_info['real_id'], 0);
 
@@ -5085,7 +5080,8 @@ class CourseManager
         $visibilityCondition = self::getCourseVisibilitySQLCondition('c', true);
 
         if (!empty($accessUrlId) && $accessUrlId == intval($accessUrlId)) {
-            $sql = "SELECT count(c.id) FROM $tableCourse c, $tableCourseRelAccessUrl u
+            $sql = "SELECT count(c.id) 
+                    FROM $tableCourse c, $tableCourseRelAccessUrl u
                     WHERE
                         c.id = u.c_id AND
                         u.access_url_id = $accessUrlId AND
@@ -5163,8 +5159,11 @@ class CourseManager
             $options[] = 'enter';
         }
 
-        if ($course['visibility'] != COURSE_VISIBILITY_HIDDEN && empty($course['registration_code']) && $course['unsubscribe'] == UNSUBSCRIBE_ALLOWED && api_user_is_login($uid) && (in_array($course['real_id'],
-                $user_courses))
+        if ($course['visibility'] != COURSE_VISIBILITY_HIDDEN &&
+            empty($course['registration_code']) &&
+            $course['unsubscribe'] == UNSUBSCRIBE_ALLOWED &&
+            api_user_is_login($uid) &&
+            in_array($course['real_id'], $user_courses)
         ) {
             $options[] = 'unsubscribe';
         }
@@ -5416,7 +5415,12 @@ class CourseManager
             // Create
             Database::insert(
                 $courseSettingTable,
-                ['title' => $variable, 'value' => $value, 'c_id' => $courseId, 'variable' => $variable]
+                [
+                    'title' => $variable,
+                    'value' => $value,
+                    'c_id' => $courseId,
+                    'variable' => $variable,
+                ]
             );
         }
         return true;
@@ -5444,9 +5448,10 @@ class CourseManager
      * Get information from the track_e_course_access table
      * @param int $sessionId
      * @param int $userId
+     * @param int $limit
      * @return array
      */
-    public static function getCourseAccessPerSessionAndUser($sessionId, $userId, $limit = null)
+    public static function getCourseAccessPerSessionAndUser($sessionId, $userId, $limit = 0)
     {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
@@ -5882,13 +5887,15 @@ class CourseManager
             " WHERE access_start_date = '$startDate' AND access_end_date = '$endDate')" : null;
         $visibility = ($includeClosed ? '' : 'visibility NOT IN (0, 4) AND ');
 
-        $query = "SELECT id, code, title
-                FROM " . Database::get_main_table(TABLE_MAIN_COURSE)."
+        $sql = "SELECT id, code, title
+                FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
                 WHERE $visibility code NOT IN (
-                    SELECT DISTINCT course_code FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE).$dateConditional.")
+                    SELECT DISTINCT course_code 
+                    FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE).$dateConditional."
+                )
                 ORDER BY id";
 
-        $result = Database::query($query);
+        $result = Database::query($sql);
         $courses = array();
         while ($row = Database::fetch_array($result)) {
             $courses[] = $row;
@@ -5940,7 +5947,6 @@ class CourseManager
         }
 
         $result = Database::query($sql);
-
         while ($row = Database::fetch_assoc($result)) {
             $coursesList[] = $row;
         }
@@ -6246,8 +6252,11 @@ class CourseManager
      * @param   string  $tableUserFieldValues The user extra field value table name
      * @return  int     The number of users with this extra field with a specific value
      */
-    public static function getCountRegisteredUsersWithCourseExtraField($name, $tableExtraFields = '', $tableUserFieldValues = '')
-    {
+    public static function getCountRegisteredUsersWithCourseExtraField(
+        $name,
+        $tableExtraFields = '',
+        $tableUserFieldValues = ''
+    ) {
         if (empty($tableExtraFields)) {
             $tableExtraFields = Database::get_main_table(TABLE_EXTRA_FIELD);
         }
@@ -6256,7 +6265,6 @@ class CourseManager
         }
 
         $registered_users_with_extra_field = 0;
-
         if (!empty($name) && $name != '-') {
             $extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
             $name = Database::escape_string($name);

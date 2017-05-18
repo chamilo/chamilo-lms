@@ -183,12 +183,12 @@ class Display
     /**
      * Displays a table
      * @param array $header Titles for the table header
- *                        each item in this array can contain 3 values
- *                        - 1st element: the column title
- *                        - 2nd element: true or false (column sortable?)
- *                        - 3th element: additional attributes for
- *                        th-tag (eg for column-width)
- *                        - 4the element: additional attributes for the td-tags
+     *                        each item in this array can contain 3 values
+     *                        - 1st element: the column title
+     *                        - 2nd element: true or false (column sortable?)
+     *                        - 3th element: additional attributes for
+     *                        th-tag (eg for column-width)
+     *                        - 4the element: additional attributes for the td-tags
      * @param array $content 2D-array with the tables content
      * @param array $sorting_options Keys are:
      *                    'column' = The column to use as sort-key
@@ -278,11 +278,11 @@ class Display
      * @param array header content
      * @param array array with the information to show
      * @param array $paging_options Keys are:
- *                    'per_page_default' = items per page when switching from
- *                                         full-    list to per-page-view
- *                    'per_page' = number of items to show per page
- *                    'page_nr' = The page to display
- *                    'hide_navigation' =  true to hide the navigation
+     *                    'per_page_default' = items per page when switching from
+     *                                         full-    list to per-page-view
+     *                    'per_page' = number of items to show per page
+     *                    'page_nr' = The page to display
+     *                    'hide_navigation' =  true to hide the navigation
      * @param array $query_vars Additional variables to add in the query-string
      * @param array $form actions Additional variables to add in the query-string
      * @param mixed An array with bool values to know which columns show.
@@ -319,11 +319,11 @@ class Display
      * @param array header content
      * @param array array with the information to show
      * @param array $paging_options Keys are:
- *                    'per_page_default' = items per page when switching from
- *                                         full-    list to per-page-view
- *                    'per_page' = number of items to show per page
- *                    'page_nr' = The page to display
- *                    'hide_navigation' =  true to hide the navigation
+     *                    'per_page_default' = items per page when switching from
+     *                                         full-    list to per-page-view
+     *                    'per_page' = number of items to show per page
+     *                    'page_nr' = The page to display
+     *                    'hide_navigation' =  true to hide the navigation
      * @param array $query_vars Additional variables to add in the query-string
      * @param array $form actions Additional variables to add in the query-string
      * @param mixed An array with bool values to know which columns show. i.e:
@@ -443,7 +443,7 @@ class Display
      */
     public static function display_normal_message($message, $filter = true, $returnValue = false)
     {
-    	$message = self::return_message($message, 'normal', $filter);
+        $message = self::return_message($message, 'normal', $filter);
         if ($returnValue) {
             return $message;
         } else {
@@ -527,7 +527,7 @@ class Display
         }
 
         if ($filter) {
-        	$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
+            $message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
         }
 
         $class = '';
@@ -940,7 +940,7 @@ class Display
         if (!empty($name)) {
             $attributes['name'] = $name;
         }
-    	return self::tag('button', $value, $attributes);
+        return self::tag('button', $value, $attributes);
     }
 
     /**
@@ -1273,9 +1273,7 @@ class Display
         // Creating the jqgrid element.
         $json .= '$("#'.$div_id.'").jqGrid({';
         //$json .= $beforeSelectRow;
-
         $json .= $json_encode;
-
         $json .= '});';
 
         // Grouping headers option
@@ -1575,50 +1573,8 @@ class Display
                 }
                 $active = true;
             } else {
-                /*$start = $stop = false;
-                $start_buffer = $stop_buffer = '';
-                if ($session_info['access_start_date'] === '0000-00-00 00:00:00' || empty($session_info['access_start_date'])) {
-                    $session_info['access_start_date'] = '';
-                } else {
-                    $start = true;
-                    $start_buffer = $session_info['access_start_date'];
-                    $session_info['access_start_date'] = $session_info['access_start_date'];
-                }
-                if ($session_info['access_end_date'] === '0000-00-00 00:00:00' || empty($session_info['access_end_date'])) {
-                    $session_info['access_end_date'] = '';
-                } else {
-                    $stop = true;
-                    $stop_buffer = $session_info['access_end_date'];
-                    $session_info['access_end_date'] = $session_info['access_end_date'];
-                }
-                if ($start && $stop) {
-                    $session['dates'] = sprintf(
-                        get_lang('FromDateXToDateY'),
-                        api_format_date($start_buffer),
-                        api_format_date($stop_buffer)
-                    );
-                } else {
-                    $start_buffer = $stop_buffer = null;
-                    if (!empty($session_info['access_start_date'])) {
-                        $start_buffer = sprintf(
-                            get_lang('FromDateX'),
-                            api_format_date(api_get_local_time($session_info['access_start_date']))
-                        );
-                    }
-
-                    if (!empty($session_info['access_end_date'])) {
-                        $stop_buffer = sprintf(
-                            get_lang('UntilDateX'),
-                            api_format_date(api_get_local_time($session_info['access_end_date']))
-                        );
-                    }*/
-
                 $dates = SessionManager::parseSessionDates($session_info, true);
-
-                //$session['dates'] = $start_buffer . ' ' . $stop_buffer.'- julio '.$dates['access'];
                 $session['dates'] = $dates['access'];
-
-
                 if (api_get_setting('show_session_coach') === 'true') {
                     $session['coach'] = api_get_person_name(
                         $session_info['firstname'],
@@ -1673,40 +1629,40 @@ class Display
         $point_info = [],
         $add_div_wrapper = true
     ) {
-		$number_of_users_who_voted = isset($point_info['users_who_voted']) ? $point_info['users_who_voted'] : null;
-		$percentage = isset($point_info['point_average']) ? $point_info['point_average'] : 0;
+        $number_of_users_who_voted = isset($point_info['users_who_voted']) ? $point_info['users_who_voted'] : null;
+        $percentage = isset($point_info['point_average']) ? $point_info['point_average'] : 0;
 
-		if (!empty($percentage)) {
+        if (!empty($percentage)) {
             $percentage = $percentage * 125 / 100;
         }
-		$accesses = isset($point_info['accesses']) ? $point_info['accesses'] : 0;
-		$star_label = sprintf(get_lang('XStarsOutOf5'), $point_info['point_average_star']);
+        $accesses = isset($point_info['accesses']) ? $point_info['accesses'] : 0;
+        $star_label = sprintf(get_lang('XStarsOutOf5'), $point_info['point_average_star']);
 
         $html = '<ul id="'.$id.'" class="star-rating">
-					<li class="current-rating" style="width:'.$percentage.'px;"></li>
-					<li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=1" title="'.$star_label.'" class="one-star">1</a></li>
-					<li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=2" title="'.$star_label.'" class="two-stars">2</a></li>
-					<li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=3" title="'.$star_label.'" class="three-stars">3</a></li>
-					<li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=4" title="'.$star_label.'" class="four-stars">4</a></li>
-					<li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=5" title="'.$star_label.'" class="five-stars">5</a></li>
-				</ul>';
+                    <li class="current-rating" style="width:'.$percentage.'px;"></li>
+                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=1" title="'.$star_label.'" class="one-star">1</a></li>
+                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=2" title="'.$star_label.'" class="two-stars">2</a></li>
+                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=3" title="'.$star_label.'" class="three-stars">3</a></li>
+                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=4" title="'.$star_label.'" class="four-stars">4</a></li>
+                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=5" title="'.$star_label.'" class="five-stars">5</a></li>
+                </ul>';
 
-		$labels = array();
+        $labels = array();
 
-		$labels[] = $number_of_users_who_voted == 1 ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');
-		$labels[] = $accesses == 1 ? $accesses.' '.get_lang('Visit') : $accesses.' '.get_lang('Visits');
-		$labels[] = $point_info['user_vote'] ? get_lang('YourVote').' ['.$point_info['user_vote'].']' : get_lang('YourVote').' [?] ';
+        $labels[] = $number_of_users_who_voted == 1 ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');
+        $labels[] = $accesses == 1 ? $accesses.' '.get_lang('Visit') : $accesses.' '.get_lang('Visits');
+        $labels[] = $point_info['user_vote'] ? get_lang('YourVote').' ['.$point_info['user_vote'].']' : get_lang('YourVote').' [?] ';
 
-		if (!$add_div_wrapper && api_is_anonymous()) {
-			$labels[] = self::tag('span', get_lang('LoginToVote'), array('class' => 'error'));
-		}
+        if (!$add_div_wrapper && api_is_anonymous()) {
+            $labels[] = self::tag('span', get_lang('LoginToVote'), array('class' => 'error'));
+        }
 
         $html .= self::div(implode(' | ', $labels), array('id' =>  'vote_label_'.$id, 'class' => 'vote_label_info'));
         $html .= ' '.self::span(' ', array('id' =>  'vote_label2_'.$id));
 
         if ($add_div_wrapper) {
-			$html = self::div($html, array('id' => 'rating_wrapper_'.$id));
-		}
+            $html = self::div($html, array('id' => 'rating_wrapper_'.$id));
+        }
 
         return $html;
     }
@@ -2124,6 +2080,7 @@ class Display
 
         return $html;
     }
+
     /**
      *
      * @param int $itemId
@@ -2149,7 +2106,7 @@ class Display
         $fixedValue = null,
         $linkAttributes = []
     ) {
-        $defaultClass = "before";
+        $defaultClass = 'before';
         $class = $defaultClass;
         foreach ($conditions as $condition) {
             $array = isset($condition['items']) ? $condition['items'] : array();
@@ -2178,13 +2135,13 @@ class Display
             }
         }
         if ($isCurrent) {
-            $class = "before current";
+            $class = 'before current';
         }
         if ($isMedia && $isCurrent) {
-            $class = "before current";
+            $class = 'before current';
         }
         if (empty($link)) {
-            $link_to_show = "#";
+            $link_to_show = '#';
         } else {
             $link_to_show = $link.($nextValue + $localCounter);
         }
@@ -2392,7 +2349,6 @@ class Display
 
         if (!$colsWidth) {
             $width = 12 / $col;
-
             array_walk($content, function() use ($width, &$colsWidth) {
                 $colsWidth[] = $width;
             });

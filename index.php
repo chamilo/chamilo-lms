@@ -38,7 +38,10 @@ if (!empty($_GET['logout'])) {
 /**
  * Registers in the track_e_default table (view in important activities in admin
  * interface) a possible attempted break in, sending auth data through get.
- * @todo This piece of code should probably move to local.inc.php where the actual login / logout procedure is handled. The real use of this code block should be seriously considered as well. This form should just use a security token and get done with it.
+ * @todo This piece of code should probably move to local.inc.php where the
+ * actual login / logout procedure is handled.
+ * The real use of this code block should be seriously considered as well.
+ * This form should just use a security token and get done with it.
  */
 if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
     $i = api_get_anonymous_id();
@@ -68,12 +71,13 @@ if (!api_get_user_id() && CustomPages::enabled()) {
 }
 
 /**
- * @todo This piece of code should probably move to local.inc.php where the actual login procedure is handled.
- * @todo Check if this code is used. I think this code is never executed because after clicking the submit button
- *       the code does the stuff in local.inc.php and then redirects to index.php or user_portal.php depending
- *       on api_get_setting('page_after_login').
+ * @todo This piece of code should probably move to local.inc.php where the
+ * actual login procedure is handled.
+ * @todo Check if this code is used. I think this code is never executed because
+ * after clicking the submit button the code does the stuff
+ * in local.inc.php and then redirects to index.php or user_portal.php depending
+ * on api_get_setting('page_after_login').
  */
-
 if (!empty($_POST['submitAuth'])) {
     // The user has been already authenticated, we are now to find the last login of the user.
     if (isset($_user['user_id'])) {

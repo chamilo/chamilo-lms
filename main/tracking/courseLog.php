@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	@package chamilo.tracking
+ * @package chamilo.tracking
  */
 
 $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
@@ -47,7 +47,10 @@ if (api_is_drh()) {
     // Blocking course for drh
     if (api_drh_can_access_all_session_content()) {
         // If the drh has been configured to be allowed to see all session content, give him access to the session courses
-        $coursesFromSession = SessionManager::getAllCoursesFollowedByUser(api_get_user_id(), null);
+        $coursesFromSession = SessionManager::getAllCoursesFollowedByUser(
+            api_get_user_id(),
+            null
+        );
 
         $coursesFromSessionCodeList = array();
         if (!empty($coursesFromSession)) {
@@ -92,41 +95,41 @@ $columnsToHide = json_encode($columnsToHide);
 $csv_content = array();
 // Scripts for reporting array hide/show columns
 $js = "<script>
-        // hide column and display the button to unhide it
-        function foldup(in_id) {
-            $('#reporting_table .data_table tr td:nth-child(' + (in_id + 1) + ')').toggleClass('hide');
-            $('#reporting_table .data_table tr th:nth-child(' + (in_id + 1) + ')').toggleClass('hide');
-            $('div#unhideButtons a:nth-child(' + (in_id + 1) + ')').toggleClass('hide');
-        }
+    // hide column and display the button to unhide it
+    function foldup(in_id) {
+        $('#reporting_table .data_table tr td:nth-child(' + (in_id + 1) + ')').toggleClass('hide');
+        $('#reporting_table .data_table tr th:nth-child(' + (in_id + 1) + ')').toggleClass('hide');
+        $('div#unhideButtons a:nth-child(' + (in_id + 1) + ')').toggleClass('hide');
+    }
 
-        // add the red cross on top of each column
-        function init_hide() {
-            $('#reporting_table .data_table tr th').each(
-                function(index) {
-                    $(this).prepend(
-                        '<div style=\"cursor:pointer\" onclick=\"foldup(' + index + ')\">" . Display::return_icon(
-                            'visible.png',
-                            get_lang('HideColumn'),
-                            array('align' => 'absmiddle', 'hspace' => '3px'),
-                            ICON_SIZE_SMALL
-                         )."</div>'
-                    );
-                }
-            );
-        }
+    // add the red cross on top of each column
+    function init_hide() {
+        $('#reporting_table .data_table tr th').each(
+            function(index) {
+                $(this).prepend(
+                    '<div style=\"cursor:pointer\" onclick=\"foldup(' + index + ')\">" . Display::return_icon(
+                        'visible.png',
+                        get_lang('HideColumn'),
+                        array('align' => 'absmiddle', 'hspace' => '3px'),
+                        ICON_SIZE_SMALL
+                     )."</div>'
+                );
+            }
+        );
+    }
 
-        // hide some column at startup
-        // be sure that these columns always exists
-        // see headers = array();
-        // tab of header texts
-        $(document).ready( function() {
-            init_hide();
-            var columnsToHide = ".$columnsToHide.";
-            columnsToHide.forEach(function(id) {
-                foldup(id);
-            });
-        })
-    </script>";
+    // hide some column at startup
+    // be sure that these columns always exists
+    // see headers = array();
+    // tab of header texts
+    $(document).ready( function() {
+        init_hide();
+        var columnsToHide = ".$columnsToHide.";
+        columnsToHide.forEach(function(id) {
+            foldup(id);
+        });
+    })
+</script>";
 
 $htmlHeadXtra[] = "<style type='text/css'>
     .secLine {background-color : #E6E6E6;}
@@ -140,10 +143,10 @@ $htmlHeadXtra[] .= $js;
 
 // Database table definitions.
 //@todo remove this calls
-$TABLETRACK_ACCESS      = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-$TABLETRACK_LINKS       = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
-$TABLETRACK_DOWNLOADS   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
-$TABLETRACK_ACCESS_2    = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+$TABLETRACK_ACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+$TABLETRACK_LINKS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
+$TABLETRACK_DOWNLOADS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
+$TABLETRACK_ACCESS_2 = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 $TABLETRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLECOURSE = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -259,7 +262,10 @@ $form_search->addElement('hidden', 'session_id', $sessionId);
 $form_search->addElement('hidden', 'id_session', $sessionId);
 $form_search->addElement('text', 'user_keyword');
 $form_search->addButtonSearch(get_lang('SearchUsers'));
-echo Display::toolbarAction('toolbar-courselog', [$actionsLeft, $form_search->returnForm(), $actionsRight]);
+echo Display::toolbarAction(
+    'toolbar-courselog',
+    [$actionsLeft, $form_search->returnForm(), $actionsRight]
+);
 
 $course_name = get_lang('Course').' '.$courseInfo['name'];
 if ($session_id) {
@@ -300,7 +306,12 @@ if (!empty($coaches)) {
 $sessionList = SessionManager::get_session_by_course($courseInfo['real_id']);
 if (!empty($sessionList)) {
     $html .= Display::page_subheader2(get_lang('SessionList'));
-    $iconCourse = Display::return_icon('course.png', null, null, ICON_SIZE_TINY);
+    $iconCourse = Display::return_icon(
+        'course.png',
+        null,
+        null,
+        ICON_SIZE_TINY
+    );
     $html .= '<ul class="session-list">';
     foreach ($sessionList as $session) {
         $url = api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='.$session['id'].'&cidReq='.$courseInfo['code'];
@@ -508,7 +519,7 @@ if ($export_csv) {
     $csv_headers[] = get_lang('FirstLoginInCourse', '');
     $csv_headers[] = get_lang('LatestLoginInCourse', '');
 
-    if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
+    if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_profile_field'])) {
         $csv_headers[] = $extra_info['display_text'];
     }
     ob_end_clean();

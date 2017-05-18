@@ -1387,5 +1387,5 @@ if ($origin != 'learnpath') {
     // So we are not in learnpath tool
     echo '</div>'; //End glossary div
 }
-var_dump(api_get_course_setting('email_alert_manager_on_new_quiz'));
+
 Display :: display_footer();

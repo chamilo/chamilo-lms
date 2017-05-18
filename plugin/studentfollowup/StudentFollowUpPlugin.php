@@ -106,6 +106,12 @@ class StudentFollowUpPlugin extends Plugin
         } else {
             $isDrh = api_is_drh();
             $isCareTaker = false;
+            $isDrhRelatedViaPost = false;
+            $isCourseCoach = false;
+            $isDrhRelatedToSession = false;
+
+            // Only admins and DRH that follow the user
+            $isAdmin = api_is_platform_admin();
 
             // Check if user is care taker
             if ($isDrh) {
@@ -113,42 +119,45 @@ class StudentFollowUpPlugin extends Plugin
                     'user' => $studentId,
                     'insertUser' => $currentUserId
                 ];
-
-                $post = Database::getManager()->getRepository('ChamiloPluginBundle:StudentFollowUp\CarePost')->findOneBy($criteria);
+                $repo = Database::getManager()->getRepository('ChamiloPluginBundle:StudentFollowUp\CarePost');
+                $post = $repo->findOneBy($criteria);
                 if ($post) {
-                    $isCareTaker = true;
+                    $isDrhRelatedViaPost = true;
                 }
-            }
 
-            // Only admins and DRH that follow the user
-            $isAdmin = api_is_platform_admin();
+                // Check if course session coach
+                $sessions = SessionManager::get_sessions_by_user($studentId);
 
-            // Check if course session coach
-            $sessions = SessionManager::get_sessions_by_user($studentId);
-
-            $isCourseCoach = false;
-            $isDrhSession = false;
-            if (!empty($sessions)) {
-                foreach ($sessions as $session) {
-                    $sessionId = $session['session_id'];
-                    $sessionDrhInfo = SessionManager::getSessionFollowedByDrh($currentUserId, $sessionId);
-                    if (!empty($sessionDrhInfo)) {
-                        $isDrhSession = true;
-                        break;
-                    }
-                    foreach ($session['courses'] as $course) {
-                        //$isCourseCoach = api_is_coach($sessionId, $course['real_id']);
-                        $coachList = SessionManager::getCoachesByCourseSession($sessionId, $course['real_id']);
-                        if (!empty($coachList) && in_array($currentUserId, $coachList)) {
-                            $isCourseCoach = true;
-                            break(2);
+                if (!empty($sessions)) {
+                    foreach ($sessions as $session) {
+                        $sessionId = $session['session_id'];
+                        $sessionDrhInfo = SessionManager::getSessionFollowedByDrh(
+                            $currentUserId,
+                            $sessionId
+                        );
+                        if (!empty($sessionDrhInfo)) {
+                            $isDrhRelatedToSession = true;
+                            break;
+                        }
+                        foreach ($session['courses'] as $course) {
+                            //$isCourseCoach = api_is_coach($sessionId, $course['real_id']);
+                            $coachList = SessionManager::getCoachesByCourseSession(
+                                $sessionId,
+                                $course['real_id']
+                            );
+                            if (!empty($coachList) && in_array($currentUserId, $coachList)) {
+                                $isCourseCoach = true;
+                                break(2);
+                            }
                         }
                     }
                 }
+
+                $isCareTaker = $isDrhRelatedViaPost && $isDrhRelatedToSession;
             }
 
-            $isAllow = $isAdmin || $isDrhSession || $isCourseCoach;
-            $showPrivate = $isAdmin || ($isDrhSession && $isCareTaker);
+            $isAllow = $isAdmin || $isCareTaker || $isDrhRelatedToSession || $isCourseCoach;
+            $showPrivate = $isAdmin || $isCareTaker;
         }
 
         return [

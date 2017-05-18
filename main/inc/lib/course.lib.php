@@ -5390,7 +5390,7 @@ class CourseManager
     /**
      * @param AppPlugin $appPlugin
      * @param string $variable
-     * @param string $value
+     * @param string|array $value
      * @param int $courseId
      * @return bool
      */
@@ -5404,6 +5404,11 @@ class CourseManager
         }
 
         $courseSettingTable = Database::get_course_table(TABLE_COURSE_SETTING);
+
+        if (is_array($value)) {
+            $value = implode(',', $value);
+        }
+
         if (self::hasCourseSetting($variable, $courseId)) {
             // Update
             Database::update(

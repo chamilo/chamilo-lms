@@ -426,10 +426,25 @@ class HTML_QuickForm_element extends HTML_Common
         if (isset($values[$elementName])) {
             return $values[$elementName];
         } elseif (strpos($elementName, '[')) {
-            $myVar = "['" . str_replace(
-                         array('\\', '\'', ']', '['), array('\\\\', '\\\'', '', "']['"),
-                         $elementName
-                     ) . "']";
+            // Fix checkbox
+            if ($this->_type === 'checkbox') {
+                $attributeValue = $this->getAttribute('value');
+                $elementNameCheckBox = str_replace('[]', '', $elementName);
+                if (isset($values[$elementNameCheckBox]) &&
+                    is_array($values[$elementNameCheckBox])
+                ) {
+                    if (in_array($attributeValue, $values[$elementNameCheckBox])) {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            $replacedName = str_replace(
+                array('\\', '\'', ']', '['),
+                array('\\\\', '\\\'', '', "']['"),
+                $elementName
+            );
+            $myVar = "['$replacedName']";
             return eval("return (isset(\$values$myVar)) ? \$values$myVar : null;");
         } else {
             return null;

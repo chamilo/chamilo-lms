@@ -1218,6 +1218,7 @@ if (empty($exerciseList) && $hotpotatoes_exist == false) {
     echo '</table>';
     echo '</div>';
 }
+
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display :: display_footer();
 }

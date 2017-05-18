@@ -1656,6 +1656,12 @@ function api_get_course_setting($setting_name, $course_code = null)
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
+            if ($setting_name === 'email_alert_manager_on_new_quiz') {
+                if (!is_null($row['value'])) {
+                    $result = explode(',', $row['value']);
+                    $row['value'] = $result;
+                }
+            }
             return $row['value'];
         }
     }

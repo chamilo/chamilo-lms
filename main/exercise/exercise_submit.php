@@ -369,6 +369,18 @@ if (empty($exercise_stat_info)) {
         $learnpath_item_id,
         $learnpath_item_view_id
     );
+
+    // Send notification at the start
+    if (!api_is_allowed_to_edit(null, true) &&
+        !api_is_excluded_user_type()
+    ) {
+        $objExercise->send_mail_notification_for_exam(
+            'start',
+            [],
+            $origin,
+            $exe_id
+        );
+    }
     if ($debug) {
         error_log("5.5  exercise_stat_info[] exists getting exe_id $exe_id");
     }
@@ -1375,5 +1387,5 @@ if ($origin != 'learnpath') {
     // So we are not in learnpath tool
     echo '</div>'; //End glossary div
 }
-
+var_dump(api_get_course_setting('email_alert_manager_on_new_quiz'));
 Display :: display_footer();

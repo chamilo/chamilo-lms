@@ -3983,27 +3983,17 @@ HOTSPOT;
                 }
             }
 
-            // Send notification
+            // Send notification at the end
             if (!api_is_allowed_to_edit(null, true) &&
                 !api_is_excluded_user_type()
             ) {
                 $objExercise->send_mail_notification_for_exam(
+                    'end',
                     $question_list_answers,
                     $origin,
                     $exe_id,
                     $total_score,
                     $total_weight
-                );
-
-                $objExercise->send_notification_for_open_questions(
-                    $question_list_answers,
-                    $origin,
-                    $exe_id
-                );
-                $objExercise->send_notification_for_oral_questions(
-                    $question_list_answers,
-                    $origin,
-                    $exe_id
                 );
             }
         }

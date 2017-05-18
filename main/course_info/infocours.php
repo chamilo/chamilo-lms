@@ -348,9 +348,17 @@ $group[] = $form->createElement('radio', 'email_alert_on_new_doc_dropbox', null,
 $form->addGroup($group, '', array(get_lang("DropboxEmailAlert")));
 
 $group = array();
-$group[] = $form->createElement('radio', 'email_alert_manager_on_new_quiz', get_lang('QuizEmailAlert'), get_lang('QuizEmailAlertActivate'), 1);
-$group[] = $form->createElement('radio', 'email_alert_manager_on_new_quiz', null, get_lang('QuizEmailAlertDeactivate'), 0);
-$form->addGroup($group, '', array(get_lang("QuizEmailAlert")));
+
+$group[] = $form->createElement('checkbox', 'email_alert_manager_on_new_quiz[]', null, get_lang('SendEmailToTeacherWhenStudentStartQuiz'), ['value' => 2]);
+// Default
+$group[] = $form->createElement('checkbox', 'email_alert_manager_on_new_quiz[]', null, get_lang('SendEmailToTeacherWhenStudentEndQuiz'), ['value' => 1]);
+
+$group[] = $form->createElement('checkbox', 'email_alert_manager_on_new_quiz[]', null, get_lang('SendEmailToTeacherWhenStudentEndQuizOnlyIfOpenQuestion'), ['value' => 3]);
+$group[] = $form->createElement('checkbox', 'email_alert_manager_on_new_quiz[]', null, get_lang('SendEmailToTeacherWhenStudentEndQuizOnlyIfOralQuestion'), ['value' => 4]);
+//$group[] = $form->createElement('checkbox', 'email_alert_manager_on_new_quiz[]', null, get_lang('QuizEmailAlertDeactivate'), ['value' => 0]);
+
+//$group[] = $form->createElement('checkbox', 'email_alert_manager_on_new_quiz[]', null, get_lang('QuizEmailSendToTeacherWhenStudentEndQuiz'), ['value' => 3]);
+$form->addGroup($group, '', array(get_lang("Exercises")));
 $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
 
 $form->addHtml('
@@ -665,7 +673,6 @@ foreach ($courseSettings as $setting) {
         $values[$setting] = $result;
     }
 }
-
 $form->setDefaults($values);
 
 // Validate form

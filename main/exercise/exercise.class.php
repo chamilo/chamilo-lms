@@ -5355,6 +5355,7 @@ class Exercise
     /**
      * Sends a notification when a user ends an examn
      *
+     * @param string $type 'start' or 'end' of an exercise
      * @param array $question_list_answers
      * @param string $origin
      * @param int $exe_id
@@ -5362,75 +5363,65 @@ class Exercise
      * @param float $weight
      * @return bool
      */
-    public function send_mail_notification_for_exam($question_list_answers, $origin, $exe_id, $score, $weight)
-    {
-        if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1) {
+    public function send_mail_notification_for_exam(
+        $type = 'end',
+        $question_list_answers,
+        $origin,
+        $exe_id,
+        $score = null,
+        $weight  = null
+    ) {
+        $setting = api_get_course_setting('email_alert_manager_on_new_quiz');
+
+        if (empty($setting)) {
             return false;
         }
 
         // Email configuration settings
         $courseCode = api_get_course_id();
         $courseInfo = api_get_course_info($courseCode);
-        $sessionId = api_get_session_id();
 
         if (empty($courseInfo)) {
             return false;
         }
 
-        $url_email = api_get_path(WEB_CODE_PATH)
-            . 'exercise/exercise_show.php?'
-            . api_get_cidreq()
-            . '&id_session='
-            . $sessionId
-            . '&id='
-            . $exe_id
-            . '&action=qualify';
+        $sessionId = api_get_session_id();
+
+        $sendStart = false;
+        $sendEnd = false;
+        $sendEndOpenQuestion = false;
+        $sendEndOralQuestion = false;
+
+        foreach ($setting as $option) {
+            switch ($option) {
+                case 0:
+                    return false;
+                    break;
+                case 1: // End
+                    if ($type == 'end') {
+                        $sendEnd = true;
+                    }
+                    break;
+                case 2: // start
+                    if ($type == 'start') {
+                        $sendStart = true;
+                    }
+                    break;
+                case 3: // end + open
+                    if ($type == 'end') {
+                        $sendEndOpenQuestion = true;
+                    }
+                    break;
+                case 4: // end + oral
+                    if ($type == 'end') {
+                        $sendEndOralQuestion = true;
+                    }
+                    break;
+            }
+        }
+
         $user_info = api_get_user_info(api_get_user_id());
-
-        $scoreLabel = '';
-        if (api_get_configuration_value('send_score_in_exam_notification_mail_to_manager') == true) {
-            $scoreLabel = ExerciseLib::show_score($score, $weight, false, true);
-            $scoreLabel = "<tr>
-                            <td>".get_lang('Score')."</td>
-                            <td>&nbsp;$scoreLabel</td>
-                        </tr>";
-        }
-
-        $msg = get_lang('ExerciseAttempted').'<br /><br />'
-                    .get_lang('AttemptDetails').' : <br /><br />
-                    <table>
-                        <tr>
-                            <td><em>'.get_lang('CourseName').'</em></td>
-                            <td>&nbsp;<b>#course#</b></td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('TestAttempted').'</td>
-                            <td>&nbsp;#exercise#</td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('StudentName').'</td>
-                            <td>&nbsp;#firstName# #lastName#</td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('StudentEmail').'</td>
-                            <td>&nbsp;#email#</td>
-                        </tr>
-                        '.$scoreLabel.'
-                    </table>';
-        $open_question_list = null;
-
-        $msg = str_replace("#email#", $user_info['email'], $msg);
-        $msg1 = str_replace("#exercise#", $this->exercise, $msg);
-        $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);
-        $msg1 = str_replace("#lastName#", $user_info['lastname'], $msg);
-        $msg = str_replace("#course#", $courseInfo['name'], $msg1);
-
-        if ($origin != 'learnpath') {
-            $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
-        }
-        $msg1 = str_replace("#url#", $url_email, $msg);
-        $mail_content = $msg1;
-        $subject = get_lang('ExerciseAttempted');
+        $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_show.php?'.api_get_cidreq().'&id_session='.$sessionId.'&id='.$exe_id.'&action=qualify';
 
         if (!empty($sessionId)) {
             $addGeneralCoach = true;
@@ -5445,6 +5436,88 @@ class Exercise
             );
         } else {
             $teachers = CourseManager::get_teacher_list_from_course_code($courseCode);
+        }
+
+        if ($sendEndOpenQuestion) {
+            $this->send_notification_for_open_questions(
+                $question_list_answers,
+                $origin,
+                $exe_id,
+                $user_info,
+                $url,
+                $teachers
+            );
+        }
+
+        if ($sendEndOralQuestion) {
+            $this->send_notification_for_oral_questions(
+                $question_list_answers,
+                $origin,
+                $exe_id,
+                $user_info,
+                $url,
+                $teachers
+            );
+        }
+
+        if (!$sendEnd && !$sendStart) {
+            return false;
+        }
+
+
+        $scoreLabel = '';
+        if ($sendEnd && api_get_configuration_value('send_score_in_exam_notification_mail_to_manager') == true) {
+            $scoreLabel = ExerciseLib::show_score($score, $weight, false, true);
+            $scoreLabel = "<tr>
+                            <td>".get_lang('Score')."</td>
+                            <td>&nbsp;$scoreLabel</td>
+                        </tr>";
+        }
+
+        if ($sendEnd) {
+            $msg = get_lang('ExerciseAttempted').'<br /><br />';
+        } else {
+            $msg = get_lang('StudentStartExercise').'<br /><br />';
+        }
+
+        $msg .= get_lang('AttemptDetails').' : <br /><br />
+                    <table>
+                        <tr>
+                            <td>'.get_lang('CourseName').'</td>
+                            <td>#course#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('Exercise').'</td>
+                            <td>&nbsp;#exercise#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentName').'</td>
+                            <td>&nbsp;#student_complete_name#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentEmail').'</td>
+                            <td>&nbsp;#email#</td>
+                        </tr>
+                        '.$scoreLabel.'
+                    </table>';
+
+        $variables = [
+            '#email#' => $user_info['email'],
+            '#exercise#' => $this->exercise,
+            '#student_complete_name#' => $user_info['complete_name'],
+            '#course#' => $courseInfo['title']
+        ];
+         if ($origin != 'learnpath' && $sendEnd) {
+            $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
+            $variables['#url#'] = $url;
+        }
+
+        $mail_content = str_replace(array_keys($variables), array_values($variables), $msg);
+
+        if ($sendEnd) {
+            $subject = get_lang('ExerciseAttempted');
+        } else {
+            $subject = get_lang('StudentStartExercise');
         }
 
         if (!empty($teachers)) {
@@ -5465,23 +5538,17 @@ class Exercise
      * @param int $exe_id
      * @return null
      */
-    public function send_notification_for_open_questions($question_list_answers, $origin, $exe_id)
-    {
-        if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1) {
-            return null;
-        }
+    private function send_notification_for_open_questions(
+        $question_list_answers,
+        $origin,
+        $exe_id,
+        $user_info,
+        $url_email,
+        $teachers
+    ) {
         // Email configuration settings
         $courseCode = api_get_course_id();
         $course_info = api_get_course_info($courseCode);
-        $url_email = api_get_path(WEB_CODE_PATH)
-            . 'exercise/exercise_show.php?'
-            . api_get_cidreq()
-            . '&id_session='
-            . api_get_session_id()
-            . '&id='
-            . $exe_id
-            . '&action=qualify';
-        $user_info = api_get_user_info(api_get_user_id());
 
         $msg = get_lang('OpenQuestionsAttempted').'<br /><br />'
                     .get_lang('AttemptDetails').' : <br /><br />'
@@ -5542,12 +5609,6 @@ class Exercise
             $mail_content = $msg1;
             $subject = get_lang('OpenQuestionsAttempted');
 
-            if (api_get_session_id()) {
-                $teachers = CourseManager::get_coach_list_from_course_code($courseCode, api_get_session_id());
-            } else {
-                $teachers = CourseManager::get_teacher_list_from_course_code($courseCode);
-            }
-
             if (!empty($teachers)) {
                 foreach ($teachers as $user_id => $teacher_data) {
                     MessageManager::send_message_simple(
@@ -5567,29 +5628,22 @@ class Exercise
      * @param int $exe_id
      * @return null
      */
-    public function send_notification_for_oral_questions($question_list_answers, $origin, $exe_id)
-    {
-        if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1) {
-            return null;
-        }
+    private function send_notification_for_oral_questions(
+        $question_list_answers,
+        $origin,
+        $exe_id,
+        $user_info,
+        $url_email,
+        $teachers
+    ) {
         // Email configuration settings
         $courseCode = api_get_course_id();
         $course_info = api_get_course_info($courseCode);
 
-        $url_email = api_get_path(WEB_CODE_PATH)
-            . 'exercise/exercise_show.php?'
-            . api_get_cidreq()
-            . '&id_session='
-            . api_get_session_id()
-            . '&id='
-            . $exe_id
-            . '&action=qualify';
-        $user_info = api_get_user_info(api_get_user_id());
-
         $oral_question_list = null;
         foreach ($question_list_answers as $item) {
-            $question    = $item['question'];
-            $answer      = $item['answer'];
+            $question = $item['question'];
+            $answer = $item['answer'];
             $answer_type = $item['answer_type'];
 
             if (!empty($question) && !empty($answer) && $answer_type == ORAL_EXPRESSION) {
@@ -5639,12 +5693,6 @@ class Exercise
             $msg1 = str_replace("#url#", $url_email, $msg);
             $mail_content = $msg1;
             $subject = get_lang('OralQuestionsAttempted');
-
-            if (api_get_session_id()) {
-                $teachers = CourseManager::get_coach_list_from_course_code($courseCode, api_get_session_id());
-            } else {
-                $teachers = CourseManager::get_teacher_list_from_course_code($courseCode);
-            }
 
             if (!empty($teachers)) {
                 foreach ($teachers as $user_id => $teacher_data) {

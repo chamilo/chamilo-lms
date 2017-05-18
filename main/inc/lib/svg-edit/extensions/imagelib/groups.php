@@ -93,7 +93,7 @@ if ((
 		echo '</ul>';
 	}
 } else {
-	echo Display::display_warning_message(get_lang('OnlyAccessFromYourGroup'));
+	echo Display::return_message(get_lang('OnlyAccessFromYourGroup'), 'warning');
 }
 ?>
 </body>

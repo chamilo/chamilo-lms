@@ -72,7 +72,7 @@ $interbreadcrumb[] = array(
 );
 Display :: display_header(get_lang('AddUserToEval'));
 if (isset ($_GET['erroroneuser'])) {
-	Display :: display_warning_message(get_lang('AtLeastOneUser'), false);
+	echo Display::return_message(get_lang('AtLeastOneUser'), 'warning', false);
 }
 DisplayGradebook :: display_header_result($evaluation[0], null, 0, 0);
 echo '<div class="main">';

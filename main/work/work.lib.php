@@ -292,8 +292,9 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
         if ($workInGradeBookLinkId) {
             if ($is_allowed_to_edit) {
                 if (intval($my_folder_data['qualification']) == 0) {
-                    Display::display_warning_message(
-                        get_lang('MaxWeightNeedToBeProvided')
+                    echo Display::return_message(
+                        get_lang('MaxWeightNeedToBeProvided'),
+                        'warning'
                     );
                 }
             }
@@ -758,7 +759,7 @@ function deleteDirWork($id)
     $locked = api_resource_is_locked_by_gradebook($id, LINK_STUDENTPUBLICATION);
 
     if ($locked == true) {
-        Display::display_warning_message(get_lang('ResourceLockedByGradebook'));
+        echo Display::return_message(get_lang('ResourceLockedByGradebook'), 'warning');
         return false;
     }
 

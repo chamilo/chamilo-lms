@@ -489,7 +489,7 @@ if (count($a_students) > 0) {
     $html .= $table->return_table();
     $html .= "</div>";
 } else {
-    $html .= Display::display_warning_message(get_lang('NoUsersInCourse'), true, true);
+    $html .= Display::return_message(get_lang('NoUsersInCourse'), 'warning', true);
 }
 echo Display::panel($html, $titleSession);
 // Send the csv file if asked.

@@ -1162,8 +1162,9 @@ HTML;
                     );
                     if (!$images_folder_visibility) {
                         //This message is shown only to the course/platform admin if the image is set to visibility = false
-                        Display::display_warning_message(
-                            get_lang('ChangeTheVisibilityOfTheCurrentImage')
+                        echo Display::return_message(
+                            get_lang('ChangeTheVisibilityOfTheCurrentImage'),
+                            'warning'
                         );
                     }
                 }

@@ -26,7 +26,7 @@ $legal_count = LegalManager::count();
 $languages = api_get_languages();
 $available_languages = count($languages['folder']);
 if ($legal_count != $available_languages) {
-    Display::display_warning_message(get_lang('YouShouldCreateTermAndConditionsForAllAvailableLanguages'));
+    echo Display::return_message(get_lang('YouShouldCreateTermAndConditionsForAllAvailableLanguages'), 'warning');
 }
 
 $table = new SortableTable('conditions', 'count_mask', 'get_legal_data_mask', 2);

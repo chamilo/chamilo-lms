@@ -53,9 +53,9 @@ if (!empty($workInfo) && !empty($workInfo['qualification'])) {
     if ($count >= 1) {
         Display::display_header();
         if (api_get_course_setting('student_delete_own_publication') == '1') {
-            Display::display_warning_message(get_lang('CantUploadDeleteYourPaperFirst'));
+            echo Display::return_message(get_lang('CantUploadDeleteYourPaperFirst'), 'warning');
         } else {
-            Display::display_warning_message(get_lang('YouAlreadySentAPaperYouCantUpload'));
+            echo Display::return_message(get_lang('YouAlreadySentAPaperYouCantUpload'), 'warning');
         }
         Display::display_footer();
         exit;
@@ -146,7 +146,7 @@ if (!empty($work_id)) {
     echo $validationStatus['message'];
     if ($is_allowed_to_edit) {
         if (api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION)) {
-            echo Display::display_warning_message(get_lang('ResourceLockedByGradebook'));
+            echo Display::return_message(get_lang('ResourceLockedByGradebook'), 'warning');
         } else {
             echo $tabs;
         }

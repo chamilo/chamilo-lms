@@ -124,7 +124,7 @@ if (!empty($message)) {
         if ($type == 'confirmation') {
             Display::display_confirmation_message($message.': <br />'.$userMessage, false);
         } else {
-            Display::display_warning_message($message.':  <br />'.$userMessage, false);
+            echo Display::return_message($message.':  <br />'.$userMessage, 'warning', false);
         }
     } else {
         $empty_line_msg = ($empty_line == 0) ? get_lang('ErrorsWhenImportingFile') : get_lang('ErrorsWhenImportingFile').': '.get_lang('EmptyHeaderLine');

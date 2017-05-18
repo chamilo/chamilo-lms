@@ -407,9 +407,10 @@ if (api_is_allowed_to_edit(null, true) ||
         </form>
     <?php
     } else {
-        echo Display::display_warning_message(
+        echo Display::return_message(
             '<a href="'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'">'.
             get_lang('ThereAreNoRegisteredLearnersInsidetheCourse').'</a>',
+            'warning',
             false
         );
     }

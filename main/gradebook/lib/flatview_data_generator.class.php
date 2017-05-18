@@ -889,7 +889,7 @@ class FlatViewDataGenerator
                 $total_score = array($item_value, $item_total);
                 $score_final = ($item_value / $item_total) * 100;
                 if ($displayWarning) {
-                    Display::display_warning_message($total_score[1]);
+                    echo Display::return_message($total_score[1], 'warning');
                 }
                 $row[] = array($score_final, trim($scoredisplay->display_score($total_score, SCORE_CUSTOM, null, true)));
             }

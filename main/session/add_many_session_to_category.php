@@ -136,7 +136,7 @@ if ((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_G
 
 $rows_session_category = SessionManager::get_all_session_category();
 if (empty($rows_session_category)) {
-    Display::display_warning_message(get_lang('YouNeedToAddASessionCategoryFirst'));
+    echo Display::return_message(get_lang('YouNeedToAddASessionCategoryFirst'), 'warning');
     Display::display_footer();
     exit;
 }

@@ -105,8 +105,23 @@ class StudentFollowUpPlugin extends Plugin
             $showPrivate = true;
         } else {
             $isDrh = api_is_drh();
+            $isCareTaker = false;
+
+            // Check if user is care taker
+            if ($isDrh) {
+                $criteria = [
+                    'user' => $studentId,
+                    'insertUser' => $currentUserId
+                ];
+
+                $post = Database::getManager()->getRepository('ChamiloPluginBundle:StudentFollowUp\CarePost')->findOneBy($criteria);
+                if ($post) {
+                    $isCareTaker = true;
+                }
+            }
+
             // Only admins and DRH that follow the user
-            $isAdminOrDrh = ($isDrh && UserManager::is_user_followed_by_drh($studentId, $currentUserId)) || api_is_platform_admin();
+            $isAdmin = api_is_platform_admin();
 
             // Check if course session coach
             $sessions = SessionManager::get_sessions_by_user($studentId);
@@ -132,8 +147,8 @@ class StudentFollowUpPlugin extends Plugin
                 }
             }
 
-            $isAllow = $isAdminOrDrh || $isDrhSession;
-            $showPrivate = $isAdminOrDrh;
+            $isAllow = $isAdmin || $isDrhSession || $isCourseCoach;
+            $showPrivate = $isAdmin || ($isDrhSession && $isCareTaker);
         }
 
         return [

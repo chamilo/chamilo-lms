@@ -5695,6 +5695,230 @@ class DocumentManager
     }
 
     /**
+     * Get the button to edit document
+     * @param boolean $isReadOnly
+     * @param array $documentData
+     * @param string $extension
+     * @param boolean $isCertificateMode
+     * @return string
+     */
+    private static function getButtonEdit($isReadOnly, array $documentData, $extension, $isCertificateMode)
+    {
+        $iconEn = Display::return_icon('edit.png', get_lang('Modify'));
+        $iconDis = Display::return_icon('edit_na.png', get_lang('Modify'));
+        $courseParams = api_get_cidreq();
+        $webOdfExtensionList = self::get_web_odf_extension_list();
+        $path = $documentData['path'];
+        $document_id = $documentData['id'];
+
+        if ($isReadOnly) {
+            if (!api_is_course_admin() && !api_is_platform_admin()) {
+                return $iconDis;
+            }
+
+            if (
+                $extension == 'svg' && api_browser_support('svg') &&
+                api_get_setting('enabled_support_svg') == 'true'
+            ) {
+                return Display::url($iconEn, "edit_draw.php?$courseParams&id=$document_id");
+            }
+
+            if (
+                in_array($extension, $webOdfExtensionList) &&
+                api_get_setting('enabled_support_odf') === true
+            ) {
+                return Display::url($iconEn, "edit_odf.php?$courseParams&id=$document_id");
+            }
+
+            if (
+                in_array($extension, ['png', 'jpg', 'jpeg', 'bmp', 'gif']) ||
+                ($extension == 'pxd' && api_get_setting('enabled_support_pixlr') == 'true')
+            ) {
+                return Display::url($iconEn, "edit_paint.php?$courseParams&id=$document_id");
+            }
+
+            return Display::url($iconEn, "edit_document.php?$courseParams&id=$document_id");
+        }
+
+        if (in_array($path, self::get_system_folders())) {
+            return $iconDis;
+        }
+
+        if ($isCertificateMode) {
+            return Display::url($iconEn, "edit_document.php?$courseParams&id=$document_id&curdirpath=/certificates");
+        }
+
+        $sessionId = api_get_session_id();
+
+        if ($sessionId && $documentData['session_id'] != $sessionId) {
+            return $iconDis;
+        }
+
+        if (
+            $extension == 'svg' && api_browser_support('svg') &&
+            api_get_setting('enabled_support_svg') == 'true'
+        ) {
+            return Display::url($iconEn, "edit_draw.php?$courseParams&id=$document_id");
+        }
+
+        if (
+            in_array($extension, $webOdfExtensionList) &&
+            api_get_setting('enabled_support_odf') === true
+        ) {
+            return Display::url($iconEn, "edit_odf.php?$courseParams&id=$document_id");
+        }
+
+        if (
+            in_array($extension, ['png', 'jpg', 'jpeg', 'bmp', 'gif']) ||
+            ($extension == 'pxd' && api_get_setting('enabled_support_pixlr') == 'true')
+        ) {
+            return Display::url($iconEn, "edit_paint.php?$courseParams&id=$document_id");
+        }
+
+        return Display::url($iconEn, "edit_document.php?$courseParams&id=$document_id");
+    }
+
+    /**
+     * Get the button to move document
+     * @param boolean $isReadOnly
+     * @param array $documentData
+     * @param boolean $isCertificateMode
+     * @param int $parentId
+     * @return string
+     */
+    private static function getButtonMove($isReadOnly, array $documentData, $isCertificateMode, $parentId)
+    {
+        $iconEn = Display::return_icon('move.png', get_lang('Move'));
+        $iconDis = Display::return_icon('move_na.png', get_lang('Move'));
+
+        if ($isReadOnly) {
+            return $iconDis;
+        }
+
+        $path = $documentData['path'];
+        $document_id = $documentData['id'];
+        $sessionId = api_get_session_id();
+        $courseParams = api_get_cidreq();
+
+        if ($isCertificateMode || in_array($path, self::get_system_folders())) {
+            return $iconDis;
+        }
+
+        if ($sessionId) {
+            if ($documentData['session_id'] != $sessionId) {
+                return $iconDis;
+            }
+        }
+
+        $urlMoveParams = http_build_query(['id' => $parentId, 'move' => $document_id]);
+
+        return Display::url(
+            $iconEn,
+            api_get_self()."?$courseParams&$urlMoveParams"
+        );
+    }
+
+    /**
+     * Get the button to set visibility to document
+     * @param boolean $isReadOnly
+     * @param int $visibility
+     * @param array $documentData
+     * @param boolean $isCertificateMode
+     * @parem int $parentId
+     * @return null|string
+     */
+    private static function getButtonVisibility($isReadOnly, $visibility, array $documentData, $isCertificateMode, $parentId)
+    {
+        $visibility_icon = ($visibility == 0) ? 'invisible' : 'visible';
+        $visibility_command = ($visibility == 0) ? 'set_visible' : 'set_invisible';
+        $courseParams = api_get_cidreq();
+
+        if ($isReadOnly) {
+            if (api_is_allowed_to_edit() || api_is_platform_admin()) {
+                return Display::return_icon($visibility_icon.'.png', get_lang('VisibilityCannotBeChanged'));
+            }
+
+            return null;
+        }
+
+        if ($isCertificateMode) {
+            return Display::return_icon($visibility_icon.'.png', get_lang('VisibilityCannotBeChanged'));
+        }
+
+        if (api_is_allowed_to_edit() || api_is_platform_admin()) {
+            $tip_visibility = $visibility_icon == 'invisible' ? get_lang('Show') : get_lang('Hide');
+
+            return Display::url(
+                Display::return_icon($visibility_icon.'.png', $tip_visibility),
+                api_get_self()."?$courseParams&id=$parentId&$visibility_command={$documentData['id']}"
+            );
+        }
+
+        return null;
+    }
+
+    /**
+     * GEt the button to delete a document
+     * @param boolean $isReadOnly
+     * @param array $documentData
+     * @param boolean $isCertificateMode
+     * @param string $curDirPath
+     * @param int $parentId
+     * @return string
+     */
+    private static function getButtonDelete($isReadOnly, array $documentData, $isCertificateMode, $curDirPath, $parentId)
+    {
+        $iconEn = Display::return_icon('delete.png', get_lang('Delete'));
+        $iconDis = Display::return_icon('delete_na.png', get_lang('ThisFolderCannotBeDeleted'));
+        $path = $documentData['path'];
+        $id = $documentData['id'];
+        $courseParams = api_get_cidreq();
+
+        if ($isReadOnly) {
+            return $iconDis;
+        }
+
+        if (in_array($path, self::get_system_folders())) {
+            return $iconDis;
+        }
+
+        $titleToShow = addslashes(basename($documentData['title']));
+        $urlDeleteParams = http_build_query([
+            'curdirpath' => $curDirPath,
+            'action' => 'delete_item',
+            'id' => $parentId,
+            'deleteid' => $documentData['id']
+        ]);
+        $btn = Display::url(
+            $iconEn,
+            api_get_self()."?$courseParams&$urlDeleteParams",
+            ['onclick' => "return confirmation('$titleToShow');"]
+        );
+
+        if (
+            isset($_GET['curdirpath']) &&
+            $_GET['curdirpath'] == '/certificates' &&
+            self::get_default_certificate_id(api_get_course_id()) == $id
+        ) {
+            return $btn;
+        }
+
+        if ($isCertificateMode) {
+            return $btn;
+        }
+
+        $sessionId = api_get_session_id();
+
+        if ($sessionId) {
+            if ($documentData['session_id'] != $sessionId) {
+                return $iconDis;
+            }
+        }
+
+        return $btn;
+    }
+
+    /**
      * Creates the row of edit icons for a file/folder
      *
      * @param string $curdirpath current path (cfr open folder)
@@ -5708,7 +5932,6 @@ class DocumentManager
     {
         $sessionId = api_get_session_id();
         $courseParams = api_get_cidreq();
-        $web_odf_extension_list = self::get_web_odf_extension_list();
         $document_id = $document_data['id'];
         $type = $document_data['filetype'];
         $is_read_only = $document_data['readonly'];
@@ -5737,173 +5960,36 @@ class DocumentManager
         $formatTypeList = self::getFormatTypeListConvertor('from', $extension);
         $formatType = current($formatTypeList);
 
-        // Build URL-parameters for table-sorting
-        $sort_params = array();
-        if (isset($_GET['column'])) {
-            $sort_params[] = 'column='.Security::remove_XSS($_GET['column']);
-        }
-        if (isset($_GET['page_nr'])) {
-            $sort_params[] = 'page_nr='.Security::remove_XSS($_GET['page_nr']);
-        }
-        if (isset($_GET['per_page'])) {
-            $sort_params[] = 'per_page='.Security::remove_XSS($_GET['per_page']);
-        }
-        if (isset($_GET['direction'])) {
-            $sort_params[] = 'direction='.Security::remove_XSS($_GET['direction']);
-        }
-        $sort_params = implode('&amp;', $sort_params);
-        $visibility_icon = ($visibility == 0) ? 'invisible' : 'visible';
-        $visibility_command = ($visibility == 0) ? 'set_visible' : 'set_invisible';
-
-        $modify_icons = '';
-
         // If document is read only *or* we're in a session and the document
         // is from a non-session context, hide the edition capabilities
-        if ($is_read_only /* or ($session_id!=api_get_session_id()) */) {
-            if (api_is_course_admin() || api_is_platform_admin()) {
-                if ($extension == 'svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
-                    $modify_icons = '<a href="edit_draw.php?'.$courseParams.'&id='.$document_id.'">'.
-                        Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL).'</a>';
-                } elseif (in_array($extension, $web_odf_extension_list) && api_get_setting('enabled_support_odf') === true) {
-                    $modify_icons = '<a href="edit_odf.php?'.$courseParams.'&id='.$document_id.'">'.
-                        Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL).'</a>';
-                } elseif ($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'bmp' || $extension == 'gif' || $extension == 'pxd' && api_get_setting('enabled_support_pixlr') == 'true') {
-                    $modify_icons = '<a href="edit_paint.php?'.$courseParams.'&id='.$document_id.'">'.
-                        Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL).'</a>';
-                } else {
-                    $modify_icons = '<a href="edit_document.php?'.$courseParams.'&id='.$document_id.'">'.
-                        Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL).'</a>';
-                }
-            } else {
-                $modify_icons = Display::return_icon('edit_na.png', get_lang('Modify'), '', ICON_SIZE_SMALL);
-            }
-            $modify_icons .= '&nbsp;'.Display::return_icon('move_na.png', get_lang('Move'), array(), ICON_SIZE_SMALL);
-            if (api_is_allowed_to_edit() || api_is_platform_admin()) {
-                $modify_icons .= '&nbsp;'.Display::return_icon($visibility_icon.'.png', get_lang('VisibilityCannotBeChanged'), '', ICON_SIZE_SMALL);
-            }
-            $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('Delete'), array(), ICON_SIZE_SMALL);
-        } else {
-            //Edit button
-            if (in_array($path, self::get_system_folders())) {
-                $modify_icons = Display::return_icon('edit_na.png', get_lang('Modify'), '', ICON_SIZE_SMALL);
-            } elseif ($is_certificate_mode) {
-                // gradebook category doesn't seem to be taken into account
-                $modify_icons = '<a href="edit_document.php?'.$courseParams.'&amp;id='.$document_id.'&curdirpath=/certificates">'.Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL).'</a>';
-            } else {
-                if ($sessionId) {
-                    if ($document_data['session_id'] == $sessionId) {
-                        if ($extension == 'svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
-                            $modify_icons = '<a href="edit_draw.php?'.$courseParams.'&amp;id='.$document_id.'">'.
-                                Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL).'</a>';
-                        } elseif (in_array($extension, $web_odf_extension_list) && api_get_setting('enabled_support_odf') === true) {
-                            $modify_icons = '<a href="edit_odf.php?'.$courseParams.'&id='.$document_id.'">'.
-                                Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL).'</a>';
-                        } elseif ($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'bmp' || $extension == 'gif' || $extension == 'pxd' && api_get_setting('enabled_support_pixlr') == 'true') {
-                            $modify_icons = '<a href="edit_paint.php?'.$courseParams.'&id='.$document_id.'">'.
-                                Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL).'</a>';
-                        } else {
-                            $modify_icons = '<a href="edit_document.php?'.$courseParams.'&amp;id='.$document_id.'">'.
-                                Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL).'</a>';
-                        }
-                    } else {
-                        $modify_icons .= '&nbsp;'.Display::return_icon('edit_na.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
-                    }
-                } else {
-                    if ($extension == 'svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
-                        $modify_icons = '<a href="edit_draw.php?'.$courseParams.'&amp;id='.$document_id.'">'.
-                            Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL).'</a>';
-                    } elseif (in_array($extension, $web_odf_extension_list) && api_get_setting('enabled_support_odf') === true) {
-                        $modify_icons = '<a href="edit_odf.php?'.$courseParams.'&id='.$document_id.'">'.
-                            Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL).'</a>';
-                    } elseif ($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'bmp' || $extension == 'gif' || $extension == 'pxd' && api_get_setting('enabled_support_pixlr') == 'true') {
-                        $modify_icons = '<a href="edit_paint.php?'.$courseParams.'&amp;id='.$document_id.'">'.
-                            Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL).'</a>';
-                    } else {
-                        $modify_icons = '<a href="edit_document.php?'.$courseParams.'&amp;id='.$document_id.'">'.
-                            Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL).'</a>';
-                    }
-                }
-            }
+        $modify_icons = [];
+        $modify_icons[] = self::getButtonEdit($is_read_only, $document_data, $extension, $is_certificate_mode);
+        $modify_icons[] = self::getButtonMove($is_read_only, $document_data, $is_certificate_mode, $parent_id);
+        $modify_icons[] = self::getButtonVisibility(
+            $is_read_only,
+            $visibility,
+            $document_data,
+            $is_certificate_mode,
+            $parent_id
+        );
+        $modify_icons[] = self::getButtonDelete(
+            $is_read_only,
+            $document_data,
+            $is_certificate_mode,
+            $curdirpath,
+            $parent_id
+        );
 
-            // Move button.
-            if ($is_certificate_mode || in_array($path, self::get_system_folders())) {
-                $modify_icons .= '&nbsp;'.Display::return_icon('move_na.png', get_lang('Move'), array(), ICON_SIZE_SMALL).'</a>';
-            } else {
-                if ($sessionId) {
-                    if ($document_data['session_id'] == $sessionId) {
-                        $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.$courseParams.'&amp;id='.$parent_id.'&amp;move='.$document_id.'">'.
-                            Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_SMALL).'</a>';
-                    } else {
-                        $modify_icons .= '&nbsp;'.Display::return_icon('move_na.png', get_lang('Move'), array(), ICON_SIZE_SMALL).'</a>';
-                    }
-                } else {
-                    $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.$courseParams.'&amp;id='.$parent_id.'&amp;move='.$document_id.'">'.
-                        Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_SMALL).'</a>';
-                }
-            }
-
-            //Visibility button
-            if ($is_certificate_mode) {
-                $modify_icons .= '&nbsp;'.Display::return_icon($visibility_icon.'.png', get_lang('VisibilityCannotBeChanged'), array(), ICON_SIZE_SMALL).'</a>';
-            } else {
-                if (api_is_allowed_to_edit() || api_is_platform_admin()) {
-                    if ($visibility_icon == 'invisible') {
-                        $tip_visibility = get_lang('Show');
-                    } else {
-                        $tip_visibility = get_lang('Hide');
-                    }
-                    $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.$courseParams.'&amp;id='.$parent_id.'&amp;'.$visibility_command.'='.$id.'&amp;'.$sort_params.'">'.
-                        Display::return_icon($visibility_icon.'.png', $tip_visibility, '', ICON_SIZE_SMALL).'</a>';
-                }
-            }
-
-            // Delete button
-            if (in_array($path, self::get_system_folders())) {
-                $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('ThisFolderCannotBeDeleted'), array(), ICON_SIZE_SMALL);
-            } else {
-                $titleToShow = addslashes(basename($document_data['title']));
-
-                if (isset($_GET['curdirpath']) &&
-                    $_GET['curdirpath'] == '/certificates' &&
-                    self::get_default_certificate_id(api_get_course_id()) == $id
-                ) {
-                    $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.$courseParams.'&amp;curdirpath='.$curdirpath.'&action=delete_item&id='.$parent_id.'&deleteid='.$document_id.'&amp;'.$sort_params.'delete_certificate_id='.$id.'" onclick="return confirmation(\''.$titleToShow.'\');">'.
-                        Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
-                } else {
-                    if ($is_certificate_mode) {
-                        $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.$courseParams.'&amp;curdirpath='.$curdirpath.'&action=delete_item&id='.$parent_id.'&deleteid='.$document_id.'&amp;'.$sort_params.'" onclick="return confirmation(\''.$titleToShow.'\');">'.
-                            Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
-                    } else {
-                        if ($sessionId) {
-                            if ($document_data['session_id'] == $sessionId) {
-                                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.$courseParams.'&amp;curdirpath='.$curdirpath.'&action=delete_item&id='.$parent_id.'&deleteid='.$document_id.'&amp;'.$sort_params.'" onclick="return confirmation(\''.$titleToShow.'\');">'.
-                                    Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
-                            } else {
-                                $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('ThisFolderCannotBeDeleted'), array(), ICON_SIZE_SMALL);
-                            }
-                        } else {
-                            $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.$courseParams.'&amp;curdirpath='.$curdirpath.'&action=delete_item&id='.$parent_id.'&deleteid='.$document_id.'&amp;'.$sort_params.'" onclick="return confirmation(\''.$titleToShow.'\');">'.
-                                Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
-                        }
-                    }
-                }
-            }
-
+        if (!$is_read_only /* or ($session_id!=api_get_session_id()) */) {
             // Add action to covert to PDF, will create a new document whit same filename but .pdf extension
             // @TODO: add prompt to select a format target
-            if (in_array($path, self::get_system_folders())) {
-                // nothing to do
-            } else {
+            if (!in_array($path, self::get_system_folders())) {
                 if ($usePpt2lp && $formatType) {
-                    $modify_icons .= '&nbsp;<a class="convertAction" href="#" '.
-                        'data-documentId = '.$document_id.
-                        ' data-formatType = '.$formatType.'>'.
-                        Display::return_icon(
-                            'convert.png',
-                            get_lang('Convert'),
-                            array(),
-                            ICON_SIZE_SMALL
-                        ).'</a>';
+                    $modify_icons[] = Display::url(
+                        Display::return_icon('convert.png', get_lang('Convert')),
+                        '#',
+                        ['class' => 'convertAction', 'data-documentId' => $document_id, 'data-formatType' => $formatType]
+                    );
                 }
             }
         }
@@ -5911,8 +5997,10 @@ class DocumentManager
         if ($type == 'file' && ($extension == 'html' || $extension == 'htm')) {
             if ($is_template == 0) {
                 if ((isset($_GET['curdirpath']) && $_GET['curdirpath'] != '/certificates') || !isset($_GET['curdirpath'])) {
-                    $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.$courseParams.'&amp;curdirpath='.$curdirpath.'&amp;add_as_template='.$id.'&amp;'.$sort_params.'">'.
-                        Display::return_icon('wizard.png', get_lang('AddAsTemplate'), array(), ICON_SIZE_SMALL).'</a>';
+                    $modify_icons[] = Display::url(
+                        Display::return_icon('wizard.png', get_lang('AddAsTemplate')),
+                        api_get_self()."?$courseParams&curdirpath=$curdirpath&add_as_template=$id"
+                    );
                 }
                 if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates') {//allow attach certificate to course
                     $visibility_icon_certificate = 'nocertificate';
@@ -5926,24 +6014,32 @@ class DocumentManager
                         $certificate = get_lang('NoDefaultCertificate');
                     }
                     if (isset($_GET['selectcat'])) {
-                        $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.$courseParams.'&amp;curdirpath='.$curdirpath.'&amp;selectcat='.intval($_GET['selectcat']).'&amp;set_certificate='.$id.'&amp;'.$sort_params.'">';
-                        $modify_icons .= Display::return_icon($visibility_icon_certificate.'.png', $certificate);
-                        $modify_icons .= '</a>';
+                        $modify_icons = Display::url(
+                            Display::return_icon($visibility_icon_certificate.'.png', $certificate),
+                            api_get_self()."?$courseParams&curdirpath=$curdirpath&selectcat=".intval($_GET['selectcat'])."&set_certificate=$id"
+                        );
                         if ($is_preview) {
-                            $modify_icons .= '&nbsp;<a target="_blank"  href="'.api_get_self().'?'.$courseParams.'&amp;curdirpath='.$curdirpath.'&amp;set_preview='.$id.'&amp;'.$sort_params.'" >'.
-                                Display::return_icon('preview_view.png', $preview, '', ICON_SIZE_SMALL).'</a>';
+                            $modify_icons[] = Display::url(
+                                Display::return_icon('preview_view.png', $preview),
+                                api_get_self()."?$courseParams&curdirpath=$curdirpath&set_preview=$id"
+                            );
                         }
                     }
                 }
             } else {
-                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.$courseParams.'&curdirpath='.$curdirpath.'&amp;remove_as_template='.$id.'&amp;'.$sort_params.'">'.
-                    Display::return_icon('wizard_na.png', get_lang('RemoveAsTemplate'), '', ICON_SIZE_SMALL).'</a>';
+                $modify_icons[] = Display::url(
+                    Display::return_icon('wizard_na.png', get_lang('RemoveAsTemplate')),
+                    api_get_self()."?$courseParams&curdirpath=$curdirpath&remove_as_template=$id"
+                );
             }
-            $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.$courseParams.'&action=export_to_pdf&id='.$id.'&curdirpath='.$curdirpath.'">'.
-                Display::return_icon('pdf.png', get_lang('Export2PDF'), array(), ICON_SIZE_SMALL).'</a>';
+
+            $modify_icons[] = Display::url(
+                Display::return_icon('pdf.png', get_lang('Export2PDF')),
+                api_get_self()."?$courseParams&action=export_to_pdf&id=$id&curdirpath=$curdirpath"
+            );
         }
 
-        return $modify_icons;
+        return implode(PHP_EOL, $modify_icons);
     }
 
     /**

@@ -4,9 +4,6 @@
  * Process payments for the Buy Courses plugin
  * @package chamilo.plugin.buycourses
  */
-/**
- * Initialization
- */
 
 $cidReset = true;
 
@@ -48,7 +45,7 @@ $form = new FormValidator('confirm_sale');
 
 if ($form->validate()) {
     $formValues = $form->getSubmitValues();
-    
+
     if (!$formValues['payment_type']) {
         Display::addFlash(
             Display::return_message($plugin->get_lang('NeedToSelectPaymentType'), 'error', false)
@@ -64,8 +61,13 @@ if ($form->validate()) {
         header('Location:'.api_get_self().'?'.$queryString);
         exit;
     }
-    
-    $serviceSaleId = $plugin->registerServiceSale($serviceId, $formValues['payment_type'], $formValues['info_select'], $formValues['enable_trial']);
+
+    $serviceSaleId = $plugin->registerServiceSale(
+        $serviceId,
+        $formValues['payment_type'],
+        $formValues['info_select'],
+        $formValues['enable_trial']
+    );
 
     if ($serviceSaleId !== false) {
         $_SESSION['bc_service_sale_id'] = $serviceSaleId;
@@ -94,7 +96,12 @@ $form->addHeader('');
 $form->addRadio('payment_type', null, $paymentTypesOptions);
 $form->addHtml('<h3 class="panel-heading">'.$plugin->get_lang('AdditionalInfo').'</h3>');
 $form->addHeader('');
-$form->addHtml(Display::return_message($plugin->get_lang('PleaseSelectTheCorrectInfoToApplyTheService'), 'info'));
+$form->addHtml(
+    Display::return_message(
+        $plugin->get_lang('PleaseSelectTheCorrectInfoToApplyTheService'),
+        'info'
+    )
+);
 $selectOptions = [
     0 => get_lang('None')
 ];
@@ -145,7 +152,6 @@ if ($typeUser) {
         // Now get all the courses lp's
         $thisLpList = $em->getRepository('ChamiloCourseBundle:CLp')->findBy(['cId' => $course->getCourse()->getId()]);
         foreach ($thisLpList as $lp) {
-
             $courseLpList[$lp->getCId()] = $lp->getName().' ('.$course->getCourse()->getTitle().')'; ;
         }
     }
@@ -190,9 +196,7 @@ if ($typeUser) {
         $form->addHtml(Display::return_message($plugin->get_lang('YourCoursesNeedAtLeastOneLearningPath'), 'error'));
     }
     $form->addSelect('info_select', get_lang('LearningPath'), $selectOptions);
-
 }
-
 
 $form->addHidden('t', intval($_GET['t']));
 $form->addHidden('i', intval($_GET['i']));
@@ -201,17 +205,16 @@ $form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success'
 
 // View
 $templateName = $plugin->get_lang('PaymentMethods');
-$interbreadcrumb[] = array("url" => "service_catalog.php", "name" => $plugin->get_lang('ListOfServicesOnSale'));
+$interbreadcrumb[] = array(
+    "url" => "service_catalog.php",
+    "name" => $plugin->get_lang('ListOfServicesOnSale'),
+);
 
 $tpl = new Template($templateName);
-
 $tpl->assign('buying_service', true);
 $tpl->assign('service', $serviceInfo);
 $tpl->assign('user', api_get_user_info());
 $tpl->assign('form', $form->returnForm());
-
-
 $content = $tpl->fetch('buycourses/view/process.tpl');
-
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

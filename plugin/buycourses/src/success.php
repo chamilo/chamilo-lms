@@ -36,7 +36,6 @@ switch ($sale['product_type']) {
 }
 
 $paypalParams = $plugin->getPaypalParams();
-
 $pruebas = $paypalParams['sandbox'] == 1;
 $paypalUsername = $paypalParams['username'];
 $paypalPassword = $paypalParams['password'];
@@ -57,12 +56,9 @@ $form->addButtonCancel($plugin->get_lang('CancelOrder'), 'cancel');
 
 if ($form->validate()) {
     $formValues = $form->getSubmitValues();
-
     if (isset($formValues['cancel'])) {
         $plugin->cancelSale($sale['id']);
-
         unset($_SESSION['bc_sale_id']);
-
         header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/index.php');
         exit;
     }

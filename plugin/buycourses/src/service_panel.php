@@ -3,9 +3,6 @@
  * User Panel
  * @package chamilo.plugin.buycourses
  */
-/**
- * Initialization
- */
 
 $cidReset = true;
 
@@ -33,7 +30,6 @@ $serviceSales = $plugin->getServiceSale(null, $userInfo['user_id']);
 $saleList = [];
 
 foreach ($serviceSales as $sale) {
-
     $saleList[] = [
         'id' => $sale['id'],
         'name' => $sale['service']['name'],
@@ -44,7 +40,7 @@ foreach ($serviceSales as $sale) {
         'date_end' => api_format_date(api_get_local_time($sale['date_end']), DATE_TIME_FORMAT_LONG_24H),
         'currency' => $sale['currency'],
         'price' => $sale['price'],
-        'status' => $sale['status']  
+        'status' => $sale['status']
     ];
 }
 

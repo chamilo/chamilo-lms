@@ -664,20 +664,29 @@ class Auth
     {
         $em = Database::getManager();
         $qb = $em->createQueryBuilder();
+        $urlId = api_get_current_access_url_id();
 
-        $_sessions = $qb->select('s')->from('ChamiloCoreBundle:Session', 's');
+        $query = $qb->select('s')->from('ChamiloCoreBundle:Session', 's');
+
+        $qb->innerJoin(
+            'ChamiloCoreBundle:AccessUrlRelSession',
+            'ars',
+            \Doctrine\ORM\Query\Expr\Join::WITH,
+            's = ars.sessionId'
+        );
 
         if (!empty($limit)) {
-            $_sessions->setFirstResult($limit['start'])
+            $query->setFirstResult($limit['start'])
                 ->setMaxResults($limit['length']);
         }
 
-        $_sessions->where(
-            $qb->expr()->gt('s.nbrCourses', 0)
-        );
+        $query
+            ->where($qb->expr()->gt('s.nbrCourses', 0))
+            ->andWhere($qb->expr()->eq('ars.accessUrlId', $urlId))
+        ;
 
         if (!is_null($date)) {
-            $_sessions
+            $query
                 ->andWhere(
                     $qb->expr()->orX(
                         $qb->expr()->between(':date', 's.accessStartDate', 's.accessEndDate'),
@@ -692,7 +701,7 @@ class Auth
                 ->setParameter('date', $date);
         }
 
-        return $_sessions->getQuery()->getResult();
+        return $query->getQuery()->getResult();
     }
 
     /**
@@ -704,7 +713,9 @@ class Auth
     {
         $count = 0;
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+        $url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $date = Database::escape_string($date);
+        $urlId = api_get_current_access_url_id();
         $dateFilter = '';
         if (!empty($date)) {
             $dateFilter = <<<SQL
@@ -714,7 +725,11 @@ class Auth
                 s.access_end_date IS NOT NULL AND s.access_end_date > '$date')
 SQL;
         }
-        $sql = "SELECT COUNT(*) FROM $sessionTable s WHERE 1 = 1 $dateFilter";
+        $sql = "SELECT COUNT(*) 
+                FROM $sessionTable s
+                INNER JOIN $url u
+                ON (s.id = u.session_id)
+                WHERE u.access_url_id = $urlId $dateFilter";
         $res = Database::query($sql);
         if ($res !== false && Database::num_rows($res) > 0) {
             $count = current(Database::fetch_row($res));

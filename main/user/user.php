@@ -512,6 +512,7 @@ $table->set_header($header_nr++, get_lang('GroupSingle'), false);
 $hideFields = api_get_configuration_value('hide_user_field_from_list');
 
 if (!empty($hideFields)) {
+    $hideFields = $hideFields['fields'];
     foreach ($hideFields as $fieldToHide) {
         if (isset($indexList[$fieldToHide])) {
             $table->setHideColumn($indexList[$fieldToHide]);

@@ -188,7 +188,7 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // The default template that will be use in the system.
 //$_configuration['default_template'] = 'default'; // (main/template/default)
 // Hide fields in the main/user/user.php page
-//$_configuration['hide_user_field_from_list'] = array('username');
+//$_configuration['hide_user_field_from_list'] = ['fields' => ['username']];
 // Aspell Settings
 //$_configuration['aspell_bin'] = '/usr/bin/hunspell';
 //$_configuration['aspell_opts'] = '-a -d en_GB -H -i utf-8';

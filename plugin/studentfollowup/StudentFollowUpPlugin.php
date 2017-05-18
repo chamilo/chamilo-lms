@@ -67,7 +67,7 @@ class StudentFollowUpPlugin extends Plugin
             $fs->remove($pluginEntityPath);
         }
         $table = Database::get_main_table('sfu_post');
-        $sql = "DROP TABLE $table";
+        $sql = "DROP TABLE IF EXISTS $table";
         Database::query($sql);
     }
 

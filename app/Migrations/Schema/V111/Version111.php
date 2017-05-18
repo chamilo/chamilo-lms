@@ -239,8 +239,6 @@ class Version111 extends AbstractMigrationChamilo
                 $table = $schema->getTable('plugin_ticket_category_rel_user');
                 $this->addSql('RENAME TABLE plugin_ticket_category_rel_user TO ticket_category_rel_user');
                 $this->addSql('ALTER TABLE ticket_category_rel_user CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE category_id category_id INT DEFAULT NULL, CHANGE user_id user_id INT DEFAULT NULL;');
-                $this->addSql('CREATE INDEX IDX_5B8A98712469DE2 ON ticket_category_rel_user (category_id);');
-                $this->addSql('CREATE INDEX IDX_5B8A987A76ED395 ON ticket_category_rel_user (user_id);');
 
                 if ($table->hasIndex('fk_5b8a98712469de2')) {
                     $table->dropIndex('fk_5b8a98712469de2');
@@ -249,6 +247,9 @@ class Version111 extends AbstractMigrationChamilo
                 if ($table->hasIndex('fk_5b8a987a76ed395')) {
                     $table->dropIndex('fk_5b8a987a76ed395');
                 }
+
+                $this->addSql('CREATE INDEX IDX_5B8A98712469DE2 ON ticket_category_rel_user (category_id);');
+                $this->addSql('CREATE INDEX IDX_5B8A987A76ED395 ON ticket_category_rel_user (user_id);');
             } else {
                 $this->addSql('CREATE TABLE IF NOT EXISTS ticket_category_rel_user (id INT AUTO_INCREMENT NOT NULL, category_id INT DEFAULT NULL, user_id INT DEFAULT NULL, INDEX IDX_5B8A98712469DE2 (category_id), INDEX IDX_5B8A987A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
                 $this->addSql('ALTER TABLE ticket_category_rel_user ADD CONSTRAINT FK_5B8A98712469DE2 FOREIGN KEY (category_id) REFERENCES ticket_category (id)');

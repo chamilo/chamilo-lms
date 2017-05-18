@@ -10,7 +10,8 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
 /**
  * Class SessionManager
  *
- * This is the session library for Chamilo.
+ * This is the session library for Chamilo
+ * (as in courses>session, not as in PHP session)
  * All main sessions functions should be placed here.
  * This class provides methods for sessions management.
  * Include/require it in your code to use its features.

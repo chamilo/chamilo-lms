@@ -327,7 +327,7 @@ class Link extends Model
             $description = trim($_POST['description']);
 
             if (empty($category_title)) {
-                Display:: display_error_message(get_lang('GiveCategoryName'));
+                echo Display::return_message(get_lang('GiveCategoryName'), 'error');
                 $ok = false;
             } else {
                 // Looking for the largest order number for this category.

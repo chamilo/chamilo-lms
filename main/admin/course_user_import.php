@@ -208,7 +208,7 @@ if (count($errors) != 0) {
         $error_message .= '</li>';
     }
     $error_message .= '</ul>';
-    Display :: display_error_message($error_message, false);
+    echo Display::return_message($error_message, 'error', false);
 }
 
 // Displaying the form.

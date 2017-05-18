@@ -13,11 +13,11 @@ $rs_id = intval($_POST['rs_id']);
 api_protect_course_script();
 
 if (!api_is_allowed_to_edit()) {
-    Display::display_error_message(get_lang("DeniedAccess"));
+    echo Display::return_message(get_lang("DeniedAccess"), 'error');
 } else {
     $sql = "UPDATE ".Database::get_main_table('rp_reporte_semanas')."
             SET work_id = '$work_id', forum_id = '$forum_id'
             WHERE  id ='$rs_id'";
     Database::query($sql);
-    Display::display_confirmation_message(get_lang('Updated'));
+    echo Display::return_message(get_lang('Updated'), 'confirm');
 }

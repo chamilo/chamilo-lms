@@ -240,7 +240,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
                 }
                 // Code for text indexing.
                 if (isset($_POST['index_document']) && $_POST['index_document']) {
-                    //Display::display_normal_message(print_r($_POST));
+                    //echo Display::return_message(print_r($_POST));
                     $di = new ChamiloIndexer();
                     isset($_POST['language']) ? $lang = Database::escape_string($_POST['language']) : $lang = 'english';
                     $di->connectDb(NULL, NULL, $lang);

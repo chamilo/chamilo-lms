@@ -151,7 +151,7 @@ switch ($action) {
                 $values = $form->exportValues();
                 $res    = $obj->save($values);
                 if ($res) {
-                    Display::display_confirmation_message(get_lang('ItemAdded'));
+                    echo Display::return_message(get_lang('ItemAdded'), 'confirm');
                 }
             }
             $obj->display();
@@ -174,7 +174,7 @@ switch ($action) {
             if ($check) {
                 $values = $form->exportValues();
                 $res    = $obj->update($values);
-                Display::display_confirmation_message(get_lang('ItemUpdated'), false);
+                echo Display::return_message(get_lang('ItemUpdated'), 'confirm', false);
             }
             $obj->display();
         } else {
@@ -191,7 +191,7 @@ switch ($action) {
         if ($check) {
             $res = $obj->delete($_GET['id']);
             if ($res) {
-                Display::display_confirmation_message(get_lang('ItemDeleted'));
+                echo Display::return_message(get_lang('ItemDeleted'), 'confirm');
             }
         }
         $obj->display();

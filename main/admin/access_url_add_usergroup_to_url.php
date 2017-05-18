@@ -51,10 +51,10 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     if ($form_sent == 1) {
         if (count($userGroups) == 0 || count($urlList) == 0) {
-            Display :: display_error_message(get_lang('AtLeastOneUserGroupAndOneURL'));
+            echo Display::return_message(get_lang('AtLeastOneUserGroupAndOneURL'), 'error');
         } else {
             UrlManager::addUserGroupListToUrl($userGroups, $urlList);
-            Display::display_confirmation_message(get_lang('UserGroupBelongURL'));
+            echo Display::return_message(get_lang('UserGroupBelongURL'), 'confirm');
         }
     }
 }

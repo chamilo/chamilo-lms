@@ -349,7 +349,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
                 true,
                 $_GET['delete_before_date'].' 23:59:59'
             );
-            Display::display_confirmation_message(sprintf(get_lang('XResultsCleaned'), $count));
+            echo Display::return_message(sprintf(get_lang('XResultsCleaned'), $count), 'confirm');
         }
     }
 }

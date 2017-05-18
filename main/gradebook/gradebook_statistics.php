@@ -42,7 +42,7 @@ $displays = $displayscore->get_custom_score_display_settings();
 
 if (!$displayscore->is_custom() || empty($displays)) {
     if (api_is_platform_admin() || api_is_course_admin()) {
-        Display :: display_error_message(get_lang('PleaseEnableScoringSystem'), false);
+        echo Display::return_message(get_lang('PleaseEnableScoringSystem'), 'error', false);
     }
 } else {
     $allresults = Result::load(null, null, $eval[0]->get_id());

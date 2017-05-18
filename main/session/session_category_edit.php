@@ -73,7 +73,7 @@ $thisDay = date('d');
 // display the header
 Display::display_header($tool_name);
 if (!empty($return)) {
-    Display::display_error_message($return, false);
+    echo Display::return_message($return, 'error', false);
 }
 ?>
 <div class="row">

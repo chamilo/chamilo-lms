@@ -329,7 +329,7 @@ if (Security::check_token('post') && (
         if ((is_array($arr_course_origin) && count($arr_course_origin) > 0) && !empty($destination_session)) {
             //We need only one value
             if (count($arr_course_origin) > 1 || count($arr_course_destination) > 1) {
-                Display::display_error_message(get_lang('YouMustSelectACourseFromOriginalSession'));
+                echo Display::return_message(get_lang('YouMustSelectACourseFromOriginalSession'), 'error');
             } else {
                 //first element of the array
                 $course_code = $arr_course_origin[0];
@@ -342,10 +342,10 @@ if (Security::check_token('post') && (
                 $cr->restore($course_destinatination, $destination_session);
 
             }
-            Display::display_confirmation_message(get_lang('CopyFinished'));
+            echo Display::return_message(get_lang('CopyFinished'), 'confirm');
             display_form();
         } else {
-            Display::display_error_message(get_lang('YouMustSelectACourseFromOriginalSession'));
+            echo Display::return_message(get_lang('YouMustSelectACourseFromOriginalSession'), 'error');
             display_form();
         }
     }
@@ -400,8 +400,9 @@ if (Security::check_token('post') && (
             ).
             get_lang('Back').'</a></div>';
     } else {
-        Display::display_error_message(
-            get_lang('You must select a course from original session and select a destination session')
+        echo Display::return_message(
+            get_lang('You must select a course from original session and select a destination session'),
+            'error'
         );
         display_form();
     }

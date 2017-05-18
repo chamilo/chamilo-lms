@@ -46,7 +46,7 @@ Display::display_header($nameTools, get_lang('Exercise'));
 if (isset($_GET['message'])) {
     if (in_array($_GET['message'], array('ExerciseEdited'))) {
         $my_message_history = Security::remove_XSS($_GET['message']);
-        Display::display_confirmation_message(get_lang($my_message_history));
+        echo Display::return_message(get_lang($my_message_history), 'confirm');
     }
 }
 

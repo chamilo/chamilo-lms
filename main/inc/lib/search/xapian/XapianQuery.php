@@ -265,5 +265,5 @@ function display_xapian_error($xapian_error_message) {
         $message_error = get_lang('SearchOtherXapianError');
     }
     $display_message = get_lang('Error').' : '.$message_error;
-    Display::display_error_message($display_message);
+    echo Display::return_message($display_message, 'error');
 }

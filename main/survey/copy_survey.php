@@ -36,17 +36,17 @@ if (Security::check_token('post')) {
     // Copy the survey to the target course
     SurveyManager::empty_survey($surveyCopyId, $courseId);
     // Empty the copied survey
-    Display::display_confirmation_message(get_lang('SurveyCopied'));
+    echo Display::return_message(get_lang('SurveyCopied'), 'confirm');
 }
 
 $surveys = SurveyManager::get_surveys(api_get_course_id(), api_get_session_id());
 $courses = CourseManager::get_courses_list();
 $form = new FormValidator('copy_survey', 'post', 'copy_survey.php?'.api_get_cidreq());
 if (!$surveys) {
-    Display::display_error_message(get_lang('NoSurveyAvailable'));
+    echo Display::return_message(get_lang('NoSurveyAvailable'), 'error');
 }
 if (count($courses) <= 1) {
-    Display::display_error_message(get_lang('CourseListNotAvailable'));
+    echo Display::return_message(get_lang('CourseListNotAvailable'), 'error');
 }
 if ($surveys && count($courses) > 1) {
     // Surveys select

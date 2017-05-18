@@ -24,7 +24,7 @@ if (isset($_GET['recover_id']) && !empty($_GET['recover_id'])) {
     $sql = "INSERT INTO $person_tbl VALUES('$course_id', $recover_id, $user_id)";
     $result = Database::query($sql);
     if ($result) {
-        Display::display_confirmation_message(get_lang('Recovered'));
+        echo Display::return_message(get_lang('Recovered'), 'confirm');
     }
 }
 

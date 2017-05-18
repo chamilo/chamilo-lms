@@ -690,10 +690,10 @@ function handle_uploaded_document(
                             // Display success message to user
                             if ($output) {
                                 Display::addFlash(
-                                    Display::display_confirmation_message(
+                                    Display::return_message(
                                         get_lang('UplUploadSucceeded').'<br /> '.$documentTitle,
-                                        false,
-                                        true
+                                        'confirm',
+                                        false
                                     )
                                 );
                             }
@@ -1067,7 +1067,7 @@ function unzip_uploaded_document(
     }
 
     if (!DocumentManager::enough_space($realSize, $maxFilledSpace)) {
-        Display::display_error_message(get_lang('UplNotEnoughSpace'));
+        echo Display::return_message(get_lang('UplNotEnoughSpace'), 'error');
         return false;
     }
 

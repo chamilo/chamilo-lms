@@ -160,11 +160,11 @@ if (!empty($_GET['add'])) {
 <input type="hidden" name="formSent" value="1"/>
 <?php
 if (!empty($errorMsg)) {
-    Display::display_error_message($errorMsg); //main API
+    echo Display::return_message($errorMsg, 'error'); //main API
 }
 
 if (!empty($OkMsg)) {
-    Display::display_confirmation_message($OkMsg); //main API
+    echo Display::return_message($OkMsg, 'confirm'); //main API
 }
 
 /*

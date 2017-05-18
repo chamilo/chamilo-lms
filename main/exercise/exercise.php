@@ -186,11 +186,12 @@ if ($is_allowedToEdit) {
                         }
                     }
                 }
-                Display:: display_confirmation_message(
+                echo Display::return_message(
                     sprintf(
                         get_lang('XResultsCleaned'),
                         $quantity_results_deleted
-                    )
+                    ),
+                    'confirm'
                 );
             }
         }

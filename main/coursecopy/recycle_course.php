@@ -63,7 +63,7 @@ if (Security::check_token('post') && (
     }
     $cr = new CourseRecycler($course);
     $cr->recycle($recycle_type);
-    Display::display_confirmation_message(get_lang('RecycleFinished'));
+    echo Display::return_message(get_lang('RecycleFinished'), 'confirm');
 } elseif (Security::check_token('post') && (
         isset($_POST['recycle_option']) &&
         $_POST['recycle_option'] == 'select_items'

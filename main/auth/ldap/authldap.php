@@ -395,7 +395,7 @@ function ldap_get_users() {
 
     } else {
         if (count($ldap_query) != 0)
-            Display :: display_error_message(get_lang('LDAPConnectionError'));
+            echo Display::return_message(get_lang('LDAPConnectionError'), 'error');
         return array();
     }
 }
@@ -450,7 +450,7 @@ function ldap_get_user_data($from, $number_of_items, $column, $direction) {
                 $users[] = $user;
             }
         } else {
-            Display :: display_error_message(get_lang('NoUser'));
+            echo Display::return_message(get_lang('NoUser'), 'error');
         }
     }
     return $users;

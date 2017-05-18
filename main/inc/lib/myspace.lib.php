@@ -814,9 +814,9 @@ class MySpace
 
                 // Displaying a feedback message
                 if (!empty($_SESSION['additional_export_fields'])) {
-                    Display::display_confirmation_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>', false);
+                    echo Display::return_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>', 'confirm', false);
                 } else {
-                    Display::display_confirmation_message(get_lang('NoAdditionalFieldsWillBeExported'), false);
+                    echo Display::return_message(get_lang('NoAdditionalFieldsWillBeExported'), 'confirm', false);
                 }
             } else {
                 $form->display();

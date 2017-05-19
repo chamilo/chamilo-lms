@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
  * @package chamilo.exercise
@@ -16,15 +17,9 @@ if (api_is_platform_admin()) {
 
 require_once 'exercise_import.inc.php';
 
-//SQL table name
-
 $tbl_exercise = Database::get_course_table(TABLE_QUIZ_TEST);
 $tbl_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
 $tbl_rel_exercise_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-
-// tool libraries
-
-//Tool title
 
 $nameTools = get_lang('ImportExercise');
 $interbredcrump[] = array('url' => '../exercise.php', 'name' => get_lang('Exercises'));
@@ -35,17 +30,17 @@ $cmd = (isset($_REQUEST['cmd']) ? $_REQUEST['cmd'] : 'show_import');
 switch ($cmd) {
     case 'show_import':
         $display = '<p>'
-            .            get_lang('Imported exercises must consist of a zip or an XML file (IMS-QTI) and be compatible with your Claroline version.').'<br>'
-            .            '</p>'
-            .            '<form enctype="multipart/form-data" action="" method="post">'
-            .            '<input name="cmd" type="hidden" value="import" />'
-            .            '<input name="uploadedExercise" type="file" /><br><br>'
-            .            get_lang('Import exercise').' : '
-            .            '<input value="'.get_lang('Ok').'" type="submit" /> '
-            .            claro_html_button($_SERVER['PHP_SELF'], get_lang('Cancel'))
-            .            '<br><br>'
-            .            '<small>'.get_lang('Max file size').' :  2&nbsp;MB</small>'
-            .            '</form>';
+            .get_lang('Imported exercises must consist of a zip or an XML file (IMS-QTI) and be compatible with your Claroline version.').'<br>'
+            .'</p>'
+            .'<form enctype="multipart/form-data" action="" method="post">'
+            .'<input name="cmd" type="hidden" value="import" />'
+            .'<input name="uploadedExercise" type="file" /><br><br>'
+            .get_lang('Import exercise').' : '
+            .'<input value="'.get_lang('Ok').'" type="submit" /> '
+            .claro_html_button($_SERVER['PHP_SELF'], get_lang('Cancel'))
+            .'<br><br>'
+            .'<small>'.get_lang('Max file size').' :  2&nbsp;MB</small>'
+            .'</form>';
         break;
     case 'import':
         //include needed librabries for treatment
@@ -67,10 +62,10 @@ include api_get_path(SYS_INC_PATH).'/header.inc.php';
 Display::display_introduction_section(
     TOOL_QUIZ,
     array(
-		'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
+        'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
         'CreateDocumentDir' => '../../..'.api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/',
-		'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/'
-	)
+        'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/'
+    )
 );
 
 // Display Forms or dialog box(if needed)

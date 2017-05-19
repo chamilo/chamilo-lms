@@ -331,7 +331,7 @@ class ImsAnswerHotspot extends Answer
                         $type = 'poly';
                         $coords = str_replace(array(';', '|'), array(',', ','), $answer['hotspot_coord']);
                         break;
-                     case 'delineation':
+                    case 'delineation':
                         $type = 'delineation';
                         $coords = str_replace(array(';', '|'), array(',', ','), $answer['hotspot_coord']);
                         break;
@@ -366,7 +366,7 @@ class ImsAnswerHotspot extends Answer
         $out .= '    </correctResponse>'."\n";
         $out .= '  </responseDeclaration>'."\n";
 
-       return $out;
+        return $out;
     }
 }
 

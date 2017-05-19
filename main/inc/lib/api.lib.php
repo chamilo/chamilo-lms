@@ -1443,7 +1443,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
  * @param bool $loadExtraData
  * @param bool $loadOnlyVisibleExtraData Get the user extra fields that are visible
  * @param bool $loadAvatars turn off to improve performance and if avatars are not needed.
- * @param bool $enableCache if true check the apc cache
+ * @param bool $updateCache update apc cache if exists
  *
  * @return array $user_info user_id, lastname, firstname, username, email, etc
  * @author Patrick Cool <patrick.cool@UGent.be>
@@ -1457,11 +1457,11 @@ function api_get_user_info(
     $loadExtraData = false,
     $loadOnlyVisibleExtraData = false,
     $loadAvatars = true,
-    $enableCache = true
+    $updateCache = false
 ) {
     $apcVar = null;
     $user = false;
-    $cacheAvailable = api_get_configuration_value('apc') && $enableCache;
+    $cacheAvailable = api_get_configuration_value('apc');
 
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');
@@ -1470,11 +1470,15 @@ function api_get_user_info(
             if ($cacheAvailable === true) {
                 $apcVar = api_get_configuration_value('apc_prefix').'userinfo_'.$userFromSession['user_id'];
                 if (apcu_exists($apcVar)) {
+                    if ($updateCache) {
+                        apcu_store($apcVar, $userFromSession, 60);
+                    }
                     $user = apcu_fetch($apcVar);
                 } else {
                     $user = _api_format_user($userFromSession, $showPassword, $loadAvatars);
                     apcu_store($apcVar, $user, 60);
                 }
+
             } else {
                 $user = _api_format_user($userFromSession, $showPassword, $loadAvatars);
             }
@@ -1491,7 +1495,7 @@ function api_get_user_info(
     // Re-use user information if not stale and already stored in APCu
     if ($cacheAvailable === true) {
         $apcVar = api_get_configuration_value('apc_prefix').'userinfo_'.$user_id;
-        if (apcu_exists($apcVar)) {
+        if (apcu_exists($apcVar) && $updateCache == false) {
             $user = apcu_fetch($apcVar);
 
             return $user;
@@ -1531,7 +1535,8 @@ function api_get_user_info(
         }
         $user = _api_format_user($result_array, $showPassword, $loadAvatars);
     }
-    if (!empty($cacheAvailable)) {
+
+    if ($cacheAvailable === true) {
         apcu_store($apcVar, $user, 60);
     }
 

@@ -103,7 +103,7 @@ $user_data = api_get_user_info(
     false,
     false,
     false,
-    false
+    true
 );
 $array_list_key = UserManager::get_api_keys(api_get_user_id());
 $id_temp_key = UserManager::get_api_key_id(api_get_user_id(), 'dokeos');
@@ -706,7 +706,7 @@ if ($form->validate()) {
         false,
         false,
         false,
-        false
+        true
     );
     Session::write('_user', $userInfo);
 

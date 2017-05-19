@@ -1443,6 +1443,8 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
  * @param bool $loadExtraData
  * @param bool $loadOnlyVisibleExtraData Get the user extra fields that are visible
  * @param bool $loadAvatars turn off to improve performance and if avatars are not needed.
+ * @param bool $enableCache if true check the apc cache
+ *
  * @return array $user_info user_id, lastname, firstname, username, email, etc
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @author Julio Montoya
@@ -1454,11 +1456,12 @@ function api_get_user_info(
     $showPassword = false,
     $loadExtraData = false,
     $loadOnlyVisibleExtraData = false,
-    $loadAvatars = true
+    $loadAvatars = true,
+    $enableCache = true
 ) {
     $apcVar = null;
     $user = false;
-    $cacheAvailable = api_get_configuration_value('apc');
+    $cacheAvailable = api_get_configuration_value('apc') && $enableCache;
 
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');

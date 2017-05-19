@@ -1688,7 +1688,6 @@ class Agenda
             } else {
                 $where_condition = "( ip.to_user_id = $user_id OR ip.to_user_id IS NULL OR (ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ) ";
             }
-            //var_dump($where_condition);
 
             if (empty($session_id)) {
                 $sessionCondition = "
@@ -1730,11 +1729,12 @@ class Agenda
                 if (empty($user_id)) {
                     $where_condition = '';
                 } else {
-                    $where_condition = " (ip.to_user_id = ".$user_id.") AND ip.to_group_id IS NULL AND ";
+                    $where_condition = " (ip.to_user_id = ".$user_id.") AND (ip.to_group_id IS NULL OR ip.to_group_id = 0) AND ";
                 }
                 $visibilityCondition = " (ip.visibility IN ('1', '0')) AND ";
             } else {
-                $where_condition = " ( (ip.to_user_id = ".api_get_user_id().") AND ip.to_group_id IS NULL) AND ";
+                // Show my items and also items sent to everyone
+                $where_condition = " ( (ip.to_user_id = ".api_get_user_id()." OR (ip.to_user_id = 0 or ip.to_user_id is NULL)) AND (ip.to_group_id IS NULL OR ip.to_group_id = 0)) AND ";
             }
 
             if (empty($session_id)) {

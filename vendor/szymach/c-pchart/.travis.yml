@@ -1,0 +1,29 @@
+language: php
+
+cache:
+  directories:
+    - bin
+    - vendor
+
+sudo: false
+
+matrix:
+    include:
+        - php: 5.4
+        - php: 5.5
+        - php: 5.6
+        - php: 7.0
+        - php: 7.1
+
+
+before_install:
+    - phpenv config-rm xdebug.ini
+    - composer self-update -n
+
+before_script:
+    - composer install -n --prefer-dist -v
+    - nohup php -S localhost:8080 -t features/fixtures/web > server.log 2>&1 &
+
+script:
+    - bin/phpcs --standard=PSR2 --encoding=UTF-8 --ignore="*.db,*.color,*.ttf" src/
+    - bin/behat --no-snippets --verbose --profile=travis -vvv

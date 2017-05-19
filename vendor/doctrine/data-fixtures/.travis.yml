@@ -1,0 +1,30 @@
+language: php
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+php:
+  - 5.6
+  - 7.0
+  - nightly
+  - hhvm
+
+matrix:
+  allow_failures:
+    - php: nightly
+
+services: mongodb
+
+before_install:
+  - "if [[ $TRAVIS_PHP_VERSION != 'hhvm' && $TRAVIS_PHP_VERSION != '7.0' ]]; then echo 'extension = mongo.so' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi"
+
+before_script:
+  - composer self-update
+  - composer install --prefer-source
+  - "if [[ $TRAVIS_PHP_VERSION != 'hhvm' && $TRAVIS_PHP_VERSION != '7.0' ]]; then composer require 'doctrine/mongodb-odm' '*@beta'; fi"
+
+script:
+  - ./vendor/bin/phpunit -v

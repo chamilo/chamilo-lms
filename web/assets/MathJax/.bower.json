@@ -1,0 +1,27 @@
+{
+  "name": "MathJax",
+  "main": "./MathJax.js",
+  "homepage": "http://www.mathjax.org/",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "keywords": [
+    "math",
+    "js",
+    "LaTeX",
+    "MathML",
+    "AsciiMath"
+  ],
+  "version": "2.5.3",
+  "_release": "2.5.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.5.3",
+    "commit": "ba9afeb5a743249acdea17540b48b14ebc95dbe4"
+  },
+  "_source": "https://github.com/mathjax/MathJax.git",
+  "_target": "2.5.*",
+  "_originalSource": "MathJax"
+}

@@ -1,0 +1,124 @@
+/*!
+ * CSS BLUE - v. 2.0
+ * 2015 - Alex Aragón (aragonc@beeznest.com)
+ * OpenClipArt ilustration (https://openclipart.org/detail/181538/old-fashioned-fishing-boat)
+ * Licensed GPL
+ * Based on Bootstrap
+*/
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Open Sans Light'), local('OpenSans-Light'), url(../chamilo/fonts/OpenSans-Light.woff2) format('woff2'), url(../chamilo/fonts/OpenSans-Light.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(../chamilo/fonts/OpenSans.woff2) format('woff2'), url(../chamilo/fonts/OpenSans.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(../chamilo/fonts/OpenSans-Semibold.woff2) format('woff2'), url(../chamilo/fonts/OpenSans-Semibold.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(../chamilo/fonts/OpenSans-Bold.woff2) format('woff2'), url(../chamilo/fonts/OpenSans-Bold.woff) format('woff');
+}
+html {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+  line-height: 1.72222;
+}
+a{
+  color: #185B8E;
+}
+a:hover{
+  color: #3F9BC7;
+}
+header{
+  background: url("images/bg-blue.png") repeat-x center -25px;
+}
+.navbar-default {
+background: #0099c0;
+background: -moz-linear-gradient(top, #0099c0 0%, #046e89 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0099c0), color-stop(100%,#046e89));
+background: -webkit-linear-gradient(top, #0099c0 0%,#046e89 100%);
+background: -o-linear-gradient(top, #0099c0 0%,#046e89 100%);
+background: -ms-linear-gradient(top, #0099c0 0%,#046e89 100%);
+background: linear-gradient(to bottom, #0099c0 0%,#046e89 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0099c0', endColorstr='#046e89',GradientType=0 );
+border-color: #0099c0;
+border-radius: 0px;
+}
+.navbar-default .navbar-brand {
+  color: #ffffff;
+}
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+  color: #ededed;
+}
+.navbar-default .navbar-text {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+  color: #ededed;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > .divider {
+  background-color: #0099c0;
+}
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+  color: #ededed;
+  background-color: #006a84;
+}
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+  color: #ededed;
+  background-color: #006a84;
+}
+.navbar-default .navbar-toggle {
+  border-color: #006a84;
+}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+  background-color: #006a84;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #ffffff;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #ffffff;
+}
+.navbar-default .navbar-link {
+  color: #ffffff;
+}
+.navbar-default .navbar-link:hover {
+  color: #ededed;
+}
+.breadcrumb{
+  background: #afdde9;
+  color: #006A84;
+}
+.nav li a:hover{
+    background: transparent;
+}
+footer.bgfooter{
+  background: #004455;
+  color: #37abc8;
+}
+footer.bgfooter a{
+  color: #ffffff;
+}
+footer.bgfooter a:hover{
+  color: #CCC;
+}

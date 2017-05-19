@@ -1,0 +1,233 @@
+{% extends 'WebProfilerBundle:Profiler:layout.html.twig' %}
+
+{% block toolbar %}
+    {% set profiler_markup_version = profiler_markup_version|default(1) %}
+
+    <div class="sf-toolbar-block">
+        {% if profiler_markup_version == 1 %}
+            <div class="sf-toolbar-icon">
+                <a href="{{ path('_profiler', { 'token': token, 'panel': name }) }}">
+                    {# fake image span #}<span style="width:0px; height: 28px; vertical-align: middle;"></span>
+                    <span class="sf-toolbar-status">{{ collector.getTotalBlock() }}</span> blocks
+                </a>
+            </div>
+        {% else %}
+            <a href="{{ path('_profiler', { 'token': token, 'panel': name }) }}">
+                <div class="sf-toolbar-icon">
+                    {{ include('@SonataBlock/Profiler/icon.svg') }}
+                    <span class="sf-toolbar-value">{{ collector.getTotalBlock() }}</span>
+                </div>
+            </a>
+        {% endif %}
+
+        <div class="sf-toolbar-info">
+            <div class="sf-toolbar-info-piece">
+                <b>Real Blocks</b>
+                <span>{{ collector.realBlocks|length }}</span>
+            </div>
+            <div class="sf-toolbar-info-piece">
+                <b>Containers</b>
+                <span>{{ collector.containers|length }}</span>
+            </div>
+            {% if profiler_markup_version == 1 %}
+                {# don't show the total number of blocks in the info in the new design,
+                it's already shown in the toolbar #}
+                <div class="sf-toolbar-info-piece">
+                    <b>Total Blocks</b>
+                    <span>{{ collector.getTotalBlock() }}</span>
+                </div>
+            {% endif %}
+            <div class="sf-toolbar-info-piece">
+                {% if profiler_markup_version == 1 %}<hr />{% endif %}
+                <b>Events</b>
+                <span>{{ collector.events|length }}</span>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block menu %}
+    <span class="label">
+        <span class="icon">
+            {{ include('@SonataBlock/Profiler/icon.svg') }}
+        </span>
+        <strong>Blocks{% if collector.events|length > 0 %}<strong>*</strong>{% endif %}</strong>
+        <span class="count">
+            <span>{{ collector.getTotalBlock() }}</span>
+        </span>
+    </span>
+{% endblock %}
+
+{% block panel %}
+    {# NEXT_MAJOR : remove this when Symfony Requirement will be bumped to 2.8+ #}
+    {% set profiler_markup_version = profiler_markup_version|default(1) %}
+
+    <h2>Events Blocks</h2>
+    <table>
+        <tr>
+            <th>code name</th>
+            <th>listener tag</th>
+            <th>Block types</th>
+            <th>Listeners</th>
+        </tr>
+
+        {% for event in collector.events %}
+            <tr>
+                <td>{{ event['template_code'] }}</td>
+                <td>{{ event['event_name'] }}</td>
+                <td>
+                    {% for type in event['blocks'] %}
+                        {{ type.1 }} (id:{{ type.0 }})
+                    {% else %}
+                        no block returned
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for listener in event['listeners'] %}
+                        {{ listener }}
+                    {% else %}
+                        no listener registered
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Real Blocks</h2>
+    {% set blocks = collector.realBlocks %}
+    {% if profiler_markup_version == 1 %}
+        {{ block('table') }}
+    {% else %}
+        <div class="tab-content">
+            {{ block('table_v2') }}
+        </div>
+    {% endif %}
+
+    <h2>Containers Blocks</h2>
+    {% set blocks = collector.containers %}
+    {% if profiler_markup_version == 1 %}
+        {{ block('table') }}
+    {% else %}
+        <div class="tab-content">
+            {{ block('table_v2') }}
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block table %}
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Mem. (diff)</th>
+            <th>Mem. (peak)</th>
+            <th>Duration</th>
+        </tr>
+        {% for id, block in blocks %}
+
+            {% set rowspan = 1 %}
+            {% if block.cache.handler %}
+                {% set rowspan = rowspan + 1 %}
+            {% endif %}
+
+            {% if block.assets.js|length > 0 or block.assets.css|length > 0 %}
+                {% set rowspan = rowspan + 1 %}
+            {% endif %}
+            <tr>
+                <th style="vertical-align: top" rowspan="{{ rowspan }}">{{ id }}</th>
+                <td>{{ block.name }}</td>
+                <td>{{ block.type }}</td>
+                <td>{{ ((block.memory_end-block.memory_start)/1000)|number_format(0) }} Kb</td>
+                <td>{{ (block.memory_peak/1000)|number_format(0) }} Kb</td>
+                <td>{{ block.duration|number_format(2) }} ms</td>
+            </tr>
+
+            {% if block.cache.handler %}
+                <tr style="vertical-align: top">
+                    <td colspan="3">
+                        Cache Keys: <pre>{{ block.cache.keys|json_encode() }}</pre> <br />
+                        Contextual Keys: <pre>{{ block.cache.contextual_keys|json_encode() }}</pre>
+                    </td>
+                    <td colspan="2">
+                        TTL: {{ block.cache.ttl }}s. <br />
+                        Lifetime: {{ block.cache.lifetime }}s. <br />
+                        Backend: {{ block.cache.handler }} <br />
+                        Loading from cache: {% if block.cache.from_cache %}YES{% else %}NO{% endif %} <br />
+                    </td>
+                </tr>
+            {% endif %}
+
+            {% if block.assets.js|length > 0 or block.assets.css|length > 0  %}
+                <tr>
+                    <td colspan="5">
+                        Javascripts: <pre>{{ block.assets.js|json_encode() }}</pre><br />
+                        Stylesheets: <pre>{{ block.assets.css|json_encode() }}</pre>
+                    </td>
+                </tr>
+            {% endif %}
+
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block table_v2 %}
+    {% for id, block in blocks %}
+        <table>
+            <thead>
+            <tr>
+                <th colspan="2">Block {{ id }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th>Name</th>
+                <td>{{ block.name }}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>{{ block.type }}</td>
+            </tr>
+            <tr>
+                <th>Mem. diff / Mem. peak / Duration</th>
+                <td>{{ ((block.memory_end-block.memory_start)/1000)|number_format(0) }} Kb / {{ (block.memory_peak/1000)|number_format(0) }} Kb / {{ block.duration|number_format(2) }} ms</td>
+            </tr>
+
+            {% if block.cache.handler %}
+                <tr>
+                    <th>Cache backend</th>
+                    <td>
+                        {{ block.cache.handler }} - Loading from cache: {% if block.cache.from_cache %}YES{% else %}NO{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Cache TTL / Lifetime</th>
+                    <td>
+                        {{ block.cache.ttl }}s. / {{ block.cache.lifetime }}s
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Cache Informations
+                    </th>
+                    <td>
+                        Cache Keys: <pre>{{ block.cache.keys|json_encode() }}</pre> <br />
+                        Contextual Keys: <pre>{{ block.cache.contextual_keys|json_encode() }}</pre> <br />
+                    </td>
+                </tr>
+            {% endif %}
+
+            {% if block.assets.js|length > 0 or block.assets.css|length > 0  %}
+                <tr>
+                    <th>Assets</th>
+                    <td>
+                        Javascripts: <pre>{{ block.assets.js|json_encode() }}</pre><br />
+                        Stylesheets: <pre>{{ block.assets.css|json_encode() }}</pre>
+                    </td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    {% endfor %}
+{% endblock %}

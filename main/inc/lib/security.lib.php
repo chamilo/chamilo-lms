@@ -58,6 +58,10 @@ class Security
         $true_path = str_replace("\\", '/', realpath($abs_path));
         $checker_path = str_replace("\\", '/', realpath($checker_path));
 
+        if (empty($checker_path)) {
+            return false;
+        }
+
         $found = strpos($true_path.'/', $checker_path);
 
         if ($found === 0) {

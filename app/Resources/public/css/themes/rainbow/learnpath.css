@@ -5,13 +5,13 @@
     color: #000;
 }
 .scorm_item_level_1{
- padding: 0 2.5em 0 1.5em;   
+ padding: 0 2.5em 0 1.5em;
 }
 .scorm_item_level_0{
- padding: 0 2.5em 0 0; 
+ padding: 0 2.5em 0 0;
 }
 .scorm_item_level_2{
- padding: 0 2.5em 0 3em;   
+ padding: 0 2.5em 0 3em;
 }
 .expand .fa{
     background-color: #96BD0D;
@@ -37,7 +37,14 @@
 .lp-view-include-breadcrumb {
   background-color: #ffffff;
 }
-
+.title-learnpath{
+    padding-left: 20px;
+    padding-top: 10px;
+}
+.title-learnpath h4{
+    color: #162a83;
+    font-weight: bold;
+}
 div.text {
 	margin-left : 6;
 	margin-right : 6;
@@ -49,7 +56,7 @@ span.messagesmall {
 	font-style : italic;
 	color : Red;
 }
-/* newscorm/learnpath */ 
+/* newscorm/learnpath */
 
 div.lp_actions {
 	background:#F8F8F8;

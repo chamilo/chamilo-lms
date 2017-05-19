@@ -31,7 +31,7 @@
                                     </div>
                                 {% endif %}
                                 {% if gamification_mode == 1 %}
-                                    <!--- gamification -->    
+                                    <!--- gamification -->
                                     <div id="scorm-gamification">
                                         <div class="row">
                                             <div class="col-xs-6">
@@ -59,8 +59,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                   <!--- end gamification -->          
-                                {% else %}         
+                                   <!--- end gamification -->
+                                {% else %}
                                     <div id="progress_bar">
                                         {{ progress_bar }}
                                     </div>
@@ -103,6 +103,9 @@
             {# right zone #}
             <div id="learning_path_right_zone" class="content-scorm">
                 <div class="lp-view-zone-container">
+                    <div class="title-learnpath pull-left">
+                        <h4>{{ lp_title_scorm }}</h4>
+                    </div>
                     <div id="lp_navigation_elem" class="navegation-bar pull-right text-right">
                         <a href="#" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">
                             {% if lp_mode == 'embedframe' %}
@@ -144,7 +147,7 @@
                                 </div>
                             </div>
                             <div role="tabpanel" class="tab-pane" id="lp-view-forum">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -152,7 +155,17 @@
             </div>
             {# end right Zone #}
 </div>
-
+{% if data_panel is not empty %}
+<script type="text/javascript">
+    $('#scorm-panel .panel .status-heading').on("click", function() {
+        $(this).siblings().find(".panel-heading").removeClass("on");
+        $(this).find(".panel-heading").toggleClass("on");
+    });
+    $('.section-list .list-item').click( function() {
+        $(this).addClass('active').siblings().removeClass('active');
+    });
+</script>
+{% endif %}
 <script>
     (function () {
         var LPViewUtils = {
@@ -193,7 +206,7 @@
                 $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
                 $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
             });
-            
+
             {% endif %}
 
             $('.lp-view-tabs').on('click', '.disabled', function (e) {

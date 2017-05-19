@@ -110,6 +110,7 @@ if ($time_control && !empty($clock_expired_time) || isset($exerciseStatus['exe_i
     $label = get_lang('ContinueTest');
 }
 
+$msgStatus = null;
 if (isset($exerciseStatus['exe_id'])) {
     $msgStatus = get_lang('YouTriedToResolveThisExerciseEarlier');
 }

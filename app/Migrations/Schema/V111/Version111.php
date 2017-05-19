@@ -257,7 +257,11 @@ class Version111 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE ticket_message_attachments DROP message_attch_id, CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE message_id message_id INT DEFAULT NULL, CHANGE ticket_id ticket_id INT DEFAULT NULL, CHANGE filename filename LONGTEXT NOT NULL, CHANGE size size INT NOT NULL, CHANGE sys_insert_user_id sys_insert_user_id INT NOT NULL, CHANGE sys_insert_datetime sys_insert_datetime DATETIME NOT NULL, CHANGE sys_lastedit_user_id sys_lastedit_user_id INT DEFAULT NULL;');
             $this->addSql('ALTER TABLE ticket_message_attachments ADD CONSTRAINT FK_70BF9E26700047D2 FOREIGN KEY (ticket_id) REFERENCES ticket_ticket (id);');
             $this->addSql('CREATE INDEX IDX_70BF9E26700047D2 ON ticket_message_attachments (ticket_id);');
-            $this->addSql('ALTER TABLE ticket_message_attachments RENAME INDEX ticket_message_id_fk TO IDX_70BF9E26537A1329;');
+
+            $table = $schema->getTable('ticket_message_attachments');
+            if ($table->hasIndex('ticket_message_id_fk')) {
+                $table->renameIndex('ticket_message_id_fk', 'IDX_70BF9E26537A1329');
+            }
 
             $this->addSql('UPDATE ticket_priority SET sys_insert_user_id = 1 WHERE sys_insert_user_id IS NULL');
             $this->addSql('UPDATE ticket_priority SET sys_insert_datetime = NOW() WHERE sys_insert_datetime IS NULL');
@@ -289,7 +293,11 @@ class Version111 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_EDE2C768613FECDF ON ticket_ticket (session_id);');
             $this->addSql('CREATE INDEX IDX_EDE2C7686BF700BD ON ticket_ticket (status_id);');
 
-            $this->addSql('ALTER TABLE ticket_ticket RENAME INDEX fk_ticket_priority TO IDX_EDE2C768497B19F9;');
+            $table = $schema->getTable('ticket_ticket');
+            if ($table->hasIndex('fk_ticket_priority')) {
+                $table->renameIndex('fk_ticket_priority', 'IDX_EDE2C768497B19F9');
+            }
+
             $this->addSql('ALTER TABLE ticket_assigned_log CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE ticket_id ticket_id INT DEFAULT NULL, CHANGE user_id user_id INT DEFAULT NULL, CHANGE assigned_date assigned_date DATETIME NOT NULL, CHANGE sys_insert_user_id sys_insert_user_id INT NOT NULL;');
             $this->addSql('ALTER TABLE ticket_assigned_log ADD CONSTRAINT FK_54B65868700047D2 FOREIGN KEY (ticket_id) REFERENCES ticket_ticket (id);');
 
@@ -297,11 +305,20 @@ class Version111 extends AbstractMigrationChamilo
 
             $this->addSql('ALTER TABLE ticket_assigned_log ADD CONSTRAINT FK_54B65868A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);');
             $this->addSql('CREATE INDEX IDX_54B65868A76ED395 ON ticket_assigned_log (user_id);');
-            $this->addSql('ALTER TABLE ticket_assigned_log RENAME INDEX fk_ticket_assigned_log TO IDX_54B65868700047D2;');
+
+            $table = $schema->getTable('ticket_assigned_log');
+            if ($table->hasIndex('fk_ticket_assigned_log')) {
+                $table->renameIndex('fk_ticket_assigned_log', 'IDX_54B65868700047D2');
+            }
 
             $this->addSql('ALTER TABLE ticket_message DROP message_id, CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE ticket_id ticket_id INT DEFAULT NULL, CHANGE subject subject VARCHAR(255) DEFAULT NULL, CHANGE message message LONGTEXT DEFAULT NULL, CHANGE status status VARCHAR(255) NOT NULL, CHANGE ip_address ip_address VARCHAR(255) NOT NULL, CHANGE sys_insert_user_id sys_insert_user_id INT NOT NULL, CHANGE sys_insert_datetime sys_insert_datetime DATETIME NOT NULL, CHANGE sys_lastedit_user_id sys_lastedit_user_id INT DEFAULT NULL;');
             $this->addSql('ALTER TABLE ticket_message ADD CONSTRAINT FK_BA71692D700047D2 FOREIGN KEY (ticket_id) REFERENCES ticket_ticket (id);');
-            $this->addSql('ALTER TABLE ticket_message RENAME INDEX fk_tick_message TO IDX_BA71692D700047D2;');
+
+             $table = $schema->getTable('ticket_message');
+            if ($table->hasIndex('fk_tick_message')) {
+                $table->renameIndex('fk_tick_message', 'IDX_BA71692D700047D2');
+            }
+
             $this->addSql('ALTER TABLE ticket_ticket CHANGE category_id category_id INT DEFAULT NULL;');
             $this->addSql('ALTER TABLE ticket_ticket ADD CONSTRAINT FK_EDE2C76812469DE2 FOREIGN KEY (category_id) REFERENCES ticket_category (id);');
             $this->addSql('CREATE INDEX IDX_EDE2C76812469DE2 ON ticket_ticket (category_id);');

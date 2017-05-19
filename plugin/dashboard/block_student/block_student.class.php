@@ -181,7 +181,7 @@ class BlockStudent extends Block
                 }
 
                 $courses_by_user = CourseManager::get_courses_list_by_user_id($student_id, true);
-                $evaluations_avg  = 0;
+                $evaluations_avg = 0;
                 $score = $weight = 0;
                 foreach ($courses_by_user as $course) {
                     $course_code = $course['code'];

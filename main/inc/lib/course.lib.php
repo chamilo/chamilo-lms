@@ -4862,7 +4862,7 @@ class CourseManager
 
             }
 
-            if ($access_link && in_array('enter',$access_link) ||
+            if ($access_link && in_array('enter', $access_link) ||
                 $course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
             ) {
                 $my_course['go_to_course_button'] = Display::url(

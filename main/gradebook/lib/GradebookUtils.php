@@ -876,7 +876,9 @@ class GradebookUtils
             }
             $user_results = $flatviewtable->datagen->get_data_to_graph2(false);
             foreach ($user_results as $user_result) {
-                $total[$user_result[count($user_result) - 1][1]]++;
+                $item = $user_result[count($user_result) - 1];
+
+                $total[$item[1]]++;
             }
         }
 
@@ -966,7 +968,7 @@ class GradebookUtils
             'course_code' => $course_code,
             'add_signatures' => ['Drh', 'Teacher', 'Date']
         );
-
+exit;
         $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
         ob_start();
         $pdf = new PDF($page_format, $page_format, $pdfParams);

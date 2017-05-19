@@ -630,7 +630,7 @@ class FlatViewDataGenerator
             $score = $item->calc_score($user_id);
 
             $real_score = $score;
-            $divide = isset($score[1]) && !empty($score[1]) ? $score[1] : 1;
+            $divide = isset($score[1]) && !empty($score[1]) && $score[1] > 0 ? $score[1] : 1;
 
             // Sub cat weight
             //$sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];

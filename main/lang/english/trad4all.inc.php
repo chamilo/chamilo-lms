@@ -7040,7 +7040,7 @@ $LdapDescriptionComment = "    <div class=\"alert alert-info\">
     <p>Array values are &lt;chamilo_field&gt; =&gt; &gt;ldap_field&gt;</p><p>
     </p>
     <h4>II. Activate LDAP authentication </h4>
-    <h5>Edit file main/inc/conf/configuration.php </h5>
+    <h5>Edit file app/config/configuration.php </h5>
     <p>-&gt; Uncomment lines:</p>
     <ul>
         <li>

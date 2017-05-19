@@ -28,17 +28,6 @@
                         </a>
                     {% endif %}
 
-                    {% if post.children.count %}
-                        <h3>Children</h3>
-                        {% for child in post.children %}
-                            <p>
-                                <a href="{{ post_url }}&post_id={{ child.id }}">
-                                {{ child.title }}
-                                </a>
-                            </p>
-                        {% endfor %}
-                    {% endif %}
-
                     {% if related_posts %}
                         <h3>Related</h3>
                          {% for post in related_posts %}
@@ -71,6 +60,15 @@
             </div>
         </div>
     </div>
+    {% if post.children.count %}
+        {% for child in post.children %}
+            {{ _self.post_template('all', child) }}
+
+                {#<a href="{{ post_url }}&post_id={{ child.id }}">#}
+                {#{{ child.title }}#}
+                {#</a>#}
+        {% endfor %}
+    {% endif %}
 {% endif %}
 {% endmacro %}
 

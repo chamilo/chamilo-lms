@@ -4764,6 +4764,10 @@ div#chat-remote-video video {
     padding: 5px;
     border-radius: 5px;
 }
+.grid-courses .items .code-title{
+  font-size: 10px;
+  font-weight: normal;
+}
 .toolbar-edit{
     padding: 5px;
     display: inline-block;
@@ -4889,7 +4893,7 @@ div#chat-remote-video video {
 	padding: 0;
 }
 .grid-courses .items .image {
-    height: 174px;
+    /* min-height: 175px; */
     position: relative;
 }
 .grid-courses .items .image .pin{

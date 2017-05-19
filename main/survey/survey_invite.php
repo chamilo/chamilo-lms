@@ -74,7 +74,7 @@ $sql = "SELECT * FROM $table_survey
         WHERE c_id = $course_id AND code='".Database::escape_string($survey_data['code'])."'";
 $result = Database::query($sql);
 if (Database::num_rows($result) > 1) {
-    Display::display_warning_message(get_lang('IdenticalSurveycodeWarning'));
+    echo Display::return_message(get_lang('IdenticalSurveycodeWarning'), 'warning');
 }
 
 // Invited / answered message

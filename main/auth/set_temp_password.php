@@ -46,7 +46,7 @@ if ($form->validate()) {
         header('Location: '.api_get_course_url($course_info['code'], $session_id));
         exit;
     } else {
-        $tpl->assign('error_message', Display::display_error_message(get_lang('CourseRegistrationCodeIncorrect'), true, true));
+        $tpl->assign('error_message', Display::return_message(get_lang('CourseRegistrationCodeIncorrect'), 'error', true));
     }
 }
 

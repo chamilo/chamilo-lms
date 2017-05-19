@@ -63,7 +63,7 @@ if (Security::check_token('post') && (
     }
     $cr = new CourseRecycler($course);
     $cr->recycle($recycle_type);
-    Display::display_confirmation_message(get_lang('RecycleFinished'));
+    echo Display::return_message(get_lang('RecycleFinished'), 'confirm');
 } elseif (Security::check_token('post') && (
         isset($_POST['recycle_option']) &&
         $_POST['recycle_option'] == 'select_items'
@@ -83,7 +83,7 @@ if (Security::check_token('post') && (
     if (!$course->has_resources()) {
         echo get_lang('NoResourcesToRecycle');
     } else {
-        Display::display_warning_message(get_lang('RecycleWarning'), false);
+        echo Display::return_message(get_lang('RecycleWarning'), 'warning', false);
         $form = new FormValidator('recycle_course', 'post', api_get_self().'?'.api_get_cidreq());
         $form->addElement('header', get_lang('SelectOptionForBackup'));
         $form->addElement('radio', 'recycle_option', null, get_lang('FullRecycle'), 'full_backup');

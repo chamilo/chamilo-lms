@@ -88,7 +88,7 @@ class MySpace
     {
         $archive_path = api_get_path(SYS_ARCHIVE_PATH);
         $archive_url = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive=';
-
+        $message = '';
         if (!$open = fopen($archive_path.$file_name, 'w+')) {
             $message = get_lang('noOpen');
         } else {
@@ -210,7 +210,7 @@ class MySpace
      * Creates a small table in the last column of the table with the user overview
      *
      * @param integer $user_id the id of the user
-     * @param array $url_params additonal url parameters
+     * @param array $url_params additional url parameters
      * @param array $row the row information (the other columns)
      * @return string html code
      */
@@ -434,36 +434,36 @@ class MySpace
         }
 
         $result_coaches = Database::query($sqlCoachs);
-        $total_no_coaches = Database::num_rows($result_coaches);
+        //$total_no_coaches = Database::num_rows($result_coaches);
         $global_coaches = array();
         while ($coach = Database::fetch_array($result_coaches)) {
             $global_coaches[$coach['user_id']] = $coach;
         }
 
-        $sql_session_coach = 'SELECT session.id_coach, u.id as user_id, lastname, firstname, MAX(login_date) as login_date
-                                FROM '.$tbl_user.' u ,'.$tbl_sessions.' as session,'.$tbl_track_login.'
+        $sql_session_coach = "SELECT session.id_coach, u.id as user_id, lastname, firstname, MAX(login_date) as login_date
+                                FROM $tbl_user u , $tbl_sessions as session, $tbl_track_login
                                 WHERE id_coach = u.id AND login_user_id = u.id
                                 GROUP BY u.id
-                                ORDER BY login_date '.$tracking_direction;
+                                ORDER BY login_date $tracking_direction";
 
         if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $sql_session_coach = 'SELECT session.id_coach, u.id as user_id, lastname, firstname, MAX(login_date) as login_date
-					FROM '.$tbl_user.' u ,'.$tbl_sessions.' as session, '.$tbl_track_login.' , '.$tbl_session_rel_access_url.' as session_rel_url
+                $sql_session_coach = "SELECT session.id_coach, u.id as user_id, lastname, firstname, MAX(login_date) as login_date
+					FROM $tbl_user u , $tbl_sessions as session, $tbl_track_login , $tbl_session_rel_access_url as session_rel_url
 					WHERE
 					    id_coach = u.id AND
 					    login_user_id = u.id  AND
-					    access_url_id = '.$access_url_id.' AND
+					    access_url_id = $access_url_id AND
 					    session_rel_url.session_id = session.id
 					GROUP BY  u.id
-					ORDER BY login_date '.$tracking_direction;
+					ORDER BY login_date $tracking_direction";
             }
         }
 
         $result_sessions_coach = Database::query($sql_session_coach);
-        $total_no_coaches += Database::num_rows($result_sessions_coach);
+        //$total_no_coaches += Database::num_rows($result_sessions_coach);
         while ($coach = Database::fetch_array($result_sessions_coach)) {
             $global_coaches[$coach['user_id']] = $coach;
         }
@@ -753,6 +753,7 @@ class MySpace
     public static function display_user_overview_export_options()
     {
         $message = '';
+        $defaults = [];
         // include the user manager and formvalidator library
         if (isset($_GET['export']) && $_GET['export'] == 'options') {
             // get all the defined extra fields
@@ -786,7 +787,7 @@ class MySpace
                 }
                 $form->setDefaults($defaults);
             } else {
-                $form->addElement('html', Display::display_warning_message(get_lang('ThereAreNotExtrafieldsAvailable')));
+                $form->addElement('html', Display::return_message(get_lang('ThereAreNotExtrafieldsAvailable'), 'warning'));
             }
 
             if ($form->validate()) {
@@ -813,9 +814,9 @@ class MySpace
 
                 // Displaying a feedback message
                 if (!empty($_SESSION['additional_export_fields'])) {
-                    Display::display_confirmation_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>', false);
+                    echo Display::return_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>', 'confirm', false);
                 } else {
-                    Display::display_confirmation_message(get_lang('NoAdditionalFieldsWillBeExported'), false);
+                    echo Display::return_message(get_lang('NoAdditionalFieldsWillBeExported'), 'confirm', false);
                 }
             } else {
                 $form->display();
@@ -2722,22 +2723,24 @@ function get_stats($user_id, $courseId, $start_date = null, $end_date = null)
 
     $course_info = api_get_course_info_by_id($courseId);
     if (!empty($course_info)) {
-        $strg_sd = '';
-        $strg_ed = '';
+        $stringStartDate = '';
+        $stringEndDate = '';
         if ($start_date != null && $end_date != null) {
             $end_date = add_day_to($end_date);
-            $strg_sd = "AND login_course_date BETWEEN '$start_date' AND '$end_date'";
-            $strg_ed = "AND logout_course_date BETWEEN '$start_date' AND '$end_date'";
+            $stringStartDate = "AND login_course_date BETWEEN '$start_date' AND '$end_date'";
+            $stringEndDate = "AND logout_course_date BETWEEN '$start_date' AND '$end_date'";
         }
-        $sql = 'SELECT
+        $user_id = intval($user_id);
+        $courseId = intval($courseId);
+        $sql = "SELECT
                 SEC_TO_TIME(avg(time_to_sec(timediff(logout_course_date,login_course_date)))) as avrg,
                 SEC_TO_TIME(sum(time_to_sec(timediff(logout_course_date,login_course_date)))) as total,
                 count(user_id) as times
-                FROM ' . $tbl_track_course.'
+                FROM $tbl_track_course
                 WHERE
-                    user_id = ' . intval($user_id).' AND
-                    c_id = ' . intval($courseId).' '.$strg_sd.' '.$strg_ed.' '.'
-                ORDER BY login_course_date ASC';
+                    user_id = $user_id AND
+                    c_id = $courseId $stringStartDate $stringEndDate
+                ORDER BY login_course_date ASC";
 
         $rs = Database::query($sql);
         $result = array();

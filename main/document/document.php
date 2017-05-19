@@ -2119,7 +2119,7 @@ if (count($documentAndFolders) > 1) {
     }
 }
 if (!empty($table_footer)) {
-    Display::display_warning_message($table_footer);
+    echo Display::return_message($table_footer, 'warning');
 }
 
 echo '

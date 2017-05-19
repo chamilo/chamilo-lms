@@ -92,7 +92,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     if ($form_sent == 1) {
         if (count($users) == 0 || count($courses) == 0) {
-            Display :: display_error_message(get_lang('AtLeastOneUserAndOneCourse'));
+            echo Display::return_message(get_lang('AtLeastOneUserAndOneCourse'), 'error');
         } else {
             $errorDrh = 0;
             foreach ($courses as $course_code) {
@@ -107,9 +107,9 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             }
 
             if ($errorDrh == 0) {
-                Display :: display_confirmation_message(get_lang('UsersAreSubscibedToCourse'));
+                echo Display::return_message(get_lang('UsersAreSubscibedToCourse'), 'confirm');
             } else {
-                Display :: display_error_message(get_lang('HumanResourcesManagerShouldNotBeRegisteredToCourses'));
+                echo Display::return_message(get_lang('HumanResourcesManagerShouldNotBeRegisteredToCourses'), 'error');
             }
         }
     }

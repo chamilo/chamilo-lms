@@ -400,7 +400,7 @@ function downloadMP3_google($filepath, $dir)
         null,
         $current_session_id
     );
-    Display::display_confirmation_message(get_lang('DocumentCreated'));
+    echo Display::return_message(get_lang('DocumentCreated'), 'confirm');
     //return to location
     echo '<script>window.location.href="'.$location.'"</script>';
 }
@@ -516,7 +516,7 @@ function downloadMP3_pediaphon($filepath, $dir)
         null,
         $current_session_id
     );
-    Display::display_confirmation_message(get_lang('DocumentCreated'));
+    echo Display::return_message(get_lang('DocumentCreated'), 'confirm');
     //return to location
     echo '<script>window.location.href="'.$location.'"</script>';
 }

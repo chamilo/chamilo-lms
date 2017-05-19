@@ -227,7 +227,7 @@ if (isset($fromExercise) && $fromExercise > 0) {
 echo '</div>';
 
 if ($displayMessage != "") {
-    Display::display_confirmation_message($displayMessage);
+    echo Display::return_message($displayMessage, 'confirm');
     $displayMessage = "";
 }
 

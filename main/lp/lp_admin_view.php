@@ -150,7 +150,7 @@ if (isset($_POST['save_audio'])) {
             Database::query($sql_insert_audio);
         }
     }
-    //Display::display_confirmation_message(get_lang('ItemUpdated'));
+    //echo Display::return_message(get_lang('ItemUpdated'), 'confirm');
     $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
     header('Location: '.$url);
     exit;
@@ -279,14 +279,14 @@ echo '<div class="col-md-8">';
 switch ($_GET['action']) {
     case 'edit_item':
         if (isset($is_success) && $is_success === true) {
-            Display::display_confirmation_message(get_lang('LearnpathItemEdited'));
+            echo Display::return_message(get_lang('LearnpathItemEdited'), 'confirm');
         } else {
             echo $_SESSION['oLP']->display_edit_item($_GET['id']);
         }
         break;
     case 'delete_item':
         if (isset($is_success) && $is_success === true) {
-            Display::display_confirmation_message(get_lang('LearnpathItemDeleted'));
+            echo Display::return_message(get_lang('LearnpathItemDeleted'), 'confirm');
         }
         break;
 }

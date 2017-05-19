@@ -4158,11 +4158,6 @@ class CourseManager
                 }
             }
         }
-
-        if (api_get_setting('display_coursecode_in_courselist') === 'true') {
-            $session_title .= ' ('.$course_info['visual_code'].') ';
-        }
-
         if (api_get_setting('display_teacher_in_courselist') === 'true') {
             $teacher_list = self::getTeachersFromCourse(
                 $course_info['real_id'],
@@ -4181,11 +4176,10 @@ class CourseManager
                 $params['coaches'] = $course_coachs;
             }
         }
-
-        $session_title .= isset($course['special_course']) ? ' '.
-                          Display::return_icon('klipper.png', get_lang('CourseAutoRegister')) : '';
-
+        $special = isset($course['special_course']) ? true : false;
         $params['title'] = $session_title;
+        $params['special'] = $special;
+        $params['code'] = $course_info['visual_code'];
         $params['extra'] = '';
         $html = $params;
 
@@ -4868,7 +4862,7 @@ class CourseManager
 
             }
 
-            if ($access_link && in_array('enter',$access_link) ||
+            if ($access_link && in_array('enter', $access_link) ||
                 $course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
             ) {
                 $my_course['go_to_course_button'] = Display::url(

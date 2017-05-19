@@ -156,7 +156,7 @@ if ($my_action == 'move' && isset($_GET['post'])) {
 
 $my_message = isset($message) ? $message : '';
 if ($my_message) {
-    Display::display_confirmation_message(get_lang($my_message));
+    echo Display::return_message(get_lang($my_message), 'confirm');
 }
 
 if ($my_message != 'PostDeletedSpecial') {

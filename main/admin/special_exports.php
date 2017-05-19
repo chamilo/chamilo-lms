@@ -310,7 +310,7 @@ function fullexportspecial()
             return $name;
         }
     } else {
-        Display::display_error_message(get_lang('ErrorMsgSpecialExport')); //main API
+        echo Display::return_message(get_lang('ErrorMsgSpecialExport'), 'error'); //main API
         $export = false;
         return false;
     }

@@ -8009,9 +8009,9 @@ $TutorXIsNotSubscribedToCourse = "Tutor %s is no subscribed to this course";
 $UpdateTitleInLps = "Update this title in learning paths";
 $WebRTCDialogHelp = "To enable video chat in your browser (if it supports it), make sure you click on the information icon on the left of the URL and then authorize the use of the webcam and microphone.";
 $UpdateFile = "Update file";
-$SendEmailToTeacherWhenStudentStartQuiz = "Send email to teacher when student start an exercise";
+$SendEmailToTeacherWhenStudentStartQuiz = "Send email to teacher when student starts an exercise";
 $SendEmailToTeacherWhenStudentEndQuiz = "Send email to teacher when student ends an exercise";
 $SendEmailToTeacherWhenStudentEndQuizOnlyIfOpenQuestion = "Send email to teacher when student ends an exercise only if an open question is answered.";
 $SendEmailToTeacherWhenStudentEndQuizOnlyIfOralQuestion = "Send email to teacher when student ends an exercise only if an oral question is answered.";
-$StudentStartExercise = "Student just start an exercise";
+$StudentStartExercise = "Student just started an exercise";
 ?>

@@ -105,7 +105,7 @@ if ($_GET['action'] == 'move' && isset($_GET['post'])) {
 /* Display the action messages */
 
 if (!empty($message)) {
-    Display :: display_confirmation_message(get_lang($message));
+    echo Display::return_message(get_lang($message), 'confirm');
 }
 
 // In this case the first and only post of the thread is removed.

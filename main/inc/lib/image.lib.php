@@ -24,7 +24,7 @@ class Image
             if (class_exists('Imagick')) {
                 $this->image_wrapper = new ImagickWrapper($path);
             } else {
-                Display::display_warning_message('Class Imagick not found');
+                echo Display::return_message('Class Imagick not found', 'warning');
                 exit;
             }
         }

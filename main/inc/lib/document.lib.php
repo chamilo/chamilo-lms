@@ -2940,8 +2940,9 @@ class DocumentManager
                 // Showing message when sending zip files
                 if ($new_path === true && $unzip == 1) {
                     if ($show_output) {
-                        Display::display_confirmation_message(
+                        echo Display::return_message(
                             get_lang('UplUploadSucceeded').'<br />',
+                            'confirm',
                             false
                         );
                     }

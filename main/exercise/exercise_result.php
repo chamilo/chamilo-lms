@@ -136,8 +136,9 @@ if ($objExercise->selectAttempts() > 0) {
         $learnpath_item_view_id
     );
     if ($attempt_count >= $objExercise->selectAttempts()) {
-        Display :: display_warning_message(
+        echo Display::return_message(
             sprintf(get_lang('ReachedMaxAttempts'), $objExercise->selectTitle(), $objExercise->selectAttempts()),
+            'warning',
             false
         );
         if ($origin != 'learnpath') {

@@ -14,7 +14,7 @@ use Chamilo\CoreBundle\Entity\ExtraField;
  *
  * All public functions static public functions inside a class called Display,
  * so you use them like this: e.g.
- * Display::display_normal_message($message)
+ * Display::return_message($message)
  *
  * @package chamilo.library
  *

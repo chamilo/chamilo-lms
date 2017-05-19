@@ -99,7 +99,7 @@ $actions .= '</div>';
 if (!in_array($_GET['type'], $possible_types)) {
     Display :: display_header($tool_name, 'Survey');
     echo $actions;
-    Display :: display_error_message(get_lang('TypeDoesNotExist'), false);
+    echo Display::return_message(get_lang('TypeDoesNotExist'), 'error', false);
     Display :: display_footer();
 }
 

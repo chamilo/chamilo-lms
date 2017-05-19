@@ -1426,7 +1426,7 @@ class learnpath
             // Update the current item with the new data.
             $sql = "UPDATE $tbl_lp_item
                     SET
-                        title = '" . Database::escape_string($title)."',
+                        title = '".Database::escape_string($title)."',
                         description = '" . Database::escape_string($description)."',
                         parent_item_id = " . $parent.",
                         previous_item_id = " . $previous.",

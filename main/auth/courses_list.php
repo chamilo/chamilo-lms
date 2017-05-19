@@ -22,7 +22,7 @@ $courses_without_category = isset($courses_in_category[0]) ? $courses_in_categor
 </div>
 <?php
 if (!empty($message)) {
-    Display::display_confirmation_message($message, false);
+    echo Display::return_message($message, 'confirm', false);
 }
 
 // COURSES WITH CATEGORIES

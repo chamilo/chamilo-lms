@@ -579,7 +579,7 @@ if ($survey_data['form_fields'] &&
 
 // Displaying the survey thanks message
 if (isset($_POST['finish_survey'])) {
-    Display::display_confirmation_message(get_lang('SurveyFinished'));
+    echo Display::return_message(get_lang('SurveyFinished'), 'confirm');
     echo $survey_data['survey_thanks'];
 
     SurveyManager::update_survey_answered(

@@ -497,8 +497,9 @@ if (isset($_GET['overwritemax'])) {
 
 if (isset($_GET['import_user_error'])) {
     $userinfo = api_get_user_info($_GET['import_user_error']);
-    Display:: display_warning_message(
-        get_lang('UserInfoDoesNotMatch').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname'])
+    echo Display::return_message(
+        get_lang('UserInfoDoesNotMatch').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']),
+        'warning'
     );
 }
 if (isset($_GET['import_score_error'])) {

@@ -121,7 +121,7 @@ if (!empty($work_id)) {
     echo $validationStatus['message'];
     if ($is_allowed_to_edit) {
         if (api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION)) {
-            echo Display::display_warning_message(get_lang('ResourceLockedByGradebook'));
+            echo Display::return_message(get_lang('ResourceLockedByGradebook'), 'warning');
         } else {
             $form->display();
         }

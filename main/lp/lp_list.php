@@ -84,10 +84,14 @@ if ($is_allowed_to_edit) {
         }
     }
     $actionLeft = null;
-    $actionLeft .= Display::url(
-        Display::return_icon('new_folder.png', get_lang('AddCategory'), array(), ICON_SIZE_MEDIUM),
-        api_get_self().'?'.api_get_cidreq().'&action=add_lp_category'
-    );
+
+    if (!$current_session) {
+        $actionLeft .= Display::url(
+            Display::return_icon('new_folder.png', get_lang('AddCategory'), array(), ICON_SIZE_MEDIUM),
+            api_get_self().'?'.api_get_cidreq().'&action=add_lp_category'
+        );
+    }
+
     $actionLeft .= Display::url(
         Display::return_icon('new_learnpath.png', get_lang('LearnpathAddLearnpath'), '', ICON_SIZE_MEDIUM),
         api_get_self().'?'.api_get_cidreq().'&action=add_lp'

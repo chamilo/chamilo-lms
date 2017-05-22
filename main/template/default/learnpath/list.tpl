@@ -16,7 +16,7 @@
             <h3 class="page-header">
                 {{ lp_data.category.getName() }}
 
-                {% if lp_data.category.getId() > 0 %}
+                {% if lp_data.category.getId() > 0 and not _c.session_id %}
                     <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=add_lp_category&id=' ~ lp_data.category.getId() }}" title="{{ "Edit"|get_lang }}">
                         <img src="{{ "edit.png"|icon }}" alt="{{ "Edit"|get_lang }}">
                     </a>

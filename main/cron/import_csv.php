@@ -354,6 +354,7 @@ class ImportCsv
         $row['course_category'] = $row['CourseCategory'];
         $row['email'] = $row['Teacher'];
         $row['language'] = $row['Language'];
+        $row['visibility'] = isset($row['Visibility']) ? $row['Visibility'] : COURSE_VISIBILITY_REGISTERED;
 
         $row['teachers'] = array();
         if (isset($row['Teacher']) && !empty($row['Teacher'])) {
@@ -1295,6 +1296,7 @@ class ImportCsv
                     $params['course_category'] = $row['course_category'];
                     $params['course_language'] = $row['language'];
                     $params['teachers'] = $row['teachers'];
+                    $params['visibility'] = $row['visibility'];
 
                     $courseInfo = CourseManager::create_course(
                         $params,

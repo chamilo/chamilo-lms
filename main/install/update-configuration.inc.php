@@ -13,13 +13,17 @@ if (defined('SYSTEM_INSTALLATION')) {
     error_log("Starting ".basename(__FILE__));
     $perm = api_get_permissions_for_new_files();
 
-    $oldConfFile = api_get_path(SYS_CODE_PATH).'inc/conf/configuration.php';
     $newConfFile = api_get_path(CONFIGURATION_PATH).'configuration.php';
+    // Check $fromVersionShort, defined in install.lib.php, in the switch
+    // on full version numbers, to know from which version we are upgrading
+    if ($fromVersionShort == '1.9') {
+        $oldConfFile = api_get_path(SYS_CODE_PATH).'inc/conf/configuration.php';
 
-    if (file_exists($oldConfFile)) {
-        copy($oldConfFile, $newConfFile);
-        @chmod($newConfFile, $perm);
-        @rmdir($oldConfFile);
+        if (file_exists($oldConfFile)) {
+            copy($oldConfFile, $newConfFile);
+            @chmod($newConfFile, $perm);
+            @rmdir($oldConfFile);
+        }
     }
 
     // Edit the configuration file.
@@ -69,7 +73,6 @@ if (defined('SYSTEM_INSTALLATION')) {
     if (!$found_software_url) {
         fwrite($fh, '$_configuration[\'software_url\'] = \''.$software_url.'\';'."\r\n");
     }
-    fwrite($fh, '?>');
     fclose($fh);
 
     error_log("configuration.php file updated.");

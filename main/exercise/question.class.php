@@ -492,35 +492,36 @@ abstract class Question
     /**
      * in this version, a question can only have 1 category
      * if category is 0, then question has no category then delete the category entry
-     * @param int $category
+     * @param int $categoryId
      *
      * @author Hubert Borderiou 12-10-2011
      */
-    public function saveCategory($category)
+    public function saveCategory($categoryId)
     {
-        if ($category <= 0) {
+        $courseId = api_get_course_int_id();
+        if ($categoryId <= 0) {
             $this->deleteCategory();
         } else {
             // update or add category for a question
             $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-            $category_id = intval($category);
+            $categoryId = intval($categoryId);
             $question_id = intval($this->id);
             $sql = "SELECT count(*) AS nb FROM $table
                     WHERE
                         question_id = $question_id AND
-                        c_id=".api_get_course_int_id();
+                        c_id = ".$courseId;
             $res = Database::query($sql);
             $row = Database::fetch_array($res);
             if ($row['nb'] > 0) {
                 $sql = "UPDATE $table
-                        SET category_id = $category_id
+                        SET category_id = $categoryId
                         WHERE
                             question_id = $question_id AND
-                            c_id = ".api_get_course_int_id();
+                            c_id = ".$courseId;
                 Database::query($sql);
             } else {
                 $sql = "INSERT INTO $table (c_id, question_id, category_id)
-                        VALUES (".api_get_course_int_id().", $question_id, $category_id)";
+                        VALUES (".$courseId.", $question_id, $categoryId)";
                 Database::query($sql);
             }
         }
@@ -917,7 +918,7 @@ abstract class Question
         $level = $this->level;
         $extra = $this->extra;
         $c_id = $this->course['real_id'];
-        $category = $this->category;
+        $categoryId = $this->category;
 
         // question already exists
         if (!empty($id)) {
@@ -936,7 +937,7 @@ abstract class Question
                 $params,
                 ['c_id = ? AND id = ?' => [$c_id, $id]]
             );
-            $this->saveCategory($category);
+            $this->saveCategory($categoryId);
 
             if (!empty($exerciseId)) {
                 api_item_property_update(

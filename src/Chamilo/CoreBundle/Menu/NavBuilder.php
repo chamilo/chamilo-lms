@@ -66,7 +66,6 @@ class NavBuilder extends ContainerAware
         );
 
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
-
             $menu->addChild(
                 $translator->trans('My courses'),
                 array('route' => 'userportal')
@@ -103,7 +102,6 @@ class NavBuilder extends ContainerAware
             );
 
             if ($checker->isGranted('ROLE_ADMIN')) {
-
                 $menu->addChild(
                     $translator->trans('Dashboard'),
                     array(
@@ -136,7 +134,7 @@ class NavBuilder extends ContainerAware
             );
             /** @var Category $category */
             foreach ($categories as $category) {
-                 $faq->addChild(
+                $faq->addChild(
                     $category->getHeadline(),
                     array(
                         'route' => 'faq',
@@ -227,7 +225,6 @@ class NavBuilder extends ContainerAware
 
         // <nav class="navbar navbar-default">
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
-
             $token = $this->container->get('security.token_storage');
             /** @var User $user */
             $user = $token->getToken()->getUser();

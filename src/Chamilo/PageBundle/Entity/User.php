@@ -1796,7 +1796,7 @@ class User extends BaseUser
         return $this->locale;
     }
 
-     /**
+    /**
      * @param string $timezone
      *
      * @return User
@@ -1969,7 +1969,7 @@ class User extends BaseUser
         return $this->plainPassword;
     }
 
-      /**
+    /**
      * Returns the user roles
      *
      * @return array The roles

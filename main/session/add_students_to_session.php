@@ -24,9 +24,7 @@ if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
 $form_sent  = 0;
 $errorMsg   = '';
 $users = $sessions = array();
-
 $id = isset($_GET['id']) ? intval($_GET['id']) : null;
-
 SessionManager::protectSession($id);
 
 $htmlResult = null;

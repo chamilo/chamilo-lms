@@ -4,9 +4,7 @@
  * to OpenMeetings from Chamilo by calling its web services
  * @package chamilo.plugin.openmeetings
  */
-/**
- * Initialization
- */
+
 namespace Chamilo\Plugin\OpenMeetings;
 
 include_once __DIR__.'/session.class.php';

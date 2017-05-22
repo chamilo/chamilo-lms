@@ -17,7 +17,6 @@ api_block_anonymous_users();
 $skill = new Skill();
 $gradebook = new Gradebook();
 $skill_gradebook = new SkillRelGradebook();
-
 $userId = api_get_user_id();
 
 switch ($action) {
@@ -128,9 +127,7 @@ switch ($action) {
         $skill_info = $skill->get_skill_info($id);
         $courses = $skill->get_courses_by_skill($id);
         $sessions = $skill->getSessionsBySkill($id);
-
         $html = '';
-
         if (!empty($courses) || !empty($sessions)) {
             Display::display_no_header();
             Display::$global_template->assign('skill', $skill_info);
@@ -175,7 +172,7 @@ switch ($action) {
         echo json_encode($info);
         break;
     case 'load_children':
-        $id             = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
+        $id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
         $load_user_data = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
         $skills = $skill->get_children($id, $load_user_data);
 
@@ -337,7 +334,6 @@ switch ($action) {
     case 'delete_profile':
         if (api_is_platform_admin() || api_is_drh()) {
             $profileId = $_REQUEST['profile'];
-
             $skillProfile = new SkillProfile();
             $isDeleted = $skillProfile->delete($profileId);
 

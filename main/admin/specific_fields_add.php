@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Add form
  * @package chamilo.admin
@@ -17,17 +18,24 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 // user permissions
 api_protect_admin_script();
-
 $fieldId = isset($_REQUEST['field_id']) ? intval($_REQUEST['field_id']) : 0;
-
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'settings.php?category=Search', 'name' => get_lang('PlatformConfigSettings'));
-$interbreadcrumb[] = array('url' => 'specific_fields.php', 'name' => get_lang('SpecificSearchFields'));
+$interbreadcrumb[] = array(
+    'url' => 'index.php',
+    'name' => get_lang('PlatformAdmin'),
+);
+$interbreadcrumb[] = array(
+    'url' => 'settings.php?category=Search',
+    'name' => get_lang('PlatformConfigSettings'),
+);
+$interbreadcrumb[] = array(
+    'url' => 'specific_fields.php',
+    'name' => get_lang('SpecificSearchFields'),
+);
 
 $tool_name = get_lang('AddSpecificSearchField');
 
 if (isset($_GET['action']) && $_GET['action'] === 'edit') {
-  $tool_name = get_lang('EditSpecificSearchField');
+    $tool_name = get_lang('EditSpecificSearchField');
 }
 // Create the form
 $form = new FormValidator('specific_fields_add');

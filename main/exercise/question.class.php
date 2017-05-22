@@ -493,12 +493,16 @@ abstract class Question
      * in this version, a question can only have 1 category
      * if category is 0, then question has no category then delete the category entry
      * @param int $categoryId
+     * @return bool
      *
      * @author Hubert Borderiou 12-10-2011
      */
     public function saveCategory($categoryId)
     {
         $courseId = api_get_course_int_id();
+        if (empty($courseId)) {
+            return false;
+        }
         if ($categoryId <= 0) {
             $this->deleteCategory();
         } else {
@@ -524,6 +528,8 @@ abstract class Question
                         VALUES (".$courseId.", $question_id, $categoryId)";
                 Database::query($sql);
             }
+
+            return true;
         }
     }
 

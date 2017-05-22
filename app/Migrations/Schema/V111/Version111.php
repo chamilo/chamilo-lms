@@ -205,24 +205,6 @@ class Version111 extends AbstractMigrationChamilo
                 $this->addSql('ALTER TABLE ticket_message ENGINE=InnoDB');
             }
 
-            if ($schema->hasTable('plugin_ticket_message_attachments')) {
-                $table = $schema->getTable('plugin_ticket_message_attachments');
-                if ($table->hasIndex('ticket_message_id_fk')) {
-                    $table->renameIndex('ticket_message_id_fk', 'IDX_70BF9E26537A1329');
-                }
-
-                $this->addSql('RENAME TABLE plugin_ticket_message_attachments TO ticket_message_attachments');
-                $this->addSql('ALTER TABLE ticket_message_attachments ENGINE=InnoDB');
-            }
-
-            $fixTableMessage = true;
-            if ($schema->hasTable('ticket_message_attachments') === false) {
-                $this->addSql('CREATE TABLE IF NOT EXISTS ticket_message_attachments (id INT AUTO_INCREMENT NOT NULL, ticket_id INT DEFAULT NULL, message_id INT DEFAULT NULL, path VARCHAR(255) NOT NULL, filename LONGTEXT NOT NULL, size INT NOT NULL, sys_insert_user_id INT NOT NULL, sys_insert_datetime DATETIME NOT NULL, sys_lastedit_user_id INT DEFAULT NULL, sys_lastedit_datetime DATETIME DEFAULT NULL, INDEX IDX_70BF9E26700047D2 (ticket_id), INDEX IDX_70BF9E26537A1329 (message_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
-                $this->addSql('ALTER TABLE ticket_message_attachments ADD CONSTRAINT FK_70BF9E26700047D2 FOREIGN KEY (ticket_id) REFERENCES ticket_ticket (id)');
-                $this->addSql('ALTER TABLE ticket_message_attachments ADD CONSTRAINT FK_70BF9E26537A1329 FOREIGN KEY (message_id) REFERENCES ticket_message (id)');
-                $fixTableMessage = false;
-            }
-
             if ($schema->hasTable('plugin_ticket_priority')) {
                 $this->addSql('RENAME TABLE plugin_ticket_priority TO ticket_priority');
                 $this->addSql('ALTER TABLE ticket_priority ENGINE=InnoDB');
@@ -280,10 +262,21 @@ class Version111 extends AbstractMigrationChamilo
                 $this->addSql('ALTER TABLE ticket_category_rel_user ADD CONSTRAINT FK_5B8A987A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
             }
 
-            if ($fixTableMessage) {
+            if ($schema->hasTable('plugin_ticket_message_attachments')) {
+                $table = $schema->getTable('plugin_ticket_message_attachments');
+                if ($table->hasIndex('ticket_message_id_fk')) {
+                    $table->renameIndex('ticket_message_id_fk', 'IDX_70BF9E26537A1329');
+                }
+
+                $this->addSql('RENAME TABLE plugin_ticket_message_attachments TO ticket_message_attachments');
+                $this->addSql('ALTER TABLE ticket_message_attachments ENGINE=InnoDB');
                 $this->addSql('ALTER TABLE ticket_message_attachments DROP message_attch_id, CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE message_id message_id INT DEFAULT NULL, CHANGE ticket_id ticket_id INT DEFAULT NULL, CHANGE filename filename LONGTEXT NOT NULL, CHANGE size size INT NOT NULL, CHANGE sys_insert_user_id sys_insert_user_id INT NOT NULL, CHANGE sys_insert_datetime sys_insert_datetime DATETIME NOT NULL, CHANGE sys_lastedit_user_id sys_lastedit_user_id INT DEFAULT NULL;');
                 $this->addSql('ALTER TABLE ticket_message_attachments ADD CONSTRAINT FK_70BF9E26700047D2 FOREIGN KEY (ticket_id) REFERENCES ticket_ticket (id);');
                 $this->addSql('CREATE INDEX IDX_70BF9E26700047D2 ON ticket_message_attachments (ticket_id);');
+            } else {
+                $this->addSql('CREATE TABLE IF NOT EXISTS ticket_message_attachments (id INT AUTO_INCREMENT NOT NULL, ticket_id INT DEFAULT NULL, message_id INT DEFAULT NULL, path VARCHAR(255) NOT NULL, filename LONGTEXT NOT NULL, size INT NOT NULL, sys_insert_user_id INT NOT NULL, sys_insert_datetime DATETIME NOT NULL, sys_lastedit_user_id INT DEFAULT NULL, sys_lastedit_datetime DATETIME DEFAULT NULL, INDEX IDX_70BF9E26700047D2 (ticket_id), INDEX IDX_70BF9E26537A1329 (message_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+                $this->addSql('ALTER TABLE ticket_message_attachments ADD CONSTRAINT FK_70BF9E26700047D2 FOREIGN KEY (ticket_id) REFERENCES ticket_ticket (id)');
+                $this->addSql('ALTER TABLE ticket_message_attachments ADD CONSTRAINT FK_70BF9E26537A1329 FOREIGN KEY (message_id) REFERENCES ticket_message (id)');
             }
 
             $this->addSql('UPDATE ticket_priority SET sys_insert_user_id = 1 WHERE sys_insert_user_id IS NULL');

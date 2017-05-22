@@ -489,9 +489,8 @@ $table->set_header($header_nr++, '', false);
 
 $indexList['photo'] = $header_nr;
 $table->set_header($header_nr++, get_lang('Photo'), false);
-
-$table->set_header($header_nr++, get_lang('OfficialCode'));
 $indexList['official_code'] = $header_nr;
+$table->set_header($header_nr++, get_lang('OfficialCode'));
 
 if ($is_western_name_order) {
     $indexList['firstname'] = $header_nr;

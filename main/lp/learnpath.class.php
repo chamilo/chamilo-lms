@@ -4125,6 +4125,38 @@ class learnpath
     }
 
     /**
+     * Publishes a learnpath category.
+     * This basically means show or hide the learnpath category to normal users.
+     * @param int $id
+     * @param int $visibility
+     * @return bool
+     */
+    public static function toggleCategoryVisibility($id, $visibility = 1)
+    {
+        $action = 'visible';
+
+        if ($visibility != 1) {
+            $action = 'invisible';
+
+            $list = new LearnpathList(api_get_user_id(), null, null, null, false, $id);
+
+            $learPaths = $list->get_flat_list();
+
+            foreach ($learPaths as $lp) {
+                learnpath::toggle_visibility($lp['iid'], 0);
+            }
+        }
+
+        return api_item_property_update(
+            api_get_course_info(),
+            TOOL_LEARNPATH_CATEGORY,
+            $id,
+            $action,
+            api_get_user_id()
+        );
+    }
+
+    /**
      * Publishes a learnpath. This basically means show or hide the learnpath
      * on the course homepage
      * Can be used as abstract

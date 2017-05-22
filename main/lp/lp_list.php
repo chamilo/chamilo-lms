@@ -837,6 +837,12 @@ foreach ($categories as $item) {
 
     $data[] = [
         'category' => $item,
+        'category_visibility' => api_get_item_visibility(
+            $courseInfo,
+            TOOL_LEARNPATH_CATEGORY,
+            $item->getId(),
+            $current_session
+        ),
         'lp_list' => $listData
     ];
 }

@@ -1827,7 +1827,7 @@ class CourseRestorer
 
     /**
      * Restore quiz-questions
-     * @params int question id $id
+     * @params int $id question id
      */
     public function restore_quiz_question($id)
     {
@@ -2177,7 +2177,7 @@ class CourseRestorer
         // to redo the link between test_category and quizzes question for questions restored
         // we can use the source_id field
         // question source_id => category source_id
-        if (!empty($newQuestionId) && $this->course->has_resources(RESOURCE_QUIZQUESTION)) {
+        if ($this->course->has_resources(RESOURCE_QUIZQUESTION)) {
             // check the category number of each question restored
             if (!empty($resources[RESOURCE_QUIZQUESTION])) {
                 foreach ($resources[RESOURCE_QUIZQUESTION] as $id => $courseCopyQuestion) {

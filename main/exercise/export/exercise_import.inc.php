@@ -99,6 +99,8 @@ function import_exercise($file)
         return 'UplZipCorrupt';
     }
 
+    $baseWorkDir = $baseWorkDir.$uploadPath;
+
     // find the different manifests for each question and parse them.
     $exerciseHandle = opendir($baseWorkDir);
     $file_found = false;
@@ -174,6 +176,7 @@ function import_exercise($file)
 
     $exercise->save();
     $last_exercise_id = $exercise->selectId();
+    $courseId = api_get_course_int_id();
     if (!empty($last_exercise_id)) {
         // For each question found...
         foreach ($exercise_info['question'] as $question_array) {
@@ -195,18 +198,23 @@ function import_exercise($file)
 
             if (isset($question_array['category'])) {
                 $category = formatText(strip_tags($question_array['category']));
-                $categoryId = TestCategory::get_category_id_for_title(
-                    $category,
-                    api_get_course_int_id()
-                );
+                if (!empty($category)) {
+                    $categoryId = TestCategory::get_category_id_for_title(
+                        $category,
+                        $courseId
+                    );
 
-                if (!empty($categoryId)) {
-                    $question->category = $categoryId;
-                } else {
-                    $cat = new TestCategory();
-                    $cat->name = $category;
-                    $cat->description = '';
-                    $question->category = $cat->save();
+                    if (empty($categoryId)) {
+                        $cat = new TestCategory();
+                        $cat->name = $category;
+                        $cat->description = '';
+                        $categoryId = $cat->save($courseId);
+                        if ($categoryId) {
+                            $question->category = $categoryId;
+                        }
+                    } else {
+                        $question->category = $categoryId;
+                    }
                 }
             }
 
@@ -214,8 +222,8 @@ function import_exercise($file)
                 $description .= $question_array['description'];
             }
             $question->updateDescription($description);
-
             $question->save($last_exercise_id);
+
             $last_question_id = $question->selectId();
             //3. Create answer
             $answer = new Answer($last_question_id);

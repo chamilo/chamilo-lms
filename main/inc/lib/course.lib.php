@@ -2345,7 +2345,6 @@ class CourseManager
             // Skills
             $table = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
             $argumentation = Database::escape_string(sprintf(get_lang('SkillFromCourseXDeletedSinceThen'), $course['code']));
-            error_log($argumentation);
             $sql = "UPDATE $table SET course_id = NULL, session_id = NULL, argumentation = '$argumentation' WHERE course_id = $courseId";
             Database::query($sql);
 

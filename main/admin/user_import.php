@@ -1,4 +1,4 @@
-*<?php
+<?php
 /* For licensing terms, see /license.txt */
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file

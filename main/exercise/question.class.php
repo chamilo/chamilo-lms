@@ -712,60 +712,56 @@ abstract class Question
      */
     private function resizePicture($Dimension, $Max)
     {
+        // if the question has an ID
+        if (!$this->id) {
+            return false;
+        }
+
         $picturePath = $this->getHotSpotFolderInCourse().'/'.$this->getPictureFilename();
 
-        // if the question has an ID
-        if ($this->id) {
-            // Get dimensions from current image.
-            $my_image = new Image($picturePath);
+        // Get dimensions from current image.
+        $my_image = new Image($picturePath);
 
-            $current_image_size = $my_image->get_image_size();
-            $current_width = $current_image_size['width'];
-            $current_height = $current_image_size['height'];
+        $current_image_size = $my_image->get_image_size();
+        $current_width = $current_image_size['width'];
+        $current_height = $current_image_size['height'];
 
-            if ($current_width < $Max && $current_height < $Max) {
-                return true;
-            } elseif ($current_height == '') {
-                return false;
-            }
+        if ($current_width < $Max && $current_height < $Max) {
+            return true;
+        } elseif ($current_height == '') {
+            return false;
+        }
 
-            // Resize according to height.
-            if ($Dimension == "height") {
+        // Resize according to height.
+        if ($Dimension == "height") {
+            $resize_scale = $current_height / $Max;
+            $new_width = ceil($current_width / $resize_scale);
+        }
+
+        // Resize according to width
+        if ($Dimension == "width") {
+            $new_width = $Max;
+        }
+
+        // Resize according to height or width, both should not be larger than $Max after resizing.
+        if ($Dimension == "any") {
+            if ($current_height > $current_width || $current_height == $current_width) {
                 $resize_scale = $current_height / $Max;
-                $new_height = $Max;
                 $new_width = ceil($current_width / $resize_scale);
             }
-
-            // Resize according to width
-            if ($Dimension == "width") {
-                $resize_scale = $current_width / $Max;
+            if ($current_height < $current_width) {
                 $new_width = $Max;
-                $new_height = ceil($current_height / $resize_scale);
-            }
-
-            // Resize according to height or width, both should not be larger than $Max after resizing.
-            if ($Dimension == "any") {
-                if ($current_height > $current_width || $current_height == $current_width) {
-                    $resize_scale = $current_height / $Max;
-                    $new_height = $Max;
-                    $new_width = ceil($current_width / $resize_scale);
-                }
-                if ($current_height < $current_width) {
-                    $resize_scale = $current_width / $Max;
-                    $new_width = $Max;
-                    $new_height = ceil($current_height / $resize_scale);
-                }
-            }
-
-            $my_image->resize($new_width, $new_height);
-            $result = $my_image->send_image($picturePath);
-
-            if ($result) {
-                return true;
-            } else {
-                return false;
             }
         }
+
+        $my_image->resize($new_width);
+        $result = $my_image->send_image($picturePath);
+
+        if ($result) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

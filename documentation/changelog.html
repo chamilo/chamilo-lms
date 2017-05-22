@@ -95,6 +95,7 @@
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/026707555d5c558c71136fb983e9c3ef0ea85b3d">02670755</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1896">GH#1896</a>) Exercises: Add reading speed/comprehension question type</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/99e1afa964d4f21941d9edb5d931960d6e86bb9c">99e1afa9</a>) Improve learnpath tracking details</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/1f68292b9065b2ffcf3aa44434db51bc056bb42f">1f68292b</a> - <a href="https://task.beeznest.com/issues/12625">BT#12625</a>) Exercises: Add option to display draggable question like with vertical orientation</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/pull/1734">PR 1734</a>) Add SEPE plugin for Spanish Employment and Social Security Ministry compliance / Añadido plugin SEPE para cumplimiento con normas del Ministerio de Empleo y Seguridad Social de España</li>
     </ul>
 
     <h4>For developers and sysadmins</h4>
@@ -143,6 +144,33 @@
 
     <h3>Improvements (minor features) and debug</h3>
     <ul>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c14fdf78b1b2a59d49520579c7ac1b4ed9c14926">c14fdf78</a>) Add update-configuration to upgrade process from 1.10 to 1.11 to update the version number</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/98eb7229334bd7ce707c5b83f2494446b31f3c25">98eb7229</a>) Add migration fix for course_code column that shouldn't have been there in the first place</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/a17717aee7ca6e60b9b1e91cd78caf4b105de7f7">a17717ae</a> - <a href="https://task.beeznest.com/issues/12892">BT#12892</a>) Improve code for Question::resizePicture</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/dde61135e00bad3e39a32a172aa03a01eeadfbee">dde61135</a> - <a href="https://task.beeznest.com/issues/12892">BT#12892</a>) Fix resize question image</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/486e1e6f5c5be19c8d0d897ffdbb2c742932514c">486e1e6f</a> - <a href="https://task.beeznest.com/issues/10892">BT#10892</a>) Fix annotation question</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/b0ff7b792373b9e3fab8aa1cd6ac6a1882253552">b0ff7b79</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1871">GH#1871</a>) Fix phpoffice word dependency version (alternate configs in Composer to cover different PHP versions)</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/fdadb054d2446ad02c5d3c1e3aaab5aa0a90ddeb">fdadb054</a> - <a href="https://task.beeznest.com/issues/10891">BT#10891</a>) Fix course question category copy</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4a2ca73213c091e7d7cc6806146c43f58553a954">4a2ca732</a> - <a href="https://task.beeznest.com/issues/10891">BT#10891</a>) Fix exercise category import</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/2d11c835feaf026573d8cca4ae43ccfee4c22400">2d11c835</a> - <a href="https://task.beeznest.com/issues/12799">BT#12799</a>) Add visibility field to CSV import of courses</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/7e7d73e168eabe26bec0674c3148a016aebd424b">7e7d73e1</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1954">GH#1954</a>) Fix installation issues with ticket tables when ticket plugin was enabled in 1.10 (2)</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3f22b2c831b8dbe3e803841dd0fe1342aebc3490">3f22b2c8</a> - <a href="https://task.beeznest.com/issues/12757">BT#12757</a>) Improve code readability when listing documents</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ea5d3788b0fa2d098c345d139d489d4db678bb5d">ea5d3788</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1954">GH#1954</a>) Fix installation issues with ticket tables when ticket plugin was enabled in 1.10</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/50e5f3387004dddb2c9f1991474af45fa32ef8b0">50e5f338</a> - <a href="https://task.beeznest.com/issues/11972">BT#11972</a>) Fix events visibilities when connected as student</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ee8b90887db1c1ba0c286a0304a520e872e83311">ee8b9088</a> - <a href="https://task.beeznest.com/issues/11972">BT#11972</a>) Fix agenda visibility when using groups</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/12af7e8db2f75cfd20c5674faf8679ba6faa7a14">12af7e8d</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1954">GH#1954</a>) Fix ticket_message_attachments table creation</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/7582301f01684efe4901f35b183e1471f59cfd89">7582301f</a> - <a href="https://task.beeznest.com/issues/12723">BT#12723</a>) Plugins: SFS: Show complete post children info</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/b74301c24d8727b73e3a3ea6d2102a4d059e8c60">b74301c2</a> - <a href="https://task.beeznest.com/issues/12671">BT#12671</a>) Block group category CRUD if inside session</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d58854a0814d17a3ef542a0053517382299e8371">d58854a0</a> - <a href="https://task.beeznest.com/issues/12723">BT#12723</a>) Plugins: SFS: Improve care detail UI</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/23e95f52c4076b56ae457eb9ff2f3a23adacf5ad">23e95f52</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1954">GH#1954</a>) Use schema to rename indexes</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d5d8d1cfbfd5663bd89d35be38913e06a831e5b7">d5d8d1cf</a> - <a href="https://task.beeznest.com/issues/10896">BT#10896</a>) Remove OverwriteFile option on dropbox update</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/cb80d33cdb9ab8e9cff01db62ac2bd87a156b91e">cb80d33c</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1954">GH#1954</a>) Fix installation issues with ticket tables when ticket plugin was enabled in 1.10: Change table to ENGINE=InnoDB</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/66237ed991d75ba9b0dc07f3302181d1dd720477">66237ed9</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1959">GH#1959</a>) Update apc cache if exists (2)</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/bd8537963e3828b2f253e33044de98a97e2c8530">bd853796</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1959">GH#1959</a>) Update apc cache if exists</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/adad453dfc5fb82778dff6e39252ea716abe8988">adad453d</a> - <a href="https://task.beeznest.com/issues/12794">BT#12794</a>) Fix session grid tpl</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/5fa816b1add6fe786fe7f90c2bd32ce5ac9b597b">5fa816b1</a>) Plugin: SFS: Update permissions</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/790b33e2e353d87b266a0096b119d65ad2e19a89">790b33e2</a> - <a href="https://task.beeznest.com/issues/12723">BT#12723</a>) Update permissions rules</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4601bc570ed80cde5f77f29d4c48fa10a9a80f22">4601bc57</a>) New options added to setting 'email_alert_manager_on_new_quiz'</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9a2455a17e575a9dacca6670986a3c4d95e6f394">9a2455a1</a> - <a href="https://task.beeznest.com/issues/12776">BT#12776</a>) Admin: Fix multiple URL support in sessions list</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3605599152fdee150607674b825be0e06d7c8d20">36055991</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1954">GH#1954</a>) First delete FKs if exists then add new ones</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/5d3752fa9d5c644f19f05c1aa091c9a78981484e">5d3752fa</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1924">GH#1924</a>) Fix issue with structure of 'hide_user_field_from_list' setting</li>

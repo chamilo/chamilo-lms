@@ -712,12 +712,12 @@ abstract class Question
      */
     private function resizePicture($Dimension, $Max)
     {
-        $picturePath = $this->getHotSpotFolderInCourse();
+        $picturePath = $this->getHotSpotFolderInCourse().'/'.$this->getPictureFilename();
 
         // if the question has an ID
         if ($this->id) {
             // Get dimensions from current image.
-            $my_image = new Image($picturePath.'/'.$this->picture);
+            $my_image = new Image($picturePath);
 
             $current_image_size = $my_image->get_image_size();
             $current_width = $current_image_size['width'];
@@ -758,7 +758,7 @@ abstract class Question
             }
 
             $my_image->resize($new_width, $new_height);
-            $result = $my_image->send_image($picturePath.'/'.$this->picture);
+            $result = $my_image->send_image($picturePath);
 
             if ($result) {
                 return true;

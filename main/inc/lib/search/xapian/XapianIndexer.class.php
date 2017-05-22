@@ -15,7 +15,6 @@ require_once __DIR__.'/../IndexableChunk.class.php';
 abstract class XapianIndexer
 {
     /* XapianWritableDatabase */
-
     protected $db;
     /* IndexableChunk[] */
     protected $chunks;
@@ -27,7 +26,7 @@ abstract class XapianIndexer
     /**
      * Class contructor
      */
-    function __construct()
+    public function __construct()
     {
         $this->db = null;
         $this->stemmer = null;
@@ -70,13 +69,16 @@ abstract class XapianIndexer
      */
     function connectDb($path = null, $dbMode = null, $lang = 'english')
     {
-        if ($this->db != null)
+        if ($this->db != null) {
             return $this->db;
-        if ($dbMode == null)
+        }
+        if ($dbMode == null) {
             $dbMode = Xapian::DB_CREATE_OR_OPEN;
+        }
 
-        if ($path == null)
+        if ($path == null) {
             $path = api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb/';
+        }
 
         try {
             $this->db = new XapianWritableDatabase($path, $dbMode);
@@ -203,7 +205,8 @@ abstract class XapianIndexer
      *
      * @param   int     $did     Xapian::docid
      * @param   array   $terms   New terms of the document
-     * @param   string  $prefix  Prefix used to categorize the doc (usually 'T' for title, 'A' for author)
+     * @param   string  $prefix  Prefix used to categorize the doc
+     * (usually 'T' for title, 'A' for author)
      * @return  boolean false on error
      */
     function update_terms($did, $terms, $prefix)

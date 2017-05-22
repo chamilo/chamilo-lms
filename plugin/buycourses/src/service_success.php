@@ -157,9 +157,7 @@ if ($form->validate()) {
     }
 
     unset($_SESSION['bc_service_sale_id']);
-
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php');
-
     exit;
 }
 

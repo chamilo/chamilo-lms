@@ -152,7 +152,7 @@ if ($typeUser) {
         // Now get all the courses lp's
         $thisLpList = $em->getRepository('ChamiloCourseBundle:CLp')->findBy(['cId' => $course->getCourse()->getId()]);
         foreach ($thisLpList as $lp) {
-            $courseLpList[$lp->getCId()] = $lp->getName().' ('.$course->getCourse()->getTitle().')'; ;
+            $courseLpList[$lp->getCId()] = $lp->getName().' ('.$course->getCourse()->getTitle().')';
         }
     }
 

@@ -23,14 +23,36 @@ class Toolbar
      */
     public function __construct(
         $toolbar = null,
-        $config = array(),
+        $config = [],
         $prefix = null
     ) {
         if (!empty($toolbar)) {
             $class = __NAMESPACE__."\\".$prefix."\\Toolbar\\".$toolbar;
             if (class_exists($class)) {
+                $this->setConfig($config);
                 $toolbarObj = new $class();
-                $this->setConfig($toolbarObj->getConfig());
+                $config = $toolbarObj->getConfig();
+
+                if (api_get_configuration_value('full_ckeditor_toolbar_set')) {
+                    $basicClass = __NAMESPACE__."\\".$prefix."\\Toolbar\\Basic";
+                    $basicObj = new $basicClass();
+                    $basicConfig = $basicObj->getConfig();
+
+                    if (api_get_setting('more_buttons_maximized_mode') == 'true') {
+                        if (isset($config['toolbar'])) {
+                            unset($config['toolbar']);
+                        }
+
+                        $config['toolbar_minToolbar'] = $basicConfig['toolbar_minToolbar'];
+                        $config['toolbar_maxToolbar'] = $basicConfig['toolbar_maxToolbar'];
+                    }
+
+                    $config['height'] = '85px';
+                    $config['toolbarCanCollapse'] = true;
+                    $config['toolbarStartupExpanded'] = false;
+                }
+
+                $this->updateConfig($config);
             }
         }
 

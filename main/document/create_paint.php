@@ -109,8 +109,8 @@ Event::event_access_tool(TOOL_DOCUMENT);
 $display_dir = $dir;
 if (isset ($group)) {
     $display_dir = explode('/', $dir);
-    unset ($display_dir[0]);
-    unset ($display_dir[1]);
+    unset($display_dir[0]);
+    unset($display_dir[1]);
     $display_dir = implode('/', $display_dir);
 }
 
@@ -131,27 +131,27 @@ echo '</div>';
 
 // pixlr
 // max size 1 Mb ??
-$title = urlencode(utf8_encode(get_lang('NewImage')));//TODO:check
+$title = urlencode(utf8_encode(get_lang('NewImage'))); //TODO:check
 //
 $image = Display::returnIconPath('canvas1024x768.png');
 //
 $pixlr_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');
-$langpixlr  = api_get_language_isocode();
+$langpixlr = api_get_language_isocode();
 $langpixlr = isset($pixlr_code_translation_table[$langpixlr]) ? $pixlredit_code_translation_table[$langpixlr] : $langpixlr;
-$loc=$langpixlr;// deprecated ?? TODO:check pixlr read user browser
+$loc = $langpixlr; // deprecated ?? TODO:check pixlr read user browser
 
-$exit_path=api_get_path(WEB_CODE_PATH).'document/exit_pixlr.php';
-$_SESSION['exit_pixlr']=$document_data['path'];
-$referrer="Chamilo";
-$target_path=api_get_path(WEB_CODE_PATH).'document/save_pixlr.php';
-$target=$target_path;
-$locktarget="true";
-$locktitle="false";
+$exit_path = api_get_path(WEB_CODE_PATH).'document/exit_pixlr.php';
+$_SESSION['exit_pixlr'] = $document_data['path'];
+$referrer = "Chamilo";
+$target_path = api_get_path(WEB_CODE_PATH).'document/save_pixlr.php';
+$target = $target_path;
+$locktarget = "true";
+$locktitle = "false";
 
-if ($_SERVER['HTTP_HOST']=="localhost") {
-	$path_and_file= api_get_path(SYS_PATH).'/crossdomain.xml';
+if ($_SERVER['HTTP_HOST'] == "localhost") {
+	$path_and_file = api_get_path(SYS_PATH).'/crossdomain.xml';
 	if (!file_exists($path_and_file)) {
-		$crossdomain='<?xml version="1.0"?>
+		$crossdomain = '<?xml version="1.0"?>
 			<!DOCTYPE cross-domain-policy SYSTEM "http://www.adobe.com/xml/dtds/cross-domain-policy.dtd">
 			<cross-domain-policy>
 				<allow-access-from domain="cdn.pixlr.com" />

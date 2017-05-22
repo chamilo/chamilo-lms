@@ -216,7 +216,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
             // is necessary verify check
             if ($legal_type == 1) {
-                if ((isset($_POST['legal_accept']) && $_POST['legal_accept']=='1')) {
+                if ((isset($_POST['legal_accept']) && $_POST['legal_accept'] == '1')) {
                     $legal_option = true;
                 } else {
                     $legal_option = false;
@@ -504,7 +504,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                  * Process external authentication
                  * on the basis of the given login name
                  */
-                $loginFailed = true;  // Default initialisation. It could
+                $loginFailed = true; // Default initialisation. It could
                 // change after the external authentication
                 $key = $uData['auth_source']; //'ldap','shibboleth'...
 
@@ -549,7 +549,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                      * Process external authentication
                      * on the basis of the given login name
                      */
-                    $loginFailed = true;  // Default initialisation. It could
+                    $loginFailed = true; // Default initialisation. It could
                     // change after the external authentication
                     $key = $uData['auth_source']; //'ldap','shibboleth'...
 
@@ -560,11 +560,11 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             } else {
                 // change after the external authentication
                 // login failed, Database::num_rows($result) <= 0
-                $loginFailed = true;  // Default initialisation. It could
+                $loginFailed = true; // Default initialisation. It could
             }
 
             // login failed, Database::num_rows($result) <= 0
-            $loginFailed = true;  // Default initialisation. It could
+            $loginFailed = true; // Default initialisation. It could
             // change after the external authentication
 
             /*
@@ -592,7 +592,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                         include_once($thisAuthSource['newUser']);
                     } else {
                         error_log(
-                            'Chamilo Authentication external file' .
+                            'Chamilo Authentication external file'.
                             ' could not be found - this might prevent your system from using'.
                             ' the authentication process in the user creation process',
                             0
@@ -704,7 +704,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             online_logout(null, false);
             $osso->logout(); //redirects and exits
         }
-    } elseif (api_get_setting('openid_authentication')=='true') {
+    } elseif (api_get_setting('openid_authentication') == 'true') {
         if (!empty($_POST['openid_url'])) {
             include api_get_path(SYS_CODE_PATH).'auth/openid/login.php';
             openid_begin(trim($_POST['openid_url']), api_get_path(WEB_PATH).'index.php');
@@ -717,7 +717,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             if ($res['status'] == 'success') {
                 $id1 = Database::escape_string($res['openid.identity']);
                 //have another id with or without the final '/'
-                $id2 = (substr($id1, -1, 1)=='/'?substr($id1, 0, -1):$id1.'/');
+                $id2 = (substr($id1, -1, 1) == '/' ? substr($id1, 0, -1) : $id1.'/');
                 //lookup the user in the main database
                 $user_table = Database::get_main_table(TABLE_MAIN_USER);
                 $sql = "SELECT user_id, username, password, auth_source, active, expiration_date
@@ -726,14 +726,14 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                         OR openid = '$id2' ";
                 $result = Database::query($sql);
                 if ($result !== false) {
-                    if (Database::num_rows($result)>0) {
+                    if (Database::num_rows($result) > 0) {
                         $uData = Database::fetch_array($result);
 
                         if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
                             //the authentification of this user is managed by Chamilo itself
 
                             // check if the account is active (not locked)
-                            if ($uData['active']=='1') {
+                            if ($uData['active'] == '1') {
                                 // check if the expiration date has not been reached
                                 if ($uData['expiration_date'] > date('Y-m-d H:i:s')
                                     || empty($uData['expiration_date'])
@@ -812,7 +812,7 @@ if (!empty($cidReq) && (!isset($_SESSION['_cid']) ||
     (isset($_SESSION['_cid']) && $cidReq != $_SESSION['_cid']))
 ) {
     $cidReset = true;
-    $gidReset = true;    // As groups depend from courses, group id is reset
+    $gidReset = true; // As groups depend from courses, group id is reset
 }
 
 /* USER INIT */
@@ -885,7 +885,7 @@ if (!isset($_SESSION['login_as'])) {
         }
 
         if ($save_course_access) {
-            $course_tracking_table = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            $course_tracking_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
             /*
             * When $_configuration['session_lifetime'] is too big 100 hours (in order to let users take exercises with no problems)
             * the function Tracking::get_time_spent_on_the_course() returns big values (200h) due the condition:
@@ -956,8 +956,8 @@ if (isset($cidReset) && $cidReset) {
             $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
             if (!empty($_GET['id_session'])) {
-                $sql = 'SELECT name FROM '.$tbl_session . '
-                        WHERE id="'.intval($_GET['id_session']) . '"';
+                $sql = 'SELECT name FROM '.$tbl_session.'
+                        WHERE id="'.intval($_GET['id_session']).'"';
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs)) {
                     list($_SESSION['session_name']) = Database::fetch_array($rs);
@@ -1044,7 +1044,7 @@ if (isset($cidReset) && $cidReset) {
         // Moreover, if we want to track a course with another session it can be usefull
         if (!empty($_GET['id_session']) && is_numeric($_GET['id_session'])) {
             $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-            $sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_GET['id_session']). '"';
+            $sql = 'SELECT name FROM '.$tbl_session.' WHERE id="'.intval($_GET['id_session']).'"';
             $rs = Database::query($sql);
             if (Database::num_rows($rs)) {
                 list($_SESSION['session_name']) = Database::fetch_array($rs);
@@ -1168,7 +1168,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                     }
                 }
                 $url = api_get_path(WEB_CODE_PATH).'auth/inscription.php';
-                header("Location:". $url);
+                header("Location:".$url);
                 exit;
             }
         }
@@ -1188,8 +1188,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
         if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
             $cuData = Database::fetch_array($result, 'ASSOC');
 
-            $is_courseAdmin = (bool)($cuData['status'] == 1);
-            $is_courseTutor = (bool)($cuData['is_tutor'] == 1);
+            $is_courseAdmin = (bool) ($cuData['status'] == 1);
+            $is_courseTutor = (bool) ($cuData['is_tutor'] == 1);
             $is_courseMember = true;
         }
 
@@ -1200,9 +1200,9 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 // This user has no status related to this course
                 // The user is subscribed in a session? The user is a Session coach a Session admin ?
 
-                $tbl_session  = Database :: get_main_table(TABLE_MAIN_SESSION);
-                $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-                $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+                $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+                $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+                $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
                 // Session coach, session admin or course coach admin
                 $sql = "SELECT session.id_coach, session_admin_id, session_rcru.user_id
@@ -1505,12 +1505,12 @@ if ((isset($cas_login) && $cas_login && exist_firstpage_parameter()) ||
     ($logging_in && exist_firstpage_parameter())
 ) {
     $redirectCourseDir = api_get_firstpage_parameter();
-    api_delete_firstpage_parameter();    // delete the cookie
+    api_delete_firstpage_parameter(); // delete the cookie
 
     if (!isset($_SESSION['request_uri'])) {
         if (CourseManager::get_course_id_from_path($redirectCourseDir)) {
             $_SESSION['noredirection'] = false;
-            $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH) . $redirectCourseDir . '/';
+            $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH).$redirectCourseDir.'/';
         }
     }
 } elseif (api_user_is_login() && exist_firstpage_parameter()) {
@@ -1518,7 +1518,7 @@ if ((isset($cas_login) && $cas_login && exist_firstpage_parameter()) ||
     api_delete_firstpage_parameter(); // delete the cookie
     if (CourseManager::get_course_id_from_path($redirectCourseDir)) {
         $_SESSION['noredirection'] = false;
-        $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH) . $redirectCourseDir . '/';
+        $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH).$redirectCourseDir.'/';
     }
 }
 

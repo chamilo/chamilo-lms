@@ -7,7 +7,7 @@
 /**
  * Init
  */
-require_once __DIR__ . '/../config.php';
+require_once __DIR__.'/../config.php';
 // protect
 api_protect_admin_script();
 // start plugin
@@ -85,8 +85,7 @@ if (!empty($sessionId)) {
         $data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_DISAPPROVED;
         $student['rejectUrl'] = $plugin->getQueueUrl($data);
         $student['complete_name'] = $isWesternNameOrder ?
-            $student['firstname'] . ', ' . $student['lastname'] :
-            $student['lastname'] . ', ' . $student['firstname'];
+            $student['firstname'].', '.$student['lastname'] : $student['lastname'].', '.$student['firstname'];
     }
     $tpl->assign('session', $sessionArray);
     $tpl->assign('students', $studentList['students']);

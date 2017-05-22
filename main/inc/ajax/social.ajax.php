@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  * Responses to AJAX calls
  */
@@ -17,11 +20,11 @@ switch ($action) {
         if (isset($_GET['is_my_friend'])) {
             $relation_type = USER_RELATION_TYPE_FRIEND; //My friend
         } else {
-            $relation_type = USER_RELATION_TYPE_UNKNOW; //Unknown contact
+            $relation_type = USER_RELATION_TYPE_UNKNOWN; //Unknown contact
         }
 
         if (isset($_GET['friend_id'])) {
-            $my_current_friend  = $_GET['friend_id'];
+            $my_current_friend = $_GET['friend_id'];
             UserManager::relate_users($current_user_id, $my_current_friend, $relation_type);
             UserManager::relate_users($my_current_friend, $current_user_id, $relation_type);
             SocialManager::invitation_accepted($my_current_friend, $current_user_id);
@@ -29,7 +32,7 @@ switch ($action) {
                 Display::return_message(get_lang('AddedContactToList'), 'success')
             );
 
-            header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/invitations.php');
+            header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
         }
         break;
     case 'deny_friend':
@@ -39,9 +42,9 @@ switch ($action) {
         }
 
         if (isset($_GET['is_my_friend'])) {
-            $relation_type = USER_RELATION_TYPE_FRIEND;//my friend
+            $relation_type = USER_RELATION_TYPE_FRIEND; //my friend
         } else {
-            $relation_type = USER_RELATION_TYPE_UNKNOW;//Contact unknown
+            $relation_type = USER_RELATION_TYPE_UNKNOWN; //Contact unknown
         }
         if (isset($_GET['denied_friend_id'])) {
             SocialManager::invitation_denied($_GET['denied_friend_id'], $current_user_id);
@@ -49,7 +52,7 @@ switch ($action) {
                 Display::return_message(get_lang('InvitationDenied'), 'success')
             );
 
-            header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/invitations.php');
+            header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
         }
         break;
     case 'delete_friend':
@@ -68,7 +71,7 @@ switch ($action) {
             break;
         }
         $user_id = api_get_user_id();
-        $name_search= Security::remove_XSS($_POST['search_name_q']);
+        $name_search = Security::remove_XSS($_POST['search_name_q']);
         $number_friends = 0;
 
         if (isset($name_search) && $name_search != 'undefined') {
@@ -81,14 +84,14 @@ switch ($action) {
         $number_of_images = 8;
         $number_friends = count($friends);
         if ($number_friends != 0) {
-            $number_loop = ($number_friends/$number_of_images);
+            $number_loop = ($number_friends / $number_of_images);
             $loop_friends = ceil($number_loop);
             $j = 0;
             for ($k = 0; $k < $loop_friends; $k++) {
-                if ($j==$number_of_images) {
-                    $number_of_images=$number_of_images*2;
+                if ($j == $number_of_images) {
+                    $number_of_images = $number_of_images * 2;
                 }
-                while ($j<$number_of_images) {
+                while ($j < $number_of_images) {
                     if (isset($friends[$j])) {
                         $friend = $friends[$j];
                         $user_name = api_xml_http_response_encode($friend['firstName'].' '.$friend['lastName']);
@@ -96,15 +99,15 @@ switch ($action) {
 
                         $friend_html .= '
                             <div class="col-md-3">
-                                <div class="thumbnail text-center" id="div_' . $friends[$j]['friend_user_id'] . '">
-                                    <img src="' . $userPicture . '" class="img-responsive" id="imgfriend_' . $friend['friend_user_id'] . '" title="$user_name">
+                                <div class="thumbnail text-center" id="div_' . $friends[$j]['friend_user_id'].'">
+                                    <img src="' . $userPicture.'" class="img-responsive" id="imgfriend_'.$friend['friend_user_id'].'" title="$user_name">
                                     <div class="caption">
                                         <h3>
-                                            <a href="profile.php?u=' . $friend['friend_user_id'] . '">' . $user_name . '</a>
+                                            <a href="profile.php?u=' . $friend['friend_user_id'].'">'.$user_name.'</a>
                                         </h3>
                                         <p>
-                                            <button class="btn btn-danger" onclick="delete_friend(this)" id=img_' . $friend['friend_user_id'] . '>
-                                                ' . get_lang('Delete') . '
+                                            <button class="btn btn-danger" onclick="delete_friend(this)" id=img_' . $friend['friend_user_id'].'>
+                                                ' . get_lang('Delete').'
                                             </button>
                                         </p>
                                     </div>
@@ -125,7 +128,7 @@ switch ($action) {
         }
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
-        $user_id = intval($_SESSION['social_user_id']);
+        $user_id = Session::read('social_user_id');
 
         if ($_POST['action']) {
             $action = $_POST['action'];
@@ -133,7 +136,7 @@ switch ($action) {
 
         switch ($action) {
             case 'load_course':
-                $course_id =  intval($_POST['course_code']); // the int course id
+                $course_id = intval($_POST['course_code']); // the int course id
                 $course_info = api_get_course_info_by_id($course_id);
                 $course_code = $course_info['code'];
 
@@ -141,7 +144,7 @@ switch ($action) {
                     //------Forum messages
                     $forum_result = get_all_post_from_user($user_id, $course_code);
                     $all_result_data = 0;
-                    if ($forum_result !='') {
+                    if ($forum_result != '') {
                         echo '<div id="social-forum-main-title">';
                         echo api_xml_http_response_encode(get_lang('Forum'));
                         echo '</div>';
@@ -154,7 +157,7 @@ switch ($action) {
                     }
 
                     //------Blog posts
-                    $result = get_blog_post_from_user($course_code, $user_id);
+                    $result = Blog::getBlogPostFromUser($course_id, $user_id, $course_code);
 
                     if (!empty($result)) {
                         api_display_tool_title(api_xml_http_response_encode(get_lang('Blog')));
@@ -166,7 +169,7 @@ switch ($action) {
                     }
 
                     //------Blog comments
-                    $result = get_blog_comment_from_user($course_code, $user_id);
+                    $result = Blog::getBlogCommentsFromUser($course_id, $user_id, $course_code);
                     if (!empty($result)) {
                         echo '<div  style="background:#FAF9F6; padding-left:10px;">';
                         api_display_tool_title(api_xml_http_response_encode(get_lang('BlogComments')));
@@ -212,8 +215,8 @@ switch ($action) {
             $html .= Display::div(
                 Display::url(
                     get_lang('SeeMore'),
-                    api_get_self() . '?u=' . $userId . '&a=list_wall_message&start=' .
-                    ($start + $length + 1) . '&length=' . $length,
+                    api_get_self().'?u='.$userId.'&a=list_wall_message&start='.
+                    ($start + $length + 1).'&length='.$length,
                     array(
                         'class' => 'nextPage',
                     )

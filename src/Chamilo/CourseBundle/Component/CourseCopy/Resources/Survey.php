@@ -80,7 +80,7 @@ class Survey extends Resource
      * @param string $lang
      * @param string $avail_from
      * @param string $avail_till
-     * @param char $is_shared
+     * @param string $is_shared
      * @param string $template
      * @param string $intro
      * @param string $surveythanks

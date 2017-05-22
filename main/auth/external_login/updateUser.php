@@ -7,7 +7,7 @@ This script must not exit.
 
 use ChamiloSession as Session;
 
-require_once(dirname(__FILE__) . '/functions.inc.php');
+require_once __DIR__.'/functions.inc.php';
 
 //MAIN CODE
 //$uData variable is set in local.inc.php
@@ -36,6 +36,6 @@ if ($new_user !== false) { //User can login
     //User cannot login
     $loginFailed = true;
     Session::erase('_uid');
-    header('Location: ' . api_get_path(WEB_PATH) . 'index.php?loginFailed=1&error=user_password_incorrect');
+    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
     exit;
 }

@@ -1,5 +1,5 @@
-{{ organization }}
-
+<br>
+<br>
 <h2 align="center"> {{ pdf_title }} </h2>
 
 {% if pdf_description %}
@@ -7,27 +7,32 @@
     <br /><br />
 {% endif %}
 
-<table align="center" width="100%">
+
+<table align="center" width="100%" class="full-width border-thin">
     {% if pdf_student_info %}
     <tr>
+        <td style="background-color: #E5E5E5; text-align: left; width:130px; ">
+            <strong>{{ "Student" | get_lang }}:</strong>  
+        </td>
         <td>
-            <strong>{{ "Student" | get_lang }}:</strong>  {{ pdf_student_info.complete_name }}
+            {{ pdf_student_info.complete_name }}
         </td>
     </tr>
     {% endif %}
-
-
     {% if pdf_teachers %}
         <tr>
+            <td style="background-color: #E5E5E5; text-align: left; width:130px;">
+                <strong>{{ "Teacher" | get_lang }}:</strong>
+            </td>
             <td>
-                <strong>{{ "Teacher" | get_lang }}:</strong> {{ pdf_teachers }}
+                {{ pdf_teachers }}
             </td>
         </tr>
     {% endif %}
 
     {% if pdf_session_info %}
         <tr>
-            <td>
+            <td style="background-color: #E5E5E5; text-align: left; width:130px;">
                 <strong>{{ "Session" | get_lang }}:</strong> {{ pdf_session_info.name }}
             </td>
 
@@ -38,10 +43,13 @@
             {% endif %}
         </tr>
 
-        {% if pdf_session_info.access_start_date != '' and pdf_session_info.access_end_date is not empty %}
+        {% if pdf_session_info.access_start_date != '' and pdf_session_info.access_end_date is not empty and pdf_session_info.access_end_date != '0000-00-00' %}
         <tr>
+            <td style="background-color: #E5E5E5; text-align: left; width:130px;">
+                <strong>{{ "PeriodToDisplay" | get_lang }}:</strong> 
+            </td>
             <td>
-                <strong>{{ "PeriodToDisplay" | get_lang }}:</strong> {{ "FromDateXToDateY"| get_lang | format(pdf_session_info.access_start_date, pdf_session_info.access_end_date ) }}
+                {{ "FromDateXToDateY"| get_lang | format(pdf_session_info.access_start_date, pdf_session_info.access_end_date ) }}
             </td>
         </tr>
         {% endif %}
@@ -49,27 +57,32 @@
 
     {% if pdf_course_info %}
     <tr>
+        <td style="background-color: #E5E5E5; text-align: left; width:130px;">
+            <strong>{{ "Course" | get_lang }}:</strong> 
+        </td>
         <td>
-            <strong>{{ "Course" | get_lang }}:</strong> {{ pdf_course_info.title }} ({{ pdf_course_info.code }})
-
-            {% if pdf_course_category %}
-            <strong>{{ "Category" | get_lang }}:</strong> {{ pdf_course_category }}
-            {% endif %}
-
+            {{ pdf_course_info.title }} ({{ pdf_course_info.code }})
         </td>
     </tr>
+        {% if pdf_course_category %}
+            <tr>
+                <td> <strong>{{ "Category" | get_lang }}:</strong></td>
+                <td> {{ pdf_course_category }} </td>
+            </tr>
+        {% endif %}
     {% endif %}
 
     {% if pdf_date %}
     <tr>
+        <td style="background-color: #E5E5E5; text-align: left; width:130px;">
+            <strong>{{ "Date" | get_lang }}:</strong> 
+        </td>
         <td>
-            <strong>{{ "Date" | get_lang }}:</strong> {{ pdf_date }}
+            {{ pdf_date }}
         </td>
     </tr>
     {% endif %}
-
 </table>
-
 
 {% if show_grade_generated_date == true %}
 <h5 align="right">
@@ -77,31 +90,22 @@
 </h5>
 {% endif %}
 
-<br />
-
 {{ pdf_content }}
 
-{% if add_signatures == true %}
+{% if not add_signatures is empty %}
     <br />
     <br />
 
-    <table style="text-align:center" width="100%">
+    <table class="full-width">
         <tr>
-            <td>
-                _____________________________
-                <br />
-                {{ "Drh" | get_lang }}
-            </td>
-            <td>
-                _____________________________
-                <br />
-                {{ "Teacher" | get_lang }}
-            </td>
-            <td>
-                _____________________________
-                <br />
-                {{ "Date" | get_lang }}
-            </td>
+            {% for signature in add_signatures %}
+                <td class="text-center">
+                    _____________________________
+                    <br />
+                    {{ signature|get_lang }}
+                </td>
+            {% endfor %}
         </tr>
     </table>
 {% endif %}
+

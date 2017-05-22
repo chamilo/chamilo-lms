@@ -125,9 +125,7 @@ $(document).ready(function() {
             for (dayIndex = 0; dayIndex < segsByDay.length; dayIndex++) {
                 daySegs = segsByDay[dayIndex];
                 if (daySegs) { // sparse array, so might be undefined
-
                     this.sortEventSegs(daySegs);
-
                     for (i = 0; i < daySegs.length; i++) {
                         var event = daySegs[i].event;
                         if (jQuery.inArray(event.id, eventList) !== -1) {
@@ -644,7 +642,6 @@ $(document).ready(function() {
                         '<div class="form-group"><label class="col-sm-3 control-label">{{ 'Session' | get_lang }}</label>' +
                         '<div class="col-sm-9">' + calEvent.session_name+"</div></div>"
                     );
-
                 } else {
                     $("#calendar_session_info").html('');
                 }
@@ -652,7 +649,6 @@ $(document).ready(function() {
                 $("#simple_title").html(calEvent.title);
                 $("#simple_content").html(calEvent.description);
                 $("#simple_comment").html(calEvent.comment);
-
                 $("#simple-dialog-form").dialog("open");
                 $("#simple-dialog-form").dialog({
 					buttons: {
@@ -706,12 +702,6 @@ $(document).ready(function() {
 			else $('#loading').hide();
 		}
 	});
-
-
-
-
-
-
 });
 </script>
 {{ actions_div }}
@@ -764,6 +754,13 @@ $(document).ready(function() {
         {{ form_add }}
 	</div>
 </div>
+
+{% if legend_list %}
+    {% for color, text in legend_list %}
+        <span style="background-color: {{ color }}" class="label label-default">&nbsp;</span> {{ text }} &nbsp;&nbsp;
+    {% endfor %}
+    <br /><br />
+{% endif %}
 <div id="loading" style="margin-left:150px;position:absolute;display:none">
     {{ "Loading" | get_lang }}...
 </div>

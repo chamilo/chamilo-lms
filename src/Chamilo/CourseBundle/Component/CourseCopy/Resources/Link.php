@@ -32,6 +32,10 @@ class Link extends Resource
      */
     public $on_homepage;
     /**
+     * @var string The link target
+     */
+    public $target;
+    /**
      * Create a new Link
      * @param int $id The id of this link in the Chamilo-course
      * @param string $title
@@ -46,7 +50,7 @@ class Link extends Resource
         $category_id,
         $on_homepage
     ) {
-        parent::__construct($id,RESOURCE_LINK);
+        parent::__construct($id, RESOURCE_LINK);
         $this->title = $title;
         $this->url = $url;
         $this->description = $description;

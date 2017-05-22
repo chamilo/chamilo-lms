@@ -20,7 +20,7 @@ $courseId = api_get_course_int_id();
 //YW Hack security to quick fix RolesRights bug
 $is_allowed = true;
 
-require_once api_get_path(SYS_CODE_PATH) . 'exercise/hotpotatoes.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php';
 
 /* Header */
 
@@ -64,7 +64,7 @@ $sql = "SELECT 1
             AND ((access_start_date <= '$now'
             AND access_end_date >= '$now')
             OR (access_start_date IS NULL AND access_end_date IS NULL))
-        WHERE session_id='" . api_get_session_id() . "' AND c_id = $courseId";
+        WHERE session_id='".api_get_session_id()."' AND c_id = $courseId";
 //echo $sql;
 $result = Database::query($sql);
 if (!Database::num_rows($result)) {
@@ -77,7 +77,7 @@ $tbl_learnpath_item = Database::get_course_table(TABLE_LP_ITEM);
 $tbl_learnpath_view = Database::get_course_table(TABLE_LP_VIEW);
 $tbl_learnpath_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
-$documentPath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document';
+$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
 // The variables for the days and the months
 $DaysShort = api_get_week_days_short();
@@ -109,7 +109,7 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
             // if user can track everybody : list user of course
             $sql = "SELECT count(user_id)
                     FROM $TABLECOURSUSER
-                    WHERE c_id = '$courseId' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . "";
+                    WHERE c_id = '$courseId' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."";
 
         } else {
             // if user can only track one group : list users of this group
@@ -147,7 +147,7 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
             // list of users in this course
             $sql = "SELECT u.user_id, u.firstname,u.lastname
                 FROM $TABLECOURSUSER cu , $TABLEUSER u
-                WHERE cu.user_id = u.user_id AND cu.relation_type<>" . COURSE_RELATION_TYPE_RRHH . "
+                WHERE cu.user_id = u.user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
                 AND cu.c_id = '$courseId'
                 LIMIT $offset,$step";
         } else {
@@ -173,7 +173,7 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
             // check if user is in this course
             $tracking_is_accepted = $is_course_member;
             $tracked_user_info = api_get_user_info($uInfo);
-            $title[0] = $tracked_user_info[1] . '_' . $tracked_user_info[2];
+            $title[0] = $tracked_user_info[1].'_'.$tracked_user_info[2];
         } else {
             // check if user is in the group of this tutor
             $sql = "SELECT u.firstname,u.lastname, u.email
@@ -187,7 +187,7 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
                 $tracking_is_accepted = true;
             }
 
-            $title[0] = $tracked_user_info['firstname'] . '_' . $tracked_user_info['lastname'];
+            $title[0] = $tracked_user_info['firstname'].'_'.$tracked_user_info['lastname'];
         }
 
         if ($tracking_is_accepted) {
@@ -235,8 +235,8 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
                 $_cid
             );
 
-            $title_line = $title_line1 . $title_line2 . $title_line3 . $title_line4 . $title_line5;
-            $line = $line1 . $line2 . $line3 . $line4 . $line5;
+            $title_line = $title_line1.$title_line2.$title_line3.$title_line4.$title_line5;
+            $line = $line1.$line2.$line3.$line4.$line5;
         } else {
             echo get_lang('ErrorUserNotInGroup');
         }
@@ -303,22 +303,22 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
      * force the browser to save the file instead of opening it
      */
 
-    $len = strlen($title_line . $line);
+    $len = strlen($title_line.$line);
     header('Content-type: application/octet-stream');
     //header('Content-Type: application/force-download');
-    header('Content-length: ' . $len);
+    header('Content-length: '.$len);
     $filename = html_entity_decode(
         str_replace(
             ":",
             "",
-            str_replace(" ", "_", $title[0] . '_' . $title[1] . '.csv')
+            str_replace(" ", "_", $title[0].'_'.$title[1].'.csv')
         )
     );
     $filename = api_replace_dangerous_char($filename);
     if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT'])) {
-        header('Content-Disposition: filename= ' . $filename);
+        header('Content-Disposition: filename= '.$filename);
     } else {
-        header('Content-Disposition: attachment; filename= ' . $filename);
+        header('Content-Disposition: attachment; filename= '.$filename);
     }
     if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
         header('Pragma: ');
@@ -327,7 +327,7 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
             'Cache-Control: public'
         ); // IE cannot download from sessions without a cache
     }
-    header('Content-Description: ' . $filename);
+    header('Content-Description: '.$filename);
     header('Content-transfer-encoding: binary');
 
     echo api_html_entity_decode($title_line, ENT_QUOTES, $charset);

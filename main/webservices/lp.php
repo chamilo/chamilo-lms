@@ -65,7 +65,7 @@ function WSHelperVerifyKey($params)
     }
 
     if ($debug) {
-        error_log("checkip " . intval($check_ip));
+        error_log("checkip ".intval($check_ip));
     }
 
     if ($check_ip) {
@@ -120,13 +120,13 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSImportLP',                            // method name
-    array('params' => 'tns:params'),  // input parameters
-    array('return' => 'xsd:string'),                                        // output parameters
-    'urn:WSLP',                                                   // namespace
-    'urn:WSLP#WSImportLP',                       // soapaction
-    'rpc',                                                                  // style
-    'encoded',                                                              // use
+$server->register('WSImportLP', // method name
+    array('params' => 'tns:params'), // input parameters
+    array('return' => 'xsd:string'), // output parameters
+    'urn:WSLP', // namespace
+    'urn:WSLP#WSImportLP', // soapaction
+    'rpc', // style
+    'encoded', // use
     'This service adds users'                                               // documentation
 );
 
@@ -183,7 +183,7 @@ function WSImportLP($params)
 
     $uniqueFile = uniqid();
     $userId = 1; // admin
-    $filePath = api_get_path(SYS_ARCHIVE_PATH) . $uniqueFile;
+    $filePath = api_get_path(SYS_ARCHIVE_PATH).$uniqueFile;
     file_put_contents($filePath, $fileData);
 
     $fileName = $params['filename'];
@@ -256,8 +256,8 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'id'    => array('name' => 'id',    'type' => 'xsd:string'),
-        'name'  => array('name' => 'name',  'type' => 'xsd:string'),
+        'id'    => array('name' => 'id', 'type' => 'xsd:string'),
+        'name'  => array('name' => 'name', 'type' => 'xsd:string'),
     )
 );
 
@@ -273,13 +273,13 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSGetLpList',                            // method name
-    array('params' => 'tns:paramsGetLpList'),  // input parameters
-    array('return' => 'tns:lpList'),                                        // output parameters
-    'urn:WSLP',                                                   // namespace
-    'urn:WSLP#WSGetLpList',                       // soapaction
-    'rpc',                                                                  // style
-    'encoded',                                                              // use
+$server->register('WSGetLpList', // method name
+    array('params' => 'tns:paramsGetLpList'), // input parameters
+    array('return' => 'tns:lpList'), // output parameters
+    'urn:WSLP', // namespace
+    'urn:WSLP#WSGetLpList', // soapaction
+    'rpc', // style
+    'encoded', // use
     'This service adds users'                                               // documentation
 );
 
@@ -294,9 +294,9 @@ function WSGetLpList($params)
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    require_once api_get_path(SYS_CODE_PATH) . 'lp/learnpathList.class.php';
-    require_once api_get_path(SYS_CODE_PATH) . 'lp/learnpath.class.php';
-    require_once api_get_path(SYS_CODE_PATH) . 'lp/learnpathItem.class.php';
+    require_once api_get_path(SYS_CODE_PATH).'lp/learnpathList.class.php';
+    require_once api_get_path(SYS_CODE_PATH).'lp/learnpath.class.php';
+    require_once api_get_path(SYS_CODE_PATH).'lp/learnpathItem.class.php';
 
     $courseIdName = $params['course_id_name'];
     $courseIdValue = $params['course_id_value'];
@@ -368,13 +368,13 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSDeleteLp',                            // method name
-    array('params' => 'tns:paramsDeleteLp'),  // input parameters
-    array('return' => 'xsd:string'),                                        // output parameters
-    'urn:WSLP',                                                   // namespace
-    'urn:WSLP#WSDeleteLp',                       // soapaction
-    'rpc',                                                                  // style
-    'encoded',                                                              // use
+$server->register('WSDeleteLp', // method name
+    array('params' => 'tns:paramsDeleteLp'), // input parameters
+    array('return' => 'xsd:string'), // output parameters
+    'urn:WSLP', // namespace
+    'urn:WSLP#WSDeleteLp', // soapaction
+    'rpc', // style
+    'encoded', // use
     'This service deletes a LP'                                               // documentation
 );
 
@@ -389,9 +389,9 @@ function WSDeleteLp($params)
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    require_once api_get_path(SYS_CODE_PATH) . 'lp/learnpathList.class.php';
-    require_once api_get_path(SYS_CODE_PATH) . 'lp/learnpath.class.php';
-    require_once api_get_path(SYS_CODE_PATH) . 'lp/learnpathItem.class.php';
+    require_once api_get_path(SYS_CODE_PATH).'lp/learnpathList.class.php';
+    require_once api_get_path(SYS_CODE_PATH).'lp/learnpath.class.php';
+    require_once api_get_path(SYS_CODE_PATH).'lp/learnpathItem.class.php';
 
     $courseIdName = $params['course_id_name'];
     $courseIdValue = $params['course_id_value'];
@@ -433,9 +433,9 @@ function WSDeleteLp($params)
     if ($lp) {
         if ($debug) error_log("LP deleted $lpId");
 
-        $course_dir = $courseInfo['directory'] . '/document';
+        $course_dir = $courseInfo['directory'].'/document';
         $sys_course_path = api_get_path(SYS_COURSE_PATH);
-        $base_work_dir = $sys_course_path . $course_dir;
+        $base_work_dir = $sys_course_path.$course_dir;
 
         $items = $lp->get_flat_ordered_items_list($lpId, 0, $courseId);
 
@@ -494,9 +494,9 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'data'  => array('name' => 'data',  'type' => 'xsd:string'),
-        'title'  => array('name' => 'title',  'type' => 'xsd:string'),
-        'filename'  => array('name' => 'filename',  'type' => 'xsd:string'),
+        'data'  => array('name' => 'data', 'type' => 'xsd:string'),
+        'title'  => array('name' => 'title', 'type' => 'xsd:string'),
+        'filename'  => array('name' => 'filename', 'type' => 'xsd:string'),
     )
 );
 
@@ -547,13 +547,13 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSCreateLp',                            // method name
-    array('params' => 'tns:paramsCreateLp'),  // input parameters
-    array('return' => 'xsd:string'),                                        // output parameters
-    'urn:WSLP',                                                   // namespace
-    'urn:WSLP#WSCreateLp',                       // soapaction
-    'rpc',                                                                  // style
-    'encoded',                                                              // use
+$server->register('WSCreateLp', // method name
+    array('params' => 'tns:paramsCreateLp'), // input parameters
+    array('return' => 'xsd:string'), // output parameters
+    'urn:WSLP', // namespace
+    'urn:WSLP#WSCreateLp', // soapaction
+    'rpc', // style
+    'encoded', // use
     'This service creates a LP'                                               // documentation
 );
 

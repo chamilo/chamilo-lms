@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once dirname(__FILE__).'/../../inc/global.inc.php';
-$url =  api_get_path(WEB_PATH).'main/auth/conditional_login/complete_phone_number.php';
+require_once __DIR__.'/../../inc/global.inc.php';
+$url = api_get_path(WEB_PATH).'main/auth/conditional_login/complete_phone_number.php';
 
-if (! isset($_SESSION['conditional_login']['uid']))
-  die("Not Authorised");
+if (!isset($_SESSION['conditional_login']['uid']))
+    die("Not Authorised");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="fr" xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml">
@@ -20,7 +20,7 @@ if (! isset($_SESSION['conditional_login']['uid']))
   </body>
 </html>
 <?php
-if (isset($_POST['submit'])){
+if (isset($_POST['submit'])) {
     $u = api_get_user_info($_SESSION['conditional_login']['uid']);
     $u['phone'] = $_POST['phone_number'];
     $password = null; // we don't want to change the password

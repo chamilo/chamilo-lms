@@ -36,29 +36,27 @@ class ExerciseResult
      * @param int $user_id User ID. Optional. If no user ID is provided, we take all the results. Defauts to null
      * @param int $filter
      * @param int $exercise_id
-     * @param null $hotpotato_name
+     *
      * @return bool
      */
     public function getExercisesReporting(
         $document_path,
         $user_id = null,
         $filter = 0,
-        $exercise_id = 0,
-        $hotpotato_name = null
+        $exercise_id = 0
     ) {
         $return = array();
         $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_TABLE_LP_MAIN = Database::get_course_table(TABLE_LP_MAIN);
-
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
         $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $TBL_TRACK_ATTEMPT_RECORDING = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
         $cid = api_get_course_id();
         $course_id = api_get_course_int_id();
         $user_id = intval($user_id);
         $sessionId = api_get_session_id();
-        $session_id_and = ' AND te.session_id = ' . $sessionId . ' ';
+        $session_id_and = ' AND te.session_id = '.$sessionId.' ';
         $exercise_id = intval($exercise_id);
 
         if (!empty($exercise_id)) {
@@ -94,7 +92,7 @@ class ExerciseResult
                     te.c_id = ce.c_id $user_id_and  $session_id_and AND
                     ce.active <>-1";
         } else {
-            $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
+            $user_id_and = ' AND te.exe_user_id = '.api_get_user_id().' ';
             // get only this user's results
             $sql = "SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").",
                         official_code,
@@ -181,7 +179,7 @@ class ExerciseResult
                             FROM $TBL_TRACK_ATTEMPT_RECORDING
                             WHERE 
                                 author != '' AND 
-                                exe_id = ".Database :: escape_string($result['exid'])."
+                                exe_id = ".Database::escape_string($result['exid'])."
                             LIMIT 1";
                 $query = Database::query($sql_exe);
 
@@ -276,32 +274,29 @@ class ExerciseResult
         return true;
     }
 
-	/**
-     * Exports the complete report as a CSV file     *
+    /**
+     * Exports the complete report as a CSV file
      * @param    string $document_path Document path inside the document tool
      * @param    integer $user_id Optional user ID
      * @param    boolean $export_user_fields Whether to include user fields or not
      * @param    int $export_filter
      * @param    int $exercise_id
-     * @param    string $hotpotato_name
      *
-	 * @return	boolean		False on error
-	 */
+     * @return  boolean False on error
+     */
     public function exportCompleteReportCSV(
         $document_path = '',
         $user_id = null,
         $export_user_fields = false,
         $export_filter = 0,
-        $exercise_id = 0,
-        $hotpotato_name = null
+        $exercise_id = 0
     ) {
         global $charset;
         $this->getExercisesReporting(
             $document_path,
             $user_id,
             $export_filter,
-            $exercise_id,
-            $hotpotato_name
+            $exercise_id
         );
         $now = api_get_local_time();
         $filename = 'exercise_results_'.$now.'.csv';
@@ -354,7 +349,7 @@ class ExerciseResult
         $data .= get_lang('Title').';';
         $data .= get_lang('StartDate').';';
         $data .= get_lang('EndDate').';';
-        $data .= get_lang('Duration'). ' ('.get_lang('MinMinutes').') ;';
+        $data .= get_lang('Duration').' ('.get_lang('MinMinutes').') ;';
         $data .= get_lang('Score').';';
         $data .= get_lang('Total').';';
         $data .= get_lang('Status').';';
@@ -365,11 +360,11 @@ class ExerciseResult
         //results
         foreach ($this->results as $row) {
             if (api_is_western_name_order()) {
-                $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
-                $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
             } else {
-                $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
-                $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
             }
 
             // Official code
@@ -378,8 +373,8 @@ class ExerciseResult
             }
 
             // Email
-            $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';
-            $data .= str_replace("\r\n",'  ',implode(", ", GroupManager :: get_user_group_name($row['user_id']))).';';
+            $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';
+            $data .= str_replace("\r\n", '  ', implode(", ", GroupManager::get_user_group_name($row['user_id']))).';';
 
             if ($export_user_fields) {
                 //show user fields data, if any, for this user
@@ -391,14 +386,14 @@ class ExerciseResult
                     true
                 );
                 if (!empty($user_fields_values)) {
-                    foreach($user_fields_values as $value) {
-                        $data .= '"'.str_replace('"','""',api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset)).'";';
+                    foreach ($user_fields_values as $value) {
+                        $data .= '"'.str_replace('"', '""', api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset)).'";';
                     }
                 }
             }
             $duration = !empty($row['duration']) ? round($row['duration'] / 60) : 0;
 
-            $data .= str_replace("\r\n",'  ', api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset)).';';
+            $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset)).';';
             $data .= str_replace("\r\n", '  ', $row['start_date']).';';
             $data .= str_replace("\r\n", '  ', $row['end_date']).';';
             $data .= str_replace("\r\n", '  ', $duration).';';

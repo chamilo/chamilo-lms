@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * 	@package chamilo.admin
- * 	@author Julio Montoya <gugli100@gmail.com>
+ * @package chamilo.admin
+ * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -36,22 +36,23 @@ if ($form->validate()) {
             if (substr($url, strlen($url) - 1, strlen($url)) == '/') {
                 UrlManager::update($url_id, $url, $description, $active);
             } else {
-                UrlManager::update($url_id, $url . '/', $description, $active);
+                UrlManager::update($url_id, $url.'/', $description, $active);
             }
             // URL Images
-            $url_images_dir = api_get_path(SYS_PATH) . 'custompages/url-images/';
+            $url_images_dir = api_get_path(SYS_PATH).'custompages/url-images/';
             $image_fields = array("url_image_1", "url_image_2", "url_image_3");
             foreach ($image_fields as $image_field) {
                 if ($_FILES[$image_field]['error'] == 0) {
                     // Hardcoded: only PNG files allowed
                     $fileFields = explode('.', $_FILES[$image_field]['name']);
                     if (end($fileFields) == 'png') {
-                        if (file_exists($url_images_dir . $url_id . '_' . $image_field . '.png')) {
+                        if (file_exists($url_images_dir.$url_id.'_'.$image_field.'.png')) {
                             // if the file exists, we have to remove it before move_uploaded_file
-                            unlink($url_images_dir . $url_id . '_' . $image_field . '.png');
+                            unlink($url_images_dir.$url_id.'_'.$image_field.'.png');
                         }
                         move_uploaded_file(
-                            $_FILES[$image_field]['tmp_name'], $url_images_dir . $url_id . '_' . $image_field . '.png'
+                            $_FILES[$image_field]['tmp_name'],
+                            $url_images_dir.$url_id.'_'.$image_field.'.png'
                         );
                     }
                     // else fail silently
@@ -68,7 +69,7 @@ if ($form->validate()) {
                     UrlManager::add($url, $description, $active);
                 } else {
                     //create
-                    UrlManager::add($url . '/', $description, $active);
+                    UrlManager::add($url.'/', $description, $active);
                 }
                 $message = get_lang('URLAdded');
                 $url_to_go = 'access_urls.php';
@@ -79,14 +80,14 @@ if ($form->validate()) {
             // URL Images
             $url .= (substr($url, strlen($url) - 1, strlen($url)) == '/') ? '' : '/';
             $url_id = UrlManager::get_url_id($url);
-            $url_images_dir = api_get_path(SYS_PATH) . 'custompages/url-images/';
+            $url_images_dir = api_get_path(SYS_PATH).'custompages/url-images/';
             $image_fields = array("url_image_1", "url_image_2", "url_image_3");
             foreach ($image_fields as $image_field) {
                 if ($_FILES[$image_field]['error'] == 0) {
                     // Hardcoded: only PNG files allowed
                     $fileFields = explode('.', $_FILES[$image_field]['name']);
                     if (end($fileFields) == 'png') {
-                        move_uploaded_file($_FILES[$image_field]['tmp_name'], $url_images_dir . $url_id . '_' . $image_field . '.png');
+                        move_uploaded_file($_FILES[$image_field]['tmp_name'], $url_images_dir.$url_id.'_'.$image_field.'.png');
                     }
                     // else fail silently
                 }
@@ -96,7 +97,7 @@ if ($form->validate()) {
         Security::clear_token();
         $tok = Security::get_token();
         Display::addFlash(Display::return_message($message));
-        header('Location: ' . $url_to_go . '?sec_token=' . $tok);
+        header('Location: '.$url_to_go.'?sec_token='.$tok);
         exit();
     }
 } else {

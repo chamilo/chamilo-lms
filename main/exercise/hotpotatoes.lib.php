@@ -15,7 +15,7 @@ $dbTable = Database::get_course_table(TABLE_DOCUMENT);
  * Creates a hotpotato directory.
  *
  * If a directory of that name already exists, don't create any. If a file of that name exists, remove it and create a directory.
- * @param   string      Wanted path
+ * @param   string   $base_work_dir   Wanted path
  * @return  boolean     Always true so far
  */
 function hotpotatoes_init($base_work_dir)
@@ -43,8 +43,8 @@ function hotpotatoes_init($base_work_dir)
 
 /**
  * Gets the title of the quiz file given as parameter.
- * @param   string    File name
- * @param   string    File path
+ * @param   string  $fname  File name
+ * @param   string  $fpath  File path
  * @return  string    The exercise title
  */
 function GetQuizName($fname, $fpath)
@@ -66,19 +66,20 @@ function GetQuizName($fname, $fpath)
     if ($title == '') {
         $title = basename($fname);
     }
-    return (string)$title;
+    return (string) $title;
 }
 
 /**
  * Gets the comment about a file from the corresponding database record.
- * @param   string    File path
+ * @param   string    $path File path
+ * @param   string    $courseCode (if not given, the course will be taken from the context)
  * @return  string    Comment from the database record
  * Added conditional to the table if is empty.
  */
-function GetComment($path, $course_code = '')
+function GetComment($path, $courseCode = '')
 {
     $dbTable = Database::get_course_table(TABLE_DOCUMENT);
-    $course_info = api_get_course_info($course_code);
+    $course_info = api_get_course_info($courseCode);
     $path = Database::escape_string($path);
     if (!empty($course_info) && !empty($path)) {
         $query = "SELECT comment FROM $dbTable WHERE c_id = {$course_info['real_id']}";
@@ -92,8 +93,8 @@ function GetComment($path, $course_code = '')
 
 /**
  * Sets the comment in the database for a particular path.
- * @param    string    File path
- * @param    string    Comment to set
+ * @param    string    $path File path
+ * @param    string    $comment Comment to set
  * @return   Doctrine\DBAL\Driver\Statement|null    Result of the database operation (Database::query will output some message directly on error anyway)
  */
 function SetComment($path, $comment)
@@ -102,8 +103,8 @@ function SetComment($path, $comment)
     $path = Database::escape_string($path);
     $comment = Database::escape_string($comment);
     $course_id = api_get_course_int_id();
-    $query = "UPDATE $dbTable SET comment='$comment'
-              WHERE $course_id AND path='$path'";
+    $query = "UPDATE $dbTable SET comment = '$comment'
+              WHERE $course_id AND path = '$path'";
     $result = Database::query($query);
 
     return $result;
@@ -111,8 +112,7 @@ function SetComment($path, $comment)
 
 /**
  * Reads the file contents into a string.
- * @param    string    Urlencoded path
- * @param string $full_file_path
+ * @param    string    $full_file_path Urlencoded path
  * @return   string    The file contents or false on security error
  */
 function ReadFileCont($full_file_path)
@@ -135,8 +135,8 @@ function ReadFileCont($full_file_path)
 
 /**
  * Writes the file contents into the given file path.
- * @param    string    Urlencoded path
- * @param    string    The file contents
+ * @param    string    $full_file_path Urlencoded path
+ * @param    string    $content The file contents
  * @return   boolean   True on success, false on security error
  */
 function WriteFileCont($full_file_path, $content)
@@ -148,27 +148,30 @@ function WriteFileCont($full_file_path, $content)
         if (basename($full_file_path) != Security::filter_filename(basename($full_file_path))) {
             return false;
         }
-        if (!($fp = fopen(urldecode($full_file_path), 'w'))) {
+        //if (!($fp = fopen(urldecode($full_file_path), 'w'))) {
             //die('Could not open Quiz input.');
+        //}
+        $fp = fopen(urldecode($full_file_path), 'w');
+        if ($fp !== false) {
+            fwrite($fp, $content);
+            fclose($fp);
+            return true;
         }
-        fwrite($fp, $content);
-        fclose($fp);
-        return true;
     }
     return false;
 }
 
 /**
  * Gets the name of an img whose path is given (without directories or extensions).
- * @param    string    An image tag (<img src="...." ...>)
+ * @param    string    $imageTag An image tag (<img src="...." ...>)
  * @return   string    The image file name or an empty string
  */
-function GetImgName($imgtag)
+function GetImgName($imageTag)
 {
     // Select src tag from img tag.
     $match = array();
-    //preg_match('/(src=(["\'])1.*(["\'])1)/i', $imgtag, $match);            //src
-    preg_match('/src(\s)*=(\s)*[\'"]([^\'"]*)[\'"]/i', $imgtag, $match); //get the img src as contained between " or '
+    //preg_match('/(src=(["\'])1.*(["\'])1)/i', $imageTag, $match);            //src
+    preg_match('/src(\s)*=(\s)*[\'"]([^\'"]*)[\'"]/i', $imageTag, $match); //get the img src as contained between " or '
     //list($key, $srctag) = each($match);
     $src = $match[3];
     //$src = substr($srctag, 5, (strlen($srctag) - 7));
@@ -177,7 +180,7 @@ function GetImgName($imgtag)
         if ($src == '') {
             return '';
         } else {
-            $tmp_src = basename($src) ;
+            $tmp_src = basename($src);
             if ($tmp_src == '') {
                 return $src;
             } else {
@@ -192,15 +195,15 @@ function GetImgName($imgtag)
 
 /**
  * Gets the source path of an image tag.
- * @param    string    An image tag
+ * @param    string    $imageTag An image tag
  * @return   string    The image source or ""
  */
-function GetSrcName($imgtag)
+function GetSrcName($imageTag)
 {
     // Select src tag from img tag.
     $match = array();
-    preg_match("|(src=\".*\" )|U", $imgtag, $match);            //src
-    list($key, $srctag) = each($match);
+    preg_match("|(src=\".*\" )|U", $imageTag, $match); //src
+    list(, $srctag) = each($match);
     $src = substr($srctag, 5, (strlen($srctag) - 7));
     if (stristr($src, 'http') === false) {
     // valid or invalid image name
@@ -212,10 +215,10 @@ function GetSrcName($imgtag)
 
 /**
  * Gets the image parameters from an image path.
- * @param    string       File name
- * @param    string       File path
- * @param    reference    Reference to a list of image parameters (emptied, then used to return results)
- * @param    reference    Reference to a counter of images (emptied, then used to return results)
+ * @param    string       $fname File name
+ * @param    string       $fpath File path
+ * @param    array    $imgparams Reference to a list of image parameters (emptied, then used to return results)
+ * @param    int    $imgcount Reference to a counter of images (emptied, then used to return results)
  */
 function GetImgParams($fname, $fpath, &$imgparams, &$imgcount)
 {
@@ -226,13 +229,13 @@ function GetImgParams($fname, $fpath, &$imgparams, &$imgcount)
     $matches = array();
     preg_match_all('(<img .*>)', $contents, $matches);
     $imgcount = 0;
-    while (list($int, $match) = each($matches)) {
+    while (list(, $match) = each($matches)) {
         // Each match consists of a key and a value.
-        while (list($key, $imgtag) = each($match)) {
-            $imgname = GetImgName($imgtag);
+        while (list(, $imageTag) = each($match)) {
+            $imgname = GetImgName($imageTag);
             if ($imgname != '' && !in_array($imgname, $imgparams)) {
-                array_push($imgparams, $imgname);    // name (+ type) of the images in the html test
-                $imgcount = $imgcount + 1;            // number of images in the html test
+                array_push($imgparams, $imgname); // name (+ type) of the images in the html test
+                $imgcount = $imgcount + 1; // number of images in the html test
             }
         }
     }
@@ -240,14 +243,14 @@ function GetImgParams($fname, $fpath, &$imgparams, &$imgcount)
 
 /**
  * Generates a list of hidden fields with the image params given as parameter to this function.
- * @param    array    List of image parameters
+ * @param    array    $imgparams List of image parameters
  * @return   string   String containing the hidden parameters built from the list given
  */
 function GenerateHiddenList($imgparams)
 {
     $list = '';
     if (is_array($imgparams)) {
-        while (list($int, $string) = each($imgparams)) {
+        while (list(, $string) = each($imgparams)) {
             $list .= "<input type=\"hidden\" name=\"imgparams[]\" value=\"$string\" />\n";
         }
     }
@@ -256,10 +259,9 @@ function GenerateHiddenList($imgparams)
 
 /**
  * Searches for a node in the given array.
- * @param    reference    Reference to the array to search
- * @param    string       Node we are looking for in the array
- * @param string $node
- * @return   mixed        Node name or false if not found
+ * @param    array    $array Reference to the array to search
+ * @param    string   $node  Node we are looking for in the array
+ * @return   mixed    Node name or false if not found
  */
 function myarraysearch(&$array, $node)
 {
@@ -278,9 +280,9 @@ function myarraysearch(&$array, $node)
 
 /**
  * Searches an image name into an array.
- * @param    reference        Reference to an array to search
- * @param    string           String to look for
- * @return   mixed            String given if found, false otherwise
+ * @param    array        $imgparams Reference to an array to search
+ * @param    string       $string String to look for
+ * @return   mixed        String given if found, false otherwise
  * @uses     myarraysearch    This function is just an additional layer on the myarraysearch() function
  */
 function CheckImageName(&$imgparams, $string)
@@ -291,7 +293,7 @@ function CheckImageName(&$imgparams, $string)
 
 /**
  * Replaces an image tag by ???
- * @param    string    The content to replace
+ * @param    string    $content The content to replace
  * @return   string    The modified content
  */
 function ReplaceImgTag($content)
@@ -299,12 +301,10 @@ function ReplaceImgTag($content)
     $newcontent = $content;
     $matches = array();
     preg_match_all('(<img .*>)', $content, $matches);
-    while (list($int, $match) = each($matches)) {
-        while (list($key, $imgtag) = each($match)) {
-            $imgname = GetSrcName($imgtag);
-            if ($imgname == '') {
-                // Valid or invalid image name.
-            } else {
+    while (list(, $match) = each($matches)) {
+        while (list(, $imageTag) = each($match)) {
+            $imgname = GetSrcName($imageTag);
+            if ($imgname != '') {
                 $prehref = $imgname;
                 $posthref = basename($imgname);
                 $newcontent = str_replace($prehref, $posthref, $newcontent);
@@ -316,10 +316,8 @@ function ReplaceImgTag($content)
 
 /**
  * Fills the folder name up to a certain length with "0".
- * @param    string    Original folder name
- * @param    integer   Length to reach
- * @param integer $name
- * @param integer $nsize
+ * @param    string    $name Original folder name
+ * @param    integer   $nsize Length to reach
  * @return   string    Modified folder name
  */
 function FillFolderName($name, $nsize)
@@ -334,7 +332,7 @@ function FillFolderName($name, $nsize)
 
 /**
  * Generates the HotPotato folder tree.
- * @param    string    Folder path
+ * @param    string    $folder Folder path
  * @return   string    Folder name (modified)
  */
 function GenerateHpFolder($folder)
@@ -352,23 +350,22 @@ function GenerateHpFolder($folder)
             }
         }
     }
-    $w = 0;
-    do {
+    $name = '';
+    $w = true;
+    while ($w == true) {
         $name = FillFolderName(mt_rand(1, 99999), 6);
         $checked = myarraysearch($filelist, $name);
         // As long as we find the name in the array, continue looping. As soon as we have a new element, quit.
-        if ($checked) {
-            $w = 1;
-        } else {
-            $w = 0;
+        if (!$checked) {
+            $w = false;
         }
-    } while ($w == 1);
+    }
     return $name;
 }
 
 /**
  * Gets the folder name (strips down path).
- * @param    string    Path
+ * @param    string    $fname Path
  * @return   string    Folder name stripped down
  */
 function GetFolderName($fname)
@@ -380,7 +377,7 @@ function GetFolderName($fname)
 
 /**
  * Gets the folder path (with out the name of the folder itself) ?
- * @param    string    Path
+ * @param    string    $fname Path
  * @return   string    Path stripped down
  */
 function GetFolderPath($fname)
@@ -395,7 +392,7 @@ function GetFolderPath($fname)
 
 /**
  * Checks if there are subfolders.
- * @param    string    Path
+ * @param    string    $path Path
  * @return   integer   1 if a subfolder was found, 0 otherwise
  */
 function CheckSubFolder($path)
@@ -408,7 +405,7 @@ function CheckSubFolder($path)
                 if ($file != '..') {
                     $full_name = $folder.'/'.$file;
                     if (is_dir($full_name)) {
-                        $dflag = 1;    // first directory
+                        $dflag = 1; // first directory
                     }
                 }
             }
@@ -419,9 +416,9 @@ function CheckSubFolder($path)
 
 /**
  * Hotpotato Garbage Collector
- * @param    string     Path
- * @param    integer    Flag
- * @param    integer    User id
+ * @param    string     $folder Path
+ * @param    integer    $flag Flag
+ * @param    integer    $user_id User id
  * @return   void       No return value, but echoes results
  */
 function HotPotGCt($folder, $flag, $user_id)
@@ -443,7 +440,7 @@ function HotPotGCt($folder, $flag, $user_id)
         }
         closedir($dir);
     }
-    while (list($key, $val) = each($filelist)) {
+    while (list(, $val) = each($filelist)) {
         if (stristr($val, $user_id.'.t.html')) {
             if ($flag == 1) {
                 my_delete($folder.'/'.$val);

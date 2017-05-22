@@ -14,7 +14,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
 //$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
 
 // Setting the name of the tool
 $tool_name = get_lang('EnrollTrainersFromExistingSessions');
@@ -70,13 +70,13 @@ echo Display::input('hidden', 'form_sent', '1');
     <tr>
         <td align="center">
             <?php
-             echo Display::select(
-                 'sessions[]',
-                 $sessionList,
-                 '',
-                 array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'sessions', 'size'=>'15px'),
-                 false
-             );
+                echo Display::select(
+                    'sessions[]',
+                    $sessionList,
+                    '',
+                    array('style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'sessions', 'size'=>'15px'),
+                    false
+                );
             ?>
         </td>
         <td align="center">

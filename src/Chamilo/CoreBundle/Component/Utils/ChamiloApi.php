@@ -67,20 +67,21 @@ class ChamiloApi
      * Get the platform logo path
      * @return null|string
      */
-    public static function getWebPlatformLogoPath()
+    public static function getWebPlatformLogoPath($theme = '')
     {
-        $theme = api_get_visual_theme();
+        $theme = empty($theme) ? api_get_visual_theme() : $theme;
         $accessUrlId = api_get_current_access_url_id();
-        $customLogoPath = "themes/$theme/images/header-logo-custom$accessUrlId.png";
+        $themeDir = \Template::getThemeDir($theme);
+        $customLogoPath = "$themeDir/images/header-logo-custom$accessUrlId.png";
 
-        if (file_exists(api_get_path(SYS_PUBLIC_PATH) . "css/$customLogoPath")) {
-            return api_get_path(WEB_CSS_PATH) . $customLogoPath;
+        if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPath")) {
+            return api_get_path(WEB_CSS_PATH).$customLogoPath;
         }
 
-        $originalLogoPath = "themes/$theme/images/header-logo.png";
+        $originalLogoPath = "$themeDir/images/header-logo.png";
 
-        if (file_exists(api_get_path(SYS_CSS_PATH) . $originalLogoPath)) {
-            return api_get_path(WEB_CSS_PATH) . $originalLogoPath;
+        if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPath)) {
+            return api_get_path(WEB_CSS_PATH).$originalLogoPath;
         }
 
         return null;
@@ -92,18 +93,18 @@ class ChamiloApi
      * @param array $imageAttributes Optional.
      * @return string
      */
-    public static function getPlatformLogo($imageAttributes = [])
+    public static function getPlatformLogo($theme = '', $imageAttributes = [])
     {
-        $logoPath = self::getWebPlatformLogoPath();
+        $logoPath = self::getWebPlatformLogoPath($theme);
         $institution = api_get_setting('Institution');
         $institutionUrl = api_get_setting('InstitutionUrl');
         $siteName = api_get_setting('siteName');
 
         if ($logoPath === null) {
-            $headerLogo = \Display::url($siteName, api_get_path(WEB_PATH) . 'index.php');
+            $headerLogo = \Display::url($siteName, api_get_path(WEB_PATH).'index.php');
 
             if (!empty($institutionUrl) && !empty($institution)) {
-                $headerLogo .= ' - ' . \Display::url($institution, $institutionUrl);
+                $headerLogo .= ' - '.\Display::url($institution, $institutionUrl);
             }
 
             $courseInfo = api_get_course_info();
@@ -126,7 +127,7 @@ class ChamiloApi
 
         $image = \Display::img($logoPath, $institution, $imageAttributes);
 
-        return \Display::url($image, api_get_path(WEB_PATH) . 'index.php');
+        return \Display::url($image, api_get_path(WEB_PATH).'index.php');
     }
 
     /**
@@ -138,9 +139,9 @@ class ChamiloApi
     public static function stripGivenTags($string, $tags)
     {
         foreach ($tags as $tag) {
-            $string2 = preg_replace('#</' . $tag . '[^>]*>#i', ' ', $string);
+            $string2 = preg_replace('#</'.$tag.'[^>]*>#i', ' ', $string);
             if ($string2 != $string) {
-                $string = preg_replace('/<' . $tag . '[^>]*>/i', ' ', $string2);
+                $string = preg_replace('/<'.$tag.'[^>]*>/i', ' ', $string2);
             }
         }
 
@@ -161,11 +162,35 @@ class ChamiloApi
         sscanf($time, "%d:%d:%d", $hours, $minutes, $seconds);
         $timeSeconds = isset($seconds) ? $hours * 3600 + $minutes * 60 + $seconds : $hours * 60 + $minutes;
         if ($operation) {
-            $date->add(new \DateInterval('PT' . $timeSeconds . 'S'));
+            $date->add(new \DateInterval('PT'.$timeSeconds.'S'));
         } else {
-            $date->sub(new \DateInterval('PT' . $timeSeconds . 'S'));
+            $date->sub(new \DateInterval('PT'.$timeSeconds.'S'));
         }
 
         return $date->format('Y-m-d H:i:s');
+    }
+    /**
+     * Returns the course id (integer) for the given course directory or the current ID if no directory is defined
+     * @param   string  $directory   The course directory/path that appears in the URL
+     * @return int
+     */
+    public static function getCourseIdByDirectory($directory = null)
+    {
+        if (!empty($directory)) {
+            $directory = \Database::escape_string($directory);
+            $row = \Database::select(
+                'id',
+                \Database::get_main_table(TABLE_MAIN_COURSE),
+                array('where'=> array('directory = ?' => array($directory))),
+                'first'
+            );
+
+            if (is_array($row) && isset($row['id'])) {
+                return $row['id'];
+            } else {
+                return false;
+            }
+        }
+        return Session::read('_real_cid', 0);
     }
 }

@@ -103,7 +103,7 @@ function storage_get_leaders($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $s
         and sco_id = '$sv_sco'
         and course_id = '$sv_course'
         and sv_key = '$sv_key'
-        order by sv_value ".($sv_asc ? "ASC": "DESC")." limit $sv_length";
+        order by sv_value ".($sv_asc ? "ASC" : "DESC")." limit $sv_length";
 //	$sql_data = "select sv.user_id as user_id, sv_key as variable, sv_value as value
 //		from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES)." sv
 //		where sv.user_id in (select u2.user_id from ($sql_leaders) u2)
@@ -135,7 +135,7 @@ function storage_get_position($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $
         and search.sco_id = '$sv_sco'
         and search.course_id = '$sv_course'
         and search.sv_key = '$sv_key'
-        and list.sv_value ".($sv_asc ? "<=": ">=")." search.sv_value
+        and list.sv_value ".($sv_asc ? "<=" : ">=")." search.sv_value
         and list.sco_id = search.sco_id
         and list.course_id = search.course_id
         and list.sv_key = search.sv_key

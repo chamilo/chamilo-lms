@@ -17,8 +17,8 @@ if (empty($_GET['term']) || empty($_GET['prefix']) || !in_array($_GET['operator'
     return;
 }
 
-require_once dirname(__FILE__) . '../../../global.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'search/ChamiloQuery.php';
+require_once __DIR__.'../../../global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'search/ChamiloQuery.php';
 
 /**
  * Search with filter and build base array avoiding repeated terms
@@ -33,7 +33,7 @@ function get_usual_sf_terms($filter, $specific_fields) {
     if (is_array($dkterms) && is_array($dkterms[1])) {
         foreach ($specific_fields as $specific_field) {
             foreach ($dkterms[1] as $obj) {
-                foreach ($obj['sf-' . $specific_field['code']] as $raw_term) {
+                foreach ($obj['sf-'.$specific_field['code']] as $raw_term) {
                     if (count($raw_term['name']) > 1) {
                         $normal_term = substr($raw_term['name'], 1);
                         $sf_terms[$specific_field['code']][$normal_term] = $normal_term;
@@ -54,10 +54,10 @@ $sf_terms = array();
 
 if (($cid = api_get_course_id()) != -1) { // with cid
     // course filter
-    $filter[] = chamilo_get_boolean_query(XAPIAN_PREFIX_COURSEID . $cid);
+    $filter[] = chamilo_get_boolean_query(XAPIAN_PREFIX_COURSEID.$cid);
     // term filter
     if ($term != '__all__') {
-        $filter[] = chamilo_get_boolean_query($prefix . $term);
+        $filter[] = chamilo_get_boolean_query($prefix.$term);
         // always and between term and courseid
         $filter = chamilo_join_queries($filter, null, 'and');
     }
@@ -65,7 +65,7 @@ if (($cid = api_get_course_id()) != -1) { // with cid
     $sf_terms = get_usual_sf_terms($filter, $specific_fields);
 } else { // without cid
     if ($term != '__all__') {
-        $filter[] = chamilo_get_boolean_query($prefix . $term);
+        $filter[] = chamilo_get_boolean_query($prefix.$term);
 
         $sf_terms = get_usual_sf_terms($filter, $specific_fields);
     } else { // no cid and all/any terms

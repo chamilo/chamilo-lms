@@ -49,14 +49,14 @@ switch ($action) {
         );
         $toolName = Security::remove_XSS(stripslashes($tool['name']));
 
-        $currentUrl = api_get_self().'?action=edit_icon&id=' . $id.'&'.api_get_cidreq();
+        $currentUrl = api_get_self().'?action=edit_icon&id='.$id.'&'.api_get_cidreq();
 
         $form = new FormValidator('icon_edit', 'post', $currentUrl);
         $form->addHeader(get_lang('EditIcon'));
         $form->addHtml('<div class="col-md-7">');
         $form->addText('name', get_lang('Name'));
         $form->addText('link', get_lang('Links'));
-        $allowed_picture_types = array ('jpg', 'jpeg', 'png');
+        $allowed_picture_types = array('jpg', 'jpeg', 'png');
         $form->addFile('icon', get_lang('CustomIcon'));
         $form->addRule('icon', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
         $form->addSelect(
@@ -117,7 +117,7 @@ switch ($action) {
         $iconsTools .= '<div class="row">';
         foreach ($toolList as $tool) {
             $tool['name'] = Security::remove_XSS(stripslashes($tool['name']));
-            $toolIconName = 'Tool' . api_underscore_to_camel_case($tool['name']);
+            $toolIconName = 'Tool'.api_underscore_to_camel_case($tool['name']);
             $toolIconName = isset($$toolIconName) ? get_lang($toolIconName) : $tool['name'];
 
             $iconsTools .= '<div class="col-md-2">';
@@ -139,13 +139,13 @@ switch ($action) {
 
             $delete = (!empty($tool['custom_icon'])) ? "<a class=\"btn btn-default\" onclick=\"javascript:
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
-                "')) return false;\" href=\"". api_get_self() . '?action=delete_icon&id=' . $tool['iid'] . '&'.api_get_cidreq()."\">
+                "')) return false;\" href=\"".api_get_self().'?action=delete_icon&id='.$tool['iid'].'&'.api_get_cidreq()."\">
             <em class=\"fa fa-trash-o\"></em></a>" : "";
-            $edit = '<a class="btn btn-default" href="' . api_get_self() . '?action=edit_icon&id=' . $tool['iid'] . '&'.api_get_cidreq().'"><em class="fa fa-pencil"></em></a>';
+            $edit = '<a class="btn btn-default" href="'.api_get_self().'?action=edit_icon&id='.$tool['iid'].'&'.api_get_cidreq().'"><em class="fa fa-pencil"></em></a>';
 
-            $iconsTools .= '<div class="icon-tools">'. $icon . '</div>';
-            $iconsTools .= '<div class="name-tools">' . $toolIconName . '</div>';
-            $iconsTools .= '<div class="toolbar">' . $edit . $delete . '</div>';
+            $iconsTools .= '<div class="icon-tools">'.$icon.'</div>';
+            $iconsTools .= '<div class="name-tools">'.$toolIconName.'</div>';
+            $iconsTools .= '<div class="toolbar">'.$edit.$delete.'</div>';
             $iconsTools .= '</div>';
             $iconsTools .= '</div>';
         }

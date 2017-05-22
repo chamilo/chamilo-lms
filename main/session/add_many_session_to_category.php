@@ -16,7 +16,7 @@ $xajax->registerFunction('search_courses');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
 
 // Database Table Definitions
 $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -38,7 +38,7 @@ if (isset($_GET['add_type']) && $_GET['add_type'] != '') {
 }
 
 if (!api_is_platform_admin() && !api_is_session_admin()) {
-    $sql = 'SELECT session_admin_id FROM ' . Database:: get_main_table(TABLE_MAIN_SESSION) . ' WHERE id=' . $id_session;
+    $sql = 'SELECT session_admin_id FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
     $rs = Database::query($sql);
     if (Database::result($rs, 0, 0) != $_user['user_id']) {
         api_not_allowed(true);
@@ -100,7 +100,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
         $sql = "UPDATE $tbl_session SET session_category_id = $categoryId WHERE id in ($session_id) ";
         Database::query($sql);
-        header('Location: add_many_session_to_category.php?id_category=' . $categoryId . '&msg=ok');
+        header('Location: add_many_session_to_category.php?id_category='.$categoryId.'&msg=ok');
         exit;
     } else {
         header('Location: add_many_session_to_category.php?msg=error');
@@ -128,27 +128,27 @@ $where = '';
 $rows_category_session = array();
 if ((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_GET['id_category'])) {
 
-    $where = 'WHERE session_category_id != ' . $categoryId .' OR session_category_id IS NULL';
-    $sql = 'SELECT id, name  FROM ' . $tbl_session . ' WHERE session_category_id =' . $categoryId . ' ORDER BY name';
+    $where = 'WHERE session_category_id != '.$categoryId.' OR session_category_id IS NULL';
+    $sql = 'SELECT id, name  FROM '.$tbl_session.' WHERE session_category_id ='.$categoryId.' ORDER BY name';
     $result = Database::query($sql);
     $rows_category_session = Database::store_result($result);
 }
 
 $rows_session_category = SessionManager::get_all_session_category();
 if (empty($rows_session_category)) {
-    Display::display_warning_message(get_lang('YouNeedToAddASessionCategoryFirst'));
+    echo Display::return_message(get_lang('YouNeedToAddASessionCategoryFirst'), 'warning');
     Display::display_footer();
     exit;
 }
 
 if (api_get_multiple_access_url()) {
-    $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+    $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
     $access_url_id = api_get_current_access_url_id();
     $sql = "SELECT s.id, s.name  FROM $tbl_session s INNER JOIN $table_access_url_rel_session u ON s.id = u.session_id $where AND u.access_url_id = $access_url_id ORDER BY name";
 } else {
     $sql = "SELECT id, name  FROM $tbl_session $where ORDER BY name";
 }
-$result=Database::query($sql);
+$result = Database::query($sql);
 $rows_session = Database::store_result($result);
 ?>
 <form name="formulaire" method="post"
@@ -156,15 +156,15 @@ $rows_session = Database::store_result($result);
 if (!empty($_GET['add'])) {
     echo '&add=true';
 } ?>" style="margin:0px;">
-<?php echo '<legend>' . $tool_name . '</legend>'; ?>
+<?php echo '<legend>'.$tool_name.'</legend>'; ?>
 <input type="hidden" name="formSent" value="1"/>
 <?php
 if (!empty($errorMsg)) {
-    Display::display_error_message($errorMsg); //main API
+    echo Display::return_message($errorMsg, 'error'); //main API
 }
 
 if (!empty($OkMsg)) {
-    Display::display_confirmation_message($OkMsg); //main API
+    echo Display::return_message($OkMsg, 'confirm'); //main API
 }
 
 /*
@@ -194,14 +194,14 @@ if (!empty($OkMsg)) {
         <option value="0" ></option>
         <?php
         if (!empty($rows_session_category)) {
-            foreach($rows_session_category as $category) {
-                if($category['id'] == $categoryId)
-                      echo '<option value="'.$category['id'].'" selected>'.$category['name'].'</option>';
-                  else
-                      echo '<option value="'.$category['id'].'">'.$category['name'].'</option>';
+            foreach ($rows_session_category as $category) {
+                if ($category['id'] == $categoryId)
+                        echo '<option value="'.$category['id'].'" selected>'.$category['name'].'</option>';
+                    else
+                        echo '<option value="'.$category['id'].'">'.$category['name'].'</option>';
             }
         }
-          ?>
+            ?>
       </select>
     </td>
 </tr>
@@ -211,7 +211,7 @@ if (!empty($OkMsg)) {
   <td align="center" width="45%"><b><?php echo get_lang('SessionListInCategory') ?> :</b></td>
 </tr>
 
-<?php if($add_type == 'multiple') { ?>
+<?php if ($add_type == 'multiple') { ?>
 <tr>
 <td>&nbsp;</td></tr>
 <?php } ?>
@@ -220,9 +220,9 @@ if (!empty($OkMsg)) {
     <div id="ajax_list_courses_multiple">
     <select id="origin" name="NoSessionCategoryList[]" multiple="multiple" size="20" style="width:320px;">
     <?php
-    foreach($rows_session as $enreg) {
+    foreach ($rows_session as $enreg) {
     ?>
-        <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"'; if(in_array($enreg['id'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['name']; ?></option>
+        <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'], ENT_QUOTES).'"'; if (in_array($enreg['id'], $CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['name']; ?></option>
     <?php } ?>
     </select></div>
 <?php unset($nosessionCourses); ?>
@@ -243,8 +243,8 @@ if (!empty($OkMsg)) {
   <td width="45%" align="center">
   <select id='destination' name="SessionCategoryList[]" multiple="multiple" size="20" style="width:320px;">
     <?php
-    foreach($rows_category_session as $enreg) { ?>
-        <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"'; if(in_array($enreg['id'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['name']; ?></option>
+    foreach ($rows_category_session as $enreg) { ?>
+        <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'], ENT_QUOTES).'"'; if (in_array($enreg['id'], $CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['name']; ?></option>
     <?php } ?>
   </select></td>
 </tr>

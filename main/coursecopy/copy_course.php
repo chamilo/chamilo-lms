@@ -6,12 +6,13 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 
 /**
+ * @todo rework file in order to use addFlash
  * @package chamilo.backup
  */
 
 // Setting the global file that gets the general configuration, the databases, the languages, ...
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_COURSE_MAINTENANCE;
+$current_course_tool = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
 
 if (!api_is_allowed_to_edit()) {
@@ -48,7 +49,6 @@ if (Security::check_token('post') && (
 ) {
     // Clear token
     Security::clear_token();
-
     if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
         $course = CourseSelectForm::get_posted_course('copy_course');
     } else {
@@ -58,10 +58,11 @@ if (Security::check_token('post') && (
     $cr = new CourseRestorer($course);
     $cr->set_file_option($_POST['same_file_name_option']);
     $cr->restore($_POST['destination_course']);
-    Display::display_normal_message(
+    echo Display::return_message(
         get_lang('CopyFinished').': <a href="'.api_get_course_url($_POST['destination_course']).'">'.
         Security::remove_XSS($_POST['destination_course']).
         '</a>',
+        'normal',
         false
     );
 } elseif (Security::check_token('post') && (
@@ -81,28 +82,26 @@ if (Security::check_token('post') && (
     $hiddenFields['sec_token'] = Security::get_token();
     CourseSelectForm::display_form($course, $hiddenFields, true);
 } else {
-    $table_c = Database :: get_main_table(TABLE_MAIN_COURSE);
-    $table_cu = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+    $table_c = Database::get_main_table(TABLE_MAIN_COURSE);
+    $table_cu = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $user_info = api_get_user_info();
     $course_info = api_get_course_info();
-    $sql = 'SELECT *
-            FROM '.$table_c.' c, '.$table_cu.' cu
-            WHERE cu.c_id = c.id';
-    if (!api_is_platform_admin()) {
-        $sql .= ' AND cu.status=1 ';
-    }
-    $sql .= ' AND
-            cu.user_id = '.$user_info['user_id'].' AND
-            c.id != '."'".$course_info['real_id']."'".'
-            ORDER BY title ASC';
-    $res = Database::query($sql);
-    if (Database::num_rows($res) == 0) {
-        Display::display_normal_message(get_lang('NoDestinationCoursesAvailable'));
+
+    $courseList = CourseManager::get_courses_list_by_user_id(
+        $user_info['user_id'],
+        false,
+        false,
+        false,
+        [$course_info['real_id']]
+    );
+
+    if (empty($courseList)) {
+        echo Display::return_message(get_lang('NoDestinationCoursesAvailable'), 'normal');
     } else {
         $options = array();
-        while ($obj = Database::fetch_object($res)) {
-            $courseInfo = api_get_course_info_by_id($obj->c_id);
-            $options[$courseInfo['code']] = $obj->title.' ('.$obj->code.')';
+        foreach ($courseList as $courseItem) {
+            $courseInfo = api_get_course_info_by_id($courseItem['real_id']);
+            $options[$courseInfo['code']] = $courseInfo['title'].' ('.$courseInfo['code'].')';
         }
 
         $form = new FormValidator(
@@ -124,7 +123,7 @@ if (Security::check_token('post') && (
         $form->addGroup($group, '', get_lang('SameFilename'));
         $form->addProgress();
         $form->addButtonSave(get_lang('CopyCourse'));
-        $form->setDefaults(array('copy_option' =>'select_items','same_file_name_option' => FILE_OVERWRITE));
+        $form->setDefaults(array('copy_option' =>'select_items', 'same_file_name_option' => FILE_OVERWRITE));
 
         // Add Security token
         $token = Security::get_token();

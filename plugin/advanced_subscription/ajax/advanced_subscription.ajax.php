@@ -8,7 +8,7 @@
 /**
  * Init
  */
-require_once __DIR__ . '/../config.php';
+require_once __DIR__.'/../config.php';
 
 $plugin = AdvancedSubscriptionPlugin::create();
 // Get validation hash
@@ -120,8 +120,7 @@ if ($verified) {
                 $isWesternNameOrder = api_is_western_name_order();
                 foreach ($adminsArray as &$admin) {
                     $admin['complete_name'] = $isWesternNameOrder ?
-                        $admin['firstname'] . ', ' . $admin['lastname'] :
-                        $admin['lastname'] . ', ' . $admin['firstname']
+                        $admin['firstname'].', '.$admin['lastname'] : $admin['lastname'].', '.$admin['firstname']
                     ;
                 }
                 unset($admin);
@@ -140,8 +139,8 @@ if ($verified) {
                     $res = $plugin->updateQueueStatus($data, ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED);
                     if (!empty($res)) {
                         // Prepare admin url
-                        $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) .
-                            'advanced_subscription/src/admin_view.php?s=' . $data['sessionId'];
+                        $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH).
+                            'advanced_subscription/src/admin_view.php?s='.$data['sessionId'];
                         // Send mails
                         $result['mailIds'] = $plugin->sendMail(
                             $data,
@@ -276,8 +275,7 @@ if ($verified) {
                     $isWesternNameOrder = api_is_western_name_order();
                     foreach ($adminsArray as &$admin) {
                         $admin['complete_name'] = $isWesternNameOrder ?
-                            $admin['firstname'] . ', ' . $admin['lastname'] :
-                            $admin['lastname'] . ', ' . $admin['firstname']
+                            $admin['firstname'].', '.$admin['lastname'] : $admin['lastname'].', '.$admin['firstname']
                         ;
                     }
                     unset($admin);
@@ -288,7 +286,7 @@ if ($verified) {
                     $data['session'] = $sessionArray;
                     $data['signature'] = api_get_setting('Institution');
                     $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH)
-                        . 'advanced_subscription/src/admin_view.php?s=' . $data['sessionId'];
+                        . 'advanced_subscription/src/admin_view.php?s='.$data['sessionId'];
                     // Check if exist and action in data
                     if (empty($data['mailAction'])) {
                         // set action in data by new status

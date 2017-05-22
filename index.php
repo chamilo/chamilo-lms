@@ -38,14 +38,17 @@ if (!empty($_GET['logout'])) {
 /**
  * Registers in the track_e_default table (view in important activities in admin
  * interface) a possible attempted break in, sending auth data through get.
- * @todo This piece of code should probably move to local.inc.php where the actual login / logout procedure is handled. The real use of this code block should be seriously considered as well. This form should just use a security token and get done with it.
+ * @todo This piece of code should probably move to local.inc.php where the
+ * actual login / logout procedure is handled.
+ * The real use of this code block should be seriously considered as well.
+ * This form should just use a security token and get done with it.
  */
 if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
     $i = api_get_anonymous_id();
     Event::addEvent(
         LOG_ATTEMPTED_FORCED_LOGIN,
         'tried_hacking_get',
-        $_SERVER['REMOTE_ADDR'].(empty($_POST['login'])?'':'/'.$_POST['login']),
+        $_SERVER['REMOTE_ADDR'].(empty($_POST['login']) ? '' : '/'.$_POST['login']),
         null,
         $i
     );
@@ -68,16 +71,17 @@ if (!api_get_user_id() && CustomPages::enabled()) {
 }
 
 /**
- * @todo This piece of code should probably move to local.inc.php where the actual login procedure is handled.
- * @todo Check if this code is used. I think this code is never executed because after clicking the submit button
- *       the code does the stuff in local.inc.php and then redirects to index.php or user_portal.php depending
- *       on api_get_setting('page_after_login').
+ * @todo This piece of code should probably move to local.inc.php where the
+ * actual login procedure is handled.
+ * @todo Check if this code is used. I think this code is never executed because
+ * after clicking the submit button the code does the stuff
+ * in local.inc.php and then redirects to index.php or user_portal.php depending
+ * on api_get_setting('page_after_login').
  */
-
 if (!empty($_POST['submitAuth'])) {
     // The user has been already authenticated, we are now to find the last login of the user.
-    if (isset ($_user['user_id'])) {
-        $track_login_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+    if (isset($_user['user_id'])) {
+        $track_login_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $sql = "SELECT UNIX_TIMESTAMP(login_date)
                 FROM $track_login_table
                 WHERE login_user_id = '".$_user['user_id']."'
@@ -122,7 +126,7 @@ $useCookieValidation = api_get_setting('cookie_warning');
 if ($useCookieValidation === 'true') {
     if (isset($_POST['acceptCookies'])) {
         api_set_site_use_cookie_warning_cookie();
-    } else if (!api_site_use_cookie_warning_cookie_exist()) {
+    } elseif (!api_site_use_cookie_warning_cookie_exist()) {
         if (Template::isToolBarDisplayedForUser()) {
             $controller->tpl->assign('toolBarDisplayed', true);
         } else {

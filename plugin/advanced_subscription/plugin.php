@@ -8,5 +8,5 @@
 /**
  * Plugin details (must be present)
  */
-require_once __DIR__ . '/config.php';
+require_once __DIR__.'/config.php';
 $plugin_info = AdvancedSubscriptionPlugin::create()->get_info();

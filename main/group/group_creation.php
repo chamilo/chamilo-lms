@@ -24,7 +24,7 @@ if (isset($_POST['action'])) {
         case 'create_groups':
             $groups = array();
 
-            for ($i = 0; $i < $_POST['number_of_groups']; $i ++) {
+            for ($i = 0; $i < $_POST['number_of_groups']; $i++) {
                 $group1['name'] = empty($_POST['group_'.$i.'_name']) ? get_lang('Group').' '.$i : $_POST['group_'.$i.'_name'];
                 $group1['category'] = isset($_POST['group_'.$i.'_category']) ? $_POST['group_'.$i.'_category'] : null;
                 $group1['tutor'] = isset($_POST['group_'.$i.'_tutor']) ? $_POST['group_'.$i.'_tutor'] : null;
@@ -78,9 +78,10 @@ Display :: display_header($nameTools, 'Group');
 
 if (isset($_POST['number_of_groups'])) {
     if (!is_numeric($_POST['number_of_groups']) || intval($_POST['number_of_groups']) < 1) {
-        Display :: display_error_message(
+        echo Display::return_message(
 			get_lang('PleaseEnterValidNumber').'<br /><br />
 			<a href="group_creation.php?'.api_get_cidreq().'">&laquo; '.get_lang('Back').'</a>',
+            'error',
 			false
 		);
     } else {
@@ -162,7 +163,7 @@ EOT;
         $form->addGroup($group_el, 'groups', null, "</td><td>", false);
         // Checkboxes
         if ($_POST['number_of_groups'] > 1) {
-            $group_el = array ();
+            $group_el = array();
             $group_el[] = $form->createElement('static', null, null, ' ');
             if (api_get_setting('allow_group_categories') === 'true') {
                 $group_el[] = $form->createElement(
@@ -183,7 +184,7 @@ EOT;
             $form->addGroup($group_el, 'groups', null, '</td><td>', false);
         }
         // Properties for all groups
-        for ($group_number = 0; $group_number < $_POST['number_of_groups']; $group_number ++) {
+        for ($group_number = 0; $group_number < $_POST['number_of_groups']; $group_number++) {
             $group_el = array();
             $group_el[] = $form->createElement('text', 'group_'.$group_number.'_name');
             if (api_get_setting('allow_group_categories') === 'true') {
@@ -210,14 +211,14 @@ EOT;
                     $prev = '000';
                 } elseif ($group_id < 100) {
                     $prev = '00';
-                } elseif ($group_id<1000) {
+                } elseif ($group_id < 1000) {
                     $prev = '0';
                 } else {
                     $prev = '';
                 }
             }
 
-            $defaults['group_'.$group_number.'_name'] = get_lang('GroupSingle').' '.$prev.$group_id ++;
+            $defaults['group_'.$group_number.'_name'] = get_lang('GroupSingle').' '.$prev.$group_id++;
             $form->addGroup($group_el, 'group_'.$group_number, null, '</td><td>', false);
         }
         $defaults['action'] = 'create_groups';
@@ -232,8 +233,8 @@ EOT;
      */
     $create_groups_form = new FormValidator('create_groups', 'post', api_get_self().'?'.api_get_cidreq());
     $create_groups_form->addElement('header', $nameTools);
-    $create_groups_form->addText('number_of_groups',get_lang('NumberOfGroupsToCreate'),null,array('value'=>'1'));
-    $create_groups_form->addButton('submit', get_lang('ProceedToCreateGroup'),'plus','primary');
+    $create_groups_form->addText('number_of_groups', get_lang('NumberOfGroupsToCreate'), null, array('value'=>'1'));
+    $create_groups_form->addButton('submit', get_lang('ProceedToCreateGroup'), 'plus', 'primary');
     $defaults = array();
     $defaults['number_of_groups'] = 1;
     $create_groups_form->setDefaults($defaults);
@@ -243,10 +244,10 @@ EOT;
      * Show form to generate subgroups
      */
     if (api_get_setting('allow_group_categories') === 'true' && count(GroupManager :: get_group_list()) > 0) {
-        $base_group_options = array ();
+        $base_group_options = array();
         $groups = GroupManager :: get_group_list();
         foreach ($groups as $index => $group) {
-            $number_of_students = GroupManager :: number_of_students($group['iid']);
+            $number_of_students = GroupManager :: number_of_students($group['id']);
             if ($number_of_students > 0) {
                 $base_group_options[$group['id']] = $group['name'].' ('.$number_of_students.' '.get_lang('Users').')';
             }

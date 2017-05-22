@@ -171,7 +171,8 @@ function complete_missing_data($user)
  * Save the imported data
  * @param   array   $users List of users
  * @return  void
- * @uses global variable $inserted_in_course, which returns the list of courses the user was inserted in
+ * @uses global variable $inserted_in_course, which returns the list of
+ * courses the user was inserted in
  */
 function save_data($users)
 {
@@ -280,7 +281,7 @@ function element_start($parser, $data)
     global $current_tag;
     switch ($data) {
         case 'Contact':
-            $user = array ();
+            $user = array();
             break;
         default:
             $current_tag = $data;
@@ -373,7 +374,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND
     $allowed_file_mimetype = array('csv', 'xml');
     $error_kind_file = false;
 
-    $checkUniqueEmail = isset($_POST['check_unique_email']) ? $_POST['check_unique_email'] :null;
+    $checkUniqueEmail = isset($_POST['check_unique_email']) ? $_POST['check_unique_email'] : null;
 
     $uploadInfo = pathinfo($_FILES['import_file']['name']);
     $ext_import_file = $uploadInfo['extension'];
@@ -382,7 +383,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND
         if (strcmp($file_type, 'csv') === 0 &&
             $ext_import_file == $allowed_file_mimetype[0]
         ) {
-            $users	= parse_csv_data($_FILES['import_file']['tmp_name']);
+            $users = parse_csv_data($_FILES['import_file']['tmp_name']);
             $errors = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
         } elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file == $allowed_file_mimetype[1]) {
@@ -399,7 +400,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND
     // List user id with error.
     $users_to_insert = array();
 
-    $keyToCheck = 'Username';
+    $keyToCheck = 'UserName';
     if ($checkUniqueEmail || api_get_setting('registration', 'email') == 'true') {
         $keyToCheck = 'Email';
     }
@@ -531,8 +532,8 @@ if ($count_fields > 0) {
     }
 }
 ?>
-    <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
-    <blockquote>
+<p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+<blockquote>
 <pre>
 <b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;<span style="color:red;"><?php if (count($list) > 0) echo implode(';', $list).';'; ?></span>Courses;ClassId;
 <b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;xxx;user/teacher/drh;0000-00-00 00:00:00;<span style="color:red;"><?php if (count($list_reponse) > 0) echo implode(';', $list_reponse).';'; ?></span>xxx1|xxx2|xxx3;1;<br />

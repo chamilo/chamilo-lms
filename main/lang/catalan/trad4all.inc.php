@@ -532,7 +532,6 @@ $Forbidden = "No és permés";
 $CourseAccessConfigTip = "El vostre curs és públic per defecte, però podeu definir a continuació el nivell de confidencialitat";
 $OpenToTheWorld = "Obert - Accés autoritzat per tothom";
 $OpenToThePlatform = "Obert - Accés autoritzat als usuaris enregistrats de la plataforma";
-$OpenToThePlatform = "Obert - accés autoritzat als usuaris enregistrats de la plataforma";
 $TipLang = "Aquest serà l'idioma que veuran tots els visitants del curs.";
 $Vid = "Video";
 $Work = "Treballs dels estudiants";
@@ -7986,4 +7985,8 @@ $Colors = "Colors";
 $DesignWithBadgeStudio = "Dissenyar amb Badge Studio";
 $DesignWithBadgeStudioComment = "Utilitzi Badge Studio per crear la seva pròpia insígnia dins de la seva plataforma";
 $YouAlreadySentThisFile = "Ja va enviar aquest o un altre arxiu amb el mateix nom. Si us plau assegureu-vos d'enviar cada arxiu una sola vegada.";
+$StudentCourseProgressX = "Progrés: %s %%";
+$SessionDurationNotStartedMaxX = "Aquesta sessió té una durada màxima de %s";
+$StudentCourseScoreX = "Puntuació: %s %%";
+$StudentCourseCertificateX = "Certificat: %s";
 ?>

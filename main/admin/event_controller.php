@@ -62,7 +62,7 @@ $extra_params['height'] = 'auto';
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = '<script>
 $(function() {
-    '.Display::grid_js('event_email_template',  $url,$columns,$column_model,$extra_params, array(), $action_links,true).'
+    '.Display::grid_js('event_email_template', $url, $columns, $column_model, $extra_params, array(), $action_links, true).'
 });
 </script>';
 
@@ -70,7 +70,6 @@ $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdm
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Events'));
 
 $tpl = new Template($tool_name);
-$tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

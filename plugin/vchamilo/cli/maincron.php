@@ -1,4 +1,5 @@
 <?php
+/* For license terms, see /license.txt */
 exit;
 
 /**
@@ -20,5 +21,5 @@ exit;
 define('CLI_SCRIPT', true); // for chamilo imported code
 define('CHAMILO_INTERNAL', true);
 error_log('[chamilo][cronjob] Starting cron jobs as process '.getmypid());
-require_once(dirname(dirname(dirname(dirname(__FILE__)))).'/main/cron/notification.php');
+require_once(dirname(dirname(dirname(__DIR__))).'/main/cron/notification.php');
 error_log('[chamilo][cronjob] Ending cron jobs of process '.getmypid());

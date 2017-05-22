@@ -33,7 +33,7 @@ $geolocalization = $gMapsPlugin->get('enable_api') === 'true';
 
 if ($geolocalization) {
     $gmapsApiKey = $gMapsPlugin->get('api_key');
-    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='. $gmapsApiKey . '" ></script>';
+    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$gmapsApiKey.'" ></script>';
 }
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
@@ -91,12 +91,20 @@ EOF;
 }
 
 $tool_name = is_profile_editable() ? get_lang('ModifProfile') : get_lang('ViewProfile');
-$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 /*
  * Get initial values for all fields.
  */
-$user_data = api_get_user_info(api_get_user_id());
+$user_data = api_get_user_info(
+    api_get_user_id(),
+    false,
+    false,
+    false,
+    false,
+    false,
+    true
+);
 $array_list_key = UserManager::get_api_keys(api_get_user_id());
 $id_temp_key = UserManager::get_api_key_id(api_get_user_id(), 'dokeos');
 $value_array = $array_list_key[$id_temp_key];
@@ -119,10 +127,10 @@ $form = new FormValidator('profile');
 if (api_is_western_name_order()) {
     //    FIRST NAME and LAST NAME
     $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
-    $form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
+    $form->addElement('text', 'lastname', get_lang('LastName'), array('size' => 40));
 } else {
     //    LAST NAME and FIRST NAME
-    $form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
+    $form->addElement('text', 'lastname', get_lang('LastName'), array('size' => 40));
     $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
 }
 if (api_get_setting('profile', 'name') !== 'true') {
@@ -131,7 +139,7 @@ if (api_get_setting('profile', 'name') !== 'true') {
 $form->applyFilter(array('lastname', 'firstname'), 'stripslashes');
 $form->applyFilter(array('lastname', 'firstname'), 'trim');
 $form->applyFilter(array('lastname', 'firstname'), 'html_filter');
-$form->addRule('lastname' , get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 
 //    USERNAME
@@ -176,7 +184,7 @@ if (api_get_setting('profile', 'email') !== 'true') {
     $form->freeze('email');
 }
 
-if (api_get_setting('registration', 'email') == 'true' &&  api_get_setting('profile', 'email') == 'true') {
+if (api_get_setting('registration', 'email') == 'true' && api_get_setting('profile', 'email') == 'true') {
     $form->applyFilter('email', 'stripslashes');
     $form->applyFilter('email', 'trim');
     $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
@@ -230,7 +238,7 @@ if (api_get_setting('profile', 'language') !== 'true') {
     $form->freeze('language');
 }
 
-//THEME
+// THEME
 if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
     $form->addElement('SelectTheme', 'theme', get_lang('Theme'));
     if (api_get_setting('profile', 'theme') !== 'true') {
@@ -316,19 +324,20 @@ if (is_platform_authentication() &&
     $form->addElement('password', 'password2', get_lang('Confirmation'), array('size' => 40));
     //    user must enter identical password twice so we can prevent some user errors
     $form->addRule(array('password1', 'password2'), get_lang('PassTwo'), 'compare');
-    if (CHECK_PASS_EASY_TO_FIND) {
-        $form->addRule('password1', get_lang('CurrentPasswordEmptyOrIncorrect'), 'callback', 'api_check_password');
-    }
+    $form->addPasswordRule('password1');
 }
 
 $extraField = new ExtraField('user');
-$return = $extraField->addElements($form, api_get_user_id());
+$return = $extraField->addElements(
+    $form,
+    api_get_user_id()
+);
 
 $jquery_ready_content = $return['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that
 // will be load in the $(document).ready javascript function
-$htmlHeadXtra[] ='<script>
+$htmlHeadXtra[] = '<script>
 $(document).ready(function(){
     '.$jquery_ready_content.'
 });
@@ -366,7 +375,8 @@ $form->setDefaults($user_data);
  *
  * @return  boolean if auth_source is platform
  */
-function is_platform_authentication() {
+function is_platform_authentication()
+{
     $tab_user_info = api_get_user_info();
     return $tab_user_info['auth_source'] == PLATFORM_AUTH_SOURCE;
 }
@@ -419,12 +429,13 @@ function upload_user_production($user_id)
  * @return    bool true o false
  * @uses Gets user ID from global variable
  */
-function check_user_email($email) {
+function check_user_email($email)
+{
     $user_id = api_get_user_id();
     if ($user_id != strval(intval($user_id)) || empty($email)) {
         return false;
     }
-    $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+    $table_user = Database::get_main_table(TABLE_MAIN_USER);
     $email = Database::escape_string($email);
     $sql = "SELECT * FROM $table_user
             WHERE user_id='".$user_id."' AND email='".$email."'";
@@ -688,7 +699,15 @@ if ($form->validate()) {
     $extraField = new ExtraFieldValue('user');
     $extraField->saveFieldValues($user_data);
 
-    $userInfo = api_get_user_info();
+    $userInfo = api_get_user_info(
+        api_get_user_id(),
+        false,
+        false,
+        false,
+        false,
+        false,
+        true
+    );
     Session::write('_user', $userInfo);
 
     $url = api_get_self();
@@ -698,18 +717,14 @@ if ($form->validate()) {
 
 // the header
 
-$actions = null;
+$actions = '';
 if (api_get_setting('allow_social_tool') !== 'true') {
     if (api_get_setting('extended_profile') === 'true') {
-        $actions .= '<div class="actions">';
-
-        if (api_get_setting('allow_social_tool') === 'true' &&
+        if (
             api_get_setting('allow_message_tool') === 'true'
         ) {
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
                 Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
-        }
-        if (api_get_setting('allow_message_tool') === 'true') {
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
                 Display::return_icon('inbox.png', get_lang('Messages')).'</a>';
         }
@@ -722,14 +737,19 @@ if (api_get_setting('allow_social_tool') !== 'true') {
             $actions .= '<a href="profile.php?type=extended'.$show.'">'.
                 Display::return_icon('edit.png', get_lang('EditExtendProfile'), '', 16).'</a>';
         }
-        $actions .= '</div>';
     }
 }
 
 $show_delete_account_button = api_get_setting('platform_unsubscribe_allowed') === 'true' ? true : false;
 
 $tpl = new Template(get_lang('ModifyProfile'));
-$tpl->assign('actions', $actions);
+
+if ($actions) {
+    $tpl->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$actions])
+    );
+}
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 

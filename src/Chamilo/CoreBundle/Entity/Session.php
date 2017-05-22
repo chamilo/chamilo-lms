@@ -61,7 +61,7 @@ class Session
     private $description;
 
     /**
-     * @var string
+     * @var bool
      *
      * @ORM\Column(name="show_description", type="boolean", nullable=true)
      */
@@ -232,7 +232,7 @@ class Session
         $this->courses = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->userCourseSubscriptions = new ArrayCollection();
-        $this->showDescription = 0;
+        $this->showDescription = false;
         $this->category = null;
         $this->studentPublications = new ArrayCollection();
     }
@@ -479,7 +479,7 @@ class Session
             Criteria::expr()->eq("user", $user)
         );
 
-        if (!is_null($status))  {
+        if (!is_null($status)) {
             $criteria->andWhere(
                 Criteria::expr()->eq("status", $status)
             );

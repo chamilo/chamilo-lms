@@ -41,7 +41,7 @@ if ($action == 'delete_on_session' || $action == 'delete_off_session') {
     exit();
 }
 
-$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
 
 if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     $interbreadcrumb[] = array("url" => 'session_category_list.php', "name" => get_lang('ListSessionCategory'));
@@ -74,7 +74,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
         $where .= " AND access_url_id = ".api_get_current_access_url_id()." ";
     }
 
-    $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+    $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
     $query = "SELECT sc.*, (
                 SELECT count(id) FROM $tbl_session s
                 INNER JOIN $table_access_url_rel_session us
@@ -114,7 +114,8 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                 <div class="pull-right">
                 <form method="POST" action="session_category_list.php" class="form-inline">
                     <div class="form-group">
-                    <input class="form-control" type="text" name="keyword" value="<?php echo $keyword; ?>"/>
+                    <input class="form-control" type="text" name="keyword" value="<?php echo $keyword; ?>"
+                    aria-label="<?php echo get_lang('Search'); ?>"/>
                     <button class="btn btn-default" type="submit" name="name" value="<?php echo get_lang('Search') ?>"><em class="fa fa-search"></em> <?php echo get_lang('Search') ?></button>
                     <!-- <a href="session_list.php?search=advanced"><?php echo get_lang('AdvancedSearch'); ?></a> -->
                     </div>

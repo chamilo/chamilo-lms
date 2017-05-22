@@ -29,8 +29,8 @@ if (isset($_GET['cat_id']) &&
     if ($_GET['sent_received'] == 'sent') {
         // here we also incorporate the person table to make sure that deleted sent documents are not included.
         $sql = "SELECT DISTINCT file.id, file.filename, file.title
-                FROM ". Database::get_course_table(TABLE_DROPBOX_FILE) ." file
-                INNER JOIN ". Database::get_course_table(TABLE_DROPBOX_PERSON) ." person
+                FROM ". Database::get_course_table(TABLE_DROPBOX_FILE)." file
+                INNER JOIN ". Database::get_course_table(TABLE_DROPBOX_PERSON)." person
                 ON (person.file_id=file.id AND file.c_id = $course_id AND person.c_id = $course_id)
                 WHERE
                     file.uploader_id = $user_id AND
@@ -40,14 +40,14 @@ if (isset($_GET['cat_id']) &&
 
     if ($_GET['sent_received'] == 'received') {
         $sql = "SELECT DISTINCT file.id, file.filename, file.title
-                FROM ". Database::get_course_table(TABLE_DROPBOX_FILE) ." file
-                INNER JOIN ". Database::get_course_table(TABLE_DROPBOX_PERSON) ." person
+                FROM ". Database::get_course_table(TABLE_DROPBOX_FILE)." file
+                INNER JOIN ". Database::get_course_table(TABLE_DROPBOX_PERSON)." person
                 ON (person.file_id=file.id AND file.c_id = $course_id AND person.c_id = $course_id)
                 INNER JOIN ".Database::get_course_table(TABLE_DROPBOX_POST)." post
                 ON (post.file_id = file.id AND post.c_id = $course_id AND file.c_id = $course_id)
                 WHERE
                     post.cat_id = ".intval($_GET['cat_id'])." AND
-                    post.dest_user_id = $user_id" ;
+                    post.dest_user_id = $user_id";
     }
     $files_to_download = array();
     $result = Database::query($sql);
@@ -86,18 +86,20 @@ if (!$allowed_to_download) {
             'error'
         )
     );
-	exit;
+    exit;
 } else {
     /*      DOWNLOAD THE FILE */
     // the user is allowed to download the file
     $_SESSION['_seen'][$_course['id']][TOOL_DROPBOX][] = intval($_GET['id']);
 
     $work = new Dropbox_Work($_GET['id']);
-
-    $path = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/dropbox/' . $work -> filename; //path to file as stored on server
-
-    if (!Security::check_abs_path($path, api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/dropbox/')) {
-        exit;
+    //path to file as stored on server
+    $path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$work->filename;
+    if (!Security::check_abs_path(
+        $path,
+        api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/')
+    ) {
+        api_not_allowed(true);
     }
     $file = $work->title;
     $result = DocumentManager::file_send_for_download($path, true, $file);

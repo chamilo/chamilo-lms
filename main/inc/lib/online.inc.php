@@ -33,17 +33,17 @@ function LoginCheck($uid)
 
         $login_date = api_get_utc_datetime();
         $access_url_id = 1;
-        if (api_get_multiple_access_url() && api_get_current_access_url_id()!=-1) {
+        if (api_get_multiple_access_url() && api_get_current_access_url_id() != -1) {
             $access_url_id = api_get_current_access_url_id();
         }
         $session_id = api_get_session_id();
         // if the $_course array exists this means we are in a course and we have to store this in the who's online table also
         // to have the x users in this course feature working
-        if (is_array($_course) && count($_course)>0 && !empty($_course['id'])) {
-            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,user_ip, c_id, session_id, access_url_id)
+        if (is_array($_course) && count($_course) > 0 && !empty($_course['id'])) {
+            $query = "REPLACE INTO ".$online_table." (login_id,login_user_id,login_date,user_ip, c_id, session_id, access_url_id)
                       VALUES ($uid,$uid,'$login_date','$user_ip', '".$_course['real_id']."' , '$session_id' , '$access_url_id' )";
         } else {
-            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,user_ip, c_id, session_id, access_url_id)
+            $query = "REPLACE INTO ".$online_table." (login_id,login_user_id,login_date,user_ip, c_id, session_id, access_url_id)
                       VALUES ($uid,$uid,'$login_date','$user_ip', 0, '$session_id', '$access_url_id')";
         }
         Database::query($query);
@@ -98,7 +98,7 @@ function online_logout($user_id = null, $logout_redirect = false)
     global $extAuthSource;
 
     // Database table definition
-    $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+    $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
     if (empty($user_id)) {
         $user_id = isset($_GET['uid']) ? intval($_GET['uid']) : 0;
@@ -117,7 +117,7 @@ function online_logout($user_id = null, $logout_redirect = false)
     		ORDER BY login_date DESC
     		LIMIT 0,1";
     $q_last_connection = Database::query($sql);
-    if (Database::num_rows($q_last_connection)>0) {
+    if (Database::num_rows($q_last_connection) > 0) {
         $i_id_last_connection = Database::result($q_last_connection, 0, "login_id");
     }
 
@@ -167,7 +167,7 @@ function LoginDelete($user_id)
 {
     $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     $user_id = intval($user_id);
-    $query = "DELETE FROM " . $online_table . " WHERE login_user_id = $user_id";
+    $query = "DELETE FROM ".$online_table." WHERE login_user_id = $user_id";
     Database::query($query);
 }
 
@@ -248,7 +248,7 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
     $current_date = api_get_utc_datetime($online_time);
     $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     $friend_user_table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-    $table_user	= Database::get_main_table(TABLE_MAIN_USER);
+    $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
     if ($friends) {
         // 	who friends from social network is online
@@ -264,8 +264,8 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
                   LIMIT $from, $number_of_items";
     } else {
         $query = "SELECT DISTINCT login_user_id, login_date
-                    FROM ".$track_online_table ." e
-                    INNER JOIN ".$table_user ." u ON (u.id = e.login_user_id)
+                    FROM ".$track_online_table." e
+                    INNER JOIN ".$table_user." u ON (u.id = e.login_user_id)
                   WHERE u.status != ".ANONYMOUS." AND login_date >= '".$current_date."'
                   ORDER BY $column $direction
                   LIMIT $from, $number_of_items";
@@ -288,8 +288,8 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
             } else {
                 // all users online
                 $query = "SELECT login_user_id, login_date
-                          FROM ".$track_online_table ." track
-                          INNER JOIN ".$table_user ." u
+                          FROM ".$track_online_table." track
+                          INNER JOIN ".$table_user." u
                           ON (u.id=track.login_user_id)
                           WHERE u.status != ".ANONYMOUS." AND track.access_url_id =  $access_url_id AND
                                 login_date >= '".$current_date."'
@@ -427,7 +427,7 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
 	if ($result) {
 		$users_online = array();
 
-		while(list($login_user_id, $login_date) = Database::fetch_row($result)) {
+		while (list($login_user_id, $login_date) = Database::fetch_row($result)) {
             $users_online[] = $login_user_id;
 		}
 		return $users_online;
@@ -436,7 +436,7 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
 	}
 }
 
-function who_is_online_in_this_course_count($uid, $time_limit, $coursecode=null)
+function who_is_online_in_this_course_count($uid, $time_limit, $coursecode = null)
 {
 	if (empty($coursecode)) {
 		return false;

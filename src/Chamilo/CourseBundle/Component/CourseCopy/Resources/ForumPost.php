@@ -25,6 +25,6 @@ class ForumPost extends Resource
     public function show()
     {
         parent::show();
-        echo $this->obj->title . ' (' . $this->obj->poster_name . ', ' . $this->obj->post_date . ')';
+        echo $this->obj->title.' ('.$this->obj->poster_name.', '.$this->obj->post_date.')';
     }
 }

@@ -7,9 +7,9 @@
  */
 class Rights {
 	private static $rights_cache = array();
-	private static $rights = array (
+	private static $rights = array(
 		'show_tabs:reports' =>
-			array (
+			array(
 				'type' => 'const',
 				'const' => 'true' )
 		);

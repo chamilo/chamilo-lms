@@ -24,7 +24,7 @@ class Redirect
     public static function go($url = '')
     {
         if (empty($url)) {
-            Redirect::session_request_uri();
+            self::session_request_uri();
             $www = self::www();
             self::navigate($www);
         }
@@ -34,7 +34,7 @@ class Redirect
             self::navigate($url);
         }
 
-        $url = self::www() . $url;
+        $url = self::www().$url;
         self::navigate($url);
     }
 
@@ -67,25 +67,25 @@ class Redirect
                     case COURSEMANAGER:
                         $redir = api_get_setting('teacher_page_after_login');
                         if (!empty($redir)) {
-                            self::navigate(api_get_path(WEB_PATH) . $redir);
+                            self::navigate(api_get_path(WEB_PATH).$redir);
                         }
                         break;
                     case STUDENT:
                         $redir = api_get_setting('student_page_after_login');
                         if (!empty($redir)) {
-                            self::navigate(api_get_path(WEB_PATH) . $redir);
+                            self::navigate(api_get_path(WEB_PATH).$redir);
                         }
                         break;
                     case DRH:
                         $redir = api_get_setting('drh_page_after_login');
                         if (!empty($redir)) {
-                            self::navigate(api_get_path(WEB_PATH) . $redir);
+                            self::navigate(api_get_path(WEB_PATH).$redir);
                         }
                         break;
                     case SESSIONADMIN:
                         $redir = api_get_setting('sessionadmin_page_after_login');
                         if (!empty($redir)) {
-                            self::navigate(api_get_path(WEB_PATH) . $redir);
+                            self::navigate(api_get_path(WEB_PATH).$redir);
                         }
                         break;
                     default:
@@ -111,7 +111,7 @@ class Redirect
             }
             $page_after_login = api_get_setting('page_after_login');
             if (!empty($page_after_login)) {
-                self::navigate(api_get_path(WEB_PATH) . $page_after_login);
+                self::navigate(api_get_path(WEB_PATH).$page_after_login);
             }
         }
     }

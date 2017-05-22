@@ -26,7 +26,7 @@ if (isset($_GET['export'])) {
 	$export_to_csv = true;
 }
 
-if (api_is_platform_admin() ) {
+if (api_is_platform_admin()) {
 	$global = true;
 } else {
 	$global = false;
@@ -34,7 +34,7 @@ if (api_is_platform_admin() ) {
 
 if ($global) {
 	$temp_course_list = CourseManager :: get_courses_list();
-	foreach($temp_course_list  as $temp_course_item) {
+	foreach ($temp_course_list  as $temp_course_item) {
 		$course_item = CourseManager ::get_course_information($temp_course_item['code']);
         $course_list[] = array(
             'code' => $course_item['code'],
@@ -47,14 +47,14 @@ if ($global) {
 }
 
 $new_course_select = array();
-foreach($course_list as $data) {
+foreach ($course_list as $data) {
     $new_course_select[$data['code']] = $data['title'];
 }
 
 $form = new FormValidator('search_simple', 'POST', '', '', null, false);
-$form->addElement('select','course_code',get_lang('Course'), $new_course_select);
+$form->addElement('select', 'course_code', get_lang('Course'), $new_course_select);
 if ($global) {
-	$form->addElement('hidden','view','admin');
+	$form->addElement('hidden', 'view', 'admin');
 } else {
 	//Get exam lists
     $course_id = api_get_course_int_id();
@@ -64,7 +64,7 @@ if ($global) {
 	                 ORDER BY quiz.title ASC";
 	$resultExercices = Database::query($sqlExercices);
 	$exercise_list[0] = get_lang('All');
-	while($a_exercices = Database::fetch_array($resultExercices)) {
+	while ($a_exercices = Database::fetch_array($resultExercices)) {
 		$exercise_list[$a_exercices['id']] = $a_exercices['title'];
 	}
 	$form->addElement('select', 'exercise_id', get_lang('Exercise'), $exercise_list);
@@ -73,8 +73,9 @@ if ($global) {
 //$form->addElement('submit','submit',get_lang('Filter'));
 $form->addButtonFilter(get_lang('Filter'));
 
-if (!empty($_REQUEST['course_code']))
+if (!empty($_REQUEST['course_code'])) {
     $selected_course = $_REQUEST['course_code'];
+}
 if (!empty($selected_course)) {
     $selected_course = api_get_course_info($selected_course);
     $course_list = array($selected_course);
@@ -87,7 +88,7 @@ if (!$export_to_csv) {
 
         echo '<div style="float:right"> <a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'">
                 '.Display::return_icon('csv.gif').'
-                &nbsp;'.get_lang('ExportAsCSV').'</a>' .
+                &nbsp;'.get_lang('ExportAsCSV').'</a>'.
                 '<a href="javascript: void(0);" onclick="javascript: window.print()">
                 '.Display::return_icon('printmgr.gif').'
                 &nbsp;'.get_lang('Print').'</a>
@@ -101,10 +102,10 @@ if (!$export_to_csv) {
         }
 		$menu_items[] = get_lang('ExamTracking');
 		$nb_menu_items = count($menu_items);
-		if($nb_menu_items>1) {
-			foreach($menu_items as $key=> $item) {
+		if ($nb_menu_items > 1) {
+			foreach ($menu_items as $key=> $item) {
 				echo $item;
-				if($key!=$nb_menu_items-1) {
+				if ($key != $nb_menu_items - 1) {
 					echo ' | ';
 				}
 			}
@@ -128,7 +129,7 @@ $main_result = array();
 $session_id = 0;
 $user_list = array();
 // Getting course list
-foreach ($course_list  as $current_course ) {
+foreach ($course_list  as $current_course) {
 	$course_info = api_get_course_info($current_course['code']);
 	$_course = $course_info;
 
@@ -162,7 +163,7 @@ foreach ($course_list  as $current_course ) {
 }
 
 if (!empty($user_list)) {
-    foreach($user_list as $user_id) {
+    foreach ($user_list as $user_id) {
         $user_data = api_get_user_info($user_id);
 		$user_list_name[$user_id] = api_get_person_name(
 			$user_data['firstname'],
@@ -170,7 +171,7 @@ if (!empty($user_list)) {
 		);
     }
 }
-$export_array =  array();
+$export_array = array();
 if (!empty($main_result)) {
 
     $html_result .= '<table  class="data_table">';
@@ -193,9 +194,9 @@ if (!empty($main_result)) {
 
             foreach ($exercises as $exercise_id => $exercise_data) {
                 $users = $exercise_data['users'];
-                foreach($users as $user_id => $attempts) {
+                foreach ($users as $user_id => $attempts) {
                     $attempt = 1;
-                    foreach($attempts as $exe_id => $attempt_data) {
+                    foreach ($attempts as $exe_id => $attempt_data) {
                         $html_result .= '<tr colspan="">';
                         $html_result .= Display::tag('td', $course_code);
                         $html_result .= Display::tag('td', $lp_list_name[$lp_id]);
@@ -222,7 +223,7 @@ if (!empty($main_result)) {
             }
         }
     }
-    $html_result .='</table>';
+    $html_result .= '</table>';
 }
 
 if (!$export_to_csv) {

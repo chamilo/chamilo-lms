@@ -110,7 +110,7 @@ class CQuizQuestion
      */
     public function __construct()
     {
-        $this->ponderation = 0;
+        $this->ponderation = 0.0;
     }
 
     /**

@@ -14,9 +14,9 @@ $this_section = "session_my_space";
 $is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
 
 if (!$is_allowedToTrack) {
-	Display :: display_header(null);
+	Display::display_header(null);
 	api_not_allowed();
-	Display :: display_footer();
+	Display::display_footer();
 }
 
 $export_to_xls = false;
@@ -24,7 +24,7 @@ if (isset($_GET['export'])) {
 	$export_to_xls = true;
 }
 
-if (api_is_platform_admin() ) {
+if (api_is_platform_admin()) {
 	$global = true;
 } else {
 	$global = false;
@@ -45,14 +45,14 @@ function load_courses() {
 $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : null;
 
 if (empty($session_id)) {
-	$temp_course_list = CourseManager :: get_courses_list();
+	$temp_course_list = CourseManager::get_courses_list();
 } else {
 	$temp_course_list = SessionManager::get_course_list_by_session_id($session_id);
 }
 
 foreach ($temp_course_list  as $temp_course_item) {
-	$course_item = CourseManager ::get_course_information($temp_course_item['code']);
-	$course_select_list[$temp_course_item['code']]	= $course_item['title'];
+	$course_item = api_get_course_info($temp_course_item['code']);
+	$course_select_list[$temp_course_item['code']] = $course_item['title'];
 }
 
 //Get session list
@@ -90,7 +90,7 @@ if (empty($course_code)) {
     $course_code = 0;
 }
 
-$form->setDefaults(array('course_code'=>(string)$course_code));
+$form->setDefaults(array('course_code'=>(string) $course_code));
 
 $course_info = api_get_course_info($course_code);
 
@@ -125,9 +125,9 @@ if (!empty($course_info)) {
 
 				foreach ($exercise_stats as $stats) {
 					if (!empty($stats['question_list'])) {
-						foreach($stats['question_list'] as $my_question_stat) {
+						foreach ($stats['question_list'] as $my_question_stat) {
 							if ($question_id == $my_question_stat['question_id']) {
-								$question_result =  $question_result + $my_question_stat['marks'];
+								$question_result = $question_result + $my_question_stat['marks'];
 								$quantity_exercises++;
 							}
 						}
@@ -148,7 +148,7 @@ if (!empty($course_info)) {
 }
 
 if (!$export_to_xls) {
-	Display :: display_header(get_lang("MySpace"));
+	Display::display_header(get_lang("MySpace"));
 	echo '<div class="actions">';
 	if ($global) {
 		echo MySpace::getTopMenu();
@@ -171,7 +171,7 @@ if (!$export_to_xls) {
 	$form->display();
 
 	if (empty($course_code)) {
-		Display::display_warning_message(get_lang('PleaseSelectACourse'));
+		echo Display::return_message(get_lang('PleaseSelectACourse'), 'warning');
 	}
 }
 
@@ -181,15 +181,15 @@ $counter = 0;
 if (!empty($main_question_list) && is_array($main_question_list)) {
 	$html_result .= '<table  class="data_table">';
 	$html_result .= '<tr><th>'.get_lang('Question').
-                    Display :: return_icon('info3.gif', get_lang('QuestionsAreTakenFromLPExercises'), array('align' => 'absmiddle', 'hspace' => '3px')).'</th>';
-	$html_result .= '<th>'.$course_info['visual_code'].' '.get_lang('AverageScore').Display :: return_icon('info3.gif', get_lang('AllStudentsAttemptsAreConsidered'), array('align' => 'absmiddle', 'hspace' => '3px')).' </th>';
+                    Display::return_icon('info3.gif', get_lang('QuestionsAreTakenFromLPExercises'), array('align' => 'absmiddle', 'hspace' => '3px')).'</th>';
+	$html_result .= '<th>'.$course_info['visual_code'].' '.get_lang('AverageScore').Display::return_icon('info3.gif', get_lang('AllStudentsAttemptsAreConsidered'), array('align' => 'absmiddle', 'hspace' => '3px')).' </th>';
 	$html_result .= '<th>'.get_lang('Quantity').'</th>';
 
 	foreach ($main_question_list as $question) {
 		$total_student = 0;
-		$counter ++;
+		$counter++;
 		$s_css_class = 'row_even';
-		if ($counter % 2 ==0 ) {
+		if ($counter % 2 == 0) {
 			$s_css_class = 'row_odd';
 		}
 		$html_result .= "<tr class='$s_css_class'>
@@ -211,11 +211,11 @@ if (!empty($main_question_list) && is_array($main_question_list)) {
 		$html_result .= "</td>";
 	}
 
-	$html_result .="</tr>";
+	$html_result .= "</tr>";
 	$html_result .= '</table>';
 } else {
 	if (!empty($course_code)) {
-		Display::display_warning_message(get_lang('NoResults'));
+		echo Display::return_message(get_lang('NoResults'), 'warning');
 	}
 }
 
@@ -223,4 +223,4 @@ if (!$export_to_xls) {
 	echo $html_result;
 }
 
-Display :: display_footer();
+Display::display_footer();

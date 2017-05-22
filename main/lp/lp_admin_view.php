@@ -20,8 +20,8 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
-$isStudentView = isset($_REQUEST['isStudentView']) ? (int)$_REQUEST['isStudentView'] : null;
-$learnpath_id = (int)$_REQUEST['lp_id'];
+$isStudentView = isset($_REQUEST['isStudentView']) ? (int) $_REQUEST['isStudentView'] : null;
+$learnpath_id = (int) $_REQUEST['lp_id'];
 $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 $_course = api_get_course_info();
 
@@ -44,7 +44,7 @@ if (isset($_SESSION['gradebook'])) {
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array (
+    $interbreadcrumb[] = array(
         'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
     );
@@ -85,7 +85,7 @@ if (isset($_POST['save_audio'])) {
             $in = implode(',', $lp_items_to_remove_audio);
         }
     }
-    if (count($lp_items_to_remove_audio)>0) {
+    if (count($lp_items_to_remove_audio) > 0) {
         $sql = "UPDATE $tbl_lp_item SET audio = '' 
                 WHERE c_id = $course_id AND id IN (".$in.")";
         $result = Database::query($sql);
@@ -120,7 +120,7 @@ if (isset($_POST['save_audio'])) {
                 // Adding something random to prevent overwriting.
                 $filename_components[count($filename_components) - 1] = time();
                 // Reconstructing the new filename.
-                $clean_name = implode($filename_components) .'.'.$file_extension;
+                $clean_name = implode($filename_components).'.'.$file_extension;
                 // Using the new name in the $_FILES superglobal.
                 $_FILES[$key]['name'] = $clean_name;
             }
@@ -150,7 +150,7 @@ if (isset($_POST['save_audio'])) {
             Database::query($sql_insert_audio);
         }
     }
-    //Display::display_confirmation_message(get_lang('ItemUpdated'));
+    //echo Display::return_message(get_lang('ItemUpdated'), 'confirm');
     $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
     header('Location: '.$url);
     exit;
@@ -279,14 +279,14 @@ echo '<div class="col-md-8">';
 switch ($_GET['action']) {
     case 'edit_item':
         if (isset($is_success) && $is_success === true) {
-            Display::display_confirmation_message(get_lang('LearnpathItemEdited'));
+            echo Display::return_message(get_lang('LearnpathItemEdited'), 'confirm');
         } else {
             echo $_SESSION['oLP']->display_edit_item($_GET['id']);
         }
         break;
     case 'delete_item':
         if (isset($is_success) && $is_success === true) {
-            Display::display_confirmation_message(get_lang('LearnpathItemDeleted'));
+            echo Display::return_message(get_lang('LearnpathItemDeleted'), 'confirm');
         }
         break;
 }

@@ -63,19 +63,19 @@ class CalendarEvent extends Resource
         $attachment_comment = null,
         $all_day = 0
     ) {
-		parent::__construct($id, RESOURCE_EVENT);
+        parent::__construct($id, RESOURCE_EVENT);
 
-		$this->title = $title;
-		$this->content = $content;
-		$this->start_date = $start_date;
-		$this->end_date = $end_date;
-		$this->all_day = $all_day;
+        $this->title = $title;
+        $this->content = $content;
+        $this->start_date = $start_date;
+        $this->end_date = $end_date;
+        $this->all_day = $all_day;
 
-		$this->attachment_path = $attachment_path;
-		$this->attachment_filename = $attachment_filename;
-		$this->attachment_size = $attachment_size;
-		$this->attachment_comment = $attachment_comment;
-	}
+        $this->attachment_path = $attachment_path;
+        $this->attachment_filename = $attachment_filename;
+        $this->attachment_size = $attachment_size;
+        $this->attachment_comment = $attachment_comment;
+    }
 
     /**
      * Show this Event

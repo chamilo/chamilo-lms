@@ -5,7 +5,7 @@
  * @package chamilo.cron
  * @author Imanol Losada <imanol.losada@beeznest.com>
  */
-require_once __DIR__ . '/../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 /**
  * Initialization
@@ -64,7 +64,7 @@ $usersToBeReminded = array();
 
 foreach ($sessions as $sessionId => $userIds) {
     $userId = 0;
-    $userIds = $userIds ? " AND sessionUser.user_id NOT IN (" . implode(", ", $userIds) . ")" : null;
+    $userIds = $userIds ? " AND sessionUser.user_id NOT IN (".implode(", ", $userIds).")" : null;
     $query = "
         SELECT sessionUser.session_id, sessionUser.user_id, session.name, session.access_end_date 
         FROM $sessionUserTable AS sessionUser
@@ -156,10 +156,10 @@ if ($usersToBeReminded) {
                 $administrator['completeName'],
                 $administrator['email']
             );
-            echo "Email sent to $userCompleteName (" . $user['email'] . ")\n";
-            echo "Session: " . $session['name'] . "\n";
-            echo "Date end: " . $session['access_end_date'] . "\n";
-            echo "Days remaining: " . $daysRemaining->format("%d") . "\n\n";
+            echo "Email sent to $userCompleteName (".$user['email'].")\n";
+            echo "Session: ".$session['name']."\n";
+            echo "Date end: ".$session['access_end_date']."\n";
+            echo "Days remaining: ".$daysRemaining->format("%d")."\n\n";
         }
         echo "======================================================================\n\n";
     }

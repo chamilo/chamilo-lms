@@ -19,11 +19,11 @@ $externalCSS = [
 ];
 
 foreach ($externalCSS as $css) {
-    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH) . $css);
+    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).$css);
 }
 
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_CSS_PATH) . 'chat.css');
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_CSS_PATH) . 'markdown.css');
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_CSS_PATH).'chat.css');
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_CSS_PATH).'markdown.css');
 
 $externalJS = [
     'highlight/highlight.pack.js',
@@ -43,7 +43,7 @@ foreach (Emojione\Emojione::$shortcode_replace as $key => $icon) {
         continue;
     }
 
-    $iconList[$key] = strtoupper($icon) . '.png';
+    $iconList[$key] = strtoupper($icon).'.png';
 }
 
 $view = new Template(get_lang('Chat'), false, false, false, true, false);

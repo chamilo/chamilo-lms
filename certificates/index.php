@@ -39,10 +39,16 @@ switch ($action) {
 
             $pageFormat = $pdfParams['orientation'] === 'landscape' ? 'A4-L' : 'A4';
             $userInfo = api_get_user_info($certificate->user_id);
-            $pdfName = api_replace_dangerous_char(get_lang('Certificate') . ' ' . $userInfo['username']);
+            $pdfName = api_replace_dangerous_char(get_lang('Certificate').' '.$userInfo['username']);
 
             $pdf = new PDF($pageFormat, $pdfParams['orientation'], $pdfParams);
-            $pdf->html_to_pdf($certificatePathList, $pdfName, null, false, false);
+            $pdf->html_to_pdf(
+                $certificatePathList,
+                $pdfName,
+                null,
+                false,
+                false
+            );
         }
         break;
     default:

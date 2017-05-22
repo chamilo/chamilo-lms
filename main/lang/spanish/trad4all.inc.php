@@ -609,7 +609,7 @@ $Forbidden = "Usted no está registrado como responsable de este curso";
 $CourseAccessConfigTip = "Por defecto el curso es público. Pero Ud. puede definir el nivel de confidencialidad en los botones superiores.";
 $OpenToTheWorld = "Público - acceso autorizado a cualquier persona";
 $OpenToThePlatform = "Abierto - acceso autorizado sólo para los usuarios registrados en la plataforma";
-$OpenToThePlatform = "Abierto - acceso permitido sólo a los usuarios registrados en la plataforma";
+$StudentXIsNotSubscribedToCourse = "El estudiante %s no está inscrito a este curso";
 $TipLang = "Este será el idioma que verán todos los visitantes del curso.";
 $Vid = "Video";
 $Work = "Trabajos";
@@ -1115,7 +1115,7 @@ $CsvExplain = "El fichero se debe presentar así: <blockquote><pre><b>URL</b>;ca
 $LinkUpdated = "El enlace ha sido actualizado";
 $OnHomepage = "¿ Mostrar el enlace en la página principal del curso";
 $ShowLinkOnHomepage = "Mostrar este enlace como un icono en la página principal del curso";
-$General = "general";
+$General = "General";
 $SearchFeatureDoIndexLink = "¿Indexar título y descripción?";
 $SaveLink = "Guardar el enlace";
 $SaveCategory = "Guardar la categoría";
@@ -1213,7 +1213,7 @@ $ShowAndSubscribeClosed = "Visible / Cerrado";
 $AdminThisUser = "Volver a este usuario";
 $Manage = "Administrar la Plataforma";
 $EnrollToCourseSuccessful = "Su inscripción en el curso se ha completado";
-$SubCat = "sub-categorías";
+$SubCat = "Subcategorías";
 $UnsubscribeNotAllowed = "En este curso no está permitido que los propios usuarios puedan anular su inscripción.";
 $CourseAdminUnsubscribeNotAllowed = "Actualmente es el administrador de este curso";
 $CourseManagement = "Catálogo de cursos";
@@ -1819,8 +1819,8 @@ $XMLNotValid = "El documento XML no es válido";
 $ForTheSession = "de la sesión";
 $AllowEmailEditorTitle = "Activar el editor de correo electrónico en línea";
 $AllowEmailEditorComment = "Si se activa esta opción, al hacer clic en un correo electrónico, se abrirá un editor en línea.";
-$AddCSVHeader = "¿ Añadir la linea de cabecera del CSV ?";
-$YesAddCSVHeader = "Sí, añadir las cabeceras CSV <br /> Esta línea define los campos y es necesaria cuando quiera importar el archivo en otra plataforma Chamilo";
+$AddCSVHeader = "¿Incluir las cabeceras?";
+$YesAddCSVHeader = "Sí, añadir las cabeceras<br /> Esta primera línea identifica los campos y es útil, entre otras situaciones, cuando quiera importar el archivo en algun portal Chamilo";
 $ListOfUsersSubscribedToCourse = "Lista de usuarios inscritos en el curso";
 $NumberOfCourses = "Número de cursos";
 $ShowDifferentCourseLanguage = "Mostrar los idiomas de los cursos";
@@ -5898,7 +5898,7 @@ $UnsubscribeUsersAlreadyAddedInCourse = "Desinscribir todos los alumnos ya inscr
 $ImportUsers = "Importar usuarios";
 $HelpFolderLearningPaths = "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:\nEsta carpeta contiene los documentos que se crean desde la herramienta Lecciones. Aquí puede editar los HTML que se hayan creado al realizar una importación desde la herramienta Lecciones, por ejemplo desde Chamilo Rapid. Se recomienda mantener invisible esta carpeta a los alumnos.";
 $YouWillBeRedirectedInXSeconds = "Un momento por favor. Será re-dirigido a otra página dentro de %s segundos...";
-$ToProtectYourSiteMakeXReadOnlyAndDeleteY = "Para proteger su instalación, ponga la carpeta %s en solo lectura (chmod -r 0555 bajo Linux) y borre completamente la carpeta %s.";
+$ToProtectYourSiteMakeXReadOnlyAndDeleteY = "Para proteger su instalación, ponga la carpeta %s en solo lectura (chmod -R 0555 bajo Linux) y borre completamente la carpeta %s.";
 $NumberOfCoursesPublic = "Número de cursos públicos";
 $NumberOfCoursesOpen = "Número de cursos abiertos";
 $NumberOfCoursesPrivate = "Número de cursos privados";
@@ -7041,7 +7041,7 @@ $LdapDescriptionComment = "<div class=\"alert alert-info\">
     <p>Los valores del Array son &lt;chamilo_field&gt; =&gt; &gt;ldap_field&gt;</p><p>
     </p>
     <h4>II. Activar la atenticación LDAP</h4>
-    <h5>Editar el archivo main/inc/conf/configuration.php </h5>
+    <h5>Editar el archivo app/config/configuration.php </h5>
     <p>-&gt; Descomentar las líneas:</p>
     <ul>
         <li>
@@ -7076,7 +7076,7 @@ Modificar valores de \$result con el nombre de los atributos de Shibboleth
 Ir a Plug-in para añadir el botón 'Shibboleth Login' en su campus de Chamilo.";
 $LdapDescriptionTitle = "<h3>Autentificacion LDAP</h3>";
 $FacebookMainActivateTitle = "Autenticación con Facebook";
-$FacebookMainActivateComment = "<p>En primer lugar, usted tiene que crear una Aplicación Facebook (ver <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) con su cuenta de Facebook. En la configuración de Aplicaciones de Facebook, el valor de la URL del sitio debe ser la URL de este campus. Tener habilitada la opción Web OAuth Login. Y agregar la URL de tu campus en el campo Valid OAuth redirect URIs</p><p>Descomenta la línea <code>&#36;_configuration['facebook_auth'] = 1;</code> para habilitar la Autenticación con Facebook</p><p>Luego, edite el archivo <code>/app/config/auth.conf.php</code> e ingresa los valores de '<code>appId</code>' y '<code>secret</code>' para <code>&#36;facebook_config</code>.</p><p>Ir a <a href='settings.php?category=Plugins'>Plugins</a> para agregar un botón configurable de <em>Incio de sesión con Facebook</em> para su campus Chamilo.</p>";
+$FacebookMainActivateComment = "<p>En primer lugar, usted tiene que crear una Aplicación Facebook (ver <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) con su cuenta de Facebook. En la configuración de Aplicaciones de Facebook, el valor de la URL del sitio debe ser la URL de este campus. Tener habilitada la opción Web OAuth Login. Y agregar la URL de tu campus en el campo Valid OAuth redirect URIs</p><p>Descomenta la línea <code>&#36;_configuration['facebook_auth'] = 1;</code> para habilitar la Autenticación con Facebook</p><p>Luego, edite el archivo <code>app/config/auth.conf.php</code> e ingresa los valores de '<code>appId</code>' y '<code>secret</code>' para <code>&#36;facebook_config</code>.</p><p>Ir a <a href='settings.php?category=Plugins'>Plugins</a> para agregar un botón configurable de <em>Incio de sesión con Facebook</em> para su campus Chamilo.</p>";
 $AnnouncementForGroup = "Anuncios para un grupo";
 $AllGroups = "Todos los grupos";
 $LanguagePriority1Title = "Prioridad del idioma 1";
@@ -7989,4 +7989,44 @@ $SeeAccesses = "Ver accesos";
 $PriorityChangeFromXToY = "Prioridad modificada de %s a %s";
 $StatusChangeFromXToY = "Estado modificado de %s a %s";
 $SkillFromCourseXDeletedSinceThen = "Esta competencia fue adquirida a través del curso %s que ha sido eliminado desde entonces.";
+$SaveAndAddNewItem = "Guardar y agregar nuevo elemento";
+$AnnouncementChooseRecipientsDescription = "De forma predeterminada, este anuncio será enviado a todos los usuarios. Pero también puede seleccionar otros destinatarios.";
+$ChooseRecipients = "Elegir destinatarios";
+$StudentCourseProgressX = "Progreso: %s %%";
+$SessionDurationNotStartedMaxX = "Esta sesión tiene una duración máxima de %s días.";
+$StudentCourseScoreX = "Nota: %s %%";
+$StudentCourseCertificateX = "Certificado: %s";
+$ConfigureExerciseVisibilityInCourseTitle = "Permitir ignorar la configuración de un ejercicio invisible en la sesión a nivel del curso base";
+$ConfigureExerciseVisibilityInCourseComment = "Activar la configuración de invisibilidad de los ejercicios en la sesión desde el curso base. Si no está configurado, se usa el parámetro global.";
+$ExerciseInvisibleInSessionTitle = "Ejercicio invisible en sesión";
+$ExerciseInvisibleInSessionComment = "Si un ejercicio es visible en el curso base entonces aparece invisible en la sesión. Si un ejercicio es invisible en el curso base entonces no aparece en la sesión.";
+$Ongoing = "En progreso";
+$Unclosed = "No cerrado";
+$AttemptStillOngoingPleaseWait = "El intento todavía está en progreso. Paciencia...";
+$MarkAttemptAsClosed = "Marcar el intento como cerrado (ya pasó el tiempo máximo)";
+$NewPasswordRequirementsNotMatched = "La nueva contraseña no corresponde a los requerimientos mínimos de seguridad";
+$NewPasswordRequirementMinXLowercase = "Mínimo %s caracter(es) alfabéticos en minúscula";
+$NewPasswordRequirementMinXUppercase = "Mínimo %s caracter(es) alfabéticos en mayúscula";
+$NewPasswordRequirementMinXNumeric = "Mínimo %s caracter(es) numéricos (0-9)";
+$NewPasswordRequirementMinXLength = "Mínimo %s caracteres en total";
+$NewPasswordRequirementMaxXLowercase = "Máximo %s caracter(es) alfabético(s) en minúscula";
+$NewPasswordRequirementMaxXUppercase = "Máximo %s caracter(es) alfabético(s) en mayúscula";
+$NewPasswordRequirementMaxXNumeric = "Máximo %s caracter(es) numéricos (0-9)";
+$NewPasswordRequirementMaxXLength = "Máximo %s caracteres en total";
+$YouCantNotEditThisQuestionBecauseAlreadyExistAnswers = "No puede editar esta pregunta porque ya existen respuestas";
+$Avatar = "Avatar";
+$StudyCycle = "Ciclo de estudio";
+$ReadingComprehension = "Comprensión lectora";
+$ReadingQuestionCongratsSpeedXNotReachedForYWords = "Lo sentimos, parece que %s palabras/minuto para este texto de %s palabras fue demasiado rápido, ya que tu respuesta de comprensión lectora fue equivocada.";
+$ReadingQuestionCongratsSpeedXReachedForYWords = "Felicitaciones, ha alcanzado la celeridad de %s palabras por minuto con un correcto entendimiento sobre un texto de %s palabras.";
+$ReadingComprehensionLevelX = "%s palabras por minuto";
+$TutorXIsNotSubscribedToCourse = "El tutor %s no está inscrito a este curso";
+$UpdateTitleInLps = "Actualizar este título en las lecciones";
+$WebRTCDialogHelp = "Para habilitar la el video chat en tu navegador (si este lo soporta), asegúrese de hacer click en el ícono de información en la izquierda de la URL para autorizar el uso de su cámara web y micrófono.";
+$UpdateFile = "Actualizar archivo";
+$SendEmailToTeacherWhenStudentStartQuiz = "Enviar un correo al profesor cuando el estudiante inicia un ejercicio";
+$SendEmailToTeacherWhenStudentEndQuiz = "Enviar un correo al profesor cuando el estudiante termina un ejercicio";
+$SendEmailToTeacherWhenStudentEndQuizOnlyIfOpenQuestion = "Enviar un correo al profesor cuando el estudiante termina un ejercicio, solo si ha respondido a una pregunta abierta";
+$SendEmailToTeacherWhenStudentEndQuizOnlyIfOralQuestion = "Enviar un correo al profesor cuando el estudiante termina un ejercicio, solo si ha respondido a una pregunta oral";
+$StudentStartExercise = "Un ejercicio/examen ha sido iniciado por un estudiante";
 ?>

@@ -5,9 +5,9 @@
  *
  * @package chamilo.include.search
  */
-include_once dirname(__FILE__) . '/../../../global.inc.php';
-require_once dirname(__FILE__) . '/search_processor.class.php';
-require_once dirname(__FILE__) . '/../IndexableChunk.class.php';
+include_once __DIR__.'/../../../global.inc.php';
+require_once __DIR__.'/search_processor.class.php';
+require_once __DIR__.'/../IndexableChunk.class.php';
 
 /**
  * Process learning paths before pass it to search listing scripts
@@ -58,7 +58,7 @@ class learnpath_processor extends search_processor
                     );
                     if ($visibility) {
                         list($thumbnail, $image, $name, $author) = $this->get_information($courseid, $lp_id, $lp['has_document_id']);
-                        $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?cidReq=%s&action=view&lp_id=%s';
+                        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?cidReq=%s&action=view&lp_id=%s';
                         $url = sprintf($url, $courseid, $lp_id);
                         $result = array(
                             'toolid' => TOOL_LEARNPATH,
@@ -135,16 +135,16 @@ class learnpath_processor extends search_processor
             $name = '';
             if ($row = Database::fetch_array($dk_result)) {
                 // Get the image path
-                $img_location = api_get_path(WEB_COURSE_PATH) . $course_path . "/document/";
+                $img_location = api_get_path(WEB_COURSE_PATH).$course_path."/document/";
                 $thumbnail_path = str_replace('.png.html', '_thumb.png', $row['path']);
                 $big_img_path = str_replace('.png.html', '.png', $row['path']);
                 $thumbnail = '';
                 if (!empty($thumbnail_path)) {
-                    $thumbnail = $img_location . $thumbnail_path;
+                    $thumbnail = $img_location.$thumbnail_path;
                 }
                 $image = '';
                 if (!empty($big_img_path)) {
-                    $image = $img_location . $big_img_path;
+                    $image = $img_location.$big_img_path;
                 }
                 $name = $row['name'];
             }

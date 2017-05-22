@@ -4,7 +4,7 @@
  * @package chamilo.webservices
  */
 require_once __DIR__.'/../inc/global.inc.php';
-require_once(dirname(__FILE__).'/webservice.php');
+require_once __DIR__.'/webservice.php';
 $libpath = api_get_path(LIBRARY_PATH);
 
 /**
@@ -43,7 +43,7 @@ class WSSoapServer {
 	 * Singleton method
 	 */
 	public static function singleton() {
-		if(!isset(self::$_instance)) {
+		if (!isset(self::$_instance)) {
 			self::$_instance = new soap_server();
 			// Set the error handler
 			WSError::setErrorHandler(new WSSoapErrorHandler());
@@ -88,7 +88,7 @@ $s->wsdl->addComplexType(
   '',
   'SOAP-ENC:Array',
   array(),
-  array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:extras[]')),'tns:extras'
+  array(array('ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:extras[]')), 'tns:extras'
 );
 
 /*
@@ -111,10 +111,10 @@ $s->register(
 	array('return' => 'xsd:string')
 );
 
-require_once(dirname(__FILE__).'/soap_user.php');
-require_once(dirname(__FILE__).'/soap_course.php');
-require_once(dirname(__FILE__).'/soap_session.php');
-require_once(dirname(__FILE__).'/soap_report.php');
+require_once __DIR__.'/soap_user.php';
+require_once __DIR__.'/soap_course.php';
+require_once __DIR__.'/soap_session.php';
+require_once __DIR__.'/soap_report.php';
 
 // Use the request to (try to) invoke the service
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';

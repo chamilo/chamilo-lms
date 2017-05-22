@@ -2,26 +2,26 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	@package chamilo.survey
- *	@author Arnaud Ligot <arnaud@cblue.be>
- *	@version $Id: $
+ * @package chamilo.survey
+ * @author Arnaud Ligot <arnaud@cblue.be>
+ * @version $Id: $
  *
- *	A small peace of code to enable user to access images included into survey
- *	which are accessible by non authenticated users. This file is included
- *	by document/download.php
+ * A small peace of code to enable user to access images included into survey
+ * which are accessible by non authenticated users. This file is included
+ * by document/download.php
  */
 
 function check_download_survey($course, $invitation, $doc_url)
 {
     // Getting all the course information
-    $_course = CourseManager::get_course_information($course);
+    $_course = api_get_course_info($course);
     $course_id = $_course['real_id'];
 
     // Database table definitions
-    $table_survey = Database:: get_course_table(TABLE_SURVEY);
-    $table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
-    $table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-    $table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
+    $table_survey = Database::get_course_table(TABLE_SURVEY);
+    $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+    $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+    $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
 
     // Now we check if the invitationcode is valid
     $sql = "SELECT * FROM $table_survey_invitation
@@ -30,23 +30,21 @@ function check_download_survey($course, $invitation, $doc_url)
                 invitation_code = '".Database::escape_string($invitation)."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) < 1) {
-        Display :: display_error_message(get_lang('WrongInvitationCode'), false);
-        Display :: display_footer();
+        echo Display::return_message(get_lang('WrongInvitationCode'), 'error', false);
+        Display::display_footer();
         exit;
     }
     $survey_invitation = Database::fetch_assoc($result);
 
     // Now we check if the user already filled the survey
     if ($survey_invitation['answered'] == 1) {
-        Display :: display_error_message(get_lang('YouAlreadyFilledThisSurvey'), false);
-        Display :: display_footer();
+        echo Display::return_message(get_lang('YouAlreadyFilledThisSurvey'), 'error', false);
+        Display::display_footer();
         exit;
     }
 
     // Very basic security check: check if a text field from a survey/answer/option contains the name of the document requested
-
     // Fetch survey ID
-
     // If this is the case there will be a language choice
     $sql = "SELECT * FROM $table_survey
             WHERE
@@ -65,7 +63,7 @@ function check_download_survey($course, $invitation, $doc_url)
             echo '</select>';
             echo '  <input type="submit" name="Submit" value="'.get_lang('Ok').'" />';
             echo '</form>';
-            display::display_footer();
+            Display::display_footer();
             exit;
         }
     } else {
@@ -102,8 +100,8 @@ function check_download_survey($course, $invitation, $doc_url)
                     )";
     $result = Database::query($sql);
     if (Database::num_rows($result) == 0) {
-        Display :: display_error_message(get_lang('WrongInvitationCode'), false);
-        Display :: display_footer();
+        echo Display::return_message(get_lang('WrongInvitationCode'), 'error', false);
+        Display::display_footer();
         exit;
     }
 

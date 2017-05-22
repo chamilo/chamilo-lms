@@ -36,7 +36,7 @@ $obj = new ExtraField($extraFieldType);
 $obj->setupBreadcrumb($interbreadcrumb, $action);
 
 //jqgrid will use this URL to do the selects
-$url = api_get_path(WEB_AJAX_PATH) . 'model.ajax.php?a=get_extra_fields&type=' . $extraFieldType;
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_extra_fields&type='.$extraFieldType;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = $obj->getJqgridColumnNames();
@@ -64,43 +64,43 @@ $(function() {
         array(),
         $action_links,
         true
-    ). '
+    ).'
 
     $("#field_type").on("change", function() {
         id = $(this).val();
         switch(id) {
             case "1":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_text.png')) . '");
+                $("#example").html("' . addslashes(Display::return_icon('userfield_text.png')).'");
                 break;
             case "2":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_text_area.png')) . '");
+                $("#example").html("' . addslashes(Display::return_icon('userfield_text_area.png')).'");
                 break;
             case "3":
-                $("#example").html("' . addslashes(Display::return_icon('add_user_field_howto.png')) . '");
+                $("#example").html("' . addslashes(Display::return_icon('add_user_field_howto.png')).'");
                 break;
             case "4":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_drop_down.png')) . '");
+                $("#example").html("' . addslashes(Display::return_icon('userfield_drop_down.png')).'");
                 break;
             case "5":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_multidropdown.png')) . '");
+                $("#example").html("' . addslashes(Display::return_icon('userfield_multidropdown.png')).'");
                 break;
             case "6":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_data.png')) . '");
+                $("#example").html("' . addslashes(Display::return_icon('userfield_data.png')).'");
                 break;
             case "7":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_date_time.png')) . '");
+                $("#example").html("' . addslashes(Display::return_icon('userfield_date_time.png')).'");
                 break;
             case "8":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_doubleselect.png')) . '");
+                $("#example").html("' . addslashes(Display::return_icon('userfield_doubleselect.png')).'");
                 break;
             case "9":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_divider.png')) . '");
+                $("#example").html("' . addslashes(Display::return_icon('userfield_divider.png')).'");
                 break;
             case "10":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_user_tag.png')) . '");
+                $("#example").html("' . addslashes(Display::return_icon('userfield_user_tag.png')).'");
                 break;
             case "11":
-                $("#example").html("' . addslashes(Display::return_icon('userfield_data.png')) . '");
+                $("#example").html("' . addslashes(Display::return_icon('userfield_data.png')).'");
                 break;
         }
     });
@@ -118,7 +118,7 @@ switch ($action) {
         ) {
             api_not_allowed();
         }
-        $url = api_get_self() . '?type=' . $obj->type . '&action=' . Security::remove_XSS($_GET['action']);
+        $url = api_get_self().'?type='.$obj->type.'&action='.Security::remove_XSS($_GET['action']);
         $form = $obj->return_form($url, 'add');
 
         // The validation or display
@@ -127,13 +127,13 @@ switch ($action) {
             unset($values['id']);
             $res = $obj->save($values);
             if ($res) {
-                Display::display_confirmation_message(get_lang('ItemAdded'));
+                echo Display::return_message(get_lang('ItemAdded'), 'confirmation');
             }
             $obj->display();
         } else {
             echo '<div class="actions">';
-            echo '<a href="' . api_get_self() . '?type=' . $obj->type . '">' .
-            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM) . '</a>';
+            echo '<a href="'.api_get_self().'?type='.$obj->type.'">'.
+            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             echo '</div>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
@@ -142,22 +142,23 @@ switch ($action) {
         break;
     case 'edit':
         // Action handling: Editing
-        $url = api_get_self() . '?type=' . $obj->type . '&action=' . Security::remove_XSS($_GET['action']) . '&id=' . intval($_GET['id']);
+        $url = api_get_self().'?type='.$obj->type.'&action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
         $form = $obj->return_form($url, 'edit');
 
         // The validation or display
         if ($form->validate()) {
             $values = $form->exportValues();
             $res = $obj->update($values);
-            Display::display_confirmation_message(
+            echo Display::return_message(
                 sprintf(get_lang('ItemUpdated'), $values['variable']),
+                'confirmation',
                 false
             );
             $obj->display();
         } else {
             echo '<div class="actions">';
-            echo '<a href="' . api_get_self() . '?type=' . $obj->type . '">' .
-            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM) . '</a>';
+            echo '<a href="'.api_get_self().'?type='.$obj->type.'">'.
+            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             echo '</div>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
@@ -168,7 +169,7 @@ switch ($action) {
         // Action handling: delete
         $res = $obj->delete($_GET['id']);
         if ($res) {
-            Display::display_confirmation_message(get_lang('ItemDeleted'));
+            echo Display::return_message(get_lang('ItemDeleted'), 'confirmation');
         }
         $obj->display();
         break;
@@ -176,4 +177,4 @@ switch ($action) {
         $obj->display();
         break;
 }
-Display :: display_footer();
+Display::display_footer();

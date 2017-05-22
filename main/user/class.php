@@ -146,7 +146,7 @@ Display :: display_header($tool_name, "User");
 $(function() {
 <?php
     // grid definition see the $usergroup>display() function
-    echo Display::grid_js('usergroups',  $url, $columns, $columnModel, $extraParams, array(), '', true);
+    echo Display::grid_js('usergroups', $url, $columns, $columnModel, $extraParams, array(), '', true);
 ?>
 });
 </script>

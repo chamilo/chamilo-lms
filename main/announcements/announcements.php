@@ -152,12 +152,12 @@ switch ($action) {
         break;
     case 'view':
         $interbreadcrumb[] = array(
-            "url" => api_get_path(WEB_CODE_PATH)."announcements/announcements.php?".api_get_cidreq(),
+            "url" => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
             "name" => $nameTools,
         );
 
         $nameTools = get_lang('View');
-        $content = AnnouncementManager::display_announcement($announcement_id);
+        $content = AnnouncementManager::displayAnnouncement($announcement_id);
         break;
     case 'list':
         $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -378,6 +378,9 @@ switch ($action) {
 
         $nameTools = $form_name;
         $form->addElement('header', $form_name);
+        $form->addButtonAdvancedSettings('choose_recipients', [get_lang('ChooseRecipients'), get_lang('AnnouncementChooseRecipientsDescription')]);
+        $form->addHtml('<div id="choose_recipients_options" style="display: none;">');
+
         $to = [];
         if (empty($group_id)) {
             if (isset($_GET['remind_inactive'])) {
@@ -432,21 +435,15 @@ switch ($action) {
             }
 
             $element = CourseManager::addUserGroupMultiSelect($form, array());
-            $form->setRequired($element);
-
-            if (!isset($announcement_to_modify)) {
-                $announcement_to_modify = '';
-            }
-
-            $form->addCheckBox('email_ann', '', get_lang('EmailOption'));
         } else {
-            if (!isset($announcement_to_modify)) {
-                $announcement_to_modify = '';
-            }
+            $element = CourseManager::addGroupMultiSelect($form, $group_properties, array());
+        }
 
-            $element = CourseManager::addGroupMultiSelect($form, $group_properties['iid'], array());
-            $form->setRequired($element);
-            $form->addCheckBox('email_ann', '', get_lang('EmailOption'));
+        $form->addHtml('</div>');
+        $form->addCheckBox('email_ann', '', get_lang('EmailOption'));
+
+        if (!isset($announcement_to_modify)) {
+            $announcement_to_modify = '';
         }
 
         $announcementInfo = AnnouncementManager::get_by_id($course_id, $id);
@@ -467,9 +464,29 @@ switch ($action) {
             }
         }
 
+        if (isset($defaults['users'])) {
+            foreach ($defaults['users'] as $value) {
+                $parts = explode(':', $value);
+
+                if (!isset($parts[1]) || empty($parts[1])) {
+                    continue;
+                }
+
+                $form->addHtml("
+                    <script>
+                        $(document).on('ready', function () {
+                            $('#choose_recipients').click();
+                        });
+                    </script>
+                ");
+                break;
+            }
+        }
+
         $defaults['email_ann'] = true;
 
-        $form->addElement('text', 'title', get_lang('EmailTitle'));
+        $form->addElement('text', 'title', get_lang('EmailTitle'), array("onkeypress" => "return event.keyCode != 13;")); //do not submit on enter
+        $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
         $form->addElement('hidden', 'id');
         $htmlTags = "<b>".get_lang('Tags')."</b><br /><br />";
         $tags = AnnouncementManager::get_tags();
@@ -482,7 +499,7 @@ switch ($action) {
         $form->addHtmlEditor(
             'content',
             get_lang('Description'),
-            false,
+            true,
             false,
             array('ToolbarSet' => 'Announcements')
         );
@@ -506,6 +523,7 @@ switch ($action) {
 
         if ($form->validate()) {
             $data = $form->getSubmitValues();
+            $data['users'] = isset($data['users']) ? $data['users'] : ['everyone'];
 
             $sendToUsersInSession = isset($data['send_to_users_in_session']) ? true : false;
 
@@ -649,7 +667,7 @@ if ($allowToEdit) {
 }
 
 if ($show_actions) {
-    echo Display::toolbarAction('toolbar', array($actionsLeft, $searchFormToString), 2, false);
+    echo Display::toolbarAction('toolbar', array($actionsLeft, $searchFormToString));
 }
 
 echo $content;

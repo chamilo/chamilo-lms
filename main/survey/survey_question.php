@@ -64,7 +64,7 @@ class survey_question
         if ($surveyData['survey_type'] == 1) {
             $table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
             $sql = 'SELECT id,name FROM '.$table_survey_question_group.'
-                    WHERE survey_id = '.(int)$_GET['survey_id'].'
+                    WHERE survey_id = '.(int) $_GET['survey_id'].'
                     ORDER BY name';
             $rs = Database::query($sql);
             $glist = null;
@@ -75,15 +75,15 @@ class survey_question
             $grouplist = $grouplist1 = $grouplist2 = $glist;
 
             if (!empty($formData['assigned'])) {
-                $grouplist = str_replace('<option value="'.$formData['assigned'].'"','<option value="'.$formData['assigned'].'" selected',$glist);
+                $grouplist = str_replace('<option value="'.$formData['assigned'].'"', '<option value="'.$formData['assigned'].'" selected', $glist);
             }
 
             if (!empty($formData['assigned1'])) {
-                $grouplist1 = str_replace('<option value="'.$formData['assigned1'].'"','<option value="'.$formData['assigned1'].'" selected',$glist);
+                $grouplist1 = str_replace('<option value="'.$formData['assigned1'].'"', '<option value="'.$formData['assigned1'].'" selected', $glist);
             }
 
             if (!empty($formData['assigned2'])) {
-                $grouplist2 = str_replace('<option value="'.$formData['assigned2'].'"','<option value="'.$formData['assigned2'].'" selected',$glist);
+                $grouplist2 = str_replace('<option value="'.$formData['assigned2'].'"', '<option value="'.$formData['assigned2'].'" selected', $glist);
             }
 
             $this->html .= '	<tr><td colspan="">
@@ -95,7 +95,7 @@ class survey_question
 
             $this->html .= '
 			<b>'.get_lang('Secondary').'</b><br />
-			'.'<input type="radio" name="choose" value="2" '.(($formData['choose']==2)?'checked':'').
+			'.'<input type="radio" name="choose" value="2" '.(($formData['choose'] == 2) ? 'checked' : '').
                 '><select name="assigned1">'.$grouplist1.'</select> '.
                 '<select name="assigned2">'.$grouplist2.'</select>'
                 .'</fieldset><br />';
@@ -131,7 +131,7 @@ class survey_question
                     <div class="form-group">
                         <label class="col-sm-2 control-label"></label>
                         <div class="col-sm-8">
-                            <div class="alert alert-info">' . get_lang('YouCantNotEditThisQuestionBecauseAlreadyExistAnswers') . '</div>
+                            <div class="alert alert-info">' . get_lang('YouCantNotEditThisQuestionBecauseAlreadyExistAnswers').'</div>
                         </div>
                         <div class="col-sm-2"></div>
                     </div>

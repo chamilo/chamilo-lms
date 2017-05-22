@@ -6,7 +6,7 @@ namespace Shibboleth;
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info>, Nicolas Rod for the University of Geneva
  */
-include_once(dirname(__FILE__) . '/../init.php');
+include_once __DIR__.'/../init.php';
 
 if (!ShibbolethTest::is_enabled())
 {
@@ -17,4 +17,4 @@ if (!ShibbolethTest::is_enabled())
 Shibboleth::session()->logout();
 ShibbolethTest::helper()->setup_new_student_no_email();
 
-require_once dirname(__FILE__) . '/../login.php';
+require_once __DIR__.'/../login.php';

@@ -23,7 +23,7 @@ $thisurl = api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php';
 if ($id) {
     $mode = 'update';
 } else {
-    $mode = $registeronly ? 'register' : 'add' ;
+    $mode = $registeronly ? 'register' : 'add';
 }
 
 $vhost = (array) Virtual::getInstance($id);

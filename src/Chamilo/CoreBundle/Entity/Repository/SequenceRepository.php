@@ -25,10 +25,6 @@ class SequenceRepository extends EntityRepository
      */
     public function findRequirementForResource($resourceId, $type)
     {
-  /*      $criteria = Criteria::create()
-            ->where(Criteria::expr()->eq("resourceId", $resourceId))
-            ->andWhere(Criteria::expr()->eq("type", $type));
-*/
         return $this->findOneBy(['resourceId' => $resourceId, 'type' => $type]);
     }
 
@@ -52,7 +48,7 @@ class SequenceRepository extends EntityRepository
             foreach ($from as $subVertex) {
                 $vertexId = $subVertex->getId();
                 $sessionInfo = api_get_session_info($vertexId);
-                $sessionInfo['admin_link'] = '<a href="' . \SessionManager::getAdminPath($vertexId) . '">' . $sessionInfo['name'] . '</a>';
+                $sessionInfo['admin_link'] = '<a href="'.\SessionManager::getAdminPath($vertexId).'">'.$sessionInfo['name'].'</a>';
                 $result['requirements'][] = $sessionInfo;
             }
 
@@ -60,14 +56,13 @@ class SequenceRepository extends EntityRepository
             foreach ($to as $subVertex) {
                 $vertexId = $subVertex->getId();
                 $sessionInfo = api_get_session_info($vertexId);
-                $sessionInfo['admin_link'] = '<a href="' . \SessionManager::getAdminPath($vertexId) . '">' . $sessionInfo['name'] . '</a>';
+                $sessionInfo['admin_link'] = '<a href="'.\SessionManager::getAdminPath($vertexId).'">'.$sessionInfo['name'].'</a>';
                 $result['dependencies'][] = $sessionInfo;
             }
         }
 
         return $result;
     }
-
 
     /**
      * Deletes a node and check in all the dependencies if the node exists in
@@ -80,11 +75,9 @@ class SequenceRepository extends EntityRepository
     public function deleteResource($resourceId, $type)
     {
         $sequence = $this->findRequirementForResource($resourceId, $type);
-
         if ($sequence && $sequence->hasGraph()) {
             $em = $this->getEntityManager();
             $graph = $sequence->getSequence()->getUnSerializeGraph();
-
             $mainVertex = $graph->getVertex($resourceId);
             $vertices = $graph->getVertices();
 
@@ -100,8 +93,8 @@ class SequenceRepository extends EntityRepository
                     $em->persist($subSequence);
                 }
             }
-            $mainVertex->destroy();
 
+            $mainVertex->destroy();
             $em->remove($sequence);
             $em->flush();
         }
@@ -221,7 +214,6 @@ class SequenceRepository extends EntityRepository
     private function findSessionFromVerticesEdges(Vertices $verticesEdges)
     {
         $sessionVertices = [];
-
         foreach ($verticesEdges as $supVertex) {
             $vertexId = $supVertex->getId();
             $session = $this->getEntityManager()->getReference(
@@ -238,5 +230,4 @@ class SequenceRepository extends EntityRepository
 
         return $sessionVertices;
     }
-
 }

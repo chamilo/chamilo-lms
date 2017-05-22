@@ -27,10 +27,7 @@ $(document).ready(function(){ $(\'.hide-me\').slideUp() });
 </script>';
 
 // Are we in a lp ?
-$origin = '';
-if (isset($_GET['origin'])) {
-    $origin =  Security::remove_XSS($_GET['origin']);
-}
+$origin = api_get_origin();
 
 /* MAIN DISPLAY SECTION */
 
@@ -46,12 +43,12 @@ $whatsnew_post_info = $_SESSION['whatsnew_post_info'];
 
 /* Header and Breadcrumbs */
 
-if (isset($_SESSION['gradebook'])){
+if (isset($_SESSION['gradebook'])) {
     $gradebook = $_SESSION['gradebook'];
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array (
+    $interbreadcrumb[] = array(
         'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
     );
@@ -108,7 +105,7 @@ if ($_GET['action'] == 'move' && isset($_GET['post'])) {
 /* Display the action messages */
 
 if (!empty($message)) {
-    Display :: display_confirmation_message(get_lang($message));
+    echo Display::return_message(get_lang($message), 'confirm');
 }
 
 // In this case the first and only post of the thread is removed.
@@ -119,7 +116,7 @@ if ($message != 'PostDeletedSpecial') {
     /* Action Links */
 
     echo '<div style="float:right;">';
-    $my_url = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&origin='.$origin.'&gradebook='.$gradebook.'&search='.Security::remove_XSS(urlencode($_GET['search']));
+    $my_url = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&gradebook='.$gradebook.'&search='.Security::remove_XSS(urlencode($_GET['search']));
     echo $my_url.'&view=flat">'.get_lang('FlatView').'</a> | ';
     echo $my_url.'&view=threaded">'.get_lang('ThreadedView').'</a> | ';
     echo $my_url.'&view=nested">'.get_lang('NestedView').'</a>';
@@ -134,7 +131,7 @@ if ($message != 'PostDeletedSpecial') {
         // The link should only appear when the user is logged in or when anonymous posts are allowed.
         if ($_user['user_id'] || ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
             // reply link
-            echo '<a href="reply.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&action=replythread&origin='.$origin.'">'.get_lang('ReplyToThread').'</a>';
+            echo '<a href="reply.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&action=replythread">'.get_lang('ReplyToThread').'</a>';
 
             // new thread link
             if (api_is_allowed_to_edit(false, true) ||
@@ -181,7 +178,7 @@ if ($message != 'PostDeletedSpecial') {
     echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
     echo '<span class="forum_title">'.prepare4display($current_thread['thread_title']).'</span><br />';
 
-    if ($origin!='learnpath') {
+    if ($origin != 'learnpath') {
         echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title']).' - ';
     }
 
@@ -191,7 +188,7 @@ if ($message != 'PostDeletedSpecial') {
     echo '<span>'.prepare4display($current_thread['thread_comment']).'</span>';
     echo "</table>";
 
-    include_once('viewpost.inc.php');
+    include_once 'viewpost.inc.php';
 }
 
 if ($origin != 'learnpath') {

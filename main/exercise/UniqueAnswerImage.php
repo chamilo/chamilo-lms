@@ -24,13 +24,12 @@ class UniqueAnswerImage extends UniqueAnswer
     }
 
     /**
-     * @param FormValidator $form
+     * @inheritdoc
      * @throws Exception
      */
     public function createAnswersForm($form)
     {
         $objExercise = Session::read('objExercise');
-
         $editorConfig = array(
             'ToolbarSet' => 'TestFreeAnswer',
             'Width' => '100%',
@@ -46,22 +45,22 @@ class UniqueAnswerImage extends UniqueAnswer
 
         if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
             //Scenario
-            $commentTitle = '<th>' . get_lang('Comment') . '</th>';
-            $feedbackTitle = '<th>' . get_lang('Scenario') . '</th>';
+            $commentTitle = '<th>'.get_lang('Comment').'</th>';
+            $feedbackTitle = '<th>'.get_lang('Scenario').'</th>';
         } else {
-            $commentTitle = '<th >' . get_lang('Comment') . '</th>';
+            $commentTitle = '<th >'.get_lang('Comment').'</th>';
         }
 
         $html = '<div class="alert alert-success" role="alert">'.get_lang('UniqueAnswerImagePreferredSize200x150').'</div>';
         $html .= '<table class="table table-striped table-hover">
             <thead>
                 <tr style="text-align: center;">
-                    <th width="10">' . get_lang('Number') . '</th>
-                    <th>' . get_lang('True') . '</th>
-                    <th>' . get_lang('Answer') . '</th>
-                        ' . $commentTitle . '
-                        ' . $feedbackTitle . '
-                    <th width="15">' . get_lang('Weighting') . '</th>
+                    <th width="10">' . get_lang('Number').'</th>
+                    <th>' . get_lang('True').'</th>
+                    <th>' . get_lang('Answer').'</th>
+                        ' . $commentTitle.'
+                        ' . $feedbackTitle.'
+                    <th width="15">' . get_lang('Weighting').'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -96,7 +95,7 @@ class UniqueAnswerImage extends UniqueAnswer
                 }
 
                 $question = Question::read($questionid);
-                $selectQuestion[$questionid] = 'Q' . $key . ' :' . cut(
+                $selectQuestion[$questionid] = 'Q'.$key.' :'.cut(
                     $question->selectTitle(), 20
                 );
             }
@@ -117,9 +116,7 @@ class UniqueAnswerImage extends UniqueAnswer
 
         if ($numberAnswers < 1) {
             $numberAnswers = 1;
-            Display::display_normal_message(
-                get_lang('YouHaveToCreateAtLeastOneAnswer')
-            );
+            echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
         }
 
         for ($i = 1; $i <= $numberAnswers; ++$i) {
@@ -129,10 +126,11 @@ class UniqueAnswerImage extends UniqueAnswer
                     $correct = $i;
                 }
 
-                $defaults['answer[' . $i . ']'] = $answer->answer[$i];
-                $defaults['comment[' . $i . ']'] = $answer->comment[$i];
-                $defaults['weighting[' . $i . ']'] = float_format(
-                    $answer->weighting[$i], 1
+                $defaults['answer['.$i.']'] = $answer->answer[$i];
+                $defaults['comment['.$i.']'] = $answer->comment[$i];
+                $defaults['weighting['.$i.']'] = float_format(
+                    $answer->weighting[$i],
+                    1
                 );
 
                 $itemList = explode('@@', $answer->destination[$i]);
@@ -143,85 +141,87 @@ class UniqueAnswerImage extends UniqueAnswer
                 $url = $itemList[3];
 
                 $try = 0;
-
                 if ($try != 0) {
                     $tryResult = 1;
                 }
 
                 $urlResult = '';
-
                 if ($url != 0) {
                     $urlResult = $url;
                 }
 
-                $tempScenario['url' . $i] = $urlResult;
-                $tempScenario['try' . $i] = $tryResult;
-                $tempScenario['lp' . $i] = $lp;
-                $tempScenario['destination' . $i] = $listDestination;
+                $tempScenario['url'.$i] = $urlResult;
+                $tempScenario['try'.$i] = $tryResult;
+                $tempScenario['lp'.$i] = $lp;
+                $tempScenario['destination'.$i] = $listDestination;
             } else {
                 $defaults['answer[1]'] = get_lang('DefaultUniqueAnswer1');
                 $defaults['weighting[1]'] = 10;
                 $defaults['answer[2]'] = get_lang('DefaultUniqueAnswer2');
                 $defaults['weighting[2]'] = 0;
 
-                $tempScenario['destination' . $i] = array('0');
-                $tempScenario['lp' . $i] = array('0');
+                $tempScenario['destination'.$i] = array('0');
+                $tempScenario['lp'.$i] = array('0');
             }
 
             $defaults['scenario'] = $tempScenario;
-
             $renderer = $form->defaultRenderer();
-
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
                 'correct'
             );
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'counter[' . $i . ']'
+                'counter['.$i.']'
             );
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'answer[' . $i . ']'
+                'answer['.$i.']'
             );
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'comment[' . $i . ']'
+                'comment['.$i.']'
             );
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'weighting[' . $i . ']'
+                'weighting['.$i.']'
             );
 
-            $answerNumber = $form->addElement('text', 'counter[' . $i . ']', null, ' value = "' . $i . '"');
+            $answerNumber = $form->addElement('text', 'counter['.$i.']', null, ' value = "'.$i.'"');
             $answerNumber->freeze();
 
             $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox"');
-            $form->addHtmlEditor('answer[' . $i . ']', null, null, true, $editorConfig);
+            $form->addHtmlEditor('answer['.$i.']', null, null, true, $editorConfig);
 
-            $form->addRule('answer[' . $i . ']', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
             if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                $form->addHtmlEditor('comment[' . $i . ']', null, null, false, $editorConfig);
+                $form->addHtmlEditor(
+                    'comment['.$i.']',
+                    null,
+                    null,
+                    false,
+                    $editorConfig
+                );
                 // Direct feedback
-                //Adding extra feedback fields
+                // Adding extra feedback fields
                 $group = array();
-                $group['try' . $i] = $form->createElement('checkbox', 'try' . $i, null, get_lang('TryAgain'));
-                $group['lp' . $i] = $form->createElement(
+                $group['try'.$i] = $form->createElement('checkbox', 'try'.$i, null, get_lang('TryAgain'));
+                $group['lp'.$i] = $form->createElement(
                     'select',
-                    'lp' . $i,
-                    get_lang('SeeTheory') . ': ',
+                    'lp'.$i,
+                    get_lang('SeeTheory').': ',
                     $selectLpId
                 );
-                $group['destination' . $i] = $form->createElement(
+                $group['destination'.$i] = $form->createElement(
                     'select',
-                    'destination' . $i,
-                    get_lang('GoToQuestion') . ': ',
+                    'destination'.$i,
+                    get_lang('GoToQuestion').': ',
                     $selectQuestion
                 );
-                $group['url' . $i] = $form->createElement(
-                    'text', 'url' . $i,
-                    get_lang('Other') . ': ',
+                $group['url'.$i] = $form->createElement(
+                    'text', 'url'.$i,
+                    get_lang('Other').': ',
                     array(
                         'class' => 'col-md-2',
                         'placeholder' => get_lang('Other')
@@ -234,25 +234,22 @@ class UniqueAnswerImage extends UniqueAnswer
                     'scenario'
                 );
             } else {
-                $form->addHtmlEditor('comment[' . $i . ']', null, null, false, $editorConfig);
+                $form->addHtmlEditor('comment['.$i.']', null, null, false, $editorConfig);
             }
-            $form->addText('weighting[' . $i . ']', null, null, array('class' => "col-md-1", 'value' => '0'));
+            $form->addText('weighting['.$i.']', null, null, array('class' => "col-md-1", 'value' => '0'));
             $form->addHtml('</tr>');
         }
 
         $form->addHtml('</tbody>');
         $form->addHtml('</table>');
 
-        global $text, $class;
-
+        global $text;
         $buttonGroup = [];
-
         if ($objExercise->edit_exercise_in_lp == true) {
             //setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
             $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
             $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
-
             $form->addGroup($buttonGroup);
         }
 
@@ -285,19 +282,19 @@ class UniqueAnswerImage extends UniqueAnswer
         $numberAnswers = $form->getSubmitValue('nb_answers');
 
         for ($i = 1; $i <= $numberAnswers; $i++) {
-            $answer = trim(str_replace(['<p>', '</p>'], '', $form->getSubmitValue('answer[' . $i . ']')));
-            $comment = trim(str_replace(['<p>', '</p>'], '', $form->getSubmitValue('comment[' . $i . ']')));
-            $weighting = trim($form->getSubmitValue('weighting[' . $i . ']'));
+            $answer = trim(str_replace(['<p>', '</p>'], '', $form->getSubmitValue('answer['.$i.']')));
+            $comment = trim(str_replace(['<p>', '</p>'], '', $form->getSubmitValue('comment['.$i.']')));
+            $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
 
             $scenario = $form->getSubmitValue('scenario');
 
             //$listDestination = $form -> getSubmitValue('destination'.$i);
             //$destinationStr = $form -> getSubmitValue('destination'.$i);
 
-            $try = $scenario['try' . $i];
-            $lp = $scenario['lp' . $i];
-            $destination = $scenario['destination' . $i];
-            $url = trim($scenario['url' . $i]);
+            $try = $scenario['try'.$i];
+            $lp = $scenario['lp'.$i];
+            $destination = $scenario['destination'.$i];
+            $url = trim($scenario['url'.$i]);
 
             /*
               How we are going to parse the destination value
@@ -318,8 +315,7 @@ class UniqueAnswerImage extends UniqueAnswer
               $destinationStr.=$destination_id.';';
               } */
 
-            $goodAnswer = ($correct == $i) ? true : false;
-
+            $goodAnswer = $correct == $i ? true : false;
             if ($goodAnswer) {
                 $nbrGoodAnswers++;
                 $weighting = abs($weighting);
@@ -346,9 +342,18 @@ class UniqueAnswerImage extends UniqueAnswer
             }
 
             //1@@1;2;@@2;4;4;@@http://www.chamilo.org
-            $dest = $try . '@@' . $lp . '@@' . $destination . '@@' . $url;
+            $dest = $try.'@@'.$lp.'@@'.$destination.'@@'.$url;
 
-            $objAnswer->createAnswer($answer, $goodAnswer, $comment, $weighting, $i, null, null, $dest);
+            $objAnswer->createAnswer(
+                $answer,
+                $goodAnswer,
+                $comment,
+                $weighting,
+                $i,
+                null,
+                null,
+                $dest
+            );
         }
 
         // saves the answers into the data base

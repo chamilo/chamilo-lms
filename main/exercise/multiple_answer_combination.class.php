@@ -29,10 +29,9 @@ class MultipleAnswerCombination extends Question
     }
 
     /**
-     * function which redefines Question::createAnswersForm
-     * @param FormValidator $form
+     * @inheritdoc
      */
-    function createAnswersForm($form)
+    public function createAnswersForm($form)
     {
         $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 2;
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
@@ -41,10 +40,10 @@ class MultipleAnswerCombination extends Question
         $html = '<table class="table table-striped table-hover">';
         $html .= '<thead>';
         $html .= '<tr>';
-        $html .= '<th width="10">' . get_lang('Number') . '</th>';
-        $html .= '<th width="10">' . get_lang('True') . '</th>';
-        $html .= '<th width="50%">' . get_lang('Comment') . '</th>';
-        $html .= '<th width="50%">' . get_lang('Answer') . '</th>';
+        $html .= '<th width="10">'.get_lang('Number').'</th>';
+        $html .= '<th width="10">'.get_lang('True').'</th>';
+        $html .= '<th width="50%">'.get_lang('Answer').'</th>';
+        $html .= '<th width="50%">'.get_lang('Comment').'</th>';
         $html .= '</tr>';
         $html .= '</thead>';
         $html .= '<tbody>';
@@ -69,17 +68,17 @@ class MultipleAnswerCombination extends Question
 
         if ($nb_answers < 1) {
             $nb_answers = 1;
-            Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+            echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
         }
 
         for ($i = 1; $i <= $nb_answers; ++$i) {
             $form->addHtml('<tr>');
 
             if (is_object($answer)) {
-                $defaults['answer[' . $i . ']'] = $answer->answer[$i];
-                $defaults['comment[' . $i . ']'] = $answer->comment[$i];
-                $defaults['weighting[' . $i . ']'] = float_format($answer->weighting[$i], 1);
-                $defaults['correct[' . $i . ']'] = $answer->correct[$i];
+                $defaults['answer['.$i.']'] = $answer->answer[$i];
+                $defaults['comment['.$i.']'] = $answer->comment[$i];
+                $defaults['weighting['.$i.']'] = float_format($answer->weighting[$i], 1);
+                $defaults['correct['.$i.']'] = $answer->correct[$i];
             } else {
                 $defaults['answer[1]'] = get_lang('DefaultMultipleAnswer2');
                 $defaults['comment[1]'] = get_lang('DefaultMultipleComment2');
@@ -95,44 +94,45 @@ class MultipleAnswerCombination extends Question
 
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'correct[' . $i . ']'
+                'correct['.$i.']'
             );
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'counter[' . $i . ']'
+                'counter['.$i.']'
             );
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'answer[' . $i . ']'
+                'answer['.$i.']'
             );
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'comment[' . $i . ']'
+                'comment['.$i.']'
             );
 
-            $answer_number = $form->addElement('text', 'counter[' . $i . ']', null, 'value="' . $i . '"');
+            $answer_number = $form->addElement('text', 'counter['.$i.']', null, 'value="'.$i.'"');
             $answer_number->freeze();
 
-            $form->addElement('checkbox',
-                'correct[' . $i . ']',
+            $form->addElement(
+                'checkbox',
+                'correct['.$i.']',
                 null,
                 null,
                 'class="checkbox" style="margin-left: 0em;"'
             );
-            $boxes_names[] = 'correct[' . $i . ']';
+            $boxes_names[] = 'correct['.$i.']';
 
             $form->addElement(
                 'html_editor',
-                'answer[' . $i . ']',
+                'answer['.$i.']',
                 null,
                 array(),
                 array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100')
             );
-            $form->addRule('answer[' . $i . ']', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
             $form->addElement(
                 'html_editor',
-                'comment[' . $i . ']',
+                'comment['.$i.']',
                 null,
                 array(),
                 array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100')
@@ -142,7 +142,6 @@ class MultipleAnswerCombination extends Question
         }
 
         $form->addElement('html', '</tbody></table>');
-
         $form->add_multiple_required_rule(
             $boxes_names,
             get_lang('ChooseAtLeastOneCheckbox'),
@@ -153,9 +152,7 @@ class MultipleAnswerCombination extends Question
         $form->addText('weighting[1]', get_lang('Score'), false, ['value' => 10]);
 
         global $text;
-        //ie6 fix
         if ($obj_ex->edit_exercise_in_lp == true) {
-
             // setting the save button here and not in the question class.php
             $buttonGroup = [
                 $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true),
@@ -223,12 +220,12 @@ class MultipleAnswerCombination extends Question
         // sets the total weighting of the question
         $this->updateWeighting($questionWeighting);
         $this->save();
-	}
+    }
 
     function return_header($feedback_type = null, $counter = null, $score = null)
     {
         $header = parent::return_header($feedback_type, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class .'">
+        $header .= '<table class="'.$this->question_table_class.'">
             <tr>
                 <th>'.get_lang("Choice").'</th>
                 <th>'. get_lang("ExpectedChoice").'</th>

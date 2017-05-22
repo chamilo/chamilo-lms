@@ -6,7 +6,7 @@
  * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_GRADEBOOK;
+$current_course_tool = TOOL_GRADEBOOK;
 
 if (!api_is_student_boss()) {
     api_protect_course_script(true);
@@ -16,9 +16,9 @@ set_time_limit(0);
 ini_set('max_execution_time', 0);
 
 //extra javascript functions for in html head:
-$htmlHeadXtra[] ="<script>
+$htmlHeadXtra[] = "<script>
 function confirmation() {
-	if (confirm(\" " . trim(get_lang('AreYouSureToDelete')) . " ?\")) {
+	if (confirm(\" " . trim(get_lang('AreYouSureToDelete'))." ?\")) {
 	    return true;
 	} else {
 	    return false;
@@ -31,7 +31,7 @@ if (!api_is_allowed_to_edit() && !api_is_student_boss()) {
     api_not_allowed(true);
 }
 
-$cat_id = isset($_GET['cat_id']) ? (int)$_GET['cat_id'] : null;
+$cat_id = isset($_GET['cat_id']) ? (int) $_GET['cat_id'] : null;
 $action = isset($_GET['action']) && $_GET['action'] ? $_GET['action'] : null;
 $filterOfficialCode = isset($_POST['filter']) ? Security::remove_XSS($_POST['filter']) : null;
 $filterOfficialCodeGet = isset($_GET['filter']) ? Security::remove_XSS($_GET['filter']) : null;
@@ -51,17 +51,17 @@ switch ($action) {
         Category::exportAllCertificates($cat_id, $userList);
         break;
     case 'generate_all_certificates':
-        $user_list = CourseManager::get_user_list_from_course_code(
+        $userList = CourseManager::get_user_list_from_course_code(
             api_get_course_id(),
             api_get_session_id()
         );
 
-        if (!empty($user_list)) {
-            foreach ($user_list as $user_info) {
-                if ($user_info['status'] == INVITEE) {
+        if (!empty($userList)) {
+            foreach ($userList as $userInfo) {
+                if ($userInfo['status'] == INVITEE) {
                     continue;
                 }
-                Category::register_user_certificate($cat_id, $user_info['user_id']);
+                Category::register_user_certificate($cat_id, $userInfo['user_id']);
             }
         }
         break;
@@ -72,11 +72,13 @@ switch ($action) {
 
 $course_code = api_get_course_id();
 
-$interbreadcrumb[] = array('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?',	'name' => get_lang('Gradebook'));
-$interbreadcrumb[] = array('url' => '#','name' => get_lang('GradebookListOfStudentsCertificates'));
+$interbreadcrumb[] = array(
+    'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?',
+    'name' => get_lang('Gradebook'),
+);
+$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('GradebookListOfStudentsCertificates'));
 
 $this_section = SECTION_COURSES;
-
 Display::display_header('');
 
 if (isset($_GET['action']) && $_GET['action'] == 'delete') {
@@ -85,37 +87,38 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete') {
         $certificate = new Certificate($_GET['certificate_id']);
         $result = $certificate->delete(true);
         Security::clear_token();
-        if ($result ==true) {
-            Display::display_confirmation_message(get_lang('CertificateRemoved'));
+        if ($result == true) {
+            echo Display::return_message(get_lang('CertificateRemoved'), 'confirmation');
         } else {
-            Display::display_error_message(get_lang('CertificateNotRemoved'));
+            echo Display::return_message(get_lang('CertificateNotRemoved'), 'error');
         }
     }
 }
 
 $token = Security::get_token();
-
 echo Display::page_header(get_lang('GradebookListOfStudentsCertificates'));
 
 //@todo replace all this code with something like get_total_weight()
-$cats = Category :: load($cat_id, null, null, null, null, null, false);
+$cats = Category:: load($cat_id, null, null, null, null, null, false);
 
 if (!empty($cats)) {
-
     //with this fix the teacher only can view 1 gradebook
     if (api_is_platform_admin()) {
-        $stud_id= (api_is_allowed_to_edit() ? null : api_get_user_id());
+        $stud_id = (api_is_allowed_to_edit() ? null : api_get_user_id());
     } else {
-        $stud_id= api_get_user_id();
+        $stud_id = api_get_user_id();
     }
 
     $total_weight = $cats[0]->get_weight();
-
-    $allcat  = $cats[0]->get_subcategories($stud_id, api_get_course_id(), api_get_session_id());
+    $allcat = $cats[0]->get_subcategories(
+        $stud_id,
+        api_get_course_id(),
+        api_get_session_id()
+    );
     $alleval = $cats[0]->get_evaluations($stud_id);
     $alllink = $cats[0]->get_links($stud_id);
 
-    $datagen = new GradebookDataGenerator ($allcat,$alleval, $alllink);
+    $datagen = new GradebookDataGenerator($allcat, $alleval, $alllink);
 
     $total_resource_weight = 0;
     if (!empty($datagen)) {
@@ -132,14 +135,14 @@ if (!empty($cats)) {
                 $newarray[] = array_slice($data, 1);
             }
 
-            foreach($newarray as $item) {
+            foreach ($newarray as $item) {
                 $total_resource_weight = $total_resource_weight + $item['2'];
             }
         }
     }
 
     if ($total_resource_weight != $total_weight) {
-        Display::display_warning_message(get_lang('SumOfActivitiesWeightMustBeEqualToTotalWeight'));
+        echo Display::return_message(get_lang('SumOfActivitiesWeightMustBeEqualToTotalWeight'), 'warning');
     }
 }
 
@@ -150,7 +153,7 @@ $certificate_list = array();
 if ($filter === 'true') {
     echo '<br />';
     $options = UserManager::getOfficialCodeGrouped();
-    $options =array_merge(array('all' => get_lang('All')), $options);
+    $options = array_merge(array('all' => get_lang('All')), $options);
     $form = new FormValidator(
         'official_code_filter',
         'POST',
@@ -158,21 +161,21 @@ if ($filter === 'true') {
     );
     $form->addElement('select', 'filter', get_lang('OfficialCode'), $options);
     $form->addButton('submit', get_lang('Submit'));
-    $filterForm = '<br />'.$form->return_form();
+    $filterForm = '<br />'.$form->returnForm();
 
     if ($form->validate()) {
         $officialCode = $form->getSubmitValue('filter');
-         if ($officialCode == 'all') {
+        if ($officialCode == 'all') {
             $certificate_list = GradebookUtils::get_list_users_certificates($cat_id);
         } else {
-             $userList = UserManager::getUsersByOfficialCode($officialCode);
-             if (!empty($userList)) {
-                 $certificate_list = GradebookUtils::get_list_users_certificates(
-                     $cat_id,
-                     $userList
-                 );
-             }
-         }
+            $userList = UserManager::getUsersByOfficialCode($officialCode);
+            if (!empty($userList)) {
+                $certificate_list = GradebookUtils::get_list_users_certificates(
+                    $cat_id,
+                    $userList
+                );
+            }
+        }
     } else {
         $certificate_list = GradebookUtils::get_list_users_certificates($cat_id);
     }
@@ -196,13 +199,11 @@ echo '</div>';
 
 echo $filterForm;
 
-if (count($certificate_list) == 0 ) {
-    echo Display::display_warning_message(get_lang('NoResultsAvailable'));
+if (count($certificate_list) == 0) {
+    echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
 } else {
-
     echo '<br /><br /><table class="data_table">';
-
-    foreach ($certificate_list as $index=>$value) {
+    foreach ($certificate_list as $index => $value) {
         echo '<tr>
                 <td width="100%" class="actions">'.get_lang('Student').' : '.api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')</td>';
         echo '</tr>';
@@ -219,7 +220,7 @@ if (count($certificate_list) == 0 ) {
             $certificates = Display::url(get_lang('Certificate'), $url, array('target'=>'_blank', 'class' => 'btn btn-default'));
             echo $certificates;
             echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&'.api_get_cidreq().'&action=delete&cat_id='.$cat_id.'&certificate_id='.$value_certificate['id'].'">
-                    '.Display::return_icon('delete.png',get_lang('Delete')).'
+                    '.Display::return_icon('delete.png', get_lang('Delete')).'
                   </a>';
             echo '</td></tr>';
         }

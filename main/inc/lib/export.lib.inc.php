@@ -94,7 +94,7 @@ class Export
         $file = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xls';
         $handle = fopen($file, 'a+');
         $systemEncoding = api_get_system_encoding();
-        fwrite($handle, '<!DOCTYPE html><html><meta http-equiv="Content-Type" content="text/html" charset="utf-8" /><body><table>');
+        fwrite($handle, '<!DOCTYPE html><html><meta http-equiv="Content-Type" content="text/html" charset="'.$encoding.'" /><body><table>');
         foreach ($data as $id => $row) {
             foreach ($row as $id2 => $row2) {
                 $data[$id][$id2] = api_htmlentities($row2);
@@ -102,7 +102,7 @@ class Export
         }
         foreach ($data as $row) {
             $string = implode("</td><td>", $row);
-            $string = '<tr><td>' . $string . '</td></tr>';
+            $string = '<tr><td>'.$string.'</td></tr>';
             if ($encoding != 'utf-8') {
                 $string = api_convert_encoding($string, $encoding, $systemEncoding);
             }
@@ -149,7 +149,7 @@ class Export
             fwrite($handle, '</'.$wrapper_tagname.'>'."\n");
         }
         fclose($handle);
-        DocumentManager :: file_send_for_download($file, true, $filename.'.xml');
+        DocumentManager::file_send_for_download($file, true, $filename.'.xml');
         exit;
     }
 
@@ -176,12 +176,12 @@ class Export
             fwrite($handle, '<'.$wrapper_tagname.'>');
         }
         $s = self::_export_complex_table_xml_helper($data);
-        fwrite($handle,$s);
+        fwrite($handle, $s);
         if (!is_null($wrapper_tagname)) {
             fwrite($handle, '</'.$wrapper_tagname.'>'."\n");
         }
         fclose($handle);
-        DocumentManager :: file_send_for_download($file, true, $filename.'.xml');
+        DocumentManager::file_send_for_download($file, true, $filename.'.xml');
         return false;
     }
 
@@ -198,10 +198,10 @@ class Export
         }
         $string = '';
         foreach ($data as $row) {
-            $string .= "\n".str_repeat("\t",$level).'<'.$row['name'].'>';
+            $string .= "\n".str_repeat("\t", $level).'<'.$row['name'].'>';
             if (is_array($row['value'])) {
-            	$string .= self::_export_complex_table_xml_helper($row['value'],$level+1)."\n";
-                $string .= str_repeat("\t",$level).'</'.$row['name'].'>';
+            	$string .= self::_export_complex_table_xml_helper($row['value'], $level + 1)."\n";
+                $string .= str_repeat("\t", $level).'</'.$row['name'].'>';
             } else {
                 $string .= $row['value'];
                 $string .= '</'.$row['name'].'>';

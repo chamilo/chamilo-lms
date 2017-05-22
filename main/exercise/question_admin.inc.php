@@ -2,16 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	Statement (?) administration
- *	This script allows to manage the statements of questions.
- * 	It is included from the script admin.php
- *	@package chamilo.exercise
- * 	@author Olivier Brouckaert
- * 	@version $Id: question_admin.inc.php 22126 2009-07-15 22:38:39Z juliomontoya $
+ * This script allows to manage the statements of questions.
+ * It is included from the script admin.php
+ * @package chamilo.exercise
+ * @author Olivier Brouckaert
+ * @version $Id: question_admin.inc.php 22126 2009-07-15 22:38:39Z juliomontoya $
  */
 
 if (isset($_GET['editQuestion'])) {
-    $objQuestion = Question::read ($_GET['editQuestion']);
+    $objQuestion = Question::read($_GET['editQuestion']);
     $action = api_get_self()."?".api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
 } else {
     $objQuestion = Question :: getInstance($_REQUEST['answerType']);
@@ -35,7 +34,7 @@ if (is_object($objQuestion)) {
     $form_title_extra = isset($typesInformation[$type][1]) ? get_lang($typesInformation[$type][1]) : null;
 
     // form title
-    $form->addElement('header', $text.': '.$form_title_extra);
+    $form->addHeader($text.': '.$form_title_extra);
 
     // question form elements
     $objQuestion->createForm($form);
@@ -50,10 +49,10 @@ if (is_object($objQuestion)) {
 
     // FORM VALIDATION
     if (isset($_POST['submitQuestion']) && $form->validate()) {
-        // question
+        // Question
         $objQuestion->processCreation($form, $objExercise);
 
-        // answers
+        // Answers
         $nb_answers = isset($nb_answers) ? $nb_answers : 0;
         $objQuestion->processAnswersCreation($form, $nb_answers);
 
@@ -78,7 +77,7 @@ if (is_object($objQuestion)) {
             echo '<img src="../document/download.php?doc_url=%2Fimages%2F'.$pictureName.'" border="0">';
         }
         if (!empty($msgErr)) {
-            Display::display_normal_message($msgErr);
+            echo Display::return_message($msgErr, 'normal');
         }
         // display the form
         $form->display();

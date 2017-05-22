@@ -37,12 +37,9 @@ $current_course_tool = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
 $to_user_id = null;
 $parent_id = null;
-
 $lib_path = api_get_path(LIBRARY_PATH);
 $actionsRight = '';
-
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
-
 $allowUseTool = false;
 
 if ($allowDownloadDocumentsByApiKey) {
@@ -79,19 +76,27 @@ if (
 $_user = api_get_user_info();
 $courseInfo = api_get_course_info();
 $courseId = $courseInfo['real_id'];
-$course_dir = $courseInfo['directory'] . '/document';
+$course_dir = $courseInfo['directory'].'/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
-$base_work_dir = $sys_course_path . $course_dir;
-$http_www = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'] . '/document';
+$base_work_dir = $sys_course_path.$course_dir;
+$http_www = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
 $document_path = $base_work_dir;
 $usePpt2lp = api_get_setting('service_ppt2lp', 'active') == 'true';
-
 $course_dir = $courseInfo['directory'].'/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$course_dir;
 $http_www = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
 $document_path = $base_work_dir;
 $currentUrl = api_get_self().'?'.api_get_cidreq();
+
+// I'm in the certification module?
+$is_certificate_mode = false;
+if (isset($_GET['curdirpath'])) {
+    $is_certificate_mode = DocumentManager::is_certificate_mode($_GET['curdirpath']);
+}
+if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
+    $is_certificate_mode = true;
+}
 
 // Removing sessions
 unset($_SESSION['draw_dir']);
@@ -148,14 +153,13 @@ if (api_get_session_id() != 0) {
 // Get group info
 $groupIid = 0;
 $groupMemberWithEditRights = false;
-
 // Setting group variables.
 if (!empty($groupId)) {
     $group_properties = GroupManager::get_group_properties($groupId);
     $groupIid = isset($group_properties['iid']) ? $group_properties['iid'] : 0;
     $isTutorGroup = GroupManager::is_tutor_of_group(
         $userId,
-        $group_properties['iid'],
+        $group_properties,
         $courseId
     );
     $groupMemberWithEditRights = $isAllowedToEdit || $isTutorGroup;
@@ -165,7 +169,7 @@ if (!empty($groupId)) {
 
     if ($group_properties['doc_state'] == 2) {
         // Documents are private
-        if ($isAllowedToEdit || GroupManager::is_user_in_group($userId, $group_properties['iid'])) {
+        if ($isAllowedToEdit || GroupManager::is_user_in_group($userId, $group_properties)) {
             // Only courseadmin or group members (members + tutors) allowed
             $interbreadcrumb[] = array(
                 'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
@@ -193,8 +197,8 @@ if (!empty($groupId)) {
 
         // Allowed to upload?
         if ($isAllowedToEdit ||
-            GroupManager::is_subscribed($userId, $group_properties['iid']) ||
-            GroupManager::is_tutor_of_group($userId, $group_properties['iid'], $courseId)
+            GroupManager::is_subscribed($userId, $group_properties) ||
+            GroupManager::is_tutor_of_group($userId, $group_properties, $courseId)
         ) {
             // Only course admin or group members can upload
             $group_member_with_upload_rights = true;
@@ -274,7 +278,7 @@ switch ($action) {
                             $certificateId
                         );
                         Display::addFlash(Display::return_message(
-                            get_lang('DocDeleted') . ': ' . $documentInfo['title'],
+                            get_lang('DocDeleted').': '.$documentInfo['title'],
                             'success'
                         ));
                     } else {
@@ -369,7 +373,19 @@ switch ($action) {
         break;
     case 'export_to_pdf':
         if (api_get_setting('students_export2pdf') == 'true' || $isAllowedToEdit || api_is_platform_admin()) {
-            DocumentManager::export_to_pdf($document_id, $course_code);
+            $orientation = 'landscape';
+            $showHeaderAndFooter = true;
+            if ($is_certificate_mode) {
+                $orientation = api_get_configuration_value('certificate_pdf_orientation');
+                $showHeaderAndFooter = !api_get_configuration_value('hide_header_footer_in_certificate');
+            }
+
+            DocumentManager::export_to_pdf(
+                $document_id,
+                $course_code,
+                $orientation,
+                $showHeaderAndFooter
+            );
         }
         break;
     case 'copytomyfiles':
@@ -465,11 +481,9 @@ switch ($action) {
     case 'convertToPdf':
         // PDF format as target by default
         $formatTarget = $_REQUEST['formatTarget'] ?
-            strtolower(Security::remove_XSS($_REQUEST['formatTarget'])) :
-            'pdf';
+            strtolower(Security::remove_XSS($_REQUEST['formatTarget'])) : 'pdf';
         $formatType = $_REQUEST['formatType'] ?
-            strtolower(Security::remove_XSS($_REQUEST['formatType'])) :
-            'text';
+            strtolower(Security::remove_XSS($_REQUEST['formatType'])) : 'text';
         // Get the document data from the ID
         $document_info = DocumentManager::get_document_data_by_id(
             $document_id,
@@ -477,8 +491,8 @@ switch ($action) {
             true,
             $session_id
         );
-        $file = $sys_course_path . $courseInfo['directory'] .
-            '/document' . $document_info['path'];
+        $file = $sys_course_path.$courseInfo['directory'].
+            '/document'.$document_info['path'];
         $fileInfo = pathinfo($file);
         if ($fileInfo['extension'] == $formatTarget) {
             Display::addFlash(Display::return_message(
@@ -509,9 +523,9 @@ switch ($action) {
                 'warning'
             ));
         } else {
-            $convertedFile = $fileInfo['dirname'] . DIRECTORY_SEPARATOR .
-                $fileInfo['filename'] . '_from_' . $fileInfo['extension'] .
-                '.' . $formatTarget;
+            $convertedFile = $fileInfo['dirname'].DIRECTORY_SEPARATOR.
+                $fileInfo['filename'].'_from_'.$fileInfo['extension'].
+                '.'.$formatTarget;
             $convertedTitle = $document_info['title'];
             $obj = new OpenofficePresentation(true);
             if (file_exists($convertedFile)) {
@@ -536,11 +550,11 @@ switch ($action) {
                     $gidReq = Security::remove_XSS($_GET['gidReq']);
                     $file_link = Display::url(
                         get_lang('SeeFile'),
-                        api_get_path(WEB_CODE_PATH) .
-                        'document/showinframes.php?'.api_get_cidreq_params($cidReq, $id_session, $gidReq).'&id=' . current($result)
+                        api_get_path(WEB_CODE_PATH).
+                        'document/showinframes.php?'.api_get_cidreq_params($cidReq, $id_session, $gidReq).'&id='.current($result)
                     );
                     Display::addFlash(Display::return_message(
-                        get_lang('CopyMade') . ' ' . $file_link,
+                        get_lang('CopyMade').' '.$file_link,
                         'confirmation',
                         false
                     ));
@@ -548,15 +562,6 @@ switch ($action) {
             }
         }
         break;
-}
-
-// I'm in the certification module?
-$is_certificate_mode = false;
-if (isset($_GET['curdirpath'])) {
-    $is_certificate_mode = DocumentManager::is_certificate_mode($_GET['curdirpath']);
-}
-if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
-    $is_certificate_mode = true;
 }
 
 // If no actions we proceed to show the document (Hack in order to use document.php?id=X)
@@ -711,7 +716,7 @@ if (isset($_GET['curdirpath']) &&
             $new_content_html
         );
         $new_content_html = str_replace(
-            SYS_CODE_PATH . 'img/',
+            SYS_CODE_PATH.'img/',
             api_get_path(WEB_IMG_PATH),
             $new_content_html
         );
@@ -768,11 +773,11 @@ function convertModal (id, format) {
     $("#convertSelect").change(function() {
         var formatTarget = $(this).val();
         window.location.href = "'.
-            api_get_self() . '?' . api_get_cidreq() .
-            '&curdirpath=' . $curdirpath .
-            '&action=convertToPdf&formatTarget=' .
-            '" + formatTarget + "&id=" + id + "&' .
-            api_get_cidreq() . '&formatType=" + format;
+            api_get_self().'?'.api_get_cidreq().
+            '&curdirpath='.$curdirpath.
+            '&action=convertToPdf&formatTarget='.
+            '" + formatTarget + "&id=" + id + "&'.
+            api_get_cidreq().'&formatType=" + format;
     });
     $("#convertModal").on("hidden", function(){
         $("." + format + "FormatType").hide();
@@ -1112,7 +1117,7 @@ if ($isAllowedToEdit ||
                 DocumentManager::updateDbInfo(
                     'update',
                     $document_to_move['path'],
-                    $moveTo . '/' . basename($document_to_move['path'])
+                    $moveTo.'/'.basename($document_to_move['path'])
                 );
 
                 //update database item property
@@ -1125,7 +1130,7 @@ if ($isAllowedToEdit ||
                         $doc_id,
                         'FolderMoved',
                         api_get_user_id(),
-                        $groupIid,
+                        $group_properties,
                         null,
                         null,
                         null,
@@ -1139,7 +1144,7 @@ if ($isAllowedToEdit ||
                         $doc_id,
                         'DocumentMoved',
                         api_get_user_id(),
-                        $groupIid,
+                        $group_properties,
                         null,
                         null,
                         null,
@@ -1230,7 +1235,7 @@ if ($isAllowedToEdit ||
                         )) {
                             $messages .= Display::return_message(get_lang('VisibilityChanged').': '.$data['title'], 'confirmation');
                         } else {
-                            $messages .=  Display::return_message(get_lang('ViModProb'), 'error');
+                            $messages .= Display::return_message(get_lang('ViModProb'), 'error');
                         }
                         break;
                     case 'delete':
@@ -1332,7 +1337,7 @@ if ($isAllowedToEdit ||
                 $courseInfo,
                 api_get_user_id(),
                 $sessionId,
-                $groupId,
+                $groupIid,
                 $to_user_id,
                 $base_work_dir,
                 $dir_name,
@@ -1342,7 +1347,7 @@ if ($isAllowedToEdit ||
 
             if (!empty($newFolderData)) {
                 $message = Display::return_message(
-                    get_lang('DirCr') . ' ' . $newFolderData['title'],
+                    get_lang('DirCr').' '.$newFolderData['title'],
                     'confirmation'
                 );
             } else {
@@ -1398,7 +1403,8 @@ if ($isAllowedToEdit) {
             null,
             null,
             null,
-            $sessionId)
+            $sessionId
+        )
         ) {
             Display::addFlash(
                 Display::return_message(get_lang('VisibilityChanged'), 'confirmation')
@@ -1425,27 +1431,27 @@ if ($isAllowedToEdit ||
         $document_id_for_template = intval($_GET['add_as_template']);
         // Create the form that asks for the directory name
         $templateForm .= '
-            <form name="set_document_as_new_template" class="form-horizontal" enctype="multipart/form-data" action="' . api_get_self() . '?add_as_template=' . $document_id_for_template . '" method="post">
+            <form name="set_document_as_new_template" class="form-horizontal" enctype="multipart/form-data" action="' . api_get_self().'?add_as_template='.$document_id_for_template.'" method="post">
                 <fieldset>
-                    <legend>' . get_lang('AddAsTemplate') . '</legend>
+                    <legend>' . get_lang('AddAsTemplate').'</legend>
                     <div class="form-group">
-                        <label for="template_title" class="col-sm-2 control-label">' . get_lang('TemplateName') . '</label>
+                        <label for="template_title" class="col-sm-2 control-label">' . get_lang('TemplateName').'</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="template_title" name="template_title">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="template_image" class="col-sm-2 control-label">' . get_lang('TemplateImage') . '</label>
+                        <label for="template_image" class="col-sm-2 control-label">' . get_lang('TemplateImage').'</label>
                         <div class="col-sm-10">
                             <input type="file" name="template_image" id="template_image">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" name="create_template" class="btn btn-primary">' . get_lang('CreateTemplate') . '</button>
+                            <button type="submit" name="create_template" class="btn btn-primary">' . get_lang('CreateTemplate').'</button>
                         </div>
                     </div>
-                    <input type="hidden" name="curdirpath" value="' . $curdirpath . '" />
+                    <input type="hidden" name="curdirpath" value="' . $curdirpath.'" />
                 </fieldset>
             </form>
             <hr>
@@ -1650,7 +1656,7 @@ if ($isAllowedToEdit ||
         if (api_get_setting('enable_record_audio') === 'true') {
             $actionsLeft .= Display::url(
                 Display::return_icon('new_recording.png', get_lang('RecordMyVoice'), '', ICON_SIZE_MEDIUM),
-                api_get_path(WEB_CODE_PATH) . 'document/record_audio.php?' . api_get_cidreq() . '&id=' . $document_id
+                api_get_path(WEB_CODE_PATH).'document/record_audio.php?'.api_get_cidreq().'&id='.$document_id
             );
         }
 
@@ -1963,12 +1969,11 @@ if (isset($_GET['createdir']) && isset($_POST['dirname']) && $_POST['dirname'] !
     $document_id = DocumentManager::get_document_id($courseInfo, $_POST['dirname']);
 }
 $selector = '';
-if (!$is_certificate_mode) {
+if (!$is_certificate_mode && !isset($_GET['move'])) {
     $selector = DocumentManager::build_directory_selector(
         $folders,
         $document_id,
-        (isset($group_properties['directory']) ? $group_properties['directory'] : array()),
-        true
+        (isset($group_properties['directory']) ? $group_properties['directory'] : array())
     );
 }
 
@@ -2114,7 +2119,7 @@ if (count($documentAndFolders) > 1) {
     }
 }
 if (!empty($table_footer)) {
-    Display::display_warning_message($table_footer);
+    echo Display::return_message($table_footer, 'warning');
 }
 
 echo '
@@ -2122,18 +2127,18 @@ echo '
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header" style="text-align: center;">
-                <button type="button" class="close" data-dismiss="modal" aria-label="' . get_lang('Close') . '">
+                <button type="button" class="close" data-dismiss="modal" aria-label="' . get_lang('Close').'">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">' . get_lang('Convert') . '</h4>
+                <h4 class="modal-title">' . get_lang('Convert').'</h4>
             </div>
             <div class="modal-body">
               <form action="#" class="form-horizontal">
                   <div class="form-group">
-                      <label class="col-sm-4 control-label" for="convertSelect">' . get_lang('ConvertFormats') . '</label>
+                      <label class="col-sm-4 control-label" for="convertSelect">' . get_lang('ConvertFormats').'</label>
                       <div class="col-sm-8">
                           <select id="convertSelect">
-                              <option value="">' . get_lang('Select') . '</option>
+                              <option value="">' . get_lang('Select').'</option>
                               <option value="pdf">
                                   PDF - Portable Document File
                               </option>
@@ -2152,7 +2157,7 @@ echo '
               </form>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">' . get_lang('Close') . '</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">' . get_lang('Close').'</button>
             </div>
         </div>
     </div>';

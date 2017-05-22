@@ -200,7 +200,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         //"lms_progress_bar_mode='".$myprogress_mode."';" .
         "olms.lms_view_id=".$view_id.";".
         "olms.lms_user_id=".$user_id.";".
-        "olms.next_item=".$new_item_id.";". // This one is very important to replace possible literal strings.
+        "olms.next_item=".$new_item_id.";".// This one is very important to replace possible literal strings.
         "olms.lms_next_item=".$mynext.";".
         "olms.lms_previous_item=".$myprevious.";".
         "olms.lms_item_type = '".$myitemtype."';".

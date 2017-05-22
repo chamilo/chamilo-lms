@@ -81,7 +81,7 @@ class StudentPublicationLink extends AbstractLink
         if (empty($this->course_code)) {
             die('Error in get_not_created_links() : course code not set');
         }
-        $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
         $sql = 'SELECT id, url from '.$this->get_studpub_table()
             .' pup WHERE c_id = '.$this->course_id.' AND has_properties != '."''".' AND id NOT IN'
@@ -92,7 +92,7 @@ class StudentPublicationLink extends AbstractLink
 
         $result = Database::query($sql);
 
-        $cats=array();
+        $cats = array();
         while ($data = Database::fetch_array($result)) {
             $cats[] = array($data['id'], $data['url']);
         }
@@ -135,9 +135,9 @@ class StudentPublicationLink extends AbstractLink
             if (empty($work_name)) {
                 $work_name = basename($data->getUrl());
             }
-            $cats[] = array ($data->getId(), $work_name);
+            $cats[] = array($data->getId(), $work_name);
         }
-        $cats=isset($cats) ? $cats : array();
+        $cats = isset($cats) ? $cats : array();
         return $cats;
     }
 
@@ -241,6 +241,7 @@ class StudentPublicationLink extends AbstractLink
                 $dql .= ' ORDER BY a.sentDate DESC';
                 break;
             case 'first':
+                //no break
             default:
                 // first attempt
                 $dql .= ' ORDER BY a.id';
@@ -263,7 +264,7 @@ class StudentPublicationLink extends AbstractLink
             ];
         }
 
-        $students = array();  // user list, needed to make sure we only
+        $students = array(); // user list, needed to make sure we only
         // take first attempts into account
         $rescount = 0;
         $sum = 0;
@@ -296,7 +297,7 @@ class StudentPublicationLink extends AbstractLink
                 return array($bestResult, $weight);
                 break;
             case 'average':
-                return array($sumResult/$rescount, $weight);
+                return array($sumResult / $rescount, $weight);
                 break;
             case 'ranking':
                 return AbstractLink::getCurrentUserRanking($stud_id, $students);
@@ -312,7 +313,7 @@ class StudentPublicationLink extends AbstractLink
      */
     private function get_studpub_table()
     {
-        return $this->studpub_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+        return $this->studpub_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     }
 
     /**
@@ -320,7 +321,7 @@ class StudentPublicationLink extends AbstractLink
      */
     private function get_itemprop_table()
     {
-        return $this->itemprop_table = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+        return $this->itemprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
     }
 
     public function needs_name_and_description()

@@ -4,7 +4,7 @@
 /**
  * Defines the scorm class, which is meant to contain the scorm items (nuclear elements)
  * @package chamilo.learnpath
- * @author	Yannick Warnier <ywarnier@beeznest.org>
+ * @author    Yannick Warnier <ywarnier@beeznest.org>
  */
 class scorm extends learnpath
 {
@@ -32,9 +32,9 @@ class scorm extends learnpath
 
     /**
      * Class constructor. Based on the parent constructor.
-     * @param	string	Course code
-     * @param	integer	Learnpath ID in DB
-     * @param	integer	User ID
+     * @param    string    Course code
+     * @param    integer    Learnpath ID in DB
+     * @param    integer    User ID
      */
     public function __construct($course_code = null, $resource_id = null, $user_id = null)
     {
@@ -47,7 +47,7 @@ class scorm extends learnpath
 
     /**
      * Opens a resource
-     * @param	integer	$id Database ID of the resource
+     * @param    integer $id Database ID of the resource
      */
     public function open($id)
     {
@@ -78,18 +78,14 @@ class scorm extends learnpath
         }
 
         if (is_file($file) && is_readable($file) && ($xml = @file_get_contents($file))) {
-
             // Parsing using PHP5 DOMXML methods.
-
             if ($this->debug > 0) { error_log('In scorm::parse_manifest() - Parsing using PHP5 method', 0); }
-
             //$this->manifest_encoding = api_detect_encoding_xml($xml); // This is the usual way for reading the encoding.
             // This method reads the encoding, it tries to be correct even in cases of wrong or missing encoding declarations.
             $this->manifest_encoding = self::detect_manifest_encoding($xml);
 
             // UTF-8 is supported by DOMDocument class, this is for sure.
             $xml = api_utf8_encode_xml($xml, $this->manifest_encoding);
-
             $doc = new DOMDocument();
             $res = @$doc->loadXML($xml);
             if ($res === false) {
@@ -213,9 +209,7 @@ class scorm extends learnpath
                 }
             }
             unset($doc);
-
             // End parsing using PHP5 DOMXML methods.
-
         } else {
             if ($this->debug > 1) { error_log('New LP - Could not open/read file '.$file, 0); }
             $this->set_error_msg("File $file could not be read");
@@ -271,7 +265,7 @@ class scorm extends learnpath
      * @param int $userMaxScore
      * @param int $sessionId
      *
-     * @return bool	Returns -1 on error
+     * @return bool    Returns -1 on error
      */
     public function import_manifest($courseCode, $userMaxScore = 1, $sessionId = 0, $userId = 0)
     {
@@ -393,7 +387,7 @@ class scorm extends learnpath
                 $path = '';
                 $type = 'dir';
                 if (isset($this->resources[$item['identifierref']])) {
-                    $oRes =& $this->resources[$item['identifierref']];
+                    $oRes = & $this->resources[$item['identifierref']];
                     $path = @$oRes->get_path();
                     if (!empty($path)) {
                         $temptype = $oRes->get_scorm_type();
@@ -444,7 +438,7 @@ class scorm extends learnpath
                 $item['parameters'] = Database::escape_string($item['parameters']);
 
                 $sql = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order,launch_data, parameters)
-                        VALUES ($courseId, $lp_id, '$type', '$identifier', '$title', '$path' , 0, $max_score, $value_add $parent, $previous, 0, '$prereq', ".$item['rel_order'] .", '".$item['datafromlms']."', '".$item['parameters']."' )";
+                        VALUES ($courseId, $lp_id, '$type', '$identifier', '$title', '$path' , 0, $max_score, $value_add $parent, $previous, 0, '$prereq', ".$item['rel_order'].", '".$item['datafromlms']."', '".$item['parameters']."' )";
 
                 Database::query($sql);
                 if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting item : '.$sql, 0); }
@@ -478,7 +472,7 @@ class scorm extends learnpath
                     foreach ($specific_fields as $specific_field) {
                         if (isset($_REQUEST[$specific_field['code']])) {
                             $sterms = trim($_REQUEST[$specific_field['code']]);
-                            $all_specific_terms .= ' '. $sterms;
+                            $all_specific_terms .= ' '.$sterms;
                             if (!empty($sterms)) {
                                 $sterms = explode(',', $sterms);
                                 foreach ($sterms as $sterm) {
@@ -487,7 +481,7 @@ class scorm extends learnpath
                             }
                         }
                     }
-                    $body_to_index = $all_specific_terms .' '. $title;
+                    $body_to_index = $all_specific_terms.' '.$title;
                     $ic_slide->addValue("content", $body_to_index);
                     // TODO: Add a comment to say terms separated by commas.
                     $courseid = api_get_course_id();
@@ -497,7 +491,7 @@ class scorm extends learnpath
                         SE_COURSE_ID => $courseid,
                         SE_TOOL_ID => TOOL_LEARNPATH,
                         SE_DATA => array('lp_id' => $lp_id, 'lp_item'=> $previous, 'document_id' => ''), // TODO: Unify with other lp types.
-                        SE_USER => (int)api_get_user_id(),
+                        SE_USER => (int) api_get_user_id(),
                     );
                     $ic_slide->xapian_data = serialize($xapian_data);
                     $di->addChunk($ic_slide);
@@ -518,9 +512,9 @@ class scorm extends learnpath
 
     /**
      * Intermediate to import_package only to allow import from local zip files
-     * @param	string	Path to the zip file, from the sys root
-     * @param	string	Current path (optional)
-     * @return string	Absolute path to the imsmanifest.xml file or empty string on error
+     * @param  string    Path to the zip file, from the sys root
+     * @param  string    Current path (optional)
+     * @return string    Absolute path to the imsmanifest.xml file or empty string on error
      */
     public function import_local_package($file_path, $current_dir = '')
     {
@@ -534,27 +528,27 @@ class scorm extends learnpath
 
     /**
      * Imports a zip file into the Chamilo structure
-     * @param  string	$zip_file_info Zip file info as given by $_FILES['userFile']
+     * @param  string $zip_file_info Zip file info as given by $_FILES['userFile']
      * @param  string
      * @param  array
      *
-     * @return	string	$current_dir Absolute path to the imsmanifest.xml file or empty string on error
+     * @return string    $current_dir Absolute path to the imsmanifest.xml file or empty string on error
      */
     public function import_package($zip_file_info, $current_dir = '', $courseInfo = array())
     {
         if ($this->debug > 0) {
-            error_log('In scorm::import_package('.print_r($zip_file_info,true).',"'.$current_dir.'") method', 0);
+            error_log('In scorm::import_package('.print_r($zip_file_info, true).',"'.$current_dir.'") method', 0);
         }
 
         $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
 
-        $maxFilledSpace = DocumentManager :: get_course_quota($courseInfo['code']);
+        $maxFilledSpace = DocumentManager::get_course_quota($courseInfo['code']);
 
         $zip_file_path = $zip_file_info['tmp_name'];
         $zip_file_name = $zip_file_info['name'];
 
         if ($this->debug > 1) {
-            error_log('New LP - import_package() - zip file path = ' . $zip_file_path . ', zip file name = ' . $zip_file_name, 0);
+            error_log('New LP - import_package() - zip file path = '.$zip_file_path.', zip file name = '.$zip_file_name, 0);
         }
 
         $course_rel_dir = api_get_course_path($courseInfo['code']).'/scorm'; // scorm dir web path starting from /courses
@@ -562,7 +556,7 @@ class scorm extends learnpath
         $current_dir = api_replace_dangerous_char(trim($current_dir)); // Current dir we are in, inside scorm/
 
         if ($this->debug > 1) {
-            error_log( 'New LP - import_package() - current_dir = ' . $current_dir, 0);
+            error_log('New LP - import_package() - current_dir = '.$current_dir, 0);
         }
 
         // Get name of the zip file without the extension.
@@ -570,7 +564,7 @@ class scorm extends learnpath
         $file_info = pathinfo($zip_file_name);
         $filename = $file_info['basename'];
         $extension = $file_info['extension'];
-        $file_base_name = str_replace('.'.$extension,'',$filename); // Filename without its extension.
+        $file_base_name = str_replace('.'.$extension, '', $filename); // Filename without its extension.
         $this->zipname = $file_base_name; // Save for later in case we don't have a title.
 
         if ($this->debug > 1) { error_log("New LP - base file name is : ".$file_base_name, 0); }
@@ -616,7 +610,7 @@ class scorm extends learnpath
         $slash_count = substr_count($shortest_path, '/');
         foreach ($manifest_list as $manifest_path) {
             $tmp_slash_count = substr_count($manifest_path, '/');
-            if ($tmp_slash_count<$slash_count) {
+            if ($tmp_slash_count < $slash_count) {
                 $shortest_path = $manifest_path;
                 $slash_count = $tmp_slash_count;
             }
@@ -625,10 +619,9 @@ class scorm extends learnpath
         $this->subdir .= '/'.dirname($shortest_path); // Do not concatenate because already done above.
         $manifest = $shortest_path;
         if ($this->debug > 1) { error_log('New LP - Package type is now '.$package_type, 0); }
-        if ($package_type== '') {
+        if ($package_type == '') {
             // && defined('CHECK_FOR_SCORM') && CHECK_FOR_SCORM)
             if ($this->debug > 1) { error_log('New LP - Package type is empty', 0); }
-
             Display::addFlash(
                 Display::return_message(get_lang('NotScormContent'))
             );
@@ -650,8 +643,8 @@ class scorm extends learnpath
             $new_dir = '/'.$new_dir;
         }
 
-        if ($new_dir[strlen($new_dir)-1] == '/') {
-            $new_dir = substr($new_dir,0,-1);
+        if ($new_dir[strlen($new_dir) - 1] == '/') {
+            $new_dir = substr($new_dir, 0, -1);
         }
 
         /* Uncompressing phase */
@@ -665,7 +658,6 @@ class scorm extends learnpath
         if (is_dir($course_sys_dir.$new_dir) ||
             @mkdir($course_sys_dir.$new_dir, api_get_permissions_for_new_directories())
         ) {
-
             // PHP method - slower...
             if ($this->debug >= 1) { error_log('New LP - Changing dir to '.$course_sys_dir.$new_dir, 0); }
             $saved_dir = getcwd();
@@ -692,7 +684,7 @@ class scorm extends learnpath
                     if ($file != '.' && $file != '..') {
                         $filetype = 'file';
 
-                        if (is_dir($course_sys_dir . $new_dir . $file)) {
+                        if (is_dir($course_sys_dir.$new_dir.$file)) {
                             $filetype = 'folder';
                         }
 
@@ -721,7 +713,7 @@ class scorm extends learnpath
                                     }
                                 }
                             }
-                            @rename($course_sys_dir.$new_dir.$file,$course_sys_dir.$new_dir.$safe_file);
+                            @rename($course_sys_dir.$new_dir.$file, $course_sys_dir.$new_dir.$safe_file);
                             if ($this->debug >= 1) { error_log('New LP - Renaming '.$course_sys_dir.$new_dir.$file.' to '.$course_sys_dir.$new_dir.$safe_file, 0); }
                         }
                     }
@@ -743,7 +735,7 @@ class scorm extends learnpath
 
     /**
      * Sets the proximity setting in the database
-     * @param	string	Proximity setting
+     * @param string    Proximity setting
      * @param int $courseId
      */
     public function set_proximity($proxy = '', $courseId = null)
@@ -764,7 +756,7 @@ class scorm extends learnpath
 
     /**
      * Sets the theme setting in the database
-     * @param	string	theme setting
+     * @param string    theme setting
      */
     public function set_theme($theme = '')
     {
@@ -783,7 +775,7 @@ class scorm extends learnpath
 
     /**
      * Sets the image setting in the database
-     * @param	string preview_image setting
+     * @param string preview_image setting
      */
     public function set_preview_image($preview_image = '')
     {
@@ -802,7 +794,7 @@ class scorm extends learnpath
 
     /**
      * Sets the author  setting in the database
-     * @param	string preview_image setting
+     * @param string preview_image setting
      */
     public function set_author($author = '')
     {
@@ -821,7 +813,7 @@ class scorm extends learnpath
 
     /**
      * Sets the content maker setting in the database
-     * @param	string	Proximity setting
+     * @param string    Proximity setting
      */
     public function set_maker($maker = '', $courseId = null)
     {
@@ -840,8 +832,9 @@ class scorm extends learnpath
     }
 
     /**
-     * Exports the current SCORM object's files as a zip. Excerpts taken from learnpath_functions.inc.php::exportpath()
-     * @param	integer	Learnpath ID (optional, taken from object context if not defined)
+     * Exports the current SCORM object's files as a zip.
+     * Excerpts taken from learnpath_functions.inc.php::exportpath()
+     * @param integer    Learnpath ID (optional, taken from object context if not defined)
      */
     public function export_zip($lp_id = null)
     {
@@ -877,19 +870,17 @@ class scorm extends learnpath
         $zipfilename = $zipfoldername.'/'.$LPnamesafe.'.zip';
 
         // Get a temporary dir for creating the zip file.
-
         //error_log('New LP - cleaning dir '.$zipfoldername, 0);
         my_delete($zipfoldername); // Make sure the temp dir is cleared.
         mkdir($zipfoldername, api_get_permissions_for_new_directories());
-        //error_log('New LP - made dir '.$zipfoldername, 0);
 
         // Create zipfile of given directory.
         $zip_folder = new PclZip($zipfilename);
         $zip_folder->create($scormfoldername.'/', PCLZIP_OPT_REMOVE_PATH, $scormfoldername.'/');
 
         //This file sending implies removing the default mime-type from php.ini
-        //DocumentManager :: file_send_for_download($zipfilename, true, $LPnamesafe.'.zip');
-        DocumentManager :: file_send_for_download($zipfilename, true);
+        //DocumentManager::file_send_for_download($zipfilename, true, $LPnamesafe.'.zip');
+        DocumentManager::file_send_for_download($zipfilename, true);
 
         // Delete the temporary zip file and directory in fileManage.lib.php
         my_delete($zipfilename);
@@ -908,7 +899,7 @@ class scorm extends learnpath
         if ($this->debug > 0) { error_log('In scorm::get_res_path('.$id.') method', 0); }
         $path = '';
         if (isset($this->resources[$id])) {
-            $oRes =& $this->resources[$id];
+            $oRes = & $this->resources[$id];
             $path = @$oRes->get_path();
         }
         return $path;
@@ -924,7 +915,7 @@ class scorm extends learnpath
         if ($this->debug > 0) { error_log('In scorm::get_res_type('.$id.') method', 0); }
         $type = '';
         if (isset($this->resources[$id])) {
-            $oRes =& $this->resources[$id];
+            $oRes = & $this->resources[$id];
             $temptype = $oRes->get_scorm_type();
             if (!empty($temptype)) {
                 $type = $temptype;
@@ -943,9 +934,9 @@ class scorm extends learnpath
         $title = '';
         if (isset($this->manifest['organizations']['default'])) {
             $title = $this->organizations[$this->manifest['organizations']['default']]->get_name();
-        } elseif (count($this->organizations)==1) {
+        } elseif (count($this->organizations) == 1) {
             // This will only get one title but so we don't need to know the index.
-            foreach($this->organizations as $id => $value) {
+            foreach ($this->organizations as $id => $value) {
                 $title = $this->organizations[$id]->get_name();
                 break;
             }

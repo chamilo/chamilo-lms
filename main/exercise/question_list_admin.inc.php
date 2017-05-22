@@ -136,7 +136,7 @@ $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&
             .sortable({
                 cursor: "move", // works?
                 update: function(event, ui) {
-                    var order = $(this).sortable("serialize") + "&a=update_question_order&exercise_id=<?php echo intval($_GET['exerciseId']);?>";
+                    var order = $(this).sortable("serialize") + "&a=update_question_order&exercise_id=<?php echo intval($_GET['exerciseId']); ?>";
                     $.post("<?php echo $ajax_url ?>", order, function(reponse){
                         $("#message").html(reponse);
                     });
@@ -172,30 +172,31 @@ if (!$inATest) {
     echo "<div class='table-responsive'>";
     echo "<table class='table table-condensed'>";
     echo "<tr>";
-    echo "<th style=\"width: 40%;\">" .get_lang('Questions'). "</th>";
-    echo "<th style=\"width: 10%;\">" .get_lang('Type'). "</th>";
-    echo "<th style=\"width: 20%;\">" .get_lang('Category'). "</th>";
-    echo "<th style=\"width: 10%;\">" .get_lang('Difficulty'). "</th>";
-    echo "<th style=\"width: 10%;\">" .get_lang('Score'). "</th>";
-    echo "<th style=\"width: 10%;\">" .get_lang('Actions'). "</th>";
+    echo "<th style=\"width: 40%;\">".get_lang('Questions')."</th>";
+    echo "<th style=\"width: 10%;\">".get_lang('Type')."</th>";
+    echo "<th style=\"width: 20%;\">".get_lang('Category')."</th>";
+    echo "<th style=\"width: 10%;\">".get_lang('Difficulty')."</th>";
+    echo "<th style=\"width: 10%;\">".get_lang('MaximumScore')."</th>";
+    echo "<th style=\"width: 10%;\">".get_lang('Actions')."</th>";
     echo "</tr>";
     echo "</table>";
     echo "</div>";
     echo '<div id="question_list">';
     if ($nbrQuestions) {
-        //Always getting list from DB
+        // Always getting list from DB
         //$questionList = $objExercise->selectQuestionList(true);
 
+        // In the building exercise mode show question list ordered as is.
         $objExercise->setCategoriesGrouping(false);
 
         // Show exercises as in category settings
         //$questionList = $objExercise->getQuestionListWithMediasUncompressed();
 
-        // Show all questions no matter the category settings.
-        $tempCategoryOrder = isset($objExercise->specialCategoryOrders) ? $objExercise->specialCategoryOrders : false;
-        $objExercise->specialCategoryOrders = false;
+        // In building mode show all questions not render by teacher order.
+        $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
+
+        // Get question list
         $questionList = $objExercise->selectQuestionList(true, true);
-        $objExercise->specialCategoryOrders = $tempCategoryOrder;
 
         // Style for columns
         $styleQuestion = "question";
@@ -204,7 +205,10 @@ if (!$inATest) {
         $styleLevel = "level";
         $styleScore = "score";
 
-        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id, false);
+        $category_list = TestCategory::getListOfCategoriesNameForTest(
+            $objExercise->id,
+            false
+        );
 
         if (is_array($questionList)) {
             foreach ($questionList as $id) {
@@ -214,18 +218,16 @@ if (!$inATest) {
                 }
                 /** @var Question $objQuestionTmp */
                 $objQuestionTmp = Question::read($id);
-                $question_class = get_class($objQuestionTmp);
 
                 $clone_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'">'.
-                    Display::return_icon('cd.png',get_lang('Copy'), array(), ICON_SIZE_SMALL).'</a>';
+                    Display::return_icon('cd.png', get_lang('Copy'), array(), ICON_SIZE_SMALL).'</a>';
                 $edit_link = ($objQuestionTmp->type == CALCULATED_ANSWER && $objQuestionTmp->isAnswered()) ?
                     '<a>'.Display::return_icon(
                         'edit_na.png',
                         get_lang('QuestionEditionNotAvailableBecauseItIsAlreadyAnsweredHoweverYouCanCopyItAndModifyTheCopy'),
                         array(),
                         ICON_SIZE_SMALL
-                    ).'</a>' :
-                    '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.
+                    ).'</a>' : '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.
                     $objQuestionTmp->selectType().'&myid=1&editQuestion='.$id.'">'.
                     Display::return_icon(
                         'edit.png',
@@ -235,30 +237,28 @@ if (!$inATest) {
                     ).'</a>';
                 $delete_link = null;
                 if ($objExercise->edit_exercise_in_lp == true) {
-                    $delete_link = '<a id="delete_'.$id.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" >'.Display::return_icon('delete.png',get_lang('RemoveFromTest'), array(), ICON_SIZE_SMALL).'</a>';
+                    $delete_link = '<a id="delete_'.$id.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" >'.Display::return_icon('delete.png', get_lang('RemoveFromTest'), array(), ICON_SIZE_SMALL).'</a>';
                 }
 
-                $edit_link = Display::tag('span', $edit_link,   array('class'=>'items'));
-                $clone_link = Display::tag('span', $clone_link,  array('class'=>'items'));
+                $edit_link = Display::tag('span', $edit_link, array('class'=>'items'));
+                $clone_link = Display::tag('span', $clone_link, array('class'=>'items'));
                 $delete_link = Display::tag('span', $delete_link, array('class'=>'items'));
-                $btnActions = Display::tag('td',Display::tag(
+                $btnActions = Display::tag('td', Display::tag(
                     'div',
                     $edit_link.$clone_link.$delete_link,
                     array('class'=>'edition')
-                ), array ('class'=>'btn-actions'));
+                ), array('class'=>'btn-actions'));
 
                 $title = Security::remove_XSS($objQuestionTmp->selectTitle());
-                /* $move = Display::return_icon(
-                    'all_directions.png',
-                    get_lang('Move'),
-                    array('class'=>'moved', 'style'=>'margin-bottom:-0.3em;')
-                ); */
+                $title = strip_tags($title);
                 $move = Display::returnFontAwesomeIcon("arrows moved", 'lg');
 
                 // Question name
                 $questionName = Display::tag(
                     'td',
-                    '<a href="#" title = "'.Security::remove_XSS($title).'">'.$move.' '.cut($title, 42).'</a>',
+                    '<a href="#" title = "'.Security::remove_XSS($title).'">
+                        '.$move.' '.cut($title, 42).'
+                    </a>',
                     array('class' => $styleQuestion)
                 );
 
@@ -285,7 +285,7 @@ if (!$inATest) {
                 $questionScore = Display::tag('td', $objQuestionTmp->selectWeighting(), array('class'=>$styleScore));
 
                 echo '<div id="question_id_list_'.$id.'" >';
-                echo '<div class="header_operations" data-exercise="' . $objExercise->selectId() . '" data-question="' . $id . '">';
+                echo '<div class="header_operations" data-exercise="'.$objExercise->selectId().'" data-question="'.$id.'">';
                 echo "<div class='table-responsive'>";
                 echo "<table class='table'>";
                 echo "<tr>";
@@ -311,7 +311,7 @@ if (!$inATest) {
     }
 
     if (!$nbrQuestions) {
-        echo Display::display_warning_message(get_lang('NoQuestion'));
+        echo Display::return_message(get_lang('NoQuestion'), 'warning');
     }
     echo '</div>'; //question list div
 }

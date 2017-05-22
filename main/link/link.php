@@ -19,7 +19,7 @@
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_LINK;
+$current_course_tool = TOOL_LINK;
 
 $this_section = SECTION_COURSES;
 api_protect_course_script(true);
@@ -99,14 +99,16 @@ $show = isset($_REQUEST['show']) && in_array(trim($_REQUEST['show']), ['all', 'n
 $categoryId = isset($_REQUEST['category_id']) ? intval($_REQUEST['category_id']) : '';
 $linkListUrl = api_get_self().'?'.api_get_cidreq().'&category_id='.$categoryId.'&show='.$show;
 $content = '';
+$token = Security::get_existing_token();
 
 switch ($action) {
     case 'addlink':
         if (api_is_allowed_to_edit(null, true)) {
-            $form = Link::getLinkForm(null, 'addlink');
-            if ($form->validate()) {
+            $form = Link::getLinkForm(null, 'addlink', $token);
+            if ($form->validate() && Security::check_token('get')) {
                 // Here we add a link
                 Link::addlinkcategory("link");
+                Security::clear_token();
                 header('Location: '.$linkListUrl);
                 exit;
             }
@@ -185,12 +187,12 @@ switch ($action) {
         break;
     case 'move_link_up':
         Link::moveLinkUp($id);
-        header('Location: ' . $linkListUrl);
+        header('Location: '.$linkListUrl);
         exit;
         break;
     case 'move_link_down':
         Link::moveLinkDown($id);
-        header('Location: ' . $linkListUrl);
+        header('Location: '.$linkListUrl);
         exit;
         break;
     case 'list':

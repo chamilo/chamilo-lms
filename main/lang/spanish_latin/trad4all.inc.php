@@ -102,7 +102,6 @@ $Forbidden = "No tiene permisos";
 $CourseAccessConfigTip = "Por defecto, el curso sólo es accesible para usted como  único usuario. Si usted desea un mínimo de confidencialidad,  lo más simple es abrir la inscripción durante una semana, pedir a los estudiantes que se inscriban ellos mismos, después cerrar la inscr";
 $OpenToTheWorld = "Abierto - accceso permitido para todos";
 $OpenToThePlatform = "Abierto - acceso permitido para usuarios registrados";
-$OpenToThePlatform = "Abierto - acceso permitido para usuarios registrados";
 $TipLang = "Este lenguaje será válido para todos los visitantes de la web de su curso.";
 $Vid = "Video";
 $Work = "Trabajos de los Estudiantes";

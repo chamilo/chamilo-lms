@@ -31,7 +31,7 @@ class ch_multiplechoice extends survey_question
             foreach ($formData['answers'] as $key => $value) {
                 $this->getForm()->addHtmlEditor('answers['.$key.']', null, false, false, $config);
 
-                if ($key < $total-1) {
+                if ($key < $total - 1) {
                     //$this->getForm()->addButton("move_down[$key]", get_lang('Down'));
                 }
 
@@ -39,13 +39,13 @@ class ch_multiplechoice extends survey_question
                     //$this->getForm()->addButton("move_up[$key]", get_lang('Up'));
                 }
 
-                if ($total> 2) {
+                if ($total > 2) {
                     $this->getForm()->addButton("delete_answer[$key]", get_lang('Delete'), 'trash', 'danger');
                 }
             }
         }
 
-        parent :: addRemoveButtons($formData);
+        parent::addRemoveButtons($formData);
     }
 
     /**

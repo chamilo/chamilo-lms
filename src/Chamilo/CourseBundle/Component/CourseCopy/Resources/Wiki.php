@@ -47,7 +47,7 @@ class Wiki extends Resource
         $progress,
         $version
     ) {
-        parent::__construct($id,RESOURCE_WIKI);
+        parent::__construct($id, RESOURCE_WIKI);
         $this->id = $id;
         $this->page_id = $page_id;
         $this->reflink = $reflink;
@@ -63,6 +63,6 @@ class Wiki extends Resource
     public function show()
     {
         parent::show();
-        echo $this->reflink.' ('. (empty($this->group_id) ? get_lang('Everyone') : get_lang('Group') . ' ' .  $this->group_id) .') ' . '<i>(' . $this->dtime . ')</i>';
+        echo $this->reflink.' ('.(empty($this->group_id) ? get_lang('Everyone') : get_lang('Group').' '.$this->group_id).') '.'<i>('.$this->dtime.')</i>';
     }
 }

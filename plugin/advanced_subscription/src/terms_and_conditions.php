@@ -7,7 +7,7 @@
 /**
  * Init
  */
-require_once __DIR__ . '/../config.php';
+require_once __DIR__.'/../config.php';
 // start plugin
 $plugin = AdvancedSubscriptionPlugin::create();
 // Session ID
@@ -24,7 +24,7 @@ $data['termsRejected'] = isset($_REQUEST['r']) ? intval($_REQUEST['r']) : 0;
 // Init template
 $tpl = new Template($plugin->get_lang('plugin_title'));
 
-$isAllowToDoRequest = $plugin->isAllowedToDoRequest( $data['studentUserId'], $data, true);
+$isAllowToDoRequest = $plugin->isAllowedToDoRequest($data['studentUserId'], $data, true);
 
 if (!$isAllowToDoRequest) {
     $tpl->assign('errorMessages', $plugin->getErrorMessages());

@@ -9,7 +9,7 @@ $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 $execute = isset($_GET['execute']) ? $_GET['execute'] : null;
 $courseId = isset($_GET['c_id']) ? $_GET['c_id'] : null;
-$questionId  = isset($_GET['question_id']) ? $_GET['question_id'] : null;
+$questionId = isset($_GET['question_id']) ? $_GET['question_id'] : null;
 
 $sql2 = "SELECT * FROM $table WHERE answer LIKE '%[%]%'";
 

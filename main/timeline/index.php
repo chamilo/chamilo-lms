@@ -23,19 +23,19 @@ $token = Security::get_token();
 
 switch ($action) {
     case 'add':
-        $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('Timeline'));
-        $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
+        $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('Timeline'));
+        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Add'));
         break;
     case 'edit':
-        $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('Timeline'));
-        $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
+        $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('Timeline'));
+        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
         break;
     case 'add_item':
-        $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('Timeline'));
-        $interbreadcrumb[]=array('url' => '#','name' => get_lang('TimelineItem'));
+        $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('Timeline'));
+        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('TimelineItem'));
         break;
     default:
-        $interbreadcrumb[]=array('url' => '#','name' => get_lang('Timeline'));
+        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Timeline'));
 }
 
 //jqgrid will use this URL to do the selects
@@ -46,23 +46,23 @@ $columns        = array(get_lang('Name'), get_lang('Actions'));
 
 //Column config
 $column_model   = array(
-                        array('name'=>'name',           'index'=>'name',        'width'=>'120',   'align'=>'left'),
-                        array('name'=>'actions',        'index'=>'actions',     'width'=>'100',  'align'=>'left', 'sortable'=>'false')
-                       );
+                        array('name'=>'name', 'index'=>'name', 'width'=>'120', 'align'=>'left'),
+                        array('name'=>'actions', 'index'=>'actions', 'width'=>'100', 'align'=>'left', 'sortable'=>'false')
+                        );
 //Autowidth
 $extra_params['autowidth'] = 'true';
 //height auto
 $extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
-$htmlHeadXtra[] ='
+$htmlHeadXtra[] = '
 <script>
 $(function() {
     // grid definition see the $timeline->display() function
-    '.Display::grid_js('timelines',  $url,$columns,$column_model,$extra_params, array(), null,true).'
+    '.Display::grid_js('timelines', $url, $columns, $column_model, $extra_params, array(), null, true).'
 });
 </script>';
-
+$toolbarAction = '';
 $timeline = new Timeline();
 
 // Action handling: Add
@@ -80,12 +80,12 @@ switch ($action) {
                 $values = $form->exportValues();
                 $res    = $timeline->save($values);
                 if ($res) {
-                    $message = Display::return_message(get_lang('ItemAdded'),'success');
+                    $message = Display::return_message(get_lang('ItemAdded'), 'success');
                 }
             }
             $content = $timeline->listing();
         } else {
-            $actions .= '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
+            $actions .= '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
             $content = $form->return_form();
@@ -106,7 +106,7 @@ switch ($action) {
             }
             $timeline->display();
         } else {
-            $actions = '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
+            $actions = '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
             $content = $form->return_form();
@@ -128,7 +128,7 @@ switch ($action) {
             }
             $timeline->display();
         } else {
-            $actions = '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
+            $actions = '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
             $content = $form->return_form();

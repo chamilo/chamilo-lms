@@ -33,7 +33,7 @@ class DummyCourseCreator
         $this->default_property['to_user_id'] = null;
         $this->default_property['visibility'] = '1';
         $this->default_property['start_visible'] = null;
-        $this->default_property['end_visible'] =  null;
+        $this->default_property['end_visible'] = null;
 
         $course = api_get_course_info($course_code);
         $this->course = new Course();
@@ -60,13 +60,13 @@ class DummyCourseCreator
         $course = api_get_course_info();
         $course_doc_path = $this->course->backup_path.'/document/';
         $number_of_documents = rand(10, 30);
-        $extensions = array ('html', 'doc');
+        $extensions = array('html', 'doc');
         $directories = array();
         $property = $this->default_property;
         $property['lastedit_type'] = 'DocumentAdded';
         $property['tool'] = TOOL_DOCUMENT;
         $doc_id = 0;
-        for ($doc_id = 1; $doc_id < $number_of_documents; $doc_id ++)
+        for ($doc_id = 1; $doc_id < $number_of_documents; $doc_id++)
         {
             $path = '';
             $doc_type = rand(0, count($extensions) - 1);
@@ -74,7 +74,7 @@ class DummyCourseCreator
             $filename = $this->get_dummy_content('title').'_'.$doc_id.'.'.$extension;
             $content = $this->get_dummy_content('text');
             $dirs = rand(0, 3);
-            for ($i = 0; $i < $dirs; $i ++)
+            for ($i = 0; $i < $dirs; $i++)
             {
                 $path .= 'directory/';
                 $directories[$path] = 1;
@@ -89,14 +89,14 @@ class DummyCourseCreator
             fwrite($fp, $content);
             fclose($fp);
             $size = filesize($file);
-            $document = new Document($doc_id, '/'.$path.$filename,$this->get_dummy_content('description'),$this->get_dummy_content('title'), 'file', $size);
+            $document = new Document($doc_id, '/'.$path.$filename, $this->get_dummy_content('description'), $this->get_dummy_content('title'), 'file', $size);
             $document->item_properties[] = $property;
             $this->course->add_resource($document);
         }
-        foreach($directories as $path => $flag)
+        foreach ($directories as $path => $flag)
         {
-            $path = substr($path,0,strlen($path)-1);
-            $document = new Document($doc_id++,'/'.$path, $this->get_dummy_content('description'),$this->get_dummy_content('title'),'folder',0);
+            $path = substr($path, 0, strlen($path) - 1);
+            $document = new Document($doc_id++, '/'.$path, $this->get_dummy_content('description'), $this->get_dummy_content('title'), 'folder', 0);
             $property['lastedit_type'] = 'FolderCreated';
             $document->item_properties[] = $property;
             $this->course->add_resource($document);
@@ -111,11 +111,11 @@ class DummyCourseCreator
         $property['lastedit_type'] = 'AnnouncementAdded';
         $property['tool'] = TOOL_ANNOUNCEMENT;
         $number_of_announcements = rand(10, 30);
-        for ($i = 0; $i < $number_of_announcements; $i ++)
+        for ($i = 0; $i < $number_of_announcements; $i++)
         {
             $time = mktime(rand(1, 24), rand(1, 60), 0, rand(1, 12), rand(1, 28), intval(date('Y')));
             $date = date('Y-m-d', $time);
-            $announcement = new Announcement($i,$this->get_dummy_content('title'),$this->get_dummy_content('text'), $date,0);
+            $announcement = new Announcement($i, $this->get_dummy_content('title'), $this->get_dummy_content('text'), $date, 0);
             $announcement->item_properties[] = $property;
             $this->course->add_resource($announcement);
         }
@@ -129,23 +129,23 @@ class DummyCourseCreator
         $property = $this->default_property;
         $property['lastedit_type'] = 'AgendaAdded';
         $property['tool'] = TOOL_CALENDAR_EVENT;
-        for ($i = 0; $i < $number_of_events; $i ++)
+        for ($i = 0; $i < $number_of_events; $i++)
         {
-            $hour = rand(1,24);
-            $minute = rand(1,60);
-            $second = rand(1,60);
-            $day = rand(1,28);
-            $month = rand(1,12);
+            $hour = rand(1, 24);
+            $minute = rand(1, 60);
+            $second = rand(1, 60);
+            $day = rand(1, 28);
+            $month = rand(1, 12);
             $year = intval(date('Y'));
-            $time = mktime($hour,$minute,$second,$month,$day,$year);
+            $time = mktime($hour, $minute, $second, $month, $day, $year);
             $start_date = date('Y-m-d H:m:s', $time);
-            $hour = rand($hour,24);
-            $minute = rand($minute,60);
-            $second = rand($second,60);
-            $day = rand($day,28);
-            $month = rand($month,12);
+            $hour = rand($hour, 24);
+            $minute = rand($minute, 60);
+            $second = rand($second, 60);
+            $day = rand($day, 28);
+            $month = rand($month, 12);
             $year = intval(date('Y'));
-            $time = mktime($hour,$minute,$second,$month,$day,$year);
+            $time = mktime($hour, $minute, $second, $month, $day, $year);
             $end_date = date('Y-m-d H:m:s', $time);
             $event = new CalendarEvent(
                 $i,
@@ -165,20 +165,20 @@ class DummyCourseCreator
     {
         // create categorys
         $number_of_categories = rand(5, 10);
-        for ($i = 0; $i < $number_of_categories; $i ++)
+        for ($i = 0; $i < $number_of_categories; $i++)
         {
-            $linkcat = new LinkCategory($i, $this->get_dummy_content('title'), $this->get_dummy_content('description'),$i);
+            $linkcat = new LinkCategory($i, $this->get_dummy_content('title'), $this->get_dummy_content('description'), $i);
             $this->course->add_resource($linkcat);
         }
         // create links
         $number_of_links = rand(5, 50);
-        $on_homepage = rand(0,20) == 0 ? 1 : 0;
+        $on_homepage = rand(0, 20) == 0 ? 1 : 0;
         $property = $this->default_property;
         $property['lastedit_type'] = 'LinkAdded';
         $property['tool'] = TOOL_LINK;
-        for ($i = 0; $i < $number_of_links; $i ++)
+        for ($i = 0; $i < $number_of_links; $i++)
         {
-            $link = new Link($i, $this->get_dummy_content('title'), 'http://www.google.com/search?q='.$this->get_dummy_content('title'), $this->get_dummy_content('description'), rand(0, $number_of_categories -1),$on_homepage);
+            $link = new Link($i, $this->get_dummy_content('title'), 'http://www.google.com/search?q='.$this->get_dummy_content('title'), $this->get_dummy_content('description'), rand(0, $number_of_categories - 1), $on_homepage);
             $link->item_properties[] = $property;
             $this->course->add_resource($link);
         }
@@ -192,18 +192,18 @@ class DummyCourseCreator
         $number_of_forums = rand(5, 50);
         $number_of_topics = rand(30, 100);
         $number_of_posts = rand(100, 1000);
-        $last_forum_post = array ();
-        $last_topic_post = array ();
+        $last_forum_post = array();
+        $last_topic_post = array();
         // create categorys
         $order = 1;
-        for ($i = 1; $i <= $number_of_categories; $i ++)
+        for ($i = 1; $i <= $number_of_categories; $i++)
         {
             $forumcat = new ForumCategory($i, $this->get_dummy_content('title'), $this->get_dummy_content('description'), $order, 0, 0);
             $this->course->add_resource($forumcat);
             $order++;
         }
         // create posts
-        for ($post_id = 1; $post_id <= $number_of_posts; $post_id ++)
+        for ($post_id = 1; $post_id <= $number_of_posts; $post_id++)
         {
             $topic_id = rand(1, $number_of_topics);
             $last_topic_post[$topic_id] = $post_id;
@@ -211,7 +211,7 @@ class DummyCourseCreator
             $this->course->add_resource($post);
         }
         // create topics
-        for ($topic_id = 1; $topic_id <= $number_of_topics; $topic_id ++)
+        for ($topic_id = 1; $topic_id <= $number_of_topics; $topic_id++)
         {
             $forum_id = rand(1, $number_of_forums);
             $last_forum_post[$forum_id] = $last_topic_post[$topic_id];
@@ -219,9 +219,9 @@ class DummyCourseCreator
             $this->course->add_resource($topic);
         }
         // create forums
-        for ($forum_id = 1; $forum_id <= $number_of_forums; $forum_id ++)
+        for ($forum_id = 1; $forum_id <= $number_of_forums; $forum_id++)
         {
-            $forum = new Forum($forum_id, $this->get_dummy_content('title'),$this->get_dummy_content('description'), rand(1, $number_of_categories), $last_forum_post[$forum_id]);
+            $forum = new Forum($forum_id, $this->get_dummy_content('title'), $this->get_dummy_content('description'), rand(1, $number_of_categories), $last_forum_post[$forum_id]);
             $this->course->add_resource($forum);
         }
     }
@@ -230,25 +230,25 @@ class DummyCourseCreator
      */
     function create_dummy_learnpaths()
     {
-        $number_of_learnpaths = rand(3,5);
+        $number_of_learnpaths = rand(3, 5);
         $global_item_id = 1;
-        for($i=1; $i<=$number_of_learnpaths;$i++)
+        for ($i = 1; $i <= $number_of_learnpaths; $i++)
         {
         $chapters = array();
-        $number_of_chapters = rand(1,6);
-        for($chapter_id = 1; $chapter_id <= $number_of_chapters; $chapter_id++)
+        $number_of_chapters = rand(1, 6);
+        for ($chapter_id = 1; $chapter_id <= $number_of_chapters; $chapter_id++)
         {
             $chapter['name'] = $this->get_dummy_content('title');
             $chapter['description'] = $this->get_dummy_content('description');
             $chapter['display_order'] = $chapter_id;
             $chapter['items'] = array();
-            $number_of_items = rand(5,20);
-            for( $item_id = 1; $item_id<$number_of_items; $item_id++)
+            $number_of_items = rand(5, 20);
+            for ($item_id = 1; $item_id < $number_of_items; $item_id++)
             {
-                $types = array(RESOURCE_ANNOUNCEMENT, RESOURCE_EVENT, RESOURCE_DOCUMENT,RESOURCE_LINK,RESOURCE_FORUM,RESOURCE_FORUMPOST,RESOURCE_FORUMTOPIC);
-                $type = $types[rand(0,count($types)-1)];
+                $types = array(RESOURCE_ANNOUNCEMENT, RESOURCE_EVENT, RESOURCE_DOCUMENT, RESOURCE_LINK, RESOURCE_FORUM, RESOURCE_FORUMPOST, RESOURCE_FORUMTOPIC);
+                $type = $types[rand(0, count($types) - 1)];
                 $resources = $this->course->resources[$type];
-                $resource = $resources[rand(0,count($resources)-1)];
+                $resource = $resources[rand(0, count($resources) - 1)];
                 $item = array();
                 $item['type'] = $resource->type;
                 $item['id'] = $resource->source_id;
@@ -256,17 +256,17 @@ class DummyCourseCreator
                 $item['title'] = $this->get_dummy_content('title');
                 $item['description'] = $this->get_dummy_content('description');
                 $item['ref_id'] = $global_item_id;
-                if( rand(0,5) == 1 && $item_id > 1)
+                if (rand(0, 5) == 1 && $item_id > 1)
                 {
                     $item['prereq_type'] = 'i';
-                    $item['prereq'] = rand($global_item_id - $item_id,$global_item_id-1);
+                    $item['prereq'] = rand($global_item_id - $item_id, $global_item_id - 1);
                 }
                 $chapter['items'][] = $item;
                 $global_item_id++;
             }
             $chapters[] = $chapter;
         }
-        $lp = new CourseCopyLearnpath($i,$this->get_dummy_content('title'),$this->get_dummy_content('description'),1,$chapters);
+        $lp = new CourseCopyLearnpath($i, $this->get_dummy_content('title'), $this->get_dummy_content('description'), 1, $chapters);
         $this->course->add_resource($lp);
         }
     }
@@ -280,20 +280,20 @@ class DummyCourseCreator
         Aenean ac wisi non enim aliquam scelerisque. Praesent eget mi. Vestibulum volutpat pulvinar justo. Phasellus sapien ante, pharetra id, bibendum sed, porta non, purus. Maecenas leo velit, luctus quis, porta non, feugiat sit amet, sapien. Proin vitae augue ut massa adipiscing placerat. Morbi ac risus. Proin dapibus eros egestas quam. Fusce fermentum lobortis elit. Duis lectus tellus, convallis nec, lobortis vel, accumsan ut, nunc. Nunc est. Donec ullamcorper laoreet quam.
         Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Suspendisse potenti. Mauris mi. Vivamus risus lacus, faucibus sit amet, sollicitudin a, blandit et, justo. In hendrerit. Sed imperdiet, eros at fringilla tempor, turpis augue semper enim, quis rhoncus nibh enim quis dui. Sed massa sapien, mattis et, laoreet sit amet, dignissim nec, urna. Integer laoreet quam quis lectus. Curabitur convallis gravida dui. Nam metus. Ut sit amet augue in nibh interdum scelerisque. Donec venenatis, lacus et pulvinar euismod, libero massa condimentum pede, commodo tristique nunc massa eu quam. Donec vulputate. Aenean in nibh. Phasellus porttitor. Donec molestie, sem ac porttitor vulputate, mauris dui egestas libero, ac lobortis dolor sem vel ligula. Nam vulputate pretium libero. Cras accumsan. Vivamus lacinia sapien sit amet elit.
         Duis bibendum elementum justo. Duis posuere. Fusce nulla odio, posuere eget, condimentum nec, venenatis eu, elit. In hac habitasse platea dictumst. Aenean ac sem in enim imperdiet feugiat. Integer tincidunt lectus at elit. Integer magna lacus, vehicula quis, eleifend eget, suscipit vitae, leo. Nunc porta augue nec enim. Curabitur vehicula volutpat enim. Aliquam consequat. Vestibulum rhoncus tellus vitae erat. Integer est. Quisque fermentum leo nec odio. Suspendisse lobortis sollicitudin augue. Nullam urna mi, suscipit eu, sagittis laoreet, ultrices ac, sem. Aliquam enim tortor, hendrerit non, cursus a, tristique sit amet, sapien. Suspendisse potenti. Aenean semper placerat neque.';
-        switch($type)
+        switch ($type)
         {
          case 'description':
-            $descriptions = explode(".",$dummy_text);
-            return $descriptions[rand(0,count($descriptions)-1)];
+            $descriptions = explode(".", $dummy_text);
+            return $descriptions[rand(0, count($descriptions) - 1)];
             break;
          case 'title':
-            $dummy_text = str_replace(array("\n",'.',',',"\t"),array(' ','','',' '),$dummy_text);
-            $titles = explode(" ",$dummy_text);
-            return trim($titles[rand(0,count($titles)-1)]);
+            $dummy_text = str_replace(array("\n", '.', ',', "\t"), array(' ', '', '', ' '), $dummy_text);
+            $titles = explode(" ", $dummy_text);
+            return trim($titles[rand(0, count($titles) - 1)]);
             break;
          case 'text':
-            $texts = explode("\n",$dummy_text);
-            return $texts[rand(0,count($texts)-1)];
+            $texts = explode("\n", $dummy_text);
+            return $texts[rand(0, count($texts) - 1)];
             break;
         }
     }

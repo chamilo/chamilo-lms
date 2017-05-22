@@ -40,31 +40,31 @@ class OpenMeetingsRestService
         // $request
         
         // Initialize the session by passing the request as a parameter
-        $session = curl_init ( $request );
+        $session = curl_init($request);
         
         // Set curl options by passing session and flags
         // CURLOPT_HEADER allows us to receive the HTTP header
-        curl_setopt ( $session, CURLOPT_HEADER, true );
+        curl_setopt($session, CURLOPT_HEADER, true);
         
         // CURLOPT_RETURNTRANSFER will return the response
-        curl_setopt ( $session, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
         
         // Make the request
-        $response = curl_exec ( $session );
+        $response = curl_exec($session);
         
         // Close the curl session
-        curl_close ( $session );
+        curl_close($session);
         
         // Confirm that the request was transmitted to the OpenMeetings! Image Search Service
-        if (! $response) {
-            die ( "Request OpenMeetings! OpenMeetings Service failed and no response was returned in ".__CLASS__.'::'.__FUNCTION__.'()' );
+        if (!$response) {
+            die ("Request OpenMeetings! OpenMeetings Service failed and no response was returned in ".__CLASS__.'::'.__FUNCTION__.'()');
         }
         
         // Create an array to store the HTTP response codes
-        $status_code = array ();
+        $status_code = array();
         
         // Use regular expressions to extract the code from the header
-        preg_match ( '/\d\d\d/', $response, $status_code );
+        preg_match('/\d\d\d/', $response, $status_code);
         $bt = debug_backtrace();
         $caller = array_shift($bt);
         $extra = ' (from '.$caller['file'].' at line '.$caller['line'].') ';
@@ -74,24 +74,24 @@ class OpenMeetingsRestService
                 // Success
                 break;
             case 503 :
-                error_log( 'Your call to OpenMeetings Web Services '.$extra.' failed and returned an HTTP status of 503.
+                error_log('Your call to OpenMeetings Web Services '.$extra.' failed and returned an HTTP status of 503.
                                  That means: Service unavailable. An internal problem prevented us from returning data to you.' );
                 return false;
                 break;
             case 403 :
-                error_log( 'Your call to OpenMeetings Web Services '.$extra.' failed and returned an HTTP status of 403.
+                error_log('Your call to OpenMeetings Web Services '.$extra.' failed and returned an HTTP status of 403.
                                  That means: Forbidden. You do not have permission to access this resource, or are over your rate limit.' );
                 return false;
                 break;
             case 400 :
                 // You may want to fall through here and read the specific XML error
-                error_log( 'Your call to OpenMeetings Web Services '.$extra.' failed and returned an HTTP status of 400.
+                error_log('Your call to OpenMeetings Web Services '.$extra.' failed and returned an HTTP status of 400.
                                  That means:  Bad request. The parameters passed to the service did not match as expected.   
                                  The exact error is returned in the XML response.' );
                 return false;
                 break;
-            default :
-                error_log( 'Your call to OpenMeetings Web Services '.$extra.' returned an unexpected HTTP status of: ' . $status_code [0] . " Request " . $request );
+            default:
+                error_log('Your call to OpenMeetings Web Services '.$extra.' returned an unexpected HTTP status of: '.$status_code [0]." Request ".$request);
                 return false;
         }
         

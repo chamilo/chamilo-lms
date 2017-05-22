@@ -35,14 +35,17 @@ if ($isSender) {
 $idUserLocal = api_get_user_id();
 $userLocal = api_get_user_info($idUserLocal, true);
 $htmlHeadXtra[] = '<script type="text/javascript" src="'
-    . api_get_path(WEB_PATH) . 'web/assets/simpleWebRTC/latest.js'
+    . api_get_path(WEB_PATH) . 'web/assets/simpleWebRTC/latest-v2.js'
     . '"></script>' . "\n";
+
+$navigator = api_get_navigator();
 
 $template = new Template();
 $template->assign('room_name', $chatVideo->getRoomName());
 $template->assign('chat_user', $chatUser);
 $template->assign('user_local', $userLocal);
 $template->assign('block_friends', $friend_html);
+$template->assign('navigator_is_firefox', $navigator['name'] == 'Mozilla');
 
 $tpl = $template->get_template('chat/video.tpl');
 $content = $template->fetch($tpl);

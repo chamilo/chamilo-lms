@@ -15,8 +15,6 @@
 	This file has two large sections.
 	1. code that belongs in document.php, but to avoid clutter I put the code here
 	2. the function resize_image that handles the image resizing
-
-
  *	@author Patrick Cool
  *	@package chamilo.document
  *	@todo convert comments to be understandable to phpDocumentor
@@ -34,16 +32,16 @@
  *							view is also possible when you choose not to resize the source images
  */
 function resize_image($image, $target_width, $target_height, $slideshow = 0) {
-	// Modifications by Ivan Tcholakov, 04-MAY-2009.
-	$result = array();
-	if ( (isset($_SESSION['image_resizing']) && $_SESSION['image_resizing']== 'resizing') or $slideshow == 1) {
-		$new_sizes = api_resize_image($image, $target_width, $target_height);
-		$result[] = $new_sizes['height'];
-		$result[] = $new_sizes['width'];
-	} else {		
+    // Modifications by Ivan Tcholakov, 04-MAY-2009.
+    $result = array();
+    if ((isset($_SESSION['image_resizing']) && $_SESSION['image_resizing'] == 'resizing') or $slideshow == 1) {
+        $new_sizes = api_resize_image($image, $target_width, $target_height);
+        $result[] = $new_sizes['height'];
+        $result[] = $new_sizes['width'];
+    } else {		
         $size = api_getimagesize($image);
-		$result[] = $size['height'];
-		$result[] = $size['width'];
-	}
-	return $result;
+        $result[] = $size['height'];
+        $result[] = $size['width'];
+    }
+    return $result;
 }

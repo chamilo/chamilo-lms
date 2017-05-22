@@ -12,7 +12,7 @@ api_protect_course_script(true);
 $action = $_REQUEST['a'];
 
 $course_id = api_get_course_int_id();
-$tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 $sessionId = api_get_session_id();
 
 switch ($action) {
@@ -84,7 +84,7 @@ switch ($action) {
             foreach ($tab_parents_id as $parent_id) {
                 $Same_parent_LP_item_list = $LP_item_list->get_item_with_same_parent($parent_id);
                 $previous_item_id = 0;
-                for ($i=0; $i < count($Same_parent_LP_item_list->list); $i++) {
+                for ($i = 0; $i < count($Same_parent_LP_item_list->list); $i++) {
                     $item_id = $Same_parent_LP_item_list->list[$i]->id;
                     // display_order
                     $display_order = $i + 1;
@@ -95,7 +95,7 @@ switch ($action) {
                     // next_item_id
                     $next_item_id = 0;
                     if ($i < count($Same_parent_LP_item_list->list) - 1) {
-                        $next_item_id = $Same_parent_LP_item_list->list[$i+1]->id;
+                        $next_item_id = $Same_parent_LP_item_list->list[$i + 1]->id;
                     }
                     $LP_item_list->set_parameters_for_id($item_id, $next_item_id, "next_item_id");
                 }
@@ -119,7 +119,7 @@ switch ($action) {
                     )
                 );
             }
-            Display::display_confirmation_message(get_lang('Saved'));
+            echo Display::return_message(get_lang('Saved'), 'confirm');
         }
         break;
     case 'record_audio':

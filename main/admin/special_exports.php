@@ -17,7 +17,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
-$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 // Access restrictions
 api_protect_admin_script(true);
 $nameTools = get_lang('SpecialExports');
@@ -37,9 +37,9 @@ Display::display_header($nameTools);
 echo Display::page_header($nameTools);
 
 if (count($_POST) == 0) {
-    Display::display_normal_message(get_lang('SpecialExportsIntroduction'));
+    echo Display::return_message(get_lang('SpecialExportsIntroduction'));
 }
-$error =0;
+$error = 0;
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
@@ -64,7 +64,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 
         $zip_folder = new PclZip($FileZip['TEMP_FILE_ZIP']);
         if (!isset($_POST['resource']) || count($_POST['resource']) == 0) {
-            Display::display_error_message(get_lang('ErrorMsgSpecialExport'));
+            echo Display::return_message(get_lang('ErrorMsgSpecialExport'), 'error');
         } else {
             $Resource = $_POST['resource'];
 
@@ -130,7 +130,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 }
 
 if ($export && $name) {
-    Display::display_confirmation_message(get_lang('BackupCreated'));
+    echo Display::return_message(get_lang('BackupCreated'), 'confirm');
     echo '<br /><a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive='.urlencode($name).'">'.get_lang('Download').'</a>';
 } else {
     // Display forms especial export
@@ -138,10 +138,10 @@ if ($export && $name) {
         $cb = new CourseBuilder();
         $course = $cb->build_session_course();
         if ($course === false) {
-            Display::display_error_message(get_lang('ErrorMsgSpecialExport'));
+            echo Display::return_message(get_lang('ErrorMsgSpecialExport'), 'error');
             form_special_export();
         } else {
-            Display::display_normal_message(get_lang('ToExportSpecialSelect'));
+            echo Display::return_message(get_lang('ToExportSpecialSelect'), 'normal');
             CourseSelectForm :: display_form_session_export($course);
         }
     } else {
@@ -157,9 +157,9 @@ function form_special_export()
     $form = new FormValidator('special_exports', 'post');
     $renderer = $form->defaultRenderer();
     $renderer->setCustomElementTemplate('<div>{element}</div> ');
-    $form->addElement('radio', 'backup_option', '',  get_lang('SpecialCreateFullBackup'), 'full_backup');
-    $form->addElement('radio', 'backup_option', '',  get_lang('SpecialLetMeSelectItems'), 'select_items');
-    $form->addElement('html','<br />');
+    $form->addElement('radio', 'backup_option', '', get_lang('SpecialCreateFullBackup'), 'full_backup');
+    $form->addElement('radio', 'backup_option', '', get_lang('SpecialLetMeSelectItems'), 'select_items');
+    $form->addElement('html', '<br />');
     $form->addButtonExport(get_lang('CreateBackup'));
     $form->addProgress();
     $values['backup_option'] = 'full_backup';
@@ -183,7 +183,7 @@ function create_zip()
         $handle = opendir($temp_zip_dir);
         while (false !== ($file = readdir($handle))) {
             if ($file != "." && $file != "..") {
-                $Diff = (time() - filemtime("$temp_zip_dir/$file")) / 60 / 60;  //the "age" of the file in hours
+                $Diff = (time() - filemtime("$temp_zip_dir/$file")) / 60 / 60; //the "age" of the file in hours
                 if ($Diff > 4) {
                     unlink("$temp_zip_dir/$file");
                 }   //delete files older than 4 hours
@@ -191,7 +191,7 @@ function create_zip()
         }
         closedir($handle);
     }
-    $temp_zip_file = $temp_zip_dir."/".md5(time()).".zip";  //create zipfile of given directory
+    $temp_zip_file = $temp_zip_dir."/".md5(time()).".zip"; //create zipfile of given directory
     return array(
         'PATH' => $path,
         'PATH_TEMP_ARCHIVE' => $temp_zip_dir,
@@ -240,7 +240,7 @@ function fullexportspecial()
     if (count($list_course) > 0) {
         foreach ($list_course as $_course) {
             if ($FileZip['PATH'] == '/') {
-                $querypath=''; // to prevent ...path LIKE '//%'... in query
+                $querypath = ''; // to prevent ...path LIKE '//%'... in query
             } else {
                 $querypath = $FileZip['PATH'];
             }
@@ -310,7 +310,7 @@ function fullexportspecial()
             return $name;
         }
     } else {
-        Display::display_error_message(get_lang('ErrorMsgSpecialExport')); //main API
+        echo Display::return_message(get_lang('ErrorMsgSpecialExport'), 'error'); //main API
         $export = false;
         return false;
     }

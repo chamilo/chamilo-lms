@@ -35,7 +35,7 @@ class ShibbolethDisplay
         $page_title = get_lang('ShibbolethLogin');
 
         Display :: display_header($page_title);
-        Display :: display_error_message($message);
+        echo Display::return_message($message, 'error');
         Display :: display_footer();
         die;
     }
@@ -47,9 +47,9 @@ class ShibbolethDisplay
     {
         $title = $title ? $title : get_lang('ShibbolethLogin');
 
-        Display :: display_header($title);
-        Display :: display_confirmation_message($message);
-        Display :: display_footer();
+        Display::display_header($title);
+        echo Display::return_message($message, 'confirm');
+        Display::display_footer();
         die;
     }
     

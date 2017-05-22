@@ -83,8 +83,12 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
         $header = str_replace('absolute', 'relative', $header);
 
         switch ($this->split_steps) {
-            case 'per_page': $this -> dealPerPage($header, $body); break;
-            case 'per_chapter': $this -> dealPerChapter($header, $body); break;
+            case 'per_page':
+                $this -> dealPerPage($header, $body);
+                break;
+            case 'per_chapter':
+                $this -> dealPerChapter($header, $body);
+                break;
         }
     }
 
@@ -117,7 +121,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
         $intro_content = api_substr($content, 0, api_strpos($content, $matches[0][0]));
         $items_to_create[get_lang('Introduction')] = $intro_content;
 
-        for ($i = 0; $i<count($matches[0]); $i++) {
+        for ($i = 0; $i < count($matches[0]); $i++) {
 
             if (empty($matches[1][$i]))
                 continue;
@@ -132,6 +136,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
         }
 
         $i = 0;
+        $previous = 0; // @todo define this variable properly
         foreach ($items_to_create as $item_title => $item_content) {
             $i++;
             $page_content = $this->format_page_content($header, $item_content);
@@ -171,7 +176,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
                 $slide_name = api_html_entity_decode($slide_name, ENT_COMPAT, api_get_system_encoding());
                 $previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
                 if ($this->first_item == 0) {
-                    $this->first_item = $previous;
+                    $this->first_item = (int) $previous;
                 }
             }
         }
@@ -191,7 +196,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 
         $first_item = 0;
 
-        foreach($pages as $key => $page_content) {
+        foreach ($pages as $key => $page_content) {
             // For every pages, we create a new file.
 
             $key += 1;
@@ -211,6 +216,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
             );
 
             $slide_name = '';
+            $previous = 0; // @todo define this variable properly
             if ($document_id) {
                 // Put the document in item_property update.
                 api_item_property_update(
@@ -230,11 +236,11 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
                 $slide_name = 'Page '.str_repeat('0', 2 - strlen($key)).$key;
                 $previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
                 if ($this->first_item == 0) {
-                    $this->first_item = $previous;
+                    $this->first_item = (int) $previous;
                 }
                 // Code for text indexing.
                 if (isset($_POST['index_document']) && $_POST['index_document']) {
-                    //Display::display_normal_message(print_r($_POST));
+                    //echo Display::return_message(print_r($_POST));
                     $di = new ChamiloIndexer();
                     isset($_POST['language']) ? $lang = Database::escape_string($_POST['language']) : $lang = 'english';
                     $di->connectDb(NULL, NULL, $lang);
@@ -245,7 +251,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
                     foreach ($specific_fields as $specific_field) {
                         if (isset($_REQUEST[$specific_field['code']])) {
                             $sterms = trim($_REQUEST[$specific_field['code']]);
-                            $all_specific_terms .= ' '. $sterms;
+                            $all_specific_terms .= ' '.$sterms;
                             if (!empty($sterms)) {
                                 $sterms = explode(',', $sterms);
                                 foreach ($sterms as $sterm) {
@@ -254,7 +260,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
                             }
                         }
                     }
-                    $page_content = $all_specific_terms .' '. $page_content;
+                    $page_content = $all_specific_terms.' '.$page_content;
                     $ic_slide->addValue('content', $page_content);
                     // Add a comment to say terms separated by commas.
                     $courseid = api_get_course_id();
@@ -265,7 +271,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
                         SE_COURSE_ID => $courseid,
                         SE_TOOL_ID => TOOL_LEARNPATH,
                         SE_DATA => array('lp_id' => $lp_id, 'lp_item' => $previous, 'document_id' => $document_id),
-                        SE_USER => (int)api_get_user_id(),
+                        SE_USER => (int) api_get_user_id(),
                     );
                     $ic_slide->xapian_data = serialize($xapian_data);
                     $di->addChunk($ic_slide);
@@ -308,7 +314,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
             $content = '<body><div style="width:'.$max_width.'">'.$content;
         }
 
-        $content = preg_replace('|</body>|i','</div>\\0', $content, -1, $count);
+        $content = preg_replace('|</body>|i', '</div>\\0', $content, -1, $count);
         if ($count < 1) {
             $content = $content.'</div></body>';
         }
@@ -336,7 +342,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
                 }
 
             } elseif ($img_width > $max_width - 10) {
-                $picture_resized = str_ireplace('width='.$img_width, 'width="'.($max_width-10).'"', $images[0][$key]);
+                $picture_resized = str_ireplace('width='.$img_width, 'width="'.($max_width - 10).'"', $images[0][$key]);
                 $content = str_replace($images[0][$key], $picture_resized, $content);
             }
         }

@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * SCRIPT PURPOSE :
  *
@@ -9,11 +10,11 @@
  *
  * Special case : If the password are encrypted in the database, we have
  * to generate a new one.
-*
-*	@todo refactor, move relevant functions to code libraries
-*
-*	@package chamilo.auth
-*/
+ *
+ * @todo refactor, move relevant functions to code libraries
+ *
+ * @package chamilo.auth
+ */
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -23,7 +24,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 // Forbidden to retrieve the lost password
 if (api_get_setting('allow_lostpassword') == 'false') {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 $reset = Request::get('reset');
@@ -47,13 +48,52 @@ if ($reset && $userId) {
     Display::addFlash(
         Display::return_message($messageText, 'info', false)
     );
-    header('Location: ' . api_get_path(WEB_PATH));
+    header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
 
 $form = new FormValidator('lost_password');
 $form->addHeader($tool_name);
-$form->addText('user', [get_lang('LoginOrEmailAddress'), get_lang('EnterEmailUserAndWellSendYouPassword')], true);
+$form->addText('user',
+    [
+        get_lang('LoginOrEmailAddress'),
+        get_lang('EnterEmailUserAndWellSendYouPassword'),
+    ],
+    true
+);
+
+$captcha = api_get_setting('allow_captcha');
+$allowCaptcha = $captcha === 'true';
+
+if ($allowCaptcha) {
+    $ajax = api_get_path(WEB_AJAX_PATH).'form.ajax.php?a=get_captcha';
+    $options = array(
+        'width' => 220,
+        'height' => 90,
+        'callback' => $ajax.'&var='.basename(__FILE__, '.php'),
+        'sessionVar' => basename(__FILE__, '.php'),
+        'imageOptions' => array(
+            'font_size' => 20,
+            'font_path' => api_get_path(SYS_FONTS_PATH).'opensans/',
+            'font_file' => 'OpenSans-Regular.ttf',
+            //'output' => 'gif'
+        )
+    );
+    
+    $captcha_question = $form->addElement(
+        'CAPTCHA_Image',
+        'captcha_question',
+        '',
+        $options
+    );
+    $form->addElement('static', null, null, get_lang('ClickOnTheImageForANewOne'));
+    
+    $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'), array('size' => 40));
+    $form->addRule('captcha', get_lang('EnterTheCharactersYouReadInTheImage'), 'required', null, 'client');
+    
+    $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
+}
+
 $form->addButtonSend(get_lang('Send'));
 
 if ($form->validate()) {
@@ -74,7 +114,7 @@ if ($form->validate()) {
         Display::addFlash(
             Display::return_message($messageText, 'error', false)
         );
-        header('Location: ' . api_get_self());
+        header('Location: '.api_get_self());
         exit;
     }
 
@@ -94,7 +134,7 @@ if ($form->validate()) {
         Display::addFlash(
             Display::return_message($messageText, 'info', false)
         );
-        header('Location: ' . api_get_path(WEB_PATH));
+        header('Location: '.api_get_path(WEB_PATH));
         exit;
     }
 
@@ -102,7 +142,7 @@ if ($form->validate()) {
         Display::addFlash(
             Display::return_message(get_lang('CouldNotResetPasswordBecauseLDAP'), 'info', false)
         );
-        header('Location: ' . api_get_path(WEB_PATH));
+        header('Location: '.api_get_path(WEB_PATH));
         exit;
     }
 
@@ -121,7 +161,7 @@ if ($form->validate()) {
             exit;
         }
 
-        header('Location: ' . api_get_path(WEB_PATH));
+        header('Location: '.api_get_path(WEB_PATH));
         exit;
     }
 
@@ -138,7 +178,7 @@ if ($form->validate()) {
     Display::addFlash(
         Display::return_message($messageText, 'info', false)
     );
-    header('Location: ' . api_get_path(WEB_PATH));
+    header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
 

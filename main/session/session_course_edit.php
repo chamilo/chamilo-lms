@@ -36,81 +36,81 @@ $sql = "SELECT s.name, c.title
             sc.c_id ='".$courseId."'";
 $result = Database::query($sql);
 
-if (!list($session_name,$course_title) = Database::fetch_row($result)) {
-	header('Location: session_course_list.php?id_session='.$id_session);
-	exit();
+if (!list($session_name, $course_title) = Database::fetch_row($result)) {
+    header('Location: session_course_list.php?id_session='.$id_session);
+    exit();
 }
 
 //$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang("SessionList"));
-$interbreadcrumb[]=array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
-$interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_session","name" =>api_htmlentities($session_name, ENT_QUOTES, $charset));
+$interbreadcrumb[] = array('url' => "session_list.php", "name" => get_lang("SessionList"));
+$interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session, "name" => get_lang('SessionOverview'));
+$interbreadcrumb[] = array('url' => "session_course_list.php?id_session=$id_session", "name" =>api_htmlentities($session_name, ENT_QUOTES, $charset));
 
 $arr_infos = array();
 if (isset($_POST['formSent']) && $_POST['formSent']) {
-	$formSent = 1;
+    $formSent = 1;
 
-	// get all tutor by course_code in the session
-	$sql = "SELECT user_id
+    // get all tutor by course_code in the session
+    $sql = "SELECT user_id
 	        FROM $tbl_session_rel_course_rel_user
 	        WHERE session_id = '$id_session' AND c_id = '".$courseId."' AND status = 2";
-	$rs_coaches = Database::query($sql);
+    $rs_coaches = Database::query($sql);
 
-	$coaches_course_session = array();
-	if (Database::num_rows($rs_coaches) > 0){
-		while ($row_coaches = Database::fetch_row($rs_coaches)) {
-			$coaches_course_session[] = $row_coaches[0];
-		}
-	}
+    $coaches_course_session = array();
+    if (Database::num_rows($rs_coaches) > 0) {
+        while ($row_coaches = Database::fetch_row($rs_coaches)) {
+            $coaches_course_session[] = $row_coaches[0];
+        }
+    }
 
-	$id_coaches= $_POST['id_coach'];
+    $id_coaches = $_POST['id_coach'];
 
-	if (is_array($id_coaches) && count($id_coaches) > 0) {
+    if (is_array($id_coaches) && count($id_coaches) > 0) {
 
-		foreach ($id_coaches as $id_coach) {
-			$id_coach = intval($id_coach);
+        foreach ($id_coaches as $id_coach) {
+            $id_coach = intval($id_coach);
             $rs1 = SessionManager::set_coach_to_course_session(
                 $id_coach,
                 $id_session,
                 $courseId
             );
-		}
+        }
 
-		// set status to 0 other tutors from multiple list
-		$array_intersect = array_diff($coaches_course_session,$id_coaches);
+        // set status to 0 other tutors from multiple list
+        $array_intersect = array_diff($coaches_course_session, $id_coaches);
 
-		foreach ($array_intersect as $no_coach_user_id) {
-			$rs2 = SessionManager::set_coach_to_course_session(
-				$no_coach_user_id,
-				$id_session,
+        foreach ($array_intersect as $no_coach_user_id) {
+            $rs2 = SessionManager::set_coach_to_course_session(
+                $no_coach_user_id,
+                $id_session,
                 $courseId,
-				true
-			);
-		}
+                true
+            );
+        }
 
-		header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
-		exit();
-	}
+        header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
+        exit();
+    }
 } else {
-	$sql = "SELECT user_id
+    $sql = "SELECT user_id
 	        FROM $tbl_session_rel_course_rel_user
 	        WHERE
                 session_id = '$id_session' AND
                 c_id = '".$courseId."' AND
                 status = 2 ";
-	$rs = Database::query($sql);
+    $rs = Database::query($sql);
 
-	if (Database::num_rows($rs) > 0) {
-		while ($infos = Database::fetch_array($rs)) {
-			$arr_infos[] = $infos['user_id'];
-		}
-	}
+    if (Database::num_rows($rs) > 0) {
+        while ($infos = Database::fetch_array($rs)) {
+            $arr_infos[] = $infos['user_id'];
+        }
+    }
 }
 
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 
 if (api_is_multiple_url_enabled()) {
-    $tbl_access_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    $tbl_access_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $access_url_id = api_get_current_access_url_id();
     $sql = "SELECT u.user_id,lastname,firstname,username
             FROM $tbl_user u
@@ -152,8 +152,8 @@ api_display_tool_title($tool_name);
     <div class="col-md-12">
         <div class="title"></div>
         <?php
-            if(!empty($errorMsg)) {
-                Display::display_normal_message($errorMsg);
+            if (!empty($errorMsg)) {
+                echo Display::return_message($errorMsg);
             }
         ?>
     </div>
@@ -166,13 +166,13 @@ api_display_tool_title($tool_name);
 
         <select name="id_coach[]" class="form-control" multiple>
             <option value="0">----- <?php echo get_lang("Choose") ?> -----</option>
-            <option value="0" <?php if(count($arr_infos) == 0) echo 'selected="selected"'; ?>>
+            <option value="0" <?php if (count($arr_infos) == 0) echo 'selected="selected"'; ?>>
                 <?php echo get_lang('None') ?>
             </option>
             <?php
             foreach ($coaches as $enreg) {
                 ?>
-                <option value="<?php echo $enreg['user_id']; ?>" <?php if(((is_array($arr_infos) && in_array($enreg['user_id'], $arr_infos)))) echo 'selected="selected"'; ?>>
+                <option value="<?php echo $enreg['user_id']; ?>" <?php if (((is_array($arr_infos) && in_array($enreg['user_id'], $arr_infos)))) echo 'selected="selected"'; ?>>
                     <?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?>
                 </option>
             <?php

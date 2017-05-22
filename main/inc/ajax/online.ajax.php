@@ -12,7 +12,7 @@ switch ($action) {
     case 'load_online_user':
         $images_to_show = MAX_ONLINE_USERS;
         $page = intval($_REQUEST['online_page_nr']);
-        $max_page = ceil(who_is_online_count()/$images_to_show);
+        $max_page = ceil(who_is_online_count() / $images_to_show);
 
         $page_rows = ($page - 1) * MAX_ONLINE_USERS;
 

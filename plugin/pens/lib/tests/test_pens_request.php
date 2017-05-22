@@ -29,8 +29,8 @@
  * @licence http://www.gnu.org/licenses/gpl.txt
  */
 
-require_once("simpletest/autorun.php");
-require_once(dirname(__FILE__)."/../pens.php");
+require_once 'simpletest/autorun.php';
+require_once __DIR__.'/../pens.php';
 
 /**
  * Unit tests for the PENSRequest class

@@ -43,7 +43,7 @@
                                 {% elseif item.course_visibility == 3 %}
                                     <img src="{{ 'bullet_blue.png'|icon() }}" alt="{{ 'OpenToTheWorld'|get_lang }}" title="{{ 'OpenToTheWorld'|get_lang }}">
                                 {% elseif item.course_visibility == 4 %}
-                                    <img src="{{ 'bullet_gray.png'|icon() }}" alt="{{ 'CourseVisibilityHidden'|get_lang }}" title="{{ 'CourseVisibilityHidden'|get_lang }}">
+                                    <img src="{{ 'bullet_grey.png'|icon() }}" alt="{{ 'CourseVisibilityHidden'|get_lang }}" title="{{ 'CourseVisibilityHidden'|get_lang }}">
                                 {% endif %}
 
                                 <a href="{{ _p.web_course ~ item.course_code ~ '/index.php' }}">{{ item.course_title }}</a>

@@ -49,9 +49,9 @@ class Room
         global $_configuration;
         $this->name = 'C'.api_get_course_int_id().'-'.api_get_session_id();
         $accessUrl = api_get_access_url($_configuration['access_url']);
-        $this->externalRoomType = substr($accessUrl['url'], strpos($accessUrl['url'],'://')+3,-1);
+        $this->externalRoomType = substr($accessUrl['url'], strpos($accessUrl['url'], '://') + 3, -1);
         if (strcmp($this->externalRoomType, 'localhost') == 0) {
-            $this->externalRoomType = substr(api_get_path(WEB_PATH), strpos(api_get_path(WEB_PATH),'://')+3, -1);
+            $this->externalRoomType = substr(api_get_path(WEB_PATH), strpos(api_get_path(WEB_PATH), '://') + 3, -1);
         }
         $this->externalRoomType = 'chamilolms.'.$this->externalRoomType;
     }
@@ -110,6 +110,6 @@ class Room
         if (!isset($this->$attribute)) {
             return $voidReturn;
         }
-        return $this->$attribute?'true':'false';
+        return $this->$attribute ? 'true' : 'false';
     }
 }

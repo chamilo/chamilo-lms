@@ -35,10 +35,10 @@
  */
 
 // include internationalization stuff
-include_once(dirname(__FILE__) . '/languages/languages.php');
+include_once __DIR__.'/languages/languages.php';
 
 // include PGT storage classes
-include_once(dirname(__FILE__) . '/PGTStorage/pgt-main.php');
+include_once __DIR__.'/PGTStorage/pgt-main.php';
 
 /**
  * @class CASClient
@@ -240,10 +240,10 @@ class CASClient
     function setLang($lang)
     {
         // include the corresponding language file
-        include_once(dirname(__FILE__) . '/languages/' . $lang . '.php');
+        include_once __DIR__.'/languages/'.$lang.'.php';
 
         if (!is_array($this->_strings)) {
-            trigger_error('language `' . $lang . '\' is not implemented', E_USER_ERROR);
+            trigger_error('language `'.$lang.'\' is not implemented', E_USER_ERROR);
         }
         $this->_lang = $lang;
     }

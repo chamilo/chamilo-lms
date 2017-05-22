@@ -6,9 +6,7 @@
 * @author Arnaud Ligot, CBlue SPRL
 * @package chamilo.admin.cli
 */
-/**
- * Init section
- */
+
 // we are in the admin area so we do not need a course id
 $cidReset = true;
 // include global script
@@ -22,7 +20,7 @@ api_protect_admin_script();
 // setting the name of the tool
 $tool_name = get_lang('CommandLineInterpreter');
 // setting breadcrumbs
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 // including the header file (which includes the banner itself)
 Display :: display_header($tool_name);
 switch ($_GET["cmd"]) {

@@ -1,10 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session,
-    Chamilo\TicketBundle\Entity\Project as TicketProject,
-    Chamilo\TicketBundle\Entity\Category as TicketCategory,
-    Chamilo\TicketBundle\Entity\Priority as TicketPriority;
+use ChamiloSession as Session;
 
 /**
  * Chamilo installation
@@ -108,7 +105,7 @@ $charset = 'UTF-8';
 \Patchwork\Utf8\Bootup::initAll();
 
 // Page encoding initialization.
-header('Content-Type: text/html; charset='. $charset);
+header('Content-Type: text/html; charset='.$charset);
 
 // Setting the error reporting levels.
 error_reporting(E_ALL);
@@ -210,7 +207,7 @@ if ($installType == 'update' && in_array($my_old_version, $update_from_version_8
     // This is the main configuration file of the system before the upgrade.
     // Old configuration file.
     // Don't change to include_once
-    $oldConfigPath = api_get_path(SYS_CODE_PATH) . 'inc/conf/configuration.php';
+    $oldConfigPath = api_get_path(SYS_CODE_PATH).'inc/conf/configuration.php';
     if (file_exists($oldConfigPath)) {
         include $oldConfigPath;
     }
@@ -313,14 +310,14 @@ if ($encryptPassForm == '1') {
     <title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
     <style type="text/css" media="screen, projection">
         @import "../../web/assets/bootstrap/dist/css/bootstrap.min.css";
-        @import "../inc/lib/javascript/bootstrap-select/css/bootstrap-select.css";
+        @import "../../web/assets/bootstrap-select/dist/css/bootstrap-select.min.css";
         @import "../../web/assets/fontawesome/css/font-awesome.min.css";
         @import "../../web/css/base.css";
         @import "../../web/css/themes/chamilo/default.css";
     </style>
     <script type="text/javascript" src="../../web/assets/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="../../web/assets/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../inc/lib/javascript/bootstrap-select/js/bootstrap-select.min.js"></script>
+    <script src="../../web/assets/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
     <script type="text/javascript">
         $(document).ready( function() {
 
@@ -340,7 +337,7 @@ if ($encryptPassForm == '1') {
             //Blocking step6 button
             $("#button_step6").click(function() {
                 $("#button_step6").hide();
-                $("#button_please_wait").html('<?php echo addslashes(get_lang('PleaseWait'));?>');
+                $("#button_please_wait").html('<?php echo addslashes(get_lang('PleaseWait')); ?>');
                 $("#button_please_wait").show();
                 $("#button_please_wait").attr('disabled', true);
                 $("#is_executable").attr("value",'step6');
@@ -417,7 +414,7 @@ if ($encryptPassForm == '1') {
 
 $instalation_type_label = '';
 if ($installType == 'new') {
-    $instalation_type_label  = get_lang('NewInstallation');
+    $instalation_type_label = get_lang('NewInstallation');
 } elseif ($installType == 'update') {
     $update_from_version = isset($update_from_version) ? $update_from_version : null;
     $instalation_type_label = get_lang('UpdateFromLMSVersion').(is_array($update_from_version) ? implode('|', $update_from_version) : '');
@@ -587,8 +584,8 @@ if (@$_POST['step2']) {
 
     <?php
     if ($installType == 'new') {
-        echo get_lang('AdminLogin') . ' : <strong>' . $loginForm . '</strong><br />';
-        echo get_lang('AdminPass') . ' : <strong>' . $passForm . '</strong><br /><br />'; /* TODO: Maybe this password should be hidden too? */
+        echo get_lang('AdminLogin').' : <strong>'.$loginForm.'</strong><br />';
+        echo get_lang('AdminPass').' : <strong>'.$passForm.'</strong><br /><br />'; /* TODO: Maybe this password should be hidden too? */
     }
     $allowSelfRegistrationLiteral = ($allowSelfReg == 'true') ? get_lang('Yes') : ($allowSelfReg == 'approval' ? get_lang('Approval') : get_lang('No'));
     echo get_lang('AdminFirstName').' : '.$adminFirstName, '<br />', get_lang('AdminLastName').' : '.$adminLastName, '<br />';
@@ -600,7 +597,7 @@ if (@$_POST['step2']) {
     <?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
     <?php echo get_lang('DBPassword').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
     <?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong><br />
-    <?php echo get_lang('AllowSelfReg').' : '. $allowSelfRegistrationLiteral; ?><br />
+    <?php echo get_lang('AllowSelfReg').' : '.$allowSelfRegistrationLiteral; ?><br />
     <?php echo get_lang('EncryptMethodUserPass').' : ';
     echo $encryptPassForm;
     ?>
@@ -612,10 +609,11 @@ if (@$_POST['step2']) {
     <?php echo get_lang('ChamiloURL').' : '.$urlForm; ?><br /><br />
     <?php
     if ($installType == 'new') {
-        echo Display::display_warning_message(
+        echo Display::return_message(
             '<h4 style="text-align: center">'.get_lang(
                 'Warning'
             ).'</h4>'.get_lang('TheInstallScriptWillEraseAllTables'),
+            'warning',
             false
         );
     }
@@ -881,97 +879,6 @@ if (@$_POST['step2']) {
         $connection->executeQuery("ALTER TABLE faq_category_translation ADD CONSTRAINT FK_5493B0FC2C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES faq_category (id) ON DELETE CASCADE;");
         $connection->executeQuery("ALTER TABLE faq_question ADD CONSTRAINT FK_4A55B05912469DE2 FOREIGN KEY (category_id) REFERENCES faq_category (id);");
         */
-
-        // Add version table
-        $connection->executeQuery('CREATE TABLE IF NOT EXISTS version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(20), PRIMARY KEY(id), UNIQUE(version))');
-
-        // Tickets
-        $ticketProject = new TicketProject();
-        $ticketProject
-            ->setId(1)
-            ->setName('Ticket System')
-            ->setInsertUserId(1);
-
-        $manager->persist($ticketProject);
-        $manager->flush();
-
-        $categories = array(
-            get_lang('TicketEnrollment') => get_lang('TicketsAboutEnrollment'),
-            get_lang('TicketGeneralInformation') => get_lang('TicketsAboutGeneralInformation'),
-            get_lang('TicketRequestAndPapework') => get_lang('TicketsAboutRequestAndPapework'),
-            get_lang('TicketAcademicIncidence') => get_lang('TicketsAboutAcademicIncidence'),
-            get_lang('TicketVirtualCampus') => get_lang('TicketsAboutVirtualCampus'),
-            get_lang('TicketOnlineEvaluation') => get_lang('TicketsAboutOnlineEvaluation')
-        );
-
-        $i = 1;
-
-        /**
-         * @var string $category
-         * @var string $description
-         */
-        foreach ($categories as $category => $description) {
-            // Online evaluation requires a course
-            $ticketCategory = new TicketCategory();
-            $ticketCategory
-                ->setId($i)
-                ->setName($category)
-                ->setDescription($description)
-                ->setProject($ticketProject)
-                ->setInsertUserId(1);
-
-            $isRequired = $i == 6;
-            $ticketCategory->setCourseRequired($isRequired);
-
-            $manager->persist($ticketCategory);
-            $manager->flush();
-
-            $i++;
-        }
-
-        // Default Priorities
-        $defaultPriorities = array(
-            TicketManager::PRIORITY_NORMAL => get_lang('PriorityNormal'),
-            TicketManager::PRIORITY_HIGH => get_lang('PriorityHigh'),
-            TicketManager::PRIORITY_LOW => get_lang('PriorityLow')
-        );
-
-        $table = Database::get_main_table(TABLE_TICKET_PRIORITY);
-        $i = 1;
-        foreach ($defaultPriorities as $code => $priority) {
-            $ticketPriority = new TicketPriority();
-            $ticketPriority
-                ->setId($i)
-                ->setName($priority)
-                ->setCode($code)
-                ->setInsertUserId(1);
-
-            $manager->persist($ticketPriority);
-            $manager->flush();
-            $i++;
-        }
-
-        $table = Database::get_main_table(TABLE_TICKET_STATUS);
-
-        // Default status
-        $defaultStatus = array(
-            TicketManager::STATUS_NEW => get_lang('StatusNew'),
-            TicketManager::STATUS_PENDING => get_lang('StatusPending'),
-            TicketManager::STATUS_UNCONFIRMED => get_lang('StatusUnconfirmed'),
-            TicketManager::STATUS_CLOSE => get_lang('StatusClose'),
-            TicketManager::STATUS_FORWARDED => get_lang('StatusForwarded')
-        );
-
-        $i = 1;
-        foreach ($defaultStatus as $code => $status) {
-            $attributes = array(
-                'id' => $i,
-                'code' => $code,
-                'name' => $status
-            );
-            Database::insert($table, $attributes);
-            $i++;
-        }
 
         $sysPath = api_get_path(SYS_PATH);
 

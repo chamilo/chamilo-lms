@@ -2,15 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *  Class Matching
- *  Matching questions type class
+ * Class Matching
+ * Matching questions type class
  *
- *  This class allows to instantiate an object of
- *  type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER)
- *	extending the class question
+ * This class allows to instantiate an object of
+ * type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER)
+ * extending the class question
  *
- *	@author Eric Marguin
- *	@package chamilo.exercise
+ * @author Eric Marguin
+ * @package chamilo.exercise
  */
 class Matching extends Question
 {
@@ -28,22 +28,19 @@ class Matching extends Question
     }
 
     /**
-     * function which redefines Question::createAnswersForm
-     * @param FormValidator $form
+     * @inheritdoc
      */
     public function createAnswersForm($form)
     {
         $defaults = array();
         $nb_matches = $nb_options = 2;
         $matches = array();
-
         $answer = null;
         $counter = 1;
 
         if (isset($this->id)) {
             $answer = new Answer($this->id);
             $answer->read();
-
             if (count($answer->nbrAnswers) > 0) {
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     $correct = $answer->isCorrect($i);
@@ -72,12 +69,12 @@ class Matching extends Question
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     if ($answer->isCorrect($i)) {
                         $nb_matches++;
-                        $defaults['answer[' . $nb_matches . ']'] = $answer->selectAnswer($i);
-                        $defaults['weighting[' . $nb_matches . ']'] = float_format($answer->selectWeighting($i), 1);
-                        $defaults['matches[' . $nb_matches . ']'] = $answer->correct[$i];
+                        $defaults['answer['.$nb_matches.']'] = $answer->selectAnswer($i);
+                        $defaults['weighting['.$nb_matches.']'] = float_format($answer->selectWeighting($i), 1);
+                        $defaults['matches['.$nb_matches.']'] = $answer->correct[$i];
                     } else {
                         $nb_options++;
-                        $defaults['option[' . $nb_options . ']'] = $answer->selectAnswer($i);
+                        $defaults['option['.$nb_options.']'] = $answer->selectAnswer($i);
                     }
                 }
             }
@@ -108,10 +105,10 @@ class Matching extends Question
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th width="5%">' . get_lang('Number') . '</th>
-                    <th width="70%">' . get_lang('Answer') . '</th>
-                    <th width="15%">' . get_lang('MatchesTo') . '</th>
-                    <th width="10%">' . get_lang('Weighting') . '</th>
+                    <th width="5%">' . get_lang('Number').'</th>
+                    <th width="70%">' . get_lang('Answer').'</th>
+                    <th width="15%">' . get_lang('MatchesTo').'</th>
+                    <th width="10%">' . get_lang('Weighting').'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -121,12 +118,19 @@ class Matching extends Question
 
         if ($nb_matches < 1) {
             $nb_matches = 1;
-            Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+            Display::addFlash(
+                Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'))
+            );
         }
+
+        $editorConfig = array(
+            'ToolbarSet' => 'TestMatching',
+            'Width' => '100%',
+            'Height' => '125'
+        );
 
         for ($i = 1; $i <= $nb_matches; ++$i) {
             $renderer = &$form->defaultRenderer();
-
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
                 "answer[$i]"
@@ -143,27 +147,38 @@ class Matching extends Question
             );
 
             $form->addHtml('<tr>');
-
             $form->addHtml("<td>$i</td>");
-            $form->addText("answer[$i]", null);
-
-            $form->addSelect("matches[$i]", null, $matches);
-            $form->addText("weighting[$i]", null, true, ['value' => 10]);
-
+            //$form->addText("answer[$i]", null);
+            $form->addHtmlEditor(
+                "answer[$i]",
+                null,
+                null,
+                false,
+                $editorConfig
+            );
+            $form->addSelect(
+                "matches[$i]",
+                null,
+                $matches,
+                ['id' => 'matches_'.$i]
+            );
+            $form->addText(
+                "weighting[$i]",
+                null,
+                true,
+                ['id' => 'weighting_'.$i, 'value' => 10]
+            );
             $form->addHtml('</tr>');
         }
 
         $form->addHtml('</tbody></table>');
-        $group = array();
-
-        $form->addGroup($group);
 
         // DISPLAY OPTIONS
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th width="15%">' . get_lang('Number') . '</th>
-                    <th width="85%">' . get_lang('Answer') . '</th>
+                    <th width="15%">' . get_lang('Number').'</th>
+                    <th width="85%">' . get_lang('Answer').'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -172,34 +187,39 @@ class Matching extends Question
 
         if ($nb_options < 1) {
             $nb_options = 1;
-            Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+            Display::addFlash(
+                Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'))
+            );
         }
 
         for ($i = 1; $i <= $nb_options; ++$i) {
             $renderer = &$form->defaultRenderer();
-
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
                 "option[$i]"
             );
 
             $form->addHtml('<tr>');
-
-            $form->addHtml('<td>' . chr(64 + $i) . '</td>');
-            $form->addText("option[$i]", null);
+            $form->addHtml('<td>'.chr(64 + $i).'</td>');
+            $form->addHtmlEditor(
+                "option[$i]",
+                null,
+                null,
+                false,
+                $editorConfig
+            );
 
             $form->addHtml('</tr>');
         }
 
         $form->addHtml('</table>');
-        $group = array();
-        global $text;
 
+        global $text;
+        $group = array();
         // setting the save button here and not in the question class.php
         $group[] = $form->addButtonDelete(get_lang('DelElem'), 'lessOptions', true);
         $group[] = $form->addButtonCreate(get_lang('AddElem'), 'moreOptions', true);
         $group[] = $form->addButtonSave($text, 'submitQuestion', true);
-
         $form->addGroup($group);
 
         if (!empty($this->id)) {
@@ -228,7 +248,6 @@ class Matching extends Question
         $nb_options = $form->getSubmitValue('nb_options');
         $this->weighting = 0;
         $position = 0;
-
         $objAnswer = new Answer($this->id);
 
         // Insert the options
@@ -267,7 +286,7 @@ class Matching extends Question
     public function return_header($feedback_type = null, $counter = null, $score = null)
     {
         $header = parent::return_header($feedback_type, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class .'">';
+        $header .= '<table class="'.$this->question_table_class.'">';
         $header .= '<tr>
                 <th>'.get_lang('ElementList').'</th>
                 <th>'.get_lang('CorrespondsTo').'</th>
@@ -280,6 +299,8 @@ class Matching extends Question
      * Check if a answer is correct
      * @param int $position
      * @param int $answer
+     * @param int $questionId
+     *
      * @return bool
      */
     public static function isCorrect($position, $answer, $questionId)

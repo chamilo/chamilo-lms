@@ -18,16 +18,16 @@
                         {% endif %}
                         </a>
                     {% endif %}
-                {% endif %}
 
-                {% if type == 'all' %}
                     {% if post.parent %}
                         <h3>Parent</h3>
                         <a href="{{ post_url }}&post_id={{ post.parent.id }}">
                             {{ post.parent.title }}
                         </a>
                     {% endif %}
+                {% endif %}
 
+                {% if type == 'all' %}
                     {% if related_posts %}
                         <h3>Related</h3>
                          {% for post in related_posts %}

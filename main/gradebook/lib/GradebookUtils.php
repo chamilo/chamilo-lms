@@ -867,18 +867,18 @@ class GradebookUtils
         $course_code = trim($cat[0]->get_course_code());
 
         $displayscore = ScoreDisplay::instance();
-        $customdisplays = $displayscore->get_custom_score_display_settings();
+        $customDisplays = $displayscore->get_custom_score_display_settings();
 
         $total = array();
-        if (is_array($customdisplays) && count(($customdisplays))) {
-            foreach ($customdisplays as $custom) {
+        if (is_array($customDisplays) && count(($customDisplays))) {
+            foreach ($customDisplays as $custom) {
                 $total[$custom['display']] = 0;
             }
             $user_results = $flatviewtable->datagen->get_data_to_graph2(false);
             foreach ($user_results as $user_result) {
                 $item = $user_result[count($user_result) - 1];
-
-                $total[$item[1]]++;
+                $customTag = isset($item[1]) ? strip_tags($item[1]) : '';
+                $total[$customTag]++;
             }
         }
 
@@ -917,7 +917,6 @@ class GradebookUtils
         $table = new HTML_Table(array('class' => 'data_table'));
         $row = 0;
         $column = 0;
-
         $table->setHeaderContents($row, $column, get_lang('NumberAbbreviation'));
         $column++;
         foreach ($printable_data[0] as $printable_data_cell) {
@@ -968,7 +967,7 @@ class GradebookUtils
             'course_code' => $course_code,
             'add_signatures' => ['Drh', 'Teacher', 'Date']
         );
-exit;
+
         $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
         ob_start();
         $pdf = new PDF($page_format, $page_format, $pdfParams);

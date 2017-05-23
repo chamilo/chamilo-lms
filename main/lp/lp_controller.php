@@ -850,6 +850,15 @@ switch ($action) {
             require 'lp_list.php';
         }
         break;
+    case 'toggle_category_visibility':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+
+        learnpath::toggleCategoryVisibility($_REQUEST['id'], $_REQUEST['new_status']);
+
+        header('Location: '.api_get_self().'?'.api_get_cidreq());
+        exit;
     case 'toggle_visible':
         // Change lp visibility (inside lp tool).
         if (!$is_allowed_to_edit) {

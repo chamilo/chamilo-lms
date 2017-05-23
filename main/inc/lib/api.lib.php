@@ -109,6 +109,7 @@ define('TOOL_LINK_CATEGORY', 'link_category');
 define('TOOL_COURSE_DESCRIPTION', 'course_description');
 define('TOOL_SEARCH', 'search');
 define('TOOL_LEARNPATH', 'learnpath');
+define('TOOL_LEARNPATH_CATEGORY', 'learnpath_category');
 define('TOOL_AGENDA', 'agenda');
 define('TOOL_ANNOUNCEMENT', 'announcement');
 define('TOOL_FORUM', 'forum');

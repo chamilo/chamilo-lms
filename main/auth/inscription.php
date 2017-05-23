@@ -574,14 +574,24 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 
                 if ($termActivated === false) {
                     $blockButton = true;
-                    Display::addFlash(Display::return_message(get_lang('TermActivatedIsNeededDescription'), 'warning'));
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('TermActivatedIsNeededDescription'),
+                            'warning',
+                            false
+                        )
+                    );
                 }
 
                 if ($blockButton === false) {
                     if ((int)$userInfo['profile_completed'] !== 1) {
                         $blockButton = true;
                         Display::addFlash(
-                            Display::return_message(get_lang('TermYourProfileIsNotCompleted'), 'warning')
+                            Display::return_message(
+                                get_lang('TermYourProfileIsNotCompleted'),
+                                'warning',
+                                false
+                            )
                         );
                     }
                 }

@@ -1,6 +1,7 @@
 {% if show_footer == true %}
     {% include template ~ "/layout/footer.tpl" %}
 {% endif %}
+{% include template ~ '/layout/footer.js.tpl' %}
     <div class="modal fade" id="global-modal" tabindex="-1" role="dialog" aria-labelledby="global-modal-title" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">

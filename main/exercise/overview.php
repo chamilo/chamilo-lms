@@ -129,7 +129,7 @@ $visible_return = $objExercise->is_visible(
 
 // Exercise is not visible remove the button
 if ($visible_return['value'] == false) {
-    if ($is_allowed_to_edit) {
+    if ($isAllowedToEdit) {
         $message = Display::return_message(get_lang('ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher'), 'warning');
     } else {
         $message = $visible_return['message'];

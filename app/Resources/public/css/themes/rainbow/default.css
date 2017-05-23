@@ -739,14 +739,27 @@ legend{
     padding-bottom: 10px;
     color: #162a83;
 }
-.btn-exercise{
+.btn-exercise,
+.form-actions .btn-warning{
     background-color: #84bd00;
     border-color: #84bd00;
     border-radius: 0;
     font-weight: bold;
     font-size: 12px;
 }
-.btn-exercise:hover{
+.btn-exercise:hover,
+.form-actions .btn-warning:hover{
+    background-color: #772583;
+    border-color: #772583;
+}
+.form-actions .btn-info{
+    background-color: #162A83;
+    border-color: #162A83;
+    border-radius: 0;
+    font-weight: bold;
+    font-size: 12px;
+}
+.form-actions .btn-info:hover{
     background-color: #772583;
     border-color: #772583;
 }
@@ -772,6 +785,18 @@ legend{
 }
 .mejs-container.mejs-audio .mejs-controls{
     background: rgba(255,255,255,0.45)
+}
+#exercise-description.panel-default{
+    color: #162A83;
+}
+#exercise-description.panel-default{
+    border: none;
+}
+#exercise-description.panel-default .panel-heading{
+    background: none;
+}
+.bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn){
+    width: 350px;
 }
 /* Large desktop */
 @media (min-width: 1200px) {

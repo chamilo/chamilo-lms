@@ -4323,7 +4323,7 @@ class learnpath
             $tool
                 ->setCategory('authoring')
                 ->setCId($courseId)
-                ->setName($category->getName())
+                ->setName(strip_tags($category->getName()))
                 ->setLink($link)
                 ->setImage('lp_category.gif')
                 ->setVisibility(1)
@@ -4346,7 +4346,7 @@ class learnpath
 
         if ($setVisibility == 1 && $tool) {
             $tool
-                ->setName($category->getName())
+                ->setName(strip_tags($category->getName()))
                 ->setVisibility(1);
 
             $em->persist($tool);
@@ -4412,7 +4412,7 @@ class learnpath
             ")
             ->setParameters([
                 'course' => $courseId,
-                'name' => $category->getName(),
+                'name' => strip_tags($category->getName()),
                 'link' => "$link%"
             ])
             ->getResult();

@@ -151,7 +151,7 @@ if ($filteredCategoryId) {
         }
 
         $interbreadcrumb[] = ['name' => $nameTools, 'url' => api_get_self()];
-        $nameTools = $category->getName();
+        $nameTools = strip_tags($category->getName());
     }
 }
 

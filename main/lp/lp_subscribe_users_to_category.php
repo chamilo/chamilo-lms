@@ -36,7 +36,7 @@ $interbreadcrumb[] = array(
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('LearningPaths')
 );
-$interbreadcrumb[] = array('url' => '#', 'name' => $category->getName());
+$interbreadcrumb[] = array('url' => '#', 'name' => strip_tags($category->getName()));
 
 // Find course.
 $course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);

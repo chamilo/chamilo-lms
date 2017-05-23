@@ -91,6 +91,7 @@ echo '<div class="col-md-3">';
 echo $lp->return_new_tree();
 echo '</div>';
 echo '<div class="col-md-9">';
+echo '<div class="prerequisites">';
 $lpItem = new learnpathItem($_GET['id']);
 if (isset($is_success) && $is_success == true) {
     echo $lp->display_manipulate($_GET['id'], $lpItem->get_type());
@@ -100,5 +101,5 @@ if (isset($is_success) && $is_success == true) {
     echo $lp->display_item_prerequisites_form($_GET['id']);
 }
 echo '</div>';
-
+echo '</div>';
 Display::display_footer();

@@ -308,8 +308,16 @@ header{
     text-align:center;
     vertical-align:middle;
 }
+.radio input[type="radio"]{
+    margin-left: -25px;
+}
 input[type=checkbox], input[type=radio]{
-    margin: 8px 0 0;
+    margin: 6px 0 0;
+}
+.prerequisites input[type=radio]{
+    margin: 0 0 0 -25px;
+    vertical-align: middle;
+    height: 20px;
 }
 #gradebook_list .centered .badge-group {
     width: auto;

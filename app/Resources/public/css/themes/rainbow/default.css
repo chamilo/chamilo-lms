@@ -801,7 +801,29 @@ legend{
     background-color: #772583;
     border-color: #772583;
 }
-
+.exercise-btn{
+    margin-top: 10px;
+}
+.mejs-container.svg.mejs-audio{
+    width: 100%!important;
+    height: 250px!important;
+    margin-bottom: 30px;
+}
+.mejs-container.mejs-audio .mejs-layers{
+    background: url(images/audio-background.jpg) center center;
+    background-size: cover;
+    height: 250px!important;
+    width: 100%!important;
+}
+.mejs-container.mejs-audio .mejs-layers .mejs-poster.mejs-layer{
+    background: url(images/icon-sound.png) no-repeat center center;
+    display: inline-block !important;
+    height: 250px!important;
+    width: 100%!important;
+}
+.mejs-container.mejs-audio .mejs-controls{
+    background: rgba(255,255,255,0.45)
+}
 /* Large desktop */
 @media (min-width: 1200px) {
 

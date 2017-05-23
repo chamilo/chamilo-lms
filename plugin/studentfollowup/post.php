@@ -50,6 +50,9 @@ $relatedPosts = [];
 if ($post) {
     $qb = $em->createQueryBuilder();
     $criteria = Criteria::create();
+
+    $criteria->where(Criteria::expr()->eq('parent', $post->getId()));
+
     if ($showPrivate == false) {
         $criteria->andWhere(Criteria::expr()->eq('private', false));
     }
@@ -57,7 +60,7 @@ if ($post) {
     if (!empty($post->getParent())) {
         $criteria->andWhere(Criteria::expr()->eq('parent', $post->getParent()));
     }
-    $criteria->andWhere(Criteria::expr()->eq('parent', $post->getId()));
+
     $criteria->orWhere(Criteria::expr()->eq('id', $post->getId()));
 
     $qb
@@ -68,7 +71,6 @@ if ($post) {
         ->orderBy('p.createdAt', 'desc')
     ;
     $query = $qb->getQuery();
-    //var_dump($query->getSQL());
     $relatedPosts = $query->getResult();
 }
 //var_dump($post->getTitle());

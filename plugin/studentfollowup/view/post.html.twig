@@ -14,14 +14,8 @@
                         {% if countElements > 1 %}
                             {{ information_icon }} + {{ countElements }}
                         {% else %}
-                            {{ information_icon }}
+                            {{ information_icon }} + 1
                         {% endif %}
-                        </a>
-                    {% endif %}
-
-                    {% if post.parent %}
-                        <a href="{{ post_url }}&post_id={{ post.parent.id }}">
-                            {{ post.parent.title }}
                         </a>
                     {% endif %}
                 {% endif %}
@@ -78,7 +72,7 @@
 </div>
 
 <h2 class="text-center">
-    Care detail view - {{ student_info.complete_name }} - {{ post.title }}
+    {{ care_title }} - {{ student_info.complete_name }} - {{ post.title }}
     {% if post.parent %}
         {{ post.parent.title }}
     {% endif %}

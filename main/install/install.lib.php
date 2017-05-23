@@ -2918,14 +2918,31 @@ function finishInstallation(
     $files = $finder->files()->in($path);
 
     // Needed for chash
-    $sql = 'CREATE TABLE IF NOT EXISTS version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(255), PRIMARY KEY(id), UNIQUE(version));';
-    Database::query($sql);
+    createVersionTable();
 
     foreach ($files as $version) {
         $version = str_replace(['Version', '.php'], '', $version->getFilename());
         $sql = "INSERT INTO version (version) VALUES ('$version')";
         Database::query($sql);
     }
+}
+
+/**
+ * Creates 'version' table
+ */
+function createVersionTable()
+{
+    $sql = getVersionTable();
+    Database::query($sql);
+}
+
+/**
+ * Get version creation table query
+ * @return string
+ */
+function getVersionTable()
+{
+    return 'CREATE TABLE IF NOT EXISTS version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(20), PRIMARY KEY(id), UNIQUE(version));';
 }
 
 /**

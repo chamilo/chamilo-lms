@@ -272,6 +272,7 @@ class Version111 extends AbstractMigrationChamilo
                 $this->addSql('ALTER TABLE ticket_message_attachments ENGINE=InnoDB');
                 $this->addSql('ALTER TABLE ticket_message_attachments DROP message_attch_id, CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE message_id message_id INT DEFAULT NULL, CHANGE ticket_id ticket_id INT DEFAULT NULL, CHANGE filename filename LONGTEXT NOT NULL, CHANGE size size INT NOT NULL, CHANGE sys_insert_user_id sys_insert_user_id INT NOT NULL, CHANGE sys_insert_datetime sys_insert_datetime DATETIME NOT NULL, CHANGE sys_lastedit_user_id sys_lastedit_user_id INT DEFAULT NULL;');
                 $this->addSql('ALTER TABLE ticket_message_attachments ADD CONSTRAINT FK_70BF9E26700047D2 FOREIGN KEY (ticket_id) REFERENCES ticket_ticket (id);');
+                $this->addSql('ALTER TABLE ticket_message_attachments ADD CONSTRAINT FK_70BF9E26537A1329 FOREIGN KEY (message_id) REFERENCES ticket_message (id);');
                 $this->addSql('CREATE INDEX IDX_70BF9E26700047D2 ON ticket_message_attachments (ticket_id);');
             } else {
                 $this->addSql('CREATE TABLE IF NOT EXISTS ticket_message_attachments (id INT AUTO_INCREMENT NOT NULL, ticket_id INT DEFAULT NULL, message_id INT DEFAULT NULL, path VARCHAR(255) NOT NULL, filename LONGTEXT NOT NULL, size INT NOT NULL, sys_insert_user_id INT NOT NULL, sys_insert_datetime DATETIME NOT NULL, sys_lastedit_user_id INT DEFAULT NULL, sys_lastedit_datetime DATETIME DEFAULT NULL, INDEX IDX_70BF9E26700047D2 (ticket_id), INDEX IDX_70BF9E26537A1329 (message_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
@@ -318,7 +319,6 @@ class Version111 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_54B65868A76ED395 ON ticket_assigned_log (user_id);');
 
 
-
             $this->addSql('ALTER TABLE ticket_message DROP message_id, CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE ticket_id ticket_id INT DEFAULT NULL, CHANGE subject subject VARCHAR(255) DEFAULT NULL, CHANGE message message LONGTEXT DEFAULT NULL, CHANGE status status VARCHAR(255) NOT NULL, CHANGE ip_address ip_address VARCHAR(255) NOT NULL, CHANGE sys_insert_user_id sys_insert_user_id INT NOT NULL, CHANGE sys_insert_datetime sys_insert_datetime DATETIME NOT NULL, CHANGE sys_lastedit_user_id sys_lastedit_user_id INT DEFAULT NULL;');
             $this->addSql('ALTER TABLE ticket_message ADD CONSTRAINT FK_BA71692D700047D2 FOREIGN KEY (ticket_id) REFERENCES ticket_ticket (id);');
 
@@ -326,9 +326,6 @@ class Version111 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE ticket_ticket CHANGE category_id category_id INT DEFAULT NULL;');
             $this->addSql('ALTER TABLE ticket_ticket ADD CONSTRAINT FK_EDE2C76812469DE2 FOREIGN KEY (category_id) REFERENCES ticket_category (id);');
             $this->addSql('CREATE INDEX IDX_EDE2C76812469DE2 ON ticket_ticket (category_id);');
-            if ($fixTableMessage) {
-                $this->addSql('ALTER TABLE ticket_message_attachments ADD CONSTRAINT FK_70BF9E26537A1329 FOREIGN KEY (message_id) REFERENCES ticket_message (id);');
-            }
             $this->addSql('DELETE FROM settings_current WHERE title = "Ticket"');
         } else {
             // Plugin was never installed. Create ticket tables
@@ -403,7 +400,8 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE session MODIFY COLUMN name VARCHAR(150) NOT NULL DEFAULT ''");
 
         if (!$schema->hasTable('version')) {
-            $this->addSql('CREATE TABLE version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(255), PRIMARY KEY(id), UNIQUE(version));');
+            $sql = getVersionTable();
+            $this->addSql($sql);
         }
 
         if ($schema->hasTable('resource')) {

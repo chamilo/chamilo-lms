@@ -24,12 +24,12 @@ api_protect_course_script(true);
 $actions = array('listing', 'add', 'edit', 'delete', 'history');
 $action = 'listing';
 if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
-	$action = $_GET['action'];
+    $action = $_GET['action'];
 }
 
 $description_type = '';
 if (isset($_GET['description_type'])) {
-	$description_type = intval($_GET['description_type']);
+    $description_type = intval($_GET['description_type']);
 }
 
 $id = null;

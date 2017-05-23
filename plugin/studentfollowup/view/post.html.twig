@@ -20,25 +20,24 @@
                     {% endif %}
 
                     {% if post.parent %}
-                        <h3>Parent</h3>
                         <a href="{{ post_url }}&post_id={{ post.parent.id }}">
                             {{ post.parent.title }}
                         </a>
                     {% endif %}
                 {% endif %}
 
-                {% if type == 'all' %}
-                    {% if related_posts %}
-                        <h3>Related</h3>
-                         {% for post in related_posts %}
-                            <p>
-                                <a href="{{ post_url }}&post_id={{ post.id }}">
-                                {{ post.title }}
-                                </a>
-                            </p>
-                        {% endfor %}
-                    {% endif %}
-                {% endif %}
+                {#{% if type == 'all' %}#}
+                    {#{% if related_posts %}#}
+                        {#<h3>Related</h3>#}
+                         {#{% for post in related_posts %}#}
+                            {#<p>#}
+                                {#<a href="{{ post_url }}&post_id={{ post.id }}">#}
+                                {#{{ post.title }}#}
+                                {#</a>#}
+                            {#</p>#}
+                        {#{% endfor %}#}
+                    {#{% endif %}#}
+                {#{% endif %}#}
             </div>
 
             <div class="col-md-4">
@@ -60,15 +59,15 @@
             </div>
         </div>
     </div>
-    {% if post.children.count %}
-        {% for child in post.children %}
-            {{ _self.post_template('all', child) }}
-
-                {#<a href="{{ post_url }}&post_id={{ child.id }}">#}
-                {#{{ child.title }}#}
-                {#</a>#}
-        {% endfor %}
-    {% endif %}
+    {#{% if type == 'all' %}#}
+        {#{% if post.children.count %}#}
+            {#{% for child in post.children %}#}
+                {#{% if child.id != post.id %}#}
+                    {#{{ _self.post_template('all', child) }}#}
+                {#{% endif %}#}
+            {#{% endfor %}#}
+        {#{% endif %}#}
+    {#{% endif %}#}
 {% endif %}
 {% endmacro %}
 
@@ -78,6 +77,15 @@
     {{ back_link }}
 </div>
 
-<h2 class="text-center">Care detail view</h2>
+<h2 class="text-center">
+    Care detail view - {{ student_info.complete_name }} - {{ post.title }}
+    {% if post.parent %}
+        {{ post.parent.title }}
+    {% endif %}
+</h2>
 
-{{ template.post_template('all', post, information_icon, post_url, current_url, related_posts) }}
+{% for post in related_posts %}
+    {{ template.post_template('all', post, information_icon, post_url, current_url) }}
+{% endfor %}
+
+{#{{ template.post_template('all', post, information_icon, post_url, current_url, related_posts) }}#}

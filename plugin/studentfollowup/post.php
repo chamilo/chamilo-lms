@@ -35,34 +35,43 @@ if ($showPrivate == false) {
 
 $criteria->andWhere(Criteria::expr()->eq('id', $postId));
 $qb
-    ->select('p')
+    ->select('distinct p')
     ->from('ChamiloPluginBundle:StudentFollowUp\CarePost', 'p')
     ->addCriteria($criteria)
     ->setMaxResults(1)
 ;
 $query = $qb->getQuery();
+
 /** @var CarePost $post */
 $post = $query->getOneOrNullResult();
 
 // Get related posts (post with same parent)
 $relatedPosts = [];
-if ($post && !empty($post->getParent())) {
+if ($post) {
     $qb = $em->createQueryBuilder();
     $criteria = Criteria::create();
     if ($showPrivate == false) {
         $criteria->andWhere(Criteria::expr()->eq('private', false));
     }
-    $criteria->andWhere(Criteria::expr()->eq('parent', $post->getParent()));
-    $criteria->andWhere(Criteria::expr()->neq('id', $post->getId()));
+
+    if (!empty($post->getParent())) {
+        $criteria->andWhere(Criteria::expr()->eq('parent', $post->getParent()));
+    }
+    $criteria->andWhere(Criteria::expr()->eq('parent', $post->getId()));
+    $criteria->orWhere(Criteria::expr()->eq('id', $post->getId()));
+
     $qb
         ->select('p')
+        ->distinct()
         ->from('ChamiloPluginBundle:StudentFollowUp\CarePost', 'p')
         ->addCriteria($criteria)
         ->orderBy('p.createdAt', 'desc')
     ;
     $query = $qb->getQuery();
+    //var_dump($query->getSQL());
     $relatedPosts = $query->getResult();
 }
+//var_dump($post->getTitle());
 
 $tpl = new Template($plugin->get_lang('plugin_title'));
 $tpl->assign('post', $post);
@@ -77,6 +86,7 @@ $tpl->assign(
     )
 );
 $tpl->assign('information_icon', Display::return_icon('info.png'));
+$tpl->assign('student_info', api_get_user_info($studentId));
 
 $content = $tpl->fetch('/'.$plugin->get_name().'/view/post.html.twig');
 // Assign into content

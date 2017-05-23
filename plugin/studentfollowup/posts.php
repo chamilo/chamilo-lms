@@ -36,6 +36,7 @@ $pageSize = 2;
 
 $qb
     ->select('p')
+    ->distinct()
     ->from('ChamiloPluginBundle:StudentFollowUp\CarePost', 'p')
     ->addCriteria($criteria)
     ->setFirstResult($pageSize * ($currentPage - 1))
@@ -48,6 +49,7 @@ $posts = new Paginator($query, $fetchJoinCollection = true);
 
 $totalItems = count($posts);
 $pagesCount = ceil($totalItems / $pageSize);
+
 $pagination = '';
 $url = api_get_self().'?student_id='.$studentId;
 if ($totalItems > 1) {
@@ -70,7 +72,7 @@ $tpl->assign('current_url', $url);
 $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/post.php?student_id='.$studentId;
 $tpl->assign('post_url', $url);
 $tpl->assign('information_icon', Display::return_icon('info.png'));
-
+$tpl->assign('student_info', api_get_user_info($studentId));
 $tpl->assign('pagination', $pagination);
 $content = $tpl->fetch('/'.$plugin->get_name().'/view/posts.html.twig');
 // Assign into content

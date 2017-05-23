@@ -1235,7 +1235,7 @@ if (!empty($error)) {
             $remind_highlight = 'no_remind_highlight';
         }
 
-        $exercise_actions = '';
+        $btnExercise = '';
         $is_remind_on = false;
 
         $attributes = array('id' =>'remind_list['.$questionId.']');
@@ -1248,7 +1248,7 @@ if (!empty($error)) {
 
         // Showing the exercise description
         if (!empty($objExercise->description)) {
-            if ($objExercise->type == ONE_PER_PAGE || ($objExercise->type != ONE_PER_PAGE && $i == 1)) {
+            if ($objExercise->type == ONE_PER_PAGE || ($objExercise->type != ONE_PER_PAGE && $i == 1)) {               
                 echo Display::panelCollapse('<span>'.
                     get_lang('ExerciseDescriptionLabel').'</span>',
                     $objExercise->description,
@@ -1256,7 +1256,7 @@ if (!empty($error)) {
                     [],
                     'description',
                     'exercise-collapse',
-                    false,
+                    true,
                     true
                 );
             }
@@ -1282,7 +1282,7 @@ if (!empty($error)) {
         // Button save and continue
         switch ($objExercise->type) {
             case ONE_PER_PAGE:
-                $exercise_actions .= $objExercise->show_button($questionId, $current_question);
+                $btnExercise .= $objExercise->show_button($questionId, $current_question);
                 break;
             case ALL_ON_ONE_PAGE :
                 $button = [
@@ -1293,10 +1293,7 @@ if (!empty($error)) {
                     ),
                     '<span id="save_for_now_'.$questionId.'"></span>&nbsp;'
                 ];
-                $exercise_actions .= Display::div(
-                    implode(PHP_EOL, $button),
-                    array('class'=>'exercise_save_now_button')
-                );
+                $btnExercise .= implode(PHP_EOL, $button);
                 break;
         }
 
@@ -1315,9 +1312,9 @@ if (!empty($error)) {
                     'for' => 'remind_list['.$questionId.']'
                 )
             );
-            $exercise_actions .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));
+            $btnExercise .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));
         }
-        echo Display::div($exercise_actions, array('class'=>'form-actions'));
+        //echo $exercise_actions;
         echo '</div>';
 
         $i++;
@@ -1328,10 +1325,10 @@ if (!empty($error)) {
         }
     }
     // end foreach()
+    $endExercise = '';
     if ($objExercise->type == ALL_ON_ONE_PAGE) {
-    	$exercise_actions = $objExercise->show_button($questionId, $current_question);
-    	echo Display::div($exercise_actions, array('class'=>'exercise_actions'));
-        echo '<br>';
+    	$endExercise = $objExercise->show_button($questionId, $current_question);
+        echo '<div class="form-actions">'.$endExercise.$btnExercise.'</div>';
     }
     echo '</form>';
 

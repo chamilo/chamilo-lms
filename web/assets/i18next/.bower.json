@@ -1,0 +1,31 @@
+{
+  "name": "i18next",
+  "main": "./i18next.min.js",
+  "dependencies": {},
+  "ignore": [
+    "test/",
+    "dist/",
+    "src/",
+    "coverage/",
+    ".babelrc",
+    ".gitignore",
+    ".editorconfig",
+    ".eslintignore",
+    ".eslintrc",
+    ".npmignore",
+    "gulpfile.js",
+    "package.json",
+    "karma.conf.js"
+  ],
+  "homepage": "https://github.com/i18next/i18next",
+  "version": "8.2.1",
+  "_release": "8.2.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v8.2.1",
+    "commit": "030a200df42689ebdc0f334a0fc6f3deb22e6e82"
+  },
+  "_source": "https://github.com/i18next/i18next.git",
+  "_target": ">=2.4.0",
+  "_originalSource": "i18next"
+}

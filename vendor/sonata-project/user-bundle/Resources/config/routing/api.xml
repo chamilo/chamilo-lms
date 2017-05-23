@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://friendsofsymfony.github.com/schema/rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://friendsofsymfony.github.com/schema/rest https://raw.github.com/FriendsOfSymfony/FOSRestBundle/master/Resources/config/schema/routing/rest_routing-1.0.xsd">
+    <import type="rest" resource="sonata.user.controller.api.user" name-prefix="sonata_api_user_user_"/>
+    <import type="rest" resource="sonata.user.controller.api.group" name-prefix="sonata_api_user_group_"/>
+</routes>

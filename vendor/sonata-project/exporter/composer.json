@@ -1,0 +1,55 @@
+{
+    "name": "sonata-project/exporter",
+    "description": "Lightweight Exporter library",
+    "keywords": ["export", "csv", "xls", "data", "client"],
+    "homepage": "https://github.com/sonata-project/Exporter",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Rabaix",
+            "email": "thomas.rabaix@gmail.com",
+            "homepage": "https://sonata-project.org/"
+        }
+    ],
+    "require": {
+        "php": "^5.3 || ^7.0"
+    },
+    "require-dev": {
+        "doctrine/dbal": "^2.2",
+        "matthiasnoback/symfony-config-test": "^1.2.1 || ^2.0",
+        "matthiasnoback/symfony-dependency-injection-test": "^0.7.6 || ^1.0",
+        "propel/propel1": "^1.6",
+        "sllh/php-cs-fixer-styleci-bridge": "^2.0",
+        "symfony/dependency-injection": "^2.3 || ^3.0",
+        "symfony/http-foundation": "^2.3 || ^3.0",
+        "symfony/http-kernel": "^2.3 || ^3.0",
+        "symfony/phpunit-bridge": "^2.7 || ^3.0",
+        "symfony/property-access": "^2.3 || ^3.0",
+        "symfony/routing": "^2.3 || ^3.0"
+    },
+    "suggest": {
+        "ext-curl": "*",
+        "propel/propel1": "^1.6",
+        "symfony/property-access": "^2.3 || ^3.0",
+        "symfony/routing": "^2.3 || ^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Exporter\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Exporter\\Test\\": "test/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    }
+}

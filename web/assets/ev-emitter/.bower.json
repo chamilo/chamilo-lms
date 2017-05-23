@@ -1,0 +1,38 @@
+{
+  "name": "ev-emitter",
+  "main": "ev-emitter.js",
+  "homepage": "https://github.com/metafizzy/ev-emitter",
+  "authors": [
+    "David DeSandro <desandrocodes@gmail.com>"
+  ],
+  "description": "lil' event emitter",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "event",
+    "emitter",
+    "pubsub"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "sandbox"
+  ],
+  "version": "1.0.3",
+  "_release": "1.0.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.3",
+    "commit": "049cc4a5f5a61642f7333f352b1ef1530636f697"
+  },
+  "_source": "https://github.com/metafizzy/ev-emitter.git",
+  "_target": "~1.0.0",
+  "_originalSource": "ev-emitter"
+}

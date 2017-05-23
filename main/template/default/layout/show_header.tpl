@@ -34,6 +34,11 @@
     </div>
 {% endif %}
 {% include template ~ "/layout/page_header.tpl" %}
+{% if show_course_shortcut is not null %}
+    <div class="nav-tools">
+        {{ show_course_shortcut }}
+    </div>
+{% endif %}
 <section id="content-section">
     <div class="container">
         {% block breadcrumb %}

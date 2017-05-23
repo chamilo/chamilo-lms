@@ -141,6 +141,20 @@ $userId = api_get_user_id();
 $userInfo = api_get_user_info();
 $lpIsShown = false;
 
+$filteredCategoryId = $action === 'view_category' && !empty($_GET['id']);
+
+if ($filteredCategoryId) {
+    /** @var CLpCategory $category */
+    foreach ($categories as $category) {
+        if ($category->getId() != $filteredCategoryId) {
+            continue;
+        }
+
+        $interbreadcrumb[] = ['name' => $nameTools, 'url' => api_get_self()];
+        $nameTools = $category->getName();
+    }
+}
+
 $test_mode = api_get_setting('server_type');
 $user = UserManager::getRepository()->find($userId);
 
@@ -149,13 +163,8 @@ $data = [];
 foreach ($categories as $item) {
     $categoryId = $item->getId();
 
-    if (!$is_allowed_to_edit) {
-        $users = $item->getUsers();
-        if (!empty($users) && $users->count() > 0) {
-            if (!$item->hasUserAdded($user)) {
-                continue;
-            }
-        }
+    if (!learnpath::categoryIsVisibleForStudent($item, $user)) {
+        continue;
     }
 
     $list = new LearnpathList(
@@ -848,6 +857,10 @@ foreach ($categories as $item) {
             $item->getId(),
             $current_session
         ),
+        'category_is_published' => learnpath::categoryIsPusblished(
+            $item,
+            $courseInfo['real_id']
+        ),
         'lp_list' => $listData
     ];
 }
@@ -861,6 +874,7 @@ $template->assign('message', $message);
 $template->assign('introduction_section', $introductionSection);
 $template->assign('data', $data);
 $template->assign('lp_is_shown', $lpIsShown);
+$template->assign('filtered_category', $filteredCategoryId);
 $templateName = $template->get_template('learnpath/list.tpl');
 $content = $template->fetch($templateName);
 $template->assign('content', $content);

@@ -334,9 +334,11 @@ if (isset($_SESSION['oLP'])) {
 }
 
 if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
-    if (isset($_REQUEST['action']) && !in_array($_REQUEST['action'], ['list', 'view'])) {
+    if (isset($_REQUEST['action']) && !in_array($_REQUEST['action'], ['list', 'view', 'view_category'])) {
         if (!empty($_REQUEST['lp_id'])) {
             $_REQUEST['action'] = 'view';
+        } elseif($_REQUEST['action'] == 'view_category') {
+            $_REQUEST['action'] = 'view_category';
         } else {
             $_REQUEST['action'] = 'list';
         }
@@ -872,6 +874,14 @@ switch ($action) {
             learnpath::toggle_visibility($_REQUEST['lp_id'], $_REQUEST['new_status']);
             require 'lp_list.php';
         }
+        break;
+    case 'toggle_category_publish':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+
+        learnpath::toggleCategoryPublish($_REQUEST['id'], $_REQUEST['new_status']);
+        require 'lp_list.php';
         break;
     case 'toggle_publish':
         // Change lp published status (visibility on homepage).

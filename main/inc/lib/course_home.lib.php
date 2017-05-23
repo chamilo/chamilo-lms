@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 
 /**
  * Class CourseHome
@@ -461,6 +462,8 @@ class CourseHome
         // Condition for the session
         $session_id = $sessionId ?: api_get_session_id();
         $course_id = $courseId ?: api_get_course_int_id();
+        $userId = api_get_user_id();
+        $user = api_get_user_entity($userId);
         $condition_session = api_get_session_condition(
             $session_id,
             true,
@@ -572,18 +575,28 @@ class CourseHome
                 $lp = new learnpath(
                     api_get_course_id(),
                     $lp_id,
-                    api_get_user_id()
+                    $userId
                 );
                 $path = $lp->get_preview_image_path(ICON_SIZE_BIG);
                 $add = learnpath::is_lp_visible_for_student(
                     $lp_id,
-                    api_get_user_id(),
+                    $userId,
                     api_get_course_id(),
                     api_get_session_id()
                 );
                 if ($path) {
                     $temp_row['custom_image'] = $path;
                 }
+            }
+
+            if ($temp_row['image'] === 'lp_category.gif') {
+                $lpCategory = self::getPublishedLpCategoryFromLink(
+                    $temp_row['link']
+                );
+                $add = learnpath::categoryIsVisibleForStudent(
+                    $lpCategory,
+                    $user
+                );
             }
 
             if ($add) {
@@ -675,7 +688,7 @@ class CourseHome
                                       WHERE blog_id =".$blog_id;
                     } else {
                         $sql_blogs = "SELECT * FROM $tbl_blogs_rel_user blogs_rel_user
-                                      WHERE blog_id =".$blog_id." AND user_id = ".api_get_user_id();
+                                      WHERE blog_id =".$blog_id." AND user_id = ".$userId;
                     }
                     $result_blogs = Database::query($sql_blogs);
 
@@ -1171,6 +1184,25 @@ class CourseHome
         }
 
         return $lp_id;
+    }
+
+    /**
+     * Get published learning path category from link inside course home
+     * @param string $link
+     * @return CLpCategory
+     */
+    public static function getPublishedLpCategoryFromLink($link)
+    {
+        $query = parse_url($link, PHP_URL_QUERY);
+        parse_str($query, $params);
+
+        $id = isset($params['id']) ? (int) $params['id'] : 0;
+
+        $em = Database::getManager();
+        /** @var CLpCategory $category */
+        $category = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+
+        return $category;
     }
 
     /**

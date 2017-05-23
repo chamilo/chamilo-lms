@@ -18,27 +18,27 @@ if (api_is_allowed_to_edit(null, true)) {
     }
     $categories[ADD_BLOCK] = get_lang('NewBloc');
 
-	$i = 1;
-	echo '<div class="actions" style="margin-bottom:30px">';
-	ksort($categories);
-	foreach ($categories as $id => $title) {
-		if ($i == ADD_BLOCK) {
-			echo '<a href="index.php?'.api_get_cidreq().'&action=add">'.
+    $i = 1;
+    echo '<div class="actions" style="margin-bottom:30px">';
+    ksort($categories);
+    foreach ($categories as $id => $title) {
+        if ($i == ADD_BLOCK) {
+            echo '<a href="index.php?'.api_get_cidreq().'&action=add">'.
                 Display::return_icon($default_description_icon[$id], $title, '', ICON_SIZE_MEDIUM).'</a>';
-			break;
-		} else {
-			echo '<a href="index.php?action=edit&'.api_get_cidreq().'&description_type='.$id.'">'.
+            break;
+        } else {
+            echo '<a href="index.php?action=edit&'.api_get_cidreq().'&description_type='.$id.'">'.
                 Display::return_icon($default_description_icon[$id], $title, '', ICON_SIZE_MEDIUM).'</a>';
-			$i++;
-		}
-	}
-	echo '</div>';
+            $i++;
+        }
+    }
+    echo '</div>';
 }
 $history = isset($history) ? $history : null;
 
 // display course description list
 if ($history) {
-	echo '<div>
+    echo '<div>
         <table width="100%">
             <tr>
                 <td><h3>'.get_lang('ThematicAdvanceHistory').'</h3></td>
@@ -49,7 +49,7 @@ if ($history) {
 $user_info = api_get_user_info();
 
 if (isset($descriptions) && count($descriptions) > 0) {
-	foreach ($descriptions as $id => $description) {
+    foreach ($descriptions as $id => $description) {
         if (!empty($description)) {
             $actions = '';
             if (api_is_allowed_to_edit(null, true) && !$history) {

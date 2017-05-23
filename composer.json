@@ -43,7 +43,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4",
+        "php": ">=5.5",
         "ext-intl": "*",
         "ext-gd": "*",
         "ext-curl": "*",
@@ -90,7 +90,6 @@
         "ircmaxell/password-compat": "~1.0.4",
         "sylius/attribute": "0.13.0",
         "sylius/translation": "0.13.0",
-        "ramsey/array_column": "~1.1",
         "patchwork/utf8": "~1.2",
         "ddeboer/data-import": "@stable",
         "phpoffice/phpexcel": "~1.8",
@@ -106,12 +105,13 @@
         "knplabs/doctrine-behaviors": "~1.1",
         "jimmiw/php-time-ago": "^0.4.14",
         "phpoffice/phpword": "^0.12.1|dev-master",
-        "facebook/php-sdk-v4" : "~5.0",
-        "kigkonsult/icalcreator" : "0.1.0",
+        "facebook/php-sdk-v4": "~5.0",
+        "kigkonsult/icalcreator": "0.1.0",
         "essence/essence": "2.6.1",
         "pclzip/pclzip": "2.8.2",
         "chamilo/chash": "dev-master",
-        "ircmaxell/random-lib": "^1.2"
+        "ircmaxell/random-lib": "^1.2",
+        "ocramius/proxy-manager": "~1.0|2.0.*"
     },
     "require-dev": {
         "behat/behat": "@stable",
@@ -151,6 +151,6 @@
         }
     },
     "config": {
-      "component-dir": "web/assets"
+        "component-dir": "web/assets"
     }
 }

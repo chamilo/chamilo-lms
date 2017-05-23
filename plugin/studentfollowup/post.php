@@ -51,14 +51,14 @@ if ($post) {
     $qb = $em->createQueryBuilder();
     $criteria = Criteria::create();
 
-    $criteria->where(Criteria::expr()->eq('parent', $post->getId()));
+    if (!empty($post->getParent())) {
+        $criteria->where(Criteria::expr()->in('parent', [$post->getParent()->getId(), $post->getId()]));
+    } else {
+        $criteria->where(Criteria::expr()->eq('parent', $post->getId()));
+    }
 
     if ($showPrivate == false) {
         $criteria->andWhere(Criteria::expr()->eq('private', false));
-    }
-
-    if (!empty($post->getParent())) {
-        $criteria->andWhere(Criteria::expr()->eq('parent', $post->getParent()));
     }
 
     $criteria->orWhere(Criteria::expr()->eq('id', $post->getId()));

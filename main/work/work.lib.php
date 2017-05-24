@@ -4587,9 +4587,10 @@ function getFormWork($form, $defaults = array(), $workId = 0)
         $form->addHtml('<div id="option2" style="display: none;">');
     }
 
-    $currentDate = substr(api_get_local_time(), 0, 10);
+    $timeNextWeek = time()+86400*7;
+    $nextWeek = substr(api_get_local_time($timeNextWeek), 0, 10);
     if (!isset($defaults['expires_on'])) {
-        $date = substr($currentDate, 0, 10);
+        $date = substr($nextWeek, 0, 10);
         $defaults['expires_on'] = $date.' 23:59';
     }
 
@@ -4598,8 +4599,8 @@ function getFormWork($form, $defaults = array(), $workId = 0)
     $form->addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'id="end_date"');
 
     if (!isset($defaults['ends_on'])) {
-        $tomorrow = substr(api_get_local_time(time()+86400), 0, 10);
-        $date = substr($tomorrow, 0, 10);
+        $nextDay = substr(api_get_local_time($timeNextWeek+86400), 0, 10);
+        $date = substr($nextDay, 0, 10);
         $defaults['ends_on'] = $date.' 23:59';
     }
     if (isset($defaults['enableEndDate']) && $defaults['enableEndDate']) {

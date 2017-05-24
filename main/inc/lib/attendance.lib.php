@@ -1985,8 +1985,10 @@ class Attendance
 
         $sessionId = api_get_session_id();
         $courseCode = api_get_course_id();
+        $courseId = api_get_course_int_id();
+
         if (!empty($sessionId)) {
-            $users = CourseManager:: get_user_list_from_course_code(
+            $users = CourseManager::get_user_list_from_course_code(
                 $courseCode,
                 $sessionId,
                 '',
@@ -1994,7 +1996,7 @@ class Attendance
                 0
             );
         } else {
-            $users = CourseManager:: get_user_list_from_course_code(
+            $users = CourseManager::get_user_list_from_course_code(
                 $courseCode,
                 0,
                 '',
@@ -2023,7 +2025,7 @@ class Attendance
         }
 
         $accessData = CourseManager::getCourseAccessPerCourseAndSession(
-            $courseCode,
+            $courseId,
             $sessionId,
             $dateTimeStartOriginal->format('Y-m-d H:i:s'),
             $dateTimeEnd->format('Y-m-d H:i:s')
@@ -2144,16 +2146,7 @@ class Attendance
             $row++;
         }
 
-        //$tableToString = null;
-
-        //$sessionInfo = api_get_session_info(api_get_session_id());
-        //if (!empty($sessionInfo)) {
-        /*$tableToString .= '<strong>'.get_lang('PeriodToDisplay').'</strong>: '.
-            sprintf(get_lang('FromDateXToDateY'), $startDate, $endDate);*/
-        //}
-
         $tableToString = $table->toHtml();
-
         $params = array(
             'filename' => get_lang('Attendance').'_'.api_get_utc_datetime(),
             'pdf_title' => get_lang('Attendance'),

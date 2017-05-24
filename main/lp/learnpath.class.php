@@ -10598,7 +10598,12 @@ EOD;
         );
     }
 
-    public function verify_document_size($s)
+    /**
+     * Verify document size
+     * @param string $s
+     * @return bool
+     */
+    public static function verify_document_size($s)
     {
         $post_max = ini_get('post_max_size');
         if (substr($post_max, -1, 1) == 'M') {

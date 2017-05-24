@@ -22,72 +22,72 @@
  * @source: https://github.com/kogmbh/WebODF/
  */
 
-/*global define,require*/
+/*global define, require, gui*/
 
 define("webodf/editor/widgets/zoomSlider", [
-    "dijit/form/HorizontalSlider",
-    "dijit/form/NumberTextBox",
-    "webodf/editor/EditorSession"],
+    "dijit/form/HorizontalSlider"],
 
-    function (HorizontalSlider, NumberTextBox, EditorSession) {
-    "use strict";
+    function (HorizontalSlider) {
+        "use strict";
 
-    // The slider zooms from -1 to +1, which corresponds
-    // to zoom levels of 1/extremeZoomFactor to extremeZoomFactor.
-    return function ZoomSlider(callback) {
-        var self = this,
-            editorSession,
-            slider,
-            extremeZoomFactor = 4;
+        // The slider zooms from -1 to +1, which corresponds
+        // to zoom levels of 1/extremeZoomFactor to extremeZoomFactor.
+        return function ZoomSlider(callback) {
+            var self = this,
+                editorSession,
+                slider,
+                extremeZoomFactor = 4;
 
-        function updateSlider(zoomLevel) {
-            slider.set('value', Math.log(zoomLevel) / Math.log(extremeZoomFactor), false);
-        }
-
-        this.setEditorSession = function(session) {
-            var zoomHelper;
-            if (editorSession) {
-                editorSession.getOdfCanvas().getZoomHelper().unsubscribe(gui.ZoomHelper.signalZoomChanged, updateSlider);
+            function updateSlider(zoomLevel) {
+                slider.set('value', Math.log(zoomLevel) / Math.log(extremeZoomFactor), false);
             }
 
-            editorSession = session;
-            if (editorSession) {
-                zoomHelper = editorSession.getOdfCanvas().getZoomHelper();
-                zoomHelper.subscribe(gui.ZoomHelper.signalZoomChanged, updateSlider);
-                updateSlider(zoomHelper.getZoomLevel());
-            }
-            slider.setAttribute('disabled', !editorSession);
-        };
-
-        this.onToolDone = function () {};
-
-        // init
-        function init() {
-            slider = new HorizontalSlider({
-                name: 'zoomSlider',
-                disabled: true,
-                value: 0,
-                minimum: -1,
-                maximum: 1,
-                discreteValues: 0.01,
-                intermediateChanges: true,
-                style: {
-                    width: '150px',
-                    height: '25px',
-                    float: 'right'
-                }
-            });
-
-            slider.onChange = function (value) {
+            this.setEditorSession = function (session) {
+                var zoomHelper;
                 if (editorSession) {
-                    editorSession.getOdfCanvas().getZoomHelper().setZoomLevel(Math.pow(extremeZoomFactor, value));
+                    editorSession.getOdfCanvas().getZoomHelper().unsubscribe(gui.ZoomHelper.signalZoomChanged, updateSlider);
                 }
-                self.onToolDone();
+
+                editorSession = session;
+                if (editorSession) {
+                    zoomHelper = editorSession.getOdfCanvas().getZoomHelper();
+                    zoomHelper.subscribe(gui.ZoomHelper.signalZoomChanged, updateSlider);
+                    updateSlider(zoomHelper.getZoomLevel());
+                }
+                slider.setAttribute('disabled', !editorSession);
             };
 
-            return callback(slider);
-        }
+            /*jslint emptyblock: true*/
+            this.onToolDone = function () {};
+            /*jslint emptyblock: false*/
 
-        init();
-    };
-});
+            // init
+            function init() {
+                slider = new HorizontalSlider({
+                    name: 'zoomSlider',
+                    disabled: true,
+                    value: 0,
+                    minimum: -1,
+                    maximum: 1,
+                    discreteValues: 0.01,
+                    intermediateChanges: true,
+                    style: {
+                        width: '150px',
+                        height: '25px',
+                        float: 'right'
+                    }
+                });
+
+                slider.onChange = function (value) {
+                    if (editorSession) {
+                        editorSession.getOdfCanvas().getZoomHelper().setZoomLevel(Math.pow(extremeZoomFactor, value));
+                    }
+                    self.onToolDone();
+                };
+
+                return callback(slider);
+            }
+
+            init();
+        };
+    });

@@ -1,5 +1,4 @@
 /**
- * @license
  * Copyright (C) 2014 KO GmbH <copyright@kogmbh.com>
  *
  * @licstart
@@ -42,7 +41,7 @@ define("webodf/editor/FullWindowZoomHelper", [], function () {
             canvasContainerElement.style.top = toolbarContainerElement.getBoundingClientRect().height + 'px';
         }
 
-        this.destroy = function(callback) {
+        this.destroy = function (callback) {
             window.removeEventListener('scroll', translateToolbar);
             window.removeEventListener('focusout', translateToolbar);
             window.removeEventListener('touchmove', translateToolbar);

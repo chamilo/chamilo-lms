@@ -1,28 +1,32 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * ODF document editor script (maybe unused)
+ * ODF document editor script
  * @package chamilo.document
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-//exit;
-$document_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+
+$documentId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $courseCode = api_get_course_id();
 
-if (!$document_id) {
+if (!$documentId) {
     api_not_allowed();
 }
 
-$document_data = DocumentManager::get_document_data_by_id($document_id, $courseCode, true);
+$documentInfo = DocumentManager::get_document_data_by_id(
+    $documentId,
+    $courseCode,
+    true
+);
 
-if (empty($document_data)) {
+if (empty($documentInfo)) {
     api_not_allowed();
 }
 
 //Check user visibility
 $is_visible = DocumentManager::check_visibility_tree(
-    $document_id,
+    $documentId,
     api_get_course_id(),
     api_get_session_id(),
     api_get_user_id(),
@@ -33,38 +37,39 @@ if (!api_is_allowed_to_edit() && !$is_visible) {
     api_not_allowed(true);
 }
 
-$header_file  = $document_data['path'];
-$pathinfo = pathinfo($header_file);
-$show_web_odf = false;
-$web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
+$headerFile = $documentInfo['path'];
+$pathinfo = pathinfo($headerFile);
+$showOdfEditor = false;
+$webOdfSupportedFiles = DocumentManager::get_web_odf_extension_list();
 
 if (
-    in_array(strtolower($pathinfo['extension']), $web_odf_supported_files) &&
+    in_array(strtolower($pathinfo['extension']), $webOdfSupportedFiles) &&
     api_get_configuration_value('enabled_support_odf') === true
 ) {
-    $show_web_odf = true;
+    $showOdfEditor = true;
 }
 
-$file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file;
+$fileUrl = api_get_path(WEB_COURSE_PATH)
+    .$_course['path'].'/document'.$headerFile;
 
-if (!$show_web_odf) {
+if (!$showOdfEditor) {
     api_not_allowed(true);
 }
 
-$parent_id = $document_data['parent_id'];
+$parentId = $documentInfo['parent_id'];
 
-if (!$parent_id) {
+if (!$parentId) {
     $testParentId = 0;
     // Get parent id from current path
-    if (!empty($document_data['path'])) {
+    if (!empty($documentInfo['path'])) {
         $testParentId = DocumentManager::get_document_id(
             api_get_course_info(),
-            dirname($document_data['path']),
+            dirname($documentInfo['path']),
             0
         );
     }
 
-    $parent_id = !empty($testParentId) ? $testParentId : 0;
+    $parentId = !empty($testParentId) ? $testParentId : 0;
 }
 
 //$htmlHeadXtra[] = api_get_js('webodf/webodf.js');
@@ -74,17 +79,17 @@ $htmlHeadXtra[] = api_get_js('wodotexteditor/FileSaver.js');
 $htmlHeadXtra[] = '
     <script type="text/javascript" charset="utf-8">
         $(document).on(\'ready\', function() {
-            createEditor(\''.$file_url_web.'\');
+            createEditor(\''.$fileUrl.'\');
         });
     </script>
 ';
 $htmlHeadXtra[] = '
     <style>
         #editorContainer {
-            width:100%;
-            height:100%;
-            margin:0px;
-            padding:0px;
+            width: 100%;
+            height: 600px;
+            margin: 0px;
+            padding: 0px;
         }
     </style>
 ';
@@ -95,9 +100,9 @@ $interbreadcrumb[] = [
     'name' => get_lang('Documents')
 ];
 
-if (!empty($document_data['parents'])) {
-    foreach($document_data['parents'] as $documentParent) {
-        if ($document_data['title'] == $documentParent['title']) {
+if (!empty($documentInfo['parents'])) {
+    foreach ($documentInfo['parents'] as $documentParent) {
+        if ($documentInfo['title'] == $documentParent['title']) {
             continue;
         }
 
@@ -109,21 +114,32 @@ if (!empty($document_data['parents'])) {
 }
 
 $actionBack = Display::url(
-    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), [], ICON_SIZE_MEDIUM),
-    'document.php?'.api_get_cidreq(true, true, 'editodf').'&id='.$parent_id
+    Display::return_icon(
+        'back.png',
+        get_lang('BackTo').' '.get_lang('DocumentsOverview'),
+        [],
+        ICON_SIZE_MEDIUM
+    ),
+    'document.php?'.api_get_cidreq(true, true, 'editodf').'&id='.$parentId
 );
 $actionEdit = Display::url(
-    Display::return_icon('edit.png', get_lang('Rename').'/'.get_lang('Comments'), [], ICON_SIZE_MEDIUM),
-    'edit_document.php?'.api_get_cidreq(true, true, 'editodf').'&id='.$document_id
+    Display::return_icon(
+        'edit.png',
+        get_lang('Rename').'/'.get_lang('Comments'),
+        [],
+        ICON_SIZE_MEDIUM
+    ),
+    'edit_document.php?'.api_get_cidreq(true, true, 'editodf')
+        .'&id='.$documentId
 );
 
 $content = '<div id="editorContainer"></div>';
 
-$view = new Template($document_data['title']);
+$view = new Template($documentInfo['title']);
 $view->assign(
     'actions',
     Display::toolbarAction('actions', [$actionBack.$actionEdit])
 );
-$view->assign('header', $document_data['title']);
+$view->assign('header', $documentInfo['title']);
 $view->assign('content', $content);
 $view->display_one_col_template();

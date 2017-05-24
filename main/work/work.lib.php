@@ -4598,7 +4598,8 @@ function getFormWork($form, $defaults = array(), $workId = 0)
     $form->addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'id="end_date"');
 
     if (!isset($defaults['ends_on'])) {
-        $date = substr($currentDate, 0, 10);
+        $tomorrow = substr(api_get_local_time(time()+86400), 0, 10);
+        $date = substr($tomorrow, 0, 10);
         $defaults['ends_on'] = $date.' 23:59';
     }
     if (isset($defaults['enableEndDate']) && $defaults['enableEndDate']) {

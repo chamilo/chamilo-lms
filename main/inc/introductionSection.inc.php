@@ -96,13 +96,7 @@ if ($intro_editAllowed) {
                 }
                 Database::getManager()->persist($toolIntro);
                 Database::getManager()->flush();
-                Display::addFlash(
-                    Display::return_message(
-                        get_lang('IntroductionTextUpdated'),
-                        'confirmation',
-                        false
-                    )
-                );
+                echo Display::return_message(get_lang('IntroductionTextUpdated'), 'confirmation', false);
             } else {
                 // got to the delete command
                 $intro_cmdDel = true;
@@ -120,9 +114,7 @@ if ($intro_editAllowed) {
                     id='".Database::escape_string($moduleId)."' AND
                     session_id='".intval($session_id)."'";
         Database::query($sql);
-        Display::addFlash(
-            Display::return_message(get_lang('IntroductionTextDeleted'), 'confirmation')
-        );
+        echo Display::return_message(get_lang('IntroductionTextDeleted'), 'confirmation');
     }
 }
 

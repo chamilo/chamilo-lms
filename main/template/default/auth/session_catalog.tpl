@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-md-12">
         <!-- header catalog session -->
-        <h2 class="title-session">{{ 'Sessions'|get_lang }}</h2>      	
+        <h2 class="title-session">{{ 'Sessions'|get_lang }}</h2>
        	<div class="search-session">
                 <div class="row">
                     <div class="col-md-6">
@@ -61,7 +61,7 @@
             <div class="row">
                 {% for item in sessions %}
                     <div class="col-md-4 col-sm-6 col-xs-12">
-                        <div id="session-{{ item.id }}" class="items items-courses">
+                        <div id="session-{{ item.id }}" class="items items-courses items-sessions">
                             <div class="image">
                                 <a href="{{ _p.web ~ 'session/' ~ item.id ~ '/about/' }}" title="{{ item.name }}">
                                 	<img class="img-responsive" src="{{ item.image ? _p.web_upload ~ item.image : 'session_default.png'|icon() }}">
@@ -145,7 +145,7 @@
                                         </div>
                                     	{% endif %}
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             {% if _u.logged %}

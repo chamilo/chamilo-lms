@@ -75,7 +75,6 @@ $Forbidden = "허용되지 않음";
 $CourseAccessConfigTip = "기본적으로 과정은 모두에게 공개됩니다. 그러나, 위의 공개 레벨을 통해 지정이 가능합니다.";
 $OpenToTheWorld = "공개 - 누구나 접근 가능합니다";
 $OpenToThePlatform = "공개 - 플랫폼에 등록한 모든 유저가 접근가능합니다";
-$OpenToThePlatform = "공개 - 플랫폼에 등록한 유저 접근 가능";
 $TipLang = "이 언어는 당신의 과정 웹사이트에 접근하는 모든 방문자에게 적용될 것입니다.";
 $Vid = "비디오";
 $Work = "기여자";

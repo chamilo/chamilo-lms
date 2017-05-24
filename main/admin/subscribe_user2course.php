@@ -92,7 +92,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     if ($form_sent == 1) {
         if (count($users) == 0 || count($courses) == 0) {
-            Display :: display_error_message(get_lang('AtLeastOneUserAndOneCourse'));
+            echo Display::return_message(get_lang('AtLeastOneUserAndOneCourse'), 'error');
         } else {
             $errorDrh = 0;
             foreach ($courses as $course_code) {
@@ -107,9 +107,9 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             }
 
             if ($errorDrh == 0) {
-                Display :: display_confirmation_message(get_lang('UsersAreSubscibedToCourse'));
+                echo Display::return_message(get_lang('UsersAreSubscibedToCourse'), 'confirm');
             } else {
-                Display :: display_error_message(get_lang('HumanResourcesManagerShouldNotBeRegisteredToCourses'));
+                echo Display::return_message(get_lang('HumanResourcesManagerShouldNotBeRegisteredToCourses'), 'error');
             }
         }
     }
@@ -292,8 +292,10 @@ if (is_array($extra_field_list)) {
     <td width="40%" align="center">
      <b><?php echo get_lang('UserList'); ?></b>
      <br/><br/>
-     <?php echo get_lang('FirstLetterUser'); ?> :
-     <select name="firstLetterUser" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
+        <?php echo get_lang('FirstLetterUser'); ?> :
+     <select name="firstLetterUser"
+        onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();"
+        aria-label="<?php echo get_lang('FirstLetterUser'); ?>">
       <option value="">--</option>
       <?php
         echo Display :: get_alphabet_options($first_letter_user);
@@ -304,8 +306,10 @@ if (is_array($extra_field_list)) {
     <td width="40%" align="center">
      <b><?php echo get_lang('CourseList'); ?> :</b>
      <br/><br/>
-     <?php echo get_lang('FirstLetterCourse'); ?> :
-     <select name="firstLetterCourse" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
+        <?php echo get_lang('FirstLetterCourse'); ?> :
+     <select name="firstLetterCourse" 
+        onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();"
+        aria-label="<?php echo get_lang('FirstLetterCourse'); ?>">
       <option value="">--</option>
       <?php
       echo Display :: get_alphabet_options($first_letter_course);

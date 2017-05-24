@@ -119,7 +119,7 @@ switch ($action) {
                     )
                 );
             }
-            Display::display_confirmation_message(get_lang('Saved'));
+            echo Display::return_message(get_lang('Saved'), 'confirm');
         }
         break;
     case 'record_audio':

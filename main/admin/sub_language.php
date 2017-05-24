@@ -115,7 +115,7 @@ $html .= '</div>';
 echo $html;
 echo '<br /><br /><br />';
 if (!empty($sublanguage_folder_error)) {
-    Display::display_warning_message($sublanguage_folder_error);
+    echo Display::return_message($sublanguage_folder_error, 'warning');
 }
 echo '<div id="div_message_information_id">&nbsp;</div>';
 

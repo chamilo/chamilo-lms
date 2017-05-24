@@ -813,11 +813,11 @@ class Event
     /**
      * Save the new message for one event and for one language
      *
-     * @param string $eventName
+     * @param string $event_name
      * @param array $users
      * @param string $message
      * @param string $subject
-     * @param string $eventMessageLanguage
+     * @param string $event_message_language
      * @param int $activated
      */
     public static function save_event_type_message($event_name, $users, $message, $subject, $event_message_language, $activated)

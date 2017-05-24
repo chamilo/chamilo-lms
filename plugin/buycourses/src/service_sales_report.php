@@ -87,9 +87,6 @@ $template->assign('sale_list', $serviceSaleList);
 $template->assign('sale_status_cancelled', BuyCoursesPlugin::SERVICE_STATUS_CANCELLED);
 $template->assign('sale_status_pending', BuyCoursesPlugin::SERVICE_STATUS_PENDING);
 $template->assign('sale_status_completed', BuyCoursesPlugin::SERVICE_STATUS_COMPLETED);
-
 $content = $template->fetch('buycourses/view/service_sales_report.tpl');
-
-
 $template->assign('content', $content);
 $template->display_one_col_template();

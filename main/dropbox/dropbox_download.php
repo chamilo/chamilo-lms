@@ -93,11 +93,13 @@ if (!$allowed_to_download) {
     $_SESSION['_seen'][$_course['id']][TOOL_DROPBOX][] = intval($_GET['id']);
 
     $work = new Dropbox_Work($_GET['id']);
-
-    $path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$work -> filename; //path to file as stored on server
-
-    if (!Security::check_abs_path($path, api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/')) {
-        exit;
+    //path to file as stored on server
+    $path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$work->filename;
+    if (!Security::check_abs_path(
+        $path,
+        api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/')
+    ) {
+        api_not_allowed(true);
     }
     $file = $work->title;
     $result = DocumentManager::file_send_for_download($path, true, $file);

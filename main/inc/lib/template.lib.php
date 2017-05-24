@@ -427,6 +427,7 @@ class Template
         $show_course_navigation_menu = null;
 
         if (!empty($this->course_id) && $this->user_is_logged_in) {
+
             if (api_get_setting('show_toolshortcuts') != 'false') {
                 //Course toolbar
                 $show_course_shortcut = CourseHome::show_navigation_tool_shortcuts();
@@ -591,7 +592,8 @@ class Template
             'bootstrap/dist/css/bootstrap.min.css',
             'jquery.scrollbar/jquery.scrollbar.css',
             'bootstrap-daterangepicker/daterangepicker.css',
-            'bootstrap-select/dist/css/bootstrap-select.min.css'
+            'bootstrap-select/dist/css/bootstrap-select.min.css',
+            'select2/dist/css/select2.min.css'
         ];
 
         foreach ($bowerCSSFiles as $file) {
@@ -599,7 +601,6 @@ class Template
         }
 
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
-        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css';
 
         if (api_is_global_chat_enabled()) {
             $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
@@ -730,9 +731,6 @@ class Template
             $js_files[] = 'fontresize.js';
         }
 
-        // Do not use minified version - generates errors (at least in the skills wheel)
-        $js_files[] = 'tag/jquery.fcbkcomplete.js';
-
         $js_file_to_string = null;
 
         $bowerJsFiles = [
@@ -749,7 +747,9 @@ class Template
             'jquery.scrollbar/jquery.scrollbar.min.js',
             'readmore-js/readmore.min.js',
             'bootstrap-select/dist/js/bootstrap-select.min.js',
-            $selectLink
+            $selectLink,
+            'select2/dist/js/select2.min.js',
+            "select2/dist/js/i18n/$isoCode.js"
         ];
         if (CHAMILO_LOAD_WYSIWYG == true) {
             $bowerJsFiles[] = 'ckeditor/ckeditor.js';

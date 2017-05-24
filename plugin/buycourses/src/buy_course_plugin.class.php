@@ -171,7 +171,7 @@ class BuyCoursesPlugin extends Plugin
         $transfer = $this->get('transfer_enable') === 'true';
 
         if ($paypal || $transfer) {
-            $item = $this->getItemByProduct(intval($productId), $productType);
+            $item = $this->getItemByProduct($productId, $productType);
             $return['html'] = '<div class="buycourses-price">';
             if ($item) {
                 $return['html'] .= '<span class="label label-primary"><b>'.$item['iso_code'].' '.$item['price'].'</b></span>';
@@ -341,6 +341,7 @@ class BuyCoursesPlugin extends Plugin
     {
         $entityManager = Database::getManager();
         $query = $entityManager->createQueryBuilder();
+        $urlId = api_get_current_access_url_id();
 
         $courses = $query
             ->select('c')
@@ -350,10 +351,14 @@ class BuyCoursesPlugin extends Plugin
                 'sc',
                 \Doctrine\ORM\Query\Expr\Join::WITH,
                 'c = sc.course'
+            )->innerJoin(
+                'ChamiloCoreBundle:AccessUrlRelCourse',
+                'ac',
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                'c = ac.course'
             )
-            ->where(
-                $query->expr()->isNull('sc.course')
-            )
+            ->where($query->expr()->isNull('sc.course'))
+            ->andWhere($query->expr()->eq('ac.url', $urlId))
             ->getQuery()
             ->getResult();
 
@@ -608,7 +613,6 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $courseCatalog = [];
-
         foreach ($courses as $course) {
             $item = $this->getItemByProduct(
                 $course->getId(),
@@ -1139,11 +1143,13 @@ class BuyCoursesPlugin extends Plugin
 
         $itemTable = Database::get_main_table(self::TABLE_ITEM);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $urlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+
+        $urlId = api_get_current_access_url_id();
 
         $min = floatval($min);
         $max = floatval($max);
 
-        $innerJoin = "$itemTable i ON c.id = i.product_id";
         $whereConditions = [
             'i.product_type = ? ' => self::PRODUCT_TYPE_COURSE
         ];
@@ -1160,9 +1166,16 @@ class BuyCoursesPlugin extends Plugin
             $whereConditions['AND i.price <= ?'] = $max;
         }
 
+        $whereConditions['AND url.access_url_id = ?'] = $urlId;
+
         $courseIds = Database::select(
             'c.id',
-            "$courseTable c INNER JOIN $innerJoin",
+            "$courseTable c 
+            INNER JOIN $itemTable i 
+            ON c.id = i.product_id 
+            INNER JOIN $urlTable url 
+            ON c.id = url.c_id
+            ",
             ['where' => $whereConditions]
         );
 

@@ -259,7 +259,7 @@ class IndexManager
         // Including the page for the news
         $html = '';
         if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['include'])) {
-            $open = @(string)file_get_contents($this->home.$_GET['include']);
+            $open = @(string) file_get_contents($this->home.$_GET['include']);
             $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
         } else {
             // Hiding home top when user not connected.
@@ -314,9 +314,9 @@ class IndexManager
 
         $html = '';
         // Notice
-        $home_notice = @(string)file_get_contents($this->home.'home_notice_'.$user_selected_language.'.html');
+        $home_notice = @(string) file_get_contents($this->home.'home_notice_'.$user_selected_language.'.html');
         if (empty($home_notice)) {
-            $home_notice = @(string)file_get_contents($this->home.'home_notice.html');
+            $home_notice = @(string) file_get_contents($this->home.'home_notice.html');
         }
 
         if (!empty($home_notice)) {
@@ -349,7 +349,7 @@ class IndexManager
         }
 
         $html = '';
-        $home_menu = @(string)file_get_contents($this->home.'home_menu_'.$user_selected_language.'.html');
+        $home_menu = @(string) file_get_contents($this->home.'home_menu_'.$user_selected_language.'.html');
         if (!empty($home_menu)) {
             $home_menu_content = '<ul class="nav nav-pills nav-stacked">';
             $home_menu_content .= api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
@@ -1240,7 +1240,7 @@ class IndexManager
                                 $user_id,
                                 $specialCourseInfo['course_code']
                             );
-                            $specialCourses[$key]['student_info']['progress'] = ($progress === false)? null : $progress;
+                            $specialCourses[$key]['student_info']['progress'] = ($progress === false) ? null : $progress;
                         }
 
                         if ($studentInfoScore) {
@@ -1288,7 +1288,7 @@ class IndexManager
                                         $user_id,
                                         $courseInCatInfo['course_code']
                                     );
-                                    $courses['in_category'][$key1]['courses'][$key2]['student_info']['progress'] = ($progress === false)? null : $progress;
+                                    $courses['in_category'][$key1]['courses'][$key2]['student_info']['progress'] = ($progress === false) ? null : $progress;
                                 }
 
                                 if ($studentInfoScore) {
@@ -1518,7 +1518,7 @@ class IndexManager
                                                     array(),
                                                     $session_id
                                                 );
-                                                $course_session['student_info']['progress']  = ($progress === false)? null : $progress;
+                                                $course_session['student_info']['progress'] = ($progress === false) ? null : $progress;
                                             }
 
                                             if ($studentInfoScore) {
@@ -1969,7 +1969,7 @@ class IndexManager
                             $listCategorySession['catSessionName']
                         );
                         // list of session
-                        $htmlSession = '';    // start
+                        $htmlSession = ''; // start
                         foreach ($listCategorySession['sessionList'] as $k => $listSession) {
                             // add session
                             $htmlSession .= '<div class="session-view-row">';
@@ -1987,7 +1987,7 @@ class IndexManager
                     }
                     $htmlSessionCategory .= '</div>'; // end session cat block
                     $htmlCategory .= $htmlSessionCategory.'</div></div>';
-                    $htmlCategory .= '';   // end course block
+                    $htmlCategory .= ''; // end course block
                 }
                 $userCategoryHtml .= $htmlCategory;
             }
@@ -2014,11 +2014,11 @@ class IndexManager
                 }
             }
             $htmlCategory .= '';
-            $userCategoryHtml .= $htmlCategory;   // end user cat block
+            $userCategoryHtml .= $htmlCategory; // end user cat block
             if ($userCategoryId != 0) {
                 $userCategoryHtml .= '</div>';
             }
-            $html .= $userCategoryHtml;   //
+            $html .= $userCategoryHtml; //
         }
         $html .= '</div>';
 
@@ -2160,11 +2160,11 @@ class IndexManager
     {
         $html = '';
         if ($categorySessionId == 0) {
-            $class1 = 'session-view-lvl-2';    // session
-            $class2 = 'session-view-lvl-4';    // got to course in session link
+            $class1 = 'session-view-lvl-2'; // session
+            $class2 = 'session-view-lvl-4'; // got to course in session link
         } else {
-            $class1 = 'session-view-lvl-3';    // session
-            $class2 = 'session-view-lvl-5';    // got to course in session link
+            $class1 = 'session-view-lvl-3'; // session
+            $class2 = 'session-view-lvl-5'; // got to course in session link
         }
 
         $icon = Display::return_icon(

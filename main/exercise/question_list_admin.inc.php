@@ -311,7 +311,7 @@ if (!$inATest) {
     }
 
     if (!$nbrQuestions) {
-        echo Display::display_warning_message(get_lang('NoQuestion'));
+        echo Display::return_message(get_lang('NoQuestion'), 'warning');
     }
     echo '</div>'; //question list div
 }

@@ -713,8 +713,9 @@ class TicketManager
         $file_name = $file_attach['name'];
         $table_support_message_attachments = Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS);
         if (!filter_extension($new_file_name)) {
-            Display::display_error_message(
-                get_lang('UplUnableToSaveFileFilteredExtension')
+            echo Display::return_message(
+                get_lang('UplUnableToSaveFileFilteredExtension'),
+                'error'
             );
         } else {
             $new_file_name = uniqid('');
@@ -1309,8 +1310,8 @@ class TicketManager
     }
 
     /**
+     * Send notification to a user through the internal messaging system
      * @param int $ticketId
-     * @param int $userId
      * @param string $title
      * @param string $message
      * @param int $onlyToUserId

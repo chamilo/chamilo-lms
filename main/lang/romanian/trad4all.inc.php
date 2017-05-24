@@ -520,7 +520,6 @@ $Forbidden = "Dumneavoastra nu sunteti înregistrati ca responsabil pentru acest
 $CourseAccessConfigTip = "În mod implicit cursul este public. Dar dumneavoastra puteți defini nivelul de confidențialitate butoanele de mai sus.";
 $OpenToTheWorld = "Public - acces autorizat la orice persoana";
 $OpenToThePlatform = "Deschis - acces permis doar pentru utilizatorii înregistrați in platforma";
-$OpenToThePlatform = "Deschis - accesul permis doar utilizatorilor inregistrati pe aceasta platforma";
 $TipLang = "Aceasta este limba pe care vizitatorii o vor vedea.";
 $Vid = "Video";
 $Work = "Munci";

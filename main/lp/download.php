@@ -50,6 +50,6 @@ if ($_SESSION['oLP']) {
     }
 }
 
-Display::display_error_message(get_lang('ProtectedDocument'));
+echo Display::return_message(get_lang('ProtectedDocument'), 'error');
 //api_not_allowed backbutton won't work.
 exit;

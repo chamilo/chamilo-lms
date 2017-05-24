@@ -166,7 +166,7 @@ class CForumThread
      */
     public function __construct()
     {
-        $this->threadPeerQualify = 0;
+        $this->threadPeerQualify = false;
         $this->threadReplies = 0;
         $this->threadViews = 0;
     }
@@ -181,7 +181,7 @@ class CForumThread
 
     /**
      * set threadPeerQualify
-     * @param integer $threadPeerQualify
+     * @param bool $threadPeerQualify
      * @return $this
      */
     public function setThreadPeerQualify($threadPeerQualify)

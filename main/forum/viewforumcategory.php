@@ -138,7 +138,7 @@ if (api_is_allowed_to_edit(false, true)) {
 // Notification
 if ($action_forums == 'notify' && isset($_GET['content']) && isset($_GET['id'])) {
     $return_message = set_notification($_GET['content'], $_GET['id']);
-    Display::display_confirmation_message($return_message, false);
+    echo Display::return_message($return_message, 'confirm', false);
 }
 
 if ($action_forums != 'add') {

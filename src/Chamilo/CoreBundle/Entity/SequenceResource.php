@@ -66,8 +66,8 @@ class SequenceResource
     }
 
     /**
-     * @param string $type
-     *
+     * Set the integer type
+     * @param int $type
      * @return SequenceResource
      */
     public function setType($type)

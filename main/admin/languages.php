@@ -233,9 +233,6 @@ $tool_name = get_lang('PlatformLanguages');
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
-// including the header file (which includes the banner itself)
-Display :: display_header($tool_name);
-
 if (isset($_GET['action']) && $_GET['action'] == 'make_unavailable_confirmed') {
     $language_info = SubLanguageManager::get_all_information_of_language($_GET['id']);
     if ($language_info['available'] == 1) {
@@ -248,6 +245,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'make_unavailable_confirmed') {
 
 // displaying the explanation for this tool
 Display::addFlash(Display::return_message(get_lang('PlatformLanguagesExplanation'), 'normal'));
+
+// including the header file (which includes the banner itself)
+Display::display_header($tool_name);
 
 echo '<a id="disable_all_except_default" href="javascript:void(0)" class="btn btn-primary"><em class="fa fa-eye"></em> '.get_lang('LanguagesDisableAllExceptDefault').'</a><br /><br />';
 

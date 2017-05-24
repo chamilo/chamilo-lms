@@ -148,6 +148,7 @@ class Database
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
                 'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
                 'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity',
+                'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity',
                 'ChamiloFaqBundle' => 'Chamilo\FaqBundle\Entity'
             )
         );
@@ -686,6 +687,7 @@ class Database
             $path.'src/Chamilo/CourseBundle/Entity',
             $path.'src/Chamilo/TicketBundle/Entity',
             $path.'src/Chamilo/SkillBundle/Entity',
+            $path.'src/Chamilo/PluginBundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Model',
             //$path.'vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Entity',

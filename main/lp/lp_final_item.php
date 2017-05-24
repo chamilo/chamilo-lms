@@ -92,7 +92,7 @@ unset($currentItem);
 // If for some reason we consider the requirements haven't been completed yet,
 // show a prerequisites warning
 if ($accessGranted == false) {
-    Display::display_warning_message(get_lang('LearnpathPrereqNotCompleted'));
+    echo Display::return_message(get_lang('LearnpathPrereqNotCompleted'), 'warning');
     $finalItemTemplate = '';
 } else {
     $catLoad = Category::load(null, null, $courseCode, null, null, $sessionId, 'ORDER By id');
@@ -141,7 +141,7 @@ if ($accessGranted == false) {
         $finalItemTemplate = generateLPFinalItemTemplate($id, $courseCode, $sessionId, $downloadCertificateLink, $badgeLink);
 
         if (!$finalItemTemplate) {
-            Display::display_warning_message(get_lang('FileNotFound'));
+            echo Display::return_message(get_lang('FileNotFound'), 'warning');
         }
     }
 }

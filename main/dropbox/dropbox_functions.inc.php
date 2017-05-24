@@ -528,7 +528,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     );
 
     $allowOverwrite = api_get_setting('dropbox_allow_overwrite');
-    if ($allowOverwrite == 'true') {
+    if ($allowOverwrite == 'true' && empty($idCondition)) {
         $form->addElement(
             'checkbox',
             'cb_overwrite',

@@ -221,7 +221,7 @@ if (
     api_is_allowed_to_session_edit(false, true)
 ) {
     $return_message = set_notification($_GET['content'], $_GET['id']);
-    Display::display_confirmation_message($return_message, false);
+    echo Display::return_message($return_message, 'confirm', false);
 }
 
 // Student list
@@ -344,7 +344,7 @@ if ($origin == 'learnpath') {
 /* Display the action messages */
 
 if (!empty($message)) {
-    Display::display_confirmation_message($message);
+    echo Display::return_message($message, 'confirm');
 }
 
 /* Action links */

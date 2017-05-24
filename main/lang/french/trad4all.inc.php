@@ -7948,4 +7948,14 @@ $StudyCycle = "Semestre";
 $ReadingComprehension = "Compréhension à la lecture";
 $ReadingQuestionCongratsSpeedXNotReachedForYWords = "Désolé, il semblerait que la vitesse de %s mots/minute soit trop rapide pour vous pour l'instant, selon cette tentative sur un texte de %s mots.";
 $ReadingQuestionCongratsSpeedXReachedForYWords = "Félicitacions, vous avez atteint la vitesse de %s mots/minute en comprenant correctement un texte de %s mots.";
+$ReadingComprehensionLevelX = "%s mots par minute";
+$TutorXIsNotSubscribedToCourse = "Le coach %s n'est pas inscrit dans ce cours";
+$UpdateTitleInLps = "Mettre ce titre à jour dans les parcours";
+$WebRTCDialogHelp = "Pour activer le vidéochat dans votre navigateur (s'il le supporte), assurez-vous de bien cliquer sur l'icône d'information dans la partie gauche de la barre d'adresse du navigateur, et d'ensuite autoriser l'utilisation de la webcam et du micro.";
+$UpdateFile = "Mettre à jour un fichier";
+$SendEmailToTeacherWhenStudentStartQuiz = "Envoyer un e-mail à l'enseignant quand l'apprenant démarre un exercice";
+$SendEmailToTeacherWhenStudentEndQuiz = "Envoyer un e-mail à l'enseignant quand l'apprenant termine un exercice";
+$SendEmailToTeacherWhenStudentEndQuizOnlyIfOpenQuestion = "Envoyer un e-mail à l'enseignant quand un apprenant termine un exercice, uniquement s'il a répondu à une question ouverte";
+$SendEmailToTeacherWhenStudentEndQuizOnlyIfOralQuestion = "Envoyer un e-mail à l'enseignant quand l'apprenant termine un exercice, uniquement s'il a répondu à une question orale";
+$StudentStartExercise = "Début d'exercice par un apprenant";
 ?>

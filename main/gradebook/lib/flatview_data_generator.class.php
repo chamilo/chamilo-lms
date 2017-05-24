@@ -630,7 +630,7 @@ class FlatViewDataGenerator
             $score = $item->calc_score($user_id);
 
             $real_score = $score;
-            $divide = isset($score[1]) && !empty($score[1]) ? $score[1] : 1;
+            $divide = isset($score[1]) && !empty($score[1]) && $score[1] > 0 ? $score[1] : 1;
 
             // Sub cat weight
             //$sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
@@ -889,7 +889,7 @@ class FlatViewDataGenerator
                 $total_score = array($item_value, $item_total);
                 $score_final = ($item_value / $item_total) * 100;
                 if ($displayWarning) {
-                    Display::display_warning_message($total_score[1]);
+                    echo Display::return_message($total_score[1], 'warning');
                 }
                 $row[] = array($score_final, trim($scoredisplay->display_score($total_score, SCORE_CUSTOM, null, true)));
             }

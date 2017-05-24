@@ -7,6 +7,8 @@
  */
 class CoursesAndSessionsCatalog
 {
+    const PAGE_LENGTH = 12;
+
     /**
      * Check the configuration for the courses and sessions catalog
      * @global array $_configuration Configuration

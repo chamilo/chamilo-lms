@@ -11,7 +11,7 @@
 api_protect_course_script(true);
 
 // Header
-Display :: display_header('');
+Display::display_header('');
 
 // Introduction section
 Display::display_introduction_section(TOOL_COURSE_DESCRIPTION);
@@ -23,4 +23,4 @@ Event::event_access_tool(TOOL_COURSE_DESCRIPTION);
 echo $content;
 
 // Footer
-Display :: display_footer();
+Display::display_footer();

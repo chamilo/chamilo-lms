@@ -116,7 +116,7 @@ switch ($action) {
             $values = $form->exportValues();
             $res    = $gradebook->update_skills_to_gradebook($values['id'], $values['skill']);
             if ($res) {
-                Display::display_confirmation_message(get_lang('ItemAdded'));
+                echo Display::return_message(get_lang('ItemAdded'), 'confirm');
             }
         }
         $form->display();

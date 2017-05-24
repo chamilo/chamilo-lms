@@ -121,12 +121,18 @@ class GradebookUtils
      */
     public static function build_type_icon_tag($kind, $attributes = array())
     {
-        return Display::return_icon(self::get_icon_file_name($kind), ' ', $attributes, ICON_SIZE_SMALL);
+        return Display::return_icon(
+            self::get_icon_file_name($kind),
+            ' ',
+            $attributes,
+            ICON_SIZE_SMALL
+        );
     }
 
     /**
      * Returns the icon filename for a gradebook item
      * @param string $type value returned by a gradebookitem's get_icon_name()
+     * @return string
      */
     public static function get_icon_file_name($type)
     {
@@ -183,6 +189,7 @@ class GradebookUtils
      * Builds the course or platform admin icons to edit a category
      * @param Category $cat category
      * @param Category $selectcat id of selected category
+     * @return string
      */
     public static function build_edit_icons_cat($cat, $selectcat)
     {
@@ -289,6 +296,7 @@ class GradebookUtils
      * Builds the course or platform admin icons to edit an evaluation
      * @param  Evaluation $eval evaluation object
      * @param int $selectcat id of selected category
+     * @return string
      */
     public static function build_edit_icons_eval($eval, $selectcat)
     {
@@ -302,7 +310,12 @@ class GradebookUtils
             $visibility_icon = ($eval->is_visible() == 0) ? 'invisible' : 'visible';
             $visibility_command = ($eval->is_visible() == 0) ? 'set_visible' : 'set_invisible';
             if ($is_locked && !api_is_platform_admin()) {
-                $modify_icons = Display::return_icon('edit_na.png', get_lang('Modify'), '', ICON_SIZE_SMALL);
+                $modify_icons = Display::return_icon(
+                    'edit_na.png',
+                    get_lang('Modify'),
+                    '',
+                    ICON_SIZE_SMALL
+                );
             } else {
                 $modify_icons = '<a href="gradebook_edit_eval.php?editeval='.$eval->get_id().'&'.$courseParams.'">'.
                     Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL).'</a>';
@@ -329,6 +342,8 @@ class GradebookUtils
      * Builds the course or platform admin icons to edit a link
      * @param AbstractLink $link
      * @param int $selectcat id of selected category
+     *
+     * @return string
      */
     public static function build_edit_icons_link($link, $selectcat)
     {
@@ -349,7 +364,12 @@ class GradebookUtils
             $visibility_command = ($link->is_visible() == 0) ? 'set_visible' : 'set_invisible';
 
             if ($is_locked && !api_is_platform_admin()) {
-                $modify_icons = Display::return_icon('edit_na.png', get_lang('Modify'), '', ICON_SIZE_SMALL);
+                $modify_icons = Display::return_icon(
+                    'edit_na.png',
+                    get_lang('Modify'),
+                    '',
+                    ICON_SIZE_SMALL
+                );
             } else {
                 $modify_icons = '<a href="gradebook_edit_link.php?editlink='.$link->get_id().'&'.$courseParams.'">'.
                     Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL).'</a>';
@@ -381,8 +401,12 @@ class GradebookUtils
      *
      * @return   array     false on error or array of resource
      */
-    public static function isResourceInCourseGradebook($course_code, $resource_type, $resource_id, $session_id = 0)
-    {
+    public static function isResourceInCourseGradebook(
+        $course_code,
+        $resource_type,
+        $resource_id,
+        $session_id = 0
+    ) {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $course_code = Database::escape_string($course_code);
         $sql = "SELECT * FROM $table l
@@ -663,8 +687,14 @@ class GradebookUtils
     public static function get_list_gradebook_certificates_by_user_id($user_id, $cat_id = null)
     {
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $sql = 'SELECT gc.score_certificate, gc.created_at, gc.path_certificate, gc.cat_id, gc.user_id, gc.id
-                FROM  ' . $table_certificate.' gc
+        $sql = 'SELECT 
+                    gc.score_certificate, 
+                    gc.created_at, 
+                    gc.path_certificate, 
+                    gc.cat_id, 
+                    gc.user_id, 
+                    gc.id
+                FROM  '.$table_certificate.' gc
                 WHERE gc.user_id="' . intval($user_id).'" ';
         if (!is_null($cat_id) && $cat_id > 0) {
             $sql .= ' AND cat_id='.intval($cat_id);
@@ -781,7 +811,6 @@ class GradebookUtils
                 $default_weight_setting = api_get_setting('gradebook_default_weight');
                 $default_weight = isset($default_weight_setting) && !empty($default_weight_setting) ? $default_weight_setting : 100;
                 $cat->set_weight($default_weight);
-
                 $cat->set_grade_model_id($gradebook_model_id);
                 $cat->set_certificate_min_score(75);
 
@@ -867,16 +896,18 @@ class GradebookUtils
         $course_code = trim($cat[0]->get_course_code());
 
         $displayscore = ScoreDisplay::instance();
-        $customdisplays = $displayscore->get_custom_score_display_settings();
+        $customDisplays = $displayscore->get_custom_score_display_settings();
 
         $total = array();
-        if (is_array($customdisplays) && count(($customdisplays))) {
-            foreach ($customdisplays as $custom) {
+        if (is_array($customDisplays) && count(($customDisplays))) {
+            foreach ($customDisplays as $custom) {
                 $total[$custom['display']] = 0;
             }
             $user_results = $flatviewtable->datagen->get_data_to_graph2(false);
             foreach ($user_results as $user_result) {
-                $total[$user_result[count($user_result) - 1][1]]++;
+                $item = $user_result[count($user_result) - 1];
+                $customTag = isset($item[1]) ? strip_tags($item[1]) : '';
+                $total[$customTag]++;
             }
         }
 
@@ -915,7 +946,6 @@ class GradebookUtils
         $table = new HTML_Table(array('class' => 'data_table'));
         $row = 0;
         $column = 0;
-
         $table->setHeaderContents($row, $column, get_lang('NumberAbbreviation'));
         $column++;
         foreach ($printable_data[0] as $printable_data_cell) {
@@ -993,12 +1023,14 @@ class GradebookUtils
             $counter++;
             $badges[] = Display::badge($value, $class);
         }
+
         return Display::badge_group($badges);
     }
 
     /**
      * returns users within a course given by param
      * @param string $courseCode
+     * @return array
      */
     public static function get_users_in_course($courseCode)
     {
@@ -1250,7 +1282,6 @@ class GradebookUtils
     {
         $userId = intval($userId);
         $courseList = [];
-
         $courses = CourseManager::get_courses_list_by_user_id($userId);
 
         foreach ($courses as $course) {
@@ -1292,7 +1323,7 @@ class GradebookUtils
     /**
      * Get the achieved certificates for a user in course sessions
      * @param int $userId The user id
-     * @param bool $includeNonPublicCertificates Whether include the non-plublic certificates
+     * @param bool $includeNonPublicCertificates Whether include the non-public certificates
      * @return array
      */
     public static function getUserCertificatesInSessions($userId, $includeNonPublicCertificates = true)
@@ -1331,7 +1362,6 @@ class GradebookUtils
                 }
 
                 $courseGradebookId = $courseGradebookCategory[0]->get_id();
-
                 $certificateInfo = self::get_certificate_by_user_id(
                     $courseGradebookId,
                     $userId

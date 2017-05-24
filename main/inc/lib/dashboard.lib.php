@@ -147,7 +147,6 @@ class DashboardManager
         $possibleplugins = self::getPossibleDashboardPluginsPath();
 
         if (count($possibleplugins) > 0) {
-
             $selected_plugins = array_intersect(array_keys($plugin_paths), $possibleplugins);
             $not_selected_plugins = array_diff($possibleplugins, array_keys($plugin_paths));
 
@@ -309,13 +308,12 @@ class DashboardManager
             }
         }
 
-		return $block_data;
-	}
+        return $block_data;
+    }
 
     /**
      * get data about enabled dashboard block (stored insise block table)
      * @param  string	$path plugin path
-     *
      * @return array 	data
      */
     public static function get_enabled_dashboard_blocks($path = '')
@@ -419,8 +417,8 @@ class DashboardManager
 
     /**
      * display checkboxes for user dashboard list
-     * @param int 	User id
-     * @param int	Block id
+     * @param int    User id
+     * @param int    Block id
      * @return void
      */
     public static function display_user_dashboard_list_checkboxes($user_id, $block_id)
@@ -471,8 +469,8 @@ class DashboardManager
 
     /**
      * This function get user block data (block id with its number of column) from extra user data
-     * @param int  		User id
-     * @return array  	data (block_id,column)
+     * @param int        User id
+     * @return array    data (block_id,column)
      */
     public static function get_user_block_data($user_id)
     {
@@ -493,42 +491,42 @@ class DashboardManager
         return $data;
     }
 
-	/**
-	 * This function update extra user blocks data after closing a dashboard block
-	 * @param int 		User id
-	 * @param string	plugin path
-	 * @param integer $user_id
-	 * @return bool
-	 */
-	public static function close_user_block($user_id, $path)
+    /**
+     * This function update extra user blocks data after closing a dashboard block
+     * @param int        User id
+     * @param string    plugin path
+     * @param integer $user_id
+     * @return bool
+     */
+    public static function close_user_block($user_id, $path)
     {
-		$enabled_dashboard_blocks = self::get_enabled_dashboard_blocks($path);
-		$user_block_data = self::get_user_block_data($user_id);
+        $enabled_dashboard_blocks = self::get_enabled_dashboard_blocks($path);
+        $user_block_data = self::get_user_block_data($user_id);
 
-		foreach ($enabled_dashboard_blocks as $enabled_block) {
-			unset($user_block_data[$enabled_block['id']]);
-		}
+        foreach ($enabled_dashboard_blocks as $enabled_block) {
+            unset($user_block_data[$enabled_block['id']]);
+        }
 
-		// get columns and blocks id for updating extra user data
-		$columns = array();
-		$user_blocks_id = array();
-		foreach ($user_block_data as $data) {
-			$user_blocks_id[$data['block_id']] = true;
-			$columns[$data['block_id']] = $data['column'];
-		}
+        // get columns and blocks id for updating extra user data
+        $columns = array();
+        $user_blocks_id = array();
+        foreach ($user_block_data as $data) {
+            $user_blocks_id[$data['block_id']] = true;
+            $columns[$data['block_id']] = $data['column'];
+        }
 
-		// update extra user blocks data
-		$upd_extra_field = self::store_user_blocks($user_id, $user_blocks_id, $columns);
+        // update extra user blocks data
+        $upd_extra_field = self::store_user_blocks($user_id, $user_blocks_id, $columns);
 
-		return $upd_extra_field;
-	}
+        return $upd_extra_field;
+    }
 
-	/**
-	 * get links for styles from dashboard plugins
-	 * @return string   links
-	 */
-	public static function get_links_for_styles_from_dashboard_plugins() {
+    /**
+     * get links for styles from dashboard plugins
+     * @return string   links
+     */
+    public static function get_links_for_styles_from_dashboard_plugins() {
 
-		return '<link rel="stylesheet" href="'.api_get_path(WEB_PLUGIN_PATH).'dashboard/css/default.css" type="text/css" />'.PHP_EOL;
-	}
+        return '<link rel="stylesheet" href="'.api_get_path(WEB_PLUGIN_PATH).'dashboard/css/default.css" type="text/css" />'.PHP_EOL;
+    }
 }

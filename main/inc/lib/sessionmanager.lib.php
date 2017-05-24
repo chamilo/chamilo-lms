@@ -10,7 +10,8 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
 /**
  * Class SessionManager
  *
- * This is the session library for Chamilo.
+ * This is the session library for Chamilo
+ * (as in courses>session, not as in PHP session)
  * All main sessions functions should be placed here.
  * This class provides methods for sessions management.
  * Include/require it in your code to use its features.
@@ -2023,10 +2024,9 @@ class SessionManager
         $status = null
     ) {
         $sessionId = intval($sessionId);
-        $courseCode = $courseInfo['code'];
         $courseId = $courseInfo['real_id'];
 
-        if (empty($sessionId) || empty($courseCode)) {
+        if (empty($sessionId) || empty($courseId)) {
             return array();
         }
 
@@ -4349,11 +4349,23 @@ class SessionManager
     {
         $table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $table_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $courseId = intval($courseId);
+        $urlId = api_get_current_access_url_id();
+
+        if (empty($courseId)) {
+            return [];
+        }
+
         $sql = "SELECT name, s.id
                 FROM $table_session_course sc
-                INNER JOIN $table_session s ON (sc.session_id = s.id)
-                WHERE sc.c_id = '$courseId' ";
+                INNER JOIN $table_session s 
+                ON (sc.session_id = s.id)
+                INNER JOIN $url u
+                ON (u.session_id = s.id)
+                WHERE 
+                    u.access_url_id = $urlId AND 
+                    sc.c_id = '$courseId' ";
         $result = Database::query($sql);
 
         return Database::store_result($result);
@@ -7242,7 +7254,7 @@ class SessionManager
             'name',
             get_lang('SessionName'),
             true,
-            ['maxlength' => 150]
+            ['maxlength' => 150, 'aria-label' => get_lang('SessionName')]
         );
         $form->addRule('name', get_lang('SessionNameAlreadyExists'), 'callback', 'check_session_name');
 

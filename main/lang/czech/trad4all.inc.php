@@ -82,7 +82,6 @@ $Forbidden = "Zakázaný";
 $CourseAccessConfigTip = "Standardně je školení veřejné. Ale můžete definovat stupeň utajení.";
 $OpenToTheWorld = "Otevřeno - přístup povolen pro celý svět";
 $OpenToThePlatform = "Otevřeno - přístup povolen pro uživatele registrované v systému";
-$OpenToThePlatform = "Otevřeno - přístup povolen pouze registrovaným uživatelům platformy";
 $TipLang = "Tento jazyk bude použit u každého návštěvníka vašeho kurzu na webu.";
 $Vid = "Video";
 $Work = "Příspěvky";

@@ -1,0 +1,90 @@
+.sepe-input-text{
+	color: #00829c;
+    font-size: 1.3em;
+    font-weight: normal;
+	padding-top: 2px;
+}
+
+.sepe-delete-link {
+    background: url("icon-delete.png") no-repeat scroll 0px 10px;
+    padding-left: 30px;
+	font-size:1.3em;
+}
+.sepe-edit-link {
+    background: url("icon-edit.png") no-repeat scroll 0 10px;
+    padding-left: 30px;
+	font-size:1.3em;
+}
+.sepe-list-link {
+    background: url("options-lines.png") no-repeat scroll 0 10px;
+    padding-left: 30px;
+	font-size:1.3em;
+}
+input.sepe-btn-menu-side{
+	width:100%;
+	margin-bottom:10px;
+}
+legend.sepe-subfield {
+    font-size: 16px;
+    line-height: 16px;
+    padding-bottom: 10px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+}
+.well.sepe-subfield {
+    background: none repeat scroll 0 0 #fafafa;
+}
+.well .well {
+    background: white;
+}
+em.span4 {
+    float: none;
+    margin: 0;
+    padding: 5px;
+	display:inline-block;
+}
+em{
+    float: none;
+    margin: 5px 0 0 0;
+    padding: 5px;
+	display: block;
+}
+.message-info{
+	padding:5px 10px;
+}
+.sepe-slt-date {
+	width:auto; 
+	display:inline-block;
+}
+input.sepe-numeric-field {
+    text-align: center;
+    width: 60px;
+}
+.sepe-subfield2 {
+    font-size: 16px;
+    text-align: center;
+}
+.sepe-margin-side{
+	margin: 0 5px;
+}
+#sepe-tbl-info-fiscal-number{
+	width:90%;
+	margin:5px auto;	
+}
+#sepe-tbl-info-fiscal-number td, #sepe-tbl-info-fiscal-number th {
+    background: none repeat scroll 0 0 white;
+    border: 1px solid;
+    color: #333;
+    font-weight: bold;
+	text-align:center;
+}
+.sepe-vertical-align-middle, .table td.sepe-vertical-align-middle{
+	vertical-align:middle;
+}
+.sepe-box-center{
+	margin:0 auto;
+}
+.sepe-margin-top{
+	margin-top:5px;
+}

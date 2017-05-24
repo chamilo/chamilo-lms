@@ -83,7 +83,6 @@ $Forbidden = "Vi ne estas mastrumanto de ĉi-kurso";
 $CourseAccessConfigTip = "Defaŭlte via kurso estas publike alirebla. Vi povas ŝanĝi la alireblecon ĉi-supre.";
 $OpenToTheWorld = "Malferma - aliro permesita al la tuta mondo";
 $OpenToThePlatform = "Malferma - aliro permesita al registritaj uzuloj";
-$OpenToThePlatform = "Malferma - aliro permesita al registritaj uzuloj";
 $TipLang = "Cxi tiu lingvo estos deviga por cxiuj uzantoj de cxi tiu kurso.";
 $Vid = "Videofilmo";
 $Work = "Kontribuaĵoj";

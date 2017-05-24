@@ -128,7 +128,7 @@ class GradebookScoreLog
 
     /**
      * Set the achieved score
-     * @param int $score
+     * @param float $score
      *
      * @return $this
      */

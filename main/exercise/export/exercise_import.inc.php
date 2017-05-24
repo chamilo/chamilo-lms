@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 
-
 /**
  * Unzip the exercise in the temp folder
  * @param string The path of the temporary directory where the exercise was uploaded and unzipped
@@ -100,6 +99,8 @@ function import_exercise($file)
         return 'UplZipCorrupt';
     }
 
+    $baseWorkDir = $baseWorkDir.$uploadPath;
+
     // find the different manifests for each question and parse them.
     $exerciseHandle = opendir($baseWorkDir);
     $file_found = false;
@@ -175,6 +176,7 @@ function import_exercise($file)
 
     $exercise->save();
     $last_exercise_id = $exercise->selectId();
+    $courseId = api_get_course_int_id();
     if (!empty($last_exercise_id)) {
         // For each question found...
         foreach ($exercise_info['question'] as $question_array) {
@@ -196,18 +198,23 @@ function import_exercise($file)
 
             if (isset($question_array['category'])) {
                 $category = formatText(strip_tags($question_array['category']));
-                $categoryId = TestCategory::get_category_id_for_title(
-                    $category,
-                    api_get_course_int_id()
-                );
+                if (!empty($category)) {
+                    $categoryId = TestCategory::get_category_id_for_title(
+                        $category,
+                        $courseId
+                    );
 
-                if (!empty($categoryId)) {
-                    $question->category = $categoryId;
-                } else {
-                    $cat = new TestCategory();
-                    $cat->name = $category;
-                    $cat->description = '';
-                    $question->category = $cat->save();
+                    if (empty($categoryId)) {
+                        $cat = new TestCategory();
+                        $cat->name = $category;
+                        $cat->description = '';
+                        $categoryId = $cat->save($courseId);
+                        if ($categoryId) {
+                            $question->category = $categoryId;
+                        }
+                    } else {
+                        $question->category = $categoryId;
+                    }
                 }
             }
 
@@ -215,8 +222,8 @@ function import_exercise($file)
                 $description .= $question_array['description'];
             }
             $question->updateDescription($description);
-
             $question->save($last_exercise_id);
+
             $last_question_id = $question->selectId();
             //3. Create answer
             $answer = new Answer($last_question_id);
@@ -427,13 +434,13 @@ function startElementQti2($parser, $name, $attributes)
 
     switch ($current_element) {
         case 'ASSESSMENTITEM':
-            //retrieve current question
+            // retrieve current question
             $current_question_ident = $attributes['IDENTIFIER'];
-            $exercise_info['question'][$current_question_ident] = array();
-            $exercise_info['question'][$current_question_ident]['answer'] = array();
-            $exercise_info['question'][$current_question_ident]['correct_answers'] = array();
-            $exercise_info['question'][$current_question_ident]['title'] = $attributes['TITLE'];
-            $exercise_info['question'][$current_question_ident]['category'] = $attributes['CATEGORY'];
+            $exercise_info['question'][$current_question_ident] = [];
+            $exercise_info['question'][$current_question_ident]['answer'] = [];
+            $exercise_info['question'][$current_question_ident]['correct_answers'] = [];
+            $exercise_info['question'][$current_question_ident]['title'] = isset($attributes['TITLE']) ? $attributes['TITLE'] : '';
+            $exercise_info['question'][$current_question_ident]['category'] = isset($attributes['CATEGORY']) ? $attributes['CATEGORY'] : '';
             $exercise_info['question'][$current_question_ident]['tempdir'] = $questionTempDir;
             break;
         case 'SECTION':
@@ -444,11 +451,11 @@ function startElementQti2($parser, $name, $attributes)
             break;
         case 'RESPONSEDECLARATION':
             // Retrieve question type
-            if ("multiple" == $attributes['CARDINALITY']) {
+            if ('multiple' == $attributes['CARDINALITY']) {
                 $exercise_info['question'][$current_question_ident]['type'] = MCMA;
                 $cardinality = 'multiple';
             }
-            if ("single" == $attributes['CARDINALITY']) {
+            if ('single' == $attributes['CARDINALITY']) {
                 $exercise_info['question'][$current_question_ident]['type'] = MCUA;
                 $cardinality = 'single';
             }
@@ -540,21 +547,20 @@ function endElementQti2($parser, $name)
     if (sizeof($element_pile) >= 2) {
         $parent_element = $element_pile[sizeof($element_pile) - 2];
     } else {
-        $parent_element = "";
+        $parent_element = '';
     }
     if (sizeof($element_pile) >= 3) {
         $grand_parent_element = $element_pile[sizeof($element_pile) - 3];
     } else {
-        $grand_parent_element = "";
+        $grand_parent_element = '';
     }
     if (sizeof($element_pile) >= 4) {
         $great_grand_parent_element = $element_pile[sizeof($element_pile) - 4];
     } else {
-        $great_grand_parent_element = "";
+        $great_grand_parent_element = '';
     }
 
-    //treat the record of the full content of itembody tag :
-
+    //treat the record of the full content of itembody tag:
     if ($record_item_body && (!in_array($current_element, $non_HTML_tag_to_avoid))) {
         $current_question_item_body .= "</".$name.">";
     }
@@ -595,17 +601,17 @@ function elementDataQti2($parser, $data)
     if (sizeof($element_pile) >= 2) {
         $parent_element = $element_pile[sizeof($element_pile) - 2];
     } else {
-        $parent_element = "";
+        $parent_element = '';
     }
     if (sizeof($element_pile) >= 3) {
         $grand_parent_element = $element_pile[sizeof($element_pile) - 3];
     } else {
-        $grand_parent_element = "";
+        $grand_parent_element = '';
     }
     if (sizeof($element_pile) >= 4) {
         $great_grand_parent_element = $element_pile[sizeof($element_pile) - 4];
     } else {
-        $great_grand_parent_element = "";
+        $great_grand_parent_element = '';
     }
 
     //treat the record of the full content of itembody tag (needed for question statment and/or FIB text:
@@ -1076,9 +1082,9 @@ function qtiProcessManifest($filePath)
             $specialHref = Database::escape_string(preg_replace('/_/', '-', strtolower($href)));
             $specialHref = preg_replace('/(-){2,8}/', '-', $specialHref);
 
-            $sql = "SELECT iid FROM ".$tableDocuments." 
+            $sql = "SELECT iid FROM $tableDocuments 
                     WHERE
-                        c_id = " . $course['real_id']." AND 
+                        c_id = ".$course['real_id']." AND 
                         session_id = $sessionId AND 
                         path = '/".$specialHref."'";
             $result = Database::query($sql);

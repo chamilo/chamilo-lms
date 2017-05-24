@@ -145,7 +145,7 @@ function checkAccessUrl()
  * Returns a textual value ('ON' or 'OFF') based on a requester 2-state ini- configuration setting.
  *
  * @param string $val a php ini value
- * @return boolean: ON or OFF
+ * @return bool ON or OFF
  * @author Joomla <http://www.joomla.org>
  */
 function getPhpSetting($val)
@@ -2918,14 +2918,31 @@ function finishInstallation(
     $files = $finder->files()->in($path);
 
     // Needed for chash
-    $sql = 'CREATE TABLE IF NOT EXISTS version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(255), PRIMARY KEY(id), UNIQUE(version));';
-    Database::query($sql);
+    createVersionTable();
 
     foreach ($files as $version) {
         $version = str_replace(['Version', '.php'], '', $version->getFilename());
         $sql = "INSERT INTO version (version) VALUES ('$version')";
         Database::query($sql);
     }
+}
+
+/**
+ * Creates 'version' table
+ */
+function createVersionTable()
+{
+    $sql = getVersionTable();
+    Database::query($sql);
+}
+
+/**
+ * Get version creation table query
+ * @return string
+ */
+function getVersionTable()
+{
+    return 'CREATE TABLE IF NOT EXISTS version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(20), PRIMARY KEY(id), UNIQUE(version));';
 }
 
 /**
@@ -3119,7 +3136,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                 $connection->executeQuery("UPDATE settings_current SET selected_value = '1.10.0' WHERE variable = 'chamilo_database_version'");
 
                 if ($processFiles) {
-
+                    $fromVersionShort = '1.9';
                     include __DIR__.'/update-files-1.9.0-1.10.0.inc.php';
                     // Only updates the configuration.inc.php with the new version
                     include __DIR__.'/update-configuration.inc.php';
@@ -3242,7 +3259,10 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                 $connection->executeQuery($sql);
 
                 if ($processFiles) {
+                    $fromVersionShort = '1.10';
                     include __DIR__.'/update-files-1.10.0-1.11.0.inc.php';
+                    // Only updates the configuration.inc.php with the new version
+                    include __DIR__.'/update-configuration.inc.php';
                 }
                 error_log('Upgrade 1.11.x process concluded!  ('.date('Y-m-d H:i:s').')');
             } else {

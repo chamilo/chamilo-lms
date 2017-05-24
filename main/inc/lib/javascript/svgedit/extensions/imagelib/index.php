@@ -79,7 +79,7 @@ if (!empty($png_svg_files)) {
 	}
 	echo '</ul>';
 } else {
-	Display::display_warning_message(get_lang('NoSVGImagesInImagesGalleryPath'));
+	echo Display::return_message(get_lang('NoSVGImagesInImagesGalleryPath'), 'warning');
 }
 ?>
 </body>

@@ -22,7 +22,7 @@ $courses_without_category = isset($courses_in_category[0]) ? $courses_in_categor
 </div>
 <?php
 if (!empty($message)) {
-    Display::display_confirmation_message($message, false);
+    echo Display::return_message($message, 'confirm', false);
 }
 
 // COURSES WITH CATEGORIES
@@ -172,7 +172,6 @@ if (!empty($user_course_categories)) {
 }
 
 echo Display::page_subheader(get_lang('NoCourseCategory'));
-
 echo '<table class="data_table">';
 // COURSES WITHOUT CATEGORY
 if (!empty($courses_without_category)) {
@@ -185,9 +184,18 @@ if (!empty($courses_without_category)) {
             <a name="course<?php echo $course['code']; ?>"></a>
             <strong><?php echo $course['title']; ?></strong><br />
             <?php
-            if (api_get_setting('display_coursecode_in_courselist') === 'true') { echo $course['visual_code']; }
-            if (api_get_setting('display_coursecode_in_courselist') === 'true' && api_get_setting('display_teacher_in_courselist') === 'true') { echo " - "; }
-            if (api_get_setting('display_teacher_in_courselist') === 'true') { echo $course['tutor']; }
+            if (api_get_setting('display_coursecode_in_courselist') === 'true') {
+                echo $course['visual_code'];
+            }
+
+            if (api_get_setting('display_coursecode_in_courselist') === 'true' &&
+                api_get_setting('display_teacher_in_courselist') === 'true'
+            ) {
+                echo " - ";
+            }
+            if (api_get_setting('display_teacher_in_courselist') === 'true') {
+                echo $course['tutor'];
+            }
             ?>
         </td>
         <td valign="top">
@@ -209,56 +217,54 @@ if (!empty($courses_without_category)) {
             </form><br />
             </div>
             <?php } ?>
-
             <div style="float:left; width:110px">
             <?php
             if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-            $icon_title = get_lang('CourseDetails').' - '.$course['title'];
+                $icon_title = get_lang('CourseDetails').' - '.$course['title'];
             ?>
             <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>inc/ajax/course_home.ajax.php?a=show_course_information&code=<?php echo $course['code'] ?>" data-title="<?php echo $icon_title ?>" title="<?php echo $icon_title ?>" class="ajax">
                 <?php echo Display::return_icon('info.png', $icon_title, '', '22'); ?>
             </a>
-            <?php } ?>
-
-             <?php if (isset($_GET['edit']) && $course['code'] == $_GET['edit']) {   ?>
-                    <?php echo Display::display_icon('edit_na.png', get_lang('Edit'), '', 22); ?>
-                  <?php } else { ?>
-                    <a href="courses.php?action=<?php echo $action; ?>&amp;edit=<?php echo $course['code']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                    <?php echo Display::display_icon('edit.png', get_lang('Edit'), '', 22); ?>
-                    </a>
+            <?php }
+            if (isset($_GET['edit']) && $course['code'] == $_GET['edit']) {   ?>
+                <?php echo Display::display_icon('edit_na.png', get_lang('Edit'), '', 22); ?>
+              <?php } else { ?>
+                <a href="courses.php?action=<?php echo $action; ?>&amp;edit=<?php echo $course['code']; ?>&amp;sec_token=<?php echo $stok; ?>">
+                <?php echo Display::display_icon('edit.png', get_lang('Edit'), '', 22); ?>
+                </a>
              <?php } ?>
 
             <!-- up /down icons-->
             <?php if ($key > 0) { ?>
-                    <a href="courses.php?action=<?php echo $action; ?>&amp;move=up&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                    <?php echo Display::display_icon('up.png', get_lang('Up'), '', 22) ?>
-                    </a>
+                <a href="courses.php?action=<?php echo $action; ?>&amp;move=up&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
+                <?php echo Display::display_icon('up.png', get_lang('Up'), '', 22) ?>
+                </a>
             <?php } else {
-                    echo Display::display_icon('up_na.png', get_lang('Up'), '', 22);
-                    }
-
-                    if ($key < $number_of_courses - 1) { ?>
-                    <a href="courses.php?action=<?php echo $action; ?>&amp;move=down&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                    <?php echo Display::display_icon('down.png', get_lang('Down'), '', 22); ?>
-                    </a>
+                echo Display::display_icon('up_na.png', get_lang('Up'), '', 22);
+            }
+            if ($key < $number_of_courses - 1) { ?>
+                <a href="courses.php?action=<?php echo $action; ?>&amp;move=down&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
+                <?php echo Display::display_icon('down.png', get_lang('Down'), '', 22); ?>
+                </a>
             <?php } else {
                     echo Display::display_icon('down_na.png', get_lang('Down'), '', 22);
                     }?>
                 </div>
                  <div style="float:left; margin-right:10px;">
                   <!-- cancel subscrioption-->
-            <?php if ($course['status'] != 1) {
+            <?php
+                if ($course['status'] != 1) {
                     if ($course['unsubscr'] == 1) {
-            ?>
-                    <!-- changed link to submit to avoid action by the search tool indexer -->
-                    <form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())) ?>')) return false;">
-                        <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
-                        <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
-                        <button class="btn btn-default" value="<?php echo get_lang('Unsubscribe'); ?>" name="unsub">
-                            <?php echo get_lang('Unsubscribe'); ?>
-                        </button>
-                    </form>
-                    </div>
+                ?>
+                <!-- changed link to submit to avoid action by the search tool indexer -->
+                <form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())) ?>')) return false;">
+                    <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
+                    <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
+                    <button class="btn btn-default" value="<?php echo get_lang('Unsubscribe'); ?>" name="unsub">
+                        <?php echo get_lang('Unsubscribe'); ?>
+                    </button>
+                </form>
+                </div>
               <?php }
                 }
                 ?>

@@ -202,7 +202,7 @@ class CLpItem
      */
     public function __construct()
     {
-        $this->maxScore = 100;
+        $this->maxScore = 100.0;
     }
 
     /**

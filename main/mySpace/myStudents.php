@@ -366,7 +366,7 @@ if (!empty($student_id)) {
     echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&export=xls">'.
     Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a> ';
 
-    if (!empty ($user_info['email'])) {
+    if (!empty($user_info['email'])) {
         $send_mail = '<a href="mailto:'.$user_info['email'].'">'.
             Display::return_icon('mail_send.png', get_lang('SendMail'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
@@ -385,10 +385,34 @@ if (!empty($student_id)) {
 
     if (api_is_platform_admin(false, true) || api_is_student_boss()) {
         echo Display::url(
-            Display::return_icon('skill-badges.png', get_lang('AssignSkill'), null, ICON_SIZE_MEDIUM),
+            Display::return_icon(
+                'skill-badges.png',
+                get_lang('AssignSkill'),
+                null,
+                ICON_SIZE_MEDIUM
+            ),
             api_get_path(WEB_CODE_PATH).'badge/assign.php?'.http_build_query(['user' => $student_id])
         );
     }
+
+    $permissions = StudentFollowUpPlugin::getPermissions(
+        $student_id,
+        api_get_user_id()
+    );
+    $isAllow = $permissions['is_allow'];
+    if ($isAllow) {
+        echo Display::url(
+            Display::return_icon(
+                'blog.png',
+                get_lang('Blog'),
+                null,
+                ICON_SIZE_MEDIUM
+            ),
+            api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php?student_id='.$student_id
+        );
+    }
+
+
 
     echo '</div>';
 
@@ -1110,14 +1134,17 @@ if (!empty($student_id)) {
                     if (api_is_allowed_to_edit()) {
                         echo '<td>';
                         if ($any_result === true) {
-                            echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.$course_code.'&course='.$course_code.'&details='.Security::remove_XSS($_GET['details']).'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student='.$user_info['user_id'].'&details=true&id_session='.$sessionId.'">';
-                            echo Display::return_icon(
+                            $url = 'myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.$course_code.'&course='.$course_code.'&details='.Security::remove_XSS($_GET['details']).'&origin='.$origin.'&lp_id='.$learnpath->getId().'&student='.$user_info['user_id'].'&details=true&id_session='.$sessionId;
+                            echo Display::url(
+                                Display::return_icon(
                                     'clean.png',
                                     get_lang('Clean'),
                                     '',
                                     ICON_SIZE_SMALL
-                                ).'</a>';
-                            echo '</a>';
+                                ),
+                                $url,
+                                ['onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDelete')))."')) return false;"]
+                            );
                         }
                         echo '</td>';
                         echo '</tr>';

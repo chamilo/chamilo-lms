@@ -113,6 +113,15 @@ class Plugin
     }
 
     /**
+     * @return string
+     */
+    public function getCamelCaseName()
+    {
+        $result = get_class($this);
+        return str_replace('Plugin', '', $result);
+    }
+
+    /**
      * Returns the title of the plugin
      * @return string
      */

@@ -20,17 +20,7 @@ class SelectAjax extends HTML_QuickForm_select
      */
     public function toHtml()
     {
-        $html = api_get_asset('select2/dist/js/select2.min.js');
-
         $iso = api_get_language_isocode(api_get_interface_language());
-        $languageCondition = '';
-
-        if (file_exists(api_get_path(SYS_PATH)."web/assets/select2/dist/js/i18n/$iso.js")) {
-            $html .= api_get_asset("select2/dist/js/i18n/$iso.js");
-            $languageCondition = "language: '$iso',";
-        }
-
-        $html .= api_get_css(api_get_path(WEB_PATH).'web/assets/select2/dist/css/select2.min.css');
 
         $formatResult = $this->getAttribute('formatResult');
 
@@ -85,11 +75,11 @@ class SelectAjax extends HTML_QuickForm_select
         $max = $this->getAttribute('maximumSelectionLength');
         $max = !empty($max) ? "maximumSelectionLength: $max, " : '';
 
-        $html .= <<<JS
+        $html = <<<JS
             <script>
                 $(function(){
                     $('#{$this->getAttribute('id')}').select2({
-                        $languageCondition
+                        language: '$iso',
                         placeholder: '$plHolder',
                         allowClear: true,
                         width: '$width',

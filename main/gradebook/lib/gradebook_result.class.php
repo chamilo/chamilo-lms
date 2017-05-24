@@ -20,10 +20,8 @@ class GradeBookResult
 
     /**
      * Exports the complete report as a CSV file
-     * @param	string		Document path inside the document tool
-     * @param	integer		Optional user ID
-     * @param	boolean		Whether to include user fields or not
-     * @return	boolean		False on error
+     * @param    string $dato Document path inside the document tool
+     * @return    boolean        False on error
      */
     public function exportCompleteReportCSV($dato)
     {
@@ -75,6 +73,7 @@ class GradeBookResult
 
     /**
      * Exports the complete report as an XLS file
+     * @param array $data
      * @return	boolean|null		False on error
      */
     public function exportCompleteReportXLS($data)
@@ -119,7 +118,7 @@ class GradeBookResult
 
     /**
      * Exports the complete report as a DOCX file
-     * @param $data The table data
+     * @param array $data The table data
      * @return bool
      */
     public function exportCompleteReportDOC($data)

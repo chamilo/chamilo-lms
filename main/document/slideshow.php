@@ -497,11 +497,11 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
             echo '</ul>';
         }
     } else {
-        Display::display_warning_message(get_lang('FileNotFound'));
+        echo Display::return_message(get_lang('FileNotFound'), 'warning');
     }
 } else {
     if ($slide_id != 'all') {
-        Display::display_warning_message(get_lang('NoDataAvailable'));
+        echo Display::return_message(get_lang('NoDataAvailable'), 'warning');
     }
 }
 

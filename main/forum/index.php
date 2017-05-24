@@ -129,7 +129,7 @@ if ($actions == 'notify' && isset($_GET['content']) && isset($_GET['id'])) {
         api_not_allowed();
     }
     $return_message = set_notification($_GET['content'], $_GET['id']);
-    Display:: display_confirmation_message($return_message, false);
+    echo Display::return_message($return_message, 'confirm', false);
 }
 
 get_whats_new();

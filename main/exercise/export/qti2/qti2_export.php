@@ -487,6 +487,7 @@ function formatExerciseQtiTitle($text)
 
 /**
  * @param string $text
+ * @return  string
  */
 function cleanAttribute($text)
 {

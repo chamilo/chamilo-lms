@@ -14,7 +14,7 @@ use Chamilo\CoreBundle\Entity\ExtraField;
  *
  * All public functions static public functions inside a class called Display,
  * so you use them like this: e.g.
- * Display::display_normal_message($message)
+ * Display::return_message($message)
  *
  * @package chamilo.library
  *
@@ -183,21 +183,21 @@ class Display
     /**
      * Displays a table
      * @param array $header Titles for the table header
-     * 						each item in this array can contain 3 values
-     * 						- 1st element: the column title
-     * 						- 2nd element: true or false (column sortable?)
-     * 						- 3th element: additional attributes for
-     *  						th-tag (eg for column-width)
-     * 						- 4the element: additional attributes for the td-tags
+     *                        each item in this array can contain 3 values
+     *                        - 1st element: the column title
+     *                        - 2nd element: true or false (column sortable?)
+     *                        - 3th element: additional attributes for
+     *                        th-tag (eg for column-width)
+     *                        - 4the element: additional attributes for the td-tags
      * @param array $content 2D-array with the tables content
      * @param array $sorting_options Keys are:
-     * 					'column' = The column to use as sort-key
-     * 					'direction' = SORT_ASC or SORT_DESC
+     *                    'column' = The column to use as sort-key
+     *                    'direction' = SORT_ASC or SORT_DESC
      * @param array $paging_options Keys are:
-     * 					'per_page_default' = items per page when switching from
-     * 										 full-	list to per-page-view
-     * 					'per_page' = number of items to show per page
-     * 					'page_nr' = The page to display
+     *                    'per_page_default' = items per page when switching from
+     *                                         full-    list to per-page-view
+     *                    'per_page' = number of items to show per page
+     *                    'page_nr' = The page to display
      * @param array $query_vars Additional variables to add in the query-string
      * @param string The style that the table will show. You can set 'table' or 'grid'
      * @author bart.mollet@hogent.be
@@ -278,16 +278,16 @@ class Display
      * @param array header content
      * @param array array with the information to show
      * @param array $paging_options Keys are:
-     * 					'per_page_default' = items per page when switching from
-     * 										 full-	list to per-page-view
-     * 					'per_page' = number of items to show per page
-     * 					'page_nr' = The page to display
-     * 					'hide_navigation' =  true to hide the navigation
+     *                    'per_page_default' = items per page when switching from
+     *                                         full-    list to per-page-view
+     *                    'per_page' = number of items to show per page
+     *                    'page_nr' = The page to display
+     *                    'hide_navigation' =  true to hide the navigation
      * @param array $query_vars Additional variables to add in the query-string
      * @param array $form actions Additional variables to add in the query-string
      * @param mixed An array with bool values to know which columns show.
      * i.e: $visibility_options= array(true, false) we will only show the first column
-     * 				Can be also only a bool value. TRUE: show all columns, FALSE: show nothing
+     *                Can be also only a bool value. TRUE: show all columns, FALSE: show nothing
      */
     public static function display_sortable_grid(
         $name,
@@ -319,19 +319,19 @@ class Display
      * @param array header content
      * @param array array with the information to show
      * @param array $paging_options Keys are:
-     * 					'per_page_default' = items per page when switching from
-     * 										 full-	list to per-page-view
-     * 					'per_page' = number of items to show per page
-     * 					'page_nr' = The page to display
-     * 					'hide_navigation' =  true to hide the navigation
+     *                    'per_page_default' = items per page when switching from
+     *                                         full-    list to per-page-view
+     *                    'per_page' = number of items to show per page
+     *                    'page_nr' = The page to display
+     *                    'hide_navigation' =  true to hide the navigation
      * @param array $query_vars Additional variables to add in the query-string
      * @param array $form actions Additional variables to add in the query-string
      * @param mixed An array with bool values to know which columns show. i.e:
      *  $visibility_options= array(true, false) we will only show the first column
-     * 	Can be also only a bool value. TRUE: show all columns, FALSE: show nothing
+     *    Can be also only a bool value. TRUE: show all columns, FALSE: show nothing
      * @param bool  true for sorting data or false otherwise
      * @param array grid classes
-     * @return 	string   html grid
+     * @return    string   html grid
      */
     public static function return_sortable_grid(
         $name,
@@ -382,7 +382,7 @@ class Display
      * @param array $query_vars Additional variables to add in the query-string
      * @param array $column_show Array of binaries 1= show columns 0. hide a column
      * @param array $column_order An array of integers that let us decide how the columns are going to be sort.
-     * 						      i.e:  $column_order=array('1''4','3','4'); The 2nd column will be order like the 4th column
+     *    i.e:  $column_order=array('1''4','3','4'); The 2nd column will be order like the 4th column
      * @param array $form_actions Set optional forms actions
      *
      * @author Julio Montoya
@@ -433,7 +433,7 @@ class Display
      * Displays a normal message. It is recommended to use this public function
      * to display any normal information messages.
      * @param string $message
-     * @param bool	$filter (true) or not (false)
+     * @param bool $filter (true) or not (false)
      * @param bool $returnValue
      *
      * @deprecated Use <code>Display::addFlash(Display::return_message($message, 'normal'));</code>
@@ -443,7 +443,7 @@ class Display
      */
     public static function display_normal_message($message, $filter = true, $returnValue = false)
     {
-    	$message = self::return_message($message, 'normal', $filter);
+        $message = self::return_message($message, 'normal', $filter);
         if ($returnValue) {
             return $message;
         } else {
@@ -469,7 +469,7 @@ class Display
 
     /**
      * Displays an confirmation message. Use this if something has been done successfully
-     * @param bool	Filter (true) or not (false)
+     * @param bool    Filter (true) or not (false)
      * @deprecated use Display::addFlash(Display::return_message($message, 'confirm'));
      * @return void
      */
@@ -487,7 +487,7 @@ class Display
      * Displays an error message. It is recommended to use this public function if an error occurs
      * @param string $message - include any additional html
      *                          tags if you need them
-     * @param bool	Filter (true) or not (false)
+     * @param bool    Filter (true) or not (false)
      * @deprecated use Display::addFlash(Display::return_message($message, 'error'));
      *
      * @return void
@@ -527,22 +527,22 @@ class Display
         }
 
         if ($filter) {
-        	$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
+            $message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
         }
 
         $class = '';
         switch ($type) {
             case 'warning':
-               $class .= 'alert alert-warning';
-               break;
+                $class .= 'alert alert-warning';
+                break;
             case 'error':
-               $class .= 'alert alert-danger';
-               break;
+                $class .= 'alert alert-danger';
+                break;
             case 'confirmation':
             case 'confirm':
             case 'success':
                 $class .= 'alert alert-success';
-               break;
+                break;
             case 'normal':
             default:
                 $class .= 'alert alert-info';
@@ -629,6 +629,7 @@ class Display
      * @param char $selected_letter The letter that should be selected
      * @todo This is English language specific implementation.
      * It should be adapted for the other languages.
+     * @return string
      */
     public static function get_alphabet_options($selected_letter = '')
     {
@@ -802,8 +803,9 @@ class Display
      *
      * @param string $image_path the filename of the file (in the main/img/ folder
      * @param string $alt_text the alt text (probably a language variable)
-     * @param array  $additional_attributes (for instance height, width, onclick, ...)
+     * @param array $additional_attributes (for instance height, width, onclick, ...)
      * @param boolean $filterPath Optional. Whether filter the image path. Default is true
+     * @return string
      * @author Julio Montoya 2010
      */
     public static function img($image_path, $alt_text = '', $additional_attributes = null, $filterPath = true)
@@ -849,6 +851,8 @@ class Display
      * @param string $tag the tag name
      * @param string $content the tag's content
      * @param array $additional_attributes (for instance height, width, onclick, ...)
+     *
+     * @return string
      * @author Julio Montoya 2010
      */
     public static function tag($tag, $content, $additional_attributes = array())
@@ -910,18 +914,17 @@ class Display
 
     /**
      * Displays an HTML input tag
-     *
      */
     public static function input($type, $name, $value, $attributes = array())
     {
-         if (isset($type)) {
-             $attributes['type'] = $type;
-         }
-         if (isset($name)) {
-             $attributes['name'] = $name;
-         }
-         if (isset($value)) {
-             $attributes['value'] = $value;
+        if (isset($type)) {
+            $attributes['type'] = $type;
+        }
+        if (isset($name)) {
+            $attributes['name'] = $name;
+        }
+        if (isset($value)) {
+            $attributes['value'] = $value;
         }
         return self::tag('input', '', $attributes);
     }
@@ -934,10 +937,10 @@ class Display
      */
     public static function button($name, $value, $attributes = array())
     {
-    	if (!empty($name)) {
+        if (!empty($name)) {
             $attributes['name'] = $name;
-    	}
-    	return self::tag('button', $value, $attributes);
+        }
+        return self::tag('button', $value, $attributes);
     }
 
     /**
@@ -1083,20 +1086,20 @@ class Display
      */
     public static function tabsOnlyLink($headers, $selected = null)
     {
-         $id = uniqid();
-         $i = 1;
-         $lis = null;
-         foreach ($headers as $item) {
+        $id = uniqid();
+        $i = 1;
+        $lis = null;
+        foreach ($headers as $item) {
             $class = null;
             if ($i == $selected) {
                 $class = 'active';
             }
-             $item = self::tag(
-                 'a',
-                 $item['content'],
-                 array('id' => $id.'-'.$i, 'href' => $item['url'])
-             );
-             $lis .= self::tag('li', $item, array('class' => $class));
+            $item = self::tag(
+                'a',
+                $item['content'],
+                array('id' => $id.'-'.$i, 'href' => $item['url'])
+            );
+            $lis .= self::tag('li', $item, array('class' => $class));
             $i++;
         }
         return self::tag('ul', $lis, array('class' => 'nav nav-tabs tabs-margin'));
@@ -1144,17 +1147,17 @@ class Display
      * example --> $(function() { <?php echo Display::grid_js('grid' ...); ?> }
      * In order to work this function needs the Display::grid_html function with the same div id
      *
-     * @param   string  $div_id div id
-     * @param   string  $url url where the jqgrid will ask for data (if datatype = json)
-     * @param   array   $column_names Visible columns (you should use get_lang). An array in which we place the names of the columns.
-     * 					This is the text that appears in the head of the grid (Header layer).
-     * 					Example: colname   {name:'date',     index:'date',   width:120, align:'right'},
-     * @param   array   $column_model the column model :  Array which describes the parameters of the columns.This is the most important part of the grid.
-     * 					For a full description of all valid values see colModel API. See the url above.
-     * @param   array   $extra_params extra parameters
-     * @param   array   $data data that will be loaded
-     * @param	string	$formatter A string that will be appended to the JSON returned
-     * @param	bool	$fixed_width not implemented yet
+     * @param   string $div_id div id
+     * @param   string $url url where the jqgrid will ask for data (if datatype = json)
+     * @param   array $column_names Visible columns (you should use get_lang). An array in which we place the names of the columns.
+     *                    This is the text that appears in the head of the grid (Header layer).
+     *                    Example: colname   {name:'date',     index:'date',   width:120, align:'right'},
+     * @param   array $column_model the column model :  Array which describes the parameters of the columns.This is the most important part of the grid.
+     *                    For a full description of all valid values see colModel API. See the url above.
+     * @param   array $extra_params extra parameters
+     * @param   array $data data that will be loaded
+     * @param    string $formatter A string that will be appended to the JSON returned
+     * @param    bool $fixed_width not implemented yet
      * @return  string  the js code
      *
      */
@@ -1270,9 +1273,7 @@ class Display
         // Creating the jqgrid element.
         $json .= '$("#'.$div_id.'").jqGrid({';
         //$json .= $beforeSelectRow;
-
         $json .= $json_encode;
-
         $json .= '});';
 
         // Grouping headers option
@@ -1308,8 +1309,8 @@ class Display
      */
     public static function table($headers, $rows, $attributes = array())
     {
-    	if (empty($attributes)) {
-    		$attributes['class'] = 'data_table';
+        if (empty($attributes)) {
+            $attributes['class'] = 'data_table';
         }
         $table = new HTML_Table($attributes);
         $row = 0;
@@ -1317,17 +1318,17 @@ class Display
 
         // Course headers
         if (!empty($headers)) {
-	        foreach ($headers as $item) {
-	            $table->setHeaderContents($row, $column, $item);
-	            $column++;
-	        }
-	        $row = 1;
-	        $column = 0;
+            foreach ($headers as $item) {
+                $table->setHeaderContents($row, $column, $item);
+                $column++;
+            }
+            $row = 1;
+            $column = 0;
         }
 
         if (!empty($rows)) {
-	        foreach ($rows as $content) {
-	            $table->setCellContents($row, $column, $content);
+            foreach ($rows as $content) {
+                $table->setCellContents($row, $column, $content);
                 $row++;
             }
         }
@@ -1572,50 +1573,8 @@ class Display
                 }
                 $active = true;
             } else {
-                /*$start = $stop = false;
-                $start_buffer = $stop_buffer = '';
-                if ($session_info['access_start_date'] === '0000-00-00 00:00:00' || empty($session_info['access_start_date'])) {
-                    $session_info['access_start_date'] = '';
-                } else {
-                    $start = true;
-                    $start_buffer = $session_info['access_start_date'];
-                    $session_info['access_start_date'] = $session_info['access_start_date'];
-                }
-                if ($session_info['access_end_date'] === '0000-00-00 00:00:00' || empty($session_info['access_end_date'])) {
-                    $session_info['access_end_date'] = '';
-                } else {
-                    $stop = true;
-                    $stop_buffer = $session_info['access_end_date'];
-                    $session_info['access_end_date'] = $session_info['access_end_date'];
-                }
-                if ($start && $stop) {
-                    $session['dates'] = sprintf(
-                        get_lang('FromDateXToDateY'),
-                        api_format_date($start_buffer),
-                        api_format_date($stop_buffer)
-                    );
-                } else {
-                    $start_buffer = $stop_buffer = null;
-                    if (!empty($session_info['access_start_date'])) {
-                        $start_buffer = sprintf(
-                            get_lang('FromDateX'),
-                            api_format_date(api_get_local_time($session_info['access_start_date']))
-                        );
-                    }
-
-                    if (!empty($session_info['access_end_date'])) {
-                        $stop_buffer = sprintf(
-                            get_lang('UntilDateX'),
-                            api_format_date(api_get_local_time($session_info['access_end_date']))
-                        );
-                    }*/
-
                 $dates = SessionManager::parseSessionDates($session_info, true);
-
-                //$session['dates'] = $start_buffer . ' ' . $stop_buffer.'- julio '.$dates['access'];
                 $session['dates'] = $dates['access'];
-
-
                 if (api_get_setting('show_session_coach') === 'true') {
                     $session['coach'] = api_get_person_name(
                         $session_info['firstname'],
@@ -1661,8 +1620,8 @@ class Display
      * @param string $id of the rating ul element
      * @param string $url that will be added (for jquery see hot_courses.tpl)
      * @param array $point_info point info array see function CourseManager::get_course_ranking()
-	 * @param bool $add_div_wrapper add a div wrapper
-	 * @return string
+     * @param bool $add_div_wrapper add a div wrapper
+     * @return string
      **/
     public static function return_rating_system(
         $id,
@@ -1670,40 +1629,40 @@ class Display
         $point_info = [],
         $add_div_wrapper = true
     ) {
-		$number_of_users_who_voted = isset($point_info['users_who_voted']) ? $point_info['users_who_voted'] : null;
-		$percentage = isset($point_info['point_average']) ? $point_info['point_average'] : 0;
+        $number_of_users_who_voted = isset($point_info['users_who_voted']) ? $point_info['users_who_voted'] : null;
+        $percentage = isset($point_info['point_average']) ? $point_info['point_average'] : 0;
 
-		if (!empty($percentage)) {
+        if (!empty($percentage)) {
             $percentage = $percentage * 125 / 100;
         }
-		$accesses = isset($point_info['accesses']) ? $point_info['accesses'] : 0;
-		$star_label = sprintf(get_lang('XStarsOutOf5'), $point_info['point_average_star']);
+        $accesses = isset($point_info['accesses']) ? $point_info['accesses'] : 0;
+        $star_label = sprintf(get_lang('XStarsOutOf5'), $point_info['point_average_star']);
 
         $html = '<ul id="'.$id.'" class="star-rating">
-					<li class="current-rating" style="width:'.$percentage.'px;"></li>
-					<li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=1" title="'.$star_label.'" class="one-star">1</a></li>
-					<li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=2" title="'.$star_label.'" class="two-stars">2</a></li>
-					<li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=3" title="'.$star_label.'" class="three-stars">3</a></li>
-					<li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=4" title="'.$star_label.'" class="four-stars">4</a></li>
-					<li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=5" title="'.$star_label.'" class="five-stars">5</a></li>
-				</ul>';
+                    <li class="current-rating" style="width:'.$percentage.'px;"></li>
+                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=1" title="'.$star_label.'" class="one-star">1</a></li>
+                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=2" title="'.$star_label.'" class="two-stars">2</a></li>
+                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=3" title="'.$star_label.'" class="three-stars">3</a></li>
+                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=4" title="'.$star_label.'" class="four-stars">4</a></li>
+                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=5" title="'.$star_label.'" class="five-stars">5</a></li>
+                </ul>';
 
-		$labels = array();
+        $labels = array();
 
-		$labels[] = $number_of_users_who_voted == 1 ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');
-		$labels[] = $accesses == 1 ? $accesses.' '.get_lang('Visit') : $accesses.' '.get_lang('Visits');
-		$labels[] = $point_info['user_vote'] ? get_lang('YourVote').' ['.$point_info['user_vote'].']' : get_lang('YourVote').' [?] ';
+        $labels[] = $number_of_users_who_voted == 1 ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');
+        $labels[] = $accesses == 1 ? $accesses.' '.get_lang('Visit') : $accesses.' '.get_lang('Visits');
+        $labels[] = $point_info['user_vote'] ? get_lang('YourVote').' ['.$point_info['user_vote'].']' : get_lang('YourVote').' [?] ';
 
-		if (!$add_div_wrapper && api_is_anonymous()) {
-			$labels[] = self::tag('span', get_lang('LoginToVote'), array('class' => 'error'));
-		}
+        if (!$add_div_wrapper && api_is_anonymous()) {
+            $labels[] = self::tag('span', get_lang('LoginToVote'), array('class' => 'error'));
+        }
 
         $html .= self::div(implode(' | ', $labels), array('id' =>  'vote_label_'.$id, 'class' => 'vote_label_info'));
         $html .= ' '.self::span(' ', array('id' =>  'vote_label2_'.$id));
 
         if ($add_div_wrapper) {
-			$html = self::div($html, array('id' => 'rating_wrapper_'.$id));
-		}
+            $html = self::div($html, array('id' => 'rating_wrapper_'.$id));
+        }
 
         return $html;
     }
@@ -2060,7 +2019,6 @@ class Display
     }
 
     /**
-     *
      * @param int $nextValue
      * @param array $list
      * @param int $current
@@ -2122,6 +2080,7 @@ class Display
 
         return $html;
     }
+
     /**
      *
      * @param int $itemId
@@ -2147,7 +2106,7 @@ class Display
         $fixedValue = null,
         $linkAttributes = []
     ) {
-        $defaultClass = "before";
+        $defaultClass = 'before';
         $class = $defaultClass;
         foreach ($conditions as $condition) {
             $array = isset($condition['items']) ? $condition['items'] : array();
@@ -2176,13 +2135,13 @@ class Display
             }
         }
         if ($isCurrent) {
-            $class = "before current";
+            $class = 'before current';
         }
         if ($isMedia && $isCurrent) {
-            $class = "before current";
+            $class = 'before current';
         }
         if (empty($link)) {
-            $link_to_show = "#";
+            $link_to_show = '#';
         } else {
             $link_to_show = $link.($nextValue + $localCounter);
         }
@@ -2390,7 +2349,6 @@ class Display
 
         if (!$colsWidth) {
             $width = 12 / $col;
-
             array_walk($content, function() use ($width, &$colsWidth) {
                 $colsWidth[] = $width;
             });

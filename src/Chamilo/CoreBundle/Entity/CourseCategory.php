@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="tree_pos", columns={"tree_pos"})
  *  }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository")
  */
 class CourseCategory
 {
@@ -251,5 +251,15 @@ class CourseCategory
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        $name = strip_tags($this->name);
+
+        return "({$this->code}) $name";
     }
 }

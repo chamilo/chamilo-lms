@@ -24,7 +24,7 @@
 
 /*global document, window, runtime, FileReader, alert, Uint8Array, Blob, saveAs, Wodo*/
 
-function createEditor(path) {
+function createReviewEditor() {
     "use strict";
 
     var editor = null,
@@ -50,9 +50,7 @@ function createEditor(path) {
         pos = docUrl.indexOf('#');
         if (pos !== -1) {
             docUrl = docUrl.substr(pos + 1);
-        } else if (path) {
-            docUrl = path;
-        }else {
+        } else {
             docUrl = "welcome.odt";
         }
         return docUrl || null;
@@ -151,6 +149,7 @@ function createEditor(path) {
     editorOptions = {
         loadCallback: load,
         saveCallback: save,
+        modus: Wodo.MODUS_REVIEW,
         allFeaturesEnabled: true
     };
 
@@ -165,7 +164,7 @@ function createEditor(path) {
 
         editor = e;
         editor.setUserData({
-            fullName: "WebODF-Curious",
+            fullName: "Curious WebODF-Reviewer",
             color:    "black"
         });
 

@@ -5725,7 +5725,7 @@ class DocumentManager
 
             if (
                 in_array($extension, $webOdfExtensionList) &&
-                api_get_setting('enabled_support_odf') === true
+                api_get_configuration_value('enabled_support_odf') === true
             ) {
                 return Display::url($iconEn, "edit_odf.php?$courseParams&id=$document_id");
             }
@@ -5763,7 +5763,7 @@ class DocumentManager
 
         if (
             in_array($extension, $webOdfExtensionList) &&
-            api_get_setting('enabled_support_odf') === true
+            api_get_configuration_value('enabled_support_odf') === true
         ) {
             return Display::url($iconEn, "edit_odf.php?$courseParams&id=$document_id");
         }

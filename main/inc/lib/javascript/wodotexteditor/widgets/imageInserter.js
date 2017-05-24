@@ -22,7 +22,7 @@
  * @source: https://github.com/kogmbh/WebODF/
  */
 
-/*global define,require,document,Image,FileReader,window,runtime,ops */
+/*global define, require, document, Image, FileReader, window, runtime, ops, gui */
 
 define("webodf/editor/widgets/imageInserter", [
     "dijit/form/Button",
@@ -50,7 +50,7 @@ define("webodf/editor/widgets/imageInserter", [
             function insertImage(mimetype, content, width, height) {
                 textController.removeCurrentSelection();
                 imageController.insertImage(mimetype, content, width, height);
-            };
+            }
 
             /**
              * @param {!string} content  as datauri
@@ -168,7 +168,9 @@ define("webodf/editor/widgets/imageInserter", [
                 }
             };
 
+            /*jslint emptyblock: true*/
             this.onToolDone = function () {};
+            /*jslint emptyblock: false*/
 
             callback(widget);
         };

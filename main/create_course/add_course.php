@@ -12,6 +12,9 @@
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>
  */
 
+use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
+use Chamilo\CoreBundle\Entity\CourseCategory;
+
 // Flag forcing the "current course" reset.
 $cidReset = true;
 
@@ -25,6 +28,12 @@ if (!api_is_allowed_to_create_course()) {
 
 // Section for the tabs.
 $this_section = SECTION_COURSES;
+
+$em = Database::getManager();
+/** @var CourseCategoryRepository $courseCategoriesRepo */
+$courseCategoriesRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
+// Get all possible teachers.
+$accessUrlId = api_get_current_access_url_id();
 
 // "Course validation" feature. This value affects the way of a new course creation:
 // true  - the new course is requested only and it is created after approval;
@@ -80,16 +89,34 @@ $form->addElement(
     '<div id="advanced_params_options" style="display:none">'
 );
 
-// Category category.
-$url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
+$countCategories = $courseCategoriesRepo->countAllInAccessUrl($accessUrlId);
 
-$form->addElement(
-    'select_ajax',
-    'category_code',
-    get_lang('CourseFaculty'),
-    null,
-    array('url' => $url)
-);
+if ($countCategories >= 100) {
+    // Category code
+    $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
+
+    $form->addElement(
+        'select_ajax',
+        'category_code',
+        get_lang('CourseFaculty'),
+        null,
+        ['url' => $url]
+    );
+} else {
+    $categories = $courseCategoriesRepo->findAllInAccessUrl($accessUrlId);
+    $categoriesOptions = [null => get_lang('None')];
+
+    /** @var CourseCategory $category */
+    foreach ($categories as $category) {
+        $categoriesOptions[$category->getCode()] = $category->__toString();
+    }
+
+    $form->addSelect(
+        'category_code',
+        get_lang('CourseFaculty'),
+        $categoriesOptions
+    );
+}
 
 // Course code
 $form->addText(

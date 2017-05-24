@@ -22,7 +22,7 @@
  * @source: https://github.com/kogmbh/WebODF/
  */
 
-/*global define, runtime, core, gui, ops, document */
+/*global runtime, define, document, core, odf, gui, ops*/
 
 define("webodf/editor/EditorSession", [
     "dojo/text!resources/fonts/fonts.css"
@@ -40,6 +40,7 @@ define("webodf/editor/EditorSession", [
     runtime.loadClass("odf.OdfUtils");
     runtime.loadClass("gui.CaretManager");
     runtime.loadClass("gui.Caret");
+    runtime.loadClass("gui.OdfFieldView");
     runtime.loadClass("gui.SessionController");
     runtime.loadClass("gui.SessionView");
     runtime.loadClass("gui.HyperlinkTooltipView");
@@ -52,10 +53,11 @@ define("webodf/editor/EditorSession", [
 
     /**
      * Instantiate a new editor session attached to an existing operation session
+     * @constructor
+     * @implements {core.EventSource}
      * @param {!ops.Session} session
      * @param {!string} localMemberId
      * @param {{viewOptions:gui.SessionViewOptions,directParagraphStylingEnabled:boolean,annotationsEnabled:boolean}} config
-     * @constructor
      */
     var EditorSession = function EditorSession(session, localMemberId, config) {
         var self = this,
@@ -69,8 +71,9 @@ define("webodf/editor/EditorSession", [
             textns = odf.Namespaces.textns,
             fontStyles = document.createElement('style'),
             formatting = odtDocument.getFormatting(),
-            domUtils = new core.DomUtils(),
-            odfUtils = new odf.OdfUtils(),
+            domUtils = core.DomUtils,
+            odfUtils = odf.OdfUtils,
+            odfFieldView,
             eventNotifier = new core.EventNotifier([
                 EditorSession.signalMemberAdded,
                 EditorSession.signalMemberUpdated,
@@ -84,7 +87,9 @@ define("webodf/editor/EditorSession", [
                 EditorSession.signalParagraphStyleModified,
                 EditorSession.signalUndoStackChanged]),
             shadowCursor = new gui.ShadowCursor(odtDocument),
-            sessionConstraints;
+            sessionConstraints,
+            /**@const*/
+            NEXT = core.StepDirection.NEXT;
 
         /**
          * @return {Array.<!string>}
@@ -94,7 +99,9 @@ define("webodf/editor/EditorSession", [
 
             availableFonts = {};
 
+            /*jslint regexp: true*/
             regex =  /font-family *: *(?:\'([^']*)\'|\"([^"]*)\")/gm;
+            /*jslint regexp: false*/
             matches = regex.exec(fontsCSS);
 
             while (matches) {
@@ -148,7 +155,7 @@ define("webodf/editor/EditorSession", [
                 i;
 
             // encode
-            for (i = 0; i < name.length; i++) {
+            for (i = 0; i < name.length; i += 1) {
                 letter = name[i];
                 // simple approach, can be improved to not skip other allowed chars
                 if (letter.match(/[a-zA-Z0-9.-_]/) !== null) {
@@ -177,7 +184,7 @@ define("webodf/editor/EditorSession", [
             // then loop until result is really unique
             while (formatting.hasParagraphStyle(result)) {
                 result = ncName + "_" + i + "_" + ncMemberId;
-                i++;
+                i += 1;
             }
 
             return result;
@@ -186,7 +193,7 @@ define("webodf/editor/EditorSession", [
         function trackCursor(cursor) {
             var node;
 
-            node = odtDocument.getParagraphElement(cursor.getNode());
+            node = odfUtils.getParagraphElement(cursor.getNode());
             if (!node) {
                 return;
             }
@@ -299,15 +306,6 @@ define("webodf/editor/EditorSession", [
         };
 
         /**
-         * Round the step up to the next step
-         * @param {!number} step
-         * @return {!boolean}
-         */
-        function roundUp(step) {
-            return step === ops.OdtStepsTranslator.NEXT_STEP;
-        }
-
-        /**
          * Applies the paragraph style with the given
          * style name to all the paragraphs within
          * the cursor selection.
@@ -320,7 +318,7 @@ define("webodf/editor/EditorSession", [
                 opQueue = [];
 
             paragraphs.forEach(function (paragraph) {
-                var paragraphStartPoint = odtDocument.convertDomPointToCursorStep(paragraph, 0, roundUp),
+                var paragraphStartPoint = odtDocument.convertDomPointToCursorStep(paragraph, 0, NEXT),
                     paragraphStyleName = paragraph.getAttributeNS(odf.Namespaces.textns, "style-name"),
                     opSetParagraphStyle;
 
@@ -359,13 +357,15 @@ define("webodf/editor/EditorSession", [
          * element. If the style name is an empty string, the default style
          * is returned.
          * @param {!string} styleName
-         * @return {Element}
+         * @return {?Element}
          */
-        this.getParagraphStyleElement = function (styleName) {
+        function getParagraphStyleElement(styleName) {
             return (styleName === "")
                 ? formatting.getDefaultStyleElement('paragraph')
-                : odtDocument.getParagraphStyleElement(styleName);
-        };
+                : formatting.getStyleElement(styleName, 'paragraph');
+        }
+
+        this.getParagraphStyleElement = getParagraphStyleElement;
 
         /**
          * Returns if the style is used anywhere in the document
@@ -376,26 +376,22 @@ define("webodf/editor/EditorSession", [
             return formatting.isStyleUsed(styleElement);
         };
 
-        function getDefaultParagraphStyleAttributes() {
-            var styleNode = formatting.getDefaultStyleElement('paragraph');
-            if (styleNode) {
-                return formatting.getInheritedStyleAttributes(styleNode);
-            }
-
-            return null;
-        }
-
         /**
          * Returns the attributes of a given paragraph style name
          * (with inheritance). If the name is an empty string,
          * the attributes of the default style are returned.
          * @param {!string} styleName
-         * @return {Object}
+         * @return {?odf.Formatting.StyleData}
          */
         this.getParagraphStyleAttributes = function (styleName) {
-            return (styleName === "")
-                ? getDefaultParagraphStyleAttributes()
-                : odtDocument.getParagraphStyleAttributes(styleName);
+            var styleNode = getParagraphStyleElement(styleName),
+                includeSystemDefault = styleName === "";
+
+            if (styleNode) {
+                return formatting.getInheritedStyleAttributes(styleNode, includeSystemDefault);
+            }
+
+            return null;
         };
 
         /**
@@ -427,8 +423,7 @@ define("webodf/editor/EditorSession", [
          */
         this.cloneParagraphStyle = function (styleName, newStyleDisplayName) {
             var newStyleName = uniqueParagraphStyleNCName(newStyleDisplayName),
-                styleNode = self.getParagraphStyleElement(styleName),
-                formatting = odtDocument.getFormatting(),
+                styleNode = getParagraphStyleElement(styleName),
                 op, setProperties, attributes, i;
 
             setProperties = formatting.getStyleAttributes(styleNode);
@@ -585,6 +580,7 @@ define("webodf/editor/EditorSession", [
                     selectionViewManager.destroy,
                     self.sessionController.destroy,
                     hyperlinkTooltipView.destroy,
+                    odfFieldView.destroy,
                     destroy
                 ];
 
@@ -593,6 +589,7 @@ define("webodf/editor/EditorSession", [
 
         function init() {
             var head = document.getElementsByTagName('head')[0],
+                odfCanvas = session.getOdtDocument().getOdfCanvas(),
                 eventManager;
 
             // TODO: fonts.css should be rather done by odfCanvas, or?
@@ -601,6 +598,8 @@ define("webodf/editor/EditorSession", [
             fontStyles.appendChild(document.createTextNode(fontsCSS));
             head.appendChild(fontStyles);
 
+            odfFieldView = new gui.OdfFieldView(odfCanvas);
+            odfFieldView.showFieldHighlight();
             self.sessionController = new gui.SessionController(session, localMemberId, shadowCursor, {
                 annotationsEnabled: config.annotationsEnabled,
                 directTextStylingEnabled: config.directTextStylingEnabled,
@@ -609,12 +608,12 @@ define("webodf/editor/EditorSession", [
             sessionConstraints = self.sessionController.getSessionConstraints();
 
             eventManager = self.sessionController.getEventManager();
-            hyperlinkTooltipView = new gui.HyperlinkTooltipView(session.getOdtDocument().getOdfCanvas(),
+            hyperlinkTooltipView = new gui.HyperlinkTooltipView(odfCanvas,
                                                     self.sessionController.getHyperlinkClickHandler().getModifier);
             eventManager.subscribe("mousemove", hyperlinkTooltipView.showTooltip);
             eventManager.subscribe("mouseout", hyperlinkTooltipView.hideTooltip);
 
-            caretManager = new gui.CaretManager(self.sessionController);
+            caretManager = new gui.CaretManager(self.sessionController, odfCanvas.getViewport());
             selectionViewManager = new gui.SelectionViewManager(gui.SvgSelectionView);
             self.sessionView = new gui.SessionView(config.viewOptions, localMemberId, session, sessionConstraints, caretManager, selectionViewManager);
             self.availableFonts = getAvailableFonts();

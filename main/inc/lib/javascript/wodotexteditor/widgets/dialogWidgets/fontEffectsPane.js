@@ -24,11 +24,14 @@
 
 /*global runtime,define,require,document,dijit */
 
-define("webodf/editor/widgets/dialogWidgets/fontEffectsPane", [], function () {
+define("webodf/editor/widgets/dialogWidgets/fontEffectsPane", [
+    "webodf/editor/widgets/dialogWidgets/idMangler"],
+function (IdMangler) {
     "use strict";
 
     var FontEffectsPane = function (callback) {
         var self = this,
+            idMangler = new IdMangler(),
             editorSession,
             contentPane,
             form,
@@ -103,35 +106,36 @@ define("webodf/editor/widgets/dialogWidgets/fontEffectsPane", [], function () {
 
         };
 
+        /*jslint unparam: true*/
         function init(cb) {
             require([
                 "dojo",
                 "dojo/ready",
-                "dojo/dom-construct",
                 "dijit/layout/ContentPane",
-                "dojox/widget/ColorPicker",
+                "dojox/widget/ColorPicker", // referenced in fontEffectsPane.html
                 "webodf/editor/widgets/fontPicker"
-            ], function (dojo, ready, domConstruct, ContentPane, ColorPicker, FontPicker) {
+            ], function (dojo, ready, ContentPane, ColorPicker, FontPicker) {
                 var editorBase = dojo.config && dojo.config.paths &&
                             dojo.config.paths['webodf/editor'];
                 runtime.assert(editorBase, "webodf/editor path not defined in dojoConfig");
                 ready(function () {
                     contentPane = new ContentPane({
                         title: runtime.tr("Font Effects"),
-                        href: editorBase+"/widgets/dialogWidgets/fontEffectsPane.html",
-                        preload: true
+                        href: editorBase + "/widgets/dialogWidgets/fontEffectsPane.html",
+                        preload: true,
+                        ioMethod: idMangler.ioMethod
                     });
 
                     contentPane.onLoad = function () {
-                        var textColorTB = dijit.byId('textColorTB'),
-                            backgroundColorTB = dijit.byId('backgroundColorTB');
+                        var textColorTB = idMangler.byId('textColorTB'),
+                            backgroundColorTB = idMangler.byId('backgroundColorTB');
 
-                        form = dijit.byId('fontEffectsPaneForm');
+                        form = idMangler.byId('fontEffectsPaneForm');
                         runtime.translateContent(form.domNode);
 
-                        preview = document.getElementById('previewText');
-                        textColorPicker = dijit.byId('textColorPicker');
-                        backgroundColorPicker = dijit.byId('backgroundColorPicker');
+                        preview = idMangler.getElementById('previewText');
+                        textColorPicker = idMangler.byId('textColorPicker');
+                        backgroundColorPicker = idMangler.byId('backgroundColorPicker');
 
                         // Bind dojox widgets' values to invisible form elements, for easy parsing
                         textColorPicker.onChange = function (value) {
@@ -143,7 +147,7 @@ define("webodf/editor/widgets/dialogWidgets/fontEffectsPane", [], function () {
 
                         fontPicker = new FontPicker(function (picker) {
                             picker.widget().startup();
-                            document.getElementById('fontPicker').appendChild(picker.widget().domNode);
+                            idMangler.getElementById('fontPicker').appendChild(picker.widget().domNode);
                             picker.widget().name = 'fontName';
                             picker.setEditorSession(editorSession);
                         });
@@ -177,6 +181,7 @@ define("webodf/editor/widgets/dialogWidgets/fontEffectsPane", [], function () {
                 });
             });
         }
+        /*jslint unparam: false*/
 
         this.setEditorSession = function(session) {
             editorSession = session;

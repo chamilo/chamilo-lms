@@ -1968,10 +1968,9 @@ class SessionManager
         $status = null
     ) {
         $sessionId = intval($sessionId);
-        $courseCode = $courseInfo['code'];
         $courseId = $courseInfo['real_id'];
 
-        if (empty($sessionId) || empty($courseCode)) {
+        if (empty($sessionId) || empty($courseId)) {
             return array();
         }
 

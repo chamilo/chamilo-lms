@@ -22,39 +22,41 @@
  * @source: https://github.com/kogmbh/WebODF/
  */
 
-/*global define,require,webodf */
+/*global define, dojo, runtime, webodf */
 
 define("webodf/editor/widgets/aboutDialog", ["dijit/Dialog"], function (Dialog) {
     "use strict";
 
     var editorBase = dojo.config && dojo.config.paths && dojo.config.paths["webodf/editor"],
-        kogmbhImageUrl = editorBase+ "/images/kogmbh.png";
+        kogmbhImageUrl = editorBase + "/images/kogmbh.png";
 
     runtime.assert(editorBase, "webodf/editor path not defined in dojoConfig");
 
     return function AboutDialog(callback) {
         var self = this;
 
+        /*jslint emptyblock: true*/
         this.onToolDone = function () {};
+        /*jslint emptyblock: false*/
 
         function init() {
             // TODO: translation, once the the about text has been decided about
-            var tr = runtime.tr,
-                dialog;
+            var dialog;
 
             // Dialog
             dialog = new Dialog({
                 style: "width: 400px",
-                title: "WebODF Text Editor",
+                title: "Wodo.TextEditor",
                 autofocus: false,
-                content: "<p>The WebODF Text Editor is an easy to use Javascript-based plugin for webpages. " +
-                            "It provides a stand-alone editor for text documents in the OpenDocument Format.</p>" +
+                content: "<p>Wodo.TextEditor is an easy to use Javascript-based plugin for webpages. " +
+                            "It provides a stand-alone editor for text documents in the OpenDocument Format. " +
+                            "Done with WebODF.</p>" +
                             //TODO: add proper link directly to page about the component
                             "<p>Learn more on the <a href=\"http://webodf.org/\" target=\"_blank\">WebODF website</a>.</p>" +
                             "<p>Version " + webodf.Version + "</p>" +
-                            "<p>Made by <a href=\"http://kogmbh.com\" target=\"_blank\"><img src=\""+kogmbhImageUrl+"\" width=\"172\" height=\"40\" alt=\"KO GmbH\" style=\"vertical-align: top;\"></a>.</p>"
+                            "<p>Made by <a href=\"http://kogmbh.com\" target=\"_blank\"><img src=\"" + kogmbhImageUrl + "\" width=\"172\" height=\"40\" alt=\"KO GmbH\" style=\"vertical-align: top;\"></a>.</p>"
             });
-            dialog.onHide = function() { self.onToolDone(); };
+            dialog.onHide = function () { self.onToolDone(); };
 
             callback(dialog);
         }

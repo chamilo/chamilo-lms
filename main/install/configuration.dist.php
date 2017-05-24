@@ -377,3 +377,5 @@ $_configuration['agenda_legend'] = [
 //$_configuration['limit_session_admin_role'] = false;
 // Course tools visibility edition in sessions
 //$_configuration['allow_edit_tool_visibility_in_session'] = false;
+// Enable the support to ODF files
+//$_configuration['enabled_support_odf'] = true;

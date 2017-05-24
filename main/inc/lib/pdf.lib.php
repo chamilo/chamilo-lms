@@ -40,8 +40,8 @@ class PDF
 
         $params['left'] = isset($params['left']) ? $params['left'] : 15;
         $params['right'] = isset($params['right']) ? $params['right'] : 15;
-        $params['top'] = isset($params['top']) ? $params['top'] : 20;
-        $params['bottom'] = isset($params['bottom']) ? $params['bottom'] : 15;
+        $params['top'] = isset($params['top']) ? $params['top'] : 30;
+        $params['bottom'] = isset($params['bottom']) ? $params['bottom'] : 30;
 
         $this->params['filename'] = isset($params['filename']) ? $params['filename'] : api_get_local_time();
         $this->params['pdf_title'] = isset($params['pdf_title']) ? $params['pdf_title'] : get_lang('Untitled');
@@ -410,7 +410,7 @@ class PDF
         $fileToSave = null,
         $returnHtml = false
     ) {
-        global $_configuration;
+        $urlAppend = api_get_configuration_value('url_append');
 
         if (empty($document_html)) {
             return false;
@@ -436,7 +436,7 @@ class PDF
         $document_html = str_replace('../../', '', $document_html);
         $document_html = str_replace('../', '', $document_html);
         $document_html = str_replace(
-            (empty($_configuration['url_append']) ? '' : $_configuration['url_append'].'/').'courses/'.$course_code.'/document/',
+            (empty($urlAppend) ? '' : $urlAppend.'/').'courses/'.$course_code.'/document/',
             '',
             $document_html
         );
@@ -460,7 +460,6 @@ class PDF
                                 $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src_fixed);
                                 $new_path = $document_path.$old_src_fixed;
                                 $document_html = str_replace($old_src, $new_path, $document_html);
-
                             }
                         }
                     }
@@ -633,9 +632,9 @@ class PDF
      */
     public function set_header($course_data)
     {
-        $this->pdf->defaultheaderfontsize   = 10; // in pts
-        $this->pdf->defaultheaderfontstyle  = 'BI'; // blank, B, I, or BI
-        $this->pdf->defaultheaderline       = 1; // 1 to include line below header/above footer
+        $this->pdf->defaultheaderfontsize = 10; // in pts
+        $this->pdf->defaultheaderfontstyle = 'BI'; // blank, B, I, or BI
+        $this->pdf->defaultheaderline = 1; // 1 to include line below header/above footer
 
         $userId = api_get_user_id();
 
@@ -653,7 +652,7 @@ class PDF
                     $teachers = api_get_person_name($teacher['firstname'], $teacher['lastname']);
                 }
             }
-            
+
             $organization = ChamiloApi::getPlatformLogo();
             // Use custom logo image.
             $pdfLogo = api_get_setting('pdf_logo_header');

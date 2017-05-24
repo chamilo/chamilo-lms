@@ -43,11 +43,10 @@ class CourseCategory
     }
 
     /**
-     * @param string $category
-     *
+     * @param string $category Optional. Parent category code
      * @return array
      */
-    public static function getCategories($category)
+    public static function getCategories($category = null)
     {
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);

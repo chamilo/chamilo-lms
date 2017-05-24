@@ -91,7 +91,7 @@ class WSSESoapServer {
 
         $this->SOAPXPath = new DOMXPath($doc);
         $this->SOAPXPath->registerNamespace('wssoap', $this->soapNS);
-        $this->SOAPXPath->registerNamespace('wswsu', WSSESoapServer::WSUNS);
+        $this->SOAPXPath->registerNamespace('wswsu', self::WSUNS);
         $wsNamespace = $this->locateSecurityHeader();
         if (!empty($wsNamespace)) {
             $this->SOAPXPath->registerNamespace('wswsse', $wsNamespace);
@@ -102,7 +102,7 @@ class WSSESoapServer {
     {
         $objXMLSecDSig = new XMLSecurityDSig();
         $objXMLSecDSig->idKeys[] = 'wswsu:Id';
-        $objXMLSecDSig->idNS['wswsu'] = WSSESoapServer::WSUNS;
+        $objXMLSecDSig->idNS['wswsu'] = self::WSUNS;
         $objXMLSecDSig->sigNode = $refNode;
 
         /* Canonicalize the signed info */

@@ -750,7 +750,7 @@ class Sepe
                     $sql = "SELECT * FROM $classRoomTable
                             WHERE specialty_id='" . $specialtyId . "'";
                     $resultClassroom = Database::query($sql);
-                    if (Database::num_rows($resultClassroom) == false) {
+                    if (Database::num_rows($resultClassroom) === 0) {
                         return array(
                             "RESPUESTA_OBT_ACCION" => array(
                                 "CODIGO_RETORNO" => "-1",

@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Symfony\Component\Filesystem\Filesystem;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 
 /**
  * Class StudentFollowUpPlugin
@@ -28,7 +29,7 @@ class StudentFollowUpPlugin extends Plugin
             '0.1',
             'Julio Montoya',
             array(
-                'tool_enable' => 'boolean'
+                'tool_enable' => 'boolean',
             )
         );
     }
@@ -117,7 +118,7 @@ class StudentFollowUpPlugin extends Plugin
             if ($isDrh) {
                 $criteria = [
                     'user' => $studentId,
-                    'insertUser' => $currentUserId
+                    'insertUser' => $currentUserId,
                 ];
                 $repo = Database::getManager()->getRepository('ChamiloPluginBundle:StudentFollowUp\CarePost');
                 $post = $repo->findOneBy($criteria);
@@ -164,5 +165,58 @@ class StudentFollowUpPlugin extends Plugin
             'is_allow' => $isAllow,
             'show_private' => $showPrivate,
         ];
+    }
+
+    /**
+     * @param string $status
+     * @param int $currentUserId
+     *
+     * @return array
+     */
+    public static function getUsers($status, $currentUserId)
+    {
+        switch ($status) {
+            case COURSEMANAGER:
+                $sessions = SessionManager::get_sessions_by_user($currentUserId);
+                $sessions = array_column($sessions, 'session_id');
+
+                // Get session courses where I'm coach
+                $courseList = SessionManager::getCoursesListByCourseCoach($currentUserId);
+                $courses = [];
+                /** @var SessionRelCourseRelUser $courseItem */
+                foreach ($courseList as $courseItem) {
+                    $courses[] = $courseItem->getCourse()->getId();
+                }
+                break;
+            case DRH:
+                $sessions = SessionManager::get_sessions_followed_by_drh($currentUserId);
+                $sessions = array_column($sessions, 'id');
+                $courses = [];
+                foreach ($sessions as $sessionId) {
+                    $sessionDrhInfo = SessionManager::getSessionFollowedByDrh(
+                        $currentUserId,
+                        $sessionId
+                    );
+                    if ($sessionDrhInfo && isset($sessionDrhInfo['course_list'])) {
+                        $courses = array_merge($courses, array_column($sessionDrhInfo['course_list'], 'id'));
+                    }
+                }
+                break;
+        }
+
+        $userList = [];
+        foreach ($sessions as $sessionId) {
+            foreach ($courses as $courseId) {
+                $courseInfo = ['real_id' => $courseId];
+                $userFromSessionList = SessionManager::getUsersByCourseSession(
+                    $sessionId,
+                    $courseInfo
+                );
+                $userList = array_merge($userList, $userFromSessionList);
+            }
+            $userList = array_unique($userList);
+        }
+
+        return $userList;
     }
 }

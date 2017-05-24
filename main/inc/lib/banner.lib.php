@@ -345,7 +345,13 @@ function return_navigation_array()
             $result = api_get_settings_params_simple($params);
             $plugin = StudentFollowUpPlugin::create();
             if (!empty($result) && $result['selected_value'] === 'installed') {
-                $navigation['follow_up']['url'] = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php';
+                // Students
+                $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php';
+
+                if (api_is_platform_admin() || api_is_drh() || api_is_teacher()) {
+                    $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/my_students.php';
+                }
+                $navigation['follow_up']['url'] = $url;
                 $navigation['follow_up']['title'] = $plugin->get_lang('CareDetailView');
                 $navigation['follow_up']['key'] = 'homepage';
                 $navigation['follow_up']['icon'] = 'homepage.png';

@@ -31,6 +31,11 @@ CKEDITOR.editorConfig = function (config) {
             attributes : { 'class': 'ck ck-title2' }
         },
         { 
+            name : 'Title 3',
+            element : 'h3',
+            attributes : { 'class': 'ck ck-title3' }
+        },
+        { 
             name : 'Alert Success',
             element : 'p',
             attributes : { 'class': 'alert alert-success' }

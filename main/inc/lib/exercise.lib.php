@@ -1110,15 +1110,20 @@ HTML;
                 $counterAnswer = 1;
 
                 $s .= $isVertical ? '' : '<div class="row">';
-
+                $count = 0;
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+                    
                     $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                     $windowId = $questionId . '_' . $counterAnswer;
                     if ($answerCorrect) {
+                        $count++;
                         $s .= $isVertical ? '<div class="row">' : '';
                         $s .= '
                             <div class="'.($isVertical ? 'col-md-12' : 'col-xs-12 col-sm-4 col-md-3 col-lg-2').'">
+                                <div class="droppable-item">
+                                    <span class="number">'.$count.'.</span> 
                                 <div id="drop_'.$windowId.'" class="droppable">&nbsp;</div>
+                                </div>
                             </div>
                         ';
                         $s .= $isVertical ? '</div>' : '';

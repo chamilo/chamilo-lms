@@ -142,7 +142,10 @@ class ExerciseResult
         }
 
         if ($this->onlyBestAttempts) {
-            $results = $bestAttemptPerUser;
+            // Remove userId indexes to avoid issues in output
+            foreach ($bestAttemptPerUser as $attempt) {
+                $results[] = $attempt;
+            }
         }
 
         $filter_by_not_revised = false;

@@ -6,7 +6,6 @@
             <div class="col-md-8">
                 <h2>{{ post.title }}</h2>
                 <p>{{ post.content }}</p>
-
                 {% if type == 'simple' %}
                     {% set countElements = post.hasParent  + post.children.count %}
                     {% if countElements %}
@@ -19,7 +18,6 @@
                         </a>
                     {% endif %}
                 {% endif %}
-
                 {#{% if type == 'all' %}#}
                     {#{% if related_posts %}#}
                         {#<h3>Related</h3>#}
@@ -33,7 +31,6 @@
                     {#{% endif %}#}
                 {#{% endif %}#}
             </div>
-
             <div class="col-md-4">
                 <p>{{ post.createdAt |date('d/m/Y') }}</p>
                 <p>{{ post.insertUser.completeName }}</p>

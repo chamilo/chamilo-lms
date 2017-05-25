@@ -2077,6 +2077,7 @@ function installSettings(
  * @param string $chamiloVersion
  * @param EntityManager $manager
  * @throws \Doctrine\DBAL\DBALException
+ * @return bool
  */
 function migrate($chamiloVersion, EntityManager $manager)
 {
@@ -2106,7 +2107,6 @@ function migrate($chamiloVersion, EntityManager $manager)
     $to = null; // if $to == null then schema will be migrated to latest version
 
     echo "<pre>";
-
     try {
         // Execute migration!
         $migratedSQL = $migration->migrate($to);
@@ -2747,9 +2747,9 @@ function finishInstallation(
     $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
 
     $connection = $manager->getConnection();
-
+    $sql = getVersionTable();
     // Add version table
-    $connection->executeQuery('CREATE TABLE IF NOT EXISTS version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(20), PRIMARY KEY(id), UNIQUE(version))');
+    $connection->executeQuery($sql);
 
     // Add tickets defaults
     $ticketProject = new TicketProject();

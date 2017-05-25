@@ -8014,5 +8014,5 @@ $SendEmailToTeacherWhenStudentEndQuiz = "Send email to teacher when student ends
 $SendEmailToTeacherWhenStudentEndQuizOnlyIfOpenQuestion = "Send email to teacher when student ends an exercise only if an open question is answered.";
 $SendEmailToTeacherWhenStudentEndQuizOnlyIfOralQuestion = "Send email to teacher when student ends an exercise only if an oral question is answered.";
 $StudentStartExercise = "Student just started an exercise";
-$TempScoreXQuestionsNotCorrectedYet = 'Temporary score: %s open question(s) not corrected yet.';
+$TempScoreXQuestionsNotCorrectedYet = "Temporary score: %s open question(s) not corrected yet.";
 ?>

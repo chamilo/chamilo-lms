@@ -8029,4 +8029,5 @@ $SendEmailToTeacherWhenStudentEndQuiz = "Enviar un correo al profesor cuando el 
 $SendEmailToTeacherWhenStudentEndQuizOnlyIfOpenQuestion = "Enviar un correo al profesor cuando el estudiante termina un ejercicio, solo si ha respondido a una pregunta abierta";
 $SendEmailToTeacherWhenStudentEndQuizOnlyIfOralQuestion = "Enviar un correo al profesor cuando el estudiante termina un ejercicio, solo si ha respondido a una pregunta oral";
 $StudentStartExercise = "Un ejercicio/examen ha sido iniciado por un estudiante";
+$TempScoreXQuestionsNotCorrectedYet = "Score temporaire: %s pregunta(s) abierta(s) no corregida(s) todavía.";
 ?>

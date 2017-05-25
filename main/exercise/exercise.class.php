@@ -7432,8 +7432,8 @@ class Exercise
         if ($check_pass_percentage) {
             $is_success = ExerciseLib::is_success_exercise_result($score, $weight, $this->selectPassPercentage());
             // Color the final test score if pass_percentage activated
-            $ribbon_total_success_or_error = "";
-            if (ExerciseLib::is_pass_pourcentage_enabled($this->selectPassPercentage())) {
+            $ribbon_total_success_or_error = '';
+            if (ExerciseLib::isPassPercentageEnabled($this->selectPassPercentage())) {
                 if ($is_success) {
                     $eventMessage = $this->getOnSuccessMessage();
                     $ribbon_total_success_or_error = ' ribbon-total-success';

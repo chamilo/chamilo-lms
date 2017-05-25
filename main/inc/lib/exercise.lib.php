@@ -2283,8 +2283,7 @@ HOTSPOT;
         $show_percentage = true,
         $use_platform_settings = true,
         $show_only_percentage = false
-    )
-    {
+    ) {
         if (is_null($score) && is_null($weight)) {
             return '-';
         }
@@ -2352,8 +2351,8 @@ HOTSPOT;
      */
     public static function show_success_message($score, $weight, $pass_percentage)
     {
-        $res = "";
-        if (self::is_pass_pourcentage_enabled($pass_percentage)) {
+        $res = '';
+        if (self::isPassPercentageEnabled($pass_percentage)) {
             $is_success = self::is_success_exercise_result(
                 $score,
                 $weight,
@@ -2392,14 +2391,14 @@ HOTSPOT;
     /**
      * Return true if pass_pourcentage activated (we use the pass pourcentage feature
      * return false if pass_percentage = 0 (we don't use the pass pourcentage feature
-     * @param $in_pass_pourcentage
+     * @param $value
      * @return boolean
      * In this version, pass_percentage and show_success_message are disabled if
      * pass_percentage is set to 0
      */
-    public static function is_pass_pourcentage_enabled($in_pass_pourcentage)
+    public static function isPassPercentageEnabled($value)
     {
-        return $in_pass_pourcentage > 0;
+        return $value > 0;
     }
 
     /**
@@ -2438,6 +2437,7 @@ HOTSPOT;
             }
         }
         $score_rounded = float_format($score, 1);
+
         return $score_rounded;
     }
 
@@ -2963,8 +2963,7 @@ HOTSPOT;
                     $avg_score += $score;
                 }
             }
-            //We asume that all exe_weighting
-            //$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
+            // We asumme that all exe_weighting
             $avg_score = ($avg_score / count($user_results));
         }
 
@@ -2998,7 +2997,7 @@ HOTSPOT;
                     $avg_score += $score;
                 }
             }
-            //We asume that all exe_weighting
+            //We asumme that all exe_weighting
             //$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
             //$avg_score = ($avg_score / count($user_results));
             if (!empty($user_count)) {
@@ -3641,7 +3640,7 @@ HOTSPOT;
         $save_user_result = false,
         $remainingMessage = ''
     ) {
-        global $origin;
+        $origin = api_get_origin();
 
         // Getting attempt info
         $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id(
@@ -3872,12 +3871,12 @@ HOTSPOT;
 
                 if ($show_results) {
                     $score = array(
-                        'result' => get_lang('Score')." : ".self::show_score(
-                                $my_total_score,
-                                $my_total_weight,
-                                false,
-                                true
-                            ),
+                        'result' => self::show_score(
+                            $my_total_score,
+                            $my_total_weight,
+                            false,
+                            true
+                        ),
                         'pass' => $my_total_score >= $my_total_weight ? true : false,
                         'score' => $my_total_score,
                         'weight' => $my_total_weight,
@@ -3888,7 +3887,6 @@ HOTSPOT;
                 }
 
                 $contents = ob_get_clean();
-
                 $question_content = '';
                 if ($show_results) {
                     $question_content = '<div class="question_row_answer">';
@@ -3900,15 +3898,12 @@ HOTSPOT;
                     );
                 }
                 $counter++;
-
                 $question_content .= $contents;
-
                 if ($show_results) {
                     $question_content .= '</div>';
                 }
 
                 $exercise_content .= $question_content;
-
             } // end foreach() block that loops over all questions
         }
 
@@ -3925,7 +3920,7 @@ HOTSPOT;
         }
 
         if (!empty($category_list) && ($show_results || $show_only_score)) {
-            //Adding total
+            // Adding total
             $category_list['total'] = array(
                 'score' => $total_score,
                 'total' => $total_weight
@@ -4021,8 +4016,8 @@ HOTSPOT;
                 $objExercise->selectPassPercentage()
             );
             // Color the final test score if pass_percentage activated
-            $ribbon_total_success_or_error = "";
-            if (self::is_pass_pourcentage_enabled(
+            $ribbon_total_success_or_error = '';
+            if (self::isPassPercentageEnabled(
                 $objExercise->selectPassPercentage()
             )
             ) {

@@ -45,13 +45,16 @@ class FreeAnswer extends Question
      * abstract function which creates the form to create/edit the answers of the question
      * @param FormValidator $form
      */
-    function processAnswersCreation($form)
+    public function processAnswersCreation($form)
     {
         $this->weighting = $form->getSubmitValue('weighting');
         $this->save();
     }
 
-    function return_header($feedback_type = null, $counter = null, $score = null)
+    /**
+     * @inheritdoc
+     */
+    public function return_header($feedback_type = null, $counter = null, $score = [])
     {
         if (!empty($score['comments']) || $score['score'] > 0) {
             $score['revised'] = true;

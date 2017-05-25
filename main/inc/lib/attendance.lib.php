@@ -1976,8 +1976,7 @@ class Attendance
      */
     public function getAttendanceLogin($startDate, $endDate)
     {
-        if (
-            empty($startDate) || $startDate == '0000-00-00' || $startDate == '0000-00-00 00:00:00' ||
+        if (empty($startDate) || $startDate == '0000-00-00' || $startDate == '0000-00-00 00:00:00' ||
             empty($endDate) || $endDate == '0000-00-00' || $endDate == '0000-00-00 00:00:00'
         ) {
             return false;
@@ -2056,7 +2055,6 @@ class Attendance
     public function getAttendanceLoginTable($startDate, $endDate)
     {
         $data = $this->getAttendanceLogin($startDate, $endDate);
-
         if (!$data) {
             return null;
         }
@@ -2120,7 +2118,6 @@ class Attendance
         $results = $data['results'];
 
         $table = new HTML_Table(array('class' => 'data_table'));
-
         $table->setHeaderContents(0, 0, get_lang('User'));
         $table->setHeaderContents(0, 1, get_lang('Date'));
 

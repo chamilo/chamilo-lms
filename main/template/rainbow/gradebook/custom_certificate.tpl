@@ -28,7 +28,7 @@
                                                 <td bgcolor="#92c647" width=58 height=91>
                                                     <img src="{{ _p.web_css_theme }}images/lado-b.png" style="display:block;">
                                                 </td>
-                                                <td bgcolor="#92c647" width=700 height=91 style="font-family:CourierSans-Light; font-weight: bold; line-height: 47px; color:#FFF; padding-bottom: 10px; font-size: 45px;">
+                                                <td bgcolor="#92c647" width=700 height=91 style="padding-left: 20px; padding-right: 20px; font-family:CourierSans-Light; font-weight: bold; line-height: 47px; color:#FFF; padding-bottom: 10px; font-size: 45px;">
                                                     {{ 'CertificateHeader' | get_lang }}
                                                 </td>
                                                 <td bgcolor="#92c647" width=58 height=91>
@@ -43,7 +43,7 @@
                                         <table bgcolor="#FFFFFF" border="0" cellspacing="0" cellpadding="0" width="100%" height=900>
                                             <tr>
                                                 <td bgcolor="#92c647" height=800><img src="{{ _p.web_css_theme }}images/lado-a.png" style="display:block;"></td>
-                                                <td height=800 style="font-family:CourierSans-Light; line-height: 22px; color:#40ad49; padding: 40px; font-size: 18px;" valign="top">
+                                                <td height=800 style="font-family:CourierSans-Light; line-height: 22px; color:#40ad49; padding: 20px; font-size: 18px;" valign="top">
                                                     <h3 style="color: #672290; font-size: 24px;">
                                                         {{ complete_name }}
                                                     </h3>
@@ -86,7 +86,7 @@
                                         <table border="0" cellspacing="0" cellpadding="0" width="100%" height=91>
                                             <tr>
                                                 <td bgcolor="#92c647" width=58 height=91><img src="{{ _p.web_css_theme }}images/lado-b.png"  style="display:block;"></td>
-                                                <td bgcolor="#92c647" width=500 height=91 style="font-family:CourierSans-Light; line-height: 18px; color:#FFF;">
+                                                <td bgcolor="#92c647" width=500 height=91 style="padding-left: 20px; padding-right: 20px; font-family:CourierSans-Light; line-height: 18px; color:#FFF;">
                                                     {{ 'CertificateFooter' | get_lang }}
                                                 </td>
                                                 <td bgcolor="#92c647" width=245 height=91><img src="{{ _p.web_css_theme }}images/lado-footer.png" style="display:block;"></td>

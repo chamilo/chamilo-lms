@@ -64,6 +64,7 @@ $form->addButtonSave(get_lang('SaveIntroText'), 'intro_cmdUpdate');
 
 /* INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED) */
 $course_id = api_get_course_int_id();
+$moduleId = intval($moduleId);
 
 if ($intro_editAllowed) {
     /* Replace command */
@@ -108,11 +109,13 @@ if ($intro_editAllowed) {
 
     /* Delete Command */
     if ($intro_cmdDel) {
+
+
         $sql = "DELETE FROM $TBL_INTRODUCTION
                 WHERE
                     c_id = $course_id AND
-                    id='".Database::escape_string($moduleId)."' AND
-                    session_id='".intval($session_id)."'";
+                    id = $moduleId AND
+                    session_id = $session_id";
         Database::query($sql);
         echo Display::return_message(get_lang('IntroductionTextDeleted'), 'confirmation');
     }
@@ -127,7 +130,7 @@ $intro_content = '';
 $sql = "SELECT intro_text FROM $TBL_INTRODUCTION
         WHERE
             c_id = $course_id AND
-            id = '".Database::escape_string($moduleId)."' AND
+            id = $moduleId AND
             session_id = 0";
 
 $intro_dbQuery = Database::query($sql);
@@ -141,8 +144,8 @@ if (!empty($session_id)) {
     $sql = "SELECT intro_text FROM $TBL_INTRODUCTION
             WHERE
                 c_id = $course_id AND
-                id = '".Database::escape_string($moduleId)."' AND
-                session_id = '".intval($session_id)."'";
+                id = $moduleId AND
+                session_id = $session_id";
     $intro_dbQuery = Database::query($sql);
     $introSessionContent = '';
     if (Database::num_rows($intro_dbQuery) > 0) {

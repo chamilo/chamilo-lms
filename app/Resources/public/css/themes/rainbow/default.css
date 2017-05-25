@@ -900,6 +900,44 @@ ul.exercise-draggable-answer .touch-items:hover{
 .question_options .droppable .gallery .exercise-draggable-answer-option{
     margin-left: 0;
 }
+.drag_question .window{
+    padding: 10px 5px;
+    border: 1px solid #162A83;
+    border-radius: 0;
+    min-height: 45px;
+}
+.drag_question .window p{
+    margin: 0;
+}
+.drag_question .window.window_right_question{
+    border-color: #96BD0D; 
+}
+.drag_question .window.window_right_question,
+.drag_question .window.window_left_question
+{
+    background: #FFFFFF;
+}
+.drag_question .window.window_right_question p{
+    padding-left: 20px;
+}
+.drag_question .window.window_left_question p{
+    padding-right: 20px;
+}
+.drag_question ._jsPlumb_endpoint{
+    cursor: pointer;
+}
+svg path{
+    stroke: rgb(22,42,131);
+    stroke-width: 2;
+}
+svg circle{
+    fill:rgb(255,255,255);
+    stroke:rgb(132,189,0);
+    stroke-width: 2;
+    r: 10;
+    cy:15;
+    cx:15;
+}
 /* Large desktop */
 @media (min-width: 1200px) {
 

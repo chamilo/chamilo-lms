@@ -141,11 +141,27 @@
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3d83d694ec1af9b0b59ad8d88d73762f2f481fec">3d83d694</a>) Improve Apache and Nginx rules in installation guide in English based on the .htaccess file</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d8f78f1660c941c25ac748ca3f2cc04b7697f83c">d8f78f16</a> - <a href="https://task.beeznest.com/issues/12476">BT#12476</a>) System announcements: rework to use an array of visibilities (requires database changes)</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4601bc570ed80cde5f77f29d4c48fa10a9a80f22">4601bc57</a>) New options added to setting 'email_alert_manager_on_new_quiz'</li>
-        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4071b1aaf3bc03b651fd42894b6c0b08e250447f">4071b1aa</a>) Added the <code>enabled_support_odf</code> configuration setting to allow edit ODF files</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4071b1aaf3bc03b651fd42894b6c0b08e250447f">4071b1aa</a>) Add configuration <code>enabled_support_odf</code> to allow edit ODF files</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/b965163df0d7a8f2dd236a78d8cb9004042d0655">b965163d</a> - <a href="https://task.beeznest.com/issues/12756">BT#12756</a>) Add configuration setting 'save_titles_as_html' to use HTML in learning paths category titles</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/37de579dfff6cf29cab25e95ddc22c36a7e399c4">37de579d</a> - <a href="https://task.beeznest.com/issues/12756">BT#12756</a>) Allow publishing learning paths categories as course tool</li>
     </ul>
 
     <h3>Improvements (minor features) and debug</h3>
     <ul>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4afa7c5d3bc1903ab46dd42234dc52e41c8822af">4afa7c5d</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1646">GH#1646</a>) Assignments: Set expiry date to 1 week from now and end date to 1 week + 1 day from now</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/13b985f6f963c7a157254e6533a98a6f7099f3da">13b985f6</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1646">GH#1646</a>) Assignments: Set default end date to be one day later than start date</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/81728783997e9417dd299a4bc072c90a536def9c">81728783</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1914">GH#1914</a>) Fix issue not showing user details in exercises results export to CSV when OnlyBestAttempt option was selected</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/5e2c2c20d7cc1048432d3a6778706b7a71b7b7a4">5e2c2c20</a>) Choose course category by AJAX only when they are more than 100, otherwise show the complete list</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/cda36386cae42a3f7cb596ede3fd26ea45751293">cda36386</a>) Fix pdf template, change top and bottom values</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/35023e42d79ac06ff2b91bc8ed1019606ec241b9">35023e42</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1542">GH#1542</a>) Fix style of prerequisites selection in learning paths</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/0895998f540189a970d74289119c91b0c7a6373c">0895998f</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1607">GH#1607</a>) Fix radio button text spacing</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4184102685cf1314956206aacd9d0ce99476da74">41841026</a>) Upgrade PHP version to 5.5 in composer.json, remove array_column package</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/60b2c1b2a3955fd10c310f8188ad37668bddb96b">60b2c1b2</a>) Fix issues wit PHP 7.1 chamilo upgrade</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d980a6c5843cb5e2d753900357cecedabfd5b71e">d980a6c5</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1965">GH#1965</a>) Course Restorer: Fix mysql error</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/51bea4b40cb5cc26ae0db7c516eb1e96f6906c2b">51bea4b4</a>) Lift PHP requirement up from 5.4 to 5.5</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/2b3e79acf3a42d60e912c4cd2156dcbea980a2f0">2b3e79ac</a> - <a href="https://task.beeznest.com/issues/12756">BT#12756</a>) Allow hiding/showing learning path categories</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/2be4112d03e8d56ab42e458d5cefd8f90c4d5f06">2be4112d</a> - <a href="https://task.beeznest.com/issues/12756">BT#12756</a>) Don't show options to modify/sort/delete learning paths categories in course session</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/503aadd8d9b0bfbf15d8fb3983feb21224f44847">503aadd8</a>) Fix learning paths category titles</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9977835a07e7d2c2f9630f82b2df312b5ac9f403">9977835a</a>) Wodo.TextEditor updated</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c14fdf78b1b2a59d49520579c7ac1b4ed9c14926">c14fdf78</a>) Add update-configuration to upgrade process from 1.10 to 1.11 to update the version number</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/98eb7229334bd7ce707c5b83f2494446b31f3c25">98eb7229</a>) Add migration fix for course_code column that shouldn't have been there in the first place</li>

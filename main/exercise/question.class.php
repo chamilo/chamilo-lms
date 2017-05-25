@@ -1888,10 +1888,10 @@ abstract class Question
      *
      * @param string $feedback_type
      * @param int $counter
-     * @param float $score
+     * @param array $score
      * @return string HTML string with the header of the question (before the answers table)
      */
-    function return_header($feedback_type = null, $counter = null, $score = null)
+    public function return_header($feedback_type = null, $counter = null, $score = [])
     {
         $counter_label = '';
         if (!empty($counter)) {
@@ -1912,9 +1912,10 @@ abstract class Question
             } else {
                 $score_label = get_lang('NotRevised');
                 $class = 'error';
+                $weight = float_format($score['weight'], 1);
+                $score['result'] = " ? / ".$weight;
             }
         }
-        $question_title = $this->question;
 
         // display question category, if any
         $header = TestCategory::returnCategoryAndTitle($this->id);
@@ -1923,9 +1924,9 @@ abstract class Question
             $header .= $this->show_media_content();
         }
 
-        $header .= Display::page_subheader2($counter_label.". ".$question_title);
+        $header .= Display::page_subheader2($counter_label.". ".$this->question);
         $header .= Display::div(
-            "<div class=\"rib rib-$class\"><h3>$score_label</h3></div> <h4>{$score['result']}</h4>",
+            "<div class=\"rib rib-$class\"><h3>$score_label</h3></div> <h4> ".get_lang('Score').": {$score['result']}</h4>",
             array('class' => 'ribbon')
         );
         if ($this->type != READING_COMPREHENSION) {

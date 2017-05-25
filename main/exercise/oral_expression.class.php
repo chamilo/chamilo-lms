@@ -70,8 +70,9 @@ class OralExpression extends Question
      * @param null $score
      * @return null|string
      */
-    function return_header($feedback_type = null, $counter = null, $score = null)
+    public function return_header($feedback_type = null, $counter = null, $score = null)
     {
+        $score['revised'] = $this->isQuestionWaitingReview($score);
         $header = parent::return_header($feedback_type, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
             <tr>

@@ -56,11 +56,7 @@ class FreeAnswer extends Question
      */
     public function return_header($feedback_type = null, $counter = null, $score = [])
     {
-        if (!empty($score['comments']) || $score['score'] > 0) {
-            $score['revised'] = true;
-        } else {
-            $score['revised'] = false;
-        }
+        $score['revised'] = $this->isQuestionWaitingReview($score);
         $header = parent::return_header($feedback_type, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'" >
         <tr>

@@ -133,7 +133,7 @@ class ExerciseShowFunctions
             if ($questionScore > 0 || !empty($comments)) {
             } else {
                 echo '<tr>';
-                echo Display::tag('td', Display::return_message(get_lang('notCorrectedYet')), array());
+                echo Display::tag('td', ExerciseLib::getNotCorrectedYetText(), []);
                 echo '</tr>';
             }
         }
@@ -163,7 +163,7 @@ class ExerciseShowFunctions
             echo '</tr>';
             if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 echo '<tr>';
-                echo Display::tag('td', get_lang('notCorrectedYet'), array('width'=>'45%'));
+                echo Display::tag('td', ExerciseLib::getNotCorrectedYetText(), array('width'=>'45%'));
                 echo '</tr>';
             } else {
                 echo '<tr><td>&nbsp;</td></tr>';
@@ -194,6 +194,7 @@ class ExerciseShowFunctions
      * @param string $answerComment
      * @param int $resultsDisabled
      * @param int $orderColor
+     * @param bool $showTotalScoreAndUserChoices
      */
     public static function display_hotspot_answer(
         $feedback_type,
@@ -529,8 +530,7 @@ class ExerciseShowFunctions
             } else {
                 echo $question->options[2];
             }
-        }
-        else {
+        } else {
             echo '-';
         }
         ?>
@@ -541,8 +541,8 @@ class ExerciseShowFunctions
             echo $answer;
             ?>
         </td>
-
-        <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+        <?php
+        if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
         <td width="20%">
             <?php
             //@todo replace this harcoded value
@@ -551,7 +551,6 @@ class ExerciseShowFunctions
                 if ($studentChoice == $answerCorrect) {
                     $color = "green";
                 }
-                //echo '<span style="font-weight: bold; color: #000;">'.nl2br($answerComment).'</span>';
                 if ($hide_expected_answer) {
                     $color = '';
                 }
@@ -563,14 +562,19 @@ class ExerciseShowFunctions
             if ($ans == 1) {
                 $comm = Event::get_comments($id, $questionId);
             }
-            ?>
-         <?php } else { ?>
-            <td>&nbsp;</td>
-        <?php } ?>
-        </tr>
-        <?php
+        } else {
+            echo '<td>&nbsp;</td>';
+        }
+        echo '</tr>';
     }
 
+    /**
+    * @param $feedback_type
+    * @param $exe_id
+    * @param $questionId
+    * @param null $questionScore
+    * @param int $results_disabled
+    */
     public static function displayAnnotationAnswer(
         $feedback_type,
         $exe_id,
@@ -579,10 +583,9 @@ class ExerciseShowFunctions
         $results_disabled = 0
     ) {
         $comments = Event::get_comments($exe_id, $questionId);
-
         if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
             if ($questionScore <= 0 && empty($comments)) {
-                echo '<br>'.Display::return_message(get_lang('notCorrectedYet'));
+                echo '<br />'.ExerciseLib::getNotCorrectedYetText();
             }
         }
     }

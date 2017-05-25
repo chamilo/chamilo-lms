@@ -1911,7 +1911,7 @@ abstract class Question
                 $class = '';
             } else {
                 $score_label = get_lang('NotRevised');
-                $class = 'error';
+                $class = 'warning';
                 $weight = float_format($score['weight'], 1);
                 $score['result'] = " ? / ".$weight;
             }
@@ -1925,10 +1925,7 @@ abstract class Question
         }
 
         $header .= Display::page_subheader2($counter_label.". ".$this->question);
-        $header .= Display::div(
-            "<div class=\"rib rib-$class\"><h3>$score_label</h3></div> <h4> ".get_lang('Score').": {$score['result']}</h4>",
-            array('class' => 'ribbon')
-        );
+        $header .= ExerciseLib::getQuestionRibbon($class, $score_label, $score['result']);
         if ($this->type != READING_COMPREHENSION) {
             // Do not show the description (the text to read) if the question is of type READING_COMPREHENSION
             $header .= Display::div($this->description, array('class' => 'question_description'));
@@ -2174,5 +2171,20 @@ abstract class Question
             $swappedAnswer->$key = $value;
         }
         return $swappedAnswer;
+    }
+
+
+    /**
+     * @param array $score
+     * @return bool
+     */
+    public function isQuestionWaitingReview($score)
+    {
+        $isReview = false;
+        if (!empty($score['comments']) || $score['score'] > 0) {
+            $isReview = true;
+        }
+
+        return $isReview;
     }
 }

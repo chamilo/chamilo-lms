@@ -246,6 +246,9 @@ class ThematicController
                 case 'export_single_thematic':
                     $theme = $thematic->get_thematic_list($thematic_id);
                     $plans = $thematic->get_thematic_plan_data($theme['id']);
+                    $plans = array_filter($plans, function ($plan) {
+                        return !empty($plan['description']);
+                    });
                     $advances = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
 
                     $view = new Template('', false, false, false, true, false, false);

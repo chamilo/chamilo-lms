@@ -1989,6 +1989,59 @@ class SessionManager
                     c_id = $courseId
                     $statusCondition
                 ";
+
+        $result = Database::query($sql);
+        $existingUsers = array();
+        while ($row = Database::fetch_array($result)) {
+            $existingUsers[] = $row['user_id'];
+        }
+
+        return $existingUsers;
+    }
+
+     /**
+     * Returns user list of the current users subscribed in the course-session
+     * @param array $sessionList
+     * @param array $courseList
+     * @param int $status
+     * @param int $start
+     * @param int $limit
+     *
+     * @return array
+     */
+    public static function getUsersByCourseAndSessionList(
+        $sessionList,
+        $courseList,
+        $status = null,
+        $start = null,
+        $limit = null
+    ) {
+        if (empty($sessionList) || empty($courseList)) {
+            return [];
+        }
+        $sessionListToString = implode("','", $sessionList);
+        $courseListToString = implode("','", $courseList);
+
+        $statusCondition = null;
+        if (isset($status) && !is_null($status)) {
+            $status = intval($status);
+            $statusCondition = " AND status = $status";
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+        $sql = "SELECT DISTINCT user_id
+                FROM $table
+                WHERE
+                    session_id IN ('$sessionListToString') AND
+                    c_id IN ('$courseListToString')
+                    $statusCondition
+                ";
+        if (!is_null($start) && !is_null($limit)) {
+            $start = (int) $start;
+            $limit = (int) $limit;
+            $sql .= "LIMIT $start, $limit";
+        }
         $result = Database::query($sql);
         $existingUsers = array();
         while ($row = Database::fetch_array($result)) {

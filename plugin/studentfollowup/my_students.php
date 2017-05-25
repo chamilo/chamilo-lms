@@ -15,6 +15,8 @@ $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
 $totalItems = 0;
 $items = [];
 $showPrivate = false;
+$pageSize = StudentFollowUpPlugin::getPageSize();
+$firstResults = $pageSize * ($currentPage - 1);
 
 $userList = [];
 if (!api_is_platform_admin()) {
@@ -22,7 +24,12 @@ if (!api_is_platform_admin()) {
     if (api_is_drh()) {
         $status = DRH;
     }
-    $userList = StudentFollowUpPlugin::getUsers($status, $currentUserId);
+    $userList = StudentFollowUpPlugin::getUsers(
+        $status,
+        $currentUserId,
+        $firstResults,
+        $pageSize
+    );
 }
 
 if (!empty($userList) || api_is_platform_admin()) {
@@ -37,14 +44,13 @@ if (!empty($userList) || api_is_platform_admin()) {
         $criteria->andWhere(Criteria::expr()->eq('private', false));
     }
 
-    $pageSize = 2;
     $qb
         ->select('p')
         ->distinct()
         ->from('ChamiloPluginBundle:StudentFollowUp\CarePost', 'p')
         ->join('p.user', 'u')
         ->addCriteria($criteria)
-        ->setFirstResult($pageSize * ($currentPage - 1))
+        ->setFirstResult($firstResults)
         ->setMaxResults($pageSize)
         ->groupBy('p.user')
         ->orderBy('p.createdAt', 'desc')

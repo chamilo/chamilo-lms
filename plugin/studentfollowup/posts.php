@@ -32,7 +32,7 @@ if ($showPrivate == false) {
     $criteria->andWhere(Criteria::expr()->eq('private', false));
 }
 
-$pageSize = 2;
+$pageSize = StudentFollowUpPlugin::getPageSize();
 
 $qb
     ->select('p')

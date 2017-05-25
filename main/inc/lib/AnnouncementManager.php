@@ -1369,7 +1369,7 @@ class AnnouncementManager
 
         $select = ' DISTINCT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date';
         if ($getCount) {
-            $select = ' COUNT(announcement.iid) count';
+            $select = ' COUNT(DISTINCT announcement.iid) count';
         }
 
         $searchCondition = '';

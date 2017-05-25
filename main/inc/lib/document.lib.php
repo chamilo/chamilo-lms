@@ -6014,7 +6014,7 @@ class DocumentManager
                         $certificate = get_lang('NoDefaultCertificate');
                     }
                     if (isset($_GET['selectcat'])) {
-                        $modify_icons = Display::url(
+                        $modify_icons[] = Display::url(
                             Display::return_icon($visibility_icon_certificate.'.png', $certificate),
                             api_get_self()."?$courseParams&curdirpath=$curdirpath&selectcat=".intval($_GET['selectcat'])."&set_certificate=$id"
                         );

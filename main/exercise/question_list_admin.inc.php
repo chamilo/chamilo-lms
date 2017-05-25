@@ -4,14 +4,13 @@
 use ChamiloSession as Session;
 
 /**
- *	Code library for HotPotatoes integration.
- *	@package chamilo.exercise
- *	@author Olivier Brouckaert & Julio Montoya & Hubert Borderiou 21-10-2011 (Question by category)
-
- *	QUESTION LIST ADMINISTRATION
+ *    Code library for HotPotatoes integration.
+ * @package chamilo.exercise
+ * @author Olivier Brouckaert & Julio Montoya & Hubert Borderiou 21-10-2011 (Question by category)
+ *    QUESTION LIST ADMINISTRATION
  *
- *	This script allows to manage the question list
- *	It is included from the script admin.php
+ *    This script allows to manage the question list
+ *    It is included from the script admin.php
  */
 
 // deletes a question from the exercise (not from the data base)
@@ -28,57 +27,65 @@ if ($deleteQuestion) {
     // destruction of the Question object
     unset($objQuestionTmp);
 }
-$ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&exercise_id=".intval($exerciseId);
+$ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()
+    ."&exercise_id=".intval($exerciseId);
 ?>
     <style>
-        .ui-state-highlight { height: 30px; line-height: 1.2em; }
+        .ui-state-highlight {
+            height: 30px;
+            line-height: 1.2em;
+        }
+
         /*Fixes edition buttons*/
         .ui-accordion-icons .ui-accordion-header .edition a {
-            padding-left:4px;
+            padding-left: 4px;
         }
     </style>
 
-    <div id="dialog-confirm" title="<?php echo get_lang("ConfirmYourChoice"); ?>" style="display:none;">
+    <div id="dialog-confirm"
+         title="<?php echo get_lang("ConfirmYourChoice"); ?>"
+         style="display:none;">
         <p>
-        <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0; display:none;">
+        <span class="ui-icon ui-icon-alert"
+              style="float:left; margin:0 7px 20px 0; display:none;">
         </span>
             <?php echo get_lang("AreYouSureToDelete"); ?>
         </p>
     </div>
 
     <script>
-        $(function() {
-            $( "#dialog:ui-dialog" ).dialog( "destroy" );
-            $( "#dialog-confirm" ).dialog({
+        $(function () {
+            $("#dialog:ui-dialog").dialog("destroy");
+            $("#dialog-confirm").dialog({
                 autoOpen: false,
                 show: "blind",
                 resizable: false,
-                height:150,
+                height: 150,
                 modal: false
             });
 
-            $(".opener").click(function() {
+            $(".opener").click(function () {
                 var targetUrl = $(this).attr("href");
-                $( "#dialog-confirm" ).dialog({
+                $("#dialog-confirm").dialog({
                     modal: true,
                     buttons: {
-                        "<?php echo get_lang("Yes"); ?>": function() {
+                        "<?php echo get_lang("Yes"); ?>": function () {
                             location.href = targetUrl;
-                            $( this ).dialog( "close" );
+                            $(this).dialog("close");
 
                         },
-                        "<?php echo get_lang("No"); ?>": function() {
-                            $( this ).dialog( "close" );
+                        "<?php echo get_lang("No"); ?>": function () {
+                            $(this).dialog("close");
                         }
                     }
                 });
-                $( "#dialog-confirm" ).dialog("open");
+                $("#dialog-confirm").dialog("open");
                 return false;
             });
 
             var stop = false;
-            $( "#question_list h3" ).click(function( event ) {
-                if ( stop ) {
+            $("#question_list h3").click(function (event) {
+                if (stop) {
                     event.stopImmediatePropagation();
                     event.preventDefault();
                     stop = false;
@@ -87,16 +94,16 @@ $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&
 
 
             /* We can add links in the accordion header */
-            $(".btn-actions .edition .items a").click(function() {
+            $(".btn-actions .edition .items a").click(function () {
                 //Avoid the redirecto when selecting the delete button
                 if (this.id.indexOf('delete') == -1) {
-                    newWind = window.open(this.href,"_self");
+                    newWind = window.open(this.href, "_self");
                     newWind.focus();
                     return false;
                 }
             });
 
-            $( "#question_list" ).accordion({
+            $("#question_list").accordion({
                 icons: null,
                 heightStyle: "content",
                 active: false, // all items closed by default
@@ -133,27 +140,27 @@ $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&
                     });
                 }
             })
-            .sortable({
-                cursor: "move", // works?
-                update: function(event, ui) {
-                    var order = $(this).sortable("serialize") + "&a=update_question_order&exercise_id=<?php echo intval($_GET['exerciseId']); ?>";
-                    $.post("<?php echo $ajax_url ?>", order, function(reponse){
-                        $("#message").html(reponse);
-                    });
-                },
-                axis: "y",
-                placeholder: "ui-state-highlight", //defines the yellow highlight
-                handle: ".moved", //only the class "moved"
-                stop: function() {
-                    stop = true;
-                }
-            });
+                .sortable({
+                    cursor: "move", // works?
+                    update: function (event, ui) {
+                        var order = $(this).sortable("serialize") + "&a=update_question_order&exercise_id=<?php echo intval($_GET['exerciseId']); ?>";
+                        $.post("<?php echo $ajax_url ?>", order, function (reponse) {
+                            $("#message").html(reponse);
+                        });
+                    },
+                    axis: "y",
+                    placeholder: "ui-state-highlight", //defines the yellow highlight
+                    handle: ".moved", //only the class "moved"
+                    stop: function () {
+                        stop = true;
+                    }
+                });
         });
     </script>
 <?php
 
 //we filter the type of questions we can add
-Question :: display_type_menu($objExercise);
+Question:: display_type_menu($objExercise);
 // Re sets the question list
 $objExercise->setQuestionList();
 
@@ -166,7 +173,9 @@ Session::erase('less_answer');
 // If we are in a test
 $inATest = isset($exerciseId) && $exerciseId > 0;
 if (!$inATest) {
-    echo "<div class='alert alert-warning'>".get_lang("ChoiceQuestionType")."</div>";
+    echo "<div class='alert alert-warning'>"
+        .get_lang("ChoiceQuestionType")
+        ."</div>";
 } else {
     // Title line
     echo "<div class='table-responsive'>";
@@ -219,35 +228,55 @@ if (!$inATest) {
                 /** @var Question $objQuestionTmp */
                 $objQuestionTmp = Question::read($id);
 
-                $clone_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'">'.
-                    Display::return_icon('cd.png', get_lang('Copy'), array(), ICON_SIZE_SMALL).'</a>';
-                $edit_link = ($objQuestionTmp->type == CALCULATED_ANSWER && $objQuestionTmp->isAnswered()) ?
-                    '<a>'.Display::return_icon(
-                        'edit_na.png',
-                        get_lang('QuestionEditionNotAvailableBecauseItIsAlreadyAnsweredHoweverYouCanCopyItAndModifyTheCopy'),
+                $clone_link = '<a href="'.api_get_self().'?'.api_get_cidreq()
+                    .'&clone_question='.$id.'">'
+                    .Display::return_icon(
+                        'cd.png',
+                        get_lang('Copy'),
                         array(),
                         ICON_SIZE_SMALL
-                    ).'</a>' : '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.
-                    $objQuestionTmp->selectType().'&myid=1&editQuestion='.$id.'">'.
-                    Display::return_icon(
-                        'edit.png',
-                        get_lang('Modify'),
-                        array(),
-                        ICON_SIZE_SMALL
-                    ).'</a>';
+                    )
+                    .'</a>';
+                $edit_link = ($objQuestionTmp->type == CALCULATED_ANSWER && $objQuestionTmp->isAnswered())
+                    ? '<a>'
+                        .Display::return_icon(
+                            'edit_na.png',
+                            get_lang('QuestionEditionNotAvailableBecauseItIsAlreadyAnsweredHoweverYouCanCopyItAndModifyTheCopy'),
+                            array(),
+                            ICON_SIZE_SMALL
+                        )
+                        .'</a>'
+                    : '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='
+                        .$objQuestionTmp->selectType().'&myid=1&editQuestion='.$id.'">'
+                        .Display::return_icon(
+                            'edit.png',
+                            get_lang('Modify'),
+                            array(),
+                            ICON_SIZE_SMALL
+                        )
+                        .'</a>';
                 $delete_link = null;
                 if ($objExercise->edit_exercise_in_lp == true) {
-                    $delete_link = '<a id="delete_'.$id.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" >'.Display::return_icon('delete.png', get_lang('RemoveFromTest'), array(), ICON_SIZE_SMALL).'</a>';
+                    $delete_link = '<a id="delete_'.$id.'" class="opener"  href="'
+                        .api_get_self().'?'.api_get_cidreq().'&exerciseId='
+                        .$exerciseId.'&deleteQuestion='.$id.'" >'
+                        .Display::return_icon(
+                            'delete.png',
+                            get_lang('RemoveFromTest'),
+                            array(),
+                            ICON_SIZE_SMALL
+                        )
+                        .'</a>';
                 }
 
-                $edit_link = Display::tag('span', $edit_link, array('class'=>'items'));
-                $clone_link = Display::tag('span', $clone_link, array('class'=>'items'));
-                $delete_link = Display::tag('span', $delete_link, array('class'=>'items'));
+                $edit_link = Display::tag('span', $edit_link, array('class' => 'items'));
+                $clone_link = Display::tag('span', $clone_link, array('class' => 'items'));
+                $delete_link = Display::tag('span', $delete_link, array('class' => 'items'));
                 $btnActions = Display::tag('td', Display::tag(
                     'div',
                     $edit_link.$clone_link.$delete_link,
-                    array('class'=>'edition')
-                ), array('class'=>'btn-actions'));
+                    array('class' => 'edition')
+                ), array('class' => 'btn-actions'));
 
                 $title = Security::remove_XSS($objQuestionTmp->selectTitle());
                 $title = strip_tags($title);
@@ -264,28 +293,52 @@ if (!$inATest) {
 
                 // Question type
                 list($typeImg, $typeExpl) = $objQuestionTmp->get_type_icon_html();
-                $questionType = Display::tag('td', Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_SMALL), array('class'=>$styleType));
+                $questionType = Display::tag(
+                    'td',
+                    Display::return_icon(
+                        $typeImg,
+                        $typeExpl,
+                        array(),
+                        ICON_SIZE_SMALL
+                    ),
+                    array('class' => $styleType)
+                );
 
                 // Question category
-                $txtQuestionCat = Security::remove_XSS(TestCategory::getCategoryNameForQuestion($objQuestionTmp->id));
+                $txtQuestionCat = Security::remove_XSS(
+                    TestCategory::getCategoryNameForQuestion($objQuestionTmp->id)
+                );
                 if (empty($txtQuestionCat)) {
                     $txtQuestionCat = "-";
                 }
-                $questionCategory = Display::tag('td', '<a href="#" style="padding:0px; margin:0px;" title="'.$txtQuestionCat.'">'.
-                    cut($txtQuestionCat, 42).'</a>', array('class'=>$styleCat));
+                $questionCategory = Display::tag(
+                    'td',
+                    '<a href="#" style="padding:0px; margin:0px;" title="'
+                        .$txtQuestionCat.'">'.cut($txtQuestionCat, 42).'</a>',
+                    array('class' => $styleCat)
+                );
 
                 // Question level
                 $txtQuestionLevel = $objQuestionTmp->level;
                 if (empty($objQuestionTmp->level)) {
                     $txtQuestionLevel = '-';
                 }
-                $questionLevel = Display::tag('td', $txtQuestionLevel, array('class'=>$styleLevel));
+                $questionLevel = Display::tag(
+                    'td',
+                    $txtQuestionLevel,
+                    array('class' => $styleLevel)
+                );
 
                 // Question score
-                $questionScore = Display::tag('td', $objQuestionTmp->selectWeighting(), array('class'=>$styleScore));
+                $questionScore = Display::tag(
+                    'td',
+                    $objQuestionTmp->selectWeighting(),
+                    array('class' => $styleScore)
+                );
 
                 echo '<div id="question_id_list_'.$id.'" >';
-                echo '<div class="header_operations" data-exercise="'.$objExercise->selectId().'" data-question="'.$id.'">';
+                echo '<div class="header_operations" data-exercise="'
+                    .$objExercise->selectId().'" data-question="'.$id.'">';
                 echo "<div class='table-responsive'>";
                 echo "<table class='table'>";
                 echo "<tr>";
@@ -302,7 +355,10 @@ if (!$inATest) {
                 echo Display::tag(
                     'div',
                     null,
-                    ['class' => 'question-list-description-block', 'id' => "pnl-question-$id"]
+                    [
+                        'class' => 'question-list-description-block',
+                        'id' => "pnl-question-$id"
+                    ]
                 );
                 echo '</div>';
                 unset($objQuestionTmp);

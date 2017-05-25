@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ This file is part of the PHPExiftool package.
+  ~
+  ~ (c) Alchemy <support@alchemy.fr>
+  ~
+  ~ For the full copyright and license information, please view the LICENSE
+  ~ file that was distributed with this source code.
+  -->
+
+<rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+
+<rdf:Description rdf:about='phpunit.xml.dist'
+  xmlns:et='http://ns.exiftool.ca/1.0/' et:toolkit='Image::ExifTool 8.88'
+  xmlns:ExifTool='http://ns.exiftool.ca/ExifTool/1.0/'
+  xmlns:System='http://ns.exiftool.ca/File/System/1.0/'
+  xmlns:File='http://ns.exiftool.ca/File/1.0/'
+  xmlns:XMP='http://ns.exiftool.ca/XMP/XMP/1.0/'>
+ <ExifTool:ExifToolVersion>8.88</ExifTool:ExifToolVersion>
+ <System:FileName>phpunit.xml.dist</System:FileName>
+ <System:Directory>.</System:Directory>
+ <System:FileSize>1051 bytes</System:FileSize>
+ <System:FileModifyDate>2012:04:18 23:25:03+02:00</System:FileModifyDate>
+ <System:FilePermissions>rw-r--r--</System:FilePermissions>
+ <File:FileType>XML</File:FileType>
+ <File:MIMEType>application/xml</File:MIMEType>
+ <XMP:PhpunitBackupGlobals>false</XMP:PhpunitBackupGlobals>
+ <XMP:PhpunitBackupStaticAttributes>false</XMP:PhpunitBackupStaticAttributes>
+ <XMP:PhpunitColors>true</XMP:PhpunitColors>
+ <XMP:PhpunitConvertErrorsToExceptions>true</XMP:PhpunitConvertErrorsToExceptions>
+ <XMP:PhpunitConvertNoticesToExceptions>true</XMP:PhpunitConvertNoticesToExceptions>
+ <XMP:PhpunitConvertWarningsToExceptions>true</XMP:PhpunitConvertWarningsToExceptions>
+ <XMP:PhpunitProcessIsolation>false</XMP:PhpunitProcessIsolation>
+ <XMP:PhpunitStopOnFailure>false</XMP:PhpunitStopOnFailure>
+ <XMP:PhpunitSyntaxCheck>true</XMP:PhpunitSyntaxCheck>
+ <XMP:PhpunitVerbose>false</XMP:PhpunitVerbose>
+ <XMP:PhpunitBootstrap>bootstrap.php</XMP:PhpunitBootstrap>
+ <XMP:PhpunitLoggingLogType>coverage-html</XMP:PhpunitLoggingLogType>
+ <XMP:PhpunitLoggingLogTarget>tests/phpunit_report/report</XMP:PhpunitLoggingLogTarget>
+ <XMP:PhpunitLoggingLogCharset>UTF-8</XMP:PhpunitLoggingLogCharset>
+ <XMP:PhpunitLoggingLogYui>true</XMP:PhpunitLoggingLogYui>
+ <XMP:PhpunitLoggingLogHighlight>false</XMP:PhpunitLoggingLogHighlight>
+ <XMP:PhpunitLoggingLogLowUpperBound>35</XMP:PhpunitLoggingLogLowUpperBound>
+ <XMP:PhpunitLoggingLogHighLowerBound>70</XMP:PhpunitLoggingLogHighLowerBound>
+ <XMP:PhpunitPhpIniName>display_errors</XMP:PhpunitPhpIniName>
+ <XMP:PhpunitPhpIniValue>on</XMP:PhpunitPhpIniValue>
+ <XMP:PhpunitTestsuitesTestsuiteName>PHPExiftool Tests Suite</XMP:PhpunitTestsuitesTestsuiteName>
+ <XMP:PhpunitTestsuitesTestsuiteDirectory>tests</XMP:PhpunitTestsuitesTestsuiteDirectory>
+ <XMP:PhpunitFilterBlacklistDirectory>vendor</XMP:PhpunitFilterBlacklistDirectory>
+ <XMP:PhpunitFilterBlacklistDirectory>tests</XMP:PhpunitFilterBlacklistDirectory>
+ <XMP:PhpunitFilterBlacklistDirectory>lib/PHPExiftool/Driver/Tag/*</XMP:PhpunitFilterBlacklistDirectory>
+</rdf:Description>
+</rdf:RDF>

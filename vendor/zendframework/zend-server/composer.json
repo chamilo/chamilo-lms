@@ -1,0 +1,35 @@
+{
+    "name": "zendframework/zend-server",
+    "description": " ",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "server"
+    ],
+    "homepage": "https://github.com/zendframework/zend-server",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.6-dev",
+            "dev-develop": "2.7-dev"
+        }
+    },
+    "require": {
+        "php": "^5.5 || ^7.0",
+        "zendframework/zend-stdlib": "^2.5 || ^3.0",
+        "zendframework/zend-code": "^2.5"
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer": "^1.7.0",
+        "phpunit/PHPUnit": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zend\\Server\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\Server\\": "test/"
+        }
+    }
+}

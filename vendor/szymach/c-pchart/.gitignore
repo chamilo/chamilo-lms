@@ -1,0 +1,6 @@
+composer.phar
+composer.lock
+bin/
+features/fixtures/output
+vendor
+vendor/*

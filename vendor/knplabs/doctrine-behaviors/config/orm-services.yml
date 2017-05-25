@@ -1,0 +1,157 @@
+parameters:
+    knp.doctrine_behaviors.reflection.class_analyzer.class: Knp\DoctrineBehaviors\Reflection\ClassAnalyzer
+    knp.doctrine_behaviors.reflection.is_recursive: true
+    knp.doctrine_behaviors.translatable_subscriber.class: Knp\DoctrineBehaviors\ORM\Translatable\TranslatableSubscriber
+    knp.doctrine_behaviors.translatable_subscriber.current_locale_callable.class: Knp\DoctrineBehaviors\ORM\Translatable\CurrentLocaleCallable
+    knp.doctrine_behaviors.translatable_subscriber.default_locale_callable.class: Knp\DoctrineBehaviors\ORM\Translatable\DefaultLocaleCallable
+    knp.doctrine_behaviors.translatable_subscriber.translatable_trait: Knp\DoctrineBehaviors\Model\Translatable\Translatable
+    knp.doctrine_behaviors.translatable_subscriber.translation_trait: Knp\DoctrineBehaviors\Model\Translatable\Translation
+    knp.doctrine_behaviors.translatable_subscriber.translatable_fetch_method: LAZY
+    knp.doctrine_behaviors.translatable_subscriber.translation_fetch_method: LAZY
+    knp.doctrine_behaviors.softdeletable_subscriber.class: Knp\DoctrineBehaviors\ORM\SoftDeletable\SoftDeletableSubscriber
+    knp.doctrine_behaviors.softdeletable_subscriber.softdeletable_trait: Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable
+    knp.doctrine_behaviors.timestampable_subscriber.class: Knp\DoctrineBehaviors\ORM\Timestampable\TimestampableSubscriber
+    knp.doctrine_behaviors.timestampable_subscriber.timestampable_trait: Knp\DoctrineBehaviors\Model\Timestampable\Timestampable
+    knp.doctrine_behaviors.timestampable_subscriber.db_field_type: datetime
+    knp.doctrine_behaviors.blameable_subscriber.class: Knp\DoctrineBehaviors\ORM\Blameable\BlameableSubscriber
+    knp.doctrine_behaviors.blameable_subscriber.blameable_trait: Knp\DoctrineBehaviors\Model\Blameable\Blameable
+    knp.doctrine_behaviors.blameable_subscriber.user_callable.class: Knp\DoctrineBehaviors\ORM\Blameable\UserCallable
+    knp.doctrine_behaviors.blameable_subscriber.user_entity: ~
+    knp.doctrine_behaviors.loggable_subscriber.class: Knp\DoctrineBehaviors\ORM\Loggable\LoggableSubscriber
+    knp.doctrine_behaviors.loggable_subscriber.logger_callable.class: Knp\DoctrineBehaviors\ORM\Loggable\LoggerCallable
+    knp.doctrine_behaviors.geocodable_subscriber.class: Knp\DoctrineBehaviors\ORM\Geocodable\GeocodableSubscriber
+    knp.doctrine_behaviors.geocodable_subscriber.geocodable_trait: Knp\DoctrineBehaviors\Model\Geocodable\Geocodable
+    knp.doctrine_behaviors.sluggable_subscriber.class: Knp\DoctrineBehaviors\ORM\Sluggable\SluggableSubscriber
+    knp.doctrine_behaviors.sluggable_subscriber.sluggable_trait: Knp\DoctrineBehaviors\Model\Sluggable\Sluggable
+    knp.doctrine_behaviors.tree_subscriber.class: Knp\DoctrineBehaviors\ORM\Tree\TreeSubscriber
+    knp.doctrine_behaviors.tree_subscriber.tree_trait: Knp\DoctrineBehaviors\Model\Tree\Node
+    knp.doctrine_behaviors.sortable_subscriber.class: Knp\DoctrineBehaviors\ORM\Sortable\SortableSubscriber
+    knp.doctrine_behaviors.sortable_subscriber.sortable_trait: Knp\DoctrineBehaviors\Model\Sortable\Sortable
+
+services:
+    knp.doctrine_behaviors.reflection.class_analyzer:
+        class:   "%knp.doctrine_behaviors.reflection.class_analyzer.class%"
+        public:  false
+
+    knp.doctrine_behaviors.translatable_subscriber:
+        class:   "%knp.doctrine_behaviors.translatable_subscriber.class%"
+        public:  false
+        arguments:
+            - "@knp.doctrine_behaviors.reflection.class_analyzer"
+            - "@knp.doctrine_behaviors.translatable_subscriber.current_locale_callable"
+            - "@knp.doctrine_behaviors.translatable_subscriber.default_locale_callable"
+            - "%knp.doctrine_behaviors.translatable_subscriber.translatable_trait%"
+            - "%knp.doctrine_behaviors.translatable_subscriber.translation_trait%"
+            - "%knp.doctrine_behaviors.translatable_subscriber.translatable_fetch_method%"
+            - "%knp.doctrine_behaviors.translatable_subscriber.translation_fetch_method%"
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    knp.doctrine_behaviors.translatable_subscriber.current_locale_callable:
+        class:           "%knp.doctrine_behaviors.translatable_subscriber.current_locale_callable.class%"
+        arguments:
+            - "@service_container" # lazy request resolution
+        public:  false
+
+    knp.doctrine_behaviors.translatable_subscriber.default_locale_callable:
+        class:           "%knp.doctrine_behaviors.translatable_subscriber.default_locale_callable.class%"
+        arguments:
+            - "%locale%"
+        public:  false
+
+    knp.doctrine_behaviors.softdeletable_subscriber:
+        class:   "%knp.doctrine_behaviors.softdeletable_subscriber.class%"
+        public:  false
+        arguments:
+            - "@knp.doctrine_behaviors.reflection.class_analyzer"
+            - "%knp.doctrine_behaviors.reflection.is_recursive%"
+            - "%knp.doctrine_behaviors.softdeletable_subscriber.softdeletable_trait%"
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    knp.doctrine_behaviors.timestampable_subscriber:
+        class:   "%knp.doctrine_behaviors.timestampable_subscriber.class%"
+        public:  false
+        arguments:
+            - "@knp.doctrine_behaviors.reflection.class_analyzer"
+            - "%knp.doctrine_behaviors.reflection.is_recursive%"
+            - "%knp.doctrine_behaviors.timestampable_subscriber.timestampable_trait%"
+            - "%knp.doctrine_behaviors.timestampable_subscriber.db_field_type%"
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    knp.doctrine_behaviors.tree_subscriber:
+        class:   "%knp.doctrine_behaviors.tree_subscriber.class%"
+        public:  false
+        arguments:
+            - "@knp.doctrine_behaviors.reflection.class_analyzer"
+            - "%knp.doctrine_behaviors.reflection.is_recursive%"
+            - "%knp.doctrine_behaviors.tree_subscriber.tree_trait%"
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    knp.doctrine_behaviors.sortable_subscriber:
+        class:   "%knp.doctrine_behaviors.sortable_subscriber.class%"
+        public:  false
+        arguments:
+            - "@knp.doctrine_behaviors.reflection.class_analyzer"
+            - "%knp.doctrine_behaviors.reflection.is_recursive%"
+            - "%knp.doctrine_behaviors.sortable_subscriber.sortable_trait%"
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    knp.doctrine_behaviors.blameable_subscriber:
+        class:   "%knp.doctrine_behaviors.blameable_subscriber.class%"
+        arguments:
+            - "@knp.doctrine_behaviors.reflection.class_analyzer"
+            - "%knp.doctrine_behaviors.reflection.is_recursive%"
+            - "%knp.doctrine_behaviors.blameable_subscriber.blameable_trait%"
+            - "@knp.doctrine_behaviors.blameable_subscriber.user_callable"
+            - "%knp.doctrine_behaviors.blameable_subscriber.user_entity%"
+        public:  false
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    knp.doctrine_behaviors.blameable_subscriber.user_callable:
+        class:           "%knp.doctrine_behaviors.blameable_subscriber.user_callable.class%"
+        arguments:
+            - "@service_container" # because of circular dep
+        public:  false
+
+    knp.doctrine_behaviors.loggable_subscriber:
+        class:   "%knp.doctrine_behaviors.loggable_subscriber.class%"
+        arguments:
+            - "@knp.doctrine_behaviors.reflection.class_analyzer"
+            - "%knp.doctrine_behaviors.reflection.is_recursive%"
+            - "@knp.doctrine_behaviors.loggable_subscriber.logger_callable"
+        public:  false
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    knp.doctrine_behaviors.loggable_subscriber.logger_callable:
+        class:           "%knp.doctrine_behaviors.loggable_subscriber.logger_callable.class%"
+        arguments:
+            - "@logger"
+        public:  false
+
+    knp.doctrine_behaviors.geocodable_subscriber:
+        class:   "%knp.doctrine_behaviors.geocodable_subscriber.class%"
+        public:  false
+        arguments:
+            - "@knp.doctrine_behaviors.reflection.class_analyzer"
+            - "%knp.doctrine_behaviors.reflection.is_recursive%"
+            - "%knp.doctrine_behaviors.geocodable_subscriber.geocodable_trait%"
+            - "@?knp.doctrine_behaviors.geocodable_callable"
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    knp.doctrine_behaviors.sluggable_subscriber:
+        class: "%knp.doctrine_behaviors.sluggable_subscriber.class%"
+        public: false
+        arguments:
+            - "@knp.doctrine_behaviors.reflection.class_analyzer"
+            - "%knp.doctrine_behaviors.reflection.is_recursive%"
+            - "%knp.doctrine_behaviors.sluggable_subscriber.sluggable_trait%"
+        tags:
+            - { name: doctrine.event_subscriber }
+

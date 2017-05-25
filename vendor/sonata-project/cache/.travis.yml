@@ -1,0 +1,52 @@
+language: php
+
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+  - hhvm
+
+sudo: false
+
+services:
+  - mongodb
+  - memcached
+  - redis-server
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+    - $HOME/.cache/pip
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 5.6
+      env: CS_FIXER=run
+    - php: 5.3
+      env: COMPOSER_FLAGS="--prefer-lowest"
+  allow_failures:
+    - php: 7.0
+    - php: hhvm
+
+before_script:
+  - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
+  - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - echo "extension=mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - echo "extension=memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - echo "extension=redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - if [[ $TRAVIS_PHP_VERSION != 'hhvm' && `php-config --vernum` -ge 50500 ]]; then pecl config-set preferred_state beta; printf "yes\n" | pecl install apcu; else echo "extension=apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini; fi;
+  - composer selfupdate
+  - composer config -q github-oauth.github.com $GITHUB_OAUTH_TOKEN
+  - travis_wait composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
+  # must be set after composer to avoid issue with autoloading
+  - echo "apc.enable_cli=On" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+
+script:
+ - if [ "$CS_FIXER" = "run" ]; then make cs_dry_run ; fi;
+ - make test
+
+notifications:
+  webhooks: https://sonata-project.org/bundles/cache/master/travis

@@ -1,0 +1,94 @@
+# Group
+group:
+    edit:
+        submit: Actualizează grupul
+    show:
+        name: Numele grupului
+    new:
+        submit: Creează grup
+    flash:
+        updated: Grupul a fost actualizat
+        created: Grupul a fost creat
+        deleted: Grupul a fost șters
+
+# Security
+security:
+    login:
+        username: Nume de utilizator
+        password: Parola
+        remember_me: Ține-mă minte
+        submit: Autentificare
+
+# Profile
+profile:
+    show:
+        username: Numele de utilizator
+        email: Email
+    edit:
+        submit: Actualizează
+    flash:
+        updated: Profilul a fost actualizat
+
+# Password change
+change_password:
+    submit: Schimba parola
+    flash:
+        success: Parola a fost schimbata
+
+# Registration
+registration:
+    check_email: Un email a fost trimis catre %email%. Contine un link de activare pe care trebuie sa il accesezi pentru a-ti activa contul.
+    confirmed: Felicitari %username%, contul tau a fost confirmat.
+    back: Inapoi la pagina de la care ai venit.
+    submit: Inregistreaza-te
+    flash:
+        user_created: Utilizatorul a fost creat cu succes
+    email:
+        subject: Bine ai venit %username%!
+        message: |
+            Salut %username%!
+
+            Pentru a-ti valida contul - acceseaza %confirmationUrl%
+
+            Toate cele bune,
+            Echipa
+
+# Password resetting
+resetting:
+    password_already_requested: Deja s-a facut o cerere in ultimele 24 de ore pentru parola acestui utilizator.
+    check_email: A fost trimit un email catre %email%. Contine un link pe care trebuie sa il accesezi pentru a-ti reseta parola.
+    request:
+        invalid_username: Numele de utilizator sau adresa de email "%username%" nu exista.
+        username: Numele de utilizator sau adresa de email
+        submit: Reseteaza parola
+    reset:
+        submit: Schimba parola
+    flash:
+        success: Parola a fost resetata cu succes
+    email:
+        subject: Resetare parola
+        message: |
+            Salut %username%!
+
+            Pentru a-ti reseta parola - acceseaza %confirmationUrl%
+
+            Toate cele bune,
+            Echipa
+
+# Global strings
+layout:
+    logout: Logout
+    login: Autentificare
+    register: Înregistrare
+    logged_in_as: Logat ca %username%
+
+# Form field labels
+form:
+    group_name: Numele grupului
+    username: Nume de utilizator
+    email: Email
+    current_password: Parola curenta
+    password: Parola
+    password_confirmation: Verificare parola
+    new_password: Noua parola
+    new_password_confirmation: Verificare parola

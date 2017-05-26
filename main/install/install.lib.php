@@ -3087,26 +3087,27 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
 
     switch ($fromVersion) {
         case '1.9.0':
-            //no break
+            // no break
         case '1.9.2':
-            //no break
+            // no break
         case '1.9.4':
-            //no break
+            // no break
         case '1.9.6':
-            //no break
+            // no break
         case '1.9.6.1':
-            //no break
+            // no break
         case '1.9.8':
-            //no break
+            // no break
         case '1.9.8.1':
-            //no break
+            // no break
         case '1.9.8.2':
-            //no break
+            // no break
         case '1.9.10':
-            //no break
+            // no break
         case '1.9.10.2':
-            //no break
+            // no break
         case '1.9.10.4':
+            // no break
         case '1.9.10.6':
             $database = new Database();
             $database->setManager($manager);

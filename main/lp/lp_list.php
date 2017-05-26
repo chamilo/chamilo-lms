@@ -141,7 +141,7 @@ $userId = api_get_user_id();
 $userInfo = api_get_user_info();
 $lpIsShown = false;
 
-$filteredCategoryId = $action === 'view_category' && !empty($_GET['id']);
+$filteredCategoryId = $action === 'view_category' && !empty($_GET['id']) ? intval($_GET['id']) : 0;
 
 if ($filteredCategoryId) {
     /** @var CLpCategory $category */

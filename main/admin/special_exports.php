@@ -46,7 +46,7 @@ $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
     (isset($_POST['backup_option']) && $_POST['backup_option'] == 'full_backup')
 ) {
-	$export = false;
+    $export = false;
     if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
         $FileZip = create_zip();
         $to_group_id = 0;
@@ -269,10 +269,10 @@ function fullexportspecial()
 
             //Add tem to the zip file session course
             $sql = "SELECT s.id, name, c_id
-                            FROM $tbl_session_course sc
-                            INNER JOIN $tbl_session  s
-                            ON sc.session_id = s.id
-                            WHERE c_id = '$course_id' ";
+                    FROM $tbl_session_course sc
+                    INNER JOIN $tbl_session s
+                    ON sc.session_id = s.id
+                    WHERE c_id = '$course_id' ";
             $query_session = Database::query($sql);
             while ($rows_session = Database::fetch_assoc($query_session)) {
                 $session_id = $rows_session['id'];

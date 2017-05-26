@@ -429,6 +429,169 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise', 'Exercise')");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'lp', 'LearningPath')");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath')");
+
+        // Fixes from 1.10.x
+
+        // Promotion
+        if ($schema->hasTable('promotion')) {
+            $table = $schema->getTable('promotion');
+            $this->addSql('ALTER TABLE promotion CHANGE name name VARCHAR(255) NOT NULL, CHANGE description description LONGTEXT NOT NULL, CHANGE career_id career_id INT DEFAULT NULL, CHANGE status status INT');
+            if ($table->hasForeignKey('FK_C11D7DD1B58CDA09') == false) {
+                $this->addSql('ALTER TABLE promotion ADD CONSTRAINT FK_C11D7DD1B58CDA09 FOREIGN KEY (career_id) REFERENCES career (id);');
+            }
+            if ($table->hasIndex('IDX_C11D7DD1B58CDA09') == false) {
+                $this->addSql('CREATE INDEX IDX_C11D7DD1B58CDA09 ON promotion (career_id);');
+            }
+        }
+
+        // Skill
+        if ($schema->hasTable('skill')) {
+            $table = $schema->getTable('skill');
+            $this->addSql('ALTER TABLE skill CHANGE name name VARCHAR(255) NOT NULL, CHANGE short_code short_code VARCHAR(100) NOT NULL, CHANGE description description LONGTEXT NOT NULL, CHANGE icon icon VARCHAR(255) NOT NULL, CHANGE updated_at updated_at DATETIME NOT NULL;');
+
+            if ($table->hasForeignKey('FK_5E3DE477CCFA12B8') == false) {
+                $this->addSql('ALTER TABLE skill ADD CONSTRAINT FK_5E3DE477CCFA12B8 FOREIGN KEY (profile_id) REFERENCES skill_level_profile (id);');
+            }
+
+            if ($table->hasIndex('IDX_5E3DE477CCFA12B8') == false) {
+                $this->addSql('CREATE INDEX IDX_5E3DE477CCFA12B8 ON skill (profile_id);');
+            }
+        }
+
+        // skill_rel_user
+        if ($schema->hasTable('skill_rel_user')) {
+            $table = $schema->getTable('skill_rel_user');
+            $this->addSql('ALTER TABLE skill_rel_user CHANGE acquired_skill_at acquired_skill_at DATETIME NOT NULL, CHANGE argumentation argumentation LONGTEXT NOT NULL, CHANGE argumentation_author_id argumentation_author_id INT NOT NULL;');
+
+            if ($table->hasForeignKey('FK_79D3D95AA76ED395') == false) {
+                $this->addSql('ALTER TABLE skill_rel_user ADD CONSTRAINT FK_79D3D95AA76ED395 FOREIGN KEY (user_id) REFERENCES user (id);');
+            }
+            if ($table->hasForeignKey('FK_79D3D95A5585C142') == false) {
+                $this->addSql('ALTER TABLE skill_rel_user ADD CONSTRAINT FK_79D3D95A5585C142 FOREIGN KEY (skill_id) REFERENCES skill (id);');
+            }
+            if ($table->hasForeignKey('FK_79D3D95A591CC992') == false) {
+                $this->addSql('ALTER TABLE skill_rel_user ADD CONSTRAINT FK_79D3D95A591CC992 FOREIGN KEY (course_id) REFERENCES course (id);');
+            }
+
+            if ($table->hasForeignKey('FK_79D3D95A613FECDF') == false) {
+                $this->addSql('ALTER TABLE skill_rel_user ADD CONSTRAINT FK_79D3D95A613FECDF FOREIGN KEY (session_id) REFERENCES session (id);');
+            }
+            if ($table->hasForeignKey('FK_79D3D95AF68F11CE') == false) {
+                $this->addSql('ALTER TABLE skill_rel_user ADD CONSTRAINT FK_79D3D95AF68F11CE FOREIGN KEY (acquired_level) REFERENCES skill_level (id);');
+            }
+            if ($table->hasIndex('IDX_79D3D95AA76ED395') == false) {
+                $this->addSql('CREATE INDEX IDX_79D3D95AA76ED395 ON skill_rel_user(user_id);');
+            }
+            if ($table->hasIndex('IDX_79D3D95A5585C142') == false) {
+                $this->addSql('CREATE INDEX IDX_79D3D95A5585C142 ON skill_rel_user(skill_id);');
+            }
+            if ($table->hasIndex('IDX_79D3D95A591CC992') == false) {
+                $this->addSql('CREATE INDEX IDX_79D3D95A591CC992 ON skill_rel_user(course_id);');
+            }
+            if ($table->hasIndex('IDX_79D3D95A613FECDF') == false) {
+                $this->addSql('CREATE INDEX IDX_79D3D95A613FECDF ON skill_rel_user(session_id);');
+            }
+            if ($table->hasIndex('IDX_79D3D95AF68F11CE') == false) {
+                $this->addSql('CREATE INDEX IDX_79D3D95AF68F11CE ON skill_rel_user (acquired_level);');
+            }
+            if ($table->hasIndex('IDX_79D3D95AF68F11CE') == false) {
+                $this->addSql('CREATE INDEX idx_select_s_c_u ON skill_rel_user (session_id, course_id, user_id);');
+            }
+            if ($table->hasIndex('IDX_79D3D95AF68F11CE') == false) {
+                $this->addSql('CREATE INDEX idx_select_sk_u ON skill_rel_user(skill_id, user_id);');
+            }
+        }
+
+        if ($schema->hasTable('skill_profile')) {
+            $this->addSql('ALTER TABLE skill_profile CHANGE name name VARCHAR(255) NOT NULL, CHANGE description description LONGTEXT NOT NULL;');
+        }
+
+        // skill_rel_user_comment
+        if ($schema->hasTable('skill_rel_user_comment')) {
+            $table = $schema->getTable('skill_rel_user_comment');
+            $this->addSql('ALTER TABLE skill_rel_user_comment CHANGE skill_rel_user_id skill_rel_user_id INT DEFAULT NULL, CHANGE feedback_giver_id feedback_giver_id INT DEFAULT NULL, CHANGE feedback_text feedback_text LONGTEXT NOT NULL, CHANGE feedback_value feedback_value INT DEFAULT 1, CHANGE feedback_datetime feedback_datetime DATETIME NOT NULL;');
+            if ($table->hasForeignKey('FK_7AE9F6B6484A9317') == false) {
+                $this->addSql('ALTER TABLE skill_rel_user_comment ADD CONSTRAINT FK_7AE9F6B6484A9317 FOREIGN KEY (skill_rel_user_id) REFERENCES skill_rel_user (id);');
+            }
+
+            if ($table->hasForeignKey('FK_7AE9F6B63AF3B65B') == false) {
+                $this->addSql('ALTER TABLE skill_rel_user_comment ADD CONSTRAINT FK_7AE9F6B63AF3B65B FOREIGN KEY (feedback_giver_id) REFERENCES user (id);');
+            }
+
+            if ($table->hasIndex('IDX_7AE9F6B6484A9317') == false) {
+                $this->addSql('CREATE INDEX IDX_7AE9F6B6484A9317 ON skill_rel_user_comment (skill_rel_user_id);');
+            }
+
+            if ($table->hasIndex('IDX_7AE9F6B63AF3B65B') == false) {
+                $this->addSql('CREATE INDEX IDX_7AE9F6B63AF3B65B ON skill_rel_user_comment (feedback_giver_id);');
+            }
+
+            if ($table->hasIndex('idx_select_su_giver') == false) {
+                $this->addSql('CREATE INDEX idx_select_su_giver ON skill_rel_user_comment (skill_rel_user_id, feedback_giver_id);');
+            }
+        }
+
+        $this->addSql('ALTER TABLE skill_rel_gradebook CHANGE type type VARCHAR(10) NOT NULL;');
+
+        // skill_level
+        if ($schema->hasTable('skill_level')) {
+            $table = $schema->getTable('skill_level');
+            $this->addSql('ALTER TABLE skill_level CHANGE profile_id profile_id INT DEFAULT NULL, CHANGE position position INT NOT NULL, CHANGE short_name short_name VARCHAR(255) NOT NULL;');
+            if ($table->hasForeignKey('FK_BFC25F2FCCFA12B8') == false) {
+                $this->addSql('ALTER TABLE skill_level ADD CONSTRAINT FK_BFC25F2FCCFA12B8 FOREIGN KEY (profile_id) REFERENCES skill_level_profile (id);');
+            }
+            if ($table->hasIndex('IDX_BFC25F2FCCFA12B8') == false) {
+                $this->addSql('CREATE INDEX IDX_BFC25F2FCCFA12B8 ON skill_level (profile_id);');
+            }
+        }
+
+        // access_url_rel_user
+        if ($schema->hasTable('access_url_rel_user')) {
+            $table = $schema->getTable('access_url_rel_user');
+            $this->addSql('ALTER TABLE access_url_rel_user CHANGE access_url_id access_url_id INT NOT NULL, CHANGE user_id user_id INT NOT NULL;');
+            if ($table->hasForeignKey('FK_85574263A76ED395') == false) {
+                $this->addSql('ALTER TABLE access_url_rel_user ADD CONSTRAINT FK_85574263A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);');
+            }
+            if ($table->hasForeignKey('FK_8557426373444FD5') == false) {
+                $this->addSql('ALTER TABLE access_url_rel_user ADD CONSTRAINT FK_8557426373444FD5 FOREIGN KEY (access_url_id) REFERENCES access_url (id);');
+            }
+        }
+
+        $this->addSql('ALTER TABLE sequence_rule ADD description LONGTEXT NOT NULL, DROP text;');
+
+        if ($schema->hasTable('course_rel_user_catalogue')) {
+            $table = $schema->getTable('course_rel_user_catalogue');
+
+            if ($table->hasForeignKey('course_rel_user_catalogue_ibfk_1')) {
+                $this->addSql('ALTER TABLE course_rel_user_catalogue DROP FOREIGN KEY course_rel_user_catalogue_ibfk_1;');
+            }
+            if ($table->hasForeignKey('course_rel_user_catalogue_ibfk_2')) {
+                $this->addSql('ALTER TABLE course_rel_user_catalogue DROP FOREIGN KEY course_rel_user_catalogue_ibfk_2;');
+            }
+
+            if ($table->hasForeignKey('FK_79CA412EA76ED395') == false) {
+                $this->addSql('ALTER TABLE course_rel_user_catalogue ADD CONSTRAINT FK_79CA412EA76ED395 FOREIGN KEY (user_id) REFERENCES user (id);');
+            }
+            if ($table->hasForeignKey('FK_79CA412E91D79BD3') == false) {
+                $this->addSql('ALTER TABLE course_rel_user_catalogue ADD CONSTRAINT FK_79CA412E91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);');
+            }
+        }
+
+        if ($schema->hasTable('extra_field_values')) {
+            $table = $schema->getTable('extra_field_values');
+            if ($table->hasForeignKey('FK_171DF924443707B0') == false) {
+                $this->addSql('ALTER TABLE extra_field_values ADD CONSTRAINT FK_171DF924443707B0 FOREIGN KEY (field_id) REFERENCES extra_field (id);');
+            }
+        }
+
+        if ($schema->hasTable('extra_field_options')) {
+            $table = $schema->getTable('extra_field_options');
+            if ($table->hasForeignKey('FK_A572E3AE443707B0') == false) {
+                $this->addSql('ALTER TABLE extra_field_options ADD CONSTRAINT FK_A572E3AE443707B0 FOREIGN KEY (field_id) REFERENCES extra_field (id);');
+            }
+        }
+
+        $this->addSql('ALTER TABLE session_rel_course DROP category, CHANGE session_id session_id INT NOT NULL, CHANGE c_id c_id INT NOT NULL, CHANGE nbr_users nbr_users INT NOT NULL, CHANGE position position INT NOT NULL;');
     }
 
     /**

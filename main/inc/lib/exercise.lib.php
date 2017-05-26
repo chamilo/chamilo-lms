@@ -968,14 +968,14 @@ class ExerciseLib
                         }
 
                         if ($answerCorrect != 0) {
-                            $parsed_answer = $answer;
+                            $parsed_answer = strip_tags($answer);
                             $windowId = "{$questionId}_{$lines_count}";
 
                             $s .= <<<HTML
                             <tr>
                                 <td widht="45%">
                                     <div id="window_{$windowId}" class="window window_left_question window{$questionId}_question">
-                                        <strong>$lines_count.</strong> $parsed_answer
+                                        <p><strong>$lines_count.</strong> $parsed_answer</p>
                                     </div>
                                 </td>
                                 <td width="10%">
@@ -1047,9 +1047,10 @@ HTML;
 HTML;
 
                             if (isset($select_items[$lines_count])) {
+                                $panswer = strip_tags($select_items[$lines_count]['answer']);
                                 $s .= <<<HTML
                                 <div id="window_{$windowId}_answer" class="window window_right_question">
-                                    <strong>{$select_items[$lines_count]['letter']}.</strong> {$select_items[$lines_count]['answer']}
+                                    <p><strong>{$select_items[$lines_count]['letter']}.</strong> {$panswer}</p>
                                 </div>
 HTML;
                             } else {

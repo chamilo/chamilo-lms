@@ -3107,6 +3107,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
         case '1.9.10.2':
             //no break
         case '1.9.10.4':
+        case '1.9.10.6':
             $database = new Database();
             $database->setManager($manager);
 

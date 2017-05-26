@@ -376,11 +376,18 @@ switch ($action) {
             || $isAllowedToEdit
             || api_is_platform_admin()
         ) {
-            $orientation = 'landscape';
+            $documentOrientation = api_get_configuration_value('document_pdf_orientation');
+            $orientation = in_array($documentOrientation, ['landscape', 'portrait'])
+                ? $documentOrientation
+                : 'landscape';
+
             $showHeaderAndFooter = true;
 
             if ($is_certificate_mode) {
-                $orientation = api_get_configuration_value('certificate_pdf_orientation');
+                $certificateOrientation = api_get_configuration_value('certificate_pdf_orientation');
+                $orientation = in_array($certificateOrientation, ['landscape', 'portrait'])
+                    ? $certificateOrientation
+                    : 'landscape';
                 $showHeaderAndFooter = !api_get_configuration_value('hide_header_footer_in_certificate');
             }
 

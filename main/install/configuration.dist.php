@@ -379,3 +379,5 @@ $_configuration['agenda_legend'] = [
 //$_configuration['allow_edit_tool_visibility_in_session'] = false;
 // Enable the support to ODF files
 //$_configuration['enabled_support_odf'] = true;
+// Pdf orientation when exporting documents
+// $_configuration['document_pdf_orientation'] = 'landscape'; // It can be 'portrait' or 'landscape'

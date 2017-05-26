@@ -147,7 +147,7 @@ $_configuration['session_stored_in_db'] = false;
 $_configuration['session_lifetime'] = SESSION_LIFETIME;
 // Activation for multi-url access
 // When enabling multi-url, settings can be configured by multi-url using a simple
-// sub-element. E.g. $_configuration['session_lifetime'] = true; could be turned into
+// sub-element. E.g. $_configuration['session_lifetime'][1] = true; could be turned into
 // something like $_configuration['session_lifetime'][2] = false; to affect only URL
 // with ID 2. The ID can be found in the access_url table.
 //$_configuration['multiple_access_urls'] = true;

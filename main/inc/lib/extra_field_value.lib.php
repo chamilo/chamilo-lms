@@ -320,7 +320,7 @@ class ExtraFieldValue extends Model
      * Save values in the *_field_values table
      * @param array $params Structured array with the values to save
      * @param boolean $show_query Whether to show the insert query (passed to the parent save() method)
-     * @result mixed The result sent from the parent method
+     * @return mixed The result sent from the parent method
      * @assert (array()) === false
      */
     public function save($params, $show_query = false)

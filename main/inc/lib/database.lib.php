@@ -554,10 +554,11 @@ class Database
     }
 
     /**
-     * Parses WHERE/ORDER conditions i.e array('where'=>array('id = ?' =>'4'), 'order'=>'id DESC'))
+     * Parses WHERE/ORDER conditions i.e array('where'=>array('id = ?' =>'4'), 'order'=>'id DESC')
      * @todo known issues, it doesn't work when using
      * LIKE conditions example: array('where'=>array('course_code LIKE "?%"'))
      * @param   array $conditions
+     * @return string Partial SQL string to add to longer query
      */
     public static function parse_conditions($conditions)
     {

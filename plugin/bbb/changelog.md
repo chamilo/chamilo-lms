@@ -1,3 +1,8 @@
+Version 2.6 - 2017-05
+---------------------
+* Add max users limit
+  * Requires a database change: "CREATE TABLE plugin_bbb_course_limit" (see bbb_plugin.class.php::install() for full query)
+
 Version 2.5 - 2016-07
 ---------------------
 * User global conference support

@@ -2616,15 +2616,17 @@ class SessionManager
      * @param	string	$variable Field's internal variable name
      * @param	int		$fieldType Field's type
      * @param	string	$displayText Field's language var name
+     * @param   string  $default    Field's default value
      * @return int     new extra field id
      */
-    public static function create_session_extra_field($variable, $fieldType, $displayText)
+    public static function create_session_extra_field($variable, $fieldType, $displayText, $default)
     {
         $extraField = new ExtraFieldModel('session');
         $params = [
             'variable' => $variable,
             'field_type' => $fieldType,
             'display_text' => $displayText,
+            'default_value' => $default
         ];
 
         return $extraField->save($params);

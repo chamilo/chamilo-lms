@@ -56,7 +56,7 @@
 
     <a name="1.11.4"></a>
 
-    <h1>Chamilo 1.11.4 - Uyuni, ? May 2017</h1>
+    <h1>Chamilo 1.11.4 - Uyuni, 31st of May 2017</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.11.4 is a minor, bugfix release of the 1.11.x branch, with a large number of bugfixes on top of 1.11.2.</p>
     <h3>Release name</h3>
@@ -97,6 +97,7 @@
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/99e1afa964d4f21941d9edb5d931960d6e86bb9c">99e1afa9</a>) Improve learnpath tracking details</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/1f68292b9065b2ffcf3aa44434db51bc056bb42f">1f68292b</a> - <a href="https://task.beeznest.com/issues/12625">BT#12625</a>) Exercises: Add option to display draggable question like with vertical orientation</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/pull/1734">PR 1734</a>) Add SEPE plugin for Spanish Employment and Social Security Ministry compliance / Añadido plugin SEPE para cumplimiento con normas del Ministerio de Empleo y Seguridad Social de España</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/f2109a10a17541f4fc806fbc4f33b29108934e34">f2109a10</a>) Plugins: BBB: Add global limit to number of users per room, including extra fields for course and session to define contextual limits</li>
     </ul>
 
     <h4>For developers and sysadmins</h4>
@@ -144,10 +145,33 @@
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4071b1aaf3bc03b651fd42894b6c0b08e250447f">4071b1aa</a>) Add configuration <code>enabled_support_odf</code> to allow edit ODF files</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/b965163df0d7a8f2dd236a78d8cb9004042d0655">b965163d</a> - <a href="https://task.beeznest.com/issues/12756">BT#12756</a>) Add configuration setting 'save_titles_as_html' to use HTML in learning paths category titles</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/37de579dfff6cf29cab25e95ddc22c36a7e399c4">37de579d</a> - <a href="https://task.beeznest.com/issues/12756">BT#12756</a>) Allow publishing learning paths categories as course tool</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4bb41f43b56da45fe36e40c504e3609d150e5a49">4bb41f43</a> - <a href="https://task.beeznest.com/issues/12783">BT#12783</a>) Add configuration setting 'document_pdf_orientation' to allow setting PDF orientation when exporting documents</li>
     </ul>
 
     <h3>Improvements (minor features) and debug</h3>
     <ul>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/cf6f05769add4c53b5237ab47bc70b823da5f366">cf6f0576</a>) Fix hidden count_message in menu (don't show if no messages)</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/5864d5f80159b66bb4a6fd39b164ccfbfacb28ac">5864d5f8</a> - <a href="https://task.beeznest.com/issues/12834">BT#12834</a>) Remove 'Open In Tab' and 'Download' buttons from showinframes</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4784f95c2e455dc004f3d742a9de58ae2f0620a6">4784f95c</a> - <a href="https://task.beeznest.com/issues/12841">BT#12841</a>) Improve course categories display in homepage (avoid breaking HTML if using HTML categories)</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3fba383b869c7dc44d53f878457d4d737494d031">3fba383b</a> - <a href="https://task.beeznest.com/issues/12824">BT#12824</a>) Improve speed in MySpace page data collection functions</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/151a9271a507af91014ff53be0291498ab2f1fcb">151a9271</a> - <a href="https://task.beeznest.com/issues/12824">BT#12824</a>) Improve query in MySpace page sessions list collection function (avoid querying if empty string parameters and not "null" parameters)</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4893a9817c9a05ea70f3e3ed9f9c1004dcc2b7e2">4893a981</a>) Change REQUIRED_PHP_VERSION to 5.5 in api.lib.php</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/14b743afa80db36b8dda97f3d33eed4db233ae90">14b743af</a>) Update SessionManager::create_session_extra_field() to add support for default values</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/68af07cad46da6137e3cb3d5793ca5ae0d50902a">68af07ca</a> - <a href="https://task.beeznest.com/issues/12783">BT#12783</a>) Allow using alternative template for PDF footer</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/9f3f86c3051acafdc432968ed9cfd43e461c9040">9f3f86c3</a>) Learnpath: Add icons for lp category</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/393e53a922fa398958a478ce7c7df71485df8374">393e53a9</a> - <a href="https://task.beeznest.com/issues/12756">BT#12756</a>) Learnpath: Fix viewing single learnpath category</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/03a9cf6f3224858c6615ea61bc60c4a831c81de7">03a9cf6f</a>) Fix inline layout for radio and checkbox group when uploading documents to learnpath</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/b92fdadff66295d21456ed835e03ec156c8c578d">b92fdadf</a>) Multi-URL: Change intra-version behaviour of configuration variable in different url.</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4e57afc5f6c040f478dfdb1ee7c9e4d2338df0bc">4e57afc5</a>) Multi-URL: Change intra-version behaviour of configuration variable in different url.</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/f64fd002dedaee266864ffc6efd96dfa8101c47a">f64fd002</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1980">GH#1980</a>) Add 1.9.10.6 to supported versions for upgrade to 1.10</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/59579de69e5726377dc71f38e97ed412a33ab404">59579de6</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1983">GH#1983</a>) Fix upgrade issues with foreign keys in skills, promotion, course_rel_user_catalogue and extra_field tables</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d1cf4980e234cf6d56b433f1604c3977c6881338">d1cf4980</a>) Format code, remove strategy="IDENTITY"</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4d06c3fabdc57c8943c81cbc0878a698531f3b12">4d06c3fa</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1983">GH#1983</a>) Fix upgrade issues with foreign keys in skills, promotion, course_rel_user_catalogue and extra_field tables</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/747e606b42147907c52e648bcd5d791cb404d15e">747e606b</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1856">GH#1856</a>) Fix announcements count in course when using selective destinations</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/1828b2c2274d3941b6d58ce4dc73d7673c1ee249">1828b2c2</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1982">GH#1982</a>) Improve question list for teacher (move to jQuery)</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d815efeaffbd2b37b817aa9e0317aab2525d7238">d815efea</a> - <a href="https://task.beeznest.com/issues/12755">BT#12755</a>) Avoid export to PDF of thematic section without description</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/536f7b5ebe445de2e25021b28ca7a01371703f87">536f7b5e</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1981">GH#1981</a>) Fix error editing certificate template</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/31fd2c945baf8a4d6c54fc70d1db70e79915acad">31fd2c94</a>) Fix issue showing confirmation message in course header</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ad1a6933bfd19dde00c2de77d7cddff87a1b349a">ad1a6933</a>) Remove E_NOTICE when saving image with pixlr</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/6150fe7d70ab3d577cc8d36770ea7d9374cef1df">6150fe7d</a>) Exercise: Improve results UI</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3d996d4760a178252b6ff2d6a8192940c354fd51">3d996d47</a>) Quiz: Replace "0/10" to ""? / 10" in exercises results</li>

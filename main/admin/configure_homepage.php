@@ -387,7 +387,7 @@ if (!empty($action)) {
                 $add_in_tab = intval($_POST['add_in_tab']);
                 $link_html = trim(stripslashes($_POST['link_html']));
                 $filename = trim(stripslashes($_POST['filename']));
-                $target_blank = $_POST['target_blank'] ? true : false;
+                $target_blank = isset($_POST['target_blank']);
 
                 if ($link_url == 'http://' || $link_url == 'https://') {
                     $link_url = '';

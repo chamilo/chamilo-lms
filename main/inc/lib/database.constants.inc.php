@@ -335,3 +335,7 @@ define('TABLE_TICKET_STATUS', 'ticket_status');
 define('TABLE_TICKET_TICKET', 'ticket_ticket');
 define('TABLE_TICKET_CATEGORY_REL_USER', 'ticket_category_rel_user');
 define('TABLE_TICKET_MESSAGE_ATTACHMENTS', 'ticket_message_attachments');
+
+define('TABLE_BRANCH', 'branch_sync');
+define('TABLE_BRANCH_TRANSACTION', 'branch_transaction');
+define('TABLE_BRANCH_TRANSACTION_STATUS', 'branch_transaction_status');

@@ -40,6 +40,10 @@ if (api_is_allowed_to_edit(null, true)) {
                 Display::return_icon('export_csv.png', get_lang('ExportThematic'), '', ICON_SIZE_MEDIUM).'</a>';
             $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_export_pdf'.$url_token.'">'.
                 Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+            $actionLeft .= Display::url(
+                Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), [], ICON_SIZE_MEDIUM),
+                api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents']).$url_token
+            );
             break;
         default:
             $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.

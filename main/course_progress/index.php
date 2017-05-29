@@ -36,6 +36,7 @@ $actions = array(
     'thematic_import',
     'thematic_export',
     'thematic_export_pdf',
+    'export_documents',
     'thematic_plan_list',
     'thematic_plan_add',
     'thematic_plan_edit',
@@ -285,6 +286,8 @@ switch ($action) {
     case 'thematic_details':
         //no break
     case 'export_single_thematic':
+        //no break
+    case 'export_documents':
         $thematic_controller->thematic($action);
         break;
     case 'thematic_plan_add':

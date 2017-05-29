@@ -520,6 +520,8 @@ class PDF
         if ($outputMode != 'F') {
             exit;
         }
+
+        return $output_file;
     }
 
     /**
@@ -766,5 +768,40 @@ class PDF
                 $this->pdf->SetHTMLFooter($this->custom_footer);
             }
         }
+    }
+
+    /**
+     * Generate a PDF file from $html in SYS_APP_PATH
+     *
+     * @param string $html PDF content
+     * @param string $fileName File name
+     * @param null $dest Optional. Directory to move file
+     * @return string The PDF path
+     */
+    public function exportFromHtmlToFile($html, $fileName, $dest = null)
+    {
+        $this->template = $this->template ?: new Template('', false, false, false, false, false, false);
+
+        $cssFile = api_get_path(SYS_CSS_PATH).'themes/'.$this->template->theme.'/print.css';
+
+        if (!file_exists($cssFile)) {
+            $cssFile = api_get_path(SYS_CSS_PATH).'print.css';
+        }
+
+        $pdfPath = self::content_to_pdf(
+            $html,
+            file_get_contents($cssFile),
+            $fileName,
+            $this->params['course_code'],
+            'F'
+        );
+
+        if (!$dest) {
+            return $pdfPath;
+        }
+
+        move($pdfPath, $dest);
+
+        return $dest.basename($pdfPath);
     }
 }

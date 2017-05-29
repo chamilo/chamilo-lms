@@ -2619,7 +2619,7 @@ class SessionManager
      * @param   string  $default    Field's default value
      * @return int     new extra field id
      */
-    public static function create_session_extra_field($variable, $fieldType, $displayText, $default)
+    public static function create_session_extra_field($variable, $fieldType, $displayText, $default = '')
     {
         $extraField = new ExtraFieldModel('session');
         $params = [

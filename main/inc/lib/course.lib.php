@@ -2922,11 +2922,10 @@ class CourseManager
      * @param    string    Field's internal variable name
      * @param    int        Field's type
      * @param    string    Field's language var name
-     * @param integer $fieldType
      * @param string $default
      * @return boolean     new extra field id
      */
-    public static function create_course_extra_field($variable, $fieldType, $displayText, $default)
+    public static function create_course_extra_field($variable, $fieldType, $displayText, $default = '')
     {
         $extraField = new ExtraField('course');
         $params = [

@@ -59,7 +59,7 @@ if ($conferenceManager) {
             }
             break;
         case 'copy_record_to_link_tool':
-            $result = $bbb->copyRecordToLinkTool($_GET['id']);
+            $result = $bbb->copyRecordingToLinkTool($_GET['id']);
             if ($result) {
                 $message = Display::return_message($plugin->get_lang('VideoConferenceAddedToTheLinkTool'), 'success');
             } else {
@@ -67,7 +67,7 @@ if ($conferenceManager) {
             }
             break;
         case 'delete_record':
-            $result = $bbb->deleteRecord($_GET['id']);
+            $result = $bbb->deleteRecording($_GET['id']);
             if ($result) {
                 $message = Display::return_message(get_lang('Deleted'), 'success');
             } else {
@@ -124,11 +124,12 @@ $meetings = $bbb->getMeetings(
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
 }
-$users_online = $bbb->getUsersOnlineInCurrentRoom();
+$usersOnline = $bbb->getUsersOnlineInCurrentRoom();
+$maxUsers = $bbb->getMaxUsersLimit();
 $status = $bbb->isServerRunning();
 $meetingExists = $bbb->meetingExists($bbb->getCurrentVideoConferenceName());
 $showJoinButton = false;
-if ($meetingExists || $conferenceManager) {
+if (($meetingExists || $conferenceManager) && ($maxUsers == 0 || $maxUsers > $usersOnline)) {
     $showJoinButton = true;
 }
 $conferenceUrl = $bbb->getConferenceUrl();
@@ -179,7 +180,9 @@ $tpl = new Template($tool_name);
 $tpl->assign('allow_to_edit', $conferenceManager);
 $tpl->assign('meetings', $meetings);
 $tpl->assign('conference_url', $conferenceUrl);
-$tpl->assign('users_online', $users_online);
+$tpl->assign('users_online', $usersOnline);
+$tpl->assign('conference_manager', $conferenceManager);
+$tpl->assign('max_users_limit', $maxUsers);
 $tpl->assign('bbb_status', $status);
 $tpl->assign('show_join_button', $showJoinButton);
 $tpl->assign('message', $message);

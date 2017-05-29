@@ -43,7 +43,8 @@ class BBBPlugin extends Plugin
                 'enable_global_conference' => 'boolean',
                 'enable_global_conference_per_user' => 'boolean',
                 'enable_conference_in_course_groups' => 'boolean',
-                'enable_global_conference_link' => 'boolean'
+                'enable_global_conference_link' => 'boolean',
+                'max_users_limit' => 'text',
             ]
         );
 
@@ -110,14 +111,27 @@ class BBBPlugin extends Plugin
         Database::query(
             "CREATE TABLE IF NOT EXISTS plugin_bbb_room (
                 id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                meeting_id int(10) unsigned NOT NULL,
-                participant_id int(11) NOT NULL,
+                meeting_id int unsigned NOT NULL,
+                participant_id int NOT NULL,
                 in_at datetime NOT NULL,
                 out_at datetime NOT NULL,
                 FOREIGN KEY (meeting_id) REFERENCES plugin_bbb_meeting (id),
                 FOREIGN KEY (participant_id) REFERENCES user (id)
             );"
         );
+        $fieldLabel = 'plugin_bbb_course_users_limit';
+        $fieldType = ExtraField::FIELD_TYPE_INTEGER;
+        $fieldTitle = 'MaxUsersInConferenceRoom';
+        $fieldDefault = '0';
+        $extraField = new ExtraField('course');
+        $fieldId = CourseManager::create_course_extra_field($fieldLabel, $fieldType, $fieldTitle, $fieldDefault);
+        $extraField->find($fieldId);
+        $extraField->update(['id' => $fieldId, 'variable' => 'plugin_bbb_course_users_limit', 'changeable' => 1, 'visible_to_self' => 1, 'visible_to_others' => 0]);
+        $fieldLabel = 'plugin_bbb_session_users_limit';
+        $extraField = new ExtraField('session');
+        $fieldId = SessionManager::create_session_extra_field($fieldLabel, $fieldType, $fieldTitle, $fieldDefault);
+        $extraField->find($fieldId);
+        $extraField->update(['id' => $fieldId, 'variable' => 'plugin_bbb_session_users_limit', 'changeable' => 1, 'visible_to_self' => 1, 'visible_to_others' => 0]);
 
         // Installing course settings
         $this->install_course_fields_in_all_courses();
@@ -141,12 +155,23 @@ class BBBPlugin extends Plugin
             'enable_conference_in_course_groups',
             'bbb_plugin',
             'bbb_plugin_host',
-            'bbb_plugin_salt'
+            'bbb_plugin_salt',
+            'max_users_limit',
         ];
 
         foreach ($variables as $variable) {
             $sql = "DELETE FROM $t_settings WHERE variable = '$variable'";
             Database::query($sql);
+        }
+        $extraField = new ExtraField('course');
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable('plugin_bbb_course_users_limit');
+        if (!empty($extraFieldInfo)) {
+            $extraField->delete($extraFieldInfo['id']);
+        }
+        $extraField = new ExtraField('session');
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable('plugin_bbb_session_users_limit');
+        if (!empty($extraFieldInfo)) {
+            $extraField->delete($extraFieldInfo['id']);
         }
 
         $sql = "DELETE FROM $t_options WHERE variable = 'bbb_plugin'";
@@ -157,10 +182,7 @@ class BBBPlugin extends Plugin
         Database::query($sql);
 
         Database::query('DROP TABLE IF EXISTS plugin_bbb_room');
-
-        $t = Database::get_main_table('plugin_bbb_meeting');
-        $sql = "DROP TABLE IF EXISTS $t";
-        Database::query($sql);
+        Database::query('DROP TABLE IF EXISTS plugin_bbb_meeting');
 
         // Deleting course settings
         $this->uninstall_course_fields_in_all_courses($this->course_settings);

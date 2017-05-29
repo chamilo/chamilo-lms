@@ -15,7 +15,7 @@
         <div class="collapse navbar-collapse" id="menuone">
             <ul class="nav navbar-nav">
                 {% for item in menu %}
-                    <li class="{{ item.current }}">
+                    <li class="{{ item.key }} {{ item.current }}">
                         <a href="{{ item.url }}" target="{{ item.target }}" title="{{ item.title }}">{{ item.title }}
                         </a>
                     </li>

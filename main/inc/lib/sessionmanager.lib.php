@@ -3370,7 +3370,7 @@ class SessionManager
     /**
      * Get sessions followed by human resources manager
      * @param int $userId
-     * @param int $status Optional
+     * @param int $status DRH Optional
      * @param int $start
      * @param int $limit
      * @param bool $getCount
@@ -3399,10 +3399,9 @@ class SessionManager
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
-        $userId = intval($userId);
+        $userId = (int) $userId;
 
         $select = " SELECT DISTINCT * ";
-
         if ($getCount) {
             $select = " SELECT count(DISTINCT(s.id)) as count ";
         }
@@ -3412,7 +3411,7 @@ class SessionManager
         }
 
         $limitCondition = null;
-        if (!empty($start) && !empty($limit)) {
+        if (!is_null($start) && !is_null($limit)) {
             $limitCondition = " LIMIT ".intval($start).", ".intval($limit);
         }
 
@@ -3423,7 +3422,7 @@ class SessionManager
         $whereConditions = null;
         $sessionCourseConditions = null;
         $sessionConditions = null;
-        $sessionQuery = null;
+        $sessionQuery = '';
         $courseSessionQuery = null;
 
         switch ($status) {
@@ -3467,7 +3466,8 @@ class SessionManager
         $subQuery = $sessionQuery.$courseSessionQuery;
 
         $sql = " $select FROM $tbl_session s
-                INNER JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
+                INNER JOIN $tbl_session_rel_access_url a 
+                ON (s.id = a.session_id)
                 WHERE
                     access_url_id = ".api_get_current_access_url_id()." AND
                     s.id IN (

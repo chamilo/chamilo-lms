@@ -181,7 +181,7 @@ class PDF
      * @param bool $complete_style show header and footer if true
      * @param bool $addStyle
      *
-     * @return bool
+     * @return false|null
      */
     public function html_to_pdf(
         $html_file_array,
@@ -679,7 +679,7 @@ class PDF
     }
 
     /**
-     * @param array $header html content
+     * @param string $header html content
      */
     public function set_custom_header($header)
     {
@@ -775,7 +775,7 @@ class PDF
      *
      * @param string $html PDF content
      * @param string $fileName File name
-     * @param null $dest Optional. Directory to move file
+     * @param string $dest Optional. Directory to move file
      * @return string The PDF path
      */
     public function exportFromHtmlToFile($html, $fileName, $dest = null)
@@ -808,8 +808,8 @@ class PDF
     /**
      * Create a PDF and save it into the documents area
      * @param string $htmlContent HTML Content
-     * @param $fileName The file name
-     * @param $courseId The course ID
+     * @param string $fileName The file name
+     * @param integer $courseId The course ID
      * @param int $sessionId Optional. The session ID
      */
     public function exportFromHtmlToDocumentsArea($htmlContent, $fileName, $courseId, $sessionId = 0)

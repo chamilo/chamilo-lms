@@ -5,7 +5,7 @@
 	<title>{{ 'Certificate' | get_lang }}</title>
 </head>
 <body style="margin: 0; padding: 0;">
-    <table border="0">
+    <table border="0" cellpadding="0" cellspacing="0">
         <tr>
             <td>
                 <img src="{{ _p.web_css_theme }}images/block.png"/>
@@ -13,7 +13,7 @@
         </tr>
         <tr>
             <td>
-                <table border="0">
+                <table border="0" cellpadding="0" cellspacing="0">
                     <tr>
                         <td><img src="{{ _p.web_css_theme }}images/block.png"/></td>
                         <td bgcolor="#92c647">

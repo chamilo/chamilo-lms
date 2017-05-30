@@ -941,3 +941,10 @@ div.system_announcement_content {
 .print_invisible {
 	display:none;
 }
+table{
+    border-collapse:collapse;
+    border: none;   
+}
+td{
+    padding: 0;
+}

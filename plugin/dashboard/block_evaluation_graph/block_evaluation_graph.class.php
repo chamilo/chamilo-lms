@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use CpChart\Classes\pData as pData;
-use CpChart\Classes\pImage as pImage;
-use CpChart\Classes\pCache as pCache;
+use CpChart\Chart\Cache as pCache;
+use CpChart\Chart\Data as pData;
+use CpChart\Chart\Image as pImage;
 
 
 /**

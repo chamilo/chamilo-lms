@@ -828,6 +828,9 @@ class Display
             $alt_text = basename($image_path);
         }
 
+        if (empty($additional_attributes)) {
+            $additional_attributes = [];
+        }
         $additional_attributes['src'] = $image_path;
 
         if (empty($additional_attributes['alt'])) {

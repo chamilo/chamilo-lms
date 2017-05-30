@@ -711,6 +711,8 @@ class PDF
         $this->pdf->defaultheaderfontstyle  = 'BI';   // blank, B, I, or BI
         $this->pdf->defaultheaderline       = 1;    // 1 to include line below header/above footer
 
+        $userId = api_get_user_id();
+
         if (!empty($course_data['code'])) {
             $teacher_list = CourseManager::get_teacher_list_from_course_code($course_data['code']);
 
@@ -718,17 +720,14 @@ class PDF
             if (!empty($teacher_list)) {
 
                 foreach ($teacher_list as $teacher) {
-                    $teachers[]= $teacher['firstname'].' '.$teacher['lastname'];
-                }
-                if (count($teachers) > 1) {
-                    $teachers = get_lang('Teachers').': '.implode(', ', $teachers);
-                } else {
-                    $teachers = get_lang('Teacher').': '.implode('', $teachers);
-                }
+                    if ($teacher['user_id'] != $userId) {
+                        continue;
+                    }
 
-                // Do not show the teacher list see BT#4080 only the current teacher name
-                $user_info = api_get_user_info();
-                $teachers = $user_info['complete_name'];
+                    // Do not show the teacher list see BT#4080 only the current teacher name
+                    $user_info = api_get_user_info();
+                    $teachers = $user_info['complete_name'];
+                }
             }
 
             $left_content    = '';

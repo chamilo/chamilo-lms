@@ -1,0 +1,41 @@
+<div class="row">
+    <form name="search" method="get" action="{{ path(route) }}">
+        <div class="row">
+            {{ form_widget(form.search) }}
+        </div>
+
+        <div class="row">
+            {{ form_widget(form.priceStart, {horizontal_input_wrapper_class: 'col-sm-3', attr: {
+                min: 1,
+                class: 'form-control',
+                placeholder: 'Start from'
+            }}) }}
+
+            {{ form_widget(form.priceEnd, {horizontal_input_wrapper_class: 'col-sm-3', attr: {
+                min: 1,
+                class: 'form-control',
+                placeholder: 'End to'
+            }}) }}
+        </div>
+
+        <div class="row">
+            {{ form_widget(form.sort, {horizontal_input_wrapper_class: 'col-sm-3'}) }}
+        </div>
+
+        <div class="row col-sm-3">
+            <input class="btn btn-primary" type="submit" value="Search" />
+        </div>
+    </form>
+</div>
+
+<div class="row text-center">
+    {% include 'SonataDatagridBundle:Search:pager.html.twig' %}
+</div>
+
+<div class="row">
+    {% for product in results %}
+        <div class="col-sm-4" itemscope itemtype="http://schema.org/Product">
+            {% include 'SonataProductBundle:Catalog:_product_grid.html.twig' %}
+        </div>
+    {% endfor %}
+</div>

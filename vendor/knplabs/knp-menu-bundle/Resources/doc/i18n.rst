@@ -1,0 +1,64 @@
+I18n for your Menu Labels
+=========================
+
+The KnpMenuBundle translates all menu items by default. Assume you've built a menu
+like this::
+
+    $menu = $factory->createItem('root');
+
+    $menu->addChild('Home', array('route' => 'homepage'));
+    $menu->addChild('Login', array('route' => 'login'));
+
+The items "Home" and "Login" can now be translated in the message domain:
+
+.. configuration-block::
+
+    .. code-block:: yaml
+
+        # app/Resources/translations/messages.fr.yml
+        Home: Accueil
+        Login: Connexion
+
+    .. code-block:: xml
+
+        <!-- app/Resources/translations/messages.fr.xlf -->
+        <?xml version="1.0"?>
+        <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+            <file source-language="en" datatype="plaintext" original="file.ext">
+                <body>
+                    <trans-unit id="menu.home">
+                        <source>Home</source>
+                        <target>Accueil</target>
+                    </trans-unit>
+
+                    <trans-unit id="menu.login">
+                        <source>Login</source>
+                        <target>Connexion</target>
+                    </trans-unit>
+                </body>
+            </file>
+        </xliff>
+
+    .. code-block:: php
+
+        // app/Resources/translations/messages.fr.php
+        return array(
+            'Home' => 'Accueil',
+            'Login' => 'Connexion',
+        );
+
+Configure the Translation Domain
+--------------------------------
+
+You can configure the translation domain that's used in the extras of the menu
+item::
+
+    // ...
+    $menu->addChild('Home', array('route' => 'homepage'))
+        ->setExtra('translation_domain', 'AcmeAdminBundle');
+
+Disabling Translation
+---------------------
+
+You can disable translation of the menu item by setting ``translation_domain``
+to ``false``.

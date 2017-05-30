@@ -1,0 +1,154 @@
+/*!
+ * Chamilo LMS stylesheet - Default v.2.0
+ * Homepage: https://chamilo.org
+ * Author: Alex Aragón <alex.aragon@beeznest.com>
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * Based on Bootstrap v3
+*/
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Open Sans Light'), local('OpenSans-Light'), url(fonts/OpenSans-Light.woff2) format('woff2'), url(fonts/OpenSans-Light.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(fonts/OpenSans.woff2) format('woff2'), url(fonts/OpenSans.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(fonts/OpenSans-Semibold.woff2) format('woff2'), url(fonts/OpenSans-Semibold.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(fonts/OpenSans-Bold.woff2) format('woff2'), url(fonts/OpenSans-Bold.woff) format('woff');
+}
+body {
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+ 
+a {
+  color: #0099FF;
+  text-decoration: none;
+}
+a:hover,
+a:focus {
+  color: #2E75A3;
+  text-decoration: none;
+}
+a:focus {
+  outline: none;
+}
+
+.navbar{
+  border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+}
+.navbar-collapse{
+  overflow: hidden !important;
+}
+.navbar-default {
+  background: #337AB7;
+  -webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+}
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .navbar-nav > li > a:hover {
+  color: #A4DC2D;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus{
+  color: #fff;
+  background-color:#2C5B8E;
+}
+.navbar-default .navbar-nav > li > a{
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus{
+  background: #18477A;
+  color: #ffffff;
+}
+.navbar-nav > li > .dropdown-menu{
+  min-width: 100%;
+  margin-top: 2px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+}
+.navbar-default .navbar-nav > .open > .dropdown-menu{
+  padding: 3px 4px;
+}
+.navbar-default .navbar-nav > .open > .dropdown-menu > li > a{
+  padding: 6px 9px;
+}
+.nav > li > a:hover, .nav > li > a:focus{
+   background-color: transparent;
+}
+.navbar-form .form-control{
+  height: 25px;
+  padding: 6px;
+}
+.navbar-default .navbar-brand {
+  color:white;
+}
+.navbar-default .navbar-collapse, .navbar-default .navbar-form{
+  border-color: #2C5B8E;
+}
+
+.navbar-default .navbar-toggle{
+  border-color: #00677C;
+}
+.navbar-default .navbar-toggle .icon-bar{
+  background-color: #ffffff;
+}
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover{
+  background-color: #2C5B8E;
+}
+.badge-warning{
+  background-color: #FD6600;
+}
+.breadcrumb{
+  padding: 8px 15px;
+  margin-bottom: 21px;
+  list-style: outside none none;
+  background-color: #ECF0F1;
+}
+.breadcrumb > .active{
+  color: #95a5a6;
+}
+.panel-default{
+  border-color: #ECF0F1;
+}
+.panel-default .panel-heading{
+  color: #2c3e50;
+  background-color:#ECF0F1;
+  border-color: #ECF0F1;
+}
+/* Jquery UI */
+.ui-accordion .ui-accordion-icons{
+  padding-left: 0.2em;
+}
+/* End Jquery UI */
+.bgfooter{
+  background-color:#1A2226;
+}
+.bgfooter{
+  color: #ffffff;
+}
+.bgfooter a{
+  color: #ffffff;
+}
+.page-header{
+  margin: 10px 0 10px;
+}

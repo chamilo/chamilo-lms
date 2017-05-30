@@ -1,0 +1,44 @@
+
+The iCalcreator 2.22 release requires PHP >= 5.3.0 due to major updates in the
+selectComponents method.
+The returnCalender/useCachedCalendar methods no longer stops PHP script (die),
+  return TRUE on success!
+iCalcreator.class.php is now split into class and function files and need a new
+  PHP iCalcreator invoke.
+
+UPDATES
+ fcn selectComponent() and supporting fcns
+   (major REWRITE due to a number of bug reports)
+  - selectComponent() now also accepts arg 1 as datetime obj (as fromDate),
+      arg 2 datetime obj (toDate) (and arg 3-6=null)
+    fcns _recur2date() accepts arg2-4 as datetime obj
+  - X-CURRENT-DTSTART/DTEND timezone OK!!
+  - no X-CURRENT-DTEND if no DTEND (DUE) is set
+  - only one reccurrence a day
+  - a RDATE will overwrite any RRULE reccurrence, on an date (Ymd) basis.
+  - any EXDATE must exactly (Ymd[His]) match any RRULE/RDATE recurrence for
+      exclusion
+  - the property X-RECURRENCE contains the RRULE+RDATE recurrence pattern
+      number
+  - new property X-OCCURENCE contains recurrence day number (ex. 'day X of Y')
+ fcn returnCalender(), set Content-Disposition as 'inline' (when new 3rd
+   arg=FALSE, default=TRUE)
+ fcns saveCalendar() and useCachedCalendar(), removed (direcory/filename) args
+   NOTE, the returnCalender/useCachedCalendar methods
+     no longer stops PHP script (die), return TRUE on success!
+ fcn parse(), mgnt of the first 'BEGIN:VCALENDAR' row (ex. remove BOM char)
+ fcn parse(), support PHP context (new 2nd arg.)
+ fcns, sprintf (YmdHis) mgnt
+     removed obsolete functions
+     split iCalcreator.class.php into class and function files.
+     Moving common vcalendar and calendarComponent methods into upper abstract
+       base class
+     NOTE, new iCalcreator PHP invoke
+
+BUG fixes
+ fcn iCalUtilityFunctions::createTimezone(), timezone standard/daylight
+   (default, date) start
+ fcns newComponent(),getComponents(), index settings
+ fcns _setDate, _setDate2, input arg sanitize
+ fcn getProperty(duration) format 4 will now include timezone from DTSTART
+ some code and doc. typo errors.

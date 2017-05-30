@@ -1,0 +1,15 @@
+language: php
+
+before_script:
+  - sudo apt-get update
+  - sudo apt-get install -y libfreetype6-dev libjpeg-dev libgif-dev libpng-dev xpdf libexpat-dev gettext zlib1g-dev build-essential
+  - wget http://www.swftools.org/swftools-0.9.1.tar.gz
+  - sh -c "tar xzvf swftools-0.9.1.tar.gz && cd swftools-0.9.1 && ./configure && make && sudo make install"
+  - composer install --dev --prefer-source
+
+php:
+  - 5.3.3
+  - 5.3
+  - 5.4
+  - 5.5
+

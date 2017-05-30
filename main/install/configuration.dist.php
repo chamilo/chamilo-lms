@@ -383,3 +383,6 @@ $_configuration['agenda_legend'] = [
 // $_configuration['document_pdf_orientation'] = 'landscape'; // It can be 'portrait' or 'landscape'
 // Use alternative footer when exporting document to PDF
 //$_configuration['use_alternative_document_pdf_footer'] = false;
+// If the MySpace page takes too long to load, you might want to remove the
+// processing of generic statistics for the user. In this case set the following to true.
+//$_configuration['tracking_skip_generic_data'] = false;

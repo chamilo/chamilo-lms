@@ -5,6 +5,7 @@
  * Homepage for the MySpace directory
  * @package chamilo.reporting
  */
+
 // resetting the course id
 $cidReset = true;
 
@@ -28,8 +29,8 @@ $is_coach = api_is_coach($session_id);
 $is_platform_admin = api_is_platform_admin();
 $is_drh = api_is_drh();
 $is_session_admin = api_is_session_admin();
-$count_sessions = 0;
 $title = '';
+$skipData = api_get_configuration_value('tracking_skip_generic_data');
 
 // Access control
 api_block_anonymous_users();
@@ -182,6 +183,7 @@ echo '</div>';
 $userId = api_get_user_id();
 $stats = Tracking::getStats($userId, true);
 
+$numberStudents = $stats['student_count'];
 $students = $stats['student_list'];
 $numberStudentBosses = $stats['student_bosses'];
 $numberTeachers = $stats['teachers'];
@@ -198,33 +200,16 @@ if (!empty($sessions)) {
 }
 
 // Sessions for the user
-$count_sessions = count($sessions);
+$countSessions = count($sessions);
 $total_time_spent = 0;
 $total_courses = 0;
 $avgTotalProgress = 0;
 $nb_inactive_students = 0;
 $numberAssignments = 0;
 $inactiveTime = time() - (3600 * 24 * 7);
-$nb_students = 0;
 $daysAgo = 7;
 $studentIds = array();
 $avg_courses_per_student = 0;
-if (!empty($students)) {
-    // Students
-    $nb_students = count($students);
-    $studentIds = array_values($students);
-    $progress = Tracking::get_avg_student_progress($studentIds);
-    $countAssignments = Tracking::count_student_assignments($studentIds);
-    // average progress
-    $avgTotalProgress = $progress / $nb_students;
-    // average assignments
-    $numberAssignments = $countAssignments / $nb_students;
-    $avg_courses_per_student = $countCourses / $nb_students;
-}
-
-$totalTimeSpent = Tracking::get_time_spent_on_the_platform($studentIds);
-$posts = Tracking::count_student_messages($studentIds);
-$averageScore = Tracking::getAverageStudentScore($studentIds);
 
 $linkAddUser = null;
 $linkCourseDetailsAsTeacher = null;
@@ -262,7 +247,7 @@ echo '<div class="report_section">
                     get_lang('FollowedStudents'),
                     api_get_path(WEB_CODE_PATH).'mySpace/student.php'
                 ).'</td>
-                <td align="right">'.$nb_students.'</td>
+                <td align="right">'.$numberStudents.'</td>
             </tr>
             <tr>
                 <td>'.Display::url(
@@ -293,7 +278,7 @@ echo '<div class="report_section">
                 api_get_path(WEB_CODE_PATH).'mySpace/users.php'
             ).
             '</td>
-                <td align="right">'.($nb_students + $numberStudentBosses + $numberTeachers + $countHumanResourcesUsers).$linkAddUser.'</td>
+                <td align="right">'.($numberStudents + $numberStudentBosses + $numberTeachers + $countHumanResourcesUsers).$linkAddUser.'</td>
             </tr>
             <tr>
                 <td>'.Display::url(
@@ -317,90 +302,109 @@ echo '<div class="report_section">
                     api_get_path(WEB_CODE_PATH).'mySpace/session.php'
                 ).
                 '</td>
-            <td align="right">'.$count_sessions.$linkAddSession.'</td>
+            <td align="right">'.$countSessions.$linkAddSession.'</td>
             </tr>
             </table>';
 echo '</div>';
 
-echo Display::page_subheader(get_lang('Students').' ('.$nb_students.')');
+echo Display::page_subheader(get_lang('Students').' ('.$numberStudents.')');
 
-if ($export_csv) {
-    //csv part
-    $csv_content[] = array(get_lang('Students'));
-    $csv_content[] = array(get_lang('InactivesStudents'), $nb_inactive_students);
-    $csv_content[] = array(get_lang('AverageTimeSpentOnThePlatform'), $totalTimeSpent);
-    $csv_content[] = array(get_lang('AverageCoursePerStudent'), $avg_courses_per_student);
-    $csv_content[] = array(get_lang('AverageProgressInLearnpath'), is_null($avgTotalProgress) ? null : round($avgTotalProgress, 2).'%');
-    $csv_content[] = array(get_lang('AverageResultsToTheExercices'), is_null($averageScore) ? null : round($averageScore, 2).'%');
-    $csv_content[] = array(get_lang('AveragePostsInForum'), $posts);
-    $csv_content[] = array(get_lang('AverageAssignments'), $numberAssignments);
-    $csv_content[] = array();
-} else {
-    $lastConnectionDate = api_get_utc_datetime(strtotime('15 days ago'));
-    $countActiveUsers = SessionManager::getCountUserTracking(
-        null,
-        1,
-        null,
-        array(),
-        array()
-    );
-    $countSleepingTeachers = SessionManager::getTeacherTracking(
-        api_get_user_id(),
-        1,
-        $lastConnectionDate,
-        true,
-        $sessionIdList
-    );
+$form = new FormValidator(
+    'search_user',
+    'get',
+    api_get_path(WEB_CODE_PATH).'mySpace/student.php'
+);
+$form = Tracking::setUserSearchForm($form);
+$form->display();
 
-    $countSleepingStudents = SessionManager::getCountUserTracking(
-        null,
-        1,
-        $lastConnectionDate,
-        $sessionIdList,
-        $studentIds
-    );
+$skipData = api_get_configuration_value('tracking_skip_generic_data');
 
-    $form = new FormValidator(
-        'search_user',
-        'get',
-        api_get_path(WEB_CODE_PATH).'mySpace/student.php'
-    );
-    $form = Tracking::setUserSearchForm($form);
-    $form->display();
+if ($skipData == false) {
+    if (!empty($students)) {
+        // Students
+        $studentIds = array_values($students);
+        $progress = Tracking::get_avg_student_progress($studentIds);
+        $countAssignments = Tracking::count_student_assignments($studentIds);
+        // average progress
+        $avgTotalProgress = $progress / $numberStudents;
+        // average assignments
+        $numberAssignments = $countAssignments / $numberStudents;
+        $avg_courses_per_student = $countCourses / $numberStudents;
+        $totalTimeSpent = Tracking::get_time_spent_on_the_platform($studentIds);
+        $posts = Tracking::count_student_messages($studentIds);
+        $averageScore = Tracking::getAverageStudentScore($studentIds);
+    }
 
-    // html part
-    echo '<div class="report_section">
-            <table class="table table-bordered table-striped">
-                <tr>
-                    <td>'.get_lang('AverageCoursePerStudent').'</td>
-                    <td align="right">'.(is_null($avg_courses_per_student) ? '' : round($avg_courses_per_student, 2)).'</td>
-                </tr>
-                <tr>
-                    <td>'.get_lang('InactivesStudents').'</td>
-                    <td align="right">'.$nb_inactive_students.'</td>
-                </tr>
-                <tr>
-                    <td>'.get_lang('AverageTimeSpentOnThePlatform').'</td>
-                    <td align="right">'.(is_null($totalTimeSpent) ? '' : api_time_to_hms($totalTimeSpent)).'</td>
-                </tr>
-                <tr>
-                    <td>'.get_lang('AverageProgressInLearnpath').'</td>
-                    <td align="right">'.(is_null($avgTotalProgress) ? '' : round($avgTotalProgress, 2).'%').'</td>
-                </tr>
-                <tr>
-                    <td>'.get_lang('AvgCourseScore').'</td>
-                    <td align="right">'.(is_null($averageScore) ? '' : round($averageScore, 2).'%').'</td>
-                </tr>
-                <tr>
-                    <td>'.get_lang('AveragePostsInForum').'</td>
-                    <td align="right">'.(is_null($posts) ? '' : round($posts, 2)).'</td>
-                </tr>
-                <tr>
-                    <td>'.get_lang('AverageAssignments').'</td>
-                    <td align="right">'.(is_null($numberAssignments) ? '' : round($numberAssignments, 2)).'</td>
-                </tr>
-            </table>
-         </div>';
+    if ($export_csv) {
+        //csv part
+        $csv_content[] = array(get_lang('Students'));
+        $csv_content[] = array(get_lang('InactivesStudents'), $nb_inactive_students);
+        $csv_content[] = array(get_lang('AverageTimeSpentOnThePlatform'), $totalTimeSpent);
+        $csv_content[] = array(get_lang('AverageCoursePerStudent'), $avg_courses_per_student);
+        $csv_content[] = array(get_lang('AverageProgressInLearnpath'), is_null($avgTotalProgress) ? null : round($avgTotalProgress, 2).'%');
+        $csv_content[] = array(get_lang('AverageResultsToTheExercices'), is_null($averageScore) ? null : round($averageScore, 2).'%');
+        $csv_content[] = array(get_lang('AveragePostsInForum'), $posts);
+        $csv_content[] = array(get_lang('AverageAssignments'), $numberAssignments);
+        $csv_content[] = array();
+    } else {
+        $lastConnectionDate = api_get_utc_datetime(strtotime('15 days ago'));
+        $countActiveUsers = SessionManager::getCountUserTracking(
+            null,
+            1,
+            null,
+            array(),
+            array()
+        );
+        $countSleepingTeachers = SessionManager::getTeacherTracking(
+            api_get_user_id(),
+            1,
+            $lastConnectionDate,
+            true,
+            $sessionIdList
+        );
+
+        $countSleepingStudents = SessionManager::getCountUserTracking(
+            null,
+            1,
+            $lastConnectionDate,
+            $sessionIdList,
+            $studentIds
+        );
+
+        // html part
+        echo '<div class="report_section">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <td>'.get_lang('AverageCoursePerStudent').'</td>
+                        <td align="right">'.(is_null($avg_courses_per_student) ? '' : round($avg_courses_per_student, 2)).'</td>
+                    </tr>
+                    <tr>
+                        <td>'.get_lang('InactivesStudents').'</td>
+                        <td align="right">'.$nb_inactive_students.'</td>
+                    </tr>
+                    <tr>
+                        <td>'.get_lang('AverageTimeSpentOnThePlatform').'</td>
+                        <td align="right">'.(is_null($totalTimeSpent) ? '' : api_time_to_hms($totalTimeSpent)).'</td>
+                    </tr>
+                    <tr>
+                        <td>'.get_lang('AverageProgressInLearnpath').'</td>
+                        <td align="right">'.(is_null($avgTotalProgress) ? '' : round($avgTotalProgress, 2).'%').'</td>
+                    </tr>
+                    <tr>
+                        <td>'.get_lang('AvgCourseScore').'</td>
+                        <td align="right">'.(is_null($averageScore) ? '' : round($averageScore, 2).'%').'</td>
+                    </tr>
+                    <tr>
+                        <td>'.get_lang('AveragePostsInForum').'</td>
+                        <td align="right">'.(is_null($posts) ? '' : round($posts, 2)).'</td>
+                    </tr>
+                    <tr>
+                        <td>'.get_lang('AverageAssignments').'</td>
+                        <td align="right">'.(is_null($numberAssignments) ? '' : round($numberAssignments, 2)).'</td>
+                    </tr>
+                </table>
+             </div>';
+    }
 }
 
 // Send the csv file if asked

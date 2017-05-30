@@ -319,6 +319,10 @@ $form->display();
 
 $skipData = api_get_configuration_value('tracking_skip_generic_data');
 
+$totalTimeSpent = null;
+$averageScore = null;
+$posts = null;
+
 if ($skipData == false) {
     if (!empty($students)) {
         // Students

@@ -804,4 +804,43 @@ class PDF
 
         return $dest.basename($pdfPath);
     }
+
+    /**
+     * Create a PDF and save it into the documents area
+     * @param string $htmlContent HTML Content
+     * @param $fileName The file name
+     * @param $courseId The course ID
+     * @param int $sessionId Optional. The session ID
+     */
+    public function exportFromHtmlToDocumentsArea($htmlContent, $fileName, $courseId, $sessionId = 0)
+    {
+        $userId = api_get_user_id();
+        $courseInfo = api_get_course_info_by_id($courseId);
+
+        $courseDirectory = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/document/';
+
+        $docPath = $this->exportFromHtmlToFile(
+            $htmlContent,
+            $fileName,
+            $courseDirectory
+        );
+
+        $docId = add_document(
+            $courseInfo,
+            str_replace($courseDirectory, '/', $docPath),
+            'file',
+            filesize($docPath),
+            $fileName,
+            null,
+            false,
+            true,
+            null,
+            $sessionId,
+            $userId
+        );
+
+        api_item_property_update($courseInfo, TOOL_DOCUMENT, $docId, 'DocumentAdded', $userId);
+
+        Display::addFlash(Display::return_message(get_lang('ItemAdded')));
+    }
 }

@@ -5022,7 +5022,10 @@ class CourseManager
      * @param bool $hideClosed Whether to hide closed and hidden courses
      * @return string SQL conditions
      */
-    public static function getCourseVisibilitySQLCondition($courseTableAlias, $hideClosed = false) {
+    public static function getCourseVisibilitySQLCondition(
+        $courseTableAlias,
+        $hideClosed = false
+    ) {
         $visibilityCondition = '';
         $hidePrivate = api_get_setting('course_catalog_hide_private');
         if ($hidePrivate === 'true') {
@@ -5054,11 +5057,11 @@ class CourseManager
 
     /**
      * Get available le courses count
-     * @param int Access URL ID (optional)
+     * @param int $accessUrlId (optional)
      * @param integer $accessUrlId
      * @return int Number of courses
      */
-    public static function countAvailableCourses($accessUrlId = null)
+    public static function countAvailableCourses($accessUrlId = 1)
     {
         $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $tableCourseRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -5069,20 +5072,25 @@ class CourseManager
             $withoutSpecialCourses = ' AND c.id NOT IN ("'.implode('","', $specialCourseList).'")';
         }
 
-        $visibilityCondition = self::getCourseVisibilitySQLCondition('c', true);
-
-        if (!empty($accessUrlId) && $accessUrlId == intval($accessUrlId)) {
-            $sql = "SELECT count(c.id) 
-                    FROM $tableCourse c, $tableCourseRelAccessUrl u
-                    WHERE
-                        c.id = u.c_id AND
-                        u.access_url_id = $accessUrlId AND
-                        c.visibility != 0 AND
-                        c.visibility != 4
-                        $withoutSpecialCourses
-                        $visibilityCondition
-                    ";
-        }
+        $visibilityCondition = self::getCourseVisibilitySQLCondition('c', true);    
+        
+        $accessUrlId = (int) $accessUrlId;
+        if (empty($accessUrlId)) {
+            $accessUrlId = 1;
+        }                
+        
+        $sql = "SELECT count(c.id) 
+                FROM $tableCourse c 
+                INNER JOIN $tableCourseRelAccessUrl u
+                ON (c.id = u.c_id)
+                WHERE
+                    u.access_url_id = $accessUrlId AND
+                    c.visibility != 0 AND
+                    c.visibility != 4
+                    $withoutSpecialCourses
+                    $visibilityCondition
+                ";
+        
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
 

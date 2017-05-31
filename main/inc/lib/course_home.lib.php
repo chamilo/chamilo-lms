@@ -827,7 +827,7 @@ class CourseHome
                                     $link['name'] = Display::return_icon(
                                         'invisible.png',
                                         get_lang('Activate'),
-                                        array('id' => 'linktool_'.$tool['id']),
+                                        array('id' => 'linktool_'.$tool['iid']),
                                         ICON_SIZE_SMALL,
                                         false
                                     );
@@ -838,7 +838,7 @@ class CourseHome
                                     $link['name'] = Display::return_icon(
                                         'visible.png',
                                         get_lang('Deactivate'),
-                                        array('id' => 'linktool_'.$tool['id']),
+                                        array('id' => 'linktool_'.$tool['iid']),
                                         ICON_SIZE_SMALL,
                                         false
                                     );
@@ -850,7 +850,7 @@ class CourseHome
                             $link['name'] = Display::return_icon(
                                 'visible.png',
                                 get_lang('Deactivate'),
-                                array('id' => 'linktool_'.$tool['id']),
+                                array('id' => 'linktool_'.$tool['iid']),
                                 ICON_SIZE_SMALL,
                                 false
                             );
@@ -874,7 +874,7 @@ class CourseHome
                 if (isset($lnk) && is_array($lnk)) {
                     foreach ($lnk as $this_link) {
                         if (empty($tool['adminlink'])) {
-                            $item['visibility'] .= '<a class="make_visible_and_invisible" href="'.api_get_self().'?'.api_get_cidreq().'&id='.$tool['id'].'&'.$this_link['cmd'].'">'.
+                            $item['visibility'] .= '<a class="make_visible_and_invisible" href="'.api_get_self().'?'.api_get_cidreq().'&id='.$tool['iid'].'&'.$this_link['cmd'].'">'.
                                 $this_link['name'].'</a>';
                         }
                     }
@@ -909,12 +909,12 @@ class CourseHome
                 }
 
                 $tool_link_params = array();
-                $toolId = isset($tool["id"]) ? $tool["id"] : null;
+                $toolIid = isset($tool["iid"]) ? $tool["iid"] : null;
 
                 //@todo this visio stuff should be removed
                 if (strpos($tool['name'], 'visio_') !== false) {
                     $tool_link_params = array(
-                        'id' => 'tooldesc_'.$toolId,
+                        'id' => 'tooldesc_'.$toolIid,
                         'href' => '"javascript: void(0);"',
                         'class' => $class,
                         'onclick' => 'javascript: window.open(\''.$tool['link'].'\',\'window_visio'.api_get_course_id().'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
@@ -922,7 +922,7 @@ class CourseHome
                     );
                 } elseif (strpos($tool['name'], 'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
                     $tool_link_params = array(
-                        'id' => 'tooldesc_'.$toolId,
+                        'id' => 'tooldesc_'.$toolIid,
                         'class' => $class,
                         'href' => 'javascript: void(0);',
                         'onclick' => 'javascript: window.open(\''.$tool['link'].'\',\'window_chat'.api_get_course_id().'\',config=\'height=\'+600+\', width=\'+825+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')', //Chat Open Windows
@@ -930,7 +930,7 @@ class CourseHome
                     );
                 } else {
                     $tool_link_params = array(
-                        'id' => 'tooldesc_'.$toolId,
+                        'id' => 'tooldesc_'.$toolIid,
                         'href' => $tool['link'],
                         'class' => $class,
                         'target' => $tool['target']
@@ -957,7 +957,7 @@ class CourseHome
                 $icon = Display::return_icon(
                     $tool['image'],
                     $tool_name,
-                    array('class' => 'tool-icon', 'id' => 'toolimage_'.$toolId),
+                    array('class' => 'tool-icon', 'id' => 'toolimage_'.$toolIid),
                     ICON_SIZE_BIG,
                     false
                 );
@@ -1006,13 +1006,13 @@ class CourseHome
                         $data = '';
                         $html .= '<div class="col-xs-6 col-md-3 course-tool">';
                         $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
-                        $toolId = isset($item['tool']['id']) ? $item['tool']['id'] : null;
+                        $toolIid = isset($item['tool']['iid']) ? $item['tool']['iid'] : null;
 
                         if (isset($item['tool']['custom_image'])) {
                             $original_image = Display::img(
                                 $item['tool']['custom_image'],
                                 $item['name'],
-                                array('id' => 'toolimage_'.$toolId)
+                                array('id' => 'toolimage_'.$toolIid)
                             );
                         } elseif (isset($item['tool']['custom_icon']) &&
                             !empty($item['tool']['custom_icon'])
@@ -1025,13 +1025,13 @@ class CourseHome
                             $original_image = Display::img(
                                 self::getCustomWebIconPath().$customIcon,
                                 $item['name'],
-                                array('id' => 'toolimage_'.$toolId)
+                                array('id' => 'toolimage_'.$toolIid)
                             );
                         } else {
                             $original_image = Display::return_icon(
                                 $image,
                                 $item['name'],
-                                array('id' => 'toolimage_'.$toolId),
+                                array('id' => 'toolimage_'.$toolIid),
                                 ICON_SIZE_BIG,
                                 false
                             );
@@ -1059,7 +1059,7 @@ class CourseHome
                         $original_image = Display::return_icon(
                                 $image,
                                 $item['name'],
-                                array('id' => 'toolimage_'.$item['tool']['id']),
+                                array('id' => 'toolimage_'.$item['tool']['iid']),
                                 ICON_SIZE_SMALL,
                                 false
                             );

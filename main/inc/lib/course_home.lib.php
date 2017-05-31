@@ -793,7 +793,7 @@ class CourseHome
                                 $link['name'] = Display::return_icon(
                                     'visible.png',
                                     get_lang('Deactivate'),
-                                    array('id' => 'linktool_'.$tool['id']),
+                                    array('id' => 'linktool_'.$tool['iid']),
                                     ICON_SIZE_SMALL,
                                     false
                                 );
@@ -804,7 +804,7 @@ class CourseHome
                                 $link['name'] = Display::return_icon(
                                     'invisible.png',
                                     get_lang('Activate'),
-                                    array('id' => 'linktool_'.$tool['id']),
+                                    array('id' => 'linktool_'.$tool['iid']),
                                     ICON_SIZE_SMALL,
                                     false
                                 );

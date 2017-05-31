@@ -5,11 +5,11 @@
     "homepage": "http://www.chamilo.org",
     "license": "GPL-3.0",
     "support": {
-        "forum": "http://www.chamilo.org/forum",
+        "forum": "https://chamilo.org/forum",
         "irc": "irc://irc.freenode.org/chamilo",
         "source": "https://github.com/chamilo/chamilo-lms",
         "docs": "https://github.com/chamilo/docs",
-        "issues": "https://support.chamilo.org/projects/chamilo-18"
+        "issues": "https://github.com/chamilo/chamilo-lms/issues"
     },
     "autoload": {
         "psr-4": {

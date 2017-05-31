@@ -386,3 +386,5 @@ $_configuration['agenda_legend'] = [
 // If the MySpace page takes too long to load, you might want to remove the
 // processing of generic statistics for the user. In this case set the following to true.
 //$_configuration['tracking_skip_generic_data'] = false;
+// Show question feedback (requires DB change)
+//$_configuration['allow_quiz_question_feedback'] = false;

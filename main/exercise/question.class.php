@@ -1,10 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
+
 /**
  * Class Question
  *
- *	This class allows to instantiate an object of type Question
+ * This class allows to instantiate an object of type Question
  *
  * @author Olivier Brouckaert, original author
  * @author Patrick Cool, LaTeX support
@@ -28,9 +30,11 @@ abstract class Question
     public $category;
     public $isContent;
     public $course;
+    public $feedback;
     public static $typePicture = 'new_question.png';
     public static $explanationLangVar = '';
     public $question_table_class = 'table table-striped';
+    public $questionTypeWithFeedback;
     public static $questionTypes = array(
         UNIQUE_ANSWER => array('unique_answer.class.php', 'UniqueAnswer'),
         MULTIPLE_ANSWER => array('multiple_answer.class.php', 'MultipleAnswer'),
@@ -79,6 +83,12 @@ abstract class Question
         $this->course = api_get_course_info();
         $this->category_list = array();
         $this->parent_id = 0;
+        $this->questionTypeWithFeedback = [
+            MATCHING,
+            MATCHING_DRAGGABLE,
+            DRAGGABLE,
+            FILL_IN_BLANKS
+        ];
     }
 
     /**
@@ -107,7 +117,6 @@ abstract class Question
     public static function read($id, $course_id = null)
     {
         $id = intval($id);
-
         if (!empty($course_id)) {
             $course_info = api_get_course_info_by_id($course_id);
         } else {
@@ -123,10 +132,9 @@ abstract class Question
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
-        $sql = "SELECT question, description, ponderation, position, type, picture, level, extra
+        $sql = "SELECT *
                 FROM $TBL_QUESTIONS
                 WHERE c_id = $course_id AND id = $id ";
-
         $result = Database::query($sql);
 
         // if the question has been found
@@ -143,6 +151,7 @@ abstract class Question
                 $objQuestion->level = (int) $object->level;
                 $objQuestion->extra = $object->extra;
                 $objQuestion->course = $course_info;
+                $objQuestion->feedback = isset($object->feedback) ? $object->feedback : '';
                 $objQuestion->category = TestCategory::getCategoryForQuestion($id);
 
                 $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -881,7 +890,8 @@ abstract class Question
     }
 
     /**
-     * Sets the title
+     * Set title
+     * @param string $title
      */
     public function setTitle($title)
     {
@@ -902,13 +912,14 @@ abstract class Question
      * if an exercise ID is provided, we add that exercise ID into the exercise list
      *
      * @author Olivier Brouckaert
-     * @param integer $exerciseId - exercise ID if saving in an exercise
+     * @param Exercise $exercise
      */
-    public function save($exerciseId = 0)
+    public function save($exercise)
     {
         $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $em = Database::getManager();
+        $exerciseId = $exercise->id;
 
         $id = $this->id;
         $question = $this->question;
@@ -934,6 +945,9 @@ abstract class Question
                 'extra' => $extra,
                 'level' => $level,
             ];
+            if ($exercise->questionFeedbackEnabled) {
+                $params['feedback'] = $this->feedback;
+            }
             Database::update(
                 $TBL_QUESTIONS,
                 $params,
@@ -952,7 +966,7 @@ abstract class Question
             }
             if (api_get_setting('search_enabled') == 'true') {
                 if ($exerciseId != 0) {
-                    $this -> search_engine_edit($exerciseId);
+                    $this->search_engine_edit($exerciseId);
                 } else {
                     /**
                      * actually there is *not* an user interface for
@@ -987,6 +1001,10 @@ abstract class Question
                 'level' => $level
             ];
 
+            if ($exercise->questionFeedbackEnabled) {
+                $params['feedback'] = $this->feedback;
+            }
+
             $this->id = Database::insert($TBL_QUESTIONS, $params);
 
             if ($this->id) {
@@ -1003,7 +1021,7 @@ abstract class Question
 
                 // If hotspot, create first answer
                 if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
-                    $quizAnswer = new \Chamilo\CourseBundle\Entity\CQuizAnswer();
+                    $quizAnswer = new CQuizAnswer();
                     $quizAnswer
                         ->setCId($c_id)
                         ->setQuestionId($this->id)
@@ -1029,7 +1047,7 @@ abstract class Question
                 }
 
                 if ($type == HOT_SPOT_DELINEATION) {
-                    $quizAnswer = new \Chamilo\CourseBundle\Entity\CQuizAnswer();
+                    $quizAnswer = new CQuizAnswer();
                     $quizAnswer
                         ->setCId($c_id)
                         ->setQuestionId($this->id)
@@ -1523,7 +1541,6 @@ abstract class Question
         if (!is_null($type)) {
             list($file_name, $class_name) = self::get_question_type($type);
             if (!empty($file_name)) {
-                include_once $file_name;
                 if (class_exists($class_name)) {
                     return new $class_name();
                 } else {
@@ -1539,8 +1556,9 @@ abstract class Question
      * Creates the form to create / edit a question
      * A subclass can redefine this function to add fields...
      * @param FormValidator $form
+     * @param Exercise $exercise
      */
-    public function createForm(&$form)
+    public function createForm(&$form, $exercise)
     {
         echo '<style>
                 .media { display:none;}
@@ -1563,7 +1581,14 @@ abstract class Question
         // question name
         if (api_get_configuration_value('save_titles_as_html')) {
             $editorConfig = ['ToolbarSet' => 'Minimal'];
-            $form->addHtmlEditor('questionName', get_lang('Question'), false, false, $editorConfig, true);
+            $form->addHtmlEditor(
+                'questionName',
+                get_lang('Question'),
+                false,
+                false,
+                $editorConfig,
+                true
+            );
         } else {
             $form->addElement('text', 'questionName', get_lang('Question'));
         }
@@ -1589,7 +1614,13 @@ abstract class Question
 
         $form->addButtonAdvancedSettings('advanced_params');
         $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
-        $form->addHtmlEditor('questionDescription', get_lang('QuestionDescription'), false, false, $editorConfig);
+        $form->addHtmlEditor(
+            'questionDescription',
+            get_lang('QuestionDescription'),
+            false,
+            false,
+            $editorConfig
+        );
 
         // hidden values
         $my_id = isset($_REQUEST['myid']) ? intval($_REQUEST['myid']) : null;
@@ -1669,12 +1700,20 @@ abstract class Question
             }
         }
 
+        if (!is_null($exercise)) {
+            if ($exercise->questionFeedbackEnabled && $this->showFeedback($exercise)) {
+                $form->addTextarea('feedback', get_lang('FeedbackIfCorrect'));
+            }
+        }
+
+
         // default values
         $defaults = array();
         $defaults['questionName'] = $this->question;
         $defaults['questionDescription'] = $this->description;
         $defaults['questionLevel'] = $this->level;
         $defaults['questionCategory'] = $this->category;
+        $defaults['feedback'] = $this->feedback;
 
         // Came from he question pool
         if (isset($_GET['fromExercise'])) {
@@ -1693,22 +1732,23 @@ abstract class Question
     /**
      * function which process the creation of questions
      * @param FormValidator $form
-     * @param Exercise $objExercise
+     * @param Exercise $exercise
      */
-    public function processCreation($form, $objExercise = null)
+    public function processCreation($form, $exercise)
     {
         $this->updateTitle($form->getSubmitValue('questionName'));
         $this->updateDescription($form->getSubmitValue('questionDescription'));
         $this->updateLevel($form->getSubmitValue('questionLevel'));
         $this->updateCategory($form->getSubmitValue('questionCategory'));
+        $this->setFeedback($form->getSubmitValue('feedback'));
 
         //Save normal question if NOT media
         if ($this->type != MEDIA_QUESTION) {
-            $this->save($objExercise->id);
+            $this->save($exercise);
 
             // modify the exercise
-            $objExercise->addToList($this->id);
-            $objExercise->update_question_positions();
+            $exercise->addToList($this->id);
+            $exercise->update_question_positions();
         }
     }
 
@@ -1720,9 +1760,10 @@ abstract class Question
 
     /**
      * abstract function which process the creation of answers
-     * @param the FormValidator $form
+     * @param FormValidator $form
+     * @param Exercise $exercise
      */
-    abstract public function processAnswersCreation($form);
+    abstract public function processAnswersCreation($form, $exercise);
 
     /**
      * Displays the menu of question types
@@ -1763,8 +1804,6 @@ abstract class Question
             eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
             echo '<li>';
             echo '<div class="icon-image">';
-
-
             $icon = '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.
                 Display::return_icon($img, $explanation, null, ICON_SIZE_BIG).'</a>';
 
@@ -1886,13 +1925,14 @@ abstract class Question
     /**
      * Shows question title an description
      *
-     * @param string $feedback_type
+     * @param Exercise $exercise
      * @param int $counter
      * @param array $score
      * @return string HTML string with the header of the question (before the answers table)
      */
-    public function return_header($feedback_type = null, $counter = null, $score = [])
+    public function return_header($exercise, $counter = null, $score = [])
     {
+        $feedbackType = $exercise->feedback_type;
         $counter_label = '';
         if (!empty($counter)) {
             $counter_label = intval($counter);
@@ -1948,6 +1988,12 @@ abstract class Question
                 );
             }
             $header .= $message.'<br />';
+        }
+
+        if (isset($score['pass']) && $score['pass'] === true) {
+            if ($this->showFeedback($exercise)) {
+                $header .= $this->returnFormatFeedback();
+            }
         }
 
         return $header;
@@ -2043,6 +2089,8 @@ abstract class Question
      * Get course medias
      * @param int course id
      * @param integer $course_id
+     *
+     * @return array
      */
     static function get_course_medias(
         $course_id,
@@ -2173,7 +2221,6 @@ abstract class Question
         return $swappedAnswer;
     }
 
-
     /**
      * @param array $score
      * @return bool
@@ -2186,5 +2233,32 @@ abstract class Question
         }
 
         return $isReview;
+    }
+
+    /**
+     * @param string $value
+     */
+    public function setFeedback($value)
+    {
+        $this->feedback = $value;
+    }
+
+    /**
+     * @param Exercise $exercise
+     * @return bool
+     */
+    public function showFeedback($exercise)
+    {
+        return
+            in_array($this->type, $this->questionTypeWithFeedback) &&
+            $exercise->feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM;
+    }
+
+    /**
+     * @return string
+     */
+    public function returnFormatFeedback()
+    {
+        return '<br /><br />'.Display::return_message($this->feedback, 'normal', false);
     }
 }

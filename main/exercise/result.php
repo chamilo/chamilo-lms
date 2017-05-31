@@ -74,7 +74,7 @@ if ($show_headers) {
 $message = Session::read('attempt_remaining');
 Session::erase('attempt_remaining');
 
-ExerciseLib::display_question_list_by_attempt(
+ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
     $id,
     false,

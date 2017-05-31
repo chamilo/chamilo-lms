@@ -200,10 +200,9 @@ class GlobalMultipleAnswer extends Question
     }
 
     /**
-     * abstract function which creates the form to create / edit the answers of the question
-     * @param FormValidator $form
+     * @inheritdoc
      */
-    function processAnswersCreation($form)
+    public function processAnswersCreation($form, $exercise)
     {
         $objAnswer = new Answer($this->id);
         $nb_answers = $form->getSubmitValue('nb_answers');
@@ -254,15 +253,18 @@ class GlobalMultipleAnswer extends Question
 
         // sets the total weighting of the question --> sert � donner le score total pendant l'examen
         $this->updateWeighting($questionWeighting);
-        $this->save();
+        $this->save($exercise);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function return_header(
-        $feedback_type = null,
+        $exercise,
         $counter = null,
         $score = null
     ) {
-        $header = parent::return_header($feedback_type, $counter, $score);
+        $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
         <tr>
             <th>' . get_lang("Choice").'</th>

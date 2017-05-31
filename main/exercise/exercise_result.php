@@ -177,7 +177,7 @@ $max_score = $objExercise->get_max_score();
 echo Display::return_message(get_lang('Saved').'<br />', 'normal', false);
 
 // Display and save questions
-ExerciseLib::display_question_list_by_attempt(
+ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
     $exe_id,
     true,

@@ -27,12 +27,11 @@ class Annotation extends Question
     }
 
     /**
-     * @param FormValidator $form
-     * @param int $fck_config
+     * @inheritdoc
      */
-    public function createForm(&$form, $fck_config = 0)
+    public function createForm(&$form, $exercise)
     {
-        parent::createForm($form, $fck_config);
+        parent::createForm($form, $exercise);
 
         $form->addElement(
             'number',
@@ -115,11 +114,11 @@ class Annotation extends Question
     }
 
     /**
-     * @param FormValidator $form
+     * @inheritdoc
      */
-    public function processAnswersCreation($form)
+    public function processAnswersCreation($form, $exercise)
     {
         $this->weighting = $form->getSubmitValue('weighting');
-        $this->save();
+        $this->save($exercise);
     }
 }

@@ -316,11 +316,9 @@ class UniqueAnswer extends Question
     }
 
     /**
-     * Receives the unique answer question type creation form data and creates
-     * or updates the answers from that question
-     * @param FormValidator $form
+     * @inheritdoc
      */
-    public function processAnswersCreation($form)
+    public function processAnswersCreation($form, $exercise)
     {
         $questionWeighting = $nbrGoodAnswers = 0;
         $correct = $form->getSubmitValue('correct');
@@ -405,27 +403,23 @@ class UniqueAnswer extends Question
 
         // sets the total weighting of the question
         $this->updateWeighting($questionWeighting);
-        $this->save();
+        $this->save($exercise);
     }
 
     /**
-     * Helper function to print the column titles in the answers edition form
-     * @param null $feedback_type The type of feedback influences what columns are shown to the editor
-     * @param null $counter The number of answers to show, in case there should be pagination
-     * @param null $score The maximum score for the question
-     * @return string HTML string for a table header + a wrapper before it
+     * @inheritdoc
      */
     public function return_header(
-        $feedback_type = null,
+        $exercise,
         $counter = null,
         $score = null
     ) {
-        $header = parent::return_header($feedback_type, $counter, $score);
+        $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
 			<tr>
-				<th>' . get_lang("Choice").'</th>
-				<th>' . get_lang("ExpectedChoice").'</th>
-				<th>' . get_lang("Answer").'</th>';
+				<th>'.get_lang("Choice").'</th>
+				<th>'.get_lang("ExpectedChoice").'</th>
+				<th>'.get_lang("Answer").'</th>';
         $header .= '<th>'.get_lang("Comment").'</th>';
         $header .= '</tr>';
 

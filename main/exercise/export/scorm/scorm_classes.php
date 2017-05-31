@@ -135,12 +135,18 @@ class ScormQuestion extends Question
         return array($js, $html);
     }
 
-    function createAnswersForm($form)
+    /**
+     * @inheritdoc
+     */
+    public function createAnswersForm($form)
     {
         return true;
     }
 
-    function processAnswersCreation($form)
+    /**
+     * @inheritdoc
+     */
+    public function processAnswersCreation($form, $exercise)
     {
         return true;
     }

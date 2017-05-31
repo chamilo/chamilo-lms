@@ -235,15 +235,13 @@ class MultipleAnswerTrueFalse extends Question
     }
 
     /**
-	 * abstract function which creates the form to create / edit the answers of the question
-	 * @param FormValidator $form
-	 */
-    public function processAnswersCreation($form)
+     * @inheritdoc
+     */
+    public function processAnswersCreation($form, $exercise)
     {
-		$questionWeighting = $nbrGoodAnswers = 0;
-		$objAnswer = new Answer($this->id);
+        $questionWeighting = $nbrGoodAnswers = 0;
+        $objAnswer = new Answer($this->id);
         $nb_answers = $form->getSubmitValue('nb_answers');
-        //$options_count    = $form->getSubmitValue('options_count');
         $course_id = api_get_course_int_id();
 
         $correct = array();
@@ -273,7 +271,7 @@ class MultipleAnswerTrueFalse extends Question
         $new_options = Question::readQuestionOption($this->id, $course_id);
         $sorted_by_position = array();
         foreach ($new_options as $item) {
-        	$sorted_by_position[$item['position']] = $item;
+            $sorted_by_position[$item['position']] = $item;
         }
 
         /* Saving quiz_question.extra values that has the correct scores of
@@ -295,7 +293,7 @@ class MultipleAnswerTrueFalse extends Question
                 // change the default values from the form 1 and 2 by the correct "option id" registered
                 $goodAnswer = $sorted_by_position[$goodAnswer]['id'];
             }
-    	    $questionWeighting += $extra_values[0]; //By default 0 has the correct answers
+            $questionWeighting += $extra_values[0]; //By default 0 has the correct answers
             $objAnswer->createAnswer($answer, $goodAnswer, $comment, '', $i);
         }
 
@@ -303,28 +301,25 @@ class MultipleAnswerTrueFalse extends Question
         $objAnswer->save();
         // sets the total weighting of the question
         $this->updateWeighting($questionWeighting);
-        $this->save();
+        $this->save($exercise);
     }
 
     /**
-     * @param int $feedback_type
-     * @param int $counter
-     * @param float $score
-     * @return null|string
+     * @inheritdoc
      */
-    function return_header($feedback_type = null, $counter = null, $score = null)
+    public function return_header($exercise, $counter = null, $score = null)
     {
-        $header = parent::return_header($feedback_type, $counter, $score);
+        $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
         <tr>
             <th>'.get_lang("Choice").'</th>
             <th>'. get_lang("ExpectedChoice").'</th>
             <th>'. get_lang("Answer").'</th>';
-            if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
-                $header .= '<th>'.get_lang("Comment").'</th>';
-            } else {
-                $header .= '<th>&nbsp;</th>';
-            }
+        if ($exercise->feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            $header .= '<th>'.get_lang("Comment").'</th>';
+        } else {
+            $header .= '<th>&nbsp;</th>';
+        }
         $header .= '</tr>';
         return $header;
     }

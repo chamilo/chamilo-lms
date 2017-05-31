@@ -42,22 +42,21 @@ class FreeAnswer extends Question
     }
 
     /**
-     * abstract function which creates the form to create/edit the answers of the question
-     * @param FormValidator $form
+     * @inheritdoc
      */
-    public function processAnswersCreation($form)
+    public function processAnswersCreation($form, $exercise)
     {
         $this->weighting = $form->getSubmitValue('weighting');
-        $this->save();
+        $this->save($exercise);
     }
 
     /**
      * @inheritdoc
      */
-    public function return_header($feedback_type = null, $counter = null, $score = [])
+    public function return_header($exercise, $counter = null, $score = [])
     {
         $score['revised'] = $this->isQuestionWaitingReview($score);
-        $header = parent::return_header($feedback_type, $counter, $score);
+        $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'" >
         <tr>
         <th>' . get_lang("Answer").'</th>

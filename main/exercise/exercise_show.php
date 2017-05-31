@@ -850,7 +850,11 @@ foreach ($questionList as $questionId) {
 
     if ($show_results) {
         //Shows question title an description
-        $question_content .= $objQuestionTmp->return_header(null, $counter, $score);
+        $question_content .= $objQuestionTmp->return_header(
+            $objExercise,
+            $counter,
+            $score
+        );
     }
     $counter++;
     $question_content .= $contents;

@@ -17,7 +17,6 @@ class MatchingDraggable extends Question
     public function __construct()
     {
         parent::__construct();
-
         $this->type = MATCHING_DRAGGABLE;
         $this->isContent = $this->getIsContent();
     }
@@ -30,10 +29,8 @@ class MatchingDraggable extends Question
         $defaults = array();
         $nb_matches = $nb_options = 2;
         $matches = array();
-
         $answer = null;
         $counter = 1;
-
         if (isset($this->id)) {
             $answer = new Answer($this->id);
             $answer->read();
@@ -60,7 +57,7 @@ class MatchingDraggable extends Question
                 $nb_matches++;
                 $nb_options++;
             }
-        } else if (!empty($this->id)) {
+        } elseif (!empty($this->id)) {
             if (count($answer->nbrAnswers) > 0) {
                 $nb_matches = $nb_options = 0;
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
@@ -224,16 +221,14 @@ class MatchingDraggable extends Question
     }
 
     /**
-     * Process the creation of answers
-     * @param FormValidator $form
+     * @inheritdoc
      */
-    public function processAnswersCreation($form)
+    public function processAnswersCreation($form, $exercise)
     {
         $nb_matches = $form->getSubmitValue('nb_matches');
         $nb_options = $form->getSubmitValue('nb_options');
         $this->weighting = 0;
         $position = 0;
-
         $objAnswer = new Answer($this->id);
 
         // Insert the options
@@ -260,19 +255,15 @@ class MatchingDraggable extends Question
             );
         }
         $objAnswer->save();
-        $this->save();
+        $this->save($exercise);
     }
 
     /**
-     * Shows question title an description
-     * @param string $feedback_type
-     * @param int $counter
-     * @param float $score
-     * @return string The header HTML code
+     * @inheritdoc
      */
-    public function return_header($feedback_type = null, $counter = null, $score = null)
+    public function return_header($exercise, $counter = null, $score = null)
     {
-        $header = parent::return_header($feedback_type, $counter, $score);
+        $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
                 <tr>
                     <th>' . get_lang('ElementList').'</th>

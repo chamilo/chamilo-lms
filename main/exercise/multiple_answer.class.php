@@ -182,19 +182,17 @@ class MultipleAnswer extends Question
     }
 
     /**
-     * abstract function which creates the form to create / edit the answers of the question
-     * @param the formvalidator instance
-     * @param the answers number to display
+     * @inheritdoc
      */
-	function processAnswersCreation($form)
+	public function processAnswersCreation($form, $exercise)
     {
         $questionWeighting = $nbrGoodAnswers = 0;
         $objAnswer  = new Answer($this->id);
         $nb_answers = $form->getSubmitValue('nb_answers');
 
         for ($i = 1; $i <= $nb_answers; $i++) {
-            $answer = trim(str_replace(['<p>', '</p>'], '', $form -> getSubmitValue('answer['.$i.']')));
-            $comment = trim(str_replace(['<p>', '</p>'], '', $form -> getSubmitValue('comment['.$i.']')));
+            $answer = trim(str_replace(['<p>', '</p>'], '', $form->getSubmitValue('answer['.$i.']')));
+            $comment = trim(str_replace(['<p>', '</p>'], '', $form->getSubmitValue('comment['.$i.']')));
             $weighting = trim($form -> getSubmitValue('weighting['.$i.']'));
             $goodAnswer = trim($form -> getSubmitValue('correct['.$i.']'));
 
@@ -221,12 +219,15 @@ class MultipleAnswer extends Question
 
         // sets the total weighting of the question
         $this->updateWeighting($questionWeighting);
-        $this->save();
-	}
+        $this->save($exercise);
+    }
 
-    function return_header($feedback_type = null, $counter = null, $score = null)
+    /**
+     * @inheritdoc
+     */
+    public function return_header($exercise, $counter = null, $score = null)
     {
-        $header = parent::return_header($feedback_type, $counter, $score);
+        $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
             <tr>
                 <th>'.get_lang("Choice").'</th>

@@ -3630,7 +3630,7 @@ HOTSPOT;
      * @param bool $save_user_result save users results (true) or just show the results (false)
      * @param string $remainingMessage
      */
-    public static function display_question_list_by_attempt(
+    public static function displayQuestionListByAttempt(
         $objExercise,
         $exe_id,
         $save_user_result = false,
@@ -3817,7 +3817,6 @@ HOTSPOT;
 
                 // Category report
                 $category_was_added_for_this_test = false;
-
                 if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
                     if (!isset($category_list[$objQuestionTmp->category]['score'])) {
                         $category_list[$objQuestionTmp->category]['score'] = 0;
@@ -3851,7 +3850,8 @@ HOTSPOT;
                     $category_list['none']['total'] += $my_total_weight;
                 }
 
-                if ($objExercise->selectPropagateNeg() == 0 && $my_total_score < 0
+                if ($objExercise->selectPropagateNeg() == 0 &&
+                    $my_total_score < 0
                 ) {
                     $my_total_score = 0;
                 }
@@ -3866,7 +3866,7 @@ HOTSPOT;
                 }
 
                 if ($show_results) {
-                    $score = array(
+                    $score = [
                         'result' => self::show_score(
                             $my_total_score,
                             $my_total_weight,
@@ -3877,9 +3877,9 @@ HOTSPOT;
                         'score' => $my_total_score,
                         'weight' => $my_total_weight,
                         'comments' => $comnt,
-                    );
+                    ];
                 } else {
-                    $score = array();
+                    $score = [];
                 }
 
                 if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION])) {
@@ -3895,7 +3895,7 @@ HOTSPOT;
                     $question_content = '<div class="question_row_answer">';
                     // Shows question title an description
                     $question_content .= $objQuestionTmp->return_header(
-                        null,
+                        $objExercise,
                         $counter,
                         $score
                     );
@@ -3940,6 +3940,7 @@ HOTSPOT;
                     "ExerciseWithFeedbackWithoutCorrectionComment"
                 )."</div>";
         }
+
         // Remove audio auto play from questions on results page - refs BT#7939
         $exercise_content = preg_replace(
             ['/autoplay[\=\".+\"]+/', '/autostart[\=\".+\"]+/'],

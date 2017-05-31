@@ -178,6 +178,7 @@ function import_exercise($file)
     $last_exercise_id = $exercise->selectId();
     $courseId = api_get_course_int_id();
     if (!empty($last_exercise_id)) {
+        //var_dump($exercise_info);exit;
         // For each question found...
         foreach ($exercise_info['question'] as $question_array) {
             //2. Create question

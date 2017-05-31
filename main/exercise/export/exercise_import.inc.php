@@ -223,7 +223,7 @@ function import_exercise($file)
                 $description .= $question_array['description'];
             }
             $question->updateDescription($description);
-            $question->save($last_exercise_id);
+            $question->save($exercise);
 
             $last_question_id = $question->selectId();
             //3. Create answer
@@ -261,7 +261,7 @@ function import_exercise($file)
                 }
             }
             $question->updateWeighting($totalCorrectWeight);
-            $question->save($last_exercise_id);
+            $question->save($exercise);
             $answer->save();
         }
 

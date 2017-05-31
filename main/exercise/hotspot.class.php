@@ -73,19 +73,17 @@ class HotSpot extends Question
     }
 
     /**
-     * @param FormValidator $form
-     * @param null $objExercise
-     * @return bool
+     * @inheritdoc
      */
-    public function processCreation($form, $objExercise = null)
+    public function processCreation($form, $exercise)
     {
         $file_info = $form->getSubmitValue('imageUpload');
-        parent::processCreation($form, $objExercise);
+        parent::processCreation($form, $exercise);
 
         if (!empty($file_info['tmp_name'])) {
             $result = $this->uploadPicture($file_info['tmp_name']);
             if ($result) {
-                $this->save();
+                $this->save($exercise);
                 return true;
             } else {
                 return false;
@@ -133,10 +131,13 @@ class HotSpotDelineation extends HotSpot
         parent::createForm($form);
     }
 
-    public function processCreation($form, $objExercise = null)
+    /**
+     * @inheritdoc
+     */
+    public function processCreation($form, $exercise)
     {
         $file_info = $form->getSubmitValue('imageUpload');
-        parent::processCreation($form, $objExercise);
+        parent::processCreation($form, $exercise);
     }
 
     public function createAnswersForm($form)

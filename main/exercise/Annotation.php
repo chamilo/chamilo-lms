@@ -83,20 +83,18 @@ class Annotation extends Question
     }
 
     /**
-     * @param FormValidator $form
-     * @param null $objExercise
-     * @return bool
+     * @inheritdoc
      */
-    public function processCreation($form, $objExercise = null)
+    public function processCreation($form, $exercise)
     {
         $fileInfo = $form->getSubmitValue('imageUpload');
-        parent::processCreation($form, $objExercise);
+        parent::processCreation($form, $exercise);
 
         if (!empty($fileInfo['tmp_name'])) {
             $result = $this->uploadPicture($fileInfo['tmp_name']);
             if ($result) {
                 $this->weighting = $form->getSubmitValue('weighting');
-                $this->save();
+                $this->save($exercise);
                 return true;
             }
 

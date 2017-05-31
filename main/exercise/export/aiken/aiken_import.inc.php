@@ -170,7 +170,6 @@ function aiken_import_exercise($file)
     // 1. Create exercise
     $exercise = new Exercise();
     $exercise->exercise = $exercise_info['name'];
-
     $exercise->save();
     $last_exercise_id = $exercise->selectId();
     if (!empty($last_exercise_id)) {
@@ -187,7 +186,7 @@ function aiken_import_exercise($file)
             }
             $type = $question->selectType();
             $question->type = constant($type);
-            $question->save($last_exercise_id);
+            $question->save($exercise);
             $last_question_id = $question->selectId();
             //3. Create answer
             $answer = new Answer($last_question_id);
@@ -217,7 +216,7 @@ function aiken_import_exercise($file)
             $answer->save();
             // Now that we know the question score, set it!
             $question->updateWeighting($max_score);
-            $question->save();
+            $question->save($exercise);
         }
 
         // Delete the temp dir where the exercise was unzipped

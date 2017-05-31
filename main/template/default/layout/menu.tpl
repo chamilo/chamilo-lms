@@ -16,7 +16,8 @@
             <ul class="nav navbar-nav">
                 {% for item in menu %}
                     <li class="{{ item.key }} {{ item.current }}">
-                        <a href="{{ item.url }}" target="{{ item.target }}" title="{{ item.title }}">{{ item.title }}
+                        <a href="{{ item.url }}" {{ item.target ? 'target="' ~ item.target ~ '"' : '' }} title="{{ item.title }}">
+                            {{ item.title }}
                         </a>
                     </li>
                 {% endfor %}

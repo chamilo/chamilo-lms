@@ -35,6 +35,7 @@ abstract class Question
     public static $explanationLangVar = '';
     public $question_table_class = 'table table-striped';
     public $questionTypeWithFeedback;
+    public $extra;
     public static $questionTypes = array(
         UNIQUE_ANSWER => array('unique_answer.class.php', 'UniqueAnswer'),
         MULTIPLE_ANSWER => array('multiple_answer.class.php', 'MultipleAnswer'),
@@ -83,11 +84,16 @@ abstract class Question
         $this->course = api_get_course_info();
         $this->category_list = array();
         $this->parent_id = 0;
+        // See BT#12611
         $this->questionTypeWithFeedback = [
             MATCHING,
             MATCHING_DRAGGABLE,
             DRAGGABLE,
-            FILL_IN_BLANKS
+            FILL_IN_BLANKS,
+            FREE_ANSWER,
+            ORAL_EXPRESSION,
+            CALCULATED_ANSWER,
+            ANNOTATION
         ];
     }
 
@@ -1702,7 +1708,7 @@ abstract class Question
 
         if (!is_null($exercise)) {
             if ($exercise->questionFeedbackEnabled && $this->showFeedback($exercise)) {
-                $form->addTextarea('feedback', get_lang('FeedbackIfCorrect'));
+                $form->addTextarea('feedback', get_lang('FeedbackIfNotCorrect'));
             }
         }
 
@@ -1932,7 +1938,6 @@ abstract class Question
      */
     public function return_header($exercise, $counter = null, $score = [])
     {
-        $feedbackType = $exercise->feedback_type;
         $counter_label = '';
         if (!empty($counter)) {
             $counter_label = intval($counter);
@@ -1990,7 +1995,7 @@ abstract class Question
             $header .= $message.'<br />';
         }
 
-        if (isset($score['pass']) && $score['pass'] === true) {
+        if (isset($score['pass']) && $score['pass'] === false) {
             if ($this->showFeedback($exercise)) {
                 $header .= $this->returnFormatFeedback();
             }

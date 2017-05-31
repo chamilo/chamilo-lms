@@ -1,0 +1,13 @@
+{
+    "Version": "2.1.31.33",
+    "Names": {
+        "CUP": [
+            "$",
+            "peso cubano"
+        ],
+        "USD": [
+            "US$",
+            "dólar estadounidense"
+        ]
+    }
+}

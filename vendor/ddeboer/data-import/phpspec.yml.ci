@@ -1,0 +1,10 @@
+suites:
+  data_import_suite:
+    namespace: Ddeboer\DataImport
+    psr4_prefix: Ddeboer\DataImport
+extensions:
+  - PhpSpec\Extension\CodeCoverageExtension
+formatter.name: pretty
+code_coverage:
+  format: clover
+  output: build/coverage.xml

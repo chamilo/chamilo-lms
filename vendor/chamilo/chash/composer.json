@@ -1,0 +1,39 @@
+{
+    "name": "chamilo/chash",
+    "type": "library",
+    "description" : "Chamilo Shell",
+    "homepage": "http://www.chamilo.org",
+    "license": "GPL-3.0",
+    "support": {
+        "forum": "http://www.chamilo.org/forum",
+        "irc": "irc://irc.freenode.org/chamilo"
+    },
+    "autoload": {
+        "psr-0": {
+            "Chash": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.4",
+        "composer/composer": "1.0.*@dev",
+        "symfony/class-loader": "~2.6",
+        "symfony/doctrine-bridge": "~2.8",
+        "symfony/validator": "~2.8",
+        "sonata-project/user-bundle": "~3.0",
+        "gedmo/doctrine-extensions": "~2.3",
+        "symfony/console": "~2.6",
+        "symfony/yaml": "~2.6",
+        "symfony/filesystem": "~2.6",
+        "symfony/finder": "~2.6",
+        "doctrine/dbal": "~2.3",
+        "doctrine/orm": "~2.2,>=2.2.3,<2.5",
+        "doctrine/migrations": "~1.0@dev",
+        "zendframework/zend-config": "~2.5.1|~2.6",
+        "zendframework/zend-stdlib": "~2.5.1|~2.6",
+        "alchemy/zippy": "~0.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*",
+        "mikey179/vfsstream": ">=1.2"
+    }
+}

@@ -1,0 +1,26 @@
+---
+default: &default
+    suites:
+        charts:
+            paths: [ %paths.base%/features ]
+            contexts:
+                - CpChart\Behat\Context\DataContext
+                - CpChart\Behat\Context\DrawContext:
+                    - %paths.base%
+                - CpChart\Behat\Context\BrowserContext
+                - CpChart\Behat\Context\DirectoryContext:
+                    - %paths.base%
+    extensions:
+        Behat\MinkExtension:
+            sessions:
+                default:
+                    goutte: ~
+            base_url: http://localhost:8080
+        SensioLabs\Behat\PageObjectExtension:
+            namespaces:
+                page: CpChart\Behat\Page
+
+travis:
+    <<: *default
+    formatters:
+        progress: true

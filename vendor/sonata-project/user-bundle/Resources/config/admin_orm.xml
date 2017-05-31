@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="sonata.user.admin.groupname">sonata_user</parameter>
+        <parameter key="sonata.user.admin.label_catalogue">SonataUserBundle</parameter>
+        <parameter key="sonata.user.admin.groupicon"><![CDATA[<i class='fa fa-users'></i>]]></parameter>
+    </parameters>
+    <services>
+        <service id="sonata.user.admin.user" class="%sonata.user.admin.user.class%">
+            <tag name="sonata.admin" manager_type="orm" group="%sonata.user.admin.groupname%" label="users" label_catalogue="%sonata.user.admin.label_catalogue%" label_translator_strategy="sonata.admin.label.strategy.underscore" icon="%sonata.user.admin.groupicon%"/>
+            <argument/>
+            <argument>%sonata.user.admin.user.entity%</argument>
+            <argument>%sonata.user.admin.user.controller%</argument>
+            <call method="setUserManager">
+                <argument type="service" id="fos_user.user_manager"/>
+            </call>
+            <call method="setTranslationDomain">
+                <argument>%sonata.user.admin.user.translation_domain%</argument>
+            </call>
+        </service>
+        <service id="sonata.user.admin.group" class="%sonata.user.admin.group.class%">
+            <tag name="sonata.admin" manager_type="orm" group="%sonata.user.admin.groupname%" label="groups" label_catalogue="%sonata.user.admin.label_catalogue%" label_translator_strategy="sonata.admin.label.strategy.underscore"/>
+            <argument/>
+            <argument>%sonata.user.admin.group.entity%</argument>
+            <argument>%sonata.user.admin.group.controller%</argument>
+            <call method="setTranslationDomain">
+                <argument>%sonata.user.admin.group.translation_domain%</argument>
+            </call>
+        </service>
+    </services>
+</container>

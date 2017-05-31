@@ -7964,4 +7964,5 @@ $StudentStartExercise = "Début d'exercice par un apprenant";
 $TempScoreXQuestionsNotCorrectedYet = "Score temporaire: %s question(s) ouverte(s) non corrigée(s).";
 $Annotation = "Annotation";
 $TeacherPicture = "Photo du prof";
+$FeedbackIfNotCorrect = "Feedback si incorrecte";
 ?>

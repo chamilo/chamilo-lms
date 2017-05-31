@@ -8017,4 +8017,5 @@ $StudentStartExercise = "Student just started an exercise";
 $TempScoreXQuestionsNotCorrectedYet = "Temporary score: %s open question(s) not corrected yet.";
 $Annotation = "Annotation";
 $TeacherPicture = "Teacher picture";
+$FeedbackIfNotCorrect = "Feedback if not correct";
 ?>

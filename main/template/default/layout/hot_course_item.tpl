@@ -37,11 +37,11 @@
                         
                             {% if item.teachers | length > 2 %}
                                 <a href="{{ teacher.url }}" class="ajax" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                    <img src="{{ teacher.avatar }}" />
+                                    <img src="{{ teacher.avatar }}" alt="{{ 'TeacherPicture' | get_lang }}" />
                                 </a>
                             {% else %}
                                 <a href="{{ teacher.url }}" class="ajax" data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                    <img src="{{ teacher.avatar }}" />
+                                    <img src="{{ teacher.avatar }}" alt="{{ 'TeacherPicture' | get_lang }}" />
                                 </a>
                                 <div class="teachers-details">
                                     <h5>

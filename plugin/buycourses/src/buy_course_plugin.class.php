@@ -175,10 +175,10 @@ class BuyCoursesPlugin extends Plugin
             $item = $this->getItemByProduct($productId, $productType);
             $return['html'] = '<div class="buycourses-price">';
             if ($item) {
-                $return['html'] .= '<span class="label label-primary"><b>'.$item['iso_code'].' '.$item['price'].'</b></span>';
+                $return['html'] .= '<span class="label label-primary"><strong>'.$item['iso_code'].' '.$item['price'].'</strong></span>';
                 $return['verificator'] = true;
             } else {
-                $return['html'] .= '<span class="label label-primary"><b>'.$this->get_lang('Free').'</b></span>';
+                $return['html'] .= '<span class="label label-primary"><strong>'.$this->get_lang('Free').'</strong></span>';
                 $return['verificator'] = false;
             }
             $return['html'] .= '</div>';

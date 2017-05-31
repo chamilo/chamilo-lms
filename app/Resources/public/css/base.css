@@ -144,7 +144,7 @@ header {
 .blackboard_hide {
    display: none;
 }
-.section-page .page-header h3{
+.section-page h3.page-header{
     font-size:22px;
     margin-top:5px;
 }
@@ -1858,7 +1858,7 @@ div.admin_section h4 {
 .question-result .page-header{
   margin-top: 20px;
 }
-.question-result .page-header h2{
+.question-result h2.page-header{
   font-size: 25px;
 }
 .question_row_score .title-score .total h3{
@@ -1877,7 +1877,7 @@ div.admin_section h4 {
 .question_row_answer .page-header{
   margin: 20px 0px;
 }
-.question_row_answer .page-header h3{
+.question_row_answer h3.page-header{
   font-size: 22px;
   margin: 0;
 }
@@ -4601,7 +4601,7 @@ div#chat-remote-video video {
   padding-bottom: 10px;
   margin-bottom: 30px;
 }
-#page-install .page-header h2{
+#page-install h2.page-header{
     font-weight: bold;
     font-size: 28px;
 }
@@ -5178,7 +5178,7 @@ div#chat-remote-video video {
     height: 100%;
     border:none;
 }
-.section-status .page-header h2{
+.section-status h2.page-header{
     font-size:22px;
     margin-top:5px;
 }
@@ -6337,14 +6337,14 @@ input[type=checkbox]{
   .question_row_answer .page-header{
     margin: 10px 0px;
   }
-  .question_row_answer .page-header h3{
+  .question_row_answer h3.page-header{
     font-size: 16px;
     margin: 0;
   }
   .question-result .page-header{
     margin-top: 20px;
   }
-  .question-result .page-header h2{
+  .question-result h2.page-header{
     font-size: 20px;
   }
   .dl-horizontal dt{
@@ -6393,14 +6393,14 @@ input[type=checkbox]{
   .question_row_answer .page-header{
     margin: 10px 0px;
   }
-  .question_row_answer .page-header h3{
+  .question_row_answer h3.page-header{
     font-size: 16px;
     margin: 0;
   }
   .question-result .page-header{
     margin-top: 20px;
   }
-  .question-result .page-header h2{
+  .question-result h2.page-header{
     font-size: 20px;
   }
   .navbar-nav .open .dropdown-menu .user-header{

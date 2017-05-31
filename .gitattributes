@@ -6,6 +6,7 @@
 .styleci.yml export-ignore
 .travis.yml export-ignore
 /tests export-ignore
+.editorconfig export-ignore
 
 /vendor/ezyang/htmlpurifier/docs export-ignore
 /vendor/ezyang/htmlpurifier/benchmarks export-ignore

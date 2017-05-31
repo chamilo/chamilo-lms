@@ -1019,7 +1019,6 @@ class CourseHome
                         ) {
                             $customIcon = $item['tool']['custom_icon'];
                             if ($item['tool']['visibility'] == '0') {
-                                $fileInfo = pathinfo($item['tool']['custom_icon']);
                                 $customIcon = self::getDisableIcon($item['tool']['custom_icon']);
                             }
                             $original_image = Display::img(

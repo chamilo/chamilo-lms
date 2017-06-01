@@ -4018,11 +4018,18 @@ HOTSPOT;
      */
     public static function getQuestionRibbon($class, $scoreLabel, $result)
     {
-        return '<div class="ribbon">
-                    <div class="rib rib-'.$class.'">
+        // ofaj
+        $hideLabel = api_get_configuration_value('exercise_hide_label');
+        $label = '<div class="rib rib-'.$class.'">
                         <h3>'.$scoreLabel.'</h3>
-                    </div> 
-                    <h4>'.get_lang('Score').': '.$result.'</h4>
+                  </div> 
+                  <h4>'.get_lang('Score').': '.$result.'</h4>';
+        if ($hideLabel === true) {
+            $label = "<h4>{$result}<h4/>";
+        }
+
+        return '<div class="ribbon">
+                '.$label.'
                 </div>'
         ;
     }

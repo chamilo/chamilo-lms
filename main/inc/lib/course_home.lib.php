@@ -996,110 +996,61 @@ class CourseHome
             } // end of foreach
         }
 
-        return self::formatToolItems($items);
+        if (api_get_setting('homepage_view') != 'activity_big') {
+            return $items;
+        }
+
+        foreach ($items as &$item) {
+            $originalImage = self::getToolIcon($item);
+            $item['tool']['image'] = Display::url(
+                $originalImage,
+                $item['url_params']['href'],
+                $item['url_params']
+            );
+        }
+
+        return $items;
     }
 
     /**
-     * Get buttons to course tools
-     * @param array $items
+     * Find the tool icon when homepage_view is activity_big
+     * @param array $item
      * @return string
      */
-    public static function formatToolItems(array $items)
+    private static function getToolIcon(array $item)
     {
-        $theme = api_get_setting('homepage_view');
-        $html = '';
+        $image = str_replace('.gif', '.png', $item['tool']['image']);
+        $toolIid = isset($item['tool']['iid']) ? $item['tool']['iid'] : null;
 
-        if (empty($items)) {
-            return $html;
+        if (isset($item['tool']['custom_image'])) {
+            return Display::img(
+                $item['tool']['custom_image'],
+                $item['name'],
+                array('id' => 'toolimage_'.$toolIid)
+            );
         }
 
-        switch ($theme) {
-            case 'activity_big':
-                foreach ($items as $item) {
-                    $data = '';
-                    $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
-                    $toolIid = isset($item['tool']['iid']) ? $item['tool']['iid'] : null;
+        if (isset($item['tool']['custom_icon']) && !empty($item['tool']['custom_icon'])) {
+            $customIcon = $item['tool']['custom_icon'];
 
-                    if (isset($item['tool']['custom_image'])) {
-                        $original_image = Display::img(
-                            $item['tool']['custom_image'],
-                            $item['name'],
-                            array('id' => 'toolimage_'.$toolIid)
-                        );
-                    } elseif (isset($item['tool']['custom_icon']) && !empty($item['tool']['custom_icon'])) {
-                        $customIcon = $item['tool']['custom_icon'];
-                        if ($item['tool']['visibility'] == '0') {
-                            $customIcon = self::getDisableIcon($item['tool']['custom_icon']);
-                        }
-                        $original_image = Display::img(
-                            self::getCustomWebIconPath().$customIcon,
-                            $item['name'],
-                            array('id' => 'toolimage_'.$toolIid)
-                        );
-                    } else {
-                        $original_image = Display::return_icon(
-                            $image,
-                            $item['name'],
-                            array('id' => 'toolimage_'.$toolIid),
-                            ICON_SIZE_BIG,
-                            false
-                        );
-                    }
+            if ($item['tool']['visibility'] == '0') {
+                $customIcon = self::getDisableIcon($item['tool']['custom_icon']);
+            }
 
-                    $data .= Display::url($original_image, $item['url_params']['href'], $item['url_params']);
-
-                    $html .= '<div class="col-xs-6 col-md-3 course-tool">'
-                        .Display::div($data, array('class' => 'big_icon'))
-                        .Display::div(
-                            '<h4>'.$item['visibility'].$item['extra'].$item['link'].'</h4>',
-                            array('class' => 'content')
-                        )
-                        .'</div>';
-                }
-                break;
-            case 'activity':
-                foreach ($items as $item) {
-                    $html .= '<div class="offset2 col-md-4 course-tool">'
-                        .$item['extra']
-                        .$item['visibility']
-                        .$item['icon']
-                        .$item['link']
-                        .'</div>';
-                }
-                break;
-            case 'vertical_activity':
-                $i = 0;
-                foreach ($items as $item) {
-                    $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
-                    $original_image = Display::return_icon(
-                        $image,
-                        $item['name'],
-                        array('id' => 'toolimage_'.$item['tool']['iid']),
-                        ICON_SIZE_SMALL,
-                        false
-                    );
-
-                    if ($i == 0) {
-                        $html .= '<ul>';
-                    }
-
-                    $html .= '<li class="course-tool">'
-                        .$item['extra']
-                        .$item['visibility']
-                        .Display::url($original_image, $item['url_params']['href'], $item['url_params'])
-                        .$item['link']
-                        .'</li>';
-
-                    if ($i == count($items) - 1) {
-                        $html .= '</ul>';
-                    }
-
-                    $i++;
-                }
-                break;
+            return Display::img(
+                self::getCustomWebIconPath().$customIcon,
+                $item['name'],
+                array('id' => 'toolimage_'.$toolIid)
+            );
         }
 
-        return $html;
+        return Display::return_icon(
+            $image,
+            $item['name'],
+            array('id' => 'toolimage_'.$toolIid),
+            ICON_SIZE_BIG,
+            false
+        );
     }
 
     /**

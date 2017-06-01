@@ -89,8 +89,8 @@ $code = isset($code) ? $code : null;
                 <?php
                 $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
                 $action = (!empty($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : 'display_courses');
-                $pageLength = (!empty($_REQUEST['pageLength']) ? intval($_REQUEST['pageLength']) : CoursesAndSessionsCatalog::PAGE_LENGTH);
-                $pageCurrent = (!empty($_REQUEST['pageCurrent']) ? intval($_REQUEST['pageCurrent']) : 1);
+                $pageLength = !empty($_REQUEST['pageLength']) ? intval($_REQUEST['pageLength']) : CoursesAndSessionsCatalog::PAGE_LENGTH;
+                $pageCurrent = !empty($_REQUEST['pageCurrent']) ? intval($_REQUEST['pageCurrent']) : 1;
                 $form = '<form action="'.$webAction.'" method="GET" >';
                 $form .= '<input type="hidden" name="action" value="'.$action.'">';
                 $form .= '<input type="hidden" name="pageCurrent" value="'.$pageCurrent.'">';

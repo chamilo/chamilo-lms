@@ -237,15 +237,13 @@ class MultipleAnswerTrueFalse extends Question
     }
 
     /**
-	 * abstract function which creates the form to create / edit the answers of the question
-	 * @param FormValidator $form
-	 */
-    public function processAnswersCreation($form)
+     * @inheritdoc
+     */
+    public function processAnswersCreation($form, $exercise)
     {
-		$questionWeighting = $nbrGoodAnswers = 0;
-		$objAnswer = new Answer($this->id);
+        $questionWeighting = $nbrGoodAnswers = 0;
+        $objAnswer = new Answer($this->id);
         $nb_answers = $form->getSubmitValue('nb_answers');
-        //$options_count    = $form->getSubmitValue('options_count');
         $course_id = api_get_course_int_id();
 
         $correct = array();
@@ -309,21 +307,18 @@ class MultipleAnswerTrueFalse extends Question
     }
 
     /**
-     * @param int $feedback_type
-     * @param int $counter
-     * @param float $score
-     * @return null|string
+     * @inheritdoc
      */
-    function return_header($feedback_type = null, $counter = null, $score = null)
+    function return_header($exercise = null, $counter = null, $score = null)
     {
-        $header = parent::return_header($feedback_type, $counter, $score);
+        $header = parent::return_header($exercise, $counter, $score);
   	    $header .= '<table class="'.$this->question_table_class .'">
 		            <tr>
                         <th>'.get_lang("Choice").'</th>
                         <th>'. get_lang("ExpectedChoice").'</th>
                         <th>'. get_lang("Answer").'</th>';
         $header .= '<th>'.get_lang('Status').'</th>';
-			if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+			if ($exercise->feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
 				$header .= '<th>'.get_lang("Comment").'</th>';
 			} else {
 				$header .= '<th>&nbsp;</th>';

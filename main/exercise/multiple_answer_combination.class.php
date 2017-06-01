@@ -177,10 +177,9 @@ class MultipleAnswerCombination extends Question
     }
 
     /**
-	 * abstract function which creates the form to create/edit the answers of the question
-	 * @param FormValidator $form
+	 * @inheritdoc
 	 */
-    public function processAnswersCreation($form)
+    public function processAnswersCreation($form, $exercise)
     {
         $questionWeighting = $nbrGoodAnswers = 0;
         $objAnswer = new Answer($this->id);
@@ -219,12 +218,15 @@ class MultipleAnswerCombination extends Question
 
         // sets the total weighting of the question
         $this->updateWeighting($questionWeighting);
-        $this->save();
+        $this->save($exercise);
     }
 
-    function return_header($feedback_type = null, $counter = null, $score = null)
+    /**
+     * @inheritdoc
+     */
+    public function return_header($exercise, $counter = null, $score = null)
     {
-        $header = parent::return_header($feedback_type, $counter, $score);
+        $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
             <tr>
                 <th>'.get_lang("Choice").'</th>

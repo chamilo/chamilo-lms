@@ -34,8 +34,10 @@ class bbb
     public $userId = 0;
     public $plugin;
     private $courseCode;
+    private $courseId;
     private $sessionId;
     private $groupId;
+    private $maxUsersLimit;
 
     /**
      * Constructor (generates a connection to the API and the Chamilo settings
@@ -48,6 +50,7 @@ class bbb
     public function __construct($host = '', $salt = '', $isGlobalConference = false, $isGlobalPerUser = 0)
     {
         $this->courseCode = api_get_course_id();
+        $this->courseId = api_get_course_int_id();
         $this->sessionId = api_get_session_id();
         $this->groupId = api_get_group_id();
 
@@ -94,6 +97,7 @@ class bbb
                 }
             }
         }
+        $this->maxUsersLimit = $this->plugin->get('max_users_limit');
 
         if ($bbbPluginEnabled === 'true') {
             $userInfo = api_get_user_info();
@@ -125,7 +129,7 @@ class bbb
     }
 
     /**
-     * Set forced the course, session or group IDs
+     * Force the course, session and/or group IDs
      * @param string $courseCode
      * @param int $sessionId
      * @param int $groupId
@@ -199,6 +203,60 @@ class bbb
         }
 
         return false;
+    }
+    /**
+     * Gets the global limit of users in a video-conference room.
+     * This value can be overridden by course-specific values
+     * @return  int Maximum number of users set globally
+     */
+    public function getMaxUsersLimit() {
+        $limit = $this->maxUsersLimit;
+        if ($limit <= 0) {
+            $limit = 0;
+        }
+        $courseLimit = 0;
+        $sessionLimit = 0;
+        // Check the extra fields for this course and session
+        // Session limit takes priority over course limit
+        // Course limit takes priority over global limit
+        if (!empty($this->courseId)) {
+            $extraField = new ExtraField('course');
+            $fieldId = $extraField->get_all(
+                array('variable = ?' => 'plugin_bbb_course_users_limit')
+            );
+            $extraValue = new ExtraFieldValue('course');
+            $value = $extraValue->get_values_by_handler_and_field_id($this->courseId, $fieldId[0]['id']);
+            if (!empty($value['value'])) {
+                $courseLimit = $value['value'];
+            }
+        }
+        if (!empty($this->sessionId)) {
+            $extraField = new ExtraField('session');
+            $fieldId = $extraField->get_all(
+                array('variable = ?' => 'plugin_bbb_session_users_limit')
+            );
+            $extraValue = new ExtraFieldValue('session');
+            $value = $extraValue->get_values_by_handler_and_field_id($this->sessionId, $fieldId[0]['id']);
+            if (!empty($value['value'])) {
+                $sessionLimit = $value['value'];
+            }
+        }
+        if (!empty($sessionLimit)) {
+            return $sessionLimit;
+        } elseif (!empty($courseLimit)) {
+            return $courseLimit;
+        }
+        return $limit;
+    }
+    /**
+     * Sets the global limit of users in a video-conference room.
+     * @param   int Maximum number of users (globally)
+     */
+    public function setMaxUsersLimit($max) {
+        if ($max < 0) {
+            $max = 0;
+        }
+        $this->maxUsersLimit = intval($max);
     }
 
     /**
@@ -954,7 +1012,7 @@ class bbb
      * @assert () === false
      * @todo Also delete links and agenda items created from this recording
      */
-    public function deleteRecord($id)
+    public function deleteRecording($id)
     {
         if (empty($id)) {
 
@@ -1006,7 +1064,7 @@ class bbb
      * @assert (1, null) === false
      * @assert (null, 'abcdefabcdefabcdefabcdef') === false
      */
-    public function copyRecordToLinkTool($id)
+    public function copyRecordingToLinkTool($id)
     {
         if (empty($id)) {
             return false;

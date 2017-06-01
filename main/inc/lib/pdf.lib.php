@@ -40,15 +40,15 @@ class PDF
 
         $params['left'] = isset($params['left']) ? $params['left'] : 15;
         $params['right'] = isset($params['right']) ? $params['right'] : 15;
-        $params['top'] = isset($params['top']) ? $params['top'] : 20;
-        $params['bottom'] = isset($params['bottom']) ? $params['bottom'] : 15;
+        $params['top'] = isset($params['top']) ? $params['top'] : 30;
+        $params['bottom'] = isset($params['bottom']) ? $params['bottom'] : 30;
 
         $this->params['filename'] = isset($params['filename']) ? $params['filename'] : api_get_local_time();
         $this->params['pdf_title'] = isset($params['pdf_title']) ? $params['pdf_title'] : get_lang('Untitled');
         $this->params['course_info'] = isset($params['course_info']) ? $params['course_info'] : api_get_course_info();
         $this->params['session_info'] = isset($params['session_info']) ? $params['session_info'] : api_get_session_info(api_get_session_id());
         $this->params['course_code'] = isset($params['course_code']) ? $params['course_code'] : api_get_course_id();
-        $this->params['add_signatures'] = isset($params['add_signatures']) ? $params['add_signatures'] : false;
+        $this->params['add_signatures'] = isset($params['add_signatures']) ? $params['add_signatures'] : [];
         $this->params['show_real_course_teachers'] = isset($params['show_real_course_teachers']) ? $params['show_real_course_teachers'] : false;
         $this->params['student_info'] = isset($params['student_info']) ? $params['student_info'] : false;
         $this->params['show_grade_generated_date'] = isset($params['show_grade_generated_date']) ? $params['show_grade_generated_date'] : false;
@@ -199,7 +199,7 @@ class PDF
      * @param bool $complete_style show header and footer if true
      * @param bool $addStyle
      *
-     * @return bool
+     * @return false|null
      */
     public function html_to_pdf(
         $html_file_array,
@@ -428,7 +428,7 @@ class PDF
         $fileToSave = null,
         $returnHtml = false
     ) {
-        global $_configuration;
+        $urlAppend = api_get_configuration_value('url_append');
 
         if (empty($document_html)) {
             return false;
@@ -454,7 +454,7 @@ class PDF
         $document_html = str_replace('../../', '', $document_html);
         $document_html = str_replace('../', '', $document_html);
         $document_html = str_replace(
-            (empty($_configuration['url_append']) ? '' : $_configuration['url_append'].'/').'courses/'.$course_code.'/document/',
+            (empty($urlAppend) ? '' : $urlAppend.'/').'courses/'.$course_code.'/document/',
             '',
             $document_html
         );
@@ -478,7 +478,6 @@ class PDF
                                 $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src_fixed);
                                 $new_path = $document_path.$old_src_fixed;
                                 $document_html = str_replace($old_src, $new_path, $document_html);
-
                             }
                         }
                     }
@@ -496,7 +495,7 @@ class PDF
         //$document_html= str_replace('temp_template_path', 'src="/main/default_course_document/', $document_html);// restore src templates
 
         api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.
-        $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');  // TODO: Maybe it is better idea the title to be passed through
+        $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8'); // TODO: Maybe it is better idea the title to be passed through
         // $_GET[] too, as it is done with file name.
         // At the moment the title is retrieved from the html document itself.
 
@@ -539,6 +538,8 @@ class PDF
         if ($outputMode != 'F') {
             exit;
         }
+
+        return $output_file;
     }
 
     /**
@@ -784,7 +785,7 @@ class PDF
     }
 
     /**
-     * @param array $header html content
+     * @param string $header html content
      */
     public function set_custom_header($header)
     {
@@ -873,5 +874,79 @@ class PDF
                 $this->pdf->SetHTMLFooter($this->custom_footer);
             }
         }
+    }
+
+    /**
+     * Generate a PDF file from $html in SYS_APP_PATH
+     *
+     * @param string $html PDF content
+     * @param string $fileName File name
+     * @param string $dest Optional. Directory to move file
+     * @return string The PDF path
+     */
+    public function exportFromHtmlToFile($html, $fileName, $dest = null)
+    {
+        $this->template = $this->template ?: new Template('', false, false, false, false, false, false);
+
+        $cssFile = api_get_path(SYS_CSS_PATH).'themes/'.$this->template->theme.'/print.css';
+
+        if (!file_exists($cssFile)) {
+            $cssFile = api_get_path(SYS_CSS_PATH).'print.css';
+        }
+
+        $pdfPath = self::content_to_pdf(
+            $html,
+            file_get_contents($cssFile),
+            $fileName,
+            $this->params['course_code'],
+            'F'
+        );
+
+        if (!$dest) {
+            return $pdfPath;
+        }
+
+        move($pdfPath, $dest);
+
+        return $dest.basename($pdfPath);
+    }
+
+    /**
+     * Create a PDF and save it into the documents area
+     * @param string $htmlContent HTML Content
+     * @param string $fileName The file name
+     * @param integer $courseId The course ID
+     * @param int $sessionId Optional. The session ID
+     */
+    public function exportFromHtmlToDocumentsArea($htmlContent, $fileName, $courseId, $sessionId = 0)
+    {
+        $userId = api_get_user_id();
+        $courseInfo = api_get_course_info_by_id($courseId);
+
+        $courseDirectory = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/document/';
+
+        $docPath = $this->exportFromHtmlToFile(
+            $htmlContent,
+            $fileName,
+            $courseDirectory
+        );
+
+        $docId = add_document(
+            $courseInfo,
+            str_replace($courseDirectory, '/', $docPath),
+            'file',
+            filesize($docPath),
+            $fileName,
+            null,
+            false,
+            true,
+            null,
+            $sessionId,
+            $userId
+        );
+
+        api_item_property_update($courseInfo, TOOL_DOCUMENT, $docId, 'DocumentAdded', $userId);
+
+        Display::addFlash(Display::return_message(get_lang('ItemAdded')));
     }
 }

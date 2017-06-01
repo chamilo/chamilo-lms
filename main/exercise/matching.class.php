@@ -239,10 +239,9 @@ class Matching extends Question
     }
 
     /**
-     * abstract function which creates the form to create / edit the answers of the question
-     * @param FormValidator $form
+     * @inheritdoc
      */
-    public function processAnswersCreation($form)
+    public function processAnswersCreation($form, $exercise)
     {
         $nb_matches = $form->getSubmitValue('nb_matches');
         $nb_options = $form->getSubmitValue('nb_options');
@@ -274,18 +273,15 @@ class Matching extends Question
             );
         }
         $objAnswer->save();
-        $this->save();
+        $this->save($exercise);
     }
 
     /**
-     * @param null $feedback_type
-     * @param null $counter
-     * @param null $score
-     * @return string
+     * @inheritdoc
      */
-    public function return_header($feedback_type = null, $counter = null, $score = null)
+    public function return_header($exercise, $counter = null, $score = null)
     {
-        $header = parent::return_header($feedback_type, $counter, $score);
+        $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">';
         $header .= '<tr>
                 <th>'.get_lang('ElementList').'</th>

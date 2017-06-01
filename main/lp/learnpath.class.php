@@ -9200,8 +9200,7 @@ class learnpath
             'POST',
             $this->getCurrentBuildingModeURL(),
             '',
-            array('enctype' => 'multipart/form-data'),
-            FormValidator::LAYOUT_INLINE
+            array('enctype' => 'multipart/form-data')
         );
 
         $folders = DocumentManager::get_all_document_folders(
@@ -9218,8 +9217,6 @@ class learnpath
             $form,
             'directory_parent_id'
         );
-
-        $form->addHtml('<hr>');
 
         $group = array(
             $form->createElement(
@@ -9245,7 +9242,6 @@ class learnpath
             )
         );
         $form->addGroup($group, null, get_lang('UplWhatIfFileExists'));
-        $form->addHtml('<br />');
         /*$form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lang('UplDoNothing'), 'nothing');
         $form->addElement('radio', 'if_exists', '', get_lang('UplOverwriteLong'), 'overwrite');
         $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename');*/

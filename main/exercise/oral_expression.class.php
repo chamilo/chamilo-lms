@@ -55,24 +55,21 @@ class OralExpression extends Question
     }
 
     /**
-     * abstract function which creates the form to create / edit the answers of the question
-     * @param the FormValidator $form
+     * @inheritdoc
      */
-    function processAnswersCreation($form)
+    public function processAnswersCreation($form, $exercise)
     {
         $this->weighting = $form->getSubmitValue('weighting');
-        $this->save();
+        $this->save($exercise);
     }
 
     /**
-     * @param null $feedback_type
-     * @param null $counter
-     * @param null $score
-     * @return null|string
+     * @inheritdoc
      */
-    function return_header($feedback_type = null, $counter = null, $score = null)
+    public function return_header($exercise, $counter = null, $score = null)
     {
-        $header = parent::return_header($feedback_type, $counter, $score);
+        $score['revised'] = $this->isQuestionWaitingReview($score);
+        $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
             <tr>
                 <th>&nbsp;</th>

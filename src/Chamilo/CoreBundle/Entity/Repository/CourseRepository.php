@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Entity\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
@@ -110,5 +111,41 @@ class CourseRepository extends EntityRepository
         $wherePart->add($queryBuilder->expr()->eq('c.status', $status));
 
         return $queryBuilder;
+    }
+
+    public function getCoursesWithNoSession($urlId)
+    {
+        $queryBuilder = $this->createQueryBuilder('c');
+        $criteria = Criteria::create();
+        $queryBuilder = $queryBuilder
+            ->select('c')
+            ->leftJoin('c.urls', 'u')
+            ->leftJoin('c.sessions', 's')
+            /*->leftJoin(
+                'ChamiloCoreBundle:SessionRelCourse',
+                'sc',
+                Join::WITH,
+                'c != sc.course'
+            )->leftJoin(
+                'ChamiloCoreBundle:AccessUrlRelCourse',
+                'ac',
+                Join::WITH,
+                'c = ac.course'
+            )*/
+            ->where($queryBuilder->expr()->isNull('s'))
+            //->where($queryBuilder->expr()->eq('s', 0))
+            ->where($queryBuilder->expr()->eq('u.url', $urlId))
+            ->getQuery();
+
+        $courses = $queryBuilder->getResult();
+        $courseList = [];
+        /** @var Course $course */
+        foreach ($courses as $course) {
+            if (empty($course->getSessions()->count() == 0)) {
+                $courseList[] = $course;
+            }
+        }
+
+        return $courseList;
     }
 }

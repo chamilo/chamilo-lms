@@ -147,7 +147,7 @@ $_configuration['session_stored_in_db'] = false;
 $_configuration['session_lifetime'] = SESSION_LIFETIME;
 // Activation for multi-url access
 // When enabling multi-url, settings can be configured by multi-url using a simple
-// sub-element. E.g. $_configuration['session_lifetime'] = true; could be turned into
+// sub-element. E.g. $_configuration['session_lifetime'][1] = true; could be turned into
 // something like $_configuration['session_lifetime'][2] = false; to affect only URL
 // with ID 2. The ID can be found in the access_url table.
 //$_configuration['multiple_access_urls'] = true;
@@ -380,3 +380,14 @@ $_configuration['agenda_legend'] = [
 //$_configuration['limit_session_admin_role'] = false;
 // Course tools visibility edition in sessions
 //$_configuration['allow_edit_tool_visibility_in_session'] = false;
+// Enable the support to ODF files
+//$_configuration['enabled_support_odf'] = true;
+// Pdf orientation when exporting documents
+// $_configuration['document_pdf_orientation'] = 'landscape'; // It can be 'portrait' or 'landscape'
+// Use alternative footer when exporting document to PDF
+//$_configuration['use_alternative_document_pdf_footer'] = false;
+// If the MySpace page takes too long to load, you might want to remove the
+// processing of generic statistics for the user. In this case set the following to true.
+//$_configuration['tracking_skip_generic_data'] = false;
+// Show question feedback (requires DB change: "ALTER TABLE c_quiz_question ADD COLUMN feedback text;")
+//$_configuration['allow_quiz_question_feedback'] = false;

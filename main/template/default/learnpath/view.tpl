@@ -160,13 +160,13 @@
             } else {
                 $(this).attr('title', '{{ "Collapse" | get_lang }}');
             }
-            
+
             if($('#navTabsbar').is(':hidden')){
                 $('#navTabsbar').show();
             } else {
                 $('#navTabsbar').hide();
             }
-            
+
         });
         {% else %}
         $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
@@ -183,7 +183,7 @@
             } else {
                 $(this).attr('title', '{{ "Collapse" | get_lang }}');
             }
-            
+
             if($('#navTabsbar').is(':hidden')){
                 $('#navTabsbar').show();
             } else {

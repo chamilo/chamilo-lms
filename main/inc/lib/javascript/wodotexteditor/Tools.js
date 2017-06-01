@@ -22,7 +22,7 @@
  * @source: https://github.com/kogmbh/WebODF/
  */
 
-/*global define,document,require,ops */
+/*global window, define, require, document, dijit, dojo, runtime, ops*/
 
 define("webodf/editor/Tools", [
     "dojo/ready",
@@ -50,20 +50,22 @@ define("webodf/editor/Tools", [
                 onToolDone = args.onToolDone,
                 loadOdtFile = args.loadOdtFile,
                 saveOdtFile = args.saveOdtFile,
+                saveAsOdtFile = args.saveAsOdtFile,
+                downloadOdtFile = args.downloadOdtFile,
                 close = args.close,
                 toolbar,
                 loadButton, saveButton, closeButton, aboutButton,
+                saveAsButton, downloadButton,
                 formatDropDownMenu, formatMenuButton,
-                paragraphStylesMenuItem, paragraphStylesDialog, simpleStyles, currentStyle,
-                zoomSlider,
-                undoRedoMenu,
+                paragraphStylesMenuItem, paragraphStylesDialog,
                 editorSession,
-                paragraphAlignment,
-                imageInserter,
-                annotationControl,
-                editHyperlinks,
                 aboutDialog,
                 sessionSubscribers = [];
+
+            function placeAndStartUpWidget(widget) {
+                widget.placeAt(toolbar);
+                widget.startup();
+            }
 
             /**
              * Creates a tool and installs it, if the enabled flag is set to true.
@@ -71,18 +73,21 @@ define("webodf/editor/Tools", [
              * is a callback to pass the created widget object to.
              * @param {!function(new:Object, function(!Object):undefined)} Tool  constructor method of the tool
              * @param {!boolean} enabled
+             * @param {!Object|undefined=} config
              * @return {?Object}
              */
-            function createTool(Tool, enabled) {
+            function createTool(Tool, enabled, config) {
                 var tool = null;
 
                 if (enabled) {
-                    tool = new Tool(function (widget) {
-                        widget.placeAt(toolbar);
-                        widget.startup();
-                    });
+                    if (config) {
+                        tool = new Tool(config, placeAndStartUpWidget);
+                    } else {
+                        tool = new Tool(placeAndStartUpWidget);
+                    }
                     sessionSubscribers.push(tool);
                     tool.onToolDone = onToolDone;
+                    tool.setEditorSession(editorSession);
                 }
 
                 return tool;
@@ -108,9 +113,12 @@ define("webodf/editor/Tools", [
                 sessionSubscribers.forEach(function (subscriber) {
                     subscriber.setEditorSession(editorSession);
                 });
-                if (formatMenuButton) {
-                    formatMenuButton.setAttribute('disabled', !editorSession);
-                }
+
+                [saveButton, saveAsButton, downloadButton, closeButton, formatMenuButton].forEach(function (button) {
+                    if (button) {
+                        button.setAttribute('disabled', !editorSession);
+                    }
+                });
             }
 
             this.setEditorSession = setEditorSession;
@@ -144,10 +152,7 @@ define("webodf/editor/Tools", [
                     aboutButton = new Button({
                         label: tr('About WebODF Text Editor'),
                         showLabel: false,
-                        iconClass: 'webodfeditor-dijitWebODFIcon',
-                        style: {
-                            float: 'left'
-                        }
+                        iconClass: 'webodfeditor-dijitWebODFIcon'
                     });
                     aboutDialog = new AboutDialog(function (dialog) {
                         aboutButton.onClick = function () {
@@ -159,33 +164,12 @@ define("webodf/editor/Tools", [
                     aboutButton.placeAt(toolbar);
                 }
 
-                // Undo/Redo
-                undoRedoMenu = createTool(UndoRedoMenu, args.undoRedoEnabled);
-
-                // Add annotation
-                annotationControl = createTool(AnnotationControl, args.annotationsEnabled);
-
-                // Simple Style Selector [B, I, U, S]
-                simpleStyles = createTool(SimpleStyles, args.directTextStylingEnabled);
-
-                // Paragraph direct alignment buttons
-                paragraphAlignment = createTool(ParagraphAlignment, args.directParagraphStylingEnabled);
-
-                // Paragraph Style Selector
-                currentStyle = createTool(CurrentStyle, args.paragraphStyleSelectingEnabled);
-
-                // Zoom Level Selector
-                zoomSlider = createTool(ZoomSlider, args.zoomingEnabled);
-
                 // Load
                 if (loadOdtFile) {
                     loadButton = new Button({
                         label: tr('Open'),
                         showLabel: false,
                         iconClass: 'dijitIcon dijitIconFolderOpen',
-                        style: {
-                            float: 'left'
-                        },
                         onClick: function () {
                             loadOdtFile();
                         }
@@ -198,16 +182,46 @@ define("webodf/editor/Tools", [
                     saveButton = new Button({
                         label: tr('Save'),
                         showLabel: false,
+                        disabled: true,
                         iconClass: 'dijitEditorIcon dijitEditorIconSave',
-                        style: {
-                            float: 'left'
-                        },
                         onClick: function () {
                             saveOdtFile();
                             onToolDone();
                         }
                     });
                     saveButton.placeAt(toolbar);
+                }
+
+                // SaveAs
+                if (saveAsOdtFile) {
+                    saveAsButton = new Button({
+                        label: tr('Save as...'),
+                        showLabel: false,
+                        disabled: true,
+                        iconClass: 'webodfeditor-dijitSaveAsIcon',
+                        onClick: function () {
+                            saveAsOdtFile();
+                            onToolDone();
+                        }
+                    });
+                    saveAsButton.placeAt(toolbar);
+                }
+
+                // Download
+                if (downloadOdtFile) {
+                    downloadButton = new Button({
+                        label: tr('Download'),
+                        showLabel: true,
+                        disabled: true,
+                        style: {
+                            float: 'right'
+                        },
+                        onClick: function () {
+                            downloadOdtFile();
+                            onToolDone();
+                        }
+                    });
+                    downloadButton.placeAt(toolbar);
                 }
 
                 // Format menu
@@ -233,25 +247,41 @@ define("webodf/editor/Tools", [
                         dropDown: formatDropDownMenu,
                         disabled: true,
                         label: tr('Format'),
-                        iconClass: "dijitIconEditTask",
-                        style: {
-                            float: 'left'
-                        }
+                        iconClass: "dijitIconEditTask"
                     });
                     formatMenuButton.placeAt(toolbar);
                 }
 
+                // Undo/Redo
+                createTool(UndoRedoMenu, args.undoRedoEnabled);
+
+                // Add annotation
+                createTool(AnnotationControl, args.annotationsEnabled);
+
+                // Simple Style Selector [B, I, U, S]
+                createTool(SimpleStyles, args.directTextStylingEnabled);
+
+                // Paragraph direct alignment buttons
+                createTool(ParagraphAlignment, args.directParagraphStylingEnabled);
+
+                // Paragraph Style Selector
+                createTool(CurrentStyle, args.paragraphStyleSelectingEnabled);
+
+                // Zoom Level Selector
+                createTool(ZoomSlider, args.zoomingEnabled);
+
                 // hyper links
-                editHyperlinks = createTool(EditHyperlinks, args.hyperlinkEditingEnabled);
+                createTool(EditHyperlinks, args.hyperlinkEditingEnabled);
 
                 // image insertion
-                imageInserter = createTool(ImageInserter, args.imageInsertingEnabled);
+                createTool(ImageInserter, args.imageInsertingEnabled);
 
                 // close button
                 if (close) {
                     closeButton = new Button({
                         label: tr('Close'),
                         showLabel: false,
+                        disabled: true,
                         iconClass: 'dijitEditorIcon dijitEditorIconCancel',
                         style: {
                             float: 'right'
@@ -261,6 +291,23 @@ define("webodf/editor/Tools", [
                         }
                     });
                     closeButton.placeAt(toolbar);
+                }
+
+                // This is an internal hook for debugging/testing.
+                // Yes, you discovered something interesting. But:
+                // Do NOT rely on it, it will not be supported and can and will change in any version.
+                // It is not officially documented for a reason. A real plugin system is only on the wishlist
+                // so far, please file your suggestions/needs at the official WebODF issue system.
+                // You have been warned.
+                if (window.wodo_plugins) {
+                    window.wodo_plugins.forEach(function (plugin) {
+                        runtime.log("Creating plugin: "+plugin.id);
+                        require([plugin.id], function (Plugin) {
+                            runtime.log("Creating as tool now: "+plugin.id);
+                            createTool(Plugin, true, plugin.config);
+                        });
+                    });
+
                 }
 
                 setEditorSession(editorSession);

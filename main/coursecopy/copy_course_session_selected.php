@@ -35,7 +35,7 @@ $courseInfo = api_get_course_info_by_id($courseId);
 $courseCode = $courseInfo['code'];
 $sessionId = api_get_session_id();
 
-if (empty($courseCode) OR empty($sessionId)) {
+if (empty($courseCode) || empty($sessionId)) {
     api_not_allowed(true);
 }
 
@@ -58,18 +58,14 @@ $tbl_session_rel_course_rel_user = Database::get_main_table(
     TABLE_MAIN_SESSION_COURSE_USER
 );
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 /* FUNCTIONS */
-
 /**
  * @param string $name
  */
 function make_select_session_list($name, $sessions, $attr = array())
 {
-
     $attrs = '';
     if (count($attr) > 0) {
         foreach ($attr as $key => $value) {

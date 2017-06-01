@@ -387,7 +387,7 @@ if (!empty($action)) {
                 $add_in_tab = intval($_POST['add_in_tab']);
                 $link_html = trim(stripslashes($_POST['link_html']));
                 $filename = trim(stripslashes($_POST['filename']));
-                $target_blank = $_POST['target_blank'] ? true : false;
+                $target_blank = isset($_POST['target_blank']);
 
                 if ($link_url == 'http://' || $link_url == 'https://') {
                     $link_url = '';
@@ -1153,19 +1153,21 @@ switch ($action) {
                         echo '<div class="actions">';
                         echo '<a href="course_category.php">'.Display::return_icon('edit.png', get_lang('Edit')).'&nbsp;'.get_lang('EditCategories').'</a>';
                         echo '</div>';
-                    }
-                    echo '<ul class="list-group">';
-                    if ($access_url_id == 1) {
-                        if (sizeof($Categories)) {
+                        echo '<ul class="list-group">';
+
+                        if (count($Categories)) {
                             foreach ($Categories as $enreg) {
-                                echo '<li class="list-group-item">'.Display::return_icon('folder.png', $enreg['name']).'&nbsp;'.$enreg['name'].'</li>';
+                                echo '<li class="list-group-item">'
+                                    .Display::return_icon('folder.png', get_lang('CourseCategory')).' '.$enreg['name']
+                                    .'</li>';
                             }
                             unset($Categories);
                         } else {
-                            echo get_lang('NoCategories');
+                            echo '<li class="list-group-item">'.get_lang('NoCategories').'</li>';
                         }
+
+                        echo '</ul>';
                     }
-                    echo '</ul>';
                     ?>
 
                     <?php

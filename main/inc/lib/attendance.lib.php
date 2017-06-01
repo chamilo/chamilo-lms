@@ -1976,8 +1976,7 @@ class Attendance
      */
     public function getAttendanceLogin($startDate, $endDate)
     {
-        if (
-            empty($startDate) || $startDate == '0000-00-00' || $startDate == '0000-00-00 00:00:00' ||
+        if (empty($startDate) || $startDate == '0000-00-00' || $startDate == '0000-00-00 00:00:00' ||
             empty($endDate) || $endDate == '0000-00-00' || $endDate == '0000-00-00 00:00:00'
         ) {
             return false;
@@ -1985,8 +1984,10 @@ class Attendance
 
         $sessionId = api_get_session_id();
         $courseCode = api_get_course_id();
+        $courseId = api_get_course_int_id();
+
         if (!empty($sessionId)) {
-            $users = CourseManager:: get_user_list_from_course_code(
+            $users = CourseManager::get_user_list_from_course_code(
                 $courseCode,
                 $sessionId,
                 '',
@@ -1994,7 +1995,7 @@ class Attendance
                 0
             );
         } else {
-            $users = CourseManager:: get_user_list_from_course_code(
+            $users = CourseManager::get_user_list_from_course_code(
                 $courseCode,
                 0,
                 '',
@@ -2023,7 +2024,7 @@ class Attendance
         }
 
         $accessData = CourseManager::getCourseAccessPerCourseAndSession(
-            $courseCode,
+            $courseId,
             $sessionId,
             $dateTimeStartOriginal->format('Y-m-d H:i:s'),
             $dateTimeEnd->format('Y-m-d H:i:s')
@@ -2054,7 +2055,6 @@ class Attendance
     public function getAttendanceLoginTable($startDate, $endDate)
     {
         $data = $this->getAttendanceLogin($startDate, $endDate);
-
         if (!$data) {
             return null;
         }
@@ -2118,7 +2118,6 @@ class Attendance
         $results = $data['results'];
 
         $table = new HTML_Table(array('class' => 'data_table'));
-
         $table->setHeaderContents(0, 0, get_lang('User'));
         $table->setHeaderContents(0, 1, get_lang('Date'));
 
@@ -2144,16 +2143,7 @@ class Attendance
             $row++;
         }
 
-        //$tableToString = null;
-
-        //$sessionInfo = api_get_session_info(api_get_session_id());
-        //if (!empty($sessionInfo)) {
-        /*$tableToString .= '<strong>'.get_lang('PeriodToDisplay').'</strong>: '.
-            sprintf(get_lang('FromDateXToDateY'), $startDate, $endDate);*/
-        //}
-
         $tableToString = $table->toHtml();
-
         $params = array(
             'filename' => get_lang('Attendance').'_'.api_get_utc_datetime(),
             'pdf_title' => get_lang('Attendance'),

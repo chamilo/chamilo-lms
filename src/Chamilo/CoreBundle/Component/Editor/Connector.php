@@ -187,7 +187,7 @@ class Connector
      * Get default driver settings.
      * @return array
      */
-    private function getDefaultDriverSettings()
+    public function getDefaultDriverSettings()
     {
         // for more options: https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
         return array(

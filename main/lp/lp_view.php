@@ -303,7 +303,7 @@ if (!empty($_REQUEST['exeId']) &&
 
             if (!empty($exercise->pass_percentage)) {
                 $status = 'failed';
-                $success = ExerciseLib::is_success_exercise_result(
+                $success = ExerciseLib::isSuccessExerciseResult(
                     $score,
                     $max_score,
                     $exercise->pass_percentage
@@ -322,7 +322,6 @@ if (!empty($_REQUEST['exeId']) &&
             if ($debug) {
                 error_log($sql);
             }
-
             Database::query($sql);
 
             $sql = "UPDATE $TBL_TRACK_EXERCICES SET

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 /**
  * This script allows to manage answers. It is included from the
@@ -24,7 +24,6 @@ $debug = 0; // debug variable to get where we are
 $okPicture = empty($pictureName) ? false : true;
 
 // if we come from the warning box "this question is used in several exercises"
-
 if ($modifyIn) {
     if ($debug > 0) {
         echo '$modifyIn was set'."<br />\n";
@@ -143,7 +142,7 @@ if ($submitAnswers || $buttonBack) {
 
             // sets the total weighting of the question
             $objQuestion->updateWeighting($questionWeighting);
-            $objQuestion->save($exerciseId);
+            $objQuestion->save($objExercise);
 
             $editQuestion = $questionId;
             unset($modifyAnswers);

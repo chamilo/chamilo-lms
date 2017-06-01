@@ -1686,7 +1686,7 @@ class Display
             }
             $title .= "<small> $second_title<small>";
         }
-        return '<div class="page-header"><'.$size.'>'.$title.'</'.$size.'></div>';
+        return '<'.$size.' class="page-header">'.$title.'</'.$size.'>';
     }
 
     public static function page_header_and_translate($title, $second_title = null)

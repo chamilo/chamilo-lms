@@ -60,3 +60,9 @@ $strings['NoGroup'] = 'No group';
 $strings['UrlMeetingToShare'] = 'URL to share';
 
 $strings['AdminView'] = 'View for administrators';
+$strings['max_users_limit'] = 'Max users limit';
+$strings['max_users_limit_help'] = 'Set this to the maximum number of users you want to allow by course or session-course. Leave empty or set to 0 to disable this limit.';
+$strings['MaxXUsersWarning'] = 'This conference room has a maximum number of %s simultaneous users.';
+$strings['MaxXUsersReached'] = 'The limit of %s simultaneous users has been reached for this conference room. Please wait for one seat to be freed or for another conference to start in order to join.';
+$strings['MaxXUsersReachedManager'] = 'The limit of %s simultaneous users has been reached for this conference room. To increase this limit, please contact the platform administrator.';
+$strings['MaxUsersInConferenceRoom'] = 'Max simultaneous users in a conference room';

@@ -170,10 +170,12 @@ class StudentFollowUpPlugin extends Plugin
     /**
      * @param string $status
      * @param int $currentUserId
+     * @param int $start
+     * @param int $limit
      *
      * @return array
      */
-    public static function getUsers($status, $currentUserId)
+    public static function getUsers($status, $currentUserId, $start, $limit)
     {
         switch ($status) {
             case COURSEMANAGER:
@@ -204,7 +206,14 @@ class StudentFollowUpPlugin extends Plugin
                 break;
         }
 
-        $userList = [];
+        $userList = SessionManager::getUsersByCourseAndSessionList(
+            $sessions,
+            $courses,
+            $start,
+            $limit
+        );
+
+        /*$userList = [];
         foreach ($sessions as $sessionId) {
             foreach ($courses as $courseId) {
                 $courseInfo = ['real_id' => $courseId];
@@ -215,8 +224,16 @@ class StudentFollowUpPlugin extends Plugin
                 $userList = array_merge($userList, $userFromSessionList);
             }
             $userList = array_unique($userList);
-        }
+        }*/
 
         return $userList;
+    }
+
+    /**
+     * @return int
+     */
+    public static function getPageSize()
+    {
+        return 2;
     }
 }

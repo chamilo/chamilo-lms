@@ -23,7 +23,7 @@ switch ($action) {
             $criteria = [
                 'cId' => $course_id,
                 'sessionId' => 0,
-                'id' => (int) $_GET['id']
+                'iid' => (int) $_GET['id']
             ];
             /** @var CTool $tool */
             $tool = $repository->findOneBy($criteria);

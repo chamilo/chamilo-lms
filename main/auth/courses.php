@@ -184,7 +184,6 @@ if (isset($_POST['unsubscribe'])) {
         $courses_controller->unsubscribe_user_from_course($_POST['unsubscribe']);
     }
 }
-
 switch ($action) {
     case 'subscribe_user_with_password':
         $courses_controller->subscribe_user(

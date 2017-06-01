@@ -13,7 +13,7 @@ if (isset($_GET['editQuestion'])) {
     $objQuestion = Question::read($_GET['editQuestion']);
     $action = api_get_self()."?".api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
 } else {
-    $objQuestion = Question :: getInstance($_REQUEST['answerType']);
+    $objQuestion = Question::getInstance($_REQUEST['answerType']);
     $action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
 }
 
@@ -37,7 +37,7 @@ if (is_object($objQuestion)) {
     $form->addHeader($text.': '.$form_title_extra);
 
     // question form elements
-    $objQuestion->createForm($form);
+    $objQuestion->createForm($form, $objExercise);
 
     // answer form elements
     $objQuestion->createAnswersForm($form);
@@ -51,15 +51,14 @@ if (is_object($objQuestion)) {
     if (isset($_POST['submitQuestion']) && $form->validate()) {
         // Question
         $objQuestion->processCreation($form, $objExercise);
-
-        // Answers
-        $nb_answers = isset($nb_answers) ? $nb_answers : 0;
-        $objQuestion->processAnswersCreation($form, $nb_answers);
+        $objQuestion->processAnswersCreation($form, $objExercise);
 
         // TODO: maybe here is the better place to index this tool, including answers text
 
         // redirect
-        if ($objQuestion->type != HOT_SPOT && $objQuestion->type != HOT_SPOT_DELINEATION) {
+        if ($objQuestion->type != HOT_SPOT &&
+            $objQuestion->type != HOT_SPOT_DELINEATION
+        ) {
             if (isset($_GET['editQuestion'])) {
                 echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemUpdated"</script>';
             } else {

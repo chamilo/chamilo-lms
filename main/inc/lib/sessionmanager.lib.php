@@ -2045,6 +2045,59 @@ class SessionManager
                     c_id = $courseId
                     $statusCondition
                 ";
+
+        $result = Database::query($sql);
+        $existingUsers = array();
+        while ($row = Database::fetch_array($result)) {
+            $existingUsers[] = $row['user_id'];
+        }
+
+        return $existingUsers;
+    }
+
+     /**
+     * Returns user list of the current users subscribed in the course-session
+     * @param array $sessionList
+     * @param array $courseList
+     * @param int $status
+     * @param int $start
+     * @param int $limit
+     *
+     * @return array
+     */
+    public static function getUsersByCourseAndSessionList(
+        $sessionList,
+        $courseList,
+        $status = null,
+        $start = null,
+        $limit = null
+    ) {
+        if (empty($sessionList) || empty($courseList)) {
+            return [];
+        }
+        $sessionListToString = implode("','", $sessionList);
+        $courseListToString = implode("','", $courseList);
+
+        $statusCondition = null;
+        if (isset($status) && !is_null($status)) {
+            $status = intval($status);
+            $statusCondition = " AND status = $status";
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+        $sql = "SELECT DISTINCT user_id
+                FROM $table
+                WHERE
+                    session_id IN ('$sessionListToString') AND
+                    c_id IN ('$courseListToString')
+                    $statusCondition
+                ";
+        if (!is_null($start) && !is_null($limit)) {
+            $start = (int) $start;
+            $limit = (int) $limit;
+            $sql .= "LIMIT $start, $limit";
+        }
         $result = Database::query($sql);
         $existingUsers = array();
         while ($row = Database::fetch_array($result)) {
@@ -2619,15 +2672,17 @@ class SessionManager
      * @param	string	$variable Field's internal variable name
      * @param	int		$fieldType Field's type
      * @param	string	$displayText Field's language var name
+     * @param   string  $default    Field's default value
      * @return int     new extra field id
      */
-    public static function create_session_extra_field($variable, $fieldType, $displayText)
+    public static function create_session_extra_field($variable, $fieldType, $displayText, $default = '')
     {
         $extraField = new ExtraFieldModel('session');
         $params = [
             'variable' => $variable,
             'field_type' => $fieldType,
             'display_text' => $displayText,
+            'default_value' => $default
         ];
 
         return $extraField->save($params);
@@ -3371,7 +3426,7 @@ class SessionManager
     /**
      * Get sessions followed by human resources manager
      * @param int $userId
-     * @param int $status Optional
+     * @param int $status DRH Optional
      * @param int $start
      * @param int $limit
      * @param bool $getCount
@@ -3400,10 +3455,9 @@ class SessionManager
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
-        $userId = intval($userId);
+        $userId = (int) $userId;
 
         $select = " SELECT DISTINCT * ";
-
         if ($getCount) {
             $select = " SELECT count(DISTINCT(s.id)) as count ";
         }
@@ -3413,7 +3467,7 @@ class SessionManager
         }
 
         $limitCondition = null;
-        if (!empty($start) && !empty($limit)) {
+        if (!is_null($start) && !is_null($limit)) {
             $limitCondition = " LIMIT ".intval($start).", ".intval($limit);
         }
 
@@ -3424,7 +3478,7 @@ class SessionManager
         $whereConditions = null;
         $sessionCourseConditions = null;
         $sessionConditions = null;
-        $sessionQuery = null;
+        $sessionQuery = '';
         $courseSessionQuery = null;
 
         switch ($status) {
@@ -3468,7 +3522,8 @@ class SessionManager
         $subQuery = $sessionQuery.$courseSessionQuery;
 
         $sql = " $select FROM $tbl_session s
-                INNER JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
+                INNER JOIN $tbl_session_rel_access_url a 
+                ON (s.id = a.session_id)
                 WHERE
                     access_url_id = ".api_get_current_access_url_id()." AND
                     s.id IN (

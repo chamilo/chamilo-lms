@@ -155,11 +155,11 @@ class ExerciseShowFunctions
             if ($questionScore > 0 || !empty($comments)) {
             } else {
                 echo '<tr>';
-                echo Display::tag('td', Display::return_message(get_lang('notCorrectedYet')), array());
+                echo Display::tag('td', ExerciseLib::getNotCorrectedYetText(), []);
                 echo '</tr>';
             }
         }
-	}
+    }
 
     /**
     * @param $feedback_type
@@ -185,7 +185,7 @@ class ExerciseShowFunctions
             echo '</tr>';
             if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 echo '<tr>';
-                echo Display::tag('td', get_lang('notCorrectedYet'), array('width'=>'45%'));
+                echo Display::tag('td', ExerciseLib::getNotCorrectedYetText(), array('width'=>'45%'));
                 echo '</tr>';
             } else {
                 echo '<tr><td>&nbsp;</td></tr>';
@@ -216,6 +216,7 @@ class ExerciseShowFunctions
      * @param string $answerComment
      * @param int $resultsDisabled
      * @param int $orderColor
+     * @param bool $showTotalScoreAndUserChoices
      */
     public static function display_hotspot_answer(
         $feedback_type,
@@ -558,8 +559,7 @@ class ExerciseShowFunctions
             } else {
                 echo $question->options[2];
             }
-        }
-        else {
+        } else {
             echo '-';
         }
         ?>
@@ -619,6 +619,13 @@ class ExerciseShowFunctions
         <?php
     }
 
+    /**
+    * @param $feedback_type
+    * @param $exe_id
+    * @param $questionId
+    * @param null $questionScore
+    * @param int $results_disabled
+    */
     public static function displayAnnotationAnswer(
         $feedback_type,
         $exe_id,
@@ -627,10 +634,9 @@ class ExerciseShowFunctions
         $results_disabled = 0
     ) {
         $comments = Event::get_comments($exe_id, $questionId);
-
         if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
             if ($questionScore <= 0 && empty($comments)) {
-                echo '<br>'.Display::return_message(get_lang('notCorrectedYet'));
+                echo '<br />'.ExerciseLib::getNotCorrectedYetText();
             }
         }
     }

@@ -115,7 +115,6 @@ class ExerciseLib
             if (in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE])) {
                 if ($answerType == DRAGGABLE) {
                     $isVertical = $objQuestionTmp->extra == 'v';
-
                     $s .= '
                         <div class="col-md-12 ui-widget ui-helper-clearfix">
                             <div class="clearfix">
@@ -149,7 +148,6 @@ class ExerciseLib
                 }
 
                 $i = 1;
-
                 $select_items[0]['id'] = 0;
                 $select_items[0]['letter'] = '--';
                 $select_items[0]['answer'] = '';
@@ -240,7 +238,6 @@ class ExerciseLib
                     } else {
                         $header .= Display::tag('th', $item);
                     }
-
                 }
                 if ($show_comment) {
                     $header .= Display::tag('th', get_lang('Feedback'));
@@ -303,7 +300,6 @@ class ExerciseLib
             }
 
             for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-
                 $answer = $objAnswerTmp->selectAnswer($answerId);
                 $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                 $numAnswer = $objAnswerTmp->selectAutoId($answerId);
@@ -909,7 +905,6 @@ class ExerciseLib
                                 if ($value == $selectedValue) {
                                     break;
                                 }
-
                                 $selectedIndex++;
                             }
 
@@ -995,7 +990,6 @@ HTML;
                                     if ($answerCorrect != $chosen['answer']) {
                                         continue;
                                     }
-
                                     $selectedValue = $chosen['answer'];
                                 }
                             }
@@ -1008,7 +1002,6 @@ HTML;
                                 if ($value == $selectedValue) {
                                     break;
                                 }
-
                                 $selectedIndex++;
                             }
 
@@ -1108,7 +1101,6 @@ HTML;
                 $s .= "</ul>";
                 $s .= "</div>"; //clearfix
                 $counterAnswer = 1;
-
                 $s .= $isVertical ? '' : '<div class="row">';
 
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
@@ -1200,7 +1192,7 @@ HTML;
                 if (!empty($answers_hotspot)) {
                     Session::write("hotspot_ordered$questionId", array_keys($answers_hotspot));
                     foreach ($answers_hotspot as $value) {
-	                        $answerList .= "<li>";
+                        $answerList .= "<li>";
                         if ($freeze) {
                             $answerList .= '<span class="hotspot-color-'.$hotspotColor
                                 .' fa fa-square" aria-hidden="true"></span>'.PHP_EOL;
@@ -1314,7 +1306,6 @@ HOTSPOT;
             if (!$only_questions) {
                 if ($show_title) {
                     TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
-
                     echo $objQuestionTmp->getTitleToDisplay($current_item);
                 }
                 echo '
@@ -1398,6 +1389,10 @@ HOTSPOT;
 
     /**
      * Validates the time control key
+     * @param int $exercise_id
+     * @param int $lp_id
+     * @param int $lp_item_id
+     * @return bool
      */
     public static function exercise_time_control_is_valid(
         $exercise_id,
@@ -1438,6 +1433,10 @@ HOTSPOT;
 
     /**
      * Deletes the time control token
+     *
+     * @param int $exercise_id
+     * @param int $lp_id
+     * @param int $lp_item_id
      */
     public static function exercise_time_control_delete(
         $exercise_id,
@@ -1455,8 +1454,11 @@ HOTSPOT;
     /**
      * Generates the time control key
      */
-    public static function get_time_control_key($exercise_id, $lp_id = 0, $lp_item_id = 0)
-    {
+    public static function get_time_control_key(
+        $exercise_id,
+        $lp_id = 0,
+        $lp_item_id = 0
+    ) {
         $exercise_id = intval($exercise_id);
         $lp_id = intval($lp_id);
         $lp_item_id = intval($lp_item_id);
@@ -2067,7 +2069,6 @@ HOTSPOT;
                                 }
                             }
                             $revisedLabel = '';
-
                             switch ($revised) {
                                 case 0:
                                     $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".
@@ -2235,10 +2236,8 @@ HOTSPOT;
                         null,
                         date_default_timezone_get()
                     );
-                    $hp_result = round(
-                            ($hpresults[$i][4] / ($hpresults[$i][5] != 0 ? $hpresults[$i][5] : 1)) * 100,
-                            2
-                        ).'% ('.$hpresults[$i][4].' / '.$hpresults[$i][5].')';
+                    $hp_result = round(($hpresults[$i][4] / ($hpresults[$i][5] != 0 ? $hpresults[$i][5] : 1)) * 100, 2)
+                        .'% ('.$hpresults[$i][4].' / '.$hpresults[$i][5].')';
                     if ($is_allowedToEdit) {
                         $list_info[] = array(
                             $hpresults[$i][0],
@@ -2284,8 +2283,7 @@ HOTSPOT;
         $show_percentage = true,
         $use_platform_settings = true,
         $show_only_percentage = false
-    )
-    {
+    ) {
         if (is_null($score) && is_null($weight)) {
             return '-';
         }
@@ -2331,7 +2329,7 @@ HOTSPOT;
      * @param string $pass_percentage
      * @return bool
      */
-    public static function is_success_exercise_result($score, $weight, $pass_percentage)
+    public static function isSuccessExerciseResult($score, $weight, $pass_percentage)
     {
         $percentage = float_format(
             ($score / ($weight != 0 ? $weight : 1)) * 100,
@@ -2351,17 +2349,17 @@ HOTSPOT;
      * @param string $pass_percentage
      * @return string
      */
-    public static function show_success_message($score, $weight, $pass_percentage)
+    public static function showSuccessMessage($score, $weight, $pass_percentage)
     {
-        $res = "";
-        if (self::is_pass_pourcentage_enabled($pass_percentage)) {
-            $is_success = self::is_success_exercise_result(
+        $res = '';
+        if (self::isPassPercentageEnabled($pass_percentage)) {
+            $isSuccess = self::isSuccessExerciseResult(
                 $score,
                 $weight,
                 $pass_percentage
             );
 
-            if ($is_success) {
+            if ($isSuccess) {
                 $html = get_lang('CongratulationsYouPassedTheTest');
                 $icon = Display::return_icon(
                     'completed.png',
@@ -2393,14 +2391,14 @@ HOTSPOT;
     /**
      * Return true if pass_pourcentage activated (we use the pass pourcentage feature
      * return false if pass_percentage = 0 (we don't use the pass pourcentage feature
-     * @param $in_pass_pourcentage
+     * @param $value
      * @return boolean
      * In this version, pass_percentage and show_success_message are disabled if
      * pass_percentage is set to 0
      */
-    public static function is_pass_pourcentage_enabled($in_pass_pourcentage)
+    public static function isPassPercentageEnabled($value)
     {
-        return $in_pass_pourcentage > 0;
+        return $value > 0;
     }
 
     /**
@@ -2439,6 +2437,7 @@ HOTSPOT;
             }
         }
         $score_rounded = float_format($score, 1);
+
         return $score_rounded;
     }
 
@@ -2464,8 +2463,7 @@ HOTSPOT;
         $search = '',
         $search_all_sessions = false,
         $active = 2
-    )
-    {
+    ) {
         $course_id = api_get_course_int_id();
 
         if (!empty($course_info) && !empty($course_info['real_id'])) {
@@ -2550,9 +2548,9 @@ HOTSPOT;
      * @param int $courseId The course ID (necessary as c_quiz.id is not unique)
      * @return array Exercise info
      */
-    public static function get_exercise_by_id($exerciseId = 0, $courseId = null)
+    public static function get_exercise_by_id($exerciseId = 0, $courseId = 0)
     {
-        $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
+        $table = Database::get_course_table(TABLE_QUIZ_TEST);
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         } else {
@@ -2565,7 +2563,7 @@ HOTSPOT;
             )
         );
 
-        return Database::select('*', $TBL_EXERCICES, $conditions);
+        return Database::select('*', $table, $conditions);
     }
 
     /**
@@ -2964,8 +2962,7 @@ HOTSPOT;
                     $avg_score += $score;
                 }
             }
-            //We asume that all exe_weighting
-            //$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
+            // We asumme that all exe_weighting
             $avg_score = ($avg_score / count($user_results));
         }
 
@@ -2999,7 +2996,7 @@ HOTSPOT;
                     $avg_score += $score;
                 }
             }
-            //We asume that all exe_weighting
+            //We asumme that all exe_weighting
             //$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
             //$avg_score = ($avg_score / count($user_results));
             if (!empty($user_count)) {
@@ -3636,13 +3633,13 @@ HOTSPOT;
      * @param bool $save_user_result save users results (true) or just show the results (false)
      * @param string $remainingMessage
      */
-    public static function display_question_list_by_attempt(
+    public static function displayQuestionListByAttempt(
         $objExercise,
         $exe_id,
         $save_user_result = false,
         $remainingMessage = ''
     ) {
-        global $origin;
+        $origin = api_get_origin();
 
         // Getting attempt info
         $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id(
@@ -3760,7 +3757,6 @@ HOTSPOT;
         $question_list_answers = array();
         $media_list = array();
         $category_list = array();
-
         $loadChoiceFromSession = false;
         $fromDatabase = true;
         $exerciseResult = null;
@@ -3775,6 +3771,7 @@ HOTSPOT;
             $delineationResults = isset($delineationResults[$objExercise->id]) ? $delineationResults[$objExercise->id] : null;
         }
 
+        $countPendingQuestions = 0;
         // Loop over all question to show results for each of them, one by one
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
@@ -3823,7 +3820,6 @@ HOTSPOT;
 
                 // Category report
                 $category_was_added_for_this_test = false;
-
                 if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
                     if (!isset($category_list[$objQuestionTmp->category]['score'])) {
                         $category_list[$objQuestionTmp->category]['score'] = 0;
@@ -3857,7 +3853,8 @@ HOTSPOT;
                     $category_list['none']['total'] += $my_total_weight;
                 }
 
-                if ($objExercise->selectPropagateNeg() == 0 && $my_total_score < 0
+                if ($objExercise->selectPropagateNeg() == 0 &&
+                    $my_total_score < 0
                 ) {
                     $my_total_score = 0;
                 }
@@ -3867,70 +3864,70 @@ HOTSPOT;
                     $comnt = Event::get_comments($exe_id, $questionId);
                     if (!empty($comnt)) {
                         echo '<b>'.get_lang('Feedback').'</b>';
-                        echo '<div id="question_feedback">'.$comnt.'</div>';
+                        echo ExerciseLib::getFeedbackText($comnt);
                     }
                 }
 
                 if ($show_results) {
-                    $score = array(
-                        'result' => get_lang('Score')." : ".self::show_score(
-                                $my_total_score,
-                                $my_total_weight,
-                                false,
-                                true
-                            ),
+                    $score = [
+                        'result' => self::show_score(
+                            $my_total_score,
+                            $my_total_weight,
+                            false,
+                            true
+                        ),
                         'pass' => $my_total_score >= $my_total_weight ? true : false,
                         'score' => $my_total_score,
                         'weight' => $my_total_weight,
                         'comments' => $comnt,
-                    );
+                    ];
                 } else {
-                    $score = array();
+                    $score = [];
+                }
+
+                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION])) {
+                    $check = $objQuestionTmp->isQuestionWaitingReview($score);
+                    if ($check === false) {
+                        $countPendingQuestions++;
+                    }
                 }
 
                 $contents = ob_get_clean();
-
                 $question_content = '';
                 if ($show_results) {
                     $question_content = '<div class="question_row_answer">';
                     // Shows question title an description
                     $question_content .= $objQuestionTmp->return_header(
-                        null,
+                        $objExercise,
                         $counter,
                         $score
                     );
                 }
                 $counter++;
-
                 $question_content .= $contents;
-
                 if ($show_results) {
                     $question_content .= '</div>';
                 }
 
                 $exercise_content .= $question_content;
-
             } // end foreach() block that loops over all questions
         }
 
         $total_score_text = null;
-
-        // Ofaj
-        //if ($origin != 'learnpath') {
-            if ($show_results || $show_only_score) {
-                $total_score_text .= '<div class="question_row_score">';
-                $total_score_text .= self::get_question_ribbon(
-                    $objExercise,
-                    $total_score,
-                    $total_weight,
-                    true
-                );
-                $total_score_text .= '</div>';
-            }
-        //}
+        if ($show_results || $show_only_score) {
+            $total_score_text .= '<div class="question_row_score">';
+            $total_score_text .= self::getTotalScoreRibbon(
+                $objExercise,
+                $total_score,
+                $total_weight,
+                true,
+                $countPendingQuestions
+            );
+            $total_score_text .= '</div>';
+        }
 
         if (!empty($category_list) && ($show_results || $show_only_score)) {
-            //Adding total
+            // Adding total
             $category_list['total'] = array(
                 'score' => $total_score,
                 'total' => $total_weight
@@ -3946,6 +3943,7 @@ HOTSPOT;
                     "ExerciseWithFeedbackWithoutCorrectionComment"
                 )."</div>";
         }
+
         // Remove audio auto play from questions on results page - refs BT#7939
         $exercise_content = preg_replace(
             ['/autoplay[\=\".+\"]+/', '/autostart[\=\".+\"]+/'],
@@ -4012,38 +4010,56 @@ HOTSPOT;
     }
 
     /**
+     * @param string $class
+     * @param string $scoreLabel
+     * @param string $result
+     *
+     * @return string
+     */
+    public static function getQuestionRibbon($class, $scoreLabel, $result)
+    {
+        return '<div class="ribbon">
+                    <div class="rib rib-'.$class.'">
+                        <h3>'.$scoreLabel.'</h3>
+                    </div> 
+                    <h4>'.get_lang('Score').': '.$result.'</h4>
+                </div>'
+        ;
+    }
+
+    /**
      * @param Exercise $objExercise
      * @param float $score
      * @param float $weight
-     * @param bool $check_pass_percentage
+     * @param bool $checkPassPercentage
+     * @param int $countPendingQuestions
      * @return string
      */
-    public static function get_question_ribbon(
+    public static function getTotalScoreRibbon(
         $objExercise,
         $score,
         $weight,
-        $check_pass_percentage = false
+        $checkPassPercentage = false,
+        $countPendingQuestions = 0
     ) {
+        $passPercentage = $objExercise->selectPassPercentage();
         $ribbon = '<div class="title-score">';
-        if ($check_pass_percentage) {
-            $is_success = self::is_success_exercise_result(
+        if ($checkPassPercentage) {
+            $isSuccess = self::isSuccessExerciseResult(
                 $score,
                 $weight,
-                $objExercise->selectPassPercentage()
+                $passPercentage
             );
             // Color the final test score if pass_percentage activated
-            $ribbon_total_success_or_error = "";
-            if (self::is_pass_pourcentage_enabled(
-                $objExercise->selectPassPercentage()
-            )
-            ) {
-                if ($is_success) {
-                    $ribbon_total_success_or_error = ' ribbon-total-success';
+            $class = '';
+            if (self::isPassPercentageEnabled($passPercentage)) {
+                if ($isSuccess) {
+                    $class = ' ribbon-total-success';
                 } else {
-                    $ribbon_total_success_or_error = ' ribbon-total-error';
+                    $class = ' ribbon-total-error';
                 }
             }
-            $ribbon .= '<div class="total '.$ribbon_total_success_or_error.'">';
+            $ribbon .= '<div class="total '.$class.'">';
         } else {
             $ribbon .= '<div class="total">';
         }
@@ -4051,14 +4067,25 @@ HOTSPOT;
         $ribbon .= self::show_score($score, $weight, false, true);
         $ribbon .= '</h3>';
         $ribbon .= '</div>';
-        if ($check_pass_percentage) {
-            $ribbon .= self::show_success_message(
+        if ($checkPassPercentage) {
+            $ribbon .= self::showSuccessMessage(
                 $score,
                 $weight,
-                $objExercise->selectPassPercentage()
+                $passPercentage
             );
         }
         $ribbon .= '</div>';
+
+        if (!empty($countPendingQuestions)) {
+            $ribbon .= '<br />';
+            $ribbon .= Display::return_message(
+                sprintf(
+                    get_lang('TempScoreXQuestionsNotCorrectedYet'),
+                    $countPendingQuestions
+                ),
+                'warning'
+            );
+        }
 
         return $ribbon;
     }
@@ -4116,5 +4143,24 @@ HOTSPOT;
         $message = str_replace("#url#", $url, $message);
 
         return $message;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getNotCorrectedYetText()
+    {
+        return Display::return_message(get_lang('notCorrectedYet'), 'warning');
+    }
+
+    /**
+     * @param string $message
+     * @return string
+     */
+    public static function getFeedbackText($message)
+    {
+        // Old style
+        //return '<div id="question_feedback">'.$message.'</div>';
+        return Display::return_message($message, 'warning', false);
     }
 }

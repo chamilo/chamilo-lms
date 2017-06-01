@@ -3,6 +3,9 @@
 
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -35,23 +38,37 @@ $interbreadcrumb[] = array(
 
 $courseId = api_get_course_int_id();
 $courseCode = api_get_course_id();
+$sessionId = api_get_session_id();
 
 $url = api_get_self().'?'.api_get_cidreq().'&lp_id='.$lpId;
 $lp = new \learnpath($courseCode, $lpId, api_get_user_id());
 $em = Database::getManager();
+/** @var CourseRepository $courseRepo */
+$courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
 
+/** @var Session $session */
 $session = null;
 if (!empty($sessionId)) {
     $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
 }
 
 // Find course.
-$course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);
+$course = $courseRepo->find($courseId);
+$subscribedUsers = [];
 
 // Getting subscribe users to the course.
-$subscribedUsers = $em->getRepository('ChamiloCoreBundle:Course')->getSubscribedStudents($course);
-$subscribedUsers = $subscribedUsers->getQuery();
-$subscribedUsers = $subscribedUsers->execute();
+if (!$session) {
+    $subscribedUsers = $courseRepo
+        ->getSubscribedStudents($course)
+        ->getQuery()
+        ->getResult();
+} else {
+    $session
+        ->getUserCourseSubscriptionsByStatus($course, Session::STUDENT)
+        ->forAll(function ($i, SessionRelCourseRelUser $sessionCourseUser) use (&$subscribedUsers) {
+            $subscribedUsers[$i] = $sessionCourseUser->getUser();
+        });
+}
 
 // Getting all users in a nice format.
 $choices = array();
@@ -67,6 +84,7 @@ $subscribedUsersInLp = $em->getRepository('ChamiloCourseBundle:CItemProperty')->
     $course,
     $session
 );
+
 $selectedChoices = array();
 foreach ($subscribedUsersInLp as $itemProperty) {
     $selectedChoices[] = $itemProperty->getToUser()->getId();

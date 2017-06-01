@@ -3,6 +3,10 @@
 /**
  * @package chamilo.admin
  */
+
+use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
+use Chamilo\CoreBundle\Entity\CourseCategory;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -12,6 +16,11 @@ api_protect_admin_script();
 
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$em = Database::getManager();
+/** @var CourseCategoryRepository $courseCategoriesRepo */
+$courseCategoriesRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
+// Get all possible teachers.
+$urlId = api_get_current_access_url_id();
 
 $courseId = isset($_GET['id']) ? $_GET['id'] : null;
 
@@ -58,7 +67,7 @@ if (api_is_multiple_url_enabled()) {
             INNER JOIN $access_url_rel_user_table url_rel_user
             ON (u.user_id=url_rel_user.user_id)
             WHERE
-                url_rel_user.access_url_id=".api_get_current_access_url_id()." AND
+                url_rel_user.access_url_id = $urlId AND
                 status = 1" . $order_clause;
 } else {
     $sql = "SELECT user_id, lastname, firstname
@@ -173,20 +182,39 @@ if (!empty($coursesInSession)) {
     }
 }
 
-// Category code
-$url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
+$countCategories = $courseCategoriesRepo->countAllInAccessUrl($urlId);
 
-$categorySelect = $form->addElement(
-    'select_ajax',
-    'category_code',
-    get_lang('CourseFaculty'),
-    null,
-    array('url' => $url)
-);
+if ($countCategories >= 100) {
+    // Category code
+    $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
 
-if (!empty($courseInfo['categoryCode'])) {
-    $data = CourseCategory::getCategory($courseInfo['categoryCode']);
-    $categorySelect->addOption($data['name'], $data['code']);
+    $categorySelect = $form->addElement(
+        'select_ajax',
+        'category_code',
+        get_lang('CourseFaculty'),
+        null,
+        ['url' => $url]
+    );
+
+    if (!empty($courseInfo['categoryCode'])) {
+        $data = \CourseCategory::getCategory($courseInfo['categoryCode']);
+        $categorySelect->addOption($data['name'], $data['code']);
+    }
+} else {
+    $courseInfo['category_code'] = $courseInfo['categoryCode'];
+    $categories = $courseCategoriesRepo->findAllInAccessUrl($urlId);
+    $categoriesOptions = [null => get_lang('None')];
+
+    /** @var CourseCategory $category */
+    foreach ($categories as $category) {
+        $categoriesOptions[$category->getCode()] = $category->__toString();
+    }
+
+    $form->addSelect(
+        'category_code',
+        get_lang('CourseFaculty'),
+        $categoriesOptions
+    );
 }
 
 $form->addText('department_name', get_lang('CourseDepartment'), false, array('size' => '60'));
@@ -248,7 +276,7 @@ if ($form->validate()) {
     $visibility = $course['visibility'];
 
     global $_configuration;
-    $urlId = api_get_current_access_url_id();
+    
     if (isset($_configuration[$urlId]) &&
         isset($_configuration[$urlId]['hosting_limit_active_courses']) &&
         $_configuration[$urlId]['hosting_limit_active_courses'] > 0

@@ -20,7 +20,7 @@ use Symfony\Component\Finder\Finder;
  */
 
 // PHP version requirement.
-define('REQUIRED_PHP_VERSION', '5.4');
+define('REQUIRED_PHP_VERSION', '5.5');
 define('REQUIRED_MIN_MEMORY_LIMIT', '128');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE', '10');
 define('REQUIRED_MIN_POST_MAX_SIZE', '10');
@@ -7642,6 +7642,11 @@ function api_get_configuration_value($variable)
             // Check if it exists for the sub portal
             if (array_key_exists($urlId, $_configuration[$variable])) {
                 return $_configuration[$variable][$urlId];
+            } else {
+                // Try to found element with id = 1 (master portal)
+                if (array_key_exists(1, $_configuration[$variable])) {
+                    return $_configuration[$variable][1];
+                }
             }
         }
 

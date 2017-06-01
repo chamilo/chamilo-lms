@@ -615,7 +615,6 @@ class Login
                         // The user is subscribed in a session? The user is a Session coach a Session admin ?
 
                         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-                        $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
                         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
                         //Session coach, session admin, course coach admin

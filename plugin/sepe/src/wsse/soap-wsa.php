@@ -70,9 +70,9 @@ class WSASoap {
         $this->soapPFX = $this->envelope->prefix; 
         $this->SOAPXPath = new DOMXPath($doc); 
         $this->SOAPXPath->registerNamespace('wssoap', $this->soapNS); 
-        $this->SOAPXPath->registerNamespace('wswsa', WSASoap::WSANS); 
+        $this->SOAPXPath->registerNamespace('wswsa', self::WSANS);
          
-        $this->envelope->setAttributeNS("http://www.w3.org/2000/xmlns/", 'xmlns:'.WSASoap::WSAPFX, WSASoap::WSANS); 
+        $this->envelope->setAttributeNS("http://www.w3.org/2000/xmlns/", 'xmlns:'.self::WSAPFX, self::WSANS);
         $this->locateHeader(); 
     } 
 
@@ -80,7 +80,7 @@ class WSASoap {
         /* Add the WSA Action */ 
         $header = $this->locateHeader(); 
 
-        $nodeAction = $this->soapDoc->createElementNS(WSASoap::WSANS, WSASoap::WSAPFX.':Action', $action); 
+        $nodeAction = $this->soapDoc->createElementNS(self::WSANS, self::SAPFX.':Action', $action);
         $header->appendChild($nodeAction); 
     } 
 
@@ -114,7 +114,7 @@ class WSASoap {
 
         $header = $this->locateHeader(); 
 
-        $nodeID = $this->soapDoc->createElementNS(WSASoap::WSANS, WSASoap::WSAPFX.':MessageID', $id); 
+        $nodeID = $this->soapDoc->createElementNS(self::WSANS, self::WSAPFX.':MessageID', $id);
         $header->appendChild($nodeID); 
         $this->messageID = $id; 
     } 
@@ -127,13 +127,13 @@ class WSASoap {
             /* Add the WSA ReplyTo */ 
             $header = $this->locateHeader(); 
      
-            $nodeReply = $this->soapDoc->createElementNS(WSASoap::WSANS, WSASoap::WSAPFX.':ReplyTo'); 
+            $nodeReply = $this->soapDoc->createElementNS(self::WSANS, self::WSAPFX.':ReplyTo');
             $header->appendChild($nodeReply); 
              
             if (empty($address)) { 
                 $address = 'http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous'; 
             } 
-            $nodeAddress = $this->soapDoc->createElementNS(WSASoap::WSANS, WSASoap::WSAPFX.':Address', $address); 
+            $nodeAddress = $this->soapDoc->createElementNS(self::WSANS, self::WSAPFX.':Address', $address);
             $nodeReply->appendChild($nodeAddress); 
     } 
 

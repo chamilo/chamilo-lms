@@ -53,12 +53,15 @@ class Ims2Question extends Question
         return $answer;
     }
 
-    function createAnswersForm($form)
+    public function createAnswersForm($form)
     {
         return true;
     }
 
-    function processAnswersCreation($form)
+    /**
+     * @inheritdoc
+     */
+    public function processAnswersCreation($form, $exercise)
     {
         return true;
     }
@@ -234,7 +237,7 @@ class ImsAnswerMatching extends Answer
         $i = 0;
 
         if (is_array($this->rightList)) {
-            foreach ($this->rightList as $rightKey=>$rightElement) {
+            foreach ($this->rightList as $rightKey => $rightElement) {
                 $out .= '<simpleAssociableChoice identifier="right_'.$i.'" >
                         <![CDATA['.formatExerciseQtiTitle($rightElement['answer']).']]>
                         </simpleAssociableChoice>'. "\n";

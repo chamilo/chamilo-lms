@@ -178,6 +178,7 @@ function import_exercise($file)
     $last_exercise_id = $exercise->selectId();
     $courseId = api_get_course_int_id();
     if (!empty($last_exercise_id)) {
+        //var_dump($exercise_info);exit;
         // For each question found...
         foreach ($exercise_info['question'] as $question_array) {
             //2. Create question
@@ -222,7 +223,7 @@ function import_exercise($file)
                 $description .= $question_array['description'];
             }
             $question->updateDescription($description);
-            $question->save($last_exercise_id);
+            $question->save($exercise);
 
             $last_question_id = $question->selectId();
             //3. Create answer
@@ -260,7 +261,7 @@ function import_exercise($file)
                 }
             }
             $question->updateWeighting($totalCorrectWeight);
-            $question->save($last_exercise_id);
+            $question->save($exercise);
             $answer->save();
         }
 

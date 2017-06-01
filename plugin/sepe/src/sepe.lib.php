@@ -89,7 +89,7 @@ function getActionInfo($id)
     global $tableSepeActions;
     $sql = "SELECT * FROM $tableSepeActions WHERE id = $id";
     $res = Database::query($sql);
-    $aux = array();
+    $row = false;
     if (Database::num_rows($res) > 0) {
         $row['action_origin'] = Security::remove_XSS(stripslashes($row['action_origin']));
         $row['action_code'] = Security::remove_XSS(stripslashes($row['action_code']));
@@ -105,8 +105,6 @@ function getActionInfo($id)
         $row['requirements'] = Security::remove_XSS(stripslashes($row['requirements']));
         $row['contact_action'] = Security::remove_XSS(stripslashes($row['contact_action']));
         $row = Database::fetch_assoc($res);
-    } else {
-        $row = false;
     }
     return $row;
 }
@@ -116,7 +114,7 @@ function getSpecialtActionInfo($specialtyId)
     global $tableSepeSpecialty;
     $sql = "SELECT * FROM $tableSepeSpecialty WHERE id = $specialtyId";
     $res = Database::query($sql);
-    $aux = array();
+    $row = false;
     if (Database::num_rows($res) > 0) {
         $row['specialty_origin'] = Security::remove_XSS(stripslashes($row['specialty_origin']));
         $row['professional_area'] = Security::remove_XSS(stripslashes($row['professional_area']));
@@ -125,8 +123,6 @@ function getSpecialtActionInfo($specialtyId)
         $row['center_code'] = Security::remove_XSS(stripslashes($row['center_code']));
         $row['modality_impartition'] = Security::remove_XSS(stripslashes($row['modality_impartition']));
         $row = Database::fetch_assoc($res);
-    } else {
-        $row = false;
     }
     return $row;
 }
@@ -139,13 +135,11 @@ function getInfoSpecialtyClassroom($classroomId)
             FROM $tableSepeSpecialtyClassroom a LEFT JOIN $tableCenters b ON a.center_id = b.id 
             WHERE a.id = $classroomId";
     $res = Database::query($sql);
-    $aux = array();
+    $row = false;
     if (Database::num_rows($res) > 0) {
         $row['center_origin'] = Security::remove_XSS(stripslashes($row['center_origin']));
         $row['center_code'] = Security::remove_XSS(stripslashes($row['center_code']));
         $row = Database::fetch_assoc($res);
-    } else {
-        $row = false;
     }
     return $row;
 }

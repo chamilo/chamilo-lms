@@ -768,6 +768,9 @@ if (@$_POST['step2']) {
             $dbPortForm
         );
 
+        $sql = getVersionTable();
+        $manager->getConnection()->executeQuery($sql);
+
         $metadataList = $manager->getMetadataFactory()->getAllMetadata();
         $schema = $manager->getConnection()->getSchemaManager()->createSchema();
 

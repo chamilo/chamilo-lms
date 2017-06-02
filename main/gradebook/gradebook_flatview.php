@@ -22,7 +22,7 @@ if (!$isDrhOfCourse) {
     GradebookUtils::block_students();
 }
 
-if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
+if (isset($_POST['submit']) && isset($_POST['keyword'])) {
     header('Location: '.api_get_self().'?selectcat='.intval($_GET['selectcat']).'&search='.Security::remove_XSS($_POST['keyword']));
     exit;
 }
@@ -40,21 +40,16 @@ if (($showlink == '0') && ($showeval == '0')) {
 }
 
 $cat = Category::load($_REQUEST['selectcat']);
-
-if (isset($_GET['userid'])) {
-    $userid = Security::remove_XSS($_GET['userid']);
-} else {
-    $userid = '';
-}
+$userId = isset($_GET['userid']) ? (int) $_GET['userid'] : 0;
 
 if ($showeval) {
-    $alleval = $cat[0]->get_evaluations($userid, true);
+    $alleval = $cat[0]->get_evaluations($userId, true);
 } else {
     $alleval = null;
 }
 
 if ($showlink) {
-    $alllinks = $cat[0]->get_links($userid, true);
+    $alllinks = $cat[0]->get_links($userId, true);
 } else {
     $alllinks = null;
 }
@@ -124,7 +119,6 @@ $flatviewtable = new FlatViewTable(
 );
 
 $flatviewtable->setAutoFill(false);
-
 $parameters = array('selectcat' => intval($_GET['selectcat']));
 $flatviewtable->set_additional_parameters($parameters);
 
@@ -272,7 +266,7 @@ $this_section = SECTION_COURSES;
 if (isset($_GET['exportpdf'])) {
     $export_pdf_form->display();
 } else {
-    Display :: display_header(get_lang('FlatView'));
+    Display::display_header(get_lang('FlatView'));
 }
 
 if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
@@ -284,7 +278,6 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
     );
     $flatviewtable->display();
 } elseif (isset($_GET['selectcat']) && ($_SESSION['studentview'] == 'teacherview')) {
-
     DisplayGradebook:: display_header_reduce_flatview(
         $cat[0],
         $showeval,

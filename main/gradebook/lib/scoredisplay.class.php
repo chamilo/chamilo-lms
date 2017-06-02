@@ -321,13 +321,18 @@ class ScoreDisplay
             // if no custom display set, use default display
             $display = $this->display_default($my_score, $type);
         }
-
         if ($this->coloring_enabled && $no_color != false) {
             $my_score_denom = isset($score[1]) && !empty($score[1]) && $score[1] > 0 ? $score[1] : 1;
             $scoreCleaned = isset($score[0]) ? $score[0] : 0;
+
             if (($scoreCleaned / $my_score_denom) < ($this->color_split_value / 100)) {
-                $display = Display::tag('font', $display, array('color'=>'red'));
+                $display = Display::tag(
+                    'font',
+                    $display,
+                    array('color' => 'red')
+                );
             }
+
         }
 
         return $display;

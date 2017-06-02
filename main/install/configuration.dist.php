@@ -202,12 +202,18 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // Unoconv binary file
 //$_configuration['unoconv.binaries'] = '/usr/bin/unoconv';
 // Proxy settings for access external services
-/*$_configuration['proxy_settings'] = array(
-    'http' => array(
-        'proxy' => 'tcp://example.com:8080',
-        'request_fulluri'=>true
-    )
-);*/
+/*$_configuration['proxy_settings'] = [
+    'stream_context_create' => [
+        'http' => [
+            'proxy' => 'tcp://example.com:8080',
+            'request_fulluri' => true
+        ]
+    ],
+    'curl_setopt_array' => [
+        'CURLOPT_PROXY' => 'http://example.com',
+        'CURLOPT_PROXYPORT' => '8080'
+    ]
+];*/
 
 // E-mail accounts to send notifications to when executing cronjobs - works for main/cron/import_csv.php
 //$_configuration['cron_notification_mails'] = array('email@example.com', 'email2@example.com');

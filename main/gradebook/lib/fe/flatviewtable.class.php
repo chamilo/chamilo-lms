@@ -106,7 +106,6 @@ class FlatViewTable extends SortableTable
 
         $user_results = $this->datagen->get_data_to_graph2(false);
 
-        //if (empty($this->datagen->get_total_items_count()) || empty($total_users)) {
         if (empty($user_results) || empty($total_users)) {
             echo get_lang('NoResults');
             return '';
@@ -159,6 +158,7 @@ class FlatViewTable extends SortableTable
                 $i++;
             }
         }
+
 
         //fixing $resource_list
         $max = 0;

@@ -526,9 +526,13 @@ class Template
     /**
      * Set system parameters
      */
-    private function set_system_parameters()
+    public function set_system_parameters()
     {
         $this->theme = api_get_visual_theme();
+        if (!empty($this->preview_theme)) {
+            $this->theme = $this->preview_theme;
+        }
+
         $this->themeDir = self::getThemeDir($this->theme);
 
         // Setting app paths/URLs
@@ -573,11 +577,6 @@ class Template
     {
         global $disable_js_and_css_files;
         $css = array();
-        $this->theme = api_get_visual_theme();
-
-        if (!empty($this->preview_theme)) {
-            $this->theme = $this->preview_theme;
-        }
 
         // Default CSS Bootstrap
         $bowerCSSFiles = [

@@ -87,6 +87,7 @@ class Display
 
         if (!empty(self::$preview_style)) {
             self::$global_template->preview_theme = self::$preview_style;
+            self::$global_template->set_system_parameters();
             self::$global_template->setCssFiles();
             self::$global_template->set_js_files();
             self::$global_template->setCssCustomFiles();

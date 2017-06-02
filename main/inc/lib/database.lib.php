@@ -166,11 +166,19 @@ class Database
             function ($class) use ($sysPath) {
                 $file = str_replace("\\", DIRECTORY_SEPARATOR, $class).".php";
                 $file = str_replace('Symfony/Component/Validator', '', $file);
-                $file = $sysPath.'vendor/symfony/validator'.$file;
+                $fileToInclude = $sysPath.'vendor/symfony/validator/'.$file;
 
-                if (file_exists($file)) {
+                if (file_exists($fileToInclude)) {
                     // file exists makes sure that the loader fails silently
-                    require_once $file;
+                    require_once $fileToInclude;
+
+                    return true;
+                }
+
+                $fileToInclude = $sysPath.'vendor/symfony/validator/Constraints/'.$file;
+                if (file_exists($fileToInclude)) {
+                    // file exists makes sure that the loader fails silently
+                    require_once $fileToInclude;
 
                     return true;
                 }

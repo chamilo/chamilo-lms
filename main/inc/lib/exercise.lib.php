@@ -1923,7 +1923,7 @@ HOTSPOT;
                 $results[] = $rowx;
             }
 
-            $group_list = GroupManager::get_group_list(null, $courseCode);
+            $group_list = GroupManager::get_group_list(null, $courseInfo);
             $clean_group_list = array();
 
             if (!empty($group_list)) {

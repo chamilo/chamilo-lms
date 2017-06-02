@@ -1657,7 +1657,14 @@ class Agenda
 
         $session_id = intval($session_id);
         $user_id = intval($user_id);
-        $groupList = GroupManager::get_group_list(null, $courseInfo['code']);
+
+        $groupList = GroupManager::get_group_list(
+            null,
+            $courseInfo,
+            null,
+            $session_id
+        );
+
         $groupNameList = array();
         if (!empty($groupList)) {
             foreach ($groupList as $group) {

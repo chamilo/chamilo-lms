@@ -554,10 +554,10 @@ if (!empty($_GET['category'])) {
 $content = ob_get_clean();
 
 // Including the header (banner).
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 echo Display::actions($action_array);
 echo '<br />';
 echo $form_search_html;
 echo $content;
 
-Display :: display_footer();
+Display::display_footer();

@@ -293,6 +293,9 @@ foreach ($categories as $item) {
             $extra = null;
 
             if ($is_allowed_to_edit) {
+                // @todo This line is what makes the teacher switch to
+                //   student view automatically. Many teachers are confused
+                //   by that, so maybe a solution can be found to avoid it
                 $url_start_lp .= '&isStudentView=true';
                 $dsp_desc = '<em>'.$details['lp_maker'].'</em> '
                     .($lpVisibility

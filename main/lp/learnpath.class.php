@@ -3500,6 +3500,7 @@ class learnpath
 
                         // We want to use parameters if they were defined in the imsmanifest
                         if (strpos($file, 'blank.php') === false) {
+                            $lp_item_params = ltrim($lp_item_params, '?');
                             $file .= (strstr($file, '?') === false ? '?' : '').$lp_item_params;
                         }
                     } else {

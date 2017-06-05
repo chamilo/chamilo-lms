@@ -42,6 +42,8 @@ class Version20151214170800 extends AbstractMigrationChamilo
             $imagePath = __DIR__ . "/../../../../courses/{$answer['directory']}/document/images/{$answer['picture']}";
             if (!file_exists($imagePath)) {
                 error_log("Migration: Image does not exists: $imagePath");
+                $imagePath = realpath($imagePath);
+                error_log("Hotspot realpath: $imagePath");
                 continue;
             }
             $imageSize = getimagesize($imagePath);

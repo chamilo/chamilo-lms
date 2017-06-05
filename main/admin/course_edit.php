@@ -1,11 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * @package chamilo.admin
- */
 
 use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Entity\CourseCategory;
+
+/**
+ * @package chamilo.admin
+ */
 
 $cidReset = true;
 
@@ -103,7 +104,11 @@ if (count($course_teachers) == 0) {
 }
 
 // Build the form
-$form = new FormValidator('update_course', 'post', api_get_self().'?id='.$courseId);
+$form = new FormValidator(
+    'update_course',
+    'post',
+    api_get_self().'?id='.$courseId
+);
 $form->addElement('header', get_lang('Course').'  #'.$courseInfo['real_id'].' '.$course_code);
 $form->addElement('hidden', 'code', $course_code);
 
@@ -113,7 +118,11 @@ $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 // Code
-$element = $form->addElement('text', 'real_code', array(get_lang('CourseCode'), get_lang('ThisValueCantBeChanged')));
+$element = $form->addElement(
+    'text',
+    'real_code',
+    array(get_lang('CourseCode'), get_lang('ThisValueCantBeChanged'))
+);
 $element->freeze();
 
 // Visual code
@@ -134,13 +143,15 @@ $form->addText(
 
 $form->applyFilter('visual_code', 'strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
-
 $form->addElement('advmultiselect', 'course_teachers', get_lang('CourseTeachers'), $allTeachers);
-
 $courseInfo['course_teachers'] = $course_teachers;
-
 if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
-    $form->addElement('checkbox', 'add_teachers_to_sessions_courses', null, get_lang('TeachersWillBeAddedAsCoachInAllCourseSessions'));
+    $form->addElement(
+        'checkbox',
+        'add_teachers_to_sessions_courses',
+        null,
+        get_lang('TeachersWillBeAddedAsCoachInAllCourseSessions')
+    );
 }
 
 $coursesInSession = SessionManager::get_session_by_course($courseInfo['real_id']);
@@ -163,10 +174,8 @@ if (!empty($coursesInSession)) {
         $groupName = 'session_coaches['.$sessionId.']';
         $platformTeacherId = 'platform_teachers_by_session_'.$sessionId;
         $coachId = 'coaches_by_session_'.$sessionId;
-
         $platformTeacherName = 'platform_teachers_by_session';
         $coachName = 'coaches_by_session';
-
         $sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId;
         $form->addElement(
             'advmultiselect',
@@ -272,11 +281,10 @@ $form->setDefaults($courseInfo);
 // Validate form
 if ($form->validate()) {
     $course = $form->getSubmitValues();
-
     $visibility = $course['visibility'];
 
     global $_configuration;
-    
+
     if (isset($_configuration[$urlId]) &&
         isset($_configuration[$urlId]['hosting_limit_active_courses']) &&
         $_configuration[$urlId]['hosting_limit_active_courses'] > 0
@@ -371,7 +379,13 @@ if ($form->validate()) {
             }
         }
 
-        CourseManager::updateTeachers($courseInfo, $teachers, true, true, false);
+        CourseManager::updateTeachers(
+            $courseInfo,
+            $teachers,
+            true,
+            true,
+            false
+        );
     } else {
         // Normal behaviour
         CourseManager::updateTeachers($courseInfo, $teachers, true, false);

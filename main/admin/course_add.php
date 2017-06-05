@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
+use Chamilo\CoreBundle\Entity\CourseCategory;
+
 /**
  * @package chamilo.admin
  */
-
-use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
-use Chamilo\CoreBundle\Entity\CourseCategory;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -78,7 +78,12 @@ $form->addText(
 
 $form->applyFilter('visual_code', 'api_strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
-$form->addRule('visual_code', get_lang('Max'), 'maxlength', CourseManager::MAX_COURSE_LENGTH_CODE);
+$form->addRule(
+    'visual_code',
+    get_lang('Max'),
+    'maxlength',
+    CourseManager::MAX_COURSE_LENGTH_CODE
+);
 
 $form->addElement(
     'select',

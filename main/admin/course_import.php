@@ -62,7 +62,12 @@ function validate_courses_data($courses)
         if (!empty($course['CourseCategory'])) {
             $categoryInfo = CourseCategory::getCategory($course['CourseCategory']);
             if (empty($categoryInfo)) {
-                CourseCategory::addNode($course['CourseCategory'], $course['CourseCategoryName'] ? $course['CourseCategoryName'] : $course['CourseCategory'], 'TRUE', null);
+                CourseCategory::addNode(
+                    $course['CourseCategory'],
+                    $course['CourseCategoryName'] ? $course['CourseCategoryName'] : $course['CourseCategory'],
+                    'TRUE',
+                    null
+                );
             }
         } else {
             $course['error'] = get_lang('NoCourseCategorySupplied');
@@ -117,10 +122,8 @@ function save_courses_data($courses)
         $params['course_category'] = $course['CourseCategory'];
         $params['course_language'] = $course_language;
         $params['user_id'] = $creatorId;
-
         $addMeAsTeacher = isset($_POST['add_me_as_teacher']) ? $_POST['add_me_as_teacher'] : false;
         $params['add_user_as_teacher'] = $addMeAsTeacher;
-
         $courseInfo = CourseManager::create_course($params);
 
         if (!empty($courseInfo)) {
@@ -207,7 +210,13 @@ if (isset($errors) && count($errors) != 0) {
     echo Display::return_message($error_message, 'error', false);
 }
 
-$form = new FormValidator('import', 'post', api_get_self(), null, array('enctype' => 'multipart/form-data'));
+$form = new FormValidator(
+    'import',
+    'post',
+    api_get_self(),
+    null,
+    array('enctype' => 'multipart/form-data')
+);
 $form->addHeader($tool_name);
 $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
 $form->addElement('checkbox', 'add_me_as_teacher', null, get_lang('AddMeAsTeacherInCourses'));

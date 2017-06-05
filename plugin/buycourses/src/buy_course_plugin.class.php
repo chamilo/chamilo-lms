@@ -383,7 +383,8 @@ class BuyCoursesPlugin extends Plugin
             ->getQuery();
 
         $courses = $qb->getResult();
-           return $courses;
+
+        return $courses;
     }
 
     /**

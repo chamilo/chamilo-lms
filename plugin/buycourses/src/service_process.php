@@ -5,6 +5,10 @@
  * @package chamilo.plugin.buycourses
  */
 
+use Chamilo\UserBundle\Entity\User,
+    Chamilo\CoreBundle\Entity\SessionRelCourseRelUser,
+    Chamilo\CoreBundle\Entity\Session;
+
 $cidReset = true;
 
 require_once '../config.php';
@@ -110,6 +114,7 @@ if ($typeUser) {
     $users = $em->getRepository('ChamiloUserBundle:User')->findAll();
     $selectOptions[$userInfo['user_id']] = api_get_person_name($userInfo['firstname'], $userInfo['lastname']).' ('.get_lang('Myself').')';
     if (!empty($users)) {
+        /** @var User $user */
         foreach ($users as $user) {
             if (intval($userInfo['user_id']) !== intval($user->getId())) {
                 $selectOptions[$user->getId()] = $user->getCompleteNameWithUsername();
@@ -118,6 +123,7 @@ if ($typeUser) {
     }
     $form->addSelect('info_select', get_lang('User'), $selectOptions);
 } elseif ($typeCourse) {
+    /** @var User $user */
     $user = $em->getRepository('ChamiloUserBundle:User')->find($currentUserId);
     $courses = $user->getCourses();
     $checker = false;
@@ -130,19 +136,31 @@ if ($typeUser) {
     }
     $form->addSelect('info_select', get_lang('Course'), $selectOptions);
 } elseif ($typeSession) {
+    $sessions = [];
+    /** @var User $user */
     $user = $em->getRepository('ChamiloUserBundle:User')->find($currentUserId);
-    $sessions = $user->getSessionCourseSubscriptions();
-    $checker = false;
-    foreach ($sessions as $session) {
-        $checker = true;
-        $selectOptions[$session->getSession()->getId()] = $session->getSession()->getName();
+    $userSubscriptions = $user->getSessionCourseSubscriptions();
+
+    /** @var SessionRelCourseRelUser $userSubscription */
+    foreach ($userSubscriptions as $userSubscription) {
+        $sessions[$userSubscription->getSession()->getId()] = $userSubscription->getSession()->getName();
     }
-    if (!$checker) {
+
+    $sessionsAsGeneralCoach = $user->getSessionAsGeneralCoach();
+    /** @var Session $sessionAsGeneralCoach */
+    foreach ($sessionsAsGeneralCoach as $sessionAsGeneralCoach) {
+        $sessions[$sessionAsGeneralCoach->getId()] = $sessionAsGeneralCoach->getName();
+    }
+
+    if (!$sessions) {
         $form->addHtml(Display::return_message($plugin->get_lang('YouNeedToBeRegisteredInAtLeastOneSession'), 'error'));
+    } else {
+        $selectOptions = $sessions;
+        $form->addSelect('info_select', get_lang('Session'), $selectOptions);
     }
-    $form->addSelect('info_select', get_lang('Session'), $selectOptions);
 } elseif ($typeFinalLp) {
     // We need here to check the current user courses first
+    /** @var User $user */
     $user = $em->getRepository('ChamiloUserBundle:User')->find($currentUserId);
     $courses = $user->getCourses();
     $courseLpList = [];

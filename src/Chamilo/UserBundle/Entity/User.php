@@ -404,6 +404,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     protected $portals;
 
     /**
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="generalCoach")
      **/
     protected $sessionAsGeneralCoach;
@@ -2432,5 +2433,14 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         $this->profileCompleted = $profileCompleted;
 
         return $this;
+    }
+
+    /**
+     * Get sessionAsGeneralCoach
+     * @return ArrayCollection
+     */
+    public function getSessionAsGeneralCoach()
+    {
+        return $this->sessionAsGeneralCoach;
     }
 }

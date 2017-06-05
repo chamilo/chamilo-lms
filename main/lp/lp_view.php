@@ -322,6 +322,7 @@ if (!empty($_REQUEST['exeId']) &&
             if ($debug) {
                 error_log($sql);
             }
+
             Database::query($sql);
 
             $sql = "UPDATE $TBL_TRACK_EXERCICES SET
@@ -545,10 +546,15 @@ $template->assign(
 $template->assign('lp_author', $_SESSION['oLP']->get_author());
 $template->assign('lp_mode', $_SESSION['oLP']->mode);
 $template->assign('lp_title_scorm', $_SESSION['oLP']->name);
-// supprimer pour OFAJ
-//$template->assign('data_list', $_SESSION['oLP']->getListArrayToc($get_toc_list));
+$template->assign('data_list', $_SESSION['oLP']->getListArrayToc($get_toc_list));
 $template->assign('lp_id', $_SESSION['oLP']->lp_id);
 $template->assign('lp_current_item_id', $_SESSION['oLP']->get_current_item_id());
+
+if (api_get_configuration_value('lp_new_style') === true && $lpType == 1) {
+   $template->assign('data_panel',$_SESSION['oLP']->getParentToc($get_toc_list));
+} else {
+   $template->assign('data_list',$_SESSION['oLP']->getListArrayToc($get_toc_list));
+}
 
 $view = $template->get_template('learnpath/view.tpl');
 $content = $template->fetch($view);

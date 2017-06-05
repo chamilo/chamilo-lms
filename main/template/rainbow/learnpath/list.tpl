@@ -10,8 +10,12 @@
 
 {{ introduction_section }}
 
+<h3 class="page-header">
+    {{ 'Learnpaths' | get_lang }}
+</h3>
+
 {% for lp_data in data %}
-    <h3 class="page-header">
+    <div class="tools">
         {% if is_allowed_to_edit %}
             {% if (categories|length) > 1 %}
                 {{ lp_data.category.getName() }}
@@ -61,13 +65,13 @@
                 <img src="{{ "delete.png"|icon }}" alt="{{ "Delete"|get_lang }}">
             </a>
         {% endif %}
-    </h3>
+    </div>
 
     {% if lp_data.lp_list %}
         <div class="table-responsive">
-            <table class="table table-hover table-striped">
+            <table class="table table-ofaj">
                 <thead>
-                    <tr>
+                    <tr class="table-header">
                         <th>{{ "Title"|get_lang }}</th>
                         {% if is_allowed_to_edit %}
                             <th>{{ "PublicationDate"|get_lang }}</th>

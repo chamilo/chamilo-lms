@@ -6,25 +6,9 @@
     {% endif %}
             <div id="learning_path_left_zone" class="sidebar-scorm">
                 <div class="lp-view-zone-container">
-                    <div id="scorm-info">
+                    <div id="scorm-info" class="scorm-header">
                         <div id="panel-scorm" class="panel-body">
-                            <div class="image-avatar">
-                                    {% if lp_author == '' %}
-                                       <div class="text-center">
-                                            {{ lp_preview_image }}
-                                        </div>
-                                    {% else %}
-                                        <div class="media">
-                                            <div class="media-left">
-                                                {{ lp_preview_image }}
-                                            </div>
-                                            <div class="media-body">
-                                                <div class="description-autor"> {{ lp_author }} </div>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                </div>
-                                
+                                <h1 class="title">{{ lp_title_scorm }}</h1>
                                 {% if show_audio_player %}
                                     <div id="lp_media_file" class="audio-scorm">
                                         {{ media_player }}
@@ -84,6 +68,7 @@
                     </div>
 
                 {# TOC layout #}
+
                 <div id="toc_id" class="scorm-body" name="toc_name">
 <!--- supprimer pour OFAJ
                     <div id="learning_path_toc" class="scorm-list">

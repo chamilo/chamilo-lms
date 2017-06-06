@@ -504,7 +504,10 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_survey_invitation ADD COLUMN group_id INT NOT NULL");
         $this->addSql("ALTER TABLE c_lp_item ADD COLUMN prerequisite_min_score float");
         $this->addSql("ALTER TABLE c_lp_item ADD COLUMN prerequisite_max_score float");
-        $this->addSql("ALTER TABLE c_group_info ADD COLUMN status tinyint DEFAULT 1");
+        $table = $schema->getTable('c_group_info');
+        if (!$table->hasColumn('status')) {
+            $this->addSql("ALTER TABLE c_group_info ADD COLUMN status tinyint DEFAULT 1");
+        }
 
         $table = $schema->getTable('c_student_publication');
         if (!$table->hasColumn('document_id')) {

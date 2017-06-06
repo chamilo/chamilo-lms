@@ -82,10 +82,8 @@ if (!$culqiEnabled) {
     unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_CULQI]);
 }
 
-$form->addRadio('payment_type', null, $paymentTypesOptions);
-$form->addHtml('<h3 class="panel-heading">'.$plugin->get_lang('AdditionalInfo').'</h3>');
-$form->addHeader('');
 $form->addHtml(Display::return_message($plugin->get_lang('PleaseSelectThePaymentMethodBeforeConfirmYourOrder'), 'info'));
+$form->addRadio('payment_type', null, $paymentTypesOptions);
 $form->addHidden('t', intval($_GET['t']));
 $form->addHidden('i', intval($_GET['i']));
 $form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success');

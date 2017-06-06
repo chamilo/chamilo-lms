@@ -163,7 +163,6 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql('UNLOCK TABLES');
         $this->addSql("ALTER TABLE access_url_rel_course ADD COLUMN c_id int");
 
-        $this->addSql('LOCK TABLE session_rel_course WRITE');
         $table = $schema->getTable('session_rel_course');
         if (!$table->hasColumn('position')) {
             $this->addSql("ALTER TABLE session_rel_course ADD COLUMN position int NOT NULL default 0");
@@ -172,7 +171,6 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE session_rel_course ADD COLUMN c_id int unsigned NOT NULL");
         $this->addSql("ALTER TABLE session_rel_course CHANGE id_session session_id int");
         $this->addSql('DELETE FROM session_rel_course WHERE session_id NOT IN (SELECT id FROM session)');
-        $this->addSql('UNLOCK TABLES');
 
         $this->addSql("DELETE FROM course_rel_user WHERE course_code NOT IN (SELECT code FROM course)");
         $this->addSql("UPDATE course_rel_user SET c_id = (SELECT id FROM course WHERE code = course_code)");

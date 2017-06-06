@@ -720,12 +720,18 @@ if (!empty($filterToSend)) {
     $userEndDatePlus = api_get_utc_datetime(substr($userEndDatePlus, 0, 11). '23:59:59');
 
     // Special OFAJ date logic
+    if ($userEndDate == '') {
     $sql = " AND (
-        (s.access_start_date >= '$userStartDateMinus' AND s.access_end_date < '$userEndDatePlus') OR
-        (s.access_start_date >= '$userStartDateMinus' AND (s.access_end_date = '' OR s.access_end_date IS NULL)) OR 
-        ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
-    )";
-
+            (s.access_start_date >= '$userStartDateMinus') OR 
+            ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
+        )";
+    } else {
+        $sql = " AND (
+            (s.access_start_date >= '$userStartDateMinus' AND s.access_end_date < '$userEndDatePlus') OR
+            (s.access_start_date >= '$userStartDateMinus' AND (s.access_end_date = '' OR s.access_end_date IS NULL)) OR 
+            ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
+        )";
+    }
     $deleteFiliere = false;
 
     $extraFieldOptions = new ExtraFieldOption('session');

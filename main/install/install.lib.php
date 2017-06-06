@@ -1107,7 +1107,8 @@ function display_requirements(
         $deprecated = [
             api_get_path(SYS_CODE_PATH).'exercice/',
             api_get_path(SYS_CODE_PATH).'newscorm/',
-            api_get_path(SYS_PLUGIN_PATH).'ticket/'
+            api_get_path(SYS_PLUGIN_PATH).'ticket/',
+            api_get_path(SYS_PLUGIN_PATH).'skype/'
         ];
         $deprecatedToRemove = [];
 

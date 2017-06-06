@@ -2105,7 +2105,7 @@ class BuyCoursesPlugin extends Plugin
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
         $whereConditions = [
-            's.id <> ? ' => 0,
+            's.visibility <> ? ' => 0,
         ];
 
         if (!empty($name)) {

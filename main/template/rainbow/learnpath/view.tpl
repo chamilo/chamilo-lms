@@ -6,32 +6,16 @@
     {% endif %}
             <div id="learning_path_left_zone" class="sidebar-scorm">
                 <div class="lp-view-zone-container">
-                    <div id="scorm-info">
+                    <div id="scorm-info" class="scorm-header">
                         <div id="panel-scorm" class="panel-body">
-                            <div class="image-avatar">
-                                    {% if lp_author == '' %}
-                                       <div class="text-center">
-                                            {{ lp_preview_image }}
-                                        </div>
-                                    {% else %}
-                                        <div class="media">
-                                            <div class="media-left">
-                                                {{ lp_preview_image }}
-                                            </div>
-                                            <div class="media-body">
-                                                <div class="description-autor"> {{ lp_author }} </div>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                </div>
-                                
+                                <h1 class="title">{{ lp_title_scorm }}</h1>
                                 {% if show_audio_player %}
                                     <div id="lp_media_file" class="audio-scorm">
                                         {{ media_player }}
                                     </div>
                                 {% endif %}
                                 {% if gamification_mode == 1 %}
-                                    <!--- gamification -->    
+                                    <!--- gamification -->
                                     <div id="scorm-gamification">
                                         <div class="row">
                                             <div class="col-xs-6">
@@ -59,8 +43,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                   <!--- end gamification -->          
-                                {% else %}         
+                                   <!--- end gamification -->
+                                {% else %}
                                     <div id="progress_bar">
                                         {{ progress_bar }}
                                     </div>
@@ -84,11 +68,15 @@
                     </div>
 
                 {# TOC layout #}
+
                 <div id="toc_id" class="scorm-body" name="toc_name">
+<!--- supprimer pour OFAJ
                     <div id="learning_path_toc" class="scorm-list">
                         <h1 class="scorm-title">{{ lp_title_scorm }}</h1>
                         {{ lp_html_toc }}
                     </div>
+-->
+                    {% include template ~ '/learnpath/scorm_list.tpl' %}
                 </div>
                 {# end TOC layout #}
                 </div>
@@ -100,6 +88,9 @@
             {# right zone #}
             <div id="learning_path_right_zone" class="content-scorm">
                 <div class="lp-view-zone-container">
+                    <div class="title-learnpath pull-left">
+                        <h4>{{ lp_title_scorm }}</h4>
+                    </div>
                     <div id="lp_navigation_elem" class="navegation-bar pull-right text-right">
                         <a href="#" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">
                             {% if lp_mode == 'embedframe' %}
@@ -141,7 +132,7 @@
                                 </div>
                             </div>
                             <div role="tabpanel" class="tab-pane" id="lp-view-forum">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -149,7 +140,17 @@
             </div>
             {# end right Zone #}
 </div>
-
+{% if data_panel is not empty %}
+<script type="text/javascript">
+    $('#scorm-panel .panel .status-heading').on("click", function() {
+        $(this).siblings().find(".panel-heading").removeClass("on");
+        $(this).find(".panel-heading").toggleClass("on");
+    });
+    $('.section-list .list-item').click( function() {
+        $(this).addClass('active').siblings().removeClass('active');
+    });
+</script>
+{% endif %}
 <script>
     (function () {
         var LPViewUtils = {
@@ -190,7 +191,7 @@
                 $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
                 $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
             });
-            
+
             {% endif %}
 
             $('.lp-view-tabs').on('click', '.disabled', function (e) {

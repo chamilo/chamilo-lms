@@ -4,14 +4,14 @@
 	<meta charset="utf-8">
 	<title>{{ 'Certificate' | get_lang }}</title>
 </head>
-<body style="margin:0; padding:0; background-color: #92c647;">
-<table border="0" bgcolor="#92c647" cellpadding="0" cellspacing="0" align="center">
+<body>
+<table border="0" bgcolor="#92c647" cellpadding="0" cellspacing="0" align="center" width="80%">
     <tr>
         <td bgcolor="#92c647"><img src="{{ _p.web_css_theme }}images/header_top.png" style="display: block;"></td>
     </tr>
     <tr>
         <td>
-            <table border="0" cellspacing="0" cellpadding="0" width="100%">
+            <table border="0" cellspacing="0" cellpadding="0" width="100%"> 
                 <tr>
                     <td bgcolor="#92c647" width=58 height=91>
                         <img src="{{ _p.web_css_theme }}images/lado-b.png" style="display:block;">

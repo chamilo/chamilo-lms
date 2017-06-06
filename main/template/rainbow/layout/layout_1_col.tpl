@@ -1,6 +1,6 @@
 {% extends template ~ "/layout/main.tpl" %}
 {% block body %}
-    <div class="container">
+    <div class="container{{ fluid == true ? '-fluid':'' }}">
         {% include template ~ "/layout/page_body.tpl" %}
         {% block content %}
             {% if content is not null %}

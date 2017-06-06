@@ -1,4 +1,4 @@
-{% extends template ~ "/layout/main.tpl" %}
+{% extends template ~ "/layout/page.tpl" %}
 
 {% block body %}
     <script type="text/javascript">
@@ -8,133 +8,157 @@
             });
         });
     </script>
-
-    <div class="col-md-12">
-        <div class="row">
-            {% if show_courses %}
-                <div class="col-md-4">
-                    <div class="section-title-catalog">{{ 'Courses'|get_lang }}</div>
-                    {% if not hidden_links %}
-                        <form class="form-horizontal" method="post" action="{{ course_url }}">
+    <div class="row">
+        <div class="col-md-12">
+        <!-- header catalog session -->
+        <h2 class="title-session">{{ 'Sessions'|get_lang }}</h2>      	
+       	<div class="search-session">
+                <div class="row">
+                    <div class="col-md-6">
+                        <form method="post" action="{{ _p.web_self }}?action=display_sessions">
                             <div class="form-group">
-                                <div class="col-sm-12">
-                                    <input type="hidden" name="sec_token" value="{{ search_token }}">
-                                    <input type="hidden" name="search_course" value="1" />
-                                    <div class="input-group">
-                                        <input type="text" name="search_term" class="form-control" />
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-default" type="submit"><em class="fa fa-search"></em> {{ 'Search'|get_lang }}</button>
-                                        </span>
-                                    </div>
+                                <label>{{ "ByDate"|get_lang }}</label>
+                                <div class="input-group">
+                                    <input type="date" name="date" id="date" title="{{ 'Date'|get_lang }}"
+                                           class="form-control" value="{{ search_date }}" readonly>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">
+                                            <em class="fa fa-search"></em> {{ 'Search'|get_lang }}
+                                        </button>
+                                    </span>
                                 </div>
                             </div>
                         </form>
-                    {% endif %}
-                </div>
-            {% endif %}
-
-            <div class="col-md-8">
-                {% if show_sessions %}
-                    <div class="section-title-catalog">{{ 'Sessions'|get_lang }}</div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <form class="form-horizontal" method="post" action="{{ _p.web_self }}?action=display_sessions">
-                                <div class="form-group">
-                                    <label class="col-sm-3">{{ "ByDate"|get_lang }}</label>
-                                    <div class="col-sm-9">
-                                        <div class="input-group">
-                                            <input type="date" name="date" id="date" class="form-control" value="{{ search_date }}" readonly>
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-default" type="submit"><em class="fa fa-search"></em> {{ 'Search'|get_lang }}</button>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="col-md-6">
-                            <form class="form-horizontal" method="post" action="{{ _p.web_self }}?action=search_tag">
-                                <div class="form-group">
-                                    <label class="col-sm-4">{{ "ByTag"|get_lang }}</label>
-                                    <div class="col-sm-8">
-                                        <div class="input-group">
-                                            <input type="text" name="search_tag" class="form-control" value="{{ search_tag }}" />
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-default" type="submit"><em class="fa fa-search"></em> {{ 'Search'|get_lang }}</button>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
                     </div>
-                {% endif %}
+                    <div class="col-md-6">
+                        <form method="post" action="{{ _p.web_self }}?action=search_tag">
+                            <label>{{ "ByTag"|get_lang }}</label>
+                            <div class="input-group">
+                                <input type="text" name="search_tag" title="{{ 'ByTag'|get_lang }}" class="form-control"
+                                       value="{{ search_tag }}"/>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">
+                                        <em class="fa fa-search"></em> {{ 'Search'|get_lang }}
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
+       	{% if show_courses %}
+        <div class="return-catalog">
+        	<a class="btn btn-default btn-lg btn-block" href="{{ _p.web_self }}">
+            	<em class="fa fa-arrow-left"></em> {{ "CourseManagement"|get_lang }}
+            </a>
+       	</div>
+       	{% endif %}
         </div>
     </div>
-
-    <section id="session-list">
-        <div class="col-md-12">
+    <!-- new view session grib -->
+    <div class="row">
+        <div class="grid-courses col-md-12">
             <div class="row">
-                {% for session in sessions %}
-                    <div class="col-xs-6 col-sm-6 col-md-3 session-col">
-                        <div class="item" id="session-{{ session.id }}">
-                            <img src="{{ session.image ? _p.web_upload ~ session.image : _p.web_img ~ 'session_default.png' }}">
-
-                            <div class="information-item">
-                                <h3 class="title-session">
-                                    <a href="{{ _p.web ~ 'session/' ~ session.id ~ '/about/' }}" title="{{ session.name }}">
-                                        {{ session.name }}
-                                    </a>
-                                </h3>
-                                <ul class="list-unstyled">
-                                    {% if show_tutor %}
-                                        <li class="author-session">
-                                            <em class="fa fa-user"></em> {{ session.coach_name }}
-                                        </li>
-                                    {% endif %}
-                                    <li class="date-session">
-                                        <em class="fa fa-calendar-o"></em> {{ session.date }}
-                                    </li>
-                                    {% if session.tags %}
-                                        <li class="tags-session">
-                                            <em class="fa fa-tags"></em> {{ session.tags|join(', ')}}
-                                        </li>
-                                    {% endif %}
-                                </ul>
-
-                                <div class="options">
-                                    {% if not _u.logged %}
-                                        <p>
-                                            <a class="btn btn-info btn-block btn-sm" href="{{ "#{_p.web}session/#{session.id}/about/" }}" title="{{ session.name }}">{{ 'SeeCourseInformationAndRequirements'|get_lang }}</a>
-                                        </p>
-                                    {% else %}
-                                        <p>
-                                            <a class="btn btn-info btn-block btn-sm" role="button" data-toggle="popover" id="session-{{ session.id }}-sequences">{{ 'SeeSequences'|get_lang }}</a>
-                                        </p>
-                                        <p class="buttom-subscribed">
-                                            {% if session.is_subscribed %}
-                                                {{ already_subscribed_label }}
-                                            {% else %}
-                                                {{ session.subscribe_button }}
-                                            {% endif %}
-                                        </p>
-                                    {% endif %}
+                {% for item in sessions %}
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div id="session-{{ item.id }}" class="items items-courses">
+                            <div class="image">
+                                <a href="{{ _p.web ~ 'session/' ~ item.id ~ '/about/' }}" title="{{ item.name }}">
+                                	<img class="img-responsive" src="{{ item.image ? _p.web_upload ~ item.image : 'session_default.png'|icon() }}">
+                                </a>
+                                {% if item.category != '' %}
+                                    <span class="category">{{ item.category }}</span>
+                                    <div class="cribbon"></div>
+                                {% endif %}
+                                <div class="admin-actions">
+                                    <div class="btn-group" role="group">
+                                        {% if item.edit_actions != '' %}
+                                            <a class="btn btn-default btn-sm" href="{{ item.edit_actions }}">
+                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                            </a>
+                                        {% endif %}
+                                        {% if item.is_subscribed %}
+                                            {{ already_subscribed_label }}
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
-
+                            <div class="description">
+                            	<div class="block-title">
+                            		<h4 class="title">
+                                    	<a href="{{ _p.web ~ 'session/' ~ item.id ~ '/about/' }}" title="{{ item.name }}">
+                                        	{{ item.name }}
+                                    	</a>
+                                	</h4>
+                            	</div>
+                            	{% if show_tutor %}
+                            	<div class="block-author">
+                                	<div class="author-card">
+                                    	<a href="{{ item.coach_url }}" class="ajax" data-title="{{ item.coach_name }}">
+                                        	<img src="{{ item.coach_avatar }}"/>
+                                    	</a>
+                                   		<div class="teachers-details">
+                                        	<h5>
+                                            	<a href="{{ item.coach_url }}" class="ajax" data-title="{{ item.coach_name }}">
+                                                   {{ item.coach_name }}
+                                            	</a>
+                                        	</h5>
+                                        	<p>{{ 'SessionGeneralCoach'|get_lang }}</p>
+                                        </div>
+                                   </div>
+                            	</div>
+                            	{% endif %}
+                            	<div class="block-info">
+                                    <ul class="info list-inline">
+                                        <li>
+                                            <i class="fa fa-book" aria-hidden="true"></i>
+                                            {{ item.nbr_courses ~ ' ' ~ 'Courses'|get_lang }}
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-user" aria-hidden="true"></i>
+                                            {{ item.nbr_users ~ ' ' ~ 'NbUsers'|get_lang }}
+                                        </li>
+                                    </ul>
+                            	</div>
+                                <div class="block-date">
+                                    {{ item.duration ? 'SessionDurationXDaysLeft'|get_lang|format(item.duration) : item.date }}
+                                </div>
+                                <div class="toolbar">
+                                    <div class="left">
+                                        {% if item.price %}
+                                            {{ item.price }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="right">
+                                    	{% if _u.logged %}
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            {% if not item.sequences is empty %}
+                                                <a class="btn btn-default btn-sm" role="button"
+                                                   title="{{ 'SeeSequences'|get_lang }}" data-toggle="popover"
+                                                   id="session-{{ item.id }}-sequences">
+                                                    <i class="fa fa-sitemap" aria-hidden="true"></i>
+                                                </a>
+                                            {% endif %}
+                                            {% if item.is_subscribed == false %}
+                                                {{ item.subscribe_button }}
+                                            {% endif %}
+                                        </div>
+                                    	{% endif %}
+                                    </div>
+                                    
+                                </div>
+                            </div>
                             {% if _u.logged %}
                                 <script>
-                                    $('#session-{{ session.id }}-sequences').popover({
+                                    $('#session-{{ item.id }}-sequences').popover({
                                         placement: 'bottom',
                                         html: true,
                                         trigger: 'click',
                                         content: function () {
                                             var content = '';
 
-                                            {% if session.sequences %}
-                                                {% for sequence in session.sequences %}
+                                            {% if item.sequences %}
+                                                {% for sequence in item.sequences %}
                                                     content += '<p class="lead">{{ sequence.name }}</p>';
 
                                                     {% if sequence.requirements %}
@@ -163,7 +187,7 @@
                                                         content += '</ul>';
                                                     {% endif %}
 
-                                                    {% if session.sequences|length > 1 %}
+                                                    {% if item.sequences|length > 1 %}
                                                         content += '<hr>';
                                                     {% endif %}
                                                 {% endfor %}
@@ -187,8 +211,7 @@
                 {% endfor %}
             </div>
         </div>
-    </section>
-
+    </div>
+    <!-- end view session grib -->
     {{ catalog_pagination }}
-
 {% endblock %}

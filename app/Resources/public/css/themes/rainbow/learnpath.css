@@ -1,17 +1,39 @@
 #learning_path_breadcrumb_zone .breadcrumb{
-    background-color: #ECF0F1;
+    background-color: #FFF;
+    color: #6B1D82;
+    border-bottom: 1px solid #84bd00;
+    padding: 10px 15px;
 }
 #learning_path_breadcrumb_zone .breadcrumb a{
-    color: #000;
+    color: #6B1D82;
+}
+#learning_path_breadcrumb_zone .breadcrumb a:hover{
+    color: #162A83
+}
+.lp-view-zone-container .scorm-header{
+    background-color: #84bd00;
+    border: none !important;
+    border-radius: 0 !important;
+}
+.icon-toolbar .fa{
+    background-color: #162A83;
+}
+#scorm-info hr{
+    background-color: #84bd00;
+}
+#scorm-info .title{
+    color: #162A83;
+    margin: 10px 0 20px 0;
+    font-size: 16px;
 }
 .scorm_item_level_1{
- padding: 0 2.5em 0 1.5em;   
+ padding: 0 2.5em 0 1.5em;
 }
 .scorm_item_level_0{
- padding: 0 2.5em 0 0; 
+ padding: 0 2.5em 0 0;
 }
 .scorm_item_level_2{
- padding: 0 2.5em 0 3em;   
+ padding: 0 2.5em 0 3em;
 }
 .expand .fa{
     background-color: #96BD0D;
@@ -27,17 +49,28 @@
     color: #96BD0D !important;
 }
 .scorm_item_section{
-    -webkit-border-top-left-radius: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-topright: 5px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    color: #162A83;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    font-weight: bold;
+    background: #E1E1E1;
 }
 .lp-view-include-breadcrumb {
   background-color: #ffffff;
 }
-
+.title-learnpath{
+    padding-left: 20px;
+    padding-top: 10px;
+}
+.title-learnpath h4{
+    color: #162a83;
+    font-weight: bold;
+}
 div.text {
 	margin-left : 6;
 	margin-right : 6;
@@ -49,7 +82,7 @@ span.messagesmall {
 	font-style : italic;
 	color : Red;
 }
-/* newscorm/learnpath */ 
+/* newscorm/learnpath */
 
 div.lp_actions {
 	background:#F8F8F8;
@@ -249,25 +282,43 @@ table.lp_overview tr:hover {
 table.lp_overview img {
 	margin-left:3px;
 }
+#learning_path_toc{
+    padding: 0;
+}
+.scorm_item_normal {
+    line-height: 25px;
+    border-bottom: 1px solid #DDD;
+    padding: 10px 5px;
+    background-color: #F5F5F5;
+}
 .scorm_item_normal a.items-list{
     line-height: 18px;
 }
-.scorm_type_document .items-list{
-	display: block;
-    background: url('images/text.png') no-repeat right center;
-    padding-bottom: 5px;
-    padding-top: 5px;
-    padding-right: 25px;
+.scorm_item_section .section {
+    background: url(images/folder-item-closed.png) no-repeat 5px center;
 }
-.scorm_type_quiz .items-list{
-	display: block;
-    background: url('images/pencil.png') no-repeat right center;
-    padding-bottom: 5px;
-    padding-top: 5px;
-    padding-right: 25px;
+.scorm_item_section.scorm_completed {
+    color: #162A83;
+}
+.scorm_item_section.scorm_completed .section {
+    background: url(images/folder-item-open.png) no-repeat 5px center;
+    padding-right: 1.5em;
+}
+.scorm_completed .item {
+    background: url(images/completed.png) no-repeat 0 center;
+}
+.scorm_highlight.scorm_completed .item {
+    background: url(images/completed-active.png) no-repeat 0 center !important;
+}
+.scorm_not_attempted .item {
+    background: url(images/not-completed.png) no-repeat 0 center;
+}
+.scorm_highlight .item {
+    background: url(images/not-completed-active.png) no-repeat 0 center !important;
+    color: #009AB8;
 }
 .scorm_item_normal.scorm_highlight{
-	background-color: #162A83;
+	background-color: #772583;
 }
 .scorm_item_normal.scorm_highlight a{
 	color: #FFFFFF !important;
@@ -296,3 +347,93 @@ table.lp_overview img {
     margin: 0 0.5em 0 90px;
     padding-left: 25px;
 }
+/* nuevo scorm */
+#scorm-panel .panel-default .panel-heading{
+    padding: 0;
+}
+#scorm-panel .panel-default .panel-heading a{
+    color: #162A83;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 30px;
+    padding-right: 15px;
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    font-weight: bold;
+    background: url(images/arrow-right.png) no-repeat #E1E1E1 5px center;
+}
+#scorm-panel .panel-default .panel-heading.on a{
+    background: url(images/arrow-down.png) no-repeat #E1E1E1 5px center;
+}
+.section-list li{
+    background-color: #E1E1E1;
+    padding: 10px 10px 10px 50px;
+    border-bottom: 1px solid #84BD00;
+    font-size: 12px;
+}
+.section-list li.final{
+    border-bottom: 1px solid #E1E1E1;
+}
+.section-list li.scorm_item_normal.scorm_highlight{
+    background: url(images/not-completed-active.png) no-repeat  #772583 30px center;
+}
+.section-list li.scorm_completed.scorm_item_normal{
+    background: url(images/completed.png) no-repeat  #ECF0F1 30px center;
+}
+.section-list li.scorm_completed.scorm_item_normal.scorm_highlight{
+    background: url(images/completed-active.png) no-repeat  #772583 30px center;
+}
+.section-list li.scorm_not_attempted.scorm_item_normal{
+    background: url(images/not-completed.png) no-repeat  #ECF0F1 30px center;
+}
+.section-list li.scorm_item_normal.scorm_highlight.scorm_not_attempted{
+    background: url(images/not-completed-active.png) no-repeat  #772583 30px center;
+}
+.section-list li.scorm_item_normal{
+    color: #162A83;
+}
+.section-list .sub-item{
+    padding-right: 30px;
+}
+.scorm_type_document .items-list{
+    display: block;
+    background: url('images/document.png') no-repeat right center;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-right: 25px;
+}
+.scorm_highlight .scorm_type_document .items-list{
+    display: block;
+    background: url('images/document-active.png') no-repeat right center;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-right: 25px;
+}
+.scorm_type_quiz .items-list{
+    display: block;
+    background: url('images/pencil.png') no-repeat right center;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-right: 25px;
+}
+.scorm_highlight .scorm_type_quiz .items-list{
+    display: block;
+    background: url('images/pencil-active.png') no-repeat right center;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-right: 25px;
+}
+.section-list .sub-item.type-document{
+    background: url(images/document.png) no-repeat center right;
+}
+.section-list .sub-item.type-quiz{
+    background: url(images/pencil.png) no-repeat center right;
+}
+.section-list .scorm_highlight .sub-item.type-document{
+    background: url(images/document-active.png) no-repeat center right;
+}
+.section-list .scorm_highlight .sub-item.type-quiz{
+    background: url(images/pencil-active.png) no-repeat center right;
+}
+/* nuevo css */

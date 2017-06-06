@@ -166,6 +166,7 @@ class Database
             function ($class) use ($sysPath) {
                 $file = str_replace("\\", DIRECTORY_SEPARATOR, $class).".php";
                 $file = str_replace('Symfony/Component/Validator', '', $file);
+                $file = str_replace('Symfony\Component\Validator', '', $file);
                 $fileToInclude = $sysPath.'vendor/symfony/validator/'.$file;
 
                 if (file_exists($fileToInclude)) {

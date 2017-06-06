@@ -23,6 +23,7 @@
 </div>
 {% endif %}
 {% if data_panel is not empty %}
+<div id="learning_path_toc" class="scorm-list">
 <div class="panel-group" id="scorm-panel" role="tablist" aria-multiselectable="true">
   {% for item in data_panel.are_parents %}
   <div class="panel panel-default">
@@ -67,5 +68,6 @@
             </li>
         {% endfor %}
     </ul>
+</div>
 </div>
 {% endif %}

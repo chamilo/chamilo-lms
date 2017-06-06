@@ -6886,7 +6886,7 @@ class TrackingCourseLog
         $table_user_field_values = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $extraField = Database::get_main_table(TABLE_EXTRA_FIELD);
         $result_extra_field = UserManager::get_extra_field_information($field_id);
-
+        $return = [];
         if (!empty($users)) {
             if ($result_extra_field['field_type'] == UserManager::USER_FIELD_TYPE_TAG) {
                 foreach ($users as $user_id) {

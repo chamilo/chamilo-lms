@@ -194,6 +194,12 @@ if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 switch ($action) {
+    case 'generate_certificate':
+        // ofaj
+        $certificate = new Certificate(0, $student_id);
+        $certificate->generatePdfFromCustomCertificate();
+        exit;
+        break;
     case 'send_legal':
         $subject = get_lang('SendLegalSubject');
         $content = sprintf(

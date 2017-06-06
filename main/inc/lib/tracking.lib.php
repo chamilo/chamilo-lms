@@ -6832,7 +6832,7 @@ class TrackingCourseLog
 
         // the select field with the additional user profile fields (= this is where we select the field of which we want to see
         // the information the users have entered or selected.
-        $return .= '<select class="chozn" name="additional_profile_field[]" multiple>';
+        $return .= '<select class="chzn-select" name="additional_profile_field[]" multiple>';
         $return .= '<option value="-">'.get_lang('SelectFieldToAdd').'</option>';
         $extra_fields_to_show = 0;
         foreach ($extra_fields as $key=>$field) {

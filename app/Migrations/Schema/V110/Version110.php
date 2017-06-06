@@ -132,7 +132,8 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE track_e_online CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT ''");
         $this->addSql("ALTER TABLE track_e_login CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT ''");
 
-		$this->addSql("ALTER TABLE user MODIFY COLUMN user_id int unsigned NOT NULL");
+        $this->addSql('LOCK TABLE user');
+        $this->addSql("ALTER TABLE user MODIFY COLUMN user_id int unsigned NOT NULL");
         $this->addSql("ALTER TABLE user DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE user MODIFY COLUMN user_id int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE user ADD COLUMN id INT DEFAULT NULL");
@@ -144,6 +145,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE user MODIFY COLUMN chatcall_user_id int unsigned default 0");
         $this->addSql("ALTER TABLE user MODIFY COLUMN expiration_date datetime default NULL");
         $this->addSql("ALTER TABLE user MODIFY COLUMN registration_date datetime NOT NULL");
+        $this->addSql('UNLOCK TABLE user');
 
         $table = $schema->getTable('course');
         if (!$table->hasColumn('add_teachers_to_sessions_courses')) {
@@ -154,15 +156,23 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE course_rel_user ADD COLUMN c_id int default NULL");
         $this->addSql("ALTER TABLE course_field_values ADD COLUMN c_id int default NULL");
 
+        $this->addSql('LOCK TABLE session_rel_course_rel_user');
         $this->addSql("ALTER TABLE session_rel_course_rel_user ADD COLUMN c_id int NOT NULL");
         $this->addSql("ALTER TABLE session_rel_course_rel_user CHANGE id_session session_id int");
         $this->addSql("ALTER TABLE session_rel_course_rel_user CHANGE id_user user_id int");
+        $this->addSql('UNLOCK TABLE session_rel_course_rel_user');
         $this->addSql("ALTER TABLE access_url_rel_course ADD COLUMN c_id int");
-        $this->addSql("ALTER TABLE session_rel_course ADD COLUMN position int NOT NULL default 0");
+
+        $this->addSql('LOCK TABLE session_rel_course');
+        $table = $schema->getTable('session_rel_course');
+        if (!$table->hasColumn('position')) {
+            $this->addSql("ALTER TABLE session_rel_course ADD COLUMN position int NOT NULL default 0");
+        }
         $this->addSql("ALTER TABLE session_rel_course ADD COLUMN category varchar(255) default ''");
         $this->addSql("ALTER TABLE session_rel_course ADD COLUMN c_id int unsigned NOT NULL");
         $this->addSql("ALTER TABLE session_rel_course CHANGE id_session session_id int");
         $this->addSql('DELETE FROM session_rel_course WHERE session_id NOT IN (SELECT id FROM session)');
+        $this->addSql('UNLOCK TABLE session_rel_course');
 
         $this->addSql("DELETE FROM course_rel_user WHERE course_code NOT IN (SELECT code FROM course)");
         $this->addSql("UPDATE course_rel_user SET c_id = (SELECT id FROM course WHERE code = course_code)");

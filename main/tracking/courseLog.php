@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * @package chamilo.tracking
  */
@@ -182,25 +184,29 @@ if (empty($session_id)) {
 
 $nbStudents = count($a_students);
 $extra_info = array();
-
+$userProfileInfo = [];
 // Getting all the additional information of an additional profile field.
-if (isset($_GET['additional_profile_field']) &&
-    is_numeric($_GET['additional_profile_field'])
-) {
+if (isset($_GET['additional_profile_field'])) {
     $user_array = array();
     foreach ($a_students as $key => $item) {
         $user_array[] = $key;
     }
-    // Fetching only the user that are loaded NOT ALL user in the portal.
-    $additional_user_profile_info = TrackingCourseLog::get_addtional_profile_information_of_field_by_user(
-        $_GET['additional_profile_field'],
-        $user_array
-    );
 
-    $extra_info = UserManager::get_extra_field_information(
-        $_GET['additional_profile_field']
-    );
+    foreach ($_GET['additional_profile_field'] as $fieldId) {
+         // Fetching only the user that are loaded NOT ALL user in the portal.
+        $userProfileInfo[$fieldId] = TrackingCourseLog::get_addtional_profile_information_of_field_by_user(
+            $fieldId,
+            $user_array
+        );
+
+        $extra_info[$fieldId] = UserManager::get_extra_field_information(
+            $fieldId
+        );
+    }
 }
+
+Session::write('additional_user_profile_info', $userProfileInfo);
+Session::write('extra_field_info', $extra_info);
 
 // Display the header.
 Display::display_header($nameTools, 'Tracking');
@@ -439,10 +445,15 @@ if (count($a_students) > 0) {
         $headers['first_login'] = get_lang('FirstLoginInCourse');
         $table->set_header(14, get_lang('LatestLoginInCourse'), false);
         $headers['latest_login'] = get_lang('LatestLoginInCourse');
-        if (isset($_GET['additional_profile_field']) and is_numeric($_GET['additional_profile_field'])) {
-            $table->set_header(15, $extra_info['display_text'], false);
-            $headers['display_text'] = $extra_info['display_text'];
-            $table->set_header(16, get_lang('Details'), false);
+        if (isset($_GET['additional_profile_field'])) {
+            $counter = 15;
+            foreach ($_GET['additional_profile_field'] as $fieldId) {
+                $table->set_header($counter, $extra_info[$fieldId]['display_text'], false);
+                $headers[$extra_info[$fieldId]['variable']] = $extra_info[$fieldId]['display_text'];
+                $counter++;
+            }
+
+            $table->set_header($counter, get_lang('Details'), false);
             $headers['details'] = get_lang('Details');
         } else {
             $table->set_header(15, get_lang('Details'), false);
@@ -454,11 +465,13 @@ if (count($a_students) > 0) {
         $table->set_header(13, get_lang('LatestLoginInCourse'), false);
         $headers['latest_login'] = get_lang('LatestLoginInCourse');
 
-        if (isset($_GET['additional_profile_field']) and is_numeric($_GET['additional_profile_field'])) {
-            $table->set_header(14, $extra_info['display_text'], false);
-            $headers['display_text'] = $extra_info['display_text'];
-            $table->set_header(15, get_lang('Details'), false);
-            $headers['Details'] = get_lang('Details');
+        if (isset($_GET['additional_profile_field'])) {
+            $counter = 15;
+            foreach ($_GET['additional_profile_field'] as $fieldId) {
+                $table->set_header($counter, $extra_info[$fieldId]['display_text'], false);
+                $headers[$extra_info[$fieldId]['variable']] = $extra_info[$fieldId]['display_text'];
+                $counter++;
+            }
         } else {
             $table->set_header(14, get_lang('Details'), false);
             $headers['Details'] = get_lang('Details');
@@ -520,8 +533,10 @@ if ($export_csv) {
     $csv_headers[] = get_lang('FirstLoginInCourse', '');
     $csv_headers[] = get_lang('LatestLoginInCourse', '');
 
-    if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_profile_field'])) {
-        $csv_headers[] = $extra_info['display_text'];
+    if (isset($_GET['additional_profile_field'])) {
+        foreach ($_GET['additional_profile_field'] as $fieldId) {
+            $csv_headers[] = $extra_info[$fieldId]['display_text'];
+        }
     }
     ob_end_clean();
     array_unshift($csv_content, $csv_headers); // Adding headers before the content.

@@ -6832,7 +6832,7 @@ class TrackingCourseLog
 
         // the select field with the additional user profile fields (= this is where we select the field of which we want to see
         // the information the users have entered or selected.
-        $return .= '<select name="additional_profile_field">';
+        $return .= '<select class="chozn" name="additional_profile_field[]" multiple>';
         $return .= '<option value="-">'.get_lang('SelectFieldToAdd').'</option>';
         $extra_fields_to_show = 0;
         foreach ($extra_fields as $key=>$field) {
@@ -6980,7 +6980,7 @@ class TrackingCourseLog
      */
     public static function get_user_data($from, $number_of_items, $column, $direction, $includeInvitedUsers = false)
     {
-        global $user_ids, $course_code, $additional_user_profile_info, $export_csv, $is_western_name_order, $csv_content, $session_id;
+        global $user_ids, $course_code, $export_csv, $is_western_name_order, $csv_content, $session_id;
 
         $course_code = Database::escape_string($course_code);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -7152,17 +7152,6 @@ class TrackingCourseLog
                 $session_id
             );
 
-            // we need to display an additional profile field
-            $user['additional'] = '';
-
-            if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_profile_field'])) {
-                if (isset($additional_user_profile_info[$user['user_id']]) &&
-                    is_array($additional_user_profile_info[$user['user_id']])
-                ) {
-                    $user['additional'] = implode(', ', $additional_user_profile_info[$user['user_id']]);
-                }
-            }
-
             if (empty($session_id)) {
                 $user['survey'] = (isset($survey_user_list[$user['user_id']]) ? $survey_user_list[$user['user_id']] : 0).' / '.$total_surveys;
             }
@@ -7202,8 +7191,25 @@ class TrackingCourseLog
 
             $user_row['first_connection'] = $user['first_connection'];
             $user_row['last_connection'] = $user['last_connection'];
-            if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_profile_field'])) {
-                $user_row['additional'] = $user['additional'];
+
+            // we need to display an additional profile field
+            if (isset($_GET['additional_profile_field'])) {
+                $data = \System\Session::read('additional_user_profile_info');
+                $extraFieldInfo = \System\Session::read('extra_field_info');
+                foreach ($_GET['additional_profile_field'] as $fieldId) {
+                    if (isset($data[$fieldId]) && isset($data[$fieldId][$user['user_id']])) {
+                        if (is_array($data[$fieldId][$user['user_id']])) {
+                            $user_row[$extraFieldInfo[$fieldId]['variable']] = implode(
+                                ', ',
+                                $data[$fieldId][$user['user_id']]
+                            );
+                        } else {
+                            $user_row[$extraFieldInfo[$fieldId]['variable']] = $data[$fieldId][$user['user_id']];
+                        }
+                    } else {
+                        $user_row[$extraFieldInfo[$fieldId]['variable']] = '';
+                    }
+                }
             }
 
             $user_row['link'] = $user['link'];
@@ -7222,6 +7228,10 @@ class TrackingCourseLog
 
             $users[] = array_values($user_row);
         }
+
+        \System\Session::erase('additional_user_profile_info');
+        \System\Session::erase('extra_field_info');
+
         return $users;
     }
 }

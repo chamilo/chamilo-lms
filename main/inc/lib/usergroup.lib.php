@@ -529,6 +529,7 @@ class UserGroup extends Model
      */
     public function getUserGroupListByUser($userId, $filterByType = null)
     {
+        $userId = (int) $userId;
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
             $from = $this->usergroup_rel_user_table." u
@@ -547,7 +548,7 @@ class UserGroup extends Model
         }
 
         if ($filterByType !== null) {
-            $where['where'][' AND g.group_type = ?'] = intval($filterByType);
+            $where['where'][' AND g.group_type = ?'] = (int) $filterByType;
         }
 
         $results = Database::select(

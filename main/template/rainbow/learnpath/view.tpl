@@ -70,12 +70,6 @@
                 {# TOC layout #}
 
                 <div id="toc_id" class="scorm-body" name="toc_name">
-<!--- supprimer pour OFAJ
-                    <div id="learning_path_toc" class="scorm-list">
-                        <h1 class="scorm-title">{{ lp_title_scorm }}</h1>
-                        {{ lp_html_toc }}
-                    </div>
--->
                     {% include template ~ '/learnpath/scorm_list.tpl' %}
                 </div>
                 {# end TOC layout #}

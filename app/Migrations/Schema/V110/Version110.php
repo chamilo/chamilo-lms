@@ -559,7 +559,13 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("DELETE FROM settings_current WHERE variable = 'advanced_filemanager'");
         $this->addSql("DELETE FROM settings_options WHERE variable = 'advanced_filemanager'");
 
-        $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('institution_address', NULL, 'textfield', 'Platform', '', 'InstitutionAddressTitle', 'InstitutionAddressComment', NULL, NULL, 1)");
+        // Fixes missing options show_glossary_in_extra_tools
+        $sql = "SELECT * FROM settings_current WHERE variable = 'institution_address'";
+        $result = $connection->executeQuery($sql);
+        $count = $result->rowCount();
+        if (empty($count)) {
+            $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('institution_address', NULL, 'textfield', 'Platform', '', 'InstitutionAddressTitle', 'InstitutionAddressComment', NULL, NULL, 1)");
+        }
         $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('prevent_session_admins_to_manage_all_users', NULL, 'radio', 'Session', 'false', 'PreventSessionAdminsToManageAllUsersTitle', 'PreventSessionAdminsToManageAllUsersComment', NULL, NULL, 1)");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('prevent_session_admins_to_manage_all_users', 'true', 'Yes'), ('prevent_session_admins_to_manage_all_users', 'false', 'No')");
 

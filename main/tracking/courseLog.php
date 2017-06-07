@@ -245,8 +245,11 @@ $actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.pri
 
 $addional_param = '';
 if (isset($_GET['additional_profile_field'])) {
-    $addional_param = 'additional_profile_field='.intval($_GET['additional_profile_field']);
+    foreach ($_GET['additional_profile_field'] as $fieldId) {
+        $addional_param .= '&additional_profile_field[]='. (int) $fieldId;
+    }
 }
+
 $users_tracking_per_page = '';
 if (isset($_GET['users_tracking_per_page'])) {
     $users_tracking_per_page = '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);

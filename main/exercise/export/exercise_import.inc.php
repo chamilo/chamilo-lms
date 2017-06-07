@@ -860,7 +860,6 @@ function endElementQti1($parser, $name, $attributes)
     }
 
     //treat the record of the full content of itembody tag :
-
     if ($record_item_body && (!in_array($current_element, $non_HTML_tag_to_avoid))) {
         $current_question_item_body .= "</".$name.">";
     }
@@ -1002,7 +1001,6 @@ function elementDataQti1($parser, $data)
                 $exercise_info['question'][$current_question_ident]['weighting'][$lastLabelFieldValue] = $data;
             }
             break;
-
     }
 }
 
@@ -1016,6 +1014,7 @@ function isQtiQuestionBank($filePath)
     $data = file_get_contents($filePath);
     if (!empty($data)) {
         $match = preg_match('/ims_qtiasiv(\d)p(\d)/', $data);
+        // @todo allow other types
         //$match2 = preg_match('/imsqti_v(\d)p(\d)/', $data);
 
         if ($match) {

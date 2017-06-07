@@ -546,7 +546,6 @@ class UserGroup extends Model
                 ";
             $where = array('where' => array('user_id = ?' => $userId));
         }
-        var_dump($where);
 
         if ($filterByType !== null) {
             $where['where'][' AND g.group_type = ?'] = intval($filterByType);

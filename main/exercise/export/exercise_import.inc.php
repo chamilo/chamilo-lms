@@ -30,8 +30,8 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
         return false;
     }
 
-    if (preg_match('/.zip$/i', $_FILES['userFile']['name']) &&
-        handle_uploaded_document(
+    if (preg_match('/.zip$/i', $_FILES['userFile']['name'])) {
+        $result = handle_uploaded_document(
             $_course,
             $_FILES['userFile'],
             $baseWorkDir,
@@ -46,9 +46,8 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
             null,
             null,
             false
-        )
-    ) {
-        return true;
+        );
+        return $result;
     }
     return false;
 }
@@ -85,7 +84,6 @@ function import_exercise($file)
     $exercise_info['name'] = preg_replace('/.zip$/i', '', $file);
     $exercise_info['question'] = array();
     $element_pile = array();
-
     // create parser and array to retrieve info from manifest
     $element_pile = array(); //pile to known the depth in which we are
 
@@ -178,7 +176,6 @@ function import_exercise($file)
     $last_exercise_id = $exercise->selectId();
     $courseId = api_get_course_int_id();
     if (!empty($last_exercise_id)) {
-        //var_dump($exercise_info);exit;
         // For each question found...
         foreach ($exercise_info['question'] as $question_array) {
             //2. Create question
@@ -253,6 +250,7 @@ function import_exercise($file)
                 } else {
                     $answer->new_correct[$i] = 0;
                 }
+
                 if (isset($question_array['weighting'][$key])) {
                     $answer->new_weighting[$i] = $question_array['weighting'][$key];
                 }
@@ -260,6 +258,7 @@ function import_exercise($file)
                     $totalCorrectWeight += $answer->new_weighting[$i];
                 }
             }
+
             $question->updateWeighting($totalCorrectWeight);
             $question->save($exercise);
             $answer->save();
@@ -616,7 +615,6 @@ function elementDataQti2($parser, $data)
     }
 
     //treat the record of the full content of itembody tag (needed for question statment and/or FIB text:
-
     if ($record_item_body && (!in_array($current_element, $non_HTML_tag_to_avoid))) {
         $current_question_item_body .= $data;
     }
@@ -640,9 +638,10 @@ function elementDataQti2($parser, $data)
             $exercise_info['question'][$current_question_ident]['answer'][$current_match_set][$currentAssociableChoice] = trim($data);
             break;
         case 'VALUE':
-            if ($parent_element == "CORRECTRESPONSE") {
-                if ($cardinality == "single") {
-                    $exercise_info['question'][$current_question_ident]['correct_answers'][$current_answer_id] = $data;
+            if ($parent_element == 'CORRECTRESPONSE') {
+                if ($cardinality == 'single') {
+                    //$exercise_info['question'][$current_question_ident]['correct_answers'][$current_answer_id] = $data;
+                    $exercise_info['question'][$current_question_ident]['correct_answers'][$data] = $data;
                 } else {
                     $exercise_info['question'][$current_question_ident]['correct_answers'][] = $data;
                 }
@@ -1017,6 +1016,8 @@ function isQtiQuestionBank($filePath)
     $data = file_get_contents($filePath);
     if (!empty($data)) {
         $match = preg_match('/ims_qtiasiv(\d)p(\d)/', $data);
+        //$match2 = preg_match('/imsqti_v(\d)p(\d)/', $data);
+
         if ($match) {
             return true;
         }

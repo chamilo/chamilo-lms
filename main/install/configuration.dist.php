@@ -416,6 +416,7 @@ $_configuration['agenda_legend'] = [
 // The provided default is an *example*, please customize.
 // This setting is particularly complicated to set with CKeditor
 //$_configuration['security_content_policy'] = 'default-src \'self\'; script-src *://*.google.com:*';
+//$_configuration['security_content_policy_report_only'] = 'default-src \'self\'; script-src *://*.google.com:*';
 //
 // HTTP Public Key Pinning protects your site from MiTM attacks using rogue
 // X.509 certificates. By whitelisting only the identities that the browser

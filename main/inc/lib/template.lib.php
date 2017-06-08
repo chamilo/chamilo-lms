@@ -1512,6 +1512,10 @@ class Template
         if (!empty($setting)) {
             header('Content-Security-Policy: '.$setting);
         }
+        $setting = api_get_configuration_value('security_content_policy_report_only');
+        if (!empty($setting)) {
+            header('Content-Security-Policy-Report-Only: '.$setting);
+        }
         // Public-Key-Pins
         $setting = api_get_configuration_value('security_public_key_pins');
         if (!empty($setting)) {

@@ -173,7 +173,7 @@ class ExtraField extends Model
         $query->where('e.extraFieldType = :type');
         $query->setParameter('type', $this->getExtraFieldType());
 
-        return $query->getQuery()->getScalarResult();
+        return $query->getQuery()->getSingleScalarResult();
     }
 
     /**

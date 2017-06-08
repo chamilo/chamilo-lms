@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="position", columns={"position"})
  *  }
  * )
- * @ORM\Entity(repositoryClass="CQuizQuestionRepository")
+ * @ORM\Entity()
  */
 class CQuizQuestion
 {

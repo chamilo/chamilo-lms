@@ -414,6 +414,7 @@ $_configuration['agenda_legend'] = [
 // XSS attacks. By whitelisting sources of approved content, you can prevent
 // the browser from loading malicious assets.
 // The provided default is an *example*, please customize.
+// This setting is particularly complicated to set with CKeditor
 //$_configuration['security_content_policy'] = 'default-src \'self\'; script-src *://*.google.com:*';
 //
 // HTTP Public Key Pinning protects your site from MiTM attacks using rogue

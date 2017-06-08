@@ -49,8 +49,8 @@ class ExerciseShowFunctions
             echo '</td></tr>';
         } else {
             ?>
-            <tr>
-                <td>
+            <tr">
+                <td>s
                     <?php echo nl2br(Security::remove_XSS($answerHTML, COURSEMANAGERLOWSECURITY)); ?>
                 </td>
 

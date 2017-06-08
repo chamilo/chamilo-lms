@@ -1204,9 +1204,11 @@ class FillBlanks extends Question
             }
         }
 
-        $style = "color: green";
+        $style = "feedback-green";
+        $iconAnswer = Display::return_icon('attempt-check.png', get_lang('Correct'), null, ICON_SIZE_SMALL);
         if (!$right) {
-            $style = "color: red; text-decoration: line-through;";
+            $style = "feedback-red";
+            $iconAnswer = Display::return_icon('attempt-nocheck.png', get_lang('Fault'), null, ICON_SIZE_SMALL);
         }
         $type = self::getFillTheBlankAnswerType($correct);
         switch ($type) {
@@ -1229,22 +1231,22 @@ class FillBlanks extends Question
                 if (count($listCorrects) > 0) {
                     $firstCorrect = $listCorrects[0];
                 }
-                $correctAnswerHtml = "<span style='color: green'>".$firstCorrect."</span>";
+                $correctAnswerHtml = "<span style='feedback-red'>".$firstCorrect."</span>";
                 break;
             case self::FILL_THE_BLANK_STANDARD:
             default:
-                $correctAnswerHtml = "<span style='color: green'>".$correct."</span>";
+                $correctAnswerHtml = "<span style='feedback-green'>".$correct."</span>";
         }
 
         if ($hideExpectedAnswer) {
-            $correctAnswerHtml = "<span title='".get_lang("ExerciseWithFeedbackWithoutCorrectionComment")."'> - </span>";
+            $correctAnswerHtml = "<span class='feedback-green' title='".get_lang("ExerciseWithFeedbackWithoutCorrectionComment")."'> - </span>";
         }
 
-        $result = "<span style='border:1px solid black; border-radius:5px; padding:2px; font-weight:bold;'>";
-        $result .= "<span style='$style'>".$answer."</span>";
-        $result .= "&nbsp;<span style='font-size:120%;'>/</span>&nbsp;";
+        $result = "<div class='feedbaak-question'>";
+        $result .= "<span class='$style'>". $iconAnswer . ' ' . $answer."</span>";
+        $result .= "&nbsp;<span class='feedback-separator'>/</span>&nbsp;";
         $result .= $correctAnswerHtml;
-        $result .= "</span>";
+        $result .= "</div>";
 
         return $result;
     }

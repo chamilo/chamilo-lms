@@ -60,6 +60,9 @@ a:focus {
     background: #162A83;
     display: inline-block;
 }
+.result-body{
+    background-color: #FFF;
+}
 #sessionList .list-group .title{
     font-size: 12px;
     font-weight: normal;
@@ -513,20 +516,62 @@ footer #footer_right{
     font-size: 12px;
 }
 .question_row_score .title-score .total{
-   background: #162A83;
-   color: #FFF;
+   background: #FFF;
+   color: #162A83;
    border: none;
+   text-align: left;
+   display: none;
+}
+.question_row_score .title-score .total h3{
+    font-weight: bold;
+}
+.question_row_answer{
+    border: none;
+}
+.feedbaak-question{
+    padding: 5px 15px;
+    display: block;
+    width: 100%;
+}
+.feedbaak-question img{
+    padding-right: 15px;
+}
+.feedbaak-question .feedback-red{
+    color: #162a83;
+    text-decoration:line-through;
+}
+.feedbaak-question .feedback-green{
+    color: #96BD0D;
+}
+.feedbaak-question .feedback-separator{
+    color:#162a83;
+    font-weight: bold;
 }
 .ribbon{
-    background: #2c539e; /* Old browsers */
-    background: -moz-linear-gradient(top, #2c539e 0%, #1a265e 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, #2c539e 0%,#1a265e 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, #2c539e 0%,#1a265e 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2c539e', endColorstr='#1a265e',GradientType=0 ); /* IE6-9 */
+    background: #FFFFFF;
     border: none;
+    box-shadow: none;
 }
 .ribbon h4{
     color: #FFF;
+}
+.question_row_answer .page-header{
+    font-weight: normal;
+    font-size: 22px;
+    margin: 5px 0;
+}
+.score-title{
+    color: #162a83;
+    font-weight: bold;
+    font-size: 16px;
+}
+.score-limits{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.score-limits .score-img{
+    display: inline-block;
+    padding-right: 5px;
 }
 /* bar progress */
 .progress{
@@ -901,6 +946,9 @@ ul.exercise-draggable-answer .touch-items:hover{
 }
 .question_options .droppable .gallery .exercise-draggable-answer-option{
     margin-left: 0;
+}
+.question_row_answer .table.table-striped tbody tr:nth-of-type(2n+1){
+    background: transparent;
 }
 .drag_question .window{
     padding: 10px 5px;

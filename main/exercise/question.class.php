@@ -147,12 +147,12 @@ abstract class Question
         if ($object = Database::fetch_object($result)) {
             $objQuestion = self::getInstance($object->type);
             if (!empty($objQuestion)) {
-                $objQuestion->id = $id;
+                $objQuestion->id = (int) $id;
                 $objQuestion->question = $object->question;
                 $objQuestion->description = $object->description;
                 $objQuestion->weighting = $object->ponderation;
                 $objQuestion->position = $object->position;
-                $objQuestion->type = $object->type;
+                $objQuestion->type = (int) $object->type;
                 $objQuestion->picture = $object->picture;
                 $objQuestion->level = (int) $object->level;
                 $objQuestion->extra = $object->extra;
@@ -1569,20 +1569,6 @@ abstract class Question
         echo '<style>
                 .media { display:none;}
             </style>';
-        echo '<script>
-        // hack to hide http://cksource.com/forums/viewtopic.php?f=6&t=8700
-        function FCKeditor_OnComplete( editorInstance ) {
-            if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name)) {
-                HideFCKEditorByInstanceName (editorInstance.Name);
-            }
-        }
-
-        function HideFCKEditorByInstanceName ( editorInstanceName ) {
-            if (document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className == "HideFCKEditor" ) {
-                document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
-            }
-        }
-        </script>';
 
         // question name
         if (api_get_configuration_value('save_titles_as_html')) {

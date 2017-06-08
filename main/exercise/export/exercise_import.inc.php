@@ -238,6 +238,7 @@ function import_exercise($file)
                     $j++;
                     $matchAnswerIds[$key] = $j;
                 }
+
                 // Answer
                 $answer->new_answer[$i] = formatText($answers['value']);
                 // Comment
@@ -251,9 +252,11 @@ function import_exercise($file)
                     $answer->new_correct[$i] = 0;
                 }
 
+                $answer->new_weighting[$i] = 0;
                 if (isset($question_array['weighting'][$key])) {
                     $answer->new_weighting[$i] = $question_array['weighting'][$key];
                 }
+
                 if ($answer->new_correct[$i]) {
                     $totalCorrectWeight += $answer->new_weighting[$i];
                 }
@@ -333,7 +336,6 @@ function qti_parse_file($exercisePath, $file, $questionFile)
     );
 
     $question_format_supported = true;
-
     $xml_parser = xml_parser_create();
     xml_parser_set_option($xml_parser, XML_OPTION_SKIP_WHITE, false);
     if ($qtiMainVersion == 1) {
@@ -404,7 +406,7 @@ function startElementQti2($parser, $name, $attributes)
     if (sizeof($element_pile) >= 2) {
         $parent_element = $element_pile[sizeof($element_pile) - 2];
     } else {
-        $parent_element = "";
+        $parent_element = '';
     }
 
     if ($record_item_body) {
@@ -498,7 +500,7 @@ function startElementQti2($parser, $name, $attributes)
             }
             break;
         case 'MAPENTRY':
-            if ($parent_element == "MAPPING") {
+            if ($parent_element == 'MAPPING' || $parent_element == 'MAPENTRY') {
                 $answer_id = $attributes['MAPKEY'];
                 if (!isset($exercise_info['question'][$current_question_ident]['weighting'])) {
                     $exercise_info['question'][$current_question_ident]['weighting'] = array();

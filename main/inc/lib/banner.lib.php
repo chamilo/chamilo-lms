@@ -803,7 +803,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         }
 
         if (!empty($lis)) {
-            $html .= Display::tag('ul', $lis, array('class' => 'breadcrumb'));
+            $html .= Display::tag('ul', get_lang('YouAreHere').': '. $lis, array('class' => 'breadcrumb'));
         }
     }
 

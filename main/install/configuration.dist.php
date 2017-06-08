@@ -414,8 +414,10 @@ $_configuration['agenda_legend'] = [
 // XSS attacks. By whitelisting sources of approved content, you can prevent
 // the browser from loading malicious assets.
 // The provided default is an *example*, please customize.
-// This setting is particularly complicated to set with CKeditor
-//$_configuration['security_content_policy'] = 'default-src \'self\'; script-src *://*.google.com:*';
+// This setting is particularly complicated to set with CKeditor, but if you
+// add all domains that you want to authorize for iframes inclusion in the
+// child-src statement, this example should work for you
+//$_configuration['security_content_policy'] = 'default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;';
 //$_configuration['security_content_policy_report_only'] = 'default-src \'self\'; script-src *://*.google.com:*';
 //
 // HTTP Public Key Pinning protects your site from MiTM attacks using rogue

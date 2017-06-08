@@ -24,7 +24,7 @@ class Version20170608164500 extends AbstractMigrationChamilo
         $schema
             ->getTable('c_quiz_question')
             ->getColumn('type')
-            ->setType(Type::INTEGER);
+            ->setType(Type::getType(Type::INTEGER));
     }
 
     /**
@@ -35,6 +35,6 @@ class Version20170608164500 extends AbstractMigrationChamilo
         $schema
             ->getTable('c_quiz_question')
             ->getColumn('type')
-            ->setType(Type::BOOLEAN);
+            ->setType(Type::getType(Type::BOOLEAN));
     }
 }

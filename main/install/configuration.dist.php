@@ -394,3 +394,52 @@ $_configuration['agenda_legend'] = [
 //$_configuration['tracking_skip_generic_data'] = false;
 // Show question feedback (requires DB change: "ALTER TABLE c_quiz_question ADD COLUMN feedback text;")
 //$_configuration['allow_quiz_question_feedback'] = false;
+
+// HTTP headers security
+// This section relates to options to increase the security of your Chamilo
+// portal against attacks specifically focused on HTTP headers vulnerabilities
+// These are all disabled by default, because some of these settings might
+// affect some features of Chamilo, like the inclusion of iframes or the
+// submission of forms by anonymous users. Please make sure you do the due
+// tests before enabling in production. Learn more about how to form secure
+// headers at https://securityheaders.io/
+//
+// HTTP Strict Transport Security is an excellent feature to support on your
+// site and strengthens your implementation of TLS by getting the User Agent
+// to enforce the use of HTTPS. Recommended value
+// "strict-transport-security: max-age=31536000; includeSubDomains".
+//$_configuration['security_strict_transport'] = 'strict-transport-security: max-age=31536000; includeSubDomains';
+//
+// Content Security Policy is an effective measure to protect your site from
+// XSS attacks. By whitelisting sources of approved content, you can prevent
+// the browser from loading malicious assets.
+//$_configuration['security_content_policy'] = '';
+//
+// HTTP Public Key Pinning protects your site from MiTM attacks using rogue
+// X.509 certificates. By whitelisting only the identities that the browser
+// should trust, your users are protected in the event a certificate
+// authority is compromised.
+//$_configuration['security_public_key_pins'] = '';
+//$_configuration['security_public_key_pins_report_only'] = '';
+//
+// X-Frame-Options tells the browser whether you want to allow your site to
+// be framed or not. By preventing a browser from framing your site you can
+// defend against attacks like clickjacking.
+// Recommended value "x-frame-options: SAMEORIGIN".
+//$_configuration['security_x_frame_options'] = 'x-frame-options: SAMEORIGIN';
+//
+// X-XSS-Protection sets the configuration for the cross-site scripting
+// filter built into most browsers.
+// Recommended value "X-XSS-Protection: 1; mode=block".
+//$_configuration['security_xss_protection'] = 'X-XSS-Protection: 1; mode=block';
+//
+// X-Content-Type-Options stops a browser from trying to MIME-sniff the
+// content type and forces it to stick with the declared content-type. The only
+// valid value for this header is "X-Content-Type-Options: nosniff".
+//$_configuration['security_x_content_type_options'] = 'X-Content-Type-Options: nosniff';
+//
+// Referrer Policy is a new header that allows a site to control how much
+// information the browser includes with navigations away from a document
+// and should be set by all sites.
+//$_configuration['security_referrer_policy'] = '';
+// HTTP headers security section ends here

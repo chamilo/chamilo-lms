@@ -30,12 +30,11 @@ class HotSpot extends Question
     }
 
     /**
-     * @param FormValidator $form
-     * @param int $fck_config
-     */
-    public function createForm(&$form, $fck_config = 0)
+    * @inheritdoc
+    */
+    public function createForm(&$form, $exercise)
     {
-        parent::createForm($form, $fck_config);
+        parent::createForm($form, $exercise);
 
         if (!isset($_GET['editQuestion'])) {
             $icon = Display::return_icon(
@@ -74,19 +73,17 @@ class HotSpot extends Question
     }
 
     /**
-     * @param FormValidator $form
-     * @param null $objExercise
-     * @return bool
+     * @inheritdoc
      */
-    public function processCreation($form, $objExercise = null)
+    public function processCreation($form, $exercise)
     {
         $file_info = $form->getSubmitValue('imageUpload');
-        parent::processCreation($form, $objExercise);
+        parent::processCreation($form, $exercise);
 
         if (!empty($file_info['tmp_name'])) {
             $result = $this->uploadPicture($file_info['tmp_name']);
             if ($result) {
-                $this->save();
+                $this->save($exercise);
                 return true;
             } else {
                 return false;
@@ -100,7 +97,10 @@ class HotSpot extends Question
         // nothing
     }
 
-    function processAnswersCreation($form)
+    /**
+     * @inheritdoc
+     */
+    public function processAnswersCreation($form, $exercise)
     {
         // nothing
     }
@@ -120,18 +120,24 @@ class HotSpotDelineation extends HotSpot
     public function __construct()
     {
         parent::__construct();
-        $this -> type = HOT_SPOT_DELINEATION;
+        $this->type = HOT_SPOT_DELINEATION;
     }
 
-    public function createForm(&$form, $fck_config = 0)
+    /**
+     * @inheritdoc
+     */
+    public function createForm(&$form, $exercise)
     {
-        parent::createForm($form, $fck_config);
+        parent::createForm($form);
     }
 
-    public function processCreation($form, $objExercise = null)
+    /**
+     * @inheritdoc
+     */
+    public function processCreation($form, $exercise)
     {
         $file_info = $form->getSubmitValue('imageUpload');
-        parent::processCreation($form, $objExercise);
+        parent::processCreation($form, $exercise);
     }
 
     public function createAnswersForm($form)
@@ -139,8 +145,11 @@ class HotSpotDelineation extends HotSpot
         parent::createAnswersForm($form);
     }
 
-    public function processAnswersCreation($form)
+    /**
+     * @inheritdoc
+     */
+    public function processAnswersCreation($form, $exercise)
     {
-        parent::processAnswersCreation($form);
+        parent::processAnswersCreation($form, $exercise);
     }
 }

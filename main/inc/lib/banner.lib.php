@@ -339,6 +339,25 @@ function return_navigation_array()
             $menu_navigation['dashboard'] = isset($possible_tabs['dashboard']) ? $possible_tabs['dashboard'] : null;
         }
 
+        ///if (api_is_student()) {
+        if (true) {
+            $params = array('variable = ? AND subkey = ?' => ['status', 'studentfollowup']);
+            $result = api_get_settings_params_simple($params);
+            $plugin = StudentFollowUpPlugin::create();
+            if (!empty($result) && $result['selected_value'] === 'installed') {
+                // Students
+                $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php';
+
+                if (api_is_platform_admin() || api_is_drh() || api_is_teacher()) {
+                    $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/my_students.php';
+                }
+                $navigation['follow_up']['url'] = $url;
+                $navigation['follow_up']['title'] = $plugin->get_lang('CareDetailView');
+                $navigation['follow_up']['key'] = 'homepage';
+                $navigation['follow_up']['icon'] = 'homepage.png';
+            }
+        }
+
         // Administration
         if (api_is_platform_admin(true)) {
             if (api_get_setting('show_tabs', 'platform_administration') == 'true') {
@@ -351,8 +370,7 @@ function return_navigation_array()
         // Reports
         if (!empty($possible_tabs['reports'])) {
             if (api_get_setting('show_tabs', 'reports') == 'true') {
-                if (
-                    (api_is_platform_admin() || api_is_drh() || api_is_session_admin())
+                if ((api_is_platform_admin() || api_is_drh() || api_is_session_admin())
                         && Rights::hasRight('show_tabs:reports')
                 ) {
                     $navigation['reports'] = $possible_tabs['reports'];
@@ -388,7 +406,7 @@ function return_navigation_array()
         if (!empty($customTabs)) {
             foreach ($customTabs as $tab) {
                 if (api_get_setting($tab['variable'], $tab['subkey']) == 'true' &&
-                    isset($possible_tabs[$tab['subkey']]) && 
+                    isset($possible_tabs[$tab['subkey']]) &&
                     api_get_plugin_setting(strtolower(str_replace('Tabs', '', $tab['subkeytext'])), 'public_main_menu_tab') == 'true'
                 ) {
                     $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH).$possible_tabs[$tab['subkey']]['url'];
@@ -455,9 +473,9 @@ function menuArray()
     $pageContent = '';
     // Get the extra page content, containing the links to add to the tabs
     if (is_file($homepath.$menuTabs.'_'.$lang.$ext) && is_readable($homepath.$menuTabs.'_'.$lang.$ext)) {
-        $pageContent = @(string)file_get_contents($homepath.$menuTabs.'_'.$lang.$ext);
+        $pageContent = @(string) file_get_contents($homepath.$menuTabs.'_'.$lang.$ext);
     } elseif (is_file($homepath.$menuTabs.$lang.$ext) && is_readable($homepath.$menuTabs.$lang.$ext)) {
-        $pageContent = @(string)file_get_contents($homepath.$menuTabs.$lang.$ext);
+        $pageContent = @(string) file_get_contents($homepath.$menuTabs.$lang.$ext);
     }
     // Sanitize page content
     $pageContent = api_to_system_encoding($pageContent, api_detect_encoding(strip_tags($pageContent)));
@@ -471,13 +489,13 @@ function menuArray()
                 $homepath.$menuTabsLoggedIn.'_'.$lang.$ext
             )
         ) {
-            $pageContent = @(string)file_get_contents($homepath.$menuTabsLoggedIn.'_'.$lang.$ext);
+            $pageContent = @(string) file_get_contents($homepath.$menuTabsLoggedIn.'_'.$lang.$ext);
             $pageContent = str_replace('::private', '', $pageContent);
         } elseif (is_file($homepath.$menuTabsLoggedIn.$lang.$ext) && is_readable(
                 $homepath.$menuTabsLoggedIn.$lang.$ext
             )
         ) {
-            $pageContent = @(string)file_get_contents($homepath.$menuTabsLoggedIn.$lang.$ext);
+            $pageContent = @(string) file_get_contents($homepath.$menuTabsLoggedIn.$lang.$ext);
             $pageContent = str_replace('::private', '', $pageContent);
         }
 
@@ -738,7 +756,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             /** @var learnpath $learnPath */
             $learnPath = Session::read('oLP');
             if (!empty($learnPath) && !empty($view_as_student_link)) {
-                if ((int)$learnPath->get_lp_session_id() != (int)api_get_session_id()) {
+                if ((int) $learnPath->get_lp_session_id() != (int) api_get_session_id()) {
                     $view_as_student_link = '';
                 }
             }
@@ -788,7 +806,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         }
     }
 
-    return $html . $additonalBlocks;
+    return $html.$additonalBlocks;
 }
 
 /**

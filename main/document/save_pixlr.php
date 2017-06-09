@@ -102,7 +102,7 @@ if ($content_type[0] != "image") {
 //Verify that the file is an image. Fileinfo method
 $finfo = new finfo(FILEINFO_MIME);
 $current_mime = $finfo->buffer($contents);
-finfo_close($finfo);
+
 if (strpos($current_mime, 'image') === false) {
     echo "Invalid mime type file";
     exit;

@@ -34,7 +34,7 @@ function handleRegions()
             api_get_utc_datetime(),
             $user_id
         );
-        Display::addFlash(Display::return_message(get_lang('SettingsStored'), 'confirmation'));
+        echo Display::return_message(get_lang('SettingsStored'), 'confirmation');
     }
 
     $plugin_obj = new AppPlugin();
@@ -140,7 +140,7 @@ function handlePlugins()
             api_get_utc_datetime(),
             $user_id
         );
-        Display::addFlash(Display::return_message(get_lang('SettingsStored'), 'confirmation'));
+        echo Display::return_message(get_lang('SettingsStored'), 'confirmation');
     }
 
     $all_plugins = $plugin_obj->read_plugins_from_path();
@@ -285,12 +285,10 @@ function handleStylesheets()
     $urlId = api_get_current_access_url_id();
 
     if (!is_writable(CSS_UPLOAD_PATH)) {
-        Display::addFlash(
-            Display::return_message(
-                CSS_UPLOAD_PATH.get_lang('IsNotWritable'),
-                'error',
-                false
-            )
+        echo Display::return_message(
+            CSS_UPLOAD_PATH.get_lang('IsNotWritable'),
+            'error',
+            false
         );
     } else {
         // Uploading a new stylesheet.
@@ -323,11 +321,7 @@ function handleStylesheets()
             );
 
             if ($result) {
-                Display::addFlash(
-                    Display::return_message(
-                        get_lang('StylesheetAdded')
-                    )
-                );
+                echo Display::return_message(get_lang('StylesheetAdded'));
             }
         }
     }
@@ -579,7 +573,7 @@ function uploadStylesheet($values, $picture)
             }
             $zip->close();
         } else {
-            Display::addFlash(Display::return_message(get_lang('ErrorReadingZip').$info['extension'], 'error', false));
+            echo Display::return_message(get_lang('ErrorReadingZip').$info['extension'], 'error', false);
         }
     } else {
         // Simply move the file.
@@ -727,7 +721,7 @@ function handleSearch()
         $formValues = $form->exportValues();
         setConfigurationSettingsInDatabase($formValues, $_configuration['access_url']);
         $search_enabled = $formValues['search_enabled'];
-        Display::addFlash(Display::return_message($SettingsStored, 'confirm'));
+        echo Display::return_message($SettingsStored, 'confirm');
     }
     $specific_fields = get_specific_field_list();
 
@@ -1099,7 +1093,7 @@ function addEditTemplate()
                 Database::insert($table_system_template, $params);
 
                 // Display a feedback message.
-                Display::addFlash(Display::return_message(get_lang('TemplateAdded'), 'confirm'));
+                echo Display::return_message(get_lang('TemplateAdded'), 'confirm');
                 echo '<a href="settings.php?category=Templates&action=add">'.Display::return_icon('new_template.png', get_lang('AddTemplate'), '', ICON_SIZE_MEDIUM).'</a>';
             } else {
                 $content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
@@ -1111,7 +1105,7 @@ function addEditTemplate()
                 Database::query($sql);
 
                 // Display a feedback message.
-                Display::addFlash(Display::return_message(get_lang('TemplateEdited'), 'confirm'));
+                echo Display::return_message(get_lang('TemplateEdited'), 'confirm');
             }
         }
         Security::clear_token();
@@ -1150,7 +1144,7 @@ function deleteTemplate($id)
     Database::query($sql);
 
     // Display a feedback message.
-    Display::addFlash(Display::return_message(get_lang('TemplateDeleted'), 'confirm'));
+    echo Display::return_message(get_lang('TemplateDeleted'), 'confirm');
 }
 
 /**
@@ -1322,7 +1316,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                             get_lang($row['comment']),
                             get_lang('MB')
                         ),
-                        array('maxlength' => '8')
+                        array('maxlength' => '8', 'aria-label' => get_lang($row['title']))
                     );
                     $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = round($row['selected_value'] / 1024 / 1024, 1);
@@ -1334,7 +1328,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                             get_lang($row['title']),
                             get_lang($row['comment']),
                         ),
-                        array('maxlength' => '5')
+                        array('maxlength' => '5', 'aria-label' => get_lang($row['title']))
                     );
                     $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = $row['selected_value'];
@@ -1344,6 +1338,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     continue;
                 } else {
                     $hideme['class'] = 'col-md-4';
+                    $hideme['aria-label'] = get_lang($row['title']);
                     $form->addElement(
                         'text',
                         $row['variable'],
@@ -1364,7 +1359,13 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     if (file_exists($file)) {
                         $value = file_get_contents($file);
                     }
-                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), array('rows'=>'10'), $hideme);
+                    $form->addElement(
+                        'textarea',
+                        $row['variable'],
+                        array(get_lang($row['title']), get_lang($row['comment'])),
+                        array('rows' => '10', 'id' => $row['variable']),
+                        $hideme
+                    );
                     $default_values[$row['variable']] = $value;
                 } elseif ($row['variable'] == 'footer_extra_content') {
                     $file = api_get_home_path().'footer_extra_content.txt';
@@ -1372,10 +1373,23 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     if (file_exists($file)) {
                         $value = file_get_contents($file);
                     }
-                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), array('rows'=>'10'), $hideme);
+                    $form->addElement(
+                        'textarea',
+                        $row['variable'],
+                        array(get_lang($row['title']), get_lang($row['comment'])),
+                        array('rows' => '10', 'id' => $row['variable']),
+                        $hideme
+                    );
                     $default_values[$row['variable']] = $value;
                 } else {
-                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), array('rows'=>'10'), $hideme);
+                    $form->addElement(
+                        'textarea',
+                        $row['variable'],
+                        array(get_lang($row['title']),
+                        get_lang($row['comment'])),
+                        array('rows' => '10', 'id' => $row['variable']),
+                        $hideme
+                    );
                     $default_values[$row['variable']] = $row['selected_value'];
                 }
                 break;
@@ -1715,9 +1729,9 @@ function generateCSSDownloadLink($style)
 
         //@TODO: use more generic script to download.
         $str = '<a class="btn btn-primary btn-large" href="'.$url.'">'.get_lang('ClickHereToDownloadTheFile').'</a>';
-        Display::addFlash(Display::return_message($str, 'normal', false));
+        echo Display::return_message($str, 'normal', false);
     } else {
-        Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
+        echo Display::return_message(get_lang('FileNotFound'), 'warning');
     }
 }
 

@@ -3,7 +3,7 @@
     /* Skill search input in the left menu */
     function check_skills_sidebar() {
         //Selecting only selected skills
-        $("#skill_id option:selected").each(function () {
+        $("#skill_id option").each(function () {
             var skill_id = $(this).val();
             if (skill_id != "") {
                 $.ajax({
@@ -369,17 +369,19 @@
             delete_gradebook_from_skill(skill_id, gradebook_id);
         });
 
-        $("#skill_id").fcbkcomplete({
-            json_url: "{{ url }}&a=find_skills",
+        $("#skill_id").select2({
+            ajax: {
+                url: '{{ url }}&a=find_skills',
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            },
             cache: false,
-            filter_case: false,
-            filter_hide: true,
-            complete_text: "{{ 'EnterTheSkillNameToSearch' | get_lang }}",
-            firstselected: true,
-            //onremove: "testme",
-            onselect: "check_skills_sidebar",
-            filter_selected: true,
-            newel: true
+            placeholder: '{{ 'EnterTheSkillNameToSearch'|get_lang }}'
+        }).on('change', function () {
+            check_skills_sidebar();
         });
 
         load_nodes(0, main_depth);
@@ -501,7 +503,7 @@
                         <h4 class="page-header">{{ 'WhatSkillsAreYouLookingFor'|get_lang }}</h4>
                         <div class="search-skill">
                             <form id="skill_search" class="form-search">
-                                <select id="skill_id" name="skill_id" /></select>
+                                <select id="skill_id" name="skill_id" style="width: 100%;" multiple></select>
                                 <table id="skill_holder" class="table table-condensed"></table>
                             </form>
                         </div>

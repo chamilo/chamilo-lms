@@ -22,6 +22,8 @@ $is_allowed_in_course = api_is_allowed_in_course();
 $userId = api_get_user_id();
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
+$course_id = api_get_course_int_id();
+$sessionId = api_get_session_id();
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
@@ -37,7 +39,6 @@ $(document).ready( function() {
 });
  </script>';
 $nameTools = get_lang('GroupManagement');
-$course_id = api_get_course_int_id();
 
 /*
  * Self-registration and un-registration
@@ -161,10 +162,14 @@ if (api_is_allowed_to_edit(false, true)) {
                 exit;
                 break;
             case 'delete_category':
-                GroupManager :: delete_category($my_get_id);
-                Display::addFlash(Display::return_message(get_lang('CategoryDeleted')));
-                header("Location: $currentUrl");
-                exit;
+                if (empty($sessionId)) {
+                    GroupManager::delete_category($my_get_id);
+                    Display::addFlash(
+                        Display::return_message(get_lang('CategoryDeleted'))
+                    );
+                    header("Location: $currentUrl");
+                    exit;
+                }
                 break;
         }
     }
@@ -182,7 +187,7 @@ if (api_is_allowed_to_edit(false, true)) {
     $actionsLeft .= '<a href="group_creation.php?'.api_get_cidreq().'">'.
         Display::return_icon('add-groups.png', get_lang('NewGroupCreate'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    if (api_get_setting('allow_group_categories') === 'true') {
+    if (api_get_setting('allow_group_categories') === 'true' && empty($sessionId)) {
         $actionsLeft .= '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
             Display::return_icon('new_folder.png', get_lang('AddCategory'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
@@ -210,7 +215,6 @@ $actionsRight = GroupManager::getSearchForm();
 $toolbar = Display::toolbarAction('toolbar-groups', array($actionsLeft, $actionsRight));
 $group_cats = GroupManager::get_categories(api_get_course_id());
 echo $toolbar;
-
 echo UserManager::getUserSubscriptionTab(3);
 
 /*  List all categories */
@@ -232,9 +236,13 @@ if (api_get_setting('allow_group_categories') === 'true') {
             continue;
         }
 
+        if (empty($categoryId) && empty($group_list)) {
+            continue;
+        }
+
         $label = Display::label(count($group_list).' '.get_lang('ExistingGroups'), 'info');
         $actions = null;
-        if (api_is_allowed_to_edit(false, true) && !empty($categoryId)) {
+        if (api_is_allowed_to_edit(false, true) && !empty($categoryId) && empty($sessionId)) {
             // Edit
             $actions .= '<a href="group_category.php?'.api_get_cidreq().'&id='.$categoryId.'" title="'.get_lang('Edit').'">'.
                 Display::return_icon('edit.png', get_lang('EditGroup'), '', ICON_SIZE_SMALL).'</a>';

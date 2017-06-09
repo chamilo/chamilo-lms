@@ -1019,7 +1019,7 @@ class AddCourse
             $question->weighting = 10;
             $question->position = 1;
             $question->course = $courseInfo;
-            $question->save($exercise_id);
+            $question->save($exercise);
             $questionId = $question->id;
 
             $answer = new Answer($questionId, $courseInfo['real_id']);
@@ -1028,7 +1028,6 @@ class AddCourse
             $answer->createAnswer(get_lang('AdmitError'), 0, get_lang('NoSeduction'), -5, 2);
             $answer->createAnswer(get_lang('Force'), 1, get_lang('Indeed'), 5, 3);
             $answer->createAnswer(get_lang('Contradiction'), 1, get_lang('NotFalse'), 5, 4);
-
             $answer->save();
 
             /* Forum tool */

@@ -5,6 +5,11 @@
  * @package chamilo.plugin.buycourses
  */
 
+use Chamilo\UserBundle\Entity\User,
+    Chamilo\CoreBundle\Entity\Course,
+    Chamilo\CoreBundle\Entity\Session,
+    Chamilo\CourseBundle\Entity\CLp;
+
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
@@ -20,6 +25,8 @@ $commissionsEnable = $plugin->get('commissions_enable');
 $culqiEnable = $plugin->get('culqi_enable');
 
 $action = isset($_GET['a']) ? $_GET['a'] : null;
+
+$em = Database::getManager();
 
 switch ($action) {
     case 'verifyPaypal':
@@ -425,12 +432,24 @@ switch ($action) {
         $nodeTitle = "";
         if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_USER) {
             $nodeType = get_lang('User');
+            /** @var User $user */
+            $user = UserManager::getManager()->find($serviceSale['node_id']);
+            $nodeName = $user ? $user->getCompleteNameWithUsername() : null;
         } else if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_COURSE) {
             $nodeType = get_lang('Course');
+            /** @var Course $course */
+            $course = $em->find('ChamiloCoreBundle:Course', $serviceSale['node_id']);
+            $nodeName = $course ? $course->getTitle() : null;
         } else if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_SESSION) {
             $nodeType = get_lang('Session');
+            /** @var Session $session */
+            $session = $em->find('ChamiloCoreBundle:Session', $serviceSale['node_id']);
+            $nodeName = $session ? $session->getName() : null;
         } else if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM) {
             $nodeType = get_lang('TemplateTitleCertificate');
+            /** @var CLp $lp */
+            $lp = $em->find('ChamiloCourseBundle:CLp', $serviceSale['node_id']);
+            $nodeName = $lp ? $lp->getName() : null;
         }
         $html .= "<li><b>{$plugin->get_lang('AppliesTo')}:</b> $nodeType</li> ";
         $html .= "<li><b>{$plugin->get_lang('Price')}:</b> {$serviceSale['service']['price']} {$serviceSale['currency']}</li> ";

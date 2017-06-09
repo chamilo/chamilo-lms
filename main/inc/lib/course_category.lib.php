@@ -43,11 +43,10 @@ class CourseCategory
     }
 
     /**
-     * @param string $category
-     *
+     * @param string $category Optional. Parent category code
      * @return array
      */
-    public static function getCategories($category)
+    public static function getCategories($category = null)
     {
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -628,34 +627,23 @@ class CourseCategory
             OR tutor_name LIKE "%'.$searchTerm.'%") ';
         }
 
-        $sql = "SELECT * FROM $tbl_course
+        $url_access_id = api_get_current_access_url_id();
+        $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $sql = "SELECT * 
+                FROM $tbl_course as course
+                INNER JOIN $tbl_url_rel_course as url_rel_course
+                ON (url_rel_course.c_id = course.id)
                 WHERE
-                    visibility != '0' AND
-                    visibility != '4'
+                    access_url_id = $url_access_id AND
+                    course.visibility != '0' AND
+                    course.visibility != '4'
                     $categoryFilter
                     $searchFilter
                     $without_special_courses
                     $visibilityCondition
-                ";
-        // Showing only the courses of the current portal access_url_id.
-        if (api_is_multiple_url_enabled()) {
-            $url_access_id = api_get_current_access_url_id();
-            if ($url_access_id != -1) {
-                $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $sql = "SELECT * FROM $tbl_course as course
-                    INNER JOIN $tbl_url_rel_course as url_rel_course
-                    ON (url_rel_course.c_id = course.id)
-                    WHERE
-                        access_url_id = $url_access_id AND
-                        course.visibility != '0' AND
-                        course.visibility != '4' AND
-                        category_code = '$category_code'
-                        $searchFilter
-                        $without_special_courses
-                        $visibilityCondition
-                    ";
-            }
-        }
+            ";
+
+
 
         return Database::num_rows(Database::query($sql));
     }
@@ -938,7 +926,7 @@ class CourseCategory
     public static function getLimitArray()
     {
         $pageCurrent = isset($_REQUEST['pageCurrent']) ? intval($_GET['pageCurrent']) : 1;
-        $pageLength = isset($_REQUEST['pageLength']) ? intval($_GET['pageLength']) : 12;
+        $pageLength = isset($_REQUEST['pageLength']) ? intval($_GET['pageLength']) : CoursesAndSessionsCatalog::PAGE_LENGTH;
 
         return array(
             'start' => ($pageCurrent - 1) * $pageLength,

@@ -275,7 +275,7 @@ class CLp
         $this->defaultEncoding = 'UTF-8';
         $this->displayOrder = 0;
         $this->contentLocal = 'local';
-        $this->preventReinit = 1;
+        $this->preventReinit = true;
         $this->useMaxScore = 1;
         $this->createdOn = new \DateTime();
     }

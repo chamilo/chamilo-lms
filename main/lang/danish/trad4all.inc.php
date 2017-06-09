@@ -112,7 +112,6 @@ $Forbidden = "Ikke tilladt";
 $CourseAccessConfigTip = "Som standard er dit kursus tilgængeligt for registrerede brugere på platformen. Ønsker du en vis fortrolighed omkring adgang til kursussiden, er det lettest at åbne for tilmeldinger i f.eks. en uge (vælg: Fortrolig adgang, Kursustilmelding Tilladt) og bede de studerende om i første lektion at tilmelde sig. Derefter lukker du siden for tilmeldinger (vælg: Kursustilmelding Nægtet). Du kan nu se de tilmeldte på deltagerlisten og slette evt. uvelkomne. Kursussiden er nu kun tilgængelig via login.";
 $OpenToTheWorld = "Åben - siden kan ses af alle på internettet";
 $OpenToThePlatform = "Åben - siden kan efter login ses af de, der følger et direkte link eller de, der står på sidens deltagerliste";
-$OpenToThePlatform = "Åben - adgang tilladt for deltagere på sidens deltagerlisten og brugere på systemet med et direkte link til siden";
 $TipLang = "Kursussidens sprog";
 $Vid = "Video";
 $Work = "Afleveringer";

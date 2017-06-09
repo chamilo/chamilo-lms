@@ -195,9 +195,7 @@ if (!api_is_allowed_to_edit()) {
 }
 
 /* MAIN TOOL CODE */
-
 /*	Code to change the comment	*/
-
 if (isset($_POST['comment'])) {
     // Fixing the path if it is wrong
     $comment = trim($_POST['comment']);
@@ -256,73 +254,6 @@ if ($is_allowed_to_edit) {
                         fclose($fp);
 
                         $filepath = $document_data['absolute_parent_path'];
-                        /*
-                        if (!is_dir($filepath.'css')) {
-                            mkdir($filepath.'css', api_get_permissions_for_new_directories());
-                            $doc_id = add_document($_course, $dir.'css', 'folder', 0, 'css');
-                            api_item_property_update(
-                                $_course,
-                                TOOL_DOCUMENT,
-                                $doc_id,
-                                'FolderCreated',
-                                api_get_user_id(),
-                                null,
-                                null,
-                                null,
-                                null,
-                                $sessionId
-                            );
-                            api_item_property_update(
-                                $_course,
-                                TOOL_DOCUMENT,
-                                $doc_id,
-                                'invisible',
-                                api_get_user_id(),
-                                null,
-                                null,
-                                null,
-                                null,
-                                $sessionId
-                            );
-                        }*/
-
-                        /*if (!is_file($filepath.'css/frames.css')) {
-                            $platform_theme = api_get_setting('stylesheets');
-                            if (file_exists(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css')) {
-                                copy(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css', $filepath.'css/frames.css');
-                                $doc_id = add_document(
-                                    $_course,
-                                    $dir . 'css/frames.css',
-                                    'file',
-                                    filesize($filepath . 'css/frames.css'),
-                                    'frames.css'
-                                );
-                                api_item_property_update(
-                                    $_course,
-                                    TOOL_DOCUMENT,
-                                    $doc_id,
-                                    'DocumentAdded',
-                                    api_get_user_id(),
-                                    null,
-                                    null,
-                                    null,
-                                    null,
-                                    $sessionId
-                                );
-                                api_item_property_update(
-                                    $_course,
-                                    TOOL_DOCUMENT,
-                                    $doc_id,
-                                    'invisible',
-                                    api_get_user_id(),
-                                    null,
-                                    null,
-                                    null,
-                                    null,
-                                    $sessionId
-                                );
-                            }
-                        }*/
 
                         // "WHAT'S NEW" notification: update table item_property
                         $document_id = DocumentManager::get_document_id($_course, $file);
@@ -352,8 +283,7 @@ if ($is_allowed_to_edit) {
                                 $dir,
                                 api_get_user_id()
                             );
-                            header('Location: document.php?id='.$document_data['parent_id'].'&'.api_get_cidreq().($is_certificate_mode ? '&curdirpath=/certificates&selectcat=1' : ''));
-                            exit;
+
                         } else {
                             Display::addFlash(Display::return_message(get_lang('Impossible'), 'warning'));
                         }
@@ -370,6 +300,9 @@ if ($is_allowed_to_edit) {
                     update_existing_document($_course, $document_id, $file_size, $read_only_flag);
                 }
             }
+
+            header('Location: document.php?id='.$document_data['parent_id'].'&'.api_get_cidreq().($is_certificate_mode ? '&curdirpath=/certificates&selectcat=1' : ''));
+            exit;
         }
     }
 }
@@ -519,15 +452,15 @@ if ($owner_id == api_get_user_id() ||
             $str_info .= $info_value.'<br/>';
         }
         $create_certificate = get_lang('CreateCertificateWithTags');
-        Display::addFlash(Display::return_message(
+        echo Display::return_message(
             $create_certificate.': <br /><br />'.$str_info,
             'normal',
             false
-        ));
+        );
     }
 
     if ($extension == 'svg' && !api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
-        Display::addFlash(Display::return_message(get_lang('BrowserDontSupportsSVG'), 'warning'));
+        echo Display::return_message(get_lang('BrowserDontSupportsSVG'), 'warning');
     }
     // HTML-editor
     echo '<div class="page-create">

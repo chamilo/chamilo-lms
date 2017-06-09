@@ -186,11 +186,12 @@ if ($is_allowedToEdit) {
                         }
                     }
                 }
-                Display:: display_confirmation_message(
+                echo Display::return_message(
                     sprintf(
                         get_lang('XResultsCleaned'),
                         $quantity_results_deleted
-                    )
+                    ),
+                    'confirm'
                 );
             }
         }
@@ -1218,6 +1219,7 @@ if (empty($exerciseList) && $hotpotatoes_exist == false) {
     echo '</table>';
     echo '</div>';
 }
+
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display :: display_footer();
 }

@@ -27,12 +27,11 @@ class Annotation extends Question
     }
 
     /**
-     * @param FormValidator $form
-     * @param int $fck_config
+     * @inheritdoc
      */
-    public function createForm(&$form, $fck_config = 0)
+    public function createForm(&$form, $exercise)
     {
-        parent::createForm($form, $fck_config);
+        parent::createForm($form, $exercise);
 
         $form->addElement(
             'number',
@@ -84,20 +83,18 @@ class Annotation extends Question
     }
 
     /**
-     * @param FormValidator $form
-     * @param null $objExercise
-     * @return bool
+     * @inheritdoc
      */
-    public function processCreation($form, $objExercise = null)
+    public function processCreation($form, $exercise)
     {
         $fileInfo = $form->getSubmitValue('imageUpload');
-        parent::processCreation($form, $objExercise);
+        parent::processCreation($form, $exercise);
 
         if (!empty($fileInfo['tmp_name'])) {
             $result = $this->uploadPicture($fileInfo['tmp_name']);
             if ($result) {
                 $this->weighting = $form->getSubmitValue('weighting');
-                $this->save();
+                $this->save($exercise);
                 return true;
             }
 
@@ -115,11 +112,11 @@ class Annotation extends Question
     }
 
     /**
-     * @param FormValidator $form
+     * @inheritdoc
      */
-    public function processAnswersCreation($form)
+    public function processAnswersCreation($form, $exercise)
     {
         $this->weighting = $form->getSubmitValue('weighting');
-        $this->save();
+        $this->save($exercise);
     }
 }

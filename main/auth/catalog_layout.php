@@ -7,7 +7,7 @@
  */
 
 if (api_get_setting('course_catalog_published') !== 'true') {
-    // Acces rights: anonymous users can't do anything usefull here.
+    // Access rights: anonymous users can't do anything usefull here.
     api_block_anonymous_users();
 }
 

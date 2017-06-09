@@ -367,7 +367,11 @@ function downloadMP3_google($filepath, $dir)
     if (empty($proxySettings)) {
         $content = file_get_contents($url);
     } else {
-        $context = stream_context_create($proxySettings);
+        if (!empty($proxySettings['stream_context_create'])) {
+            $context = stream_context_create($proxySettings['stream_context_create']);
+        } else {
+            $context = stream_context_create();
+        }
         $content = file_get_contents($url, false, $context);
     }
 
@@ -400,7 +404,7 @@ function downloadMP3_google($filepath, $dir)
         null,
         $current_session_id
     );
-    Display::display_confirmation_message(get_lang('DocumentCreated'));
+    echo Display::return_message(get_lang('DocumentCreated'), 'confirm');
     //return to location
     echo '<script>window.location.href="'.$location.'"</script>';
 }
@@ -516,7 +520,7 @@ function downloadMP3_pediaphon($filepath, $dir)
         null,
         $current_session_id
     );
-    Display::display_confirmation_message(get_lang('DocumentCreated'));
+    echo Display::return_message(get_lang('DocumentCreated'), 'confirm');
     //return to location
     echo '<script>window.location.href="'.$location.'"</script>';
 }

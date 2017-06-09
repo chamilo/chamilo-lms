@@ -55,12 +55,13 @@ if ($_POST['form_sent']) {
 
     if ($form_sent == 1) {
         if (count($users) == 0 || count($url_list) == 0) {
-            Display:: display_error_message(
-                get_lang('AtLeastOneUserAndOneURL')
+            echo Display::return_message(
+                get_lang('AtLeastOneUserAndOneURL'),
+                'error'
             );
         } else {
             UrlManager::add_users_to_urls($users, $url_list);
-            Display:: display_confirmation_message(get_lang('UsersBelongURL'));
+            echo Display::return_message(get_lang('UsersBelongURL'), 'confirm');
         }
     }
 }

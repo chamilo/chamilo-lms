@@ -22,7 +22,7 @@
  * @source: https://github.com/kogmbh/WebODF/
  */
 
-/*global define,require*/
+/*global define, require, runtime*/
 
 define("webodf/editor/widgets/undoRedoMenu",
     ["webodf/editor/EditorSession", "dijit/form/Button"],
@@ -86,7 +86,7 @@ define("webodf/editor/widgets/undoRedoMenu",
                 }
             }
 
-            this.setEditorSession = function(session) {
+            this.setEditorSession = function (session) {
                 if (editorSession) {
                     editorSession.unsubscribe(EditorSession.signalUndoStackChanged, checkUndoButtons);
                 }
@@ -102,7 +102,9 @@ define("webodf/editor/widgets/undoRedoMenu",
                 }
             };
 
+            /*jslint emptyblock: true*/
             this.onToolDone = function () {};
+            /*jslint emptyblock: false*/
 
             // init
             callback(widget);

@@ -169,61 +169,85 @@ class Version111 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX UN_ticket_code ON plugin_ticket_ticket;');
             $this->addSql('DROP INDEX FK_ticket_category ON plugin_ticket_ticket;');
             $this->addSql('ALTER TABLE plugin_ticket_ticket DROP PRIMARY KEY;');
-            $this->addSql('ALTER TABLE plugin_ticket_ticket ADD id INT, ADD code VARCHAR(255) NOT NULL, CHANGE project_id project_id INT DEFAULT NULL, CHANGE priority_id priority_id INT DEFAULT NULL, CHANGE course_id course_id INT DEFAULT NULL, CHANGE session_id session_id INT DEFAULT NULL, CHANGE personal_email personal_email VARCHAR(255) NOT NULL, CHANGE assigned_last_user assigned_last_user INT DEFAULT NULL, CHANGE status_id status_id INT DEFAULT NULL, CHANGE total_messages total_messages INT NOT NULL, CHANGE keyword keyword VARCHAR(255) DEFAULT NULL, CHANGE source source VARCHAR(255) DEFAULT NULL, CHANGE start_date start_date DATETIME DEFAULT NULL, CHANGE sys_insert_user_id sys_insert_user_id INT NOT NULL, CHANGE sys_insert_datetime sys_insert_datetime DATETIME NOT NULL, CHANGE sys_lastedit_user_id sys_lastedit_user_id INT DEFAULT NULL, CHANGE subject subject VARCHAR(255) NOT NULL, CHANGE message message LONGTEXT DEFAULT NULL;');
+
+            $this->addSql('ALTER TABLE plugin_ticket_ticket ADD id INT, ADD code VARCHAR(255) NOT NULL');
+
+            $this->addSql('UPDATE plugin_ticket_priority SET sys_insert_datetime = NOW() WHERE sys_insert_datetime IS NULL');
+
+
+            $this->addSql('UPDATE plugin_ticket_priority SET sys_insert_user_id = 1 WHERE sys_insert_user_id IS NULL');
+
+            $this->addSql('ALTER TABLE plugin_ticket_priority ADD code VARCHAR(255) NOT NULL, ADD name VARCHAR(255) NOT NULL, ADD description LONGTEXT DEFAULT NULL, ADD color VARCHAR(255) NOT NULL, ADD urgency VARCHAR(255) NOT NULL, CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE sys_insert_user_id sys_insert_user_id INT NOT NULL, CHANGE sys_insert_datetime sys_insert_datetime DATETIME NOT NULL, CHANGE sys_lastedit_user_id sys_lastedit_user_id INT DEFAULT NULL;');
+
+            $this->addSql('UPDATE plugin_ticket_priority SET code = priority_id');
+            $this->addSql('UPDATE plugin_ticket_priority SET name = priority');
+            $this->addSql('UPDATE plugin_ticket_priority SET description = priority_desc');
+            $this->addSql('UPDATE plugin_ticket_priority SET color = priority_color');
+            $this->addSql('UPDATE plugin_ticket_priority SET urgency = priority_urgency');
+
+            $this->addSql('ALTER TABLE plugin_ticket_status ADD code VARCHAR(255) NOT NULL, CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE name name VARCHAR(255) NOT NULL, CHANGE description description LONGTEXT DEFAULT NULL;');
+            $this->addSql('UPDATE plugin_ticket_status SET code = status_id ');
+            $this->addSql('ALTER TABLE plugin_ticket_status DROP status_id');
+
+            $this->addSql('UPDATE plugin_ticket_ticket t SET priority_id = (SELECT id FROM plugin_ticket_priority t2 WHERE t2.code = t.priority_id)');
+            $this->addSql('UPDATE plugin_ticket_ticket t SET status_id = (SELECT id FROM plugin_ticket_status t2 WHERE t2.code = t.status_id)');
+
+            $this->addSql('ALTER TABLE plugin_ticket_ticket CHANGE project_id project_id INT DEFAULT NULL, CHANGE priority_id priority_id INT DEFAULT NULL, CHANGE course_id course_id INT DEFAULT NULL, CHANGE session_id session_id INT DEFAULT NULL, CHANGE personal_email personal_email VARCHAR(255) NOT NULL, CHANGE assigned_last_user assigned_last_user INT DEFAULT NULL, CHANGE status_id status_id INT DEFAULT NULL, CHANGE total_messages total_messages INT NOT NULL, CHANGE keyword keyword VARCHAR(255) DEFAULT NULL, CHANGE source source VARCHAR(255) DEFAULT NULL, CHANGE start_date start_date DATETIME DEFAULT NULL, CHANGE sys_insert_user_id sys_insert_user_id INT NOT NULL, CHANGE sys_insert_datetime sys_insert_datetime DATETIME NOT NULL, CHANGE sys_lastedit_user_id sys_lastedit_user_id INT DEFAULT NULL, CHANGE subject subject VARCHAR(255) NOT NULL, CHANGE message message LONGTEXT DEFAULT NULL;');
 
             $this->addSql('UPDATE plugin_ticket_ticket SET code = ticket_code');
             $this->addSql('UPDATE plugin_ticket_ticket SET id = ticket_id');
             $this->addSql('ALTER TABLE plugin_ticket_ticket DROP ticket_id, DROP ticket_code, DROP request_user');
             $this->addSql('ALTER TABLE plugin_ticket_ticket MODIFY COLUMN id INT NOT NULL PRIMARY KEY AUTO_INCREMENT');
 
+            $table = $schema->getTable('plugin_ticket_ticket');
+            if ($table->hasIndex('fk_ticket_priority')) {
+                $this->addSql('ALTER TABLE plugin_ticket_ticket DROP INDEX fk_ticket_priority, ADD INDEX IDX_EDE2C768497B19F9(priority_id)');
+            }
+
             if ($schema->hasTable('plugin_ticket_assigned_log')) {
+                $table = $schema->getTable('plugin_ticket_assigned_log');
+                if ($table->hasIndex('fk_ticket_assigned_log')) {
+                    $this->addSql('ALTER TABLE plugin_ticket_assigned_log DROP INDEX fk_ticket_assigned_log, ADD INDEX IDX_54B65868700047D2(ticket_id);');
+                }
+
                 $this->addSql('RENAME TABLE plugin_ticket_assigned_log TO ticket_assigned_log');
+                $this->addSql('ALTER TABLE ticket_assigned_log ENGINE=InnoDB');
             }
 
             if ($schema->hasTable('plugin_ticket_category')) {
                 $this->addSql('RENAME TABLE plugin_ticket_category TO ticket_category');
+                $this->addSql('ALTER TABLE ticket_category ENGINE=InnoDB');
             }
 
             if ($schema->hasTable('plugin_ticket_message')) {
-                $this->addSql(
-                    'RENAME TABLE plugin_ticket_message TO ticket_message'
-                );
-            }
+                $table = $schema->getTable('plugin_ticket_message');
+                if ($table->hasIndex('fk_tick_message')) {
+                    $this->addSql('ALTER TABLE plugin_ticket_message DROP INDEX fk_tick_message, ADD INDEX IDX_BA71692D700047D2(ticket_id);');
+                }
 
-            if ($schema->hasTable('plugin_ticket_message_attachments')) {
-                $this->addSql(
-                    'RENAME TABLE plugin_ticket_message_attachments TO ticket_message_attachments'
-                );
+                $this->addSql('RENAME TABLE plugin_ticket_message TO ticket_message');
+                $this->addSql('ALTER TABLE ticket_message ENGINE=InnoDB');
             }
 
             if ($schema->hasTable('plugin_ticket_priority')) {
-                $this->addSql(
-                    'RENAME TABLE plugin_ticket_priority TO ticket_priority'
-                );
+                $this->addSql('RENAME TABLE plugin_ticket_priority TO ticket_priority');
+                $this->addSql('ALTER TABLE ticket_priority ENGINE=InnoDB');
             }
 
             if ($schema->hasTable('plugin_ticket_project')) {
-                $this->addSql(
-                    'RENAME TABLE plugin_ticket_project TO ticket_project'
-                );
+                $this->addSql('RENAME TABLE plugin_ticket_project TO ticket_project');
+                $this->addSql('ALTER TABLE ticket_project ENGINE=InnoDB');
             }
 
             if ($schema->hasTable('plugin_ticket_status')) {
-                $this->addSql(
-                    'RENAME TABLE plugin_ticket_status TO ticket_status'
-                );
+                $this->addSql('RENAME TABLE plugin_ticket_status TO ticket_status');
+                $this->addSql('ALTER TABLE ticket_status ENGINE=InnoDB');
             }
 
-            if ($schema->hasTable('plugin_ticket_ticket')) {
-                $this->addSql(
-                    'RENAME TABLE plugin_ticket_ticket TO ticket_ticket'
-                );
-            }
+            $this->addSql('RENAME TABLE plugin_ticket_ticket TO ticket_ticket');
+            $this->addSql('ALTER TABLE ticket_ticket ENGINE=InnoDB');
 
             $this->addSql('ALTER TABLE ticket_project DROP project_id, CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE name name VARCHAR(255) NOT NULL, CHANGE description description LONGTEXT DEFAULT NULL, CHANGE email email VARCHAR(255) DEFAULT NULL, CHANGE other_area other_area INT DEFAULT NULL, CHANGE sys_insert_user_id sys_insert_user_id INT NOT NULL, CHANGE sys_insert_datetime sys_insert_datetime DATETIME NOT NULL, CHANGE sys_lastedit_user_id sys_lastedit_user_id INT DEFAULT NULL;');
-            $this->addSql('ALTER TABLE ticket_status ADD code VARCHAR(255) NOT NULL, CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE name name VARCHAR(255) NOT NULL, CHANGE description description LONGTEXT DEFAULT NULL;');
-            $this->addSql('UPDATE ticket_status SET code = status_id ');
-            $this->addSql('ALTER TABLE ticket_status DROP status_id');
 
             $this->addSql('UPDATE ticket_category SET sys_insert_user_id = 1 WHERE sys_insert_user_id IS NULL');
             $this->addSql('UPDATE ticket_category SET sys_insert_datetime = NOW() WHERE sys_insert_datetime IS NULL');
@@ -238,9 +262,8 @@ class Version111 extends AbstractMigrationChamilo
             if ($schema->hasTable('plugin_ticket_category_rel_user')) {
                 $table = $schema->getTable('plugin_ticket_category_rel_user');
                 $this->addSql('RENAME TABLE plugin_ticket_category_rel_user TO ticket_category_rel_user');
+                $this->addSql('ALTER TABLE ticket_category_rel_user ENGINE=InnoDB');
                 $this->addSql('ALTER TABLE ticket_category_rel_user CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE category_id category_id INT DEFAULT NULL, CHANGE user_id user_id INT DEFAULT NULL;');
-                $this->addSql('CREATE INDEX IDX_5B8A98712469DE2 ON ticket_category_rel_user (category_id);');
-                $this->addSql('CREATE INDEX IDX_5B8A987A76ED395 ON ticket_category_rel_user (user_id);');
 
                 if ($table->hasIndex('fk_5b8a98712469de2')) {
                     $table->dropIndex('fk_5b8a98712469de2');
@@ -249,36 +272,42 @@ class Version111 extends AbstractMigrationChamilo
                 if ($table->hasIndex('fk_5b8a987a76ed395')) {
                     $table->dropIndex('fk_5b8a987a76ed395');
                 }
+
+                $this->addSql('CREATE INDEX IDX_5B8A98712469DE2 ON ticket_category_rel_user (category_id);');
+                $this->addSql('CREATE INDEX IDX_5B8A987A76ED395 ON ticket_category_rel_user (user_id);');
             } else {
                 $this->addSql('CREATE TABLE IF NOT EXISTS ticket_category_rel_user (id INT AUTO_INCREMENT NOT NULL, category_id INT DEFAULT NULL, user_id INT DEFAULT NULL, INDEX IDX_5B8A98712469DE2 (category_id), INDEX IDX_5B8A987A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
                 $this->addSql('ALTER TABLE ticket_category_rel_user ADD CONSTRAINT FK_5B8A98712469DE2 FOREIGN KEY (category_id) REFERENCES ticket_category (id)');
                 $this->addSql('ALTER TABLE ticket_category_rel_user ADD CONSTRAINT FK_5B8A987A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
             }
 
-            $this->addSql('ALTER TABLE ticket_message_attachments DROP message_attch_id, CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE message_id message_id INT DEFAULT NULL, CHANGE ticket_id ticket_id INT DEFAULT NULL, CHANGE filename filename LONGTEXT NOT NULL, CHANGE size size INT NOT NULL, CHANGE sys_insert_user_id sys_insert_user_id INT NOT NULL, CHANGE sys_insert_datetime sys_insert_datetime DATETIME NOT NULL, CHANGE sys_lastedit_user_id sys_lastedit_user_id INT DEFAULT NULL;');
-            $this->addSql('ALTER TABLE ticket_message_attachments ADD CONSTRAINT FK_70BF9E26700047D2 FOREIGN KEY (ticket_id) REFERENCES ticket_ticket (id);');
-            $this->addSql('CREATE INDEX IDX_70BF9E26700047D2 ON ticket_message_attachments (ticket_id);');
-            $this->addSql('ALTER TABLE ticket_message_attachments RENAME INDEX ticket_message_id_fk TO IDX_70BF9E26537A1329;');
+            $this->addSql('ALTER TABLE ticket_message DROP message_id, CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE ticket_id ticket_id INT DEFAULT NULL, CHANGE subject subject VARCHAR(255) DEFAULT NULL, CHANGE message message LONGTEXT DEFAULT NULL, CHANGE status status VARCHAR(255) NOT NULL, CHANGE ip_address ip_address VARCHAR(255) NOT NULL, CHANGE sys_insert_user_id sys_insert_user_id INT NOT NULL, CHANGE sys_insert_datetime sys_insert_datetime DATETIME NOT NULL, CHANGE sys_lastedit_user_id sys_lastedit_user_id INT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE ticket_message ADD CONSTRAINT FK_BA71692D700047D2 FOREIGN KEY (ticket_id) REFERENCES ticket_ticket (id);');
+
+            if ($schema->hasTable('plugin_ticket_message_attachments')) {
+                $table = $schema->getTable('plugin_ticket_message_attachments');
+                if ($table->hasIndex('ticket_message_id_fk')) {
+                    $this->addSql('ALTER TABLE plugin_ticket_message_attachments DROP INDEX ticket_message_id_fk, ADD INDEX IDX_70BF9E26537A1329(message_id);');
+                }
+
+                $this->addSql('RENAME TABLE plugin_ticket_message_attachments TO ticket_message_attachments');
+                $this->addSql('ALTER TABLE ticket_message_attachments ENGINE=InnoDB');
+                $this->addSql('ALTER TABLE ticket_message_attachments DROP message_attch_id, CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE message_id message_id INT DEFAULT NULL, CHANGE ticket_id ticket_id INT DEFAULT NULL, CHANGE filename filename LONGTEXT NOT NULL, CHANGE size size INT NOT NULL, CHANGE sys_insert_user_id sys_insert_user_id INT NOT NULL, CHANGE sys_insert_datetime sys_insert_datetime DATETIME NOT NULL, CHANGE sys_lastedit_user_id sys_lastedit_user_id INT DEFAULT NULL;');
+                $this->addSql('ALTER TABLE ticket_message_attachments ADD CONSTRAINT FK_70BF9E26700047D2 FOREIGN KEY (ticket_id) REFERENCES ticket_ticket (id);');
+                $this->addSql('ALTER TABLE ticket_message_attachments ADD CONSTRAINT FK_70BF9E26537A1329 FOREIGN KEY (message_id) REFERENCES ticket_message (id);');
+                $this->addSql('CREATE INDEX IDX_70BF9E26700047D2 ON ticket_message_attachments (ticket_id);');
+            } else {
+                $this->addSql('CREATE TABLE IF NOT EXISTS ticket_message_attachments (id INT AUTO_INCREMENT NOT NULL, ticket_id INT DEFAULT NULL, message_id INT DEFAULT NULL, path VARCHAR(255) NOT NULL, filename LONGTEXT NOT NULL, size INT NOT NULL, sys_insert_user_id INT NOT NULL, sys_insert_datetime DATETIME NOT NULL, sys_lastedit_user_id INT DEFAULT NULL, sys_lastedit_datetime DATETIME DEFAULT NULL, INDEX IDX_70BF9E26700047D2 (ticket_id), INDEX IDX_70BF9E26537A1329 (message_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+                $this->addSql('ALTER TABLE ticket_message_attachments ADD CONSTRAINT FK_70BF9E26700047D2 FOREIGN KEY (ticket_id) REFERENCES ticket_ticket (id)');
+                $this->addSql('ALTER TABLE ticket_message_attachments ADD CONSTRAINT FK_70BF9E26537A1329 FOREIGN KEY (message_id) REFERENCES ticket_message (id)');
+            }
 
             $this->addSql('UPDATE ticket_priority SET sys_insert_user_id = 1 WHERE sys_insert_user_id IS NULL');
             $this->addSql('UPDATE ticket_priority SET sys_insert_datetime = NOW() WHERE sys_insert_datetime IS NULL');
 
-            $this->addSql('ALTER TABLE ticket_priority ADD code VARCHAR(255) NOT NULL, ADD name VARCHAR(255) NOT NULL, ADD description LONGTEXT DEFAULT NULL, ADD color VARCHAR(255) NOT NULL, ADD urgency VARCHAR(255) NOT NULL, CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE sys_insert_user_id sys_insert_user_id INT NOT NULL, CHANGE sys_insert_datetime sys_insert_datetime DATETIME NOT NULL, CHANGE sys_lastedit_user_id sys_lastedit_user_id INT DEFAULT NULL;');
-
-            $this->addSql('UPDATE ticket_priority SET code = priority_id');
-            $this->addSql('UPDATE ticket_priority SET name = priority');
-            $this->addSql('UPDATE ticket_priority SET description = priority_desc');
-            $this->addSql('UPDATE ticket_priority SET color = priority_color');
-            $this->addSql('UPDATE ticket_priority SET urgency = priority_urgency');
-
             $this->addSql('ALTER TABLE ticket_priority DROP priority_id, DROP priority, DROP priority_desc, DROP priority_color, DROP priority_urgency');
 
-            $this->addSql('UPDATE ticket_ticket t SET priority_id = (SELECT id FROM ticket_priority t2 WHERE t2.code = t.priority_id)');
-            $this->addSql('UPDATE ticket_ticket t SET status_id = (SELECT id FROM ticket_status t2 WHERE t2.code = t.status_id)');
-
-
             $this->addSql('ALTER TABLE ticket_ticket ADD CONSTRAINT FK_EDE2C768497B19F9 FOREIGN KEY (priority_id) REFERENCES ticket_priority (id);');
-
             $this->addSql('UPDATE ticket_ticket SET project_id = 1 WHERE project_id is NULL or project_id = 0');
             $this->addSql('ALTER TABLE ticket_ticket ADD CONSTRAINT FK_EDE2C768166D1F9C FOREIGN KEY (project_id) REFERENCES ticket_project (id);');
 
@@ -294,7 +323,6 @@ class Version111 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_EDE2C768613FECDF ON ticket_ticket (session_id);');
             $this->addSql('CREATE INDEX IDX_EDE2C7686BF700BD ON ticket_ticket (status_id);');
 
-            $this->addSql('ALTER TABLE ticket_ticket RENAME INDEX fk_ticket_priority TO IDX_EDE2C768497B19F9;');
             $this->addSql('ALTER TABLE ticket_assigned_log CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE ticket_id ticket_id INT DEFAULT NULL, CHANGE user_id user_id INT DEFAULT NULL, CHANGE assigned_date assigned_date DATETIME NOT NULL, CHANGE sys_insert_user_id sys_insert_user_id INT NOT NULL;');
             $this->addSql('ALTER TABLE ticket_assigned_log ADD CONSTRAINT FK_54B65868700047D2 FOREIGN KEY (ticket_id) REFERENCES ticket_ticket (id);');
 
@@ -302,17 +330,10 @@ class Version111 extends AbstractMigrationChamilo
 
             $this->addSql('ALTER TABLE ticket_assigned_log ADD CONSTRAINT FK_54B65868A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);');
             $this->addSql('CREATE INDEX IDX_54B65868A76ED395 ON ticket_assigned_log (user_id);');
-            $this->addSql('ALTER TABLE ticket_assigned_log RENAME INDEX fk_ticket_assigned_log TO IDX_54B65868700047D2;');
 
-
-            $this->addSql('ALTER TABLE ticket_message DROP message_id, CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE ticket_id ticket_id INT DEFAULT NULL, CHANGE subject subject VARCHAR(255) DEFAULT NULL, CHANGE message message LONGTEXT DEFAULT NULL, CHANGE status status VARCHAR(255) NOT NULL, CHANGE ip_address ip_address VARCHAR(255) NOT NULL, CHANGE sys_insert_user_id sys_insert_user_id INT NOT NULL, CHANGE sys_insert_datetime sys_insert_datetime DATETIME NOT NULL, CHANGE sys_lastedit_user_id sys_lastedit_user_id INT DEFAULT NULL;');
-            $this->addSql('ALTER TABLE ticket_message ADD CONSTRAINT FK_BA71692D700047D2 FOREIGN KEY (ticket_id) REFERENCES ticket_ticket (id);');
-            $this->addSql('ALTER TABLE ticket_message RENAME INDEX fk_tick_message TO IDX_BA71692D700047D2;');
             $this->addSql('ALTER TABLE ticket_ticket CHANGE category_id category_id INT DEFAULT NULL;');
             $this->addSql('ALTER TABLE ticket_ticket ADD CONSTRAINT FK_EDE2C76812469DE2 FOREIGN KEY (category_id) REFERENCES ticket_category (id);');
             $this->addSql('CREATE INDEX IDX_EDE2C76812469DE2 ON ticket_ticket (category_id);');
-
-            $this->addSql('ALTER TABLE ticket_message_attachments ADD CONSTRAINT FK_70BF9E26537A1329 FOREIGN KEY (message_id) REFERENCES ticket_message (id);');
             $this->addSql('DELETE FROM settings_current WHERE title = "Ticket"');
         } else {
             // Plugin was never installed. Create ticket tables
@@ -387,7 +408,8 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE session MODIFY COLUMN name VARCHAR(150) NOT NULL DEFAULT ''");
 
         if (!$schema->hasTable('version')) {
-            $this->addSql('CREATE TABLE version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(255), PRIMARY KEY(id), UNIQUE(version));');
+            $sql = getVersionTable();
+            $this->addSql($sql);
         }
 
         if ($schema->hasTable('resource')) {
@@ -407,6 +429,110 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise', 'Exercise')");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'lp', 'LearningPath')");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath')");
+
+        // Fixes from 1.10.x
+
+        // Promotion
+        if ($schema->hasTable('promotion')) {
+            $table = $schema->getTable('promotion');
+            $this->addSql('ALTER TABLE promotion CHANGE name name VARCHAR(255) NOT NULL, CHANGE description description LONGTEXT NOT NULL, CHANGE career_id career_id INT DEFAULT NULL, CHANGE status status INT');
+            if ($table->hasForeignKey('FK_C11D7DD1B58CDA09') == false) {
+                $this->addSql('ALTER TABLE promotion ADD CONSTRAINT FK_C11D7DD1B58CDA09 FOREIGN KEY (career_id) REFERENCES career (id);');
+            }
+            if ($table->hasIndex('IDX_C11D7DD1B58CDA09') == false) {
+                $this->addSql('CREATE INDEX IDX_C11D7DD1B58CDA09 ON promotion (career_id);');
+            }
+        }
+
+        if ($schema->hasTable('skill_profile')) {
+            $this->addSql('ALTER TABLE skill_profile CHANGE name name VARCHAR(255) NOT NULL, CHANGE description description LONGTEXT NOT NULL;');
+        }
+
+        // skill_rel_user_comment
+        if ($schema->hasTable('skill_rel_user_comment')) {
+            $table = $schema->getTable('skill_rel_user_comment');
+            $this->addSql('ALTER TABLE skill_rel_user_comment CHANGE skill_rel_user_id skill_rel_user_id INT DEFAULT NULL, CHANGE feedback_giver_id feedback_giver_id INT DEFAULT NULL, CHANGE feedback_text feedback_text LONGTEXT NOT NULL, CHANGE feedback_value feedback_value INT DEFAULT 1, CHANGE feedback_datetime feedback_datetime DATETIME NOT NULL;');
+            if ($table->hasForeignKey('FK_7AE9F6B6484A9317') == false) {
+                $this->addSql('ALTER TABLE skill_rel_user_comment ADD CONSTRAINT FK_7AE9F6B6484A9317 FOREIGN KEY (skill_rel_user_id) REFERENCES skill_rel_user (id);');
+            }
+
+            if ($table->hasForeignKey('FK_7AE9F6B63AF3B65B') == false) {
+                $this->addSql('ALTER TABLE skill_rel_user_comment ADD CONSTRAINT FK_7AE9F6B63AF3B65B FOREIGN KEY (feedback_giver_id) REFERENCES user (id);');
+            }
+
+            if ($table->hasIndex('IDX_7AE9F6B6484A9317') == false) {
+                $this->addSql('CREATE INDEX IDX_7AE9F6B6484A9317 ON skill_rel_user_comment (skill_rel_user_id);');
+            }
+
+            if ($table->hasIndex('IDX_7AE9F6B63AF3B65B') == false) {
+                $this->addSql('CREATE INDEX IDX_7AE9F6B63AF3B65B ON skill_rel_user_comment (feedback_giver_id);');
+            }
+
+            if ($table->hasIndex('idx_select_su_giver') == false) {
+                $this->addSql('CREATE INDEX idx_select_su_giver ON skill_rel_user_comment (skill_rel_user_id, feedback_giver_id);');
+            }
+        }
+
+        $this->addSql('ALTER TABLE skill_rel_gradebook CHANGE type type VARCHAR(10) NOT NULL;');
+
+        // access_url_rel_user
+        if ($schema->hasTable('access_url_rel_user')) {
+            $table = $schema->getTable('access_url_rel_user');
+            $this->addSql('ALTER TABLE access_url_rel_user CHANGE access_url_id access_url_id INT NOT NULL, CHANGE user_id user_id INT NOT NULL;');
+            if ($table->hasForeignKey('FK_85574263A76ED395') == false) {
+                $this->addSql('ALTER TABLE access_url_rel_user ADD CONSTRAINT FK_85574263A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);');
+            }
+            if ($table->hasForeignKey('FK_8557426373444FD5') == false) {
+                $this->addSql('ALTER TABLE access_url_rel_user ADD CONSTRAINT FK_8557426373444FD5 FOREIGN KEY (access_url_id) REFERENCES access_url (id);');
+            }
+        }
+
+        if ($schema->hasTable('sequence_rule')) {
+            $table = $schema->getTable('sequence_rule');
+            if ($table->hasColumn('text')) {
+                $this->addSql('ALTER TABLE sequence_rule DROP text');
+            }
+
+            if (!$table->hasColumn('description')) {
+                $this->addSql(
+                    'ALTER TABLE sequence_rule ADD description LONGTEXT NOT NULL'
+                );
+            }
+        }
+
+        if ($schema->hasTable('course_rel_user_catalogue')) {
+            $table = $schema->getTable('course_rel_user_catalogue');
+
+            if ($table->hasForeignKey('course_rel_user_catalogue_ibfk_1')) {
+                $this->addSql('ALTER TABLE course_rel_user_catalogue DROP FOREIGN KEY course_rel_user_catalogue_ibfk_1;');
+            }
+            if ($table->hasForeignKey('course_rel_user_catalogue_ibfk_2')) {
+                $this->addSql('ALTER TABLE course_rel_user_catalogue DROP FOREIGN KEY course_rel_user_catalogue_ibfk_2;');
+            }
+
+            if ($table->hasForeignKey('FK_79CA412EA76ED395') == false) {
+                $this->addSql('ALTER TABLE course_rel_user_catalogue ADD CONSTRAINT FK_79CA412EA76ED395 FOREIGN KEY (user_id) REFERENCES user (id);');
+            }
+            if ($table->hasForeignKey('FK_79CA412E91D79BD3') == false) {
+                $this->addSql('ALTER TABLE course_rel_user_catalogue ADD CONSTRAINT FK_79CA412E91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);');
+            }
+        }
+
+        if ($schema->hasTable('extra_field_values')) {
+            $table = $schema->getTable('extra_field_values');
+            if ($table->hasForeignKey('FK_171DF924443707B0') == false) {
+                $this->addSql('ALTER TABLE extra_field_values ADD CONSTRAINT FK_171DF924443707B0 FOREIGN KEY (field_id) REFERENCES extra_field (id);');
+            }
+        }
+
+        if ($schema->hasTable('extra_field_options')) {
+            $table = $schema->getTable('extra_field_options');
+            if ($table->hasForeignKey('FK_A572E3AE443707B0') == false) {
+                $this->addSql('ALTER TABLE extra_field_options ADD CONSTRAINT FK_A572E3AE443707B0 FOREIGN KEY (field_id) REFERENCES extra_field (id);');
+            }
+        }
+
+        $this->addSql('ALTER TABLE session_rel_course DROP category');
     }
 
     /**

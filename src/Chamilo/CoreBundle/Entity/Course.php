@@ -964,7 +964,7 @@ class Course
      */
     public function setSubscribe($subscribe)
     {
-        $this->subscribe = intval($subscribe);
+        $this->subscribe = boolval($subscribe);
 
         return $this;
     }
@@ -988,7 +988,7 @@ class Course
      */
     public function setUnsubscribe($unsubscribe)
     {
-        $this->unsubscribe = intval($unsubscribe);
+        $this->unsubscribe = boolval($unsubscribe);
 
         return $this;
     }

@@ -28,7 +28,11 @@ $course_info = api_get_course_info_by_id($course_id);
 $tpl = new Template(null);
 
 // Build the form
-$form = new FormValidator('set_temp_password', 'POST', api_get_self().'?course_id='.$course_id.'&session_id='.$session_id);
+$form = new FormValidator(
+    'set_temp_password',
+    'POST',
+    api_get_self().'?course_id='.$course_id.'&session_id='.$session_id
+);
 $form->addElement('header', get_lang('CourseRequiresPassword'));
 $form->addElement('hidden', 'course_id', $course_id);
 $form->addElement('hidden', 'session_id', $session_id);
@@ -42,7 +46,7 @@ if ($form->validate()) {
         header('Location: '.api_get_course_url($course_info['code'], $session_id));
         exit;
     } else {
-        $tpl->assign('error_message', Display::display_error_message(get_lang('CourseRegistrationCodeIncorrect'), true, true));
+        $tpl->assign('error_message', Display::return_message(get_lang('CourseRegistrationCodeIncorrect'), 'error', true));
     }
 }
 

@@ -130,7 +130,7 @@ if (count($userList) > 0) {
 echo '</div>';
 
 if (count($userList) == 0) {
-    echo Display::display_warning_message(get_lang('NoResultsAvailable'));
+    echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
 } else {
     echo '<br /><br /><table class="data_table">';
     foreach ($userList as $index => $value) {

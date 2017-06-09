@@ -15,7 +15,7 @@ switch ($action) {
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
         $recipients = isset($_POST['recipients']) ? $_POST['recipients'] : '';
-        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
         if (empty($recipients) && empty($id)) {
             $resultList[] = ['error' => get_lang('YouMustSelectAtLeastOneDestinee')];

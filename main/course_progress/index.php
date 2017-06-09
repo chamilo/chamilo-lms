@@ -36,6 +36,7 @@ $actions = array(
     'thematic_import',
     'thematic_export',
     'thematic_export_pdf',
+    'export_documents',
     'thematic_plan_list',
     'thematic_plan_add',
     'thematic_plan_edit',
@@ -44,7 +45,8 @@ $actions = array(
     'thematic_advance_add',
     'thematic_advance_edit',
     'thematic_advance_delete',
-    'export_single_thematic'
+    'export_single_thematic',
+    'export_single_documents'
 );
 
 $action = 'thematic_details';
@@ -66,9 +68,6 @@ if ($action == 'thematic_details' || $action == 'thematic_list') {
 
 // get thematic id
 $thematic_id = isset($_GET['thematic_id']) ? (int) $_GET['thematic_id'] : 0;
-
-// get thematic plan description type
-$description_type = isset($_GET['description_type']) ? (int) $_GET['description_type'] : 0;
 
 // instance thematic object for using like library here
 $thematic = new Thematic();
@@ -216,11 +215,6 @@ if ($action == 'thematic_plan_list' || $action == 'thematic_plan_delete') {
 if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
     $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl, 'name' => get_lang('ThematicControl'));
     $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic_id, 'name' => get_lang('ThematicPlan').' ('.$cleanThematicTitle.')');
-    if ($description_type >= ADD_THEMATIC_PLAN) {
-        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewBloc'));
-    } else {
-        $interbreadcrumb[] = array('url' => '#', 'name' => $default_thematic_plan_title[$description_type]);
-    }
 }
 if ($action == 'thematic_advance_list' || $action == 'thematic_advance_delete') {
     $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl, 'name' => get_lang('ThematicControl'));
@@ -285,6 +279,10 @@ switch ($action) {
     case 'thematic_details':
         //no break
     case 'export_single_thematic':
+        //no break
+    case 'export_documents':
+        //no break
+    case 'export_single_documents':
         $thematic_controller->thematic($action);
         break;
     case 'thematic_plan_add':

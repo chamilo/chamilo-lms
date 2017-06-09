@@ -35,7 +35,7 @@ $result_course = Database::query($sql_course);
 if (Database::num_rows($result_course) > 0) {
 	if (isset($_POST['export'])) {
 		$export_result = export_csv($header, $data, 'test.csv'); // TODO: There is no data for exporting yet.
-		Display :: display_error_message($export_result);
+		echo Display::return_message($export_result, 'error');
 	}
 	echo '<table class="data_table"><tr><th>'.get_lang('Course').'</th><th>'.get_lang('TempsFrequentation').'</th><th>'.get_lang('Progression').'</th><th>'.get_lang('MoyenneTest').'</th></tr>';
 	$header = array(get_lang('Course', ''), get_lang('TempsFrequentation', ''), get_lang('Progression', ''), get_lang('MoyenneTest', ''));

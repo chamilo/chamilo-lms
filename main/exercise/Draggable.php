@@ -29,9 +29,7 @@ class Draggable extends Question
         $defaults = array();
         $nb_matches = $nb_options = 2;
         $matches = array();
-
         $answer = null;
-
         if ($form->isSubmitted()) {
             $nb_matches = $form->getSubmitValue('nb_matches');
             $nb_options = $form->getSubmitValue('nb_options');
@@ -174,29 +172,24 @@ class Draggable extends Question
     }
 
     /**
-     * Abstract function which creates the form to create / edit the answers of the question
-     * @param FormValidator $form
+     * @inheritdoc
      */
-    public function processAnswersCreation($form)
+    public function processAnswersCreation($form, $exercise)
     {
         $this->extra = $form->exportValue('orientation');
         $nb_matches = $form->getSubmitValue('nb_matches');
         $this->weighting = 0;
         $position = 0;
-
         $objAnswer = new Answer($this->id);
-
         // Insert the options
         for ($i = 1; $i <= $nb_matches; ++$i) {
             $position++;
-
             $objAnswer->createAnswer($position, 0, '', 0, $position);
         }
 
         // Insert the answers
         for ($i = 1; $i <= $nb_matches; ++$i) {
             $position++;
-
             $answer = $form->getSubmitValue('answer['.$i.']');
             $matches = $form->getSubmitValue('matches['.$i.']');
             $weighting = $form->getSubmitValue('weighting['.$i.']');
@@ -211,19 +204,15 @@ class Draggable extends Question
         }
 
         $objAnswer->save();
-        $this->save();
+        $this->save($exercise);
     }
 
     /**
-     * Shows question title an description
-     * @param string $feedback_type
-     * @param int $counter
-     * @param float $score
-     * @return string
+     * @inheritdoc
      */
-    public function return_header($feedback_type = null, $counter = null, $score = null)
+    public function return_header($exercise, $counter = null, $score = null)
     {
-        $header = parent::return_header($feedback_type, $counter, $score);
+        $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
             <tr>
                 <th>' . get_lang('ElementList').'</th>

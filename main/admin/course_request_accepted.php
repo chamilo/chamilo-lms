@@ -133,16 +133,17 @@ function modify_filter($id)
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
 $tool_name = get_lang('AcceptedCourseRequests');
-Display :: display_header($tool_name);
 
 // Display confirmation or error message.
 if (!empty($message)) {
     if ($is_error_message) {
-        Display::display_error_message($message, false);
+        Display::addFlash(Display::return_message($message, 'error', false));
     } else {
         Display::addFlash(Display::return_message($message, 'normal', false));
     }
 }
+
+Display :: display_header($tool_name);
 
 if (!$course_validation_feature) {
     Display :: display_footer();

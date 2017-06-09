@@ -14,6 +14,15 @@ use Doctrine\ORM\Mapping as ORM;
 class MessageAttachment
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="path", type="string", length=255, nullable=false)
@@ -47,17 +56,6 @@ class MessageAttachment
      * @ORM\Column(name="filename", type="string", length=255, nullable=false)
      */
     private $filename;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
 
     /**
      * Set path

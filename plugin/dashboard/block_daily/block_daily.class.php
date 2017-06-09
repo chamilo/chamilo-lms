@@ -66,7 +66,6 @@ class BlockDaily extends Block
      */
     public function get_block()
     {
-
         global $charset;
         $column = 2;
         $data = array();
@@ -101,10 +100,7 @@ class BlockDaily extends Block
     public function get_content_html()
     {
         $course_data = $this->get_course_information_data();
-        //$content = '<div style="margin:10px;">';
-        $content = '<h4>'.get_lang(
-                'YourCourseList'
-            ).'</h4>';
+        $content = '<h4>'.get_lang('YourCourseList').'</h4>';
         $data_table = null;
         if (!empty($course_data)) {
             $data_table .= '<table class="data_table" width:"95%">';

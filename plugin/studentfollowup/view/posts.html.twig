@@ -1,0 +1,11 @@
+{% import 'studentfollowup/view/post.html.twig' as template %}
+
+<h2 class="text-center">{{ care_title }} - {{ student_info.complete_name }}</h2>
+{% if posts %}
+    {% for post in posts %}
+        {{ template.post_template('simple', post, information_icon, post_url, current_url) }}
+    {% endfor %}
+    <div>
+    {{ pagination }}
+    </div>
+{% endif %}

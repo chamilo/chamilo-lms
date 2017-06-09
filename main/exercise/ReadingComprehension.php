@@ -136,7 +136,7 @@ class ReadingComprehension extends UniqueAnswer
     /**
      * @inheritdoc
      */
-    public function createForm(&$form)
+    public function createForm(&$form, $exercise)
     {
         // Categories
         $tabCat = TestCategory::getCategoriesIdAndName();

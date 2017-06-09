@@ -11,14 +11,14 @@ $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 
 $htmlHeadXtra[] = api_get_js_simple(
-    api_get_path(WEB_PLUGIN_PATH) . 'bbb/resources/utils.js'
+    api_get_path(WEB_PLUGIN_PATH).'bbb/resources/utils.js'
 );
-$htmlHeadXtra[] = "<script>var _p = {web_plugin: '" . api_get_path(WEB_PLUGIN_PATH). "'}</script>";
+$htmlHeadXtra[] = "<script>var _p = {web_plugin: '".api_get_path(WEB_PLUGIN_PATH)."'}</script>";
 
 $tpl = new Template($tool_name);
 
 $isGlobal = isset($_GET['global']) ? true : false;
-$isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id']: false;
+$isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
 
 $bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);
 $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -59,7 +59,7 @@ if ($conferenceManager) {
             }
             break;
         case 'copy_record_to_link_tool':
-            $result = $bbb->copyRecordToLinkTool($_GET['id']);
+            $result = $bbb->copyRecordingToLinkTool($_GET['id']);
             if ($result) {
                 $message = Display::return_message($plugin->get_lang('VideoConferenceAddedToTheLinkTool'), 'success');
             } else {
@@ -67,7 +67,7 @@ if ($conferenceManager) {
             }
             break;
         case 'delete_record':
-            $result = $bbb->deleteRecord($_GET['id']);
+            $result = $bbb->deleteRecording($_GET['id']);
             if ($result) {
                 $message = Display::return_message(get_lang('Deleted'), 'success');
             } else {
@@ -80,22 +80,22 @@ if ($conferenceManager) {
         case 'end':
             $bbb->endMeeting($_GET['id']);
             $message = Display::return_message(
-                $plugin->get_lang('MeetingClosed') . '<br />' . $plugin->get_lang(
+                $plugin->get_lang('MeetingClosed').'<br />'.$plugin->get_lang(
                     'MeetingClosedComment'
                 ),
                 'success',
                 false
             );
 
-            if (file_exists(__DIR__ . '/config.vm.php')) {
-                require __DIR__ . '/../../vendor/autoload.php';
+            if (file_exists(__DIR__.'/config.vm.php')) {
+                require __DIR__.'/../../vendor/autoload.php';
 
-                require __DIR__ . '/lib/vm/AbstractVM.php';
-                require __DIR__ . '/lib/vm/VMInterface.php';
-                require __DIR__ . '/lib/vm/DigitalOceanVM.php';
-                require __DIR__ . '/lib/VM.php';
+                require __DIR__.'/lib/vm/AbstractVM.php';
+                require __DIR__.'/lib/vm/VMInterface.php';
+                require __DIR__.'/lib/vm/DigitalOceanVM.php';
+                require __DIR__.'/lib/VM.php';
 
-                $config = require __DIR__ . '/config.vm.php';
+                $config = require __DIR__.'/config.vm.php';
 
                 $vm = new VM($config);
                 $vm->resizeToMinLimit();
@@ -124,11 +124,12 @@ $meetings = $bbb->getMeetings(
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
 }
-$users_online = $bbb->getUsersOnlineInCurrentRoom();
+$usersOnline = $bbb->getUsersOnlineInCurrentRoom();
+$maxUsers = $bbb->getMaxUsersLimit();
 $status = $bbb->isServerRunning();
 $meetingExists = $bbb->meetingExists($bbb->getCurrentVideoConferenceName());
 $showJoinButton = false;
-if ($meetingExists || $conferenceManager) {
+if (($meetingExists || $conferenceManager) && ($maxUsers == 0 || $maxUsers > $usersOnline)) {
     $showJoinButton = true;
 }
 $conferenceUrl = $bbb->getConferenceUrl();
@@ -179,7 +180,9 @@ $tpl = new Template($tool_name);
 $tpl->assign('allow_to_edit', $conferenceManager);
 $tpl->assign('meetings', $meetings);
 $tpl->assign('conference_url', $conferenceUrl);
-$tpl->assign('users_online', $users_online);
+$tpl->assign('users_online', $usersOnline);
+$tpl->assign('conference_manager', $conferenceManager);
+$tpl->assign('max_users_limit', $maxUsers);
 $tpl->assign('bbb_status', $status);
 $tpl->assign('show_join_button', $showJoinButton);
 $tpl->assign('message', $message);
@@ -191,7 +194,7 @@ $content = $tpl->fetch($listing_tpl);
 if (api_is_platform_admin()) {
     $actionLinks = Display::toolbarButton(
         $plugin->get_lang('AdminView'),
-        api_get_path(WEB_PLUGIN_PATH) . 'bbb/admin.php',
+        api_get_path(WEB_PLUGIN_PATH).'bbb/admin.php',
         'list',
         'primary'
     );

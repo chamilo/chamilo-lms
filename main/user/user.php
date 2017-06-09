@@ -489,9 +489,8 @@ $table->set_header($header_nr++, '', false);
 
 $indexList['photo'] = $header_nr;
 $table->set_header($header_nr++, get_lang('Photo'), false);
-
-$table->set_header($header_nr++, get_lang('OfficialCode'));
 $indexList['official_code'] = $header_nr;
+$table->set_header($header_nr++, get_lang('OfficialCode'));
 
 if ($is_western_name_order) {
     $indexList['firstname'] = $header_nr;
@@ -512,6 +511,7 @@ $table->set_header($header_nr++, get_lang('GroupSingle'), false);
 $hideFields = api_get_configuration_value('hide_user_field_from_list');
 
 if (!empty($hideFields)) {
+    $hideFields = $hideFields['fields'];
     foreach ($hideFields as $fieldToHide) {
         if (isset($indexList[$fieldToHide])) {
             $table->setHideColumn($indexList[$fieldToHide]);
@@ -745,6 +745,11 @@ function searchUserKeyword($firstname, $lastname, $username, $official_code, $ke
 
 /**
  * Get the users to display on the current page.
+ * @param   int $from Offset
+ * @param   int $number_of_items
+ * @param   int $column The column on which to sort
+ * @param   string $direction ASC or DESC, for the sort order of the query results
+ * @return  array
  */
 function get_user_data($from, $number_of_items, $column, $direction)
 {

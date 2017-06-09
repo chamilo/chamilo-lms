@@ -10,7 +10,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $xajax = new xajax();
-$xajax->registerFunction ('search_sessions');
+$xajax->registerFunction('search_sessions');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -19,13 +19,13 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // setting breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('CareersAndPromotions'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'career_dashboard.php', 'name' => get_lang('CareersAndPromotions'));
 
 // Setting the name of the tool
 $tool_name = get_lang('SubscribeSessionsToPromotions');
 $add_type = 'multiple';
-if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
+if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -74,7 +74,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $session_in_promotion_posted = $_POST['session_in_promotion_name'];
     if (!is_array($session_in_promotion_posted)) {
-        $session_in_promotion_posted=array($session_in_promotion_posted);
+        $session_in_promotion_posted = array($session_in_promotion_posted);
     }
     if ($form_sent == 1) {
         // Added a parameter to send emails when registering a user
@@ -119,15 +119,15 @@ if ($add_type == 'multiple') {
 }
 
 echo '<div class="actions">';
-echo '<a href="promotions.php">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="promotions.php">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 ?>
 
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) echo '&add=true'; ?>" style="margin:0px;" <?php if ($ajax_search) {echo ' onsubmit="valide();"'; }?>>
 <?php echo '<legend>'.$tool_name.' '.$promotion_data['name'].'</legend>';
 
 
-if ($add_type=='multiple') {
+if ($add_type == 'multiple') {
     $extraField = new \ExtraField('session');
     $extra_field_list = $extraField->get_all_extra_field_by_type(ExtraField::FIELD_TYPE_SELECT);
     $new_field_list = array();
@@ -139,7 +139,7 @@ if ($add_type=='multiple') {
             echo '&nbsp;<select name="'.$varname.'">';
             echo '<option value="0">--'.get_lang('Select').'--</option>';
             foreach ($new_field['data'] as $option) {
-                $checked='';
+                $checked = '';
                 if (isset($_POST[$varname])) {
                     if ($_POST[$varname] == $option[1]) {
                         $checked = 'selected="true"';
@@ -158,7 +158,7 @@ echo Display::input('hidden', 'id', $id);
 echo Display::input('hidden', 'form_sent', '1');
 echo Display::input('hidden', 'add_type', null);
 if (!empty($errorMsg)) {
-    Display::addFlash(Display::return_message($errorMsg, 'normal')); //main API
+    echo Display::return_message($errorMsg, 'normal'); //main API
 }
 ?>
 
@@ -170,7 +170,7 @@ if (!empty($errorMsg)) {
   <td align="center"><b><?php echo get_lang('SessionsInPromotion') ?> :</b></td>
 </tr>
 
-<?php if ($add_type=='multiple') { ?>
+<?php if ($add_type == 'multiple') { ?>
 <tr>
 <td align="center">
 <?php echo get_lang('FirstLetterSessions'); ?> :
@@ -188,7 +188,7 @@ if (!empty($errorMsg)) {
   <td align="center">
   <div id="content_source">
       <?php
-      if (!($add_type=='multiple')) {
+      if (!($add_type == 'multiple')) {
         ?>
         <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
         <div id="ajax_list_users_single"></div>
@@ -196,7 +196,7 @@ if (!empty($errorMsg)) {
       } else {
       ?>
       <div id="ajax_list_multiple">
-        <?php echo Display::select('session_not_in_promotion_name',$session_not_in_promotion, '',array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'session_not_in_promotion','size'=>'15px'),false); ?>
+        <?php echo Display::select('session_not_in_promotion_name', $session_not_in_promotion, '', array('style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'session_not_in_promotion', 'size'=>'15px'), false); ?>
       </div>
     <?php
       }
@@ -231,7 +231,7 @@ if (!empty($errorMsg)) {
         'session_in_promotion_name[]',
         $session_in_promotion,
         '',
-        array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'session_in_promotion','size'=>'15px'),
+        array('style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'session_in_promotion', 'size'=>'15px'),
         false
     );
     unset($sessionUsersList);
@@ -341,7 +341,7 @@ function search_sessions($needle, $type)
             }
         }
         $return .= '</select>';
-        $xajax_response -> addAssign('ajax_list_multiple','innerHTML',api_utf8_encode($return));
+        $xajax_response -> addAssign('ajax_list_multiple', 'innerHTML', api_utf8_encode($return));
     }
 
     return $xajax_response;

@@ -614,7 +614,10 @@ class CoursesController
 
         return Display::div(
             $icon,
-            array('class' => 'btn btn-default btn-sm registered', 'title' => get_lang("AlreadyRegisteredToSession"))
+            array(
+                'class' => 'btn btn-default btn-sm registered',
+                'title' => get_lang("AlreadyRegisteredToSession"),
+            )
         );
     }
 
@@ -647,10 +650,9 @@ class CoursesController
         $countSessions = $this->model->countSessions($date);
         $sessions = $this->model->browseSessions($date, $limit);
 
-        $pageTotal = intval(ceil(intval($countSessions) / $limit['length']));
+        $pageTotal = intval(intval($countSessions) / $limit['length']);
         // Do NOT show pagination if only one page or less
-        $cataloguePagination = $pageTotal > 1 ?
-            CourseCategory::getCatalogPagination($limit['current'], $limit['length'], $pageTotal) : '';
+        $cataloguePagination = $pageTotal > 1 ? CourseCategory::getCatalogPagination($limit['current'], $limit['length'], $pageTotal) : '';
         $sessionsBlocks = $this->getFormattedSessionsBlock($sessions);
 
         // Get session search catalogue URL
@@ -665,7 +667,7 @@ class CoursesController
         $tpl = new Template();
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
-        $tpl->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
+        $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true' ? true : false);
         $tpl->assign('course_url', $courseUrl);
         $tpl->assign('catalog_pagination', $cataloguePagination);
         $tpl->assign('hidden_links', $hiddenLinks);
@@ -689,13 +691,18 @@ class CoursesController
         $searchTag = isset($_POST['search_tag']) ? $_POST['search_tag'] : null;
         $searchDate = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
         $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
-        $courseUrl = CourseCategory::getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
+        $courseUrl = CourseCategory::getCourseCategoryUrl(
+            1,
+            $limit['length'],
+            null,
+            0,
+            'subscribe'
+        );
 
         $sessions = $this->model->browseSessionsByTags($searchTag, $limit);
         $sessionsBlocks = $this->getFormattedSessionsBlock($sessions);
 
         $tpl = new Template();
-
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
         $tpl->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
@@ -720,7 +727,13 @@ class CoursesController
     {
         $q = isset($_REQUEST['q']) ? Security::remove_XSS($_REQUEST['q']) : null;
         $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
-        $courseUrl = CourseCategory::getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
+        $courseUrl = CourseCategory::getCourseCategoryUrl(
+            1,
+            $limit['length'],
+            null,
+            0,
+            'subscribe'
+        );
         $searchDate = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
 
         $sessions = $this->model->browseSessionsBySearch($q, $limit);
@@ -807,12 +820,10 @@ class CoursesController
             );
 
             $hasRequirements = false;
-
             foreach ($sequences['sequences'] as $sequence) {
                 if (count($sequence['requirements']) === 0) {
                     continue;
                 }
-
                 $hasRequirements = true;
                 break;
             }
@@ -846,7 +857,7 @@ class CoursesController
                 'is_subscribed' => SessionManager::isUserSubscribedAsStudent($session->getId(), $userId),
                 'icon' => $this->getSessionIcon($session->getName()),
                 'date' => $sessionDates['display'],
-                'price' => (!empty($isThisSessionOnSale['html']) ? $isThisSessionOnSale['html'] : ''),
+                'price' => !empty($isThisSessionOnSale['html']) ? $isThisSessionOnSale['html'] : '',
                 'subscribe_button' => isset($isThisSessionOnSale['buy_button']) ? $isThisSessionOnSale['buy_button'] : $this->getRegisteredInSessionButton(
                     $session->getId(),
                     $session->getName(),

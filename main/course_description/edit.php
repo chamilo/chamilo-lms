@@ -56,7 +56,7 @@ echo '</div>';
 
 // error messages
 if (isset($error) && intval($error) == 1) {
-	Display::addFlash(Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error', false));
+	echo Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error', false);
 }
 
 // default header title form

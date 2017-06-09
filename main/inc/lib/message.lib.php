@@ -586,7 +586,7 @@ class MessageManager
         // user's file name
         $file_name = $file_attach['name'];
         if (!filter_extension($new_file_name)) {
-            Display:: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+            echo Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error');
         } else {
             $new_file_name = uniqid('');
             if (!empty($receiver_user_id)) {

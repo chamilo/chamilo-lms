@@ -81,7 +81,7 @@ class CToolIntro
     /**
      * Set id
      *
-     * @param string $id
+     * @param int $id
      * @return CToolIntro
      */
     public function setId($id)

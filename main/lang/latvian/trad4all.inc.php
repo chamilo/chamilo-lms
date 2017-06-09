@@ -145,7 +145,6 @@ $Forbidden = "Nav atļauts";
 $CourseAccessConfigTip = "Pēc noklusējuma, Jūsu apmācības kurss ir publisks, bet Jūs varat noteikt augstāku konfidencialitātes līmeni.";
 $OpenToTheWorld = "Atklātā pieeja - iespējama no jebkuras vietas pasaulē!";
 $OpenToThePlatform = "Daļēji atklātā pieeja - iespējama lietotājiem, kas reģistrējušies portālā";
-$OpenToThePlatform = "Atklātā pieeja - iespējama lietotājiem, kas reģistrējušies portālā";
 $TipLang = "Atverot kursu mācībām, mācību vides darba virsma būs <b>izvēlētājā valodā</b>!";
 $Vid = "Video";
 $Work = "Raksti";

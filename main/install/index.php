@@ -609,10 +609,11 @@ if (@$_POST['step2']) {
     <?php echo get_lang('ChamiloURL').' : '.$urlForm; ?><br /><br />
     <?php
     if ($installType == 'new') {
-        echo Display::display_warning_message(
+        echo Display::return_message(
             '<h4 style="text-align: center">'.get_lang(
                 'Warning'
             ).'</h4>'.get_lang('TheInstallScriptWillEraseAllTables'),
+            'warning',
             false
         );
     }
@@ -766,6 +767,9 @@ if (@$_POST['step2']) {
             $dbNameForm,
             $dbPortForm
         );
+
+        $sql = getVersionTable();
+        $manager->getConnection()->executeQuery($sql);
 
         $metadataList = $manager->getMetadataFactory()->getAllMetadata();
         $schema = $manager->getConnection()->getSchemaManager()->createSchema();

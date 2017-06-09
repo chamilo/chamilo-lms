@@ -228,9 +228,6 @@ $template->assign(
 );
 $template->assign('has_requirements', $hasRequirements);
 $template->assign('sequences', $sessionRequirements);
-
-$templateFolder = api_get_configuration_value('default_template');
-
 $layout = $template->get_template('session/about.tpl');
 $content = $template->fetch($layout);
 $template->assign('header', $session->getName());

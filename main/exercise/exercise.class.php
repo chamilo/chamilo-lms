@@ -73,6 +73,8 @@ class Exercise
     public $emailAlert;
     public $notifyUserByEmail = '';
     public $sessionId = 0;
+    public $questionFeedbackEnabled = false;
+    public $questionTypeWithFeedback;
 
     /**
      * Constructor of the class
@@ -115,6 +117,9 @@ class Exercise
         }
         $this->course_id = $course_info['real_id'];
         $this->course = $course_info;
+
+        // ALTER TABLE c_quiz_question ADD COLUMN feedback text;
+        $this->questionFeedbackEnabled = api_get_configuration_value('allow_quiz_question_feedback');
     }
 
     /**
@@ -3676,19 +3681,14 @@ class Exercise
                         if (!$switchableAnswerSet) {
                             // not switchable answer, must be in the same place than teacher order
                             for ($i = 0; $i < count($listCorrectAnswers['tabwords']); $i++) {
-                                $studentAnswer = isset($choice[$i]) ? trim($choice[$i]) : '';
+                                $studentAnswer = isset($choice[$i]) ? $choice[$i] : '';
                                 $correctAnswer = $listCorrectAnswers['tabwords'][$i];
 
                                 // This value is the user input, not escaped while correct answer is escaped by fckeditor
                                 // Works with cyrillic alphabet and when using ">" chars see #7718 #7610 #7618
                                 // ENT_QUOTES is used in order to transform ' to &#039;
                                 if (!$from_database) {
-                                    $studentAnswer = htmlentities(
-                                        api_utf8_encode($studentAnswer),
-                                        ENT_QUOTES
-                                    );
-                                    // fix apostrophe
-                                    $studentAnswer = str_replace('&#039;', '&#39;', $studentAnswer);
+                                    $studentAnswer = FillBlanks::clearStudentAnswer($studentAnswer);
                                 }
 
                                 $isAnswerCorrect = 0;
@@ -5360,6 +5360,7 @@ class Exercise
     /**
      * Sends a notification when a user ends an examn
      *
+     * @param string $type 'start' or 'end' of an exercise
      * @param array $question_list_answers
      * @param string $origin
      * @param int $exe_id
@@ -5367,75 +5368,65 @@ class Exercise
      * @param float $weight
      * @return bool
      */
-    public function send_mail_notification_for_exam($question_list_answers, $origin, $exe_id, $score, $weight)
-    {
-        if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1) {
+    public function send_mail_notification_for_exam(
+        $type = 'end',
+        $question_list_answers,
+        $origin,
+        $exe_id,
+        $score = null,
+        $weight  = null
+    ) {
+        $setting = api_get_course_setting('email_alert_manager_on_new_quiz');
+
+        if (empty($setting)) {
             return false;
         }
 
         // Email configuration settings
         $courseCode = api_get_course_id();
         $courseInfo = api_get_course_info($courseCode);
-        $sessionId = api_get_session_id();
 
         if (empty($courseInfo)) {
             return false;
         }
 
-        $url_email = api_get_path(WEB_CODE_PATH)
-            . 'exercise/exercise_show.php?'
-            . api_get_cidreq()
-            . '&id_session='
-            . $sessionId
-            . '&id='
-            . $exe_id
-            . '&action=qualify';
+        $sessionId = api_get_session_id();
+
+        $sendStart = false;
+        $sendEnd = false;
+        $sendEndOpenQuestion = false;
+        $sendEndOralQuestion = false;
+
+        foreach ($setting as $option) {
+            switch ($option) {
+                case 0:
+                    return false;
+                    break;
+                case 1: // End
+                    if ($type == 'end') {
+                        $sendEnd = true;
+                    }
+                    break;
+                case 2: // start
+                    if ($type == 'start') {
+                        $sendStart = true;
+                    }
+                    break;
+                case 3: // end + open
+                    if ($type == 'end') {
+                        $sendEndOpenQuestion = true;
+                    }
+                    break;
+                case 4: // end + oral
+                    if ($type == 'end') {
+                        $sendEndOralQuestion = true;
+                    }
+                    break;
+            }
+        }
+
         $user_info = api_get_user_info(api_get_user_id());
-
-        $scoreLabel = '';
-        if (api_get_configuration_value('send_score_in_exam_notification_mail_to_manager') == true) {
-            $scoreLabel = ExerciseLib::show_score($score, $weight, false, true);
-            $scoreLabel = "<tr>
-                            <td>".get_lang('Score')."</td>
-                            <td>&nbsp;$scoreLabel</td>
-                        </tr>";
-        }
-
-        $msg = get_lang('ExerciseAttempted').'<br /><br />'
-                    .get_lang('AttemptDetails').' : <br /><br />
-                    <table>
-                        <tr>
-                            <td><em>'.get_lang('CourseName').'</em></td>
-                            <td>&nbsp;<b>#course#</b></td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('TestAttempted').'</td>
-                            <td>&nbsp;#exercise#</td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('StudentName').'</td>
-                            <td>&nbsp;#firstName# #lastName#</td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('StudentEmail').'</td>
-                            <td>&nbsp;#email#</td>
-                        </tr>
-                        '.$scoreLabel.'
-                    </table>';
-        $open_question_list = null;
-
-        $msg = str_replace("#email#", $user_info['email'], $msg);
-        $msg1 = str_replace("#exercise#", $this->exercise, $msg);
-        $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);
-        $msg1 = str_replace("#lastName#", $user_info['lastname'], $msg);
-        $msg = str_replace("#course#", $courseInfo['name'], $msg1);
-
-        if ($origin != 'learnpath') {
-            $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
-        }
-        $msg1 = str_replace("#url#", $url_email, $msg);
-        $mail_content = $msg1;
-        $subject = get_lang('ExerciseAttempted');
+        $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_show.php?'.api_get_cidreq().'&id_session='.$sessionId.'&id='.$exe_id.'&action=qualify';
 
         if (!empty($sessionId)) {
             $addGeneralCoach = true;
@@ -5450,6 +5441,88 @@ class Exercise
             );
         } else {
             $teachers = CourseManager::get_teacher_list_from_course_code($courseCode);
+        }
+
+        if ($sendEndOpenQuestion) {
+            $this->send_notification_for_open_questions(
+                $question_list_answers,
+                $origin,
+                $exe_id,
+                $user_info,
+                $url,
+                $teachers
+            );
+        }
+
+        if ($sendEndOralQuestion) {
+            $this->send_notification_for_oral_questions(
+                $question_list_answers,
+                $origin,
+                $exe_id,
+                $user_info,
+                $url,
+                $teachers
+            );
+        }
+
+        if (!$sendEnd && !$sendStart) {
+            return false;
+        }
+
+
+        $scoreLabel = '';
+        if ($sendEnd && api_get_configuration_value('send_score_in_exam_notification_mail_to_manager') == true) {
+            $scoreLabel = ExerciseLib::show_score($score, $weight, false, true);
+            $scoreLabel = "<tr>
+                            <td>".get_lang('Score')."</td>
+                            <td>&nbsp;$scoreLabel</td>
+                        </tr>";
+        }
+
+        if ($sendEnd) {
+            $msg = get_lang('ExerciseAttempted').'<br /><br />';
+        } else {
+            $msg = get_lang('StudentStartExercise').'<br /><br />';
+        }
+
+        $msg .= get_lang('AttemptDetails').' : <br /><br />
+                    <table>
+                        <tr>
+                            <td>'.get_lang('CourseName').'</td>
+                            <td>#course#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('Exercise').'</td>
+                            <td>&nbsp;#exercise#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentName').'</td>
+                            <td>&nbsp;#student_complete_name#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentEmail').'</td>
+                            <td>&nbsp;#email#</td>
+                        </tr>
+                        '.$scoreLabel.'
+                    </table>';
+
+        $variables = [
+            '#email#' => $user_info['email'],
+            '#exercise#' => $this->exercise,
+            '#student_complete_name#' => $user_info['complete_name'],
+            '#course#' => $courseInfo['title']
+        ];
+         if ($origin != 'learnpath' && $sendEnd) {
+            $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
+            $variables['#url#'] = $url;
+        }
+
+        $mail_content = str_replace(array_keys($variables), array_values($variables), $msg);
+
+        if ($sendEnd) {
+            $subject = get_lang('ExerciseAttempted');
+        } else {
+            $subject = get_lang('StudentStartExercise');
         }
 
         if (!empty($teachers)) {
@@ -5470,23 +5543,17 @@ class Exercise
      * @param int $exe_id
      * @return null
      */
-    public function send_notification_for_open_questions($question_list_answers, $origin, $exe_id)
-    {
-        if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1) {
-            return null;
-        }
+    private function send_notification_for_open_questions(
+        $question_list_answers,
+        $origin,
+        $exe_id,
+        $user_info,
+        $url_email,
+        $teachers
+    ) {
         // Email configuration settings
         $courseCode = api_get_course_id();
         $course_info = api_get_course_info($courseCode);
-        $url_email = api_get_path(WEB_CODE_PATH)
-            . 'exercise/exercise_show.php?'
-            . api_get_cidreq()
-            . '&id_session='
-            . api_get_session_id()
-            . '&id='
-            . $exe_id
-            . '&action=qualify';
-        $user_info = api_get_user_info(api_get_user_id());
 
         $msg = get_lang('OpenQuestionsAttempted').'<br /><br />'
                     .get_lang('AttemptDetails').' : <br /><br />'
@@ -5547,12 +5614,6 @@ class Exercise
             $mail_content = $msg1;
             $subject = get_lang('OpenQuestionsAttempted');
 
-            if (api_get_session_id()) {
-                $teachers = CourseManager::get_coach_list_from_course_code($courseCode, api_get_session_id());
-            } else {
-                $teachers = CourseManager::get_teacher_list_from_course_code($courseCode);
-            }
-
             if (!empty($teachers)) {
                 foreach ($teachers as $user_id => $teacher_data) {
                     MessageManager::send_message_simple(
@@ -5572,29 +5633,22 @@ class Exercise
      * @param int $exe_id
      * @return null
      */
-    public function send_notification_for_oral_questions($question_list_answers, $origin, $exe_id)
-    {
-        if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1) {
-            return null;
-        }
+    private function send_notification_for_oral_questions(
+        $question_list_answers,
+        $origin,
+        $exe_id,
+        $user_info,
+        $url_email,
+        $teachers
+    ) {
         // Email configuration settings
         $courseCode = api_get_course_id();
         $course_info = api_get_course_info($courseCode);
 
-        $url_email = api_get_path(WEB_CODE_PATH)
-            . 'exercise/exercise_show.php?'
-            . api_get_cidreq()
-            . '&id_session='
-            . api_get_session_id()
-            . '&id='
-            . $exe_id
-            . '&action=qualify';
-        $user_info = api_get_user_info(api_get_user_id());
-
         $oral_question_list = null;
         foreach ($question_list_answers as $item) {
-            $question    = $item['question'];
-            $answer      = $item['answer'];
+            $question = $item['question'];
+            $answer = $item['answer'];
             $answer_type = $item['answer_type'];
 
             if (!empty($question) && !empty($answer) && $answer_type == ORAL_EXPRESSION) {
@@ -5644,12 +5698,6 @@ class Exercise
             $msg1 = str_replace("#url#", $url_email, $msg);
             $mail_content = $msg1;
             $subject = get_lang('OralQuestionsAttempted');
-
-            if (api_get_session_id()) {
-                $teachers = CourseManager::get_coach_list_from_course_code($courseCode, api_get_session_id());
-            } else {
-                $teachers = CourseManager::get_teacher_list_from_course_code($courseCode);
-            }
 
             if (!empty($teachers)) {
                 foreach ($teachers as $user_id => $teacher_data) {
@@ -7078,345 +7126,6 @@ class Exercise
             echo Display::div($exercise_actions, array('class'=>'form-actions'));
             echo '</div>';
         }
-    }
-
-    /**
-     * @param int $exeId
-     * @return array
-     */
-    public function returnQuestionListByAttempt($exeId)
-    {
-        return $this->displayQuestionListByAttempt($exeId, false, true);
-    }
-
-    /**
-     * Display the exercise results
-     * @param int  $exe_id
-     * @param bool $saveUserResult save users results (true) or just show the results (false)
-     * @param bool $returnExerciseResult return array with exercise result info
-     * @return mixed
-     */
-    public function displayQuestionListByAttempt($exe_id, $saveUserResult = false, $returnExerciseResult = false)
-    {
-        global $origin, $debug;
-
-        //Getting attempt info
-        $exercise_stat_info = $this->getStatTrackExerciseInfoByExeId($exe_id);
-
-        //Getting question list
-        $question_list = array();
-        if (!empty($exercise_stat_info['data_tracking'])) {
-            $question_list = explode(',', $exercise_stat_info['data_tracking']);
-        } else {
-            //Try getting the question list only if save result is off
-            if ($saveUserResult == false) {
-                $question_list = $this->selectQuestionList();
-            }
-            error_log("Data tracking is empty! exe_id: $exe_id");
-        }
-
-        $counter = 1;
-        $total_score = 0;
-        $total_weight = 0;
-
-        $exercise_content = null;
-
-        //Hide results
-        $show_results = false;
-        $show_only_score = false;
-
-        if ($this->results_disabled == RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS) {
-            $show_results = true;
-        }
-
-        $showScoreOptions = [
-            RESULT_DISABLE_SHOW_SCORE_ONLY,
-            RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
-            RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT
-        ];
-
-        if (in_array($this->results_disabled, $showScoreOptions)) {
-            $show_only_score = true;
-        }
-
-        if ($show_results || $show_only_score) {
-            $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
-            // Shows exercise header.
-            echo $this->show_exercise_result_header(
-                $user_info['complete_name'],
-                api_convert_and_format_date($exercise_stat_info['start_date'], DATE_TIME_FORMAT_LONG),
-                $exercise_stat_info['duration']
-            );
-        }
-
-        // Display text when test is finished #4074 and for LP #4227
-        $end_of_message = $this->selectTextWhenFinished();
-        if (!empty($end_of_message)) {
-            echo Display::return_message($end_of_message, 'normal', false);
-            echo "<div class='clear'>&nbsp;</div>";
-        }
-
-        $question_list_answers = array();
-        $media_list = array();
-        $category_list = array();
-        $tempParentId = null;
-        $mediaCounter = 0;
-        $exerciseResultInfo = array();
-
-        // Loop over all question to show results for each of them, one by one
-        if (!empty($question_list)) {
-            if ($debug) {
-                error_log('Looping question_list '.print_r($question_list, 1));
-            }
-
-            foreach ($question_list as $questionId) {
-                // Creates a temporary Question object
-                $objQuestionTmp = Question::read($questionId);
-
-                // This variable comes from exercise_submit_modal.php
-                ob_start();
-                $hotspot_delineation_result = null;
-
-                // We're inside *one* question. Go through each possible answer for this question
-                $result = $this->manageAnswers(
-                    $exercise_stat_info['exe_id'],
-                    $questionId,
-                    null,
-                    'exercise_result',
-                    array(),
-                    $saveUserResult,
-                    true,
-                    $show_results,
-                    $hotspot_delineation_result
-                );
-
-                if (empty($result)) {
-                    continue;
-                }
-
-                $total_score += $result['score'];
-                $total_weight += $result['weight'];
-
-                $question_list_answers[] = array(
-                    'question' => $result['open_question'],
-                    'answer' => $result['open_answer'],
-                    'answer_type' => $result['answer_type']
-                );
-
-                $my_total_score = $result['score'];
-                $my_total_weight = $result['weight'];
-
-                // Category report
-                $category_was_added_for_this_test = false;
-                $categoryExerciseList = $this->getListOfCategoriesWithQuestionForTest();
-
-                $category_list = array();
-                if (isset($categoryExerciseList) && !empty($categoryExerciseList)) {
-                    foreach ($categoryExerciseList as $category_id => $categoryInfo) {
-                        if (!isset($category_list[$category_id])) {
-                            $category_list[$category_id] = array();
-                            $category_list[$category_id]['score'] = 0;
-                            $category_list[$category_id]['total'] = 0;
-                        }
-                        $category_list[$category_id]['score'] += $my_total_score;
-                        $category_list[$category_id]['total'] += $my_total_weight;
-                        $category_was_added_for_this_test = true;
-                    }
-                }
-
-                // No category for this question!
-                if ($category_was_added_for_this_test == false) {
-                    if (!isset($category_list['none'])) {
-                        $category_list['none'] = array();
-                        $category_list['none']['score'] = 0;
-                        $category_list['none']['total'] = 0;
-                    }
-
-                    $category_list['none']['score'] += $my_total_score;
-                    $category_list['none']['total'] += $my_total_weight;
-                }
-
-                if ($this->selectPropagateNeg() == 0 && $my_total_score < 0) {
-                    $my_total_score = 0;
-                }
-
-                $comnt = null;
-                if ($show_results) {
-                    $comnt = get_comments($exe_id, $questionId);
-                    if (!empty($comnt)) {
-                        echo '<b>'.get_lang('Feedback').'</b>';
-                        echo '<div id="question_feedback">'.$comnt.'</div>';
-                    }
-                }
-
-                $score = array();
-                $score['result'] = get_lang('Score')." : ".
-                    ExerciseLib::show_score(
-                        $my_total_score,
-                        $my_total_weight,
-                        false,
-                        true
-                    );
-                $score['pass'] = $my_total_score >= $my_total_weight ? true : false;
-                $score['score'] = $my_total_score;
-                $score['weight'] = $my_total_weight;
-                $score['comments'] = $comnt;
-
-                $exerciseResultInfo[$questionId]['score'] = $score;
-                $exerciseResultInfo[$questionId]['details'] = $result;
-
-                // If no results we hide the results
-                if ($show_results == false) {
-                    $score = array();
-                }
-                $contents = ob_get_clean();
-
-                $question_content = '<div class="question_row">';
-
-                if ($show_results) {
-                    $show_media = false;
-                    $counterToShow = $counter;
-                    if ($objQuestionTmp->parent_id != 0) {
-
-                        if (!in_array($objQuestionTmp->parent_id, $media_list)) {
-                            $media_list[] = $objQuestionTmp->parent_id;
-                            $show_media = true;
-                        }
-                        if ($tempParentId == $objQuestionTmp->parent_id) {
-                            $mediaCounter++;
-                        } else {
-                            $mediaCounter = 0;
-                        }
-                        $counterToShow = chr(97 + $mediaCounter);
-                        $tempParentId = $objQuestionTmp->parent_id;
-                    }
-
-                    // Shows question title an description.
-                    $question_content .= $objQuestionTmp->return_header(
-                        null,
-                        $counterToShow,
-                        $score,
-                        $show_media,
-                        $this->getHideQuestionTitle()
-                    );
-
-                    // display question category, if any
-                    $question_content .= TestCategory::getCategoryNamesForQuestion(
-                        $questionId,
-                        null,
-                        true,
-                        $this->categoryMinusOne
-                    );
-                }
-                $counter++;
-                $question_content .= $contents;
-                $question_content .= '</div>';
-                $exercise_content .= $question_content;
-            } // end foreach() block that loops over all questions
-        }
-
-        $total_score_text = null;
-
-        if ($returnExerciseResult) {
-            return $exerciseResultInfo;
-        }
-
-        if ($origin != 'learnpath') {
-            if ($show_results || $show_only_score) {
-                $total_score_text .= $this->get_question_ribbon($total_score, $total_weight, true);
-            }
-        }
-
-        if (!empty($category_list) && ($show_results || $show_only_score)) {
-            //Adding total
-            $category_list['total'] = array('score' => $total_score, 'total' => $total_weight);
-            echo TestCategory::get_stats_table_by_attempt($this->id, $category_list, $this->categoryMinusOne);
-        }
-
-        echo $total_score_text;
-        echo $exercise_content;
-
-        if (!$show_only_score) {
-            echo $total_score_text;
-        }
-
-        if ($saveUserResult) {
-
-            // Tracking of results
-            $learnpath_id = $exercise_stat_info['orig_lp_id'];
-            $learnpath_item_id = $exercise_stat_info['orig_lp_item_id'];
-            $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
-
-            if (api_is_allowed_to_session_edit()) {
-                Event::update_event_exercise(
-                    $exercise_stat_info['exe_id'],
-                    $this->selectId(),
-                    $total_score,
-                    $total_weight,
-                    api_get_session_id(),
-                    $learnpath_id,
-                    $learnpath_item_id,
-                    $learnpath_item_view_id,
-                    $exercise_stat_info['exe_duration'],
-                    '',
-                    array()
-                );
-            }
-
-            // Send notification.
-            if (!api_is_allowed_to_edit(null, true)) {
-                $isSuccess = ExerciseLib::is_success_exercise_result($total_score, $total_weight, $this->selectPassPercentage());
-                $this->sendCustomNotification($exe_id, $exerciseResultInfo, $isSuccess);
-                $this->sendNotificationForOpenQuestions($question_list_answers, $origin, $exe_id);
-                $this->sendNotificationForOralQuestions($question_list_answers, $origin, $exe_id);
-            }
-        }
-    }
-
-    /**
-     * Returns an HTML ribbon to show on top of the exercise result, with
-     * colouring depending on the success or failure of the student
-     * @param integer $score
-     * @param integer $weight
-     * @param bool $check_pass_percentage
-     * @return string
-     */
-    public function get_question_ribbon($score, $weight, $check_pass_percentage = false)
-    {
-        $eventMessage = null;
-        $ribbon = '<div class="question_row">';
-        $ribbon .= '<div class="ribbon">';
-        if ($check_pass_percentage) {
-            $is_success = ExerciseLib::is_success_exercise_result($score, $weight, $this->selectPassPercentage());
-            // Color the final test score if pass_percentage activated
-            $ribbon_total_success_or_error = "";
-            if (ExerciseLib::is_pass_pourcentage_enabled($this->selectPassPercentage())) {
-                if ($is_success) {
-                    $eventMessage = $this->getOnSuccessMessage();
-                    $ribbon_total_success_or_error = ' ribbon-total-success';
-                } else {
-                    $eventMessage = $this->getOnFailedMessage();
-                    $ribbon_total_success_or_error = ' ribbon-total-error';
-                }
-            }
-            $ribbon .= '<div class="rib rib-total '.$ribbon_total_success_or_error.'">';
-        } else {
-            $ribbon .= '<div class="rib rib-total">';
-        }
-        $ribbon .= '<h3>'.get_lang('YourTotalScore').":&nbsp;";
-        $ribbon .= ExerciseLib::show_score($score, $weight, false, true);
-        $ribbon .= '</h3>';
-        $ribbon .= '</div>';
-
-        if ($check_pass_percentage) {
-            $ribbon .= ExerciseLib::show_success_message($score, $weight, $this->selectPassPercentage());
-        }
-        $ribbon .= '</div>';
-        $ribbon .= '</div>';
-
-        $ribbon .= $eventMessage;
-
-        return $ribbon;
     }
 
     /**

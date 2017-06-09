@@ -95,7 +95,7 @@ function xapian_query($query_string, $db = NULL, $start = 0, $length = 10, $extr
 
                 // process each specific field prefix
                 foreach ($specific_fields as $specific_field) {
-                    $results[$count]['sf-' . $specific_field['code']] = xapian_get_doc_terms($document, $specific_field['code']);
+                    $results[$count]['sf-'.$specific_field['code']] = xapian_get_doc_terms($document, $specific_field['code']);
                 }
 
                 // rest of data
@@ -264,6 +264,6 @@ function display_xapian_error($xapian_error_message) {
     } else {
         $message_error = get_lang('SearchOtherXapianError');
     }
-    $display_message = get_lang('Error') . ' : ' . $message_error;
-    Display::display_error_message($display_message);
+    $display_message = get_lang('Error').' : '.$message_error;
+    echo Display::return_message($display_message, 'error');
 }

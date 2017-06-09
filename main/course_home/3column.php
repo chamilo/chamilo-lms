@@ -4,13 +4,13 @@
 /**
  *  HOME PAGE FOR EACH COURSE (BASIC TOOLS FIXED)
  *
- *	This page, included in every course's index.php is the home
- *	page.To make administration simple, the professor edits his
- *	course from it's home page. Only the login detects that the
- *	visitor is allowed to activate, deactivate home page links,
- *	access to Professor's tools (statistics, edit forums...).
+ *  This page, included in every course's index.php is the home
+ *  page.To make administration simple, the professor edits his
+ *  course from it's home page. Only the login detects that the
+ *  visitor is allowed to activate, deactivate home page links,
+ *  access to Professor's tools (statistics, edit forums...).
  *
- *	@package chamilo.course_home
+ * @package chamilo.course_home
  */
 
 $hide = isset($_GET['hide']) && $_GET['hide'] === 'yes' ? 'yes' : null;
@@ -79,83 +79,76 @@ if (api_is_allowed_to_edit(null, true)) {
             "</font></td></tr>\n",
             "</table>\n";
         echo "<br /><br /><br />\n";
+    } elseif ($destroy) {
+        // if remove
 
-} // if remove
+        /*
+         * Process hiding a tools from aivailable tools.
+         * visibility=2 are only view  by Dokeos Administrator (visibility 0,1->2)
+         */
+        Database::query("UPDATE $TBL_ACCUEIL SET visibility='2' WHERE c_id = $course_id AND id = $id");
+    } elseif ($hide) {
+        // visibility 1 -> 0
+        /* HIDE */
+        Database::query("UPDATE $TBL_ACCUEIL SET visibility=0 WHERE c_id = $course_id AND id=$id");
+        $show_message .= Display::return_message(get_lang('ToolIsNowHidden'), 'confirmation');
+    } elseif ($restore) {
+        /*	REACTIVATE */
+        // visibility 0,2 -> 1
+        Database::query("UPDATE $TBL_ACCUEIL SET visibility=1  WHERE c_id = $course_id AND id=$id");
+        $show_message .= Display::return_message(get_lang('ToolIsNowVisible'), 'confirmation');
+    } elseif (isset($update) && $update) {
+        /*
+         * Editing "apparance" of  a tools  on the course Home Page.
+         */
+        $result = Database::query("SELECT * FROM $TBL_ACCUEIL WHERE c_id = $course_id AND id=$id");
+        $tool = Database::fetch_array($result);
+        $racine = api_get_path(SYS_PATH).'/'.$currentCourseID.'/images/';
+        $chemin = $racine;
+        $name = $tool[1];
+        $image = $tool[3];
 
-/*
- * Process hiding a tools from aivailable tools.
- * visibility=2 are only view  by Dokeos Administrator (visibility 0,1->2)
- */
+        $content .= "<tr>\n".
+            "<td colspan=\"4\">\n".
+            "<table>\n".
+            "<tr>\n".
+            "<td>\n".
+            "<form method=\"post\" action=\"".api_get_self()."\">\n".
+            "<input type=\"hidden\" name=\"id\" value=\"$id\">\n".
+            "Image : ".Display::return_icon($image)."\n".
+            "</td>\n".
+            "<td>\n".
+            "<select name=\"image\">\n".
+            "<option selected>".$image."</option>\n";
 
-elseif ($destroy) {
-    Database::query("UPDATE $TBL_ACCUEIL SET visibility='2' WHERE c_id = $course_id AND id = $id");
-}
-
-/* HIDE */
-
-elseif ($hide) { // visibility 1 -> 0
-    Database::query("UPDATE $TBL_ACCUEIL SET visibility=0 WHERE c_id = $course_id AND id=$id");
-    $show_message .= Display::return_message(get_lang('ToolIsNowHidden'), 'confirmation');
-}
-
-/*	REACTIVATE */
-
-elseif ($restore) { // visibility 0,2 -> 1
-    Database::query("UPDATE $TBL_ACCUEIL SET visibility=1  WHERE c_id = $course_id AND id=$id");
-    $show_message .= Display::return_message(get_lang('ToolIsNowVisible'), 'confirmation');
-}
-/*
- * Editing "apparance" of  a tools  on the course Home Page.
- */
-elseif (isset($update) && $update) {
-    $result = Database::query("SELECT * FROM $TBL_ACCUEIL WHERE c_id = $course_id AND id=$id");
-    $tool = Database::fetch_array($result);
-    $racine = api_get_path(SYS_PATH).'/'.$currentCourseID.'/images/';
-    $chemin = $racine;
-    $name = $tool[1];
-    $image = $tool[3];
-
-    $content .= "<tr>\n".
-        "<td colspan=\"4\">\n".
-        "<table>\n".
-        "<tr>\n".
-        "<td>\n".
-        "<form method=\"post\" action=\"".api_get_self()."\">\n".
-        "<input type=\"hidden\" name=\"id\" value=\"$id\">\n".
-        "Image : ".Display::return_icon($image)."\n".
-        "</td>\n".
-        "<td>\n".
-        "<select name=\"image\">\n".
-        "<option selected>".$image."</option>\n";
-
-    if ($dir = @opendir($chemin)) {
-        while ($file = readdir($dir)) {
-            if ($file == '..' || $file == '.') {
-                unset($file);
+        if ($dir = @opendir($chemin)) {
+            while ($file = readdir($dir)) {
+                if ($file == '..' || $file == '.') {
+                    unset($file);
+                }
+                $content .= "<option>".$file."</option>\n";
             }
-            $content .= "<option>".$file."</option>\n";
+            closedir($dir);
         }
-        closedir($dir);
-    }
 
-    $content .= "</select>\n".
-        "</td>\n".
-        "</tr>\n".
-        "<tr>\n".
-        "<td>".get_lang('NameOfTheLink')." : </td>\n".
-        "<td><input type=\"text\" name=\"name\" value=\"".$name."\"></td>\n".
-        "</tr>\n".
-        "<tr>\n".
-        "<td>Lien :</td>\n".
-        "<td><input type=\"text\" name=\"link\" value=\"".$link."\"></td>\n".
-        "</tr>\n".
-        "<tr>\n".
-        "<td colspan=\"2\"><input type=\"submit\" name=\"submit\" value=\"".get_lang('Ok')."\"></td>\n".
-        "</tr>\n".
-        "</form>\n".
-        "</table>\n".
-        "</td>\n".
-        "</tr>\n";
+        $content .= "</select>\n".
+            "</td>\n".
+            "</tr>\n".
+            "<tr>\n".
+            "<td>".get_lang('NameOfTheLink')." : </td>\n".
+            "<td><input type=\"text\" name=\"name\" value=\"".$name."\"></td>\n".
+            "</tr>\n".
+            "<tr>\n".
+            "<td>Lien :</td>\n".
+            "<td><input type=\"text\" name=\"link\" value=\"".$link."\"></td>\n".
+            "</tr>\n".
+            "<tr>\n".
+            "<td colspan=\"2\"><input type=\"submit\" name=\"submit\" value=\"".get_lang('Ok')."\"></td>\n".
+            "</tr>\n".
+            "</form>\n".
+            "</table>\n".
+            "</td>\n".
+            "</tr>\n";
     }
 }
 
@@ -175,13 +168,12 @@ if (api_is_platform_admin() && api_is_allowed_to_edit(null, true) && !api_is_coa
             </td>
             </tr>
             </table>\n";
-    } // if remove
-
-    /*
-     * Process hiding a tools from aivailable tools.
-     * visibility=2 are only viewed by Dokeos Administrator visibility 0,1->2
-     */
-    elseif (isset($delete) && $delete) {
+    } elseif (isset($delete) && $delete) {
+         // if remove
+        /*
+         * Process hiding a tools from aivailable tools.
+         * visibility=2 are only viewed by Dokeos Administrator visibility 0,1->2
+         */
         Database::query("DELETE FROM $TBL_ACCUEIL WHERE c_id = $course_id AND id = $id AND added_tool=1");
     }
 }

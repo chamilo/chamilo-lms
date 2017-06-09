@@ -292,9 +292,15 @@ if (!empty($gradebook) && $gradebook == 'view') {
 
 $interbreadcrumb[] = array("url" => "exercise.php", "name" => get_lang('Exercises'));
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
-    $interbreadcrumb[] = ["url" => "admin.php?exerciseId=".$objExercise->id, "name" => $objExercise->selectTitle(true)];
+    $interbreadcrumb[] = [
+        "url" => "admin.php?exerciseId=".$objExercise->id,
+        "name" => $objExercise->selectTitle(true),
+    ];
 } else {
-    $interbreadcrumb[] = ["url" => "#", "name" => $objExercise->selectTitle(true)];
+    $interbreadcrumb[] = [
+        "url" => "#",
+        "name" => $objExercise->selectTitle(true),
+    ];
 }
 
 // shows a link to go back to the question pool
@@ -314,7 +320,6 @@ if ($modifyIn == 'thisExercise') {
     }
 }
 $htmlHeadXtra[] = '<script>
-
 function multiple_answer_true_false_onchange(variable) {
     var result = variable.checked;
     var id = variable.id;
@@ -385,11 +390,10 @@ if ($inATest) {
         Display::return_icon('settings.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $maxScoreAllQuestions = 0;
-    //$questionList = $objExercise->getQuestionList();
     $questionList = $objExercise->selectQuestionList(true, true);
     if (!empty($questionList)) {
-        foreach ($questionList as $q) {
-            $question = Question::read($q);
+        foreach ($questionList as $questionItemId) {
+            $question = Question::read($questionItemId);
             if ($question) {
                 $maxScoreAllQuestions += $question->selectWeighting();
             }
@@ -415,7 +419,7 @@ if ($inATest) {
     }
     echo '</div>';
 
-} else if (isset($_GET['newQuestion'])) {
+} elseif (isset($_GET['newQuestion'])) {
     // we are in create a new question from question pool not in a test
     echo '<div class="actions">';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'">'.
@@ -466,7 +470,7 @@ if ($newQuestion || $editQuestion) {
 
 if (isset($_GET['hotspotadmin'])) {
     if (!is_object($objQuestion)) {
-        $objQuestion = Question :: read($_GET['hotspotadmin']);
+        $objQuestion = Question::read($_GET['hotspotadmin']);
     }
     if (!$objQuestion) {
         api_not_allowed();

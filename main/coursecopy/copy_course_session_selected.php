@@ -35,7 +35,7 @@ $courseInfo = api_get_course_info_by_id($courseId);
 $courseCode = $courseInfo['code'];
 $sessionId = api_get_session_id();
 
-if (empty($courseCode) OR empty($sessionId)) {
+if (empty($courseCode) || empty($sessionId)) {
     api_not_allowed(true);
 }
 
@@ -58,18 +58,14 @@ $tbl_session_rel_course_rel_user = Database::get_main_table(
     TABLE_MAIN_SESSION_COURSE_USER
 );
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 /* FUNCTIONS */
-
 /**
  * @param string $name
  */
 function make_select_session_list($name, $sessions, $attr = array())
 {
-
     $attrs = '';
     if (count($attr) > 0) {
         foreach ($attr as $key => $value) {
@@ -353,10 +349,10 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 } elseif (isset($_POST['copy_option']) && $_POST['copy_option'] == 'select_items') {
     // Else, if a CourseSelectForm is requested, show it
     if (api_get_setting('show_glossary_in_documents') != 'none') {
-        Display::addFlash(Display::return_message(
+        echo Display::return_message(
             get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'),
             'normal'
-        ));
+        );
     }
 
     $arrCourseDestination = array();
@@ -370,10 +366,10 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
     }
 
     if (!empty($destinationSession)) {
-        Display::addFlash(Display::return_message(
+        echo Display::return_message(
             get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'),
             'normal'
-        ));
+        );
 
         $cb = new CourseBuilder('', $courseInfo);
         $course = $cb->build($sessionId, $courseCode);

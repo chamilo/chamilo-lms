@@ -716,7 +716,14 @@ switch ($action) {
             get_lang('CountCertificates')
         );
 
-        $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
+        $extra_fields = UserManager::get_extra_fields(
+            0,
+            100,
+            null,
+            null,
+            true,
+            true
+        );
 
         if (!empty($extra_fields)) {
             foreach ($extra_fields as $extra) {
@@ -783,7 +790,14 @@ switch ($action) {
             get_lang('CourseAdvance')
         );
 
-        $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
+        $extra_fields = UserManager::get_extra_fields(
+            0,
+            100,
+            null,
+            null,
+            true,
+            true
+        );
         if (!empty($extra_fields)) {
             foreach ($extra_fields as $extra) {
                 $columns[] = $extra['1'];

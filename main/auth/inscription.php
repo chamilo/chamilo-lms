@@ -34,7 +34,7 @@ $geolocalization = $gMapsPlugin->get('enable_api') === 'true';
 
 if ($geolocalization) {
     $gmapsApiKey = $gMapsPlugin->get('api_key');
-    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='. $gmapsApiKey . '" ></script>';
+    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$gmapsApiKey.'" ></script>';
 }
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
@@ -109,7 +109,15 @@ if ($user_already_registered_show_terms === false) {
         if (api_get_setting('registration', 'email') != 'true') {
             $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
         }
-        $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+        $form->addRule(
+            'email',
+            sprintf(
+                get_lang('UsernameMaxXCharacters'),
+                (string) USERNAME_MAX_LENGTH
+            ),
+            'maxlength',
+            USERNAME_MAX_LENGTH
+        );
         $form->addRule('email', get_lang('UserTaken'), 'username_available');
     }
 
@@ -151,7 +159,15 @@ if ($user_already_registered_show_terms === false) {
         );
         $form->applyFilter('username', 'trim');
         $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
-        $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+        $form->addRule(
+            'username',
+            sprintf(
+                get_lang('UsernameMaxXCharacters'),
+                (string) USERNAME_MAX_LENGTH
+            ),
+            'maxlength',
+            USERNAME_MAX_LENGTH
+        );
         $form->addRule('username', get_lang('UsernameWrong'), 'username');
         $form->addRule('username', get_lang('UserTaken'), 'username_available');
     }
@@ -253,10 +269,25 @@ if ($user_already_registered_show_terms === false) {
         );
         $form->addElement('static', null, null, get_lang('ClickOnTheImageForANewOne'));
 
-        $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'), array('size' => 40));
-        $form->addRule('captcha', get_lang('EnterTheCharactersYouReadInTheImage'), 'required', null, 'client');
-
-        $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
+        $form->addElement(
+            'text',
+            'captcha',
+            get_lang('EnterTheLettersYouSee'),
+            array('size' => 40)
+        );
+        $form->addRule(
+            'captcha',
+            get_lang('EnterTheCharactersYouReadInTheImage'),
+            'required',
+            null,
+            'client'
+        );
+        $form->addRule(
+            'captcha',
+            get_lang('TheTextYouEnteredDoesNotMatchThePicture'),
+            'CAPTCHA',
+            $captcha_question
+        );
     }
 
     // EXTENDED FIELDS
@@ -399,7 +430,7 @@ if (!CustomPages::enabled()) {
         }
     }
 
-    $tool_name = get_lang('Registration', null, (!empty($_POST['language'])?$_POST['language']: $_user['language']));
+    $tool_name = get_lang('Registration', null, (!empty($_POST['language']) ? $_POST['language'] : $_user['language']));
 
     if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_registered_show_terms) {
         $tool_name = get_lang('TermsAndConditions');
@@ -420,7 +451,7 @@ if (!CustomPages::enabled()) {
     }
 
     if (file_exists($home.'register_top_'.$user_selected_language.'.html')) {
-        $home_top_temp = @(string)file_get_contents($home.'register_top_'.$user_selected_language.'.html');
+        $home_top_temp = @(string) file_get_contents($home.'register_top_'.$user_selected_language.'.html');
         $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
         if (!empty($open)) {
@@ -449,7 +480,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
         if (api_get_setting('show_terms_if_profile_completed') === 'true') {
             $userInfo = api_get_user_info();
             if ($userInfo && $userInfo['status'] != ANONYMOUS) {
-                if ((int)$userInfo['profile_completed'] !== 1) {
+                if ((int) $userInfo['profile_completed'] !== 1) {
                     api_not_allowed(true);
                 }
             }
@@ -570,7 +601,7 @@ if ($form->validate()) {
             $form
         );
 
-        //update the extra fields
+        // Update the extra fields
         $count_extra_field = count($extras);
         if ($count_extra_field > 0 && is_integer($user_id)) {
             foreach ($extras as $key => $value) {
@@ -676,7 +707,7 @@ if ($form->validate()) {
                 Database::query($sql);
 
                 // 2. Send mail to all platform admin
-                $emailsubject  = get_lang('ApprovalForNewAccount', null, $values['language']).': '.$values['username'];
+                $emailsubject = get_lang('ApprovalForNewAccount', null, $values['language']).': '.$values['username'];
                 $emailbody = get_lang('ApprovalForNewAccount', null, $values['language'])."\n";
                 $emailbody .= get_lang('UserName', null, $values['language']).': '.$values['username']."\n";
 
@@ -820,14 +851,14 @@ if ($form->validate()) {
         }
     } else {
         if (!empty($values['email'])) {
-            $text_after_registration.= '<p>'.get_lang('MailHasBeenSent', null, $_user['language']).'.</p>';
+            $text_after_registration .= '<p>'.get_lang('MailHasBeenSent', null, $_user['language']).'.</p>';
         }
 
         if ($is_allowedCreateCourse) {
             if ($usersCanCreateCourse) {
-                $form_data['message'] = '<p>'. get_lang('NowGoCreateYourCourse', null, $_user['language']). "</p>";
+                $form_data['message'] = '<p>'.get_lang('NowGoCreateYourCourse', null, $_user['language'])."</p>";
             }
-            $form_data['action']  = api_get_path(WEB_CODE_PATH).'create_course/add_course.php';
+            $form_data['action'] = api_get_path(WEB_CODE_PATH).'create_course/add_course.php';
 
             if (api_get_setting('course_validation') === 'true') {
                 $form_data['button'] = Display::button(
@@ -850,7 +881,7 @@ if ($form->validate()) {
         } else {
             if (api_get_setting('allow_students_to_browse_courses') == 'true') {
                 $form_data['action'] = 'courses.php?action=subscribe';
-                $form_data['message'] = '<p>'. get_lang('NowGoChooseYourCourses', null, $_user['language']). ".</p>";
+                $form_data['message'] = '<p>'.get_lang('NowGoChooseYourCourses', null, $_user['language']).".</p>";
             } else {
                 $form_data['action'] = api_get_path(WEB_PATH).'user_portal.php';
             }
@@ -863,7 +894,7 @@ if ($form->validate()) {
     }
 
     if ($sessionPremiumChecker && $sessionId) {
-        header('Location:' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/process.php?i=' . $sessionId . '&t=2');
+        header('Location:'.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$sessionId.'&t=2');
         Session::erase('SessionIsPremium');
         Session::erase('sessionId');
         exit;

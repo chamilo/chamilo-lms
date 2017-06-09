@@ -4,9 +4,10 @@
  * Process payments for the Buy Courses plugin
  * @package chamilo.plugin.buycourses
  */
-/**
- * Initialization
- */
+
+use Chamilo\UserBundle\Entity\User,
+    Chamilo\CoreBundle\Entity\SessionRelCourseRelUser,
+    Chamilo\CoreBundle\Entity\Session;
 
 $cidReset = true;
 
@@ -48,7 +49,7 @@ $form = new FormValidator('confirm_sale');
 
 if ($form->validate()) {
     $formValues = $form->getSubmitValues();
-    
+
     if (!$formValues['payment_type']) {
         Display::addFlash(
             Display::return_message($plugin->get_lang('NeedToSelectPaymentType'), 'error', false)
@@ -64,8 +65,13 @@ if ($form->validate()) {
         header('Location:'.api_get_self().'?'.$queryString);
         exit;
     }
-    
-    $serviceSaleId = $plugin->registerServiceSale($serviceId, $formValues['payment_type'], $formValues['info_select'], $formValues['enable_trial']);
+
+    $serviceSaleId = $plugin->registerServiceSale(
+        $serviceId,
+        $formValues['payment_type'],
+        $formValues['info_select'],
+        $formValues['enable_trial']
+    );
 
     if ($serviceSaleId !== false) {
         $_SESSION['bc_service_sale_id'] = $serviceSaleId;
@@ -90,11 +96,14 @@ if (!$culqiEnabled) {
     unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_CULQI]);
 }
 
-$form->addHeader('');
+$form->addHtml(Display::return_message($plugin->get_lang('PleaseSelectThePaymentMethodBeforeConfirmYourOrder'), 'info'));
 $form->addRadio('payment_type', null, $paymentTypesOptions);
-$form->addHtml('<h3 class="panel-heading">'.$plugin->get_lang('AdditionalInfo').'</h3>');
-$form->addHeader('');
-$form->addHtml(Display::return_message($plugin->get_lang('PleaseSelectTheCorrectInfoToApplyTheService'), 'info'));
+$form->addHtml(
+    Display::return_message(
+        $plugin->get_lang('PleaseSelectTheCorrectInfoToApplyTheService'),
+        'info'
+    )
+);
 $selectOptions = [
     0 => get_lang('None')
 ];
@@ -103,6 +112,7 @@ if ($typeUser) {
     $users = $em->getRepository('ChamiloUserBundle:User')->findAll();
     $selectOptions[$userInfo['user_id']] = api_get_person_name($userInfo['firstname'], $userInfo['lastname']).' ('.get_lang('Myself').')';
     if (!empty($users)) {
+        /** @var User $user */
         foreach ($users as $user) {
             if (intval($userInfo['user_id']) !== intval($user->getId())) {
                 $selectOptions[$user->getId()] = $user->getCompleteNameWithUsername();
@@ -111,6 +121,7 @@ if ($typeUser) {
     }
     $form->addSelect('info_select', get_lang('User'), $selectOptions);
 } elseif ($typeCourse) {
+    /** @var User $user */
     $user = $em->getRepository('ChamiloUserBundle:User')->find($currentUserId);
     $courses = $user->getCourses();
     $checker = false;
@@ -123,19 +134,31 @@ if ($typeUser) {
     }
     $form->addSelect('info_select', get_lang('Course'), $selectOptions);
 } elseif ($typeSession) {
+    $sessions = [];
+    /** @var User $user */
     $user = $em->getRepository('ChamiloUserBundle:User')->find($currentUserId);
-    $sessions = $user->getSessionCourseSubscriptions();
-    $checker = false;
-    foreach ($sessions as $session) {
-        $checker = true;
-        $selectOptions[$session->getSession()->getId()] = $session->getSession()->getName();
+    $userSubscriptions = $user->getSessionCourseSubscriptions();
+
+    /** @var SessionRelCourseRelUser $userSubscription */
+    foreach ($userSubscriptions as $userSubscription) {
+        $sessions[$userSubscription->getSession()->getId()] = $userSubscription->getSession()->getName();
     }
-    if (!$checker) {
+
+    $sessionsAsGeneralCoach = $user->getSessionAsGeneralCoach();
+    /** @var Session $sessionAsGeneralCoach */
+    foreach ($sessionsAsGeneralCoach as $sessionAsGeneralCoach) {
+        $sessions[$sessionAsGeneralCoach->getId()] = $sessionAsGeneralCoach->getName();
+    }
+
+    if (!$sessions) {
         $form->addHtml(Display::return_message($plugin->get_lang('YouNeedToBeRegisteredInAtLeastOneSession'), 'error'));
+    } else {
+        $selectOptions = $sessions;
+        $form->addSelect('info_select', get_lang('Session'), $selectOptions);
     }
-    $form->addSelect('info_select', get_lang('Session'), $selectOptions);
 } elseif ($typeFinalLp) {
     // We need here to check the current user courses first
+    /** @var User $user */
     $user = $em->getRepository('ChamiloUserBundle:User')->find($currentUserId);
     $courses = $user->getCourses();
     $courseLpList = [];
@@ -145,8 +168,7 @@ if ($typeUser) {
         // Now get all the courses lp's
         $thisLpList = $em->getRepository('ChamiloCourseBundle:CLp')->findBy(['cId' => $course->getCourse()->getId()]);
         foreach ($thisLpList as $lp) {
-
-            $courseLpList[$lp->getCId()] = $lp->getName().' ('.$course->getCourse()->getTitle().')'; ;
+            $courseLpList[$lp->getCId()] = $lp->getName().' ('.$course->getCourse()->getTitle().')';
         }
     }
 
@@ -190,9 +212,7 @@ if ($typeUser) {
         $form->addHtml(Display::return_message($plugin->get_lang('YourCoursesNeedAtLeastOneLearningPath'), 'error'));
     }
     $form->addSelect('info_select', get_lang('LearningPath'), $selectOptions);
-
 }
-
 
 $form->addHidden('t', intval($_GET['t']));
 $form->addHidden('i', intval($_GET['i']));
@@ -201,17 +221,16 @@ $form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success'
 
 // View
 $templateName = $plugin->get_lang('PaymentMethods');
-$interbreadcrumb[] = array("url" => "service_catalog.php", "name" => $plugin->get_lang('ListOfServicesOnSale'));
+$interbreadcrumb[] = array(
+    "url" => "service_catalog.php",
+    "name" => $plugin->get_lang('ListOfServicesOnSale'),
+);
 
 $tpl = new Template($templateName);
-
 $tpl->assign('buying_service', true);
 $tpl->assign('service', $serviceInfo);
 $tpl->assign('user', api_get_user_info());
 $tpl->assign('form', $form->returnForm());
-
-
 $content = $tpl->fetch('buycourses/view/process.tpl');
-
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

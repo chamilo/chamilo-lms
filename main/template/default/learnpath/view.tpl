@@ -65,11 +65,8 @@
                 </div>
             {# TOC layout #}
             <div id="toc_id" class="scorm-body" name="toc_name">
-                <div id="learning_path_toc" class="scorm-list">
-                    <h1 class="scorm-title">{{ lp_title_scorm }}</h1>
-                    {{ lp_html_toc }}
+                    {% include template ~ '/learnpath/scorm_list.tpl' %}
                 </div>
-            </div>
             {# end TOC layout #}
             </div>
         </div>
@@ -163,13 +160,13 @@
             } else {
                 $(this).attr('title', '{{ "Collapse" | get_lang }}');
             }
-            
+
             if($('#navTabsbar').is(':hidden')){
                 $('#navTabsbar').show();
             } else {
                 $('#navTabsbar').hide();
             }
-            
+
         });
         {% else %}
         $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
@@ -186,7 +183,7 @@
             } else {
                 $(this).attr('title', '{{ "Collapse" | get_lang }}');
             }
-            
+
             if($('#navTabsbar').is(':hidden')){
                 $('#navTabsbar').show();
             } else {

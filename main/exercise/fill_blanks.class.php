@@ -346,10 +346,9 @@ class FillBlanks extends Question
     }
 
     /**
-     * Function which creates the form to create/edit the answers of the question
-     * @param FormValidator $form
+     * @inheritdoc
      */
-    public function processAnswersCreation($form)
+    public function processAnswersCreation($form, $exercise)
     {
         $answer = $form->getSubmitValue('answer');
         // Due the ckeditor transform the elements to their HTML value
@@ -372,7 +371,7 @@ class FillBlanks extends Question
         // remove spaces at the beginning and the end of text in square brackets
         $answer = preg_replace_callback(
             "/".$blankStartSeparatorRegexp."[^]]+".$blankEndSeparatorRegexp."/",
-            function($matches) use ($blankStartSeparator, $blankEndSeparator) {
+            function ($matches) use ($blankStartSeparator, $blankEndSeparator) {
                 $matchingResult = $matches[0];
                 $matchingResult = trim($matchingResult, $blankStartSeparator);
                 $matchingResult = trim($matchingResult, $blankEndSeparator);
@@ -457,21 +456,18 @@ class FillBlanks extends Question
         $is_multiple = $form -> getSubmitValue('multiple_answer');
         $answer .= '@'.$is_multiple;
 
-        $this->save();
+        $this->save($exercise);
         $objAnswer = new Answer($this->id);
         $objAnswer->createAnswer($answer, 0, '', 0, 1);
         $objAnswer->save();
     }
 
     /**
-     * @param null $feedback_type
-     * @param null $counter
-     * @param null $score
-     * @return string
+     * @inheritdoc
      */
-    public function return_header($feedback_type = null, $counter = null, $score = null)
+    public function return_header($exercise, $counter = null, $score = null)
     {
-        $header = parent::return_header($feedback_type, $counter, $score);
+        $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
             <tr>
                 <th>'.get_lang("Answer").'</th>
@@ -639,7 +635,7 @@ class FillBlanks extends Question
                 // the answer must be one of the choice made
                 $listSeveral = self::getFillTheBlankSeveralAnswers($correctAnswer);
 
-                $listSeveral = array_map(function ($item) {
+                $listSeveral = array_map(function($item) {
                     return self::trimOption($item);
                 }, $listSeveral);
 
@@ -1321,5 +1317,20 @@ class FillBlanks extends Question
         }
 
         return $isCorrect;
+    }
+
+    /**
+     * Clear the answer entered by student
+     * @param string $answer
+     * @return string
+     */
+    public static function clearStudentAnswer($answer)
+    {
+        $answer = htmlentities(api_utf8_encode($answer), ENT_QUOTES);
+        $answer = str_replace('&#039;', '&#39;', $answer); // fix apostrophe
+        $answer = api_preg_replace('/\s\s+/', ' ', $answer); // replace excess white spaces
+        $answer = strtr($answer, array_flip(get_html_translation_table(HTML_ENTITIES, ENT_QUOTES)));
+
+        return trim($answer);
     }
 }

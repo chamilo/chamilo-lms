@@ -80,7 +80,7 @@ class ImsAssessmentItem
     */
     function start_item_body()
     {
-        return '  <itemBody>' . "\n";
+        return '  <itemBody>'."\n";
     }
 
     /**
@@ -98,7 +98,7 @@ class ImsAssessmentItem
     */
     function add_response_processing()
     {
-        return '  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_correct"/>' . "\n";
+        return '  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_correct"/>'."\n";
     }
 
     /**
@@ -114,7 +114,7 @@ class ImsAssessmentItem
         $head = $foot = '';
 
         if ($standalone) {
-            $head = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' . "\n";
+            $head = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>'."\n";
         }
 
         //TODO understand why answer might be a non-object sometimes
@@ -172,8 +172,8 @@ class ImsSection
     function start_section()
     {
         $out = '<section 
-            ident = "EXO_' . $this->exercise->selectId() . '" 
-            title = "' .cleanAttribute(formatExerciseQtiDescription($this->exercise->selectTitle())) . '"            
+            ident = "EXO_' . $this->exercise->selectId().'" 
+            title = "' .cleanAttribute(formatExerciseQtiDescription($this->exercise->selectTitle())).'"            
         >' . "\n";
         return $out;
     }
@@ -189,7 +189,7 @@ class ImsSection
             // return exercise duration in ISO8601 format.
             $minutes = floor($max_time / 60);
             $seconds = $max_time % 60;
-            return '<duration>PT' . $minutes . 'M' . $seconds . "S</duration>\n";
+            return '<duration>PT'.$minutes.'M'.$seconds."S</duration>\n";
         } else {
             return '';
         }
@@ -202,7 +202,7 @@ class ImsSection
     function export_presentation()
     {
         $out = "<presentation_material><flow_mat><material>\n"
-             . "  <mattext><![CDATA[" . formatExerciseQtiDescription($this->exercise->selectDescription()) . "]]></mattext>\n"
+             . "  <mattext><![CDATA[".formatExerciseQtiDescription($this->exercise->selectDescription())."]]></mattext>\n"
              . "</material></flow_mat></presentation_material>\n";
         return $out;
     }
@@ -216,14 +216,14 @@ class ImsSection
     {
         $out = '';
         if ($n = $this->exercise->getShuffle()) {
-            $out.= "<selection_ordering>"
+            $out .= "<selection_ordering>"
                  . "  <selection>\n"
-                 . "    <selection_number>" . $n . "</selection_number>\n"
+                 . "    <selection_number>".$n."</selection_number>\n"
                  . "  </selection>\n"
                  . '  <order order_type="Random" />'
                  . "\n</selection_ordering>\n";
         } else {
-            $out.= '<selection_ordering sequence_type="Normal">' . "\n"
+            $out .= '<selection_ordering sequence_type="Normal">'."\n"
                  . "  <selection />\n"
                  . "</selection_ordering>\n";
         }
@@ -255,8 +255,8 @@ class ImsSection
     {
         $head = $foot = '';
         if ($standalone) {
-            $head = '<?xml version = "1.0" encoding = "UTF-8" standalone = "no"?>' . "\n"
-                  . '<!DOCTYPE questestinterop SYSTEM "ims_qtiasiv2p1.dtd">' . "\n"
+            $head = '<?xml version = "1.0" encoding = "UTF-8" standalone = "no"?>'."\n"
+                  . '<!DOCTYPE questestinterop SYSTEM "ims_qtiasiv2p1.dtd">'."\n"
                   . "<questestinterop>\n";
             $foot = "</questestinterop>\n";
         }
@@ -317,7 +317,7 @@ class ImsItem
     {
         $this->question = $question;
         $this->answer = $question->answer;
-        $this->questionIdent = "QST_" . $question->selectId();
+        $this->questionIdent = "QST_".$question->selectId();
     }
 
     /**
@@ -329,7 +329,7 @@ class ImsItem
     */
     function start_item()
     {
-        return '<item title="' . cleanAttribute(formatExerciseQtiDescription($this->question->selectTitle())) . '" ident="' . $this->questionIdent . '">' . "\n";
+        return '<item title="'.cleanAttribute(formatExerciseQtiDescription($this->question->selectTitle())).'" ident="'.$this->questionIdent.'">'."\n";
     }
 
     /**
@@ -352,8 +352,8 @@ class ImsItem
     */
     function start_presentation()
     {
-        return '<presentation label="' . $this->questionIdent . '"><flow>' . "\n"
-            . '<material><mattext>' . formatExerciseQtiDescription($this->question->selectDescription()) . "</mattext></material>\n";
+        return '<presentation label="'.$this->questionIdent.'"><flow>'."\n"
+            . '<material><mattext>'.formatExerciseQtiDescription($this->question->selectDescription())."</mattext></material>\n";
     }
 
     /**
@@ -373,7 +373,7 @@ class ImsItem
     */
     function start_processing()
     {
-        return '<resprocessing><outcomes><decvar vartype="Integer" defaultval="0" /></outcomes>' . "\n";
+        return '<resprocessing><outcomes><decvar vartype="Integer" defaultval="0" /></outcomes>'."\n";
     }
 
     /**
@@ -401,8 +401,8 @@ class ImsItem
         $head = $foot = "";
 
         if ($standalone) {
-            $head = '<?xml version = "1.0" encoding = "'.$charset.'" standalone = "no"?>' . "\n"
-                  . '<!DOCTYPE questestinterop SYSTEM "ims_qtiasiv2p1.dtd">' . "\n"
+            $head = '<?xml version = "1.0" encoding = "'.$charset.'" standalone = "no"?>'."\n"
+                  . '<!DOCTYPE questestinterop SYSTEM "ims_qtiasiv2p1.dtd">'."\n"
                   . "<questestinterop>\n";
             $foot = "</questestinterop>\n";
         }
@@ -487,6 +487,7 @@ function formatExerciseQtiTitle($text)
 
 /**
  * @param string $text
+ * @return  string
  */
 function cleanAttribute($text)
 {

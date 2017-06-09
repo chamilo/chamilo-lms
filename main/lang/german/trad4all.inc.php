@@ -3646,7 +3646,7 @@ $SurveyAdded = "Umfrage hinzugefügt";
 $WikiAdded = "Wiki hinzugefügt";
 $ReadOnly = "Nur Lesen";
 $Unacceptable = "Unakzeptabel";
-$DisplayTrainingList = "Kurliste anzeigen";
+$DisplayTrainingList = "Kursliste anzeigen";
 $HistoryTrainingSession = "Kurs-Verlauf";
 $Until = "Bis";
 $FirstPage = "Erste Seite";
@@ -3964,7 +3964,7 @@ $RequestSentToPlatformAdmin = "Der Wunsch kann für diese Art von Benutzerkonto 
 $ProgressIntroduction = "Beginnen Sie unten mit der Auswahl eines Session-Kurs<br/>Sie können dann Ihren Fortschritt für jeden Kurs sehen, den Sie belegt haben.";
 $NeverExpires = "Läuft nie ab";
 $ActiveAccount = "Aktiver Zugang";
-$YourAccountHasToBeApproved = "Der Zugang muss genehmigt werden";
+$YourAccountHasToBeApproved = "Der Zugang wird erst nach Genehmigung freigeschalten";
 $ApprovalForNewAccount = "Genehmigung für neuen Zugang";
 $ManageUser = "Benutzer verwalten";
 $SubscribeUserToCourseAsTeacher = "Als Kursleiter in diesen Kurs einschreiben";
@@ -5935,7 +5935,7 @@ $EditExtraFieldOptions = "Zusatzfeld-Optionen bearbeiten";
 $ExerciseDescriptionLabel = "Beschreibung";
 $UserInactivedSinceX = "Benutzer inaktiv seit %s";
 $ContactInformationDescription = "Hallo,<br />\n<br />\nSie sind dabei eine der besten Open Source E-Learning Plattformen auf dem Markt  zu starten. Wie viele andere Open Source Projekte, basiert dieses Projekt auf einer großen Community von Studenten, Dozenten, Lehrern, Entwicklern und Autoren die alle bemüht sind, das Projekt bekannt zu machen.<br /><br />\nWenn wir etwas mehr von Ihnen wissen, denn Sie sind einer unsere wichtigsten User, der Sie dieses E-Learning-System verwalten, können wir andere wissen lassen, dass Sie unsere Software benutzen und Sie darüber informieren, wenn wir Events organisieren, die vielleicht für Sie wichtig sein könnten.<br /><br />\n\nMit dem Ausfüllen dieses Formulars akzeptieren Sie, das die Chamilo Association oder ihre Mitgleider Ihnen Informationen per Email zu senden darf, soweit es sich um Events der Chamilo Community oder Updates der Chamilo-Software handelt. Dies hilft der Community als Organsation zu wachsen, die ständig bemüht ist Ihre zeit und Ihre Privatsphäre zu achten und zu respektieren.<br />\n<br />\nBitte beachten Sie, das <b>nicht verpflichtet</b> sind, dieses Formular auszufüllen.Wenn Sie anonym bleiben wollen, haben Sie keine Möglichkeit die Vorteile eines registrierten Portal-Administrators zu nutzen, aber wir respektieren Ihre Entscheidung. Lassen Sie dann einfach dieses Formular leer und klicken Sie auf\"Weiter\".<br /><br />";
-$CompanyActivity = "Tätigkeitsbereich Hrer Firma / Organisation";
+$CompanyActivity = "Tätigkeitsbereich Ihrer Firma / Organisation";
 $PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses = "Bitte um etwas Geduld für die Registrierung zu den Kursen. Bei Verdacht auf Vergessen bitte den Plattform-Administrator kontaktieren, welcher üblicherweise im Fußbereich angezeigt wird.";
 $ManageSessionFields = "Session-Felder verwalten";
 $DateUnLock = "Termin freigeben";
@@ -6286,7 +6286,7 @@ $ItemCopied = "Inhalt kopiert";
 $MyStatistics = "Meine Auswertungen";
 $PublishedExercises = "Verfügbare Tests";
 $DoneExercises = "Abslovierte Prüfungen";
-$AverageExerciseResult = "Durchschnittliches Prüfunsgergebnis";
+$AverageExerciseResult = "Durchschnittliches Prüfungsergebnis";
 $LPProgress = "Lernpfad-Fortschritt";
 $Ranking = "Reihenfolge";
 $BestResultInCourse = "Bestes Ergebnis im Kurs";
@@ -6978,7 +6978,7 @@ CAS manage user authentication, LDAP activation isn't required.
 </div>
 <br />
 <h4>I. LDAP configuration</h4>
-<h5>Edit file main/inc/conf/auth.conf.php </h5>
+<h5>Edit file app/config/auth.conf.php </h5>
 -&gt; Edit values of array <code>&#36;extldap_config</code>
 <br />
 <br />
@@ -7004,7 +7004,7 @@ Die Array-Struktur wird in Datei main/auth/external_login/ldap.conf.php erkl&aum
 <br />
 <br />
 <h4>II. LDAP-Authentifizierung aktivieren</h4>
-<h5>In der Datei main/inc/conf/configuration.php</h5>-&gt; folgende Zeilen auskommentieren
+<h5>In der Datei app/config/configuration.php</h5>-&gt; folgende Zeilen auskommentieren
 <br />
 &#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration['root_sys'].&quot;main/auth/external_login/login.ldap.php&quot;;
 <br />
@@ -7046,7 +7046,7 @@ $FacebookMainActivateComment = "Zuerst muß eine Facebook Anwendung erstellt wer
 <br /><br />
 Danach die Datei
 <br /><br />
-<strong>main/inc/conf/auth.conf.php</strong>
+<strong>app/config/auth.conf.php</strong>
 <br /><br />
 öffnen und 'appId' und 'secret' für \$facebook_config aus der FB-Anwendung einfügen.
 Anschließend zu den <a href=\"/settings.php?category=Facebook\">Plugins</a> wechseln und 'Facebook Login' Button für die Plattform aktivieren.";
@@ -7863,9 +7863,7 @@ $TooManyRepetitions = "Zu viele Wiederholungen";
 $YourPasswordContainsSequences = "Ihr Passwort enthält Sequenzen";
 $PasswordVeryWeak = "Sehr schwach";
 $UserXHasBeenAssignedToBoss = "Der Schüler %s, die Ihnen zugeordnet";
-$UserXHasBeenAssignedToBossWithUrlX = "Sie wurden Vormund für den Lernenden %s ernannt.
-
-Sie können sein Profil zugreifen hier:% s";
+$UserXHasBeenAssignedToBossWithUrlX = "Sie wurden dem Teilnehmer %s als Tutor zugewiesen. Zum Profil: %s";
 $ShortName = "Kurzname";
 $Portal = "Portal";
 $CourseUserDocument = "Kursbenutzerdokument";

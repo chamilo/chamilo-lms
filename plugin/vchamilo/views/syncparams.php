@@ -46,7 +46,7 @@ foreach ($settings as $param) {
         isset($param['subkey']) && !empty($param['subkey']) ? $param['variable'].' ['.$param['subkey'].']' : $param['variable'],
         $param['category'],
         $param['access_url'],
-        '<input type="text" disabled name="value_'.$param['id'].'" value="'.htmlspecialchars($param['selected_value'], ENT_COMPAT, 'UTF-8' ).'" />'.
+        '<input type="text" disabled name="value_'.$param['id'].'" value="'.htmlspecialchars($param['selected_value'], ENT_COMPAT, 'UTF-8').'" />'.
         '<br />Master value: '.$param['selected_value'],
         $syncButton,
     );
@@ -56,8 +56,8 @@ foreach ($settings as $param) {
 
 $content  = '<form name="settingsform" action="'.$thisurl.'">';
 $content .= '<input type="hidden" name="what" value="" />';
-$content .=  $table->toHtml();
-$content .=  '</form>';
+$content .= $table->toHtml();
+$content .= '</form>';
 
 Display::addFlash(Display::return_message($plugin->get_lang('Sync your master settings to all instances.')));
 

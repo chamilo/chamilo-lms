@@ -40,6 +40,10 @@ if (api_is_allowed_to_edit(null, true)) {
                 Display::return_icon('export_csv.png', get_lang('ExportThematic'), '', ICON_SIZE_MEDIUM).'</a>';
             $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_export_pdf'.$url_token.'">'.
                 Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+            $actionLeft .= Display::url(
+                Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), [], ICON_SIZE_MEDIUM),
+                api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents']).$url_token
+            );
             break;
         default:
             $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
@@ -149,6 +153,12 @@ if ($action == 'thematic_list') {
                             'thematic_id' => $my_thematic_id
                         ]),
                         array('class' => 'btn btn-default')
+                    );
+                    $toolbarThematic .= Display::url(
+                        Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), [], ICON_SIZE_TINY),
+                        api_get_self().'?'.api_get_cidreq().$url_token.'&'
+                            .http_build_query(['action' => 'export_single_documents', 'thematic_id' => $my_thematic_id]),
+                        ['class' => 'btn btn-default']
                     );
                     $toolbarThematic .= '<a class="btn btn-default" href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='
                         .$my_thematic_id.$params.$url_token.'">'

@@ -102,33 +102,69 @@ $form = new FormValidator('user_add');
 $form->addElement('header', '', $tool_name);
 if (api_is_western_name_order()) {
     // Firstname
-    $form->addElement('text', 'firstname', get_lang('FirstName'));
+    $form->addElement(
+        'text',
+        'firstname',
+        get_lang('FirstName'),
+        array(
+            'id' => 'firstname'
+        )
+    );
     $form->applyFilter('firstname', 'html_filter');
     $form->applyFilter('firstname', 'trim');
     $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
     // Lastname
-    $form->addElement('text', 'lastname', get_lang('LastName'));
+    $form->addElement(
+        'text',
+        'lastname',
+        get_lang('LastName'),
+        array(
+            'id' => 'lastname'
+        )
+    );
     $form->applyFilter('lastname', 'html_filter');
     $form->applyFilter('lastname', 'trim');
     $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
 } else {
     // Lastname
-    $form->addElement('text', 'lastname', get_lang('LastName'));
+    $form->addElement(
+        'text',
+        'lastname',
+        get_lang('LastName'),
+        array(
+            'id' => 'lastname'
+        )
+    );
     $form->applyFilter('lastname', 'html_filter');
     $form->applyFilter('lastname', 'trim');
     $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
     // Firstname
-    $form->addElement('text', 'firstname', get_lang('FirstName'));
+    $form->addElement(
+        'text',
+        'firstname',
+        get_lang('FirstName'),
+        array(
+            'id' => 'firstname'
+        )
+    );
     $form->applyFilter('firstname', 'html_filter');
     $form->applyFilter('firstname', 'trim');
     $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 }
 // Official code
-$form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => '40'));
+$form->addElement(
+    'text',
+    'official_code',
+    get_lang('OfficialCode'),
+    array(
+        'size' => '40',
+        'id' => 'official_code'
+    )
+);
 $form->applyFilter('official_code', 'html_filter');
 $form->applyFilter('official_code', 'trim');
 // Email
-$form->addElement('text', 'email', get_lang('Email'), array('size' => '40', 'autocomplete' => 'off'));
+$form->addElement('text', 'email', get_lang('Email'), array('size' => '40', 'autocomplete' => 'off', 'id' => 'email'));
 $form->addRule('email', get_lang('EmailWrong'), 'email');
 if (api_get_setting('registration', 'email') == 'true') {
     $form->addRule('email', get_lang('EmailWrong'), 'required');
@@ -140,7 +176,7 @@ if (api_get_setting('login_is_email') == 'true') {
 }
 
 // Phone
-$form->addElement('text', 'phone', get_lang('PhoneNumber'), ['autocomplete' => 'off']);
+$form->addElement('text', 'phone', get_lang('PhoneNumber'), ['autocomplete' => 'off', 'id' => 'phone']);
 // Picture
 $form->addFile(
     'picture',

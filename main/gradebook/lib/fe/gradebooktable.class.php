@@ -716,7 +716,7 @@ class GradebookTable extends SortableTable
                     $modify_icons = '<a href="gradebook_edit_cat.php?editcat='.$id_cat.'&cidReq='.$course_code.'&id_session='.api_get_session_id().'">'.
                         Display::return_icon('edit.png', $warning_message, array(), ICON_SIZE_SMALL).'</a>';
                     $warning_message .= $modify_icons;
-                    Display::display_warning_message($warning_message, false);
+                    echo Display::return_message($warning_message, 'warning', false);
                 }
 
                 $content_html = DocumentManager::replace_user_info_into_html(
@@ -773,7 +773,7 @@ class GradebookTable extends SortableTable
                     }
 
                     if (!empty($warning_message)) {
-                        Display::display_warning_message($warning_message, false);
+                        echo Display::return_message($warning_message, 'warning', false);
                     }
                 }
             }

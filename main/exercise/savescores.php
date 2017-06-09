@@ -101,9 +101,9 @@ if ($origin != 'learnpath') {
                     lp_view_id = $lpViewId
                 ";
         Database::query($sql);
-        Display::display_confirmation_message(get_lang('HotPotatoesFinished'));
+        echo Display::return_message(get_lang('HotPotatoesFinished'), 'confirm');
     } else {
-        Display::display_error_message(get_lang('Error'));
+        echo Display::return_message(get_lang('Error'), 'error');
     }
 
     Display::display_footer();

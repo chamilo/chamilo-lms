@@ -15,7 +15,6 @@ if (!$paypalEnabled) {
 }
 
 $serviceSaleId = $_SESSION['bc_service_sale_id'];
-
 $serviceSale = $plugin->getServiceSale($serviceSaleId);
 $itemPrice = $serviceSale['price'];
 
@@ -34,8 +33,20 @@ require_once("paypalfunctions.php");
 
 $buyerInformation = GetShippingDetails(urlencode($_SESSION['TOKEN']));
 
-$form = new FormValidator('success', 'POST', api_get_self(), null, null, FormValidator::LAYOUT_INLINE);
-$form->addButton('confirm', $plugin->get_lang('ConfirmOrder'), 'check', 'success');
+$form = new FormValidator(
+    'success',
+    'POST',
+    api_get_self(),
+    null,
+    null,
+    FormValidator::LAYOUT_INLINE
+);
+$form->addButton(
+    'confirm',
+    $plugin->get_lang('ConfirmOrder'),
+    'check',
+    'success'
+);
 $form->addButtonCancel($plugin->get_lang('CancelOrder'), 'cancel');
 
 if ($form->validate()) {
@@ -54,7 +65,6 @@ if ($form->validate()) {
     }
 
     $confirmPayments = ConfirmPayment($itemPrice);
-
     if ($confirmPayments['ACK'] !== 'Success') {
         $erroMessage = vsprintf(
             $plugin->get_lang('ErrorOccurred'),
@@ -147,23 +157,22 @@ if ($form->validate()) {
     }
 
     unset($_SESSION['bc_service_sale_id']);
-
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php');
-
     exit;
 }
 
 $token = isset($_GET['token']) ? Security::remove_XSS($_GET['token']) : null;
-
 if (empty($token)) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = array("url" => "service_catalog.php", "name" => $plugin->get_lang('ListOfServicesOnSale'));
+$interbreadcrumb[] = array(
+    "url" => "service_catalog.php",
+    "name" => $plugin->get_lang('ListOfServicesOnSale'),
+);
 
 $templateName = $plugin->get_lang('PaymentMethods');
 $tpl = new Template($templateName);
-
 $tpl->assign('title', $serviceSale['service']['name']);
 $tpl->assign('price', $serviceSale['price']);
 $tpl->assign('currency', $serviceSale['currency_id']);

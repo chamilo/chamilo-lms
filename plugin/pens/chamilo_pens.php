@@ -25,8 +25,8 @@
  * @licence http://www.gnu.org/licenses/gpl.txt
  */
 
-require_once __DIR__ . '/../../main/inc/global.inc.php';
-require_once __DIR__ . '/lib/pens.php';
+require_once __DIR__.'/../../main/inc/global.inc.php';
+require_once __DIR__.'/lib/pens.php';
 
 /**
  * ChamiloPens
@@ -156,24 +156,24 @@ class ChamiloPens extends Plugin
         $clean_vendor_data = Database::escape_string($this->_vendor_data);
         $created_at = api_get_utc_datetime();
         $table = Database::get_main_table(self::TABLE_NAME);
-        $sql_query = "INSERT INTO $table (pens_version, package_type, package_type_version, package_format, package_id, client, vendor_data, package_name, created_at) VALUES (" .
-            "'" . $this->_pens_version . "', " .
-            "'" . $this->_package_type . "', " .
-            "'" . $clean_package_type_version . "', " .
-            "'" . $this->_package_format . "', " .
-            "'" . $clean_package_id . "', " .
-            "'" . $clean_client . "', " .
-            "'" . $clean_vendor_data . "', " .
-            "'" . $this->_package_name . "', " .
-            "'" . $created_at . "') ON DUPLICATE KEY UPDATE " .
-            "pens_version = VALUES(pens_version), " .
-            "package_type = VALUES(package_type), " .
-            "package_type_version = VALUES(package_type_version), " .
-            "package_format = VALUES(package_format), " .
-            "client = VALUES(client), " .
-            "vendor_data = VALUES(vendor_data), " .
-            "package_name = VALUES(package_name), " .
-            "updated_at = '" . $created_at . "';";
+        $sql_query = "INSERT INTO $table (pens_version, package_type, package_type_version, package_format, package_id, client, vendor_data, package_name, created_at) VALUES (".
+            "'".$this->_pens_version."', ".
+            "'".$this->_package_type."', ".
+            "'".$clean_package_type_version."', ".
+            "'".$this->_package_format."', ".
+            "'".$clean_package_id."', ".
+            "'".$clean_client."', ".
+            "'".$clean_vendor_data."', ".
+            "'".$this->_package_name."', ".
+            "'".$created_at."') ON DUPLICATE KEY UPDATE ".
+            "pens_version = VALUES(pens_version), ".
+            "package_type = VALUES(package_type), ".
+            "package_type_version = VALUES(package_type_version), ".
+            "package_format = VALUES(package_format), ".
+            "client = VALUES(client), ".
+            "vendor_data = VALUES(vendor_data), ".
+            "package_name = VALUES(package_name), ".
+            "updated_at = '".$created_at."';";
         Database::query($sql_query);
     }
 
@@ -186,7 +186,7 @@ class ChamiloPens extends Plugin
     public static function findByPackageId($package_id)
     {
         $table = Database::get_main_table(self::TABLE_NAME);
-        $sql_query = "SELECT * FROM $table WHERE package_id = '" . $package_id . "';";
+        $sql_query = "SELECT * FROM $table WHERE package_id = '".$package_id."';";
         $results = Database::query($sql_query);
         $number = Database::num_rows($results);
         if ($number == 1) {

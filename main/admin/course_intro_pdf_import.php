@@ -18,7 +18,6 @@ $errors = [];
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
-Display::display_header($tool_name);
 
 if ($_POST['formSent']) {
     if (empty($_FILES['import_file']['tmp_name'])) {
@@ -49,6 +48,8 @@ if (count($errors) != 0) {
 } elseif ($_POST['formSent']) {
     Display::addFlash(Display::return_message('CourseIntroductionsAllImportesSuccessfully', 'confirmation', false));
 }
+
+Display::display_header($tool_name);
 ?>
     <form method="post" action="<?php echo api_get_self(); ?>" enctype="multipart/form-data" style="margin: 0;">
         <h3><?php echo $tool_name; ?></h3>

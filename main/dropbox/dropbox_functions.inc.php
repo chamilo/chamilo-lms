@@ -528,7 +528,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     );
 
     $allowOverwrite = api_get_setting('dropbox_allow_overwrite');
-    if ($allowOverwrite == 'true') {
+    if ($allowOverwrite == 'true' && empty($idCondition)) {
         $form->addElement(
             'checkbox',
             'cb_overwrite',
@@ -649,7 +649,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     if (($dropbox_person->isCourseTutor || $dropbox_person->isCourseAdmin)
         && $allowGroups == 'true' || $allowStudentToStudent == 'true'
     ) {
-        $complete_group_list_for_dropbox = GroupManager::get_group_list(null, $course_info['code']);
+        $complete_group_list_for_dropbox = GroupManager::get_group_list(null, $course_info);
 
         if (count($complete_group_list_for_dropbox) > 0) {
             foreach ($complete_group_list_for_dropbox as $current_group) {

@@ -605,7 +605,6 @@ $Forbidden = "Zakázané";
 $CourseAccessConfigTip = "Štandardne je Váš kurz verejný. Hore však môžete definovať úroveň dôvernosti.";
 $OpenToTheWorld = "Otvorené - prístup povolený každému";
 $OpenToThePlatform = "Otvorené - prístup povolený používateľom registrovaným na platforme";
-$OpenToThePlatform = "Otvorené - prístup povolený len pre registrovaných na portále";
 $TipLang = "Tento jazyk bude prijaťeľný pre každého návštevníka portálu.";
 $Vid = "Video";
 $Work = "Príspevky";

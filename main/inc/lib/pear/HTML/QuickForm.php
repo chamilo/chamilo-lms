@@ -585,6 +585,12 @@ class HTML_QuickForm extends HTML_Common
             $this->_elementIndex[$elementName] = end($elKeys);
         }
 
+        $elId = $elementObject->getAttribute('id');
+
+        if (empty($elId)) {
+            $elementObject->setAttribute('id', "{$this->getAttribute('name')}_$elementName");
+        }
+
         if ($this->_freezeAll) {
             $elementObject->freeze();
         }

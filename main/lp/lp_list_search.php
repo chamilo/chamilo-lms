@@ -33,7 +33,7 @@ search_widget_prepare($htmlHeadXtra);
 Display::display_header(null, 'Path');
 
 if (api_get_setting('search_enabled') !== 'true') {
-    Display::display_error_message(get_lang('SearchFeatureNotEnabledComment'));
+    echo Display::return_message(get_lang('SearchFeatureNotEnabledComment'), 'error');
 } else {
     if (!empty($_GET['action'])) {
         search_widget_show($_GET['action']);

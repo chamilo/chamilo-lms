@@ -78,9 +78,10 @@ Display :: display_header($nameTools, 'Group');
 
 if (isset($_POST['number_of_groups'])) {
     if (!is_numeric($_POST['number_of_groups']) || intval($_POST['number_of_groups']) < 1) {
-        Display :: display_error_message(
+        echo Display::return_message(
 			get_lang('PleaseEnterValidNumber').'<br /><br />
 			<a href="group_creation.php?'.api_get_cidreq().'">&laquo; '.get_lang('Back').'</a>',
+            'error',
 			false
 		);
     } else {

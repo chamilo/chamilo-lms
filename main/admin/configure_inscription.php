@@ -165,7 +165,7 @@ echo Display::page_header($tool_name);
 
 //api_display_tool_title($tool_name);
 if (api_get_setting('allow_registration') == 'approval') {
-    Display::addFlash(Display::return_message(get_lang('YourAccountHasToBeApproved'), 'normal'));
+    echo Display::return_message(get_lang('YourAccountHasToBeApproved'), 'normal');
 }
 //if openid was not found
 if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
@@ -180,7 +180,6 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
 }
 
 if ($display_all_form) {
-
     if (api_is_western_name_order()) {
         //	FIRST NAME and LAST NAME
         $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40, 'disabled' => 'disabled'));
@@ -364,11 +363,17 @@ switch ($action) {
         }
 
         if (!empty($errorMsg)) {
-            Display::addFlash(Display::return_message($errorMsg, 'normal'));
+            echo Display::return_message($errorMsg, 'normal');
         }
 
         $default = array();
-        $form = new FormValidator('configure_inscription_'.$action, 'post', api_get_self().'?action='.$action, '', array('style' => 'margin: 0px;'));
+        $form = new FormValidator(
+            'configure_inscription_'.$action,
+            'post',
+            api_get_self().'?action='.$action,
+            '',
+            array('style' => 'margin: 0px;')
+        );
         $renderer = & $form->defaultRenderer();
         $renderer->setHeaderTemplate('');
         $renderer->setFormTemplate('<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>');
@@ -376,7 +381,17 @@ switch ($action) {
         $renderer->setRequiredNoteTemplate('');
         $form->addElement('hidden', 'formSent', '1');
         $default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
-        $form->addHtmlEditor($name, '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
+        $form->addHtmlEditor(
+            $name,
+            '',
+            true,
+            false,
+            array(
+                'ToolbarSet' => 'PortalHomePage',
+                'Width' => '100%',
+                'Height' => '400'
+            )
+        );
         $form->addButtonSave(get_lang('Save'));
         $form->setDefaults($default);
         $form->display();

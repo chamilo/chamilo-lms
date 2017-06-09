@@ -1,5 +1,3 @@
-<br>
-<br>
 <h2 align="center"> {{ pdf_title }} </h2>
 
 {% if pdf_description %}
@@ -7,12 +5,11 @@
     <br /><br />
 {% endif %}
 
-
 <table align="center" width="100%" class="full-width border-thin">
     {% if pdf_student_info %}
     <tr>
         <td style="background-color: #E5E5E5; text-align: left; width:130px; ">
-            <strong>{{ "Student" | get_lang }}:</strong>  
+            <strong>{{ "Student" | get_lang }}:</strong>
         </td>
         <td>
             {{ pdf_student_info.complete_name }}
@@ -46,7 +43,7 @@
         {% if pdf_session_info.access_start_date != '' and pdf_session_info.access_end_date is not empty and pdf_session_info.access_end_date != '0000-00-00' %}
         <tr>
             <td style="background-color: #E5E5E5; text-align: left; width:130px;">
-                <strong>{{ "PeriodToDisplay" | get_lang }}:</strong> 
+                <strong>{{ "PeriodToDisplay" | get_lang }}:</strong>
             </td>
             <td>
                 {{ "FromDateXToDateY"| get_lang | format(pdf_session_info.access_start_date, pdf_session_info.access_end_date ) }}
@@ -58,7 +55,7 @@
     {% if pdf_course_info %}
     <tr>
         <td style="background-color: #E5E5E5; text-align: left; width:130px;">
-            <strong>{{ "Course" | get_lang }}:</strong> 
+            <strong>{{ "Course" | get_lang }}:</strong>
         </td>
         <td>
             {{ pdf_course_info.title }} ({{ pdf_course_info.code }})
@@ -75,7 +72,7 @@
     {% if pdf_date %}
     <tr>
         <td style="background-color: #E5E5E5; text-align: left; width:130px;">
-            <strong>{{ "Date" | get_lang }}:</strong> 
+            <strong>{{ "Date" | get_lang }}:</strong>
         </td>
         <td>
             {{ pdf_date }}
@@ -83,6 +80,7 @@
     </tr>
     {% endif %}
 </table>
+<br />
 
 {% if show_grade_generated_date == true %}
 <h5 align="right">

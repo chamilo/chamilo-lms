@@ -40,6 +40,7 @@ class ThematicController
         $check = Security::check_token('request');
         $thematic_id = isset($_REQUEST['thematic_id']) ? intval($_REQUEST['thematic_id']) : null;
         $displayHeader = !empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header' ? false : true;
+        $courseId = api_get_course_int_id();
 
         if ($check) {
             switch ($action) {
@@ -198,6 +199,8 @@ class ThematicController
                     exit;
                     // Don't continue building a normal page.
                     return;
+                case 'export_documents':
+                    //no break
                 case 'thematic_export_pdf':
                     
                     $pdfOrientation = api_get_configuration_value('thematic_pdf_orientation');
@@ -226,26 +229,52 @@ class ThematicController
                         }
                         $listFinish[] = $theme;
                     }
-                    
+
                     $view = new Template('', false, false, false, true, false, false);
                     $view->assign('data', $listFinish);
                     $template = $view->get_template('course_progress/pdf_general_thematic.tpl');
-                    
+
+                    $format = $pdfOrientation !== 'portrait' ? 'A4-L' : 'A4-P';
+                    $orientation = $pdfOrientation !== 'portrait' ? 'L' : 'P';
+                    $fileName = get_lang('Thematic').'-'.api_get_local_time();
+                    $title = get_lang('Thematic');
+                    $signatures = ['Drh', 'Teacher', 'Date'];
+
+                    if ($action === 'export_documents') {
+                        $pdf = new PDF(
+                            $format,
+                            $orientation,
+                            [
+                                'filename' => $fileName,
+                                'pdf_title' => $fileName,
+                                'add_signatures' => $signatures
+                            ]
+                        );
+                        $pdf->exportFromHtmlToDocumentsArea($view->fetch($template), $fileName, $courseId);
+
+                        header('Location: '.api_get_self().'?'.api_get_cidreq());
+                        exit;
+                    }
+
                     Export::export_html_to_pdf(
                         $view->fetch($template),
                         [
-                            'filename' => get_lang('Thematic').'-'.api_get_local_time(),
-                            'pdf_title' => get_lang('Thematic'),
-                            'add_signatures' => ['Drh', 'Teacher', 'Date'],
-                            'format' => $pdfOrientation !== 'portrait' ? 'A4-L' : 'A4-P',
-                            'orientation' => $pdfOrientation !== 'portrait' ? 'L' : 'P'
+                            'filename' => $fileName,
+                            'pdf_title' => $title,
+                            'add_signatures' => $signatures,
+                            'format' => $format,
+                            'orientation' => $orientation
                         ]
                     );
-
                     break;
+                case 'export_single_documents':
+                    //no break
                 case 'export_single_thematic':
                     $theme = $thematic->get_thematic_list($thematic_id);
                     $plans = $thematic->get_thematic_plan_data($theme['id']);
+                    $plans = array_filter($plans, function ($plan) {
+                        return !empty($plan['description']);
+                    });
                     $advances = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
 
                     $view = new Template('', false, false, false, true, false, false);
@@ -256,15 +285,36 @@ class ThematicController
                     $template = $view->get_template('course_progress/pdf_single_thematic.tpl');
 
                     $pdfOrientation = api_get_configuration_value('thematic_pdf_orientation');
+                    $format = $pdfOrientation !== 'portrait' ? 'A4-L' : 'A4-P';
+                    $orientation = $pdfOrientation !== 'portrait' ? 'L' : 'P';
+                    $title = get_lang('Thematic').'-'.$theme['title'];
+                    $fileName = $title.'-'.api_get_local_time();
+                    $signatures = ['Drh', 'Teacher', 'Date'];
+
+                    if ($action === 'export_single_documents') {
+                        $pdf = new PDF(
+                            $format,
+                            $orientation,
+                            [
+                                'filename' => $fileName,
+                                'pdf_title' => $fileName,
+                                'add_signatures' => $signatures
+                            ]
+                        );
+                        $pdf->exportFromHtmlToDocumentsArea($view->fetch($template), $fileName, $courseId);
+
+                        header('Location: '.api_get_self().'?'.api_get_cidreq());
+                        exit;
+                    }
 
                     Export::export_html_to_pdf(
                         $view->fetch($template),
                         [
-                            'filename' => get_lang('Thematic').'-'.api_get_local_time(),
-                            'pdf_title' => get_lang('Thematic'),
-                            'add_signatures' => ['Drh', 'Teacher', 'Date'],
-                            'format' => $pdfOrientation !== 'portrait' ? 'A4-L' : 'A4-P',
-                            'orientation' => $pdfOrientation !== 'portrait' ? 'L' : 'P'
+                            'filename' => $fileName,
+                            'pdf_title' => $title,
+                            'add_signatures' => $signatures,
+                            'format' => $format,
+                            'orientation' => $orientation
                         ]
                     );
                     break;

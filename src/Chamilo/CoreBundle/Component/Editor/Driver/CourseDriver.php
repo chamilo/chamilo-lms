@@ -29,7 +29,6 @@ class CourseDriver extends Driver implements DriverInterface
             $coursePath = api_get_path(SYS_COURSE_PATH);
             $courseDir = $courseInfo['directory'].'/document';
             $baseDir = $coursePath.$courseDir;
-
             $this->coursePath = $baseDir;
 
             // Creates shared folder
@@ -100,6 +99,15 @@ class CourseDriver extends Driver implements DriverInterface
                     )
                 )
             );
+
+            // admin/teachers can create dirs from ckeditor
+            if ($this->allowToEdit()) {
+                $defaultDisabled = $this->connector->getDefaultDriverSettings()['disabled'];
+                $defaultDisabled = array_flip($defaultDisabled);
+                unset($defaultDisabled['mkdir']);
+                $defaultDisabled = array_flip($defaultDisabled);
+                $config['disabled'] = $defaultDisabled;
+            }
 
             $foldersToHide = \DocumentManager::get_all_document_folders(
                 $this->connector->course,
@@ -297,7 +305,6 @@ class CourseDriver extends Driver implements DriverInterface
     public function allow()
     {
         //if ($this->connector->security->isGranted('ROLE_ADMIN')) {
-
         if (api_is_anonymous()) {
             return false;
         }
@@ -319,6 +326,52 @@ class CourseDriver extends Driver implements DriverInterface
         $allow = $this->allow();
 
         return $allow && api_is_allowed_to_edit(null, true);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _mkdir($path, $name)
+    {
+        if ($this->allowToEdit() == false) {
+            return false;
+        }
+
+        $path = $this->_joinPath($path, $name);
+
+        if (mkdir($path)) {
+            $this->setConnectorFromPlugin();
+            chmod($path, $this->options['dirMode']);
+            clearstatcache();
+            $_course = $this->connector->course;
+            $realPathRoot = $this->getCourseDocumentSysPath();
+
+            // Removing course path
+            $newPath = str_replace($realPathRoot, '/', $path);
+            $documentId = add_document(
+                $_course,
+                $newPath,
+                'folder',
+                0,
+                $name,
+                null,
+                0,
+                true,
+                api_get_group_id(),
+                api_get_session_id(),
+                api_get_user_id()
+            );
+
+            if (empty($documentId)) {
+                unlink($path);
+
+                return false;
+            }
+
+            return $path;
+        }
+
+        return false;
     }
 
     /**

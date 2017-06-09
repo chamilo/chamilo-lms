@@ -10,7 +10,8 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
 /**
  * Class SessionManager
  *
- * This is the session library for Chamilo.
+ * This is the session library for Chamilo
+ * (as in courses>session, not as in PHP session)
  * All main sessions functions should be placed here.
  * This class provides methods for sessions management.
  * Include/require it in your code to use its features.
@@ -96,8 +97,8 @@ class SessionManager
      * @param   string  $displayEndDate (YYYY-MM-DD hh:mm:ss)
      * @param   string  $coachStartDate (YYYY-MM-DD hh:mm:ss)
      * @param   string  $coachEndDate (YYYY-MM-DD hh:mm:ss)
-     * @param   mixed   $coachId If integer, this is the session coach id, if string, the coach ID will be looked for from the user table
      * @param   integer $sessionCategoryId ID of the session category in which this session is registered
+     * @param   mixed   $coachId If integer, this is the session coach id, if string, the coach ID will be looked for from the user table
      * @param   integer $visibility Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
      * @param   bool    $fixSessionNameIfExists
      * @param   string  $duration
@@ -293,7 +294,7 @@ class SessionManager
      *
      * @return bool
      */
-    public static function session_name_exists($name)
+    public static function sessionNameExists($name)
     {
         $name = Database::escape_string($name);
         $sql = "SELECT COUNT(*) as count FROM ".Database::get_main_table(TABLE_MAIN_SESSION)."
@@ -345,8 +346,8 @@ class SessionManager
             $where_condition = str_replace('category_name', 'sc.name', $where_condition);
             $where_condition = str_replace(
                 array("AND session_active = '1'  )", " AND (  session_active = '1'  )"),
-                array(') GROUP BY s.name HAVING session_active = 1 ', " GROUP BY s.name HAVING session_active = 1 ")
-                , $where_condition
+                array(') GROUP BY s.name HAVING session_active = 1 ', " GROUP BY s.name HAVING session_active = 1 "),
+                $where_condition
             );
             $where_condition = str_replace(
                 array("AND session_active = '0'  )", " AND (  session_active = '0'  )"),
@@ -387,7 +388,6 @@ class SessionManager
                 $where $where_condition ) as session_table";
 
         if (api_is_multiple_url_enabled()) {
-
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $where .= " AND ar.access_url_id = $access_url_id ";
@@ -552,14 +552,27 @@ class SessionManager
                 return $sessions[0]['total_rows'];
             }
 
+            $activeIcon = Display::return_icon(
+                'accept.png',
+                get_lang('Active'),
+                array(),
+                ICON_SIZE_SMALL
+            );
+            $inactiveIcon = Display::return_icon(
+                'error.png',
+                get_lang('Inactive'),
+                array(),
+                ICON_SIZE_SMALL
+            );
+
             foreach ($sessions as $session) {
                 $session_id = $session['id'];
                 $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
 
                 if (isset($session['session_active']) && $session['session_active'] == 1) {
-                    $session['session_active'] = Display::return_icon('accept.png', get_lang('Active'), array(), ICON_SIZE_SMALL);
+                    $session['session_active'] = $activeIcon;
                 } else {
-                    $session['session_active'] = Display::return_icon('error.png', get_lang('Inactive'), array(), ICON_SIZE_SMALL);
+                    $session['session_active'] = $inactiveIcon;
                 }
 
                 $session = self::convert_dates_to_local($session, true);
@@ -1365,16 +1378,16 @@ class SessionManager
     /**
      * Creates a new course code based in given code
      *
-     * @param string	$session_name
+     * @param string $session_name
      * <code>
      * $wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return: course3
      * if the course code doest not exist in the DB the same course code will be returned
      * </code>
-     * @return string	wanted unused code
+     * @return string wanted unused code
      */
     public static function generateNextSessionName($session_name)
     {
-        $session_name_ok = !self::session_name_exists($session_name);
+        $session_name_ok = !self::sessionNameExists($session_name);
         if (!$session_name_ok) {
             $table = Database::get_main_table(TABLE_MAIN_SESSION);
             $session_name = Database::escape_string($session_name);
@@ -1385,7 +1398,7 @@ class SessionManager
                 $row = Database::fetch_array($result);
                 $count = $row['count'] + 1;
                 $session_name = $session_name.'_'.$count;
-                $result = self::session_name_exists($session_name);
+                $result = self::sessionNameExists($session_name);
                 if (!$result) {
                     return $session_name;
                 }
@@ -1955,10 +1968,9 @@ class SessionManager
         $status = null
     ) {
         $sessionId = intval($sessionId);
-        $courseCode = $courseInfo['code'];
         $courseId = $courseInfo['real_id'];
 
-        if (empty($sessionId) || empty($courseCode)) {
+        if (empty($sessionId) || empty($courseId)) {
             return array();
         }
 
@@ -1977,6 +1989,59 @@ class SessionManager
                     c_id = $courseId
                     $statusCondition
                 ";
+
+        $result = Database::query($sql);
+        $existingUsers = array();
+        while ($row = Database::fetch_array($result)) {
+            $existingUsers[] = $row['user_id'];
+        }
+
+        return $existingUsers;
+    }
+
+     /**
+     * Returns user list of the current users subscribed in the course-session
+     * @param array $sessionList
+     * @param array $courseList
+     * @param int $status
+     * @param int $start
+     * @param int $limit
+     *
+     * @return array
+     */
+    public static function getUsersByCourseAndSessionList(
+        $sessionList,
+        $courseList,
+        $status = null,
+        $start = null,
+        $limit = null
+    ) {
+        if (empty($sessionList) || empty($courseList)) {
+            return [];
+        }
+        $sessionListToString = implode("','", $sessionList);
+        $courseListToString = implode("','", $courseList);
+
+        $statusCondition = null;
+        if (isset($status) && !is_null($status)) {
+            $status = intval($status);
+            $statusCondition = " AND status = $status";
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+        $sql = "SELECT DISTINCT user_id
+                FROM $table
+                WHERE
+                    session_id IN ('$sessionListToString') AND
+                    c_id IN ('$courseListToString')
+                    $statusCondition
+                ";
+        if (!is_null($start) && !is_null($limit)) {
+            $start = (int) $start;
+            $limit = (int) $limit;
+            $sql .= "LIMIT $start, $limit";
+        }
         $result = Database::query($sql);
         $existingUsers = array();
         while ($row = Database::fetch_array($result)) {
@@ -2551,15 +2616,17 @@ class SessionManager
      * @param	string	$variable Field's internal variable name
      * @param	int		$fieldType Field's type
      * @param	string	$displayText Field's language var name
+     * @param   string  $default    Field's default value
      * @return int     new extra field id
      */
-    public static function create_session_extra_field($variable, $fieldType, $displayText)
+    public static function create_session_extra_field($variable, $fieldType, $displayText, $default = '')
     {
         $extraField = new ExtraFieldModel('session');
         $params = [
             'variable' => $variable,
             'field_type' => $fieldType,
             'display_text' => $displayText,
+            'default_value' => $default
         ];
 
         return $extraField->save($params);
@@ -3303,7 +3370,7 @@ class SessionManager
     /**
      * Get sessions followed by human resources manager
      * @param int $userId
-     * @param int $status Optional
+     * @param int $status DRH Optional
      * @param int $start
      * @param int $limit
      * @param bool $getCount
@@ -3332,10 +3399,9 @@ class SessionManager
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
-        $userId = intval($userId);
+        $userId = (int) $userId;
 
         $select = " SELECT DISTINCT * ";
-
         if ($getCount) {
             $select = " SELECT count(DISTINCT(s.id)) as count ";
         }
@@ -3345,7 +3411,7 @@ class SessionManager
         }
 
         $limitCondition = null;
-        if (!empty($start) && !empty($limit)) {
+        if (!is_null($start) && !is_null($limit)) {
             $limitCondition = " LIMIT ".intval($start).", ".intval($limit);
         }
 
@@ -3356,7 +3422,7 @@ class SessionManager
         $whereConditions = null;
         $sessionCourseConditions = null;
         $sessionConditions = null;
-        $sessionQuery = null;
+        $sessionQuery = '';
         $courseSessionQuery = null;
 
         switch ($status) {
@@ -3400,7 +3466,8 @@ class SessionManager
         $subQuery = $sessionQuery.$courseSessionQuery;
 
         $sql = " $select FROM $tbl_session s
-                INNER JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
+                INNER JOIN $tbl_session_rel_access_url a 
+                ON (s.id = a.session_id)
                 WHERE
                     access_url_id = ".api_get_current_access_url_id()." AND
                     s.id IN (
@@ -4281,11 +4348,23 @@ class SessionManager
     {
         $table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $table_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $courseId = intval($courseId);
+        $urlId = api_get_current_access_url_id();
+
+        if (empty($courseId)) {
+            return [];
+        }
+
         $sql = "SELECT name, s.id
                 FROM $table_session_course sc
-                INNER JOIN $table_session s ON (sc.session_id = s.id)
-                WHERE sc.c_id = '$courseId' ";
+                INNER JOIN $table_session s 
+                ON (sc.session_id = s.id)
+                INNER JOIN $url u
+                ON (u.session_id = s.id)
+                WHERE 
+                    u.access_url_id = $urlId AND 
+                    sc.c_id = '$courseId' ";
         $result = Database::query($sql);
 
         return Database::store_result($result);
@@ -7170,7 +7249,7 @@ class SessionManager
             'name',
             get_lang('SessionName'),
             true,
-            ['maxlength' => 150]
+            ['maxlength' => 150, 'aria-label' => get_lang('SessionName')]
         );
         $form->addRule('name', get_lang('SessionNameAlreadyExists'), 'callback', 'check_session_name');
 

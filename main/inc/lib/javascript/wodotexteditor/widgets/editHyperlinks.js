@@ -22,7 +22,7 @@
  * @source: https://github.com/kogmbh/WebODF/
  */
 
-/*global define,require,document,odf */
+/*global define, require, document, odf, runtime, core, gui */
 
 define("webodf/editor/widgets/editHyperlinks", [
     "webodf/editor/EditorSession",
@@ -35,6 +35,8 @@ define("webodf/editor/widgets/editHyperlinks", [
         "use strict";
 
         runtime.loadClass("odf.OdfUtils");
+        runtime.loadClass("odf.TextSerializer");
+        runtime.loadClass("core.EventSubscriptions");
 
         var EditHyperlinks = function (callback) {
             var self = this,
@@ -44,20 +46,10 @@ define("webodf/editor/widgets/editHyperlinks", [
                 linkEditorContent,
                 editHyperlinkButton,
                 removeHyperlinkButton,
-                odfUtils = new odf.OdfUtils(),
+                odfUtils = odf.OdfUtils,
                 textSerializer = new odf.TextSerializer(),
+                eventSubscriptions = new core.EventSubscriptions(),
                 dialog;
-
-            /**
-             * @param {!Range} selection
-             * @return {!string}
-             */
-            function getTextContent(selection) {
-                var document = selection.startContainer.ownerDocument,
-                    fragmentContainer = document.createElement('span');
-                fragmentContainer.appendChild(selection.cloneContents());
-                return textSerializer.writeToString(fragmentContainer);
-            }
 
             function updateLinkEditorContent() {
                 var selection = editorSession.getSelectedRange(),
@@ -75,7 +67,8 @@ define("webodf/editor/widgets/editHyperlinks", [
                     // User has selected part of a hyperlink or a block of text. Assume user is attempting to modify the
                     // existing hyperlink, or wants to convert the selection into a hyperlink
                     linkEditorContent.set({
-                        linkDisplayText: getTextContent(selection),
+                        // TODO Improve performance by rewriting to not clone the range contents
+                        linkDisplayText: textSerializer.writeToString(selection.cloneContents()),
                         linkUrl: linkTarget,
                         isReadOnlyText: true
                     });
@@ -89,17 +82,19 @@ define("webodf/editor/widgets/editHyperlinks", [
                 }
             }
 
-            function checkHyperlinkButtons() {
-                var linksInSelection = editorSession.getSelectedHyperlinks();
+            function updateHyperlinkButtons() {
+                var controllerEnabled = hyperlinkController && hyperlinkController.isEnabled(),
+                    linksInSelection;
 
-                // The 3rd parameter is false to avoid firing onChange when setting the value programmatically.
-                removeHyperlinkButton.set('disabled', linksInSelection.length === 0, false);
-            }
-
-            function enableHyperlinkButtons(isEnabled) {
+                // Enable to disable all widgets initially
                 widget.children.forEach(function (element) {
-                    element.setAttribute('disabled', !isEnabled);
+                    element.set('disabled', controllerEnabled !== true, false);
                 });
+                if (controllerEnabled) {
+                    // Specifically enable the remove hyperlink button only if there are links in the current selection
+                    linksInSelection = editorSession.getSelectedHyperlinks();
+                    removeHyperlinkButton.set('disabled', linksInSelection.length === 0, false);
+                }
             }
 
             function updateSelectedLink(hyperlinkData) {
@@ -108,12 +103,12 @@ define("webodf/editor/widgets/editHyperlinks", [
                     selectedLinkRange,
                     linksInSelection = editorSession.getSelectedHyperlinks();
 
-                if (hyperlinkData.isReadOnlyText == "true") {
+                if (hyperlinkData.isReadOnlyText === "true") {
                     if (selection && selection.collapsed && linksInSelection.length === 1) {
                         // Editing the single link the cursor is currently within
                         selectedLinkRange = selection.cloneRange();
                         selectedLinkRange.selectNode(linksInSelection[0]);
-                        selectionController.selectRange(selectedLinkRange, true)
+                        selectionController.selectRange(selectedLinkRange, true);
                     }
                     hyperlinkController.removeHyperlinks();
                     hyperlinkController.addHyperlink(hyperlinkData.linkUrl);
@@ -122,35 +117,27 @@ define("webodf/editor/widgets/editHyperlinks", [
                     linksInSelection = editorSession.getSelectedHyperlinks();
                     selectedLinkRange = selection.cloneRange();
                     selectedLinkRange.selectNode(linksInSelection[0]);
-                    selectionController.selectRange(selectedLinkRange, true)
+                    selectionController.selectRange(selectedLinkRange, true);
                 }
             }
 
             this.setEditorSession = function (session) {
-                if (editorSession) {
-                    editorSession.unsubscribe(EditorSession.signalCursorMoved, checkHyperlinkButtons);
-                    editorSession.unsubscribe(EditorSession.signalParagraphChanged, checkHyperlinkButtons);
-                    editorSession.unsubscribe(EditorSession.signalParagraphStyleModified, checkHyperlinkButtons);
-                    hyperlinkController.unsubscribe(gui.HyperlinkController.enabledChanged, enableHyperlinkButtons);
-                }
-
+                eventSubscriptions.unsubscribeAll();
+                hyperlinkController = undefined;
                 editorSession = session;
                 if (editorSession) {
                     hyperlinkController = editorSession.sessionController.getHyperlinkController();
-
-                    editorSession.subscribe(EditorSession.signalCursorMoved, checkHyperlinkButtons);
-                    editorSession.subscribe(EditorSession.signalParagraphChanged, checkHyperlinkButtons);
-                    editorSession.subscribe(EditorSession.signalParagraphStyleModified, checkHyperlinkButtons);
-                    hyperlinkController.subscribe(gui.HyperlinkController.enabledChanged, enableHyperlinkButtons);
-
-                    enableHyperlinkButtons(hyperlinkController.isEnabled());
-                    checkHyperlinkButtons();
-                } else {
-                    enableHyperlinkButtons( false );
+                    eventSubscriptions.addFrameSubscription(editorSession, EditorSession.signalCursorMoved, updateHyperlinkButtons);
+                    eventSubscriptions.addFrameSubscription(editorSession, EditorSession.signalParagraphChanged, updateHyperlinkButtons);
+                    eventSubscriptions.addFrameSubscription(editorSession, EditorSession.signalParagraphStyleModified, updateHyperlinkButtons);
+                    eventSubscriptions.addSubscription(hyperlinkController, gui.HyperlinkController.enabledChanged, updateHyperlinkButtons);
                 }
+                updateHyperlinkButtons();
             };
 
+            /*jslint emptyblock: true*/
             this.onToolDone = function () {};
+            /*jslint emptyblock: false*/
 
             function init() {
                 textSerializer.filter = new odf.OdfNodeFilter();

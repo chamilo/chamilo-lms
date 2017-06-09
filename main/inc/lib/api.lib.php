@@ -20,7 +20,7 @@ use Symfony\Component\Finder\Finder;
  */
 
 // PHP version requirement.
-define('REQUIRED_PHP_VERSION', '5.4');
+define('REQUIRED_PHP_VERSION', '5.5');
 define('REQUIRED_MIN_MEMORY_LIMIT', '128');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE', '10');
 define('REQUIRED_MIN_POST_MAX_SIZE', '10');
@@ -109,6 +109,7 @@ define('TOOL_LINK_CATEGORY', 'link_category');
 define('TOOL_COURSE_DESCRIPTION', 'course_description');
 define('TOOL_SEARCH', 'search');
 define('TOOL_LEARNPATH', 'learnpath');
+define('TOOL_LEARNPATH_CATEGORY', 'learnpath_category');
 define('TOOL_AGENDA', 'agenda');
 define('TOOL_ANNOUNCEMENT', 'announcement');
 define('TOOL_FORUM', 'forum');
@@ -1443,6 +1444,8 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
  * @param bool $loadExtraData
  * @param bool $loadOnlyVisibleExtraData Get the user extra fields that are visible
  * @param bool $loadAvatars turn off to improve performance and if avatars are not needed.
+ * @param bool $updateCache update apc cache if exists
+ *
  * @return array $user_info user_id, lastname, firstname, username, email, etc
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @author Julio Montoya
@@ -1454,7 +1457,8 @@ function api_get_user_info(
     $showPassword = false,
     $loadExtraData = false,
     $loadOnlyVisibleExtraData = false,
-    $loadAvatars = true
+    $loadAvatars = true,
+    $updateCache = false
 ) {
     $apcVar = null;
     $user = false;
@@ -1467,11 +1471,15 @@ function api_get_user_info(
             if ($cacheAvailable === true) {
                 $apcVar = api_get_configuration_value('apc_prefix').'userinfo_'.$userFromSession['user_id'];
                 if (apcu_exists($apcVar)) {
+                    if ($updateCache) {
+                        apcu_store($apcVar, $userFromSession, 60);
+                    }
                     $user = apcu_fetch($apcVar);
                 } else {
                     $user = _api_format_user($userFromSession, $showPassword, $loadAvatars);
                     apcu_store($apcVar, $user, 60);
                 }
+
             } else {
                 $user = _api_format_user($userFromSession, $showPassword, $loadAvatars);
             }
@@ -1488,7 +1496,7 @@ function api_get_user_info(
     // Re-use user information if not stale and already stored in APCu
     if ($cacheAvailable === true) {
         $apcVar = api_get_configuration_value('apc_prefix').'userinfo_'.$user_id;
-        if (apcu_exists($apcVar)) {
+        if (apcu_exists($apcVar) && $updateCache == false) {
             $user = apcu_fetch($apcVar);
 
             return $user;
@@ -1528,7 +1536,8 @@ function api_get_user_info(
         }
         $user = _api_format_user($result_array, $showPassword, $loadAvatars);
     }
-    if (!empty($cacheAvailable)) {
+
+    if ($cacheAvailable === true) {
         apcu_store($apcVar, $user, 60);
     }
 
@@ -1656,6 +1665,12 @@ function api_get_course_setting($setting_name, $course_code = null)
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
+            if ($setting_name === 'email_alert_manager_on_new_quiz') {
+                if (!is_null($row['value'])) {
+                    $result = explode(',', $row['value']);
+                    $row['value'] = $result;
+                }
+            }
             return $row['value'];
         }
     }
@@ -6017,20 +6032,6 @@ function api_check_term_condition($user_id)
  * @param int The tool id
  * @return array
  */
-function api_get_tool_information($tool_id)
-{
-    $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
-    $course_id = api_get_course_int_id();
-    $sql = "SELECT * FROM $t_tool WHERE c_id = $course_id AND id = ".intval($tool_id);
-    $rs  = Database::query($sql);
-    return Database::fetch_array($rs);
-}
-
-/**
- * Gets all information of a tool into course
- * @param int The tool id
- * @return array
- */
 function api_get_tool_information_by_name($name)
 {
     $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
@@ -7625,6 +7626,11 @@ function api_get_configuration_value($variable)
             // Check if it exists for the sub portal
             if (array_key_exists($urlId, $_configuration[$variable])) {
                 return $_configuration[$variable][$urlId];
+            } else {
+                // Try to found element with id = 1 (master portal)
+                if (array_key_exists(1, $_configuration[$variable])) {
+                    return $_configuration[$variable][1];
+                }
             }
         }
 

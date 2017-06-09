@@ -106,11 +106,11 @@ if (((isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') ||
     (isset($_GET['selectcat']) && ($_SESSION['studentview'] == 'teacherview')))
 ) {
     if (isset ($_GET['scoringupdated'])) {
-        Display::display_confirmation_message(get_lang('ScoringUpdated'), false);
+        echo Display::return_message(get_lang('ScoringUpdated'), 'confirm', false);
     }
 
     if (isset ($_GET['nouniqueranges'])) {
-        Display::display_error_message(get_lang('NoUniqueScoreRanges'), false);
+        echo Display::return_message(get_lang('NoUniqueScoreRanges'), 'error', false);
     }
     $scoreform->display();
 }

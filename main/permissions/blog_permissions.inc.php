@@ -46,7 +46,7 @@ $course_id = api_get_course_int_id();
 $tbl_course_rel_user = $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $sql = "SELECT user_id
 		FROM $tbl_course_rel_user
-		WHERE status = '1' AND c_id = '" . api_get_course_int_id() . "'";
+		WHERE status = '1' AND c_id = '".api_get_course_int_id()."'";
 $result = Database::query($sql);
 while ($user = Database::fetch_assoc($result)) {
     unset($blog_users[$user['user_id']]);
@@ -110,7 +110,7 @@ if (api_get_setting('group_roles') == 'true') {
     }
 }
 
-echo "<form method=\"post\" action=\"" . str_replace('&', '&amp;', $_SERVER['REQUEST_URI']) . "\">";
+echo "<form method=\"post\" action=\"".str_replace('&', '&amp;', $_SERVER['REQUEST_URI'])."\">";
 
 // ---------------------------------------------------
 // 		DISPLAYING THE ROLES LIST
@@ -118,7 +118,7 @@ echo "<form method=\"post\" action=\"" . str_replace('&', '&amp;', $_SERVER['REQ
 
 if (api_get_setting('user_roles') == 'true') {
     // the list of the roles for the user
-    echo '<strong>' . get_lang('UserRoles') . '</strong><br />';
+    echo '<strong>'.get_lang('UserRoles').'</strong><br />';
     $current_user_course_roles = get_roles('user', $user_id);
     $current_user_platform_roles = get_roles('user', $user_id, 'platform');
     display_role_list($current_user_course_roles, $current_user_platform_roles);
@@ -132,24 +132,24 @@ echo "<table class=\"data_table\">\n";
 
 // the header
 echo "\t<tr>\n";
-echo "\t\t<th rowspan=\"2\">" . get_lang('Module') . "</th>\n";
-echo "\t\t<th colspan=\"4\">" . get_lang('ArticleManager') . "</th>\n";
-echo "\t\t<th colspan=\"3\">" . get_lang('CommentManager') . "</th>\n";
-echo "\t\t<th colspan=\"3\">" . get_lang('BlogManager') . "</th>\n";
+echo "\t\t<th rowspan=\"2\">".get_lang('Module')."</th>\n";
+echo "\t\t<th colspan=\"4\">".get_lang('ArticleManager')."</th>\n";
+echo "\t\t<th colspan=\"3\">".get_lang('CommentManager')."</th>\n";
+echo "\t\t<th colspan=\"3\">".get_lang('BlogManager')."</th>\n";
 echo "\t</tr>\n";
 
 // Subheader
 echo "\t<tr>\n";
-echo "\t\t<th align='center'>" . get_lang('Add') . "</th>\n";
-echo "\t\t<th align='center'>" . get_lang('Delete') . "</th>\n";
-echo "\t\t<th align='center'>" . get_lang('Edit') . "</th>\n";
-echo "\t\t<th align='center'>" . get_lang('Rate') . "</th>\n";
-echo "\t\t<th align='center'>" . get_lang('Add') . "</th>\n";
-echo "\t\t<th align='center'>" . get_lang('Delete') . "</th>\n";
-echo "\t\t<th align='center'>" . get_lang('Rate') . "</th>\n";
-echo "\t\t<th align='center'>" . get_lang('Tasks') . "</th>\n";
-echo "\t\t<th align='center'>" . get_lang('Members') . "</th>\n";
-echo "\t\t<th align='center'>" . get_lang('Roles') . "</th>\n";
+echo "\t\t<th align='center'>".get_lang('Add')."</th>\n";
+echo "\t\t<th align='center'>".get_lang('Delete')."</th>\n";
+echo "\t\t<th align='center'>".get_lang('Edit')."</th>\n";
+echo "\t\t<th align='center'>".get_lang('Rate')."</th>\n";
+echo "\t\t<th align='center'>".get_lang('Add')."</th>\n";
+echo "\t\t<th align='center'>".get_lang('Delete')."</th>\n";
+echo "\t\t<th align='center'>".get_lang('Rate')."</th>\n";
+echo "\t\t<th align='center'>".get_lang('Tasks')."</th>\n";
+echo "\t\t<th align='center'>".get_lang('Members')."</th>\n";
+echo "\t\t<th align='center'>".get_lang('Roles')."</th>\n";
 echo "\t</tr>\n";
 
 // the main area with the checkboxes or images
@@ -171,7 +171,7 @@ foreach ($blog_users as $user_id => $user_name) { // $blog_users contains all th
             display_image_matrix_for_blogs(
                 $current_user_permissions,
                 $user_id,
-                'BLOG_' . $blog_id,
+                'BLOG_'.$blog_id,
                 $value,
                 (isset($inherited_permissions) ? $inherited_permissions : null),
                 (isset($course_admin) ? $course_admin : null)
@@ -190,7 +190,7 @@ echo "</table>\n";
 echo "</form><br />";
 
 // 			LEGEND
-echo '<strong>' . get_lang('Legend') . '</strong><br />';
-echo '<img src="../img/wrong.gif" /> ' . get_lang('UserHasPermissionNot') . '<br />';
-echo '<img src="../img/checkbox_on2.gif" /> ' . get_lang('UserHasPermission') . '<br />';
-echo '<img src="../img/checkbox_on3.gif" /> ' . get_lang('UserHasPermissionByRoleGroup') . '<br />';
+echo '<strong>'.get_lang('Legend').'</strong><br />';
+echo '<img src="../img/wrong.gif" /> '.get_lang('UserHasPermissionNot').'<br />';
+echo '<img src="../img/checkbox_on2.gif" /> '.get_lang('UserHasPermission').'<br />';
+echo '<img src="../img/checkbox_on3.gif" /> '.get_lang('UserHasPermissionByRoleGroup').'<br />';

@@ -22,7 +22,7 @@
  * @source: https://github.com/kogmbh/WebODF/
  */
 
-/*global define, require */
+/*global define, require, runtime, gui */
 
 define("webodf/editor/widgets/annotation", [
     "dijit/form/Button"],
@@ -84,11 +84,12 @@ define("webodf/editor/widgets/annotation", [
                 }
             };
 
+            /*jslint emptyblock: true*/
             this.onToolDone = function () {};
+            /*jslint emptyblock: false*/
 
             callback(widget);
         };
 
         return AnnotationControl;
-    }
-);
+    });

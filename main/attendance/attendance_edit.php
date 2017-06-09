@@ -12,7 +12,7 @@ api_protect_course_script(true);
 
 // error messages
 if (isset($error)) {
-    Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'), false);
+    echo Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error', false);
 }
 
 if (!isset($error)) {

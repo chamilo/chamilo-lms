@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 
-
 /**
  * Unzip the exercise in the temp folder
  * @param string The path of the temporary directory where the exercise was uploaded and unzipped
@@ -31,8 +30,8 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
         return false;
     }
 
-    if (preg_match('/.zip$/i', $_FILES['userFile']['name']) &&
-        handle_uploaded_document(
+    if (preg_match('/.zip$/i', $_FILES['userFile']['name'])) {
+        $result = handle_uploaded_document(
             $_course,
             $_FILES['userFile'],
             $baseWorkDir,
@@ -47,9 +46,8 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
             null,
             null,
             false
-        )
-    ) {
-        return true;
+        );
+        return $result;
     }
     return false;
 }
@@ -86,7 +84,6 @@ function import_exercise($file)
     $exercise_info['name'] = preg_replace('/.zip$/i', '', $file);
     $exercise_info['question'] = array();
     $element_pile = array();
-
     // create parser and array to retrieve info from manifest
     $element_pile = array(); //pile to known the depth in which we are
 
@@ -99,6 +96,8 @@ function import_exercise($file)
     if (!get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)) {
         return 'UplZipCorrupt';
     }
+
+    $baseWorkDir = $baseWorkDir.$uploadPath;
 
     // find the different manifests for each question and parse them.
     $exerciseHandle = opendir($baseWorkDir);
@@ -175,6 +174,7 @@ function import_exercise($file)
 
     $exercise->save();
     $last_exercise_id = $exercise->selectId();
+    $courseId = api_get_course_int_id();
     if (!empty($last_exercise_id)) {
         // For each question found...
         foreach ($exercise_info['question'] as $question_array) {
@@ -196,18 +196,23 @@ function import_exercise($file)
 
             if (isset($question_array['category'])) {
                 $category = formatText(strip_tags($question_array['category']));
-                $categoryId = TestCategory::get_category_id_for_title(
-                    $category,
-                    api_get_course_int_id()
-                );
+                if (!empty($category)) {
+                    $categoryId = TestCategory::get_category_id_for_title(
+                        $category,
+                        $courseId
+                    );
 
-                if (!empty($categoryId)) {
-                    $question->category = $categoryId;
-                } else {
-                    $cat = new TestCategory();
-                    $cat->name = $category;
-                    $cat->description = '';
-                    $question->category = $cat->save();
+                    if (empty($categoryId)) {
+                        $cat = new TestCategory();
+                        $cat->name = $category;
+                        $cat->description = '';
+                        $categoryId = $cat->save($courseId);
+                        if ($categoryId) {
+                            $question->category = $categoryId;
+                        }
+                    } else {
+                        $question->category = $categoryId;
+                    }
                 }
             }
 
@@ -215,8 +220,8 @@ function import_exercise($file)
                 $description .= $question_array['description'];
             }
             $question->updateDescription($description);
+            $question->save($exercise);
 
-            $question->save($last_exercise_id);
             $last_question_id = $question->selectId();
             //3. Create answer
             $answer = new Answer($last_question_id);
@@ -233,6 +238,7 @@ function import_exercise($file)
                     $j++;
                     $matchAnswerIds[$key] = $j;
                 }
+
                 // Answer
                 $answer->new_answer[$i] = formatText($answers['value']);
                 // Comment
@@ -245,15 +251,19 @@ function import_exercise($file)
                 } else {
                     $answer->new_correct[$i] = 0;
                 }
+
+                $answer->new_weighting[$i] = 0;
                 if (isset($question_array['weighting'][$key])) {
                     $answer->new_weighting[$i] = $question_array['weighting'][$key];
                 }
+
                 if ($answer->new_correct[$i]) {
                     $totalCorrectWeight += $answer->new_weighting[$i];
                 }
             }
+
             $question->updateWeighting($totalCorrectWeight);
-            $question->save($last_exercise_id);
+            $question->save($exercise);
             $answer->save();
         }
 
@@ -326,7 +336,6 @@ function qti_parse_file($exercisePath, $file, $questionFile)
     );
 
     $question_format_supported = true;
-
     $xml_parser = xml_parser_create();
     xml_parser_set_option($xml_parser, XML_OPTION_SKIP_WHITE, false);
     if ($qtiMainVersion == 1) {
@@ -397,7 +406,7 @@ function startElementQti2($parser, $name, $attributes)
     if (sizeof($element_pile) >= 2) {
         $parent_element = $element_pile[sizeof($element_pile) - 2];
     } else {
-        $parent_element = "";
+        $parent_element = '';
     }
 
     if ($record_item_body) {
@@ -427,13 +436,13 @@ function startElementQti2($parser, $name, $attributes)
 
     switch ($current_element) {
         case 'ASSESSMENTITEM':
-            //retrieve current question
+            // retrieve current question
             $current_question_ident = $attributes['IDENTIFIER'];
-            $exercise_info['question'][$current_question_ident] = array();
-            $exercise_info['question'][$current_question_ident]['answer'] = array();
-            $exercise_info['question'][$current_question_ident]['correct_answers'] = array();
-            $exercise_info['question'][$current_question_ident]['title'] = $attributes['TITLE'];
-            $exercise_info['question'][$current_question_ident]['category'] = $attributes['CATEGORY'];
+            $exercise_info['question'][$current_question_ident] = [];
+            $exercise_info['question'][$current_question_ident]['answer'] = [];
+            $exercise_info['question'][$current_question_ident]['correct_answers'] = [];
+            $exercise_info['question'][$current_question_ident]['title'] = isset($attributes['TITLE']) ? $attributes['TITLE'] : '';
+            $exercise_info['question'][$current_question_ident]['category'] = isset($attributes['CATEGORY']) ? $attributes['CATEGORY'] : '';
             $exercise_info['question'][$current_question_ident]['tempdir'] = $questionTempDir;
             break;
         case 'SECTION':
@@ -444,11 +453,11 @@ function startElementQti2($parser, $name, $attributes)
             break;
         case 'RESPONSEDECLARATION':
             // Retrieve question type
-            if ("multiple" == $attributes['CARDINALITY']) {
+            if ('multiple' == $attributes['CARDINALITY']) {
                 $exercise_info['question'][$current_question_ident]['type'] = MCMA;
                 $cardinality = 'multiple';
             }
-            if ("single" == $attributes['CARDINALITY']) {
+            if ('single' == $attributes['CARDINALITY']) {
                 $exercise_info['question'][$current_question_ident]['type'] = MCUA;
                 $cardinality = 'single';
             }
@@ -491,7 +500,7 @@ function startElementQti2($parser, $name, $attributes)
             }
             break;
         case 'MAPENTRY':
-            if ($parent_element == "MAPPING") {
+            if ($parent_element == 'MAPPING' || $parent_element == 'MAPENTRY') {
                 $answer_id = $attributes['MAPKEY'];
                 if (!isset($exercise_info['question'][$current_question_ident]['weighting'])) {
                     $exercise_info['question'][$current_question_ident]['weighting'] = array();
@@ -540,21 +549,20 @@ function endElementQti2($parser, $name)
     if (sizeof($element_pile) >= 2) {
         $parent_element = $element_pile[sizeof($element_pile) - 2];
     } else {
-        $parent_element = "";
+        $parent_element = '';
     }
     if (sizeof($element_pile) >= 3) {
         $grand_parent_element = $element_pile[sizeof($element_pile) - 3];
     } else {
-        $grand_parent_element = "";
+        $grand_parent_element = '';
     }
     if (sizeof($element_pile) >= 4) {
         $great_grand_parent_element = $element_pile[sizeof($element_pile) - 4];
     } else {
-        $great_grand_parent_element = "";
+        $great_grand_parent_element = '';
     }
 
-    //treat the record of the full content of itembody tag :
-
+    //treat the record of the full content of itembody tag:
     if ($record_item_body && (!in_array($current_element, $non_HTML_tag_to_avoid))) {
         $current_question_item_body .= "</".$name.">";
     }
@@ -595,21 +603,20 @@ function elementDataQti2($parser, $data)
     if (sizeof($element_pile) >= 2) {
         $parent_element = $element_pile[sizeof($element_pile) - 2];
     } else {
-        $parent_element = "";
+        $parent_element = '';
     }
     if (sizeof($element_pile) >= 3) {
         $grand_parent_element = $element_pile[sizeof($element_pile) - 3];
     } else {
-        $grand_parent_element = "";
+        $grand_parent_element = '';
     }
     if (sizeof($element_pile) >= 4) {
         $great_grand_parent_element = $element_pile[sizeof($element_pile) - 4];
     } else {
-        $great_grand_parent_element = "";
+        $great_grand_parent_element = '';
     }
 
     //treat the record of the full content of itembody tag (needed for question statment and/or FIB text:
-
     if ($record_item_body && (!in_array($current_element, $non_HTML_tag_to_avoid))) {
         $current_question_item_body .= $data;
     }
@@ -633,9 +640,10 @@ function elementDataQti2($parser, $data)
             $exercise_info['question'][$current_question_ident]['answer'][$current_match_set][$currentAssociableChoice] = trim($data);
             break;
         case 'VALUE':
-            if ($parent_element == "CORRECTRESPONSE") {
-                if ($cardinality == "single") {
-                    $exercise_info['question'][$current_question_ident]['correct_answers'][$current_answer_id] = $data;
+            if ($parent_element == 'CORRECTRESPONSE') {
+                if ($cardinality == 'single') {
+                    //$exercise_info['question'][$current_question_ident]['correct_answers'][$current_answer_id] = $data;
+                    $exercise_info['question'][$current_question_ident]['correct_answers'][$data] = $data;
                 } else {
                     $exercise_info['question'][$current_question_ident]['correct_answers'][] = $data;
                 }
@@ -854,7 +862,6 @@ function endElementQti1($parser, $name, $attributes)
     }
 
     //treat the record of the full content of itembody tag :
-
     if ($record_item_body && (!in_array($current_element, $non_HTML_tag_to_avoid))) {
         $current_question_item_body .= "</".$name.">";
     }
@@ -996,7 +1003,6 @@ function elementDataQti1($parser, $data)
                 $exercise_info['question'][$current_question_ident]['weighting'][$lastLabelFieldValue] = $data;
             }
             break;
-
     }
 }
 
@@ -1010,6 +1016,9 @@ function isQtiQuestionBank($filePath)
     $data = file_get_contents($filePath);
     if (!empty($data)) {
         $match = preg_match('/ims_qtiasiv(\d)p(\d)/', $data);
+        // @todo allow other types
+        //$match2 = preg_match('/imsqti_v(\d)p(\d)/', $data);
+
         if ($match) {
             return true;
         }
@@ -1076,9 +1085,9 @@ function qtiProcessManifest($filePath)
             $specialHref = Database::escape_string(preg_replace('/_/', '-', strtolower($href)));
             $specialHref = preg_replace('/(-){2,8}/', '-', $specialHref);
 
-            $sql = "SELECT iid FROM ".$tableDocuments." 
+            $sql = "SELECT iid FROM $tableDocuments 
                     WHERE
-                        c_id = " . $course['real_id']." AND 
+                        c_id = ".$course['real_id']." AND 
                         session_id = $sessionId AND 
                         path = '/".$specialHref."'";
             $result = Database::query($sql);

@@ -62,7 +62,7 @@ $(document).on('ready', function () {
                     <td>{{ row.session ? row.session.name : '&nbsp' }}</td>
                     <td>{{ row.course.name }}</td>
                 {% endif %}
-                <td>{{ row.coach.completeName }} ({{ row.coach.username}})</td>
+                <td>{{ row.coach.complete_name }} ({{ row.coach.username}})</td>
                 <td>{{ row.totalTime }}</td>
             </tr>
         {% endfor %}

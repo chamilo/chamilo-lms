@@ -136,8 +136,9 @@ if ($objExercise->selectAttempts() > 0) {
         $learnpath_item_view_id
     );
     if ($attempt_count >= $objExercise->selectAttempts()) {
-        Display :: display_warning_message(
+        echo Display::return_message(
             sprintf(get_lang('ReachedMaxAttempts'), $objExercise->selectTitle(), $objExercise->selectAttempts()),
+            'warning',
             false
         );
         if ($origin != 'learnpath') {
@@ -176,7 +177,7 @@ $max_score = $objExercise->get_max_score();
 echo Display::return_message(get_lang('Saved').'<br />', 'normal', false);
 
 // Display and save questions
-ExerciseLib::display_question_list_by_attempt(
+ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
     $exe_id,
     true,
@@ -209,7 +210,7 @@ if ($origin != 'learnpath') {
 } else {
 	$lp_mode = isset($_SESSION['lp_mode']) ? $_SESSION['lp_mode'] : null;
 	$url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->feedback_type.'#atoc_'.$learnpath_item_id;
-	$href = ($lp_mode == 'fullscreen') ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
+	$href = $lp_mode == 'fullscreen' ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
 
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');

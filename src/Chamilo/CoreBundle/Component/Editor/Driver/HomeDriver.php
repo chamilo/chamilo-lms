@@ -16,7 +16,6 @@ class HomeDriver extends Driver implements DriverInterface
      */
     public function setup()
     {
-
     }
 
     /**
@@ -47,7 +46,6 @@ class HomeDriver extends Driver implements DriverInterface
         $this->setConnectorFromPlugin();
 
         if ($this->allow()) {
-
             return parent::upload($fp, $dst, $name, $tmpname);
         }
     }
@@ -60,7 +58,6 @@ class HomeDriver extends Driver implements DriverInterface
         $this->setConnectorFromPlugin();
 
         if ($this->allow()) {
-
             return parent::rm($hash);
         }
     }

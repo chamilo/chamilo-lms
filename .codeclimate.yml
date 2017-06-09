@@ -59,12 +59,13 @@ exclude_paths:
 - main/lang/
 - plugin/buycourses/src/Culqi/
 - plugin/buycourses/src/Requests/
+- plugin/buycourses/src/Requests.php
+- plugin/buycourses/src/paypalfunctions.php
 - plugin/kannelsms/vendor/
 - plugin/clockworksms/vendor/
 - plugin/pens/lib
 - plugin/bbb/lib/bbb_api.php
 - plugin/ims_lti/OAuthSimple.php
-- plugin/buycourses/src/Requests.php
 - tests/
 - vendor/
 - web/

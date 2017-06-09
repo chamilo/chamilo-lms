@@ -1198,7 +1198,7 @@ class AnnouncementManager
 
             if (!filter_extension($new_file_name)) {
                 $return = -1;
-                Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+                echo Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error');
             } else {
                 $new_file_name = uniqid('');
                 $new_path = $updir.'/'.$new_file_name;
@@ -1255,7 +1255,7 @@ class AnnouncementManager
 
             if (!filter_extension($new_file_name)) {
                 $return = -1;
-                Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+                echo Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error');
             } else {
                 $new_file_name = uniqid('');
                 $new_path = $updir.'/'.$new_file_name;
@@ -1273,7 +1273,7 @@ class AnnouncementManager
                 $result = Database::query($sql);
                 if ($result === false) {
                     $return = -1;
-                    Display::display_error_message(get_lang('UplUnableToSaveFile'));
+                    echo Display::return_message(get_lang('UplUnableToSaveFile'), 'error');
                 } else {
                     $return = 1;
                 }
@@ -1369,7 +1369,7 @@ class AnnouncementManager
 
         $select = ' DISTINCT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date';
         if ($getCount) {
-            $select = ' COUNT(announcement.iid) count';
+            $select = ' COUNT(DISTINCT announcement.iid) count';
         }
 
         $searchCondition = '';

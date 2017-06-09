@@ -194,7 +194,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  * @param string $uploadPath Example: /folder1/folder2/
  * @param int $userId
  * @param int $groupId group.id
- * @param int $toUserId, NULL for everybody
+ * @param int $toUserId User ID, or NULL for everybody
  * @param int $unzip 1/0
  * @param string $whatIfFileExists overwrite, rename or warn if exists (default)
  * @param boolean $output Optional output parameter.
@@ -568,7 +568,7 @@ function handle_uploaded_document(
                         $groupId
                     );
 
-                    $documentTitle = get_document_title($cleanName);
+                    $documentTitle = disable_dangerous_file($cleanName);
                     $fullPath = $whereToSave.$fileSystemName;
                     $filePath = $uploadPath.$fileSystemName;
 
@@ -690,10 +690,10 @@ function handle_uploaded_document(
                             // Display success message to user
                             if ($output) {
                                 Display::addFlash(
-                                    Display::display_confirmation_message(
+                                    Display::return_message(
                                         get_lang('UplUploadSucceeded').'<br /> '.$documentTitle,
-                                        false,
-                                        true
+                                        'confirm',
+                                        false
                                     )
                                 );
                             }
@@ -826,9 +826,7 @@ function add_ext_on_mime($file_name, $file_type)
     // Check whether the file has an extension AND whether the browser has sent a MIME Type
 
     if (!preg_match('/^.*\.[a-zA-Z_0-9]+$/', $file_name) && $file_type) {
-
         // Build a "MIME-types / extensions" connection table
-
         static $mime_type = array();
 
         $mime_type[] = 'application/msword'; $extension[] = '.doc';
@@ -891,9 +889,7 @@ function add_ext_on_mime($file_name, $file_type)
 
         // Test on PC (files with no extension get application/octet-stream)
         //$mime_type[] = 'application/octet-stream';      $extension[] = '.ext';
-
         // Check whether the MIME type sent by the browser is within the table
-
         foreach ($mime_type as $key => & $type) {
             if ($type == $file_type) {
                 $file_name .= $extension[$key];
@@ -1065,14 +1061,13 @@ function unzip_uploaded_document(
 
     // Check the zip content (real size and file extension)
     $zip_content_array = (array) $zip->listContent();
-
     $realSize = 0;
     foreach ($zip_content_array as & $this_content) {
         $realSize += $this_content['size'];
     }
 
     if (!DocumentManager::enough_space($realSize, $maxFilledSpace)) {
-        Display::display_error_message(get_lang('UplNotEnoughSpace'));
+        echo Display::return_message(get_lang('UplNotEnoughSpace'), 'error');
         return false;
     }
 
@@ -1375,7 +1370,8 @@ function item_property_update_on_folder($_course, $path, $user_id)
  * @param	path+filename eg: /main/document/document.php
  * @return	The directory depth
  */
-function get_levels($filename) {
+function get_levels($filename)
+{
     $levels = explode('/', $filename);
     if (empty($levels[count($levels) - 1])) {
         unset($levels[count($levels) - 1]);
@@ -1440,8 +1436,8 @@ function set_default_settings($upload_path, $filename, $filetype = 'file')
  * @param  string $html_file
  * @return array -  images path list
  */
-function search_img_from_html($html_file) {
-
+function search_img_from_html($html_file)
+{
     $img_path_list = array();
 
     if (!$fp = fopen($html_file, 'r')) {
@@ -1726,13 +1722,11 @@ function move_uploaded_file_collection_into_directory(
 function replace_img_path_in_html_file($original_img_path, $new_img_path, $html_file)
 {
     // Open the file
-
     $fp = fopen($html_file, 'r');
     $buffer = fread($fp, filesize($html_file));
     $new_html_content = '';
 
     // Fix the image tags
-
     for ($i = 0, $fileNb = count($original_img_path); $i < $fileNb; $i++) {
         $replace_what = $original_img_path[$i];
         // We only need the directory and the filename /path/to/file_html_files/missing_file.gif -> file_html_files/missing_file.gif

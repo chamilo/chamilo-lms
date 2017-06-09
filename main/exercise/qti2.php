@@ -8,7 +8,6 @@
  * @version $Id: qti2.php  2010-03-12 12:14:25Z $
  */
 
-// including the global Chamilo file
 require_once __DIR__.'/../inc/global.inc.php';
 
 // section (for the tabs)

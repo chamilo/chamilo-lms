@@ -42,7 +42,7 @@ switch ($action) {
             }
             $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval($count_unread_message);
         }
-        $total_invitations = !empty($total_invitations) ? Display::badge($total_invitations) : '';
+        //$total_invitations = !empty($total_invitations) ? Display::badge($total_invitations) : '';
 
         echo $total_invitations;
         break;

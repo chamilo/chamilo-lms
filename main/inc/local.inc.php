@@ -1227,7 +1227,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                     $is_sessionAdmin     = true;
                 } else {
                     // Am I a session coach for this session?
-                    $sql = "SELECT session.id, session.id_coach FROM $tbl_session session
+                    $sql = "SELECT session.id, session.id_coach 
+                            FROM $tbl_session session
                             INNER JOIN $tbl_session_course sc
                             ON sc.session_id = session.id
                             WHERE session.id = $session_id

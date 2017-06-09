@@ -223,7 +223,7 @@ $result = Database::query($sql);
 <input type="hidden" name="formSent" value="1" />
 <?php
 if (!empty($msg)) {
-	Display::addFlash(Display::return_message($msg, 'normal')); //main API
+	echo Display::return_message($msg, 'normal'); //main API
 }
 ?>
 

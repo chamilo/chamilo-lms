@@ -22,7 +22,7 @@ class AddManySessionToCategoryFunctions
      * @assert () !== ''
      * @assert ('abc','single') !== ''
      */
-    function search_courses($needle,$type)
+    function search_courses($needle, $type)
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $xajax_response = new xajaxResponse();
@@ -38,7 +38,7 @@ class AddManySessionToCategoryFunctions
             $return .= '<select id="origin" name="NoSessionCategoryList[]" multiple="multiple" size="20" style="width:340px;">';
             while ($course = Database::fetch_array($rs)) {
                 $course_list[] = $course['id'];
-                $return .= '<option value="'.$course['id'].'" title="'.htmlspecialchars($course['name'],ENT_QUOTES).'">'.$course['name'].'</option>';
+                $return .= '<option value="'.$course['id'].'" title="'.htmlspecialchars($course['name'], ENT_QUOTES).'">'.$course['name'].'</option>';
             }
             $return .= '</select>';
             $xajax_response->addAssign(

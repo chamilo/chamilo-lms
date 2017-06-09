@@ -1136,18 +1136,18 @@ class Wiki
             }
 
             $pageWiki = self::make_wiki_link_clickable(
-                    self::detect_external_link(
-                        self::detect_anchor_link(
-                            self::detect_mail_link(
-                                self::detect_ftp_link(
-                                    self::detect_irc_link(
-                                        self::detect_news_link($content)
-                                    )
+                self::detect_external_link(
+                    self::detect_anchor_link(
+                        self::detect_mail_link(
+                            self::detect_ftp_link(
+                                self::detect_irc_link(
+                                    self::detect_news_link($content)
                                 )
                             )
                         )
                     )
-                );
+                )
+            );
 
             $footerWiki = get_lang('Progress').': '.($row['progress'] * 10).'%&nbsp;&nbsp;&nbsp;'.get_lang('Rating').': '.$row['score'].'&nbsp;&nbsp;&nbsp;'.get_lang('Words').': '.self::word_count($content);
 
@@ -1449,6 +1449,7 @@ class Wiki
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
         }
+
         return $row['visibility_disc'];
     }
 
@@ -1923,7 +1924,7 @@ class Wiki
     /**
      * Function export last wiki page version to document area
      * @param int $doc_id wiki page id
-     *
+     * @return mixed
      * @author Juan Carlos Raña <herodoto@telefonica.net>
      */
     public function export2doc($doc_id)
@@ -2142,7 +2143,6 @@ class Wiki
         $userinfo = api_get_user_info($userId);
         $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username'], ENT_QUOTES));
         $name = $userinfo['complete_name']." - ".$username;
-
         $photo = '<img src="'.$userinfo['avatar'].'" alt="'.$name.'"  width="40" height="50" align="top" title="'.$name.'"  />';
 
         // teacher assignment title
@@ -2179,7 +2179,6 @@ class Wiki
                 $is_tutor_and_member = GroupManager::is_tutor_of_group($assig_user_id, $groupInfo) &&
                     GroupManager::is_subscribed($assig_user_id, $groupInfo);
                 // student is tutor and member
-
                 if ($is_tutor_and_member) {
                     $status_in_group = get_lang('GroupTutorAndMember');
                 } else {
@@ -2920,8 +2919,13 @@ class Wiki
         $total_empty_content_lv = 0;
         $sql = 'SELECT  * FROM  '.$tbl_wiki.' s1
                 WHERE s1.c_id = '.$course_id.' AND content="" AND id=(
-                SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2
-                WHERE s1.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
+                    SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2
+                    WHERE 
+                        s1.c_id = '.$course_id.' AND 
+                        s1.reflink = s2.reflink AND 
+                        '.$groupfilter.' AND 
+                        session_id='.$session_id.'
+                )';
         $allpages = Database::query($sql);
         while ($row = Database::fetch_array($allpages)) {
             $total_empty_content_lv = $total_empty_content_lv + 1;
@@ -3000,7 +3004,6 @@ class Wiki
         }
 
         //Total pages identifies as student page (wiki portfolio mode - individual assignment)
-
         $total_student_assignment = 0;
         $sql = 'SELECT  * FROM  '.$tbl_wiki.' s1
                 WHERE s1.c_id = '.$course_id.' AND assignment=2 AND
@@ -3093,8 +3096,7 @@ class Wiki
             //put always this line alfter check num all pages
         }
 
-        //Total users that have participated in the Wiki
-
+        // Total users that have participated in the Wiki
         $total_users = 0;
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE  c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
@@ -3302,7 +3304,6 @@ class Wiki
         if (Database::num_rows($allpages) > 0) {
             while ($obj = Database::fetch_object($allpages)) {
                 $userinfo = api_get_user_info($obj->user_id);
-                $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
                 $row = array();
                 if ($obj->user_id != 0 && $userinfo !== false) {
                     $row[] = UserManager::getUserProfileLink($userinfo).'
@@ -3403,9 +3404,19 @@ class Wiki
         //mode assignment: previous to show  page type
         $icon_assignment = null;
         if ($row['assignment'] == 1) {
-            $icon_assignment = Display::return_icon('wiki_assignment.png', get_lang('AssignmentDescExtra'), '', ICON_SIZE_SMALL);
+            $icon_assignment = Display::return_icon(
+                'wiki_assignment.png',
+                get_lang('AssignmentDescExtra'),
+                '',
+                ICON_SIZE_SMALL
+            );
         } elseif ($row['assignment'] == 2) {
-            $icon_assignment = Display::return_icon('wiki_work.png', get_lang('AssignmentWorkExtra'), '', ICON_SIZE_SMALL);
+            $icon_assignment = Display::return_icon(
+                'wiki_work.png',
+                get_lang('AssignmentWorkExtra'),
+                '',
+                ICON_SIZE_SMALL
+            );
         }
 
         $countWPost = null;
@@ -3428,10 +3439,20 @@ class Wiki
                 $lock_unlock_disc = null;
                 if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
                     if (self::check_addlock_discuss() == 1) {
-                        $addlock_disc = Display::return_icon('unlock.png', get_lang('UnlockDiscussExtra'), '', ICON_SIZE_SMALL);
+                        $addlock_disc = Display::return_icon(
+                            'unlock.png',
+                            get_lang('UnlockDiscussExtra'),
+                            '',
+                            ICON_SIZE_SMALL
+                        );
                         $lock_unlock_disc = 'unlockdisc';
                     } else {
-                        $addlock_disc = Display::return_icon('lock.png', get_lang('LockDiscussExtra'), '', ICON_SIZE_SMALL);
+                        $addlock_disc = Display::return_icon(
+                            'lock.png',
+                            get_lang('LockDiscussExtra'),
+                            '',
+                            ICON_SIZE_SMALL
+                        );
                         $lock_unlock_disc = 'lockdisc';
                     }
                 }
@@ -3475,18 +3496,26 @@ class Wiki
 
                 //discussion action: email notification
                 if (self::check_notify_discuss($page) == 1) {
-                    $notify_disc = Display::return_icon('messagebox_info.png', get_lang('NotifyDiscussByEmail'), '', ICON_SIZE_SMALL);
+                    $notify_disc = Display::return_icon(
+                        'messagebox_info.png',
+                        get_lang('NotifyDiscussByEmail'),
+                        '',
+                        ICON_SIZE_SMALL
+                    );
                     $lock_unlock_notify_disc = 'unlocknotifydisc';
                 } else {
-                    $notify_disc = Display::return_icon('mail.png', get_lang('CancelNotifyDiscussByEmail'), '', ICON_SIZE_SMALL);
+                    $notify_disc = Display::return_icon(
+                        'mail.png',
+                        get_lang('CancelNotifyDiscussByEmail'),
+                        '',
+                        ICON_SIZE_SMALL
+                    );
                     $lock_unlock_notify_disc = 'locknotifydisc';
                 }
                 echo '<span style="float:right">';
                 echo '<a href="index.php?action=discuss&amp;actionpage='.$lock_unlock_notify_disc.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$notify_disc.'</a>';
                 echo '</span>';
-
                 echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.api_htmlentities($row['title']);
-
                 if ($lastuserinfo !== false) {
                     echo ' ('.get_lang('MostRecentVersionBy').' '.UserManager::getUserProfileLink($lastuserinfo).' '.$lastversiondate.$countWPost.')'.$avg_WPost_score.' '; //TODO: read average score
                 }
@@ -3784,10 +3813,20 @@ class Wiki
 
         if (api_is_allowed_to_session_edit(false, true)) {
             if (self::check_notify_all() == 1) {
-                $notify_all = Display::return_icon('messagebox_info.png', get_lang('NotifyByEmail'), '', ICON_SIZE_SMALL).' '.get_lang('NotNotifyChanges');
+                $notify_all = Display::return_icon(
+                        'messagebox_info.png',
+                        get_lang('NotifyByEmail'),
+                        '',
+                        ICON_SIZE_SMALL
+                    ).' '.get_lang('NotNotifyChanges');
                 $lock_unlock_notify_all = 'unlocknotifyall';
             } else {
-                $notify_all = Display::return_icon('mail.png', get_lang('CancelNotifyByEmail'), '', ICON_SIZE_SMALL).' '.get_lang('NotifyChanges');
+                $notify_all = Display::return_icon(
+                        'mail.png',
+                        get_lang('CancelNotifyByEmail'),
+                        '',
+                        ICON_SIZE_SMALL
+                    ).' '.get_lang('NotifyChanges');
                 $lock_unlock_notify_all = 'locknotifyall';
             }
         }
@@ -3825,16 +3864,33 @@ class Wiki
 
                 //get type assignment icon
                 if ($obj->assignment == 1) {
-                    $ShowAssignment = Display::return_icon('wiki_assignment.png', get_lang('AssignmentDesc'), '', ICON_SIZE_SMALL);
+                    $ShowAssignment = Display::return_icon(
+                        'wiki_assignment.png',
+                        get_lang('AssignmentDesc'),
+                        '',
+                        ICON_SIZE_SMALL
+                    );
                 } elseif ($obj->assignment == 2) {
-                    $ShowAssignment = Display::return_icon('wiki_work.png', get_lang('AssignmentWork'), '', ICON_SIZE_SMALL);
+                    $ShowAssignment = Display::return_icon(
+                        'wiki_work.png',
+                        get_lang('AssignmentWork'),
+                        '',
+                        ICON_SIZE_SMALL
+                    );
                 } elseif ($obj->assignment == 0) {
-                    $ShowAssignment = Display::return_icon('px_transparent.gif');
+                    $ShowAssignment = Display::return_icon(
+                        'px_transparent.gif'
+                    );
                 }
 
                 // Get icon task
                 if (!empty($obj->task)) {
-                    $icon_task = Display::return_icon('wiki_task.png', get_lang('StandardTask'), '', ICON_SIZE_SMALL);
+                    $icon_task = Display::return_icon(
+                        'wiki_task.png',
+                        get_lang('StandardTask'),
+                        '',
+                        ICON_SIZE_SMALL
+                    );
                 } else {
                     $icon_task = Display::return_icon('px_transparent.gif');
                 }
@@ -3853,7 +3909,15 @@ class Wiki
                 $rows[] = $row;
             }
 
-            $table = new SortableTableFromArrayConfig($rows, 0, 10, 'RecentPages_table', '', '', 'DESC');
+            $table = new SortableTableFromArrayConfig(
+                $rows,
+                0,
+                10,
+                'RecentPages_table',
+                '',
+                '',
+                'DESC'
+            );
             $table->set_additional_parameters(
                 array(
                     'cidReq' =>api_get_course_id(),
@@ -4068,7 +4132,6 @@ class Wiki
         $course_id = $this->course_id;
         $condition_session = $this->condition_session;
         $groupfilter = $this->groupfilter;
-
         $userId = intval($userId);
         $userinfo = api_get_user_info($userId);
         if ($userinfo !== false) {
@@ -4128,10 +4191,17 @@ class Wiki
                 $row[] = Security::remove_XSS($obj->progress).' %';
                 $row[] = Security::remove_XSS($obj->score);
                 $rows[] = $row;
-
             }
 
-            $table = new SortableTableFromArrayConfig($rows, 2, 10, 'UsersContributions_table', '', '', 'ASC');
+            $table = new SortableTableFromArrayConfig(
+                $rows,
+                2,
+                10,
+                'UsersContributions_table',
+                '',
+                '',
+                'ASC'
+            );
             $table->set_additional_parameters(
                 array(
                     'cidReq' => Security::remove_XSS($_GET['cidReq']),
@@ -4808,11 +4878,9 @@ class Wiki
 
         if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
             Display::addFlash('<div id="wikititle">'.get_lang('DeletePageHistory').'</div>');
-
             if ($page == "index") {
                 Display::addFlash(Display::return_message(get_lang('WarningDeleteMainPage'), 'warning', false));
             }
-
             $message = get_lang('ConfirmDeletePage')."
                 <a href=\"index.php?".api_get_cidreq()."\">".get_lang("No")."</a>
                 <a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&title=".api_htmlentities(urlencode($page))."&delete=yes\">".
@@ -4829,7 +4897,13 @@ class Wiki
                 }
             }
         } else {
-            Display::addFlash(Display::return_message(get_lang("OnlyAdminDeletePageWiki"), 'normal', false));
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('OnlyAdminDeletePageWiki'),
+                    'normal',
+                    false
+                )
+            );
         }
     }
 
@@ -4865,7 +4939,6 @@ class Wiki
         $row = Database::fetch_array($result);
 
         // we do not need a while loop since we are always displaying the last version
-
         if ($row['content'] == '' && $row['title'] == '' && $page == '') {
             Display::addFlash(
                 Display::return_message(get_lang('MustSelectPage'), 'error', false)
@@ -5427,7 +5500,6 @@ class Wiki
     public function handleAction($action)
     {
         $page = $this->page;
-
         switch ($action) {
             case 'export_to_pdf':
                 if (isset($_GET['wiki_id'])) {

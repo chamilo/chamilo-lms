@@ -1,8 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
+use Chamilo\CoreBundle\Entity\CourseCategory;
+
 /**
  * @package chamilo.admin
  */
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -12,6 +17,11 @@ api_protect_admin_script();
 
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$em = Database::getManager();
+/** @var CourseCategoryRepository $courseCategoriesRepo */
+$courseCategoriesRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
+// Get all possible teachers.
+$urlId = api_get_current_access_url_id();
 
 $courseId = isset($_GET['id']) ? $_GET['id'] : null;
 
@@ -58,7 +68,7 @@ if (api_is_multiple_url_enabled()) {
             INNER JOIN $access_url_rel_user_table url_rel_user
             ON (u.user_id=url_rel_user.user_id)
             WHERE
-                url_rel_user.access_url_id=".api_get_current_access_url_id()." AND
+                url_rel_user.access_url_id = $urlId AND
                 status = 1" . $order_clause;
 } else {
     $sql = "SELECT user_id, lastname, firstname
@@ -94,7 +104,11 @@ if (count($course_teachers) == 0) {
 }
 
 // Build the form
-$form = new FormValidator('update_course', 'post', api_get_self().'?id='.$courseId);
+$form = new FormValidator(
+    'update_course',
+    'post',
+    api_get_self().'?id='.$courseId
+);
 $form->addElement('header', get_lang('Course').'  #'.$courseInfo['real_id'].' '.$course_code);
 $form->addElement('hidden', 'code', $course_code);
 
@@ -104,7 +118,11 @@ $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 // Code
-$element = $form->addElement('text', 'real_code', array(get_lang('CourseCode'), get_lang('ThisValueCantBeChanged')));
+$element = $form->addElement(
+    'text',
+    'real_code',
+    array(get_lang('CourseCode'), get_lang('ThisValueCantBeChanged'))
+);
 $element->freeze();
 
 // Visual code
@@ -125,13 +143,15 @@ $form->addText(
 
 $form->applyFilter('visual_code', 'strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
-
 $form->addElement('advmultiselect', 'course_teachers', get_lang('CourseTeachers'), $allTeachers);
-
 $courseInfo['course_teachers'] = $course_teachers;
-
 if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
-    $form->addElement('checkbox', 'add_teachers_to_sessions_courses', null, get_lang('TeachersWillBeAddedAsCoachInAllCourseSessions'));
+    $form->addElement(
+        'checkbox',
+        'add_teachers_to_sessions_courses',
+        null,
+        get_lang('TeachersWillBeAddedAsCoachInAllCourseSessions')
+    );
 }
 
 $coursesInSession = SessionManager::get_session_by_course($courseInfo['real_id']);
@@ -154,10 +174,8 @@ if (!empty($coursesInSession)) {
         $groupName = 'session_coaches['.$sessionId.']';
         $platformTeacherId = 'platform_teachers_by_session_'.$sessionId;
         $coachId = 'coaches_by_session_'.$sessionId;
-
         $platformTeacherName = 'platform_teachers_by_session';
         $coachName = 'coaches_by_session';
-
         $sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId;
         $form->addElement(
             'advmultiselect',
@@ -173,20 +191,39 @@ if (!empty($coursesInSession)) {
     }
 }
 
-// Category code
-$url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
+$countCategories = $courseCategoriesRepo->countAllInAccessUrl($urlId);
 
-$categorySelect = $form->addElement(
-    'select_ajax',
-    'category_code',
-    get_lang('CourseFaculty'),
-    null,
-    array('url' => $url)
-);
+if ($countCategories >= 100) {
+    // Category code
+    $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
 
-if (!empty($courseInfo['categoryCode'])) {
-    $data = CourseCategory::getCategory($courseInfo['categoryCode']);
-    $categorySelect->addOption($data['name'], $data['code']);
+    $categorySelect = $form->addElement(
+        'select_ajax',
+        'category_code',
+        get_lang('CourseFaculty'),
+        null,
+        ['url' => $url]
+    );
+
+    if (!empty($courseInfo['categoryCode'])) {
+        $data = \CourseCategory::getCategory($courseInfo['categoryCode']);
+        $categorySelect->addOption($data['name'], $data['code']);
+    }
+} else {
+    $courseInfo['category_code'] = $courseInfo['categoryCode'];
+    $categories = $courseCategoriesRepo->findAllInAccessUrl($urlId);
+    $categoriesOptions = [null => get_lang('None')];
+
+    /** @var CourseCategory $category */
+    foreach ($categories as $category) {
+        $categoriesOptions[$category->getCode()] = $category->__toString();
+    }
+
+    $form->addSelect(
+        'category_code',
+        get_lang('CourseFaculty'),
+        $categoriesOptions
+    );
 }
 
 $form->addText('department_name', get_lang('CourseDepartment'), false, array('size' => '60'));
@@ -244,11 +281,10 @@ $form->setDefaults($courseInfo);
 // Validate form
 if ($form->validate()) {
     $course = $form->getSubmitValues();
-
     $visibility = $course['visibility'];
 
     global $_configuration;
-    $urlId = api_get_current_access_url_id();
+
     if (isset($_configuration[$urlId]) &&
         isset($_configuration[$urlId]['hosting_limit_active_courses']) &&
         $_configuration[$urlId]['hosting_limit_active_courses'] > 0
@@ -343,7 +379,13 @@ if ($form->validate()) {
             }
         }
 
-        CourseManager::updateTeachers($courseInfo, $teachers, true, true, false);
+        CourseManager::updateTeachers(
+            $courseInfo,
+            $teachers,
+            true,
+            true,
+            false
+        );
     } else {
         // Normal behaviour
         CourseManager::updateTeachers($courseInfo, $teachers, true, false);

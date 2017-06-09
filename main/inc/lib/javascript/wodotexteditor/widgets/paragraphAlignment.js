@@ -22,14 +22,14 @@
  * @source: https://github.com/kogmbh/WebODF/
  */
 
-/*global define,require,ops,gui */
+/*global define, require, ops, gui, runtime */
 
 define("webodf/editor/widgets/paragraphAlignment", [
     "dijit/form/ToggleButton",
     "dijit/form/Button",
     "webodf/editor/EditorSession"],
 
-    function (ToggleButton, Button, EditorSession) {
+    function (ToggleButton, Button) {
         "use strict";
 
         var ParagraphAlignment = function (callback) {
@@ -119,8 +119,7 @@ define("webodf/editor/widgets/paragraphAlignment", [
                 justifyRight,
                 justifyFull,
                 outdent,
-                indent
-            ];
+                indent ];
 
             widget.startup = function () {
                 widget.children.forEach(function (element) {
@@ -184,10 +183,12 @@ define("webodf/editor/widgets/paragraphAlignment", [
                 });
             };
 
+            /*jslint emptyblock: true*/
             this.onToolDone = function () {};
+            /*jslint emptyblock: false*/
 
             callback(widget);
         };
 
         return ParagraphAlignment;
-});
+    });

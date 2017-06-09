@@ -145,7 +145,7 @@ function checkAccessUrl()
  * Returns a textual value ('ON' or 'OFF') based on a requester 2-state ini- configuration setting.
  *
  * @param string $val a php ini value
- * @return boolean: ON or OFF
+ * @return bool ON or OFF
  * @author Joomla <http://www.joomla.org>
  */
 function getPhpSetting($val)
@@ -411,7 +411,7 @@ function & get_language_folder_list()
     if (!is_array($result)) {
         $result = array();
         $exceptions = array('.', '..', 'CVS', '.svn');
-        $search       = array('_latin',   '_unicode',   '_corporate',   '_org'  , '_KM',   '_');
+        $search       = array('_latin', '_unicode', '_corporate', '_org', '_KM', '_');
         $replace_with = array(' (Latin)', ' (unicode)', ' (corporate)', ' (org)', ' (KM)', ' ');
         $dirname = api_get_path(SYS_LANG_PATH);
         $handle = opendir($dirname);
@@ -446,9 +446,9 @@ function my_directory_to_array($directory)
     if ($handle = opendir($directory)) {
         while (false !== ($file = readdir($handle))) {
             if ($file != "." && $file != "..") {
-                if (is_dir($directory. "/" . $file)) {
-                    $array_items = array_merge($array_items, my_directory_to_array($directory. '/' . $file));
-                    $file = $directory . "/" . $file;
+                if (is_dir($directory."/".$file)) {
+                    $array_items = array_merge($array_items, my_directory_to_array($directory.'/'.$file));
+                    $file = $directory."/".$file;
                     $array_items[] = preg_replace("/\/\//si", '/', $file);
                 }
             }
@@ -493,7 +493,7 @@ function get_config_param($param, $updatePath = '')
         // try to recover config file from Chamilo 1.9.x
         if (file_exists($updatePath.'main/inc/conf/configuration.php')) {
             $updateFromConfigFile = 'main/inc/conf/configuration.php';
-        } elseif (file_exists($updatePath . 'app/config/configuration.php')) {
+        } elseif (file_exists($updatePath.'app/config/configuration.php')) {
             $updateFromConfigFile = 'app/config/configuration.php';
         } else {
             // Give up recovering.
@@ -654,7 +654,7 @@ function display_language_selection()
     <h2><?php get_lang('WelcomeToTheChamiloInstaller'); ?></h2>
     <div class="RequirementHeading">
         <h2><?php echo display_step_sequence(); ?>
-            <?php echo get_lang('InstallationLanguage');?>
+            <?php echo get_lang('InstallationLanguage'); ?>
         </h2>
         <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
         <form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
@@ -708,14 +708,14 @@ function display_requirements(
     }
     echo '</div>';
 
-    $properlyAccessUrl =  checkAccessUrl();
+    $properlyAccessUrl = checkAccessUrl();
 
     if (!$properlyAccessUrl) {
         echo '
             <div class="alert alert-danger">
-                ' . Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_MEDIUM, true, false, true) .
-            ' ' .
-            sprintf(get_lang('InstallMultiURLDetectedNotMainURL'), api_get_configuration_value('root_web')) . '
+                ' . Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_MEDIUM, true, false, true).
+            ' '.
+            sprintf(get_lang('InstallMultiURLDetectedNotMainURL'), api_get_configuration_value('root_web')).'
             </div>
         ';
     }
@@ -747,7 +747,7 @@ function display_requirements(
     if (phpversion() < REQUIRED_PHP_VERSION) {
         echo '<strong><font color="red">'.get_lang('PHPVersionError').'</font></strong>';
     } else {
-        echo '<strong><font color="green">'.get_lang('PHPVersionOK'). ' '.phpversion().'</font></strong>';
+        echo '<strong><font color="green">'.get_lang('PHPVersionOK').' '.phpversion().'</font></strong>';
     }
     echo '</td>
             </tr>
@@ -1105,9 +1105,10 @@ function display_requirements(
         }
 
         $deprecated = [
-            api_get_path(SYS_CODE_PATH) . 'exercice/',
-            api_get_path(SYS_CODE_PATH) . 'newscorm/',
-            api_get_path(SYS_PLUGIN_PATH) . 'ticket/'
+            api_get_path(SYS_CODE_PATH).'exercice/',
+            api_get_path(SYS_CODE_PATH).'newscorm/',
+            api_get_path(SYS_PLUGIN_PATH).'ticket/',
+            api_get_path(SYS_PLUGIN_PATH).'skype/'
         ];
         $deprecatedToRemove = [];
 
@@ -1217,7 +1218,7 @@ function display_license_agreement()
 function get_contact_registration_form()
 {
 
-    $html ='
+    $html = '
    <div class="form-horizontal">
     <div class="panel panel-default">
     <div class="panel-body">
@@ -1314,7 +1315,7 @@ function get_contact_registration_form()
         <div class="col-sm-9">
             <div class="radio">
                 <label>
-                    <input type="radio" name="financial_decision" id="financial_decision1" value="1" checked /> ' . get_lang('Yes') . '
+                    <input type="radio" name="financial_decision" id="financial_decision1" value="1" checked /> ' . get_lang('Yes').'
                 </label>
             </div>
             <div class="radio">
@@ -1373,8 +1374,8 @@ function displayDatabaseParameter(
             echo '<input type="hidden" name="'.$formFieldName.'" id="'.$formFieldName.'" value="'.api_htmlentities($parameterValue).'" />';
             echo api_htmlentities($parameterValue);
         } else {
-            echo '<div class="col-sm-5"><input type="' . $inputType . '" class="form-control" size="' . DATABASE_FORM_FIELD_DISPLAY_LENGTH . '" maxlength="' . $maxLength . '" name="' . $formFieldName . '" id="' . $formFieldName . '" value="' . api_htmlentities($parameterValue) . '" />' . "</div>";
-            echo '<div class="col-sm-3">' . $extra_notice . '</div>';
+            echo '<div class="col-sm-5"><input type="'.$inputType.'" class="form-control" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.$maxLength.'" name="'.$formFieldName.'" id="'.$formFieldName.'" value="'.api_htmlentities($parameterValue).'" />'."</div>";
+            echo '<div class="col-sm-3">'.$extra_notice.'</div>';
         }
     }
 }
@@ -1408,12 +1409,12 @@ function display_database_settings_form(
         $dbNameForm = $_configuration['main_database'];
         $dbPortForm = isset($_configuration['db_port']) ? $_configuration['db_port'] : '';
 
-        echo '<div class="RequirementHeading"><h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2></div>';
+        echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('DBSetting').'</h2></div>';
         echo '<div class="RequirementContent">';
         echo get_lang('DBSettingUpgradeIntro');
         echo '</div>';
     } else {
-        echo '<div class="RequirementHeading"><h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2></div>';
+        echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('DBSetting').'</h2></div>';
         echo '<div class="RequirementContent">';
         echo get_lang('DBSettingIntro');
         echo '</div>';
@@ -1423,12 +1424,12 @@ function display_database_settings_form(
         <div class="panel-body">
         <div class="form-group">
             <label class="col-sm-4"><?php echo get_lang('DBHost'); ?> </label>
-            <?php if ($installType == 'update'){ ?>
+            <?php if ($installType == 'update') { ?>
             <div class="col-sm-5">
                 <input type="hidden" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" /><?php echo $dbHostForm; ?>
             </div>
             <div class="col-sm-3"></div>
-            <?php }else{ ?>
+            <?php } else { ?>
             <div class="col-sm-5">
                 <input type="text" class="form-control" size="25" maxlength="50" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" />
             </div>
@@ -1437,12 +1438,12 @@ function display_database_settings_form(
         </div>
         <div class="form-group">
             <label class="col-sm-4"><?php echo get_lang('DBPort'); ?> </label>
-            <?php if ($installType == 'update'){ ?>
+            <?php if ($installType == 'update') { ?>
             <div class="col-sm-5">
                 <input type="hidden" name="dbPortForm" value="<?php echo htmlentities($dbPortForm); ?>" /><?php echo $dbPortForm; ?>
             </div>
             <div class="col-sm-3"></div>
-            <?php }else{ ?>
+            <?php } else { ?>
             <div class="col-sm-5">
                 <input type="text" class="form-control" size="25" maxlength="50" name="dbPortForm" value="<?php echo htmlentities($dbPortForm); ?>" />
             </div>
@@ -1468,7 +1469,7 @@ function display_database_settings_form(
             <?php
             //Database Name fix replace weird chars
             if ($installType != INSTALL_TYPE_UPDATE) {
-                $dbNameForm = str_replace(array('-','*', '$', ' ', '.'), '', $dbNameForm);
+                $dbNameForm = str_replace(array('-', '*', '$', ' ', '.'), '', $dbNameForm);
             }
 
             displayDatabaseParameter(
@@ -1561,7 +1562,7 @@ function panel($content = null, $title = null, $id = null, $style = null) {
     if (!empty($title)) {
         $panelTitle = Display::div($title, array('class' => 'panel-heading'));
         $panelBody = Display::div($content, array('class' => 'panel-body'));
-        $panelParent = Display::div($panelTitle . $panelBody, array('id' => $id, 'class' => 'panel panel-'.$style));
+        $panelParent = Display::div($panelTitle.$panelBody, array('id' => $id, 'class' => 'panel panel-'.$style));
     } else {
         $panelBody = Display::div($html, array('class' => 'panel-body'));
         $panelParent = Display::div($panelBody, array('id' => $id, 'class' => 'panel panel-'.$style));
@@ -1587,9 +1588,9 @@ function display_configuration_parameter(
     $displayWhenUpdate = 'true'
 ) {
     $html = '<div class="form-group">';
-    $html .= '<label class="col-sm-6 control-label">' . $parameterName . '</label>';
+    $html .= '<label class="col-sm-6 control-label">'.$parameterName.'</label>';
     if ($installType == INSTALL_TYPE_UPDATE && $displayWhenUpdate) {
-        $html .= '<input type="hidden" name="' . $formFieldName . '" value="'. api_htmlentities($parameterValue, ENT_QUOTES). '" />' . $parameterValue;
+        $html .= '<input type="hidden" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'.$parameterValue;
     } else {
         $html .= '<div class="col-sm-6"><input class="form-control" type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'."</div>";
     }
@@ -1637,7 +1638,7 @@ function display_configuration_settings_form(
         $languageForm = $_SESSION['install_language'];
     }
     echo '<div class="RequirementHeading">';
-    echo "<h2>" . display_step_sequence() . get_lang("CfgSetting") . "</h2>";
+    echo "<h2>".display_step_sequence().get_lang("CfgSetting")."</h2>";
     echo '</div>';
 
     echo '<p>'.get_lang('ConfigSettingsInfo').' <strong>app/config/configuration.php</strong></p>';
@@ -1655,14 +1656,14 @@ function display_configuration_settings_form(
 
     // Parameters 3 and 4: administrator's names
 
-    $html .=  display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
-    $html .=  display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
+    $html .= display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
+    $html .= display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
 
     //Parameter 3: administrator's email
-    $html .=  display_configuration_parameter($installType, get_lang('AdminEmail'), 'emailForm', $emailForm);
+    $html .= display_configuration_parameter($installType, get_lang('AdminEmail'), 'emailForm', $emailForm);
 
     //Parameter 6: administrator's telephone
-    $html .=  display_configuration_parameter($installType, get_lang('AdminPhone'), 'adminPhoneForm', $adminPhoneForm);
+    $html .= display_configuration_parameter($installType, get_lang('AdminPhone'), 'adminPhoneForm', $adminPhoneForm);
 
 
     echo panel($html, get_lang('Administrator'), 'administrator');
@@ -1681,12 +1682,12 @@ function display_configuration_settings_form(
         $html .= display_language_selection_box('languageForm', $languageForm);
         $html .= '</div>';
     }
-    $html.= "</div>";
+    $html .= "</div>";
 
 
     //Second parameter: Chamilo URL
     $html .= '<div class="form-group">';
-    $html .= '<label class="col-sm-6 control-label">'.get_lang('ChamiloURL') .get_lang('ThisFieldIsRequired').'</label>';
+    $html .= '<label class="col-sm-6 control-label">'.get_lang('ChamiloURL').get_lang('ThisFieldIsRequired').'</label>';
 
 
 
@@ -1710,34 +1711,34 @@ function display_configuration_settings_form(
 
 
     $html .= '<div class="form-group">
-            <label class="col-sm-6 control-label">' . get_lang("EncryptMethodUserPass") . '</label>
+            <label class="col-sm-6 control-label">' . get_lang("EncryptMethodUserPass").'</label>
         <div class="col-sm-6">';
     if ($installType == 'update') {
-        $html .= '<input type="hidden" name="encryptPassForm" value="'. $encryptPassForm .'" />'. $encryptPassForm;
+        $html .= '<input type="hidden" name="encryptPassForm" value="'.$encryptPassForm.'" />'.$encryptPassForm;
     } else {
 
         $html .= '<div class="checkbox">
                     <label>
-                        <input  type="radio" name="encryptPassForm" value="bcrypt" id="encryptPass1" '. ($encryptPassForm == 'bcrypt' ? 'checked="checked" ':'') .'/> bcrypt
+                        <input  type="radio" name="encryptPassForm" value="bcrypt" id="encryptPass1" '. ($encryptPassForm == 'bcrypt' ? 'checked="checked" ' : '').'/> bcrypt
                     </label>';
 
         $html .= '<label>
-                        <input  type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" '. ($encryptPassForm == 'sha1' ? 'checked="checked" ':'') .'/> sha1
+                        <input  type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" '. ($encryptPassForm == 'sha1' ? 'checked="checked" ' : '').'/> sha1
                     </label>';
 
         $html .= '<label>
-                        <input type="radio" name="encryptPassForm" value="md5" id="encryptPass0" '. ($encryptPassForm == 'md5' ? 'checked="checked" ':'') .'/> md5
+                        <input type="radio" name="encryptPassForm" value="md5" id="encryptPass0" '. ($encryptPassForm == 'md5' ? 'checked="checked" ' : '').'/> md5
                     </label>';
 
         $html .= '<label>
-                        <input type="radio" name="encryptPassForm" value="none" id="encryptPass2" '. ($encryptPassForm == 'none' ? 'checked="checked" ':'') .'/>'. get_lang('None').'
+                        <input type="radio" name="encryptPassForm" value="none" id="encryptPass2" '. ($encryptPassForm == 'none' ? 'checked="checked" ' : '').'/>'.get_lang('None').'
                     </label>';
         $html .= '</div>';
     }
     $html .= '</div></div>';
 
     $html .= '<div class="form-group">
-            <label class="col-sm-6 control-label">' . get_lang('AllowSelfReg') . '</label>
+            <label class="col-sm-6 control-label">' . get_lang('AllowSelfReg').'</label>
             <div class="col-sm-6">';
     if ($installType == 'update') {
         if ($allowSelfReg == 'true') {
@@ -1747,17 +1748,17 @@ function display_configuration_settings_form(
         } else {
             $label = get_lang('AfterApproval');
         }
-        $html .= '<input type="hidden" name="allowSelfReg" value="'. $allowSelfReg .'" />'. $label;
+        $html .= '<input type="hidden" name="allowSelfReg" value="'.$allowSelfReg.'" />'.$label;
     } else {
         $html .= '<div class="control-group">';
         $html .= '<label class="checkbox-inline">
-                        <input type="radio" name="allowSelfReg" value="true" id="allowSelfReg1" '. ($allowSelfReg == 'true' ? 'checked="checked" ' : '') . ' /> '. get_lang('Yes') .'
+                        <input type="radio" name="allowSelfReg" value="true" id="allowSelfReg1" '. ($allowSelfReg == 'true' ? 'checked="checked" ' : '').' /> '.get_lang('Yes').'
                     </label>';
         $html .= '<label class="checkbox-inline">
-                        <input type="radio" name="allowSelfReg" value="false" id="allowSelfReg0" '. ($allowSelfReg == 'false' ? '' : 'checked="checked" ') .' /> '. get_lang('No') .'
+                        <input type="radio" name="allowSelfReg" value="false" id="allowSelfReg0" '. ($allowSelfReg == 'false' ? '' : 'checked="checked" ').' /> '.get_lang('No').'
                     </label>';
          $html .= '<label class="checkbox-inline">
-                    <input type="radio" name="allowSelfReg" value="approval" id="allowSelfReg2" '. ($allowSelfReg == 'approval' ? '' : 'checked="checked" ') .' /> '. get_lang('AfterApproval') .'
+                    <input type="radio" name="allowSelfReg" value="approval" id="allowSelfReg2" '. ($allowSelfReg == 'approval' ? '' : 'checked="checked" ').' /> '.get_lang('AfterApproval').'
                 </label>';
         $html .= '</div>';
     }
@@ -1765,7 +1766,7 @@ function display_configuration_settings_form(
     $html .= '</div>';
 
     $html .= '<div class="form-group">';
-    $html .= '<label class="col-sm-6 control-label">'. get_lang('AllowSelfRegProf') .'</label>
+    $html .= '<label class="col-sm-6 control-label">'.get_lang('AllowSelfRegProf').'</label>
         <div class="col-sm-6">';
     if ($installType == 'update') {
         if ($allowSelfRegProf == 'true') {
@@ -1773,16 +1774,16 @@ function display_configuration_settings_form(
         } else {
             $label = get_lang('No');
         }
-        $html .= '<input type="hidden" name="allowSelfRegProf" value="'. $allowSelfRegProf.'" />'. $label;
+        $html .= '<input type="hidden" name="allowSelfRegProf" value="'.$allowSelfRegProf.'" />'.$label;
     } else {
         $html .= '<div class="control-group">
                 <label class="checkbox-inline">
-                    <input type="radio" name="allowSelfRegProf" value="1" id="allowSelfRegProf1" '. ($allowSelfRegProf ? 'checked="checked" ' : '') .'/>
-                ' . get_lang('Yes') .'
+                    <input type="radio" name="allowSelfRegProf" value="1" id="allowSelfRegProf1" '. ($allowSelfRegProf ? 'checked="checked" ' : '').'/>
+                ' . get_lang('Yes').'
                 </label>';
         $html .= '<label class="checkbox-inline">
-                    <input type="radio" name="allowSelfRegProf" value="0" id="allowSelfRegProf0" '. ($allowSelfRegProf ? '' : 'checked="checked" ') .' />
-                   '. get_lang('No') .'
+                    <input type="radio" name="allowSelfRegProf" value="0" id="allowSelfRegProf0" '. ($allowSelfRegProf ? '' : 'checked="checked" ').' />
+                   '. get_lang('No').'
                 </label>';
         $html .= '</div>';
     }
@@ -1847,7 +1848,7 @@ function get_countries_list_from_array($combo = false)
         "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Morocco", "Mozambique", "Myanmar",
         "Namibia", "Nauru", "Nepa", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Norway",
         "Oman",
-        "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland","Portugal",
+        "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal",
         "Qatar",
         "Romania", "Russia", "Rwanda",
         "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia and Montenegro", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "Spain", "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria",
@@ -1894,11 +1895,11 @@ function updateDirAndFilesPermissions()
     $permissions_for_new_directories = isset($_SESSION['permissions_for_new_directories']) ? $_SESSION['permissions_for_new_directories'] : 0770;
     $permissions_for_new_files = isset($_SESSION['permissions_for_new_files']) ? $_SESSION['permissions_for_new_files'] : 0660;
     // use decoct() to store as string
-    $sql = "UPDATE $table SET selected_value = '0" . decoct($permissions_for_new_directories) . "'
+    $sql = "UPDATE $table SET selected_value = '0".decoct($permissions_for_new_directories)."'
               WHERE variable  = 'permissions_for_new_directories'";
     Database::query($sql);
 
-    $sql = "UPDATE $table SET selected_value = '0" . decoct($permissions_for_new_files) . "' WHERE variable  = 'permissions_for_new_files'";
+    $sql = "UPDATE $table SET selected_value = '0".decoct($permissions_for_new_files)."' WHERE variable  = 'permissions_for_new_files'";
     Database::query($sql);
 
     if (isset($_SESSION['permissions_for_new_directories'])) {
@@ -1918,8 +1919,8 @@ function updateDirAndFilesPermissions()
 function compare_setting_values($current_value, $wanted_value)
 {
     $current_value_string = $current_value;
-    $current_value = (float)$current_value;
-    $wanted_value = (float)$wanted_value;
+    $current_value = (float) $current_value;
+    $wanted_value = (float) $wanted_value;
 
     if ($current_value >= $wanted_value) {
         return Display::label($current_value_string, 'success');
@@ -1983,7 +1984,7 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
 
                     fwrite($fp, $out);
                     while (!feof($fp)) {
-                        $result = str_replace("\r\n", '',fgets($fp, 128));
+                        $result = str_replace("\r\n", '', fgets($fp, 128));
                         if (!empty($result) && $result == '123') {
                             $output = true;
                         }
@@ -2006,7 +2007,7 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
                     curl_setopt($ch, CURLOPT_URL, $url);
                     //curl_setopt($ch, CURLOPT_TIMEOUT, 30);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    $result = curl_exec ($ch);
+                    $result = curl_exec($ch);
                     if (!empty($result) && $result == '123') {
                         $output = true;
                     }
@@ -2077,6 +2078,7 @@ function installSettings(
  * @param string $chamiloVersion
  * @param EntityManager $manager
  * @throws \Doctrine\DBAL\DBALException
+ * @return bool
  */
 function migrate($chamiloVersion, EntityManager $manager)
 {
@@ -2106,7 +2108,6 @@ function migrate($chamiloVersion, EntityManager $manager)
     $to = null; // if $to == null then schema will be migrated to latest version
 
     echo "<pre>";
-
     try {
         // Execute migration!
         $migratedSQL = $migration->migrate($to);
@@ -2747,9 +2748,9 @@ function finishInstallation(
     $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
 
     $connection = $manager->getConnection();
-
+    $sql = getVersionTable();
     // Add version table
-    $connection->executeQuery('CREATE TABLE IF NOT EXISTS version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(20), PRIMARY KEY(id), UNIQUE(version))');
+    $connection->executeQuery($sql);
 
     // Add tickets defaults
     $ticketProject = new TicketProject();
@@ -2860,12 +2861,12 @@ function finishInstallation(
         $adminPhoneForm,
         '', //$picture_uri = '',
         PLATFORM_AUTH_SOURCE,
-        '',//$expirationDate,
+        '', //$expirationDate,
         1,
         0,
         null,
         '',
-        false,  //$send_mail = false,
+        false, //$send_mail = false,
         true //$isAdmin = false
     );
 
@@ -2887,7 +2888,7 @@ function finishInstallation(
         0,
         null,
         '',
-        false,  //$send_mail = false,
+        false, //$send_mail = false,
         false //$isAdmin = false
     );
 
@@ -2918,14 +2919,31 @@ function finishInstallation(
     $files = $finder->files()->in($path);
 
     // Needed for chash
-    $sql = 'CREATE TABLE IF NOT EXISTS version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(255), PRIMARY KEY(id), UNIQUE(version));';
-    Database::query($sql);
+    createVersionTable();
 
     foreach ($files as $version) {
-        $version = str_replace(['Version',  '.php' ], '', $version->getFilename());
+        $version = str_replace(['Version', '.php'], '', $version->getFilename());
         $sql = "INSERT INTO version (version) VALUES ('$version')";
         Database::query($sql);
     }
+}
+
+/**
+ * Creates 'version' table
+ */
+function createVersionTable()
+{
+    $sql = getVersionTable();
+    Database::query($sql);
+}
+
+/**
+ * Get version creation table query
+ * @return string
+ */
+function getVersionTable()
+{
+    return 'CREATE TABLE IF NOT EXISTS version (id int unsigned NOT NULL AUTO_INCREMENT, version varchar(20), PRIMARY KEY(id), UNIQUE(version));';
 }
 
 /**
@@ -2968,7 +2986,7 @@ function installProfileSettings($installationProfile = '')
                 SET selected_value = '".$param->selected_value."'
                 WHERE variable = '".$param->variable."'";
         if (!empty($param->subkey)) {
-            $sql .= " AND subkey='" . $param->subkey . "'";
+            $sql .= " AND subkey='".$param->subkey."'";
         }
         Database::query($sql);
     }
@@ -3070,26 +3088,28 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
 
     switch ($fromVersion) {
         case '1.9.0':
-            //no break
+            // no break
         case '1.9.2':
-            //no break
+            // no break
         case '1.9.4':
-            //no break
+            // no break
         case '1.9.6':
-            //no break
+            // no break
         case '1.9.6.1':
-            //no break
+            // no break
         case '1.9.8':
-            //no break
+            // no break
         case '1.9.8.1':
-            //no break
+            // no break
         case '1.9.8.2':
-            //no break
+            // no break
         case '1.9.10':
-            //no break
+            // no break
         case '1.9.10.2':
-            //no break
+            // no break
         case '1.9.10.4':
+            // no break
+        case '1.9.10.6':
             $database = new Database();
             $database->setManager($manager);
 
@@ -3119,7 +3139,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                 $connection->executeQuery("UPDATE settings_current SET selected_value = '1.10.0' WHERE variable = 'chamilo_database_version'");
 
                 if ($processFiles) {
-
+                    $fromVersionShort = '1.9';
                     include __DIR__.'/update-files-1.9.0-1.10.0.inc.php';
                     // Only updates the configuration.inc.php with the new version
                     include __DIR__.'/update-configuration.inc.php';
@@ -3242,7 +3262,10 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                 $connection->executeQuery($sql);
 
                 if ($processFiles) {
+                    $fromVersionShort = '1.10';
                     include __DIR__.'/update-files-1.10.0-1.11.0.inc.php';
+                    // Only updates the configuration.inc.php with the new version
+                    include __DIR__.'/update-configuration.inc.php';
                 }
                 error_log('Upgrade 1.11.x process concluded!  ('.date('Y-m-d H:i:s').')');
             } else {

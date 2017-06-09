@@ -15,8 +15,9 @@
         <div class="collapse navbar-collapse" id="menuone">
             <ul class="nav navbar-nav">
                 {% for item in menu %}
-                    <li class="{{ item.current }}">
-                        <a href="{{ item.url }}" target="{{ item.target }}" title="{{ item.title }}">{{ item.title }}
+                    <li class="{{ item.key }} {{ item.current }}">
+                        <a href="{{ item.url }}" {{ item.target ? 'target="' ~ item.target ~ '"' : '' }} title="{{ item.title }}">
+                            {{ item.title }}
                         </a>
                     </li>
                 {% endfor %}
@@ -24,16 +25,22 @@
             {% if _u.logged == 1 %}
                 <script>
                     $(document).ready(function () {
-                        $("#count_message")
-                            .load('{{ _p.web_main }}inc/ajax/message.ajax.php?a=get_count_message', function () {
+                        $.get('{{ _p.web_main }}inc/ajax/message.ajax.php?a=get_count_message', function(data){
+                            var message = data;
+                            if( message === "0"){
+                                $("#count_message_li").addClass('hidden');
+                            } else {
                                 $("#count_message_li").removeClass('hidden');
-                            });
+                                $("#count_message").append(message);
+                            }
+                        });
                     });
                 </script>
+                
                 <ul class="nav navbar-nav navbar-right">
                     <li id="count_message_li" class="hidden">
                         <a href="{{ message_url }}">
-                            <span id="count_message"></span>
+                            <span id="count_message" class="badge badge-warning"></span>
                         </a>
                     </li>
                     {% if _u.status != 6 %}

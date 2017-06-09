@@ -330,10 +330,6 @@ echo '<div class="text-center">';
 $file_url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$header_file;
 $file_url_web = $file_url.'?'.api_get_cidreq();
 
-if (in_array(strtolower($pathinfo['extension']), array('html', "htm"))) {
-    echo '<a class="btn btn-default" href="'.$file_url_web.'" target="_blank">'.get_lang('CutPasteLink').'</a>';
-}
-
 if ($show_web_odf) {
     $browser = api_get_navigator();
     $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file_url;
@@ -345,11 +341,6 @@ if ($show_web_odf) {
             src="' . $pdfUrl.'">
         </iframe>';
     echo '</div>';
-} elseif (!$originIsLearnpath) {
-    // ViewerJS already have download button
-    echo '<p>';
-    echo Display::toolbarButton(get_lang('Download'), $file_url_web, 'download', 'default', ['target' => '_blank']);
-    echo '</p>';
 }
 
 echo '</div>';

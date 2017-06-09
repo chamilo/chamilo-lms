@@ -1759,8 +1759,8 @@ class CourseRestorer
                         'c_id' => $this->destination_course_id,
                         'title' => self::DBUTF8($quiz->title),
                         'description' => ($quiz->description === false ? '' : self::DBUTF8($quiz->description)),
-                        'type' => isset($quiz->quiz_type) ? $quiz->quiz_type : $quiz->type,
-                        'random' => $quiz->random,
+                        'type' => isset($quiz->quiz_type) ? (int) $quiz->quiz_type : $quiz->type,
+                        'random' => (int) $quiz->random,
                         'active' => $quiz->active,
                         'sound' => self::DBUTF8($doc),
                         'max_attempt' => (int) $quiz->max_attempt,
@@ -1769,10 +1769,10 @@ class CourseRestorer
                         'pass_percentage' => $quiz->pass_percentage,
                         'feedback_type' => (int) $quiz->feedback_type,
                         'random_answers' => (int) $quiz->random_answers,
-                        'random_by_category' => $quiz->random_by_category,
-                        'review_answers' => $quiz->review_answers,
-                        'propagate_neg' => $quiz->propagate_neg,
-                        'text_when_finished' => $quiz->text_when_finished,
+                        'random_by_category' => (int) $quiz->random_by_category,
+                        'review_answers' => (int) $quiz->review_answers,
+                        'propagate_neg' => (int) $quiz->propagate_neg,
+                        'text_when_finished' => (string) $quiz->text_when_finished,
                         'expired_time' => (int) $quiz->expired_time,
                         'start_time' => $quiz->start_time,
                         'end_time' => $quiz->end_time,
@@ -1827,7 +1827,7 @@ class CourseRestorer
 
     /**
      * Restore quiz-questions
-     * @params int question id $id
+     * @params int $id question id
      */
     public function restore_quiz_question($id)
     {
@@ -2177,7 +2177,7 @@ class CourseRestorer
         // to redo the link between test_category and quizzes question for questions restored
         // we can use the source_id field
         // question source_id => category source_id
-        if (!empty($newQuestionId) && $this->course->has_resources(RESOURCE_QUIZQUESTION)) {
+        if ($this->course->has_resources(RESOURCE_QUIZQUESTION)) {
             // check the category number of each question restored
             if (!empty($resources[RESOURCE_QUIZQUESTION])) {
                 foreach ($resources[RESOURCE_QUIZQUESTION] as $id => $courseCopyQuestion) {
@@ -2870,7 +2870,7 @@ class CourseRestorer
     * @param boolean Option Overwrite
     * @param string $source
     * @param string $dest
-    * @return void()
+    * @return void
     * @deprecated
     */
     public function allow_create_all_directory($source, $dest, $overwrite = false)

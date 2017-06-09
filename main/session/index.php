@@ -16,7 +16,7 @@ if (empty($_GET['session_id'])) {
     api_not_allowed();
 }
 
-$session_id = isset($_GET['session_id']) ? intval($_GET['session_id']): null;
+$session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
 $sessionField = new ExtraFieldValue('session');
 $valueAllowVisitors = $sessionField->get_values_by_handler_and_field_variable(
     $session_id,
@@ -31,7 +31,7 @@ if (!$allowVisitors) {
 
 $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$course_id  = isset($_GET['course_id'])  ? intval($_GET['course_id']) : null;
+$course_id = isset($_GET['course_id']) ? intval($_GET['course_id']) : null;
 Session::write('id_session', $session_id);
 
 // Clear the exercise session just in case
@@ -176,12 +176,12 @@ $sessionTitleLink = api_get_configuration_value('courses_list_session_title_link
 if ($sessionTitleLink == 2 && $session->getNbrCourses() === 1) {
     $sessionCourses = $session->getCourses();
     $sessionCourse = $sessionCourses[0]->getCourse();
-    $courseUrl = $sessionCourse->getDirectory() . '/index.php?';
+    $courseUrl = $sessionCourse->getDirectory().'/index.php?';
     $courseUrl .= http_build_query([
         'id_session' => $session->getId()
     ]);
 
-    header('Location: ' . api_get_path(WEB_COURSE_PATH) . $courseUrl);
+    header('Location: '.api_get_path(WEB_COURSE_PATH).$courseUrl);
     exit;
 }
 
@@ -189,7 +189,7 @@ Display::display_header(get_lang('Session'));
 
 $session_select = array();
 foreach ($session_list as $item) {
-    $session_select[$item['id']] =  $item['name'];
+    $session_select[$item['id']] = $item['name'];
 }
 
 // Session list form
@@ -243,7 +243,7 @@ if (!empty($courseList)) {
                 $exerciseId = $exerciseInfo['id'];
 
                 if ($exerciseInfo['start_time'] == '0000-00-00 00:00:00') {
-                    $start_date  = '-';
+                    $start_date = '-';
                 } else {
                     $start_date = $exerciseInfo['start_time'];
                 }
@@ -280,7 +280,7 @@ if (!empty($courseList)) {
 
                     $name = Display::url(
                         $exerciseInfo['title'],
-                        api_get_path(WEB_CODE_PATH) . "exercise/overview.php?cidReq=$courseCode&exerciseId={$exerciseId}&id_session=$session_id",
+                        api_get_path(WEB_CODE_PATH)."exercise/overview.php?cidReq=$courseCode&exerciseId={$exerciseId}&id_session=$session_id",
                         array('target' => SESSION_LINK_TARGET)
                     );
 
@@ -312,7 +312,7 @@ if (!empty($courseList)) {
                     if (!empty($result['exe_weighting']) &&
                         intval($result['exe_weighting']) != 0
                     ) {
-                        $my_score = $result['exe_result']/$result['exe_weighting'];
+                        $my_score = $result['exe_result'] / $result['exe_weighting'];
                     }
                     $position = ExerciseLib::get_exercise_result_ranking(
                         $my_score,
@@ -325,7 +325,7 @@ if (!empty($courseList)) {
 
                     $name = Display::url(
                         $exerciseInfo['title'],
-                        api_get_path(WEB_CODE_PATH) . "exercise/result.php?cidReq=$courseCode&id={$result['exe_id']}&id_session=$session_id&show_headers=1",
+                        api_get_path(WEB_CODE_PATH)."exercise/result.php?cidReq=$courseCode&id={$result['exe_id']}&id_session=$session_id&show_headers=1",
                         array('target' => SESSION_LINK_TARGET, 'class'=>'exercise-result-link')
                     );
 
@@ -358,7 +358,7 @@ if (!empty($new_exercises)) {
     $my_real_array = array_merge($new_exercises, $my_real_array);
 }
 
-$start = $end = $start_only = $end_only ='';
+$start = $end = $start_only = $end_only = '';
 
 if (!empty($session_info['access_start_date'])) {
     $start = api_convert_and_format_date($session_info['access_start_date'], DATE_FORMAT_SHORT);
@@ -397,11 +397,11 @@ $columns_courses = array(
     get_lang('NumberOfPublishedLps'),
 );
 $column_model_courses = array(
-    array('name'=>'title',              'index'=>'title',               'width'=>'400px',  'align'=>'left',  'sortable'=>'true'),
+    array('name'=>'title', 'index'=>'title', 'width'=>'400px', 'align'=>'left', 'sortable'=>'true'),
     //array('name'=>'recent_lps',         'index'=>'recent_lps',          'width'=>'10px',  'align'=>'left',  'sortable'=>'false'),
 //    array('name'=>'max_mutation_date',  'index'=>'max_mutation_date',   'width'=>'120px',  'align'=>'left',  'sortable'=>'true'),
-    array('name'=>'exercise_count',     'index'=>'exercise_count',      'width'=>'180px',  'align'=>'left',  'sortable'=>'true'),
-    array('name'=>'lp_count',           'index'=>'lp_count',            'width'=>'180px',  'align'=>'left',  'sortable'=>'true')
+    array('name'=>'exercise_count', 'index'=>'exercise_count', 'width'=>'180px', 'align'=>'left', 'sortable'=>'true'),
+    array('name'=>'lp_count', 'index'=>'lp_count', 'width'=>'180px', 'align'=>'left', 'sortable'=>'true')
 );
 
 $extra_params_courses['height'] = '100%';
@@ -425,10 +425,10 @@ $columns = array(
     get_lang('LearningPaths')
 );
 
-$column_model   = array(
-    array('name'=>'date',   'index'=>'date',   'width'=>'120', 'align'=>'left', 'sortable'=>'true'),
+$column_model = array(
+    array('name'=>'date', 'index'=>'date', 'width'=>'120', 'align'=>'left', 'sortable'=>'true'),
     array('name'=>'course', 'index'=>'course', 'width'=>'300', 'align'=>'left', 'sortable'=>'true', 'wrap_cell' => 'true'),
-    array('name'=>'lp',     'index'=>'lp',     'width'=>'440', 'align'=>'left', 'sortable'=>'true')
+    array('name'=>'lp', 'index'=>'lp', 'width'=>'440', 'align'=>'left', 'sortable'=>'true')
 );
 
 $extra_params = array();
@@ -474,11 +474,11 @@ $column_week = array(
     get_lang('LearningPaths')
 );
 
-$column_week_model  = array(
-    array('name'=>'week',     'index'=>'week',    'width'=>'40',  'align'=>'left', 'sortable'=>'false'),
-    array('name'=>'date',     'index'=>'date',    'width'=>'120', 'align'=>'left', 'sortable'=>'false'),
-    array('name'=>'course',   'index'=>'course',  'width'=>'300', 'align'=>'left', 'sortable'=>'true', 'wrap_cell' => 'true'),
-    array('name'=>'lp',       'index'=>'lp',      'width'=>'440', 'align'=>'left', 'sortable'=>'true')
+$column_week_model = array(
+    array('name'=>'week', 'index'=>'week', 'width'=>'40', 'align'=>'left', 'sortable'=>'false'),
+    array('name'=>'date', 'index'=>'date', 'width'=>'120', 'align'=>'left', 'sortable'=>'false'),
+    array('name'=>'course', 'index'=>'course', 'width'=>'300', 'align'=>'left', 'sortable'=>'true', 'wrap_cell' => 'true'),
+    array('name'=>'lp', 'index'=>'lp', 'width'=>'440', 'align'=>'left', 'sortable'=>'true')
 );
 
 $extra_params_week = array();
@@ -490,7 +490,7 @@ $extra_params_week['groupingView'] = array(
     'groupField' => array('week'),
     'groupOrder' => array('desc'),
     'groupColumnShow' => 'false',
-    'groupText' => array('<b>' . get_lang('PeriodWeek') . ' {0}</b>')
+    'groupText' => array('<b>'.get_lang('PeriodWeek').' {0}</b>')
 );
 $extra_params_week['autowidth'] = 'true'; //use the width of the parent
 $extra_params_week['height'] = '100%';
@@ -507,15 +507,15 @@ if (!api_is_anonymous()) {
         get_lang('BestResultInCourse'),
         get_lang('Ranking')
     );
-    $column_exercise_model  = array(
-        array('name'=>'status',     'index'=>'status',     'width'=>'40', 'align'=>'left',   'sortable'=>'false'),
-        array('name'=>'date',       'index'=>'date',       'width'=>'130','align'=>'left',   'sortable'=>'true'),
-        array('name'=>'course',     'index'=>'course',     'width'=>'200','align'=>'left',   'sortable'=>'true', 'wrap_cell' => 'true'),
-        array('name'=>'exercise',   'index'=>'exercise',   'width'=>'200','align'=>'left',   'sortable'=>'false'),
-        array('name'=>'attempt',    'index'=>'attempt',    'width'=>'60', 'align'=>'center', 'sortable'=>'true'),
-        array('name'=>'result',     'index'=>'result',     'width'=>'120','align'=>'center', 'sortable'=>'true'),
-        array('name'=>'best_result','index'=>'best_result','width'=>'140','align'=>'center', 'sortable'=>'true'),
-        array('name'=>'position',   'index'=>'position',   'width'=>'55', 'align'=>'center', 'sortable'=>'true')
+    $column_exercise_model = array(
+        array('name'=>'status', 'index'=>'status', 'width'=>'40', 'align'=>'left', 'sortable'=>'false'),
+        array('name'=>'date', 'index'=>'date', 'width'=>'130', 'align'=>'left', 'sortable'=>'true'),
+        array('name'=>'course', 'index'=>'course', 'width'=>'200', 'align'=>'left', 'sortable'=>'true', 'wrap_cell' => 'true'),
+        array('name'=>'exercise', 'index'=>'exercise', 'width'=>'200', 'align'=>'left', 'sortable'=>'false'),
+        array('name'=>'attempt', 'index'=>'attempt', 'width'=>'60', 'align'=>'center', 'sortable'=>'true'),
+        array('name'=>'result', 'index'=>'result', 'width'=>'120', 'align'=>'center', 'sortable'=>'true'),
+        array('name'=>'best_result', 'index'=>'best_result', 'width'=>'140', 'align'=>'center', 'sortable'=>'true'),
+        array('name'=>'position', 'index'=>'position', 'width'=>'55', 'align'=>'center', 'sortable'=>'true')
     );
     $extra_params_exercise['height'] = '100%';
     $extra_params_exercise['autowidth'] = 'true';

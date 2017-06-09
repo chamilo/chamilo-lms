@@ -96,7 +96,15 @@ $table_user = Database::get_main_table(TABLE_MAIN_USER);
 /*
  * Get initial values for all fields.
  */
-$user_data = api_get_user_info(api_get_user_id());
+$user_data = api_get_user_info(
+    api_get_user_id(),
+    false,
+    false,
+    false,
+    false,
+    false,
+    true
+);
 $array_list_key = UserManager::get_api_keys(api_get_user_id());
 $id_temp_key = UserManager::get_api_key_id(api_get_user_id(), 'dokeos');
 $value_array = $array_list_key[$id_temp_key];
@@ -230,7 +238,7 @@ if (api_get_setting('profile', 'language') !== 'true') {
     $form->freeze('language');
 }
 
-//THEME
+// THEME
 if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
     $form->addElement('SelectTheme', 'theme', get_lang('Theme'));
     if (api_get_setting('profile', 'theme') !== 'true') {
@@ -691,7 +699,15 @@ if ($form->validate()) {
     $extraField = new ExtraFieldValue('user');
     $extraField->saveFieldValues($user_data);
 
-    $userInfo = api_get_user_info();
+    $userInfo = api_get_user_info(
+        api_get_user_id(),
+        false,
+        false,
+        false,
+        false,
+        false,
+        true
+    );
     Session::write('_user', $userInfo);
 
     $url = api_get_self();

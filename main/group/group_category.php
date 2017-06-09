@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	@package chamilo.group
+ * @package chamilo.group
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -12,12 +12,18 @@ $current_course_tool = TOOL_GROUP;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
+$sessionId = api_get_session_id();
+
 if (!api_is_allowed_to_edit(false, true) ||
     !(isset($_GET['id']) ||
     isset($_POST['id']) ||
     isset($_GET['action']) ||
     isset($_POST['action']))
 ) {
+    api_not_allowed(true);
+}
+
+if (!empty($sessionId)) {
     api_not_allowed(true);
 }
 

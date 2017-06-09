@@ -73,11 +73,11 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     // the form
     if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&path='.$hotpotatoes_path.' ">'.
-            Display::return_icon('save.png',   get_lang('Export'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 } else {
-    $actions .= '<a href="exercise.php">' .
-        Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
+    $actions .= '<a href="exercise.php">'.
+        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 if ($is_allowedToEdit) {
@@ -99,13 +99,13 @@ $nameTools = get_lang('Results');
 
 if ($is_allowedToEdit || $is_tutor) {
     $nameTools = get_lang('StudentScore');
-    $interbreadcrumb[] = array("url" => "exercise.php","name" => get_lang('Exercises'));
+    $interbreadcrumb[] = array("url" => "exercise.php", "name" => get_lang('Exercises'));
     $objExerciseTmp = new Exercise();
     /*if ($objExerciseTmp->read($exercise_id)) {
         $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exercise_id, "name" => $objExerciseTmp->name);
     }*/
 } else {
-    $interbreadcrumb[] = array("url" => "exercise.php","name" => get_lang('Exercises'));
+    $interbreadcrumb[] = array("url" => "exercise.php", "name" => get_lang('Exercises'));
     $objExerciseTmp = new Exercise();
     /*if ($objExerciseTmp->read($exercise_id)) {
         $nameTools = get_lang('Results').': '.$objExerciseTmp->name;
@@ -168,7 +168,7 @@ $action_links = '';
 // Generating group list
 
 $group_list = GroupManager::get_group_list();
-$group_parameters = array('group_all:'.get_lang('All'),'group_none:'.get_lang('None'));
+$group_parameters = array('group_all:'.get_lang('All'), 'group_none:'.get_lang('None'));
 
 foreach ($group_list as $group) {
     $group_parameters[] = $group['id'].':'.$group['name'];

@@ -26,23 +26,27 @@ if (!empty($thematic_simple_list)) {
     }
 }
 
-$i = 1;
+//$i = 1;
 
 echo Display::tag('h2', $thematic_data['title']);
 echo $thematic_data['content'];
 
 if (isset($message) && $message == 'ok') {
-    Display::addFlash(Display::return_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'), 'normal'));
+    echo Display::return_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'), 'normal');
 }
 
 if ($action === 'thematic_plan_list') {
+    $token = Security::get_token();
+
+    ChamiloSession::write('thematic_plan_token', $token);
+
     $form = new FormValidator(
         'thematic_plan_add',
         'POST',
         'index.php?action=thematic_plan_list&thematic_id='.$thematic_id.'&'.api_get_cidreq()
     );
     $form->addElement('hidden', 'action', 'thematic_plan_add');
-    //$form->addElement('hidden', 'thematic_plan_token', $token);
+    $form->addElement('hidden', 'thematic_plan_token', $token);
     $form->addElement('hidden', 'thematic_id', $thematic_id);
 
     foreach ($default_thematic_plan_title as $id => $title) {

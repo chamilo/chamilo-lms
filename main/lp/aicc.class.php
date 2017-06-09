@@ -246,12 +246,12 @@ class aicc extends learnpath
 
         $this->config_encoding = "ISO-8859-1"; // TODO: We may apply detection for this value, see the function api_detect_encoding().
 
-        $sql = "INSERT INTO $new_lp (c_id, lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib, content_maker,display_order)" .
-                "VALUES " .
-                "($course_id, 3, '".$this->course_title."', '".$this->course_id."','".$this->course_description."'," .
-                "'".$this->subdir."', 0, 'embedded', '".$this->config_encoding."'," .
+        $sql = "INSERT INTO $new_lp (c_id, lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib, content_maker,display_order)".
+                "VALUES ".
+                "($course_id, 3, '".$this->course_title."', '".$this->course_id."','".$this->course_description."',".
+                "'".$this->subdir."', 0, 'embedded', '".$this->config_encoding."',".
                 "'aicc_api.php','".$this->course_creator."',$dsp)";
-        if ($this->debug > 2) { error_log('New LP - In import_aicc(), inserting path: '. $sql, 0); }
+        if ($this->debug > 2) { error_log('New LP - In import_aicc(), inserting path: '.$sql, 0); }
         Database::query($sql);
         $lp_id = Database::insert_id();
 
@@ -280,7 +280,7 @@ class aicc extends learnpath
 
         $previous = 0;
         foreach ($this->aulist as $identifier => $dummy) {
-            $oAu =& $this->aulist[$identifier];
+            $oAu = & $this->aulist[$identifier];
             //echo "Item ".$oAu->identifier;
             $field_add = '';
             $value_add = '';
@@ -298,12 +298,12 @@ class aicc extends learnpath
             $parent = 0; // TODO: Deal with the parent.
             $previous = 0;
             $prereq = $oAu->prereq_string;
-            $sql_item = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order,parameters) " .
-                    "VALUES " .
-                    "($course_id, $lp_id, 'au','".$oAu->identifier."','".$title."'," .
-                    "'$path',0,100, $value_add" .
-                    "$parent, $previous, 0, " .
-                    "'$prereq', 0,'".(!empty($oAu->parameters)?Database::escape_string($oAu->parameters):'')."'" .
+            $sql_item = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order,parameters) ".
+                    "VALUES ".
+                    "($course_id, $lp_id, 'au','".$oAu->identifier."','".$title."',".
+                    "'$path',0,100, $value_add".
+                    "$parent, $previous, 0, ".
+                    "'$prereq', 0,'".(!empty($oAu->parameters) ? Database::escape_string($oAu->parameters) : '')."'".
                     ")";
             Database::query($sql_item);
             if ($this->debug > 1) { error_log('New LP - In aicc::import_aicc() - inserting item : '.$sql_item.' : ', 0); }
@@ -330,7 +330,7 @@ class aicc extends learnpath
      * @param string    Current path (optional)
      * @return string    Absolute path to the AICC description files or empty string on error
      */
-    function import_local_package($file_path, $current_dir = '')
+    public function import_local_package($file_path, $current_dir = '')
     {
         // TODO: Prepare info as given by the $_FILES[''] vector.
         $file_info = array();
@@ -345,7 +345,7 @@ class aicc extends learnpath
      * @param    string    Zip file info as given by $_FILES['userFile']
      * @return    string    Absolute path to the AICC config files directory or empty string on error
      */
-    function import_package($zip_file_info, $current_dir = '')
+    public function import_package($zip_file_info, $current_dir = '')
     {
         if ($this->debug > 0) { error_log('In aicc::import_package('.print_r($zip_file_info, true).',"'.$current_dir.'") method', 0); }
         //ini_set('error_log', 'E_ALL');
@@ -354,7 +354,7 @@ class aicc extends learnpath
         $zip_file_name = $zip_file_info['name'];
 
         if ($this->debug > 0) { error_log('New LP - aicc::import_package() - Zip file path = '.$zip_file_path.', zip file name = '.$zip_file_name, 0); }
-        $course_rel_dir  = api_get_course_path().'/scorm'; // Scorm dir web path starting from /courses
+        $course_rel_dir = api_get_course_path().'/scorm'; // Scorm dir web path starting from /courses
         $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_rel_dir; // The absolute system path of this course.
         $current_dir = api_replace_dangerous_char(trim($current_dir)); // Current dir we are in, inside scorm/
         if ($this->debug > 0) { error_log('New LP - aicc::import_package() - Current_dir = '.$current_dir, 0); }
@@ -371,7 +371,7 @@ class aicc extends learnpath
         if ($this->debug > 0) { error_log('New LP - aicc::import_package() - Base file name is : '.$file_base_name, 0); }
         $new_dir = api_replace_dangerous_char(trim($file_base_name));
         $this->subdir = $new_dir;
-        if($this->debug > 0) { error_log('New LP - aicc::import_package() - Subdir is first set to : '.$this->subdir, 0); }
+        if ($this->debug > 0) { error_log('New LP - aicc::import_package() - Subdir is first set to : '.$this->subdir, 0); }
 
         /*
         if (check_name_exist($course_sys_dir.$current_dir.'/'.$new_dir)) {
@@ -418,7 +418,7 @@ class aicc extends learnpath
                         $subdir_isset = true;
                     } else {
                         if (!$subdir_isset) {
-                            if (preg_match('?^.*/aicc$?i',dirname($thisContent['filename']))) {
+                            if (preg_match('?^.*/aicc$?i', dirname($thisContent['filename']))) {
                                 //echo "Cutting subdir<br/>";
                                 $this->subdir .= '/'.substr(dirname($thisContent['filename']), 0, -5);
                             } else {
@@ -528,7 +528,7 @@ class aicc extends learnpath
                         // TODO: RENAMING FILES CAN BE VERY DANGEROUS AICC-WISE, avoid that as much as possible!
                         //$safe_file = api_replace_dangerous_char($file, 'strict');
                         $find_str = array('\\', '.php', '.phtml');
-                        $repl_str = array('/',  '.txt', '.txt');
+                        $repl_str = array('/', '.txt', '.txt');
                         $safe_file = str_replace($find_str, $repl_str, $file);
 
                         if ($safe_file != $file) {
@@ -738,7 +738,7 @@ class aicc extends learnpath
         if ($this->debug > 0) { error_log('In aicc::get_res_path('.$id.') method', 0); }
         $path = '';
         if (isset($this->resources[$id])) {
-            $oRes =& $this->resources[$id];
+            $oRes = & $this->resources[$id];
             $path = @$oRes->get_path();
         }
         return $path;
@@ -754,7 +754,7 @@ class aicc extends learnpath
         if ($this->debug > 0) { error_log('In aicc::get_res_type('.$id.') method', 0); }
         $type = '';
         if (isset($this->resources[$id])) {
-            $oRes =& $this->resources[$id];
+            $oRes = & $this->resources[$id];
             $temptype = $oRes->get_scorm_type();
             if (!empty($temptype)) {
                 $type = $temptype;
@@ -854,7 +854,8 @@ class aicc extends learnpath
      * Static function to parse AICC ini strings.
      * Based on work by sinedeo at gmail dot com published on php.net (parse_ini_file()).
      * @param		string	INI File string
-     * @param		array	List of names of sections that should be considered as containing only hard string data (no variables), provided in lower case
+     * @param		array	List of names of sections that should be considered
+     * as containing only hard string data (no variables), provided in lower case
      * @return	array	Structured array
      */
     function parse_ini_string_quotes_safe($s, $pure_strings = array())
@@ -933,21 +934,23 @@ class aicc extends learnpath
             $chr = $data{$i};
             switch ($chr) {
                 case $enclosure:
-                    if ($enclosed && $data{$i+1} == $enclosure) {
+                    if ($enclosed && $data{$i + 1} == $enclosure) {
                         $fldval .= $chr;
                         ++$i; // Skip the next character.
-                    } else
+                    } else {
                         $enclosed = !$enclosed;
+                    }
                     break;
                 case $delim:
                     if (!$enclosed) {
                         $ret_array[$linecount][$fldcount++] = $fldval;
                         $fldval = '';
-                    } else
+                    } else {
                         $fldval .= $chr;
+                    }
                     break;
                 case "\r":
-                    if (!$enclosed&&$data{$i+1} == "\n") {
+                    if (!$enclosed && $data{$i + 1} == "\n") {
                         continue;
                     }
                     // no break
@@ -956,11 +959,12 @@ class aicc extends learnpath
                         $ret_array[$linecount++][$fldcount] = $fldval;
                         $fldcount = 0;
                         $fldval = '';
-                    } else
+                    } else {
                         $fldval .= $chr;
+                    }
                     break;
                 case "\\r":
-                    if (!$enclosed&&$data{$i+1} == "\\n") {
+                    if (!$enclosed && $data{$i + 1} == "\\n") {
                         continue;
                     }
                     // no break
@@ -969,8 +973,9 @@ class aicc extends learnpath
                         $ret_array[$linecount++][$fldcount] = $fldval;
                         $fldcount = 0;
                         $fldval = '';
-                    } else
+                    } else {
                         $fldval .= $chr;
+                    }
                     break;
                 default:
                     $fldval .= $chr;

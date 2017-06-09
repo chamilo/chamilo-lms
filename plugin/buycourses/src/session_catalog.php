@@ -57,7 +57,7 @@ $form->addButtonFilter(get_lang('Search'));
 
 $sessionList = $plugin->getCatalogSessionList($nameFilter, $minFilter, $maxFilter);
 
-//View
+// View
 if (api_is_platform_admin()) {
     $interbreadcrumb[] = [
         'url' => 'configuration.php',

@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	@package chamilo.admin
-*/
+ * @package chamilo.admin
+ */
 // resetting the course id
 $cidReset = true;
 
@@ -36,9 +36,8 @@ $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 // setting the name of the tool
 $tool_name = get_lang('SubscribeUsersToSession');
 $add_type = 'unique';
-
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
-	$add_type = Security::remove_XSS($_REQUEST['add_type']);
+    $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
 $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
@@ -195,7 +194,7 @@ function search_users($needle, $type)
                                     user.status<>6 '.$cond_user_id.
                                 $order_clause;
                         break;
-                    case 'any_session' :
+                    case 'any_session':
                         $sql = 'SELECT DISTINCT user.id, username, lastname, firstname, official_code
                             FROM '.$tbl_user.' user
                             LEFT OUTER JOIN '.$tbl_session_rel_user.' s
@@ -251,16 +250,13 @@ function search_users($needle, $type)
 }
 
 $xajax->processRequests();
-
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 function add_user_to_session (code, content) {
 	document.getElementById("user_to_add").value = "";
 	document.getElementById("ajax_list_users_single").innerHTML = "";
-
 	destination = document.getElementById("destination_users");
-
 	for (i=0;i<destination.length;i++) {
 		if(destination.options[i].text == content) {
 				return false;
@@ -400,7 +396,7 @@ if ($ajax_search) {
 
     unset($users); //clean to free memory
 } else {
-    //Filter by Extra Fields
+    // Filter by Extra Fields
     $extra_field_result = [];
     $use_extra_fields = false;
     if (is_array($extra_field_list)) {
@@ -431,10 +427,13 @@ if ($ajax_search) {
 
     if ($use_extra_fields) {
         $final_result = array();
-       	if (count($extra_field_result) > 1) {
-	    for ($i = 0; $i < count($extra_field_result) - 1; $i++) {
+        if (count($extra_field_result) > 1) {
+            for ($i = 0; $i < count($extra_field_result) - 1; $i++) {
                 if (is_array($extra_field_result[$i + 1])) {
-                    $final_result = array_intersect($extra_field_result[$i], $extra_field_result[$i + 1]);
+                    $final_result = array_intersect(
+                        $extra_field_result[$i],
+                        $extra_field_result[$i + 1]
+                    );
                 }
             }
         } else {
@@ -512,7 +511,7 @@ if ($ajax_search) {
     }
     unset($users); //clean to free memory
 
-    //filling the correct users in list
+    // filling the correct users in list
     $sql = "SELECT  u.id, lastname, firstname, username, session_id, official_code
           FROM $tbl_user u
           LEFT JOIN $tbl_session_rel_user
@@ -574,28 +573,28 @@ $newLinks .= Display::url(
 );
 ?>
 <div class="actions">
-	<?php
+<?php
     echo $link_add_type_unique;
     echo $link_add_type_multiple;
     echo $link_add_group;
     echo $newLinks;
-    ?>
+?>
 </div>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($addProcess)) echo '&add=true'; ?>"  <?php if ($ajax_search) { echo ' onsubmit="valide();"'; }?>>
 <?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') </legend>'; ?>
 <?php
 if ($add_type == 'multiple') {
-	if (is_array($extra_field_list)) {
-		if (is_array($new_field_list) && count($new_field_list) > 0) {
-			echo '<h3>'.get_lang('FilterUsers').'</h3>';
-			foreach ($new_field_list as $new_field) {
-				echo $new_field['name'];
-				$varname = 'field_'.$new_field['variable'];
+    if (is_array($extra_field_list)) {
+        if (is_array($new_field_list) && count($new_field_list) > 0) {
+            echo '<h3>'.get_lang('FilterUsers').'</h3>';
+            foreach ($new_field_list as $new_field) {
+                echo $new_field['name'];
+                $varname = 'field_'.$new_field['variable'];
                 $fieldtype = $new_field['type'];
-				echo '&nbsp;<select name="'.$varname.'">';
-				echo '<option value="0">--'.get_lang('Select').'--</option>';
-				foreach ($new_field['data'] as $option) {
-					$checked = '';
+                echo '&nbsp;<select name="'.$varname.'">';
+                echo '<option value="0">--'.get_lang('Select').'--</option>';
+                foreach ($new_field['data'] as $option) {
+                    $checked = '';
                     if ($fieldtype == ExtraField::FIELD_TYPE_TAG) {
                         if (isset($_POST[$varname])) {
                             if ($_POST[$varname] == $option['tag']) {
@@ -616,11 +615,11 @@ if ($add_type == 'multiple') {
                 $extraHidden = $fieldtype == ExtraField::FIELD_TYPE_TAG ? '<input type="hidden" name="field_id" value="'.$option['field_id'].'" />' : '';
                 echo $extraHidden;
                 echo '&nbsp;&nbsp;';
-			}
-			echo '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
-			echo '<br /><br />';
-		}
-	}
+            }
+            echo '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
+            echo '<br /><br />';
+        }
+    }
 }
 ?>
 <input type="hidden" name="form_sent" value="1" />
@@ -628,7 +627,7 @@ if ($add_type == 'multiple') {
 
 <?php
 if (!empty($errorMsg)) {
-	echo Display::return_message($errorMsg); //main API
+    echo Display::return_message($errorMsg); //main API
 }
 ?>
 <div id="multiple-add-session" class="row">
@@ -675,7 +674,6 @@ if (!empty($errorMsg)) {
     <div class="col-md-4">
         <?php if ($add_type == 'multiple') { ?>
             <?php echo get_lang('FirstLetterUser'); ?> :
-
             <select id="first_letter_user" name="firstLetterUser" onchange = "change_select(this.value);" >
                 <option value = "%">--</option>
                 <?php
@@ -694,7 +692,6 @@ if (!empty($errorMsg)) {
                   <em class="fa fa-chevron-left"></em>
                 </button>
             </div>
-
             <?php
         } else {
             ?>

@@ -143,7 +143,6 @@ $Forbidden = "Qanqa manan qelqachikunkichu kay yachachinaq manuchakuq hinaqa";
 $CourseAccessConfigTip = "Por defecto el curso es público. Pero Ud. puede definir el nivel de confidencialidad en los botones superiores.";
 $OpenToTheWorld = "Público - acceso autorizado a cualquier persona";
 $OpenToThePlatform = "Público - acceso autorizado sólo para los usuarios registrados en la plataforma";
-$OpenToThePlatform = "Runakunapaq - hanp'arapi haykuqmasikuna qelqachikusqapaq haykuna huñichasqa";
 $TipLang = "Kay simitan qhawanqaku yachichinaq llipin watukuq.";
 $Vid = "Video";
 $Work = "Llank'aykuna";

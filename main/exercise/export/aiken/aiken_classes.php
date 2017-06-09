@@ -31,12 +31,15 @@ class Aiken2Question extends Question
         return $answer;
     }
 
-    function createAnswersForm($form)
+    public function createAnswersForm($form)
     {
         return true;
     }
 
-    function processAnswersCreation($form)
+    /**
+     * @inheritdoc
+     */
+    public function processAnswersCreation($form, $exercise)
     {
         return true;
     }

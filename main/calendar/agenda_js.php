@@ -203,7 +203,7 @@ $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
 $form = new FormValidator(
     'form',
     'get',
-    null,
+    api_get_self().'?'.api_get_cidreq(),
     null,
     array('id' => 'add_event_form')
 );

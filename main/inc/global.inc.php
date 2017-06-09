@@ -72,7 +72,7 @@ api_check_php_version($includePath.'/');
 // 2. Empty username is formally valid, but it is reserved for the anonymous user.
 // 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
 
-$defaultUserNameLength = 40;
+$defaultUserNameLength = 50;
 if (api_get_setting('login_is_email') == 'true') {
     $defaultUserNameLength = 100;
 }
@@ -249,6 +249,7 @@ foreach ($result as & $row) {
 
         if ($row['access_url_changeable'] == 1 && $url_info['active'] == 1) {
             if (isset($settings_by_access_list[$var]) &&
+                isset($settings_by_access_list[$var][$subkey]) &&
                 $settings_by_access_list[$var][$subkey][$category]['selected_value'] != '') {
                 if ($row['subkey'] == null) {
                     $_setting[$row['variable']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];

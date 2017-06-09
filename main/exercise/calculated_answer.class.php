@@ -183,10 +183,9 @@ class CalculatedAnswer extends Question
     }
 
     /**
-     * abstract function which creates the form to create / edit the answers of the question
-     * @param FormValidator $form
+     * @inheritdoc
      */
-    public function processAnswersCreation($form)
+    public function processAnswersCreation($form, $exercise)
     {
         if (!self::isAnswered()) {
             $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
@@ -247,14 +246,11 @@ class CalculatedAnswer extends Question
     }
 
     /**
-     * @param null $feedback_type
-     * @param null $counter
-     * @param null $score
-     * @return null|string
+     * @inheritdoc
      */
-    public function return_header($feedback_type = null, $counter = null, $score = null)
+    public function return_header($exercise, $counter = null, $score = null)
     {
-        $header = parent::return_header($feedback_type, $counter, $score);
+        $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
             <tr>
                 <th>'.get_lang("Answer").'</th>

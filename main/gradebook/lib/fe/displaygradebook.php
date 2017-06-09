@@ -297,7 +297,7 @@ class DisplayGradebook
                 $scoreinfo .= '<strong>'.sprintf(get_lang('TotalX'), $scorecourse_display.$aditionalButtons).'</strong>';
 
             }
-            Display::addFlash(Display::return_message($scoreinfo, 'normal', false));
+            echo Display::return_message($scoreinfo, 'normal', false);
         }
 
         // show navigation tree and buttons?
@@ -448,7 +448,7 @@ class DisplayGradebook
             $msg = $weight.' - '.$min_certification.$edit_icon;
             //@todo show description
             $description = (($catobj->get_description() == "" || is_null($catobj->get_description())) ? '' : '<strong>'.get_lang('GradebookDescriptionLog').'</strong>'.': '.$catobj->get_description());
-            Display::addFlash(Display::return_message($msg, 'normal', false));
+            echo Display::return_message($msg, 'normal', false);
             if (!empty($description)) {
                 echo Display::div($description, array());
             }

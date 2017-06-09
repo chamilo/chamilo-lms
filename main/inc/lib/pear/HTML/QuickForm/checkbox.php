@@ -104,7 +104,7 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
         if (!$checked) {
             $this->removeAttribute('checked');
         } else {
-            $this->updateAttributes(array('checked'=>'checked'));
+            $this->updateAttributes(array('checked' => 'checked'));
         }
     } //end func setChecked
 
@@ -330,6 +330,7 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
                 // constant values override both default and submitted ones
                 // default values are overriden by submitted
                 $value = $this->_findValue($caller->_constantValues);
+
                 if (null === $value) {
                     // if no boxes were checked, then there is no value in the array
                     // yet we don't want to display default value in this case
@@ -339,6 +340,7 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
                         $value = $this->_findValue($caller->_defaultValues);
                     }
                 }
+
                 if (null !== $value || $caller->isSubmitted()) {
                     $this->setChecked($value);
                 }

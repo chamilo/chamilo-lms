@@ -109,7 +109,7 @@ if (api_is_course_admin() ||
 
     // Displaying the survey thanks message
     if (isset($_POST['finish_survey'])) {
-        Display::display_confirmation_message(get_lang('SurveyFinished'));
+        echo Display::return_message(get_lang('SurveyFinished'), 'confirm');
         echo $survey_data['survey_thanks'];
         Display :: display_footer();
         exit;
@@ -232,7 +232,7 @@ if (api_is_course_admin() ||
     }
     $form->display();
 } else {
-    Display :: display_error_message(get_lang('NotAllowed'), false);
+    echo Display::return_message(get_lang('NotAllowed'), 'error', false);
 }
 
 Display :: display_footer();

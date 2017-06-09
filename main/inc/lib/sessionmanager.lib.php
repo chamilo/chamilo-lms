@@ -3949,17 +3949,17 @@ class SessionManager
     /**
      * Gets user status within a session
      *
-     * @param int $user_id
-     * @param int $session_id
+     * @param int $userId
+     * @param int $sessionId
      *
      * @return \Chamilo\CoreBundle\Entity\SessionRelUser
      */
-    public static function get_user_status_in_session($user_id, $session_id)
+    public static function getUserStatusInSession($userId, $sessionId)
     {
         $em = Database::getManager();
         $subscriptions = $em
             ->getRepository('ChamiloCoreBundle:SessionRelUser')
-            ->findBy(['session' => $session_id, 'user' => $user_id]);
+            ->findBy(['session' => $sessionId, 'user' => $userId]);
 
         /** @var SessionRelUser $subscription */
         $subscription = current($subscriptions);

@@ -60,25 +60,19 @@ class Agenda
                     $this->set_course($courseInfo);
                 }
 
-                // Check if teacher
-                if (empty($sessionId)) {
-                    $isAllowToEdit = api_is_allowed_to_edit(false, true);
-                } else {
-                    $isAllowToEdit = api_is_allowed_to_session_edit(
-                        false,
-                        true
-                    );
-                }
+                // Check if teacher/admin rights.
+                $isAllowToEdit = api_is_allowed_to_edit(false, true);
 
-                // Check
-                if (api_get_course_setting('allow_user_edit_agenda') && api_is_allowed_in_course()) {
+                // Check course setting.
+                if (api_get_course_setting('allow_user_edit_agenda') == '1'
+                    && api_is_allowed_in_course()
+                ) {
                     $isAllowToEdit = true;
                 }
 
                 $groupId = api_get_group_id();
                 if (!empty($groupId)) {
                     $groupInfo = GroupManager::get_group_properties($groupId);
-
                     $userHasAccess = GroupManager::user_has_access(
                         api_get_user_id(),
                         $groupInfo['iid'],

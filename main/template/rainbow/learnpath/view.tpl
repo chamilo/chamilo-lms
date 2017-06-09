@@ -166,10 +166,42 @@
                 $('#learning_path_toc').css({
                     top: scormInfoHeight
                 });
+            },
+            groupToc: function () {
+                $('[data-lp-id]:not([data-lp-parent])').each(function () {
+                    var $self = $(this),
+                        id = $self.data('lp-id') || 0;
+
+                    if (!id) {
+                        return;
+                    }
+
+                    $self.find('.panel-collapse .panel-body').append('<div id="scorm-panel-' + id + '">');
+                });
+
+                $('[data-lp-parent]').each(function () {
+                    var $panel = $(this),
+                        parentId = $panel.data('lp-parent') || 0,
+                        id = $panel.data('lp-id') || 0;
+
+                    if (!parentId) {
+                        return;
+                    }
+
+                    $panel.appendTo('#scorm-panel-' + parentId);
+
+                    if ($('#collapse-' + id).is('.in')) {
+                        $('#collapse-' + parentId).collapse('toggle');
+                    }
+                });
             }
         };
 
         $(document).on('ready', function () {
+            {% if data_panel %}
+            LPViewUtils.groupToc();
+            {% endif %}
+
             if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
               $('#wrapper-iframe').css({
                 'overflow' : 'auto',

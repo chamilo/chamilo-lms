@@ -27,10 +27,12 @@
     <div id="learning_path_toc" class="scorm-list">
         <div class="panel-group" id="scorm-panel" role="tablist" aria-multiselectable="true">
             {% for item in data_panel.are_parents %}
-                <div class="panel panel-default">
+                <div class="panel panel-default" data-lp-id="{{ item.id }}"
+                    {{ item.parent ? 'data-lp-parent="' ~ item.parent ~ '"' : '' }}>
                     <div class="status-heading">
                         <div class="panel-heading {{ item.current }}" role="tab" id="heading-{{ item.id }}">
-                            <a role="button" data-toggle="collapse" data-parent="#scorm-panel"
+                            <a role="button" data-toggle="collapse"
+                               data-parent="#scorm-panel{{ item.parent ? '-' ~ item.parent : '' }}"
                                href="#collapse-{{ item.id }}" aria-expanded="true"
                                aria-controls="collapse-{{ item.id }}">
                                 {{ item.title }}

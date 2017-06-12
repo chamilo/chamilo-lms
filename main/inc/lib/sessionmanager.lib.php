@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
+use Chamilo\CoreBundle\Entity\Course;
 
 /**
  * Class SessionManager
@@ -8496,5 +8497,32 @@ class SessionManager
                 }
             }
         }
+    }
+
+    /**
+     * @param \Chamilo\CoreBundle\Entity\Course $course
+     * @param \Chamilo\CoreBundle\Entity\Session $session
+     * @return int
+     */
+    public static function getCountUsersInCourseSession(Course $course, Session $session)
+    {
+        return Database::getManager()
+            ->createQuery("
+                SELECT COUNT(scu)
+                FROM ChamiloCoreBundle:SessionRelCourseRelUser scu
+                INNER JOIN ChamiloCoreBundle:SessionRelUser su
+                    WITH scu.user = su.user
+                    AND scu.session = su.session
+                WHERE scu.course = :course
+                    AND su.relationType != :rrhh
+                    AND scu.session = :session
+            ")
+            ->setParameters([
+                'course' => $course->getId(),
+                'rrhh' => SESSION_RELATION_TYPE_RRHH,
+                'session' => $session->getId()
+            ])
+            ->getSingleScalarResult();
+
     }
 }

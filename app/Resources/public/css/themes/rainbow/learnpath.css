@@ -457,4 +457,9 @@ table.lp_overview img {
 #scorm-panel .panel-parent .section-list li.scorm_not_attempted.scorm_item_normal{
     background: url(images/not-completed.png) no-repeat  #ECF0F1 55px center;
 }
+#scorm-panel .panel-parent .section-list li.scorm_completed.scorm_item_normal.scorm_highlight,
+#scorm-panel .panel-parent .section-list li.scorm_not_attempted.scorm_item_normal.scorm_highlight
+{
+    background: url(images/completed-active.png) no-repeat  #772583 55px center;
+}
 /* nuevo css */

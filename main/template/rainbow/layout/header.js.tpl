@@ -1,3 +1,4 @@
+<script src="{{ _p.web_css_theme }}js/jquery.checkradios.min.js"></script>
 <script>
 {% if constant('CHAMILO_LOAD_WYSIWYG') %}
     // External plugins not part of the default Ckeditor package.
@@ -91,6 +92,7 @@ function doneResizing() {
 };
 
 $(document).ready(function() {
+    $('.checkradios').checkradios();
     $("#open-view-list").click(function(){
         $("#student-list-work").fadeIn(300);
     });

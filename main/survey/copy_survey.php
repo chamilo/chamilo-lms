@@ -51,8 +51,8 @@ $option = str_replace("&nbsp;", '', strip_tags($survey['title']));
 $options = array();
 foreach ($courses as $course) {
     if (($course['id'] != $currentCourseId || $course['session_id'] != $currentSessionId) &&
-        (api_is_global_platform_admin() || (CourseManager::is_course_teacher(api_get_user_id(),$course['code'])
-        && $course['session_id'] == 0) || api_is_coach($course['session_id'],$course['id']))) {
+        (api_is_global_platform_admin() || (CourseManager::is_course_teacher(api_get_user_id(), $course['code'])
+        && $course['session_id'] == 0) || api_is_coach($course['session_id'], $course['id']))) {
         $value=array("courseId" => $course['id'], "sessionId" => $course['session_id']);
         if (isset($course['session_name'])) {
             $options[json_encode($value)] = $course['title'].' ['.$course['session_name'].']';

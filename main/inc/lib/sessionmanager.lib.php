@@ -3825,7 +3825,10 @@ class SessionManager
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-        $selectedField = 'u.user_id,lastname, firstname, username, relation_type, access_url_id';
+        $selectedField = '
+            u.user_id, u.lastname, u.firstname, u.username, su.relation_type, au.access_url_id,
+            su.moved_to, su.moved_status, su.moved_at
+        ';
 
         if ($getCount) {
             $selectedField = 'count(1) AS count';
@@ -3833,23 +3836,23 @@ class SessionManager
 
         $sql = "SELECT $selectedField
                 FROM $tbl_user u
-                INNER JOIN $tbl_session_rel_user
-                ON u.user_id = $tbl_session_rel_user.user_id AND
-                $tbl_session_rel_user.session_id = $id
-                LEFT OUTER JOIN $table_access_url_user uu
-                ON (uu.user_id = u.user_id)
+                INNER JOIN $tbl_session_rel_user su
+                ON u.user_id = su.user_id AND
+                su.session_id = $id
+                LEFT OUTER JOIN $table_access_url_user au
+                ON (au.user_id = u.user_id)
                 ";
 
         $urlId = api_get_current_access_url_id();
         if (isset($status) && $status != '') {
             $status = intval($status);
-            $sql .= " WHERE relation_type = $status AND (access_url_id = $urlId OR access_url_id is null )";
+            $sql .= " WHERE su.relation_type = $status AND (au.access_url_id = $urlId OR su.access_url_id is null )";
         } else {
-            $sql .= " WHERE (access_url_id = $urlId OR access_url_id is null )";
+            $sql .= " WHERE (au.access_url_id = $urlId OR au.access_url_id is null )";
         }
 
-        $sql .= " ORDER BY relation_type, ";
-        $sql .= api_sort_by_first_name() ? ' firstname, lastname' : '  lastname, firstname';
+        $sql .= " ORDER BY su.relation_type, ";
+        $sql .= api_sort_by_first_name() ? ' u.firstname, u.lastname' : '  u.lastname, u.firstname';
 
         $result = Database::query($sql);
         if ($getCount) {

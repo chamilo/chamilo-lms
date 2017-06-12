@@ -1678,7 +1678,7 @@ class CourseManager
         $session_id = intval($session_id);
         $course_code = Database::escape_string($course_code);
         $tblUser = Database::get_main_table(TABLE_MAIN_USER);
-        $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tblCourseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tblUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
@@ -1692,7 +1692,7 @@ class CourseManager
         $where = array();
         if (!empty($session_id)) {
             $sql .= "
-                LEFT JOIN $tblSessionUser as session_course_user
+                LEFT JOIN $tblSessionCourseUser as session_course_user
                     ON user.user_id = session_course_user.user_id
                     AND session_course_user.c_id = $courseId
                     AND session_course_user.session_id = $session_id

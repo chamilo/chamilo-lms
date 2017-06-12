@@ -50,8 +50,8 @@ if ($form->validate()) {
 $selectcat_inter = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 $interbreadcrumb[] = array(
     'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectcat_inter,
-    'name' => get_lang('Gradebook'
-));
+    'name' => get_lang('Gradebook')
+);
 
 $htmlHeadXtra[] = '<script>
 $(document).ready( function() {

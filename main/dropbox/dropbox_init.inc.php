@@ -352,11 +352,19 @@ if ($view == 'sent' || empty($view)) {
         $nameTools = get_lang('AddNewCategory');
     }
     if ($action == 'add') {
+        /*$interbreadcrumb[] = array(
+            'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=sent&'.api_get_cidreq(),
+            'name' => get_lang('SentFiles'),
+        );*/
+        $nameTools = get_lang('UploadNewFile');
+    }
+
+    if ($action == 'update') {
         $interbreadcrumb[] = array(
             'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=sent&'.api_get_cidreq(),
             'name' => get_lang('SentFiles'),
         );
-        $nameTools = get_lang('UploadNewFile');
+        $nameTools = get_lang('UpdateFile');
     }
 }
 

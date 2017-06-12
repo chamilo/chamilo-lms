@@ -19,7 +19,7 @@ api_protect_course_script();
 
 if (isset($_GET['lp_item_id'])) {
     // Get parameter only came from lp_view.php.
-    $lp_item_id  = intval($_GET['lp_item_id']);
+    $lp_item_id = intval($_GET['lp_item_id']);
     if (isset($_SESSION['lpobject'])) {
         $oLP = unserialize($_SESSION['lpobject']);
     }
@@ -69,12 +69,12 @@ if ((!$is_allowed_to_edit) || $isStudentView) {
 $course_id = api_get_course_int_id();
 $sql = "SELECT * FROM $tbl_lp 
         WHERE c_id = $course_id AND id = $learnpath_id";
-$result=Database::query($sql);
+$result = Database::query($sql);
 $therow = Database::fetch_array($result);
 
 /* SHOWING THE ADMIN TOOLS	*/
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array (
+    $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq(),
         'name' => get_lang('ToolGradebook')
     );

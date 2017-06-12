@@ -41,7 +41,7 @@
                                 {% endif %}
                             {% endfor %}
 
-                            {% if 'allow_show_skype_account'|get_setting == 'true' and not skype_account is empty %}
+                            {% if 'allow_show_skype_account'|api_get_setting == 'true' and not skype_account is empty %}
                                 <li class="item">
                                     <a href="skype:{{ skype_account }}?chat">
                                         <span class="fa fa-skype fa-fw" aria-hidden="true"></span> {{ 'Skype'|get_lang }}
@@ -49,7 +49,7 @@
                                 </li>
                             {% endif %}
 
-                            {% if 'allow_show_linkedin_url'|get_setting == 'true' and not linkedin_url is empty %}
+                            {% if 'allow_show_linkedin_url'|api_get_setting == 'true' and not linkedin_url is empty %}
                                 <li class="item">
                                     <a href="{{ linkedin_url }}" target="_blank">
                                         <span class="fa fa-linkedin fa-fw" aria-hidden="true"></span> {{ 'LinkedIn'|get_lang }}

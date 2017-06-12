@@ -163,8 +163,8 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::SAVE_COURSE_NOTEBOOK:
-            $title = !empty($_POST['title'])? $_POST['title'] : null;
-            $text = !empty($_POST['text'])? $_POST['text'] : null;
+            $title = !empty($_POST['title']) ? $_POST['title'] : null;
+            $text = !empty($_POST['text']) ? $_POST['text'] : null;
             $data = $restApi->saveCourseNotebook($title, $text);
             $restResponse->setData($data);
             break;

@@ -37,14 +37,10 @@ function check_unzip() {
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 if (!$is_allowed_to_edit) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
-$courseDir = $_course['path']."/document";
-$sys_course_path = api_get_path(SYS_COURSE_PATH);
-$base_work_dir = $sys_course_path.$courseDir;
 $noPHP_SELF = true;
-$max_filled_space = DocumentManager::get_course_quota();
 
 //what's the current path?
 if (isset($_REQUEST['curdirpath'])) {

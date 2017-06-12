@@ -22,12 +22,15 @@
  * @source: https://github.com/kogmbh/WebODF/
  */
 
-/*global define,require,dojo,dijit */
+/*global define, require, dojo, dijit, runtime */
 
-define("webodf/editor/widgets/paragraphStylesDialog", [], function () {
+define("webodf/editor/widgets/paragraphStylesDialog", [
+    "webodf/editor/widgets/dialogWidgets/idMangler"],
+function (IdMangler) {
     "use strict";
     return function ParagraphStylesDialog(callback) {
         var self = this,
+            idMangler = new IdMangler(),
             editorSession,
             dialog,
             stylePicker, alignmentPane, fontEffectsPane;
@@ -42,14 +45,11 @@ define("webodf/editor/widgets/paragraphStylesDialog", [], function () {
                 "dijit/layout/ContentPane",
                 "dijit/form/Button",
                 "dijit/form/DropDownButton"], function (Dialog, TooltipDialog, popup, LayoutContainer, TabContainer, ContentPane, Button, DropDownButton) {
-                var i,
-                    tr = runtime.tr,
+                var tr = runtime.tr,
                     mainLayoutContainer,
                     tabContainer,
                     topBar,
                     actionBar,
-                    okButton,
-                    cancelButton,
                     cloneButton,
                     deleteButton,
                     cloneTooltip,
@@ -58,8 +58,7 @@ define("webodf/editor/widgets/paragraphStylesDialog", [], function () {
                     * Mapping of the properties from edit pane properties to the attributes of style:text-properties
                     * @const@type{Array.<!{propertyName:string,attributeName:string,unit:string}>}
                     */
-                    textPropertyMapping = [
-                    {
+                    textPropertyMapping = [{
                         propertyName:  'fontSize',
                         attributeName: 'fo:font-size',
                         unit:          'pt'
@@ -89,8 +88,7 @@ define("webodf/editor/widgets/paragraphStylesDialog", [], function () {
                     * Mapping of the properties from edit pane properties to the attributes of style:paragraph-properties
                     * @const@type{Array.<!{propertyName:string,attributeName:string,unit:string}>}
                     */
-                    paragraphPropertyMapping = [
-                    {
+                    paragraphPropertyMapping = [{
                         propertyName:  'topMargin',
                         attributeName: 'fo:margin-top',
                         unit:          'mm'
@@ -220,9 +218,9 @@ define("webodf/editor/widgets/paragraphStylesDialog", [], function () {
                 mainLayoutContainer.addChild(topBar);
 
                 cloneTooltip = new TooltipDialog({
-                    content:
-                        '<h2 style="margin: 0;">'+tr("Clone this Style")+'</h2><br/>' +
-                        '<label for="name">'+tr("New Name:")+'</label> <input data-dojo-type="dijit/form/TextBox" id="name" name="name"><br/><br/>',
+                    content: idMangler.mangleIds(
+                        '<h2 style="margin: 0;">' + tr("Clone this Style") + '</h2><br/>' +
+                        '<label for="name">' + tr("New Name:") + '</label> <input data-dojo-type="dijit/form/TextBox" id="name" name="name"><br/><br/>'),
                     style: "width: 300px;"
                 });
                 cloneButton = new Button({
@@ -263,11 +261,11 @@ define("webodf/editor/widgets/paragraphStylesDialog", [], function () {
                 actionBar = dojo.create("div", {
                     "class": "dijitDialogPaneActionBar"
                 });
-                okButton = new dijit.form.Button({
+                new dijit.form.Button({
                     label: tr("OK"),
                     onClick: accept
                 }).placeAt(actionBar);
-                cancelButton = new dijit.form.Button({
+                new dijit.form.Button({
                     label: tr("Cancel"),
                     onClick: cancel
                 }).placeAt(actionBar);
@@ -289,7 +287,7 @@ define("webodf/editor/widgets/paragraphStylesDialog", [], function () {
                         stylePicker.widget().domNode.style.marginTop = "5px";
                         topBar.addChild(stylePicker.widget(), 0);
 
-                        stylePicker.onRemove = function (name) {
+                        stylePicker.onRemove = function () {
                             // The style picker automatically falls back
                             // to the first entry if the currently selected
                             // entry is deleted. So it is safe to simply
@@ -319,6 +317,9 @@ define("webodf/editor/widgets/paragraphStylesDialog", [], function () {
                     };
 
                     dialog.onHide = self.onToolDone;
+
+                    // only done to make jslint see the var used
+                    return p || a || f;
                 });
 
                 dialog.addChild(mainLayoutContainer);
@@ -328,7 +329,7 @@ define("webodf/editor/widgets/paragraphStylesDialog", [], function () {
             });
         }
 
-        this.setEditorSession = function(session) {
+        this.setEditorSession = function (session) {
             editorSession = session;
             if (stylePicker) {
                 stylePicker.setEditorSession(session);
@@ -344,7 +345,9 @@ define("webodf/editor/widgets/paragraphStylesDialog", [], function () {
             }
         };
 
+        /*jslint emptyblock: true*/
         this.onToolDone = function () {};
+        /*jslint emptyblock: false*/
 
         // init
         makeWidget(function (dialog) {

@@ -34,8 +34,10 @@ class bbb
     public $userId = 0;
     public $plugin;
     private $courseCode;
+    private $courseId;
     private $sessionId;
     private $groupId;
+    private $maxUsersLimit;
 
     /**
      * Constructor (generates a connection to the API and the Chamilo settings
@@ -48,6 +50,7 @@ class bbb
     public function __construct($host = '', $salt = '', $isGlobalConference = false, $isGlobalPerUser = 0)
     {
         $this->courseCode = api_get_course_id();
+        $this->courseId = api_get_course_int_id();
         $this->sessionId = api_get_session_id();
         $this->groupId = api_get_group_id();
 
@@ -94,6 +97,7 @@ class bbb
                 }
             }
         }
+        $this->maxUsersLimit = $this->plugin->get('max_users_limit');
 
         if ($bbbPluginEnabled === 'true') {
             $userInfo = api_get_user_info();
@@ -125,7 +129,7 @@ class bbb
     }
 
     /**
-     * Set forced the course, session or group IDs
+     * Force the course, session and/or group IDs
      * @param string $courseCode
      * @param int $sessionId
      * @param int $groupId
@@ -200,6 +204,60 @@ class bbb
 
         return false;
     }
+    /**
+     * Gets the global limit of users in a video-conference room.
+     * This value can be overridden by course-specific values
+     * @return  int Maximum number of users set globally
+     */
+    public function getMaxUsersLimit() {
+        $limit = $this->maxUsersLimit;
+        if ($limit <= 0) {
+            $limit = 0;
+        }
+        $courseLimit = 0;
+        $sessionLimit = 0;
+        // Check the extra fields for this course and session
+        // Session limit takes priority over course limit
+        // Course limit takes priority over global limit
+        if (!empty($this->courseId)) {
+            $extraField = new ExtraField('course');
+            $fieldId = $extraField->get_all(
+                array('variable = ?' => 'plugin_bbb_course_users_limit')
+            );
+            $extraValue = new ExtraFieldValue('course');
+            $value = $extraValue->get_values_by_handler_and_field_id($this->courseId, $fieldId[0]['id']);
+            if (!empty($value['value'])) {
+                $courseLimit = $value['value'];
+            }
+        }
+        if (!empty($this->sessionId)) {
+            $extraField = new ExtraField('session');
+            $fieldId = $extraField->get_all(
+                array('variable = ?' => 'plugin_bbb_session_users_limit')
+            );
+            $extraValue = new ExtraFieldValue('session');
+            $value = $extraValue->get_values_by_handler_and_field_id($this->sessionId, $fieldId[0]['id']);
+            if (!empty($value['value'])) {
+                $sessionLimit = $value['value'];
+            }
+        }
+        if (!empty($sessionLimit)) {
+            return $sessionLimit;
+        } elseif (!empty($courseLimit)) {
+            return $courseLimit;
+        }
+        return $limit;
+    }
+    /**
+     * Sets the global limit of users in a video-conference room.
+     * @param   int Maximum number of users (globally)
+     */
+    public function setMaxUsersLimit($max) {
+        if ($max < 0) {
+            $max = 0;
+        }
+        $this->maxUsersLimit = intval($max);
+    }
 
     /**
      * See this file in you BBB to set up default values
@@ -258,7 +316,7 @@ class bbb
 
         $params['record'] = api_get_course_setting('big_blue_button_record_and_store', $courseCode) == 1 ? true : false;
         $max = api_get_course_setting('big_blue_button_max_students_allowed', $courseCode);
-        $max =  isset($max) ? $max : -1;
+        $max = isset($max) ? $max : -1;
 
         $params['status'] = 1;
         // Generate a pseudo-global-unique-id to avoid clash of conferences on
@@ -291,23 +349,23 @@ class bbb
             $duration = 300;
 
             $bbbParams = array(
-                'meetingId' => $params['remote_id'], 					// REQUIRED
-                'meetingName' => $meetingName, 	// REQUIRED
-                'attendeePw' => $attendeePassword, 					// Match this value in getJoinMeetingURL() to join as attendee.
-                'moderatorPw' => $moderatorPassword, 					// Match this value in getJoinMeetingURL() to join as moderator.
-                'welcomeMsg' => $welcomeMessage, 					// ''= use default. Change to customize.
-                'dialNumber' => '', 					// The main number to call into. Optional.
-                'voiceBridge' => $params['voice_bridge'], 					// PIN to join voice. Required.
-                'webVoice' => '', 						// Alphanumeric to join voice. Optional.
+                'meetingId' => $params['remote_id'], // REQUIRED
+                'meetingName' => $meetingName, // REQUIRED
+                'attendeePw' => $attendeePassword, // Match this value in getJoinMeetingURL() to join as attendee.
+                'moderatorPw' => $moderatorPassword, // Match this value in getJoinMeetingURL() to join as moderator.
+                'welcomeMsg' => $welcomeMessage, // ''= use default. Change to customize.
+                'dialNumber' => '', // The main number to call into. Optional.
+                'voiceBridge' => $params['voice_bridge'], // PIN to join voice. Required.
+                'webVoice' => '', // Alphanumeric to join voice. Optional.
                 'logoutUrl' =>  $this->logoutUrl,
-                'maxParticipants' => $max, 				// Optional. -1 = unlimitted. Not supported in BBB. [number]
-                'record' => $record, 					// New. 'true' will tell BBB to record the meeting.
-                'duration' => $duration, 				// Default = 0 which means no set duration in minutes. [number]
+                'maxParticipants' => $max, // Optional. -1 = unlimitted. Not supported in BBB. [number]
+                'record' => $record, // New. 'true' will tell BBB to record the meeting.
+                'duration' => $duration, // Default = 0 which means no set duration in minutes. [number]
                 //'meta_category' => '', 				// Use to pass additional info to BBB server. See API docs.
             );
 
             if ($this->debug) {
-                error_log("create_meeting params: ".print_r($bbbParams,1));
+                error_log("create_meeting params: ".print_r($bbbParams, 1));
             }
 
             $status = false;
@@ -320,7 +378,7 @@ class bbb
                 if (isset($result) && strval($result['returncode']) == 'SUCCESS') {
                     if ($this->debug) {
                         error_log(
-                            "create_meeting result: " . print_r($result, 1)
+                            "create_meeting result: ".print_r($result, 1)
                         );
                     }
                     $meeting = $this->joinMeeting($meetingName, true);
@@ -370,7 +428,7 @@ class bbb
 
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
-        $conditions =  array(
+        $conditions = array(
             'where' => array(
                 'c_id = ? AND session_id = ? AND meeting_name = ? AND status = 1 AND access_url = ?' =>
                     array($courseId, $sessionId, $meetingName, $this->accessUrl)
@@ -379,7 +437,7 @@ class bbb
 
         if ($this->hasGroupSupport()) {
             $groupId = api_get_group_id();
-            $conditions =  array(
+            $conditions = array(
                 'where' => array(
                     'c_id = ? AND session_id = ? AND meeting_name = ? AND group_id = ? AND status = 1 AND access_url = ?' =>
                         array($courseId, $sessionId, $meetingName, $groupId, $this->accessUrl)
@@ -481,7 +539,7 @@ class bbb
 
             if ($this->debug) {
                 error_log(
-                    "meeting is running: " . intval($meetingInfoExists)
+                    "meeting is running: ".intval($meetingInfoExists)
                 );
             }
 
@@ -498,11 +556,11 @@ class bbb
 
         if ($meetingInfoExists) {
             $joinParams = array(
-                'meetingId' => $meetingData['remote_id'],	//	-- REQUIRED - A unique id for the meeting
-                'username' => $this->userCompleteName,	//-- REQUIRED - The name that will display for the user in the meeting
-                'password' => $pass,			//-- REQUIRED - The attendee or moderator password, depending on what's passed here
+                'meetingId' => $meetingData['remote_id'], //	-- REQUIRED - A unique id for the meeting
+                'username' => $this->userCompleteName, //-- REQUIRED - The name that will display for the user in the meeting
+                'password' => $pass, //-- REQUIRED - The attendee or moderator password, depending on what's passed here
                 //'createTime' => api_get_utc_datetime(),			//-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
-                'userID' => api_get_user_id(),				//-- OPTIONAL - string
+                'userID' => api_get_user_id(), //-- OPTIONAL - string
                 'webVoiceConf' => ''	//	-- OPTIONAL - string
             );
             $url = $this->api->getJoinMeetingURL($joinParams);
@@ -511,7 +569,7 @@ class bbb
             $url = $this->logoutUrl;
         }
         if ($this->debug) {
-            error_log("return url :" . $url);
+            error_log("return url :".$url);
         }
 
         return $url;
@@ -552,7 +610,7 @@ class bbb
      */
     public function getAllMeetingsInCourse($courseId, $sessionId, $status)
     {
-        $conditions =  array(
+        $conditions = array(
             'where' => array(
                 'status = ? AND c_id = ? AND session_id = ? ' => array(
                     $status,
@@ -592,14 +650,14 @@ class bbb
 
         $conditions = [];
         if ($courseId || $sessionId || $groupId) {
-            $conditions =  array(
+            $conditions = array(
                 'where' => array(
                     'c_id = ? AND session_id = ? ' => array($courseId, $sessionId),
                 ),
             );
 
             if ($this->hasGroupSupport()) {
-                $conditions =  array(
+                $conditions = array(
                     'where' => array(
                         'c_id = ? AND session_id = ? AND group_id = ? ' => array($courseId, $sessionId, $groupId)
                     )
@@ -665,7 +723,7 @@ class bbb
 
             $meetingBBB['end_url'] = $this->endUrl($meetingDB);
 
-            if (isset($meetingBBB['returncode']) && (string)$meetingBBB['returncode'] == 'FAILED') {
+            if (isset($meetingBBB['returncode']) && (string) $meetingBBB['returncode'] == 'FAILED') {
                 if ($meetingDB['status'] == 1 && $this->isConferenceManager()) {
                     $this->endMeeting($meetingDB['id'], $courseCode);
                 }
@@ -721,7 +779,7 @@ class bbb
                 }
 
                 $actionLinks = $this->getActionLinks($meetingDB, $record, $isGlobal, $isAdminReport);
-                $item['show_links']  = $recordLink;
+                $item['show_links'] = $recordLink;
             } else {
                 $actionLinks = $this->getActionLinks($meetingDB, [], $isGlobal, $isAdminReport);
 
@@ -739,11 +797,11 @@ class bbb
 
             if ($meetingDB['status'] == 1) {
                 $joinParams = array(
-                    'meetingId' => $meetingDB['remote_id'],		//-- REQUIRED - A unique id for the meeting
-                    'username' => $this->userCompleteName,	//-- REQUIRED - The name that will display for the user in the meeting
-                    'password' => $pass,			//-- REQUIRED - The attendee or moderator password, depending on what's passed here
-                    'createTime' => '',			//-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
-                    'userID' => '',			//	-- OPTIONAL - string
+                    'meetingId' => $meetingDB['remote_id'], //-- REQUIRED - A unique id for the meeting
+                    'username' => $this->userCompleteName, //-- REQUIRED - The name that will display for the user in the meeting
+                    'password' => $pass, //-- REQUIRED - The attendee or moderator password, depending on what's passed here
+                    'createTime' => '', //-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
+                    'userID' => '', //	-- OPTIONAL - string
                     'webVoiceConf' => ''	//	-- OPTIONAL - string
                 );
                 $item['go_url'] = $this->protocol.$this->api->getJoinMeetingURL($joinParams);
@@ -819,8 +877,8 @@ class bbb
         }
 
         $endParams = array(
-            'meetingId' => $meetingData['remote_id'],   // REQUIRED - We have to know which meeting to end.
-            'password' => $pass,        // REQUIRED - Must match moderator pass for meeting.
+            'meetingId' => $meetingData['remote_id'], // REQUIRED - We have to know which meeting to end.
+            'password' => $pass, // REQUIRED - Must match moderator pass for meeting.
         );
         $this->api->endMeetingWithXmlResponseArray($endParams);
         Database::update(
@@ -954,7 +1012,7 @@ class bbb
      * @assert () === false
      * @todo Also delete links and agenda items created from this recording
      */
-    public function deleteRecord($id)
+    public function deleteRecording($id)
     {
         if (empty($id)) {
 
@@ -1006,7 +1064,7 @@ class bbb
      * @assert (1, null) === false
      * @assert (null, 'abcdefabcdefabcdefabcdef') === false
      */
-    public function copyRecordToLinkTool($id)
+    public function copyRecordingToLinkTool($id)
     {
         if (empty($id)) {
             return false;
@@ -1073,7 +1131,7 @@ class bbb
      */
     public function redirectToBBB($url)
     {
-        if (file_exists(__DIR__ . '/../config.vm.php')) {
+        if (file_exists(__DIR__.'/../config.vm.php')) {
             // Using VM
             echo Display::url($this->plugin->get_lang('ClickToContinue'), $url);
             exit;
@@ -1330,7 +1388,7 @@ class bbb
         if ($meetingInfo['has_video_m4v']) {
             $links[] = Display::url(
                 Display::return_icon('save.png', get_lang('DownloadFile')),
-                $recordInfo['playbackFormatUrl'] . '/capture.m4v',
+                $recordInfo['playbackFormatUrl'].'/capture.m4v',
                 ['target' => '_blank']
             );
         } else {
@@ -1395,7 +1453,7 @@ class bbb
             return false;
         }
 
-        $hasCapture = SocialManager::verifyUrl($meetingInfo['video_url'] . '/capture.m4v');
+        $hasCapture = SocialManager::verifyUrl($meetingInfo['video_url'].'/capture.m4v');
 
         if ($hasCapture) {
             return Database::update(

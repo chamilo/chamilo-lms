@@ -41,12 +41,12 @@ $nameTools = get_lang('ToolForum');
 
 // Breadcrumbs
 
-if (isset($_SESSION['gradebook'])){
+if (isset($_SESSION['gradebook'])) {
     $gradebook = $_SESSION['gradebook'];
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array (
+    $interbreadcrumb[] = array(
         'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
     );
@@ -59,7 +59,7 @@ if ($origin == 'group') {
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(), 'name' => get_lang('GroupSpace').' ('.$group_properties['name'].')');
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?origin='.$origin.'&forum='.intval($_GET['forum']).'&'.api_get_cidreq(), 'name' => prepare4display($current_forum['forum_title']));
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/forumsearch.php?'.api_get_cidreq(),'name' => get_lang('ForumSearch'));
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/forumsearch.php?'.api_get_cidreq(), 'name' => get_lang('ForumSearch'));
 } else {
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq(), 'name' => $nameTools);
     $nameTools = get_lang('ForumSearch');

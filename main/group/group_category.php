@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	@package chamilo.group
+ * @package chamilo.group
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -12,13 +12,19 @@ $current_course_tool = TOOL_GROUP;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
+$sessionId = api_get_session_id();
+
 if (!api_is_allowed_to_edit(false, true) ||
-    !(isset ($_GET['id']) ||
-    isset ($_POST['id']) ||
-    isset ($_GET['action']) ||
-    isset ($_POST['action']))
+    !(isset($_GET['id']) ||
+    isset($_POST['id']) ||
+    isset($_GET['action']) ||
+    isset($_POST['action']))
 ) {
-	api_not_allowed();
+    api_not_allowed(true);
+}
+
+if (!empty($sessionId)) {
+    api_not_allowed(true);
 }
 
 /**
@@ -36,6 +42,9 @@ function check_max_number_of_members($value)
 
 /**
  * Function to check the number of groups per user
+ *
+ * @param $value
+ * @return bool
  */
 function check_groups_per_user($value)
 {
@@ -81,35 +90,34 @@ $(document).ready( function() {
  </script>';
 
 $interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
-
 $course_id = api_get_course_int_id();
 
 // Build the form
 if (isset($_GET['id'])) {
-	// Update settings of existing category
-	$action = 'update_settings';
+    // Update settings of existing category
+    $action = 'update_settings';
     $form = new FormValidator(
         'group_category',
         'post',
         api_get_self().'?id='.$category['id'].'&'.api_get_cidreq()
     );
-	$form->addElement('hidden', 'id');
+    $form->addElement('hidden', 'id');
 } else {
     // Checks if the field was created in the table Category. It creates it if is neccesary
     $table_category = Database::get_course_table(TABLE_GROUP_CATEGORY);
     if (!Database::query("SELECT wiki_state FROM $table_category WHERE c_id = $course_id")) {
         Database::query("ALTER TABLE $table_category ADD wiki_state tinyint(3) UNSIGNED NOT NULL default '1' WHERE c_id = $course_id");
     }
-	// Create a new category
-	$action = 'add_category';
-	$form = new FormValidator('group_category');
+    // Create a new category
+    $action = 'add_category';
+    $form = new FormValidator('group_category');
 }
 
 // If categories allowed, show title & description field
 if (api_get_setting('allow_group_categories') == 'true') {
     $form->addElement('header', $nameTools);
     $form->addElement('html', '<div class="row"><div class="col-md-6">');
-	$form->addText('title', get_lang('Title'));
+    $form->addText('title', get_lang('Title'));
 
     // Groups per user
     $possible_values = array();
@@ -142,8 +150,8 @@ if (api_get_setting('allow_group_categories') == 'true') {
     $form->addElement('html', '</div>');
     $form->addElement('html', '</div>');
 } else {
-	$form->addElement('hidden', 'title');
-	$form->addElement('hidden', 'description');
+    $form->addElement('hidden', 'title');
+    $form->addElement('hidden', 'description');
 }
 
 $form->addElement('header', get_lang('DefaultSettingsForNewGroups'));
@@ -268,7 +276,11 @@ $form->addElement('html', '</div>');
 $form->addElement('html', '<div class="col-md-12">');
 
 // Submit
-$form->addButtonSave(get_lang('PropModify'), 'submit');
+if (isset($_GET['id'])) {
+    $form->addButtonUpdate(get_lang('Edit'), 'submit');
+} else {
+    $form->addButtonSave(get_lang('Add'), 'submit');
+}
 
 $currentUrl = api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq();
 

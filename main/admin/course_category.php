@@ -85,10 +85,21 @@ if ($action == 'add' || $action == 'edit') {
     $form = new FormValidator('course_category', 'post', $url);
     $form->addElement('header', '', $form_title);
     $form->addElement('hidden', 'formSent', 1);
-
     $form->addElement('text', 'code', get_lang("CategoryCode"));
-    $form->addElement('text', 'name', get_lang("CategoryName"));
-    $form->addRule('name', get_lang('PleaseEnterCategoryInfo'), 'required');
+
+    if (api_get_configuration_value('save_titles_as_html')) {
+        $form->addHtmlEditor(
+            'name',
+            get_lang('CategoryName'),
+            true,
+            false,
+            ['ToolbarSet' => 'Minimal']
+        );
+    } else {
+        $form->addElement('text', 'name', get_lang("CategoryName"));
+        $form->addRule('name', get_lang('PleaseEnterCategoryInfo'), 'required');
+    }
+
     $form->addRule('code', get_lang('PleaseEnterCategoryInfo'), 'required');
     $group = array(
         $form->createElement(
@@ -124,7 +135,7 @@ if ($action == 'add' || $action == 'edit') {
 } else {
     // If multiple URLs and not main URL, prevent deletion and inform user
     if ($action == 'delete' && api_get_multiple_access_url() && api_get_current_access_url_id() != 1) {
-        Display::display_warning_message(get_lang('CourseCategoriesAreGlobal'));
+        echo Display::return_message(get_lang('CourseCategoriesAreGlobal'), 'warning');
     }
     echo '<div class="actions">';
     $link = null;

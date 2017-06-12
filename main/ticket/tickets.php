@@ -19,7 +19,7 @@ function load_history_ticket(div_course, ticket_id) {
     $.ajax({
         contentType: "application/x-www-form-urlencoded",
         beforeSend: function(object) {
-        $("div#"+div_course).html("<img src=\'' . $webLibPath . 'javascript/indicator.gif\' />"); },
+        $("div#"+div_course).html("<img src=\'' . $webLibPath.'javascript/indicator.gif\' />"); },
         type: "POST",
         url: "ticket_assign_log.php",
         data: "ticket_id="+ticket_id,
@@ -42,10 +42,10 @@ $(document).ready(function() {
 function display_advanced_search_form () {
     if ($("#advanced_search_form").css("display") == "none") {
         $("#advanced_search_form").css("display","block");
-        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-down') . ' '. get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('AdvancedSearch').'\');
     } else {
         $("#advanced_search_form").css("display","none");
-        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-right') . ' '.get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'\');
     }
 }
 </script>';
@@ -219,7 +219,7 @@ if (!empty($projectId)) {
     $form->addHidden('project_id', $projectId);
     
     $advancedSearch = Display::url(
-        '<span id="img_plus_and_minus">&nbsp;'. Display::returnFontAwesomeIcon('arrow-right') .' '.get_lang('AdvancedSearch'),
+        '<span id="img_plus_and_minus">&nbsp;'.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch'),
         'javascript://',
         array(
             'class' => 'btn btn-default advanced-parameters',
@@ -235,10 +235,10 @@ if (!empty($projectId)) {
                 ICON_SIZE_MEDIUM
                 ),
             api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id='.$projectId,
-            [ 'title' => get_lang('Add') ]
+            ['title' => get_lang('Add')]
             );
         
-        $actionRight.= Display::url(
+        $actionRight .= Display::url(
             Display::return_icon(
                 'export_excel.png',
                 get_lang('Export'),
@@ -246,10 +246,10 @@ if (!empty($projectId)) {
                 ICON_SIZE_MEDIUM
                 ),
             api_get_self().'?action=export'.$get_parameter.$get_parameter2.'&project_id='.$projectId,
-            [ 'title' => get_lang('Export') ]
+            ['title' => get_lang('Export')]
             );
         
-        $actionRight.= Display::url(
+        $actionRight .= Display::url(
             Display::return_icon(
                 'settings.png',
                 get_lang('Categories'),
@@ -257,12 +257,12 @@ if (!empty($projectId)) {
                 ICON_SIZE_MEDIUM
                 ),
             api_get_path(WEB_CODE_PATH).'ticket/settings.php',
-            [ 'title' => get_lang('Settings') ]
+            ['title' => get_lang('Settings')]
             );
         
     }
     
-    echo Display::toolbarAction('toolbar-tickets', array( 0 => $form->return_form(), 1 => $advancedSearch, 2 => $actionRight));
+    echo Display::toolbarAction('toolbar-tickets', array(0 => $form->return_form(), 1 => $advancedSearch, 2 => $actionRight));
 
     $advancedSearchForm = new FormValidator(
         'advanced_search',
@@ -313,8 +313,8 @@ if (!empty($projectId)) {
 } else {
     if (api_get_setting('ticket_allow_student_add') === 'true') {
         echo '<div class="actions" >';
-        echo '<a href="' . api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id='.$projectId.'">' .
-                Display::return_icon('add.png', get_lang('Add'), '', '32') .
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id='.$projectId.'">'.
+                Display::return_icon('add.png', get_lang('Add'), '', '32').
              '</a>';
         echo '</div>';
     }
@@ -330,8 +330,8 @@ if ($isAdmin) {
     $table->set_header(6, get_lang('AssignedTo'), true);
     $table->set_header(7, get_lang('Message'), true);
 } else {
-    echo '<center><h1>' . get_lang('MyTickets') . '</h1></center>';
-    echo '<center><p>' . get_lang('TicketMsgWelcome') . '</p></center>';
+    echo '<center><h1>'.get_lang('MyTickets').'</h1></center>';
+    echo '<center><p>'.get_lang('TicketMsgWelcome').'</p></center>';
     $table->set_header(0, '#', true);
     $table->set_header(1, get_lang('Status'), false);
     $table->set_header(2, get_lang('Date'), true);

@@ -42,7 +42,7 @@ class TestCategory
 
             $this->id = $row['id'];
             $this->name = $row['title'];
-            $this->description  = $row['description'];
+            $this->description = $row['description'];
 
             return $this;
         }
@@ -74,8 +74,8 @@ class TestCategory
         if ($row['nb'] <= 0) {
             $params = [
                 'c_id' => $courseId,
-                'title' => $this->name,
-                'description' => $this->description
+                'title' => (string) $this->name,
+                'description' => (string) $this->description
             ];
             $newId = Database::insert($table, $params);
 
@@ -239,7 +239,7 @@ class TestCategory
      */
     public static function getCategoryForQuestion($questionId, $courseId = 0)
     {
-        $courseId = (int)$courseId;
+        $courseId = (int) $courseId;
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
@@ -401,7 +401,7 @@ class TestCategory
         $categories = self::getListOfCategoriesIDForTestObject($exercise_obj);
         foreach ($categories as $cat_id) {
             $cat = new TestCategory();
-            $cat = (array)$cat->getCategory($cat_id);
+            $cat = (array) $cat->getCategory($cat_id);
             $cat['iid'] = $cat['id'];
             $cat['title'] = $cat['name'];
             $result[$cat['id']] = $cat;
@@ -437,7 +437,7 @@ class TestCategory
         $quiz->read($exerciseId);
         $questionList = $quiz->selectQuestionList();
         // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ? ? ?
-        for ($i=1; $i <= count($questionList); $i++) {
+        for ($i = 1; $i <= count($questionList); $i++) {
             if (self::getCategoryForQuestion($questionList[$i]) == $categoryId) {
                 $nbCatResult++;
             }
@@ -618,7 +618,7 @@ class TestCategory
      */
     public static function returnCategoryAndTitle($questionId, $in_display_category_name = 1)
     {
-        $is_student = !(api_is_allowed_to_edit(null,true) || api_is_session_admin());
+        $is_student = !(api_is_allowed_to_edit(null, true) || api_is_session_admin());
         // @todo fix $_SESSION['objExercise']
         $objExercise = Session::read('objExercise');
         if (!empty($objExercise)) {
@@ -658,7 +658,7 @@ class TestCategory
     public static function sortTabByBracketLabel($in_tab)
     {
         $tabResult = array();
-        $tabCatName = array();	// tab of category name
+        $tabCatName = array(); // tab of category name
         while (list($cat_id, $tabquestion) = each($in_tab)) {
             $category = new TestCategory();
             $category = $category->getCategory($cat_id);
@@ -956,8 +956,8 @@ class TestCategory
             $return .= $warning;
             $return .= '<table class="data_table">';
             $return .= '<tr>';
-            $return .= '<th height="24">' . get_lang('Categories') . '</th>';
-            $return .= '<th width="70" height="24">' . get_lang('Number') . '</th></tr>';
+            $return .= '<th height="24">'.get_lang('Categories').'</th>';
+            $return .= '<th width="70" height="24">'.get_lang('Number').'</th></tr>';
 
             $emptyCategory = array(
                 'id' => '0',
@@ -978,7 +978,7 @@ class TestCategory
                 $return .= '</td>';
                 $return .= '<td>';
                 $value = isset($saved_categories) && isset($saved_categories[$cat_id]) ? $saved_categories[$cat_id]['count_questions'] : -1;
-                $return .= '<input name="category['.$cat_id.']" value="' .$value.'" />';
+                $return .= '<input name="category['.$cat_id.']" value="'.$value.'" />';
                 $return .= '</td>';
                 $return .= '</tr>';
             }
@@ -1137,16 +1137,16 @@ class TestCategory
             $tmpobj = $tmpobj->getCategory($category['id']);
             $nb_question = $tmpobj->getCategoryQuestionsNumber();
             $rowname = self::protectJSDialogQuote($category['title']);
-            $nb_question_label = $nb_question == 1 ? $nb_question . ' ' . get_lang('Question') : $nb_question . ' ' . get_lang('Questions');
-            $content = "<span style='float:right'>" . $nb_question_label . "</span>";
+            $nb_question_label = $nb_question == 1 ? $nb_question.' '.get_lang('Question') : $nb_question.' '.get_lang('Questions');
+            $content = "<span style='float:right'>".$nb_question_label."</span>";
             $content .= '<div class="sectioncomment">';
             $content .= $category['description'];
             $content .= '</div>';
-            $links = '<a href="' . api_get_self() . '?action=editcategory&category_id=' . $category['id'] . '&'.api_get_cidreq().'">' .
-                Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL) . '</a>';
-            $links .= ' <a href="' . api_get_self() . '?'.api_get_cidreq().'&action=deletecategory&category_id=' . $category['id'] . '" ';
-            $links .= 'onclick="return confirmDelete(\'' . self::protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure') . '[' . $rowname) . '] ?\', \'id_cat' . $category['id'] . '\');">';
-            $links .= Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
+            $links = '<a href="'.api_get_self().'?action=editcategory&category_id='.$category['id'].'&'.api_get_cidreq().'">'.
+                Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
+            $links .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=deletecategory&category_id='.$category['id'].'" ';
+            $links .= 'onclick="return confirmDelete(\''.self::protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure').'['.$rowname).'] ?\', \'id_cat'.$category['id'].'\');">';
+            $links .= Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
             $html .= Display::panel($content, $category['title'].$links);
         }
 

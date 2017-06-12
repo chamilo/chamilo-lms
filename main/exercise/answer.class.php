@@ -45,7 +45,7 @@ class Answer
     /**
      * constructor of the class
      *
-     * @author 	Olivier Brouckaert
+     * @author Olivier Brouckaert
      * @param int $questionId that answers belong to
      * @param int $course_id
      */
@@ -190,8 +190,9 @@ class Answer
 
     /**
      * Reads answer information from the data base ordered by parameter
-     * @param string $field    Field we want to order by
-     * @param string $order    DESC or ASC
+     * @param string $field Field we want to order by
+     * @param string $order DESC or ASC
+     * @return bool
      *
      * @author Frederic Vauthier
      */
@@ -275,10 +276,12 @@ class Answer
             $i++;
         }
         $this->nbrAnswers = $i - 1;
+
+        return true;
     }
 
     /**
-     * returns the autoincrement id identificator
+     * returns the autoincrement id
      *
      * @author Juan Carlos Ra�a
      * @return integer - answer num
@@ -379,7 +382,8 @@ class Answer
     /**
      * Returns a list of answers
      * @author Yannick Warnier <ywarnier@beeznest.org>
-     * @return array	List of answers where each answer is an array
+     * @param bool $decode
+     * @return array    List of answers where each answer is an array
      * of (id, answer, comment, grade) and grade=weighting
      */
     public function getAnswersList($decode = false)
@@ -498,7 +502,7 @@ class Answer
      * @param - integer $id - answer ID
      * @return integer - answer position
      */
-    function selectPosition($id)
+    public function selectPosition($id)
     {
         return isset($this->position[$id]) ? $this->position[$id] : null;
     }
@@ -531,14 +535,14 @@ class Answer
      * Creates a new answer
      *
      * @author Olivier Brouckaert
-     * @param string 	$answer answer title
-     * @param integer 	$correct 0 if bad answer, not 0 if good answer
-     * @param string 	$comment answer comment
-     * @param integer 	$weighting answer weighting
-     * @param integer 	$position answer position
-     * @param array    $new_hotspot_coordinates Coordinates for hotspot exercises (optional)
-     * @param integer	$new_hotspot_type Type for hotspot exercises (optional)
-     * @param string   $destination
+     * @param string $answer answer title
+     * @param integer $correct 0 if bad answer, not 0 if good answer
+     * @param string $comment answer comment
+     * @param integer $weighting answer weighting
+     * @param integer $position answer position
+     * @param array $new_hotspot_coordinates Coordinates for hotspot exercises (optional)
+     * @param integer $new_hotspot_type Type for hotspot exercises (optional)
+     * @param string $destination
      */
     public function createAnswer(
         $answer,

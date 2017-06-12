@@ -130,7 +130,6 @@ $Forbidden = "Nije dozvoljeno";
 $CourseAccessConfigTip = "Svaki kurs po kreiranju je javni, ali Vi možete definisati nifo poverljivosti gore.";
 $OpenToTheWorld = "Otovren – pristup omogućen celom svetu";
 $OpenToThePlatform = "Otvoren pristup – pristup omogućen korisnicima koji su registrovani.";
-$OpenToThePlatform = "Otvoren – pristup dozvoljen svim korisnicima koji su registrovani na platformi";
 $TipLang = "Ovaj jezik će važiti za sve posetioce vašeg kursa";
 $Vid = "Video";
 $Work = "Doprinosi";

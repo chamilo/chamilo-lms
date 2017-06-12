@@ -41,8 +41,8 @@ switch ($serviceSale['payment_type']) {
         // purchase-specific fields are ignored. This little condition handle this fact.
         $itemPrice = $serviceSale['price'];
 
-        $returnUrl = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_success.php';
-        $cancelUrl = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_error.php';
+        $returnUrl = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_success.php';
+        $cancelUrl = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_error.php';
 
         // The extra params for handle the hard job, this var is VERY IMPORTANT !!
         $extra = '';
@@ -74,7 +74,7 @@ switch ($serviceSale['payment_type']) {
 
             $plugin->cancelServiceSale(intval($serviceSale['id']));
 
-            header('Location: '. api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_catalog.php');
+            header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php');
             exit;
         }
 
@@ -83,7 +83,14 @@ switch ($serviceSale['payment_type']) {
     case BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER:
         $transferAccounts = $plugin->getTransferAccounts();
 
-        $form = new FormValidator('success', 'POST', api_get_self(), null, null, FormValidator::LAYOUT_INLINE);
+        $form = new FormValidator(
+            'success',
+            'POST',
+            api_get_self(),
+            null,
+            null,
+            FormValidator::LAYOUT_INLINE
+        );
 
         if ($form->validate()) {
             $formValues = $form->getSubmitValues();
@@ -95,7 +102,7 @@ switch ($serviceSale['payment_type']) {
                 Display::addFlash(
                     Display::return_message($plugin->get_lang('OrderCancelled'), 'error', false)
                 );
-                header('Location: '. api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_catalog.php');
+                header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php');
                 exit;
             }
 
@@ -134,7 +141,7 @@ switch ($serviceSale['payment_type']) {
             );
 
             unset($_SESSION['bc_service_sale_id']);
-            header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_catalog.php');
+            header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php');
             exit;
         }
 
@@ -164,12 +171,17 @@ switch ($serviceSale['payment_type']) {
         // directly from the main url "https://integ-pago.culqi.com" because a local copy of this JS is not supported
         $htmlHeadXtra[] = '<script src="//integ-pago.culqi.com/js/v1"></script>';
 
-        $form = new FormValidator('success', 'POST', api_get_self(), null, null, FormValidator::LAYOUT_INLINE);
+        $form = new FormValidator(
+            'success',
+            'POST',
+            api_get_self(),
+            null,
+            null,
+            FormValidator::LAYOUT_INLINE
+        );
 
         if ($form->validate()) {
-
             $formValues = $form->getSubmitValues();
-
             if (isset($formValues['cancel'])) {
                 $plugin->cancelServiceSale($serviceSale['id']);
 
@@ -183,15 +195,30 @@ switch ($serviceSale['payment_type']) {
                     )
                 );
 
-                header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/index.php');
+                header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/index.php');
                 exit;
             }
         }
-        $form->addButton('confirm', $plugin->get_lang('ConfirmOrder'), 'check', 'success', 'default', null, ['id' => 'confirm']);
-        $form->addButton('cancel', $plugin->get_lang('CancelOrder'), 'times', 'danger', 'default', null, ['id' => 'cancel']);
+        $form->addButton(
+            'confirm',
+            $plugin->get_lang('ConfirmOrder'),
+            'check',
+            'success',
+            'default',
+            null,
+            ['id' => 'confirm']
+        );
+        $form->addButton(
+            'cancel',
+            $plugin->get_lang('CancelOrder'),
+            'times',
+            'danger',
+            'default',
+            null,
+            ['id' => 'cancel']
+        );
 
         $template = new Template();
-
         $template->assign('terms', $terms['terms_and_conditions']);
         $template->assign('title', $serviceSale['service']['name']);
         $template->assign('price', floatval($serviceSale['price']));
@@ -202,9 +229,7 @@ switch ($serviceSale['payment_type']) {
         $template->assign('form', $form->returnForm());
         $template->assign('is_culqi_payment', true);
         $template->assign('culqi_params', $culqiParams = $plugin->getCulqiParams());
-
         $content = $template->fetch('buycourses/view/process_confirm.tpl');
-
         $template->assign('content', $content);
         $template->display_one_col_template();
         break;

@@ -1,57 +1,14 @@
-{% set group_courses = 'view_grid_courses_grouped_categories_in_sessions'|get_configuration_value %}
+{% set group_courses = 'view_grid_courses_grouped_categories_in_sessions'| api_get_configuration_value %}
 
 {% macro course_block(course, show_category) %}
     <div class="col-xs-12 col-sm-6 col-md-4">
-        <div class="items">
+        <div class="items items-sessions">
             <div class="image">
                 <img src="{{ course.image }}" class="img-responsive">
                 {% if course.category != '' and show_category %}
                     <span class="category">{{ course.category }}</span>
                     <div class="cribbon"></div>
                 {% endif %}
-                <div class="black-shadow">
-                    <div class="author-card">
-                        {% for teacher in course.teachers %}
-                            {% set counter = counter + 1 %}
-                            {% if counter <= 3 %}
-                                <a href="{{ teacher.url }}" class="ajax"
-                                   data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                    <img src="{{ teacher.avatar }}"/>
-                                </a>
-                                <div class="teachers-details">
-                                    <h5>
-                                        <a href="{{ teacher.url }}" class="ajax"
-                                           data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                            {{ teacher.firstname }} {{ teacher.lastname }}
-                                        </a>
-                                    </h5>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                    {% if item.student_info %}
-                        {% if (item.student_info.progress is not null) and (item.student_info.score is not null) %}
-                            <div class="course-student-info">
-                                <div class="student-info">
-
-                                    {% if (item.student_info.progress is not null) %}
-                                    {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
-                                    {% endif %}
-
-                                    {% if (item.student_info.score is not null) %}
-                                    {{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}
-                                    {% endif %}
-
-                                    {% if (item.student_info.certificate is not null) %}
-                                    {{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}
-                                    {% endif %}
-
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endif %}
-
-                </div>
                 {% if course.edit_actions != '' %}
                     <div class="admin-actions">
                         {% if course.document == '' %}
@@ -70,14 +27,60 @@
                 {% endif %}
             </div>
             <div class="description">
-                <h4 class="title">
-                    {% if course.visibility == constant('COURSE_VISIBILITY_CLOSED') %}
-                        {{ course.title }} {{ course.code_course }}
-                    {% else %}
-                        <a href="{{ course.link }}">{{ course.title }} {{ course.code_course }}</a>
-                    {% endif %}
-                </h4>
+                <div class="block-title">
+                  <h4 class="title">
+                      {% if course.visibility == constant('COURSE_VISIBILITY_CLOSED') %}
+                          {{ course.title }}
+                          <span class="code-title">{{ course.code }}</span>
+                      {% else %}
+                          <a href="{{ course.link }}">{{ course.title }}</a>
+                      {% endif %}
+                  </h4>
+                </div>
+                <div class="block-author">
+                  {% for teacher in course.teachers %}
+                        {% if course.teachers | length > 2 %}
+                          <a href="{{ teacher.url }}" class="ajax"
+                             data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                              <img src="{{ teacher.avatar }}"/>
+                          </a>
+                        {% else %}
+                          <a href="{{ teacher.url }}" class="ajax"
+                             data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                              <img src="{{ teacher.avatar }}"/>
+                          </a>
+                          <div class="teachers-details">
+                              <h5>
+                                  <a href="{{ teacher.url }}" class="ajax"
+                                     data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                                      {{ teacher.firstname }} {{ teacher.lastname }}
+                                  </a>
+                              </h5>
+                              <p>{{ "Teacher"|get_lang }}</p>
+                          </div>
+                        {% endif %}
+                  {% endfor %}
+                </div>
                 <div class="notifications">{{ course.notifications }}</div>
+                    {% if item.student_info %}
+                        <div class="black-student">
+                        {% if (item.student_info.progress is not null) and (item.student_info.score is not null) %}
+                            <div class="course-student-info">
+                                <div class="student-info">
+                                    {% if (item.student_info.progress is not null) %}
+                                    {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
+                                    {% endif %}
+                                    {% if (item.student_info.score is not null) %}
+                                    {{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}
+                                    {% endif %}
+                                    {% if (item.student_info.certificate is not null) %}
+                                    {{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                      </div>
+                  {% endif %}
             </div>
         </div>
     </div>

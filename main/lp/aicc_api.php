@@ -80,33 +80,33 @@ var G_LastError = G_NoError ;
 var commit = false ;
 
 // Strictly SCORM variables.
-var score=<?php echo $oItem->get_score();?>;
-var max=<?php echo $oItem->get_max();?>;
-var min=<?php echo $oItem->get_min();?>;
-var lesson_status='<?php echo $oItem->get_status();?>';
-var session_time='<?php echo $oItem->get_scorm_time('js');?>';
-var suspend_data = '<?php echo $oItem->get_suspend_data();?>';
-var lesson_location = '<?php echo $oItem->get_lesson_location();?>';
-var total_time = '<?php echo $oItem->get_scorm_time('js');?>';
+var score=<?php echo $oItem->get_score(); ?>;
+var max=<?php echo $oItem->get_max(); ?>;
+var min=<?php echo $oItem->get_min(); ?>;
+var lesson_status='<?php echo $oItem->get_status(); ?>';
+var session_time='<?php echo $oItem->get_scorm_time('js'); ?>';
+var suspend_data = '<?php echo $oItem->get_suspend_data(); ?>';
+var lesson_location = '<?php echo $oItem->get_lesson_location(); ?>';
+var total_time = '<?php echo $oItem->get_scorm_time('js'); ?>';
 
 // Chamilo internal variables.
 var saved_lesson_status = 'not attempted';
-var lms_lp_id = <?php echo $oLP->get_id();?>;
-var lms_item_id = <?php echo $oItem->get_id();?>;
+var lms_lp_id = <?php echo $oLP->get_id(); ?>;
+var lms_item_id = <?php echo $oItem->get_id(); ?>;
 //var lms_new_item_id = 0; //temporary value (only there between a load_item() and a LMSInitialize())
 var lms_been_synchronized = 0;
 var lms_initialized = 0;
 var lms_total_lessons = <?php echo $oLP->get_total_items_count(); ?>;
-var lms_complete_lessons = <?php echo $oLP->get_complete_items_count();?>;
-var lms_progress_bar_mode = '<?php echo $oLP->progress_bar_mode;?>';
+var lms_complete_lessons = <?php echo $oLP->get_complete_items_count(); ?>;
+var lms_progress_bar_mode = '<?php echo $oLP->progress_bar_mode; ?>';
 if(lms_progress_bar_mode == ''){lms_progress_bar_mode='%';}
-var lms_view_id = '<?php echo $oLP->get_view();?>';
+var lms_view_id = '<?php echo $oLP->get_view(); ?>';
 if(lms_view_id == ''){ lms_view_id = 1;}
-var lms_user_id = '<?php echo $_user['user_id'];?>';
-var lms_next_item = '<?php echo $oLP->get_next_item_id();?>';
-var lms_previous_item = '<?php echo $oLP->get_previous_item_id();?>';
-var lms_lp_type = '<?php echo $oLP->get_type();?>';
-var lms_item_type = '<?php echo $oItem->get_type();?>';
+var lms_user_id = '<?php echo $_user['user_id']; ?>';
+var lms_next_item = '<?php echo $oLP->get_next_item_id(); ?>';
+var lms_previous_item = '<?php echo $oLP->get_previous_item_id(); ?>';
+var lms_lp_type = '<?php echo $oLP->get_type(); ?>';
+var lms_item_type = '<?php echo $oItem->get_type(); ?>';
 
 // Backup for old values.
 var old_score = 0;
@@ -164,11 +164,11 @@ function LMSGetValue(param) {
     }else if(param == 'cmi.core.lesson_mode'){
         result='normal';
     }else if(param == 'cmi.suspend_data'){
-        result='<?php echo $oItem->get_suspend_data();?>';
+        result='<?php echo $oItem->get_suspend_data(); ?>';
     }else if(param == 'cmi.launch_data'){
         result='';
     }else if(param == 'cmi.objectives._count'){
-        result='<?php echo $oItem->get_view_count();?>';
+        result='<?php echo $oItem->get_view_count(); ?>';
     }
     /*
     // Switch not working??? WTF???
@@ -229,13 +229,13 @@ function LMSGetValue(param) {
             result='normal';
             break;
         case 'cmi.suspend_data'		:
-            result='<?php echo $oItem->get_suspend_data();?>';
+            result='<?php echo $oItem->get_suspend_data(); ?>';
             break;
         case 'cmi.launch_data'		:
             result='';
             break;
         case 'cmi.objectives._count':
-            result='<?php echo $oItem->get_view_count();?>';
+            result='<?php echo $oItem->get_view_count(); ?>';
             break;
         default 					:
             result='';
@@ -287,7 +287,7 @@ function savedata(origin) { //origin can be 'commit', 'finish' or 'terminate'
     $url = $_SERVER['HTTP_HOST'].$self;
     $url = substr($url, 0, -14); // 14 is the length of this file's name (/scorm_api.php).
     echo $url;
-    ?>/lp_controller.php?<?php echo api_get_cidreq(); ?>&action=save&lp_id=<?php echo $oLP->get_id();?>&" + param + "";
+    ?>/lp_controller.php?<?php echo api_get_cidreq(); ?>&action=save&lp_id=<?php echo $oLP->get_id(); ?>&" + param + "";
     logit_lms('saving data (status='+lesson_status+')',1);
     xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location);
     //xajax_update_pgs();

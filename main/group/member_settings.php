@@ -222,7 +222,7 @@ switch ($action) {
     case 'empty':
         if (api_is_allowed_to_edit(false, true)) {
             GroupManager:: unsubscribe_all_users($current_group);
-            Display :: display_confirmation_message(get_lang('GroupEmptied'));
+            echo Display::return_message(get_lang('GroupEmptied'), 'confirm');
         }
         break;
 }

@@ -67,7 +67,7 @@ if (isset($_GET['delete_watermark'])) {
     Display::addFlash(Display::return_message(get_lang('FileDeleted')));
 }
 
-if (isset($_GET['action']) &&  $_GET['action'] == 'delete_grading') {
+if (isset($_GET['action']) && $_GET['action'] == 'delete_grading') {
     $id = intval($_GET['id']);
     api_delete_setting_option($id);
 }
@@ -80,7 +80,10 @@ $form_search = new FormValidator(
     array(),
     FormValidator::LAYOUT_INLINE
 );
-$form_search->addElement('text', 'search_field');
+$form_search->addElement('text', 'search_field', null, array(
+    'id' => 'search_field',
+    'aria-label' => get_lang('Search')
+));
 $form_search->addElement('hidden', 'category', 'search_setting');
 $form_search->addButtonSearch(get_lang('Search'), 'submit_button');
 $form_search->setDefaults(
@@ -233,7 +236,7 @@ if (!empty($_GET['category']) &&
         // Set true for allow_message_tool variable if social tool is actived
         foreach ($convert_byte_to_mega_list as $item) {
             if (isset($values[$item])) {
-                $values[$item] = round($values[$item]*1024*1024);
+                $values[$item] = round($values[$item] * 1024 * 1024);
             }
         }
 
@@ -498,7 +501,7 @@ if (!empty($_GET['category'])) {
                         api_get_utc_datetime(),
                         $user_id
                     );
-                    Display :: display_confirmation_message(get_lang('DashboardPluginsUpdatedSuccessfully'));
+                    echo Display::return_message(get_lang('DashboardPluginsUpdatedSuccessfully'), 'confirmation');
                 }
             }
             echo '<script>
@@ -551,10 +554,10 @@ if (!empty($_GET['category'])) {
 $content = ob_get_clean();
 
 // Including the header (banner).
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 echo Display::actions($action_array);
 echo '<br />';
 echo $form_search_html;
 echo $content;
 
-Display :: display_footer();
+Display::display_footer();

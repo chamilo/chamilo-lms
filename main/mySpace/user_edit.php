@@ -205,12 +205,12 @@ $interbreadcrumb[] = array(
     "name" => get_lang('UserList'),
 );
 
-// Display form
-Display::display_header($tool_name);
-
 if (isset($_REQUEST['message'])) {
 	Display::addFlash(Display::return_message(get_lang('Updated'), 'normal'));
 }
+
+Display::display_header($tool_name);
+// Display form
 $form->display();
 
 Display::display_footer();

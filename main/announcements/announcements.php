@@ -152,12 +152,12 @@ switch ($action) {
         break;
     case 'view':
         $interbreadcrumb[] = array(
-            "url" => api_get_path(WEB_CODE_PATH)."announcements/announcements.php?".api_get_cidreq(),
+            "url" => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
             "name" => $nameTools,
         );
 
         $nameTools = get_lang('View');
-        $content = AnnouncementManager::display_announcement($announcement_id);
+        $content = AnnouncementManager::displayAnnouncement($announcement_id);
         break;
     case 'list':
         $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -440,7 +440,6 @@ switch ($action) {
         }
 
         $form->addHtml('</div>');
-//        $form->setRequired($element);
         $form->addCheckBox('email_ann', '', get_lang('EmailOption'));
 
         if (!isset($announcement_to_modify)) {
@@ -486,7 +485,8 @@ switch ($action) {
 
         $defaults['email_ann'] = true;
 
-        $form->addElement('text', 'title', get_lang('EmailTitle'));
+        $form->addElement('text', 'title', get_lang('EmailTitle'), array("onkeypress" => "return event.keyCode != 13;")); //do not submit on enter
+        $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
         $form->addElement('hidden', 'id');
         $htmlTags = "<b>".get_lang('Tags')."</b><br /><br />";
         $tags = AnnouncementManager::get_tags();
@@ -499,7 +499,7 @@ switch ($action) {
         $form->addHtmlEditor(
             'content',
             get_lang('Description'),
-            false,
+            true,
             false,
             array('ToolbarSet' => 'Announcements')
         );

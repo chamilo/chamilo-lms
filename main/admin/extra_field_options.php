@@ -151,7 +151,7 @@ switch ($action) {
                 $values = $form->exportValues();
                 $res = $obj->save_one_item($values);
                 if ($res) {
-                    Display::display_confirmation_message(get_lang('ItemAdded'));
+                    echo Display::return_message(get_lang('ItemAdded'), 'confirmation');
                 }
             }
             $obj->display();
@@ -171,7 +171,7 @@ switch ($action) {
             if ($check) {
                 $values = $form->exportValues();
                 $res = $obj->update($values);
-                Display::display_confirmation_message(sprintf(get_lang('ItemUpdated'), $values['display_text']), false);
+                echo Display::return_message(sprintf(get_lang('ItemUpdated'), $values['display_text']), 'confirmation', false);
             }
             $obj->display();
         } else {
@@ -185,7 +185,7 @@ switch ($action) {
         if ($check) {
             $res = $obj->delete($_GET['id']);
             if ($res) {
-                Display::display_confirmation_message(get_lang('ItemDeleted'));
+                echo Display::return_message(get_lang('ItemDeleted'), 'confirmation');
             }
         }
         $obj->display();
@@ -194,4 +194,4 @@ switch ($action) {
         $obj->display();
         break;
 }
-Display :: display_footer();
+Display::display_footer();

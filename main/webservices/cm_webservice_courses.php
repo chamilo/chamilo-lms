@@ -5,6 +5,7 @@
  * @package chamilo.webservices
  */
 require_once __DIR__.'/../inc/global.inc.php';
+
 $libpath = api_get_path(LIBRARY_PATH);
 
 require_once __DIR__.'/cm_webservice.php';
@@ -43,13 +44,3 @@ class WSCMCourses extends WSCM
         }
     }
 }
-
-/*
-echo "aqui: ";
-$aqui = new WSCMCourses();
-echo "<pre>";
-//print_r($aqui->unreadMessage("aluno", "e695f51fe3dd6b7cf2be3188a614f10f"));
-print_r($aqui->get_course_title("aluno", "c4ca4238a0b923820dcc509a6f75849b", "P0204"));
-echo "</pre>";
-
-*/

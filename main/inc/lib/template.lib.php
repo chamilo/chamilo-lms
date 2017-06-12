@@ -94,8 +94,10 @@ class Template
 
         $loader = new Twig_Loader_Filesystem($template_paths);
 
+        $isTestMode = api_get_setting('server_type') === 'test';
+
         //Setting Twig options depending on the server see http://twig.sensiolabs.org/doc/api.html#environment-options
-        if (api_get_setting('server_type') == 'test') {
+        if ($isTestMode) {
             $options = array(
                 //'cache' => api_get_path(SYS_ARCHIVE_PATH), //path to the cache folder
                 'autoescape' => false,
@@ -122,51 +124,69 @@ class Template
 
         $this->twig = new Twig_Environment($loader, $options);
 
-        $this->twig->addFilter('get_plugin_lang', new Twig_Filter_Function('get_plugin_lang'));
-        $this->twig->addFilter('get_lang', new Twig_Filter_Function('get_lang'));
-        $this->twig->addFilter('get_path', new Twig_Filter_Function('api_get_path'));
-        $this->twig->addFilter('get_setting', new Twig_Filter_Function('api_get_setting'));
-        $this->twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
-        $this->twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
-        $this->twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
-        $this->twig->addFilter(
-            'display_page_subheader',
-            new Twig_Filter_Function('Display::page_subheader_and_translate')
-        );
-        $this->twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
-        $this->twig->addFilter('img', new Twig_Filter_Function('Template::get_image'));
-        $this->twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
-        $this->twig->addFilter('isAllowedToEdit', new Twig_Filter_Function('api_is_allowed_to_edit'));
-        $this->twig->addFilter('api_get_local_time', new Twig_Filter_Function('api_get_local_time'));
-        // a combination of the two previous functions
-        $this->twig->addFilter('local_format_date', new Twig_Filter_Function('api_convert_and_format_date'));
-        $this->twig->addFilter('user_info', new Twig_Filter_Function('api_get_user_info'));
-        $this->twig->addFilter('get_configuration_value', new Twig_Filter_Function('api_get_configuration_value'));
+        if ($isTestMode) {
+            $this->twig->addExtension(new Twig_Extension_Debug());
+        }
 
-        /*
-          $lexer = new Twig_Lexer($this->twig, array(
-          //'tag_comment'  => array('{*', '*}'),
-          //'tag_comment'  => array('{#', '#}'),
-          //'tag_block'    => array('{', '}'),
-          //'tag_variable' => array('{$', '}'),
-          ));
-          $this->twig->setLexer($lexer); */
+        // Twig filters setup
+        $filters = [
+            'get_plugin_lang',
+            'get_lang',
+            'api_get_path',
+            'api_get_local_time',
+            'api_convert_and_format_date',
+            'api_is_allowed_to_edit',
+            'api_get_user_info',
+            'api_get_configuration_value',
+            'api_get_setting',
+            [
+                'name' => 'return_message',
+                'callable' => 'Display::return_message_and_translate'
+            ],
+            [
+                'name' => 'display_page_header',
+                'callable' => 'Display::page_header_and_translate'
+            ],
+            [
+                'name' => 'display_page_subheader',
+                'callable' => 'Display::page_subheader_and_translate'
+            ],
+            [
+                'name' => 'icon',
+                'callable' => 'Template::get_icon_path'
+            ],
+            [
+                'name' => 'img',
+                'callable' => 'Template::get_image'
+            ],
+            [
+                'name' => 'format_date',
+                'callable' => 'Template::format_date'
+            ]
+        ];
 
-        //Setting system variables
+        foreach ($filters as $filter) {
+            if (is_array($filter)) {
+                $this->twig->addFilter(new Twig_SimpleFilter($filter['name'], $filter['callable']));
+            } else {
+                $this->twig->addFilter(new Twig_SimpleFilter($filter, $filter));
+            }
+        }
+
+        // Setting system variables
         $this->set_system_parameters();
 
-        //Setting user variables
+        // Setting user variables
         $this->set_user_parameters();
 
-        //Setting course variables
+        // Setting course variables
         $this->set_course_parameters();
 
-        //Setting administrator variables
+        // Setting administrator variables
         $this->setAdministratorParams();
-
         $this->setCSSEditor();
 
-        //header and footer are showed by default
+        // Header and footer are showed by default
         $this->set_footer($show_footer);
         $this->set_header($show_header);
 
@@ -282,7 +302,7 @@ class Template
                 $content = '<div class="help">';
                 $content .= Display::url(
                     Display::return_icon('help.large.png', get_lang('Help')),
-                    api_get_path(WEB_CODE_PATH) . 'help/help.php?open=' . $help,
+                    api_get_path(WEB_CODE_PATH).'help/help.php?open='.$help,
                     [
                         'class' => 'ajax',
                         'data-title' => get_lang('Help')
@@ -407,6 +427,7 @@ class Template
         $show_course_navigation_menu = null;
 
         if (!empty($this->course_id) && $this->user_is_logged_in) {
+
             if (api_get_setting('show_toolshortcuts') != 'false') {
                 //Course toolbar
                 $show_course_shortcut = CourseHome::show_navigation_tool_shortcuts();
@@ -505,9 +526,13 @@ class Template
     /**
      * Set system parameters
      */
-    private function set_system_parameters()
+    public function set_system_parameters()
     {
         $this->theme = api_get_visual_theme();
+        if (!empty($this->preview_theme)) {
+            $this->theme = $this->preview_theme;
+        }
+
         $this->themeDir = self::getThemeDir($this->theme);
 
         // Setting app paths/URLs
@@ -517,7 +542,7 @@ class Template
             'web_course' => api_get_path(WEB_COURSE_PATH),
             'web_main' => api_get_path(WEB_CODE_PATH),
             'web_css' => api_get_path(WEB_CSS_PATH),
-            'web_css_theme' => api_get_path(WEB_CSS_PATH) . $this->themeDir,
+            'web_css_theme' => api_get_path(WEB_CSS_PATH).$this->themeDir,
             'web_ajax' => api_get_path(WEB_AJAX_PATH),
             'web_img' => api_get_path(WEB_IMG_PATH),
             'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
@@ -552,11 +577,6 @@ class Template
     {
         global $disable_js_and_css_files;
         $css = array();
-        $this->theme = api_get_visual_theme();
-
-        if (!empty($this->preview_theme)) {
-            $this->theme = $this->preview_theme;
-        }
 
         // Default CSS Bootstrap
         $bowerCSSFiles = [
@@ -568,18 +588,18 @@ class Template
             'bootstrap/dist/css/bootstrap.min.css',
             'jquery.scrollbar/jquery.scrollbar.css',
             'bootstrap-daterangepicker/daterangepicker.css',
-            'bootstrap-select/dist/css/bootstrap-select.min.css'
+            'bootstrap-select/dist/css/bootstrap-select.min.css',
+            'select2/dist/css/select2.min.css'
         ];
 
         foreach ($bowerCSSFiles as $file) {
             $css[] = api_get_path(WEB_PATH).'web/assets/'.$file;
         }
 
-        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css';
-        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/style.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
 
         if (api_is_global_chat_enabled()) {
-            $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chat/css/chat.css';
+            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
         }
         $css_file_to_string = '';
         foreach ($css as $file) {
@@ -681,10 +701,10 @@ class Template
     {
         global $disable_js_and_css_files, $htmlHeadXtra;
         $isoCode = api_get_language_isocode();
-        $selectLink = 'bootstrap-select/dist/js/i18n/defaults-' . $isoCode . '_' . strtoupper($isoCode) . '.min.js';
+        $selectLink = 'bootstrap-select/dist/js/i18n/defaults-'.$isoCode.'_'.strtoupper($isoCode).'.min.js';
 
         if ($isoCode == 'en') {
-            $selectLink = 'bootstrap-select/dist/js/i18n/defaults-' . $isoCode . '_US.min.js';
+            $selectLink = 'bootstrap-select/dist/js/i18n/defaults-'.$isoCode.'_US.min.js';
         }
         // JS files
         $js_files = array(
@@ -707,9 +727,6 @@ class Template
             $js_files[] = 'fontresize.js';
         }
 
-        // Do not use minified version - generates errors (at least in the skills wheel)
-        $js_files[] = 'tag/jquery.fcbkcomplete.js';
-
         $js_file_to_string = null;
 
         $bowerJsFiles = [
@@ -726,19 +743,21 @@ class Template
             'jquery.scrollbar/jquery.scrollbar.min.js',
             'readmore-js/readmore.min.js',
             'bootstrap-select/dist/js/bootstrap-select.min.js',
-            $selectLink
+            $selectLink,
+            'select2/dist/js/select2.min.js',
+            "select2/dist/js/i18n/$isoCode.js"
         ];
         if (CHAMILO_LOAD_WYSIWYG == true) {
             $bowerJsFiles[] = 'ckeditor/ckeditor.js';
         }
 
         if (api_get_setting('include_asciimathml_script') == 'true') {
-            $bowerJsFiles[] = 'MathJax/MathJax.js?config=AM_HTMLorMML';
+            $bowerJsFiles[] = 'MathJax/MathJax.js?config=TeX-AMS_HTML';
         }
 
         if ($isoCode != 'en') {
-            $bowerJsFiles[] = 'jqueryui-timepicker-addon/dist/i18n/jquery-ui-timepicker-' . $isoCode . '.js';
-            $bowerJsFiles[] = 'jquery-ui/ui/minified/i18n/datepicker-' . $isoCode . '.min.js';
+            $bowerJsFiles[] = 'jqueryui-timepicker-addon/dist/i18n/jquery-ui-timepicker-'.$isoCode.'.js';
+            $bowerJsFiles[] = 'jquery-ui/ui/minified/i18n/datepicker-'.$isoCode.'.min.js';
         }
 
         foreach ($bowerJsFiles as $file) {
@@ -1046,16 +1065,18 @@ class Template
             );
         }
 
+        self::addHTTPSecurityHeaders();
+
         $socialMeta = '';
         $metaTitle = api_get_setting('meta_title');
         if (!empty($metaTitle)) {
-            $socialMeta .= '<meta name="twitter:card" content="summary" />' . "\n";
+            $socialMeta .= '<meta name="twitter:card" content="summary" />'."\n";
             $metaSite = api_get_setting('meta_twitter_site');
             if (!empty($metaSite)) {
-                $socialMeta .= '<meta name="twitter:site" content="' . $metaSite . '" />' . "\n";
+                $socialMeta .= '<meta name="twitter:site" content="'.$metaSite.'" />'."\n";
                 $metaCreator = api_get_setting('meta_twitter_creator');
                 if (!empty($metaCreator)) {
-                    $socialMeta .= '<meta name="twitter:creator" content="' . $metaCreator . '" />' . "\n";
+                    $socialMeta .= '<meta name="twitter:creator" content="'.$metaCreator.'" />'."\n";
                 }
             }
 
@@ -1067,19 +1088,19 @@ class Template
             if (!$userId && !$skillId) {
                 // no combination of user and skill ID has been defined,
                 // so print the normal OpenGraph meta tags
-                $socialMeta .= '<meta property="og:title" content="' . $metaTitle . '" />' . "\n";
-                $socialMeta .= '<meta property="og:url" content="' . api_get_path(WEB_PATH) . '" />' . "\n";
+                $socialMeta .= '<meta property="og:title" content="'.$metaTitle.'" />'."\n";
+                $socialMeta .= '<meta property="og:url" content="'.api_get_path(WEB_PATH).'" />'."\n";
 
                 $metaDescription = api_get_setting('meta_description');
                 if (!empty($metaDescription)) {
-                    $socialMeta .= '<meta property="og:description" content="' . $metaDescription . '" />' . "\n";
+                    $socialMeta .= '<meta property="og:description" content="'.$metaDescription.'" />'."\n";
                 }
 
                 $metaImage = api_get_setting('meta_image_path');
                 if (!empty($metaImage)) {
-                    if (is_file(api_get_path(SYS_PATH) . $metaImage)) {
-                        $path = api_get_path(WEB_PATH) . $metaImage;
-                        $socialMeta .= '<meta property="og:image" content="' . $path . '" />' . "\n";
+                    if (is_file(api_get_path(SYS_PATH).$metaImage)) {
+                        $path = api_get_path(WEB_PATH).$metaImage;
+                        $socialMeta .= '<meta property="og:image" content="'.$path.'" />'."\n";
                     }
                 }
             }
@@ -1129,7 +1150,7 @@ class Template
         // Tutor name
         if (api_get_setting('show_tutor_data') == 'true') {
             // Course manager
-            $courseId  = api_get_course_int_id();
+            $courseId = api_get_course_int_id();
             $id_session = api_get_session_id();
             if (!empty($courseId)) {
                 $tutor_data = '';
@@ -1161,7 +1182,7 @@ class Template
             $courseId = api_get_course_int_id();
             if (!empty($courseId)) {
                 $teacher_data = '';
-                $mail= CourseManager::get_emails_of_tutors_to_course($courseId);
+                $mail = CourseManager::get_emails_of_tutors_to_course($courseId);
                 if (!empty($mail)) {
                     $teachers_parsed = array();
                     foreach ($mail as $value) {
@@ -1429,7 +1450,7 @@ class Template
                     'sessionVar'   => basename(__FILE__, '.php'),
                     'imageOptions' => array(
                         'font_size' => 20,
-                        'font_path' => api_get_path(SYS_FONTS_PATH) . 'opensans/',
+                        'font_path' => api_get_path(SYS_FONTS_PATH).'opensans/',
                         'font_file' => 'OpenSans-Regular.ttf',
                         //'output' => 'gif'
                     )
@@ -1471,5 +1492,59 @@ class Template
         ];
 
         $this->assign('_admin', $_admin);
+    }
+
+    /**
+     * Manage specific HTTP headers security
+     * @return void (prints headers directly)
+     */
+    private function addHTTPSecurityHeaders() {
+        // Implementation of HTTP headers security, as suggested and checked
+        // by https://securityheaders.io/
+        // Enable these settings in configuration.php to use them on your site
+        // Strict-Transport-Security
+        $setting = api_get_configuration_value('security_strict_transport');
+        if (!empty($setting)) {
+            header('Strict-Transport-Security: '.$setting);
+        }
+        // Content-Security-Policy
+        $setting = api_get_configuration_value('security_content_policy');
+        if (!empty($setting)) {
+            header('Content-Security-Policy: '.$setting);
+        }
+        $setting = api_get_configuration_value('security_content_policy_report_only');
+        if (!empty($setting)) {
+            header('Content-Security-Policy-Report-Only: '.$setting);
+        }
+        // Public-Key-Pins
+        $setting = api_get_configuration_value('security_public_key_pins');
+        if (!empty($setting)) {
+            header('Public-Key-Pins: '.$setting);
+        }
+        $setting = api_get_configuration_value('security_public_key_pins_report_only');
+        if (!empty($setting)) {
+            header('Public-Key-Pins-Report-Only: '.$setting);
+        }
+        // X-Frame-Options
+        $setting = api_get_configuration_value('security_x_frame_options');
+        if (!empty($setting)) {
+            header('X-Frame-Options: '.$setting);
+        }
+        // X-XSS-Protection
+        $setting = api_get_configuration_value('security_xss_protection');
+        if (!empty($setting)) {
+            header('X-XSS-Protection: '.$setting);
+        }
+        // X-Content-Type-Options
+        $setting = api_get_configuration_value('security_x_content_type_options');
+        if (!empty($setting)) {
+            header('X-Content-Type-Options: '.$setting);
+        }
+        // Referrer-Policy
+        $setting = api_get_configuration_value('security_referrer_policy');
+        if (!empty($setting)) {
+            header('Referrer-Policy: '.$setting);
+        }
+        // end of HTTP headers security block
     }
 }

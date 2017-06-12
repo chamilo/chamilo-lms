@@ -4,36 +4,35 @@
 use ChamiloSession as Session;
 
 /**
-        HOME PAGE FOR EACH COURSE
-*
-*	This page, included in every course's index.php is the home
-*	page. To make administration simple, the teacher edits his
-*	course from the home page. Only the login detects that the
-*	visitor is allowed to activate, deactivate home page links,
-*	access to the teachers tools (statistics, edit forums...).
-*
-* Edit visibility of tools
-*
-*   visibility = 1 - everybody
-*   visibility = 0 - course admin (teacher) and platform admin
-*
-* Who can change visibility ?
-*
-*   admin = 0 - course admin (teacher) and platform admin
-*   admin = 1 - platform admin
-*
-* Show message to confirm that a tools must be hide from available tools
-*
-*   visibility 0,1
-*
-*
-*	@package chamilo.course_home
-*/
+ * HOME PAGE FOR EACH COURSE
+ *
+ * This page, included in every course's index.php is the home
+ * page. To make administration simple, the teacher edits his
+ * course from the home page. Only the login detects that the
+ * visitor is allowed to activate, deactivate home page links,
+ * access to the teachers tools (statistics, edit forums...).
+ *
+ * Edit visibility of tools
+ *
+ *   visibility = 1 - everybody
+ *   visibility = 0 - course admin (teacher) and platform admin
+ *
+ * Who can change visibility ?
+ *
+ *   admin = 0 - course admin (teacher) and platform admin
+ *   admin = 1 - platform admin
+ *
+ * Show message to confirm that a tools must be hide from available tools
+ *
+ *   visibility 0,1
+ *
+ * @package chamilo.course_home
+ */
 
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-$htmlHeadXtra[] ='<script>
+$htmlHeadXtra[] = '<script>
 /* option show/hide thematic-block */
 $(document).ready(function(){
     $("#thematic-show").click(function(){
@@ -159,11 +158,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'subscribe') {
         }
     }
 }
+
 /*	Is the user allowed here? */
 api_protect_course_script(true);
 
 /*  STATISTICS */
-
 if (!isset($coursesAlreadyVisited[$course_code])) {
     Event::accessCourse();
     $coursesAlreadyVisited[$course_code] = 1;
@@ -181,8 +180,8 @@ if (!empty($auto_launch)) {
         } else {
             $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
             if (!isset($_SESSION[$session_key])) {
-                //redirecting to the LP
-                $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . api_get_cidreq() . '&id_session=' . $session_id;
+                // Redirecting to the LP
+                $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&id_session='.$session_id;
                 $_SESSION[$session_key] = true;
                 header("Location: $url");
                 exit;
@@ -193,13 +192,13 @@ if (!empty($auto_launch)) {
         $course_id = api_get_course_int_id();
         $condition = '';
         if (!empty($session_id)) {
-            $condition =  api_get_session_condition($session_id);
+            $condition = api_get_session_condition($session_id);
             $sql = "SELECT id FROM $lp_table
                     WHERE c_id = $course_id AND autolaunch = 1 $condition
                     LIMIT 1";
             $result = Database::query($sql);
             // If we found nothing in the session we just called the session_id =  0 autolaunch
-            if (Database::num_rows($result) ==  0) {
+            if (Database::num_rows($result) == 0) {
                 $condition = '';
             }
         }
@@ -208,16 +207,16 @@ if (!empty($auto_launch)) {
                 WHERE c_id = $course_id AND autolaunch = 1 $condition
                 LIMIT 1";
         $result = Database::query($sql);
-        if (Database::num_rows($result) >  0) {
+        if (Database::num_rows($result) > 0) {
             $lp_data = Database::fetch_array($result, 'ASSOC');
             if (!empty($lp_data['id'])) {
                 if (api_is_platform_admin() || api_is_allowed_to_edit()) {
-                	$show_autolaunch_lp_warning = true;
+                    $show_autolaunch_lp_warning = true;
                 } else {
                     $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                     if (!isset($_SESSION[$session_key])) {
                         //redirecting to the LP
-                        $url = api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . api_get_cidreq() . '&action=view&lp_id=' . $lp_data['id'];
+                        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['id'];
 
                         $_SESSION[$session_key] = true;
                         header("Location: $url");
@@ -277,13 +276,13 @@ if ($show_autolaunch_lp_warning) {
 }
 
 if (api_get_setting('homepage_view') === 'activity' || api_get_setting('homepage_view') === 'activity_big') {
-	require 'activity.php';
+    require 'activity.php';
 } elseif (api_get_setting('homepage_view') === '2column') {
-	require '2column.php';
+    require '2column.php';
 } elseif (api_get_setting('homepage_view') === '3column') {
-	require '3column.php';
+    require '3column.php';
 } elseif (api_get_setting('homepage_view') === 'vertical_activity') {
-	require 'vertical_activity.php';
+    require 'vertical_activity.php';
 }
 
 $content = '<div id="course_tools">'.$content.'</div>';
@@ -294,7 +293,6 @@ $tpl->assign('content', $content);
 
 // Direct login to course
 $tpl->assign('course_code', $course_code);
-
 $tpl->display_one_col_template();
 
 // Deleting the objects

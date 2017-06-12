@@ -13,7 +13,7 @@ echo "Starting tool\n";
 echo "Chamilo Bulk Nodes Creation v.1.0\n";
 echo "=================================\n";
 require_once('../../../main/inc/global.inc.php');
-require_once('clilib.php');       // cli only functions
+require_once('clilib.php'); // cli only functions
 // Ensure errors are well explained
 ini_set('debug_display', 1);
 ini_set('debug_level', E_ALL);
@@ -68,26 +68,26 @@ Example:
 
 if (!empty($options['config'])) {
     echo "Loading config : ".$options['config'];
-    if (!file_exists($options['config'])){
+    if (!file_exists($options['config'])) {
         cli_error('Config file mentioned but not found');
     }
 
     $content = file($options['config']);
-    foreach($content as $l) {
+    foreach ($content as $l) {
         if (preg_match('/^\s+$/', $l)) continue; // Empty lines.
         if (preg_match('/^[#\/!;]/', $l)) continue; // Comments (any form).
         if (preg_match('/^(.*?)=(.*)$/', $l, $matches)) {
-            if (in_array($matches[1], $expectedoptions)){
+            if (in_array($matches[1], $expectedoptions)) {
                 $options[trim($matches[1])] = trim($matches[2]);
             }
         }
     }
 }
 
-require_once($_configuration['root_sys'].'local/classes/database.class.php');       // cli only functions
-require_once($_configuration['root_sys'].'local/classes/textlib.class.php');       // cli only functions
-require_once($_configuration['root_sys'].'local/classes/mootochamlib.php');       // moodle like API
-require_once($_configuration['root_sys'] . '/plugin/vchamilo/lib/vchamilo_plugin.class.php');
+require_once($_configuration['root_sys'].'local/classes/database.class.php'); // cli only functions
+require_once($_configuration['root_sys'].'local/classes/textlib.class.php'); // cli only functions
+require_once($_configuration['root_sys'].'local/classes/mootochamlib.php'); // moodle like API
+require_once($_configuration['root_sys'].'/plugin/vchamilo/lib/vchamilo_plugin.class.php');
 
 global $DB;
 if ($options['verbose']) echo "building database manager\n";
@@ -117,7 +117,7 @@ ctrace('Starting generation');
 // Get main admin for further replacement.
 $admin = $DB->get_record('user', array('username' => 'admin'));
 
-foreach($nodes as $data) {
+foreach ($nodes as $data) {
 
     ctrace('Making node '.$data->root_web);
 
@@ -163,7 +163,7 @@ foreach($nodes as $data) {
                 $settingrec->access_url = 1;
                 $settingrec->selected_value = $value;
                 ctrace("Setting up {$settingrec->variable}|{$settingrec->subkey} to $value\n");
-                if ($oldrec = $NDB->get_record('settings_current', array('variable' => $settingrec->variable, 'subkey' => $settingrec->subkey, 'type' => $settingrec->type))){
+                if ($oldrec = $NDB->get_record('settings_current', array('variable' => $settingrec->variable, 'subkey' => $settingrec->subkey, 'type' => $settingrec->type))) {
                     $settingrec->id = $oldrec->id;
                     $NDB->update_record('settings_current', $settingrec, 'id');
                 } else {
@@ -208,9 +208,9 @@ foreach($nodes as $data) {
 
     if ($interactive) {
         $input = readline("Continue (y/n|r) ?\n");
-        if ($input == 'r' || $input == 'R'){
+        if ($input == 'r' || $input == 'R') {
             // do nothing, just continue
-        } elseif ($input == 'n' || $input == 'N'){
+        } elseif ($input == 'n' || $input == 'N') {
             echo "finishing\n";
             exit;
         }

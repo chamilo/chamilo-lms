@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_STUDENTPUBLICATION;
+$current_course_tool = TOOL_STUDENTPUBLICATION;
 
 require_once 'work.lib.php';
 
@@ -52,7 +52,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
     $userInfo = api_get_user_info($work['user_id']);
     $interbreadcrumb[] = array('url' => $url_dir, 'name' => $my_folder_data['title']);
     $interbreadcrumb[] = array('url' => '#', 'name' => $userInfo['complete_name']);
-    $interbreadcrumb[] = array('url' => '#','name' => $work['title']);
+    $interbreadcrumb[] = array('url' => '#', 'name' => $work['title']);
 
     if (($courseInfo['show_score'] == 0 &&
         $work['active'] == 1 &&

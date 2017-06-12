@@ -147,7 +147,7 @@ $_configuration['session_stored_in_db'] = false;
 $_configuration['session_lifetime'] = SESSION_LIFETIME;
 // Activation for multi-url access
 // When enabling multi-url, settings can be configured by multi-url using a simple
-// sub-element. E.g. $_configuration['session_lifetime'] = true; could be turned into
+// sub-element. E.g. $_configuration['session_lifetime'][1] = true; could be turned into
 // something like $_configuration['session_lifetime'][2] = false; to affect only URL
 // with ID 2. The ID can be found in the access_url table.
 //$_configuration['multiple_access_urls'] = true;
@@ -188,7 +188,7 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // The default template that will be use in the system.
 //$_configuration['default_template'] = 'default'; // (main/template/default)
 // Hide fields in the main/user/user.php page
-//$_configuration['hide_user_field_from_list'] = array('username');
+//$_configuration['hide_user_field_from_list'] = ['fields' => ['username']];
 // Aspell Settings
 //$_configuration['aspell_bin'] = '/usr/bin/hunspell';
 //$_configuration['aspell_opts'] = '-a -d en_GB -H -i utf-8';
@@ -202,12 +202,18 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // Unoconv binary file
 //$_configuration['unoconv.binaries'] = '/usr/bin/unoconv';
 // Proxy settings for access external services
-/*$_configuration['proxy_settings'] = array(
-    'http' => array(
-        'proxy' => 'tcp://example.com:8080',
-        'request_fulluri'=>true
-    )
-);*/
+/*$_configuration['proxy_settings'] = [
+    'stream_context_create' => [
+        'http' => [
+            'proxy' => 'tcp://example.com:8080',
+            'request_fulluri' => true
+        ]
+    ],
+    'curl_setopt_array' => [
+        'CURLOPT_PROXY' => 'http://example.com',
+        'CURLOPT_PROXYPORT' => '8080'
+    ]
+];*/
 
 // E-mail accounts to send notifications to when executing cronjobs - works for main/cron/import_csv.php
 //$_configuration['cron_notification_mails'] = array('email@example.com', 'email2@example.com');
@@ -335,6 +341,22 @@ $_configuration['tracking_columns'] = [
         'last_connection' => true,
         'details' => true,
     ],
+    'my_students_lp' => [
+        'lp' => true,
+        'time' => true,
+        'best_score' => true,
+        'latest_attempt_avg_score' => true,
+        'progress' => true,
+        'last_connection' => true,
+    ],
+    'my_progress_lp' => [
+        'lp' => true,
+        'time' => true,
+        'progress' => true,
+        'score' => true,
+        'best_score' => true,
+        'last_connection' => true,
+    ]
 ];
 */
 // Hide session link of course_block on index/userportal
@@ -345,7 +367,84 @@ $_configuration['agenda_legend'] = [
     'red' => 'red caption',
     '#f0f' => 'another caption'
 ];*/
-// Save question titles with HTML
-$_configuration['question_title_html'] = false;
+// Save some tool titles with HTML editor
+// $_configuration['save_titles_as_html'] = false;
 // Show the full toolbar set to all CKEditor
 //$_configuration['full_ckeditor_toolbar_set'] = false;
+// Allow change the orientation when export a (course progress) thematic to pdf. Portrait or landscape
+//$_configuration['thematic_pdf_orientation'] = 'landscape';
+// Show number of users in session list
+//$_configuration['session_list_show_count_users'] = false;
+// Session admin access to all course content
+//$_configuration['session_admins_access_all_content'] = false;
+// Adds roles to the system announcements (requires DB change BT#12476)
+//$_configuration['system_announce_extra_roles'] = false;
+// Limits the features that a session admin has access to from the main admin panel (removes users import and usergroups)
+//$_configuration['limit_session_admin_role'] = false;
+// Course tools visibility edition in sessions
+//$_configuration['allow_edit_tool_visibility_in_session'] = false;
+// Enable the support to ODF files
+//$_configuration['enabled_support_odf'] = true;
+// Pdf orientation when exporting documents
+// $_configuration['document_pdf_orientation'] = 'landscape'; // It can be 'portrait' or 'landscape'
+// Use alternative footer when exporting document to PDF
+//$_configuration['use_alternative_document_pdf_footer'] = false;
+// If the MySpace page takes too long to load, you might want to remove the
+// processing of generic statistics for the user. In this case set the following to true.
+//$_configuration['tracking_skip_generic_data'] = false;
+// Show question feedback (requires DB change: "ALTER TABLE c_quiz_question ADD COLUMN feedback text;")
+//$_configuration['allow_quiz_question_feedback'] = false;
+
+// HTTP headers security
+// This section relates to options to increase the security of your Chamilo
+// portal against attacks specifically focused on HTTP headers vulnerabilities
+// These are all disabled by default, because some of these settings might
+// affect some features of Chamilo, like the inclusion of iframes or the
+// submission of forms by anonymous users. Please make sure you do the due
+// tests before enabling in production. Learn more about how to form secure
+// headers at https://securityheaders.io/
+//
+// HTTP Strict Transport Security is an excellent feature to support on your
+// site and strengthens your implementation of TLS by getting the User Agent
+// to enforce the use of HTTPS. Recommended value
+// "strict-transport-security: max-age=31536000; includeSubDomains".
+//$_configuration['security_strict_transport'] = 'strict-transport-security: max-age=31536000; includeSubDomains';
+//
+// Content Security Policy is an effective measure to protect your site from
+// XSS attacks. By whitelisting sources of approved content, you can prevent
+// the browser from loading malicious assets.
+// The provided default is an *example*, please customize.
+// This setting is particularly complicated to set with CKeditor, but if you
+// add all domains that you want to authorize for iframes inclusion in the
+// child-src statement, this example should work for you
+//$_configuration['security_content_policy'] = 'default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;';
+//$_configuration['security_content_policy_report_only'] = 'default-src \'self\'; script-src *://*.google.com:*';
+//
+// HTTP Public Key Pinning protects your site from MiTM attacks using rogue
+// X.509 certificates. By whitelisting only the identities that the browser
+// should trust, your users are protected in the event a certificate
+// authority is compromised.
+//$_configuration['security_public_key_pins'] = '';
+//$_configuration['security_public_key_pins_report_only'] = '';
+//
+// X-Frame-Options tells the browser whether you want to allow your site to
+// be framed or not. By preventing a browser from framing your site you can
+// defend against attacks like clickjacking.
+// Recommended value "x-frame-options: SAMEORIGIN".
+//$_configuration['security_x_frame_options'] = 'x-frame-options: SAMEORIGIN';
+//
+// X-XSS-Protection sets the configuration for the cross-site scripting
+// filter built into most browsers.
+// Recommended value "X-XSS-Protection: 1; mode=block".
+//$_configuration['security_xss_protection'] = 'X-XSS-Protection: 1; mode=block';
+//
+// X-Content-Type-Options stops a browser from trying to MIME-sniff the
+// content type and forces it to stick with the declared content-type. The only
+// valid value for this header is "X-Content-Type-Options: nosniff".
+//$_configuration['security_x_content_type_options'] = 'X-Content-Type-Options: nosniff';
+//
+// Referrer Policy is a new header that allows a site to control how much
+// information the browser includes with navigation away from a document
+// and should be set by all sites.
+//$_configuration['security_referrer_policy'] = 'origin-when-cross-origin';
+// HTTP headers security section ends here

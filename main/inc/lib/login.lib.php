@@ -36,24 +36,24 @@ class Login
             if ($by_username) {
                 $secret_word = self::get_secret_word($user['email']);
                 if ($reset) {
-                    $reset_link = $portal_url . "main/auth/lostPassword.php?reset=" . $secret_word . "&id=" . $user['uid'];
+                    $reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secret_word."&id=".$user['uid'];
                 } else {
-                    $reset_link = get_lang('Pass') . " : $user[password]";
+                    $reset_link = get_lang('Pass')." : $user[password]";
                 }
-                $user_account_list = get_lang('YourRegistrationData') . " : \n" . get_lang('UserName') . ' : ' . $user['loginName'] . "\n" . get_lang('ResetLink') . ' : ' . $reset_link . '';
+                $user_account_list = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$user['loginName']."\n".get_lang('ResetLink').' : '.$reset_link.'';
 
                 if ($user_account_list) {
-                    $user_account_list = "\n-----------------------------------------------\n" . $user_account_list;
+                    $user_account_list = "\n-----------------------------------------------\n".$user_account_list;
                 }
             } else {
                 foreach ($user as $this_user) {
                     $secret_word = self::get_secret_word($this_user['email']);
                     if ($reset) {
-                        $reset_link = $portal_url . "main/auth/lostPassword.php?reset=" . $secret_word . "&id=" . $this_user['uid'];
+                        $reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secret_word."&id=".$this_user['uid'];
                     } else {
-                        $reset_link = get_lang('Pass') . " : $this_user[password]";
+                        $reset_link = get_lang('Pass')." : $this_user[password]";
                     }
-                    $user_account_list[] = get_lang('YourRegistrationData') . " : \n" . get_lang('UserName') . ' : ' . $this_user['loginName'] . "\n" . get_lang('ResetLink') . ' : ' . $reset_link . '';
+                    $user_account_list[] = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$this_user['loginName']."\n".get_lang('ResetLink').' : '.$reset_link.'';
                 }
                 if ($user_account_list) {
                     $user_account_list = implode("\n-----------------------------------------------\n", $user_account_list);
@@ -63,8 +63,8 @@ class Login
             if (!$by_username) {
                 $user = $user[0];
             }
-            $reset_link = get_lang('Pass') . " : $user[password]";
-            $user_account_list = get_lang('YourRegistrationData') . " : \n" . get_lang('UserName') . ' : ' . $user['loginName'] . "\n" . $reset_link . '';
+            $reset_link = get_lang('Pass')." : $user[password]";
+            $user_account_list = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$user['loginName']."\n".$reset_link.'';
         }
         return $user_account_list;
     }
@@ -77,7 +77,7 @@ class Login
      */
     public static function send_password_to_user($user, $by_username = false)
     {
-        $email_subject = "[" . api_get_setting('siteName') . "] " . get_lang('LoginRequest'); // SUBJECT
+        $email_subject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 
         if ($by_username) { // Show only for lost password
             $user_account_list = self::get_user_account_list($user, false, $by_username); // BODY
@@ -96,7 +96,7 @@ class Login
             }
         }
 
-        $email_body = get_lang('YourAccountParam') . " " . $portal_url . "\n\n$user_account_list";
+        $email_body = get_lang('YourAccountParam')." ".$portal_url."\n\n$user_account_list";
         // SEND MESSAGE
         $sender_name = api_get_person_name(
             api_get_setting('administratorName'),
@@ -135,7 +135,7 @@ class Login
      */
     public static function handle_encrypted_password($user, $by_username = false)
     {
-        $email_subject = "[" . api_get_setting('siteName') . "] " . get_lang('LoginRequest'); // SUBJECT
+        $email_subject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 
         if ($by_username) {
         // Show only for lost password
@@ -145,11 +145,11 @@ class Login
             $user_account_list = self::get_user_account_list($user, true); // BODY
             $email_to = $user[0]['email'];
         }
-        $email_body = get_lang('DearUser') . " :\n" . get_lang('password_request') . "\n";
-        $email_body .= $user_account_list . "\n-----------------------------------------------\n\n";
+        $email_body = get_lang('DearUser')." :\n".get_lang('password_request')."\n";
+        $email_body .= $user_account_list."\n-----------------------------------------------\n\n";
         $email_body .= get_lang('PasswordEncryptedForSecurity');
 
-        $email_body .= "\n\n" . get_lang('SignatureFormula') . ",\n" . api_get_setting('administratorName') . " " . api_get_setting('administratorSurname') . "\n" . get_lang('PlataformAdmin') . " - " . api_get_setting('siteName');
+        $email_body .= "\n\n".get_lang('SignatureFormula').",\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n".get_lang('PlataformAdmin')." - ".api_get_setting('siteName');
 
         $sender_name = api_get_person_name(
             api_get_setting('administratorName'),
@@ -243,7 +243,7 @@ class Login
                     password,
                     email,
                     auth_source
-                FROM " . $tbl_user . "
+                FROM " . $tbl_user."
                 WHERE user_id = $id";
         $result = Database::query($sql);
         $num_rows = Database::num_rows($result);
@@ -302,7 +302,7 @@ class Login
                         ON user.user_id = a.user_id
                         LEFT JOIN $track_e_login login
                         ON user.user_id  = login.login_user_id
-                        WHERE user.user_id = '" . $_user['user_id'] . "'
+                        WHERE user.user_id = '".$_user['user_id']."'
                         ORDER BY login.login_date DESC LIMIT 1";
 
                 $result = Database::query($sql);
@@ -332,7 +332,7 @@ class Login
                     Session::write('is_platformAdmin', $is_platformAdmin);
                     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
                 } else {
-                    header('location:' . api_get_path(WEB_PATH));
+                    header('location:'.api_get_path(WEB_PATH));
                     //exit("WARNING UNDEFINED UID !! ");
                 }
             } else { // no uid => logout or Anonymous
@@ -378,9 +378,9 @@ class Login
         global $_course;
         global $_real_cid;
 
-        global $is_courseAdmin;  //course teacher
-        global $is_courseTutor;  //course teacher - some rights
-        global $is_courseCoach;  //course coach
+        global $is_courseAdmin; //course teacher
+        global $is_courseTutor; //course teacher - some rights
+        global $is_courseCoach; //course coach
         global $is_courseMember; //course student
         global $is_sessionAdmin;
         global $is_allowed_in_course;
@@ -437,7 +437,7 @@ class Login
 
                     if (!empty($_GET['id_session'])) {
                         $_SESSION['id_session'] = intval($_GET['id_session']);
-                        $sql = 'SELECT name FROM ' . $tbl_session . ' WHERE id="' . intval($_SESSION['id_session']) . '"';
+                        $sql = 'SELECT name FROM '.$tbl_session.' WHERE id="'.intval($_SESSION['id_session']).'"';
                         $rs = Database::query($sql);
                         if ($rs != null) {
                             list($_SESSION['session_name']) = Database::fetch_array($rs);
@@ -455,7 +455,7 @@ class Login
                     }
                 } else {
                     //exit("WARNING UNDEFINED CID !! ");
-                    header('location:' . api_get_path(WEB_PATH));
+                    header('location:'.api_get_path(WEB_PATH));
                 }
             } else {
                 Session::erase('_cid');
@@ -482,7 +482,7 @@ class Login
         } else {
             // Continue with the previous values
             if (empty($_SESSION['_course']) OR empty($_SESSION['_cid'])) { //no previous values...
-                $_cid = -1;        //set default values that will be caracteristic of being unset
+                $_cid = -1; //set default values that will be caracteristic of being unset
                 $_course = -1;
             } else {
                 $_cid = $_SESSION['_cid'];
@@ -492,7 +492,7 @@ class Login
                 // Moreover, if we want to track a course with another session it can be usefull
                 if (!empty($_GET['id_session'])) {
                     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-                    $sql = 'SELECT name FROM ' . $tbl_session . ' WHERE id="' . intval($_SESSION['id_session']) . '"';
+                    $sql = 'SELECT name FROM '.$tbl_session.' WHERE id="'.intval($_SESSION['id_session']).'"';
                     $rs = Database::query($sql);
                     if ($rs != null) {
                         list($_SESSION['session_name']) = Database::fetch_array($rs);
@@ -534,9 +534,9 @@ class Login
                             //But only if the login date is < than now + max_life_time
                             $sql = "SELECT course_access_id FROM $course_tracking_table
                                     WHERE
-                                        user_id     = " . intval($_user ['user_id']) . " AND
+                                        user_id     = ".intval($_user ['user_id'])." AND
                                         c_id = '".api_get_course_int_id()."' AND
-                                        session_id  = " . api_get_session_id() . " AND
+                                        session_id  = " . api_get_session_id()." AND
                                         login_course_date > now() - INTERVAL $session_lifetime SECOND
                                     ORDER BY login_course_date DESC LIMIT 0,1";
                             $result = Database::query($sql);
@@ -546,11 +546,11 @@ class Login
                                 //We update the course tracking table
                                 $sql = "UPDATE $course_tracking_table
                                         SET logout_course_date = '$time', counter = counter+1
-                                        WHERE course_access_id = " . intval($i_course_access_id) . " AND session_id = " . api_get_session_id();
+                                        WHERE course_access_id = ".intval($i_course_access_id)." AND session_id = ".api_get_session_id();
                                 Database::query($sql);
                             } else {
-                                $sql = "INSERT INTO $course_tracking_table (c_id, user_id, login_course_date, logout_course_date, counter, session_id)" .
-                                        "VALUES('" . api_get_course_int_id() . "', '" . $_user['user_id'] . "', '$time', '$time', '1','" . api_get_session_id() . "')";
+                                $sql = "INSERT INTO $course_tracking_table (c_id, user_id, login_course_date, logout_course_date, counter, session_id)".
+                                        "VALUES('".api_get_course_int_id()."', '".$_user['user_id']."', '$time', '$time', '1','".api_get_session_id()."')";
                                 Database::query($sql);
                             }
                         }
@@ -577,8 +577,8 @@ class Login
                 $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
                 $sql = "SELECT * FROM $course_user_table
                        WHERE
-                        user_id  = '" . $user_id . "' AND
-                        relation_type <> " . COURSE_RELATION_TYPE_RRHH . " AND
+                        user_id  = '".$user_id."' AND
+                        relation_type <> " . COURSE_RELATION_TYPE_RRHH." AND
                         c_id = '".$_real_cid."'";
                 $result = Database::query($sql);
 
@@ -599,8 +599,8 @@ class Login
                         );
 
                         if (!$user_is_subscribed) {
-                            $url = api_get_path(WEB_CODE_PATH) . 'course_info/legal.php?course_code=' . $_course['code'] . '&session_id=' . $session_id;
-                            header('Location: ' . $url);
+                            $url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?course_code='.$_course['code'].'&session_id='.$session_id;
+                            header('Location: '.$url);
                             exit;
                         }
                     }
@@ -615,7 +615,6 @@ class Login
                         // The user is subscribed in a session? The user is a Session coach a Session admin ?
 
                         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-                        $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
                         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
                         //Session coach, session admin, course coach admin
@@ -641,11 +640,11 @@ class Login
                         } else {
                             //Im a coach or a student?
                             $sql = "SELECT user_id, status
-                                    FROM " . $tbl_session_course_user . "
+                                    FROM " . $tbl_session_course_user."
                                     WHERE
                                         c_id = '$_cid' AND
-                                        user_id = '" . $user_id . "' AND
-                                        session_id = '" . $session_id . "'
+                                        user_id = '".$user_id."' AND
+                                        session_id = '" . $session_id."'
                                     LIMIT 1";
                             $result = Database::query($sql);
 
@@ -790,7 +789,7 @@ class Login
         if ($reset) { // session data refresh requested
             if ($group_id && $_cid && !empty($_course['real_id'])) { // have keys to search data
                 $group_table = Database::get_course_table(TABLE_GROUP);
-                $sql = "SELECT * FROM $group_table WHERE c_id = " . $_course['real_id'] . " AND id = '$group_id'";
+                $sql = "SELECT * FROM $group_table WHERE c_id = ".$_course['real_id']." AND id = '$group_id'";
                 $result = Database::query($sql);
                 if (Database::num_rows($result) > 0) { // This group has recorded status related to this course
                     $gpData = Database::fetch_array($result);
@@ -843,7 +842,7 @@ class Login
      */
     public static function get_user_accounts_by_username($username)
     {
-        if (strpos($username,'@')){
+        if (strpos($username, '@')) {
             $username = api_strtolower($username);
             $email = true;
         } else {

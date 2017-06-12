@@ -396,13 +396,13 @@ class CoursesController
                     $html .= '</strong>';
                 } else {
                     if (!empty($categoryCourses)) {
-                        $html .= '<a href="' . CourseCategory::getCourseCategoryUrl(
+                        $html .= '<a href="'.CourseCategory::getCourseCategoryUrl(
                                 1,
                                 $limit['length'],
                                 $categoryCode,
                                 $hiddenLinks,
                                 $action
-                            ) . '">';
+                            ).'">';
                         $html .= "$categoryName ($categoryCourses)";
                         $html .= '</a>';
                     } else {
@@ -421,13 +421,13 @@ class CoursesController
                         if ($code == $subCategory1Code) {
                             $html .= "<strong>$subCategory1Name ($subCategory1Courses)</strong>";
                         } else {
-                            $html .= '<a href="' . CourseCategory::getCourseCategoryUrl(
+                            $html .= '<a href="'.CourseCategory::getCourseCategoryUrl(
                                     1,
                                     $limit['length'],
                                     $categoryCode,
                                     $hiddenLinks,
                                     $action
-                                ) . '">';
+                                ).'">';
                             $html .= "$subCategory1Name ($subCategory1Courses)";
                             $html .= '</a>';
                         }
@@ -445,13 +445,13 @@ class CoursesController
                                 if ($code == $subCategory2Code) {
                                     $html .= "<strong>$subCategory2Name ($subCategory2Courses)</strong>";
                                 } else {
-                                    $html .= '<a href="' . CourseCategory::getCourseCategoryUrl(
+                                    $html .= '<a href="'.CourseCategory::getCourseCategoryUrl(
                                             1,
                                             $limit['length'],
                                             $categoryCode,
                                             $hiddenLinks,
                                             $action
-                                        ) . '">';
+                                        ).'">';
                                     $html .= "$subCategory2Name ($subCategory2Courses)";
                                     $html .= '</a>';
                                 }
@@ -469,13 +469,13 @@ class CoursesController
                                         if ($code == $subCategory3Code) {
                                             $html .= "<strong>$subCategory3Name ($subCategory3Courses)</strong>";
                                         } else {
-                                            $html .= '<a href="' . CourseCategory::getCourseCategoryUrl(
+                                            $html .= '<a href="'.CourseCategory::getCourseCategoryUrl(
                                                     1,
                                                     $limit['length'],
                                                     $categoryCode,
                                                     $hiddenLinks,
                                                     $action
-                                                ) . '">';
+                                                ).'">';
                                             $html .= "$subCategory3Name ($subCategory3Courses)";
                                             $html .= '</a>';
                                         }
@@ -536,7 +536,7 @@ class CoursesController
                 'shield',
                 'default',
                 [
-                    'class' => $btnBing . ' ajax',
+                    'class' => $btnBing.' ajax',
                     'data-title' => get_lang('CheckRequirements'),
                     'data-size' => 'md',
                     'title' => get_lang('CheckRequirements')
@@ -565,7 +565,7 @@ class CoursesController
                 'pencil',
                 'primary',
                 [
-                    'class' => $btnBing .' ajax',
+                    'class' => $btnBing.' ajax',
                     'data-title' => get_lang('AreYouSureToSubscribe'),
                     'data-size' => 'md',
                     'title' => get_lang('Subscribe')
@@ -614,7 +614,10 @@ class CoursesController
 
         return Display::div(
             $icon,
-            array('class' => 'btn btn-default btn-sm registered', 'title' => get_lang("AlreadyRegisteredToSession"))
+            array(
+                'class' => 'btn btn-default btn-sm registered',
+                'title' => get_lang("AlreadyRegisteredToSession"),
+            )
         );
     }
 
@@ -647,11 +650,9 @@ class CoursesController
         $countSessions = $this->model->countSessions($date);
         $sessions = $this->model->browseSessions($date, $limit);
 
-        $pageTotal = intval(ceil(intval($countSessions) / $limit['length']));
+        $pageTotal = intval(intval($countSessions) / $limit['length']);
         // Do NOT show pagination if only one page or less
-        $cataloguePagination = $pageTotal > 1 ?
-            CourseCategory::getCatalogPagination($limit['current'], $limit['length'], $pageTotal) :
-            '';
+        $cataloguePagination = $pageTotal > 1 ? CourseCategory::getCatalogPagination($limit['current'], $limit['length'], $pageTotal) : '';
         $sessionsBlocks = $this->getFormattedSessionsBlock($sessions);
 
         // Get session search catalogue URL
@@ -666,13 +667,13 @@ class CoursesController
         $tpl = new Template();
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
-        $tpl->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
+        $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true' ? true : false);
         $tpl->assign('course_url', $courseUrl);
         $tpl->assign('catalog_pagination', $cataloguePagination);
         $tpl->assign('hidden_links', $hiddenLinks);
         $tpl->assign('search_token', Security::get_token());
         $tpl->assign('search_date', $date);
-        $tpl->assign('web_session_courses_ajax_url', api_get_path(WEB_AJAX_PATH) . 'course.ajax.php');
+        $tpl->assign('web_session_courses_ajax_url', api_get_path(WEB_AJAX_PATH).'course.ajax.php');
         $tpl->assign('sessions', $sessionsBlocks);
         $tpl->assign('already_subscribed_label', $this->getAlreadyRegisteredInSessionLabel());
 
@@ -690,16 +691,21 @@ class CoursesController
         $searchTag = isset($_POST['search_tag']) ? $_POST['search_tag'] : null;
         $searchDate = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
         $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
-        $courseUrl = CourseCategory::getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
+        $courseUrl = CourseCategory::getCourseCategoryUrl(
+            1,
+            $limit['length'],
+            null,
+            0,
+            'subscribe'
+        );
 
         $sessions = $this->model->browseSessionsByTags($searchTag, $limit);
         $sessionsBlocks = $this->getFormattedSessionsBlock($sessions);
 
         $tpl = new Template();
-
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
-        $tpl->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
+        $tpl->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
         $tpl->assign('course_url', $courseUrl);
         $tpl->assign('already_subscribed_label', $this->getAlreadyRegisteredInSessionLabel());
         $tpl->assign('hidden_links', $hiddenLinks);
@@ -721,7 +727,13 @@ class CoursesController
     {
         $q = isset($_REQUEST['q']) ? Security::remove_XSS($_REQUEST['q']) : null;
         $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
-        $courseUrl = CourseCategory::getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
+        $courseUrl = CourseCategory::getCourseCategoryUrl(
+            1,
+            $limit['length'],
+            null,
+            0,
+            'subscribe'
+        );
         $searchDate = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
 
         $sessions = $this->model->browseSessionsBySearch($q, $limit);
@@ -730,7 +742,7 @@ class CoursesController
         $tpl = new Template();
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
-        $tpl->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
+        $tpl->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
         $tpl->assign('course_url', $courseUrl);
         $tpl->assign('already_subscribed_label', $this->getAlreadyRegisteredInSessionLabel());
         $tpl->assign('hidden_links', $hiddenLinks);
@@ -808,12 +820,10 @@ class CoursesController
             );
 
             $hasRequirements = false;
-
             foreach ($sequences['sequences'] as $sequence) {
                 if (count($sequence['requirements']) === 0) {
                     continue;
                 }
-
                 $hasRequirements = true;
                 break;
             }
@@ -829,7 +839,7 @@ class CoursesController
             $coachName = $session->getGeneralCoach()->getCompleteName();
             $actions = null;
             if (api_is_platform_admin()) {
-                $actions = api_get_path(WEB_CODE_PATH) .'session/resume_session.php?id_session='.$session->getId();
+                $actions = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session->getId();
             }
 
             $isThisSessionOnSale = $session->getBuyCoursePluginPrice();
@@ -841,13 +851,13 @@ class CoursesController
                 'nbr_courses' => $session->getNbrCourses(),
                 'nbr_users' => $session->getNbrUsers(),
                 'coach_id' => $coachId,
-                'coach_url' => api_get_path(WEB_AJAX_PATH) . 'user_manager.ajax.php?a=get_user_popup&user_id=' . $coachId,
+                'coach_url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$coachId,
                 'coach_name' => $coachName,
                 'coach_avatar' => UserManager::getUserPicture($coachId, USER_IMAGE_SIZE_SMALL),
                 'is_subscribed' => SessionManager::isUserSubscribedAsStudent($session->getId(), $userId),
                 'icon' => $this->getSessionIcon($session->getName()),
                 'date' => $sessionDates['display'],
-                'price' => (!empty($isThisSessionOnSale['html'])?$isThisSessionOnSale['html']:''),
+                'price' => !empty($isThisSessionOnSale['html']) ? $isThisSessionOnSale['html'] : '',
                 'subscribe_button' => isset($isThisSessionOnSale['buy_button']) ? $isThisSessionOnSale['buy_button'] : $this->getRegisteredInSessionButton(
                     $session->getId(),
                     $session->getName(),
@@ -857,7 +867,11 @@ class CoursesController
                 'description' => $session->getDescription(),
                 'category' => $catName,
                 'tags' => $sessionCourseTags,
-                'edit_actions' => $actions
+                'edit_actions' => $actions,
+                'duration' => SessionManager::getDayLeftInSession(
+                    ['id' => $session->getId(), 'duration' => $session->getDuration()],
+                    $userId
+                )
             );
 
             $sessionsBlock = array_merge($sessionsBlock, $sequences);

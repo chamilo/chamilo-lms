@@ -7,9 +7,6 @@
 * @package chamilo.auth
 */
 
-// Access rights: anonymous users can't do anything useful here.
-//api_block_anonymous_users();
-
 // Header
 Display::display_header('');
 

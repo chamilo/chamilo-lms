@@ -80,7 +80,7 @@ class SurveyLink extends AbstractLink
             $links[] = array(
                 $data['survey_id'],
                 api_trunc_str(
-                    $data['code'] . ': ' . self::html_to_text($data['title']),
+                    $data['code'].': '.self::html_to_text($data['title']),
                     80
                 )
             );
@@ -276,24 +276,33 @@ class SurveyLink extends AbstractLink
         return null;
     }
 
+    /**
+     * Get the survey data from the c_survey table with the current object id
+     * @return mixed
+     */
     private function get_survey_data()
     {
         $tbl_name = $this->get_survey_table();
         $session_id = api_get_session_id();
+
         if ($tbl_name == '') {
             return false;
-        } elseif (!isset($this->survey_data)) {
+        } elseif (empty($this->survey_data)) {
             $sql = 'SELECT * FROM '.$tbl_name.'
                     WHERE
                         c_id = '.$this->course_id.' AND
                         survey_id = '.intval($this->get_ref_id()).' AND
-                        session_id='.intval($session_id);
+                        session_id = '.intval($session_id);
             $query = Database::query($sql);
             $this->survey_data = Database::fetch_array($query);
         }
         return $this->survey_data;
     }
 
+    /**
+     * Get the name of the icon for this tool
+     * @return string
+     */
     public function get_icon_name()
     {
         return 'survey';
@@ -302,6 +311,5 @@ class SurveyLink extends AbstractLink
     private static function html_to_text($string)
     {
         return strip_tags($string);
-        //return trim(api_html_entity_decode(strip_tags(str_ireplace(array('<p>', '</p>', '<br />', '<br/>', '<br>'), array('', ' ', ' ', ' ', ' '), $string)), ENT_QUOTES));
     }
 }

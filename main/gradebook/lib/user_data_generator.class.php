@@ -30,6 +30,12 @@ class UserDataGenerator
     private $scorecache;
     private $avgcache;
 
+    /**
+     * UserDataGenerator constructor.
+     * @param int $userid
+     * @param array $evals
+     * @param array $links
+     */
     public function __construct($userid, $evals = array(), $links = array())
     {
         $this->userid = $userid;
@@ -95,7 +101,7 @@ class UserDataGenerator
         // sort users array
         if ($sorting & self::UDG_SORT_TYPE) {
             usort($allitems, array('UserDataGenerator', 'sort_by_type'));
-        }elseif ($sorting & self::UDG_SORT_NAME) {
+        } elseif ($sorting & self::UDG_SORT_NAME) {
             usort($allitems, array('UserDataGenerator', 'sort_by_name'));
         } elseif ($sorting & self::UDG_SORT_COURSE) {
             usort($allitems, array('UserDataGenerator', 'sort_by_course'));
@@ -130,7 +136,7 @@ class UserDataGenerator
         $visibleitems = array_slice($allitems, $start, $count);
 
         // fill score cache if not done yet
-        if (!isset ($this->scorecache)) {
+        if (!isset($this->scorecache)) {
             foreach ($visibleitems as $item) {
                 $this->scorecache[$item->get_item_type().$item->get_id()]
                     = $item->calc_score($this->userid);
@@ -148,8 +154,9 @@ class UserDataGenerator
             $row[] = $this->build_category_name($item);
             $row[] = $this->build_average_column($item, $ignore_score_color);
             $row[] = $this->build_result_column($item, $ignore_score_color);
-            if ($scoredisplay->is_custom())
+            if ($scoredisplay->is_custom()) {
                 $row[] = $this->build_mask_column($item, $ignore_score_color);
+            }
             $data[] = $row;
         }
         return $data;
@@ -343,7 +350,7 @@ class UserDataGenerator
      */
     private function get_course_name_from_code_cached($coursecode)
     {
-        if (isset ($this->coursecodecache) && isset ($this->coursecodecache[$coursecode])) {
+        if (isset($this->coursecodecache) && isset($this->coursecodecache[$coursecode])) {
             return $this->coursecodecache[$coursecode];
         } else {
             $name = CourseManager::getCourseNameFromCode($coursecode);
@@ -358,7 +365,7 @@ class UserDataGenerator
      */
     private function get_category_cached($category_id)
     {
-        if (isset ($this->categorycache) && isset ($this->categorycache[$category_id])) {
+        if (isset($this->categorycache) && isset ($this->categorycache[$category_id])) {
             return $this->categorycache[$category_id];
         } else {
             $cat = Category::load($category_id);

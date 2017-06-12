@@ -1,29 +1,34 @@
 <table class="full-width border-thin">
     <thead>
     <tr>
-        <th>{{ 'Thematic'|get_lang }}</th>
-        <th>{{ 'ThematicPlan'|get_lang }}</th>
-        <th>{{ 'ThematicAdvance'|get_lang }}</th>
+        <th width="30%" style="display:inline-block; padding: 10px; text-align: center; background-color: #E5E5E5;">{{ 'Thematic'|get_lang }}</th>
+        <th width="50%" style="display:inline-block; padding: 10px; text-align: center; background-color: #E5E5E5;">{{ 'ThematicPlan'|get_lang }}</th>
+        <th width="20%" style="display:inline-block; padding: 10px; text-align: center; background-color: #E5E5E5;">{{ 'ThematicAdvance'|get_lang }}</th>
     </tr>
     </thead>
     <tbody>
     <tr>
         <td>
-            <h2>{{ theme.title }}</h2>
+            <h4>{{ theme.title }}</h4>
+            <br>
             {{ theme.content }}
         </td>
         <td>
             {% for plan in plans %}
-                <h3>{{ plan.title }}</h3>
+                <br>
+                <h4>{{ plan.title }}</h4>
+                <br>
                 {{ plan.description }}
             {% endfor %}
         </td>
         <td>
             {% for advance in advances %}
-                <p>
-                    <strong>{{ advance.start_date|local_format_date(2) ~ ' (' ~ advance.duration ~ 'HourShort'|get_lang ~ ') ' }}</strong>
-                </p>
+                <h4 style="margin-bottom: 10px;">
+                    {{ advance.duration }} {{ "MinHours" | get_lang }}
+                </h4>
+                <p>{{ advance.start_date|api_convert_and_format_date(2) }}</p>
                 {{ advance.content }}
+                <br>
             {% endfor %}
         </td>
     </tr>

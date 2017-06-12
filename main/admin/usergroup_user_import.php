@@ -168,7 +168,7 @@ if (count($errors) != 0) {
         $error_message .= "<br />";
     }
     $error_message .= "\n";
-    Display :: display_error_message($error_message, false);
+    echo Display::return_message($error_message, 'error', false);
 }
 $form->display();
 ?>

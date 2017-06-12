@@ -26,9 +26,10 @@
 
 define("webodf/editor/widgets/dialogWidgets/editHyperlinkPane", [
     "dojo",
-    "dijit/layout/ContentPane"],
+    "dijit/layout/ContentPane",
+    "webodf/editor/widgets/dialogWidgets/idMangler"],
 
-    function (dojo, ContentPane) {
+    function (dojo, ContentPane, IdMangler) {
         "use strict";
 
         runtime.loadClass("core.CSSUnits");
@@ -36,6 +37,7 @@ define("webodf/editor/widgets/dialogWidgets/editHyperlinkPane", [
         var EditHyperlinkPane = function () {
             var self = this,
                 editorBase = dojo.config && dojo.config.paths && dojo.config.paths['webodf/editor'],
+                idMangler = new IdMangler(),
                 contentPane,
                 form,
                 displayTextField,
@@ -62,12 +64,13 @@ define("webodf/editor/widgets/dialogWidgets/editHyperlinkPane", [
                 title: runtime.tr("editLink"),
                 href: editorBase+"/widgets/dialogWidgets/editHyperlinkPane.html",
                 preload: true,
+                ioMethod: idMangler.ioMethod,
                 onLoad : function () {
-                    form = dijit.byId('editHyperlinkPaneForm');
+                    form = idMangler.byId('editHyperlinkPaneForm');
                     form.onSubmit = onSave;
-                    dijit.byId('cancelHyperlinkChangeButton').onClick = onCancel;
-                    displayTextField = dijit.byId('linkDisplayText');
-                    linkField = dijit.byId('linkUrl');
+                    idMangler.byId('cancelHyperlinkChangeButton').onClick = onCancel;
+                    displayTextField = idMangler.byId('linkDisplayText');
+                    linkField = idMangler.byId('linkUrl');
                     linkField.on("change", function(value) {
                         displayTextField.set('placeHolder', value);
                     });

@@ -18,8 +18,18 @@ $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
-// Access control
-api_protect_course_script(true, false, true);
+$filter_user = isset($_REQUEST['filter_by_user']) ? intval($_REQUEST['filter_by_user']) : null;
+$isBossOfStudent = false;
+if (api_is_student_boss() && !empty($filter_user)) {
+    // Check if boss has access to user info.
+    if (UserManager::userIsBossOfStudent(api_get_user_id(), $filter_user)) {
+        $isBossOfStudent = true;
+    } else {
+        api_not_allowed(true);
+    }
+} else {
+    api_protect_course_script(true, false, true);
+}
 
 // including additional libraries
 require_once 'hotpotatoes.lib.php';
@@ -40,13 +50,10 @@ $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISE
 $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-
 $allowCoachFeedbackExercises = api_get_setting('allow_coach_feedback_exercises') === 'true';
 
 $course_id = api_get_course_int_id();
 $exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : null;
-$filter_user = isset($_REQUEST['filter_by_user']) ? intval($_REQUEST['filter_by_user']) : null;
-
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 
 if (empty($exercise_id)) {
@@ -149,7 +156,7 @@ if (isset($_REQUEST['comments']) &&
     foreach ($_POST as $key_index => $key_value) {
         $my_post_info = explode('_', $key_index);
 
-        $post_content_id[] = $my_post_info[1];
+        $post_content_id[] = isset($my_post_info[1]) ? $my_post_info[1] : null;
 
         if ($my_post_info[0] == 'comments') {
             $comments_exist = true;
@@ -303,17 +310,17 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 
 
 if ($is_allowedToEdit || $is_tutor) {
-    $nameTools = get_lang('StudentScore');
     $interbreadcrumb[] = array("url" => "exercise.php?gradebook=$gradebook", "name" => get_lang('Exercises'));
     $objExerciseTmp = new Exercise();
+    $nameTools = get_lang('StudentScore');
     if ($objExerciseTmp->read($exercise_id)) {
-        $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exercise_id, "name" => $objExerciseTmp->name);
+        $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exercise_id, "name" => $objExerciseTmp->selectTitle(true));
     }
 } else {
     $interbreadcrumb[] = array("url" => "exercise.php?gradebook=$gradebook", "name" => get_lang('Exercises'));
     $objExerciseTmp = new Exercise();
     if ($objExerciseTmp->read($exercise_id)) {
-        $nameTools = get_lang('Results').': '.$objExerciseTmp->name;
+        $nameTools = get_lang('Results').': '.$objExerciseTmp->selectTitle(true);
     }
 }
 
@@ -342,7 +349,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
                 true,
                 $_GET['delete_before_date'].' 23:59:59'
             );
-            Display::display_confirmation_message(sprintf(get_lang('XResultsCleaned'), $count));
+            echo Display::return_message(sprintf(get_lang('XResultsCleaned'), $count), 'confirm');
         }
     }
 }

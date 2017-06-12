@@ -37,7 +37,7 @@ $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdm
 $interbreadcrumb[] = array("url" => 'user_list.php', "name" => get_lang('UserList'));
 
 $userId = $user['user_id'];
-$tool_name = $user['complete_name'].(empty($user['official_code'])?'':' ('.$user['official_code'].')');
+$tool_name = $user['complete_name'].(empty($user['official_code']) ? '' : ' ('.$user['official_code'].')');
 $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
@@ -248,13 +248,6 @@ foreach ($data as $label => $item) {
     $row++;
 }
 $trackingInformation = $table->toHtml();
-
-$tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-
 $socialInformation = '';
 
 /**
@@ -325,7 +318,7 @@ if (count($sessions) > 0) {
         $csvContent[] = $headerList;
         foreach ($session_item['courses'] as $my_course) {
             $courseInfo = api_get_course_info_by_id($my_course['real_id']);
-            $sessionStatus = SessionManager::get_user_status_in_session(
+            $sessionStatus = SessionManager::get_user_status_in_course_session(
                 $userId,
                 $courseInfo['real_id'],
                 $id_session
@@ -452,7 +445,7 @@ if (Database::num_rows($res) > 0) {
         $tools = '<a href="course_information.php?code='.$courseCode.'">'.
             Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
             '<a href="'.$courseInfo['course_public_url'].'">'.
-            Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .
+            Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>'.
             '<a href="course_edit.php?id='.$course->c_id.'">'.
             Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
         if ($course->status == STUDENT) {

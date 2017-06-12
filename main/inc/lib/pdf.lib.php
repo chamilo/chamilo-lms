@@ -40,8 +40,8 @@ class PDF
 
         $params['left'] = isset($params['left']) ? $params['left'] : 15;
         $params['right'] = isset($params['right']) ? $params['right'] : 15;
-        $params['top'] = isset($params['top']) ? $params['top'] : 20;
-        $params['bottom'] = isset($params['bottom']) ? $params['bottom'] : 15;
+        $params['top'] = isset($params['top']) ? $params['top'] : 30;
+        $params['bottom'] = isset($params['bottom']) ? $params['bottom'] : 30;
 
         $this->params['filename'] = isset($params['filename']) ? $params['filename'] : api_get_local_time();
         $this->params['pdf_title'] = isset($params['pdf_title']) ? $params['pdf_title'] : get_lang('Untitled');
@@ -53,7 +53,10 @@ class PDF
         $this->params['student_info'] = isset($params['student_info']) ? $params['student_info'] : false;
         $this->params['show_grade_generated_date'] = isset($params['show_grade_generated_date']) ? $params['show_grade_generated_date'] : false;
         $this->params['show_teacher_as_myself'] = isset($params['show_teacher_as_myself']) ? $params['show_teacher_as_myself'] : true;
-        $this->params['pdf_date'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date(api_get_local_time(), DATE_TIME_FORMAT_LONG);
+        $localTime = api_get_local_time();
+        $this->params['pdf_date'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_TIME_FORMAT_LONG);
+        $this->params['pdf_date_only'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_FORMAT_LONG);
+
 
         $this->pdf = new mPDF(
             'UTF-8',
@@ -98,20 +101,6 @@ class PDF
         // Assignments
         $tpl->assign('pdf_content', $content);
 
-        $organization = ChamiloApi::getPlatformLogo();
-        // Use custom logo image.
-        $pdfLogo = api_get_setting('pdf_logo_header');
-        if ($pdfLogo === 'true') {
-            $visualTheme = api_get_visual_theme();
-            $img = api_get_path(SYS_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
-            if (file_exists($img)) {
-                $img = api_get_path(WEB_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
-                $organization = "<img src='$img'>";
-            }
-        }
-
-        $tpl->assign('organization', $organization);
-
         // Showing only the current teacher/admin instead the all teacher list name see BT#4080
         if (isset($this->params['show_real_course_teachers']) &&
             $this->params['show_real_course_teachers']
@@ -141,6 +130,7 @@ class PDF
         $tpl->assign('pdf_course_info', $this->params['course_info']);
         $tpl->assign('pdf_session_info', $this->params['session_info']);
         $tpl->assign('pdf_date', $this->params['pdf_date']);
+        $tpl->assign('pdf_date_only', $this->params['pdf_date_only']);
         $tpl->assign('pdf_teachers', $teacher_list);
         $tpl->assign('pdf_title', $this->params['pdf_title']);
         $tpl->assign('pdf_student_info', $this->params['student_info']);
@@ -152,8 +142,11 @@ class PDF
         $html = $tpl->fetch($tableTemplate);
         $html = api_utf8_encode($html);
 
-        $css_file = api_get_path(SYS_CSS_PATH).'/print.css';
-        $css = file_exists($css_file) ? @file_get_contents($css_file) : '';
+        $css_file = api_get_path(SYS_CSS_PATH).'themes/'.$tpl->theme.'/print.css';
+        if (!file_exists($css_file)) {
+            $css_file = api_get_path(SYS_CSS_PATH).'print.css';
+        }
+        $css = file_get_contents($css_file);
 
         $html = self::content_to_pdf(
             $html,
@@ -188,7 +181,7 @@ class PDF
      * @param bool $complete_style show header and footer if true
      * @param bool $addStyle
      *
-     * @return bool
+     * @return false|null
      */
     public function html_to_pdf(
         $html_file_array,
@@ -417,7 +410,7 @@ class PDF
         $fileToSave = null,
         $returnHtml = false
     ) {
-        global $_configuration;
+        $urlAppend = api_get_configuration_value('url_append');
 
         if (empty($document_html)) {
             return false;
@@ -443,7 +436,7 @@ class PDF
         $document_html = str_replace('../../', '', $document_html);
         $document_html = str_replace('../', '', $document_html);
         $document_html = str_replace(
-            (empty($_configuration['url_append']) ? '' : $_configuration['url_append'].'/').'courses/'.$course_code.'/document/',
+            (empty($urlAppend) ? '' : $urlAppend.'/').'courses/'.$course_code.'/document/',
             '',
             $document_html
         );
@@ -467,7 +460,6 @@ class PDF
                                 $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src_fixed);
                                 $new_path = $document_path.$old_src_fixed;
                                 $document_html = str_replace($old_src, $new_path, $document_html);
-
                             }
                         }
                     }
@@ -528,6 +520,8 @@ class PDF
         if ($outputMode != 'F') {
             exit;
         }
+
+        return $output_file;
     }
 
     /**
@@ -640,9 +634,9 @@ class PDF
      */
     public function set_header($course_data)
     {
-        $this->pdf->defaultheaderfontsize   = 10; // in pts
-        $this->pdf->defaultheaderfontstyle  = 'BI'; // blank, B, I, or BI
-        $this->pdf->defaultheaderline       = 1; // 1 to include line below header/above footer
+        $this->pdf->defaultheaderfontsize = 10; // in pts
+        $this->pdf->defaultheaderfontstyle = 'BI'; // blank, B, I, or BI
+        $this->pdf->defaultheaderline = 1; // 1 to include line below header/above footer
 
         $userId = api_get_user_id();
 
@@ -661,8 +655,21 @@ class PDF
                 }
             }
 
+            $organization = ChamiloApi::getPlatformLogo();
+            // Use custom logo image.
+            $pdfLogo = api_get_setting('pdf_logo_header');
+            if ($pdfLogo === 'true') {
+                $visualTheme = api_get_visual_theme();
+                $img = api_get_path(SYS_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
+                if (file_exists($img)) {
+                    $img = api_get_path(WEB_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
+                    $organization = "<img src='$img'>";
+                }
+            }
+
             $view = new Template('', false, false, false, true, false, false);
             $view->assign('teacher_name', $teachers);
+            $view->assign('organization', $organization);
             $template = $view->get_template('export/pdf_header.tpl');
             $headerHTML = $view->fetch($template);
 
@@ -672,7 +679,7 @@ class PDF
     }
 
     /**
-     * @param array $header html content
+     * @param string $header html content
      */
     public function set_custom_header($header)
     {
@@ -761,5 +768,79 @@ class PDF
                 $this->pdf->SetHTMLFooter($this->custom_footer);
             }
         }
+    }
+
+    /**
+     * Generate a PDF file from $html in SYS_APP_PATH
+     *
+     * @param string $html PDF content
+     * @param string $fileName File name
+     * @param string $dest Optional. Directory to move file
+     * @return string The PDF path
+     */
+    public function exportFromHtmlToFile($html, $fileName, $dest = null)
+    {
+        $this->template = $this->template ?: new Template('', false, false, false, false, false, false);
+
+        $cssFile = api_get_path(SYS_CSS_PATH).'themes/'.$this->template->theme.'/print.css';
+
+        if (!file_exists($cssFile)) {
+            $cssFile = api_get_path(SYS_CSS_PATH).'print.css';
+        }
+
+        $pdfPath = self::content_to_pdf(
+            $html,
+            file_get_contents($cssFile),
+            $fileName,
+            $this->params['course_code'],
+            'F'
+        );
+
+        if (!$dest) {
+            return $pdfPath;
+        }
+
+        move($pdfPath, $dest);
+
+        return $dest.basename($pdfPath);
+    }
+
+    /**
+     * Create a PDF and save it into the documents area
+     * @param string $htmlContent HTML Content
+     * @param string $fileName The file name
+     * @param integer $courseId The course ID
+     * @param int $sessionId Optional. The session ID
+     */
+    public function exportFromHtmlToDocumentsArea($htmlContent, $fileName, $courseId, $sessionId = 0)
+    {
+        $userId = api_get_user_id();
+        $courseInfo = api_get_course_info_by_id($courseId);
+
+        $courseDirectory = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/document/';
+
+        $docPath = $this->exportFromHtmlToFile(
+            $htmlContent,
+            $fileName,
+            $courseDirectory
+        );
+
+        $docId = add_document(
+            $courseInfo,
+            str_replace($courseDirectory, '/', $docPath),
+            'file',
+            filesize($docPath),
+            $fileName,
+            null,
+            false,
+            true,
+            null,
+            $sessionId,
+            $userId
+        );
+
+        api_item_property_update($courseInfo, TOOL_DOCUMENT, $docId, 'DocumentAdded', $userId);
+
+        Display::addFlash(Display::return_message(get_lang('ItemAdded')));
     }
 }

@@ -51,3 +51,9 @@ $strings['ClickToContinue'] = 'Hacer click para continuar';
 $strings['UrlMeetingToShare'] = 'URL a compartir';
 
 $strings['AdminView'] = 'Vista para administradores';
+$strings['max_users_limit'] = 'Cantidad máxima de usuarios';
+$strings['max_users_limit_help'] = 'Este valor indica la cantidad máxima de usuarios simultáneos en una conferencia en un curso o curso-sesión. Dejar vacío o en 0 para no poner límite.';
+$strings['MaxXUsersWarning'] = 'Esta sala de conferencia es limitada a un máximo de %s usuarios simultáneos.';
+$strings['MaxXUsersReached'] = 'El límite de %s usuarios simultáneos ha sido alcanzado en esta sala de conferencia. Por favor refresque la página en unos minutos para ver si un asiento se ha liberado, o espere la apertura de una nueva sala para poder participar.';
+$strings['MaxXUsersReachedManager'] = 'El límite de %s usuarios simultáneos ha sido alcanzado en esta sala de conferencia. Para aumentar el límite, contáctese con el administrador del portal.';
+$strings['MaxUsersInConferenceRoom'] = 'Número máximo de usuarios simultáneos en una sala de conferencia';

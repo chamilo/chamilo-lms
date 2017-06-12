@@ -99,7 +99,7 @@ class FormValidator extends HTML_QuickForm
         $renderer->setHeaderTemplate('<legend>{header}</legend>');
 
         //Set required field template
-        $this->setRequiredNote('<span class="form_required">*</span> <small>' . get_lang('ThisFieldIsRequired') . '</small>');
+        $this->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
         $noteTemplate = <<<EOT
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-10">{requiredNote}</div>
@@ -172,18 +172,21 @@ EOT;
     /**
      * Adds a text field to the form.
      * A trim-filter is attached to the field.
-     * @param string $label					The label for the form-element
-     * @param string $name					The element name
-     * @param bool   $required	(optional)	Is the form-element required (default=true)
-     * @param array  $attributes (optional)	List of attributes for the form-element
+     * @param string $label The label for the form-element
+     * @param string $name The element name
+     * @param bool $required (optional)    Is the form-element required (default=true)
+     * @param array $attributes (optional)    List of attributes for the form-element
+     * @return HTML_QuickForm_text
      */
     public function addText($name, $label, $required = true, $attributes = array())
     {
-        $this->addElement('text', $name, $label, $attributes);
+        $element = $this->addElement('text', $name, $label, $attributes);
         $this->applyFilter($name, 'trim');
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
         }
+
+        return $element;
     }
 
     /**
@@ -939,7 +942,7 @@ EOT;
 
         if ($geolocalization) {
             $gmapsApiKey = $gMapsPlugin->get('api_key');
-            $this->addHtml('<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key='. $gmapsApiKey . '" ></script>');
+            $this->addHtml('<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key='.$gmapsApiKey.'" ></script>');
         }
         $this->addElement(
             'text',
@@ -977,7 +980,7 @@ EOT;
 
                     if (typeof google === "object") {
 
-                        var address = $("#' . $name . '").val();
+                        var address = $("#' . $name.'").val();
                         initializeGeo'.$name.'(address, false);
 
                         $("#geolocalization_'.$name.'").on("click", function() {
@@ -999,7 +1002,7 @@ EOT;
                         });
 
                     } else {
-                        $("#map_'.$name.'").html("<div class=\"alert alert-info\">' . get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap') . '</div>");
+                        $("#map_'.$name.'").html("<div class=\"alert alert-info\">'.get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap').'</div>");
                     }
 
                 });
@@ -1014,7 +1017,7 @@ EOT;
                         };
 
                         var geoError = function(error) {
-                            alert("Geocode ' . get_lang('Error') . ': " + error);
+                            alert("Geocode ' . get_lang('Error').': " + error);
                         };
 
                         var geoOptions = {
@@ -1065,11 +1068,11 @@ EOT;
                                         infowindow.open(map_'.$name.', marker);
                                     });
                                 } else {
-                                    alert("' . get_lang("NotFound") . '");
+                                    alert("' . get_lang("NotFound").'");
                                 }
 
                             } else {
-                                alert("Geocode ' . get_lang('Error') . ': ' . get_lang("AddressField") . ' ' . get_lang("NotFound") . '");
+                                alert("Geocode ' . get_lang('Error').': '.get_lang("AddressField").' '.get_lang("NotFound").'");
                             }
                         });
                     }
@@ -1104,8 +1107,8 @@ EOT;
         $this->with_progress_bar = true;
         $id = $this->getAttribute('id');
 
-        $this->updateAttributes("onsubmit=\"javascript: addProgress('" . $id . "')\"");
-        $this->addHtml('<script language="javascript" src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/upload.js" type="text/javascript"></script>');
+        $this->updateAttributes("onsubmit=\"javascript: addProgress('".$id."')\"");
+        $this->addHtml('<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/upload.js" type="text/javascript"></script>');
     }
 
     /**
@@ -1678,7 +1681,7 @@ EOT;
                             .attr('target', '_blank')
                             .prop('href', file.url);
                         $(data.context.children()[index]).parent().wrap(link);                        
-                        var successMessage = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-success\"/>').text('" . addslashes(get_lang('UplUploadSucceeded')) . "'));
+                        var successMessage = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-success\"/>').text('" . addslashes(get_lang('UplUploadSucceeded'))."'));
                         $(data.context.children()[index]).parent().append(successMessage);
                     } else if (file.error) {
                         var error = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-danger\"/>').text(file.error));
@@ -1688,7 +1691,7 @@ EOT;
                 $('#dropzone').removeClass('hover');
             }).on('fileuploadfail', function (e, data) {
                 $.each(data.files, function (index) {
-                    var failedMessage = '" . addslashes(get_lang('UplUploadFailed')) . "';
+                    var failedMessage = '" . addslashes(get_lang('UplUploadFailed'))."';
                     var error = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-danger\"/>').text(failedMessage));
                     $(data.context.children()[index]).parent().append(error);
                 });

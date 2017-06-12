@@ -24,7 +24,6 @@ class KannelsmsPlugin extends SmsPlugin
 
     /**
      * Constructor
-     * @return  void
      */
     protected function __construct()
     {

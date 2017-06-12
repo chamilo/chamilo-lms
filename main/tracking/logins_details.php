@@ -75,13 +75,13 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
     // check if uid is tutor of this group
     $courseId = api_get_course_int_id();
 
-    if (( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
+    if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
         if ($is_allowedToTrackEverybodyInCourse) {
             $sql = "SELECT u.firstname,u.lastname, u.email
                     FROM $TABLECOURSUSER cu , $TABLEUSER u
                     WHERE
                         cu.user_id = u.user_id AND
-                        cu.relation_type<>" . COURSE_RELATION_TYPE_RRHH . " AND
+                        cu.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
                         cu.c_id = '$courseId' AND
                         u.user_id = '$uInfo'";
         } else {
@@ -97,21 +97,21 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
             $res[2] == "" ? $res2 = get_lang('NoEmail') : $res2 = Display::encrypted_mailto_link($res[2]);
 
             echo "<tr><td>";
-            echo $informationsAbout . " : <br>";
+            echo $informationsAbout." : <br>";
             echo "<ul>\n"
-            . "<li>" . get_lang('FirstName') . " : " . $res[0] . "</li>\n"
-            . "<li>" . get_lang('LastName') . " : " . $res[1] . "</li>\n"
-            . "<li>" . get_lang('Email') . " : " . $res2 . "</li>\n"
+            . "<li>".get_lang('FirstName')." : ".$res[0]."</li>\n"
+            . "<li>".get_lang('LastName')." : ".$res[1]."</li>\n"
+            . "<li>".get_lang('Email')." : ".$res2."</li>\n"
             . "</ul>";
             echo "</td></tr>";
             /*             * ***** MENU ******* */
             echo "<tr>
                 <td>
-                [<a href='userLog.php?uInfo=$uInfo&view=$view'>" . get_lang('Back') . "</a>]
+                [<a href='userLog.php?uInfo=$uInfo&view=$view'>".get_lang('Back')."</a>]
         ";
             echo "  &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;
-                [<a href='" . api_get_self() . "?uInfo=$uInfo&view=$view&period=week&reqdate=$reqdate' class='specialLink'>" . get_lang('PeriodWeek') . "</a>]
-                [<a href='" . api_get_self() . "?uInfo=$uInfo&view=$view&period=month&reqdate=$reqdate' class='specialLink'>" . get_lang('PeriodMonth') . "</a>]
+                [<a href='" . api_get_self()."?uInfo=$uInfo&view=$view&period=week&reqdate=$reqdate' class='specialLink'>".get_lang('PeriodWeek')."</a>]
+                [<a href='" . api_get_self()."?uInfo=$uInfo&view=$view&period=month&reqdate=$reqdate' class='specialLink'>".get_lang('PeriodMonth')."</a>]
                 &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;
         ";
             switch ($period) {
@@ -120,8 +120,8 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
                     $previousReqDate = $reqdate - 7 * 86400;
                     $nextReqDate = $reqdate + 7 * 86400;
                     echo "
-                    [<a href='" . api_get_self() . "?uInfo=$uInfo&view=$view&period=week&reqdate=$previousReqDate' class='specialLink'>" . get_lang('PreviousWeek') . "</a>]
-                    [<a href='" . api_get_self() . "?uInfo=$uInfo&view=$view&period=week&reqdate=$nextReqDate' class='specialLink'>" . get_lang('NextWeek') . "</a>]
+                    [<a href='" . api_get_self()."?uInfo=$uInfo&view=$view&period=week&reqdate=$previousReqDate' class='specialLink'>".get_lang('PreviousWeek')."</a>]
+                    [<a href='" . api_get_self()."?uInfo=$uInfo&view=$view&period=week&reqdate=$nextReqDate' class='specialLink'>".get_lang('NextWeek')."</a>]
                 ";
                     break;
                 default:
@@ -132,8 +132,8 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
                     $previousReqDate = mktime(1, 1, 1, date("m", $reqdate) - 1, 1, date("Y", $reqdate));
                     $nextReqDate = mktime(1, 1, 1, date("m", $reqdate) + 1, 1, date("Y", $reqdate));
                     echo "
-                    [<a href='" . api_get_self() . "?uInfo=$uInfo&view=$view&period=month&reqdate=$previousReqDate' class='specialLink'>" . get_lang('PreviousMonth') . "</a>]
-                    [<a href='" . api_get_self() . "?uInfo=$uInfo&view=$view&period=month&reqdate=$nextReqDate' class='specialLink'>" . get_lang('NextMonth') . "</a>]
+                    [<a href='" . api_get_self()."?uInfo=$uInfo&view=$view&period=month&reqdate=$previousReqDate' class='specialLink'>".get_lang('PreviousMonth')."</a>]
+                    [<a href='" . api_get_self()."?uInfo=$uInfo&view=$view&period=month&reqdate=$nextReqDate' class='specialLink'>".get_lang('NextMonth')."</a>]
                 ";
                     break;
             }
@@ -153,7 +153,7 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
                         AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
                         GROUP BY DAYOFMONTH(access_date)
                         ORDER BY access_date ASC";
-                $displayedDate = $MonthsLong[date("n", $reqdate) - 1] . date(" Y", $reqdate);
+                $displayedDate = $MonthsLong[date("n", $reqdate) - 1].date(" Y", $reqdate);
                 break;
             case "week" :
                 $sql = "SELECT access_date
@@ -165,24 +165,24 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
                         GROUP BY DAYOFMONTH(access_date)
                         ORDER BY access_date ASC";
                 $weeklowreqdate = ($reqdate - (86400 * date("w", $reqdate)));
-                $weekhighreqdate = ($reqdate + (86400 * (6 - date("w", $reqdate)) ));
-                $displayedDate = get_lang('From') . " " . date("d ", $weeklowreqdate) . $MonthsLong[date("n", $weeklowreqdate) - 1] . date(" Y", $weeklowreqdate)
-                        . " " . get_lang('To') . " " . date("d ", $weekhighreqdate) . $MonthsLong[date("n", $weekhighreqdate) - 1] . date(" Y", $weekhighreqdate);
+                $weekhighreqdate = ($reqdate + (86400 * (6 - date("w", $reqdate))));
+                $displayedDate = get_lang('From')." ".date("d ", $weeklowreqdate).$MonthsLong[date("n", $weeklowreqdate) - 1].date(" Y", $weeklowreqdate)
+                        . " ".get_lang('To')." ".date("d ", $weekhighreqdate).$MonthsLong[date("n", $weekhighreqdate) - 1].date(" Y", $weekhighreqdate);
                 break;
         }
         echo "<tr><td>";
         $results = StatsUtils::getManyResults1Col($sql);
         /*             * * display of the displayed period  ** */
         echo "<table width='100%' cellpadding='2' cellspacing='1' border='0' align=center>";
-        echo "<td bgcolor='#E6E6E6'>" . $displayedDate . "</td>";
+        echo "<td bgcolor='#E6E6E6'>".$displayedDate."</td>";
         if (is_array($results)) {
             for ($j = 0; $j < sizeof($results); $j++) {
                 $beautifulDateTime = api_convert_and_format_date($results[$j], null, date_default_timezone_get());
                 echo "<tr>";
-                echo "<td style='padding-left : 40px;' valign='top'>" . $beautifulDateTime . "</td>";
+                echo "<td style='padding-left : 40px;' valign='top'>".$beautifulDateTime."</td>";
                 echo"</tr>";
                 // $limit is used to select only results between $results[$j] (current login) and next one
-                if ($j == ( sizeof($results) - 1 ))
+                if ($j == (sizeof($results) - 1))
                     $limit = date("Y-m-d H:i:s", $nextReqDate);
                 else
                     $limit = $results[$j + 1];
@@ -192,8 +192,8 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
                         FROM $TABLETRACK_ACCESS
                         WHERE access_user_id = $uInfo
                             AND access_tool IS NOT NULL
-                            AND access_date > '" . $results[$j] . "'
-                            AND access_date < '" . $limit . "'
+                            AND access_date > '".$results[$j]."'
+                            AND access_date < '" . $limit."'
                             AND c_id = $courseId
                         GROUP BY access_tool
                         ORDER BY access_tool ASC";
@@ -204,8 +204,8 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
                     echo "<table width='50%' cellpadding='0' cellspacing='0' border='0'>\n";
                     for ($k = 0; $k < count($results2); $k++) {
                         echo "<tr>\n";
-                        echo "<td width='70%' style='padding-left : 60px;'>" . get_lang($results2[$k][0]) . "</td>\n";
-                        echo "<td width='30%' align='right' style='padding-right : 40px'>" . $results2[$k][1] . " " . get_lang('Visits') . "</td>\n";
+                        echo "<td width='70%' style='padding-left : 60px;'>".get_lang($results2[$k][0])."</td>\n";
+                        echo "<td width='30%' align='right' style='padding-right : 40px'>".$results2[$k][1]." ".get_lang('Visits')."</td>\n";
                         echo "</tr>";
                     }
                     echo "</table>\n";
@@ -215,7 +215,7 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
             }
         } else {
             echo "<tr>";
-            echo "<td colspan='2' bgcolor='#eeeeee'>" . get_lang('NoResult') . "</td>";
+            echo "<td colspan='2' bgcolor='#eeeeee'>".get_lang('NoResult')."</td>";
             echo "</tr>";
         }
         echo "</table>";

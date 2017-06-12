@@ -9,7 +9,7 @@
 /**
  * This form is included by ldap_import_students.php and ldap_import_students_to_session.php
  */
-$nbre=0;
+$nbre = 0;
 echo '<form name="form" method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'">';
 if ($statut == 1) {
     echo get_lang(
@@ -28,23 +28,23 @@ if (!empty($course)) {
 $is_western_name_order = api_is_western_name_order();
 echo '<input type="hidden" name="confirmed" value="yes">';
 echo '<table border="0" cellspacing="0" width="100%">';
-echo '<tr align="center" id="header3">' .
-		'<td width="15%"><input type="button" value="'.get_lang('AllSlashNone').'" onClick="checkAll();"></td>' .
-		'<td width="40%"><b>'.get_lang('Email').'</b></td>' .
+echo '<tr align="center" id="header3">'.
+		'<td width="15%"><input type="button" value="'.get_lang('AllSlashNone').'" onClick="checkAll();"></td>'.
+		'<td width="40%"><b>'.get_lang('Email').'</b></td>'.
 		($is_western_name_order
-			? '<td width="15%"><b>'.get_lang('FirstName').'</b></td>' .
+			? '<td width="15%"><b>'.get_lang('FirstName').'</b></td>'.
 			'<td width="15%"><b>'.get_lang('Name').'</b></td>'
-			: '<td width="15%"><b>'.get_lang('Name').'</b></td>' .
-			'<td width="15%"><b>'.get_lang('FirstName').'</b></td>') .
-		'<td width="15%"><b>'.get_lang('Login').'</b></td>' .
+			: '<td width="15%"><b>'.get_lang('Name').'</b></td>'.
+			'<td width="15%"><b>'.get_lang('FirstName').'</b></td>').
+		'<td width="15%"><b>'.get_lang('Login').'</b></td>'.
 	  '</tr>'."\n";
 while (list ($key, $val) = each($nom_form)) {
-	$nbre=$nbre+1;
-	if($nbre & 1) $ndiv=2; else $ndiv=3;
+	$nbre = $nbre + 1;
+	if ($nbre & 1) $ndiv = 2; else $ndiv = 3;
 	echo '<tr align="center" id="header'.$ndiv.'">';
 	echo '<td><input type="checkbox" name="checkboxes[]" value="'.$key.'" checked="checked"></td>';
 	echo '<td>'.$email_form[$key].'<input type="hidden" name="email_form['.$key.']" size="40" value="'.$email_form[$key].'"></td>';
-	if ($is_western_name_order)	{
+	if ($is_western_name_order) {
 		echo '<td>'.$prenom_form[$key].'<input type="hidden" name="prenom_form['.$key.']" size="20" value="'.$prenom_form[$key].'"></td>';
 		echo '<td>'.$nom_form[$key].'<input type="hidden" name="nom_form['.$key.']" size="20" value="'.$nom_form[$key].'"></td>';
 	} else {

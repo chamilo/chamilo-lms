@@ -59,10 +59,10 @@ if (!empty($course_user_list)) {
 
         $issues .= '<div class="text-course">';
         $issues .= '<p>'.sprintf(
-                get_lang('YouHaveEnteredTheCourseXInY'),
-                '" '.$courseInfo['name'].' "',
-                api_convert_and_format_date($login, DATE_TIME_FORMAT_LONG)
-                ).'</p>';
+            get_lang('YouHaveEnteredTheCourseXInY'),
+            '" '.$courseInfo['name'].' "',
+            api_convert_and_format_date($login, DATE_TIME_FORMAT_LONG)
+        ).'</p>';
         $issues .= '</div>';
         $issues .= '</li>';
         $count++;
@@ -90,13 +90,11 @@ if (!empty($dates)) {
 }
 
 $message = null;
-
 if (empty($content)) {
     $message = Display::return_message(get_lang('NoDataAvailable'), 'warning');
 }
 
 $tpl = new Template($nameTools);
-
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

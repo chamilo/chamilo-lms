@@ -149,14 +149,25 @@ switch ($action) {
                 $row['count_questions'] = $count_questions;
 
                 $response->rows[$i]['id'] = $row['exe_id'];
-                $remaining = strtotime($row['start_date']) + ($oExe->expired_time * 60) - strtotime(api_get_utc_datetime(time()));
-                $h = floor($remaining / 3600);
-                $m = floor(($remaining - ($h * 3600)) / 60);
-                $s = ($remaining - ($h * 3600) - ($m * 60));
+                if (!empty($oExe->expired_time)) {
+                    $remaining = strtotime($row['start_date']) + ($oExe->expired_time * 60) - strtotime(api_get_utc_datetime(time()));
+                    $h = floor($remaining / 3600);
+                    $m = floor(($remaining - ($h * 3600)) / 60);
+                    $s = ($remaining - ($h * 3600) - ($m * 60));
+                    $timeInfo = api_format_date(
+                        $row['start_date'],
+                        DATE_TIME_FORMAT_LONG
+                    ).' ['.($h > 0 ? $h.':' : '').sprintf("%02d", $m).':'.sprintf("%02d", $s).']';
+                } else {
+                    $timeInfo = api_format_date(
+                            $row['start_date'],
+                            DATE_TIME_FORMAT_LONG
+                    );
+                }
                 $array = array(
                     $row['firstname'],
                     $row['lastname'],
-                    api_format_date($row['start_date'], DATE_TIME_FORMAT_LONG).' ['.($h > 0 ? $h.':' : '').sprintf("%02d", $m).':'.sprintf("%02d", $s).']',
+                    $timeInfo,
                     $row['count_questions'],
                     round($row['score'] * 100).'%'
                 );
@@ -186,7 +197,7 @@ switch ($action) {
                 );
                 $counter++;
             }
-            Display::display_confirmation_message(get_lang('Saved'));
+            echo Display::return_message(get_lang('Saved'), 'confirmation');
         }
         break;
     case 'update_question_order':
@@ -195,7 +206,7 @@ switch ($action) {
         $exercise_id = isset($_REQUEST['exercise_id']) ? $_REQUEST['exercise_id'] : null;
 
         if (empty($exercise_id)) {
-            return Display::display_error_message(get_lang('Error'));
+            return Display::return_message(get_lang('Error'), 'error');
         }
         if (api_is_allowed_to_edit(null, true)) {
             $new_question_list = $_POST['question_id_list'];
@@ -209,7 +220,7 @@ switch ($action) {
                 ;
                 $counter++;
             }
-            Display::display_confirmation_message(get_lang('Saved'));
+            echo Display::return_message(get_lang('Saved'), 'confirmation');
         }
         break;
     case 'add_question_to_reminder':

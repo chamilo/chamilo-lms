@@ -16,7 +16,7 @@ class HTML_QuickForm_Rule_HTML extends HTML_QuickForm_Rule
      */
     function validate($html, $mode = NO_HTML)
     {
-        $allowed_tags = self::get_allowed_tags ($mode, $fullpage);
+        $allowed_tags = self::get_allowed_tags($mode, $fullpage);
         $cleaned_html = kses($html, $allowed_tags);
         return $html == $cleaned_html;
     }
@@ -33,7 +33,7 @@ class HTML_QuickForm_Rule_HTML extends HTML_QuickForm_Rule
         // Include the allowed tags.
         //include __DIR__.'/allowed_tags.inc.php';
         global $allowed_tags_student, $allowed_tags_student_full_page, $allowed_tags_teacher, $allowed_tags_teacher_full_page;
-        switch($mode)
+        switch ($mode)
         {
             case NO_HTML:
                 return array();

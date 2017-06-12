@@ -24,7 +24,7 @@ global $CLI_VCHAMILO_PRECHECK;
 
 $CLI_VCHAMILO_PRECHECK = true; // force first config to be minimal
 require(dirname(dirname(dirname(__DIR__))).'/main/inc/conf/configuration.php'); // get boot config
-require_once($_configuration['root_sys'].'plugin/vchamilo/cli/clilib.php');       // cli only functions
+require_once($_configuration['root_sys'].'plugin/vchamilo/cli/clilib.php'); // cli only functions
 
 // Ensure errors are well explained
 

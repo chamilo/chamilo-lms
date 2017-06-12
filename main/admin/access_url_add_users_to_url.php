@@ -30,8 +30,8 @@ $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
 /*	Header	*/
 $tool_name = get_lang('AddUsersToURL');
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
 
 Display :: display_header($tool_name);
 
@@ -46,8 +46,8 @@ api_display_tool_title($tool_name);
 
 if ($_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    $users = is_array($_POST['user_list']) ? $_POST['user_list'] : array() ;
-    $url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : array() ;
+    $users = is_array($_POST['user_list']) ? $_POST['user_list'] : array();
+    $url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : array();
     $first_letter_user = $_POST['first_letter_user'];
     foreach ($users as $key => $value) {
         $users[$key] = intval($value);
@@ -55,12 +55,13 @@ if ($_POST['form_sent']) {
 
     if ($form_sent == 1) {
         if (count($users) == 0 || count($url_list) == 0) {
-            Display:: display_error_message(
-                get_lang('AtLeastOneUserAndOneURL')
+            echo Display::return_message(
+                get_lang('AtLeastOneUserAndOneURL'),
+                'error'
             );
         } else {
             UrlManager::add_users_to_urls($users, $url_list);
-            Display:: display_confirmation_message(get_lang('UsersBelongURL'));
+            echo Display::return_message(get_lang('UsersBelongURL'), 'confirm');
         }
     }
 }
@@ -70,7 +71,7 @@ if (empty($first_letter_user)) {
     $sql = "SELECT count(*) as nb_users FROM $tbl_user";
     $result = Database::query($sql);
     $num_row = Database::fetch_array($result);
-    if ($num_row['nb_users']>1000) {
+    if ($num_row['nb_users'] > 1000) {
         //if there are too much users to gracefully handle with the HTML select list,
         // assign a default filter on users names
         $first_letter_user = 'A';
@@ -101,7 +102,7 @@ unset($result);
     <td width="40%" align="center">
      <b><?php echo get_lang('UserList'); ?></b>
      <br/><br/>
-     <?php echo get_lang('Select').' ' ; echo $target_name == 'firstname'? get_lang('FirstName') : get_lang('LastName'); ?>
+     <?php echo get_lang('Select').' '; echo $target_name == 'firstname' ? get_lang('FirstName') : get_lang('LastName'); ?>
      <select name="first_letter_user" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
       <option value="">--</option>
       <?php
@@ -120,7 +121,7 @@ unset($result);
         <?php
         foreach ($db_users as $user) {
         ?>
-            <option value="<?php echo $user['user_id']; ?>" <?php if(in_array($user['user_id'], $users)) echo 'selected="selected"'; ?>>
+            <option value="<?php echo $user['user_id']; ?>" <?php if (in_array($user['user_id'], $users)) echo 'selected="selected"'; ?>>
             <?php echo api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')'; ?>
             </option>
         <?php
@@ -136,7 +137,7 @@ unset($result);
 		<?php
         foreach ($db_urls as $url_obj) {
             ?>
-			<option value="<?php echo $url_obj['id']; ?>" <?php if(in_array($url_obj['id'],$url_list)) echo 'selected="selected"'; ?>>
+			<option value="<?php echo $url_obj['id']; ?>" <?php if (in_array($url_obj['id'], $url_list)) echo 'selected="selected"'; ?>>
                 <?php echo $url_obj['url']; ?>
 			</option>
 			<?php

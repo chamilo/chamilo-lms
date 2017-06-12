@@ -8,7 +8,7 @@
 /**
  * Init
  */
-require_once __DIR__ . '/../config.php';
+require_once __DIR__.'/../config.php';
 // Protect test
 api_protect_admin_script();
 
@@ -42,7 +42,7 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 }
 // Check if a file that limits access from webservices exists and contains
 // the restraining check
-if (is_file(api_get_path(WEB_CODE_PATH) .'webservices/webservice-auth-ip.conf.php')) {
+if (is_file(api_get_path(WEB_CODE_PATH).'webservices/webservice-auth-ip.conf.php')) {
     include api_get_path(WEB_CODE_PATH).'webservices/webservice-auth-ip.conf.php';
     if (!empty($ws_auth_ip)) {
         $check_ip = true;
@@ -63,7 +63,7 @@ if ($check_ip) {
 $params['secret_key'] = sha1($security_key);
 
 // Registration soap wsdl
-$wsUrl = api_get_path(WEB_CODE_PATH) . 'webservices/registration.soap.php?wsdl';
+$wsUrl = api_get_path(WEB_CODE_PATH).'webservices/registration.soap.php?wsdl';
 $options = array(
     'location' => $wsUrl,
     'uri' => $wsUrl
@@ -79,7 +79,7 @@ try {
     $result = $client->__soapCall('HookAdvancedSubscription..WSSessionGetDetailsByUser', array($params));
     if (is_object($result) && isset($result->action_url)) {
         echo '<br />';
-        echo Display::url("message" . $result->message, $result->action_url);
+        echo Display::url("message".$result->message, $result->action_url);
     }
 } catch (\Exception $e) {
     var_dump($e);

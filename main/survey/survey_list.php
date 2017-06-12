@@ -2,13 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	@package chamilo.survey
- * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
- * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
- *	@author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code
- * 	@version $Id: survey_list.php 21933 2009-07-09 06:08:22Z ivantcholakov $
+ * @package chamilo.survey
+ * @author unknown, the initial survey that did not make it in 1.8 because of bad code
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
+ * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code
+ * @version $Id: survey_list.php 21933 2009-07-09 06:08:22Z ivantcholakov $
  *
- * 	@todo use quickforms for the forms
+ * @todo use quickforms for the forms
  */
 if (!isset($_GET['cidReq'])) {
     $_GET['cidReq'] = 'none'; // Prevent sql errors
@@ -109,9 +109,9 @@ if ($action === 'delete' && isset($_GET['survey_id'])) {
     $return = SurveyManager::delete_survey($_GET['survey_id']);
 
     if ($return) {
-        Display::display_confirmation_message(get_lang('SurveyDeleted'), false);
+        echo Display::return_message(get_lang('SurveyDeleted'), 'confirmation', false);
     } else {
-        Display::display_error_message(get_lang('ErrorOccurred'), false);
+        echo Display::return_message(get_lang('ErrorOccurred'), 'error', false);
     }
 }
 
@@ -132,9 +132,9 @@ if ($action == 'empty') {
     }
     $return = SurveyManager::empty_survey(intval($_GET['survey_id']));
     if ($return) {
-        Display :: display_confirmation_message(get_lang('SurveyEmptied'), false);
+        echo Display::return_message(get_lang('SurveyEmptied'), 'confirmation', false);
     } else {
-        Display :: display_error_message(get_lang('ErrorOccurred'), false);
+        echo Display::return_message(get_lang('ErrorOccurred'), 'error', false);
     }
 }
 
@@ -151,9 +151,9 @@ if (isset($_POST['action']) && $_POST['action']) {
             // delete the actual survey
             SurveyManager::delete_survey($value);
         }
-        Display :: display_confirmation_message(get_lang('SurveysDeleted'), false);
+        echo Display::return_message(get_lang('SurveysDeleted'), 'confirmation', false);
     } else {
-        Display :: display_error_message(get_lang('NoSurveysSelected'), false);
+        echo Display::return_message(get_lang('NoSurveysSelected'), 'error', false);
     }
 }
 

@@ -68,7 +68,7 @@ class ExtraFieldValue extends Model
         $query->where('e.extraFieldType = :type');
         $query->setParameter('type', $this->getExtraField()->getExtraFieldType());
 
-        return $query->getQuery()->getScalarResult();
+        return $query->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -106,7 +106,7 @@ class ExtraFieldValue extends Model
 
         // Parse params.
         foreach ($extraFields as $fieldDetails) {
-            if ($fieldDetails['visible_to_self'] != 1) {
+            if ($fieldDetails['visible_to_self'] != 1 && !api_is_platform_admin(true, true)) {
                 continue;
             }
 
@@ -160,6 +160,10 @@ class ExtraFieldValue extends Model
                     $tags = [];
 
                     foreach ($tagValues as $tagValue) {
+                        if (empty($tagValue)) {
+                            continue;
+                        }
+
                         $tagsResult = $em->getRepository('ChamiloCoreBundle:Tag')
                             ->findBy([
                                 'tag' => $tagValue,
@@ -316,7 +320,7 @@ class ExtraFieldValue extends Model
      * Save values in the *_field_values table
      * @param array $params Structured array with the values to save
      * @param boolean $show_query Whether to show the insert query (passed to the parent save() method)
-     * @result mixed The result sent from the parent method
+     * @return mixed The result sent from the parent method
      * @assert (array()) === false
      */
     public function save($params, $show_query = false)
@@ -871,13 +875,11 @@ class ExtraFieldValue extends Model
     {
         $field_id = intval($field_id);
         $item_id = intval($item_id);
-        $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $sql = "DELETE FROM {$this->table}
                 WHERE
                     item_id = '$item_id' AND
-                    field_id = '$field_id' AND
-                    extra_field_type = $extraFieldType
+                    field_id = '$field_id'
                 ";
         Database::query($sql);
     }

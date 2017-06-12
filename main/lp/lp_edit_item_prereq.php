@@ -27,7 +27,7 @@ $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 /* MAIN CODE */
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
     error_log('New LP - User not authorized in lp_edit_item_prereq.php');
-    header('location:lp_controller.php?action=view&lp_id=' . $learnpath_id);
+    header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
 }
 
@@ -45,7 +45,7 @@ if (isset($_SESSION['gradebook'])) {
 
 if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
     );
 }
@@ -91,6 +91,7 @@ echo '<div class="col-md-3">';
 echo $lp->return_new_tree();
 echo '</div>';
 echo '<div class="col-md-9">';
+echo '<div class="prerequisites">';
 $lpItem = new learnpathItem($_GET['id']);
 if (isset($is_success) && $is_success == true) {
     echo $lp->display_manipulate($_GET['id'], $lpItem->get_type());
@@ -100,5 +101,5 @@ if (isset($is_success) && $is_success == true) {
     echo $lp->display_item_prerequisites_form($_GET['id']);
 }
 echo '</div>';
-
+echo '</div>';
 Display::display_footer();

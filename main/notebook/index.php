@@ -92,7 +92,7 @@ if ($action === 'addnote') {
             $values = $form->exportValues();
             $res = NotebookManager::save_note($values);
             if ($res) {
-                Display::display_confirmation_message(get_lang('NoteAdded'));
+                echo Display::return_message(get_lang('NoteAdded'), 'confirmation');
             }
         }
         Security::clear_token();
@@ -144,7 +144,7 @@ if ($action === 'addnote') {
             $values = $form->exportValues();
             $res = NotebookManager::update_note($values);
             if ($res) {
-                Display::display_confirmation_message(get_lang('NoteUpdated'));
+                echo Display::return_message(get_lang('NoteUpdated'), 'confirmation');
             }
 
         }
@@ -164,7 +164,7 @@ if ($action === 'addnote') {
     // Action handling: deleting a note
     $res = NotebookManager::delete_note($_GET['notebook_id']);
     if ($res) {
-        Display::display_confirmation_message(get_lang('NoteDeleted'));
+        echo Display::return_message(get_lang('NoteDeleted'), 'confirmation');
     }
 
     NotebookManager::display_notes();
@@ -175,23 +175,23 @@ if ($action === 'addnote') {
     switch ($_GET['view']) {
         case 'creation_date':
             if (!$_GET['direction'] || $_GET['direction'] == 'ASC') {
-                Display::display_confirmation_message(get_lang('NotesSortedByCreationDateAsc'));
+                echo Display::return_message(get_lang('NotesSortedByCreationDateAsc'), 'confirmation');
             } else {
-                Display::display_confirmation_message(get_lang('NotesSortedByCreationDateDESC'));
+                echo Display::return_message(get_lang('NotesSortedByCreationDateDESC'), 'confirmation');
             }
             break;
         case 'update_date':
             if (!$_GET['direction'] || $_GET['direction'] == 'ASC') {
-                Display::display_confirmation_message(get_lang('NotesSortedByUpdateDateAsc'));
+                echo Display::return_message(get_lang('NotesSortedByUpdateDateAsc'), 'confirmation');
             } else {
-                Display::display_confirmation_message(get_lang('NotesSortedByUpdateDateDESC'));
+                echo Display::return_message(get_lang('NotesSortedByUpdateDateDESC'), 'confirmation');
             }
             break;
         case 'title':
             if (!$_GET['direction'] || $_GET['direction'] == 'ASC') {
-                Display::display_confirmation_message(get_lang('NotesSortedByTitleAsc'));
+                echo Display::return_message(get_lang('NotesSortedByTitleAsc'), 'confirmation');
             } else {
-                Display::display_confirmation_message(get_lang('NotesSortedByTitleDESC'));
+                echo Display::return_message(get_lang('NotesSortedByTitleDESC'), 'confirmation');
             }
             break;
     }

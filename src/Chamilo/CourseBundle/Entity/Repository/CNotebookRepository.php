@@ -29,8 +29,8 @@ class CNotebookRepository extends EntityRepository
         Course $course,
         Session $session = null,
         $orderField = 'creation_date',
-        $orderDirection = 'DESC')
-    {
+        $orderDirection = 'DESC'
+    ) {
         switch ($orderField) {
             case 'creation_date':
                 $orderField = 'N.creationDate';

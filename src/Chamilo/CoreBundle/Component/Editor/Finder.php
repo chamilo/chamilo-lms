@@ -39,16 +39,16 @@ class Finder extends \elFinder
         set_error_handler('elFinder::phpErrorHandler', $errLevel);
 
         // convert PATH_INFO to GET query
-        if (! empty($_SERVER['PATH_INFO'])) {
+        if (!empty($_SERVER['PATH_INFO'])) {
             $_ps = explode('/', trim($_SERVER['PATH_INFO'], '/'));
-            if (! isset($_GET['cmd'])) {
+            if (!isset($_GET['cmd'])) {
                 $_cmd = $_ps[0];
                 if (isset($this->commands[$_cmd])) {
                     $_GET['cmd'] = $_cmd;
                     $_i = 1;
-                    foreach(array_keys($this->commands[$_cmd]) as $_k) {
+                    foreach (array_keys($this->commands[$_cmd]) as $_k) {
                         if (isset($_ps[$_i])) {
-                            if (! isset($_GET[$_k])) {
+                            if (!isset($_GET[$_k])) {
                                 $_GET[$_k] = $_ps[$_i];
                             }
                         } else {
@@ -65,11 +65,11 @@ class Finder extends \elFinder
         // setup debug mode
         $this->debug = (isset($opts['debug']) && $opts['debug'] ? true : false);
         if ($this->debug) {
-            error_reporting(defined('ELFINDER_DEBUG_ERRORLEVEL')? ELFINDER_DEBUG_ERRORLEVEL : -1);
+            error_reporting(defined('ELFINDER_DEBUG_ERRORLEVEL') ? ELFINDER_DEBUG_ERRORLEVEL : -1);
             ini_set('diaplay_errors', '1');
         }
 
-        if (! interface_exists('elFinderSessionInterface')) {
+        if (!interface_exists('elFinderSessionInterface')) {
             include_once __DIR__.'/elFinderSessionInterface.php';
         }
 
@@ -81,10 +81,10 @@ class Finder extends \elFinder
                 'base64encode' => !empty($opts['base64encodeSessionData']),
                 'keys' => array(
                     'default'   => !empty($opts['sessionCacheKey']) ? $opts['sessionCacheKey'] : 'elFinderCaches',
-                    'netvolume' => !empty($opts['netVolumesSessionKey'])? $opts['netVolumesSessionKey'] : 'elFinderNetVolumes'
+                    'netvolume' => !empty($opts['netVolumesSessionKey']) ? $opts['netVolumesSessionKey'] : 'elFinderNetVolumes'
                 )
             );
-            if (! class_exists('elFinderSession')) {
+            if (!class_exists('elFinderSession')) {
                 include_once __DIR__.'/elFinderSession.php';
             }
             $this->session = new elFinderSession($sessionOpts);
@@ -102,8 +102,8 @@ class Finder extends \elFinder
             self::$volumesCnt = $volumesCntStart;
         }
 
-        $this->time  = $this->utime();
-        $this->sessionCloseEarlier = isset($opts['sessionCloseEarlier'])? (bool)$opts['sessionCloseEarlier'] : true;
+        $this->time = $this->utime();
+        $this->sessionCloseEarlier = isset($opts['sessionCloseEarlier']) ? (bool) $opts['sessionCloseEarlier'] : true;
         $this->sessionUseCmds = array_flip($sessionUseCmds);
         $this->timeout = (isset($opts['timeout']) ? $opts['timeout'] : 0);
         $this->uploadTempPath = (isset($opts['uploadTempPath']) ? $opts['uploadTempPath'] : '');
@@ -116,14 +116,14 @@ class Finder extends \elFinder
                 elFinder::$commonTempPath = '';
             }
         }
-        $this->maxArcFilesSize = isset($opts['maxArcFilesSize'])? intval($opts['maxArcFilesSize']) : 0;
-        $this->optionsNetVolumes = (isset($opts['optionsNetVolumes']) && is_array($opts['optionsNetVolumes']))? $opts['optionsNetVolumes'] : array();
+        $this->maxArcFilesSize = isset($opts['maxArcFilesSize']) ? intval($opts['maxArcFilesSize']) : 0;
+        $this->optionsNetVolumes = (isset($opts['optionsNetVolumes']) && is_array($opts['optionsNetVolumes'])) ? $opts['optionsNetVolumes'] : array();
         if (isset($opts['itemLockExpire'])) {
             $this->itemLockExpire = intval($opts['itemLockExpire']);
         }
 
         // deprecated settings
-        $this->netVolumesSessionKey = !empty($opts['netVolumesSessionKey'])? $opts['netVolumesSessionKey'] : 'elFinderNetVolumes';
+        $this->netVolumesSessionKey = !empty($opts['netVolumesSessionKey']) ? $opts['netVolumesSessionKey'] : 'elFinderNetVolumes';
         self::$sessionCacheKey = !empty($opts['sessionCacheKey']) ? $opts['sessionCacheKey'] : 'elFinderCaches';
 
         // check session cache
@@ -147,25 +147,25 @@ class Finder extends \elFinder
             $_reqCmd = isset($_req['cmd']) ? $_req['cmd'] : '';
             foreach ($opts['bind'] as $cmd => $handlers) {
                 $doRegist = (strpos($cmd, '*') !== false);
-                if (! $doRegist) {
+                if (!$doRegist) {
                     $_getcmd = create_function('$cmd', 'list($ret) = explode(\'.\', $cmd);return trim($ret);');
                     $doRegist = ($_reqCmd && in_array($_reqCmd, array_map($_getcmd, explode(' ', $cmd))));
                 }
                 if ($doRegist) {
                     // for backward compatibility
-                    if (! is_array($handlers)) {
+                    if (!is_array($handlers)) {
                         $handlers = array($handlers);
                     } else {
                         if (count($handlers) === 2 && is_object($handlers[0])) {
                             $handlers = array($handlers);
                         }
                     }
-                    foreach($handlers as $handler) {
+                    foreach ($handlers as $handler) {
                         if ($handler) {
                             if (is_string($handler) && strpos($handler, '.')) {
                                 list($_domain, $_name, $_method) = array_pad(explode('.', $handler), 3, '');
                                 if (strcasecmp($_domain, 'plugin') === 0) {
-                                    if ($plugin = $this->getPluginInstance($_name, isset($opts['plugin'][$_name])? $opts['plugin'][$_name] : array())
+                                    if ($plugin = $this->getPluginInstance($_name, isset($opts['plugin'][$_name]) ? $opts['plugin'][$_name] : array())
                                             and method_exists($plugin, $_method)) {
                                         $this->bind($cmd, array($plugin, $_method));
                                     }
@@ -186,9 +186,9 @@ class Finder extends \elFinder
         // check for net volumes stored in session
         $netVolumes = $this->getNetVolumes();
         foreach ($netVolumes as $key => $root) {
-            if (! isset($root['id'])) {
+            if (!isset($root['id'])) {
                 // given fixed unique id
-                if (! $root['id'] = $this->getNetVolumeUniqueId($netVolumes)) {
+                if (!$root['id'] = $this->getNetVolumeUniqueId($netVolumes)) {
                     $this->mountErrors[] = 'Netmount Driver "'.$root['driver'].'" : Could\'t given volume id.';
                     continue;
                 }

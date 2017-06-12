@@ -116,9 +116,7 @@ class UniqueAnswerImage extends UniqueAnswer
 
         if ($numberAnswers < 1) {
             $numberAnswers = 1;
-            Display::addFlash(Display::return_message(
-                get_lang('YouHaveToCreateAtLeastOneAnswer')
-            ));
+            echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
         }
 
         for ($i = 1; $i <= $numberAnswers; ++$i) {
@@ -276,7 +274,10 @@ class UniqueAnswerImage extends UniqueAnswer
         $form->setConstants(array('nb_answers' => $numberAnswers));
     }
 
-    public function processAnswersCreation($form)
+    /**
+     * @inheritdoc
+     */
+    public function processAnswersCreation($form, $exercise)
     {
         $questionWeighting = $nbrGoodAnswers = 0;
         $correct = $form->getSubmitValue('correct');
@@ -363,12 +364,6 @@ class UniqueAnswerImage extends UniqueAnswer
 
         // sets the total weighting of the question
         $this->updateWeighting($questionWeighting);
-        $this->save();
+        $this->save($exercise);
     }
-
-    public function return_header($feedback_type = null, $counter = null, $score = null)
-    {
-        return parent::return_header($feedback_type, $counter, $score);
-    }
-
 }

@@ -438,11 +438,11 @@ $ExerciseEndButtonCourseHome = "Page d'accueil du cours";
 $ExerciseEndButton = "Bouton de fin d'exercice";
 $HideQuestionTitle = "Cacher le titre des questions";
 $QuestionSelection = "Ordre de sélection des questions";
-$OrderedCategoriesByParentWithQuestionsRandom = "Ordonnées par catégorie par parent, questions à l'hasard";
+$OrderedCategoriesByParentWithQuestionsRandom = "Ordonnées par catégorie par parent, questions au hasard";
 $OrderedCategoriesByParentWithQuestionsOrdered = "Ordonnées par catégorie par parent, questions dans l'ordre";
-$RandomCategoriesWithRandomQuestionsNoQuestionGrouped = "Catégories à l'hasard, questions à l'hasard (questions non groupées)";
-$RandomCategoriesWithQuestionsOrderedNoQuestionGrouped = "Catégories à l'hasard, questions ordonnées (questions non groupées)";
-$RandomCategoriesWithRandomQuestions = "Catégories à l'hasard, questions à l'hasard";
+$RandomCategoriesWithRandomQuestionsNoQuestionGrouped = "Catégories au hasard, questions au hasard (questions non groupées)";
+$RandomCategoriesWithQuestionsOrderedNoQuestionGrouped = "Catégories au hasard, questions ordonnées (questions non groupées)";
+$RandomCategoriesWithRandomQuestions = "Catégories au hasard, questions au hasard";
 $OrderedCategoriesAlphabeticallyWithRandomQuestions = "Ordonnées par catégorie alphabétiquement, questions au hasard";
 $RandomCategoriesWithQuestionsOrdered = "Catégories au hasard, questions dans l'ordre";
 $OrderedCategoriesAlphabeticallyWithQuestionsOrdered = "Ordonnées par catégorie alphabétiquement, questions dans l'ordre";
@@ -598,6 +598,7 @@ $Forbidden = "Accès non autorisé";
 $CourseAccessConfigTip = "Votre cours est public par défaut, mais vous pouvez définir le niveau de confidentialité ci-dessus.";
 $OpenToTheWorld = "Public - accès autorisé pour tout le monde";
 $OpenToThePlatform = "Ouvert - accès autorisé aux utilisateurs enregistrés sur la plateforme";
+$StudentXIsNotSubscribedToCourse = "L'étudiant(e) %s n'est pas inscrit(e) dans ce cours";
 $TipLang = "Cette langue vaudra pour tous les visiteurs de votre cours.";
 $Vid = "Vidéo";
 $Work = "Travaux";
@@ -1811,8 +1812,8 @@ $XMLNotValid = "Le document XML n'est pas valide";
 $ForTheSession = "pour la session";
 $AllowEmailEditorTitle = "Activer l'éditeur d'emails en ligne";
 $AllowEmailEditorComment = "Si cette option est activée, cliquer sur une adresse mail ouvrira un éditeur en ligne.";
-$AddCSVHeader = "Ajouter la ligne d'en-tête du CSV?";
-$YesAddCSVHeader = "Oui, ajouter la ligne d'en-tête CSV<br />Cette ligne définit les champs et est nécessaire lorsque vous désirez importer le fichier sur un autre campus Chamilo";
+$AddCSVHeader = "Inclure la ligne d'en-têtes?";
+$YesAddCSVHeader = "Oui, ajouter la ligne d'en-têtes<br />Placés en première ligne, les titres des champs sont utiles notamment lorsque vous souhaitez réimporter le fichier dans un portail Chamilo.";
 $ListOfUsersSubscribedToCourse = "Liste des utilisateurs inscrits au cours";
 $NumberOfCourses = "Nombre de cours";
 $ShowDifferentCourseLanguage = "Afficher les langues des cours";
@@ -5889,7 +5890,7 @@ $UnsubscribeUsersAlreadyAddedInCourse = "Désinscrire les utilisateurs actuellem
 $ImportUsers = "Importer des utilisateurs";
 $HelpFolderLearningPaths = "Ce répertoire contient des documents créés par l'outil de parcours. Vous pouvez y éditer les documents HTML qui ont été générés par l'import de contenu, comme par exemple ceux importés via Chamilo Rapid. Il est recommandé de laisser ce répertoire invisible aux étudiants.\n(Cette information n'est pas visible par les apprenants)";
 $YouWillBeRedirectedInXSeconds = "Un instant s'il vous plaît. Vous serez redirigé dans %s secondes...";
-$ToProtectYourSiteMakeXReadOnlyAndDeleteY = "Pour protéger votre installation, mettez le répertoire %s en lecture seule (chmod -r 0555 sous Linux) et supprimez complètement le répertoire %s";
+$ToProtectYourSiteMakeXReadOnlyAndDeleteY = "Pour protéger votre installation, mettez le répertoire %s en lecture seule (chmod -R 0555 sous Linux) et supprimez complètement le répertoire %s";
 $NumberOfCoursesPublic = "Nombre de cours publics";
 $NumberOfCoursesOpen = "Nombre de cours ouverts";
 $NumberOfCoursesPrivate = "Nombre de cours privés";
@@ -7000,15 +7001,15 @@ $ResourceLockedByGradebook = "Cette option n'est pas disponible parceque cette a
 $GradebookLockedAlert = "Ce cahier de notes a été bloqué. Vous ne pouvez pas le débloquer en tant qu'enseignant. S'il est réellement nécessaire de le débloquer, veuillez contacter un administrateur de la plateforme en expliquer la raison pour laquelle vous avez besoin de le débloquer (autrement, cela pourrait être considéré comme une tentative de fraude).";
 $GradebookEnableLockingTitle = "Autoriser les enseignants à fermer les tests";
 $GradebookEnableLockingComment = "Une fois qu'un test est fermé il ne peut plus être modifier. Seul l'administrateur peut réouvrir un test qui a été fermé par un enseignant.";
-$LdapDescriptionComment = "<div class='normal-message'> <br /><ul><li>Authentification LDAP : <br />Voir I. ci-dessous pour configurer LDAP <br />Voir II. ci-dessous pour activer l'authentification LDAP </li><br /><br /><li> Mise à jour des attributs de l'utilisateur, auprès du serveur LDAP,après une authentification CAS (voir <a href='settings.php?category=CAS'>configurationde CAS </a>) : <br />Voir I. ci-dessous pour configurer LDAP <br />L'authentification est gérée par CAS, il n'est pas nécessaired'activer l'authentification LDAP dans ce cas. </li><br /></ul></div><br /><h4>I. Configuration des paramètres du serveur LDAP </h4><h5>Éditez le fichier main/inc/conf/auth.conf.php </h5>-&gt; Mettez à jour les informations de configuration LDAP du tableau <code>&#36;extldap_config</code> <br /> Les paramètres sont <br /><ul><li>base domain string (ex : 'base_dn' =&gt; 'DC=cblue,DC=be') </li><li>admin distinguished name (ex : 'admin_dn' =&gt;'CN=admin,dc=cblue,dc=be') </li><li>admin password (ex : 'admin_password' =&gt; '123456') </li><li>ldap host (ex : 'host' =&gt; array('1.2.3.4', '2.3.4.5', '3.4.5.6')) </li><li>filter (ex : 'filter' =&gt; '') </li><li>port (ex : 'port' =&gt; 389) </li><li>protocol version (2 or 3) (ex : 'protocol_version' =&gt;3) </li><li>user_search (ex : 'user_search' =&gt; 'sAMAccountName=%username%') </li><li>encoding (ex : 'encoding' =&gt; 'UTF-8') </li><li>update_userinfo (ex : 'update_userinfo' =&gt; true) </li></ul>-&gt; Mettez à jour les informations de correspondances entre les attributsLDAP et les champs utilisateurs Chamilo du tableau <code>&#36;extldap_user_correspondance</code> <br /> Le tableau est de la forme : &lt;chamilo_field&gt; =&gt;&gt;ldap_field&gt; <br />Sa structure est détaillée dans le fichiermain/auth/external_login/ldap.conf.php <br /><br /><br /><h4>II. Activation de l'authentification LDAP </h4><h5>Éditez le fichier main/inc/conf/configuration.php </h5>-&gt; Décommenter les lignes <br />&#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration['root_sys'].&quot;main/auth/external_login/login.ldap.php&quot;;<br />&#36;extAuthSource[&quot;extldap&quot;][&quot;newUser&quot;] =&#36;_configuration['root_sys'].&quot;main/auth/external_login/newUser.ldap.php&quot;;<br /><br />Notes : les utilisateurs authentifiés par LDAP saisissent leur login et motde passe dans les même champs que les utilisateurs locaux à la plate forme.<br />Notes : activer l'authentification LDAP ajoute un menu Externalauthentification [LDAP] dans l'interface d'ajout et de modification d'unutilisateur.";
+$LdapDescriptionComment = "<div class='normal-message'> <br /><ul><li>Authentification LDAP : <br />Voir I. ci-dessous pour configurer LDAP <br />Voir II. ci-dessous pour activer l'authentification LDAP </li><br /><br /><li> Mise à jour des attributs de l'utilisateur, auprès du serveur LDAP,après une authentification CAS (voir <a href='settings.php?category=CAS'>configuration de CAS </a>) : <br />Voir I. ci-dessous pour configurer LDAP <br />L'authentification est gérée par CAS, il n'est pas nécessaired'activer l'authentification LDAP dans ce cas. </li><br /></ul></div><br /><h4>I. Configuration des paramètres du serveur LDAP </h4><h5>Éditez le fichier main/inc/conf/auth.conf.php </h5>-&gt; Mettez à jour les informations de configuration LDAP du tableau <code>&#36;extldap_config</code> <br /> Les paramètres sont <br /><ul><li>base domain string (ex : 'base_dn' =&gt; 'DC=cblue,DC=be') </li><li>admin distinguished name (ex : 'admin_dn' =&gt;'CN=admin,dc=cblue,dc=be') </li><li>admin password (ex : 'admin_password' =&gt; '123456') </li><li>ldap host (ex : 'host' =&gt; array('1.2.3.4', '2.3.4.5', '3.4.5.6')) </li><li>filter (ex : 'filter' =&gt; '') </li><li>port (ex : 'port' =&gt; 389) </li><li>protocol version (2 or 3) (ex : 'protocol_version' =&gt;3) </li><li>user_search (ex : 'user_search' =&gt; 'sAMAccountName=%username%') </li><li>encoding (ex : 'encoding' =&gt; 'UTF-8') </li><li>update_userinfo (ex : 'update_userinfo' =&gt; true) </li></ul>-&gt; Mettez à jour les informations de correspondances entre les attributsLDAP et les champs utilisateurs Chamilo du tableau <code>&#36;extldap_user_correspondance</code> <br /> Le tableau est de la forme : &lt;chamilo_field&gt; =&gt;&gt;ldap_field&gt; <br />Sa structure est détaillée dans le fichiermain/auth/external_login/ldap.conf.php <br /><br /><br /><h4>II. Activation de l'authentification LDAP </h4><h5>Éditez le fichier app/config/configuration.php </h5>-&gt; Décommenter les lignes <br />&#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration['root_sys'].&quot;main/auth/external_login/login.ldap.php&quot;;<br />&#36;extAuthSource[&quot;extldap&quot;][&quot;newUser&quot;] =&#36;_configuration['root_sys'].&quot;main/auth/external_login/newUser.ldap.php&quot;;<br /><br />Notes : les utilisateurs authentifiés par LDAP saisissent leur login et motde passe dans les même champs que les utilisateurs locaux à la plate forme.<br />Notes : activer l'authentification LDAP ajoute un menu Externalauthentification [LDAP] dans l'interface d'ajout et de modification d'unutilisateur.";
 $ShibbolethMainActivateTitle = "<h3>Configuration de l'authentification Shibboleth</h3>";
 $ShibbolethMainActivateComment = "<p>Vous devez, en premier lieu, configurer Shibboleth pour votre serveur web. Pour le configurer pour Chamilo.</p><h5>éditez le fichier main/auth/shibboleth/config/aai.class.php</h5><p>Modifiez les valeurs de l'objet &#36;result avec les nom des attributs retourné par votre serveur Shibboleth.</p>Les valeurs à modifier sont<ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Vous trouverez dans les <a href='settings.php?category=Shibboleth'>Plugin</a> un bouton 'Login Shibboleth', paramétrable, qui s'ajoutera sur la page d'accueil de votre campus Chamilo.";
 $LdapDescriptionTitle = "Identification LDAP";
 $FacebookMainActivateTitle = "<h3>Configuration de l'authentification via Facebook</h3>";
 $FacebookMainActivateComment = "<p>
 <h5>Créez votre apllication Facebook</h5>Vous devez, en premier lieu, créer une application Facebook (cf. <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) avec votre compte Facebook.<br/>
-<h5>Éditez le fichier main/inc/conf/configuration.php</h5>Et décommentez la ligne &#36;_configuration['facebook_auth'] = 1;<br/><br/>
-<h5>Éditez le fichier main/inc/conf/auth.conf.php<br/></h5>Entrez les valeurs 'appId' et 'secret', fournies par Facebook, pour la variable &#36;facebook_config.<br/><br/>
+<h5>Éditez le fichier app/config/configuration.php</h5>Et décommentez la ligne &#36;_configuration['facebook_auth'] = 1;<br/><br/>
+<h5>Éditez le fichier app/config/auth.conf.php<br/></h5>Entrez les valeurs 'appId' et 'secret', fournies par Facebook, pour la variable &#36;facebook_config.<br/><br/>
 <h5>Éditez le fichier main/inc/conf/auth.conf.php</h5>Et décommentez les lignes &#36;facebook_config<br/><br/>
 <h5>Activez le plugin Facebook de Chamilo<br/></h5>Et placez le dans la région login_top ou login_bottom.<br/>Vous pouvez changer l'image de connexion dans les options de configuration du plugin.</p>";
 $AnnouncementForGroup = "Annonce pour un groupe";
@@ -7944,4 +7945,24 @@ $NewPasswordRequirementMaxXLowercase = "Maximum %s caractère(s) alphabétique(s
 $NewPasswordRequirementMaxXUppercase = "Maximum %s caractère(s) alphabétique(s) en majuscule";
 $NewPasswordRequirementMaxXNumeric = "Maximum %s caractère(s) numérique(s) (0-9)";
 $NewPasswordRequirementMaxXLength = "Maximum %s caractère(s) au total";
+$YouCantNotEditThisQuestionBecauseAlreadyExistAnswers = "L'édition de cette question a été désactivée parce que des utilisateurs y ont déjà répondu";
+$Avatar = "Avatar";
+$StudyCycle = "Semestre";
+$ReadingComprehension = "Compréhension à la lecture";
+$ReadingQuestionCongratsSpeedXNotReachedForYWords = "Désolé, il semblerait que la vitesse de %s mots/minute soit trop rapide pour vous pour l'instant, selon cette tentative sur un texte de %s mots.";
+$ReadingQuestionCongratsSpeedXReachedForYWords = "Félicitacions, vous avez atteint la vitesse de %s mots/minute en comprenant correctement un texte de %s mots.";
+$ReadingComprehensionLevelX = "%s mots par minute";
+$TutorXIsNotSubscribedToCourse = "Le coach %s n'est pas inscrit dans ce cours";
+$UpdateTitleInLps = "Mettre ce titre à jour dans les parcours";
+$WebRTCDialogHelp = "Pour activer le vidéochat dans votre navigateur (s'il le supporte), assurez-vous de bien cliquer sur l'icône d'information dans la partie gauche de la barre d'adresse du navigateur, et d'ensuite autoriser l'utilisation de la webcam et du micro.";
+$UpdateFile = "Mettre à jour un fichier";
+$SendEmailToTeacherWhenStudentStartQuiz = "Envoyer un e-mail à l'enseignant quand l'apprenant démarre un exercice";
+$SendEmailToTeacherWhenStudentEndQuiz = "Envoyer un e-mail à l'enseignant quand l'apprenant termine un exercice";
+$SendEmailToTeacherWhenStudentEndQuizOnlyIfOpenQuestion = "Envoyer un e-mail à l'enseignant quand un apprenant termine un exercice, uniquement s'il a répondu à une question ouverte";
+$SendEmailToTeacherWhenStudentEndQuizOnlyIfOralQuestion = "Envoyer un e-mail à l'enseignant quand l'apprenant termine un exercice, uniquement s'il a répondu à une question orale";
+$StudentStartExercise = "Début d'exercice par un apprenant";
+$TempScoreXQuestionsNotCorrectedYet = "Score temporaire: %s question(s) ouverte(s) non corrigée(s).";
+$Annotation = "Annotation";
+$TeacherPicture = "Photo du prof";
+$FeedbackIfNotCorrect = "Feedback si incorrecte";
 ?>

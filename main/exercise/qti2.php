@@ -1,13 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
- *	Code for Qti2 import integration.
- *	@package chamilo.exercise
- * 	@author Ronny Velasquez
- * 	@version $Id: qti2.php  2010-03-12 12:14:25Z $
+ * Code for Qti2 import integration.
+ * @package chamilo.exercise
+ * @author Ronny Velasquez
+ * @version $Id: qti2.php  2010-03-12 12:14:25Z $
  */
 
-// including the global Chamilo file
 require_once __DIR__.'/../inc/global.inc.php';
 
 // section (for the tabs)
@@ -72,7 +72,7 @@ function ch_qti2_import_file($array_file)
         return import_exercise($array_file['name']);
     }
 
-    return 'langFileError';
+    return 'FileError';
 }
 
 $message = null;

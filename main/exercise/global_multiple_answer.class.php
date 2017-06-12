@@ -35,20 +35,20 @@ class GlobalMultipleAnswer extends Question
         $html = '<table class="data_table">
                 <tr>
                     <th width="10px">
-                        ' . get_lang('Number') . '
+                        ' . get_lang('Number').'
                     </th>
                     <th width="10px">
-                        ' . get_lang('True') . '
+                        ' . get_lang('True').'
                     </th>
                     <th width="50%">
-                        ' . get_lang('Answer') . '
+                        ' . get_lang('Answer').'
                     </th>';
 
-        $html .='<th>' . get_lang('Comment') . '</th>';
-        $html .='</tr>';
+        $html .= '<th>'.get_lang('Comment').'</th>';
+        $html .= '</tr>';
         $form->addElement(
             'label',
-            get_lang('Answers') .
+            get_lang('Answers').
             '<br /> '.Display::return_icon('fill_field.png'),
             $html
         );
@@ -63,16 +63,14 @@ class GlobalMultipleAnswer extends Question
             }
         }
 
-        #le nombre de r�ponses est bien enregistr� sous la forme int(nb)
-
+        //  le nombre de r�ponses est bien enregistr� sous la forme int(nb)
         /* Ajout mise en forme nb reponse */
         $form->addElement('hidden', 'nb_answers');
         $boxes_names = array();
 
-        /* V�rification : Cr�action d'au moins une r�ponse */
         if ($nb_answers < 1) {
             $nb_answers = 1;
-            Display::addFlash(Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'), 'normal'));
+            echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'), 'normal');
         }
 
         //D�but affichage score global dans la modification d'une question
@@ -83,9 +81,9 @@ class GlobalMultipleAnswer extends Question
         for ($i = 1; $i <= $nb_answers; ++$i) {
             /* si la reponse est de type objet */
             if (is_object($answer)) {
-                $defaults['answer[' . $i . ']'] = $answer->answer[$i];
-                $defaults['comment[' . $i . ']'] = $answer->comment[$i];
-                $defaults['correct[' . $i . ']'] = $answer->correct[$i];
+                $defaults['answer['.$i.']'] = $answer->answer[$i];
+                $defaults['comment['.$i.']'] = $answer->comment[$i];
+                $defaults['correct['.$i.']'] = $answer->correct[$i];
 
                 // start
                 $scoreA = $answer->weighting[$i];
@@ -126,8 +124,8 @@ class GlobalMultipleAnswer extends Question
             );
             $answer_number->freeze();
 
-            $form->addElement('checkbox', 'correct[' . $i . ']', null, null, 'class="checkbox"');
-            $boxes_names[] = 'correct[' . $i . ']';
+            $form->addElement('checkbox', 'correct['.$i.']', null, null, 'class="checkbox"');
+            $boxes_names[] = 'correct['.$i.']';
 
             $form->addElement(
                 'html_editor',
@@ -140,7 +138,7 @@ class GlobalMultipleAnswer extends Question
                     'Height' => '100',
                 )
             );
-            $form->addRule('answer[' . $i . ']', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
             $form->addElement(
                 'html_editor',
                 'comment['.$i.']',
@@ -202,12 +200,10 @@ class GlobalMultipleAnswer extends Question
     }
 
     /**
-     * abstract function which creates the form to create / edit the answers of the question
-     * @param FormValidator $form
+     * @inheritdoc
      */
-    function processAnswersCreation($form)
+    public function processAnswersCreation($form, $exercise)
     {
-        $questionWeighting = $nbrGoodAnswers = 0;
         $objAnswer = new Answer($this->id);
         $nb_answers = $form->getSubmitValue('nb_answers');
 
@@ -217,7 +213,7 @@ class GlobalMultipleAnswer extends Question
         // Reponses correctes
         $nbr_corrects = 0;
         for ($i = 1; $i <= $nb_answers; $i++) {
-            $goodAnswer = trim($form->getSubmitValue('correct[' . $i . ']'));
+            $goodAnswer = trim($form->getSubmitValue('correct['.$i.']'));
             if ($goodAnswer) {
                 $nbr_corrects++;
             }
@@ -236,9 +232,9 @@ class GlobalMultipleAnswer extends Question
         $test = $form->getSubmitValue('pts');
 
         for ($i = 1; $i <= $nb_answers; $i++) {
-            $answer = trim($form->getSubmitValue('answer[' . $i . ']'));
-            $comment = trim($form->getSubmitValue('comment[' . $i . ']'));
-            $goodAnswer = trim($form->getSubmitValue('correct[' . $i . ']'));
+            $answer = trim($form->getSubmitValue('answer['.$i.']'));
+            $comment = trim($form->getSubmitValue('comment['.$i.']'));
+            $goodAnswer = trim($form->getSubmitValue('correct['.$i.']'));
 
             if ($goodAnswer) {
                 $weighting = abs($answer_score);
@@ -257,21 +253,24 @@ class GlobalMultipleAnswer extends Question
 
         // sets the total weighting of the question --> sert � donner le score total pendant l'examen
         $this->updateWeighting($questionWeighting);
-        $this->save();
+        $this->save($exercise);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function return_header(
-        $feedback_type = null,
+        $exercise,
         $counter = null,
         $score = null
     ) {
-        $header = parent::return_header($feedback_type, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class .'">
+        $header = parent::return_header($exercise, $counter, $score);
+        $header .= '<table class="'.$this->question_table_class.'">
         <tr>
-            <th>' . get_lang("Choice") . '</th>
-            <th>' . get_lang("ExpectedChoice") . '</th>
-            <th>' . get_lang("Answer") . '</th>';
-        $header .= '<th>' . get_lang("Comment") . '</th>';
+            <th>' . get_lang("Choice").'</th>
+            <th>' . get_lang("ExpectedChoice").'</th>
+            <th>' . get_lang("Answer").'</th>';
+        $header .= '<th>'.get_lang("Comment").'</th>';
         $header .= '</tr>';
 
         return $header;

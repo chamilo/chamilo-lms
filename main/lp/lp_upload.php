@@ -32,12 +32,10 @@ if (isset($_POST) && $is_error) {
     );
     return false;
     unset($_FILES['user_file']);
-} else if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
-
+} elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
     // A file upload has been detected, now deal with the file...
     // Directory creation.
     $stopping_error = false;
-
     $s = $_FILES['user_file']['name'];
 
     // Get name of the zip file without the extension.
@@ -47,7 +45,10 @@ if (isset($_POST) && $is_error) {
     $file_base_name = str_replace('.'.$extension, '', $filename);
 
     $new_dir = api_replace_dangerous_char(trim($file_base_name));
-    $type = learnpath::get_package_type($_FILES['user_file']['tmp_name'], $_FILES['user_file']['name']);
+    $type = learnpath::get_package_type(
+        $_FILES['user_file']['tmp_name'],
+        $_FILES['user_file']['name']
+    );
 
     $proximity = 'local';
     if (!empty($_REQUEST['content_proximity'])) {

@@ -8,7 +8,7 @@
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_BLOGS;
+$current_course_tool = TOOL_BLOGS;
 
 $this_section = SECTION_COURSES;
 
@@ -20,7 +20,7 @@ api_protect_course_script(true);
 
 //	 ONLY USERS REGISTERED IN THE COURSE
 if ((!api_is_allowed_in_course() || !$is_courseMember) && !api_is_allowed_to_edit()) {
-    api_not_allowed(true);//print headers/footers
+    api_not_allowed(true); //print headers/footers
 }
 
 if (api_is_allowed_to_edit()) {
@@ -34,40 +34,40 @@ if (api_is_allowed_to_edit()) {
             'url' => 'blog_admin.php?'.api_get_cidreq(),
             'name' => $nameTools,
         );
-        $my_url='';
-        if (isset($_GET['action']) && $_GET['action']=='add') {
+        $my_url = '';
+        if (isset($_GET['action']) && $_GET['action'] == 'add') {
             $current_section = get_lang('AddBlog');
-            $my_url='action=add';
-        } elseif (isset($_GET['action']) && $_GET['action']=='edit') {
+            $my_url = 'action=add';
+        } elseif (isset($_GET['action']) && $_GET['action'] == 'edit') {
             $current_section = get_lang('EditBlog');
-            $my_url='action=edit&amp;blog_id='.Security::remove_XSS($_GET['blog_id']);
+            $my_url = 'action=edit&amp;blog_id='.Security::remove_XSS($_GET['blog_id']);
         }
         Display::display_header('');
     }
     echo '<div class="actions">';
     echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add'>",
-        Display::return_icon('new_blog.png', get_lang('AddBlog'),'',ICON_SIZE_MEDIUM)."</a>";
+        Display::return_icon('new_blog.png', get_lang('AddBlog'), '', ICON_SIZE_MEDIUM)."</a>";
     echo '</div>';
 
     if (!empty($_POST['new_blog_submit']) && !empty($_POST['blog_name'])) {
-        if (isset($_POST['blog_name']))  {
+        if (isset($_POST['blog_name'])) {
             Blog::addBlog($_POST['blog_name'], $_POST['blog_subtitle']);
-            Display::display_confirmation_message(get_lang('BlogStored'));
+            echo Display::return_message(get_lang('BlogStored'), 'confirmation');
         }
     }
     if (!empty($_POST['edit_blog_submit']) && !empty($_POST['blog_name'])) {
-        if (strlen(trim($_POST['blog_name']))>0) {
+        if (strlen(trim($_POST['blog_name'])) > 0) {
             Blog::editBlog($_POST['blog_id'], $_POST['blog_name'], $_POST['blog_subtitle']);
-            Display::display_confirmation_message(get_lang('BlogEdited'));
+            echo Display::return_message(get_lang('BlogEdited'), 'confirmation');
         }
     }
     if (isset($_GET['action']) && $_GET['action'] == 'visibility') {
         Blog::changeBlogVisibility(intval($_GET['blog_id']));
-        Display::display_confirmation_message(get_lang('VisibilityChanged'));
+        echo Display::return_message(get_lang('VisibilityChanged'), 'confirmation');
     }
     if (isset($_GET['action']) && $_GET['action'] == 'delete') {
         Blog::deleteBlog(intval($_GET['blog_id']));
-        Display::display_confirmation_message(get_lang('BlogDeleted'));
+        echo Display::return_message(get_lang('BlogDeleted'), 'confirmation');
     }
 
     if (isset($_GET['action']) && $_GET['action'] == 'add') {
@@ -83,10 +83,10 @@ if (api_is_allowed_to_edit()) {
         // we show the form if
         // 1. no post data
         // 2. there is post data and one of the three form elements is empty
-        if (!$_POST || (!empty($_POST) && (empty($_POST['edit_blog_submit']) || empty($_POST['blog_name']) ))) {
+        if (!$_POST || (!empty($_POST) && (empty($_POST['edit_blog_submit']) || empty($_POST['blog_name'])))) {
             // if there is post data there is certainly an error in the form
             if ($_POST) {
-                Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
+                echo Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error');
             }
             Blog::displayBlogEditForm(intval($_GET['blog_id']));
         }

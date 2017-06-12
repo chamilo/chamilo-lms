@@ -2,8 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	@package chamilo.admin
+ * @package chamilo.admin
 */
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -12,11 +13,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['user_id']);
-
 api_protect_super_admin($user_id, null, true);
-
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
-
 $userInfo = api_get_user_info($user_id);
 
 $htmlHeadXtra[] = '
@@ -24,39 +22,39 @@ $htmlHeadXtra[] = '
 var is_platform_id = "'.$is_platform_admin.'";
 
 function enable_expiration_date() {
-	document.user_edit.radio_expiration_date[0].checked=false;
-	document.user_edit.radio_expiration_date[1].checked=true;
+    document.user_edit.radio_expiration_date[0].checked=false;
+    document.user_edit.radio_expiration_date[1].checked=true;
 }
 
 function password_switch_radio_button(){
-	var input_elements = document.getElementsByTagName("input");
-	for (var i = 0; i < input_elements.length; i++) {
-		if(input_elements.item(i).name == "reset_password" && input_elements.item(i).value == "2") {
-			input_elements.item(i).checked = true;
-		}
-	}
+    var input_elements = document.getElementsByTagName("input");
+    for (var i = 0; i < input_elements.length; i++) {
+        if(input_elements.item(i).name == "reset_password" && input_elements.item(i).value == "2") {
+            input_elements.item(i).checked = true;
+        }
+    }
 }
 
 function display_drh_list(){
     var $radios = $("input:radio[name=platform_admin]");
-	if (document.getElementById("status_select").value=='.COURSEMANAGER.') {
+    if (document.getElementById("status_select").value=='.COURSEMANAGER.') {
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="block";
-	} else if (document.getElementById("status_select").value=='.STUDENT.') {
+    } else if (document.getElementById("status_select").value=='.STUDENT.') {
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="none";
         $radios.filter("[value=0]").attr("checked", true);
-	} else {
+    } else {
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="none";
         $radios.filter("[value=0]").attr("checked", true);
-	}
+    }
 }
 
 function show_image(image,width,height) {
-	width = parseInt(width) + 20;
-	height = parseInt(height) + 20;
-	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \' , resizable=0\');
+    width = parseInt(width) + 20;
+    height = parseInt(height) + 20;
+    window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \' , resizable=0\');
 }
 
 function confirmation(name) {
@@ -72,8 +70,8 @@ $gMapsPlugin = GoogleMapsPlugin::create();
 $geolocalization = $gMapsPlugin->get('enable_api') === 'true';
 
 if ($geolocalization) {
-	$gmapsApiKey = $gMapsPlugin->get('api_key');
-	$htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$gmapsApiKey.'" ></script>';
+    $gmapsApiKey = $gMapsPlugin->get('api_key');
+    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$gmapsApiKey.'" ></script>';
 }
 
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
@@ -117,27 +115,27 @@ $form->addElement('header', $tool_name);
 $form->addElement('hidden', 'user_id', $user_id);
 
 if (api_is_western_name_order()) {
-	// Firstname
-	$form->addElement('text', 'firstname', get_lang('FirstName'));
-	$form->applyFilter('firstname', 'html_filter');
-	$form->applyFilter('firstname', 'trim');
-	$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
-	// Lastname
-	$form->addElement('text', 'lastname', get_lang('LastName'));
-	$form->applyFilter('lastname', 'html_filter');
-	$form->applyFilter('lastname', 'trim');
-	$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
+    // Firstname
+    $form->addElement('text', 'firstname', get_lang('FirstName'));
+    $form->applyFilter('firstname', 'html_filter');
+    $form->applyFilter('firstname', 'trim');
+    $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+    // Lastname
+    $form->addElement('text', 'lastname', get_lang('LastName'));
+    $form->applyFilter('lastname', 'html_filter');
+    $form->applyFilter('lastname', 'trim');
+    $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
 } else {
-	// Lastname
-	$form->addElement('text', 'lastname', get_lang('LastName'));
-	$form->applyFilter('lastname', 'html_filter');
-	$form->applyFilter('lastname', 'trim');
-	$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
-	// Firstname
-	$form->addElement('text', 'firstname', get_lang('FirstName'));
-	$form->applyFilter('firstname', 'html_filter');
-	$form->applyFilter('firstname', 'trim');
-	$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+    // Lastname
+    $form->addElement('text', 'lastname', get_lang('LastName'));
+    $form->applyFilter('lastname', 'html_filter');
+    $form->applyFilter('lastname', 'trim');
+    $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
+    // Firstname
+    $form->addElement('text', 'firstname', get_lang('FirstName'));
+    $form->applyFilter('firstname', 'html_filter');
+    $form->applyFilter('firstname', 'trim');
+    $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 }
 
 // Official code
@@ -159,7 +157,7 @@ if (api_get_setting('login_is_email') == 'true') {
 
 // OpenID
 if (api_get_setting('openid_authentication') == 'true') {
-	$form->addElement('text', 'openid', get_lang('OpenIDURL'));
+    $form->addElement('text', 'openid', get_lang('OpenIDURL'));
 }
 
 // Phone
@@ -174,18 +172,18 @@ $form->addFile(
 $allowed_picture_types = api_get_supported_image_extensions(false);
 
 $form->addRule(
-	'picture',
-	get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
-	'filetype',
-	$allowed_picture_types
+    'picture',
+    get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
+    'filetype',
+    $allowed_picture_types
 );
 if (strlen($user_data['picture_uri']) > 0) {
-	$form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
+    $form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
 }
 
 // Username
 if (api_get_setting('login_is_email') != 'true') {
-	$form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
+    $form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
     $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
@@ -259,15 +257,15 @@ $display = isset($user_data['status']) && ($user_data['status'] == STUDENT || (i
 
 // Platform admin
 if (api_is_platform_admin()) {
-	$group = array();
-	$group[] = $form->createElement('radio', 'platform_admin', null, get_lang('Yes'), 1);
-	$group[] = $form->createElement('radio', 'platform_admin', null, get_lang('No'), 0);
+    $group = array();
+    $group[] = $form->createElement('radio', 'platform_admin', null, get_lang('Yes'), 1);
+    $group[] = $form->createElement('radio', 'platform_admin', null, get_lang('No'), 0);
 
-	$user_data['status'] == 1 ? $display = 'block' : $display = 'none';
+    $user_data['status'] == 1 ? $display = 'block' : $display = 'none';
 
-	$form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.'">');
-	$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), null, false);
-	$form->addElement('html', '</div>');
+    $form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.'">');
+    $form->addGroup($group, 'admin', get_lang('PlatformAdmin'), null, false);
+    $form->addElement('html', '</div>');
 }
 
 //Language
@@ -285,16 +283,16 @@ $date = sprintf(get_lang('CreatedByXYOnZ'), 'user_information.php?user_id='.$use
 $form->addElement('label', get_lang('RegistrationDate'), $date);
 
 if (!$user_data['platform_admin']) {
-	// Expiration Date
-	$form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
-	$group = array();
-	$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
-	$group[] = $form->createElement('DateTimePicker', 'expiration_date', null, array('onchange' => 'javascript: enable_expiration_date();'));
-	$form->addGroup($group, 'max_member_group', null, null, false);
+    // Expiration Date
+    $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
+    $group = array();
+    $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
+    $group[] = $form->createElement('DateTimePicker', 'expiration_date', null, array('onchange' => 'javascript: enable_expiration_date();'));
+    $form->addGroup($group, 'max_member_group', null, null, false);
 
-	// Active account or inactive account
-	$form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
-	$form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
+    // Active account or inactive account
+    $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
+    $form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
 }
 $studentBossList = UserManager::getStudentBossList($user_data['user_id']);
 
@@ -333,7 +331,7 @@ $jquery_ready_content = $returnParams['jquery_ready_content'];
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
-	'.$jquery_ready_content.'
+    '.$jquery_ready_content.'
 });
 </script>';
 
@@ -345,18 +343,18 @@ $user_data['reset_password'] = 0;
 $expiration_date = $user_data['expiration_date'];
 
 if (empty($expiration_date)) {
-	$user_data['radio_expiration_date'] = 0;
-	$user_data['expiration_date'] = api_get_local_time();
+    $user_data['radio_expiration_date'] = 0;
+    $user_data['expiration_date'] = api_get_local_time();
 } else {
-	$user_data['radio_expiration_date'] = 1;
-	$user_data['expiration_date'] = api_get_local_time($expiration_date);
+    $user_data['radio_expiration_date'] = 1;
+    $user_data['expiration_date'] = api_get_local_time($expiration_date);
 }
 $form->setDefaults($user_data);
 
 $error_drh = false;
 // Validate form
 if ($form->validate()) {
-	$user = $form->getSubmitValues(1);
+    $user = $form->getSubmitValues(1);
     $reset_password = intval($user['reset_password']);
     if ($reset_password == 2 && empty($user['password'])) {
         Display::addFlash(Display::return_message(get_lang('PasswordIsTooShort')));
@@ -364,49 +362,49 @@ if ($form->validate()) {
         exit();
     }
 
-	$is_user_subscribed_in_course = CourseManager::is_user_subscribed_in_course($user['user_id']);
+    $is_user_subscribed_in_course = CourseManager::is_user_subscribed_in_course($user['user_id']);
 
-	if ($user['status'] == DRH && $is_user_subscribed_in_course) {
-		$error_drh = true;
-	} else {
-		$picture_element = $form->getElement('picture');
-		$picture = $picture_element->getValue();
+    if ($user['status'] == DRH && $is_user_subscribed_in_course) {
+        $error_drh = true;
+    } else {
+        $picture_element = $form->getElement('picture');
+        $picture = $picture_element->getValue();
 
-		$picture_uri = $user_data['picture_uri'];
-		if (isset($user['delete_picture']) && $user['delete_picture']) {
-			$picture_uri = UserManager::delete_user_picture($user_id);
-		} elseif (!empty($picture['name'])) {
+        $picture_uri = $user_data['picture_uri'];
+        if (isset($user['delete_picture']) && $user['delete_picture']) {
+            $picture_uri = UserManager::delete_user_picture($user_id);
+        } elseif (!empty($picture['name'])) {
             $picture_uri = UserManager::update_user_picture(
                 $user_id,
                 $_FILES['picture']['name'],
                 $_FILES['picture']['tmp_name'],
                 $user['picture_crop_result']
             );
-		}
+        }
 
-		$lastname = $user['lastname'];
-		$firstname = $user['firstname'];
+        $lastname = $user['lastname'];
+        $firstname = $user['firstname'];
         $password = $user['password'];
         $auth_source = isset($user['auth_source']) ? $user['auth_source'] : $userInfo['auth_source'];
-		$official_code = $user['official_code'];
-		$email = $user['email'];
-		$phone = $user['phone'];
-		$username = isset($user['username']) ? $user['username'] : $userInfo['username'];
-		$status = intval($user['status']);
-		$platform_admin = intval($user['platform_admin']);
-		$send_mail = intval($user['send_mail']);
-		$reset_password = intval($user['reset_password']);
-		$hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : null;
-		$language = $user['language'];
+        $official_code = $user['official_code'];
+        $email = $user['email'];
+        $phone = $user['phone'];
+        $username = isset($user['username']) ? $user['username'] : $userInfo['username'];
+        $status = intval($user['status']);
+        $platform_admin = intval($user['platform_admin']);
+        $send_mail = intval($user['send_mail']);
+        $reset_password = intval($user['reset_password']);
+        $hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : null;
+        $language = $user['language'];
         $address = isset($user['address']) ? $user['address'] : null;
 
-		if ($user['radio_expiration_date'] == '1' && !$user_data['platform_admin']) {
+        if ($user['radio_expiration_date'] == '1' && !$user_data['platform_admin']) {
             $expiration_date = $user['expiration_date'];
-		} else {
-			$expiration_date = null;
-		}
+        } else {
+            $expiration_date = null;
+        }
 
-		$active = $user_data['platform_admin'] ? 1 : intval($user['active']);
+        $active = $user_data['platform_admin'] ? 1 : intval($user['active']);
 
         //If the user is set to admin the status will be overwrite by COURSEMANAGER = 1
         if ($platform_admin == 1) {
@@ -445,33 +443,33 @@ if ($form->validate()) {
             UserManager::subscribeUserToBossList($user_id, $user['student_boss']);
         }
 
-		if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
-			$up = UserManager::update_openid($user_id, $user['openid']);
-		}
+        if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
+            $up = UserManager::update_openid($user_id, $user['openid']);
+        }
         $currentUserId = api_get_user_id();
 
         $userObj = api_get_user_entity($user_id);
 
         UserManager::add_user_as_admin($userObj);
 
-		if ($user_id != $currentUserId) {
-			if ($platform_admin == 1) {
-				$userObj = api_get_user_entity($user_id);
+        if ($user_id != $currentUserId) {
+            if ($platform_admin == 1) {
+                $userObj = api_get_user_entity($user_id);
                 UserManager::add_user_as_admin($userObj);
-			} else {
+            } else {
                 UserManager::remove_user_admin($user_id);
-			}
-		}
+            }
+        }
 
         $extraFieldValue = new ExtraFieldValue('user');
         $extraFieldValue->saveFieldValues($user);
 
-		$tok = Security::get_token();
+        $tok = Security::get_token();
 
         Display::addFlash(Display::return_message(get_lang('UserUpdated')));
-		header('Location: user_list.php?sec_token='.$tok);
-		exit();
-	}
+        header('Location: user_list.php?sec_token='.$tok);
+        exit();
+    }
 }
 
 if ($error_drh) {

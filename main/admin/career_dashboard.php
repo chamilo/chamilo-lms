@@ -26,9 +26,11 @@ $interbreadcrumb[] = array(
     'url' => 'career_dashboard.php',
     'name' => get_lang('CareersAndPromotions')
 );
+$tpl = new Template(get_lang('CareersAndPromotions'));
 
 Display :: display_header(null);
 
+$html = null;
 $form = new FormValidator('filter_form', 'GET', api_get_self());
 
 $career = new Career();
@@ -58,23 +60,43 @@ $form->addSelect(
 $form->addButtonSearch(get_lang('Filter'));
 
 // action links
-echo '<div class="actions" style="margin-bottom:20px">';
-    echo  '<a href="../admin/index.php">'.
-            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo '<a href="careers.php">'.
-            Display::return_icon('career.png', get_lang('Careers'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo '<a href="promotions.php">'.
-            Display::return_icon('promotion.png', get_lang('Promotions'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
+$actionLeft = Display::url(
+    Display::return_icon(
+        'back.png',
+        get_lang('BackTo').' '.get_lang('PlatformAdmin'),
+        null,
+        ICON_SIZE_MEDIUM
+    ),
+    '../admin/index.php'
+);
+$actionLeft .= Display::url(
+    Display::return_icon(
+        'career.png',
+        get_lang('Careers'),
+        null,
+        ICON_SIZE_MEDIUM
+    ),
+    'careers.php'
+);
+$actionLeft .= Display::url(
+    Display::return_icon(
+        'promotion.png',
+        get_lang('Promotions'),
+        null,
+        ICON_SIZE_MEDIUM
+    ),
+    'promotions.php'
+);
 
-$form->display();
-
+$actions = Display::toolbarAction('toolbar-career', array($actionLeft));
+$html .= $form->returnForm();
 $careers = $career->get_all($condition); //only status =1
 
 $column_count = 3;
 $i = 0;
 $grid_js = '';
 $career_array = array();
+
 if (!empty($careers)) {
     foreach ($careers as $career_item) {
         $promotion = new Promotion();
@@ -106,6 +128,7 @@ if (!empty($careers)) {
                     );
                 }
                 $promotion_array[$promotion_item['id']] = array(
+                    'id' => $promotion_item['id'],
                     'name' => $promotion_item['name'],
                     'sessions' => $session_list,
                 );
@@ -115,73 +138,17 @@ if (!empty($careers)) {
             'name' => $career_item['name'],
             'promotions' => $promotion_array,
         );
+        $careerList = array(
+            'promotions' => $promotion_array,
+        );
+        $careers[$career_item['id']]['career'] = $careerList;
     }
 }
 
-echo '<table class="data_table">';
+$tpl->assign('actions', $actions);
+$tpl->assign('form_filter', $html);
+$tpl->assign('data', $careers);
+$layout = $tpl->get_template('admin/career_dashboard.tpl');
+$tpl->display($layout);
 
-if (!empty($career_array)) {
-    foreach ($career_array as $career_id => $data) {
-        $career = $data['name'];
-        $promotions = $data['promotions'];
-        $career = Display::url($career, 'careers.php?action=edit&id='.$career_id);
-        $career = Display::tag('h4', $career);
-        echo '<tr><td style="background-color:#ECF0F1" colspan="3">'.$career.'</td></tr>';
-        if (!empty($promotions)) {
-            foreach ($promotions as $promotion_id => $promotion) {
-                $promotion_name = $promotion['name'];
-                $promotion_url = Display::url($promotion_name, 'promotions.php?action=edit&id='.$promotion_id);
-                $sessions = $promotion['sessions'];
-                $count = count($promotion['sessions']);
-                $rowspan = '';
-                if (!empty($count)) {
-                    $rowspan = 'rowspan="'.$count.'"';
-                }
-
-                echo '<tr style="border-bottom:1px solid #ccc;">'.
-                    '<td '.$rowspan.' style="border-right:1px solid #aaa;">'.
-                    Display::tag('h5', $promotion_url).
-                    '</td>';
-
-                $first = true;
-                if (!empty($sessions)) {
-                    foreach ($sessions as $session) {
-                        $url = Display::url(
-                            $session['data']['name'],
-                            '../session/resume_session.php?id_session='.$session['data']['id']
-                        );
-                        // Tricky TR because of "rowspan" in previous TD - only
-                        // use TR if not on the first line
-                        if (!$first) {
-                            echo '<tr style="border-bottom:1px solid #ccc;">';
-                        } else {
-                            $first = false;
-                        }
-                        // Session name
-                        echo Display::tag('td', $url, array('style' => 'border-right:1px solid #aaa;'));
-                        echo '<td>';
-                        // Courses
-                        echo '<ul>';
-                        if (!empty($session['courses'])) {
-                            foreach ($session['courses'] as $course) {
-                                echo '<li>';
-                                $url = Display::url(
-                                    $course['title'],
-                                    api_get_path(WEB_COURSE_PATH).$course['directory'].'/index.php?id_session='.$session['data']['id']
-                                );
-                                echo $url;
-                                echo '</li>';
-                            }
-                        }
-                        echo '</ul>';
-                        echo '</td>';
-                        echo '</tr>';
-                    }
-                }
-                echo '</tr>';
-            }
-        }
-    }
-}
-echo '</table>';
 Display::display_footer();

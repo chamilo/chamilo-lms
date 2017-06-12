@@ -127,7 +127,7 @@ switch ($action) {
             unset($values['id']);
             $res = $obj->save($values);
             if ($res) {
-                Display::display_confirmation_message(get_lang('ItemAdded'));
+                echo Display::return_message(get_lang('ItemAdded'), 'confirmation');
             }
             $obj->display();
         } else {
@@ -149,8 +149,9 @@ switch ($action) {
         if ($form->validate()) {
             $values = $form->exportValues();
             $res = $obj->update($values);
-            Display::display_confirmation_message(
+            echo Display::return_message(
                 sprintf(get_lang('ItemUpdated'), $values['variable']),
+                'confirmation',
                 false
             );
             $obj->display();
@@ -168,7 +169,7 @@ switch ($action) {
         // Action handling: delete
         $res = $obj->delete($_GET['id']);
         if ($res) {
-            Display::display_confirmation_message(get_lang('ItemDeleted'));
+            echo Display::return_message(get_lang('ItemDeleted'), 'confirmation');
         }
         $obj->display();
         break;
@@ -176,4 +177,4 @@ switch ($action) {
         $obj->display();
         break;
 }
-Display :: display_footer();
+Display::display_footer();

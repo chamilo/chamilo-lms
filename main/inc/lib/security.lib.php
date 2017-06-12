@@ -43,10 +43,10 @@ class Security
     /**
      * Checks if the absolute path (directory) given is really under the
      * checker path (directory)
-     * @param	string	Absolute path to be checked (with trailing slash)
-     * @param	string	Checker path under which the path
+     * @param string    Absolute path to be checked (with trailing slash)
+     * @param string    Checker path under which the path
      * should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
-     * @return	bool	True if the path is under the checker, false otherwise
+     * @return bool    True if the path is under the checker, false otherwise
      */
     public static function check_abs_path($abs_path, $checker_path)
     {
@@ -57,6 +57,10 @@ class Security
 
         $true_path = str_replace("\\", '/', realpath($abs_path));
         $checker_path = str_replace("\\", '/', realpath($checker_path));
+
+        if (empty($checker_path)) {
+            return false;
+        }
 
         $found = strpos($true_path.'/', $checker_path);
 
@@ -77,10 +81,10 @@ class Security
     /**
      * Checks if the relative path (directory) given is really under the
      * checker path (directory)
-     * @param	string	Relative path to be checked (relative to the current directory) (with trailing slash)
-     * @param	string	Checker path under which the path
+     * @param string    Relative path to be checked (relative to the current directory) (with trailing slash)
+     * @param string    Checker path under which the path
      * should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
-     * @return	bool	True if the path is under the checker, false otherwise
+     * @return bool    True if the path is under the checker, false otherwise
      */
     public static function check_rel_path($rel_path, $checker_path)
     {
@@ -105,8 +109,7 @@ class Security
      * Filters dangerous filenames (*.php[.]?* and .htaccess) and returns it in
      * a non-executable form (for PHP and htaccess, this is still vulnerable to
      * other languages' files extensions)
-     * @param   string  Unfiltered filename
-     * @param   string  Filtered filename
+     * @param   string  $filename Unfiltered filename
      * @return string
      */
     public static function filter_filename($filename)
@@ -117,8 +120,8 @@ class Security
     /**
      * This function checks that the token generated in get_token() has been kept (prevents
      * Cross-Site Request Forgeries attacks)
-     * @param	string	The array in which to get the token ('get' or 'post')
-     * @return	bool	True if it's the right token, false otherwise
+     * @param    string    The array in which to get the token ('get' or 'post')
+     * @return    bool    True if it's the right token, false otherwise
      */
     public static function check_token($request_type = 'post')
     {
@@ -238,8 +241,8 @@ class Security
     /**
      * This function returns a variable from the clean array. If the variable doesn't exist,
      * it returns null
-     * @param	string	Variable name
-     * @return	mixed	Variable or NULL on error
+     * @param string    Variable name
+     * @return mixed    Variable or NULL on error
      */
     public static function get($varname)
     {
@@ -254,16 +257,16 @@ class Security
      * This function tackles the XSS injections.
      * Filtering for XSS is very easily done by using the htmlentities() function.
      * This kind of filtering prevents JavaScript snippets to be understood as such.
-     * @param string	The variable to filter for XSS, this params can be a string or an array (example : array(x,y))
+     * @param string The variable to filter for XSS, this params can be a string or an array (example : array(x,y))
      * @param int The user status,constant allowed (STUDENT, COURSEMANAGER, ANONYMOUS, COURSEMANAGERLOWSECURITY)
      * @param bool $filter_terms
-     * @return	mixed	Filtered string or array
+     * @return mixed    Filtered string or array
      */
     public static function remove_XSS($var, $user_status = null, $filter_terms = false)
     {
-    	if ($filter_terms) {
-    		$var = self::filter_terms($var);
-    	}
+        if ($filter_terms) {
+            $var = self::filter_terms($var);
+        }
 
         if (empty($user_status)) {
             if (api_is_anonymous()) {
@@ -351,14 +354,13 @@ class Security
     }
 
     /**
-     *
      * Filter content
-     * @param	string $text to be filter
-     * @return 	string
+     * @param string $text to be filter
+     * @return string
      */
     public static function filter_terms($text)
     {
-    	static $bad_terms = array();
+        static $bad_terms = array();
 
         if (empty($bad_terms)) {
             $list = api_get_setting('filter_terms');
@@ -379,22 +381,22 @@ class Security
             }
         }
 
-    	$replace = '***';
-    	if (!empty($bad_terms)) {
-    		// Fast way
-    		$new_text = str_ireplace($bad_terms, $replace, $text, $count);
-    		$text = $new_text;
-    	}
+        $replace = '***';
+        if (!empty($bad_terms)) {
+            // Fast way
+            $new_text = str_ireplace($bad_terms, $replace, $text, $count);
+            $text = $new_text;
+        }
 
-		return $text;
+        return $text;
     }
 
     /**
      * This method provides specific protection (against XSS and other kinds of attacks) for static images (icons) used by the system.
      * Image paths are supposed to be given by programmers - people who know what they do, anyway, this method encourages
      * a safe practice for generating icon paths, without using heavy solutions based on HTMLPurifier for example.
-     * @param string $img_path          The input path of the image, it could be relative or absolute URL.
-     * @return string                   Returns sanitized image path or an empty string when the image path is not secure.
+     * @param string $img_path The input path of the image, it could be relative or absolute URL.
+     * @return string Returns sanitized image path or an empty string when the image path is not secure.
      * @author Ivan Tcholakov, March 2011
      */
     public static function filter_img_path($image_path)

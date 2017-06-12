@@ -13,8 +13,7 @@ $exerciseId = isset($_GET['exe_id']) ? intval($_GET['exe_id']) : 0;
 $objQuestion = Question::read($questionId);
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $picturePath = $documentPath.'/images';
-$pictureName = $objQuestion->selectPicture();
-$pictureSize = getimagesize($picturePath.'/'.$objQuestion->selectPicture());
+$pictureSize = getimagesize($picturePath.'/'.$objQuestion->getPictureFilename());
 $pictureWidth = $pictureSize[0];
 $pictureHeight = $pictureSize[1];
 

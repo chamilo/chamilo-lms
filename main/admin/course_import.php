@@ -15,13 +15,13 @@
  */
 function validate_courses_data($courses)
 {
-    $errors = array ();
-    $coursecodes = array ();
+    $errors = array();
+    $coursecodes = array();
     foreach ($courses as $index => $course) {
-        $course['line'] = $index +1;
+        $course['line'] = $index + 1;
 
         // 1. Check whether mandatory fields are set.
-        $mandatory_fields = array ('Code', 'Title', 'CourseCategory');
+        $mandatory_fields = array('Code', 'Title', 'CourseCategory');
         foreach ($mandatory_fields as $field) {
             if (empty($course[$field])) {
                 $course['error'] = get_lang($field.'Mandatory');
@@ -62,7 +62,12 @@ function validate_courses_data($courses)
         if (!empty($course['CourseCategory'])) {
             $categoryInfo = CourseCategory::getCategory($course['CourseCategory']);
             if (empty($categoryInfo)) {
-                CourseCategory::addNode($course['CourseCategory'], $course['CourseCategoryName'] ? $course['CourseCategoryName'] : $course['CourseCategory'], 'TRUE', null);
+                CourseCategory::addNode(
+                    $course['CourseCategory'],
+                    $course['CourseCategoryName'] ? $course['CourseCategoryName'] : $course['CourseCategory'],
+                    'TRUE',
+                    null
+                );
             }
         } else {
             $course['error'] = get_lang('NoCourseCategorySupplied');
@@ -117,10 +122,8 @@ function save_courses_data($courses)
         $params['course_category'] = $course['CourseCategory'];
         $params['course_language'] = $course_language;
         $params['user_id'] = $creatorId;
-
         $addMeAsTeacher = isset($_POST['add_me_as_teacher']) ? $_POST['add_me_as_teacher'] : false;
         $params['add_user_as_teacher'] = $addMeAsTeacher;
-
         $courseInfo = CourseManager::create_course($params);
 
         if (!empty($courseInfo)) {
@@ -139,7 +142,7 @@ function save_courses_data($courses)
     }
 
     if (!empty($msg)) {
-        Display::addFlash(Display::return_message($msg, 'normal', false));
+        echo Display::return_message($msg, 'normal', false);
     }
 }
 
@@ -172,19 +175,19 @@ $tool_name = get_lang('ImportCourses').' CSV';
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     if (empty($_FILES['import_file']['tmp_name'])) {
         $error_message = get_lang('UplUploadFailed');
-        Display :: display_error_message($error_message, false);
+        echo Display::return_message($error_message, 'error', false);
     } else {
         $allowed_file_mimetype = array('csv');
 
         $ext_import_file = substr($_FILES['import_file']['name'], (strrpos($_FILES['import_file']['name'], '.') + 1));
 
         if (!in_array($ext_import_file, $allowed_file_mimetype)) {
-            Display :: display_error_message(get_lang('YouMustImportAFileAccordingToSelectedOption'));
+            echo Display::return_message(get_lang('YouMustImportAFileAccordingToSelectedOption'), 'error');
         } else {
             $courses = parse_csv_courses_data($_FILES['import_file']['tmp_name']);
 
@@ -204,10 +207,16 @@ if (isset($errors) && count($errors) != 0) {
         $error_message .= '</li>';
     }
     $error_message .= '</ul>';
-    Display :: display_error_message($error_message, false);
+    echo Display::return_message($error_message, 'error', false);
 }
 
-$form = new FormValidator('import', 'post', api_get_self(), null, array('enctype' => 'multipart/form-data'));
+$form = new FormValidator(
+    'import',
+    'post',
+    api_get_self(),
+    null,
+    array('enctype' => 'multipart/form-data')
+);
 $form->addHeader($tool_name);
 $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
 $form->addElement('checkbox', 'add_me_as_teacher', null, get_lang('AddMeAsTeacherInCourses'));
@@ -229,4 +238,4 @@ BIO0017;Language;LANG;;;english
 </blockquote>
 
 <?php
-Display :: display_footer();
+Display::display_footer();

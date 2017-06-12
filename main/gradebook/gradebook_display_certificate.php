@@ -6,7 +6,7 @@
  * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_GRADEBOOK;
+$current_course_tool = TOOL_GRADEBOOK;
 
 if (!api_is_student_boss()) {
     api_protect_course_script(true);
@@ -16,9 +16,9 @@ set_time_limit(0);
 ini_set('max_execution_time', 0);
 
 //extra javascript functions for in html head:
-$htmlHeadXtra[] ="<script>
+$htmlHeadXtra[] = "<script>
 function confirmation() {
-	if (confirm(\" " . trim(get_lang('AreYouSureToDelete')) . " ?\")) {
+	if (confirm(\" " . trim(get_lang('AreYouSureToDelete'))." ?\")) {
 	    return true;
 	} else {
 	    return false;
@@ -31,7 +31,7 @@ if (!api_is_allowed_to_edit() && !api_is_student_boss()) {
     api_not_allowed(true);
 }
 
-$cat_id = isset($_GET['cat_id']) ? (int)$_GET['cat_id'] : null;
+$cat_id = isset($_GET['cat_id']) ? (int) $_GET['cat_id'] : null;
 $action = isset($_GET['action']) && $_GET['action'] ? $_GET['action'] : null;
 $filterOfficialCode = isset($_POST['filter']) ? Security::remove_XSS($_POST['filter']) : null;
 $filterOfficialCodeGet = isset($_GET['filter']) ? Security::remove_XSS($_GET['filter']) : null;
@@ -76,7 +76,7 @@ $interbreadcrumb[] = array(
     'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?',
     'name' => get_lang('Gradebook'),
 );
-$interbreadcrumb[] = array('url' => '#','name' => get_lang('GradebookListOfStudentsCertificates'));
+$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('GradebookListOfStudentsCertificates'));
 
 $this_section = SECTION_COURSES;
 Display::display_header('');
@@ -88,9 +88,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete') {
         $result = $certificate->delete(true);
         Security::clear_token();
         if ($result == true) {
-            Display::display_confirmation_message(get_lang('CertificateRemoved'));
+            echo Display::return_message(get_lang('CertificateRemoved'), 'confirmation');
         } else {
-            Display::display_error_message(get_lang('CertificateNotRemoved'));
+            echo Display::return_message(get_lang('CertificateNotRemoved'), 'error');
         }
     }
 }
@@ -104,9 +104,9 @@ $cats = Category:: load($cat_id, null, null, null, null, null, false);
 if (!empty($cats)) {
     //with this fix the teacher only can view 1 gradebook
     if (api_is_platform_admin()) {
-        $stud_id= (api_is_allowed_to_edit() ? null : api_get_user_id());
+        $stud_id = (api_is_allowed_to_edit() ? null : api_get_user_id());
     } else {
-        $stud_id= api_get_user_id();
+        $stud_id = api_get_user_id();
     }
 
     $total_weight = $cats[0]->get_weight();
@@ -142,7 +142,7 @@ if (!empty($cats)) {
     }
 
     if ($total_resource_weight != $total_weight) {
-        Display::display_warning_message(get_lang('SumOfActivitiesWeightMustBeEqualToTotalWeight'));
+        echo Display::return_message(get_lang('SumOfActivitiesWeightMustBeEqualToTotalWeight'), 'warning');
     }
 }
 
@@ -153,7 +153,7 @@ $certificate_list = array();
 if ($filter === 'true') {
     echo '<br />';
     $options = UserManager::getOfficialCodeGrouped();
-    $options =array_merge(array('all' => get_lang('All')), $options);
+    $options = array_merge(array('all' => get_lang('All')), $options);
     $form = new FormValidator(
         'official_code_filter',
         'POST',
@@ -161,7 +161,7 @@ if ($filter === 'true') {
     );
     $form->addElement('select', 'filter', get_lang('OfficialCode'), $options);
     $form->addButton('submit', get_lang('Submit'));
-    $filterForm = '<br />'.$form->return_form();
+    $filterForm = '<br />'.$form->returnForm();
 
     if ($form->validate()) {
         $officialCode = $form->getSubmitValue('filter');
@@ -200,7 +200,7 @@ echo '</div>';
 echo $filterForm;
 
 if (count($certificate_list) == 0) {
-    echo Display::display_warning_message(get_lang('NoResultsAvailable'));
+    echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
 } else {
     echo '<br /><br /><table class="data_table">';
     foreach ($certificate_list as $index => $value) {
@@ -220,7 +220,7 @@ if (count($certificate_list) == 0) {
             $certificates = Display::url(get_lang('Certificate'), $url, array('target'=>'_blank', 'class' => 'btn btn-default'));
             echo $certificates;
             echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&'.api_get_cidreq().'&action=delete&cat_id='.$cat_id.'&certificate_id='.$value_certificate['id'].'">
-                    '.Display::return_icon('delete.png',get_lang('Delete')).'
+                    '.Display::return_icon('delete.png', get_lang('Delete')).'
                   </a>';
             echo '</td></tr>';
         }

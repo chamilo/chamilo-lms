@@ -1,9 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
+use Chamilo\CoreBundle\Entity\CourseCategory;
+
 /**
  * @package chamilo.admin
  */
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -14,8 +18,11 @@ $tool_name = get_lang('AddCourse');
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
 
-
+$em = Database::getManager();
+/** @var CourseCategoryRepository $courseCategoriesRepo */
+$courseCategoriesRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
 // Get all possible teachers.
+$accessUrlId = api_get_current_access_url_id();
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT user_id,lastname,firstname
@@ -28,7 +35,7 @@ if (api_is_multiple_url_enabled()) {
             FROM $table_user as u
             INNER JOIN $access_url_rel_user_table url_rel_user
             ON (u.user_id=url_rel_user.user_id)
-            WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
+            WHERE url_rel_user.access_url_id=".$accessUrlId." AND status=1".$order_clause;
 }
 
 $res = Database::query($sql);
@@ -42,7 +49,14 @@ $form = new FormValidator('update_course');
 $form->addElement('header', $tool_name);
 
 // Title
-$form->addText('title', get_lang('Title'), true);
+$form->addText(
+    'title',
+    get_lang('Title'),
+    true,
+    array(
+        'aria-label' => get_lang('Title')
+    )
+);
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
@@ -57,13 +71,19 @@ $form->addText(
     [
         'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
         'pattern' => '[a-zA-Z0-9]+',
-        'title' => get_lang('OnlyLettersAndNumbers')
+        'title' => get_lang('OnlyLettersAndNumbers'),
+        'id' => 'visual_code'
     ]
 );
 
 $form->applyFilter('visual_code', 'api_strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
-$form->addRule('visual_code', get_lang('Max'), 'maxlength', CourseManager::MAX_COURSE_LENGTH_CODE);
+$form->addRule(
+    'visual_code',
+    get_lang('Max'),
+    'maxlength',
+    CourseManager::MAX_COURSE_LENGTH_CODE
+);
 
 $form->addElement(
     'select',
@@ -77,27 +97,52 @@ $form->addElement(
 );
 $form->applyFilter('course_teachers', 'html_filter');
 
-// Category code
-$url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
+$countCategories = $courseCategoriesRepo->countAllInAccessUrl($accessUrlId);
 
-$form->addElement(
-    'select_ajax',
-    'category_code',
-    get_lang('CourseFaculty'),
-    null,
-    array(
-        'url' => $url
-    //    'formatResult' => 'function(item) { return item.name + "'" +item.code; }'
-    )
-);
+if ($countCategories >= 100) {
+    // Category code
+    $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
+
+    $form->addElement(
+        'select_ajax',
+        'category_code',
+        get_lang('CourseFaculty'),
+        null,
+        ['url' => $url]
+    );
+} else {
+    $categories = $courseCategoriesRepo->findAllInAccessUrl($accessUrlId);
+    $categoriesOptions = [null => get_lang('None')];
+
+    /** @var CourseCategory $category */
+    foreach ($categories as $category) {
+        $categoriesOptions[$category->getCode()] = $category->__toString();
+    }
+
+    $form->addSelect(
+        'category_code',
+        get_lang('CourseFaculty'),
+        $categoriesOptions
+    );
+}
 
 // Course department
-$form->addText('department_name', get_lang('CourseDepartment'), false, array('size' => '60'));
+$form->addText(
+    'department_name',
+    get_lang('CourseDepartment'),
+    false,
+    array('size' => '60', 'id' => 'department_name')
+);
 $form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
 
 // Department URL
-$form->addText('department_url', get_lang('CourseDepartmentURL'), false, array('size' => '60'));
+$form->addText(
+    'department_url',
+    get_lang('CourseDepartmentURL'),
+    false,
+    array('size' => '60', 'id' => 'department_url')
+);
 $form->applyFilter('department_url', 'html_filter');
 
 // Course language.
@@ -148,7 +193,9 @@ $group[] = $form->createElement('radio', 'unsubscribe', get_lang('Unsubscription
 $group[] = $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
 $form->addGroup($group, '', get_lang('Unsubscription'));
 
-$form->addElement('text', 'disk_quota', array(get_lang('CourseQuota'), null, get_lang('MB')));
+$form->addElement('text', 'disk_quota', array(get_lang('CourseQuota'), null, get_lang('MB')), array(
+    'id' => 'disk_quota'
+));
 $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 
 $obj = new GradeModel();

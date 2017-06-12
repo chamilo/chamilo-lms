@@ -3,6 +3,8 @@
 /**
  * Responses to AJAX calls
  */
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 require_once __DIR__.'/../global.inc.php';
 
 $action = $_REQUEST['a'];
@@ -27,7 +29,8 @@ switch ($action) {
         echo $rating;
         break;
     case 'get_course_image':
-        $courseInfo = api_get_course_info($_REQUEST['code']);
+        $courseId = ChamiloApi::getCourseIdByDirectory($_REQUEST['code']);
+        $courseInfo = api_get_course_info_by_id($courseId);
         $image = isset($_REQUEST['image']) && in_array($_REQUEST['image'], ['course_image_large_source', 'course_image_source']) ? $_REQUEST['image'] : '';
         if ($courseInfo && $image) {
             DocumentManager::file_send_for_download($courseInfo[$image]);
@@ -63,7 +66,7 @@ switch ($action) {
             foreach ($categories as $item) {
                 $list['items'][] = [
                     'id' => $item['code'],
-                    'text' => '('.$item['code'].') '.$item['name']
+                    'text' => '('.$item['code'].') '.strip_tags($item['name'])
                 ];
             }
 
@@ -87,7 +90,7 @@ switch ($action) {
                         0, //howMany
                         1, //$orderby = 1
                         'ASC',
-                        -1,  //visibility
+                        -1, //visibility
                         $_GET['q'],
                         null, //$urlId
                         true //AlsoSearchCode
@@ -109,7 +112,7 @@ switch ($action) {
 
                 if (!empty($course['category_code'])) {
                     $parents = CourseCategory::getParentsToString($course['category_code']);
-                    $title = $parents . $course['title'];
+                    $title = $parents.$course['title'];
                 }
 
                 $results['items'][] = array(
@@ -189,7 +192,7 @@ switch ($action) {
                     ON u.user_id = r.user_id
                     WHERE session_id = %d AND c_id =  '%s'
                     AND (u.firstname LIKE '%s' OR u.username LIKE '%s' OR u.lastname LIKE '%s')";
-            $needle = '%' . $_GET['q'] . '%';
+            $needle = '%'.$_GET['q'].'%';
             $sql_query = sprintf($sql, $_GET['session_id'], $course['real_id'], $needle, $needle, $needle);
 
             $result = Database::query($sql_query);
@@ -208,7 +211,7 @@ switch ($action) {
     case 'search_exercise_by_course':
         if (api_is_platform_admin()) {
             $course = api_get_course_info_by_id($_GET['course_id']);
-            $session_id = (!empty($_GET['session_id'])) ?  intval($_GET['session_id']) : 0 ;
+            $session_id = (!empty($_GET['session_id'])) ? intval($_GET['session_id']) : 0;
             $exercises = ExerciseLib::get_all_exercises(
                 $course,
                 $session_id,
@@ -219,7 +222,7 @@ switch ($action) {
             );
 
             foreach ($exercises as $exercise) {
-                $data[] = array('id' => $exercise['id'], 'text' => html_entity_decode($exercise['title']) );
+                $data[] = array('id' => $exercise['id'], 'text' => html_entity_decode($exercise['title']));
             }
             if (!empty($data)) {
                 $data[] = array('id' => 'T', 'text' => 'TODOS');
@@ -244,11 +247,11 @@ switch ($action) {
                 $sql,
                 intval($_GET['course_id']),
                 intval($_GET['session_id']),
-                '%' . Database::escape_string($_GET['q']).'%'
+                '%'.Database::escape_string($_GET['q']).'%'
             );
             $result = Database::query($sql_query);
             while ($survey = Database::fetch_assoc($result)) {
-                $survey['title'] .= ($survey['anonymous'] == 1) ? ' (' . get_lang('Anonymous') . ')' : '';
+                $survey['title'] .= ($survey['anonymous'] == 1) ? ' ('.get_lang('Anonymous').')' : '';
                 $data[] = array(
                     'id' => $survey['id'],
                     'text' => strip_tags(html_entity_decode($survey['title']))

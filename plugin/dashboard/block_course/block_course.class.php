@@ -7,7 +7,8 @@
  */
 /**
  * This class is used like controller for this course block plugin,
- * the class name must be registered inside path.info file (e.g: controller = "BlockCourse"), so dashboard controller will be instantiate it
+ * the class name must be registered inside path.info file
+ * (e.g: controller = "BlockCourse"), so dashboard controller will be instantiate it
  * @package chamilo.dashboard
  */
 class BlockCourse extends Block
@@ -51,7 +52,8 @@ class BlockCourse extends Block
     }
 
     /**
-     * This method return content html containing information about courses and its position for showing it inside dashboard interface
+     * This method return content html containing information
+     * about courses and its position for showing it inside dashboard interface
      * it's important to use the name 'get_block' for beeing used from dashboard controller
      * @return array   column and content html
      */
@@ -92,10 +94,7 @@ class BlockCourse extends Block
     public function get_content_html()
     {
         $course_data = $this->get_course_information_data();
-        //$content = '<div style="margin:10px;">';
-        $content = '<h4>'.get_lang(
-                'YourCourseList'
-            ).'</h4>';
+        $content = '<h4>'.get_lang('YourCourseList').'</h4>';
         $data_table = null;
         if (!empty($course_data)) {
             $data_table .= '<table class="data_table" width:"95%">';
@@ -172,7 +171,8 @@ class BlockCourse extends Block
             if (count($users) > 0) {
                 $nb_students_in_course = count($users);
                 $avg_time_spent_in_course = api_time_to_hms(
-                    Tracking::get_time_spent_on_the_course($users, $courseId) / $nb_students_in_course);
+                    Tracking::get_time_spent_on_the_course($users, $courseId) / $nb_students_in_course
+                );
             } else {
                 $avg_time_spent_in_course = null;
             }

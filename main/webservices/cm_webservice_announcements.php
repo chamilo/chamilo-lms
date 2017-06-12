@@ -15,7 +15,6 @@ require_once __DIR__.'/cm_webservice.php';
  */
 class WSCMAnnouncements extends WSCM
 {
-
     public function get_announcements_id($username, $password, $course_code)
     {
         if ($this->verifyUserPass($username, $password) == "valid") {

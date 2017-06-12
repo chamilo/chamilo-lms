@@ -211,18 +211,17 @@ if (!empty($my_folder_data['description'])) {
 }
 
 $check_qualification = intval($my_folder_data['qualification']);
-
 $orderName = api_is_western_name_order() ? 'firstname' : 'lastname';
+
 
 if (!empty($work_data['enable_qualification']) &&
     !empty($check_qualification)
 ) {
     $type = 'simple';
-
     $columns = array(
         get_lang('FullUserName'),
         get_lang('Title'),
-        get_lang('Feedback'),
+        get_lang('Score'),
         get_lang('Date'),
         get_lang('Status'),
         get_lang('UploadCorrection'),
@@ -287,7 +286,6 @@ if (!empty($work_data['enable_qualification']) &&
     );
 } else {
     $type = 'complex';
-
     $columns = array(
         get_lang('FullUserName'),
         get_lang('Title'),
@@ -316,8 +314,8 @@ if (!empty($work_data['enable_qualification']) &&
         array(
             'name' => 'qualification',
             'index' => 'qualification',
-            'width' => '30',
-            'align' => 'left',
+            'width' => '20',
+            'align' => 'center',
             'search' => 'true',
         ),
         array(
@@ -331,7 +329,7 @@ if (!empty($work_data['enable_qualification']) &&
         array(
             'name' => 'correction',
             'index' => 'correction',
-            'width' => '45',
+            'width' => '40',
             'align' => 'left',
             'search' => 'false',
             'sortable' => 'false',

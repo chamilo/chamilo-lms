@@ -71,7 +71,7 @@ switch ($action) {
                 <div class="row">
                     <div class="col-sm-10 col-sm-offset-2">
                         <a class="btn btn-primary" id="send_message_link">
-                            <em class="fa fa-envelope"></em> ' . get_lang('Send') . '
+                            <em class="fa fa-envelope"></em> ' . get_lang('Send').'
                         </a>
                     </div>
                 </div>
@@ -90,13 +90,22 @@ switch ($action) {
         }
         break;
     case 'search_tags':
+        header('Content-Type: application/json');
+
+        $result = ['items' => []];
+
         if (api_is_anonymous()) {
-            echo '';
-        } else {
-            if (isset($_GET['tag']) && isset($_GET['field_id'])) {
-                echo UserManager::get_tags($_GET['tag'], $_GET['field_id'], 'json', '10');
-            }
+            echo json_encode($result);
+            break;
         }
+
+        if (!isset($_GET['q'], $_GET['field_id'])) {
+            echo json_encode($result);
+            break;
+        }
+
+        $result['items'] = UserManager::get_tags($_GET['q'], $_GET['field_id'], null, '10');
+        echo json_encode($result);
         break;
     case 'generate_api_key':
         if (api_is_anonymous()) {
@@ -136,13 +145,13 @@ switch ($action) {
                     $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
                     $email_admin = api_get_setting('emailAdministrator');
                     $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-                    $emailbody=get_lang('Dear')." ".stripslashes($recipient_name).",\n\n";
+                    $emailbody = get_lang('Dear')." ".stripslashes($recipient_name).",\n\n";
 
-                    $emailbody.=sprintf(get_lang('YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators'), api_get_setting('siteName'))."\n";
-                    $emailbody.=sprintf(get_lang('YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided'), api_get_path(WEB_PATH)).",\n\n";
-                    $emailbody.=get_lang('HaveFun')."\n\n";
+                    $emailbody .= sprintf(get_lang('YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators'), api_get_setting('siteName'))."\n";
+                    $emailbody .= sprintf(get_lang('YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided'), api_get_path(WEB_PATH)).",\n\n";
+                    $emailbody .= get_lang('HaveFun')."\n\n";
                     //$emailbody.=get_lang('Problem'). "\n\n". get_lang('SignatureFormula');
-                    $emailbody.=api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+                    $emailbody .= api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
 
                     $additionalParameters = array(
                         'smsType' => SmsPlugin::ACCOUNT_APPROVED_CONNECT,
@@ -174,4 +183,3 @@ switch ($action) {
         echo '';
 }
 exit;
-

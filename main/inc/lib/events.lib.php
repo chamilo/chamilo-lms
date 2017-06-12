@@ -78,9 +78,7 @@ class Event
         Database::query($sql);
 
         // Auto subscribe
-        $user_status = $userInfo['status']  == SESSIONADMIN ? 'sessionadmin' :
-            $userInfo['status'] == COURSEMANAGER ? 'teacher' :
-                $userInfo['status'] == DRH ? 'DRH' : 'student';
+        $user_status = $userInfo['status'] == SESSIONADMIN ? 'sessionadmin' : $userInfo['status'] == COURSEMANAGER ? 'teacher' : $userInfo['status'] == DRH ? 'DRH' : 'student';
         $autoSubscribe = api_get_setting($user_status.'_autosubscribe');
         if ($autoSubscribe) {
             $autoSubscribe = explode('|', $autoSubscribe);
@@ -337,7 +335,7 @@ class Event
         global $debug;
 
         if ($debug) error_log('Called to update_event_exercice');
-        if ($debug) error_log('duration:' . $duration);
+        if ($debug) error_log('duration:'.$duration);
 
         if ($exeid != '') {
             /*
@@ -385,7 +383,7 @@ class Event
         		   status = '".$status."',
         		   questions_to_check = '".$remind_list."',
         		   data_tracking = '".implode(',', $question_list)."',
-                   user_ip = '" . Database::escape_string(api_get_real_ip()) . "'
+                   user_ip = '" . Database::escape_string(api_get_real_ip())."'
         		 WHERE exe_id = '".Database::escape_string($exeid)."'";
             $res = Database::query($sql);
 
@@ -815,11 +813,11 @@ class Event
     /**
      * Save the new message for one event and for one language
      *
-     * @param string $eventName
+     * @param string $event_name
      * @param array $users
      * @param string $message
      * @param string $subject
-     * @param string $eventMessageLanguage
+     * @param string $event_message_language
      * @param int $activated
      */
     public static function save_event_type_message($event_name, $users, $message, $subject, $event_message_language, $activated)
@@ -1069,15 +1067,15 @@ class Event
 
         if (!empty($exe_list) && is_array($exe_list) && count($exe_list) > 0) {
             $sql = "DELETE FROM $track_e_exercises
-                WHERE exe_id IN (" . implode(',', $exe_list) . ")";
+                WHERE exe_id IN (".implode(',', $exe_list).")";
             Database::query($sql);
 
             $sql = "DELETE FROM $track_attempts
-                WHERE exe_id IN (" . implode(',', $exe_list) . ")";
+                WHERE exe_id IN (".implode(',', $exe_list).")";
             Database::query($sql);
 
             $sql = "DELETE FROM $recording_table
-                WHERE exe_id IN (" . implode(',', $exe_list) . ")";
+                WHERE exe_id IN (".implode(',', $exe_list).")";
             Database::query($sql);
         }
 
@@ -1119,7 +1117,7 @@ class Event
             self::addEvent(
                 LOG_EXERCISE_RESULT_DELETE,
                 LOG_EXERCISE_AND_USER_ID,
-                $exercise_id . '-' . $user_id,
+                $exercise_id.'-'.$user_id,
                 null,
                 null,
                 $course_id,
@@ -1213,12 +1211,6 @@ class Event
             $list = array();
             while ($row = Database::fetch_array($res, 'ASSOC')) {
                 $list[$row['exe_id']] = $row;
-                $sql = "SELECT * FROM $table_track_attempt 
-                        WHERE exe_id = {$row['exe_id']}";
-                $res_question = Database::query($sql);
-                while ($row_q = Database::fetch_array($res_question, 'ASSOC')) {
-                    $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
-                }
             }
             return $list;
         }
@@ -1725,7 +1717,7 @@ class Event
         self::addEvent(
             LOG_QUESTION_RESULT_DELETE,
             LOG_EXERCISE_ATTEMPT_QUESTION_ID,
-            $exe_id . '-' . $question_id,
+            $exe_id.'-'.$question_id,
             null,
             null,
             $courseId,
@@ -1762,7 +1754,7 @@ class Event
         self::addEvent(
             LOG_QUESTION_RESULT_DELETE,
             LOG_EXERCISE_ATTEMPT_QUESTION_ID,
-            $exe_id . '-' . $question_id,
+            $exe_id.'-'.$question_id,
             null,
             null,
             $courseId,

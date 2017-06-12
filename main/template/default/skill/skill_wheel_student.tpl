@@ -128,17 +128,19 @@
 
         /* Wheel skill popup form */
 
-        $("#skill_id").fcbkcomplete({
-            json_url: "{{ url }}&a=find_skills",
+        $("#skill_id").select2({
+            ajax: {
+                url: '{{ url }}&a=find_skills',
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            },
             cache: false,
-            filter_case: false,
-            filter_hide: true,
-            complete_text: "{{ 'EnterTheSkillNameToSearch'|get_lang }}",
-            firstselected: true,
-            //onremove: "testme",
-            onselect: "check_skills_sidebar",
-            filter_selected: true,
-            newel: true
+            placeholder: '{{ 'EnterTheSkillNameToSearch'|get_lang }}'
+        }).on('change', function () {
+            check_skills_sidebar();
         });
 
         load_nodes(0, main_depth);
@@ -202,7 +204,7 @@
                                 <div class="search-skill">
                                     <h5 class="page-header">{{ 'SkillsSearch'|get_lang }}</h5>
                                     <form id="skill_search" class="form-search">
-                                        <select id="skill_id" name="skill_id" /></select>
+                                        <select id="skill_id" name="skill_id" multiple style="width: 100%;"></select>
                                         <table id="skill_holder" class="table table-condensed"></table>
                                     </form>
                                 </div>

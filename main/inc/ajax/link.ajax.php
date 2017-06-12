@@ -29,6 +29,16 @@ switch ($action) {
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_TIMEOUT => 4
             );
+
+            $proxySettings = api_get_configuration_value('proxy_settings');
+
+            if (!empty($proxySettings) &&
+                isset($proxySettings['curl_setopt_array'])
+            ) {
+                 $defaults[CURLOPT_PROXY] = $proxySettings['curl_setopt_array']['CURLOPT_PROXY'];
+                 $defaults[CURLOPT_PROXYPORT] = $proxySettings['curl_setopt_array']['CURLOPT_PROXYPORT'];
+            }
+
             // Create a new cURL resource
             $ch = curl_init();
             curl_setopt_array($ch, $defaults);

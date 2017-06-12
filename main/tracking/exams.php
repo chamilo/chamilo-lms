@@ -156,6 +156,7 @@ if ($global) {
     $html .= '<tr>';
     $html .= '<th>'.get_lang('Quiz').'</th>';
     $html .= '<th>'.get_lang('User').'</th>';
+    $html .= '<th>'.get_lang('Username').'</th>';
     //$html .= '<th>'.sprintf(get_lang('ExamPassX'), $filter_score).'</th>';
     $html .= '<th>'.get_lang('Percentage').' %</th>';
     $html .= '<th>'.get_lang('Status').'</th>';
@@ -425,9 +426,10 @@ function export_complete_report_xls($filename, $array)
     } else {
         $worksheet->setCellValueByColumnAndRow(0, $line, get_lang('Exercises'));
         $worksheet->setCellValueByColumnAndRow(1, $line, get_lang('User'));
-        $worksheet->setCellValueByColumnAndRow(2, $line, get_lang('Percentage'));
-        $worksheet->setCellValueByColumnAndRow(3, $line, get_lang('Status'));
-        $worksheet->setCellValueByColumnAndRow(4, $line, get_lang('Attempts'));
+        $worksheet->setCellValueByColumnAndRow(2, $line, get_lang('Username'));
+        $worksheet->setCellValueByColumnAndRow(3, $line, get_lang('Percentage'));
+        $worksheet->setCellValueByColumnAndRow(4, $line, get_lang('Status'));
+        $worksheet->setCellValueByColumnAndRow(5, $line, get_lang('Attempts'));
         $line++;
 
         foreach ($array as $row) {
@@ -443,7 +445,12 @@ function export_complete_report_xls($filename, $array)
                     $line,
                     html_entity_decode(strip_tags($user))
                 );
-                $column = 2;
+                $worksheet->setCellValueByColumnAndRow(
+                    2,
+                    $line,
+                    $row['usernames'][$key]
+                );
+                $column = 3;
 
                 foreach ($row['results'][$key] as $result_item) {
                     $worksheet->setCellValueByColumnAndRow(
@@ -597,6 +604,7 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
             $userRow = '<td>';
             $userRow .= $userInfo['complete_name'];
             $userRow .= '</td>';
+            $userRow .= '<td>'.$userInfo['username'].'</td>';
 
             // Best result
 
@@ -642,7 +650,8 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
                 'html' => $userRow,
                 'score' => $score,
                 'array' => $tempArray,
-                'user' => $userInfo['complete_name']
+                'user' => $userInfo['complete_name'],
+                'username' => $userInfo['username']
             );
         }
     }
@@ -668,6 +677,7 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
                 $html .= $row['html'];
                 $row_not_global['results'][] = $row['array'];
                 $row_not_global['users'][] = $row['user'];
+                $row_not_global['usernames'][] = $row['username'];
             }
             $export_array[] = $row_not_global;
         }

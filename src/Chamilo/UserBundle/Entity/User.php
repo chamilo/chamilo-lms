@@ -161,7 +161,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     private $authSource;
 
     /**
-     * @var boolean
+     * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
@@ -404,6 +404,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     protected $portals;
 
     /**
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="generalCoach")
      **/
     protected $sessionAsGeneralCoach;
@@ -441,7 +442,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     {
         $this->status = self::STUDENT;
         $this->salt = sha1(uniqid(null, true));
-        $this->active = 1;
+        $this->active = true;
         $this->registrationDate = new \DateTime();
         $this->authSource = 'platform';
         $this->courses = new ArrayCollection();
@@ -901,7 +902,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     /**
      * Get status
      *
-     * @return boolean
+     * @return int
      */
     public function getStatus()
     {
@@ -2432,5 +2433,14 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         $this->profileCompleted = $profileCompleted;
 
         return $this;
+    }
+
+    /**
+     * Get sessionAsGeneralCoach
+     * @return ArrayCollection
+     */
+    public function getSessionAsGeneralCoach()
+    {
+        return $this->sessionAsGeneralCoach;
     }
 }

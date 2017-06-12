@@ -276,7 +276,7 @@ $formNormal->addHeader(get_lang('EditWeight'));
 $formNormal->display();
 
 $warning_message = sprintf(get_lang('TotalWeightMustBeX'), $original_total);
-Display::display_warning_message($warning_message, false);
+echo Display::return_message($warning_message, 'warning', false);
 
 ?>
 <form method="post"

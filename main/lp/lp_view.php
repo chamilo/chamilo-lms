@@ -26,6 +26,11 @@ if ($lp_controller_touched != 1) {
 }
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+if (isset($_REQUEST['origin']) && $_REQUEST['origin'] === 'learnpath') {
+    $_REQUEST['origin'] = '';
+}
+
 //To prevent the template class
 $show_learnpath = true;
 
@@ -298,7 +303,7 @@ if (!empty($_REQUEST['exeId']) &&
 
             if (!empty($exercise->pass_percentage)) {
                 $status = 'failed';
-                $success = ExerciseLib::is_success_exercise_result(
+                $success = ExerciseLib::isSuccessExerciseResult(
                     $score,
                     $max_score,
                     $exercise->pass_percentage
@@ -317,7 +322,6 @@ if (!empty($_REQUEST['exeId']) &&
             if ($debug) {
                 error_log($sql);
             }
-
             Database::query($sql);
 
             $sql = "UPDATE $TBL_TRACK_EXERCICES SET
@@ -535,10 +539,7 @@ $template->assign(
 $template->assign('lp_author', $_SESSION['oLP']->get_author());
 $template->assign('lp_mode', $_SESSION['oLP']->mode);
 $template->assign('lp_title_scorm', $_SESSION['oLP']->name);
-$template->assign(
-    'lp_html_toc',
-    $_SESSION['oLP']->get_html_toc($get_toc_list)
-);
+$template->assign('data_list', $_SESSION['oLP']->getListArrayToc($get_toc_list));
 $template->assign('lp_id', $_SESSION['oLP']->lp_id);
 $template->assign('lp_current_item_id', $_SESSION['oLP']->get_current_item_id());
 

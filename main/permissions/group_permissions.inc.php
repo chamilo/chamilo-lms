@@ -12,7 +12,7 @@ echo $group_id;
 if ($_POST['StoreGroupPermissions'] and $setting_visualisation == 'checkbox') {
     $result_message = store_permissions('group', $group_id);
     if ($result_message) {
-        Display::addFlash(Display::return_message($result_message, 'normal'));
+        echo Display::return_message($result_message);
     }
 }
 if (isset($_GET['action'])) {
@@ -25,7 +25,7 @@ if (isset($_GET['action'])) {
     }
 }
 if (isset($result_message)) {
-    Display::addFlash(Display::return_message($result_message, 'normal'));
+    echo Display::return_message($result_message);
 }
 
 // 			RETRIEVING THE PERMISSIONS
@@ -48,11 +48,11 @@ if (api_get_setting('permissions') == 'full') {
     $header_array = $rights_full;
 }
 
-echo "<form method=\"post\" action=\"" . str_replace('&', '&amp;', $_SERVER['REQUEST_URI']) . "\">";
+echo "<form method=\"post\" action=\"".str_replace('&', '&amp;', $_SERVER['REQUEST_URI'])."\">";
 // 		DISPLAYING THE ROLES LIST
 if (api_get_setting('group_roles') == 'true') {
     // the list of the roles for the user
-    echo '<strong>' . get_lang('GroupRoles') . '</strong><br />';
+    echo '<strong>'.get_lang('GroupRoles').'</strong><br />';
     $current_group_course_roles = get_roles('group', $group_id);
     $current_group_platform_roles = get_roles('group', $group_id, 'platform');
     display_role_list($current_group_course_roles, $current_group_platform_roles);
@@ -64,9 +64,9 @@ echo "<table class=\"data_table\">\n";
 
 // the header
 echo "\t<tr>\n";
-echo "\t\t<th>" . get_lang('Module') . "</th>\n";
+echo "\t\t<th>".get_lang('Module')."</th>\n";
 foreach ($header_array as $header_key => $header_value) {
-    echo "\t\t<th>" . get_lang($header_value) . "</th>\n";
+    echo "\t\t<th>".get_lang($header_value)."</th>\n";
 }
 echo "\t</tr>\n";
 
@@ -113,12 +113,12 @@ foreach ($tool_rights as $tool => $rights) // $tool_rights contains all the poss
 
 echo "</table>\n";
 if ($setting_visualisation == 'checkbox') {
-    echo "<input type=\"Submit\" name=\"StoreGroupPermissions\" value=\"" . get_lang('StorePermissions') . "\">";
+    echo "<input type=\"Submit\" name=\"StoreGroupPermissions\" value=\"".get_lang('StorePermissions')."\">";
 }
 echo "</form>";
 
 // 			LEGEND
-echo '<strong>' . get_lang('Legend') . '</strong><br />';
-echo '<img src="../img/wrong.gif" /> ' . get_lang('UserHasPermissionNot') . '<br />';
-echo '<img src="../img/checkbox_on2.gif" /> ' . get_lang('UserHasPermission') . '<br />';
-echo '<img src="../img/checkbox_on3.gif" /> ' . get_lang('UserHasPermissionByRoleGroup') . '<br />';
+echo '<strong>'.get_lang('Legend').'</strong><br />';
+echo '<img src="../img/wrong.gif" /> '.get_lang('UserHasPermissionNot').'<br />';
+echo '<img src="../img/checkbox_on2.gif" /> '.get_lang('UserHasPermission').'<br />';
+echo '<img src="../img/checkbox_on3.gif" /> '.get_lang('UserHasPermissionByRoleGroup').'<br />';

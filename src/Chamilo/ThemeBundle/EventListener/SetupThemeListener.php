@@ -11,8 +11,8 @@ namespace Chamilo\ThemeBundle\EventListener;
 use Chamilo\ThemeBundle\Theme\ThemeManager;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
-class SetupThemeListener {
-
+class SetupThemeListener
+{
     /**
      * @var ThemeManager
      */
@@ -22,19 +22,17 @@ class SetupThemeListener {
 
     protected $lteAdmin;
 
-    function __construct($manager, $cssBase = null, $lteAdmin = null)
+    public function __construct($manager, $cssBase = null, $lteAdmin = null)
     {
         $this->cssBase  = $cssBase ?: 'bundles/avanzuadmintheme/';
         $this->lteAdmin = $lteAdmin ?: 'vendor/AdminLTE/css/';
         $this->manager  = $manager;
     }
 
-
-    public function onKernelController(FilterControllerEvent $event) {
-
+    public function onKernelController(FilterControllerEvent $event)
+    {
         $css = rtrim($this->cssBase, '/').'/'.trim($this->lteAdmin, '/');
         $mng = $this->manager;
-
         $mng->registerStyle('jquery-ui', $css.'/jQueryUI/jquery-ui-1.10.3.custom.css');
         $mng->registerStyle('bootstrap', $css.'/bootstrap.css', array('jquery-ui'));
         $mng->registerStyle('bootstrap-slider', $css.'/bootstrap-slider/slider.css', array('bootstrap'));
@@ -46,6 +44,5 @@ class SetupThemeListener {
         $mng->registerStyle('daterangepicker', $css.'/daterangepicker/daterangepicker-bs3.css', array('admin-lte'));
         $mng->registerStyle('timepicker', $css.'/timepicker/bootstrap-timepicker.css', array('admin-lte'));
         $mng->registerStyle('wysiwyg', $css.'/bootstrap-wysihtml5/bootstrap3-wysihtml5.css', array('admin-lte'));
-
     }
 }

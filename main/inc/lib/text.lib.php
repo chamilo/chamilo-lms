@@ -75,8 +75,8 @@ function api_set_encoding_html(&$string, $encoding)
 /**
  * Returns the title of a html document.
  * @param string $string                The contents of the input document.
+ * @param string $output_encoding       The encoding of the retrieved title. If the value is not set, the system encoding is assumend.
  * @param string $input_encoding        The encoding of the input document. If the value is not set, it is detected.
- * @param string $$output_encoding      The encoding of the retrieved title. If the value is not set, the system encoding is assumend.
  * @return string                       The retrieved title, html-entities and extra-whitespace between the words are cleaned.
  */
 function api_get_title_html(&$string, $output_encoding = null, $input_encoding = null)

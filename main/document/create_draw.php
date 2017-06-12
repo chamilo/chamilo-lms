@@ -166,7 +166,7 @@ if (api_browser_support('svg')) {
 	echo '<iframe style="height: 550px; width: 100%;" scrolling="no" frameborder="0" src="'.$svg_url.'"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>';
 	echo '</noscript>';
 } else {
-	Display::display_error_message(get_lang('BrowserDontSupportsSVG'));
+	echo Display::return_message(get_lang('BrowserDontSupportsSVG'), 'error');
 }
 
 Display :: display_footer();

@@ -29,9 +29,7 @@ class Draggable extends Question
         $defaults = array();
         $nb_matches = $nb_options = 2;
         $matches = array();
-
         $answer = null;
-
         if ($form->isSubmitted()) {
             $nb_matches = $form->getSubmitValue('nb_matches');
             $nb_options = $form->getSubmitValue('nb_options');
@@ -52,6 +50,8 @@ class Draggable extends Question
                 $nb_options++;
             }
         } else if (!empty($this->id)) {
+            $defaults['orientation'] = in_array($this->extra, ['h', 'v']) ? $this->extra : 'h';
+
             $answer = new Answer($this->id);
             $answer->read();
 
@@ -76,6 +76,7 @@ class Draggable extends Question
             $defaults['matches[2]'] = '2';
             $defaults['option[1]'] = get_lang('DefaultMatchingOptA');
             $defaults['option[2]'] = get_lang('DefaultMatchingOptB');
+            $defaults['orientation'] = 'h';
         }
 
         for ($i = 1; $i <= $nb_matches; ++$i) {
@@ -84,6 +85,12 @@ class Draggable extends Question
 
         $form->addElement('hidden', 'nb_matches', $nb_matches);
         $form->addElement('hidden', 'nb_options', $nb_options);
+
+        $form->addRadio(
+            'orientation',
+            get_lang('Orientation'),
+            ['h' => get_lang('Horizontal'), 'v' => get_lang('Vertical')]
+        );
 
         // DISPLAY MATCHES
         $html = '<table class="table table-striped table-hover">
@@ -101,7 +108,7 @@ class Draggable extends Question
 
         if ($nb_matches < 1) {
             $nb_matches = 1;
-            Display::addFlash(Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'), 'normal'));
+            echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'), 'normal');
         }
 
         for ($i = 1; $i <= $nb_matches; ++$i) {
@@ -149,6 +156,8 @@ class Draggable extends Question
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
         } else {
+            $form->setDefaults(['orientation' => 'h']);
+
             if ($this->isContent == 1) {
                 $form->setDefaults($defaults);
             }
@@ -163,28 +172,24 @@ class Draggable extends Question
     }
 
     /**
-     * Abstract function which creates the form to create / edit the answers of the question
-     * @param FormValidator $form
+     * @inheritdoc
      */
-    public function processAnswersCreation($form)
+    public function processAnswersCreation($form, $exercise)
     {
+        $this->extra = $form->exportValue('orientation');
         $nb_matches = $form->getSubmitValue('nb_matches');
         $this->weighting = 0;
         $position = 0;
-
         $objAnswer = new Answer($this->id);
-
         // Insert the options
         for ($i = 1; $i <= $nb_matches; ++$i) {
             $position++;
-
             $objAnswer->createAnswer($position, 0, '', 0, $position);
         }
 
         // Insert the answers
         for ($i = 1; $i <= $nb_matches; ++$i) {
             $position++;
-
             $answer = $form->getSubmitValue('answer['.$i.']');
             $matches = $form->getSubmitValue('matches['.$i.']');
             $weighting = $form->getSubmitValue('weighting['.$i.']');
@@ -199,19 +204,15 @@ class Draggable extends Question
         }
 
         $objAnswer->save();
-        $this->save();
+        $this->save($exercise);
     }
 
     /**
-     * Shows question title an description
-     * @param string $feedback_type
-     * @param int $counter
-     * @param float $score
-     * @return string
+     * @inheritdoc
      */
-    public function return_header($feedback_type = null, $counter = null, $score = null)
+    public function return_header($exercise, $counter = null, $score = null)
     {
-        $header = parent::return_header($feedback_type, $counter, $score);
+        $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
             <tr>
                 <th>' . get_lang('ElementList').'</th>

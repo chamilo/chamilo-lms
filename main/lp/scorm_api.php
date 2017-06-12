@@ -25,7 +25,7 @@ $use_anonymous = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$file   = (empty($_SESSION['file'])?'':$_SESSION['file']);
+$file = (empty($_SESSION['file']) ? '' : $_SESSION['file']);
 /** @var learnpath $oLP */
 $oLP = unserialize($_SESSION['lpobject']);
 /** @var learnpathItem $oItem */
@@ -41,7 +41,7 @@ $userId = api_get_user_id();
 
 header('Content-type: text/javascript');
 
-?>var scorm_logs=<?php echo ((empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin()) )?'0':'3');?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
+?>var scorm_logs=<?php echo ((empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin())) ? '0' : '3'); ?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
 var lms_logs = 0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
 
 // API Object initialization (eases access later on)
@@ -144,25 +144,25 @@ olms.finishSignalReceived = 0;
 olms.statusSignalReceived = 0;
 
 // Strictly scorm variables
-olms.score=<?php echo $oItem->get_score();?>;
-olms.max='<?php echo $oItem->get_max();?>';
-olms.min='<?php echo $oItem->get_min();?>';
-olms.lesson_status='<?php echo $oItem->get_status();?>';
-olms.session_time='<?php echo $oItem->get_scorm_time('js');?>';
-olms.suspend_data = '<?php echo $oItem->get_suspend_data();?>';
-olms.lesson_location = '<?php echo $oItem->get_lesson_location();?>';
-olms.total_time = '<?php echo $oItem->get_scorm_time('js');?>';
-olms.mastery_score = '<?php echo $oItem->get_mastery_score();?>';
+olms.score=<?php echo $oItem->get_score(); ?>;
+olms.max='<?php echo $oItem->get_max(); ?>';
+olms.min='<?php echo $oItem->get_min(); ?>';
+olms.lesson_status='<?php echo $oItem->get_status(); ?>';
+olms.session_time='<?php echo $oItem->get_scorm_time('js'); ?>';
+olms.suspend_data = '<?php echo $oItem->get_suspend_data(); ?>';
+olms.lesson_location = '<?php echo $oItem->get_lesson_location(); ?>';
+olms.total_time = '<?php echo $oItem->get_scorm_time('js'); ?>';
+olms.mastery_score = '<?php echo $oItem->get_mastery_score(); ?>';
 olms.launch_data = '<?php echo $oItem->get_launch_data(); ?>';
-olms.max_time_allowed = '<?php echo $oItem->get_max_time_allowed();?>';
-olms.interactions = new Array(<?php echo $oItem->get_interactions_js_array();?>);
+olms.max_time_allowed = '<?php echo $oItem->get_max_time_allowed(); ?>';
+olms.interactions = new Array(<?php echo $oItem->get_interactions_js_array(); ?>);
 olms.item_objectives = new Array();
 olms.info_lms_item = new Array();
 
 // Chamilo internal variables (not SCORM)
 // olms.saved_lesson_status = 'not attempted';
-olms.lms_lp_id = <?php echo $oLP->get_id();?>;
-olms.lms_item_id = <?php echo $oItem->get_id();?>;
+olms.lms_lp_id = <?php echo $oLP->get_id(); ?>;
+olms.lms_item_id = <?php echo $oItem->get_id(); ?>;
 olms.lms_initialized = 0;
 // switch_finished indicates if the switch process is finished (if it has gone
 // through LMSInitialize() for the new item. Until then, all LMSSetValue()
@@ -171,26 +171,26 @@ olms.lms_initialized = 0;
 olms.switch_finished = 0;
 
 //olms.lms_total_lessons = <?php echo $oLP->get_total_items_count(); ?>;
-//olms.lms_complete_lessons = <?php echo $oLP->get_complete_items_count();?>;
-//olms.lms_progress_bar_mode = '<?php echo $oLP->progress_bar_mode;?>';
+//olms.lms_complete_lessons = <?php echo $oLP->get_complete_items_count(); ?>;
+//olms.lms_progress_bar_mode = '<?php echo $oLP->progress_bar_mode; ?>';
 //if(lms_progress_bar_mode == ''){lms_progress_bar_mode='%';}
 
-olms.lms_view_id = '<?php echo $oLP->get_view();?>';
+olms.lms_view_id = '<?php echo $oLP->get_view(); ?>';
 if(olms.lms_view_id == ''){ olms.lms_view_id = 1;}
-olms.lms_user_id = '<?php echo $userId;?>';
-olms.lms_next_item = '<?php echo $oLP->get_next_item_id();?>';
-olms.lms_previous_item = '<?php echo $oLP->get_previous_item_id();?>';
-olms.lms_lp_type = '<?php echo $oLP->get_type();?>';
-olms.lms_item_type = '<?php echo $oItem->get_type();?>';
-olms.lms_item_credit = '<?php echo $oItem->get_credit();?>';
-olms.lms_item_lesson_mode = '<?php echo $oItem->get_lesson_mode();?>';
-olms.lms_item_launch_data = '<?php echo addslashes($oItem->get_launch_data());?>';
-olms.lms_item_core_exit = '<?php echo $oItem->get_core_exit();?>';
+olms.lms_user_id = '<?php echo $userId; ?>';
+olms.lms_next_item = '<?php echo $oLP->get_next_item_id(); ?>';
+olms.lms_previous_item = '<?php echo $oLP->get_previous_item_id(); ?>';
+olms.lms_lp_type = '<?php echo $oLP->get_type(); ?>';
+olms.lms_item_type = '<?php echo $oItem->get_type(); ?>';
+olms.lms_item_credit = '<?php echo $oItem->get_credit(); ?>';
+olms.lms_item_lesson_mode = '<?php echo $oItem->get_lesson_mode(); ?>';
+olms.lms_item_launch_data = '<?php echo addslashes($oItem->get_launch_data()); ?>';
+olms.lms_item_core_exit = '<?php echo $oItem->get_core_exit(); ?>';
 olms.lms_course_id = '<?php echo $oLP->get_course_int_id(); ?>';
 olms.lms_session_id = '<?php echo api_get_session_id(); ?>';
 olms.lms_course_code = '<?php echo $oLP->getCourseCode(); ?>';
 olms.lms_course_id =  '<?php echo $oLP->get_course_int_id(); ?>';
-<?php echo $oLP->get_items_details_as_js('olms.lms_item_types');?>
+<?php echo $oLP->get_items_details_as_js('olms.lms_item_types'); ?>
 
 // Following definition of cmi.core.score.raw in SCORM 1.2, "LMS should
 // initialize this to an empty string ("") upon initial launch of a SCO. The
@@ -227,8 +227,8 @@ $(document).ready(function() {
     logit_scorm('Other SCORM calls are shown in orange.', 1);
     logit_lms('To add new messages to these logs, use logit_lms() or logit_scorm().');
 
-    olms.info_lms_item[0] = '<?php echo $oItem->get_id();?>';
-    olms.info_lms_item[1] = '<?php echo $oItem->get_id();?>';
+    olms.info_lms_item[0] = '<?php echo $oItem->get_id(); ?>';
+    olms.info_lms_item[1] = '<?php echo $oItem->get_id(); ?>';
 
     $("#content_id").load(function() {
         logit_lms('#content_id load event starts');
@@ -499,7 +499,7 @@ function LMSGetValue(param) {
         result = 'id,score,status';
     } else if(param == 'cmi.objectives._count'){
     // ---- cmi.objectives._count
-        //result='<?php echo $oItem->get_view_count();?>';
+        //result='<?php echo $oItem->get_view_count(); ?>';
         result = olms.item_objectives.length;
     } else if(param.substring(0,15)== 'cmi.objectives.'){
         var myres = '';

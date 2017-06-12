@@ -168,8 +168,8 @@ if ($form->validate()) {
         $gradebook = $_SESSION['gradebook'];
     }
 
-    if (!empty($gradebook) && $gradebook=='view') {
-        $interbreadcrumb[]= array(
+    if (!empty($gradebook) && $gradebook == 'view') {
+        $interbreadcrumb[] = array(
             'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
             'name' => get_lang('ToolGradebook')
         );
@@ -181,7 +181,7 @@ if ($form->validate()) {
     );
     $interbreadcrumb[] = array(
         "url" => 'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq(),
-        "name" => $objExercise->name,
+        "name" => $objExercise->selectTitle(true),
     );
 
     Display::display_header($nameTools, get_lang('Exercise'));
@@ -189,7 +189,7 @@ if ($form->validate()) {
     echo '<div class="actions">';
 
     if ($objExercise->id != 0) {
-        echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">' .
+        echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
@@ -199,9 +199,9 @@ if ($form->validate()) {
             } else {
                 $lp_id = intval($_GET['lp_id']);
             }
-            echo "<a href=\"../lp/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'',ICON_SIZE_MEDIUM)."</a>";
+            echo "<a href=\"../lp/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"), '', ICON_SIZE_MEDIUM)."</a>";
         } else {
-            echo '<a href="exercise.php?'.api_get_cidreq().'">' .
+            echo '<a href="exercise.php?'.api_get_cidreq().'">'.
                 Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).
                 '</a>';
         }
@@ -209,15 +209,13 @@ if ($form->validate()) {
     echo '</div>';
 
     if ($objExercise->feedback_type == 1) {
-        Display::addFlash(Display::return_message(
-            get_lang('DirectFeedbackCantModifyTypeQuestion')
-        ));
+        echo Display::return_message(get_lang('DirectFeedbackCantModifyTypeQuestion'));
     }
 
-    if (api_get_setting('search_enabled')=='true' &&
+    if (api_get_setting('search_enabled') == 'true' &&
         !extension_loaded('xapian')
     ) {
-        Display::display_error_message(get_lang('SearchXapianModuleNotInstalled'));
+        echo Display::return_message(get_lang('SearchXapianModuleNotInstalled'), 'error');
     }
 
     // to hide the exercise description

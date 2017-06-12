@@ -1,7 +1,7 @@
 <meta charset="{{ system_charset }}" />
 <link href="https://chamilo.org/chamilo-lms/" rel="help" />
 <link href="https://chamilo.org/the-association/" rel="author" />
-<link href="https://chamilo.org/the-association/" rel="copyright" />
+<link href="https://www.gnu.org/licenses/gpl-3.0.en.html" rel="license" />
 <!-- Force latest IE rendering engine or ChromeFrame if installed -->
 <!--[if IE]>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">

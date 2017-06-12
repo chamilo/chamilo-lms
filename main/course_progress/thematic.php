@@ -40,6 +40,10 @@ if (api_is_allowed_to_edit(null, true)) {
                 Display::return_icon('export_csv.png', get_lang('ExportThematic'), '', ICON_SIZE_MEDIUM).'</a>';
             $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_export_pdf'.$url_token.'">'.
                 Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+            $actionLeft .= Display::url(
+                Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), [], ICON_SIZE_MEDIUM),
+                api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents']).$url_token
+            );
             break;
         default:
             $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
@@ -150,6 +154,12 @@ if ($action == 'thematic_list') {
                         ]),
                         array('class' => 'btn btn-default')
                     );
+                    $toolbarThematic .= Display::url(
+                        Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), [], ICON_SIZE_TINY),
+                        api_get_self().'?'.api_get_cidreq().$url_token.'&'
+                            .http_build_query(['action' => 'export_single_documents', 'thematic_id' => $my_thematic_id]),
+                        ['class' => 'btn btn-default']
+                    );
                     $toolbarThematic .= '<a class="btn btn-default" href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='
                         .$my_thematic_id.$params.$url_token.'">'
                         .Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_TINY).'</a>';
@@ -190,7 +200,17 @@ if ($action == 'thematic_list') {
         $form->addElement('hidden', 'thematic_id', $thematic_id);
     }
 
-    $form->addText('title', get_lang('Title'), true, array('size' => '50'));
+    if (api_get_configuration_value('save_titles_as_html')) {
+        $form->addHtmlEditor(
+            'title',
+            get_lang('Title'),
+            true,
+            false,
+            ['ToolbarSet' => 'Minimal']
+        );
+    } else {
+        $form->addText('title', get_lang('Title'), true, array('size' => '50'));
+    }
     $form->addHtmlEditor('content', get_lang('Content'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Height' => '150'));
     $form->addButtonSave(get_lang('Save'));
 
@@ -200,7 +220,7 @@ if ($action == 'thematic_list') {
         if (api_get_session_id()) {
             if ($thematic_data['session_id'] != api_get_session_id()) {
                 $show_form = false;
-                Display::display_error_message(get_lang('NotAllowedClickBack'), false);
+                echo Display::return_message(get_lang('NotAllowedClickBack'), 'error', false);
             }
         }
         // set default values
@@ -211,10 +231,10 @@ if ($action == 'thematic_list') {
 
     // error messages
     if (isset($error)) {
-        Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'), false);
+        echo Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error', false);
     }
     if ($show_form) {
-        $html = $form->return_form();
+        $html = $form->returnForm();
         
     }
 } elseif ($action == 'thematic_import_select') {
@@ -224,7 +244,7 @@ if ($action == 'thematic_list') {
     $form->addElement('file', 'file');
     $form->addElement('checkbox', 'replace', null, get_lang('DeleteAllThematic'));
     $form->addButtonImport(get_lang('Import'), 'SubmitImport');
-    $html = $form->return_form();
+    $html = $form->returnForm();
 }
 $tpl->assign('actions', $toolbar);
 if (!empty($html)) {

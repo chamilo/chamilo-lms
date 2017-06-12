@@ -11,12 +11,9 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (empty($origin)) {
-    $origin = $_REQUEST['origin'];
-}
-
 $id = isset($_REQUEST['id']) ? intval($_GET['id']) : null; //exe id
 $show_headers = isset($_REQUEST['show_headers']) ? intval($_REQUEST['show_headers']) : null; //exe id
+$origin = api_get_origin();
 
 if ($origin == 'learnpath') {
     $show_headers = false;
@@ -71,13 +68,13 @@ if ($show_headers) {
     $htmlHeadXtra[] = '<style>
         body { background: none;}
     </style>';
-	Display::display_reduced_header();
+    Display::display_reduced_header();
 }
 
 $message = Session::read('attempt_remaining');
 Session::erase('attempt_remaining');
 
-ExerciseLib::display_question_list_by_attempt(
+ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
     $id,
     false,

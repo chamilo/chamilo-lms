@@ -60,33 +60,30 @@ class Agenda
                     $this->set_course($courseInfo);
                 }
 
-                // Check if teacher
-                if (empty($sessionId)) {
-                    $isAllowToEdit = api_is_allowed_to_edit(false, true);
-                } else {
-                    $isAllowToEdit = api_is_allowed_to_session_edit(
-                        false,
-                        true
-                    );
-                }
+                // Check if teacher/admin rights.
+                $isAllowToEdit = api_is_allowed_to_edit(false, true);
 
-                // Check
-                if (api_get_course_setting('allow_user_edit_agenda') && api_is_allowed_in_course()) {
+                // Check course setting.
+                if (api_get_course_setting('allow_user_edit_agenda') == '1'
+                    && api_is_allowed_in_course()
+                ) {
                     $isAllowToEdit = true;
                 }
 
                 $groupId = api_get_group_id();
                 if (!empty($groupId)) {
                     $groupInfo = GroupManager::get_group_properties($groupId);
-                    $isGroupAccess = GroupManager::user_has_access(
-                            api_get_user_id(),
-                            $groupInfo['iid'],
-                            GroupManager::GROUP_TOOL_CALENDAR
-                        ) &&
-                        GroupManager::is_tutor_of_group(
-                            api_get_user_id(),
-                            $groupInfo
-                        );
+                    $userHasAccess = GroupManager::user_has_access(
+                        api_get_user_id(),
+                        $groupInfo['iid'],
+                        GroupManager::GROUP_TOOL_CALENDAR
+                    );
+                    $isTutor = GroupManager::is_tutor_of_group(
+                        api_get_user_id(),
+                        $groupInfo
+                    );
+
+                    $isGroupAccess = $userHasAccess || $isTutor;
                     if ($isGroupAccess) {
                         $isAllowToEdit = true;
                     } else {
@@ -264,19 +261,15 @@ class Agenda
                     Database::query($sql);
 
                     $groupId = api_get_group_id();
-                    $groupIid = 0;
+                    $groupInfo = [];
                     if ($groupId) {
                         $groupInfo = GroupManager::get_group_properties(
                             $groupId
                         );
-                        if ($groupInfo) {
-                            $groupIid = $groupInfo['iid'];
-                        }
                     }
 
                     if (!empty($usersToSend)) {
                         $sendTo = $this->parseSendToArray($usersToSend);
-
                         if ($sendTo['everyone']) {
                             api_item_property_update(
                                 $this->course,
@@ -284,7 +277,7 @@ class Agenda
                                 $id,
                                 'AgendaAdded',
                                 $senderId,
-                                $groupIid,
+                                $groupInfo,
                                 '',
                                 $start,
                                 $end,
@@ -296,7 +289,7 @@ class Agenda
                                 $id,
                                 'visible',
                                 $senderId,
-                                $groupIid,
+                                $groupInfo,
                                 '',
                                 $start,
                                 $end,
@@ -306,13 +299,13 @@ class Agenda
                             // Storing the selected groups
                             if (!empty($sendTo['groups'])) {
                                 foreach ($sendTo['groups'] as $group) {
-                                    $groupIidItem = 0;
+                                    $groupInfoItem = [];
                                     if ($group) {
-                                        $groupInfo = GroupManager::get_group_properties(
+                                        $groupInfoItem = GroupManager::get_group_properties(
                                             $group
                                         );
-                                        if ($groupInfo) {
-                                            $groupIidItem = $groupInfo['iid'];
+                                        if ($groupInfoItem) {
+                                            $groupIidItem = $groupInfoItem['iid'];
                                         }
                                     }
 
@@ -322,7 +315,7 @@ class Agenda
                                         $id,
                                         'AgendaAdded',
                                         $senderId,
-                                        $groupIidItem,
+                                        $groupInfoItem,
                                         0,
                                         $start,
                                         $end,
@@ -335,7 +328,7 @@ class Agenda
                                         $id,
                                         'visible',
                                         $senderId,
-                                        $groupIidItem,
+                                        $groupInfoItem,
                                         0,
                                         $start,
                                         $end,
@@ -353,7 +346,7 @@ class Agenda
                                         $id,
                                         'AgendaAdded',
                                         $senderId,
-                                        $groupIid,
+                                        $groupInfo,
                                         $userId,
                                         $start,
                                         $end,
@@ -366,7 +359,7 @@ class Agenda
                                         $id,
                                         'visible',
                                         $senderId,
-                                        $groupIid,
+                                        $groupInfo,
                                         $userId,
                                         $start,
                                         $end,
@@ -737,6 +730,7 @@ class Agenda
 
                 $groupId = api_get_group_id();
                 $groupIid = 0;
+                $groupInfo = [];
                 if ($groupId) {
                     $groupInfo = GroupManager::get_group_properties($groupId);
                     if ($groupInfo) {
@@ -808,11 +802,11 @@ class Agenda
                                 foreach ($eventInfo['send_to']['groups'] as $group) {
                                     $groupIidItem = 0;
                                     if ($group) {
-                                        $groupInfo = GroupManager::get_group_properties(
+                                        $groupInfoItem = GroupManager::get_group_properties(
                                             $group
                                         );
-                                        if ($groupInfo) {
-                                            $groupIidItem = $groupInfo['iid'];
+                                        if ($groupInfoItem) {
+                                            $groupIidItem = $groupInfoItem['iid'];
                                         }
                                     }
 
@@ -850,7 +844,7 @@ class Agenda
                                 $id,
                                 'visible',
                                 $authorId,
-                                $groupIid,
+                                $groupInfo,
                                 null,
                                 $start,
                                 $end,
@@ -870,14 +864,11 @@ class Agenda
                             // Add groups
                             if (!empty($groupToAdd)) {
                                 foreach ($groupToAdd as $group) {
-                                    $groupIidItem = 0;
+                                    $groupInfoItem = [];
                                     if ($group) {
-                                        $groupInfo = GroupManager::get_group_properties(
+                                        $groupInfoItem = GroupManager::get_group_properties(
                                             $group
                                         );
-                                        if ($groupInfo) {
-                                            $groupIidItem = $groupInfo['iid'];
-                                        }
                                     }
 
                                     api_item_property_update(
@@ -886,7 +877,7 @@ class Agenda
                                         $id,
                                         'visible',
                                         $authorId,
-                                        $groupIidItem,
+                                        $groupInfoItem,
                                         0,
                                         $start,
                                         $end,
@@ -899,12 +890,13 @@ class Agenda
                             if (!empty($groupsToDelete)) {
                                 foreach ($groupsToDelete as $group) {
                                     $groupIidItem = 0;
+                                    $groupInfoItem = [];
                                     if ($group) {
-                                        $groupInfo = GroupManager::get_group_properties(
+                                        $groupInfoItem = GroupManager::get_group_properties(
                                             $group
                                         );
-                                        if ($groupInfo) {
-                                            $groupIidItem = $groupInfo['iid'];
+                                        if ($groupInfoItem) {
+                                            $groupIidItem = $groupInfoItem['iid'];
                                         }
                                     }
 
@@ -928,7 +920,7 @@ class Agenda
                                         $id,
                                         'visible',
                                         $authorId,
-                                        $groupIid,
+                                        $groupInfo,
                                         $userId,
                                         $start,
                                         $end,
@@ -945,7 +937,7 @@ class Agenda
                                         TOOL_CALENDAR_EVENT,
                                         $id,
                                         $userId,
-                                        $groupIid,
+                                        $groupInfo,
                                         $this->sessionId
                                     );
                                 }
@@ -1252,14 +1244,20 @@ class Agenda
                                 $this->getCourseEvents(
                                     $start,
                                     $end,
-                                    $courseInfo
+                                    $courseInfo,
+                                    0,
+                                    0,
+                                    $user_id
                                 );
                             }
                         } else {
                             $this->getCourseEvents(
                                 $start,
                                 $end,
-                                $courseInfo
+                                $courseInfo,
+                                0,
+                                0,
+                                $user_id
                             );
                         }
                     }
@@ -1645,52 +1643,49 @@ class Agenda
         if (empty($courseInfo)) {
             return array();
         }
-        $course_id = $courseInfo['real_id'];
+        $courseId = $courseInfo['real_id'];
 
-        if (empty($course_id)) {
+        if (empty($courseId)) {
             return array();
         }
 
         $session_id = intval($session_id);
         $user_id = intval($user_id);
-        $groupList = GroupManager::get_group_list(null, $courseInfo['code']);
 
-        $group_name_list = array();
+        $groupList = GroupManager::get_group_list(
+            null,
+            $courseInfo,
+            null,
+            $session_id
+        );
+
+        $groupNameList = array();
         if (!empty($groupList)) {
             foreach ($groupList as $group) {
-                $group_name_list[$group['id']] = $group['name'];
+                $groupNameList[$group['id']] = $group['name'];
             }
         }
 
-        if (!empty($groupId)) {
-            if (!api_is_allowed_to_edit()) {
-                $user_id = api_get_user_id();
-                $group_memberships = GroupManager::get_group_ids(
-                    $course_id,
-                    $user_id
-                );
-            } else {
-                $group_memberships = GroupManager::get_group_ids(
-                    $course_id,
-                    $user_id
-                );
-            }
+        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+            $isAllowToEdit = true;
         } else {
-            // if no group was defined but I am a student reviewing his agenda,
-            // group events should show, so we should fetch those groups to which
-            // I belong
-            if (!api_is_allowed_to_edit()) {
-                $user_id = api_get_user_id();
-                $group_memberships = GroupManager::get_group_ids(
-                    $course_id,
-                    $user_id
-                );
+            $isAllowToEdit = CourseManager::is_course_teacher(api_get_user_id(), $courseInfo['code']);
+        }
+
+        $groupMemberships = [];
+
+        if (!empty($groupId)) {
+            $groupMemberships = array($groupId);
+        } else {
+            if ($isAllowToEdit) {
+                if (!empty($groupList)) {
+                    $groupMemberships = array_column($groupList, 'id');
+                }
             } else {
-                // If no group was defined and I am a teacher/admin reviewing
-                // someone else's agenda, we should fetch this person's groups
-                $group_memberships = GroupManager::get_group_ids(
-                    $course_id,
-                    $user_id
+                // get only related groups from user
+                $groupMemberships = GroupManager::get_group_ids(
+                    $courseId,
+                    api_get_user_id()
                 );
             }
         }
@@ -1698,119 +1693,127 @@ class Agenda
         $tlb_course_agenda = Database::get_course_table(TABLE_AGENDA);
         $tbl_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-        if (!empty($groupId)) {
-            $group_memberships = array($groupId);
+        if (empty($session_id)) {
+            $sessionCondition = "
+            (
+                agenda.session_id = 0 AND (ip.session_id IS NULL OR ip.session_id = 0)
+            ) ";
+        } else {
+            $sessionCondition = "
+            (
+                agenda.session_id = $session_id AND
+                ip.session_id = $session_id
+            ) ";
         }
 
-        if (is_array($group_memberships) && count($group_memberships) > 0) {
-            if (api_is_allowed_to_edit()) {
-                if (!empty($groupId)) {
-                    $where_condition = "( ip.to_group_id IN (".implode(
-                            ", ",
-                            $group_memberships
-                        ).") ) ";
+        //var_dump($courseInfo['code']);
+
+        if ($isAllowToEdit) {
+            // No group filter was asked
+            if (empty($groupId)) {
+                if (empty($user_id)) {
+                    // Show all events not added in group
+                    $userCondition = ' (ip.to_group_id IS NULL OR ip.to_group_id = 0) ';
+                    // admin see only his stuff
+                    if ($this->type === 'personal') {
+                        $userCondition = " (ip.to_user_id = ".api_get_user_id()." AND (ip.to_group_id IS NULL OR ip.to_group_id = 0) ) ";
+                        $userCondition .= " OR ( (ip.to_user_id = 0 OR ip.to_user_id is NULL)  AND (ip.to_group_id IS NULL OR ip.to_group_id = 0) ) ";
+                    }
+
+                    if (!empty($groupMemberships)) {
+                        // Show events sent to selected groups
+                        $userCondition .= " OR (ip.to_user_id = 0 OR ip.to_user_id is NULL) AND (ip.to_group_id IN (".implode(", ", $groupMemberships).")) ";
+                    }
+
+                    //var_dump($this->type);
+                    if ($this->type === 'personal') {
+                        //$userCondition .= " OR (ip.to_user_id = ".api_get_user_id()." )  ";
+                    }
                 } else {
-                    if (!empty($user_id)) {
-                        $where_condition = "( ip.to_user_id = $user_id OR ip.to_user_id IS NULL OR (ip.to_group_id IN (0, ".implode(
-                                ", ",
-                                $group_memberships
-                            ).")) ) ";
-                    } else {
-                        $where_condition = "( ip.to_group_id IN (0, ".implode(
-                                ", ",
-                                $group_memberships
-                            ).") ) ";
+                    // Show events of requested user in no group
+                    $userCondition = " (ip.to_user_id = $user_id AND (ip.to_group_id IS NULL OR ip.to_group_id = 0)) ";
+                    // Show events sent to selected groups
+                    if (!empty($groupMemberships)) {
+                        $userCondition .= " OR (ip.to_user_id = $user_id) AND (ip.to_group_id IN (".implode(", ", $groupMemberships).")) ";
                     }
                 }
             } else {
-                $where_condition = "( ip.to_user_id = $user_id OR ip.to_user_id IS NULL OR (ip.to_group_id IN (0, ".implode(
-                        ", ",
-                        $group_memberships
-                    ).")) ) ";
-            }
+                // Show only selected groups (depending of user status)
+                $userCondition = " (ip.to_user_id = 0 OR ip.to_user_id is NULL) AND (ip.to_group_id IN (".implode(", ", $groupMemberships).")) ";
 
-            if (empty($session_id)) {
-                $sessionCondition = "
-                (
-                    agenda.session_id = 0 AND (ip.session_id IS NULL OR ip.session_id = 0)
-                ) ";
-            } else {
-                $sessionCondition = "
-                (
-                    agenda.session_id = $session_id AND
-                    ip.session_id = $session_id
-                ) ";
-            }
-
-            $sql = "SELECT DISTINCT
-                        agenda.*,
-                        ip.visibility,
-                        ip.to_group_id,
-                        ip.insert_user_id,
-                        ip.ref,
-                        to_user_id
-                    FROM $tlb_course_agenda agenda
-                    INNER JOIN $tbl_property ip
-                    ON (
-                        agenda.id = ip.ref AND 
-                        agenda.c_id = ip.c_id AND 
-                        ip.tool = '".TOOL_CALENDAR_EVENT."'
-                    )
-                    WHERE
-                        $where_condition AND
-                        ip.visibility = '1' AND
-                        agenda.c_id = $course_id AND
-                        ip.c_id = agenda.c_id AND
-                        $sessionCondition
-                    ";
-        } else {
-            $visibilityCondition = " ip.visibility='1' AND ";
-
-            if (api_is_allowed_to_edit()) {
-                if ($user_id == 0) {
-                    $where_condition = '';
-                } else {
-                    $where_condition = " (ip.to_user_id = ".$user_id." OR ip.to_user_id IS NULL) AND ip.to_group_id IS NULL AND ";
+                if (!empty($groupMemberships)) {
+                    // Show send to $user_id in selected groups
+                    $userCondition .= " OR (ip.to_user_id = $user_id) AND (ip.to_group_id IN (".implode(", ", $groupMemberships).")) ";
                 }
-                $visibilityCondition = " (ip.visibility IN ('1', '0')) AND ";
-            } else {
-                $where_condition = " ( (ip.to_user_id = ".api_get_user_id()." OR ip.to_user_id IS NULL) AND ip.to_group_id IS NULL) AND ";
             }
 
-            if (empty($session_id)) {
-                $sessionCondition = "
-                (
-                    agenda.session_id = 0 AND
-                    (ip.session_id IS NULL OR ip.session_id = 0)
-                ) ";
+            /*// No user filter
+            if (empty($user_id)) {
+                //$userCondition .= ' OR (ip.to_group_id IS NULL OR ip.to_group_id = 0) ';
             } else {
-                $sessionCondition = "
-                (
-                    agenda.session_id = $session_id AND
-                    ip.session_id = $session_id
-                ) ";
+                // Show send to $user_id in course
+                $userCondition .= " AND (ip.to_user_id = $user_id AND (ip.to_group_id IS NULL OR ip.to_group_id = 0)) ";
+                if (!empty($groupMemberships)) {
+                    // Show send to $user_id in selected groups
+                    $userCondition .= " OR (ip.to_user_id = $user_id) AND (ip.to_group_id IN (".implode(", ", $groupMemberships).")) ";
+                }
+            }*/
+        } else {
+            // No group filter was asked
+            if (empty($groupId)) {
+                // Show events sent to everyone and no group
+                $userCondition = ' ( (ip.to_user_id = 0 OR ip.to_user_id is NULL) AND (ip.to_group_id IS NULL OR ip.to_group_id = 0) ';
+
+                // Show events sent to selected groups
+                if (!empty($groupMemberships)) {
+                    $userCondition .= " OR (ip.to_user_id = 0 OR ip.to_user_id is NULL) AND (ip.to_group_id IN (".implode(", ", $groupMemberships)."))) ";
+                } else {
+                    $userCondition .= " ) ";
+                }
+
+                $userCondition .= " OR (ip.to_user_id = ".api_get_user_id()." AND (ip.to_group_id IS NULL OR ip.to_group_id = 0)) ";
+            } else {
+                if (!empty($groupMemberships)) {
+                    // Show send to everyone - and only selected groups
+                    $userCondition = " (ip.to_user_id = 0 OR ip.to_user_id is NULL) AND (ip.to_group_id IN (".implode(", ", $groupMemberships).")) ";
+                }
             }
 
-            $sql = "SELECT DISTINCT
-                        agenda.*,
-                        ip.visibility,
-                        ip.to_group_id,
-                        ip.insert_user_id,
-                        ip.ref,
-                        to_user_id
-                    FROM $tlb_course_agenda agenda
-                    INNER JOIN $tbl_property ip
-                    ON (agenda.id = ip.ref AND agenda.c_id = ip.c_id AND ip.tool='".TOOL_CALENDAR_EVENT."' )
-                    WHERE
-                        $where_condition
-                        $visibilityCondition
-                        agenda.c_id = $course_id AND
-                        $sessionCondition
-                    ";
+            // Show sent to only me and no group
+            if (!empty($groupMemberships)) {
+                $userCondition .= " OR (ip.to_user_id = ".api_get_user_id().") AND (ip.to_group_id IN (".implode(", ", $groupMemberships).")) ";
+            } else {
+                // Show sent to only me and selected groups
+            }
         }
 
-        $dateCondition = null;
+        if (api_is_allowed_to_edit()) {
+            $visibilityCondition = " (ip.visibility IN ('1', '0'))  ";
+        } else {
+            $visibilityCondition = " (ip.visibility = '1') ";
+        }
 
+        $sql = "SELECT DISTINCT
+                    agenda.*,
+                    ip.visibility,
+                    ip.to_group_id,
+                    ip.insert_user_id,
+                    ip.ref,
+                    to_user_id
+                FROM $tlb_course_agenda agenda
+                INNER JOIN $tbl_property ip
+                ON (
+                    agenda.id = ip.ref AND 
+                    agenda.c_id = ip.c_id AND 
+                    ip.tool = '".TOOL_CALENDAR_EVENT."'
+                )
+                WHERE
+                    $sessionCondition AND
+                    ($userCondition) AND
+                    $visibilityCondition AND
+                    agenda.c_id = $courseId
+        ";
+        $dateCondition = '';
         if (!empty($start) && !empty($end)) {
             $dateCondition .= "AND (
                  agenda.start_date BETWEEN '".$start."' AND '".$end."' OR
@@ -1828,10 +1831,7 @@ class Agenda
 
         $coachCanEdit = false;
         if (!empty($session_id)) {
-            $coachCanEdit = api_is_coach(
-                    $session_id,
-                    $course_id
-                ) || api_is_platform_admin();
+            $coachCanEdit = api_is_coach($session_id, $courseId) || api_is_platform_admin();
         }
 
         if (Database::num_rows($result)) {
@@ -1850,7 +1850,7 @@ class Agenda
                 $eventId = $row['ref'];
                 $items = $this->getUsersAndGroupSubscribedToEvent(
                     $eventId,
-                    $course_id,
+                    $courseId,
                     $this->sessionId
                 );
                 $group_to_array = $items['groups'];
@@ -1860,7 +1860,6 @@ class Agenda
                     $courseInfo
                 );
                 $event['attachment'] = '';
-
                 if (!empty($attachmentList)) {
                     foreach ($attachmentList as $attachment) {
                         $has_attachment = Display::return_icon(
@@ -1868,7 +1867,7 @@ class Agenda
                             get_lang('Attachment')
                         );
                         $user_filename = $attachment['filename'];
-                        $url = api_get_path(WEB_CODE_PATH).'calendar/download.php?file='.$attachment['path'].'&course_id='.$course_id.'&'.api_get_cidreq();
+                        $url = api_get_path(WEB_CODE_PATH).'calendar/download.php?file='.$attachment['path'].'&course_id='.$courseId.'&'.api_get_cidreq();
                         $event['attachment'] .= $has_attachment.
                             Display::url(
                                 $user_filename,
@@ -1880,7 +1879,7 @@ class Agenda
                 $event['title'] = $row['title'];
                 $event['className'] = 'course';
                 $event['allDay'] = 'false';
-                $event['course_id'] = $course_id;
+                $event['course_id'] = $courseId;
                 $event['borderColor'] = $event['backgroundColor'] = $this->event_course_color;
 
                 $sessionInfo = [];
@@ -1940,7 +1939,7 @@ class Agenda
                     $sent_to = array();
                     if (!empty($group_to_array)) {
                         foreach ($group_to_array as $group_item) {
-                            $sent_to[] = $group_name_list[$group_item];
+                            $sent_to[] = $groupNameList[$group_item];
                         }
                     }
                     $sent_to = implode('@@', $sent_to);
@@ -1981,9 +1980,7 @@ class Agenda
 
                 //Event sent to everyone!
                 if (empty($event['sent_to'])) {
-                    $event['sent_to'] = '<div class="label_tag notice">'.get_lang(
-                            'Everyone'
-                        ).'</div>';
+                    $event['sent_to'] = '<div class="label_tag notice">'.get_lang('Everyone').'</div>';
                 }
 
                 $event['description'] = $row['content'];
@@ -1991,12 +1988,8 @@ class Agenda
                 $event['real_id'] = $row['id'];
                 $event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
                 $event['parent_event_id'] = $row['parent_event_id'];
-                $event['has_children'] = $this->hasChildren(
-                    $row['id'],
-                    $course_id
-                ) ? 1 : 0;
+                $event['has_children'] = $this->hasChildren($row['id'], $courseId) ? 1 : 0;
                 $event['comment'] = $row['comment'];
-
                 $this->events[] = $event;
             }
         }
@@ -2335,8 +2328,8 @@ class Agenda
         if (isset($groupId) && !empty($groupId)) {
             $form->addElement(
                 'hidden',
-                'selected_form[0]',
-                "GROUP:'.$groupId.'"
+                'users_to_send[]',
+                "GROUP:$groupId"
             );
             $form->addElement('hidden', 'to', 'true');
         } else {
@@ -2933,9 +2926,7 @@ class Agenda
         }
 
         $actionsLeft = '';
-        $actionsLeft .= "<a href='".api_get_path(
-                WEB_CODE_PATH
-            )."calendar/agenda_js.php?type={$this->type}&".$courseCondition."'>".
+        $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type={$this->type}&".$courseCondition."'>".
             Display::return_icon(
                 'calendar.png',
                 get_lang('Calendar'),
@@ -2943,9 +2934,7 @@ class Agenda
                 ICON_SIZE_MEDIUM
             )."</a>";
 
-        $actionsLeft .= "<a href='".api_get_path(
-                WEB_CODE_PATH
-            )."calendar/agenda_list.php?type={$this->type}&".$courseCondition."'>".
+        $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_list.php?type={$this->type}&".$courseCondition."'>".
             Display::return_icon(
                 'week.png',
                 get_lang('AgendaList'),
@@ -2958,11 +2947,11 @@ class Agenda
             (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) &&
             api_is_allowed_to_session_edit(false, true) ||
             (GroupManager::user_has_access(
-                    api_get_user_id(),
-                    $groupIid,
-                    GroupManager::GROUP_TOOL_CALENDAR
-                ) &&
-                GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo))
+                api_get_user_id(),
+                $groupIid,
+                GroupManager::GROUP_TOOL_CALENDAR
+            ) &&
+            GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo))
         ) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
@@ -2971,10 +2960,7 @@ class Agenda
                     '',
                     ICON_SIZE_MEDIUM
                 ),
-                api_get_path(
-                    WEB_CODE_PATH
-                )."calendar/agenda.php?".api_get_cidreq(
-                )."&action=add&type=".$this->type
+                api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=add&type=".$this->type
             );
 
             $actionsLeft .= Display::url(
@@ -2984,10 +2970,7 @@ class Agenda
                     '',
                     ICON_SIZE_MEDIUM
                 ),
-                api_get_path(
-                    WEB_CODE_PATH
-                )."calendar/agenda.php?".api_get_cidreq(
-                )."&action=importical&type=".$this->type
+                api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=importical&type=".$this->type
             );
 
             if ($this->type === 'course') {
@@ -3137,12 +3120,12 @@ class Agenda
                     $end->format('e')
                 );
                 $title = api_convert_encoding(
-                    (string)$event->summary,
+                    (string) $event->summary,
                     $charset,
                     'UTF-8'
                 );
                 $description = api_convert_encoding(
-                    (string)$event->description,
+                    (string) $event->description,
                     $charset,
                     'UTF-8'
                 );

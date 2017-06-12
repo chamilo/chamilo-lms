@@ -136,6 +136,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
         }
 
         $i = 0;
+        $previous = 0; // @todo define this variable properly
         foreach ($items_to_create as $item_title => $item_content) {
             $i++;
             $page_content = $this->format_page_content($header, $item_content);
@@ -175,7 +176,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
                 $slide_name = api_html_entity_decode($slide_name, ENT_COMPAT, api_get_system_encoding());
                 $previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
                 if ($this->first_item == 0) {
-                    $this->first_item = $previous;
+                    $this->first_item = (int) $previous;
                 }
             }
         }
@@ -215,6 +216,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
             );
 
             $slide_name = '';
+            $previous = 0; // @todo define this variable properly
             if ($document_id) {
                 // Put the document in item_property update.
                 api_item_property_update(
@@ -234,11 +236,11 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
                 $slide_name = 'Page '.str_repeat('0', 2 - strlen($key)).$key;
                 $previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
                 if ($this->first_item == 0) {
-                    $this->first_item = $previous;
+                    $this->first_item = (int) $previous;
                 }
                 // Code for text indexing.
                 if (isset($_POST['index_document']) && $_POST['index_document']) {
-                    //Display::display_normal_message(print_r($_POST));
+                    //echo Display::return_message(print_r($_POST));
                     $di = new ChamiloIndexer();
                     isset($_POST['language']) ? $lang = Database::escape_string($_POST['language']) : $lang = 'english';
                     $di->connectDb(NULL, NULL, $lang);

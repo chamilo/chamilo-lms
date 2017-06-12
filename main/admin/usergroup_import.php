@@ -90,9 +90,6 @@ $interbreadcrumb[] = array('url' => 'usergroups.php', 'name' => get_lang('Classe
 // Setting the name of the tool.
 $tool_name = get_lang('ImportClassListCSV');
 
-// Displaying the header.
-Display :: display_header($tool_name);
-
 set_time_limit(0);
 
 $form = new FormValidator('import_classes');
@@ -126,6 +123,9 @@ if ($form->validate()) {
         Display::addFlash(Display::return_message($error_message, 'error', false));
     }
 }
+
+// Displaying the header.
+Display :: display_header($tool_name);
 
 $form->display();
 ?>

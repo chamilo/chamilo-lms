@@ -5,7 +5,7 @@ Development information
 
   Debugging help:
     error_log('info: id = <'. $id .'>');
-    Display::display_normal_message(print_r($arrLP,1));
+    echo Display::return_message(print_r($arrLP,1));
 
   DB modifications:
     ALTER TABLE lp_item ADD terms TEXT NULL ;

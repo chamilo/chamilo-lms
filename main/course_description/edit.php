@@ -56,7 +56,7 @@ echo '</div>';
 
 // error messages
 if (isset($error) && intval($error) == 1) {
-	Display::addFlash(Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error', false));
+	echo Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error', false);
 }
 
 // default header title form
@@ -72,13 +72,23 @@ $form = new FormValidator(
 	'POST',
 	'index.php?action=edit&id='.$original_id.'&description_type='.$description_type.'&'.api_get_cidreq()
 );
-
 $form->addElement('header', $header);
 $form->addElement('hidden', 'id', $original_id);
 $form->addElement('hidden', 'description_type', $description_type);
 $form->addElement('hidden', 'sec_token', $token);
-$form->addText('title', get_lang('Title'), true, array('size' => '50'));
-$form->applyFilter('title', 'html_filter');
+
+if (api_get_configuration_value('save_titles_as_html')) {
+    $form->addHtmlEditor(
+        'title',
+        get_lang('Title'),
+        true,
+        false,
+        ['ToolbarSet' => 'Minimal']
+    );
+} else {
+    $form->addText('title', get_lang('Title'));
+    $form->applyFilter('title', 'html_filter');
+}
 $form->addHtmlEditor(
 	'contentDescription',
 	get_lang('Content'),

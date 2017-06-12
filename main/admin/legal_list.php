@@ -10,7 +10,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
-$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $tool_name = get_lang('TermsAndConditions');
 Display :: display_header($tool_name);
 
@@ -19,14 +19,14 @@ $parameters['sec_token'] = Security::get_token();
 // action menu
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/legal_add.php">'.
-    Display::return_icon('edit.gif',get_lang('EditTermsAndConditions'), '').get_lang('EditTermsAndConditions').'</a>&nbsp;&nbsp;';
+    Display::return_icon('edit.gif', get_lang('EditTermsAndConditions'), '').get_lang('EditTermsAndConditions').'</a>&nbsp;&nbsp;';
 echo '</div>';
 
 $legal_count = LegalManager::count();
 $languages = api_get_languages();
 $available_languages = count($languages['folder']);
 if ($legal_count != $available_languages) {
-    Display::display_warning_message(get_lang('YouShouldCreateTermAndConditionsForAllAvailableLanguages'));
+    echo Display::return_message(get_lang('YouShouldCreateTermAndConditionsForAllAvailableLanguages'), 'warning');
 }
 
 $table = new SortableTable('conditions', 'count_mask', 'get_legal_data_mask', 2);

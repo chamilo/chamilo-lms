@@ -111,7 +111,7 @@ class ImsLtiPlugin extends Plugin
             return false;
         }
 
-        $sql = 'DROP TABLE IF EXISTS ' . self::TABLE_TOOL;
+        $sql = 'DROP TABLE IF EXISTS '.self::TABLE_TOOL;
         Database::query($sql);
 
         return true;
@@ -124,14 +124,14 @@ class ImsLtiPlugin extends Plugin
     {
         $button = Display::toolbarButton(
             $this->get_lang('AddExternalTool'),
-            api_get_path(WEB_PLUGIN_PATH) . 'ims_lti/add.php',
+            api_get_path(WEB_PLUGIN_PATH).'ims_lti/add.php',
             'cog',
             'primary'
         );
 
         $this->course_settings = [
             [
-                'name' => $this->get_lang('ImsLtiDescription') . $button . '<hr>',
+                'name' => $this->get_lang('ImsLtiDescription').$button.'<hr>',
                 'type' => 'html'
             ]
         ];
@@ -153,8 +153,8 @@ class ImsLtiPlugin extends Plugin
             ->setId($cToolId)
             ->setCId($course->getId())
             ->setName($tool->getName())
-            ->setLink($this->get_name() . '/start.php?' . http_build_query(['id' => $tool->getId()]))
-            ->setImage($this->get_name() . '.png')
+            ->setLink($this->get_name().'/start.php?'.http_build_query(['id' => $tool->getId()]))
+            ->setImage($this->get_name().'.png')
             ->setVisibility(1)
             ->setAdmin(0)
             ->setAddress('squaregray.gif')
@@ -172,7 +172,7 @@ class ImsLtiPlugin extends Plugin
         $text = $this->get_lang('ImsLtiDescription');
         $text .= sprintf(
             $this->get_lang('ManageToolButton'),
-            api_get_path(WEB_PLUGIN_PATH) . 'ims_lti/list.php'
+            api_get_path(WEB_PLUGIN_PATH).'ims_lti/list.php'
         );
 
         return $text;

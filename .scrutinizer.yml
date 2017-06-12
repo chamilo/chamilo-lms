@@ -77,6 +77,7 @@ coding_style:
                 opening: end-of-line
             try:
                 opening: end-of-line
+
         upper_lower_casing:
             keywords:
                 general: lower
@@ -161,9 +162,13 @@ filter:
         - 'main/default_course_document'
         - 'plugin/buycourses/src/Culqi/*'
         - 'plugin/buycourses/src/Requests/*'
+        - 'plugin/buycourses/src/paypalfunctions.php'
+        - 'plugin/buycourses/src/Requests.php'
         - 'plugin/kannelsms/vendor/*'
         - 'plugin/clockworksms/vendor/*'
         - 'plugin/pens/lib/'
+        - 'plugin/bbb/lib/bbb_api.php'
+        - 'plugin/ims_lti/OAuthSimple.php'
         - 'tests/*'
         - 'vendor/*'
         - 'web/*'

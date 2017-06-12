@@ -93,10 +93,10 @@ if (isset($_POST['StoreCategory'])) {
     }
     $return_information = store_addcategory();
     if ($return_information['type'] == 'confirmation') {
-        Display::addFlash(Display::return_message($return_information['message'], 'confirmation'));
+        echo Display::return_message($return_information['message'], 'confirmation');
     }
     if ($return_information['type'] == 'error') {
-        Display::addFlash(Display::return_message(get_lang('FormHasErrorsPleaseComplete').'<br />'.$return_information['message'], 'error'));
+        echo Display::return_message(get_lang('FormHasErrorsPleaseComplete').'<br />'.$return_information['message'], 'error');
         display_addcategory_form($_POST['category_name'], $_POST['edit_id'], $postAction);
     }
 }
@@ -117,7 +117,7 @@ if (($action == 'movesent' || $action == 'movereceived') && isset($_GET['move_id
     );
 }
 if (isset($_POST['do_move'])) {
-    Display::addFlash(Display::return_message(store_move($_POST['id'], $_POST['move_target'], $_POST['part']), 'confirm'));
+    echo Display::return_message(store_move($_POST['id'], $_POST['move_target'], $_POST['part']), 'confirm');
 }
 
 // Delete a file
@@ -134,7 +134,7 @@ if (($action == 'deletereceivedfile' || $action == 'deletesentfile') && isset($_
         $dropboxfile->deleteSentWork($_GET['id']);
         $message = get_lang('SentFileDeleted');
     }
-    Display::addFlash(Display::return_message($message, 'confirmation'));
+    echo Display::return_message($message, 'confirmation');
 }
 
 // Delete a category
@@ -143,7 +143,7 @@ if (($action == 'deletereceivedcategory' || $action == 'deletesentcategory') && 
         api_not_allowed();
     }
     $message = delete_category($action, $_GET['id']);
-    Display::addFlash(Display::return_message($message, 'confirmation'));
+    echo Display::return_message($message, 'confirmation');
 }
 
 // Do an action on multiple files
@@ -158,7 +158,7 @@ if (!isset($_POST['feedback']) && (
     $postAction == 'download_sent')
 ) {
     $display_message = handle_multiple_actions();
-    Display::addFlash(Display::return_message($display_message, 'normal'));
+    echo Display::return_message($display_message, 'normal');
 }
 
 // Store Feedback
@@ -170,14 +170,14 @@ if (isset($_POST['feedback'])) {
     $check = Security::check_token();
     if ($check) {
         $display_message = store_feedback();
-        Display::addFlash(Display::return_message($display_message, 'normal'));
+        echo Display::return_message($display_message, 'normal');
         Security::check_token();
     }
 }
 
 // Error Message
 if (isset($_GET['error']) && !empty($_GET['error'])) {
-    Display::addFlash(Display::return_message(get_lang($_GET['error']), 'normal'));
+    echo Display::return_message(get_lang($_GET['error']), 'normal');
 }
 
 $dropbox_data_sent = array();
@@ -565,10 +565,12 @@ if ($action != 'add') {
                     '</a><br />'.$dropbox_file->description;
                 $file_size = $dropbox_file->filesize;
                 $dropbox_file_data[] = format_file_size($file_size);
-                $receivers_celldata = null;
+                $receivers_celldata = '';
                 foreach ($dropbox_file->recipients as $recipient) {
-                    $userInfo = api_get_user_info($recipient['user_id']);
-                    $receivers_celldata = UserManager::getUserProfileLink($userInfo).', '.$receivers_celldata;
+                    if (isset($recipient['user_id'])) {
+                        $userInfo = api_get_user_info($recipient['user_id']);
+                        $receivers_celldata = UserManager::getUserProfileLink($userInfo).', '.$receivers_celldata;
+                    }
                 }
                 $receivers_celldata = trim(trim($receivers_celldata), ','); // Removing the trailing comma.
                 $dropbox_file_data[] = $receivers_celldata;

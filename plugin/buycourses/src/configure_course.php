@@ -255,7 +255,7 @@ if ($form->validate()) {
             );
         } else {
             $itemId = $plugin->registerItem([
-                'currency_id' => $currency['id'],
+                'currency_id' => (int) $currency['id'],
                 'product_type' => $formValues['t'],
                 'product_id' => intval($formValues['i']),
                 'price' => floatval($_POST['price'])

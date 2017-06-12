@@ -114,7 +114,8 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                 <div class="pull-right">
                 <form method="POST" action="session_category_list.php" class="form-inline">
                     <div class="form-group">
-                    <input class="form-control" type="text" name="keyword" value="<?php echo $keyword; ?>"/>
+                    <input class="form-control" type="text" name="keyword" value="<?php echo $keyword; ?>"
+                    aria-label="<?php echo get_lang('Search'); ?>"/>
                     <button class="btn btn-default" type="submit" name="name" value="<?php echo get_lang('Search') ?>"><em class="fa fa-search"></em> <?php echo get_lang('Search') ?></button>
                     <!-- <a href="session_list.php?search=advanced"><?php echo get_lang('AdvancedSearch'); ?></a> -->
                     </div>

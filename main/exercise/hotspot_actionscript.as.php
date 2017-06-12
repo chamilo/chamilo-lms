@@ -13,7 +13,7 @@ use ChamiloSession as Session;
 session_cache_limiter("none");
 
 require_once __DIR__.'/../inc/global.inc.php';
-require api_get_path(LIBRARY_PATH) . 'geometry.lib.php';
+require api_get_path(LIBRARY_PATH).'geometry.lib.php';
 
 // set vars
 $questionId = intval($_GET['modifyAnswers']);

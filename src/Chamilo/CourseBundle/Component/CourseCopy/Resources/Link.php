@@ -32,6 +32,10 @@ class Link extends Resource
      */
     public $on_homepage;
     /**
+     * @var string The link target
+     */
+    public $target;
+    /**
      * Create a new Link
      * @param int $id The id of this link in the Chamilo-course
      * @param string $title

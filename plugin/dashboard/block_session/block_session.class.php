@@ -15,101 +15,92 @@
 class BlockSession extends Block
 {
     private $user_id;
-	private $sessions;
-	private $path;
-	private $permission = array(DRH, SESSIONADMIN);
+    private $sessions;
+    private $path;
+    private $permission = array(DRH, SESSIONADMIN);
 
-	/**
-	 * Constructor
-	 */
+    /**
+     * Constructor
+     */
     public function __construct($user_id)
     {
-    	$this->user_id = $user_id;
-    	$this->path = 'block_session';
-    	if ($this->is_block_visible_for_user($user_id)) {
+        $this->user_id = $user_id;
+        $this->path = 'block_session';
+        if ($this->is_block_visible_for_user($user_id)) {
             $this->sessions = SessionManager::get_sessions_followed_by_drh($user_id);
-    	}
-    }
-
-	/**
-	 * This method check if a user is allowed to see the block inside dashboard interface
-	 * @param	int		User id
-	 * @return	bool	Is block visible for user
-	 */
-    public function is_block_visible_for_user($user_id)
-    {
-    	$user_info = api_get_user_info($user_id);
-		$user_status = $user_info['status'];
-		$is_block_visible_for_user = false;
-    	if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
-    		$is_block_visible_for_user = true;
-    	}
-    	return $is_block_visible_for_user;
+        }
     }
 
     /**
-     * This method return content html containing information about sessions and its position for showing it inside dashboard interface
+     * This method check if a user is allowed to see the block inside dashboard interface
+     * @param int        User id
+     * @return bool    Is block visible for user
+     */
+    public function is_block_visible_for_user($user_id)
+    {
+        $user_info = api_get_user_info($user_id);
+        $user_status = $user_info['status'];
+        $is_block_visible_for_user = false;
+        if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
+            $is_block_visible_for_user = true;
+        }
+        return $is_block_visible_for_user;
+    }
+
+    /**
+     * This method return content html containing
+     * information about sessions and its position for showing it inside dashboard interface
      * it's important to use the name 'get_block' for beeing used from dashboard controller
      * @return array   column and content html
      */
     public function get_block()
     {
+        global $charset;
+        $column = 2;
+        $data = array();
+        $content = $this->get_content_html();
+        $content_html = '<div class="panel panel-default" id="intro">
+                            <div class="panel-heading">
+                                '.get_lang('SessionsInformation').'
+                                <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
+                                <em class="fa fa-times"></em>
+                                </a></div>
+                            </div>
+                            <div class="panel-body">
+                            '.$content.'
+                            </div>
+                        </div>
+                ';
 
-		global $charset;
+        $data['column'] = $column;
+        $data['content_html'] = $content_html;
 
-    	$column = 2;
-    	$data   = array();
-
-		$content = $this->get_content_html();
-
-		$content_html = '
-			            <div class="panel panel-default" id="intro">
-			                <div class="panel-heading">
-			                    '.get_lang('SessionsInformation').'
-			                    <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
-			                    <em class="fa fa-times"></em>
-			                    </a></div>
-			                </div>
-			                <div class="panel-body">
-							'.$content.'
-			                </div>
-			            </div>
-				';
-
-    	$data['column'] = $column;
-    	$data['content_html'] = $content_html;
-
-    	return $data;
+        return $data;
     }
 
     /**
- 	 * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
- 	 * @return string  content html
- 	 */
+     * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
+     * @return string  content html
+     */
     public function get_content_html()
     {
+        $content = '';
+        $sessions = $this->sessions;
+        $content .= '<h4>'.get_lang('YourSessionsList').'</h4>';
+        if (count($sessions) > 0) {
+            $sessions_table = '<table class="data_table" width:"95%">';
+            $sessions_table .= '<tr>
+                                    <th >'.get_lang('Title').'</th>
+                                    <th >'.get_lang('Date').'</th>
+                                    <th width="100px">'.get_lang('NbCoursesPerSession').'</th>
+                                </tr>';
+            $i = 1;
+            foreach ($sessions as $session) {
+                $session_id = intval($session['id']);
+                $title = $session['name'];
 
- 		$content = '';
-		$sessions = $this->sessions;
-
-		//$content = '<div style="margin:10px;">';
-		$content .= '<h4>'.get_lang('YourSessionsList').'</h4>';
-
-		if (count($sessions) > 0) {
-			$sessions_table = '<table class="data_table" width:"95%">';
- 			$sessions_table .= '<tr>
-									<th >'.get_lang('Title').'</th>
-									<th >'.get_lang('Date').'</th>
-									<th width="100px">'.get_lang('NbCoursesPerSession').'</th>
-								</tr>';
-			$i = 1;
-			foreach ($sessions as $session) {
-
-				$session_id = intval($session['id']);
-				$title = $session['name'];
-
-				if (!empty($session['access_start_date'])) {
-				    $dateFrom = api_convert_and_format_date(
+                if (!empty($session['access_start_date'])) {
+                    $dateFrom = api_convert_and_format_date(
                         $session['access_start_date'],
                         DATE_FORMAT_SHORT,
                         date_default_timezone_get()
@@ -121,44 +112,45 @@ class BlockSession extends Block
                     );
 
                     $date = vsprintf(get_lang('FromDateXToDateY'), [$dateFrom, $dateUntil]);
-				} else {
-					$date = ' - ';
-				}
+                } else {
+                    $date = ' - ';
+                }
 
-	 			$count_courses_in_session = count(Tracking::get_courses_list_from_session($session_id));
+                $count_courses_in_session = count(Tracking::get_courses_list_from_session($session_id));
 
-				if ($i % 2 == 0) $class_tr = 'row_odd';
-	    		else $class_tr = 'row_even';
+                if ($i % 2 == 0) {
+                    $class_tr = 'row_odd';
+                } else {
+                    $class_tr = 'row_even';
+                }
 
-				$sessions_table .= '<tr class="'.$class_tr.'">
-										<td>'.$title.'</td>
-										<td align="center">'.$date.'</td>
-										<td align="center">'.$count_courses_in_session.'</td>
-								   </tr>';
-				$i++;
-			}
-			$sessions_table .= '</table>';
-			$content .= $sessions_table;
-		} else {
-			$content .= get_lang('ThereIsNoInformationAboutYourSessions');
-		}
+                $sessions_table .= '<tr class="'.$class_tr.'">
+                                        <td>'.$title.'</td>
+                                        <td align="center">'.$date.'</td>
+                                        <td align="center">'.$count_courses_in_session.'</td>
+                                   </tr>';
+                $i++;
+            }
+            $sessions_table .= '</table>';
+            $content .= $sessions_table;
+        } else {
+            $content .= get_lang('ThereIsNoInformationAboutYourSessions');
+        }
 
-		if (count($sessions) > 0) {
-			$content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/session.php">'.get_lang('SeeMore').'</a></div>';
-		}
+        if (count($sessions) > 0) {
+            $content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/session.php">'.get_lang('SeeMore').'</a></div>';
+        }
 
-		//$content .= '</div>';
-
- 		return $content;
- 	}
+        return $content;
+    }
 
     /**
-	 * Get number of sessions
-	 * @return int
-	 */
-	function get_number_of_sessions()
+     * Get number of sessions
+     * @return int
+     */
+    function get_number_of_sessions()
     {
-		return count($this->sessions);
-	}
+        return count($this->sessions);
+    }
 
 }

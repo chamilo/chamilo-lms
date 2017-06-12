@@ -27,7 +27,7 @@ $session_id = intval($_GET['id_session']);
 $type = isset($_REQUEST['type']) ? Security::remove_XSS($_REQUEST['type']) : '';
 $course_code = isset($_REQUEST['course']) ? Security::remove_XSS($_REQUEST['course']) : '';
 $courseInfo = api_get_course_info($course_code);
-$courseId = (!empty($courseInfo['real_id'])?$courseInfo['real_id']:null);
+$courseId = (!empty($courseInfo['real_id']) ? $courseInfo['real_id'] : null);
 $connections = MySpace::get_connections_to_course($user_id, $courseId, $session_id);
 $quote_simple = "'";
 
@@ -126,7 +126,7 @@ $result_to_print = convert_to_string($sql_result);
 
 echo Display::page_header(get_lang('DetailsStudentInCourse'));
 echo Display::page_subheader(
-    get_lang('User').': '.$userInfo['complete_name'].' - '.get_lang('Course').': '.$courseInfo['title'] . ' (' . $course_code . ')'
+    get_lang('User').': '.$userInfo['complete_name'].' - '.get_lang('Course').': '.$courseInfo['title'].' ('.$course_code.')'
 );
 
 $form->setDefaults(array('from' => $from, 'to' => $to));
@@ -151,7 +151,7 @@ $form->display();
                 $foo_stats .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';
                 echo $foo_stats;
             } else {
-                echo Display::display_warning_message(get_lang('NoDataAvailable'));
+                echo Display::return_message(get_lang('NoDataAvailable'), 'warning');
             }
             ?>
         </div>

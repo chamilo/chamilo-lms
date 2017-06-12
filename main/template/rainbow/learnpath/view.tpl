@@ -176,7 +176,7 @@
                         return;
                     }
 
-                    $self.find('.panel-collapse .panel-body').append('<div id="scorm-panel-' + id + '">');
+                    $self.find('.panel-collapse .panel-body').append('<div id="scorm-panel-' + id + '" class="panel-parent">');
                 });
 
                 $('[data-lp-parent]').each(function () {

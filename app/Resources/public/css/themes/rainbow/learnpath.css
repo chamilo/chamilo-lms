@@ -284,6 +284,13 @@ table.lp_overview img {
 }
 #learning_path_toc{
     padding: 0;
+    border:none;
+}
+#scorm-panel .panel.panel-default{
+    border: none;
+}
+.section-list{
+    border-bottom: none;
 }
 .scorm_item_normal {
     line-height: 25px;
@@ -435,5 +442,19 @@ table.lp_overview img {
 }
 .section-list .scorm_highlight .sub-item.type-quiz{
     background: url(images/pencil-active.png) no-repeat center right;
+}
+#scorm-panel .panel-parent .panel-default .panel-heading a{
+    padding-left: 55px;
+    background: url(images/arrow-down.png) no-repeat #E1E1E1 30px center;
+    font-size: 12px;
+}
+#scorm-panel .panel-parent .section-list li{
+    padding: 10px 10px 10px 75px;
+}
+#scorm-panel .panel-parent .section-list li.scorm_completed.scorm_item_normal.scorm_highlight{
+    background: url(images/completed-active.png) no-repeat  #772583 55px center;
+}
+#scorm-panel .panel-parent .section-list li.scorm_not_attempted.scorm_item_normal{
+    background: url(images/not-completed.png) no-repeat  #ECF0F1 55px center;
 }
 /* nuevo css */

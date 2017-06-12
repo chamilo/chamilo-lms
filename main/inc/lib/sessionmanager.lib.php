@@ -6,6 +6,7 @@ use \ExtraField as ExtraFieldModel;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
 
 /**
  * Class SessionManager
@@ -3947,32 +3948,23 @@ class SessionManager
 
     /**
      * Gets user status within a session
-     * @param int $user_id
-     * @param int $courseId
-     * @param $session_id
-     * @return int
-     * @assert (null,null,null) === false
+     *
+     * @param int $userId
+     * @param int $sessionId
+     *
+     * @return \Chamilo\CoreBundle\Entity\SessionRelUser
      */
-    public static function get_user_status_in_session($user_id, $courseId, $session_id)
+    public static function getUserStatusInSession($userId, $sessionId)
     {
-        if (empty($user_id) or empty($courseId) or empty($session_id)) {
-            return false;
-        }
-        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT session_rcru.status
-                FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
-                WHERE session_rcru.user_id = user.user_id AND
-                    session_rcru.session_id = '".intval($session_id)."' AND
-                    session_rcru.c_id ='" . intval($courseId)."' AND
-                    user.user_id = " . intval($user_id);
-        $result = Database::query($sql);
-        $status = false;
-        if (Database::num_rows($result)) {
-            $status = Database::fetch_row($result);
-            $status = $status['0'];
-        }
-        return $status;
+        $em = Database::getManager();
+        $subscriptions = $em
+            ->getRepository('ChamiloCoreBundle:SessionRelUser')
+            ->findBy(['session' => $sessionId, 'user' => $userId]);
+
+        /** @var SessionRelUser $subscription */
+        $subscription = current($subscriptions);
+
+        return $subscription;
     }
 
     /**

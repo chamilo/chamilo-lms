@@ -318,7 +318,7 @@ if (count($sessions) > 0) {
         $csvContent[] = $headerList;
         foreach ($session_item['courses'] as $my_course) {
             $courseInfo = api_get_course_info_by_id($my_course['real_id']);
-            $sessionStatus = SessionManager::get_user_status_in_session(
+            $sessionStatus = SessionManager::get_user_status_in_course_session(
                 $userId,
                 $courseInfo['real_id'],
                 $id_session

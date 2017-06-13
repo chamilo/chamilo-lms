@@ -449,3 +449,6 @@ $_configuration['agenda_legend'] = [
 // and should be set by all sites.
 //$_configuration['security_referrer_policy'] = 'origin-when-cross-origin';
 // HTTP headers security section ends here
+
+// Add answered_at field in table survey_invitation
+//$_configuration['survey_answered_at_field'] = 'false';

@@ -5,6 +5,7 @@ use ChamiloSession as Session;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\Finder\Finder;
+use Chamilo\CoreBundle\Entity\SettingsCurrent;
 
 /**
  * This is a code library for Chamilo.
@@ -5350,119 +5351,76 @@ function &api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $ur
 }
 
 /**
- * Sets a platform configuration setting to a given value
- * @param string    The value we want to record
- * @param string    The variable name we want to insert
- * @param string    The subkey for the variable we want to insert
- * @param string    The type for the variable we want to insert
- * @param string    The category for the variable we want to insert
- * @param string    The title
- * @param string    The comment
- * @param string    The scope
- * @param string    The subkey text
- * @param int       The access_url for which this parameter is valid
- * @param int       The changeability of this setting for non-master urls
- * @param string $val
- * @param string $var
- * @param string $sk
- * @param string $c
- * @return boolean  true on success, false on failure
+ * @param string $value The value we want to record
+ * @param string $variable The variable name we want to insert
+ * @param string $subKey The subkey for the variable we want to insert
+ * @param string $type The type for the variable we want to insert
+ * @param string $category The category for the variable we want to insert
+ * @param string $title The title
+ * @param string $comment The comment
+ * @param string $scope The scope
+ * @param string $subKeyText The subkey text
+ * @param int $accessUrlId The access_url for which this parameter is valid
+ * @param int $visiblity The changeability of this setting for non-master urls
+ * @return int The setting ID
  */
 function api_add_setting(
-    $val,
-    $var,
-    $sk = null,
+    $value,
+    $variable,
+    $subKey = null,
     $type = 'textfield',
-    $c = null,
-    $title = '',
-    $com = '',
-    $sc = null,
-    $skt = null,
-    $a = 1,
-    $v = 0
+    $category = null,
+    $title = null,
+    $comment = null,
+    $scope = null,
+    $subKeyText = null,
+    $accessUrlId = 1,
+    $visiblity = 0
 ) {
-    if (empty($var) || !isset($val)) { return false; }
-    $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-    $var = Database::escape_string($var);
-    $val = Database::escape_string($val);
-    $a = (int) $a;
-    if (empty($a)) { $a = 1; }
+    $em = Database::getManager();
+    $settingRepo = $em->getRepository('ChamiloCoreBundle:SettingsCurrent');
+
+    $accessUrlId = (int) $accessUrlId ?: 1;
+
+    $criteria = ['variable' => $variable, 'accessUrl' => $accessUrlId];
+
+    if (!empty($subKey)) {
+        $criteria['subkey'] = $subKey;
+    }
+
     // Check if this variable doesn't exist already
-    $select = "SELECT id FROM $t_settings WHERE variable = '$var' ";
-    if (!empty($sk)) {
-        $sk = Database::escape_string($sk);
-        $select .= " AND subkey = '$sk'";
-    }
-    if ($a > 1) {
-        $select .= " AND access_url = $a";
-    } else {
-        $select .= " AND access_url = 1 ";
-    }
-    $res = Database::query($select);
-    if (Database::num_rows($res) > 0) { // Found item for this access_url.
-        $row = Database::fetch_array($res);
-        Database::update(
-            $t_settings,
-            array('selected_value' => $val),
-            array('id = ?' => array($row['id']))
-        );
-        return $row['id'];
+    /** @var SettingsCurrent $setting */
+    $setting = $settingRepo->findOneBy($criteria);
+
+    if ($setting) {
+        $setting->setSelectedValue($value);
+
+        $em->persist($setting);
+        $em->flush();
+
+        return $setting->getId();
     }
 
     // Item not found for this access_url, we have to check if the whole thing is missing
     // (in which case we ignore the insert) or if there *is* a record but just for access_url = 1
-    $insert = "INSERT INTO $t_settings ".
-                "(variable,selected_value,".
-                "type,category,".
-                "subkey,title,".
-                "comment,scope,".
-                "subkeytext,access_url,access_url_changeable)".
-                " VALUES ('$var','$val',";
-    if (isset($type)) {
-        $type = Database::escape_string($type);
-        $insert .= "'$type',";
-    } else {
-        $insert .= "NULL,";
-    }
-    if (isset($c)) { // Category
-        $c = Database::escape_string($c);
-        $insert .= "'$c',";
-    } else {
-        $insert .= "NULL,";
-    }
-    if (isset($sk)) { // Subkey
-        $sk = Database::escape_string($sk);
-        $insert .= "'$sk',";
-    } else {
-        $insert .= "NULL,";
-    }
-    if (isset($title)) { // Title
-        $title = Database::escape_string($title);
-        $insert .= "'$title',";
-    } else {
-        $insert .= "NULL,";
-    }
-    if (isset($com)) { // Comment
-        $com = Database::escape_string($com);
-        $insert .= "'$com',";
-    } else {
-        $insert .= "NULL,";
-    }
-    if (isset($sc)) { // Scope
-        $sc = Database::escape_string($sc);
-        $insert .= "'$sc',";
-    } else {
-        $insert .= "NULL,";
-    }
-    if (isset($skt)) { // Subkey text
-        $skt = Database::escape_string($skt);
-        $insert .= "'$skt',";
-    } else {
-        $insert .= "NULL,";
-    }
-    $insert .= "$a,$v)";
-    $res = Database::query($insert);
-    return $res;
+    $setting = new SettingsCurrent();
+    $setting
+        ->setVariable($variable)
+        ->setSelectedValue($value)
+        ->setType($type)
+        ->setCategory($category)
+        ->setSubkey($subKey)
+        ->setTitle($title)
+        ->setComment($comment)
+        ->setScope($scope)
+        ->setSubkeytext($subKeyText)
+        ->setAccessUrl($accessUrlId)
+        ->setAccessUrlChangeable($visiblity);
+
+    $em->persist($setting);
+    $em->flush();
+
+    return $setting->getId();
 }
 
 /**

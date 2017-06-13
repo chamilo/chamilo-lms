@@ -37,6 +37,7 @@ class ImportCsv
     public $defaultLanguage = 'dutch';
     public $extraFieldIdNameList = array(
         'session' => 'external_session_id',
+        'session_career' => 'external_career_id',
         'course' => 'external_course_id',
         'user' => 'external_user_id',
         'calendar_event' => 'external_calendar_event_id',
@@ -294,6 +295,12 @@ class ImportCsv
             $this->extraFieldIdNameList['session'],
             1,
             'External session id'
+        );
+
+        SessionManager::create_session_extra_field(
+            $this->extraFieldIdNameList['session_career'],
+            1,
+            'Career id'
         );
 
         // Create calendar_event extra field extra_external_session_id
@@ -1946,7 +1953,10 @@ class ImportCsv
             true,
             $this->defaultAdminId,
             $this->logger,
-            array('SessionID' => 'extra_'.$this->extraFieldIdNameList['session']),
+            array(
+                'SessionID' => 'extra_'.$this->extraFieldIdNameList['session'],
+                'CareerId' => 'extra_'.$this->extraFieldIdNameList['session_career']
+            ),
             $this->extraFieldIdNameList['session'],
             $this->daysCoachAccessBeforeBeginning,
             $this->daysCoachAccessAfterBeginning,

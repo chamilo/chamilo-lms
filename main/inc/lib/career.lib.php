@@ -277,11 +277,12 @@ class Career extends Model
     }
 
     /**
+     * @param array
      * @param \Fhaculty\Graph\Graph $graph
      *
      * @return string
      */
-    public static function renderDiagram($graph)
+    public static function renderDiagram($careerInfo, $graph)
     {
         if (!($graph instanceof \Fhaculty\Graph\Graph)) {
             return '';
@@ -304,7 +305,8 @@ class Career extends Model
         $group = 0;
         /** @var \Fhaculty\Graph\Vertex $vertex */
         $counter = 0;
-        $html = '';
+
+        $html = Display::page_header($careerInfo['name']);
         foreach ($graph->getVertices() as $vertex) {
             $id = $vertex->getId();
             $windowId = "window_$id";

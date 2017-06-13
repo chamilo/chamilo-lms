@@ -394,7 +394,8 @@ $_configuration['agenda_legend'] = [
 //$_configuration['tracking_skip_generic_data'] = false;
 // Show question feedback (requires DB change: "ALTER TABLE c_quiz_question ADD COLUMN feedback text;")
 //$_configuration['allow_quiz_question_feedback'] = false;
-
+// Show view accordion lp_category
+//$_configuration['lp_category_accordion'] = false;
 // HTTP headers security
 // This section relates to options to increase the security of your Chamilo
 // portal against attacks specifically focused on HTTP headers vulnerabilities

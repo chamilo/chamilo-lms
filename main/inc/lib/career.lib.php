@@ -275,4 +275,151 @@ class Career extends Model
 
         return parent::update($params);
     }
+
+    /**
+     * @param \Fhaculty\Graph\Graph $graph
+     *
+     * @return string
+     */
+    public static function renderDiagram($graph)
+    {
+        if (!($graph instanceof \Fhaculty\Graph\Graph)) {
+            return '';
+        }
+
+        $debug = false;
+        $maxColumn = 0;
+        foreach ($graph->getVertices() as $vertex) {
+            $groupId = (int) $vertex->getGroup();
+            if ($groupId > $maxColumn) {
+                $maxColumn = $groupId;
+            }
+        }
+
+        $width = 80 / $maxColumn;
+        //var_dump($maxColumn);
+        //$width = 100;
+        //$groupWidth = $width + 30;
+        $defaultSpace = 40;
+        $group = 0;
+        /** @var \Fhaculty\Graph\Vertex $vertex */
+        $counter = 0;
+        $html = '';
+        foreach ($graph->getVertices() as $vertex) {
+            $id = $vertex->getId();
+            $windowId = "window_$id";
+            $groupId = $vertex->getGroup();
+            $groupJsId = "group_$groupId";
+
+            if ($group != $vertex->getGroup()) {
+                if ($group > 0) {
+                    $counter = 0;
+                    $html .= '</div>'.PHP_EOL;
+                }
+
+                $left =  ($defaultSpace).'px';
+                if ($group == 0) {
+                    $left = 0;
+                }
+                $html .= PHP_EOL.'<div id="'.$groupJsId.'" style="padding:15px;border-style:solid;float:left; margin-left:'.$left.'; width:'.$width.'%">';
+            }
+
+            if ($debug) {
+                echo ('->>>>>>>'.$vertex->getAttribute('graphviz.label')).' - '.$vertex->getGroup().PHP_EOL;
+            }
+
+            $group = $vertex->getGroup();
+            $content = $vertex->getAttribute('Notes');
+            $content .= '<div class="pull-right">['.$id.']</div>';
+            if ($debug) {
+                echo ('entering vertices: ').PHP_EOL;
+            }
+
+            /** @var \Fhaculty\Graph\Vertex $vertexTo */
+            foreach ($vertex->getVerticesEdgeTo() as $vertexTo) {
+                $childId = $vertexTo->getId();
+                if ($id == $childId) {
+                    continue;
+                }
+
+                $childId = "window_$childId";
+                $childGroupId = $vertexTo->getGroup();
+                $childJsGroupId = "group_$childGroupId";
+                if ($debug) {
+                    echo ($vertexTo->getAttribute('graphviz.label')).PHP_EOL;
+                }
+
+                if (($vertexTo->getGroup() - $groupId) == 1) {
+                    $content .= self::createConnection($windowId, $childId, ['Left', 'Right']);
+                } else {
+                    if ($childGroupId > $groupId) {
+                        $content .= self::createConnection(
+                            $groupJsId,
+                            $childJsGroupId
+                        );
+                    } else {
+                        $anchor = ['Left', 'Right'];
+                        if ($childGroupId == 1) {
+                            $anchor = ['Right', 'Left'];
+                        }
+                        $content .= self::createConnection(
+                            $childJsGroupId,
+                            $groupJsId,
+                            $anchor
+                        );
+                    }
+                }
+            }
+
+            $counter++;
+            $color = '';
+            if ($vertex->getAttribute('HasColor') == 1) {
+                $color = 'danger';
+            }
+
+            $html .= PHP_EOL.'<div id="'.$windowId.'" class="window" style="float:left; width:100%; "  >';
+            $html .= Display::panel(
+                $content,
+                $vertex->getAttribute('graphviz.label'),
+                null,
+                $color,
+                null
+                //$windowId
+            );
+            $html .= '</div>';
+        }
+        $html .= '</div>'.PHP_EOL;
+
+        return $html;
+    }
+
+    /**
+     * @param string $source
+     * @param string $target
+     * @param array $anchor
+     * @return string
+     */
+    public static function createConnection($source, $target, $anchor = [])
+    {
+        if (empty($anchor)) {
+            // Default
+            $anchor = ['Bottom', 'Right'];
+        }
+
+        $anchor = implode('","', $anchor);
+        $html = '<script> jsPlumb.ready(function() { ';
+        $html .= 'jsPlumb.connect({
+                        source:"'.$source.'",
+                        target:"'.$target.'",
+                        endpoint:[ "Rectangle", { width:1, height:1 }],                                        
+                        connector: ["Flowchart"],                                        
+                        anchor: ["'.$anchor.'"],
+                        overlays: [
+                            [ "Arrow", { location:0.9 } ],
+                        ],
+                      });';
+        $html .= '});</script>'.PHP_EOL;
+
+        return $html;
+    }
 }

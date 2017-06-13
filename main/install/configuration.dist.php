@@ -451,4 +451,8 @@ $_configuration['agenda_legend'] = [
 // HTTP headers security section ends here
 
 // Add answered_at field in table survey_invitation
-//$_configuration['survey_answered_at_field'] = 'false';
+//$_configuration['survey_answered_at_field'] = false;
+
+// Allow career diagram
+//$_configuration['allow_career_diagram'] = false;
+

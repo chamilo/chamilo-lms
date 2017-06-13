@@ -2276,18 +2276,22 @@ class Display
      * @param string $footer
      * @param string $style primary|success|info|warning|danger
      * @param string $extra
+     * @param string $id
      *
      * @return string
      */
-    public static function panel($content, $title = '', $footer = '', $style = '', $extra = '')
+    public static function panel($content, $title = '', $footer = '', $style = '', $extra = '', $id = '')
     {
         $title = !empty($title) ? '<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
         $footer = !empty($footer) ? '<div class="panel-footer ">'.$footer.'</div>' : '';
         $styles = ['primary', 'success', 'info', 'warning', 'danger'];
         $style = !in_array($style, $styles) ? 'default' : $style;
 
+        if (!empty($id)) {
+            $id = " id = $id ";
+        }
         return '
-            <div class="panel panel-'.$style.'">
+            <div '.$id.' class="panel panel-'.$style.'">
                 '.$title.'
                 '.self::contentPanel($content).'
                 '.$footer.'

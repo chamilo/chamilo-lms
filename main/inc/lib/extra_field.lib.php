@@ -129,6 +129,9 @@ class ExtraField extends Model
             case 'work':
                 $this->extraFieldType = EntityExtraField::WORK_FIELD_TYPE;
                 break;
+            case 'career':
+                $this->extraFieldType = EntityExtraField::CAREER_FIELD_TYPE;
+                break;
         }
 
         $this->pageUrl  = 'extra_fields.php?type='.$this->type;
@@ -158,7 +161,8 @@ class ExtraField extends Model
             'calendar_event',
             'lp_item',
             'skill',
-            'work'
+            'work',
+            'career'
         );
     }
 

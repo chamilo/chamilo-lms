@@ -5,6 +5,7 @@ use Chamilo\CoreBundle\Entity\Sequence;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
+use Graphp\GraphViz\GraphViz;
 
 /**
  * Responses to AJAX calls
@@ -37,7 +38,7 @@ switch ($action) {
                 if ($sequence->hasGraph()) {
                     $graph = $sequence->getUnSerializeGraph();
                     $graph->setAttribute('graphviz.node.fontname', 'arial');
-                    $graphviz = new \Graphp\GraphViz\GraphViz();
+                    $graphviz = new GraphViz();
                     $graphImage = '';
                     try {
                         $graphImage = $graphviz->createImageHtml($graph);

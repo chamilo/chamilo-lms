@@ -40,9 +40,9 @@ class Plugin
      * main/img/icons/64/plugin_name_na.png
      * @example
      * $course_settings = array(
-          array('name' => 'big_blue_button_welcome_message',  'type' => 'text'),
-          array('name' => 'big_blue_button_record_and_store', 'type' => 'checkbox')
-       );
+    array('name' => 'big_blue_button_welcome_message',  'type' => 'text'),
+    array('name' => 'big_blue_button_record_and_store', 'type' => 'checkbox')
+    );
      */
     public $course_settings = array();
     /**
@@ -50,6 +50,9 @@ class Plugin
      * function.
      */
     public $course_settings_callback = false;
+
+    const TAB_FILTER_NO_STUDENT = '::no-student';
+    const TAB_FILTER_ONLY_STUDENT = '::only-student';
 
     /**
      * Default constructor for the plugin class. By default, it only sets
@@ -634,14 +637,14 @@ class Plugin
 
     }
 
-   /**
-    * Add a tab to platform
-    * @param string   $tabName
-    * @param string   $url
-    *
-    * @return false|string
-    */
-    public function addTab($tabName, $url)
+    /**
+     * Add a tab to platform
+     * @param string $tabName
+     * @param string $url
+     * @param string $userFilter Optional. Filter tab type
+     * @return false|string
+     */
+    public function addTab($tabName, $url, $userFilter = null)
     {
         $sql = "SELECT * FROM settings_current
                 WHERE
@@ -673,6 +676,17 @@ class Plugin
 
         // End Check
         $subkey = 'custom_tab_'.$tabNum;
+
+        if (!empty($userFilter)) {
+            switch ($userFilter) {
+                case self::TAB_FILTER_NO_STUDENT:
+                    //no break
+                case self::TAB_FILTER_ONLY_STUDENT:
+                    $subkey .= $userFilter;
+                    break;
+            }
+        }
+
         $attributes = array(
             'variable' => 'show_tabs',
             'subkey' => $subkey,
@@ -730,9 +744,16 @@ class Plugin
                 $tabs = Database::store_result($result, 'ASSOC');
                 $i = 1;
                 foreach ($tabs as $row) {
-                    $attributes = array(
-                        'subkey' => 'custom_tab_'.$i
-                    );
+                    $newSubKey = "custom_tab_$i";
+
+                    if (strpos($row['subkey'], self::TAB_FILTER_NO_STUDENT) !== false) {
+                        $newSubKey .= self::TAB_FILTER_NO_STUDENT;
+                    } elseif (strpos($row['subkey'], self::TAB_FILTER_ONLY_STUDENT) !== false) {
+                        $newSubKey .= self::TAB_FILTER_ONLY_STUDENT;
+                    }
+
+                    $attributes = ['subkey' => $newSubKey];
+
                     $this->updateTab($row['subkey'], $attributes);
                     $i++;
                 }

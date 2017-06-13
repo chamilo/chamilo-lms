@@ -2878,7 +2878,9 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
         $form->addElement('label', get_lang('Thread'), $iframe);
     }
 
-    if ((api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($myThread)) {
+    if (Gradebook::is_active() &&
+        (api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($myThread)
+    ) {
         $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
         $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 

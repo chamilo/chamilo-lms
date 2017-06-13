@@ -1677,34 +1677,41 @@ class CourseManager
         // variable initialisation
         $session_id = intval($session_id);
         $course_code = Database::escape_string($course_code);
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tblCourseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tblUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
 
-        $sql = 'SELECT DISTINCT count(user.id) as count  
-                FROM ' . Database::get_main_table(TABLE_MAIN_USER).' as user ';
+        $sql = "
+            SELECT DISTINCT count(user.id) as count  
+            FROM $tblUser as user
+        ";
         $where = array();
         if (!empty($session_id)) {
-            $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user
-                      ON
-                        user.user_id = session_course_user.user_id AND
-                        session_course_user.c_id = "' . $courseId.'" AND
-                        session_course_user.session_id  = ' . $session_id;
+            $sql .= "
+                LEFT JOIN $tblSessionCourseUser as session_course_user
+                    ON user.user_id = session_course_user.user_id
+                    AND session_course_user.c_id = $courseId
+                    AND session_course_user.session_id = $session_id
+            ";
 
             $where[] = ' session_course_user.c_id IS NOT NULL ';
         } else {
-            $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_COURSE_USER).' as course_rel_user
-                        ON
-                            user.user_id = course_rel_user.user_id AND
-                            course_rel_user.relation_type<>' . COURSE_RELATION_TYPE_RRHH.' AND
-                            course_rel_user.c_id = ' . $courseId;
+            $sql .= "
+                LEFT JOIN $tblCourseUser as course_rel_user
+                    ON user.user_id = course_rel_user.user_id
+                    AND course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+                    AND course_rel_user.c_id = $courseId
+            ";
             $where[] = ' course_rel_user.c_id IS NOT NULL ';
         }
 
         $multiple_access_url = api_get_multiple_access_url();
         if ($multiple_access_url) {
-            $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).'  au
-                      ON (au.user_id = user.user_id) ';
+            $sql .= " LEFT JOIN $tblUrlUser au ON (au.user_id = user.user_id) ";
         }
 
         $sql .= ' WHERE '.implode(' OR ', $where);
@@ -5072,13 +5079,13 @@ class CourseManager
             $withoutSpecialCourses = ' AND c.id NOT IN ("'.implode('","', $specialCourseList).'")';
         }
 
-        $visibilityCondition = self::getCourseVisibilitySQLCondition('c', true);    
-        
+        $visibilityCondition = self::getCourseVisibilitySQLCondition('c', true);
+
         $accessUrlId = (int) $accessUrlId;
         if (empty($accessUrlId)) {
             $accessUrlId = 1;
-        }                
-        
+        }
+
         $sql = "SELECT count(c.id) 
                 FROM $tableCourse c 
                 INNER JOIN $tableCourseRelAccessUrl u
@@ -5090,7 +5097,7 @@ class CourseManager
                     $withoutSpecialCourses
                     $visibilityCondition
                 ";
-        
+
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
 

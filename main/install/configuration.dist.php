@@ -450,8 +450,12 @@ $_configuration['agenda_legend'] = [
 //$_configuration['security_referrer_policy'] = 'origin-when-cross-origin';
 // HTTP headers security section ends here
 // Add answered_at field in table survey_invitation
+// Requires DB change:
+// ALTER TABLE c_survey_invitation ADD answered_at DATETIME DEFAULT NULL;
 //$_configuration['survey_answered_at_field'] = false;
 // Allow career diagram, requires a DB change:
-// ALTER TABLE c_survey_invitation ADD answered_at DATETIME DEFAULT NULL;
+//UPDATE extra_field_values SET created_at = NULL WHERE CAST(created_at AS CHAR(20)) = '0000-00-00 00:00:00';
+//UPDATE extra_field_values SET updated_at = NULL WHERE CAST(updated_at AS CHAR(20)) = '0000-00-00 00:00:00';
+//ALTER TABLE extra_field_values modify column value longtext null;
 //$_configuration['allow_career_diagram'] = false;
 

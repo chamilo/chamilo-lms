@@ -11,14 +11,9 @@ use ChamiloSession as Session;
  *
  * Requires extra_field_values.value to be longtext to save diagram:
  *
-update extra_field_values set created_at = null where created_at = '0000-00-00 00:00:00';
-update extra_field_values set updated_at = null where updated_at = '0000-00-00 00:00:00';
-
 UPDATE extra_field_values SET created_at = NULL WHERE CAST(created_at AS CHAR(20)) = '0000-00-00 00:00:00';
 UPDATE extra_field_values SET updated_at = NULL WHERE CAST(updated_at AS CHAR(20)) = '0000-00-00 00:00:00';
-
-alter table extra_field_values modify column value longtext null;
-
+ALTER TABLE extra_field_values modify column value longtext null;
 */
 
 $cidReset = true;

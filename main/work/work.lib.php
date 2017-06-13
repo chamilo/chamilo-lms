@@ -3841,7 +3841,7 @@ function processWorkForm(
     $sessionId = intval($sessionId);
     $userId = intval($userId);
 
-    $title = $values['title'];
+    $title = $values['title'].$values['extension'];
     $description = $values['description'];
     $contains_file = isset($values['contains_file']) && !empty($values['contains_file']) ? intval($values['contains_file']) : 0;
 

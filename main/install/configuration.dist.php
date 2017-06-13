@@ -449,10 +449,9 @@ $_configuration['agenda_legend'] = [
 // and should be set by all sites.
 //$_configuration['security_referrer_policy'] = 'origin-when-cross-origin';
 // HTTP headers security section ends here
-
 // Add answered_at field in table survey_invitation
 //$_configuration['survey_answered_at_field'] = false;
-
-// Allow career diagram
+// Allow career diagram, requires a DB change:
+// ALTER TABLE c_survey_invitation ADD answered_at DATETIME DEFAULT NULL;
 //$_configuration['allow_career_diagram'] = false;
 

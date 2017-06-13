@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CTool;
+
 /**
  * Class Plugin
  * Base class for plugins
@@ -469,41 +471,61 @@ class Plugin
         }
 
         // Stop here if we don't want a tool link on the course homepage
-        if (!$add_tool_link) {
-            return true;
-        }
-
-        if ($this->addCourseTool == false) {
+        if (!$add_tool_link || $this->addCourseTool == false) {
             return true;
         }
 
         //Add an icon in the table tool list
-        $table = Database::get_course_table(TABLE_TOOL_LIST);
-        $sql = "SELECT name FROM $table
-                WHERE c_id = $courseId AND name = '$plugin_name' ";
-        $result = Database::query($sql);
-        if (!Database::num_rows($result)) {
-            $tool_link = "$plugin_name/start.php";
-            $cToolId = AddCourse::generateToolId($courseId);
+        $this->createLinkToCourseTool($plugin_name, $courseId);
+    }
 
-            Database::insert(
-                $table,
-                [
-                    'id' => $cToolId,
-                    'c_id' => $courseId,
-                    'name' => $plugin_name,
-                    'link' => $tool_link,
-                    'image' => "$plugin_name.png",
-                    'visibility' => 1,
-                    'admin' => 0,
-                    'address' => 'squaregrey.gif',
-                    'added_tool' => 0,
-                    'target' => '_self',
-                    'category' => 'plugin',
-                    'session_id' => 0
-                ]
-            );
+    /**
+     * Add an link for a course tool
+     * @param string $name The tool name
+     * @param int $courseId The course ID
+     * @param string $iconName Optional. Icon file name
+     * @return \Chamilo\CourseBundle\Entity\CTool|null
+     */
+    protected function createLinkToCourseTool($name, $courseId, $iconName = null)
+    {
+        if (!$this->addCourseTool) {
+            return null;
         }
+
+        $em = Database::getManager();
+
+        /** @var CTool $tool */
+        $tool = $em
+            ->getRepository('ChamiloCourseBundle:CTool')
+            ->findOneBy([
+                'name' => $name,
+                'cId' => $courseId
+            ]);
+
+        if (!$tool) {
+            $cToolId = AddCourse::generateToolId($courseId);
+            $pluginName = $this->get_name();
+
+            $tool = new CTool();
+            $tool
+                ->setId($cToolId)
+                ->setCId($courseId)
+                ->setName($name)
+                ->setLink("$pluginName/start.php")
+                ->setImage($iconName ?: "$pluginName.png")
+                ->setVisibility(true)
+                ->setAdmin(0)
+                ->setAddress('squaregrey.gif')
+                ->setAddedTool(false)
+                ->setTarget('_self')
+                ->setCategory('plugin')
+                ->setSessionId(0);
+
+            $em->persist($tool);
+            $em->flush();
+        }
+
+        return $tool;
     }
 
     /**

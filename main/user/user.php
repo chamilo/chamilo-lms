@@ -217,8 +217,11 @@ if (api_is_allowed_to_edit(null, true)) {
                     if (api_is_multiple_url_enabled()) {
                         $sql .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
                     }
-                    $sql .= " WHERE c_id = '$courseId' AND session_course_user.user_id = user.user_id ";
-                    $sql .= ' AND session_id = '.$sessionId;
+                    $sql .= "
+                        WHERE c_id = $courseId
+                            AND session_course_user.user_id = user.user_id
+                            AND session_id = $sessionId
+                    ";
 
                     if (api_is_multiple_url_enabled()) {
                         $sql .= " AND user.user_id = au.user_id AND access_url_id =  $current_access_url_id  ";

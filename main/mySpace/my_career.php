@@ -19,22 +19,31 @@ foreach ($sessionCategories as $category) {
     $sessions = $category['sessions'];
     foreach ($sessions as $session) {
         $sessionId = $session['session_id'];
-
+        // Getting session extra field 'external_career_id'
         $item = $extraFieldValue->get_values_by_handler_and_field_variable(
             $sessionId,
             'external_career_id'
         );
         if ($item && isset($item['value']) && !empty($item['value'])) {
-            $careerId = $item['value'];
-            $careerInfo = $career->find($careerId);
-            if (!empty($careerInfo)) {
-                $itemCareer = $extraFieldValueCareer->get_values_by_handler_and_field_variable(
-                    $careerId,
-                    'career_diagram'
-                );
-                if ($itemCareer && !empty($itemCareer['value'])) {
-                    $graph = unserialize($itemCareer['value']);
-                    $content .= Career::renderDiagram($careerInfo, $graph);
+            // External career id
+            $externalCareerId = $item['value'];
+            // Getting career id from external career id
+            $itemCareer = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
+                'external_career_id',
+                $externalCareerId
+            );
+            if ($itemCareer && !empty($itemCareer['item_id'])) {
+                $careerId = $itemCareer['item_id'];
+                $careerInfo = $career->find($careerId);
+                if (!empty($careerInfo)) {
+                    $diagram = $extraFieldValueCareer->get_values_by_handler_and_field_variable(
+                        $careerId,
+                        'career_diagram'
+                    );
+                    if ($diagram && !empty($diagram['value'])) {
+                        $graph = unserialize($diagram['value']);
+                        $content .= Career::renderDiagram($careerInfo, $graph);
+                    }
                 }
             }
         }

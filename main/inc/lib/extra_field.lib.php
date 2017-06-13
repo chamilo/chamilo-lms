@@ -539,7 +539,11 @@ class ExtraField extends Model
                 );
 
                 if ($field['field_type'] == self::FIELD_TYPE_TAG) {
-                    $tags = UserManager::get_user_tags_to_string($itemId, $field['id'], false);
+                    $tags = UserManager::get_user_tags_to_string(
+                        $itemId,
+                        $field['id'],
+                        false
+                    );
                     $extra_data['extra_'.$field['variable']] = $tags;
 
                     continue;
@@ -549,7 +553,11 @@ class ExtraField extends Model
                     $field_value = $field_value['value'];
                     switch ($field['field_type']) {
                         case self::FIELD_TYPE_TAG:
-                            $tags = UserManager::get_user_tags_to_string($itemId, $field['id'], false);
+                            $tags = UserManager::get_user_tags_to_string(
+                                $itemId,
+                                $field['id'],
+                                false
+                            );
 
                             $extra_data['extra_'.$field['variable']] = $tags;
                             break;
@@ -1077,7 +1085,6 @@ class ExtraField extends Model
                             if (isset($optionList[$defaultValueId]) &&
                                 isset($optionList[$defaultValueId]['priority'])
                             ) {
-
                                 if (!empty($optionList[$defaultValueId]['priority'])) {
                                     $priorityId = $optionList[$defaultValueId]['priority'];
                                     $option = new ExtraFieldOption($this->type);
@@ -1303,7 +1310,6 @@ class ExtraField extends Model
                         $tagsSelect->setMultiple(true);
 
                         $selectedOptions = [];
-
                         if ($this->type === 'user') {
                             // The magic should be here
                             $user_tags = UserManager::get_user_tags($itemId, $field_details['id']);
@@ -1314,7 +1320,6 @@ class ExtraField extends Model
                                         $tag['tag'],
                                         $tag['tag']
                                     );
-
                                     $selectedOptions[] = $tag['tag'];
                                 }
                             }
@@ -2316,8 +2321,8 @@ JAVASCRIPT;
                         'op' => 'cn',
                     );
 
-                    //Second
-                    $search_options['value']    = $field['id'].':';
+                    // Second
+                    $search_options['value'] = $field['id'].':';
                     $search_options['dataInit'] = 'register_second_select';
 
                     $column_model[] = array(

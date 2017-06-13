@@ -4465,7 +4465,6 @@ class SessionManager
             $error_message = get_lang('NotCSV');
         } else {
             $tag_names = array();
-
             foreach ($content as $key => $enreg) {
                 $enreg = explode(';', trim($enreg));
                 if ($key) {
@@ -4659,7 +4658,6 @@ class SessionManager
                     }
 
                     if ($my_session_result === false) {
-
                         // Creating a session.
                         $sql = "INSERT IGNORE INTO $tbl_session SET
                                 name = '$session_name',

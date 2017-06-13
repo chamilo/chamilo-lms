@@ -111,6 +111,7 @@ class ExtraFieldValue extends Model
             }
 
             $field_variable = $fieldDetails['variable'];
+
             if (isset($params['extra_'.$field_variable])) {
                 $value = $params['extra_'.$field_variable];
             } else {
@@ -310,7 +311,6 @@ class ExtraFieldValue extends Model
                         'value' => $value,
                         'comment' => $comment
                     );
-
                     self::save($newParams, $showQuery);
             }
         }

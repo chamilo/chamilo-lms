@@ -251,6 +251,8 @@ class Career extends Model
     {
         $res = parent::delete($id);
         if ($res) {
+            $extraFieldValues = new ExtraFieldValue('career');
+            $extraFieldValues->deleteValuesByItem($id);
             Event::addEvent(
                 LOG_CAREER_DELETE,
                 LOG_CAREER_ID,

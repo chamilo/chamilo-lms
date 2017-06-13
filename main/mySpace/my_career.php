@@ -9,31 +9,33 @@ if (api_get_configuration_value('allow_career_diagram') == false) {
 
 $htmlHeadXtra[] = api_get_js('jsplumb2.js');
 
-$sessions = SessionManager::get_sessions_by_user(api_get_user_id());
+$sessionCategories = UserManager::get_sessions_by_category(api_get_user_id(), false);
 
 $content = '';
 $extraFieldValue = new ExtraFieldValue('session');
 $extraFieldValueCareer = new ExtraFieldValue('career');
 $career = new Career();
-foreach ($sessions as $session) {
-    $sessionId = $session['session_id'];
+foreach ($sessionCategories as $category) {
+    $sessions = $category['sessions'];
+    foreach ($sessions as $session) {
+        $sessionId = $session['session_id'];
 
-    $item = $extraFieldValue->get_values_by_handler_and_field_variable(
-        $sessionId,
-        'external_career_id'
-    );
-
-    if ($item && isset($item['value']) && !empty($item['value'])) {
-        $careerId = $item['value'];
-        $careerInfo = $career->find($careerId);
-        if (!empty($careerInfo)) {
-            $itemCareer = $extraFieldValueCareer->get_values_by_handler_and_field_variable(
-                $careerId,
-                'career_diagram'
-            );
-            if ($itemCareer && !empty($itemCareer['value'])) {
-                $graph = unserialize($itemCareer['value']);
-                $content .= Career::renderDiagram($careerInfo, $graph);
+        $item = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $sessionId,
+            'external_career_id'
+        );
+        if ($item && isset($item['value']) && !empty($item['value'])) {
+            $careerId = $item['value'];
+            $careerInfo = $career->find($careerId);
+            if (!empty($careerInfo)) {
+                $itemCareer = $extraFieldValueCareer->get_values_by_handler_and_field_variable(
+                    $careerId,
+                    'career_diagram'
+                );
+                if ($itemCareer && !empty($itemCareer['value'])) {
+                    $graph = unserialize($itemCareer['value']);
+                    $content .= Career::renderDiagram($careerInfo, $graph);
+                }
             }
         }
     }

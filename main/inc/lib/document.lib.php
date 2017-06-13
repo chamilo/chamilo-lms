@@ -5349,9 +5349,10 @@ class DocumentManager
 
         // Add class="invisible" on invisible files
         $visibility_class = $visibility == false ? ' class="muted"' : '';
-        $forcedownload_link = null;
-        $forcedownload_icon = null;
-        $prevent_multiple_click = null;
+        $forcedownload_link = '';
+        $forcedownload_icon = '';
+        $prevent_multiple_click = '';
+        $force_download_html = '';
 
         if (!$show_as_icon) {
             // Build download link (icon)

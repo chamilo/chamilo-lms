@@ -6239,15 +6239,15 @@ ul#toolnavbox-two li a.btn{
 input[type=checkbox]{
     margin: 8px 0 0;
 }
-.lp-accordeon .panel-heading .panel-title{
+.lp-accordion .panel-heading .panel-title{
     width: 100%;
     display: inline-block;
 }
-.lp-accordeon .panel-heading .panel-title a{
+.lp-accordion .panel-heading .panel-title a{
     width: 100%;
     display: block;
 }
-.lp-accordeon .panel-heading .tools-actions{
+.lp-accordion .panel-heading .tools-actions{
     position: relative;
     top: -30px;
 }

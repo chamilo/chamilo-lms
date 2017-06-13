@@ -10,8 +10,8 @@
 
 {{ introduction_section }}
 
-{% set configuration = 'lp_category_accordeon'|api_get_configuration_value %}
-<div class="lp-accordeon panel-group" id="lp-accordion" role="tablist" aria-multiselectable="true">
+{% set configuration = 'lp_category_accordion'|api_get_configuration_value %}
+<div class="lp-accordion panel-group" id="lp-accordion" role="tablist" aria-multiselectable="true">
 {% for lp_data in data %}
     {% set show_category = true %}
 

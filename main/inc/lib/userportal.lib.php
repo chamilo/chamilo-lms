@@ -2044,11 +2044,15 @@ class IndexManager
             $rightActions = '<div class="pull-right">'.$courseParams['right_actions'].'</div>';
         }
 
+        $notifications = isset($courseParams['notifications']) ? $courseParams['notifications'] : '';
+
         return "<div>
                     $button
                     <span class='$class'>$icon
-                    <a class='sessionView' href='$courseLink'>$title</a>
-                    </span>".$courseParams['notifications']." $rightActions
+                        <a class='sessionView' href='$courseLink'>$title</a>
+                    </span> 
+                    $notifications 
+                    $rightActions 
                 </div>
                 $teachers";
     }

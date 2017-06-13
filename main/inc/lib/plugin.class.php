@@ -291,11 +291,12 @@ class Plugin
 
     /**
      * Returns an array with the global settings for this plugin
+     * @param bool $forceFromDB Optional. Force get settings from the database
      * @return array Plugin settings as an array
      */
-    public function get_settings()
+    public function get_settings($forceFromDB = false)
     {
-        if (empty($this->settings)) {
+        if (empty($this->settings) || $forceFromDB) {
             $settings = api_get_settings_params(
                 array(
                     "subkey = ? AND category = ? AND type = ? " => array($this->get_name(), 'Plugins', 'setting')
@@ -802,5 +803,16 @@ class Plugin
             return true;
         }
         return false;
+    }
+
+    /**
+     * Allow make some actions after configure the plugin parameters
+     * This function is called from main/admin/configure_plugin.php page
+     * when saving the plugin parameters
+     * @return \Plugin
+     */
+    public function performActionsAfterConfigure()
+    {
+        return $this;
     }
 }

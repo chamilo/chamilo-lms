@@ -743,9 +743,9 @@ class Display
 
         if ($loadThemeIcon) {
             $theme = 'themes/'.api_get_visual_theme().'/icons/';
-            if(is_file($alternateCssPath.$theme.$image)){
+            if (is_file($alternateCssPath.$theme.$image)) {
                 $icon = $alternateWebCssPath.$theme.$image;
-            }else{
+            } else {
                 $icon = $w_code_path.'img/'.$image;
             }
             // Checking the theme icons folder example: app/Resources/public/css/themes/chamilo/icons/XXX

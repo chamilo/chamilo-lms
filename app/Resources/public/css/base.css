@@ -6791,6 +6791,10 @@ input.form-control[type="color"] {
     margin-top: 20px;
 }
 
+.col-xs-6.course-tool:nth-child(2n+1) {
+    clear: left;
+}
+
 /* Extra small devices (phones, less than 768px) */
 /* No media query since this is the default in Bootstrap */
 
@@ -6811,6 +6815,13 @@ input.form-control[type="color"] {
 
 /* Medium devices (desktops, 992px and up) */
 @media (min-width: 992px) {
+    .col-xs-6.course-tool:nth-child(2n+1) {
+        clear: none;
+    }
+    .col-md-3.course-tool:nth-child(4n+1) {
+        clear: left;
+    }
+
     div.navbar-collapse {
         padding-left: 0;
     }

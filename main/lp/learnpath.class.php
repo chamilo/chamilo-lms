@@ -11770,7 +11770,9 @@ EOD;
             case TOOL_ANNOUNCEMENT:
                 return $main_dir_path.'announcements/announcements.php?ann_id='.$id.'&'.$extraParams;
             case TOOL_LINK:
-                return $main_dir_path.'link/link_goto.php?link_id='.$id.'&'.$extraParams;
+                $linkInfo = Link::get_link_info($id);
+
+                return $linkInfo['url'];
             case TOOL_QUIZ:
                 if (empty($id)) {
                     return '';

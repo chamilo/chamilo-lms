@@ -474,6 +474,7 @@ switch ($action) {
         $start = $limit * $page - $limit;
         $course_list = SessionManager::get_course_list_by_session_id($session_id);
         $count = 0;
+        $temp = [];
 
         foreach ($course_list as $item) {
             if (isset($course_id) && !empty($course_id)) {

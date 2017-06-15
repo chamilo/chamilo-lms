@@ -2175,7 +2175,6 @@ $ApprovalForNewAccount = "批核新戶口";
 $ManageUser = "管理使用者";
 $SubscribeUserToCourseAsTeacher = "於本課程加入教師用戶";
 $PasswordEncryptedForSecurity = "因應安全理由，你的密碼已被加密。按下連結，你的密碼便會通過電郵傳送給你。";
-$SystemUnableToSendEmailContact = "系統未能發送電郵給聯絡人";
 $UsernameMaxXCharacters = "使用者名稱最長為 %s 字母";
 $InLnk = "隱藏的工具";
 $DelLk = "確定要移除這連結嗎?";

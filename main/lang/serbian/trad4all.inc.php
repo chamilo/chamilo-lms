@@ -1948,7 +1948,6 @@ $ApprovalForNewAccount = "Odobrenje za novi nalog";
 $ManageUser = "Upravljanje korisnika";
 $SubscribeUserToCourseAsTeacher = "Upisati trenera";
 $PasswordEncryptedForSecurity = "Vaša lozinka je šifrovana iz bezbednosnih razloga. Nakon što pritisnete link e-mail će vam poslati ponovo lozinku.";
-$SystemUnableToSendEmailContact = "Portal nije u mogućnosti da pošalje e-mail kontakt";
 $OpenIDCouldNotBeFoundPleaseRegister = "Ovaj otvoreni ID nije bilo moguće pronaći u našoj bazi. Molimo Vas da se prijavite za novi nalog. Ako već imate nalog kod nas, molimo vas uredite svoj profil na svom računu dodavanjem ovog otvorenog ID";
 $UsernameMaxXCharacters = "Korisničko ime treba da bude dugačko najviše %s znakova";
 $PictureUploaded = "Vaša slika je bila učitana";

@@ -3950,7 +3950,6 @@ $ApprovalForNewAccount = "Goedkeuring voor een nieuw account";
 $ManageUser = "Beheer gebruiker";
 $SubscribeUserToCourseAsTeacher = "Schrijf de gebruikers in deze cursus in als leerkracht";
 $PasswordEncryptedForSecurity = "Uw paswoord is geëncrypteerd omwile van beveiligingsredenen. Na het klikken op de link wordt opnieuw een e-mail verstuurd met uw paswoord.";
-$SystemUnableToSendEmailContact = "Het systeem kon het email contact niet verzenden";
 $OpenIDCouldNotBeFoundPleaseRegister = "Deze OpenID bestaat niet in onze database. Gelieve u te registreren voor een nieuwe account. Bent u bij ons reeds geregistreerd, gelieve dan uw profiel aan te passen, en deze OpenID toe te voegen";
 $UsernameMaxXCharacters = "De gebruikersnaam mag slechts maximum %s tekens lang zijn";
 $PictureUploaded = "Uw afbeelding werd geüploaded";

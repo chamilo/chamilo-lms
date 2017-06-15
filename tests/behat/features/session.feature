@@ -44,13 +44,13 @@ Feature: Session tool
     Then I should see "Temp Session"
     And I should see "Description for Temp Session"
 
-#  Scenario: Delete session
-#    Given I am on "/main/session/session_list.php?keyword=Temp+session"
-#    And wait for the page to be loaded
-#    And I follow "Delete"
-#    And I confirm the popup
-#    Then I should see "Deleted"
-#
+  Scenario: Delete session
+    Given I am on "/main/session/session_list.php?keyword=Temp+session"
+    And wait for the page to be loaded
+    And I follow "Delete"
+    And I confirm the popup
+    Then I should see "Deleted"
+
   Scenario: Delete session category
     Given I am on "/main/session/session_category_list.php"
     And I follow "Delete"

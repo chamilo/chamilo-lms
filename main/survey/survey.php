@@ -30,7 +30,7 @@ if ($isDrhOfCourse) {
     exit;
 }
 if (!api_is_allowed_to_edit(false, true) ||
-    (api_is_course_coach() && $extend_rights_for_coachs == 'false')
+    (api_is_session_general_coach() && $extend_rights_for_coachs == 'false')
 ) {
     api_not_allowed(true);
     exit;

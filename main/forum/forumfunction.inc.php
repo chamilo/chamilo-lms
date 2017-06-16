@@ -2879,7 +2879,7 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
     }
 
     if (Gradebook::is_active() &&
-        (api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($myThread)
+        (api_is_course_admin() || api_is_session_general_coach() || api_is_course_tutor()) && !($myThread)
     ) {
         $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
         $form->addElement('html', '<div id="advanced_params_options" style="display:none">');

@@ -2027,7 +2027,7 @@ class GroupManager
             return true;
         }
 
-        if (api_is_course_coach() && $groupInfo['session_id'] == $sessionId) {
+        if (api_is_session_general_coach() && $groupInfo['session_id'] == $sessionId) {
             return true;
         }
 
@@ -2267,7 +2267,7 @@ class GroupManager
             $url = api_get_path(WEB_CODE_PATH).'group/';
             // Edit-links
             if (api_is_allowed_to_edit(false, true) &&
-                !(api_is_course_coach() && intval($this_group['session_id']) != $session_id)
+                !(api_is_session_general_coach() && intval($this_group['session_id']) != $session_id)
             ) {
                 $edit_actions = '<a href="'.$url.'settings.php?'.api_get_cidreq(true, false).'&gidReq='.$this_group['id'].'"  title="'.get_lang('Edit').'">'.
                     Display::return_icon('edit.png', get_lang('EditGroup'), '', ICON_SIZE_SMALL).'</a>&nbsp;';

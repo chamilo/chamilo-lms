@@ -242,7 +242,7 @@ if (
         $row['user_id'] == $_user['user_id']
     ) || (
         api_is_allowed_to_edit(false, true) && !(
-            api_is_course_coach() &&
+            api_is_session_general_coach() &&
             $current_forum['session_id'] != $sessionId
         )
     )
@@ -279,7 +279,7 @@ if (!empty($my_post) && is_array($my_post)) {
 if (
     (isset($groupInfo['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo)) ||
     api_is_allowed_to_edit(false, true) &&
-    !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
+    !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)
 ) {
     if ($locked == false) {
         echo "<a href=\"".api_get_self()."?".api_get_cidreq().
@@ -434,7 +434,7 @@ if (!empty($attachment_list) && is_array($attachment_list)) {
 
         if (
             ($current_forum['allow_edit'] == 1 && $rows[$display_post_id]['user_id'] == $_user['user_id']) ||
-            (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
+            (api_is_allowed_to_edit(false, true) && !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
         ) {
             echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.
                 api_get_cidreq().'&action=delete_attach&id_attach='.$attachment['id'].'&forum='.$forumId.

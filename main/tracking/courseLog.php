@@ -312,22 +312,26 @@ if (!empty($coaches)) {
     $html .= $coaches;
 }
 
-$sessionList = SessionManager::get_session_by_course($courseInfo['real_id']);
-if (!empty($sessionList)) {
-    $html .= Display::page_subheader2(get_lang('SessionList'));
-    $icon = Display::return_icon(
-        'session.png',
-        null,
-        null,
-        ICON_SIZE_TINY
-    );
+if (api_is_platform_admin(true) || api_is_session_general_coach()) {
+    $sessionList = SessionManager::get_session_by_course($courseInfo['real_id']);
 
-    $html .= '<ul class="session-list">';
-    foreach ($sessionList as $session) {
-        $url = api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='.$session['id'].'&cidReq='.$courseInfo['code'];
-        $html .= Display::tag('li', $icon.' '.Display::url($session['name'], $url));
+    if (!empty($sessionList)) {
+        $html .= Display::page_subheader2(get_lang('SessionList'));
+        $icon = Display::return_icon(
+            'session.png',
+            null,
+            null,
+            ICON_SIZE_TINY
+        );
+
+        $html .= '<ul class="session-list">';
+        foreach ($sessionList as $session) {
+            $url = api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='
+                .$session['id'].'&cidReq='.$courseInfo['code'];
+            $html .= Display::tag('li', $icon.' '.Display::url($session['name'], $url));
+        }
+        $html .= '</ul>';
     }
-    $html .= '</ul>';
 }
 
 $html .= Display::page_subheader2(get_lang('StudentList'));

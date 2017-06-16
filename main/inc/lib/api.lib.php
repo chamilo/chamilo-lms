@@ -2625,6 +2625,7 @@ function api_is_course_admin()
 
 /**
  * Checks whether the current user is a course coach
+ * Based on the presence of user in session.id_coach (session general coach)
  * @return bool     True if current user is a course coach
  */
 function api_is_course_coach()
@@ -2634,6 +2635,7 @@ function api_is_course_coach()
 
 /**
  * Checks whether the current user is a course tutor
+ * Based on the presence of user in session_rel_course_rel_user.user_id with status = 2
  * @return bool     True if current user is a course tutor
  */
 function api_is_course_tutor()

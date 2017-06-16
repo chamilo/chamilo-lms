@@ -1261,7 +1261,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                                 case '2': // coach - teacher
                                     $is_courseMember = true;
                                     $is_courseTutor = true;
-                                    $is_courseCoach = true;
+                                    $is_courseCoach = false;
                                     $is_sessionAdmin = false;
 
                                     if (api_get_setting('extend_rights_for_coach') == 'true') {

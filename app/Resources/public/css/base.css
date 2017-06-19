@@ -163,7 +163,6 @@ header {
     color: #666;
 }
 #carousel-announcement img{
-    display: block;
     max-width: 100%;
     height: auto;
 }

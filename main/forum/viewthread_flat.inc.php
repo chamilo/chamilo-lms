@@ -162,7 +162,7 @@ if (isset($current_thread['thread_id'])) {
                 ($current_forum['allow_edit'] == 1 && $row['user_id'] == $_user['user_id']) ||
                 (
                 api_is_allowed_to_edit(false, true) &&
-                !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
+                !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)
                 )
             ) {
                 if (api_is_allowed_to_session_edit(false, true)) {
@@ -178,7 +178,7 @@ if (isset($current_thread['thread_id'])) {
             if ($origin != 'learnpath') {
                 if (GroupManager::is_tutor_of_group($userId, $groupInfo) ||
                     api_is_allowed_to_edit(false, true) &&
-                    !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
+                    !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)
                 ) {
                     if ($locked === false) {
                         $deleteUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
@@ -205,7 +205,7 @@ if (isset($current_thread['thread_id'])) {
 
                 if (GroupManager::is_tutor_of_group($userId, $groupInfo) ||
                     (api_is_allowed_to_edit(false, true) &&
-                    !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
+                    !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)
                     )
                 ) {
                     $iconEdit .= return_visible_invisible_icon(
@@ -318,7 +318,7 @@ if (isset($current_thread['thread_id'])) {
                     $html .= '<a href="download.php?file='.$realname.'"> '.$user_filename.' </a>';
 
                     if (($current_forum['allow_edit'] == 1 && $row['user_id'] == $_user['user_id']) ||
-                        (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
+                        (api_is_allowed_to_edit(false, true) && !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
                     ) {
                         $html .= '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_attach&id_attach='
                             . $attachment['iid'].'&forum='.$clean_forum_id.'&thread='.$clean_thread_id

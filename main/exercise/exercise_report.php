@@ -74,7 +74,7 @@ if (!empty($_GET['path'])) {
 
 if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
     if (api_is_platform_admin() || api_is_course_admin() ||
-        api_is_course_tutor() || api_is_course_coach()
+        api_is_course_tutor() || api_is_session_general_coach()
     ) {
         $loadExtraData = false;
         if (isset($_REQUEST['extra_data']) && $_REQUEST['extra_data'] == 1) {
@@ -262,7 +262,7 @@ $actions = null;
 if ($is_allowedToEdit && $origin != 'learnpath') {
     // the form
     if (api_is_platform_admin() || api_is_course_admin() ||
-        api_is_course_tutor() || api_is_course_coach()
+        api_is_course_tutor() || api_is_session_general_coach()
     ) {
         $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a href="live_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display::return_icon('activity_monitor.png', get_lang('LiveResults'), '', ICON_SIZE_MEDIUM).'</a>';

@@ -76,7 +76,6 @@ function remove_item(origin)
 }
 </script>';
 
-$errorMsg = '';
 $CourseList = $SessionList = array();
 $courses = $sessions = array();
 
@@ -209,12 +208,6 @@ unset($Courses);
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $sessionId; ?><?php if (!empty($_GET['add'])) echo '&add=true'; ?>" style="margin:0px;" <?php if ($ajax_search) {echo ' onsubmit="valide();"'; }?>>
     <legend><?php echo $tool_name.' ('.$session_info['name'].')'; ?></legend>
     <input type="hidden" name="formSent" value="1" />
-
-    <?php
-    if (!empty($errorMsg)) {
-        echo Display::return_message($errorMsg); //main API
-    }
-    ?>
     <div id="multiple-add-session" class="row">
         <div class="col-md-4">
             <label><?php echo get_lang('CourseListInPlatform') ?> :</label>

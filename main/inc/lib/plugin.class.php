@@ -487,9 +487,10 @@ class Plugin
      * @param string $name The tool name
      * @param int $courseId The course ID
      * @param string $iconName Optional. Icon file name
+     * @param string $link Optional. Link URL
      * @return \Chamilo\CourseBundle\Entity\CTool|null
      */
-    protected function createLinkToCourseTool($name, $courseId, $iconName = null)
+    protected function createLinkToCourseTool($name, $courseId, $iconName = null, $link = null)
     {
         if (!$this->addCourseTool) {
             return null;
@@ -514,7 +515,7 @@ class Plugin
                 ->setId($cToolId)
                 ->setCId($courseId)
                 ->setName($name)
-                ->setLink("$pluginName/start.php")
+                ->setLink($link ?: "$pluginName/start.php")
                 ->setImage($iconName ?: "$pluginName.png")
                 ->setVisibility(true)
                 ->setAdmin(0)

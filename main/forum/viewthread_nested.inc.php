@@ -118,7 +118,7 @@ foreach ($posts as $post) {
     if ((isset($groupInfo['iid']) && $tutorGroup) ||
         ($current_forum['allow_edit'] == 1 && $post['user_id'] == $userId) ||
         (api_is_allowed_to_edit(false, true) &&
-        !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
+        !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
     ) {
         if ($locked == false && postIsEditableByStudent($current_forum, $post)) {
             $editUrl = api_get_path(WEB_CODE_PATH).'forum/editpost.php?'.api_get_cidreq();
@@ -139,7 +139,7 @@ foreach ($posts as $post) {
 
     if ((isset($groupInfo['iid']) && $tutorGroup) ||
         api_is_allowed_to_edit(false, true) &&
-        !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
+        !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)
     ) {
         if ($locked == false) {
             $deleteUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
@@ -164,7 +164,7 @@ foreach ($posts as $post) {
 
     if (api_is_allowed_to_edit(false, true) &&
         !(
-            api_is_course_coach() &&
+            api_is_session_general_coach() &&
             $current_forum['session_id'] != $sessionId
         )
     ) {
@@ -333,7 +333,7 @@ foreach ($posts as $post) {
             $html .= ' "> '.$user_filename.' </a>';
             $html .= '<span class="forum_attach_comment" >'.$attachment['comment'].'</span>';
             if (($current_forum['allow_edit'] == 1 && $post['user_id'] == $userId) ||
-                (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
+                (api_is_allowed_to_edit(false, true) && !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
             ) {
                 $html .= '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_attach&id_attach='
                     . $attachment['iid'].'&forum='.$clean_forum_id.'&thread='.$clean_thread_id

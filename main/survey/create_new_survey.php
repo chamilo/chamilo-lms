@@ -26,7 +26,7 @@ $table_gradebook_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code) */
 // If user is not teacher or if he's a coach trying to access an element out of his session
 if (!api_is_allowed_to_edit()) {
-    if (!api_is_course_coach() ||
+    if (!api_is_session_general_coach() ||
         (!empty($_GET['survey_id']) &&
         !api_is_element_in_the_session(TOOL_SURVEY, $_GET['survey_id']))
     ) {

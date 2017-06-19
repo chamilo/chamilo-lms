@@ -2625,15 +2625,17 @@ function api_is_course_admin()
 
 /**
  * Checks whether the current user is a course coach
- * @return bool     True if current user is a course coach
+ * Based on the presence of user in session.id_coach (session general coach)
+ * @return bool True if current user is a course coach
  */
-function api_is_course_coach()
+function api_is_session_general_coach()
 {
-    return Session::read('is_courseCoach');
+    return Session::read('is_session_general_coach');
 }
 
 /**
  * Checks whether the current user is a course tutor
+ * Based on the presence of user in session_rel_course_rel_user.user_id with status = 2
  * @return bool     True if current user is a course tutor
  */
 function api_is_course_tutor()
@@ -3443,6 +3445,9 @@ function api_not_allowed($print_headers = false, $message = null)
             'error',
             false
         );
+        if (!empty($message)) {
+            $msg = $message;
+        }
     }
 
     $tpl->assign('content', $msg);
@@ -5492,7 +5497,6 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
         // This user has got a recorded state for this course.
         $cuData = Database::fetch_array($result);
         $is_courseMember = true;
-        $is_courseTutor = ($cuData['is_tutor'] == 1);
         $is_courseAdmin = ($cuData['status'] == 1);
     }
 
@@ -5517,17 +5521,11 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
 
         if ($row[0]['id_coach'] == $userid) {
             $is_courseMember = true;
-            $is_courseTutor = true;
             $is_courseAdmin = false;
-            $is_courseCoach = true;
-            $is_sessionAdmin = false;
         }
         elseif ($row[0]['session_admin_id'] == $userid) {
             $is_courseMember = false;
-            $is_courseTutor = false;
             $is_courseAdmin = false;
-            $is_courseCoach = false;
-            $is_sessionAdmin = true;
         } else {
             // Check if the current user is the course coach.
             $sql = "SELECT 1
@@ -5541,9 +5539,6 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
             //if ($row = Database::fetch_array($result)) {
             if (Database::num_rows($result) > 0) {
                 $is_courseMember = true;
-                $is_courseTutor = true;
-                $is_courseCoach = true;
-                $is_sessionAdmin = false;
 
                 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
@@ -5571,9 +5566,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
                     // This user haa got a recorded state for this course.
                     while ($row = Database::fetch_array($result)) {
                         $is_courseMember = true;
-                        $is_courseTutor = false;
                         $is_courseAdmin = false;
-                        $is_sessionAdmin = false;
                     }
                 }
             }

@@ -361,7 +361,7 @@ class Login
      * @global type $_courseUser
      * @global type $is_courseAdmin
      * @global type $is_courseTutor
-     * @global type $is_courseCoach
+     * @global type $is_session_general_coach
      * @global type $is_courseMember
      * @global type $is_sessionAdmin
      * @global type $is_allowed_in_course
@@ -380,7 +380,7 @@ class Login
 
         global $is_courseAdmin; //course teacher
         global $is_courseTutor; //course teacher - some rights
-        global $is_courseCoach; //course coach
+        global $is_session_general_coach; //course coach
         global $is_courseMember; //course student
         global $is_sessionAdmin;
         global $is_allowed_in_course;
@@ -635,7 +635,7 @@ class Login
                             $is_courseMember = false;
                             $is_courseTutor = false;
                             $is_courseAdmin = false;
-                            $is_courseCoach = false;
+                            $is_session_general_coach = false;
                             $is_sessionAdmin = true;
                         } else {
                             //Im a coach or a student?
@@ -656,7 +656,7 @@ class Login
                                     case '2': // coach - teacher
                                         $is_courseMember = true;
                                         $is_courseTutor = true;
-                                        $is_courseCoach = true;
+                                        $is_session_general_coach = true;
                                         $is_sessionAdmin = false;
 
                                         if (api_get_setting('extend_rights_for_coach') == 'true') {
@@ -699,7 +699,7 @@ class Login
                 $is_courseMember = false;
                 $is_courseAdmin = false;
                 $is_courseTutor = false;
-                $is_courseCoach = false;
+                $is_session_general_coach = false;
                 $is_sessionAdmin = false;
             }
 
@@ -758,14 +758,14 @@ class Login
             Session::write('is_courseAdmin', $is_courseAdmin);
             Session::write('is_courseMember', $is_courseMember);
             Session::write('is_courseTutor', $is_courseTutor);
-            Session::write('is_courseCoach', $is_courseCoach);
+            Session::write('is_session_general_coach', $is_session_general_coach);
             Session::write('is_allowed_in_course', $is_allowed_in_course);
             Session::write('is_sessionAdmin', $is_sessionAdmin);
         } else {
             // continue with the previous values
             $is_courseAdmin = Session::read('is_courseAdmin');
             $is_courseTutor = Session::read('is_courseTutor');
-            $is_courseCoach = Session::read('is_courseCoach');
+            $is_session_general_coach = Session::read('is_session_general_coach');
             $is_courseMember = Session::read('is_courseMember');
             $is_allowed_in_course = Session::read('is_allowed_in_course');
         }

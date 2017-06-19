@@ -3442,6 +3442,9 @@ function api_not_allowed($print_headers = false, $message = null)
             'error',
             false
         );
+        if (!empty($message)) {
+            $msg = $message;
+        }
     }
 
     $tpl->assign('content', $msg);

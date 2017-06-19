@@ -1,0 +1,230 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$cidReset = true;
+
+require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_admin_script();
+
+$sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
+$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+$action = isset($_GET['action']) ? $_GET['action'] : '';
+
+$sessionInfo = api_get_session_info($sessionId);
+if (!$sessionInfo) {
+    api_not_allowed(true);
+}
+
+$object = new ProgrammedAnnouncement();
+
+if (!$object->allowed()) {
+    api_not_allowed(true);
+}
+
+$htmlHeadXtra[] = api_get_jqgrid_js();
+$interbreadcrumb[] = array('url' => "session_list.php", "name" => get_lang('SessionList'));
+$interbreadcrumb[] = array(
+    'url' => "resume_session.php?id_session=".$sessionId,
+    "name" => get_lang('SessionOverview')
+);
+
+$interbreadcrumb[] = array(
+    'url' => api_get_self()."?session_id=".$sessionId,
+    "name" => get_lang('ProgrammedAnnouncements')
+);
+
+if ($action == 'add') {
+    $tool_name = get_lang('Add');
+} elseif ($action == 'edit') {
+    $tool_name = get_lang('Edit');
+} else {
+    $tool_name = get_lang('ProgrammedAnnouncements');
+}
+
+
+
+switch ($action) {
+    case 'run':
+        $messagesSent = $object->sendPendingMessages();
+
+        Display::addFlash(
+            Display::return_message(
+                get_lang('MessageSent').': '.$messagesSent,
+                'confirmation'
+            )
+        );
+        $content = $object->getGrid($sessionId);
+
+        break;
+    case 'add':
+        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&session_id='.$sessionId;
+        $form = $object->returnForm($url, 'add', $sessionInfo);
+
+        // The validation or display
+        if ($form->validate()) {
+            $values = $form->getSubmitValues();
+            switch ($values['type']) {
+                case 'base_date':
+                    $numberDays = (int) $values['days'];
+                    switch ($values['base_date']) {
+                        case 'start_date':
+                            $baseDate = new DateTime($sessionInfo['access_start_date']);
+                            break;
+                        case 'end_date':
+                            $baseDate = new DateTime($sessionInfo['access_end_date']);
+                            break;
+                    }
+                    $interval = new DateInterval('P'.$numberDays.'D');
+
+                    switch ($values['moment_type']) {
+                        case 'after':
+                            $newDate = $baseDate->add($interval);
+                            break;
+                        case 'before':
+                            $newDate = $baseDate->sub($interval);
+                            break;
+                    }
+                    $values['date'] = $newDate->format('Y-m-d h:i:s');
+                    break;
+                case 'specific_date':
+                    $values['date'] = api_get_utc_datetime($values['date']);
+                    break;
+            }
+            $res = $object->save($values);
+            $values['date'] = api_get_utc_datetime($values['date']);
+
+            if ($res) {
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('ItemAdded'),
+                        'confirmation'
+                    )
+                );
+            }
+            $content = $object->getGrid($sessionId);
+        } else {
+            $content = '<div class="actions">';
+            $content .= '<a href="'.api_get_self().'?session_id='.$sessionId.'">'.
+                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+            $content .= '</div>';
+            $form->addElement('hidden', 'sec_token');
+
+            $content .= $form->returnForm();
+        }
+
+        /*if ($form->validate()) {
+            $values = $form->getSubmitValues();
+            $values['subject'];
+            $values['message'];
+
+            switch ($values['type']) {
+                case 'base_date':
+
+                    $values['date_time'];
+                    break;
+                case 'specific_date':
+
+                    break;
+            }
+        }*/
+        break;
+    case 'edit':
+        // Action handling: Editing
+        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']).'&session_id='.$sessionId;
+        $form = $object->returnSimpleForm($url, 'edit', $sessionInfo);
+        if ($form->validate()) {
+            $values = $form->getSubmitValues();
+            $values['id'] = $id;
+            $values['sent'] = isset($values['sent']) ? 1 : '';
+            $values['date'] = api_get_utc_datetime($values['date']);
+            $res = $object->update($values);
+
+            Display::addFlash(Display::return_message(
+                get_lang('Updated'),
+                'confirmation'
+            ));
+        }
+        $item = $object->get($id);
+        $item['date'] = api_get_local_time($item['date']);
+        $form->setDefaults($item);
+        $content = $form->returnForm();
+        break;
+    case 'delete':
+        $res = $object->delete($_GET['id']);
+        $content = $object->getGrid($sessionId);
+        break;
+    default:
+        $content = $object->getGrid($sessionId);
+        break;
+}
+
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_programmed_announcements&session_id='.$sessionId;
+
+$columns = [
+    get_lang('Subject'),
+    get_lang('Date'),
+    get_lang('Sent'),
+    get_lang('Actions')
+];
+
+$columnModel = [
+    array(
+        'name' => 'subject',
+        'index' => 'subject',
+        'width' => '250',
+        'align' => 'left',
+    ),
+    array(
+        'name' => 'date',
+        'index' => 'date',
+        //'width' => '90',
+        //'align' => 'left',
+        'sortable' => 'true',
+    ),
+    array(
+        'name' => 'sent',
+        'index' => 'sent',
+        //'width' => '90',
+        //'align' => 'left',
+        'sortable' => 'true',
+    ),
+     array(
+        'name' => 'actions',
+        'index' => 'actions',
+        'width' => '100',
+        'align' => 'left',
+        'formatter' => 'action_formatter',
+        'sortable' => 'false',
+    )
+];
+
+$actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
+    return \'<a href="?action=edit&session_id='.$sessionId.'&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?action=delete&session_id='.$sessionId.'&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
+    '\';
+}';
+
+$extraParams = [];
+$extraParams['autowidth'] = 'true';
+
+$htmlHeadXtra[] = '<script>
+$(function() {
+    // grid definition see the $obj->display() function
+    '.Display::grid_js(
+        'programmed',
+        $url,
+        $columns,
+        $columnModel,
+        $extraParams,
+        array(),
+        $actionLinks,
+        true
+    ).'
+});
+</script>';
+
+
+$tpl = new Template($tool_name);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

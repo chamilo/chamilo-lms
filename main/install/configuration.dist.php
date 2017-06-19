@@ -458,4 +458,6 @@ $_configuration['agenda_legend'] = [
 //UPDATE extra_field_values SET updated_at = NULL WHERE CAST(updated_at AS CHAR(20)) = '0000-00-00 00:00:00';
 //ALTER TABLE extra_field_values modify column value longtext null;
 //$_configuration['allow_career_diagram'] = false;
+// Allow scheduled emails to session users. See class ProgrammedAnnouncement
+//$_configuration['allow_scheduled_announcements'] = false;
 

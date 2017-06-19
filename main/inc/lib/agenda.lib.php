@@ -103,14 +103,22 @@ class Agenda
         $this->setIsAllowedToEdit($isAllowToEdit);
         $this->events = [];
 
+        $platformColor = api_get_configuration_value('agenda_platform_color') ?: 'red';
+        $courseColor = api_get_configuration_value('agenda_course_color') ?: '#458B00';
+        $groupColor = api_get_configuration_value('agenda_group_color') ?: '#A0522D';
+        $sessionColor = api_get_configuration_value('agenda_session_color') ?: '#00496D';
+        $otherSessionColor = api_get_configuration_value('agenda_other_session_color') ?: '#999';
+        $personalColor = api_get_configuration_value('agenda_personal_color') ?: 'steel blue';
+        $studentPublicationColor = api_get_configuration_value('agenda_student_publication_color') ?: '#FF8C00';
+
         // Event colors
-        $this->event_platform_color = 'red'; //red
-        $this->event_course_color = '#458B00'; //green
-        $this->event_group_color = '#A0522D'; //siena
-        $this->event_session_color = '#00496D'; // kind of green
-        $this->eventOtherSessionColor = '#999';
-        $this->event_personal_color = 'steel blue'; //steel blue
-        $this->eventStudentPublicationColor = '#FF8C00'; //DarkOrange
+        $this->event_platform_color = $platformColor; //red
+        $this->event_course_color = $courseColor; //green
+        $this->event_group_color = $groupColor; //siena
+        $this->event_session_color = $sessionColor; // kind of green
+        $this->eventOtherSessionColor = $otherSessionColor;
+        $this->event_personal_color = $personalColor; //steel blue
+        $this->eventStudentPublicationColor = $studentPublicationColor; //DarkOrange
     }
 
     /**

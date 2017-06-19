@@ -504,6 +504,8 @@ window.HotspotQuestion = (function () {
         AdminHotspotsSVG.prototype.render = function () {
             this.el.setAttribute('version', '1.1');
             this.el.setAttribute('viewBox', '0 0 ' + this.image.width + ' ' + this.image.height);
+            this.el.setAttribute('width', this.image.width);
+            this.el.setAttribute('height', this.image.height);
 
             var imageSvg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
             imageSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'href', this.image.src);
@@ -802,6 +804,8 @@ window.HotspotQuestion = (function () {
         UserHotspotsSVG.prototype.render = function () {
             this.el.setAttribute('version', '1.1');
             this.el.setAttribute('viewBox', '0 0 ' + this.image.width + ' ' + this.image.height);
+            this.el.setAttribute('width', this.image.width);
+            this.el.setAttribute('height', this.image.height);
 
             var imageSvg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
             imageSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'href', this.image.src);
@@ -1018,6 +1022,8 @@ window.HotspotQuestion = (function () {
         SolutionHotspotsSVG.prototype.render = function () {
             this.el.setAttribute('version', '1.1');
             this.el.setAttribute('viewBox', '0 0 ' + this.image.width + ' ' + this.image.height);
+            this.el.setAttribute('width', this.image.width);
+            this.el.setAttribute('height', this.image.height);
 
             var imageSvg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
             imageSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'href', this.image.src);
@@ -1430,11 +1436,13 @@ window.DelineationQuestion = (function () {
         this.render = function () {
             var imageSvg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
             imageSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', image.src);
-            imageSvg.setAttributeNS(null, 'width', image.width);
-            imageSvg.setAttributeNS(null, 'height', image.height);
+            imageSvg.setAttribute('width', image.width);
+            imageSvg.setAttribute('height', image.height);
 
-            this.el.setAttributeNS(null, 'version', '1.1');
-            this.el.setAttributeNS(null, 'viewBox', '0 0 ' + image.width + ' ' + image.height);
+            this.el.setAttribute('version', '1.1');
+            this.el.setAttribute('viewBox', '0 0 ' + image.width + ' ' + image.height);
+            this.el.setAttribute('width', image.width);
+            this.el.setAttribute('height', image.height);
             this.el.appendChild(imageSvg);
 
             var isDrawing = false;
@@ -1550,11 +1558,13 @@ window.DelineationQuestion = (function () {
         this.render = function () {
             var imageSvg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
             imageSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', image.src);
-            imageSvg.setAttributeNS(null, 'width', image.width);
-            imageSvg.setAttributeNS(null, 'height', image.height);
+            imageSvg.setAttribute('width', image.width);
+            imageSvg.setAttribute('height', image.height);
 
-            this.el.setAttributeNS(null, 'version', '1.1');
-            this.el.setAttributeNS(null, 'viewBox', '0 0 ' + image.width + ' ' + image.height);
+            this.el.setAttribute('version', '1.1');
+            this.el.setAttribute('viewBox', '0 0 ' + image.width + ' ' + image.height);
+            this.el.setAttribute('width', image.width);
+            this.el.setAttribute('height', image.height);
             this.el.appendChild(imageSvg);
 
             this.renderDelineation();
@@ -1675,11 +1685,13 @@ window.DelineationQuestion = (function () {
         this.render = function () {
             var imageSvg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
             imageSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', image.src);
-            imageSvg.setAttributeNS(null, 'width', image.width);
-            imageSvg.setAttributeNS(null, 'height', image.height);
+            imageSvg.setAttribute('width', image.width);
+            imageSvg.setAttribute('height', image.height);
 
-            this.el.setAttributeNS(null, 'version', '1.1');
-            this.el.setAttributeNS(null, 'viewBox', '0 0 ' + image.width + ' ' + image.height);
+            this.el.setAttribute('version', '1.1');
+            this.el.setAttribute('viewBox', '0 0 ' + image.width + ' ' + image.height);
+            this.el.setAttribute('width', image.width);
+            this.el.setAttribute('height', image.height);
             this.el.appendChild(imageSvg);
         };
 

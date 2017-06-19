@@ -2898,20 +2898,21 @@ tr.forum_category_header a {
     border-bottom: 1px solid #aaa;
     border-top: 1px solid #aaa;
 }
+.forum-date{
+    font-size: 12px;
+}
 /* **** POST **** */
 .quote {
     background-color: #a0e5fc;
 }
-
+a.forum-goto{
+    font-size: 12px;
+}
 .structure {
     /*border-bottom: 1px solid #666666;*/
     font-weight: bold;
     background-color: #F7F7F7;
     height: 20px;
-}
-a.forum_group_link {
-    font-weight: lighter;
-    display:inline;
 }
 .forum_description {
     color: #000;

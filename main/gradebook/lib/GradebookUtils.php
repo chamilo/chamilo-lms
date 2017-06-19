@@ -1467,7 +1467,6 @@ class GradebookUtils
         }
 
         $pdf->params['student_info'] = $userInfo;
-
         $file = api_get_path(SYS_ARCHIVE_PATH).uniqid().'.html';
 
         $content =
@@ -1476,12 +1475,11 @@ class GradebookUtils
             '<br />'.get_lang('Feedback').'<br />
             <textarea rows="5" cols="100" ></textarea>';
 
-        $address = api_get_setting('institution_address');
+        /*$address = api_get_setting('institution_address');
         $phone = api_get_setting('administratorTelephone');
         $address = str_replace('\n', '<br />', $address);
 
-        $pdf->custom_header = array('html' => "<h5 align='right'>$address <br />$phone</h5>");
-
+        $pdf->custom_header = array('html' => "<h5 align='right'>$address <br />$phone</h5>");*/
         $result = $pdf->html_to_pdf_with_template(
             $content,
             $saveToFile,

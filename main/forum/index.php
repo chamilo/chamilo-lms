@@ -189,18 +189,26 @@ if (!empty($allCourseForums)) {
 if (api_is_allowed_to_edit(false, true)) {
     $actionLeft .= Display::url(
             Display::return_icon(
-                'new_folder.png', get_lang('AddForumCategory'), null, ICON_SIZE_MEDIUM
-            ), api_get_self().'?'.api_get_cidreq().'&action=add&content=forumcategory&lp_id='.$lp_id);
+                'new_folder.png',
+                get_lang('AddForumCategory'),
+                null,
+                ICON_SIZE_MEDIUM
+            ),
+        api_get_self().'?'.api_get_cidreq().'&action=add&content=forumcategory&lp_id='.$lp_id);
 
     if (is_array($forumCategories) && !empty($forumCategories)) {
         $actionLeft .= Display::url(
                 Display::return_icon(
-                    'new_forum.png', get_lang('AddForum'), '', ICON_SIZE_MEDIUM
-                ), api_get_self().'?'.api_get_cidreq().'&action=add&content=forum&lp_id='.$lp_id);
+                    'new_forum.png',
+                    get_lang('AddForum'),
+                    null,
+                    ICON_SIZE_MEDIUM
+                ),
+            api_get_self().'?'.api_get_cidreq().'&action=add&content=forum&lp_id='.$lp_id);
     }
 }
 
-$actions = Display::toolbarAction('toolbar-forum', array(0 => $actionLeft));
+$actions = Display::toolbarAction('toolbar-forum', array($actionLeft));
 
 // Fixes error if there forums with no category.
 $forumsInNoCategory = get_forums_in_category(0);
@@ -231,15 +239,11 @@ if (is_array($forumCategories)) {
         } else {
             $dataForum['title'] = $forumCategory['cat_title'];
         }
-        $dataForum['session_start'] = api_get_session_image(
+        $dataForum['icon_session'] = api_get_session_image(
             $forumCategory['session_id'], $_user['status']
         );
 
-        // Validation when belongs to a session.
-        $sessionImg = api_get_session_image(
-            $forumCategory['session_id'], $_user['status']
-        );
-        $dataForum['icon_session'] = $sessionImg;
+        // Validation when belongs to a session
         $dataForum['description'] = $forumCategory['cat_comment'];
 
         if (empty($sessionId) && !empty($forumCategory['session_name'])) {
@@ -355,12 +359,9 @@ if (is_array($forumCategories)) {
                             }
                         }
                         // Validation when belongs to a session
-                        $sessionImg = api_get_session_image(
+                        $forumInfo['icon_session'] = api_get_session_image(
                             $forum['session_id'], $_user['status']
                         );
-
-                        $forumInfo['icon_session'] = $sessionImg;
-
                         if ($forum['forum_of_group'] != '0') {
                             $my_all_groups_forum_name = isset($all_groups[$forum['forum_of_group']]['name']) ?
                                 $all_groups[$forum['forum_of_group']]['name'] : null;
@@ -432,11 +433,11 @@ if (is_array($forumCategories)) {
                                 );
                             }
                         }
-                        $forumInfo['last_post_id'] = $poster_id;
+                        $forumInfo['last_poster_id'] = $poster_id;
                         
-                        if (!empty($forum['last_post_id'])) {
-                            $forumInfo['last_post_date'] = api_convert_and_format_date($forum['last_post_date']);
-                            $forumInfo['last_post_user'] = display_user_link($poster_id, $name, null, $username);
+                        if (!empty($forum['last_poster_id'])) {
+                            $forumInfo['last_poster_date'] = api_convert_and_format_date($forum['last_post_date']);
+                            $forumInfo['last_poster_user'] = display_user_link($poster_id, $name, null, $username);
                         }
 
                         if (api_is_allowed_to_edit(false, true) &&

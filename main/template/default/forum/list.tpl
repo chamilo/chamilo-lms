@@ -50,12 +50,12 @@
                                 {% endif %}
                                 {{ subitem.icon_session }}
                                 </h3>
-                                {% if subitem.last_post_id is not empty %}
+                                {% if subitem.last_poster_id is not empty %}
                                     <div class="forum-date">
                                         <i class="fa fa-comments" aria-hidden="true"></i> 
-                                        {{ subitem.last_post_date }} 
+                                        {{ subitem.last_poster_date }} 
                                         {{ "By"|get_lang }} 
-                                        {{ subitem.last_post_user }}
+                                        {{ subitem.last_poster_user }}
                                     </div>
                                 {% endif %}
                                 <div class="description">

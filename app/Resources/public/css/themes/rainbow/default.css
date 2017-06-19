@@ -494,9 +494,20 @@ footer #footer_right{
   background: transparent;
   font-size: 12px;
   color: #6B1D82;
+  border-radius: 0;
+  border-bottom: 1px solid #96bd0d;
+}
+.view-options {
+    padding-top: 0;
+    padding-right: 0;
 }
 .breadcrumb a{
     color: #6B1D82;
+}
+#scorm-panel .panel.panel-default{
+    margin-top:0 ;
+    border-bottom: 1px solid #84bd00;
+    border-radius: 0;
 }
 .panel-default{
   border-color: #ddd;
@@ -607,7 +618,7 @@ footer #footer_right{
     color: #162a83;
 }
 .table-ofaj .table-header th{
-    border-bottom: 2px solid #96bd0d;
+    border-bottom: 1px solid #96bd0d;
     padding-top: 20px;
 }
 .table-ofaj tbody tr td{
@@ -962,7 +973,8 @@ ul.exercise-draggable-answer .touch-items:hover{
     margin: 0;
 }
 .drag_question .window.window_right_question{
-    border-color: #96BD0D; 
+    border-color: #96BD0D;
+    font-weight: bold;
 }
 .drag_question .window.window_right_question,
 .drag_question .window.window_left_question
@@ -985,6 +997,14 @@ svg path{
 svg circle{
     fill:rgb(255,255,255);
     stroke:rgb(132,189,0);
+    stroke-width: 2;
+    r: 10;
+    cy:15;
+    cx:15;
+}
+.point_end ._jsPlumb_endpoint svg circle{
+    fill:rgb(255,255,255);
+    stroke:rgb(22,42,131);
     stroke-width: 2;
     r: 10;
     cy:15;

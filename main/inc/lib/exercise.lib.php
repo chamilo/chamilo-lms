@@ -1043,7 +1043,7 @@ HTML;
 
                             $s .= <<<HTML
                             </td>
-                            <td width="45%">
+                            <td width="45%" class="point_end">
 HTML;
 
                             if (isset($select_items[$lines_count])) {

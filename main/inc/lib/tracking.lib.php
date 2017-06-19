@@ -249,15 +249,17 @@ class Tracking
         $h = get_lang('h');
 
         if (!empty($export_csv)) {
-            $csv_content[] = array(
+            $csvHeaders = array(
                 get_lang('ScormLessonTitle'),
                 get_lang('ScormStatus'),
                 get_lang('ScormScore')
             );
 
             if ($hideTime === false) {
-                $csv_content[] = get_lang('ScormTime');
+                $csvHeaders[] = get_lang('ScormTime');
             }
+
+            $csv_content[] = $csvHeaders;
         }
 
         $result_disabled_ext_all = true;

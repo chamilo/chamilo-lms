@@ -41,7 +41,7 @@
             <div class="session panel-body {{ collapsable }}" id="collapse_{{ row.id }}">
                 <div class="row">
                     <div class="col-md-12">
-                        {% if row.description != '' %}
+                        {% if row.show_description %}
                             {{ row.description }}
                         {% endif %}
                         <ul class="info-session list-inline">
@@ -132,7 +132,7 @@
                     <div class="col-md-10">
                         <div class="info-session">
                             <p>{{ row.subtitle }}</p>
-                            {% if row.description != '' %}
+                            {% if row.show_description %}
                                 <div class="description">
                                     {{ row.description }}
                                 </div>

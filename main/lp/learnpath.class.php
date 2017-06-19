@@ -11,6 +11,8 @@ use Symfony\Component\Finder\Finder;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\UserBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CLpItem,
+    Chamilo\CourseBundle\Entity\CLpItemView;
 
 /**
  * Class learnpath
@@ -4282,7 +4284,7 @@ class learnpath
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
         $sessionCondition = api_get_session_condition($sessionId, true, false, 't.sessionId');
-        
+
         $em = Database::getManager();
 
         /** @var CLpCategory $category */
@@ -11735,105 +11737,103 @@ EOD;
         $lpViewId,
         $origin = 'learnpath'
     ) {
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $course_info = api_get_course_info_by_id($course_id);
-        $course_id = $course_info['real_id'];
         $course_code = $course_info['code'];
         $session_id = api_get_session_id();
         $learningPathId = intval($learningPathId);
         $id_in_path = intval($id_in_path);
         $lpViewId = intval($lpViewId);
         $em = Database::getManager();
-        $sql = "SELECT * FROM $tbl_lp_item
-                 WHERE
-                    c_id = $course_id AND
-                    lp_id = $learningPathId AND
-                    id = $id_in_path
-                ";
-        $res_item = Database::query($sql);
-        if (Database::num_rows($res_item) < 1) {
+        $lpItemRepo = $em->getRepository('ChamiloCourseBundle:CLpItem');
+        /** @var CLpItem $rowItem */
+        $rowItem = $lpItemRepo->findOneBy([
+            'cId' => $course_id,
+            'lpId' => $learningPathId,
+            'id' => $id_in_path
+        ]);
+
+        if (!$rowItem) {
             return -1;
         }
-        $row_item = Database::fetch_array($res_item, 'ASSOC');
 
-        $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        // Get the lp_item_view with the highest view_count.
-        $sql = "SELECT * FROM $item_view_table
-                WHERE
-                    c_id = $course_id AND
-                    lp_item_id = ".$row_item['id']." AND
-                    lp_view_id = $lpViewId
-                ORDER BY view_count DESC";
-        $learnpathItemViewResult = Database::query($sql);
-        $learnpathItemViewData = Database::fetch_array($learnpathItemViewResult, 'ASSOC');
-        $learnpathItemViewId = 0;
-        if (isset($learnpathItemViewData)) {
-            $learnpathItemViewId = $learnpathItemViewData['id'];
-        }
-
-        $type = strtolower($row_item['item_type']);
-        $id = (strcmp($row_item['path'], '') == 0) ? '0' : $row_item['path'];
+        $type = $rowItem->getItemType();
+        $id = empty($rowItem->getPath()) ? '0' : $rowItem->getPath();
         $main_dir_path = api_get_path(WEB_CODE_PATH);
         $main_course_path = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
         $link = '';
-        $extraParams = "origin=$origin&cidReq=$course_code&session_id=$session_id&id_session=$session_id";
+        $extraParams = api_get_cidreq().'&session_id='.$session_id;
         switch ($type) {
             case 'dir':
-                $link .= $main_dir_path.'lp/blank.php';
-                break;
+                return $main_dir_path.'lp/blank.php';
             case TOOL_CALENDAR_EVENT:
-                $link .= $main_dir_path.'calendar/agenda.php?agenda_id='.$id.'&'.$extraParams;
-                break;
+                return $main_dir_path.'calendar/agenda.php?agenda_id='.$id.'&'.$extraParams;
             case TOOL_ANNOUNCEMENT:
-                $link .= $main_dir_path.'announcements/announcements.php?ann_id='.$id.'&'.$extraParams;
-                break;
+                return $main_dir_path.'announcements/announcements.php?ann_id='.$id.'&'.$extraParams;
             case TOOL_LINK:
-                $link .= $main_dir_path.'link/link_goto.php?link_id='.$id.'&'.$extraParams;
-                break;
+                $linkInfo = Link::get_link_info($id);
+
+                return $linkInfo['url'];
             case TOOL_QUIZ:
-                if (!empty($id)) {
-                    $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-                    $sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id";
-                    $result = Database::query($sql);
-                    $myrow = Database::fetch_array($result);
-                    if ($row_item['title'] != '') {
-                        $myrow['title'] = $row_item['title'];
-                    }
-                    $link .= $main_dir_path.'exercise/overview.php?lp_init=1&learnpath_item_view_id='.$learnpathItemViewId.'&learnpath_id='.$learningPathId.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id.'&'.$extraParams;
+                if (empty($id)) {
+                    return '';
                 }
-                break;
+
+                // Get the lp_item_view with the highest view_count.
+                $learnpathItemViewResult = $em
+                    ->getRepository('ChamiloCourseBundle:CLpItemView')
+                    ->findBy(
+                        ['cId' => $course_id, 'lpItemId' => $rowItem->getId(), 'lpViewId' => $lpViewId],
+                        ['viewCount' => 'DESC'],
+                        1
+                    );
+                /** @var CLpItemView $learnpathItemViewData */
+                $learnpathItemViewData = current($learnpathItemViewResult);
+                $learnpathItemViewId = $learnpathItemViewData ? $learnpathItemViewData->getId() : 0;
+
+                return $main_dir_path.'exercise/overview.php?'.$extraParams.'&'
+                    .http_build_query([
+                        'lp_init' => 1,
+                        'learnpath_item_view_id' => $learnpathItemViewId,
+                        'learnpath_id' => $learningPathId,
+                        'learnpath_item_id' => $id_in_path,
+                        'exerciseId' => $id
+                    ]);
             case TOOL_HOTPOTATOES: //lowercase because of strtolower above
                 $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
                 $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND id=$id");
                 $myrow = Database::fetch_array($result);
                 $path = $myrow['path'];
-                $link .= $main_dir_path.'exercise/showinframes.php?file='.$path.'&cid='.$course_code.'&uid='.api_get_user_id().'&learnpath_id='.$learningPathId.'&learnpath_item_id='.$id_in_path.'&lp_view_id='.$lpViewId.'&'.$extraParams;
-                break;
+
+                return $main_dir_path.'exercise/showinframes.php?file='.$path.'&cid='.$course_code.'&uid='
+                    .api_get_user_id().'&learnpath_id='.$learningPathId.'&learnpath_item_id='.$id_in_path
+                    .'&lp_view_id='.$lpViewId.'&'.$extraParams;
             case TOOL_FORUM:
-                $link .= $main_dir_path.'forum/viewforum.php?forum='.$id.'&lp=true&'.$extraParams;
-                break;
+                return $main_dir_path.'forum/viewforum.php?forum='.$id.'&lp=true&'.$extraParams;
             case TOOL_THREAD:  //forum post
                 $tbl_topics = Database::get_course_table(TABLE_FORUM_THREAD);
-                if (!empty($id)) {
-                    $sql = "SELECT * FROM $tbl_topics WHERE c_id = $course_id AND thread_id=$id";
-                    $result = Database::query($sql);
-                    $myrow = Database::fetch_array($result);
-                    $link .= $main_dir_path.'forum/viewthread.php?thread='.$id.'&forum='.$myrow['forum_id'].'&lp=true&'.$extraParams;
+                if (empty($id)) {
+                    return '';
                 }
-                break;
+                $sql = "SELECT * FROM $tbl_topics WHERE c_id = $course_id AND thread_id=$id";
+                $result = Database::query($sql);
+                $myrow = Database::fetch_array($result);
+
+                return $main_dir_path.'forum/viewthread.php?thread='.$id.'&forum='.$myrow['forum_id'].'&lp=true&'
+                    .$extraParams;
             case TOOL_POST:
                 $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
                 $result = Database::query("SELECT * FROM $tbl_post WHERE c_id = $course_id AND post_id=$id");
                 $myrow = Database::fetch_array($result);
-                $link .= $main_dir_path.'forum/viewthread.php?post='.$id.'&thread='.$myrow['thread_id'].'&forum='.$myrow['forum_id'].'&lp=true&'.$extraParams;
-                break;
+
+                return $main_dir_path.'forum/viewthread.php?post='.$id.'&thread='.$myrow['thread_id'].'&forum='
+                    .$myrow['forum_id'].'&lp=true&'.$extraParams;
             case TOOL_DOCUMENT:
                 $document = $em
                     ->getRepository('ChamiloCourseBundle:CDocument')
                     ->findOneBy(['cId' => $course_id, 'id' => $id]);
 
                 if (!$document) {
-                    break;
+                    return '';
                 }
 
                 $documentPathInfo = pathinfo($document->getPath());
@@ -11841,45 +11841,37 @@ EOD;
                 $extension = isset($documentPathInfo['extension']) ? $documentPathInfo['extension'] : '';
                 $showDirectUrl = !in_array($extension, $jplayer_supported_files);
 
-                if ($showDirectUrl) {
-                    $link = $main_course_path.'document'.$document->getPath().'?'.$extraParams;
-                } else {
-                    $link = api_get_path(WEB_CODE_PATH).'document/showinframes.php?id='.$id.'&'.$extraParams;
-                }
-
                 $openmethod = 2;
                 $officedoc = false;
                 Session::write('openmethod', $openmethod);
                 Session::write('officedoc', $officedoc);
-                break;
-            case TOOL_LP_FINAL_ITEM:
-                $link .= api_get_path(WEB_CODE_PATH).'lp/lp_final_item.php?&id='.$id.'&lp_id='.$learningPathId.'&'.$extraParams;
-                break;
-            case 'assignments':
-                $link .= $main_dir_path.'work/work.php?'.$extraParams;
-                break;
-            case TOOL_DROPBOX:
-                $link .= $main_dir_path.'dropbox/index.php?'.$extraParams;
-                break;
-            case 'introduction_text': //DEPRECATED
-                $link .= '';
-                break;
-            case TOOL_COURSE_DESCRIPTION:
-                $link .= $main_dir_path.'course_description?'.$extraParams;
-                break;
-            case TOOL_GROUP:
-                $link .= $main_dir_path.'group/group.php?'.$extraParams;
-                break;
-            case TOOL_USER:
-                $link .= $main_dir_path.'user/user.php?'.$extraParams;
-                break;
-            case TOOL_STUDENTPUBLICATION:
-                if (!empty($row_item['path'])) {
-                    $link .= $main_dir_path.'work/work_list.php?id='.$row_item['path'].'&'.$extraParams;
-                    break;
+
+                if ($showDirectUrl) {
+                    return $main_course_path.'document'.$document->getPath().'?'.$extraParams;
                 }
-                $link .= $main_dir_path.'work/work.php?'.api_get_cidreq().'&id='.$row_item['path'].'&'.$extraParams;
-                break;
+
+                return api_get_path(WEB_CODE_PATH).'document/showinframes.php?id='.$id.'&'.$extraParams;
+            case TOOL_LP_FINAL_ITEM:
+                return api_get_path(WEB_CODE_PATH).'lp/lp_final_item.php?&id='.$id.'&lp_id='.$learningPathId.'&'
+                    .$extraParams;
+            case 'assignments':
+                return $main_dir_path.'work/work.php?'.$extraParams;
+            case TOOL_DROPBOX:
+                return $main_dir_path.'dropbox/index.php?'.$extraParams;
+            case 'introduction_text': //DEPRECATED
+                return '';
+            case TOOL_COURSE_DESCRIPTION:
+                return $main_dir_path.'course_description?'.$extraParams;
+            case TOOL_GROUP:
+                return $main_dir_path.'group/group.php?'.$extraParams;
+            case TOOL_USER:
+                return $main_dir_path.'user/user.php?'.$extraParams;
+            case TOOL_STUDENTPUBLICATION:
+                if (!empty($rowItem->getPath())) {
+                    return $main_dir_path.'work/work_list.php?id='.$rowItem->getPath().'&'.$extraParams;
+                }
+
+                return $main_dir_path.'work/work.php?'.api_get_cidreq().'&id='.$rowItem->getPath().'&'.$extraParams;
         } //end switch
 
         return $link;

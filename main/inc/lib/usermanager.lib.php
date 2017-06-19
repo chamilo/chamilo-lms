@@ -2653,6 +2653,9 @@ class UserManager
         // Get the list of sessions per user
         $now = new DateTime('now', new DateTimeZone('UTC'));
 
+        // LEFT JOIN is used for session_rel_course_rel_user because an inner
+        // join would not catch session-courses where the user is general
+        // session coach but which do not have students nor coaches registered
         $dql = "SELECT DISTINCT
                     s.id,
                     s.name,
@@ -2665,7 +2668,7 @@ class UserManager
                     s.coachAccessStartDate AS coach_access_start_date,
                     s.coachAccessEndDate AS coach_access_end_date
                 FROM ChamiloCoreBundle:Session AS s
-                INNER JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
+                LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
                 INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.sessionId = s.id
                 LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
                 WHERE (scu.user = :user OR s.generalCoach = :user) AND url.accessUrlId = :url

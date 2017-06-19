@@ -3971,7 +3971,6 @@ $ApprovalForNewAccount = "Aprovação para um novo registro";
 $ManageUser = "Administrar usuário";
 $SubscribeUserToCourseAsTeacher = "Registra usuários neste curso como professor";
 $PasswordEncryptedForSecurity = "A sua senha está encriptada por razões de segurança. Assim, depois de clicar no link será enviado um e-mail para você com sua senha.";
-$SystemUnableToSendEmailContact = "Não foi possível enviar a senha perdida/esquecida. Entre em contato com o administrador da plataforma clicando no seguinte link:";
 $OpenIDCouldNotBeFoundPleaseRegister = "Este OpenID não foi encontrado na nossa base de dados. Por favor, registe-se novamente. Se já está registado, conecte-se, edite o seu perfil no interior da sua conta e acrescente este OpenID.";
 $UsernameMaxXCharacters = "O Nome de usuário pode ter no máximo %s caracteres";
 $PictureUploaded = "A foto foi enviada com sucesso";

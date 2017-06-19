@@ -210,7 +210,7 @@ if (isset($_GET['print'])) {
 if (!empty($_GET['export_report']) &&
     $_GET['export_report'] == 'export_report'
 ) {
-    if (api_is_platform_admin() || api_is_course_admin() || api_is_course_coach() || $isDrhOfCourse) {
+    if (api_is_platform_admin() || api_is_course_admin() || api_is_session_general_coach() || $isDrhOfCourse) {
         $user_id = null;
 
         if (empty($_SESSION['export_user_fields'])) {

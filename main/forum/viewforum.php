@@ -574,7 +574,7 @@ if (is_array($threads)) {
             $iconsEdit = '';
             if ($origin != 'learnpath') {
                 if (api_is_allowed_to_edit(false, true) &&
-                    !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
+                    !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)
                 ) {
                     $iconsEdit .= '<a href="'.$forumUrl.'editthread.php?'.$cidreq
                         . '&forum='.$my_forum.'&thread='

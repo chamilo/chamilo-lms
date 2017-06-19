@@ -3497,29 +3497,16 @@ class SessionManager
             $imgPath = Display::return_icon(
                 'session_default_small.png',
                 null,
-                null,
-                null,
-                null,
+                [],
+                ICON_SIZE_SMALL,
+                false,
                 true
             );
 
-            $tableExtraFields = Database::get_main_table(TABLE_EXTRA_FIELD);
-            $sql = "SELECT id FROM ".$tableExtraFields."
-                    WHERE extra_field_type = 3 AND variable='image'";
-            $resultField = Database::query($sql);
-            $imageFieldId = Database::fetch_assoc($resultField);
-
             while ($row = Database::fetch_array($result)) {
+                $imageFilename = \ExtraField::FIELD_TYPE_FILE_IMAGE.'_'.$row['id'].'.png';
 
-                $row['image'] = null;
-                $sessionImage = $sysUploadPath.$imageFieldId['id'].'_'.$row['id'].'.png';
-
-                if (is_file($sessionImage)) {
-                    $sessionImage = $webUploadPath.$imageFieldId['id'].'_'.$row['id'].'.png';
-                    $row['image'] = $sessionImage;
-                } else {
-                    $row['image'] = $imgPath;
-                }
+                $row['image'] = is_file($sysUploadPath.$imageFilename) ? $webUploadPath.$imageFilename : $imgPath;
 
                 if ($row['display_start_date'] == '0000-00-00 00:00:00' || $row['display_start_date'] == '0000-00-00') {
                     $row['display_start_date'] = null;

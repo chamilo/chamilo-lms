@@ -4033,7 +4033,6 @@ $ApprovalForNewAccount = "Schválenie nového konta";
 $ManageUser = "Spravovať používateľov";
 $SubscribeUserToCourseAsTeacher = "Prihlásiť lektorov";
 $PasswordEncryptedForSecurity = "Vaše heslo je z bezpečnostných dôvodov zakódované. Preto po kliknutí na odkaz Vám bude znova zaslaný e-mail s Vašim heslom.";
-$SystemUnableToSendEmailContact = "Systém nie je schopný poslať e-mailový kontakt";
 $OpenIDCouldNotBeFoundPleaseRegister = "Tento OpenID nebol nájdený v databáze. Prosím zaregistrujte si nový účet. Ak ste máte u nás účet, upravte svoj ​​profil v účte pridaním tohto OpenID";
 $UsernameMaxXCharacters = "Meno používateľa môže byť dlhé maximálne # znakov";
 $PictureUploaded = "Váš obrázok bol načítaný";

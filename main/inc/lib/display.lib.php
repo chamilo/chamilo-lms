@@ -739,14 +739,14 @@ class Display
         }
 
         $size_extra = $size.'/';
-
-        // Checking the img/ folder
         $icon = $w_code_path.'img/'.$image;
-
         $theme = 'themes/chamilo/icons/';
 
         if ($loadThemeIcon) {
             $theme = 'themes/'.api_get_visual_theme().'/icons/';
+            if (is_file($alternateCssPath.$theme.$image)) {
+                $icon = $alternateWebCssPath.$theme.$image;
+            }
             // Checking the theme icons folder example: app/Resources/public/css/themes/chamilo/icons/XXX
             if (is_file($alternateCssPath.$theme.$size_extra.$image)) {
                 $icon = $alternateWebCssPath.$theme.$size_extra.$image;

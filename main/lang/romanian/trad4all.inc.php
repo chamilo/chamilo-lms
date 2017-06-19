@@ -3858,7 +3858,6 @@ $ApprovalForNewAccount = "Aprobare pentru cont nou";
 $ManageUser = "Gestioneaza utilizatorul";
 $SubscribeUserToCourseAsTeacher = "Inscrieti utilizatorii acestui curs ca si profesori";
 $PasswordEncryptedForSecurity = "Parola dvs. este criptata din motive de securitate. Dupa ce faceti clic pe link-ul va fi trimis un alt e-mail cu parola.";
-$SystemUnableToSendEmailContact = "Sistemul nu poate trimite emailul";
 $OpenIDCouldNotBeFoundPleaseRegister = "Aceste OpenID nu exista in baza noastra de date. Va rugam sa va inregistrati pentru un nou cont. Sunteti deja inregistrat in baza noastra de date. Va rugam sa  adaptati profilul dvs. si sa adaugati OpenID.";
 $UsernameMaxXCharacters = "Numele de utilizator poate fi de maximum %s caractere";
 $PictureUploaded = "Fotografia a fost actualizata";

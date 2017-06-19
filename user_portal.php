@@ -142,7 +142,7 @@ if (isset($_COOKIE['defaultMyCourseView'.$userId]) &&
 // if teacher, session coach or admin, display the button to change te course view
 
 if ($displayMyCourseViewBySessionLink &&
-    (api_is_drh() || api_is_course_coach() || api_is_platform_admin() || api_is_session_admin() || api_is_teacher())
+    (api_is_drh() || api_is_session_general_coach() || api_is_platform_admin() || api_is_session_admin() || api_is_teacher())
 ) {
     $courseAndSessions['html'] = "<div class='view-by-session-link'>
 		<div class='btn-group pull-right'>

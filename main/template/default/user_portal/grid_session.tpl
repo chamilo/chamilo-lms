@@ -103,7 +103,7 @@
             {% endif %}
         </div>
         <div class="panel-body">
-            {% if row.description != '' %}
+            {% if row.show_description %}
                 {{ row.description }}
             {% endif %}
 

@@ -2447,7 +2447,6 @@ $ApprovalForNewAccount = "Uuden tunnuksen hyväksyminen";
 $ManageUser = "Hallitse käyttäjää";
 $SubscribeUserToCourseAsTeacher = "Rekisteröi kouluttajia";
 $PasswordEncryptedForSecurity = "Salasanasi on salattu tietoturvan takaamiseksi. Painamalla linkkiä saat sähköpostiin uuden salasanan.";
-$SystemUnableToSendEmailContact = "Sähköpostin lähettäminen ei onnistunut";
 $UsernameMaxXCharacters = "Tunnuksen pitää olla korkeintaan %s merkkiä pitkä";
 $PictureUploaded = "Kuvasi on ladattu";
 $UsersRegistered = "Käyttäjät on rekisteröity kurssille";

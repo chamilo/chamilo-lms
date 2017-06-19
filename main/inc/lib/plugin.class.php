@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CTool;
+
 /**
  * Class Plugin
  * Base class for plugins
@@ -38,9 +40,9 @@ class Plugin
      * main/img/icons/64/plugin_name_na.png
      * @example
      * $course_settings = array(
-          array('name' => 'big_blue_button_welcome_message',  'type' => 'text'),
-          array('name' => 'big_blue_button_record_and_store', 'type' => 'checkbox')
-       );
+    array('name' => 'big_blue_button_welcome_message',  'type' => 'text'),
+    array('name' => 'big_blue_button_record_and_store', 'type' => 'checkbox')
+    );
      */
     public $course_settings = array();
     /**
@@ -48,6 +50,9 @@ class Plugin
      * function.
      */
     public $course_settings_callback = false;
+
+    const TAB_FILTER_NO_STUDENT = '::no-student';
+    const TAB_FILTER_ONLY_STUDENT = '::only-student';
 
     /**
      * Default constructor for the plugin class. By default, it only sets
@@ -291,11 +296,12 @@ class Plugin
 
     /**
      * Returns an array with the global settings for this plugin
+     * @param bool $forceFromDB Optional. Force get settings from the database
      * @return array Plugin settings as an array
      */
-    public function get_settings()
+    public function get_settings($forceFromDB = false)
     {
-        if (empty($this->settings)) {
+        if (empty($this->settings) || $forceFromDB) {
             $settings = api_get_settings_params(
                 array(
                     "subkey = ? AND category = ? AND type = ? " => array($this->get_name(), 'Plugins', 'setting')
@@ -468,41 +474,62 @@ class Plugin
         }
 
         // Stop here if we don't want a tool link on the course homepage
-        if (!$add_tool_link) {
-            return true;
-        }
-
-        if ($this->addCourseTool == false) {
+        if (!$add_tool_link || $this->addCourseTool == false) {
             return true;
         }
 
         //Add an icon in the table tool list
-        $table = Database::get_course_table(TABLE_TOOL_LIST);
-        $sql = "SELECT name FROM $table
-                WHERE c_id = $courseId AND name = '$plugin_name' ";
-        $result = Database::query($sql);
-        if (!Database::num_rows($result)) {
-            $tool_link = "$plugin_name/start.php";
-            $cToolId = AddCourse::generateToolId($courseId);
+        $this->createLinkToCourseTool($plugin_name, $courseId);
+    }
 
-            Database::insert(
-                $table,
-                [
-                    'id' => $cToolId,
-                    'c_id' => $courseId,
-                    'name' => $plugin_name,
-                    'link' => $tool_link,
-                    'image' => "$plugin_name.png",
-                    'visibility' => 1,
-                    'admin' => 0,
-                    'address' => 'squaregrey.gif',
-                    'added_tool' => 0,
-                    'target' => '_self',
-                    'category' => 'plugin',
-                    'session_id' => 0
-                ]
-            );
+    /**
+     * Add an link for a course tool
+     * @param string $name The tool name
+     * @param int $courseId The course ID
+     * @param string $iconName Optional. Icon file name
+     * @param string $link Optional. Link URL
+     * @return \Chamilo\CourseBundle\Entity\CTool|null
+     */
+    protected function createLinkToCourseTool($name, $courseId, $iconName = null, $link = null)
+    {
+        if (!$this->addCourseTool) {
+            return null;
         }
+
+        $em = Database::getManager();
+
+        /** @var CTool $tool */
+        $tool = $em
+            ->getRepository('ChamiloCourseBundle:CTool')
+            ->findOneBy([
+                'name' => $name,
+                'cId' => $courseId
+            ]);
+
+        if (!$tool) {
+            $cToolId = AddCourse::generateToolId($courseId);
+            $pluginName = $this->get_name();
+
+            $tool = new CTool();
+            $tool
+                ->setId($cToolId)
+                ->setCId($courseId)
+                ->setName($name)
+                ->setLink($link ?: "$pluginName/start.php")
+                ->setImage($iconName ?: "$pluginName.png")
+                ->setVisibility(true)
+                ->setAdmin(0)
+                ->setAddress('squaregrey.gif')
+                ->setAddedTool(false)
+                ->setTarget('_self')
+                ->setCategory('plugin')
+                ->setSessionId(0);
+
+            $em->persist($tool);
+            $em->flush();
+        }
+
+        return $tool;
     }
 
     /**
@@ -611,14 +638,14 @@ class Plugin
 
     }
 
-   /**
-    * Add a tab to platform
-    * @param string   $tabName
-    * @param string   $url
-    *
-    * @return false|string
-    */
-    public function addTab($tabName, $url)
+    /**
+     * Add a tab to platform
+     * @param string $tabName
+     * @param string $url
+     * @param string $userFilter Optional. Filter tab type
+     * @return false|string
+     */
+    public function addTab($tabName, $url, $userFilter = null)
     {
         $sql = "SELECT * FROM settings_current
                 WHERE
@@ -650,6 +677,17 @@ class Plugin
 
         // End Check
         $subkey = 'custom_tab_'.$tabNum;
+
+        if (!empty($userFilter)) {
+            switch ($userFilter) {
+                case self::TAB_FILTER_NO_STUDENT:
+                    //no break
+                case self::TAB_FILTER_ONLY_STUDENT:
+                    $subkey .= $userFilter;
+                    break;
+            }
+        }
+
         $attributes = array(
             'variable' => 'show_tabs',
             'subkey' => $subkey,
@@ -707,9 +745,16 @@ class Plugin
                 $tabs = Database::store_result($result, 'ASSOC');
                 $i = 1;
                 foreach ($tabs as $row) {
-                    $attributes = array(
-                        'subkey' => 'custom_tab_'.$i
-                    );
+                    $newSubKey = "custom_tab_$i";
+
+                    if (strpos($row['subkey'], self::TAB_FILTER_NO_STUDENT) !== false) {
+                        $newSubKey .= self::TAB_FILTER_NO_STUDENT;
+                    } elseif (strpos($row['subkey'], self::TAB_FILTER_ONLY_STUDENT) !== false) {
+                        $newSubKey .= self::TAB_FILTER_ONLY_STUDENT;
+                    }
+
+                    $attributes = ['subkey' => $newSubKey];
+
                     $this->updateTab($row['subkey'], $attributes);
                     $i++;
                 }
@@ -802,5 +847,16 @@ class Plugin
             return true;
         }
         return false;
+    }
+
+    /**
+     * Allow make some actions after configure the plugin parameters
+     * This function is called from main/admin/configure_plugin.php page
+     * when saving the plugin parameters
+     * @return \Plugin
+     */
+    public function performActionsAfterConfigure()
+    {
+        return $this;
     }
 }

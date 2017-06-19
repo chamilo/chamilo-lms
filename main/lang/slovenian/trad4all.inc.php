@@ -3966,7 +3966,6 @@ $ApprovalForNewAccount = "Odobritev za nov račun";
 $ManageUser = "Upravljaj uporabnika";
 $SubscribeUserToCourseAsTeacher = "Vpiši uporabnike v ta tečaj kot učitelje";
 $PasswordEncryptedForSecurity = "Vaše geslo je bilo kriptirano iz varnostnih razlogov. Zato vam bo geslo po kliku na dano povezavo poslano na vaš e-poštni naslov.";
-$SystemUnableToSendEmailContact = "System ne more poslati e-pošte naslovniku";
 $OpenIDCouldNotBeFoundPleaseRegister = "Ta OpenID ne obstaja v naši podatkovni bazi. Prosimo, da se registrirajte za dodelitev novega uporabniškega računa. V primeru, da uporabniški račun na tem portalu že imate, ustrezno spremenite vaš profil, tako da dodate ta OpenID.";
 $UsernameMaxXCharacters = "Uporabniško ime je lahko dolgo največ %s znakov";
 $PictureUploaded = "Vaša slika je bila naložena";

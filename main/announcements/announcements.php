@@ -297,7 +297,7 @@ switch ($action) {
             api_not_allowed();
         }
 
-        if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
+        if (!api_is_session_general_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
             AnnouncementManager::delete_announcement($_course, $id);
             Display::addFlash(Display::return_message(get_lang('AnnouncementDeleted')));
         }
@@ -331,7 +331,7 @@ switch ($action) {
                     api_not_allowed();
                 }
 
-                if (!api_is_course_coach() ||
+                if (!api_is_session_general_coach() ||
                     api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $_GET['id'])
                 ) {
                     AnnouncementManager::change_visibility_announcement(

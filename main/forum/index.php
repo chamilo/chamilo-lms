@@ -236,22 +236,22 @@ if (!empty($forumsInNoCategory)) {
 /* Display Forum Categories and the Forums in it */
 // Step 3: We display the forum_categories first.
 $listForumCategory = array();
-$dataForum = array();
+$forumCategoryInfo = array();
 
 if (is_array($forumCategories)) {
     foreach ($forumCategories as $forumCategory) {
-        $dataForum['id'] = $forumCategory['cat_id'];
+        $forumCategoryInfo['id'] = $forumCategory['cat_id'];
         if (empty($forumCategory['cat_title'])) {
-            $dataForum['title'] = get_lang('WithoutCategory');
+            $forumCategoryInfo['title'] = get_lang('WithoutCategory');
         } else {
-            $dataForum['title'] = $forumCategory['cat_title'];
+            $forumCategoryInfo['title'] = $forumCategory['cat_title'];
         }
-        $dataForum['icon_session'] = api_get_session_image(
+        $forumCategoryInfo['icon_session'] = api_get_session_image(
             $forumCategory['session_id'], $_user['status']
         );
 
         // Validation when belongs to a session
-        $dataForum['description'] = $forumCategory['cat_comment'];
+        $forumCategoryInfo['description'] = $forumCategory['cat_comment'];
 
         if (empty($sessionId) && !empty($forumCategory['session_name'])) {
             $forumCategory['session_display'] = ' ('.Security::remove_XSS($forumCategory['session_name']).')';
@@ -261,7 +261,7 @@ if (is_array($forumCategories)) {
 
         $tools = null;
         $idCategory = $forumCategory['cat_id'];
-        $dataForum['url'] = 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.intval($idCategory);
+        $forumCategoryInfo['url'] = 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.intval($idCategory);
 
         if (!empty($idCategory)) {
             if (
@@ -304,8 +304,8 @@ if (is_array($forumCategories)) {
                 );
             }
         }
-        $dataForum['tools'] = $tools;
-        $dataForum['forums'] = [];
+        $forumCategoryInfo['tools'] = $tools;
+        $forumCategoryInfo['forums'] = [];
         // The forums in this category.
         $forumInfo = array();
         $forumsInCategory = get_forums_in_category($forumCategory['cat_id']);
@@ -521,9 +521,9 @@ if (is_array($forumCategories)) {
                     }
                 }
             }
-            $dataForum['forums'] = $forumsDetailsList;
+            $forumCategoryInfo['forums'] = $forumsDetailsList;
         }
-        $listForumCategory[] = $dataForum;
+        $listForumCategory[] = $forumCategoryInfo;
     }
 }
 

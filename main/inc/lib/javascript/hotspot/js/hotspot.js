@@ -522,7 +522,7 @@ window.HotspotQuestion = (function () {
 
             this.el.appendChild(
                 hotspotSVG.render().el
-                );
+            );
 
             var hotspotSelect = new HotspotSelect(hotspotIndex, this.collection, hotspotSVG);
 
@@ -875,18 +875,20 @@ window.HotspotQuestion = (function () {
                     if (self.answersCollection.length === self.hotspotsCollection.length) {
                         $(config.selector).parent()
                             .find('#hotspot-messages-' + config.questionId + ' span:not(.fa)').text(
-                                lang.HotspotExerciseFinished
-                            );
+                            lang.HotspotExerciseFinished
+                        );
 
                         return;
                     }
 
                     $(config.selector).parent()
                         .find('#hotspot-messages-' + config.questionId + ' span:not(.fa)').text(
-                            lang.NextAnswer + ' ' + self.hotspotsCollection.get(
-                                self.answersCollection.length
-                            ).name
-                        );
+                        lang.NextAnswer +
+                            ' ' +
+                            self.hotspotsCollection
+                                .get(self.answersCollection.length)
+                                .name
+                    );
 
                     isMoving = false;
                 })
@@ -1103,13 +1105,13 @@ window.HotspotQuestion = (function () {
 
         var getPointOnImage = function (referenceElement, x, y) {
             var pointerPosition = {
-                left: x + window.scrollX,
-                top: y + window.scrollY
-            },
-            canvasOffset = {
-                x: referenceElement.getBoundingClientRect().left + window.scrollX,
-                y: referenceElement.getBoundingClientRect().top + window.scrollY
-            };
+                    left: x + window.scrollX,
+                    top: y + window.scrollY
+                },
+                canvasOffset = {
+                    x: referenceElement.getBoundingClientRect().left + window.scrollX,
+                    y: referenceElement.getBoundingClientRect().top + window.scrollY
+                };
 
             return {
                 x: Math.round(pointerPosition.left - canvasOffset.x),
@@ -1136,22 +1138,22 @@ window.HotspotQuestion = (function () {
 
         switch (config.for) {
             case 'admin':
-                xhrQuestion = $.getJSON(config.relPath+'exercise/hotspot_actionscript_admin.as.php', {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript_admin.as.php', {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
 
             case 'user':
-                xhrQuestion = $.getJSON(config.relPath+'exercise/hotspot_actionscript.as.php', {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript.as.php', {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });
                 break;
 
             case 'solution':
-                //no break
+            //no break
             case 'preview':
-                xhrQuestion = $.getJSON(config.relPath+'exercise/hotspot_answers.as.php', {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php', {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });
@@ -1169,7 +1171,7 @@ window.HotspotQuestion = (function () {
                     break;
 
                 case 'solution':
-                    //no break
+                //no break
                 case 'preview':
                     startHotspotsSolution(questionInfo);
                     break;
@@ -1345,7 +1347,7 @@ window.DelineationQuestion = (function () {
             var type = this.model instanceof OarModel ? 'oar' : 'delineation';
 
             var template = '\n\
-                <div class="input-group hotspot-'  + this.model.id + ' active">\n\
+                <div class="input-group hotspot-' + this.model.id + ' active">\n\
                     <span class="input-group-addon" id="hotspot-' + this.model.id + '">\n\
                         <span class="fa fa-square fa-fw" data-hidden="true"></span>\n\
                         <span class="sr-only">' + (type === 'delineation' ? lang.Delineation : lang.Oar) + '</span>\n\
@@ -1449,37 +1451,37 @@ window.DelineationQuestion = (function () {
             });
 
             $el.on({
-                    'dragstart': function (e) {
-                        e.preventDefault();
-                    },
-                    'click': function (e) {
-                        e.preventDefault();
+                'dragstart': function (e) {
+                    e.preventDefault();
+                },
+                'click': function (e) {
+                    e.preventDefault();
 
-                        var currentPoint = getPointOnImage(self.el, e.clientX, e.clientY),
-                            points = [];
+                    var currentPoint = getPointOnImage(self.el, e.clientX, e.clientY),
+                        points = [];
 
-                        if (!isDrawing) {
-                            isDrawing = true;
-                        } else {
-                            points = self.collection.get(selectedPolygonIndex).get('points');
-                        }
-
-                        points.push([currentPoint.x, currentPoint.y]);
-
-                        self.collection.get(selectedPolygonIndex).set('points', points);
-                    },
-                    'contextmenu': function (e) {
-                        e.preventDefault();
-
-                        if (!contextMenu.el.parentNode) {
-                            $el.parent().append(contextMenu.render().el);
-                        }
-
-                        var currentPoint = getPointOnImage(self.el, e.clientX, e.clientY);
-
-                        contextMenu.show(currentPoint.x, currentPoint.y);
+                    if (!isDrawing) {
+                        isDrawing = true;
+                    } else {
+                        points = self.collection.get(selectedPolygonIndex).get('points');
                     }
-                });
+
+                    points.push([currentPoint.x, currentPoint.y]);
+
+                    self.collection.get(selectedPolygonIndex).set('points', points);
+                },
+                'contextmenu': function (e) {
+                    e.preventDefault();
+
+                    if (!contextMenu.el.parentNode) {
+                        $el.parent().append(contextMenu.render().el);
+                    }
+
+                    var currentPoint = getPointOnImage(self.el, e.clientX, e.clientY);
+
+                    contextMenu.show(currentPoint.x, currentPoint.y);
+                }
+            });
 
             return this;
         };
@@ -1585,37 +1587,37 @@ window.DelineationQuestion = (function () {
             });
 
             $el.on({
-                    'dragstart': function (e) {
-                        e.preventDefault();
-                    },
-                    'click': function (e) {
-                        e.preventDefault();
+                'dragstart': function (e) {
+                    e.preventDefault();
+                },
+                'click': function (e) {
+                    e.preventDefault();
 
-                        var currentPoint = getPointOnImage(self.el, e.clientX, e.clientY),
-                            points = [];
+                    var currentPoint = getPointOnImage(self.el, e.clientX, e.clientY),
+                        points = [];
 
-                        if (!isDrawing) {
-                            isDrawing = true;
-                        } else {
-                            points = self.model.get('points');
-                        }
-
-                        points.push([currentPoint.x, currentPoint.y]);
-
-                        self.model.set('points', points);
-                    },
-                    'contextmenu': function (e) {
-                        e.preventDefault();
-
-                        if (!contextMenu.el.parentNode) {
-                            $el.parent().append(contextMenu.render().el);
-                        }
-
-                        var currentPoint = getPointOnImage(self.el, e.clientX, e.clientY);
-
-                        contextMenu.show(currentPoint.x, currentPoint.y);
+                    if (!isDrawing) {
+                        isDrawing = true;
+                    } else {
+                        points = self.model.get('points');
                     }
-                });
+
+                    points.push([currentPoint.x, currentPoint.y]);
+
+                    self.model.set('points', points);
+                },
+                'contextmenu': function (e) {
+                    e.preventDefault();
+
+                    if (!contextMenu.el.parentNode) {
+                        $el.parent().append(contextMenu.render().el);
+                    }
+
+                    var currentPoint = getPointOnImage(self.el, e.clientX, e.clientY);
+
+                    contextMenu.show(currentPoint.x, currentPoint.y);
+                }
+            });
 
             return this;
         };
@@ -1751,28 +1753,28 @@ window.DelineationQuestion = (function () {
             return;
         }
 
-    $(config.selector).html('\n\
-        <span class="fa fa-spinner fa-spin fa-3x" aria-hidden="hidden"></span>\n\
-        <span class="sr-only">Loading</span>\n\
-    ');
+        $(config.selector).html('\n\
+            <span class="fa fa-spinner fa-spin fa-3x" aria-hidden="hidden"></span>\n\
+            <span class="sr-only">Loading</span>\n\
+        ');
 
         var xhrQuestion = null;
 
         switch (config.for) {
             case 'admin':
-                xhrQuestion = $.getJSON(config.relPath+'exercise/hotspot_actionscript_admin.as.php', {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript_admin.as.php', {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
             case 'user':
-                xhrQuestion = $.getJSON(config.relPath+'exercise/hotspot_actionscript.as.php', {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript.as.php', {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
             case 'solution':
-                //no break
+            //no break
             case 'preview':
-                xhrQuestion = $.getJSON(config.relPath+'exercise/hotspot_answers.as.php', {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php', {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });

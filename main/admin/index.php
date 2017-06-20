@@ -434,20 +434,35 @@ if (api_is_platform_admin()) {
             foreach ($menuAdministratorItems as $plugin_name) {
                 $plugin_info = $plugin_obj->getPluginInfo($plugin_name);
 
+                if ($plugin_info['is_admin_plugin'] === false) {
+                    continue;
+                }
+
                 if ($plugin_info['is_admin_plugin']) {
                     $itemUrl = '/admin.php';
                 } elseif ($plugin_info['is_admin_plugin']) {
                     $itemUrl = '/start.php';
                 }
 
-                if (!file_exists(api_get_path(SYS_PLUGIN_PATH).$pluginName.$itemUrl)) {
+                $itemUrl = $pluginName.'/start.php';
+
+                if (file_exists(api_get_path(SYS_PLUGIN_PATH).$itemUrl)) {
+                    $items[] = array(
+                        'url' => api_get_path(WEB_PLUGIN_PATH).$itemUrl,
+                        'label' => $plugin_info['title']
+                    );
+
                     continue;
                 }
 
-                $items[] = array(
-                    'url' => api_get_path(WEB_PLUGIN_PATH).$plugin_name.$itemUrl,
-                    'label' => $plugin_info['title']
-                );
+                $itemUrl = $pluginName.'/admin.php';
+
+                if (file_exists(api_get_path(SYS_PLUGIN_PATH).$itemUrl)) {
+                    $items[] = array(
+                        'url' => api_get_path(WEB_PLUGIN_PATH).$itemUrl,
+                        'label' => $plugin_info['title']
+                    );
+                }
             }
 
             $blocks['plugins']['items'] = $items;

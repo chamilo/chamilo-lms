@@ -42,56 +42,57 @@
 <section id="settings">
     {% set columns = 2 %}
     {% for block_item in blocks %}
+        {% if block_item.items %}
+            {% if loop.first or loop.index0 is divisibleby(columns) %}
+                <div class="row">
+            {% endif %}
 
-        {% if loop.first or loop.index0 is divisibleby(columns) %}
-            <div class="row">
-        {% endif %}
-
-        <div id="tabs-{{ loop.index }}" class="col-md-6">
-            <div class="panel panel-default {{ block_item.class }}">
-                <div class="panel-heading">
-                    {{ block_item.icon }} {{ block_item.label }}
-                    {% if block_item.editable and _u.is_admin %}
-                        <button type="button" class="btn btn-link btn-sm admin-edit-block pull-right"
-                                data-label="{{ block_item.label }}" data-id="{{ block_item.class }}">
-                            <img src="{{ "edit.png"|icon(22) }}" width="22" height="22" alt="{{ "Edit"|get_lang }}"
-                                 title="{{ "Edit"|get_lang }}"/>
-                        </button>
-                    {% endif %}
-                </div>
-                <div class="panel-body">
-                    <div style="display: block;">
-                        {{ block_item.search_form }}
+            <div id="tabs-{{ loop.index }}" class="col-md-6">
+                <div class="panel panel-default {{ block_item.class }}">
+                    <div class="panel-heading">
+                        {{ block_item.icon }} {{ block_item.label }}
+                        {% if block_item.editable and _u.is_admin %}
+                            <button type="button" class="btn btn-link btn-sm admin-edit-block pull-right"
+                                    data-label="{{ block_item.label }}" data-id="{{ block_item.class }}">
+                                <img src="{{ "edit.png"|icon(22) }}" width="22" height="22" alt="{{ "Edit"|get_lang }}"
+                                     title="{{ "Edit"|get_lang }}"/>
+                            </button>
+                        {% endif %}
                     </div>
-                    {% if block_item.items is not null %}
-                        <div class="block-items-admin">
-                            <ul class="list-items-admin">
-                                {% for url in block_item.items %}
-                                    <li>
-                                        <a href="{{ url.url }}">
-                                            {{ url.label }}
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                    <div class="panel-body">
+                        <div style="display: block;">
+                            {{ block_item.search_form }}
                         </div>
-                    {% endif %}
+                        {% if block_item.items is not null %}
+                            <div class="block-items-admin">
+                                <ul class="list-items-admin">
+                                    {% for url in block_item.items %}
+                                        <li>
+                                            <a href="{{ url.url }}">
+                                                {{ url.label }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
 
-                    {% if block_item.extra is not null %}
-                        <div>
-                            {{ block_item.extra }}
-                        </div>
-                    {% endif %}
+                        {% if block_item.extra is not null %}
+                            <div>
+                                {{ block_item.extra }}
+                            </div>
+                        {% endif %}
 
-                    {% if block_item.extraContent %}
-                        <div>{{ block_item.extraContent }}</div>
-                    {% endif %}
+                        {% if block_item.extraContent %}
+                            <div>{{ block_item.extraContent }}</div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
 
-        {% if loop.last or loop.index is divisibleby(columns) %}
-            </div>
+            {% if loop.last or loop.index is divisibleby(columns) %}
+                </div>
+            {% endif %}
         {% endif %}
     {% endfor %}
 </section>

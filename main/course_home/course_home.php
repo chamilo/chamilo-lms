@@ -289,6 +289,7 @@ if (api_get_setting('homepage_view') === 'activity' || api_get_setting('homepage
 $diagram = '';
 $allow = api_get_configuration_value('allow_career_diagram');
 if ($allow === true) {
+    $htmlHeadXtra[] = api_get_js('jsplumb2.js');
     $extra = new ExtraFieldValue('session');
     $value = $extra->get_values_by_handler_and_field_variable(
         api_get_session_id(),

@@ -11761,7 +11761,7 @@ EOD;
         $main_dir_path = api_get_path(WEB_CODE_PATH);
         $main_course_path = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
         $link = '';
-        $extraParams = api_get_cidreq().'&session_id='.$session_id;
+        $extraParams = api_get_cidreq(true, true, 'learnpath').'&session_id='.$session_id;
         switch ($type) {
             case 'dir':
                 return $main_dir_path.'lp/blank.php';

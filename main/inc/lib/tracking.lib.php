@@ -3004,48 +3004,40 @@ class Tracking
         }
 
         return ($row['sum_score'] / $row['sum_max_score']) * 100;
-
     }
 
     /**
      * This function gets time spent in learning path for a student inside a course
-     * @param     int|array    Student id(s)
-     * @param     string         Course code
-     * @param     array         Limit average to listed lp ids
-     * @param     int            Session id (optional), if param $session_id is
-     * null(default) it'll return results including sessions, 0 = session is not filtered
-     * @return     int         Total time
+     * @param int|array $student_id Student id(s)
+     * @param string $course_code Course code
+     * @param array $lp_ids Limit average to listed lp ids
+     * @param int $session_id Session id (optional), if param $session_id is null(default)
+     * it'll return results including sessions, 0 = session is not filtered
+     * @return int Total time
      */
-    public static function get_time_spent_in_lp($student_id, $course_code, $lp_ids = array(), $session_id = null)
+    public static function get_time_spent_in_lp($student_id, $course_code, $lp_ids = array(), $session_id = 0)
     {
         $course = api_get_course_info($course_code);
-        $student_id = intval($student_id);
+        $student_id = (int) $student_id;
+        $session_id = (int) $session_id;
         $total_time = 0;
 
         if (!empty($course)) {
-
             $lp_table = Database::get_course_table(TABLE_LP_MAIN);
             $t_lpv = Database::get_course_table(TABLE_LP_VIEW);
             $t_lpiv = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-
             $course_id = $course['real_id'];
 
             // Compose a filter based on optional learning paths list given
-            $condition_lp = "";
+            $condition_lp = '';
             if (count($lp_ids) > 0) {
                 $condition_lp = " AND id IN(".implode(',', $lp_ids).") ";
             }
 
-            // Compose a filter based on optional session id
-            $session_id = intval($session_id);
-            $condition_session = "";
-            if (isset($session_id)) {
-                $condition_session = " AND session_id = $session_id ";
-            }
-
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
-            $sql = "SELECT DISTINCT(id) FROM $lp_table WHERE c_id = $course_id $condition_lp";
+            $sql = "SELECT DISTINCT(id) FROM $lp_table 
+                    WHERE c_id = $course_id $condition_lp";
             $res_row_lp = Database::query($sql);
             $count_row_lp = Database::num_rows($res_row_lp);
 
@@ -3053,19 +3045,19 @@ class Tracking
             if ($count_row_lp > 0) {
                 while ($row_lp = Database::fetch_array($res_row_lp)) {
                     $lp_id = intval($row_lp['id']);
-                    $sql = 'SELECT SUM(total_time)
-                            FROM '.$t_lpiv.' AS item_view
-                            INNER JOIN '.$t_lpv.' AS view
+                    $sql = "SELECT SUM(total_time)
+                            FROM $t_lpiv AS item_view
+                            INNER JOIN $t_lpv AS view
                             ON (
                                 item_view.lp_view_id = view.id AND
                                 item_view.c_id = view.c_id
                             )
                             WHERE
-                                item_view.c_id = '.$course_id.' AND
-                                view.c_id = '.$course_id.' AND
-                                view.lp_id = '.$lp_id.' AND
-                                view.user_id = '.$student_id.' AND
-                                session_id = '.$session_id;
+                                item_view.c_id = $course_id AND
+                                view.c_id = $course_id AND
+                                view.lp_id = $lp_id AND
+                                view.user_id = $student_id AND
+                                session_id = $session_id";
 
                     $rs = Database::query($sql);
                     if (Database::num_rows($rs) > 0) {

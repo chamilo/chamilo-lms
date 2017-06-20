@@ -484,12 +484,16 @@ switch ($action) {
         }
 
         $defaults['email_ann'] = true;
-
-        $form->addElement('text', 'title', get_lang('EmailTitle'), array("onkeypress" => "return event.keyCode != 13;")); //do not submit on enter
+        $form->addElement(
+            'text',
+            'title',
+            get_lang('EmailTitle'),
+            array("onkeypress" => "return event.keyCode != 13;")
+        );
         $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
         $form->addElement('hidden', 'id');
         $htmlTags = "<b>".get_lang('Tags')."</b><br /><br />";
-        $tags = AnnouncementManager::get_tags();
+        $tags = AnnouncementManager::getTags();
 
         foreach ($tags as $tag) {
             $htmlTags .= "<b>".$tag."</b><br />";

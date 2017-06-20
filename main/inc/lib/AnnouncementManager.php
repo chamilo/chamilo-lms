@@ -22,18 +22,25 @@ class AnnouncementManager
     /**
      * @return array
      */
-    public static function get_tags()
+    public static function getTags()
     {
-        return array(
+        $tags = [
             '((user_name))',
             '((user_firstname))',
             '((user_lastname))',
             '((user_official_code))',
-            '((teacher_name))',
-            '((teacher_email))',
             '((course_title))',
             '((course_link))'
-        );
+        ];
+
+        $tags[] = '((teachers))';
+
+        if (!empty(api_get_session_id())) {
+            $tags[] = '((coaches))';
+            $tags[] = '((general_coach))';
+        }
+
+        return $tags;
     }
 
     /**
@@ -52,17 +59,24 @@ class AnnouncementManager
     ) {
         $readerInfo = api_get_user_info($userId);
         $courseInfo = api_get_course_info($courseCode);
-        $teacherList = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
+        $teacherList = CourseManager::get_teacher_list_from_course_code_to_string(
+            $courseInfo['code']
+        );
 
-        $teacher_email = '';
-        $teacher_name = '';
-        if (!empty($teacherList)) {
-            foreach ($teacherList as $teacher_data) {
-                $teacher_name = api_get_person_name($teacher_data['firstname'], $teacher_data['lastname']);
-                $teacher_email = $teacher_data['email'];
-                break;
-            }
+        $generalCoach = '';
+        $coaches = '';
+        if (!empty($sessionId)) {
+            $sessionInfo = api_get_session_info($sessionId);
+
+            $coaches = CourseManager::get_coachs_from_course_to_string(
+                $sessionId,
+                $courseInfo['real_id']
+            );
+
+            $generalCoach = api_get_user_info($sessionInfo['id_coach']);
+            $generalCoach = $generalCoach['complete_name'];
         }
+
         $data = [];
         $data['user_name'] = '';
         $data['user_firstname'] = '';
@@ -74,12 +88,18 @@ class AnnouncementManager
             $data['user_lastname'] = $readerInfo['lastname'];
             $data['user_official_code'] = $readerInfo['official_code'];
         }
-        $data['teacher_name'] = $teacher_name;
-        $data['teacher_email'] = $teacher_email;
+
         $data['course_title'] = $courseInfo['name'];
         $courseLink = api_get_course_url($courseCode, $sessionId);
         $data['course_link'] = Display::url($courseLink, $courseLink);
-        $content = str_replace(self::get_tags(), $data, $content);
+        $data['teachers'] = $teacherList;
+
+        if (!empty(api_get_session_id())) {
+            $data['coaches'] = $coaches;
+            $data['general_coach'] = $generalCoach;
+        }
+
+        $content = str_replace(self::getTags(), $data, $content);
 
         return $content;
     }

@@ -37,10 +37,11 @@ class Export
      * Export tabular data to CSV-file
      * @param array $data
      * @param string $filename
+     * @param bool $writeOnly Whether to only write on disk or also send for download
      *
-     * @return mixed csv file | false if no data to export
+     * @return mixed csv raw data | false if no data to export | string file path if success in $writeOnly mode
      */
-    public static function arrayToCsv($data, $filename = 'export')
+    public static function arrayToCsv($data, $filename = 'export', $writeOnly = false)
     {
         if (empty($data)) {
             return false;
@@ -57,8 +58,11 @@ class Export
         }
         $writer->finish();
 
-        DocumentManager::file_send_for_download($filePath, true, $filename.'.csv');
-        exit;
+        if (!$writeOnly) {
+            DocumentManager::file_send_for_download($filePath, true, $filename.'.csv');
+            exit;
+        }
+        return $filePath;
     }
 
     /**

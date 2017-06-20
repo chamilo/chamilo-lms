@@ -3420,10 +3420,11 @@ class learnpathItem
         if (self::DEBUG > 0) {
             error_log('learnpathItem::set_time('.$scorm_time.')', 0);
         }
-        if ($scorm_time == '0'
-                and ($this->type != 'sco')
-                and $this->current_start_time != 0)
-        {
+
+        if ($scorm_time == '0' &&
+            $this->type != 'sco' &&
+            $this->current_start_time != 0
+        ) {
             $my_time = time() - $this->current_start_time;
             if ($my_time > 0) {
                 $this->update_time($my_time);
@@ -3445,7 +3446,6 @@ class learnpathItem
                         $res
                     )
                     ) {
-                        $time = time();
                         $hour = $res[1];
                         $min = $res[2];
                         $sec = $res[3];
@@ -3595,16 +3595,17 @@ class learnpathItem
             error_log("total_sec: $total_sec");
         }
 
-        //Step 1 : get actual total time stored in db
+        // Step 1 : get actual total time stored in db
         $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $course_id = api_get_course_int_id();
 
-        $sql = 'SELECT total_time, status FROM '.$item_view_table.'
-                 WHERE 
-                    c_id = ' . $course_id.' AND 
-                    lp_item_id="' . $this->db_id.'" AND 
-                    lp_view_id="' . $this->view_id.'" AND 
-                    view_count="' . $this->get_attempt_id().'"';
+        $sql = 'SELECT total_time, status 
+                FROM '.$item_view_table.'
+                WHERE 
+                    c_id = '.$course_id.' AND 
+                    lp_item_id = "'.$this->db_id.'" AND 
+                    lp_view_id = "'.$this->view_id.'" AND 
+                    view_count = "'.$this->get_attempt_id().'"';
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 

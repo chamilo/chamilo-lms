@@ -288,7 +288,7 @@ if (api_get_setting('homepage_view') === 'activity' || api_get_setting('homepage
 // Get session-career diagram
 $diagram = '';
 $allow = api_get_configuration_value('allow_career_diagram');
-if ($allow) {
+if ($allow === true) {
     $extra = new ExtraFieldValue('session');
     $value = $extra->get_values_by_handler_and_field_variable(
         api_get_session_id(),

@@ -1754,3 +1754,60 @@ function isStyleChangeable()
     }
     return $changeable;
 }
+
+/**
+ * Get all settings of one category prepared for display in admin/settings.php
+ * @param string $category
+ * @return array
+ */
+function getCategorySettings($category = '')
+{
+    $url_id = api_get_current_access_url_id();
+    $settings_by_access_list = array();
+
+    if ($url_id == 1) {
+        $settings = api_get_settings($category, 'group', $url_id);
+    } else {
+        $url_info = api_get_access_url($url_id);
+        if ($url_info['active'] == 1) {
+            $categoryToSearch = $category;
+            if ($category == 'search_setting') {
+                $categoryToSearch = '';
+            }
+            // The default settings of Chamilo
+            $settings = api_get_settings($categoryToSearch, 'group', 1, 0);
+            // The settings that are changeable from a particular site.
+            $settings_by_access = api_get_settings($categoryToSearch, 'group', $url_id, 1);
+
+            foreach ($settings_by_access as $row) {
+                if (empty($row['variable'])) {
+                    $row['variable'] = 0;
+                }
+                if (empty($row['subkey'])) {
+                    $row['subkey'] = 0;
+                }
+                if (empty($row['category'])) {
+                    $row['category'] = 0;
+                }
+
+                // One more validation if is changeable.
+                if ($row['access_url_changeable'] == 1) {
+                    $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = $row;
+                } else {
+                    $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = array();
+                }
+            }
+        }
+    }
+
+    if (isset($category) && $category == 'search_setting') {
+        if (!empty($_REQUEST['search_field'])) {
+            $settings = searchSetting($_REQUEST['search_field']);
+        }
+    }
+
+    return array(
+        'settings' => $settings,
+        'settings_by_access_list' => $settings_by_access_list
+    );
+}

@@ -71,10 +71,10 @@ class ProgrammedAnnouncement extends Model
     /**
      * Displays the title + grid
      */
-	public function getGrid($sessionId)
+    public function getGrid($sessionId)
     {
-		// action links
-		$action = '<div class="actions" style="margin-bottom:20px">';
+        // action links
+        $action = '<div class="actions" style="margin-bottom:20px">';
         $action .= '<a href="programmed_announcement.php?session_id='.$sessionId.'">'.
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).
             '</a>';
@@ -87,22 +87,22 @@ class ProgrammedAnnouncement extends Model
 
         $action .= '</div>';
 
-		$html = $action;
+        $html = $action;
         $html .= '<div id="session-table" class="table-responsive">';
         $html .= Display::grid_html('programmed');
         $html .= '</div>';
 
         return $html;
-	}
+    }
 
-	/**
+    /**
      * Returns a Form validator Obj
      * @param   string  $url
      * @param   string  $action add, edit
      *
      * @return  FormValidator form validator obj
      */
-	public function returnSimpleForm($url, $action, $sessionInfo = [])
+    public function returnSimpleForm($url, $action, $sessionInfo = [])
     {
         $form = new FormValidator(
             'announcement',
@@ -125,9 +125,12 @@ class ProgrammedAnnouncement extends Model
         return $form;
     }
 
+    /**
+     * @param FormValidator $form
+     */
     private function setTagsInForm(& $form)
     {
-	    $form->addLabel(
+        $form->addLabel(
             get_lang('Tags'),
             Display::return_message(
                 implode('<br />', $this->getTags()),
@@ -137,14 +140,12 @@ class ProgrammedAnnouncement extends Model
         );
     }
 
-
-
     /**
      * Returns a Form validator Obj
      * @todo the form should be auto generated
      * @param   string  $url
      * @param   string  $action add, edit
-     *
+     * @param array
      * @return  FormValidator form validator obj
      */
     public function returnForm($url, $action, $sessionInfo = [])
@@ -247,34 +248,6 @@ class ProgrammedAnnouncement extends Model
     }
 
     /**
-     * @param array $params
-     * @param bool $show_query
-     * @return bool
-     */
-    public function save($params, $show_query = false)
-    {
-        $id = parent::save($params, $show_query);
-
-        return $id;
-    }
-
-    /**
-     * @param array $params
-     */
-    public function update($params)
-    {
-        parent::update($params);
-    }
-
-    /**
-     * @param int $id
-     */
-    public function delete($id)
-    {
-	    parent::delete($id);
-    }
-
-    /**
      * @return int
      */
     public function sendPendingMessages()
@@ -284,7 +257,6 @@ class ProgrammedAnnouncement extends Model
         }
 
         $messagesSent = 0;
-
         $now = api_get_utc_datetime();
         $courseCode = api_get_course_id();
         $result = $this->get_all();
@@ -294,7 +266,7 @@ class ProgrammedAnnouncement extends Model
                 if (!empty($result['date']) && $result['date'] < $now) {
                     $sessionId = $result['session_id'];
                     $sessionInfo = api_get_session_info($sessionId);
-                    //self::update(['id' => $result['id'], 'sent' => 1]);
+                    self::update(['id' => $result['id'], 'sent' => 1]);
                     $users = SessionManager::get_users_by_session($sessionId);
                     $subject = $result['subject'];
                     $message = $result['message'];

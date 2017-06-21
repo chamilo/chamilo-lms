@@ -42,8 +42,6 @@ if ($action == 'add') {
     $tool_name = get_lang('ProgrammedAnnouncements');
 }
 
-
-
 switch ($action) {
     case 'run':
         $messagesSent = $object->sendPendingMessages();
@@ -76,7 +74,6 @@ switch ($action) {
                             break;
                     }
                     $interval = new DateInterval('P'.$numberDays.'D');
-
                     switch ($values['moment_type']) {
                         case 'after':
                             $newDate = $baseDate->add($interval);
@@ -91,8 +88,8 @@ switch ($action) {
                     $values['date'] = api_get_utc_datetime($values['date']);
                     break;
             }
+
             $res = $object->save($values);
-            $values['date'] = api_get_utc_datetime($values['date']);
 
             if ($res) {
                 Display::addFlash(
@@ -112,22 +109,6 @@ switch ($action) {
 
             $content .= $form->returnForm();
         }
-
-        /*if ($form->validate()) {
-            $values = $form->getSubmitValues();
-            $values['subject'];
-            $values['message'];
-
-            switch ($values['type']) {
-                case 'base_date':
-
-                    $values['date_time'];
-                    break;
-                case 'specific_date':
-
-                    break;
-            }
-        }*/
         break;
     case 'edit':
         // Action handling: Editing
@@ -151,7 +132,7 @@ switch ($action) {
         $content = $form->returnForm();
         break;
     case 'delete':
-        $res = $object->delete($_GET['id']);
+        $object->delete($_GET['id']);
         $content = $object->getGrid($sessionId);
         break;
     default:
@@ -189,7 +170,7 @@ $columnModel = [
         //'align' => 'left',
         'sortable' => 'true',
     ),
-     array(
+    array(
         'name' => 'actions',
         'index' => 'actions',
         'width' => '100',
@@ -223,7 +204,6 @@ $(function() {
     ).'
 });
 </script>';
-
 
 $tpl = new Template($tool_name);
 $tpl->assign('content', $content);

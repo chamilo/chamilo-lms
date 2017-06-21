@@ -283,7 +283,7 @@ class SortableTable extends HTML_Table
             }
         }
 
-        $html .= $content;
+        $html .= '<div class="table-responsive">'.$content.'</div>';
 
         if (!$empty_table) {
             if (!empty($this->additional_parameters)) {
@@ -336,7 +336,7 @@ class SortableTable extends HTML_Table
             }
         }
 
-        return '<div class="table-responsive">'.$html.'</div>';
+        return $html;
     }
 
     /**

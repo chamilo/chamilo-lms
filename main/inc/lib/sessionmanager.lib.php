@@ -53,7 +53,7 @@ class SessionManager
             return [];
         }
 
-        return [
+        $result = [
             'id' => $session->getId(),
             'id_coach' => $session->getGeneralCoach() ? $session->getGeneralCoach()->getId() : null,
             'session_category_id' => $session->getCategory() ? $session->getCategory()->getId() : null,
@@ -87,6 +87,8 @@ class SessionManager
                 : null,
             'send_subscription_notification' => $session->getSendSubscriptionNotification(),
         ];
+
+        return $result;
     }
 
     /**
@@ -1888,26 +1890,32 @@ class SessionManager
 
             // Replace with this new function
             // insert new users into session_rel_course_rel_user and ignore if they already exist
-
             foreach ($user_list as $enreg_user) {
                 if (!in_array($enreg_user, $existingUsers)) {
-                    $enreg_user = Database::escape_string($enreg_user);
-                    $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id, c_id, user_id, visibility, status)
-                            VALUES($id_session, $courseId, $enreg_user, $session_visibility, 0)";
-                    $result = Database::query($sql);
-
-                    Event::addEvent(
-                        LOG_SESSION_ADD_USER_COURSE,
-                        LOG_USER_ID,
+                    $status = self::get_user_status_in_course_session(
                         $enreg_user,
-                        api_get_utc_datetime(),
-                        api_get_user_id(),
                         $courseId,
                         $id_session
                     );
+                    // Avoid duplicate entries.
+                    if ($status === false || ($status !== false && $status != 0)) {
+                        $enreg_user = (int) $enreg_user;
+                        $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id, c_id, user_id, visibility, status)
+                                VALUES($id_session, $courseId, $enreg_user, $session_visibility, 0)";
+                        $result = Database::query($sql);
+                        if (Database::affected_rows($result)) {
+                            $nbr_users++;
+                        }
 
-                    if (Database::affected_rows($result)) {
-                        $nbr_users++;
+                        Event::addEvent(
+                            LOG_SESSION_ADD_USER_COURSE,
+                            LOG_USER_ID,
+                            $enreg_user,
+                            api_get_utc_datetime(),
+                            api_get_user_id(),
+                            $courseId,
+                            $id_session
+                        );
                     }
                 }
             }
@@ -1933,13 +1941,15 @@ class SessionManager
 
         // Insert missing users into session
         $nbr_users = 0;
-
         foreach ($user_list as $enreg_user) {
-            $enreg_user = Database::escape_string($enreg_user);
-            $nbr_users++;
-            $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, registered_at)
-                    VALUES (0, $id_session, $enreg_user, '".api_get_utc_datetime()."')";
-            Database::query($sql);
+            $isUserSubscribed = self::isUserSubscribedAsStudent($id_session, $enreg_user);
+            if ($isUserSubscribed === false) {
+                $enreg_user = (int)$enreg_user;
+                $nbr_users++;
+                $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, registered_at)
+                        VALUES (0, $id_session, $enreg_user, '".api_get_utc_datetime()."')";
+                Database::query($sql);
+            }
         }
 
         // update number of users in the session
@@ -3920,9 +3930,10 @@ class SessionManager
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT session_rcru.status
-                FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
-                WHERE
-                    session_rcru.user_id = user.user_id AND
+                FROM $tbl_session_rel_course_rel_user session_rcru 
+                INNER JOIN $tbl_user user
+                ON (session_rcru.user_id = user.user_id)
+                WHERE                    
                     session_rcru.session_id = '".intval($session_id)."' AND
                     session_rcru.c_id ='" . intval($courseId)."' AND
                     user.user_id = " . intval($user_id);
@@ -7463,6 +7474,14 @@ class SessionManager
         $js = $extra['jquery_ready_content'];
 
         return ['js' => $js];
+    }
+
+    /**
+     * @return bool
+     */
+    public static function allowProgrammedAnnouncement()
+    {
+        return true;
     }
 
     /**

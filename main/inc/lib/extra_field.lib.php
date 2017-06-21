@@ -132,6 +132,9 @@ class ExtraField extends Model
             case 'career':
                 $this->extraFieldType = EntityExtraField::CAREER_FIELD_TYPE;
                 break;
+            case 'user_certificate':
+                $this->extraFieldType = EntityExtraField::USER_CERTIFICATE;
+                break;
         }
 
         $this->pageUrl  = 'extra_fields.php?type='.$this->type;
@@ -162,7 +165,8 @@ class ExtraField extends Model
             'lp_item',
             'skill',
             'work',
-            'career'
+            'career',
+            'user_certificate'
         );
     }
 

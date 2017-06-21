@@ -254,8 +254,10 @@ if ($action_forums != 'add') {
 
     // Step 4: We display all the forums in this category.
     $forum_count = 0;
-    foreach ($forum_list as $key => $forum) {
-        if ($forum['forum_category'] == $forum_category['cat_id']) {
+    
+    foreach ($forum_list as $forum) {
+        if(!empty($forum['forum_category'])){
+            if ($forum['forum_category'] == $forum_category['cat_id']) {
             // The forum has to be showed if
             // 1.v it is a not a group forum (teacher and student)
             // 2.v it is a group forum and it is public (teacher and student)
@@ -500,6 +502,7 @@ if ($action_forums != 'add') {
                 $html .= '</div></div>';
             }
             echo $html;
+        }
         }
     }
     if (count($forum_list) == 0) {

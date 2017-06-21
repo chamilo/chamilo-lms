@@ -100,9 +100,9 @@
 
     {% if programmed_announcement %}
         <tr>
-            <td>{{ 'ProgrammedAnnouncements' | get_lang}}</td>
+            <td>{{ 'ScheduledAnnouncements' | get_lang}}</td>
             <td>
-                <a class="btn btn-default" href="{{ _p.web_main }}session/programmed_announcement.php?session_id={{ session.id }}">
+                <a class="btn btn-default" href="{{ _p.web_main }}session/scheduled_announcement.php?session_id={{ session.id }}">
                     {{ 'Edit' | get_lang }}
                 </a>
             </td>

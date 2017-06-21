@@ -217,7 +217,7 @@ class ScheduledAnnouncement extends Model
             get_lang('AfterOrBefore'),
             [
                 'after' => get_lang('After'),
-                'before' => get_lang('before'),
+                'before' => get_lang('Before'),
             ]
         );
 

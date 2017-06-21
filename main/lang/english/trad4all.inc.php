@@ -8006,4 +8006,5 @@ $ScheduledAnnouncements = "Scheduled announcements";
 $SpecificDate = "Specific date";
 $BaseDate = "Base date";
 $AfterOrBefore = "After or before";
+$Before = "Before";
 ?>

@@ -8037,4 +8037,5 @@ $ScheduledAnnouncements = "Programación de anuncios";
 $SpecificDate = "Envio en fecha concreta";
 $BaseDate = "Envío en base a fecha de inicio/fin de la sesión";
 $AfterOrBefore = "Antes o después";
+$Before = "Antes de";
 ?>

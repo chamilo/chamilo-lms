@@ -504,7 +504,7 @@ if ($ajax_search) {
             LEFT JOIN $tbl_session_rel_user su
                 ON su.user_id = u.id
                 AND su.session_id = $id_session
-                AND v.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
             WHERE u.status <> ".DRH." AND u.status <> 6
             $order_clause
         ";

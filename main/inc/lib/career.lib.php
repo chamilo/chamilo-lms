@@ -300,7 +300,7 @@ class Career extends Model
         }
 
         $width = 80 / $maxColumn;
-        //var_dump($maxColumn);
+
         //$width = 100;
         //$groupWidth = $width + 30;
         $defaultSpace = 40;
@@ -309,6 +309,39 @@ class Career extends Model
         $counter = 0;
 
         $html = Display::page_header($careerInfo['name']);
+
+        $list = [];
+        $vertexNoGroups = [];
+        foreach ($graph->getVertices() as $vertex) {
+            $group = $vertex->getAttribute('Group');
+            $column = $vertex->getGroup();
+            $row = $vertex->getAttribute('Row');
+            //$id = $vertex->getId();
+            //$vertex->setAttribute('noGroup');
+            if (empty($group)) {
+                $group = $column;
+                $vertexNoGroups[$group][$column][$row] = $vertex;
+            } else {
+                $list[$group][$column][$row] = $vertex;
+            }
+        }
+
+        $graphHtml = '<div class="container">';
+        $maxGroups = count($list);
+        $widthGroup = 85 / $maxGroups;
+        foreach ($list as $group => $columnList) {
+            $graphHtml .= self::parseColumns($list, $group, $columnList, $maxColumn, $widthGroup);
+        }
+
+         $graphHtml .= '</div>';
+         $graphHtml .= '<br/><div class="container">';
+
+        foreach ($vertexNoGroups as $group => $columnList) {
+            $graphHtml .= self::parseColumns($vertexNoGroups, $group, $columnList, $maxColumn, $widthGroup);
+        }
+
+        $graphHtml .= '</div>';
+
         foreach ($graph->getVertices() as $vertex) {
             $id = $vertex->getId();
             $windowId = "window_$id";
@@ -354,8 +387,9 @@ class Career extends Model
                 }
 
                 if (($vertexTo->getGroup() - $groupId) == 1) {
-                    $content .= self::createConnection($windowId, $childId, ['Left', 'Right']);
+                    //$content .= self::createConnection($windowId, $childId, ['Left', 'Right']);
                 } else {
+                    /*
                     if ($childGroupId > $groupId) {
                         $content .= self::createConnection(
                             $groupJsId,
@@ -371,7 +405,7 @@ class Career extends Model
                             $groupJsId,
                             $anchor
                         );
-                    }
+                    }**/
                 }
             }
 
@@ -394,7 +428,97 @@ class Career extends Model
         }
         $html .= '</div>'.PHP_EOL;
 
-        return $html;
+        return $graphHtml;
+    }
+
+    /**
+     * @param $list
+     * @param $group
+     * @param $columnList
+     * @param $maxColumn
+     * @param $widthGroup
+     * @return string
+     */
+    public static function parseColumns($list, $group, $columnList, $maxColumn, $widthGroup)
+    {
+        $width = 80 / $maxColumn;
+
+        //$width = 100;
+        //$groupWidth = $width + 30;
+        $defaultSpace = 40;
+        //$group = 0;
+
+        $leftGroup = ($defaultSpace).'px';
+        if ($group == 1) {
+            $leftGroup = 0;
+        }
+        $groupIdTag = "group_$group";
+        $graphHtml = '<div id="'.$groupIdTag.'" style="padding:15px;border-style:solid;float:left; margin-left:'.$leftGroup.'; width:'.$widthGroup.'%">';
+        foreach ($columnList as $column => $rows) {
+            $leftColumn = ($defaultSpace).'px';
+            if ($column == 1) {
+                $leftColumn = 0;
+            }
+            if (count($columnList) == 1) {
+                $leftColumn = 0;
+            }
+
+            $widthColumn = 85 / count($columnList);
+            $graphHtml .= '<div id="col_'.$column.'" style="padding:15px;float:left; margin-left:'.$leftColumn.'; width:'.$widthColumn.'%">';
+            /** @var  \Fhaculty\Graph\Vertex $vertex */
+            foreach ($rows as $row => $vertex) {
+                $id = $vertex->getId();
+                $rowId = "row_$row";
+                $graphHtml .= '<div id = "row_'.$id.'" class="'.$rowId.'">';
+                $color = '';
+                if ($vertex->getAttribute('HasColor') == 1) {
+                    $color = 'danger';
+                }
+                $content = $vertex->getAttribute('Notes');
+                $content .= '<div class="pull-right">['.$id.']</div>';
+
+                $graphHtml .= Display::panel(
+                    $content,
+                    $vertex->getAttribute('graphviz.label'),
+                    null,
+                    $color,
+                    null
+                );
+                $graphHtml .= '</div>';
+
+                $arrow = $vertex->getAttribute('DrawArrowFrom');
+
+                if (!empty($arrow)) {
+                    $parts = explode('G', $arrow);
+                    if (empty($parts[0]) && count($parts) == 2) {
+                        $groupArrow = $parts[1];
+                        //var_dump($id);var_dump($rowId, "group_$groupArrow");
+                        $graphHtml .= self::createConnection(
+                            "group_$groupArrow",
+                            "row_$id",
+                            ['Left', 'Right']
+                        );
+                    } else {
+                        $graphHtml .= self::createConnection(
+                            "row_$arrow",
+                            "row_$id",
+                            ['Left', 'Right']
+                        );
+                    }
+                }
+            }
+            $graphHtml .= '</div>';
+        }
+
+        $nextGroup = (int) $group + 1;
+        if (isset($list[$nextGroup])) {
+            $nextGroupTag = "group_$nextGroup";
+            //$graphHtml .= self::createConnection($groupIdTag, $nextGroupTag, ['Left', 'Right']);
+        }
+
+        $graphHtml .= '</div>';
+
+        return $graphHtml;
     }
 
     /**
@@ -419,7 +543,7 @@ class Career extends Model
                         connector: ["Flowchart"],                                        
                         anchor: ["'.$anchor.'"],
                         overlays: [
-                            [ "Arrow", { location:0.9 } ],
+                            [ "Arrow", { location:0.7 } ],
                         ],
                       });';
         $html .= '});</script>'.PHP_EOL;

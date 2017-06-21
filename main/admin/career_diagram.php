@@ -65,6 +65,8 @@ if ($action == 'add') {
     $tool_name = get_lang('Careers');
 }
 
+
+
 $career = new Career();
 $careerInfo = $career->get($careerId);
 if (empty($careerInfo)) {
@@ -82,7 +84,7 @@ $item = $extraFieldValue->get_values_by_handler_and_field_variable(
 
 if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
     $graph = unserialize($item['value']);
-    $html .= Career::renderDiagram($careerInfo, $graph);
+    $html = Career::renderDiagram($careerInfo, $graph);
     $tpl = new Template('');
     $tpl->assign('content', $html);
     $tpl->display_one_col_template();

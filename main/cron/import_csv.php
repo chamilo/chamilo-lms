@@ -2362,7 +2362,6 @@ class ImportCsv
             foreach ($values as $column => $rowList) {
                 foreach ($rowList as $row) {
                     $careerId = $row['CareerId'];
-
                     $item = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
                         $extraFieldName,
                         $careerId,
@@ -2401,11 +2400,13 @@ class ImportCsv
                         $careerList[$careerId] = $graph;
                     }
 
-                    $currentCourseId = (int)$row['CourseId'];
+                    $currentCourseId = (int) $row['CourseId'];
                     $name = $row['CourseName'];
                     $hasColor = $row['HasColor'];
                     $notes = $row['Notes'];
-
+                    $groupValue = $row['Group'];
+                    $rowValue = $row['Row'];
+                    $arrow = $row['DrawArrowFrom'];
                     if ($graph->hasVertex($currentCourseId)) {
                         // Avoid double insertion
                         continue;
@@ -2414,6 +2415,10 @@ class ImportCsv
                         $current->setAttribute('graphviz.label', $name);
                         $current->setAttribute('HasColor', $hasColor);
                         $current->setAttribute('Notes', $notes);
+                        $current->setAttribute('Row', $rowValue);
+                        $current->setAttribute('Group', $groupValue);
+                        $current->setAttribute('DrawArrowFrom', $arrow);
+
                         //$current->setAttribute('graphviz.color', 'blue');
                         $current->setAttribute('graphviz.shape', 'box');
                         $current->setGroup($column);

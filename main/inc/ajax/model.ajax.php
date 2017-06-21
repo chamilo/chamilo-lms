@@ -192,7 +192,7 @@ if (!$sidx) {
 
 switch ($action) {
     case 'get_programmed_announcements':
-        $object = new ProgrammedAnnouncement();
+        $object = new ScheduledAnnouncement();
         $count = $object->get_count();
         break;
     case 'get_group_reporting':

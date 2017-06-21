@@ -16,7 +16,7 @@ if (!$sessionInfo) {
     api_not_allowed(true);
 }
 
-$object = new ProgrammedAnnouncement();
+$object = new ScheduledAnnouncement();
 
 if (!$object->allowed()) {
     api_not_allowed(true);
@@ -31,7 +31,7 @@ $interbreadcrumb[] = array(
 
 $interbreadcrumb[] = array(
     'url' => api_get_self()."?session_id=".$sessionId,
-    "name" => get_lang('ProgrammedAnnouncements')
+    "name" => get_lang('ScheduledAnnouncements')
 );
 
 if ($action == 'add') {
@@ -39,7 +39,7 @@ if ($action == 'add') {
 } elseif ($action == 'edit') {
     $tool_name = get_lang('Edit');
 } else {
-    $tool_name = get_lang('ProgrammedAnnouncements');
+    $tool_name = '';
 }
 
 switch ($action) {

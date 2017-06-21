@@ -27,6 +27,7 @@ class ExtraField extends BaseAttribute
     const SKILL_FIELD_TYPE = 8;
     const WORK_FIELD_TYPE = 9;
     const CAREER_FIELD_TYPE = 10;
+    const USER_CERTIFICATE = 11;
 
     /**
      * @var integer

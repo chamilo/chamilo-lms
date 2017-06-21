@@ -359,7 +359,7 @@ if (!empty($sessionInfo['promotion_id'])) {
     $promotion = $promotion->find($sessionInfo['promotion_id']);
 }
 
-$programmedAnnouncement = new ProgrammedAnnouncement();
+$programmedAnnouncement = new ScheduledAnnouncement();
 $programmedAnnouncement = $programmedAnnouncement->allowed();
 
 $tpl = new Template(get_lang('Session'));

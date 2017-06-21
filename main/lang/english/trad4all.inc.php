@@ -1824,7 +1824,7 @@ $YesAddCSVHeader = "Yes, add the headers<br />This will put the fields names on 
 $ListOfUsersSubscribedToCourse = "List of users subscribed to course";
 $NumberOfCourses = "Courses";
 $ShowDifferentCourseLanguage = "Show course languages";
-$VisioRTMPTunnelPort = "Videoconference RTMTP protocol tunnel port";
+$VisioRTMPTunnelPort = "Videoconference RTMPT protocol tunnel port";
 $Security = "Security";
 $UploadExtensionsListType = "Type of filtering on document uploads";
 $UploadExtensionsListTypeComment = "Whether you want to use the blacklist or whitelist filtering. See blacklist or whitelist description below for more details.";
@@ -1996,8 +1996,8 @@ $ImportLDAPUsersIntoSession = "Import LDAP users into a session";
 $LDAPSelectFilterOnUsersOU = "Select a filter to find a matching string at the end of the OU attribute";
 $LDAPOUAttributeFilter = "The OU attribute filter";
 $SelectSessionToImportUsersTo = "Select the session in which you want to import these users";
-$VisioUseRtmptTitle = "Use the rtmpt protocol";
-$VisioUseRtmptComment = "The rtmpt protocol allows access to the videoconference from behind a firewall, by redirecting the communications on port 80. This, however, will slow down the streaming, so it is recommended not to use it unless necessary.";
+$VisioUseRtmptTitle = "Use the RTMPT protocol";
+$VisioUseRtmptComment = "The RTMPT protocol allows access to the videoconference from behind a firewall, by redirecting the communications on port 80. This, however, will slow down the streaming, so it is recommended to avoid using it unless required.";
 $UploadNewStylesheet = "New stylesheet file";
 $NameStylesheet = "Name of the stylesheet";
 $StylesheetAdded = "The stylesheet has been added";
@@ -4008,6 +4008,7 @@ $ApprovalForNewAccount = "Approval for new account";
 $ManageUser = "Manage user";
 $SubscribeUserToCourseAsTeacher = "Enroll teachers";
 $PasswordEncryptedForSecurity = "Your password is encrypted for security reasons. Thus, after pressing the link an e-mail will be sent to you again with your password.";
+$ExtraFields = "Extra fields";
 $OpenIDCouldNotBeFoundPleaseRegister = "This OpenID could not be found in our database. Please register for a new account. If you have already an account with us, please edit your profile inside your account to add this OpenID";
 $UsernameMaxXCharacters = "The login needs to be maximum %s characters long";
 $PictureUploaded = "Your picture has been uploaded";
@@ -6082,7 +6083,7 @@ $AcceptThisCourseRequest = "Accept this course";
 $ANewCourseWillBeCreated = "A new course %s is going to be created. Is it OK to proceed?";
 $AdditionalInfoWillBeAsked = "Additional information about %s course request is going to be asked through an e-mail message. Is it OK to proceed?";
 $AskAdditionalInfo = "Ask for additional information";
-$BrowserDontSupportsSVG = "Your browser does not support SVG files. To use the drawing tool you must have an advanced browser like: Firefox or Chrome";
+$BrowserDontSupportsSVG = "Your browser does not support SVG files. To use the drawing tool you must have an advanced browser such as Firefox or Chrome";
 $BrowscapInfo = "Browscap loading browscap.ini file that contains a large amount of data on the browser and its capabilities, so it can be used by the function get_browser () PHP";
 $DeleteThisCourseRequest = "Delete this course request";
 $ACourseRequestWillBeDeleted = "The course request %s is going to be deleted. Is it OK to proceed?";
@@ -6133,7 +6134,7 @@ $SSOServerUnAuthURIComment = "The address of the page on the server that logs th
 $SSOServerProtocolTitle = "Single Sign On server's protocol";
 $SSOServerProtocolComment = "The protocol string to prefix the Single Sign On server's domain (we recommend you use https:// if your server is able to provide this feature, as all non-secure protocols are dangerous for authentication matters)";
 $EnabledWirisTitle = "WIRIS mathematical editor";
-$EnabledWirisComment = "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS. <br/>This activation is not fully realized unless it has been previously downloaded the <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\" target=\"_blank\">PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/ <br/>This is necessary because Wiris is proprietary software and his services are <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by configuration.ini.default Chamilo file.";
+$EnabledWirisComment = "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\" target=\"_blank\">PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo.";
 $FileSavedAs = "File saved as";
 $FileExportAs = "File export as";
 $AllowSpellCheckTitle = "Spell check";
@@ -6163,7 +6164,7 @@ $BigBlueButtonHostTitle = "BigBlueButton server host";
 $BigBlueButtonHostComment = "This is the name of the server where your BigBlueButton server is running. Might be <i>localhost</i>, an IP address (e.g. 192.168.13.54) or a domain name (e.g. my.video.com).";
 $BigBlueButtonSecuritySaltTitle = "Security key of the BigBlueButton server";
 $BigBlueButtonSecuritySaltComment = "This is the security key of your BigBlueButton server, which will allow your server to authentify the Chamilo installation. Refer to the BigBlueButton documentation to locate it.";
-$SelectSVGEditImage = "Select a picture";
+$SelectSVGEditImage = "Select a picture (SVG, PNG)";
 $OnlyAccessFromYourGroup = "Only accessible from your group";
 $CreateAssignmentPage = "This will create a special wiki page in which the teacher can describe the task and which will be automatically linked to the wiki pages where learners perform the task. Both the teacher's and the learners' pages are created automatically. In these tasks, learners can only edit and view theirs pages, but this can be changed easily if you need to.";
 $UserFolders = "Folders of users";
@@ -6360,9 +6361,7 @@ $MailNotifyInvitation = "Notify by mail on new invitation received";
 $MailNotifyMessage = "Notify by mail on new personal message received";
 $MailNotifyGroupMessage = "Notify by mail on new message received in group";
 $SearchEnabledTitle = "Fulltext search";
-$SearchEnabledComment = "This feature allows you to index most of the documents uploaded to your portal, then provide a search feature for users.<br />
-This feature will not index documents that have already been uploaded, so it is important to enable (if wanted) at the beginning of your implementation.<br />
-Once enabled, a search box will appear in the courses list of every user. Searching for a specific term will bring a list of corresponding documents, exercises or forum topics, filtered depending on the availability of these contents to the user.";
+$SearchEnabledComment = "This feature allows you to index most of the documents uploaded to your portal, then provide a search feature for users.<br />This feature will not index documents that have already been uploaded, so it is important to enable (if wanted) at the beginning of your implementation.<br />Once enabled, a search box will appear in the courses list of every user. Searching for a specific term will bring a list of corresponding documents, exercises or forum topics, filtered depending on the availability of these contents to the user.";
 $SpecificSearchFieldsAvailable = "Available custom search fields";
 $XapianModuleInstalled = "Xapian module installed";
 $ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField = "Click on the box below to select files from your computer (you can use CTRL + clic to select various files at a time), or drag and drop some files from your desktop directly over the box below. The system will handle the rest!";
@@ -7052,7 +7051,7 @@ $ShibbolethMainActivateTitle = "<h3>Shibboleth authentication</h3>";
 $ShibbolethMainActivateComment = "<p>First of all, you have to configure Shibboleth for your web server.</p>To configure it for Chamilo<h5>edit file main/auth/shibboleth/config/aai.class.php</h5><p>Modify object &#36;result values with the name of your Shibboleth attributes</p><ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Go to <a href='settings.php?category=Shibboleth'>Plugin</a> to add a configurable 'Shibboleth Login' button for your Chamilo campus.";
 $LdapDescriptionTitle = "<h3>LDAP autentication</h3>";
 $FacebookMainActivateTitle = "<h3>Facebook authentication</h3>";
-$FacebookMainActivateComment = "<p>First of all, you have to create a Facebook Application (see <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) with your Facebook account. In the Facebook Apps settings, the site URL value should be the URL of this campus. Enable the Web OAuth Login option. And add the site URL of your campus to the Valid OAuth redirect URIs field</p><p>Uncommentt the line <code>&#36;_configuration['facebook_auth'] = 1;</code> to enable the Facebook Auth.</p><p>Then, edit the <code>app/config/auth.conf.php</code> file and enter '<code>appId</code>' and '<code>secret</code>' values for <code>&#36;facebook_config</code>.</p><p>Go to <a href='settings.php?category=Plugins'>Plugins</a> to add a configurable <em>Facebook Login</em> button for your Chamilo campus.</p>";
+$FacebookMainActivateComment = "<p><h5>Create your Facebook Application</h5>First of all, you have to create a Facebook Application (see <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) with your Facebook account. In the Facebook Apps settings, the site URL value should be the URL of this campus. Enable the Web OAuth Login option. And add the site URL of your campus to the Valid OAuth redirect URIs field</p><p>Uncomment the line <code>&#36;_configuration['facebook_auth'] = 1;</code> to enable the Facebook Auth.</p><p>Then, edit the <code>app/config/auth.conf.php</code> file and enter '<code>appId</code>' and '<code>secret</code>' values for <code>&#36;facebook_config</code>.</p><p>Go to <a href='settings.php?category=Plugins'>Plugins</a> to add a configurable <em>Facebook Login</em> button for your Chamilo campus.</p>";
 $AnnouncementForGroup = "Announcement for a group";
 $AllGroups = "All groups";
 $LanguagePriority1Title = "Language priority 1";
@@ -7477,13 +7476,8 @@ $AreYouSureToSubscribe = "Are you sure to subscribe?";
 $CheckYourEmailAndFollowInstructions = "Check your e-mail and follow the instructions.";
 $LinkExpired = "Link expired, please try again.";
 $ResetPasswordInstructions = "Instructions for the password change procedure";
-$ResetPasswordCommentWithUrl = "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.
-
-To set a the new password you need to activate it. To do this, please click this link:
-
-%s
-
-If you did not request this procedure, then please ignore this message. If you keep receiving it, please contact the portal administrator.";
+$ResetPasswordCommentWithUrl = "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>
+To set a the new password you need to activate it. To do this, please click this link:<br/>%s<br/>If you did not request this procedure, then please ignore this message. If you keep receiving it, please contact the portal administrator.";
 $CronRemindCourseExpirationActivateTitle = "Remind Course Expiration cron";
 $CronRemindCourseExpirationActivateComment = "Enable the Remind Course Expiration cron";
 $CronRemindCourseExpirationFrequencyTitle = "Frequency for the Remind Course Expiration cron";
@@ -7491,14 +7485,8 @@ $CronRemindCourseExpirationFrequencyComment = "Number of days before the expirat
 $CronCourseFinishedActivateText = "Course Finished cron";
 $CronCourseFinishedActivateComment = "Activate the Course Finished cron";
 $MailCronCourseFinishedSubject = "End of course %s";
-$MailCronCourseFinishedBody = "Dear %s,
-
-Thank you for your participation to course %s. We hope you've acquired new relevant knowledge and enjoyed the course.
-
-You can check your performance in the course through the My Progress section.
-
-Best regards,
-
+$MailCronCourseFinishedBody = "Dear %s,<br/>Thank you for your participation to course %s. We hope you've acquired new relevant knowledge and enjoyed the course.<br/>
+You can check your performance in the course through the My Progress section.<br/>Best regards,<br/>
 %s Team";
 $GenerateDefaultContent = "Generate default content";
 $ThanksForYourSubscription = "Thanks for your subscription";
@@ -7720,9 +7708,7 @@ $LegalAccepted = "Legal accepted";
 $LoadTermConditionsSectionTitle = "Load term conditions section";
 $LoadTermConditionsSectionDescription = "The legal agreement will appear during the login or when enter to a course.";
 $SendTermsSubject = "Your terms and conditions are ready to be signed";
-$SendTermsDescriptionToUrlX = "Hello,
-
-Your tutor sent you your terms and conditions. You can sign it following this url: %s";
+$SendTermsDescriptionToUrlX = "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s";
 $UserXSignedTheAgreement = "User %s signed the agreement.";
 $UserXSignedTheAgreementTheY = "User %s signed the agreement the %s.";
 $ShowTermsIfProfileCompletedTitle = "Terms and conditions only if profile complete";
@@ -7883,8 +7869,7 @@ $TooManyRepetitions = "Too many repetitions";
 $YourPasswordContainsSequences = "Your password contains sequences";
 $PasswordVeryWeak = "Very weak";
 $UserXHasBeenAssignedToBoss = "You have been assigned the learner %s";
-$UserXHasBeenAssignedToBossWithUrlX = "You have been assigned as tutor for the learner %s.
-
+$UserXHasBeenAssignedToBossWithUrlX = "You have been assigned as tutor for the learner %s.<br/>
 You can access his profile here: %s";
 $ShortName = "Short name";
 $Portal = "Portal";
@@ -8017,4 +8002,8 @@ $TempScoreXQuestionsNotCorrectedYet = "Temporary score: %s open question(s) not 
 $Annotation = "Annotation";
 $TeacherPicture = "Teacher picture";
 $FeedbackIfNotCorrect = "Feedback if not correct";
+$ScheduledAnnouncements = "Scheduled announcements";
+$SpecificDate = "Specific date";
+$BaseDate = "Base date";
+$AfterOrBefore = "After or before";
 ?>

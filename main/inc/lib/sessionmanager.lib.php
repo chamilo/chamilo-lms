@@ -7477,14 +7477,6 @@ class SessionManager
     }
 
     /**
-     * @return bool
-     */
-    public static function allowProgrammedAnnouncement()
-    {
-        return true;
-    }
-
-    /**
      * Gets the number of rows in the session table filtered through the given
      * array of parameters
      * @param array Array of options/filters/keys

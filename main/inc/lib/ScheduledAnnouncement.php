@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class ProgrammedAnnouncement
+ * Class ScheduledAnnouncement
  * Requires DB change:
- * $sql = "CREATE TABLE IF NOT EXISTS programmed_announcements (
+ * $sql = "CREATE TABLE IF NOT EXISTS scheduled_announcements (
             id int UNSIGNED NOT NULL AUTO_INCREMENT,
             subject VARCHAR(255) NOT NULL,
             message TEXT NOT NULL,
@@ -18,14 +18,14 @@
  * $_configuration['allow_scheduled_announcements'] = true;
  *
  * Setup linux cron file:
- * main/cron/programmed_announcement.php
+ * main/cron/scheduled_announcement.php
  *
  * Requires:
  * composer update
  *
  * @package chamilo.library
  */
-class ProgrammedAnnouncement extends Model
+class ScheduledAnnouncement extends Model
 {
     public $table;
     public $columns = array('id', 'subject', 'message', 'date', 'sent', 'session_id');
@@ -36,7 +36,7 @@ class ProgrammedAnnouncement extends Model
     public function __construct()
     {
         parent::__construct();
-        $this->table = 'programmed_announcements';
+        $this->table = 'scheduled_announcements';
     }
 
     /**
@@ -75,13 +75,13 @@ class ProgrammedAnnouncement extends Model
     {
         // action links
         $action = '<div class="actions" style="margin-bottom:20px">';
-        $action .= '<a href="programmed_announcement.php?session_id='.$sessionId.'">'.
+        $action .= '<a href="scheduled_announcement.php?session_id='.$sessionId.'">'.
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).
             '</a>';
 
         $action .= '<a href="'.api_get_self().'?action=add&session_id='.$sessionId.'">'.
             Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
-        $action .= '<a href="programmed_announcement.php?action=run&session_id='.$sessionId.'">'.
+        $action .= '<a href="scheduled_announcement.php?action=run&session_id='.$sessionId.'">'.
             Display::return_icon('mail_send.png', get_lang('Send'), '', ICON_SIZE_MEDIUM).
             '</a>';
 
@@ -208,7 +208,7 @@ class ProgrammedAnnouncement extends Model
 
         $form->addText(
             'days',
-            get_lang('days'),
+            get_lang('Days'),
             false
         );
 
@@ -290,6 +290,8 @@ class ProgrammedAnnouncement extends Model
                             $tags = [
                                 '((session_name))' => $sessionInfo['name'],
                                 '((user_complete_name))' => $userInfo['complete_name'],
+                                '((user_first_name))' => $userInfo['firstname'],
+                                '((user_last_name))' => $userInfo['lastname'],
                                 '((lp_progress))' => $progress,
                             ];
 
@@ -319,6 +321,8 @@ class ProgrammedAnnouncement extends Model
         $tags = [
             '((session_name))',
             '((user_complete_name))',
+            '((user_first_name))',
+            '((user_last_name))',
             '((lp_progress))'
         ];
 

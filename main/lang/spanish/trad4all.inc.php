@@ -4008,6 +4008,7 @@ $ApprovalForNewAccount = "Validación de una nueva cuenta";
 $ManageUser = "Gestión de usuario";
 $SubscribeUserToCourseAsTeacher = "Inscribir profesores";
 $PasswordEncryptedForSecurity = "Su contraseña está encriptada para su seguridad. Por ello, cuando haya pulsado en el enlace para regenerar su clave se le remitirá un nuevo correo que contendrá su contraseña.";
+$ExtraFields = "Campos extras";
 $OpenIDCouldNotBeFoundPleaseRegister = "Este OpenID no se encuentra en nuestra base de datos. Por favor, regístrese para obtener una cuenta. Si ya tiene una cuenta con nosotros,  edite su perfil en la misma para añadir este OpenID";
 $UsernameMaxXCharacters = "El nombre de usuario puede tener como máximo una longitud de %s caracteres";
 $PictureUploaded = "Su imagen ha sido enviada";
@@ -8032,4 +8033,8 @@ $TempScoreXQuestionsNotCorrectedYet = "Score temporaire: %s pregunta(s) abierta(
 $Annotation = "Anotación";
 $TeacherPicture = "Foto del profesor";
 $FeedbackIfNotCorrect = "Feedback si no es correcta";
+$ScheduledAnnouncements = "Programación de anuncios";
+$SpecificDate = "Envio en fecha concreta";
+$BaseDate = "Envío en base a fecha de inicio/fin de la sesión";
+$AfterOrBefore = "Antes o después";
 ?>

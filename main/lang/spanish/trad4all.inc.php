@@ -8038,4 +8038,11 @@ $SpecificDate = "Envio en fecha concreta";
 $BaseDate = "Envío en base a fecha de inicio/fin de la sesión";
 $AfterOrBefore = "Antes o después";
 $Before = "Antes de";
+$ScheduleAnnouncementDescription = "Este formulario permite programar anuncios/avisos para que sean enviados de manera automática a los alumnos que están realizando un curso en una sesión.
+
+Existe dos tipos de anuncios que se pueden enviar:
+
+Envío en una fecha concreta: En este caso se selecciona un día concreto para hacer el envío.
+
+Envío en base a la fecha de inicio/finalización de la sesión: en este caso se ha de indicar el número de días que han de pasar antes de enviar el anuncio. Y esos días pueden estar asociados a antes o después de la fecha de inicio/finalización. Por ejemplo: 3 días después de fecha de inicio.";
 ?>

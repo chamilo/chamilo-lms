@@ -8007,4 +8007,11 @@ $SpecificDate = "Specific date";
 $BaseDate = "Base date";
 $AfterOrBefore = "After or before";
 $Before = "Before";
+$ScheduleAnnouncementDescription = "This form allows scheduling announcements to be sent automatically to the students who are taking a course in a session. 
+
+There are two types of announcements that can be sent: 
+
+Specific date: In this case a specific day is selected to make the announcement. 
+
+Based on the start / end date of the session: in this case the number of days to pass before sending the announcement must be indicated. And those days can be associated to before or after the start / end date. For example: 3 days after the start date.";
 ?>

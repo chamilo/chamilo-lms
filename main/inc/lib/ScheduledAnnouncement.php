@@ -164,6 +164,15 @@ class ScheduledAnnouncement extends Model
         );
 
         $form->addHeader($header);
+        if ($action == 'add') {
+            $form->addHtml(
+                Display::return_message(
+                    nl2br(get_lang('ScheduleAnnouncementDescription')),
+                    'normal',
+                    false
+                )
+            );
+        }
         $form->addHidden('session_id', $sessionInfo['id']);
 
         $useBaseDate = false;

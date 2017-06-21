@@ -13,12 +13,22 @@
  * Init
  */
 // comment exit statement before executing
-//exit;
-$language = 'french';
-$_GET['language'] = $language;
-require __DIR__ . '/../../main/inc/global.inc.php';
+exit;
 
-$debug = 1;
+/* Usage doc */
+if ($argc <= 1) {
+    echo 'Usage: php settings2csv.php [language]'.PHP_EOL;
+    echo '  Where the language name is supported by Chamilo. e.g. french, spanish, ...'.PHP_EOL;
+    echo '  (defaults to "english").'.PHP_EOL;
+    echo '  The resulting filepath will appear on the output line'.PHP_EOL.PHP_EOL;
+}
+
+$language = 'english';
+if (!empty($argv[1])) {
+    $language = $argv[1];
+}
+$_GET['language'] = $language;
+@require __DIR__ . '/../../main/inc/global.inc.php';
 
 // Categories, in order of appearance in the Chamilo settings page
 // Check the end of main/admin/settings.php for the initial list

@@ -15,9 +15,11 @@ $id = isset($_REQUEST['id']) ? intval($_GET['id']) : null; //exe id
 $show_headers = isset($_REQUEST['show_headers']) ? intval($_REQUEST['show_headers']) : null; //exe id
 $origin = api_get_origin();
 
+$class = 'result-body';
 if ($origin == 'learnpath') {
     $show_headers = false;
 }
+
 
 api_protect_course_script($show_headers);
 
@@ -73,14 +75,14 @@ if ($show_headers) {
 
 $message = Session::read('attempt_remaining');
 Session::erase('attempt_remaining');
-
+echo '<div class="'.$class.'">';
 ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
     $id,
     false,
     $message
 );
-
+echo '</div>';
 if ($show_headers) {
     Display::display_footer();
 }

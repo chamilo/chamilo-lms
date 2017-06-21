@@ -183,8 +183,8 @@
         this.el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         this.el.setAttribute('version', '1.1');
         this.el.setAttribute('viewBox', '0 0 ' + this.image.width + ' ' + this.image.height);
-        this.el.style.width = this.image.width + 'px';
-        this.el.style.height = this.image.height + 'px';
+        this.el.setAttribute('width', this.image.width);
+        this.el.setAttribute('height', this.image.height);
 
         var svgImage = document.createElementNS('http://www.w3.org/2000/svg', 'image');
         svgImage.setAttributeNS('http://www.w3.org/1999/xlink', 'href', this.image.src);

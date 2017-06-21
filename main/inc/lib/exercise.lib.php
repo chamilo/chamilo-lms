@@ -305,7 +305,7 @@ class ExerciseLib
                 $numAnswer = $objAnswerTmp->selectAutoId($answerId);
                 $comment = $objAnswerTmp->selectComment($answerId);
                 $attributes = array();
-
+                
                 switch ($answerType) {
                     case UNIQUE_ANSWER:
                         //no break
@@ -365,7 +365,7 @@ class ExerciseLib
                             $attributes['style'] = 'display: none;';
                             $answer = '<div class="thumbnail">'.$answer.'</div>';
                         }
-
+                        $attributes['class'] = 'checkradios';
                         $answer_input .= '<label class="radio '.$hidingClass.'">';
                         $answer_input .= Display::input(
                             'radio',
@@ -418,7 +418,7 @@ class ExerciseLib
 
                         if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                             $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-
+                            $attributes['class'] = 'checkradios';
                             $answer_input = '<label class="checkbox">';
                             $answer_input .= Display::input(
                                 'checkbox',
@@ -1043,7 +1043,7 @@ HTML;
 
                             $s .= <<<HTML
                             </td>
-                            <td width="45%">
+                            <td width="45%" class="point_end">
 HTML;
 
                             if (isset($select_items[$lines_count])) {
@@ -4022,16 +4022,30 @@ HOTSPOT;
      *
      * @return string
      */
-    public static function getQuestionRibbon($class, $scoreLabel, $result)
+    public static function getQuestionRibbon($class, $scoreLabel, $result, $array)
     {
         // ofaj
+        $html = null;
         $hideLabel = api_get_configuration_value('exercise_hide_label');
         $label = '<div class="rib rib-'.$class.'">
                         <h3>'.$scoreLabel.'</h3>
                   </div> 
                   <h4>'.get_lang('Score').': '.$result.'</h4>';
         if ($hideLabel === true) {
-            $label = "<h4>{$result}<h4/>";
+            
+            $answerUsed = (int)$array['used'];
+            $answerMissing = (int)$array['missing'] - $answerUsed;
+            
+            for ($i = 1; $i <= $answerUsed; $i++) {
+                $html.= '<span class="score-img">'.Display::return_icon('attempt-check.png',null,null,ICON_SIZE_SMALL).'</span>';
+            }
+            for ($i = 1; $i <= $answerMissing; $i++) {
+                $html.= '<span class="score-img">'.Display::return_icon('attempt-nocheck.png',null,null,ICON_SIZE_SMALL).'</span>';
+            }
+            $label = '<div class="score-title">'.get_lang('CorrectAnswers').': '.$result.'</div>';
+            $label .= '<div class="score-limits">';
+            $label .= $html;
+            $label .= '</div>';
         }
 
         return '<div class="ribbon">

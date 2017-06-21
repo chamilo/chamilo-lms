@@ -1968,9 +1968,13 @@ abstract class Question
         if ($show_media) {
             $header .= $this->show_media_content();
         }
-
+        
+        $scoreCurrent = [
+            'used' => $score['score'],
+            'missing' => $score['weight']
+        ];
         $header .= Display::page_subheader2($counter_label.". ".$this->question);
-        $header .= ExerciseLib::getQuestionRibbon($class, $score_label, $score['result']);
+        $header .= ExerciseLib::getQuestionRibbon($class, $score_label, $score['result'], $scoreCurrent);
         if ($this->type != READING_COMPREHENSION) {
             // Do not show the description (the text to read) if the question is of type READING_COMPREHENSION
             $header .= Display::div($this->description, array('class' => 'question_description'));
@@ -2264,6 +2268,6 @@ abstract class Question
      */
     public function returnFormatFeedback()
     {
-        return '<br /><br />'.Display::return_message($this->feedback, 'normal', false);
+        return '<br />'.Display::return_message($this->feedback, 'normal', false);
     }
 }

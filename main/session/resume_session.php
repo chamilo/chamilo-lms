@@ -247,15 +247,16 @@ $url .= Display::url(
 );
 $url .= Display::url(
     Display::return_icon('export_csv.png', get_lang('ExportUsers'), array(), ICON_SIZE_SMALL),
-    "/main/user/user_export.php?file_type=csv&session=$sessionId&addcsvheader=1"
+    api_get_path(WEB_CODE_PATH)."user/user_export.php?file_type=csv&session=$sessionId&addcsvheader=1"
 );
 
 $userListToShow = Display::page_subheader(get_lang('UserList').$url);
 $userList = SessionManager::get_users_by_session($sessionId);
 
 if (!empty($userList)) {
-    $table = new HTML_Table(array('class' => 'data_table', 'id'=>'session-user-list'));
-
+    $table = new HTML_Table(
+        array('class' => 'data_table', 'id' => 'session-user-list')
+    );
     $table->setHeaderContents(0, 0, get_lang('User'));
     $table->setHeaderContents(0, 1, get_lang('Status'));
     $table->setHeaderContents(0, 2, get_lang('Actions'));

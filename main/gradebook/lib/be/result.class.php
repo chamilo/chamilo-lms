@@ -97,7 +97,8 @@ class Result
             // Verified_if_exist_evaluation
             $sql = 'SELECT COUNT(*) AS count
                     FROM ' . $tbl_grade_results.'
-                    WHERE evaluation_id="' . Database::escape_string($evaluation_id).'";';
+                    WHERE evaluation_id="' . Database::escape_string($evaluation_id).'"';
+
             $result = Database::query($sql);
             $existEvaluation = Database::result($result, 0, 0);
 
@@ -176,6 +177,7 @@ class Result
             $paramcount++;
         }
         $sql .= ' ORDER BY u.lastname, u.firstname';
+
         $result = Database::query($sql);
         $allres = array();
         while ($data = Database::fetch_array($result)) {

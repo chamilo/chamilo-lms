@@ -155,7 +155,6 @@ if (api_is_platform_admin()) {
     $items[] = array('url' => 'course_add.php', 'label' => get_lang('AddCourse'));
 
     if (api_get_setting('course_validation') == 'true') {
-
         $items[] = array('url' => 'course_request_review.php', 'label' => get_lang('ReviewCourseRequests'));
         $items[] = array('url' => 'course_request_accepted.php', 'label' => get_lang('AcceptedCourseRequests'));
         $items[] = array('url' => 'course_request_rejected.php', 'label' => get_lang('RejectedCourseRequests'));
@@ -248,11 +247,14 @@ if (api_is_platform_admin()) {
         $items[] = array('url' => 'event_controller.php?action=listing', 'label' => get_lang('EventMessageManagement'));
     }
 
+    $items[] = array('url' => 'extra_field_list.php', 'label' => get_lang('ExtraFields'));
+
     if (!empty($_configuration['multiple_access_urls'])) {
         if (api_is_global_platform_admin()) {
             $items[] = array('url' => 'access_urls.php', 'label' => get_lang('ConfigureMultipleAccessURLs'));
         }
     }
+
 
     if (api_get_setting('allow_terms_conditions') == 'true') {
         $items[] = array('url' => 'legal_add.php', 'label' => get_lang('TermsAndConditions'));

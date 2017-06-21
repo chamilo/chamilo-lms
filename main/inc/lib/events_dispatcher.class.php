@@ -23,8 +23,8 @@ class EventsDispatcher
 
         foreach ($event_config[$event_name]["actions"] as $func) {
             $execute = true;
-            if (!function_exists($func)) // if the function doesn't exist, we log
-            {
+            // if the function doesn't exist, we log
+            if (!function_exists($func)) {
                 error_log("EventsDispatcher warning : ".$func." does not exist.");
                 $execute = false;
             }

@@ -6,7 +6,7 @@
  * Copyright (c) 2007 Mustapha Alouani (supervised by Michel Moreau-Belliard)
  */
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -15,11 +15,11 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 require('../auth/ldap/authldap.php');
 
-$annee_base=date('Y');
+$annee_base = date('Y');
 
 $tool_name = get_lang('LDAPImport');
 // setting breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 var buttoncheck = 1;
@@ -45,7 +45,7 @@ function checkAll() {
 
 $annee = $_GET['annee'];
 $composante = $_GET['composante'];
-$etape =  $_GET['etape'];
+$etape = $_GET['etape'];
 $course = $_POST['course'];
 
 
@@ -195,7 +195,7 @@ elseif ($annee <> "" && $composante <> "" && $etape == "") // form3 :annee!=0com
 	echo '</div>';
 }
 */
-elseif(!empty($annee) && empty($course))
+elseif (!empty($annee) && empty($course))
 {
 	Display::display_header($tool_name);
 	echo '<div style="align:center">';
@@ -203,7 +203,7 @@ elseif(!empty($annee) && empty($course))
 	echo '<form method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'"><br />';
 	echo '<select name="course">';
 	$courses = CourseManager::get_courses_list();
-	foreach($courses as $row)
+	foreach ($courses as $row)
 	{
 		echo '<option value="'.$row['code'].'">'.api_htmlentities($row['title']).'</option>';
 	}
@@ -236,7 +236,7 @@ elseif (!empty($annee) && !empty($course) && empty($_POST['confirmed']))
 
 		$info = ldap_get_entries($ds, $sr);
 
-		for ($key = 0; $key < $info["count"]; $key ++) {
+		for ($key = 0; $key < $info["count"]; $key++) {
 			$nom_form[] = $info[$key]["sn"][0];
 			$prenom_form[] = $info[$key]["givenname"][0];
 			$email_form[] = $info[$key]["mail"][0];
@@ -256,7 +256,7 @@ elseif (!empty($annee) && !empty($course) && empty($_POST['confirmed']))
 		asort($nom_form);
 		reset($nom_form);
 
-		$statut=5;
+		$statut = 5;
 		include ('ldap_form_add_users_group.php');
 	} else {
 		echo '<h4>'.get_lang('UnableToConnectTo').' '.$host.'</h4>';
@@ -267,25 +267,25 @@ elseif (!empty($annee) && !empty($course) && empty($_POST['confirmed']))
     echo '</div>';
 
 }
-elseif (!empty($annee) && !empty($course) && ($_POST['confirmed']=='yes'))
+elseif (!empty($annee) && !empty($course) && ($_POST['confirmed'] == 'yes'))
 {
-	$id=$_POST['username_form'];
-	$UserList=array();
+	$id = $_POST['username_form'];
+	$UserList = array();
 	$userid_match_login = array();
 	foreach ($id as $form_index=>$user_id)
 	{
-		if(is_array($_POST['checkboxes']) && in_array($form_index,array_values($_POST['checkboxes'])))
+		if (is_array($_POST['checkboxes']) && in_array($form_index, array_values($_POST['checkboxes'])))
 		{
 			$tmp = ldap_add_user($user_id);
-			$UserList[]= $tmp;
+			$UserList[] = $tmp;
 			$userid_match_login[$tmp] = $user_id;
 		}
 	}
 	if (!empty($_POST['course']))
 	{
-		foreach($UserList as $user_id)
+		foreach ($UserList as $user_id)
 		{
-			CourseManager::add_user_to_course($user_id,$_POST['course']);
+			CourseManager::add_user_to_course($user_id, $_POST['course']);
 		}
 		header('Location: course_information.php?code='.Security::remove_XSS($_POST['course']));
 	}
@@ -305,14 +305,14 @@ elseif (!empty($annee) && !empty($course) && ($_POST['confirmed']=='yes'))
 		{
 			$message=get_lang('NoUserAdded');
 		}
-		Display :: display_normal_message($message,false);
+		Display::addFlash(Display::return_message($message, 'normal', false));
 	}
 	*/
 	else
 	{
-		Display::display_header($tool_name);
-		$message=get_lang('NoUserAdded');
-		Display :: display_normal_message($message,false);
+		$message = get_lang('NoUserAdded');
+		Display::addFlash(Display::return_message($message, 'normal', false));
+        Display::display_header($tool_name);
 	}
 	echo '<br /><br />';
     echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('BackToNewSearch').'</a>';

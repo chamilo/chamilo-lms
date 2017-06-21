@@ -10,7 +10,7 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$form_style= '<style>
+$form_style = '<style>
 .row {
     width: 200px;
 }
@@ -28,20 +28,20 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 </script>';
 $htmlHeadXtra[] = $form_style;
 
-if (api_get_setting('search_enabled')=='true') {
+if (api_get_setting('search_enabled') == 'true') {
     $specific_fields = get_specific_field_list();
 }
 
 if (isset($_POST['convert'])) {
     $cwdir = getcwd();
     if (isset($_FILES['user_file'])) {
-        $allowed_extensions = array('doc','docx','odt','txt','sxw','rtf');
-        if (in_array(strtolower(pathinfo($_FILES['user_file']['name'],PATHINFO_EXTENSION)),$allowed_extensions)) {
+        $allowed_extensions = array('doc', 'docx', 'odt', 'txt', 'sxw', 'rtf');
+        if (in_array(strtolower(pathinfo($_FILES['user_file']['name'], PATHINFO_EXTENSION)), $allowed_extensions)) {
             require('../lp/lp_upload.php');
             if (isset($o_doc) && $first_item_id != 0) {
                 // Search-related section
-                if (api_get_setting('search_enabled')=='true') {
-                    require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+                if (api_get_setting('search_enabled') == 'true') {
+                    require_once(api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php');
                     $specific_fields = get_specific_field_list();
 
                     foreach ($specific_fields as $specific_field) {
@@ -77,7 +77,7 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[]= array ("url"=>"../lp/lp_controller.php?action=list", "name"=> get_lang("Doc"));
+$interbreadcrumb[] = array("url"=>"../lp/lp_controller.php?action=list", "name"=> get_lang("Doc"));
 $nameTools = get_lang("WoogieConversionPowerPoint");
 Display :: display_header($nameTools);
 
@@ -97,7 +97,7 @@ $s_style = "border-width: 1px;
          border-color: #4171B5;
          color: #000;";
 
-$s_style_error="border-width: 1px;
+$s_style_error = "border-width: 1px;
          border-style: solid;
          margin-left: 0;
          margin-top: 10px;
@@ -123,7 +123,7 @@ $form = new FormValidator('update_course', 'POST', '', '', 'style="margin: 0;"')
 
 // build the form
 
-$form -> addElement ('html','<br>');
+$form -> addElement('html', '<br>');
 
 $div_upload_limit = '&nbsp;&nbsp;'.get_lang('UploadMaxSize').' : '.ini_get('post_max_size');
 
@@ -136,7 +136,7 @@ $user_file_template =
         <!-- BEGIN error --><br /><span class="form_error">{error}</span><!-- END error -->
 </div>
 EOT;
-$renderer->setElementTemplate($user_file_template,'user_file');
+$renderer->setElementTemplate($user_file_template, 'user_file');
 
 // set template for other elements
 $user_file_template =
@@ -174,7 +174,7 @@ $form->addElement('hidden', 'split_steps', 'per_page');
 $form->addElement('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
 $form->addElement('hidden', 'woogie', 'true');
 $form->addProgress();
-$defaults = array('split_steps'=>'per_page','index_document'=>'checked="checked"');
+$defaults = array('split_steps'=>'per_page', 'index_document'=>'checked="checked"');
 $form -> setDefaults($defaults);
 
 // display the form

@@ -71,7 +71,7 @@ $_SESSION['image_files_only'] = $image_files_only;
 function sort_files($table)
 {
     $tablename_direction = isset($_GET['tablename_direction']) ? Security::remove_XSS($_GET['tablename_direction']) : 'ASC';
-    $accepted_extensions = array('.jpg', '.jpeg', '.gif', '.png', '.bmp','.svg');
+    $accepted_extensions = array('.jpg', '.jpeg', '.gif', '.png', '.bmp', '.svg');
     $temp = array();
 
     foreach ($table as & $file_array) {

@@ -115,8 +115,7 @@ class Database
      */
     public static function getUTCDateTimeTypeClass()
     {
-        return isset(self::$utcDateTimeClass) ? self::$utcDateTimeClass :
-        'Application\DoctrineExtensions\DBAL\Types\UTCDateTimeType';
+        return isset(self::$utcDateTimeClass) ? self::$utcDateTimeClass : 'Application\DoctrineExtensions\DBAL\Types\UTCDateTimeType';
     }
 
     /**
@@ -149,6 +148,7 @@ class Database
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
                 'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
                 'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity',
+                'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity',
                 'ChamiloFaqBundle' => 'Chamilo\FaqBundle\Entity'
             )
         );
@@ -281,6 +281,9 @@ class Database
      */
     public static function fetch_row(Statement $result)
     {
+        if ($result === false) {
+            return array();
+        }
         return $result->fetch(PDO::FETCH_NUM);
     }
 
@@ -312,6 +315,9 @@ class Database
      */
     public static function num_rows(Statement $result)
     {
+        if ($result === false) {
+            return 0;
+        }
         return $result->rowCount();
     }
 
@@ -353,8 +359,6 @@ class Database
             } catch (Exception $e) {
                 error_log($e->getMessage());
                 api_not_allowed(false, get_lang('GeneralError'));
-
-                exit;
             }
         }
 
@@ -414,7 +418,7 @@ class Database
 
         if (!empty($params)) {
             $sql = 'INSERT INTO '.$table_name.' ('.implode(',', $params).')
-                    VALUES (:'.implode(', :' ,$params).')';
+                    VALUES (:'.implode(', :', $params).')';
 
             $statement = self::getManager()->getConnection()->prepare($sql);
             $result = $statement->execute($attributes);
@@ -451,14 +455,13 @@ class Database
             $updateSql = '';
             $count = 1;
 
-            if ($showQuery) {
-                var_dump($attributes);
-            }
-
             foreach ($attributes as $key => $value) {
+                if ($showQuery) {
+                    echo $key.': '.$value.PHP_EOL;
+                }
                 $updateSql .= "$key = :$key ";
                 if ($count < count($attributes)) {
-                    $updateSql.= ', ';
+                    $updateSql .= ', ';
                 }
                 $count++;
             }
@@ -513,7 +516,7 @@ class Database
             if ($columns == '*') {
                 $clean_columns = '*';
             } else {
-                $clean_columns = (string)$columns;
+                $clean_columns = (string) $columns;
             }
         }
 
@@ -537,10 +540,11 @@ class Database
     }
 
     /**
-     * Parses WHERE/ORDER conditions i.e array('where'=>array('id = ?' =>'4'), 'order'=>'id DESC'))
+     * Parses WHERE/ORDER conditions i.e array('where'=>array('id = ?' =>'4'), 'order'=>'id DESC')
      * @todo known issues, it doesn't work when using
      * LIKE conditions example: array('where'=>array('course_code LIKE "?%"'))
      * @param   array $conditions
+     * @return string Partial SQL string to add to longer query
      */
     public static function parse_conditions($conditions)
     {
@@ -559,11 +563,11 @@ class Database
                         if (is_array($value_array)) {
                             $clean_values = array();
                             foreach ($value_array as $item) {
-                                $item = Database::escape_string($item);
-                                $clean_values[]= $item;
+                                $item = self::escape_string($item);
+                                $clean_values[] = $item;
                             }
                         } else {
-                            $value_array = Database::escape_string($value_array);
+                            $value_array = self::escape_string($value_array);
                             $clean_values = $value_array;
                         }
 
@@ -584,7 +588,7 @@ class Database
                     }
 
                     if (!empty($where_return)) {
-                        $return_value = " WHERE $where_return" ;
+                        $return_value = " WHERE $where_return";
                     }
                     break;
                 case 'order':
@@ -607,10 +611,10 @@ class Database
                                 if (in_array($element[1], array('desc', 'asc'))) {
                                     $order = $element[1];
                                 }
-                                $temp_value[]= $element[0].' '.$order.' ';
+                                $temp_value[] = $element[0].' '.$order.' ';
                             } else {
                                 //by default DESC
-                                $temp_value[]= $element[0].' DESC ';
+                                $temp_value[] = $element[0].' DESC ';
                             }
                         }
                         if (!empty($temp_value)) {
@@ -684,6 +688,7 @@ class Database
             $path.'src/Chamilo/CourseBundle/Entity',
             $path.'src/Chamilo/TicketBundle/Entity',
             $path.'src/Chamilo/SkillBundle/Entity',
+            $path.'src/Chamilo/PluginBundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Model',
             //$path.'vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Entity',

@@ -243,7 +243,7 @@ var ui = {};
 
         if (remove) { return; }
 
-        cssClass = statusClasses[cssClass];
+        cssClass = statusClasses[Math.floor(cssClass / 2)];
         if (!options.ui.bootstrap2) { cssClass = "has-" + cssClass; }
         $container.addClass(cssClass);
     };

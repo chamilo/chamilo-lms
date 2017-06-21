@@ -65,7 +65,7 @@ $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 /* MAIN CODE */
 
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
-    error_log('New LP - User not authorized in lp_add_item.php');
+    error_log('New LP - User not authorized in lp_edit_item.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
 }
@@ -89,31 +89,32 @@ if (isset($_SESSION['gradebook'])) {
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array (
+    $interbreadcrumb[] = array(
         'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
     );
 }
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
+$interbreadcrumb[] = array(
+    'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
+    'name' => get_lang('LearningPaths')
+);
 $interbreadcrumb[] = array(
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => stripslashes("{$therow['name']}"),
+    'name' => Security::remove_XSS($therow['name'])
 );
 $interbreadcrumb[] = array(
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => get_lang('NewStep'),
+    'name' => get_lang('NewStep')
 );
 
 // Theme calls.
 $show_learn_path = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
 
-Display::display_header(get_lang('Edit'),'Path');
+Display::display_header(get_lang('Edit'), 'Path');
 $suredel = trim(get_lang('AreYouSureToDeleteJS'));
-
 ?>
 <script>
-/* <![CDATA[ */
 function stripslashes(str) {
     str=str.replace(/\\'/g,'\'');
     str=str.replace(/\\"/g,'"');
@@ -165,9 +166,9 @@ echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
 $path_item = isset($_GET['path_item']) ? $_GET['path_item'] : 0;
 $path_item = Database::escape_string($path_item);
-$tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
-$sql_doc = "SELECT path FROM " . $tbl_doc . "
-            WHERE c_id = $course_id AND id = '". $path_item."' ";
+$tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
+$sql_doc = "SELECT path FROM ".$tbl_doc."
+            WHERE c_id = $course_id AND id = '".$path_item."' ";
 
 $res_doc = Database::query($sql_doc);
 $path_file = Database::result($res_doc, 0, 0);

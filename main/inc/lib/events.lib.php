@@ -78,9 +78,7 @@ class Event
         Database::query($sql);
 
         // Auto subscribe
-        $user_status = $userInfo['status']  == SESSIONADMIN ? 'sessionadmin' :
-            $userInfo['status'] == COURSEMANAGER ? 'teacher' :
-                $userInfo['status'] == DRH ? 'DRH' : 'student';
+        $user_status = $userInfo['status'] == SESSIONADMIN ? 'sessionadmin' : $userInfo['status'] == COURSEMANAGER ? 'teacher' : $userInfo['status'] == DRH ? 'DRH' : 'student';
         $autoSubscribe = api_get_setting($user_status.'_autosubscribe');
         if ($autoSubscribe) {
             $autoSubscribe = explode('|', $autoSubscribe);
@@ -337,7 +335,7 @@ class Event
         global $debug;
 
         if ($debug) error_log('Called to update_event_exercice');
-        if ($debug) error_log('duration:' . $duration);
+        if ($debug) error_log('duration:'.$duration);
 
         if ($exeid != '') {
             /*
@@ -385,7 +383,7 @@ class Event
         		   status = '".$status."',
         		   questions_to_check = '".$remind_list."',
         		   data_tracking = '".implode(',', $question_list)."',
-                   user_ip = '" . Database::escape_string(api_get_real_ip()) . "'
+                   user_ip = '" . Database::escape_string(api_get_real_ip())."'
         		 WHERE exe_id = '".Database::escape_string($exeid)."'";
             $res = Database::query($sql);
 
@@ -619,7 +617,7 @@ class Event
             return false;
         }
 
-        $table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
         if ($updateResults) {
             $params = array(
                 'hotspot_correct' => $correct,
@@ -815,11 +813,11 @@ class Event
     /**
      * Save the new message for one event and for one language
      *
-     * @param string $eventName
+     * @param string $event_name
      * @param array $users
      * @param string $message
      * @param string $subject
-     * @param string $eventMessageLanguage
+     * @param string $event_message_language
      * @param int $activated
      */
     public static function save_event_type_message($event_name, $users, $message, $subject, $event_message_language, $activated)
@@ -924,7 +922,7 @@ class Event
      */
     public static function get_attempt_count($user_id, $exerciseId, $lp_id, $lp_item_id, $lp_item_view_id)
     {
-        $stat_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $stat_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $user_id = intval($user_id);
         $exerciseId = intval($exerciseId);
         $lp_id = intval($lp_id);
@@ -945,7 +943,7 @@ class Event
 
         $query = Database::query($sql);
         if (Database::num_rows($query) > 0) {
-            $attempt = Database :: fetch_array($query, 'ASSOC');
+            $attempt = Database::fetch_array($query, 'ASSOC');
             return $attempt['count'];
         } else {
             return 0;
@@ -961,7 +959,7 @@ class Event
      */
     public static function get_attempt_count_not_finished($user_id, $exerciseId, $lp_id, $lp_item_id)
     {
-        $stat_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $stat_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $user_id = intval($user_id);
         $exerciseId = intval($exerciseId);
         $lp_id = intval($lp_id);
@@ -981,7 +979,7 @@ class Event
 
         $query = Database::query($sql);
         if (Database::num_rows($query) > 0) {
-            $attempt = Database :: fetch_array($query, 'ASSOC');
+            $attempt = Database::fetch_array($query, 'ASSOC');
             return $attempt['count'];
         } else {
             return 0;
@@ -1069,19 +1067,19 @@ class Event
 
         if (!empty($exe_list) && is_array($exe_list) && count($exe_list) > 0) {
             $sql = "DELETE FROM $track_e_exercises
-                WHERE exe_id IN (" . implode(',', $exe_list) . ")";
+                WHERE exe_id IN (".implode(',', $exe_list).")";
             Database::query($sql);
 
             $sql = "DELETE FROM $track_attempts
-                WHERE exe_id IN (" . implode(',', $exe_list) . ")";
+                WHERE exe_id IN (".implode(',', $exe_list).")";
             Database::query($sql);
 
             $sql = "DELETE FROM $recording_table
-                WHERE exe_id IN (" . implode(',', $exe_list) . ")";
+                WHERE exe_id IN (".implode(',', $exe_list).")";
             Database::query($sql);
         }
 
-        Event::addEvent(
+        self::addEvent(
             LOG_LP_ATTEMPT_DELETE,
             LOG_LP_ID,
             $lp_id,
@@ -1116,10 +1114,10 @@ class Event
                         session_id = $session_id AND
                         status = 'incomplete' ";
             Database::query($sql);
-            Event::addEvent(
+            self::addEvent(
                 LOG_EXERCISE_RESULT_DELETE,
                 LOG_EXERCISE_AND_USER_ID,
-                $exercise_id . '-' . $user_id,
+                $exercise_id.'-'.$user_id,
                 null,
                 null,
                 $course_id,
@@ -1213,12 +1211,6 @@ class Event
             $list = array();
             while ($row = Database::fetch_array($res, 'ASSOC')) {
                 $list[$row['exe_id']] = $row;
-                $sql = "SELECT * FROM $table_track_attempt 
-                        WHERE exe_id = {$row['exe_id']}";
-                $res_question = Database::query($sql);
-                while ($row_q = Database::fetch_array($res_question, 'ASSOC')) {
-                    $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
-                }
             }
             return $list;
         }
@@ -1630,7 +1622,7 @@ class Event
      */
     public static function get_all_exercises_from_lp($lp_id, $course_id)
     {
-        $lp_item_table = Database :: get_course_table(TABLE_LP_ITEM);
+        $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
         $course_id = intval($course_id);
         $lp_id = intval($lp_id);
         $sql = "SELECT * FROM $lp_item_table
@@ -1722,10 +1714,10 @@ class Event
                     question_id = $question_id ";
         Database::query($sql);
 
-        Event::addEvent(
+        self::addEvent(
             LOG_QUESTION_RESULT_DELETE,
             LOG_EXERCISE_ATTEMPT_QUESTION_ID,
-            $exe_id . '-' . $question_id,
+            $exe_id.'-'.$question_id,
             null,
             null,
             $courseId,
@@ -1759,10 +1751,10 @@ class Event
                     c_id = $courseId AND
                     hotspot_question_id = $question_id ";
         Database::query($sql);
-        Event::addEvent(
+        self::addEvent(
             LOG_QUESTION_RESULT_DELETE,
             LOG_EXERCISE_ATTEMPT_QUESTION_ID,
-            $exe_id . '-' . $question_id,
+            $exe_id.'-'.$question_id,
             null,
             null,
             $courseId,
@@ -1794,7 +1786,14 @@ class Event
         Database::query($sql);
 
         // Course catalog stats modifications see #4191
-        CourseManager::update_course_ranking(null, null, null, null, true, false);
+        CourseManager::update_course_ranking(
+            null,
+            null,
+            null,
+            null,
+            true,
+            false
+        );
     }
 
     /**
@@ -1905,7 +1904,7 @@ class Event
      * The IP address is not considered a useful filter here.
      * @param int $courseId The course in which to add the time
      * @param int $userId The user for whom to add the time
-     * @param $sessionId The session in which to add the time (if any)
+     * @param int $sessionId The session in which to add the time (if any)
      * @param string $virtualTime The amount of time to be added, in a hh:mm:ss format. If int, we consider it is expressed in hours.
      * @return True on successful removal, false otherwise
      */

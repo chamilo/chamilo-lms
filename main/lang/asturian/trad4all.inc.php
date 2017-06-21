@@ -145,7 +145,6 @@ $Forbidden = "Usté ta ensin rexistrar como responsable d'esti cursu";
 $CourseAccessConfigTip = "Por defeutu el cursu ye públicu, pero definir el nivel de confidencialidá nos botones d'enriba.";
 $OpenToTheWorld = "Abiertu - Entrada autorizada a tol mundu";
 $OpenToThePlatform = "Abiertu - entrada permitida namás a los usuarios rexistraos na plataforma";
-$OpenToThePlatform = "Públicu - accesu permitíu namás a los usuarios rexistraos na plataforma";
 $TipLang = "Esti va ser l'idioma que van ver los visitantes del cursu.";
 $Vid = "Videu";
 $Work = "Trabayos";

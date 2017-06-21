@@ -19,15 +19,15 @@ class TaskModel implements TaskInterface
     /**
      *
      */
-    const COLOR_AQUA   = 'aqua';
+    const COLOR_AQUA = 'aqua';
     /**
      *
      */
-    const COLOR_GREEN  = 'green';
+    const COLOR_GREEN = 'green';
     /**
      *
      */
-    const COLOR_RED    = 'red';
+    const COLOR_RED = 'red';
     /**
      *
      */
@@ -42,7 +42,7 @@ class TaskModel implements TaskInterface
     /**
      * @var string
      */
-    protected $color = TaskModel::COLOR_AQUA;
+    protected $color = self::COLOR_AQUA;
 
     /**
      * @var null
@@ -54,7 +54,7 @@ class TaskModel implements TaskInterface
      * @param int    $progress
      * @param string $color
      */
-    function __construct($title = null, $progress = 0, $color = TaskModel::COLOR_AQUA)
+    function __construct($title = null, $progress = 0, $color = self::COLOR_AQUA)
     {
         $this->color    = $color;
         $this->progress = $progress;
@@ -119,7 +119,8 @@ class TaskModel implements TaskInterface
         return $this->title;
     }
 
-    public function getIdentifier() {
+    public function getIdentifier()
+    {
         return $this->title;
     }
 

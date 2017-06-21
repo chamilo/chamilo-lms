@@ -25,6 +25,12 @@ $_SESSION['this_section'] = $this_section;
 // Access restrictions.
 api_protect_admin_script();
 
+ // Submit stylesheets.
+if (isset($_POST['save']) && isset($_GET['category']) && $_GET['category'] === 'Stylesheets') {
+    storeStylesheets();
+    Display::addFlash(Display::return_message(get_lang('Saved')));
+}
+
 // Settings to avoid
 $settings_to_avoid = array(
     'use_session_mode' => 'true',
@@ -45,7 +51,7 @@ if (isset($_POST['style'])) {
 }
 
 // Database table definitions.
-$table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+$table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
 // Setting breadcrumbs.
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
@@ -61,7 +67,7 @@ if (isset($_GET['delete_watermark'])) {
     Display::addFlash(Display::return_message(get_lang('FileDeleted')));
 }
 
-if (isset($_GET['action']) &&  $_GET['action'] == 'delete_grading') {
+if (isset($_GET['action']) && $_GET['action'] == 'delete_grading') {
     $id = intval($_GET['id']);
     api_delete_setting_option($id);
 }
@@ -74,7 +80,10 @@ $form_search = new FormValidator(
     array(),
     FormValidator::LAYOUT_INLINE
 );
-$form_search->addElement('text', 'search_field');
+$form_search->addElement('text', 'search_field', null, array(
+    'id' => 'search_field',
+    'aria-label' => get_lang('Search')
+));
 $form_search->addElement('hidden', 'category', 'search_setting');
 $form_search->addButtonSearch(get_lang('Search'), 'submit_button');
 $form_search->setDefaults(
@@ -177,7 +186,6 @@ if (!empty($_GET['category']) &&
                 $locked_settings = api_get_locked_settings();
                 foreach ($values as $key => $value) {
                     if (!in_array($key, $locked_settings)) {
-
                         $changeable = 0;
                         if ($mark_all) {
                             $changeable = 1;
@@ -228,7 +236,7 @@ if (!empty($_GET['category']) &&
         // Set true for allow_message_tool variable if social tool is actived
         foreach ($convert_byte_to_mega_list as $item) {
             if (isset($values[$item])) {
-                $values[$item] = round($values[$item]*1024*1024);
+                $values[$item] = round($values[$item] * 1024 * 1024);
             }
         }
 
@@ -369,9 +377,7 @@ if (!empty($_GET['category']) &&
         exit;
     }
 }
-
-$htmlHeadXtra[] = '<script>
-    
+$htmlHeadXtra[] = '<script>    
     var hide_icon = "'.api_get_path(WEB_IMG_PATH).'/icons/32/shared_setting_na.png";
     var show_icon = "'.api_get_path(WEB_IMG_PATH).'/icons/32/shared_setting.png";
     var url       = "'.api_get_path(WEB_AJAX_PATH).'admin.ajax.php?a=update_changeable_setting";
@@ -401,9 +407,6 @@ $htmlHeadXtra[] = '<script>
         });
     });
 </script>';
-
-// Including the header (banner).
-Display :: display_header($tool_name);
 
 // The action images.
 $action_images['platform'] = 'platform.png';
@@ -474,10 +477,7 @@ foreach ($resultcategories as $row) {
     $action_array[] = $url;
 }
 
-echo Display::actions($action_array);
-echo '<br />';
-echo $form_search_html;
-
+ob_start();
 if (!empty($_GET['category'])) {
     switch ($_GET['category']) {
         case 'Regions':
@@ -501,7 +501,7 @@ if (!empty($_GET['category'])) {
                         api_get_utc_datetime(),
                         $user_id
                     );
-                    Display :: display_confirmation_message(get_lang('DashboardPluginsUpdatedSuccessfully'));
+                    echo Display::return_message(get_lang('DashboardPluginsUpdatedSuccessfully'), 'confirmation');
                 }
             }
             echo '<script>
@@ -551,5 +551,13 @@ if (!empty($_GET['category'])) {
             }
     }
 }
+$content = ob_get_clean();
+
+// Including the header (banner).
+Display :: display_header($tool_name);
+echo Display::actions($action_array);
+echo '<br />';
+echo $form_search_html;
+echo $content;
 
 Display :: display_footer();

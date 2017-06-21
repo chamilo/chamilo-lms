@@ -5,6 +5,6 @@
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
  * @package chamilo.plugin.google_maps
  */
-require_once __DIR__ . '/config.php';
+require_once __DIR__.'/config.php';
 
 GoogleMapsPlugin::create()->install();

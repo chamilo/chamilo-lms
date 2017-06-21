@@ -48,8 +48,8 @@ $current_uid = api_get_user_id();
 
 // get message user id for inbox/outbox
 $message_uid = '';
-$message_type = array('inbox','outbox');
-if (in_array($_GET['type'],$message_type)) {
+$message_type = array('inbox', 'outbox');
+if (in_array($_GET['type'], $message_type)) {
 	if ($_GET['type'] == 'inbox') {
 		$message_uid = $row_users['user_receiver_id'];
 	} else {
@@ -63,7 +63,7 @@ $userGroup = new UserGroup();
 
 if (!empty($row_users['group_id'])) {
 	$users_group = $userGroup->get_all_users_by_group($row_users['group_id']);
-	if (!in_array($current_uid,array_keys($users_group))) {
+	if (!in_array($current_uid, array_keys($users_group))) {
 		$not_allowed_to_edit = true;
 	}
 } else {

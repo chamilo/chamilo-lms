@@ -8,21 +8,21 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 // the section (tabs)
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 
 // notice for unauthorized people.
 api_protect_course_script(true);
 
 // breadcrumbs
-$interbreadcrumb[]=array("url" => "exercise.php","name" => get_lang('Exercises'));
+$interbreadcrumb[] = array("url" => "exercise.php", "name" => get_lang('Exercises'));
 
 // Tool name
-$nameTools=get_lang('AddQuestionToExercise');
+$nameTools = get_lang('AddQuestionToExercise');
 
 // The form
-$form = new FormValidator('add_question','post',api_get_self().'?'.api_get_cidreq());
+$form = new FormValidator('add_question', 'post', api_get_self().'?'.api_get_cidreq());
 // form title
-$form->addElement('header','',get_lang('AddQuestionToExercise'));
+$form->addElement('header', '', get_lang('AddQuestionToExercise'));
 
 $question_list = Question::get_question_type_list();
 $question_list_options = array();
@@ -38,10 +38,10 @@ $form->addElement(
 );
 
 //session id
-$session_id  = api_get_session_id();
+$session_id = api_get_session_id();
 
 // the exercises
-$tbl_exercises = Database :: get_course_table(TABLE_QUIZ_TEST);
+$tbl_exercises = Database::get_course_table(TABLE_QUIZ_TEST);
 $course_id = api_get_course_int_id();
 
 $sql = "SELECT id,title,type,description, results_disabled
@@ -98,7 +98,7 @@ if ($form->validate()) {
     Display::display_header($nameTools);
 
     echo '<div class="actions">';
-    echo '<a href="exercise.php?show=test">'.Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="exercise.php?show=test">'.Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
 
     // displaying the form

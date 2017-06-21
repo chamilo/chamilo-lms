@@ -9,5 +9,5 @@ require '../..//inc/global.inc.php';
 require_once('authcas.php');
 global $cas_auth_ver, $cas_auth_server, $cas_auth_port, $cas_auth_uri;
 
-phpCAS::client($cas_auth_ver,$cas_auth_server,$cas_auth_port,$cas_auth_uri);
+phpCAS::client($cas_auth_ver, $cas_auth_server, $cas_auth_port, $cas_auth_uri);
 phpCAS::logout();

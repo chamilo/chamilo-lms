@@ -22,5 +22,5 @@
  * See facebook section of the auth.conf.php file
  */
 
-require dirname(__FILE__) . '/../../../app/config/auth.conf.php';
+require __DIR__.'/../../../app/config/auth.conf.php';
 

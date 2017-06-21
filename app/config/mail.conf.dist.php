@@ -18,3 +18,4 @@ $platform_email['SMTP_CHARSET'] = 'UTF-8';
 $platform_email['SMTP_UNIQUE_SENDER'] = 0; // to send all mails from the same user
 $platform_email['SMTP_DEBUG'] = 0; // change to 1 to enable smtp debug
 $platform_email['SMTP_SECURE'] = 'tls'; // if you're using SSL: ssl; or TLS: tls. (only used if SMTP_AUTH==1)
+$platform_email['SMTP_UNIQUE_REPLY_TO'] = 0; // to use AWS SMS service, SMTP_UNIQUE_SENDER and this have to be = 1

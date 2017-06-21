@@ -87,7 +87,7 @@ if ($form->validate()) {
         }
 
         if ($pluginLegal) {
-            header('Location:' .$url);
+            header('Location:'.$url);
             exit;
         }
     }

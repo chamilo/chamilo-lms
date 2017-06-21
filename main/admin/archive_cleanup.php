@@ -16,9 +16,16 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
-$form = new FormValidator('archive_cleanup_form', 'post', '', '', array(), FormValidator::LAYOUT_BOX);
+$form = new FormValidator(
+    'archive_cleanup_form',
+    'post',
+    '',
+    '',
+    array(),
+    FormValidator::LAYOUT_BOX
+);
 $form->addButtonSend(get_lang('ArchiveDirCleanupProceedButton'));
 
 if ($form->validate()) {
@@ -34,6 +41,11 @@ if ($form->validate()) {
     if (!empty($htaccess)) {
         @file_put_contents($archive_path.'/.htaccess', $htaccess);
     }
+
+    if (function_exists('opcache_reset')) {
+        opcache_reset();
+    }
+
     if ($result) {
         Display::addFlash(Display::return_message(get_lang('ArchiveDirCleanupSucceeded')));
     } else {
@@ -45,6 +57,6 @@ if ($form->validate()) {
 }
 
 Display::display_header(get_lang('ArchiveDirCleanup'));
-Display::display_warning_message(get_lang('ArchiveDirCleanupDescr'));
+echo Display::return_message(get_lang('ArchiveDirCleanupDescr'), 'warning');
 $form->display();
 Display::display_footer();

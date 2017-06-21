@@ -128,7 +128,6 @@ $Forbidden = "Inte tillåtet";
 $CourseAccessConfigTip = "Som standard är din kurs publik. Du kan definiera nivån av tillgänglighet ovan.";
 $OpenToTheWorld = "Öppen - access tillåten för hela världen";
 $OpenToThePlatform = "Öppen - access tillåten för registrerade användare";
-$OpenToThePlatform = "Öppen - åtkomst tillåten för användare registrerade på plattformen.";
 $TipLang = "Detta språk gäller för alla som besöker denna kurs.";
 $Vid = "Video";
 $Work = "Elevarbeten";

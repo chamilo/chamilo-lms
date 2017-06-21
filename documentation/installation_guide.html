@@ -78,7 +78,7 @@ Chamilo is mainly a LMS running (the so called <span style="font-weight: bold;">
 <ul>
 <li><span style="font-weight: bold;">Apache 2.2+</span></li>
 <li><span style="font-weight: bold;">MySQL 5.1+ or MariaDB 5+</span></li>
-<li><span style="font-weight: bold;">PHP 5.4+ (5.6 recommended for greater efficiency) (support for PHP7 seems OK but not evaluated on high load setups just yet)</span></li>
+<li><span style="font-weight: bold;">PHP 5.5+ (5.6 recommended for greater efficiency) (support for PHP7 seems OK but not evaluated on high load setups just yet)</span></li>
 </ul>
 <br />
 All these pieces of software are free software and freely available. <br /><br />
@@ -713,24 +713,28 @@ If you have issues with files taking a long time to download, make sure you reco
   &lt;Directory "/var/www/chamilo"&gt;
 	RewriteEngine On
 	RewriteCond %{QUERY_STRING} ^id=(.*)$
-	RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
 	RewriteRule ^certificates/$ certificates/index.php?id=%1 [L]
-	RewriteRule ^courses/([^/]+)/$ main/course_home/course_home.php?cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/?$ main/course_home/course_home.php?cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
 	RewriteRule ^courses/([^/]+)/document/certificates/(.*)$ app/courses/$1/document/certificates/$2 [QSA,L]
 	RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
-	RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/upload/([^/]+)/(.*)$ main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 [QSA,L]
 	RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
-	RewriteRule ^courses/([^/]+)/upload/(.*)$ app/courses/$1/upload/$2 [QSA,L]
-	RewriteRule ^courses/([^/]+)/course-pic85x85.png$ app/courses/$1/course-pic85x85.png [QSA,L]
-	RewriteRule ^courses/([^/]+)/course-pic.png$ app/courses/$1/course-pic.png [QSA,L]
-	RewriteRule ^main/upload/users/(.*)/(.*)/my_files/(.*)$ app/upload/users/$1/$2/my_files/$3 [QSA,L]
+	RewriteRule ^courses/([^/]+)/course-pic85x85.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_image_source [QSA,L]
+	RewriteRule ^courses/([^/]+)/course-pic.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_image_large_source [QSA,L]
+	RewriteRule ^courses/([^/]+)/(.*)$ app/courses/$1/$2 [QSA,L]
 	RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
+    RewriteRule ^badge/(\d{1,}) main/badge/issued.php?issue=$1 [L]
+    RewriteRule ^skill/(\d{1,})/user/(\d{1,}) main/badge/issued.php?skill=$1&user=$2 [L]
     RewriteRule ^badge/(\d{1,})/user/(\d{1,}) main/badge/issued.php?skill=$1&user=$2 [L]
-	RewriteRule ^main/admin/$ main/admin/index.php [QSA,L]
-    RewriteRule ^main/exercice/(.+)$ main/exercise/$1 [QSA,L]
+    RewriteRule ^main/exercice/(.*)$ main/exercise/$1 [QSA,L]
     RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
-	RewriteRule ^courses/(.*)$ app/courses/$1 [QSA,L]
+	RewriteRule ^main/upload/users/(.*)/(.*)/my_files/(.*)$ app/upload/users/$1/$2/my_files/$3 [QSA,L]
+	RewriteRule ^main/admin/$ main/admin/index.php [QSA,L]
+    RewriteRule ^service/(\d+)$ plugin/buycourses/src/service_information.php?service_id=$1 [L]
+	RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
+    RewriteRule ^(tests|.git) - [F,L,NC]
   &lt;/Directory&gt;
     </pre>
     <h3>Nginx</h3>
@@ -742,41 +746,42 @@ If you have issues with files taking a long time to download, make sure you reco
   charset utf-8;
 
   location @rewrite{
+    rewrite ^certificates/$ certificates/index.php last;
+    rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
+    rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
     # Alternatively, you can choose to give direct access to all SCORM files, which is much faster but less secure
     # rewrite "^/courses/([^/]+)/scorm/(.*)$" /app/courses/$1/scorm/$2 break;
+
     rewrite "^/courses/([^/]+)/document/certificates/(.*)$" /app/courses/$1/document/certificates/$2 last;
     rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
+    rewrite ^/courses/([^/]+)/upload/([^/]+)/(.*)$ main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 last;
     rewrite ^/courses/([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 last;
-    rewrite ^/courses/([^/]+)/upload/(.*)$ /app/courses/$1/upload/$2 last;
-    rewrite ^/main/upload/users/(.*)/(.*)/my_files/(.*)$ /app/upload/users/$1/$2/my_files/$3 last;
-    try_files $uri /index.php;
+    rewrite ^/courses/([^/]+)/(.*)$ /app/courses/$1/$2 last;
+    rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
+    rewrite ^/badge/(\d+) /main/badge/issued.php?issue=$1 last;
+    rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
+    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
+    rewrite ^/main/exercice/(.*)$ /main/exercise/$1 last;
+    rewrite ^/main/newscorm/(.*)$ /main/lp/$1 last;
+    rewrite ^/service/(\d+)$ /plugin/buycourses/src/service_information.php?service_id=$1 last;
+    rewrite "^/main/upload/users/(.*)/(.*)/my_files/(.*)$" /app/upload/users/$1/$2/my_files/$3 last;
+
+    try_files $uri /index.php$is_args$args;
     break;
   }
 
   location / {
-    rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
-    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
     try_files $uri @rewrite;
   }
 
   location /main {
-    rewrite ^/main/admin/$ /main/admin/index.php last;
+    rewrite ^/main/admin/?$ /main/admin/index.php last;
   }
 
   location ~ \.php$ {
     client_max_body_size 20M;
-    try_files $uri /index.php$is_args$args;
-
-    rewrite ^/certificates/$ /certificates/index.php?id=%1  last;
-    rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
-    rewrite ^/badge/([^/]+) /main/badge/issued.php?issue=$1 last;
-    rewrite ^/main/exercice/(.+)$ /main/exercise/$1 last;
-    rewrite ^/main/newscorm/(.+)$ /main/lp/$1 last;
+    try_files $uri @rewrite;
 
     fastcgi_pass unix:/var/run/php5-fpm.sock;
     fastcgi_split_path_info ^(.+\.php)(/.*)$;
@@ -791,12 +796,6 @@ If you have issues with files taking a long time to download, make sure you reco
     access_log off;
     rewrite ^/courses/([^/]+)/course-pic85x85.png$ /app/courses/$1/course-pic85x85.png last;
     rewrite ^/courses/([^/]+)/course-pic.png$ /app/courses/$1/course-pic.png last;
-    rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
-    rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
-    rewrite ^/courses/([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 last;
-    rewrite ^/courses/([^/]+)/upload/(.*)$ /app/courses/$1/upload/$2 last;
-    # For all these media resources not treated by previous rewrites, give direct access (no permission check)
-    rewrite ^/courses/(.*)$ /app/courses/$1 break;
     try_files $uri @rewrite;
   }
   location ~ ~\.(ht|git){

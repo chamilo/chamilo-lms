@@ -7,9 +7,9 @@ use Chamilo\CourseBundle\Entity\CLp;
  * Class LearnpathList
  * This class is only a learning path list container with several practical methods for sorting the list and
  * provide links to specific paths
- * @uses	Database.lib.php to use the database
- * @uses	learnpath.class.php to generate learnpath objects to get in the list
- * @author	Yannick Warnier <ywarnier@beeznest.org>
+ * @uses    Database.lib.php to use the database
+ * @uses    learnpath.class.php to generate learnpath objects to get in the list
+ * @author Yannick Warnier <ywarnier@beeznest.org>
  *
  */
 class LearnpathList
@@ -28,15 +28,13 @@ class LearnpathList
      * This method is the constructor for the learnpathList. It gets a list of available learning paths from
      * the database and creates the learnpath objects. This list depends on the user that is connected
      * (only displays) items if he has enough permissions to view them.
-     * @param	integer	$user_id
-     * @param	string	$course_code Optional course code (otherwise we use api_get_course_id())
-     * @param   int		$session_id Optional session id (otherwise we use api_get_session_id())
-     * @param   string  $order_by
-     * @param   string  $check_publication_dates
+     * @param   integer $user_id
+     * @param   string $course_code Optional course code (otherwise we use api_get_course_id())
+     * @param   int $session_id Optional session id (otherwise we use api_get_session_id())
+     * @param   string $order_by
+     * @param   bool $check_publication_dates
      * @param   int     $categoryId
      * @param bool $ignoreCategoryFilter
-     *
-     * @return	void
      */
     public function __construct(
         $user_id,
@@ -108,10 +106,8 @@ class LearnpathList
                     $order
                 ";
 
-        $learningPaths = Database::getManager()
-            ->createQuery($dql)
-            ->getResult();
-
+        $learningPaths = Database::getManager()->createQuery($dql)->getResult();
+        $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
         $names = [];
         /** @var CLp $row */
         foreach ($learningPaths as $row) {
@@ -119,8 +115,8 @@ class LearnpathList
             // it prevents ' to be slashed and the input (done by learnpath.class.php::toggle_visibility())
             // is done using domesticate()
             $name = domesticate($row->getName());
-            $link = 'lp/lp_controller.php?action=view&lp_id=' . $row->getId() . '&id_session='.$session_id;
-            $oldLink = 'newscorm/lp_controller.php?action=view&lp_id=' . $row->getId() . '&id_session='.$session_id;
+            $link = 'lp/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session='.$session_id;
+            $oldLink = 'newscorm/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session='.$session_id;
 
             $sql2 = "SELECT * FROM $tbl_tool
                      WHERE
@@ -142,12 +138,24 @@ class LearnpathList
             }
 
             // Check if visible.
-            $vis = api_get_item_visibility(
+            $visibility = api_get_item_visibility(
                 api_get_course_info($course_code),
                 'learnpath',
                 $row->getId(),
                 $session_id
             );
+
+            // If option is not true then don't show invisible LP to user
+            if ($showBlockedPrerequisite !== true && !api_is_allowed_to_edit()) {
+                $lpVisibility = learnpath::is_lp_visible_for_student(
+                    $row->getId(),
+                    $user_id,
+                    $course_code
+                );
+                if ($lpVisibility === false) {
+                    continue;
+                }
+            }
 
             $this->list[$row->getIid()] = array(
                 'lp_type' => $row->getLpType(),
@@ -160,7 +168,7 @@ class LearnpathList
                 'lp_maker' => stripslashes($row->getContentMaker()),
                 'lp_proximity' => $row->getContentLocal(),
                 'lp_encoding' => api_get_system_encoding(),
-                'lp_visibility' => $vis,
+                'lp_visibility' => $visibility,
                 'lp_published' => $pub,
                 'lp_prevent_reinit' => $row->getPreventReinit(),
                 'seriousgame_mode' => $row->getSeriousgameMode(),
@@ -181,14 +189,14 @@ class LearnpathList
             );
             $names[$row->getName()] = $row->getIid();
         }
-
-        $this->alpha_list = asort($names);
+        asort($names);
+        $this->alpha_list = $names;
     }
 
     /**
      * Gets references to learnpaths for all learnpaths IDs kept in the local list.
      * This applies a transformation internally on list and ref_list and returns a copy of the refs list
-     * @return	array	List of references to learnpath objects
+     * @return array    List of references to learnpath objects
      */
     public function get_refs()
     {
@@ -201,7 +209,7 @@ class LearnpathList
 
     /**
      * Gets a table of the different learnpaths we have at the moment
-     * @return	array	Learnpath info as [lp_id] => ([lp_type]=> ..., [lp_name]=>...,[lp_desc]=>...,[lp_path]=>...)
+     * @return array    Learnpath info as [lp_id] => ([lp_type]=> ..., [lp_name]=>...,[lp_desc]=>...,[lp_path]=>...)
      */
     public function get_flat_list()
     {
@@ -226,7 +234,7 @@ class LearnpathList
 
         $lessons = array();
         while ($row = Database::fetch_array($result)) {
-            if (api_get_item_visibility($course, 'learnpath', $row['id'],  $session_id)) {
+            if (api_get_item_visibility($course, 'learnpath', $row['id'], $session_id)) {
                 $lessons[$row['id']] = $row;
             }
         }

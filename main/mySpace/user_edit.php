@@ -18,8 +18,8 @@ if (!api_is_platform_admin()) {
 }
 
 // Database table definitions
-$table_admin = Database:: get_main_table(TABLE_MAIN_ADMIN);
-$table_user = Database:: get_main_table(TABLE_MAIN_USER);
+$table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
 $database = Database::get_main_database();
 
 $userId = isset($_REQUEST['user_id']) ? intval($_REQUEST['user_id']) : '';
@@ -85,15 +85,15 @@ $auth_sources = 0; //make available wider as we need it in case of form reset (s
 	$group[] =& $form->createElement('select', 'auth_source', null, $auth_sources);
 	$group[] =& $form->createElement('static', '', '', '<br />');
 }*/
-$group[] =& $form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
-$group[] =& $form->createElement('radio', 'password_auto', 'id="radio_user_password"', null, 0);
-$group[] =& $form->createElement('password', 'password', null, array('onkeydown' => 'javascript: password_switch_radio_button(document.user_add,"password[password_auto]");'));
+$group[] = & $form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
+$group[] = & $form->createElement('radio', 'password_auto', 'id="radio_user_password"', null, 0);
+$group[] = & $form->createElement('password', 'password', null, array('onkeydown' => 'javascript: password_switch_radio_button(document.user_add,"password[password_auto]");'));
 $form->addGroup($group, 'password', get_lang('Password'));
 
 // Send email
 $group = array();
-$group[] =& $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
-$group[] =& $form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
+$group[] = & $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
+$group[] = & $form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
 $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'));
 
 // Set default values
@@ -104,7 +104,7 @@ $defaults['password']['password_auto'] = 1;
 
 $form->setDefaults($defaults);
 // Submit button
-$select_level = array ();
+$select_level = array();
 $html_results_enabled[] = $form->addButtonUpdate(get_lang('Update'), 'submit', true);
 $form->addGroup($html_results_enabled);
 // Validate form
@@ -165,17 +165,17 @@ if ($form->validate()) {
 			}
 
 			$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($userInfo['firstname'], $userInfo['lastname'])).",\n\n".
-                get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".
-                get_lang('Username')." : ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .
-                get_lang('Address') ." ". api_get_setting('siteName') ." ".
-                get_lang('Is') ." : ".$portal_url."\n\n".
-                get_lang('Problem'). "\n\n".
+                get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".
+                get_lang('Username')." : ".$username."\n".get_lang('Pass')." : ".stripslashes($password)."\n\n".
+                get_lang('Address')." ".api_get_setting('siteName')." ".
+                get_lang('Is')." : ".$portal_url."\n\n".
+                get_lang('Problem')."\n\n".
                 get_lang('SignatureFormula').",\n\n".
                 api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
-                get_lang('Manager'). " ".
+                get_lang('Manager')." ".
                 api_get_setting('siteName')."\nT. ".
-                api_get_setting('administratorTelephone')."\n" .
-                get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+                api_get_setting('administratorTelephone')."\n".
+                get_lang('Email')." : ".api_get_setting('emailAdministrator');
             $emailbody = nl2br($emailbody);
 
 			api_mail_html(
@@ -205,12 +205,12 @@ $interbreadcrumb[] = array(
     "name" => get_lang('UserList'),
 );
 
-// Display form
-Display::display_header($tool_name);
-
 if (isset($_REQUEST['message'])) {
-	Display::display_normal_message(get_lang('Updated'));
+	Display::addFlash(Display::return_message(get_lang('Updated'), 'normal'));
 }
+
+Display::display_header($tool_name);
+// Display form
 $form->display();
 
 Display::display_footer();

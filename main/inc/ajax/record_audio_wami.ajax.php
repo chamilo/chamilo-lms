@@ -50,7 +50,7 @@ if ($ext != 'wav') {
 // Do not use here check Fileinfo method because return: text/plain
 
 $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-$saveDir = $dirBaseDocuments . $wamidir;
+$saveDir = $dirBaseDocuments.$wamidir;
 
 if (!is_dir($saveDir)) {
     DocumentManager::createDefaultAudioFolder($_course);
@@ -90,7 +90,7 @@ $output = true;
 ob_start();
 
 // Strangely the file path changes with a double extension
-copy($documentPath, $documentPath . '.wav');
+copy($documentPath, $documentPath.'.wav');
 
 $documentData = DocumentManager::upload_document(
     $file,
@@ -129,9 +129,7 @@ if (!empty($documentData)) {
             $lp->set_modified_on();
             $lpItem = new learnpathItem($lpItemId);
             $lpItem->add_audio_from_documents($newDocId);
-            Display::addFlash(
-                Display::return_message(get_lang('Updated'), 'info')
-            );
+            echo Display::return_message(get_lang('Updated'), 'info');
         }
     }
 
@@ -139,5 +137,5 @@ if (!empty($documentData)) {
     // Remove file with one extension
     unlink($documentPath);
 } else {
-    Display::addFlash($contents);
+    echo $contents;
 }

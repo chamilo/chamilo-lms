@@ -58,7 +58,7 @@ class SequenceResource
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getType()
     {
@@ -66,8 +66,8 @@ class SequenceResource
     }
 
     /**
-     * @param string $type
-     *
+     * Set the integer type
+     * @param int $type
      * @return SequenceResource
      */
     public function setType($type)
@@ -123,7 +123,7 @@ class SequenceResource
     }
 
     /**
-     * @param mixed $sequence
+     * @param Sequence $sequence
      * @return $this
      */
     public function setSequence(Sequence $sequence)

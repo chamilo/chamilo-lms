@@ -1,0 +1,82 @@
+{% macro post_template(type, post, information_icon, post_url, current_url, related_posts) %}
+{% if post %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+        <div class="row">
+            <div class="col-md-8">
+                <h2>{{ post.title }}</h2>
+                <p>{{ post.content }}</p>
+                {% if type == 'simple' %}
+                    {% set countElements = post.hasParent  + post.children.count %}
+                    {% if countElements %}
+                        <a href="{{ post_url }}&post_id={{ post.id }}">
+                        {% if countElements > 1 %}
+                            {{ information_icon }} + {{ countElements }}
+                        {% else %}
+                            {{ information_icon }} + 1
+                        {% endif %}
+                        </a>
+                    {% endif %}
+                {% endif %}
+                {#{% if type == 'all' %}#}
+                    {#{% if related_posts %}#}
+                        {#<h3>Related</h3>#}
+                         {#{% for post in related_posts %}#}
+                            {#<p>#}
+                                {#<a href="{{ post_url }}&post_id={{ post.id }}">#}
+                                {#{{ post.title }}#}
+                                {#</a>#}
+                            {#</p>#}
+                        {#{% endfor %}#}
+                    {#{% endif %}#}
+                {#{% endif %}#}
+            </div>
+            <div class="col-md-4">
+                <p>{{ post.createdAt |date('d/m/Y') }}</p>
+                <p>{{ post.insertUser.completeName }}</p>
+                {% if post.tags %}
+                    {% for tag in post.tags %}
+                        {{ tag }}
+                        {% if not loop.last	 %}
+                            ,
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                {% if post.private %}
+                    <p><span class="label label-warning">Private</span></p>
+                {% endif %}
+            </div>
+            </div>
+        </div>
+    </div>
+    {#{% if type == 'all' %}#}
+        {#{% if post.children.count %}#}
+            {#{% for child in post.children %}#}
+                {#{% if child.id != post.id %}#}
+                    {#{{ _self.post_template('all', child) }}#}
+                {#{% endif %}#}
+            {#{% endfor %}#}
+        {#{% endif %}#}
+    {#{% endif %}#}
+{% endif %}
+{% endmacro %}
+
+{% import _self as template %}
+
+<div class="actions">
+    {{ back_link }}
+</div>
+
+<h2 class="text-center">
+    {{ care_title }} - {{ student_info.complete_name }} - {{ post.title }}
+    {% if post.parent %}
+        {{ post.parent.title }}
+    {% endif %}
+</h2>
+
+{% for post in related_posts %}
+    {{ template.post_template('all', post, information_icon, post_url, current_url) }}
+{% endfor %}
+
+{#{{ template.post_template('all', post, information_icon, post_url, current_url, related_posts) }}#}

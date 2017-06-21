@@ -34,7 +34,7 @@ class sso
      */
     public function __construct()
     {
-        $this->protocol   = api_get_setting('sso_authentication_protocol');
+        $this->protocol = api_get_setting('sso_authentication_protocol');
         // There can be multiple domains, so make sure to take only the first
         // This might be later extended with a decision process
         $domains = explode(',', api_get_setting('sso_authentication_domain'));
@@ -42,7 +42,7 @@ class sso
         $this->auth_uri = api_get_setting('sso_authentication_auth_uri');
         $this->deauth_uri = api_get_setting('sso_authentication_unauth_uri');
         //cut the string to avoid recursive URL construction in case of failure
-        $this->referer = $this->protocol.$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'],0,strpos($_SERVER['REQUEST_URI'],'sso'));
+        $this->referer = $this->protocol.$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], 'sso'));
         $this->deauth_url = $this->protocol.$this->domain.$this->deauth_uri;
         $this->master_url = $this->protocol.$this->domain.$this->auth_uri;
         $this->referrer_uri = base64_encode($_SERVER['REQUEST_URI']);
@@ -130,11 +130,11 @@ class sso
                 ) {
                     //error_log('user n password are ok');
                     //Check if the account is active (not locked)
-                    if ($uData['active']=='1') {
+                    if ($uData['active'] == '1') {
                         // check if the expiration date has not been reached
                         if (empty($uData['expiration_date'])
                             or $uData['expiration_date'] > date('Y-m-d H:i:s')
-                            or $uData['expiration_date']=='0000-00-00 00:00:00') {
+                            or $uData['expiration_date'] == '0000-00-00 00:00:00') {
 
                             //If Multiple URL is enabled
                             if (api_get_multiple_access_url()) {
@@ -168,11 +168,11 @@ class sso
                                             // the user credentials are OK, which
                                             // should be protection enough
                                             // against evil URL spoofing...
-                                            $sso_target = api_get_path(WEB_PATH) . base64_decode($sso['ruri']);
+                                            $sso_target = api_get_path(WEB_PATH).base64_decode($sso['ruri']);
                                         } else {
-                                            $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) . 'index.php';
+                                            $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH).'index.php';
                                         }
-                                        header('Location: '. $sso_target);
+                                        header('Location: '.$sso_target);
                                         exit;
                                     } else {
                                         // user does not have permission for this site
@@ -286,9 +286,9 @@ class sso
         $userId = intval($userId);
 
         if ($asAdmin && api_is_platform_admin(true)) {
-            return api_get_path(WEB_CODE_PATH) . "admin/user_edit.php?user_id=$userId";
+            return api_get_path(WEB_CODE_PATH)."admin/user_edit.php?user_id=$userId";
         }
 
-        return api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+        return api_get_path(WEB_CODE_PATH).'auth/profile.php';
     }
 }

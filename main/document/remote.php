@@ -40,8 +40,8 @@ $cwd = $_REQUEST['cwd'];
 $nParent = 0; // the number of /.. into the url
 while (substr($cwd, -3, 3) == '/..') {
     // go to parent directory
-    $cwd= substr($cwd, 0, -3);
-    if (strlen($cwd) == 0) { $cwd='/'; }
+    $cwd = substr($cwd, 0, -3);
+    if (strlen($cwd) == 0) { $cwd = '/'; }
     $nParent++;
 }
 for (; $nParent > 0; $nParent--) {
@@ -55,7 +55,7 @@ if (Security::check_abs_path($cwd, api_get_path(SYS_PATH))) {
 }
 if ($action == 'list') {
     /*==== List files ====*/
-    if ($debug>0) { error_log("sending file list",0); }
+    if ($debug > 0) { error_log("sending file list", 0); }
 
     // get files list
     $files = DocumentManager::get_all_document_data($_course, $cwd, 0, null, false);

@@ -111,7 +111,7 @@ switch ($action) {
                 echo 'false';
                 break;
             }
-            $work_table = Database:: get_course_table(
+            $work_table = Database::get_course_table(
                 TABLE_STUDENT_PUBLICATION
             );
 

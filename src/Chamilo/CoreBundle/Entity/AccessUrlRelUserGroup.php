@@ -40,7 +40,7 @@ class AccessUrlRelUserGroup
      * Set accessUrlId
      *
      * @param integer $accessUrlId
-     * @return AccessUrlRelUser
+     * @return AccessUrlRelUserGroup
      */
     public function setAccessUrlId($accessUrlId)
     {

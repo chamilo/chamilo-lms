@@ -40,8 +40,8 @@ if ($ack == "SUCCESS" || $ack == "SUCCESSWITHWARNING") {
     $ErrorSeverityCode = urldecode($resArray["L_SEVERITYCODE0"]);
 
     echo "SetExpressCheckout API call failed. ";
-    echo "Detailed Error Message: " . $ErrorLongMsg;
-    echo "Short Error Message: " . $ErrorShortMsg;
-    echo "Error Code: " . $ErrorCode;
-    echo "Error Severity Code: " . $ErrorSeverityCode;
+    echo "Detailed Error Message: ".$ErrorLongMsg;
+    echo "Short Error Message: ".$ErrorShortMsg;
+    echo "Error Code: ".$ErrorCode;
+    echo "Error Severity Code: ".$ErrorSeverityCode;
 }

@@ -12,7 +12,7 @@ namespace Shibboleth;
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info>, Nicolas Rod for the University of Geneva
  */
-$dir = dirname(__FILE__);
-include_once("$dir/../../init.php");
+$dir = __DIR__;
+include_once "$dir/../../init.php";
 
 ShibbolethController::instance()->admin_login();

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_STUDENTPUBLICATION;
+$current_course_tool = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
 
@@ -172,7 +172,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
     $actionsLeft .= Display::return_icon('new_document.png', get_lang('AddDocument'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    $actionsLeft .=  '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_user.php?'.api_get_cidreq().'&id='.$workId.'">';
+    $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_user.php?'.api_get_cidreq().'&id='.$workId.'">';
     $actionsLeft .= Display::return_icon('addworkuser.png', get_lang('AddUsers'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=export_pdf">';
@@ -192,12 +192,12 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     $actionsLeft .= $display_output;
     $url = api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId;
     $actionsLeft .= '<a class="btn-toolbar" href="'.$url.'">'.
-        Display::return_icon('upload_package.png', get_lang('UploadCorrectionsPackage'), '', ICON_SIZE_MEDIUM) . ' ' . get_lang('UploadCorrectionsPackage') . '</a>';
+        Display::return_icon('upload_package.png', get_lang('UploadCorrectionsPackage'), '', ICON_SIZE_MEDIUM).' '.get_lang('UploadCorrectionsPackage').'</a>';
     $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_correction';
     $actionsLeft .= Display::toolbarButton(get_lang('DeleteCorrections'), $url, 'remove', 'danger');
 }
 
-echo Display::toolbarAction('toolbar-worklist', array($actionsLeft), 1);
+echo Display::toolbarAction('toolbar-worklist', array($actionsLeft));
 
 if (!empty($my_folder_data['title'])) {
     echo Display::page_subheader($my_folder_data['title']);
@@ -211,18 +211,17 @@ if (!empty($my_folder_data['description'])) {
 }
 
 $check_qualification = intval($my_folder_data['qualification']);
-
 $orderName = api_is_western_name_order() ? 'firstname' : 'lastname';
+
 
 if (!empty($work_data['enable_qualification']) &&
     !empty($check_qualification)
 ) {
     $type = 'simple';
-
     $columns = array(
         get_lang('FullUserName'),
         get_lang('Title'),
-        get_lang('Feedback'),
+        get_lang('Score'),
         get_lang('Date'),
         get_lang('Status'),
         get_lang('UploadCorrection'),
@@ -287,7 +286,6 @@ if (!empty($work_data['enable_qualification']) &&
     );
 } else {
     $type = 'complex';
-
     $columns = array(
         get_lang('FullUserName'),
         get_lang('Title'),
@@ -316,8 +314,8 @@ if (!empty($work_data['enable_qualification']) &&
         array(
             'name' => 'qualification',
             'index' => 'qualification',
-            'width' => '30',
-            'align' => 'left',
+            'width' => '20',
+            'align' => 'center',
             'search' => 'true',
         ),
         array(
@@ -331,7 +329,7 @@ if (!empty($work_data['enable_qualification']) &&
         array(
             'name' => 'correction',
             'index' => 'correction',
-            'width' => '45',
+            'width' => '40',
             'align' => 'left',
             'search' => 'false',
             'sortable' => 'false',

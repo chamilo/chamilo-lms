@@ -213,11 +213,11 @@ class GradebookDataGenerator
             api_get_session_id()
         );
 
-        $scoreDisplay = ScoreDisplay :: instance();
+        $scoreDisplay = ScoreDisplay::instance();
         $display = $scoreDisplay->display_score($score, SCORE_DIV_PERCENT_WITH_CUSTOM, SCORE_BOTH, true);
         $type = $item->get_item_type();
         if ($type == 'L' && get_class($item) == 'ExerciseLink') {
-            $display  = ExerciseLib::show_score($score[0], $score[1], false);
+            $display = ExerciseLib::show_score($score[0], $score[1], false);
         }
 
         return array(
@@ -234,12 +234,12 @@ class GradebookDataGenerator
     private function buildAverageResultColumn(GradebookItem $item)
     {
         $score = $item->calc_score(null, 'average');
-        $scoreDisplay = ScoreDisplay :: instance();
+        $scoreDisplay = ScoreDisplay::instance();
         $display = $scoreDisplay->display_score($score, SCORE_DIV_PERCENT_WITH_CUSTOM, SCORE_BOTH, true);
         $type = $item->get_item_type();
 
         if ($type == 'L' && get_class($item) == 'ExerciseLink') {
-            $display  = ExerciseLib::show_score($score[0], $score[1], false);
+            $display = ExerciseLib::show_score($score[0], $score[1], false);
         }
 
         return array(
@@ -415,7 +415,7 @@ class GradebookDataGenerator
     public function sort_by_type($item1, $item2)
     {
         if ($item1->get_item_type() == $item2->get_item_type()) {
-            return $this->sort_by_name($item1,$item2);
+            return $this->sort_by_name($item1, $item2);
         } else {
             return ($item1->get_item_type() < $item2->get_item_type() ? -1 : 1);
         }
@@ -430,7 +430,7 @@ class GradebookDataGenerator
     {
         $result = api_strcmp($item1->get_description(), $item2->get_description());
         if ($result == 0) {
-            return $this->sort_by_name($item1,$item2);
+            return $this->sort_by_name($item1, $item2);
         }
         return $result;
     }

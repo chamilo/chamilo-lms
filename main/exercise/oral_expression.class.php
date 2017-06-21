@@ -42,37 +42,34 @@ class OralExpression extends Question
             get_lang('Weighting'),
             array('class' => 'span1')
         );
-        global $text, $class;
+        global $text;
         // setting the save button here and not in the question class.php
         $form->addButtonSave($text, 'submitQuestion');
         if (!empty($this->id)) {
             $form -> setDefaults(array('weighting' => float_format($this->weighting, 1)));
         } else {
-            if ($this -> isContent == 1) {
-                $form -> setDefaults(array('weighting' => '10'));
+            if ($this->isContent == 1) {
+                $form->setDefaults(array('weighting' => '10'));
             }
         }
     }
 
     /**
-     * abstract function which creates the form to create / edit the answers of the question
-     * @param the FormValidator $form
+     * @inheritdoc
      */
-    function processAnswersCreation($form)
+    public function processAnswersCreation($form, $exercise)
     {
         $this->weighting = $form->getSubmitValue('weighting');
-        $this->save();
+        $this->save($exercise);
     }
 
     /**
-     * @param null $feedback_type
-     * @param null $counter
-     * @param null $score
-     * @return null|string
+     * @inheritdoc
      */
-    function return_header($feedback_type = null, $counter = null, $score = null)
+    public function return_header($exercise, $counter = null, $score = null)
     {
-        $header = parent::return_header($feedback_type, $counter, $score);
+        $score['revised'] = $this->isQuestionWaitingReview($score);
+        $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
             <tr>
                 <th>&nbsp;</th>
@@ -105,7 +102,7 @@ class OralExpression extends Question
         }
         $this->storePath = $this->generateDirectory();
         $this->fileName = $this->generateFileName();
-        $this->filePath = $this->storePath . $this->fileName;
+        $this->filePath = $this->storePath.$this->fileName;
     }
 
     /**
@@ -114,26 +111,26 @@ class OralExpression extends Question
      */
     private function generateDirectory()
     {
-        $this->storePath = api_get_path(SYS_COURSE_PATH) . $this->course['path'] . '/exercises/';
+        $this->storePath = api_get_path(SYS_COURSE_PATH).$this->course['path'].'/exercises/';
 
         if (!is_dir($this->storePath)) {
             mkdir($this->storePath);
         }
 
-        if (!is_dir($this->storePath . $this->sessionId)) {
-            mkdir($this->storePath . $this->sessionId);
+        if (!is_dir($this->storePath.$this->sessionId)) {
+            mkdir($this->storePath.$this->sessionId);
         }
 
-        if (!empty($this->exerciseId) && !is_dir($this->storePath . $this->sessionId . '/' . $this->exerciseId)) {
-            mkdir($this->storePath . $this->sessionId . '/' . $this->exerciseId);
+        if (!empty($this->exerciseId) && !is_dir($this->storePath.$this->sessionId.'/'.$this->exerciseId)) {
+            mkdir($this->storePath.$this->sessionId.'/'.$this->exerciseId);
         }
 
-        if (!empty($this->id) && !is_dir($this->storePath . $this->sessionId . '/' . $this->exerciseId . '/' . $this->id)) {
-            mkdir($this->storePath . $this->sessionId . '/' . $this->exerciseId . '/' . $this->id);
+        if (!empty($this->id) && !is_dir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id)) {
+            mkdir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id);
         }
 
-        if (!empty($this->userId) && !is_dir($this->storePath . $this->sessionId . '/' . $this->exerciseId . '/' . $this->id . '/' . $this->userId)) {
-            mkdir($this->storePath . $this->sessionId . '/' . $this->exerciseId . '/' . $this->id . '/' . $this->userId);
+        if (!empty($this->userId) && !is_dir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id.'/'.$this->userId)) {
+            mkdir($this->storePath.$this->sessionId.'/'.$this->exerciseId.'/'.$this->id.'/'.$this->userId);
         }
 
         $params = [
@@ -192,7 +189,7 @@ class OralExpression extends Question
      */
     public function returnRecorder()
     {
-        $directory = '/..' . $this->generateRelativeDirectory();
+        $directory = '/..'.$this->generateRelativeDirectory();
         $recordAudioView = new Template(
             '',
             false,
@@ -246,7 +243,7 @@ class OralExpression extends Question
                     return '';
                 }
 
-                return $this->storePath . $result->getFilename();
+                return $this->storePath.$result->getFilename();
             }
         }
 
@@ -305,12 +302,12 @@ class OralExpression extends Question
             $items[5] = 'temp_exe';
             $filename = implode('-', $items);
 
-            if (is_file($this->storePath . $filename . '.' . $extension)) {
-                $old_name = $this->storePath . $filename . '.' . $extension;
+            if (is_file($this->storePath.$filename.'.'.$extension)) {
+                $old_name = $this->storePath.$filename.'.'.$extension;
                 $items = explode('-', $this->fileName);
                 $items[5] = $exe_id;
                 $filename = $filename = implode('-', $items);
-                $new_name = $this->storePath . $filename . '.' . $extension;
+                $new_name = $this->storePath.$filename.'.'.$extension;
                 rename($old_name, $new_name);
                 break;
             }

@@ -4,23 +4,24 @@
  * Quick page to react to first login cases
  * @package chamilo.custompages
  */
-require_once('language.php');
-require_once(dirname(__FILE__).'/../main/inc/global.inc.php');
+
+require_once api_get_path(SYS_PATH).'main/inc/global.inc.php';
+require_once __DIR__.'/language.php';
 
 /**
  * Security checks
  */
-if (! isset($_SESSION['conditional_login']['uid']))
+if (!isset($_SESSION['conditional_login']['uid']))
   die("Not Authorised");
 
 if (isset($_POST['password'])) {
     $u = api_get_user_info($_SESSION['conditional_login']['uid']);
     if ($_POST['password'] != $_POST['password2']) {
-        header('Location: '. api_get_self().'?invalid=2');
+        header('Location: '.api_get_self().'?invalid=2');
         exit();
     }
-    if (empty($_POST['password'])){ //|| !api_check_password($password)) { //Pass must be at least 5 char long with 2 digits and 3 letters
-        header('Location: '. api_get_self().'?invalid=1');
+    if (empty($_POST['password'])) { //|| !api_check_password($password)) { //Pass must be at least 5 char long with 2 digits and 3 letters
+        header('Location: '.api_get_self().'?invalid=1');
         exit();
     }
     $password = $_POST['password'];
@@ -96,23 +97,23 @@ $www = api_get_path('WEB_PATH');
 		<div id="header">
 			<img src="/custompages/images/header.png" alt="Logo" />
 		</div> <!-- #header -->
-    <h2> <?php echo custompages_get_lang('FirstLogin');?> </h2>
+    <h2> <?php echo custompages_get_lang('FirstLogin'); ?> </h2>
 
 		<div id="changepassword-form-box" class="form-box">
-      <div class="info"> <?php echo custompages_get_lang('FirstLoginChangePassword');?> </div>
+      <div class="info"> <?php echo custompages_get_lang('FirstLoginChangePassword'); ?> </div>
 		<?php if (isset($error_message)) {
 			echo '<div id="changepassword-form-error" class="form-error">'.$error_message.'</div>';
 		}?>
 			<form id="changepassword-form" class="form" method="post">
 				<div>
-          <label for="password">*<?php echo custompages_get_lang('Password');?></label>
+          <label for="password">*<?php echo custompages_get_lang('Password'); ?></label>
 					<input name="password" type="password" /><br />
-          <label for="password2">*<?php echo custompages_get_lang('Password');?></label>
+          <label for="password2">*<?php echo custompages_get_lang('Password'); ?></label>
 					<input name="password2" type="password" /><br />
 				</div>
 			</form>
 			<div id="changepassword-form-submit" class="form-submit" onclick="document.forms['changepassword-form'].submit();">
-      <span><?php echo custompages_get_lang('LoginEnter');?></span>
+      <span><?php echo custompages_get_lang('LoginEnter'); ?></span>
 			</div> <!-- #form-submit -->
 		</div> <!-- #form -->
 		<div id="footer">

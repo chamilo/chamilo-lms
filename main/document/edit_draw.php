@@ -40,7 +40,7 @@ if (empty($document_data)) {
 $dir = str_replace('\\', '/', $dir);
 
 /* Constants & Variables */
-$current_session_id=api_get_session_id();
+$current_session_id = api_get_session_id();
 $group_id = api_get_group_id();
 
 //path for svg-edit save
@@ -53,8 +53,8 @@ $get_file = Security::remove_XSS($file_path);
 $file = basename($get_file);
 $temp_file = explode(".", $file);
 $filename = $temp_file[0];
-$nameTools = get_lang('EditDocument') . ': ' . $filename;
-$courseDir = $_course['path'] . '/document';
+$nameTools = get_lang('EditDocument').': '.$filename;
+$courseDir = $_course['path'].'/document';
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 /*	Other initialization code */
@@ -96,13 +96,14 @@ if (!empty($group_id)) {
 
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
 
-if (!$is_certificate_mode)
+if (!$is_certificate_mode) {
     $interbreadcrumb[] = array(
         "url" => "./document.php?curdirpath=".urlencode($my_cur_dir_path).'&'.api_get_cidreq(),
         "name" => get_lang('Documents'),
     );
-else
+} else {
     $interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
+}
 
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {
@@ -128,15 +129,15 @@ Event::event_access_tool(TOOL_DOCUMENT);
 Display :: display_header($nameTools, 'Doc');
 echo '<div class="actions">';
 echo '<a href="document.php?id='.$parent_id.'">'.
-    Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.'&origin=editdraw">'.
-    Display::return_icon('edit.png',get_lang('Rename').'/'.get_lang('Comments'),'',ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('edit.png', get_lang('Rename').'/'.get_lang('Comments'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 if (api_browser_support('svg')) {
 	//automatic loading the course language
 	$svgedit_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');
-	$langsvgedit  = api_get_language_isocode();
+	$langsvgedit = api_get_language_isocode();
 	$langsvgedit = isset($svgedit_code_translation_table[$langsvgedit]) ? $svgedit_code_translation_table[$langsvgedit] : $langsvgedit;
 	$langsvgedit = file_exists(api_get_path(LIBRARY_PATH).'javascript/svgedit/locale/lang.'.$langsvgedit.'.js') ? $langsvgedit : 'en';
 	$svg_url = api_get_path(WEB_LIBRARY_PATH).'javascript/svgedit/svg-editor.php?url=../../../../../courses/'.$courseDir.$dir.$file.'&lang='.$langsvgedit;
@@ -161,6 +162,6 @@ if (api_browser_support('svg')) {
 	echo '<iframe style="height: 550px; width: 100%;" scrolling="no" frameborder="0\' src="'.$svg_url.'"<noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>';
 	echo '</noscript>';
 } else {
-	Display::display_error_message(get_lang('BrowserDontSupportsSVG'));
+	echo Display::return_message(get_lang('BrowserDontSupportsSVG'), 'error');
 }
 Display::display_footer();

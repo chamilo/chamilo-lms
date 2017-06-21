@@ -261,7 +261,7 @@ function element_start($parser, $data)
     global $current_tag;
     switch ($data) {
         case 'Contact':
-            $user = array ();
+            $user = array();
             break;
         default:
             $current_tag = $data;
@@ -424,7 +424,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
 Display :: display_header($tool_name);
 
 if (!empty($error_message)) {
-    Display::display_error_message($error_message);
+    echo Display::return_message($error_message, 'error');
 }
 
 $form = new FormValidator('user_update_import', 'post', api_get_self());

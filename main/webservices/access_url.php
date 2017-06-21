@@ -17,7 +17,11 @@ define('WS_ERROR_NOT_FOUND_RESULT', 2);
 define('WS_ERROR_INVALID_INPUT', 3);
 define('WS_ERROR_SETTING', 4);
 
-function return_error($code) {
+/**
+ * @param integer $code
+ */
+function return_error($code)
+{
     $fault = null;
     switch ($code) {
         case WS_ERROR_SECRET_KEY:
@@ -58,24 +62,27 @@ function WSHelperVerifyKey($params)
         list($ip1, $ip2) = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
         $ip = trim($ip1);
     }
-    if ($debug)
+    if ($debug) {
         error_log("ip: $ip");
+    }
     // Check if a file that limits access from webservices exists and contains
     // the restraining check
     if (is_file('webservice-auth-ip.conf.php')) {
         include 'webservice-auth-ip.conf.php';
-        if ($debug)
+        if ($debug) {
             error_log("webservice-auth-ip.conf.php file included");
+        }
         if (!empty($ws_auth_ip)) {
             $check_ip = true;
             $ip_matches = api_check_ip_in_range($ip, $ws_auth_ip);
-            if ($debug)
+            if ($debug) {
                 error_log("ip_matches: $ip_matches");
+            }
         }
     }
 
     if ($debug) {
-        error_log("checkip " . intval($check_ip));
+        error_log("checkip ".intval($check_ip));
     }
 
     if ($check_ip) {
@@ -87,8 +94,9 @@ function WSHelperVerifyKey($params)
 
     $result = api_is_valid_secret_key($secret_key, $security_key);
     //error_log($secret_key.'-'.$security_key);
-    if ($debug)
+    if ($debug) {
         error_log('WSHelperVerifyKey result: '.intval($result));
+    }
     return $result;
 }
 
@@ -110,8 +118,6 @@ $server->soap_defencoding = 'UTF-8';
 // Initialize WSDL support
 $server->configureWSDL('WSAccessUrl', 'urn:WSAccessUrl');
 
-
-
 $server->wsdl->addComplexType(
     'portalItem',
     'complexType',
@@ -131,7 +137,13 @@ $server->wsdl->addComplexType(
     '',
     'SOAP-ENC:Array',
     array(),
-    array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:portalItem[]')),'tns:portalItem'
+    array(
+        array(
+            'ref' => 'SOAP-ENC:arrayType',
+            'wsdl:arrayType' => 'tns:portalItem[]',
+        ),
+    ),
+    'tns:portalItem'
 );
 
 $server->wsdl->addComplexType(
@@ -146,13 +158,13 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSGetPortals',                   // method name
-    array('getPortals' => 'tns:getPortals'),    // input parameters
-    array('return' => 'tns:portalList'),                    // output parameters
-    'urn:WSAccessUrl',                               // namespace
-    'urn:WSAccessUrl#WSGetPortals',              // soapaction
-    'rpc',                                              // style
-    'encoded',                                          // use
+$server->register('WSGetPortals', // method name
+    array('getPortals' => 'tns:getPortals'), // input parameters
+    array('return' => 'tns:portalList'), // output parameters
+    'urn:WSAccessUrl', // namespace
+    'urn:WSAccessUrl#WSGetPortals', // soapaction
+    'rpc', // style
+    'encoded', // use
     'This service adds a user to portal'               // documentation
 );
 
@@ -193,13 +205,14 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSAddUserToPortal',                   // method name
-    array('addUserToPortal' => 'tns:AddUserToPortal'),    // input parameters
-    array('return' => 'xsd:string'),                    // output parameters
-    'urn:WSAccessUrl',                               // namespace
-    'urn:WSAccessUrl#WSAddUserToPortal',              // soapaction
-    'rpc',                                              // style
-    'encoded',                                          // use
+$server->register(
+    'WSAddUserToPortal', // method name
+    array('addUserToPortal' => 'tns:AddUserToPortal'), // input parameters
+    array('return' => 'xsd:string'), // output parameters
+    'urn:WSAccessUrl', // namespace
+    'urn:WSAccessUrl#WSAddUserToPortal', // soapaction
+    'rpc', // style
+    'encoded', // use
     'This service adds a user to portal'               // documentation
 );
 
@@ -224,13 +237,14 @@ function WSAddUserToPortal($params)
 }
 
 // Register the method to expose
-$server->register('WSRemoveUserFromPortal',                      // method name
-    array('removeUserFromPortal' => 'tns:AddUserToPortal'),  // input parameters
-    array('return' => 'xsd:string'),                            // output parameters
-    'urn:WSAccessUrl',                                       // namespace
-    'urn:WSAccessUrl#WSRemoveUserFromPortal',                 // soapaction
-    'rpc',                                                      // style
-    'encoded',                                                  // use
+$server->register(
+    'WSRemoveUserFromPortal', // method name
+    array('removeUserFromPortal' => 'tns:AddUserToPortal'), // input parameters
+    array('return' => 'xsd:string'), // output parameters
+    'urn:WSAccessUrl', // namespace
+    'urn:WSAccessUrl#WSRemoveUserFromPortal', // soapaction
+    'rpc', // style
+    'encoded', // use
     'This service remove a user from a portal'                  // documentation
 );
 
@@ -267,13 +281,14 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSGetPortalListFromUser',                      // method name
-    array('getPortalListFromUser' => 'tns:getPortalListFromUser'),  // input parameters
-    array('return' => 'tns:portalList'),                            // output parameters
-    'urn:WSAccessUrl',                                       // namespace
-    'urn:WSAccessUrl#WSGetPortalListFromUser',                 // soapaction
-    'rpc',                                                      // style
-    'encoded',                                                  // use
+$server->register(
+    'WSGetPortalListFromUser', // method name
+    array('getPortalListFromUser' => 'tns:getPortalListFromUser'), // input parameters
+    array('return' => 'tns:portalList'), // output parameters
+    'urn:WSAccessUrl', // namespace
+    'urn:WSAccessUrl#WSGetPortalListFromUser', // soapaction
+    'rpc', // style
+    'encoded', // use
     'This service remove a user from a portal'                  // documentation
 );
 
@@ -311,13 +326,14 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSGetPortalListFromCourse',                      // method name
-    array('getPortalListFromCourse' => 'tns:getPortalListFromCourse'),  // input parameters
-    array('return' => 'tns:portalList'),                            // output parameters
-    'urn:WSAccessUrl',                                       // namespace
-    'urn:WSAccessUrl#getPortalListFromCourse',                 // soapaction
-    'rpc',                                                      // style
-    'encoded',                                                  // use
+$server->register(
+    'WSGetPortalListFromCourse', // method name
+    array('getPortalListFromCourse' => 'tns:getPortalListFromCourse'), // input parameters
+    array('return' => 'tns:portalList'), // output parameters
+    'urn:WSAccessUrl', // namespace
+    'urn:WSAccessUrl#getPortalListFromCourse', // soapaction
+    'rpc', // style
+    'encoded', // use
     'This service remove a user from a portal'                  // documentation
 );
 
@@ -361,13 +377,13 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSAddCourseToPortal',                   // method name
-    array('addCourseToPortal' => 'tns:addCourseToPortal'),    // input parameters
-    array('return' => 'xsd:string'),                    // output parameters
-    'urn:WSAccessUrl',                               // namespace
-    'urn:WSAccessUrl#WSAddCourseToPortal',              // soapaction
-    'rpc',                                              // style
-    'encoded',                                          // use
+$server->register('WSAddCourseToPortal', // method name
+    array('addCourseToPortal' => 'tns:addCourseToPortal'), // input parameters
+    array('return' => 'xsd:string'), // output parameters
+    'urn:WSAccessUrl', // namespace
+    'urn:WSAccessUrl#WSAddCourseToPortal', // soapaction
+    'rpc', // style
+    'encoded', // use
     'This service adds a course to portal'               // documentation
 );
 
@@ -394,13 +410,13 @@ function WSAddCourseToPortal($params)
 }
 
 // Register the method to expose
-$server->register('WSRemoveCourseFromPortal',                      // method name
-    array('removeCourseFromPortal' => 'tns:addCourseToPortal'),  // input parameters
-    array('return' => 'xsd:string'),                            // output parameters
-    'urn:WSAccessUrl',                                       // namespace
-    'urn:WSAccessUrl#WSRemoveCourseFromPortal',                 // soapaction
-    'rpc',                                                      // style
-    'encoded',                                                  // use
+$server->register('WSRemoveCourseFromPortal', // method name
+    array('removeCourseFromPortal' => 'tns:addCourseToPortal'), // input parameters
+    array('return' => 'xsd:string'), // output parameters
+    'urn:WSAccessUrl', // namespace
+    'urn:WSAccessUrl#WSRemoveCourseFromPortal', // soapaction
+    'rpc', // style
+    'encoded', // use
     'This service remove a course from a portal'                  // documentation
 );
 

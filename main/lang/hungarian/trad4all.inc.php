@@ -144,7 +144,6 @@ $Forbidden = "Nem engedélyezett";
 $CourseAccessConfigTip = "Alapértelmezésként a kurzus nyilvános, de ezt korlátozhatja az alábbi opciókkal.";
 $OpenToTheWorld = "Nyitott - elérhető az egész világ számára";
 $OpenToThePlatform = "Nyitott - regisztrált felhasználók számára elérhető";
-$OpenToThePlatform = "Nyitva - csak regisztrált tagok számára elérhető.";
 $TipLang = "A kurzus website-ot látogató minden felhasználó ezt a nyelvet fogja látni.";
 $Vid = "Video";
 $Work = "Hozzájárulások";

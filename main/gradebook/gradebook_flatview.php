@@ -8,7 +8,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/fe/exportgradebook.php';
 
-$current_course_tool  = TOOL_GRADEBOOK;
+$current_course_tool = TOOL_GRADEBOOK;
 
 api_protect_course_script(true);
 
@@ -60,7 +60,7 @@ if ($showlink) {
 }
 
 if (isset($export_flatview_form) && (!$file_type == 'pdf')) {
-    Display :: display_normal_message($export_flatview_form->toHtml(), false);
+    Display::addFlash(Display::return_message($export_flatview_form->toHtml(), 'normal', false));
 }
 
 if (isset($_GET['selectcat'])) {
@@ -74,7 +74,7 @@ $simple_search_form = new UserForm(
     null,
     'simple_search_form',
     null,
-    api_get_self() . '?selectcat=' . $category_id
+    api_get_self().'?selectcat='.$category_id
 );
 $values = $simple_search_form->exportValues();
 
@@ -148,15 +148,15 @@ if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
     }
 }
 
-if (isset($_GET['exportpdf']))	{
-    $interbreadcrumb[] = array (
-        'url' => api_get_self().'?selectcat=' . Security::remove_XSS($_GET['selectcat']).'&'.api_get_cidreq(),
+if (isset($_GET['exportpdf'])) {
+    $interbreadcrumb[] = array(
+        'url' => api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&'.api_get_cidreq(),
         'name' => get_lang('FlatView')
     );
 
     $pageNum = isset($_GET['flatviewlist_page_nr']) ? intval($_GET['flatviewlist_page_nr']) : null;
     $perPage = isset($_GET['flatviewlist_per_page']) ? intval($_GET['flatviewlist_per_page']) : null;
-    $url = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+    $url = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
         'exportpdf' => '',
         'offset' => $offset,
         'selectcat' => intval($_GET['selectcat']),
@@ -195,7 +195,7 @@ if (isset($_GET['exportpdf']))	{
     }
 }
 
-if (isset($_GET['print']))	{
+if (isset($_GET['print'])) {
     $printable_data = GradebookUtils::get_printable_data(
         $cat[0],
         $users,

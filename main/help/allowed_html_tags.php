@@ -50,10 +50,10 @@ $table_header = array();
 $table_header[] = array('tag', true);
 $table_header[] = array('attributes', false);
 foreach ($tags as $tag => & $attributes) {
-	$row = array();
-	$row[] = '<kbd>'.$tag.'</kbd>';
-	$row[] = '<kbd>&nbsp;'.implode(', ', array_keys($attributes)).'</kbd>';
-	$table_data[] = $row;
+    $row = array();
+    $row[] = '<kbd>'.$tag.'</kbd>';
+    $row[] = '<kbd>&nbsp;'.implode(', ', array_keys($attributes)).'</kbd>';
+    $table_data[] = $row;
 }
 Display::display_sortable_table($table_header, $table_data, array(), array(), array('fullpage' => intval($_GET['fullpage'])));
 ?>

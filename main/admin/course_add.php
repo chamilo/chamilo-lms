@@ -2,8 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	@package chamilo.admin
+ * @package chamilo.admin
  */
+
+use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
+use Chamilo\CoreBundle\Entity\CourseCategory;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -14,21 +18,24 @@ $tool_name = get_lang('AddCourse');
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
 
-
+$em = Database::getManager();
+/** @var CourseCategoryRepository $courseCategoriesRepo */
+$courseCategoriesRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
 // Get all possible teachers.
+$accessUrlId = api_get_current_access_url_id();
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT user_id,lastname,firstname
         FROM $table_user
         WHERE status=1".$order_clause;
 // Filtering teachers when creating a course.
 if (api_is_multiple_url_enabled()) {
-    $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $sql = "SELECT u.user_id,lastname,firstname
             FROM $table_user as u
             INNER JOIN $access_url_rel_user_table url_rel_user
             ON (u.user_id=url_rel_user.user_id)
-            WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
+            WHERE url_rel_user.access_url_id=".$accessUrlId." AND status=1".$order_clause;
 }
 
 $res = Database::query($sql);
@@ -42,7 +49,14 @@ $form = new FormValidator('update_course');
 $form->addElement('header', $tool_name);
 
 // Title
-$form->addText('title', get_lang('Title'), true);
+$form->addText(
+    'title',
+    get_lang('Title'),
+    true,
+    array(
+        'aria-label' => get_lang('Title')
+    )
+);
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
@@ -57,7 +71,8 @@ $form->addText(
     [
         'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
         'pattern' => '[a-zA-Z0-9]+',
-        'title' => get_lang('OnlyLettersAndNumbers')
+        'title' => get_lang('OnlyLettersAndNumbers'),
+        'id' => 'visual_code'
     ]
 );
 
@@ -77,27 +92,52 @@ $form->addElement(
 );
 $form->applyFilter('course_teachers', 'html_filter');
 
-// Category code
-$url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
+$countCategories = $courseCategoriesRepo->countAllInAccessUrl($accessUrlId);
 
-$form->addElement(
-    'select_ajax',
-    'category_code',
-    get_lang('CourseFaculty'),
-    null,
-    array(
-        'url' => $url
-    //    'formatResult' => 'function(item) { return item.name + "'" +item.code; }'
-    )
-);
+if ($countCategories >= 100) {
+    // Category code
+    $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
+
+    $form->addElement(
+        'select_ajax',
+        'category_code',
+        get_lang('CourseFaculty'),
+        null,
+        ['url' => $url]
+    );
+} else {
+    $categories = $courseCategoriesRepo->findAllInAccessUrl($accessUrlId);
+    $categoriesOptions = [null => get_lang('None')];
+
+    /** @var CourseCategory $category */
+    foreach ($categories as $category) {
+        $categoriesOptions[$category->getCode()] = $category->__toString();
+    }
+
+    $form->addSelect(
+        'category_code',
+        get_lang('CourseFaculty'),
+        $categoriesOptions
+    );
+}
 
 // Course department
-$form->addText('department_name', get_lang('CourseDepartment'), false, array ('size' => '60'));
+$form->addText(
+    'department_name',
+    get_lang('CourseDepartment'),
+    false,
+    array('size' => '60', 'id' => 'department_name')
+);
 $form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
 
 // Department URL
-$form->addText('department_url', get_lang('CourseDepartmentURL'), false, array ('size' => '60'));
+$form->addText(
+    'department_url',
+    get_lang('CourseDepartmentURL'),
+    false,
+    array('size' => '60', 'id' => 'department_url')
+);
 $form->applyFilter('department_url', 'html_filter');
 
 // Course language.
@@ -123,32 +163,34 @@ if (api_get_setting('teacher_can_select_course_template') === 'true') {
             get_lang('PickACourseAsATemplateForThisNewCourse'),
         ],
         null,
-        ['url' => api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?a=search_course']
+        ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course']
     );
 }
 
 $form->addElement('checkbox', 'exemplary_content', '', get_lang('FillWithExemplaryContent'));
 
 $group = array();
-$group[]= $form->createElement('radio', 'visibility', get_lang('CourseAccess'), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
-$group[]= $form->createElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
-$group[]= $form->createElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
-$group[]= $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
-$group[]= $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityHidden'), COURSE_VISIBILITY_HIDDEN);
+$group[] = $form->createElement('radio', 'visibility', get_lang('CourseAccess'), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
+$group[] = $form->createElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
+$group[] = $form->createElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
+$group[] = $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
+$group[] = $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityHidden'), COURSE_VISIBILITY_HIDDEN);
 
-$form->addGroup($group,'', get_lang('CourseAccess'));
-
-$group = array();
-$group[]= $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
-$group[]= $form->createElement('radio', 'subscribe', null, get_lang('Denied'), 0);
-$form->addGroup($group,'', get_lang('Subscription'));
+$form->addGroup($group, '', get_lang('CourseAccess'));
 
 $group = array();
-$group[]= $form->createElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
-$group[]= $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
+$group[] = $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
+$group[] = $form->createElement('radio', 'subscribe', null, get_lang('Denied'), 0);
+$form->addGroup($group, '', get_lang('Subscription'));
+
+$group = array();
+$group[] = $form->createElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
+$group[] = $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
 $form->addGroup($group, '', get_lang('Unsubscription'));
 
-$form->addElement('text','disk_quota',array(get_lang('CourseQuota'), null, get_lang('MB')));
+$form->addElement('text', 'disk_quota', array(get_lang('CourseQuota'), null, get_lang('MB')), array(
+    'id' => 'disk_quota'
+));
 $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 
 $obj = new GradeModel();
@@ -158,7 +200,7 @@ $obj->fill_grade_model_select_in_form($form);
 $extra_field = new ExtraField('course');
 $extra = $extra_field->addElements($form);
 
-$htmlHeadXtra[] ='
+$htmlHeadXtra[] = '
 <script>
 
 $(function() {
@@ -171,7 +213,7 @@ $form->addButtonCreate(get_lang('CreateCourse'));
 
 // Set some default values.
 $values['course_language'] = api_get_setting('platformLanguage');
-$values['disk_quota'] = round(api_get_setting('default_document_quotum')/1024/1024, 1);
+$values['disk_quota'] = round(api_get_setting('default_document_quotum') / 1024 / 1024, 1);
 
 $default_course_visibility = api_get_setting('courses_default_creation_visibility');
 
@@ -191,16 +233,16 @@ if ($form->validate()) {
     $course = $form->exportValues();
 
     $course_teachers = isset($course['course_teachers']) ? $course['course_teachers'] : null;
-    $course['disk_quota'] = $course['disk_quota']*1024*1024;
+    $course['disk_quota'] = $course['disk_quota'] * 1024 * 1024;
     $course['exemplary_content'] = empty($course['exemplary_content']) ? false : true;
     $course['teachers'] = $course_teachers;
     $course['wanted_code'] = $course['visual_code'];
-    $course['gradebook_model_id']   = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;
+    $course['gradebook_model_id'] = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;
     // Fixing category code
-    $course['course_category'] = isset($course['category_code']) ? $course['category_code'] :  '';
+    $course['course_category'] = isset($course['category_code']) ? $course['category_code'] : '';
 
-    include_once api_get_path(SYS_CODE_PATH) . 'lang/english/trad4all.inc.php';
-    $file_to_include = api_get_path(SYS_CODE_PATH) . 'lang/' . $course['course_language'] . '/trad4all.inc.php';
+    include_once api_get_path(SYS_CODE_PATH).'lang/english/trad4all.inc.php';
+    $file_to_include = api_get_path(SYS_CODE_PATH).'lang/'.$course['course_language'].'/trad4all.inc.php';
 
     if (file_exists($file_to_include)) {
         include $file_to_include;

@@ -11,9 +11,9 @@
  */
 
 $_course = api_get_course_info();
-$courseDir = $_course['path'] . "/document";
+$courseDir = $_course['path']."/document";
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
-$base_work_dir = $sys_course_path . $courseDir;
+$base_work_dir = $sys_course_path.$courseDir;
 $noPHP_SELF = true;
 $max_filled_space = DocumentManager::get_course_quota();
 
@@ -35,12 +35,12 @@ if (!DocumentManager::get_document_id($_course, $path)) {
  */
 $nameTools = get_lang('UplUploadDocument');
 $interbreadcrumb[] = array(
-    "url" => api_get_path(WEB_CODE_PATH)."document/document.php?curdirpath=" . urlencode($path) . '&'.api_get_cidreq(),
+    "url" => api_get_path(WEB_CODE_PATH)."document/document.php?curdirpath=".urlencode($path).'&'.api_get_cidreq(),
     "name" => $langDocuments
 );
 Display::display_header($nameTools, "Doc");
 //show the title
-api_display_tool_title($nameTools . $add_group_to_title);
+api_display_tool_title($nameTools.$add_group_to_title);
 
 /**
  * Process
@@ -74,13 +74,13 @@ if (isset($_FILES['user_upload'])) {
             if ($new_title) {
                 $ct .= ", title='$new_title'";
             }
-        	Database::query("UPDATE $table_document SET" . substr($ct, 1) ." WHERE id = '$docid'");
+        	Database::query("UPDATE $table_document SET".substr($ct, 1)." WHERE id = '$docid'");
     	}
         //check for missing images in html files
         $missing_files = check_for_missing_files($base_work_dir.$_POST['curdirpath'].$new_path);
         if ($missing_files) {
             //show a form to upload the missing files
-            Display::display_normal_message(
+            echo Display::return_message(
                 build_missing_files_form(
                     $missing_files,
                     $_POST['curdirpath'],
@@ -124,14 +124,14 @@ if (isset($_POST['submit_image'])) {
         replace_img_path_in_html_file(
             $_POST['img_file_path'],
             $paths_to_replace_in_file,
-            $base_work_dir . $_POST['related_file']
+            $base_work_dir.$_POST['related_file']
         );
         //update parent folders
         item_property_update_on_folder($_course, $_POST['curdirpath'], $_user['user_id']);
     }
 }
 //they want to create a directory
-if (isset($_POST['create_dir']) && $_POST['dirname']!='') {
+if (isset($_POST['create_dir']) && $_POST['dirname'] != '') {
     $added_slash = $path == '/' ? '' : '/';
 	$dir_name = $path.$added_slash.api_replace_dangerous_char($_POST['dirname']);
     $created_dir = create_unexisting_directory(
@@ -145,10 +145,10 @@ if (isset($_POST['create_dir']) && $_POST['dirname']!='') {
         $_POST['dirname']
     );
     if ($created_dir) {
-        Display::display_normal_message(get_lang('DirCr'));
+        echo Display::return_message(get_lang('DirCr'));
         $path = $created_dir;
     } else {
-        Display::addFlash(Display::return_message(get_lang('CannotCreateDir')));
+        echo Display::return_message(get_lang('CannotCreateDir'));
     }
 }
 
@@ -156,18 +156,18 @@ if (isset($_GET['createdir'])) {
 	//create the form that asks for the directory name
 	$new_folder_text = '<form action="'.api_get_self().'" method="POST">';
 	$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.$path.'"/>';
-	$new_folder_text .= get_lang('NewDir') .' ';
+	$new_folder_text .= get_lang('NewDir').' ';
 	$new_folder_text .= '<input type="text" name="dirname"/>';
 	$new_folder_text .= '<input type="submit" name="create_dir" value="'.get_lang('Ok').'"/>';
 	$new_folder_text .= '</form>';
 	//show the form
-	Display::display_normal_message($new_folder_text);
+	echo Display::return_message($new_folder_text, 'normal');
 } else {	//give them a link to create a directory
 ?>
 	<p>
         <a href="<?php echo api_get_self(); ?>?path=<?php echo $path; ?>&amp;createdir=1">
             <?php echo Display::return_icon('new_folder.gif'); ?>
-            <?php echo(get_lang('CreateDir'));?>
+            <?php echo(get_lang('CreateDir')); ?>
         </a>
     </p>
 <?php
@@ -190,11 +190,11 @@ if (isset($_GET['createdir'])) {
 </td>
 </tr>
 <tr>
-<td><?php echo get_lang('Title');?></td>
+<td><?php echo get_lang('Title'); ?></td>
 <td><input type="text" size="20" name="title" style="width:300px;"></td>
 </tr>
 <tr>
-<td valign="top"><?php echo get_lang('Comment');?></td>
+<td valign="top"><?php echo get_lang('Comment'); ?></td>
 <td><textarea rows="3" cols="20" name="comment" wrap="virtual" style="width:300px;"></textarea></td>
 </tr>
 <tr>
@@ -202,21 +202,21 @@ if (isset($_GET['createdir'])) {
 <?php echo get_lang('Options'); ?>
 </td>
 <td>
-- <input type="checkbox" name="unzip" value="1" onclick="check_unzip()"/> <?php echo(get_lang('Uncompress'));?><br/>
-- <?php echo (get_lang('UplWhatIfFileExists'));?><br/>
-&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="nothing" title="<?php echo (get_lang('UplDoNothingLong'));?>" checked="checked"/>  <?php echo (get_lang('UplDoNothing'));?><br/>
-&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="overwrite" title="<?php echo (get_lang('UplOverwriteLong'));?>"/> <?php echo (get_lang('UplOverwrite'));?><br/>
-&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="rename" title="<?php echo (get_lang('UplRenameLong'));?>"/> <?php echo (get_lang('UplRename'));?>
+- <input type="checkbox" name="unzip" value="1" onclick="check_unzip()"/> <?php echo(get_lang('Uncompress')); ?><br/>
+- <?php echo (get_lang('UplWhatIfFileExists')); ?><br/>
+&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="nothing" title="<?php echo (get_lang('UplDoNothingLong')); ?>" checked="checked"/>  <?php echo (get_lang('UplDoNothing')); ?><br/>
+&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="overwrite" title="<?php echo (get_lang('UplOverwriteLong')); ?>"/> <?php echo (get_lang('UplOverwrite')); ?><br/>
+&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="rename" title="<?php echo (get_lang('UplRenameLong')); ?>"/> <?php echo (get_lang('UplRename')); ?>
 </td>
 </tr>
 </table>
 
-<input type="submit" value="<?php echo(get_lang('Ok'));?>">
+<input type="submit" value="<?php echo(get_lang('Ok')); ?>">
 </form>
 <!-- end upload form -->
 
  <!-- so they can get back to the documents   -->
- <p><?php echo (get_lang('Back'));?> <?php echo (get_lang('To'));?> <a href="document.php?curdirpath=<?php echo $path; ?>"><?php echo (get_lang('DocumentsOverview'));?></a></p>
+ <p><?php echo (get_lang('Back')); ?> <?php echo (get_lang('To')); ?> <a href="document.php?curdirpath=<?php echo $path; ?>"><?php echo (get_lang('DocumentsOverview')); ?></a></p>
 <?php
 
 Display::display_footer();

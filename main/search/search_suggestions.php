@@ -6,14 +6,14 @@
  * @package chamilo.search
  */
 
-require_once dirname(__FILE__) . '/../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 function get_suggestions_from_search_engine($q)
 {
     global $charset;
 
     $json = [];
-    $table_sfv = Database:: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
+    $table_sfv = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
     $q = Database::escape_string($q);
     $cid = api_get_course_id();
     $sql_add = '';
@@ -27,13 +27,13 @@ function get_suggestions_from_search_engine($q)
     $i = 0;
     while ($row = Database::fetch_array($sql_result)) {
         $json[] = [
-            'id' => api_convert_encoding($row['value'],'UTF-8',$charset),
-            'value' => api_convert_encoding($row['value'],'UTF-8',$charset),
-            'label' => api_convert_encoding($row['value'],'UTF-8',$charset)
+            'id' => api_convert_encoding($row['value'], 'UTF-8', $charset),
+            'value' => api_convert_encoding($row['value'], 'UTF-8', $charset),
+            'label' => api_convert_encoding($row['value'], 'UTF-8', $charset)
         ];
 
-        if ($i<20) {
-            $data[ $row['course_code'] ] [ $row['tool_id'] ] [ $row['ref_id'] ] = 1;
+        if ($i < 20) {
+            $data[$row['course_code']] [$row['tool_id']] [$row['ref_id']] = 1;
         }
         $i++;
     }
@@ -95,7 +95,7 @@ function get_suggestions_from_search_engine($q)
                     }
                 }
                 foreach ($output as $i=>$out) {
-                    if (api_stristr($out,$q) === false) {continue;}
+                    if (api_stristr($out, $q) === false) {continue; }
                     $s = api_convert_encoding(substr($out, 0, -3), 'UTF-8', $charset);
                     if (!in_array($s, $more_sugg)) {
                         $more_sugg[] = $s;

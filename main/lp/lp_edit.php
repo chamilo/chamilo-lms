@@ -20,12 +20,12 @@ if (isset($_SESSION['gradebook'])) {
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array (
+    $interbreadcrumb[] = array(
         'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
     );
 }
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list?'.api_get_cidreq(), 'name' => get_lang('LearningPaths'));
+$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list&'.api_get_cidreq(), 'name' => get_lang('LearningPaths'));
 $interbreadcrumb[] = array(
     'url' => api_get_self()."?action=build&lp_id=".$_SESSION['oLP']->get_id().'&'.api_get_cidreq(),
     'name' => $_SESSION['oLP']->get_name()
@@ -76,7 +76,7 @@ $hide_toc_frame = $form->addElement(
 );
 if (api_get_setting('allow_course_theme') === 'true') {
     $mycourselptheme = api_get_course_setting('allow_learning_path_theme');
-    if (!empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1) {
+    if (!empty($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
         //LP theme picker
         $theme_select = $form->addElement('SelectTheme', 'lp_theme', get_lang('Theme'));
         $form->applyFilter('lp_theme', 'trim');
@@ -105,7 +105,7 @@ if (strlen($_SESSION['oLP']->get_preview_image()) > 0) {
 $label = ($_SESSION['oLP']->get_preview_image() != '' ? get_lang('UpdateImage') : get_lang('AddImage'));
 $form->addElement('file', 'lp_preview_image', array($label, get_lang('ImageWillResizeMsg')));
 
-$form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'filetype', array ('jpg', 'jpeg', 'png', 'gif'));
+$form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'filetype', array('jpg', 'jpeg', 'png', 'gif'));
 
 // Search terms (only if search is activated).
 if (api_get_setting('search_enabled') === 'true') {
@@ -134,7 +134,7 @@ $defaults['lp_name'] = Security::remove_XSS($_SESSION['oLP']->get_name());
 $defaults['lp_author'] = Security::remove_XSS($_SESSION['oLP']->get_author());
 $defaults['hide_toc_frame'] = Security::remove_XSS($_SESSION['oLP']->get_hide_toc_frame());
 $defaults['category_id'] = intval($_SESSION['oLP']->getCategoryId());
-$defaults['accumulate_scorm_time']  = $_SESSION['oLP']->getAccumulateScormTime();
+$defaults['accumulate_scorm_time'] = $_SESSION['oLP']->getAccumulateScormTime();
 
 $expired_on = $_SESSION['oLP']->expired_on;
 $publicated_on = $_SESSION['oLP']->publicated_on;
@@ -214,14 +214,14 @@ $form->addElement('hidden', 'lp_id', $_SESSION['oLP']->get_id());
 if ($enableLpExtraFields) {
     $htmlHeadXtra[] = '<script>
     $(function() {
-        ' . $extra['jquery_ready_content'] . '
+        ' . $extra['jquery_ready_content'].'
     });
     </script>';
 }
 
 
 $defaults['publicated_on'] = !empty($publicated_on) && $publicated_on !== '0000-00-00 00:00:00' ? api_get_local_time($publicated_on) : null;
-$defaults['expired_on'] = (!empty($expired_on) )? api_get_local_time($expired_on): date('Y-m-d 12:00:00', time()+84600);
+$defaults['expired_on'] = (!empty($expired_on)) ? api_get_local_time($expired_on) : date('Y-m-d 12:00:00', time() + 84600);
 $defaults['subscribe_users'] = $_SESSION['oLP']->getSubscribeUsers();
 $form->setDefaults($defaults);
 

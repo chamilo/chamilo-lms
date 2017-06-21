@@ -146,7 +146,6 @@ $Forbidden = "Ez duzu baimenik";
 $CourseAccessConfigTip = "Besterik ezean, ikastaroa publikoa da. Baina zuk sarbide maila zehaztu dezakezu gaineko aukeretan.";
 $OpenToTheWorld = "Publikoa - sarbidea edonorentzat dago baimenduta";
 $OpenToThePlatform = "Irekia - plataforman izena eman duten erabiltzaileentzat bakarrik baimenduta dago sarbidea";
-$OpenToThePlatform = "Irekia - plataforman izena eman duten erabiltzaileentzat bakarrik baimenduta dago sarbidea";
 $TipLang = "Hizkuntza hau izango da baliogarria, zure heziketa webguneko bisitari guztientzat";
 $Vid = "Chamilo LIVE bideoa";
 $Work = "Lanak";

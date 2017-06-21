@@ -19,6 +19,7 @@ class ExtraFieldOption extends Model
     );
 
     public $extraField;
+    public $fieldId;
 
     /**
      * Gets the table for the type of object for which we are using an extra field
@@ -114,7 +115,7 @@ class ExtraFieldOption extends Model
      * Delete all the options of a specific field
      * @param int $field_id
      *
-     * @result void
+     * @return void
      * @assert (-1) === false
      */
     public function delete_all_options_by_field_id($field_id)
@@ -216,7 +217,7 @@ class ExtraFieldOption extends Model
 
                         foreach ($sub_options as $sub_option) {
                             if (!empty($sub_option)) {
-                                $new_params  = array(
+                                $new_params = array(
                                     'field_id' => $field_id,
                                     'option_value' => $sub_id,
                                     'display_text' => $sub_option,
@@ -253,7 +254,7 @@ class ExtraFieldOption extends Model
                     $option = trim($option);
 
                     if ($option_info == false) {
-                        $order      = self::get_max_order($field_id);
+                        $order = self::get_max_order($field_id);
 
                         $new_params = array(
                             'field_id' => $field_id,
@@ -332,7 +333,7 @@ class ExtraFieldOption extends Model
                 WHERE
                     field_id = $field_id AND
                     option_value = '".$option_value."' AND
-                    sf.extra_field_type = ".$extraFieldType."
+                    sf.extra_field_type = $extraFieldType
                 ";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -361,7 +362,7 @@ class ExtraFieldOption extends Model
                 WHERE
                     field_id = $field_id AND
                     s.display_text = '".$option_display_text."' AND
-                    sf.extra_field_type = ".$extraFieldType."
+                    sf.extra_field_type = $extraFieldType
                 ";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -419,7 +420,6 @@ class ExtraFieldOption extends Model
         $field_id = intval($field_id);
 
         $orderBy = null;
-
         switch ($ordered_by) {
             case 'id':
                 $orderBy = ['id' => 'ASC'];
@@ -453,7 +453,6 @@ class ExtraFieldOption extends Model
         }
 
         $options = [];
-
         foreach ($result as $row) {
             $option = [
                 'id' => $row->getId(),
@@ -467,10 +466,8 @@ class ExtraFieldOption extends Model
 
             if ($add_id_in_array) {
                 $options[$row->getId()] = $option;
-
                 continue;
             }
-
             $options[] = $option;
         }
 
@@ -657,13 +654,18 @@ class ExtraFieldOption extends Model
 
         $form->addElement('hidden', 'id', $id);
         $form->addElement('hidden', 'type', $this->type);
-        $form->addElement('hidden', 'field_id', $this->field_id);
+        $form->addElement('hidden', 'field_id', $this->fieldId);
 
         if ($action == 'edit') {
-            $translateUrl = api_get_path(WEB_CODE_PATH) . 'extrafield/translate.php?' . http_build_query([
+            $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'.http_build_query([
                 'extra_field_option' => $id
             ]);
-            $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
+            $translateButton = Display::toolbarButton(
+                get_lang('TranslateThisTerm'),
+                $translateUrl,
+                'language',
+                'link'
+            );
 
             $form->addText(
                 'display_text',

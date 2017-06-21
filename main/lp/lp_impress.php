@@ -35,7 +35,7 @@ $visibility = api_get_item_visibility(
     null,
     api_get_group_id()
 );
-if (!api_is_allowed_to_edit(null, true) && intval($visibility) == 0 ) {
+if (!api_is_allowed_to_edit(null, true) && intval($visibility) == 0) {
      api_not_allowed();
 }
 
@@ -73,22 +73,22 @@ if ($is_allowed_to_edit) {
 $html = '';
 $step = 1;
 foreach ($list as $toc) {
-    $x = 1000*$step;
+    $x = 1000 * $step;
     $html .= '<div id="step-'.$step.'" class="step slide" data-x="'.$x.'" data-y="-1500"  >';
     $html .= '<div class="impress-content">';
     $src = $_SESSION['oLP']->get_link('http', $toc['id']);
     if ($toc['type'] !== 'dir') {
         //just showing the src in a iframe ...
         $html .= '<h2>'.$toc['title'].'</h2>';
-        $html .= '<iframe border="0" frameborder="0" style="width:100%;height:600px" src="' . $src . '"></iframe>';
-    }else{
+        $html .= '<iframe border="0" frameborder="0" style="width:100%;height:600px" src="'.$src.'"></iframe>';
+    } else {
         $html .= "<div class='impress-title'>";
         $html .= '<h1>'.$toc['title'].'</h1>';
         $html .= "</div>";
     }
     $html .= "</div>";
     $html .= "</div>";
-    $step ++;
+    $step++;
 }
 
 //Setting the template

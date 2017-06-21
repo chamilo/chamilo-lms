@@ -1,4 +1,5 @@
 <?php
+/* For license terms, see /license.txt */
 /**
  * This script contains calls to the various filling scripts that allow a
  * demo presenter to fill his Dokeos with demo data.
@@ -9,7 +10,7 @@
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
  */
 
-$incdir = dirname(__FILE__).'/../../main/inc/';
+$incdir = __DIR__.'/../../main/inc/';
 require $incdir.'global.inc.php';
 
 /**
@@ -19,7 +20,7 @@ require $incdir.'global.inc.php';
 if (PHP_SAPI != 'cli') { die('This demo-data filling script can only be run from the command line. Please launch it from the command line using: php5 fill_all.php. To enable it from your browser (very highly dangerous), remove the first line of code from the "logic" section of this file.'); }
 $eol = PHP_EOL;
 $output = '';
-$files = scandir(dirname(__FILE__));
+$files = scandir(__DIR__);
 foreach ($files as $file) {
     if (substr($file, 0, 1) == '.' or substr($file, 0, 5) != 'fill_') {
         ;

@@ -6,7 +6,7 @@
  */
 
 require_once 'xapian.php';
-require_once dirname(__FILE__) . '/../IndexableChunk.class.php';
+require_once __DIR__.'/../IndexableChunk.class.php';
 
 /**
  * Abstract helper class
@@ -15,7 +15,6 @@ require_once dirname(__FILE__) . '/../IndexableChunk.class.php';
 abstract class XapianIndexer
 {
     /* XapianWritableDatabase */
-
     protected $db;
     /* IndexableChunk[] */
     protected $chunks;
@@ -27,7 +26,7 @@ abstract class XapianIndexer
     /**
      * Class contructor
      */
-    function __construct()
+    public function __construct()
     {
         $this->db = null;
         $this->stemmer = null;
@@ -70,13 +69,16 @@ abstract class XapianIndexer
      */
     function connectDb($path = null, $dbMode = null, $lang = 'english')
     {
-        if ($this->db != null)
+        if ($this->db != null) {
             return $this->db;
-        if ($dbMode == null)
+        }
+        if ($dbMode == null) {
             $dbMode = Xapian::DB_CREATE_OR_OPEN;
+        }
 
-        if ($path == null)
+        if ($path == null) {
             $path = api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb/';
+        }
 
         try {
             $this->db = new XapianWritableDatabase($path, $dbMode);
@@ -90,7 +92,7 @@ abstract class XapianIndexer
 
             return $this->db;
         } catch (Exception $e) {
-            Display::display_error_message($e->getMessage());
+            echo Display::return_message($e->getMessage(), 'error');
 
             return 1;
         }
@@ -130,7 +132,7 @@ abstract class XapianIndexer
                     if (!empty($chunk->terms)) {
                         foreach ($chunk->terms as $term) {
                             /* FIXME: think of getting weight */
-                            $doc->add_term($term['flag'] . $term['name'], 1);
+                            $doc->add_term($term['flag'].$term['name'], 1);
                         }
                     }
 
@@ -150,7 +152,7 @@ abstract class XapianIndexer
                 }
             }
         } catch (Exception $e) {
-            Display::display_error_message($e->getMessage());
+            echo Display::return_message($e->getMessage(), 'error');
             exit(1);
         }
     }
@@ -169,7 +171,7 @@ abstract class XapianIndexer
         try {
             $docid = $this->db->get_document($did);
         } catch (Exception $e) {
-            //Display::display_error_message($e->getMessage());
+            //echo Display::return_message($e->getMessage(), 'error');
             return false;
         }
         return $docid;
@@ -188,12 +190,12 @@ abstract class XapianIndexer
         }
         try {
             if (!is_a($doc, 'XapianDocument')) {
-                return FALSE;
+                return false;
             }
             $doc_data = $doc->get_data();
             return $doc_data;
         } catch (Exception $e) {
-            //Display::display_error_message($e->getMessage());
+            //echo Display::return_message($e->getMessage(), 'error');
             return false;
         }
     }
@@ -203,7 +205,8 @@ abstract class XapianIndexer
      *
      * @param   int     $did     Xapian::docid
      * @param   array   $terms   New terms of the document
-     * @param   string  $prefix  Prefix used to categorize the doc (usually 'T' for title, 'A' for author)
+     * @param   string  $prefix  Prefix used to categorize the doc
+     * (usually 'T' for title, 'A' for author)
      * @return  boolean false on error
      */
     function update_terms($did, $terms, $prefix)
@@ -215,7 +218,7 @@ abstract class XapianIndexer
         $doc->clear_terms();
         foreach ($terms as $term) {
             //add directly
-            $doc->add_term($prefix . $term, 1);
+            $doc->add_term($prefix.$term, 1);
         }
         $this->db->replace_document($did, $doc);
         $this->db->flush();
@@ -235,7 +238,7 @@ abstract class XapianIndexer
         }
         if (is_numeric($did) && $did > 0) {
             $doc = $this->get_document($did);
-            if ($doc !== FALSE) {
+            if ($doc !== false) {
                 $this->db->delete_document($did);
                 $this->db->flush();
             }
@@ -252,12 +255,12 @@ abstract class XapianIndexer
     function add_term_to_doc($term, $doc)
     {
         if (!is_a($doc, 'XapianDocument')) {
-            return FALSE;
+            return false;
         }
         try {
             $doc->add_term($term);
         } catch (Exception $e) {
-            Display::display_error_message($e->getMessage());
+            echo Display::return_message($e->getMessage(), 'error');
             return 1;
         }
     }
@@ -272,12 +275,12 @@ abstract class XapianIndexer
     function remove_term_from_doc($term, $doc)
     {
         if (!is_a($doc, 'XapianDocument')) {
-            return FALSE;
+            return false;
         }
         try {
             $doc->remove_term($term);
         } catch (Exception $e) {
-            Display::display_error_message($e->getMessage());
+            echo Display::return_message($e->getMessage(), 'error');
             return 1;
         }
     }
@@ -286,12 +289,13 @@ abstract class XapianIndexer
      * Replace a document in the actual db
      *
      * @param XapianDocument $doc xapian document to push into the db
-     * @param Xapian::docid $did xapian document id of the document to replace
+     * @param int $did xapian document id of the document to replace
+     * @return mixed
      */
     function replace_document($doc, $did)
     {
         if (!is_a($doc, 'XapianDocument')) {
-            return FALSE;
+            return false;
         }
         if ($this->db == null) {
             $this->connectDb();
@@ -300,11 +304,10 @@ abstract class XapianIndexer
             $this->getDb()->replace_document((int) $did, $doc);
             $this->getDb()->flush();
         } catch (Exception $e) {
-            Display::display_error_message($e->getMessage());
+            echo Display::return_message($e->getMessage(), 'error');
             return 1;
         }
     }
-
 
     /**
      * Class destructor
@@ -314,5 +317,4 @@ abstract class XapianIndexer
         unset($this->db);
         unset($this->stemmer);
     }
-
 }

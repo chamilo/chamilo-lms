@@ -3,6 +3,7 @@ $strings['plugin_title'] = "Sell courses";
 $strings['plugin_comment'] = "Sell courses directly through your Chamilo portal, using a PayPal account to receive funds. Neither the Chamilo association nor the developers involved could be considered responsible of any issue you might suffer using this plugin.";
 $strings['show_main_menu_tab'] = "Show tab in main menu";
 $strings['show_main_menu_tab_help'] = "In case of not wanting to show the tab, you can create this link in your Chamilo homepage : %s";
+$strings['public_main_menu_tab'] = "Show tab in main menu to anonymous users too";
 $strings['include_sessions'] = "Include sessions";
 $strings['paypal_enable'] = "Enable PayPal";
 $strings['commissions_enable'] = "Enable Commissions";

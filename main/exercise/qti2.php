@@ -1,13 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
- *	Code for Qti2 import integration.
- *	@package chamilo.exercise
- * 	@author Ronny Velasquez
- * 	@version $Id: qti2.php  2010-03-12 12:14:25Z $
+ * Code for Qti2 import integration.
+ * @package chamilo.exercise
+ * @author Ronny Velasquez
+ * @version $Id: qti2.php  2010-03-12 12:14:25Z $
  */
 
-// including the global Chamilo file
 require_once __DIR__.'/../inc/global.inc.php';
 
 // section (for the tabs)
@@ -19,8 +19,8 @@ if (!api_is_allowed_to_edit(null, true)) {
 }
 
 // the breadcrumbs
-$interbreadcrumb[]= array (
-    "url" => api_get_path(WEB_CODE_PATH) . "exercise/exercise.php?".api_get_cidreq(),
+$interbreadcrumb[] = array(
+    "url" => api_get_path(WEB_CODE_PATH)."exercise/exercise.php?".api_get_cidreq(),
     "name" => get_lang('Exercises')
 );
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
@@ -32,8 +32,8 @@ function ch_qti2_display_form()
 {
     $name_tools = get_lang('ImportQtiQuiz');
     $form  = '<div class="actions">';
-    $form .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'exercise/exercise.php?show=test&'.api_get_cidreq().'">'.
-        Display :: return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
+    $form .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?show=test&'.api_get_cidreq().'">'.
+        Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
     $form .= '</div>';
     $formValidator = new FormValidator(
         'qti_upload',
@@ -72,7 +72,7 @@ function ch_qti2_import_file($array_file)
         return import_exercise($array_file['name']);
     }
 
-    return 'langFileError';
+    return 'FileError';
 }
 
 $message = null;
@@ -83,7 +83,7 @@ if ((api_is_allowed_to_edit(null, true))) {
         $imported = ch_qti2_import_file($_FILES['userFile']);
 
         if (is_numeric($imported) && !empty($imported)) {
-            header('Location: '.api_get_path(WEB_CODE_PATH) . 'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$imported);
+            header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$imported);
             exit;
         } else {
             $message = Display::return_message(get_lang($imported));

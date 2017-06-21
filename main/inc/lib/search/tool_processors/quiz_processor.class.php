@@ -5,8 +5,8 @@
  *
  * @package chamilo.include.search
  */
-include_once dirname(__FILE__) . '/../../../global.inc.php';
-require_once dirname(__FILE__) . '/search_processor.class.php';
+include_once __DIR__.'/../../../global.inc.php';
+require_once __DIR__.'/search_processor.class.php';
 
 /**
  * Process exercises before pass it to search listing scripts
@@ -68,7 +68,7 @@ class quiz_processor extends search_processor
                     $visibility = api_get_item_visibility(api_get_course_info($courseid), TOOL_QUIZ, $exercise_id);
                     if ($visibility) {
                         list($thumbnail, $image, $name, $author) = $this->get_information($courseid, $exercise_id);
-                        $url = api_get_path(WEB_CODE_PATH) . 'exercise/exercise_submit.php?cidReq=%s&exerciseId=%s';
+                        $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?cidReq=%s&exerciseId=%s';
                         $url = sprintf($url, $courseid, $exercise_id);
                         $result = array(
                             'toolid' => TOOL_QUIZ,

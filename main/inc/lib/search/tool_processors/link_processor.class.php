@@ -5,8 +5,8 @@
  *
  * @package chamilo.include.search
  */
-include_once dirname(__FILE__) . '/../../../global.inc.php';
-require_once dirname(__FILE__) . '/search_processor.class.php';
+include_once __DIR__.'/../../../global.inc.php';
+require_once __DIR__.'/search_processor.class.php';
 
 /**
  * Process links before pass it to search listing scripts
@@ -103,11 +103,11 @@ class link_processor extends search_processor
 
             $link_id = intval($link_id);
             $sql = "SELECT insert_user_id FROM $item_property_table
-              		WHERE ref = $link_id AND tool = '" . TOOL_LINK . "' AND c_id = $course_id
+              		WHERE ref = $link_id AND tool = '".TOOL_LINK."' AND c_id = $course_id
               		LIMIT 1";
 
             $name = get_lang('Links');
-            $url = api_get_path(WEB_PATH) . 'main/link/link.php?cidReq=%s';
+            $url = api_get_path(WEB_PATH).'main/link/link.php?cidReq=%s';
             $url = sprintf($url, $course_id_alpha);
             // Get the image path
             $thumbnail = Display::returnIconPath('link.png');

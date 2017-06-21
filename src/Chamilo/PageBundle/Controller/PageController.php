@@ -57,7 +57,7 @@ class PageController extends Controller
 
         return $this->render(
             '@ChamiloPage/latest.html.twig',
-            [ 'pages' => $pagesToShow ]
+            ['pages' => $pagesToShow]
         );
     }
 

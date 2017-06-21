@@ -7,7 +7,7 @@ get_lang('SubstractionMinus')."\n".
 get_lang('MultiplicationStar')."\n".
 get_lang('DivisionSlash')."\n".
 get_lang('ExponentiationCircumflex')."\n".
-get_lang('ModuloPercentage') . "\n" .
+get_lang('ModuloPercentage')."\n".
 "\n".
 get_lang('SquareRootSqrt')."\n".
 get_lang('AbsoluteValueAbs')."\n".

@@ -20,29 +20,29 @@ interface MenuItemInterface {
     public function getIdentifier();
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getLabel();
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getRoute();
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function isActive();
 
     /**
-     * @param $isActive
+     * @param boolean $isActive
      *
-     * @return mixed
+     * @return MenuItemModel
      */
     public function setIsActive($isActive);
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function hasChildren();
 
@@ -54,14 +54,14 @@ interface MenuItemInterface {
     /**
      * @param MenuItemInterface $child
      *
-     * @return mixed
+     * @return MenuItemModel
      */
     public function addChild(MenuItemInterface $child);
 
     /**
      * @param MenuItemInterface $child
      *
-     * @return mixed
+     * @return MenuItemModel
      */
     public function removeChild(MenuItemInterface $child);
 
@@ -76,24 +76,24 @@ interface MenuItemInterface {
     public function getBadge();
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getBadgeColor();
 
     /**
-     * @return mixed
+     * @return MenuItemInterface
      */
     public function getParent();
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function hasParent();
 
     /**
      * @param MenuItemInterface $parent
      *
-     * @return mixed
+     * @return MenuItemModel
      */
     public function setParent(MenuItemInterface $parent = null);
 

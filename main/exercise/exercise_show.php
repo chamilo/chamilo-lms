@@ -349,6 +349,7 @@ if (!empty($maxEditors) && count($questionList) > $maxEditors) {
     $useAdvancedEditor = false;
 }
 
+$countPendingQuestions = 0;
 foreach ($questionList as $questionId) {
     $choice = $exerciseResult[$questionId];
     // destruction of the Question object
@@ -367,7 +368,6 @@ foreach ($questionList as $questionId) {
     }
 
     $relPath = api_get_path(WEB_CODE_PATH);
-
     switch ($answerType) {
         case MULTIPLE_ANSWER_COMBINATION:
             //no break
@@ -702,7 +702,7 @@ foreach ($questionList as $questionId) {
             if (empty($comnt)) {
                 echo '<br />';
             } else {
-                echo '<div id="question_feedback">'.$comnt.'</div>';
+                echo ExerciseLib::getFeedbackText($comnt);
             }
             echo '</div>';
 
@@ -741,7 +741,7 @@ foreach ($questionList as $questionId) {
             echo '<br />';
             if (!empty($comnt)) {
                 echo '<b>'.get_lang('Feedback').'</b>';
-                echo '<div id="question_feedback">'.$comnt.'</div>';
+                echo ExerciseLib::getFeedbackText($comnt);
             }
         }
 
@@ -761,7 +761,7 @@ foreach ($questionList as $questionId) {
 
                 if ($questionScore == -1) {
                     $questionScore = 0;
-                    echo Display::return_message(get_lang('notCorrectedYet'));
+                    echo ExerciseLib::getNotCorrectedYetText();
                 }
             } else {
                 $arrmarks[] = $questionId;
@@ -822,7 +822,7 @@ foreach ($questionList as $questionId) {
 
     $score = array();
     if ($show_results) {
-        $score['result'] = get_lang('Score')." : ".ExerciseLib::show_score(
+        $score['result'] = ExerciseLib::show_score(
             $my_total_score,
             $my_total_weight,
             false,
@@ -835,16 +835,26 @@ foreach ($questionList as $questionId) {
         $score['comments'] = isset($comnt) ? $comnt : null;
     }
 
+    if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION])) {
+        $check = $objQuestionTmp->isQuestionWaitingReview($score);
+        if ($check === false) {
+            $countPendingQuestions++;
+        }
+    }
+
     unset($objAnswerTmp);
     $i++;
 
     $contents = ob_get_clean();
-
     $question_content = '<div class="question_row">';
 
     if ($show_results) {
         //Shows question title an description
-        $question_content .= $objQuestionTmp->return_header(null, $counter, $score);
+        $question_content .= $objQuestionTmp->return_header(
+            $objExercise,
+            $counter,
+            $score
+        );
     }
     $counter++;
     $question_content .= $contents;
@@ -862,11 +872,12 @@ if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])
         if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
             $my_total_score_temp = 0;
         }
-        $total_score_text .= ExerciseLib::get_question_ribbon(
+        $total_score_text .= ExerciseLib::getTotalScoreRibbon(
             $objExercise,
             $my_total_score_temp,
             $totalWeighting,
-            true
+            true,
+            $countPendingQuestions
         );
         $total_score_text .= '</div>';
     }

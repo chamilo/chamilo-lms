@@ -27,7 +27,7 @@ $is_allowed = true;
 require_once api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php';
 
 if (isset($uInfo)) {
-    $interbreadcrumb[]= array(
+    $interbreadcrumb[] = array(
         'url'=>'../user/userInfo.php?uInfo='.Security::remove_XSS($uInfo),
         "name"=> api_ucfirst(get_lang('Users'))
     );
@@ -48,7 +48,7 @@ td {border-bottom: thin dashed gray;}
 /*]]>*/
 </style>";
 
-Display::display_header($nameTools,"Tracking");
+Display::display_header($nameTools, "Tracking");
 
 /*	Constants and variables */
 
@@ -56,11 +56,11 @@ $is_allowedToTrack = $is_courseAdmin;
 $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $courseId);
 
 // Database Table Definitions
-$TABLECOURSUSER	        	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$TABLEUSER	        		= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
-$TABLECOURSE_GROUPSUSER 	= Database::get_course_table(TABLE_GROUP_USER);
+$TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$TABLEUSER = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+$TABLECOURSE_GROUPSUSER = Database::get_course_table(TABLE_GROUP_USER);
 $now = api_get_utc_datetime();
 
 $sql = "SELECT 1
@@ -72,8 +72,8 @@ $sql = "SELECT 1
             OR (access_start_date IS NULL AND access_end_date IS NULL))
         WHERE session_id='".api_get_session_id()."' AND c_id = $courseId";
 //echo $sql;
-$result=Database::query($sql);
-if(!Database::num_rows($result)){
+$result = Database::query($sql);
+if (!Database::num_rows($result)) {
     $disabled = true;
 }
 
@@ -82,7 +82,7 @@ $tbl_learnpath_item = Database::get_course_table(TABLE_LP_ITEM);
 $tbl_learnpath_view = Database::get_course_table(TABLE_LP_VIEW);
 $tbl_learnpath_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
-$documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
 // The variables for the days and the months
 $DaysShort = api_get_week_days_short();
@@ -107,7 +107,7 @@ $is_allowedToTrackEverybodyInCourse = $is_allowedToTrack; // allowed to track al
 <table width="100%" cellpadding="2" cellspacing="3" border="0">
 <?php
 // check if uid is tutor of this group
-if (( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
+if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
     if (!$uInfo && !isset($uInfo)) {
         /*
         *		Display list of user of this group
@@ -131,7 +131,7 @@ if (( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
         $step = 25; // number of student per page
         if ($userGroupNb > $step) {
             if (!isset($offset)) {
-                    $offset=0;
+                    $offset = 0;
             }
 
             $next     = $offset + $step;
@@ -184,13 +184,13 @@ if (( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
         $list_users = getManyResults3Col($sql);
         echo "<table width='100%' cellpadding='2' cellspacing='1' border='0'>\n"
                     ."<tr align='center' valign='top' bgcolor='#E6E6E6'>\n"
-                    ."<td align='left'>",get_lang('UserName'),"</td>\n"
+                    ."<td align='left'>", get_lang('UserName'), "</td>\n"
                     ."</tr>\n";
         for ($i = 0; $i < sizeof($list_users); $i++) {
             echo    "<tr valign='top' align='center'>\n"
                     ."<td align='left'>"
-                    ."<a href='".api_get_self()."?uInfo=",$list_users[$i][0],"'>"
-                    .$list_users[$i][1]," ",$list_users[$i][2]
+                    ."<a href='".api_get_self()."?uInfo=", $list_users[$i][0], "'>"
+                    .$list_users[$i][1], " ", $list_users[$i][2]
                     ."</a>".
                     "</td>\n";
         }
@@ -247,7 +247,7 @@ if (( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
             ";
 
             if (!isset($view)) {
-                $view ='0000000';
+                $view = '0000000';
             }
             //Logins
             TrackingUserLog::display_login_tracking_info($view, $uInfo, $courseId);
@@ -279,8 +279,8 @@ if (( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                 </tr>";
 
             $sql = "SELECT id, name FROM $tbl_learnpath_main";
-            $result=Database::query($sql);
-            $ar=Database::fetch_array($result);
+            $result = Database::query($sql);
+            $ar = Database::fetch_array($result);
 
             echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
             echo "<table cellpadding='2' cellspacing='1' border='0' align='center'><tr>
@@ -297,14 +297,14 @@ if (( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                     if ($ar['id'] == $scormcontopen) {
                         //have to list the students here
                         $contentId = intval($ar['id']);
-                        $sql3 = "SELECT iv.status, iv.score, i.title, iv.total_time " .
-                                "FROM $tbl_learnpath_item i " .
-                                "INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
-                                "INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
+                        $sql3 = "SELECT iv.status, iv.score, i.title, iv.total_time ".
+                                "FROM $tbl_learnpath_item i ".
+                                "INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id ".
+                                "INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id ".
                                 "WHERE (v.user_id=".intval($uInfo)." and v.lp_id=$contentId)
                                 ORDER BY v.id, i.id";
-                        $result3=Database::query($sql3);
-                        $ar3=Database::fetch_array($result3);
+                        $result3 = Database::query($sql3);
+                        $ar3 = Database::fetch_array($result3);
                         if (is_array($ar3)) {
                             echo "<tr><td>&nbsp;&nbsp;&nbsp;</td>
                                    <td class='secLine'>
@@ -326,7 +326,7 @@ if (( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                                 echo "<tr><td>&nbsp;&nbsp;&nbsp;</td><td>";
                                 echo "$title</td><td align=right>{$ar3['status']}</td><td align=right>{$ar3['score']}</td><td align=right>$time</td>";
                                 echo "</tr>";
-                                $ar3=Database::fetch_array($result3);
+                                $ar3 = Database::fetch_array($result3);
                             }
                         } else {
                             echo "<tr>";
@@ -337,7 +337,7 @@ if (( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                     $ar = Database::fetch_array($result);
                 }
             } else {
-                $noscorm=true;
+                $noscorm = true;
             }
 
             if ($noscorm) {

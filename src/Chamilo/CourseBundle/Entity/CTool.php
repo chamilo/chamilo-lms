@@ -96,7 +96,8 @@ class CTool
      *
      * @ORM\Column(name="target", type="string", length=20, nullable=false)
      */
-    private $target;
+    private
+        $target;
 
     /**
      * @var string
@@ -125,6 +126,25 @@ class CTool
      * @ORM\Column(name="custom_icon", type="string", length=255, nullable=true)
      */
     private $customIcon;
+
+    /**
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
+
+    /**
+     * @param int $iid
+     * @return CTool
+     */
+    public function setIid($iid)
+    {
+        $this->iid = $iid;
+
+        return $this;
+    }
 
     /**
      * Set name

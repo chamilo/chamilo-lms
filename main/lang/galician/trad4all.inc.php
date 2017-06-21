@@ -590,7 +590,6 @@ $Forbidden = "Non estás rexistrado como responsable neste curso";
 $CourseAccessConfigTip = "Por defecto o teu curso é público. Pero podes definir o nivel de privacidade máis arriba.";
 $OpenToTheWorld = "Aberto - acceso permitido a todo o mundo";
 $OpenToThePlatform = "Aberto - acceso permitido para usuarios rexistrados na plataforma";
-$OpenToThePlatform = "Aberto - acceso permitido para usuarios rexistrados na plataforma";
 $TipLang = "Esta lingua será válida para todos os visitantes da web do seu curso.";
 $Vid = "Vídeo";
 $Work = "Traballos";

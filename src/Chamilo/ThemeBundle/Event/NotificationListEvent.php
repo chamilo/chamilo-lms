@@ -17,7 +17,6 @@ use Chamilo\ThemeBundle\Model\NotificationInterface;
  */
 class NotificationListEvent extends ThemeEvent
 {
-
     /**
      * @var array
      */

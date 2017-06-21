@@ -18,7 +18,7 @@ $wiki->charset = $charset;
 
 // section (for the tabs)
 $this_section = SECTION_COURSES;
-$current_course_tool  = TOOL_WIKI;
+$current_course_tool = TOOL_WIKI;
 
 $course_id = api_get_course_int_id();
 $session_id = api_get_session_id();
@@ -27,7 +27,7 @@ $course_id = api_get_course_int_id();
 $groupId = api_get_group_id();
 
 // additional style information
-$htmlHeadXtra[] ='<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'wiki/css/default.css"/>';
+$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'wiki/css/default.css"/>';
 
 // javascript for advanced parameters menu
 $htmlHeadXtra[] = '<script>
@@ -72,9 +72,9 @@ if ($groupId) {
     //ensure this tool in groups whe it's private or deactivated
     if ($group_properties['wiki_state'] == 0) {
         api_not_allowed();
-    } elseif ($group_properties['wiki_state']==2) {
+    } elseif ($group_properties['wiki_state'] == 2) {
         if (!api_is_allowed_to_edit(false, true) and
-            !GroupManager :: is_user_in_group(api_get_user_id(), $group_properties['iid'])
+            !GroupManager :: is_user_in_group(api_get_user_id(), $group_properties)
         ) {
             api_not_allowed();
         }
@@ -84,7 +84,7 @@ if ($groupId) {
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true);
 
 // The page we are dealing with
-$page = isset($_GET['title']) ? $_GET['title']: 'index';
+$page = isset($_GET['title']) ? $_GET['title'] : 'index';
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : 'showpage';
 $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : null;
 

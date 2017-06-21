@@ -124,10 +124,10 @@ function clear_session_list(div_session) {
 function display_advanced_search_form () {
     if ($("#advanced_search_form").css("display") == "none") {
         $("#advanced_search_form").css("display","block");
-        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-down') . ' '. get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('AdvancedSearch').'\');
     } else {
         $("#advanced_search_form").css("display","none");
-        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-right') . ' '.get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'\');
     }
 }
 
@@ -203,8 +203,8 @@ function prepare_user_sql_query($is_count)
 
     // adding the filter to see the user's only of the current access_url
     if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
-        $access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.id=url_rel_user.user_id)";
+        $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $sql .= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.id=url_rel_user.user_id)";
     }
 
     $keywordList = array(
@@ -243,7 +243,7 @@ function prepare_user_sql_query($is_count)
     */
 
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
-        $keywordFiltered = Database::escape_string("%". $_GET['keyword'] ."%");
+        $keywordFiltered = Database::escape_string("%".$_GET['keyword']."%");
         $sql .= " WHERE (
                     u.firstname LIKE '$keywordFiltered' OR
                     u.lastname LIKE '$keywordFiltered' OR
@@ -277,13 +277,13 @@ function prepare_user_sql_query($is_count)
         */
         $sql .= " $query_admin_table
             WHERE (
-                u.firstname LIKE '". Database::escape_string("%".$keywordListValues['keyword_firstname']."%")."' AND
+                u.firstname LIKE '".Database::escape_string("%".$keywordListValues['keyword_firstname']."%")."' AND
                 u.lastname LIKE '". Database::escape_string("%".$keywordListValues['keyword_lastname']."%")."' AND
                 u.username LIKE '". Database::escape_string("%".$keywordListValues['keyword_username']."%")."' AND
                 u.email LIKE '". Database::escape_string("%".$keywordListValues['keyword_email']."%")."' AND
                 u.status LIKE '".Database::escape_string($keywordListValues['keyword_status'])."' ";
         if (!empty($keywordListValues['keyword_officialcode'])) {
-            $sql .= " AND u.official_code LIKE '" . Database::escape_string("%" . $keywordListValues['keyword_officialcode'] . "%") . "' ";
+            $sql .= " AND u.official_code LIKE '".Database::escape_string("%".$keywordListValues['keyword_officialcode']."%")."' ";
         }
         $sql .= "
             $keyword_admin
@@ -299,41 +299,63 @@ function prepare_user_sql_query($is_count)
     }
 
     $variables = Session::read('variables_to_show', []);
-
-    $extraField = new ExtraField('user');
-
-    $extraFieldResult = [];
-    foreach ($variables as $variable) {
-        if (isset($_GET['extra_'.$variable])) {
-            if (is_array($_GET['extra_'.$variable])) {
-                $values = $_GET['extra_'.$variable];
-            } else {
-                $values = [$_GET['extra_'.$variable]];
-            }
-            $info = $extraField->get_handler_field_info_by_field_variable($variable);
-            if (empty($info)) {
-                continue;
-            }
-
-            foreach ($values as $value) {
-                if ($info['field_type'] == ExtraField::FIELD_TYPE_TAG) {
-                    $result = $extraField->getAllUserPerTag($info['id'], $value);
-                    $result = empty($result) ? [] : array_column($result, 'user_id');
+    if (!empty($variables)) {
+        $extraField = new ExtraField('user');
+        $extraFieldResult = [];
+        $extraFieldHasData = [];
+        foreach ($variables as $variable) {
+            if (isset($_GET['extra_'.$variable])) {
+                if (is_array($_GET['extra_'.$variable])) {
+                    $values = $_GET['extra_'.$variable];
                 } else {
-                    $result = UserManager::get_extra_user_data_by_value(
-                        $variable,
-                        $value
-                    );
+                    $values = [$_GET['extra_'.$variable]];
                 }
-                if (!empty($result)) {
-                    $extraFieldResult = array_merge($extraFieldResult, $result);
+
+                if (empty($values)) {
+                    continue;
+                }
+
+                $info = $extraField->get_handler_field_info_by_field_variable(
+                    $variable
+                );
+
+                if (empty($info)) {
+                    continue;
+                }
+
+                foreach ($values as $value) {
+                    if (empty($value)) {
+                        continue;
+                    }
+                    if ($info['field_type'] == ExtraField::FIELD_TYPE_TAG) {
+                        $result = $extraField->getAllUserPerTag(
+                            $info['id'],
+                            $value
+                        );
+                        $result = empty($result) ? [] : array_column(
+                            $result,
+                            'user_id'
+                        );
+                    } else {
+                        $result = UserManager::get_extra_user_data_by_value(
+                            $variable,
+                            $value
+                        );
+                    }
+                    $extraFieldHasData[] = true;
+                    if (!empty($result)) {
+                        $extraFieldResult = array_merge(
+                            $extraFieldResult,
+                            $result
+                        );
+                    }
                 }
             }
         }
-    }
 
-    if (!empty($extraFieldResult)) {
-        $sql .= " AND (u.id IN ('".implode("','", $extraFieldResult)."')) ";
+        if (!empty($extraFieldHasData)) {
+            $sql .= " AND (u.id IN ('".implode("','", $extraFieldResult)."')) ";
+        }
     }
 
     // adding the filter to see the user's only of the current access_url
@@ -365,21 +387,29 @@ function loginUser($userId)
     $canLoginAs = api_can_login_as($userId);
 
     if (!$canLoginAs || empty($userInfo)) {
-
         return false;
     }
 
     $firstname = $userInfo['firstname'];
     $lastname = $userInfo['lastname'];
 
-	if (api_is_western_name_order()) {
-		$message = sprintf(get_lang('AttemptingToLoginAs'),$firstname, $lastname, $userId);
-	} else {
-		$message = sprintf(get_lang('AttemptingToLoginAs'), $lastname, $firstname, $userId);
-	}
+    if (api_is_western_name_order()) {
+        $message = sprintf(
+            get_lang('AttemptingToLoginAs'),
+            $firstname,
+            $lastname,
+            $userId
+        );
+    } else {
+        $message = sprintf(
+            get_lang('AttemptingToLoginAs'),
+            $lastname,
+            $firstname,
+            $userId
+        );
+    }
 
-	if ($userId) {
-
+    if ($userId) {
         // Logout the current user
         LoginDelete(api_get_user_id());
 
@@ -409,7 +439,7 @@ function loginUser($userId)
         $target_url = api_get_path(WEB_PATH)."user_portal.php";
         $message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'), '<a href="'.$target_url.'">'.$target_url.'</a>');
         Display :: display_header(get_lang('UserList'));
-        Display :: display_normal_message($message, false);
+        echo Display::return_message($message, 'normal', false);
         Display :: display_footer();
         exit;
     }
@@ -440,8 +470,8 @@ function get_number_of_users()
 function get_user_data($from, $number_of_items, $column, $direction)
 {
     $sql = prepare_user_sql_query(false);
-    if (!in_array($direction, array('ASC','DESC'))) {
-    	$direction = 'ASC';
+    if (!in_array($direction, array('ASC', 'DESC'))) {
+        $direction = 'ASC';
     }
     $column = intval($column);
     $from = intval($from);
@@ -452,12 +482,12 @@ function get_user_data($from, $number_of_items, $column, $direction)
         $sql .= " WHERE u.creator_id = ".api_get_user_id();
     }
 
-	$sql .= " ORDER BY col$column $direction ";
-	$sql .= " LIMIT $from,$number_of_items";
+    $sql .= " ORDER BY col$column $direction ";
+    $sql .= " LIMIT $from,$number_of_items";
 
-	$res = Database::query($sql);
+    $res = Database::query($sql);
 
-	$users = array ();
+    $users = array();
     $t = time();
 	while ($user = Database::fetch_row($res)) {
 		$userPicture = UserManager::getUserPicture($user[0], USER_IMAGE_SIZE_SMALL);
@@ -468,7 +498,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             $expiration_time = convert_sql_date($user[10]);
             // if expiration date is passed, store a special value for active field
             if ($expiration_time < $t) {
-        	   $user[7] = '-1';
+                $user[7] = '-1';
             }
         }
 
@@ -551,8 +581,8 @@ function modify_filter($user_id, $url_params, $row)
 					<div class="blackboard_hide" id="div_s_'.$user_id.'">&nbsp;&nbsp;</div>
 					</a>';
 	} else {
-		$result .= Display::return_icon('course_na.png',get_lang('Courses')).'&nbsp;&nbsp;';
-		$result .= Display::return_icon('course_na.png',get_lang('Sessions')).'&nbsp;&nbsp;';
+		$result .= Display::return_icon('course_na.png', get_lang('Courses')).'&nbsp;&nbsp;';
+		$result .= Display::return_icon('course_na.png', get_lang('Sessions')).'&nbsp;&nbsp;';
 	}
 
     if (api_is_platform_admin()) {
@@ -587,7 +617,7 @@ function modify_filter($user_id, $url_params, $row)
     if (api_is_platform_admin(true)) {
         $editProfileUrl = Display::getProfileEditionLink($user_id, true);
         if (!$user_is_anonymous && api_global_admin_can_edit_admin($user_id, null, true)) {
-            $result .= '<a href="' . $editProfileUrl . '">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
+            $result .= '<a href="'.$editProfileUrl.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
         } else {
             $result .= Display::return_icon('edit_na.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
         }
@@ -598,7 +628,7 @@ function modify_filter($user_id, $url_params, $row)
     if ($allowAssignSkill) {
         $result .= Display::url(
             Display::return_icon('skill-badges.png', get_lang('AssignSkill'), null, ICON_SIZE_SMALL),
-            api_get_path(WEB_CODE_PATH) . 'badge/assign.php?' . http_build_query(['user' => $user_id])
+            api_get_path(WEB_CODE_PATH).'badge/assign.php?'.http_build_query(['user' => $user_id])
         );
     }
 
@@ -738,10 +768,10 @@ if (!empty($action)) {
             case 'add_user_to_my_url':
                 $user_id = $_REQUEST["user_id"];
                 $result = UrlManager::add_user_to_url($user_id, $current_access_url_id);
-                if ($result ) {
+                if ($result) {
                     $user_info = api_get_user_info($user_id);
                     $message = get_lang('UserAdded').' '.$user_info['firstname'].' '.$user_info['lastname'].' ('.$user_info['username'].')';
-                    $message  = Display::return_message($message, 'confirmation');
+                    $message = Display::return_message($message, 'confirmation');
                 }
                 break;
 			case 'delete_user':
@@ -794,13 +824,20 @@ if (!empty($action)) {
 
 // Create a search-box
 $form = new FormValidator('search_simple', 'get', null, null, null, 'inline');
-$form->addText('keyword', get_lang('Search'), false);
+$form->addText(
+    'keyword',
+    get_lang('Search'),
+    false,
+    array(
+        'aria-label' => get_lang("SearchUsers")
+    )
+);
 $form->addButtonSearch(get_lang('Search'));
 
 $searchAdvanced = '
 <a id="advanced_params" href="javascript://" class = "btn btn-default advanced_options" onclick="display_advanced_search_form();">
     <span id="img_plus_and_minus">&nbsp;
-    '. Display::returnFontAwesomeIcon('arrow-right') . ' '.get_lang('AdvancedSearch').'
+    '. Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'
     </span>
 </a>';
 $actionsLeft = '';
@@ -808,7 +845,7 @@ $actionsCenter = '';
 $actionsRight  = '';
 if (api_is_platform_admin()) {
 	$actionsRight .= '<a class="pull-right" href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
-         Display::return_icon('new_user.png',get_lang('AddUsers'),'',ICON_SIZE_MEDIUM).'</a>';
+         Display::return_icon('new_user.png', get_lang('AddUsers'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 $actionsLeft .= $form->returnForm();
@@ -834,7 +871,7 @@ Session::write('admin_list', $_admins_list);
 // Display Advanced search form.
 $form = new FormValidator('advanced_search', 'get', '', '', array(), FormValidator::LAYOUT_HORIZONTAL);
 
-$form->addElement('html','<div id="advanced_search_form" style="display:none;">');
+$form->addElement('html', '<div id="advanced_search_form" style="display:none;">');
 $form->addElement('header', get_lang('AdvancedSearch'));
 $form->addText('keyword_firstname', get_lang('FirstName'), false);
 $form->addText('keyword_lastname', get_lang('LastName'), false);
@@ -873,7 +910,7 @@ $defaults = array();
 $defaults['keyword_active'] = 1;
 $defaults['keyword_inactive'] = 1;
 $form->setDefaults($defaults);
-$form->addElement('html','</div>');
+$form->addElement('html', '</div>');
 
 $form = $form->returnForm();
 
@@ -954,10 +991,10 @@ if ($table->get_total_number_of_items() == 0) {
                 }
                 if ($add_user) {
                     $row_table = array();
-                    $row_table[] =  api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
-                    $row_table[] =  $access_info_to_string;
+                    $row_table[] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
+                    $row_table[] = $access_info_to_string;
                     $url = api_get_self().'?action=add_user_to_my_url&user_id='.$user['id'].'&sec_token='.$_SESSION['sec_token'];
-                    $row_table[] =  Display::url(get_lang('AddUserToMyURL'), $url, array('class' => 'btn'));
+                    $row_table[] = Display::url(get_lang('AddUserToMyURL'), $url, array('class' => 'btn'));
 
                     foreach ($row_table as $cell) {
                         $table->setCellContents($row, $column, $cell);
@@ -973,14 +1010,10 @@ if ($table->get_total_number_of_items() == 0) {
         }
     }
 }
-$toolbarActions = Display::toolbarAction(
-    'toolbarUser',
-    array($actionsLeft, $actionsCenter, $actionsRight),
-    3
-);
+$toolbarActions = Display::toolbarAction('toolbarUser', [$actionsLeft, $actionsCenter, $actionsRight], [4, 4, 4]);
 
 $tpl = new Template($tool_name);
-//$tpl->assign('actions', $toolbarActions);
+$tpl->assign('actions', $toolbarActions);
 $tpl->assign('message', $message);
-$tpl->assign('content', $toolbarActions.$form.$table_result.$extra_search_options);
+$tpl->assign('content', $form.$table_result.$extra_search_options);
 $tpl->display_one_col_template();

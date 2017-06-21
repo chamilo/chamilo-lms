@@ -9,7 +9,7 @@ use Chamilo\UserBundle\Entity\User;
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 $cidReset = true;
 
-require_once __DIR__ . '/../../main/inc/global.inc.php';
+require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_admin_script();
 
@@ -36,8 +36,6 @@ $form->addDatePicker('search_meeting_end', get_lang('DateEnd'));
 $form->addButtonSearch(get_lang('Search'));
 $form->setDefaults($dateRange);
 
-$actions = [];
-
 if ($form->validate()) {
     $dateRange = $form->getSubmitValues();
 }
@@ -51,7 +49,7 @@ foreach ($meetings as &$meeting) {
         /** @var User $participant */
         $participant = $meetingParticipant['participant'];
         $meeting['participants'][] = $participant->getCompleteName()
-            . ' (' . $participant->getEmail() . ')';
+            . ' ('.$participant->getEmail().')';
     }
 }
 
@@ -98,21 +96,20 @@ if (!$bbb->isServerRunning()) {
 }
 
 $htmlHeadXtra[] = api_get_js_simple(
-    api_get_path(WEB_PLUGIN_PATH) . 'bbb/resources/utils.js'
+    api_get_path(WEB_PLUGIN_PATH).'bbb/resources/utils.js'
 );
-$htmlHeadXtra[] = "<script>var _p = {web_plugin: '" . api_get_path(WEB_PLUGIN_PATH). "'}</script>";
+$htmlHeadXtra[] = "<script>var _p = {web_plugin: '".api_get_path(WEB_PLUGIN_PATH)."'}</script>";
 
 $tpl = new Template($tool_name);
 $tpl->assign('meetings', $meetings);
 $tpl->assign('search_form', $form->returnForm());
 
 $content = $tpl->fetch('bbb/admin.tpl');
-$actions = [];
 
 if ($meetings) {
-    $actions[] = Display::toolbarButton(
+    $actions = Display::toolbarButton(
         get_lang('ExportInExcel'),
-        api_get_self() . '?' . http_build_query([
+        api_get_self().'?'.http_build_query([
             'action' => 'export',
             'search_meeting_start' => $dateStart,
             'search_meeting_end' => $dateEnd
@@ -120,9 +117,13 @@ if ($meetings) {
         'file-excel-o',
         'success'
     );
+
+    $tpl->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$actions])
+    );
 }
 
 $tpl->assign('header', $plugin->get_lang('RecordList'));
-$tpl->assign('actions', implode('', $actions));
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

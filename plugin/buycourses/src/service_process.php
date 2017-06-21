@@ -4,16 +4,13 @@
  * Process payments for the Buy Courses plugin
  * @package chamilo.plugin.buycourses
  */
-/**
- * Initialization
- */
 
 $cidReset = true;
 
 require_once '../config.php';
 
 if (!isset($_REQUEST['t'], $_REQUEST['i'])) {
-    header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_catalog.php');
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php');
 }
 
 $currentUserId = api_get_user_id();
@@ -38,8 +35,8 @@ if ($includeServices !== 'true') {
 $typeUser = intval($_REQUEST['t']) === BuyCoursesPlugin::SERVICE_TYPE_USER;
 $typeCourse = intval($_REQUEST['t']) === BuyCoursesPlugin::SERVICE_TYPE_COURSE;
 $typeSession = intval($_REQUEST['t']) === BuyCoursesPlugin::SERVICE_TYPE_SESSION;
-$typeFinalLp= intval($_REQUEST['t']) === BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM;
-$queryString = 'i=' . intval($_REQUEST['i']) . '&t=' . intval($_REQUEST['t']).$additionalQueryString;
+$typeFinalLp = intval($_REQUEST['t']) === BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM;
+$queryString = 'i='.intval($_REQUEST['i']).'&t='.intval($_REQUEST['t']).$additionalQueryString;
 
 $serviceInfo = $plugin->getServices(intval($_REQUEST['i']));
 $userInfo = api_get_user_info($currentUserId);
@@ -48,12 +45,12 @@ $form = new FormValidator('confirm_sale');
 
 if ($form->validate()) {
     $formValues = $form->getSubmitValues();
-    
+
     if (!$formValues['payment_type']) {
         Display::addFlash(
             Display::return_message($plugin->get_lang('NeedToSelectPaymentType'), 'error', false)
         );
-        header('Location:' . api_get_self() . '?' . $queryString);
+        header('Location:'.api_get_self().'?'.$queryString);
         exit;
     }
 
@@ -61,16 +58,21 @@ if ($form->validate()) {
         Display::addFlash(
             Display::return_message($plugin->get_lang('AdditionalInfoRequired'), 'error', false)
         );
-        header('Location:' . api_get_self() . '?' . $queryString);
+        header('Location:'.api_get_self().'?'.$queryString);
         exit;
     }
-    
-    $serviceSaleId = $plugin->registerServiceSale($serviceId, $formValues['payment_type'], $formValues['info_select'], $formValues['enable_trial']);
+
+    $serviceSaleId = $plugin->registerServiceSale(
+        $serviceId,
+        $formValues['payment_type'],
+        $formValues['info_select'],
+        $formValues['enable_trial']
+    );
 
     if ($serviceSaleId !== false) {
         $_SESSION['bc_service_sale_id'] = $serviceSaleId;
 
-        header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/service_process_confirm.php');
+        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_process_confirm.php');
     }
 
     exit;
@@ -94,14 +96,19 @@ $form->addHeader('');
 $form->addRadio('payment_type', null, $paymentTypesOptions);
 $form->addHtml('<h3 class="panel-heading">'.$plugin->get_lang('AdditionalInfo').'</h3>');
 $form->addHeader('');
-$form->addHtml(Display::return_message($plugin->get_lang('PleaseSelectTheCorrectInfoToApplyTheService'), 'info'));
+$form->addHtml(
+    Display::return_message(
+        $plugin->get_lang('PleaseSelectTheCorrectInfoToApplyTheService'),
+        'info'
+    )
+);
 $selectOptions = [
     0 => get_lang('None')
 ];
 
 if ($typeUser) {
     $users = $em->getRepository('ChamiloUserBundle:User')->findAll();
-    $selectOptions[$userInfo['user_id']] = api_get_person_name($userInfo['firstname'], $userInfo['lastname']) . ' (' . get_lang('Myself') . ')';
+    $selectOptions[$userInfo['user_id']] = api_get_person_name($userInfo['firstname'], $userInfo['lastname']).' ('.get_lang('Myself').')';
     if (!empty($users)) {
         foreach ($users as $user) {
             if (intval($userInfo['user_id']) !== intval($user->getId())) {
@@ -145,8 +152,7 @@ if ($typeUser) {
         // Now get all the courses lp's
         $thisLpList = $em->getRepository('ChamiloCourseBundle:CLp')->findBy(['cId' => $course->getCourse()->getId()]);
         foreach ($thisLpList as $lp) {
-
-            $courseLpList[$lp->getCId()] = $lp->getName() . ' (' . $course->getCourse()->getTitle() . ')';;
+            $courseLpList[$lp->getCId()] = $lp->getName().' ('.$course->getCourse()->getTitle().')';
         }
     }
 
@@ -163,7 +169,7 @@ if ($typeUser) {
                 //Now only we need the final item and return the current LP
                 if ($item->getItemType() == TOOL_LP_FINAL_ITEM) {
                     $checker = true;
-                    $sessionLpList[$lp->getCId()] = $lp->getName() . ' (' . $session->getSession()->getName() . ')';
+                    $sessionLpList[$lp->getCId()] = $lp->getName().' ('.$session->getSession()->getName().')';
                 }
             }
         }
@@ -178,7 +184,7 @@ if ($typeUser) {
                 //Now only we need the final item and return the current LP
                 if ($item->getItemType() == TOOL_LP_FINAL_ITEM) {
                     $checker = true;
-                    $sessionLpList[$lp->getCId()] = $lp->getName() . ' (' . $session->getSession()->getName() . ')';
+                    $sessionLpList[$lp->getCId()] = $lp->getName().' ('.$session->getSession()->getName().')';
                 }
             }
         }
@@ -190,9 +196,7 @@ if ($typeUser) {
         $form->addHtml(Display::return_message($plugin->get_lang('YourCoursesNeedAtLeastOneLearningPath'), 'error'));
     }
     $form->addSelect('info_select', get_lang('LearningPath'), $selectOptions);
-
 }
-
 
 $form->addHidden('t', intval($_GET['t']));
 $form->addHidden('i', intval($_GET['i']));
@@ -201,17 +205,16 @@ $form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success'
 
 // View
 $templateName = $plugin->get_lang('PaymentMethods');
-$interbreadcrumb[] = array("url" => "service_catalog.php", "name" => $plugin->get_lang('ListOfServicesOnSale'));
+$interbreadcrumb[] = array(
+    "url" => "service_catalog.php",
+    "name" => $plugin->get_lang('ListOfServicesOnSale'),
+);
 
 $tpl = new Template($templateName);
-
 $tpl->assign('buying_service', true);
 $tpl->assign('service', $serviceInfo);
 $tpl->assign('user', api_get_user_info());
 $tpl->assign('form', $form->returnForm());
-
-
 $content = $tpl->fetch('buycourses/view/process.tpl');
-
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

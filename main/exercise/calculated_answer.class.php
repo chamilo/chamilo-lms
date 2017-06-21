@@ -31,7 +31,6 @@ class CalculatedAnswer extends Question
     public function createAnswersForm($form)
     {
         $defaults = array();
-
         if (!empty($this->id)) {
             $objAnswer = new Answer($this->id);
             $preArray = explode('@@', $objAnswer->selectAnswer(1));
@@ -125,12 +124,17 @@ class CalculatedAnswer extends Question
             Display::return_icon('fill_field.png'),
             array(
                 'id' => 'answer',
-                'onkeyup' => 'javascript: updateBlanks(this);'
+                'onkeyup' => 'javascript: updateBlanks(this);',
             ),
-            array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '350'));
+            array(
+                'ToolbarSet' => 'TestQuestionDescription',
+                'Width' => '100%',
+                'Height' => '350',
+            )
+        );
 
-        $form->addRule('answer', get_lang('GiveText'),'required');
-        $form->addRule('answer', get_lang('DefineBlanks'),'regex','/\[.*\]/');
+        $form->addRule('answer', get_lang('GiveText'), 'required');
+        $form->addRule('answer', get_lang('DefineBlanks'), 'regex', '/\[.*\]/');
 
         $form->addElement('label', null, get_lang('IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals'));
         $form->addElement('html', '<div id="blanks_weighting"></div>');
@@ -158,7 +162,11 @@ class CalculatedAnswer extends Question
         $form->setDefaults(array('weighting' => '10'));
 
         $form->addElement('text', 'answerVariations', get_lang('AnswerVariations'));
-        $form->addRule('answerVariations', get_lang('GiveAnswerVariations'),'required');
+        $form->addRule(
+            'answerVariations',
+            get_lang('GiveAnswerVariations'),
+            'required'
+        );
         $form->setDefaults(array('answerVariations' => '1'));
 
         global $text;
@@ -175,10 +183,9 @@ class CalculatedAnswer extends Question
     }
 
     /**
-     * abstract function which creates the form to create / edit the answers of the question
-     * @param FormValidator $form
+     * @inheritdoc
      */
-    public function processAnswersCreation($form)
+    public function processAnswersCreation($form, $exercise)
     {
         if (!self::isAnswered()) {
             $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
@@ -199,22 +206,21 @@ class CalculatedAnswer extends Question
             $this->weighting = $form->getSubmitValue('weighting');
 
             // Create as many answers as $answerVariations
-            for ($j=0 ; $j < $answerVariations; $j++) {
+            for ($j = 0; $j < $answerVariations; $j++) {
                 $auxAnswer = $answer;
                 $auxFormula = $formula;
                 $nb = preg_match_all('/\[[^\]]*\]/', $auxAnswer, $blanks);
                 if ($nb > 0) {
-                    for ($i=0 ; $i < $nb; ++$i) {
+                    for ($i = 0; $i < $nb; ++$i) {
                         $blankItem = $blanks[0][$i];
                         $replace = array("[", "]");
                         $newBlankItem = str_replace($replace, "", $blankItem);
                         $newBlankItem = "[".trim($newBlankItem)."]";
                         // take random float values when one or both edge values have a decimal point
                         $randomValue =
-                            (strpos($lowestValues[$i],'.') !== false ||
-                            strpos($highestValues[$i],'.') !== false) ?
-                            mt_rand($lowestValues[$i]*100,$highestValues[$i]*100)/100 :
-                            mt_rand($lowestValues[$i],$highestValues[$i]);
+                            (strpos($lowestValues[$i], '.') !== false ||
+                            strpos($highestValues[$i], '.') !== false) ?
+                            mt_rand($lowestValues[$i] * 100, $highestValues[$i] * 100) / 100 : mt_rand($lowestValues[$i], $highestValues[$i]);
                         $auxAnswer = str_replace($blankItem, $randomValue, $auxAnswer);
                         $auxFormula = str_replace($blankItem, $randomValue, $auxFormula);
                     }
@@ -240,15 +246,12 @@ class CalculatedAnswer extends Question
     }
 
     /**
-     * @param null $feedback_type
-     * @param null $counter
-     * @param null $score
-     * @return null|string
+     * @inheritdoc
      */
-    public function return_header($feedback_type = null, $counter = null, $score = null)
+    public function return_header($exercise, $counter = null, $score = null)
     {
-        $header = parent::return_header($feedback_type, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class .'">
+        $header = parent::return_header($exercise, $counter, $score);
+        $header .= '<table class="'.$this->question_table_class.'">
             <tr>
                 <th>'.get_lang('Answer').'</th>
                 <th>'.get_lang('YourChoice').'</th>

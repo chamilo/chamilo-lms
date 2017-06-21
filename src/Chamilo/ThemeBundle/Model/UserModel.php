@@ -8,7 +8,8 @@
 namespace Chamilo\ThemeBundle\Model;
 
 
-class UserModel implements  UserInterface {
+class UserModel implements UserInterface
+{
 
     /**
      * @var string
@@ -30,11 +31,11 @@ class UserModel implements  UserInterface {
      */
     protected $isOnline = false;
 
-    function __construct($username='', $avatar = '', $memberSince = null, $isOnline = true)
+    function __construct($username = '', $avatar = '', $memberSince = null, $isOnline = true)
     {
         $this->avatar      = $avatar;
         $this->isOnline    = $isOnline;
-        $this->memberSince = $memberSince ?:new \DateTime();
+        $this->memberSince = $memberSince ?: new \DateTime();
         $this->username    = $username;
     }
 
@@ -124,7 +125,8 @@ class UserModel implements  UserInterface {
         return $this->getIsOnline();
     }
 
-    public function getIdentifier() {
+    public function getIdentifier()
+    {
         return str_replace(' ', '-', $this->getUsername());
     }
 }

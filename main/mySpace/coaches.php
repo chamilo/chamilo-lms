@@ -27,14 +27,14 @@ Display :: display_header($nameTools);
 api_display_tool_title($nameTools);
 
 // Database Table Definitions
-$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_rel_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_rel_course_rel_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_session_rel_user = Database :: get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
 /**
  * MAIN PART

@@ -27,7 +27,7 @@ class SkillVisualizer
     {
         $this->skills   = $skills;
         $this->type     = $type;
-        $this->center_x = intval($offset_x + $this->canvas_x/2 - $this->block_size/2);
+        $this->center_x = intval($this->offset_x + $this->canvas_x / 2 - $this->block_size / 2);
     }
 
     function prepare_skill_box($skill, $position, $class)
@@ -39,9 +39,9 @@ class SkillVisualizer
             $extra_class = 'second_window';
         }
 
-        $this->html .= '<div id="block_'.$block_id.'" class = "open_block window '.$extra_class.'  '.$class.'" style = "top:' . $position['y'] . 'px; left:' . $position['x'] . 'px;">';
+        $this->html .= '<div id="block_'.$block_id.'" class = "open_block window '.$extra_class.'  '.$class.'" style = "top:'.$position['y'].'px; left:'.$position['x'].'px;">';
 
-        $content =  $skill['name'];
+        $content = $skill['name'];
         $content .= '<div class="btn-group">';
         $content .= Display::url(get_lang('Edit'), '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block btn'));
         $content .= Display::url('+', '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block btn'));
@@ -87,9 +87,9 @@ class SkillVisualizer
         }
         //default_arrow_color
 
-        $this->js .= 'var e'.$block_id.' = prepare("block_' . $block_id.'",  '.$end_point.');'."\n";
-        $this->js .= 'var e'.$skill['parent_id'].' = prepare("block_' . $skill['parent_id'].'",  '.$end_point.');'."\n";
-        $this->js .= 'jsPlumb.connect({source: e'.$block_id.', target:e'.$skill['parent_id'].'});'."\n";;
+        $this->js .= 'var e'.$block_id.' = prepare("block_'.$block_id.'",  '.$end_point.');'."\n";
+        $this->js .= 'var e'.$skill['parent_id'].' = prepare("block_'.$skill['parent_id'].'",  '.$end_point.');'."\n";
+        $this->js .= 'jsPlumb.connect({source: e'.$block_id.', target:e'.$skill['parent_id'].'});'."\n"; ;
     }
 
     /**
@@ -125,10 +125,10 @@ class SkillVisualizer
         $brothers = array();
 
         foreach ($this->skills as &$skill) {
-            if (!in_array($skill['parent_id'], array(0,1))) {
+            if (!in_array($skill['parent_id'], array(0, 1))) {
                 continue;
             }
-            $childs = isset($skill['children']) ? count($skill['children']) : 0 ;
+            $childs = isset($skill['children']) ? count($skill['children']) : 0;
 
             //$x = round($this->offsetX * sin(deg2rad($corner * $count)));
             //$y = round($this->offsetY * cos(deg2rad($corner * $count)));
@@ -144,10 +144,10 @@ class SkillVisualizer
             if ($skill['parent_id'] == 0) {
                 //$x = 130*$childs/2;
                 //$x = $this->space_between_blocks_x*$childs/2;
-                $x = $this->canvas_x/2  - $this->block_size/2;
+                $x = $this->canvas_x / 2 - $this->block_size / 2;
             } else {
                 $max = isset($this->skills[$skill['parent_id']]['children']) ? count($this->skills[$skill['parent_id']]['children']) : 0;
-                foreach($this->skills[$skill['parent_id']]['children'] as  $id => $sk) {
+                foreach ($this->skills[$skill['parent_id']]['children'] as  $id => $sk) {
                     if ($skill['id'] == $sk['id']) {
                         break;
                     }
@@ -155,17 +155,17 @@ class SkillVisualizer
                 }
                 $parent_x = isset($this->skills[$skill['parent_id']]['x']) ? $this->skills[$skill['parent_id']]['x'] : 0;
                 //$x = $my_count*$this->space_between_blocks_x + $parent_x  + $this->block_size - ($this->space_between_blocks_x*$max/2) ;
-                $x = $my_count*$this->space_between_blocks_x + $parent_x  + $this->block_size - ($this->canvas_x/2 ) ;
+                $x = $my_count * $this->space_between_blocks_x + $parent_x + $this->block_size - ($this->canvas_x / 2);
             }
 
-            $y = $skill['level']*$this->space_between_blocks_y;
+            $y = $skill['level'] * $this->space_between_blocks_y;
 
             $skill['x'] = $x;
             $skill['y'] = $y;
 
             //$skill['description']  = "{$brothers[$skill['parent_id']]} $x - $y";
             //$skill['name']  =  $skill['name']."  |  $x = $my_count * 150  +  $parent_x - (150* $max/2) - 10*$childs ";
-            $this->add_item($skill, array('x' => $this->offset_x + $x, 'y' => $this->offset_y +$y));
+            $this->add_item($skill, array('x' => $this->offset_x + $x, 'y' => $this->offset_y + $y));
         }
         return $this->get_html();
     }

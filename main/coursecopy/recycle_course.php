@@ -13,7 +13,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRecycler;
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_COURSE_MAINTENANCE;
+$current_course_tool = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
 
 // Check access rights (only teachers are allowed here)
@@ -63,7 +63,7 @@ if (Security::check_token('post') && (
     }
     $cr = new CourseRecycler($course);
     $cr->recycle($recycle_type);
-    Display::display_confirmation_message(get_lang('RecycleFinished'));
+    echo Display::return_message(get_lang('RecycleFinished'), 'confirm');
 } elseif (Security::check_token('post') && (
         isset($_POST['recycle_option']) &&
         $_POST['recycle_option'] == 'select_items'
@@ -83,7 +83,7 @@ if (Security::check_token('post') && (
     if (!$course->has_resources()) {
         echo get_lang('NoResourcesToRecycle');
     } else {
-        Display::display_warning_message(get_lang('RecycleWarning'), false);
+        echo Display::return_message(get_lang('RecycleWarning'), 'warning', false);
         $form = new FormValidator('recycle_course', 'post', api_get_self().'?'.api_get_cidreq());
         $form->addElement('header', get_lang('SelectOptionForBackup'));
         $form->addElement('radio', 'recycle_option', null, get_lang('FullRecycle'), 'full_backup');

@@ -13,21 +13,21 @@
 /*
     Database Variables
 */
-$table_categories = Database :: get_course_table(TABLE_FORUM_CATEGORY);
-$table_forums = Database :: get_course_table(TABLE_FORUM);
-$table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
-$table_posts = Database :: get_course_table(TABLE_FORUM_POST);
-$table_mailcue = Database :: get_course_table(TABLE_FORUM_MAIL_QUEUE);
-$table_threads_qualify = Database :: get_course_table(
+$table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
+$table_forums = Database::get_course_table(TABLE_FORUM);
+$table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
+$table_posts = Database::get_course_table(TABLE_FORUM_POST);
+$table_mailcue = Database::get_course_table(TABLE_FORUM_MAIL_QUEUE);
+$table_threads_qualify = Database::get_course_table(
     TABLE_FORUM_THREAD_QUALIFY
 );
-$table_threads_qualify_historical = Database :: get_course_table(
+$table_threads_qualify_historical = Database::get_course_table(
     TABLE_FORUM_THREAD_QUALIFY_LOG
 );
 
-$forum_table_attachment = Database :: get_course_table(TABLE_FORUM_ATTACHMENT);
-$table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-$table_users = Database :: get_main_table(TABLE_MAIN_USER);
+$forum_table_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
+$table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
+$table_users = Database::get_main_table(TABLE_MAIN_USER);
 
 /*
     Some configuration settings

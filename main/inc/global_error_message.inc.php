@@ -98,18 +98,19 @@ if (is_int($global_error_code) && $global_error_code > 0) {
             $global_error_message['description'] = $IncorrectPhpVersionDescription;
             break;
         case 2:
-            require __DIR__ . '/../install/version.php';
+            require __DIR__.'/../install/version.php';
             $global_error_message['section'] = $SectionInstallation;
             $global_error_message['title'] = $InstallationTitle;
             if (($pos = strpos($InstallationDescription, '%s')) === false) {
                 $InstallationDescription = 'Click to INSTALL Chamilo %s or read the installation guide';
             }
             $read_installation_guide = substr($InstallationDescription, $pos + 2);
+            $versionStatus = (!empty($new_version_status) && $new_version_status != 'stable' ? $new_version_status : '');
             $InstallationDescription = '<form action="'.$root_rel.'main/install/index.php" method="get">
             <div class="row">
                     <div class="col-md-12">
                     <div class="office">
-                    <h2 class="title">Welcome to the Chamilo '.$new_version.' installation wizard</h2>
+                    <h2 class="title">Welcome to the Chamilo '.$new_version.' '.$new_version_status.' installation wizard</h2>
                     <p class="text">Let\'s start hunting skills down with Chamilo LMS! This wizard will guide you through the Chamilo installation and configuration process.</p>
                           <p class="download-info">
                               <button class="btn btn-primary btn-lg" type="submit" value="INSTALL Chamilo" ><i class="fa fa-download" aria-hidden="true"></i> Install Chamilo</button>

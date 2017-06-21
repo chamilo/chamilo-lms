@@ -25,7 +25,7 @@ if (isset($_GET['order'])) {
         api_not_allowed(true);
     }
 
-    $urlToRedirect = api_get_self() . '?';
+    $urlToRedirect = api_get_self().'?';
 
     switch ($_GET['action']) {
         case 'confirm':
@@ -94,10 +94,10 @@ $form->addRadio(
     get_lang('Filter'),
     [$plugin->get_lang('ByStatus'), $plugin->get_lang('ByUser')]
 );
-$form->addHtml('<div id="report-by-status" ' . ($selectedFilterType !== '0' ? 'style="display:none"' : '') . '>');
+$form->addHtml('<div id="report-by-status" '.($selectedFilterType !== '0' ? 'style="display:none"' : '').'>');
 $form->addSelect('status', $plugin->get_lang('OrderStatus'), $saleStatuses);
 $form->addHtml('</div>');
-$form->addHtml('<div id="report-by-user" ' . ($selectedFilterType !== '1' ? 'style="display:none"' : '') . '>');
+$form->addHtml('<div id="report-by-user" '.($selectedFilterType !== '1' ? 'style="display:none"' : '').'>');
 $form->addText('user', get_lang('UserName'), false);
 $form->addHtml('</div>');
 $form->addButtonFilter(get_lang('Search'));
@@ -139,34 +139,34 @@ $templateName = $plugin->get_lang('SalesReport');
 
 $template = new Template($templateName);
 
-$toolbar = '';
-
 if ($paypalEnable == "true" && $commissionsEnable == "true") {
-
-    $toolbar .= Display::toolbarButton(
+    $toolbar = Display::toolbarButton(
         $plugin->get_lang('PaypalPayoutCommissions'),
-        api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/paypal_payout.php',
+        api_get_path(WEB_PLUGIN_PATH).'buycourses/src/paypal_payout.php',
         'paypal',
         'primary',
         ['title' => $plugin->get_lang('PaypalPayoutCommissions')]
     );
 
-    $template->assign('actions', $toolbar);
-
+    $template->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$toolbar])
+    );
 }
 
 if ($commissionsEnable == "true") {
-
-    $toolbar .= Display::toolbarButton(
+    $toolbar = Display::toolbarButton(
         $plugin->get_lang('PayoutReport'),
-        api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/payout_report.php',
+        api_get_path(WEB_PLUGIN_PATH).'buycourses/src/payout_report.php',
         'money',
         'info',
         ['title' => $plugin->get_lang('PayoutReport')]
     );
 
-    $template->assign('actions', $toolbar);
-
+    $template->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$toolbar])
+    );
 }
 $template->assign('form', $form->returnForm());
 $template->assign('selected_sale', $selectedSale);

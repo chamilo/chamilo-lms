@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action
+ * Template (front controller in MVC pattern) used for dispatching
+ * to the controllers depend on the current action
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> Bug fixing, sql improvements
  *
@@ -111,7 +112,6 @@ $(function() {
             $("#hidden_input_"+calendar_id).attr("value","");
             $("#hidden_input_"+calendar_id).attr("disabled",true);
             return false;
-
         } else {
             //Unlock
             $(".checkbox_head_"+calendar_id).attr("disabled", false);
@@ -269,7 +269,7 @@ switch ($action) {
     case 'attendance_sheet_export_to_pdf':
         $attendanceController->attendance_sheet_export_to_pdf($action, $attendance_id, $student_id, $course_id);
         break;
-    case 'attendance_sheet_add' :
+    case 'attendance_sheet_add':
         if (api_is_allowed_to_edit(null, true)) {
             $attendanceController->attendance_sheet($action, $attendance_id);
         } else {
@@ -285,12 +285,16 @@ switch ($action) {
         }
         break;
     case 'calendar_add':
+        //no break
     case 'calendar_edit':
+        //no break
     case 'calendar_all_delete':
+        //no break
     case 'calendar_delete':
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed();
         }
+        //no break
     case 'calendar_list':
         $attendanceController->attendance_calendar($action, $attendance_id, $calendar_id);
         break;

@@ -8,11 +8,11 @@
  * Code
  */
 require_once 'xapian.php';
-require_once dirname(__FILE__) . '/../IndexableChunk.class.php';
+require_once __DIR__.'/../IndexableChunk.class.php';
 //TODO: think another way without including specific fields here
-require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
-define('XAPIAN_DB', api_get_path(SYS_UPLOAD_PATH) . 'plugins/xapian/searchdb/');
+define('XAPIAN_DB', api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb/');
 
 /**
  * Queries the database.
@@ -95,7 +95,7 @@ function xapian_query($query_string, $db = NULL, $start = 0, $length = 10, $extr
 
                 // process each specific field prefix
                 foreach ($specific_fields as $specific_field) {
-                    $results[$count]['sf-' . $specific_field['code']] = xapian_get_doc_terms($document, $specific_field['code']);
+                    $results[$count]['sf-'.$specific_field['code']] = xapian_get_doc_terms($document, $specific_field['code']);
                 }
 
                 // rest of data
@@ -213,11 +213,14 @@ function xapian_get_doc_terms($doc = NULL, $prefix) {
 function xapian_join_queries($query1, $query2 = NULL, $op = 'or') {
     // let decide how to join, avoiding include xapian.php outside
     switch ($op) {
-        case 'or': $op = XapianQuery::OP_OR;
+        case 'or':
+            $op = XapianQuery::OP_OR;
             break;
-        case 'and': $op = XapianQuery::OP_AND;
+        case 'and':
+            $op = XapianQuery::OP_AND;
             break;
-        default: $op = XapianQuery::OP_OR;
+        default:
+            $op = XapianQuery::OP_OR;
             break;
     }
 
@@ -261,6 +264,6 @@ function display_xapian_error($xapian_error_message) {
     } else {
         $message_error = get_lang('SearchOtherXapianError');
     }
-    $display_message = get_lang('Error') . ' : ' . $message_error;
-    Display::display_error_message($display_message);
+    $display_message = get_lang('Error').' : '.$message_error;
+    echo Display::return_message($display_message, 'error');
 }

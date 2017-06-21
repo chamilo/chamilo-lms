@@ -102,45 +102,81 @@ $form = new FormValidator('user_add');
 $form->addElement('header', '', $tool_name);
 if (api_is_western_name_order()) {
     // Firstname
-    $form->addElement('text', 'firstname', get_lang('FirstName'));
+    $form->addElement(
+        'text',
+        'firstname',
+        get_lang('FirstName'),
+        array(
+            'id' => 'firstname'
+        )
+    );
     $form->applyFilter('firstname', 'html_filter');
     $form->applyFilter('firstname', 'trim');
     $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
     // Lastname
-    $form->addElement('text', 'lastname', get_lang('LastName'));
+    $form->addElement(
+        'text',
+        'lastname',
+        get_lang('LastName'),
+        array(
+            'id' => 'lastname'
+        )
+    );
     $form->applyFilter('lastname', 'html_filter');
     $form->applyFilter('lastname', 'trim');
     $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
 } else {
     // Lastname
-    $form->addElement('text', 'lastname', get_lang('LastName'));
+    $form->addElement(
+        'text',
+        'lastname',
+        get_lang('LastName'),
+        array(
+            'id' => 'lastname'
+        )
+    );
     $form->applyFilter('lastname', 'html_filter');
     $form->applyFilter('lastname', 'trim');
     $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
     // Firstname
-    $form->addElement('text', 'firstname', get_lang('FirstName'));
+    $form->addElement(
+        'text',
+        'firstname',
+        get_lang('FirstName'),
+        array(
+            'id' => 'firstname'
+        )
+    );
     $form->applyFilter('firstname', 'html_filter');
     $form->applyFilter('firstname', 'trim');
     $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 }
 // Official code
-$form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => '40'));
+$form->addElement(
+    'text',
+    'official_code',
+    get_lang('OfficialCode'),
+    array(
+        'size' => '40',
+        'id' => 'official_code'
+    )
+);
 $form->applyFilter('official_code', 'html_filter');
 $form->applyFilter('official_code', 'trim');
 // Email
-$form->addElement('text', 'email', get_lang('Email'), array('size' => '40', 'autocomplete' => 'off'));
+$form->addElement('text', 'email', get_lang('Email'), array('size' => '40', 'autocomplete' => 'off', 'id' => 'email'));
 $form->addRule('email', get_lang('EmailWrong'), 'email');
 if (api_get_setting('registration', 'email') == 'true') {
     $form->addRule('email', get_lang('EmailWrong'), 'required');
 }
 
 if (api_get_setting('login_is_email') == 'true') {
-    $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
     $form->addRule('email', get_lang('UserTaken'), 'username_available');
 }
 
 // Phone
-$form->addElement('text', 'phone', get_lang('PhoneNumber'), ['autocomplete' => 'off']);
+$form->addElement('text', 'phone', get_lang('PhoneNumber'), ['autocomplete' => 'off', 'id' => 'phone']);
 // Picture
 $form->addFile(
     'picture',
@@ -155,7 +191,7 @@ $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allow
 if (api_get_setting('login_is_email') != 'true') {
     $form->addElement('text', 'username', get_lang('LoginName'), array('id'=> 'username', 'maxlength' => USERNAME_MAX_LENGTH, 'autocomplete' => 'off'));
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
     $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
     $form->addRule('username', get_lang('UserTaken'), 'username_available');
 }
@@ -210,6 +246,7 @@ $group[] = $form->createElement(
 );
 
 $form->addGroup($group, 'password', get_lang('Password'));
+$form->addPasswordRule('password', 'password');
 $form->addGroupRule('password', get_lang('EnterPassword'), 'required', null, 1);
 
 if ($checkPass) {
@@ -242,7 +279,7 @@ $form->addElement(
 );
 
 //drh list (display only if student)
-$display = isset($_POST['status']) && $_POST['status'] == STUDENT  || !isset($_POST['status']) ? 'block' : 'none';
+$display = isset($_POST['status']) && $_POST['status'] == STUDENT || !isset($_POST['status']) ? 'block' : 'none';
 
 //@todo remove the drh list here. This code is unused
 $form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
@@ -276,7 +313,7 @@ $group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
 $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'));
 // Expiration Date
 $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
-$group = array ();
+$group = array();
 $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
 $group[] = $form->createElement(
     'DateTimePicker',
@@ -292,11 +329,20 @@ $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active
 $form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
 
 $extraField = new ExtraField('user');
-$returnParams = $extraField->addElements($form);
+$returnParams = $extraField->addElements(
+    $form,
+    null,
+    [],
+    false,
+    false,
+    [],
+    [],
+    true
+);
 $jquery_ready_content = $returnParams['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
-$htmlHeadXtra[] ='<script>
+$htmlHeadXtra[] = '<script>
 $(document).ready(function(){
 	'.$jquery_ready_content.'
 });
@@ -454,13 +500,14 @@ if ($form->validate()) {
     $form->setConstants(array('sec_token' => $token));
 }
 
-if (!empty($message)){
+if (!empty($message)) {
 	$message = Display::return_message(stripslashes($message));
 }
 $content = $form->returnForm();
 
 $tpl = new Template($tool_name);
-//$tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
+
+

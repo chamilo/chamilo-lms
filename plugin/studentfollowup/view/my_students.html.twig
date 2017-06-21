@@ -1,0 +1,26 @@
+<h2>{{ 'Students' | get_lang}}</h2>
+{{ form }}
+{% if users %}
+    <table class="data_table">
+    <tr>
+        <th>Student</th>
+        <th>Action</th>
+    </tr>
+    {% for user in users %}
+        <tr>
+            <td>{{ user.user.completeNameWithUsername }}</td>
+            <td>
+                <a href="{{ my_students_url }}&student={{ user.user.id }}">
+                    <img src="{{ '2rightarrow.png'|icon() }}">
+                </a>
+                <a href="{{ post_url }}&student_id={{ user.user.id }}">
+                    <img src="{{ 'blog.png'|icon() }}">
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+    <div>
+    {{ pagination }}
+    </div>
+{% endif %}

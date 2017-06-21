@@ -4,15 +4,14 @@
  * Displayed after the user has been logged out.
  * @package chamilo.custompages
  */
-/**
- * Init
- */
+
 $called_direcly = !function_exists('api_get_path');
 if ($called_direcly) {
     return '';
 }
 
-require_once 'language.php';
+require_once __DIR__.'/language.php';
+
 $www = api_get_path('WEB_PATH');
 
 /**
@@ -52,7 +51,7 @@ $www = api_get_path('WEB_PATH');
                     You have been logged out.
                 </div>
             </div>
-            <a href="<?php echo $www . 'user_portal.php'; ?>">Go to your portal</a>
+            <a href="<?php echo $www.'user_portal.php'; ?>">Go to your portal</a>
             <div id="footer">
                 <img src="<?php echo $www ?>/custompages/images/footer.png" alt="footer"/>
             </div>

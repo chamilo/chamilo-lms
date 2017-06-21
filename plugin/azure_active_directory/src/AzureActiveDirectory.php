@@ -11,9 +11,11 @@ class AzureActiveDirectory extends Plugin
     const SETTING_TENANT = 'tenant';
     const SETTING_SIGNUP_POLICY = 'signup_policy';
     const SETTING_SIGNIN_POLICY = 'signin_policy';
+    const SETTING_SIGNUNIFIED_POLICY = 'signunified_policy';
     const SETTING_BLOCK_NAME = 'block_name';
     const URL_TYPE_SIGNUP = 'sign-up';
     const URL_TYPE_SIGNIN = 'sign-in';
+    const URL_TYPE_SIGNUNIFIED = 'sign-unified';
     const URL_TYPE_SIGNOUT = 'sign-out';
 
     /**
@@ -27,10 +29,11 @@ class AzureActiveDirectory extends Plugin
             self::SETTING_TENANT => 'text',
             self::SETTING_SIGNUP_POLICY => 'text',
             self::SETTING_SIGNIN_POLICY => 'text',
+            self::SETTING_SIGNUNIFIED_POLICY => 'text',
             self::SETTING_BLOCK_NAME => 'text'
         ];
 
-        parent::__construct('1.0', 'Angel Fernando Quiroz Campos', $settings);
+        parent::__construct('1.1', 'Angel Fernando Quiroz Campos', $settings);
     }
 
     /**
@@ -63,13 +66,13 @@ class AzureActiveDirectory extends Plugin
         $settings = [];
 
         foreach ($settingsInfo as $settingInfo) {
-            $variable = str_replace($this->get_name() . '_', '', $settingInfo['variable']);
+            $variable = str_replace($this->get_name().'_', '', $settingInfo['variable']);
 
             $settings[$variable] = $settingInfo['selected_value'];
         }
 
         $url = "https://login.microsoftonline.com/{$settings[self::SETTING_TENANT]}/oauth2/v2.0/";
-        $callback = api_get_path(WEB_PLUGIN_PATH) . $this->get_name() . '/src/callback.php';
+        $callback = api_get_path(WEB_PLUGIN_PATH).$this->get_name().'/src/callback.php';
 
         if ($urlType === self::URL_TYPE_SIGNOUT) {
             $action = 'logout';
@@ -83,6 +86,8 @@ class AzureActiveDirectory extends Plugin
 
             if ($urlType === self::URL_TYPE_SIGNIN) {
                 $policy = $settings[self::SETTING_SIGNIN_POLICY];
+            } elseif ($urlType === self::URL_TYPE_SIGNUNIFIED) {
+                $policy = $settings[self::SETTING_SIGNUNIFIED_POLICY];
             }
 
             $urlParams = [
@@ -97,6 +102,6 @@ class AzureActiveDirectory extends Plugin
             ];
         }
 
-        return $url . $action . '?' . http_build_query($urlParams);
+        return $url.$action.'?'.http_build_query($urlParams);
     }
 }

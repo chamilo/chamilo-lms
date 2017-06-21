@@ -30,6 +30,12 @@ class UserDataGenerator
     private $scorecache;
     private $avgcache;
 
+    /**
+     * UserDataGenerator constructor.
+     * @param int $userid
+     * @param array $evals
+     * @param array $links
+     */
     public function __construct($userid, $evals = array(), $links = array())
     {
         $this->userid = $userid;
@@ -39,7 +45,7 @@ class UserDataGenerator
             $toadd = true;
             $coursecode = $eval->get_course_code();
             if (isset($coursecode)) {
-                $result = Result :: load(null, $userid, $eval->get_id());
+                $result = Result::load(null, $userid, $eval->get_id());
                 if (count($result) == 0) {
                     $toadd = false;
                 }
@@ -50,9 +56,9 @@ class UserDataGenerator
 
         }
         if (count($result) == 0) {
-            $evals_filtered=$evals;
+            $evals_filtered = $evals;
         } else {
-            $evals_filtered=$evals_filtered_copy;
+            $evals_filtered = $evals_filtered_copy;
         }
         $this->items = array_merge($evals_filtered, $links);
 
@@ -85,7 +91,7 @@ class UserDataGenerator
     {
         // do some checks on count, redefine if invalid value
         if (!isset($count)) {
-            $count = count ($this->items) - $start;
+            $count = count($this->items) - $start;
         }
         if ($count < 0) {
             $count = 0;
@@ -93,63 +99,64 @@ class UserDataGenerator
         $allitems = $this->items;
 
         // sort users array
-        if ($sorting & self :: UDG_SORT_TYPE) {
+        if ($sorting & self::UDG_SORT_TYPE) {
             usort($allitems, array('UserDataGenerator', 'sort_by_type'));
-        }elseif ($sorting & self :: UDG_SORT_NAME) {
+        } elseif ($sorting & self::UDG_SORT_NAME) {
             usort($allitems, array('UserDataGenerator', 'sort_by_name'));
-        } elseif ($sorting & self :: UDG_SORT_COURSE) {
+        } elseif ($sorting & self::UDG_SORT_COURSE) {
             usort($allitems, array('UserDataGenerator', 'sort_by_course'));
-        } elseif ($sorting & self :: UDG_SORT_CATEGORY) {
+        } elseif ($sorting & self::UDG_SORT_CATEGORY) {
             usort($allitems, array('UserDataGenerator', 'sort_by_category'));
-        } elseif ($sorting & self :: UDG_SORT_AVERAGE) {
+        } elseif ($sorting & self::UDG_SORT_AVERAGE) {
             // if user sorts on average scores, first calculate them and cache them
             foreach ($allitems as $item) {
-                $this->avgcache[$item->get_item_type() . $item->get_id()]= $item->calc_score();
+                $this->avgcache[$item->get_item_type().$item->get_id()] = $item->calc_score();
             }
             usort($allitems, array('UserDataGenerator', 'sort_by_average'));
-        } elseif ($sorting & self :: UDG_SORT_SCORE) {
+        } elseif ($sorting & self::UDG_SORT_SCORE) {
             // if user sorts on student's scores, first calculate them and cache them
             foreach ($allitems as $item) {
-                $this->scorecache[$item->get_item_type() . $item->get_id()]
+                $this->scorecache[$item->get_item_type().$item->get_id()]
                     = $item->calc_score($this->userid);
             }
             usort($allitems, array('UserDataGenerator', 'sort_by_score'));
-        } elseif ($sorting & self :: UDG_SORT_MASK) {
+        } elseif ($sorting & self::UDG_SORT_MASK) {
             // if user sorts on student's masks, first calculate scores and cache them
             foreach ($allitems as $item) {
-                $this->scorecache[$item->get_item_type() . $item->get_id()]
+                $this->scorecache[$item->get_item_type().$item->get_id()]
                     = $item->calc_score($this->userid);
             }
             usort($allitems, array('UserDataGenerator', 'sort_by_mask'));
         }
 
-        if ($sorting & self :: UDG_SORT_DESC) {
+        if ($sorting & self::UDG_SORT_DESC) {
             $allitems = array_reverse($allitems);
         }
         // select the items we have to display
         $visibleitems = array_slice($allitems, $start, $count);
 
         // fill score cache if not done yet
-        if (!isset ($this->scorecache)) {
+        if (!isset($this->scorecache)) {
             foreach ($visibleitems as $item) {
-                $this->scorecache[$item->get_item_type() . $item->get_id()]
+                $this->scorecache[$item->get_item_type().$item->get_id()]
                     = $item->calc_score($this->userid);
             }
 
         }
         // generate the data to display
-        $scoredisplay = ScoreDisplay :: instance();
+        $scoredisplay = ScoreDisplay::instance();
         $data = array();
         foreach ($visibleitems as $item) {
-            $row = array ();
+            $row = array();
             $row[] = $item;
             $row[] = $item->get_name();
             $row[] = $this->build_course_name($item);
             $row[] = $this->build_category_name($item);
             $row[] = $this->build_average_column($item, $ignore_score_color);
             $row[] = $this->build_result_column($item, $ignore_score_color);
-            if ($scoredisplay->is_custom())
+            if ($scoredisplay->is_custom()) {
                 $row[] = $this->build_mask_column($item, $ignore_score_color);
+            }
             $data[] = $row;
         }
         return $data;
@@ -163,7 +170,7 @@ class UserDataGenerator
     function sort_by_type($item1, $item2)
     {
         if ($item1->get_item_type() == $item2->get_item_type()) {
-            return $this->sort_by_name($item1,$item2);
+            return $this->sort_by_name($item1, $item2);
         } else {
             return ($item1->get_item_type() < $item2->get_item_type() ? -1 : 1);
         }
@@ -203,7 +210,7 @@ class UserDataGenerator
      */
     function sort_by_name($item1, $item2)
     {
-        return api_strnatcmp($item1->get_name(),$item2->get_name());
+        return api_strnatcmp($item1->get_name(), $item2->get_name());
     }
 
     /**
@@ -213,8 +220,8 @@ class UserDataGenerator
      */
     function sort_by_average($item1, $item2)
     {
-        $score1 = $this->avgcache[$item1->get_item_type() . $item1->get_id()];
-        $score2 = $this->avgcache[$item2->get_item_type() . $item2->get_id()];
+        $score1 = $this->avgcache[$item1->get_item_type().$item1->get_id()];
+        $score2 = $this->avgcache[$item2->get_item_type().$item2->get_id()];
 
         return $this->compare_scores($score1, $score2);
     }
@@ -226,8 +233,8 @@ class UserDataGenerator
      */
     function sort_by_score($item1, $item2)
     {
-        $score1 = $this->scorecache[$item1->get_item_type() . $item1->get_id()];
-        $score2 = $this->scorecache[$item2->get_item_type() . $item2->get_id()];
+        $score1 = $this->scorecache[$item1->get_item_type().$item1->get_id()];
+        $score2 = $this->scorecache[$item2->get_item_type().$item2->get_id()];
 
         return $this->compare_scores($score1, $score2);
     }
@@ -239,10 +246,10 @@ class UserDataGenerator
      */
     function sort_by_mask($item1, $item2)
     {
-        $score1 = $this->scorecache[$item1->get_item_type() . $item1->get_id()];
-        $score2 = $this->scorecache[$item2->get_item_type() . $item2->get_id()];
+        $score1 = $this->scorecache[$item1->get_item_type().$item1->get_id()];
+        $score2 = $this->scorecache[$item2->get_item_type().$item2->get_id()];
 
-        return ScoreDisplay :: compare_scores_by_custom_display($score1, $score2);
+        return ScoreDisplay::compare_scores_by_custom_display($score1, $score2);
     }
 
     /**
@@ -256,10 +263,10 @@ class UserDataGenerator
             return (isset($score2) ? 1 : 0);
         } elseif (!isset($score2)) {
             return -1;
-        } elseif (($score1[0]/$score1[1]) == ($score2[0]/$score2[1])) {
+        } elseif (($score1[0] / $score1[1]) == ($score2[0] / $score2[1])) {
             return 0;
         } else {
-            return (($score1[0]/$score1[1]) < ($score2[0]/$score2[1]) ? -1 : 1);
+            return (($score1[0] / $score1[1]) < ($score2[0] / $score2[1]) ? -1 : 1);
         }
     }
 
@@ -291,12 +298,12 @@ class UserDataGenerator
     private function build_average_column($item, $ignore_score_color)
     {
         if (isset($this->avgcache)) {
-            $avgscore = $this->avgcache[$item->get_item_type() . $item->get_id()];
+            $avgscore = $this->avgcache[$item->get_item_type().$item->get_id()];
         } else {
             $avgscore = $item->calc_score();
         }
 
-        $scoredisplay = ScoreDisplay :: instance();
+        $scoredisplay = ScoreDisplay::instance();
         $displaytype = SCORE_AVERAGE;
         /*if ($ignore_score_color)
             $displaytype |= SCORE_IGNORE_SPLIT;
@@ -311,8 +318,8 @@ class UserDataGenerator
      */
     private function build_result_column($item, $ignore_score_color)
     {
-        $studscore = $this->scorecache[$item->get_item_type() . $item->get_id()];
-        $scoredisplay = ScoreDisplay :: instance();
+        $studscore = $this->scorecache[$item->get_item_type().$item->get_id()];
+        $scoredisplay = ScoreDisplay::instance();
         $displaytype = SCORE_DIV_PERCENT;
         if ($ignore_score_color) {
             $displaytype |= SCORE_IGNORE_SPLIT;
@@ -328,8 +335,8 @@ class UserDataGenerator
      */
     private function build_mask_column($item, $ignore_score_color)
     {
-        $studscore = $this->scorecache[$item->get_item_type() . $item->get_id()];
-        $scoredisplay = ScoreDisplay :: instance();
+        $studscore = $this->scorecache[$item->get_item_type().$item->get_id()];
+        $scoredisplay = ScoreDisplay::instance();
         $displaytype = SCORE_DIV_PERCENT;
         if ($ignore_score_color) {
             $displaytype |= SCORE_IGNORE_SPLIT;
@@ -343,7 +350,7 @@ class UserDataGenerator
      */
     private function get_course_name_from_code_cached($coursecode)
     {
-        if (isset ($this->coursecodecache) && isset ($this->coursecodecache[$coursecode])) {
+        if (isset($this->coursecodecache) && isset($this->coursecodecache[$coursecode])) {
             return $this->coursecodecache[$coursecode];
         } else {
             $name = CourseManager::getCourseNameFromCode($coursecode);
@@ -358,7 +365,7 @@ class UserDataGenerator
      */
     private function get_category_cached($category_id)
     {
-        if (isset ($this->categorycache) && isset ($this->categorycache[$category_id])) {
+        if (isset($this->categorycache) && isset ($this->categorycache[$category_id])) {
             return $this->categorycache[$category_id];
         } else {
             $cat = Category::load($category_id);

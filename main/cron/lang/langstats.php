@@ -32,16 +32,16 @@ if ($_GET['output'] == 1) {
 /**
  * Display
  */
-if (count($list)==0) { echo 'No terms loaded so far'; }
-if (count($list)>0) {
+if (count($list) == 0) { echo 'No terms loaded so far'; }
+if (count($list) > 0) {
   $i = 1;
   $j = 1;
   $k = 0;
   $files = array();
   $trans = array();
   echo 'Number of records: '.count($list).'<br />';
-  echo '<table><tr><th>Index</th><th>Registration order</th><th>Term</th>'.($output==1?'<th>Origin</th>':'').'<th>Count</th></tr>';
-  foreach($list as $elem) {
+  echo '<table><tr><th>Index</th><th>Registration order</th><th>Term</th>'.($output == 1 ? '<th>Origin</th>' : '').'<th>Count</th></tr>';
+  foreach ($list as $elem) {
     if ($k > $terms_limit) { break; }
     $fixed_elem = $elem;
     if ($output) {
@@ -57,13 +57,13 @@ if (count($list)>0) {
       $trans[$fixed_elem['term_name']] = $translation;
       $j++;
     }
-    echo '<tr><td>',$i,
-      '</td><td>',$fixed_elem['id'],
-      '</td><td>',$fixed_elem['term_name'];
+    echo '<tr><td>', $i,
+      '</td><td>', $fixed_elem['id'],
+      '</td><td>', $fixed_elem['term_name'];
     if ($output) {
       echo '</td><td>'.$variables_origin[$fixed_elem['term_name']];
     }
-    echo '</td><td>',$fixed_elem['term_count'],'</td></tr>';
+    echo '</td><td>', $fixed_elem['term_count'], '</td></tr>';
     $i++;
   }
   echo '</table>';
@@ -71,9 +71,9 @@ if (count($list)>0) {
     @mkdir('/tmp/lang');
     foreach ($files as $file => $terms) {
       @touch('/tmp/lang/'.$file);
-      file_put_contents('/tmp/lang/'.$file,"<?php".PHP_EOL);
+      file_put_contents('/tmp/lang/'.$file, "<?php".PHP_EOL);
       foreach ($terms as $term) {
-        file_put_contents('/tmp/lang/'.$file,'$'.$term.' = "'.str_replace('"','\"',$trans[$term]).'";'.PHP_EOL, FILE_APPEND);
+        file_put_contents('/tmp/lang/'.$file, '$'.$term.' = "'.str_replace('"', '\"', $trans[$term]).'";'.PHP_EOL, FILE_APPEND);
       }
     }  
   }

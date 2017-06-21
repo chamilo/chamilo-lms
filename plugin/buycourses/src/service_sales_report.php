@@ -51,34 +51,34 @@ $templateName = $plugin->get_lang('SalesReport');
 
 $template = new Template($templateName);
 
-$toolbar = '';
-
 if ($paypalEnable == 'true' && $commissionsEnable == 'true') {
-
-    $toolbar .= Display::toolbarButton(
+    $toolbar = Display::toolbarButton(
         $plugin->get_lang('PaypalPayoutCommissions'),
-        api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/paypal_payout.php',
+        api_get_path(WEB_PLUGIN_PATH).'buycourses/src/paypal_payout.php',
         'paypal',
         'primary',
         ['title' => $plugin->get_lang('PaypalPayoutCommissions')]
     );
 
-    $template->assign('actions', $toolbar);
-
+    $template->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$toolbar])
+    );
 }
 
 if ($commissionsEnable == 'true') {
-
-    $toolbar .= Display::toolbarButton(
+    $toolbar = Display::toolbarButton(
         $plugin->get_lang('PayoutReport'),
-        api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/payout_report.php',
+        api_get_path(WEB_PLUGIN_PATH).'buycourses/src/payout_report.php',
         'money',
         'info',
         ['title' => $plugin->get_lang('PayoutReport')]
     );
 
-    $template->assign('actions', $toolbar);
-
+    $template->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$toolbar])
+    );
 }
 $template->assign('form', $form->returnForm());
 $template->assign('showing_services', true);
@@ -87,9 +87,6 @@ $template->assign('sale_list', $serviceSaleList);
 $template->assign('sale_status_cancelled', BuyCoursesPlugin::SERVICE_STATUS_CANCELLED);
 $template->assign('sale_status_pending', BuyCoursesPlugin::SERVICE_STATUS_PENDING);
 $template->assign('sale_status_completed', BuyCoursesPlugin::SERVICE_STATUS_COMPLETED);
-
 $content = $template->fetch('buycourses/view/service_sales_report.tpl');
-
-
 $template->assign('content', $content);
 $template->display_one_col_template();

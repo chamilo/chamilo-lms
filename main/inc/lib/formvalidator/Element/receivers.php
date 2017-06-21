@@ -43,9 +43,9 @@ class HTML_QuickForm_receivers extends HTML_QuickForm_group
 	 */
 	function _createElements()
 	{
-		$this->_elements[] = new HTML_QuickForm_Radio('receivers', '', get_lang('Everybody'), '0', array ('onclick' => 'javascript:receivers_hide(\'receivers_to\')'));
+		$this->_elements[] = new HTML_QuickForm_Radio('receivers', '', get_lang('Everybody'), '0', array('onclick' => 'javascript:receivers_hide(\'receivers_to\')'));
 		$this->_elements[0]->setChecked(true);
-		$this->_elements[] = new HTML_QuickForm_Radio('receivers', '', get_lang('SelectGroupsUsers'), '1', array ('onclick' => 'javascript:receivers_show(\'receivers_to\')'));
+		$this->_elements[] = new HTML_QuickForm_Radio('receivers', '', get_lang('SelectGroupsUsers'), '1', array('onclick' => 'javascript:receivers_show(\'receivers_to\')'));
 		$this->_elements[] = new HTML_QuickForm_advmultiselect('to', '', $this->receivers);
 		$this->_elements[2]->setSelected($this->receivers_selected);
 	}
@@ -61,7 +61,7 @@ class HTML_QuickForm_receivers extends HTML_QuickForm_group
 		$renderer->setElementTemplate('{element}');
 		$select_boxes = $this->_elements[2];
 		$select_boxes->setElementTemplate('<div style="margin-left:20px;display:block;" id="receivers_'.$select_boxes->getName().'">'.$select_boxes->_elementTemplate.'</div>');
-		parent :: accept($renderer);
+		parent::accept($renderer);
 		$js = $this->getElementJS();
 		return $renderer->toHtml().$js;
 	}

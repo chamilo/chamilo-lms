@@ -25,7 +25,6 @@ class scormMetadata
      * DOM parser.
      * @param	string	Type of creation required. Can be 'db' or 'manifest' (default)
      * @param	mixed	Depending on the type, can be the DB ID of the learnpath item or the pointer to the <metadata> element in the imsmanifest.xml file
-     * @return	boolean	True on success, false on failure
      */
     public function __construct($type = 'manifest', &$element)
     {
@@ -88,7 +87,7 @@ class scormMetadata
                      //$keep_href = '';
                      if (is_array($attributes)) {
                          foreach ($attributes as $attrib) {
-                             if (trim($attrib->value) != ''){
+                             if (trim($attrib->value) != '') {
                                  $this->attribs[$attrib->name] = $attrib->value;
                              }
                          }

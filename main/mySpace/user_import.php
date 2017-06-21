@@ -31,7 +31,7 @@ if (api_get_setting('add_users_by_coach') === 'true') {
     if (!api_is_platform_admin()) {
         if (isset($_REQUEST['id_session'])) {
             $id_session = intval($_REQUEST['id_session']);
-            $sql = 'SELECT id_coach FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).'
+            $sql = 'SELECT id_coach FROM '.Database::get_main_table(TABLE_MAIN_SESSION).'
                     WHERE id='.$id_session;
             $rs = Database::query($sql);
             if (Database::result($rs, 0, 0) != $_user['user_id']) {
@@ -89,7 +89,7 @@ if ($_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
 Display :: display_header($tool_name);
 
 if ($_FILES['import_file']['size'] == 0 && $_POST) {
-	Display::display_error_message(get_lang('ThisFieldIsRequired'));
+	echo Display::return_message(get_lang('ThisFieldIsRequired'), 'error');
 }
 
 if (count($errors) != 0) {
@@ -100,7 +100,7 @@ if (count($errors) != 0) {
         $error_message .= '</li>';
     }
     $error_message .= '</ul>';
-    Display :: display_error_message($error_message, false);
+    echo Display::return_message($error_message, 'error', false);
 }
 
 $form = new FormValidator('user_import');

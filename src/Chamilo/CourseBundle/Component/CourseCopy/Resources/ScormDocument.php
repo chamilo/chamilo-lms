@@ -21,7 +21,7 @@ class ScormDocument extends Resource
      */
     public function __construct($id, $path, $title)
     {
-        parent::__construct($id,RESOURCE_SCORM);
+        parent::__construct($id, RESOURCE_SCORM);
         $this->path = 'scorm'.$path;
         $this->title = $title;
     }
@@ -36,7 +36,7 @@ class ScormDocument extends Resource
         echo $path;
         if (!empty($this->title)) {
             if (strpos($path, $this->title) === false) {
-                echo " - " . $this->title;
+                echo " - ".$this->title;
             }
         }
     }

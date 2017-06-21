@@ -187,11 +187,11 @@ function chooseFolderIcon($folderPath)
     }
 
     switch ($folderPath) {
-        case '/audio';
+        case '/audio':
             return 'folder_audio.gif';
         case '/flash':
             return 'folder_flash.gif';
-        case '/images';
+        case '/images':
             return 'folder_images.gif';
         case '/video':
             return 'folder_video.gif';
@@ -283,7 +283,7 @@ function get_total_folder_size($path, $can_see_invisible = false)
         'props.session_id'
     );
 
-    $visibility_rule = ' props.visibility ' . ($can_see_invisible ? '<> 2' : '= 1');
+    $visibility_rule = ' props.visibility '.($can_see_invisible ? '<> 2' : '= 1');
 
     $sql = "SELECT SUM(table1.size) FROM (
                 SELECT props.ref, size

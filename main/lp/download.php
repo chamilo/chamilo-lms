@@ -24,7 +24,7 @@ $doc_url = str_replace(' ', '+', $doc_url);
 
 $doc_url = str_replace(array('../', '\\..', '\\0', '..\\'), array('', '', '', ''), $doc_url); //echo $doc_url;
 
-if (strpos($doc_url,'../') || strpos($doc_url,'/..')) {
+if (strpos($doc_url, '../') || strpos($doc_url, '/..')) {
     $doc_url = '';
 }
 $sys_course_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/scorm';
@@ -50,6 +50,6 @@ if ($_SESSION['oLP']) {
     }
 }
 
-Display::display_error_message(get_lang('ProtectedDocument'));
+echo Display::return_message(get_lang('ProtectedDocument'), 'error');
 //api_not_allowed backbutton won't work.
 exit;

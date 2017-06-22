@@ -328,7 +328,10 @@ class Career extends Model
 
         $graphHtml = '<div class="container">';
         $maxGroups = count($list);
-        $widthGroup = 85 / $maxGroups;
+        $widthGroup = 30;
+        if (!empty($maxGroups)) {
+            $widthGroup = 85 / $maxGroups;
+        }
         foreach ($list as $group => $columnList) {
             $graphHtml .= self::parseColumns($list, $group, $columnList, $maxColumn, $widthGroup);
         }
@@ -441,8 +444,8 @@ class Career extends Model
      */
     public static function parseColumns($list, $group, $columnList, $maxColumn, $widthGroup)
     {
+        $topValue = 90;
         $width = 80 / $maxColumn;
-
         //$width = 100;
         //$groupWidth = $width + 30;
         $defaultSpace = 40;
@@ -465,11 +468,31 @@ class Career extends Model
 
             $widthColumn = 85 / count($columnList);
             $graphHtml .= '<div id="col_'.$column.'" style="padding:15px;float:left; margin-left:'.$leftColumn.'; width:'.$widthColumn.'%">';
-            /** @var  \Fhaculty\Graph\Vertex $vertex */
+            $rowCount = 1;
+
+            $maxRow = 0;
             foreach ($rows as $row => $vertex) {
+                if ($row > $maxRow) {
+                    $maxRow = $row;
+                }
+            }
+
+            $newRowList = [];
+            for ($i = 0; $i < $maxRow; $i++) {
+                $newRowList[$i+1] = isset($rows[$i+1]) ? $rows[$i+1] : null;
+            }
+
+            /** @var  \Fhaculty\Graph\Vertex $vertex */
+            foreach ($newRowList as $row => $vertex) {
+                if (is_null($vertex)) {
+                    $graphHtml .= '<div class="empty" style="height: 120px">';
+                    $graphHtml .= '</div>';
+                    continue;
+                }
                 $id = $vertex->getId();
                 $rowId = "row_$row";
-                $graphHtml .= '<div id = "row_'.$id.'" class="'.$rowId.'">';
+                $top = $topValue*($row-1);
+                $graphHtml .= '<div id = "row_'.$id.'" class="'.$rowId.'" >';
                 $color = '';
                 if ($vertex->getAttribute('HasColor') == 1) {
                     $color = 'danger';

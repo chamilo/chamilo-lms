@@ -128,6 +128,36 @@ if (isset($_GET['isStudentView'])) {
         );
     }
 }
+/*
+if (isset($_GET['action']) && $_GET['action'] == 'generate_custom_report') {
+    $allow = api_get_configuration_value('gradebook_custom_student_report');
+    if ($allow) {
+        $customCourseId = isset($_GET['custom_course_id']) ? $_GET['custom_course_id'] : '';
+        // save extra_course_id extra field
+        if (!empty($customCourseId)) {
+            $extraField = new ExtraFieldValue('course');
+            $params = [
+                'item_id' => api_get_course_int_id(),
+                'extra_course_id' => $customCourseId
+            ];
+            $extraField->saveFieldValues($params);
+        }
+
+        $start = isset($_GET['range_start']) ? $_GET['range_start'] : '';
+        $end = isset($_GET['range_end']) ? $_GET['range_end'] : '';
+
+        $flatviewtable = new FlatViewTable(
+            $cat[0],
+            $users,
+            $alleval,
+            $alllinks,
+            true,
+            $offset,
+            $addparams,
+            $mainCourseCategory[0]
+        );
+    }
+}*/
 
 // ACTIONS
 //this is called when there is no data for the course admin
@@ -589,9 +619,9 @@ if (!isset($_GET['exportpdf'])) {
             'name' => get_lang('ToolGradebook')
         );
 
-        Display :: display_header('');
+        Display::display_header('');
     } else {
-        Display :: display_header(get_lang('ToolGradebook'));
+        Display::display_header(get_lang('ToolGradebook'));
     }
 }
 
@@ -608,7 +638,7 @@ if (isset($_GET['studentoverview'])) {
     $allcat = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
     $alleval = $cats[0]->get_evaluations($stud_id, true);
     $alllink = $cats[0]->get_links($stud_id, true);
-    if (isset ($_GET['exportpdf'])) {
+    if (isset($_GET['exportpdf'])) {
         $datagen = new GradebookDataGenerator($allcat, $alleval, $alllink);
         $header_names = array(
             get_lang('Name'),

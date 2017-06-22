@@ -11737,8 +11737,6 @@ EOD;
         $lpViewId,
         $origin = 'learnpath'
     ) {
-        $course_info = api_get_course_info_by_id($course_id);
-        $course_code = $course_info['code'];
         $session_id = api_get_session_id();
         $learningPathId = intval($learningPathId);
         $id_in_path = intval($id_in_path);
@@ -11756,6 +11754,8 @@ EOD;
             return -1;
         }
 
+        $course_info = api_get_course_info_by_id($course_id);
+        $course_code = $course_info['code'];
         $type = $rowItem->getItemType();
         $id = empty($rowItem->getPath()) ? '0' : $rowItem->getPath();
         $main_dir_path = api_get_path(WEB_CODE_PATH);

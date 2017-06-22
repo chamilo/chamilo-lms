@@ -18,12 +18,6 @@ use Chamilo\CoreBundle\Entity\Session,
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-// setting breadcrumbs
-$interbreadcrumb[] = array(
-    'url' => 'session_list.php',
-    'name' => get_lang('Sessions'),
-);
-
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -36,7 +30,10 @@ if (empty($sessionId)) {
 SessionManager::protectSession($sessionId);
 
 $tool_name = get_lang('SessionOverview');
-$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
+$interbreadcrumb[] = array(
+    'url' => 'session_list.php',
+    'name' => get_lang('SessionList')
+);
 
 $orig_param = '&origin=resume_session';
 
@@ -362,7 +359,7 @@ if (!empty($sessionInfo['promotion_id'])) {
 $programmedAnnouncement = new ScheduledAnnouncement();
 $programmedAnnouncement = $programmedAnnouncement->allowed();
 
-$tpl = new Template(get_lang('Session'));
+$tpl = new Template($tool_name);
 $tpl->assign('session_header', $sessionHeader);
 $tpl->assign('title', $sessionTitle);
 $tpl->assign('general_coach', $generalCoach);

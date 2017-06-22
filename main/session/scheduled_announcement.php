@@ -22,24 +22,33 @@ if (!$object->allowed()) {
     api_not_allowed(true);
 }
 
+
+$sessionUrl =  api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId;
+
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$interbreadcrumb[] = array('url' => "session_list.php", "name" => get_lang('SessionList'));
 $interbreadcrumb[] = array(
-    'url' => "resume_session.php?id_session=".$sessionId,
+    'url' => "session_list.php",
+    "name" => get_lang('SessionList')
+);
+$interbreadcrumb[] = array(
+    'url' => $sessionUrl,
     "name" => get_lang('SessionOverview')
 );
 
-$interbreadcrumb[] = array(
-    'url' => api_get_self()."?session_id=".$sessionId,
-    "name" => get_lang('ScheduledAnnouncements')
-);
-
 if ($action == 'add') {
+    $interbreadcrumb[] = array(
+        'url' => api_get_self()."?session_id=".$sessionId,
+        "name" => get_lang('ScheduledAnnouncements')
+    );
     $tool_name = get_lang('Add');
 } elseif ($action == 'edit') {
     $tool_name = get_lang('Edit');
+    $interbreadcrumb[] = array(
+        'url' => api_get_self()."?session_id=".$sessionId,
+        "name" => get_lang('ScheduledAnnouncements')
+    );
 } else {
-    $tool_name = '';
+    $tool_name = get_lang('ScheduledAnnouncements');
 }
 
 switch ($action) {
@@ -102,8 +111,10 @@ switch ($action) {
             $content = $object->getGrid($sessionId);
         } else {
             $content = '<div class="actions">';
-            $content .= '<a href="'.api_get_self().'?session_id='.$sessionId.'">'.
-                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+            $content .= Display::url(
+                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
+                api_get_self().'?session_id='.$sessionId
+            );
             $content .= '</div>';
             $form->addElement('hidden', 'sec_token');
 
@@ -206,5 +217,6 @@ $(function() {
 </script>';
 
 $tpl = new Template($tool_name);
-$tpl->assign('content', $content);
+$sessionTitle = Display::page_header($sessionInfo['name']);
+$tpl->assign('content', $sessionTitle.$content);
 $tpl->display_one_col_template();

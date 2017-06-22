@@ -68,9 +68,10 @@ class ScheduledAnnouncement extends Model
     {
         // action links
         $action = '<div class="actions" style="margin-bottom:20px">';
-        $action .= '<a href="scheduled_announcement.php?session_id='.$sessionId.'">'.
-            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).
-            '</a>';
+        $action .= Display::url(
+            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId
+        );
 
         $action .= '<a href="'.api_get_self().'?action=add&session_id='.$sessionId.'">'.
             Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -294,6 +295,7 @@ class ScheduledAnnouncement extends Model
                                 '((user_complete_name))' => $userInfo['complete_name'],
                                 '((user_first_name))' => $userInfo['firstname'],
                                 '((user_last_name))' => $userInfo['lastname'],
+                                //'((course_title))' => $userInfo['lastname'],
                                 '((lp_progress))' => $progress,
                             ];
 

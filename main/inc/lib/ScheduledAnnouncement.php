@@ -4,15 +4,8 @@
 /**
  * Class ScheduledAnnouncement
  * Requires DB change:
- * $sql = "CREATE TABLE IF NOT EXISTS scheduled_announcements (
-            id int UNSIGNED NOT NULL AUTO_INCREMENT,
-            subject VARCHAR(255) NOT NULL,
-            message TEXT NOT NULL,
-            date datetime DEFAULT NULL,
-            sent INT,
-            session_id INT NOT NULL,
-            PRIMARY KEY (id)
-    )";
+ *
+ * CREATE TABLE scheduled_announcements (id INT AUTO_INCREMENT NOT NULL, subject VARCHAR(255) NOT NULL, message LONGTEXT NOT NULL, date DATETIME DEFAULT NULL, sent TINYINT(1) NOT NULL, session_id INT NOT NULL, c_id INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
  *
  * Config setting:
  * $_configuration['allow_scheduled_announcements'] = true;

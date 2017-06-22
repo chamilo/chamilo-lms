@@ -534,9 +534,9 @@ class Evaluation implements GradebookItem
      * Calculate the score of this evaluation
      * @param int $stud_id (default: all students who have results for this eval - then the average is returned)
      * @param string $type (best, average, ranking)
-     * @return	array (score, max) if student is given
-     * 			array (sum of scores, number of scores) otherwise
-     * 			or null if no scores available
+     * @return    array (score, max) if student is given
+     *            array (sum of scores, number of scores) otherwise
+     *            or null if no scores available
      */
     public function calc_score($stud_id = null, $type = null)
     {
@@ -549,6 +549,7 @@ class Evaluation implements GradebookItem
             if ($useSession == false) {
                 $results = null;
             }
+            $results = null;
             if (empty($results)) {
                 $results = Result::load(null, $stud_id, $this->id);
                 Session::write('calc_score', array($key => $results));
@@ -562,7 +563,6 @@ class Evaluation implements GradebookItem
 
             return array($score, $this->get_max());
         } else {
-
             $count = 0;
             $sum = 0;
             $bestResult = 0;
@@ -575,6 +575,7 @@ class Evaluation implements GradebookItem
             if ($useSession == false) {
                 $allResults = null;
             }
+
             if (empty($allResults)) {
                 $allResults = Result::load(null, null, $this->id);
                 Session::write($key, $allResults);
@@ -595,7 +596,6 @@ class Evaluation implements GradebookItem
                 }
                 $students[$res->get_user_id()] = $score;
             }
-
             if (empty($count)) {
                 return null;
             }

@@ -371,13 +371,17 @@ $_configuration['agenda_legend'] = [
     '#f0f' => 'another caption'
 ];*/
 // Set customs colors to agenda events
-//$_configuration['agenda_platform_color'] = 'red';
-//$_configuration['agenda_course_color'] = '#458B00';
-//$_configuration['agenda_group_color'] = '#A0522D';
-//$_configuration['agenda_session_color'] = '#00496D';
-//$_configuration['agenda_other_session_color'] = '#999';
-//$_configuration['agenda_personal_color'] = 'steel blue';
-//$_configuration['agenda_student_publication_color'] = '#FF8C00';
+/*
+$_configuration['agenda_colors'] = [
+    'platform' => 'red',
+    'course' => '#458B00',
+    'group' => '#A0522D',
+    'session' => '#00496D',
+    'other_session' => '#999',
+    'personal' => 'steel blue',
+    'student_publication' => '#FF8C00'
+];
+*/
 //
 //
 // Save some tool titles with HTML editor
@@ -475,7 +479,7 @@ $_configuration['agenda_legend'] = [
 //$_configuration['allow_scheduled_announcements'] = false;
 // Add the list of emails as a bcc when sending an email.
 /*
-$_configuration['send_all_email_to'] = [
+$_configuration['send_all_emails_to'] = [
     'emails' => [
         'admin1@example.com',
         'admin2@example.com',

@@ -982,7 +982,7 @@ class Thematic
                     $_course,
                     'thematic_plan',
                     $thematic_plan_id,
-                    "ThematicPlanUpdated",
+                    'ThematicPlanUpdated',
                     $user_id
                 );
 
@@ -1003,7 +1003,7 @@ class Thematic
                         $_course,
                         'thematic_plan',
                         $last_id,
-                        "ThematicPlanAdded",
+                        'ThematicPlanAdded',
                         $user_id
                     );
                 }

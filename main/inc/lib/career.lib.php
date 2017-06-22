@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Vertex;
+
 /**
  * Class Career
  */
@@ -280,13 +283,13 @@ class Career extends Model
 
     /**
      * @param array
-     * @param \Fhaculty\Graph\Graph $graph
+     * @param Graph $graph
      *
      * @return string
      */
     public static function renderDiagram($careerInfo, $graph)
     {
-        if (!($graph instanceof \Fhaculty\Graph\Graph)) {
+        if (!($graph instanceof Graph)) {
             return '';
         }
 
@@ -300,24 +303,18 @@ class Career extends Model
         }
 
         $width = 80 / $maxColumn;
-
-        //$width = 100;
-        //$groupWidth = $width + 30;
         $defaultSpace = 40;
         $group = 0;
-        /** @var \Fhaculty\Graph\Vertex $vertex */
         $counter = 0;
-
         $html = Display::page_header($careerInfo['name']);
 
         $list = [];
         $vertexNoGroups = [];
+        /** @var Vertex $vertex */
         foreach ($graph->getVertices() as $vertex) {
             $group = $vertex->getAttribute('Group');
             $column = $vertex->getGroup();
             $row = $vertex->getAttribute('Row');
-            //$id = $vertex->getId();
-            //$vertex->setAttribute('noGroup');
             if (empty($group)) {
                 $group = $column;
                 $vertexNoGroups[$group][$column][$row] = $vertex;
@@ -332,15 +329,28 @@ class Career extends Model
         if (!empty($maxGroups)) {
             $widthGroup = 85 / $maxGroups;
         }
+
         foreach ($list as $group => $columnList) {
-            $graphHtml .= self::parseColumns($list, $group, $columnList, $maxColumn, $widthGroup);
+            $graphHtml .= self::parseColumns(
+                $list,
+                $group,
+                $columnList,
+                $maxColumn,
+                $widthGroup
+            );
         }
 
          $graphHtml .= '</div>';
          $graphHtml .= '<br/><div class="container">';
 
         foreach ($vertexNoGroups as $group => $columnList) {
-            $graphHtml .= self::parseColumns($vertexNoGroups, $group, $columnList, $maxColumn, $widthGroup);
+            $graphHtml .= self::parseColumns(
+                $vertexNoGroups,
+                $group,
+                $columnList,
+                $maxColumn,
+                $widthGroup
+            );
         }
 
         $graphHtml .= '</div>';
@@ -375,7 +385,7 @@ class Career extends Model
                 echo ('entering vertices: ').PHP_EOL;
             }
 
-            /** @var \Fhaculty\Graph\Vertex $vertexTo */
+            /** @var Vertex $vertexTo */
             foreach ($vertex->getVerticesEdgeTo() as $vertexTo) {
                 $childId = $vertexTo->getId();
                 if ($id == $childId) {
@@ -445,18 +455,22 @@ class Career extends Model
     public static function parseColumns($list, $group, $columnList, $maxColumn, $widthGroup)
     {
         $topValue = 90;
-        $width = 80 / $maxColumn;
-        //$width = 100;
-        //$groupWidth = $width + 30;
         $defaultSpace = 40;
-        //$group = 0;
 
-        $leftGroup = ($defaultSpace).'px';
+        $leftGroup = $defaultSpace.'px';
         if ($group == 1) {
             $leftGroup = 0;
         }
         $groupIdTag = "group_$group";
-        $graphHtml = '<div id="'.$groupIdTag.'" style="padding:15px;border-style:solid;float:left; margin-left:'.$leftGroup.'; width:'.$widthGroup.'%">';
+
+        $showGroupLine = true;
+        foreach ($columnList as $column => $rows) {
+            if (count($rows) == 1) {
+                $showGroupLine = false;
+            }
+        }
+        $borderLine = $showGroupLine ? 'border-style:solid;' : '';
+        $graphHtml = '<div id="'.$groupIdTag.'" style="padding:15px; '.$borderLine.' float:left; margin-left:'.$leftGroup.'; width:'.$widthGroup.'%">';
         foreach ($columnList as $column => $rows) {
             $leftColumn = ($defaultSpace).'px';
             if ($column == 1) {
@@ -468,8 +482,6 @@ class Career extends Model
 
             $widthColumn = 85 / count($columnList);
             $graphHtml .= '<div id="col_'.$column.'" style="padding:15px;float:left; margin-left:'.$leftColumn.'; width:'.$widthColumn.'%">';
-            $rowCount = 1;
-
             $maxRow = 0;
             foreach ($rows as $row => $vertex) {
                 if ($row > $maxRow) {
@@ -482,7 +494,7 @@ class Career extends Model
                 $newRowList[$i+1] = isset($rows[$i+1]) ? $rows[$i+1] : null;
             }
 
-            /** @var  \Fhaculty\Graph\Vertex $vertex */
+            /** @var Vertex $vertex */
             foreach ($newRowList as $row => $vertex) {
                 if (is_null($vertex)) {
                     $graphHtml .= '<div class="empty" style="height: 120px">';
@@ -515,7 +527,6 @@ class Career extends Model
                     $parts = explode('G', $arrow);
                     if (empty($parts[0]) && count($parts) == 2) {
                         $groupArrow = $parts[1];
-                        //var_dump($id);var_dump($rowId, "group_$groupArrow");
                         $graphHtml .= self::createConnection(
                             "group_$groupArrow",
                             "row_$id",
@@ -535,8 +546,20 @@ class Career extends Model
 
         $nextGroup = (int) $group + 1;
         if (isset($list[$nextGroup])) {
-            $nextGroupTag = "group_$nextGroup";
-            //$graphHtml .= self::createConnection($groupIdTag, $nextGroupTag, ['Left', 'Right']);
+            $columnCount = 0;
+            foreach ($list[$group] as $cols) {
+                $columnCount .= count($cols);
+            }
+
+            $columnCountNext = 0;
+            foreach ($list[$nextGroup] as $cols) {
+                $columnCountNext .= count($cols);
+            }
+
+            if ($columnCount > 1 && $columnCountNext > 1) {
+                $nextGroupTag = "group_$nextGroup";
+                $graphHtml .= self::createConnection($groupIdTag, $nextGroupTag, ['Left', 'Right']);
+            }
         }
 
         $graphHtml .= '</div>';
@@ -566,7 +589,7 @@ class Career extends Model
                         connector: ["Flowchart"],                                        
                         anchor: ["'.$anchor.'"],
                         overlays: [
-                            [ "Arrow", { location:0.7 } ],
+                            [ "Arrow", { location:0.5 } ],
                         ],
                       });';
         $html .= '});</script>'.PHP_EOL;

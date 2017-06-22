@@ -85,7 +85,7 @@ $item = $extraFieldValue->get_values_by_handler_and_field_variable(
 if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
     $graph = unserialize($item['value']);
     $html = Career::renderDiagram($careerInfo, $graph);
-    $tpl = new Template('');
+    $tpl = new Template(get_lang('Diagram'));
     $tpl->assign('content', $html);
     $tpl->display_one_col_template();
 }

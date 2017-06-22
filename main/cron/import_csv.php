@@ -2450,6 +2450,7 @@ class ImportCsv
                             $parentId = (int) $parentId;
                             echo $parentId.PHP_EOL;
                             if ($graph->hasVertex($parentId)) {
+                                /** @var Vertex $parent */
                                 $parent = $graph->getVertex($parentId);
                                 /*$parent->setAttribute('graphviz.color', 'red');
                                 $parent->setAttribute('graphviz.label', $name);
@@ -2461,21 +2462,8 @@ class ImportCsv
                 }
             }
 
-            // 2. Transform the graph into a jsplumb graph
-            $html = '<style> 
-                .window .panel-title {
-                    font-size: 12px;
-                }
-                .window  {
-                    font-size: 12px;
-                }
-            </style>';
             /** @var Graph $graph */
             foreach ($careerList as $id => $graph) {
-                if ($id != 631) {
-                    //continue;
-                }
-
                 if (isset($careerChamiloIdList[$id])) {
                     $params = [
                         'item_id' => $careerChamiloIdList[$id],

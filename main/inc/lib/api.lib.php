@@ -7866,7 +7866,7 @@ function api_mail_html(
         str_replace('<br />', "\n", api_html_entity_decode($message))
     );
 
-    $list = api_get_configuration_value('send_all_email_to');
+    $list = api_get_configuration_value('send_all_emails_to');
     if (!empty($list) && isset($list['emails'])) {
         foreach ($list['emails'] as $email) {
             $mail->AddBCC($email);

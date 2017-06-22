@@ -258,7 +258,6 @@ class SortableTable extends HTML_Table
             $nav   = $this->get_navigation_html();
 
             // Only show pagination info when there are items to paginate
-
             if ($this->get_total_number_of_items() > $this->default_items_per_page) {
                 $html  = '<div class="table-well">';
                 $html .= '<table class="data_table_pagination">';
@@ -433,6 +432,7 @@ class SortableTable extends HTML_Table
         $html .= '</div>'; //close grid_container
         $html .= '</div>'; //close main grid
         $html .= '<div class="clear"></div>';
+
         echo $html;
     }
 
@@ -445,8 +445,13 @@ class SortableTable extends HTML_Table
      * @param bool       sort data optionally
      * @return string    grid html
      */
-    public function display_simple_grid($visibility_options, $hide_navigation = true, $per_page = 20, $sort_data = true, $grid_class = array())
-    {
+    public function display_simple_grid(
+        $visibility_options,
+        $hide_navigation = true,
+        $per_page = 20,
+        $sort_data = true,
+        $grid_class = array()
+    ) {
         $empty_table = false;
         $total = $this->get_total_number_of_items();
 

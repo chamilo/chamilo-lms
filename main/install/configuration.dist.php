@@ -479,7 +479,7 @@ $_configuration['agenda_colors'] = [
 //$_configuration['allow_scheduled_announcements'] = false;
 // Add the list of emails as a bcc when sending an email.
 /*
-$_configuration['send_all_email_to'] = [
+$_configuration['send_all_emails_to'] = [
     'emails' => [
         'admin1@example.com',
         'admin2@example.com',

@@ -260,7 +260,16 @@ $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 
 // Extra fields
 $extra_field = new ExtraField('course');
-$extra = $extra_field->addElements($form, $courseId);
+$extra = $extra_field->addElements(
+    $form,
+    $courseId,
+    [],
+    false,
+    false,
+    [],
+    [],
+    true
+);
 
 $htmlHeadXtra[] = '
 <script>

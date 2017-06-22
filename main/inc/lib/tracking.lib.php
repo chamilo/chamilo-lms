@@ -4068,48 +4068,29 @@ class Tracking
 
     /**
      * Get inactive students in course
-     * @param    int   $courseId
-     * @param    string  $since  Since login course date (optional, default = 'never')
-     * @param    int        $session_id    (optional)
-     * @return    array    Inactive users
+     * @param int   $courseId
+     * @param string|int $since  Since login course date (optional, default = 'never')
+     * @param int $session_id    (optional)
+     * @return array Inactive users
      */
-    public static function getInactiveStudentsInCourse($courseId, $since = 'never', $session_id = 0)
-    {
+    public static function getInactiveStudentsInCourse(
+        $courseId,
+        $since = 'never',
+        $session_id = 0
+    ) {
         $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $table_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $now = api_get_utc_datetime();
-        $courseId = intval($courseId);
+        $courseId = (int) $courseId;
+        $session_id = (int) $session_id;
 
         if (empty($courseId)) {
             return false;
         }
 
-        if (empty($session_id)) {
-            $inner = '
-                INNER JOIN '.$table_course_rel_user.' course_user
-                ON course_user.user_id = stats_login.user_id AND course_user.c_id = c.id
-            ';
-        } else {
-            $inner = '
-                    INNER JOIN '.$tbl_session_course_user.' session_course_user
-                    ON
-                        c.id = session_course_user.c_id AND
-                        session_course_user.session_id = '.intval($session_id).' AND
-                        session_course_user.user_id = stats_login.user_id ';
-        }
-
-        $sql = 'SELECT stats_login.user_id, MAX(login_course_date) max_date
-                FROM '.$tbl_track_login.' stats_login
-                INNER JOIN '.$tableCourse.' c
-                ON (c.id = stats_login.c_id)
-                '.$inner.'
-                WHERE c.id = '.$courseId.'
-                GROUP BY stats_login.user_id
-                HAVING DATE_SUB( "' . $now.'", INTERVAL '.$since.' DAY) > max_date ';
-
-        if ($since == 'never') {
+        if ($since === 'never') {
             if (empty($session_id)) {
                 $sql = 'SELECT course_user.user_id
                         FROM ' . $table_course_rel_user.' course_user
@@ -4134,15 +4115,38 @@ class Tracking
                             stats_login.login_course_date IS NULL
                         GROUP BY session_course_user.user_id';
             }
+        } else {
+            $since = (int) $since;
+            if (empty($session_id)) {
+                $inner = 'INNER JOIN '.$table_course_rel_user.' course_user
+                          ON course_user.user_id = stats_login.user_id AND course_user.c_id = c.id ';
+            } else {
+                $inner = 'INNER JOIN '.$tbl_session_course_user.' session_course_user
+                          ON
+                            c.id = session_course_user.c_id AND
+                            session_course_user.session_id = '.$session_id.' AND
+                            session_course_user.user_id = stats_login.user_id ';
+            }
+
+            $sql = 'SELECT 
+                    stats_login.user_id, 
+                    MAX(login_course_date) max_date
+                FROM '.$tbl_track_login.' stats_login
+                INNER JOIN '.$tableCourse.' c
+                ON (c.id = stats_login.c_id)
+                '.$inner.'
+                WHERE c.id = '.$courseId.'
+                GROUP BY stats_login.user_id
+                HAVING DATE_SUB("'.$now.'", INTERVAL '.$since.' DAY) > max_date ';
         }
 
         $rs = Database::query($sql);
-        $inactive_users = array();
+        $users = [];
         while ($user = Database::fetch_array($rs)) {
-            $inactive_users[] = $user['user_id'];
+            $users[] = $user['user_id'];
         }
 
-        return $inactive_users;
+        return $users;
     }
 
     /**

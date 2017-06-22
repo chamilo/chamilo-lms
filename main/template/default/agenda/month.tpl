@@ -287,11 +287,14 @@ $(document).ready(function() {
                 } else {
                     $('#end_date').html('');
                 }
+                alert('{{ type_event_color }}');
 
-				$('#color_calendar').html('{{ type_label | escape('js')}}');
-				$('#color_calendar').removeClass('group_event');
-				$('#color_calendar').addClass('label_tag');
-				$('#color_calendar').addClass('{{ type_event_class | escape('js') }}');
+				$('#color_calendar')
+                    .html('{{ type_label | escape('js')}}')
+                    .removeClass('group_event')
+                    .addClass('label_tag')
+                    .addClass('{{ type_event_class | escape('js') }}')
+                    .css('background-color', '{{ type_event_color }}');
 
                 //It shows the CKEDITOR while Adding an Event
                 $('#cke_content').show();

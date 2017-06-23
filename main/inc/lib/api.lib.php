@@ -7989,7 +7989,8 @@ function api_mail_html(
                 "Protocol: ".$mail->Mailer.' :: '.
                 "Host/Port: ".$mail->Host.':'.$mail->Port.' :: '.
                 "Authent/Open: ".($mail->SMTPAuth ? 'Authent' : 'Open').' :: '.
-                ($mail->SMTPAuth ? "  User/Pass: ".$mail->Username.':'.$mail->Password : '')
+                ($mail->SMTPAuth ? "  User/Pass: ".$mail->Username.':'.$mail->Password : '').' :: '.
+                "Sender: ".$mail->Sender
             );
         }
         return 0;

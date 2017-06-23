@@ -103,16 +103,15 @@ if ($actions === 'add') {
         'name' => get_lang('ForumCategories'),
     );
 }
-Display::display_header('');
+
 // Tool introduction
 $introduction = Display::return_introduction_section(TOOL_FORUM);
-
 $form_count = 0;
-
+$formContent = '';
 if (api_is_allowed_to_edit(false, true)) {
     //if is called from a learning path lp_id
     $lp_id = isset($_REQUEST['lp_id']) ? intval($_REQUEST['lp_id']) : null;
-    handle_forum_and_forumcategories($lp_id);
+    $formContent = handle_forum_and_forumcategories($lp_id);
 }
 
 // Notification
@@ -129,7 +128,6 @@ if ($actions == 'notify' && isset($_GET['content']) && isset($_GET['id'])) {
 get_whats_new();
 $whatsnew_post_info = Session::read('whatsnew_post_info');
 
-$tpl = new Template($nameTools, false, false, false, false, true, false);
 /* TRACKING */
 Event::event_access_tool(TOOL_FORUM);
 /*
@@ -522,9 +520,11 @@ if (is_array($forumCategories)) {
     }
 }
 
+
+$tpl = new Template($nameTools);
 $tpl->assign('introduction_section', $introduction);
 $tpl->assign('actions', $actions);
 $tpl->assign('data', $listForumCategory);
+$tpl->assign('form_content', $formContent);
 $layout = $tpl->get_template('forum/list.tpl');
 $tpl->display($layout);
-Display:: display_footer();

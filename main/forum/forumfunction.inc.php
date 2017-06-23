@@ -110,9 +110,11 @@ function handle_forum_and_forumcategories($lp_id = null)
         $get_content = 'forumcategory';
     }
 
+    $content = '';
+
     // Adding a forum category
     if (($action_forum_cat == 'add' && $get_content == 'forumcategory') || $post_submit_cat) {
-        show_add_forumcategory_form(array(), $lp_id); //$lp_id when is called from learning path
+        $content = show_add_forumcategory_form([], $lp_id); //$lp_id when is called from learning path
     }
 
     // Adding a forum
@@ -122,13 +124,13 @@ function handle_forum_and_forumcategories($lp_id = null)
         } else {
             $inputvalues = array();
         }
-        show_add_forum_form($inputvalues, $lp_id);
+        $content = show_add_forum_form($inputvalues, $lp_id);
     }
 
     // Edit a forum category
     if (($action_forum_cat == 'edit' && $get_content == 'forumcategory') || (isset($_POST['SubmitEditForumCategory'])) ? true : false) {
         $forum_category = get_forum_categories($get_id);
-        show_edit_forumcategory_form($forum_category);
+        $content = show_edit_forumcategory_form($forum_category);
     }
 
     // Delete a forum category
@@ -148,25 +150,25 @@ function handle_forum_and_forumcategories($lp_id = null)
                 GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
             }
         }
-        $return_message = deleteForumCategoryThread($get_content, $get_id);
-        echo Display::return_message($return_message, 'confirmation', false);
+        deleteForumCategoryThread($get_content, $get_id);
     }
 
     // Change visibility of a forum or a forum category.
     if ($action_forum_cat == 'invisible' || $action_forum_cat == 'visible') {
         $return_message = change_visibility($get_content, $get_id, $action_forum_cat);
-        echo Display::return_message($return_message, 'confirmation', false);
+        Display::addFlash(Display::return_message($return_message, 'confirmation', false));
     }
     // Change lock status of a forum or a forum category.
     if ($action_forum_cat == 'lock' || $action_forum_cat == 'unlock') {
         $return_message = change_lock_status($get_content, $get_id, $action_forum_cat);
-        echo Display::return_message($return_message, 'confirmation', false);
+        Display::addFlash(Display::return_message($return_message, 'confirmation', false));
     }
     // Move a forum or a forum category.
     if ($action_forum_cat == 'move' && isset($_GET['direction'])) {
         $return_message = move_up_down($get_content, $_GET['direction'], $get_id);
-        echo Display::return_message($return_message, 'confirmation', false);
+        Display::addFlash(Display::return_message($return_message, 'confirmation', false));
     }
+    return $content;
 }
 
 /**
@@ -211,7 +213,7 @@ function show_add_forumcategory_form($inputvalues = array(), $lp_id)
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
-        $form->display();
+        return $form->returnForm();
     }
 }
 
@@ -413,14 +415,14 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
         if ($check) {
             $values = $form->getSubmitValues();
             $return_message = store_forum($values);
-            echo Display::return_message($return_message, 'confirmation');
+            Display::addFlash(Display::return_message($return_message, 'confirmation'));
         }
         Security::clear_token();
     } else {
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
-        $form->display();
+        return $form->returnForm();
     }
 }
 
@@ -507,7 +509,7 @@ function show_edit_forumcategory_form($inputvalues = array())
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
-        $form->display();
+        return $form->returnForm();
     }
 }
 
@@ -600,7 +602,7 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
     }
 
     if ($showMessage) {
-        echo Display::return_message($return_message, 'confirmation');
+        Display::addFlash(Display::return_message($return_message, 'confirmation'));
     }
 
     return $last_id;
@@ -839,7 +841,6 @@ function deleteForumCategoryThread($content, $id)
 
     $tool_constant = null;
     $return_message = '';
-
     if ($content == 'forumcategory') {
         $tool_constant = TOOL_FORUM_CATEGORY;
         $return_message = get_lang('ForumCategoryDeleted');
@@ -899,6 +900,9 @@ function deleteForumCategoryThread($content, $id)
     );
 
     // Check if this returns a true and if so => return $return_message, if not => return false;
+    if (!empty($return_message)) {
+        Display::addFlash(Display::return_message($return_message, 'confirmation', false));
+    }
     return $return_message;
 }
 

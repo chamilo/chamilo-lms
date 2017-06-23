@@ -113,11 +113,12 @@ class learnpath
             $this->error = 'Course code does not exist in database.';
         }
 
-        $this->set_course_int_id($course_id);
         $lp_id = (int) $lp_id;
+        $course_id = (int) $course_id;
+        $this->set_course_int_id($course_id);
         // Check learnpath ID.
-        if (empty($lp_id)) {
-            $this->error = 'Learnpath ID is empty';
+        if (empty($lp_id) || empty($course_id)) {
+            $this->error = "Parameter is empty: LpId:'$lp_id', courseId: '$lp_id'";
         } else {
             // TODO: Make it flexible to use any course_code (still using env course code here).
             $lp_table = Database::get_course_table(TABLE_LP_MAIN);
@@ -205,7 +206,7 @@ class learnpath
                     $this->last_item_seen = $row['last_item'];
                     $this->progress_db = $row['progress'];
                     $this->lp_view_session_id = $row['session_id'];
-                } else if (!api_is_invitee()) {
+                } elseif (!api_is_invitee()) {
                     if ($this->debug > 2) {
                         error_log('New LP - learnpath::__construct() '.__LINE__.' - NOT Found previous view', 0);
                     }
@@ -398,7 +399,6 @@ class learnpath
                         }
                     }
                 }
-
 
                 $this->ordered_items = self::get_flat_ordered_items_list(
                     $this->get_id(),
@@ -1084,7 +1084,7 @@ class learnpath
                     // No other LP uses that directory, delete it.
                     $course_rel_dir = api_get_course_path().'/scorm/'; // scorm dir web path starting from /courses
                     $course_scorm_dir = api_get_path(SYS_COURSE_PATH).$course_rel_dir; // The absolute system path for this course.
-                    if ($delete == 'remove' && is_dir($course_scorm_dir.$path) && !empty ($course_scorm_dir)) {
+                    if ($delete == 'remove' && is_dir($course_scorm_dir.$path) && !empty($course_scorm_dir)) {
                         if ($this->debug > 2) {
                             error_log('New LP - In learnpath::delete(), found SCORM, deleting directory: '.$course_scorm_dir.$path, 0);
                         }
@@ -1276,8 +1276,9 @@ class learnpath
         }
 
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $sql_select = "SELECT * FROM ".$tbl_lp_item." WHERE c_id = ".$course_id." AND id = ".$id;
-        $res_select = Database::query($sql_select);
+        $sql = "SELECT * FROM $tbl_lp_item 
+                WHERE c_id = ".$course_id." AND id = ".$id;
+        $res_select = Database::query($sql);
         $row_select = Database::fetch_array($res_select);
         $audio_update_sql = '';
         if (is_array($audio) && !empty($audio['tmp_name']) && $audio['error'] === 0) {
@@ -1350,10 +1351,10 @@ class learnpath
             // Only update title and description.
             $sql = "UPDATE ".$tbl_lp_item."
                     SET title = '" . Database::escape_string($title)."',
-                        prerequisite = '" . $prerequisites."',
-                        description = '" . Database::escape_string($description)."'
-                        " . $audio_update_sql.",
-                        max_time_allowed = '" . Database::escape_string($max_time_allowed)."'
+                        prerequisite = '".$prerequisites."',
+                        description = '".Database::escape_string($description)."'
+                        ".$audio_update_sql.",
+                        max_time_allowed = '".Database::escape_string($max_time_allowed)."'
                     WHERE c_id = ".$course_id." AND id = ".$id;
             Database::query($sql);
         } else {
@@ -1366,7 +1367,6 @@ class learnpath
 
             /* BEGIN -- virtually remove the current item id */
             /* for the next and previous item it is like the current item doesn't exist anymore */
-
             if ($old_previous != 0) {
                 // Next
                 $sql = "UPDATE ".$tbl_lp_item."
@@ -1383,7 +1383,8 @@ class learnpath
                 Database::query($sql);
             }
 
-            // display_order - 1 for every item with a display_order bigger then the display_order of the current item.
+            // display_order - 1 for every item with a display_order
+            // bigger then the display_order of the current item.
             $sql = "UPDATE ".$tbl_lp_item."
                     SET display_order = display_order - 1
                     WHERE
@@ -1431,12 +1432,12 @@ class learnpath
             $sql = "UPDATE $tbl_lp_item
                     SET
                         title = '".Database::escape_string($title)."',
-                        description = '" . Database::escape_string($description)."',
-                        parent_item_id = " . $parent.",
-                        previous_item_id = " . $previous.",
-                        next_item_id = " . $new_next.",
-                        display_order = " . $new_order."
-                        " . $audio_update_sql."
+                        description = '".Database::escape_string($description)."',
+                        parent_item_id = ".$parent.",
+                        previous_item_id = ".$previous.",
+                        next_item_id = ".$new_next.",
+                        display_order = ".$new_order."
+                        ".$audio_update_sql."
                     WHERE c_id = ".$course_id." AND id = ".$id;
             Database::query($sql);
 
@@ -1583,7 +1584,6 @@ class learnpath
         }
 
         if (empty($id) || $id != strval(intval($id))) {
-
             return array();
         }
 

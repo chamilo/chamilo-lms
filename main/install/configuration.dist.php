@@ -363,7 +363,7 @@ $_configuration['tracking_columns'] = [
 //$_configuration['remove_session_url']= false ;
 //
 //
-// AGENDA CONFIGURATION SETTINGS
+// ------ AGENDA CONFIGURATION SETTINGS
 // Shows a legend in the agenda tool
 /*
 $_configuration['agenda_legend'] = [
@@ -382,7 +382,7 @@ $_configuration['agenda_colors'] = [
     'student_publication' => '#FF8C00'
 ];
 */
-//
+// ------
 //
 // Save some tool titles with HTML editor
 // $_configuration['save_titles_as_html'] = false;
@@ -413,7 +413,8 @@ $_configuration['agenda_colors'] = [
 //$_configuration['allow_quiz_question_feedback'] = false;
 // Show view accordion lp_category
 //$_configuration['lp_category_accordion'] = false;
-// HTTP headers security
+//
+// ------ HTTP headers security
 // This section relates to options to increase the security of your Chamilo
 // portal against attacks specifically focused on HTTP headers vulnerabilities
 // These are all disabled by default, because some of these settings might
@@ -465,7 +466,8 @@ $_configuration['agenda_colors'] = [
 // information the browser includes with navigation away from a document
 // and should be set by all sites.
 //$_configuration['security_referrer_policy'] = 'origin-when-cross-origin';
-// HTTP headers security section ends here
+// ------ HTTP headers security section ends here
+//
 // Add answered_at field in table survey_invitation
 // Requires DB change:
 // ALTER TABLE c_survey_invitation ADD answered_at DATETIME DEFAULT NULL;
@@ -485,4 +487,3 @@ $_configuration['send_all_emails_to'] = [
         'admin2@example.com',
     ]
 ];*/
-

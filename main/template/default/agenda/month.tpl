@@ -287,7 +287,6 @@ $(document).ready(function() {
                 } else {
                     $('#end_date').html('');
                 }
-                alert('{{ type_event_color }}');
 
 				$('#color_calendar')
                     .html('{{ type_label | escape('js')}}')

@@ -169,6 +169,7 @@ filter:
         - 'plugin/pens/lib/'
         - 'plugin/bbb/lib/bbb_api.php'
         - 'plugin/ims_lti/OAuthSimple.php'
+        - 'plugin/sepe/src/wsse/*'
         - 'tests/*'
         - 'vendor/*'
         - 'web/*'

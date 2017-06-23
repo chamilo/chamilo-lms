@@ -469,8 +469,10 @@ class Career extends Model
                 $showGroupLine = false;
             }
         }
+
         $borderLine = $showGroupLine ? 'border-style:solid;' : '';
         $graphHtml = '<div id="'.$groupIdTag.'" style="padding:15px; '.$borderLine.' float:left; margin-left:'.$leftGroup.'; width:'.$widthGroup.'%">';
+
         foreach ($columnList as $column => $rows) {
             $leftColumn = ($defaultSpace).'px';
             if ($column == 1) {
@@ -490,54 +492,93 @@ class Career extends Model
             }
 
             $newRowList = [];
+            $defaultSubGroup = -1;
+            $subGroupCountList = [];
             for ($i = 0; $i < $maxRow; $i++) {
-                $newRowList[$i+1] = isset($rows[$i+1]) ? $rows[$i+1] : null;
+                /** @var Vertex $vertex */
+                $vertex = isset($rows[$i+1]) ? $rows[$i+1] : null;
+                if (!is_null($vertex)) {
+                    $subGroup = $vertex->getAttribute('SubGroup');
+                    if ($subGroup == '' || empty($subGroup)) {
+                        $defaultSubGroup = 0;
+                    } else {
+                        $defaultSubGroup = (int) $subGroup;
+                    }
+                }
+                $newRowList[$i+1][$defaultSubGroup][] = $vertex;
+                if (!isset($subGroupCountList[$defaultSubGroup])) {
+                    $subGroupCountList[$defaultSubGroup] = 1;
+                } else {
+                    $subGroupCountList[$defaultSubGroup]++;
+                }
             }
 
+            //$graphHtml .= '<div id="'.$groupIdTag.'" style="padding:15px; '.$borderLine.' float:left; margin-left:'.$leftGroup.'; width:'.$widthGroup.'%">';
+            $subGroup = null;
+            $subGroupAdded = [];
             /** @var Vertex $vertex */
-            foreach ($newRowList as $row => $vertex) {
-                if (is_null($vertex)) {
-                    $graphHtml .= '<div class="empty" style="height: 120px">';
-                    $graphHtml .= '</div>';
-                    continue;
-                }
-                $id = $vertex->getId();
-                $rowId = "row_$row";
-                $top = $topValue*($row-1);
-                $graphHtml .= '<div id = "row_'.$id.'" class="'.$rowId.'" >';
-                $color = '';
-                if ($vertex->getAttribute('HasColor') == 1) {
-                    $color = 'danger';
-                }
-                $content = $vertex->getAttribute('Notes');
-                $content .= '<div class="pull-right">['.$id.']</div>';
+            foreach ($newRowList as $row => $subGroupList) {
+                foreach ($subGroupList as $subGroup => $vertexList) {
+                    if (!empty($subGroup) && $subGroup != -1) {
+                        if (!isset($subGroupAdded[$subGroup])) {
+                            $subGroupAdded[$subGroup] = 1;
+                        } else {
+                            $subGroupAdded[$subGroup]++;
+                        }
+                        if ($subGroupAdded[$subGroup] == 1) {
+                            $graphHtml .= '<div id="sub_group_'.$subGroup.'" style="margin-bottom:20px; padding:15px; border-style:solid; width:100%">';
+                        }
+                    }
 
-                $graphHtml .= Display::panel(
-                    $content,
-                    $vertex->getAttribute('graphviz.label'),
-                    null,
-                    $color,
-                    null
-                );
-                $graphHtml .= '</div>';
+                    foreach ($vertexList as $vertex) {
+                        if (is_null($vertex)) {
+                            $graphHtml .= '<div class="empty" style="height: 120px">';
+                            $graphHtml .= '</div>';
+                            continue;
+                        }
 
-                $arrow = $vertex->getAttribute('DrawArrowFrom');
+                        $id = $vertex->getId();
+                        $rowId = "row_$row";
+                        $top = $topValue * ($row - 1);
+                        $graphHtml .= '<div id = "row_'.$id.'" class="'.$rowId.'" >';
+                        $color = '';
+                        if ($vertex->getAttribute('HasColor') == 1) {
+                            $color = 'danger';
+                        }
+                        $content = $vertex->getAttribute('Notes');
+                        $content .= '<div class="pull-right">['.$id.']</div>';
 
-                if (!empty($arrow)) {
-                    $parts = explode('G', $arrow);
-                    if (empty($parts[0]) && count($parts) == 2) {
-                        $groupArrow = $parts[1];
-                        $graphHtml .= self::createConnection(
-                            "group_$groupArrow",
-                            "row_$id",
-                            ['Left', 'Right']
+                        $graphHtml .= Display::panel(
+                            $content,
+                            $vertex->getAttribute('graphviz.label'),
+                            null,
+                            $color,
+                            null
                         );
-                    } else {
-                        $graphHtml .= self::createConnection(
-                            "row_$arrow",
-                            "row_$id",
-                            ['Left', 'Right']
-                        );
+                        $graphHtml .= '</div>';
+
+                        $arrow = $vertex->getAttribute('DrawArrowFrom');
+                        if (!empty($arrow)) {
+                            $parts = explode('G', $arrow);
+                            if (empty($parts[0]) && count($parts) == 2) {
+                                $groupArrow = $parts[1];
+                                $graphHtml .= self::createConnection(
+                                    "group_$groupArrow",
+                                    "row_$id",
+                                    ['Left', 'Right']
+                                );
+                            } else {
+                                $graphHtml .= self::createConnection(
+                                    "row_$arrow",
+                                    "row_$id",
+                                    ['Left', 'Right']
+                                );
+                            }
+                        }
+                    }
+
+                    if (!empty($subGroup) && $subGroup != -1 && $subGroupCountList[$subGroup] == $subGroupAdded[$subGroup]) {
+                        $graphHtml .= '</div>';
                     }
                 }
             }
@@ -583,15 +624,15 @@ class Career extends Model
         $anchor = implode('","', $anchor);
         $html = '<script> jsPlumb.ready(function() { ';
         $html .= 'jsPlumb.connect({
-                        source:"'.$source.'",
-                        target:"'.$target.'",
-                        endpoint:[ "Rectangle", { width:1, height:1 }],                                        
-                        connector: ["Flowchart"],                                        
-                        anchor: ["'.$anchor.'"],
-                        overlays: [
-                            [ "Arrow", { location:0.5 } ],
-                        ],
-                      });';
+            source:"'.$source.'",
+            target:"'.$target.'",
+            endpoint:[ "Rectangle", { width:1, height:1 }],                                        
+            connector: ["Flowchart"],                                        
+            anchor: ["'.$anchor.'"],
+            overlays: [
+                [ "Arrow", { location:0.5 } ],
+            ],
+        });';
         $html .= '});</script>'.PHP_EOL;
 
         return $html;

@@ -144,6 +144,7 @@ class Event
      *  I encourage to use $nameTool as $tool when calling this function
      *
      * 	Functionality for "what's new" notification is added by Toon Van Hoecke
+     * @return bool
      */
     public static function event_access_tool($tool, $id_session = 0)
     {
@@ -193,7 +194,7 @@ class Event
                     VALUES (".$user_id.", '".$courseId."' , '$tool', '$reallyNow', $id_session)";
             Database::query($sql);
         }
-        return 1;
+        return true;
     }
 
     /**
@@ -208,6 +209,7 @@ class Event
      * (why? perhaps to prevent sql insertion hacks?)
      * and later again.
      * Doing this twice causes an error, I remove one of them.
+     * @return int
      */
     public static function event_download($doc_url)
     {
@@ -243,6 +245,7 @@ class Event
      * @desc Record information for upload event
      * used in the works tool to record informations when
      * an user upload 1 work
+     * @return int
      */
     public static function event_upload($doc_id)
     {
@@ -278,6 +281,7 @@ class Event
      * @author Sebastien Piraux <piraux_seb@hotmail.com>
      * @desc Record information for link event (when an user click on an added link)
      * it will be used in a redirection page
+     * @return int
      */
     public static function event_link($link_id)
     {
@@ -336,7 +340,6 @@ class Event
 
         if ($debug) error_log('Called to update_event_exercice');
         if ($debug) error_log('duration:'.$duration);
-
         if ($exeid != '') {
             /*
              * Code commented due BT#8423 do not change the score to 0.
@@ -400,20 +403,20 @@ class Event
 
     /**
      * Record an event for this attempt at answering an exercise
-     * @param	float	Score achieved
-     * @param	string	Answer given
-     * @param	integer	Question ID
-     * @param	integer Exercise attempt ID a.k.a exe_id (from track_e_exercise)
-     * @param	integer	Position
-     * @param	integer Exercise ID (from c_quiz)
-     * @param	bool update results?
-     * @param	$fileName string  Filename (for audio answers - using nanogong)
-     * @param	integer User ID The user who's going to get this score. Default value of null means "get from context".
-     * @param	integer	Course ID (from the "id" column of course table). Default value of null means "get from context".
-     * @param	integer	Session ID (from the session table). Default value of null means "get from context".
-     * @param	integer	Learnpath ID (from c_lp table). Default value of null means "get from context".
-     * @param	integer	Learnpath item ID (from the c_lp_item table). Default value of null means "get from context".
-     * @return	boolean	Result of the insert query
+     * @param    float    Score achieved
+     * @param    string    Answer given
+     * @param    integer    Question ID
+     * @param    integer Exercise attempt ID a.k.a exe_id (from track_e_exercise)
+     * @param    integer    Position
+     * @param    integer Exercise ID (from c_quiz)
+     * @param    bool update results?
+     * @param    $fileName string  Filename (for audio answers - using nanogong)
+     * @param    integer User ID The user who's going to get this score. Default value of null means "get from context".
+     * @param    integer    Course ID (from the "id" column of course table). Default value of null means "get from context".
+     * @param    integer    Session ID (from the session table). Default value of null means "get from context".
+     * @param    integer    Learnpath ID (from c_lp table). Default value of null means "get from context".
+     * @param    integer    Learnpath item ID (from the c_lp_item table). Default value of null means "get from context".
+     * @return    boolean    Result of the insert query
      */
     public static function saveQuestionAttempt(
         $score,
@@ -794,11 +797,11 @@ class Event
      */
     public static function get_events_by_user_and_type($user_id, $event_type)
     {
-        $TABLETRACK_DEFAULT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $user_id = intval($user_id);
         $event_type = Database::escape_string($event_type);
 
-        $sql = "SELECT * FROM $TABLETRACK_DEFAULT
+        $sql = "SELECT * FROM $table
                 WHERE default_value_type = 'user_id' AND
                       default_value = $user_id AND
                       default_event_type = '$event_type'
@@ -820,14 +823,21 @@ class Event
      * @param string $event_message_language
      * @param int $activated
      */
-    public static function save_event_type_message($event_name, $users, $message, $subject, $event_message_language, $activated)
-    {
+    public static function save_event_type_message(
+        $event_name,
+        $users,
+        $message,
+        $subject,
+        $event_message_language,
+        $activated
+    ) {
         $event_name = Database::escape_string($event_name);
         $activated = intval($activated);
         $event_message_language = Database::escape_string($event_message_language);
 
         // Deletes then re-adds the users linked to the event
-        $sql = 'DELETE FROM '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' WHERE event_type_name = "'.$event_name.'"	';
+        $sql = 'DELETE FROM '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' 
+                WHERE event_type_name = "'.$event_name.'"	';
         Database::query($sql);
 
         foreach ($users as $user) {
@@ -837,7 +847,8 @@ class Event
         }
         $language_id = api_get_language_id($event_message_language);
         // check if this template in this language already exists or not
-        $sql = 'SELECT COUNT(id) as total FROM '.Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).'
+        $sql = 'SELECT COUNT(id) as total
+                FROM '.Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).'
                 WHERE event_type_name = "'.$event_name.'" AND language_id = '.$language_id;
 
         $sql = Database::store_result(Database::query($sql), 'ASSOC');
@@ -848,8 +859,10 @@ class Event
                 SET message = "'.Database::escape_string($message).'",
                 subject = "'.Database::escape_string($subject).'",
                 activated = '.$activated.'
-                WHERE event_type_name = "'.$event_name.'" AND language_id = (SELECT id FROM '.Database::get_main_table(TABLE_MAIN_LANGUAGE).'
-                    WHERE dokeos_folder = "'.$event_message_language.'")';
+                WHERE event_type_name = "'.$event_name.'" AND language_id = (
+                    SELECT id FROM '.Database::get_main_table(TABLE_MAIN_LANGUAGE).'
+                    WHERE dokeos_folder = "'.$event_message_language.'"
+                )';
             Database::query($sql);
         } else { // else we create a new record
             // gets the language_-_id
@@ -920,8 +933,13 @@ class Event
      * @param   int lp item id
      * @param   int lp item view id
      */
-    public static function get_attempt_count($user_id, $exerciseId, $lp_id, $lp_item_id, $lp_item_view_id)
-    {
+    public static function get_attempt_count(
+        $user_id,
+        $exerciseId,
+        $lp_id,
+        $lp_item_id,
+        $lp_item_view_id
+    ) {
         $stat_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $user_id = intval($user_id);
         $exerciseId = intval($exerciseId);
@@ -957,8 +975,12 @@ class Event
      * @param $lp_item_id
      * @return int
      */
-    public static function get_attempt_count_not_finished($user_id, $exerciseId, $lp_id, $lp_item_id)
-    {
+    public static function get_attempt_count_not_finished(
+        $user_id,
+        $exerciseId,
+        $lp_id,
+        $lp_item_id
+    ) {
         $stat_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $user_id = intval($user_id);
         $exerciseId = intval($exerciseId);
@@ -1093,10 +1115,10 @@ class Event
     /**
      * Delete all exercise attempts (included in LP or not)
      *
-     * @param 	int		user id
-     * @param 	int		exercise id
-     * @param 	int	$course_id
-     * @param 	int		session id
+     * @param int user id
+     * @param int exercise id
+     * @param int $course_id
+     * @param int session id
      */
     public static function delete_all_incomplete_attempts($user_id, $exercise_id, $course_id, $session_id = 0)
     {
@@ -1185,8 +1207,11 @@ class Event
      * @return  array   with the results
      *
      */
-    public static function get_all_exercise_results_by_course($courseId, $session_id = 0, $get_count = true)
-    {
+    public static function get_all_exercise_results_by_course(
+        $courseId,
+        $session_id = 0,
+        $get_count = true
+    ) {
         $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $courseId = intval($courseId);
@@ -1381,15 +1406,20 @@ class Event
      * @return  array   with the results
      *
      */
-    public static function count_exercise_attempts_by_user($user_id, $exercise_id, $courseId, $session_id = 0)
-    {
-        $TABLETRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+    public static function count_exercise_attempts_by_user(
+        $user_id,
+        $exercise_id,
+        $courseId,
+        $session_id = 0
+    ) {
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $courseId = intval($courseId);
         $exercise_id = intval($exercise_id);
         $session_id = intval($session_id);
         $user_id = intval($user_id);
 
-        $sql = "SELECT count(*) as count FROM $TABLETRACK_EXERCICES
+        $sql = "SELECT count(*) as count 
+                FROM $table
                 WHERE status = ''  AND
                     exe_user_id = '$user_id' AND
                     c_id = '$courseId' AND
@@ -1409,7 +1439,8 @@ class Event
     }
 
     /**
-     * Gets all exercise BEST results attempts (NO Exercises in LPs) from a given exercise id, course, session per user
+     * Gets all exercise BEST results attempts (NO Exercises in LPs)
+     * from a given exercise id, course, session per user
      * @param   int     $exercise_id
      * @param   int     $courseId
      * @param   int     $session_id
@@ -1732,8 +1763,13 @@ class Event
      * @param $question_id
      * @param int $sessionId
      */
-    public static function delete_attempt_hotspot($exe_id, $user_id, $courseId, $question_id, $sessionId = null)
-    {
+    public static function delete_attempt_hotspot(
+        $exe_id,
+        $user_id,
+        $courseId,
+        $question_id,
+        $sessionId = null
+    ) {
         $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 
         $exe_id = intval($exe_id);
@@ -1908,8 +1944,12 @@ class Event
      * @param string $virtualTime The amount of time to be added, in a hh:mm:ss format. If int, we consider it is expressed in hours.
      * @return True on successful removal, false otherwise
      */
-    public static function eventRemoveVirtualCourseTime($courseId, $userId, $sessionId = 0, $virtualTime = '')
-    {
+    public static function eventRemoveVirtualCourseTime(
+        $courseId,
+        $userId,
+        $sessionId = 0,
+        $virtualTime = ''
+    ) {
         if (empty($virtualTime)) {
             return false;
         }
@@ -1932,14 +1972,14 @@ class Event
         // Get the current latest course connection register. We need that
         // record to re-use the data and create a new record.
         $sql = "SELECT course_access_id
-                        FROM $courseTrackingTable
-                        WHERE
-                            user_id = $userId AND
-                            c_id = $courseId  AND
-                            session_id  = $sessionId AND
-                            counter = 0 AND
-                            (UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) = '$virtualTime'
-                        ORDER BY login_course_date DESC LIMIT 0,1";
+                FROM $courseTrackingTable
+                WHERE
+                    user_id = $userId AND
+                    c_id = $courseId  AND
+                    session_id  = $sessionId AND
+                    counter = 0 AND
+                    (UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) = '$virtualTime'
+                ORDER BY login_course_date DESC LIMIT 0,1";
         $result = Database::query($sql);
 
         // Ignore if we didn't find any course connection record in the last
@@ -1948,7 +1988,8 @@ class Event
             // Found the latest connection
             $row = Database::fetch_row($result);
             $courseAccessId = $row[0];
-            $sql = "DELETE FROM $courseTrackingTable WHERE course_access_id = $courseAccessId";
+            $sql = "DELETE FROM $courseTrackingTable 
+                    WHERE course_access_id = $courseAccessId";
             $result = Database::query($sql);
 
             return $result;

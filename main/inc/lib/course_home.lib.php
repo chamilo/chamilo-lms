@@ -74,20 +74,22 @@ class CourseHome
             $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
             if (api_is_allowed_to_edit(null, true)) {
                 $sql_links = "SELECT tl.*, tip.visibility
-								FROM $tbl_link tl
-                                LEFT JOIN $tbl_item_property tip ON tip.tool='link' AND tip.ref=tl.id
-                                WHERE 	tl.c_id = $course_id AND
-                                		tip.c_id = $course_id AND
-                						tl.on_homepage='1' AND
-                						tip.visibility != 2";
+                              FROM $tbl_link tl
+                              LEFT JOIN $tbl_item_property tip ON tip.tool='link' AND tip.ref=tl.id
+                              WHERE 	
+                                tl.c_id = $course_id AND
+                                tip.c_id = $course_id AND
+                                tl.on_homepage='1' AND
+                				tip.visibility != 2";
             } else {
                 $sql_links = "SELECT tl.*, tip.visibility
-                                    FROM $tbl_link tl
-                                    LEFT JOIN $tbl_item_property tip ON tip.tool='link' AND tip.ref=tl.id
-                                    WHERE 	tl.c_id = $course_id AND
-                                			tip.c_id = $course_id AND
-                							tl.on_homepage='1' AND
-                							tip.visibility = 1";
+                                FROM $tbl_link tl
+                                LEFT JOIN $tbl_item_property tip ON tip.tool='link' AND tip.ref=tl.id
+                                WHERE 	
+                                    tl.c_id = $course_id AND
+                                    tip.c_id = $course_id AND
+                                    tl.on_homepage='1' AND
+                                    tip.visibility = 1";
             }
             $result_links = Database::query($sql_links);
             while ($links_row = Database::fetch_array($result_links)) {
@@ -194,11 +196,19 @@ class CourseHome
                 !api_is_coach()
             ) {
                 if ($tool['visibility']) {
-                    $link['name'] = Display::return_icon('remove.gif', get_lang('Deactivate'), array('style' => 'vertical-align: middle;'));
+                    $link['name'] = Display::return_icon(
+                        'remove.gif',
+                        get_lang('Deactivate'),
+                        array('style' => 'vertical-align: middle;')
+                    );
                     $link['cmd'] = "hide=yes";
                     $lnk[] = $link;
                 } else {
-                    $link['name'] = Display::return_icon('add.gif', get_lang('Activate'), array('style' => 'vertical-align: middle;'));
+                    $link['name'] = Display::return_icon(
+                        'add.gif',
+                        get_lang('Activate'),
+                        array('style' => 'vertical-align: middle;')
+                    );
                     $link['cmd'] = "restore=yes";
                     $lnk[] = $link;
                 }
@@ -543,7 +553,6 @@ class CourseHome
         }
 
         $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
-
         while ($temp_row = Database::fetch_assoc($result)) {
             $add = false;
             if ($check) {
@@ -607,7 +616,12 @@ class CourseHome
         // Grabbing all the links that have the property on_homepage set to 1
         $course_link_table = Database::get_course_table(TABLE_LINK);
         $course_item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $condition_session = api_get_session_condition($session_id, true, true, 'tip.session_id');
+        $condition_session = api_get_session_condition(
+            $session_id,
+            true,
+            true,
+            'tip.session_id'
+        );
 
         switch ($course_tool_category) {
             case TOOL_AUTHORING:
@@ -1208,7 +1222,6 @@ class CourseHome
                     if ($row['category'] == 'plugin') {
                         $plugin = new AppPlugin();
                         $pluginInfo = $plugin->getPluginInfo($row['name']);
-
                         $navigation_items[$row['id']]['link'] = api_get_path(WEB_PLUGIN_PATH);
                         $navigation_items[$row['id']]['name'] = $pluginInfo['title'];
                     } else {
@@ -1222,7 +1235,6 @@ class CourseHome
             /* 	Admin (edit rights) only links
               - Course settings (course admin only)
               - Course rights (roles & rights overview) */
-
             if ($include_admin_tools) {
                 $sql = "SELECT name, image FROM $course_tools_table
                         WHERE c_id = $course_id  AND link='course_info/infocours.php'";
@@ -1286,7 +1298,12 @@ class CourseHome
             } else if (api_get_setting('show_navigation_menu') == 'icons') {
                 $class = 'icons';
                 $marginLeft = 25;
-                $item = Display::return_icon(substr($navigation_item['image'], 0, -3)."png", $navigation_item['name'], array('class'=>'tool-img'), ICON_SIZE_SMALL);
+                $item = Display::return_icon(
+                    substr($navigation_item['image'], 0, -3)."png",
+                    $navigation_item['name'],
+                    array('class' => 'tool-img'),
+                    ICON_SIZE_SMALL
+                );
             } else {
                 $class = 'icons-text';
                 $item = $navigation_item['name'].Display::return_icon(substr($navigation_item['image'], 0, -3)."png", $navigation_item['name'], array('class'=>'tool-img'), ICON_SIZE_SMALL);

@@ -309,9 +309,8 @@ if (is_array($forumCategories)) {
                 // test if $whatsnew_post_info[$forum['forum_id']] is empty or not.
                 if (isset($forum['forum_id'])) {
                     if (!empty($whatsnew_post_info)) {
-                        if (
-                            isset($whatsnew_post_info[$forum['forum_id']])
-                            && is_array($whatsnew_post_info[$forum['forum_id']])
+                        if (isset($whatsnew_post_info[$forum['forum_id']]) &&
+                            is_array($whatsnew_post_info[$forum['forum_id']])
                         ) {
                             foreach ($whatsnew_post_info[$forum['forum_id']] as $key_thread_id => $new_post_array) {
                                 if (empty($whatsnew_post_info[$forum['forum_id']][$key_thread_id])) {
@@ -367,7 +366,8 @@ if (is_array($forumCategories)) {
                         }
                         // Validation when belongs to a session
                         $forumInfo['icon_session'] = api_get_session_image(
-                            $forum['session_id'], $_user['status']
+                            $forum['session_id'],
+                            $_user['status']
                         );
                         if ($forum['forum_of_group'] != '0') {
                             $my_all_groups_forum_name = isset($all_groups[$forum['forum_of_group']]['name'])
@@ -454,7 +454,6 @@ if (is_array($forumCategories)) {
                             }
                         }
                         $forumInfo['last_poster_id'] = $poster_id;
-
                         if (!empty($forum['last_poster_id'])) {
                             $forumInfo['last_poster_date'] = api_convert_and_format_date($forum['last_post_date']);
                             $forumInfo['last_poster_user'] = display_user_link($poster_id, $name, null, $username);

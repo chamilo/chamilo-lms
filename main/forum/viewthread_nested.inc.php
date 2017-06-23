@@ -143,12 +143,12 @@ foreach ($posts as $post) {
     ) {
         if ($locked == false) {
             $deleteUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
-                    'forum' => $clean_forum_id,
-                    'thread' => $clean_thread_id,
-                    'action' => 'delete',
-                    'content' => 'post',
-                    'id' => $post['post_id']
-                ]);
+                'forum' => $clean_forum_id,
+                'thread' => $clean_thread_id,
+                'action' => 'delete',
+                'content' => 'post',
+                'id' => $post['post_id']
+            ]);
             $iconEdit .= Display::url(
                 Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL),
                 $deleteUrl,
@@ -292,8 +292,7 @@ foreach ($posts as $post) {
     $html .= '</div>';
 
     // note: this can be removed here because it will be displayed in the tree
-    if (
-        isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]) &&
+    if (isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]) &&
         !empty($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]) &&
         !empty($whatsnew_post_info[$_GET['forum']][$post['thread_id']])
     ) {

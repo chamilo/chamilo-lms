@@ -40,7 +40,6 @@ $origin = api_get_origin();
 $nameTools = get_lang('ToolForum');
 
 // Breadcrumbs
-
 if (isset($_SESSION['gradebook'])) {
     $gradebook = $_SESSION['gradebook'];
 }

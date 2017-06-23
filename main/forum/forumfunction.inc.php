@@ -6098,4 +6098,3 @@ function postIsEditableByStudent($forum, $post)
         return true;
     }
 }
-

@@ -72,7 +72,7 @@ if (!api_is_allowed_to_edit(false, true) &&
 
 // 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category['visibility'] && $current_forum_category['locked'] <> 0) OR $current_forum['locked'] <> 0)
+    (($current_forum_category['visibility'] && $current_forum_category['locked'] <> 0) || $current_forum['locked'] <> 0)
 ) {
     api_not_allowed();
 }

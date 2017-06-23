@@ -197,8 +197,8 @@ if ($my_message != 'PostDeletedSpecial') {
             }
             // new thread link
             if ((
-                    api_is_allowed_to_edit(false, true) &&
-                    !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)
+                api_is_allowed_to_edit(false, true) &&
+                !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)
                 ) ||
                 ($current_forum['allow_new_threads'] == 1 && isset($_user['user_id'])) ||
                 ($current_forum['allow_new_threads'] == 1 && !isset($_user['user_id']) && $current_forum['allow_anonymous'] == 1)

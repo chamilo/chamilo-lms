@@ -423,11 +423,10 @@ class Template
         $this->assign('show_toolbar', $show_toolbar);
 
         //Only if course is available
-        $show_course_shortcut        = null;
+        $show_course_shortcut = null;
         $show_course_navigation_menu = null;
 
         if (!empty($this->course_id) && $this->user_is_logged_in) {
-
             if (api_get_setting('show_toolshortcuts') != 'false') {
                 //Course toolbar
                 $show_course_shortcut = CourseHome::show_navigation_tool_shortcuts();
@@ -727,8 +726,7 @@ class Template
             $js_files[] = 'fontresize.js';
         }
 
-        $js_file_to_string = null;
-
+        $js_file_to_string = '';
         $bowerJsFiles = [
             'modernizr/modernizr.js',
             'jquery/dist/jquery.min.js',
@@ -877,11 +875,10 @@ class Template
 
         $this->assign('title_string', $title_string);
 
-        //Setting the theme and CSS files
+        // Setting the theme and CSS files
         $css = $this->setCssFiles();
         $this->set_js_files();
         $this->setCssCustomFiles($css);
-        //$this->set_js_files_post();
 
         $browser = api_browser_support('check_browser');
         if ($browser[0] == 'Internet Explorer' && $browser[1] >= '11') {
@@ -997,13 +994,11 @@ class Template
             $this->assign('logout_link', api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id());
         }
 
-        //Profile link
+        // Profile link
         if (api_get_setting('allow_social_tool') == 'true') {
             $profile_url = api_get_path(WEB_CODE_PATH).'social/home.php';
-
         } else {
             $profile_url = api_get_path(WEB_CODE_PATH).'auth/profile.php';
-
         }
 
         $this->assign('profile_url', $profile_url);
@@ -1207,7 +1202,6 @@ class Template
     public function show_header_template()
     {
         $tpl = $this->get_template('layout/show_header.tpl');
-
         $this->display($tpl);
     }
 
@@ -1333,7 +1327,6 @@ class Template
         global $loginFailed;
         $userId = api_get_user_id();
         if (!($userId) || api_is_anonymous($userId)) {
-
             // Only display if the user isn't logged in.
             $this->assign(
                 'login_language_form',
@@ -1458,17 +1451,38 @@ class Template
 
                 // Minimum options using all defaults (including defaults for Image_Text):
                 //$options = array('callback' => 'qfcaptcha_image.php');
-
                 $captcha_question = $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
                 $form->addHtml(get_lang('ClickOnTheImageForANewOne'));
 
-                $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'));
-                $form->addRule('captcha', get_lang('EnterTheCharactersYouReadInTheImage'), 'required', null, 'client');
-                $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
+                $form->addElement(
+                    'text',
+                    'captcha',
+                    get_lang('EnterTheLettersYouSee')
+                );
+                $form->addRule(
+                    'captcha',
+                    get_lang('EnterTheCharactersYouReadInTheImage'),
+                    'required',
+                    null,
+                    'client'
+                );
+                $form->addRule(
+                    'captcha',
+                    get_lang('TheTextYouEnteredDoesNotMatchThePicture'),
+                    'CAPTCHA',
+                    $captcha_question
+                );
             }
         }
 
-        $form->addButton('submitAuth', get_lang('LoginEnter'), null, 'primary', null, 'btn-block');
+        $form->addButton(
+            'submitAuth',
+            get_lang('LoginEnter'),
+            null,
+            'primary',
+            null,
+            'btn-block'
+        );
 
         $html = $form->returnForm();
         if (api_get_setting('openid_authentication') == 'true') {
@@ -1498,7 +1512,8 @@ class Template
      * Manage specific HTTP headers security
      * @return void (prints headers directly)
      */
-    private function addHTTPSecurityHeaders() {
+    private function addHTTPSecurityHeaders()
+    {
         // Implementation of HTTP headers security, as suggested and checked
         // by https://securityheaders.io/
         // Enable these settings in configuration.php to use them on your site

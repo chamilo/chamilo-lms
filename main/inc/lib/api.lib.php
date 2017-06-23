@@ -7859,7 +7859,13 @@ function api_mail_html(
     if (isset($platform_email['SMTP_UNIQUE_SENDER']) && $platform_email['SMTP_UNIQUE_SENDER']) {
         $senderName = $platform_email['SMTP_FROM_NAME'];
         $senderEmail = $platform_email['SMTP_FROM_EMAIL'];
+        $valid = PHPMailer::validateAddress($senderEmail);
+        if ($valid) {
+            //force-set Sender to $senderEmail, otherwise SetFrom only does it if it is currently empty
+            $mail->Sender = $senderEmail;
+        }
     }
+
     $mail->SetFrom($senderEmail, $senderName);
     $mail->Subject = $subject;
     $mail->AltBody = strip_tags(

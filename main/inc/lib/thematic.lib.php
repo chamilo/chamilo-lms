@@ -885,11 +885,11 @@ class Thematic
                         tp.id, thematic_id, tp.title, description, description_type, t.session_id
                     FROM $tbl_thematic_plan tp
                     INNER JOIN $tbl_thematic t 
-                    ON (t.id = tp.thematic_id)
+                    ON (t.id = tp.thematic_id AND t.c_id = tp.c_id)
                     WHERE
                         t.c_id = $course_id AND
                         tp.c_id = $course_id
-                        $condition  AND
+                        $condition AND
                         tp.id IN (".implode(', ', $thematic_plan_id_list).") ";
 
             $rs = Database::query($sql);

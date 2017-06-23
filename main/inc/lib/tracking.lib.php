@@ -312,7 +312,7 @@ class Tracking
 
                 $result = Database::query($sql);
                 $num = Database::num_rows($result);
-                $time_for_total = 'NaN';
+                $time_for_total = 0;
 
                 // Extend all
                 if (($extend_this || $extend_all) && $num > 0) {
@@ -616,7 +616,6 @@ class Tracking
                     $extend_this_attempt = 0;
                     $inter_num = learnpath::get_interactions_count_from_db($row['iv_id'], $course_id);
                     $objec_num = learnpath::get_objectives_count_from_db($row['iv_id'], $course_id);
-
                     $extend_attempt_link = '';
                     if ($inter_num > 0 || $objec_num > 0) {
                         if (!empty($extendAttemptId) && $extendAttemptId == $row['iv_id']) {
@@ -657,19 +656,17 @@ class Tracking
                     while ($tmp_row = Database::fetch_array($result)) {
                         $subtotal_time += $tmp_row['mytime'];
                     }
-
                     $title = $row['mytitle'];
-
                     // Selecting the exe_id from stats attempts tables in order to look the max score value.
                     $sql = 'SELECT * FROM '.$tbl_stats_exercices.'
                             WHERE
-                                exe_exo_id="' . $row['path'].'" AND
-                                exe_user_id="' . $user_id.'" AND
-                                orig_lp_id = "' . $lp_id.'" AND
-                                orig_lp_item_id = "' . $row['myid'].'" AND
-                                c_id = ' . $course_id.' AND
+                                exe_exo_id="'.$row['path'].'" AND
+                                exe_user_id="'.$user_id.'" AND
+                                orig_lp_id = "'.$lp_id.'" AND
+                                orig_lp_item_id = "'.$row['myid'].'" AND
+                                c_id = '.$course_id.' AND
                                 status <> "incomplete" AND
-                                session_id = ' . $session_id.'
+                                session_id = '.$session_id.'
                              ORDER BY exe_date DESC
                              LIMIT 1';
 
@@ -1131,14 +1128,15 @@ class Tracking
 
         if (!$is_allowed_to_edit && $result_disabled_ext_all) {
             $final_score = Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
+            $finalScoreToCsv = get_lang('ResultsHiddenByExerciseSetting');
         } else {
             if (is_numeric($total_score)) {
                 $final_score = $total_score.'%';
             } else {
                 $final_score = $total_score;
             }
+            $finalScoreToCsv = $final_score;
         }
-
         $progress = learnpath::getProgress($lp_id, $user_id, $course_id, $session_id);
 
         if (($counter % 2) == 0) {
@@ -1185,7 +1183,7 @@ class Tracking
             $temp = array(
                 get_lang('AccomplishedStepsTotal'),
                 '',
-                $final_score
+                $finalScoreToCsv
             );
 
             if ($hideTime === false) {

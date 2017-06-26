@@ -270,7 +270,10 @@ class ScheduledAnnouncement extends Model
                     $sessionId = $result['session_id'];
                     $sessionInfo = api_get_session_info($sessionId);
                     self::update(['id' => $result['id'], 'sent' => 1]);
-                    $users = SessionManager::get_users_by_session($sessionId);
+                    $users = SessionManager::get_users_by_session(
+                        $sessionId,
+                        0
+                    );
                     $subject = $result['subject'];
                     $message = $result['message'];
 

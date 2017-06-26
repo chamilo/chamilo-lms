@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 /**
  *
  *                             SCRIPT PURPOSE
@@ -110,8 +113,6 @@
 */
 
 // Verified if exists the username and password in session current
-
-use ChamiloSession as Session;
 
 // Facebook connexion, if activated
 if (api_is_facebook_auth_activated() && !api_get_user_id()) {
@@ -1392,3 +1393,7 @@ if ((isset($cas_login) && $cas_login && exist_firstpage_parameter()) ||
 }
 
 Redirect::session_request_uri($logging_in, $user_id);
+
+if (!ChamiloApi::isAjaxRequest()) {
+    SurveyManager::protectByMandatory();
+}

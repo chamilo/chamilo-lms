@@ -158,6 +158,9 @@ $form->addElement('select', 'visible_results', get_lang('ResultsVisibility'), $v
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 
+$extraField = new ExtraField('survey');
+$extraField->addElements($form, $survey_id);
+
 // Additional Parameters
 $form->addButtonAdvancedSettings('advanced_params');
 $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
@@ -270,6 +273,9 @@ if ($form->validate()) {
     $values = $form->getSubmitValues();
     // Storing the survey
     $return = SurveyManager::store_survey($values);
+
+    $extraFieldValue = new ExtraFieldValue('survey');
+    $extraFieldValue->saveFieldValues($values);
 
     // Redirecting to the survey page (whilst showing the return message)
     header('location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$return['id'].'&'.api_get_cidreq());

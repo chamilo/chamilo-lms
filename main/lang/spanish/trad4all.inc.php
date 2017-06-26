@@ -8045,4 +8045,5 @@ Existe dos tipos de anuncios que se pueden enviar:
 Envío en una fecha concreta: En este caso se selecciona un día concreto para hacer el envío.
 
 Envío en base a la fecha de inicio/finalización de la sesión: en este caso se ha de indicar el número de días que han de pasar antes de enviar el anuncio. Y esos días pueden estar asociados a antes o después de la fecha de inicio/finalización. Por ejemplo: 3 días después de fecha de inicio.";
+$MandatorySurveyNoAnswered = "Usted tiene pendiente una encuesta obligatoria. Para ingresar al curso, primero deberá completarla";
 ?>

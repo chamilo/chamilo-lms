@@ -290,12 +290,26 @@ class ScheduledAnnouncement extends Model
                                 $progress = '0%';
                             }
 
+                            $startTime = api_get_local_time(
+                                $sessionInfo['access_start_date'],
+                                null,
+                                null,
+                                true
+                            );
+                            $endTime = api_get_local_time(
+                                $sessionInfo['access_end_date'],
+                                null,
+                                null,
+                                true
+                            );
+
                             $tags = [
                                 '((session_name))' => $sessionInfo['name'],
+                                '((session_start_date))' => $startTime,
+                                '((session_end_date))' => $endTime,
                                 '((user_complete_name))' => $userInfo['complete_name'],
                                 '((user_first_name))' => $userInfo['firstname'],
                                 '((user_last_name))' => $userInfo['lastname'],
-                                //'((course_title))' => $userInfo['lastname'],
                                 '((lp_progress))' => $progress,
                             ];
 
@@ -324,6 +338,8 @@ class ScheduledAnnouncement extends Model
     {
         $tags = [
             '((session_name))',
+            '((session_start_date))',
+            '((session_end_date))',
             '((user_complete_name))',
             '((user_first_name))',
             '((user_last_name))',

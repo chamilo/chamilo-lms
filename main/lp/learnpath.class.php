@@ -9107,7 +9107,7 @@ class learnpath
                 $return .= '<input class="form-control" size="4" maxlength="3" name="min_'.$item['id'].'" type="number" min="0" step="any" max="'.$item['max_score'].'" value="'.$selectedMinScoreValue.'" />';
                 $return .= '</td>';
                 $return .= '<td>';
-                $return .= '<input class="form-control" size="4" maxlength="3" name="max_'.$item['id'].'" type="number" min="0" step="any" max="'.$item['max_score'].'" value="'.$selectedMaxScoreValue.'" />';
+                $return .= '<input class="form-control" size="4" maxlength="3" readonly name="max_'.$item['id'].'" type="number" min="0" step="any" max="'.$item['max_score'].'" value="'.$selectedMaxScoreValue.'" />';
                 $return .= '</td>';
             }
 
@@ -9116,7 +9116,7 @@ class learnpath
                 $return .= '<center><input size="4" maxlength="3" name="min_'.$item['id'].'" type="number" min="0" step="any" max="'.$item['max_score'].'" value="'.$selectedMinScoreValue.'" /></center>';
                 $return .= '</td>';
                 $return .= '<td>';
-                $return .= '<center><input size="4" maxlength="3" name="max_'.$item['id'].'" type="number" min="0" step="any" max="'.$item['max_score'].'"  value="'.$selectedMaxScoreValue.'" /></center>';
+                $return .= '<center><input size="4" maxlength="3" name="max_'.$item['id'].'" readonly type="number" min="0" step="any" max="'.$item['max_score'].'"  value="'.$selectedMaxScoreValue.'" /></center>';
                 $return .= '</td>';
             }
             $return .= '</tr>';

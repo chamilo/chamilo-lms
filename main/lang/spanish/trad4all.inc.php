@@ -609,7 +609,7 @@ $Forbidden = "Usted no está registrado como responsable de este curso";
 $CourseAccessConfigTip = "Por defecto el curso es público. Pero Ud. puede definir el nivel de confidencialidad en los botones superiores.";
 $OpenToTheWorld = "Público - acceso autorizado a cualquier persona";
 $OpenToThePlatform = "Abierto - acceso autorizado sólo para los usuarios registrados en la plataforma";
-$OpenToThePlatform = "Abierto - acceso permitido sólo a los usuarios registrados en la plataforma";
+$StudentXIsNotSubscribedToCourse = "El estudiante %s no está inscrito a este curso";
 $TipLang = "Este será el idioma que verán todos los visitantes del curso.";
 $Vid = "Video";
 $Work = "Trabajos";
@@ -1115,7 +1115,7 @@ $CsvExplain = "El fichero se debe presentar así: <blockquote><pre><b>URL</b>;ca
 $LinkUpdated = "El enlace ha sido actualizado";
 $OnHomepage = "¿ Mostrar el enlace en la página principal del curso";
 $ShowLinkOnHomepage = "Mostrar este enlace como un icono en la página principal del curso";
-$General = "general";
+$General = "General";
 $SearchFeatureDoIndexLink = "¿Indexar título y descripción?";
 $SaveLink = "Guardar el enlace";
 $SaveCategory = "Guardar la categoría";
@@ -1213,7 +1213,7 @@ $ShowAndSubscribeClosed = "Visible / Cerrado";
 $AdminThisUser = "Volver a este usuario";
 $Manage = "Administrar la Plataforma";
 $EnrollToCourseSuccessful = "Su inscripción en el curso se ha completado";
-$SubCat = "sub-categorías";
+$SubCat = "Subcategorías";
 $UnsubscribeNotAllowed = "En este curso no está permitido que los propios usuarios puedan anular su inscripción.";
 $CourseAdminUnsubscribeNotAllowed = "Actualmente es el administrador de este curso";
 $CourseManagement = "Catálogo de cursos";
@@ -1819,8 +1819,8 @@ $XMLNotValid = "El documento XML no es válido";
 $ForTheSession = "de la sesión";
 $AllowEmailEditorTitle = "Activar el editor de correo electrónico en línea";
 $AllowEmailEditorComment = "Si se activa esta opción, al hacer clic en un correo electrónico, se abrirá un editor en línea.";
-$AddCSVHeader = "¿ Añadir la linea de cabecera del CSV ?";
-$YesAddCSVHeader = "Sí, añadir las cabeceras CSV <br /> Esta línea define los campos y es necesaria cuando quiera importar el archivo en otra plataforma Chamilo";
+$AddCSVHeader = "¿Incluir las cabeceras?";
+$YesAddCSVHeader = "Sí, añadir las cabeceras<br /> Esta primera línea identifica los campos y es útil, entre otras situaciones, cuando quiera importar el archivo en algun portal Chamilo";
 $ListOfUsersSubscribedToCourse = "Lista de usuarios inscritos en el curso";
 $NumberOfCourses = "Número de cursos";
 $ShowDifferentCourseLanguage = "Mostrar los idiomas de los cursos";
@@ -4008,7 +4008,7 @@ $ApprovalForNewAccount = "Validación de una nueva cuenta";
 $ManageUser = "Gestión de usuario";
 $SubscribeUserToCourseAsTeacher = "Inscribir profesores";
 $PasswordEncryptedForSecurity = "Su contraseña está encriptada para su seguridad. Por ello, cuando haya pulsado en el enlace para regenerar su clave se le remitirá un nuevo correo que contendrá su contraseña.";
-$SystemUnableToSendEmailContact = "El sistema no ha podido enviarle el correo electrónico";
+$ExtraFields = "Campos extras";
 $OpenIDCouldNotBeFoundPleaseRegister = "Este OpenID no se encuentra en nuestra base de datos. Por favor, regístrese para obtener una cuenta. Si ya tiene una cuenta con nosotros,  edite su perfil en la misma para añadir este OpenID";
 $UsernameMaxXCharacters = "El nombre de usuario puede tener como máximo una longitud de %s caracteres";
 $PictureUploaded = "Su imagen ha sido enviada";
@@ -4764,10 +4764,9 @@ $DropboxContent = "<p>Compartir documentos es una herramienta de gestión de con
 $HHome = "Ayuda: Página principal del curso";
 $HomeContent = "<p>La página principal del curso muestra varias herramientas: un texto de introducción, una descripción del curso, un gestor de documentos, etc. Esta página tiene un funcionamiento modular: con un sólo clic puede hacer visible  / invisible cualquier herramienta. Las herramientas ocultas pueden ser reactivadas en cualquier momento.</p> <b>Navegación</b> <p>Para moverse por el curso dispone de dos barras de navegación. Una en la parte superior izquierda, que muestra el lugar del curso en el que Vd. se encuentra. Otra (en el caso de que esté activada), en la parte superior derecha que permite acceder a cualquier herramienta haciendo clic en su icono. Si en la barra de navegación izquierda selecciona el nombre del curso, o si pulsa sobre el icono en forma de casa de la barra de navegación derecha, irá a la página principal del curso. </p><p><b>Buenas prácticas</b> </p><p>Para motivar a sus estudiantes  es importante que el sitio de su curso sea un sitio dinámico. Esto indicará que hay 'alguien detrás de la pantalla'. Una forma rápida de dar esa sensación es corregir el contenido del texto de introducción del curso semanalmente para dar las últimas noticias. Aunque puede ser que desee reservar este espacio para un contenido más estable, por ejemplo, el logotipo del curso.</p><p>Para construir un curso siga estos  pasos:<ol>  <li>Impida el acceso al curso durante el proceso de elaboración. Para ello, compruebe mediante la herramienta 'Configuración del curso' que el acceso al mismo sea privado y que esté deshabilitada la inscripción por parte de los usuarios.  </li>   <li>Muestre todas las herramientas haciendo clic en el ojo cerrado que las acompaña. </li>  <li>Utilice las herramientas que necesite para 'llenar' su sitio con contenidos, eventos, directrices, ejercicios, etc</li>   <li>Oculte todas las herramientas : su página principal estará vacía en la 'Vista de estudiante' </li>  <li>Use la herramienta 'Lecciones' para estructurar la secuencia que los alumnos seguirán para visitar las diferentes herramientas y aprender con ellas. De esta forma, usted utiliza el resto de las herramientas, pero no las muestra simultáneamente. </li>   <li>Haga clic sobre el icono en forma de ojo para que la lección que ha creado se muestre en la página principal del curso.</li>   <li>La preparación del sitio para su curso está completa. Su página principal muestra solamente un texto de introducción seguido de un enlace, el cual conduce a los estudiantes a través del curso. Haga clic en 'Vista de alumno' (arriba a la derecha) para previsualizar lo que los estudiantes verán.</li></ol>";
 $HOnline = "Ayuda: Conferencia online";
-$OnlineContent = "<br><span style=\"font-weight: bold;\">Introducción</span><br> <br> <div style=\"margin-left: 40px;\">El sistema de Conferencia Online de chamilo le permite de forma sencilla, enseñar, informar o reunir a más de 500 personas.<br> </div> <ul> <ul> <li><b>audio :</b> la voz del ponente se envía por broadcast en tiempo real a los participantes en calidad radio FM fracias al streaming mp3<br> </li> <li><b>diapositivas:</b> los participantes siguen las presentaciones de PowerPoint, Flash, PDF...<br> </li> <li><b>interacción :</b> los participantes pueden realizar sus preguntas al ponente a través del Chat.</li> </ul> </ul> <span style=\"font-weight: bold;\"></span><span style=\"font-weight: bold;\"><br> Estudiante / asistente</span><br> <br> <div style=\"margin-left: 40px;\">Para asistir a la conferencia Vd. necesita:<br> </div> <br> <div style=\"margin-left: 40px;\">1. Altavoces (o auriculares) conectados a su PC<br>  <br> 2. Winamp Media player<br> <br> <a href=\"http://www.winamp.com\"><img style=\"border: 0px solid ; width: 87px; height: 27px;\" alt=\"Winamp\" src=\"../img/winamp.gif\"></a><br> <br> Mac : use <a href=\"http://www.quicktime.com\">Quicktime</a><br> Linux : use <a href=\"http://www.xmms.org\">XMMS</a> <br> <br>    3. Acrobat PDF reader, Word, PowerPoint, Flash, ..., dependiendo del formato de las diapositivas del profesor<br> <br> <a href=\"http://www.acrobat.com\"><img style=\"border: 0px solid ; width: 87px; height: 31px;\" alt=\"acrobat reader\" src=\"../img/acroread.gif\"></a><br> </div> <br> <span style=\"font-weight: bold;\"><br>  Profesor / ponente</span><br> <br> <div style=\"margin-left: 40px;\">Para dar una conferencia Vd. necesita:<br> </div> <br> <div style=\"margin-left: 40px;\">1. Unos auriculares con micrófono<br> <br> <img style=\"border: 0px solid ; width: 87px; height: 87px;\" alt=\"Auriculares\" src=\"../img/headset.gif\"></a><br>  <br>  <br> 2. Winamp<br> <br> <a href=\"http://www.winamp.com\"><img style=\"border: 0px solid ; width: 87px; height: 27px;\" alt=\"Winamp\" src=\"../img/winamp.gif\"></a><br> <br>  3. SHOUTcast DSP Plug-In para Winamp 2.x <br> <br> <a href=\"http://www.shoutcast.com\"><img style=\"border: 0px solid ; width: 87px; height: 24px;\" alt=\"Shoutcast\" src=\"../img/shoutcast.gif\"></a><br> <br>  Siga las instrucciones de <a href=\"http://www.shoutcast.com\">www.shoutcast.com</a> para instalar y configurar Shoutcast Winamp DSP Plug-In. <br> </div> <br> <span style=\"font-weight: bold;\"><br>  ¿ Cómo dar una conferencia ?<br> <br> </span> <div style=\"margin-left: 40px;\">   <p>Crear un curso en chamilo > Entrar en el curso > Hacer visible la herramienta Conferencia Online > Editar los parámetros (icono en forma de lápiz, arriba a la izquierda) > Enviar sus diapositivas (PDF, PowerPoint....) > Escribir un texto de introducción > escribir la URL desde donde se va a proveer el streaming.</p>   </div>  <div style=\"margin-left: 40px;\">   <p><img style=\"width: 256px; height: 182px;\" alt=\"conference config\" src=\"../img/conf_screen_conf.gif\"><br>    No olvide dar previamente a los futuros participantes en la reunión una fecha, hora y directrices lo suficientemente claras..<br>    <br>    <span style=\"font-weight: bold;\">Consejo</span> : 10 minutos antes de la conferencia, escriba un pequeño mensaje informando a los participantes de que está online y puede ayudarles a solucionar algún problema de audio. </p>   <p> <br>      <span style=\"font-weight: bold;\">Servidor de streaming</span><br>    Para dar una conferencia en tiempo real, necesita un servidor de streaming y probablemente personal técnico que le ayude a realizarla. El técnico le suministrará el URL que necesita escribir en el campo de streaming cuando edita los parámetros de la herramienta Conferencia Online.<br>      <br>      <small><a href=\"http://www.chamilo.com/hosting.php#streaming\"><img style=\"border: 0px solid ; width: 258px; height: 103px;\" alt=\"chamilo streaming\" src=\"../img/streaming.jpg\"><br>      Chamilo streaming</a></small><br>      <br>     Hágalo usted mismo : instale, configure y administre <a href=\"http://www.shoutcast.com\">Shoutcast</a> o <a href=\"http://developer.apple.com/darwin/projects/streaming/\">Apple Darwin</a>. <br>      <br>     O contacte con Beeznest. Podemos ayudarles a organizar su conferencia, asistir a su ponente y alquilarle a bajo costo la posibilidad de streaming en nuestros servidores: <a href=\"http://www.chamilo.com/hosting.php#streaming\">http://www.chamilo.com/hosting.php</a><br>      <br>      <br>   </p> </div>";
+$YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap = "El plugin GoogleMaps tiene que ser activado por el administrador de la plataforma para que se pueda ver el mapa.";
 $HClar = "Ayuda: Chamilo";
 $HDoc = "Ayuda: Documentos";
-$DocContent = "<p>El módulo de gestión de documentos funciona de manera semejante al gestor de ficheros de su ordenador. </p> <p><b>Los profesores pueden</b> crear páginas web simples ('Crear un documento HTML') o transferir a esta  sección, archivos de cualquier tipo (HTML, Word, PowerPoint, Excel, PDF, Flash, QuickTime, etc.). Tenga en cuenta    que no todos los archivos que envíe podrán ser vistos por los demás usuarios, quienes deberán disponer de las\t herramientas apropiadas para abrirlos, en caso contrario, al hacer clic sobre el nombre del archivo tan\t  sólo podrán descargarlo. Esta descarga siempre será posible si pulsan sobre\t   el icono <img src=../document/../img/save.gif width=20 height=20>. No olvide revisar previamente con un antivirus los ficheros\t    que se envíe al servidor.</p> <p>Los documentos se presentan en la pantalla por orden alfabético. Si desea que los documentos se ordenen de manera diferente, puede renombrarlos haciendo que vayan precedidos de un número (01, 02, 03, ...). También puede usar la herramienta lecciones para presentar una sofisticada tabla de contenidos. Tenga en cuenta que cuando transfiere documentos al servidor, puede decidir   no mostrar la sección 'Documentos' y sólo mostrar una página de inicio    (añadir un enlace a la página web principal de la actividad) y/o unas Lecciones que contenga sólo alguno de los\t archivos de la sección Documentos.</p> <hr>\t<h4>Transferencia de documentos</h4>   <ol>  <li>Sitúese en la carpeta del módulo ' Documentos' a donde quiere enviar los archivos   (por defecto al directorio raíz del curso).</li>  <li>Pulse sobre la opción 'Enviar un documento'; esto le llevará a una pantalla en la que seleccionará el documento de su ordenador con la ayuda del botón <input type=submit value=Examinar... name=submit2>.</li>  <li>Transfiera el documento a la web del curso pulsando el botón     <input type=submit value=Enviar name=submit2>.</li>  <li>Si el nombre del documento contiene acentos u otros caracteres especiales puede ser que deba renombrarlo para que se abra correctamente. </li></ol><p>  También es posible enviar varios documentos en un archivo comprimido en formato zip y ordenar, si así lo desea, que se descomprima automáticamente en el servidor.</p><p>  Además de archivos zip convencionales se pueden enviar archivos SCORM comprimidos, que también tendrán la extensión zip. Los contenidos SCORM son tutoriales especiales que han sido diseñados de acuerdo  con una norma internacional: SCORM. Es un formato especial para que los contenidos educativos puedan ejecutarse e intercambiarse   libremente entre distintos Sistemas de Gestión del Conocimiento (LMS= Learning Management Systems). En otras palabras, los    materiales SCORM son independientes de la plataforma, siendo su importación y exportación muy simple. La gestión de estos archivos se realiza a través de la herramienta Lecciones. </p> <p>  Tenga en cuenta que el administrador de la plataforma ha definido un tamaño máximo para cualquier archivo que transfiera. Si desea enviar archivos mayores (por ej., vídeos...) póngase en contacto con él.</p>   <p>  <b>Observaciones especiales para el envío de páginas web</b>.</p><p>El envío de páginas web simples no plantea ningún problema, aunque si su complejidad es mayor puede ser que no tengan el funcionamiento esperado. En estos casos se recomienda empaquetar sus páginas web como archivos  SCORM comprimidos y usar la herramienta Lecciones (ver más arriba).<hr><h4>Gestión de directorios y archivos </h4><h3>  Crear una carpeta.</h3><p>Esto le permitirá organizar el contenido de la sección 'Documentos' guardando los documentos en diferentes carpetas o directorios. Puede crear tantas subcarpetas como desee.</p> <ol><li>Hacer clic sobre <img src=../document/../img/dossier.gif width=20 height=20> 'Crear un directorio', situado en la parte superior</li><li>Introduzca el nombre del nuevo directorio. </li><li>Valide haciendo clic en <input type=submit value=OK name=submit23>. </li></ol><h3>  Borrar un directorio o un archivo. </h3><ol><li>Haga clic en el botón <img src=../img/delete.gif width=20 height=20> de la columna 'Modificar'. </li></ol><h3>  Cambiar el nombre de un directorio o de un archivo. </h3><ol><li>Haga clic en el botón <img src=../document/../img/edit.gif width=20 height=20><img src=../document/../img/comment.gif width=20 height=20> de la columna  'Modificar'. </li><li>Introduzca el nuevo nombre. </li><li>Valide haciendo clic en <input type=submit value=OK name=submit24>. </li></ol><h3>  Mover un directorio o un archivo a otro directorio. </h3><ol><li>Haga clic sobre el botón <img src=../document/../img/deplacer.gif width=34 height=16> de la columna 'Modificar'</li><li>Escoja la carpeta a la que quiere mover el documento, haciendo clic sobre el menú desplegable (la palabra \"raíz\" en dicho menú representa el directorio principal de la sección 'Documentos'). </li><li>Valide haciendo clic en <input type=submit value=OK name=submit25>. </li></ol><h3>  Añadir un comentario a un documento o a una carpeta </h3><ol><li>Haga clic en el botón <img src=../document/../img/edit.gif width=20 height=20><img src=../document/../img/comment.gif width=20 height=20> de la columna 'Modificar'</li><li>Introduzca, modifique o borre el comentario en la zona prevista. </li><li>Valide haciendo clic en <input type=submit value=OK name=submit26>. </li></ol><h3>  Ocultar una carpeta o un documento a los miembros de la actividad. </h3><ol><li>Haga clic en el botón <img src=../img/visible.gif width=20 height=20> de la columna 'Modificar'</li><p>  El documento o el directorio continúa existiendo, pero ya no será visible para los miembros de la actividad. </p><p>  Si desea que este elemento vuelva a ser visible, haga clic en el botón <img src=../document/../img/invisible.gif width=24 height=20>.</p></ol><h3>  Ver una carpeta o un archivo. </h3><p>Para ver el contenido de una carpeta bastará pulsar sobre su nombre. En el caso de un archivo, el procedimiento es similar, aunque tendremos que tener instalados los programas necesarios para su visualización, en caso  contrario intentará descargarlos. Se debe tener especial cuidado con los archivos de extensiones ejecutables, los cuales   recomendamos sean escaneados con un antivirus cuando se descarguen.</p><p><b>Ver varias imágenes como una presentación </b></p><p>Cuando el sistema detecta la existencia de imágenes en una carpeta, se activa la opción Mostrar presentación', junto a la Ayuda. Esta permite ver estas imágenes de forma secuencial. Como  en cualquier presentación, conviene recordar que las imágenes no sólo pueden consistir en fotos,   sino también esquemas, mapas conceptuales, etc. </p><hr><h4>Creación y edición de documentos en formato HTML </h4><p>Puede crear y editar directamente en el servidor un documento en formato HTML sin salir de su navegador. </p><p>  Para crear un documento web, haga clic sobre '<img src=../document/../img/defaut.gif width=20 height=20> Crear un documento', déle un nombre (evite que el nombre contenga  acentos u otros caracteres especiales), y utilice el editor para componer el documento. </p><p>  Para modificar el contenido de un documento web, haga clic en el botón <img src=../document/../img/edit.gif width=20 height=20><img src=../document/../img/comment.gif width=20 height=20>de la columna 'Modificar', y se presentará un editor web además de las posibilidades de renombrar y añadir un comentario al documento. </p><p><b>Sobre el editor HTML de la Plataforma. </b></p><p>El editor de documentos HTML es del tipo WYSIWYG (What You See Is What You Get=Lo que ve es lo que obtendrá), lo que permite componerlos sin tener que rellenar líneas de código HTML, aunque podrá ver el código pulsando  sobre el botón '< >'. Un menú con diversos botones le facilitará la elección del tipo y   tamaño de letra, sangrar, hacer listas, colorear, crear enlaces, tablas, insertar imágenes, etc. También    es posible cortar y pegar. Se trata de un editor elemental, pero que no precisa de ningún otro programa adicional a su navegador.</p>\t<hr><h4>Crear una Leccion </h4><p>Esta utilidad le permite construir lecciones con el contenido de las actividades. El resultado formará una tabla de materias, pero con más posibilidades. Para más información, ir al módulo Lecciones y ver su ayuda contextual. </p>";
 $HUser = "Ayuda: Usuarios";
 $HExercise = "Ayuda: Ejercicios";
 $HPath = "Ayuda: Lecciones";
@@ -5346,8 +5345,8 @@ $AddTimeLimit = "Añadir límite de tiempo";
 $EditTimeLimit = "Editar límite de tiempo";
 $TheTimeLimitsAreReferential = "El plazo de una categoría es referencial, no afectará a los límites de una sesión de formación";
 $FieldTypeTag = "User tag";
-$SendEmailToAdminTitle = "Aviso por correo electrónico, de la creación de un nuevo curso";
-$SendEmailToAdminComment = "Enviar un correo electrónico al administrador de la plataforma, cada vez que un profesor cree un nuevo curso";
+$SendEmailToAdminTitle = "Aviso e-mail a la creación de nuevos cursos";
+$SendEmailToAdminComment = "Enviar un correo electrónico al administrador de la plataforma cada vez que un profesor cree un nuevo curso";
 $UserTag = "Etiqueta de usuario";
 $SelectSession = "Seleccionar sesión";
 $SpecialCourse = "Curso especial";
@@ -5899,7 +5898,7 @@ $UnsubscribeUsersAlreadyAddedInCourse = "Desinscribir todos los alumnos ya inscr
 $ImportUsers = "Importar usuarios";
 $HelpFolderLearningPaths = "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:\nEsta carpeta contiene los documentos que se crean desde la herramienta Lecciones. Aquí puede editar los HTML que se hayan creado al realizar una importación desde la herramienta Lecciones, por ejemplo desde Chamilo Rapid. Se recomienda mantener invisible esta carpeta a los alumnos.";
 $YouWillBeRedirectedInXSeconds = "Un momento por favor. Será re-dirigido a otra página dentro de %s segundos...";
-$ToProtectYourSiteMakeXReadOnlyAndDeleteY = "Para proteger su instalación, ponga la carpeta %s en solo lectura (chmod -r 0555 bajo Linux) y borre completamente la carpeta %s.";
+$ToProtectYourSiteMakeXReadOnlyAndDeleteY = "Para proteger su instalación, ponga la carpeta %s en solo lectura (chmod -R 0555 bajo Linux) y borre completamente la carpeta %s.";
 $NumberOfCoursesPublic = "Número de cursos públicos";
 $NumberOfCoursesOpen = "Número de cursos abiertos";
 $NumberOfCoursesPrivate = "Número de cursos privados";
@@ -5924,7 +5923,7 @@ $GenerateCertificates = "Generar certificados";
 $ExportAllCertificatesToPDF = "Exportar todos los certificados a PDF";
 $DeleteAllCertificates = "Eliminar todos los certificados";
 $ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage = "Existen usuarios usando este idioma. ¿Desea deshabilitar este idioma y actualizar estos usuarios con el idioma por defecto de la plataforma?";
-$dateFormatLongNoDay = "%d %B %Y";
+$dateFormatLongNoDay = "%d de %B de %Y";
 $dateFormatOnlyDayName = "%A";
 $ReturnToCourseList = "Regreso a lista de cursos";
 $dateFormatShortNumberNoYear = "%d/%m";
@@ -6661,11 +6660,12 @@ $SupportedScormContentMakers = "Paquetes Scorm soportados";
 $DisableEndDate = "Deshabilitar fecha final";
 $ForumCategories = "Categorías de foro";
 $Copy = "Copiar";
-$ArchiveDirCleanup = "Limpieza del directorio archive";
-$ArchiveDirCleanupDescr = "Chamilo guarda una copia de los archivos temporales que genera (para los backups, las exportaciones, las copias, etc) dentro del directorio archive/. Pasado un tiempo, todo esto puede llegar a ocupar bastante espacio en el disco duro. Si hace clic en el siguiente botón ejecutará una limpieza manual de este directorio. Esta operación debería ser realizada regularmente mediante la utilidad cron de Linux, pero si esto no es posible en su entorno puede utilizar esta página para eliminar todos los archivos temporales cada cierto tiempo.";
+$ArchiveDirCleanup = "Limpieza de caché y archivos temporales";
+$ArchiveDirCleanupDescr = "Chamilo guarda una copia de los archivos temporales que genera (para los backups, las exportaciones, las copias, etc) dentro del directorio app/cache/. Pasado un tiempo, todo esto puede llegar a ocupar bastante espacio en el disco duro. Si hace clic en el siguiente botón ejecutará una limpieza manual de este directorio. Esta operación debería ser realizada regularmente mediante la utilidad cron de Linux, pero si esto no es posible en su entorno puede utilizar esta página para eliminar todos los archivos temporales cada cierto tiempo.
+Esta opción limpia el caché de temas también.";
 $ArchiveDirCleanupProceedButton = "Ejecutar la limpieza";
-$ArchiveDirCleanupSucceeded = "El contenido del directorio archive/ ha sido eliminado.";
-$ArchiveDirCleanupFailed = "Por alguna razón (quizá por falta de permisos), no se pudo limpiar la carpeta archive/. Puede limpiarla manualmente conectándose al servidor y eliminando todo el contenido de la carpeta chamilo/archive/, excepto el fichero .htaccess.";
+$ArchiveDirCleanupSucceeded = "El contenido del directorio app/cache/ ha sido eliminado.";
+$ArchiveDirCleanupFailed = "Por alguna razón (quizá por falta de permisos), no se pudo limpiar la carpeta app/cache/. Puede limpiarla manualmente conectándose al servidor y eliminando todo el contenido de la carpeta chamilo/app/cache/, excepto el fichero .htaccess.";
 $EnableStartTime = "Usar tiempo de publicación";
 $EnableEndTime = "Usar tiempo de fin de publicación";
 $LocalTimeUsingPortalTimezoneXIsY = "La hora local usando la zona horaria del portal (%s) es %s";
@@ -7041,7 +7041,7 @@ $LdapDescriptionComment = "<div class=\"alert alert-info\">
     <p>Los valores del Array son &lt;chamilo_field&gt; =&gt; &gt;ldap_field&gt;</p><p>
     </p>
     <h4>II. Activar la atenticación LDAP</h4>
-    <h5>Editar el archivo main/inc/conf/configuration.php </h5>
+    <h5>Editar el archivo app/config/configuration.php </h5>
     <p>-&gt; Descomentar las líneas:</p>
     <ul>
         <li>
@@ -7076,7 +7076,7 @@ Modificar valores de \$result con el nombre de los atributos de Shibboleth
 Ir a Plug-in para añadir el botón 'Shibboleth Login' en su campus de Chamilo.";
 $LdapDescriptionTitle = "<h3>Autentificacion LDAP</h3>";
 $FacebookMainActivateTitle = "Autenticación con Facebook";
-$FacebookMainActivateComment = "<p>En primer lugar, usted tiene que crear una Aplicación Facebook (ver <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) con su cuenta de Facebook. En la configuración de Aplicaciones de Facebook, el valor de la URL del sitio debe ser la URL de este campus. Tener habilitada la opción Web OAuth Login. Y agregar la URL de tu campus en el campo Valid OAuth redirect URIs</p><p>Descomenta la línea <code>&#36;_configuration['facebook_auth'] = 1;</code> para habilitar la Autenticación con Facebook</p><p>Luego, edite el archivo <code>/app/config/auth.conf.php</code> e ingresa los valores de '<code>appId</code>' y '<code>secret</code>' para <code>&#36;facebook_config</code>.</p><p>Ir a <a href='settings.php?category=Plugins'>Plugins</a> para agregar un botón configurable de <em>Incio de sesión con Facebook</em> para su campus Chamilo.</p>";
+$FacebookMainActivateComment = "<p>En primer lugar, usted tiene que crear una Aplicación Facebook (ver <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) con su cuenta de Facebook. En la configuración de Aplicaciones de Facebook, el valor de la URL del sitio debe ser la URL de este campus. Tener habilitada la opción Web OAuth Login. Y agregar la URL de tu campus en el campo Valid OAuth redirect URIs</p><p>Descomenta la línea <code>&#36;_configuration['facebook_auth'] = 1;</code> para habilitar la Autenticación con Facebook</p><p>Luego, edite el archivo <code>app/config/auth.conf.php</code> e ingresa los valores de '<code>appId</code>' y '<code>secret</code>' para <code>&#36;facebook_config</code>.</p><p>Ir a <a href='settings.php?category=Plugins'>Plugins</a> para agregar un botón configurable de <em>Incio de sesión con Facebook</em> para su campus Chamilo.</p>";
 $AnnouncementForGroup = "Anuncios para un grupo";
 $AllGroups = "Todos los grupos";
 $LanguagePriority1Title = "Prioridad del idioma 1";
@@ -7966,4 +7966,84 @@ $SelectWeeksSpan = "Seleccione la duración en semanas";
 $CourseXAdded = "Curso %s añadido";
 $CurrentPassword = "Contraseña actual";
 $DeleteCorrections = "Eliminar correciones";
+$AllowMyFilesTitle = "Permitir uso de página 'Mis documentos'";
+$AllowMyFilesComment = "Permitir a los usuarios subir archivos en un espacio personal en la plataforma.";
+$InstallMultiURLDetectedNotMainURL = "Usted actualmente está usando la funcionalidad de multi-url y está intentando actualizar su portal usando una URL secundaria. Por favor, conéctese a la URL principal para proceder con la actualización: %s";
+$OnlyXQuestionsPickedRandomly = "Solo %s preguntas serán seleccionadas aleatoriamente según la configuración del ejercicio.";
+$AllowDownloadDocumentsByApiKeyTitle = "Permitir descargar documentos del curso a través de la clave de API";
+$AllowDownloadDocumentsByApiKeyComment = "Descargar documentos con la llave API";
+$UploadCorrectionsExplanationWithDownloadLinkX = "Primero necesita descargar las correcciones <a href=\"%s\">aquí</a>. Luego descomprima el archivo y edita los documentos sin cambiar sus nombres. Finalmente, crea un archivo zip con estos documentos y vuelva a subir el archivo en esta forma a través de este formulario.";
+$PostsPendingModeration = "Contribuciones a la espera de moderación";
+$OnlyUsersFromCourseSession = "Solo usuarios de un curso en una sesión";
+$ServerXForwardedForInfo = "Si su servidor está detrás de un reverse proxy o un firewall (y únicamente en estos casos), podría usar la cabecera HTTP X_FORWARDED_FOR para mostrar la dirección IP del usuario distante (usted, en este caso).";
+$GeolocalizationCoordinates = "Geolocalización por coordenadas";
+$ExportUsersOfACourse = "Exportar usuarios de un curso";
+$PauseRecordingAudio = "Pausar grabación";
+$PlayRecordingAudio = "Reanudar grabación";
+$YourSessionTimeHasExpired = "Usted ya está registrado pero su periodo de permanencia en este curso ya expiró.";
+$ConsideredWorkingTime = "Tiempo de preparación";
+$DocumentNumber = "ID de documento";
+$SocialData = "Datos sociales";
+$WallMessagesPosted = "Mensajes publicados en su muro (por el/ella)";
+$SeeAccesses = "Ver accesos";
+$PriorityChangeFromXToY = "Prioridad modificada de %s a %s";
+$StatusChangeFromXToY = "Estado modificado de %s a %s";
+$SkillFromCourseXDeletedSinceThen = "Esta competencia fue adquirida a través del curso %s que ha sido eliminado desde entonces.";
+$SaveAndAddNewItem = "Guardar y agregar nuevo elemento";
+$AnnouncementChooseRecipientsDescription = "De forma predeterminada, este anuncio será enviado a todos los usuarios. Pero también puede seleccionar otros destinatarios.";
+$ChooseRecipients = "Elegir destinatarios";
+$StudentCourseProgressX = "Progreso: %s %%";
+$SessionDurationNotStartedMaxX = "Esta sesión tiene una duración máxima de %s días.";
+$StudentCourseScoreX = "Nota: %s %%";
+$StudentCourseCertificateX = "Certificado: %s";
+$ConfigureExerciseVisibilityInCourseTitle = "Permitir ignorar la configuración de un ejercicio invisible en la sesión a nivel del curso base";
+$ConfigureExerciseVisibilityInCourseComment = "Activar la configuración de invisibilidad de los ejercicios en la sesión desde el curso base. Si no está configurado, se usa el parámetro global.";
+$ExerciseInvisibleInSessionTitle = "Ejercicio invisible en sesión";
+$ExerciseInvisibleInSessionComment = "Si un ejercicio es visible en el curso base entonces aparece invisible en la sesión. Si un ejercicio es invisible en el curso base entonces no aparece en la sesión.";
+$Ongoing = "En progreso";
+$Unclosed = "No cerrado";
+$AttemptStillOngoingPleaseWait = "El intento todavía está en progreso. Paciencia...";
+$MarkAttemptAsClosed = "Marcar el intento como cerrado (ya pasó el tiempo máximo)";
+$NewPasswordRequirementsNotMatched = "La nueva contraseña no corresponde a los requerimientos mínimos de seguridad";
+$NewPasswordRequirementMinXLowercase = "Mínimo %s caracter(es) alfabéticos en minúscula";
+$NewPasswordRequirementMinXUppercase = "Mínimo %s caracter(es) alfabéticos en mayúscula";
+$NewPasswordRequirementMinXNumeric = "Mínimo %s caracter(es) numéricos (0-9)";
+$NewPasswordRequirementMinXLength = "Mínimo %s caracteres en total";
+$NewPasswordRequirementMaxXLowercase = "Máximo %s caracter(es) alfabético(s) en minúscula";
+$NewPasswordRequirementMaxXUppercase = "Máximo %s caracter(es) alfabético(s) en mayúscula";
+$NewPasswordRequirementMaxXNumeric = "Máximo %s caracter(es) numéricos (0-9)";
+$NewPasswordRequirementMaxXLength = "Máximo %s caracteres en total";
+$YouCantNotEditThisQuestionBecauseAlreadyExistAnswers = "No puede editar esta pregunta porque ya existen respuestas";
+$Avatar = "Avatar";
+$StudyCycle = "Ciclo de estudio";
+$ReadingComprehension = "Comprensión lectora";
+$ReadingQuestionCongratsSpeedXNotReachedForYWords = "Lo sentimos, parece que %s palabras/minuto para este texto de %s palabras fue demasiado rápido, ya que tu respuesta de comprensión lectora fue equivocada.";
+$ReadingQuestionCongratsSpeedXReachedForYWords = "Felicitaciones, ha alcanzado la celeridad de %s palabras por minuto con un correcto entendimiento sobre un texto de %s palabras.";
+$ReadingComprehensionLevelX = "%s palabras por minuto";
+$TutorXIsNotSubscribedToCourse = "El tutor %s no está inscrito a este curso";
+$UpdateTitleInLps = "Actualizar este título en las lecciones";
+$WebRTCDialogHelp = "Para habilitar la el video chat en tu navegador (si este lo soporta), asegúrese de hacer click en el ícono de información en la izquierda de la URL para autorizar el uso de su cámara web y micrófono.";
+$UpdateFile = "Actualizar archivo";
+$SendEmailToTeacherWhenStudentStartQuiz = "Enviar un correo al profesor cuando el estudiante inicia un ejercicio";
+$SendEmailToTeacherWhenStudentEndQuiz = "Enviar un correo al profesor cuando el estudiante termina un ejercicio";
+$SendEmailToTeacherWhenStudentEndQuizOnlyIfOpenQuestion = "Enviar un correo al profesor cuando el estudiante termina un ejercicio, solo si ha respondido a una pregunta abierta";
+$SendEmailToTeacherWhenStudentEndQuizOnlyIfOralQuestion = "Enviar un correo al profesor cuando el estudiante termina un ejercicio, solo si ha respondido a una pregunta oral";
+$StudentStartExercise = "Un ejercicio/examen ha sido iniciado por un estudiante";
+$TempScoreXQuestionsNotCorrectedYet = "Score temporaire: %s pregunta(s) abierta(s) no corregida(s) todavía.";
+$Annotation = "Anotación";
+$TeacherPicture = "Foto del profesor";
+$FeedbackIfNotCorrect = "Feedback si no es correcta";
+$ScheduledAnnouncements = "Programación de anuncios";
+$SpecificDate = "Envio en fecha concreta";
+$BaseDate = "Envío en base a fecha de inicio/fin de la sesión";
+$AfterOrBefore = "Antes o después";
+$Before = "Antes de";
+$ScheduleAnnouncementDescription = "Este formulario permite programar anuncios/avisos para que sean enviados de manera automática a los alumnos que están realizando un curso en una sesión.
+
+Existe dos tipos de anuncios que se pueden enviar:
+
+Envío en una fecha concreta: En este caso se selecciona un día concreto para hacer el envío.
+
+Envío en base a la fecha de inicio/finalización de la sesión: en este caso se ha de indicar el número de días que han de pasar antes de enviar el anuncio. Y esos días pueden estar asociados a antes o después de la fecha de inicio/finalización. Por ejemplo: 3 días después de fecha de inicio.";
+$MandatorySurveyNoAnswered = "Usted tiene pendiente una encuesta obligatoria. Para ingresar al curso, primero deberá completarla";
 ?>

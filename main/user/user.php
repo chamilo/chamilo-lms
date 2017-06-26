@@ -581,7 +581,7 @@ if (api_is_allowed_to_edit(null, true)) {
             $selectedTab = 1;
             $url = api_get_path(WEB_CODE_PATH).'user/subscribe_user.php?'.api_get_cidreq().'&type='.STUDENT;
             $icon = Display::url(
-                Display::return_icon('add-user.png', get_lang('Add'), '', ICON_SIZE_MEDIUM),
+                Display::return_icon('add-user.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
                 $url
             );
             break;
@@ -589,7 +589,7 @@ if (api_is_allowed_to_edit(null, true)) {
             $selectedTab = 2;
             $url = api_get_path(WEB_CODE_PATH).'user/subscribe_user.php?'.api_get_cidreq().'&type='.COURSEMANAGER;
             $icon = Display::url(
-                Display::return_icon('add-teacher.png', get_lang('Add'), '', ICON_SIZE_MEDIUM),
+                Display::return_icon('add-teacher.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
                 $url
             );
             break;
@@ -599,17 +599,17 @@ if (api_is_allowed_to_edit(null, true)) {
     echo '<div class="col-md-6">';
     echo $icon;
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=csv&type='.$type.'">'.
-        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a> ';
+        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM).'</a> ';
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=xls&type='.$type.'">'.
-        Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a> ';
+        Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM).'</a> ';
 
     if ($canEditUsers) {
         $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import">'.
-            Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'), '', ICON_SIZE_MEDIUM).'</a> ';
+            Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'), [], ICON_SIZE_MEDIUM).'</a> ';
     }
 
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=pdf&type='.$type.'">'.
-        Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a> ';
+        Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM).'</a> ';
     echo $actions;
 
     echo '</div>';

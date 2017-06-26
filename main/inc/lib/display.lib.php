@@ -730,6 +730,12 @@ class Display
         $alternateCssPath = api_get_path(SYS_PUBLIC_PATH).'css/';
         $alternateWebCssPath = api_get_path(WEB_PUBLIC_PATH).'css/';
 
+        // Avoid issues with illegal string offset for legacy calls to this
+        // method with an empty string rather than null or an empty array
+        if (empty($additional_attributes)) {
+            $additional_attributes = [];
+        }
+
         $image = trim($image);
 
         if (isset($size)) {

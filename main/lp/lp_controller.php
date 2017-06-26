@@ -1088,22 +1088,6 @@ switch ($action) {
             exit;
         }
         break;
-    case 'edititemprereq':
-    case 'edit_item_prereq':
-        if (!$is_allowed_to_edit) {
-            api_not_allowed(true);
-        }
-        if (!$lp_found) {
-            error_log('New LP - No learnpath given for edit item prereq', 0);
-            require 'lp_list.php';
-        } else {
-            if (!empty($_REQUEST['id']) && !empty($_REQUEST['submit_item'])) {
-                $_SESSION['refresh'] = 1;
-                $_SESSION['oLP']->edit_item_prereq($_REQUEST['id'], $_REQUEST['prereq']);
-            }
-            require 'lp_admin_view.php';
-        }
-        break;
     case 'restart':
         if (!$lp_found) {
             error_log('New LP - No learnpath given for restart', 0);

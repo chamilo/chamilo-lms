@@ -213,7 +213,10 @@ class ImportCsv
                         $file = $fileInfo['file'];
 
                         echo 'File: '.$file.PHP_EOL;
+                        echo 'Method : '.$method.PHP_EOL;
+                        echo PHP_EOL;
                         $this->logger->addInfo("Reading file: $file");
+                        $this->logger->addInfo("Loading method $method ");
                         if ($method == 'importSessions') {
                             $this->$method(
                                 $file,
@@ -253,7 +256,10 @@ class ImportCsv
 
                         $file = $fileInfo['file'];
                         echo 'Static file: '.$file.PHP_EOL;
+                        echo 'Method : '.$method.PHP_EOL;
+                        echo PHP_EOL;
                         $this->logger->addInfo("Reading static file: $file");
+                        $this->logger->addInfo("Loading method $method ");
                         $this->$method(
                             $file,
                             true,
@@ -1358,7 +1364,8 @@ class ImportCsv
                     // Update
                     $params = array(
                         'title' => $row['title'],
-                        'category_code' => $row['course_category']
+                        'category_code' => $row['course_category'],
+                        'visibility' => $row['visibility']
                     );
 
                     $result = CourseManager::update_attributes(

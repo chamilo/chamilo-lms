@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CSurveyInvitation,
+    Doctrine\Common\Collections\Criteria;
+
 /**
  * Class SurveyManager
  * @package chamilo.survey
@@ -1722,5 +1725,69 @@ class SurveyManager
     {
         $code = self::generate_survey_hash($survey_id, $course_id, $session_id, $group_id);
         return api_get_path(WEB_CODE_PATH).'survey/link.php?h='.$code.'&i='.$survey_id.'&c='.intval($course_id).'&s='.intval($session_id).'&g='.$group_id;
+    }
+
+    /**
+     * Check if the current user has mandatory surveys no-answered
+     * and redirect to fill the first found survey
+     */
+    public static function protectByMandatory()
+    {
+        if (isset($GLOBALS['fillingSurvey']) && $GLOBALS['fillingSurvey']) {
+            return;
+        }
+
+        $userId = api_get_user_id();
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+
+        if (!$userId) {
+            return;
+        }
+
+        if (!$courseId) {
+            return;
+        }
+
+        try {
+            /** @var CSurveyInvitation $invitation */
+            $invitation = Database::getManager()
+                ->createQuery("
+                    SELECT i FROM ChamiloCourseBundle:CSurveyInvitation i
+                    INNER JOIN ChamiloCourseBundle:CSurvey s WITH i.surveyCode = s.code
+                    WHERE i.answered = 0
+                        AND i.cId = :course
+                        AND i.user = :user
+                        AND i.sessionId = :session
+                        AND :now BETWEEN s.availFrom AND s.availTill
+                    ORDER BY i.invitationDate ASC
+                ")
+                ->setMaxResults(1)
+                ->setParameters([
+                    'course' => $courseId,
+                    'user' => $userId,
+                    'session' => $sessionId,
+                    'now' => new DateTime('UTC', new DateTimeZone('UTC'))
+                ])
+                ->getSingleResult();
+        } catch (Exception $e) {
+            $invitation = null;
+        }
+
+        if (!$invitation) {
+            return;
+        }
+
+        $urlParams = http_build_query([
+            'course' => api_get_course_id(),
+            'invitationcode' => $invitation->getInvitationCode()
+        ]);
+
+        Display::addFlash(
+            Display::return_message(get_lang('MandatorySurveyNoAnswered'), 'warning')
+        );
+
+        header('Location: '.api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?'.$urlParams);
+        exit;
     }
 }

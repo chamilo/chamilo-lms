@@ -1960,3 +1960,5 @@ INSERT INTO settings_current (variable, type, category, selected_value, title, c
 VALUES ('allow_download_documents_by_api_key', 'radio', 'WebServices', 'false', 'AllowDownloadDocumentsByApiKeyTitle', 'AllowDownloadDocumentsByApiKeyComment', '', NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_download_documents_by_api_key', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_download_documents_by_api_key', 'false', 'No');
+
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (12, 13, 'is_mandatory','IsMandatory', 1, 1, NOW());

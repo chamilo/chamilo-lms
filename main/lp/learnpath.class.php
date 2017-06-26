@@ -10841,7 +10841,9 @@ EOD;
             $last_item_not_dir = null;
             $last_item_not_dir_type = null;
             $last_item_not_dir_max = null;
-            foreach ($this->items as $item) {
+
+            foreach ($this->ordered_items as $itemId) {
+                $item = $this->getItem($itemId);
                 // if there was a previous item... (otherwise jump to set it)
                 if (!empty($previous_item_id)) {
                     $current_item_id = $item->get_id(); //save current id

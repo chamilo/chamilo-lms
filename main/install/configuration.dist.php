@@ -284,4 +284,11 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['considered_working_time'] = 'work_time';
 //
 // ------ Survey configuration settings
+// Add support to mandatory surveys. The user will not be able to enter to the course until fill the mandatory surveys
+// Requires DB change:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at)
+VALUES (12, 13, 'is_mandatory', 'IsMandatory', 1, 1, NOW());
+*/
+//$_configuration['allow_mandatory_survey'] = false;
 // ------

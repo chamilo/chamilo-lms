@@ -52,6 +52,9 @@ class MySpace
         return Display::actions($actions, null);
     }
 
+    /**
+     * @return string
+     */
     public static function getTopMenu()
     {
         $menu_items = array();
@@ -68,7 +71,7 @@ class MySpace
             Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), 32),
             api_get_path(WEB_CODE_PATH).'tracking/exams.php'
         );
-        $menu = null;
+        $menu = '';
         foreach ($menu_items as $item) {
             $menu .= $item;
         }
@@ -146,7 +149,10 @@ class MySpace
         while ($row = Database::fetch_array($rs)) {
             $timestamp_login_date = api_strtotime($row['login_course_date'], 'UTC');
             $timestamp_logout_date = api_strtotime($row['logout_course_date'], 'UTC');
-            $connections[] = array('login' => $timestamp_login_date, 'logout' => $timestamp_logout_date);
+            $connections[] = array(
+                'login' => $timestamp_login_date,
+                'logout' => $timestamp_logout_date
+            );
         }
 
         return $connections;
@@ -470,11 +476,21 @@ class MySpace
 
         $all_datas = array();
         foreach ($global_coaches as $id_coach => $coaches) {
-            $time_on_platform   = api_time_to_hms(Tracking::get_time_spent_on_the_platform($coaches['user_id']));
-            $last_connection    = Tracking::get_last_connection_date($coaches['user_id']);
-            $nb_students        = count(Tracking::get_student_followed_by_coach($coaches['user_id']));
-            $nb_courses         = count(Tracking::get_courses_followed_by_coach($coaches['user_id']));
-            $nb_sessions        = count(Tracking::get_sessions_coached_by_user($coaches['user_id']));
+            $time_on_platform = api_time_to_hms(
+                Tracking::get_time_spent_on_the_platform($coaches['user_id'])
+            );
+            $last_connection = Tracking::get_last_connection_date(
+                $coaches['user_id']
+            );
+            $nb_students = count(
+                Tracking::get_student_followed_by_coach($coaches['user_id'])
+            );
+            $nb_courses = count(
+                Tracking::get_courses_followed_by_coach($coaches['user_id'])
+            );
+            $nb_sessions = count(
+                Tracking::get_sessions_coached_by_user($coaches['user_id'])
+            );
 
             $table_row = array();
             if ($is_western_name_order) {
@@ -2746,10 +2762,14 @@ function get_stats($user_id, $courseId, $start_date = null, $end_date = null)
         $result = array();
 
         if ($row = Database::fetch_array($rs)) {
-            $foo_avg    = $row['avrg'];
-            $foo_total  = $row['total'];
-            $foo_times  = $row['times'];
-            $result = array('avg' => $foo_avg, 'total' => $foo_total, 'times' => $foo_times);
+            $foo_avg = $row['avrg'];
+            $foo_total = $row['total'];
+            $foo_times = $row['times'];
+            $result = array(
+                'avg' => $foo_avg,
+                'total' => $foo_total,
+                'times' => $foo_times
+            );
         }
     }
 

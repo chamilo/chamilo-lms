@@ -2,17 +2,17 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	This is the tracking library for Chamilo.
-*
-*	@package chamilo.reporting
-*
-* Calculates the time spent on the course
-* @param integer $user_id the user id
-* @param string $course_code the course code
-* @author Julio Montoya <gugli100@gmail.com>
-* @author Jorge Frisancho Jibaja - select between dates
-*
-*/
+ * This is the tracking library for Chamilo.
+ *
+ * @package chamilo.reporting
+ *
+ * Calculates the time spent on the course
+ * @param integer $user_id the user id
+ * @param string $course_code the course code
+ * @author Julio Montoya <gugli100@gmail.com>
+ * @author Jorge Frisancho Jibaja - select between dates
+ *
+ */
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -55,7 +55,11 @@ $group = array(
     $form->createElement(
         'label',
         null,
-        Display::url(get_lang('Search'), 'javascript://', array('onclick'=> 'loadGraph();', 'class' => 'btn btn-default'))
+        Display::url(
+            get_lang('Search'),
+            'javascript://',
+            array('onclick' => 'loadGraph();', 'class' => 'btn btn-default')
+        )
     )
 );
 $form->addGroup($group);

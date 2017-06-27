@@ -3227,6 +3227,10 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                     }
                 }
 
+                // Delete c_student_publication from any session that doesn't exist anymore
+                $sql = "DELETE FROM c_student_publication WHERE session_id NOT IN (SELECT id FROM session)";
+                $statement = $connection->executeQuery($sql);
+
                 // Fix work documents that don't have c_item_property value
                 $sql = "SELECT * FROM c_student_publication WHERE parent_id IS NOT NULL";
                 $statement = $connection->executeQuery($sql);

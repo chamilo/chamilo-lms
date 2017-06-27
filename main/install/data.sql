@@ -1800,5 +1800,3 @@ VALUES
 ('show_full_skill_name_on_skill_wheel', 'false', 'No');
 
 UPDATE settings_current SET selected_value = '1.10.0.51' WHERE variable = 'chamilo_database_version';
-
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at) VALUES (12, 13, 'is_mandatory','IsMandatory', 1, 1, NOW());

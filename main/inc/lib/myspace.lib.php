@@ -121,9 +121,9 @@ class MySpace
     /**
      * Gets the connections to a course as an array of login and logout time
      *
-     * @param   int     $userId User id
-     * @param   int   $courseId
-     * @param   int     $sessionId Session id (optional, default = 0)
+     * @param   int $userId User id
+     * @param   int $courseId
+     * @param   int $sessionId Session id (optional, default = 0)
      * @return  array   Connections
      */
     public static function get_connections_to_course($userId, $courseId, $sessionId = 0)
@@ -147,8 +147,8 @@ class MySpace
 
         while ($row = Database::fetch_array($rs)) {
             $connections[] = array(
-                'login' => api_strtotime($row['login_course_date'], 'UTC'),
-                'logout' => api_strtotime($row['logout_course_date'], 'UTC')
+                'login' => $row['login_course_date'],
+                'logout' => $row['logout_course_date']
             );
         }
 
@@ -2707,8 +2707,8 @@ class MySpace
 
             while ($row = Database::fetch_array($rs)) {
                 $connections[] = array(
-                    'login' => api_strtotime($row['login_course_date'], 'UTC'),
-                    'logout' => api_strtotime($row['logout_course_date'], 'UTC')
+                    'login' => $row['login_course_date'],
+                    'logout' =>$row['logout_course_date']
                 );
             }
         }
@@ -2765,7 +2765,8 @@ function get_stats($user_id, $courseId, $start_date = null, $end_date = null)
     return $result;
 }
 
-function add_day_to($end_date) {
+function add_day_to($end_date)
+{
     $foo_date = strtotime($end_date);
     $foo_date = strtotime(" +1 day", $foo_date);
     $foo_date = date("Y-m-d", $foo_date);
@@ -2808,7 +2809,8 @@ function convert_to_string($result)
             $html .= api_get_local_time($data['login']);
             $html .= '</td>';
             $html .= '<td>';
-            $html .= api_time_to_hms($data['logout'] - $data['login']);
+
+            $html .= api_time_to_hms(api_strtotime($data['logout']) - api_strtotime($data['login']));
             $html .= '</tr></td>';
         }
     }
@@ -2828,7 +2830,7 @@ function convert_to_string($result)
  * @version OCT-22- 2010
  * @return string
  */
-function grapher($sql_result, $start_date, $end_date, $type = "")
+function grapher($sql_result, $start_date, $end_date, $type = '')
 {
     if (empty($start_date)) {
         $start_date = '';
@@ -2864,12 +2866,14 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
     $i = 0;
     if (is_array($sql_result) && count($sql_result) > 0) {
         foreach ($sql_result as $key => $data) {
+            $login = api_strtotime($data['login']);
+            $logout = api_strtotime($data['logout']);
             //creating the main array
-            if (isset($main_month_year[date('m-Y', $data['login'])])) {
-                $main_month_year[date('m-Y', $data['login'])] += float_format(($data['logout'] - $data['login']) / 60, 0);
+            if (isset($main_month_year[date('m-Y', $login)])) {
+                $main_month_year[date('m-Y', $login)] += float_format(($logout - $login) / 60, 0);
             }
-            if (isset($main_day[date('d-m-Y', $data['login'])])) {
-                $main_day[date('d-m-Y', $data['login'])] += float_format(($data['logout'] - $data['login']) / 60, 0);
+            if (isset($main_day[date('d-m-Y', $login)])) {
+                $main_day[date('d-m-Y', $login)] += float_format(($logout - $login) / 60, 0);
             }
             if ($i > 500) {
                 break;

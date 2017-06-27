@@ -78,10 +78,10 @@ class Exercise
 
     /**
      * Constructor of the class
-     *
+     * @param int $courseId
      * @author Olivier Brouckaert
      */
-    public function __construct($course_id = null)
+    public function __construct($courseId = 0)
     {
         $this->id = 0;
         $this->exercise = '';
@@ -110,8 +110,8 @@ class Exercise
         $this->scoreTypeModel = 0;
         $this->globalCategoryId = null;
 
-        if (!empty($course_id)) {
-            $course_info = api_get_course_info_by_id($course_id);
+        if (!empty($courseId)) {
+            $course_info = api_get_course_info_by_id($courseId);
         } else {
             $course_info = api_get_course_info();
         }

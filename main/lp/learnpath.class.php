@@ -12570,6 +12570,25 @@ EOD;
 
         return stripslashes($output);
     }
+
+    /**
+     * Get the parent names for the current item
+     * @return array
+     */
+    public function getCurrentItemParentNames()
+    {
+        $return = [];
+        $item = $this->getItem($this->get_current_item_id());
+        $parent = $this->getItem($item->get_parent());
+
+        while ($parent) {
+            $return[] = $parent->get_title();
+
+            $parent = $this->getItem($parent->get_parent());
+        }
+
+        return array_reverse($return);
+    }
 }
 
 if (!function_exists('trim_value')) {

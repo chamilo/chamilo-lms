@@ -285,6 +285,20 @@ switch ($action) {
         echo json_encode($position);
 
         break;
+    case 'get_parent_names':
+        /** @var \learnpath $lp */
+        $lp = Session::read('oLP');
+        $parentNames = $lp->getCurrentItemParentNames();
+
+        $response = '';
+
+        foreach ($parentNames as $parentName) {
+            $response .= '<p class="h5 hidden-xs hidden-md">'.$parentName.'</p>';
+        }
+
+        echo $response;
+
+        break;
     default:
         echo '';
 }

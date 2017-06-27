@@ -87,6 +87,11 @@
         <div class="lp-view-zone-container">
             <div class="title-learnpath pull-left">
                 <h4>{{ lp_title_scorm }}</h4>
+                <div id="item-parent-names">
+                    {% for parent_title in lp_item_parents %}
+                        <p class="h5 hidden-xs hidden-md">{{ parent_title }}</p>
+                    {% endfor %}
+                </div>
             </div>
             <div id="lp_navigation_elem" class="navegation-bar pull-right text-right">
                 <a href="#" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">
@@ -106,7 +111,7 @@
             </div>
 
             <div class="lp-view-tabs">
-                <ul id="navTabs" class="nav nav-tabs" role="tablist">
+                <ul id="navTabs" class="nav nav-tabs pull-left" style="margin-top: 75px;" role="tablist">
                     <li role="presentation" class="active">
                         <a href="#lp-view-content" aria-controls="lp-view-content" role="tab" data-toggle="tab">
                             <span class="fa fa-book fa-2x fa-fw" aria-hidden="true"></span><span

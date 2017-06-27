@@ -1367,6 +1367,8 @@ class IndexManager
             $coursesListSessionStyle = 1;
         }
 
+        $portalShowDescription = api_get_setting('show_session_description') === 'true';
+
         // Declared listSession variable
         $listSession = [];
         $session_now = time();
@@ -1533,7 +1535,7 @@ class IndexManager
                             $params['image'] = isset($imageField['value']) ? $imageField['value'] : null;
                             $params['duration'] = isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
                             $params['edit_actions'] = $actions;
-                            $params['show_description'] = $session_box['show_description'];
+                            $params['show_description'] = $session_box['show_description'] == 1 && $portalShowDescription;
                             $params['description'] = $session_box['description'];
                             $params['visibility'] = $session_box['visibility'];
                             $params['show_simple_session_info'] = $showSimpleSessionInfo;

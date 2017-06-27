@@ -65,8 +65,6 @@ if ($action == 'add') {
     $tool_name = get_lang('Careers');
 }
 
-
-
 $career = new Career();
 $careerInfo = $career->get($careerId);
 if (empty($careerInfo)) {

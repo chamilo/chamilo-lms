@@ -16,6 +16,8 @@ if (!isset($_GET['cidReq'])) {
     $_cid = $_GET['cidReq'];
 }
 
+$fillingSurvey = true;
+
 // Including the global initialization file
 require_once __DIR__.'/../inc/global.inc.php';
 

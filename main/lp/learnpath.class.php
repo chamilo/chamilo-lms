@@ -9010,13 +9010,16 @@ class learnpath
         $return .= '<form method="POST">';
         $return .= '<div class="table-responsive">';
         $return .= '<table class="table table-hover">';
+        $return .= '<thead>';
         $return .= '<tr>';
         $return .= '<th>'.get_lang('LearnpathPrerequisites').'</th>';
-        $return .= '<th width="140" >'.get_lang('Minimum').'</th>';
+        $return .= '<th width="140">'.get_lang('Minimum').'</th>';
         $return .= '<th width="140">'.get_lang('Maximum').'</th>';
         $return .= '</tr>';
+        $return .= '</thead>';
 
         // Adding the none option to the prerequisites see http://www.chamilo.org/es/node/146
+        $return .= '<tbody>';
         $return .= '<tr>';
         $return .= '<td colspan="3">';
         $return .= '<div class="radio learnpath"><label for="idNone">';
@@ -9104,25 +9107,26 @@ class learnpath
                 $item['max_score'] = $tmp_obj_lp_item->max_score;
 
                 $return .= '<td>';
-                $return .= '<input class="form-control" size="4" maxlength="3" name="min_'.$item['id'].'" type="number" min="0" step="any" max="'.$item['max_score'].'" value="'.$selectedMinScoreValue.'" />';
+                $return .= '<input class="form-control" size="4" maxlength="3" name="min_'.$item['id'].'" type="number" min="0" step="1" max="'.$item['max_score'].'" value="'.$selectedMinScoreValue.'" />';
                 $return .= '</td>';
                 $return .= '<td>';
-                $return .= '<input class="form-control" size="4" maxlength="3" name="max_'.$item['id'].'" type="number" min="0" step="any" max="'.$item['max_score'].'" value="'.$selectedMaxScoreValue.'" />';
+                $return .= '<input class="form-control" size="4" maxlength="3" readonly name="max_'.$item['id'].'" type="number" min="0" step="1" max="'.$item['max_score'].'" value="'.$selectedMaxScoreValue.'" />';
                 $return .= '</td>';
             }
 
             if ($item['item_type'] == TOOL_HOTPOTATOES) {
                 $return .= '<td>';
-                $return .= '<center><input size="4" maxlength="3" name="min_'.$item['id'].'" type="number" min="0" step="any" max="'.$item['max_score'].'" value="'.$selectedMinScoreValue.'" /></center>';
+                $return .= '<input size="4" maxlength="3" name="min_'.$item['id'].'" type="number" min="0" step="1" max="'.$item['max_score'].'" value="'.$selectedMinScoreValue.'" />';
                 $return .= '</td>';
                 $return .= '<td>';
-                $return .= '<center><input size="4" maxlength="3" name="max_'.$item['id'].'" type="number" min="0" step="any" max="'.$item['max_score'].'"  value="'.$selectedMaxScoreValue.'" /></center>';
+                $return .= '<input size="4" maxlength="3" name="max_'.$item['id'].'" readonly type="number" min="0" step="1" max="'.$item['max_score'].'"  value="'.$selectedMaxScoreValue.'" />';
                 $return .= '</td>';
             }
             $return .= '</tr>';
         }
         $return .= '<tr>';
         $return .= '</tr>';
+        $return .= '</tbody>';
         $return .= '</table>';
         $return .= '</div>';
         $return .= '<div class="form-group">';
@@ -10837,7 +10841,9 @@ EOD;
             $last_item_not_dir = null;
             $last_item_not_dir_type = null;
             $last_item_not_dir_max = null;
-            foreach ($this->items as $item) {
+
+            foreach ($this->ordered_items as $itemId) {
+                $item = $this->getItem($itemId);
                 // if there was a previous item... (otherwise jump to set it)
                 if (!empty($previous_item_id)) {
                     $current_item_id = $item->get_id(); //save current id

@@ -462,8 +462,11 @@ class MessageManager
      * @param  int $message_id
      * @return void
      */
-    public static function update_parent_ids_from_reply($parent_id, $receiver_user_id, $message_id)
-    {
+    public static function update_parent_ids_from_reply(
+        $parent_id,
+        $receiver_user_id,
+        $message_id
+    ) {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $parent_id = intval($parent_id);
         $receiver_user_id = intval($receiver_user_id);
@@ -634,13 +637,17 @@ class MessageManager
      * @param  int    group id (optional)
      * @return void
      */
-    public static function delete_message_attachment_file($message_id, $message_uid, $group_id = 0)
-    {
+    public static function delete_message_attachment_file(
+        $message_id,
+        $message_uid,
+        $group_id = 0
+    ) {
         $message_id = intval($message_id);
         $message_uid = intval($message_uid);
         $table_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
-        $sql = "SELECT * FROM $table_message_attach WHERE message_id = '$message_id'";
+        $sql = "SELECT * FROM $table_message_attach 
+                WHERE message_id = '$message_id'";
         $rs = Database::query($sql);
         while ($row = Database::fetch_array($rs)) {
             $path = $row['path'];
@@ -810,8 +817,7 @@ class MessageManager
         }
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $parent_id = intval($parent_id);
-
-        $condition_group_id = "";
+        $condition_group_id = '';
         if ($group_id !== '') {
             $group_id = intval($group_id);
             $condition_group_id = " AND group_id = '$group_id' ";

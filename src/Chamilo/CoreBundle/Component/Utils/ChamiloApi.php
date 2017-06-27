@@ -193,4 +193,15 @@ class ChamiloApi
         }
         return Session::read('_real_cid', 0);
     }
+
+    /**
+     * Check if the current HTTP request is by AJAX
+     * @return bool
+     */
+    public static function isAjaxRequest()
+    {
+        $requestedWith = isset($_SERVER['HTTP_X_REQUESTED_WITH']) ? $_SERVER['HTTP_X_REQUESTED_WITH'] : null;
+
+        return $requestedWith === 'XMLHttpRequest';
+    }
 }

@@ -270,7 +270,10 @@ class ScheduledAnnouncement extends Model
                     $sessionId = $result['session_id'];
                     $sessionInfo = api_get_session_info($sessionId);
                     self::update(['id' => $result['id'], 'sent' => 1]);
-                    $users = SessionManager::get_users_by_session($sessionId);
+                    $users = SessionManager::get_users_by_session(
+                        $sessionId,
+                        0
+                    );
                     $subject = $result['subject'];
                     $message = $result['message'];
 
@@ -290,12 +293,34 @@ class ScheduledAnnouncement extends Model
                                 $progress = '0%';
                             }
 
+                            $startTime = api_get_local_time(
+                                $sessionInfo['access_start_date'],
+                                null,
+                                null,
+                                true
+                            );
+                            $endTime = api_get_local_time(
+                                $sessionInfo['access_end_date'],
+                                null,
+                                null,
+                                true
+                            );
+
+                            $generalCoach = '';
+                            if (!empty($sessionInfo['coach_id'])) {
+                                $coachInfo = api_get_user_info($sessionInfo['coach_id']);
+                                if (!empty($coachInfo)) {
+                                    $generalCoach = $coachInfo['complete_name'];
+                                }
+                            }
                             $tags = [
                                 '((session_name))' => $sessionInfo['name'],
+                                '((session_start_date))' => $startTime,
+                                '((general_coach))' => $generalCoach,
+                                '((session_end_date))' => $endTime,
                                 '((user_complete_name))' => $userInfo['complete_name'],
                                 '((user_first_name))' => $userInfo['firstname'],
                                 '((user_last_name))' => $userInfo['lastname'],
-                                //'((course_title))' => $userInfo['lastname'],
                                 '((lp_progress))' => $progress,
                             ];
 
@@ -324,6 +349,9 @@ class ScheduledAnnouncement extends Model
     {
         $tags = [
             '((session_name))',
+            '((session_start_date))',
+            '((session_end_date))',
+            '((general_coach))',
             '((user_complete_name))',
             '((user_first_name))',
             '((user_last_name))',

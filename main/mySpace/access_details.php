@@ -73,7 +73,7 @@ if ($form->validate()) {
     $course = $values['course'];
 }
 
-$url = api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail_by_date&course='.$course.'&student='.$user_id;
+$url = api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail_by_date&course='.$course.'&student='.$user_id.'&session_id='.$session_id;
 
 $htmlHeadXtra[] = '<script src="slider.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="slider.css" />';
@@ -124,7 +124,7 @@ $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AccessDetails'));
 Display :: display_header('');
 $userInfo = api_get_user_info($user_id);
 $result_to_print = '';
-$sql_result = MySpace::get_connections_to_course($user_id, $courseId);
+$sql_result = MySpace::get_connections_to_course($user_id, $courseInfo);
 $result_to_print = convert_to_string($sql_result);
 
 echo Display::page_header(get_lang('DetailsStudentInCourse'));
@@ -147,8 +147,8 @@ $form->display();
         </div><br />
         <div id="cev_cont_stats">
             <?php
-            if ($result_to_print != "") {
-                $rst = get_stats($user_id, $courseId);
+            if ($result_to_print != '') {
+                $rst = get_stats($user_id, $courseInfo, $session_id);
                 $foo_stats = '<strong>'.get_lang('Total').': </strong>'.$rst['total'].'<br />';
                 $foo_stats .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';
                 $foo_stats .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';

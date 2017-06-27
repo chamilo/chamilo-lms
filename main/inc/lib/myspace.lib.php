@@ -121,26 +121,27 @@ class MySpace
     /**
      * Gets the connections to a course as an array of login and logout time
      *
-     * @param   int $userId User id
-     * @param   int $courseId
-     * @param   int $sessionId Session id (optional, default = 0)
-     * @return  array   Connections
+     * @param int $userId User id
+     * @param array $courseInfo
+     * @param int $sessionId Session id (optional, default = 0)
+     * @return array Connections
      */
-    public static function get_connections_to_course($userId, $courseId, $sessionId = 0)
+    public static function get_connections_to_course($userId, $courseInfo, $sessionId = 0)
     {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
         // protect data
         $userId = (int) $userId;
-        $courseId = (int) $courseId;
+        $courseId = (int) $courseInfo['real_id'];
         $sessionId = (int) $sessionId;
+        $sessionCondition = api_get_session_condition($sessionId);
 
         $sql = 'SELECT login_course_date, logout_course_date
                 FROM ' . $table.'
                 WHERE
                     user_id = '.$userId.' AND
-                    c_id = '.$courseId.' AND
-                    session_id = '.$sessionId.'
+                    c_id = '.$courseId.' 
+                    '.$sessionCondition.'
                 ORDER BY login_course_date ASC';
         $rs = Database::query($sql);
         $connections = array();
@@ -2679,22 +2680,29 @@ class MySpace
      * Gets the connections to a course as an array of login and logout time
      *
      * @param   int $user_id
-     * @param   int $courseId
+     * @param   array $course_info
+     * @param int $sessionId
+     * @param string $start_date
+     * @param string $end_date
      * @author  Jorge Frisancho Jibaja
      * @author  Julio Montoya <gugli100@gmail.com> fixing the function
      * @version OCT-22- 2010
      * @return  array
      */
-    public static function get_connections_to_course_by_date($user_id, $courseId, $start_date, $end_date)
-    {
+    public static function get_connections_to_course_by_date(
+        $user_id,
+        $course_info,
+        $sessionId,
+        $start_date,
+        $end_date
+    ) {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $course_info = api_get_course_info_by_id($courseId);
         $user_id = intval($user_id);
-        $courseId = intval($courseId);
         $connections = array();
-
         if (!empty($course_info)) {
+            $courseId = intval($course_info['real_id']);
             $end_date = add_day_to($end_date);
+            $sessionCondition = api_get_session_condition($sessionId);
             $sql = "SELECT login_course_date, logout_course_date
                     FROM $table
                     WHERE
@@ -2702,6 +2710,7 @@ class MySpace
                         c_id = $courseId AND
                         login_course_date BETWEEN '$start_date' AND '$end_date' AND
                         logout_course_date BETWEEN '$start_date' AND '$end_date'
+                        $sessionCondition
                     ORDER BY login_course_date ASC";
             $rs = Database::query($sql);
 
@@ -2718,16 +2727,16 @@ class MySpace
 
 /**
  * @param $user_id
- * @param int $courseId
+ * @param array $course_info
+ * @param int $sessionId
  * @param null $start_date
  * @param null $end_date
  * @return array
  */
-function get_stats($user_id, $courseId, $start_date = null, $end_date = null)
+function get_stats($user_id, $course_info, $sessionId, $start_date = null, $end_date = null)
 {
     $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-
-    $course_info = api_get_course_info_by_id($courseId);
+    $result = array();
     if (!empty($course_info)) {
         $stringStartDate = '';
         $stringEndDate = '';
@@ -2737,7 +2746,8 @@ function get_stats($user_id, $courseId, $start_date = null, $end_date = null)
             $stringEndDate = "AND logout_course_date BETWEEN '$start_date' AND '$end_date'";
         }
         $user_id = intval($user_id);
-        $courseId = intval($courseId);
+        $courseId = intval($course_info['real_id']);
+        $sessionCondition = api_get_session_condition($sessionId);
         $sql = "SELECT
                 SEC_TO_TIME(AVG(time_to_sec(timediff(logout_course_date,login_course_date)))) as avrg,
                 SEC_TO_TIME(SUM(time_to_sec(timediff(logout_course_date,login_course_date)))) as total,
@@ -2745,11 +2755,11 @@ function get_stats($user_id, $courseId, $start_date = null, $end_date = null)
                 FROM $table
                 WHERE
                     user_id = $user_id AND
-                    c_id = $courseId $stringStartDate $stringEndDate
+                    c_id = $courseId $stringStartDate $stringEndDate 
+                    $sessionCondition                    
                 ORDER BY login_course_date ASC";
 
         $rs = Database::query($sql);
-        $result = array();
         if ($row = Database::fetch_array($rs)) {
             $foo_avg = $row['avrg'];
             $foo_total = $row['total'];

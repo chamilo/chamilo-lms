@@ -39,8 +39,18 @@ Feature: Session tool
     And I press "submit"
     Then I should see "Update successful"
 
-  Scenario: Check shown session description
+  Scenario: Check shown session description with platform setting off
     Given I am on "/user_portal.php?nosession=true"
+    Then I should see "Temp Session"
+    And I should not see "Description for Temp Session"
+
+  Scenario: Check shown session description with platform setting on
+    Given I am a platform administrator
+    And I am on "/main/admin/settings.php"
+    And I check the "show_session_description" radio button with "true" value
+    And I press "Save settings"
+    Then I should see "Update successful"
+    Then I am on "/user_portal.php?nosession=true"
     Then I should see "Temp Session"
     And I should see "Description for Temp Session"
 

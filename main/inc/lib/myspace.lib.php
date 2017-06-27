@@ -128,8 +128,7 @@ class MySpace
      */
     public static function get_connections_to_course($userId, $courseId, $sessionId = 0)
     {
-        // Database table definitions
-        $tbl_track_course = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
         // protect data
         $userId = (int) $userId;
@@ -137,7 +136,7 @@ class MySpace
         $sessionId = (int) $sessionId;
 
         $sql = 'SELECT login_course_date, logout_course_date
-                FROM ' . $tbl_track_course.'
+                FROM ' . $table.'
                 WHERE
                     user_id = '.$userId.' AND
                     c_id = '.$courseId.' AND
@@ -147,11 +146,9 @@ class MySpace
         $connections = array();
 
         while ($row = Database::fetch_array($rs)) {
-            $timestamp_login_date = api_strtotime($row['login_course_date'], 'UTC');
-            $timestamp_logout_date = api_strtotime($row['logout_course_date'], 'UTC');
             $connections[] = array(
-                'login' => $timestamp_login_date,
-                'logout' => $timestamp_logout_date
+                'login' => api_strtotime($row['login_course_date'], 'UTC'),
+                'logout' => api_strtotime($row['logout_course_date'], 'UTC')
             );
         }
 
@@ -2648,7 +2645,6 @@ class MySpace
         //TODO: Dont use numeric index
         foreach ($data as $key => $info) {
             $start_date = $info['col0'];
-
             $end_date = $info['logout_course_date'];
 
             $return[$info['user_id']] = array(
@@ -2682,8 +2678,8 @@ class MySpace
     /**
      * Gets the connections to a course as an array of login and logout time
      *
-     * @param   int       $user_id
-     * @param   int    $courseId
+     * @param   int $user_id
+     * @param   int $courseId
      * @author  Jorge Frisancho Jibaja
      * @author  Julio Montoya <gugli100@gmail.com> fixing the function
      * @version OCT-22- 2010
@@ -2691,8 +2687,7 @@ class MySpace
      */
     public static function get_connections_to_course_by_date($user_id, $courseId, $start_date, $end_date)
     {
-        // Database table definitions
-        $tbl_track_course = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $course_info = api_get_course_info_by_id($courseId);
         $user_id = intval($user_id);
         $courseId = intval($courseId);
@@ -2701,23 +2696,19 @@ class MySpace
         if (!empty($course_info)) {
             $end_date = add_day_to($end_date);
             $sql = "SELECT login_course_date, logout_course_date
-                FROM $tbl_track_course
-                WHERE
-                    user_id = $user_id AND
-                    c_id = $courseId AND
-                    login_course_date BETWEEN '$start_date' AND '$end_date' AND
-                    logout_course_date BETWEEN '$start_date' AND '$end_date'
-                ORDER BY login_course_date ASC";
+                    FROM $table
+                    WHERE
+                        user_id = $user_id AND
+                        c_id = $courseId AND
+                        login_course_date BETWEEN '$start_date' AND '$end_date' AND
+                        logout_course_date BETWEEN '$start_date' AND '$end_date'
+                    ORDER BY login_course_date ASC";
             $rs = Database::query($sql);
 
             while ($row = Database::fetch_array($rs)) {
-                $login_date = $row['login_course_date'];
-                $logout_date = $row['logout_course_date'];
-                $timestamp_login_date = strtotime($login_date);
-                $timestamp_logout_date = strtotime($logout_date);
                 $connections[] = array(
-                    'login' => $timestamp_login_date,
-                    'logout' => $timestamp_logout_date
+                    'login' => api_strtotime($row['login_course_date'], 'UTC'),
+                    'logout' => api_strtotime($row['logout_course_date'], 'UTC')
                 );
             }
         }
@@ -2734,8 +2725,7 @@ class MySpace
  */
 function get_stats($user_id, $courseId, $start_date = null, $end_date = null)
 {
-    // Database table definitions
-    $tbl_track_course = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+    $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
     $course_info = api_get_course_info_by_id($courseId);
     if (!empty($course_info)) {
@@ -2749,10 +2739,10 @@ function get_stats($user_id, $courseId, $start_date = null, $end_date = null)
         $user_id = intval($user_id);
         $courseId = intval($courseId);
         $sql = "SELECT
-                SEC_TO_TIME(avg(time_to_sec(timediff(logout_course_date,login_course_date)))) as avrg,
-                SEC_TO_TIME(sum(time_to_sec(timediff(logout_course_date,login_course_date)))) as total,
+                SEC_TO_TIME(AVG(time_to_sec(timediff(logout_course_date,login_course_date)))) as avrg,
+                SEC_TO_TIME(SUM(time_to_sec(timediff(logout_course_date,login_course_date)))) as total,
                 count(user_id) as times
-                FROM $tbl_track_course
+                FROM $table
                 WHERE
                     user_id = $user_id AND
                     c_id = $courseId $stringStartDate $stringEndDate
@@ -2760,7 +2750,6 @@ function get_stats($user_id, $courseId, $start_date = null, $end_date = null)
 
         $rs = Database::query($sql);
         $result = array();
-
         if ($row = Database::fetch_array($rs)) {
             $foo_avg = $row['avrg'];
             $foo_total = $row['total'];
@@ -2805,21 +2794,26 @@ function convert_to_array($sql_result)
 /**
  * Converte an array to a table in html
  *
- * @param array $sql_result
+ * @param array $result
  * @author Jorge Frisancho Jibaja
  * @version OCT-22- 2010
  * @return string
  */
-function convert_to_string($sql_result)
+function convert_to_string($result)
 {
-    $result_to_print = '<table>';
-    if (!empty($sql_result)) {
-        foreach ($sql_result as $key => $data) {
-            $result_to_print .= '<tr><td>'.date('d-m-Y (H:i:s)', $data['login']).'</td><td>'.api_time_to_hms($data['logout'] - $data['login']).'</tr></td>'."\n";
+    $html = '<table class="table">';
+    if (!empty($result)) {
+        foreach ($result as $key => $data) {
+            $html .= '<tr><td>';
+            $html .= api_get_local_time($data['login']);
+            $html .= '</td>';
+            $html .= '<td>';
+            $html .= api_time_to_hms($data['logout'] - $data['login']);
+            $html .= '</tr></td>';
         }
     }
-    $result_to_print .= '</table>';
-    return $result_to_print;
+    $html .= '</table>';
+    return $html;
 }
 
 
@@ -2836,9 +2830,15 @@ function convert_to_string($sql_result)
  */
 function grapher($sql_result, $start_date, $end_date, $type = "")
 {
-    if (empty($start_date)) { $start_date = ""; }
-    if (empty($end_date)) { $end_date = ""; }
-    if ($type == "") { $type = 'day'; }
+    if (empty($start_date)) {
+        $start_date = '';
+    }
+    if (empty($end_date)) {
+        $end_date = '';
+    }
+    if ($type == '') {
+        $type = 'day';
+    }
     $main_year = $main_month_year = $main_day = [];
 
     $period = new DatePeriod(
@@ -2888,7 +2888,6 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
                 break;
         }
 
-        // the nice graphics :D
         $labels = array_keys($main_date);
         if (count($main_date) == 1) {
             $labels = $labels[0];
@@ -2929,7 +2928,6 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
 
             /* Turn of Antialiasing */
             $myPicture->Antialias = false;
-
             /* Draw the background */
             $settings = array("R" => 255, "G" => 255, "B" => 255);
             $myPicture->drawFilledRectangle(0, 0, $mainWidth, $mainHeight, $settings);
@@ -3032,7 +3030,10 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
 
         return $html;
     } else {
-        $foo_img = api_convert_encoding('<div id="messages" class="warning-message">'.get_lang('GraphicNotAvailable').'</div>', 'UTF-8');
+        $foo_img = api_convert_encoding(
+            '<div id="messages" class="warning-message">'.get_lang('GraphicNotAvailable').'</div>',
+            'UTF-8'
+        );
 
         return $foo_img;
     }

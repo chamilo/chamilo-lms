@@ -521,8 +521,8 @@ class Career extends Model
                             $top = $topValue * ($row - 1);
                             $graphHtml .= '<div id = "row_'.$id.'" class="'.$rowId.' career_row" >';
                             $color = '';
-                            if ($vertex->getAttribute('HasColor') == 1) {
-                                $color = 'danger';
+                            if (!empty($vertex->getAttribute('HasColor'))) {
+                                $color = $vertex->getAttribute('HasColor');
                             }
                             $content = $vertex->getAttribute('Notes');
                             $content .= '<div class="pull-right">['.$id.']</div>';
@@ -531,8 +531,10 @@ class Career extends Model
                                 $content,
                                 $vertex->getAttribute('graphviz.label'),
                                 null,
-                                $color,
-                                null
+                                null,
+                                null,
+                                null,
+                                $color
                             );
                             $graphHtml .= '</div>';
 

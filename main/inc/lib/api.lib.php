@@ -2279,7 +2279,7 @@ function api_get_session_visibility(
 
             $totalDuration = $firstAccess + $duration + $userDuration;
 
-            return $totalDuration > $currentTime ? SESSION_AVAILABLE : SESSION_INVISIBLE;
+            return $totalDuration > $currentTime ? SESSION_AVAILABLE : SESSION_VISIBLE_READ_ONLY;
         }
 
         return SESSION_AVAILABLE;

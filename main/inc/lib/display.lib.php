@@ -1576,7 +1576,9 @@ class Display
             ) {
                 if (isset($session_info['duration']) && !empty($session_info['duration'])) {
                     $daysLeft = SessionManager::getDayLeftInSession($session_info, api_get_user_id());
-                    $session['duration'] = sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft);
+                    $session['duration'] = $daysLeft >= 0
+                        ? sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft)
+                        : get_lang('YourSessionTimeHasExpired');
                 }
                 $active = true;
             } else {

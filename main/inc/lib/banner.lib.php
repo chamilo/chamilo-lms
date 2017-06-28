@@ -642,10 +642,17 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
                         $user_id
                     );
 
-                    $additonalBlocks .= Display::return_message(
-                        sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft),
-                        'information'
-                    );
+                    if ($daysLeft >= 0) {
+                        $additonalBlocks .= Display::return_message(
+                            sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft),
+                            'information'
+                        );
+                    } else {
+                        $additonalBlocks .= Display::return_message(
+                            get_lang('YourSessionTimeHasExpired'),
+                            'warning'
+                        );
+                    }
                 }
                 break;
         }

@@ -34,6 +34,12 @@ if (empty($careerId)) {
     api_not_allowed(true);
 }
 
+$career = new Career();
+$careerInfo = $career->get($careerId);
+if (empty($careerInfo)) {
+    api_not_allowed(true);
+}
+
 // setting breadcrumbs
 $interbreadcrumb[] = array(
     'url' => 'index.php',
@@ -50,25 +56,18 @@ $interbreadcrumb[] = array(
 );
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-
 $check = Security::check_token('request');
 $token = Security::get_token();
 
 if ($action == 'add') {
     $interbreadcrumb[] = array('url' => 'careers.php', 'name' => get_lang('Careers'));
-    $tool_name = get_lang('Add');
+    $toolName = get_lang('Add');
 } elseif ($action == 'edit') {
     $interbreadcrumb[] = array('url' => 'careers.php', 'name' => get_lang('Careers'));
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
-    $tool_name = get_lang('Edit');
+    $toolName = get_lang('Edit');
 } else {
-    $tool_name = get_lang('Careers');
-}
-
-$career = new Career();
-$careerInfo = $career->get($careerId);
-if (empty($careerInfo)) {
-    api_not_allowed(true);
+    $toolName = get_lang('Careers');
 }
 
 $extraFieldValue = new ExtraFieldValue('career');
@@ -82,8 +81,9 @@ $item = $extraFieldValue->get_values_by_handler_and_field_variable(
 
 if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
     $graph = unserialize($item['value']);
-    $html = Career::renderDiagram($careerInfo, $graph);
     $tpl = new Template(get_lang('Diagram'));
+    $html = Display::page_subheader2($careerInfo['name']);
+    $html .= Career::renderDiagram($careerInfo, $graph);
     $tpl->assign('content', $html);
     $tpl->display_one_col_template();
 }

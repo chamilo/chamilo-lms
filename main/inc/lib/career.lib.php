@@ -303,157 +303,142 @@ class Career extends Model
             }
         }
 
-        $defaultSpace = 40;
-        $group = 0;
-        $counter = 0;
-        $html = Display::page_header($careerInfo['name']);
-
         $list = [];
-        $vertexNoGroups = [];
         /** @var Vertex $vertex */
         foreach ($graph->getVertices() as $vertex) {
             $group = $vertex->getAttribute('Group');
             $subGroup = $vertex->getAttribute('SubGroup');
             $column = $vertex->getGroup();
             $row = $vertex->getAttribute('Row');
-            if (empty($group)) {
-                //$group = $column;
-                //$vertexNoGroups[$group][$subGroup][$column][$row] = $vertex;
-            } else {
-                //$list[$group][$subGroup][$column][$row] = $vertex;
-            }
             $list[$group][$subGroup][$column][$row] = $vertex;
         }
+
         $maxGroups = count($list);
         $widthGroup = 30;
         if (!empty($maxGroups)) {
             $widthGroup = 85 / $maxGroups;
         }
 
+        $connections = '';
+        $groupDrawLine = [];
+
+        foreach ($list as $group => $subGroupList) {
+            $showGroupLine = true;
+            foreach ($subGroupList as $column => $rows) {
+                if (count($rows) == 1) {
+                    $showGroupLine = false;
+                }
+                $groupDrawLine[$group] = $showGroupLine;
+
+                //if ($showGroupLine == false) {
+                /** @var Vertex $vertex */
+                foreach ($rows as $row => $items) {
+                    foreach ($items as $vertex) {
+                        if ($vertex instanceof Vertex) {
+                            $connectionList = $vertex->getAttribute(
+                                'Connections'
+                            );
+                            $firstConnection = '';
+                            $secondConnection = '';
+                            if (!empty($connectionList)) {
+                                $explode = explode('-', $connectionList);
+                                $pos = strpos($explode[0], 'SG');
+                                if ($pos === false) {
+                                    $pos = strpos($explode[0], 'G');
+                                    if (is_numeric($pos)) {
+                                        // group_123 id
+                                        $groupValueId = (int)str_replace(
+                                            'G',
+                                            '',
+                                            $explode[0]
+                                        );
+                                        $firstConnection = 'group_'.$groupValueId;
+                                        $groupDrawLine[$groupValueId] = true;
+                                    } else {
+                                        // Course block (row_123 id)
+                                        if (!empty($explode[0])) {
+                                            $firstConnection = 'row_'.(int) $explode[0];
+                                        }
+                                    }
+                                } else {
+                                    // subgroup__123 id
+                                    $firstConnection = 'subgroup_'.(int)str_replace('SG', '', $explode[0]);
+                                }
+
+                                $pos = strpos($explode[1], 'SG');
+                                if ($pos === false) {
+                                    $pos = strpos($explode[1], 'G');
+                                    if (is_numeric($pos)) {
+                                        $groupValueId = (int)str_replace(
+                                            'G',
+                                            '',
+                                            $explode[1]
+                                        );
+                                        $secondConnection = 'group_'.$groupValueId;
+                                        $groupDrawLine[$groupValueId] = true;
+                                    } else {
+                                        // Course block (row_123 id)
+                                        if (!empty($explode[0])) {
+                                            $secondConnection = 'row_'.(int) $explode[1];
+                                        }
+                                    }
+                                } else {
+                                    $secondConnection = 'subgroup_'.(int)str_replace('SG', '', $explode[1]);
+                                }
+
+                                if (!empty($firstConnection) && !empty($firstConnection)) {
+                                    $connections .= self::createConnection(
+                                        $firstConnection,
+                                        $secondConnection,
+                                        ['Left', 'Right']
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+                //}
+            }
+        }
+
         $graphHtml = '<div class="container">';
         foreach ($list as $group => $subGroupList) {
+            $showGroupLine = false;
+            if (isset($groupDrawLine[$group]) && $groupDrawLine[$group]) {
+                $showGroupLine = true;
+            }
             $graphHtml .= self::parseColumns(
                 $list,
                 $group,
+                $showGroupLine,
                 $subGroupList,
                 $maxColumn,
                 $widthGroup
             );
         }
-
         $graphHtml .= '</div>';
-
-        /*$graphHtml .= '<br/><div class="container">';
-        foreach ($vertexNoGroups as $group => $subGroupList) {
-            $graphHtml .= self::parseColumns(
-                $vertexNoGroups,
-                $group,
-                $subGroupList,
-                $maxColumn,
-                $widthGroup
-            );
-        }
-        $graphHtml .= '</div>';*/
-
-        foreach ($graph->getVertices() as $vertex) {
-            $id = $vertex->getId();
-            $windowId = "window_$id";
-            $groupId = $vertex->getGroup();
-            $groupJsId = "group_$groupId";
-
-            if ($group != $vertex->getGroup()) {
-                if ($group > 0) {
-                    $counter = 0;
-                    $html .= '</div>'.PHP_EOL;
-                }
-
-                $left =  ($defaultSpace).'px';
-                if ($group == 0) {
-                    $left = 0;
-                }
-               // $html .= PHP_EOL.'<div id="'.$groupJsId.'" style="padding:15px;border-style:solid;float:left; margin-left:'.$left.'; width:'.$width.'%">';
-            }
-
-            if ($debug) {
-                echo ('->>>>>>>'.$vertex->getAttribute('graphviz.label')).' - '.$vertex->getGroup().PHP_EOL;
-            }
-
-            $group = $vertex->getGroup();
-            $content = $vertex->getAttribute('Notes');
-            $content .= '<div class="pull-right">['.$id.']</div>';
-            if ($debug) {
-                echo ('entering vertices: ').PHP_EOL;
-            }
-
-            /** @var Vertex $vertexTo */
-            foreach ($vertex->getVerticesEdgeTo() as $vertexTo) {
-                $childId = $vertexTo->getId();
-                if ($id == $childId) {
-                    continue;
-                }
-
-                $childId = "window_$childId";
-                $childGroupId = $vertexTo->getGroup();
-                $childJsGroupId = "group_$childGroupId";
-                if ($debug) {
-                    echo ($vertexTo->getAttribute('graphviz.label')).PHP_EOL;
-                }
-
-                if (($vertexTo->getGroup() - $groupId) == 1) {
-                    //$content .= self::createConnection($windowId, $childId, ['Left', 'Right']);
-                } else {
-                    /*
-                    if ($childGroupId > $groupId) {
-                        $content .= self::createConnection(
-                            $groupJsId,
-                            $childJsGroupId
-                        );
-                    } else {
-                        $anchor = ['Left', 'Right'];
-                        if ($childGroupId == 1) {
-                            $anchor = ['Right', 'Left'];
-                        }
-                        $content .= self::createConnection(
-                            $childJsGroupId,
-                            $groupJsId,
-                            $anchor
-                        );
-                    }**/
-                }
-            }
-
-            $counter++;
-            /*$color = '';
-            if ($vertex->getAttribute('HasColor') == 1) {
-                $color = 'danger';
-            }
-
-            $html .= PHP_EOL.'<div id="'.$windowId.'" class="window" style="float:left; width:100%; "  >';
-            $html .= Display::panel(
-                $content,
-                $vertex->getAttribute('graphviz.label'),
-                null,
-                $color,
-                null
-                //$windowId
-            );
-            $html .= '</div>';*/
-        }
-        //$html .= '</div>'.PHP_EOL;
+        $graphHtml .= $connections;
 
         return $graphHtml;
     }
 
     /**
-     * @param $list
-     * @param $group
-     * @param $subGroupList
-     * @param $maxColumn
+     * @param array $list
+     * @param int $group
+     * @param bool $showGroupLine
+     * @param array $subGroupList
+     * @param int $maxColumn
      * @param $widthGroup
      * @return string
      */
-    public static function parseColumns($list, $group, $subGroupList, $maxColumn, $widthGroup)
-    {
+    public static function parseColumns(
+        $list,
+        $group,
+        $showGroupLine,
+        $subGroupList,
+        $maxColumn,
+        $widthGroup
+    ) {
         $topValue = 90;
         $defaultSpace = 40;
         $leftGroup = $defaultSpace.'px';
@@ -462,14 +447,7 @@ class Career extends Model
         }
 
         $groupIdTag = "group_$group";
-        $showGroupLine = true;
-        foreach ($subGroupList as $column => $rows) {
-            if (count($rows) == 1) {
-                $showGroupLine = false;
-            }
-        }
-
-        $borderLine = $showGroupLine ? 'border-style:solid;' : '';
+        $borderLine = $showGroupLine === true ? 'border-style:solid;' : '';
         // padding:15px;
         $graphHtml = '<div id="'.$groupIdTag.'" style=" '.$borderLine.' padding:15px; float:left; margin-left:'.$leftGroup.'; width:'.$widthGroup.'%">';
 
@@ -479,7 +457,7 @@ class Career extends Model
                 $line = 'border-style:solid;';
             }
             // padding:15px;
-            $graphHtml .= '<div id="subgroup_'.$subGroup.'" style="'.$line.' padding:15px; float:left; margin-left:0px; width:100%">';
+            $graphHtml .= '<div id="subgroup_'.$subGroup.'" style="'.$line.' margin-bottom:20px; padding:15px; float:left; margin-left:0px; width:100%">';
             foreach ($columnList as $column => $rows) {
                 $leftColumn = $defaultSpace.'px';
                 if ($column == 1) {
@@ -602,41 +580,6 @@ class Career extends Model
                                     ['Left', 'Right']
                                 );
                             }
-
-                            $connections = $vertex->getAttribute('Connections');
-                            $firstConnection = '';
-                            $secondConnection = '';
-                            if (!empty($connections)) {
-                                $explode = explode('-', $connections);
-
-                                $pos = strpos($explode[0], 'SG');
-
-                                if ($pos === false) {
-                                    $pos = strpos($explode[0], 'G');
-                                    if (is_numeric($pos)) {
-                                        $firstConnection = 'group_'.(int) str_replace('G', '', $explode[0]);
-                                    }
-                                } else {
-                                    $firstConnection = 'subgroup_'.(int) str_replace('SG', '', $explode[0]);
-                                }
-
-                                $pos = strpos($explode[1], 'SG');
-                                if ($pos === false) {
-                                    $pos = strpos($explode[1], 'G');
-                                    if (is_numeric($pos)) {
-                                        $secondConnection = 'group_'.(int) str_replace('G', '', $explode[1]);
-                                    }
-                                } else {
-                                    $secondConnection = 'subgroup_'.(int) str_replace('SG', '', $explode[1]);
-                                }
-                                if (!empty($firstConnection) && !empty($firstConnection)) {
-                                    $graphHtml .= self::createConnection(
-                                        $firstConnection,
-                                        $secondConnection,
-                                        ['Left', 'Right']
-                                    );
-                                }
-                            }
                         }
 
                         if (!empty($subGroup) && $subGroup != -1 && $subGroupCountList[$subGroup] == $subGroupAdded[$subGroup]) {
@@ -648,28 +591,6 @@ class Career extends Model
             }
             $graphHtml .= '</div>';
         }
-        $graphHtml .= '</div>';
-
-        return $graphHtml;
-
-        $nextGroup = (int) $group + 1;
-        if (isset($list[$nextGroup])) {
-            $columnCount = 0;
-            foreach ($list[$group] as $cols) {
-                $columnCount .= count($cols);
-            }
-
-            $columnCountNext = 0;
-            foreach ($list[$nextGroup] as $cols) {
-                $columnCountNext .= count($cols);
-            }
-
-            if ($columnCount > 1 && $columnCountNext > 1) {
-                $nextGroupTag = "group_$nextGroup";
-                $graphHtml .= self::createConnection($groupIdTag, $nextGroupTag, ['Left', 'Right']);
-            }
-        }
-
         $graphHtml .= '</div>';
 
         return $graphHtml;

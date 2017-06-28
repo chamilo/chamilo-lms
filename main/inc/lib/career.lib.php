@@ -294,6 +294,7 @@ class Career extends Model
         }
 
         $debug = false;
+
         // Getting max column
         $maxColumn = 0;
         foreach ($graph->getVertices() as $vertex) {
@@ -407,12 +408,11 @@ class Career extends Model
             if (isset($groupDrawLine[$group]) && $groupDrawLine[$group]) {
                 $showGroupLine = true;
             }
-            $graphHtml .= self::parseColumns(
+            $graphHtml .= self::parseSubGroups(
                 $list,
                 $group,
                 $showGroupLine,
                 $subGroupList,
-                $maxColumn,
                 $widthGroup
             );
         }
@@ -427,16 +427,14 @@ class Career extends Model
      * @param int $group
      * @param bool $showGroupLine
      * @param array $subGroupList
-     * @param int $maxColumn
      * @param $widthGroup
      * @return string
      */
-    public static function parseColumns(
+    public static function parseSubGroups(
         $list,
         $group,
         $showGroupLine,
         $subGroupList,
-        $maxColumn,
         $widthGroup
     ) {
         $topValue = 90;
@@ -449,7 +447,7 @@ class Career extends Model
         $groupIdTag = "group_$group";
         $borderLine = $showGroupLine === true ? 'border-style:solid;' : '';
         // padding:15px;
-        $graphHtml = '<div id="'.$groupIdTag.'" style=" '.$borderLine.' padding:15px; float:left; margin-left:'.$leftGroup.'; width:'.$widthGroup.'%">';
+        $graphHtml = '<div id="'.$groupIdTag.'" class="career_group" style=" '.$borderLine.' padding:15px; float:left; margin-left:'.$leftGroup.'; width:'.$widthGroup.'%">';
 
         foreach ($subGroupList as $subGroup => $columnList) {
             $line = '';
@@ -457,7 +455,7 @@ class Career extends Model
                 $line = 'border-style:solid;';
             }
             // padding:15px;
-            $graphHtml .= '<div id="subgroup_'.$subGroup.'" style="'.$line.' margin-bottom:20px; padding:15px; float:left; margin-left:0px; width:100%">';
+            $graphHtml .= '<div id="subgroup_'.$subGroup.'" class="career_subgroup" style="'.$line.' margin-bottom:20px; padding:15px; float:left; margin-left:0px; width:100%">';
             foreach ($columnList as $column => $rows) {
                 $leftColumn = $defaultSpace.'px';
                 if ($column == 1) {
@@ -468,7 +466,7 @@ class Career extends Model
                 }
 
                 $widthColumn = 85 / count($columnList);
-                $graphHtml .= '<div id="col_'.$column.'" style="padding:15px;float:left; margin-left:'.$leftColumn.'; width:'.$widthColumn.'%">';
+                $graphHtml .= '<div id="col_'.$column.'" class="career_column" style="padding:15px;float:left; margin-left:'.$leftColumn.'; width:'.$widthColumn.'%">';
                 $maxRow = 0;
                 foreach ($rows as $row => $vertex) {
                     if ($row > $maxRow) {
@@ -509,14 +507,11 @@ class Career extends Model
                             } else {
                                 $subGroupAdded[$subGroup]++;
                             }
-                            if ($subGroupAdded[$subGroup] == 1) {
-                                //$graphHtml .= '<div id="sub_group_'.$subGroup.'" style="margin-bottom:20px; padding:15px; border-style:solid; width:100%">';
-                            }
                         }
 
                         foreach ($vertexList as $vertex) {
                             if (is_null($vertex)) {
-                                $graphHtml .= '<div class="empty" style="height: 130px">';
+                                $graphHtml .= '<div class="career_empty" style="height: 130px">';
                                 $graphHtml .= '</div>';
                                 continue;
                             }
@@ -524,7 +519,7 @@ class Career extends Model
                             $id = $vertex->getId();
                             $rowId = "row_$row";
                             $top = $topValue * ($row - 1);
-                            $graphHtml .= '<div id = "row_'.$id.'" class="'.$rowId.'" >';
+                            $graphHtml .= '<div id = "row_'.$id.'" class="'.$rowId.' career_row" >';
                             $color = '';
                             if ($vertex->getAttribute('HasColor') == 1) {
                                 $color = 'danger';
@@ -580,10 +575,6 @@ class Career extends Model
                                     ['Left', 'Right']
                                 );
                             }
-                        }
-
-                        if (!empty($subGroup) && $subGroup != -1 && $subGroupCountList[$subGroup] == $subGroupAdded[$subGroup]) {
-                           // $graphHtml .= '</div>';
                         }
                     }
                 }

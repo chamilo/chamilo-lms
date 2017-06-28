@@ -601,15 +601,44 @@ class Career extends Model
         }
 
         $anchor = implode('","', $anchor);
-        $html = '<script> jsPlumb.ready(function() { ';
+        $html = '<script>
+
+        var connectorPaintStyle = {
+            strokeWidth: 2,
+            stroke: "#a31ed3",
+            joinstyle: "round",
+            outlineStroke: "white",
+            outlineWidth: 2
+        },
+        // .. and this is the hover style.
+        connectorHoverStyle = {
+            strokeWidth: 3,
+            stroke: "#216477",
+            outlineWidth: 5,
+            outlineStroke: "white"
+        },
+        endpointHoverStyle = {
+            fill: "#E80CAF",
+            stroke: "#E80CAF"
+        };
+        jsPlumb.ready(function() { ';
         $html .= 'jsPlumb.connect({
             source:"'.$source.'",
             target:"'.$target.'",
             endpoint:[ "Rectangle", { width:1, height:1 }],                                        
-            connector: ["Flowchart"],                                        
+            connector: ["Flowchart"],             
+            paintStyle: connectorPaintStyle,    
+            hoverPaintStyle: endpointHoverStyle,                
             anchor: ["'.$anchor.'"],
             overlays: [
-                [ "Arrow", { location:0.5 } ],
+                [ 
+                    "Arrow", 
+                    { 
+                        location:1,  
+                        width:11, 
+                        length:11 
+                    } 
+                ],
             ],
         });';
         $html .= '});</script>'.PHP_EOL;

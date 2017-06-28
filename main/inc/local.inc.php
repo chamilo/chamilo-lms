@@ -1018,10 +1018,6 @@ if (isset($cidReset) && $cidReset) {
         if (api_get_group_id()) {
             Session::erase('_gid');
         }
-
-        if (api_is_in_gradebook()) {
-            api_remove_in_gradebook();
-        }
     }
 } else {
     // Continue with the previous values

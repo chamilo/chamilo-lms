@@ -307,16 +307,19 @@ class ScheduledAnnouncement extends Model
                             );
 
                             $generalCoach = '';
+                            $generalCoachEmail = '';
                             if (!empty($sessionInfo['coach_id'])) {
                                 $coachInfo = api_get_user_info($sessionInfo['coach_id']);
                                 if (!empty($coachInfo)) {
                                     $generalCoach = $coachInfo['complete_name'];
+                                    $generalCoachEmail = $coachInfo['email'];
                                 }
                             }
                             $tags = [
                                 '((session_name))' => $sessionInfo['name'],
                                 '((session_start_date))' => $startTime,
                                 '((general_coach))' => $generalCoach,
+                                '((general_coach_email))' => $generalCoachEmail,
                                 '((session_end_date))' => $endTime,
                                 '((user_complete_name))' => $userInfo['complete_name'],
                                 '((user_first_name))' => $userInfo['firstname'],
@@ -352,6 +355,7 @@ class ScheduledAnnouncement extends Model
             '((session_start_date))',
             '((session_end_date))',
             '((general_coach))',
+            '((general_coach_email))',
             '((user_complete_name))',
             '((user_first_name))',
             '((user_last_name))',

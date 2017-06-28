@@ -1513,9 +1513,9 @@ class Agenda
                         $row['enddate']
                     );
                 }
+
                 $event['description'] = $row['text'];
                 $event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
-
                 $event['parent_event_id'] = 0;
                 $event['has_children'] = 0;
 
@@ -2017,12 +2017,8 @@ class Agenda
      */
     public function getPlatformEvents($start, $end)
     {
-        $start = isset($start) && !empty($start) ? api_get_utc_datetime(
-            intval($start)
-        ) : null;
-        $end = isset($end) && !empty($end) ? api_get_utc_datetime(
-            intval($end)
-        ) : null;
+        $start = isset($start) && !empty($start) ? api_get_utc_datetime(intval($start)) : null;
+        $end = isset($end) && !empty($end) ? api_get_utc_datetime(intval($end)) : null;
         $dateCondition = '';
 
         if (!empty($start) && !empty($end)) {
@@ -2061,25 +2057,18 @@ class Agenda
                 }
 
                 if (!empty($row['start_date'])) {
-                    $event['start'] = $this->formatEventDate(
-                        $row['start_date']
-                    );
-                    $event['start_date_localtime'] = api_get_local_time(
-                        $row['start_date']
-                    );
+                    $event['start'] = $this->formatEventDate($row['start_date']);
+                    $event['start_date_localtime'] = api_get_local_time($row['start_date']);
                 }
+
                 if (!empty($row['end_date'])) {
                     $event['end'] = $this->formatEventDate($row['end_date']);
-                    $event['end_date_localtime'] = api_get_local_time(
-                        $row['end_date']
-                    );
+                    $event['end_date_localtime'] = api_get_local_time($row['end_date']);
                 }
-
-                $event['description'] = $row['content'];
                 $event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
-
                 $event['parent_event_id'] = 0;
                 $event['has_children'] = 0;
+                $event['description'] = $row['content'];
 
                 $my_events[] = $event;
                 $this->events[] = $event;

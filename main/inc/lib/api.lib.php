@@ -2227,9 +2227,6 @@ function api_get_session_visibility(
     $courseId = null,
     $ignore_visibility_for_admins = true
 ) {
-    // Means that the session is still available.
-    $visibility = 0;
-
     if (api_is_platform_admin()) {
         if ($ignore_visibility_for_admins) {
             return SESSION_AVAILABLE;
@@ -2237,16 +2234,17 @@ function api_get_session_visibility(
     }
 
     $now = time();
-    if (!empty($session_id)) {
+    if (empty($session_id)) {
+        return 0; // Means that the session is still available.
+    }
         $session_id = intval($session_id);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $sql = "SELECT * FROM $tbl_session
-                WHERE id = $session_id ";
+        $result = Database::query("SELECT * FROM $tbl_session WHERE id = $session_id");
 
-        $result = Database::query($sql);
-
-        if (Database::num_rows($result) > 0) {
+        if (Database::num_rows($result) <= 0) {
+            return SESSION_INVISIBLE;
+        }
             $row = Database::fetch_array($result, 'ASSOC');
             $visibility = $original_visibility = $row['visibility'];
 
@@ -2268,55 +2266,39 @@ function api_get_session_visibility(
                     }
 
                     $currentTime = time();
-                    $firstAccess = 0;
-                    if (isset($courseAccess['login_course_date'])) {
-                        $firstAccess = api_strtotime(
-                            $courseAccess['login_course_date'],
-                            'UTC'
-                        );
-                    }
+                    $firstAccess = isset($courseAccess['login_course_date'])
+                        ? api_strtotime($courseAccess['login_course_date'], 'UTC')
+                        : 0;
                     $userDurationData = SessionManager::getUserSession(
                         api_get_user_id(),
                         $session_id
                     );
-                    $userDuration = 0;
-                    if (isset($userDurationData['duration'])) {
-                        $userDuration = intval($userDurationData['duration']) * 24 * 60 * 60;
-                    }
+                    $userDuration = isset($userDurationData['duration'])
+                        ? (intval($userDurationData['duration']) * 24 * 60 * 60)
+                        : 0;
 
                     $totalDuration = $firstAccess + $duration + $userDuration;
-                    if ($totalDuration > $currentTime) {
-                        return SESSION_AVAILABLE;
-                    } else {
-                        return SESSION_INVISIBLE;
-                    }
+                        return $totalDuration > $currentTime ? SESSION_AVAILABLE : SESSION_INVISIBLE;
                 }
 
                 return SESSION_AVAILABLE;
-            } else {
+            }
                 // If start date was set.
                 if (!empty($row['access_start_date'])) {
-                    if ($now > api_strtotime($row['access_start_date'], 'UTC')) {
-                        $visibility = SESSION_AVAILABLE;
-                    } else {
-                        $visibility = SESSION_INVISIBLE;
-                    }
+                    $visibility = $now > api_strtotime($row['access_start_date'], 'UTC')
+                        ? SESSION_AVAILABLE
+                        : SESSION_INVISIBLE;
                 }
 
                 // If the end date was set.
                 if (!empty($row['access_end_date'])) {
                     // Only if date_start said that it was ok
                     if ($visibility === SESSION_AVAILABLE) {
-                        if ($now < api_strtotime($row['access_end_date'], 'UTC')) {
-                            // Date still available
-                            $visibility = SESSION_AVAILABLE;
-                        } else {
-                            // Session ends
-                            $visibility = $row['visibility'];
-                        }
+                        $visibility = $now < api_strtotime($row['access_end_date'], 'UTC')
+                            ? SESSION_AVAILABLE // Date still available
+                            : $row['visibility']; // Session ends
                     }
                 }
-            }
 
             /* If I'm a coach the visibility can change in my favor depending in
              the coach dates */
@@ -2326,31 +2308,18 @@ function api_get_session_visibility(
                 // Test start date.
                 if (!empty($row['coach_access_start_date'])) {
                     $start = api_strtotime($row['coach_access_start_date'], 'UTC');
-                    if ($start < $now) {
-                        $visibility = SESSION_AVAILABLE;
-                    } else {
-                        $visibility = SESSION_INVISIBLE;
-                    }
+                    $visibility = $start < $now ? SESSION_AVAILABLE : SESSION_INVISIBLE;
                 }
 
                 // Test end date.
                 if (!empty($row['coach_access_end_date'])) {
-                    if ($visibility = SESSION_AVAILABLE) {
+                    if ($visibility === SESSION_AVAILABLE) {
                         $endDateCoach = api_strtotime($row['coach_access_end_date'], 'UTC');
 
-                        if ($endDateCoach >= $now) {
-                            $visibility = SESSION_AVAILABLE;
-                        } else {
-                            $visibility = $row['visibility'];
-                        }
+                        $visibility = $endDateCoach >= $now ? SESSION_AVAILABLE : $row['visibility'];
                     }
                 }
             }
-        } else {
-            $visibility = SESSION_INVISIBLE;
-        }
-    }
-
     return $visibility;
 }
 

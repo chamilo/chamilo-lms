@@ -481,10 +481,9 @@ $(document).ready(function() {
                 $("#comment").hide();
 
 				allFields.removeClass( "ui-state-error" );
-
 				$("#dialog-form").dialog("open");
 
-				var url = '{{ web_agenda_ajax_url }}&a=edit_event&id='+calEvent.id+'&start='+calEvent.start.unix()+'&end='+calEvent.end.unix()+'&all_day='+calEvent.allDay+'&view='+view.name;
+				var url = '{{ web_agenda_ajax_url }}&a=edit_event&id='+calEvent.id+'&view='+view.name;
 				var delete_url = '{{ web_agenda_ajax_url }}&a=delete_event&id='+calEvent.id;
 
 				$("#dialog-form").dialog({
@@ -525,7 +524,7 @@ $(document).ready(function() {
 						},
                         {% endif %}
                         '{{ "Edit"|get_lang }}' : function() {
-                            url =  "{{ _p.web_main }}calendar/agenda.php?action=edit&type=fromjs&id=" + calEvent.id+'&course_id='+calEvent.course_id+"";
+                            url =  "{{ _p.web_main }}calendar/agenda.php?action=edit&type=fromjs&id="+calEvent.id+'&course_id='+calEvent.course_id+"";
                             window.location.href = url;
                             $("#dialog-form").dialog( "close" );
                         },

@@ -549,7 +549,7 @@ class Statistics
         $sqlList = [];
         foreach ($days as $day) {
             $date = new DateTime($now);
-            if ($days > 1) {
+            if ($day > 1) {
                 $date->sub(new DateInterval('P'.$day.'D'));
             }
             $startDate = $date->format('Y-m-d').' 00:00:00';
@@ -559,8 +559,10 @@ class Statistics
             if ($day == 1) {
                 $label = get_lang('Today');
             } else {
-                $label = sprintf(get_lang('LastXDays'), $day).' <br /> ('.$localDate.')';
+                $label = sprintf(get_lang('LastXDays'), $day);
             }
+
+            $label .= ' <br /> ('.$localDate.')';
 
             $sql = "SELECT count($field) AS number 
                     FROM $table $table_url 

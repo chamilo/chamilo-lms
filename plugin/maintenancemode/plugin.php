@@ -157,17 +157,13 @@ RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
         $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
         curl_close($handle);
 
-        // Looks htaccess contains errors. Restore as it was.
-        if ($httpCode != 200) {
-            Display::addFlash(
-                Display::return_message(
-                    'Check your htaccess instructions. The original file was restored.',
-                    'warning'
-                )
-            );
-            $originalContent = str_replace("\x0D", '', $originalContent);
-            file_put_contents($file, $originalContent);
-        } else {
+        $statusOkList = [
+            200,
+            301,
+            302,
+        ];
+
+        if (in_array($httpCode, $statusOkList)) {
             $result = file_put_contents($maintenanceHtml, $content);
             if ($result === false) {
                 Display::addFlash(
@@ -177,6 +173,16 @@ RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
                     )
                 );
             }
+        } else {
+            // Looks htaccess contains errors. Restore as it was.
+            Display::addFlash(
+                Display::return_message(
+                    'Check your htaccess instructions. The original file was restored.',
+                    'warning'
+                )
+            );
+            $originalContent = str_replace("\x0D", '', $originalContent);
+            file_put_contents($file, $originalContent);
         }
 
         if ($active == false) {

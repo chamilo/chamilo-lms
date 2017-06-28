@@ -549,7 +549,9 @@ class Statistics
         $sqlList = [];
         foreach ($days as $day) {
             $date = new DateTime($now);
-            $date->sub(new DateInterval('P'.$day.'D'));
+            if ($days > 1) {
+                $date->sub(new DateInterval('P'.$day.'D'));
+            }
             $startDate = $date->format('Y-m-d').' 00:00:00';
             $endDate = $date->format('Y-m-d').' 23:59:59';
 
@@ -603,7 +605,7 @@ class Statistics
         $now = api_get_utc_datetime();
         $date = new DateTime($now);
         $date->sub(new DateInterval('P15D'));
-        $newDate = $date->format('Y-m-d h:i:s');
+        $newDate = $date->format('Y-m-d').' 00:00:00';
 
         $field = 'login_id';
         if ($distinct) {

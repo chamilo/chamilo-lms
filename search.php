@@ -328,7 +328,7 @@ $userForm->addHtml('</div></div></div></div>');
 
 $userForm->addHtml('<div class="panel-group" id="search_extrafield" role="tablist" aria-multiselectable="true">');
 $userForm->addHtml('<div class="panel panel-default">');
-$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">' . get_lang('Filiere') . '</a></div>');
+$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">' . get_lang('FiliereTitle') . '</a></div>');
 $userForm->addHtml('<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">');
 $userForm->addHtml('<div class="panel-body"><p class="text-info">' . get_lang('FiliereExplanation') .'</p>');
 

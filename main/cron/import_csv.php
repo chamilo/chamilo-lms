@@ -2409,7 +2409,7 @@ class ImportCsv
 
                     $currentCourseId = (int) $row['CourseId'];
                     $name = $row['CourseName'];
-                    $hasColor = $row['HasColor'];
+                    $color = $row['DefinedColor'];
                     $notes = $row['Notes'];
                     $groupValue = $row['Group'];
                     $rowValue = $row['Row'];
@@ -2423,7 +2423,7 @@ class ImportCsv
                     } else {
                         $current = $graph->createVertex($currentCourseId);
                         $current->setAttribute('graphviz.label', $name);
-                        $current->setAttribute('HasColor', $hasColor);
+                        $current->setAttribute('DefinedColor', $color);
                         $current->setAttribute('Notes', $notes);
                         $current->setAttribute('Row', $rowValue);
                         $current->setAttribute('Group', $groupValue);

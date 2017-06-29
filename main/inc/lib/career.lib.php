@@ -309,9 +309,13 @@ class Career extends Model
         foreach ($graph->getVertices() as $vertex) {
             $group = $vertex->getAttribute('Group');
             $subGroup = $vertex->getAttribute('SubGroup');
+            $subGroupData = explode(':', $subGroup);
             $column = $vertex->getGroup();
             $row = $vertex->getAttribute('Row');
-            $list[$group][$subGroup][$column][$row] = $vertex;
+            $subGroupId = $subGroupData[0];
+            $label = isset($subGroupData[1]) ? $subGroupData[1] : '';
+            $list[$group][$subGroupId]['columns'][$column][$row] = $vertex;
+            $list[$group][$subGroupId]['label'] = $label;
         }
 
         $maxGroups = count($list);
@@ -322,20 +326,24 @@ class Career extends Model
 
         $connections = '';
         $groupDrawLine = [];
+        $groupCourseList = [];
 
+        // Read Connections column
         foreach ($list as $group => $subGroupList) {
-            $showGroupLine = true;
-            foreach ($subGroupList as $column => $rows) {
-                if (count($rows) == 1) {
+            foreach ($subGroupList as $subGroupData) {
+                $columns = $subGroupData['columns'];
+                $showGroupLine = true;
+                if (count($columns) == 1) {
                     $showGroupLine = false;
                 }
                 $groupDrawLine[$group] = $showGroupLine;
 
                 //if ($showGroupLine == false) {
                 /** @var Vertex $vertex */
-                foreach ($rows as $row => $items) {
+                foreach ($columns as $row => $items) {
                     foreach ($items as $vertex) {
                         if ($vertex instanceof Vertex) {
+                            $groupCourseList[$group][] = $vertex->getId();
                             $connectionList = $vertex->getAttribute(
                                 'Connections'
                             );
@@ -409,7 +417,7 @@ class Career extends Model
                 $showGroupLine = true;
             }
             $graphHtml .= self::parseSubGroups(
-                $list,
+                $groupCourseList,
                 $group,
                 $showGroupLine,
                 $subGroupList,
@@ -423,7 +431,7 @@ class Career extends Model
     }
 
     /**
-     * @param array $list
+     * @param array $groupCourseList list of groups and their courses
      * @param int $group
      * @param bool $showGroupLine
      * @param array $subGroupList
@@ -431,7 +439,7 @@ class Career extends Model
      * @return string
      */
     public static function parseSubGroups(
-        $list,
+        $groupCourseList,
         $group,
         $showGroupLine,
         $subGroupList,
@@ -449,13 +457,19 @@ class Career extends Model
         // padding:15px;
         $graphHtml = '<div id="'.$groupIdTag.'" class="career_group" style=" '.$borderLine.' padding:15px; float:left; margin-left:'.$leftGroup.'; width:'.$widthGroup.'%">';
 
-        foreach ($subGroupList as $subGroup => $columnList) {
+        foreach ($subGroupList as $subGroup => $subGroupData) {
+            $subGroupLabel = $subGroupData['label'];
+            $columnList = $subGroupData['columns'];
+
             $line = '';
             if (!empty($subGroup)) {
                 $line = 'border-style:solid;';
             }
             // padding:15px;
             $graphHtml .= '<div id="subgroup_'.$subGroup.'" class="career_subgroup" style="'.$line.' margin-bottom:20px; padding:15px; float:left; margin-left:0px; width:100%">';
+            if (!empty($subGroupLabel)) {
+                $graphHtml .= '<h3>'.$subGroupLabel.'</h3>';
+            }
             foreach ($columnList as $column => $rows) {
                 $leftColumn = $defaultSpace.'px';
                 if ($column == 1) {
@@ -518,11 +532,10 @@ class Career extends Model
 
                             $id = $vertex->getId();
                             $rowId = "row_$row";
-                            $top = $topValue * ($row - 1);
                             $graphHtml .= '<div id = "row_'.$id.'" class="'.$rowId.' career_row" >';
                             $color = '';
-                            if (!empty($vertex->getAttribute('HasColor'))) {
-                                $color = $vertex->getAttribute('HasColor');
+                            if (!empty($vertex->getAttribute('DefinedColor'))) {
+                                $color = $vertex->getAttribute('DefinedColor');
                             }
                             $content = $vertex->getAttribute('Notes');
                             $content .= '<div class="pull-right">['.$id.']</div>';
@@ -559,9 +572,11 @@ class Career extends Model
                                 } else {
                                     $parts = explode('SG', $arrow);
                                     if (empty($parts[0]) && count($parts) == 2) {
-                                        $groupArrow = $parts[1];
+                                        $subGroupArrow = $parts[1];
+                                        /*var_dump($subGroupArrow);
+                                        var_dump(array_keys($subGroupList));*/
                                         $graphHtml .= self::createConnection(
-                                            "subgroup_$groupArrow",
+                                            "subgroup_$subGroupArrow",
                                             "row_$id",
                                             ['Left', 'Right']
                                         );
@@ -571,10 +586,16 @@ class Career extends Model
                             }
 
                             if ($found == false) {
+                                $defaultArrow = ['Left', 'Right'];
+                                if (isset($groupCourseList[$group]) &&
+                                    in_array($arrow, $groupCourseList[$group])
+                                ) {
+                                    $defaultArrow = ['Top', 'Bottom'];
+                                }
                                 $graphHtml .= self::createConnection(
                                     "row_$arrow",
                                     "row_$id",
-                                    ['Left', 'Right']
+                                    $defaultArrow
                                 );
                             }
                         }

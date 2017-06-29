@@ -5965,8 +5965,8 @@ class Exercise
      * Checks if the exercise is visible due a lot of conditions
      * visibility, time limits, student attempts
      * Return associative array
-     * value : true if execise visible
-     * message : HTML formated message
+     * value : true if exercise visible
+     * message : HTML formatted message
      * rawMessage : text message
      * @param int $lpId
      * @param int $lpItemId
@@ -5995,7 +5995,11 @@ class Exercise
         if ($this->active == -1) {
             return array(
                 'value' => false,
-                'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false),
+                'message' => Display::return_message(
+                    get_lang('ExerciseNotFound'),
+                    'warning',
+                    false
+                ),
                 'rawMessage' => get_lang('ExerciseNotFound')
             );
         }
@@ -6018,16 +6022,26 @@ class Exercise
             if ($this->active == 0) {
                 return array(
                     'value' => false,
-                    'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false),
+                    'message' => Display::return_message(
+                        get_lang('ExerciseNotFound'),
+                        'warning',
+                        false
+                    ),
                     'rawMessage' => get_lang('ExerciseNotFound')
                 );
             }
         } else {
             // 2.1 LP is loaded
-            if ($this->active == 0 && !learnpath::is_lp_visible_for_student($lpId, api_get_user_id())) {
+            if ($this->active == 0 &&
+                !learnpath::is_lp_visible_for_student($lpId, api_get_user_id())
+            ) {
                 return array(
                     'value' => false,
-                    'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false),
+                    'message' => Display::return_message(
+                        get_lang('ExerciseNotFound'),
+                        'warning',
+                        false
+                    ),
                     'rawMessage' => get_lang('ExerciseNotFound')
                 );
             }
@@ -6042,7 +6056,6 @@ class Exercise
 
         if ($limitTimeExists) {
             $timeNow = time();
-
             $existsStartDate = false;
             $nowIsAfterStartDate = true;
             $existsEndDate = false;
@@ -6071,26 +6084,34 @@ class Exercise
                 if ($nowIsAfterStartDate) {
                     // after start date, no end date
                     $isVisible = true;
-                    $message = sprintf(get_lang('ExerciseAvailableSinceX'),
-                        api_convert_and_format_date($this->start_time));
+                    $message = sprintf(
+                        get_lang('ExerciseAvailableSinceX'),
+                        api_convert_and_format_date($this->start_time)
+                    );
                 } else {
                     // before start date, no end date
                     $isVisible = false;
-                    $message = sprintf(get_lang('ExerciseAvailableFromX'),
-                        api_convert_and_format_date($this->start_time));
-            }
+                    $message = sprintf(
+                        get_lang('ExerciseAvailableFromX'),
+                        api_convert_and_format_date($this->start_time)
+                    );
+                }
             } elseif (!$existsStartDate && $existsEndDate) {
                 // doesnt exist start date, exists end date
                 if ($nowIsBeforeEndDate) {
                     // before end date, no start date
                     $isVisible = true;
-                    $message = sprintf(get_lang('ExerciseAvailableUntilX'),
-                        api_convert_and_format_date($this->end_time));
+                    $message = sprintf(
+                        get_lang('ExerciseAvailableUntilX'),
+                        api_convert_and_format_date($this->end_time)
+                    );
                 } else {
                     // after end date, no start date
                     $isVisible = false;
-                    $message = sprintf(get_lang('ExerciseAvailableUntilX'),
-                        api_convert_and_format_date($this->end_time));
+                    $message = sprintf(
+                        get_lang('ExerciseAvailableUntilX'),
+                        api_convert_and_format_date($this->end_time)
+                    );
                 }
             } elseif ($existsStartDate && $existsEndDate) {
                 // exists start date and end date
@@ -6098,30 +6119,36 @@ class Exercise
                     if ($nowIsBeforeEndDate) {
                         // after start date and before end date
                         $isVisible = true;
-                        $message = sprintf(get_lang('ExerciseIsActivatedFromXToY'),
+                        $message = sprintf(
+                            get_lang('ExerciseIsActivatedFromXToY'),
                             api_convert_and_format_date($this->start_time),
-                            api_convert_and_format_date($this->end_time));
+                            api_convert_and_format_date($this->end_time)
+                        );
                     } else {
                         // after start date and after end date
                         $isVisible = false;
-                        $message = sprintf(get_lang('ExerciseWasActivatedFromXToY'),
+                        $message = sprintf(
+                            get_lang('ExerciseWasActivatedFromXToY'),
                             api_convert_and_format_date($this->start_time),
-                            api_convert_and_format_date($this->end_time));
+                            api_convert_and_format_date($this->end_time)
+                        );
                     }
                 } else {
                     if ($nowIsBeforeEndDate) {
                         // before start date and before end date
                         $isVisible = false;
-                        $message = sprintf(get_lang('ExerciseWillBeActivatedFromXToY'),
+                        $message = sprintf(
+                            get_lang('ExerciseWillBeActivatedFromXToY'),
                             api_convert_and_format_date($this->start_time),
-                            api_convert_and_format_date($this->end_time));
+                            api_convert_and_format_date($this->end_time)
+                        );
                     }
                     // case before start date and after end date is impossible
                 }
             } elseif (!$existsStartDate && !$existsEndDate) {
                 // doesnt exist start date nor end date
                 $isVisible = true;
-                $message = "";
+                $message = '';
             }
         }
 
@@ -6130,7 +6157,6 @@ class Exercise
 
         if ($isVisible) {
             if ($exerciseAttempts > 0) {
-
                 $attemptCount = Event::get_attempt_count_not_finished(
                     api_get_user_id(),
                     $this->id,
@@ -6150,7 +6176,7 @@ class Exercise
             }
         }
 
-        $rawMessage = "";
+        $rawMessage = '';
         if (!empty($message)) {
             $rawMessage = $message;
             $message = Display::return_message($message, 'warning', false);
@@ -6167,7 +6193,10 @@ class Exercise
     {
         $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT max_score FROM $TBL_LP_ITEM
-            WHERE c_id = {$this->course_id} AND item_type = '".TOOL_QUIZ."' AND path = '{$this->id}'";
+                WHERE 
+                    c_id = {$this->course_id} AND 
+                    item_type = '".TOOL_QUIZ."' AND 
+                    path = '{$this->id}'";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return true;

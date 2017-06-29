@@ -76,6 +76,7 @@ class Exercise
     public $sessionId = 0;
     public $questionFeedbackEnabled = false;
     public $questionTypeWithFeedback;
+    public $showPreviousButton;
 
     /**
      * Constructor of the class
@@ -121,6 +122,7 @@ class Exercise
 
         // ALTER TABLE c_quiz_question ADD COLUMN feedback text;
         $this->questionFeedbackEnabled = api_get_configuration_value('allow_quiz_question_feedback');
+        $this->showPreviousButton = true;
     }
 
     /**
@@ -134,14 +136,14 @@ class Exercise
      */
     public function read($id, $parseQuestionList = true)
     {
-        $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
-        $table_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $table = Database::get_course_table(TABLE_QUIZ_TEST);
+        $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
 
         $id = (int) $id;
         if (empty($this->course_id)) {
             return false;
         }
-        $sql = "SELECT * FROM $TBL_EXERCISES 
+        $sql = "SELECT * FROM $table 
                 WHERE c_id = ".$this->course_id." AND id = ".$id;
         $result = Database::query($sql);
 
@@ -176,11 +178,16 @@ class Exercise
             $this->questionSelectionType = isset($object->question_selection_type) ? $object->question_selection_type : null;
             $this->hideQuestionTitle = isset($object->hide_question_title) ? (int) $object->hide_question_title : 0;
 
+            if (isset($object->show_previous_button)) {
+                $this->showPreviousButton = $object->show_previous_button == 1 ? true : false;
+            }
+
             $sql = "SELECT lp_id, max_score
-                    FROM $table_lp_item
-                    WHERE   c_id = {$this->course_id} AND
-                            item_type = '".TOOL_QUIZ."' AND
-                            path = '".$id."'";
+                    FROM $tableLpItem
+                    WHERE   
+                        c_id = {$this->course_id} AND
+                        item_type = '".TOOL_QUIZ."' AND
+                        path = '".$id."'";
             $result = Database::query($sql);
 
             if (Database::num_rows($result) > 0) {
@@ -1607,6 +1614,11 @@ class Exercise
                     'question_selection_type' => $this->getQuestionSelectionType(),
                     'hide_question_title' => $this->getHideQuestionTitle()
                 ];
+
+                $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
+                if ($allow === true) {
+                    $paramsExtra['show_previous_button'] = $this->showPreviousButton();
+                }
             }
 
             $params = array_merge($params, $paramsExtra);
@@ -2163,6 +2175,29 @@ class Exercise
             );
             $form->addGroup($group, null, get_lang('HideQuestionTitle'));
 
+            $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
+
+            if ($allow === true) {
+                // Hide question title.
+                $group = array(
+                    $form->createElement(
+                        'radio',
+                        'show_previous_button',
+                        null,
+                        get_lang('Yes'),
+                        '1'
+                    ),
+                    $form->createElement(
+                        'radio',
+                        'show_previous_button',
+                        null,
+                        get_lang('No'),
+                        '0'
+                    )
+                );
+                $form->addGroup($group, null, get_lang('ShowPreviousButton'));
+            }
+
             // Attempts
             $attempt_option = range(0, 10);
             $attempt_option[0] = get_lang('Infinite');
@@ -2176,7 +2211,13 @@ class Exercise
             );
 
             // Exercise time limit
-            $form->addElement('checkbox', 'activate_start_date_check', null, get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
+            $form->addElement(
+                'checkbox',
+                'activate_start_date_check',
+                null,
+                get_lang('EnableStartTime'),
+                array('onclick' => 'activate_start_date()')
+            );
 
             $var = self::selectTimeLimit();
 
@@ -2188,7 +2229,13 @@ class Exercise
 
             $form->addElement('date_time_picker', 'start_time');
             $form->addElement('html', '</div>');
-            $form->addElement('checkbox', 'activate_end_date_check', null, get_lang('EnableEndTime'), array('onclick' => 'activate_end_date()'));
+            $form->addElement(
+                'checkbox',
+                'activate_end_date_check',
+                null,
+                get_lang('EnableEndTime'),
+                array('onclick' => 'activate_end_date()')
+            );
 
             if (!empty($this->end_time)) {
                 $form->addElement('html', '<div id="end_date_div" style="display:block;">');
@@ -2200,7 +2247,12 @@ class Exercise
             $form->addElement('html', '</div>');
 
             $display = 'block';
-            $form->addElement('checkbox', 'propagate_neg', null, get_lang('PropagateNegativeResults'));
+            $form->addElement(
+                'checkbox',
+                'propagate_neg',
+                null,
+                get_lang('PropagateNegativeResults')
+            );
             $form->addCheckBox(
                 'save_correct_answers',
                 null,
@@ -2337,6 +2389,7 @@ class Exercise
                 $defaults['pass_percentage'] = $this->selectPassPercentage();
                 $defaults['question_selection_type'] = $this->getQuestionSelectionType();
                 $defaults['hide_question_title'] = $this->getHideQuestionTitle();
+                $defaults['show_previous_button'] = $this->showPreviousButton();
 
                 if (!empty($this->start_time)) {
                     $defaults['activate_start_date_check'] = 1;
@@ -2372,6 +2425,7 @@ class Exercise
                 $defaults['end_button'] = $this->selectEndButton();
                 $defaults['question_selection_type'] = 1;
                 $defaults['hide_question_title'] = 0;
+                $defaults['show_previous_button'] = 1;
                 $defaults['on_success_message'] = null;
                 $defaults['on_failed_message'] = null;
             }
@@ -2379,6 +2433,7 @@ class Exercise
             $defaults['exerciseTitle'] = $this->selectTitle();
             $defaults['exerciseDescription'] = $this->selectDescription();
         }
+
         if (api_get_setting('search_enabled') === 'true') {
             $defaults['index_document'] = 'checked="checked"';
         }
@@ -2440,6 +2495,7 @@ class Exercise
         $this->setQuestionSelectionType($form->getSubmitValue('question_selection_type'));
         $this->setScoreTypeModel($form->getSubmitValue('score_type_model'));
         $this->setGlobalCategoryId($form->getSubmitValue('global_category_id'));
+        $this->setShowPreviousButton($form->getSubmitValue('show_previous_button'));
 
         if ($form->getSubmitValue('activate_start_date_check') == 1) {
             $start_time = $form->getSubmitValue('start_time');
@@ -2979,17 +3035,19 @@ class Exercise
 				$class .= ' question-validate-btn'; // used to select it with jquery
                 if ($this->type == ONE_PER_PAGE) {
                     if ($questionNum != 1) {
-                        $prev_question = $questionNum - 2;
-                        $all_button[] = Display::button(
-                            'previous_question_and_save',
-                            get_lang('PreviousQuestion'),
-                            [
-                                'type' => 'button',
-                                'class' => 'btn btn-default',
-                                'data-prev' => $prev_question,
-                                'data-question' => $question_id
-                            ]
-                        );
+                        if ($this->showPreviousButton()) {
+                            $prev_question = $questionNum - 2;
+                            $all_button[] = Display::button(
+                                'previous_question_and_save',
+                                get_lang('PreviousQuestion'),
+                                [
+                                    'type' => 'button',
+                                    'class' => 'btn btn-default',
+                                    'data-prev' => $prev_question,
+                                    'data-question' => $question_id
+                                ]
+                            );
+                        }
                     }
 
                     //Next question
@@ -7528,5 +7586,29 @@ class Exercise
     private function getUnformattedTitle()
     {
         return strip_tags(api_html_entity_decode($this->title));
+    }
+
+    /**
+     * @return bool
+     */
+    public function showPreviousButton()
+    {
+        $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
+        if ($allow === false) {
+            return true;
+        }
+
+        return $this->showPreviousButton;
+    }
+
+    /**
+     * @param bool $showPreviousButton
+     * @return Exercise
+     */
+    public function setShowPreviousButton($showPreviousButton)
+    {
+        $this->showPreviousButton = $showPreviousButton;
+
+        return $this;
     }
 }

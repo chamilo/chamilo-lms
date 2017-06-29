@@ -11,8 +11,8 @@ use Symfony\Component\Finder\Finder;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\UserBundle\Entity\User;
-use Chamilo\CourseBundle\Entity\CLpItem,
-    Chamilo\CourseBundle\Entity\CLpItemView;
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CLpItemView;
 
 /**
  * Class learnpath
@@ -189,7 +189,11 @@ class learnpath
 
                 // Selecting by view_count descending allows to get the highest view_count first.
                 $sql = "SELECT * FROM $lp_table
-                        WHERE c_id = $course_id AND lp_id = '$lp_id' AND user_id = '$user_id' $session
+                        WHERE 
+                            c_id = $course_id AND 
+                            lp_id = '$lp_id' AND 
+                            user_id = '$user_id' 
+                            $session
                         ORDER BY view_count DESC";
                 $res = Database::query($sql);
                 if ($this->debug > 2) {
@@ -221,7 +225,8 @@ class learnpath
                     ];
                     $this->lp_view_id = Database::insert($lp_table, $params);
                     if (!empty($this->lp_view_id)) {
-                        $sql = "UPDATE $lp_table SET id = iid WHERE iid = ".$this->lp_view_id;
+                        $sql = "UPDATE $lp_table SET id = iid
+                                WHERE iid = ".$this->lp_view_id;
                         Database::query($sql);
                     }
                 }
@@ -305,7 +310,10 @@ class learnpath
 
                     // Setting the object level with variable $this->items[$i][parent]
                     foreach ($this->items as $itemLPObject) {
-                        $level = self::get_level_for_item($this->items, $itemLPObject->db_id);
+                        $level = self::get_level_for_item(
+                            $this->items,
+                            $itemLPObject->db_id
+                        );
                         $itemLPObject->level = $level;
                     }
 
@@ -517,7 +525,7 @@ class learnpath
                 WHERE
                     c_id = $course_id AND
                     lp_id = ".$this->get_id()." AND
-                    parent_item_id = " . $parent;
+                    parent_item_id = ".$parent;
 
         $res_count = Database::query($sql);
         $row = Database::fetch_array($res_count);
@@ -526,13 +534,13 @@ class learnpath
         if ($num > 0) {
             if (empty($previous)) {
                 $sql = "SELECT id, next_item_id, display_order
-                        FROM " . $tbl_lp_item."
+                        FROM $tbl_lp_item
                         WHERE
                             c_id = $course_id AND
                             lp_id = ".$this->get_id()." AND
-                            parent_item_id = " . $parent." AND
+                            parent_item_id = ".$parent." AND
                             previous_item_id = 0 OR
-                            previous_item_id=" . $parent;
+                            previous_item_id= ".$parent;
                 $result = Database::query($sql);
                 $row = Database::fetch_array($result);
                 $tmp_previous = 0;
@@ -545,7 +553,7 @@ class learnpath
                         WHERE
                             c_id = $course_id AND
                             lp_id = ".$this->get_id()." AND
-                            id = " . $previous;
+                            id = ".$previous;
 
                 $result = Database::query($sql);
                 $row = Database:: fetch_array($result);
@@ -564,8 +572,8 @@ class learnpath
         $typeCleaned = Database::escape_string($type);
         if ($type == 'quiz') {
             $sql = 'SELECT SUM(ponderation)
-                    FROM ' . Database::get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
-                    INNER JOIN  ' . Database::get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
+                    FROM '.Database::get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
+                    INNER JOIN '.Database::get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
                     ON
                         quiz_question.id = quiz_rel_question.question_id AND
                         quiz_question.c_id = quiz_rel_question.c_id
@@ -852,7 +860,6 @@ class learnpath
                     'subscribe_users' => 0,
                     'accumulate_scorm_time' => 1
                 ];
-
                 $id = Database::insert($tbl_lp, $params);
 
                 if ($id > 0) {
@@ -1024,10 +1031,10 @@ class learnpath
 
     /**
      * Static admin function allowing removal of a learnpath
-     * @param	array $courseInfo
-     * @param	integer	Learnpath ID
-     * @param	string	Whether to delete data or keep it (default: 'keep', others: 'remove')
-     * @return	boolean	True on success, false on failure (might change that to return number of elements deleted)
+     * @param array $courseInfo
+     * @param integer $id    Learnpath ID
+     * @param string $delete Whether to delete data or keep it (default: 'keep', others: 'remove')
+     * @return boolean    True on success, false on failure (might change that to return number of elements deleted)
      */
     public function delete($courseInfo = null, $id = null, $delete = 'keep')
     {
@@ -1501,8 +1508,12 @@ class learnpath
      *
      * @return    boolean    True on success, false on error
      */
-    public function edit_item_prereq($id, $prerequisite_id, $mastery_score = 0, $max_score = 100)
-    {
+    public function edit_item_prereq(
+        $id,
+        $prerequisite_id,
+        $mastery_score = 0,
+        $max_score = 100
+    ) {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::edit_item_prereq('.$id.','.$prerequisite_id.','.$mastery_score.','.$max_score.')', 0);
@@ -1825,12 +1836,12 @@ class learnpath
             $index = 0;
             // Loop through all ordered items and stop at the first item that is
             // not a directory *and* that has not been completed yet.
-            while (!empty($this->ordered_items[$index]) AND
-                is_a($this->items[$this->ordered_items[$index]], 'learnpathItem') AND
+            while (!empty($this->ordered_items[$index]) &&
+                is_a($this->items[$this->ordered_items[$index]], 'learnpathItem') &&
                 (
-                    $this->items[$this->ordered_items[$index]]->get_type() == 'dir' OR
+                    $this->items[$this->ordered_items[$index]]->get_type() == 'dir' ||
                     $this->items[$this->ordered_items[$index]]->is_done() === true
-                ) AND $index < $this->max_ordered_items) {
+                ) && $index < $this->max_ordered_items) {
                 $index++;
             }
             $this->last = $this->current;

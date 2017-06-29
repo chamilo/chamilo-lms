@@ -38,6 +38,7 @@ class AnnouncementManager
         if (!empty(api_get_session_id())) {
             $tags[] = '((coaches))';
             $tags[] = '((general_coach))';
+            $tags[] = '((general_coach_email))';
         }
 
         return $tags;
@@ -63,7 +64,8 @@ class AnnouncementManager
             $courseInfo['code']
         );
 
-        $generalCoach = '';
+        $generalCoachName = '';
+        $generalCoachEmail = '';
         $coaches = '';
         if (!empty($sessionId)) {
             $sessionInfo = api_get_session_info($sessionId);
@@ -74,7 +76,8 @@ class AnnouncementManager
             );
 
             $generalCoach = api_get_user_info($sessionInfo['id_coach']);
-            $generalCoach = $generalCoach['complete_name'];
+            $generalCoachName = $generalCoach['complete_name'];
+            $generalCoachEmail = $generalCoach['email'];
         }
 
         $data = [];
@@ -96,7 +99,8 @@ class AnnouncementManager
 
         if (!empty(api_get_session_id())) {
             $data['coaches'] = $coaches;
-            $data['general_coach'] = $generalCoach;
+            $data['general_coach'] = $generalCoachName;
+            $data['general_coach_email'] = $generalCoachEmail;
         }
 
         $content = str_replace(self::getTags(), $data, $content);

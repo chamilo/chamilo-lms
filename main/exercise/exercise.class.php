@@ -3,6 +3,7 @@
 
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
+use Chamilo\CourseBundle\Entity\CQuizCategory;
 
 /**
  * Class Exercise
@@ -511,7 +512,8 @@ class Exercise
     }
 
     /**
-     * If false the question list will be managed as always if true the question will be filtered
+     * If false the question list will be managed as always if true
+     * the question will be filtered
      * depending of the exercise settings (table c_quiz_rel_category)
      * @param bool $status active or inactive grouping
      **/
@@ -599,8 +601,9 @@ class Exercise
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
             $sql = "SELECT q.iid
-                    FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
-                        ON (e.question_id = q.id AND e.c_id = ".$this->course_id." )
+                    FROM $TBL_EXERCICE_QUESTION e 
+                    INNER JOIN $TBL_QUESTIONS  q
+                    ON (e.question_id = q.id AND e.c_id = ".$this->course_id." )
 					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
 					";
 
@@ -662,9 +665,13 @@ class Exercise
                         'score' => $objQuestionTmp->selectWeighting(),
                         'level' => $objQuestionTmp->level
                     );
+
                     if (!empty($extraFields)) {
                         foreach ($extraFields as $extraField) {
-                            $value = $extraFieldValue->get_values_by_handler_and_field_id($question['id'], $extraField['id']);
+                            $value = $extraFieldValue->get_values_by_handler_and_field_id(
+                                $question['id'],
+                                $extraField['id']
+                            );
                             $stringValue = null;
                             if ($value) {
                                 $stringValue = $value['field_value'];
@@ -693,7 +700,7 @@ class Exercise
                 ON (e.question_id = q.id AND e.c_id = q.c_id)
                 WHERE 
                     e.c_id = {$this->course_id} AND 
-                    e.exercice_id	= ".Database::escape_string($this->id);
+                    e.exercice_id = ".Database::escape_string($this->id);
         $result = Database::query($sql);
 
         $count = 0;
@@ -753,7 +760,7 @@ class Exercise
         $result = Database::query($sql);
         $count_question_orders = Database::num_rows($result);
 
-        // Getting question list from the order (question list drag n drop interface ).
+        // Getting question list from the order (question list drag n drop interface).
         $sql = "SELECT DISTINCT e.question_id, e.question_order
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
@@ -1042,7 +1049,6 @@ class Exercise
             foreach ($questions_by_category as $categoryId => $questionList) {
                 $cat = new TestCategory();
                 $cat = $cat->getCategory($categoryId);
-
                 $cat = (array) $cat;
                 $cat['iid'] = $cat['id'];
                 $categoryParentInfo = null;
@@ -6256,8 +6262,14 @@ class Exercise
 
         $this->setMediaList($questionList);
 
-        $this->questionList = $this->transformQuestionListWithMedias($questionList, false);
-        $this->questionListUncompressed = $this->transformQuestionListWithMedias($questionList, true);
+        $this->questionList = $this->transformQuestionListWithMedias(
+            $questionList,
+            false
+        );
+        $this->questionListUncompressed = $this->transformQuestionListWithMedias(
+            $questionList,
+            true
+        );
     }
 
     /**
@@ -6567,28 +6579,9 @@ class Exercise
         return $question_count;
     }
 
-    function get_exercise_list_ordered()
-    {
-        $table_exercise_order = Database::get_course_table(TABLE_QUIZ_ORDER);
-        $course_id = api_get_course_int_id();
-        $session_id = api_get_session_id();
-        $sql = "SELECT exercise_id, exercise_order
-                FROM $table_exercise_order
-                WHERE c_id = $course_id AND session_id = $session_id
-                ORDER BY exercise_order";
-        $result = Database::query($sql);
-        $list = array();
-        if (Database::num_rows($result)) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
-                $list[$row['exercise_order']] = $row['exercise_id'];
-            }
-        }
-        return $list;
-    }
-
     /**
      * Get categories added in the exercise--category matrix
-     * @return bool
+     * @return array
      */
     public function get_categories_in_exercise()
     {
@@ -6605,36 +6598,12 @@ class Exercise
                 return $list;
             }
         }
-        return false;
-    }
-
-    /**
-     * @param null $order
-     * @return bool
-     */
-    public function get_categories_with_name_in_exercise($order = null)
-    {
-        $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
-        $table_category = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $sql = "SELECT * FROM $table qc
-                INNER JOIN $table_category c
-                ON (category_id = c.iid)
-                WHERE exercise_id = {$this->id} AND qc.c_id = {$this->course_id} ";
-        if (!empty($order)) {
-            $sql .= "ORDER BY $order ";
-        }
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
-                $list[$row['category_id']] = $row;
-            }
-            return $list;
-        }
-        return false;
+        return [];
     }
 
     /**
      * Get total number of question that will be parsed when using the category/exercise
+     * @return int
      */
     public function getNumberQuestionExerciseCategory()
     {
@@ -6684,8 +6653,12 @@ class Exercise
      * @param string $link
      * @return string
      */
-    public function progressExercisePaginationBar($questionList, $currentQuestion, $conditions, $link)
-    {
+    public function progressExercisePaginationBar(
+        $questionList,
+        $currentQuestion,
+        $conditions,
+        $link
+    ) {
         $mediaQuestions = $this->getMediaList();
 
         $html = '<div class="exercise_pagination pagination pagination-mini"><ul>';
@@ -6722,7 +6695,13 @@ class Exercise
                 $wasMedia = true;
                 $nextValue += count($questionList);
             } else {
-                $html .= Display::parsePaginationItem($questionId, $isCurrent, $conditions, $link, $counter);
+                $html .= Display::parsePaginationItem(
+                    $questionId,
+                    $isCurrent,
+                    $conditions,
+                    $link,
+                    $counter
+                );
                 $counter++;
                 $nextValue++;
                 $wasMedia = false;
@@ -6730,6 +6709,7 @@ class Exercise
             $counterNoMedias++;
         }
         $html .= '</ul></div>';
+
         return $html;
     }
 
@@ -6760,7 +6740,6 @@ class Exercise
             $useRootAsCategoryTitle = false;
 
             // Grouping questions per parent category see BT#6540
-
             if (in_array(
                 $selectionType,
                 array(
@@ -6775,7 +6754,6 @@ class Exercise
             // at the root of the tree, then pre-order the categories tree by
             // removing children and summing their questions into the parent
             // categories
-
             if ($useRootAsCategoryTitle) {
                 // The new categories list starts empty
                 $newCategoryList = array();
@@ -6876,8 +6854,13 @@ class Exercise
      * @param array $attemptList
      * @param array $remindList
      */
-    public function renderQuestionList($questionList, $currentQuestion, $exerciseResult, $attemptList, $remindList)
-    {
+    public function renderQuestionList(
+        $questionList,
+        $currentQuestion,
+        $exerciseResult,
+        $attemptList,
+        $remindList
+    ) {
         $mediaQuestions = $this->getMediaList();
         $i = 0;
 
@@ -6894,7 +6877,10 @@ class Exercise
                     if ($this->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
                         // if the user has already answered this question
                         if (isset($exerciseResult[$questionId])) {
-                            echo Display::return_message(get_lang('AlreadyAnswered'), 'normal');
+                            echo Display::return_message(
+                                get_lang('AlreadyAnswered'),
+                                'normal'
+                            );
                             break;
                         }
                     }
@@ -6904,7 +6890,6 @@ class Exercise
             // The $questionList contains the media id we check if this questionId is a media question type
 
             if (isset($mediaQuestions[$questionId]) && $mediaQuestions[$questionId] != 999) {
-
                 // The question belongs to a media
                 $mediaQuestionList = $mediaQuestions[$questionId];
                 $objQuestionTmp = Question::read($questionId);
@@ -6953,7 +6938,16 @@ class Exercise
                 }
             } else {
                 // Normal question render.
-                $this->renderQuestion($questionId, $attemptList, $remindList, $i, $currentQuestion, null, null, $questionList);
+                $this->renderQuestion(
+                    $questionId,
+                    $attemptList,
+                    $remindList,
+                    $i,
+                    $currentQuestion,
+                    null,
+                    null,
+                    $questionList
+                );
             }
 
             // For sequential exercises.
@@ -6993,7 +6987,6 @@ class Exercise
         $realQuestionList,
         $generateJS = true
     ) {
-
         // With this option on the question is loaded via AJAX
         //$generateJS = true;
         //$this->loadQuestionAJAX = true;
@@ -7032,7 +7025,6 @@ class Exercise
             global $origin;
             $question_obj = Question::read($questionId);
             $user_choice = isset($attemptList[$questionId]) ? $attemptList[$questionId] : null;
-
             $remind_highlight = null;
 
             //Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
@@ -7058,7 +7050,20 @@ class Exercise
 
             // Shows the question + possible answers
             $showTitle = $this->getHideQuestionTitle() == 1 ? false : true;
-            echo $this->showQuestion($question_obj, false, $origin, $i, $showTitle, false, $user_choice, false, null, false, $this->getModelType(), $this->categoryMinusOne);
+            echo $this->showQuestion(
+                $question_obj,
+                false,
+                $origin,
+                $i,
+                $showTitle,
+                false,
+                $user_choice,
+                false,
+                null,
+                false,
+                $this->getModelType(),
+                $this->categoryMinusOne
+            );
 
             // Button save and continue
             switch ($this->type) {
@@ -7105,8 +7110,23 @@ class Exercise
 
             // Checkbox review answers
             if ($this->review_answers && !in_array($question_obj->type, Question::question_type_no_review())) {
-                $remind_question_div = Display::tag('label', Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes).get_lang('ReviewQuestionLater'), array('class' => 'checkbox', 'for' =>'remind_list['.$questionId.']'));
-                $exercise_actions   .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));
+                $remind_question_div = Display::tag(
+                    'label',
+                    Display::input(
+                        'checkbox',
+                        'remind_list['.$questionId.']',
+                        '',
+                        $attributes
+                    ).get_lang('ReviewQuestionLater'),
+                    array(
+                        'class' => 'checkbox',
+                        'for' => 'remind_list['.$questionId.']'
+                    )
+                );
+                $exercise_actions .= Display::div(
+                    $remind_question_div,
+                    array('class' => 'exercise_save_now_button')
+                );
             }
 
             echo Display::div(' ', array('class'=>'clear'));
@@ -7114,10 +7134,16 @@ class Exercise
             $paginationCounter = null;
             if ($this->type == ONE_PER_PAGE) {
                 if (empty($questions_in_media)) {
-                    $paginationCounter = Display::paginationIndicator($current_question, count($realQuestionList));
+                    $paginationCounter = Display::paginationIndicator(
+                        $current_question,
+                        count($realQuestionList)
+                    );
                 } else {
                     if ($last_question_in_media) {
-                        $paginationCounter = Display::paginationIndicator($current_question, count($realQuestionList));
+                        $paginationCounter = Display::paginationIndicator(
+                            $current_question,
+                            count($realQuestionList)
+                        );
                     }
                 }
             }
@@ -7339,8 +7365,12 @@ class Exercise
      * @param $currentQuestion
      * @return int|null
      */
-    public static function getNextQuestionId($exeId, $exercise_stat_info, $remindList, $currentQuestion)
-    {
+    public static function getNextQuestionId(
+        $exeId,
+        $exercise_stat_info,
+        $remindList,
+        $currentQuestion
+    ) {
         $result = Event::get_exercise_results_by_attempt($exeId, 'incomplete');
 
         if (isset($result[$exeId])) {
@@ -7361,7 +7391,6 @@ class Exercise
 
         if (!empty($result['question_list'])) {
             $answeredQuestions = array();
-
             foreach ($result['question_list'] as $question) {
                 if (!empty($question['answer'])) {
                     $answeredQuestions[] = $question['question_id'];
@@ -7369,7 +7398,6 @@ class Exercise
             }
 
             // Checking answered questions
-
             $counterAnsweredQuestions = 0;
             foreach ($data_tracking as $questionId) {
                 if (!in_array($questionId, $answeredQuestions)) {
@@ -7382,7 +7410,6 @@ class Exercise
 
             $counterRemindListQuestions = 0;
             // Checking questions saved in the reminder list
-
             if (!empty($remindList)) {
                 foreach ($data_tracking as $questionId) {
                     if (in_array($questionId, $remindList)) {

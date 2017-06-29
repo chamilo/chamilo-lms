@@ -237,8 +237,8 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
                 $default['content'] = sprintf(
                     get_lang('OfajEndLpDescription'),
                     $sendToUserFirstname,
-                    $currentUserInfo['complete_name'],
-                    $currentUserInfo['complete_name']
+                    $currentUserInfo['firstname'],
+                    $currentUserInfo['firstname']
                 );
                 break;
         }

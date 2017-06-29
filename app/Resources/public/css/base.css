@@ -4775,7 +4775,6 @@ div#chat-remote-video video {
 
 .grid-courses .items.items-courses {
     padding-bottom: 10px;
-    width: 310px;
     box-shadow: 2px 4px 15px 0 rgba(46,61,73,.1);
     transition: box-shadow .3s ease , border .3s ease;
 }
@@ -4914,6 +4913,7 @@ div#chat-remote-video video {
 }
 .grid-courses .items .description{
     padding: 5px 10px;
+    min-height: 140px;
 }
 .grid-courses .items .description .text{
     font-size: 12px;
@@ -5003,14 +5003,10 @@ div#chat-remote-video video {
 /* Catalog session */
 .return-catalog{
 	margin-bottom: 35px;
-	padding-left: 15px;
-    padding-right: 15px;
 }
 .search-session, .search-courses{
     margin-bottom: 15px;
     margin-top: 25px;
-    padding-left: 15px;
-    padding-right: 15px;
 }
 .search-session .form-inline label{
     font-weight: normal;

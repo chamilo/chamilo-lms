@@ -67,7 +67,8 @@
     padding-left: 20px;
     padding-top: 10px;
 }
-.title-learnpath h4{
+.title-learnpath h4,
+.title-learnpath .h5 {
     color: #162a83;
     font-weight: bold;
 }
@@ -467,3 +468,20 @@ table.lp_overview img {
 }
 
 /* nuevo css */
+
+#learning_path_right_zone .lp-view-tabs .tab-content {
+    bottom: 5px;
+    left: 5px;
+    position: absolute;
+    right: 5px;
+    top: 84px;
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    #learning_path_right_zone .lp-view-tabs .tab-content {
+        bottom: 10px;
+        right: 10px;
+        top: 100px;
+    }
+}

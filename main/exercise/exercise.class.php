@@ -4408,7 +4408,8 @@ class Exercise
                                 0,
                                 0,
                                 $objQuestionTmp->getFileUrl(true),
-                                $results_disabled
+                                $results_disabled,
+                                $questionScore
                             );
                         } elseif ($answerType == HOT_SPOT) {
                             /**
@@ -4769,7 +4770,8 @@ class Exercise
                                     $exeId,
                                     $questionId,
                                     $objQuestionTmp->getFileUrl(),
-                                    $results_disabled
+                                    $results_disabled,
+                                    $questionScore
                                 ).'</td>
                                 </tr>
                                 </table>';

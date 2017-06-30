@@ -266,8 +266,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['hide_my_certificate_link'] = false;
 // Hide header and footer in certificate pdf
 //$_configuration['hide_header_footer_in_certificate'] = false;
-// Send only quiz answer notifications to course coaches and not general coach
-//$_configuration['block_quiz_mail_notification_general_coach'] = false;
 // Security: block direct access from logged in users to contents in OPEN (but not public) courses. Set to true to block
 //$_configuration['block_registered_users_access_to_open_course_contents'] = false;
 // Allows syncing the database with the current entity schema
@@ -409,8 +407,6 @@ $_configuration['agenda_colors'] = [
 // If the MySpace page takes too long to load, you might want to remove the
 // processing of generic statistics for the user. In this case set the following to true.
 //$_configuration['tracking_skip_generic_data'] = false;
-// Show question feedback (requires DB change: "ALTER TABLE c_quiz_question ADD COLUMN feedback text;")
-//$_configuration['allow_quiz_question_feedback'] = false;
 // Show view accordion lp_category
 //$_configuration['lp_category_accordion'] = false;
 //
@@ -497,12 +493,19 @@ $_configuration['send_all_emails_to'] = [
         'admin2@example.com',
     ]
 ];*/
-// Add option in exercise to show or hide the "previous" button.
-// ALTER TABLE c_quiz ADD show_previous_button TINYINT(1) DEFAULT 1;
-//$_configuration['allow_quiz_show_previous_button_setting'] = false;
 // Allow ticket projects to be access by specific chamilo roles
 /*$_configuration['ticket_project_user_roles'] = [
     'permissions' => [
         1 => [17] // project_id = 1, STUDENT_BOSS = 17
     ]
 ];*/
+//
+// ------ Exercises configuration settings
+// Send only quiz answer notifications to course coaches and not general coach
+//$_configuration['block_quiz_mail_notification_general_coach'] = false;
+// Show question feedback (requires DB change: "ALTER TABLE c_quiz_question ADD COLUMN feedback text;")
+//$_configuration['allow_quiz_question_feedback'] = false;
+// Add option in exercise to show or hide the "previous" button.
+//ALTER TABLE c_quiz ADD show_previous_button TINYINT(1) DEFAULT 1;
+//$_configuration['allow_quiz_show_previous_button_setting'] = false;
+// ------

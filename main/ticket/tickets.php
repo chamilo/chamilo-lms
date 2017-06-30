@@ -139,8 +139,7 @@ if (!empty($projectId)) {
             'keyword',
             'keyword_status',
             'keyword_category',
-            'keyword_request_user',
-            'keyword_admin',
+            'keyword_assigned_to',
             'keyword_start_date',
             'keyword_unread',
             'Tickets_per_page',
@@ -270,6 +269,36 @@ if (!empty($projectId)) {
         )
     );
 
+    $ticketLabel = get_lang('AllTickets');
+    $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId;
+
+    if (!isset($_GET['keyword_assigned_to'])) {
+        $ticketLabel = get_lang('MyTickets');
+        $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId.'&keyword_assigned_to='.api_get_user_id();
+    }
+
+    $options = '';
+    if (api_is_platform_admin()) {
+        $options .=Display::url(
+            get_lang('Projects'),
+            api_get_path(WEB_CODE_PATH).'ticket/projects.php'
+        );
+    }
+
+    $options .= Display::url(
+        $ticketLabel,
+        $url
+    );
+
+    if (api_is_platform_admin()) {
+        echo Display::toolbarAction(
+            'options',
+            array(
+                $options
+            )
+        );
+    }
+
     $advancedSearchForm = new FormValidator(
         'advanced_search',
         'get',
@@ -289,7 +318,7 @@ if (!empty($projectId)) {
     $advancedSearchForm->addDateTimePicker('keyword_start_date_start', get_lang('Created'));
     $advancedSearchForm->addDateTimePicker('keyword_start_date_end', get_lang('Until'));
     $advancedSearchForm->addSelect(
-        'keyword_admin',
+        'keyword_assigned_to',
         get_lang('AssignedTo'),
         $selectAdmins,
         ['placeholder' => get_lang('All')]

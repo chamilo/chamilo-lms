@@ -2,9 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *
  * @package chamilo.plugin.ticket
  */
+
+$cidReset = true;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -108,44 +110,6 @@ function add_image_form() {
 </script>';
 
 $htmlHeadXtra[] = '<style>
-div.row div.label2 {
-	float:left;
-	text-align: right;
-	width:22%;
-}
-div.row div.formw2 {
-    width:50%;
-	margin-left: 2%;
-	margin-right: 16%;
-	float:left;
-}
-.messageuser, .messagesupport {
-    border: 1px solid;
-    margin: 10px 0px;
-    padding:15px 10px 15px 50px;
-    background-repeat: no-repeat;
-    background-position: 10px center;
-    width:50%;
-	behavior: url(/pie/PIE.htc);
-}
-.messageuser {
-    color: #00529B;
-    -moz-border-radius: 15px 15px 15px 15px;
-    -webkit-border-radius: 15px 15px 15px 15px;
-    background-color: #BDE5F8;
-    margin-left:20%;
-    border-radius:15px;
-    float: left;
-}
-.messagesupport {
-    color: #4F8A10;
-    -moz-border-radius: 15px 15px 15px 15px;
-    -webkit-border-radius: 15px 15px 15px 15px;
-    background-color: #DFF2BF;
-    margin-right: 20%;
-    float: right;
-    border-radius:15px;
-}
 .attachment-link {
     margin: 12px;
 }
@@ -325,7 +289,6 @@ if (!isset($_POST['compose'])) {
                 ['class' => 'well']
             );
         }
-
         $counter++;
     }
 
@@ -337,8 +300,7 @@ if (!isset($_POST['compose'])) {
         if (!$isAdmin && $ticket['ticket']['status_id'] != TicketManager::STATUS_UNCONFIRMED) {
             show_form_send_message($ticket['ticket']);
         } else {
-            if (
-                $ticket['ticket']['assigned_last_user'] == $user_id ||
+            if ($ticket['ticket']['assigned_last_user'] == $user_id ||
                 $ticket['ticket']['sys_insert_user_id'] == $user_id ||
                 $isAdmin
             ) {

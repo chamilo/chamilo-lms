@@ -382,7 +382,9 @@ $extra = $extraField->addElements(
             get_lang('ThemeField').' 4',
             get_lang('ThemeField').' 5'
         ],
-    ]
+    ],
+    [],
+    true
 );
 
 $form->addHtml('</div></div></div>');

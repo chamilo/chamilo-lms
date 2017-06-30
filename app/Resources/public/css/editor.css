@@ -194,10 +194,14 @@ blockquote p {
 .alert-success .alert-link {
   color: #2b542c;
 }
-.alert-info {
-  color: #31708f;
-  background-color: #d9edf7;
-  border-color: #bce8f1;
+.result-body .exercise-message .alert-info {
+  color: #FFFFFF !important;
+  background-color: #84bd00 !important;
+  border-color: #84bd00 !important;
+  border-radius: 0;
+}
+.result-body .exercise-message .alert-info p span{
+    color: #FFFFFF !important;
 }
 .alert-info hr {
   border-top-color: #a6e1ec;
@@ -231,4 +235,40 @@ blockquote p {
   display: block;
   max-width: 100%;
   height: auto;
+}
+.result-body .alert.alert-info{
+    background: none;
+    color: #162A83;
+    border:none;
+    border-top: 1px solid #84BD00;
+}
+.result-body .alert.alert-info p{
+    padding-bottom: 10px;
+    font-weight: bold;
+}
+.result-body .alert.alert-info .btn.btn-info {
+    color: #fff;
+    background-color: #84BD00;
+    border-color: #84BD00;
+}
+.result-body .alert.alert-info .btn.btn-info:hover {
+    color: #fff;
+    background-color: #772583;
+    border-color: #772583;
+}
+.table.table-striped tr td p span,
+.table.table-striped tr td span{
+    color: #162A83 !important;
+}
+.main-question .question_description p span{
+    color: #162A83 !important;
+}
+.main-question .question_options label p span{
+    color: #162A83 !important;
+}
+.question_row_answer .question_description p span{
+    color: #162A83 !important;
+}
+.table.table-striped tr th{
+    color: #162A83 !important;
 }

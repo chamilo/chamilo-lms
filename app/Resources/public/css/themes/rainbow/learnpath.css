@@ -285,6 +285,7 @@ table.lp_overview img {
 #learning_path_toc{
     padding: 0;
     border:none;
+    border-radius: 0;
 }
 #scorm-panel .panel.panel-default{
     border: none;
@@ -293,7 +294,7 @@ table.lp_overview img {
     border-bottom: none;
 }
 .scorm_item_normal {
-    line-height: 25px;
+    line-height: 18px;
     border-bottom: 1px solid #DDD;
     padding: 10px 5px;
     background-color: #F5F5F5;
@@ -375,7 +376,7 @@ table.lp_overview img {
 .section-list li{
     background-color: #E1E1E1;
     padding: 10px 10px 10px 50px;
-    border-bottom: 1px solid #84BD00;
+    border-bottom: 1px solid #162A83;
     font-size: 12px;
 }
 .section-list li.final{
@@ -444,8 +445,11 @@ table.lp_overview img {
 }
 #scorm-panel .panel-parent .panel-default .panel-heading a{
     padding-left: 55px;
-    background: url(images/arrow-down.png) no-repeat #E1E1E1 30px center;
+    background: url(images/arrow-right.png) no-repeat #E1E1E1 31px center;
     font-size: 12px;
+}
+#scorm-panel .panel-parent .panel-default .panel-heading.on a{
+    background: url(images/arrow-down.png) no-repeat #E1E1E1 31px center;
 }
 #scorm-panel .panel-parent .section-list li{
     padding: 10px 10px 10px 75px;
@@ -461,4 +465,5 @@ table.lp_overview img {
 {
     background: url(images/completed-active.png) no-repeat  #772583 55px center;
 }
+
 /* nuevo css */

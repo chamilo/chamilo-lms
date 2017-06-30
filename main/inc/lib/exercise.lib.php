@@ -3906,7 +3906,7 @@ HOTSPOT;
                     $question_content .= '</div>';
                 }
 
-                $exercise_content .= $question_content;
+                $exercise_content .= Display::panel($question_content);
             } // end foreach() block that loops over all questions
         }
 

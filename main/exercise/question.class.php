@@ -2250,6 +2250,6 @@ abstract class Question
      */
     public function returnFormatFeedback()
     {
-        return '<br /><br />'.Display::return_message($this->feedback, 'normal', false);
+        return Display::return_message($this->feedback, 'normal', false);
     }
 }

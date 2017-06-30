@@ -173,10 +173,9 @@ if ($origin != 'learnpath') {
     <script>
         var maxEditors = <?php echo intval($maxEditors); ?>;
         function showfck(sid, marksid) {
-            document.getElementById(sid).style.display = 'block';
-            document.getElementById(marksid).style.display = 'block';
-            var comment = 'feedback_' + sid;
-            document.getElementById(comment).style.display = 'none';
+            $('#' + sid).toggleClass('hidden');
+            $('#' + marksid).toggleClass('hidden');
+            $('#feedback_' + sid).toggleClass('hidden', !$('#' + sid).is('.hidden'));
         }
 
         function openEmailWrapper() {
@@ -698,33 +697,31 @@ foreach ($questionList as $questionId) {
                     $url_name = get_lang('AddComments');
                 }
             }
-            echo '<br />';
-            echo Display::url(
+            echo '<p>';
+            echo Display::button(
+                'show_ck',
                 $url_name,
-                'javascript://',
-                array(
-                    'class' => 'btn',
+                [
+                    'type' => 'button',
+                    'class' => 'btn btn-default',
                     'onclick' => "showfck('".$name."', '".$marksname."');",
-                )
+                ]
             );
-            echo '<br />';
+            echo '</p>';
 
-            echo '<div id="feedback_'.$name.'" style="width:100%">';
+            echo '<div id="feedback_'.$name.'" class="show">';
             $comnt = trim(Event::get_comments($id, $questionId));
-            if (empty($comnt)) {
-                echo '<br />';
-            } else {
+            if (!empty($comnt)) {
                 echo ExerciseLib::getFeedbackText($comnt);
             }
             echo '</div>';
 
-            echo '<div id="'.$name.'" style="display:none">';
+            echo '<div id="'.$name.'" class="hidden">';
             $arrid[] = $questionId;
-            $feedback_form = new FormValidator('frmcomments'.$questionId, 'post', '');
-            $feedback_form->addElement('html', '<br>');
+            $feedback_form = new FormValidator('frmcomments'.$questionId);
             $renderer = &$feedback_form->defaultRenderer();
-            $renderer->setFormTemplate('<form{attributes}><div align="left">{content}</div></form>');
-            $renderer->setCustomElementTemplate('<div align="left">{element}</div>');
+            $renderer->setFormTemplate('<form{attributes}><div>{content}</div></form>');
+            $renderer->setCustomElementTemplate('<div>{element}</div>');
             $comnt = Event::get_comments($id, $questionId);
             $default = array('comments_'.$questionId => $comnt);
 
@@ -743,7 +740,6 @@ foreach ($questionList as $questionId) {
             } else {
                 $feedback_form->addElement('textarea', 'comments_'.$questionId);
             }
-            $feedback_form->addElement('html', '<br>');
             $feedback_form->setDefaults($default);
             $feedback_form->display();
             echo '</div>';
@@ -760,7 +756,7 @@ foreach ($questionList as $questionId) {
         if ($is_allowedToEdit && $isFeedbackAllowed) {
             if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION))) {
                 $marksname = "marksName".$questionId;
-                echo '<div id="'.$marksname.'" style="display:none">';
+                echo '<div id="'.$marksname.'" class="hidden">';
                 echo '<form name="marksform_'.$questionId.'" method="post" action="">';
                 $arrmarks[] = $questionId;
                 echo get_lang("AssignMarks");
@@ -778,7 +774,7 @@ foreach ($questionList as $questionId) {
             } else {
                 $arrmarks[] = $questionId;
                 echo '
-                    <div id="'.$marksname.'" style="display:none">
+                    <div id="'.$marksname.'" class="hidden">
                         <form name="marksform_'.$questionId.'" method="post" action="">
                             <select name="marks" id="marks" style="display:none;">
                                 <option>'.$questionScore.'</option>
@@ -879,7 +875,7 @@ foreach ($questionList as $questionId) {
     $counter++;
     $question_content .= $contents;
     $question_content .= '</div>';
-    $exercise_content .= $question_content;
+    $exercise_content .= Display::panel($question_content);
 } // end of large foreach on questions
 
 $total_score_text = null;

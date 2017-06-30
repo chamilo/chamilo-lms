@@ -51,7 +51,7 @@ class ExerciseShowFunctions
             ?>
             <tr>
                 <td>
-                    <?php echo nl2br(Security::remove_XSS($answerHTML, COURSEMANAGERLOWSECURITY)); ?>
+                    <?php echo Security::remove_XSS($answerHTML, COURSEMANAGERLOWSECURITY); ?>
                 </td>
 
                 <?php
@@ -125,7 +125,7 @@ class ExerciseShowFunctions
 
         if (!empty($answer)) {
             echo '<tr><td>';
-            echo nl2br(Security::remove_XSS($answer));
+            echo Security::remove_XSS($answer);
             echo '</td></tr>';
         }
 
@@ -159,7 +159,7 @@ class ExerciseShowFunctions
 
         if (empty($id)) {
             echo '<tr>';
-            echo Display::tag('td', nl2br(Security::remove_XSS($answer)), array('width'=>'55%'));
+            echo Display::tag('td', Security::remove_XSS($answer), array('width'=>'55%'));
             echo '</tr>';
             if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 echo '<tr>';
@@ -172,7 +172,7 @@ class ExerciseShowFunctions
             echo '<tr>';
             echo '<td>';
             if (!empty($answer)) {
-                echo nl2br(Security::remove_XSS($answer));
+                echo Security::remove_XSS($answer);
             }
             echo '</td>';
 

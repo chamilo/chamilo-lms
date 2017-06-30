@@ -500,3 +500,9 @@ $_configuration['send_all_emails_to'] = [
 // Add option in exercise to show or hide the "previous" button.
 // ALTER TABLE c_quiz ADD show_previous_button TINYINT(1) DEFAULT 1;
 //$_configuration['allow_quiz_show_previous_button_setting'] = false;
+// Allow ticket projects to be access by specific chamilo roles
+/*$_configuration['ticket_project_user_roles'] = [
+    'permissions' => [
+        1 => [17] // project_id = 1, STUDENT_BOSS = 17
+    ]
+];*/

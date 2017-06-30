@@ -127,6 +127,7 @@ if (empty($projectId)) {
 
 $currentUrl = api_get_self().'?project_id='.$projectId;
 $user_id = api_get_user_id();
+$isAllow = TicketManager::userIsAllowInProject(api_get_user_info(), $projectId);
 $isAdmin = api_is_platform_admin();
 $actionRight = '';
 
@@ -278,7 +279,7 @@ if (!empty($projectId)) {
     }
 
     $options = '';
-    if (api_is_platform_admin()) {
+    if ($isAdmin) {
         $options .=Display::url(
             get_lang('Projects'),
             api_get_path(WEB_CODE_PATH).'ticket/projects.php'
@@ -290,7 +291,7 @@ if (!empty($projectId)) {
         $url
     );
 
-    if (api_is_platform_admin()) {
+    if ($isAllow) {
         echo Display::toolbarAction(
             'options',
             array(
@@ -358,8 +359,10 @@ if ($isAdmin) {
     $table->set_header(6, get_lang('AssignedTo'), true);
     $table->set_header(7, get_lang('Message'), true);
 } else {
-    echo Display::page_subheader(get_lang('MyTickets'));
-    echo Display::return_message(get_lang('TicketMsgWelcome'));
+    if ($isAllow == false) {
+        echo Display::page_subheader(get_lang('MyTickets'));
+        echo Display::return_message(get_lang('TicketMsgWelcome'));
+    }
     $table->set_header(0, '#', true);
     $table->set_header(1, get_lang('Status'), false);
     $table->set_header(2, get_lang('Date'), true);

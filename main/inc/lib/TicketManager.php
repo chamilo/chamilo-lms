@@ -781,6 +781,7 @@ class TicketManager
         $table_support_status = Database::get_main_table(TABLE_TICKET_STATUS);
         $direction = !empty($direction) ? $direction : 'DESC';
         $userId = !empty($userId) ? $userId : api_get_user_id();
+        $userInfo = api_get_user_info($userId);
         $isAdmin = UserManager::is_admin($userId);
 
         if (!isset($_GET['project_id'])) {
@@ -841,7 +842,11 @@ class TicketManager
             WHERE 1=1                                
         ";
 
-        if (!$isAdmin) {
+        $projectId = (int) $_GET['project_id'];
+        $userIsAllowInProject = self::userIsAllowInProject($userInfo, $projectId);
+
+        // Check if a role was set to the project
+        if ($userIsAllowInProject == false) {
             $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
         }
 
@@ -980,7 +985,7 @@ class TicketManager
 
     /**
      * @param int $userId
-     * @return mixed
+     * @return int
      */
     public static function get_total_tickets_by_user_id($userId = 0)
     {
@@ -989,7 +994,11 @@ class TicketManager
         $table_support_priority = Database::get_main_table(TABLE_TICKET_PRIORITY);
         $table_support_status = Database::get_main_table(TABLE_TICKET_STATUS);
 
-        $userId = api_get_user_id();
+        $userInfo = api_get_user_info();
+        if (empty($userInfo)) {
+            return 0;
+        }
+        $userId = $userInfo['id'];
 
         if (!isset($_GET['project_id'])) {
             return 0;
@@ -1003,10 +1012,20 @@ class TicketManager
                 ON (ticket.priority_id = priority.id)
                 INNER JOIN $table_support_status status
                 ON (ticket.status_id = status.id)
-	        WHERE 1 = 1";
+	            WHERE 1 = 1";
 
-        if (!api_is_platform_admin()) {
-            $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
+        $projectId = (int) $_GET['project_id'];
+        $allowRoleList = self::getAllowedRolesFromProject($projectId);
+
+        // Check if a role was set to the project
+        if (!empty($allowRoleList) && is_array($allowRoleList)) {
+            if (!in_array($userInfo['status'], $allowRoleList)) {
+                $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
+            }
+        } else {
+            if (!api_is_platform_admin()) {
+                $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
+            }
         }
 
         // Search simple
@@ -1066,7 +1085,7 @@ class TicketManager
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 
-        return $obj->total;
+        return (int)$obj->total;
     }
 
     /**
@@ -1140,10 +1159,8 @@ class TicketManager
             $webPath = api_get_path(WEB_CODE_PATH);
             while ($row = Database::fetch_assoc($result)) {
                 $message = $row;
-                $completeName = api_get_person_name($row['firstname'], $row['lastname']);
-                $href = $webPath.'main/admin/user_information.php?user_id='.$row['user_id'];
                 $message['admin'] = UserManager::is_admin($message['user_id']);
-                $message['user_created'] = "<a href='$href'> $completeName </a>";
+                $message['user_info'] = api_get_user_info($message['user_id']);
                 $sql = "SELECT *
                         FROM $table_support_message_attachments
                         WHERE
@@ -2251,5 +2268,46 @@ class TicketManager
             $sql = "UPDATE ticket_project SET sys_lastedit_user_id = NULL WHERE sys_lastedit_user_id = $userId";
             Database::query($sql);
         }
+    }
+
+    /**
+     * @param array $userInfo
+     * @param int $projectId
+     *
+     * @return bool
+     */
+    public static function userIsAllowInProject($userInfo, $projectId)
+    {
+        if (api_is_platform_admin()) {
+            return true;
+        }
+
+        $allowRoleList = self::getAllowedRolesFromProject($projectId);
+
+        // Check if a role was set to the project
+        if (!empty($allowRoleList) && is_array($allowRoleList)) {
+            if (in_array($userInfo['status'], $allowRoleList)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param int $projectId
+     * @todo load from database instead of configuration.php setting
+     * @return array
+     */
+    public static function getAllowedRolesFromProject($projectId)
+    {
+        $options = api_get_configuration_value('ticket_project_user_roles');
+        if ($options) {
+            if (isset($options['permissions'][$projectId])) {
+                return $options['permissions'][$projectId];
+            }
+        }
+
+        return [];
     }
 }

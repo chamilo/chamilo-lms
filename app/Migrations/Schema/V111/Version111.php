@@ -532,7 +532,12 @@ class Version111 extends AbstractMigrationChamilo
             }
         }
 
-        $this->addSql('ALTER TABLE session_rel_course DROP category');
+        if ($schema->hasTable('session_rel_course')) {
+            $table = $schema->getTable('session_rel_course');
+            if ($table->hasColumn('category')) {
+                $this->addSql('ALTER TABLE session_rel_course DROP category');
+            }
+        }
     }
 
     /**

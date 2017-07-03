@@ -846,7 +846,7 @@ class CoursesController
 
             $sessionsBlock = array(
                 'id' => $session->getId(),
-                'name' => $session->getName(),
+                'name' => cut($session->getName(), 60),
                 'image' => isset($imageField['value']) ? $imageField['value'] : null,
                 'nbr_courses' => $session->getNbrCourses(),
                 'nbr_users' => $session->getNbrUsers(),

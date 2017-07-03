@@ -194,7 +194,11 @@ foreach ($session_list as $item) {
 
 // Session list form
 if (count($session_select) > 1) {
-    $form = new FormValidator('exercise_admin', 'get', api_get_self().'?session_id='.$session_id);
+    $form = new FormValidator(
+        'exercise_admin',
+        'get',
+        api_get_self().'?session_id='.$session_id
+    );
     $form->addElement(
         'select',
         'session_id',
@@ -351,7 +355,6 @@ if (!empty($courseList)) {
     }
 }
 
-
 $my_real_array = msort($my_real_array, 'date', 'asc');
 
 if (!empty($new_exercises)) {
@@ -375,10 +378,19 @@ if (!empty($start) && !empty($end)) {
     $dates = Display::tag('i', $start_only.' '.$end_only);
 }
 
-echo Display::tag('h1', $session_info['name']);
-echo $dates.'<br />';
+$editLink = '';
+if (api_is_platform_admin()) {
+    $editLink = '&nbsp;'.Display::url(
+        Display::return_icon('edit.png', get_lang('Edit')),
+        api_get_path(WEB_CODE_PATH).'session/session_edit.php?page=resume_session.php&id='.$session_id
+    );
+}
 
-if ($session_info['show_description'] == 1) {
+echo Display::tag('h1', $session_info['name'].$editLink);
+echo $dates.'<br />';
+$allow = api_get_setting('show_session_description') === 'true';
+
+if ($session_info['show_description'] == 1 && $allow) {
 ?>
     <div class="home-course-intro">
         <div class="page-course">
@@ -409,7 +421,6 @@ $extra_params_courses['autowidth'] = 'true'; //use the width of the parent
 
 //$extra_params_courses['gridview'] = "false";
 /*$extra_params_courses['rowNum'] = 9000;
-
 $extra_params_courses['height'] = "100%";
 $extra_params_courses['autowidth'] = 'false'; //use the width of the parent
 $extra_params_courses['recordtext'] = '';
@@ -433,9 +444,7 @@ $column_model = array(
 
 $extra_params = array();
 $extra_params['sortname'] = 'date';
-
 /*
-
 $extra_params['sortorder'] = 'asc';
 $extra_params['pgbuttons'] = false;
 $extra_params['recordtext'] = '';

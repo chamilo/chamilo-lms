@@ -1530,6 +1530,6 @@ if ((isset($cas_login) && $cas_login && exist_firstpage_parameter()) ||
 
 Redirect::session_request_uri($logging_in, $user_id);
 
-if (!ChamiloApi::isAjaxRequest()) {
+if (!ChamiloApi::isAjaxRequest() && api_get_configuration_value('survey_answered_at_field')) {
     SurveyManager::protectByMandatory();
 }

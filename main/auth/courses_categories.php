@@ -128,7 +128,6 @@ $code = isset($code) ? $code : null;
 </div>
 <?php  } ?>
 <div class="grid-courses">
-<div class="row">
 <?php
 if ($showCourses && $action != 'display_sessions') {
     if (!empty($message)) {
@@ -263,10 +262,11 @@ if ($showCourses && $action != 'display_sessions') {
 }
 ?>
 </div>
-</div>
 <?php
 
+echo '<div class="col-md-12">';
 echo $cataloguePagination;
+echo '</div>';
 
 /**
  * Display the course catalog image of a course
@@ -355,7 +355,7 @@ function return_title($course, $registeredUser)
 {
     $html = '';
     $linkCourse = api_get_course_url($course['code']);
-    $title = cut($course['title'], 45);
+    $title = cut($course['title'], 60);
 
     $html .= '<div class="block-title"><h4 class="title">';
 

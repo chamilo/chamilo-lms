@@ -4606,7 +4606,7 @@ class Tracking
 
         $rs = Database::query($sql);
         $simple_session_array = array();
-        while ($row = Database::fetch_array($rs)) {
+        while ($row = Database::fetch_array($rs, 'ASSOC')) {
             $course_info = api_get_course_info($row['code']);
             $temp_course_in_session[$row['session_id']]['course_list'][$course_info['real_id']] = $course_info;
             $temp_course_in_session[$row['session_id']]['name'] = $row['name'];
@@ -4616,8 +4616,8 @@ class Tracking
         foreach ($simple_session_array as $my_session_id => $session_name) {
             $course_list = $temp_course_in_session[$my_session_id]['course_list'];
             $my_course_data = array();
-            foreach ($course_list as $course_data) {
-                $my_course_data[$course_data['id']] = $course_data['title'];
+            foreach ($course_list as $courseId => $course_data) {
+                $my_course_data[$courseId] = $course_data['title'];
             }
 
             if (empty($session_id)) {
@@ -4640,12 +4640,16 @@ class Tracking
         if ($show_courses) {
             if (!empty($courses)) {
                 $html .= Display::page_subheader(
-                    Display::return_icon('course.png', get_lang('MyCourses'), array(), ICON_SIZE_SMALL).' '.get_lang('MyCourses')
+                    Display::return_icon(
+                        'course.png',
+                        get_lang('MyCourses'),
+                        array(),
+                        ICON_SIZE_SMALL
+                    ).' '.get_lang('MyCourses')
                 );
                 $html .= '<div class="table-responsive">';
                 $html .= '<table class="table table-striped table-hover">';
                 $html .= '<thead>';
-                //'.Display::tag('th', get_lang('Score').Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), array('class'=>'head')).'
                 $html .= '<tr>
                           '.Display::tag('th', get_lang('Course'), array('width'=>'300px')).'
                           '.Display::tag('th', get_lang('TimeSpentInTheCourse')).'
@@ -4740,7 +4744,6 @@ class Tracking
             $my_results = array();
             $all_exercise_graph_list = array();
             $all_exercise_start_time = array();
-
             foreach ($course_in_session as $my_session_id => $session_data) {
                 $course_list = $session_data['course_list'];
                 $user_count = count(SessionManager::get_users_by_session($my_session_id));
@@ -4758,7 +4761,7 @@ class Tracking
                     );
 
                     foreach ($exercise_list as $exercise_data) {
-                        $exercise_obj = new Exercise($course_data['id']);
+                        $exercise_obj = new Exercise($course_data['real_id']);
                         $exercise_obj->read($exercise_data['id']);
                         // Exercise is not necessary to be visible to show results check the result_disable configuration instead
                         //$visible_return = $exercise_obj->is_visible();
@@ -4766,7 +4769,7 @@ class Tracking
                             $best_average = intval(
                                 ExerciseLib::get_best_average_score_by_exercise(
                                     $exercise_data['id'],
-                                    $course_data['id'],
+                                    $course_data['real_id'],
                                     $my_session_id,
                                     $user_count
                                 )
@@ -4856,9 +4859,8 @@ class Tracking
             $html .= '<tbody>';
 
             foreach ($course_in_session as $my_session_id => $session_data) {
-                $course_list  = $session_data['course_list'];
+                $course_list = $session_data['course_list'];
                 $session_name = $session_data['name'];
-
                 if ($showAllSessions == false) {
                     if (isset($session_id) && !empty($session_id)) {
                         if ($session_id != $my_session_id) {
@@ -4923,7 +4925,6 @@ class Tracking
                 $html .= Display::tag('td', Display::url($session_name, $url, array('target'=>SESSION_LINK_TARGET)));
                 $html .= Display::tag('td', $all_exercises);
                 $html .= Display::tag('td', $all_unanswered_exercises_by_user);
-                //$html .= Display::tag('td', $all_done_exercise);
                 $html .= Display::tag('td', ExerciseLib::convert_to_percentage($all_average));
 
                 if (isset($_GET['session_id']) && $my_session_id == $_GET['session_id']) {
@@ -5026,13 +5027,15 @@ class Tracking
                     <tbody>';
 
                 foreach ($course_list as $course_data) {
-                    $course_code  = $course_data['code'];
+                    $course_code = $course_data['code'];
                     $course_title = $course_data['title'];
-                    $courseInfo = api_get_course_info($course_code);
-                    $courseId = $courseInfo['real_id'];
+                    $courseId = $course_data['real_id'];
 
                     // All exercises in the course @todo change for a real count
-                    $exercises = ExerciseLib::get_all_exercises($course_data, $session_id_from_get);
+                    $exercises = ExerciseLib::get_all_exercises(
+                        $course_data,
+                        $session_id_from_get
+                    );
                     $count_exercises = 0;
                     if (!empty($exercises)) {
                         $count_exercises = count($exercises);
@@ -5084,7 +5087,7 @@ class Tracking
 
                     $last_connection = self::get_last_connection_date_on_the_course(
                         $user_id,
-                        $courseInfo,
+                        $course_data,
                         $session_id_from_get
                     );
 
@@ -5117,7 +5120,11 @@ class Tracking
                     }
 
                     $url = api_get_course_url($course_code, $session_id_from_get);
-                    $course_url = Display::url($course_title, $url, array('target' => SESSION_LINK_TARGET));
+                    $course_url = Display::url(
+                        $course_title,
+                        $url,
+                        array('target' => SESSION_LINK_TARGET)
+                    );
 
                     if (is_numeric($progress)) {
                         $progress = $progress.'%';
@@ -5140,7 +5147,9 @@ class Tracking
                         $last_connection = '';
                     }
 
-                    if ($course_code == $courseCodeFromGet && $_GET['session_id'] == $session_id_from_get) {
+                    if ($course_code == $courseCodeFromGet &&
+                        $_GET['session_id'] == $session_id_from_get
+                    ) {
                         $details = Display::url(
                             Display::return_icon('2rightarrow_na.png', get_lang('Details')),
                         '#course_session_data'

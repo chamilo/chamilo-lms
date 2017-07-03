@@ -57,13 +57,13 @@ $column_model = array(
     array(
         'name' => 'name',
         'index' => 'name',
-        'width' => '80',
+        'width' => '200',
         'align' => 'left',
     ),
     array(
         'name' => 'description',
         'index' => 'description',
-        'width' => '500',
+        'width' => '400',
         'align' => 'left',
         'sortable' => 'false',
     ),
@@ -100,7 +100,16 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 $(function() {
 <?php
     // grid definition see the $career->display() function
-    echo Display::grid_js('careers', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+    echo Display::grid_js(
+        'careers',
+        $url,
+        $columns,
+        $column_model,
+        $extra_params,
+        array(),
+        $action_links,
+        true
+    );
 ?>
 });
 </script>
@@ -110,7 +119,9 @@ $career = new Career();
 // Action handling: Add
 switch ($action) {
     case 'add':
-        if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+        if (api_get_session_id() != 0 &&
+            !api_is_allowed_to_session_edit(false, true)
+        ) {
             api_not_allowed();
         }
         Session::write('notebook_view', 'creation_date');

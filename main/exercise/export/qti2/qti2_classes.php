@@ -3,7 +3,8 @@
 
 /**
  * @author Claro Team <cvs@claroline.net>
- * @author Yannick Warnier <yannick.warnier@beeznest.com> - updated ImsAnswerHotspot to match QTI norms
+ * @author Yannick Warnier <yannick.warnier@beeznest.com> -
+ * updated ImsAnswerHotspot to match QTI norms
  * @package chamilo.exercise
  */
 class Ims2Question extends Question
@@ -208,6 +209,9 @@ class ImsAnswerFillInBlanks extends Answer
  */
 class ImsAnswerMatching extends Answer
 {
+    public $leftList;
+    public $rightList;
+
     /**
      * Export the question part as a matrix-choice, with only one possible answer per line.
      */
@@ -222,7 +226,7 @@ class ImsAnswerMatching extends Answer
         //add left column
         $out .= '  <simpleMatchSet>'."\n";
         if (is_array($this->leftList)) {
-            foreach ($this->leftList as $leftKey=>$leftElement) {
+            foreach ($this->leftList as $leftKey => $leftElement) {
                 $out .= '
                 <simpleAssociableChoice identifier="left_'.$leftKey.'" >
                     <![CDATA['.formatExerciseQtiTitle($leftElement['answer']).']]>

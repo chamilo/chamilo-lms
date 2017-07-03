@@ -1576,7 +1576,9 @@ class Display
             ) {
                 if (isset($session_info['duration']) && !empty($session_info['duration'])) {
                     $daysLeft = SessionManager::getDayLeftInSession($session_info, api_get_user_id());
-                    $session['duration'] = sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft);
+                    $session['duration'] = $daysLeft >= 0
+                        ? sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft)
+                        : get_lang('YourSessionTimeHasExpired');
                 }
                 $active = true;
             } else {
@@ -2280,22 +2282,36 @@ class Display
      * @param string $content
      * @param string $title
      * @param string $footer
-     * @param string $style primary|success|info|warning|danger
+     * @param string $type primary|success|info|warning|danger
      * @param string $extra
      * @param string $id
+     * @param string $customColor
      *
      * @return string
      */
-    public static function panel($content, $title = '', $footer = '', $style = '', $extra = '', $id = '')
-    {
-        $title = !empty($title) ? '<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
-        $footer = !empty($footer) ? '<div class="panel-footer ">'.$footer.'</div>' : '';
-        $styles = ['primary', 'success', 'info', 'warning', 'danger'];
-        $style = !in_array($style, $styles) ? 'default' : $style;
+    public static function panel(
+        $content,
+        $title = '',
+        $footer = '',
+        $type = 'default',
+        $extra = '',
+        $id = '',
+        $customColor = ''
+    ) {
+        $headerStyle = '';
+        if (!empty($customColor)) {
+            $headerStyle = 'style = "color: white; background-color: '.$customColor.'" ';
+        }
+
+        $title = !empty($title) ? '<div class="panel-heading" '.$headerStyle.' ><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
+        $footer = !empty($footer) ? '<div class="panel-footer">'.$footer.'</div>' : '';
+        $typeList = ['primary', 'success', 'info', 'warning', 'danger'];
+        $style = !in_array($type, $typeList) ? 'default' : $type;
 
         if (!empty($id)) {
             $id = " id = $id ";
         }
+
         return '
             <div '.$id.' class="panel panel-'.$style.'">
                 '.$title.'

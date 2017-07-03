@@ -187,12 +187,14 @@ function import_exercise($file)
             }
             $question->setAnswer();
             $description = '';
+            /*
             if (strlen($question_array['title']) < 50) {
                 $question->updateTitle(formatText(strip_tags($question_array['title'])).'...');
             } else {
                 $question->updateTitle(formatText(substr(strip_tags($question_array['title']), 0, 50)));
                 $description .= $question_array['title'];
-            }
+            }*/
+            $question->updateTitle(formatText(strip_tags($question_array['title'])));
 
             if (isset($question_array['category'])) {
                 $category = formatText(strip_tags($question_array['category']));

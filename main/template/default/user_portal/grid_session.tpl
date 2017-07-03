@@ -68,13 +68,13 @@
                             <div class="course-student-info">
                                 <div class="student-info">
                                     {% if (item.student_info.progress is not null) %}
-                                    {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
+                                        {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
                                     {% endif %}
                                     {% if (item.student_info.score is not null) %}
-                                    {{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}
+                                        {{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}
                                     {% endif %}
                                     {% if (item.student_info.certificate is not null) %}
-                                    {{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}
+                                        {{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}
                                     {% endif %}
                                 </div>
                             </div>
@@ -106,7 +106,6 @@
             {% if row.show_description %}
                 {{ row.description }}
             {% endif %}
-
             <ul class="info-session list-inline">
                 {% if row.coach_name %}
                     <li>
@@ -114,7 +113,6 @@
                         {{ row.coach_name }}
                     </li>
                 {% endif %}
-
                 <li>
                     <i class="fa fa-calendar" aria-hidden="true"></i>
                     {{ row.date ? row.date : row.duration }}

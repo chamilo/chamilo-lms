@@ -70,7 +70,6 @@
                                             {% endfor %}
                                         {% endif %}
                                     </div>
-                                    
                                     {% if item.student_info %}
                                         {% if (item.student_info.progress is not null) and (item.student_info.score is not null) %}
                                         <div class="course-student-info">
@@ -90,7 +89,6 @@
                                         </div>
                                         {% endif %}
                                     {% endif %}
-
                                 </div>
                             </div>
                         </div>

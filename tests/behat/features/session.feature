@@ -12,10 +12,25 @@ Feature: Session tool
     And I press "Add category"
     Then I should see "The category has been added"
 
-  Scenario: Create a session with hidden description
+  @javascript
+  Scenario: Create a session
+    Given I am on "/main/session/session_add.php"
+    When I fill in the following:
+      | name | Session1 |
+    And I fill in select2 input "#coach_username" with id "1" and value "admin"
+    And I press "submit"
+    Then I should see "Add courses to this session (Session1)"
+    Then I select "TEMP (TEMP)" from "NoSessionCoursesList[]"
+    And I press "add_course"
+    And I press "next"
+    Then I should see "Update successful"
+
+  @javascript
+  Scenario: Create a session with description
     Given I am on "/main/session/session_add.php"
     When I fill in the following:
       | name | Temp Session |
+    And I fill in select2 input "#coach_username" with id "1" and value "admin"
     And I press "advanced_params"
     And I fill in ckeditor field "description" with "Description for Temp Session"
     And I press "submit"
@@ -25,12 +40,12 @@ Feature: Session tool
     And I press "next"
     Then I should see "Update successful"
 
-  Scenario: Check hidden session description
+  Scenario: Check session description is not present
     Given I am on "/user_portal.php?nosession=true"
     Then I should see "Temp Session"
     And I should not see "Description for Temp Session"
 
-  Scenario: Show session description
+  Scenario: Edit session description setting
     Given I am on "/main/session/session_list.php?keyword=Temp+session"
     And wait for the page to be loaded
     And I follow "Edit"
@@ -39,13 +54,34 @@ Feature: Session tool
     And I press "submit"
     Then I should see "Update successful"
 
-  Scenario: Check shown session description
-    Given I am on "/user_portal.php?nosession=true"
+  Scenario: Check session description with platform setting off
+    Given I am a platform administrator
+    And I am on "/main/admin/settings.php?search_field=show_session_description&category=search_setting"
+    And I check the "show_session_description" radio button with "false" value
+    And I press "Save settings"
+    Then I am on "/user_portal.php?nosession=true"
+    Then I should see "Temp Session"
+    And I should not see "Description for Temp Session"
+
+  Scenario: Check session description with platform setting on
+    Given I am a platform administrator
+    And I am on "/main/admin/settings.php?search_field=show_session_description&category=search_setting"
+    And I check the "show_session_description" radio button with "true" value
+    And I press "Save settings"
+    Then I should see "Update successful"
+    Then I am on "/user_portal.php?nosession=true"
     Then I should see "Temp Session"
     And I should see "Description for Temp Session"
 
   Scenario: Delete session
     Given I am on "/main/session/session_list.php?keyword=Temp+session"
+    And wait for the page to be loaded
+    And I follow "Delete"
+    And I confirm the popup
+    Then I should see "Deleted"
+
+  Scenario: Delete session "Session1"
+    Given I am on "/main/session/session_list.php?keyword=Session1"
     And wait for the page to be loaded
     And I follow "Delete"
     And I confirm the popup

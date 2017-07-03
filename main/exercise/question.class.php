@@ -1935,7 +1935,7 @@ abstract class Question
             $class = 'success';
         }
 
-        if ($this->type == FREE_ANSWER || $this->type == ORAL_EXPRESSION) {
+        if (in_array($this->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
             $score['revised'] = isset($score['revised']) ? $score['revised'] : false;
             if ($score['revised'] == true) {
                 $score_label = get_lang('Revised');
@@ -2250,6 +2250,6 @@ abstract class Question
      */
     public function returnFormatFeedback()
     {
-        return '<br /><br />'.Display::return_message($this->feedback, 'normal', false);
+        return Display::return_message($this->feedback, 'normal', false);
     }
 }

@@ -2661,6 +2661,7 @@ class UserManager
                     s.name,
                     s.accessStartDate AS access_start_date,
                     s.accessEndDate AS access_end_date,
+                    s.duration,
                     sc.id AS session_category_id,
                     sc.name AS session_category_name,
                     sc.dateStart AS session_category_date_start,
@@ -2695,16 +2696,23 @@ class UserManager
                 $user_id,
                 $session_id
             );
+            $daysLeft = SessionManager::getDayLeftInSession($row, $user_id);
 
             // User portal filters:
             if ($ignoreTimeLimit === false) {
                 if ($is_time_over) {
                     // History
-                    if (empty($row['access_end_date'])) {
-                        continue;
-                    } else {
-                        if ($row['access_end_date'] > $now) {
+                    if ($row['duration']) {
+                        if ($daysLeft >= 0) {
                             continue;
+                        }
+                    } else {
+                        if (empty($row['access_end_date'])) {
+                            continue;
+                        } else {
+                            if ($row['access_end_date'] > $now) {
+                                continue;
+                            }
                         }
                     }
                 } else {
@@ -2715,11 +2723,17 @@ class UserManager
                     if (api_is_platform_admin() || $isGeneralCoach || $isCoachOfCourse) {
                         // Teachers can access the session depending in the access_coach date
                     } else {
-                        if (isset($row['access_end_date']) &&
-                            !empty($row['access_end_date'])
-                        ) {
-                            if ($row['access_end_date'] <= $now) {
+                        if ($row['duration']) {
+                            if ($daysLeft <= 0) {
                                 continue;
+                            }
+                        } else {
+                            if (isset($row['access_end_date']) &&
+                                !empty($row['access_end_date'])
+                            ) {
+                                if ($row['access_end_date'] <= $now) {
+                                    continue;
+                                }
                             }
                         }
                     }

@@ -10,9 +10,10 @@
                     {% else %}
                         <a href="{{ _p.web_main ~ 'session/index.php?session_id=' ~ row.id }}">
                     {% endif %}
-                        <img id="session_img_{{ row.id }}" src="{{ "window_list.png"|icon(32) }}" width="32" height="32"
-                             alt="{{ row.title }}" title="{{ row.title }}">
-                        {{ row.title }}
+
+                    <img id="session_img_{{ row.id }}" src="{{ "window_list.png"|icon(32) }}" width="32" height="32"
+                         alt="{{ row.title }}" title="{{ row.title }}">
+                    {{ row.title }}
                     </a>
                 {% elseif row.course_list_session_style == 2 %}
                     {# No link #}
@@ -51,62 +52,59 @@
                                     {{ row.coach_name }}
                                 </li>
                             {% endif %}
-
                             <li>
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
                                 {{ row.date ? row.date : row.duration }}
                             </li>
                         </ul>
                         <div class="sessions-items">
-                            {% for item in row.courses %}
-                                <div class="courses">
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <a href="{{ item.link }}" class="thumbnail">
-                                                <img class="img-responsive"
-                                                     src="{{ item.thumbnails ? item.thumbnails : item.icon }}">
-                                            </a>
-                                        </div>
-                                        <div class="col-md-10">
-                                            <h4>{{ item.title }}</h4>
-                                            <div class="list-teachers">
-                                                {% if item.coaches|length > 0 %}
-                                                    <img src="{{ 'teacher.png'|icon(16) }}" width="16" height="16">
-                                                    {% for coach in item.coaches %}
-                                                        {{ loop.index > 1 ? ' | ' }}
-                                                        <a href="{{ _p.web_ajax ~ 'user_manager.ajax.php?' ~ {'a': 'get_user_popup', 'user_id': coach.user_id}|url_encode() }}"
-                                                           data-title="{{ coach.full_name }}" class="ajax">
-                                                            {{ coach.firstname }}, {{ coach.lastname }}
-                                                        </a>
-                                                    {% endfor %}
-                                                {% endif %}
-                                            </div>
-                                        </div>
-
-                                        {% if item.student_info %}
-                                            {% if (item.student_info.progress is not null) and (item.student_info.score is not null) %}
-                                                <div class="course-student-info">
-                                                    <div class="student-info">
-
-                                                        {% if (item.student_info.progress is not null) %}
-                                                        {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
-                                                        {% endif %}
-
-                                                        {% if (item.student_info.score is not null) %}
-                                                        {{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}
-                                                        {% endif %}
-
-                                                        {% if (item.student_info.certificate is not null) %}
-                                                        {{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}
-                                                        {% endif %}
-
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-                                        {% endif %}
+                        {% for item in row.courses %}
+                            <div class="courses">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <a href="{{ item.link }}" class="thumbnail">
+                                            <img class="img-responsive"
+                                                 src="{{ item.thumbnails ? item.thumbnails : item.icon }}">
+                                        </a>
                                     </div>
+                                    <div class="col-md-10">
+                                        <h4>{{ item.title }}</h4>
+                                        <div class="list-teachers">
+                                            {% if item.coaches|length > 0 %}
+                                                <img src="{{ 'teacher.png'|icon(16) }}" width="16" height="16">
+                                                {% for coach in item.coaches %}
+                                                    {{ loop.index > 1 ? ' | ' }}
+                                                    <a href="{{ _p.web_ajax ~ 'user_manager.ajax.php?' ~ {'a': 'get_user_popup', 'user_id': coach.user_id}|url_encode() }}"
+                                                       data-title="{{ coach.full_name }}" class="ajax">
+                                                        {{ coach.firstname }}, {{ coach.lastname }}
+                                                    </a>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    {% if item.student_info %}
+                                        {% if (item.student_info.progress is not null) and (item.student_info.score is not null) %}
+                                            <div class="course-student-info">
+                                                <div class="student-info">
+                                                    {% if (item.student_info.progress is not null) %}
+                                                        {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
+                                                    {% endif %}
+
+                                                    {% if (item.student_info.score is not null) %}
+                                                        {{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}
+                                                    {% endif %}
+
+                                                    {% if (item.student_info.certificate is not null) %}
+                                                        {{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
                                 </div>
-                            {% endfor %}
+                            </div>
+                        {% endfor %}
                         </div>
                     </div>
                 </div>

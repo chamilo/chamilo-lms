@@ -70,7 +70,8 @@ class aicc extends learnpath
 
     /**
      * Parses a set of AICC config files and puts everything into the $config array
-     * @param string Path to the config files dir on the system. If not defined, uses the base path of the course's scorm dir
+     * @param string Path to the config files dir on the system.
+     * If not defined, uses the base path of the course's scorm dir
      * @return array Structured array representing the config files' contents
      */
     function parse_config_files($dir = '')
@@ -231,7 +232,9 @@ class aicc extends learnpath
             return false;
         }
 
-        if ($this->debug > 0) { error_log('New LP - In aicc::import_aicc('.$course_code.')', 0); }
+        if ($this->debug > 0) {
+            error_log('New LP - In aicc::import_aicc('.$course_code.')', 0);
+        }
 
         $new_lp = Database::get_course_table(TABLE_LP_MAIN);
         $new_lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -251,7 +254,9 @@ class aicc extends learnpath
                 "($course_id, 3, '".$this->course_title."', '".$this->course_id."','".$this->course_description."',".
                 "'".$this->subdir."', 0, 'embedded', '".$this->config_encoding."',".
                 "'aicc_api.php','".$this->course_creator."',$dsp)";
-        if ($this->debug > 2) { error_log('New LP - In import_aicc(), inserting path: '.$sql, 0); }
+        if ($this->debug > 2) {
+            error_log('New LP - In import_aicc(), inserting path: '.$sql, 0);
+        }
         Database::query($sql);
         $lp_id = Database::insert_id();
 
@@ -640,7 +645,8 @@ class aicc extends learnpath
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET author = '$author' WHERE c_id = ".$course_id." id = ".$lp;
+            $sql = "UPDATE $tbl_lp SET author = '$author' 
+                    WHERE c_id = ".$course_id." id = ".$lp;
             Database::query($sql);
             return true;
         } else {
@@ -660,7 +666,8 @@ class aicc extends learnpath
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET content_maker = '$maker' WHERE c_id = ".$course_id." id = ".$lp;
+            $sql = "UPDATE $tbl_lp SET content_maker = '$maker' 
+                    WHERE c_id = ".$course_id." id = ".$lp;
             Database::query($sql);
             return true;
         } else {

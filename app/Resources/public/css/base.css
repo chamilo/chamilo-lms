@@ -1843,9 +1843,6 @@ div.admin_section h4 {
     font-size:130%;
 }
 
-.question_row {
-    margin-bottom: 40px;
-}
 .question_row_score .title-score .total{
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -1864,17 +1861,8 @@ div.admin_section h4 {
   margin: 0px;
   font-size: 22px;
 }
-.question_row_answer{
-  padding: 20px;
-  border: 1px solid #dddddd;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border-radius: 4px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-}
 .question_row_answer .page-header{
-  margin: 20px 0px;
+  margin: 10px 0;
 }
 .question_row_answer h3.page-header{
   font-size: 22px;
@@ -4775,7 +4763,6 @@ div#chat-remote-video video {
 
 .grid-courses .items.items-courses {
     padding-bottom: 10px;
-    width: 310px;
     box-shadow: 2px 4px 15px 0 rgba(46,61,73,.1);
     transition: box-shadow .3s ease , border .3s ease;
 }
@@ -4795,17 +4782,24 @@ div#chat-remote-video video {
     box-shadow: 2px 4px 15px 0 rgba(46,61,73,.1);
     transition: box-shadow .3s ease , border .3s ease;
 }
-.grid-courses .items .block-title{
-    margin: 15px 10px 10px 10px;
+.grid-courses .items .block-title {
+    margin: 10px 10px 10px 10px;
+    min-height: 40px;
 }
-.grid-courses .items .title{
+.grid-courses .items .title {
     line-height: 1.4;
     padding: 0px;
     font-size: 14px;
     font-weight: bold;
-    min-height: 42px;
     margin: 0;
 }
+
+.grid-courses .items .toolbar {
+    text-align: right;
+    padding: 10px 0px 0px 0px;
+    min-height: 30px;
+}
+
 .grid-courses .items .image .black-shadow {
     top: 0px;
     left: 0px;
@@ -4831,10 +4825,7 @@ div#chat-remote-video video {
     height: 42px;
     margin: 0;
 }
-.grid-courses .items .toolbar{
-    text-align: right;
-    padding: 0 10px;
-}
+
 .grid-courses .items .toolbar .info{
     float: left;
     font-size: 12px;
@@ -4858,7 +4849,7 @@ div#chat-remote-video video {
 	padding: 0;
 }
 .grid-courses .items .image {
-    /* min-height: 175px; */
+    min-height: 225px;
     position: relative;
 }
 .grid-courses .items .image .pin{
@@ -4914,6 +4905,7 @@ div#chat-remote-video video {
 }
 .grid-courses .items .description{
     padding: 5px 10px;
+    min-height: 140px;
 }
 .grid-courses .items .description .text{
     font-size: 12px;
@@ -5003,14 +4995,10 @@ div#chat-remote-video video {
 /* Catalog session */
 .return-catalog{
 	margin-bottom: 35px;
-	padding-left: 15px;
-    padding-right: 15px;
 }
 .search-session, .search-courses{
     margin-bottom: 15px;
     margin-top: 25px;
-    padding-left: 15px;
-    padding-right: 15px;
 }
 .search-session .form-inline label{
     font-weight: normal;
@@ -6344,7 +6332,7 @@ input[type=checkbox]{
     padding: 10px;
   }
   .question_row_answer .page-header{
-    margin: 10px 0px;
+    margin: 10px 0;
   }
   .question_row_answer h3.page-header{
     font-size: 16px;
@@ -6400,7 +6388,7 @@ input[type=checkbox]{
     display: block;
   }
   .question_row_answer .page-header{
-    margin: 10px 0px;
+    margin: 10px 0;
   }
   .question_row_answer h3.page-header{
     font-size: 16px;

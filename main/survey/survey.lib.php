@@ -1754,20 +1754,25 @@ class SurveyManager
             $invitation = Database::getManager()
                 ->createQuery("
                     SELECT i FROM ChamiloCourseBundle:CSurveyInvitation i
-                    INNER JOIN ChamiloCourseBundle:CSurvey s WITH i.surveyCode = s.code
+                    INNER JOIN ChamiloCourseBundle:CSurvey s WITH s.code = i.surveyCode
+                    INNER JOIN ChamiloCoreBundle:ExtraFieldValues efv WITH efv.itemId = s.iid
+                    INNER JOIN ChamiloCoreBundle:ExtraField ef WITH efv.field = ef.id
                     WHERE i.answered = 0
                         AND i.cId = :course
                         AND i.user = :user
                         AND i.sessionId = :session
                         AND :now BETWEEN s.availFrom AND s.availTill
-                    ORDER BY i.invitationDate ASC
+                        AND ef.variable = :variable
+                        AND efv.value = 1
+                    ORDER BY s.availTill ASC
                 ")
                 ->setMaxResults(1)
                 ->setParameters([
                     'course' => $courseId,
                     'user' => $userId,
                     'session' => $sessionId,
-                    'now' => new DateTime('UTC', new DateTimeZone('UTC'))
+                    'now' => new DateTime('UTC', new DateTimeZone('UTC')),
+                    'variable' => 'is_mandatory'
                 ])
                 ->getSingleResult();
         } catch (Exception $e) {

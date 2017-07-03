@@ -508,6 +508,8 @@ $_configuration['send_all_emails_to'] = [
 // Add option in exercise to show or hide the "previous" button.
 //ALTER TABLE c_quiz ADD show_previous_button TINYINT(1) DEFAULT 1;
 //$_configuration['allow_quiz_show_previous_button_setting'] = false;
+// Allow to teachers review exercises question with audio notes
+//$_configuration["allow_teacher_comment_audio"] = false;
 // ------
 // Hide search form in session list
 //$_configuration['hide_search_form_in_session_list'] = false;

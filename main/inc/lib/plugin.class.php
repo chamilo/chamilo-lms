@@ -791,6 +791,7 @@ class Plugin
         $langString = str_replace('Plugin', '', get_class($this));
         $pluginName = strtolower($langString);
         $pluginUrl = 'plugin/'.$pluginName.'/'.$filePath;
+
         if ($showTab === 'true') {
             $tabAdded = $this->addTab($langString, $pluginUrl);
             if ($tabAdded) {

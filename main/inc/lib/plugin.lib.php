@@ -158,9 +158,9 @@ class AppPlugin
             'setting',
             'Plugins',
             $pluginName,
-            null,
-            null,
-            null,
+            '',
+            '',
+            '',
             $urlId,
             1
         );
@@ -479,7 +479,6 @@ class AppPlugin
      */
     public function add_to_region($plugin, $region)
     {
-        $access_url_id = api_get_current_access_url_id();
         api_add_setting(
             $plugin,
             $region,
@@ -487,10 +486,10 @@ class AppPlugin
             'region',
             'Plugins',
             $plugin,
-            null,
-            null,
-            null,
-            $access_url_id,
+            '',
+            '',
+            '',
+            api_get_current_access_url_id(),
             1
         );
     }

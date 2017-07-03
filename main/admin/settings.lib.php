@@ -603,7 +603,6 @@ function storeRegions()
 
     // Get a list of all current 'Plugins' settings
     $installed_plugins = $plugin_obj->get_installed_plugins();
-
     $shortlist_installed = array();
     if (!empty($installed_plugins)) {
         foreach ($installed_plugins as $plugin) {
@@ -612,7 +611,6 @@ function storeRegions()
             }
         }
     }
-    $shortlist_installed = array_flip(array_flip($shortlist_installed));
 
     $plugin_list = $plugin_obj->read_plugins_from_path();
 

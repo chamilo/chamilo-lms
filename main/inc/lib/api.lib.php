@@ -5334,25 +5334,24 @@ function &api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $ur
  * @param string $scope The scope
  * @param string $subKeyText The subkey text
  * @param int $accessUrlId The access_url for which this parameter is valid
- * @param int $visiblity The changeability of this setting for non-master urls
+ * @param int $visibility The changeability of this setting for non-master urls
  * @return int The setting ID
  */
 function api_add_setting(
     $value,
     $variable,
-    $subKey = null,
+    $subKey = '',
     $type = 'textfield',
-    $category = null,
-    $title = null,
-    $comment = null,
-    $scope = null,
-    $subKeyText = null,
+    $category = '',
+    $title = '',
+    $comment = '',
+    $scope = '',
+    $subKeyText = '',
     $accessUrlId = 1,
-    $visiblity = 0
+    $visibility = 0
 ) {
     $em = Database::getManager();
     $settingRepo = $em->getRepository('ChamiloCoreBundle:SettingsCurrent');
-
     $accessUrlId = (int) $accessUrlId ?: 1;
 
     $criteria = ['variable' => $variable, 'accessUrl' => $accessUrlId];
@@ -5388,7 +5387,7 @@ function api_add_setting(
         ->setScope($scope)
         ->setSubkeytext($subKeyText)
         ->setAccessUrl($accessUrlId)
-        ->setAccessUrlChangeable($visiblity);
+        ->setAccessUrlChangeable($visibility);
 
     $em->persist($setting);
     $em->flush();

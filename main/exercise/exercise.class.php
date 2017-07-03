@@ -5791,8 +5791,9 @@ class Exercise
                 $icon.PHP_EOL.$this->exercise.' : '.get_lang('Result')
             );
         }
-
+        $html .= "<div class='description'>";
         $html .= Display::description($array);
+        $html .= "</div>";
         $html .= "</div>";
         return $html;
     }

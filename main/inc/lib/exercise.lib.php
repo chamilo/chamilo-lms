@@ -3756,7 +3756,9 @@ HOTSPOT;
         // Display text when test is finished #4074 and for LP #4227
         $end_of_message = $objExercise->selectTextWhenFinished();
         if (!empty($end_of_message)) {
+            echo '<div class="exercise-message">';
             echo Display::return_message($end_of_message, 'normal', false);
+            echo '</div>';
             echo "<div class='clear'>&nbsp;</div>";
         }
 

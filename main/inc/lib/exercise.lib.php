@@ -3882,7 +3882,7 @@ HOTSPOT;
                     $score = [];
                 }
 
-                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION])) {
+                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
                     $check = $objQuestionTmp->isQuestionWaitingReview($score);
                     if ($check === false) {
                         $countPendingQuestions++;

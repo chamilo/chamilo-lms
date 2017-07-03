@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
 
 /**
  * Implements the tracking of students in the Reporting pages
@@ -557,7 +558,8 @@ if (!empty($student_id)) {
                 </td>
             </tr>
             <tr>
-                <td> <?php echo get_lang('Tel').' : ';
+                <td>
+                    <?php echo get_lang('Tel').' : ';
                     if (!empty($user_info['phone'])) {
                         echo $user_info['phone'];
                     } else {
@@ -591,6 +593,107 @@ if (!empty($student_id)) {
                 </tr>
             <?php
             }
+
+            // Ofaj
+            $bossList = Usermanager::getStudentBossList($student_id);
+
+            echo '<tr><td>';
+            echo get_lang('StudentBoss').' : ';
+            foreach ($bossList as $boss) {
+                $bossInfo = api_get_user_info($boss['boss_id']);
+                if ($bossInfo) {
+                    echo $bossInfo['complete_name_with_username'].'<br />';
+                }
+            }
+            echo '</td></tr>';
+
+            echo '<tr><td>';
+            echo get_lang('Language').' : ';
+            echo $user_info['language'];
+            echo '</td></tr>';
+
+            $startDate = UserManager::get_extra_user_data_by_field(
+                $user_info['user_id'],
+                'datedebutstage'
+            );
+
+            $endDate = UserManager::get_extra_user_data_by_field(
+                $user_info['user_id'],
+                'datefinstage'
+            );
+
+            $extraField = new ExtraField('user');
+            $extraFieldInfoStart = $extraField->get_handler_field_info_by_field_variable(
+                'datedebutstage'
+            );
+
+            $extraFieldInfoEnd = $extraField->get_handler_field_info_by_field_variable(
+            'datefinstage'
+            );
+
+            echo '<tr><td>';
+            echo $extraFieldInfoStart['display_text'].' : ';
+            if (isset($startDate['datedebutstage'])) {
+                echo $startDate['datedebutstage'];
+            }
+            echo '</td></tr>';
+
+            echo '<tr><td>';
+            echo $extraFieldInfoEnd['display_text'].' : ';
+            if (isset($endDate['datefinstage'])) {
+                echo $endDate['datefinstage'];
+            }
+            echo '</td></tr>';
+
+            echo '<tr><td>';
+            echo get_lang('Language').' : ';
+            echo $user_info['language'];
+            echo '</td></tr>';
+
+            /** @var ExtraFieldSavedSearch $saved */
+            $search = [
+                'user' => $student_id
+            ];
+
+            $items = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findBy($search);
+            $listVariables = [
+                'ecouter',
+                'lire',
+                'ecrire',
+                's_exprimer_oralement_en_continu',
+                'participer_a_une_conversation'
+            ];
+
+            $extraField = new ExtraField('session');
+
+            if ($items) {
+                 /** @var ExtraFieldSavedSearch $item */
+                foreach ($items as $item) {
+                    $variable = $item->getField()->getVariable();
+                    if (in_array($variable, $listVariables)) {
+                        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($variable);
+                        if ($extraFieldInfo) {
+                            echo '<tr><td>';
+                            $options = $extraFieldInfo['options'];
+                            $optionValues = array_column($options, 'display_text', 'option_value');
+                            //var_dump($optionValues);
+                            echo $extraFieldInfo['display_text'].' : ';
+                            $answers = $item->getValue();
+                            $list = [];
+                            foreach ($answers as $answer) {
+                                $list[] = $optionValues[$answer];
+                            }
+                            echo '<li>';
+                            echo implode('</li><li>', $list);
+                            echo '</li>';
+
+                            echo '</td></tr>';
+                        }
+                    }
+                }
+            }
+
+
 
             // Display timezone if the user selected one and if the admin allows the use of user's timezone
             $timezone = null;

@@ -385,7 +385,7 @@ class learnpath
                                             'lp_view_id' => $this->lp_view_id,
                                             'view_count' => 1,
                                             'status' => 'not attempted',
-                                            'start_time' => api_get_utc_datetime(),
+                                            'start_time' => time(),
                                             'total_time' => 0,
                                             'score' => 0
                                         ];

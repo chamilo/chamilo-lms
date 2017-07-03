@@ -127,6 +127,8 @@ $extra_params['postData'] = array(
     )
 );
 
+$hideSearch = api_get_configuration_value('hide_search_form_in_session_list');
+
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
      return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
@@ -220,7 +222,16 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
             }
 
             <?php
-            echo Display::grid_js('sessions', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+            echo Display::grid_js(
+                'sessions',
+                $url,
+                $columns,
+                $column_model,
+                $extra_params,
+                array(),
+                $action_links,
+                true
+            );
             ?>
 
             setSearchSelect("status");
@@ -271,8 +282,12 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
                 prmSearch
             );
 
+            <?php
             // Create the searching dialog.
-            grid.searchGrid(prmSearch);
+            if ($hideSearch !== true) {
+                echo 'grid.searchGrid(prmSearch);';
+            }
+            ?>
 
             // Fixes search table.
             var searchDialogAll = $("#fbox_"+grid[0].id);

@@ -509,3 +509,5 @@ $_configuration['send_all_emails_to'] = [
 //ALTER TABLE c_quiz ADD show_previous_button TINYINT(1) DEFAULT 1;
 //$_configuration['allow_quiz_show_previous_button_setting'] = false;
 // ------
+// Hide search form in session list
+//$_configuration['hide_search_form_in_session_list'] = false;

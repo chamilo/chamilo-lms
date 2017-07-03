@@ -33,7 +33,7 @@ $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document
 $saveDir = $dirBaseDocuments.$audioDir;
 
 if (!is_dir($saveDir)) {
-    DocumentManager::createDefaultAudioFolder($courseInfo);
+    mkdir($saveDir, api_get_permissions_for_new_directories(), true);
 }
 
 $documentPath = $saveDir.'/'.$audioFileName;

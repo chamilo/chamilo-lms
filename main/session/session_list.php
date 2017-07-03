@@ -91,7 +91,17 @@ if (!empty($courseId)) {
 
 if (isset($_REQUEST['keyword'])) {
     //Begin with see the searchOper param
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=s.name&searchString='.Security::remove_XSS($_REQUEST['keyword']).'&searchOper=in';
+    $filter = new stdClass();
+    $filter->groupOp = 'OR';
+    $rule = new stdClass();
+    $rule->field = 'category_name';
+    $rule->op = 'in';
+    $rule->data = Security::remove_XSS($_REQUEST['keyword']);
+    $filter->rules[] = $rule;
+    $filter->groupOp = 'OR';
+
+    $filter = json_encode($filter);
+    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters='.$filter.'&searchField=s.name&searchString='.Security::remove_XSS($_REQUEST['keyword']).'&searchOper=in';
 }
 
 if (isset($_REQUEST['id_category'])) {
@@ -115,17 +125,19 @@ $extra_params['autowidth'] = 'true';
 // height auto
 $extra_params['height'] = 'auto';
 
-$extra_params['postData'] = array(
-    'filters' => array(
-        "groupOp" => "AND",
-        "rules" => $result['rules'],
-        /*array(
-            array( "field" => "display_start_date", "op" => "gt", "data" => ""),
-            array( "field" => "display_end_date", "op" => "gt", "data" => "")
-        ),*/
-        //'groups' => $groups
-    )
-);
+if (!isset($_GET['keyword'])) {
+    $extra_params['postData'] = array(
+        'filters' => array(
+            "groupOp" => "AND",
+            "rules" => $result['rules'],
+            /*array(
+                array( "field" => "display_start_date", "op" => "gt", "data" => ""),
+                array( "field" => "display_end_date", "op" => "gt", "data" => "")
+            ),*/
+            //'groups' => $groups
+        )
+    );
+}
 
 $hideSearch = api_get_configuration_value('hide_search_form_in_session_list');
 

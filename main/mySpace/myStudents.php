@@ -645,11 +645,6 @@ if (!empty($student_id)) {
             }
             echo '</td></tr>';
 
-            echo '<tr><td>';
-            echo get_lang('Language').' : ';
-            echo $user_info['language'];
-            echo '</td></tr>';
-
             /** @var ExtraFieldSavedSearch $saved */
             $search = [
                 'user' => $student_id

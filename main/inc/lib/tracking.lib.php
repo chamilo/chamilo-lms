@@ -5211,6 +5211,9 @@ class Tracking
             $session_id = intval($session_id);
             $course = Database::escape_string($course_code);
             $course_info = api_get_course_info($course);
+            if (empty($course_info)) {
+                return '';
+            }
 
             $html .= '<a name="course_session_data"></a>';
             $html .= Display::page_subheader($course_info['title']);

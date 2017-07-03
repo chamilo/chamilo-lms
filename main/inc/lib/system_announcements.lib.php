@@ -905,14 +905,14 @@ class SystemAnnouncementManager
                 return SystemAnnouncementManager::VISIBLE_DRH;
             }
 
-            if (api_is_allowed_to_create_course()) {
+            if (api_is_teacher()) {
                 return SystemAnnouncementManager::VISIBLE_TEACHER;
             } else {
                 return SystemAnnouncementManager::VISIBLE_STUDENT;
             }
         } else {
             // Default behaviour
-            return api_is_allowed_to_create_course() ? SystemAnnouncementManager::VISIBLE_TEACHER : SystemAnnouncementManager::VISIBLE_STUDENT;
+            return api_is_teacher() ? SystemAnnouncementManager::VISIBLE_TEACHER : SystemAnnouncementManager::VISIBLE_STUDENT;
         }
     }
 }

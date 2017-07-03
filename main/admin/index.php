@@ -66,7 +66,13 @@ if (!empty($hook)) {
 }
 
 /* Users */
-$blocks['users']['icon'] = Display::return_icon('members.png', get_lang('Users'), array(), ICON_SIZE_MEDIUM, false);
+$blocks['users']['icon'] = Display::return_icon(
+    'members.png',
+    get_lang('Users'),
+    array(),
+    ICON_SIZE_MEDIUM,
+    false
+);
 $blocks['users']['label'] = api_ucfirst(get_lang('Users'));
 $blocks['users']['class'] = 'block-admin-users';
 
@@ -76,20 +82,20 @@ if (file_exists($usersBlockExtraFile)) {
     $blocks['users']['extraContent'] = file_get_contents($usersBlockExtraFile);
 }
 
+$search_form = '
+    <form method="get" class="form-inline" action="user_list.php">
+        <div class="form-group">
+            <input class="form-control" type="text" name="keyword" value=""
+             aria-label="'.get_lang('Search').'">
+            <button class="btn btn-default" type="submit">
+                <em class="fa fa-search"></em> ' . get_lang('Search').'
+            </button>
+        </div>
+    </form>';
+$blocks['users']['search_form'] = $search_form;
+
 if (api_is_platform_admin()) {
     $blocks['users']['editable'] = true;
-
-    $search_form = '
-        <form method="get" class="form-inline" action="user_list.php">
-            <div class="form-group">
-                <input class="form-control" type="text" name="keyword" value=""
-                 aria-label="'.get_lang('Search').'">
-                <button class="btn btn-default" type="submit">
-                    <em class="fa fa-search"></em> ' . get_lang('Search').'
-                </button>
-            </div>
-        </form>';
-    $blocks['users']['search_form'] = $search_form;
     $items = array(
         array('url' => 'user_list.php', 'label' => get_lang('UserList')),
         array('url' => 'user_add.php', 'label' => get_lang('AddUsers')),
@@ -109,12 +115,12 @@ if (api_is_platform_admin()) {
         array('url' => 'user_add.php', 'label' => get_lang('AddUsers')),
     );
 } else {
-    $items = array(
+    $items = [
         array('url' => 'user_list.php', 'label' => get_lang('UserList')),
         array('url' => 'user_add.php', 'label' => get_lang('AddUsers')),
         array('url' => 'user_import.php', 'label' => get_lang('ImportUserListXMLCSV')),
         array('url' => 'usergroups.php', 'label' => get_lang('Classes')),
-    );
+    ];
 }
 
 $blocks['users']['items'] = $items;

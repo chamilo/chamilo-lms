@@ -19,8 +19,8 @@ $origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
 $course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
 $courseInfo = api_get_course_info($course_code);
 $student_id = isset($_GET['student']) ? (int) $_GET['student'] : 0;
-
 $currentUrl = api_get_self().'?student='.$student_id.'&course='.$course_code.'&id_session='.$sessionId.'&origin='.$origin;
+$allowMessages = api_get_configuration_value('private_messages_about_user');
 
 if (empty($student_id)) {
     api_not_allowed(true);
@@ -197,18 +197,20 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 switch ($action) {
     case 'send_message':
-        $subject = isset($_POST['subject']) ? $_POST['subject'] : '';
-        $message = isset($_POST['message']) ? $_POST['message'] : '';
+        if ($allowMessages === true) {
+            $subject = isset($_POST['subject']) ? $_POST['subject'] : '';
+            $message = isset($_POST['message']) ? $_POST['message'] : '';
 
-        MessageManager::sendMessageAboutUser(
-            $user_info,
-            api_get_user_info(),
-            $subject,
-            $message
-        );
-        Display::addFlash(Display::return_message(get_lang('MessageSent')));
-        header('Location: '.$currentUrl);
-        exit;
+            MessageManager::sendMessageAboutUser(
+                $user_info,
+                api_get_user_info(),
+                $subject,
+                $message
+            );
+            Display::addFlash(Display::return_message(get_lang('MessageSent')));
+            header('Location: '.$currentUrl);
+            exit;
+        }
         break;
     case 'send_legal':
         $subject = get_lang('SendLegalSubject');
@@ -1580,7 +1582,6 @@ echo Tracking::displayUserSkills(
     $sessionId
 );
 
-$allowMessages = api_get_configuration_value('private_messages_about_user');
 if ($allowMessages === true) {
     // Messages
     echo Display::page_subheader2(get_lang('Messages'));

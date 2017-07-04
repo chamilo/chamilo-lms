@@ -481,7 +481,7 @@ class Login
             }
         } else {
             // Continue with the previous values
-            if (empty($_SESSION['_course']) OR empty($_SESSION['_cid'])) { //no previous values...
+            if (empty($_SESSION['_course']) or empty($_SESSION['_cid'])) { //no previous values...
                 $_cid = -1; //set default values that will be caracteristic of being unset
                 $_course = -1;
             } else {

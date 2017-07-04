@@ -5586,12 +5586,13 @@ function getForumCreatedByUser($user_id, $courseId, $sessionId)
                 true,
                 $sessionId
             );
-
-            $forumList[] = array(
-                $forumInfo['forum_title'],
-                api_get_local_time($forum['insert_date']),
-                api_get_local_time($forum['lastedit_date']),
-            );
+            if (!empty($forumInfo)) {
+                $forumList[] = array(
+                    $forumInfo['forum_title'],
+                    api_get_local_time($forum['insert_date']),
+                    api_get_local_time($forum['lastedit_date']),
+                );
+            }
         }
     }
 

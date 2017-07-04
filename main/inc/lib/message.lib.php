@@ -176,6 +176,67 @@ class MessageManager
         return $message_list;
     }
 
+    /**
+     * @param array $aboutUserInfo
+     * @param array $fromUserInfo
+     * @param string $subject
+     * @param string $content
+     * @return bool
+     */
+    public static function sendMessageAboutUser(
+        $aboutUserInfo,
+        $fromUserInfo,
+        $subject,
+        $content
+    ) {
+        if (empty($aboutUserInfo) || empty($fromUserInfo)) {
+            return false;
+        }
+
+        if (empty($fromUserInfo['id']) || empty($aboutUserInfo['id'])) {
+            return false;
+        }
+
+        $table = Database::get_main_table(TABLE_MESSAGE);
+        $now = api_get_utc_datetime();
+        $params = [
+            'user_sender_id' => $fromUserInfo['id'],
+            'user_receiver_id' => $aboutUserInfo['id'],
+            'msg_status' => MESSAGE_STATUS_CONVERSATION,
+            'send_date' => $now,
+            'title' => $subject,
+            'content' => $content,
+            'group_id' => 0,
+            'parent_id' => 0,
+            'update_date' => $now
+        ];
+        $id = Database::insert($table, $params);
+        if ($id) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array $aboutUserInfo
+     * @return array
+     */
+    public static function getMessagesAboutUser($aboutUserInfo)
+    {
+        if (!empty($aboutUserInfo)) {
+            $criteria = [
+              'userReceiverId' => $aboutUserInfo['id'],
+              'msgStatus' => MESSAGE_STATUS_CONVERSATION
+            ];
+            $repo = Database::getManager()->getRepository('ChamiloCoreBundle:Message');
+            $messages = $repo->findBy($criteria, ['sendDate' => 'DESC']);
+
+            return $messages;
+        }
+
+        return [];
+    }
 
     /**
      * Sends a message to a user/group
@@ -247,7 +308,7 @@ class MessageManager
         if (empty($subject) && empty($group_id)) {
             Display::addFlash(Display::return_message(get_lang('YouShouldWriteASubject'), 'warning'));
             return false;
-        } else if ($total_filesize > intval(api_get_setting('message_max_upload_filesize'))) {
+        } elseif ($total_filesize > intval(api_get_setting('message_max_upload_filesize'))) {
             $warning = sprintf(
                 get_lang("FilesSizeExceedsX"),
                 format_file_size(api_get_setting('message_max_upload_filesize'))

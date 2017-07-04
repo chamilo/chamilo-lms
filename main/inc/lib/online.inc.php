@@ -90,6 +90,8 @@ function preventMultipleLogin($userId)
 
 /**
  * This function handles the logout and is called whenever there is a $_GET['logout']
+ * @param int $user_id
+ * @param bool $logout_redirect
  * @return void  Directly redirects the user or leaves him where he is, but doesn't return anything
  * @author Fernando P. García <fernando@develcuy.com>
  */
@@ -462,4 +464,64 @@ function who_is_online_in_this_course_count($uid, $time_limit, $coursecode = nul
 	} else {
 		return false;
 	}
+}
+
+/**
+ * Register the logout of the course (usually when logging out of the platform)
+ * from the track_e_course_access table
+ * @param   array $logoutInfo Information stored by local.inc.php before new context ['uid'=> x, 'cid'=>y, 'sid'=>z]
+ * @return  void
+ */
+function courseLogout($logoutInfo)
+{
+    if (empty($logoutInfo['uid']) or empty($logoutInfo['cid'])) {
+        return;
+    }
+    if (isset($_configuration['session_lifetime'])) {
+        $sessionLifetime    = $_configuration['session_lifetime'];
+    } else {
+        $sessionLifetime    = 3600; // 1 hour
+    }
+    /*
+     * When $_configuration['session_lifetime'] is larger than ~100 hours (in order to let users take exercises with no problems)
+     * the function Tracking::get_time_spent_on_the_course() returns larger values (200h) due the condition:
+     * login_course_date > now() - INTERVAL $session_lifetime SECOND
+     */
+    if ($sessionLifetime > 86400) {
+        $sessionLifetime = 3600; // 1 hour
+    }
+    if (!empty($logoutInfo) && !empty($logoutInfo['cid'])) {
+        $tableCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $userId = intval($logoutInfo['uid']);
+        $courseId = intval($logoutInfo['cid']);
+        $sessionId = 0;
+        if (!empty($logoutInfo['sid'])) {
+            $sessionId = intval($logoutInfo['sid']);
+        }
+        $currentDate = api_get_utc_datetime();
+        $sql = "SELECT course_access_id
+            FROM $tableCourseAccess
+            WHERE user_id = $userId AND
+                c_id = $courseId  AND
+                session_id  = $sessionId AND
+                login_course_date > '$currentDate' - INTERVAL $sessionLifetime SECOND
+            ORDER BY login_course_date DESC LIMIT 1";
+        $result = Database::query($sql);
+
+        if (Database::num_rows($result) > 0) {
+            $courseAccessId = Database::result($result, 0, 0);
+            $sql = "UPDATE $tableCourseAccess
+                SET logout_course_date = '$currentDate', counter = counter+1
+                WHERE course_access_id = $courseAccessId";
+            error_log($sql);
+            Database::query($sql);
+        } else {
+            $ip = api_get_real_ip();
+            $sql = "INSERT INTO $tableCourseAccess 
+                      (c_id, user_ip, user_id, login_course_date, logout_course_date, counter, session_id)
+                    VALUES 
+                      ($courseId, '$ip', $userId, '$currentDate', '$currentDate', 1, $sessionId)";
+            Database::query($sql);
+        }
+    }
 }

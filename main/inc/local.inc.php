@@ -139,6 +139,25 @@ if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login
 $logout = isset($_GET["logout"]) ? $_GET["logout"] : '';
 $gidReq = isset($_GET["gidReq"]) ? intval($_GET["gidReq"]) : '';
 
+// Keep a trace of the course and session from which we are getting out, to
+// enable proper course logout tracking in courseLogout()
+$logoutInfo = [];
+if (!empty($logout)) {
+    $uid = 0;
+    if (!empty($_SESSION['_user']) && !empty($_SESSION['_user']['user_id'])) {
+        $uid = $_SESSION['_user']['user_id'];
+    }
+    $cid = 0;
+    if (!empty($_SESSION['_cid'])) {
+        $cid = api_get_course_int_id($_SESSION['_cid']);
+    }
+    $logoutInfo = [
+        'uid' => $uid,
+        'cid' => $cid,
+        'sid' => api_get_session_id()
+    ];
+}
+
 //this fixes some problems with generic functionalities like
 //My Agenda & What's New icons linking to courses
 // $cidReq can be set in the index.php file of a course-area
@@ -400,6 +419,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                             .'index.php?loginFailed=1&error=access_url_inactive';
                                         if ($cas_login) {
                                             cas_logout(null, $location);
+                                            courseLogout($logoutInfo);
                                         } else {
                                             header('Location: '.$location);
                                         }
@@ -632,6 +652,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             if ($logout) {
                 // Make custom redirect after logout
                 online_logout($_SESSION['_user']['user_id'], false);
+                courseLogout($logoutInfo);
                 $osso->logout(); //redirects and exits
             }
         } elseif (!$logout) {
@@ -703,6 +724,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             //if there was an attempted logout without a previous login, log
             // this anonymous user out as well but avoid redirect
             online_logout(null, false);
+            courseLogout($logoutInfo);
             $osso->logout(); //redirects and exits
         }
     } elseif (api_get_setting('openid_authentication') == 'true') {
@@ -883,53 +905,8 @@ if (!isset($_SESSION['login_as'])) {
         // Disables the updates in the TRACK_E_COURSE_ACCESS table
         if (isset($_dont_save_user_course_access) && $_dont_save_user_course_access == true) {
             $save_course_access = false;
-        }
-
-        if ($save_course_access) {
-            $course_tracking_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-            /*
-            * When $_configuration['session_lifetime'] is too big 100 hours (in order to let users take exercises with no problems)
-            * the function Tracking::get_time_spent_on_the_course() returns big values (200h) due the condition:
-            * login_course_date > now() - INTERVAL $session_lifetime SECOND
-            *
-            */
-            /*
-            if (isset($_configuration['session_lifetime'])) {
-                $session_lifetime    = $_configuration['session_lifetime'];
-            } else {
-                $session_lifetime    = 3600; // 1 hour
-            }*/
-
-            $session_lifetime = 3600; // 1 hour
-            $time = api_get_utc_datetime();
-            if (isset($_user['user_id']) && !empty($_user['user_id'])) {
-                //We select the last record for the current course in the course tracking table
-                //But only if the login date is < than now + max_life_time
-                $sql = "SELECT course_access_id
-                        FROM $course_tracking_table
-                        WHERE
-                            user_id = ".intval($_user['user_id'])." AND
-                            c_id = ".$_course['real_id']."  AND
-                            session_id  = ".api_get_session_id()." AND
-                            login_course_date > '$time' - INTERVAL $session_lifetime SECOND
-                        ORDER BY login_course_date DESC LIMIT 0,1";
-                $result = Database::query($sql);
-                if (Database::num_rows($result) > 0) {
-                    $i_course_access_id = Database::result($result, 0, 0);
-                    // We update the course tracking table
-                    $sql = "UPDATE $course_tracking_table  
-                            SET logout_course_date = '$time', counter = counter+1
-                            WHERE 
-                                course_access_id = ".intval($i_course_access_id)." AND 
-                                session_id = ".api_get_session_id();
-                    Database::query($sql);
-                } else {
-                    $ip = api_get_real_ip();
-                    $sql = "INSERT INTO $course_tracking_table (c_id, user_ip, user_id, login_course_date, logout_course_date, counter, session_id)
-                            VALUES('".$_course['real_id']."', '".$ip."', '".$_user['user_id']."', '$time', '$time', '1','".api_get_session_id()."')";
-                    Database::query($sql);
-                }
-            }
+        } else {
+            courseLogout($logoutInfo);
         }
     }
 }

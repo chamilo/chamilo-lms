@@ -143,10 +143,12 @@ class IndexManager
     /**
      * Alias for the online_logout() function
      * @param bool $redirect Whether to ask online_logout to redirect to index.php or not
+     * @param array $logoutInfo Information stored by local.inc.php before new context ['uid'=> x, 'cid'=>y, 'sid'=>z]
      */
-    public function logout($redirect = true)
+    public function logout($redirect = true, $logoutInfo = [])
     {
         online_logout($this->user_id, true);
+        courseLogout($logoutInfo);
     }
 
     /**

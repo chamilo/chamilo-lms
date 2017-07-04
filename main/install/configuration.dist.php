@@ -513,7 +513,7 @@ $_configuration['send_all_emails_to'] = [
 // ------
 // Hide search form in session list
 //$_configuration['hide_search_form_in_session_list'] = false;
-// Allow conversation of student boss and teachers about user privately
+// Allow exchange of messages from teachers/bosses about a user.
 //$_configuration['private_messages_about_user'] = false;
 
 

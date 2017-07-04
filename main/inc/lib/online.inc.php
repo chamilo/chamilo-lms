@@ -477,18 +477,14 @@ function courseLogout($logoutInfo)
     if (empty($logoutInfo['uid']) or empty($logoutInfo['cid'])) {
         return;
     }
-    if (isset($_configuration['session_lifetime'])) {
-        $sessionLifetime    = $_configuration['session_lifetime'];
-    } else {
-        $sessionLifetime    = 3600; // 1 hour
-    }
+    $sessionLifetime = api_get_configuration_value('session_lifetime');
     /*
      * When $_configuration['session_lifetime'] is larger than ~100 hours (in order to let users take exercises with no problems)
      * the function Tracking::get_time_spent_on_the_course() returns larger values (200h) due the condition:
      * login_course_date > now() - INTERVAL $session_lifetime SECOND
      */
-    if ($sessionLifetime > 86400) {
-        $sessionLifetime = 3600; // 1 hour
+    if (empty($sessionLifetime) or $sessionLifetime > 86400) {
+        $sessionLifetime    = 3600; // 1 hour
     }
     if (!empty($logoutInfo) && !empty($logoutInfo['cid'])) {
         $tableCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);

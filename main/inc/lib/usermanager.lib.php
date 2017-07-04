@@ -475,7 +475,13 @@ class UserManager
                         'password' => $original_password,
                     );
 
-                    api_mail_html(
+                    MessageManager::send_message_simple(
+                        $userId,
+                        $emailSubject,
+                        $emailBody
+                    );
+
+                    /*api_mail_html(
                         $recipient_name,
                         $email,
                         $emailSubject,
@@ -486,7 +492,7 @@ class UserManager
                         null,
                         null,
                         $additionalParameters
-                    );
+                    );*/
                 }
 
                 if ($sendEmailToAllAdmins) {

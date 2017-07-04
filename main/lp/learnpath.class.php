@@ -4381,8 +4381,7 @@ class learnpath
     public static function categoryIsVisibleForStudent(
         CLpCategory $category,
         User $user
-    )
-    {
+    ) {
         $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 
         if ($isAllowedToEdit) {
@@ -4408,11 +4407,10 @@ class learnpath
      * @param int $courseId
      * @return bool
      */
-    public static function categoryIsPusblished(
+    public static function categoryIsPublished(
         CLpCategory $category,
         $courseId
-    )
-    {
+    ) {
         $link = self::getCategoryLinkForTool($category->getId());
         $em = Database::getManager();
 

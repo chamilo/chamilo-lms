@@ -59,7 +59,10 @@ class ExerciseLib
         $pictureName = $objQuestionTmp->getPictureFilename();
         $s = '';
 
-        if ($answerType != HOT_SPOT && $answerType != HOT_SPOT_DELINEATION && $answerType != ANNOTATION) {
+        if ($answerType != HOT_SPOT &&
+            $answerType != HOT_SPOT_DELINEATION &&
+            $answerType != ANNOTATION
+        ) {
             // Question is not a hotspot
             if (!$only_questions) {
                 $questionDescription = $objQuestionTmp->selectDescription();
@@ -312,7 +315,6 @@ class ExerciseLib
                         //no break
                     case READING_COMPREHENSION:
                         $input_id = 'choice-'.$questionId.'-'.$answerId;
-
                         if (isset($user_choice[0]['answer']) && $user_choice[0]['answer'] == $numAnswer) {
                             $attributes = array(
                                 'id' => $input_id,
@@ -1054,9 +1056,7 @@ HTML;
                             }
 
                             $s .= '</td></tr>';
-
                             $lines_count++;
-
                             if (($lines_count - 1) == $num_suggestions) {
                                 while (isset($select_items[$lines_count])) {
                                     $s .= <<<HTML

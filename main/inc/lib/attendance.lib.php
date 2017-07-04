@@ -352,9 +352,9 @@ class Attendance
 
     /**
      * edit attendances inside table
-     * @param 	int	   attendance id
-     * @param  	bool   true for adding link in gradebook or false otherwise (optional)
-     * @return 	int    last id
+     * @param int attendance id
+     * @param bool true for adding link in gradebook or false otherwise (optional)
+     * @return int last id
      */
     public function attendance_edit($attendance_id, $link_to_gradebook = false)
     {
@@ -663,7 +663,6 @@ class Attendance
             $value = array();
             $uid = $user_data['user_id'];
             $userInfo = api_get_user_info($uid);
-
             $status = $user_data['status'];
 
             if (!empty($groupId)) {
@@ -759,10 +758,10 @@ class Attendance
             $rs  = Database::query($sql);
             if (Database::num_rows($rs) == 0) {
                 $sql = "INSERT INTO $tbl_attendance_sheet SET
-                        c_id					= $course_id,
-                        user_id 				= '$uid',
-                        attendance_calendar_id 	= '$calendar_id',
-                        presence 				= 1";
+                        c_id = $course_id,
+                        user_id = '$uid',
+                        attendance_calendar_id = '$calendar_id',
+                        presence = 1";
                 $result = Database::query($sql);
 
                 $affected_rows += Database::affected_rows($result);
@@ -843,7 +842,6 @@ class Attendance
         $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $course_id = api_get_course_int_id();
-
         $attendance_id = intval($attendance_id);
         // fill results about presence of students
         $attendance_calendar = $this->get_attendance_calendar(
@@ -913,7 +911,6 @@ class Attendance
 
         // update attendance qualify max
         $count_done_calendar = self::get_done_attendance_calendar($attendance_id);
-
         $sql = "UPDATE $tbl_attendance SET
                     attendance_qualify_max = '$count_done_calendar'
                 WHERE c_id = $course_id AND id = '$attendance_id'";
@@ -1123,7 +1120,10 @@ class Attendance
         $user_id = intval($user_id);
         $results = array();
         $total_faults = $total_weight = $porcent = 0;
-        $attendances_by_course = $this->get_attendances_list($course_info['real_id'], $session_id);
+        $attendances_by_course = $this->get_attendances_list(
+            $course_info['real_id'],
+            $session_id
+        );
 
         foreach ($attendances_by_course as $attendance) {
             // Get total faults and total weight
@@ -1157,6 +1157,7 @@ class Attendance
      * Get registered users' attendance sheet inside current course
      * @param int $attendance_id
      * @param int $user_id for showing data for only one user (optional)
+     * @param int $groupId
      * @return array  users attendance sheet data
      */
     public function get_users_attendance_sheet(
@@ -1285,9 +1286,9 @@ class Attendance
 
     /**
      * Get user' score from current attendance
-     * @param	int	$user_id
-     * @param	int $attendance_id
-     * @return	int score
+     * @param int $user_id
+     * @param int $attendance_id
+     * @return int score
      */
     public function get_user_score($user_id, $attendance_id, $groupId = null)
     {
@@ -1454,9 +1455,9 @@ class Attendance
 
     /**
      * Get number of attendance calendar inside current attendance
-     * @param	int	$attendance_id
-     * @param	int	$groupId
-     * @return	int number of dates in attendance calendar
+     * @param int $attendance_id
+     * @param int $groupId
+     * @return int number of dates in attendance calendar
      */
     public static function get_number_of_attendance_calendar(
         $attendance_id,
@@ -1547,8 +1548,8 @@ class Attendance
 
     /**
      * Get count dates inside attendance calendar by attendance id
-     * @param	int	$attendance_id
-     * @return	int     count of dates
+     * @param int $attendance_id
+     * @return int     count of dates
      */
     public static function get_count_dates_inside_attendance_calendar($attendance_id)
     {
@@ -1863,11 +1864,14 @@ class Attendance
      * delete a datetime from attendance calendar table
      * @param	int		attendance calendar id
      * @param	int		attendance id
-     * @param	bool	true for removing all calendar inside current attendance, false for removing by calendar id
+     * @param	bool true for removing all calendar inside current attendance, false for removing by calendar id
      * @return	int affected rows
      */
-    public function attendance_calendar_delete($calendar_id, $attendance_id, $all_delete = false)
-    {
+    public function attendance_calendar_delete(
+        $calendar_id,
+        $attendance_id,
+        $all_delete = false
+    ) {
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
 
@@ -1995,8 +1999,12 @@ class Attendance
      */
     public function getAttendanceLogin($startDate, $endDate)
     {
-        if (empty($startDate) || $startDate == '0000-00-00' || $startDate == '0000-00-00 00:00:00' ||
-            empty($endDate) || $endDate == '0000-00-00' || $endDate == '0000-00-00 00:00:00'
+        if (empty($startDate) ||
+            $startDate == '0000-00-00' ||
+            $startDate == '0000-00-00 00:00:00' ||
+            empty($endDate) ||
+            $endDate == '0000-00-00' ||
+            $endDate == '0000-00-00 00:00:00'
         ) {
             return false;
         }

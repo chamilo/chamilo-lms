@@ -1,20 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * 	@author Thomas Depraetere
- * 	@author Hugues Peeters
- * 	@author Christophe Gesche
- * 	@author Sebastien Piraux
+ * @author Thomas Depraetere
+ * @author Hugues Peeters
+ * @author Christophe Gesche
+ * @author Sebastien Piraux
  *
- * 	@package chamilo.tracking
-
- */
-/**
- * Code
+ * @package chamilo.tracking
  */
 // TODO: Is this file deprecated?
 
-/* 		INIT SECTION */
 $uInfo = $_REQUEST['uInfo'];
 if (!isset($_REQUEST['reqdate'])) {
     $reqdate = time();
@@ -29,21 +24,18 @@ if (!isset($_REQUEST['view'])) {
 }
 require_once __DIR__.'/../inc/global.inc.php';
 
-$interbreadcrumb[] = array("url" => "../user/user.php", "name" => get_lang('Users'));
-
+$interbreadcrumb[] = array(
+    "url" => "../user/user.php",
+    "name" => get_lang('Users')
+);
 $nameTools = get_lang('ToolName');
-
-$htmlHeadXtra[] = "<style type='text/css'>
-/*<![CDATA[*/
+$htmlHeadXtra[] = "<style>
 .secLine {background-color : #E6E6E6;}
 .content {padding-left : 15px;padding-right : 15px; }
 .specialLink{color : #0000FF;}
-/*]]>*/
 </style>
 <style media='print' type='text/css'>
-/*<![CDATA[*/
 td {border-bottom: thin dashed gray;}
-/*]]>*/
 </style>";
 
 $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -126,7 +118,7 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
                     break;
                 default:
                     $period = "month";
-                case "month" :
+                case "month":
                     // previous and next date must be evaluated
                     // 30 days should be a good approximation
                     $previousReqDate = mktime(1, 1, 1, date("m", $reqdate) - 1, 1, date("Y", $reqdate));
@@ -144,7 +136,7 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
             /*             * ***** END OF MENU ******* */
 
         switch ($period) {
-            case "month" :
+            case "month":
                 $sql = "SELECT access_date
                         FROM $TABLETRACK_ACCESS
                         WHERE access_user_id = $uInfo
@@ -155,7 +147,7 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
                         ORDER BY access_date ASC";
                 $displayedDate = $MonthsLong[date("n", $reqdate) - 1].date(" Y", $reqdate);
                 break;
-            case "week" :
+            case "week":
                 $sql = "SELECT access_date
                         FROM $TABLETRACK_ACCESS
                         WHERE access_user_id = $uInfo
@@ -229,5 +221,5 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
 }
 ?>
 </table>
-    <?php
-    Display::display_footer();
+<?php
+Display::display_footer();

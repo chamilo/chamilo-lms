@@ -18,7 +18,7 @@ use Chamilo\CourseBundle\Entity\CLpItemView;
  * Class learnpath
  * This class defines the parent attributes and methods for Chamilo learnpaths
  * and SCORM learnpaths. It is used by the scorm class.
- *
+ * @todo decouple class
  * @package chamilo.learnpath
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  * @author  Julio Montoya   <gugli100@gmail.com> Several improvements and fixes
@@ -3970,8 +3970,8 @@ class learnpath
             $i = 1;
             while ($row = Database::fetch_array($res)) {
                 $max = $i;
-                if ($row['display_order'] != $i) { // If we find a gap in the order, we need to fix it.
-                    $need_fix = true;
+                if ($row['display_order'] != $i) {
+                    // If we find a gap in the order, we need to fix it.
                     $sql_u = "UPDATE $lp_table SET display_order = $i
                               WHERE c_id = ".$courseId." AND id = ".$row['id'];
                     Database::query($sql_u);
@@ -4007,7 +4007,10 @@ class learnpath
             error_log('New LP - In learnpath::next()', 0);
         }
         $this->last = $this->get_current_item_id();
-        $this->items[$this->last]->save(false, $this->prerequisites_match($this->last));
+        $this->items[$this->last]->save(
+            false,
+            $this->prerequisites_match($this->last)
+        );
         $this->autocomplete_parents($this->last);
         $new_index = $this->get_next_index();
         if ($this->debug > 2) {
@@ -4130,8 +4133,9 @@ class learnpath
      * Publishes a learnpath. This basically means show or hide the learnpath
      * to normal users.
      * Can be used as abstract
-     * @param	integer	Learnpath ID
-     * @param	string	New visibility
+     * @param integer    Learnpath ID
+     * @param string    New visibility
+     * @return bool
      */
     public static function toggle_visibility($lp_id, $set_visibility = 1)
     {
@@ -4163,9 +4167,14 @@ class learnpath
 
         if ($visibility != 1) {
             $action = 'invisible';
-
-            $list = new LearnpathList(api_get_user_id(), null, null, null, false, $id);
-
+            $list = new LearnpathList(
+                api_get_user_id(),
+                null,
+                null,
+                null,
+                false,
+                $id
+            );
             $learPaths = $list->get_flat_list();
 
             foreach ($learPaths as $lp) {
@@ -4304,7 +4313,12 @@ class learnpath
     {
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
-        $sessionCondition = api_get_session_condition($sessionId, true, false, 't.sessionId');
+        $sessionCondition = api_get_session_condition(
+            $sessionId,
+            true,
+            false,
+            't.sessionId'
+        );
 
         $em = Database::getManager();
 
@@ -4581,7 +4595,11 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::save_last()', 0);
         }
-        $session_condition = api_get_session_condition(api_get_session_id(), true, false);
+        $session_condition = api_get_session_condition(
+            api_get_session_id(),
+            true,
+            false
+        );
         $table = Database::get_course_table(TABLE_LP_VIEW);
 
         if (isset($this->current) && !api_is_invitee()) {
@@ -4840,7 +4858,6 @@ class learnpath
                 }
 
                 $dterms = $terms;
-
                 $missing_terms = array_diff($dterms, $xterms);
                 $deprecated_terms = array_diff($xterms, $dterms);
 
@@ -5064,7 +5081,12 @@ class learnpath
         /** @var CLp $lp */
         $lp = $em
             ->getRepository('ChamiloCourseBundle:CLp')
-            ->findOneBy(['id' => $this->get_id(), 'cId' => api_get_course_int_id()]);
+            ->findOneBy(
+                [
+                    'id' => $this->get_id(),
+                    'cId' => api_get_course_int_id()
+                ]
+            );
 
         if (!$lp) {
             return false;
@@ -5073,7 +5095,6 @@ class learnpath
         $this->expired_on = !empty($expired_on) ? api_get_utc_datetime($expired_on, false, true) : null;
 
         $lp->setExpiredOn($this->expired_on);
-
         $em->persist($lp);
         $em->flush();
 
@@ -5099,7 +5120,12 @@ class learnpath
         /** @var CLp $lp */
         $lp = $em
             ->getRepository('ChamiloCourseBundle:CLp')
-            ->findOneBy(['id' => $this->get_id(), 'cId' => api_get_course_int_id()]);
+            ->findOneBy(
+                [
+                    'id' => $this->get_id(),
+                    'cId' => api_get_course_int_id()
+                ]
+            );
 
         if (!$lp) {
             return false;
@@ -11161,7 +11187,7 @@ EOD;
     /**
      * Set whether this is a learning path with the possibility to subscribe
      * users or not
-     * @param int $subscribeUsers (0 = false, 1 = true)
+     * @param int $value (0 = false, 1 = true)
      * @return bool
      */
     public function setSubscribeUsers($value)
@@ -11169,7 +11195,7 @@ EOD;
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_subscribe_users()', 0);
         }
-        $this->subscribeUsers = intval($value); ;
+        $this->subscribeUsers = (int) $value;
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET subscribe_users = ".$this->subscribeUsers."
@@ -11628,7 +11654,14 @@ EOD;
         $renderer = $form->defaultRenderer();
         $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp_certificate');
 
-        $form->addHtmlEditor('content_lp_certificate', null, true, false, $editorConfig, true);
+        $form->addHtmlEditor(
+            'content_lp_certificate',
+            null,
+            true,
+            false,
+            $editorConfig,
+            true
+        );
         $form->addHidden('action', 'add_final_item');
         $form->addHidden('path', Session::read('pathItem'));
         $form->addHidden('previous', $this->get_last());

@@ -759,7 +759,6 @@ class SocialManager extends UserManager
         if (in_array($show, $show_groups) && !empty($group_id)) {
             // Group image
             $userGroup = new UserGroup();
-
             $group_info = $userGroup->get($group_id);
 
             $userGroupImage = $userGroup->get_picture_group(

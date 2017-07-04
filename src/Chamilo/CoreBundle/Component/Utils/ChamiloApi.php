@@ -117,7 +117,7 @@ class ChamiloApi
                         $courseInfo['extLink']['url'],
                         ['class' => 'extLink']
                     );
-                } else if (!empty($courseInfo['extLink']['url'])) {
+                } elseif (!empty($courseInfo['extLink']['url'])) {
                     $headerLogo .= $courseInfo['extLink']['url'];
                 }
             }

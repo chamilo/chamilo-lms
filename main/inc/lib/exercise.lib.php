@@ -3859,9 +3859,18 @@ HOTSPOT;
                 $comnt = null;
                 if ($show_results) {
                     $comnt = Event::get_comments($exe_id, $questionId);
-                    if (!empty($comnt)) {
+                    $teacherAudio = ExerciseLib::getOralFeedbackAudio($exe_id, $questionId, api_get_user_id());;
+
+                    if (!empty($comnt) || $teacherAudio) {
                         echo '<b>'.get_lang('Feedback').'</b>';
+                    }
+
+                    if (!empty($comnt)) {
                         echo ExerciseLib::getFeedbackText($comnt);
+                    }
+
+                    if ($teacherAudio) {
+                        echo $teacherAudio;
                     }
                 }
 
@@ -3882,7 +3891,7 @@ HOTSPOT;
                     $score = [];
                 }
 
-                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION])) {
+                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
                     $check = $objQuestionTmp->isQuestionWaitingReview($score);
                     if ($check === false) {
                         $countPendingQuestions++;
@@ -4153,5 +4162,56 @@ HOTSPOT;
         // Old style
         //return '<div id="question_feedback">'.$message.'</div>';
         return Display::return_message($message, 'warning', false);
+    }
+
+    /**
+     * Get the recorder audio component for save a teacher audio feedback
+     * @param int $attemptId
+     * @param int $questionId
+     * @param int $userId
+     * @return string
+     */
+    public static function getOralFeedbackForm($attemptId, $questionId, $userId)
+    {
+        $view = new Template('', false, false, false, false, false, false);
+        $view->assign('user_id', $userId);
+        $view->assign('question_id', $questionId);
+        $view->assign('directory', "/../exercises/teacher_audio/$attemptId/");
+        $view->assign('file_name', "{$questionId}_{$userId}");
+        $template = $view->get_template('exercise/oral_expression.tpl');
+
+        return $view->fetch($template);
+    }
+
+    /**
+     * Get the audio componen for a teacher audio feedback
+     * @param int $attemptId
+     * @param int $questionId
+     * @param int $userId
+     * @return string
+     */
+    public static function getOralFeedbackAudio($attemptId, $questionId, $userId)
+    {
+        $courseInfo = api_get_course_info();
+        $sysCourseDir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'];
+        $webCourseDir = api_get_path(WEB_COURSE_PATH).$courseInfo['path'];
+        $fileName = "{$questionId}_{$userId}";
+        $filePath = null;
+
+        if (file_exists("$sysCourseDir/exercises/teacher_audio/$attemptId/$fileName.ogg")) {
+            $filePath = "$webCourseDir/exercises/teacher_audio/$attemptId/$fileName.ogg";
+        } elseif (file_exists("$sysCourseDir/exercises/teacher_audio/$attemptId/$fileName.wav.wav")) {
+            $filePath = "$webCourseDir/exercises/teacher_audio/$attemptId/$fileName.wav.wav";
+        }
+
+        if (!$filePath) {
+            return '';
+        }
+
+        return Display::tag(
+            'audio',
+            null,
+            ['src' => $filePath]
+        );
     }
 }

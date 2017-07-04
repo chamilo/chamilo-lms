@@ -3123,7 +3123,8 @@ class Tracking
 
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
-            $sql = "SELECT id FROM $lp_table WHERE c_id = $course_id AND id = $lp_id ";
+            $sql = "SELECT id FROM $lp_table 
+                    WHERE c_id = $course_id AND id = $lp_id ";
             $res_row_lp = Database::query($sql);
             $count_row_lp = Database::num_rows($res_row_lp);
 
@@ -5211,6 +5212,9 @@ class Tracking
             $session_id = intval($session_id);
             $course = Database::escape_string($course_code);
             $course_info = api_get_course_info($course);
+            if (empty($course_info)) {
+                return '';
+            }
 
             $html .= '<a name="course_session_data"></a>';
             $html .= Display::page_subheader($course_info['title']);
@@ -5515,7 +5519,10 @@ class Tracking
                     $time_spent_in_lp = api_time_to_hms($time_spent_in_lp);
                     $last_connection = '-';
                     if (!empty($last_connection_in_lp)) {
-                        $last_connection = api_convert_and_format_date($last_connection_in_lp, DATE_TIME_FORMAT_LONG);
+                        $last_connection = api_convert_and_format_date(
+                            $last_connection_in_lp,
+                            DATE_TIME_FORMAT_LONG
+                        );
                     }
 
                     $url = api_get_path(WEB_CODE_PATH)."lp/lp_controller.php?cidReq={$course_code}&id_session=$session_id&lp_id=$lp_id&action=view";

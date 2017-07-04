@@ -523,19 +523,12 @@ class Template
     }
 
     /**
-     * Set system parameters
+     * Get the web paths
+     * @return array
      */
-    public function set_system_parameters()
+    private function getWebPaths()
     {
-        $this->theme = api_get_visual_theme();
-        if (!empty($this->preview_theme)) {
-            $this->theme = $this->preview_theme;
-        }
-
-        $this->themeDir = self::getThemeDir($this->theme);
-
-        // Setting app paths/URLs
-        $_p = array(
+        return [
             'web' => api_get_path(WEB_PATH),
             'web_relative' => api_get_path(REL_PATH),
             'web_course' => api_get_path(WEB_COURSE_PATH),
@@ -551,8 +544,23 @@ class Template
             'web_query_vars' => api_htmlentities($_SERVER['QUERY_STRING']),
             'web_self_query_vars' => api_htmlentities($_SERVER['REQUEST_URI']),
             'web_cid_query' => api_get_cidreq(),
-        );
-        $this->assign('_p', $_p);
+        ];
+    }
+
+    /**
+     * Set system parameters
+     */
+    public function set_system_parameters()
+    {
+        $this->theme = api_get_visual_theme();
+        if (!empty($this->preview_theme)) {
+            $this->theme = $this->preview_theme;
+        }
+
+        $this->themeDir = self::getThemeDir($this->theme);
+
+        // Setting app paths/URLs
+        $this->assign('_p', $this->getWebPaths());
 
         // Here we can add system parameters that can be use in any template
         $_s = array(
@@ -775,8 +783,9 @@ class Template
         if (!$disable_js_and_css_files) {
             $this->assign('js_file_to_string', $js_file_to_string);
 
+            $extra_headers = '<script>var _p = '.json_encode($this->getWebPaths(), JSON_PRETTY_PRINT).'</script>';
             //Adding jquery ui by default
-            $extra_headers = api_get_jquery_ui_js();
+            $extra_headers .= api_get_jquery_ui_js();
 
             //$extra_headers = '';
             if (isset($htmlHeadXtra) && $htmlHeadXtra) {

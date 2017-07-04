@@ -385,7 +385,7 @@ class learnpath
                                             'lp_view_id' => $this->lp_view_id,
                                             'view_count' => 1,
                                             'status' => 'not attempted',
-                                            'start_time' => api_get_utc_datetime(),
+                                            'start_time' => time(),
                                             'total_time' => 0,
                                             'score' => 0
                                         ];
@@ -1063,10 +1063,12 @@ class learnpath
         }
 
         // Proposed by Christophe (nickname: clefevre)
-        $sql = "DELETE FROM $lp_item WHERE c_id = ".$course_id." AND lp_id = ".$this->lp_id;
+        $sql = "DELETE FROM $lp_item
+                WHERE c_id = ".$course_id." AND lp_id = ".$this->lp_id;
         Database::query($sql);
 
-        $sql = "DELETE FROM $lp_view WHERE c_id = ".$course_id." AND lp_id = ".$this->lp_id;
+        $sql = "DELETE FROM $lp_view 
+                WHERE c_id = ".$course_id." AND lp_id = ".$this->lp_id;
         Database::query($sql);
 
         self::toggle_publish($this->lp_id, 'i');
@@ -1080,7 +1082,10 @@ class learnpath
                 $row = Database::fetch_array($res);
                 $path = $row['path'];
                 $sql = "SELECT id FROM $lp
-                        WHERE c_id = ".$course_id." AND path = '$path' AND id != ".$this->lp_id;
+                        WHERE 
+                            c_id = ".$course_id." AND
+                            path = '$path' AND 
+                            id != ".$this->lp_id;
                 $res = Database::query($sql);
                 if (Database::num_rows($res) > 0) {
                     // Another learning path uses this directory, so don't delete it.
@@ -1158,12 +1163,14 @@ class learnpath
             return false;
         }
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM $lp_item WHERE c_id = ".$course_id." AND parent_item_id = $id";
+        $sql = "SELECT * FROM $lp_item 
+                WHERE c_id = ".$course_id." AND parent_item_id = $id";
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res)) {
             $num += $this->delete_children_items($row['id']);
-            $sql_del = "DELETE FROM $lp_item WHERE c_id = ".$course_id." AND id = ".$row['id'];
-            Database::query($sql_del);
+            $sql = "DELETE FROM $lp_item 
+                    WHERE c_id = ".$course_id." AND id = ".$row['id'];
+            Database::query($sql);
             $num++;
         }
         return $num;
@@ -1914,12 +1921,12 @@ class learnpath
 
     /**
      * Gets the js library from the database
-     * @return	string	The name of the javascript library to be used
+     * @return    string    The name of the javascript library to be used
      */
     public function get_js_lib()
     {
         $lib = '';
-        if (!empty ($this->js_lib)) {
+        if (!empty($this->js_lib)) {
             $lib = $this->js_lib;
         }
         return $lib;
@@ -1931,7 +1938,7 @@ class learnpath
      */
     public function get_id()
     {
-        if (!empty ($this->lp_id)) {
+        if (!empty($this->lp_id)) {
             return $this->lp_id;
         } else {
             return 0;
@@ -2218,6 +2225,9 @@ class learnpath
     {
         $course_id = api_get_course_int_id();
         $_course = api_get_course_info();
+        if (empty($_course)) {
+            return '';
+        }
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $tbl_lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
@@ -2750,7 +2760,7 @@ class learnpath
                 // It's a simple string item from which the ID can be found in the refs list,
                 // so we can transform it directly to an ID for export.
                 return $this->items[$this->refs_list[$prereq]]->ref;
-            } else if (isset($this->refs_list['ITEM_'.$prereq])) {
+            } elseif (isset($this->refs_list['ITEM_'.$prereq])) {
                 return $this->items[$this->refs_list['ITEM_'.$prereq]]->ref;
             } else {
                 // The last case, if it's a complex form, then find all the IDs (SCORM strings)
@@ -3621,7 +3631,7 @@ class learnpath
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
             $this->lp_view_id = $row['id'];
-        } else if (!api_is_invitee()) {
+        } elseif (!api_is_invitee()) {
             // There is no database record, create one.
             $sql = "INSERT INTO $lp_view_table (c_id, lp_id,user_id, view_count, session_id) VALUES
             		($course_id, ".$this->get_id().",".$this->get_user_id().", 1, $sessionId)";
@@ -4381,8 +4391,7 @@ class learnpath
     public static function categoryIsVisibleForStudent(
         CLpCategory $category,
         User $user
-    )
-    {
+    ) {
         $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 
         if ($isAllowedToEdit) {
@@ -4408,11 +4417,10 @@ class learnpath
      * @param int $courseId
      * @return bool
      */
-    public static function categoryIsPusblished(
+    public static function categoryIsPublished(
         CLpCategory $category,
         $courseId
-    )
-    {
+    ) {
         $link = self::getCategoryLinkForTool($category->getId());
         $em = Database::getManager();
 

@@ -2460,6 +2460,7 @@ class Display
      * @param bool|true $open
      * @param bool|false $fullClickable
      * @return null|string
+     * @todo rework function to easy use
      */
     public static function panelCollapse(
         $title,

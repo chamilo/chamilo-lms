@@ -72,9 +72,9 @@ if (isset($form)) {
                 'setting',
                 'Plugins',
                 $pluginName,
-                null,
-                null,
-                null,
+                '',
+                '',
+                '',
                 $_configuration['access_url'],
                 1
             );

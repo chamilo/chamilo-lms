@@ -60,7 +60,12 @@ if (!in_array(
 // Search features
 
 //@todo move this in the display_class or somewhere else
-
+/**
+ * @param string $col
+ * @param string $oper
+ * @param string $val
+ * @return string
+ */
 function getWhereClause($col, $oper, $val)
 {
     $ops = array(
@@ -142,7 +147,7 @@ if (($search || $forceSearch) && ($search !== 'false')) {
 
                 $extraCondition = '';
                 if (!empty($condition_array)) {
-                    $extraCondition = ' AND ( ';
+                    $extraCondition = ' OR ( ';
                     $extraCondition .= implode($filters->groupOp, $condition_array);
                     $extraCondition .= ' ) ';
                 }
@@ -150,7 +155,6 @@ if (($search || $forceSearch) && ($search !== 'false')) {
                 $whereCondition .= $extraCondition;
 
                 // Question field
-
                 $resultQuestion = $extraField->getExtraFieldRules($filters, 'question_');
                 $questionFields = $resultQuestion['extra_fields'];
                 $condition_array = $resultQuestion['condition_array'];

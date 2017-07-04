@@ -3,6 +3,7 @@
 
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
+use Chamilo\CoreBundle\Entity\Message;
 
 /**
  * Implements the tracking of students in the Reporting pages
@@ -17,10 +18,18 @@ $sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : 0;
 $origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
 $course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
 $courseInfo = api_get_course_info($course_code);
-$student_id = intval($_GET['student']);
+$student_id = isset($_GET['student']) ? (int) $_GET['student'] : 0;
+$currentUrl = api_get_self().'?student='.$student_id.'&course='.$course_code.'&id_session='.$sessionId.'&origin='.$origin;
+$allowMessages = api_get_configuration_value('private_messages_about_user');
+
+if (empty($student_id)) {
+    api_not_allowed(true);
+}
+
+// user info
+$user_info = api_get_user_info($student_id);
 
 $allowedToTrackUser = true;
-
 if (!api_is_session_admin() &&
     !api_is_drh() &&
     !api_is_student_boss() &&
@@ -184,11 +193,25 @@ if (isset($_GET['details'])) {
 $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $user_id = isset($_GET['user_id']) && !empty($_GET['user_id']) ? (int) $_GET['user_id'] : api_get_user_id();
-
-// Action behaviour
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 switch ($action) {
+    case 'send_message':
+        if ($allowMessages === true) {
+            $subject = isset($_POST['subject']) ? $_POST['subject'] : '';
+            $message = isset($_POST['message']) ? $_POST['message'] : '';
+
+            MessageManager::sendMessageAboutUser(
+                $user_info,
+                api_get_user_info(),
+                $subject,
+                $message
+            );
+            Display::addFlash(Display::return_message(get_lang('MessageSent')));
+            header('Location: '.$currentUrl);
+            exit;
+        }
+        break;
     case 'send_legal':
         $subject = get_lang('SendLegalSubject');
         $content = sprintf(
@@ -225,18 +248,15 @@ switch ($action) {
 
             // @todo delete the stats.track_e_exercises records.
             // First implement this http://support.chamilo.org/issues/1334
-            $message = Display::return_message(
+            Display::addFlash(Display::return_message(
                 get_lang('LPWasReset'),
                 'success'
-            );
+            ));
         }
         break;
     default:
         break;
 }
-
-// user info
-$user_info = api_get_user_info($student_id);
 $courses_in_session = array();
 
 //See #4676
@@ -252,11 +272,15 @@ $sessions_coached_by_user = Tracking::get_sessions_coached_by_user(api_get_user_
 // RRHH or session admin
 if (api_is_session_admin() || api_is_drh()) {
     $courses = CourseManager::get_courses_followed_by_drh(api_get_user_id());
-    $session_by_session_admin = SessionManager::get_sessions_followed_by_drh(api_get_user_id());
+    $session_by_session_admin = SessionManager::get_sessions_followed_by_drh(
+        api_get_user_id()
+    );
 
     if (!empty($session_by_session_admin)) {
         foreach ($session_by_session_admin as $session_coached_by_user) {
-            $courses_followed_by_coach = Tracking :: get_courses_list_from_session($session_coached_by_user['id']);
+            $courses_followed_by_coach = Tracking::get_courses_list_from_session(
+                $session_coached_by_user['id']
+            );
             $courses_in_session_by_coach[$session_coached_by_user['id']] = $courses_followed_by_coach;
         }
     }
@@ -278,7 +302,7 @@ $sql = "SELECT c_id
             user_id = ".intval($user_info['user_id']);
 $rs = Database::query($sql);
 
-while ($row = Database :: fetch_array($rs)) {
+while ($row = Database::fetch_array($rs)) {
     if ($drh_can_access_all_courses) {
         $courses_in_session[0][] = $row['c_id'];
     } else {
@@ -294,7 +318,7 @@ $sql = 'SELECT session_id, c_id
         WHERE user_id=' . intval($user_info['user_id']);
 $rs = Database::query($sql);
 $tmp_sessions = array();
-while ($row = Database :: fetch_array($rs, 'ASSOC')) {
+while ($row = Database::fetch_array($rs, 'ASSOC')) {
     $tmp_sessions[] = $row['session_id'];
     if ($drh_can_access_all_courses) {
         if (in_array($row['session_id'], $tmp_sessions)) {
@@ -339,16 +363,7 @@ if (api_is_drh() && !api_is_platform_admin()) {
 }
 
 Display::display_header($nameTools);
-
-if (isset($message)) {
-    echo $message;
-}
-
 $token = Security::get_token();
-
-if (empty($student_id)) {
-    api_not_allowed();
-}
 
 // Actions bar
 echo '<div class="actions">';
@@ -980,7 +995,7 @@ if (empty($_GET['details'])) {
         $lps = $query->getResult();
         */
         if (true) {
-            $categoriesTempList = learnpath::getCategories(api_get_course_int_id());
+            $categoriesTempList = learnpath::getCategories($courseInfo['real_id']);
             $categoryTest = new CLpCategory();
             $categoryTest->setId(0);
             $categoryTest->setName(get_lang('WithOutCategory'));
@@ -1002,7 +1017,7 @@ if (empty($_GET['details'])) {
 
                 $list = new LearnpathList(
                     api_get_user_id(),
-                    null,
+                    $courseInfo['code'],
                     null,
                     null,
                     false,
@@ -1566,6 +1581,59 @@ echo Tracking::displayUserSkills(
     $courseInfo ? $courseInfo['real_id'] : 0,
     $sessionId
 );
+
+if ($allowMessages === true) {
+    // Messages
+    echo Display::page_subheader2(get_lang('Messages'));
+    $messages = MessageManager::getMessagesAboutUser($user_info);
+
+    if (!empty($messages)) {
+        /** @var Message $message */
+        foreach ($messages as $message) {
+            $tag = 'message_'.$message->getId();
+            $tagAccordion = 'accordion_'.$message->getId();
+            $tagCollapse = 'collapse_'.$message->getId();
+            $date = Display::dateToStringAgoAndLongDate(
+                $message->getSendDate()
+            );
+            $senderId = $message->getUserSenderId();
+            $senderInfo = api_get_user_info($senderId);
+            echo Display::panelCollapse(
+                $message->getTitle(),
+                $message->getContent().'<br />'.$date.'<br />'.get_lang(
+                    'Author'
+                ).': '.$senderInfo['complete_name_with_message_link'],
+                $tag,
+                null,
+                $tagAccordion,
+                $tagCollapse,
+                false
+            );
+        }
+    }
+
+    echo Display::url(
+        get_lang('NewMessage'),
+        'javascript: void(0);',
+        [
+            'onClick' => "$('#compose_message').show();",
+            'class' => 'btn btn-default'
+        ]
+    );
+
+    $form = new FormValidator(
+        'messages',
+        'post',
+        api_get_self().'?action=send_message&student='.$student_id
+    );
+    $form->addHtml('<div id="compose_message" style="display:none;">');
+    $form->addText('subject', get_lang('Subject'));
+    $form->addHtmlEditor('message', get_lang('Message'));
+    $form->addButtonSend(get_lang('Send'));
+    $form->addHidden('sec_token', $token);
+    $form->addHtml('</div>');
+    $form->display();
+}
 
 if ($export) {
     ob_end_clean();

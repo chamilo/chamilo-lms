@@ -69,6 +69,7 @@ if (api_get_setting('enable_record_audio') === 'true') {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/recorder.js"></script>';
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/gui.js"></script>';
     $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfobject.js"></script>';
+    $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 }
 
 $template = new Template();

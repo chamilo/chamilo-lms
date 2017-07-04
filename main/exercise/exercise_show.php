@@ -139,6 +139,9 @@ if (isset($_SESSION['gradebook'])) {
     $gradebook = Security::remove_XSS($_SESSION['gradebook']);
 }
 
+$allowRecordAudio = api_get_setting('enable_record_audio') === 'true';
+$allowTeacherComentAudio = api_get_configuration_value('allow_teacher_comment_audio') === true;
+
 if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array(
         'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
@@ -158,6 +161,14 @@ $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/js/annotation.js"></script>';
+
+if ($allowRecordAudio && $allowTeacherComentAudio) {
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordRTC.js"></script>';
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/recorder.js"></script>';
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/gui.js"></script>';
+    $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfobject.js"></script>';
+    $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
+}
 
 if ($origin != 'learnpath') {
     Display::display_header('');
@@ -713,10 +724,13 @@ foreach ($questionList as $questionId) {
             $comnt = trim(Event::get_comments($id, $questionId));
             if (!empty($comnt)) {
                 echo ExerciseLib::getFeedbackText($comnt);
+                echo ExerciseLib::getOralFeedbackAudio($id, $questionId, $student_id);
             }
             echo '</div>';
 
-            echo '<div id="'.$name.'" class="hidden">';
+            echo '<div id="'.$name.'" class="row hidden">';
+            echo '<div class="col-sm-'.($allowTeacherComentAudio ? 7 : 12).'">';
+
             $arrid[] = $questionId;
             $feedback_form = new FormValidator('frmcomments'.$questionId);
             $renderer = &$feedback_form->defaultRenderer();
@@ -742,6 +756,15 @@ foreach ($questionList as $questionId) {
             }
             $feedback_form->setDefaults($default);
             $feedback_form->display();
+
+            echo '</div>';
+
+            if ($allowRecordAudio && $allowTeacherComentAudio) {
+                echo '<div class="col-sm-5">';
+                echo ExerciseLib::getOralFeedbackForm($id, $questionId, $student_id);
+                echo '</div>';
+            }
+
             echo '</div>';
 
         } else {
@@ -750,6 +773,7 @@ foreach ($questionList as $questionId) {
             if (!empty($comnt)) {
                 echo '<b>'.get_lang('Feedback').'</b>';
                 echo ExerciseLib::getFeedbackText($comnt);
+                echo ExerciseLib::getOralFeedbackAudio($id, $questionId, $student_id);
             }
         }
 

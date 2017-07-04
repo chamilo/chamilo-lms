@@ -58,7 +58,7 @@ class MessageManager
                 FROM $table
                 WHERE
                     user_receiver_id=".api_get_user_id()." AND
-                    msg_status = " . MESSAGE_STATUS_UNREAD;
+                    msg_status = ".MESSAGE_STATUS_UNREAD;
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
 
@@ -136,7 +136,7 @@ class MessageManager
                 FROM $table_message
                 WHERE
                   user_receiver_id=".api_get_user_id()." AND
-                  msg_status IN (0,1)
+                  msg_status IN (".MESSAGE_STATUS_NEW.", ".MESSAGE_STATUS_UNREAD.")
                   $keywordCondition
                 ORDER BY col$column $direction
                 LIMIT $from, $number_of_items";
@@ -174,6 +174,68 @@ class MessageManager
         }
 
         return $message_list;
+    }
+
+    /**
+     * @param array $aboutUserInfo
+     * @param array $fromUserInfo
+     * @param string $subject
+     * @param string $content
+     * @return bool
+     */
+    public static function sendMessageAboutUser(
+        $aboutUserInfo,
+        $fromUserInfo,
+        $subject,
+        $content
+    ) {
+        if (empty($aboutUserInfo) || empty($fromUserInfo)) {
+            return false;
+        }
+
+        if (empty($fromUserInfo['id']) || empty($aboutUserInfo['id'])) {
+            return false;
+        }
+
+        $table = Database::get_main_table(TABLE_MESSAGE);
+        $now = api_get_utc_datetime();
+        $params = [
+            'user_sender_id' => $fromUserInfo['id'],
+            'user_receiver_id' => $aboutUserInfo['id'],
+            'msg_status' => MESSAGE_STATUS_CONVERSATION,
+            'send_date' => $now,
+            'title' => $subject,
+            'content' => $content,
+            'group_id' => 0,
+            'parent_id' => 0,
+            'update_date' => $now
+        ];
+        $id = Database::insert($table, $params);
+        if ($id) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array $aboutUserInfo
+     * @return array
+     */
+    public static function getMessagesAboutUser($aboutUserInfo)
+    {
+        if (!empty($aboutUserInfo)) {
+            $criteria = [
+              'userReceiverId' => $aboutUserInfo['id'],
+              'msgStatus' => MESSAGE_STATUS_CONVERSATION
+            ];
+            $repo = Database::getManager()->getRepository('ChamiloCoreBundle:Message');
+            $messages = $repo->findBy($criteria, ['sendDate' => 'DESC']);
+
+            return $messages;
+        }
+
+        return [];
     }
 
     /**
@@ -246,7 +308,7 @@ class MessageManager
         if (empty($subject) && empty($group_id)) {
             Display::addFlash(Display::return_message(get_lang('YouShouldWriteASubject'), 'warning'));
             return false;
-        } else if ($total_filesize > intval(api_get_setting('message_max_upload_filesize'))) {
+        } elseif ($total_filesize > intval(api_get_setting('message_max_upload_filesize'))) {
             $warning = sprintf(
                 get_lang("FilesSizeExceedsX"),
                 format_file_size(api_get_setting('message_max_upload_filesize'))
@@ -277,7 +339,7 @@ class MessageManager
                 $params = [
                     'user_sender_id' => $user_sender_id,
                     'user_receiver_id' => $receiver_user_id,
-                    'msg_status' => '1',
+                    'msg_status' => MESSAGE_STATUS_UNREAD,
                     'send_date' => $now,
                     'title' => $subject,
                     'content' => $content,
@@ -311,7 +373,7 @@ class MessageManager
                 $params = [
                     'user_sender_id' => $user_sender_id,
                     'user_receiver_id' => $receiver_user_id,
-                    'msg_status' => '4',
+                    'msg_status' => MESSAGE_STATUS_OUTBOX,
                     'send_date' => $now,
                     'title' => $subject,
                     'content' => $content,
@@ -507,7 +569,7 @@ class MessageManager
         $user_receiver_id = intval($user_receiver_id);
         $id = intval($id);
         $sql = "SELECT * FROM $table_message
-                WHERE id=".$id." AND msg_status<>4";
+                WHERE id=".$id." AND msg_status <>".MESSAGE_STATUS_OUTBOX;
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -515,7 +577,7 @@ class MessageManager
             self::delete_message_attachment_file($id, $user_receiver_id);
             // delete message
             $query = "UPDATE $table_message 
-                      SET msg_status = 3
+                      SET msg_status = ".MESSAGE_STATUS_DELETED."
                       WHERE 
                         user_receiver_id=".$user_receiver_id." AND 
                         id = " . $id;
@@ -553,7 +615,7 @@ class MessageManager
             self::delete_message_attachment_file($id, $user_sender_id);
             // delete message
             $sql = "UPDATE $table_message 
-                    SET msg_status=3
+                    SET msg_status = ".MESSAGE_STATUS_DELETED."
                     WHERE user_sender_id='$user_sender_id' AND id='$id'";
             Database::query($sql);
 
@@ -692,9 +754,9 @@ class MessageManager
         }
 
         $table_message = Database::get_main_table(TABLE_MESSAGE);
-        $sql = "UPDATE $table_message SET msg_status = '0'
+        $sql = "UPDATE $table_message SET msg_status = '".MESSAGE_STATUS_NEW."'
                 WHERE
-                    msg_status<>4 AND
+                    msg_status <> ".MESSAGE_STATUS_OUTBOX." AND
                     user_receiver_id=".intval($user_id)." AND
                     id='" . intval($message_id)."'";
         Database::query($sql);
@@ -1001,7 +1063,7 @@ class MessageManager
                           WHERE
                             user_sender_id = ".api_get_user_id()." AND
                             id = " . $message_id." AND
-                            msg_status = 4;";
+                            msg_status = ".MESSAGE_STATUS_OUTBOX;
                 $result = Database::query($query);
             }
         } else {
@@ -1015,7 +1077,7 @@ class MessageManager
 
                 $query = "SELECT * FROM $table_message
                           WHERE
-                            msg_status<>4 AND
+                            msg_status<> ".MESSAGE_STATUS_OUTBOX." AND
                             user_receiver_id=".api_get_user_id()." AND
                             id='" . $message_id."'";
                 $result = Database::query($query);

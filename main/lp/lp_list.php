@@ -868,7 +868,7 @@ foreach ($categories as $item) {
             $item->getId(),
             $current_session
         ),
-        'category_is_published' => learnpath::categoryIsPusblished(
+        'category_is_published' => learnpath::categoryIsPublished(
             $item,
             $courseInfo['real_id']
         ),

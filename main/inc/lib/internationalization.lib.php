@@ -479,6 +479,12 @@ function api_get_local_time(
     }
     if (is_numeric($time)) {
         $time = intval($time);
+        if ($return_null_if_invalid_date) {
+            if (strtotime(date('d-m-Y H:i:s', $time)) !== (int) $time) {
+                return null;
+            }
+        }
+
         $from_timezone = 'UTC';
         $time = gmdate('Y-m-d H:i:s', $time);
     }
@@ -530,7 +536,7 @@ function api_strtotime($time, $timezone = null)
  * @author Ivan Tcholakov, 2009, code refactoring, adding support for predefined date/time formats.
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  *
- * @param mixed Timestamp or datetime string
+ * @param mixed $time Timestamp or datetime string
  * @param string|int Date format (see date formats in the Chamilo system:
  * TIME_NO_SEC_FORMAT,
  * DATE_FORMAT_SHORT,
@@ -544,6 +550,10 @@ function api_strtotime($time, $timezone = null)
  */
 function api_format_date($time, $format = null, $language = null)
 {
+    if (empty($time)) {
+        return '';
+    }
+
     $system_timezone = date_default_timezone_get();
     date_default_timezone_set(api_get_timezone());
 
@@ -726,7 +736,7 @@ function date_to_str_ago($date, $timeZone = 'UTC')
 function api_convert_and_format_date($time = null, $format = null, $from_timezone = null)
 {
     // First, convert the datetime to the right timezone
-    $time = api_get_local_time($time, null, $from_timezone);
+    $time = api_get_local_time($time, null, $from_timezone, true);
     // Second, localize the date
     return api_format_date($time, $format);
 }

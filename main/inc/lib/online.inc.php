@@ -513,7 +513,6 @@ function courseLogout($logoutInfo)
             $sql = "UPDATE $tableCourseAccess
                 SET logout_course_date = '$currentDate', counter = counter+1
                 WHERE course_access_id = $courseAccessId";
-            error_log($sql);
             Database::query($sql);
         } else {
             $ip = api_get_real_ip();

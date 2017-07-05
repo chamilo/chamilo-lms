@@ -1733,7 +1733,7 @@ class SurveyManager
      */
     public static function protectByMandatory()
     {
-        if (isset($GLOBALS['fillingSurvey']) && $GLOBALS['fillingSurvey']) {
+        if (strpos($_SERVER['SCRIPT_NAME'], 'fillsurvey.php') !== false) {
             return;
         }
 
@@ -1792,7 +1792,7 @@ class SurveyManager
             Display::return_message(get_lang('MandatorySurveyNoAnswered'), 'warning')
         );
 
-        header('Location: '.api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?'.$urlParams);
+        header('Location: '.api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?'.$urlParams.'&'.api_get_cidreq());
         exit;
     }
 }

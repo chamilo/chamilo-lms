@@ -692,6 +692,7 @@ switch ($action) {
         );
         if ($result) {
             foreach ($result as &$item) {
+                $item['sent'] = $item['sent'] == 1 ? get_lang('Yes') : get_lang('No');
                 $item['date'] = api_get_local_time($item['date']);
             }
         }
@@ -893,7 +894,7 @@ switch ($action) {
         }
 
         break;
-	case 'get_user_skill_ranking':
+    case 'get_user_skill_ranking':
         $columns = array('photo', 'firstname', 'lastname', 'skills_acquired', 'currently_learning', 'rank');
         $result = $skill->get_user_list_skill_ranking($start, $limit, $sidx, $sord, $whereCondition);
         $result = msort($result, 'skills_acquired', 'asc');

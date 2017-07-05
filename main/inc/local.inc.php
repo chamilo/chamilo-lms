@@ -142,7 +142,7 @@ $gidReq = isset($_GET["gidReq"]) ? intval($_GET["gidReq"]) : '';
 // Keep a trace of the course and session from which we are getting out, to
 // enable proper course logout tracking in courseLogout()
 $logoutInfo = [];
-if (!empty($logout)) {
+if (!empty($logout) or !empty($cidReset)) {
     $uid = 0;
     if (!empty($_SESSION['_user']) && !empty($_SESSION['_user']['user_id'])) {
         $uid = $_SESSION['_user']['user_id'];
@@ -970,6 +970,8 @@ if (isset($cidReset) && $cidReset) {
             header('location:'.api_get_path(WEB_PATH));
         }
     } else {
+        // Leave a logout time in the track_e_course_access table if we were in a course
+        courseLogout($logoutInfo);
         Session::erase('_cid');
         Session::erase('_real_cid');
         Session::erase('_course');

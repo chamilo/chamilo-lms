@@ -163,6 +163,7 @@ function online_logout($user_id = null, $logout_redirect = false)
 /**
  * Remove all login records from the track_e_online stats table, for the given user ID.
  * @param int User ID
+ * @param integer $user_id
  * @return void
  */
 function LoginDelete($user_id)
@@ -322,6 +323,9 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
     }
 }
 
+/**
+ * @param string $time_limit
+ */
 function who_is_online_count($time_limit = null, $friends = false)
 {
     if (empty($time_limit)) {
@@ -438,6 +442,10 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
 	}
 }
 
+/**
+ * @param integer $uid
+ * @param string $time_limit
+ */
 function who_is_online_in_this_course_count($uid, $time_limit, $coursecode = null)
 {
 	if (empty($coursecode)) {

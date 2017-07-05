@@ -7775,8 +7775,8 @@ class SessionManager
     /**
      * Gets the admin session list callback of the session/session_list.php
      * page with all user/details in the right fomat
-     * @param array
-     * @result array Array of rows results
+     * @param array $options
+     * @return array Array of rows results
      * @asset ('a') === false
      */
     public static function get_sessions_admin_complete($options = array())
@@ -7853,7 +7853,7 @@ class SessionManager
         $select = "
                 SELECT * FROM (
                     SELECT DISTINCT
-                         IF (
+                        IF (
                             (s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR
                             (s.access_start_date = '0000-00-00 00:00:00' AND s.access_end_date = '0000-00-00 00:00:00' ) OR
                             (s.access_start_date IS NULL AND s.access_end_date IS NULL) OR
@@ -7902,9 +7902,11 @@ class SessionManager
             $where .= ' AND '.$options['where'];
         }
 
+        $limit = '';
         if (!empty($options['limit'])) {
-            $where .= " LIMIT ".$options['limit'];
+            $limit = " LIMIT ".$options['limit'];
         }
+
         $query = "$select FROM $tbl_session s
                     LEFT JOIN $tbl_session_field_values fv
                     ON (fv.item_id = s.id)
@@ -7919,24 +7921,34 @@ class SessionManager
                     LEFT JOIN $tbl_session_category sc
                     ON (s.session_category_id = sc.id)
                     INNER JOIN $tbl_user u
-                    ON (s.id_coach = u.user_id) ".
-            $where;
+                    ON (s.id_coach = u.user_id) 
+                    $where
+                    $limit
+        ";
 
         if (api_is_multiple_url_enabled()) {
             $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $where .= " AND ar.access_url_id = $access_url_id ";
                 $query = "$select
                     FROM $tbl_session s
-                    LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
-                    LEFT JOIN $tbl_session_field_options fvo ON (fv.field_id = fvo.field_id)
-                    LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id)
-                    LEFT JOIN $tbl_course c ON (src.c_id = c.id)
-                    LEFT JOIN $tbl_session_category sc ON (s.session_category_id = sc.id)
-                    INNER JOIN $tbl_user u ON (s.id_coach = u.user_id)
-                    INNER JOIN $table_access_url_rel_session ar ON (ar.session_id = s.id)
-                    $where";
+                    LEFT JOIN $tbl_session_field_values fv 
+                    ON (fv.item_id = s.id)
+                    LEFT JOIN $tbl_session_field_options fvo 
+                    ON (fv.field_id = fvo.field_id)
+                    LEFT JOIN $tbl_session_rel_course src 
+                    ON (src.session_id = s.id)
+                    LEFT JOIN $tbl_course c 
+                    ON (src.c_id = c.id)
+                    LEFT JOIN $tbl_session_category sc 
+                    ON (s.session_category_id = sc.id)
+                    INNER JOIN $tbl_user u 
+                    ON (s.id_coach = u.user_id)
+                    INNER JOIN $table_access_url_rel_session ar 
+                    ON (ar.session_id = s.id AND ar.access_url_id = $access_url_id)
+                    $where
+                    $limit
+                ";
             }
         }
 
@@ -7947,8 +7959,22 @@ class SessionManager
         }
 
         $result = Database::query($query);
-        $formatted_sessions = array();
 
+        $acceptIcon = Display::return_icon(
+            'accept.png',
+            get_lang('Active'),
+            array(),
+            ICON_SIZE_SMALL
+        );
+
+        $errorIcon = Display::return_icon(
+            'error.png',
+            get_lang('Inactive'),
+            array(),
+            ICON_SIZE_SMALL
+        );
+
+        $formatted_sessions = array();
         if (Database::num_rows($result)) {
             $sessions = Database::store_result($result, 'ASSOC');
             foreach ($sessions as $session) {
@@ -7956,9 +7982,9 @@ class SessionManager
                 $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
                 $session['coach_name'] = Display::url($session['coach_name'], "user_information.php?user_id=".$session['user_id']);
                 if ($session['session_active'] == 1) {
-                    $session['session_active'] = Display::return_icon('accept.png', get_lang('Active'), array(), ICON_SIZE_SMALL);
+                    $session['session_active'] = $acceptIcon;
                 } else {
-                    $session['session_active'] = Display::return_icon('error.png', get_lang('Inactive'), array(), ICON_SIZE_SMALL);
+                    $session['session_active'] = $errorIcon;
                 }
 
                 $session = self::convert_dates_to_local($session);
@@ -8003,7 +8029,10 @@ class SessionManager
 
                 // Magic filter
                 if (isset($formatted_sessions[$session_id])) {
-                    $formatted_sessions[$session_id] = self::compareArraysToMerge($formatted_sessions[$session_id], $session);
+                    $formatted_sessions[$session_id] = self::compareArraysToMerge(
+                        $formatted_sessions[$session_id],
+                        $session
+                    );
                 } else {
                     $formatted_sessions[$session_id] = $session;
                 }

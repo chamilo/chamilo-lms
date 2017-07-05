@@ -31,6 +31,7 @@ exclude_paths:
 - app/cache/
 - app/logs/
 - app/config/
+- app/SymfonyRequirements.php
 - app/Migrations/
 - app/Resources/
 - main/admin/db.php

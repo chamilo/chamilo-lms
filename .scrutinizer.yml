@@ -130,6 +130,7 @@ filter:
         - 'app/cache/*'
         - 'app/logs/*'
         - 'app/config/*'
+        - 'app/SymfonyRequirements.php'
         - 'documentation/*'
         - 'app/Migrations/*'
         - 'app/Resources/*'

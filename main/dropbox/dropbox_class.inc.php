@@ -621,8 +621,6 @@ class Dropbox_Person
     {
         $course_id = api_get_course_int_id();
         $_course = api_get_course_info();
-        $dropbox_cnf = getDropboxConf();
-
         $id = intval($id);
 
         // index check
@@ -684,7 +682,6 @@ class Dropbox_Person
      */
     public function filter_received_work($type, $value)
     {
-        $dropbox_cnf = getDropboxConf();
         $new_received_work = array();
         $mailId = get_mail_id_base();
         foreach ($this->receivedWork as $work) {

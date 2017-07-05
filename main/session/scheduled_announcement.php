@@ -22,7 +22,6 @@ if (!$object->allowed()) {
     api_not_allowed(true);
 }
 
-
 $sessionUrl =  api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId;
 
 $htmlHeadXtra[] = api_get_jqgrid_js();

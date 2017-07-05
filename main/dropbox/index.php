@@ -6,7 +6,9 @@ require_once 'dropbox_init.inc.php';
 
 $last_access = '';
 // get the last time the user accessed the tool
-if (isset($_SESSION[$_course['id']]) && $_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX] == '') {
+if (isset($_SESSION[$_course['id']]) &&
+    $_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX] == ''
+) {
     $last_access = get_last_tool_access(TOOL_DROPBOX);
     $_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX] = $last_access;
 } else {
@@ -119,7 +121,15 @@ if (($action == 'movesent' || $action == 'movereceived') && isset($_GET['move_id
     );
 }
 if (isset($_POST['do_move'])) {
-    echo Display::return_message(store_move($_POST['id'], $_POST['move_target'], $_POST['part']), 'confirm');
+    $result = store_move(
+        $_POST['id'],
+        $_POST['move_target'],
+        $_POST['part']
+    );
+    echo Display::return_message(
+        $result,
+        'confirm'
+    );
 }
 
 // Delete a file
@@ -127,7 +137,11 @@ if (($action == 'deletereceivedfile' || $action == 'deletesentfile') && isset($_
     if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
     }
-    $dropboxfile = new Dropbox_Person(api_get_user_id(), $is_courseAdmin, $is_courseTutor);
+    $dropboxfile = new Dropbox_Person(
+        api_get_user_id(),
+        $is_courseAdmin,
+        $is_courseTutor
+    );
     if ($action == 'deletereceivedfile') {
         $dropboxfile->deleteReceivedWork($_GET['id']);
         $message = get_lang('ReceivedFileDeleted');
@@ -164,7 +178,6 @@ if (!isset($_POST['feedback']) && (
 }
 
 // Store Feedback
-
 if (isset($_POST['feedback'])) {
     if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
@@ -243,7 +256,6 @@ if ($action != 'add') {
         }
 
         /* Menu Sent */
-
         if (api_get_session_id() == 0) {
             echo '<div class="actions">';
             if ($view_dropbox_category_sent != 0) {
@@ -374,11 +386,11 @@ if ($action != 'add') {
                         )
                     ) {
                         $new_icon = '&nbsp;'.Display::return_icon(
-                                'new_dropbox_message.png',
-                                get_lang('New'),
-                                '',
-                                ICON_SIZE_SMALL
-                            );
+                            'new_dropbox_message.png',
+                            get_lang('New'),
+                            '',
+                            ICON_SIZE_SMALL
+                        );
                     }
                 }
 
@@ -409,7 +421,6 @@ if ($action != 'add') {
                 '</a>';
 
                 // This is a hack to have an additional row in a sortable table
-
                 if ($action == 'viewfeedback' && isset($_GET['id']) && is_numeric($_GET['id']) && $dropbox_file->id == $_GET['id']) {
                     $action_icons .= "</td></tr>"; // Ending the normal row of the sortable table
                     $action_icons .= '<tr>
@@ -496,7 +507,6 @@ if ($action != 'add') {
     }
 
     /*	SENT FILES */
-
     if (!$view || $view == 'sent' || !$showSentReceivedTabs) {
         // This is for the categories
         if (isset($viewSentCategory) && $viewSentCategory != '') {

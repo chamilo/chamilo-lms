@@ -8530,12 +8530,14 @@ class SessionManager
     }
 
     /**
-     * @param \Chamilo\CoreBundle\Entity\Course $course
-     * @param \Chamilo\CoreBundle\Entity\Session $session
+     * @param Course $course
+     * @param Session $session
      * @return int
      */
-    public static function getCountUsersInCourseSession(Course $course, Session $session)
-    {
+    public static function getCountUsersInCourseSession(
+        Course $course,
+        Session $session
+    ) {
         return Database::getManager()
             ->createQuery("
                 SELECT COUNT(scu)

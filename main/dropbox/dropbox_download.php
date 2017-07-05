@@ -77,7 +77,6 @@ if (user_can_download_file($_GET['id'], api_get_user_id())) {
 }
 
 /*		ERROR IF NOT ALLOWED TO DOWNLOAD */
-
 if (!$allowed_to_download) {
     api_not_allowed(
         true,
@@ -97,7 +96,8 @@ if (!$allowed_to_download) {
     $path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$work->filename;
     if (!Security::check_abs_path(
         $path,
-        api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/')
+        api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'
+    )
     ) {
         api_not_allowed(true);
     }

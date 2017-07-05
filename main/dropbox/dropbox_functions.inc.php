@@ -214,8 +214,8 @@ function display_move_form(
 /**
 * This function moves a file to a different category
 *
-* @param $id the id of the file we are moving
-* @param $target the id of the folder we are moving to
+* @param int $id the id of the file we are moving
+* @param int $target the id of the folder we are moving to
 * @param string $part are we moving a received file or a sent file?
 *
 * @return string string

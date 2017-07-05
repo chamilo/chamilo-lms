@@ -1,24 +1,23 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *	@author Patrick Cool
- *	@package chamilo.document
+ * @author Patrick Cool
+ * @package chamilo.document
  * @author Patrick Cool, patrick.cool@UGent.be, Ghent University, May 2004, http://icto.UGent.be
  * Please bear in mind that this is only an beta release.
  * I wrote this quite quick and didn't think too much about it in advance.
  * It is not perfect at all but it is workable and usefull (I think)
  * Do not consider this as a powerpoint replacement, although it has
  * the same starting point.
- *	This is a plugin for the documents tool. It looks for .jpg, .jpeg, .gif, .png
- * 	files (since these are the files that can be viewed in a browser) and creates
- *	a slideshow with it by allowing to go to the next/previous image.
- *	You can also have a quick overview (thumbnail view) of all the images in
- *	that particular folder.
- *	Maybe it is important to notice that each slideshow is folder based. Only
- *	the images of the chosen folder are shown.
- *
- *	On this page the options of the slideshow can be set: maintain the original file
- *	or resize the file to a given width.
+ * This is a plugin for the documents tool. It looks for .jpg, .jpeg, .gif, .png
+ * files (since these are the files that can be viewed in a browser) and creates
+ * a slideshow with it by allowing to go to the next/previous image.
+ * You can also have a quick overview (thumbnail view) of all the images in
+ * that particular folder.
+ * Maybe it is important to notice that each slideshow is folder based. Only
+ * the images of the chosen folder are shown.
+ * On this page the options of the slideshow can be set: maintain the original file
+ * or resize the file to a given width.
  */
 require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script();
@@ -45,19 +44,18 @@ Display::display_header($originaltoolname, 'Doc');
 $image_resizing = isset($_SESSION['image_resizing']) ? $_SESSION['image_resizing'] : null;
 
 ?>
-
-<script type="text/javascript">
+<script>
 function enableresizing() { //v2.0
-	document.options.width.disabled=false;
-	//document.options.width.className='enabled_input';
-	document.options.height.disabled=false;
-	//document.options.height.className='enabled_input';
+    document.options.width.disabled=false;
+    //document.options.width.className='enabled_input';
+    document.options.height.disabled=false;
+    //document.options.height.className='enabled_input';
 }
 function disableresizing() { //v2.0
-	document.options.width.disabled=true;
-	//document.options.width.className='disabled_input';
-	document.options.height.disabled=true;
-	//document.options.height.className='disabled_input';
+    document.options.width.disabled=true;
+    //document.options.width.className='disabled_input';
+    document.options.height.disabled=true;
+    //document.options.height.className='disabled_input';
 }
 window.onload = <?php echo $image_resizing == 'resizing' ? 'enableresizing' : 'disableresizing'; ?>;
 </script>
@@ -69,7 +67,7 @@ echo Display::toolbarAction('toolbar-slideshow', [$actions])
 ?>
 <div class="panel panel-default">
     <div class="panel-body">
-<form action="slideshow.php?curdirpath=<?php echo $pathurl; ?>" method="post" name="options" id="options" class="form-horizontal">
+    <form action="slideshow.php?curdirpath=<?php echo $pathurl; ?>" method="post" name="options" id="options" class="form-horizontal">
 	<legend><?php echo get_lang('SlideshowOptions') ?></legend>
         <div class="radio">
             <label>

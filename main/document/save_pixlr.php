@@ -1,16 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *	This file allows creating new svg and png documents with an online editor.
+ * This file allows creating new svg and png documents with an online editor.
  *
- *	@package chamilo.document
+ * @package chamilo.document
  *
  * @author Juan Carlos Raña Trabado
  * @since 30/january/2011
 */
-/**
- * Code
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();

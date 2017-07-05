@@ -19,7 +19,8 @@ $origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
 $course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
 $courseInfo = api_get_course_info($course_code);
 $student_id = isset($_GET['student']) ? (int) $_GET['student'] : 0;
-$currentUrl = api_get_self().'?student='.$student_id.'&course='.$course_code.'&id_session='.$sessionId.'&origin='.$origin;
+$details = isset($_GET['details']) ? Security::remove_XSS($_GET['details']) : '';
+$currentUrl = api_get_self().'?student='.$student_id.'&course='.$course_code.'&id_session='.$sessionId.'&origin='.$origin.'&details='.$details;
 $allowMessages = api_get_configuration_value('private_messages_about_user');
 
 if (empty($student_id)) {
@@ -82,7 +83,7 @@ function show_image(image,width,height) {
 if ($export) {
     ob_start();
 }
-$csv_content = array();
+$csv_content = [];
 $from_myspace = false;
 
 if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
@@ -95,7 +96,7 @@ if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
 $nameTools = get_lang('StudentDetails');
 $em = Database::getManager();
 
-if (isset($_GET['details'])) {
+if (!empty($details)) {
     if ($origin === 'user_course') {
         if (empty($cidReq)) {
             $interbreadcrumb[] = array(
@@ -631,7 +632,7 @@ $userGroups = $userGroupManager->getNameListByUser(
             <td align="left"><?php echo $last_connection_date ?></td>
         </tr>
         <?php
-        if (isset($_GET['details']) && $_GET['details'] == 'true') {
+        if ($details == 'true') {
         ?>
             <tr>
                 <td align="right"><?php echo get_lang('TimeSpentInTheCourse') ?></td>
@@ -724,7 +725,7 @@ $userGroups = $userGroupManager->getNameListByUser(
 </div>
 <?php
 
-if (empty($_GET['details'])) {
+if (empty($details)) {
     $csv_content[] = array();
     $csv_content[] = array(
         get_lang('Session'),
@@ -1196,7 +1197,7 @@ if (empty($_GET['details'])) {
                     if (api_is_allowed_to_edit()) {
                         echo '<td>';
                         if ($any_result === true) {
-                            $url = 'myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.$course_code.'&course='.$course_code.'&details='.Security::remove_XSS($_GET['details']).'&origin='.$origin.'&lp_id='.$lp_id.'&student='.$user_info['user_id'].'&details=true&id_session='.$sessionId;
+                            $url = 'myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.$course_code.'&course='.$course_code.'&details='.$details.'&origin='.$origin.'&lp_id='.$lp_id.'&student='.$user_info['user_id'].'&details=true&id_session='.$sessionId;
                             echo Display::url(
                                 Display::return_icon(
                                     'clean.png',

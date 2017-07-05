@@ -4849,7 +4849,7 @@ div#chat-remote-video video {
 	padding: 0;
 }
 .grid-courses .items .image {
-    min-height: 225px;
+    /* min-height: 175px; */
     position: relative;
 }
 .grid-courses .items .image .pin{

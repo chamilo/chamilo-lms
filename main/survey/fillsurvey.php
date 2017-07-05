@@ -505,7 +505,9 @@ echo Display::return_icon(
     ICON_SIZE_SMALL
 );
 echo strip_tags($survey_data['survey_title']).'</div>';
-echo '<div id="survey_subtitle">'.strip_tags($survey_data['survey_subtitle']).'</div>';
+if (!empty($survey_data['survey_subtitle'])) {
+    echo '<div id="survey_subtitle">'.strip_tags($survey_data['survey_subtitle']).'</div>';
+}
 
 // Displaying the survey introduction
 if (!isset($_GET['show'])) {

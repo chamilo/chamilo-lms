@@ -235,10 +235,12 @@ switch ($action) {
         break;
     case 'reset_lp':
         $lp_id = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : '';
+        $check = true;
 
         if (api_is_allowed_to_edit() &&
             !empty($lp_id) &&
-            !empty($student_id)
+            !empty($student_id) &&
+            Security::check_token('get')
         ) {
             Event::delete_student_lp_events(
                 $student_id,
@@ -253,6 +255,7 @@ switch ($action) {
                 get_lang('LPWasReset'),
                 'success'
             ));
+            Security::clear_token();
         }
         break;
     default:

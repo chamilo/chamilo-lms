@@ -2422,17 +2422,17 @@ class Tracking
 
     /**
      * Returns the average student progress in the learning paths of the given
-     * course.
+     * course, it will take into account the progress that were not started.
      * @param int|array $studentId
-     * @param string    $courseCode
-     * @param array     $lpIdList Limit average to listed lp ids
-     * @param int       $sessionId     Session id (optional),
+     * @param string $courseCode
+     * @param array $lpIdList Limit average to listed lp ids
+     * @param int $sessionId     Session id (optional),
      * if parameter $session_id is null(default) it'll return results including
      * sessions, 0 = session is not filtered
-     * @param bool      $returnArray Will return an array of the type:
+     * @param bool $returnArray Will return an array of the type:
      * [sum_of_progresses, number] if it is set to true
      * @param boolean $onlySeriousGame Optional. Limit average to lp on seriousgame mode
-     * @return double   Average progress of the user in this course
+     * @return double Average progress of the user in this course
      */
     public static function get_avg_student_progress(
         $studentId,
@@ -2503,7 +2503,15 @@ class Tracking
             $conditions[] = " lp_view.user_id = '$studentId' ";
 
             if (empty($lpIdList)) {
-                $lpList = new LearnpathList($studentId, $courseCode, $sessionId);
+                $lpList = new LearnpathList(
+                    $studentId,
+                    $courseCode,
+                    $sessionId,
+                    null,
+                    false,
+                    null,
+                    true
+                );
                 $lpList = $lpList->get_flat_list();
                 if (!empty($lpList)) {
                     /** @var  $lp */
@@ -2519,18 +2527,6 @@ class Tracking
         }
 
         $conditionToString = implode('AND', $conditions);
-        // Get last view for each student (in case of multi-attempt)
-        // Also filter on LPs of this session
-        /*$sql = " SELECT
-                    MAX(view_count),
-                    AVG(progress) average,
-                    SUM(progress) sum_progress,
-                    count(progress) count_progress
-                FROM $lpViewTable lp_view
-                WHERE
-                  $conditionToString
-                $groupBy";*/
-
         $sql = "
             SELECT lp_id, view_count, progress 
             FROM $lpViewTable lp_view
@@ -2562,7 +2558,7 @@ class Tracking
 
         if (!empty($progress)) {
             $sum = array_sum($progress);
-            $average = $sum / count($progress);
+            $average = $sum / count($lpIdList);
         } else {
             $average = 0;
             $sum = 0;
@@ -2571,7 +2567,7 @@ class Tracking
         if ($returnArray) {
             return [
                 $sum,
-                count($progress)
+                count($lpIdList)
             ];
         }
 

@@ -357,14 +357,14 @@ function return_title($course, $registeredUser)
 {
     $html = '';
     $linkCourse = api_get_course_url($course['code']);
-    $title = cut($course['title'], 60);
+    $cutTitle = cut($course['title'], 60);
 
     $html .= '<div class="block-title"><h4 class="title">';
 
     if (!$registeredUser) {
-        $html .= $title;
+        $html .= $cutTitle;
     } else {
-        $html .= '<a title="'.$title.'" href="'.$linkCourse.'">'.$title.'</a>';
+        $html .= '<a title="'.$course['title'].'" href="'.$linkCourse.'">'.$cutTitle.'</a>';
     }
 
     $html .= '</h4></div>';

@@ -398,7 +398,8 @@ function return_description_button($course)
             array(
                 'class' => 'ajax btn btn-default btn-sm',
                 'data-title' => $title, 'title' => get_lang('Description'),
-                'aria-label' => get_lang('Description')
+                'aria-label' => get_lang('Description'),
+                'data-size' => 'lg'
             )
         );
     }

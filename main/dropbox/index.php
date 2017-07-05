@@ -33,7 +33,7 @@ if (isset($_GET['dropbox_column'])) {
     $sort_params[] = 'dropbox_column='.intval($_GET['dropbox_column']);
 }
 if (isset($_GET['dropbox_page_nr'])) {
-    $sort_params[] = 'page_nr='.intval($_GET['page_nr']);
+    $sort_params[] = 'page_nr='.intval($_GET['dropbox_page_nr']);
 }
 if (isset($_GET['dropbox_per_page'])) {
     $sort_params[] = 'dropbox_per_page='.intval($_GET['dropbox_per_page']);
@@ -88,7 +88,9 @@ if ($action == 'editcategory' && isset($_GET['id'])) {
 
 // Storing a new or edited category
 if (isset($_POST['StoreCategory'])) {
-    if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+    if (api_get_session_id() != 0 &&
+        !api_is_allowed_to_session_edit(false, true)
+    ) {
         api_not_allowed();
     }
     $return_information = store_addcategory();

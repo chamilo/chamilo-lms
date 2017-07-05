@@ -142,7 +142,7 @@ $gidReq = isset($_GET["gidReq"]) ? intval($_GET["gidReq"]) : '';
 // Keep a trace of the course and session from which we are getting out, to
 // enable proper course logout tracking in courseLogout()
 $logoutInfo = [];
-if (!empty($logout) or !empty($cidReset)) {
+if (!empty($logout) || !empty($cidReset)) {
     $uid = 0;
     if (!empty($_SESSION['_user']) && !empty($_SESSION['_user']['user_id'])) {
         $uid = $_SESSION['_user']['user_id'];
@@ -1017,7 +1017,7 @@ if (isset($cidReset) && $cidReset) {
         }
     }
 
-    if (empty($_SESSION['_course']) or empty($_SESSION['_cid'])) { //no previous values...
+    if (empty($_SESSION['_course']) || empty($_SESSION['_cid'])) { //no previous values...
         $_cid = -1; // Set default values
         $_course = -1;
     } else {

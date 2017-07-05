@@ -482,7 +482,7 @@ function who_is_online_in_this_course_count($uid, $time_limit, $coursecode = nul
  */
 function courseLogout($logoutInfo)
 {
-    if (empty($logoutInfo['uid']) or empty($logoutInfo['cid'])) {
+    if (empty($logoutInfo['uid']) || empty($logoutInfo['cid'])) {
         return;
     }
     $sessionLifetime = api_get_configuration_value('session_lifetime');
@@ -491,7 +491,7 @@ function courseLogout($logoutInfo)
      * the function Tracking::get_time_spent_on_the_course() returns larger values (200h) due the condition:
      * login_course_date > now() - INTERVAL $session_lifetime SECOND
      */
-    if (empty($sessionLifetime) or $sessionLifetime > 86400) {
+    if (empty($sessionLifetime) || $sessionLifetime > 86400) {
         $sessionLifetime    = 3600; // 1 hour
     }
     if (!empty($logoutInfo) && !empty($logoutInfo['cid'])) {

@@ -106,7 +106,7 @@
         "jimmiw/php-time-ago": "^0.4.14",
         "phpoffice/phpword": "^0.12.1|dev-master",
         "facebook/php-sdk-v4": "~5.0",
-        "kigkonsult/icalcreator": "0.1.0",
+        "kigkonsult/icalcreator": "2.22.5",
         "essence/essence": "2.6.1",
         "pclzip/pclzip": "2.8.2",
         "chamilo/chash": "dev-master",

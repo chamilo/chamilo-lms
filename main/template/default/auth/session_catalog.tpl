@@ -14,7 +14,21 @@
         <h2 class="title-session">{{ 'Sessions'|get_lang }}</h2>
        	<div class="search-session">
                 <div class="row">
+                {% if show_courses %}
+                    <div class="col-md-4">
+                        <div class="return-catalog">
+                            <a class="btn btn-default btn-lg btn-block" href="{{ _p.web_self }}">
+                                <em class="fa fa-arrow-left"></em> {{ "CourseManagement"|get_lang }}
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if show_courses %}
+                    <div class="col-md-4">
+                {% else %}
                     <div class="col-md-6">
+                {% endif %}
                         <form method="post" action="{{ _p.web_self }}?action=display_sessions">
                             <div class="form-group">
                                 <label>{{ "ByDate"|get_lang }}</label>
@@ -30,7 +44,12 @@
                             </div>
                         </form>
                     </div>
+
+                {% if show_courses %}
+                    <div class="col-md-4">
+                {% else %}
                     <div class="col-md-6">
+                {% endif %}
                         <form method="post" action="{{ _p.web_self }}?action=search_tag">
                             <label>{{ "ByTag"|get_lang }}</label>
                             <div class="input-group">
@@ -46,13 +65,6 @@
                     </div>
                 </div>
             </div>
-       	{% if show_courses %}
-        <div class="return-catalog">
-        	<a class="btn btn-default btn-lg btn-block" href="{{ _p.web_self }}">
-            	<em class="fa fa-arrow-left"></em> {{ "CourseManagement"|get_lang }}
-            </a>
-       	</div>
-       	{% endif %}
         </div>
     </div>
     <!-- new view session grib -->

@@ -22,7 +22,6 @@ if (isset($_GET['action']) &&
 
 // Decide whether we show the latest post first
 $sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : ($origin != 'learnpath' ? 'ASC' : 'DESC');
-
 $posts = getPosts($current_forum, $_GET['thread'], $sortDirection, true);
 $count = 0;
 $clean_forum_id = intval($_GET['forum']);

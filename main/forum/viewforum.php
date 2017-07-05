@@ -611,7 +611,7 @@ if (is_array($threads)) {
             }
             $iconnotify = 'notification_mail_na.png';
             if (is_array(
-                    isset($_SESSION['forum_notification']['thread']) ? $_SESSION['forum_notification']['thread'] : null
+                isset($_SESSION['forum_notification']['thread']) ? $_SESSION['forum_notification']['thread'] : null
                 )
             ) {
                 if (in_array($row['thread_id'], $_SESSION['forum_notification']['thread'])) {

@@ -42,6 +42,8 @@ class ShibbolethSession
     {
         $_SESSION['_user'] = array();
         online_logout(null, false);
+        global $logoutInfo;
+        courseLogout($logoutInfo);
     }
 
     /**

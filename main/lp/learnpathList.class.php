@@ -50,11 +50,11 @@ class LearnpathList
 
         $this->course_code = $course_code;
         $this->user_id = $user_id;
-        $course_id = $course_info['real_id'];
 
-        if (empty($course_id)) {
+        if (empty($course_info['real_id'])) {
             return false;
         }
+        $course_id = $course_info['real_id'];
 
         // Condition for the session.
         if (isset($session_id)) {

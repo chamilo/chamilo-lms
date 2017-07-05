@@ -2774,21 +2774,19 @@ class learnpathItem
         if (self::DEBUG > 0) {
             error_log('learnpathItem::restart()', 0);
         }
-        if ($this->type == 'sco') {
+        $seriousGame = $this->get_seriousgame_mode();
+        //For serious game  : We reuse same attempt_id
+        if ($seriousGame == 1 && $this->type == 'sco') {
             // If this is a sco, Chamilo can't update the time without an
             //  explicit scorm call
             $this->current_start_time = 0;
             $this->current_stop_time = 0; //Those 0 value have this effect
             $this->last_scorm_session_time = 0;
+            $this->save();
+            return true;
         }
         $this->save();
 
-        //For serious game  : We reuse same attempt_id
-        if ($this->get_seriousgame_mode() == 1 && $this->type == 'sco') {
-            $this->current_start_time = 0;
-            $this->current_stop_time = 0;
-            return true;
-        }
         $allowed = $this->is_restart_allowed();
         if ($allowed === -1) {
             // Nothing allowed, do nothing.
@@ -2814,12 +2812,9 @@ class learnpathItem
             //$this->current_score = 0;
             $this->current_start_time = 0;
             $this->current_stop_time = 0;
-            //$this->current_data = '';
+            //$this->current_data = '';scorm
             //$this->status = $this->possible_status[0];
             $this->interactions_count = $this->get_interactions_count(true);
-            if ($this->type == 'sco') {
-                $this->scorm_init_time();
-            }
         }
         return true;
     }

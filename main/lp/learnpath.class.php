@@ -381,7 +381,7 @@ class learnpath
                                         // Add that row to the lp_item_view table so that we have something to show in the stats page.
                                         $params = [
                                             'c_id' => $course_id,
-                                            'lp_item_id' => $course_id,
+                                            'lp_item_id' => $item_id,
                                             'lp_view_id' => $this->lp_view_id,
                                             'view_count' => 1,
                                             'status' => 'not attempted',

@@ -8,7 +8,7 @@ $strings['IPAdmin'] = "Admin's IP";
 $strings['MaintenanceModeIsOff'] = "Maintenance mode is off";
 $strings['MaintenanceModeIsOn'] = "Maintenance mode is on";
 
-$strings['IPAdminDescription'] = "The admin with this IP will only have access to the platform.";
+$strings['IPAdminDescription'] = "Only the admin with this IP will maintain access to the platform during maintenance mode.";
 $strings['MaintenanceFileNotPresent'] = "Can't create file: %s. Check permissions in the root folder";
 
 

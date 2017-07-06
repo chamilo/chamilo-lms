@@ -148,7 +148,7 @@ $code = isset($code) ? $code : null;
         </div>
     </div>
 </div>
-<div class="grid-courses">
+<div class="grid-courses row">
 <?php
 if ($showCourses && $action != 'display_sessions') {
     if (!empty($message)) {
@@ -203,7 +203,7 @@ if ($showCourses && $action != 'display_sessions') {
             // display thumbnail
             $html .= returnThumbnail($course, $userRegistered);
 
-            $separator = '<div class="separator">&nbsp;</div>';
+            $separator = null;'<div class="separator">&nbsp;</div>';
             $subscribeButton = return_register_button($course, $stok, $code, $search_term);
 
             // start buycourse validation
@@ -233,12 +233,9 @@ if ($showCourses && $action != 'display_sessions') {
             $html .= return_teacher($course);
 
             // display button line
-            $html .= '<div class="toolbar">';
-            $html .= '<div class="left">';
-            $html .= $separator;
-            $html .= '</div>';
-            $html .= '<div class="right">';
-            $html .= '<div class="btn-group">';
+            $html .= '<div class="toolbar row">';
+            $html .= $separator ? '<div class="col-sm-4">'.$separator.'</div>' : '';
+            $html .= '<div class="col-sm-8">';
             // if user registered as student
             if ($userRegisteredInCourse) {
                 $html .= return_already_registered_label('student');
@@ -262,7 +259,6 @@ if ($showCourses && $action != 'display_sessions') {
                     }
                 }
             }
-            $html .= '</div>';
             $html .= '</div>';
             $html .= '</div>';
             $html .= '</div>';
@@ -350,16 +346,20 @@ function returnThumbnail($course, $registeredUser)
 function return_teacher($courseInfo)
 {
     $teachers = CourseManager::getTeachersFromCourse($courseInfo['real_id']);
+    $length = count($teachers);
+
+    if (!$length) {
+        return '';
+    }
 
     $html = '<div class="block-author">';
-    $length = count($teachers);
     foreach ($teachers as $value) {
         $name = $value['firstname'].' '.$value['lastname'];
         if ($length > 2) {
-             $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">
+             $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
                     <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
         } else {
-            $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">
+            $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
                     <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
             $html .= '<div class="teachers-details"><h5>
                     <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
@@ -382,14 +382,13 @@ function return_title($course, $registeredUser)
 {
     $html = '';
     $linkCourse = api_get_course_url($course['code']);
-    $cutTitle = cut($course['title'], 60);
 
     $html .= '<div class="block-title"><h4 class="title">';
 
     if (!$registeredUser) {
-        $html .= $cutTitle;
+        $html .= $course['title'];
     } else {
-        $html .= '<a title="'.$course['title'].'" href="'.$linkCourse.'">'.$cutTitle.'</a>';
+        $html .= '<a title="'.$course['title'].'" href="'.$linkCourse.'">'.$course['title'].'</a>';
     }
 
     $html .= '</h4></div>';
@@ -451,7 +450,7 @@ function return_goto_button($course)
             'aria-label' => $title,
         )
     );
-    return $html;
+    return $html.PHP_EOL;
 }
 
 /**
@@ -480,7 +479,7 @@ function return_already_registered_label($in_status)
         )
     );
 
-    return $html;
+    return $html.PHP_EOL;
 }
 
 /**
@@ -515,7 +514,7 @@ function return_register_button($course, $stok, $code, $search_term)
  */
 function return_unregister_button($course, $stok, $search_term, $code)
 {
-    $title = get_lang('UnsubscriptionAllowed');
+    $title = get_lang('Unsubscription');
     $html = Display::url(
         Display::returnFontAwesomeIcon('sign-in').' '.$title,
         api_get_self().'?action=unsubscribe&sec_token='.$stok

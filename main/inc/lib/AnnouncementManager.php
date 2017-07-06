@@ -1180,12 +1180,12 @@ class AnnouncementManager
      */
     public static function get_attachment($announcementId)
     {
-        $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
+        $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $announcementId = intval($announcementId);
         $course_id = api_get_course_int_id();
         $row = array();
         $sql = 'SELECT id, path, filename, comment 
-                FROM ' . $tbl_announcement_attachment.'
+                FROM '.$table.'
 				WHERE c_id = ' . $course_id.' AND announcement_id = '.$announcementId;
         $result = Database::query($sql);
         if (Database::num_rows($result) != 0) {
@@ -1725,8 +1725,7 @@ class AnnouncementManager
 
         if (api_is_allowed_to_edit(false, true)) {
             // check teacher status
-            if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
-
+            if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
                 if (api_get_group_id() == 0) {
                     $group_condition = '';
                 } else {
@@ -1754,7 +1753,7 @@ class AnnouncementManager
             }
         } else {
             // students only get to see the visible announcements
-            if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
+            if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
                 $group_memberships = GroupManager::get_group_ids($_course['real_id'], $userId);
 
                 if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
@@ -1834,7 +1833,6 @@ class AnnouncementManager
                                 ORDER BY display_order DESC
                                 LIMIT 0, $maximum";
                     } else {
-
                         if (api_get_course_setting('allow_user_edit_announcement')) {
                             $cond_user_id = " AND (
                                 ip.lastedit_user_id = '".api_get_user_id()."' OR ip.to_group_id='0' OR ip.to_group_id IS NULL

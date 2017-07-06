@@ -5,7 +5,7 @@
  */
 class Sepe
 {
-    
+
     /**
      * @param crearCentroInput[] $crearCentroInput
      *
@@ -22,7 +22,7 @@ class Sepe
         );
         Database::insert($tableLog, $paramsLog);
         /* End tracking log */
-        
+
         // Code
         $crearCentroInput = $crearCentroInput->DATOS_IDENTIFICATIVOS;
         $centerOrigin = $crearCentroInput->ID_CENTRO->ORIGEN_CENTRO;
@@ -117,7 +117,7 @@ class Sepe
         );
         Database::insert($tableLog, $paramsLog);
         /* End tracking log */
-        
+
         // Code
         $table = Database::get_main_table('plugin_sepe_center');
 
@@ -191,7 +191,7 @@ class Sepe
             $result = new stdClass();
             $result->RESPUESTA_DATOS_CENTRO = new SoapVar($obj, SOAP_ENC_OBJECT);
             */
-            return $result; 
+            return $result;
         }
     }
 
@@ -210,7 +210,7 @@ class Sepe
         );
         Database::insert($tableLog, $paramsLog);
         /* End tracking log */
-        
+
         $array = json_decode(json_encode($crearAccionInput), true);
         $crearAccionInputArray = (array) $array;
         // Code
@@ -231,7 +231,7 @@ class Sepe
         $schedule = $crearAccionInput->ACCION_FORMATIVA->DESCRIPCION_ACCION->HORARIOS;
         $requerements = $crearAccionInput->ACCION_FORMATIVA->DESCRIPCION_ACCION->REQUISITOS;
         $contactAction = $crearAccionInput->ACCION_FORMATIVA->DESCRIPCION_ACCION->CONTACTO_ACCION;
-      
+
 
         if (empty($actionOrigin) || empty($actionCode)) {
             error_log('2 - error en parametros - l244');
@@ -258,7 +258,6 @@ class Sepe
                     "ACCION_FORMATIVA"=>$crearAccionInputArray['ACCION_FORMATIVA']
                 )
             );
-            
         }
 
         $startDate = self::fixDate($startDate);
@@ -287,7 +286,7 @@ class Sepe
             if (!is_array($specialtyList)) {
                 $auxList = array();
                 $auxList[] = $specialtyList;
-                $specialtyList = $auxList;    
+                $specialtyList = $auxList;
             }
             foreach ($specialtyList as $specialty) {
                 $specialtyOrigin = $specialty->ID_ESPECIALIDAD->ORIGEN_ESPECIALIDAD;
@@ -386,7 +385,7 @@ class Sepe
                     );
                 }
 
-                
+
                 if ($specialtyId) {
                     $tableSpecialtyClassroom = Database::get_main_table('plugin_sepe_specialty_classroom');
                     $tableCenters = Database::get_main_table('plugin_sepe_centers');
@@ -394,7 +393,7 @@ class Sepe
                         if (!is_array($centroList)) {
                             $auxList = array();
                             $auxList[] = $centroList;
-                            $centroList = $auxList;    
+                            $centroList = $auxList;
                         }
                         foreach ($centroList as $centro) {
                             $centerOrigin = $centro->ORIGEN_CENTRO;
@@ -414,7 +413,7 @@ class Sepe
                                     VALUES ('" . $specialtyId . "','" . $centerId . "')";
                             Database::query($sql);
                             $id = Database::insert_id();
-                                
+
                             if (empty($id)) {
                                 return array(
                                     "RESPUESTA_OBT_ACCION" => array(
@@ -435,7 +434,7 @@ class Sepe
                             if (!is_array($tutorList)) {
                                 $auxList = array();
                                 $auxList[] = $tutorList;
-                                $tutorList = $auxList;    
+                                $tutorList = $auxList;
                             }
                             foreach ($tutorList as $tutor) {
                                 $documentType = $tutor->ID_TUTOR->TIPO_DOCUMENTO;
@@ -446,7 +445,7 @@ class Sepe
                                 $teachingCompetence = $tutor->COMPETENCIA_DOCENTE;
                                 $experienceTeleforming = $tutor->EXPERIENCIA_MODALIDAD_TELEFORMACION;
                                 $trainingTeleforming = $tutor->FORMACION_MODALIDAD_TELEFORMACION;
-                                
+
                                 /* check tutor not exists */
                                 $sql = "SELECT id FROM $tableTutors WHERE 
                                 document_type='".$documentType."' AND document_number='".$documentNumber."' AND document_letter='".$documentLetter."';";
@@ -486,7 +485,7 @@ class Sepe
             if (!is_array($participantList)) {
                 $auxList = array();
                 $auxList[] = $participantList;
-                $participantList = $auxList;    
+                $participantList = $auxList;
             }
             foreach ($participantList as $participant) {
                 $documentType = $participant->ID_PARTICIPANTE->TIPO_DOCUMENTO;
@@ -526,7 +525,7 @@ class Sepe
                             $tutorIdCompany = Database::insert($tableTutorsCompany, $params_tmp);
                         }
                     }
-                    
+
                     $documentTypeTraining = isset($participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->TIPO_DOCUMENTO) ? $participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->TIPO_DOCUMENTO : null;
                     $documentNumberTraining = isset($participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->NUM_DOCUMENTO) ? $participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->NUM_DOCUMENTO : null;
                     $documentLetterTraining = isset($participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->LETRA_NIF) ? $participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->LETRA_NIF : null;
@@ -571,12 +570,12 @@ class Sepe
                 }
 
                 $participantId = Database::insert_id();
-                
+
                 foreach ($participant->ESPECIALIDADES_PARTICIPANTE as $valueList) {
                     if (!is_array($participantList)) {
                         $auxList = array();
                         $auxList[] = $valueList;
-                        $valueList = $auxList;    
+                        $valueList = $auxList;
                     }
                     foreach ($valueList as $value) {
                         $specialtyOrigin = null;
@@ -621,7 +620,7 @@ class Sepe
 
                         $startDate = self::fixDate($startDate);
                         $endDate = self::fixDate($endDate);
-                        
+
                         $table_aux = Database::get_main_table('plugin_sepe_participants_specialty');
                         $sql = "INSERT INTO $table_aux (participant_id,specialty_origin,professional_area,specialty_code,registration_date,leaving_date,center_origin,center_code,start_date,end_date,final_result,final_qualification,final_score)
                                 VALUES ('" . $participantId . "','" . $specialtyOrigin . "','" . $professionalArea . "','" . $specialtyCode . "','" . $registrationDate . "','" . $leavingDate . "','" . $centerOrigin . "','" . $centerCode . "','" . $startDate . "','" . $endDate . "','" . $finalResult . "','" . $finalQualification . "','" . $finalScore . "');";
@@ -641,17 +640,17 @@ class Sepe
                             if (!is_array($tutorialList)) {
                                 $auxList = array();
                                 $auxList[] = $tutorialList;
-                                $tutorialList = $auxList;    
+                                $tutorialList = $auxList;
                             }
                             foreach ($tutorialList as $tutorial) {
                                 $centerOrigin = $tutorial->CENTRO_PRESENCIAL_TUTORIA->ORIGEN_CENTRO;
                                 $centerCode = $tutorial->CENTRO_PRESENCIAL_TUTORIA->CODIGO_CENTRO;
                                 $startDate = $tutorial->FECHA_INICIO;
                                 $endDate = $tutorial->FECHA_FIN;
-    
+
                                 $startDate = self::fixDate($startDate);
                                 $endDate = self::fixDate($endDate);
-                                
+
                                 $table_aux2 = Database::get_main_table('plugin_sepe_participants_specialty_tutorials');
                                 $sql = "INSERT INTO $table_aux2 (participant_specialty_id,center_origin,center_code,start_date,end_date)
                                         VALUES ('" . $participantSpecialtyId . "','" . $centerOrigin . "','" . $centerCode . "','" . $startDate . "','" . $endDate . "');";
@@ -693,7 +692,7 @@ class Sepe
         Database::insert($tableLog, $paramsLog);
 
         /* End tracking log */
-        
+
         $actionOrigin = $obtenerAccionInput->ID_ACCION->ORIGEN_ACCION;
         $actionCode = $obtenerAccionInput->ID_ACCION->CODIGO_ACCION;
 
@@ -765,7 +764,7 @@ class Sepe
                         $sql = "SELECT * FROM $tableCenters WHERE id='".$tmp['center_id']."';";
                         $resultCenter = Database::query($sql);
                         $auxCenter = Database::fetch_assoc($resultCenter);
-                        
+
                         $classroomCenter = new stdClass();
                         $classroomCenter->ORIGEN_CENTRO = $auxCenter['center_origin'];
                         $classroomCenter->CODIGO_CENTRO = $auxCenter['center_code'];
@@ -810,24 +809,80 @@ class Sepe
                     $idEspecialidad->AREA_PROFESIONAL = $aux['professional_area'];
                     $idEspecialidad->CODIGO_ESPECIALIDAD = $aux['specialty_code'];
 
-                    $params[0] = new SoapVar($idEspecialidad, SOAP_ENC_OBJECT, NULL, null, 'ID_ESPECIALIDAD', null);
+                    $params[0] = new SoapVar(
+                        $idEspecialidad,
+                        SOAP_ENC_OBJECT,
+                        null,
+                        null,
+                        'ID_ESPECIALIDAD',
+                        null
+                    );
 
                     $centroImparticion = new stdClass();
                     $centroImparticion->ORIGEN_CENTRO = $aux['center_origin'];
                     $centroImparticion->CODIGO_CENTRO = $aux['center_code'];
 
-                    $params[1] = new SoapVar($centroImparticion, SOAP_ENC_OBJECT, NULL, null, 'CENTRO_IMPARTICION', null);
-                    $params[2] = new SoapVar(self::undoFixDate($aux['start_date']), XSD_STRING, NULL, null, 'FECHA_INICIO', null);
-                    $params[3] = new SoapVar(self::undoFixDate($aux['end_date']), XSD_STRING, NULL, null, 'FECHA_FIN', null);
-                    $params[4] = new SoapVar($aux['modality_impartition'], XSD_STRING, NULL, null, 'MODALIDAD_IMPARTICION', null);
+                    $params[1] = new SoapVar(
+                        $centroImparticion,
+                        SOAP_ENC_OBJECT,
+                        null,
+                        null,
+                        'CENTRO_IMPARTICION',
+                        null
+                    );
+                    $params[2] = new SoapVar(
+                        self::undoFixDate($aux['start_date']),
+                        XSD_STRING,
+                        null,
+                        null,
+                        'FECHA_INICIO',
+                        null
+                    );
+                    $params[3] = new SoapVar(
+                        self::undoFixDate($aux['end_date']),
+                        XSD_STRING,
+                        null,
+                        null,
+                        'FECHA_FIN',
+                        null
+                    );
+                    $params[4] = new SoapVar(
+                        $aux['modality_impartition'],
+                        XSD_STRING,
+                        null,
+                        null,
+                        'MODALIDAD_IMPARTICION',
+                        null
+                    );
 
                     $obj = new stdClass();
                     $obj->HORAS_PRESENCIAL = $aux['classroom_hours'];
                     $obj->HORAS_TELEFORMACION = $aux['distance_hours'];
 
-                    $params[5] = new SoapVar($obj, SOAP_ENC_OBJECT, NULL, null, 'DATOS_DURACION', null);
-                    $params[6] = new SoapVar($classroomCenterList, SOAP_ENC_OBJECT, null, null, 'CENTROS_SESIONES_PRESENCIALES', null);
-                    $params[7] = new SoapVar($trainingTutors, SOAP_ENC_OBJECT, null, null, 'TUTORES_FORMADORES', null);
+                    $params[5] = new SoapVar(
+                        $obj,
+                        SOAP_ENC_OBJECT,
+                        null,
+                        null,
+                        'DATOS_DURACION',
+                        null
+                    );
+                    $params[6] = new SoapVar(
+                        $classroomCenterList,
+                        SOAP_ENC_OBJECT,
+                        null,
+                        null,
+                        'CENTROS_SESIONES_PRESENCIALES',
+                        null
+                    );
+                    $params[7] = new SoapVar(
+                        $trainingTutors,
+                        SOAP_ENC_OBJECT,
+                        null,
+                        null,
+                        'TUTORES_FORMADORES',
+                        null
+                    );
 
                     $obj = new stdClass();
 
@@ -873,8 +928,21 @@ class Sepe
                         $obj->SEGUIMIENTO_EVALUACION->NUMERO_ACTIVIDADES_EVALUACION = $aux['evaluation_activity_count'];
                     }
 
-                    $params[8] = new SoapVar($obj, SOAP_ENC_OBJECT, null, null, 'USO', null);
-                    $specialty[] = new SoapVar($params, SOAP_ENC_OBJECT, null, null, 'ESPECIALIDAD');
+                    $params[8] = new SoapVar(
+                        $obj,
+                        SOAP_ENC_OBJECT,
+                        null,
+                        null,
+                        'USO',
+                        null
+                    );
+                    $specialty[] = new SoapVar(
+                        $params,
+                        SOAP_ENC_OBJECT,
+                        null,
+                        null,
+                        'ESPECIALIDAD'
+                    );
                 }
             } else {
                 return array(
@@ -897,7 +965,7 @@ class Sepe
                     $sql = "SELECT * FROM $participantsSpecialityTable
                             WHERE participant_id='" . $participantId . "'";
                     $resultParticipantSpecialty = Database::query($sql);
-                    
+
                     $namespace = null;
                     $specialtyParticipant = array();
                     while ($tmp = Database::fetch_assoc($resultParticipantSpecialty)) {
@@ -921,7 +989,13 @@ class Sepe
                                 $obj->FECHA_FIN = $endDate;
                             }
 
-                            $obj = new SoapVar($obj, SOAP_ENC_OBJECT, null, null, 'TUTORIA_PRESENCIAL');
+                            $obj = new SoapVar(
+                                $obj,
+                                SOAP_ENC_OBJECT,
+                                null,
+                                null,
+                                'TUTORIA_PRESENCIAL'
+                            );
                             $classroomTutorials->append($obj);
                         }
 
@@ -943,7 +1017,14 @@ class Sepe
                             $obj->FECHA_BAJA = $leavingDate;
                         }
 
-                        $obj->TUTORIAS_PRESENCIALES = new SoapVar($classroomTutorials, SOAP_ENC_OBJECT, null, null, 'TUTORIAS_PRESENCIALES', null);
+                        $obj->TUTORIAS_PRESENCIALES = new SoapVar(
+                            $classroomTutorials,
+                            SOAP_ENC_OBJECT,
+                            null,
+                            null,
+                            'TUTORIAS_PRESENCIALES',
+                            null
+                        );
                         $obj->EVALUACION_FINAL = new stdClass();
 
                         if (!empty($tmp['center_origin']) && !empty($tmp['center_code'])) {
@@ -975,7 +1056,13 @@ class Sepe
                         if (isset($tmp['final_score']) && $tmp['final_score'] != '') {
                             $obj->RESULTADOS->PUNTUACION_FINAL = $tmp['final_score'];
                         }
-                        $specialtyParticipant[] = new SoapVar($obj, SOAP_ENC_OBJECT, null, null, 'ESPECIALIDAD');
+                        $specialtyParticipant[] = new SoapVar(
+                            $obj,
+                            SOAP_ENC_OBJECT,
+                            null,
+                            null,
+                            'ESPECIALIDAD'
+                        );
                     }
 
                     $params = new stdClass();
@@ -1088,7 +1175,7 @@ class Sepe
         );
         Database::insert($tableLog, $paramsLog);
         /* End tracking log */
-        
+
         $table = Database::get_main_table('plugin_sepe_actions');
 
         $sql = "SELECT action_origin, action_code FROM $table";
@@ -1139,7 +1226,7 @@ class Sepe
         );
         Database::insert($tableLog, $paramsLog);
         /* End tracking log */
-        
+
         $actionOrigin = $eliminarAccionInput->ID_ACCION->ORIGEN_ACCION;
         $actionCode = $eliminarAccionInput->ID_ACCION->CODIGO_ACCION;
 
@@ -1151,11 +1238,11 @@ class Sepe
                 )
             );
         }
-        
+
         $table = Database::get_main_table('plugin_sepe_actions');
         $sql = "DELETE FROM $table
                 WHERE action_origin='".$actionOrigin."' AND action_code='".$actionCode."';";
-        
+
         $rs = Database::query($sql);
         if (!$rs) {
             return array(
@@ -1165,7 +1252,7 @@ class Sepe
                 )
             );
         }
-        
+
         return array(
             "RESPUESTA_ELIMINAR_ACCION" => array(
                 "CODIGO_RETORNO" => "0",

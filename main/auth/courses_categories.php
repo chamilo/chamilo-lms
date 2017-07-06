@@ -149,7 +149,6 @@ if ($showCourses && $action != 'display_sessions') {
 
     $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
     $user_id = api_get_user_id();
-
     $categoryList = CourseManager::getCategoriesList();
 
     if (!empty($browse_courses_in_category)) {
@@ -169,14 +168,13 @@ if ($showCourses && $action != 'display_sessions') {
             $course_private = $course['visibility'] == COURSE_VISIBILITY_REGISTERED;
             $course_closed = $course['visibility'] == COURSE_VISIBILITY_CLOSED;
 
-            $course_subscribe_allowed = ($course['subscribe'] == 1);
-            $course_unsubscribe_allowed = ($course['unsubscribe'] == 1);
+            $course_subscribe_allowed = $course['subscribe'] == 1;
+            $course_unsubscribe_allowed = $course['unsubscribe'] == 1;
             $count_connections = $course['count_connections'];
             $creation_date = substr($course['creation_date'], 0, 10);
 
-            $html = null;
             // display the course bloc
-            $html .= '<div class="col-xs-12 col-sm-6 col-md-4"><div class="items items-courses">';
+            $html = '<div class="col-xs-12 col-sm-6 col-md-4"><div class="items items-courses">';
 
             $course['category_title'] = '';
             if (isset($course['category'])) {
@@ -252,13 +250,15 @@ if ($showCourses && $action != 'display_sessions') {
             $html .= '</div>';
             $html .= '</div>';
             echo $html;
-
         }
     } else {
         if (!isset($_REQUEST['subscribe_user_with_password']) &&
             !isset($_REQUEST['subscribe_course'])
         ) {
-            echo Display::return_message(get_lang('ThereAreNoCoursesInThisCategory'), 'warning');
+            echo Display::return_message(
+                get_lang('ThereAreNoCoursesInThisCategory'),
+                'warning'
+            );
         }
     }
 }
@@ -273,6 +273,7 @@ echo '</div>';
 /**
  * Display the course catalog image of a course
  * @param array $course
+ * @param bool $registeredUser
  *
  * @return string HTML string
  */
@@ -323,12 +324,15 @@ function returnThumbnail($course, $registeredUser)
     return $html;
 }
 
-function return_teacher($course)
+/**
+ * @param array $courseInfo
+ * @return string
+ */
+function return_teacher($courseInfo)
 {
-    $courseInfo = api_get_course_info($course['code']);
     $teachers = CourseManager::getTeachersFromCourse($courseInfo['real_id']);
-    $html = null;
-    $html .= '<div class="block-author">';
+
+    $html = '<div class="block-author">';
     $length = count($teachers);
     foreach ($teachers as $value) {
         $name = $value['firstname'].' '.$value['lastname'];
@@ -350,7 +354,9 @@ function return_teacher($course)
 
 /**
  * Display the title of a course in course catalog
- * @param $course
+ * @param array $course
+ * @param bool $registeredUser
+ *
  * @return string HTML string
  */
 function return_title($course, $registeredUser)
@@ -384,7 +390,8 @@ function return_title($course, $registeredUser)
 
 /**
  * Display the description button of a course in the course catalog
- * @param $course
+ * @param array $course
+ *
  * @return string HTML string
  */
 function return_description_button($course)
@@ -397,7 +404,8 @@ function return_description_button($course)
             api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'],
             array(
                 'class' => 'ajax btn btn-default btn-sm',
-                'data-title' => $title, 'title' => get_lang('Description'),
+                'data-title' => $title,
+                'title' => get_lang('Description'),
                 'aria-label' => get_lang('Description'),
                 'data-size' => 'lg'
             )

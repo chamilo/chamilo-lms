@@ -2285,17 +2285,17 @@ HOTSPOT;
             return '-';
         }
 
-        $max_note = api_get_setting('exercise_max_score');
-        $min_note = api_get_setting('exercise_min_score');
+        $maxNote = api_get_setting('exercise_max_score');
+        $minNote = api_get_setting('exercise_min_score');
 
         if ($use_platform_settings) {
-            if ($max_note != '' && $min_note != '') {
+            if ($maxNote != '' && $minNote != '') {
                 if (!empty($weight) && intval($weight) != 0) {
-                    $score = $min_note + ($max_note - $min_note) * $score / $weight;
+                    $score = $minNote + ($maxNote - $minNote) * $score / $weight;
                 } else {
-                    $score = $min_note;
+                    $score = $minNote;
                 }
-                $weight = $max_note;
+                $weight = $maxNote;
             }
         }
         $percentage = (100 * $score) / ($weight != 0 ? $weight : 1);
@@ -2305,7 +2305,7 @@ HOTSPOT;
         $score = float_format($score, 1);
         $weight = float_format($weight, 1);
 
-        $html = null;
+        $html = '';
         if ($show_percentage) {
             $parent = '('.$score.' / '.$weight.')';
             $html = $percentage."%  $parent";
@@ -2315,9 +2315,89 @@ HOTSPOT;
         } else {
             $html = $score.' / '.$weight;
         }
-        $html = Display::span($html, array('class' => 'score_exercise'));
+
+        // Over write score
+        $scoreBasedInModel = self::convertScoreToModel($percentage);
+        if (!empty($scoreBasedInModel)) {
+            $html = $scoreBasedInModel;
+        }
+
+        $html = Display::span($html, ['class' => 'score_exercise']);
 
         return $html;
+    }
+
+    /**
+     * @param array $model
+     * @param float $percentage
+     * @return string
+     */
+    public static function getModelStyle($model, $percentage)
+    {
+        $modelWithStyle = get_lang($model['name']);
+        $modelWithStyle .= ' - <span class="'.$model['css_class'].'">'.$model['css_class'].' </span> - ';
+        $modelWithStyle .= $percentage;
+
+        return $modelWithStyle;
+    }
+
+    /**
+     * @param float $percentage value between 0 and 100
+     * @return string
+     */
+    public static function convertScoreToModel($percentage)
+    {
+        $model = self::getCourseScoreModel();
+        if (!empty($model)) {
+            $scoreWithGrade = [];
+            foreach ($model['score_list'] as $item) {
+                if ($percentage >= $item['min']  && $percentage <= $item['max']) {
+                    $scoreWithGrade = $item;
+                    break;
+                }
+            }
+
+            if (!empty($scoreWithGrade)) {
+                return self::getModelStyle($scoreWithGrade, $percentage);
+            }
+        }
+        return '';
+    }
+
+    /**
+     * @return array
+     */
+    public static function getCourseScoreModel()
+    {
+        $modelList = self::getScoreModels();
+        if (empty($modelList)) {
+            return [];
+        }
+
+        $courseInfo = api_get_course_info();
+        if (!empty($courseInfo)) {
+            $scoreModelId = api_get_course_setting('score_model_id');
+            if ($scoreModelId != -1) {
+                $modelIdList = array_column($modelList['models'], 'id');
+                if (in_array($scoreModelId, $modelIdList)) {
+                    foreach ($modelList['models'] as $item) {
+                        if ($item['id'] == $scoreModelId) {
+                            return $item;
+                        }
+                    }
+                }
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getScoreModels()
+    {
+        return api_get_configuration_value('score_grade_model');
     }
 
     /**
@@ -2421,15 +2501,15 @@ HOTSPOT;
      */
     public static function convert_score($score, $weight)
     {
-        $max_note = api_get_setting('exercise_max_score');
-        $min_note = api_get_setting('exercise_min_score');
+        $maxNote = api_get_setting('exercise_max_score');
+        $minNote = api_get_setting('exercise_min_score');
 
         if ($score != '' && $weight != '') {
-            if ($max_note != '' && $min_note != '') {
+            if ($maxNote != '' && $minNote != '') {
                 if (!empty($weight)) {
-                    $score = $min_note + ($max_note - $min_note) * $score / $weight;
+                    $score = $minNote + ($maxNote - $minNote) * $score / $weight;
                 } else {
-                    $score = $min_note;
+                    $score = $minNote;
                 }
             }
         }
@@ -3859,7 +3939,11 @@ HOTSPOT;
                 $comnt = null;
                 if ($show_results) {
                     $comnt = Event::get_comments($exe_id, $questionId);
-                    $teacherAudio = ExerciseLib::getOralFeedbackAudio($exe_id, $questionId, api_get_user_id());;
+                    $teacherAudio = ExerciseLib::getOralFeedbackAudio(
+                        $exe_id,
+                        $questionId,
+                        api_get_user_id()
+                    );;
 
                     if (!empty($comnt) || $teacherAudio) {
                         echo '<b>'.get_lang('Feedback').'</b>';
@@ -3914,8 +3998,8 @@ HOTSPOT;
                 if ($show_results) {
                     $question_content .= '</div>';
                 }
-
                 $exercise_content .= Display::panel($question_content);
+
             } // end foreach() block that loops over all questions
         }
 

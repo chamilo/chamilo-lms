@@ -140,7 +140,7 @@ if (isset($_SESSION['gradebook'])) {
 }
 
 $allowRecordAudio = api_get_setting('enable_record_audio') === 'true';
-$allowTeacherComentAudio = api_get_configuration_value('allow_teacher_comment_audio') === true;
+$allowTeacherCommentAudio = api_get_configuration_value('allow_teacher_comment_audio') === true;
 
 if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array(
@@ -162,7 +162,7 @@ $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PA
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/js/annotation.js"></script>';
 
-if ($allowRecordAudio && $allowTeacherComentAudio) {
+if ($allowRecordAudio && $allowTeacherCommentAudio) {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordRTC.js"></script>';
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/recorder.js"></script>';
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/gui.js"></script>';
@@ -202,7 +202,7 @@ if ($origin != 'learnpath') {
                 oHidn.type = "hidden";
                 var selname = oHidn.name = "marks_" + m_id[i];
                 var selid = document.forms['marksform_' + m_id[i]].marks.selectedIndex;
-                oHidn.value = document.forms['marksform_' + m_id[i]].marks.options[selid].text;
+                oHidn.value = document.forms['marksform_' + m_id[i]].marks.options[selid].value;
                 f.appendChild(oHidn);
             }
 
@@ -721,7 +721,7 @@ foreach ($questionList as $questionId) {
             echo '</p>';
 
             echo '<div id="feedback_'.$name.'" class="show">';
-            $comnt = trim(Event::get_comments($id, $questionId));
+            $comnt = Event::get_comments($id, $questionId);
             if (!empty($comnt)) {
                 echo ExerciseLib::getFeedbackText($comnt);
                 echo ExerciseLib::getOralFeedbackAudio($id, $questionId, $student_id);
@@ -729,7 +729,7 @@ foreach ($questionList as $questionId) {
             echo '</div>';
 
             echo '<div id="'.$name.'" class="row hidden">';
-            echo '<div class="col-sm-'.($allowTeacherComentAudio ? 7 : 12).'">';
+            echo '<div class="col-sm-'.($allowTeacherCommentAudio ? 7 : 12).'">';
 
             $arrid[] = $questionId;
             $feedback_form = new FormValidator('frmcomments'.$questionId);
@@ -759,7 +759,7 @@ foreach ($questionList as $questionId) {
 
             echo '</div>';
 
-            if ($allowRecordAudio && $allowTeacherComentAudio) {
+            if ($allowRecordAudio && $allowTeacherCommentAudio) {
                 echo '<div class="col-sm-5">';
                 echo ExerciseLib::getOralFeedbackForm($id, $questionId, $student_id);
                 echo '</div>';
@@ -780,13 +780,31 @@ foreach ($questionList as $questionId) {
         if ($is_allowedToEdit && $isFeedbackAllowed) {
             if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION))) {
                 $marksname = "marksName".$questionId;
-                echo '<div id="'.$marksname.'" class="hidden">';
-                echo '<form name="marksform_'.$questionId.'" method="post" action="">';
                 $arrmarks[] = $questionId;
+
+                echo '<div id="'.$marksname.'" class="hidden">';
+                // @todo use FormValidator
+                /*$formMark = new FormValidator("marksform_'.$questionId.'", 'post');
+                $options = [
+                  1,
+                  2
+                ];
+                $formMark->addSelect('marks', get_lang('AssignMarks'), $options);
+                $formMark->display();*/
+                echo '<form name="marksform_'.$questionId.'" method="post" action="">';
                 echo get_lang("AssignMarks");
-                echo "&nbsp;<select name='marks' id='marks'>";
-                for ($i = 0; $i <= $questionWeighting; $i++) {
-                    echo '<option '.(($i == $questionScore) ? "selected='selected'" : '').'>'.$i.'</option>';
+                echo "&nbsp;<select class='selectpicker' name='marks' id='marks'>";
+                $model = ExerciseLib::getCourseScoreModel();
+                if (empty($model)) {
+                    for ($i = 0; $i <= $questionWeighting; $i++) {
+                        echo '<option value="'.$i.'" '.(($i == $questionScore) ? "selected='selected'" : '').'>'.$i.'</option>';
+                    }
+                } else {
+                    foreach ($model['score_list'] as $item) {
+                        $i = api_number_format($item['score_to_qualify']/100 * $questionWeighting, 2);
+                        $model = ExerciseLib::getModelStyle($item, $i);
+                        echo '<option value="'.$i.'" '.(($i == $questionScore) ? "selected='selected'" : '').'>'.$model.'</option>';
+                    }
                 }
                 echo '</select>';
                 echo '</form><br /></div>';
@@ -801,7 +819,7 @@ foreach ($questionList as $questionId) {
                     <div id="'.$marksname.'" class="hidden">
                         <form name="marksform_'.$questionId.'" method="post" action="">
                             <select name="marks" id="marks" style="display:none;">
-                                <option>'.$questionScore.'</option>
+                                <option value="'.$questionScore.'" >'.$questionScore.'</option>
                             </select>
                         </form>
                         <br/>

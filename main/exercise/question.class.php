@@ -1945,6 +1945,10 @@ abstract class Question
                 $class = 'warning';
                 $weight = float_format($score['weight'], 1);
                 $score['result'] = " ? / ".$weight;
+                $model = ExerciseLib::getCourseScoreModel();
+                if (!empty($model)) {
+                    $score['result'] = " ? ";
+                }
             }
         }
 
@@ -2219,8 +2223,10 @@ abstract class Question
     public function isQuestionWaitingReview($score)
     {
         $isReview = false;
-        if (!empty($score['comments']) || $score['score'] > 0) {
-            $isReview = true;
+        if (!empty($score)) {
+            if (!empty($score['comments']) || $score['score'] > 0) {
+                $isReview = true;
+            }
         }
 
         return $isReview;

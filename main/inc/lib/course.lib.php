@@ -5379,6 +5379,10 @@ class CourseManager
             'show_course_in_user_language'
         );
 
+        if (!empty(ExerciseLib::getScoreModels())) {
+            $courseSettings[] = 'score_model_id';
+        }
+
         $allowLPReturnLink = api_get_setting('allow_lp_return_link');
         if ($allowLPReturnLink === 'true') {
             $courseSettings[] = 'lp_return_link';

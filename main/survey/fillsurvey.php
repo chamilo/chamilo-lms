@@ -16,8 +16,6 @@ if (!isset($_GET['cidReq'])) {
     $_cid = $_GET['cidReq'];
 }
 
-$fillingSurvey = true;
-
 // Including the global initialization file
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -165,7 +163,13 @@ if (Database::num_rows($result) > 1) {
     } else {
         // Header
         Display :: display_header(get_lang('ToolSurvey'));
-        echo '<form id="language" name="language" method="POST" action="'.api_get_self().'?course='.Security::remove_XSS($_GET['course']).'&invitationcode='.Security::remove_XSS($_GET['invitationcode']).'&cidReq='.Security::remove_XSS($_GET['cidReq']).'">';
+        $frmLangUrl = api_get_self().'?'.api_get_cidreq().'&'
+            .http_build_query([
+                'course' => Security::remove_XSS($_GET['course']),
+                'invitationcode' => Security::remove_XSS($_GET['invitationcode'])
+            ]);
+
+        echo '<form id="language" name="language" method="POST" action="'.$frmLangUrl.'">';
         echo '<select name="language">';
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             echo '<option value="'.$row['survey_id'].'">'.$row['lang'].'</option>';
@@ -371,7 +375,8 @@ if ($survey_data['form_fields'] != '' &&
     $form = new FormValidator(
         'profile',
         'post',
-        api_get_self()."?".str_replace('&show_form=1', '&show_form=1', Security::remove_XSS($_SERVER['QUERY_STRING']))
+        api_get_self()."?".api_get_cidreq().'&'
+            .str_replace('&show_form=1', '&show_form=1', Security::remove_XSS($_SERVER['QUERY_STRING']))
     );
 
     if (api_is_western_name_order()) {
@@ -593,6 +598,14 @@ if (isset($_POST['finish_survey'])) {
     );
 
     SurveyUtil::flagSurveyAsAnswered($survey_invitation['survey_code'], $survey_invitation['c_id']);
+
+    if ($course_info) {
+        echo Display::toolbarButton(
+            get_lang('ReturnToCourseHomepage'),
+            api_get_course_url($course_info['code']),
+            'home'
+        );
+    }
 
     unset($_SESSION['paged_questions']);
     unset($_SESSION['page_questions_sec']);
@@ -1181,7 +1194,7 @@ $p_l = isset($_POST['language']) ? Security::remove_XSS($_POST['language']) : ''
 
 $add_parameters = isset($_GET['user_id']) ? 'user_id='.intval($_GET['user_id']).'&amp;' : '';
 
-$url = api_get_self().'?'.$add_parameters.'course='.$g_c.'&invitationcode='.$g_ic.'&show='.$show.'&cidReq='.$g_cr;
+$url = api_get_self().'?'.api_get_cidreq().'&'.$add_parameters.'course='.$g_c.'&invitationcode='.$g_ic.'&show='.$show;
 $form = new FormValidator('question', 'post', $url);
 $form->addHidden('language', $p_l);
 

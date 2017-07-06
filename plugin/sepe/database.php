@@ -32,7 +32,7 @@ $sepeCenterTable->addColumn('url', \Doctrine\DBAL\Types\Type::STRING);
 $sepeCenterTable->addColumn('tracking_url', \Doctrine\DBAL\Types\Type::STRING);
 $sepeCenterTable->addColumn('phone', \Doctrine\DBAL\Types\Type::STRING);
 $sepeCenterTable->addColumn('mail', \Doctrine\DBAL\Types\Type::STRING);
-$sepeCenterTable->setPrimaryKey(array('d'));
+$sepeCenterTable->setPrimaryKey(array('id'));
 
 /* ========== PLUGIN_SEPE_ACTIONS ========== */
 $sepeActionsTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_ACTIONS);
@@ -248,7 +248,7 @@ $sepeCentrosTable->addColumn(
     \Doctrine\DBAL\Types\Type::STRING,
     array('length' => 16)
 );
-$sepeCentrosTable->setPrimaryKey(array('cod'));
+$sepeCentrosTable->setPrimaryKey(array('id'));
 
 /* ========== PLUGIN_SEPE_SPECIALTY_CLASSROOM ========== */
 $sepeSpecialtyClassroomTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_SPECIALTY_CLASSROOM);
@@ -267,7 +267,7 @@ $sepeSpecialtyClassroomTable->addColumn(
     \Doctrine\DBAL\Types\Type::INTEGER,
     array('unsigned' => true)
 );
-$sepeSpecialtyClassroomTable->setPrimaryKey(array('cod'));
+$sepeSpecialtyClassroomTable->setPrimaryKey(array('id'));
 $sepeSpecialtyClassroomTable->addForeignKeyConstraint(
     $sepeSpecialtyTable,
     array('specialty_id'),
@@ -416,7 +416,7 @@ $sepeTutorsCompanyTable->addColumn(
     \Doctrine\DBAL\Types\Type::STRING,
     array('length' => 2)
 );
-$sepeTutorsCompanyTable->setPrimaryKey(array('cod'));
+$sepeTutorsCompanyTable->setPrimaryKey(array('id'));
 
 /* ========== PLUGIN_SEPE_PARTICIPANTS ========== */ 
 $sepeParticipantsTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_PARTICIPANTS);
@@ -567,7 +567,7 @@ $sepeParticipantsSpecialtyTable->addColumn(
     \Doctrine\DBAL\Types\Type::STRING,
     array('length' => 4, 'notnull' => false)
 );
-$sepeParticipantsSpecialtyTable->setPrimaryKey(array('cod'));
+$sepeParticipantsSpecialtyTable->setPrimaryKey(array('id'));
 $sepeParticipantsSpecialtyTable->addForeignKeyConstraint(
     $sepeParticipantsTable,
     array('participant_id'),
@@ -624,7 +624,7 @@ $sepeCourseActionsTable->addColumn(
     \Doctrine\DBAL\Types\Type::INTEGER,
     array('unsigned' => true)
 );
-$sepeCourseActionsTable->setPrimaryKey(array('cod'));
+$sepeCourseActionsTable->setPrimaryKey(array('id'));
 $sepeCourseActionsTable->addForeignKeyConstraint(
     $sepeActionsTable,
     array('action_id'),
@@ -729,7 +729,7 @@ foreach ($competences as $competence) {
     Database::insert(
         $sepeTeachingCompetenceTable,
         array(
-            'cod' => $competence[0],
+            'id' => $competence[0],
             'code' => $competence[1],
             'value' => $competence[2]
         )
@@ -740,7 +740,7 @@ $sepeTutorsCompanyTable = Database::get_main_table(SepePlugin::TABLE_SEPE_TUTORS
 Database::insert(
     $sepeTutorsCompanyTable,
     array(
-        'cod' => 1,
+        'id' => 1,
         'alias' => 'Sin tutor',
         'company' => 'SI',
         'training' => 'SI'
@@ -814,7 +814,7 @@ $fielddefault = '';
 //$fieldoptions = ';Albacete;Alicante/Alacant;Almería;Araba/Álava;Asturias;Ávila;Badajoz;Balears, Illes;Barcelona;Bizkaia;Burgos;Cáceres;Cádiz;Cantabria;Castellón/Castelló;Ciudad Real;Córdoba;Coruña, A;Cuenca;Gipuzkoa;Girona;Granada;Guadalajara;Huelva;Huesca;Jaén;León;Lleida;Lugo;Madrid;Málaga;Murcia;Navarra;Ourense;Palencia;Palmas, Las;Pontevedr;Rioja, La;Salamanca;Santa Cruz de Tenerife;Segovia;Sevilla;Soria;Tarragona;Teruel;Toledo;Valencia/Valéncia;Valladolid;Zamora;Zaragoza;Ceuta;Melilla';
 $field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
 $i = 1;
-foreach ($list_provincias as $value) {
+foreach ($list_provinces as $value) {
     $sql = "INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES ('".$field_id."', '".$i."', '".$value."','".$i."');";
     Database::query($sql);
     $i++;

@@ -75,7 +75,7 @@ if ($editFile && api_is_platform_admin()) {
     $block = str_replace($endLine, '', $block);
 
     $form = new FormValidator('htaccess');
-    $form->addHtml('The following text will be added in the /.htaccess');
+    $form->addHtml($plugin->get_lang('TheFollowingTextWillBeAddedToHtaccess'));
     $element = $form->addText(
         'ip',
         [$plugin->get_lang('IPAdmin'), $plugin->get_lang('IPAdminDescription')]

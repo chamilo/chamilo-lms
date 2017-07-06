@@ -274,6 +274,7 @@ if ($form->validate()) {
     // Storing the survey
     $return = SurveyManager::store_survey($values);
 
+    $values['item_id'] = $return['id'];
     $extraFieldValue = new ExtraFieldValue('survey');
     $extraFieldValue->saveFieldValues($values);
 

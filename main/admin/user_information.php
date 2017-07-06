@@ -570,7 +570,7 @@ $fullUrl = UserManager::getUserPicture(
 echo '<div class="row">';
 
 echo '<div class="col-md-2">';
-echo '<a class="expand-image" href="'.$fullUrlBig.'">'
+echo '<a class="thumbnail expand-image" href="'.$fullUrlBig.'">'
     .'<img src="'.$fullUrl.'" /></a><br />';
 echo '</div>';
 

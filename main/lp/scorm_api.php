@@ -458,7 +458,7 @@ function LMSGetValue(param) {
     } else if(param == 'cmi.core.student_name'){
         // ---- cmi.core.student_name
         <?php
-          $who = addslashes($user['complete_name']);
+          $who = addslashes($user['lastname']).', '.addslashes($user['firstname']);
           echo "result='$who';";
         ?>
     } else if(param == 'cmi.core.lesson_location'){

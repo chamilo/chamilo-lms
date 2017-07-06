@@ -500,7 +500,8 @@ $_configuration['send_all_emails_to'] = [
     ]
 ];*/
 //
-// ------ Exercises configuration settings
+
+// Exercises configuration settings
 // Send only quiz answer notifications to course coaches and not general coach
 //$_configuration['block_quiz_mail_notification_general_coach'] = false;
 // Show question feedback (requires DB change: "ALTER TABLE c_quiz_question ADD COLUMN feedback text;")
@@ -510,10 +511,52 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['allow_quiz_show_previous_button_setting'] = false;
 // Allow to teachers review exercises question with audio notes
 //$_configuration["allow_teacher_comment_audio"] = false;
-// ------
+
 // Hide search form in session list
 //$_configuration['hide_search_form_in_session_list'] = false;
 // Allow exchange of messages from teachers/bosses about a user.
 //$_configuration['private_messages_about_user'] = false;
 
-
+// Score model
+// Allow to convert a score into a text/color label
+// using a model if score is inside those values. See BT#12898
+/*
+$_configuration['score_grade_model'] = [
+    'models' => [
+        [
+            'id' => 1,
+            'name' => 'ThisIsMyModel', // Value will be translated using get_lang
+            'score_list' => [
+                [
+                    'name' => 'VeryBad', // Value will be translated using get_lang
+                    'css_class' => 'btn-danger',
+                    'min' => 0,
+                    'max' => 20,
+                    'score_to_qualify' => 0
+                ],
+                [
+                    'name' => 'Bad',
+                    'css_class' => 'btn-danger',
+                    'min' => 21,
+                    'max' => 50,
+                    'score_to_qualify' => 25
+                ],
+                [
+                    'name' => 'Good',
+                    'css_class' => 'btn-warning',
+                    'min' => 51,
+                    'max' => 70,
+                    'score_to_qualify' => 60
+                ],
+                [
+                    'name' => 'VeryGood',
+                    'css_class' => 'btn-success',
+                    'min' => 71,
+                    'max' => 100,
+                    'score_to_qualify' => 100
+                ]
+            ]
+        ]
+    ]
+];
+*/

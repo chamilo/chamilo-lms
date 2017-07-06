@@ -7598,8 +7598,8 @@ class TrackingUserLogCSV
     }
 
     /**
-     * @param $userId
-     * @param $courseInfo
+     * @param int $userId
+     * @param array $courseInfo
      * @param int $sessionId
      * @return array
      */
@@ -7609,7 +7609,7 @@ class TrackingUserLogCSV
         $sessionId = 0
     ) {
         $csvContent = array();
-        $courseToolInformation = null;
+        $courseToolInformation = '';
         $headerTool = array(
             array(get_lang('Title')),
             array(get_lang('CreatedAt')),
@@ -7629,7 +7629,7 @@ class TrackingUserLogCSV
 
         if (!empty($courseForumInformationArray)) {
             $csvContent[] = array();
-            $csvContent[] = get_lang('Forums');
+            $csvContent[] = [get_lang('Forums')];
             $csvContent[] = $headerListForCSV;
             foreach ($courseForumInformationArray as $row) {
                 $csvContent[] = $row;
@@ -7652,7 +7652,7 @@ class TrackingUserLogCSV
 
         if (!empty($courseWorkInformationArray)) {
             $csvContent[] = null;
-            $csvContent[] = get_lang('Works');
+            $csvContent[] = [get_lang('Works')];
             $csvContent[] = $headerListForCSV;
 
             foreach ($courseWorkInformationArray as $row) {
@@ -7668,8 +7668,8 @@ class TrackingUserLogCSV
                 $courseWorkInformationArray
             );
         }
-        $courseToolInformationTotal = null;
 
+        $courseToolInformationTotal = null;
         if (!empty($courseToolInformation)) {
             $sessionTitle = null;
             if (!empty($sessionId)) {

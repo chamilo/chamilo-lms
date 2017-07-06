@@ -3587,7 +3587,7 @@ class CourseManager
                 }
 
                 $params['title'] = $course_info['title'];
-                $params['title_cut'] = cut($course_info['title'], 45);
+                $params['title_cut'] = $course_info['title'];
                 $params['link'] = $course_info['course_public_url'].'?id_session=0&autoreg=1';
                 if (api_get_setting('display_teacher_in_courselist') === 'true') {
                     $params['teachers'] = self::getTeachersFromCourse($courseId, true);
@@ -3803,7 +3803,7 @@ class CourseManager
             $params['thumbnails'] = $thumbnails;
             $params['image'] = $image;
             $params['title'] = $course_info['title'];
-            $params['title_cut'] = cut($course_info['title'], 45);
+            $params['title_cut'] = $params['title'];
             $params['category'] = $course_info['categoryName'];
             $params['teachers'] = $teachers;
 
@@ -5378,6 +5378,10 @@ class CourseManager
             'enable_forum_auto_launch',
             'show_course_in_user_language'
         );
+
+        if (!empty(ExerciseLib::getScoreModels())) {
+            $courseSettings[] = 'score_model_id';
+        }
 
         $allowLPReturnLink = api_get_setting('allow_lp_return_link');
         if ($allowLPReturnLink === 'true') {

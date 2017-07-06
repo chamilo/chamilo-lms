@@ -4743,7 +4743,6 @@ div#chat-remote-video video {
     margin-bottom: 20px;
 }
 .grid-courses .items.my-courses{
-    min-height: 340px;
     box-shadow: 2px 4px 15px 0 rgba(46,61,73,.1);
     transition: box-shadow .3s ease , border .3s ease;
 }
@@ -4768,7 +4767,6 @@ div#chat-remote-video video {
 }
 
 .grid-courses .items.items-sessions {
-    min-height: 355px;
 }
 
 .grid-courses .items.items-courses:hover,
@@ -4778,13 +4776,11 @@ div#chat-remote-video video {
     transition: box-shadow .3s ease , border .3s ease;
 }
 .grid-courses .items.items-hotcourse{
-    min-height: 400px;
     box-shadow: 2px 4px 15px 0 rgba(46,61,73,.1);
     transition: box-shadow .3s ease , border .3s ease;
 }
 .grid-courses .items .block-title {
-    margin: 10px 10px 10px 10px;
-    min-height: 40px;
+    margin: 10px 0;
 }
 .grid-courses .items .title {
     line-height: 1.4;
@@ -4794,10 +4790,8 @@ div#chat-remote-video video {
     margin: 0;
 }
 
-.grid-courses .items .toolbar {
-    text-align: right;
-    padding: 10px 0px 0px 0px;
-    min-height: 30px;
+.grid-courses .items .toolbar > div {
+    text-align: center;
 }
 
 .grid-courses .items .image .black-shadow {
@@ -4818,11 +4812,9 @@ div#chat-remote-video video {
 }
 
 .hot-courses .grid-courses .items .title{
-    line-height: 1.4;
     padding: 0px;
     font-size: 14px;
     font-weight: bold;
-    height: 42px;
     margin: 0;
 }
 
@@ -4836,11 +4828,10 @@ div#chat-remote-video video {
     padding: 5px 10px;
 }
 .grid-courses .items .block-info{
-    padding: 0 10px;
     font-size: 12px;
 }
 .grid-courses .items .block-date{
-    padding: 5px 10px;
+    padding: 5px 0;
     font-size: 11px;
     line-height: 18px;
 }
@@ -4849,8 +4840,10 @@ div#chat-remote-video video {
 	padding: 0;
 }
 .grid-courses .items .image {
-    /* min-height: 175px; */
     position: relative;
+}
+.grid-courses .items .image .img-responsive{
+    min-width: 100%;
 }
 .grid-courses .items .image .pin{
     position: absolute;
@@ -4860,7 +4853,7 @@ div#chat-remote-video video {
 }
 .grid-courses .items .ranking{
     font-size: 10px;
-    margin: 10px;
+    margin: 0 0 10px;
 }
 .grid-courses .items .notifications{
     text-align: center;
@@ -4905,7 +4898,6 @@ div#chat-remote-video video {
 }
 .grid-courses .items .description{
     padding: 5px 10px;
-    min-height: 140px;
 }
 .grid-courses .items .description .text{
     font-size: 12px;
@@ -4935,10 +4927,8 @@ div#chat-remote-video video {
 }
 /*---- */
 .grid-courses .items .block-author {
-    min-height: 35px;
     display: flex;
-    margin-top: 5px;
-    margin-left: 5px;
+    margin: 5px 0 10px;
 }
 .grid-courses .items .block-author img{
     border: 2px solid #fff;
@@ -6210,9 +6200,6 @@ ul#toolnavbox-two li a.btn{
 }
 .label-subscribed{
     font-size: 12px;
-    position: absolute;
-    top: -65px;
-    right: 0;
     width: 100px;
 }
 .form-horizontal .radio{
@@ -6429,8 +6416,6 @@ input[type=checkbox]{
         width: 100%;
     }
     .grid-courses .items{
-        margin-left: 5%;
-        margin-right: 5%;
     }
     .navbar .container .navbar-brand{
         display: block;
@@ -6785,6 +6770,13 @@ input.form-control[type="color"] {
 
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
+    .grid-courses .items .toolbar .col-sm-4 {
+        text-align: left;
+    }
+    .grid-courses .items .toolbar .col-sm-8 {
+        text-align: right;
+    }
+
     .actions div.text-right{
         text-align: right;
     }
@@ -6793,7 +6785,7 @@ input.form-control[type="color"] {
         margin-right: 0;
     }
 
-    .section-catalog .grid-courses .col-sm-6:nth-child(2n+1) {
+    .grid-courses .col-sm-6:nth-child(2n+1) {
         clear: left;
     }
 }
@@ -6811,10 +6803,10 @@ input.form-control[type="color"] {
         padding-left: 0;
     }
 
-    .section-catalog .grid-courses .col-sm-6:nth-child(2n+1) {
+    .grid-courses .col-sm-6:nth-child(2n+1) {
         clear: none;
     }
-    .section-catalog .grid-courses .col-md-3:nth-child(4n+1) {
+    .grid-courses .col-md-4:nth-child(3n+1) {
         clear: left;
     }
 }

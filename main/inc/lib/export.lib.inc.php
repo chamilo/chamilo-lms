@@ -53,6 +53,10 @@ class Export
         $writer->setStream(fopen($filePath, 'w'));
 
         foreach ($data as $item) {
+            if (empty($item)) {
+                $writer->writeItem([]);
+                continue;
+            }
             $item = array_map('trim', $item);
             $writer->writeItem($item);
         }

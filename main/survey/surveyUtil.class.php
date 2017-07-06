@@ -187,7 +187,6 @@ class SurveyUtil
 
         if ($error) {
             $tool_name = get_lang('Reporting');
-
             Display::addFlash(
                 Display::return_message(
                     get_lang('Error').': '.$error,
@@ -946,13 +945,13 @@ class SurveyUtil
                     echo '<th>&nbsp;-&nbsp;</th>';
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                     $display_percentage_header = 1;
-                } else if ($row['type'] == 'percentage' && $display_percentage_header) {
+                } elseif ($row['type'] == 'percentage' && $display_percentage_header) {
                     echo '<th>&nbsp;%&nbsp;</th>';
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                     $display_percentage_header = 0;
-                } else if ($row['type'] == 'percentage') {
+                } elseif ($row['type'] == 'percentage') {
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
-                } else if ($row['type'] <> 'comment' && $row['type'] <> 'pagebreak' && $row['type'] <> 'percentage') {
+                } elseif ($row['type'] <> 'comment' && $row['type'] <> 'pagebreak' && $row['type'] <> 'percentage') {
                     echo '<th>';
                     echo $row['option_text'];
                     echo '</th>';
@@ -1858,7 +1857,12 @@ class SurveyUtil
                                 $tableHtml .= '<th>'.$question_y['answers'][($ij)].'</th>';
                             } else {
                                 $tableHtml .= '<td align="center">';
-                                $votes = self::comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii - 1)], $question_y['answersid'][($ij)]);
+                                $votes = self::comparative_check(
+                                    $answers_x,
+                                    $answers_y,
+                                    $question_x['answersid'][($ii - 1)],
+                                    $question_y['answersid'][($ij)]
+                                );
                                 $tableHtml .= $votes;
                                 array_push(
                                     $chartData,
@@ -2015,10 +2019,10 @@ class SurveyUtil
         $course_id = api_get_course_int_id();
 
         // Database table definition
-        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
+        $table = Database::get_course_table(TABLE_SURVEY_INVITATION);
 
         $sql = "SELECT count(user) AS total
-		        FROM $table_survey_invitation
+		        FROM $table
 		        WHERE
                     c_id = $course_id AND
                     survey_id='".intval($_GET['survey_id'])."' AND
@@ -2182,7 +2186,12 @@ class SurveyUtil
                     $invitation_text = str_replace('src="../../', 'src="'.api_get_path(WEB_PATH), $invitation_text);
                     $invitation_text = trim(stripslashes($invitation_text));
                 }
-                self::send_invitation_mail($value, $invitation_code, $invitation_title, $invitation_text);
+                self::send_invitation_mail(
+                    $value,
+                    $invitation_code,
+                    $invitation_title,
+                    $invitation_text
+                );
                 $counter++;
             }
         }
@@ -2284,14 +2293,6 @@ class SurveyUtil
 
         // Optionally: finding the e-mail of the course user
         if (is_numeric($invitedUser)) {
-            $table_user = Database::get_main_table(TABLE_MAIN_USER);
-            $sql = "SELECT firstname, lastname, email FROM $table_user
-                    WHERE user_id='".Database::escape_string($invitedUser)."'";
-            $result = Database::query($sql);
-            $row = Database::fetch_array($result);
-            $recipient_email = $row['email'];
-            $recipient_name = api_get_person_name($row['firstname'], $row['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-
             MessageManager::send_message(
                 $invitedUser,
                 $invitation_title,
@@ -2304,12 +2305,11 @@ class SurveyUtil
                 null,
                 $sender_user_id
             );
-
         } else {
             /** @todo check if the address is a valid email	 */
             $recipient_email = $invitedUser;
             @api_mail_html(
-                $recipient_name,
+                '',
                 $recipient_email,
                 $invitation_title,
                 $full_invitation_text,
@@ -3168,7 +3168,6 @@ class SurveyUtil
         $survey_code = Database::escape_string($survey_code);
         $user_id = intval($user_id);
         $user_answer = Database::escape_string($user_answer);
-
         $course_id = api_get_course_int_id();
 
         $sql = 'SELECT COUNT(*) as count
@@ -3220,8 +3219,11 @@ class SurveyUtil
      * @param   string $chartContainerId
      * @return	string 	(direct output)
      */
-    public static function drawChart($chartData, $hasSerie = false, $chartContainerId = 'chartContainer')
-    {
+    public static function drawChart(
+        $chartData,
+        $hasSerie = false,
+        $chartContainerId = 'chartContainer'
+    ) {
         $htmlChart = '';
         if (api_browser_support("svg")) {
             $htmlChart .= api_get_js("d3/d3.v3.5.4.min.js");
@@ -3346,7 +3348,6 @@ class SurveyUtil
                     survey_id = '".$surveyId."'
                 ORDER BY answer_id, user ASC";
         $result = Database::query($sql);
-
         $response = Database::affected_rows($result);
 
         return $response > 0;

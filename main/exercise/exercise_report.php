@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * 	Exercise list: This script shows the list of exercises for administrators and students.
- * 	@package chamilo.exercise
- * 	@author Julio Montoya <gugli100@gmail.com> jqgrid integration
- *   Modified by hubert.borderiou (question category)
+ * Exercise list: This script shows the list of exercises for administrators and students.
+ * @package chamilo.exercise
+ * @author Julio Montoya <gugli100@gmail.com> jqgrid integration
+ * Modified by hubert.borderiou (question category)
  *
- *  @todo fix excel export
+ * @todo fix excel export
  *
  */
 

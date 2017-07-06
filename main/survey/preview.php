@@ -97,7 +97,10 @@ if (api_is_course_admin() ||
 ) {
     // Survey information
     echo '<div id="survey_title">'.$survey_data['survey_title'].'</div>';
-    echo '<div id="survey_subtitle">'.$survey_data['survey_subtitle'].'</div>';
+
+    if (!empty($survey_data['survey_subtitle'])) {
+        echo '<div id="survey_subtitle">'.$survey_data['survey_subtitle'].'</div>';
+    }
 
     // Displaying the survey introduction
     if (!isset($_GET['show'])) {
@@ -116,7 +119,6 @@ if (api_is_course_admin() ||
     }
 
     $questions = array();
-
     if (isset($_GET['show'])) {
         // Getting all the questions for this page and add them to a
         // multidimensional array where the first index is the page.
@@ -125,7 +127,7 @@ if (api_is_course_admin() ||
         $paged_questions = array();
         $counter = 0;
         $sql = "SELECT * FROM $table_survey_question
-                WHERE c_id = $course_id AND survey_id = '".intval($survey_id)."'
+                WHERE c_id = $course_id AND survey_id = '".$survey_id."'
                 ORDER BY sort ASC";
         $result = Database::query($sql);
         $questions_exists = true;
@@ -159,7 +161,7 @@ if (api_is_course_admin() ||
                         survey_question.question_id = survey_question_option.question_id AND
                         survey_question_option.c_id = $course_id
                     WHERE
-                        survey_question.survey_id = '".intval($survey_id)."' AND
+                        survey_question.survey_id = '".$survey_id."' AND
                         survey_question.question_id IN (".Database::escape_string(implode(',', $paged_questions[$_GET['show']]), null, false).") AND
                         survey_question.c_id =  $course_id
                     ORDER BY survey_question.sort, survey_question_option.sort ASC";
@@ -191,7 +193,7 @@ if (api_is_course_admin() ||
             WHERE
                 c_id = $course_id AND
                 type='".Database::escape_string('pagebreak')."' AND
-                survey_id='".intval($survey_id)."'";
+                survey_id='".$survey_id."'";
     $result = Database::query($sql);
     $numberofpages = Database::num_rows($result) + 1;
 
@@ -202,7 +204,7 @@ if (api_is_course_admin() ||
         $show = 0;
     }
 
-    $url = api_get_self().'?survey_id='.Security::remove_XSS($survey_id).'&show='.$show;
+    $url = api_get_self().'?survey_id='.$survey_id.'&show='.$show;
     $form = new FormValidator('question', 'post', $url);
 
     if (is_array($questions) && count($questions) > 0) {
@@ -219,16 +221,32 @@ if (api_is_course_admin() ||
 
     if (($show < $numberofpages) || (!$_GET['show'] && count($questions) > 0)) {
         if ($show == 0) {
-            $form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'success', 'large');
+            $form->addButton(
+                'next_survey_page',
+                get_lang('StartSurvey'),
+                'arrow-right',
+                'success',
+                'large'
+            );
         } else {
-            $form->addButton('next_survey_page', get_lang('NextQuestion'), 'arrow-right');
+            $form->addButton(
+                'next_survey_page',
+                get_lang('NextQuestion'),
+                'arrow-right'
+            );
         }
     }
-    if ($show >= $numberofpages && $_GET['show'] || (isset($_GET['show']) && count($questions) == 0)) {
+    if ($show >= $numberofpages && $_GET['show'] ||
+        (isset($_GET['show']) && count($questions) == 0)
+    ) {
         if ($questions_exists == false) {
             echo '<p>'.get_lang('ThereAreNotQuestionsForthisSurvey').'</p>';
         }
-        $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right');
+        $form->addButton(
+            'finish_survey',
+            get_lang('FinishSurvey'),
+            'arrow-right'
+        );
     }
     $form->display();
 } else {

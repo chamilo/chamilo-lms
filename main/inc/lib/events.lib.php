@@ -1682,15 +1682,16 @@ class Event
      */
     public static function get_comments($exe_id, $question_id)
     {
-        $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $sql = "SELECT teacher_comment 
-                FROM $table_track_attempt
+                FROM $table
                 WHERE
                     exe_id='".Database::escape_string($exe_id)."' AND
                     question_id = '".Database::escape_string($question_id)."'
                 ORDER by question_id";
         $sqlres = Database::query($sql);
         $comm = Database::result($sqlres, 0, 'teacher_comment');
+        $comm = trim($comm);
 
         return $comm;
     }

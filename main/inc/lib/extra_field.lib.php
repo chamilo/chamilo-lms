@@ -1475,15 +1475,15 @@ class ExtraField extends Model
                     case self::FIELD_TYPE_MOBILE_PHONE_NUMBER:
                         $form->addElement(
                             'text',
-                            'extra_'.$field_details[1],
-                            $field_details[3]." (".get_lang('CountryDialCode').")",
+                            'extra_'.$field_details['variable'],
+                            $field_details['display_text']." (".get_lang('CountryDialCode').")",
                             array('size' => 40, 'placeholder' => '(xx)xxxxxxxxx')
                         );
-                        $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
-                        $form->applyFilter('extra_'.$field_details[1], 'trim');
-                        $form->applyFilter('extra_'.$field_details[1], 'mobile_phone_number_filter');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'trim');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'mobile_phone_number_filter');
                         $form->addRule(
-                            'extra_'.$field_details[1],
+                            'extra_'.$field_details['variable'],
                             get_lang('MobilePhoneNumberWrong'),
                             'mobile_phone_number'
                         );

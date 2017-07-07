@@ -32,18 +32,23 @@ class survey_question
         ).' ';
 
         if ($action == 'add') {
-            $toolName .= get_lang('AddQuestion');
-        }
-        if ($action == 'edit') {
-            $toolName .= get_lang('EditQuestion');
+            $toolName .= get_lang('AddQuestion').': ';
+        } elseif ($action == 'edit') {
+            $toolName .= get_lang('EditQuestion').': ';
         }
 
-        if ($_GET['type'] == 'yesno') {
-            $toolName .= ': '.get_lang('YesNo');
-        } else if ($_GET['type'] == 'multiplechoice') {
-            $toolName .= ': '.get_lang('UniqueSelect');
-        } else {
-            $toolName .= ': '.get_lang(api_ucfirst(Security::remove_XSS($_GET['type'])));
+        switch ($_GET['type']) {
+            case 'yesno':
+                $toolName .= get_lang('YesNo');
+                break;
+            case 'multiplechoice':
+                $toolName .= get_lang('UniqueSelect');
+                break;
+            case 'multipleresponse':
+                $toolName .= get_lang('MultipleResponse');
+                break;
+            default:
+                $toolName .= get_lang(api_ucfirst(Security::remove_XSS($_GET['type'])));
         }
 
         $sharedQuestionId = isset($formData['shared_question_id']) ? $formData['shared_question_id'] : null;

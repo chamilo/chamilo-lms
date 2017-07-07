@@ -2378,7 +2378,7 @@ function send_reminder_users_without_publication($task_data)
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  * @author Julio Montoya <gugli100@gmail.com> Adding session support - 2011
  */
-function send_email_on_homework_creation($courseId, $sessionId = 0, $workId)
+function sendEmailToStudentsOnHomeworkCreation($courseId, $sessionId = 0, $workId)
 {
     $courseInfo = api_get_course_info_by_id($courseId);
     $courseCode = $courseInfo['code'];
@@ -4114,7 +4114,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $session_id)
     $workFieldValue->saveFieldValues($formValues);
 
     if (api_get_course_setting('email_alert_students_on_new_homework') == 1) {
-        send_email_on_homework_creation(
+        sendEmailToStudentsOnHomeworkCreation(
             $course_id,
             $session ? $session->getId() : 0,
             $workTable->getIid()

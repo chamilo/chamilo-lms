@@ -148,7 +148,6 @@ $code = isset($code) ? $code : null;
         </div>
     </div>
 </div>
-<div class="grid-courses row">
 <?php
 if ($showCourses && $action != 'display_sessions') {
     if (!empty($message)) {
@@ -171,6 +170,8 @@ if ($showCourses && $action != 'display_sessions') {
     $categoryList = CourseManager::getCategoriesList();
 
     if (!empty($browse_courses_in_category)) {
+        echo '<div class="grid-courses row">';
+
         foreach ($browse_courses_in_category as $course) {
             $course_hidden = $course['visibility'] == COURSE_VISIBILITY_HIDDEN;
 
@@ -266,6 +267,8 @@ if ($showCourses && $action != 'display_sessions') {
             $html .= '</div>';
             echo $html;
         }
+
+        echo '</div>';
     } else {
         if (!isset($_REQUEST['subscribe_user_with_password']) &&
             !isset($_REQUEST['subscribe_course'])
@@ -277,9 +280,6 @@ if ($showCourses && $action != 'display_sessions') {
         }
     }
 }
-?>
-</div>
-<?php
 
 echo '<div class="col-md-12">';
 echo $cataloguePagination;

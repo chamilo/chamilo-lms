@@ -836,16 +836,17 @@ class SurveyManager
         // ALTER TABLE c_survey_invitation ADD answered_at DATETIME DEFAULT NULL;
         $answeredAt = '';
         if ($allow) {
-            $answeredAt = " answered_at = '".api_get_utc_datetime()."' AND";
+            $answeredAt = "answered_at = '".api_get_utc_datetime()."',";
         }
 
         // Storing that the user has finished the survey.
-        $sql = "UPDATE $table_survey_invitation SET answered='1'
+        $sql = "UPDATE $table_survey_invitation
+            SET $answeredAt
+                answered = 1
                 WHERE
-                    $answeredAt
                     c_id = $course_id AND
-                    session_id='".$session_id."' AND
-                    user='".Database::escape_string($user)."' AND
+                    session_id = $session_id AND
+                    user ='".Database::escape_string($user)."' AND
                     survey_code='".Database::escape_string($survey_code)."'";
         Database::query($sql);
     }

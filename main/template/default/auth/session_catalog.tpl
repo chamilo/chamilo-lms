@@ -83,16 +83,14 @@
                                     <div class="cribbon"></div>
                                 {% endif %}
                                 <div class="admin-actions">
-                                    <div class="btn-group" role="group">
-                                        {% if item.edit_actions != '' %}
-                                            <a class="btn btn-default btn-sm" href="{{ item.edit_actions }}">
-                                                <i class="fa fa-pencil" aria-hidden="true"></i>
-                                            </a>
-                                        {% endif %}
-                                        {% if item.is_subscribed %}
-                                            {{ already_subscribed_label }}
-                                        {% endif %}
-                                    </div>
+                                    {% if item.edit_actions != '' %}
+                                        <a class="btn btn-default btn-sm" href="{{ item.edit_actions }}">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                        </a>
+                                    {% endif %}
+                                    {% if item.is_subscribed %}
+                                        {{ already_subscribed_label }}
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="description">
@@ -135,29 +133,28 @@
                                 <div class="block-date">
                                     {{ item.duration ? 'SessionDurationXDaysLeft'|get_lang|format(item.duration) : item.date }}
                                 </div>
-                                <div class="toolbar">
-                                    <div class="left">
-                                        {% if item.price %}
-                                            {{ item.price }}
-                                        {% endif %}
-                                    </div>
-                                    <div class="right">
-                                    	{% if _u.logged %}
-                                        <div class="btn-group btn-group-sm" role="group">
-                                            {% if not item.sequences is empty %}
-                                                <a class="btn btn-default btn-sm" role="button"
-                                                   title="{{ 'SeeSequences'|get_lang }}" data-toggle="popover"
-                                                   id="session-{{ item.id }}-sequences">
-                                                    <i class="fa fa-sitemap" aria-hidden="true"></i>
-                                                </a>
-                                            {% endif %}
-                                            {% if item.is_subscribed == false %}
-                                                {{ item.subscribe_button }}
-                                            {% endif %}
+                                <div class="toolbar row">
+                                    {% if item.price %}
+                                        <div class="col-sm-4">
+                                                {{ item.price }}
                                         </div>
-                                    	{% endif %}
-                                    </div>
-
+                                    {% endif %}
+                                    {% if _u.logged %}
+                                        <div class="col-sm-8">
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                {% if not item.sequences is empty %}
+                                                    <a class="btn btn-default btn-sm" role="button"
+                                                       title="{{ 'SeeSequences'|get_lang }}" data-toggle="popover"
+                                                       id="session-{{ item.id }}-sequences">
+                                                        <i class="fa fa-sitemap" aria-hidden="true"></i>
+                                                    </a>
+                                                {% endif %}
+                                                {% if item.is_subscribed == false %}
+                                                    {{ item.subscribe_button }}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                             {% if _u.logged %}

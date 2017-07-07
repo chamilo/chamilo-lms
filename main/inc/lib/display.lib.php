@@ -1462,7 +1462,7 @@ class Display
         }
 
         // Show all tool icons where there is something new.
-        $return = '&nbsp;';
+        $return = '';
         foreach ($notifications as $notification) {
             $toolName = $notification['tool'];
             if (!(
@@ -1525,7 +1525,7 @@ class Display
                 '&ref='.$notification['ref'].
                 '&gidReq='.$notification['to_group_id'].
                 '&id_session='.$sessionId
-            ).'&nbsp;';
+            ).PHP_EOL;
         }
 
         return $return;

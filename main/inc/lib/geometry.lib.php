@@ -12,9 +12,13 @@ define('DEBUG', false);
  * @param max[y]    Y resolution
  * @returns an array such as: for all i in [0..max[x][ : for all j in [0..max[y][ : array[i][j] = FALSE
  */
-function poly_init($max) {
-    return array_fill(0, $max["x"] - 1,
-            array_fill(0, $max["y"] - 1, FALSE));
+function poly_init($max)
+{
+    return array_fill(
+        0,
+        $max["x"] - 1,
+        array_fill(0, $max["y"] - 1, false)
+    );
 }
 
 
@@ -41,7 +45,8 @@ function poly_init($max) {
  * @returns an array such as: for all i in [0..max[x][ : for all j in [0..max[y][ : array[i][j] = in_poly(poly, i,j)
  *                in_poly(poly,i,j) = true iff (i,j) is inside the polygon defined by poly
  */
-function poly_compile($poly, $max, $test = false) {
+function poly_compile($poly, $max, $test = false)
+{
     $res = poly_init($max);
 
     // looking for EDGES
@@ -56,9 +61,9 @@ function poly_compile($poly, $max, $test = false) {
      *        for all j in [O..max[y][ : for all i in bords[$j] :
      *            (i,j) is a point inside an edge of the polygone
      */
-	$bord_lenght = $max['x'];
+    $bord_lenght = $max['x'];
     if ($max['y'] > $bord_lenght) {
-     	$bord_lenght = $max['y'];
+        $bord_lenght = $max['y'];
     }
 
     //$bords = array_fill(0, $bord_lenght-1, array()); // building this array
@@ -66,7 +71,7 @@ function poly_compile($poly, $max, $test = false) {
 
     /* adding the first point of the polygone */
     if (is_array($bords[$poly[0]['y']])) //avoid warning
-    	array_push($bords[$poly[0]['y']], $poly[0]['x']);
+        array_push($bords[$poly[0]['y']], $poly[0]['x']);
 
     $i = 1; // we re-use $i and $old_pente bellow the loop
     $old_pente = 0;
@@ -78,14 +83,14 @@ function poly_compile($poly, $max, $test = false) {
             if ($poly[$i - 1]['x'] == $poly[$i]['x'])
                 continue; // twice the same point
             else {    //  infinite elevation of the edge
-            	if (is_array($bords[$poly[$i]['y']]))
-                	array_push($bords[$poly[$i]['y']], $poly[$i]['x']);
+                if (is_array($bords[$poly[$i]['y']]))
+                    array_push($bords[$poly[$i]['y']], $poly[$i]['x']);
                 $old_pente = 0;
                 continue;
             }
         }
 
-		//echo 'point:'.$poly[$i]['y']; bug here
+        //echo 'point:'.$poly[$i]['y']; bug here
         // adding the point as a part of an edge
         if (is_array($bords[$poly[$i]['y']])) //avoid warning
         array_push($bords[$poly[$i]['y']], $poly[$i]['x']);
@@ -102,13 +107,13 @@ function poly_compile($poly, $max, $test = false) {
         if ($i > 1)
             if (($old_pente < 0 && $pente > 0)
                     || ($old_pente > 0 && $pente < 0)) {
-				if (is_array($bords[$poly[$i]['y']])) //avoid warning
-                	array_push($bords[$poly[$i]['y']], $poly[$i]['x']);
+                if (is_array($bords[$poly[$i]['y']])) //avoid warning
+                    array_push($bords[$poly[$i]['y']], $poly[$i]['x']);
 
                 if (DEBUG)
                     echo '*('.$poly[$i]['x'].
                         ';'.$poly[$i]['y'].')   ';
-        	}
+            }
 
         /* detect the direction of the elevation in Y */
         $dy_inc = ($poly[$i]['y'] - $poly[$i - 1]['y']) > 0 ? 1 : -1;
@@ -137,9 +142,9 @@ function poly_compile($poly, $max, $test = false) {
         // elevation between $poly[0]['x'] and $poly[1]['x'])
         $rest = $poly[0]['y'] - $poly[1]['y'];
         if ($rest != 0)
-        	$pente1 = ($poly[0]['x'] - $poly[1]['x']) / ($rest);
+            $pente1 = ($poly[0]['x'] - $poly[1]['x']) / ($rest);
         else
-			$pente1 = 0;
+            $pente1 = 0;
 
         // elevation between $poly[$i-1]['x'] and $poly[0]['x'])
         $pente = ($poly[$i - 1]['x'] - $poly[0]['x']) /
@@ -151,14 +156,14 @@ function poly_compile($poly, $max, $test = false) {
 
         // doubling the first point if needed (see above)
         if (($pente1 < 0 && $pente > 0) || ($pente1 > 0 && $pente < 0)) {
-        	if (is_array($bords[$poly[$i - 1]['y']]))
-            	array_push($bords[$poly[$i - 1]['y']], round($poly[$i - 1]['x']));
+            if (is_array($bords[$poly[$i - 1]['y']]))
+                array_push($bords[$poly[$i - 1]['y']], round($poly[$i - 1]['x']));
             //if (DEBUG) echo '('.$poly[$i-1]['x'].';'.$poly[$i-1]['y'].')   ';
         }
         //  doubling the last point if neededd
         if (($old_pente < 0 && $pente > 0) || ($old_pente > 0 && $pente < 0)) {
-        	if (is_array($bords[$poly[$i - 1]['y']])) //avoid warning
-            	array_push($bords[$poly[$i - 1]['y']], round($poly[$i - 1]['x']));
+            if (is_array($bords[$poly[$i - 1]['y']])) //avoid warning
+                array_push($bords[$poly[$i - 1]['y']], round($poly[$i - 1]['x']));
             //if (DEBUG) echo '*('.$poly[$i-1]['x'].';'.$poly[$i-1]['y'].')   ';
         }
 
@@ -185,7 +190,7 @@ function poly_compile($poly, $max, $test = false) {
     for ($i = 0; $i < $n; $i++) {  // Y
         //error_log(__FILE__.' - Border Num '.$i,0);
         if (is_array($bords[$i])) {
-       		sort($bords[$i]);
+            sort($bords[$i]);
         }
 
         for ($j = 0; $j < sizeof($bords[$i]); $j += 2) { // bords
@@ -196,15 +201,15 @@ function poly_compile($poly, $max, $test = false) {
             for ($k = round($bords[$i][$j]); $k <= $bords[$i][$j + 1]; $k++) {
                 $res[$k][$i] = true; //filling the array with trues
                 if ($test == 1) {
-                	/*how to draw the polygon in a human way:
-                	In ubuntu : sudo apt-get install gnuplot
-                	Create an empty file with all points with the result of this echos (No commas, no point, no headers)
-                	In gnuplot:
-                	For 1 polygon:  plot "/home/jmontoya/test"
-                	For 2 polygons:  plot "/home/jmontoya/test", "/home/jmontoya/test2"
-                	A new window will appear with the plot
-                	*/
-                	echo $k.'  '.$i; echo '<br />';
+                    /*how to draw the polygon in a human way:
+                    In ubuntu : sudo apt-get install gnuplot
+                    Create an empty file with all points with the result of this echos (No commas, no point, no headers)
+                    In gnuplot:
+                    For 1 polygon:  plot "/home/jmontoya/test"
+                    For 2 polygons:  plot "/home/jmontoya/test", "/home/jmontoya/test2"
+                    A new window will appear with the plot
+                    */
+                    echo $k.'  '.$i; echo '<br />';
                 }
             }
         }
@@ -222,7 +227,8 @@ function poly_compile($poly, $max, $test = false) {
  *
  * @return string     html code of the representation of the polygone image
  */
-function poly_dump(&$poly, $max, $format = 'raw') {
+function poly_dump(&$poly, $max, $format = 'raw')
+{
     if ($format == 'html') {
         $s = "<div style='font-size: 8px; line-height:3px'><pre>\n";
     }
@@ -247,7 +253,8 @@ function poly_dump(&$poly, $max, $format = 'raw') {
  *
  * @returns (see below, UTSL)
  */
-function poly_result(&$poly1, &$poly2, $max) {
+function poly_result(&$poly1, &$poly2, $max)
+{
     $onlyIn1 = 0;
     $surfaceOf1 = 0;
     $surfaceOf2 = 0;
@@ -280,8 +287,8 @@ function poly_result(&$poly1, &$poly2, $max) {
  *
  * @returns (see below, UTSL)
  */
-function poly_touch(&$poly1, &$poly2, $max) {
-
+function poly_touch(&$poly1, &$poly2, $max)
+{
     for ($i = 0; $i < $max['x']; $i++) {
         for ($j = 0; $j < $max['y']; $j++) {
             if (isset($poly1[$i][$j]) && ($poly1[$i][$j] == true)
@@ -301,14 +308,15 @@ function poly_touch(&$poly1, &$poly2, $max) {
  * @return  array   An array of points in the right format to use with the
  *                  local functions
  */
-function convert_coordinates($coords, $sep = '|') {
+function convert_coordinates($coords, $sep = '|')
+{
     $points = array();
     $pairs = explode($sep, $coords);
     foreach ($pairs as $idx => $pcoord) {
         list($x, $y) = explode(';', $pcoord);
         $points[] = array('x'=>$x, 'y'=>$y);
     }
-	return $points;
+    return $points;
 }
 
 /**
@@ -317,15 +325,16 @@ function convert_coordinates($coords, $sep = '|') {
  * @param   array   Coordinates of one polygon
  * @return  array   ('x'=>val,'y'=>val)
  */
-function poly_get_max(&$coords1, &$coords2) {
+function poly_get_max(&$coords1, &$coords2)
+{
     $mx = 0;
     $my = 0;
     foreach ($coords1 as $coord) {
-    	if ($coord['x'] > $mx) {
+        if ($coord['x'] > $mx) {
             $mx = $coord['x'];
-    	}
+        }
         if ($coord['y'] > $my) {
-        	$my = $coord['y'];
+            $my = $coord['y'];
         }
     }
     foreach ($coords2 as $coord) {
@@ -461,7 +470,8 @@ class Geometry
      * @param array $point The point properties
      * @return boolean
      */
-    public static function pointIsInPolygon($properties, $point) {
+    public static function pointIsInPolygon($properties, $point)
+    {
         $points = $properties;
         $isInside = false;
 

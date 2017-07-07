@@ -35,6 +35,7 @@ exclude_paths:
 - app/Migrations/
 - app/Resources/
 - main/admin/db.php
+- main/admin/ldap_synchro.php
 - main/auth/cas/lib/CAS/
 - main/auth/shibboleth
 - main/auth/openid

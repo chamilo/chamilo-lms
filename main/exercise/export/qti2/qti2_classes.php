@@ -118,26 +118,27 @@ class ImsAnswerMultipleChoice extends Answer
         $out = '  <responseDeclaration identifier="'.$questionIdent.'" cardinality="'.$cardinality.'" baseType="identifier">'."\n";
 
         // Match the correct answers.
-        $out .= '    <correctResponse>'."\n";
         if (is_array($this->answerList)) {
+            $out .= '    <correctResponse>'."\n";
             foreach ($this->answerList as $current_answer) {
                 if ($current_answer['correct']) {
                     $out .= '      <value>answer_'.$current_answer['id'].'</value>'."\n";
                 }
             }
+            $out .= '    </correctResponse>'."\n";
         }
-        $out .= '    </correctResponse>'."\n";
 
         // Add the grading
-        $out .= '    <mapping>'."\n";
         if (is_array($this->answerList)) {
+            $out .= '    <mapping>'."\n";
             foreach ($this->answerList as $current_answer) {
                 if (isset($current_answer['grade'])) {
                     $out .= ' <mapEntry mapKey="answer_'.$current_answer['id'].'" mappedValue="'.$current_answer['grade'].'" />'."\n";
                 }
             }
+            $out .= '    </mapping>'."\n";
         }
-        $out .= '    </mapping>'."\n";
+
         $out .= '  </responseDeclaration>'."\n";
 
         return $out;
@@ -158,7 +159,6 @@ class ImsAnswerFillInBlanks extends Answer
     public function imsExportResponses($questionIdent, $questionStatment)
     {
         $this->answerList = $this->getAnswersList(true);
-
         $text = isset($this->answerText) ? $this->answerText : '';
         if (is_array($this->answerList)) {
             foreach ($this->answerList as $key => $answer) {
@@ -168,9 +168,8 @@ class ImsAnswerFillInBlanks extends Answer
                 $text = str_replace('['.$answer.']', '<textEntryInteraction responseIdentifier="fill_'.$key.'" expectedLength="'.api_strlen($answer).'"/>', $text);
             }
         }
-        $out = $text;
 
-        return $out;
+        return $text;
     }
 
     /**
@@ -277,13 +276,15 @@ class ImsAnswerMatching extends Answer
             }
         }
         $out .= '    </correctResponse>'."\n";
-        $out .= '    <mapping>'."\n";
+
         if (is_array($gradeArray)) {
+            $out .= '    <mapping>'."\n";
             foreach ($gradeArray as $gradeKey => $grade) {
                 $out .= '          <mapEntry mapKey="'.$gradeKey.'" mappedValue="'.$grade.'"/>'."\n";
             }
+            $out .= '    </mapping>'."\n";
         }
-        $out .= '    </mapping>'."\n";
+
         $out .= '  </responseDeclaration>'."\n";
 
         return $out;
@@ -347,9 +348,8 @@ class ImsAnswerHotspot extends Answer
             }
         }
         $text .= '      </graphicOrderInteraction>'."\n";
-        $out = $text;
 
-        return $out;
+        return $text;
     }
 
     /**
@@ -359,18 +359,16 @@ class ImsAnswerHotspot extends Answer
     {
         $this->answerList = $this->getAnswersList(true);
         $this->gradeList = $this->getGradesList();
-        $out = '';
-        $out .= '  <responseDeclaration identifier="hotspot_'.$questionIdent.'" cardinality="ordered" baseType="identifier">'."\n";
-        $out .= '    <correctResponse>'."\n";
-
+        $out = '  <responseDeclaration identifier="hotspot_'.$questionIdent.'" cardinality="ordered" baseType="identifier">'."\n";
         if (is_array($this->answerList)) {
+            $out .= '    <correctResponse>'."\n";
             foreach ($this->answerList as $answerKey => $answer) {
                 $answerKey = $answer['id'];
                 $answer = $answer['answer'];
                 $out .= '<value><![CDATA['.formatExerciseQtiTitle($answerKey).']]></value>';
             }
+            $out .= '    </correctResponse>'."\n";
         }
-        $out .= '    </correctResponse>'."\n";
         $out .= '  </responseDeclaration>'."\n";
 
         return $out;
@@ -389,13 +387,23 @@ class ImsAnswerFree extends Answer
      */
     public function imsExportResponses($questionIdent, $questionStatment, $questionDesc = '', $questionMedia = '')
     {
-        return '';
+        //expectedLength="200"
+        return '<extendedTextInteraction responseIdentifier="'.$questionIdent.'" >
+            <prompt>
+            '.$questionDesc.'
+            </prompt>
+            </extendedTextInteraction>';
     }
     /**
      *
      */
-    public function imsExportResponsesDeclaration($questionIdent)
+    public function imsExportResponsesDeclaration($questionIdent, $question)
     {
-        return '';
+        $out = '  <responseDeclaration identifier="'.$questionIdent.'" cardinality="single" baseType="string">';
+        $out .= '<outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float">
+                <defaultValue><value>'.$question->weighting.'</value></defaultValue></outcomeDeclaration>';
+        $out .= '  </responseDeclaration>'."\n";
+
+        return $out;
     }
 }

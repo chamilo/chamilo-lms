@@ -251,9 +251,11 @@ class ScheduledAnnouncement extends Model
     }
 
     /**
+     * @param int $urlId
+     *
      * @return int
      */
-    public function sendPendingMessages()
+    public function sendPendingMessages($urlId = 0)
     {
         if (!$this->allowed()) {
             return 0;
@@ -261,7 +263,6 @@ class ScheduledAnnouncement extends Model
 
         $messagesSent = 0;
         $now = api_get_utc_datetime();
-        $courseCode = api_get_course_id();
         $result = $this->get_all();
 
         foreach ($result as $result) {
@@ -269,23 +270,44 @@ class ScheduledAnnouncement extends Model
                 if (!empty($result['date']) && $result['date'] < $now) {
                     $sessionId = $result['session_id'];
                     $sessionInfo = api_get_session_info($sessionId);
-                    self::update(['id' => $result['id'], 'sent' => 1]);
+                    if (empty($sessionInfo)) {
+                        continue;
+                    }
                     $users = SessionManager::get_users_by_session(
                         $sessionId,
-                        0
+                        '0',
+                        false,
+                        $urlId
                     );
+
+                    if (empty($users)) {
+                        continue;
+                    }
+
+                    self::update(['id' => $result['id'], 'sent' => 1]);
+
                     $subject = $result['subject'];
                     $message = $result['message'];
 
                     if ($users) {
                         foreach ($users as $user) {
                             $userInfo = api_get_user_info($user['user_id']);
-                            $progress = Tracking::get_avg_student_progress(
-                                $user['user_id'],
-                                $courseCode,
-                                null,
-                                $sessionId
-                            );
+                            $courseList = SessionManager::getCoursesInSession($sessionId);
+                            $courseInfo = [];
+                            if (!empty($courseList)) {
+                                $courseId = current($courseList);
+                                $courseInfo = api_get_course_info_by_id($courseId);
+                            }
+
+                            $progress = '';
+                            if (!empty($sessionInfo) && !empty($courseInfo)) {
+                                $progress = Tracking::get_avg_student_progress(
+                                    $user['user_id'],
+                                    $courseInfo['code'],
+                                    null,
+                                    $sessionId
+                                );
+                            }
 
                             if (is_numeric($progress)) {
                                 $progress = $progress.'%';
@@ -330,7 +352,7 @@ class ScheduledAnnouncement extends Model
                             $message = str_replace(array_keys($tags), $tags, $message);
 
                             MessageManager::send_message(
-                                $user['user_id'],
+                                $userInfo['user_id'],
                                 $subject,
                                 $message
                             );

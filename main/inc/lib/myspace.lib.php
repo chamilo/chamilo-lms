@@ -126,8 +126,11 @@ class MySpace
      * @param int $sessionId Session id (optional, default = 0)
      * @return array Connections
      */
-    public static function get_connections_to_course($userId, $courseInfo, $sessionId = 0)
-    {
+    public static function get_connections_to_course(
+        $userId,
+        $courseInfo,
+        $sessionId = 0
+    ) {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
         // protect data
@@ -438,7 +441,6 @@ class MySpace
         }
 
         $result_coaches = Database::query($sqlCoachs);
-        //$total_no_coaches = Database::num_rows($result_coaches);
         $global_coaches = array();
         while ($coach = Database::fetch_array($result_coaches)) {
             $global_coaches[$coach['user_id']] = $coach;
@@ -552,6 +554,9 @@ class MySpace
         $table -> display();
     }
 
+    /**
+     * @return mixed
+     */
     public static function count_coaches()
     {
         global $total_no_coaches;
@@ -572,8 +577,12 @@ class MySpace
      * Display a sortable table that contains an overview off all the progress of the user in a session
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
-    public static function display_tracking_lp_progress_overview($sessionId = '', $courseId = '', $date_from, $date_to)
-    {
+    public static function display_tracking_lp_progress_overview(
+        $sessionId = '',
+        $courseId = '',
+        $date_from,
+        $date_to
+    ) {
         $course = api_get_course_info_by_id($courseId);
         /**
          * Column name
@@ -679,7 +688,8 @@ class MySpace
      * @param   int $sessionId  The session ID
      * @param   int $courseId   The course ID
      * @param   int $exerciseId The quiz ID
-     * @param   int $answer Answer status (0 = incorrect, 1 = correct, 2 = both)
+     * @param   $date_from
+     * @param   $date_to
      * @return  string  HTML array of results formatted for gridJS
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
@@ -740,7 +750,16 @@ class MySpace
         $extra_params['height'] = 'auto';
 
         $tableId = 'exerciseProgressOverview';
-        $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), '', true);
+        $table = Display::grid_js(
+            $tableId,
+            $url,
+            $columns,
+            $column_model,
+            $extra_params,
+            array(),
+            '',
+            true
+        );
 
         $return = '<script>$(function() {'.$table.
             'jQuery("#'.$tableId.'").jqGrid("navGrid","#'.$tableId.'_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
@@ -753,6 +772,7 @@ class MySpace
                 });
             });</script>';
         $return .= Display::grid_html($tableId);
+
         return $return;
     }
 
@@ -830,7 +850,11 @@ class MySpace
                 if (!empty($_SESSION['additional_export_fields'])) {
                     echo Display::return_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>', 'confirm', false);
                 } else {
-                    echo Display::return_message(get_lang('NoAdditionalFieldsWillBeExported'), 'confirm', false);
+                    echo Display::return_message(
+                        get_lang('NoAdditionalFieldsWillBeExported'),
+                        'confirm',
+                        false
+                    );
                 }
             } else {
                 $form->display();
@@ -901,8 +925,12 @@ class MySpace
      * @param string $direction Order direction
      * @return array Results
      */
-    public static function get_course_data_tracking_overview($from, $numberItems, $column, $direction)
-    {
+    public static function get_course_data_tracking_overview(
+        $from,
+        $numberItems,
+        $column,
+        $direction
+    ) {
         $courses = CourseManager::get_courses_list(
             $from,
             $numberItems,
@@ -967,18 +995,44 @@ class MySpace
         $total_questions_answered = 0;
         while ($row = Database::fetch_object($result)) {
             // get time spent in the course and session
-            $time_spent += Tracking::get_time_spent_on_the_course($row->user_id, $courseInfo['real_id']);
-            $progress_tmp = Tracking::get_avg_student_progress($row->user_id, $course_code, array(), null, true);
+            $time_spent += Tracking::get_time_spent_on_the_course(
+                $row->user_id,
+                $courseInfo['real_id']
+            );
+            $progress_tmp = Tracking::get_avg_student_progress(
+                $row->user_id,
+                $course_code,
+                array(),
+                null,
+                true
+            );
             $progress += $progress_tmp[0];
             $nb_progress_lp += $progress_tmp[1];
-            $score_tmp = Tracking::get_avg_student_score($row->user_id, $course_code, array(), null, true);
+            $score_tmp = Tracking::get_avg_student_score(
+                $row->user_id,
+                $course_code,
+                array(),
+                null,
+                true
+            );
             if (is_array($score_tmp)) {
                 $score += $score_tmp[0];
                 $nb_score_lp += $score_tmp[1];
             }
-            $nb_messages += Tracking::count_student_messages($row->user_id, $course_code);
-            $nb_assignments += Tracking::count_student_assignments($row->user_id, $course_code);
-            $last_login_date_tmp = Tracking::get_last_connection_date_on_the_course($row->user_id, $courseInfo, null, false);
+            $nb_messages += Tracking::count_student_messages(
+                $row->user_id,
+                $course_code
+            );
+            $nb_assignments += Tracking::count_student_assignments(
+                $row->user_id,
+                $course_code
+            );
+            $last_login_date_tmp = Tracking::get_last_connection_date_on_the_course(
+                $row->user_id,
+                $courseInfo,
+                null,
+                false
+            );
             if ($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned
                 $last_login_date = $last_login_date_tmp;
             } else if ($last_login_date_tmp != false && $last_login_date != false) { // TODO: Repeated previous condition. To be cleaned.
@@ -1004,7 +1058,11 @@ class MySpace
             $avg_score = '-';
         }
         if ($last_login_date) {
-            $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT, date_default_timezone_get());
+            $last_login_date = api_convert_and_format_date(
+                $last_login_date,
+                DATE_FORMAT_SHORT,
+                date_default_timezone_get()
+            );
         } else {
             $last_login_date = '-';
         }
@@ -1121,19 +1179,45 @@ class MySpace
             $total_questions_answered = 0;
             while ($row = Database::fetch_object($result)) {
                 // get time spent in the course and session
-                $time_spent += Tracking::get_time_spent_on_the_course($row->user_id, $courseId);
-                $progress_tmp = Tracking::get_avg_student_progress($row->user_id, $course_code, array(), null, true);
+                $time_spent += Tracking::get_time_spent_on_the_course(
+                    $row->user_id,
+                    $courseId
+                );
+                $progress_tmp = Tracking::get_avg_student_progress(
+                    $row->user_id,
+                    $course_code,
+                    array(),
+                    null,
+                    true
+                );
                 $progress += $progress_tmp[0];
                 $nb_progress_lp += $progress_tmp[1];
-                $score_tmp = Tracking::get_avg_student_score($row->user_id, $course_code, array(), null, true);
+                $score_tmp = Tracking::get_avg_student_score(
+                    $row->user_id,
+                    $course_code,
+                    array(),
+                    null,
+                    true
+                );
                 if (is_array($score_tmp)) {
                     $score += $score_tmp[0];
                     $nb_score_lp += $score_tmp[1];
                 }
-                $nb_messages += Tracking::count_student_messages($row->user_id, $course_code);
-                $nb_assignments += Tracking::count_student_assignments($row->user_id, $course_code);
+                $nb_messages += Tracking::count_student_messages(
+                    $row->user_id,
+                    $course_code
+                );
+                $nb_assignments += Tracking::count_student_assignments(
+                    $row->user_id,
+                    $course_code
+                );
 
-                $last_login_date_tmp = Tracking::get_last_connection_date_on_the_course($row->user_id, $courseInfo, null, false);
+                $last_login_date_tmp = Tracking::get_last_connection_date_on_the_course(
+                    $row->user_id,
+                    $courseInfo,
+                    null,
+                    false
+                );
                 if ($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned.
                     $last_login_date = $last_login_date_tmp;
                 } else if ($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition. To be cleaned.
@@ -1159,7 +1243,11 @@ class MySpace
                 $avg_score = '-';
             }
             if ($last_login_date) {
-                $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT, date_default_timezone_get());
+                $last_login_date = api_convert_and_format_date(
+                    $last_login_date,
+                    DATE_FORMAT_SHORT,
+                    date_default_timezone_get()
+                );
             } else {
                 $last_login_date = '-';
             }
@@ -1246,8 +1334,12 @@ class MySpace
      * @param string $direction Order direction
      * @return array Results
      */
-    public static function get_session_data_tracking_overview($from, $numberItems, $column, $direction)
-    {
+    public static function get_session_data_tracking_overview(
+        $from,
+        $numberItems,
+        $column,
+        $direction
+    ) {
         $from = (int) $from;
         $numberItems = (int) $numberItems;
         $direction = Database::escape_string($direction);
@@ -1277,7 +1369,7 @@ class MySpace
     /**
      * Fills in session reporting data
      *
-     * @param integer $user_id the id of the user
+     * @param int $session_id the id of the user
      * @param array $url_params additonal url parameters
      * @param array $row the row information (the other columns)
      * @return string html code
@@ -1659,7 +1751,12 @@ class MySpace
             $direction = 'ASC';
         }
 
-        $user_data = self::get_user_data_tracking_overview($from, 1000, $orderby, $direction);
+        $user_data = self::get_user_data_tracking_overview(
+            $from,
+            1000,
+            $orderby,
+            $direction
+        );
 
         // the first line of the csv file with the column headers
         $csv_row = array();

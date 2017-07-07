@@ -123,8 +123,9 @@ if (($search || $forceSearch) && ($search !== 'false')) {
     $whereConditionInForm = getWhereClause($searchField, $searchOperator, $searchString);
 
     if (!empty($whereConditionInForm)) {
-        $whereCondition .= ' AND '.$whereConditionInForm;
+        $whereCondition .= ' AND ('.$whereConditionInForm.') ';
     }
+
     $filters = isset($_REQUEST['filters']) && !is_array($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
 
     if (!empty($filters)) {
@@ -147,10 +148,11 @@ if (($search || $forceSearch) && ($search !== 'false')) {
 
                 $extraCondition = '';
                 if (!empty($condition_array)) {
-                    $extraCondition = ' OR ( ';
+                    $extraCondition = $filters->groupOp.' ( ';
                     $extraCondition .= implode($filters->groupOp, $condition_array);
                     $extraCondition .= ' ) ';
                 }
+
 
                 $whereCondition .= $extraCondition;
 
@@ -160,7 +162,7 @@ if (($search || $forceSearch) && ($search !== 'false')) {
                 $condition_array = $resultQuestion['condition_array'];
 
                 if (!empty($condition_array)) {
-                    $extraQuestionCondition = ' AND ( ';
+                    $extraQuestionCondition = $filters->groupOp.' ( ';
                     $extraQuestionCondition .= implode($filters->groupOp, $condition_array);
                     $extraQuestionCondition .= ' ) ';
                     // Remove conditions already added

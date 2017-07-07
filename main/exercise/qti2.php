@@ -15,7 +15,7 @@ $this_section = SECTION_COURSES;
 
 // access restriction: only teachers are allowed here
 if (!api_is_allowed_to_edit(null, true)) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 // the breadcrumbs

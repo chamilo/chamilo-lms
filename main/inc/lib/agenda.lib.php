@@ -3015,15 +3015,25 @@ class Agenda
                         FormValidator::LAYOUT_INLINE
                     );
 
-                    $sessions = SessionManager::get_sessions_by_user(
-                        api_get_user_id()
-                    );
+                    if (api_is_drh()) {
+                        $sessionList = SessionManager::get_sessions_admin(['order' => 'name ASC']);
+                        if (!empty($sessionList)) {
+                            $sessions = [];
+                            foreach ($sessionList as $sessionItem) {
+                                $sessions[$sessionItem['id']] = strip_tags($sessionItem['name']);
+                            }
+                        }
+                    } else {
+                        $sessions = SessionManager::get_sessions_by_user(
+                            api_get_user_id()
+                        );
+                        $sessions = array_column(
+                            $sessions,
+                            'session_name',
+                            'session_id'
+                        );
+                    }
                     $form->addHidden('type', 'personal');
-                    $sessions = array_column(
-                        $sessions,
-                        'session_name',
-                        'session_id'
-                    );
                     $sessions = ['0' => get_lang('SelectAnOption')] + $sessions;
 
                     $form->addSelect(

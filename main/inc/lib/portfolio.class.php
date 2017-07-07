@@ -7,6 +7,7 @@
  * Once external libraries are moved to their own directory it would be worth
  * moving them to their own files under a common portfolio directory.
  * @package chamilo.portfolio
+ * @deprecated
  */
 /**
  * Init

@@ -99,8 +99,12 @@ class Attendance
      * @see SortableTable#get_table_data($from)
      * @return array
      */
-    public static function get_attendance_data($from, $number_of_items, $column, $direction)
-    {
+    public static function get_attendance_data(
+        $from,
+        $number_of_items,
+        $column,
+        $direction
+    ) {
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();

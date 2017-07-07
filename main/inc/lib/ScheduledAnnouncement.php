@@ -270,13 +270,22 @@ class ScheduledAnnouncement extends Model
                 if (!empty($result['date']) && $result['date'] < $now) {
                     $sessionId = $result['session_id'];
                     $sessionInfo = api_get_session_info($sessionId);
-                    self::update(['id' => $result['id'], 'sent' => 1]);
+                    if (empty($sessionInfo)) {
+                        continue;
+                    }
                     $users = SessionManager::get_users_by_session(
                         $sessionId,
                         '0',
                         false,
                         $urlId
                     );
+
+                    if (empty($users)) {
+                        continue;
+                    }
+
+                    self::update(['id' => $result['id'], 'sent' => 1]);
+
                     $subject = $result['subject'];
                     $message = $result['message'];
 

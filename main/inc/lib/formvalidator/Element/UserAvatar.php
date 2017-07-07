@@ -3,13 +3,24 @@
 
 use Chamilo\UserBundle\Entity\User;
 
-class InputUser extends HTML_QuickForm_input
+/**
+ * Class UserAvatar
+ * FormValidator element to add an user avatar wrapping a hidden input with its user ID
+ * Is necessary set an instance of Chamilo\UserBundle\Entity\User as value. The exported value is the user ID
+ */
+class UserAvatar extends HTML_QuickForm_input
 {
     /** @var User */
     private $user = null;
     private $imageSize = 'small';
     private $subTitle = '';
 
+    /**
+     * UserAvatar constructor.
+     * @param string $name
+     * @param string $label
+     * @param array $attributes
+     */
     public function __construct($name, $label, $attributes = [])
     {
         if (isset($attributes['image_size'])) {
@@ -39,6 +50,9 @@ class InputUser extends HTML_QuickForm_input
         parent::setValue($this->user->getId());
     }
 
+    /**
+     * @inheritDoc
+     */
     public function toHtml()
     {
         if (!$this->user) {

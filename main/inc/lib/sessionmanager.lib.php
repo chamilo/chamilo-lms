@@ -3848,9 +3848,9 @@ class SessionManager
                 ";
 
         $urlId = api_get_current_access_url_id();
-        if (isset($status) && $status != '') {
+        if ($status != '') {
             $status = intval($status);
-            $sql .= " WHERE su.relation_type = $status AND (au.access_url_id = $urlId OR su.access_url_id is null )";
+            $sql .= " WHERE su.relation_type = $status AND (au.access_url_id = $urlId OR au.access_url_id is null)";
         } else {
             $sql .= " WHERE (au.access_url_id = $urlId OR au.access_url_id is null )";
         }

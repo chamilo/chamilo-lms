@@ -22,7 +22,7 @@ require __DIR__.'/qti2_classes.php';
 class ImsAssessmentItem
 {
     public $question;
-    public $question_ident;
+    public $questionIdent;
     public $answer;
 
     /**
@@ -112,7 +112,6 @@ class ImsAssessmentItem
     function export($standalone = false)
     {
         $head = $foot = '';
-
         if ($standalone) {
             $head = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>'."\n";
         }
@@ -124,7 +123,7 @@ class ImsAssessmentItem
 
         $res = $head
             .$this->start_item()
-            .$this->answer->imsExportResponsesDeclaration($this->questionIdent)
+            .$this->answer->imsExportResponsesDeclaration($this->questionIdent, $this->question)
             .$this->start_item_body()
             .$this->answer->imsExportResponses(
                 $this->questionIdent,
@@ -304,7 +303,7 @@ class ImsSection
 class ImsItem
 {
     public $question;
-    public $question_ident;
+    public $questionIdent;
     public $answer;
 
     /**
@@ -418,7 +417,7 @@ class ImsItem
             . $this->answer->imsExportFeedback($this->questionIdent)
             . $this->end_item()
             . $foot;
-        }
+    }
 }
 
 /**
@@ -450,7 +449,7 @@ function export_question_qti($questionId, $standalone = true)
 {
     $question = new Ims2Question();
     $qst = $question->read($questionId);
-    if (!$qst || $qst->type == FREE_ANSWER) {
+    if (!$qst) {
         return '';
     }
     $question->id = $qst->id;

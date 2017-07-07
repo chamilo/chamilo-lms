@@ -101,9 +101,14 @@ class MessageManager
      * @param int $from
      * @param int $number_of_items
      * @param string $direction
+     * @return array
      */
-    public static function get_message_data($from, $number_of_items, $column, $direction)
-    {
+    public static function get_message_data(
+        $from,
+        $number_of_items,
+        $column,
+        $direction
+    ) {
         $from = intval($from);
         $number_of_items = intval($number_of_items);
 
@@ -497,9 +502,9 @@ class MessageManager
             if (!empty($drhList)) {
                 foreach ($drhList as $drhInfo) {
                     $message = sprintf(
-                            get_lang('CopyOfMessageSentToXUser'),
-                            $userInfo['complete_name']
-                        ).' <br />'.$message;
+                        get_lang('CopyOfMessageSentToXUser'),
+                        $userInfo['complete_name']
+                    ).' <br />'.$message;
 
                     self::send_message_simple(
                         $drhInfo['user_id'],
@@ -633,7 +638,6 @@ class MessageManager
      * @param  int        receiver user id (optional)
      * @param  int        sender user id (optional)
      * @param  int        group id (optional)
-     * @return void
      */
     public static function save_message_attachment_file(
         $file_attach,
@@ -662,7 +666,6 @@ class MessageManager
 
             // User-reserved directory where photos have to be placed.*
             $userGroup = new UserGroup();
-
             if (!empty($group_id)) {
                 $path_user_info = $userGroup->get_group_picture_path_by_id($group_id, 'system', true);
             } else {
@@ -697,7 +700,6 @@ class MessageManager
      * @param  int    message id
      * @param  int    message user id (receiver user id or sender user id)
      * @param  int    group id (optional)
-     * @return void
      */
     public static function delete_message_attachment_file(
         $message_id,
@@ -917,8 +919,9 @@ class MessageManager
      */
     public static function exist_message($user_id, $id)
     {
-        if ($id != strval(intval($id)) || $user_id != strval(intval($user_id)))
+        if ($id != strval(intval($id)) || $user_id != strval(intval($user_id))) {
             return false;
+        }
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $query = "SELECT id FROM $table_message
                   WHERE
@@ -940,8 +943,12 @@ class MessageManager
      * @param  string
      * @return array
      */
-    public static function get_message_data_sent($from, $number_of_items, $column, $direction)
-    {
+    public static function get_message_data_sent(
+        $from,
+        $number_of_items,
+        $column,
+        $direction
+    ) {
         $from = intval($from);
         $number_of_items = intval($number_of_items);
         if (!isset($direction)) {
@@ -1087,7 +1094,10 @@ class MessageManager
         $user_sender_id = $row['user_sender_id'];
 
         // get file attachments by message id
-        $files_attachments = self::get_links_message_attachment_files($message_id, $source);
+        $files_attachments = self::get_links_message_attachment_files(
+            $message_id,
+            $source
+        );
 
         $title = Security::remove_XSS($row['title'], STUDENT, true);
         $content = Security::remove_XSS($row['content'], STUDENT, true);
@@ -1251,7 +1261,8 @@ class MessageManager
                     Display::url(
                         Security::remove_XSS($topic['title'], STUDENT, true),
                         api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$group_id.'&topic_id='.$topic['id']
-                    ), array('class' => 'title')
+                    ),
+                    array('class' => 'title')
                 );
                 $actions = '';
                 if ($my_group_role == GROUP_USER_PERMISSION_ADMIN ||
@@ -1558,8 +1569,12 @@ class MessageManager
      * @param int   indent for nested view
      * @return void
      */
-    public static function message_recursive_sort($rows, &$messages, $seed = 0, $indent = 0)
-    {
+    public static function message_recursive_sort(
+        $rows,
+        &$messages,
+        $seed = 0,
+        $indent = 0
+    ) {
         if ($seed > 0 && isset($rows[$seed]["id"])) {
             $messages[$rows[$seed]["id"]] = $rows[$seed];
             $messages[$rows[$seed]["id"]]["indent_cnt"] = $indent;
@@ -1647,8 +1662,17 @@ class MessageManager
     public static function generate_message_form()
     {
         $form = new FormValidator('send_message');
-        $form->addText('subject', get_lang('Subject'), false, ['id' => 'subject_id']);
-        $form->addTextarea('content', get_lang('Message'), ['id' => 'content_id', 'rows' => '5']);
+        $form->addText(
+            'subject',
+            get_lang('Subject'),
+            false,
+            ['id' => 'subject_id']
+        );
+        $form->addTextarea(
+            'content',
+            get_lang('Message'),
+            ['id' => 'content_id', 'rows' => '5']
+        );
 
         return $form->returnForm();
     }
@@ -1661,7 +1685,11 @@ class MessageManager
     public static function generate_invitation_form($id, $params = array())
     {
         $form = new FormValidator('send_invitation');
-        $form->addTextarea('content', get_lang('AddPersonalMessage'), ['id' => 'content_invitation_id', 'rows' => 5]);
+        $form->addTextarea(
+            'content',
+            get_lang('AddPersonalMessage'),
+            ['id' => 'content_invitation_id', 'rows' => 5]
+        );
         return $form->returnForm();
     }
 
@@ -1682,16 +1710,22 @@ class MessageManager
         if (isset($_REQUEST['action'])) {
             switch ($_REQUEST['action']) {
                 case 'mark_as_unread' :
-                    $number_of_selected_messages = count($_POST['id']);
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $message_id) {
-                            self::update_message_status(api_get_user_id(), $message_id, MESSAGE_STATUS_UNREAD);
+                            self::update_message_status(
+                                api_get_user_id(),
+                                $message_id,
+                                MESSAGE_STATUS_UNREAD
+                            );
                         }
                     }
-                    $html .= Display::return_message(api_xml_http_response_encode($success_unread), 'normal', false);
+                    $html .= Display::return_message(
+                        api_xml_http_response_encode($success_unread),
+                        'normal',
+                        false
+                    );
                     break;
                 case 'mark_as_read' :
-                    $number_of_selected_messages = count($_POST['id']);
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $message_id) {
                             self::update_message_status(api_get_user_id(), $message_id, MESSAGE_STATUS_NEW);
@@ -1700,7 +1734,6 @@ class MessageManager
                     $html .= Display::return_message(api_xml_http_response_encode($success_read), 'normal', false);
                     break;
                 case 'delete' :
-                    $number_of_selected_messages = count($_POST['id']);
                     foreach ($_POST['id'] as $index => $message_id) {
                         self::delete_message_by_user_receiver(api_get_user_id(), $message_id);
                     }
@@ -1903,7 +1936,12 @@ class MessageManager
             )
         );
 
-        $result = Database::select('COUNT(1) AS qty', $messageAttachmentTable, $conditions, 'first');
+        $result = Database::select(
+            'COUNT(1) AS qty',
+            $messageAttachmentTable,
+            $conditions,
+            'first'
+        );
 
         if (!empty($result)) {
             if ($result['qty'] > 0) {
@@ -1955,7 +1993,10 @@ class MessageManager
         );
         $tplMailBody->assign('user', $user);
         $tplMailBody->assign('is_western_name_order', api_is_western_name_order());
-        $tplMailBody->assign('manageUrl', api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user->getId());
+        $tplMailBody->assign(
+            'manageUrl',
+            api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user->getId()
+        );
 
         $layoutContent = $tplMailBody->get_template('mail/new_user_mail_to_admin.tpl');
 

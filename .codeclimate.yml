@@ -35,6 +35,7 @@ exclude_paths:
 - app/Migrations/
 - app/Resources/
 - main/admin/db.php
+- main/admin/ldap_synchro.php
 - main/auth/cas/lib/CAS/
 - main/auth/shibboleth
 - main/auth/openid
@@ -50,6 +51,7 @@ exclude_paths:
 - main/inc/lib/pear/
 - main/inc/lib/phpmailer/
 - main/inc/lib/phpseclib/
+- main/inc/lib/portfolio.class.php
 - main/inc/lib/svg-edit/
 - main/inc/lib/swfobject/
 - main/inc/lib/wami-recorder/

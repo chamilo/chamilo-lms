@@ -1751,6 +1751,21 @@ EOT;
             }
         }
     }
+
+    /**
+     * Add a \InputUser element to the form.
+     * It needs a Chamilo\UserBundle\Entity\User as value.
+     * The exported value is the Chamilo\UserBundle\Entity\User ID
+     * @param string $name
+     * @param string $label
+     * @param string $imageSize Optional. Small, medium or large image
+     * @param string $subtitle Optional. The subtitle for the field
+     * @return \InputUser
+     */
+    public function addInputUser($name, $label, $imageSize = 'small', $subtitle = '')
+    {
+        return $this->addElement('InputUser', $name, $label, ['image_size' => $imageSize, 'sub_title' => $subtitle]);
+    }
 }
 
 /**

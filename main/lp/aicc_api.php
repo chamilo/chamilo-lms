@@ -4,14 +4,14 @@
 use ChamiloSession as Session;
 
 /**
- *	API event handler functions for AICC / CMIv4 in API communication mode
+ * API event handler functions for AICC / CMIv4 in API communication mode
  *
- *	@author   Denes Nagy <darkden@freemail.hu>
- *  @author   Yannick Warnier <ywarnier@beeznest.org>
- *	@version  v 1.0
- *	@access   public
- *	@package  chamilo.learnpath
- * 	@license	GNU/GPL
+ * @author   Denes Nagy <darkden@freemail.hu>
+ * @author   Yannick Warnier <ywarnier@beeznest.org>
+ * @version  v 1.0
+ * @access   public
+ * @package  chamilo.learnpath
+ * @license    GNU/GPL
  */
 
 /**
@@ -141,10 +141,10 @@ function LMSGetValue(param) {
     }else if(param == 'cmi.core.student_id'){
         result='<?php echo $_user['user_id']; ?>';
     }else if(param == 'cmi.core.student_name'){
-          <?php
-            $who = addslashes(api_get_person_name($_user['firstName'], $_user['lastName']));
-            echo "result='$who';";
-          ?>
+      <?php
+        $who = addslashes(api_get_person_name($_user['firstName'], $_user['lastName']));
+        echo "result='$who';";
+      ?>
     }else if(param == 'cmi.core.lesson_location'){
         result=lesson_location;
     }else if(param == 'cmi.core.total_time'){

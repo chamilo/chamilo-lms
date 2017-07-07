@@ -433,8 +433,11 @@ class SessionManager
      * @return mixed Integer for number of rows, or array of results
      * @assert (array(),true) !== false
      */
-    public static function get_sessions_admin($options = array(), $get_count = false, $columns = [])
-    {
+    public static function get_sessions_admin(
+        $options = array(),
+        $get_count = false,
+        $columns = []
+    ) {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
@@ -539,6 +542,7 @@ class SessionManager
         }
         $query .= $order;
         $query .= $limit;
+
         $result = Database::query($query);
 
         $categories = self::get_all_session_category();
@@ -548,7 +552,6 @@ class SessionManager
                 $orderedCategories[$category['id']] = $category['name'];
             }
         }
-
         $formatted_sessions = array();
         if (Database::num_rows($result)) {
             $sessions = Database::store_result($result, 'ASSOC');

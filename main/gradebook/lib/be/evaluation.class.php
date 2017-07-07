@@ -225,7 +225,7 @@ class Evaluation implements GradebookItem
         $sql = 'SELECT * FROM '.$tbl_grade_evaluations;
         $paramcount = 0;
 
-        if (isset ($id)) {
+        if (isset($id)) {
             $sql .= ' WHERE id = '.intval($id);
             $paramcount++;
         }
@@ -670,7 +670,11 @@ class Evaluation implements GradebookItem
         $subcats = Category::load(null, null, null, $catid);
         foreach ($subcats as $cat) {
             $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
-            $targets = $this->add_target_subcategories($targets, $level + 1, $cat->get_id());
+            $targets = $this->add_target_subcategories(
+                $targets,
+                $level + 1,
+                $cat->get_id()
+            );
         }
         return $targets;
     }
@@ -694,6 +698,7 @@ class Evaluation implements GradebookItem
      * and return them as an array of Evaluation objects
      * @param int $cat_id parent category (use 'null' to retrieve them in all categories)
      * @param int $stud_id student id
+     * @return array
      */
     public static function get_evaluations_with_result_for_student($cat_id = null, $stud_id)
     {
@@ -722,6 +727,8 @@ class Evaluation implements GradebookItem
 
     /**
      * Get a list of students that do not have a result record for this evaluation
+     * @param string $first_letter_user
+     * @return array
      */
     public function get_not_subscribed_students($first_letter_user = '')
     {
@@ -777,14 +784,14 @@ class Evaluation implements GradebookItem
      * @param int locked 1 or unlocked 0
      *
      **/
-    function lock($locked)
+    public function lock($locked)
     {
         $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $sql = "UPDATE $table_evaluation SET locked = '".intval($locked)."' WHERE id='".intval($this->id)."'";
         Database::query($sql);
     }
 
-    function check_lock_permissions()
+    public function check_lock_permissions()
     {
         if (api_is_platform_admin()) {
             return true;
@@ -795,7 +802,7 @@ class Evaluation implements GradebookItem
         }
     }
 
-    function delete_linked_data()
+    public function delete_linked_data()
     {
 
     }

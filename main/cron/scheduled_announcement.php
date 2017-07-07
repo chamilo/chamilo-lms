@@ -3,7 +3,15 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$object = new ScheduledAnnouncement();
-$messagesSent = $object->sendPendingMessages();
+$urlList = UrlManager::get_url_data();
+foreach ($urlList as $url) {
+    echo "Portal: ".$url['url'].PHP_EOL;
+    $object = new ScheduledAnnouncement();
+    $messagesSent = $object->sendPendingMessages($url['id']);
+    echo "Messages sent $messagesSent".PHP_EOL;
+}
 
-echo "Messages sent $messagesSent";
+
+
+
+

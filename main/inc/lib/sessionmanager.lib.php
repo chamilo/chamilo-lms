@@ -3817,9 +3817,10 @@ class SessionManager
      * @param  int $id session id
      * @param    int $status filter by status coach = 2
      * @param bool $getCount Optional. Allow get the number of rows from the result
+     * @param int $urlId
      * @return array|int A list with an user list. If $getCount is true then return a the count of registers
      */
-    public static function get_users_by_session($id, $status = null, $getCount = false)
+    public static function get_users_by_session($id, $status = null, $getCount = false, $urlId = 0)
     {
         if (empty($id)) {
             return array();
@@ -3847,7 +3848,8 @@ class SessionManager
                 ON (au.user_id = u.user_id)
                 ";
 
-        $urlId = api_get_current_access_url_id();
+        $urlId = empty($urlId) ? api_get_current_access_url_id() : (int) $urlId;
+
         if ($status != '') {
             $status = intval($status);
             $sql .= " WHERE su.relation_type = $status AND (au.access_url_id = $urlId OR au.access_url_id is null)";

@@ -251,9 +251,11 @@ class ScheduledAnnouncement extends Model
     }
 
     /**
+     * @param int $urlId
+     *
      * @return int
      */
-    public function sendPendingMessages()
+    public function sendPendingMessages($urlId = 0)
     {
         if (!$this->allowed()) {
             return 0;
@@ -261,7 +263,6 @@ class ScheduledAnnouncement extends Model
 
         $messagesSent = 0;
         $now = api_get_utc_datetime();
-        //$courseCode = api_get_course_id();
         $result = $this->get_all();
 
         foreach ($result as $result) {
@@ -272,7 +273,9 @@ class ScheduledAnnouncement extends Model
                     self::update(['id' => $result['id'], 'sent' => 1]);
                     $users = SessionManager::get_users_by_session(
                         $sessionId,
-                        0
+                        '0',
+                        false,
+                        $urlId
                     );
                     $subject = $result['subject'];
                     $message = $result['message'];
@@ -340,7 +343,7 @@ class ScheduledAnnouncement extends Model
                             $message = str_replace(array_keys($tags), $tags, $message);
 
                             MessageManager::send_message(
-                                $user['user_id'],
+                                $userInfo['user_id'],
                                 $subject,
                                 $message
                             );

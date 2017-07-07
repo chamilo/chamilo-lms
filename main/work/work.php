@@ -197,7 +197,7 @@ switch ($action) {
             header('Location: '.$currentUrl);
             exit;
         } else {
-            $content = $form->return_form();
+            $content = $form->returnForm();
         }
         break;
     case 'delete_dir':

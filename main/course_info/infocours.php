@@ -311,6 +311,7 @@ $form->addGroup($group, '', array(get_lang("NewUserEmailAlert")));
 
 $group = array();
 $group[] = $form->createElement('radio', 'email_alert_students_on_new_homework', get_lang('NewHomeworkEmailAlert'), get_lang('NewHomeworkEmailAlertEnable'), 1);
+$group[] = $form->createElement('radio', 'email_alert_students_on_new_homework', null, get_lang('NewHomeworkEmailAlertToDrhEnable'), 2);
 $group[] = $form->createElement('radio', 'email_alert_students_on_new_homework', null, get_lang('NewHomeworkEmailAlertDisable'), 0);
 $form->addGroup($group, '', array(get_lang("NewHomeworkEmailAlert")));
 

@@ -261,7 +261,7 @@ class ScheduledAnnouncement extends Model
 
         $messagesSent = 0;
         $now = api_get_utc_datetime();
-        $courseCode = api_get_course_id();
+        //$courseCode = api_get_course_id();
         $result = $this->get_all();
 
         foreach ($result as $result) {
@@ -280,12 +280,22 @@ class ScheduledAnnouncement extends Model
                     if ($users) {
                         foreach ($users as $user) {
                             $userInfo = api_get_user_info($user['user_id']);
-                            $progress = Tracking::get_avg_student_progress(
-                                $user['user_id'],
-                                $courseCode,
-                                null,
-                                $sessionId
-                            );
+                            $courseList = SessionManager::getCoursesInSession($sessionId);
+                            $courseInfo = [];
+                            if (!empty($courseList)) {
+                                $courseId = current($courseList);
+                                $courseInfo = api_get_course_info_by_id($courseId);
+                            }
+
+                            $progress = '';
+                            if (!empty($sessionInfo) && !empty($courseInfo)) {
+                                $progress = Tracking::get_avg_student_progress(
+                                    $user['user_id'],
+                                    $courseInfo['code'],
+                                    null,
+                                    $sessionId
+                                );
+                            }
 
                             if (is_numeric($progress)) {
                                 $progress = $progress.'%';

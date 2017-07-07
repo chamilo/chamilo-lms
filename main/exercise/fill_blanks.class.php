@@ -497,7 +497,6 @@ class FillBlanks extends Question
         $displayForStudent,
         $inBlankNumber
     ) {
-        $result = '';
         $inTabTeacherSolution = $listAnswersInfo['tabwords'];
         $inTeacherSolution = $inTabTeacherSolution[$inBlankNumber];
         switch (self::getFillTheBlankAnswerType($inTeacherSolution)) {
@@ -506,12 +505,14 @@ class FillBlanks extends Question
                 // the blank menu
                 // display a menu from answer separated with |
                 // if display for student, shuffle the correct answer menu
-                $listMenu = self::getFillTheBlankMenuAnswers($inTeacherSolution, $displayForStudent);
-                $resultOptions = ['' => '--'];
+                $listMenu = self::getFillTheBlankMenuAnswers(
+                    $inTeacherSolution,
+                    $displayForStudent
+                );
 
+                $resultOptions = ['' => '--'];
                 foreach ($listMenu as $item) {
                     $item = self::trimOption($item);
-
                     $resultOptions[$item] = $item;
                 }
 
@@ -749,7 +750,7 @@ class FillBlanks extends Question
             // remove [ and ] in string
             array_walk(
                 $listWords[0],
-                function(&$value, $key, $tabBlankChar) {
+                function (&$value, $key, $tabBlankChar) {
                     $trimChars = '';
                     for ($i = 0; $i < count($tabBlankChar); $i++) {
                         $trimChars .= $tabBlankChar[$i];

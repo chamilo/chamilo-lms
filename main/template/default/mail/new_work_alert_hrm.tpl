@@ -2,7 +2,7 @@
 <p>{{ 'HrmNewWorkAlertBodyIntro' }}</p>
 <dl>
     <dt>{{ 'Student'|get_lang }}</dt>
-    <dd>{{ student_name }}</dd>
+    <dd>{{ student.complete_name }}</dd>
     <dt>{{ 'Course'|get_lang }}</dt>
     <dd>{{ course.name }} - {{ course.code }}</dd>
     <dt>{{ 'AssignmentName'|get_lang }}</dt>

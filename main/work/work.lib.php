@@ -2388,13 +2388,14 @@ function sendEmailToDrhOnHomeworkCreation($courseId, $workId, $sessionId = 0)
     $bodyView = new Template(null, false, false, false, false, false);
 
     foreach ($students as $student) {
+        $student['complete_name'] = api_get_person_name($student["firstname"], $student["lastname"]);
         $hrms = UserManager::getDrhListFromUser($student['id']);
 
         foreach ($hrms as $hrm) {
             $hrmName = api_get_person_name($hrm['firstname'], $hrm['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
 
             $bodyView->assign('hrm_name', $hrmName);
-            $bodyView->assign('student_name', api_get_person_name($student["firstname"], $student["lastname"]));
+            $bodyView->assign('student', $student);
             $bodyView->assign('course', $courseInfo);
             $bodyView->assign('course_link', api_get_course_url($courseInfo['code'], $sessionId));
             $bodyView->assign('work', $workInfo);
@@ -2403,7 +2404,11 @@ function sendEmailToDrhOnHomeworkCreation($courseId, $workId, $sessionId = 0)
 
             MessageManager::send_message(
                 $hrm['id'],
-                get_lang('HrmNewWorkAlertSubject'),
+                sprintf(
+                    get_lang('StudentXHasBeenAssignedNewWorkInCourseY'),
+                    $student['firstname'],
+                    $courseInfo['title']
+                ),
                 $bodyView->fetch($bodyTemplate)
             );
         }

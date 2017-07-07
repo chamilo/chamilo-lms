@@ -3498,7 +3498,6 @@ class SessionManager
         if ($getSql) {
             return $sql;
         }
-
         $result = Database::query($sql);
 
         if ($getCount) {
@@ -3520,6 +3519,10 @@ class SessionManager
             );
 
             while ($row = Database::fetch_array($result)) {
+                if ($getOnlySessionId) {
+                    $sessions[$row['id']] = $row;
+                    continue;
+                }
                 $imageFilename = \ExtraField::FIELD_TYPE_FILE_IMAGE.'_'.$row['id'].'.png';
 
                 $row['image'] = is_file($sysUploadPath.$imageFilename) ? $webUploadPath.$imageFilename : $imgPath;

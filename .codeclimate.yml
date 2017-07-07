@@ -51,6 +51,7 @@ exclude_paths:
 - main/inc/lib/pear/
 - main/inc/lib/phpmailer/
 - main/inc/lib/phpseclib/
+- main/inc/lib/portfolio.class.php
 - main/inc/lib/svg-edit/
 - main/inc/lib/swfobject/
 - main/inc/lib/wami-recorder/

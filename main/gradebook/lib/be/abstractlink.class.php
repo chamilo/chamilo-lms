@@ -228,6 +228,7 @@ abstract class AbstractLink implements GradebookItem
      * @param string $course_code
      * @param integer $category_id
      * @param integer $visible
+     * @return array
      */
     public static function load(
         $id = null,
@@ -468,11 +469,14 @@ abstract class AbstractLink implements GradebookItem
         // links can only be moved to categories inside this course
         $targets = array();
         $level = 0;
-
         $crscats = Category::load(null, null, $this->get_course_code(), 0);
         foreach ($crscats as $cat) {
             $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
-            $targets = $this->add_target_subcategories($targets, $level + 1, $cat->get_id());
+            $targets = $this->add_target_subcategories(
+                $targets,
+                $level + 1,
+                $cat->get_id()
+            );
         }
 
         return $targets;
@@ -487,7 +491,11 @@ abstract class AbstractLink implements GradebookItem
         $subcats = Category::load(null, null, null, $catid);
         foreach ($subcats as $cat) {
             $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
-            $targets = $this->add_target_subcategories($targets, $level + 1, $cat->get_id());
+            $targets = $this->add_target_subcategories(
+                $targets,
+                $level + 1,
+                $cat->get_id()
+            );
         }
         return $targets;
     }
@@ -511,6 +519,7 @@ abstract class AbstractLink implements GradebookItem
      * To keep consistency, do not call this method but LinkFactory::find_links instead.
      * @todo can be written more efficiently using a new (but very complex) sql query
      * @param string $name_mask
+     * @return array
      */
     public function find_links($name_mask, $selectcat)
     {
@@ -622,6 +631,7 @@ abstract class AbstractLink implements GradebookItem
      * @param int $userId
      * @param array $studentList Array with user id and scores
      * Example: [1 => 5.00, 2 => 8.00]
+     * @return array
      */
     public static function getCurrentUserRanking($userId, $studentList)
     {

@@ -8029,7 +8029,7 @@ $SendEmailToTeacherWhenStudentEndQuiz = "Enviar un correo al profesor cuando el 
 $SendEmailToTeacherWhenStudentEndQuizOnlyIfOpenQuestion = "Enviar un correo al profesor cuando el estudiante termina un ejercicio, solo si ha respondido a una pregunta abierta";
 $SendEmailToTeacherWhenStudentEndQuizOnlyIfOralQuestion = "Enviar un correo al profesor cuando el estudiante termina un ejercicio, solo si ha respondido a una pregunta oral";
 $StudentStartExercise = "Un ejercicio/examen ha sido iniciado por un estudiante";
-$TempScoreXQuestionsNotCorrectedYet = "Score temporaire: %s pregunta(s) abierta(s) no corregida(s) todavía.";
+$TempScoreXQuestionsNotCorrectedYet = "Nota temporal: %s pregunta(s) abierta(s) no corregida(s) todavía.";
 $Annotation = "Anotación";
 $TeacherPicture = "Foto del profesor";
 $FeedbackIfNotCorrect = "Feedback si no es correcta";
@@ -8049,4 +8049,7 @@ $MandatorySurveyNoAnswered = "Usted tiene pendiente una encuesta obligatoria. Pa
 $ShowPreviousButton = "Mostrar el botón 'anterior'";
 $AllTickets = "Todos los tickets";
 $IsMandatory = "Obligatorio/a?";
+$StudentXHasBeenAssignedNewWorkInCourseY = "Nueva tarea asignada a %s en el curso %s";
+$AsHRMYouReceiveThisMailToAlertThatXHasNewWorkInCourseY = "Como su responsable RH, está recibiendo este correo para avisarle que una nueva tarea acaba de ser asignada a %s en el curso %s.";
+$DearXComma = "Estimado/a %s,";
 ?>

@@ -8018,4 +8018,7 @@ $MandatorySurveyNoAnswered = "A mandatory survey is waiting your answer. To ente
 $ShowPreviousButton = "Show previous button";
 $AllTickets = "All tickets";
 $IsMandatory = "Mandatory?";
+$StudentXHasBeenAssignedNewWorkInCourseY = "%s got a new assignment in course %s";
+$AsHRMYouReceiveThisMailToAlertThatXHasNewWorkInCourseY = "As his/her human resources manager, you are receiving this e-mail to let you know that %s just got a new assignment in course %s";
+$DearXComma = "Dear %s,";
 ?>

@@ -7960,4 +7960,7 @@ $MandatorySurveyNoAnswered = "Une enquête obligatoire est en attente de votre r
 $ShowPreviousButton = "Montrer le bouton 'Précédent'";
 $AllTickets = "Tous les tickets";
 $IsMandatory = "Obligatoire?";
+$StudentXHasBeenAssignedNewWorkInCourseY = "Une nouvelle tâche a été assignée à %s dans le cours %s";
+$AsHRMYouReceiveThisMailToAlertThatXHasNewWorkInCourseY = "En tant que son responsable RH, vous recevez cet e-mail pour vous avertir qu'une nouvelle tâche vient d'être assignée à %s dans le cours %s.";
+$DearXComma = "Cher/Chère %s,";
 ?>

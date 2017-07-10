@@ -1366,6 +1366,7 @@ function WSCreateUserPasswordCrypted($params)
             phone               = '".Database::escape_string($phone)."',
             language            = '".Database::escape_string($language)."',
             registration_date   = '".api_get_utc_datetime()."',
+            roles = 'a:0:{}', 
             ".$queryExpirationDate."
             hr_dept_id          = '".Database::escape_string($hr_dept_id)."',
             active              = '".Database::escape_string($active)."'";

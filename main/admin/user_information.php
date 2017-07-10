@@ -1,5 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
+use Chamilo\UserBundle\Entity\User,
+    Chamilo\CoreBundle\Entity\UserRelUser;
 
 /**
  * Script showing information about a user (name, e-mail, courses and sessions)
@@ -22,6 +24,8 @@ if (empty($user)) {
     api_not_allowed(true);
 }
 
+/** @var User $userEntity */
+$userEntity = api_get_user_entity($user['user_id']);
 $myUserId = api_get_user_id();
 
 if (!api_is_student_boss()) {
@@ -92,6 +96,10 @@ if (api_is_platform_admin()) {
             ICON_SIZE_MEDIUM
         ),
         api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.$userId
+    );
+    $actions[] = Display::url(
+        Display::return_icon('new_group.png', get_lang('AddHrmToUser'), [], ICON_SIZE_MEDIUM),
+        api_get_path(WEB_PATH).'main/admin/add_drh_to_user.php?u='.$userId
     );
 }
 
@@ -576,6 +584,33 @@ echo '</div>';
 if ($studentBossList) {
     echo Display::page_subheader(get_lang('StudentBossList'));
     echo $studentBossListToString;
+}
+
+$hrmList = $userEntity->getHrm();
+
+if ($hrmList) {
+    echo Display::page_subheader(get_lang('HrmList'));
+    echo '<div class="row">';
+
+    /** @var UserRelUser $hrm */
+    foreach ($hrmList as $hrm) {
+        $hrmInfo = api_get_user_info($hrm->getId());
+        $userPicture = isset($hrmInfo["avatar_medium"]) ? $hrmInfo["avatar_medium"] : $hrmInfo["avatar"];
+
+        echo '<div class="col-sm-3">';
+        echo '<div class="media">';
+        echo '<div class="media-left">';
+        echo Display::img($userPicture, $hrmInfo['complete_name'], ['class' => 'media-object'], false);
+        echo '</div>';
+        echo '<div class="media-body">';
+        echo '<h4 class="media-heading">'.$hrmInfo['complete_name'].'</h4>';
+        echo $hrmInfo['username'];
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+    }
+
+    echo '</div>';
 }
 
 if (api_get_setting('allow_social_tool') === 'true') {

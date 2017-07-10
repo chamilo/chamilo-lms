@@ -43,24 +43,29 @@ $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $csvContent = [];
 
 // only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
-$login_as_icon = '';
-$editUser = '';
-$exportLink = '';
-$vCardExportLink = '';
+$actions = [
+    Display::url(
+        Display::return_icon('statistics.png', get_lang('Reporting'), [], ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?'.http_build_query([
+            'student' => intval($_GET['user_id'])
+        ]),
+        ['title' => get_lang('Reporting')]
+    )
+];
 
 if (api_is_platform_admin()) {
-    $login_as_icon =
-        '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php'
-        .'?action=login_as&user_id='.$userId.'&'
-        .'sec_token='.$_SESSION['sec_token'].'">'
-        .Display::return_icon(
+    $actions[] = Display::url(
+        Display::return_icon(
             'login_as.png',
             get_lang('LoginAs'),
-            array(),
+            [],
             ICON_SIZE_MEDIUM
-        ).'</a>';
+        ),
+        api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$userId.'&'
+            .'sec_token='.$_SESSION['sec_token']
+    );
 
-    $editUser = Display::url(
+    $actions[] = Display::url(
         Display::return_icon(
             'edit.png',
             get_lang('Edit'),
@@ -70,20 +75,20 @@ if (api_is_platform_admin()) {
         api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$userId
     );
 
-    $exportLink = Display::url(
+    $actions[] = Display::url(
         Display::return_icon(
             'export_csv.png',
             get_lang('ExportAsCSV'),
-            '',
+            [],
             ICON_SIZE_MEDIUM
         ),
         api_get_self().'?user_id='.$userId.'&action=export'
     );
-    $vCardExportLink = Display::url(
+    $actions[] = Display::url(
         Display::return_icon(
             'vcard.png',
             get_lang('UserInfo'),
-            '',
+            [],
             ICON_SIZE_MEDIUM
         ),
         api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.$userId
@@ -539,15 +544,7 @@ if (isset($_GET['action'])) {
 
 Display::display_header($tool_name);
 
-echo '<div class="actions">
-        <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.intval($_GET['user_id']).'" title="'.get_lang('Reporting').'">'.
-        Display::return_icon('statistics.png', get_lang('Reporting'), '', ICON_SIZE_MEDIUM).'
-        </a>
-        '.$login_as_icon.'
-        '.$editUser.'
-        '.$exportLink.'
-        '.$vCardExportLink.'
-    </div>';
+echo Display::toolbarAction('toolbar-user-information', [implode(PHP_EOL, $actions)]);
 echo Display::page_header($tool_name);
 
 $fullUrlBig = UserManager::getUserPicture(

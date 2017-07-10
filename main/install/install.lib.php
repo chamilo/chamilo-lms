@@ -3230,7 +3230,8 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                 error_log('End - Fix post_group_id');
 
                 // Delete c_student_publication from any session that doesn't exist anymore
-                $sql = "DELETE FROM c_student_publication WHERE session_id NOT IN (SELECT id FROM session)";
+                $sql = "DELETE FROM c_student_publication 
+                        WHERE session_id NOT IN (SELECT id FROM session) AND (session_id <> 0 or session_id is not null)";
                 $connection->executeQuery($sql);
 
                 error_log('Fix work documents');

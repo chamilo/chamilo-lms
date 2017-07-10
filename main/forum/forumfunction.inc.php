@@ -1512,7 +1512,7 @@ function get_forums(
     $forum_list = array();
     $includeGroupsForumSelect = '';
     if (!$includeGroupsForum) {
-        $includeGroupsForumSelect = " AND forum_of_group = 0 ";
+        $includeGroupsForumSelect = " AND (forum_of_group = 0 OR forum_of_group IS NULL) ";
     }
 
     if ($id == '') {

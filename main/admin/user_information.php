@@ -613,6 +613,34 @@ if ($hrmList) {
     echo '</div>';
 }
 
+if ($user['status'] == DRH) {
+    $usersAssigned = UserManager::get_users_followed_by_drh($userId);
+
+    if ($usersAssigned) {
+        echo Display::page_subheader(get_lang('AssignedUsersListToHumanResourcesManager'));
+        echo '<div class="row">';
+
+        foreach ($usersAssigned as $userAssigned) {
+            $userAssigned = api_get_user_info($userAssigned['user_id']);
+            $userPicture = isset($userAssigned["avatar_medium"]) ? $userAssigned["avatar_medium"] : $userAssigned["avatar"];
+
+            echo '<div class="col-sm-4 col-md-3">';
+            echo '<div class="media">';
+            echo '<div class="media-left">';
+            echo Display::img($userPicture, $userAssigned['complete_name'], ['class' => 'media-object'], false);
+            echo '</div>';
+            echo '<div class="media-body">';
+            echo '<h4 class="media-heading">'.$userAssigned['complete_name'].'</h4>';
+            echo $userAssigned['username'];
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+        }
+
+        echo '</div>';
+    }
+}
+
 if (api_get_setting('allow_social_tool') === 'true') {
     echo Display::page_subheader(get_lang('SocialData'));
     echo $socialInformation;

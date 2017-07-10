@@ -3193,22 +3193,21 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                 error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
                 $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
 
-                error_log('Fix post_group_id:');
+                error_log('Fix c_student_publication.post_group_id');
 
                 // Fix post_group_id
-                $sql = "SELECT * FROM c_student_publication where (post_group_id <> 0 or post_group_id is not null)";
+                $sql = "SELECT * FROM c_student_publication WHERE (post_group_id <> 0 AND post_group_id is not null)";
                 $statement = $connection->executeQuery($sql);
                 $result = $statement->fetchAll();
                 foreach ($result as $row) {
                     $groupId = $row['post_group_id'];
                     $courseId = $row['c_id'];
-                    $sessionId = $row['session_id'];
                     $workIid = $row['iid'];
-                    $sql = "SELECT iid from c_group_info where c_id = $courseId and iid = $groupId";
+                    $sql = "SELECT iid from c_group_info WHERE c_id = $courseId AND iid = $groupId";
                     $statement = $connection->executeQuery($sql);
                     $count = $statement->rowCount();
                     if ($count == 0) {
-                        $sql = "SELECT iid from c_group_info where c_id = $courseId and id = $groupId";
+                        $sql = "SELECT iid from c_group_info WHERE c_id = $courseId AND id = $groupId";
                         $statement = $connection->executeQuery($sql);
                         $count = $statement->rowCount();
                         if ($count > 0) {
@@ -3218,8 +3217,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                                 $sqlUpdate = "UPDATE c_student_publication 
                                               SET post_group_id = $newGroupId 
                                               WHERE 
-                                                c_id = $courseId AND 
-                                                post_group_id = $groupId AND 
+                                                c_id = $courseId AND
                                                 iid = $workIid
                                               ";
                                 $connection->executeQuery($sqlUpdate);
@@ -3227,11 +3225,11 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                         }
                     }
                 }
-                error_log('End - Fix post_group_id');
+                error_log('End - Fix c_student_publication.post_group_id');
 
                 // Delete c_student_publication from any session that doesn't exist anymore
                 $sql = "DELETE FROM c_student_publication 
-                        WHERE session_id NOT IN (SELECT id FROM session) AND (session_id <> 0 or session_id is not null)";
+                        WHERE session_id NOT IN (SELECT id FROM session) AND (session_id <> 0 AND session_id is not null)";
                 $connection->executeQuery($sql);
 
                 error_log('Fix work documents');
@@ -3240,7 +3238,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                 $statement = $connection->executeQuery($sql);
                 $result = $statement->fetchAll();
                 foreach ($result as $row) {
-                    $groupId  = $row['post_group_id'];
+                    $groupId = $row['post_group_id'];
                     $courseId = $row['c_id'];
                     $sessionId = $row['session_id'];
                     $workId = $row['id'];

@@ -260,8 +260,9 @@ $form->setDefaults($params);
 
 if ($export_csv) {
     // send the csv file if asked
-    $content = $table->return_table();
+    $content = $table->get_table_data();
     foreach ($content as &$row) {
+        $row[3] = strip_tags($row[3]);
         unset($row[4]);
     }
     $csv_content = array_merge($csv_header, $content);

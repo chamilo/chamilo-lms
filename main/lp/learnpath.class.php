@@ -10088,7 +10088,14 @@ class learnpath
                         $my_item->setAttribute('identifierref', 'RESOURCE_'.$item->get_id());
                         $my_item->setAttribute('isvisible', 'true');
                         // Give a child element <title> to the <item> element.
-                        $my_title = $xmldoc->createElement('title', htmlspecialchars(api_utf8_encode($item->get_title()), ENT_QUOTES, 'UTF-8'));
+                        $my_title = $xmldoc->createElement(
+                            'title',
+                            htmlspecialchars(
+                                api_utf8_encode($item->get_title()),
+                                ENT_QUOTES,
+                                'UTF-8'
+                            )
+                        );
                         $my_item->appendChild($my_title);
                         // Give a child element <adlcp:prerequisites> to the <item> element.
                         $my_prereqs = $xmldoc->createElement('adlcp:prerequisites', $item->get_prereq_string());
@@ -10156,7 +10163,14 @@ class learnpath
                         $my_item->setAttribute('identifierref', 'RESOURCE_'.$item->get_id());
                         $my_item->setAttribute('isvisible', 'true');
                         // Give a child element <title> to the <item> element.
-                        $my_title = $xmldoc->createElement('title', htmlspecialchars(api_utf8_encode($item->get_title()), ENT_QUOTES, 'UTF-8'));
+                        $my_title = $xmldoc->createElement(
+                            'title',
+                            htmlspecialchars(
+                                api_utf8_encode($item->get_title()),
+                                ENT_QUOTES,
+                                'UTF-8'
+                            )
+                        );
                         $my_item->appendChild($my_title);
                         $my_max_score = $xmldoc->createElement('max_score', $item->get_max());
                         //$my_item->appendChild($my_max_score);
@@ -10199,7 +10213,10 @@ class learnpath
                         $my_file_path = 'quiz_'.$item->get_id().'.html';
                         // Write the contents of the exported exercise into a (big) html file
                         // to later pack it into the exported SCORM. The file will be removed afterwards.
-                        $contents = ScormSection::export_exercise_to_scorm($exe, true);
+                        $contents = ScormSection::export_exercise_to_scorm(
+                            $exe,
+                            true
+                        );
 
                         $tmp_file_path = $archive_path.$temp_dir_short.'/'.$my_file_path;
                         $res = file_put_contents($tmp_file_path, $contents);
@@ -10462,7 +10479,9 @@ class learnpath
                         ->exclude('certificates')
                     ;
 
-                    if (is_dir($containerOrigin) && is_dir($containerDestination)) {
+                    if (is_dir($containerOrigin) &&
+                        is_dir($containerDestination)
+                    ) {
                         $fs = new Filesystem();
                         $fs->mirror(
                             $containerOrigin,

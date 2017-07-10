@@ -204,7 +204,7 @@ if ($showCourses && $action != 'display_sessions') {
             // display thumbnail
             $html .= returnThumbnail($course, $userRegistered);
 
-            $separator = null;'<div class="separator">&nbsp;</div>';
+            $separator = null;
             $subscribeButton = return_register_button($course, $stok, $code, $search_term);
 
             // start buycourse validation

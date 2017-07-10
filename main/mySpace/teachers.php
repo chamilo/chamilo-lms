@@ -161,7 +161,7 @@ function get_users($from, $limit, $column, $direction)
             $detailsLink = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'&id_session='.$sessionId.'">
 				          '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>';
         } else {
-            $detailsLink = '<a href="myStudents.php?student='.$student_id.'">
+            $detailsLink = '<a href="myStudents.php?student='.$student_id.'&origin=teacher_details">
 				            '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>';
         }
         $row[] = $detailsLink;

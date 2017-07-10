@@ -164,6 +164,11 @@ if (!empty($details)) {
                 "name" => get_lang('SessionOverview')
             );
         }
+    } elseif ($origin === 'teacher_details') {
+        $this_section = SECTION_TRACKING;
+        $interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('MySpace'));
+        $interbreadcrumb[] = array("url" => "teachers.php", "name" => get_lang('Teachers'));
+        $nameTools = $user_info['complete_name'];
     } else {
         $interbreadcrumb[] = array(
             "url" => api_is_student_boss() ? "#" : "index.php",

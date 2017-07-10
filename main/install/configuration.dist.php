@@ -518,6 +518,8 @@ $_configuration['send_all_emails_to'] = [
 // Allow send email notification per exercise
 //ALTER TABLE c_quiz ADD COLUMN notifications VARCHAR(255) NULL DEFAULT NULL;
 //$_configuration['allow_notification_setting_per_exercise'] = false;
+// Hide free/oral/annotation question result see BT#12613
+//$_configuration['hide_free_question_score'] = false;
 
 // Score model
 // Allow to convert a score into a text/color label

@@ -1949,6 +1949,11 @@ abstract class Question
                 if (!empty($model)) {
                     $score['result'] = " ? ";
                 }
+
+                $hide = api_get_configuration_value('hide_free_question_score');
+                if ($hide === true) {
+                    $score['result'] = '-';
+                }
             }
         }
 

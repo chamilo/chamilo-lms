@@ -12,7 +12,7 @@ $course_plugin = 'sepe';
 $plugin = SepePlugin::create();
 $_cid = 0;
 
-if ( !empty($_POST)) {
+if (!empty($_POST)) {
     $check = Security::check_token('post');
     if ($check) {
         $sltUserExists = intval($_POST['slt_user_exists']);
@@ -219,5 +219,5 @@ if (api_is_platform_admin()) {
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 } else {
-    header('Location:' . api_get_path(WEB_PATH));
+    header('Location:'.api_get_path(WEB_PATH));
 }

@@ -492,7 +492,7 @@ function courseLogout($logoutInfo)
      * login_course_date > now() - INTERVAL $session_lifetime SECOND
      */
     if (empty($sessionLifetime) || $sessionLifetime > 86400) {
-        $sessionLifetime    = 3600; // 1 hour
+        $sessionLifetime = 3600; // 1 hour
     }
     if (!empty($logoutInfo) && !empty($logoutInfo['cid'])) {
         $tableCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);

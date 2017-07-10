@@ -280,7 +280,7 @@ if (!empty($projectId)) {
 
     $options = '';
     if ($isAdmin) {
-        $options .=Display::url(
+        $options .= Display::url(
             get_lang('Projects'),
             api_get_path(WEB_CODE_PATH).'ticket/projects.php'
         );

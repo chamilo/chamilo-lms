@@ -1676,7 +1676,7 @@ if ($isAllowedToEdit ||
         // Record an image clip from my webcam
         if (api_get_setting('enable_webcam_clip') == 'true') {
             $actionsLeft .= Display::url(
-                Display::return_icon('webcam.png', get_lang('WebCamClip'), '',  ICON_SIZE_MEDIUM),
+                Display::return_icon('webcam.png', get_lang('WebCamClip'), '', ICON_SIZE_MEDIUM),
                 api_get_path(WEB_CODE_PATH).'document/webcam_clip.php?'.api_get_cidreq().'&id='.$document_id
             );
         }

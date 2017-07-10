@@ -337,7 +337,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
     if (isset($_REQUEST['action']) && !in_array($_REQUEST['action'], ['list', 'view', 'view_category'])) {
         if (!empty($_REQUEST['lp_id'])) {
             $_REQUEST['action'] = 'view';
-        } elseif($_REQUEST['action'] == 'view_category') {
+        } elseif ($_REQUEST['action'] == 'view_category') {
             $_REQUEST['action'] = 'view_category';
         } else {
             $_REQUEST['action'] = 'list';

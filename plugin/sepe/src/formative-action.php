@@ -34,8 +34,8 @@ if (api_is_platform_admin()) {
     }
     
     $tpl->assign('info', $info);
-    $tpl->assign('start_date', date("d/m/Y",strtotime($info['start_date'])));
-    $tpl->assign('end_date', date("d/m/Y",strtotime($info['end_date'])));
+    $tpl->assign('start_date', date("d/m/Y", strtotime($info['start_date'])));
+    $tpl->assign('end_date', date("d/m/Y", strtotime($info['end_date'])));
     $tpl->assign('action_id', $actionId);
     $listSpecialty = specialtyList($actionId);
     $tpl->assign('listSpecialty', $listSpecialty);
@@ -46,5 +46,5 @@ if (api_is_platform_admin()) {
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 } else {
-    header('Location:' . api_get_path(WEB_PATH));
+    header('Location:'.api_get_path(WEB_PATH));
 }

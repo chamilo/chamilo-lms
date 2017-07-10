@@ -168,7 +168,7 @@ if ($sessionInfo['nbr_courses'] == 0) {
         $namesOfCoaches = [];
         $coachSubscriptions = $session
             ->getUserCourseSubscriptionsByStatus($course, Session::COACH)
-            ->forAll(function ($index, SessionRelCourseRelUser $subscription) use (&$namesOfCoaches) {
+            ->forAll(function($index, SessionRelCourseRelUser $subscription) use (&$namesOfCoaches) {
                 $namesOfCoaches[] = $subscription->getUser()->getCompleteNameWithUserName();
 
                 return true;
@@ -189,7 +189,7 @@ if ($sessionInfo['nbr_courses'] == 0) {
 
             $orderButtons .= Display::url(
                 Display::return_icon(
-                    $count + 1 == count($courses) ? 'down_na.png'  : 'down.png',
+                    $count + 1 == count($courses) ? 'down_na.png' : 'down.png',
                     get_lang('MoveDown')
                 ),
                 $count + 1 == count($courses)

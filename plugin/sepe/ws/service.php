@@ -83,7 +83,7 @@ class CustomServer extends Zend\Soap\Server
     }
 }
 
-function authenticate($WSUser,$WSKey)
+function authenticate($WSUser, $WSKey)
 {
     $tUser = Database::get_main_table(TABLE_MAIN_USER);
     $tApi = Database::get_main_table(TABLE_MAIN_USER_API_KEY);

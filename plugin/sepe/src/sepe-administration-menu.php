@@ -39,7 +39,7 @@ if (api_is_platform_admin() && $enable) {
                     $htmlText .= '<li>';
                     $htmlText .= '<a href="'.$pluginPath.'configuration.php">';
                         $htmlText .= '<img src="'.api_get_path(WEB_PLUGIN_PATH).'sepe/resources/settings.png">';
-                        $htmlText .=$plugin->get_lang('Setting');
+                        $htmlText .= $plugin->get_lang('Setting');
                     $htmlText .= '</a>';
                     $htmlText .= '</li>';
                 $htmlText .= '</ul>';
@@ -57,5 +57,5 @@ if (api_is_platform_admin() && $enable) {
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 } else {
-    header('Location:' . api_get_path(WEB_PATH));
+    header('Location:'.api_get_path(WEB_PATH));
 }

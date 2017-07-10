@@ -12,7 +12,7 @@ $course_plugin = 'sepe';
 $plugin = SepePlugin::create();
 $_cid = 0;
 
-if ( !empty($_POST)) {
+if (!empty($_POST)) {
     $check = Security::check_token('post');
     if ($check) {
         $companyTutorId = (!empty($_POST['company_tutor_id']) ? intval($_POST['company_tutor_id']) : NULL);
@@ -134,7 +134,7 @@ if ( !empty($_POST)) {
             }
             Database::query($sql);
             
-            $insertLog = checkInsertNewLog($platformUserId,$actionId);
+            $insertLog = checkInsertNewLog($platformUserId, $actionId);
             if ($insertLog) {
                 $sql = "INSERT INTO $tableSepeLogParticipant (
                             platform_user_id, 
@@ -220,7 +220,7 @@ if (api_is_platform_admin()) {
     $listTutorCompany = listTutorType("company = '1'");
     $tpl->assign('list_tutor_company', $listTutorCompany);
     $listTutorTraining = array();
-    $listTutorTraining= listTutorType("training = '1'");
+    $listTutorTraining = listTutorType("training = '1'");
     $tpl->assign('list_tutor_training', $listTutorTraining);
     if (isset($_SESSION['sepe_message_info'])) {
         $tpl->assign('message_info', $_SESSION['sepe_message_info']);    
@@ -236,5 +236,5 @@ if (api_is_platform_admin()) {
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 } else {
-    header('Location:' . api_get_path(WEB_PATH));
+    header('Location:'.api_get_path(WEB_PATH));
 }

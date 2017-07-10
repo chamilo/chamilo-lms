@@ -4646,7 +4646,7 @@ function getFormWork($form, $defaults = array(), $workId = 0)
         $form->addHtml('<div id="option2" style="display: none;">');
     }
 
-    $timeNextWeek = time()+86400*7;
+    $timeNextWeek = time() + 86400 * 7;
     $nextWeek = substr(api_get_local_time($timeNextWeek), 0, 10);
     if (!isset($defaults['expires_on'])) {
         $date = substr($nextWeek, 0, 10);
@@ -4658,7 +4658,7 @@ function getFormWork($form, $defaults = array(), $workId = 0)
     $form->addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'id="end_date"');
 
     if (!isset($defaults['ends_on'])) {
-        $nextDay = substr(api_get_local_time($timeNextWeek+86400), 0, 10);
+        $nextDay = substr(api_get_local_time($timeNextWeek + 86400), 0, 10);
         $date = substr($nextDay, 0, 10);
         $defaults['ends_on'] = $date.' 23:59';
     }

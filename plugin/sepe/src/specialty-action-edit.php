@@ -181,7 +181,7 @@ if (api_is_platform_admin()) {
         } elseif (strpos($info['start_date'], '0000') === false) {
             $yearStart = date("Y", strtotime($info['start_date']));
         } else {
-            $yearStart  = date("Y");
+            $yearStart = date("Y");
         }
         if ($info['end_date'] != '0000-00-00' && $info['end_date'] != NULL) {
             $tpl->assign('day_end', date("j", strtotime($info['end_date'])));
@@ -191,7 +191,7 @@ if (api_is_platform_admin()) {
         } elseif (strpos($info['end_date'], '0000') === false) {
             $yearEnd = date("Y", strtotime($info['end_date']));
         } else {
-            $yearEnd  = date("Y");
+            $yearEnd = date("Y");
         }
         $tpl->assign('new_action', '0');
         $tpl->assign('specialty_id', intval($_GET['specialty_id']));
@@ -210,7 +210,7 @@ if (api_is_platform_admin()) {
     }
     $yearStart -= 5;
     $yearEnd += 5;
-    $fin_rango_anio = (($yearStart + 15) < $yearEnd) ? ($yearEnd+1):($yearStart +15);
+    $fin_rango_anio = (($yearStart + 15) < $yearEnd) ? ($yearEnd + 1) : ($yearStart + 15);
     while ($yearStart <= $fin_rango_anio) {
         $yearList[] = $yearStart;
         $yearStart++;
@@ -231,5 +231,5 @@ if (api_is_platform_admin()) {
     $tpl->display_one_col_template();
 
 } else {
-    header('Location:' . api_get_path(WEB_PATH));
+    header('Location:'.api_get_path(WEB_PATH));
 }

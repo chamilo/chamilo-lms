@@ -80,7 +80,7 @@ class SepePlugin extends Plugin
             return false;
         }
 
-        require_once api_get_path(SYS_PLUGIN_PATH) . 'sepe/database.php';
+        require_once api_get_path(SYS_PLUGIN_PATH).'sepe/database.php';
     }
         
     /**
@@ -121,9 +121,9 @@ class SepePlugin extends Plugin
         $oldTableTutorsCompany = 'plugin_sepe_tutors_empresa';
         $oldTableCompetence = 'plugin_sepe_competencia_docente';
         $sql = "RENAME TABLE "
-                   . $oldTableCenters ." TO ". self::TABLE_SEPE_CENTERS .", "
-                   . $oldTableTutorsCompany ." TO ". self::TABLE_SEPE_TUTORS_COMPANY .", "
-                   . $oldTableCompetence ." TO ". self::TABLE_SEPE_TEACHING_COMPETENCE .";";
+                   . $oldTableCenters." TO ".self::TABLE_SEPE_CENTERS.", "
+                   . $oldTableTutorsCompany." TO ".self::TABLE_SEPE_TUTORS_COMPANY.", "
+                   . $oldTableCompetence." TO ".self::TABLE_SEPE_TEACHING_COMPETENCE.";";
         Database::query($sql);
         
         $sepeCourseActionsTable = self::TABLE_SEPE_COURSE_ACTIONS;

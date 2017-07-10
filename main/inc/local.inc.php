@@ -1207,7 +1207,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                     $is_courseMember     = false;
                     $is_courseTutor      = false;
                     $is_courseAdmin      = false;
-                    $is_session_general_coach      = false;
+                    $is_session_general_coach = false;
                     $is_sessionAdmin     = true;
                 } else {
                     // Am I a session coach for this session?

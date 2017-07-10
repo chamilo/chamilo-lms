@@ -69,7 +69,7 @@ if (api_is_multiple_url_enabled()) {
             ON (u.user_id=url_rel_user.user_id)
             WHERE
                 url_rel_user.access_url_id = $urlId AND
-                status = 1" . $order_clause;
+                status = 1".$order_clause;
 } else {
     $sql = "SELECT user_id, lastname, firstname
             FROM $table_user WHERE status='1'".$order_clause;

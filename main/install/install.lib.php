@@ -3191,8 +3191,9 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
 
             if ($result) {
                 error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
-
                 $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
+
+                error_log('Fix post_group_id:');
 
                 // Fix post_group_id
                 $sql = "SELECT * FROM c_student_publication where (post_group_id <> 0 or post_group_id is not null)";
@@ -3226,11 +3227,13 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                         }
                     }
                 }
+                error_log('End - Fix post_group_id');
 
                 // Delete c_student_publication from any session that doesn't exist anymore
                 $sql = "DELETE FROM c_student_publication WHERE session_id NOT IN (SELECT id FROM session)";
-                $statement = $connection->executeQuery($sql);
+                $connection->executeQuery($sql);
 
+                error_log('Fix work documents');
                 // Fix work documents that don't have c_item_property value
                 $sql = "SELECT * FROM c_student_publication WHERE parent_id IS NOT NULL";
                 $statement = $connection->executeQuery($sql);
@@ -3262,10 +3265,12 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                         );
                     }
                 }
+                error_log('End - Fix work documents');
+
                 $sql = "UPDATE settings_current SET selected_value = '1.11.0' WHERE variable = 'chamilo_database_version'";
                 $connection->executeQuery($sql);
-
                 if ($processFiles) {
+                    error_log('Update config files');
                     $fromVersionShort = '1.10';
                     include __DIR__.'/update-files-1.10.0-1.11.0.inc.php';
                     // Only updates the configuration.inc.php with the new version

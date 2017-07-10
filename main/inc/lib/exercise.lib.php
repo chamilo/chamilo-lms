@@ -590,14 +590,16 @@ class ExerciseLib
                         $displayForStudent = true;
                         $listAnswerInfo = FillBlanks::getAnswerInfo($answer);
 
-                        list($answer) = explode('::', $answer);
                         // Correct answers
                         $correctAnswerList = $listAnswerInfo['tabwords'];
 
                         // Student's answer
                         $studentAnswerList = array();
                         if (isset($user_choice[0]['answer'])) {
-                            $arrayStudentAnswer = FillBlanks::getAnswerInfo($user_choice[0]['answer'], true);
+                            $arrayStudentAnswer = FillBlanks::getAnswerInfo(
+                                $user_choice[0]['answer'],
+                                true
+                            );
                             $studentAnswerList = $arrayStudentAnswer['studentanswer'];
                         }
 
@@ -4297,5 +4299,20 @@ HOTSPOT;
             null,
             ['src' => $filePath]
         );
+    }
+
+    /**
+     * @return array
+     */
+    public static function getNotificationSettings()
+    {
+        $emailAlerts = [
+            2 => get_lang('SendEmailToTeacherWhenStudentStartQuiz'),
+            1 => get_lang('SendEmailToTeacherWhenStudentEndQuiz'), // default
+            3 => get_lang('SendEmailToTeacherWhenStudentEndQuizOnlyIfOpenQuestion'),
+            4 => get_lang('SendEmailToTeacherWhenStudentEndQuizOnlyIfOralQuestion')
+        ];
+
+        return $emailAlerts;
     }
 }

@@ -77,6 +77,7 @@ class Exercise
     public $questionFeedbackEnabled = false;
     public $questionTypeWithFeedback;
     public $showPreviousButton;
+    public $notifications;
 
     /**
      * Constructor of the class
@@ -177,6 +178,11 @@ class Exercise
             $this->globalCategoryId = isset($object->global_category_id) ? $object->global_category_id : null;
             $this->questionSelectionType = isset($object->question_selection_type) ? $object->question_selection_type : null;
             $this->hideQuestionTitle = isset($object->hide_question_title) ? (int) $object->hide_question_title : 0;
+
+            $this->notifications = [];
+            if (!empty($object->notifications)) {
+                $this->notifications = explode(',', $object->notifications);
+            }
 
             if (isset($object->show_previous_button)) {
                 $this->showPreviousButton = $object->show_previous_button == 1 ? true : false;
@@ -1619,6 +1625,13 @@ class Exercise
                 if ($allow === true) {
                     $paramsExtra['show_previous_button'] = $this->showPreviousButton();
                 }
+
+                $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
+                if ($allow === true) {
+                    $notifications = $this->getNotifications();
+                    $notifications = implode(',', $notifications);
+                    $paramsExtra['notifications'] = $notifications;
+                }
             }
 
             $params = array_merge($params, $paramsExtra);
@@ -1686,6 +1699,18 @@ class Exercise
                 'propagate_neg' => $propagate_neg,
                 'hide_question_title' => $this->getHideQuestionTitle()
             ];
+
+            $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
+            if ($allow === true) {
+                $params['show_previous_button'] = $this->showPreviousButton();
+            }
+
+            $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
+            if ($allow === true) {
+                $notifications = $this->getNotifications();
+                $notifications = implode(',', $notifications);
+                $params['notifications'] = $notifications;
+            }
 
             $this->id = Database::insert($TBL_EXERCISES, $params);
 
@@ -1993,11 +2018,30 @@ class Exercise
 
                 // Type of questions disposition on page
                 $radios = array();
-                $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'), '1', array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
-                $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'), '2', array('onclick' => 'check_per_page_one()', 'id'=>'option_page_one'));
+                $radios[] = $form->createElement(
+                    'radio',
+                    'exerciseType',
+                    null,
+                    get_lang('SimpleExercise'),
+                    '1',
+                    array(
+                        'onclick' => 'check_per_page_all()',
+                        'id' => 'option_page_all'
+                    )
+                );
+                $radios[] = $form->createElement(
+                    'radio',
+                    'exerciseType',
+                    null,
+                    get_lang('SequentialExercise'),
+                    '2',
+                    array(
+                        'onclick' => 'check_per_page_one()',
+                        'id' => 'option_page_one'
+                    )
+                );
 
                 $form->addGroup($radios, null, get_lang('QuestionsPerPage'));
-
             } else {
                 // if is Direct feedback but has not questions we can allow to modify the question type
                 if ($this->selectNbrQuestions() == 0) {
@@ -2315,7 +2359,30 @@ class Exercise
                 $editor_config
             );
 
-            $form->addCheckBox('update_title_in_lps', null, get_lang('UpdateTitleInLps'));
+            $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
+
+            if ($allow === true) {
+                $settings = ExerciseLib::getNotificationSettings();
+                $group = [];
+                foreach ($settings as $itemId => $label) {
+                    $group[] = $form->createElement(
+                        'checkbox',
+                        'notifications[]',
+                        null,
+                        $label,
+                        ['value' => $itemId]
+                    );
+                }
+
+                $form->addGroup($group, '', [get_lang('EmailNotifications')]);
+
+            }
+
+            $form->addCheckBox(
+                'update_title_in_lps',
+                null,
+                get_lang('UpdateTitleInLps')
+            );
 
             $defaults = array();
             if (api_get_setting('search_enabled') === 'true') {
@@ -2408,6 +2475,7 @@ class Exercise
                 } else {
                     $defaults['enabletimercontroltotalminutes'] = 0;
                 }
+                $defaults['notifications'] = $this->getNotifications();
             } else {
                 $defaults['exerciseType'] = 2;
                 $defaults['exerciseAttempts'] = 0;
@@ -2496,6 +2564,7 @@ class Exercise
         $this->setScoreTypeModel($form->getSubmitValue('score_type_model'));
         $this->setGlobalCategoryId($form->getSubmitValue('global_category_id'));
         $this->setShowPreviousButton($form->getSubmitValue('show_previous_button'));
+        $this->setNotifications($form->getSubmitValue('notifications'));
 
         if ($form->getSubmitValue('activate_start_date_check') == 1) {
             $start_time = $form->getSubmitValue('start_time');
@@ -5444,8 +5513,13 @@ class Exercise
     ) {
         $setting = api_get_course_setting('email_alert_manager_on_new_quiz');
 
-        if (empty($setting)) {
+        if (empty($setting) && empty($this->getNotifications())) {
             return false;
+        }
+
+        $settingFromExercise = $this->getNotifications();
+        if (!empty($settingFromExercise)) {
+            $setting = $settingFromExercise;
         }
 
         // Email configuration settings
@@ -5457,7 +5531,6 @@ class Exercise
         }
 
         $sessionId = api_get_session_id();
-
         $sendStart = false;
         $sendEnd = false;
         $sendEndOpenQuestion = false;
@@ -7641,5 +7714,21 @@ class Exercise
         $this->showPreviousButton = $showPreviousButton;
 
         return $this;
+    }
+
+    /**
+     * @param array $notifications
+     */
+    public function setNotifications($notifications)
+    {
+        $this->notifications = $notifications;
+    }
+
+    /**
+     * @return array
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
     }
 }

@@ -511,11 +511,13 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['allow_quiz_show_previous_button_setting'] = false;
 // Allow to teachers review exercises question with audio notes
 //$_configuration["allow_teacher_comment_audio"] = false;
-
 // Hide search form in session list
 //$_configuration['hide_search_form_in_session_list'] = false;
 // Allow exchange of messages from teachers/bosses about a user.
 //$_configuration['private_messages_about_user'] = false;
+// Allow send email notification per exercise
+//ALTER TABLE c_quiz ADD COLUMN notifications VARCHAR(255) NULL DEFAULT NULL;
+//$_configuration['allow_notification_setting_per_exercise'] = false;
 
 // Score model
 // Allow to convert a score into a text/color label

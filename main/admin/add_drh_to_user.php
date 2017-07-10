@@ -74,7 +74,7 @@ if ($form->validate()) {
             continue;
         }
 
-        UserManager::subscribeUsersToHRManager($hrm->getId(), [$user->getId()]);
+        UserManager::subscribeUsersToHRManager($hrm->getId(), [$user->getId()], false);
     }
 
     Display::addFlash(

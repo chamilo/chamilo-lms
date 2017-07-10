@@ -4478,13 +4478,20 @@ class UserManager
 
     /**
      * Subscribes users to human resource manager (Dashboard feature)
-     * @param   int    $hr_dept_id
-     * @param   array   $users_id
-     * @param   int     affected rows
-     * */
-    public static function subscribeUsersToHRManager($hr_dept_id, $users_id)
+     * @param int $hr_dept_id
+     * @param array $users_id
+     * @param bool $deleteOtherAssignedUsers
+     * @return int
+     */
+    public static function subscribeUsersToHRManager($hr_dept_id, $users_id, $deleteOtherAssignedUsers = true)
     {
-        return self::subscribeUsersToUser($hr_dept_id, $users_id, USER_RELATION_TYPE_RRHH);
+        return self::subscribeUsersToUser(
+            $hr_dept_id,
+            $users_id,
+            USER_RELATION_TYPE_RRHH,
+            false,
+            $deleteOtherAssignedUsers
+        );
     }
 
     /**
@@ -4493,8 +4500,16 @@ class UserManager
      * @param array $subscribedUsersId The id of suscribed users
      * @param string $relationType The relation type
      * @param bool $deleteUsersBeforeInsert
+     * @param bool $deleteOtherAssignedUsers
+     * @return int
      */
-    public static function subscribeUsersToUser($userId, $subscribedUsersId, $relationType, $deleteUsersBeforeInsert = false)
+    public static function subscribeUsersToUser(
+        $userId,
+        $subscribedUsersId,
+        $relationType,
+        $deleteUsersBeforeInsert = false,
+        $deleteOtherAssignedUsers = true
+    )
     {
         $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $userRelAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -4503,29 +4518,31 @@ class UserManager
         $relationType = intval($relationType);
         $affectedRows = 0;
 
-        if (api_get_multiple_access_url()) {
-            // Deleting assigned users to hrm_id
-            $sql = "SELECT s.user_id FROM $userRelUserTable s 
+        if ($deleteOtherAssignedUsers) {
+            if (api_get_multiple_access_url()) {
+                // Deleting assigned users to hrm_id
+                $sql = "SELECT s.user_id FROM $userRelUserTable s 
                     INNER JOIN $userRelAccessUrlTable a ON (a.user_id = s.user_id) 
                     WHERE 
                         friend_user_id = $userId AND 
                         relation_type = $relationType AND 
                         access_url_id = ".api_get_current_access_url_id();
-        } else {
-            $sql = "SELECT user_id FROM $userRelUserTable 
+            } else {
+                $sql = "SELECT user_id FROM $userRelUserTable 
                     WHERE friend_user_id = $userId 
                     AND relation_type = $relationType";
-        }
-        $result = Database::query($sql);
+            }
+            $result = Database::query($sql);
 
-        if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result)) {
-                $sql = "DELETE FROM $userRelUserTable 
+            if (Database::num_rows($result) > 0) {
+                while ($row = Database::fetch_array($result)) {
+                    $sql = "DELETE FROM $userRelUserTable 
                         WHERE 
                           user_id = {$row['user_id']} AND 
                           friend_user_id = $userId AND 
                           relation_type = $relationType";
-                Database::query($sql);
+                    Database::query($sql);
+                }
             }
         }
 

@@ -1022,7 +1022,7 @@ if (empty($details)) {
                 $list = new LearnpathList(
                     api_get_user_id(),
                     $courseInfo['code'],
-                    null,
+                    $sessionId,
                     null,
                     false,
                     $categoryId

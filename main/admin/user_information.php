@@ -594,10 +594,10 @@ if ($hrmList) {
 
     /** @var UserRelUser $hrm */
     foreach ($hrmList as $hrm) {
-        $hrmInfo = api_get_user_info($hrm->getId());
+        $hrmInfo = api_get_user_info($hrm->getFriendUserId());
         $userPicture = isset($hrmInfo["avatar_medium"]) ? $hrmInfo["avatar_medium"] : $hrmInfo["avatar"];
 
-        echo '<div class="col-sm-3">';
+        echo '<div class="col-sm-4 col-md-3">';
         echo '<div class="media">';
         echo '<div class="media-left">';
         echo Display::img($userPicture, $hrmInfo['complete_name'], ['class' => 'media-object'], false);

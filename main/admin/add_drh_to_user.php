@@ -81,7 +81,7 @@ if ($form->validate()) {
         Display::return_message(get_lang('AssignedUsersHaveBeenUpdatedSuccessfully'), 'success')
     );
 
-    header('Location: '.api_get_self().'?u='.$user->getId());
+    header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$user->getId());
     exit;
 }
 

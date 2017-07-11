@@ -112,8 +112,7 @@ $code = isset($code) ? $code : null;
                             $categoryCode = $category['code'];
                             $countCourse = $category['count_courses'];
                             $form .= '<option '.($categoryCode == $codeType ? 'selected="selected" ' : '')
-                                .' value="'
-                                .$category['code'].'">'.$category['name'].' ( '.$countCourse.' ) </option>';
+                                .' value="'.$category['code'].'">'.$category['name'].' ('.$countCourse.') </option>';
                             if (!empty($browse_course_categories[$categoryCode])) {
                                 foreach ($browse_course_categories[$categoryCode] as $subCategory) {
                                     $subCategoryCode = $subCategory['code'];
@@ -121,9 +120,7 @@ $code = isset($code) ? $code : null;
                                         .($subCategoryCode == $codeType
                                             ? 'selected="selected" '
                                             : '')
-                                        .' value="'.$subCategory['code'].'">---'.$subCategory['name'].' ( '
-                                        .$subCategory['count_courses']
-                                        .' )</option>';
+                                        .' value="'.$subCategory['code'].'">---'.$subCategory['name'].' ('.$subCategory['count_courses'].')</option>';
                                 }
                             }
                         }

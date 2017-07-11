@@ -143,6 +143,42 @@ $form->addText(
 
 $form->applyFilter('visual_code', 'strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
+
+$countCategories = $courseCategoriesRepo->countAllInAccessUrl($urlId);
+if ($countCategories >= 100) {
+    // Category code
+    $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
+
+    $categorySelect = $form->addElement(
+        'select_ajax',
+        'category_code',
+        get_lang('CourseFaculty'),
+        null,
+        ['url' => $url]
+    );
+
+    if (!empty($courseInfo['categoryCode'])) {
+        $data = \CourseCategory::getCategory($courseInfo['categoryCode']);
+        $categorySelect->addOption($data['name'], $data['code']);
+    }
+} else {
+    $courseInfo['category_code'] = $courseInfo['categoryCode'];
+    $categories = $courseCategoriesRepo->findAllInAccessUrl($urlId);
+    $categoriesOptions = [null => get_lang('None')];
+
+    /** @var CourseCategory $category */
+    foreach ($categories as $category) {
+        $categoriesOptions[$category->getCode()] = (string) $category;
+    }
+
+    $form->addSelect(
+        'category_code',
+        get_lang('CourseFaculty'),
+        $categoriesOptions
+    );
+}
+
+
 $form->addElement(
     'advmultiselect',
     'course_teachers',
@@ -197,41 +233,6 @@ if (!empty($coursesInSession)) {
         );
         $courseInfo[$groupName] = $sessionTeachers;
     }
-}
-
-$countCategories = $courseCategoriesRepo->countAllInAccessUrl($urlId);
-
-if ($countCategories >= 100) {
-    // Category code
-    $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
-
-    $categorySelect = $form->addElement(
-        'select_ajax',
-        'category_code',
-        get_lang('CourseFaculty'),
-        null,
-        ['url' => $url]
-    );
-
-    if (!empty($courseInfo['categoryCode'])) {
-        $data = \CourseCategory::getCategory($courseInfo['categoryCode']);
-        $categorySelect->addOption($data['name'], $data['code']);
-    }
-} else {
-    $courseInfo['category_code'] = $courseInfo['categoryCode'];
-    $categories = $courseCategoriesRepo->findAllInAccessUrl($urlId);
-    $categoriesOptions = [null => get_lang('None')];
-
-    /** @var CourseCategory $category */
-    foreach ($categories as $category) {
-        $categoriesOptions[$category->getCode()] = $category;
-    }
-
-    $form->addSelect(
-        'category_code',
-        get_lang('CourseFaculty'),
-        $categoriesOptions
-    );
 }
 
 $form->addText('department_name', get_lang('CourseDepartment'), false, array('size' => '60'));

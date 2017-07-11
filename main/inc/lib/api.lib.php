@@ -1852,13 +1852,13 @@ function api_get_course_info_by_id($id = null)
                     course_category.name faName
                 FROM $course_table
                 LEFT JOIN $course_cat_table
-                ON course.category_code =  course_category.code
+                ON course.category_code = course_category.code
                 WHERE course.id = $id";
         $result = Database::query($sql);
         $_course = array();
         if (Database::num_rows($result) > 0) {
-            $course_data = Database::fetch_array($result);
-            $_course = api_format_course_array($course_data);
+            $row = Database::fetch_array($result);
+            $_course = api_format_course_array($row);
         }
         return $_course;
     }

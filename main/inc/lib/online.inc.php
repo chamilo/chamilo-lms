@@ -130,7 +130,7 @@ function online_logout($user_id = null, $logout_redirect = false)
         Database::query($sql);
     }
 
-    LoginDelete($user_id); //from inc/lib/online.inc.php - removes the "online" status
+    UserManager::loginDelete($user_id);
 
     //the following code enables the use of an external logout function.
     //example: define a $extAuthSource['ldap']['logout']="file.php" in configuration.php
@@ -160,19 +160,6 @@ function online_logout($user_id = null, $logout_redirect = false)
     }
 }
 
-/**
- * Remove all login records from the track_e_online stats table, for the given user ID.
- * @param int User ID
- * @param integer $user_id
- * @return void
- */
-function LoginDelete($user_id)
-{
-    $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-    $user_id = intval($user_id);
-    $query = "DELETE FROM ".$online_table." WHERE login_user_id = $user_id";
-    Database::query($query);
-}
 
 /**
  * @param int $user_id

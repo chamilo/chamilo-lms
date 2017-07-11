@@ -3191,80 +3191,8 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
 
             if ($result) {
                 error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
-                $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
 
-                error_log('Fix c_student_publication.post_group_id');
-
-                // Fix post_group_id
-                $sql = "SELECT * FROM c_student_publication WHERE (post_group_id <> 0 AND post_group_id is not null)";
-                $statement = $connection->executeQuery($sql);
-                $result = $statement->fetchAll();
-                foreach ($result as $row) {
-                    $groupId = $row['post_group_id'];
-                    $courseId = $row['c_id'];
-                    $workIid = $row['iid'];
-                    $sql = "SELECT iid from c_group_info WHERE c_id = $courseId AND iid = $groupId";
-                    $statement = $connection->executeQuery($sql);
-                    $count = $statement->rowCount();
-                    if ($count == 0) {
-                        $sql = "SELECT iid from c_group_info WHERE c_id = $courseId AND id = $groupId";
-                        $statement = $connection->executeQuery($sql);
-                        $count = $statement->rowCount();
-                        if ($count > 0) {
-                            $rowGroup = $statement->fetch();
-                            $newGroupId = $rowGroup['iid'];
-                            if ($newGroupId) {
-                                $sqlUpdate = "UPDATE c_student_publication 
-                                              SET post_group_id = $newGroupId 
-                                              WHERE 
-                                                c_id = $courseId AND
-                                                iid = $workIid
-                                              ";
-                                $connection->executeQuery($sqlUpdate);
-                            }
-                        }
-                    }
-                }
-                error_log('End - Fix c_student_publication.post_group_id');
-
-                // Delete c_student_publication from any session that doesn't exist anymore
-                $sql = "DELETE FROM c_student_publication 
-                        WHERE session_id NOT IN (SELECT id FROM session) AND (session_id <> 0 AND session_id is not null)";
-                $connection->executeQuery($sql);
-
-                error_log('Fix work documents');
-                // Fix work documents that don't have c_item_property value
-                $sql = "SELECT * FROM c_student_publication WHERE parent_id IS NOT NULL";
-                $statement = $connection->executeQuery($sql);
-                $result = $statement->fetchAll();
-                foreach ($result as $row) {
-                    $groupId = $row['post_group_id'];
-                    $courseId = $row['c_id'];
-                    $sessionId = $row['session_id'];
-                    $workId = $row['id'];
-                    $itemInfo = api_get_item_property_info(
-                        $courseId,
-                        'work',
-                        $workId,
-                        $sessionId
-                    );
-                    $courseInfo = api_get_course_info_by_id($courseId);
-                    if (empty($itemInfo)) {
-                        api_item_property_update(
-                            $courseInfo,
-                            'work',
-                            $workId,
-                            'visible',
-                            1,
-                            $groupId,
-                            null,
-                            null,
-                            null,
-                            $sessionId
-                        );
-                    }
-                }
-                error_log('End - Fix work documents');
+                fixPostGroupIds($connection);
 
                 $sql = "UPDATE settings_current SET selected_value = '1.11.0' WHERE variable = 'chamilo_database_version'";
                 $connection->executeQuery($sql);
@@ -3287,4 +3215,84 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
     echo '</div>';
 
     return true;
+}
+
+/**
+ * @param \Doctrine\DBAL\Connection $connection
+ */
+function fixPostGroupIds($connection)
+{
+    $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
+    error_log('Fix c_student_publication.post_group_id');
+
+    // Fix post_group_id
+    $sql = "SELECT * FROM c_student_publication WHERE (post_group_id <> 0 AND post_group_id is not null)";
+    $statement = $connection->executeQuery($sql);
+    $result = $statement->fetchAll();
+    foreach ($result as $row) {
+        $groupId = $row['post_group_id'];
+        $courseId = $row['c_id'];
+        $workIid = $row['iid'];
+        $sql = "SELECT iid from c_group_info WHERE c_id = $courseId AND iid = $groupId";
+        $statement = $connection->executeQuery($sql);
+        $count = $statement->rowCount();
+        if ($count == 0) {
+            $sql = "SELECT iid from c_group_info WHERE c_id = $courseId AND id = $groupId";
+            $statement = $connection->executeQuery($sql);
+            $count = $statement->rowCount();
+            if ($count > 0) {
+                $rowGroup = $statement->fetch();
+                $newGroupId = $rowGroup['iid'];
+                if ($newGroupId) {
+                    $sqlUpdate = "UPDATE c_student_publication 
+                                  SET post_group_id = $newGroupId 
+                                  WHERE 
+                                    c_id = $courseId AND
+                                    iid = $workIid
+                                  ";
+                    $connection->executeQuery($sqlUpdate);
+                }
+            }
+        }
+    }
+    error_log('End - Fix c_student_publication.post_group_id');
+
+    // Delete c_student_publication from any session that doesn't exist anymore
+    $sql = "DELETE FROM c_student_publication 
+            WHERE session_id NOT IN (SELECT id FROM session) AND (session_id <> 0 AND session_id is not null)";
+    $connection->executeQuery($sql);
+
+    error_log('Fix work documents');
+    // Fix work documents that don't have c_item_property value
+    $sql = "SELECT * FROM c_student_publication WHERE parent_id IS NOT NULL";
+    $statement = $connection->executeQuery($sql);
+    $result = $statement->fetchAll();
+    foreach ($result as $row) {
+        $groupId = $row['post_group_id'];
+        $courseId = $row['c_id'];
+        $sessionId = $row['session_id'];
+        $workId = $row['id'];
+        $itemInfo = api_get_item_property_info(
+            $courseId,
+            'work',
+            $workId,
+            $sessionId
+        );
+        $courseInfo = api_get_course_info_by_id($courseId);
+        if (empty($itemInfo)) {
+            api_item_property_update(
+                $courseInfo,
+                'work',
+                $workId,
+                'visible',
+                1,
+                $groupId,
+                null,
+                null,
+                null,
+                $sessionId
+            );
+        }
+    }
+    error_log('End - Fix work documents');
 }

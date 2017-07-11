@@ -66,6 +66,7 @@ class SocialManager extends UserManager
      * @param int user id
      * @param int user friend id
      * @param string
+     * @return int
      * @author isaac flores paz
      */
     public static function get_relation_between_contacts($user_id, $user_friend)
@@ -132,8 +133,12 @@ class SocialManager extends UserManager
      * @author Julio Montoya <gugli100@gmail.com> Cleaning code, function renamed, $load_extra_info option added
      * @author isaac flores paz
      */
-    public static function get_friends($user_id, $id_group = null, $search_name = null, $load_extra_info = true)
-    {
+    public static function get_friends(
+        $user_id,
+        $id_group = null,
+        $search_name = null,
+        $load_extra_info = true
+    ) {
         $list_ids_friends = array();
         $tbl_my_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $tbl_my_user = Database::get_main_table(TABLE_MAIN_USER);

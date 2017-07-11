@@ -333,7 +333,11 @@ class Statistics
                     array('title' => get_lang('UserInfo'))
                 );
 
-                $row[6] = TrackingUserLog::get_ip_from_user_event($row[6], $row[7], true);
+                $row[6] = Tracking::get_ip_from_user_event(
+                    $row[6],
+                    $row[7],
+                    true
+                );
                 if (empty($row[6])) {
                     $row[6] = get_lang('Unknown');
                 }

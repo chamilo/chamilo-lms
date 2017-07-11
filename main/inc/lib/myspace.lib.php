@@ -2689,8 +2689,12 @@ class MySpace
      * @param $orderDirection
      * @return array
      */
-    public static function getUserDataAccessTrackingOverview($from, $numberItems, $column, $orderDirection)
-    {
+    public static function getUserDataAccessTrackingOverview(
+        $from,
+        $numberItems,
+        $column,
+        $orderDirection
+    ) {
         $user = Database::get_main_table(TABLE_MAIN_USER);
         $course = Database::get_main_table(TABLE_MAIN_COURSE);
         $track_e_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
@@ -2733,7 +2737,6 @@ class MySpace
         $sql .= " LIMIT $from,$numberItems";
         $result = Database::query($sql);
 
-        //$clicks = Tracking::get_total_clicks_by_session();
         $data = array();
         while ($user = Database::fetch_assoc($result)) {
             $data[] = $user;

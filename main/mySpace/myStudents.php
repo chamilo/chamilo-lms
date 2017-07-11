@@ -469,7 +469,7 @@ $avg_student_progress = round($avg_student_progress, 2);
 $time_spent_on_the_course = 0;
 if (!empty($courseInfo)) {
     $time_spent_on_the_course = api_time_to_hms(
-        Tracking:: get_time_spent_on_the_course(
+        Tracking::get_time_spent_on_the_course(
             $user_info['user_id'],
             $courseInfo['real_id'],
             $sessionId
@@ -478,12 +478,15 @@ if (!empty($courseInfo)) {
 }
 
 // get information about connections on the platform by student
-$first_connection_date = Tracking :: get_first_connection_date($user_info['user_id']);
+$first_connection_date = Tracking::get_first_connection_date($user_info['user_id']);
 if ($first_connection_date == '') {
     $first_connection_date = get_lang('NoConnexion');
 }
 
-$last_connection_date = Tracking :: get_last_connection_date($user_info['user_id'], true);
+$last_connection_date = Tracking::get_last_connection_date(
+    $user_info['user_id'],
+    true
+);
 if ($last_connection_date == '') {
     $last_connection_date = get_lang('NoConnexion');
 }

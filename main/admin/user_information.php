@@ -328,7 +328,7 @@ if (count($sessions) > 0) {
             $csvContent[] = array_map('strip_tags', $row);
             $data[] = $row;
 
-            $result = TrackingUserLogCSV::getToolInformation(
+            $result = Tracking::getToolInformation(
                 $userId,
                 $courseInfo,
                 $id_session
@@ -435,7 +435,7 @@ if (Database::num_rows($res) > 0) {
         $csvContent[] = array_map('strip_tags', $row);
         $data[] = $row;
 
-        $result = TrackingUserLogCSV::getToolInformation(
+        $result = Tracking::getToolInformation(
             $userId,
             $courseInfo,
             0

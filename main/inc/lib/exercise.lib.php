@@ -2141,7 +2141,7 @@ HOTSPOT;
 
                             //Admin can always delete the attempt
                             if (($locked == false || api_is_platform_admin()) && !api_is_student_boss()) {
-                                $ip = TrackingUserLog::get_ip_from_user_event(
+                                $ip = Tracking::get_ip_from_user_event(
                                     $results[$i]['exe_user_id'],
                                     api_get_utc_datetime(),
                                     false

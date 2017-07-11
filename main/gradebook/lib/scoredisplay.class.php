@@ -20,6 +20,7 @@ class ScoreDisplay
     /**
      * Get the instance of this class
      * @param int $category_id
+     * @return ScoreDisplay
      */
     public static function instance($category_id = 0)
     {

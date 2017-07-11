@@ -136,8 +136,12 @@ class SystemAnnouncementManager
      * @param string $user_id
      * @return string
      */
-    public static function displayAllAnnouncements($visibility, $id = -1, $start = 0, $user_id = '')
-    {
+    public static function displayAllAnnouncements(
+        $visibility,
+        $id = -1,
+        $start = 0,
+        $user_id = ''
+    ) {
         $user_selected_language = api_get_interface_language();
         $start = intval($start);
         $userGroup = new UserGroup();
@@ -342,7 +346,9 @@ class SystemAnnouncementManager
         $db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 
         if (!checkdate($date_start_to_compare[1], $date_start_to_compare[2], $date_start_to_compare[0])) {
-            Display::addFlash(Display::return_message(get_lang('InvalidStartDate'), 'warning'));
+            Display::addFlash(
+                Display::return_message(get_lang('InvalidStartDate'), 'warning')
+            );
 
             return false;
         }
@@ -352,13 +358,17 @@ class SystemAnnouncementManager
             $date_end_to_compare[0]) &&
             !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])
         ) {
-            Display::addFlash(Display::return_message(get_lang('InvalidEndDate'), 'warning'));
+            Display::addFlash(
+                Display::return_message(get_lang('InvalidEndDate'), 'warning')
+            );
 
             return false;
         }
 
         if (strlen(trim($title)) == 0) {
-            Display::addFlash(Display::return_message(get_lang('InvalidTitle'), 'warning'));
+            Display::addFlash(
+                Display::return_message(get_lang('InvalidTitle'), 'warning')
+            );
 
             return false;
         }
@@ -879,7 +889,6 @@ class SystemAnnouncementManager
          ALTER TABLE sys_announcement ADD COLUMN visible_session_admin INT DEFAULT 0;
          ALTER TABLE sys_announcement ADD COLUMN visible_boss INT DEFAULT 0;
         */
-
         return api_get_configuration_value('system_announce_extra_roles');
     }
 

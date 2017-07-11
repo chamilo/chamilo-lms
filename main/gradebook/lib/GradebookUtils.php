@@ -482,8 +482,14 @@ class GradebookUtils
      * @param null $mainCourseCategory
      * @return array
      */
-    public static function get_printable_data($cat, $users, $alleval, $alllinks, $params, $mainCourseCategory = null)
-    {
+    public static function get_printable_data(
+        $cat,
+        $users,
+        $alleval,
+        $alllinks,
+        $params,
+        $mainCourseCategory = null
+    ) {
         $datagen = new FlatViewDataGenerator(
             $users,
             $alleval,
@@ -684,8 +690,10 @@ class GradebookUtils
      * @param int $cat_id The category id
      * @return array
      */
-    public static function get_list_gradebook_certificates_by_user_id($user_id, $cat_id = null)
-    {
+    public static function get_list_gradebook_certificates_by_user_id(
+        $user_id,
+        $cat_id = null
+    ) {
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $sql = 'SELECT 
                     gc.score_certificate, 

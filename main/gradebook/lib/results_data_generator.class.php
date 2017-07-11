@@ -54,8 +54,13 @@ class ResultsDataGenerator
      * 4 ['score']     : student's score
      * 5 ['display']   : custom score display (only if custom scoring enabled)
      */
-    public function get_data($sorting = 0, $start = 0, $count = null, $ignore_score_color = false, $pdf = false)
-    {
+    public function get_data(
+        $sorting = 0,
+        $start = 0,
+        $count = null,
+        $ignore_score_color = false,
+        $pdf = false
+    ) {
         // do some checks on count, redefine if invalid value
         $number_decimals = api_get_setting('gradebook_number_decimals');
         if (!isset($count)) {
@@ -86,12 +91,13 @@ class ResultsDataGenerator
                     $ignore_score_color
                 );
             }
-            $user['percentage_score'] = intval($scoredisplay->display_score(
-                array($result->get_score(), $this->evaluation->get_max()),
-                SCORE_PERCENT,
-                SCORE_BOTH,
-                true
-            )
+            $user['percentage_score'] = intval(
+                $scoredisplay->display_score(
+                    array($result->get_score(), $this->evaluation->get_max()),
+                    SCORE_PERCENT,
+                    SCORE_BOTH,
+                    true
+                )
             );
             if ($pdf && $number_decimals == null) {
                 $user['scoreletter'] = $result->get_score();
@@ -132,7 +138,7 @@ class ResultsDataGenerator
      * @param bool  Whether we want the real score (2/4 (50 %)) or the transformation (A, B, C, etc)
      * @param bool  Whether we want to ignore the score color
      * @param boolean $realscore
-     * @result string The score as we want to show it
+     * @return string The score as we want to show it
      */
     private function get_score_display($score, $realscore, $ignore_score_color = false)
     {

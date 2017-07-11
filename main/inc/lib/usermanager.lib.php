@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
+use ChamiloSession as Session;
 
 /**
  *
@@ -5297,5 +5298,99 @@ SQL;
 
             return Display::tabsOnlyLink($headers, $optionSelected);
         }
+    }
+
+    /**
+     * Make sure this function is protected because it does NOT check password!
+     *
+     * This function defines globals.
+     * @param  int $userId
+     * @param bool $checkIfUserCanLoginAs
+     * @return array
+     * @author Evie Embrechts
+     * @author Yannick Warnier <yannick.warnier@dokeos.com>
+    */
+    public static function loginAsUser($userId, $checkIfUserCanLoginAs = true)
+    {
+        $userId = intval($userId);
+        $userInfo = api_get_user_info($userId);
+
+        // Check if the user is allowed to 'login_as'
+        $canLoginAs = true;
+        if ($checkIfUserCanLoginAs) {
+            $canLoginAs = api_can_login_as($userId);
+        }
+
+        if (!$canLoginAs || empty($userInfo)) {
+            return false;
+        }
+
+        if ($userId) {
+            // Logout the current user
+            self::loginDelete(api_get_user_id());
+
+            Session::erase('_user');
+            Session::erase('is_platformAdmin');
+            Session::erase('is_allowedCreateCourse');
+            Session::erase('_uid');
+
+            // Cleaning session variables
+            $_user['firstName'] = $userInfo['firstname'];
+            $_user['lastName'] = $userInfo['lastname'];
+            $_user['mail'] = $userInfo['email'];
+            $_user['official_code'] = $userInfo['official_code'];
+            $_user['picture_uri'] = $userInfo['picture_uri'];
+            $_user['user_id'] = $userId;
+            $_user['id'] = $userId;
+            $_user['status'] = $userInfo['status'];
+
+            // Filling session variables with new data
+            Session::write('_uid', $userId);
+            Session::write('_user', $userInfo);
+            Session::write('is_platformAdmin', (bool) UserManager::is_admin($userId));
+            Session::write('is_allowedCreateCourse', (bool) ($userInfo['status'] == 1));
+            // will be useful later to know if the user is actually an admin or not (example reporting)
+            Session::write('login_as', true);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Remove all login records from the track_e_online stats table,
+     * for the given user ID.
+     * @param int User ID
+     * @param integer $user_id
+     * @return void
+     */
+    public static function loginDelete($user_id)
+    {
+        $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+        $user_id = intval($user_id);
+        $query = "DELETE FROM ".$online_table." WHERE login_user_id = $user_id";
+        Database::query($query);
+    }
+
+    /**
+     * Login as first admin user registered in the platform
+     * @return array
+     */
+    public static function logInAsFirstAdmin()
+    {
+        $adminList = self::get_all_administrators();
+
+        if (!empty($adminList)) {
+            $userInfo = current($adminList);
+            if (!empty($userInfo)) {
+                $result = self::loginAsUser($userInfo['user_id'], false);
+                if ($result && api_is_platform_admin()) {
+                    return api_get_user_info();
+                }
+            }
+        }
+
+        return [];
     }
 }

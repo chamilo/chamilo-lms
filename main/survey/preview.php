@@ -96,7 +96,7 @@ if (api_is_course_admin() ||
     api_is_allowed_to_session_edit(false, true)
 ) {
     // Survey information
-    echo '<div id="survey_title">'.$survey_data['survey_title'].'</div>';
+    echo '<div class="page-header"><h2>'.$survey_data['survey_title'].'</h2></div>';
 
     if (!empty($survey_data['survey_subtitle'])) {
         echo '<div id="survey_subtitle">'.$survey_data['survey_subtitle'].'</div>';
@@ -105,7 +105,7 @@ if (api_is_course_admin() ||
     // Displaying the survey introduction
     if (!isset($_GET['show'])) {
         if (!empty($survey_data['survey_introduction'])) {
-            echo '<div id="survey_content" class="survey_content">'.$survey_data['survey_introduction'].'</div>';
+            echo '<div class="survey_content">'.$survey_data['survey_introduction'].'</div>';
         }
         $limit = 0;
     }
@@ -205,34 +205,34 @@ if (api_is_course_admin() ||
     }
 
     $url = api_get_self().'?survey_id='.$survey_id.'&show='.$show;
-    $form = new FormValidator('question', 'post', $url);
-
+    $form = new FormValidator('question-survey', 'post', $url, null, null, FormValidator::LAYOUT_INLINE);
+    
     if (is_array($questions) && count($questions) > 0) {
         foreach ($questions as $key => & $question) {
             $ch_type = 'ch_'.$question['type'];
             /** @var survey_question $display */
             $display = new $ch_type;
-            $form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
-            $form->addHtml($question['survey_question']);
+            $form->addHtml('<div class="survey_question '.$ch_type.'">');
+            $form->addHtml('<h5 class="title">'.$question['question_id'].'. '.strip_tags($question['survey_question']).'</h5>');
             $display->render($form, $question);
-            $form->addHtml('</div></div>');
+            $form->addHtml('</div>');
         }
     }
-
+    $form->addHtml('<div class="start-survey">');
     if (($show < $numberofpages) || (!$_GET['show'] && count($questions) > 0)) {
         if ($show == 0) {
             $form->addButton(
                 'next_survey_page',
                 get_lang('StartSurvey'),
                 'arrow-right',
-                'success',
-                'large'
+                'success'
             );
         } else {
             $form->addButton(
                 'next_survey_page',
                 get_lang('NextQuestion'),
-                'arrow-right'
+                'arrow-right',
+                'success'
             );
         }
     }
@@ -245,9 +245,11 @@ if (api_is_course_admin() ||
         $form->addButton(
             'finish_survey',
             get_lang('FinishSurvey'),
-            'arrow-right'
+            'arrow-right',
+            'success'
         );
     }
+    $form->addHtml('</div>');
     $form->display();
 } else {
     echo Display::return_message(get_lang('NotAllowed'), 'error', false);

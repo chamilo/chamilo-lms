@@ -83,6 +83,7 @@ class Result
      * @param $id result id
      * @param $user_id user id (student)
      * @param $evaluation_id evaluation where this is a result for
+     * @return array
      */
     public static function load($id = null, $user_id = null, $evaluation_id = null)
     {
@@ -255,8 +256,8 @@ class Result
      */
     public function save()
     {
-        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-        $sql = 'UPDATE '.$tbl_grade_results.'
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $sql = 'UPDATE '.$table.'
                 SET user_id = ' . $this->get_user_id()
             . ', evaluation_id = '.$this->get_evaluation_id()
             . ', score = ';
@@ -275,8 +276,8 @@ class Result
      */
     public function delete()
     {
-        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-        $sql = 'DELETE FROM '.$tbl_grade_results.' WHERE id = '.$this->id;
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $sql = 'DELETE FROM '.$table.' WHERE id = '.$this->id;
         Database::query($sql);
     }
 }

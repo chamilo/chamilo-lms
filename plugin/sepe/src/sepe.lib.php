@@ -52,7 +52,7 @@ function checkIdentificationData()
     $result = Database::query($sql);
     if (Database::affected_rows($result) > 0) {
         return true;
-    }else{
+    } else {
         return false;
     }
 }
@@ -218,7 +218,7 @@ function getTutorsSpecialty($specialtyId)
     $res = Database::query($sql);
     $aux = array();
     while ($row = Database::fetch_assoc($res)) {
-        if (!in_array($row['id'],$tutorsList)) {
+        if (!in_array($row['id'], $tutorsList)) {
             $tutor = array();
             $tutor['id'] = $row['id'];
             if (trim($row['firstname']) != '' || trim($row['lastname']) != '') {
@@ -253,7 +253,7 @@ function getInfoSpecialtyTutor($tutorId)
     return $row;
 }
 
-function freeTeacherList($teacherList,$specialtyId,$platform_user_id)
+function freeTeacherList($teacherList, $specialtyId, $platform_user_id)
 {
     global $tableSepeSpecialtyTutors;
     global $tableSepeTutors;
@@ -492,7 +492,7 @@ function getSpecialtyTutorId($specialtyId, $tutorId)
     return $row['id'];
 }
 
-function checkInsertNewLog($platformUserId,$actionId)
+function checkInsertNewLog($platformUserId, $actionId)
 {
     global $tableSepeLogParticipant;
     $sql = "SELECT * FROM $tableSepeLogParticipant WHERE platform_user_id = $platformUserId AND action_id = $actionId";

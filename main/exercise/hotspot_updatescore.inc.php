@@ -20,16 +20,16 @@ $hotspotId = $_GET['hotspotId'];
 $exerciseId = $objExercise->selectId();
 if ($_GET['answerId'] == "0") { // click is NOT on a hotspot
     $hit = 0;
-	$answerId = $hotspotId;
+    $answerId = $hotspotId;
 
-	// remove from session
-	unset($_SESSION['exerciseResult'][$questionId][$answerId]);
+    // remove from session
+    unset($_SESSION['exerciseResult'][$questionId][$answerId]);
 } else { // user clicked ON a hotspot
-	$hit = 1;
-	$answerId = $hotspotId;
+    $hit = 1;
+    $answerId = $hotspotId;
 
-	// Save into session
-	$_SESSION['exerciseResult'][$questionId][$answerId] = $hit;
+    // Save into session
+    $_SESSION['exerciseResult'][$questionId][$answerId] = $hit;
 }
 
 //round-up the coordinates

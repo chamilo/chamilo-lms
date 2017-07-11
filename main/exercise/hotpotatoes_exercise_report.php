@@ -290,10 +290,17 @@ function exportExcel() {
 
 $(function() {
 <?php
-    echo Display::grid_js('results', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
-
+    echo Display::grid_js(
+        'results',
+        $url,
+        $columns,
+        $column_model,
+        $extra_params,
+        array(),
+        $action_links,
+        true
+    );
     if ($is_allowedToEdit || $is_tutor) { ?>
-
         //setSearchSelect("status");
         //
         //view:true, del:false, add:false, edit:false, excel:true}

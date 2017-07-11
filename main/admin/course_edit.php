@@ -143,7 +143,12 @@ $form->addText(
 
 $form->applyFilter('visual_code', 'strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
-$form->addElement('advmultiselect', 'course_teachers', get_lang('CourseTeachers'), $allTeachers);
+$form->addElement(
+    'advmultiselect',
+    'course_teachers',
+    get_lang('CourseTeachers'),
+    $allTeachers
+);
 $courseInfo['course_teachers'] = $course_teachers;
 if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
     $form->addElement(
@@ -158,7 +163,10 @@ $coursesInSession = SessionManager::get_session_by_course($courseInfo['real_id']
 if (!empty($coursesInSession)) {
     foreach ($coursesInSession as $session) {
         $sessionId = $session['id'];
-        $coaches = SessionManager::getCoachesByCourseSession($sessionId, $courseInfo['real_id']);
+        $coaches = SessionManager::getCoachesByCourseSession(
+            $sessionId,
+            $courseInfo['real_id']
+        );
         $teachers = $allTeachers;
 
         $sessionTeachers = array();
@@ -216,7 +224,7 @@ if ($countCategories >= 100) {
 
     /** @var CourseCategory $category */
     foreach ($categories as $category) {
-        $categoriesOptions[$category->getCode()] = $category->__toString();
+        $categoriesOptions[$category->getCode()] = $category;
     }
 
     $form->addSelect(

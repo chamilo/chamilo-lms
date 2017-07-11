@@ -116,7 +116,7 @@ if ($countCategories >= 100) {
 
     /** @var CourseCategory $category */
     foreach ($categories as $category) {
-        $categoriesOptions[$category->getCode()] = $category->__toString();
+        $categoriesOptions[$category->getCode()] = $category;
     }
 
     $form->addSelect(

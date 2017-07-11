@@ -3158,9 +3158,9 @@ class learnpath
             'passed' => 'scorm_completed',
             'succeeded' => 'scorm_completed',
             'browsed' => 'scorm_completed',
-            ];
-        foreach ($toc_list as $item) {
+        ];
 
+        foreach ($toc_list as $item) {
             $list['id'] = $item['id'];
             $list['status'] = $item['status'];
             $cssStatus = null;
@@ -4175,9 +4175,9 @@ class learnpath
                 false,
                 $id
             );
-            $learPaths = $list->get_flat_list();
 
-            foreach ($learPaths as $lp) {
+            $lpList = $list->get_flat_list();
+            foreach ($lpList as $lp) {
                 learnpath::toggle_visibility($lp['iid'], 0);
             }
 
@@ -5924,13 +5924,23 @@ class learnpath
                         }
                     } else {
                         $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'&path_item='.$arrLP[$i]['path'].'" class="btn btn-default">';
-                        $edit_icon .= Display::return_icon('edit.png', get_lang('LearnpathEditModule'), array(), ICON_SIZE_TINY);
+                        $edit_icon .= Display::return_icon(
+                            'edit.png',
+                            get_lang('LearnpathEditModule'),
+                            array(),
+                            ICON_SIZE_TINY
+                        );
                         $edit_icon .= '</a>';
                     }
                 } else {
                     if ($arrLP[$i]['item_type'] == TOOL_LP_FINAL_ITEM) {
                         $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'" class="btn btn-default">';
-                        $edit_icon .= Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_TINY);
+                        $edit_icon .= Display::return_icon(
+                            'edit.png',
+                            get_lang('Edit'),
+                            array(),
+                            ICON_SIZE_TINY
+                        );
                         $edit_icon .= '</a>';
                     }
                 }
@@ -12064,8 +12074,3 @@ EOD;
     }
 }
 
-if (!function_exists('trim_value')) {
-    function trim_value(& $value) {
-        $value = trim($value);
-    }
-}

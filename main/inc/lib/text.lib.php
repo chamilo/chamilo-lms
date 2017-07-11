@@ -861,3 +861,11 @@ function underScoreToCamelCase($string, $capitalizeFirstCharacter = true)
 
     return $str;
 }
+
+/**
+ * @param string $value
+ */
+function trim_value(& $value)
+{
+    $value = trim($value);
+}

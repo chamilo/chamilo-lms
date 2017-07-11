@@ -537,70 +537,71 @@ $table_title = Display::return_icon(
 ).$user_info['complete_name'];
 
 echo Display::page_subheader($table_title);
-$userPicture = UserManager::getUserPicture($user_info['user_id']);
+$userPicture = UserManager::getUserPicture($user_info['user_id'], USER_IMAGE_SIZE_BIG);
 $userGroupManager = new UserGroup();
 $userGroups = $userGroupManager->getNameListByUser(
     $user_info['user_id'],
     UserGroup::NORMAL_CLASS
 );
 ?>
-<img src="<?php echo $userPicture ?>">
 <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-2">
+        <img src="<?php echo $userPicture ?>" class="thumbnail img-responsive">
+    </div>
+    <div class="col-sm-5">
         <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th><?php echo get_lang('Information'); ?></th>
+                <th colspan="2"><?php echo get_lang('Information'); ?></th>
             </tr>
         </thead>
         <tbody>
         <tr>
-            <td><?php echo get_lang('Name').' : '.$user_info['complete_name']; ?></td>
+            <td><?php echo get_lang('Name'); ?></td>
+            <td><?php echo $user_info['complete_name']; ?></td>
         </tr>
         <tr>
+            <td><?php echo get_lang('Email'); ?></td>
             <td>
                 <?php
-                echo get_lang('Email').' : ';
-                if (!empty($user_info['email'])) {
-                    echo '<a href="mailto:'.$user_info['email'].'">'.$user_info['email'].'</a>';
-                } else {
-                    echo get_lang('NoEmail');
-                } ?>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <?php echo get_lang('Tel').' : ';
-                if (!empty($user_info['phone'])) {
-                    echo $user_info['phone'];
-                } else {
-                    echo get_lang('NoTel');
-                }
+                echo !empty($user_info['email'])
+                    ? '<a href="mailto:'.$user_info['email'].'">'.$user_info['email'].'</a>'
+                    : get_lang('NoEmail');
                 ?>
             </td>
         </tr>
         <tr>
-            <td>
-                <?php
-                echo get_lang('OfficialCode').' : ';
-                if (!empty($user_info['official_code'])) {
-                    echo $user_info['official_code'];
-                } else {
-                    echo get_lang('NoOfficialCode');
-                }
-                ?>
-            </td>
+            <td><?php echo get_lang('Tel'); ?></td>
+            <td><?php echo !empty($user_info['phone']) ? $user_info['phone'] : get_lang('NoTel'); ?></td>
         </tr>
         <tr>
-            <td><?php echo get_lang('OnLine').' : '.$online; ?> </td>
+            <td><?php echo get_lang('OfficialCode') ?></td>
+            <td><?php
+                echo !empty($user_info['official_code'])
+                    ? $user_info['official_code']
+                    : get_lang('NoOfficialCode');
+                ?></td>
+        </tr>
+        <tr>
+            <td><?php echo get_lang('OnLine'); ?></td>
+            <td><?php echo $online; ?></td>
         </tr>
         <?php
         if (!empty($course_code)) {
         ?>
             <tr>
-                <td>
-                    <a href="access_details.php?student=<?php echo $student_id; ?>&course=<?php echo $course_code; ?>&origin=<?php echo $origin; ?>&cidReq=<?php echo $course_code; ?>&id_session=<?php echo $sessionId; ?>"><?php echo get_lang('SeeAccesses'); ?></a>
-                </td>
+                <td colspan="2"><?php
+                    echo Display::url(
+                        get_lang('SeeAccesses'),
+                        'access_details.php?'.http_build_query([
+                            'student' => $student_id,
+                            'course' => $course_code,
+                            'origin' => $origin,
+                            'cidReq' => $course_code,
+                            'id_session' => $sessionId
+                        ])
+                    );
+                    ?></td>
             </tr>
         <?php
         }
@@ -627,7 +628,7 @@ $userGroups = $userGroupManager->getNameListByUser(
         </tbody>
     </table>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-5">
     <table class="table table-striped table-hover">
         <thead>
         <tr>

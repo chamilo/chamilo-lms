@@ -3455,6 +3455,14 @@ i.size-32.icon-new-work{
     padding-top: 20px;
     margin-bottom: 20px;
 }
+.survey-reports .list-group .list-group-item h4{
+    font-weight: bold;
+    font-size: 14px;
+}
+.survey-reports .list-group .list-group-item img{
+    float: left;
+    margin-right: 5px;
+}
 .survey-block .table tbody tr:hover td{
   background-color: #fff6d5 ;
 }

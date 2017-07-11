@@ -4418,6 +4418,12 @@ class UserManager
             case STUDENT_BOSS:
                 $drhConditions = " AND friend_user_id = $userId AND relation_type = ".USER_RELATION_TYPE_BOSS;
                 break;
+            case HRM_REQUEST:
+                $drhConditions .= " AND
+                    friend_user_id = '$userId' AND
+                    relation_type = '".USER_RELATION_TYPE_HRM_REQUEST."'
+                ";
+                break;
         }
 
         $join = null;
@@ -4493,6 +4499,37 @@ class UserManager
             false,
             $deleteOtherAssignedUsers
         );
+    }
+
+    /**
+     * Register request to assign users to HRM
+     * @param int $hrmId The HRM ID
+     * @param int $usersId The users ID
+     * @return int
+     */
+    public static function requestUsersToHRManager($hrmId, $usersId)
+    {
+        return self::subscribeUsersToUser(
+            $hrmId,
+            $usersId,
+            USER_RELATION_TYPE_HRM_REQUEST,
+            false,
+            false
+        );
+    }
+
+    /**
+     * Remove the requests for assign a user to a HRM
+     * @param \Chamilo\UserBundle\Entity\User $hrmId
+     */
+    public static function clearHrmRequestsForUser(User $hrmId)
+    {
+        Database::getManager()
+            ->createQuery('
+                DELETE FROM ChamiloCoreBundle:UserRelUser uru
+                WHERE uru.friendUserId = :hrm_id AND uru.relationType = :relation_type
+            ')
+            ->execute(['hrm_id' => $hrmId, 'relation_type' => USER_RELATION_TYPE_HRM_REQUEST]);
     }
 
     /**

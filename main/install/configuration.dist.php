@@ -564,3 +564,5 @@ $_configuration['score_grade_model'] = [
     ]
 ];
 */
+//Allow show link to request vinculation HRM-user
+//$_configuration['show_link_request_hrm_user'] = false;

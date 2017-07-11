@@ -2446,7 +2446,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
-     * Get the HRM list from the user
+     * Get the list of HRM who have assigned this user
      * @return array
      */
     public function getHrm()

@@ -975,6 +975,18 @@ class IndexManager
         $profile_content .= '<li class="profile-social"><a href="'.$editProfileUrl.'">'
             .Display::return_icon('edit-profile.png', get_lang('EditProfile'))
             .get_lang('EditProfile').'</a></li>';
+
+        if (api_get_configuration_value('show_link_request_hrm_user') && api_is_drh()) {
+            $label = get_lang('RequireVinculationWithUser');
+            $icon = Display::return_icon('new_group.png', $label);
+            $profile_content .= '<li>'
+                .Display::url(
+                    $icon.$label,
+                    api_get_path(WEB_CODE_PATH).'social/require_user_vinculation.php'
+                )
+                .'</li>';
+        }
+
         $profile_content .= '</ul>';
 
         $html = self::show_right_block(

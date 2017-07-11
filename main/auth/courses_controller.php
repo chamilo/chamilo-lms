@@ -186,7 +186,7 @@ class CoursesController
             $limit,
             $justVisible
         );
-        $data['browse_course_categories']   = $browse_course_categories;
+        $data['browse_course_categories'] = $browse_course_categories;
         $data['search_term'] = Security::remove_XSS($search_term); //filter before showing in template
 
         // getting all the courses to which the user is subscribed to

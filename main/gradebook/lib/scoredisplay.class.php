@@ -20,11 +20,12 @@ class ScoreDisplay
     /**
      * Get the instance of this class
      * @param int $category_id
+     * @return ScoreDisplay
      */
     public static function instance($category_id = 0)
     {
         static $instance;
-        if (!isset ($instance)) {
+        if (!isset($instance)) {
             $instance = new ScoreDisplay($category_id);
         }
 
@@ -197,8 +198,11 @@ class ScoreDisplay
      * @param int   score color percent (optional)
      * @param int   gradebook category id (optional)
      */
-    public function update_custom_score_display_settings($displays, $scorecolpercent = 0, $category_id = null)
-    {
+    public function update_custom_score_display_settings(
+        $displays,
+        $scorecolpercent = 0,
+        $category_id = null
+    ) {
         $this->custom_display = $displays;
         $this->custom_display_conv = $this->convert_displays($this->custom_display);
 
@@ -448,6 +452,7 @@ class ScoreDisplay
     /**
      * Depends on the teacher's configuration of thresholds. i.e. [0 50] "Bad", [50:100] "Good"
      * @param array $score
+     * @return string
      */
     private function display_custom($score)
     {
@@ -564,7 +569,6 @@ class ScoreDisplay
     private function sort_display($item1, $item2)
     {
         if ($item1['score'] === $item2['score']) {
-
             return 0;
         } else {
             return ($item1['score'] < $item2['score'] ? -1 : 1);

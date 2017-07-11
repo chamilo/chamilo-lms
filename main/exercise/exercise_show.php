@@ -801,7 +801,7 @@ foreach ($questionList as $questionId) {
                     }
                 } else {
                     foreach ($model['score_list'] as $item) {
-                        $i = api_number_format($item['score_to_qualify']/100 * $questionWeighting, 2);
+                        $i = api_number_format($item['score_to_qualify'] / 100 * $questionWeighting, 2);
                         $model = ExerciseLib::getModelStyle($item, $i);
                         echo '<option value="'.$i.'" '.(($i == $questionScore) ? "selected='selected'" : '').'>'.$model.'</option>';
                     }

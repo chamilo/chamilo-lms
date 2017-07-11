@@ -106,11 +106,19 @@ class ExtraFieldValue extends Model
 
         // Parse params.
         foreach ($extraFields as $fieldDetails) {
-            if ($fieldDetails['visible_to_self'] != 1 && !api_is_platform_admin(true, true)) {
-                continue;
-            }
 
             $field_variable = $fieldDetails['variable'];
+
+            // if the field is not visible to the user in the end, we need to apply special rules
+            if ($fieldDetails['visible_to_self'] != 1) {
+                //only admins should be able to add those values
+                if (!api_is_platform_admin(true, true)) {
+                    // although if not admin but sent through a CLI script, we should accept it as well
+                    if (PHP_SAPI != 'cli') {
+                        continue; //not a CLI script, so don't write the value to DB
+                    }
+                }
+            }
 
             if (isset($params['extra_'.$field_variable])) {
                 $value = $params['extra_'.$field_variable];

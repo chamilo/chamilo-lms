@@ -863,7 +863,14 @@ class FlatViewDataGenerator
 
                     $row[] = array(
                         $item_value,
-                        trim($scoredisplay->display_score($real_score, SCORE_CUSTOM, null, true))
+                        trim(
+                            $scoredisplay->display_score(
+                                $real_score,
+                                SCORE_CUSTOM,
+                                null,
+                                true
+                            )
+                        )
                     );
                     $item_value_total += $item_value;
                     $final_score += $score[0];
@@ -873,7 +880,14 @@ class FlatViewDataGenerator
                 $total_score = array($final_score, $item_total);
                 $row[] = array(
                     $final_score,
-                    trim($scoredisplay->display_score($total_score, SCORE_CUSTOM, null, true))
+                    trim(
+                        $scoredisplay->display_score(
+                            $total_score,
+                            SCORE_CUSTOM,
+                            null,
+                            true
+                        )
+                    )
                 );
             } else {
                 for ($count = 0; $count < count($this->evals_links); $count++) {
@@ -884,7 +898,17 @@ class FlatViewDataGenerator
                     $item_total += $item->get_weight();
                     $score_denom = ($score[1] == 0) ? 1 : $score[1];
                     $score_final = ($score[0] / $score_denom) * 100;
-                    $row[] = array($score_final, trim($scoredisplay->display_score($score, SCORE_CUSTOM, null, true)));
+                    $row[] = array(
+                        $score_final,
+                        trim(
+                            $scoredisplay->display_score(
+                                $score,
+                                SCORE_CUSTOM,
+                                null,
+                                true
+                            )
+                        )
+                    );
 
                 }
                 $total_score = array($item_value, $item_total);
@@ -892,7 +916,17 @@ class FlatViewDataGenerator
                 if ($displayWarning) {
                     echo Display::return_message($total_score[1], 'warning');
                 }
-                $row[] = array($score_final, trim($scoredisplay->display_score($total_score, SCORE_CUSTOM, null, true)));
+                $row[] = array(
+                    $score_final,
+                    trim(
+                        $scoredisplay->display_score(
+                            $total_score,
+                            SCORE_CUSTOM,
+                            null,
+                            true
+                        )
+                    )
+                );
             }
 
             $data[] = $row;

@@ -350,10 +350,10 @@ class Sepe
                     'action_id' => $actionId,
                     'specialty_origin' => $specialtyOrigin,
                     'professional_area' => $professionalArea,
-                    'specialty_code' =>$specialtyCode ,
+                    'specialty_code' =>$specialtyCode,
                     'center_origin' => $centerOrigin,
                     'center_code' => $centerCode,
-                    'start_date' => $startDate ,
+                    'start_date' => $startDate,
                     'end_date' => $endDate,
                     'modality_impartition' => $modalityImpartition,
                     'classroom_hours' => $classroomHours,
@@ -368,7 +368,7 @@ class Sepe
                     'night_access_number' => $nightAccessNumber,
                     'night_total_duration' => $nightTotalDuration,
                     'attendees_count' => $attendeesCount,
-                    'learning_activity_count' => $learningActivityCount ,
+                    'learning_activity_count' => $learningActivityCount,
                     'attempt_count' => $attemptCount,
                     'evaluation_activity_count' => $evaluationActivityCount
                 );
@@ -400,17 +400,17 @@ class Sepe
                             $centerCode = $centro->CODIGO_CENTRO;
                             $sql = "SELECT id FROM $tableCenters WHERE center_origin='".$centerOrigin."' AND center_code='".$centerCode."';";
                             $res = Database::query($sql);
-                            if (Database::num_rows($res)>0) {
+                            if (Database::num_rows($res) > 0) {
                                 $aux_row = Database::fetch_assoc($res);
                                 $centerId = $aux_row['id'];
                             } else {
                                 $sql = "INSERT INTO $tableCenters (center_origin, center_code)
-                                        VALUES ('" . $centerOrigin . "','" . $centerCode . "');";
+                                        VALUES ('".$centerOrigin."','".$centerCode."');";
                                 Database::query($sql);
                                 $centerId = Database::insert_id();
                             }
                             $sql = "INSERT INTO $tableSpecialtyClassroom (specialty_id, center_id)
-                                    VALUES ('" . $specialtyId . "','" . $centerId . "')";
+                                    VALUES ('".$specialtyId."','".$centerId."')";
                             Database::query($sql);
                             $id = Database::insert_id();
 
@@ -450,12 +450,12 @@ class Sepe
                                 $sql = "SELECT id FROM $tableTutors WHERE 
                                 document_type='".$documentType."' AND document_number='".$documentNumber."' AND document_letter='".$documentLetter."';";
                                 $res = Database::query($sql);
-                                if (Database::num_rows($res)>0) {
+                                if (Database::num_rows($res) > 0) {
                                     $aux_row = Database::fetch_assoc($res);
                                     $tutorId = $aux_row['id'];
                                 } else {
                                     $sql = "INSERT INTO $tableTutors (document_type, document_number, document_letter)
-                                        VALUES ('" . $documentType . "','" . $documentNumber . "','" . $documentLetter . "');";
+                                        VALUES ('".$documentType."','".$documentNumber."','".$documentLetter."');";
                                     Database::query($sql);
                                     $tutorId = Database::insert_id();
                                 }
@@ -469,7 +469,7 @@ class Sepe
                                     );
                                 }
                                 $sql = "INSERT INTO $tableSpecialityTutors (specialty_id, tutor_id, tutor_accreditation, professional_experience, teaching_competence, experience_teleforming, training_teleforming)
-                                        VALUES ('" . $specialtyId . "','" . $tutorId . "','" . $tutorAccreditation . "','" . $professionalExperience . "','" . $teachingCompetence . "','" . $experienceTeleforming . "','" . $trainingTeleforming . "');";
+                                        VALUES ('".$specialtyId."','".$tutorId."','".$tutorAccreditation."','".$professionalExperience."','".$teachingCompetence."','".$experienceTeleforming."','".$trainingTeleforming."');";
                                 Database::query($sql);
                             }
                         }
@@ -511,7 +511,7 @@ class Sepe
                     $documentLetterCompany = isset($participant->CONTRATO_FORMACION->ID_TUTOR_EMPRESA->LETRA_NIF) ? $participant->CONTRATO_FORMACION->ID_TUTOR_EMPRESA->LETRA_NIF : null;
                     if (!empty($documentTypeCompany) || !empty($documentNumberCompany) || !empty($documentLetterCompany)) {
                         $tmp_e = Database::query('SELECT id FROM '.$tableTutorsCompany.' WHERE document_type="'.$documentTypeCompany.'" AND document_number="'.$documentNumberCompany.'" AND document_letter="'.$documentLetterCompany.'";');
-                        if (Database::num_rows($tmp_e)>0) {
+                        if (Database::num_rows($tmp_e) > 0) {
                             $row_tmp = Database::fetch_assoc($tmp_e);
                             $tutorIdCompany = $row_tmp['id'];
                             Database::query("UPDATE $tableTutorsCompany SET company='1' WHERE id='".$tutorIdCompany."'");
@@ -531,7 +531,7 @@ class Sepe
                     $documentLetterTraining = isset($participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->LETRA_NIF) ? $participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->LETRA_NIF : null;
                     if (!empty($documentTypeTraining) || !empty($documentNumberTraining) || !empty($documentLetterTraining)) {
                         $tmp_f = Database::query('SELECT id FROM '.$tableTutorsCompany.' WHERE document_type="'.$documentTypeTraining.'" AND document_number="'.$documentNumberTraining.'" AND document_letter="'.$documentLetterTraining.'";');
-                        if (Database::num_rows($tmp_f)>0) {
+                        if (Database::num_rows($tmp_f) > 0) {
                             $row_tmp = Database::fetch_assoc($tmp_f);
                             $tutorIdTraining = $row_tmp['id'];
                             Database::query("UPDATE $tableTutorsCompany SET training='1' WHERE id='".$tutorIdTraining."'");
@@ -623,7 +623,7 @@ class Sepe
 
                         $table_aux = Database::get_main_table('plugin_sepe_participants_specialty');
                         $sql = "INSERT INTO $table_aux (participant_id,specialty_origin,professional_area,specialty_code,registration_date,leaving_date,center_origin,center_code,start_date,end_date,final_result,final_qualification,final_score)
-                                VALUES ('" . $participantId . "','" . $specialtyOrigin . "','" . $professionalArea . "','" . $specialtyCode . "','" . $registrationDate . "','" . $leavingDate . "','" . $centerOrigin . "','" . $centerCode . "','" . $startDate . "','" . $endDate . "','" . $finalResult . "','" . $finalQualification . "','" . $finalScore . "');";
+                                VALUES ('".$participantId."','".$specialtyOrigin."','".$professionalArea."','".$specialtyCode."','".$registrationDate."','".$leavingDate."','".$centerOrigin."','".$centerCode."','".$startDate."','".$endDate."','".$finalResult."','".$finalQualification."','".$finalScore."');";
                         Database::query($sql);
                         $participantSpecialtyId = Database::insert_id();
                         if (empty($participantSpecialtyId)) {
@@ -653,7 +653,7 @@ class Sepe
 
                                 $table_aux2 = Database::get_main_table('plugin_sepe_participants_specialty_tutorials');
                                 $sql = "INSERT INTO $table_aux2 (participant_specialty_id,center_origin,center_code,start_date,end_date)
-                                        VALUES ('" . $participantSpecialtyId . "','" . $centerOrigin . "','" . $centerCode . "','" . $startDate . "','" . $endDate . "');";
+                                        VALUES ('".$participantSpecialtyId."','".$centerOrigin."','".$centerCode."','".$startDate."','".$endDate."');";
                                 $rs = Database::query($sql);
                                 if (!$rs) {
                                     return array(
@@ -747,7 +747,7 @@ class Sepe
                 while ($aux = Database::fetch_assoc($rs)) {
                     $specialtyId = $aux['id'];
                     $sql = "SELECT * FROM $classRoomTable
-                            WHERE specialty_id='" . $specialtyId . "'";
+                            WHERE specialty_id='".$specialtyId."'";
                     $resultClassroom = Database::query($sql);
                     if (Database::num_rows($resultClassroom) === 0) {
                         return array(
@@ -772,14 +772,14 @@ class Sepe
                         $classroomCenterList->append($classroomCenter);
                     }
                     $sql = "SELECT * FROM $specialityTutorTable
-                            WHERE specialty_id='" . $specialtyId . "'";
+                            WHERE specialty_id='".$specialtyId."'";
                     $resultSpecialtyTutor = Database::query($sql);
 
                     $trainingTutors = new ArrayObject();
                     if (Database::num_rows($resultSpecialtyTutor)) {
                         while ($tmp_aux = Database::fetch_assoc($resultSpecialtyTutor)) {
                             $sql = "SELECT * FROM $tutorTable
-                                    WHERE id='" . $tmp_aux['tutor_id'] . "'
+                                    WHERE id='".$tmp_aux['tutor_id']."'
                                     LIMIT 1";
                               $rs_tutor = Database::query($sql);
                             if (Database::num_rows($rs_tutor)) {
@@ -906,8 +906,8 @@ class Sepe
                         $obj->HORARIO_TARDE->DURACION_TOTAL = $aux['afternoon_total_duration'];
                     }
 
-                    if (!empty($aux['night_participants_number'])  ||
-                        !empty($aux['night_access_number'])  ||
+                    if (!empty($aux['night_participants_number']) ||
+                        !empty($aux['night_access_number']) ||
                         !empty($aux['night_total_duration'])
                     ) {
                         $obj->HORARIO_NOCHE = new stdClass();
@@ -916,9 +916,9 @@ class Sepe
                         $obj->HORARIO_NOCHE->DURACION_TOTAL = $aux['night_total_duration'];
                     }
 
-                    if (!empty($aux['attendees_count'])  ||
-                        !empty($aux['learning_activity_count'])  ||
-                        !empty($aux['attempt_count'])  ||
+                    if (!empty($aux['attendees_count']) ||
+                        !empty($aux['learning_activity_count']) ||
+                        !empty($aux['attempt_count']) ||
                         !empty($aux['evaluation_activity_count'])
                     ) {
                         $obj->SEGUIMIENTO_EVALUACION = new stdClass();
@@ -963,7 +963,7 @@ class Sepe
                     $participantId = $aux['id'];
 
                     $sql = "SELECT * FROM $participantsSpecialityTable
-                            WHERE participant_id='" . $participantId . "'";
+                            WHERE participant_id='".$participantId."'";
                     $resultParticipantSpecialty = Database::query($sql);
 
                     $namespace = null;
@@ -971,7 +971,7 @@ class Sepe
                     while ($tmp = Database::fetch_assoc($resultParticipantSpecialty)) {
                         $participantSpecialtyId = $tmp['id'];
                         $sql = "SELECT * FROM $participantsSpecialityTutorialsTable
-                                WHERE participant_specialty_id='" . $participantSpecialtyId . "'";
+                                WHERE participant_specialty_id='".$participantSpecialtyId."'";
                         $resultTutorials = Database::query($sql);
                         $classroomTutorials = new ArrayObject();
 

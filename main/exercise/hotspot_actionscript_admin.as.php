@@ -97,10 +97,10 @@ for ($i = 1; $i <= $nbrAnswers; $i++) {
         }*/
     }
 
-	// This is a good answer, count + 1 for nmbr of clicks
-	if ($answers['weighting'][$i] > 0) {
-		$nmbrTries++;
-	}
+    // This is a good answer, count + 1 for nmbr of clicks
+    if ($answers['weighting'][$i] > 0) {
+        $nmbrTries++;
+    }
 
     $hotSpot['coord'] = $answers['hotspot_coordinates'][$i];
     $data['hotspots'][] = $hotSpot;

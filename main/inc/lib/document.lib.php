@@ -2167,11 +2167,23 @@ class DocumentManager
      * @return   array    List of file paths. An additional field containing 'local' or 'remote' helps determine
      * if the file should be copied into the zip or just linked
      */
-    public static function get_resources_from_source_html($source_html, $is_file = false, $type = null, $recursivity = 1)
-    {
+    public static function get_resources_from_source_html(
+        $source_html,
+        $is_file = false,
+        $type = null,
+        $recursivity = 1
+    ) {
         $max = 5;
         $attributes = array();
-        $wanted_attributes = array('src', 'url', '@import', 'href', 'value', 'flashvars', 'poster');
+        $wanted_attributes = array(
+            'src',
+            'url',
+            '@import',
+            'href',
+            'value',
+            'flashvars',
+            'poster'
+        );
         $explode_attributes = array('flashvars' => 'file');
         $abs_path = '';
 

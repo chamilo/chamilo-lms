@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
+use ChamiloSession as Session;
 
 /**
  *
@@ -4478,13 +4479,20 @@ class UserManager
 
     /**
      * Subscribes users to human resource manager (Dashboard feature)
-     * @param   int    $hr_dept_id
-     * @param   array   $users_id
-     * @param   int     affected rows
-     * */
-    public static function subscribeUsersToHRManager($hr_dept_id, $users_id)
+     * @param int $hr_dept_id
+     * @param array $users_id
+     * @param bool $deleteOtherAssignedUsers
+     * @return int
+     */
+    public static function subscribeUsersToHRManager($hr_dept_id, $users_id, $deleteOtherAssignedUsers = true)
     {
-        return self::subscribeUsersToUser($hr_dept_id, $users_id, USER_RELATION_TYPE_RRHH);
+        return self::subscribeUsersToUser(
+            $hr_dept_id,
+            $users_id,
+            USER_RELATION_TYPE_RRHH,
+            false,
+            $deleteOtherAssignedUsers
+        );
     }
 
     /**
@@ -4493,8 +4501,16 @@ class UserManager
      * @param array $subscribedUsersId The id of suscribed users
      * @param string $relationType The relation type
      * @param bool $deleteUsersBeforeInsert
+     * @param bool $deleteOtherAssignedUsers
+     * @return int
      */
-    public static function subscribeUsersToUser($userId, $subscribedUsersId, $relationType, $deleteUsersBeforeInsert = false)
+    public static function subscribeUsersToUser(
+        $userId,
+        $subscribedUsersId,
+        $relationType,
+        $deleteUsersBeforeInsert = false,
+        $deleteOtherAssignedUsers = true
+    )
     {
         $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $userRelAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -4503,29 +4519,31 @@ class UserManager
         $relationType = intval($relationType);
         $affectedRows = 0;
 
-        if (api_get_multiple_access_url()) {
-            // Deleting assigned users to hrm_id
-            $sql = "SELECT s.user_id FROM $userRelUserTable s 
+        if ($deleteOtherAssignedUsers) {
+            if (api_get_multiple_access_url()) {
+                // Deleting assigned users to hrm_id
+                $sql = "SELECT s.user_id FROM $userRelUserTable s 
                     INNER JOIN $userRelAccessUrlTable a ON (a.user_id = s.user_id) 
                     WHERE 
                         friend_user_id = $userId AND 
                         relation_type = $relationType AND 
                         access_url_id = ".api_get_current_access_url_id();
-        } else {
-            $sql = "SELECT user_id FROM $userRelUserTable 
+            } else {
+                $sql = "SELECT user_id FROM $userRelUserTable 
                     WHERE friend_user_id = $userId 
                     AND relation_type = $relationType";
-        }
-        $result = Database::query($sql);
+            }
+            $result = Database::query($sql);
 
-        if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result)) {
-                $sql = "DELETE FROM $userRelUserTable 
+            if (Database::num_rows($result) > 0) {
+                while ($row = Database::fetch_array($result)) {
+                    $sql = "DELETE FROM $userRelUserTable 
                         WHERE 
                           user_id = {$row['user_id']} AND 
                           friend_user_id = $userId AND 
                           relation_type = $relationType";
-                Database::query($sql);
+                    Database::query($sql);
+                }
             }
         }
 
@@ -5214,7 +5232,7 @@ class UserManager
      * @param string $lastname Lastname to search
      * @return array The user list
      */
-    public static function getUserByName($firstname, $lastname)
+    public static function getUsersByName($firstname, $lastname)
     {
         $firstname = Database::escape_string($firstname);
         $lastname = Database::escape_string($lastname);
@@ -5280,5 +5298,99 @@ SQL;
 
             return Display::tabsOnlyLink($headers, $optionSelected);
         }
+    }
+
+    /**
+     * Make sure this function is protected because it does NOT check password!
+     *
+     * This function defines globals.
+     * @param  int $userId
+     * @param bool $checkIfUserCanLoginAs
+     * @return array
+     * @author Evie Embrechts
+     * @author Yannick Warnier <yannick.warnier@dokeos.com>
+    */
+    public static function loginAsUser($userId, $checkIfUserCanLoginAs = true)
+    {
+        $userId = intval($userId);
+        $userInfo = api_get_user_info($userId);
+
+        // Check if the user is allowed to 'login_as'
+        $canLoginAs = true;
+        if ($checkIfUserCanLoginAs) {
+            $canLoginAs = api_can_login_as($userId);
+        }
+
+        if (!$canLoginAs || empty($userInfo)) {
+            return false;
+        }
+
+        if ($userId) {
+            // Logout the current user
+            self::loginDelete(api_get_user_id());
+
+            Session::erase('_user');
+            Session::erase('is_platformAdmin');
+            Session::erase('is_allowedCreateCourse');
+            Session::erase('_uid');
+
+            // Cleaning session variables
+            $_user['firstName'] = $userInfo['firstname'];
+            $_user['lastName'] = $userInfo['lastname'];
+            $_user['mail'] = $userInfo['email'];
+            $_user['official_code'] = $userInfo['official_code'];
+            $_user['picture_uri'] = $userInfo['picture_uri'];
+            $_user['user_id'] = $userId;
+            $_user['id'] = $userId;
+            $_user['status'] = $userInfo['status'];
+
+            // Filling session variables with new data
+            Session::write('_uid', $userId);
+            Session::write('_user', $userInfo);
+            Session::write('is_platformAdmin', (bool) UserManager::is_admin($userId));
+            Session::write('is_allowedCreateCourse', (bool) ($userInfo['status'] == 1));
+            // will be useful later to know if the user is actually an admin or not (example reporting)
+            Session::write('login_as', true);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Remove all login records from the track_e_online stats table,
+     * for the given user ID.
+     * @param int User ID
+     * @param integer $user_id
+     * @return void
+     */
+    public static function loginDelete($user_id)
+    {
+        $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+        $user_id = intval($user_id);
+        $query = "DELETE FROM ".$online_table." WHERE login_user_id = $user_id";
+        Database::query($query);
+    }
+
+    /**
+     * Login as first admin user registered in the platform
+     * @return array
+     */
+    public static function logInAsFirstAdmin()
+    {
+        $adminList = self::get_all_administrators();
+
+        if (!empty($adminList)) {
+            $userInfo = current($adminList);
+            if (!empty($userInfo)) {
+                $result = self::loginAsUser($userInfo['user_id'], false);
+                if ($result && api_is_platform_admin()) {
+                    return api_get_user_info();
+                }
+            }
+        }
+
+        return [];
     }
 }

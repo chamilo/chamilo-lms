@@ -28,6 +28,46 @@ abstract class AbstractLink implements GradebookItem
     public $studentList;
 
     /**
+     * @return bool
+     */
+    abstract function has_results();
+
+    /**
+     * @return string
+     */
+    abstract function get_link();
+
+    /**
+     * @return bool
+     */
+    abstract function is_valid_link();
+
+    /**
+     * @return string
+     */
+    abstract function get_type_name();
+
+    /**
+     * @return bool
+     */
+    abstract function needs_name_and_description();
+
+    /**
+     * @return bool
+     */
+    abstract function needs_max();
+
+    /**
+     * @return bool
+     */
+    abstract function needs_results();
+
+    /**
+     * @return bool
+     */
+    abstract function is_allowed_to_change_name();
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -485,6 +525,7 @@ abstract class AbstractLink implements GradebookItem
     /**
      * Internal function used by get_target_categories()
      * @param integer $level
+     * @return array
      */
     private function add_target_subcategories($targets, $level, $catid)
     {
@@ -551,14 +592,6 @@ abstract class AbstractLink implements GradebookItem
         return 'link';
     }
 
-    abstract function has_results();
-    abstract function get_link();
-    abstract function is_valid_link();
-    abstract function get_type_name();
-    abstract function needs_name_and_description();
-    abstract function needs_max();
-    abstract function needs_results();
-    abstract function is_allowed_to_change_name();
 
     /* Seems to be not used anywhere */
     public function get_not_created_links()

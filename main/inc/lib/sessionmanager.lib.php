@@ -165,9 +165,6 @@ class SessionManager
         if (empty($name)) {
             $msg = get_lang('SessionNameIsRequired');
             return $msg;
-        } elseif (empty($coachId)) {
-            $msg = get_lang('CoachIsRequired');
-            return $msg;
         } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i') && !api_is_valid_date($startDate, 'Y-m-d H:i:s')) {
             $msg = get_lang('InvalidStartDate');
             return $msg;

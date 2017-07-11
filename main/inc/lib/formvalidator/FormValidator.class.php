@@ -1764,7 +1764,7 @@ EOT;
      */
     public function addUserAvatar($name, $label, $imageSize = 'small', $subtitle = '')
     {
-        return $this->addElement('InputUser', $name, $label, ['image_size' => $imageSize, 'sub_title' => $subtitle]);
+        return $this->addElement('UserAvatar', $name, $label, ['image_size' => $imageSize, 'sub_title' => $subtitle]);
     }
 }
 

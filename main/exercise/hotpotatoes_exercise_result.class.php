@@ -19,6 +19,7 @@ class HotpotatoesExerciseResult
      * @param    string        The document path (for HotPotatoes retrieval)
      * @param    integer        User ID. Optional. If no user ID is provided, we take all the results. Defauts to null
      * @param string $document_path
+     * @return bool
      */
     public function getExercisesReporting($document_path, $hotpotato_name)
     {
@@ -226,17 +227,37 @@ class HotpotatoesExerciseResult
         }
 
         if ($with_column_user) {
-            $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Email'));
+            $worksheet->setCellValueByColumnAndRow(
+                $column,
+                $line,
+                get_lang('Email')
+            );
             $column++;
             if (api_is_western_name_order()) {
-                $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('FirstName'));
+                $worksheet->setCellValueByColumnAndRow(
+                    $column,
+                    $line,
+                    get_lang('FirstName')
+                );
                 $column++;
-                $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('LastName'));
+                $worksheet->setCellValueByColumnAndRow(
+                    $column,
+                    $line,
+                    get_lang('LastName')
+                );
                 $column++;
             } else {
-                $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('LastName'));
+                $worksheet->setCellValueByColumnAndRow(
+                    $column,
+                    $line,
+                    get_lang('LastName')
+                );
                 $column++;
-                $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('FirstName'));
+                $worksheet->setCellValueByColumnAndRow(
+                    $column,
+                    $line,
+                    get_lang('FirstName')
+                );
                 $column++;
             }
         }
@@ -267,19 +288,47 @@ class HotpotatoesExerciseResult
             }
         }
 
-        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Title'));
+        $worksheet->setCellValueByColumnAndRow(
+            $column,
+            $line,
+            get_lang('Title')
+        );
         $column++;
-        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('StartDate'));
+        $worksheet->setCellValueByColumnAndRow(
+            $column,
+            $line,
+            get_lang('StartDate')
+        );
         $column++;
-        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('EndDate'));
+        $worksheet->setCellValueByColumnAndRow(
+            $column,
+            $line,
+            get_lang('EndDate')
+        );
         $column++;
-        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Duration').' ('.get_lang('MinMinutes').')');
+        $worksheet->setCellValueByColumnAndRow(
+            $column,
+            $line,
+            get_lang('Duration').' ('.get_lang('MinMinutes').')'
+        );
         $column++;
-        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Score'));
+        $worksheet->setCellValueByColumnAndRow(
+            $column,
+            $line,
+            get_lang('Score')
+        );
         $column++;
-        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Total'));
+        $worksheet->setCellValueByColumnAndRow(
+            $column,
+            $line,
+            get_lang('Total')
+        );
         $column++;
-        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Status'));
+        $worksheet->setCellValueByColumnAndRow(
+            $column,
+            $line,
+            get_lang('Status')
+        );
         $line++;
 
         foreach ($this->results as $row) {
@@ -298,14 +347,46 @@ class HotpotatoesExerciseResult
                 $column++;
 
                 if (api_is_western_name_order()) {
-                    $worksheet->setCellValueByColumnAndRow($column, $line, api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset));
+                    $worksheet->setCellValueByColumnAndRow(
+                        $column,
+                        $line,
+                        api_html_entity_decode(
+                            strip_tags($row['first_name']),
+                            ENT_QUOTES,
+                            $charset
+                        )
+                    );
                     $column++;
-                    $worksheet->setCellValueByColumnAndRow($column, $line, api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset));
+                    $worksheet->setCellValueByColumnAndRow(
+                        $column,
+                        $line,
+                        api_html_entity_decode(
+                            strip_tags($row['last_name']),
+                            ENT_QUOTES,
+                            $charset
+                        )
+                    );
                     $column++;
                 } else {
-                    $worksheet->setCellValueByColumnAndRow($column, $line, api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset));
+                    $worksheet->setCellValueByColumnAndRow(
+                        $column,
+                        $line,
+                        api_html_entity_decode(
+                            strip_tags($row['last_name']),
+                            ENT_QUOTES,
+                            $charset
+                        )
+                    );
                     $column++;
-                    $worksheet->setCellValueByColumnAndRow($column, $line, api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset));
+                    $worksheet->setCellValueByColumnAndRow(
+                        $column,
+                        $line,
+                        api_html_entity_decode(
+                            strip_tags($row['first_name']),
+                            ENT_QUOTES,
+                            $charset
+                        )
+                    );
                     $column++;
                 }
             }

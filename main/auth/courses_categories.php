@@ -19,7 +19,7 @@ $pageCurrent = isset($pageCurrent) ? $pageCurrent : isset($_GET['pageCurrent']) 
 $pageLength = isset($pageLength) ? $pageLength : isset($_GET['pageLength']) ? intval($_GET['pageLength']) : CoursesAndSessionsCatalog::PAGE_LENGTH;
 $pageTotal = intval(ceil(intval($countCoursesInCategory) / $pageLength));
 $cataloguePagination = $pageTotal > 1 ? CourseCategory::getCatalogPagination($pageCurrent, $pageLength, $pageTotal) : '';
-$search_term = isset($search_term) ? $search_term : null;
+$searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : '';
 
 if ($showSessions && isset($_POST['date'])) {
     $date = $_POST['date'];
@@ -78,7 +78,7 @@ $code = isset($code) ? $code : null;
                                     <input class="form-control" type="text" name="search_term"
                                            value="<?php echo(empty($_POST['search_term'])
                                                ? ''
-                                               : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>"/>
+                                               : api_htmlentities($searchTerm)); ?>"/>
                                     <div class="input-group-btn">
                                         <button class="btn btn-default" type="submit">
                                             <em class="fa fa-search"></em> <?php echo get_lang('Search'); ?>
@@ -158,8 +158,8 @@ if ($showCourses && $action != 'display_sessions') {
         echo $content;
     }
 
-    if (!empty($search_term)) {
-        echo "<p><strong>".get_lang('SearchResultsFor')." ".Security::remove_XSS($_POST['search_term'])."</strong><br />";
+    if (!empty($searchTerm)) {
+        echo "<p><strong>".get_lang('SearchResultsFor')." ".$searchTerm."</strong><br />";
     }
 
     $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
@@ -202,7 +202,7 @@ if ($showCourses && $action != 'display_sessions') {
             $html .= returnThumbnail($course, $userRegistered);
 
             $separator = null;
-            $subscribeButton = return_register_button($course, $stok, $code, $search_term);
+            $subscribeButton = return_register_button($course, $stok, $code, $searchTerm);
 
             // start buycourse validation
             // display the course price and buy button if the buycourses plugin is enabled and this course is configured
@@ -239,13 +239,13 @@ if ($showCourses && $action != 'display_sessions') {
                 $html .= return_already_registered_label('student');
                 if (!$course_closed) {
                     if ($course_unsubscribe_allowed) {
-                        $html .= return_unregister_button($course, $stok, $search_term, $code);
+                        $html .= return_unregister_button($course, $stok, $searchTerm, $code);
                     }
                 }
             } elseif ($userRegisteredInCourseAsTeacher) {
                 // if user registered as teacher
                 if ($course_unsubscribe_allowed) {
-                    $html .= return_unregister_button($course, $stok, $search_term, $code);
+                    $html .= return_unregister_button($course, $stok, $searchTerm, $code);
                 }
             } else {
                 // if user not registered in the course

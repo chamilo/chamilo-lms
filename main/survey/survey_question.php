@@ -309,7 +309,8 @@ class survey_question
             'button',
             'remove_answer',
             get_lang('RemoveAnswer'),
-            'minus'
+            'minus',
+            'default'
         );
 
         if (count($data['answers']) <= 2) {
@@ -322,7 +323,8 @@ class survey_question
             'button',
             'add_answer',
             get_lang('AddAnswer'),
-            'plus'
+            'plus',
+            'default'
         );
     }
 

@@ -56,8 +56,11 @@ class Display
      * @param string Optional help file name
      * @param string $page_header
      */
-    public static function display_header($tool_name = '', $help = null, $page_header = null)
-    {
+    public static function display_header(
+        $tool_name = '',
+        $help = null,
+        $page_header = null
+    ) {
         $origin = api_get_origin();
         $showHeader = true;
         if (isset($origin) && $origin == 'learnpath') {
@@ -106,7 +109,12 @@ class Display
     public static function display_reduced_header()
     {
         global $show_learnpath, $tool_name;
-        self::$global_template = new Template($tool_name, false, false, $show_learnpath);
+        self::$global_template = new Template(
+            $tool_name,
+            false,
+            false,
+            $show_learnpath
+        );
         echo self::$global_template->show_header_template();
     }
 
@@ -117,7 +125,12 @@ class Display
     {
         global $tool_name, $show_learnpath;
         $disable_js_and_css_files = true;
-        self::$global_template = new Template($tool_name, false, false, $show_learnpath);
+        self::$global_template = new Template(
+            $tool_name,
+            false,
+            false,
+            $show_learnpath
+        );
     }
 
     /**
@@ -126,7 +139,12 @@ class Display
     public static function set_header()
     {
         global $show_learnpath, $tool_name;
-        self::$global_template = new Template($tool_name, false, false, $show_learnpath);
+        self::$global_template = new Template(
+            $tool_name,
+            false,
+            false,
+            $show_learnpath
+        );
     }
 
     /**
@@ -160,8 +178,10 @@ class Display
      * return: $tool return a string array list with the "define" in main_api.lib
      * @return html code for adding an introduction
      */
-    public static function display_introduction_section($tool, $editor_config = null)
-    {
+    public static function display_introduction_section(
+        $tool,
+        $editor_config = null
+    ) {
         echo self::return_introduction_section($tool, $editor_config);
     }
 
@@ -170,8 +190,10 @@ class Display
      * @param array $editor_config
      * @return null
      */
-    public static function return_introduction_section($tool, $editor_config = null)
-    {
+    public static function return_introduction_section(
+        $tool,
+        $editor_config = null
+    ) {
         $is_allowed_to_edit = api_is_allowed_to_edit();
         $moduleId = $tool;
         if (api_get_setting('enable_tool_introduction') == 'true' || $tool == TOOL_COURSE_HOMEPAGE) {
@@ -442,8 +464,11 @@ class Display
      *
      * @return void
      */
-    public static function display_normal_message($message, $filter = true, $returnValue = false)
-    {
+    public static function display_normal_message(
+        $message,
+        $filter = true,
+        $returnValue = false
+    ) {
         $message = self::return_message($message, 'normal', $filter);
         if ($returnValue) {
             return $message;
@@ -458,8 +483,11 @@ class Display
      *
      * @deprecated use Display::addFlash(Display::return_message($message, 'warning'));
      */
-    public static function display_warning_message($message, $filter = true, $returnValue = false)
-    {
+    public static function display_warning_message(
+        $message,
+        $filter = true,
+        $returnValue = false
+    ) {
         $message = self::return_message($message, 'warning', $filter);
         if ($returnValue) {
             return $message;
@@ -474,8 +502,11 @@ class Display
      * @deprecated use Display::addFlash(Display::return_message($message, 'confirm'));
      * @return void
      */
-    public static function display_confirmation_message($message, $filter = true, $returnValue = false)
-    {
+    public static function display_confirmation_message(
+        $message,
+        $filter = true,
+        $returnValue = false
+    ) {
         $message = self::return_message($message, 'confirm', $filter);
         if ($returnValue) {
             return $message;
@@ -493,8 +524,11 @@ class Display
      *
      * @return void
      */
-    public static function display_error_message($message, $filter = true, $returnValue = false)
-    {
+    public static function display_error_message(
+        $message,
+        $filter = true,
+        $returnValue = false
+    ) {
         $message = self::return_message($message, 'error', $filter);
         if ($returnValue) {
             return $message;
@@ -508,8 +542,11 @@ class Display
      * @param string $type
      * @param bool $filter
      */
-    public static function return_message_and_translate($message, $type = 'normal', $filter = true)
-    {
+    public static function return_message_and_translate(
+        $message,
+        $type = 'normal',
+        $filter = true
+    ) {
         $message = get_lang($message);
         echo self::return_message($message, $type, $filter);
     }
@@ -521,14 +558,21 @@ class Display
      * @param   bool    $filter Whether to XSS-filter or not
      * @return  string  Message wrapped into an HTML div
      */
-    public static function return_message($message, $type = 'normal', $filter = true)
-    {
+    public static function return_message(
+        $message,
+        $type = 'normal',
+        $filter = true
+    ) {
         if (empty($message)) {
             return '';
         }
 
         if ($filter) {
-            $message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
+            $message = api_htmlentities(
+                $message,
+                ENT_QUOTES,
+                api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding()
+            );
         }
 
         $class = '';
@@ -560,8 +604,11 @@ class Display
      * @param string  optional, class from stylesheet
      * @return string encrypted mailto hyperlink
      */
-    public static function encrypted_mailto_link($email, $clickable_text = null, $style_class = '')
-    {
+    public static function encrypted_mailto_link(
+        $email,
+        $clickable_text = null,
+        $style_class = ''
+    ) {
         if (is_null($clickable_text)) {
             $clickable_text = $email;
         }
@@ -602,8 +649,12 @@ class Display
      * @param string  optional, class from stylesheet
      * @return string encrypted mailto hyperlink
      */
-    public static function icon_mailto_link($email, $icon_file = "mail.png", $icon_size = 22, $style_class = '')
-    {
+    public static function icon_mailto_link(
+        $email,
+        $icon_file = "mail.png",
+        $icon_size = 22,
+        $style_class = ''
+    ) {
         // "mailto:" already present?
         if (substr($email, 0, 7) != 'mailto:') {
             $email = 'mailto:'.$email;
@@ -815,8 +866,12 @@ class Display
      * @return string
      * @author Julio Montoya 2010
      */
-    public static function img($image_path, $alt_text = '', $additional_attributes = null, $filterPath = true)
-    {
+    public static function img(
+        $image_path,
+        $alt_text = '',
+        $additional_attributes = null,
+        $filterPath = true
+    ) {
         if (empty($image_path)) {
             // For some reason, the call to img() happened without a proper
             // image. Log the error and return an empty string to avoid
@@ -979,7 +1034,11 @@ class Display
             } else {
                 $blank_item_text = Security::remove_XSS($blank_item_text);
             }
-            $html .= self::tag('option', '-- '.$blank_item_text.' --', array('value' => '-1'));
+            $html .= self::tag(
+                'option',
+                '-- '.$blank_item_text.' --',
+                array('value' => '-1')
+            );
         }
         if ($values) {
             foreach ($values as $key => $value) {
@@ -1027,8 +1086,13 @@ class Display
      *
      * @return string
      */
-    public static function tabs($headers, $items, $id = 'tabs', $attributes = array(), $ul_attributes = array())
-    {
+    public static function tabs(
+        $headers,
+        $items,
+        $id = 'tabs',
+        $attributes = array(),
+        $ul_attributes = array()
+    ) {
         if (empty($headers) || count($headers) == 0) {
             return '';
         }
@@ -1055,7 +1119,15 @@ class Display
             $lis .= self::tag('li', $item, $ul_attributes);
             $i++;
         }
-        $ul = self::tag('ul', $lis, ['class' => 'nav nav-tabs tabs-margin', 'role'=> 'tablist', 'id' => 'ul_'.$id]);
+        $ul = self::tag(
+            'ul',
+            $lis,
+            [
+                'class' => 'nav nav-tabs tabs-margin',
+                'role' => 'tablist',
+                'id' => 'ul_'.$id
+            ]
+        );
 
         $i = 1;
         $divs = '';
@@ -1109,7 +1181,12 @@ class Display
             $lis .= self::tag('li', $item, array('class' => $class));
             $i++;
         }
-        return self::tag('ul', $lis, array('class' => 'nav nav-tabs tabs-margin'));
+
+        return self::tag(
+            'ul',
+            $lis,
+            array('class' => 'nav nav-tabs tabs-margin')
+        );
     }
 
     /**
@@ -1189,12 +1266,11 @@ class Display
         // encoding problems - see #6159
         //$column_names = array_map("utf8_encode", $column_names);
 
-        $obj->colNames      = $column_names;
-        $obj->colModel      = $column_model;
-        $obj->pager         = '#'.$div_id.'_pager';
+        $obj->colNames = $column_names;
+        $obj->colModel = $column_model;
+        $obj->pager = '#'.$div_id.'_pager';
         $obj->datatype = 'json';
         $obj->viewrecords = 'true';
-
         $all_value = 10000000;
 
         // Default row quantity

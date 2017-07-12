@@ -1347,8 +1347,16 @@ class Category implements GradebookItem
                 $crscats = self::load(null, null, $this->course_code, 0);
                 foreach ($crscats as $cat) {
                     if ($this->can_be_moved_to_cat($cat)) {
-                        $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
-                        $targets = $this->add_target_subcategories($targets, $level + 1, $cat->get_id());
+                        $targets[] = array(
+                            $cat->get_id(),
+                            $cat->get_name(),
+                            $level + 1
+                        );
+                        $targets = $this->add_target_subcategories(
+                            $targets,
+                            $level + 1,
+                            $cat->get_id()
+                        );
                     }
                 }
             }
@@ -1357,7 +1365,11 @@ class Category implements GradebookItem
             foreach ($indcats as $cat) {
                 if ($this->can_be_moved_to_cat($cat)) {
                     $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
-                    $targets = $this->add_target_subcategories($targets, $level + 1, $cat->get_id());
+                    $targets = $this->add_target_subcategories(
+                        $targets,
+                        $level + 1,
+                        $cat->get_id()
+                    );
                 }
             }
 
@@ -1470,15 +1482,33 @@ class Category implements GradebookItem
             $user = api_is_platform_admin() ? null : api_get_user_id();
             $cats = self::get_root_categories_for_teacher($user);
             foreach ($cats as $cat) {
-                $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
-                $targets = self::add_subtree($targets, $level + 1, $cat->get_id(), null);
+                $targets[] = array(
+                    $cat->get_id(),
+                    $cat->get_name(),
+                    $level + 1
+                );
+                $targets = self::add_subtree(
+                    $targets,
+                    $level + 1,
+                    $cat->get_id(),
+                    null
+                );
             }
         } else {
             // student
             $cats = self::get_root_categories_for_student(api_get_user_id());
             foreach ($cats as $cat) {
-                $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
-                $targets = self::add_subtree($targets, $level + 1, $cat->get_id(), 1);
+                $targets[] = array(
+                    $cat->get_id(),
+                    $cat->get_name(),
+                    $level + 1
+                );
+                $targets = self::add_subtree(
+                    $targets,
+                    $level + 1,
+                    $cat->get_id(),
+                    1
+                );
             }
         }
 
@@ -1733,15 +1763,42 @@ class Category implements GradebookItem
 
                 // root
                 if ($this->id == 0) {
-                    return $this->get_root_categories_for_teacher(api_get_user_id(), $course_code, $session_id, false);
+                    return $this->get_root_categories_for_teacher(
+                        api_get_user_id(),
+                        $course_code,
+                        $session_id,
+                        false
+                    );
                     // inside a course
                 } elseif (!empty($this->course_code)) {
-                    return self::load(null, null, $this->course_code, $this->id, null, $session_id, $order);
+                    return self::load(
+                        null,
+                        null,
+                        $this->course_code,
+                        $this->id,
+                        null,
+                        $session_id,
+                        $order
+                    );
                 } elseif (!empty($course_code)) {
-                    return self::load(null, null, $course_code, $this->id, null, $session_id, $order);
+                    return self::load(
+                        null,
+                        null,
+                        $course_code,
+                        $this->id,
+                        null,
+                        $session_id,
+                        $order
+                    );
                     // course independent
                 } else {
-                    return self::load(null, api_get_user_id(), 0, $this->id, null);
+                    return self::load(
+                        null,
+                        api_get_user_id(),
+                        0,
+                        $this->id,
+                        null
+                    );
                 }
             } elseif (api_is_platform_admin()) {
                 // platform admin

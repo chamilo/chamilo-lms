@@ -304,16 +304,11 @@ header {
     text-align:center;
     vertical-align:middle;
 }
-.radio input[type="radio"]{
-    margin-left: -25px;
-}
 input[type=checkbox], input[type=radio]{
-    margin: 6px 0 0;
+    margin: 3px 0 0;
 }
 .prerequisites input[type=radio]{
-    margin: 0 0 0 -25px;
-    vertical-align: middle;
-    height: 20px;
+    height: 12px;
 }
 #gradebook_list .centered .badge-group {
     width: auto;
@@ -6166,15 +6161,6 @@ ul#toolnavbox-two li a.btn{
 .label-subscribed{
     font-size: 12px;
     width: 100px;
-}
-.form-horizontal .radio{
-    padding-left: 5px;
-}
-.checkbox input[type="checkbox"]{
-    margin-left: -24px;
-}
-input[type=checkbox]{
-    margin: 8px 0 0;
 }
 .lp-accordion .panel-heading .panel-title{
     width: 100%;

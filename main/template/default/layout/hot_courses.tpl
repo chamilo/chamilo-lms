@@ -21,7 +21,7 @@ $(document).ready( function() {
 });
 </script>
 <section class="hot-courses">
-    <div class="hot-course-head">
+    <div class="page-header">
         <h4 class="hot-course-title">
             {{ "HottestCourses"|get_lang}}
             {% if _u.is_admin %}

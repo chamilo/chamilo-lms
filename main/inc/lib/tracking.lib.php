@@ -2561,7 +2561,10 @@ class Tracking
 
         if (!empty($progress)) {
             $sum = array_sum($progress);
-            $average = $sum / count($lpIdList);
+            $average = 0;
+            if (!empty($lpIdList)) {
+                $average = $sum / count($lpIdList);
+            }
         } else {
             $average = 0;
             $sum = 0;

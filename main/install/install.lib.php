@@ -3241,35 +3241,37 @@ function fixPostGroupIds($connection)
     error_log('Fix c_student_publication.post_group_id');
 
     // Fix post_group_id
-    $sql = "SELECT * FROM c_student_publication WHERE (post_group_id <> 0 AND post_group_id is not null)";
+    $sql = "SELECT * FROM c_student_publication 
+            WHERE (post_group_id <> 0 AND post_group_id is not null)";
     $statement = $connection->executeQuery($sql);
     $result = $statement->fetchAll();
+
     foreach ($result as $row) {
         $groupId = $row['post_group_id'];
         $courseId = $row['c_id'];
         $workIid = $row['iid'];
-        $sql = "SELECT iid from c_group_info WHERE c_id = $courseId AND iid = $groupId";
+        $sql = "SELECT iid from c_group_info 
+                WHERE c_id = $courseId AND id = $groupId";
         $statement = $connection->executeQuery($sql);
         $count = $statement->rowCount();
-        if ($count == 0) {
-            $sql = "SELECT iid from c_group_info WHERE c_id = $courseId AND id = $groupId";
-            $statement = $connection->executeQuery($sql);
-            $count = $statement->rowCount();
-            if ($count > 0) {
-                $rowGroup = $statement->fetch();
-                $newGroupId = $rowGroup['iid'];
-                if ($newGroupId) {
-                    $sqlUpdate = "UPDATE c_student_publication 
-                                  SET post_group_id = $newGroupId 
-                                  WHERE 
-                                    c_id = $courseId AND
-                                    iid = $workIid
-                                  ";
-                    $connection->executeQuery($sqlUpdate);
-                }
+        if ($count > 0) {
+            $rowGroup = $statement->fetch();
+            $newGroupId = $rowGroup['iid'];
+            if ($newGroupId == $groupId) {
+                continue;
+            }
+            if ($newGroupId) {
+                $sql = "UPDATE c_student_publication 
+                        SET post_group_id = $newGroupId 
+                        WHERE 
+                            c_id = $courseId AND
+                            iid = $workIid
+                        ";
+                $connection->executeQuery($sql);
             }
         }
     }
+
     error_log('End - Fix c_student_publication.post_group_id');
 
     // Delete c_student_publication from any session that doesn't exist anymore

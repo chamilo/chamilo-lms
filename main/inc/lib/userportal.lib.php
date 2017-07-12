@@ -977,12 +977,12 @@ class IndexManager
             .get_lang('EditProfile').'</a></li>';
 
         if (api_get_configuration_value('show_link_request_hrm_user') && api_is_drh()) {
-            $label = get_lang('RequireVinculationWithUser');
+            $label = get_lang('RequestLinkingToUser');
             $icon = Display::return_icon('new_group.png', $label);
             $profile_content .= '<li>'
                 .Display::url(
                     $icon.$label,
-                    api_get_path(WEB_CODE_PATH).'social/require_user_vinculation.php'
+                    api_get_path(WEB_CODE_PATH).'social/require_user_linking.php'
                 )
                 .'</li>';
         }

@@ -8021,4 +8021,11 @@ $IsMandatory = "Mandatory?";
 $StudentXHasBeenAssignedNewWorkInCourseY = "%s got a new assignment in course %s";
 $AsHRMYouReceiveThisMailToAlertThatXHasNewWorkInCourseY = "As his/her human resources manager, you are receiving this e-mail to let you know that %s just got a new assignment in course %s";
 $DearXComma = "Dear %s,";
+$UserLinkingRequests = "User linking requests";
+$NewHomeworkEmailAlertToHrmEnable = "Send e-mail to students and their HRM on assignments creation";
+$UserLinkingRequestAccepted = "User linking request accepted";
+$UserLinkingTo = "Linked to student";
+$RequestLinkingToUser = "Request linking to student";
+$LinkingRequestsAdded = "Linking request added";
+$HrmList = "Human Resource Managers list";
 ?>

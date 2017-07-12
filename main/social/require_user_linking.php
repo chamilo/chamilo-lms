@@ -40,7 +40,7 @@ foreach ($usersRequested as $userRequested) {
     $requestOptions[$userInfo['user_id']] = $userInfo['complete_name'];
 }
 
-$form = new FormValidator('require_user_vinculation');
+$form = new FormValidator('require_user_linking');
 $form->addUserAvatar('hrm', get_lang('DRH'), 'medium');
 $form->addSelectAjax(
     'users',
@@ -65,7 +65,7 @@ if ($form->validate()) {
     UserManager::requestUsersToHRManager($hrm->getId(), $usersId, false);
 
     Display::addFlash(
-        Display::return_message(get_lang('RequestsVinculationAdded'), 'success')
+        Display::return_message(get_lang('LinkingRequestsAdded'), 'success')
     );
 
     header('Location: '.api_get_self());
@@ -102,7 +102,7 @@ foreach ($usersAssigned as $userAssigned) {
 
 $content .= '</div>';
 
-$toolName = get_lang('RequireVinculationWithUser');
+$toolName = get_lang('RequestLinkingToUser');
 
 $view = new Template($toolName);
 $view->assign('header', $toolName);

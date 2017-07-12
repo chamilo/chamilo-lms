@@ -67,7 +67,10 @@ class SystemAnnouncementManager
         $groups = array();
         foreach ($temp_user_groups as $user_group) {
             $groups = array_merge($groups, array($user_group['id']));
-            $groups = array_merge($groups, $userGroup->get_parent_groups($user_group['id']));
+            $groups = array_merge(
+                $groups,
+                $userGroup->get_parent_groups($user_group['id'])
+            );
         }
 
         $groups_string = '('.implode($groups, ',').')';
@@ -379,8 +382,16 @@ class SystemAnnouncementManager
         //Fixing urls that are sent by email
         //$content = str_replace('src=\"/home/', 'src=\"'.api_get_path(WEB_PATH).'home/', $content);
         //$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
-        $content = str_replace('src=\"'.api_get_path(REL_HOME_PATH), 'src=\"'.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH), $content);
-        $content = str_replace('file='.api_get_path(REL_HOME_PATH), 'file='.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH), $content);
+        $content = str_replace(
+            'src=\"'.api_get_path(REL_HOME_PATH),
+            'src=\"'.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH),
+            $content
+        );
+        $content = str_replace(
+            'file='.api_get_path(REL_HOME_PATH),
+            'file='.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH),
+            $content
+        );
         $lang = is_null($lang) ? '' : $lang;
 
         $current_access_url_id = 1;
@@ -568,8 +579,16 @@ class SystemAnnouncementManager
         //Fixing urls that are sent by email
         //$content = str_replace('src=\"/home/', 'src=\"'.api_get_path(WEB_PATH).'home/', $content);
         //$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
-        $content = str_replace('src=\"'.api_get_path(REL_HOME_PATH), 'src=\"'.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH), $content);
-        $content = str_replace('file='.api_get_path(REL_HOME_PATH), 'file='.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH), $content);
+        $content = str_replace(
+            'src=\"'.api_get_path(REL_HOME_PATH),
+            'src=\"'.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH),
+            $content
+        );
+        $content = str_replace(
+            'file='.api_get_path(REL_HOME_PATH),
+            'file='.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH),
+            $content
+        );
 
         if ($sendEmailTest) {
             self::send_system_announcement_by_email(

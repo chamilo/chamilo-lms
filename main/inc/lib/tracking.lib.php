@@ -3972,8 +3972,11 @@ class Tracking
      * @param    int        Session id (optional)
      * @return     int     Chat last connections by course in x days
      */
-    public static function chat_connections_during_last_x_days_by_course($course_code, $last_days, $session_id = 0)
-    {
+    public static function chat_connections_during_last_x_days_by_course(
+        $course_code,
+        $last_days,
+        $session_id = 0
+    ) {
         $course_info = api_get_course_info($course_code);
         if (empty($course_info)) {
             return null;
@@ -4009,8 +4012,11 @@ class Tracking
      * @param    int        Session id (optional)
      * @return     string    datetime formatted without day (e.g: February 23, 2010 10:20:50 )
      */
-    public static function chat_last_connection($student_id, $courseId, $session_id = 0)
-    {
+    public static function chat_last_connection(
+        $student_id,
+        $courseId,
+        $session_id = 0
+    ) {
         $student_id = intval($student_id);
         $courseId = intval($courseId);
         $session_id = intval($session_id);

@@ -18,7 +18,7 @@ class Login
      * @param array $user array with keys: email, password, uid, loginName
      * @param boolean $reset
      * @param boolean $by_username
-     * @return unknown
+     * @return string
      */
     public static function get_user_account_list($user, $reset = false, $by_username = false)
     {
@@ -73,6 +73,7 @@ class Login
      * This function sends the actual password to the user
      *
      * @param int $user
+     * @return string
      * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
      */
     public static function send_password_to_user($user, $by_username = false)
@@ -107,7 +108,6 @@ class Login
         $email_admin = api_get_setting('emailAdministrator');
 
         if (api_mail_html('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
-
             return get_lang('YourPasswordHasBeenReset');
         } else {
             $admin_email = Display:: encrypted_mailto_link(
@@ -128,8 +128,9 @@ class Login
     /**
      * Handle encrypted password, send an email to a user with his password
      *
-     * @param int	user id
-     * @param bool	$by_username
+     * @param int user id
+     * @param bool $by_username
+     * @return string
      *
      * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
      */
@@ -252,7 +253,6 @@ class Login
             $user = Database::fetch_array($result);
 
             if ($user['auth_source'] == 'extldap') {
-
                 return get_lang('CouldNotResetPassword');
             }
         } else {
@@ -534,7 +534,6 @@ class Login
 
         if ($reset) {
             if (isset($user_id) && $user_id && isset($_cid) && $_cid) {
-
                 //Check if user is subscribed in a course
                 $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
                 $sql = "SELECT * FROM $course_user_table
@@ -570,7 +569,6 @@ class Login
 
                 //We are in a session course? Check session permissions
                 if (!empty($session_id)) {
-
                     //I'm not the teacher of the course
                     if ($is_courseAdmin == false) {
                         // this user has no status related to this course
@@ -673,7 +671,7 @@ class Login
                     case COURSE_VISIBILITY_OPEN_WORLD: //3
                         $is_allowed_in_course = true;
                         break;
-                    case COURSE_VISIBILITY_OPEN_PLATFORM : //2
+                    case COURSE_VISIBILITY_OPEN_PLATFORM: //2
                         if (isset($user_id) && !api_is_anonymous($user_id)) {
                             $is_allowed_in_course = true;
                         }
@@ -760,7 +758,8 @@ class Login
                 } else {
                     Session::erase('_gid');
                 }
-            } elseif (isset($_SESSION['_gid']) or isset($_gid)) { // Keys missing => not anymore in the group - course relation
+            } elseif (isset($_SESSION['_gid']) || isset($_gid)) {
+                // Keys missing => not anymore in the group - course relation
                 Session::erase('_gid');
             }
         } elseif (isset($_SESSION['_gid'])) { // continue with the previous values
@@ -812,15 +811,15 @@ class Login
             $email = false;
         }
 
-		if ($email) {
-			$condition = "LOWER(email) = '".Database::escape_string($username)."' ";
-		} else {
+        if ($email) {
+            $condition = "LOWER(email) = '".Database::escape_string($username)."' ";
+        } else {
             $condition = "LOWER(username) = '".Database::escape_string($username)."'";
         }
 
-		$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-		$query = "SELECT 
-		            user_id AS uid, 
+        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+        $query = "SELECT 
+                    user_id AS uid, 
 		            lastname AS lastName, 
 		            firstname AS firstName, 
 		            username AS loginName, 
@@ -834,7 +833,7 @@ class Login
                     auth_source
 				 FROM $tbl_user
 				 WHERE ( $condition AND active = 1) ";
-		$result = Database::query($query);
+        $result = Database::query($query);
         $num_rows = Database::num_rows($result);
         if ($result && $num_rows > 0) {
             return Database::fetch_assoc($result);

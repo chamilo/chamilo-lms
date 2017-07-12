@@ -100,8 +100,12 @@ class Statistics
      * @param bool $onlyActive Count only active users (false to only return currently active users)
      * @return int Number of users counted
      */
-    public static function countUsers($status = null, $categoryCode = null, $countInvisibleCourses = true, $onlyActive = false)
-    {
+    public static function countUsers(
+        $status = null,
+        $categoryCode = null,
+        $countInvisibleCourses = true,
+        $onlyActive = false
+    ) {
         // Database table definitions
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -223,8 +227,12 @@ class Statistics
      * @param string $direction
      * @return array
      */
-    public static function getActivitiesData($from, $numberOfItems, $column, $direction)
-    {
+    public static function getActivitiesData(
+        $from,
+        $numberOfItems,
+        $column,
+        $direction
+    ) {
         $track_e_default = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -396,8 +404,12 @@ class Statistics
      * @param bool $showTotal
      * @param bool $isFileSize
      */
-    public static function printStats($title, $stats, $showTotal = true, $isFileSize = false)
-    {
+    public static function printStats(
+        $title,
+        $stats,
+        $showTotal = true,
+        $isFileSize = false
+    ) {
         $total = 0;
         $data = self::rescale($stats);
         echo '<table class="data_table" cellspacing="0" cellpadding="3">

@@ -2221,7 +2221,19 @@ HOTSPOT;
                 }
             }
         } else {
-            $hpresults = StatsUtils::getManyResultsXCol($hpsql, 6);
+            //$hpresults = StatsUtils::getManyResultsXCol($hpsql, 6);
+            $hpresults = [];
+            $res = Database::query($hpsql);
+            if ($res !== false) {
+                $i = 0;
+                while ($resA = Database::fetch_array($res, 'NUM')) {
+                    for ($j = 0; $j < 6; $j++) {
+                        $hpresults[$i][$j] = $resA[$j];
+                    }
+                    $i++;
+                }
+            }
+
             // Print HotPotatoes test results.
             if (is_array($hpresults)) {
                 for ($i = 0; $i < sizeof($hpresults); $i++) {

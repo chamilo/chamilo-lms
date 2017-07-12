@@ -721,6 +721,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                     $questions[$row['sort']]['type'] = $row['type'];
                     $questions[$row['sort']]['options'][$row['question_option_id']] = $row['option_text'];
                     $questions[$row['sort']]['maximum_score'] = $row['max_value'];
+                    $questions[$row['sort']]['sort'] = $row['sort'];
                 } else {
                     // If the type is a pagebreak we are finished loading the questions for this page
                     break;
@@ -1024,6 +1025,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                                 $questions[$row['sort']]['survey_group_sec1'] = $row['survey_group_sec1'];
                                 $questions[$row['sort']]['survey_group_sec2'] = $row['survey_group_sec2'];
                                 $questions[$row['sort']]['survey_group_pri'] = $row['survey_group_pri'];
+                                $questions[$row['sort']]['sort'] = $row['sort'];
                             } else {
                                 // If the type is a pagebreak we are finished loading the questions for this page
                                 break;
@@ -1145,12 +1147,14 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                         $questions[$row['sort']]['survey_group_sec1'] = $row['survey_group_sec1'];
                         $questions[$row['sort']]['survey_group_sec2'] = $row['survey_group_sec2'];
                         $questions[$row['sort']]['survey_group_pri'] = $row['survey_group_pri'];
+                        $questions[$row['sort']]['sort'] = $row['sort'];
                     } else {
                         // If the type is a page break we are finished loading the questions for this page
                         break;
                     }
                     $counter++;
                 }
+                var_Dump($questions);
             }
         }
     } else { // In case it's another type than 0 or 1
@@ -1200,7 +1204,7 @@ if (isset($questions) && is_array($questions)) {
         // @todo move this in a function.
         $form->addHtml('<div class="survey_question '.$ch_type.'">');
         //$form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
-        $form->addHtml('<h5 class="title">'.$question['question_id'].'. '.strip_tags($question['survey_question']).'</h5>');
+        $form->addHtml('<h5 class="title">'.$question['sort'].'. '.strip_tags($question['survey_question']).'</h5>');
         //$form->addHtml($question['survey_question']);
         $display->render($form, $question);
         $form->addHtml('</div>');

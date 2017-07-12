@@ -4195,9 +4195,18 @@ class SurveyUtil
         $table->set_header(6, get_lang('AvailableUntil'));
         $table->set_header(7, get_lang('Invite'));
         $table->set_header(8, get_lang('Anonymous'));
-        $table->set_header(9, get_lang('Modify'), false, 'width="150"');
+
+        if (api_get_configuration_value('allow_mandatory_survey')) {
+            $table->set_header(9, get_lang('IsMandatory'));
+            $table->set_header(10, get_lang('Modify'), false, 'width="150"');
+            $table->set_column_filter(9, 'anonymous_filter');
+            $table->set_column_filter(10, 'modify_filter_drh');
+        } else {
+            $table->set_header(9, get_lang('Modify'), false, 'width="150"');
+            $table->set_column_filter(9, 'modify_filter_drh');
+        }
+
         $table->set_column_filter(8, 'anonymous_filter');
-        $table->set_column_filter(9, 'modify_filter_drh');
         $table->display();
     }
 
@@ -4233,9 +4242,18 @@ class SurveyUtil
         $table->set_header(6, get_lang('AvailableUntil'));
         $table->set_header(7, get_lang('Invite'));
         $table->set_header(8, get_lang('Anonymous'));
-        $table->set_header(9, get_lang('Modify'), false, 'width="150"');
+
+        if (api_get_configuration_value('allow_mandatory_survey')) {
+            $table->set_header(9, get_lang('IsMandatory'));
+            $table->set_header(10, get_lang('Modify'), false, 'width="150"');
+            $table->set_column_filter(9, 'anonymous_filter');
+            $table->set_column_filter(10, 'modify_filter');
+        } else {
+            $table->set_header(9, get_lang('Modify'), false, 'width="150"');
+            $table->set_column_filter(9, 'modify_filter');
+        }
+
         $table->set_column_filter(8, 'anonymous_filter');
-        $table->set_column_filter(9, 'modify_filter');
         $table->set_form_actions(array('delete' => get_lang('DeleteSurvey')));
         $table->display();
     }
@@ -4264,9 +4282,18 @@ class SurveyUtil
         $table->set_header(6, get_lang('AvailableUntil'));
         $table->set_header(7, get_lang('Invite'));
         $table->set_header(8, get_lang('Anonymous'));
-        $table->set_header(9, get_lang('Modify'), false, 'width="130"');
+
+        if (api_get_configuration_value('allow_mandatory_survey')) {
+            $table->set_header(9, get_lang('Modify'), false, 'width="130"');
+            $table->set_header(10, get_lang('Modify'), false, 'width="130"');
+            $table->set_column_filter(9, 'anonymous_filter');
+            $table->set_column_filter(10, 'modify_filter_for_coach');
+        } else {
+            $table->set_header(9, get_lang('Modify'), false, 'width="130"');
+            $table->set_column_filter(9, 'modify_filter_for_coach');
+        }
+
         $table->set_column_filter(8, 'anonymous_filter');
-        $table->set_column_filter(9, 'modify_filter_for_coach');
         $table->display();
     }
 
@@ -4433,6 +4460,7 @@ class SurveyUtil
         $table_survey = Database :: get_course_table(TABLE_SURVEY);
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
         $table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
+        $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
         $_user = api_get_user_info();
 
         // Searching
@@ -4481,6 +4509,8 @@ class SurveyUtil
         $res = Database::query($sql);
         $surveys = array();
         $array = array();
+        $efv = new ExtraFieldValue('survey');
+
         while ($survey = Database::fetch_array($res)) {
             $array[0] = $survey[0];
             $array[1] = Display::url(
@@ -4506,7 +4536,15 @@ class SurveyUtil
                 );
 
             $array[8] = $survey[8];
-            $array[9] = $survey[9];
+
+            if ($mandatoryAllowed) {
+                $efvMandatory = $efv->get_values_by_handler_and_field_variable($survey[9], 'is_mandatory');
+
+                $array[9] = $efvMandatory ? $efvMandatory['value'] : 0;
+                $array[10] = $survey[9];
+            } else {
+                $array[9] = $survey[9];
+            }
 
             if ($isDrh) {
                 $array[1] = $survey[1];
@@ -4520,6 +4558,7 @@ class SurveyUtil
 
     static function get_survey_data_for_coach($from, $number_of_items, $column, $direction)
     {
+        $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
         $survey_tree = new SurveyTree();
         $last_version_surveys = $survey_tree->get_last_children_from_branch($survey_tree->surveylist);
         $list = array();
@@ -4544,6 +4583,7 @@ class SurveyUtil
         $table_user 			= Database :: get_main_table(TABLE_MAIN_USER);
 
         $course_id = api_get_course_int_id();
+        $efv = new ExtraFieldValue('survey');
 
         //IF(is_shared<>0,'V','-')	 					AS col6,
         $sql = "SELECT ".
@@ -4569,6 +4609,11 @@ class SurveyUtil
         $res = Database::query($sql);
         $surveys = array();
         while ($survey = Database::fetch_array($res)) {
+            if ($mandatoryAllowed) {
+                $survey['col10'] = $survey['col9'];
+                $efvMandatory = $efv->get_values_by_handler_and_field_variable($survey['col9'], 'is_mandatory');
+                $survey['col9'] = $efvMandatory['value'];
+            }
             $surveys[] = $survey;
         }
         return $surveys;
@@ -4588,6 +4633,7 @@ class SurveyUtil
         $course_id = $_course['real_id'];
         $user_id = intval($user_id);
         $sessionId = api_get_session_id();
+        $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
 
         // Database table definitions
         $table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -4630,6 +4676,9 @@ class SurveyUtil
         echo '<tr>';
         echo '	<th>'.get_lang('SurveyName').'</th>';
         echo '	<th>'.get_lang('Anonymous').'</th>';
+        if ($mandatoryAllowed) {
+            echo '<th class="text-center">'.get_lang('IsMandatory').'</th>';
+        }
         echo '</tr>';
 
         $sql = "SELECT *
@@ -4646,6 +4695,9 @@ class SurveyUtil
 				";
         $result = Database::query($sql);
         $counter = 0;
+
+        $efv = new ExtraFieldValue('survey');
+
         while ($row = Database::fetch_array($result, 'ASSOC')) {
 
             // Get the user into survey answer table (user or anonymus)
@@ -4671,6 +4723,10 @@ class SurveyUtil
             echo '<td class="center">';
             echo ($row['anonymous'] == 1) ? get_lang('Yes') : get_lang('No');
             echo '</td>';
+            if ($mandatoryAllowed) {
+                $efvMandatory = $efv->get_values_by_handler_and_field_variable($row['survey_id'], 'is_mandatory');
+                echo '<td class="text-center">'.($efvMandatory['value'] ? get_lang('Yes') : get_lang('No')).'</td>';
+            }
             echo '</tr>';
             if ($row['anonymous'] == 1) {
                 $current_user_id = $_SESSION['surveyuser'];

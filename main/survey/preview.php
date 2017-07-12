@@ -22,6 +22,7 @@ $table_user = Database:: get_main_table(TABLE_MAIN_USER);
 $table_survey_invitation = Database:: get_course_table(TABLE_SURVEY_INVITATION);
 
 $course_id = api_get_course_int_id();
+$courseInfo = $course_id ? api_get_course_info_by_id($course_id) : [];
 $userId = api_get_user_id();
 $surveyId = intval($_GET['survey_id']);
 $userInvited = 0;
@@ -150,87 +151,96 @@ if (api_is_course_admin() ||
                         survey_question.sort,
                         survey_question.type,
                         survey_question.max_value,
-						survey_question_option.question_option_id,
-						survey_question_option.option_text,
-						survey_question_option.sort as option_sort
-					FROM $table_survey_question survey_question
-					LEFT JOIN $table_survey_question_option survey_question_option
-					ON
-						survey_question.question_id = survey_question_option.question_id AND
-						survey_question_option.c_id = $course_id
-					WHERE
-					    survey_question.survey_id = '".intval($survey_id)."' AND
-						survey_question.question_id IN (".Database::escape_string(implode(',',$paged_questions[$_GET['show']]), null, false).") AND
-						survey_question.c_id =  $course_id
-					ORDER BY survey_question.sort, survey_question_option.sort ASC";
+                        survey_question_option.question_option_id,
+                        survey_question_option.option_text,
+                        survey_question_option.sort as option_sort
+                    FROM $table_survey_question survey_question
+                    LEFT JOIN $table_survey_question_option survey_question_option
+                    ON
+                        survey_question.question_id = survey_question_option.question_id AND
+                        survey_question_option.c_id = $course_id
+                    WHERE
+                        survey_question.survey_id = '".$survey_id."' AND
+                        survey_question.question_id IN (".Database::escape_string(implode(',', $paged_questions[$_GET['show']]), null, false).") AND
+                        survey_question.c_id =  $course_id
+                    ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
-			$result = Database::query($sql);
-			$question_counter_max = Database::num_rows($result);
-			$limit = 0;
-			while ($row = Database::fetch_array($result)) {
-				// If the type is not a pagebreak we store it in the $questions array
-				if ($row['type'] != 'pagebreak') {
-					$questions[$row['sort']]['question_id'] = $row['question_id'];
-					$questions[$row['sort']]['survey_id'] = $row['survey_id'];
-					$questions[$row['sort']]['survey_question'] = $row['survey_question'];
-					$questions[$row['sort']]['display'] = $row['display'];
-					$questions[$row['sort']]['type'] = $row['type'];
-					$questions[$row['sort']]['options'][intval($row['option_sort'])] = $row['option_text'];
-					$questions[$row['sort']]['maximum_score'] = $row['max_value'];
-				} else {
-					// If the type is a pagebreak we are finished loading the questions for this page
-					break;
-				}
-				$counter_question++;
-			}
-		}
-	}
-
-	// Selecting the maximum number of pages
-	$sql = "SELECT * FROM $table_survey_question
-	        WHERE
-	            c_id = $course_id AND
-	            type='".Database::escape_string('pagebreak')."' AND
-	            survey_id='".intval($survey_id)."'";
-	$result = Database::query($sql);
-	$numberofpages = Database::num_rows($result) + 1;
-
-	// Displaying the form with the questions
-	if (isset($_GET['show'])) {
-		$show = (int)$_GET['show'] + 1;
-	} else {
-		$show = 0;
-	}
-
-	$url = api_get_self().'?survey_id='.Security::remove_XSS($survey_id).'&show='.$show;
-	$form = new FormValidator('question', 'post', $url);
-
-	if (is_array($questions) && count($questions) > 0) {
-		foreach ($questions as $key => & $question) {
-			$ch_type = 'ch_'.$question['type'];
-			/** @var survey_question $display */
-			$display = new $ch_type;
-			$form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
-			$form->addHtml($question['survey_question']);
-			$display->render($form, $question);
-			$form->addHtml('</div></div>');
-		}
-	}
-
-	if (($show < $numberofpages) || (!$_GET['show'] && count($questions) > 0)) {
-        if ($show == 0) {
-			$form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'success', 'large');
-        } else {
-			$form->addButton('next_survey_page', get_lang('NextQuestion'), 'arrow-right');
+            $result = Database::query($sql);
+            $question_counter_max = Database::num_rows($result);
+            $limit = 0;
+            while ($row = Database::fetch_array($result)) {
+                // If the type is not a pagebreak we store it in the $questions array
+                if ($row['type'] != 'pagebreak') {
+                    $questions[$row['sort']]['question_id'] = $row['question_id'];
+                    $questions[$row['sort']]['survey_id'] = $row['survey_id'];
+                    $questions[$row['sort']]['survey_question'] = $row['survey_question'];
+                    $questions[$row['sort']]['display'] = $row['display'];
+                    $questions[$row['sort']]['type'] = $row['type'];
+                    $questions[$row['sort']]['options'][intval($row['option_sort'])] = $row['option_text'];
+                    $questions[$row['sort']]['maximum_score'] = $row['max_value'];
+                } else {
+                    // If the type is a pagebreak we are finished loading the questions for this page
+                    break;
+                }
+                $counter_question++;
+            }
         }
-	}
-	if ($show >= $numberofpages && $_GET['show'] || (isset($_GET['show']) && count($questions) == 0)) {
-		if ($questions_exists == false) {
-			echo '<p>'.get_lang('ThereAreNotQuestionsForthisSurvey').'</p>';
+    }
+
+    // Selecting the maximum number of pages
+    $sql = "SELECT * FROM $table_survey_question
+            WHERE
+                c_id = $course_id AND
+                type='".Database::escape_string('pagebreak')."' AND
+                survey_id='".$survey_id."'";
+    $result = Database::query($sql);
+    $numberofpages = Database::num_rows($result) + 1;
+
+    // Displaying the form with the questions
+    if (isset($_GET['show'])) {
+        $show = (int) $_GET['show'] + 1;
+    } else {
+        $show = 0;
+    }
+
+    $url = api_get_self().'?survey_id='.$survey_id.'&show='.$show;
+    $form = new FormValidator('question-survey', 'post', $url, null, null, FormValidator::LAYOUT_INLINE);
+
+    if (is_array($questions) && count($questions) > 0) {
+        foreach ($questions as $key => & $question) {
+            $ch_type = 'ch_'.$question['type'];
+            /** @var survey_question $display */
+            $display = new $ch_type;
+            $form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
+            $form->addHtml($question['survey_question']);
+            $display->render($form, $question);
+            $form->addHtml('</div></div>');
+        }
+    }
+
+    if (($show < $numberofpages) || (!$_GET['show'] && count($questions) > 0)) {
+        if ($show == 0) {
+            $form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'success', 'large');
+        } else {
+            $form->addButton('next_survey_page', get_lang('NextQuestion'), 'arrow-right');
+        }
+    }
+
+    if ($show >= $numberofpages && $_GET['show'] || (isset($_GET['show']) && count($questions) == 0)) {
+        if ($questions_exists == false) {
+            echo '<p>'.get_lang('ThereAreNotQuestionsForthisSurvey').'</p>';
 		}
-		$form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right');
-	}
-	$form->display();
+		$form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right', 'success');
+    }
+    $form->display();
+
+    if ($courseInfo) {
+        echo '<br><p>'.Display::toolbarButton(
+            get_lang('ReturnToCourseHomepage'),
+            api_get_course_url($courseInfo['code']),
+            'home'
+        ).'</p>';
+    }
 } else {
 	Display :: display_error_message(get_lang('NotAllowed'), false);
 }

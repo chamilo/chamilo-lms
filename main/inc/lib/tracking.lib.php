@@ -3151,6 +3151,7 @@ class Tracking
                         INNER JOIN '.$t_lpv.' AS view
                         ON (item_view.lp_view_id = view.id AND item_view.c_id = view.c_id)
                         WHERE
+                            total_time > 0 AND
                             item_view.c_id = '.$course_id.' AND
                             view.c_id = '.$course_id.' AND
                             view.lp_id = '.$lp_id.' AND 

@@ -8052,4 +8052,11 @@ $IsMandatory = "Obligatorio/a?";
 $StudentXHasBeenAssignedNewWorkInCourseY = "Nueva tarea asignada a %s en el curso %s";
 $AsHRMYouReceiveThisMailToAlertThatXHasNewWorkInCourseY = "Como su responsable RH, está recibiendo este correo para avisarle que una nueva tarea acaba de ser asignada a %s en el curso %s.";
 $DearXComma = "Estimado/a %s,";
+$UserLinkingRequests = "Solicitudes de vinculación a estudiantes";
+$NewHomeworkEmailAlertToHrmEnable = "Enviar un correo a los estudiantes y sus responsables de recursos humanos a la creación de una tarea";
+$UserLinkingRequestAccepted = "Solicitud de vinculación a estudiante aceptada";
+$UserLinkingTo = "Vinculado al estudiante";
+$RequestLinkingToUser = "Solicitar vinculación a estudiante";
+$LinkingRequestsAdded = "Solicitud de vinculación añadida";
+$HrmList = "Lista de responsables de recursos humanos";
 ?>

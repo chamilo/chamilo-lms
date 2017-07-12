@@ -60,7 +60,7 @@ class Attendance
      * Get attendance list only the id, name and attendance_qualify_max fields
      * @param   string  $course_id course db name (optional)
      * @param   int     $session_id session id (optional)
-     * @return  array	attendances list
+     * @return  array    attendances list
      */
     public function get_attendances_list($course_id = '', $session_id = null)
     {
@@ -710,7 +710,12 @@ class Attendance
                 $value['result_color_bar'] = $user_faults['color_bar'];
             }
 
-            $photo = Display::img($userInfo['avatar_small'], $userInfo['complete_name'], [], false);
+            $photo = Display::img(
+                $userInfo['avatar_small'],
+                $userInfo['complete_name'],
+                [],
+                false
+            );
 
             $value['photo'] = $photo;
             $value['firstname'] = $user_data['firstname'];
@@ -1798,32 +1803,6 @@ class Attendance
                 }
                 break;
         }
-    }
-
-    /**
-     * Adds x months to a UNIX timestamp
-     * @param   int     The timestamp
-     * @param   int     The number of years to add
-     * @return  int     The new timestamp
-     */
-    private function add_month($timestamp, $num = 1)
-    {
-        $values = api_get_utc_datetime($timestamp);
-        $values = str_replace(array(':', '-', ' '), '/', $values);
-        list($y, $m, $d, $h, $n, $s) = split('/', $values);
-        if ($m + $num > 12) {
-            $y += floor($num / 12);
-            $m += $num % 12;
-        } else {
-            $m += $num;
-        }
-        //date_default_timezone_set('UTC');
-        // return mktime($h, $n, $s, $m, $d, $y);
-        $result = api_strtotime($y.'-'.$m.'-'.$d.' '.$h.':'.$n.':'.$s, 'UTC');
-        if (!empty($result)) {
-            return $result;
-        }
-        return false;
     }
 
     /**

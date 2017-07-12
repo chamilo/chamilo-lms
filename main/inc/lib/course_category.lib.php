@@ -87,7 +87,6 @@ class CourseCategory
                 ORDER BY t1.tree_pos";
 
         $result = Database::query($sql);
-
         $categories = Database::store_result($result);
 
         return $categories;
@@ -354,8 +353,9 @@ class CourseCategory
 
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $categoryCode = Database::escape_string($categoryCode);
-        $sql = "SELECT code, parent_id FROM $tbl_category
-            WHERE code = '$categoryCode'";
+        $sql = "SELECT code, parent_id 
+                FROM $tbl_category
+                WHERE code = '$categoryCode'";
 
         $result = Database::query($sql);
         $children = [];
@@ -472,7 +472,7 @@ class CourseCategory
 
             return $table->toHtml();
         } else {
-            return Display::return_message(get_lang("NoCategories"), 'warning');
+            return Display::return_message(get_lang('NoCategories'), 'warning');
         }
     }
 
@@ -609,7 +609,10 @@ class CourseCategory
             $without_special_courses = ' AND course.id NOT IN ("'.implode('","', $specialCourseList).'")';
         }
 
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition(
+            'course',
+            true
+        );
 
         $categoryFilter = '';
         if ($categoryCode === 'ALL') {
@@ -642,9 +645,6 @@ class CourseCategory
                     $without_special_courses
                     $visibilityCondition
             ";
-
-
-
         return Database::num_rows(Database::query($sql));
     }
 
@@ -663,7 +663,10 @@ class CourseCategory
         if (!empty($specialCourseList)) {
             $without_special_courses = ' AND course.id NOT IN ("'.implode('","', $specialCourseList).'")';
         }
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition(
+            'course',
+            true
+        );
 
         if (!empty($random_value)) {
             $random_value = intval($random_value);
@@ -833,7 +836,12 @@ class CourseCategory
 
             $element->addOption($option, $cat['code'], $params);
             if ($cat['auth_cat_child'] == 'TRUE') {
-                self::setCategoriesInForm($element, $defaultCode, $cat['code'], $padding.' - ');
+                self::setCategoriesInForm(
+                    $element,
+                    $defaultCode,
+                    $cat['code'],
+                    $padding.' - '
+                );
             }
         }
     }
@@ -875,7 +883,6 @@ class CourseCategory
         }
 
         $tableCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
-
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
         $conditions = " INNER JOIN $table a ON (c.id = a.course_category_id)";
         $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
@@ -970,7 +977,12 @@ class CourseCategory
         if ($pageBottom > 1) {
             $pageDiv .= self::getPageNumberItem(1, $pageLength);
             if ($pageBottom > 2) {
-                $pageDiv .= self::getPageNumberItem($pageBottom - 1, $pageLength, null, '...');
+                $pageDiv .= self::getPageNumberItem(
+                    $pageBottom - 1,
+                    $pageLength,
+                    null,
+                    '...'
+                );
             }
         }
 
@@ -981,13 +993,22 @@ class CourseCategory
             } else {
                 $pageItemAttributes = [];
             }
-            $pageDiv .= self::getPageNumberItem($i, $pageLength, $pageItemAttributes);
+            $pageDiv .= self::getPageNumberItem(
+                $i,
+                $pageLength,
+                $pageItemAttributes
+            );
         }
 
         // Check if current page is the last page
         if ($pageTop < $pageTotal) {
             if ($pageTop < ($pageTotal - 1)) {
-                $pageDiv .= self::getPageNumberItem($pageTop + 1, $pageLength, null, '...');
+                $pageDiv .= self::getPageNumberItem(
+                    $pageTop + 1,
+                    $pageLength,
+                    null,
+                    '...'
+                );
             }
             $pageDiv .= self::getPageNumberItem($pageTotal, $pageLength);
         }
@@ -1025,7 +1046,6 @@ class CourseCategory
 
         $categoryCodeRequest = isset($_REQUEST['category_code']) ? Security::remove_XSS($_REQUEST['category_code']) : null;
         $categoryCode = isset($categoryCode) ? Security::remove_XSS($categoryCode) : $categoryCodeRequest;
-
         $hiddenLinksRequest = isset($_REQUEST['hidden_links']) ? Security::remove_XSS($_REQUEST['hidden_links']) : null;
         $hiddenLinks = isset($hiddenLinks) ? Security::remove_XSS($hiddenLinksRequest) : $categoryCodeRequest;
 

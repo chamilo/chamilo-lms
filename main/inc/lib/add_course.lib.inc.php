@@ -324,29 +324,19 @@ class AddCourse
     public static function browse_folders($path, $files, $media)
     {
         if ($media == 'images') {
-            $code_path = api_get_path(
-                    SYS_CODE_PATH
-                ).'default_course_document/images/';
+            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
         }
         if ($media == 'audio') {
-            $code_path = api_get_path(
-                    SYS_CODE_PATH
-                ).'default_course_document/audio/';
+            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/audio/';
         }
         if ($media == 'flash') {
-            $code_path = api_get_path(
-                    SYS_CODE_PATH
-                ).'default_course_document/flash/';
+            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/flash/';
         }
         if ($media == 'video') {
-            $code_path = api_get_path(
-                    SYS_CODE_PATH
-                ).'default_course_document/video/';
+            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/video/';
         }
         if ($media == 'certificates') {
-            $code_path = api_get_path(
-                    SYS_CODE_PATH
-                ).'default_course_document/certificates/';
+            $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/certificates/';
         }
         if (is_dir($path)) {
             $handle = opendir($path);
@@ -693,7 +683,6 @@ class AddCourse
 
         /*    Documents   */
         if ($fill_with_exemplary_content) {
-
             $files = [
                 ['path' => '/images', 'title' => get_lang('Images'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/images/gallery', 'title' => get_lang('DefaultCourseImages'), 'filetype' => 'folder', 'size' => 0],
@@ -983,7 +972,6 @@ class AddCourse
                 ->setIntroText(get_lang('IntroductionTwo'));
             $manager->persist($toolIntro);
 
-
             $toolIntro = new Chamilo\CourseBundle\Entity\CToolIntro();
             $toolIntro
                 ->setCId($course_id)
@@ -1144,6 +1132,7 @@ class AddCourse
      * and the api_get_setting('course_create_active_tools') should be 0 or 1 (used for
      * the visibility of the tool)
      * @param string $variable
+     * @return bool
      * @author Patrick Cool, patrick.cool@ugent.be
      * @assert ('true') === true
      * @assert ('false') === false

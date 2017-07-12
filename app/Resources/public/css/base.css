@@ -204,10 +204,8 @@ header {
   margin: 25px auto;
   text-align: center;
 }
-#notice_block p, #notice-block p{
-    color: #666;
-    font-size: 12px;
-    line-height: 20px;
+#notice_block h5{
+    font-weight: bold;
 }
 .carousel-indicators{
   bottom: 0px !important;
@@ -1607,7 +1605,7 @@ div.admin_section h4 {
     right: 0;
 }
 .view-options{
-    padding-top: 2px;
+    padding-top: 3px;
     padding-right: 10px;
 }
 #course_settings h3 img {
@@ -3861,10 +3859,6 @@ i.size-32.icon-new-work{
   color: #666;
 }
 /* Items menus sidebar */
-.sidebar .nav li a{
-  padding: 2px;
-  font-size: 12px;
-}
 .sidebar .nav li a img{
   vertical-align: middle;
   margin-right: 5px;

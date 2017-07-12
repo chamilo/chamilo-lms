@@ -481,7 +481,13 @@ if (api_is_platform_admin()) {
 
     /* Chamilo.org */
 
-    $blocks['chamilo']['icon'] = Display::return_icon('platform.png', 'Chamilo.org', array(), ICON_SIZE_MEDIUM, false);
+    $blocks['chamilo']['icon'] = Display::return_icon(
+        'platform.png',
+        'Chamilo.org',
+        array(),
+        ICON_SIZE_MEDIUM,
+        false
+    );
     $blocks['chamilo']['label'] = 'Chamilo.org';
     $blocks['chamilo']['class'] = 'block-admin-chamilo';
 
@@ -505,12 +511,18 @@ if (api_is_platform_admin()) {
     $blocks['chamilo']['search_form'] = null;
 
     // Version check
-    $blocks['version_check']['icon'] = Display::return_icon('platform.png', 'Chamilo.org', array(), ICON_SIZE_MEDIUM, false);
+    $blocks['version_check']['icon'] = Display::return_icon(
+        'platform.png',
+        'Chamilo.org',
+        array(),
+        ICON_SIZE_MEDIUM,
+        false
+    );
     $blocks['version_check']['label'] = get_lang('VersionCheck');
     $blocks['version_check']['extra'] = '<div class="admin-block-version"></div>';
     $blocks['version_check']['search_form'] = null;
-    $blocks['version_check']['items'] = null;
-    $blocks['version_check']['class'] = 'block-admin-version_check';
+    $blocks['version_check']['items'] = '<div class="block-admin-version_check"></div>';
+    $blocks['version_check']['class'] = '';
 
     // Check Hook Event for Admin Block Object
     if (!empty($hook)) {

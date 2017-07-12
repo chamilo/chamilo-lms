@@ -3147,8 +3147,8 @@ class Tracking
             // calculates last connection time
             if ($count_row_lp > 0) {
                 $sql = 'SELECT MAX(start_time)
-                        FROM ' . $t_lpiv.' AS item_view
-                        INNER JOIN ' . $t_lpv.' AS view
+                        FROM '.$t_lpiv.' AS item_view
+                        INNER JOIN '.$t_lpv.' AS view
                         ON (item_view.lp_view_id = view.id AND item_view.c_id = view.c_id)
                         WHERE
                             item_view.c_id = '.$course_id.' AND
@@ -5370,6 +5370,7 @@ class Tracking
                         $lp_id,
                         $session_id
                     );
+
                     $time_spent_in_lp = self::get_time_spent_in_lp(
                         $user_id,
                         $course,
@@ -5485,7 +5486,7 @@ class Tracking
      * @param array $average average scores 0-100
      * @return string
      */
-    static function generate_session_exercise_graph($names, $my_results, $average)
+    public static function generate_session_exercise_graph($names, $my_results, $average)
     {
         /* Create and populate the pData object */
         $myData = new pData();

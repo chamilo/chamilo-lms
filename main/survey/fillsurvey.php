@@ -502,16 +502,11 @@ Display :: display_header(get_lang('ToolSurvey'));
 
 // Displaying the survey title and subtitle (appears on every page)
 echo '<div class="survey-block">';
-echo '<div id="survey_title">';
-echo Display::return_icon(
-    'statistics.png',
-    get_lang('CreateNewSurvey'),
-    array('style'=>'display:inline-block; margin-right:5px;'),
-    ICON_SIZE_SMALL
-);
-echo strip_tags($survey_data['survey_title']).'</div>';
+echo '<div class="page-header">';
+echo '<h2>';
+echo strip_tags($survey_data['survey_title']).'</h2></div>';
 if (!empty($survey_data['survey_subtitle'])) {
-    echo '<div id="survey_subtitle">'.strip_tags($survey_data['survey_subtitle']).'</div>';
+    echo '<div class="survey_subtitle"><p>'.strip_tags($survey_data['survey_subtitle']).'</p></div>';
 }
 
 // Displaying the survey introduction
@@ -522,7 +517,7 @@ if (!isset($_GET['show'])) {
     $paged_questions_sec = array();
 
     if (!empty($survey_data['survey_introduction'])) {
-        echo '<div id="survey_content" class="survey_content">'.$survey_data['survey_introduction'].'</div>';
+        echo '<div class="survey_content">'.$survey_data['survey_introduction'].'</div>';
     }
     $limit = 0;
 }
@@ -726,6 +721,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                     $questions[$row['sort']]['type'] = $row['type'];
                     $questions[$row['sort']]['options'][$row['question_option_id']] = $row['option_text'];
                     $questions[$row['sort']]['maximum_score'] = $row['max_value'];
+                    $questions[$row['sort']]['sort'] = $row['sort'];
                 } else {
                     // If the type is a pagebreak we are finished loading the questions for this page
                     break;
@@ -1029,6 +1025,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                                 $questions[$row['sort']]['survey_group_sec1'] = $row['survey_group_sec1'];
                                 $questions[$row['sort']]['survey_group_sec2'] = $row['survey_group_sec2'];
                                 $questions[$row['sort']]['survey_group_pri'] = $row['survey_group_pri'];
+                                $questions[$row['sort']]['sort'] = $row['sort'];
                             } else {
                                 // If the type is a pagebreak we are finished loading the questions for this page
                                 break;
@@ -1150,12 +1147,14 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                         $questions[$row['sort']]['survey_group_sec1'] = $row['survey_group_sec1'];
                         $questions[$row['sort']]['survey_group_sec2'] = $row['survey_group_sec2'];
                         $questions[$row['sort']]['survey_group_pri'] = $row['survey_group_pri'];
+                        $questions[$row['sort']]['sort'] = $row['sort'];
                     } else {
                         // If the type is a page break we are finished loading the questions for this page
                         break;
                     }
                     $counter++;
                 }
+                var_Dump($questions);
             }
         }
     } else { // In case it's another type than 0 or 1
@@ -1195,7 +1194,7 @@ $p_l = isset($_POST['language']) ? Security::remove_XSS($_POST['language']) : ''
 $add_parameters = isset($_GET['user_id']) ? 'user_id='.intval($_GET['user_id']).'&amp;' : '';
 
 $url = api_get_self().'?'.api_get_cidreq().'&'.$add_parameters.'course='.$g_c.'&invitationcode='.$g_ic.'&show='.$show;
-$form = new FormValidator('question', 'post', $url);
+$form = new FormValidator('question', 'post', $url, null, null, FormValidator::LAYOUT_INLINE);
 $form->addHidden('language', $p_l);
 
 if (isset($questions) && is_array($questions)) {
@@ -1203,25 +1202,28 @@ if (isset($questions) && is_array($questions)) {
         $ch_type = 'ch_'.$question['type'];
         $display = new $ch_type;
         // @todo move this in a function.
-        $form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
-        $form->addHtml($question['survey_question']);
+        $form->addHtml('<div class="survey_question '.$ch_type.'">');
+        //$form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
+        $form->addHtml('<h5 class="title">'.$question['sort'].'. '.strip_tags($question['survey_question']).'</h5>');
+        //$form->addHtml($question['survey_question']);
         $display->render($form, $question);
-        $form->addHtml('</div></div>');
+        $form->addHtml('</div>');
     }
 }
 
+$form->addHtml('<div class="start-survey">');
 if ($survey_data['survey_type'] === '0') {
     if ($survey_data['show_form_profile'] == 0) {
         // The normal survey as always
         if (($show < $numberofpages) || !$_GET['show']) {
             if ($show == 0) {
-                $form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'success', 'large');
+                $form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'success');
             } else {
-                $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
+                $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right', 'success');
             }
         }
         if ($show >= $numberofpages && $_GET['show']) {
-            $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right');
+            $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right', 'success');
         }
     } else {
         // The normal survey as always but with the form profile
@@ -1229,14 +1231,14 @@ if ($survey_data['survey_type'] === '0') {
             $numberofpages = count($paged_questions);
             if (($show < $numberofpages) || !$_GET['show']) { //$show = $_GET['show'] + 1
                 if ($show == 0) {
-                    $form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'success', 'large');
+                    $form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'success');
                 } else {
-                    $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
+                    $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right', 'success');
                 }
             }
 
             if ($show >= $numberofpages && $_GET['show']) {
-                $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right');
+                $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right', 'success');
             }
         }
     }
@@ -1255,7 +1257,7 @@ if ($survey_data['survey_type'] === '0') {
 
         if ($personality == 0) {
             if (($show <= $numberofpages) || !$_GET['show']) {
-                $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
+                $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right', 'success');
                 if ($survey_data['one_question_per_page'] == 0) {
                     if ($personality >= 0) {
                         $form->addHidden('personality', $personality);
@@ -1277,10 +1279,10 @@ if ($survey_data['survey_type'] === '0') {
         } elseif ($personality > 0) {
             if ($survey_data['one_question_per_page'] == 1) {
                 if ($show >= $numberofpages) {
-                    $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right');
+                    $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right', 'success');
                 } else {
                     $form->addHidden('personality', $personality);
-                    $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
+                    $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right', 'success');
                 }
             } else {
                 // if the personality test hidden input was set.
@@ -1289,12 +1291,13 @@ if ($survey_data['survey_type'] === '0') {
         }
     } elseif ($survey_data['form_fields'] == '') {
         // This is the case when the show_profile_form is true but there are not form_fields
-        $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
+        $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right', 'success');
     } elseif (!is_array($user_data)) {
         // If the user is not registered in the platform we do not show the form to update his information
-        $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
+        $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right', 'success');
     }
 }
+$form->addHtml('</div>');
 $form->display();
 
 // Footer

@@ -32,7 +32,7 @@ if ($action === 'accept' && $hrm && $assinedId) {
         $em->flush();
 
         Display::addFlash(
-            Display::return_message(get_lang('UserVinculationRequestAccepted'), 'success')
+            Display::return_message(get_lang('UserLinkingRequestAccepted'), 'success')
         );
     }
 
@@ -75,7 +75,7 @@ function getData(User $hrm)
     return $result;
 }
 
-$form = new FormValidator('user_vinculation_requests', 'get');
+$form = new FormValidator('user_linking_requests', 'get');
 $form->addSelectAjax(
     'hrm',
     get_lang('DRH'),
@@ -91,7 +91,7 @@ if ($hrm) {
 
     if ($requests) {
         $content .= Display::table(
-            [get_lang('UserVinculationTo'), get_lang('Actions')],
+            [get_lang('UserLinkingTo'), get_lang('Actions')],
             $requests
         );
     } else {
@@ -101,7 +101,7 @@ if ($hrm) {
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
-$toolName = get_lang('UserVinculationRequests');
+$toolName = get_lang('UserLinkingRequests');
 
 $view = new Template($toolName);
 $view->assign('header', $toolName);

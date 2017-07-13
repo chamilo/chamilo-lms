@@ -132,7 +132,8 @@
         ],
         "post-update-cmd": [
             "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles"
-        ]
+        ],
+        "update-css": "Chamilo\\CoreBundle\\Composer\\ScriptHandler::updateCss"
     },
     "extra": {
         "symfony-app-dir": "app",

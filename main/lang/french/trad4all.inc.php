@@ -7963,4 +7963,11 @@ $IsMandatory = "Obligatoire?";
 $StudentXHasBeenAssignedNewWorkInCourseY = "Une nouvelle tâche a été assignée à %s dans le cours %s";
 $AsHRMYouReceiveThisMailToAlertThatXHasNewWorkInCourseY = "En tant que son responsable RH, vous recevez cet e-mail pour vous avertir qu'une nouvelle tâche vient d'être assignée à %s dans le cours %s.";
 $DearXComma = "Cher/Chère %s,";
+$UserLinkingRequests = "Demandes de liaisons à utilisateurs";
+$NewHomeworkEmailAlertToHrmEnable = "Envoyer un e-mail aux apprenants et à leurs directeurs de ressources humaines lors de la création d'un travail";
+$UserLinkingRequestAccepted = "Demande de liaison acceptée";
+$UserLinkingTo = "Lié à l'apprenant";
+$RequestLinkingToUser = "Solliciter lien à apprenant";
+$LinkingRequestsAdded = "Demande de liaison enregistrée";
+$HrmList = "Liste des directeurs de ressources humaines";
 ?>

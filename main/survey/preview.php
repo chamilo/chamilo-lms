@@ -22,6 +22,7 @@ $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
 
 $course_id = api_get_course_int_id();
+$courseInfo = $course_id ? api_get_course_info_by_id($course_id) : [];
 $userId = api_get_user_id();
 $surveyId = intval($_GET['survey_id']);
 $userInvited = 0;
@@ -206,7 +207,7 @@ if (api_is_course_admin() ||
 
     $url = api_get_self().'?survey_id='.$survey_id.'&show='.$show;
     $form = new FormValidator('question-survey', 'post', $url, null, null, FormValidator::LAYOUT_INLINE);
-    
+
     if (is_array($questions) && count($questions) > 0) {
         foreach ($questions as $key => & $question) {
             $ch_type = 'ch_'.$question['type'];
@@ -251,6 +252,14 @@ if (api_is_course_admin() ||
     }
     $form->addHtml('</div>');
     $form->display();
+
+    if ($courseInfo) {
+        echo Display::toolbarButton(
+            get_lang('ReturnToCourseHomepage'),
+            api_get_course_url($courseInfo['code']),
+            'home'
+        );
+    }
 } else {
     echo Display::return_message(get_lang('NotAllowed'), 'error', false);
 }

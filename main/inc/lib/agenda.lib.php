@@ -3000,7 +3000,9 @@ class Agenda
                     );
 
                     if (api_is_drh()) {
-                        $sessionList = SessionManager::get_sessions_admin(['order' => 'name ASC']);
+                        $sessionList = SessionManager::get_sessions_followed_by_drh(
+                            api_get_user_id()
+                        );
                         if (!empty($sessionList)) {
                             $sessions = [];
                             foreach ($sessionList as $sessionItem) {

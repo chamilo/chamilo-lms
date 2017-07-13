@@ -376,70 +376,56 @@ class IndexManager
      */
     public function return_skills_links()
     {
-        $content = '<ul class="nav nav-pills nav-stacked">';
-        $certificatesItem = '';
-        if (!api_is_anonymous()) {
-            $allow = api_get_configuration_value('hide_my_certificate_link');
-            if ($allow === false) {
-                $certificatesItem = Display::tag(
-                    'li',
-                    Display::url(
-                        Display::return_icon('graduation.png', get_lang('MyCertificates')).get_lang('MyCertificates'),
-                        api_get_path(WEB_CODE_PATH)."gradebook/my_certificates.php"
-                    )
-                );
-            }
+        $items = [];
+        $certificatesItem = [];
+        if (!api_is_anonymous() && api_get_configuration_value('hide_my_certificate_link') === false) {
+            $certificatesItem = [
+                'icon' => Display::return_icon('graduation.png', get_lang('MyCertificates')),
+                'link' => api_get_path(WEB_CODE_PATH).'gradebook/my_certificates.php',
+                'title' => get_lang('MyCertificates')
+            ];
         }
 
-        $searchItem = '';
+        $searchItem = [];
         if (api_get_setting('allow_public_certificates') == 'true') {
-            $searchItem = Display::tag(
-                'li',
-                Display::url(
-                    Display::return_icon('search_graduation.png', get_lang('Search')).get_lang('Search'),
-                    api_get_path(WEB_CODE_PATH)."gradebook/search.php"
-                )
-            );
+            $searchItem = [
+                'icon' => Display::return_icon('search_graduation.png', get_lang('Search')),
+                'link' => api_get_path(WEB_CODE_PATH).'gradebook/search.php',
+                'title' => get_lang('Search')
+            ];
         }
 
         if (empty($certificatesItem) && empty($searchItem)) {
             return '';
         } else {
-            $content .= $certificatesItem;
-            $content .= $searchItem;
+            $items[] = $certificatesItem;
+            $items[] = $searchItem;
         }
 
         if (api_get_setting('allow_skills_tool') == 'true') {
-            $content .= Display::tag(
-                'li',
-                Display::url(
-                    Display::return_icon('skill-badges.png', get_lang('MySkills')).get_lang('MySkills'),
-                    api_get_path(WEB_CODE_PATH).'social/my_skills_report.php'
-                )
-            );
+            $items[] = [
+                'icon' => Display::return_icon('skill-badges.png', get_lang('MySkills')),
+                'link' => api_get_path(WEB_CODE_PATH).'social/my_skills_report.php',
+                'title' => get_lang('MySkills')
+            ];
             $allowSkillsManagement = api_get_setting('allow_hr_skills_management') == 'true';
             if (($allowSkillsManagement && api_is_drh()) || api_is_platform_admin()) {
-                $content .= Display::tag(
-                    'li',
-                    Display::url(
-                        Display::return_icon('edit-skill.png', get_lang('MySkills')).get_lang('ManageSkills'),
-                        api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php'
-                    )
-                );
+                $items[] = [
+                    'icon' => Display::return_icon('edit-skill.png', get_lang('MySkills')),
+                    'link' => api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php',
+                    'title' => get_lang('ManageSkills')
+                ];
             }
         }
 
-        $content .= '</ul>';
-        $html = self::show_right_block(
+        return self::show_right_block(
             get_lang("Skills"),
-            $content,
+            self::returnRightBlockItems($items),
             'skill_block',
             null,
             'skills',
             'skillsCollapse'
         );
-
-        return $html;
     }
 
     /**
@@ -778,7 +764,7 @@ class IndexManager
      * @param string $idCollapse
      * @return string
      */
-    public function show_right_block(
+    public function  show_right_block(
         $title,
         $content,
         $id = '',
@@ -847,32 +833,34 @@ class IndexManager
      */
     public function return_classes_block()
     {
-        $html = '';
-        if (api_get_setting('show_groups_to_users') === 'true') {
-            $usergroup = new UserGroup();
-            $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
-            $classes = '';
-            if (!empty($usergroup_list)) {
-                foreach ($usergroup_list as $group_id) {
-                    $data = $usergroup->get($group_id);
-                    $data['name'] = Display::url(
-                        $data['name'],
-                        api_get_path(WEB_CODE_PATH).'user/classes.php?id='.$data['id']
-                    );
-                    $classes .= Display::tag('li', $data['name']);
-                }
-            }
-            if (api_is_platform_admin()) {
-                $classes .= Display::tag(
-                    'li',
-                    Display::url(get_lang('AddClasses'), api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add')
-                );
-            }
-            if (!empty($classes)) {
-                $classes = Display::tag('ul', $classes, array('class' => 'nav nav-pills nav-stacked'));
-                $html .= self::show_right_block(get_lang('Classes'), $classes, 'classes_block');
+        if (api_get_setting('show_groups_to_users') !== 'true') {
+            return '';
+        }
+
+        $usergroup = new UserGroup();
+        $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
+        $items = [];
+        if (!empty($usergroup_list)) {
+            foreach ($usergroup_list as $group_id) {
+                $data = $usergroup->get($group_id);
+                $items[] = [
+                    'link' => api_get_path(WEB_CODE_PATH).'user/classes.php?id='.$data['id'],
+                    'title' => $data['name']
+                ];
             }
         }
+        if (api_is_platform_admin()) {
+            $items[] = [
+                'link' => api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add',
+                'title' => get_lang('AddClasses')
+            ];
+        }
+
+        $html = self::show_right_block(
+            get_lang('Classes'),
+            self::returnRightBlockItems($items),
+            'classes_block'
+        );
 
         return $html;
     }
@@ -918,8 +906,8 @@ class IndexManager
             return;
         }
 
+        $items = [];
         $userGroup = new UserGroup();
-        $profile_content = '<ul class="nav nav-pills nav-stacked">';
 
         //  @todo Add a platform setting to add the user image.
         if (api_get_setting('allow_message_tool') == 'true') {
@@ -944,54 +932,60 @@ class IndexManager
             if (api_get_setting('allow_social_tool') == 'true') {
                 $link = '?f=social';
             }
-            $profile_content .= '<li class="inbox-message-social"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'">'
-                .Display::return_icon('inbox.png', get_lang('Inbox'))
-                .get_lang('Inbox').$cant_msg.' </a></li>';
-            $profile_content .= '<li class="new-message-social"><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'">'
-                .Display::return_icon('new-message.png', get_lang('Compose'))
-                .get_lang('Compose').' </a></li>';
+            $items[] = [
+                'class' => 'inbox-message-social',
+                'icon' => Display::return_icon('inbox.png', get_lang('Inbox')),
+                'link' => api_get_path(WEB_PATH).'main/messages/inbox.php'.$link,
+                'title' => get_lang('Inbox').$cant_msg
+            ];
+            $items[] = [
+                'class' => 'new-message-social',
+                'icon' => Display::return_icon('new-message.png', get_lang('Compose')),
+                'link' => api_get_path(WEB_PATH).'main/messages/new_message.php'.$link,
+                'title' => get_lang('Compose')
+            ];
 
             if (api_get_setting('allow_social_tool') == 'true') {
                 $total_invitations = Display::badge($total_invitations);
-                $profile_content .= '<li class="invitations-social"><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'
-                    .Display::return_icon('invitations.png', get_lang('PendingInvitations'))
-                    .get_lang('PendingInvitations').$total_invitations.'</a></li>';
+                $items[] = [
+                    'class' => 'invitations-social',
+                    'icon' => Display::return_icon('invitations.png', get_lang('PendingInvitations')),
+                    'link' => api_get_path(WEB_PATH).'main/social/invitations.php',
+                    'title' => get_lang('PendingInvitations').$total_invitations
+                ];
             }
 
             if (isset($_configuration['allow_my_files_link_in_homepage']) && $_configuration['allow_my_files_link_in_homepage']) {
-                $myFiles = '<li class="myfiles-social"><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'
-                    .Display::return_icon('sn-files.png', get_lang('Files'))
-                    .get_lang('MyFiles').'</a></li>';
-
-                if (api_get_setting('allow_my_files') === 'false') {
-                    $myFiles = '';
+                if (api_get_setting('allow_my_files') !== 'false') {
+                    $items[] = [
+                        'class' => 'myfiles-social',
+                        'icon' => Display::return_icon('sn-files.png', get_lang('Files')),
+                        'link' => api_get_path(WEB_PATH).'main/social/myfiles.php',
+                        'title' => get_lang('MyFiles')
+                    ];
                 }
-                $profile_content .= $myFiles;
             }
         }
 
-        $editProfileUrl = Display::getProfileEditionLink($user_id);
-
-        $profile_content .= '<li class="profile-social"><a href="'.$editProfileUrl.'">'
-            .Display::return_icon('edit-profile.png', get_lang('EditProfile'))
-            .get_lang('EditProfile').'</a></li>';
+        $items[] = [
+            'class' => 'profile-social',
+            'icon' => Display::return_icon('edit-profile.png', get_lang('EditProfile')),
+            'link' => Display::getProfileEditionLink($user_id),
+            'title' => get_lang('EditProfile')
+        ];
 
         if (api_get_configuration_value('show_link_request_hrm_user') && api_is_drh()) {
             $label = get_lang('RequestLinkingToUser');
-            $icon = Display::return_icon('new_group.png', $label);
-            $profile_content .= '<li>'
-                .Display::url(
-                    $icon.$label,
-                    api_get_path(WEB_CODE_PATH).'social/require_user_linking.php'
-                )
-                .'</li>';
+            $items[] = [
+                'icon' => Display::return_icon('new_group.png', $label),
+                'link' => api_get_path(WEB_CODE_PATH).'social/require_user_linking.php',
+                'title' => $label
+            ];
         }
-
-        $profile_content .= '</ul>';
 
         $html = self::show_right_block(
             get_lang('Profile'),
-            $profile_content,
+            self::returnRightBlockItems($items),
             'profile_block',
             null,
             'profile',
@@ -1055,7 +1049,6 @@ class IndexManager
      */
     public function return_course_block()
     {
-        $html = '';
         $show_create_link = false;
         $show_course_link = false;
         if (api_is_allowed_to_create_course()) {
@@ -1066,75 +1059,109 @@ class IndexManager
             $show_course_link = true;
         }
 
-        // My account section
-        $my_account_content = '<ul class="nav nav-pills nav-stacked">';
+        $items = [];
 
+        // My account section
         if ($show_create_link) {
-            $my_account_content .= '<li class="add-course"><a href="main/create_course/add_course.php">';
             if (api_get_setting('course_validation') == 'true' && !api_is_platform_admin()) {
-                $my_account_content .= Display::return_icon('new-course.png', get_lang('CreateCourseRequest'));
-                $my_account_content .= get_lang('CreateCourseRequest');
+                $items[] = [
+                    'class' => 'add-course',
+                    'icon' => Display::return_icon('new-course.png', get_lang('CreateCourseRequest')),
+                    'link' => 'main/create_course/add_course.php',
+                    'title' => get_lang('CreateCourseRequest')
+                ];
             } else {
-                $my_account_content .= Display::return_icon('new-course.png', get_lang('CourseCreate'));
-                $my_account_content .= get_lang('CourseCreate');
+                $items[] = [
+                    'class' => 'add-course',
+                    'icon' => Display::return_icon('new-course.png', get_lang('CourseCreate')),
+                    'link' => 'main/create_course/add_course.php',
+                    'title' => get_lang('CourseCreate')
+                ];
             }
-            $my_account_content .= '</a></li>';
 
             if (SessionManager::allowToManageSessions()) {
-                $my_account_content .= '<li class="add-course"><a href="main/session/session_add.php">';
-                $my_account_content .= Display::return_icon('session.png', get_lang('AddSession'));
-                $my_account_content .= get_lang('AddSession');
-                $my_account_content .= '</a></li>';
+                $items[] = [
+                    'class' => 'add-course',
+                    'icon' => Display::return_icon('session.png', get_lang('AddSession')),
+                    'link' => 'main/session/session_add.php',
+                    'title' => get_lang('AddSession')
+                ];
             }
         }
 
         // Sort courses
-        $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
-        $img_order = Display::return_icon('order-course.png', get_lang('SortMyCourses'));
-        $my_account_content .= '<li class="order-course">'.
-            Display::url(
-                $img_order.get_lang('SortMyCourses'),
-                $url,
-                array('class' => 'sort course')
-            ).
-        '</li>';
+        $items[] = [
+            'class' => 'order-course',
+            'icon' => Display::return_icon('order-course.png', get_lang('SortMyCourses')),
+            'link' => api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses',
+            'title' => get_lang('SortMyCourses')
+        ];
 
         // Session history
         if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-            $my_account_content .= '<li class="history-course"><a href="user_portal.php">'
-                .Display::return_icon('history-course.png', get_lang('DisplayTrainingList'))
-                .get_lang('DisplayTrainingList').'</a></li>';
+            $items[] = [
+                'class' => 'history-course',
+                'icon' => Display::return_icon('history-course.png', get_lang('DisplayTrainingList')),
+                'link' => 'user_portal.php',
+                'title' => get_lang('DisplayTrainingList')
+            ];
         } else {
-            $my_account_content .= '<li class="history-course"><a href="user_portal.php?history=1">'
-                .Display::return_icon('history-course.png', get_lang('HistoryTrainingSessions'))
-                .get_lang('HistoryTrainingSessions').'</a></li>';
+            $items[] = [
+                'class' => 'history-course',
+                'icon' => Display::return_icon('history-course.png', get_lang('HistoryTrainingSessions')),
+                'link' => 'user_portal.php?history=1',
+                'title' => get_lang('HistoryTrainingSessions')
+            ];
         }
 
         // Course catalog
         if ($show_course_link) {
             if (!api_is_drh()) {
-                $my_account_content .= '<li class="list-course"><a href="main/auth/courses.php">'
-                    .Display::return_icon('catalog-course.png', get_lang('CourseCatalog'))
-                    .get_lang('CourseCatalog').'</a></li>';
+                $items[] = [
+                    'class' => 'list-course',
+                    'icon' => Display::return_icon('catalog-course.png', get_lang('CourseCatalog')),
+                    'link' => 'main/auth/courses.php',
+                    'title' => get_lang('CourseCatalog')
+                ];
             } else {
-                $my_account_content .= '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
+                $items[] = [
+                    'link' => 'main/dashboard/index.php',
+                    'title' => get_lang('Dashboard')
+                ];
             }
         }
 
-        $my_account_content .= '</ul>';
+        return self::show_right_block(
+            get_lang('Courses'),
+            self::returnRightBlockItems($items),
+            'course_block',
+            null,
+            'course',
+            'courseCollapse'
+        );
+    }
 
-        if (!empty($my_account_content)) {
-            $html = self::show_right_block(
-                get_lang('Courses'),
-                $my_account_content,
-                'course_block',
-                null,
-                'course',
-                'courseCollapse'
-            );
+    /**
+     * Generate the HTML code for items when displaying the right-side blocks
+     * @param array $items
+     * @return string
+     */
+    private static function returnRightBlockItems(array $items)
+    {
+        $my_account_content = '';
+
+        foreach ($items as $item) {
+            if (empty($item['link']) && empty($item['title'])) {
+                continue;
+            }
+
+            $my_account_content .= '<li class="'.(empty($item['class']) ? '' : $item['class']).'">'
+                .(empty($item['icon']) ? '' : '<i class="fa-li fa">'.$item['icon'].'</i>')
+                .'<a href="'.$item['link'].'">'.$item['title'].'</a>'
+                .'</li>';
         }
 
-        return $html;
+        return '<ul class="fa-ul">'.$my_account_content.'</ul>';
     }
 
     /**

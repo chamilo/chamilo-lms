@@ -3854,9 +3854,8 @@ i.size-32.icon-new-work{
   color: #666;
 }
 /* Items menus sidebar */
-.sidebar .nav li a img{
-  vertical-align: middle;
-  margin-right: 5px;
+.sidebar .fa-ul li{
+    line-height: 25px;
 }
 .social-network-menu .nav li a, #groups-acordeon .nav li a{
   padding: 5px;

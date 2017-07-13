@@ -6722,6 +6722,11 @@ input.form-control[type="color"] {
     clear: left;
 }
 
+.btn-orange {
+    background-color: #EF7710;
+    border: none;
+}
+
 /* Extra small devices (phones, less than 768px) */
 /* No media query since this is the default in Bootstrap */
 

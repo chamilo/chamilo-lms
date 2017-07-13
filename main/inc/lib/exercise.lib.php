@@ -2348,9 +2348,9 @@ HOTSPOT;
      */
     public static function getModelStyle($model, $percentage)
     {
-        $modelWithStyle = get_lang($model['name']);
-        $modelWithStyle .= ' - <span class="'.$model['css_class'].'">'.$model['css_class'].' </span> - ';
-        $modelWithStyle .= $percentage;
+        //$modelWithStyle = get_lang($model['name']);
+        $modelWithStyle = '<span class="'.$model['css_class'].'"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+        //$modelWithStyle .= $percentage;
 
         return $modelWithStyle;
     }

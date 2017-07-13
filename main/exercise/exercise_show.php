@@ -793,7 +793,7 @@ foreach ($questionList as $questionId) {
                 $formMark->display();*/
                 echo '<form name="marksform_'.$questionId.'" method="post" action="">';
                 echo get_lang("AssignMarks");
-                echo "&nbsp;<select class='selectpicker' name='marks' id='marks'>";
+                echo "&nbsp;<select name='marks' id='marks'>";
                 $model = ExerciseLib::getCourseScoreModel();
                 if (empty($model)) {
                     for ($i = 0; $i <= $questionWeighting; $i++) {
@@ -803,7 +803,7 @@ foreach ($questionList as $questionId) {
                     foreach ($model['score_list'] as $item) {
                         $i = api_number_format($item['score_to_qualify'] / 100 * $questionWeighting, 2);
                         $model = ExerciseLib::getModelStyle($item, $i);
-                        echo '<option value="'.$i.'" '.(($i == $questionScore) ? "selected='selected'" : '').'>'.$model.'</option>';
+                        echo '<option class = "'.$item['css_class'].'" value="'.$i.'" '.(($i == $questionScore) ? "selected='selected'" : '').'>'.$model.'</option>';
                     }
                 }
                 echo '</select>';

@@ -1745,22 +1745,22 @@ class UserManager
             case USER_IMAGE_SIZE_SMALL:
                 $pictureAnonymousSize = '32';
                 $realSizeName = 'small_';
-                $gravatarSize = 22;
+                $gravatarSize = 32;
                 break;
             case USER_IMAGE_SIZE_MEDIUM:
                 $pictureAnonymousSize = '64';
                 $realSizeName = 'medium_';
-                $gravatarSize = 50;
+                $gravatarSize = 64;
                 break;
             case USER_IMAGE_SIZE_ORIGINAL:
                 $pictureAnonymousSize = '128';
                 $realSizeName = '';
-                $gravatarSize = 200;
+                $gravatarSize = 128;
                 break;
             case USER_IMAGE_SIZE_BIG:
                 $pictureAnonymousSize = '128';
                 $realSizeName = 'big_';
-                $gravatarSize = 200;
+                $gravatarSize = 128;
                 break;
         }
 

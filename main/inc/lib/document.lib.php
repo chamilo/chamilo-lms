@@ -2559,7 +2559,9 @@ class DocumentManager
                                 $value_modified = str_replace('&amp;', '&', $value);
                                 $value_array = explode('&', $value_modified);
                                 foreach ($value_array as $item) {
-                                    list($key, $item_value) = explode('=', $item);
+                                    $itemParts = explode('=', $item);
+                                    $key = $itemParts[0];
+                                    $item_value = !empty($itemParts[1]) ? $itemParts[1] : '';
                                     if ($key == $explode_variables[$name]) {
                                         $attributes[strtolower($name)][] = $item_value;
                                     }

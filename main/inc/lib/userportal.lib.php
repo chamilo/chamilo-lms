@@ -1049,6 +1049,7 @@ class IndexManager
      */
     public function return_course_block()
     {
+        $isHrm = api_is_drh();
         $show_create_link = false;
         $show_course_link = false;
         if (api_is_allowed_to_create_course()) {
@@ -1111,6 +1112,13 @@ class IndexManager
                 'icon' => Display::return_icon('history-course.png', get_lang('HistoryTrainingSessions')),
                 'link' => 'user_portal.php?history=1',
                 'title' => get_lang('HistoryTrainingSessions')
+            ];
+        }
+
+        if ($isHrm) {
+            $items[] = [
+                'link' => api_get_path(WEB_CODE_PATH).'auth/hrm_courses.php',
+                'title' => get_lang('HrmAssignedUsersCourseList')
             ];
         }
 
@@ -1785,7 +1793,7 @@ class IndexManager
         }
 
         return [
-            'html' => $specialCourseList.$sessions_with_category.$sessions_with_no_category.$listCourse,
+            'html' => trim($specialCourseList.$sessions_with_category.$sessions_with_no_category.$listCourse),
             'session_count' => $sessionCount,
             'course_count' => $courseCount
         ];

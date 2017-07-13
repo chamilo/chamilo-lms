@@ -3669,7 +3669,8 @@ class CourseManager
             // We simply display the title of the category.
             $courseInCategory = self::returnCoursesCategories(
                 $row['id'],
-                $load_dirs
+                $load_dirs,
+                $user_id
             );
 
             $params = [
@@ -3681,7 +3682,7 @@ class CourseManager
         }
 
         // Step 2: We display the course without a user category.
-        $coursesNotCategory = self::returnCoursesCategories(0, $load_dirs);
+        $coursesNotCategory = self::returnCoursesCategories(0, $load_dirs, $user_id);
 
         if ($coursesNotCategory) {
             $listItems['not_category'] = $coursesNotCategory;
@@ -3697,9 +3698,9 @@ class CourseManager
      * @param bool     $load_dirs Whether to show the document quick-loader or not
      * @return string
      */
-    public static function returnCoursesCategories($user_category_id, $load_dirs = false)
+    public static function returnCoursesCategories($user_category_id, $load_dirs = false, $user_id = 0)
     {
-        $user_id = api_get_user_id();
+        $user_id = $user_id ?: api_get_user_id();
         $user_category_id = (int) $user_category_id;
 
         // Table definitions

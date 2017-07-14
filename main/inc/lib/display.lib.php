@@ -2603,7 +2603,8 @@ HTML;
 
         return self::tip(
             date_to_str_ago($dateTime),
-            api_get_local_time($dateTime)
+            api_convert_and_format_date($dateTime, DATE_TIME_FORMAT_LONG)
+            //api_get_local_time($dateTime)
         );
     }
 

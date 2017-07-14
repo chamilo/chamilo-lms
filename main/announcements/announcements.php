@@ -67,7 +67,6 @@ $sessionId = api_get_session_id();
 
 if (!empty($group_id)) {
     $group_properties = GroupManager:: get_group_properties($group_id);
-
     $interbreadcrumb[] = array(
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups'),
@@ -196,7 +195,12 @@ switch ($action) {
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_course_announcements&'.api_get_cidreq().'&title_to_search='.$keyword.'&user_id_to_search='.$userIdToSearch;
         $deleteUrl = api_get_path(WEB_AJAX_PATH).'announcement.ajax.php?a=delete_item&'.api_get_cidreq();
-        $columns = array(get_lang('Title'), get_lang('By'), get_lang('LastUpdateDate'), get_lang('Actions'));
+        $columns = array(
+            get_lang('Title'),
+            get_lang('By'),
+            get_lang('LastUpdateDate'),
+            get_lang('Actions')
+        );
 
         // Column config
         $columnModel = array(
@@ -215,8 +219,8 @@ switch ($action) {
                 'sortable' => 'false',
             ),
             array(
-                'name' => 'insert_date',
-                'index' => 'insert_date',
+                'name' => 'lastedit_date',
+                'index' => 'lastedit_date',
                 'width' => '200',
                 'align' => 'left',
                 'sortable' => 'false',
@@ -266,7 +270,11 @@ switch ($action) {
         });
         </script>';
 
-        $count = AnnouncementManager::getAnnouncements($stok, $announcement_number, true);
+        $count = AnnouncementManager::getAnnouncements(
+            $stok,
+            $announcement_number,
+            true
+        );
 
         if (empty($count)) {
             $html = '';

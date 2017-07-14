@@ -238,3 +238,24 @@ blockquote p {
   max-width: 100%;
   height: auto;
 }
+.img-va-baseline {
+    vertical-align: baseline;
+}
+.img-va-top {
+    vertical-align: top;
+}
+.img-va-middle {
+    vertical-align: middle;
+}
+.img-va-super {
+    vertical-align: super;
+}
+.img-va-sub {
+    vertical-align: sub;
+}
+.img-va-text-top {
+    vertical-align: text-top;
+}
+.img-va-text-bottom {
+    vertical-align: text-bottom;
+}

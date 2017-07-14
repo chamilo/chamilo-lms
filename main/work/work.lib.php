@@ -3308,7 +3308,7 @@ function formatWorkScore($score, $weight)
         $label = 'warning';
     }
 
-    $scoreBasedInModel = ExerciseLib::convertScoreToModel($relativeScore);
+    $scoreBasedInModel = ExerciseLib::convertScoreToModel($relativeScore*100);
     if (empty($scoreBasedInModel)) {
         $finalScore = api_number_format($score, 1).' / '.$weight;
 

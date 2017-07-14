@@ -18,7 +18,7 @@ $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
-$filter_user = isset($_REQUEST['filter_by_user']) ? intval($_REQUEST['filter_by_user']) : null;
+$filter_user = isset($_REQUEST['filter_by_user']) ? (int) $_REQUEST['filter_by_user'] : null;
 $isBossOfStudent = false;
 if (api_is_student_boss() && !empty($filter_user)) {
     // Check if boss has access to user info.
@@ -155,7 +155,6 @@ if (isset($_REQUEST['comments']) &&
 
     foreach ($_POST as $key_index => $key_value) {
         $my_post_info = explode('_', $key_index);
-
         $post_content_id[] = isset($my_post_info[1]) ? $my_post_info[1] : null;
 
         if ($my_post_info[0] == 'comments') {
@@ -240,8 +239,7 @@ if (isset($_REQUEST['comments']) &&
     }
 
     // Updating LP score here
-    if (in_array($origin, array('tracking_course', 'user_course', 'correct_exercise_in_lp'))
-    ) {
+    if (in_array($origin, array('tracking_course', 'user_course', 'correct_exercise_in_lp'))) {
         $sql = "UPDATE $TBL_LP_ITEM_VIEW 
                 SET score = '".floatval($tot)."'
                 WHERE c_id = ".$course_id." AND id = ".$lp_item_view_id;

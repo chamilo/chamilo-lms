@@ -149,12 +149,15 @@ if (!empty($gradebook) && $gradebook == 'view') {
     );
 }
 
-$interbreadcrumb[] = array("url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises'));
+$interbreadcrumb[] = array(
+    "url" => "exercise.php?".api_get_cidreq(),
+    'name' => get_lang('Exercises')
+);
 $interbreadcrumb[] = array(
     "url" => "overview.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(),
     "name" => $objExercise->selectTitle(true)
 );
-$interbreadcrumb[] = array("url" => "#", "name" => get_lang('Result'));
+$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Result'));
 
 $this_section = SECTION_COURSES;
 
@@ -268,7 +271,11 @@ if (!empty($track_exercise_info)) {
             $show_only_total_score = true;
             if ($origin != 'learnpath') {
                 if ($currentUserId == $student_id) {
-                    echo Display::return_message(get_lang('ThankYouForPassingTheTest'), 'warning', false);
+                    echo Display::return_message(
+                        get_lang('ThankYouForPassingTheTest'),
+                        'warning',
+                        false
+                    );
                 }
             }
         } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
@@ -320,7 +327,6 @@ if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLa
 }
 
 $i = $totalScore = $totalWeighting = 0;
-
 if ($debug > 0) {
     error_log("ExerciseResult: ".print_r($exerciseResult, 1));
     error_log("QuestionList: ".print_r($questionList, 1));
@@ -977,7 +983,10 @@ if (!empty($category_list) && ($show_results || $show_only_total_score || $showT
         'score' => $my_total_score_temp,
         'total' => $totalWeighting
     );
-    echo TestCategory::get_stats_table_by_attempt($objExercise->id, $category_list);
+    echo TestCategory::get_stats_table_by_attempt(
+        $objExercise->id,
+        $category_list
+    );
 }
 
 echo $total_score_text;
@@ -1019,7 +1028,13 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
             'exeid' => $id
         ]);
 
-        $emailForm = new FormValidator('myform', 'post', $formUrl, '', ['id' => 'myform']);
+        $emailForm = new FormValidator(
+            'myform',
+            'post',
+            $formUrl,
+            '',
+            ['id' => 'myform']
+        );
     }
 
     $emailForm->addCheckBox(
@@ -1100,7 +1115,10 @@ if ($origin != 'learnpath') {
         echo "<script>window.parent.API.void_save_asset('$totalScore', '$totalWeighting', 0, 'completed'); </script>";
         echo '</body></html>';
     } else {
-        echo Display::return_message(get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'), 'normal');
+        echo Display::return_message(
+            get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'),
+            'normal'
+        );
         echo '<br />';
     }
 }

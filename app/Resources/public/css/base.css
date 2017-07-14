@@ -6721,8 +6721,33 @@ input.form-control[type="color"] {
 }
 
 .btn-orange {
-    background-color: #EF7710;
+    background-color: #EF5F00;
     border: none;
+}
+
+.exercise_mark_select .dropdown-menu>li>a.btn-danger:focus,
+.exercise_mark_select .dropdown-menu>li>a.btn-danger:hover {
+    opacity: 0.8;
+    background-color: #d9534f;
+}
+
+.exercise_mark_select .dropdown-menu>li>a.btn-orange:focus,
+.exercise_mark_select .dropdown-menu>li>a.btn-orange:hover {
+    background-color: #EF7710;
+    opacity: 0.8 !important;
+}
+
+
+.exercise_mark_select .dropdown-menu>li>a.btn-warning:focus,
+.exercise_mark_select .dropdown-menu>li>a.btn-warning:hover {
+    background-color: #f0ad4e;
+    opacity: 0.8 !important;
+}
+
+.exercise_mark_select .dropdown-menu>li>a.btn-success:focus,
+.exercise_mark_select .dropdown-menu>li>a.btn-success:hover {
+    background-color: #5cb85c;
+    opacity: 0.8 !important;
 }
 
 /* Extra small devices (phones, less than 768px) */

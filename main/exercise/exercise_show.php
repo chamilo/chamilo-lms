@@ -170,6 +170,14 @@ if ($allowRecordAudio && $allowTeacherCommentAudio) {
     $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 }
 
+// Filling the scores with the right colors.
+$models = ExerciseLib::getCourseScoreModel();
+$cssListToString = '';
+if (!empty($models)) {
+    $cssList = array_column($models['score_list'], 'css_class');
+    $cssListToString = implode(' ', $cssList);
+}
+
 if ($origin != 'learnpath') {
     Display::display_header('');
 } else {
@@ -182,6 +190,28 @@ if ($origin != 'learnpath') {
 }
 ?>
     <script>
+        <?php if (!empty($cssListToString)) { ?>
+
+        function updateSelect(element) {
+            var spanTag = element.parent().find('span.filter-option');
+            var value = element.val();
+            var optionClass = $('.exercise_mark_select option[value="'+value+'"]').attr('class');
+            spanTag.removeClass('<?php echo $cssListToString; ?>');
+            spanTag.addClass(optionClass);
+        }
+
+        $(document).ready( function() {
+            // Loading values
+            $('.exercise_mark_select').on('loaded.bs.select', function() {
+                updateSelect($(this));
+            });
+            // On change
+            $('.exercise_mark_select').on('changed.bs.select', function(e, clickedIndex) {
+                updateSelect($(this));
+            });
+        });
+        <?php } ?>
+
         var maxEditors = <?php echo intval($maxEditors); ?>;
         function showfck(sid, marksid) {
             $('#' + sid).toggleClass('hidden');
@@ -793,7 +823,7 @@ foreach ($questionList as $questionId) {
                 $formMark->display();*/
                 echo '<form name="marksform_'.$questionId.'" method="post" action="">';
                 echo get_lang("AssignMarks");
-                echo "&nbsp;<select name='marks' id='marks'>";
+                echo "&nbsp;<select name='marks' id='marks' class='selectpicker exercise_mark_select'>";
                 $model = ExerciseLib::getCourseScoreModel();
                 if (empty($model)) {
                     for ($i = 0; $i <= $questionWeighting; $i++) {
@@ -818,7 +848,7 @@ foreach ($questionList as $questionId) {
                 echo '
                     <div id="'.$marksname.'" class="hidden">
                         <form name="marksform_'.$questionId.'" method="post" action="">
-                            <select name="marks" id="marks" style="display:none;">
+                            <select name="marks" id="marks" style="display:none;" class="exercise_mark_select">
                                 <option value="'.$questionScore.'" >'.$questionScore.'</option>
                             </select>
                         </form>

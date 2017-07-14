@@ -829,7 +829,7 @@ foreach ($questionList as $questionId) {
                 $formMark->display();*/
                 echo '<form name="marksform_'.$questionId.'" method="post" action="">';
                 echo get_lang("AssignMarks");
-                echo "&nbsp;<select name='marks' id='marks' class='selectpicker exercise_mark_select'>";
+                echo "&nbsp;<select name='marks' id='select_marks_".$questionId."' class='selectpicker exercise_mark_select'>";
                 $model = ExerciseLib::getCourseScoreModel();
                 if (empty($model)) {
                     for ($i = 0; $i <= $questionWeighting; $i++) {
@@ -854,7 +854,7 @@ foreach ($questionList as $questionId) {
                 echo '
                     <div id="'.$marksname.'" class="hidden">
                         <form name="marksform_'.$questionId.'" method="post" action="">
-                            <select name="marks" id="marks" style="display:none;" class="exercise_mark_select">
+                            <select name="marks" id="select_marks_'.$questionId.'" style="display:none;" class="exercise_mark_select">
                                 <option value="'.$questionScore.'" >'.$questionScore.'</option>
                             </select>
                         </form>

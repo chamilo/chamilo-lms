@@ -2434,6 +2434,79 @@ HOTSPOT;
         return false;
     }
 
+    public static function addScoreModelInput(FormValidator & $form, $name, $weight, $selected)
+    {
+        $model = self::getCourseScoreModel();
+        if (empty($model)) {
+            return false;
+        }
+
+        /** @var HTML_QuickForm_select $element */
+        $element = $form->createElement(
+            'select',
+            $name,
+            get_lang('Qualification'),
+            [],
+            ['class' => 'exercise_mark_select']
+        );
+
+        foreach ($model['score_list'] as $item) {
+            $i = api_number_format($item['score_to_qualify'] / 100 * $weight, 2);
+            $label = ExerciseLib::getModelStyle($item, $i);
+            $attributes = [
+                'class' => $item['css_class']
+            ];
+            if ($selected == $i) {
+                $attributes['selected'] = 'selected';
+            }
+            $element->addOption($label, $i, $attributes);
+        }
+        $form->addElement($element);
+    }
+
+    /**
+     * @return string
+     */
+    public static function getJsCode()
+    {
+        // Filling the scores with the right colors.
+        $models = ExerciseLib::getCourseScoreModel();
+        $cssListToString = '';
+        if (!empty($models)) {
+            $cssList = array_column($models['score_list'], 'css_class');
+            $cssListToString = implode(' ', $cssList);
+        }
+
+        if (empty($cssListToString)) {
+            return '';
+        }
+        $js = <<<EOT
+        
+        function updateSelect(element) {
+            var spanTag = element.parent().find('span.filter-option');
+            var value = element.val();
+            var selectId = element.attr('id');
+            var optionClass = $('#' + selectId + ' option[value="'+value+'"]').attr('class');
+            spanTag.removeClass('$cssListToString');
+            spanTag.addClass(optionClass);
+        }
+        
+        $(document).ready( function() {
+            // Loading values
+            $('.exercise_mark_select').on('loaded.bs.select', function() {
+                updateSelect($(this));
+            });
+            // On change
+            $('.exercise_mark_select').on('changed.bs.select', function() {
+                updateSelect($(this));
+            });
+        });
+EOT;
+
+            return $js;
+
+    }
+
     /**
      * @param float $score
      * @param float $weight
@@ -3646,7 +3719,7 @@ HOTSPOT;
 
         $sql = "SELECT DISTINCT exe_user_id
                 FROM $track_exercises e
-                INNER JOIN $track_attempt a 
+                INNER JOIN $track_attempt a
                 ON (a.exe_id = e.exe_id)
                 WHERE
                     exe_exo_id 	 = $exercise_id AND
@@ -4119,7 +4192,7 @@ HOTSPOT;
         return '<div class="ribbon">
                     <div class="rib rib-'.$class.'">
                         <h3>'.$scoreLabel.'</h3>
-                    </div> 
+                    </div>
                     <h4>'.get_lang('Score').': '.$result.'</h4>
                 </div>'
         ;

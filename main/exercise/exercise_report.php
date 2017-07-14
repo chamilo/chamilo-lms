@@ -170,9 +170,10 @@ if (isset($_REQUEST['comments']) &&
     } else {
         $array_content_id_exe = $post_content_id;
     }
-
+var_dump($_POST, $array_content_id_exe);
     for ($i = 0; $i < $loop_in_track; $i++) {
         $my_marks = isset($_POST['marks_'.$array_content_id_exe[$i]]) ? $_POST['marks_'.$array_content_id_exe[$i]] : '';
+
         $contain_comments = $_POST['comments_'.$array_content_id_exe[$i]];
         if (isset($contain_comments)) {
             $my_comments = $_POST['comments_'.$array_content_id_exe[$i]];
@@ -185,6 +186,8 @@ if (isset($_REQUEST['comments']) &&
             'marks' => $my_marks,
             'teacher_comment' => $my_comments
         ];
+
+
         Database::update(
             $TBL_TRACK_ATTEMPT,
             $params,

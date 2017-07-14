@@ -6724,29 +6724,31 @@ input.form-control[type="color"] {
     background-color: #EF5F00;
     border: none;
 }
-
+.exercise_mark_select .dropdown-menu>.active>a.btn-danger,
 .exercise_mark_select .dropdown-menu>li>a.btn-danger:focus,
 .exercise_mark_select .dropdown-menu>li>a.btn-danger:hover {
     opacity: 0.8;
-    background-color: #d9534f;
+    background-color: #d9534f !important;
 }
 
+.exercise_mark_select .dropdown-menu>.active>a.btn-orange,
 .exercise_mark_select .dropdown-menu>li>a.btn-orange:focus,
 .exercise_mark_select .dropdown-menu>li>a.btn-orange:hover {
-    background-color: #EF7710;
+    background-color: #EF7710 !important;
     opacity: 0.8 !important;
 }
 
-
+.exercise_mark_select .dropdown-menu>.active>a.btn-warning,
 .exercise_mark_select .dropdown-menu>li>a.btn-warning:focus,
 .exercise_mark_select .dropdown-menu>li>a.btn-warning:hover {
-    background-color: #f0ad4e;
+    background-color: #f0ad4e  !important;
     opacity: 0.8 !important;
 }
 
+.exercise_mark_select .dropdown-menu>.active>a.btn-success,
 .exercise_mark_select .dropdown-menu>li>a.btn-success:focus,
 .exercise_mark_select .dropdown-menu>li>a.btn-success:hover {
-    background-color: #5cb85c;
+    background-color: #5cb85c  !important;
     opacity: 0.8 !important;
 }
 

@@ -1587,6 +1587,7 @@ function getWorkListTeacher(
 
             return $row['count'];
         }
+
         $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq();
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $workId = $work['id'];
@@ -3300,16 +3301,25 @@ function formatWorkScore($score, $weight)
     if (!empty($weight)) {
         $relativeScore = $score / $weight;
     }
+
     if ($relativeScore < 0.5) {
         $label = 'important';
     } elseif ($relativeScore < 0.75) {
         $label = 'warning';
     }
 
-    return Display::label(
-    api_number_format($score, 1).' / '.$weight,
-        $label
-    );
+    $scoreBasedInModel = ExerciseLib::convertScoreToModel($relativeScore);
+    if (empty($scoreBasedInModel)) {
+        $finalScore = api_number_format($score, 1).' / '.$weight;
+
+        return Display::label(
+            $finalScore,
+            $label
+        );
+    } else {
+        $finalScore = $scoreBasedInModel;
+        return $finalScore;
+    }
 }
 
 /**
@@ -3499,15 +3509,26 @@ function getWorkCommentForm($work, $workParent)
 
     if (api_is_allowed_to_edit()) {
         if (!empty($qualification) && intval($qualification) > 0) {
-            $form->addFloat(
-                'qualification',
-                array(get_lang('Qualification'), " / ".$qualification),
-                false,
-                [],
-                false,
-                0,
-                $qualification
-            );
+            $model = ExerciseLib::getCourseScoreModel();
+            if (empty($model)) {
+                $form->addFloat(
+                    'qualification',
+                    array(get_lang('Qualification'), " / ".$qualification),
+                    false,
+                    [],
+                    false,
+                    0,
+                    $qualification
+                );
+            } else {
+                ExerciseLib::addScoreModelInput(
+                    $form,
+                    'qualification',
+                    $qualification,
+                    $work['qualification']
+                );
+            }
+
 
             $form->addFile('file', get_lang('Correction'));
             $form->setDefaults(['qualification' => $work['qualification']]);

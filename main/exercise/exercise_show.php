@@ -173,13 +173,7 @@ if ($allowRecordAudio && $allowTeacherCommentAudio) {
     $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 }
 
-// Filling the scores with the right colors.
-$models = ExerciseLib::getCourseScoreModel();
-$cssListToString = '';
-if (!empty($models)) {
-    $cssList = array_column($models['score_list'], 'css_class');
-    $cssListToString = implode(' ', $cssList);
-}
+$scoreJsCode = ExerciseLib::getJsCode();
 
 if ($origin != 'learnpath') {
     Display::display_header('');
@@ -193,27 +187,7 @@ if ($origin != 'learnpath') {
 }
 ?>
     <script>
-        <?php if (!empty($cssListToString)) { ?>
-
-        function updateSelect(element) {
-            var spanTag = element.parent().find('span.filter-option');
-            var value = element.val();
-            var optionClass = $('.exercise_mark_select option[value="'+value+'"]').attr('class');
-            spanTag.removeClass('<?php echo $cssListToString; ?>');
-            spanTag.addClass(optionClass);
-        }
-
-        $(document).ready( function() {
-            // Loading values
-            $('.exercise_mark_select').on('loaded.bs.select', function() {
-                updateSelect($(this));
-            });
-            // On change
-            $('.exercise_mark_select').on('changed.bs.select', function(e, clickedIndex) {
-                updateSelect($(this));
-            });
-        });
-        <?php } ?>
+        <?php echo $scoreJsCode; ?>
 
         var maxEditors = <?php echo intval($maxEditors); ?>;
         function showfck(sid, marksid) {

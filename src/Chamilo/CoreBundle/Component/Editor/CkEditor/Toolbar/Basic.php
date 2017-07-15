@@ -176,6 +176,19 @@ class Basic extends Toolbar
         $config['skin'] = 'bootstrapck,'.api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/skins/bootstrapck/';
         //$config['skin'] = 'moono-lisa';
 
+        $config['image2_chamilo_alignClasses'] = [
+            'pull-left',
+            'block-center',
+            'pull-right',
+            'img-va-baseline',
+            'img-va-top',
+            'img-va-middle',
+            'img-va-super',
+            'img-va-sub',
+            'img-va-text-top',
+            'img-va-text-bottom'
+        ];
+
         if (isset($this->config)) {
             $this->config = array_merge($config, $this->config);
         } else {

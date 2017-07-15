@@ -13,7 +13,18 @@
 				template +
 				'<figcaption>{captionPlaceholder}</figcaption>' +
 			'</figure>' ),
-		alignmentsObj = { left: 0, center: 1, right: 2 },
+		alignmentsObj = {
+			'left': 0,
+			'center': 1,
+			'right': 2,
+			'baseline': 3,
+			'top': 4,
+			'middle': 5,
+			'super': 6,
+			'sub': 7,
+			'text-top': 8,
+			'text-bottom': 9
+		},
 		regexPercent = /^\s*(\d+\%)\s*$/i;
 
 	CKEDITOR.plugins.add( 'image2_chamilo', {
@@ -394,6 +405,20 @@
 							data.align = 'left';
 						} else if ( alignElement.hasClass( alignClasses[ 2 ] ) ) {
 							data.align = 'right';
+						} else if ( alignElement.hasClass( alignClasses[ 3 ] ) ) {
+							data.align = 'baseline';
+						} else if ( alignElement.hasClass( alignClasses[ 4 ] ) ) {
+							data.align = 'top';
+						} else if ( alignElement.hasClass( alignClasses[ 5 ] ) ) {
+							data.align = 'middle';
+						} else if ( alignElement.hasClass( alignClasses[ 6 ] ) ) {
+							data.align = 'super';
+						} else if ( alignElement.hasClass( alignClasses[ 7 ] ) ) {
+							data.align = 'sub';
+						} else if ( alignElement.hasClass( alignClasses[ 8 ] ) ) {
+							data.align = 'text-top';
+						} else if ( alignElement.hasClass( alignClasses[ 9 ] ) ) {
+							data.align = 'text-bottom';
 						}
 
 						if ( data.align ) {
@@ -404,8 +429,14 @@
 					}
 					// Read initial float style from figure/image and then remove it.
 					else {
-						data.align = alignElement.getStyle( 'float' ) || 'none';
+						data.align = alignElement.getStyle( 'float' );
+						if ( data.align !== 'left' && data.align !== 'right' ) {
+							data.align = alignElement.getStyle('vertical-align');
+						} else {
+							data.align = 'none';
+						}
 						alignElement.removeStyle( 'float' );
+						alignElement.removeStyle( 'vertical-align' );
 					}
 				}
 
@@ -852,7 +883,7 @@
 
 		if ( alignClasses ) {
 			// Remove all align classes first.
-			for ( var i = 3; i--; )
+			for ( var i = 10; i--; )
 				wrapper.removeClass( alignClasses[ i ] );
 
 			if ( align == 'center' ) {
@@ -882,8 +913,10 @@
 			else {
 				if ( align == 'none' )
 					wrapper.removeStyle( 'float' );
-				else
+				else if (align == 'left' || align == 'right')
 					wrapper.setStyle( 'float', align );
+				else
+					wrapper.setStyle( 'vertical-align', align );
 
 				wrapper.removeStyle( 'text-align' );
 			}
@@ -1014,8 +1047,10 @@
 				else if ( align in { left: 1, right: 1 } ) {
 					if ( alignClasses )
 						attrsHolder.addClass( alignClasses[ alignmentsObj[ align ] ] );
-					else
+					else if (align == 'left' || align == 'right')
 						styles[ 'float' ] = align;
+					else
+						styles['vertical-align'] = align;
 				}
 
 				// Update element styles.
@@ -1558,14 +1593,17 @@
 			rules.p.classes = rules.div.classes;
 
 			// Left/right classes from the config.
-			rules.img.classes = alignClasses[ 0 ] + ',' + alignClasses[ 2 ];
+			rules.img.classes = alignClasses[ 0 ];
+			for (var classI = 2; classI <= 10; classI++) {
+				rules.img.classes += ',' + alignClasses[ classI ];
+			}
 			rules.figure.classes += ',' + rules.img.classes;
 		} else {
 			// Centering with text-align.
 			rules.div.styles = 'text-align';
 			rules.p.styles = 'text-align';
 
-			rules.img.styles = 'float';
+			rules.img.styles = 'float,vertical-align';
 			rules.figure.styles = 'float,display';
 		}
 
@@ -1587,7 +1625,7 @@
 				},
 				align: {
 					requiredContent: 'img' +
-						( alignClasses ? '(' + alignClasses[ 0 ] + ')' : '{float}' )
+						( alignClasses ? '(' + alignClasses[ 0 ] + ')' : '{float,vertica-align}' )
 				},
 				caption: {
 					requiredContent: 'figcaption'

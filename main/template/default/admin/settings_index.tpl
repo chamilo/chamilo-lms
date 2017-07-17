@@ -43,11 +43,7 @@
     {% set columns = 2 %}
     {% for block_item in blocks %}
         {% if block_item.items %}
-            {% if loop.first or loop.index0 is divisibleby(columns) %}
-                <div class="row">
-            {% endif %}
-
-            <div id="tabs-{{ loop.index }}" class="col-md-6">
+            <div id="tabs-{{ loop.index }}" class="settings-block col-md-6">
                 <div class="panel panel-default {{ block_item.class }}">
                     <div class="panel-heading">
                         {{ block_item.icon }} {{ block_item.label }}
@@ -89,10 +85,6 @@
                     </div>
                 </div>
             </div>
-
-            {% if loop.last or loop.index is divisibleby(columns) %}
-                </div>
-            {% endif %}
         {% endif %}
     {% endfor %}
 </section>

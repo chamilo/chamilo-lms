@@ -19,11 +19,12 @@
 			'right': 2,
 			'baseline': 3,
 			'top': 4,
-			'middle': 5,
-			'super': 6,
-			'sub': 7,
-			'text-top': 8,
-			'text-bottom': 9
+			'bottom': 5,
+			'middle': 6,
+			'super': 7,
+			'sub': 8,
+			'text-top': 9,
+			'text-bottom': 10
 		},
 		regexPercent = /^\s*(\d+\%)\s*$/i;
 
@@ -410,14 +411,16 @@
 						} else if ( alignElement.hasClass( alignClasses[ 4 ] ) ) {
 							data.align = 'top';
 						} else if ( alignElement.hasClass( alignClasses[ 5 ] ) ) {
-							data.align = 'middle';
+							data.align = 'bottom';
 						} else if ( alignElement.hasClass( alignClasses[ 6 ] ) ) {
-							data.align = 'super';
+							data.align = 'middle';
 						} else if ( alignElement.hasClass( alignClasses[ 7 ] ) ) {
-							data.align = 'sub';
+							data.align = 'super';
 						} else if ( alignElement.hasClass( alignClasses[ 8 ] ) ) {
-							data.align = 'text-top';
+							data.align = 'sub';
 						} else if ( alignElement.hasClass( alignClasses[ 9 ] ) ) {
+							data.align = 'text-top';
+						} else if ( alignElement.hasClass( alignClasses[ 10 ] ) ) {
 							data.align = 'text-bottom';
 						}
 
@@ -883,7 +886,7 @@
 
 		if ( alignClasses ) {
 			// Remove all align classes first.
-			for ( var i = 10; i--; )
+			for ( var i = 11; i--; )
 				wrapper.removeClass( alignClasses[ i ] );
 
 			if ( align == 'center' ) {
@@ -1594,7 +1597,7 @@
 
 			// Left/right classes from the config.
 			rules.img.classes = alignClasses[ 0 ];
-			for (var classI = 2; classI <= 10; classI++) {
+			for (var classI = 2; classI <= 11; classI++) {
 				rules.img.classes += ',' + alignClasses[ classI ];
 			}
 			rules.figure.classes += ',' + rules.img.classes;

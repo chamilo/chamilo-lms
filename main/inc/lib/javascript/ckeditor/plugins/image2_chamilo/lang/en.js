@@ -21,6 +21,7 @@ CKEDITOR.plugins.setLang( 'image2_chamilo', 'en', {
     responsive: 'Responsive image',
 	alignBaseline: 'Baseline',
 	alignTop: 'Top',
+	alignBottom: 'Bottom',
 	alignMiddle: 'Middle',
 	alignSuper: 'Super',
 	alignSub: 'Sub',

@@ -244,6 +244,9 @@ blockquote p {
 .img-va-top {
     vertical-align: top;
 }
+.img-va-bottom {
+    vertical-align: bottom;
+}
 .img-va-middle {
     vertical-align: middle;
 }

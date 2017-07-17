@@ -182,6 +182,7 @@ class Basic extends Toolbar
             'pull-right',
             'img-va-baseline',
             'img-va-top',
+            'img-va-bottom',
             'img-va-middle',
             'img-va-super',
             'img-va-sub',

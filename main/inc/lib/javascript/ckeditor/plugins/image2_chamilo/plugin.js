@@ -1028,6 +1028,18 @@
 
 			if ( align && align != 'none' ) {
 				var styles = CKEDITOR.tools.parseCssText( attrs.style || '' );
+				var allowedAllignments = {
+					'left': 1,
+					'right': 1,
+					'baseline': 1,
+					'top': 1,
+					'bottom': 1,
+					'middle': 1,
+					'super': 1,
+					'sub': 1,
+					'text-top': 1,
+					'text-bottom': 1
+				};
 
 				// When the widget is captioned (<figure>) and internally centering is done
 				// with widget's wrapper style/class, in the external data representation,
@@ -1047,7 +1059,7 @@
 				}
 
 				// If left/right, add float style to the downcasted element.
-				else if ( align in { left: 1, right: 1 } ) {
+				else if ( align in allowedAllignments ) {
 					if ( alignClasses )
 						attrsHolder.addClass( alignClasses[ alignmentsObj[ align ] ] );
 					else if (align == 'left' || align == 'right')

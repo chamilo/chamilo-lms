@@ -1314,7 +1314,7 @@ if (!empty($error)) {
             );
             $btnExercise .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));
         }
-        //echo $exercise_actions;
+        echo $btnExercise;
         echo '</div>';
 
         $i++;

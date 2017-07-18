@@ -506,7 +506,7 @@ footer #footer_right{
 }
 #scorm-panel .panel.panel-default{
     margin-top:0 ;
-    border-bottom: 1px solid #162A83;
+    border-bottom: 1px solid #84bd00;
     border-radius: 0;
 }
 .panel-default{
@@ -1160,6 +1160,9 @@ svg circle{
 .radio p{
     display: inline-block;
     margin: 0;
+}
+.question_row_answer{
+    color: #162a83;
 }
 /* Large desktop */
 @media (min-width: 1200px) {

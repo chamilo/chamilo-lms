@@ -358,6 +358,7 @@ table.lp_overview img {
 }
 #scorm-panel .panel-default .panel-heading{
     padding: 0;
+    line-height: 16px;
 }
 #scorm-panel .panel-default .panel-heading a{
     color: #162A83;
@@ -383,20 +384,23 @@ table.lp_overview img {
 .section-list li.final{
     border-bottom: 1px solid #E1E1E1;
 }
+.section-list li{
+    line-height: 14px;
+}
 .section-list li.scorm_item_normal.scorm_highlight{
-    background: url(images/not-completed-active.png) no-repeat  #772583 30px center;
+    background: url(images/not-completed-active.png) no-repeat  #772583 28px center;
 }
 .section-list li.scorm_completed.scorm_item_normal{
-    background: url(images/completed.png) no-repeat  #ECF0F1 30px center;
+    background: url(images/completed.png) no-repeat  #ECF0F1 28px center;
 }
 .section-list li.scorm_completed.scorm_item_normal.scorm_highlight{
-    background: url(images/completed-active.png) no-repeat  #772583 30px center;
+    background: url(images/completed-active.png) no-repeat  #772583 28px center;
 }
 .section-list li.scorm_not_attempted.scorm_item_normal{
-    background: url(images/not-completed.png) no-repeat  #ECF0F1 30px center;
+    background: url(images/not-completed.png) no-repeat  #ECF0F1 28px center;
 }
 .section-list li.scorm_item_normal.scorm_highlight.scorm_not_attempted{
-    background: url(images/not-completed-active.png) no-repeat  #772583 30px center;
+    background: url(images/not-completed-active.png) no-repeat  #772583 28px center;
 }
 .section-list li.scorm_item_normal{
     color: #162A83;
@@ -455,18 +459,20 @@ table.lp_overview img {
 #scorm-panel .panel-parent .section-list li{
     padding: 10px 10px 10px 75px;
 }
-#scorm-panel .panel-parent .section-list li.scorm_completed.scorm_item_normal.scorm_highlight{
-    background: url(images/completed-active.png) no-repeat  #772583 55px center;
+#scorm-panel .panel-parent .section-list li.scorm_completed.scorm_item_normal{
+    background: url(images/completed.png) no-repeat  #ECF0F1 50px center;
 }
 #scorm-panel .panel-parent .section-list li.scorm_not_attempted.scorm_item_normal{
-    background: url(images/not-completed.png) no-repeat  #ECF0F1 55px center;
+    background: url(images/not-completed.png) no-repeat  #ECF0F1 50px center;
 }
 #scorm-panel .panel-parent .section-list li.scorm_completed.scorm_item_normal.scorm_highlight,
 #scorm-panel .panel-parent .section-list li.scorm_not_attempted.scorm_item_normal.scorm_highlight
 {
-    background: url(images/completed-active.png) no-repeat  #772583 55px center;
+    background: url(images/completed-active.png) no-repeat  #772583 50px center;
 }
-
+#scorm-panel .panel-parent{
+    margin-bottom: -1px;
+}
 /* nuevo css */
 
 #learning_path_right_zone .lp-view-tabs .tab-content {

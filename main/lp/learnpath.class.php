@@ -12573,12 +12573,14 @@ EOD;
 
     /**
      * Get the parent names for the current item
+     * @param int $newItemId Optional. The item ID
      * @return array
      */
-    public function getCurrentItemParentNames()
+    public function getCurrentItemParentNames($newItemId = 0)
     {
+        $newItemId = $newItemId ?: $this->get_current_item_id();
         $return = [];
-        $item = $this->getItem($this->get_current_item_id());
+        $item = $this->getItem($newItemId);
         $parent = $this->getItem($item->get_parent());
 
         while ($parent) {

@@ -21,34 +21,34 @@ CKEDITOR.editorConfig = function (config) {
     //Style for default CKEditor Chamilo LMS
     config.stylesSet = [
         { 
-            name : 'Title 1',
-            element : 'h1',
-            attributes : { 'class': 'ck ck-title' }
-        },
-        { 
-            name : 'Title 2',
+            name : 'Titre',
             element : 'h2',
-            attributes : { 'class': 'ck ck-title2' }
+            attributes : { 'class': 'ck ck-titre' }
         },
         { 
-            name : 'Title 3',
-            element : 'h3',
-            attributes : { 'class': 'ck ck-title3' }
+            name : 'Parcours',
+            element : 'h4',
+            attributes : { 'class': 'ck ck-parcours' }
         },
         { 
-            name : 'Alert Success',
+            name : 'Etape',
+            element : 'h5',
+            attributes : { 'class': 'ck ck-etape' }
+        },
+        { 
+            name : 'Texte',
             element : 'p',
-            attributes : { 'class': 'alert alert-success' }
+            attributes : { 'class': 'ck ck-texte' }
         },
         { 
-            name : 'Alert Info',
+            name : 'Source',
             element : 'p',
-            attributes : { 'class': 'alert alert-info' }
+            attributes : { 'class': 'ck ck-source' }
         },
         { 
-            name : 'Alert Warning',
+            name : 'Consignes',
             element : 'p',
-            attributes : { 'class': 'alert alert-warning' }
+            attributes : { 'class': 'ck ck-consignes' }
         },
         { 
             name : 'Alert Danger',

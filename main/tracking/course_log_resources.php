@@ -68,7 +68,12 @@ if ($export_csv || $exportXls) {
         ]
     );
 
-    Export::arrayToCsv($csvData);
+    if ($export_csv) {
+        Export::arrayToCsv($csvData);
+    }
+    if ($exportXls) {
+        Export::arrayToXls($csvData);
+    }
     die;
 }
 
@@ -124,6 +129,8 @@ if (isset($_GET['users_tracking_per_page'])) {
 
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.$users_tracking_per_page.'">
 '.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=xls&'.$addional_param.$users_tracking_per_page.'">
+'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
 
 echo '</span>';
 echo '</div>';

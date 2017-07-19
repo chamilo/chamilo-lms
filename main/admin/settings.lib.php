@@ -1094,7 +1094,12 @@ function addEditTemplate()
                 echo Display::return_message(get_lang('TemplateAdded'), 'confirm');
                 echo '<a href="settings.php?category=Templates&action=add">'.Display::return_icon('new_template.png', get_lang('AddTemplate'), '', ICON_SIZE_MEDIUM).'</a>';
             } else {
-                $content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
+                $cssFile = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/editor.css';
+                $style = '<link href="'.$cssFile.'" rel="stylesheet" media="screen" type="text/css" />';
+                $bootstrap = '<link href="'.api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css" />';
+                $viewport = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
+                $content_template = '<head>'.$viewport.'<title>'.$values['title'].'</title>'.$style.$bootstrap.'</head>'
+                    . '<body>'.Database::escape_string($values['template_text']).'</body>';
                 $sql = "UPDATE $table_system_template set title = '".Database::escape_string($values['title'])."', content = '".$content_template."'";
                 if (!empty($new_file_name)) {
                     $sql .= ", image = '".Database::escape_string($new_file_name)."'";

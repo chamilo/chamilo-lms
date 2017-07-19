@@ -8059,4 +8059,7 @@ $UserLinkingTo = "Vinculado al estudiante";
 $RequestLinkingToUser = "Solicitar vinculación a estudiante";
 $LinkingRequestsAdded = "Solicitud de vinculación añadida";
 $HrmList = "Lista de responsables de recursos humanos";
+$AssignHrmToUser = "Asignar Director de Recursos Humanos a usuario";
+$AddHrmToUser = "Añadir Director de Recursos Humanos a usuario";
+$HrmAssignedUsersCourseList = "Lista de cursos de usuarios asignados al Director de Recursos Humanos";
 ?>

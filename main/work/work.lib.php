@@ -4191,7 +4191,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $session_id)
                 $session ? $session->getId() : 0,
                 $workTable->getIid()
             );
-            break;
+            //no break
         case 2:
             sendEmailToDrhOnHomeworkCreation(
                 $course_id,

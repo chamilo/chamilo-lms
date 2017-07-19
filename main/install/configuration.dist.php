@@ -566,3 +566,5 @@ $_configuration['score_grade_model'] = [
 */
 //Allow show link to request vinculation HRM-user
 //$_configuration['show_link_request_hrm_user'] = false;
+// Allow CKEditor start up with ShowBlocks plugin acive
+//$_configuration['ckeditor_startup_outline_blocks'] = false;

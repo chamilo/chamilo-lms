@@ -189,6 +189,7 @@ class Basic extends Toolbar
             'img-va-text-top',
             'img-va-text-bottom'
         ];
+        $config['startupOutlineBlocks'] = api_get_configuration_value('ckeditor_startup_outline_blocks') === true;
 
         if (isset($this->config)) {
             $this->config = array_merge($config, $this->config);

@@ -3854,8 +3854,17 @@ i.size-32.icon-new-work{
   color: #666;
 }
 /* Items menus sidebar */
-.sidebar .fa-ul li{
-    line-height: 25px;
+.sidebar .list-group-item{
+    border: none;
+    margin-left: 2.14285714em;
+    padding: 10px 5px;
+}
+.sidebar .list-group-item .item-icon{
+    margin-right: 5px;
+    text-align: center;
+    position: absolute;
+    left: -2.14285714em;
+    width: 2.14285714em;
 }
 .social-network-menu .nav li a, #groups-acordeon .nav li a{
   padding: 5px;

@@ -1163,13 +1163,13 @@ class IndexManager
                 continue;
             }
 
-            $my_account_content .= '<li class="'.(empty($item['class']) ? '' : $item['class']).'">'
-                .(empty($item['icon']) ? '' : '<i class="fa-li fa">'.$item['icon'].'</i>')
+            $my_account_content .= '<li class="list-group-item '.(empty($item['class']) ? '' : $item['class']).'">'
+                .(empty($item['icon']) ? '' : '<span class="item-icon">'.$item['icon'].'</span>')
                 .'<a href="'.$item['link'].'">'.$item['title'].'</a>'
                 .'</li>';
         }
 
-        return '<ul class="fa-ul">'.$my_account_content.'</ul>';
+        return '<ul class="list-group">'.$my_account_content.'</ul>';
     }
 
     /**

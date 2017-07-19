@@ -6613,8 +6613,8 @@ class TrackingCourseLog
                     lastedit_type as col1,
                     ref as ref,
                     user.username as col3,
-                    insert_date as col5,
-                    visibility as col6,
+                    insert_date as col6,
+                    visibility as col7,
                     user.user_id as user_id
                 FROM $table_item_property track_resource, $table_user user
                 WHERE
@@ -6652,7 +6652,7 @@ class TrackingCourseLog
                 $sql .= " ORDER BY col$column $direction";
             }
         } else {
-            $sql .= " ORDER BY col5 DESC ";
+            $sql .= " ORDER BY col6 DESC ";
         }
 
         $from = intval($from);
@@ -6732,7 +6732,7 @@ class TrackingCourseLog
                     $row[0] = api_ucfirst($row['col0']);
                 }
                 $row[1] = get_lang($row[1]);
-                $row[6] = api_convert_and_format_date($row['col5'], null, date_default_timezone_get());
+                $row[6] = api_convert_and_format_date($row['col6'], null, date_default_timezone_get());
                 $row[5] = '';
                 //@todo Improve this code please
                 switch ($table_name['table_name']) {
@@ -6834,7 +6834,7 @@ class TrackingCourseLog
 
                     $ip = Tracking::get_ip_from_user_event(
                         $row['user_id'],
-                        $row['col5'],
+                        $row['col6'],
                         true
                     );
                     if (empty($ip)) {

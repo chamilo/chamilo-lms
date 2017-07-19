@@ -4364,9 +4364,11 @@ EOT;
     public static function getOralFeedbackAudio($attemptId, $questionId, $userId)
     {
         $courseInfo = api_get_course_info();
+        $sessionId = api_get_session_id();
+        $groupId = api_get_group_id();
         $sysCourseDir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'];
         $webCourseDir = api_get_path(WEB_COURSE_PATH).$courseInfo['path'];
-        $fileName = "{$questionId}_{$userId}";
+        $fileName = "{$questionId}_{$userId}".DocumentManager::getDocumentSuffix($courseInfo, $sessionId, $groupId);
         $filePath = null;
 
         if (file_exists("$sysCourseDir/exercises/teacher_audio/$attemptId/$fileName.ogg")) {

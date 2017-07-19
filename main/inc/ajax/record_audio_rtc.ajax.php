@@ -23,10 +23,6 @@ if (empty($userId)) {
     api_not_allowed();
 }
 
-$audioFileName = Security::remove_XSS($file['name']);
-$audioFileName = Database::escape_string($audioFileName);
-$audioFileName = api_replace_dangerous_char($audioFileName);
-$audioFileName = disable_dangerous_file($audioFileName);
 $audioDir = Security::remove_XSS($audioDir);
 
 $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
@@ -35,8 +31,6 @@ $saveDir = $dirBaseDocuments.$audioDir;
 if (!is_dir($saveDir)) {
     mkdir($saveDir, api_get_permissions_for_new_directories(), true);
 }
-
-$documentPath = $saveDir.'/'.$audioFileName;
 
 $file['file'] = $file;
 

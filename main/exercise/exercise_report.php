@@ -170,7 +170,7 @@ if (isset($_REQUEST['comments']) &&
     } else {
         $array_content_id_exe = $post_content_id;
     }
-var_dump($_POST, $array_content_id_exe);
+
     for ($i = 0; $i < $loop_in_track; $i++) {
         $my_marks = isset($_POST['marks_'.$array_content_id_exe[$i]]) ? $_POST['marks_'.$array_content_id_exe[$i]] : '';
 

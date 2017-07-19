@@ -72,8 +72,8 @@ function APIobject() {
 // SCORM
 var API = new APIobject(); //for scorm 1.2
 var api = API;
-var API_1484_11 = new APIobject();  //for scorm 1.3
-var api_1484_11 = API_1484_11;
+//var API_1484_11 = new APIobject();  //for scorm 1.3
+//var api_1484_11 = API_1484_11;
 
 // SCORM-specific Error codes
 var G_NoError = 0;

@@ -6656,9 +6656,10 @@ class TrackingCourseLog
         }
 
         $from = intval($from);
-        $number_of_items = intval($number_of_items);
-
-        $sql .= " LIMIT $from, $number_of_items ";
+        if ($from) {
+            $number_of_items = intval($number_of_items);
+            $sql .= " LIMIT $from, $number_of_items ";
+        }
 
         $res = Database::query($sql);
         $resources = array();

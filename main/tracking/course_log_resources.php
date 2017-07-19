@@ -30,10 +30,46 @@ if (!$is_allowedToTrack) {
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$exportXls = isset($_GET['export']) && $_GET['export'] == 'xls' ? true : false;
 $session_id = intval($_REQUEST['id_session']);
 
-if ($export_csv) {
-    ob_start();
+if ($export_csv || $exportXls) {
+    $csvData = TrackingCourseLog::get_item_resources_data(0, 0, '', '');
+    array_walk(
+        $csvData,
+        function (&$item) {
+            $item[0] = strip_tags($item[0]);
+            $item[2] = strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', PHP_EOL, $item[2]));
+            $item[3] = strip_tags($item[3]);
+            $item[4] = strip_tags($item[4]);
+
+            unset(
+                $item['col0'],
+                $item['col1'],
+                $item['ref'],
+                $item['col3'],
+                $item['col6'],
+                $item['user_id'],
+                $item['col7']
+            );
+        }
+    );
+
+    array_unshift(
+        $csvData,
+        [
+            get_lang('Tool'),
+            get_lang('EventType'),
+            get_lang('Session'),
+            get_lang('UserName'),
+            get_lang('IPAddress'),
+            get_lang('Document'),
+            get_lang('Date')
+        ]
+    );
+
+    Export::arrayToCsv($csvData);
+    die;
 }
 
 if (empty($session_id)) {

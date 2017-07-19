@@ -115,7 +115,7 @@ $table = new SortableTable(
     'resources',
     array('TrackingCourseLog', 'count_item_resources'),
     array('TrackingCourseLog', 'get_item_resources_data'),
-    5,
+    6,
     20,
     'DESC'
 );

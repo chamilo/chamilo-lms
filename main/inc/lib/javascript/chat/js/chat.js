@@ -330,13 +330,6 @@ function chatWith(user_id, user_name, status, userImage) {
 	$("#chatbox_"+user_id+" .chatboxtextarea").focus();
 }
 
-function chatNotYetWith(message) {
-    $("#js_alerts").html(message);
-    $("#js_alerts").css('display', 'block');
-    $("#js_alerts").attr('class', 'alert alert-warning');
-    $('#js_alerts').alert()
-}
-
 /**
  * Creates a div
  */

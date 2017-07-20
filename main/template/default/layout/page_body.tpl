@@ -2,7 +2,6 @@
     {{ actions }}
 {% endif %}
 {{ flash_messages }}
-<span id="js_alerts"></span>
 {% if header != '' %}
     <div class="section-page">
         <div class="page-header">

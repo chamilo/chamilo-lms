@@ -1,5 +1,6 @@
 <?php
 /* For license terms, see /license.txt */
+
 /**
  * Process payments for the Buy Courses plugin
  * @package chamilo.plugin.buycourses
@@ -96,7 +97,9 @@ if (!$culqiEnabled) {
     unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_CULQI]);
 }
 
-$form->addHtml(Display::return_message($plugin->get_lang('PleaseSelectThePaymentMethodBeforeConfirmYourOrder'), 'info'));
+$form->addHtml(
+    Display::return_message($plugin->get_lang('PleaseSelectThePaymentMethodBeforeConfirmYourOrder'), 'info')
+);
 $form->addRadio('payment_type', null, $paymentTypesOptions);
 $form->addHtml(
     Display::return_message(
@@ -110,7 +113,8 @@ $selectOptions = [
 
 if ($typeUser) {
     $users = $em->getRepository('ChamiloUserBundle:User')->findAll();
-    $selectOptions[$userInfo['user_id']] = api_get_person_name($userInfo['firstname'], $userInfo['lastname']).' ('.get_lang('Myself').')';
+    $selectOptions[$userInfo['user_id']] = api_get_person_name($userInfo['firstname'], $userInfo['lastname'])
+        .' ('.get_lang('Myself').')';
     if (!empty($users)) {
         /** @var User $user */
         foreach ($users as $user) {
@@ -175,7 +179,9 @@ if ($typeUser) {
     // Here now checking the current user sessions
     $sessions = $user->getSessionCourseSubscriptions();
     foreach ($sessions as $session) {
-        $thisLpList = $em->getRepository('ChamiloCourseBundle:CLp')->findBy(['sessionId' => $session->getSession()->getId()]);
+        $thisLpList = $em
+            ->getRepository('ChamiloCourseBundle:CLp')
+            ->findBy(['sessionId' => $session->getSession()->getId()]);
 
         //Here check all the lpItems
         foreach ($thisLpList as $lp) {

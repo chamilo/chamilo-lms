@@ -5308,9 +5308,6 @@ div#chat-remote-video video {
   -webkit-border-radius: 5px;
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
 }
-.table-responsive{
-    overflow-x: inherit;
-}
 .panel-student{
   width: 550px;
 }

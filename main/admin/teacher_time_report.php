@@ -368,6 +368,33 @@ $form->setDefaults([
     'until' => $selectedUntil
 ]);
 
+$leftActions = Display::url(
+    Display::return_icon('session.png', get_lang('Sessions'), [], ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH).'admin/teachers_time_by_session_report.php'
+);
+$rightActions = Display::url(
+    Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
+    api_get_self().'?'.http_build_query([
+        'export' => 'pdf',
+        'from' => $selectedFrom,
+        'until' => $selectedUntil,
+        'course' => $selectedCourse,
+        'session' => $selectedSession,
+        'teacher' => $selectedTeacher
+    ])
+);
+$rightActions .= Display::url(
+    Display::return_icon('export_excel.png', get_lang('ExportExcel'), [], ICON_SIZE_MEDIUM),
+    api_get_self().'?'.http_build_query([
+        'export' => 'xls',
+        'from' => $selectedFrom,
+        'until' => $selectedUntil,
+        'course' => $selectedCourse,
+        'session' => $selectedSession,
+        'teacher' => $selectedTeacher
+    ])
+);
+
 $tpl = new Template($toolName);
 $tpl->assign('report_title', $reportTitle);
 $tpl->assign('report_sub_title', $reportSubTitle);
@@ -385,5 +412,7 @@ $tpl->assign('rows', $timeReport->data);
 $templateName = $tpl->get_template('admin/teacher_time_report.tpl');
 
 $contentTemplate = $tpl->fetch($templateName);
+$tpl->assign('header', get_lang('TeacherTimeReport'));
+$tpl->assign('actions', Display::toolbarAction('teacher_time_report_actions', [$leftActions, $rightActions]));
 $tpl->assign('content', $contentTemplate);
 $tpl->display_one_col_template();

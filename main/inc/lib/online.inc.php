@@ -462,6 +462,38 @@ function who_is_online_in_this_course_count($uid, $time_limit, $coursecode = nul
 }
 
 /**
+ * @param string $timeLimit
+ * @param int $sessionId
+ * @return bool
+ * @internal param int $uid
+ */
+function whoIsOnlineInIhisSessionCount($timeLimit, $sessionId)
+{
+    if (!$sessionId) {
+        return 0;
+    }
+
+	$tblTrackOnline = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+	$timeLimit = Database::escape_string($timeLimit);
+
+    $online_time = time() - $timeLimit * 60;
+    $current_date = api_get_utc_datetime($online_time);
+
+	$query = "SELECT count(login_user_id) as count
+              FROM $tblTrackOnline
+              WHERE login_user_id <> 2 AND session_id = $sessionId AND login_date >= '$current_date' ";
+	$result = Database::query($query);
+
+	if (Database::num_rows($result) > 0) {
+		$row = Database::fetch_assoc($result);
+
+		return $row['count'];
+	}
+
+    return 0;
+}
+
+/**
  * Register the logout of the course (usually when logging out of the platform)
  * from the track_e_course_access table
  * @param   array $logoutInfo Information stored by local.inc.php before new context ['uid'=> x, 'cid'=>y, 'sid'=>z]

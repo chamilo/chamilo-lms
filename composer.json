@@ -111,7 +111,8 @@
         "pclzip/pclzip": "2.8.2",
         "chamilo/chash": "dev-master",
         "ircmaxell/random-lib": "^1.2",
-        "ocramius/proxy-manager": "~1.0|2.0.*"
+        "ocramius/proxy-manager": "~1.0|2.0.*",
+        "culqi/culqi-php": "v1.3.3"
     },
     "require-dev": {
         "behat/behat": "@stable",

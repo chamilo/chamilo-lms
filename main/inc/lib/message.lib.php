@@ -1108,9 +1108,10 @@ class MessageManager
         $user_image = '';
         if (api_get_setting('allow_social_tool') == 'true') {
             $user_image = Display::img(
-                $from_user['avatar_no_query'],
+                $from_user['avatar_small'],
                 $name,
-                array('title' => $name, 'class' => 'img-responsive img-circle', 'style' => 'max-width:35px')
+                array('title' => $name, 'class' => 'img-responsive img-circle', 'style' => 'max-width:35px'),
+                false
             );
         }
 

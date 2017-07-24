@@ -276,7 +276,6 @@ blockquote p {
 }
 .result-body .alert.alert-info p{
     padding-bottom: 10px;
-    font-weight: bold;
 }
 .result-body .alert.alert-info .btn.btn-info {
     color: #fff;

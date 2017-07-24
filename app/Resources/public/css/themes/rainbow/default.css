@@ -829,6 +829,10 @@ legend{
 .exercise-container .description{
     color: #162a83;
 }
+.exercise-container .description p span,
+.exercise-container .description span{
+    color: #162a83 !important;
+}
 .exercise-container .attempts{
     padding-top: 10px;
     padding-bottom: 10px;
@@ -846,6 +850,10 @@ legend{
     padding-top: 10px;
     padding-bottom: 10px;
     color: #162a83;
+}
+#exercise-description #exercise-collapse  p span,
+#exercise-description #exercise-collapse  span{
+    color: #162a83 !important;
 }
 .btn-exercise,
 .form-actions .btn-warning{
@@ -1126,6 +1134,10 @@ svg circle{
   box-sizing: content-box;
   overflow:hidden;
 }
+.question_options .checkbox b span,
+.question_options .checkbox span{
+  color: #162A83 !important;
+}
 .checkradios-radio{
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
@@ -1163,6 +1175,20 @@ svg circle{
 }
 .question_row_answer{
     color: #162a83;
+}
+.result-body .exercise_description span,
+.result-body .exercise_description p,
+.result-body .exercise_description p span{
+    color: #162a83 !important;
+}
+.exercise-message .alert.alert-info{
+    color: #FFFFFF !important;
+    background-color: #84bd00 !important;
+    border-color: #84bd00 !important;
+    border-radius: 0;
+}
+.exercise_description p{
+    color: #162a83 !important;
 }
 /* Large desktop */
 @media (min-width: 1200px) {

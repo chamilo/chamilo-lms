@@ -5779,8 +5779,9 @@ class Exercise
             $array[] = array('title' => get_lang('IP'), 'content' => $ip);
         }
 
-        $icon = Display::return_icon('test-quiz.png', get_lang('Result'), null, ICON_SIZE_MEDIUM);
-
+        //$icon = Display::return_icon('test-quiz.png', get_lang('Result'), null, ICON_SIZE_MEDIUM);
+        $icon = '';
+        
         $html = '<div class="question-result">';
 
         if (api_get_configuration_value('save_titles_as_html')) {

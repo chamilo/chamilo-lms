@@ -17,6 +17,14 @@ CKEDITOR.plugins.setLang( 'image2_chamilo', 'fr', {
 	title: 'Propriétés de l\'image',
 	uploadTab: 'Téléverser',
 	urlMissing: 'L\'URL source de l\'image est manquante.',
-	altMissing: 'Alternative text is missing.', // MISSING
-    responsive: 'Responsive image' // MISSING
+	altMissing: 'Texte alternatif manquant.',
+        responsive: 'Image adaptive',
+        alignBaseline: 'Sur la ligne',
+        alignTop: 'En haut',
+        alignBottom: 'En bas',
+        alignMiddle: 'Au milieu',
+        alignSuper: 'Superieur',
+        alignSub: 'Inférieur',
+        alignTextTop: 'Text-en-haut',
+        alignTextBottom: 'Text-en-bas'
 } );

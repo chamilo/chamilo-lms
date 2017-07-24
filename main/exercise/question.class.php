@@ -2004,7 +2004,7 @@ abstract class Question
                 $header .= $this->returnFormatFeedback();
             }
         }
-
+        
         return $header;
     }
 

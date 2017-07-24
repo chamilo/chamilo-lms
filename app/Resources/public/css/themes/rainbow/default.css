@@ -1190,6 +1190,7 @@ svg circle{
 .exercise_description p{
     color: #162a83 !important;
 }
+
 /* Large desktop */
 @media (min-width: 1200px) {
 

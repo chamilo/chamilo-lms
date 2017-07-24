@@ -227,6 +227,7 @@ class MultipleAnswer extends Question
      */
     public function return_header($exercise, $counter = null, $score = null)    
     {
+        
 	    $header = parent::return_header($exercise, $counter, $score);
 	    $header .= '<table class="'.$this->question_table_class .'">
 			<tr>

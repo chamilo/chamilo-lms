@@ -428,7 +428,7 @@ class ExerciseLib
                             );
                             $answer_input .= $answer;
                             $answer_input .= '</label>';
-
+                            
                             if ($show_comment) {
                                 $s .= '<tr><td>';
                                 $s .= $answer_input;
@@ -3905,6 +3905,7 @@ HOTSPOT;
                 if ($show_results) {
                     $question_content = '<div class="question_row_answer">';
                     // Shows question title an description
+                   
                     $question_content .= $objQuestionTmp->return_header(
                         $objExercise,
                         $counter,
@@ -3913,6 +3914,7 @@ HOTSPOT;
                 }
                 $counter++;
                 $question_content .= $contents;
+                
                 if ($show_results) {
                     $question_content .= '</div>';
                 }

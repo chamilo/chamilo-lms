@@ -234,12 +234,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['lp_fixed_encoding'] = 'false';
 // Fix urls changing http with https in scorm packages.
 //$_configuration['lp_replace_http_to_https'] = false;
-// Manage the links to Session Index page
-// 1 = Default. Works as it is now (default is to link to the special session page)
-// 0 = No link (not clickable)
-// 2 = Link to the course if there is only one course
-// 3 = Session link will make course list foldable
-//$_configuration['courses_list_session_title_link'] = 1;
 // Fix embedded videos inside lps, adding an optional popup
 //$_configuration['lp_fix_embed_content'] = false;
 // Manage deleted files marked with "DELETED" (by course and only by allowed by admin)
@@ -248,10 +242,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['session_hide_tab_list'] = array();
 // Show invisible exercise in LP list
 //$_configuration['show_invisible_exercise_in_lp_list'] = false;
-// New grid view the list of courses
-//$_configuration['view_grid_courses'] = 'true';
-// Show courses grouped by categories when $_configuration['view_grid_courses'] is enabled
-//$_configuration['view_grid_courses_grouped_categories_in_sessions'] = true;
 // Chamilo is installed/downloaded. Packagers can change this
 // to reflect their packaging method. The default value is 'chamilo'. This will
 // be reflected on the https://version.chamilo.org/stats page in the future.
@@ -270,8 +260,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['block_registered_users_access_to_open_course_contents'] = false;
 // Allows syncing the database with the current entity schema
 //$_configuration['sync_db_with_schema'] = false;
-// Load course notifications in user_portal.php using ajax
-//$_configuration['user_portal_load_notification_by_ajax'] = false;
 // When exporting a LP, all files and folders in the same path of an html will be exported too.
 //$_configuration['add_all_files_in_lp_export'] = false;
 // Send exercise student score to manager in email notification
@@ -306,10 +294,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['hide_main_navigation_menu'] = false;
 // PDF image dpi value. Default value 96
 // $_configuration['pdf_img_dpi'] = 96;
-// Hide the "what's new" icon notifications in course list
-// $_configuration['hide_course_notification'] = true;
-// Show less session information in course list
-//$_configuration['show_simple_session_info'] = true;
 // Hide LP time in reports.
 // $_configuration['hide_lp_time'] = false;
 // Hide rating elements in pages ("Courses catalog" & "Most Popular courses")
@@ -568,3 +552,22 @@ $_configuration['score_grade_model'] = [
 //$_configuration['show_link_request_hrm_user'] = false;
 // Allow CKEditor start up with ShowBlocks plugin acive
 //$_configuration['ckeditor_startup_outline_blocks'] = false;
+//
+// ------ SETTINGS FOT USER COURSE LIST
+// Manage the links to Session Index page
+// 1 = Default. Works as it is now (default is to link to the special session page)
+// 0 = No link (not clickable)
+// 2 = Link to the course if there is only one course
+// 3 = Session link will make course list foldable
+//$_configuration['courses_list_session_title_link'] = 1;
+// New grid view the list of courses
+//$_configuration['view_grid_courses'] = 'true';
+// Show courses grouped by categories when $_configuration['view_grid_courses'] is enabled
+//$_configuration['view_grid_courses_grouped_categories_in_sessions'] = true;
+// Load course notifications in user_portal.php using ajax
+//$_configuration['user_portal_load_notification_by_ajax'] = false;
+// Hide the "what's new" icon notifications in course list
+// $_configuration['hide_course_notification'] = true;
+// Show less session information in course list
+//$_configuration['show_simple_session_info'] = true;
+// ------

@@ -25,7 +25,7 @@ $(document).on('ready', function () {
 </script>
 
 {{ form }}
-<h2 class="page-header">{{ report_title }} <small>{{ report_sub_title }}</small></h2>
+<h3 class="page-header">{{ report_title }} <small>{{ report_sub_title }}</small></h3>
 
 <table class="table">
     <thead>
@@ -35,7 +35,7 @@ $(document).on('ready', function () {
                 <th>{{ 'Course' | get_lang }}</th>
             {% endif %}
             <th>{{ 'Coach' | get_lang }}</th>
-            <th>{{ 'TotalTime' | get_lang }}</th>
+            <th class="text-center">{{ 'TotalTime' | get_lang }}</th>
         </tr>
     </thead>
     <tbody>
@@ -46,7 +46,7 @@ $(document).on('ready', function () {
                     <td>{{ row.course.name }}</td>
                 {% endif %}
                 <td>{{ row.coach.complete_name }} ({{ row.coach.username}})</td>
-                <td>{{ row.total_time }}</td>
+                <td class="text-center">{{ row.total_time }}</td>
             </tr>
         {% endfor %}
     </tbody>

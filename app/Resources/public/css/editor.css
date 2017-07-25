@@ -45,7 +45,8 @@ body{
     display: block;
     font-style: normal;
     font-weight: normal;
-    line-height: 1;
+/* Commenting Ck line height to use the general configuration cf BT#13092 */ 
+/*    line-height: 1; */
     font-size-adjust: none;
     font-stretch: normal;
     font-feature-settings: normal;
@@ -104,7 +105,7 @@ body{
 }
 .ck-titre{
     font-family: 'Verdana';
-    font-size: 30px;
+    font-size: 23px;
     color: #162a83;
 }
 .ck-texte{

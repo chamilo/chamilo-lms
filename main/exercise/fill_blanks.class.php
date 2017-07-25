@@ -796,6 +796,7 @@ class FillBlanks extends Question
         }
 
         $listAnswerResults['commonwords'] = explode("::", $commonWords);
+        //echo strip_tags($commonWords);
 
         return $listAnswerResults;
     }
@@ -1231,11 +1232,11 @@ class FillBlanks extends Question
                 if (count($listCorrects) > 0) {
                     $firstCorrect = $listCorrects[0];
                 }
-                $correctAnswerHtml = "<span style='feedback-red'>".$firstCorrect."</span>";
+                $correctAnswerHtml = "<span class='feedback-red'>" . $firstCorrect . "</span>";
                 break;
             case self::FILL_THE_BLANK_STANDARD:
             default:
-                $correctAnswerHtml = "<span style='feedback-green'>".$correct."</span>";
+                $correctAnswerHtml = "<span class='feedback-green'>" . $correct . "</span>";
         }
 
         if ($hideExpectedAnswer) {
@@ -1243,9 +1244,9 @@ class FillBlanks extends Question
         }
 
         $result = "<div class='feedbaak-question'>";
-        $result .= "<span class='$style'>". $iconAnswer . ' ' . $answer."</span>";
-        $result .= "&nbsp;<span class='feedback-separator'>/</span>&nbsp;";
-        $result .= $correctAnswerHtml;
+        $result .= $iconAnswer . "<span class='$style'>" . $answer . "</span>";
+        $result .= "<span class='feedback-separator'> / </span>";
+        //$result .= $correctAnswerHtml;
         $result .= "</div>";
 
         return $result;

@@ -539,24 +539,53 @@ footer #footer_right{
 .question_row_answer{
     border: none;
 }
+.table.table-striped tr td p span,
+.table.table-striped tr td span{
+    color: #162A83 !important;
+}
+.main-question .question_description p span{
+    color: #162A83 !important;
+}
+.main-question .question_options label p span{
+    color: #162A83 !important;
+}
+.question_row_answer .question_description p span{
+    color: #162A83 !important;
+}
+.table.table-striped tr th{
+    color: #162A83 !important;
+    border-top: 1px solid #84bd00;
+}
+.table.table-striped tr td{
+    border-top: 1px solid #84bd00;
+}
 .feedbaak-question{
-    padding: 5px 15px;
-    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: inline-block;
     width: 100%;
 }
 .feedbaak-question img{
-    padding-right: 15px;
+    padding-right: 10px;
 }
-.feedbaak-question .feedback-red{
-    color: #162a83;
+.table.table-striped tr td span.feedback-red{
+    color: #162a83 !important;
     text-decoration:line-through;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 14px;
 }
-.feedbaak-question .feedback-green{
-    color: #96BD0D;
+.table.table-striped tr td span.feedback-green{
+    color: #96BD0D !important;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 14px;
 }
 .feedbaak-question .feedback-separator{
     color:#162a83;
     font-weight: bold;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 .ribbon{
     background: #FFFFFF;
@@ -1190,7 +1219,9 @@ svg circle{
 .exercise_description p{
     color: #162a83 !important;
 }
-
+.question_options input[type="text"]{
+    padding: 5px;
+}
 /* Large desktop */
 @media (min-width: 1200px) {
 

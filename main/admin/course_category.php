@@ -22,6 +22,8 @@ if (!empty($categoryId)) {
 }
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
+$myCourseListAsCategory = api_get_configuration_value('my_courses_list_as_category');
+
 if (!empty($action)) {
     if ($action == 'delete') {
         CourseCategory::deleteNode($categoryId);
@@ -45,10 +47,16 @@ if (!empty($action)) {
                 $_POST['auth_course_child'],
                 $categoryId
             );
+            $categoryInfo = CourseCategory::getCategory($_POST['code']);
+            $ret = $categoryInfo['id'];
             $errorMsg = Display::return_message(get_lang('Updated'));
         }
         if (!$ret) {
             $errorMsg = Display::return_message(get_lang('CatCodeAlreadyUsed'), 'error');
+        } else {
+            if ($myCourseListAsCategory && isset($_FILES['image'])) {
+                CourseCategory::saveImage($ret, $_FILES['image']);
+            }
         }
 
         Display::addFlash($errorMsg);
@@ -119,6 +127,22 @@ if ($action == 'add' || $action == 'edit') {
         ),
     );
     $form->addGroup($group, null, get_lang("AllowCoursesInCategory"));
+
+    if ($myCourseListAsCategory) {
+        $form->addFile('image', get_lang('Image'), ['accept' => 'image/*']);
+
+        if ($action == 'edit' && !empty($categoryInfo['image'])) {
+            $form->addHtml('
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-8">'.Display::img(
+                    api_get_path(WEB_UPLOAD_PATH).$categoryInfo['image'],
+                    get_lang('Image'),
+                    ['width' => 256]
+                ).'</div>
+                </div>
+            ');
+        }
+    }
 
     if (!empty($categoryInfo)) {
         $class = "save";

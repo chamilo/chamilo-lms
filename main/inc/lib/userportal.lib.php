@@ -1177,7 +1177,7 @@ class IndexManager
      * @param int $user_id
      * @return string
      */
-    public function returnCoursesAndSessions($user_id)
+    public function returnCoursesAndSessions($user_id, $showSessions = true, $categoryCodeFilter = '')
     {
         $gameModeIsActive = api_get_setting('gamification_mode');
         $listCourse = '';
@@ -1387,6 +1387,10 @@ class IndexManager
             }
 
             if ($specialCourses) {
+                if ($categoryCodeFilter) {
+                    $specialCourses = self::filterByCategory($specialCourses, $categoryCodeFilter);
+                }
+
                 $this->tpl->assign('courses', $specialCourses);
 
                 $specialCourseList = $this->tpl->fetch(
@@ -1395,6 +1399,11 @@ class IndexManager
             }
 
             if ($courses['in_category'] || $courses['not_category']) {
+                if ($categoryCodeFilter) {
+                    $courses['in_category'] = self::filterByCategory($courses['in_category'], $categoryCodeFilter);
+                    $courses['not_category'] = self::filterByCategory($courses['not_category'], $categoryCodeFilter);
+                }
+
                 $this->tpl->assign('courses', $courses['not_category']);
                 $this->tpl->assign('categories', $courses['in_category']);
 
@@ -1410,215 +1419,29 @@ class IndexManager
         }
 
         $sessions_with_category = '';
-        $coursesListSessionStyle = api_get_configuration_value('courses_list_session_title_link');
-        $coursesListSessionStyle = $coursesListSessionStyle === false ? 1 : $coursesListSessionStyle;
-        if (api_is_drh()) {
-            $coursesListSessionStyle = 1;
-        }
+        $sessions_with_no_category = '';
 
-        $portalShowDescription = api_get_setting('show_session_description') === 'true';
+        if ($showSessions) {
+            $coursesListSessionStyle = api_get_configuration_value('courses_list_session_title_link');
+            $coursesListSessionStyle = $coursesListSessionStyle === false ? 1 : $coursesListSessionStyle;
+            if (api_is_drh()) {
+                $coursesListSessionStyle = 1;
+            }
 
-        // Declared listSession variable
-        $listSession = [];
-        $session_now = time();
-        if (is_array($session_categories)) {
-            foreach ($session_categories as $session_category) {
-                $session_category_id = $session_category['session_category']['id'];
-                // Sessions and courses that are not in a session category
-                if (
-                    empty($session_category_id) &&
-                    isset($session_category['sessions'])
-                ) {
-                    // Independent sessions
-                    foreach ($session_category['sessions'] as $session) {
-                        $session_id = $session['session_id'];
+            $portalShowDescription = api_get_setting('show_session_description') === 'true';
 
-                        // Don't show empty sessions.
-                        if (count($session['courses']) < 1) {
-                            continue;
-                        }
-
-                        // Courses inside the current session.
-                        $date_session_start = $session['access_start_date'];
-                        $date_session_end = $session['access_end_date'];
-                        $coachAccessStartDate = $session['coach_access_start_date'];
-                        $coachAccessEndDate = $session['coach_access_end_date'];
-                        $count_courses_session = 0;
-
-                        // Loop course content
-                        $html_courses_session = [];
-                        $atLeastOneCourseIsVisible = false;
-
-                        foreach ($session['courses'] as $course) {
-                            $is_coach_course = api_is_coach($session_id, $course['real_id']);
-                            $allowed_time = 0;
-                            $allowedEndTime = true;
-
-                            if (!empty($date_session_start)) {
-                                if ($is_coach_course) {
-                                    $allowed_time = api_strtotime($coachAccessStartDate);
-                                } else {
-                                    $allowed_time = api_strtotime($date_session_start);
-                                }
-
-                                if (!isset($_GET['history'])) {
-                                    if (!empty($date_session_end)) {
-                                        if ($is_coach_course) {
-                                            // if coach end date is empty we use the default end date
-                                            if (empty($coachAccessEndDate)) {
-                                                $endSessionToTms = api_strtotime($date_session_end);
-                                                if ($session_now > $endSessionToTms) {
-                                                    $allowedEndTime = false;
-                                                }
-                                            } else {
-                                                $endSessionToTms = api_strtotime($coachAccessEndDate);
-                                                if ($session_now > $endSessionToTms) {
-                                                    $allowedEndTime = false;
-                                                }
-                                            }
-                                        } else {
-                                            $endSessionToTms = api_strtotime($date_session_end);
-                                            if ($session_now > $endSessionToTms) {
-                                                $allowedEndTime = false;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            if ($session_now >= $allowed_time && $allowedEndTime) {
-                                // Read only and accessible.
-                                $atLeastOneCourseIsVisible = true;
-
-                                if (api_get_setting('hide_courses_in_sessions') == 'false') {
-                                    $courseUserHtml = CourseManager::get_logged_user_course_html(
-                                        $course,
-                                        $session_id,
-                                        'session_course_item',
-                                        true,
-                                        $this->load_directories_preview
-                                    );
-                                    if (isset($courseUserHtml[1])) {
-                                        $course_session = $courseUserHtml[1];
-                                        $course_session['skill'] = isset($courseUserHtml['skill']) ? $courseUserHtml['skill'] : '';
-
-                                        //Course option (show student progress)
-                                        //This code will add new variables (Progress, Score, Certificate)
-                                        if ($studentInfoProgress || $studentInfoScore || $studentInfoCertificate) {
-                                            if ($studentInfoProgress) {
-                                                $progress = Tracking::get_avg_student_progress(
-                                                    $user_id,
-                                                    $course['course_code'],
-                                                    array(),
-                                                    $session_id
-                                                );
-                                                $course_session['student_info']['progress'] = ($progress === false) ? null : $progress;
-                                            }
-
-                                            if ($studentInfoScore) {
-                                                $percentage_score = Tracking::get_avg_student_score(
-                                                    $user_id,
-                                                    $course['course_code'],
-                                                    array(),
-                                                    $session_id
-                                                );
-                                                $course_session['student_info']['score'] = $percentage_score;
-                                            }
-
-                                            if ($studentInfoCertificate) {
-                                                $category = Category::load(
-                                                    null,
-                                                    null,
-                                                    $course['course_code'],
-                                                    null,
-                                                    null,
-                                                    $session_id
-                                                );
-                                                $course_session['student_info']['certificate'] = null;
-                                                if (isset($category[0])) {
-                                                    if ($category[0]->is_certificate_available($user_id)) {
-                                                        $course_session['student_info']['certificate'] = Display::label(get_lang('Yes'), 'success');
-                                                    } else {
-                                                        $course_session['student_info']['certificate'] = Display::label(get_lang('No'));
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        $html_courses_session[] = $course_session;
-                                    }
-                                }
-                                $count_courses_session++;
-                            }
-                        }
-
-                        // No courses to show.
-                        if ($atLeastOneCourseIsVisible == false) {
-                            if (empty($html_courses_session)) {
-                                continue;
-                            }
-                        }
-
-                        if ($count_courses_session > 0) {
-                            $params = array(
-                                'id' => $session_id
-                            );
-                            $session_box = Display::get_session_title_box($session_id);
-                            $actions = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session_id;
-                            $coachId = $session_box['id_coach'];
-                            $extraFieldValue = new ExtraFieldValue('session');
-                            $imageField = $extraFieldValue->get_values_by_handler_and_field_variable(
-                                $session_id,
-                                'image'
-                            );
-
-                            $params['category_id'] = $session_box['category_id'];
-                            $params['title'] = $session_box['title'];
-                            $params['id_coach'] = $coachId;
-                            $params['coach_url'] = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$coachId;
-                            $params['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;
-                            $params['coach_avatar'] = UserManager::getUserPicture(
-                                $coachId,
-                                USER_IMAGE_SIZE_SMALL
-                            );
-                            $params['date'] = $session_box['dates'];
-                            $params['image'] = isset($imageField['value']) ? $imageField['value'] : null;
-                            $params['duration'] = isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
-                            $params['edit_actions'] = $actions;
-                            $params['show_description'] = $session_box['show_description'] == 1 && $portalShowDescription;
-                            $params['description'] = $session_box['description'];
-                            $params['visibility'] = $session_box['visibility'];
-                            $params['show_simple_session_info'] = $showSimpleSessionInfo;
-                            $params['course_list_session_style'] = $coursesListSessionStyle;
-                            $params['num_users'] = $session_box['num_users'];
-                            $params['num_courses'] = $session_box['num_courses'];
-                            $params['course_categories'] = CourseManager::getCourseCategoriesFromCourseList(
-                                $html_courses_session
-                            );
-                            $params['courses'] = $html_courses_session;
-
-                            if ($showSimpleSessionInfo) {
-                                $params['subtitle'] = self::getSimpleSessionDetails(
-                                    $session_box['coach'],
-                                    $session_box['dates'],
-                                    isset($session_box['duration']) ? $session_box['duration'] : null
-                                );
-                            }
-
-                            if ($gameModeIsActive) {
-                                $params['stars'] = GamificationUtils::getSessionStars($params['id'], $this->user_id);
-                                $params['progress'] = GamificationUtils::getSessionProgress($params['id'],
-                                    $this->user_id);
-                                $params['points'] = GamificationUtils::getSessionPoints($params['id'], $this->user_id);
-                            }
-                            $listSession[] = $params;
-                            $sessionCount++;
-                        }
-                    }
-                } else {
-                    // All sessions included in
-                    $count_courses_session = 0;
-                    $html_sessions = '';
-                    if (isset($session_category['sessions'])) {
+            // Declared listSession variable
+            $listSession = [];
+            $session_now = time();
+            if (is_array($session_categories)) {
+                foreach ($session_categories as $session_category) {
+                    $session_category_id = $session_category['session_category']['id'];
+                    // Sessions and courses that are not in a session category
+                    if (
+                        empty($session_category_id)
+                        && isset($session_category['sessions'])
+                    ) {
+                        // Independent sessions
                         foreach ($session_category['sessions'] as $session) {
                             $session_id = $session['session_id'];
 
@@ -1627,13 +1450,16 @@ class IndexManager
                                 continue;
                             }
 
+                            // Courses inside the current session.
                             $date_session_start = $session['access_start_date'];
                             $date_session_end = $session['access_end_date'];
                             $coachAccessStartDate = $session['coach_access_start_date'];
                             $coachAccessEndDate = $session['coach_access_end_date'];
+                            $count_courses_session = 0;
 
+                            // Loop course content
                             $html_courses_session = [];
-                            $count = 0;
+                            $atLeastOneCourseIsVisible = false;
 
                             foreach ($session['courses'] as $course) {
                                 $is_coach_course = api_is_coach($session_id, $course['real_id']);
@@ -1673,122 +1499,324 @@ class IndexManager
                                 }
 
                                 if ($session_now >= $allowed_time && $allowedEndTime) {
-                                    if (api_get_setting('hide_courses_in_sessions') === 'false') {
-                                        $c = CourseManager::get_logged_user_course_html(
+                                    // Read only and accessible.
+                                    $atLeastOneCourseIsVisible = true;
+
+                                    if (api_get_setting('hide_courses_in_sessions') == 'false') {
+                                        $courseUserHtml = CourseManager::get_logged_user_course_html(
                                             $course,
                                             $session_id,
-                                            'session_course_item'
+                                            'session_course_item',
+                                            true,
+                                            $this->load_directories_preview
                                         );
-                                        $html_courses_session[] = $c[1];
+                                        if (isset($courseUserHtml[1])) {
+                                            $course_session = $courseUserHtml[1];
+                                            $course_session['skill'] =
+                                                isset($courseUserHtml['skill']) ? $courseUserHtml['skill'] : '';
+
+                                            //Course option (show student progress)
+                                            //This code will add new variables (Progress, Score, Certificate)
+                                            if ($studentInfoProgress || $studentInfoScore || $studentInfoCertificate) {
+                                                if ($studentInfoProgress) {
+                                                    $progress = Tracking::get_avg_student_progress(
+                                                        $user_id,
+                                                        $course['course_code'],
+                                                        array(),
+                                                        $session_id
+                                                    );
+                                                    $course_session['student_info']['progress'] =
+                                                        ($progress === false) ? null : $progress;
+                                                }
+
+                                                if ($studentInfoScore) {
+                                                    $percentage_score = Tracking::get_avg_student_score(
+                                                        $user_id,
+                                                        $course['course_code'],
+                                                        array(),
+                                                        $session_id
+                                                    );
+                                                    $course_session['student_info']['score'] = $percentage_score;
+                                                }
+
+                                                if ($studentInfoCertificate) {
+                                                    $category = Category::load(
+                                                        null,
+                                                        null,
+                                                        $course['course_code'],
+                                                        null,
+                                                        null,
+                                                        $session_id
+                                                    );
+                                                    $course_session['student_info']['certificate'] = null;
+                                                    if (isset($category[0])) {
+                                                        if ($category[0]->is_certificate_available($user_id)) {
+                                                            $course_session['student_info']['certificate'] =
+                                                                Display::label(get_lang('Yes'), 'success');
+                                                        } else {
+                                                            $course_session['student_info']['certificate'] =
+                                                                Display::label(get_lang('No'));
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            $html_courses_session[] = $course_session;
+                                        }
                                     }
                                     $count_courses_session++;
-                                    $count++;
                                 }
                             }
 
-                            $sessionParams = [];
-                            // Category
-                            if ($count > 0) {
+                            // No courses to show.
+                            if ($atLeastOneCourseIsVisible == false) {
+                                if (empty($html_courses_session)) {
+                                    continue;
+                                }
+                            }
+
+                            if ($count_courses_session > 0) {
+                                $params = array(
+                                    'id' => $session_id
+                                );
                                 $session_box = Display::get_session_title_box($session_id);
-                                $sessionParams[0]['id'] = $session_id;
-                                $sessionParams[0]['date'] = $session_box['dates'];
-                                $sessionParams[0]['duration'] = isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
-                                $sessionParams[0]['course_list_session_style'] = $coursesListSessionStyle;
-                                $sessionParams[0]['title'] = $session_box['title'];
-                                $sessionParams[0]['subtitle'] = (!empty($session_box['coach']) ? $session_box['coach'].' | ' : '').$session_box['dates'];
-                                $sessionParams[0]['show_actions'] = api_is_platform_admin();
-                                $sessionParams[0]['courses'] = $html_courses_session;
-                                $sessionParams[0]['show_simple_session_info'] = $showSimpleSessionInfo;
-                                $sessionParams[0]['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;
+                                $actions =
+                                    api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session_id;
+                                $coachId = $session_box['id_coach'];
+                                $extraFieldValue = new ExtraFieldValue('session');
+                                $imageField = $extraFieldValue->get_values_by_handler_and_field_variable(
+                                    $session_id,
+                                    'image'
+                                );
+
+                                $params['category_id'] = $session_box['category_id'];
+                                $params['title'] = $session_box['title'];
+                                $params['id_coach'] = $coachId;
+                                $params['coach_url'] =
+                                    api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='
+                                    .$coachId;
+                                $params['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;
+                                $params['coach_avatar'] = UserManager::getUserPicture(
+                                    $coachId,
+                                    USER_IMAGE_SIZE_SMALL
+                                );
+                                $params['date'] = $session_box['dates'];
+                                $params['image'] = isset($imageField['value']) ? $imageField['value'] : null;
+                                $params['duration'] =
+                                    isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
+                                $params['edit_actions'] = $actions;
+                                $params['show_description'] =
+                                    $session_box['show_description'] == 1 && $portalShowDescription;
+                                $params['description'] = $session_box['description'];
+                                $params['visibility'] = $session_box['visibility'];
+                                $params['show_simple_session_info'] = $showSimpleSessionInfo;
+                                $params['course_list_session_style'] = $coursesListSessionStyle;
+                                $params['num_users'] = $session_box['num_users'];
+                                $params['num_courses'] = $session_box['num_courses'];
+                                $params['course_categories'] = CourseManager::getCourseCategoriesFromCourseList(
+                                    $html_courses_session
+                                );
+                                $params['courses'] = $html_courses_session;
 
                                 if ($showSimpleSessionInfo) {
-                                    $sessionParams[0]['subtitle'] = self::getSimpleSessionDetails(
+                                    $params['subtitle'] = self::getSimpleSessionDetails(
                                         $session_box['coach'],
                                         $session_box['dates'],
                                         isset($session_box['duration']) ? $session_box['duration'] : null
                                     );
                                 }
 
-                                $this->tpl->assign('session', $sessionParams);
-                                $html_sessions .= $this->tpl->fetch(
-                                    $this->tpl->get_template('user_portal/classic_session.tpl')
-                                );
-
+                                if ($gameModeIsActive) {
+                                    $params['stars'] =
+                                        GamificationUtils::getSessionStars($params['id'], $this->user_id);
+                                    $params['progress'] = GamificationUtils::getSessionProgress($params['id'],
+                                        $this->user_id);
+                                    $params['points'] =
+                                        GamificationUtils::getSessionPoints($params['id'], $this->user_id);
+                                }
+                                $listSession[] = $params;
                                 $sessionCount++;
                             }
                         }
-                    }
+                    } else {
+                        // All sessions included in
+                        $count_courses_session = 0;
+                        $html_sessions = '';
+                        if (isset($session_category['sessions'])) {
+                            foreach ($session_category['sessions'] as $session) {
+                                $session_id = $session['session_id'];
 
-                    if ($count_courses_session > 0) {
-                        $categoryParams = array(
-                            'id' => $session_category['session_category']['id'],
-                            'title' => $session_category['session_category']['name'],
-                            'show_actions' => api_is_platform_admin(),
-                            'subtitle' => '',
-                            'sessions' => $html_sessions
-                        );
+                                // Don't show empty sessions.
+                                if (count($session['courses']) < 1) {
+                                    continue;
+                                }
 
-                        $session_category_start_date = $session_category['session_category']['date_start'];
-                        $session_category_end_date = $session_category['session_category']['date_end'];
-                        if ($session_category_start_date == '0000-00-00') {
-                            $session_category_start_date = '';
+                                $date_session_start = $session['access_start_date'];
+                                $date_session_end = $session['access_end_date'];
+                                $coachAccessStartDate = $session['coach_access_start_date'];
+                                $coachAccessEndDate = $session['coach_access_end_date'];
+
+                                $html_courses_session = [];
+                                $count = 0;
+
+                                foreach ($session['courses'] as $course) {
+                                    $is_coach_course = api_is_coach($session_id, $course['real_id']);
+                                    $allowed_time = 0;
+                                    $allowedEndTime = true;
+
+                                    if (!empty($date_session_start)) {
+                                        if ($is_coach_course) {
+                                            $allowed_time = api_strtotime($coachAccessStartDate);
+                                        } else {
+                                            $allowed_time = api_strtotime($date_session_start);
+                                        }
+
+                                        if (!isset($_GET['history'])) {
+                                            if (!empty($date_session_end)) {
+                                                if ($is_coach_course) {
+                                                    // if coach end date is empty we use the default end date
+                                                    if (empty($coachAccessEndDate)) {
+                                                        $endSessionToTms = api_strtotime($date_session_end);
+                                                        if ($session_now > $endSessionToTms) {
+                                                            $allowedEndTime = false;
+                                                        }
+                                                    } else {
+                                                        $endSessionToTms = api_strtotime($coachAccessEndDate);
+                                                        if ($session_now > $endSessionToTms) {
+                                                            $allowedEndTime = false;
+                                                        }
+                                                    }
+                                                } else {
+                                                    $endSessionToTms = api_strtotime($date_session_end);
+                                                    if ($session_now > $endSessionToTms) {
+                                                        $allowedEndTime = false;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if ($session_now >= $allowed_time && $allowedEndTime) {
+                                        if (api_get_setting('hide_courses_in_sessions') === 'false') {
+                                            $c = CourseManager::get_logged_user_course_html(
+                                                $course,
+                                                $session_id,
+                                                'session_course_item'
+                                            );
+                                            $html_courses_session[] = $c[1];
+                                        }
+                                        $count_courses_session++;
+                                        $count++;
+                                    }
+                                }
+
+                                $sessionParams = [];
+                                // Category
+                                if ($count > 0) {
+                                    $session_box = Display::get_session_title_box($session_id);
+                                    $sessionParams[0]['id'] = $session_id;
+                                    $sessionParams[0]['date'] = $session_box['dates'];
+                                    $sessionParams[0]['duration'] =
+                                        isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
+                                    $sessionParams[0]['course_list_session_style'] = $coursesListSessionStyle;
+                                    $sessionParams[0]['title'] = $session_box['title'];
+                                    $sessionParams[0]['subtitle'] =
+                                        (!empty($session_box['coach']) ? $session_box['coach'].' | ' : '')
+                                        .$session_box['dates'];
+                                    $sessionParams[0]['show_actions'] = api_is_platform_admin();
+                                    $sessionParams[0]['courses'] = $html_courses_session;
+                                    $sessionParams[0]['show_simple_session_info'] = $showSimpleSessionInfo;
+                                    $sessionParams[0]['coach_name'] =
+                                        !empty($session_box['coach']) ? $session_box['coach'] : null;
+
+                                    if ($showSimpleSessionInfo) {
+                                        $sessionParams[0]['subtitle'] = self::getSimpleSessionDetails(
+                                            $session_box['coach'],
+                                            $session_box['dates'],
+                                            isset($session_box['duration']) ? $session_box['duration'] : null
+                                        );
+                                    }
+
+                                    $this->tpl->assign('session', $sessionParams);
+                                    $html_sessions .= $this->tpl->fetch(
+                                        $this->tpl->get_template('user_portal/classic_session.tpl')
+                                    );
+
+                                    $sessionCount++;
+                                }
+                            }
                         }
 
-                        if ($session_category_end_date == '0000-00-00') {
-                            $session_category_end_date = '';
-                        }
-
-                        if (
-                            !empty($session_category_start_date) &&
-                            !empty($session_category_end_date)
-                        ) {
-                            $categoryParams['subtitle'] = sprintf(
-                                get_lang('FromDateXToDateY'),
-                                $session_category_start_date,
-                                $session_category_end_date
+                        if ($count_courses_session > 0) {
+                            $categoryParams = array(
+                                'id' => $session_category['session_category']['id'],
+                                'title' => $session_category['session_category']['name'],
+                                'show_actions' => api_is_platform_admin(),
+                                'subtitle' => '',
+                                'sessions' => $html_sessions
                             );
-                        } else {
-                            if (!empty($session_category_start_date)) {
-                                $categoryParams['subtitle'] = get_lang('From').' '.$session_category_start_date;
+
+                            $session_category_start_date = $session_category['session_category']['date_start'];
+                            $session_category_end_date = $session_category['session_category']['date_end'];
+                            if ($session_category_start_date == '0000-00-00') {
+                                $session_category_start_date = '';
                             }
 
-                            if (!empty($session_category_end_date)) {
-                                $categoryParams['subtitle'] = get_lang('Until').' '.$session_category_end_date;
+                            if ($session_category_end_date == '0000-00-00') {
+                                $session_category_end_date = '';
                             }
+
+                            if (
+                                !empty($session_category_start_date)
+                                && !empty($session_category_end_date)
+                            ) {
+                                $categoryParams['subtitle'] = sprintf(
+                                    get_lang('FromDateXToDateY'),
+                                    $session_category_start_date,
+                                    $session_category_end_date
+                                );
+                            } else {
+                                if (!empty($session_category_start_date)) {
+                                    $categoryParams['subtitle'] = get_lang('From').' '.$session_category_start_date;
+                                }
+
+                                if (!empty($session_category_end_date)) {
+                                    $categoryParams['subtitle'] = get_lang('Until').' '.$session_category_end_date;
+                                }
+                            }
+
+                            $this->tpl->assign('session_category', $categoryParams);
+                            $sessions_with_category .= $this->tpl->fetch(
+                                "{$this->tpl->templateFolder}/user_portal/session_category.tpl"
+                            );
                         }
-
-                        $this->tpl->assign('session_category', $categoryParams);
-                        $sessions_with_category .= $this->tpl->fetch(
-                            "{$this->tpl->templateFolder}/user_portal/session_category.tpl"
-                        );
                     }
                 }
-            }
 
-            $allCoursesInSessions = [];
-            foreach ($listSession as $currentSession) {
-                $coursesInSessions = $currentSession['courses'];
-                unset($currentSession['courses']);
-                foreach ($coursesInSessions as $coursesInSession) {
-                    $coursesInSession['session'] = $currentSession;
-                    $allCoursesInSessions[] = $coursesInSession;
+                $allCoursesInSessions = [];
+                foreach ($listSession as $currentSession) {
+                    $coursesInSessions = $currentSession['courses'];
+                    unset($currentSession['courses']);
+                    foreach ($coursesInSessions as $coursesInSession) {
+                        $coursesInSession['session'] = $currentSession;
+                        $allCoursesInSessions[] = $coursesInSession;
+                    }
                 }
-            }
 
-            $this->tpl->assign('all_courses', $allCoursesInSessions);
-            $this->tpl->assign('session', $listSession);
-            $this->tpl->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
-            $this->tpl->assign('gamification_mode', $gameModeIsActive);
-            $this->tpl->assign('remove_session_url', api_get_configuration_value('remove_session_url'));
+                $this->tpl->assign('all_courses', $allCoursesInSessions);
+                $this->tpl->assign('session', $listSession);
+                $this->tpl->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
+                $this->tpl->assign('gamification_mode', $gameModeIsActive);
+                $this->tpl->assign('remove_session_url', api_get_configuration_value('remove_session_url'));
 
-            if ($viewGridCourses) {
-                $sessions_with_no_category = $this->tpl->fetch(
-                    $this->tpl->get_template('/user_portal/grid_session.tpl')
-                );
-            } else {
-                $sessions_with_no_category = $this->tpl->fetch(
-                    $this->tpl->get_template('user_portal/classic_session.tpl')
-                );
+                if ($viewGridCourses) {
+                    $sessions_with_no_category = $this->tpl->fetch(
+                        $this->tpl->get_template('/user_portal/grid_session.tpl')
+                    );
+                } else {
+                    $sessions_with_no_category = $this->tpl->fetch(
+                        $this->tpl->get_template('user_portal/classic_session.tpl')
+                    );
+                }
             }
         }
 
@@ -2241,5 +2269,49 @@ class IndexManager
         $strDetails[] = !empty($duration) ? $duration : $dates;
 
         return implode(' | ', $strDetails);
+    }
+
+    /**
+     * @param $userId
+     * @return array
+     */
+    public static function returnCourseCategoryListFromUser($userId)
+    {
+        $sessionCount = 0;
+
+        $courseList = CourseManager::get_courses_list_by_user_id($userId);
+        $categoryCodes = CourseManager::getCourseCategoriesFromCourseList($courseList);
+        $categories = [];
+
+        foreach ($categoryCodes as $categoryCode) {
+            $categories[] = CourseCategory::getCategory($categoryCode);
+        }
+
+        $template = new Template('', false, false, false, true, false, false);
+        $layout = $template->get_template('user_portal/course_categories.tpl');
+        $template->assign('course_categories', $categories);
+
+        return [
+            'html' => $template->fetch($layout),
+            'course_count' => count($courseList),
+            'session_count' => $sessionCount
+        ];
+    }
+
+    /**
+     * Filter the course list by category code
+     * @param array $courseList course list
+     * @param string $categoryCode
+     * @return array
+     */
+    private static function filterByCategory($courseList, $categoryCode)
+    {
+        return array_filter($courseList, function ($courseInfo) use ($categoryCode) {
+            if ($courseInfo['category_code'] === $categoryCode) {
+                return true;
+            }
+
+            return false;
+        });
     }
 }

@@ -1150,4 +1150,33 @@ class CourseCategory
 
         return $nameTools;
     }
+
+    /**
+     * Save image for a course category
+     * @param int $categoryId Course category ID
+     * @param array $fileData File data from $_FILES
+     */
+    public static function saveImage($categoryId, $fileData)
+    {
+        if (!empty($fileData['error'])) {
+            return;
+        }
+
+        $extension = getextension($fileData['name']);
+
+        $dirName = 'course_category/';
+        $fileDir = api_get_path(SYS_UPLOAD_PATH).$dirName;
+        $fileName = "cc_$categoryId.{$extension[0]}";
+
+        if (!file_exists($fileDir)) {
+            mkdir($fileDir, api_get_permissions_for_new_directories(), true);
+        }
+
+        $image = new Image($fileData['tmp_name']);
+        $image->send_image($fileDir.$fileName);
+
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+
+        Database::update($table, ['image' => $dirName.$fileName], ['id = ?' => $categoryId]);
+    }
 }

@@ -22,7 +22,6 @@ if (!empty($categoryId)) {
 }
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-$errorMsg = '';
 if (!empty($action)) {
     if ($action == 'delete') {
         CourseCategory::deleteNode($categoryId);
@@ -38,7 +37,7 @@ if (!empty($action)) {
                 $category
             );
 
-            Display::addFlash(Display::return_message(get_lang('Created')));
+            $errorMsg = Display::return_message(get_lang('Created'));
         } else {
             $ret = CourseCategory::editNode(
                 $_POST['code'],
@@ -46,13 +45,15 @@ if (!empty($action)) {
                 $_POST['auth_course_child'],
                 $categoryId
             );
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            $errorMsg = Display::return_message(get_lang('Updated'));
         }
-        if ($ret) {
-            $action = '';
-        } else {
-            $errorMsg = get_lang('CatCodeAlreadyUsed');
+        if (!$ret) {
+            $errorMsg = Display::return_message(get_lang('CatCodeAlreadyUsed'), 'error');
         }
+
+        Display::addFlash($errorMsg);
+        header('Location: '.api_get_path(WEB_CODE_PATH).'admin/course_category.php');
+        exit;
     } elseif ($action == 'moveUp') {
         CourseCategory::moveNodeUp($categoryId, $_GET['tree_pos'], $category);
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));

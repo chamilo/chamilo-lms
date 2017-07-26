@@ -952,14 +952,14 @@ window.HotspotQuestion = (function () {
                     answersCollection = new AnswersCollection(),
                     hotspotsSVG = new UserHotspotsSVG(hotspotsCollection, answersCollection, this);
 
-                $(config.selector).css('width', this.width).append(hotspotsSVG.render().el);
+                $(config.selector).css('width', this.width + 20).append(hotspotsSVG.render().el);
 
                 $(config.selector).parent().prepend('\n\
-                    <div id="hotspot-messages-' + config.questionId + '" class="alert alert-info">\n\
-                        <h4>\n\
+                    <div id="hotspot-messages-' + config.questionId + '" class="alert alert-info hotspot">\n\
+                        <p>\n\
                             <span class="fa fa-info-circle" aria-hidden="true"></span>\n\
                             <span></span>\n\
-                        </h4>\n\
+                        </p>\n\
                     </div>\n\
                 ');
 

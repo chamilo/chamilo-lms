@@ -1190,6 +1190,7 @@ HTML;
             $hotspotColor = 0;
             if ($answerType != HOT_SPOT_DELINEATION) {
                 $answerList = '
+                    <div class="sidebar-well">
                     <div class="well well-sm">
                         <h5 class="page-header">' . get_lang('HotspotZones').'</h5>
                         <ol>
@@ -1211,6 +1212,7 @@ HTML;
 
                 $answerList .= '
                         </ul>
+                    </div>
                     </div>
                 ';
 
@@ -4108,7 +4110,7 @@ HOTSPOT;
         $ribbon .= '</div>';
 
         if (!empty($countPendingQuestions)) {
-            $ribbon .= '<br />';
+            //$ribbon .= '<br />';
             $ribbon .= Display::return_message(
                 sprintf(
                     get_lang('TempScoreXQuestionsNotCorrectedYet'),
@@ -4117,7 +4119,7 @@ HOTSPOT;
                 'warning'
             );
         }
-
+        
         return $ribbon;
     }
 

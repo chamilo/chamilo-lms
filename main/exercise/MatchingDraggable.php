@@ -265,7 +265,7 @@ class MatchingDraggable extends Question
     public function return_header($exercise, $counter = null, $score = null)
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'">
+        $header .= '<table class="matching '.$this->question_table_class.'">
                 <tr>
                     <th>' . get_lang('ElementList') . '</th>
                     <th>' . get_lang('YourChoice') . '</th>

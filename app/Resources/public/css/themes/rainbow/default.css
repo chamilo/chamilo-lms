@@ -893,6 +893,8 @@ legend{
 }
 .main-question .question_title{
     font-size: 14px;
+    font-weight: bold;
+    font-family: Verdana;
 }
 .question-list-description-block select.selectpicker{
     display: block!important;

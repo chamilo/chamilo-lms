@@ -12072,5 +12072,26 @@ EOD;
         }
         return stripslashes($output);
     }
+
+    /**
+     * Get the parent names for the current item
+     * @param int $newItemId Optional. The item ID
+     * @return array
+     */
+    public function getCurrentItemParentNames($newItemId = 0)
+    {
+        $newItemId = $newItemId ?: $this->get_current_item_id();
+        $return = [];
+        $item = $this->getItem($newItemId);
+        $parent = $this->getItem($item->get_parent());
+
+        while ($parent) {
+            $return[] = $parent->get_title();
+
+            $parent = $this->getItem($parent->get_parent());
+        }
+
+        return array_reverse($return);
+    }
 }
 

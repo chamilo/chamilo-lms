@@ -883,11 +883,13 @@ class ExtraFieldValue extends Model
     {
         $field_id = intval($field_id);
         $item_id = intval($item_id);
+        $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $sql = "DELETE FROM {$this->table}
                 WHERE
                     item_id = '$item_id' AND
-                    field_id = '$field_id'
+                    field_id = '$field_id' AND
+                    extra_field_type = $extraFieldType
                 ";
         Database::query($sql);
     }

@@ -3,10 +3,9 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\UserBundle\Entity\User;
-use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
+use Chamilo\CoreBundle\Entity\SkillRelUser;
+use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
-use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
-use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
 use ChamiloSession as Session;
 
 /**
@@ -723,9 +722,34 @@ class UserManager
         Database::query($sql);
 
         // Skills
-        $table = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
-        $sql = "DELETE FROM $table WHERE user_id = $user_id";
-        Database::query($sql);
+        $em = Database::getManager();
+
+        $criteria = ['user' => $user_id];
+        $skills = $em->getRepository('ChamiloCoreBundle:SkillRelUser')->findBy($criteria);
+        if ($skills) {
+            /** @var SkillRelUser $skill */
+            foreach ($skills as $skill) {
+                $comments = $skill->getComments();
+                if ($comments) {
+                    /** @var SkillRelUserComment $comment */
+                    foreach ($comments as $comment) {
+                        $em->remove($comment);
+                    }
+                }
+                $em->remove($skill);
+            }
+            $em->flush();
+        }
+
+        // ExtraFieldSavedSearch
+        $criteria = ['user' => $user_id];
+        $searchList = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findBy($criteria);
+        if ($searchList) {
+            foreach ($searchList as $search) {
+                $em->remove($search);
+            }
+            $em->flush();
+        }
 
         $connection = Database::getManager()->getConnection();
         $tableExists = $connection->getSchemaManager()->tablesExist(['plugin_bbb_room']);
@@ -4970,10 +4994,24 @@ class UserManager
      * @param array $bossList
      * @return int Affected rows
      */
-    public static function subscribeUserToBossList($studentId, $bossList)
+    /**
+     * Subscribe boss to students
+     *
+     * @param int $studentId
+     * @param array $bossList
+     * @param bool $sendNotification
+     * @return int Affected rows
+     */
+    public static function subscribeUserToBossList($studentId, $bossList, $sendNotification = false)
     {
         if ($bossList) {
             $studentId = (int) $studentId;
+            $studentInfo = api_get_user_info($studentId);
+
+            if (empty($studentInfo)) {
+                return false;
+            }
+
             $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
             $sql = "DELETE FROM $userRelUserTable 
                     WHERE user_id = $studentId AND relation_type = ".USER_RELATION_TYPE_BOSS;
@@ -4983,8 +5021,20 @@ class UserManager
                 $bossId = (int) $bossId;
                 $sql = "INSERT IGNORE INTO $userRelUserTable (user_id, friend_user_id, relation_type)
                         VALUES ($studentId, $bossId, ".USER_RELATION_TYPE_BOSS.")";
+                $insertId = Database::query($sql);
 
-                Database::query($sql);
+                if ($insertId && $sendNotification) {
+                    $name = $studentInfo['complete_name'];
+                    $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$studentId;
+                    $url = Display::url($url, $url);
+                    $subject = sprintf(get_lang('UserXHasBeenAssignedToBoss'), $name);
+                    $message = sprintf(get_lang('UserXHasBeenAssignedToBossWithUrlX'), $name, $url);
+                    MessageManager::send_message_simple(
+                        $bossId,
+                        $subject,
+                        $message
+                    );
+                }
             }
         }
     }
@@ -5031,6 +5081,30 @@ class UserManager
             $lastConnectionDate,
             STUDENT_BOSS
         );
+    }
+
+    /**
+     * Get the teacher (users with COURSEMANGER status) list
+     * @return array The list
+     */
+    public static function getTeachersList()
+    {
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $resultData = Database::select('user_id, lastname, firstname, username', $userTable, array(
+            'where' => array(
+                'status = ?' => COURSEMANAGER
+            )
+        ));
+
+        foreach ($resultData as &$teacherData) {
+            $teacherData['completeName'] = api_get_person_name(
+                $teacherData['firstname'],
+                $teacherData['lastname']
+            );
+        }
+
+        return $resultData;
     }
 
     /**

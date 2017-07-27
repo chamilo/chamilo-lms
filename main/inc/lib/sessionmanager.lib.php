@@ -427,13 +427,16 @@ class SessionManager
      * @param array $options order and limit keys
      * @param boolean $get_count Whether to get all the results or only the count
      * @param array $columns
+     * @param array $extraFieldsToLoad
+     *
      * @return mixed Integer for number of rows, or array of results
      * @assert (array(),true) !== false
      */
     public static function get_sessions_admin(
         $options = array(),
         $get_count = false,
-        $columns = []
+        $columns = [],
+        $extraFieldsToLoad = array()
     ) {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -571,7 +574,41 @@ class SessionManager
 
             foreach ($sessions as $session) {
                 $session_id = $session['id'];
-                $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
+                 $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
+                if (api_is_drh()) {
+                    $url = api_get_path(WEB_CODE_PATH)."session/about.php?session_id=".$session['id'];
+                }
+                if (api_is_platform_admin()) {
+                    $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
+                }
+
+                if ($extraFieldsToLoad) {
+                    $url = api_get_path(WEB_CODE_PATH)."session/about.php?session_id=".$session['id'];
+                }
+                $session['name'] = Display::url(
+                    $session['name'],
+                    $url
+                );
+
+                if (!empty($extraFieldsToLoad)) {
+                    foreach ($extraFieldsToLoad as $field) {
+                        $extraFieldValue = new ExtraFieldValue('session');
+                        $fieldData = $extraFieldValue->getAllValuesByItemAndField(
+                            $session['id'],
+                            $field['id']
+                        );
+                        $fieldDataArray = array();
+                        $fieldDataToString = '';
+                        if (!empty($fieldData)) {
+                            foreach ($fieldData as $data) {
+                                $fieldDataArray[] = $data['value'];
+                            }
+                            $fieldDataToString = implode(', ', $fieldDataArray);
+
+                        }
+                        $session[$field['variable']] = $fieldDataToString;
+                    }
+                }
 
                 if (isset($session['session_active']) && $session['session_active'] == 1) {
                     $session['session_active'] = $activeIcon;
@@ -6282,6 +6319,9 @@ class SessionManager
     /**
      * Returns the number of days the student has left in a session when using
      * sessions durations
+     * @param array $sessionInfo
+     * @param int $userId
+     * @return int
      */
     public static function getDayLeftInSession(array $sessionInfo, $userId)
     {
@@ -7602,8 +7642,10 @@ class SessionManager
      * @param string $list_type
      * @return array
      */
-    public static function getGridColumns($list_type = 'simple')
-    {
+    public static function getGridColumns(
+        $list_type = 'simple',
+        $extraFields = array()
+    ) {
         $showCount = api_get_configuration_value('session_list_show_count_users');
         // Column config
         $operators = array('cn', 'nc');
@@ -7708,6 +7750,19 @@ class SessionManager
                     array('name'=>'course_title', 'index'=>'course_title', 'width'=>'50', 'hidden' => 'true', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true', 'sopt' => $operators)),
                 );
                 break;
+        }
+
+        if (!empty($extraFields)) {
+            foreach ($extraFields as $field) {
+                $columns[] = $field['display_text'];
+                $column_model[] = array(
+                    'name' => $field['variable'],
+                    'index' => $field['variable'],
+                    'width' => '80',
+                    'align' => 'center',
+                    'search' => 'false'
+                );
+            }
         }
 
         // Inject extra session fields

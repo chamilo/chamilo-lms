@@ -764,7 +764,7 @@ class IndexManager
      * @param string $idCollapse
      * @return string
      */
-    public function  show_right_block(
+    public function show_right_block(
         $title,
         $content,
         $id = '',

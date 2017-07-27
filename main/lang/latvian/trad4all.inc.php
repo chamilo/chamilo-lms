@@ -3342,7 +3342,6 @@ $ApprovalForNewAccount = "Jauna konta apstiprinājums";
 $ManageUser = "Organizēt lietotāju";
 $SubscribeUserToCourseAsTeacher = "Reģistrēt Lektorus";
 $PasswordEncryptedForSecurity = "Drošības apsvērumu dēļ, Jūsu parole tiek šifrēta. Tādējādi, nospiežot uz e-pasta saites, Jums tiks nosūtīta atkārtota parole.";
-$SystemUnableToSendEmailContact = "Portāls nevar nosūtīt e-pastu";
 $OpenIDCouldNotBeFoundPleaseRegister = "Šis OpenID nav atrodams mūsu datu bāzē. Lūdzu reģistrēties jauna konta izveidei. Ja Jums jau ir konts mūsu sistēmā, lūdzu, rediģējiet savu profilu konta iekšienē, lai pievienotu šo OpenID";
 $UsernameMaxXCharacters = "Lietotājvārdam jābūt %s burtu garam";
 $PictureUploaded = "Jūsu attēli ir augšupielādēti";

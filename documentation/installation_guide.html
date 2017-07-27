@@ -736,6 +736,12 @@ If you have issues with files taking a long time to download, make sure you reco
 	RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
     RewriteRule ^(tests|.git) - [F,L,NC]
   &lt;/Directory&gt;
+
+    AddType application/font-woff .woff .woff2
+    &lt;IfModule mod_expires.c&gt;
+      ExpiresActive On
+      ExpiresByType application/font-woff "access plus 1 month"
+    &lt;/IfModule&gt;
     </pre>
     <h3>Nginx</h3>
     Nginx doesn't support .htaccess rules, so you have no other option than to apply the following rules (note that your PHP backend configuration may vary).
@@ -791,8 +797,8 @@ If you have issues with files taking a long time to download, make sure you reco
   }
 
   # Serve static files directly
-  location ~* \.(png|jpe?g|gif|ico|js|css|mp3|swf|flv|mp4|ogg)$ {
-    expires 1y;
+  location ~* \.(png|jpe?g|gif|ico|js|css|mp3|swf|flv|mp4|ogg|woff|woff2)$ {
+    expires 30d;
     access_log off;
     rewrite ^/courses/([^/]+)/course-pic85x85.png$ /app/courses/$1/course-pic85x85.png last;
     rewrite ^/courses/([^/]+)/course-pic.png$ /app/courses/$1/course-pic.png last;

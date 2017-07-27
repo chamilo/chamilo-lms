@@ -3976,7 +3976,6 @@ $ApprovalForNewAccount = "Aprovação de nova conta";
 $ManageUser = "Gerir utilizador";
 $SubscribeUserToCourseAsTeacher = "Inscrever instrutores";
 $PasswordEncryptedForSecurity = "A sua senha/password encontra-se encriptada por razões de segurança. Assim, após clicar na ligação/link ser-lhe-á enviado um e-mail com a sua password.";
-$SystemUnableToSendEmailContact = "Não foi possível ao Portal enviar o e-mail de contacto";
 $OpenIDCouldNotBeFoundPleaseRegister = "Este OpenID não foi encontrado na nossa base-de-dados. Por favor, registe-se com uma nova conta. Se já possui uma conta, por favor edite o seu perfil na área da sua conta para adicionar este OpenID";
 $UsernameMaxXCharacters = "O login/acesso só pode conter um máximo de %s caracteres";
 $PictureUploaded = "A sua imagem foi enviada";

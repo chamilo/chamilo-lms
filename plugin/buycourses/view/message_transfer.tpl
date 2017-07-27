@@ -16,20 +16,20 @@
     <p>{{ 'BankAccountIntro'|get_plugin_lang('BuyCoursesPlugin')|format(sale.product) }}</p>
     <table>
         <thead>
-            <tr>
-                <th>{{ 'Name'|get_lang }}</th>
-                <th>{{ 'BankAccount'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                <th>{{ 'SWIFT'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-            </tr>
+        <tr>
+            <th>{{ 'Name'|get_lang }}</th>
+            <th>{{ 'BankAccount'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+            <th>{{ 'SWIFT'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+        </tr>
         </thead>
         <tbody>
-            {% for account in transfer_accounts %}
-                <tr>
-                    <td>{{ account.name }}</td>
-                    <td>{{ account.account }}</td>
-                    <td>{{ account.swift }}</td>
-                </tr>
-            {% endfor %}
+        {% for account in transfer_accounts %}
+            <tr>
+                <td>{{ account.name }}</td>
+                <td>{{ account.account }}</td>
+                <td>{{ account.swift }}</td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
     <p>{{ 'PurchaseDetailsEnd'|get_plugin_lang('BuyCoursesPlugin') }}</p>

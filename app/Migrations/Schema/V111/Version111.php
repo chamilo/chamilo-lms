@@ -487,7 +487,18 @@ class Version111 extends AbstractMigrationChamilo
             }
         }
 
-        $this->addSql('ALTER TABLE sequence_rule ADD description LONGTEXT NOT NULL, DROP text;');
+        if ($schema->hasTable('sequence_rule')) {
+            $table = $schema->getTable('sequence_rule');
+            if ($table->hasColumn('text')) {
+                $this->addSql('ALTER TABLE sequence_rule DROP text');
+            }
+
+            if (!$table->hasColumn('description')) {
+                $this->addSql(
+                    'ALTER TABLE sequence_rule ADD description LONGTEXT NOT NULL'
+                );
+            }
+        }
 
         if ($schema->hasTable('course_rel_user_catalogue')) {
             $table = $schema->getTable('course_rel_user_catalogue');
@@ -521,7 +532,12 @@ class Version111 extends AbstractMigrationChamilo
             }
         }
 
-        $this->addSql('ALTER TABLE session_rel_course DROP category');
+        if ($schema->hasTable('session_rel_course')) {
+            $table = $schema->getTable('session_rel_course');
+            if ($table->hasColumn('category')) {
+                $this->addSql('ALTER TABLE session_rel_course DROP category');
+            }
+        }
     }
 
     /**

@@ -37,5 +37,5 @@ if (api_is_platform_admin()) {
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 } else {
-    header('Location:' . api_get_path(WEB_PATH));
+    header('Location:'.api_get_path(WEB_PATH));
 }

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * @package chamilo.admin
  * @todo use formvalidator
@@ -23,14 +25,16 @@ $xajax->registerFunction(array('search_courses', 'AddCourseToSession', 'search_c
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
+$interbreadcrumb[] = array(
+    'url' => 'session_list.php',
+    'name' => get_lang('SessionList')
+);
 $interbreadcrumb[] = array(
     'url' => "resume_session.php?id_session=".$sessionId,
     'name' => get_lang('SessionOverview')
 );
 
 // Database Table Definitions
-$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -76,7 +80,6 @@ function remove_item(origin)
 }
 </script>';
 
-$errorMsg = '';
 $CourseList = $SessionList = array();
 $courses = $sessions = array();
 
@@ -209,19 +212,13 @@ unset($Courses);
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $sessionId; ?><?php if (!empty($_GET['add'])) echo '&add=true'; ?>" style="margin:0px;" <?php if ($ajax_search) {echo ' onsubmit="valide();"'; }?>>
     <legend><?php echo $tool_name.' ('.$session_info['name'].')'; ?></legend>
     <input type="hidden" name="formSent" value="1" />
-
-    <?php
-    if (!empty($errorMsg)) {
-        echo Display::return_message($errorMsg); //main API
-    }
-    ?>
     <div id="multiple-add-session" class="row">
         <div class="col-md-4">
             <label><?php echo get_lang('CourseListInPlatform') ?> :</label>
             <?php
             if (!($add_type == 'multiple')) {
                 ?>
-                <input type="text" id="course_to_add" onkeyup="xajax_search_courses(this.value,'single')" class="form-control"/>
+                <input type="text" id="course_to_add" onkeyup="xajax_search_courses(this.value, 'single', <?php echo $sessionId; ?>)" class="form-control"/>
                 <div id="ajax_list_courses_single"></div>
             <?php
             } else {
@@ -245,7 +242,7 @@ unset($Courses);
                 <div class="code-course">
                     <?php echo get_lang('FirstLetterCourse'); ?> :
 
-                    <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple')" class="selectpicker show-tick form-control">
+                    <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple', <?php echo $sessionId; ?>)" class="selectpicker show-tick form-control">
                         <option value="%">--</option>
                         <?php
                         echo Display :: get_alphabet_options();

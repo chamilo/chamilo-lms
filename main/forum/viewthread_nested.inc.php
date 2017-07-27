@@ -22,7 +22,6 @@ if (isset($_GET['action']) &&
 
 // Decide whether we show the latest post first
 $sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : ($origin != 'learnpath' ? 'ASC' : 'DESC');
-
 $posts = getPosts($current_forum, $_GET['thread'], $sortDirection, true);
 $count = 0;
 $clean_forum_id = intval($_GET['forum']);
@@ -118,7 +117,7 @@ foreach ($posts as $post) {
     if ((isset($groupInfo['iid']) && $tutorGroup) ||
         ($current_forum['allow_edit'] == 1 && $post['user_id'] == $userId) ||
         (api_is_allowed_to_edit(false, true) &&
-        !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
+        !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
     ) {
         if ($locked == false && postIsEditableByStudent($current_forum, $post)) {
             $editUrl = api_get_path(WEB_CODE_PATH).'forum/editpost.php?'.api_get_cidreq();
@@ -139,16 +138,16 @@ foreach ($posts as $post) {
 
     if ((isset($groupInfo['iid']) && $tutorGroup) ||
         api_is_allowed_to_edit(false, true) &&
-        !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
+        !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)
     ) {
         if ($locked == false) {
             $deleteUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
-                    'forum' => $clean_forum_id,
-                    'thread' => $clean_thread_id,
-                    'action' => 'delete',
-                    'content' => 'post',
-                    'id' => $post['post_id']
-                ]);
+                'forum' => $clean_forum_id,
+                'thread' => $clean_thread_id,
+                'action' => 'delete',
+                'content' => 'post',
+                'id' => $post['post_id']
+            ]);
             $iconEdit .= Display::url(
                 Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL),
                 $deleteUrl,
@@ -164,7 +163,7 @@ foreach ($posts as $post) {
 
     if (api_is_allowed_to_edit(false, true) &&
         !(
-            api_is_course_coach() &&
+            api_is_session_general_coach() &&
             $current_forum['session_id'] != $sessionId
         )
     ) {
@@ -292,8 +291,7 @@ foreach ($posts as $post) {
     $html .= '</div>';
 
     // note: this can be removed here because it will be displayed in the tree
-    if (
-        isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]) &&
+    if (isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]) &&
         !empty($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]) &&
         !empty($whatsnew_post_info[$_GET['forum']][$post['thread_id']])
     ) {
@@ -333,7 +331,7 @@ foreach ($posts as $post) {
             $html .= ' "> '.$user_filename.' </a>';
             $html .= '<span class="forum_attach_comment" >'.$attachment['comment'].'</span>';
             if (($current_forum['allow_edit'] == 1 && $post['user_id'] == $userId) ||
-                (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
+                (api_is_allowed_to_edit(false, true) && !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
             ) {
                 $html .= '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_attach&id_attach='
                     . $attachment['iid'].'&forum='.$clean_forum_id.'&thread='.$clean_thread_id

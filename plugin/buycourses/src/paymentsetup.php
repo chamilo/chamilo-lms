@@ -76,7 +76,12 @@ foreach ($currencies as $currency) {
     }
 }
 
-$currencyForm->addTextarea('terms_and_conditions', [get_lang('TermsAndConditions'), $plugin->get_lang('WriteHereTheTermsAndConditionsOfYourECommerce')], '');
+$currencyForm->addTextarea(
+    'terms_and_conditions',
+    [get_lang('TermsAndConditions'),
+     $plugin->get_lang('WriteHereTheTermsAndConditionsOfYourECommerce')],
+    []
+);
 $currencyForm->addButtonSave(get_lang('Save'));
 $currencyForm->setDefaults($plugin->getGlobalParameters());
 

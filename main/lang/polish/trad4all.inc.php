@@ -3538,7 +3538,6 @@ $ApprovalForNewAccount = "Zatwierdzenie nowego konta";
 $ManageUser = "Zarządzaj użytkownikami";
 $SubscribeUserToCourseAsTeacher = "Zapisz (Nauczyciel) użytkowników na kurs.";
 $PasswordEncryptedForSecurity = "Twoje hasło jest szyfrowane ze względów bezpieczeństwa. Po naciśnięciu przycisku, hasło zostanie wysłane do Ciebie ponownie.";
-$SystemUnableToSendEmailContact = "System nie był w stanie wysłać e-mail'a. Prosimy o kontakt";
 $OpenIDCouldNotBeFoundPleaseRegister = "Nie można znaleźć tego ID w naszej bazie danych. Zarejestruj nowe konto. Jeśli masz już u nas konto, edytuj swój profil wewnątrz swojego konta, aby dodać ID";
 $UsernameMaxXCharacters = "Nazwa użytkownika może mieć do %s znaków.";
 $PictureUploaded = "Twój obraz został wgrany";

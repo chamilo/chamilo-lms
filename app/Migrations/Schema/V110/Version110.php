@@ -132,7 +132,8 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE track_e_online CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT ''");
         $this->addSql("ALTER TABLE track_e_login CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT ''");
 
-		$this->addSql("ALTER TABLE user MODIFY COLUMN user_id int unsigned NOT NULL");
+        $this->addSql('LOCK TABLE user WRITE');
+        $this->addSql("ALTER TABLE user MODIFY COLUMN user_id int unsigned NOT NULL");
         $this->addSql("ALTER TABLE user DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE user MODIFY COLUMN user_id int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE user ADD COLUMN id INT DEFAULT NULL");
@@ -144,6 +145,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE user MODIFY COLUMN chatcall_user_id int unsigned default 0");
         $this->addSql("ALTER TABLE user MODIFY COLUMN expiration_date datetime default NULL");
         $this->addSql("ALTER TABLE user MODIFY COLUMN registration_date datetime NOT NULL");
+        $this->addSql('UNLOCK TABLES');
 
         $table = $schema->getTable('course');
         if (!$table->hasColumn('add_teachers_to_sessions_courses')) {
@@ -154,11 +156,17 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE course_rel_user ADD COLUMN c_id int default NULL");
         $this->addSql("ALTER TABLE course_field_values ADD COLUMN c_id int default NULL");
 
+        $this->addSql('LOCK TABLE session_rel_course_rel_user WRITE');
         $this->addSql("ALTER TABLE session_rel_course_rel_user ADD COLUMN c_id int NOT NULL");
         $this->addSql("ALTER TABLE session_rel_course_rel_user CHANGE id_session session_id int");
         $this->addSql("ALTER TABLE session_rel_course_rel_user CHANGE id_user user_id int");
+        $this->addSql('UNLOCK TABLES');
         $this->addSql("ALTER TABLE access_url_rel_course ADD COLUMN c_id int");
-        $this->addSql("ALTER TABLE session_rel_course ADD COLUMN position int NOT NULL default 0");
+
+        $table = $schema->getTable('session_rel_course');
+        if (!$table->hasColumn('position')) {
+            $this->addSql("ALTER TABLE session_rel_course ADD COLUMN position int NOT NULL default 0");
+        }
         $this->addSql("ALTER TABLE session_rel_course ADD COLUMN category varchar(255) default ''");
         $this->addSql("ALTER TABLE session_rel_course ADD COLUMN c_id int unsigned NOT NULL");
         $this->addSql("ALTER TABLE session_rel_course CHANGE id_session session_id int");
@@ -496,7 +504,10 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_survey_invitation ADD COLUMN group_id INT NOT NULL");
         $this->addSql("ALTER TABLE c_lp_item ADD COLUMN prerequisite_min_score float");
         $this->addSql("ALTER TABLE c_lp_item ADD COLUMN prerequisite_max_score float");
-        $this->addSql("ALTER TABLE c_group_info ADD COLUMN status tinyint DEFAULT 1");
+        $table = $schema->getTable('c_group_info');
+        if (!$table->hasColumn('status')) {
+            $this->addSql("ALTER TABLE c_group_info ADD COLUMN status tinyint DEFAULT 1");
+        }
 
         $table = $schema->getTable('c_student_publication');
         if (!$table->hasColumn('document_id')) {
@@ -548,13 +559,26 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("DELETE FROM settings_current WHERE variable = 'advanced_filemanager'");
         $this->addSql("DELETE FROM settings_options WHERE variable = 'advanced_filemanager'");
 
-        $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('institution_address', NULL, 'textfield', 'Platform', '', 'InstitutionAddressTitle', 'InstitutionAddressComment', NULL, NULL, 1)");
+        // Fixes missing options show_glossary_in_extra_tools
+        $sql = "SELECT * FROM settings_current WHERE variable = 'institution_address'";
+        $result = $connection->executeQuery($sql);
+        $count = $result->rowCount();
+        if (empty($count)) {
+            $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('institution_address', NULL, 'textfield', 'Platform', '', 'InstitutionAddressTitle', 'InstitutionAddressComment', NULL, NULL, 1)");
+        }
         $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('prevent_session_admins_to_manage_all_users', NULL, 'radio', 'Session', 'false', 'PreventSessionAdminsToManageAllUsersTitle', 'PreventSessionAdminsToManageAllUsersComment', NULL, NULL, 1)");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('prevent_session_admins_to_manage_all_users', 'true', 'Yes'), ('prevent_session_admins_to_manage_all_users', 'false', 'No')");
-        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'none', 'None')");
-        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise', 'Exercise')");
-        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'lp', 'Learning path')");
-        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath')");
+
+        // Fixes missing options show_glossary_in_extra_tools
+        $sql = "SELECT * FROM settings_options WHERE variable = 'show_glossary_in_extra_tools'";
+        $result = $connection->executeQuery($sql);
+        $count = $result->rowCount();
+        if (empty($count)) {
+            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'none', 'None')");
+            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise', 'Exercise')");
+            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'lp', 'Learning path')");
+            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath')");
+        }
 
         $sql = "SELECT * FROM settings_current WHERE variable = 'documents_default_visibility_defined_in_course'";
         $result = $connection->executeQuery($sql);

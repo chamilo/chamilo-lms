@@ -9,7 +9,7 @@ use \ChamiloSession as Session;
 require_once '../config.php';
 $plugin = SepePlugin::create();
 
-if ( !empty($_POST)) {
+if (!empty($_POST)) {
     $check = Security::check_token('post');
     if ($check) {
         $centerOrigin = Database::escape_string(trim($_POST['center_origin']));
@@ -89,5 +89,5 @@ if (api_is_platform_admin()) {
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 } else {
-    header('Location:' . api_get_path(WEB_PATH));
+    header('Location:'.api_get_path(WEB_PATH));
 }

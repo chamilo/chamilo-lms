@@ -156,8 +156,36 @@ $this_section = SECTION_PLATFORM_ADMIN;
 if ($action == 'login_as') {
     $check = Security::check_token('get');
     if (isset($_GET['user_id']) && $check) {
-        $result = loginUser($_GET['user_id']);
-        if ($result == false) {
+        $result = UserManager::loginAsUser($_GET['user_id']);
+        if ($result) {
+            $userInfo = api_get_user_info();
+            $firstname = $userInfo['firstname'];
+            $lastname = $userInfo['lastname'];
+            $userId = $userInfo['id'];
+
+            if (api_is_western_name_order()) {
+                $message = sprintf(
+                    get_lang('AttemptingToLoginAs'),
+                    $firstname,
+                    $lastname,
+                    $userId
+                );
+            } else {
+                $message = sprintf(
+                    get_lang('AttemptingToLoginAs'),
+                    $lastname,
+                    $firstname,
+                    $userId
+                );
+            }
+
+            $target_url = api_get_path(WEB_PATH)."user_portal.php";
+            $message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'), '<a href="'.$target_url.'">'.$target_url.'</a>');
+            Display :: display_header(get_lang('UserList'));
+            echo Display::return_message($message, 'normal', false);
+            Display :: display_footer();
+            exit;
+        } else {
             api_not_allowed(true);
         }
     }
@@ -366,83 +394,6 @@ function prepare_user_sql_query($is_count)
     }
 
     return $sql;
-}
-
-/**
- * Make sure this function is protected because it does NOT check password!
- *
- * This function defines globals.
- * @param  int $userId
- *
- * @return false|null    False on failure, redirection on success
- * @author Evie Embrechts
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
-*/
-function loginUser($userId)
-{
-    $userId = intval($userId);
-    $userInfo = api_get_user_info($userId);
-
-    // Check if the user is allowed to 'login_as'
-    $canLoginAs = api_can_login_as($userId);
-
-    if (!$canLoginAs || empty($userInfo)) {
-        return false;
-    }
-
-    $firstname = $userInfo['firstname'];
-    $lastname = $userInfo['lastname'];
-
-    if (api_is_western_name_order()) {
-        $message = sprintf(
-            get_lang('AttemptingToLoginAs'),
-            $firstname,
-            $lastname,
-            $userId
-        );
-    } else {
-        $message = sprintf(
-            get_lang('AttemptingToLoginAs'),
-            $lastname,
-            $firstname,
-            $userId
-        );
-    }
-
-    if ($userId) {
-        // Logout the current user
-        LoginDelete(api_get_user_id());
-
-        Session::erase('_user');
-        Session::erase('is_platformAdmin');
-        Session::erase('is_allowedCreateCourse');
-        Session::erase('_uid');
-        // Cleaning session variables
-
-        $_user['firstName'] = $userInfo['firstname'];
-        $_user['lastName'] = $userInfo['lastname'];
-        $_user['mail'] = $userInfo['email'];
-        $_user['official_code'] = $userInfo['official_code'];
-        $_user['picture_uri'] = $userInfo['picture_uri'];
-        $_user['user_id'] = $userId;
-        $_user['id'] = $userId;
-        $_user['status'] = $userInfo['status'];
-
-        // Filling session variables with new data
-        Session::write('_uid', $userId);
-        Session::write('_user', $userInfo);
-        Session::write('is_platformAdmin', (bool) (UserManager::is_admin($userId)));
-        Session::write('is_allowedCreateCourse', (bool) ($userInfo['status'] == 1));
-        // will be useful later to know if the user is actually an admin or not (example reporting)
-        Session::write('login_as', true);
-
-        $target_url = api_get_path(WEB_PATH)."user_portal.php";
-        $message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'), '<a href="'.$target_url.'">'.$target_url.'</a>');
-        Display :: display_header(get_lang('UserList'));
-        echo Display::return_message($message, 'normal', false);
-        Display :: display_footer();
-        exit;
-    }
 }
 
 /**

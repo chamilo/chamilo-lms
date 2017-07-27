@@ -7,7 +7,6 @@
 
 namespace Chamilo\ThemeBundle\Theme;
 
-
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetReference;
 use Assetic\Factory\AssetFactory;
@@ -19,9 +18,12 @@ use Symfony\Component\DependencyInjection\Container;
 use Chamilo\FoundationBundle\Util\DependencyResolver;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 
+/**
+ * Class ThemeManager
+ * @package Chamilo\ThemeBundle\Theme
+ */
 class ThemeManager
 {
-
     /** @var  Container */
     protected $container;
 
@@ -29,11 +31,16 @@ class ThemeManager
 
     protected $javascripts = array();
 
-    protected $locations   = array();
+    protected $locations = array();
 
     protected $resolverClass;
 
-    function __construct($container, $resolverClass = null)
+    /**
+     * ThemeManager constructor.
+     * @param $container
+     * @param null $resolverClass
+     */
+    public function __construct($container, $resolverClass = null)
     {
         $this->container     = $container;
         $this->resolverClass = $resolverClass ?: 'Chamilo\ThemeBundle\Util\DependencyResolver';
@@ -105,5 +112,4 @@ class ThemeManager
     {
         return $this->container->get('file_locator');
     }
-
 }

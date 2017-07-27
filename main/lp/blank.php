@@ -17,8 +17,7 @@ body { background: none;}
 </style>
 ";
 
-$message = null;
-
+$message = '';
 if (isset($_GET['error'])) {
     switch ($_GET['error']) {
         case 'document_deleted':
@@ -50,15 +49,9 @@ if (isset($_GET['error'])) {
             break;
     }
 } elseif (isset($_GET['msg']) && $_GET['msg'] == 'exerciseFinished') {
-    Display::addFlash(
-        Display::return_message(get_lang('ExerciseFinished'))
-    );
+    $message = Display::return_message(get_lang('ExerciseFinished'));
 }
 
-if (!empty($message)) {
-    Display::addFlash($message);
-}
-
-Display::display_reduced_header();
-Display::display_reduced_footer();
-?>
+$template = new Template();
+$template->assign('content', $message);
+$template->display_blank_template();

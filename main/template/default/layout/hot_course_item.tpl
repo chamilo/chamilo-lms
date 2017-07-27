@@ -54,13 +54,13 @@
                             {% endif %}
                         {% endfor %}
                     </div>
-                    <div class="toolbar">
-                        <div class="left">
+                    <div class="toolbar row">
+                        <div class="col-sm-4">
                             {% if item.price %}
                                 {{ item.price }}
                             {% endif %}
                         </div>
-                        <div class="right">
+                        <div class="col-sm-8">
                             <div class="btn-group" role="group">
                                 {{ item.register_button }}
                                 {{ item.unsubscribe_button }}

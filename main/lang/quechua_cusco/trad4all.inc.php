@@ -3168,7 +3168,6 @@ $ApprovalForNewAccount = "Musuq qelqachanaq chaninchaynin";
 $ManageUser = "Haykuqmasi kamachina";
 $SubscribeUserToCourseAsTeacher = "Qelqachay yachachiqkunata";
 $PasswordEncryptedForSecurity = "Qelqa pakaykiqa encriptada nisqa kashan tajyaykipaq. Chayrayku hoqmanta mañakunki chayqa, musuq e-chaskita apachimusaykiku qelqa-pakaykiwan.";
-$SystemUnableToSendEmailContact = "Kay k'itiqa manaraqmi apachisunkichu e-chaskita";
 $OpenIDCouldNotBeFoundPleaseRegister = "Kay OpenId manan kashanchu base de datos nisqapiqa. Ama hina kaychu, qelqachakuy cuenta nisqata hap'ipanaykipaq. Sichus cuenta nisqawan ña kashanki, chayqa ruwapay runaykimanta OpenId nisqa yapanapaq";
 $UsernameMaxXCharacters = "Haykuqmasi sutiqa kay yupasqa seq'ellawan kanqa %s";
 $PictureUploaded = "Wankiykiqa apachikunña";

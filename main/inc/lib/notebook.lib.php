@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * 	This class provides methods for the notebook management.
- * 	Include/require it in your code to use its features.
- * 	@author Carlos Vargas <litox84@gmail.com>, move code of main/notebook up here
- * 	@package chamilo.library
+ * This class provides methods for the notebook management.
+ * Include/require it in your code to use its features.
+ * @author Carlos Vargas <litox84@gmail.com>, move code of main/notebook up here
+ * @package chamilo.library
  */
 class NotebookManager
 {
@@ -130,6 +130,7 @@ class NotebookManager
      *
      * @author Christian Fasanando <christian.fasanando@dokeos.com>
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
+     * @return bool
      * @version januari 2009, dokeos 1.8.6
      */
     public static function update_note($values)

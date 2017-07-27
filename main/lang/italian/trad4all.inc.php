@@ -3986,7 +3986,6 @@ $ApprovalForNewAccount = "Approvazione della nuova iscrizione";
 $ManageUser = "Gestione utenti";
 $SubscribeUserToCourseAsTeacher = "Iscrivi un docente";
 $PasswordEncryptedForSecurity = "La tua password è criptata per motivi di sicurezza e di privacy, per cui cliccando sul collegamento la password ti verrà all'indirizzo e-mail da te fornito.";
-$SystemUnableToSendEmailContact = "Il sistema non è in grado di inviare il messaggio e-mail: contatta l'";
 $OpenIDCouldNotBeFoundPleaseRegister = "L'OpenID non è stato trovato nel database. Ti preghiamo di registrarti nuovamente. Se sei già registrata/o modifica il tuo profilo e aggiungi l'OpenID corretto.";
 $UsernameMaxXCharacters = "Il Nome Utente può avere una lunghezza massima di %s caratteri";
 $PictureUploaded = "L'immagine è stata caricata";

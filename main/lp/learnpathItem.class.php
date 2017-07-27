@@ -161,42 +161,36 @@ class learnpathItem
                     $this->children[] = $row['id'];
                 }
             }
-        }
 
-        //$this->seriousgame_mode = $this->get_seriousgame_mode();
-        $this->seriousgame_mode = 0;
-
-        // Get search_did.
-        if (api_get_setting('search_enabled') == 'true') {
-            $tbl_se_ref = Database::get_main_table(
-                TABLE_MAIN_SEARCH_ENGINE_REF
-            );
-            $sql = 'SELECT *
-                FROM %s
-                WHERE course_code=\'%s\'
-                    AND tool_id=\'%s\'
-                    AND ref_id_high_level=%s
-                    AND ref_id_second_level=%d
-                LIMIT 1';
-            // TODO: Verify if it's possible to assume the actual course instead
-            // of getting it from db.
-            $sql = sprintf(
-                $sql,
-                $tbl_se_ref,
-                api_get_course_id(),
-                TOOL_LEARNPATH,
-                $this->lp_id,
-                $id
-            );
-            if (self::DEBUG > 0) {
-                error_log($sql);
-            };
-            $res = Database::query($sql);
-            if (Database::num_rows($res) > 0) {
-                $se_ref = Database::fetch_array($res);
-                $this->search_did = (int) $se_ref['search_did'];
+            // Get search_did.
+            if (api_get_setting('search_enabled') == 'true') {
+                $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+                $sql = 'SELECT *
+                        FROM %s
+                        WHERE 
+                            course_code=\'%s\' AND 
+                            tool_id=\'%s\' AND 
+                            ref_id_high_level=%s AND 
+                            ref_id_second_level=%d
+                        LIMIT 1';
+                // TODO: Verify if it's possible to assume the actual course instead
+                // of getting it from db.
+                $sql = sprintf(
+                    $sql,
+                    $tbl_se_ref,
+                    api_get_course_id(),
+                    TOOL_LEARNPATH,
+                    $this->lp_id,
+                    $id
+                );
+                $res = Database::query($sql);
+                if (Database::num_rows($res) > 0) {
+                    $se_ref = Database::fetch_array($res);
+                    $this->search_did = (int) $se_ref['search_did'];
+                }
             }
         }
+        $this->seriousgame_mode = 0;
         $this->audio = $row['audio'];
         if (self::DEBUG > 0) {
             error_log(
@@ -1034,609 +1028,478 @@ class learnpathItem
             case TOOL_QUIZ:
             case 'sco':
                 // Get the document and, if HTML, open it.
-                if (is_file($abs_path)) {
-                    // for now, read the whole file in one go (that's gonna be
-                    // a problem when the file is too big).
-                    $info = pathinfo($abs_path);
-                    $ext = $info['extension'];
+                if (!is_file($abs_path)) {
+                    // The file could not be found.
+                    return false;
+                }
 
-                    switch (strtolower($ext)) {
-                        case 'html':
-                        case 'htm':
-                        case 'shtml':
-                        case 'css':
-                            $wanted_attributes = array(
-                                'src',
-                                'url',
-                                '@import',
-                                'href',
-                                'value'
-                            );
-                            // Parse it for included resources.
-                            $file_content = file_get_contents($abs_path);
-                            // Get an array of attributes from the HTML source.
-                            $attributes = DocumentManager::parse_HTML_attributes(
-                                $file_content,
-                                $wanted_attributes
-                            );
+                // for now, read the whole file in one go (that's gonna be
+                // a problem when the file is too big).
+                $info = pathinfo($abs_path);
+                $ext = $info['extension'];
 
-                            // Look at 'src' attributes in this file
-                            foreach ($wanted_attributes as $attr) {
-                                if (isset($attributes[$attr])) {
-                                    // Find which kind of path these are (local or remote).
-                                    $sources = $attributes[$attr];
+                switch (strtolower($ext)) {
+                    case 'html':
+                    case 'htm':
+                    case 'shtml':
+                    case 'css':
+                        $wanted_attributes = array(
+                            'src',
+                            'url',
+                            '@import',
+                            'href',
+                            'value'
+                        );
+                        // Parse it for included resources.
+                        $file_content = file_get_contents($abs_path);
+                        // Get an array of attributes from the HTML source.
+                        $attributes = DocumentManager::parse_HTML_attributes(
+                            $file_content,
+                            $wanted_attributes
+                        );
 
-                                    foreach ($sources as $source) {
-                                        // Skip what is obviously not a resource.
-                                        if (strpos(
-                                            $source,
-                                            "+this."
-                                        )
-                                        ) {
-                                            continue;
-                                        } // javascript code - will still work unaltered.
-                                        if (strpos(
-                                                $source,
-                                                '.'
-                                            ) === false
-                                        ) {
-                                            continue;
-                                        } // No dot, should not be an external file anyway.
-                                        if (strpos(
-                                            $source,
-                                            'mailto:'
-                                        )
-                                        ) {
-                                            continue;
-                                        } // mailto link.
-                                        if (strpos($source, ';') && !strpos(
-                                                $source,
-                                                '&amp;'
-                                            )
-                                        ) {
-                                            continue;
-                                        } // Avoid code - that should help.
+                        // Look at 'src' attributes in this file
+                        foreach ($wanted_attributes as $attr) {
+                            if (isset($attributes[$attr])) {
+                                // Find which kind of path these are (local or remote).
+                                $sources = $attributes[$attr];
 
-                                        if ($attr == 'value') {
-                                            if (strpos($source, 'mp3file')) {
-                                                $files_list[] = array(
-                                                    substr(
+                                foreach ($sources as $source) {
+                                    // Skip what is obviously not a resource.
+                                    if (strpos($source, "+this.")) {
+                                        continue;
+                                    } // javascript code - will still work unaltered.
+                                    if (strpos($source, '.') === false) {
+                                        continue;
+                                    } // No dot, should not be an external file anyway.
+                                    if (strpos($source, 'mailto:')) {
+                                        continue;
+                                    } // mailto link.
+                                    if (strpos($source, ';') &&
+                                        !strpos($source, '&amp;')
+                                    ) {
+                                        continue;
+                                    } // Avoid code - that should help.
+
+                                    if ($attr == 'value') {
+                                        if (strpos($source, 'mp3file')) {
+                                            $files_list[] = array(
+                                                substr(
+                                                    $source,
+                                                    0,
+                                                    strpos(
                                                         $source,
-                                                        0,
-                                                        strpos(
-                                                            $source,
-                                                            '.swf'
-                                                        ) + 4
-                                                    ),
+                                                        '.swf'
+                                                    ) + 4
+                                                ),
+                                                'local',
+                                                'abs'
+                                            );
+                                            $mp3file = substr(
+                                                $source,
+                                                strpos(
+                                                    $source,
+                                                    'mp3file='
+                                                ) + 8
+                                            );
+                                            if (substr($mp3file, 0, 1) == '/') {
+                                                $files_list[] = array(
+                                                    $mp3file,
                                                     'local',
                                                     'abs'
                                                 );
-                                                $mp3file = substr(
-                                                    $source,
-                                                    strpos(
-                                                        $source,
-                                                        'mp3file='
-                                                    ) + 8
+                                            } else {
+                                                $files_list[] = array(
+                                                    $mp3file,
+                                                    'local',
+                                                    'rel'
                                                 );
-                                                if (substr(
-                                                        $mp3file,
-                                                        0,
-                                                        1
-                                                    ) == '/'
-                                                ) {
-                                                    $files_list[] = array(
-                                                        $mp3file,
-                                                        'local',
-                                                        'abs'
-                                                    );
-                                                } else {
-                                                    $files_list[] = array(
-                                                        $mp3file,
-                                                        'local',
-                                                        'rel'
-                                                    );
-                                                }
-                                            } elseif (strpos(
-                                                    $source,
-                                                    'flv='
-                                                ) === 0
-                                            ) {
-
-                                                $source = substr($source, 4);
-                                                if (strpos($source, '&') > 0) {
-                                                    $source = substr(
-                                                        $source,
-                                                        0,
-                                                        strpos($source, '&')
-                                                    );
-                                                }
-                                                if (strpos(
-                                                        $source,
-                                                        '://'
-                                                    ) > 0
-                                                ) {
-                                                    if (strpos(
-                                                            $source,
-                                                            api_get_path(
-                                                                WEB_PATH
-                                                            )
-                                                        ) !== false
-                                                    ) {
-                                                        // We found the current portal url.
-                                                        $files_list[] = array(
-                                                            $source,
-                                                            'local',
-                                                            'url'
-                                                        );
-                                                    } else {
-                                                        // We didn't find any trace of current portal.
-                                                        $files_list[] = array(
-                                                            $source,
-                                                            'remote',
-                                                            'url'
-                                                        );
-                                                    }
-                                                } else {
-                                                    $files_list[] = array(
-                                                        $source,
-                                                        'local',
-                                                        'abs'
-                                                    );
-                                                }
-                                                continue; // Skipping anything else to avoid two entries
-                                                //(while the others can have sub-files in their url, flv's can't).
                                             }
-                                        }
-
-                                        if (strpos($source, '://') > 0) {
-
-                                            // Cut at '?' in a URL with params.
-                                            if (strpos($source, '?') > 0) {
-                                                $second_part = substr(
-                                                    $source,
-                                                    strpos($source, '?')
-                                                );
-                                                if (strpos(
-                                                        $second_part,
-                                                        '://'
-                                                    ) > 0
-                                                ) {
-                                                    // If the second part of the url contains a url too,
-                                                    // treat the second one before cutting.
-
-                                                    $pos1 = strpos(
-                                                        $second_part,
-                                                        '='
-                                                    );
-                                                    $pos2 = strpos(
-                                                        $second_part,
-                                                        '&'
-                                                    );
-                                                    $second_part = substr(
-                                                        $second_part,
-                                                        $pos1 + 1,
-                                                        $pos2 - ($pos1 + 1)
-                                                    );
-                                                    if (strpos(
-                                                            $second_part,
-                                                            api_get_path(
-                                                                WEB_PATH
-                                                            )
-                                                        ) !== false
-                                                    ) {
-                                                        // We found the current portal url.
-                                                        $files_list[] = array(
-                                                            $second_part,
-                                                            'local',
-                                                            'url'
-                                                        );
-                                                        $in_files_list[] = self::get_resources_from_source(
-                                                            TOOL_DOCUMENT,
-                                                            $second_part,
-                                                            $recursivity + 1
-                                                        );
-                                                        if (count(
-                                                                $in_files_list
-                                                            ) > 0
-                                                        ) {
-                                                            $files_list = array_merge(
-                                                                $files_list,
-                                                                $in_files_list
-                                                            );
-                                                        }
-                                                    } else {
-                                                        // We didn't find any trace of current portal.
-                                                        $files_list[] = array(
-                                                            $second_part,
-                                                            'remote',
-                                                            'url'
-                                                        );
-                                                    }
-                                                } elseif (strpos(
-                                                        $second_part,
-                                                        '='
-                                                    ) > 0
-                                                ) {
-                                                    if (substr(
-                                                            $second_part,
-                                                            0,
-                                                            1
-                                                        ) === '/'
-                                                    ) {
-                                                        // Link starts with a /, making it absolute (relative to DocumentRoot).
-                                                        $files_list[] = array(
-                                                            $second_part,
-                                                            'local',
-                                                            'abs'
-                                                        );
-                                                        $in_files_list[] = self::get_resources_from_source(
-                                                            TOOL_DOCUMENT,
-                                                            $second_part,
-                                                            $recursivity + 1
-                                                        );
-                                                        if (count(
-                                                                $in_files_list
-                                                            ) > 0
-                                                        ) {
-                                                            $files_list = array_merge(
-                                                                $files_list,
-                                                                $in_files_list
-                                                            );
-                                                        }
-                                                    } elseif (strstr(
-                                                            $second_part,
-                                                            '..'
-                                                        ) === 0
-                                                    ) {
-                                                        // Link is relative but going back in the hierarchy.
-                                                        $files_list[] = array(
-                                                            $second_part,
-                                                            'local',
-                                                            'rel'
-                                                        );
-                                                        $dir = dirname(
-                                                            $abs_path
-                                                        );
-                                                        $new_abs_path = realpath(
-                                                            $dir.'/'.$second_part
-                                                        );
-                                                        $in_files_list[] = self::get_resources_from_source(
-                                                            TOOL_DOCUMENT,
-                                                            $new_abs_path,
-                                                            $recursivity + 1
-                                                        );
-                                                        if (count(
-                                                                $in_files_list
-                                                            ) > 0
-                                                        ) {
-                                                            $files_list = array_merge(
-                                                                $files_list,
-                                                                $in_files_list
-                                                            );
-                                                        }
-                                                    } else {
-                                                        // No starting '/', making it relative to current document's path.
-                                                        if (substr(
-                                                                $second_part,
-                                                                0,
-                                                                2
-                                                            ) == './'
-                                                        ) {
-                                                            $second_part = substr(
-                                                                $second_part,
-                                                                2
-                                                            );
-                                                        }
-                                                        $files_list[] = array(
-                                                            $second_part,
-                                                            'local',
-                                                            'rel'
-                                                        );
-                                                        $dir = dirname(
-                                                            $abs_path
-                                                        );
-                                                        $new_abs_path = realpath(
-                                                            $dir.'/'.$second_part
-                                                        );
-                                                        $in_files_list[] = self::get_resources_from_source(
-                                                            TOOL_DOCUMENT,
-                                                            $new_abs_path,
-                                                            $recursivity + 1
-                                                        );
-                                                        if (count(
-                                                                $in_files_list
-                                                            ) > 0
-                                                        ) {
-                                                            $files_list = array_merge(
-                                                                $files_list,
-                                                                $in_files_list
-                                                            );
-                                                        }
-                                                    }
-                                                }
-                                                // Leave that second part behind now.
+                                        } elseif (strpos($source, 'flv=') === 0) {
+                                            $source = substr($source, 4);
+                                            if (strpos($source, '&') > 0) {
                                                 $source = substr(
                                                     $source,
                                                     0,
-                                                    strpos($source, '?')
+                                                    strpos($source, '&')
                                                 );
-                                                if (strpos(
-                                                        $source,
-                                                        '://'
-                                                    ) > 0
-                                                ) {
-                                                    if (strpos(
-                                                            $source,
-                                                            api_get_path(
-                                                                WEB_PATH
-                                                            )
-                                                        ) !== false
-                                                    ) {
-                                                        // We found the current portal url.
-                                                        $files_list[] = array(
-                                                            $source,
-                                                            'local',
-                                                            'url'
-                                                        );
-                                                        $in_files_list[] = self::get_resources_from_source(
-                                                            TOOL_DOCUMENT,
-                                                            $source,
-                                                            $recursivity + 1
-                                                        );
-                                                        if (count(
-                                                                $in_files_list
-                                                            ) > 0
-                                                        ) {
-                                                            $files_list = array_merge(
-                                                                $files_list,
-                                                                $in_files_list
-                                                            );
-                                                        }
-                                                    } else {
-                                                        // We didn't find any trace of current portal.
-                                                        $files_list[] = array(
-                                                            $source,
-                                                            'remote',
-                                                            'url'
-                                                        );
-                                                    }
-                                                } else {
-                                                    // No protocol found, make link local.
-                                                    if (substr(
-                                                            $source,
-                                                            0,
-                                                            1
-                                                        ) === '/'
-                                                    ) {
-                                                        // Link starts with a /, making it absolute (relative to DocumentRoot).
-                                                        $files_list[] = array(
-                                                            $source,
-                                                            'local',
-                                                            'abs'
-                                                        );
-                                                        $in_files_list[] = self::get_resources_from_source(
-                                                            TOOL_DOCUMENT,
-                                                            $source,
-                                                            $recursivity + 1
-                                                        );
-                                                        if (count(
-                                                                $in_files_list
-                                                            ) > 0
-                                                        ) {
-                                                            $files_list = array_merge(
-                                                                $files_list,
-                                                                $in_files_list
-                                                            );
-                                                        }
-                                                    } elseif (strstr(
-                                                            $source,
-                                                            '..'
-                                                        ) === 0
-                                                    ) {
-                                                        // Link is relative but going back in the hierarchy.
-                                                        $files_list[] = array(
-                                                            $source,
-                                                            'local',
-                                                            'rel'
-                                                        );
-                                                        $dir = dirname(
-                                                            $abs_path
-                                                        );
-                                                        $new_abs_path = realpath(
-                                                            $dir.'/'.$source
-                                                        );
-                                                        $in_files_list[] = self::get_resources_from_source(
-                                                            TOOL_DOCUMENT,
-                                                            $new_abs_path,
-                                                            $recursivity + 1
-                                                        );
-                                                        if (count(
-                                                                $in_files_list
-                                                            ) > 0
-                                                        ) {
-                                                            $files_list = array_merge(
-                                                                $files_list,
-                                                                $in_files_list
-                                                            );
-                                                        }
-                                                    } else {
-                                                        // No starting '/', making it relative to current document's path.
-                                                        if (substr(
-                                                                $source,
-                                                                0,
-                                                                2
-                                                            ) == './'
-                                                        ) {
-                                                            $source = substr(
-                                                                $source,
-                                                                2
-                                                            );
-                                                        }
-                                                        $files_list[] = array(
-                                                            $source,
-                                                            'local',
-                                                            'rel'
-                                                        );
-                                                        $dir = dirname(
-                                                            $abs_path
-                                                        );
-                                                        $new_abs_path = realpath(
-                                                            $dir.'/'.$source
-                                                        );
-                                                        $in_files_list[] = self::get_resources_from_source(
-                                                            TOOL_DOCUMENT,
-                                                            $new_abs_path,
-                                                            $recursivity + 1
-                                                        );
-                                                        if (count(
-                                                                $in_files_list
-                                                            ) > 0
-                                                        ) {
-                                                            $files_list = array_merge(
-                                                                $files_list,
-                                                                $in_files_list
-                                                            );
-                                                        }
-                                                    }
-                                                }
                                             }
-
-                                            // Found some protocol there.
-                                            if (strpos(
-                                                    $source,
-                                                    api_get_path(WEB_PATH)
-                                                ) !== false
-                                            ) {
-                                                // We found the current portal url.
-                                                $files_list[] = array(
-                                                    $source,
-                                                    'local',
-                                                    'url'
-                                                );
-                                                $in_files_list[] = self::get_resources_from_source(
-                                                    TOOL_DOCUMENT,
-                                                    $source,
-                                                    $recursivity + 1
-                                                );
-                                                if (count($in_files_list) > 0) {
-                                                    $files_list = array_merge(
-                                                        $files_list,
-                                                        $in_files_list
+                                            if (strpos($source, '://') > 0) {
+                                                if (strpos($source, api_get_path(WEB_PATH)) !== false) {
+                                                    // We found the current portal url.
+                                                    $files_list[] = array(
+                                                        $source,
+                                                        'local',
+                                                        'url'
+                                                    );
+                                                } else {
+                                                    // We didn't find any trace of current portal.
+                                                    $files_list[] = array(
+                                                        $source,
+                                                        'remote',
+                                                        'url'
                                                     );
                                                 }
                                             } else {
-                                                // We didn't find any trace of current portal.
-                                                $files_list[] = array(
-                                                    $source,
-                                                    'remote',
-                                                    'url'
-                                                );
-                                            }
-                                        } else {
-                                            // No protocol found, make link local.
-                                            if (substr($source, 0, 1) === '/') {
-                                                // Link starts with a /, making it absolute (relative to DocumentRoot).
                                                 $files_list[] = array(
                                                     $source,
                                                     'local',
                                                     'abs'
                                                 );
-                                                $in_files_list[] = self::get_resources_from_source(
-                                                    TOOL_DOCUMENT,
-                                                    $source,
-                                                    $recursivity + 1
+                                            }
+                                            continue; // Skipping anything else to avoid two entries
+                                            //(while the others can have sub-files in their url, flv's can't).
+                                        }
+                                    }
+
+                                    if (strpos($source, '://') > 0) {
+                                        // Cut at '?' in a URL with params.
+                                        if (strpos($source, '?') > 0) {
+                                            $second_part = substr(
+                                                $source,
+                                                strpos($source, '?')
+                                            );
+                                            if (strpos($second_part, '://') > 0) {
+                                                // If the second part of the url contains a url too,
+                                                // treat the second one before cutting.
+                                                $pos1 = strpos(
+                                                    $second_part,
+                                                    '='
                                                 );
-                                                if (count($in_files_list) > 0) {
-                                                    $files_list = array_merge(
-                                                        $files_list,
-                                                        $in_files_list
+                                                $pos2 = strpos(
+                                                    $second_part,
+                                                    '&'
+                                                );
+                                                $second_part = substr(
+                                                    $second_part,
+                                                    $pos1 + 1,
+                                                    $pos2 - ($pos1 + 1)
+                                                );
+                                                if (strpos($second_part, api_get_path(WEB_PATH)) !== false) {
+                                                    // We found the current portal url.
+                                                    $files_list[] = array(
+                                                        $second_part,
+                                                        'local',
+                                                        'url'
+                                                    );
+                                                    $in_files_list[] = self::get_resources_from_source(
+                                                        TOOL_DOCUMENT,
+                                                        $second_part,
+                                                        $recursivity + 1
+                                                    );
+                                                    if (count($in_files_list) > 0) {
+                                                        $files_list = array_merge(
+                                                            $files_list,
+                                                            $in_files_list
+                                                        );
+                                                    }
+                                                } else {
+                                                    // We didn't find any trace of current portal.
+                                                    $files_list[] = array(
+                                                        $second_part,
+                                                        'remote',
+                                                        'url'
                                                     );
                                                 }
-                                            } elseif (strstr(
-                                                    $source,
-                                                    '..'
-                                                ) === 0
-                                            ) {
-                                                // Link is relative but going back in the hierarchy.
-                                                $files_list[] = array(
-                                                    $source,
-                                                    'local',
-                                                    'rel'
-                                                );
-                                                $dir = dirname($abs_path);
-                                                $new_abs_path = realpath(
-                                                    $dir.'/'.$source
-                                                );
-                                                $in_files_list[] = self::get_resources_from_source(
-                                                    TOOL_DOCUMENT,
-                                                    $new_abs_path,
-                                                    $recursivity + 1
-                                                );
-                                                if (count($in_files_list) > 0) {
-                                                    $files_list = array_merge(
-                                                        $files_list,
-                                                        $in_files_list
+                                            } elseif (strpos($second_part, '=') > 0) {
+                                                if (substr($second_part,0,1) === '/') {
+                                                    // Link starts with a /, making it absolute (relative to DocumentRoot).
+                                                    $files_list[] = array(
+                                                        $second_part,
+                                                        'local',
+                                                        'abs'
+                                                    );
+                                                    $in_files_list[] = self::get_resources_from_source(
+                                                        TOOL_DOCUMENT,
+                                                        $second_part,
+                                                        $recursivity + 1
+                                                    );
+                                                    if (count($in_files_list) > 0) {
+                                                        $files_list = array_merge(
+                                                            $files_list,
+                                                            $in_files_list
+                                                        );
+                                                    }
+                                                } elseif (strstr($second_part,'..') === 0) {
+                                                    // Link is relative but going back in the hierarchy.
+                                                    $files_list[] = array(
+                                                        $second_part,
+                                                        'local',
+                                                        'rel'
+                                                    );
+                                                    $dir = dirname(
+                                                        $abs_path
+                                                    );
+                                                    $new_abs_path = realpath(
+                                                        $dir.'/'.$second_part
+                                                    );
+                                                    $in_files_list[] = self::get_resources_from_source(
+                                                        TOOL_DOCUMENT,
+                                                        $new_abs_path,
+                                                        $recursivity + 1
+                                                    );
+                                                    if (count($in_files_list) > 0) {
+                                                        $files_list = array_merge(
+                                                            $files_list,
+                                                            $in_files_list
+                                                        );
+                                                    }
+                                                } else {
+                                                    // No starting '/', making it relative to current document's path.
+                                                    if (substr($second_part, 0,2) == './') {
+                                                        $second_part = substr(
+                                                            $second_part,
+                                                            2
+                                                        );
+                                                    }
+                                                    $files_list[] = array(
+                                                        $second_part,
+                                                        'local',
+                                                        'rel'
+                                                    );
+                                                    $dir = dirname(
+                                                        $abs_path
+                                                    );
+                                                    $new_abs_path = realpath(
+                                                        $dir.'/'.$second_part
+                                                    );
+                                                    $in_files_list[] = self::get_resources_from_source(
+                                                        TOOL_DOCUMENT,
+                                                        $new_abs_path,
+                                                        $recursivity + 1
+                                                    );
+                                                    if (count($in_files_list) > 0) {
+                                                        $files_list = array_merge(
+                                                            $files_list,
+                                                            $in_files_list
+                                                        );
+                                                    }
+                                                }
+                                            }
+                                            // Leave that second part behind now.
+                                            $source = substr(
+                                                $source,
+                                                0,
+                                                strpos($source, '?')
+                                            );
+                                            if (strpos($source, '://') > 0) {
+                                                if (strpos($source, api_get_path(WEB_PATH)) !== false) {
+                                                    // We found the current portal url.
+                                                    $files_list[] = array(
+                                                        $source,
+                                                        'local',
+                                                        'url'
+                                                    );
+                                                    $in_files_list[] = self::get_resources_from_source(
+                                                        TOOL_DOCUMENT,
+                                                        $source,
+                                                        $recursivity + 1
+                                                    );
+                                                    if (count($in_files_list) > 0) {
+                                                        $files_list = array_merge(
+                                                            $files_list,
+                                                            $in_files_list
+                                                        );
+                                                    }
+                                                } else {
+                                                    // We didn't find any trace of current portal.
+                                                    $files_list[] = array(
+                                                        $source,
+                                                        'remote',
+                                                        'url'
                                                     );
                                                 }
                                             } else {
-
-                                                // No starting '/', making it relative to current document's path.
-                                                if (strpos(
+                                                // No protocol found, make link local.
+                                                if (substr($source, 0, 1) === '/') {
+                                                    // Link starts with a /, making it absolute (relative to DocumentRoot).
+                                                    $files_list[] = array(
                                                         $source,
-                                                        'width='
-                                                    ) || strpos(
-                                                        $source,
-                                                        'autostart='
-                                                    )
-                                                ) {
-                                                    continue;
-                                                }
-
-                                                if (substr(
-                                                        $source,
-                                                        0,
-                                                        2
-                                                    ) == './'
-                                                ) {
-                                                    $source = substr(
-                                                        $source,
-                                                        2
+                                                        'local',
+                                                        'abs'
                                                     );
+                                                    $in_files_list[] = self::get_resources_from_source(
+                                                        TOOL_DOCUMENT,
+                                                        $source,
+                                                        $recursivity + 1
+                                                    );
+                                                    if (count($in_files_list) > 0) {
+                                                        $files_list = array_merge(
+                                                            $files_list,
+                                                            $in_files_list
+                                                        );
+                                                    }
+                                                } elseif (strstr($source, '..') === 0) {
+                                                    // Link is relative but going back in the hierarchy.
+                                                    $files_list[] = array(
+                                                        $source,
+                                                        'local',
+                                                        'rel'
+                                                    );
+                                                    $dir = dirname(
+                                                        $abs_path
+                                                    );
+                                                    $new_abs_path = realpath(
+                                                        $dir.'/'.$source
+                                                    );
+                                                    $in_files_list[] = self::get_resources_from_source(
+                                                        TOOL_DOCUMENT,
+                                                        $new_abs_path,
+                                                        $recursivity + 1
+                                                    );
+                                                    if (count($in_files_list) > 0) {
+                                                        $files_list = array_merge(
+                                                            $files_list,
+                                                            $in_files_list
+                                                        );
+                                                    }
+                                                } else {
+                                                    // No starting '/', making it relative to current document's path.
+                                                    if (substr($source, 0, 2) == './') {
+                                                        $source = substr(
+                                                            $source,
+                                                            2
+                                                        );
+                                                    }
+                                                    $files_list[] = array(
+                                                        $source,
+                                                        'local',
+                                                        'rel'
+                                                    );
+                                                    $dir = dirname(
+                                                        $abs_path
+                                                    );
+                                                    $new_abs_path = realpath(
+                                                        $dir.'/'.$source
+                                                    );
+                                                    $in_files_list[] = self::get_resources_from_source(
+                                                        TOOL_DOCUMENT,
+                                                        $new_abs_path,
+                                                        $recursivity + 1
+                                                    );
+                                                    if (count($in_files_list) > 0) {
+                                                        $files_list = array_merge(
+                                                            $files_list,
+                                                            $in_files_list
+                                                        );
+                                                    }
                                                 }
-                                                $files_list[] = array(
+                                            }
+                                        }
+
+                                        // Found some protocol there.
+                                        if (strpos($source, api_get_path(WEB_PATH)) !== false) {
+                                            // We found the current portal url.
+                                            $files_list[] = array(
+                                                $source,
+                                                'local',
+                                                'url'
+                                            );
+                                            $in_files_list[] = self::get_resources_from_source(
+                                                TOOL_DOCUMENT,
+                                                $source,
+                                                $recursivity + 1
+                                            );
+                                            if (count($in_files_list) > 0) {
+                                                $files_list = array_merge(
+                                                    $files_list,
+                                                    $in_files_list
+                                                );
+                                            }
+                                        } else {
+                                            // We didn't find any trace of current portal.
+                                            $files_list[] = array(
+                                                $source,
+                                                'remote',
+                                                'url'
+                                            );
+                                        }
+                                    } else {
+                                        // No protocol found, make link local.
+                                        if (substr($source, 0, 1) === '/') {
+                                            // Link starts with a /, making it absolute (relative to DocumentRoot).
+                                            $files_list[] = array(
+                                                $source,
+                                                'local',
+                                                'abs'
+                                            );
+                                            $in_files_list[] = self::get_resources_from_source(
+                                                TOOL_DOCUMENT,
+                                                $source,
+                                                $recursivity + 1
+                                            );
+                                            if (count($in_files_list) > 0) {
+                                                $files_list = array_merge(
+                                                    $files_list,
+                                                    $in_files_list
+                                                );
+                                            }
+                                        } elseif (strstr($source, '..') === 0) {
+                                            // Link is relative but going back in the hierarchy.
+                                            $files_list[] = array(
+                                                $source,
+                                                'local',
+                                                'rel'
+                                            );
+                                            $dir = dirname($abs_path);
+                                            $new_abs_path = realpath(
+                                                $dir.'/'.$source
+                                            );
+                                            $in_files_list[] = self::get_resources_from_source(
+                                                TOOL_DOCUMENT,
+                                                $new_abs_path,
+                                                $recursivity + 1
+                                            );
+                                            if (count($in_files_list) > 0) {
+                                                $files_list = array_merge(
+                                                    $files_list,
+                                                    $in_files_list
+                                                );
+                                            }
+                                        } else {
+                                            // No starting '/', making it relative to current document's path.
+                                            if (strpos($source, 'width=') ||
+                                                strpos($source, 'autostart=')
+                                            ) {
+                                                continue;
+                                            }
+
+                                            if (substr($source, 0, 2) == './') {
+                                                $source = substr(
                                                     $source,
-                                                    'local',
-                                                    'rel'
+                                                    2
                                                 );
-                                                $dir = dirname($abs_path);
-                                                $new_abs_path = realpath(
-                                                    $dir.'/'.$source
+                                            }
+                                            $files_list[] = array(
+                                                $source,
+                                                'local',
+                                                'rel'
+                                            );
+                                            $dir = dirname($abs_path);
+                                            $new_abs_path = realpath(
+                                                $dir.'/'.$source
+                                            );
+                                            $in_files_list[] = self::get_resources_from_source(
+                                                TOOL_DOCUMENT,
+                                                $new_abs_path,
+                                                $recursivity + 1
+                                            );
+                                            if (count($in_files_list) > 0) {
+                                                $files_list = array_merge(
+                                                    $files_list,
+                                                    $in_files_list
                                                 );
-                                                $in_files_list[] = self::get_resources_from_source(
-                                                    TOOL_DOCUMENT,
-                                                    $new_abs_path,
-                                                    $recursivity + 1
-                                                );
-                                                if (count($in_files_list) > 0) {
-                                                    $files_list = array_merge(
-                                                        $files_list,
-                                                        $in_files_list
-                                                    );
-                                                }
                                             }
                                         }
                                     }
                                 }
                             }
-                            break;
-                        default:
-                            break;
-                    }
-
-                } else {
-                    // The file could not be found.
-                    return false;
+                        }
+                        break;
+                    default:
+                        break;
                 }
+
                 break;
             default: // Ignore.
                 break;
@@ -2780,21 +2643,19 @@ class learnpathItem
         if (self::DEBUG > 0) {
             error_log('learnpathItem::restart()', 0);
         }
-        if ($this->type == 'sco') {
+        $seriousGame = $this->get_seriousgame_mode();
+        //For serious game  : We reuse same attempt_id
+        if ($seriousGame == 1 && $this->type == 'sco') {
             // If this is a sco, Chamilo can't update the time without an
             //  explicit scorm call
             $this->current_start_time = 0;
             $this->current_stop_time = 0; //Those 0 value have this effect
             $this->last_scorm_session_time = 0;
+            $this->save();
+            return true;
         }
         $this->save();
 
-        //For serious game  : We reuse same attempt_id
-        if ($this->get_seriousgame_mode() == 1 && $this->type == 'sco') {
-            $this->current_start_time = 0;
-            $this->current_stop_time = 0;
-            return true;
-        }
         $allowed = $this->is_restart_allowed();
         if ($allowed === -1) {
             // Nothing allowed, do nothing.
@@ -2820,12 +2681,9 @@ class learnpathItem
             //$this->current_score = 0;
             $this->current_start_time = 0;
             $this->current_stop_time = 0;
-            //$this->current_data = '';
+            //$this->current_data = '';scorm
             //$this->status = $this->possible_status[0];
             $this->interactions_count = $this->get_interactions_count(true);
-            if ($this->type == 'sco') {
-                $this->scorm_init_time();
-            }
         }
         return true;
     }
@@ -3420,10 +3278,11 @@ class learnpathItem
         if (self::DEBUG > 0) {
             error_log('learnpathItem::set_time('.$scorm_time.')', 0);
         }
-        if ($scorm_time == '0'
-                and ($this->type != 'sco')
-                and $this->current_start_time != 0)
-        {
+
+        if ($scorm_time == '0' &&
+            $this->type != 'sco' &&
+            $this->current_start_time != 0
+        ) {
             $my_time = time() - $this->current_start_time;
             if ($my_time > 0) {
                 $this->update_time($my_time);
@@ -3445,7 +3304,6 @@ class learnpathItem
                         $res
                     )
                     ) {
-                        $time = time();
                         $hour = $res[1];
                         $min = $res[2];
                         $sec = $res[3];
@@ -3595,16 +3453,17 @@ class learnpathItem
             error_log("total_sec: $total_sec");
         }
 
-        //Step 1 : get actual total time stored in db
+        // Step 1 : get actual total time stored in db
         $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $course_id = api_get_course_int_id();
 
-        $sql = 'SELECT total_time, status FROM '.$item_view_table.'
-                 WHERE 
-                    c_id = ' . $course_id.' AND 
-                    lp_item_id="' . $this->db_id.'" AND 
-                    lp_view_id="' . $this->view_id.'" AND 
-                    view_count="' . $this->get_attempt_id().'"';
+        $sql = 'SELECT total_time, status 
+                FROM '.$item_view_table.'
+                WHERE 
+                    c_id = '.$course_id.' AND 
+                    lp_item_id = "'.$this->db_id.'" AND 
+                    lp_view_id = "'.$this->view_id.'" AND 
+                    view_count = "'.$this->get_attempt_id().'"';
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 

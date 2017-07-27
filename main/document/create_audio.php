@@ -367,7 +367,11 @@ function downloadMP3_google($filepath, $dir)
     if (empty($proxySettings)) {
         $content = file_get_contents($url);
     } else {
-        $context = stream_context_create($proxySettings);
+        if (!empty($proxySettings['stream_context_create'])) {
+            $context = stream_context_create($proxySettings['stream_context_create']);
+        } else {
+            $context = stream_context_create();
+        }
         $content = file_get_contents($url, false, $context);
     }
 

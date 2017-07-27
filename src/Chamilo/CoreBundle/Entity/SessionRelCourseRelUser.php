@@ -88,7 +88,7 @@ class SessionRelCourseRelUser
     }
 
     /**
-     * @return mixed
+     * @return \Chamilo\UserBundle\Entity\User
      */
     public function getUser()
     {

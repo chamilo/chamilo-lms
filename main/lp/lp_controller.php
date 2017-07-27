@@ -337,7 +337,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
     if (isset($_REQUEST['action']) && !in_array($_REQUEST['action'], ['list', 'view', 'view_category'])) {
         if (!empty($_REQUEST['lp_id'])) {
             $_REQUEST['action'] = 'view';
-        } elseif($_REQUEST['action'] == 'view_category') {
+        } elseif ($_REQUEST['action'] == 'view_category') {
             $_REQUEST['action'] = 'view_category';
         } else {
             $_REQUEST['action'] = 'list';
@@ -1086,22 +1086,6 @@ switch ($action) {
             $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_REQUEST['lp_id']).'&'.api_get_cidreq();
             header('Location: '.$url);
             exit;
-        }
-        break;
-    case 'edititemprereq':
-    case 'edit_item_prereq':
-        if (!$is_allowed_to_edit) {
-            api_not_allowed(true);
-        }
-        if (!$lp_found) {
-            error_log('New LP - No learnpath given for edit item prereq', 0);
-            require 'lp_list.php';
-        } else {
-            if (!empty($_REQUEST['id']) && !empty($_REQUEST['submit_item'])) {
-                $_SESSION['refresh'] = 1;
-                $_SESSION['oLP']->edit_item_prereq($_REQUEST['id'], $_REQUEST['prereq']);
-            }
-            require 'lp_admin_view.php';
         }
         break;
     case 'restart':

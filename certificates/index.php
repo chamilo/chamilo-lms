@@ -55,14 +55,20 @@ switch ($action) {
         // Special rules for anonymous users
         if (!$certificate->isVisible()) {
             Display::display_reduced_header();
-            echo Display::return_message(get_lang('CertificateExistsButNotPublic'), 'warning');
+            echo Display::return_message(
+                get_lang('CertificateExistsButNotPublic'),
+                'warning'
+            );
             Display::display_reduced_footer();
             break;
         }
 
         if (!$certificate->isAvailable()) {
             Display::display_reduced_header();
-            echo Display::return_message(get_lang('NoCertificateAvailable'), 'error');
+            echo Display::return_message(
+                get_lang('NoCertificateAvailable'),
+                'error'
+            );
             Display::display_reduced_footer();
             break;
         }

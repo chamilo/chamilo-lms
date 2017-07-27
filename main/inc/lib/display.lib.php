@@ -56,8 +56,11 @@ class Display
      * @param string Optional help file name
      * @param string $page_header
      */
-    public static function display_header($tool_name = '', $help = null, $page_header = null)
-    {
+    public static function display_header(
+        $tool_name = '',
+        $help = null,
+        $page_header = null
+    ) {
         $origin = api_get_origin();
         $showHeader = true;
         if (isset($origin) && $origin == 'learnpath') {
@@ -87,6 +90,7 @@ class Display
 
         if (!empty(self::$preview_style)) {
             self::$global_template->preview_theme = self::$preview_style;
+            self::$global_template->set_system_parameters();
             self::$global_template->setCssFiles();
             self::$global_template->set_js_files();
             self::$global_template->setCssCustomFiles();
@@ -105,7 +109,12 @@ class Display
     public static function display_reduced_header()
     {
         global $show_learnpath, $tool_name;
-        self::$global_template = new Template($tool_name, false, false, $show_learnpath);
+        self::$global_template = new Template(
+            $tool_name,
+            false,
+            false,
+            $show_learnpath
+        );
         echo self::$global_template->show_header_template();
     }
 
@@ -116,7 +125,12 @@ class Display
     {
         global $tool_name, $show_learnpath;
         $disable_js_and_css_files = true;
-        self::$global_template = new Template($tool_name, false, false, $show_learnpath);
+        self::$global_template = new Template(
+            $tool_name,
+            false,
+            false,
+            $show_learnpath
+        );
     }
 
     /**
@@ -125,7 +139,12 @@ class Display
     public static function set_header()
     {
         global $show_learnpath, $tool_name;
-        self::$global_template = new Template($tool_name, false, false, $show_learnpath);
+        self::$global_template = new Template(
+            $tool_name,
+            false,
+            false,
+            $show_learnpath
+        );
     }
 
     /**
@@ -159,8 +178,10 @@ class Display
      * return: $tool return a string array list with the "define" in main_api.lib
      * @return html code for adding an introduction
      */
-    public static function display_introduction_section($tool, $editor_config = null)
-    {
+    public static function display_introduction_section(
+        $tool,
+        $editor_config = null
+    ) {
         echo self::return_introduction_section($tool, $editor_config);
     }
 
@@ -169,8 +190,10 @@ class Display
      * @param array $editor_config
      * @return null
      */
-    public static function return_introduction_section($tool, $editor_config = null)
-    {
+    public static function return_introduction_section(
+        $tool,
+        $editor_config = null
+    ) {
         $is_allowed_to_edit = api_is_allowed_to_edit();
         $moduleId = $tool;
         if (api_get_setting('enable_tool_introduction') == 'true' || $tool == TOOL_COURSE_HOMEPAGE) {
@@ -441,8 +464,11 @@ class Display
      *
      * @return void
      */
-    public static function display_normal_message($message, $filter = true, $returnValue = false)
-    {
+    public static function display_normal_message(
+        $message,
+        $filter = true,
+        $returnValue = false
+    ) {
         $message = self::return_message($message, 'normal', $filter);
         if ($returnValue) {
             return $message;
@@ -457,8 +483,11 @@ class Display
      *
      * @deprecated use Display::addFlash(Display::return_message($message, 'warning'));
      */
-    public static function display_warning_message($message, $filter = true, $returnValue = false)
-    {
+    public static function display_warning_message(
+        $message,
+        $filter = true,
+        $returnValue = false
+    ) {
         $message = self::return_message($message, 'warning', $filter);
         if ($returnValue) {
             return $message;
@@ -473,8 +502,11 @@ class Display
      * @deprecated use Display::addFlash(Display::return_message($message, 'confirm'));
      * @return void
      */
-    public static function display_confirmation_message($message, $filter = true, $returnValue = false)
-    {
+    public static function display_confirmation_message(
+        $message,
+        $filter = true,
+        $returnValue = false
+    ) {
         $message = self::return_message($message, 'confirm', $filter);
         if ($returnValue) {
             return $message;
@@ -492,8 +524,11 @@ class Display
      *
      * @return void
      */
-    public static function display_error_message($message, $filter = true, $returnValue = false)
-    {
+    public static function display_error_message(
+        $message,
+        $filter = true,
+        $returnValue = false
+    ) {
         $message = self::return_message($message, 'error', $filter);
         if ($returnValue) {
             return $message;
@@ -507,8 +542,11 @@ class Display
      * @param string $type
      * @param bool $filter
      */
-    public static function return_message_and_translate($message, $type = 'normal', $filter = true)
-    {
+    public static function return_message_and_translate(
+        $message,
+        $type = 'normal',
+        $filter = true
+    ) {
         $message = get_lang($message);
         echo self::return_message($message, $type, $filter);
     }
@@ -520,14 +558,21 @@ class Display
      * @param   bool    $filter Whether to XSS-filter or not
      * @return  string  Message wrapped into an HTML div
      */
-    public static function return_message($message, $type = 'normal', $filter = true)
-    {
+    public static function return_message(
+        $message,
+        $type = 'normal',
+        $filter = true
+    ) {
         if (empty($message)) {
             return '';
         }
 
         if ($filter) {
-            $message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
+            $message = api_htmlentities(
+                $message,
+                ENT_QUOTES,
+                api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding()
+            );
         }
 
         $class = '';
@@ -559,8 +604,11 @@ class Display
      * @param string  optional, class from stylesheet
      * @return string encrypted mailto hyperlink
      */
-    public static function encrypted_mailto_link($email, $clickable_text = null, $style_class = '')
-    {
+    public static function encrypted_mailto_link(
+        $email,
+        $clickable_text = null,
+        $style_class = ''
+    ) {
         if (is_null($clickable_text)) {
             $clickable_text = $email;
         }
@@ -601,8 +649,12 @@ class Display
      * @param string  optional, class from stylesheet
      * @return string encrypted mailto hyperlink
      */
-    public static function icon_mailto_link($email, $icon_file = "mail.png", $icon_size = 22, $style_class = '')
-    {
+    public static function icon_mailto_link(
+        $email,
+        $icon_file = "mail.png",
+        $icon_size = 22,
+        $style_class = ''
+    ) {
         // "mailto:" already present?
         if (substr($email, 0, 7) != 'mailto:') {
             $email = 'mailto:'.$email;
@@ -729,6 +781,12 @@ class Display
         $alternateCssPath = api_get_path(SYS_PUBLIC_PATH).'css/';
         $alternateWebCssPath = api_get_path(WEB_PUBLIC_PATH).'css/';
 
+        // Avoid issues with illegal string offset for legacy calls to this
+        // method with an empty string rather than null or an empty array
+        if (empty($additional_attributes)) {
+            $additional_attributes = [];
+        }
+
         $image = trim($image);
 
         if (isset($size)) {
@@ -738,14 +796,14 @@ class Display
         }
 
         $size_extra = $size.'/';
-
-        // Checking the img/ folder
         $icon = $w_code_path.'img/'.$image;
-
         $theme = 'themes/chamilo/icons/';
 
         if ($loadThemeIcon) {
             $theme = 'themes/'.api_get_visual_theme().'/icons/';
+            if (is_file($alternateCssPath.$theme.$image)) {
+                $icon = $alternateWebCssPath.$theme.$image;
+            }
             // Checking the theme icons folder example: app/Resources/public/css/themes/chamilo/icons/XXX
             if (is_file($alternateCssPath.$theme.$size_extra.$image)) {
                 $icon = $alternateWebCssPath.$theme.$size_extra.$image;
@@ -808,8 +866,12 @@ class Display
      * @return string
      * @author Julio Montoya 2010
      */
-    public static function img($image_path, $alt_text = '', $additional_attributes = null, $filterPath = true)
-    {
+    public static function img(
+        $image_path,
+        $alt_text = '',
+        $additional_attributes = null,
+        $filterPath = true
+    ) {
         if (empty($image_path)) {
             // For some reason, the call to img() happened without a proper
             // image. Log the error and return an empty string to avoid
@@ -972,7 +1034,11 @@ class Display
             } else {
                 $blank_item_text = Security::remove_XSS($blank_item_text);
             }
-            $html .= self::tag('option', '-- '.$blank_item_text.' --', array('value' => '-1'));
+            $html .= self::tag(
+                'option',
+                '-- '.$blank_item_text.' --',
+                array('value' => '-1')
+            );
         }
         if ($values) {
             foreach ($values as $key => $value) {
@@ -1020,8 +1086,13 @@ class Display
      *
      * @return string
      */
-    public static function tabs($headers, $items, $id = 'tabs', $attributes = array(), $ul_attributes = array())
-    {
+    public static function tabs(
+        $headers,
+        $items,
+        $id = 'tabs',
+        $attributes = array(),
+        $ul_attributes = array()
+    ) {
         if (empty($headers) || count($headers) == 0) {
             return '';
         }
@@ -1048,7 +1119,15 @@ class Display
             $lis .= self::tag('li', $item, $ul_attributes);
             $i++;
         }
-        $ul = self::tag('ul', $lis, ['class' => 'nav nav-tabs tabs-margin', 'role'=> 'tablist', 'id' => 'ul_'.$id]);
+        $ul = self::tag(
+            'ul',
+            $lis,
+            [
+                'class' => 'nav nav-tabs tabs-margin',
+                'role' => 'tablist',
+                'id' => 'ul_'.$id
+            ]
+        );
 
         $i = 1;
         $divs = '';
@@ -1102,7 +1181,12 @@ class Display
             $lis .= self::tag('li', $item, array('class' => $class));
             $i++;
         }
-        return self::tag('ul', $lis, array('class' => 'nav nav-tabs tabs-margin'));
+
+        return self::tag(
+            'ul',
+            $lis,
+            array('class' => 'nav nav-tabs tabs-margin')
+        );
     }
 
     /**
@@ -1182,12 +1266,11 @@ class Display
         // encoding problems - see #6159
         //$column_names = array_map("utf8_encode", $column_names);
 
-        $obj->colNames      = $column_names;
-        $obj->colModel      = $column_model;
-        $obj->pager         = '#'.$div_id.'_pager';
+        $obj->colNames = $column_names;
+        $obj->colModel = $column_model;
+        $obj->pager = '#'.$div_id.'_pager';
         $obj->datatype = 'json';
         $obj->viewrecords = 'true';
-
         $all_value = 10000000;
 
         // Default row quantity
@@ -1455,7 +1538,7 @@ class Display
         }
 
         // Show all tool icons where there is something new.
-        $return = '&nbsp;';
+        $return = '';
         foreach ($notifications as $notification) {
             $toolName = $notification['tool'];
             if (!(
@@ -1518,7 +1601,7 @@ class Display
                 '&ref='.$notification['ref'].
                 '&gidReq='.$notification['to_group_id'].
                 '&id_session='.$sessionId
-            ).'&nbsp;';
+            ).PHP_EOL;
         }
 
         return $return;
@@ -1569,7 +1652,9 @@ class Display
             ) {
                 if (isset($session_info['duration']) && !empty($session_info['duration'])) {
                     $daysLeft = SessionManager::getDayLeftInSession($session_info, api_get_user_id());
-                    $session['duration'] = sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft);
+                    $session['duration'] = $daysLeft >= 0
+                        ? sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft)
+                        : get_lang('YourSessionTimeHasExpired');
                 }
                 $active = true;
             } else {
@@ -1897,6 +1982,7 @@ class Display
         if (empty($tip)) {
             return $text;
         }
+
         return self::span($text, array('class' => 'boot-tooltip', 'title' => strip_tags($tip)));
     }
 
@@ -2272,20 +2358,38 @@ class Display
      * @param string $content
      * @param string $title
      * @param string $footer
-     * @param string $style primary|success|info|warning|danger
+     * @param string $type primary|success|info|warning|danger
      * @param string $extra
+     * @param string $id
+     * @param string $customColor
      *
      * @return string
      */
-    public static function panel($content, $title = '', $footer = '', $style = '', $extra = '')
-    {
-        $title = !empty($title) ? '<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
-        $footer = !empty($footer) ? '<div class="panel-footer ">'.$footer.'</div>' : '';
-        $styles = ['primary', 'success', 'info', 'warning', 'danger'];
-        $style = !in_array($style, $styles) ? 'default' : $style;
+    public static function panel(
+        $content,
+        $title = '',
+        $footer = '',
+        $type = 'default',
+        $extra = '',
+        $id = '',
+        $customColor = ''
+    ) {
+        $headerStyle = '';
+        if (!empty($customColor)) {
+            $headerStyle = 'style = "color: white; background-color: '.$customColor.'" ';
+        }
+
+        $title = !empty($title) ? '<div class="panel-heading" '.$headerStyle.' ><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
+        $footer = !empty($footer) ? '<div class="panel-footer">'.$footer.'</div>' : '';
+        $typeList = ['primary', 'success', 'info', 'warning', 'danger'];
+        $style = !in_array($type, $typeList) ? 'default' : $type;
+
+        if (!empty($id)) {
+            $id = " id = $id ";
+        }
 
         return '
-            <div class="panel panel-'.$style.'">
+            <div '.$id.' class="panel panel-'.$style.'">
                 '.$title.'
                 '.self::contentPanel($content).'
                 '.$footer.'
@@ -2432,6 +2536,7 @@ class Display
      * @param bool|true $open
      * @param bool|false $fullClickable
      * @return null|string
+     * @todo rework function to easy use
      */
     public static function panelCollapse(
         $title,
@@ -2498,7 +2603,8 @@ HTML;
 
         return self::tip(
             date_to_str_ago($dateTime),
-            api_get_local_time($dateTime)
+            api_convert_and_format_date($dateTime, DATE_TIME_FORMAT_LONG)
+            //api_get_local_time($dateTime)
         );
     }
 

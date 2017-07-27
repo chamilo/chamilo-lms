@@ -42,6 +42,8 @@ class ShibbolethSession
     {
         $_SESSION['_user'] = array();
         online_logout(null, false);
+        global $logoutInfo;
+        courseLogout($logoutInfo);
     }
 
     /**
@@ -56,7 +58,7 @@ class ShibbolethSession
          * This is BAD. Logic should be migrated into a function and stop relying on global variables.
          */
         global $_uid, $is_allowedCreateCourse, $is_platformAdmin, $_real_cid, $is_courseAdmin;
-        global $is_courseMember, $is_courseTutor, $is_courseCoach, $is_allowed_in_course, $is_sessionAdmin, $_gid;
+        global $is_courseMember, $is_courseTutor, $is_session_general_coach, $is_allowed_in_course, $is_sessionAdmin, $_gid;
         $_uid = $uid;
 
         //is_allowedCreateCourse

@@ -62,7 +62,6 @@ class Model
         // Database table definition
         $result = Database::delete($this->table, $params);
         if ($result != 1) {
-            
             return false;
         }
 
@@ -78,7 +77,7 @@ class Model
     {
         $clean_params = array();
         if (!empty($params)) {
-            foreach ($params as $key=>$value) {
+            foreach ($params as $key => $value) {
                 if (in_array($key, $this->columns)) {
                     $clean_params[$key] = $value;
                 }
@@ -143,6 +142,7 @@ class Model
 
     /**
      * Get the count of elements
+     * @return int
      */
     public function get_count()
     {

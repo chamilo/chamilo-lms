@@ -31,9 +31,11 @@ exclude_paths:
 - app/cache/
 - app/logs/
 - app/config/
+- app/SymfonyRequirements.php
 - app/Migrations/
 - app/Resources/
 - main/admin/db.php
+- main/admin/ldap_synchro.php
 - main/auth/cas/lib/CAS/
 - main/auth/shibboleth
 - main/auth/openid
@@ -49,6 +51,7 @@ exclude_paths:
 - main/inc/lib/pear/
 - main/inc/lib/phpmailer/
 - main/inc/lib/phpseclib/
+- main/inc/lib/portfolio.class.php
 - main/inc/lib/svg-edit/
 - main/inc/lib/swfobject/
 - main/inc/lib/wami-recorder/
@@ -66,6 +69,7 @@ exclude_paths:
 - plugin/pens/lib
 - plugin/bbb/lib/bbb_api.php
 - plugin/ims_lti/OAuthSimple.php
+- plugin/sepe/src/wsse/
 - tests/
 - vendor/
 - web/

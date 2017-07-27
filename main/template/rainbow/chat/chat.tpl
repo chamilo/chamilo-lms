@@ -78,12 +78,6 @@
                             friend: ChChat.currentFriend
                         })
                         .done(function (response) {
-                            if (response.data.chatIsDenied) {
-                                alert("{{ 'ChatDenied'|get_lang }}");
-
-                                return;
-                            }
-
                             if (response.data.history) {
                                 ChChat._historySize = response.data.oldFileSize;
                                 ChChat.setHistory(response.data.history);

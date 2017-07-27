@@ -67,7 +67,10 @@ class SystemAnnouncementManager
         $groups = array();
         foreach ($temp_user_groups as $user_group) {
             $groups = array_merge($groups, array($user_group['id']));
-            $groups = array_merge($groups, $userGroup->get_parent_groups($user_group['id']));
+            $groups = array_merge(
+                $groups,
+                $userGroup->get_parent_groups($user_group['id'])
+            );
         }
 
         $groups_string = '('.implode($groups, ',').')';
@@ -136,8 +139,12 @@ class SystemAnnouncementManager
      * @param string $user_id
      * @return string
      */
-    public static function displayAllAnnouncements($visibility, $id = -1, $start = 0, $user_id = '')
-    {
+    public static function displayAllAnnouncements(
+        $visibility,
+        $id = -1,
+        $start = 0,
+        $user_id = ''
+    ) {
         $user_selected_language = api_get_interface_language();
         $start = intval($start);
         $userGroup = new UserGroup();
@@ -342,7 +349,9 @@ class SystemAnnouncementManager
         $db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 
         if (!checkdate($date_start_to_compare[1], $date_start_to_compare[2], $date_start_to_compare[0])) {
-            Display::addFlash(Display::return_message(get_lang('InvalidStartDate'), 'warning'));
+            Display::addFlash(
+                Display::return_message(get_lang('InvalidStartDate'), 'warning')
+            );
 
             return false;
         }
@@ -352,13 +361,17 @@ class SystemAnnouncementManager
             $date_end_to_compare[0]) &&
             !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])
         ) {
-            Display::addFlash(Display::return_message(get_lang('InvalidEndDate'), 'warning'));
+            Display::addFlash(
+                Display::return_message(get_lang('InvalidEndDate'), 'warning')
+            );
 
             return false;
         }
 
         if (strlen(trim($title)) == 0) {
-            Display::addFlash(Display::return_message(get_lang('InvalidTitle'), 'warning'));
+            Display::addFlash(
+                Display::return_message(get_lang('InvalidTitle'), 'warning')
+            );
 
             return false;
         }
@@ -369,8 +382,16 @@ class SystemAnnouncementManager
         //Fixing urls that are sent by email
         //$content = str_replace('src=\"/home/', 'src=\"'.api_get_path(WEB_PATH).'home/', $content);
         //$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
-        $content = str_replace('src=\"'.api_get_path(REL_HOME_PATH), 'src=\"'.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH), $content);
-        $content = str_replace('file='.api_get_path(REL_HOME_PATH), 'file='.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH), $content);
+        $content = str_replace(
+            'src=\"'.api_get_path(REL_HOME_PATH),
+            'src=\"'.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH),
+            $content
+        );
+        $content = str_replace(
+            'file='.api_get_path(REL_HOME_PATH),
+            'file='.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH),
+            $content
+        );
         $lang = is_null($lang) ? '' : $lang;
 
         $current_access_url_id = 1;
@@ -558,8 +579,16 @@ class SystemAnnouncementManager
         //Fixing urls that are sent by email
         //$content = str_replace('src=\"/home/', 'src=\"'.api_get_path(WEB_PATH).'home/', $content);
         //$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
-        $content = str_replace('src=\"'.api_get_path(REL_HOME_PATH), 'src=\"'.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH), $content);
-        $content = str_replace('file='.api_get_path(REL_HOME_PATH), 'file='.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH), $content);
+        $content = str_replace(
+            'src=\"'.api_get_path(REL_HOME_PATH),
+            'src=\"'.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH),
+            $content
+        );
+        $content = str_replace(
+            'file='.api_get_path(REL_HOME_PATH),
+            'file='.api_get_path(WEB_PATH).api_get_path(REL_HOME_PATH),
+            $content
+        );
 
         if ($sendEmailTest) {
             self::send_system_announcement_by_email(
@@ -879,7 +908,6 @@ class SystemAnnouncementManager
          ALTER TABLE sys_announcement ADD COLUMN visible_session_admin INT DEFAULT 0;
          ALTER TABLE sys_announcement ADD COLUMN visible_boss INT DEFAULT 0;
         */
-
         return api_get_configuration_value('system_announce_extra_roles');
     }
 
@@ -905,14 +933,14 @@ class SystemAnnouncementManager
                 return SystemAnnouncementManager::VISIBLE_DRH;
             }
 
-            if (api_is_allowed_to_create_course()) {
+            if (api_is_teacher()) {
                 return SystemAnnouncementManager::VISIBLE_TEACHER;
             } else {
                 return SystemAnnouncementManager::VISIBLE_STUDENT;
             }
         } else {
             // Default behaviour
-            return api_is_allowed_to_create_course() ? SystemAnnouncementManager::VISIBLE_TEACHER : SystemAnnouncementManager::VISIBLE_STUDENT;
+            return api_is_teacher() ? SystemAnnouncementManager::VISIBLE_TEACHER : SystemAnnouncementManager::VISIBLE_STUDENT;
         }
     }
 }

@@ -60,7 +60,7 @@ class Attendance
      * Get attendance list only the id, name and attendance_qualify_max fields
      * @param   string  $course_id course db name (optional)
      * @param   int     $session_id session id (optional)
-     * @return  array	attendances list
+     * @return  array    attendances list
      */
     public function get_attendances_list($course_id = '', $session_id = null)
     {
@@ -99,8 +99,12 @@ class Attendance
      * @see SortableTable#get_table_data($from)
      * @return array
      */
-    public static function get_attendance_data($from, $number_of_items, $column, $direction)
-    {
+    public static function get_attendance_data(
+        $from,
+        $number_of_items,
+        $column,
+        $direction
+    ) {
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
@@ -352,9 +356,9 @@ class Attendance
 
     /**
      * edit attendances inside table
-     * @param 	int	   attendance id
-     * @param  	bool   true for adding link in gradebook or false otherwise (optional)
-     * @return 	int    last id
+     * @param int attendance id
+     * @param bool true for adding link in gradebook or false otherwise (optional)
+     * @return int last id
      */
     public function attendance_edit($attendance_id, $link_to_gradebook = false)
     {
@@ -427,8 +431,8 @@ class Attendance
 
     /**
      * Restore attendance
-     * @param 	int|array	   one or many attendances id
-     * @return 	int    		   affected rows
+     * @param int|array one or many attendances id
+     * @return int affected rows
      */
     public function attendance_restore($attendance_id)
     {
@@ -477,8 +481,8 @@ class Attendance
 
     /**
      * Delete attendances
-     * @param 	int|array	$attendance_id   one or many attendances id
-     * @return 	int    		   affected rows
+     * @param int|array $attendance_id one or many attendances id
+     * @return int affected rows
      */
     public function attendance_delete($attendance_id)
     {
@@ -529,10 +533,10 @@ class Attendance
 
     /**
      * Changes visibility
-     * @param int|array	$attendanceId   one or many attendances id
-     * @param int status
+     * @param int|array $attendanceId one or many attendances id
+     * @param int $status
      *
-     * @return 	int affected rows
+     * @return int affected rows
      */
     public function changeVisibility($attendanceId, $status = 1)
     {
@@ -590,6 +594,8 @@ class Attendance
      * Lock or unlock an attendance
      * @param   int     attendance id
      * @param   bool    True to lock or false otherwise
+     *
+     * @return int
      */
     public function lock_attendance($attendance_id, $lock = true)
     {
@@ -618,16 +624,15 @@ class Attendance
 
     /**
      * Get registered users inside current course
-     * @param 	int	   $attendance_id attendance id for showing attendance result field (optional)
+     * @param int $attendance_id attendance id for showing attendance result field (optional)
      * @param int $groupId
-     * @return 	array  users data
+     * @return array  users data
      */
     public function get_users_rel_course($attendance_id = 0, $groupId = null)
     {
         $current_session_id = api_get_session_id();
         $current_course_id  = api_get_course_id();
         $currentCourseIntId = api_get_course_int_id();
-
         $studentInGroup = array();
 
         if (!empty($current_session_id)) {
@@ -662,7 +667,6 @@ class Attendance
             $value = array();
             $uid = $user_data['user_id'];
             $userInfo = api_get_user_info($uid);
-
             $status = $user_data['status'];
 
             if (!empty($groupId)) {
@@ -697,12 +701,21 @@ class Attendance
             }
 
             if (!empty($attendance_id)) {
-                $user_faults = $this->get_faults_of_user($uid, $attendance_id, $groupId);
+                $user_faults = $this->get_faults_of_user(
+                    $uid,
+                    $attendance_id,
+                    $groupId
+                );
                 $value['attendance_result'] = $user_faults['faults'].'/'.$user_faults['total'].' ('.$user_faults['faults_porcent'].'%)';
                 $value['result_color_bar'] = $user_faults['color_bar'];
             }
 
-            $photo = Display::img($userInfo['avatar_small'], $userInfo['complete_name'], [], false);
+            $photo = Display::img(
+                $userInfo['avatar_small'],
+                $userInfo['complete_name'],
+                [],
+                false
+            );
 
             $value['photo'] = $photo;
             $value['firstname'] = $user_data['firstname'];
@@ -719,10 +732,10 @@ class Attendance
 
     /**
      * add attendances sheet inside table
-     * @param 	int	   $calendar_id attendance calendar id
-     * @param  	array  $users_present present users during current class
-     * @param	int	   $attendance_id
-     * @return 	int    affected rows
+     * @param int $calendar_id attendance calendar id
+     * @param array $users_present present users during current class
+     * @param int $attendance_id
+     * @return int    affected rows
      */
     public function attendance_sheet_add($calendar_id, $users_present, $attendance_id)
     {
@@ -754,10 +767,10 @@ class Attendance
             $rs  = Database::query($sql);
             if (Database::num_rows($rs) == 0) {
                 $sql = "INSERT INTO $tbl_attendance_sheet SET
-                        c_id					= $course_id,
-                        user_id 				= '$uid',
-                        attendance_calendar_id 	= '$calendar_id',
-                        presence 				= 1";
+                        c_id = $course_id,
+                        user_id = '$uid',
+                        attendance_calendar_id = '$calendar_id',
+                        presence = 1";
                 $result = Database::query($sql);
 
                 $affected_rows += Database::affected_rows($result);
@@ -829,9 +842,8 @@ class Attendance
 
     /**
      * update users' attendance results
-     * @param 	array  $user_ids registered users inside current course
-     * @param	int	   $attendance_id
-     * @return 	void
+     * @param array $user_ids registered users inside current course
+     * @param int $attendance_id
      */
     public function update_users_results($user_ids, $attendance_id)
     {
@@ -839,7 +851,6 @@ class Attendance
         $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $course_id = api_get_course_int_id();
-
         $attendance_id = intval($attendance_id);
         // fill results about presence of students
         $attendance_calendar = $this->get_attendance_calendar(
@@ -909,7 +920,6 @@ class Attendance
 
         // update attendance qualify max
         $count_done_calendar = self::get_done_attendance_calendar($attendance_id);
-
         $sql = "UPDATE $tbl_attendance SET
                     attendance_qualify_max = '$count_done_calendar'
                 WHERE c_id = $course_id AND id = '$attendance_id'";
@@ -967,8 +977,8 @@ class Attendance
 
     /**
      * Get number of done attendances inside current sheet
-     * @param	int	   attendance id
-     * @return 	int	   number of done attendances
+     * @param int attendance id
+     * @return int number of done attendances
      */
     public static function get_done_attendance_calendar($attendance_id)
     {
@@ -994,7 +1004,8 @@ class Attendance
      * @param int $user_id
      * @param int $attendance_id
      * @param int $groupId
-     * @return 	array  results containing number of faults, total done attendance,
+     *
+     * @return array results containing number of faults, total done attendance,
      * percent of faults and color depend on result (red, orange)
      */
     public function get_faults_of_user($user_id, $attendance_id, $groupId = null)
@@ -1050,8 +1061,8 @@ class Attendance
 
     /**
      * Get results of faults average for all courses by user
-     * @param	int	   $user_id
-     * @return 	array  results containing number of faults, total done attendance,
+     * @param int $user_id
+     * @return array  results containing number of faults, total done attendance,
      * percentage of faults and color depend on result (red, orange)
      */
     public function get_faults_average_inside_courses($user_id)
@@ -1092,7 +1103,7 @@ class Attendance
         }
 
         $porcent = $total_weight > 0 ? round(($total_faults * 100) / $total_weight, 0) : 0;
-        $results['faults'] 	= $total_faults;
+        $results['faults'] = $total_faults;
         $results['total'] = $total_weight;
         $results['porcent'] = $porcent;
 
@@ -1101,21 +1112,27 @@ class Attendance
 
     /**
      * Get results of faults average by course
-     * @param	int	   $user_id
-     * @param 	string	$course_code
-     * @param	int	   Session id (optional)
-     * @return 	array  results containing number of faults,
+     * @param int $user_id
+     * @param string $course_code
+     * @param int Session id (optional)
+     * @return array  results containing number of faults,
      * total done attendance, porcent of faults and color depend on result (red, orange)
      */
-    public function get_faults_average_by_course($user_id, $course_code, $session_id = null)
-    {
+    public function get_faults_average_by_course(
+        $user_id,
+        $course_code,
+        $session_id = null
+    ) {
         // Database tables and variables
         $course_info = api_get_course_info($course_code);
         $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
         $user_id = intval($user_id);
         $results = array();
         $total_faults = $total_weight = $porcent = 0;
-        $attendances_by_course = $this->get_attendances_list($course_info['real_id'], $session_id);
+        $attendances_by_course = $this->get_attendances_list(
+            $course_info['real_id'],
+            $session_id
+        );
 
         foreach ($attendances_by_course as $attendance) {
             // Get total faults and total weight
@@ -1138,7 +1155,7 @@ class Attendance
         }
 
         $porcent = $total_weight > 0 ? round(($total_faults * 100) / $total_weight, 0) : 0;
-        $results['faults'] 	= $total_faults;
+        $results['faults'] = $total_faults;
         $results['total'] = $total_weight;
         $results['porcent'] = $porcent;
 
@@ -1147,16 +1164,24 @@ class Attendance
 
     /**
      * Get registered users' attendance sheet inside current course
-     * @param	int	   $attendance_id
-     * @param	int	   $user_id for showing data for only one user (optional)
-     * @return 	array  users attendance sheet data
+     * @param int $attendance_id
+     * @param int $user_id for showing data for only one user (optional)
+     * @param int $groupId
+     * @return array  users attendance sheet data
      */
-    public function get_users_attendance_sheet($attendance_id, $user_id = 0, $groupId = null)
-    {
+    public function get_users_attendance_sheet(
+        $attendance_id,
+        $user_id = 0,
+        $groupId = null
+    ) {
         $tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-
-        $attendance_calendar = $this->get_attendance_calendar($attendance_id, 'all', null, $groupId);
+        $attendance_calendar = $this->get_attendance_calendar(
+            $attendance_id,
+            'all',
+            null,
+            $groupId
+        );
         $calendar_ids = array();
         // get all dates from calendar by current attendance
         foreach ($attendance_calendar as $cal) {
@@ -1215,16 +1240,16 @@ class Attendance
 
     /**
      * Get next attendance calendar without presences (done attendances)
-     * @param	int	attendance id
-     * @return 	int attendance calendar id
+     * @param int    attendance id
+     * @return int attendance calendar id
      */
     public function get_next_attendance_calendar_id($attendance_id)
     {
-        $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
+        $table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $attendance_id = intval($attendance_id);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT id FROM $tbl_attendance_calendar
+        $sql = "SELECT id FROM $table
                 WHERE
                     c_id = $course_id AND
                     attendance_id = '$attendance_id' AND
@@ -1243,15 +1268,15 @@ class Attendance
 
     /**
      * Get next attendance calendar datetime without presences (done attendances)
-     * @param	int	attendance id
-     * @return 	int UNIX time format datetime
+     * @param int    attendance id
+     * @return int UNIX time format datetime
      */
     public function get_next_attendance_calendar_datetime($attendance_id)
     {
-        $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
+        $table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $course_id = api_get_course_int_id();
         $attendance_id = intval($attendance_id);
-        $sql = "SELECT id, date_time FROM $tbl_attendance_calendar
+        $sql = "SELECT id, date_time FROM $table
                 WHERE
                     c_id = $course_id AND
                     attendance_id = '$attendance_id' AND
@@ -1270,9 +1295,9 @@ class Attendance
 
     /**
      * Get user' score from current attendance
-     * @param	int	$user_id
-     * @param	int $attendance_id
-     * @return	int score
+     * @param int $user_id
+     * @param int $attendance_id
+     * @return int score
      */
     public function get_user_score($user_id, $attendance_id, $groupId = null)
     {
@@ -1318,15 +1343,15 @@ class Attendance
 
     /**
      * Get attendance calendar data by id
-     * @param	int	attendance calendar id
-     * @return	array attendance calendar data
+     * @param int    attendance calendar id
+     * @return array attendance calendar data
      */
     public function get_attendance_calendar_by_id($calendar_id)
     {
-        $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
+        $table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $calendar_id = intval($calendar_id);
         $course_id = api_get_course_int_id();
-        $sql = "SELECT * FROM $tbl_attendance_calendar
+        $sql = "SELECT * FROM $table
                 WHERE c_id = $course_id AND id = '$calendar_id' ";
         $rs = Database::query($sql);
         $data = array();
@@ -1342,13 +1367,13 @@ class Attendance
 
     /**
      * Get all attendance calendar data inside current attendance
-     * @param int	$attendance_id
+     * @param int $attendance_id
      * @param string $type
      * @param int $calendar_id
      * @param int $groupId
      * @param bool $showAll = false show group calendar items or not
      *
-     * @return	array attendance calendar data
+     * @return array attendance calendar data
      */
     public function get_attendance_calendar(
         $attendance_id,
@@ -1439,12 +1464,16 @@ class Attendance
 
     /**
      * Get number of attendance calendar inside current attendance
-     * @param	int	$attendance_id
-     * @param	int	$groupId
-     * @return	int number of dates in attendance calendar
+     * @param int $attendance_id
+     * @param int $groupId
+     * @return int number of dates in attendance calendar
      */
-    public static function get_number_of_attendance_calendar($attendance_id, $groupId = 0, $done_attendance = NULL, $userId = 0)
-    {
+    public static function get_number_of_attendance_calendar(
+        $attendance_id,
+        $groupId = 0,
+        $done_attendance = null,
+        $userId = 0
+    ) {
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $calendarRelGroup = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
         $tbl_groupRelUser = Database::get_course_table(TABLE_GROUP_USER);
@@ -1528,8 +1557,8 @@ class Attendance
 
     /**
      * Get count dates inside attendance calendar by attendance id
-     * @param	int	$attendance_id
-     * @return	int     count of dates
+     * @param int $attendance_id
+     * @return int     count of dates
      */
     public static function get_count_dates_inside_attendance_calendar($attendance_id)
     {
@@ -1570,8 +1599,9 @@ class Attendance
 
     /**
      * check if an attendance is locked
-     * @param   int $attendance_id
-     * @param   bool
+     * @param int $attendance_id
+     * @param bool
+     * @return bool
      */
     public static function is_locked_attendance($attendance_id)
     {
@@ -1628,8 +1658,8 @@ class Attendance
     }
 
     /**
-     * @param int   $calendarId
-     * @param int 	$courseId
+     * @param int $calendarId
+     * @param int $courseId
      * @param array $groupList
      */
     public function addAttendanceCalendarToGroup($calendarId, $courseId, $groupList)
@@ -1665,7 +1695,7 @@ class Attendance
     /**
      * @param int $calendarId
      * @param int $courseId
-     * @param int $groupId
+     *
      * @return array
      */
     public function getGroupListByAttendanceCalendar($calendarId, $courseId)
@@ -1705,7 +1735,6 @@ class Attendance
     /**
      * @param int $calendarId
      * @param int $courseId
-     * @param int $groupId
      *
      * @return array
      */
@@ -1777,32 +1806,6 @@ class Attendance
     }
 
     /**
-     * Adds x months to a UNIX timestamp
-     * @param   int     The timestamp
-     * @param   int     The number of years to add
-     * @return  int     The new timestamp
-     */
-    private function add_month($timestamp, $num = 1)
-    {
-        $values = api_get_utc_datetime($timestamp);
-        $values = str_replace(array(':', '-', ' '), '/', $values);
-        list($y, $m, $d, $h, $n, $s) = split('/', $values);
-        if ($m + $num > 12) {
-            $y += floor($num / 12);
-            $m += $num % 12;
-        } else {
-            $m += $num;
-        }
-        //date_default_timezone_set('UTC');
-        // return mktime($h, $n, $s, $m, $d, $y);
-        $result = api_strtotime($y.'-'.$m.'-'.$d.' '.$h.':'.$n.':'.$s, 'UTC');
-        if (!empty($result)) {
-            return $result;
-        }
-        return false;
-    }
-
-    /**
      * edit a datetime inside attendance calendar table
      * @param	int	attendance calendar id
      * @param	int	attendance id
@@ -1844,11 +1847,14 @@ class Attendance
      * delete a datetime from attendance calendar table
      * @param	int		attendance calendar id
      * @param	int		attendance id
-     * @param	bool	true for removing all calendar inside current attendance, false for removing by calendar id
+     * @param	bool true for removing all calendar inside current attendance, false for removing by calendar id
      * @return	int affected rows
      */
-    public function attendance_calendar_delete($calendar_id, $attendance_id, $all_delete = false)
-    {
+    public function attendance_calendar_delete(
+        $calendar_id,
+        $attendance_id,
+        $all_delete = false
+    ) {
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
 
@@ -1976,8 +1982,12 @@ class Attendance
      */
     public function getAttendanceLogin($startDate, $endDate)
     {
-        if (empty($startDate) || $startDate == '0000-00-00' || $startDate == '0000-00-00 00:00:00' ||
-            empty($endDate) || $endDate == '0000-00-00' || $endDate == '0000-00-00 00:00:00'
+        if (empty($startDate) ||
+            $startDate == '0000-00-00' ||
+            $startDate == '0000-00-00 00:00:00' ||
+            empty($endDate) ||
+            $endDate == '0000-00-00' ||
+            $endDate == '0000-00-00 00:00:00'
         ) {
             return false;
         }

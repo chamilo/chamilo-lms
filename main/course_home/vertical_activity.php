@@ -52,6 +52,7 @@ if (api_is_platform_admin()) {
 }
 
 //	COURSE ADMIN ONLY VIEW
+$blocks = [];
 
 // Start of tools for CourseAdmins (teachers/tutors)
 if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
@@ -70,20 +71,26 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
         </div>';
     }
 
-    $content .= '<div class="courseadminview-activity-3col"><span class="viewcaption">'.get_lang('Authoring').'</span>';
     $my_list  = CourseHome::get_tools_category(TOOL_AUTHORING);
-    $content .= CourseHome::show_tools_category($my_list);
-    $content .= '</div>';
 
-    $content .= '<div class="courseadminview-activity-3col"><span class="viewcaption">'.get_lang('Interaction').'</span>';
+    $blocks[] = [
+        'title' => get_lang('Authoring'),
+        'content' => CourseHome::show_tools_category($my_list)
+    ];
+
     $my_list  = CourseHome::get_tools_category(TOOL_INTERACTION);
-    $content .= CourseHome::show_tools_category($my_list);
-    $content .= '</div>';
 
-    $content .= '<div class="courseadminview-activity-3col"><span class="viewcaption">'.get_lang('Administration').'</span>';
+    $blocks[] = [
+        'title' => get_lang('Interaction'),
+        'content' => CourseHome::show_tools_category($my_list)
+    ];
+
     $my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
-    $content .= CourseHome::show_tools_category($my_list);
-    $content .= '</div>';
+
+    $blocks[] = [
+        'title' => get_lang('Administration'),
+        'content' => CourseHome::show_tools_category($my_list)
+    ];
 
 } elseif (api_is_coach()) {
     if (api_get_setting('show_session_data') == 'true' && $session_id > 0) {
@@ -93,15 +100,16 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
              $content .= '</table></div>';
     }
 
-    $content .= '<div class="Authoringview">';
-                $my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
-                $content .= CourseHome::show_tools_category($my_list);
-    $content .= '</div>';
+    $my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
+
+    $blocks[] = [
+        'class' => 'Authoringview',
+        'content' => CourseHome::show_tools_category($my_list)
+    ];
     //	TOOLS AUTHORING
 } else {
     $my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
     if (count($my_list) > 0) {
-        $content .= '<div class="course-student-view-activity-3col">';
         //ordering by get_lang name
         $order_tool_list = array();
         foreach ($my_list as $key => $new_tool) {
@@ -113,20 +121,17 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
         foreach ($order_tool_list as $key => $new_tool) {
             $my_temp_tool_array[] = $my_list[$key];
         }
-        $my_list = $my_temp_tool_array;
 
-        $i = 0;
-        foreach ($my_list as $new_tool) {
-            if ($i >= 10) {
-                $my_list2[] = $new_tool;
-            } else {
-                $my_list1[] = $new_tool;
-            }
-            $i++;
-        }
-        $content .= CourseHome::show_tools_category($my_list1);
-        $content .= CourseHome::show_tools_category($my_list2);
-        $content .= '</div>';
+        $blocks[] = [
+            'class' => 'course-student-view-activity-3col',
+            'content' => CourseHome::show_tools_category($my_temp_tool_array)
+        ];
     }
 }
-$content .= '</div>';
+
+$activityView = new Template('', false, false, false, false, false, false);
+$activityView->assign('blocks', $blocks);
+
+$content .= $activityView->fetch(
+    $activityView->get_template('course_home/vertical_activity.tpl')
+);

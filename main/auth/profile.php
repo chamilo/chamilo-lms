@@ -69,15 +69,6 @@ function show_image(image,width,height) {
     height = parseInt(height) + 20;
     window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
 }
-
-function hide_icon_edit(element_html)  {
-    ident="#edit_image";
-    $(ident).hide();
-}
-function show_icon_edit(element_html) {
-    ident="#edit_image";
-    $(ident).show();
-}
 </script>';
 
 $jquery_ready_content = '';

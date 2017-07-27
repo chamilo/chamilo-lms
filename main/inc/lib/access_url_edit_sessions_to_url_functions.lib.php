@@ -26,7 +26,7 @@ class Accessurleditsessionstourl
      * @return string Xajax response block
      * @assert () === false
      */
-    function search_sessions($needle, $id)
+    public function search_sessions($needle, $id)
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $xajax_response = new xajaxResponse();
@@ -53,7 +53,11 @@ class Accessurleditsessionstourl
                 }
             }
         }
-        $xajax_response -> addAssign('ajax_list_courses', 'innerHTML', api_utf8_encode($return));
+        $xajax_response->addAssign(
+            'ajax_list_courses',
+            'innerHTML',
+            api_utf8_encode($return)
+        );
         return $xajax_response;
     }
 }

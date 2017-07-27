@@ -103,19 +103,18 @@ if ($load_dirs) {
 if ($displayMyCourseViewBySessionLink) {
     $htmlHeadXtra[] = '
     <script>
-        userId = ' . $userId.'
+        userId = '.$userId.'
         $(document).ready(function() {
-            changeMyCoursesView($.cookie("defaultMyCourseView"+userId));
+            changeMyCoursesView($.cookie("defaultMyCourseView" + userId));
         });
     
         /**
         * Keep in cookie the last teacher view for the My Courses Tab. default view, or view by session
         * @param inView
         */
-        function changeMyCoursesView(inView)
-        {
+        function changeMyCoursesView(inView) {
             $.cookie("defaultMyCourseView"+userId, inView, { expires: 365 });
-            if (inView == ' . IndexManager::VIEW_BY_SESSION.') {
+            if (inView == '.IndexManager::VIEW_BY_SESSION.') {
                 $("#viewBySession").addClass("btn-primary");
                 $("#viewByDefault").removeClass("btn-primary");
             } else {
@@ -126,35 +125,53 @@ if ($displayMyCourseViewBySessionLink) {
 	</script>';
 }
 
+$myCourseListAsCategory = api_get_configuration_value('my_courses_list_as_category');
+
 $controller = new IndexManager(get_lang('MyCourses'));
 
-// Main courses and session list
-if (isset($_COOKIE['defaultMyCourseView'.$userId]) &&
-    $_COOKIE['defaultMyCourseView'.$userId] == IndexManager::VIEW_BY_SESSION && $displayMyCourseViewBySessionLink
-) {
-    $courseAndSessions = $controller->returnCoursesAndSessionsViewBySession($userId);
-    IndexManager::setDefaultMyCourseView(IndexManager::VIEW_BY_SESSION, $userId);
+if (!$myCourseListAsCategory) {
+    // Main courses and session list
+    if (isset($_COOKIE['defaultMyCourseView'.$userId])
+        && $_COOKIE['defaultMyCourseView'.$userId] == IndexManager::VIEW_BY_SESSION
+        && $displayMyCourseViewBySessionLink
+    ) {
+        $courseAndSessions = $controller->returnCoursesAndSessionsViewBySession($userId);
+        IndexManager::setDefaultMyCourseView(IndexManager::VIEW_BY_SESSION, $userId);
+    } else {
+        $courseAndSessions = $controller->returnCoursesAndSessions($userId);
+        IndexManager::setDefaultMyCourseView(IndexManager::VIEW_BY_DEFAULT, $userId);
+    }
+
+    // if teacher, session coach or admin, display the button to change te course view
+
+    if ($displayMyCourseViewBySessionLink
+        && (api_is_drh() || api_is_session_general_coach() || api_is_platform_admin() || api_is_session_admin()
+            || api_is_teacher())
+    ) {
+        $courseAndSessions['html'] = "
+            <div class='view-by-session-link'>
+                <div class='btn-group pull-right'>
+                    <a class='btn btn-default' id='viewByDefault' href='user_portal.php'
+                        onclick='changeMyCoursesView(\"".IndexManager::VIEW_BY_DEFAULT."\")'>
+                        ".get_lang('MyCoursesDefaultView')."
+                    </a>
+                    <a class='btn btn-default' id='viewBySession' href='user_portal.php'
+                        onclick='changeMyCoursesView(\"".IndexManager::VIEW_BY_SESSION."\")'>
+                        ".get_lang('MyCoursesSessionView')."
+                    </a>
+                </div>
+            </div>
+            <br /><br />
+        ".$courseAndSessions['html'];
+    }
 } else {
-    $courseAndSessions = $controller->returnCoursesAndSessions($userId);
-    IndexManager::setDefaultMyCourseView(IndexManager::VIEW_BY_DEFAULT, $userId);
-}
+    $categoryCode = isset($_GET['category']) ? $_GET['category'] : '';
 
-// if teacher, session coach or admin, display the button to change te course view
-
-if ($displayMyCourseViewBySessionLink &&
-    (api_is_drh() || api_is_course_coach() || api_is_platform_admin() || api_is_session_admin() || api_is_teacher())
-) {
-    $courseAndSessions['html'] = "<div class='view-by-session-link'>
-		<div class='btn-group pull-right'>
-		<a class='btn btn-default' id='viewByDefault' href='user_portal.php' onclick='changeMyCoursesView(\"".IndexManager::VIEW_BY_DEFAULT."\")'>
-		".get_lang('MyCoursesDefaultView')."
-		</a>
-		<a class='btn btn-default' id='viewBySession' href='user_portal.php' onclick='changeMyCoursesView(\"".IndexManager::VIEW_BY_SESSION."\")'>
-		".get_lang('MyCoursesSessionView')."
-		</a>
-		</div>
-	</div><br /><br />
-	".$courseAndSessions['html'];
+    if (!$categoryCode) {
+        $courseAndSessions = $controller->returnCourseCategoryListFromUser($userId);
+    } else {
+        $courseAndSessions = $controller->returnCoursesAndSessions($userId, false, $categoryCode);
+    }
 }
 
 // Check if a user is enrolled only in one course for going directly to the course after the login.
@@ -187,9 +204,7 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
     }
 
     // User is subscribed to 1 course.
-    if (!isset($_SESSION['coursesAlreadyVisited']) &&
-        $count_of_sessions == 0 && $count_of_courses_no_sessions == 1
-    ) {
+    if (!isset($_SESSION['coursesAlreadyVisited']) && $count_of_sessions == 0 && $count_of_courses_no_sessions == 1) {
         $courses = CourseManager::get_courses_list_by_user_id(
             $userId
         );
@@ -280,6 +295,9 @@ if (!empty($_GET['history'])) {
     $historyClass = 'courses-history';
 }
 $controller->tpl->assign('course_history_page', $historyClass);
+if ($myCourseListAsCategory) {
+    $controller->tpl->assign('header', get_lang('MyCourses'));
+}
 $controller->tpl->display_two_col_template();
 
 // Deleting the session_id.

@@ -61,12 +61,17 @@ switch ($action) {
         );
         // Setting the form elements
         $form->addElement('header', get_lang('TermAddNew'));
-        $form->addElement(
-            'text',
-            'name',
-            get_lang('TermName'),
-            array('id' => 'glossary_title')
-        );
+        if (api_get_configuration_value('save_titles_as_html')) {
+            $form->addHtmlEditor(
+                'name',
+                get_lang('TermName'),
+                false,
+                false,
+                ['ToolbarSet' => 'Minimal']
+            );
+        } else {
+            $form->addElement('text', 'name', get_lang('TermName'), array('id' => 'glossary_title'));
+        }
 
         $form->addElement(
             'html_editor',
@@ -111,6 +116,17 @@ switch ($action) {
             $form->addElement('header', get_lang('TermEdit'));
             $form->addElement('hidden', 'glossary_id');
             $form->addElement('text', 'name', get_lang('TermName'));
+            if (api_get_configuration_value('save_titles_as_html')) {
+                $form->addHtmlEditor(
+                    'name',
+                    get_lang('TermName'),
+                    false,
+                    false,
+                    ['ToolbarSet' => 'Minimal']
+                );
+            } else {
+                $form->addElement('text', 'name', get_lang('TermName'), array('id' => 'glossary_title'));
+            }
 
             $form->addElement(
                 'html_editor',

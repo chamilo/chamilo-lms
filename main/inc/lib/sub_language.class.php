@@ -392,7 +392,7 @@ class SubLanguageManager
      */
     public static function set_platform_language($language_id)
     {
-        if (empty($language_id) or (intval($language_id) != $language_id)) {
+        if (empty($language_id) || (intval($language_id) != $language_id)) {
             return false;
         }
         $language_id = intval($language_id);

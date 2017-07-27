@@ -5,6 +5,7 @@ use ChamiloSession as Session;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\Finder\Finder;
+use Chamilo\CoreBundle\Entity\SettingsCurrent;
 
 /**
  * This is a code library for Chamilo.
@@ -48,6 +49,7 @@ define('SESSION_STUDENT', 15); //student subscribed in a session course
 define('COURSE_TUTOR', 16); // student is tutor of a course (NOT in session)
 define('STUDENT_BOSS', 17); // student is boss
 define('INVITEE', 20);
+define('HRM_REQUEST', 21); //HRM has request for vinculation with user
 
 // Table of status
 $_status_list[COURSEMANAGER] = 'teacher'; // 1
@@ -350,6 +352,7 @@ define('USER_RELATION_TYPE_ENEMY', 5); // should be deprecated is useless
 define('USER_RELATION_TYPE_DELETED', 6);
 define('USER_RELATION_TYPE_RRHH', 7);
 define('USER_RELATION_TYPE_BOSS', 8);
+define('USER_RELATION_TYPE_HRM_REQUEST', 9);
 
 // Gradebook link constants
 // Please do not change existing values, they are used in the database !
@@ -536,6 +539,8 @@ define('MESSAGE_STATUS_INVITATION_DENIED', '7');
 define('MESSAGE_STATUS_WALL', '8');
 define('MESSAGE_STATUS_WALL_DELETE', '9');
 define('MESSAGE_STATUS_WALL_POST', '10');
+define('MESSAGE_STATUS_CONVERSATION', '11');
+
 // Images
 define('IMAGE_WALL_SMALL_SIZE', 200);
 define('IMAGE_WALL_MEDIUM_SIZE', 500);
@@ -994,6 +999,8 @@ function api_is_facebook_auth_activated() {
  */
 function api_add_trailing_slash($path) {
     return substr($path, -1) == '/' ? $path : $path.'/';
+    // This code is about 20% faster than the preg_replace equivalent
+    //return preg_replace('/([^\/])$/', '$1/', $path);
 }
 
 /**
@@ -1863,13 +1870,13 @@ function api_get_course_info_by_id($id = null)
                     course_category.name faName
                 FROM $course_table
                 LEFT JOIN $course_cat_table
-                ON course.category_code =  course_category.code
+                ON course.category_code = course_category.code
                 WHERE course.id = $id";
         $result = Database::query($sql);
         $_course = array();
         if (Database::num_rows($result) > 0) {
-            $course_data = Database::fetch_array($result);
-            $_course = api_format_course_array($course_data);
+            $row = Database::fetch_array($result);
+            $_course = api_format_course_array($row);
         }
         return $_course;
     }
@@ -2240,9 +2247,6 @@ function api_get_session_visibility(
     $courseId = null,
     $ignore_visibility_for_admins = true
 ) {
-    // Means that the session is still available.
-    $visibility = 0;
-
     if (api_is_platform_admin()) {
         if ($ignore_visibility_for_admins) {
             return SESSION_AVAILABLE;
@@ -2250,117 +2254,88 @@ function api_get_session_visibility(
     }
 
     $now = time();
-    if (!empty($session_id)) {
-        $session_id = intval($session_id);
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $sql = "SELECT * FROM $tbl_session
-                WHERE id = $session_id ";
+    if (empty($session_id)) {
+        return 0; // Means that the session is still available.
+    }
 
-        $result = Database::query($sql);
+    $session_id = intval($session_id);
+    $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        if (Database::num_rows($result) > 0) {
-            $row = Database::fetch_array($result, 'ASSOC');
-            $visibility = $original_visibility = $row['visibility'];
+    $result = Database::query("SELECT * FROM $tbl_session WHERE id = $session_id");
 
-            // I don't care the session visibility.
-            if (empty($row['access_start_date']) && empty($row['access_end_date'])) {
-                // Session duration per student.
-                if (isset($row['duration']) && !empty($row['duration'])) {
-                    $duration = $row['duration'] * 24 * 60 * 60;
+    if (Database::num_rows($result) <= 0) {
+        return SESSION_INVISIBLE;
+    }
 
-                    $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
-                        $session_id,
-                        api_get_user_id()
-                    );
+    $row = Database::fetch_array($result, 'ASSOC');
+    $visibility = $original_visibility = $row['visibility'];
 
-                    // If there is a session duration but there is no previous
-                    // access by the user, then the session is still available
-                    if (count($courseAccess) == 0) {
-                        return SESSION_AVAILABLE;
-                    }
+    // I don't care the session visibility.
+    if (empty($row['access_start_date']) && empty($row['access_end_date'])) {
+        // Session duration per student.
+        if (isset($row['duration']) && !empty($row['duration'])) {
+            $duration = $row['duration'] * 24 * 60 * 60;
 
-                    $currentTime = time();
-                    $firstAccess = 0;
-                    if (isset($courseAccess['login_course_date'])) {
-                        $firstAccess = api_strtotime(
-                            $courseAccess['login_course_date'],
-                            'UTC'
-                        );
-                    }
-                    $userDurationData = SessionManager::getUserSession(
-                        api_get_user_id(),
-                        $session_id
-                    );
-                    $userDuration = 0;
-                    if (isset($userDurationData['duration'])) {
-                        $userDuration = intval($userDurationData['duration']) * 24 * 60 * 60;
-                    }
+            $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser($session_id, api_get_user_id());
 
-                    $totalDuration = $firstAccess + $duration + $userDuration;
-                    if ($totalDuration > $currentTime) {
-                        return SESSION_AVAILABLE;
-                    } else {
-                        return SESSION_INVISIBLE;
-                    }
-                }
-
+            // If there is a session duration but there is no previous
+            // access by the user, then the session is still available
+            if (count($courseAccess) == 0) {
                 return SESSION_AVAILABLE;
-            } else {
-                // If start date was set.
-                if (!empty($row['access_start_date'])) {
-                    if ($now > api_strtotime($row['access_start_date'], 'UTC')) {
-                        $visibility = SESSION_AVAILABLE;
-                    } else {
-                        $visibility = SESSION_INVISIBLE;
-                    }
-                }
-
-                // If the end date was set.
-                if (!empty($row['access_end_date'])) {
-                    // Only if date_start said that it was ok
-                    if ($visibility === SESSION_AVAILABLE) {
-                        if ($now < api_strtotime($row['access_end_date'], 'UTC')) {
-                            // Date still available
-                            $visibility = SESSION_AVAILABLE;
-                        } else {
-                            // Session ends
-                            $visibility = $row['visibility'];
-                        }
-                    }
-                }
             }
 
-            /* If I'm a coach the visibility can change in my favor depending in
-             the coach dates */
-            $isCoach = api_is_coach($session_id, $courseId);
+            $currentTime = time();
+            $firstAccess = isset($courseAccess['login_course_date'])
+                ? api_strtotime($courseAccess['login_course_date'], 'UTC')
+                : 0;
+            $userDurationData = SessionManager::getUserSession(
+                api_get_user_id(),
+                $session_id
+            );
+            $userDuration = isset($userDurationData['duration'])
+                ? (intval($userDurationData['duration']) * 24 * 60 * 60)
+                : 0;
 
-            if ($isCoach) {
-                // Test start date.
-                if (!empty($row['coach_access_start_date'])) {
-                    $start = api_strtotime($row['coach_access_start_date'], 'UTC');
-                    if ($start < $now) {
-                        $visibility = SESSION_AVAILABLE;
-                    } else {
-                        $visibility = SESSION_INVISIBLE;
-                    }
-                }
+            $totalDuration = $firstAccess + $duration + $userDuration;
 
-                // Test end date.
-                if (!empty($row['coach_access_end_date'])) {
-                    if ($visibility = SESSION_AVAILABLE) {
-                        $endDateCoach = api_strtotime($row['coach_access_end_date'], 'UTC');
+            return $totalDuration > $currentTime ? SESSION_AVAILABLE : SESSION_VISIBLE_READ_ONLY;
+        }
 
-                        if ($endDateCoach >= $now) {
-                            $visibility = SESSION_AVAILABLE;
-                        } else {
-                            $visibility = $row['visibility'];
-                        }
-                    }
-                }
+        return SESSION_AVAILABLE;
+    }
+    // If start date was set.
+    if (!empty($row['access_start_date'])) {
+        $visibility = $now > api_strtotime($row['access_start_date'], 'UTC') ? SESSION_AVAILABLE : SESSION_INVISIBLE;
+    }
+
+    // If the end date was set.
+    if (!empty($row['access_end_date'])) {
+        // Only if date_start said that it was ok
+        if ($visibility === SESSION_AVAILABLE) {
+            $visibility = $now < api_strtotime($row['access_end_date'], 'UTC')
+                ? SESSION_AVAILABLE // Date still available
+                : $row['visibility']; // Session ends
+        }
+    }
+
+    /* If I'm a coach the visibility can change in my favor depending in
+     the coach dates */
+    $isCoach = api_is_coach($session_id, $courseId);
+
+    if ($isCoach) {
+        // Test start date.
+        if (!empty($row['coach_access_start_date'])) {
+            $start = api_strtotime($row['coach_access_start_date'], 'UTC');
+            $visibility = $start < $now ? SESSION_AVAILABLE : SESSION_INVISIBLE;
+        }
+
+        // Test end date.
+        if (!empty($row['coach_access_end_date'])) {
+            if ($visibility === SESSION_AVAILABLE) {
+                $endDateCoach = api_strtotime($row['coach_access_end_date'], 'UTC');
+                $visibility = $endDateCoach >= $now ? SESSION_AVAILABLE : $row['visibility'];
             }
-        } else {
-            $visibility = SESSION_INVISIBLE;
         }
     }
 
@@ -2638,15 +2613,17 @@ function api_is_course_admin()
 
 /**
  * Checks whether the current user is a course coach
- * @return bool     True if current user is a course coach
+ * Based on the presence of user in session.id_coach (session general coach)
+ * @return bool True if current user is a course coach
  */
-function api_is_course_coach()
+function api_is_session_general_coach()
 {
-    return Session::read('is_courseCoach');
+    return Session::read('is_session_general_coach');
 }
 
 /**
  * Checks whether the current user is a course tutor
+ * Based on the presence of user in session_rel_course_rel_user.user_id with status = 2
  * @return bool     True if current user is a course tutor
  */
 function api_is_course_tutor()
@@ -3456,6 +3433,9 @@ function api_not_allowed($print_headers = false, $message = null)
             'error',
             false
         );
+        if (!empty($message)) {
+            $msg = $message;
+        }
     }
 
     $tpl->assign('content', $msg);
@@ -5364,119 +5344,75 @@ function &api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $ur
 }
 
 /**
- * Sets a platform configuration setting to a given value
- * @param string    The value we want to record
- * @param string    The variable name we want to insert
- * @param string    The subkey for the variable we want to insert
- * @param string    The type for the variable we want to insert
- * @param string    The category for the variable we want to insert
- * @param string    The title
- * @param string    The comment
- * @param string    The scope
- * @param string    The subkey text
- * @param int       The access_url for which this parameter is valid
- * @param int       The changeability of this setting for non-master urls
- * @param string $val
- * @param string $var
- * @param string $sk
- * @param string $c
- * @return boolean  true on success, false on failure
+ * @param string $value The value we want to record
+ * @param string $variable The variable name we want to insert
+ * @param string $subKey The subkey for the variable we want to insert
+ * @param string $type The type for the variable we want to insert
+ * @param string $category The category for the variable we want to insert
+ * @param string $title The title
+ * @param string $comment The comment
+ * @param string $scope The scope
+ * @param string $subKeyText The subkey text
+ * @param int $accessUrlId The access_url for which this parameter is valid
+ * @param int $visibility The changeability of this setting for non-master urls
+ * @return int The setting ID
  */
 function api_add_setting(
-    $val,
-    $var,
-    $sk = null,
+    $value,
+    $variable,
+    $subKey = '',
     $type = 'textfield',
-    $c = null,
+    $category = '',
     $title = '',
-    $com = '',
-    $sc = null,
-    $skt = null,
-    $a = 1,
-    $v = 0
+    $comment = '',
+    $scope = '',
+    $subKeyText = '',
+    $accessUrlId = 1,
+    $visibility = 0
 ) {
-    if (empty($var) || !isset($val)) { return false; }
-    $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-    $var = Database::escape_string($var);
-    $val = Database::escape_string($val);
-    $a = (int) $a;
-    if (empty($a)) { $a = 1; }
+    $em = Database::getManager();
+    $settingRepo = $em->getRepository('ChamiloCoreBundle:SettingsCurrent');
+    $accessUrlId = (int) $accessUrlId ?: 1;
+
+    $criteria = ['variable' => $variable, 'accessUrl' => $accessUrlId];
+
+    if (!empty($subKey)) {
+        $criteria['subkey'] = $subKey;
+    }
+
     // Check if this variable doesn't exist already
-    $select = "SELECT id FROM $t_settings WHERE variable = '$var' ";
-    if (!empty($sk)) {
-        $sk = Database::escape_string($sk);
-        $select .= " AND subkey = '$sk'";
-    }
-    if ($a > 1) {
-        $select .= " AND access_url = $a";
-    } else {
-        $select .= " AND access_url = 1 ";
-    }
-    $res = Database::query($select);
-    if (Database::num_rows($res) > 0) { // Found item for this access_url.
-        $row = Database::fetch_array($res);
-        Database::update(
-            $t_settings,
-            array('selected_value' => $val),
-            array('id = ?' => array($row['id']))
-        );
-        return $row['id'];
+    /** @var SettingsCurrent $setting */
+    $setting = $settingRepo->findOneBy($criteria);
+
+    if ($setting) {
+        $setting->setSelectedValue($value);
+
+        $em->persist($setting);
+        $em->flush();
+
+        return $setting->getId();
     }
 
     // Item not found for this access_url, we have to check if the whole thing is missing
     // (in which case we ignore the insert) or if there *is* a record but just for access_url = 1
-    $insert = "INSERT INTO $t_settings ".
-                "(variable,selected_value,".
-                "type,category,".
-                "subkey,title,".
-                "comment,scope,".
-                "subkeytext,access_url,access_url_changeable)".
-                " VALUES ('$var','$val',";
-    if (isset($type)) {
-        $type = Database::escape_string($type);
-        $insert .= "'$type',";
-    } else {
-        $insert .= "NULL,";
-    }
-    if (isset($c)) { // Category
-        $c = Database::escape_string($c);
-        $insert .= "'$c',";
-    } else {
-        $insert .= "NULL,";
-    }
-    if (isset($sk)) { // Subkey
-        $sk = Database::escape_string($sk);
-        $insert .= "'$sk',";
-    } else {
-        $insert .= "NULL,";
-    }
-    if (isset($title)) { // Title
-        $title = Database::escape_string($title);
-        $insert .= "'$title',";
-    } else {
-        $insert .= "NULL,";
-    }
-    if (isset($com)) { // Comment
-        $com = Database::escape_string($com);
-        $insert .= "'$com',";
-    } else {
-        $insert .= "NULL,";
-    }
-    if (isset($sc)) { // Scope
-        $sc = Database::escape_string($sc);
-        $insert .= "'$sc',";
-    } else {
-        $insert .= "NULL,";
-    }
-    if (isset($skt)) { // Subkey text
-        $skt = Database::escape_string($skt);
-        $insert .= "'$skt',";
-    } else {
-        $insert .= "NULL,";
-    }
-    $insert .= "$a,$v)";
-    $res = Database::query($insert);
-    return $res;
+    $setting = new SettingsCurrent();
+    $setting
+        ->setVariable($variable)
+        ->setSelectedValue($value)
+        ->setType($type)
+        ->setCategory($category)
+        ->setSubkey($subKey)
+        ->setTitle($title)
+        ->setComment($comment)
+        ->setScope($scope)
+        ->setSubkeytext($subKeyText)
+        ->setAccessUrl($accessUrlId)
+        ->setAccessUrlChangeable($visibility);
+
+    $em->persist($setting);
+    $em->flush();
+
+    return $setting->getId();
 }
 
 /**
@@ -5548,7 +5484,6 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
         // This user has got a recorded state for this course.
         $cuData = Database::fetch_array($result);
         $is_courseMember = true;
-        $is_courseTutor = ($cuData['is_tutor'] == 1);
         $is_courseAdmin = ($cuData['status'] == 1);
     }
 
@@ -5573,17 +5508,11 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
 
         if ($row[0]['id_coach'] == $userid) {
             $is_courseMember = true;
-            $is_courseTutor = true;
             $is_courseAdmin = false;
-            $is_courseCoach = true;
-            $is_sessionAdmin = false;
         }
         elseif ($row[0]['session_admin_id'] == $userid) {
             $is_courseMember = false;
-            $is_courseTutor = false;
             $is_courseAdmin = false;
-            $is_courseCoach = false;
-            $is_sessionAdmin = true;
         } else {
             // Check if the current user is the course coach.
             $sql = "SELECT 1
@@ -5597,9 +5526,6 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
             //if ($row = Database::fetch_array($result)) {
             if (Database::num_rows($result) > 0) {
                 $is_courseMember = true;
-                $is_courseTutor = true;
-                $is_courseCoach = true;
-                $is_sessionAdmin = false;
 
                 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
@@ -5627,9 +5553,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
                     // This user haa got a recorded state for this course.
                     while ($row = Database::fetch_array($result)) {
                         $is_courseMember = true;
-                        $is_courseTutor = false;
                         $is_courseAdmin = false;
-                        $is_sessionAdmin = false;
                     }
                 }
             }
@@ -7924,12 +7848,25 @@ function api_mail_html(
     if (isset($platform_email['SMTP_UNIQUE_SENDER']) && $platform_email['SMTP_UNIQUE_SENDER']) {
         $senderName = $platform_email['SMTP_FROM_NAME'];
         $senderEmail = $platform_email['SMTP_FROM_EMAIL'];
+        $valid = PHPMailer::validateAddress($senderEmail);
+        if ($valid) {
+            //force-set Sender to $senderEmail, otherwise SetFrom only does it if it is currently empty
+            $mail->Sender = $senderEmail;
+        }
     }
+
     $mail->SetFrom($senderEmail, $senderName);
     $mail->Subject = $subject;
     $mail->AltBody = strip_tags(
         str_replace('<br />', "\n", api_html_entity_decode($message))
     );
+
+    $list = api_get_configuration_value('send_all_emails_to');
+    if (!empty($list) && isset($list['emails'])) {
+        foreach ($list['emails'] as $email) {
+            $mail->AddBCC($email);
+        }
+    }
 
     // Send embedded image.
     if ($embedded_image) {
@@ -8041,7 +7978,8 @@ function api_mail_html(
                 "Protocol: ".$mail->Mailer.' :: '.
                 "Host/Port: ".$mail->Host.':'.$mail->Port.' :: '.
                 "Authent/Open: ".($mail->SMTPAuth ? 'Authent' : 'Open').' :: '.
-                ($mail->SMTPAuth ? "  User/Pass: ".$mail->Username.':'.$mail->Password : '')
+                ($mail->SMTPAuth ? "  User/Pass: ".$mail->Username.':'.$mail->Password : '').' :: '.
+                "Sender: ".$mail->Sender
             );
         }
         return 0;

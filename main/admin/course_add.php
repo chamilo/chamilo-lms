@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
+use Chamilo\CoreBundle\Entity\CourseCategory;
+
 /**
  * @package chamilo.admin
  */
-
-use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
-use Chamilo\CoreBundle\Entity\CourseCategory;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -78,19 +78,6 @@ $form->addText(
 
 $form->applyFilter('visual_code', 'api_strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
-$form->addRule('visual_code', get_lang('Max'), 'maxlength', CourseManager::MAX_COURSE_LENGTH_CODE);
-
-$form->addElement(
-    'select',
-    'course_teachers',
-    get_lang('CourseTeachers'),
-    $teachers,
-    [
-        'id' => 'course_teachers',
-        'multiple' => 'multiple'
-    ]
-);
-$form->applyFilter('course_teachers', 'html_filter');
 
 $countCategories = $courseCategoriesRepo->countAllInAccessUrl($accessUrlId);
 
@@ -111,15 +98,34 @@ if ($countCategories >= 100) {
 
     /** @var CourseCategory $category */
     foreach ($categories as $category) {
-        $categoriesOptions[$category->getCode()] = $category->__toString();
+        $categoriesOptions[$category->getCode()] = (string) $category;
     }
-
     $form->addSelect(
         'category_code',
         get_lang('CourseFaculty'),
         $categoriesOptions
     );
 }
+
+
+$form->addRule(
+    'visual_code',
+    get_lang('Max'),
+    'maxlength',
+    CourseManager::MAX_COURSE_LENGTH_CODE
+);
+
+$form->addElement(
+    'select',
+    'course_teachers',
+    get_lang('CourseTeachers'),
+    $teachers,
+    [
+        'id' => 'course_teachers',
+        'multiple' => 'multiple'
+    ]
+);
+$form->applyFilter('course_teachers', 'html_filter');
 
 // Course department
 $form->addText(

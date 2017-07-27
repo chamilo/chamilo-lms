@@ -75,26 +75,27 @@
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
                             <thead>
-                                <tr>
-                                    <th>{{ 'Name'|get_lang }}</th>
-                                    <th>{{ 'BankAccount'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                                    <th>{{ 'SWIFT'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                                    <th>{{ 'Actions'|get_lang }}</th>
-                                </tr>
+                            <tr>
+                                <th>{{ 'Name'|get_lang }}</th>
+                                <th>{{ 'BankAccount'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                                <th>{{ 'SWIFT'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                                <th>{{ 'Actions'|get_lang }}</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                {% for account in transfer_accounts %}
-                                    <tr>
-                                        <td>{{ account.name }}</td>
-                                        <td>{{ account.account }}</td>
-                                        <td>{{ account.swift }}</td>
-                                        <td>
-                                            <a href="{{ _p.web_self ~ '?' ~ {'action':'delete_taccount', 'id': account.id}|url_encode() }}" class="btn btn-danger btn-sm">
-                                                <em class="fa fa-remove"></em> {{ 'Delete'|get_lang }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
+                            {% for account in transfer_accounts %}
+                                <tr>
+                                    <td>{{ account.name }}</td>
+                                    <td>{{ account.account }}</td>
+                                    <td>{{ account.swift }}</td>
+                                    <td>
+                                        <a href="{{ _p.web_self ~ '?' ~ {'action':'delete_taccount', 'id': account.id}|url_encode() }}"
+                                           class="btn btn-danger btn-sm">
+                                            <em class="fa fa-remove"></em> {{ 'Delete'|get_lang }}
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>

@@ -1,8 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
-*	@package chamilo.admin
-*/
+ * @package chamilo.admin
+ */
 
 $cidReset = true;
 
@@ -15,16 +16,24 @@ $xajax->registerFunction('search_users');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
-
 $id_session = intval($_GET['id_session']);
 
 SessionManager::protect_teacher_session_edit($id_session);
 
 // setting breadcrumbs
 if (api_is_platform_admin()) {
-    $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-    $interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
-    $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session, "name" => get_lang('SessionOverview'));
+    $interbreadcrumb[] = array(
+        'url' => 'index.php',
+        'name' => get_lang('PlatformAdmin')
+    );
+    $interbreadcrumb[] = array(
+        'url' => 'session_list.php',
+        'name' => get_lang('SessionList')
+    );
+    $interbreadcrumb[] = array(
+        'url' => "resume_session.php?id_session=".$id_session,
+        "name" => get_lang('SessionOverview')
+    );
 }
 $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
 $extra_field_list = [];
@@ -49,62 +58,59 @@ if ($allowTutors == 'true') {
     $extra_field_list = UserManager::get_extra_fields();
     $new_field_list = array();
     if (is_array($extra_field_list)) {
-    	foreach ($extra_field_list as $extra_field) {
-    		//if is enabled to filter and is a "<select>" field type
-    		if ($extra_field[8] == 1 && $extra_field[2] == 4) {
+        foreach ($extra_field_list as $extra_field) {
+            //if is enabled to filter and is a "<select>" field type
+            if ($extra_field[8] == 1 && $extra_field[2] == 4) {
                 $new_field_list[] = array(
                     'name' => $extra_field[3],
                     'variable' => $extra_field[1],
                     'data' => $extra_field[9],
                 );
-    		}
-    	}
+            }
+        }
     }
 
     function search_users($needle, $type)
     {
-    	global $id_session;
-
+        global $id_session;
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $xajax_response = new xajaxResponse();
+        $return = '';
 
-    	$xajax_response = new xajaxResponse();
-    	$return = '';
-
-    	if (!empty($needle) && !empty($type)) {
-
+        if (!empty($needle) && !empty($type)) {
             //normal behaviour
             if ($type == 'any_session' && $needle == 'false') {
                 $type = 'multiple';
                 $needle = '';
             }
 
-    		// xajax send utf8 datas... datas in db can be non-utf8 datas
-    		$charset = api_get_system_encoding();
-    		$needle = Database::escape_string($needle);
-    		$needle = api_convert_encoding($needle, $charset, 'utf-8');
+            // xajax send utf8 datas... datas in db can be non-utf8 datas
+            $charset = api_get_system_encoding();
+            $needle = Database::escape_string($needle);
+            $needle = api_convert_encoding($needle, $charset, 'utf-8');
 
-    		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
-    		$cond_user_id = '';
+            $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
+            $cond_user_id = '';
 
             //Only for single & multiple
             if (in_array($type, array('single', 'multiple'))) {
-        		if (!empty($id_session)) {
-        		    $id_session = intval($id_session);
-        			// check id_user from session_rel_user table
-        			$sql = 'SELECT user_id FROM '.$tbl_session_rel_user.'
-        			        WHERE session_id ="'.$id_session.'" AND relation_type<>'.SESSION_RELATION_TYPE_RRHH.' ';
-        			$res = Database::query($sql);
-        			$user_ids = array();
-        			if (Database::num_rows($res) > 0) {
-        				while ($row = Database::fetch_row($res)) {
-        					$user_ids[] = (int) $row[0];
-        				}
-        			}
-        			if (count($user_ids) > 0) {
-        				$cond_user_id = ' AND user.user_id NOT IN('.implode(",", $user_ids).')';
-        			}
-        		}
+                if (!empty($id_session)) {
+                    $id_session = intval($id_session);
+                    // check id_user from session_rel_user table
+                    $sql = 'SELECT user_id FROM '.$tbl_session_rel_user.'
+                            WHERE session_id ="'.$id_session.'" AND relation_type<>'.SESSION_RELATION_TYPE_RRHH.' ';
+                    $res = Database::query($sql);
+                    $user_ids = array();
+                    if (Database::num_rows($res) > 0) {
+                        while ($row = Database::fetch_row($res)) {
+                            $user_ids[] = (int) $row[0];
+                        }
+                    }
+                    if (count($user_ids) > 0) {
+                        $cond_user_id = ' AND user.user_id NOT IN('.implode(",", $user_ids).')';
+                    }
+                }
             }
 
             switch ($type) {
@@ -136,11 +142,11 @@ if ($allowTutors == 'true') {
                                 user.status <> 6 '.$cond_user_id.
                             $order_clause;
                     break;
-    		}
-    		if (api_is_multiple_url_enabled()) {
-    			$tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    			$access_url_id = api_get_current_access_url_id();
-    			if ($access_url_id != -1) {
+            }
+            if (api_is_multiple_url_enabled()) {
+                $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+                $access_url_id = api_get_current_access_url_id();
+                if ($access_url_id != -1) {
                     switch ($type) {
                         case 'single':
                             $sql = 'SELECT user.user_id, username, lastname, firstname
@@ -164,7 +170,7 @@ if ($allowTutors == 'true') {
                                     '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.status<>'.DRH.' AND user.status<>6 '.$cond_user_id.
                                     $order_clause;
                             break;
-                        case 'any_session' :
+                        case 'any_session':
                             $sql = 'SELECT DISTINCT user.user_id, username, lastname, firstname
                                     FROM '.$tbl_user.' user
                                     LEFT OUTER JOIN '.$tbl_session_rel_user.' s
@@ -178,65 +184,64 @@ if ($allowTutors == 'true') {
                                         user.status<>6 '.$cond_user_id.
                             $order_clause;
                             break;
-    				}
-    			}
-    		}
+                    }
+                }
+            }
 
-    		$rs = Database::query($sql);
+            $rs = Database::query($sql);
             $i = 0;
-    		if ($type == 'single') {
-    			while ($user = Database::fetch_array($rs)) {
-    	            $i++;
-    	            if ($i <= 10) {
-                		$person_name = api_get_person_name($user['firstname'], $user['lastname']);
-    					$return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_session(\''.$user['user_id'].'\',\''.$person_name.' ('.$user['username'].')'.'\')">'.$person_name.' ('.$user['username'].')</a><br />';
-    	            } else {
-    	            	$return .= '...<br />';
-    	            }
-    			}
+            if ($type == 'single') {
+                while ($user = Database::fetch_array($rs)) {
+                    $i++;
+                    if ($i <= 10) {
+                        $person_name = api_get_person_name($user['firstname'], $user['lastname']);
+                        $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_session(\''.$user['user_id'].'\',\''.$person_name.' ('.$user['username'].')'.'\')">'.$person_name.' ('.$user['username'].')</a><br />';
+                    } else {
+                        $return .= '...<br />';
+                    }
+                }
 
-    			$xajax_response -> addAssign('ajax_list_users_single', 'innerHTML', api_utf8_encode($return));
-    		} else {
-    			$return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
-    			while ($user = Database :: fetch_array($rs)) {
-    				$person_name = api_get_person_name($user['firstname'], $user['lastname']);
-    	            $return .= '<option value="'.$user['user_id'].'">'.$person_name.' ('.$user['username'].')</option>';
-    			}
-    			$return .= '</select>';
-    			$xajax_response -> addAssign('ajax_list_users_multiple', 'innerHTML', api_utf8_encode($return));
-    		}
-    	}
+                $xajax_response -> addAssign('ajax_list_users_single', 'innerHTML', api_utf8_encode($return));
+            } else {
+                $return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
+                while ($user = Database :: fetch_array($rs)) {
+                    $person_name = api_get_person_name($user['firstname'], $user['lastname']);
+                    $return .= '<option value="'.$user['user_id'].'">'.$person_name.' ('.$user['username'].')</option>';
+                }
+                $return .= '</select>';
+                $xajax_response -> addAssign('ajax_list_users_multiple', 'innerHTML', api_utf8_encode($return));
+            }
+        }
 
-    	return $xajax_response;
+        return $xajax_response;
     }
 
-    $xajax -> processRequests();
+    $xajax->processRequests();
 
     $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
     $htmlHeadXtra[] = '<script>
     function add_user_to_session (code, content) {
-    	document.getElementById("user_to_add").value = "";
-    	document.getElementById("ajax_list_users_single").innerHTML = "";
+        document.getElementById("user_to_add").value = "";
+        document.getElementById("ajax_list_users_single").innerHTML = "";
+        destination = document.getElementById("destination_users");
 
-    	destination = document.getElementById("destination_users");
-
-    	for (i=0;i<destination.length;i++) {
-    		if(destination.options[i].text == content) {
-    				return false;
-    		}
-    	}
-    	destination.options[destination.length] = new Option(content,code);
-    	destination.selectedIndex = -1;
-    	sortOptions(destination.options);
+        for (i=0;i<destination.length;i++) {
+            if(destination.options[i].text == content) {
+                    return false;
+            }
+        }
+        destination.options[destination.length] = new Option(content,code);
+        destination.selectedIndex = -1;
+        sortOptions(destination.options);
     }
 
     function remove_item(origin) {
-    	for(var i = 0 ; i<origin.options.length ; i++) {
-    		if(origin.options[i].selected) {
-    			origin.options[i]=null;
-    			i = i-1;
-    		}
-    	}
+        for(var i = 0 ; i<origin.options.length ; i++) {
+            if(origin.options[i].selected) {
+                origin.options[i]=null;
+                i = i-1;
+            }
+        }
     }
 
     function validate_filter() {
@@ -347,8 +352,8 @@ if ($allowTutors == 'true') {
 
         if ($use_extra_fields) {
             $final_result = array();
-           	if (count($extra_field_result) > 1) {
-    	    for ($i = 0; $i < count($extra_field_result) - 1; $i++) {
+            if (count($extra_field_result) > 1) {
+                for ($i = 0; $i < count($extra_field_result) - 1; $i++) {
                     if (is_array($extra_field_result[$i + 1])) {
                         $final_result = array_intersect(
                             $extra_field_result[$i],
@@ -426,7 +431,7 @@ if ($allowTutors == 'true') {
                     'un' => $user['username']
                 );
                 unset($users[$uid]);
-    	}
+            }
         }
         unset($users); //clean to free memory
 
@@ -471,46 +476,46 @@ if ($allowTutors == 'true') {
     }
 
     if ($add_type === 'multiple') {
-    	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
-    	$link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
+        $link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
+        $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
     } else {
-    	$link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
-    	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+        $link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
+        $link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
     }
-    	$link_add_group = '<a href="usergroups.php">'.
+        $link_add_group = '<a href="usergroups.php">'.
             Display::return_icon('multiple.gif', get_lang('RegistrationByUsersGroups')).get_lang('RegistrationByUsersGroups').'</a>';
     ?>
     <div class="actions">
-    	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>&nbsp;|&nbsp;<?php echo $link_add_group; ?>
+        <?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>&nbsp;|&nbsp;<?php echo $link_add_group; ?>
     </div>
     <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($_GET['add'])) echo '&add=true'; ?>" style="margin:0px;" <?php if ($ajax_search) {echo ' onsubmit="valide();"'; }?>>
     <?php echo '<legend>'.$tool_name.' ('.$session->getName().') </legend>'; ?>
     <?php
     if ($add_type === 'multiple') {
-    	if (is_array($extra_field_list)) {
-    		if (is_array($new_field_list) && count($new_field_list) > 0) {
-    			echo '<h3>'.get_lang('FilterUsers').'</h3>';
-    			foreach ($new_field_list as $new_field) {
-    				echo $new_field['name'];
-    				$varname = 'field_'.$new_field['variable'];
-    				echo '&nbsp;<select name="'.$varname.'">';
-    				echo '<option value="0">--'.get_lang('Select').'--</option>';
-    				foreach ($new_field['data'] as $option) {
-    					$checked = '';
-    					if (isset($_POST[$varname])) {
-    						if ($_POST[$varname] == $option[1]) {
-    							$checked = 'selected="true"';
-    						}
-    					}
-    					echo '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
-    				}
-    				echo '</select>';
-    				echo '&nbsp;&nbsp;';
-    			}
-    			echo '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
-    			echo '<br /><br />';
-    		}
-    	}
+        if (is_array($extra_field_list)) {
+            if (is_array($new_field_list) && count($new_field_list) > 0) {
+                echo '<h3>'.get_lang('FilterUsers').'</h3>';
+                foreach ($new_field_list as $new_field) {
+                    echo $new_field['name'];
+                    $varname = 'field_'.$new_field['variable'];
+                    echo '&nbsp;<select name="'.$varname.'">';
+                    echo '<option value="0">--'.get_lang('Select').'--</option>';
+                    foreach ($new_field['data'] as $option) {
+                        $checked = '';
+                        if (isset($_POST[$varname])) {
+                            if ($_POST[$varname] == $option[1]) {
+                                $checked = 'selected="true"';
+                            }
+                        }
+                        echo '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
+                    }
+                    echo '</select>';
+                    echo '&nbsp;&nbsp;';
+                }
+                echo '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
+                echo '<br /><br />';
+            }
+        }
     }
     ?>
     <input type="hidden" name="form_sent" value="1" />
@@ -581,14 +586,14 @@ if ($allowTutors == 'true') {
             </div>
             <br />
             <br />
-    		<?php
-    		if (isset($_GET['add'])) {
-    			echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('FinishSessionCreation').'</button>';
+            <?php
+            if (isset($_GET['add'])) {
+                echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('FinishSessionCreation').'</button>';
             } else {
                 //@todo see that the call to "valide()" doesn't duplicate the onsubmit of the form (necessary to avoid delete on "enter" key pressed)
-    			echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToSession').'</button>';
+                echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToSession').'</button>';
             }
-    		?>
+            ?>
         </div>
         <div class="span5">
             <div class="multiple_select_header">
@@ -609,82 +614,82 @@ if ($allowTutors == 'true') {
     </form>
     <script>
     function moveItem(origin , destination) {
-    	for (var i = 0 ; i<origin.options.length ; i++) {
-    		if (origin.options[i].selected) {
-    			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
-    			origin.options[i]=null;
-    			i = i-1;
-    		}
-    	}
-    	destination.selectedIndex = -1;
-    	sortOptions(destination.options);
+        for (var i = 0 ; i<origin.options.length ; i++) {
+            if (origin.options[i].selected) {
+                destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
+                origin.options[i]=null;
+                i = i-1;
+            }
+        }
+        destination.selectedIndex = -1;
+        sortOptions(destination.options);
     }
 
     function sortOptions(options)
     {
-    	newOptions = new Array();
-    	for (i = 0 ; i<options.length ; i++)
-    		newOptions[i] = options[i];
+        newOptions = new Array();
+        for (i = 0 ; i<options.length ; i++)
+            newOptions[i] = options[i];
 
-    	newOptions = newOptions.sort(mysort);
-    	options.length = 0;
-    	for (i = 0 ; i < newOptions.length ; i++)
-    		options[i] = newOptions[i];
+        newOptions = newOptions.sort(mysort);
+        options.length = 0;
+        for (i = 0 ; i < newOptions.length ; i++)
+            options[i] = newOptions[i];
     }
 
     function mysort(a, b)
     {
-    	if (a.text.toLowerCase() > b.text.toLowerCase()) {
-    		return 1;
-    	}
-    	if (a.text.toLowerCase() < b.text.toLowerCase()) {
-    		return -1;
-    	}
-    	return 0;
+        if (a.text.toLowerCase() > b.text.toLowerCase()) {
+            return 1;
+        }
+        if (a.text.toLowerCase() < b.text.toLowerCase()) {
+            return -1;
+        }
+        return 0;
     }
 
     function valide()
     {
-    	var options = document.getElementById('destination_users').options;
-    	for (i = 0 ; i<options.length ; i++)
-    		options[i].selected = true;
-    	document.forms.formulaire.submit();
+        var options = document.getElementById('destination_users').options;
+        for (i = 0 ; i<options.length ; i++)
+            options[i].selected = true;
+        document.forms.formulaire.submit();
     }
 
 
     function loadUsersInSelect(select)
     {
-    	var xhr_object = null;
-    	if(window.XMLHttpRequest) // Firefox
-    		xhr_object = new XMLHttpRequest();
-    	else if(window.ActiveXObject) // Internet Explorer
-    		xhr_object = new ActiveXObject("Microsoft.XMLHTTP");
-    	else  // XMLHttpRequest non supporté par le navigateur
-    	alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
+        var xhr_object = null;
+        if(window.XMLHttpRequest) // Firefox
+            xhr_object = new XMLHttpRequest();
+        else if(window.ActiveXObject) // Internet Explorer
+            xhr_object = new ActiveXObject("Microsoft.XMLHTTP");
+        else  // XMLHttpRequest non supporté par le navigateur
+        alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
 
-    	//xhr_object.open("GET", "loadUsersInSelect.ajax.php?id_session=<?php echo $id_session ?>&letter="+select.options[select.selectedIndex].text, false);
-    	xhr_object.open("POST", "loadUsersInSelect.ajax.php");
-    	xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    	nosessionUsers = makepost(document.getElementById('origin_users'));
-    	sessionUsers = makepost(document.getElementById('destination_users'));
-    	nosessionClasses = makepost(document.getElementById('origin_classes'));
-    	sessionClasses = makepost(document.getElementById('destination_classes'));
-    	xhr_object.send("nosessionusers="+nosessionUsers+"&sessionusers="+sessionUsers+"&nosessionclasses="+nosessionClasses+"&sessionclasses="+sessionClasses);
-    	xhr_object.onreadystatechange = function() {
-    		if (xhr_object.readyState == 4) {
-    			document.getElementById('content_source').innerHTML = result = xhr_object.responseText;
-    			//alert(xhr_object.responseText);
-    		}
-    	}
+        //xhr_object.open("GET", "loadUsersInSelect.ajax.php?id_session=<?php echo $id_session ?>&letter="+select.options[select.selectedIndex].text, false);
+        xhr_object.open("POST", "loadUsersInSelect.ajax.php");
+        xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        nosessionUsers = makepost(document.getElementById('origin_users'));
+        sessionUsers = makepost(document.getElementById('destination_users'));
+        nosessionClasses = makepost(document.getElementById('origin_classes'));
+        sessionClasses = makepost(document.getElementById('destination_classes'));
+        xhr_object.send("nosessionusers="+nosessionUsers+"&sessionusers="+sessionUsers+"&nosessionclasses="+nosessionClasses+"&sessionclasses="+sessionClasses);
+        xhr_object.onreadystatechange = function() {
+            if (xhr_object.readyState == 4) {
+                document.getElementById('content_source').innerHTML = result = xhr_object.responseText;
+                //alert(xhr_object.responseText);
+            }
+        }
     }
 
     function makepost(select)
     {
-    	var options = select.options;
-    	var ret = "";
-    	for (i = 0 ; i<options.length ; i++)
-    		ret = ret + options[i].value +'::'+options[i].text+";;";
-    	return ret;
+        var options = select.options;
+        var ret = "";
+        for (i = 0 ; i<options.length ; i++)
+            ret = ret + options[i].value +'::'+options[i].text+";;";
+        return ret;
     }
     </script>
 <?php

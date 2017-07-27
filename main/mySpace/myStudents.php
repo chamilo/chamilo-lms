@@ -1640,7 +1640,7 @@ if ($export) {
             break;
         case 'xls':
             Export::arrayToXls($csv_content, 'reporting_student');
-        break;
+            break;
     }
     exit;
 }

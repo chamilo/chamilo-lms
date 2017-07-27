@@ -202,12 +202,18 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // Unoconv binary file
 //$_configuration['unoconv.binaries'] = '/usr/bin/unoconv';
 // Proxy settings for access external services
-/*$_configuration['proxy_settings'] = array(
-    'http' => array(
-        'proxy' => 'tcp://example.com:8080',
-        'request_fulluri'=>true
-    )
-);*/
+/*$_configuration['proxy_settings'] = [
+    'stream_context_create' => [
+        'http' => [
+            'proxy' => 'tcp://example.com:8080',
+            'request_fulluri' => true
+        ]
+    ],
+    'curl_setopt_array' => [
+        'CURLOPT_PROXY' => 'http://example.com',
+        'CURLOPT_PROXYPORT' => '8080'
+    ]
+];*/
 
 // E-mail accounts to send notifications to when executing cronjobs - works for main/cron/import_csv.php
 //$_configuration['cron_notification_mails'] = array('email@example.com', 'email2@example.com');
@@ -228,12 +234,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['lp_fixed_encoding'] = 'false';
 // Fix urls changing http with https in scorm packages.
 //$_configuration['lp_replace_http_to_https'] = false;
-// Manage the links to Session Index page
-// 1 = Default. Works as it is now (default is to link to the special session page)
-// 0 = No link (not clickable)
-// 2 = Link to the course if there is only one course
-// 3 = Session link will make course list foldable
-//$_configuration['courses_list_session_title_link'] = 1;
 // Fix embedded videos inside lps, adding an optional popup
 //$_configuration['lp_fix_embed_content'] = false;
 // Manage deleted files marked with "DELETED" (by course and only by allowed by admin)
@@ -242,10 +242,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['session_hide_tab_list'] = array();
 // Show invisible exercise in LP list
 //$_configuration['show_invisible_exercise_in_lp_list'] = false;
-// New grid view the list of courses
-//$_configuration['view_grid_courses'] = 'true';
-// Show courses grouped by categories when $_configuration['view_grid_courses'] is enabled
-//$_configuration['view_grid_courses_grouped_categories_in_sessions'] = true;
 // Chamilo is installed/downloaded. Packagers can change this
 // to reflect their packaging method. The default value is 'chamilo'. This will
 // be reflected on the https://version.chamilo.org/stats page in the future.
@@ -263,14 +259,10 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['hide_my_certificate_link'] = false;
 // Hide header and footer in certificate pdf
 //$_configuration['hide_header_footer_in_certificate'] = false;
-// Send only quiz answer notifications to course coaches and not general coach
-//$_configuration['block_quiz_mail_notification_general_coach'] = false;
 // Security: block direct access from logged in users to contents in OPEN (but not public) courses. Set to true to block
 //$_configuration['block_registered_users_access_to_open_course_contents'] = false;
 // Allows syncing the database with the current entity schema
 //$_configuration['sync_db_with_schema'] = false;
-// Load course notifications in user_portal.php using ajax
-//$_configuration['user_portal_load_notification_by_ajax'] = false;
 // When exporting a LP, all files and folders in the same path of an html will be exported too.
 //$_configuration['add_all_files_in_lp_export'] = false;
 // Send exercise student score to manager in email notification
@@ -305,10 +297,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['hide_main_navigation_menu'] = false;
 // PDF image dpi value. Default value 96
 // $_configuration['pdf_img_dpi'] = 96;
-// Hide the "what's new" icon notifications in course list
-// $_configuration['hide_course_notification'] = true;
-// Show less session information in course list
-//$_configuration['show_simple_session_info'] = true;
 // Hide LP time in reports.
 // $_configuration['hide_lp_time'] = false;
 // Hide rating elements in pages ("Courses catalog" & "Most Popular courses")
@@ -358,12 +346,29 @@ $_configuration['tracking_columns'] = [
 */
 // Hide session link of course_block on index/userportal
 //$_configuration['remove_session_url']= false ;
+//
+//
+// ------ AGENDA CONFIGURATION SETTINGS
 // Shows a legend in the agenda tool
 /*
 $_configuration['agenda_legend'] = [
     'red' => 'red caption',
     '#f0f' => 'another caption'
 ];*/
+// Set customs colors to agenda events
+/*
+$_configuration['agenda_colors'] = [
+    'platform' => 'red',
+    'course' => '#458B00',
+    'group' => '#A0522D',
+    'session' => '#00496D',
+    'other_session' => '#999',
+    'personal' => 'steel blue',
+    'student_publication' => '#FF8C00'
+];
+*/
+// ------
+//
 // Save some tool titles with HTML editor
 // $_configuration['save_titles_as_html'] = false;
 // Show the full toolbar set to all CKEditor
@@ -389,5 +394,187 @@ $_configuration['agenda_legend'] = [
 // If the MySpace page takes too long to load, you might want to remove the
 // processing of generic statistics for the user. In this case set the following to true.
 //$_configuration['tracking_skip_generic_data'] = false;
+// Show view accordion lp_category
+//$_configuration['lp_category_accordion'] = false;
+//
+// ------ HTTP headers security
+// This section relates to options to increase the security of your Chamilo
+// portal against attacks specifically focused on HTTP headers vulnerabilities
+// These are all disabled by default, because some of these settings might
+// affect some features of Chamilo, like the inclusion of iframes or the
+// submission of forms by anonymous users. Please make sure you do the due
+// tests before enabling in production. Learn more about how to form secure
+// headers at https://securityheaders.io/
+//
+// HTTP Strict Transport Security is an excellent feature to support on your
+// site and strengthens your implementation of TLS by getting the User Agent
+// to enforce the use of HTTPS. Recommended value
+// "strict-transport-security: max-age=31536000; includeSubDomains".
+//$_configuration['security_strict_transport'] = 'strict-transport-security: max-age=31536000; includeSubDomains';
+//
+// Content Security Policy is an effective measure to protect your site from
+// XSS attacks. By whitelisting sources of approved content, you can prevent
+// the browser from loading malicious assets.
+// The provided default is an *example*, please customize.
+// This setting is particularly complicated to set with CKeditor, but if you
+// add all domains that you want to authorize for iframes inclusion in the
+// child-src statement, this example should work for you
+//$_configuration['security_content_policy'] = 'default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;';
+//$_configuration['security_content_policy_report_only'] = 'default-src \'self\'; script-src *://*.google.com:*';
+//
+// HTTP Public Key Pinning protects your site from MiTM attacks using rogue
+// X.509 certificates. By whitelisting only the identities that the browser
+// should trust, your users are protected in the event a certificate
+// authority is compromised.
+//$_configuration['security_public_key_pins'] = '';
+//$_configuration['security_public_key_pins_report_only'] = '';
+//
+// X-Frame-Options tells the browser whether you want to allow your site to
+// be framed or not. By preventing a browser from framing your site you can
+// defend against attacks like clickjacking.
+// Recommended value "x-frame-options: SAMEORIGIN".
+//$_configuration['security_x_frame_options'] = 'x-frame-options: SAMEORIGIN';
+//
+// X-XSS-Protection sets the configuration for the cross-site scripting
+// filter built into most browsers.
+// Recommended value "X-XSS-Protection: 1; mode=block".
+//$_configuration['security_xss_protection'] = 'X-XSS-Protection: 1; mode=block';
+//
+// X-Content-Type-Options stops a browser from trying to MIME-sniff the
+// content type and forces it to stick with the declared content-type. The only
+// valid value for this header is "X-Content-Type-Options: nosniff".
+//$_configuration['security_x_content_type_options'] = 'X-Content-Type-Options: nosniff';
+//
+// Referrer Policy is a new header that allows a site to control how much
+// information the browser includes with navigation away from a document
+// and should be set by all sites.
+//$_configuration['security_referrer_policy'] = 'origin-when-cross-origin';
+// ------ HTTP headers security section ends here
+//
+// ------ Survey configuration settings
+// Add answered_at field in table survey_invitation
+// Requires DB change:
+// ALTER TABLE c_survey_invitation ADD answered_at DATETIME DEFAULT NULL;
+//$_configuration['survey_answered_at_field'] = false;
+// Add support to mandatory surveys. The user will not be able to enter to the course until fill the mandatory surveys
+// Requires DB change:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at)
+VALUES (12, 13, 'is_mandatory', 'IsMandatory', 1, 1, NOW());
+*/
+//$_configuration['allow_mandatory_survey'] = false;
+// ------
+//
+// Allow career diagram, requires a DB change:
+//UPDATE extra_field_values SET created_at = NULL WHERE CAST(created_at AS CHAR(20)) = '0000-00-00 00:00:00';
+//UPDATE extra_field_values SET updated_at = NULL WHERE CAST(updated_at AS CHAR(20)) = '0000-00-00 00:00:00';
+//ALTER TABLE extra_field_values modify column value longtext null;
+//$_configuration['allow_career_diagram'] = false;
+// Allow scheduled emails to session users. See class ProgrammedAnnouncement
+//$_configuration['allow_scheduled_announcements'] = false;
+// Add the list of emails as a bcc when sending an email.
+/*
+$_configuration['send_all_emails_to'] = [
+    'emails' => [
+        'admin1@example.com',
+        'admin2@example.com',
+    ]
+];*/
+// Allow ticket projects to be access by specific chamilo roles
+/*$_configuration['ticket_project_user_roles'] = [
+    'permissions' => [
+        1 => [17] // project_id = 1, STUDENT_BOSS = 17
+    ]
+];*/
+//
+
+// Exercises configuration settings
+// Send only quiz answer notifications to course coaches and not general coach
+//$_configuration['block_quiz_mail_notification_general_coach'] = false;
 // Show question feedback (requires DB change: "ALTER TABLE c_quiz_question ADD COLUMN feedback text;")
 //$_configuration['allow_quiz_question_feedback'] = false;
+// Add option in exercise to show or hide the "previous" button.
+//ALTER TABLE c_quiz ADD show_previous_button TINYINT(1) DEFAULT 1;
+//$_configuration['allow_quiz_show_previous_button_setting'] = false;
+// Allow to teachers review exercises question with audio notes
+//$_configuration["allow_teacher_comment_audio"] = false;
+// Hide search form in session list
+//$_configuration['hide_search_form_in_session_list'] = false;
+// Allow exchange of messages from teachers/bosses about a user.
+//$_configuration['private_messages_about_user'] = false;
+// Allow send email notification per exercise
+//ALTER TABLE c_quiz ADD COLUMN notifications VARCHAR(255) NULL DEFAULT NULL;
+//$_configuration['allow_notification_setting_per_exercise'] = false;
+// Hide free/oral/annotation question result see BT#12613
+//$_configuration['hide_free_question_score'] = false;
+
+// Score model
+// Allow to convert a score into a text/color label
+// using a model if score is inside those values. See BT#12898
+/*
+$_configuration['score_grade_model'] = [
+    'models' => [
+        [
+            'id' => 1,
+            'name' => 'ThisIsMyModel', // Value will be translated using get_lang
+            'score_list' => [
+                [
+                    'name' => 'VeryBad', // Value will be translated using get_lang
+                    'css_class' => 'btn-danger',
+                    'min' => 0,
+                    'max' => 20,
+                    'score_to_qualify' => 0
+                ],
+                [
+                    'name' => 'Bad',
+                    'css_class' => 'btn-danger',
+                    'min' => 21,
+                    'max' => 50,
+                    'score_to_qualify' => 25
+                ],
+                [
+                    'name' => 'Good',
+                    'css_class' => 'btn-warning',
+                    'min' => 51,
+                    'max' => 70,
+                    'score_to_qualify' => 60
+                ],
+                [
+                    'name' => 'VeryGood',
+                    'css_class' => 'btn-success',
+                    'min' => 71,
+                    'max' => 100,
+                    'score_to_qualify' => 100
+                ]
+            ]
+        ]
+    ]
+];
+*/
+//Allow show link to request vinculation HRM-user
+//$_configuration['show_link_request_hrm_user'] = false;
+// Allow CKEditor start up with ShowBlocks plugin acive
+//$_configuration['ckeditor_startup_outline_blocks'] = false;
+//
+// ------ SETTINGS FOT USER COURSE LIST
+// Manage the links to Session Index page
+// 1 = Default. Works as it is now (default is to link to the special session page)
+// 0 = No link (not clickable)
+// 2 = Link to the course if there is only one course
+// 3 = Session link will make course list foldable
+//$_configuration['courses_list_session_title_link'] = 1;
+// New grid view the list of courses
+//$_configuration['view_grid_courses'] = 'true';
+// Show courses grouped by categories when $_configuration['view_grid_courses'] is enabled
+//$_configuration['view_grid_courses_grouped_categories_in_sessions'] = true;
+// Load course notifications in user_portal.php using ajax
+//$_configuration['user_portal_load_notification_by_ajax'] = false;
+// Hide the "what's new" icon notifications in course list
+// $_configuration['hide_course_notification'] = true;
+// Show less session information in course list
+//$_configuration['show_simple_session_info'] = true;
+// Show course category list on My Courses page before the courses. Requires a DB change
+//ALTER TABLE course_category ADD image varchar(255) NULL;
+//$_configuration['my_courses_list_as_category'] = false;
+// ------
+//

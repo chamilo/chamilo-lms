@@ -25,7 +25,7 @@ class ChamiloIndexer extends XapianIndexer
      * @param int $search_did Search engine document id from search_engine_ref table
      * @return  boolean False on error or nothing to do, true otherwise
      */
-    function set_terms(
+    public function set_terms(
         $terms_string,
         $prefix,
         $course_code,
@@ -82,22 +82,19 @@ class ChamiloIndexer extends XapianIndexer
      * Get the terms stored at database
      * @return  array Array of terms
      */
-    function get_terms_on_db($prefix, $course_code, $tool_id, $ref_id)
+    public function get_terms_on_db($prefix, $course_code, $tool_id, $ref_id)
     {
         require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-        $terms = get_specific_field_values_list_by_prefix($prefix, $course_code, $tool_id, $ref_id);
+        $terms = get_specific_field_values_list_by_prefix(
+            $prefix,
+            $course_code,
+            $tool_id,
+            $ref_id
+        );
         $prefix_terms = array();
         foreach ($terms as $term) {
             $prefix_terms[] = $term['value'];
         }
         return $prefix_terms;
-    }
-
-}
-
-if (!function_exists('trim_value')) {
-    function trim_value(&$value)
-    {
-        $value = trim($value);
     }
 }

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
+
 /**
  * Class ExtraFieldOption
  * Handles the extra fields for various objects (users, sessions, courses)
@@ -31,7 +33,6 @@ class ExtraFieldOption extends Model
         $this->type = $type;
         $extraField = new ExtraField($this->type);
         $this->extraField = $extraField;
-
         $this->table = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
         $this->tableExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
     }
@@ -43,7 +44,6 @@ class ExtraFieldOption extends Model
     {
         return $this->extraField;
     }
-
 
     /**
      * Gets the number of options already available in the table for this item type
@@ -453,6 +453,7 @@ class ExtraFieldOption extends Model
         }
 
         $options = [];
+        /** @var ExtraFieldOptions $row */
         foreach ($result as $row) {
             $option = [
                 'id' => $row->getId(),
@@ -494,7 +495,7 @@ class ExtraFieldOption extends Model
             ->findSecondaryOptions($option);
 
         $optionsInfo = [];
-
+        /** @var ExtraFieldOptions $subOption */
         foreach ($subOptions as $subOption) {
             $optionsInfo[] = [
                 'id' => $subOption->getId(),

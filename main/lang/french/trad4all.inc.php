@@ -7962,4 +7962,25 @@ $TempScoreXQuestionsNotCorrectedYet = "Score temporaire: %s question(s) ouverte(
 $Annotation = "Annotation";
 $TeacherPicture = "Photo du prof";
 $FeedbackIfNotCorrect = "Feedback si incorrecte";
+$ScheduledAnnouncements = "Annonces programmées";
+$SpecificDate = "Date spécifique d'envoi";
+$BaseDate = "Envoi sur base des dates de début/fin de la session";
+$AfterOrBefore = "Avant ou après";
+$Before = "Avant le";
+$ScheduleAnnouncementDescription = "Ce formulair permet de programmer l'envoi automatique d'annonces aux étudiants qui réalisent le cours dans une session. Il existe deux types d'annonces programmées: l'envoi à une date spécifique: dans ce cas, on sélectionne un jour en particulier pour procéder à l'envoi du mail; et l'envoi sur base des dates de début ou de fin de la session: dans ce cas, il faut indiquer le nombre de jours de différence avec la date de début ou de fin, auquel l'e-mail doit être envoyé. Par exemple: 3 jours avant la fin de la session.";
+$MandatorySurveyNoAnswered = "Une enquête obligatoire est en attente de votre réponse. Pour entrer dans le cours, il est nécessaire de la compléter d'abord.";
+$ShowPreviousButton = "Montrer le bouton 'Précédent'";
+$AllTickets = "Tous les tickets";
+$IsMandatory = "Obligatoire?";
+$StudentXHasBeenAssignedNewWorkInCourseY = "Une nouvelle tâche a été assignée à %s dans le cours %s";
+$AsHRMYouReceiveThisMailToAlertThatXHasNewWorkInCourseY = "En tant que son responsable RH, vous recevez cet e-mail pour vous avertir qu'une nouvelle tâche vient d'être assignée à %s dans le cours %s.";
+$DearXComma = "Cher/Chère %s,";
+$UserLinkingRequests = "Demandes de liaisons à utilisateurs";
+$NewHomeworkEmailAlertToHrmEnable = "Envoyer un e-mail aux apprenants et à leurs directeurs de ressources humaines lors de la création d'un travail";
+$UserLinkingRequestAccepted = "Demande de liaison acceptée";
+$UserLinkingTo = "Lié à l'apprenant";
+$RequestLinkingToUser = "Solliciter lien à apprenant";
+$LinkingRequestsAdded = "Demande de liaison enregistrée";
+$HrmList = "Liste des directeurs de ressources humaines";
+
 ?>

@@ -62,6 +62,7 @@ if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
 }
 
 $categoryCode = isset($_GET['category_code']) && !empty($_GET['category_code']) ? $_GET['category_code'] : 'ALL';
+$searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : '';
 
 $nameTools = CourseCategory::getCourseCatalogNameTools($action);
 if (empty($nameTools)) {
@@ -145,13 +146,14 @@ if (isset($_POST['create_course_category']) &&
 if (isset($_REQUEST['search_course'])) {
     if ($ctok == $_REQUEST['sec_token']) {
         $courses_controller->search_courses(
-            $_REQUEST['search_term'],
+            $searchTerm,
             null,
             null,
             null,
             $limit,
             true
         );
+        exit;
     }
 }
 
@@ -160,7 +162,7 @@ if (isset($_REQUEST['subscribe_course'])) {
     if ($ctok == $_GET['sec_token']) {
         $courses_controller->subscribe_user(
             $_GET['subscribe_course'],
-            $_GET['search_term'],
+            $searchTerm,
             $categoryCode
         );
     }
@@ -168,11 +170,10 @@ if (isset($_REQUEST['subscribe_course'])) {
 
 // We are unsubscribing from a course (=Unsubscribe from course).
 if (isset($_GET['unsubscribe'])) {
-    $search_term = isset($_GET['search_term']) ? $_GET['search_term'] : null;
     if ($ctok == $_GET['sec_token']) {
         $courses_controller->unsubscribe_user_from_course(
             $_GET['unsubscribe'],
-            $search_term,
+            $searchTerm,
             $categoryCode
         );
     }
@@ -188,7 +189,7 @@ switch ($action) {
     case 'subscribe_user_with_password':
         $courses_controller->subscribe_user(
             isset($_POST['subscribe_user_with_password']) ? $_POST['subscribe_user_with_password'] : '',
-            isset($_POST['search_term']) ? $_POST['search_term'] : '',
+            $searchTerm,
             isset($_POST['category_code']) ? $_POST['category_code'] : ''
         );
         break;

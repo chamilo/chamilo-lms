@@ -2655,7 +2655,6 @@ $ApprovalForNewAccount = "تاییدیه برای حساب کاربری جدید
 $ManageUser = "مدیریت کاربر";
 $SubscribeUserToCourseAsTeacher = "ثبت نام اساتید";
 $PasswordEncryptedForSecurity = "کلمه عبور شما جهت امنیت بیشتر کد گذاری شد. البته پس از فشردن پیوند یک نامه الکترونیک بهمراه کلمه عبور برای شما مجددا ارسال می شود.";
-$SystemUnableToSendEmailContact = "این سیستم قادر به ارسال نامه الکترونیک نبود. لطفا تماس بگیرید";
 $OpenIDCouldNotBeFoundPleaseRegister = "این OpenID  در پایگاه داده وجود ندارد. لطفا یک حساب کاربری جدید ثبت کنید. اگر هم اکنون یک حساب کاربری در سایت دارید، لطفا مشخصات خود در حساب کاربری را ویرایش نموده و این OpenID  را اضافه نمایید.";
 $UsernameMaxXCharacters = "نام کاربری باید حداکثر %s کاراکتر طول داشته باشد";
 $PictureUploaded = "تصویر شما آپلود شد";

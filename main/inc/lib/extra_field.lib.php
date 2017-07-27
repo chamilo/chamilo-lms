@@ -129,9 +129,18 @@ class ExtraField extends Model
             case 'work':
                 $this->extraFieldType = EntityExtraField::WORK_FIELD_TYPE;
                 break;
+            case 'career':
+                $this->extraFieldType = EntityExtraField::CAREER_FIELD_TYPE;
+                break;
+            case 'user_certificate':
+                $this->extraFieldType = EntityExtraField::USER_CERTIFICATE;
+                break;
+            case 'survey':
+                $this->extraFieldType = EntityExtraField::SURVEY_FIELD_TYPE;
+                break;
         }
 
-        $this->pageUrl  = 'extra_fields.php?type='.$this->type;
+        $this->pageUrl = 'extra_fields.php?type='.$this->type;
         // Example QuestionFields
         $this->pageName = get_lang(ucwords($this->type).'Fields');
     }
@@ -158,7 +167,10 @@ class ExtraField extends Model
             'calendar_event',
             'lp_item',
             'skill',
-            'work'
+            'work',
+            'career',
+            'user_certificate',
+            'survey'
         );
     }
 
@@ -173,7 +185,7 @@ class ExtraField extends Model
         $query->where('e.extraFieldType = :type');
         $query->setParameter('type', $this->getExtraFieldType());
 
-        return $query->getQuery()->getScalarResult();
+        return $query->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -220,13 +232,14 @@ class ExtraField extends Model
             ->orderBy($sidx, $sord)
             ->setFirstResult($start)
             ->setMaxResults($limit);
+
         //echo $query->getQuery()->getSQL();
         return $query->getQuery()->getArrayResult();
     }
 
     /**
      * @param array $conditions
-     * @param null  $order_field_options_by
+     * @param null $order_field_options_by
      *
      * @return array
      */
@@ -551,7 +564,11 @@ class ExtraField extends Model
                 );
 
                 if ($field['field_type'] == self::FIELD_TYPE_TAG) {
-                    $tags = UserManager::get_user_tags_to_string($itemId, $field['id'], false);
+                    $tags = UserManager::get_user_tags_to_string(
+                        $itemId,
+                        $field['id'],
+                        false
+                    );
                     $extra_data['extra_'.$field['variable']] = $tags;
 
                     continue;
@@ -561,7 +578,11 @@ class ExtraField extends Model
                     $field_value = $field_value['value'];
                     switch ($field['field_type']) {
                         case self::FIELD_TYPE_TAG:
-                            $tags = UserManager::get_user_tags_to_string($itemId, $field['id'], false);
+                            $tags = UserManager::get_user_tags_to_string(
+                                $itemId,
+                                $field['id'],
+                                false
+                            );
 
                             $extra_data['extra_'.$field['variable']] = $tags;
                             break;
@@ -759,7 +780,7 @@ class ExtraField extends Model
 
     /**
      * @param array $params
-     * @param bool  $show_query
+     * @param bool $show_query
      *
      * @return bool
      */
@@ -914,7 +935,7 @@ class ExtraField extends Model
                 }
 
                 switch ($field_details['field_type']) {
-                    case ExtraField::FIELD_TYPE_TEXT:
+                    case self::FIELD_TYPE_TEXT:
                         $form->addElement(
                             'text',
                             'extra_'.$field_details['variable'],
@@ -931,7 +952,7 @@ class ExtraField extends Model
                             }
                         }
                         break;
-                    case ExtraField::FIELD_TYPE_TEXTAREA:
+                    case self::FIELD_TYPE_TEXTAREA:
                         $form->addHtmlEditor(
                             'extra_'.$field_details['variable'],
                             $field_details['display_text'],
@@ -949,7 +970,7 @@ class ExtraField extends Model
                             }
                         }
                         break;
-                    case ExtraField::FIELD_TYPE_RADIO:
+                    case self::FIELD_TYPE_RADIO:
                         $group = array();
                         if (isset($field_details['options']) && !empty($field_details['options'])) {
                             foreach ($field_details['options'] as $option_details) {
@@ -976,7 +997,7 @@ class ExtraField extends Model
                             }
                         }
                         break;
-                    case ExtraField::FIELD_TYPE_CHECKBOX:
+                    case self::FIELD_TYPE_CHECKBOX:
                         $group = array();
                         if (isset($field_details['options']) && !empty($field_details['options'])) {
                             foreach ($field_details['options'] as $option_details) {
@@ -1022,7 +1043,7 @@ class ExtraField extends Model
                             }
                         }
                         break;
-                    case ExtraField::FIELD_TYPE_SELECT:
+                    case self::FIELD_TYPE_SELECT:
                         $get_lang_variables = false;
                         if (in_array(
                             $field_details['variable'],
@@ -1103,10 +1124,9 @@ class ExtraField extends Model
                             }
 
                             // Setting priority message
-                            if (isset($optionList[$defaultValueId]) &&
-                                isset($optionList[$defaultValueId]['priority'])
+                            if (isset($optionList[$defaultValueId])
+                                && isset($optionList[$defaultValueId]['priority'])
                             ) {
-
                                 if (!empty($optionList[$defaultValueId]['priority'])) {
                                     $priorityId = $optionList[$defaultValueId]['priority'];
                                     $option = new ExtraFieldOption($this->type);
@@ -1189,7 +1209,7 @@ class ExtraField extends Model
                             }
                         }
                         break;
-                    case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
+                    case self::FIELD_TYPE_SELECT_MULTIPLE:
                         $options = array();
                         foreach ($field_details['options'] as $option_id => $option_details) {
                             $options[$option_details['option_value']] = $option_details['display_text'];
@@ -1274,7 +1294,7 @@ class ExtraField extends Model
                             }
                         }
                         break;
-                    case ExtraField::FIELD_TYPE_DATETIME:
+                    case self::FIELD_TYPE_DATETIME:
                         $form->addDateTimePicker(
                             'extra_'.$field_details['variable'],
                             $field_details['display_text']
@@ -1290,7 +1310,7 @@ class ExtraField extends Model
                             }
                         }
                         break;
-                    case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
+                    case self::FIELD_TYPE_DOUBLE_SELECT:
                         $first_select_id = 'first_extra_'.$field_details['variable'];
                         $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
 
@@ -1694,9 +1714,8 @@ EOF;
                             }
                         }
                         break;
-                    case ExtraField::FIELD_TYPE_FILE_IMAGE:
+                    case self::FIELD_TYPE_FILE_IMAGE:
                         $fieldVariable = "extra_{$field_details['variable']}";
-
                         $fieldTexts = [
                             $field_details['display_text'],
                         ];
@@ -1892,49 +1911,52 @@ EOF;
                             }
                         }
 
-                        $form->addHtml(
-                            '<script>
+                        $form->addHtml("
+                            <script>
                                 $(document).ready(function() {
-                                    
-                                    if (typeof google === "object") {
-
-                                        var address = "' . $dataValue . '";
-                                        initializeGeo'.$field_details['variable'].'(address, false);
+                                    if (typeof google === 'object') {
+                                        var address = '$dataValue';
+                                        initializeGeo{$field_details['variable']}(address, false);
     
-                                        $("#geolocalization_extra_'.$field_details['variable'].'").on("click", function() {
-                                            var address = $("#extra_'.$field_details['variable'].'").val();
-                                            initializeGeo'.$field_details['variable'].'(address, false);
+                                        $('#geolocalization_extra_{$field_details['variable']}').on('click', function() {
+                                            var address = $('#extra_{$field_details['variable']}').val();
+                                            initializeGeo{$field_details['variable']}(address, false);
                                             return false;
                                         });
     
-                                        $("#myLocation_extra_'.$field_details['variable'].'").on("click", function() {
-                                            myLocation'.$field_details['variable'].'();
+                                        $('#myLocation_extra_{$field_details['variable']}').on('click', function() {
+                                            myLocation{$field_details['variable']}();
                                             return false;
                                         });
     
-                                        $("#extra_'.$field_details['variable'].'").keypress(function (event) {
+                                        $('#extra_{$field_details['variable']}').keypress(function(event) {
                                             if (event.which == 13) {
-                                                $("#geolocalization_extra_'.$field_details['variable'].'").click();
+                                                $('#geolocalization_extra_{$field_details['variable']}').click();
                                                 return false;
                                             }
                                         });
                                         
-                                    } else {
-                                        $("#map_extra_'.$field_details['variable'].'").html("<div class=\"alert alert-info\">'.get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap').'</div>");
-                                    }                                    
+                                        return;
+                                    }
+
+                                    $('#map_extra_{$field_details['variable']}')
+                                        .html('<div class=\"alert alert-info\">"
+                                            .get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap')
+                                            ."</div>');
                                 });
 
-                                function myLocation'.$field_details['variable'].'() {
+                                function myLocation{$field_details['variable']}() {
                                     if (navigator.geolocation) {
                                         var geoPosition = function(position) {
                                             var lat = position.coords.latitude;
                                             var lng = position.coords.longitude;
                                             var latLng = new google.maps.LatLng(lat, lng);
-                                            initializeGeo'.$field_details['variable'].'(false, latLng)
+                                            initializeGeo{$field_details['variable']}(false, latLng)
                                         };
 
                                         var geoError = function(error) {
-                                            alert("Geocode ' . get_lang('Error').': " + error);
+                                            console.log(error);
+                                            alert('Geocode ".get_lang('Error').": ' + error);
                                         };
 
                                         var geoOptions = {
@@ -1945,7 +1967,7 @@ EOF;
                                     }
                                 }
 
-                                function initializeGeo'.$field_details['variable'].'(address, latLng) {
+                                function initializeGeo{$field_details['variable']}(address, latLng) {
                                     var geocoder = new google.maps.Geocoder();
                                     var latlng = new google.maps.LatLng(-34.397, 150.644);
                                     var myOptions = {
@@ -1959,49 +1981,62 @@ EOF;
                                         mapTypeId: google.maps.MapTypeId.ROADMAP
                                     };
 
-                                    map_'.$field_details['variable'].' = new google.maps.Map(document.getElementById("map_extra_'.$field_details['variable'].'"), myOptions);
+                                    map_{$field_details['variable']} = new google.maps.Map(
+                                        document.getElementById('map_extra_{$field_details['variable']}'),
+                                        myOptions
+                                    );
 
-                                    var parameter = address ? { "address": address } : latLng ? { "latLng": latLng } : false;
+                                    var parameter = address ? {'address': address} : latLng ? {'latLng': latLng} : false;
 
                                     if (geocoder && parameter) {
                                         geocoder.geocode(parameter, function(results, status) {
                                             if (status == google.maps.GeocoderStatus.OK) {
                                                 if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
-                                                    map_'.$field_details['variable'].'.setCenter(results[0].geometry.location);
+                                                    map_{$field_details['variable']}.setCenter(results[0].geometry.location);
                                                     if (!address) {
-                                                        $("#extra_'.$field_details['variable'].'").val(results[0].formatted_address);
+                                                        $('#extra_{$field_details['variable']}').val(results[0].formatted_address);
                                                     }
                                                     var infowindow = new google.maps.InfoWindow({
-                                                        content: "<b>" + $("#extra_'.$field_details['variable'].'").val() + "</b>",
+                                                        content: '<b>' + $('#extra_{$field_details['variable']}').val() + '</b>',
                                                         size: new google.maps.Size(150, 50)
                                                     });
 
                                                     var marker = new google.maps.Marker({
                                                         position: results[0].geometry.location,
-                                                        map: map_'.$field_details['variable'].',
-                                                        title: $("#extra_'.$field_details['variable'].'").val()
+                                                        map: map_{$field_details['variable']},
+                                                        title: $('#extra_{$field_details['variable']}').val()
                                                     });
-                                                    google.maps.event.addListener(marker, "click", function() {
-                                                        infowindow.open(map_'.$field_details['variable'].', marker);
+                                                    google.maps.event.addListener(marker, 'click', function() {
+                                                        infowindow.open(map_{$field_details['variable']}, marker);
                                                     });
                                                 } else {
-                                                    alert("' . get_lang("NotFound").'");
+                                                    alert('".get_lang('NotFound')."');
                                                 }
-
                                             } else {
-                                                alert("Geocode ' . get_lang('Error').': '.get_lang("AddressField").' '.get_lang("NotFound").'");
+                                                alert('Geocode ".get_lang('Error').": ".get_lang("AddressField")
+                                                    ." ".get_lang('NotFound')."');
                                             }
                                         });
                                     }
                                 }
                             </script>
-                        ');
+                        ");
                         $form->addHtml('
                             <div class="form-group">
-                                <label for="geolocalization_extra_'.$field_details['variable'].'" class="col-sm-2 control-label"></label>
+                                <label for="geolocalization_extra_'.$field_details['variable'].'"
+                                    class="col-sm-2 control-label"></label>
                                 <div class="col-sm-8">
-                                    <button class="null btn btn-default " id="geolocalization_extra_'.$field_details['variable'].'" name="geolocalization_extra_'.$field_details['variable'].'" type="submit"><em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'</button>
-                                    <button class="null btn btn-default " id="myLocation_extra_'.$field_details['variable'].'" name="myLocation_extra_'.$field_details['variable'].'" type="submit"><em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'</button>
+                                    <button class="null btn btn-default "
+                                        id="geolocalization_extra_'.$field_details['variable'].'"
+                                        name="geolocalization_extra_'.$field_details['variable'].'"
+                                        type="submit">
+                                        <em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'
+                                    </button>
+                                    <button class="null btn btn-default " id="myLocation_extra_'.$field_details['variable'].'"
+                                        name="myLocation_extra_'.$field_details['variable'].'"
+                                        type="submit">
+                                        <em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'
+                                    </button>
                                 </div>
                             </div>
                         ');
@@ -2012,7 +2047,8 @@ EOF;
                                     '.$field_details['display_text'].' - '.get_lang('Map').'
                                 </label>
                                 <div class="col-sm-8">
-                                    <div name="map_extra_'.$field_details['variable'].'" id="map_extra_'.$field_details['variable'].'" style="width:100%; height:300px;">
+                                    <div name="map_extra_'.$field_details['variable'].'"
+                                        id="map_extra_'.$field_details['variable'].'" style="width:100%; height:300px;">
                                     </div>
                                 </div>
                             </div>
@@ -2048,53 +2084,57 @@ EOF;
                             $lng = $latLag[1];
                         }
 
-                        $form->addHtml(
-                            '<script>
+                        $form->addHtml("
+                            <script>
                                 $(document).ready(function() {
-                                    if (typeof google === "object") {
-                                        
-                                        var lat = "' . $lat.'";
-                                        var lng = "' . $lng.'";
+                                    if (typeof google === 'object') {
+                                        var lat = '$lat';
+                                        var lng = '$lng';
                                         var latLng = new google.maps.LatLng(lat, lng);
-                                        initializeGeo'.$field_details['variable'].'(false, latLng);
-    
-                                        $("#geolocalization_extra_'.$field_details['variable'].'").on("click", function() {
-                                            var latLng = $("#extra_'.$field_details['variable'].'").val().split(",");
+                                        initializeGeo{$field_details['variable']}(false, latLng);
+
+                                        $('#geolocalization_extra_{$field_details['variable']}').on('click', function() {
+                                            var latLng = $('#extra_{$field_details['variable']}').val().split(',');
                                             var lat = latLng[0];
                                             var lng = latLng[1];
                                             var latLng = new google.maps.LatLng(lat, lng);
-                                            initializeGeo'.$field_details['variable'].'(false, latLng);
+                                            initializeGeo{$field_details['variable']}(false, latLng);
                                             return false;
                                         });
-    
-                                        $("#myLocation_extra_'.$field_details['variable'].'").on("click", function() {
-                                            myLocation'.$field_details['variable'].'();
+
+                                        $('#myLocation_extra_{$field_details['variable']}').on('click', function() {
+                                            myLocation{$field_details['variable']}();
                                             return false;
                                         });
-    
-                                        $("#extra_'.$field_details['variable'].'").keypress(function (event) {
+
+                                        $('#extra_{$field_details['variable']}').keypress(function (event) {
                                             if (event.which == 13) {
-                                                $("#geolocalization_extra_'.$field_details['variable'].'").click();
+                                                $('#geolocalization_extra_{$field_details['variable']}').click();
                                                 return false;
                                             }
                                         });
-                                    } else {
-                                        $("#map_extra_'.$field_details['variable'].'").html("<div class=\"alert alert-info\">'.get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap').'</div>");
+
+                                        return;
                                     }
-                                    
+
+
+                                    $('#map_extra_{$field_details['variable']}')
+                                        .html('<div class=\"alert alert-info\">"
+                                            .get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap')
+                                            ."</div>');
                                 });
 
-                                function myLocation'.$field_details['variable'].'() {
+                                function myLocation{$field_details['variable']}() {
                                     if (navigator.geolocation) {
                                         var geoPosition = function(position) {
                                             var lat = position.coords.latitude;
                                             var lng = position.coords.longitude;
                                             var latLng = new google.maps.LatLng(lat, lng);
-                                            initializeGeo'.$field_details['variable'].'(false, latLng)
+                                            initializeGeo{$field_details['variable']}(false, latLng)
                                         };
 
                                         var geoError = function(error) {
-                                            alert("Geocode ' . get_lang('Error').': " + error);
+                                            alert('Geocode ".get_lang('Error').": ' + error);
                                         };
 
                                         var geoOptions = {
@@ -2105,7 +2145,7 @@ EOF;
                                     }
                                 }
 
-                                function initializeGeo'.$field_details['variable'].'(address, latLng) {
+                                function initializeGeo{$field_details['variable']}(address, latLng) {
                                     var geocoder = new google.maps.Geocoder();
                                     var latlng = new google.maps.LatLng(-34.397, 150.644);
                                     var myOptions = {
@@ -2119,49 +2159,63 @@ EOF;
                                         mapTypeId: google.maps.MapTypeId.ROADMAP
                                     };
 
-                                    map_'.$field_details['variable'].' = new google.maps.Map(document.getElementById("map_extra_'.$field_details['variable'].'"), myOptions);
+                                    map_{$field_details['variable']} = new google.maps.Map(
+                                        document.getElementById('map_extra_{$field_details['variable']}'),
+                                        myOptions
+                                    );
 
-                                    var parameter = address ? { "address": address } : latLng ? { "latLng": latLng } : false;
+                                    var parameter = address ? {'address': address} : latLng ? {'latLng': latLng} : false;
 
                                     if (geocoder && parameter) {
                                         geocoder.geocode(parameter, function(results, status) {
                                             if (status == google.maps.GeocoderStatus.OK) {
                                                 if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
-                                                    map_'.$field_details['variable'].'.setCenter(results[0].geometry.location);
+                                                    map_{$field_details['variable']}.setCenter(results[0].geometry.location);
 
-                                                    $("#extra_'.$field_details['variable'].'").val(results[0].geometry.location.lat() + "," + results[0].geometry.location.lng());
+                                                    $('#extra_{$field_details['variable']}')
+                                                        .val(results[0].geometry.location.lat() + ',' + results[0].geometry.location.lng());
 
                                                     var infowindow = new google.maps.InfoWindow({
-                                                        content: "<b>" + $("#extra_'.$field_details['variable'].'").val() + "</b>",
+                                                        content: '<b>' + $('#extra_{$field_details['variable']}').val() + '</b>',
                                                         size: new google.maps.Size(150, 50)
                                                     });
 
                                                     var marker = new google.maps.Marker({
                                                         position: results[0].geometry.location,
-                                                        map: map_'.$field_details['variable'].',
-                                                        title: $("#extra_'.$field_details['variable'].'").val()
+                                                        map: map_{$field_details['variable']},
+                                                        title: $('#extra_{$field_details['variable']}').val()
                                                     });
-                                                    google.maps.event.addListener(marker, "click", function() {
-                                                        infowindow.open(map_'.$field_details['variable'].', marker);
+                                                    google.maps.event.addListener(marker, 'click', function() {
+                                                        infowindow.open(map_{$field_details['variable']}, marker);
                                                     });
                                                 } else {
-                                                    alert("' . get_lang("NotFound").'");
+                                                    alert('".get_lang("NotFound")."');
                                                 }
 
                                             } else {
-                                                alert("Geocode ' . get_lang('Error').': " + status);
+                                                alert('Geocode ".get_lang('Error').": ' + status);
                                             }
                                         });
                                     }
                                 }
                             </script>
-                        ');
+                        ");
                         $form->addHtml('
                             <div class="form-group">
-                                <label for="geolocalization_extra_'.$field_details['variable'].'" class="col-sm-2 control-label"></label>
+                                <label for="geolocalization_extra_'.$field_details['variable'].'"
+                                    class="col-sm-2 control-label"></label>
                                 <div class="col-sm-8">
-                                    <button class="null btn btn-default " id="geolocalization_extra_'.$field_details['variable'].'" name="geolocalization_extra_'.$field_details['variable'].'" type="submit"><em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'</button>
-                                    <button class="null btn btn-default " id="myLocation_extra_'.$field_details['variable'].'" name="myLocation_extra_'.$field_details['variable'].'" type="submit"><em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'</button>
+                                    <button class="null btn btn-default "
+                                        id="geolocalization_extra_'.$field_details['variable'].'"
+                                        name="geolocalization_extra_'.$field_details['variable'].'"
+                                        type="submit">
+                                        <em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'
+                                    </button>
+                                    <button class="null btn btn-default"
+                                        id="myLocation_extra_'.$field_details['variable'].'"
+                                        name="myLocation_extra_'.$field_details['variable'].'" type="submit">
+                                        <em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'
+                                    </button>
                                 </div>
                             </div>
                         ');
@@ -2172,7 +2226,9 @@ EOF;
                                     '.$field_details['display_text'].' - '.get_lang('Map').'
                                 </label>
                                 <div class="col-sm-8">
-                                    <div name="map_extra_'.$field_details['variable'].'" id="map_extra_'.$field_details['variable'].'" style="width:100%; height:300px;">
+                                    <div name="map_extra_'.$field_details['variable'].'"
+                                        id="map_extra_'.$field_details['variable'].'"
+                                        style="width:100%; height:300px;">
                                     </div>
                                 </div>
                             </div>
@@ -2294,7 +2350,7 @@ EOF;
                 'align' => 'left',
                 'sortable' => 'true',
             ),
-             array(
+            array(
                 'name' => 'visible_to_others',
                 'index' => 'visible_to_others',
                 'width' => '35',
@@ -2352,9 +2408,8 @@ EOF;
         $form->addElement('header', $header);
 
         if ($action == 'edit') {
-            $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'.http_build_query([
-                'extra_field' => $id
-            ]);
+            $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'
+                .http_build_query(['extra_field' => $id]);
             $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
 
             $form->addText(
@@ -2428,12 +2483,12 @@ EOF;
         $group[] = $form->createElement('radio', 'visible_to_others', null, get_lang('No'), 0);
         $form->addGroup($group, '', get_lang('VisibleToOthers'), null, false);
 
-        $group   = array();
+        $group = array();
         $group[] = $form->createElement('radio', 'changeable', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'changeable', null, get_lang('No'), 0);
         $form->addGroup($group, '', get_lang('FieldChangeability'), null, false);
 
-        $group   = array();
+        $group = array();
         $group[] = $form->createElement('radio', 'filter', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'filter', null, get_lang('No'), 0);
         $form->addGroup($group, '', get_lang('FieldFilter'), null, false);
@@ -2504,15 +2559,15 @@ JAVASCRIPT;
             </a>
 JAVASCRIPT;
 
-        return "function action_formatter(cellvalue, options, rowObject) {
+        return "function action_formatter(cellvalue, options, rowObject) {        
             return '$editButton $deleteButton';
         }";
     }
 
     /**
      * @param array $columns
-     * @param array  $column_model
-     * @param array  $extraFields
+     * @param array $column_model
+     * @param array $extraFields
      * @return array
      */
     public function getRules(&$columns, &$column_model, $extraFields = array(), $checkExtraFieldExistence = false)
@@ -2528,18 +2583,19 @@ JAVASCRIPT;
         $rules = array();
         if (!empty($fields)) {
             foreach ($fields as $field) {
-
                 $search_options = array();
-                $type           = 'text';
+                $type = 'text';
                 if (in_array($field['field_type'], array(self::FIELD_TYPE_SELECT, self::FIELD_TYPE_DOUBLE_SELECT))) {
-                    $type                   = 'select';
+                    $type = 'select';
                     $search_options['sopt'] = array('eq', 'ne'); //equal not equal
                 } else {
                     $search_options['sopt'] = array('cn', 'nc'); //contains not contains
                 }
 
                 $search_options['searchhidden'] = 'true';
-                $search_options['defaultValue'] = isset($search_options['field_default_value']) ? $search_options['field_default_value'] : null;
+                $search_options['defaultValue'] = isset($search_options['field_default_value'])
+                    ? $search_options['field_default_value']
+                    : null;
 
                 if ($field['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
                     //Add 2 selects
@@ -2551,7 +2607,8 @@ JAVASCRIPT;
                         foreach ($options as $option) {
                             foreach ($option as $sub_option) {
                                 if ($sub_option['option_value'] == 0) {
-                                    $first_options[] = $sub_option['field_id'].'#'.$sub_option['id'].':'.$sub_option['display_text'];
+                                    $first_options[] = $sub_option['field_id'].'#'.$sub_option['id'].':'
+                                        .$sub_option['display_text'];
                                 }
                             }
                         }
@@ -2576,8 +2633,8 @@ JAVASCRIPT;
                         'op' => 'cn',
                     );
 
-                    //Second
-                    $search_options['value']    = $field['id'].':';
+                    // Second
+                    $search_options['value'] = $field['id'].':';
                     $search_options['dataInit'] = 'register_second_select';
 
                     $column_model[] = array(
@@ -2714,28 +2771,31 @@ JAVASCRIPT;
                                 fv$counter.value = fvo$counter.option_value
                              )
                             ";
-                    } else if (isset($extra_field_info['field_type']) &&
-                        $extra_field_info['field_type'] == self::FIELD_TYPE_TAG
-                    ) {
-                        $options['where'] = str_replace(
-                            $extra_info['field'],
-                            'tag'.$counter.'.tag ',
-                            $options['where']
-                        );
-
-                        $inject_joins .= "
-                            INNER JOIN $this->table_field_rel_tag tag_rel$counter
-                            ON (tag_rel$counter.field_id = ".$extra_info['id']." AND tag_rel$counter.item_id = s.".$this->primaryKey.")
-                            INNER JOIN $this->table_field_tag tag$counter
-                            ON (tag$counter.id =  tag_rel$counter.tag_id)
-                        ";
                     } else {
-                        //text, textarea, etc
-                        $options['where'] = str_replace(
-                            $extra_info['field'],
-                            'fv'.$counter.'.field_id = '.$extra_info['id'].' AND fv'.$counter.'.value',
-                            $options['where']
-                        );
+                        if (isset($extra_field_info['field_type'])
+                            && $extra_field_info['field_type'] == self::FIELD_TYPE_TAG
+                        ) {
+                            $options['where'] = str_replace(
+                                $extra_info['field'],
+                                'tag'.$counter.'.tag ',
+                                $options['where']
+                            );
+
+                            $inject_joins .= "
+                                INNER JOIN $this->table_field_rel_tag tag_rel$counter
+                                ON (tag_rel$counter.field_id = ".$extra_info['id']." AND tag_rel$counter.item_id = s."
+                                    .$this->primaryKey.")
+                                INNER JOIN $this->table_field_tag tag$counter
+                                ON (tag$counter.id =  tag_rel$counter.tag_id)
+                            ";
+                        } else {
+                            //text, textarea, etc
+                            $options['where'] = str_replace(
+                                $extra_info['field'],
+                                'fv'.$counter.'.field_id = '.$extra_info['id'].' AND fv'.$counter.'.value',
+                                $options['where']
+                            );
+                        }
                     }
 
                     $field_value_to_join[] = " fv$counter.$this->handler_id ";
@@ -2959,12 +3019,12 @@ JAVASCRIPT;
                         $displayedValue = api_format_date($valueData['value'], DATE_FORMAT_LONG_NO_DAY);
                     }
                     break;
-                case ExtraField::FIELD_TYPE_TAG:
+                case self::FIELD_TYPE_TAG:
                     if (!empty($valueData)) {
                         $displayedValue = $valueData;
                     }
                     break;
-                case ExtraField::FIELD_TYPE_FILE_IMAGE:
+                case self::FIELD_TYPE_FILE_IMAGE:
                     if ($valueData === false || empty($valueData['value'])) {
                         break;
                     }
@@ -3139,6 +3199,4 @@ JAVASCRIPT;
         $result = Database::store_result($result);
         return $result;
     }
-
-
 }

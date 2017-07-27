@@ -32,7 +32,8 @@ $loginFailed = isset($_GET['loginFailed']) ? true : isset($loginFailed);
 
 if (!empty($_GET['logout'])) {
     $redirect = !empty($_GET['no_redirect']) ? false : true;
-    $controller->logout($redirect);
+    // pass $logoutInfo defined in local.inc.php
+    $controller->logout($redirect, $logoutInfo);
 }
 
 /**

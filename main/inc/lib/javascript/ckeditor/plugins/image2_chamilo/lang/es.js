@@ -18,5 +18,13 @@ CKEDITOR.plugins.setLang( 'image2_chamilo', 'es', {
 	uploadTab: 'Cargar',
 	urlMissing: 'Debe indicar la URL de la imagen.',
 	altMissing: 'Falta el texto alternativo.',
-    responsive: 'Imagen responsiva'
+    responsive: 'Imagen responsiva',
+    alignBaseline: 'Línea base',
+    alignTop: 'Parte superior de la fuente',
+	alignBottom: 'Parte inferior de la fuente',
+    alignMiddle: 'Parte central',
+    alignSuper: 'Superíndice',
+    alignSub: 'Subíndice',
+    alignTextTop: 'Parte superior de la línea',
+    alignTextBottom: 'Parte inferior de la línea'
 } );

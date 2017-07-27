@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Tools\Pagination\Paginator;

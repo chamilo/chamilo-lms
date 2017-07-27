@@ -23,6 +23,15 @@ use Doctrine\ORM\Mapping as ORM;
 class CourseCategory
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=100, nullable=false)
@@ -70,17 +79,6 @@ class CourseCategory
      * @ORM\Column(name="auth_cat_child", type="string", length=40, nullable=true)
      */
     private $authCatChild;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
 
     /**
      * Set name
@@ -260,6 +258,6 @@ class CourseCategory
     {
         $name = strip_tags($this->name);
 
-        return "({$this->code}) $name";
+        return "$name ({$this->code})";
     }
 }

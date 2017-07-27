@@ -94,7 +94,7 @@ $sessionId = api_get_session_id();
 if ($action === 'delete' && isset($_GET['survey_id'])) {
     // Getting the information of the survey (used for when the survey is shared)
     $survey_data = SurveyManager::get_survey($_GET['survey_id']);
-    if (api_is_course_coach() && $sessionId != $survey_data['session_id']) {
+    if (api_is_session_general_coach() && $sessionId != $survey_data['session_id']) {
         // The coach can't delete a survey not belonging to his session
         api_not_allowed();
         exit;
@@ -118,7 +118,7 @@ if ($action === 'delete' && isset($_GET['survey_id'])) {
 if ($action == 'empty') {
     $mysession = api_get_session_id();
     if ($mysession != 0) {
-        if (!((api_is_course_coach() || api_is_platform_admin()) &&
+        if (!((api_is_session_general_coach() || api_is_platform_admin()) &&
             api_is_element_in_the_session(TOOL_SURVEY, $_GET['survey_id']))) {
             // The coach can't empty a survey not belonging to his session
             api_not_allowed();
@@ -158,7 +158,7 @@ if (isset($_POST['action']) && $_POST['action']) {
 }
 
 echo '<div class="actions">';
-if (!api_is_course_coach() || $extend_rights_for_coachs == 'true') {
+if (!api_is_session_general_coach() || $extend_rights_for_coachs == 'true') {
     // Action links
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.
         Display::return_icon('new_survey.png', get_lang('CreateNewSurvey'), '', ICON_SIZE_MEDIUM).'</a> ';
@@ -168,7 +168,7 @@ echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.
 echo '</div>';
 
 // Load main content
-if (api_is_course_coach() && $extend_rights_for_coachs == 'false') {
+if (api_is_session_general_coach() && $extend_rights_for_coachs == 'false') {
     SurveyUtil::display_survey_list_for_coach();
 } else {
     SurveyUtil::display_survey_list();

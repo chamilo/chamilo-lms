@@ -26,7 +26,7 @@ $table_gradebook_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code) */
 // If user is not teacher or if he's a coach trying to access an element out of his session
 if (!api_is_allowed_to_edit()) {
-    if (!api_is_course_coach() ||
+    if (!api_is_session_general_coach() ||
         (!empty($_GET['survey_id']) &&
         !api_is_element_in_the_session(TOOL_SURVEY, $_GET['survey_id']))
     ) {
@@ -158,6 +158,9 @@ $form->addElement('select', 'visible_results', get_lang('ResultsVisibility'), $v
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 
+$extraField = new ExtraField('survey');
+$extraField->addElements($form, $survey_id);
+
 // Additional Parameters
 $form->addButtonAdvancedSettings('advanced_params');
 $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
@@ -270,6 +273,10 @@ if ($form->validate()) {
     $values = $form->getSubmitValues();
     // Storing the survey
     $return = SurveyManager::store_survey($values);
+
+    $values['item_id'] = $return['id'];
+    $extraFieldValue = new ExtraFieldValue('survey');
+    $extraFieldValue->saveFieldValues($values);
 
     // Redirecting to the survey page (whilst showing the return message)
     header('location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$return['id'].'&'.api_get_cidreq());

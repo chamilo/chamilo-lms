@@ -1,5 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
+use Doctrine\Common\Collections\Criteria,
+    Chamilo\UserBundle\Entity\User;
 
 /**
  * Responses to AJAX calls
@@ -178,6 +180,42 @@ switch ($action) {
         } else {
             echo '-1';
         }
+        break;
+    case 'user_by_role':
+        api_block_anonymous_users(false);
+
+        $criteria = new Criteria();
+        $criteria
+            ->where(
+                Criteria::expr()->orX(
+                    Criteria::expr()->contains('username', $_REQUEST['q']),
+                    Criteria::expr()->contains('firstname', $_REQUEST['q']),
+                    Criteria::expr()->contains('lastname', $_REQUEST['q'])
+                )
+            )
+            ->andWhere(
+                Criteria::expr()->eq('status', DRH)
+            );
+
+        $users = UserManager::getRepository()->matching($criteria);
+
+        if (!$users->count()) {
+            echo json_encode([]);
+            break;
+        }
+
+        $items = [];
+
+        /** @var User $user */
+        foreach ($users as $user) {
+            $items[] = [
+                'id' => $user->getId(),
+                'text' => $user->getCompleteNameWithUsername()
+            ];
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode(['items' => $items]);
         break;
     default:
         echo '';

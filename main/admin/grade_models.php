@@ -173,7 +173,7 @@ switch ($action) {
         if ($form->validate()) {
             if ($check) {
                 $values = $form->exportValues();
-                $res    = $obj->update($values);
+                $res = $obj->update($values);
                 echo Display::return_message(get_lang('ItemUpdated'), 'confirm', false);
             }
             $obj->display();

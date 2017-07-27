@@ -69,7 +69,7 @@ class ExtraFieldValue extends Model
         $query->where('e.extraFieldType = :type');
         $query->setParameter('type', $this->getExtraField()->getExtraFieldType());
 
-        return $query->getQuery()->getScalarResult();
+        return $query->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -337,11 +337,11 @@ class ExtraFieldValue extends Model
                         'value' => $value,
                         'comment' => $comment
                     );
-
                     self::save($newParams, $showQuery);
             }
         }
 
+        // ofaj
         // Set user.profile_completed = 1
         if ($this->type === 'user') {
             if (api_get_setting('show_terms_if_profile_completed') === 'true') {

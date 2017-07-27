@@ -24,23 +24,6 @@ if (api_get_setting('allow_message_tool') != 'true') {
     api_not_allowed();
 }
 
-$htmlHeadXtra[] = '<script>
-
-function show_icon_edit(element_html) {
-	ident="#edit_image";
-	$(ident).show();
-}
-
-function hide_icon_edit(element_html)  {
-	ident="#edit_image";
-	$(ident).hide();
-}
-
-</script>';
-
-/*
-  MAIN CODE
- */
 $nameTools = get_lang('Messages');
 $request = api_is_xml_http_request();
 $show_message = null;
@@ -167,7 +150,7 @@ if (!isset($_GET['del_msg'])) {
     $num_msg = intval($_POST['total']);
     for ($i = 0; $i < $num_msg; $i++) {
         if ($_POST[$i]) {
-            //the user_id was necesarry to delete a message??
+            //the user_id was necessary to delete a message??
             $show_message .= MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_POST['_'.$i]);
         }
     }

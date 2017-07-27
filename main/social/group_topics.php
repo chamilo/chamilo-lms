@@ -147,24 +147,6 @@ function add_image_form() {
 	}
 }
 
-function show_icon_edit(element_html) {
-    ident="#edit_image";
-    $(ident).show();
-}
-
-function hide_icon_edit(element_html)  {
-    ident="#edit_image";
-    $(ident).hide();
-}
-
-function validate_text_empty(str,msg) {
-	var str = str.replace(/^\s*|\s*$/g,"");
-	if (str.length == 0) {
-		alert(msg);
-		return true;
-	}
-}
-
 $(document).ready(function() {
 	if ($("#msg_'.$message_id.'").length) {
 		$("html,body").animate({

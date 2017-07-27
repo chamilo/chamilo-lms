@@ -168,7 +168,7 @@ $form->addElement('text', 'thread_title', get_lang('Title'));
 $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
 $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
-if ((api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && ($threadId)) {
+if ((api_is_course_admin() || api_is_session_general_coach() || api_is_course_tutor()) && ($threadId)) {
     // Thread qualify
     if (Gradebook::is_active()) {
         //Loading gradebook select

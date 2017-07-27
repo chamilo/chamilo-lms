@@ -24,7 +24,7 @@ switch ($action) {
 
             $list = explode(',', $_REQUEST['id']);
             foreach ($list as $itemId) {
-                if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $itemId)) {
+                if (!api_is_session_general_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $itemId)) {
                     AnnouncementManager::delete_announcement($courseInfo, $itemId);
                 }
             }

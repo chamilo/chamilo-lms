@@ -42,8 +42,7 @@ $pathinfo = pathinfo($headerFile);
 $showOdfEditor = false;
 $webOdfSupportedFiles = DocumentManager::get_web_odf_extension_list();
 
-if (
-    in_array(strtolower($pathinfo['extension']), $webOdfSupportedFiles) &&
+if (in_array(strtolower($pathinfo['extension']), $webOdfSupportedFiles) &&
     api_get_configuration_value('enabled_support_odf') === true
 ) {
     $showOdfEditor = true;

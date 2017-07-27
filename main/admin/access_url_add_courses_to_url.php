@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	This script allows platform admins to add users to urls.
-*	It displays a list of users and a list of courses;
-*	you can select multiple users and courses and then click on
-*	@package chamilo.admin
-*	@author Julio Montoya <gugli100@gmail.com>
+ * This script allows platform admins to add users to urls.
+ * It displays a list of users and a list of courses;
+ * you can select multiple users and courses and then click on
+ * @package chamilo.admin
+ * @author Julio Montoya <gugli100@gmail.com>
 */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -104,10 +104,10 @@ unset($result);
      <?php echo get_lang('FirstLetterCourse'); ?> :
      <select name="first_letter_course" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
       <option value="">--</option>
-      <?php
-        echo Display :: get_alphabet_options($first_letter_course);
-        echo Display :: get_numeric_options(0, 9, $first_letter_course);
-      ?>
+    <?php
+    echo Display:: get_alphabet_options($first_letter_course);
+    echo Display:: get_numeric_options(0, 9, $first_letter_course);
+    ?>
      </select>
     </td>
         <td width="20%">&nbsp;</td>
@@ -119,7 +119,8 @@ unset($result);
     <td width="40%" align="center">
      <select name="course_list[]" multiple="multiple" size="20" style="width:400px;">
 		<?php foreach ($db_courses as $course) { ?>
-			<option value="<?php echo $course['code']; ?>" <?php if (in_array($course['code'], $courses)) echo 'selected="selected"'; ?>><?php echo $course['title'].' ('.$course['code'].')'; ?>
+			<option value="<?php echo $course['code']; ?>" <?php if (in_array($course['code'], $courses)) echo 'selected="selected"'; ?>>
+                <?php echo $course['title'].' ('.$course['code'].')'; ?>
             </option>
         <?php } ?>
     </select>
@@ -129,10 +130,11 @@ unset($result);
    </td>
    <td width="40%" align="center">
     <select name="url_list[]" multiple="multiple" size="20" style="width:300px;">
-		<?php foreach ($db_urls as $url_obj) { ?>
-        <option value="<?php echo $url_obj['id']; ?>" <?php if (in_array($url_obj['id'], $url_list)) echo 'selected="selected"'; ?>><?php echo $url_obj['url']; ?>
-        </option>
-		<?php } ?>
+    <?php foreach ($db_urls as $url_obj) { ?>
+    <option value="<?php echo $url_obj['id']; ?>" <?php if (in_array($url_obj['id'], $url_list)) echo 'selected="selected"'; ?>>
+        <?php echo $url_obj['url']; ?>
+    </option>
+    <?php } ?>
     </select>
    </td>
   </tr>

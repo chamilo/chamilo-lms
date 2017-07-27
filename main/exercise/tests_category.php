@@ -5,6 +5,7 @@
   hubert.borderiou
   Manage tests category page
  */
+
 $htmlHeadXtra[] = '
 <script>
 	function confirmDelete(in_txt, in_id) {

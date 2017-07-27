@@ -146,17 +146,15 @@ function get_course_data($from, $number_of_items, $column, $direction)
     $res = Database::query($sql);
     $courses = array();
     $languages = api_get_languages_to_array();
-
     while ($course = Database::fetch_array($res)) {
         // Place colour icons in front of courses.
         $show_visual_code = $course['visual_code'] != $course[2] ? Display::label($course['visual_code'], 'info') : null;
         $course[1] = get_course_visibility_icon($course[8]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[9].'/index.php">'.$course[1].'</a> '.$show_visual_code;
         $course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
         $course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
-
         $language = isset($languages[$course[3]]) ? $languages[$course[3]] : $course[3];
 
-        $course_rem = array(
+        $courseItem = array(
             $course[0],
             $course[1],
             $course[2],
@@ -166,7 +164,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
             $course[6],
             $course[7],
         );
-        $courses[] = $course_rem;
+        $courses[] = $courseItem;
     }
 
     return $courses;
@@ -258,19 +256,39 @@ function get_course_visibility_icon($v)
     $style = 'margin-bottom:0;margin-right:5px;';
     switch ($v) {
         case 0:
-            return Display::return_icon('bullet_red.png', get_lang('CourseVisibilityClosed'), array('style' => $style));
+            return Display::return_icon(
+                'bullet_red.png',
+                get_lang('CourseVisibilityClosed'),
+                array('style' => $style)
+            );
             break;
         case 1:
-            return Display::return_icon('bullet_orange.png', get_lang('Private'), array('style' => $style));
+            return Display::return_icon(
+                'bullet_orange.png',
+                get_lang('Private'),
+                array('style' => $style)
+            );
             break;
         case 2:
-            return Display::return_icon('bullet_green.png', get_lang('OpenToThePlatform'), array('style' => $style));
+            return Display::return_icon(
+                'bullet_green.png',
+                get_lang('OpenToThePlatform'),
+                array('style' => $style)
+            );
             break;
         case 3:
-            return Display::return_icon('bullet_blue.png', get_lang('OpenToTheWorld'), array('style' => $style));
+            return Display::return_icon(
+                'bullet_blue.png',
+                get_lang('OpenToTheWorld'),
+                array('style' => $style)
+            );
             break;
         case 4:
-            return Display::return_icon('bullet_grey.png', get_lang('CourseVisibilityHidden'), array('style' => $style));
+            return Display::return_icon(
+                'bullet_grey.png',
+                get_lang('CourseVisibilityHidden'),
+                array('style' => $style)
+            );
             break;
         default:
             return '';
@@ -414,7 +432,11 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         });
     </script>';
 
-    $actions = Display::toolbarAction('toolbar', [$actions1, $actions2, $actions3, $actions4], [2, 4, 3, 3]);
+    $actions = Display::toolbarAction(
+        'toolbar',
+        [$actions1, $actions2, $actions3, $actions4],
+        [2, 4, 3, 3]
+    );
 
     if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
         // Create a sortable table with the course data filtered by session

@@ -913,7 +913,7 @@ function getOnlineUsersInSessionCount($sessionId)
             return apcu_fetch($apcVar);
         }
 
-        $numberOnlineInCourse = whoIsOnlineInIhisSessionCount(
+        $numberOnlineInCourse = whoIsOnlineInThisSessionCount(
             api_get_setting('time_limit_whosonline'),
             $sessionId
         );
@@ -922,7 +922,7 @@ function getOnlineUsersInSessionCount($sessionId)
         return $numberOnlineInCourse;
     }
 
-    return whoIsOnlineInIhisSessionCount(
+    return whoIsOnlineInThisSessionCount(
         api_get_setting('time_limit_whosonline'),
         $sessionId
     );

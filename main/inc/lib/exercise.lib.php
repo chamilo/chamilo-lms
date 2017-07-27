@@ -26,6 +26,7 @@ class ExerciseLib
      * @param bool $show_comment
      * @param null $exercise_feedback
      * @param bool $show_answers
+     *
      * @return bool|int
      */
     public static function showQuestion(

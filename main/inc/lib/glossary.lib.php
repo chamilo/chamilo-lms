@@ -703,14 +703,10 @@ class GlossaryManager
             0,
             'ASC'
         );
-        $html = '<html><body>';
-        $html .= '<h2>'.get_lang('Glossary').'</h2><hr><br><br>';
-        foreach ($data as $item) {
-            $term = $item[0];
-            $description = $item[1];
-            $html .= '<h4>'.$term.'</h4><p>'.$description.'<p><hr>';
-        }
-        $html .= '</body></html>';
+        $template = new Template('', false, false, false, true, false, false);
+        $layout = $template->get_template('glossary/export_pdf.tpl');
+        $template->assign('items', $data);
+        $html = $template->fetch($layout);
         $courseCode = api_get_course_id();
         $pdf = new PDF();
         $pdf->content_to_pdf($html, '', get_lang('Glossary').'_'.$courseCode, $courseCode);

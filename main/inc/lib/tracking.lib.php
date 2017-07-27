@@ -7261,7 +7261,8 @@ class TrackingCourseLog
             $user['last_connection'] = Tracking::get_last_connection_date_on_the_course(
                 $user['user_id'],
                 $courseInfo,
-                $session_id
+                $session_id,
+                $export_csv === false
             );
 
             if (empty($session_id)) {

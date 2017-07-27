@@ -1,5 +1,4 @@
 {% if just_created == 1%}
-{{ just_created_link }}
 <h3>{{ 'JustCreated'|get_lang }} {{ course_title }}</h3>
 <hr />
 {% endif %}

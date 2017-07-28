@@ -311,7 +311,12 @@ class MessageManager
 
         // Validating fields
         if (empty($subject) && empty($group_id)) {
-            Display::addFlash(Display::return_message(get_lang('YouShouldWriteASubject'), 'warning'));
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('YouShouldWriteASubject'),
+                    'warning'
+                )
+            );
             return false;
         } elseif ($total_filesize > intval(api_get_setting('message_max_upload_filesize'))) {
             $warning = sprintf(
@@ -328,7 +333,6 @@ class MessageManager
 
         //Just in case we replace the and \n and \n\r while saving in the DB
         //$content = str_replace(array("\n", "\n\r"), '<br />', $content);
-
         $now = api_get_utc_datetime();
         if (!empty($receiver_user_id) || !empty($group_id)) {
             // message for user friend
@@ -435,7 +439,13 @@ class MessageManager
                 $group_info['topic_id'] = $topic_id;
                 $group_info['msg_id'] = $inbox_last_id;
 
-                $user_list = $usergroup->get_users_by_group($group_id, false, array(), 0, 1000);
+                $user_list = $usergroup->get_users_by_group(
+                    $group_id,
+                    false,
+                    array(),
+                    0,
+                    1000
+                );
 
                 // Adding more sense to the message group
                 $subject = sprintf(get_lang('ThereIsANewMessageInTheGroupX'), $group_info['name']);

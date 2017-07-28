@@ -331,7 +331,7 @@ switch ($action) {
         );
         break;
     case 'calendar_logins':
-        if ($allowToEdit || api_is_drh()) {
+        if (api_is_course_admin() || api_is_drh()) {
             $attendanceController->getAttendanceBaseInLogin(false, true);
         }
         break;

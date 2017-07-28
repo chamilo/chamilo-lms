@@ -1035,7 +1035,7 @@ class MySpace
             );
             if ($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned
                 $last_login_date = $last_login_date_tmp;
-            } else if ($last_login_date_tmp != false && $last_login_date != false) { // TODO: Repeated previous condition. To be cleaned.
+            } elseif ($last_login_date_tmp != false && $last_login_date != false) { // TODO: Repeated previous condition. To be cleaned.
                 // Find the max and assign it to first_login_date
                 if (strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
                     $last_login_date = $last_login_date_tmp;

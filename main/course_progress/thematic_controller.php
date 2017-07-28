@@ -202,7 +202,7 @@ class ThematicController
                 case 'export_documents':
                     //no break
                 case 'thematic_export_pdf':
-                    
+
                     $pdfOrientation = api_get_configuration_value('thematic_pdf_orientation');
 
                     $list = $thematic->get_thematic_list();
@@ -221,7 +221,7 @@ class ThematicController
                                 );
                             }
                             $theme['thematic_plan'] = $item;
-                            
+
                         }
                         $dataAdvance = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
                         if (!empty($dataAdvance)) {
@@ -447,7 +447,7 @@ class ThematicController
                     $data['next_description_type'] = $thematic->get_next_description_type($_POST['thematic_id']);
 
                     // render to the view
-                    
+
                     $this->view->set_data($data);
                     $this->view->set_layout('layout');
                     $this->view->set_template('thematic_plan');
@@ -476,7 +476,7 @@ class ThematicController
             }
             $data['thematic_id'] = $thematic_id;
             $data['description_type'] = $description_type;
-        } else if (!empty($thematic_id) && $action === 'thematic_plan_list') {
+        } elseif (!empty($thematic_id) && $action === 'thematic_plan_list') {
             $data['thematic_plan_data'] = $thematic->get_thematic_plan_data($thematic_id);
             $data['thematic_id'] = $thematic_id;
         }
@@ -490,7 +490,7 @@ class ThematicController
         $data['thematic_data'] = $thematic->get_thematic_list($thematic_id);
 
         //render to the view
-        
+
         $this->view->set_data($data);
         $this->view->set_layout('layout');
         $this->view->set_template('thematic_plan');
@@ -509,7 +509,6 @@ class ThematicController
         $thematic = new Thematic();
         $attendance = new Attendance();
         $data = array();
-
         $displayHeader = (!empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header') ? false : true;
 
         // get data for attendance input select
@@ -576,7 +575,6 @@ class ThematicController
         $layoutName = $displayHeader ? 'layout' : 'layout_no_header';
 
         // render to the view
-        
         $this->view->set_data($data);
         $this->view->set_layout($layoutName);
         $this->view->set_template('thematic_advance');

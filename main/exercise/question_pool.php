@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Question Pool
  * This script allows administrators to manage questions and add them into their exercises.
@@ -10,8 +12,6 @@
  * @author Julio Montoya adding support to query all questions from all session, courses, exercises
  * @author Modify by hubert borderiou 2011-10-21 Question's category
  */
-
-use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -58,7 +58,7 @@ if (!empty($objExercise)) {
 }
 
 // message to be displayed if actions successful
-$displayMessage = "";
+$displayMessage = '';
 if ($is_allowedToEdit) {
     // Duplicating a Question
     if (!isset($_POST['recup']) && $question_copy != 0 && isset($fromExercise)) {
@@ -126,7 +126,7 @@ if ($is_allowedToEdit) {
         // Adds the question ID represented by $recup into the list of questions for the current exercise
         $objExercise->addToList($recup);
         Session::write('objExercise', $objExercise);
-    } else if (isset($_POST['recup']) && is_array($_POST['recup']) && $fromExercise) {
+    } elseif (isset($_POST['recup']) && is_array($_POST['recup']) && $fromExercise) {
         $list_recup = $_POST['recup'];
 
         foreach ($list_recup as $course_id => $question_data) {

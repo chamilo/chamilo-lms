@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
-use Chamilo\UserBundle\Entity\User,
-    Chamilo\CoreBundle\Entity\UserRelUser;
+
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserRelUser;
 
 /**
  * Script showing information about a user (name, e-mail, courses and sessions)
@@ -41,7 +42,7 @@ $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdm
 $interbreadcrumb[] = array("url" => 'user_list.php', "name" => get_lang('UserList'));
 
 $userId = $user['user_id'];
-$tool_name = $user['complete_name'].(empty($user['official_code']) ? '' : ' ('.$user['official_code'].')');
+$tool_name = $userEntity->getCompleteName();
 $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $csvContent = [];
@@ -49,7 +50,12 @@ $csvContent = [];
 // only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
 $actions = [
     Display::url(
-        Display::return_icon('statistics.png', get_lang('Reporting'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon(
+            'statistics.png',
+            get_lang('Reporting'),
+            [],
+            ICON_SIZE_MEDIUM
+        ),
         api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?'.http_build_query([
             'student' => intval($_GET['user_id'])
         ]),
@@ -65,8 +71,7 @@ if (api_is_platform_admin()) {
             [],
             ICON_SIZE_MEDIUM
         ),
-        api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$userId.'&'
-            .'sec_token='.$_SESSION['sec_token']
+        api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$userId.'&sec_token='.$_SESSION['sec_token']
     );
 
     $actions[] = Display::url(
@@ -99,8 +104,21 @@ if (api_is_platform_admin()) {
     );
     $actions[] = Display::url(
         Display::return_icon('new_group.png', get_lang('AddHrmToUser'), [], ICON_SIZE_MEDIUM),
-        api_get_path(WEB_PATH).'main/admin/add_drh_to_user.php?u='.$userId
+        api_get_path(WEB_CODE_PATH).'admin/add_drh_to_user.php?u='.$userId
     );
+
+    if (api_get_setting('allow_skills_tool') == 'true') {
+        $actions[] = Display::url(
+            Display::return_icon(
+                'skill-badges.png',
+                get_lang('AddSkill'),
+                array(),
+                ICON_SIZE_MEDIUM,
+                false
+            ),
+            api_get_path(WEB_CODE_PATH).'badge/assign.php?user='.$userId
+        );
+    }
 }
 
 $studentBossList = UserManager::getStudentBossList($userId);
@@ -165,8 +183,8 @@ $table = new HTML_Table(array('class' => 'data_table'));
 $table->setHeaderContents(0, 0, get_lang('Tracking'));
 $csvContent[] = [get_lang('Tracking')];
 $data = array(
-    get_lang('FirstLogin') => Tracking :: get_first_connection_date($userId),
-    get_lang('LatestLogin') => Tracking :: get_last_connection_date($userId, true)
+    get_lang('FirstLogin') => Tracking::get_first_connection_date($userId),
+    get_lang('LatestLogin') => Tracking::get_last_connection_date($userId, true)
 );
 
 if (api_get_setting('allow_terms_conditions') === 'true') {
@@ -503,7 +521,10 @@ if (isset($_GET['action'])) {
             break;
         case 'delete_legal':
             $extraFieldValue = new ExtraFieldValue('user');
-            $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
+            $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+                $userId,
+                'legal_accept'
+            );
             $result = $extraFieldValue->delete($value['id']);
             if ($result) {
                 Display::addFlash(Display::return_message(get_lang('Deleted')));

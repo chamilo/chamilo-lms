@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * Page for assign skills to a user
@@ -28,6 +29,7 @@ $skillRepo = $entityManager->getRepository('ChamiloCoreBundle:Skill');
 $skillRelSkill = $entityManager->getRepository('ChamiloCoreBundle:SkillRelSkill');
 $skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
 $skillUserRepo = $entityManager->getRepository('ChamiloCoreBundle:SkillRelUser');
+/** @var User $user */
 $user = $entityManager->find('ChamiloUserBundle:User', $userId);
 
 if (!$user) {
@@ -187,7 +189,20 @@ if ($form->validate()) {
 $form->setDefaults(['user_name' => $user->getCompleteName()]);
 $form->freeze(['user_name']);
 
-$template = new Template('');
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
+    'name' => get_lang('PlatformAdmin')
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'admin/user_list.php',
+    'name' => get_lang('UserList')
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId,
+    'name' => $user->getCompleteName()
+);
+
+$template = new Template(get_lang('AddSkill'));
 $template->assign('header', get_lang('AssignSkill'));
 $template->assign('content', $form->returnForm());
 $template->display_one_col_template();

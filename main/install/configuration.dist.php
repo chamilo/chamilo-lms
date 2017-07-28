@@ -461,7 +461,7 @@ VALUES (12, 13, 'is_mandatory', 'IsMandatory', 1, 1, NOW());
 */
 //$_configuration['allow_mandatory_survey'] = false;
 // ------
-//
+
 // Allow career diagram, requires a DB change:
 //UPDATE extra_field_values SET created_at = NULL WHERE CAST(created_at AS CHAR(20)) = '0000-00-00 00:00:00';
 //UPDATE extra_field_values SET updated_at = NULL WHERE CAST(updated_at AS CHAR(20)) = '0000-00-00 00:00:00';
@@ -548,12 +548,12 @@ $_configuration['score_grade_model'] = [
     ]
 ];
 */
-//Allow show link to request vinculation HRM-user
+
+// Allow show link to request relation between HRM and user
 //$_configuration['show_link_request_hrm_user'] = false;
-// Allow CKEditor start up with ShowBlocks plugin acive
+// Allow CKEditor start up with ShowBlocks plugin active
 //$_configuration['ckeditor_startup_outline_blocks'] = false;
-//
-// ------ SETTINGS FOT USER COURSE LIST
+// SETTINGS FOR USER COURSE LIST
 // Manage the links to Session Index page
 // 1 = Default. Works as it is now (default is to link to the special session page)
 // 0 = No link (not clickable)
@@ -574,4 +574,3 @@ $_configuration['score_grade_model'] = [
 //ALTER TABLE course_category ADD image varchar(255) NULL;
 //$_configuration['my_courses_list_as_category'] = false;
 // ------
-//

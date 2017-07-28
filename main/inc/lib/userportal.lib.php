@@ -1193,7 +1193,7 @@ class IndexManager
         $listCourse = '';
         $specialCourseList = '';
         $load_history = isset($_GET['history']) && intval($_GET['history']) == 1 ? true : false;
-        $viewGridCourses = api_get_configuration_value('view_grid_courses') === 'true';
+        $viewGridCourses = api_get_configuration_value('view_grid_courses') === true;
         $showSimpleSessionInfo = api_get_configuration_value('show_simple_session_info');
 
         $coursesWithoutCategoryTemplate = '/user_portal/classic_courses_without_category.tpl';

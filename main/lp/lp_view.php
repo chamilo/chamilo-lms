@@ -547,7 +547,8 @@ $template->assign('lp_author', $_SESSION['oLP']->get_author());
 $template->assign('lp_mode', $_SESSION['oLP']->mode);
 $template->assign('title_course', $_SESSION['oLP']->course_info['title']);
 $template->assign('lp_title_scorm', $_SESSION['oLP']->name);
-$template->assign('lp_item_parents', $_SESSION['oLP']->getCurrentItemParentNames());
+// supprimer pour OFAJ
+//$template->assign('data_list', $_SESSION['oLP']->getListArrayToc($get_toc_list));
 $template->assign('lp_id', $_SESSION['oLP']->lp_id);
 $template->assign('lp_current_item_id', $_SESSION['oLP']->get_current_item_id());
 

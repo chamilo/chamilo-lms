@@ -340,7 +340,6 @@ $blocks['sessions']['extra'] = null;
 
 /* Settings */
 if (api_is_platform_admin()) {
-
     $blocks['settings']['icon'] = Display::return_icon(
         'settings.png',
         get_lang('System'),
@@ -352,21 +351,44 @@ if (api_is_platform_admin()) {
     $blocks['settings']['class'] = 'block-admin-settings';
 
     $items = array();
-    $items[] = array('url' => 'special_exports.php', 'label' => get_lang('SpecialExports'));
-    $items[] = array('url' => 'system_status.php', 'label' => get_lang('SystemStatus'));
+    $items[] = array(
+        'url' => 'special_exports.php',
+        'label' => get_lang('SpecialExports')
+    );
+    $items[] = array(
+        'url' => 'system_status.php',
+        'label' => get_lang('SystemStatus')
+    );
     if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
-        $items[] = array('url' => 'filler.php', 'label' => get_lang('DataFiller'));
+        $items[] = array(
+            'url' => 'filler.php',
+            'label' => get_lang('DataFiller')
+        );
     }
 
-    $items[] = array('url' => 'archive_cleanup.php', 'label' => get_lang('ArchiveDirCleanup'));
-    $items[] = array('url' => 'resource_sequence.php', 'label' => get_lang('ResourcesSequencing'));
+    $items[] = array(
+        'url' => 'archive_cleanup.php',
+        'label' => get_lang('ArchiveDirCleanup')
+    );
+    $items[] = array(
+        'url' => 'resource_sequence.php',
+        'label' => get_lang('ResourcesSequencing')
+    );
     if (is_dir(api_get_path(SYS_TEST_PATH))) {
-        $items[] = ['url' => 'email_tester.php', 'label' => get_lang('EMailTester')];
+        $items[] = [
+            'url' => 'email_tester.php',
+            'label' => get_lang('EMailTester')
+        ];
     }
 
-    $items[] = ['url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php', 'label' => get_lang('TicketSystem')];
+    $items[] = [
+        'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
+        'label' => get_lang('TicketSystem')
+    ];
 
-    if (api_get_configuration_value('db_manager_enabled') == true && api_is_global_platform_admin()) {
+    if (api_get_configuration_value('db_manager_enabled') == true &&
+        api_is_global_platform_admin()
+    ) {
         $host = $_configuration['db_host'];
         $username = $_configuration['db_user'];
         $databaseName = $_configuration['main_database'];
@@ -394,17 +416,31 @@ if (api_is_platform_admin()) {
         $blocks['skills']['class'] = 'block-admin-skills';
 
         $items = array();
-        //$items[] = array('url'=>'skills.php',           'label' => get_lang('SkillsTree'));
-        $items[] = array('url' => 'skills_wheel.php', 'label' => get_lang('SkillsWheel'));
-        $items[] = array('url' => 'skills_import.php', 'label' => get_lang('SkillsImport'));
-        $items[] = array('url' => 'skill_list.php', 'label' => get_lang('ManageSkills'));
-        $items[] = array('url'=>'skill.php', 'label' => get_lang('ManageSkillsLevels'));
-        //$items[] = array('url'=>'skills_profile.php',   'label' => get_lang('SkillsProfile'));
+        $items[] = array(
+            'url' => 'skills_wheel.php',
+            'label' => get_lang('SkillsWheel')
+        );
+        $items[] = array(
+            'url' => 'skills_import.php',
+            'label' => get_lang('SkillsImport')
+        );
+        $items[] = array(
+            'url' => 'skill_list.php',
+            'label' => get_lang('ManageSkills')
+        );
+        $items[] = array(
+            'url' => 'skill.php',
+            'label' => get_lang('ManageSkillsLevels')
+        );
+
         $items[] = array(
             'url' => api_get_path(WEB_CODE_PATH).'social/skills_ranking.php',
             'label' => get_lang('SkillsRanking')
         );
-        $items[] = array('url' => 'skills_gradebook.php', 'label' => get_lang('SkillsAndGradebooks'));
+        $items[] = array(
+            'url' => 'skills_gradebook.php',
+            'label' => get_lang('SkillsAndGradebooks')
+        );
         $items[] = array(
             'url' => api_get_path(WEB_CODE_PATH).'admin/skill_badge.php',
             'label' => get_lang('Badges')
@@ -413,7 +449,9 @@ if (api_is_platform_admin()) {
         $blocks['skills']['extra'] = null;
         $blocks['skills']['search_form'] = null;
     }
+}
 
+if (api_is_platform_admin()) {
     /* Plugins */
     global $_plugins;
     if (isset($_plugins['menu_administrator']) && count($_plugins['menu_administrator']) > 0) {

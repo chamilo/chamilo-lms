@@ -14,7 +14,9 @@ use Chamilo\UserBundle\Entity\User;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (!api_is_platform_admin(false, true) && !api_is_student_boss()) {
+if (!api_is_platform_admin(false, true) &&
+    !api_is_student_boss()
+) {
     api_not_allowed(true);
 }
 
@@ -189,18 +191,41 @@ if ($form->validate()) {
 $form->setDefaults(['user_name' => $user->getCompleteName()]);
 $form->freeze(['user_name']);
 
-$interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
-    'name' => get_lang('PlatformAdmin')
-);
-$interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH).'admin/user_list.php',
-    'name' => get_lang('UserList')
-);
-$interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId,
-    'name' => $user->getCompleteName()
-);
+
+if (api_is_drh()) {
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'mySpace/index.php',
+        "name" => get_lang('MySpace')
+    );
+    if ($user->getStatus() == COURSEMANAGER) {
+        $interbreadcrumb[] = array(
+            "url" => api_get_path(WEB_CODE_PATH).'mySpace/teachers.php',
+            'name' => get_lang('Teachers')
+        );
+    } else {
+        $interbreadcrumb[] = array(
+            "url" => api_get_path(WEB_CODE_PATH).'mySpace/student.php',
+            'name' => get_lang('MyStudents')
+        );
+    }
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userId,
+        'name' => $user->getCompleteName()
+    );
+} else {
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
+        'name' => get_lang('PlatformAdmin')
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'admin/user_list.php',
+        'name' => get_lang('UserList')
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId,
+        'name' => $user->getCompleteName()
+    );
+}
 
 $template = new Template(get_lang('AddSkill'));
 $template->assign('header', get_lang('AssignSkill'));

@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CLpCategory;
+use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
 
 /**
@@ -17,12 +19,20 @@ $sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : 0;
 $origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
 $course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
 $courseInfo = api_get_course_info($course_code);
-$student_id = intval($_GET['student']);
+$student_id = isset($_GET['student']) ? (int) $_GET['student'] : 0;
+$details = isset($_GET['details']) ? Security::remove_XSS($_GET['details']) : '';
+$currentUrl = api_get_self().'?student='.$student_id.'&course='.$course_code.'&id_session='.$sessionId.'&origin='.$origin.'&details='.$details;
+$allowMessages = api_get_configuration_value('private_messages_about_user');
+
+if (empty($student_id)) {
+    api_not_allowed(true);
+}
+
+// user info
+$user_info = api_get_user_info($student_id);
 
 $allowedToTrackUser = true;
-
-if (
-    !api_is_session_admin() &&
+if (!api_is_session_admin() &&
     !api_is_drh() &&
     !api_is_student_boss() &&
     !api_is_platform_admin()
@@ -74,7 +84,7 @@ function show_image(image,width,height) {
 if ($export) {
     ob_start();
 }
-$csv_content = array();
+$csv_content = [];
 $from_myspace = false;
 
 if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
@@ -87,7 +97,7 @@ if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
 $nameTools = get_lang('StudentDetails');
 $em = Database::getManager();
 
-if (isset($_GET['details'])) {
+if (!empty($details)) {
     if ($origin === 'user_course') {
         if (empty($cidReq)) {
             $interbreadcrumb[] = array(
@@ -155,6 +165,11 @@ if (isset($_GET['details'])) {
                 "name" => get_lang('SessionOverview')
             );
         }
+    } elseif ($origin === 'teacher_details') {
+        $this_section = SECTION_TRACKING;
+        $interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('MySpace'));
+        $interbreadcrumb[] = array("url" => "teachers.php", "name" => get_lang('Teachers'));
+        $nameTools = $user_info['complete_name'];
     } else {
         $interbreadcrumb[] = array(
             "url" => api_is_student_boss() ? "#" : "index.php",
@@ -184,17 +199,26 @@ if (isset($_GET['details'])) {
 // Database Table Definitions
 $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-
-if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
-    $user_id = intval($_GET['user_id']);
-} else {
-    $user_id = api_get_user_id();
-}
-
-// Action behaviour
+$user_id = isset($_GET['user_id']) && !empty($_GET['user_id']) ? (int) $_GET['user_id'] : api_get_user_id();
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 switch ($action) {
+    case 'send_message':
+        if ($allowMessages === true) {
+            $subject = isset($_POST['subject']) ? $_POST['subject'] : '';
+            $message = isset($_POST['message']) ? $_POST['message'] : '';
+
+            MessageManager::sendMessageAboutUser(
+                $user_info,
+                api_get_user_info(),
+                $subject,
+                $message
+            );
+            Display::addFlash(Display::return_message(get_lang('MessageSent')));
+            header('Location: '.$currentUrl);
+            exit;
+        }
+        break;
     case 'generate_certificate':
         // ofaj
         $certificate = new Certificate(0, $student_id);
@@ -223,10 +247,12 @@ switch ($action) {
         break;
     case 'reset_lp':
         $lp_id = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : '';
+        $check = true;
 
         if (api_is_allowed_to_edit() &&
             !empty($lp_id) &&
-            !empty($student_id)
+            !empty($student_id) &&
+            Security::check_token('get')
         ) {
             Event::delete_student_lp_events(
                 $student_id,
@@ -246,14 +272,10 @@ switch ($action) {
     default:
         break;
 }
-
-// user info
-$user_info = api_get_user_info($student_id);
 $courses_in_session = array();
 
 //See #4676
 $drh_can_access_all_courses = false;
-
 if (api_is_drh() || api_is_platform_admin() || api_is_student_boss()) {
     $drh_can_access_all_courses = true;
 }
@@ -265,11 +287,15 @@ $sessions_coached_by_user = Tracking::get_sessions_coached_by_user(api_get_user_
 // RRHH or session admin
 if (api_is_session_admin() || api_is_drh()) {
     $courses = CourseManager::get_courses_followed_by_drh(api_get_user_id());
-    $session_by_session_admin = SessionManager::get_sessions_followed_by_drh(api_get_user_id());
+    $session_by_session_admin = SessionManager::get_sessions_followed_by_drh(
+        api_get_user_id()
+    );
 
     if (!empty($session_by_session_admin)) {
         foreach ($session_by_session_admin as $session_coached_by_user) {
-            $courses_followed_by_coach = Tracking :: get_courses_list_from_session($session_coached_by_user['id']);
+            $courses_followed_by_coach = Tracking::get_courses_list_from_session(
+                $session_coached_by_user['id']
+            );
             $courses_in_session_by_coach[$session_coached_by_user['id']] = $courses_followed_by_coach;
         }
     }
@@ -291,7 +317,7 @@ $sql = "SELECT c_id
             user_id = ".intval($user_info['user_id']);
 $rs = Database::query($sql);
 
-while ($row = Database :: fetch_array($rs)) {
+while ($row = Database::fetch_array($rs)) {
     if ($drh_can_access_all_courses) {
         $courses_in_session[0][] = $row['c_id'];
     } else {
@@ -307,7 +333,7 @@ $sql = 'SELECT session_id, c_id
         WHERE user_id=' . intval($user_info['user_id']);
 $rs = Database::query($sql);
 $tmp_sessions = array();
-while ($row = Database :: fetch_array($rs, 'ASSOC')) {
+while ($row = Database::fetch_array($rs, 'ASSOC')) {
     $tmp_sessions[] = $row['session_id'];
     if ($drh_can_access_all_courses) {
         if (in_array($row['session_id'], $tmp_sessions)) {
@@ -1210,7 +1236,11 @@ if (!empty($student_id)) {
                     echo '<tr class="'.$css_class.'">';
                     $contentToExport = [];
                     if (in_array('lp', $columnHeadersKeys)) {
-                        $contentToExport[] = api_html_entity_decode(stripslashes($lp_name), ENT_QUOTES, $charset);
+                        $contentToExport[] = api_html_entity_decode(
+                            stripslashes($lp_name),
+                            ENT_QUOTES,
+                            $charset
+                        );
                         echo Display::tag('td', stripslashes($lp_name));
                     }
                     if (in_array('time', $columnHeadersKeys)) {
@@ -1233,8 +1263,8 @@ if (!empty($student_id)) {
                     }
 
                     if (in_array('last_connection', $columnHeadersKeys)) {
-                        //Do not change with api_convert_and_format_date, because this value came from the lp_item_view table
-                        //which implies several other changes not a priority right now
+                        // Do not change with api_convert_and_format_date, because this value came from the lp_item_view table
+                        // which implies several other changes not a priority right now
                         $contentToExport[] = $start_time;
                         echo Display::tag('td', $start_time);
                     }
@@ -1630,6 +1660,60 @@ if (!empty($student_id)) {
         $courseInfo ? $courseInfo['real_id'] : 0,
         $sessionId
     );
+
+
+if ($allowMessages === true) {
+    // Messages
+    echo Display::page_subheader2(get_lang('Messages'));
+    $messages = MessageManager::getMessagesAboutUser($user_info);
+
+    if (!empty($messages)) {
+        /** @var Message $message */
+        foreach ($messages as $message) {
+            $tag = 'message_'.$message->getId();
+            $tagAccordion = 'accordion_'.$message->getId();
+            $tagCollapse = 'collapse_'.$message->getId();
+            $date = Display::dateToStringAgoAndLongDate(
+                $message->getSendDate()
+            );
+            $senderId = $message->getUserSenderId();
+            $senderInfo = api_get_user_info($senderId);
+            echo Display::panelCollapse(
+                $message->getTitle(),
+                $message->getContent().'<br />'.$date.'<br />'.get_lang(
+                    'Author'
+                ).': '.$senderInfo['complete_name_with_message_link'],
+                $tag,
+                null,
+                $tagAccordion,
+                $tagCollapse,
+                false
+            );
+        }
+    }
+
+    echo Display::url(
+        get_lang('NewMessage'),
+        'javascript: void(0);',
+        [
+            'onClick' => "$('#compose_message').show();",
+            'class' => 'btn btn-default'
+        ]
+    );
+
+    $form = new FormValidator(
+        'messages',
+        'post',
+        api_get_self().'?action=send_message&student='.$student_id
+    );
+    $form->addHtml('<div id="compose_message" style="display:none;">');
+    $form->addText('subject', get_lang('Subject'));
+    $form->addHtmlEditor('message', get_lang('Message'));
+    $form->addButtonSend(get_lang('Send'));
+    $form->addHidden('sec_token', $token);
+    $form->addHtml('</div>');
+    $form->display();
+}
 }
 
 if ($export) {

@@ -3448,7 +3448,6 @@ class DocumentManager
         $userInfo = api_get_user_info();
 
         $user_in_course = false;
-
         if (api_is_platform_admin()) {
             $user_in_course = true;
         }
@@ -3518,7 +3517,12 @@ class DocumentManager
 
         $parentData = [];
         if ($folderId !== false) {
-            $parentData = self::get_document_data_by_id($folderId, $course_info['code'], false, $session_id);
+            $parentData = self::get_document_data_by_id(
+                $folderId,
+                $course_info['code'],
+                false,
+                $session_id
+            );
             if (!empty($parentData)) {
                 $cleanedPath = $parentData['path'];
                 $num = substr_count($cleanedPath, '/');
@@ -3535,8 +3539,7 @@ class DocumentManager
                     $notLikeCondition
                 ";
             } else {
-                $folderCondition = " AND
-                docs.filetype = 'file' ";
+                $folderCondition = " AND docs.filetype = 'file' ";
             }
         }
 
@@ -3546,7 +3549,8 @@ class DocumentManager
         }
 
         $sql = "SELECT DISTINCT last.visibility, docs.*
-                FROM $tbl_item_prop AS last INNER JOIN $tbl_doc AS docs
+                FROM $tbl_item_prop AS last 
+                INNER JOIN $tbl_doc AS docs
                 ON (docs.id = last.ref AND docs.c_id = last.c_id)
                 WHERE
                     docs.path NOT LIKE '%_DELETED_%' AND
@@ -3588,7 +3592,6 @@ class DocumentManager
 
         // If you want to debug it, I advise you to do "echo" on the eval statements.
         $newResources = array();
-
         if (!empty($resources) && $user_in_course) {
             foreach ($resources as $resource) {
                 $is_visible = self::is_visible_by_id(
@@ -3996,9 +3999,19 @@ class DocumentManager
         $user_id,
         $groupId = 0
     ) {
-        $document_data = self::get_document_data_by_id($doc_id, $course_code, null, $session_id);
+        $document_data = self::get_document_data_by_id(
+            $doc_id,
+            $course_code,
+            null,
+            $session_id
+        );
         if ($session_id != 0 && !$document_data) {
-            $document_data = self::get_document_data_by_id($doc_id, $course_code, null, 0);
+            $document_data = self::get_document_data_by_id(
+                $doc_id,
+                $course_code,
+                null,
+                0
+            );
         }
 
         if (!empty($document_data)) {
@@ -4080,7 +4093,8 @@ class DocumentManager
             $doc_mime = mime_content_type($doc_path);
             $allowed_mime_types = self::file_get_mime_type(true);
 
-            // mime_content_type does not detect correctly some formats that are going to be supported for index, so an extensions array is used for the moment
+            // mime_content_type does not detect correctly some formats that
+            // are going to be supported for index, so an extensions array is used for the moment
             if (empty($doc_mime)) {
                 $allowed_extensions = array(
                     'doc',
@@ -4187,7 +4201,13 @@ class DocumentManager
                                     $ic_slide->addTerm($sterm, $specific_field['code']);
                                     // updated the last param here from $value to $sterm without being sure - see commit15464
                                     if (!$simulation) {
-                                        add_specific_field_value($specific_field['id'], $course_code, TOOL_DOCUMENT, $docid, $sterm);
+                                        add_specific_field_value(
+                                            $specific_field['id'],
+                                            $course_code,
+                                            TOOL_DOCUMENT,
+                                            $docid,
+                                            $sterm
+                                        );
                                     }
                                 }
                             }
@@ -4225,7 +4245,13 @@ class DocumentManager
                             foreach ($sterms as $sterm) {
                                 if (!$simulation) {
                                     $ic_slide->addTerm(trim($sterm), $specific_field['code']);
-                                    add_specific_field_value($specific_field['id'], $course_code, TOOL_DOCUMENT, $docid, $sterm);
+                                    add_specific_field_value(
+                                        $specific_field['id'],
+                                        $course_code,
+                                        TOOL_DOCUMENT,
+                                        $docid,
+                                        $sterm
+                                    );
                                 }
                             }
                         }
@@ -4716,7 +4742,6 @@ class DocumentManager
                 );
 
                 if (!empty($documentId)) {
-
                     if ($deleteWavFile) {
                         $coursePath = $courseInfo['directory'].'/document';
                         $documentPath = api_get_path(SYS_COURSE_PATH).$coursePath;
@@ -4859,8 +4884,11 @@ class DocumentManager
      * @param bool $fromBaseCourse
      * @param int $sessionId
      */
-    public static function generateDefaultCertificate($courseData, $fromBaseCourse = false, $sessionId = 0)
-    {
+    public static function generateDefaultCertificate(
+        $courseData,
+        $fromBaseCourse = false,
+        $sessionId = 0
+    ) {
         if (empty($courseData)) {
             return false;
         }
@@ -4963,7 +4991,6 @@ class DocumentManager
     {
         $documentId = intval($documentId);
         $newName = Database::escape_string($newName);
-
         $docuentTable = Database::get_course_table(TABLE_DOCUMENT);
 
         $values = array(
@@ -5223,11 +5250,10 @@ class DocumentManager
      * Builds the form that enables the user to
      * select a directory to browse/upload in
      *
-     * @param array 	An array containing the folders we want to be able to select
-     * @param string	The current folder (path inside of the "document" directory, including the prefix "/")
-     * @param string	Group directory, if empty, prevents documents to be uploaded (because group documents cannot be uploaded in root)
-     * @param	boolean	Whether to change the renderer (this will add a template <span> to the QuickForm object displaying the form)
-
+     * @param array    An array containing the folders we want to be able to select
+     * @param string    The current folder (path inside of the "document" directory, including the prefix "/")
+     * @param string    Group directory, if empty, prevents documents to be uploaded (because group documents cannot be uploaded in root)
+     * @param boolean    Whether to change the renderer (this will add a template <span> to the QuickForm object displaying the form)
      * @return string html form
      */
     public static function build_directory_selector(
@@ -5441,7 +5467,7 @@ class DocumentManager
                     api_is_platform_admin() ||
                     api_get_setting('students_download_folders') == 'true'
                 ) {
-                    //filter: when I am into a shared folder, I can only show "my shared folder" for donwload
+                    // filter: when I am into a shared folder, I can only show "my shared folder" for donwload
                     if (self::is_shared_folder($curdirpath, $current_session_id)) {
                         if (preg_match('/shared_folder\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) ||
                             preg_match('/shared_folder_session_'.$current_session_id.'\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) ||

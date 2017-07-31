@@ -7275,6 +7275,8 @@ class SessionManager
     /**
      * Returns a human readable string
      * @params array $sessionInfo An array with all the session dates
+     * @param bool $showTime
+     *
      * @return string
      */
     public static function parseSessionDates($sessionInfo, $showTime = false)

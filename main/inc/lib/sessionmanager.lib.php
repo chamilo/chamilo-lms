@@ -574,6 +574,13 @@ class SessionManager
 
             foreach ($sessions as $session) {
                 $session_id = $session['id'];
+                if ($showCountUsers) {
+                    $session['users'] = SessionManager::get_users_by_session(
+                        $session['id'],
+                        null,
+                        true
+                    );
+                }
                  $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
                 if (api_is_drh()) {
                     $url = api_get_path(WEB_CODE_PATH)."session/about.php?session_id=".$session['id'];

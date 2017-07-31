@@ -543,7 +543,7 @@ if (count($a_students) > 0) {
 echo Display::panel($html, $titleSession);
 // Send the csv file if asked.
 if ($export_csv) {
-    $csv_headers = array();
+    $csv_headers = [];
     $csv_headers[] = get_lang('OfficialCode');
     if ($is_western_name_order) {
         $csv_headers[] = get_lang('FirstName');
@@ -574,8 +574,18 @@ if ($export_csv) {
         }
     }
     ob_end_clean();
+
      // Adding headers before the content.
     array_unshift($csv_content, $csv_headers);
+
+    if ($session_id) {
+        $sessionData = [];
+        $sessionInfo = api_get_session_info($session_id);
+        $sessionDates = SessionManager::parseSessionDates($sessionInfo);
+
+        array_unshift($csv_content, [get_lang('Date'), $sessionDates['access']]);
+        array_unshift($csv_content, [get_lang('SessionName'), $sessionInfo['name']]);
+    }
 
     Export::arrayToCsv($csv_content, 'reporting_student_list');
     exit;

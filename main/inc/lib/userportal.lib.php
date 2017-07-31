@@ -321,7 +321,6 @@ class IndexManager
         if (empty($home_notice)) {
             $home_notice = @(string) file_get_contents($this->home.'home_notice.html');
         }
-
         if (!empty($home_notice)) {
             $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
             $html = self::show_right_block(
@@ -333,7 +332,6 @@ class IndexManager
                 'noticesCollapse'
             );
         }
-
         return $html;
     }
 
@@ -377,29 +375,20 @@ class IndexManager
     public function return_skills_links()
     {
         $items = [];
-        $certificatesItem = [];
+        //$certificatesItem = [];
         if (!api_is_anonymous() && api_get_configuration_value('hide_my_certificate_link') === false) {
-            $certificatesItem = [
+            $items[] = [
                 'icon' => Display::return_icon('graduation.png', get_lang('MyCertificates')),
                 'link' => api_get_path(WEB_CODE_PATH).'gradebook/my_certificates.php',
                 'title' => get_lang('MyCertificates')
             ];
         }
-
-        $searchItem = [];
         if (api_get_setting('allow_public_certificates') == 'true') {
-            $searchItem = [
+            $items[] = [
                 'icon' => Display::return_icon('search_graduation.png', get_lang('Search')),
                 'link' => api_get_path(WEB_CODE_PATH).'gradebook/search.php',
                 'title' => get_lang('Search')
             ];
-        }
-
-        if (empty($certificatesItem) && empty($searchItem)) {
-            return '';
-        } else {
-            $items[] = $certificatesItem;
-            $items[] = $searchItem;
         }
 
         if (api_get_setting('allow_skills_tool') == 'true') {
@@ -417,15 +406,7 @@ class IndexManager
                 ];
             }
         }
-
-        return self::show_right_block(
-            get_lang("Skills"),
-            self::returnRightBlockItems($items),
-            'skill_block',
-            null,
-            'skills',
-            'skillsCollapse'
-        );
+        return $items;
     }
 
     /**
@@ -982,32 +963,21 @@ class IndexManager
                 'title' => $label
             ];
         }
-
-        $html = self::show_right_block(
-            get_lang('Profile'),
-            self::returnRightBlockItems($items),
-            'profile_block',
-            null,
-            'profile',
-            'profileCollapse'
-        );
-
+        
         $setting = api_get_plugin_setting('bbb', 'enable_global_conference');
         $settingLink = api_get_plugin_setting('bbb', 'enable_global_conference_link');
         if ($setting === 'true' && $settingLink === 'true') {
             $url = api_get_path(WEB_PLUGIN_PATH).'bbb/start.php?global=1';
             $content = Display::url(get_lang('LaunchVideoConferenceRoom'), $url);
-            $html .= self::show_right_block(
-                get_lang('VideoConference'),
-                $content,
-                'videoconference_block',
-                null,
-                'videoconference',
-                'videoconferenceCollapse'
-            );
+            $items[] = [
+                'class' => 'video-conference',
+                'icon' => Display::return_icon('bbb.png', get_lang('VideoConference')),
+                'link' => $content,
+                'title' => get_lang('VideoConference')
+            ];
         }
-
-        return $html;
+        
+        return $items;
     }
 
     /**
@@ -1015,7 +985,7 @@ class IndexManager
      */
     public function return_navigation_links()
     {
-        $html = '';
+        $items = [];
         // Deleting the myprofile link.
         if (api_get_setting('allow_social_tool') == 'true') {
             unset($this->tpl->menu_navigation['myprofile']);
@@ -1029,19 +999,17 @@ class IndexManager
         // Main navigation section.
         // Tabs that are deactivated are added here.
         if (!empty($this->tpl->menu_navigation)) {
-            $content = '<ul class="nav nav-pills nav-stacked">';
+            //$content = '<ul class="nav nav-pills nav-stacked">';
             foreach ($this->tpl->menu_navigation as $section => $navigation_info) {
-                $current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
-                $content .= '<li'.$current.'>';
-                $content .= '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
-                $content .= '</li>';
+                $items [] = [
+                    'icon' => null,
+                    'link' => $navigation_info['url'],
+                    'title' => $navigation_info['title']
+                ];
             }
-            $content .= '</ul>';
-
-            $html = self::show_right_block(get_lang('MainNavigation'), $content, 'navigation_link_block');
         }
 
-        return $html;
+        return $items;
     }
 
     /**
@@ -1138,15 +1106,8 @@ class IndexManager
                 ];
             }
         }
-
-        return self::show_right_block(
-            get_lang('Courses'),
-            self::returnRightBlockItems($items),
-            'course_block',
-            null,
-            'course',
-            'courseCollapse'
-        );
+        
+        return $items;
     }
 
     /**

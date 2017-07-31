@@ -436,9 +436,10 @@ class SessionManager
     public static function get_sessions_admin(
         $options = array(),
         $get_count = false,
+        $columns = [],
+        $extraFieldsToLoad = array(),
         $accessStartDate = '',
-        $accessEndDate = '',
-        $extraFieldsToLoad = array()
+        $accessEndDate = ''
     ) {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -483,7 +484,6 @@ class SessionManager
                     }
                 }
             }
-
             $select =
                 "SELECT DISTINCT 
                      s.name,

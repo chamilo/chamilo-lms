@@ -321,10 +321,13 @@ $items[] = array(
     'url' => $sessionPath.'session_export.php',
     'label' => get_lang('ExportSessionListXMLCSV'),
 );
-$items[] = array(
-    'url' => '../coursecopy/copy_course_session.php',
-    'label' => get_lang('CopyFromCourseInSessionToAnotherSession')
-);
+
+if (api_is_global_platform_admin()) {
+    $items[] = array(
+        'url' => '../coursecopy/copy_course_session.php',
+        'label' => get_lang('CopyFromCourseInSessionToAnotherSession')
+    );
+}
 
 if (api_is_platform_admin()) {
     // option only visible in development mode. Enable through code if required

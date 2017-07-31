@@ -564,6 +564,9 @@ switch ($action) {
         break;
     case 'get_sessions':
         $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
+        $session_columns = SessionManager::getGridColumns($list_type);
+        $columns = $session_columns['simple_column_name'];
+
         $loadExtraFields = isset($_REQUEST['load_extra_field']) ? $_REQUEST['load_extra_field'] : '';
         $extraFieldsToLoad = array();
         if (!empty($loadExtraFields)) {
@@ -579,9 +582,10 @@ switch ($action) {
             $count = SessionManager::get_sessions_admin(
                 array('where' => $whereCondition, 'extra' => $extra_fields),
                 true,
+                [],
+                $extraFieldsToLoad,
                 $accessStartDate,
-                $accessEndDate,
-                $extraFieldsToLoad
+                $accessEndDate
             );
         } else {
             $count = SessionManager::get_count_admin_complete(
@@ -1268,9 +1272,10 @@ switch ($action) {
                     'limit' => "$start , $limit",
                 ),
                 false,
+                $session_columns,
+                $extraFieldsToLoad,
                 $accessStartDate,
-                $accessEndDate,
-                $extraFieldsToLoad
+                $accessEndDate
             );
         } else {
             $result = SessionManager::get_sessions_admin_complete(

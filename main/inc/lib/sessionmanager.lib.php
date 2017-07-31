@@ -436,9 +436,10 @@ class SessionManager
     public static function get_sessions_admin(
         $options = array(),
         $get_count = false,
+        $columns = [],
+        $extraFieldsToLoad = array(),
         $accessStartDate = '',
-        $accessEndDate = '',
-        $extraFieldsToLoad = array()
+        $accessEndDate = ''
     ) {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -497,13 +498,13 @@ class SessionManager
                      s.id 
              ";
 
-            if ($showCountUsers) {
-                $select .= ', count(su.user_id) users';
-            }
-
             // ofaj fix
             if (!empty($extraFieldsToLoad)) {
                 $select = "SELECT DISTINCT s.* ";
+            }
+
+            if ($showCountUsers) {
+                $select .= ', count(su.user_id) users';
             }
 
             if (isset($options['order'])) {
@@ -528,7 +529,6 @@ class SessionManager
 
         if ($showCountUsers) {
             $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-            //$tableUserUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $inject_joins .= " LEFT JOIN $table su ON (su.session_id = s.id)";
         }
 
@@ -597,6 +597,13 @@ class SessionManager
 
             foreach ($sessions as $session) {
                 $session_id = $session['id'];
+                if ($showCountUsers) {
+                    $session['users'] = SessionManager::get_users_by_session(
+                        $session['id'],
+                        null,
+                        true
+                    );
+                }
                 $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
                 if (api_is_drh()) {
                     $url = api_get_path(WEB_CODE_PATH)."session/about.php?session_id=".$session['id'];

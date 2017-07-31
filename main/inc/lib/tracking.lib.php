@@ -7093,7 +7093,7 @@ class TrackingCourseLog
         $direction,
         $includeInvitedUsers = false
     ) {
-        global $user_ids, $course_code, $export_csv, $is_western_name_order, $csv_content, $session_id;
+        global $user_ids, $course_code, $export_csv, $csv_content, $session_id;
 
         $course_code = Database::escape_string($course_code);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);

@@ -5,7 +5,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-api_protect_admin_script();
+api_protect_admin_script(true);
 
 $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;

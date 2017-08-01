@@ -99,7 +99,7 @@ $token = Security::get_token();
 echo Display::page_header(get_lang('GradebookListOfStudentsCertificates'));
 
 //@todo replace all this code with something like get_total_weight()
-$cats = Category:: load($cat_id, null, null, null, null, null, false);
+$cats = Category::load($cat_id, null, null, null, null, null, false);
 
 if (!empty($cats)) {
     //with this fix the teacher only can view 1 gradebook
@@ -142,7 +142,10 @@ if (!empty($cats)) {
     }
 
     if ($total_resource_weight != $total_weight) {
-        echo Display::return_message(get_lang('SumOfActivitiesWeightMustBeEqualToTotalWeight'), 'warning');
+        echo Display::return_message(
+            get_lang('SumOfActivitiesWeightMustBeEqualToTotalWeight'),
+            'warning'
+        );
     }
 }
 
@@ -183,17 +186,29 @@ if ($filter === 'true') {
     $certificate_list = GradebookUtils::get_list_users_certificates($cat_id);
 }
 
-echo '<div class="btn-group">';
-$url = api_get_self().'?action=generate_all_certificates'.'&'.api_get_cidreq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
-echo Display::url(get_lang('GenerateCertificates'), $url, array('class' => 'btn btn-default'));
+$url = api_get_self().'?'.api_get_cidreq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
 
-$url = api_get_self().'?action=delete_all_certificates'.'&'.api_get_cidreq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
-echo Display::url(get_lang('DeleteAllCertificates'), $url, array('class' => 'btn btn-default'));
+echo '<div class="btn-group">';
+
+echo Display::url(
+    get_lang('GenerateCertificates'),
+    $url.'&action=generate_all_certificates',
+    array('class' => 'btn btn-default')
+);
+
+echo Display::url(
+    get_lang('DeleteAllCertificates'),
+    $url.'&action=delete_all_certificates',
+    array('class' => 'btn btn-default')
+);
 
 $hideCertificateExport = api_get_setting('hide_certificate_export_link');
 if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
-    $url = api_get_self().'?action=export_all_certificates'.'&'.api_get_cidreq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
-    echo Display::url(get_lang('ExportAllCertificatesToPDF'), $url, array('class' => 'btn btn-default'));
+    echo Display::url(
+        get_lang('ExportAllCertificatesToPDF'),
+        $url.'&action=export_all_certificates',
+        array('class' => 'btn btn-default')
+    );
 }
 echo '</div>';
 
@@ -210,14 +225,21 @@ if (count($certificate_list) == 0) {
         echo '<tr><td>
             <table class="data_table">';
 
-        $list_certificate = GradebookUtils::get_list_gradebook_certificates_by_user_id($value['user_id'], $cat_id);
-        foreach ($list_certificate as $value_certificate) {
+        $list = GradebookUtils::get_list_gradebook_certificates_by_user_id(
+            $value['user_id'],
+            $cat_id
+        );
+        foreach ($list as $value_certificate) {
             echo '<tr>';
             echo '<td width="50%">'.get_lang('Score').' : '.$value_certificate['score_certificate'].'</td>';
             echo '<td width="30%">'.get_lang('Date').' : '.api_convert_and_format_date($value_certificate['created_at']).'</td>';
             echo '<td width="20%">';
             $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$value_certificate['id'];
-            $certificates = Display::url(get_lang('Certificate'), $url, array('target'=>'_blank', 'class' => 'btn btn-default'));
+            $certificates = Display::url(
+                get_lang('Certificate'),
+                $url,
+                array('target' => '_blank', 'class' => 'btn btn-default')
+            );
             echo $certificates;
             echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&'.api_get_cidreq().'&action=delete&cat_id='.$cat_id.'&certificate_id='.$value_certificate['id'].'">
                     '.Display::return_icon('delete.png', get_lang('Delete')).'

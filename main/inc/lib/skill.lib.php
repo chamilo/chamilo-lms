@@ -1607,7 +1607,7 @@ class Skill extends Model
     {
         if (self::isToolAvailable()) {
             if (api_is_platform_admin()) {
-                //return true;
+                return true;
             }
 
             if (!empty($studentId)) {

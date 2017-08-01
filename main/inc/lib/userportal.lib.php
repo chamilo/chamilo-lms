@@ -370,13 +370,15 @@ class IndexManager
 
     /**
      * Generate the block for show a panel with links to My Certificates and Certificates Search pages
-     * @return string The HTML code for the panel
+     * @return array The HTML code for the panel
      */
-    public function return_skills_links()
+    public function returnSkillLinks()
     {
         $items = [];
-        //$certificatesItem = [];
-        if (!api_is_anonymous() && api_get_configuration_value('hide_my_certificate_link') === false) {
+
+        if (!api_is_anonymous() &&
+            api_get_configuration_value('hide_my_certificate_link') === false
+        ) {
             $items[] = [
                 'icon' => Display::return_icon('graduation.png', get_lang('MyCertificates')),
                 'link' => api_get_path(WEB_CODE_PATH).'gradebook/my_certificates.php',
@@ -389,13 +391,6 @@ class IndexManager
                 'link' => api_get_path(WEB_CODE_PATH).'gradebook/search.php',
                 'title' => get_lang('Search')
             ];
-        }
-
-        if (empty($certificatesItem) && empty($searchItem)) {
-            return '';
-        } else {
-            $items[] = $certificatesItem;
-            $items[] = $searchItem;
         }
 
         if (Skill::isAllow(0, false)) {
@@ -413,6 +408,8 @@ class IndexManager
                 ];
             }
         }
+
+        return $items;
     }
 
     /**
@@ -882,7 +879,7 @@ class IndexManager
     }
 
     /**
-     * @return null|string|void
+     * @return array
      */
     public function return_profile_block()
     {
@@ -969,7 +966,7 @@ class IndexManager
                 'title' => $label
             ];
         }
-        
+
         $setting = api_get_plugin_setting('bbb', 'enable_global_conference');
         $settingLink = api_get_plugin_setting('bbb', 'enable_global_conference_link');
         if ($setting === 'true' && $settingLink === 'true') {
@@ -982,12 +979,12 @@ class IndexManager
                 'title' => get_lang('VideoConference')
             ];
         }
-        
+
         return $items;
     }
 
     /**
-     * @return null|string
+     * @return array
      */
     public function return_navigation_links()
     {
@@ -1112,7 +1109,7 @@ class IndexManager
                 ];
             }
         }
-        
+
         return $items;
     }
 

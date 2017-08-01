@@ -266,7 +266,8 @@ $controller->tpl->assign('course_block', $controller->return_course_block());
 $controller->tpl->assign('navigation_course_links', $controller->return_navigation_links());
 $controller->tpl->assign('search_block', $controller->return_search_block());
 $controller->tpl->assign('classes_block', $controller->return_classes_block());
-$controller->tpl->assign('skills_block', $controller->return_skills_links());
+$controller->tpl->assign('skills_block', $controller->returnSkillLinks());
+
 $historyClass = '';
 if (!empty($_GET['history'])) {
     $historyClass = 'courses-history';

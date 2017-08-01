@@ -78,7 +78,8 @@
                     {{ user_image_block }}
                 {% endif %}
 
-                                <!-- block profile -->
+                {% if profile_block %}
+                <!-- block profile -->
                 <div class="panel-group" id="profile" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default" id="profile_block">
                         <div class="panel-heading" role="tab">
@@ -100,11 +101,14 @@
                                     </li>
                                     {% endfor %}
                                 </ul>
-                            </div> 
-                        </div> 
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- end block profile -->
+                {% endif %}
+
+                {% if course_block %}
                 <!-- block course -->
                 <div class="panel-group" id="course" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default" id="course_block">
@@ -127,11 +131,14 @@
                                     </li>
                                     {% endfor %}
                                 </ul>
-                            </div> 
-                        </div> 
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- end block course -->
+                {% endif %}
+
+                {% if skills_block %}
                 <!-- block skills -->
                 <div class="panel-group" id="skill" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default" id="skill_block">
@@ -154,21 +161,20 @@
                                     </li>
                                     {% endfor %}
                                 </ul>
-                            </div> 
-                        </div> 
+                            </div>
+                        </div>
                     </div>
-                </div>              
+                </div>
                 <!-- end block skills -->
-                
+                {% endif %}
+
                 {{ teacher_block }}
-                
                 {{ certificates_search_block }}
-                
                 {{ notice_block }}
-                
                 {{ help_block }}
-                
-                <!-- block navegation -->
+
+                <!-- block navigation -->
+                {% if navigation_course_links %}
                 <div class="panel-group" id="menu" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default" id="menu_block">
                         <div class="panel-heading" role="tab">
@@ -187,14 +193,14 @@
                                     </li>
                                     {% endfor %}
                                 </ul>
-                            </div> 
-                        </div> 
+                            </div>
+                        </div>
                     </div>
-                </div>              
-                <!-- end block navegation -->
-                
+                </div>
+                {% endif %}
+                <!-- end block navigation -->
+
                 {{ search_block }}
-                
                 {{ classes_block }}
 
                 {% if plugin_menu_bottom %}

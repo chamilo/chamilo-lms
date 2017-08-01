@@ -402,7 +402,7 @@ class IndexManager
             $items[] = $searchItem;
         }
 
-        if (api_get_setting('allow_skills_tool') == 'true') {
+        if (Skill::isAllow(0, false)) {
             $items[] = [
                 'icon' => Display::return_icon('skill-badges.png', get_lang('MySkills')),
                 'link' => api_get_path(WEB_CODE_PATH).'social/my_skills_report.php',
@@ -419,7 +419,7 @@ class IndexManager
         }
 
         return self::show_right_block(
-            get_lang("Skills"),
+            get_lang('Skills'),
             self::returnRightBlockItems($items),
             'skill_block',
             null,

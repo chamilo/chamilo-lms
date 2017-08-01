@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \Skill as SkillManager;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\UserBundle\Entity\User;
@@ -14,17 +15,13 @@ use Chamilo\UserBundle\Entity\User;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (!api_is_platform_admin(false, true) &&
-    !api_is_student_boss()
-) {
-    api_not_allowed(true);
-}
-
 $userId = isset($_REQUEST['user']) ? (int) $_REQUEST['user'] : 0;
 
 if (empty($userId)) {
     api_not_allowed(true);
 }
+
+SkillManager::isAllow($userId);
 
 $entityManager = Database::getManager();
 $skillRepo = $entityManager->getRepository('ChamiloCoreBundle:Skill');
@@ -132,7 +129,6 @@ $form->setDefaults($formDefaultValues);
 
 if ($form->validate()) {
     $values = $form->exportValues();
-
     $skill = $skillRepo->find($values['skill']);
 
     if (!$skill) {
@@ -190,7 +186,6 @@ if ($form->validate()) {
 
 $form->setDefaults(['user_name' => $user->getCompleteName()]);
 $form->freeze(['user_name']);
-
 
 if (api_is_drh()) {
     $interbreadcrumb[] = array(

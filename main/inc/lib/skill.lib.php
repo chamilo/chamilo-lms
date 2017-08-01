@@ -1594,4 +1594,89 @@ class Skill extends Model
 
         return false;
     }
+
+    /**
+     * If $studentId is set then check if current user has the right to see
+     * the page.
+     * @param int $studentId check if current user has access to see $studentId
+     * @param bool $blockPage raise a api_not_allowed()
+     *
+     * @return bool
+     */
+    public static function isAllow($studentId = 0, $blockPage = true)
+    {
+        if (self::isToolAvailable()) {
+            if (api_is_platform_admin()) {
+                //return true;
+            }
+
+            if (!empty($studentId)) {
+                $currentUserId = api_get_user_id();
+                if ((int) $currentUserId === (int) $studentId) {
+                    return true;
+                }
+
+                $haveAccess = self::hasAccessToUserSkill(
+                    $currentUserId,
+                    $studentId
+                );
+
+                if ($haveAccess) {
+                    return true;
+                }
+            }
+        }
+
+        if ($blockPage) {
+            api_not_allowed(true);
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isToolAvailable()
+    {
+        $allowTool = api_get_setting('allow_skills_tool');
+
+        if ($allowTool == 'true') {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $currentUserId
+     * @param $studentId
+     * @return bool
+     */
+    public static function hasAccessToUserSkill($currentUserId, $studentId)
+    {
+        if (self::isToolAvailable()) {
+            if (api_is_platform_admin()) {
+                return true;
+            }
+            $allow = api_get_configuration_value('allow_private_skills');
+            if ($allow === true) {
+                if (api_is_teacher()) {
+                    return UserManager::isTeacherOfStudent(
+                        $currentUserId,
+                        $studentId
+                    );
+                }
+
+                if (api_is_drh()) {
+                    return UserManager::is_user_followed_by_drh(
+                        $studentId,
+                        $currentUserId
+                    );
+                }
+            }
+        }
+
+        return false;
+    }
 }

@@ -14,10 +14,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-
-if (api_get_setting('allow_skills_tool') != 'true') {
-    api_not_allowed();
-}
+Skill::isAllow();
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 $skillId = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -115,7 +112,7 @@ switch ($action) {
         //no break
     default:
         $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-        
+
         $toolbar = Display::url(
             Display::return_icon(
                 'add.png',
@@ -125,7 +122,7 @@ switch ($action) {
             api_get_path(WEB_CODE_PATH).'admin/skill_create.php',
             ['title' => get_lang('CreateSkill')]
             );
-        
+
         $toolbar .= Display::url(
             Display::return_icon(
                 'wheel_skill.png',
@@ -135,7 +132,7 @@ switch ($action) {
             api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php',
             ['title' => get_lang('SkillsWheel')]
             );
-              
+
         $toolbar .= Display::url(
             Display::return_icon(
                 'edit-skill.png',
@@ -145,7 +142,7 @@ switch ($action) {
             api_get_path(WEB_CODE_PATH).'admin/skill_badge_list.php',
             ['title' => get_lang('BadgesManagement')]
             );
-        
+
         $toolbar .= Display::url(
             Display::return_icon(
                 'import_csv.png',
@@ -155,7 +152,7 @@ switch ($action) {
             api_get_path(WEB_CODE_PATH).'admin/skills_import.php',
             ['title' => get_lang('ImportSkillsListCSV')]
             );
-        
+
         $extraField = new ExtraField('skill');
         $arrayVals = $extraField->get_handler_field_info_by_tags('tags');
         $tags = [];

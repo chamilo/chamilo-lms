@@ -574,3 +574,7 @@ $_configuration['score_grade_model'] = [
 //ALTER TABLE course_category ADD image varchar(255) NULL;
 //$_configuration['my_courses_list_as_category'] = false;
 // ------
+
+// Skills can only visible for admins, teachers (related to a user via a course),
+// and HRM users (if related to a user).
+// $_configuration['allow_private_skills'] = false;

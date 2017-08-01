@@ -2118,7 +2118,6 @@ class Category implements GradebookItem
 
         // A student always sees only the teacher's repartition
         $scoretotal_display = $scoredisplay->display_score($scoretotal, SCORE_DIV_PERCENT);
-
         $userFinishedCourse = self::userFinishedCourse(
             $user_id,
             $cats_course[0],
@@ -2132,7 +2131,7 @@ class Category implements GradebookItem
             return false;
         }
 
-        $skillToolEnabled = api_get_setting('allow_skills_tool') == 'true';
+        $skillToolEnabled = Skill::hasAccessToUserSkill(api_get_user_id(), $user_id);
         $userHasSkills = false;
 
         if ($skillToolEnabled) {

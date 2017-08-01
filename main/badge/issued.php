@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\SkillRelUserComment;
+
 /**
  * Show information about the issued badge
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
@@ -11,9 +13,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $issue = isset($_REQUEST['issue']) ? intval($_REQUEST['issue']) : 0;
 
-if (!$issue) {
-    header('Location: '.api_get_path(WEB_PATH));
-    exit;
+if (empty($issue)) {
+    api_not_allowed(true);
 }
 
 $entityManager = Database::getManager();
@@ -41,6 +42,8 @@ if (!$user || !$skill) {
     header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
+
+Skill::isAllow($user->getId());
 
 $userInfo = [
     'id' => $user->getId(),
@@ -120,7 +123,6 @@ $acquiredLevel = [];
 $profile = $skillRepo->find($skillId)->getProfile();
 
 if (!$profile) {
-
     $skillRelSkill = new SkillRelSkill();
     $parents = $skillRelSkill->get_skill_parents($skillId);
 
@@ -142,7 +144,6 @@ if (!$profile) {
 }
 
 if ($profile) {
-
     $profileId = $profile->getId();
 
     $levels = $skillLevelRepo->findBy([
@@ -159,7 +160,6 @@ if ($profile) {
         $profileId = key($profileLevel);
         $acquiredLevel[$profileId] = $profileLevel[$profileId];
     }
-
 }
 
 $formAcquiredLevel = new FormValidator('acquired_level');
@@ -196,14 +196,14 @@ $form->addButtonSend(get_lang('Send'));
 
 if ($form->validate() && $allowComment) {
     $values = $form->exportValues();
-
-    $skillUserComment = new Chamilo\CoreBundle\Entity\SkillRelUserComment();
+    $skillUserComment = new SkillRelUserComment();
     $skillUserComment
         ->setFeedbackDateTime(new DateTime)
         ->setFeedbackGiver($currentUser)
         ->setFeedbackText($values['comment'])
         ->setFeedbackValue($values['value'] ? $values['value'] : null)
-        ->setSkillRelUser($skillIssue);
+        ->setSkillRelUser($skillIssue)
+    ;
 
     $entityManager->persist($skillUserComment);
     $entityManager->flush();

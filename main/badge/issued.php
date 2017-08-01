@@ -107,6 +107,7 @@ $skillIssueComments = $skillIssue->getComments(true);
 $userId = $skillIssueInfo['user_id'];
 $skillId = $skillIssueInfo['skill_id'];
 
+/** @var SkillRelUserComment $comment */
 foreach ($skillIssueComments as $comment) {
     $commentDate = api_get_local_time($comment->getFeedbackDateTime());
 
@@ -228,14 +229,14 @@ if ($allowDownloadExport) {
     $objSkill = new Skill();
     $assertionUrl = $skillIssueInfo['badge_assertion'];
     $skills = $objSkill->get($skillId);
-    $unbakedBadge = api_get_path(SYS_UPLOAD_PATH)."badges/".$skills['icon'];
+    $unbakedBadge = api_get_path(SYS_UPLOAD_PATH).'badges/'.$skills['icon'];
     if (!is_file($unbakedBadge)) {
         $unbakedBadge = api_get_path(WEB_CODE_PATH).'img/icons/128/badges-default.png';
     }
 
     $unbakedBadge = file_get_contents($unbakedBadge);
     $badgeInfoError = false;
-    $personalBadge = "";
+    $personalBadge = '';
     $png = new PNGImageBaker($unbakedBadge);
 
     if ($png->checkChunks("tEXt", "openbadges")) {

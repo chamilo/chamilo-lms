@@ -1,5 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\SkillRelUser;
+use Chamilo\CoreBundle\Entity\SkillRelUserComment;
+
 /**
  * Show information about all issued badges with same skill by user
  *
@@ -58,8 +63,9 @@ $skillInfo = [
 ];
 
 $allUserBadges = [];
-
+/** @var SkillRelUser $skillIssue */
 foreach ($userSkills as $index => $skillIssue) {
+    /** @var User $currentUser */
     $currentUser = $em->find('ChamiloUserBundle:User', $currentUserId);
     $allowDownloadExport = $currentUser ? $currentUser->getId() === $user->getId() : false;
     $allowComment = $currentUser ? Skill::userCanAddFeedbackToUser($currentUser, $user) : false;
@@ -98,7 +104,6 @@ foreach ($userSkills as $index => $skillIssue) {
 
     foreach ($skillIssueComments as $comment) {
         $commentDate = api_get_local_time($comment->getFeedbackDateTime());
-
         $skillIssueInfo['comments'][] = [
             'text' => $comment->getFeedbackText(),
             'value' => $comment->getFeedbackValue(),
@@ -108,11 +113,9 @@ foreach ($userSkills as $index => $skillIssue) {
     }
 
     $acquiredLevel = [];
-
     $profile = $skillRepo->find($skillId)->getProfile();
 
     if (!$profile) {
-
         $skillRelSkill = new SkillRelSkill();
         $parents = $skillRelSkill->get_skill_parents($skillId);
 
@@ -174,7 +177,11 @@ foreach ($userSkills as $index => $skillIssue) {
         exit;
     }
 
-    $form = new FormValidator('comment'.$skillIssue->getId(), 'post', $skillIssue->getIssueUrlAll());
+    $form = new FormValidator(
+        'comment'.$skillIssue->getId(),
+        'post',
+        $skillIssue->getIssueUrlAll()
+    );
     $form->addTextarea('comment', get_lang('NewComment'), ['rows' => 4]);
     $form->applyFilter('comment', 'trim');
     $form->addRule('comment', get_lang('ThisFieldIsRequired'), 'required');
@@ -190,7 +197,7 @@ foreach ($userSkills as $index => $skillIssue) {
     if ($form->validate() && $allowComment) {
         $values = $form->exportValues();
 
-        $skillUserComment = new Chamilo\CoreBundle\Entity\SkillRelUserComment();
+        $skillUserComment = new SkillRelUserComment();
         $skillUserComment
             ->setFeedbackDateTime(new DateTime)
             ->setFeedbackGiver($currentUser)
@@ -210,7 +217,6 @@ foreach ($userSkills as $index => $skillIssue) {
 
     if ($allowDownloadExport) {
         $backpack = 'https://backpack.openbadges.org/';
-
         $configBackpack = api_get_setting('openbadges_backpack');
 
         if (strcmp($backpack, $configBackpack) !== 0) {
@@ -264,7 +270,6 @@ foreach ($userSkills as $index => $skillIssue) {
     $allUserBadges[$index]['acquired_level_form'] = $formAcquiredLevel->returnForm();
     $allUserBadges[$index]['badge_error'] = $badgeInfoError;
     $allUserBadges[$index]['personal_badge'] = $personalBadge;
-
 }
 
 $template = new Template(get_lang('IssuedBadgeInformation'));

@@ -26,7 +26,12 @@ if (!$objSkill->user_has_skill($userId, $skillId, $courseId, $sessionId)) {
 }
 
 $objSkillRelUser = new SkillRelUser();
-$userSkill = $objSkillRelUser->getByUserAndSkill($userId, $skillId, $courseId, $sessionId);
+$userSkill = $objSkillRelUser->getByUserAndSkill(
+    $userId,
+    $skillId,
+    $courseId,
+    $sessionId
+);
 
 if ($userSkill == false) {
     exit;

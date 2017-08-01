@@ -9,6 +9,8 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+Skill::isAllow();
+
 $isStudent = api_is_student();
 $isStudentBoss = api_is_student_boss();
 $isDRH = api_is_drh();
@@ -19,18 +21,15 @@ if (!$isStudent && !$isStudentBoss && !$isDRH) {
 }
 
 $userId = api_get_user_id();
-
 $skillTable = Database::get_main_table(TABLE_MAIN_SKILL);
 $skillRelUserTable = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
 $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-
 $tableRows = array();
-
 $tpl = new Template(get_lang('Skills'));
 $tplPath = null;
 
-$tpl->assign('allowSkillsTool', api_get_setting('allow_skills_tool') === 'true');
-$tpl->assign('allowDrhSkillsManagement', api_get_setting('allow_hr_skills_management') === 'true');
+$tpl->assign('allow_skill_tool', api_get_setting('allow_skills_tool') === 'true');
+$tpl->assign('allow_drh_skills_management', api_get_setting('allow_hr_skills_management') === 'true');
 
 if ($isStudent) {
     $sql = "SELECT s.name, sru.acquired_skill_at, c.title, c.directory
@@ -40,14 +39,19 @@ if ($isStudent) {
             LEFT JOIN $courseTable c
             ON sru.course_id = c.id
             WHERE sru.user_id = $userId";
-
     $result = Database::query($sql);
-
     while ($resultData = Database::fetch_assoc($result)) {
         $tableRow = array(
             'skillName' => $resultData['name'],
             'achievedAt' => api_format_date($resultData['acquired_skill_at'], DATE_FORMAT_NUMBER),
-            'courseImage' => Display::return_icon('course.png', null, null, ICON_SIZE_MEDIUM, null, true),
+            'courseImage' => Display::return_icon(
+                'course.png',
+                null,
+                null,
+                ICON_SIZE_MEDIUM,
+                null,
+                true
+            ),
             'courseName' => $resultData['title']
         );
 
@@ -68,7 +72,7 @@ if ($isStudent) {
     }
 
     $tplPath = 'skill/student_report.tpl';
-} else if ($isStudentBoss) {
+} elseif ($isStudentBoss) {
     $selectedStudent = isset($_REQUEST['student']) ? intval($_REQUEST['student']) : 0;
     $tableRows = array();
     $followedStudents = UserManager::getUsersFollowedByStudentBoss($userId);
@@ -94,7 +98,14 @@ if ($isStudent) {
                 'completeName' => $followedStudents[$selectedStudent]['completeName'],
                 'skillName' => $resultData['name'],
                 'achievedAt' => api_format_date($resultData['acquired_skill_at'], DATE_FORMAT_NUMBER),
-                'courseImage' => Display::return_icon('course.png', null, null, ICON_SIZE_MEDIUM, null, true),
+                'courseImage' => Display::return_icon(
+                    'course.png',
+                    null,
+                    null,
+                    ICON_SIZE_MEDIUM,
+                    null,
+                    true
+                ),
                 'courseName' => $resultData['title']
             );
 
@@ -118,15 +129,13 @@ if ($isStudent) {
     $tplPath = 'skill/student_boss_report.tpl';
     $tpl->assign('followedStudents', $followedStudents);
     $tpl->assign('selectedStudent', $selectedStudent);
-} else if ($isDRH) {
+} elseif ($isDRH) {
     $selectedCourse = isset($_REQUEST['course']) ? intval($_REQUEST['course']) : null;
     $selectedSkill = isset($_REQUEST['skill']) ? intval($_REQUEST['skill']) : 0;
-
     $action = null;
-
     if (!empty($selectedCourse)) {
         $action = 'filterByCourse';
-    } else if (!empty($selectedSkill)) {
+    } elseif (!empty($selectedSkill)) {
         $action = 'filterBySkill';
     }
 
@@ -174,7 +183,14 @@ if ($isStudent) {
     foreach ($tableRows as &$row) {
         $row['completeName'] = api_get_person_name($row['firstname'], $row['lastname']);
         $row['achievedAt'] = api_format_date($row['acquired_skill_at'], DATE_FORMAT_NUMBER);
-        $row['courseImage'] = Display::return_icon('course.png', null, null, ICON_SIZE_MEDIUM, null, true);
+        $row['courseImage'] = Display::return_icon(
+            'course.png',
+            null,
+            null,
+            ICON_SIZE_MEDIUM,
+            null,
+            true
+        );
 
         $imageSysPath = sprintf("%s%s/course-pic.png", api_get_path(SYS_COURSE_PATH), $row['c_directory']);
 

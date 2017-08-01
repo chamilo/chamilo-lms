@@ -232,7 +232,7 @@ class CatForm extends FormValidator
         $skillsDefaults = [];
 
         if (api_is_platform_admin() || api_is_drh()) {
-            if (api_get_setting('allow_skills_tool') == 'true') {
+            if (Skill::isToolAvailable()) {
                 $skillSelect = $this->addElement(
                     'select_ajax',
                     'skills',
@@ -250,7 +250,6 @@ class CatForm extends FormValidator
 
                 // The magic should be here
                 $skills = $this->category_object->get_skills();
-
                 foreach ($skills as $skill) {
                     $skillsDefaults[] = $skill['id'];
 

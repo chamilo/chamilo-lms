@@ -12,16 +12,14 @@ $userId = isset($_GET['user']) ? intval($_GET['user']) : 0;
 $skillId = isset($_GET['skill']) ? intval($_GET['skill']) : 0;
 
 if (!$userId || !$skillId) {
-    header('Location: '.api_get_path(WEB_PATH));
-    exit;
+    api_not_allowed(true);
 }
 
-$entityManager = Database::getManager();
-$user = $entityManager->find('ChamiloUserBundle:User', $userId);
-$skill = $entityManager->find('ChamiloCoreBundle:Skill', $skillId);
-$skillRepo = $entityManager->getRepository('ChamiloCoreBundle:Skill');
-$skillUserRepo = $entityManager->getRepository('ChamiloCoreBundle:SkillRelUser');
-$skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
+Skill::isAllow($userId);
+
+$em = Database::getManager();
+$user = $em->find('ChamiloUserBundle:User', $userId);
+$skill = $em->find('ChamiloCoreBundle:Skill', $skillId);
 
 $currentUserId = api_get_user_id();
 
@@ -33,6 +31,11 @@ if (!$user || !$skill) {
     header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
+
+
+$skillRepo = $em->getRepository('ChamiloCoreBundle:Skill');
+$skillUserRepo = $em->getRepository('ChamiloCoreBundle:SkillRelUser');
+$skillLevelRepo = $em->getRepository('ChamiloSkillBundle:Level');
 
 $userSkills = $skillUserRepo->findBy([
     'user' => $user,
@@ -57,7 +60,7 @@ $skillInfo = [
 $allUserBadges = [];
 
 foreach ($userSkills as $index => $skillIssue) {
-    $currentUser = $entityManager->find('ChamiloUserBundle:User', $currentUserId);
+    $currentUser = $em->find('ChamiloUserBundle:User', $currentUserId);
     $allowDownloadExport = $currentUser ? $currentUser->getId() === $user->getId() : false;
     $allowComment = $currentUser ? Skill::userCanAddFeedbackToUser($currentUser, $user) : false;
     $skillIssueDate = api_get_local_time($skillIssue->getAcquiredSkillAt());
@@ -164,8 +167,8 @@ foreach ($userSkills as $index => $skillIssue) {
         $level = $skillLevelRepo->find($values['acquired_level']);
         $skillIssue->setAcquiredLevel($level);
 
-        $entityManager->persist($skillIssue);
-        $entityManager->flush();
+        $em->persist($skillIssue);
+        $em->flush();
 
         header("Location: ".$skillIssue->getIssueUrlAll());
         exit;
@@ -195,8 +198,8 @@ foreach ($userSkills as $index => $skillIssue) {
             ->setFeedbackValue($values['value'] ? $values['value'] : null)
             ->setSkillRelUser($skillIssue);
 
-        $entityManager->persist($skillUserComment);
-        $entityManager->flush();
+        $em->persist($skillUserComment);
+        $em->flush();
 
         header("Location: ".$skillIssue->getIssueUrlAll());
         exit;

@@ -185,7 +185,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
         $subTitle1 = get_lang('CurrentTopic');
         $class1 = ' current';
-    } else if ($displayMode == '2') {
+    } elseif ($displayMode == '2') {
         // Show only the two next course progress steps
         // $information_title = get_lang('InfoAboutNextAdvanceNotDone');
         $last_done_advance = $thematic->get_next_thematic_advance_not_done();
@@ -193,7 +193,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
         $thematic_advance_info2 = $thematic->get_thematic_advance_list($next_advance_not_done);
         $subTitle1 = $subTitle2 = get_lang('NextTopic');
-    } else if ($displayMode == '3') {
+    } elseif ($displayMode == '3') {
         // Show the current and next course progress steps
         // $information_title = get_lang('InfoAboutLastDoneAdvanceAndNextAdvanceNotDone');
         $last_done_advance = $thematic->get_last_done_thematic_advance();

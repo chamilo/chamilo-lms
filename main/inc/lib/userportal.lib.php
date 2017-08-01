@@ -391,7 +391,14 @@ class IndexManager
             ];
         }
 
-        if (api_get_setting('allow_skills_tool') == 'true') {
+        if (empty($certificatesItem) && empty($searchItem)) {
+            return '';
+        } else {
+            $items[] = $certificatesItem;
+            $items[] = $searchItem;
+        }
+
+        if (Skill::isAllow(0, false)) {
             $items[] = [
                 'icon' => Display::return_icon('skill-badges.png', get_lang('MySkills')),
                 'link' => api_get_path(WEB_CODE_PATH).'social/my_skills_report.php',
@@ -406,7 +413,6 @@ class IndexManager
                 ];
             }
         }
-        return $items;
     }
 
     /**

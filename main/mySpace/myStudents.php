@@ -405,9 +405,8 @@ if (api_can_login_as($student_id)) {
         Display::return_icon('login_as.png', get_lang('LoginAs'), null, ICON_SIZE_MEDIUM).'</a>&nbsp;&nbsp;';
 }
 
-if (api_is_platform_admin(false, true) ||
-    api_is_student_boss()
-) {
+
+if (Skill::isAllow($student_id, false)) {
     echo Display::url(
         Display::return_icon(
             'skill-badges.png',

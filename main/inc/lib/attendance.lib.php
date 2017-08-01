@@ -1051,7 +1051,7 @@ class Attendance
 
         if ($faults_porcent > 25) {
             $color_bar = '#f28989';
-        } else if ($faults_porcent > 10) {
+        } elseif ($faults_porcent > 10) {
             $color_bar = '#F90';
         }
         $results['color_bar'] = $color_bar;

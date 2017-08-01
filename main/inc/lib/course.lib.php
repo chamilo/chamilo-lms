@@ -4287,18 +4287,15 @@ class CourseManager
                 'session_category_id' => $session_category_id
             );
 
-            if (api_get_setting('allow_skills_tool') === 'true') {
-                $entityManager = Database::getManager();
-                $objUser = $entityManager->find('ChamiloUserBundle:User', $user_id);
-                $objCourse = $entityManager->find('ChamiloCoreBundle:Course', $course['real_id']);
-                $objSession = $entityManager->find('ChamiloCoreBundle:Session', $session_id);
+            if (Skill::isAllow($user_id, false)) {
+                $em = Database::getManager();
+                $objUser = $em->find('ChamiloUserBundle:User', $user_id);
+                $objCourse = $em->find('ChamiloCoreBundle:Course', $course['real_id']);
+                $objSession = $em->find('ChamiloCoreBundle:Session', $session_id);
 
-                $skill = $entityManager
-                    ->getRepository('ChamiloCoreBundle:Skill')
-                    ->getLastByUser($objUser, $objCourse, $objSession);
+                $skill = $em->getRepository('ChamiloCoreBundle:Skill')->getLastByUser($objUser, $objCourse, $objSession);
 
                 $output['skill'] = null;
-
                 if ($skill) {
                     $output['skill']['name'] = $skill->getName();
                     $output['skill']['icon'] = $skill->getIcon();

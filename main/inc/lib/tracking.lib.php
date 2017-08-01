@@ -6342,20 +6342,19 @@ class Tracking
      */
     public static function displayUserSkills($userId, $courseId = 0, $sessionId = 0)
     {
+        if (Skill::isAllow($userId, false) === false) {
+            return '';
+        }
+
         $userId = intval($userId);
         $courseId = intval($courseId);
         $sessionId = intval($sessionId);
-
-        if (api_get_setting('allow_skills_tool') !== 'true') {
-            return '';
-        }
 
         $filter = ['user' => $userId];
         $filter['course'] = $courseId ?: null;
         $filter['session'] = $sessionId ?: null;
 
         $em = Database::getManager();
-
         $skillsRelUser = $em->getRepository('ChamiloCoreBundle:SkillRelUser')->findBy($filter);
 
         $html = '
@@ -7093,7 +7092,7 @@ class TrackingCourseLog
         $direction,
         $includeInvitedUsers = false
     ) {
-        global $user_ids, $course_code, $export_csv, $is_western_name_order, $csv_content, $session_id;
+        global $user_ids, $course_code, $export_csv, $csv_content, $session_id;
 
         $course_code = Database::escape_string($course_code);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);

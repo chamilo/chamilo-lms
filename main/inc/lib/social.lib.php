@@ -2055,8 +2055,8 @@ class SocialManager extends UserManager
      */
     public static function getSkillBlock($userId)
     {
-        if (api_get_setting('allow_skills_tool') !== 'true') {
-            return null;
+        if (Skill::isAllow($userId, false) === false) {
+            return '';
         }
 
         $skill = new Skill();

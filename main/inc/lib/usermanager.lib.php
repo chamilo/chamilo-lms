@@ -4571,8 +4571,7 @@ class UserManager
         $relationType,
         $deleteUsersBeforeInsert = false,
         $deleteOtherAssignedUsers = true
-    )
-    {
+    ) {
         $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $userRelAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
@@ -4583,26 +4582,30 @@ class UserManager
         if ($deleteOtherAssignedUsers) {
             if (api_get_multiple_access_url()) {
                 // Deleting assigned users to hrm_id
-                $sql = "SELECT s.user_id FROM $userRelUserTable s 
-                    INNER JOIN $userRelAccessUrlTable a ON (a.user_id = s.user_id) 
-                    WHERE 
-                        friend_user_id = $userId AND 
-                        relation_type = $relationType AND 
-                        access_url_id = ".api_get_current_access_url_id();
+                $sql = "SELECT s.user_id 
+                        FROM $userRelUserTable s 
+                        INNER JOIN $userRelAccessUrlTable a
+                        ON (a.user_id = s.user_id) 
+                        WHERE 
+                            friend_user_id = $userId AND 
+                            relation_type = $relationType AND 
+                            access_url_id = ".api_get_current_access_url_id();
             } else {
-                $sql = "SELECT user_id FROM $userRelUserTable 
-                    WHERE friend_user_id = $userId 
-                    AND relation_type = $relationType";
+                $sql = "SELECT user_id 
+                        FROM $userRelUserTable 
+                        WHERE 
+                            friend_user_id = $userId AND 
+                            relation_type = $relationType";
             }
             $result = Database::query($sql);
 
             if (Database::num_rows($result) > 0) {
                 while ($row = Database::fetch_array($result)) {
                     $sql = "DELETE FROM $userRelUserTable 
-                        WHERE 
-                          user_id = {$row['user_id']} AND 
-                          friend_user_id = $userId AND 
-                          relation_type = $relationType";
+                            WHERE
+                                user_id = {$row['user_id']} AND 
+                                friend_user_id = $userId AND 
+                                relation_type = $relationType";
                     Database::query($sql);
                 }
             }
@@ -4620,7 +4623,6 @@ class UserManager
         if (is_array($subscribedUsersId)) {
             foreach ($subscribedUsersId as $subscribedUserId) {
                 $subscribedUserId = intval($subscribedUserId);
-
                 $sql = "INSERT IGNORE INTO $userRelUserTable (user_id, friend_user_id, relation_type)
                         VALUES ($subscribedUserId, $userId, $relationType)";
 
@@ -4757,9 +4759,14 @@ class UserManager
             $cat = Category::load($category_id);
             $displayscore = ScoreDisplay::instance();
             if (isset($cat) && $displayscore->is_custom()) {
-                $grade = $displayscore->display_score(array($score, $cat[0]->get_weight()), SCORE_DIV_PERCENT_WITH_CUSTOM);
+                $grade = $displayscore->display_score(
+                    array($score, $cat[0]->get_weight()),
+                    SCORE_DIV_PERCENT_WITH_CUSTOM
+                );
             } else {
-                $grade = $displayscore->display_score(array($score, $cat[0]->get_weight()));
+                $grade = $displayscore->display_score(
+                    array($score, $cat[0]->get_weight())
+                );
             }
             $row['grade'] = $grade;
 
@@ -4860,13 +4867,17 @@ class UserManager
 
     /**
      *
-     * @param int   student id
-     * @param int   years
-     * @param bool  show warning_message
-     * @param bool  return_timestamp
+     * @param int $student_id
+     * @param int $years
+     * @param bool $warning_message  show warning_message
+     * @param bool $return_timestamp return_timestamp
      */
-    public static function delete_inactive_student($student_id, $years = 2, $warning_message = false, $return_timestamp = false)
-    {
+    public static function delete_inactive_student(
+        $student_id,
+        $years = 2,
+        $warning_message = false,
+        $return_timestamp = false
+    ) {
         $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $sql = 'SELECT login_date FROM '.$tbl_track_login.'
                 WHERE login_user_id = '.intval($student_id).'
@@ -5090,8 +5101,10 @@ class UserManager
     public static function getTeachersList()
     {
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
-
-        $resultData = Database::select('user_id, lastname, firstname, username', $userTable, array(
+        $resultData = Database::select(
+            'user_id, lastname, firstname, username',
+            $userTable,
+            array(
             'where' => array(
                 'status = ?' => COURSEMANAGER
             )
@@ -5117,9 +5130,7 @@ class UserManager
                 FROM $user
                 GROUP BY official_code";
         $result = Database::query($sql);
-
         $values = Database::store_result($result, 'ASSOC');
-
         $result = array();
         foreach ($values as $value) {
             $result[$value['official_code']] = $value['official_code'];
@@ -5503,5 +5514,54 @@ SQL;
         }
 
         return [];
+    }
+
+    /**
+     * Check if user is teacher of a student based in their courses
+     * @param $teacherId
+     * @param $studentId
+     * @return array
+     */
+    public static function getCommonCoursesBetweenTeacherAndStudent($teacherId, $studentId)
+    {
+        $courses = CourseManager::getCoursesFollowedByUser($teacherId, COURSEMANAGER);
+        if (empty($courses)) {
+            return false;
+        }
+
+        $coursesFromUser = CourseManager::get_courses_list_by_user_id($studentId);
+        if (empty($coursesFromUser)) {
+            return false;
+        }
+
+        $coursesCodeList = array_column($courses, 'code');
+        $coursesCodeFromUserList = array_column($coursesFromUser, 'code');
+        $commonCourses = array_intersect($coursesCodeList, $coursesCodeFromUserList);
+        $commonCourses = array_filter($commonCourses);
+
+        if (!empty($commonCourses)) {
+            return $commonCourses;
+        }
+
+        return [];
+    }
+
+    /**
+     * @param $teacherId
+     * @param $studentId
+     * @return bool
+     */
+    public static function isTeacherOfStudent($teacherId, $studentId)
+    {
+        $courses = self::getCommonCoursesBetweenTeacherAndStudent(
+            $teacherId,
+            $studentId
+        );
+
+        if (!empty($courses)) {
+            return true;
+        }
+
+        return false;
     }
 }

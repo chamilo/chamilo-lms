@@ -8031,4 +8031,14 @@ $HrmList = "Human Resource Managers list";
 $AssignHrmToUser = "Assign Human Resources Manager to user";
 $AddHrmToUser = "Add Human Resources Manager to user";
 $HrmAssignedUsersCourseList = "Human Resources Manager assigned users course list";
+$GoToSurvey = "Go to Survey";
+$NotificationCertificateSubject = "Certificate notification";
+$NotificationCertificateTemplate = "((user_first_name)),
+
+Congratulations on the completion of ((course_title)). Your final grade received for this class is ((score)). Please allow a few days for it to reflect in their system. We look forward to seeing you in future classes. If we can assist you further in any way, please feel free to contact us.
+
+Sincerely,
+((author_first_name)), ((author_last_name))
+((portal_name))";
+$SendCertificateNotifications = "Send certificate notification to all users";
 ?>

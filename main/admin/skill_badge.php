@@ -11,9 +11,9 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-if (!api_is_platform_admin() || api_get_setting('allow_skills_tool') !== 'true') {
-    api_not_allowed(true);
-}
+api_protect_admin_script();
+Skill::isAllow();
+
 $backpack = 'https://backpack.openbadges.org/';
 
 $configBackpack = api_get_setting('openbadges_backpack');
@@ -33,10 +33,11 @@ $toolbar = Display::url(
         'list_badges.png',
         get_lang('ManageSkills'),
         null,
-        ICON_SIZE_MEDIUM),
+        ICON_SIZE_MEDIUM
+    ),
     api_get_path(WEB_CODE_PATH).'admin/skill_list.php',
     ['title' => get_lang('ManageSkills')]
-    );
+);
 
 $tpl = new Template(get_lang('Badges'));
 $tpl->assign('backpack', $backpack);

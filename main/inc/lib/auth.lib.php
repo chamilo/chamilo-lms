@@ -620,7 +620,7 @@ class Auth
                         $all_course_information['real_id'],
                         $send_to_tutor_also = false
                     );
-                } else if ($send == 2) {
+                } elseif ($send == 2) {
                     CourseManager::email_to_tutor(
                         $user_id,
                         $all_course_information['real_id'],

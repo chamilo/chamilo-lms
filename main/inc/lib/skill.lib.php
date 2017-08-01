@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\UserBundle\Entity\User;
+use Chamilo\UserBundle\Entity\Repository\UserRepository;
 
 /**
  * Class SkillProfile
@@ -135,8 +136,8 @@ class SkillRelProfile extends Model
     /**
      * This function is for getting profile info from profile_id.
      * @param int $profileId
+     * @return array
      */
-
     public function getProfileInfo($profileId)
     {
         $sql = "SELECT * FROM $this->table p
@@ -338,7 +339,14 @@ class SkillRelGradebook extends Model
     {
         $result = $this->find(
             'all',
-            array('where' => array('gradebook_id = ? AND skill_id = ?' => array($gradebook_id, $skill_id)))
+            array(
+                'where' => array(
+                    'gradebook_id = ? AND skill_id = ?' => array(
+                        $gradebook_id,
+                        $skill_id
+                    )
+                )
+            )
         );
         if (!empty($result)) {
             return true;
@@ -357,7 +365,14 @@ class SkillRelGradebook extends Model
         $result = Database::select(
             '*',
             $this->table,
-            array('where' => array('skill_id = ? AND gradebook_id = ? ' => array($skill_id, $gradebook_id))),
+            array(
+                'where' => array(
+                    'skill_id = ? AND gradebook_id = ? ' => array(
+                        $skill_id,
+                        $gradebook_id
+                    )
+                )
+            ),
             'first'
         );
         return $result;
@@ -933,6 +948,8 @@ class Skill extends Model
      *
      * @param int $userId User's id
      * @param bool $get_skill_data
+     *
+     * @return array
      */
     public function get_user_skills($user_id, $get_skill_data = false)
     {
@@ -1043,8 +1060,7 @@ class Skill extends Model
 
                 // If a short code was defined, send the short code to replace
                 // skill name (to shorten the text in the wheel)
-                if (
-                    !empty($skill['short_code']) &&
+                if (!empty($skill['short_code']) &&
                     api_get_setting('show_full_skill_name_on_skill_wheel') === 'false'
                 ) {
                     $skill['data']['short_code'] = $skill['short_code'];
@@ -1243,8 +1259,13 @@ class Skill extends Model
      * @param $where_condition
      * @return array
      */
-    public function get_user_list_skill_ranking($start, $limit, $sidx, $sord, $where_condition)
-    {
+    public function get_user_list_skill_ranking(
+        $start,
+        $limit,
+        $sidx,
+        $sord,
+        $where_condition
+    ) {
         $start = intval($start);
         $limit = intval($limit);
         /*  ORDER BY $sidx $sord */
@@ -1270,14 +1291,14 @@ class Skill extends Model
     public function get_user_list_skill_ranking_count()
     {
         $sql = "SELECT count(*) FROM (
-                        SELECT count(distinct 1)
-                        FROM {$this->table} s
-                        INNER JOIN {$this->table_skill_rel_user} su
-                        ON (s.id = su.skill_id)
-                        INNER JOIN {$this->table_user} u
-                        ON u.user_id = su.user_id
-                        GROUP BY username
-                     ) as T1";
+                    SELECT count(distinct 1)
+                    FROM {$this->table} s
+                    INNER JOIN {$this->table_skill_rel_user} su
+                    ON (s.id = su.skill_id)
+                    INNER JOIN {$this->table_user} u
+                    ON u.user_id = su.user_id
+                    GROUP BY username
+                 ) as T1";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $result = Database::fetch_row($result);
@@ -1531,6 +1552,7 @@ class Skill extends Model
         }
 
         $entityManager = Database::getManager();
+        /** @var UserRepository $userRepo */
         $userRepo = $entityManager->getRepository('ChamiloUserBundle:User');
         $fromUserStatus = $fromUser->getStatus();
 
@@ -1564,10 +1586,97 @@ class Skill extends Model
                 }
                 break;
             case DRH:
-                return UserManager::is_user_followed_by_drh($toUser->getId(), $fromUser->getId());
+                return UserManager::is_user_followed_by_drh(
+                    $toUser->getId(),
+                    $fromUser->getId()
+                );
         }
 
         return false;
     }
 
+    /**
+     * If $studentId is set then check if current user has the right to see
+     * the page.
+     * @param int $studentId check if current user has access to see $studentId
+     * @param bool $blockPage raise a api_not_allowed()
+     *
+     * @return bool
+     */
+    public static function isAllow($studentId = 0, $blockPage = true)
+    {
+        if (self::isToolAvailable()) {
+            if (api_is_platform_admin()) {
+                return true;
+            }
+
+            if (!empty($studentId)) {
+                $currentUserId = api_get_user_id();
+                if ((int) $currentUserId === (int) $studentId) {
+                    return true;
+                }
+
+                $haveAccess = self::hasAccessToUserSkill(
+                    $currentUserId,
+                    $studentId
+                );
+
+                if ($haveAccess) {
+                    return true;
+                }
+            }
+        }
+
+        if ($blockPage) {
+            api_not_allowed(true);
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isToolAvailable()
+    {
+        $allowTool = api_get_setting('allow_skills_tool');
+
+        if ($allowTool == 'true') {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $currentUserId
+     * @param $studentId
+     * @return bool
+     */
+    public static function hasAccessToUserSkill($currentUserId, $studentId)
+    {
+        if (self::isToolAvailable()) {
+            if (api_is_platform_admin()) {
+                return true;
+            }
+            $allow = api_get_configuration_value('allow_private_skills');
+            if ($allow === true) {
+                if (api_is_teacher()) {
+                    return UserManager::isTeacherOfStudent(
+                        $currentUserId,
+                        $studentId
+                    );
+                }
+
+                if (api_is_drh()) {
+                    return UserManager::is_user_followed_by_drh(
+                        $studentId,
+                        $currentUserId
+                    );
+                }
+            }
+        }
+
+        return false;
+    }
 }

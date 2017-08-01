@@ -1,7 +1,7 @@
-{% if allowSkillsTool %}
+{% if allow_skill_tool %}
     <div class="btn-group">
         <a class="btn btn-default" href="{{ _p.web_main }}social/skills_wheel.php">{{ 'SkillsWheel' | get_lang }}</a>
-        {% if allowDrhSkillsManagement %}
+        {% if allow_drh_skills_management %}
             <a class="btn btn-default" href="{{ _p.web_main }}admin/skills_wheel.php">{{ 'ManageSkills' | get_lang }}</a>
         {% endif %}
     </div>

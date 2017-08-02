@@ -1184,7 +1184,10 @@ class ExtraField extends Model
                             'extra_'.$field_details['variable'],
                             $field_details['display_text'],
                             $options,
-                            array('multiple' => 'multiple', 'id' => 'extra_'.$field_details['variable'])
+                            array(
+                                'multiple' => 'multiple',
+                                'id' => 'extra_'.$field_details['variable']
+                            )
                         );
                         if ($freezeElement) {
                             $form->freeze('extra_'.$field_details['variable']);
@@ -2634,7 +2637,6 @@ JAVASCRIPT;
                 continue;
             }
             if (strpos($rule->field, '_second') === false) {
-
             } else {
                 $my_field = str_replace('_second', '', $rule->field);
                 $double_select[$my_field] = $rule->data;

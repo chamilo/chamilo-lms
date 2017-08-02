@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CToolIntro;
+
 /**
  * Class AddCourse
  */
@@ -956,7 +958,7 @@ class AddCourse
                             <h2>' . get_lang('IntroductionText').'</h2>
                          </p>';
 
-            $toolIntro = new Chamilo\CourseBundle\Entity\CToolIntro();
+            $toolIntro = new CToolIntro();
             $toolIntro
                 ->setCId($course_id)
                 ->setId(TOOL_COURSE_HOMEPAGE)
@@ -964,7 +966,7 @@ class AddCourse
                 ->setIntroText($intro_text);
             $manager->persist($toolIntro);
 
-            $toolIntro = new Chamilo\CourseBundle\Entity\CToolIntro();
+            $toolIntro = new CToolIntro();
             $toolIntro
                 ->setCId($course_id)
                 ->setId(TOOL_STUDENTPUBLICATION)
@@ -972,7 +974,7 @@ class AddCourse
                 ->setIntroText(get_lang('IntroductionTwo'));
             $manager->persist($toolIntro);
 
-            $toolIntro = new Chamilo\CourseBundle\Entity\CToolIntro();
+            $toolIntro = new CToolIntro();
             $toolIntro
                 ->setCId($course_id)
                 ->setId(TOOL_WIKI)

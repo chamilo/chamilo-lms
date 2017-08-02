@@ -3,6 +3,7 @@
 
 use Michelf\MarkdownExtra;
 use Doctrine\Common\Collections\Criteria;
+use Chamilo\CourseBundle\Entity\CChatConnected;
 
 /**
  * Class CourseChat
@@ -319,7 +320,7 @@ class CourseChatUtils
             return;
         }
 
-        $connection = new \Chamilo\CourseBundle\Entity\CChatConnected();
+        $connection = new CChatConnected();
         $connection
             ->setCId($this->courseId)
             ->setUserId($this->userId)

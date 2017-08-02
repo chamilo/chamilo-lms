@@ -510,15 +510,59 @@ class Plugin
     }
 
     /**
+     * Delete the fields added to the course settings page and the link to the
+     * tool on the course's homepage
+     * @param int $courseId
+     *
+     * @return false|null
+     */
+    public function uninstall_course_fields($courseId)
+    {
+        $courseId = intval($courseId);
+
+        if (empty($courseId)) {
+            return false;
+        }
+        $plugin_name = $this->get_name();
+
+        $t_course = Database::get_course_table(TABLE_COURSE_SETTING);
+        $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
+
+        if (!empty($this->course_settings)) {
+            foreach ($this->course_settings as $setting) {
+                $variable = Database::escape_string($setting['name']);
+                if (!empty($setting['group'])) {
+                    $variable = Database::escape_string($setting['group']);
+                }
+                if (empty($variable)) {
+                    continue;
+                }
+                $sql = "DELETE FROM $t_course
+                        WHERE c_id = $courseId AND variable = '$variable'";
+                Database::query($sql);
+            }
+        }
+
+        $plugin_name = Database::escape_string($plugin_name);
+        $sql = "DELETE FROM $t_tool
+                WHERE c_id = $courseId AND name = '$plugin_name'";
+        Database::query($sql);
+    }
+
+    /**
      * Add an link for a course tool
      * @param string $name The tool name
      * @param int $courseId The course ID
      * @param string $iconName Optional. Icon file name
      * @param string $link Optional. Link URL
-     * @return \Chamilo\CourseBundle\Entity\CTool|null
+     * @return CTool|null
      */
-    protected function createLinkToCourseTool($name, $courseId, $iconName = null, $link = null)
-    {
+    protected function createLinkToCourseTool(
+        $name,
+        $courseId,
+        $iconName = null,
+        $link = null
+    ) {
         if (!$this->addCourseTool) {
             return null;
         }
@@ -557,46 +601,6 @@ class Plugin
         }
 
         return $tool;
-    }
-
-    /**
-     * Delete the fields added to the course settings page and the link to the
-     * tool on the course's homepage
-     * @param int $courseId
-     *
-     * @return false|null
-     */
-    public function uninstall_course_fields($courseId)
-    {
-        $courseId = intval($courseId);
-
-        if (empty($courseId)) {
-            return false;
-        }
-        $plugin_name = $this->get_name();
-
-        $t_course = Database::get_course_table(TABLE_COURSE_SETTING);
-        $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
-
-        if (!empty($this->course_settings)) {
-            foreach ($this->course_settings as $setting) {
-                $variable = Database::escape_string($setting['name']);
-                if (!empty($setting['group'])) {
-                    $variable = Database::escape_string($setting['group']);
-                }
-                if (empty($variable)) {
-                    continue;
-                }
-                $sql = "DELETE FROM $t_course
-                        WHERE c_id = $courseId AND variable = '$variable'";
-                Database::query($sql);
-            }
-        }
-
-        $plugin_name = Database::escape_string($plugin_name);
-        $sql = "DELETE FROM $t_tool
-                WHERE c_id = $courseId AND name = '$plugin_name'";
-        Database::query($sql);
     }
 
     /**

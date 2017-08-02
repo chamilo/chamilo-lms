@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
 
 /**
  * Class UniqueAnswer
@@ -463,7 +464,7 @@ class UniqueAnswer extends Question
         $position = $row_max->max_position + 1;
 
         // Insert a new answer
-        $quizAnswer = new \Chamilo\CourseBundle\Entity\CQuizAnswer();
+        $quizAnswer = new CQuizAnswer();
         $quizAnswer
             ->setCId($course_id)
             ->setId($id)

@@ -7602,6 +7602,8 @@ class SessionManager
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $sessionCourseUserTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_session_field_values = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $tbl_session_field_options = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
 
         $where = 'WHERE 1 = 1 ';
         $user_id = api_get_user_id();

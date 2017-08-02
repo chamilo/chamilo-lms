@@ -140,9 +140,9 @@ class MessageManager
                     msg_status as col4
                 FROM $table_message
                 WHERE
-                  user_receiver_id=".api_get_user_id()." AND
-                  msg_status IN (".MESSAGE_STATUS_NEW.", ".MESSAGE_STATUS_UNREAD.")
-                  $keywordCondition
+                    user_receiver_id=".api_get_user_id()." AND
+                    msg_status IN (".MESSAGE_STATUS_NEW.", ".MESSAGE_STATUS_UNREAD.")
+                    $keywordCondition
                 ORDER BY col$column $direction
                 LIMIT $from, $number_of_items";
 
@@ -150,6 +150,7 @@ class MessageManager
         $i = 0;
         $message_list = array();
 
+        $newMessageLink = api_get_path(WEB_CODE_PATH).'messages/new_message.php';
         while ($result = Database::fetch_row($sql_result)) {
             $message[0] = $result[0];
             $result[2] = Security::remove_XSS($result[2], STUDENT, true);
@@ -164,11 +165,24 @@ class MessageManager
             if (isset($_GET['f']) && $_GET['f'] == 'social') {
                 $link = '&f=social';
             }
+
             $userInfo = api_get_user_info($result[1]);
             $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].$link.'">'.$result[2].'</a><br />'.$userInfo['complete_name'];
-            $message[3] = '<a href="new_message.php?re_id='.$result[0].$link.'">'.
-                Display::return_icon('message_reply.png', get_lang('ReplyToMessage')).'</a>'.
-                '&nbsp;&nbsp;<a onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" href="inbox.php?action=deleteone&id='.$result[0].$link.'">'.Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>';
+
+            $message[3] =
+                Display::url(
+                    Display::returnFontAwesomeIcon('reply', 2),
+                    $newMessageLink.'?re_id='.$result[0].$link,
+                    ['title' => get_lang('ReplyToMessage') ]
+                ).
+                '&nbsp;&nbsp;'.
+                Display::url(
+                    Display::returnFontAwesomeIcon('share', 2),
+                    $newMessageLink.'?forward_id='.$result[0].$link,
+                    ['title' => get_lang('ForwardMessage') ]
+                ).
+                '&nbsp;&nbsp;<a title="'.addslashes(get_lang('DeleteMessage')).'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" href="inbox.php?action=deleteone&id='.$result[0].$link.'">'.
+                Display::returnFontAwesomeIcon('trash', 2).'</a>';
 
             $message[2] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG); //date stays the same
             foreach ($message as $key => $value) {
@@ -257,6 +271,7 @@ class MessageManager
      * @param int $topic_id (optional) the default value is the current user_id
      * @param int $sender_id
      * @param bool $directMessage
+     * @param int $forwardId
      *
      * @return bool
      */
@@ -271,7 +286,8 @@ class MessageManager
         $edit_message_id = 0,
         $topic_id = 0,
         $sender_id = null,
-        $directMessage = false
+        $directMessage = false,
+        $forwardId = 0
     ) {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $group_id = intval($group_id);
@@ -330,7 +346,6 @@ class MessageManager
         }
 
         $inbox_last_id = null;
-
         //Just in case we replace the and \n and \n\r while saving in the DB
         //$content = str_replace(array("\n", "\n\r"), '<br />', $content);
         $now = api_get_utc_datetime();
@@ -677,7 +692,11 @@ class MessageManager
             // User-reserved directory where photos have to be placed.*
             $userGroup = new UserGroup();
             if (!empty($group_id)) {
-                $path_user_info = $userGroup->get_group_picture_path_by_id($group_id, 'system', true);
+                $path_user_info = $userGroup->get_group_picture_path_by_id(
+                    $group_id,
+                    'system',
+                    true
+                );
             } else {
                 $path_user_info['dir'] = UserManager::getUserPathById($message_user_id, 'system');
             }
@@ -766,7 +785,8 @@ class MessageManager
         }
 
         $table_message = Database::get_main_table(TABLE_MESSAGE);
-        $sql = "UPDATE $table_message SET msg_status = '".MESSAGE_STATUS_NEW."'
+        $sql = "UPDATE $table_message SET 
+                    msg_status = '".MESSAGE_STATUS_NEW."'
                 WHERE
                     msg_status <> ".MESSAGE_STATUS_OUTBOX." AND
                     user_receiver_id=".intval($user_id)." AND
@@ -1009,8 +1029,8 @@ class MessageManager
                 $message[1] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.$userInfo['complete_name'].'</a>';
                 $message[2] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.str_replace("\\", "", $result[2]).'</a>';
                 $message[3] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG); //date stays the same
-                $message[4] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.
-                    Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>';
+                $message[4] = '&nbsp;&nbsp;<a title="'.addslashes(get_lang('DeleteMessage')).'" onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.
+                    Display::returnFontAwesomeIcon('trash', 2).'</a>';
             } else {
                 $link = '';
                 if (isset($_GET['f']) && $_GET['f'] == 'social') {
@@ -1018,8 +1038,8 @@ class MessageManager
                 }
                 $message[1] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].$link.'">'.$result[2].'</a><br />'.$userInfo['complete_name'];
                 $message[2] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG); //date stays the same
-                $message[3] = '<a href="outbox.php?action=deleteone&id='.$result[0].'&'.$link.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" >'.
-                    Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>';
+                $message[3] = '<a title="'.addslashes(get_lang('DeleteMessage')).'" href="outbox.php?action=deleteone&id='.$result[0].'&'.$link.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" >'.
+                    Display::returnFontAwesomeIcon('trash', 2).'</a>';
             }
 
             foreach ($message as $key => $value) {
@@ -1041,7 +1061,6 @@ class MessageManager
     public static function get_number_of_messages_sent()
     {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
-
         $keyword = Session::read('message_sent_search_keyword');
         $keywordCondition = '';
         if (!empty($keyword)) {
@@ -1248,7 +1267,6 @@ class MessageManager
             }
 
             $array_html = array();
-
             foreach ($new_topics as $index => $topic) {
                 $html = '';
                 // topics
@@ -1720,7 +1738,7 @@ class MessageManager
 
         if (isset($_REQUEST['action'])) {
             switch ($_REQUEST['action']) {
-                case 'mark_as_unread' :
+                case 'mark_as_unread':
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $message_id) {
                             self::update_message_status(
@@ -1736,23 +1754,39 @@ class MessageManager
                         false
                     );
                     break;
-                case 'mark_as_read' :
+                case 'mark_as_read':
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $message_id) {
-                            self::update_message_status(api_get_user_id(), $message_id, MESSAGE_STATUS_NEW);
+                            self::update_message_status(
+                                api_get_user_id(),
+                                $message_id,
+                                MESSAGE_STATUS_NEW
+                            );
                         }
                     }
-                    $html .= Display::return_message(api_xml_http_response_encode($success_read), 'normal', false);
+                    $html .= Display::return_message(
+                        api_xml_http_response_encode($success_read),
+                        'normal',
+                        false
+                    );
                     break;
-                case 'delete' :
+                case 'delete':
                     foreach ($_POST['id'] as $index => $message_id) {
                         self::delete_message_by_user_receiver(api_get_user_id(), $message_id);
                     }
-                    $html .= Display::return_message(api_xml_http_response_encode($success), 'normal', false);
+                    $html .= Display::return_message(
+                        api_xml_http_response_encode($success),
+                        'normal',
+                        false
+                    );
                     break;
-                case 'deleteone' :
+                case 'deleteone':
                     self::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
-                    $html .= Display::return_message(api_xml_http_response_encode($success), 'confirmation', false);
+                    $html .= Display::return_message(
+                        api_xml_http_response_encode($success),
+                        'confirmation',
+                        false
+                    );
                     break;
             }
         }
@@ -1769,7 +1803,7 @@ class MessageManager
         $table->set_header(0, '', false, array('style' => 'width:15px;'));
         $table->set_header(1, get_lang('Messages'), false);
         $table->set_header(2, get_lang('Date'), true, array('style' => 'width:180px;'));
-        $table->set_header(3, get_lang('Modify'), false, array('style' => 'width:70px;'));
+        $table->set_header(3, get_lang('Modify'), false, array('style' => 'width:120px;'));
 
         if (isset($_REQUEST['f']) && $_REQUEST['f'] == 'social') {
             $parameters['f'] = 'social';
@@ -1801,7 +1835,6 @@ class MessageManager
         }
 
         Session::write('message_sent_search_keyword', $keyword);
-
         $success = get_lang('SelectedMessagesDeleted').'&nbsp</b><br /><a href="outbox.php?'.$social_link.'">'.get_lang('BackToOutbox').'</a>';
 
         $html = null;
@@ -1811,7 +1844,10 @@ class MessageManager
                     $number_of_selected_messages = count($_POST['id']);
                     if ($number_of_selected_messages != 0) {
                         foreach ($_POST['id'] as $index => $message_id) {
-                            self::delete_message_by_user_receiver(api_get_user_id(), $message_id);
+                            self::delete_message_by_user_receiver(
+                                api_get_user_id(),
+                                $message_id
+                            );
                         }
                     }
                     $html .= Display::return_message(api_xml_http_response_encode($success), 'normal', false);
@@ -1837,9 +1873,8 @@ class MessageManager
         $parameters['f'] = isset($_GET['f']) && $_GET['f'] == 'social' ? 'social' : null;
         $table->set_additional_parameters($parameters);
         $table->set_header(0, '', false, array('style' => 'width:15px;'));
-
         $table->set_header(1, get_lang('Messages'), false);
-        $table->set_header(2, get_lang('Date'), true, array('style' => 'width:160px;'));
+        $table->set_header(2, get_lang('Date'), true, array('style' => 'width:180px;'));
         $table->set_header(3, get_lang('Modify'), false, array('style' => 'width:70px;'));
 
         $table->set_form_actions(array('delete' => get_lang('DeleteSelectedMessages')));

@@ -8041,4 +8041,7 @@ Sincerely,
 ((author_first_name)), ((author_last_name))
 ((portal_name))";
 $SendCertificateNotifications = "Send certificate notification to all users";
+$MailSubjectForwardShort = "Fwd";
+$ForwardedMessage = "Forwarded message";
+$ForwardMessage = "Forward message";
 ?>

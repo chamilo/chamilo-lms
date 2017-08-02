@@ -70,7 +70,7 @@ function show_compose_to_any($user_id)
 {
     $default['user_list'] = 0;
     $online_user_list = null;
-    $html = manage_form($default, $online_user_list);
+    $html = manageForm($default, $online_user_list);
 
     return $html;
 }
@@ -90,7 +90,7 @@ function show_compose_reply_to_message($message_id, $receiver_id)
     }
     $userInfo = api_get_user_info($row['user_sender_id']);
     $default['users'] = array($row['user_sender_id']);
-    $html = manage_form($default, null, $userInfo['complete_name']);
+    $html = manageForm($default, null, $userInfo['complete_name']);
 
     return $html;
 }
@@ -101,12 +101,18 @@ function show_compose_to_user($receiver_id)
     $html = get_lang('To').':&nbsp;<strong>'.$userInfo['complete_name'].'</strong>';
     $default['title'] = api_xml_http_response_encode(get_lang('EnterTitle'));
     $default['users'] = array($receiver_id);
-    $html .= manage_form($default);
+    $html .= manageForm($default);
 
     return $html;
 }
 
-function manage_form($default, $select_from_user_list = null, $sent_to = null)
+/**
+ * @param $default
+ * @param null $select_from_user_list
+ * @param null $sent_to
+ * @return string
+ */
+function manageForm($default, $select_from_user_list = null, $sent_to = null)
 {
     $group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
     $message_id = isset($_GET['message_id']) ? intval($_GET['message_id']) : null;
@@ -187,6 +193,21 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
         );
     }
 
+    if (isset($_GET['forward_id'])) {
+        $forwardId = (int) $_GET['forward_id'];
+        $message_reply_info = MessageManager::get_message_by_id($forwardId);
+        $default['title'] = '['.get_lang('MailSubjectForwardShort').": ".$message_reply_info['title'].']';
+        $form->addHidden('forward_id', $forwardId);
+        $form->addHidden('save_form', 'save_form');
+        $receiverInfo = api_get_user_info($message_reply_info['user_receiver_id']);
+
+        $forwardMessage = '---------- '.get_lang('ForwardedMessage').' ---------'.'<br />';
+        $forwardMessage .= get_lang('Date').': '.api_get_local_time($message_reply_info['send_date']).'<br />';
+        $forwardMessage .= get_lang('Subject').': '.$message_reply_info['title'].'<br />';
+        $forwardMessage .= get_lang('To').': '.$receiverInfo['email'].'<br />';
+        $default['content'] = '<p><br/></p>'.$forwardMessage.'<br />'.Security::filter_terms($message_reply_info['content']);
+    }
+
     if (empty($group_id)) {
         $form->addElement(
             'label',
@@ -233,6 +254,8 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
             $content = $default['content'];
             $group_id = isset($default['group_id']) ? $default['group_id'] : null;
             $parent_id = isset($default['parent_id']) ? $default['parent_id'] : null;
+            $forwardId = isset($_POST['forward_id']) ? $_POST['forward_id'] : false;
+
             if (is_array($user_list) && count($user_list) > 0) {
                 //all is well, send the message
                 foreach ($user_list as $userId) {
@@ -243,7 +266,12 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
                         $_FILES,
                         $file_comments,
                         $group_id,
-                        $parent_id
+                        $parent_id,
+                        0,
+                        0,
+                        null,
+                        false,
+                        $forwardId
                     );
                     if ($res) {
                         $userInfo = api_get_user_info($userId);
@@ -356,8 +384,8 @@ if (!isset($_POST['compose'])) {
     $default['content'] = $_POST['content'];
 
     // comes from a reply button
-    if (isset($_GET['re_id'])) {
-        $social_right_content .= manage_form($default);
+    if (isset($_GET['re_id']) || isset($_GET['forward_id'])) {
+        $social_right_content .= manageForm($default);
     } else {
         // post
         if ($restrict) {
@@ -369,7 +397,7 @@ if (!isset($_POST['compose'])) {
             if (isset($_POST['hidden_user'])) {
                 $default['users'] = array($_POST['hidden_user']);
             }
-            $social_right_content .= manage_form($default);
+            $social_right_content .= manageForm($default);
         } else {
             $social_right_content .= Display::return_message(get_lang('ErrorSendingMessage'), 'error');
         }

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * 	@package chamilo.messages
+ * @package chamilo.messages
  */
 
 $cidReset = true;
@@ -15,7 +15,9 @@ if (isset($_GET['messages_page_nr'])) {
     if ($_REQUEST['f'] == 'social') {
         $social_link = '?f=social';
     }
-    if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
+    if (api_get_setting('allow_social_tool') == 'true' &&
+        api_get_setting('allow_message_tool') == 'true'
+    ) {
         header('Location:inbox.php'.$social_link);
         exit;
     }
@@ -74,7 +76,10 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
         }
     } elseif (trim($info_delete[0]) == 'delete') {
         for ($i = 1; $i <= $count_delete; $i++) {
-            MessageManager::delete_message_by_user_receiver(api_get_user_id(), $info_delete[$i]);
+            MessageManager::delete_message_by_user_receiver(
+                api_get_user_id(),
+                $info_delete[$i]
+            );
         }
         $message_box = get_lang('SelectedMessagesDeleted');
         $show_message .= Display::return_message(api_xml_http_response_encode($message_box));
@@ -92,7 +97,10 @@ if (isset($_GET['f']) && $_GET['f'] == 'social') {
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Inbox'));
 } else {
     $this_section = SECTION_MYPROFILE;
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'main/auth/profile.php', 'name' => get_lang('Profile'));
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_PATH).'main/auth/profile.php',
+        'name' => get_lang('Profile')
+    );
 }
 
 $social_parameter = '';
@@ -103,7 +111,9 @@ if ((isset($_GET['f']) && $_GET['f'] === 'social') ||
     $social_parameter = '?f=social';
 } else {
     //Comes from normal profile
-    if (api_get_setting('allow_social_tool') === 'true' && api_get_setting('allow_message_tool') === 'true') {
+    if (api_get_setting('allow_social_tool') === 'true' &&
+        api_get_setting('allow_message_tool') === 'true'
+    ) {
         $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
             Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
     }
@@ -151,7 +161,10 @@ if (!isset($_GET['del_msg'])) {
     for ($i = 0; $i < $num_msg; $i++) {
         if ($_POST[$i]) {
             //the user_id was necessary to delete a message??
-            $show_message .= MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_POST['_'.$i]);
+            $show_message .= MessageManager::delete_message_by_user_receiver(
+                api_get_user_id(),
+                $_POST['_'.$i]
+            );
         }
     }
     $social_right_content .= MessageManager::inbox_display();

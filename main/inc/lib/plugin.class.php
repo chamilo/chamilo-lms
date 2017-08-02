@@ -19,6 +19,9 @@ use Chamilo\CourseBundle\Entity\CTool;
  */
 class Plugin
 {
+    const TAB_FILTER_NO_STUDENT = '::no-student';
+    const TAB_FILTER_ONLY_STUDENT = '::only-student';
+
     protected $version = '';
     protected $author = '';
     protected $fields = [];
@@ -50,9 +53,6 @@ class Plugin
      * function.
      */
     public $course_settings_callback = false;
-
-    const TAB_FILTER_NO_STUDENT = '::no-student';
-    const TAB_FILTER_ONLY_STUDENT = '::only-student';
 
     /**
      * Default constructor for the plugin class. By default, it only sets
@@ -204,6 +204,7 @@ class Plugin
         foreach ($this->fields as $name => $type) {
             $options = null;
             if (is_array($type) && isset($type['type']) && $type['type'] === 'select') {
+                $attributes = isset($type['attributes']) ? $type['attributes'] : [];
                 $options = $type['options'];
                 $type = $type['type'];
             }
@@ -235,8 +236,20 @@ class Plugin
                     break;
                 case 'boolean':
                     $group = array();
-                    $group[] = $result->createElement('radio', $name, '', get_lang('Yes'), 'true');
-                    $group[] = $result->createElement('radio', $name, '', get_lang('No'), 'false');
+                    $group[] = $result->createElement(
+                        'radio',
+                        $name,
+                        '',
+                        get_lang('Yes'),
+                        'true'
+                    );
+                    $group[] = $result->createElement(
+                        'radio',
+                        $name,
+                        '',
+                        get_lang('No'),
+                        'false'
+                    );
                     $result->addGroup($group, null, array($this->get_lang($name), $help));
                     break;
                 case 'checkbox':
@@ -261,14 +274,19 @@ class Plugin
                         $type,
                         $name,
                         array($this->get_lang($name), $help),
-                        $options
+                        $options,
+                        $attributes
                     );
                     break;
             }
         }
 
         if (!empty($checkboxGroup)) {
-            $result->addGroup($checkboxGroup, null, array($this->get_lang('sms_types'), $help));
+            $result->addGroup(
+                $checkboxGroup,
+                null,
+                array($this->get_lang('sms_types'), $help)
+            );
         }
         $result->setDefaults($defaults);
         $result->addButtonSave($this->get_lang('Save'), 'submit_button');
@@ -287,6 +305,12 @@ class Plugin
         $settings = $this->get_settings();
         foreach ($settings as $setting) {
             if ($setting['variable'] == $this->get_name().'_'.$name) {
+                if (!empty($setting['selected_value']) &&
+                    @unserialize($setting['selected_value']) !== false
+                ) {
+                    $setting['selected_value'] = unserialize($setting['selected_value']);
+                }
+
                 return $setting['selected_value'];
             }
         }
@@ -304,7 +328,12 @@ class Plugin
         if (empty($this->settings) || $forceFromDB) {
             $settings = api_get_settings_params(
                 array(
-                    "subkey = ? AND category = ? AND type = ? " => array($this->get_name(), 'Plugins', 'setting')
+                    "subkey = ? AND category = ? AND type = ? AND access_url = ?" => array(
+                        $this->get_name(),
+                        'Plugins',
+                        'setting',
+                        api_get_current_access_url_id()
+                    )
                 )
             );
             $this->settings = $settings;
@@ -334,7 +363,6 @@ class Plugin
     {
         // Check whether the language strings for the plugin have already been
         // loaded. If so, no need to load them again.
-
         if (is_null($this->strings)) {
             global $language_interface;
             $root = api_get_path(SYS_PLUGIN_PATH);
@@ -369,7 +397,6 @@ class Plugin
                 $parentPath = "{$root}{$plugin_name}/lang/{$languageParentFolder}.php";
                 if (is_readable($parentPath)) {
                     include $parentPath;
-
                     if (!empty($strings)) {
                         foreach ($strings as $key => $string) {
                             $this->strings[$key] = $string;

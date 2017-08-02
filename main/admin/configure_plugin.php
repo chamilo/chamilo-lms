@@ -22,7 +22,6 @@ if (!in_array($pluginName, $installedPlugins) || empty($pluginInfo)) {
     api_not_allowed(true);
 }
 
-global $_configuration;
 $content = '';
 $currentUrl = api_get_self()."?name=$pluginName";
 
@@ -33,7 +32,6 @@ if (isset($pluginInfo['settings_form'])) {
         // We override the form attributes
         $attributes = array('action' => $currentUrl, 'method' => 'POST');
         $form->updateAttributes($attributes);
-
         if (isset($pluginInfo['settings'])) {
             $form->setDefaults($pluginInfo['settings']);
         }
@@ -58,13 +56,12 @@ if (isset($form)) {
                     $accessUrlId,
                     $pluginName,
                     'setting',
-                    "status"
+                    'status'
                 )
             )
         );
 
         foreach ($values as $key => $value) {
-            $value = trim($value);
             api_add_setting(
                 $value,
                 Database::escape_string($pluginName.'_'.$key),
@@ -75,7 +72,7 @@ if (isset($form)) {
                 '',
                 '',
                 '',
-                $_configuration['access_url'],
+                api_get_current_access_url_id(),
                 1
             );
         }
@@ -112,4 +109,3 @@ $interbreadcrumb[] = array(
 $tpl = new Template($pluginName, true, true, false, true, false);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
-

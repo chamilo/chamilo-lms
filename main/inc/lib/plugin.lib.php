@@ -419,19 +419,29 @@ class AppPlugin
 
             $plugin_info = array();
             if (file_exists($plugin_file)) {
-
                 require $plugin_file;
             }
 
+            // @todo check if settings are already added
             // Extra options
             $plugin_settings = api_get_settings_params(
                 array(
-                    "subkey = ? AND category = ? AND type = ? " => array($plugin_name, 'Plugins', 'setting')
+                    "subkey = ? AND category = ? AND type = ? AND access_url = ?" => array(
+                        $plugin_name,
+                        'Plugins',
+                        'setting',
+                        api_get_current_access_url_id()
+                    )
                 )
             );
 
             $settings_filtered = array();
             foreach ($plugin_settings as $item) {
+                if (!empty($item['selected_value'])) {
+                    if (@unserialize($item['selected_value']) !== false) {
+                        $item['selected_value'] = unserialize($item['selected_value']);
+                    }
+                }
                 $settings_filtered[$item['variable']] = $item['selected_value'];
             }
             $plugin_info['settings'] = $settings_filtered;

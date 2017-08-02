@@ -2443,7 +2443,11 @@ function api_get_plugin_setting($plugin, $variable)
     $result = api_get_setting($variableName);
 
     if (isset($result[$plugin])) {
-        return $result[$plugin];
+        $value = $result[$plugin];
+        if (@unserialize($value) !== false) {
+            $value = unserialize($value);
+        }
+        return $value;
     }
 
     return null;
@@ -5359,6 +5363,12 @@ function api_add_setting(
     $em = Database::getManager();
     $settingRepo = $em->getRepository('ChamiloCoreBundle:SettingsCurrent');
     $accessUrlId = (int) $accessUrlId ?: 1;
+
+    if (is_array($value)) {
+        $value = serialize($value);
+    } else {
+        $value = trim($value);
+    }
 
     $criteria = ['variable' => $variable, 'accessUrl' => $accessUrlId];
 

@@ -883,28 +883,26 @@ class IndexManager
      */
     public function return_profile_block()
     {
-        global $_configuration;
-        $user_id = api_get_user_id();
-
-        if (empty($user_id)) {
+        $userInfo = api_get_user_info();
+        $userId = api_get_user_id();
+        if (empty($userId)) {
             return;
         }
 
         $items = [];
         $userGroup = new UserGroup();
-
         //  @todo Add a platform setting to add the user image.
         if (api_get_setting('allow_message_tool') == 'true') {
             // New messages.
             $number_of_new_messages = MessageManager::getCountNewMessages();
             // New contact invitations.
             $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(
-                api_get_user_id()
+                $userId
             );
 
             // New group invitations sent by a moderator.
             $group_pending_invitations = $userGroup->get_groups_by_user(
-                api_get_user_id(),
+                $userId,
                 GROUP_USER_PERMISSION_PENDING_INVITATION,
                 false
             );
@@ -939,7 +937,7 @@ class IndexManager
                 ];
             }
 
-            if (isset($_configuration['allow_my_files_link_in_homepage']) && $_configuration['allow_my_files_link_in_homepage']) {
+            if (api_get_configuration_value('allow_my_files_link_in_homepage')) {
                 if (api_get_setting('allow_my_files') !== 'false') {
                     $items[] = [
                         'class' => 'myfiles-social',
@@ -954,11 +952,13 @@ class IndexManager
         $items[] = [
             'class' => 'profile-social',
             'icon' => Display::return_icon('edit-profile.png', get_lang('EditProfile')),
-            'link' => Display::getProfileEditionLink($user_id),
+            'link' => Display::getProfileEditionLink($userId),
             'title' => get_lang('EditProfile')
         ];
 
-        if (api_get_configuration_value('show_link_request_hrm_user') && api_is_drh()) {
+        if (api_get_configuration_value('show_link_request_hrm_user') &&
+            api_is_drh()
+        ) {
             $label = get_lang('RequestLinkingToUser');
             $items[] = [
                 'icon' => Display::return_icon('new_group.png', $label),
@@ -967,14 +967,14 @@ class IndexManager
             ];
         }
 
-        $setting = api_get_plugin_setting('bbb', 'enable_global_conference');
-        $settingLink = api_get_plugin_setting('bbb', 'enable_global_conference_link');
-        if ($setting === 'true' && $settingLink === 'true') {
+        if (bbb::showGlobalConferenceLink($userInfo)) {
             $url = api_get_path(WEB_PLUGIN_PATH).'bbb/start.php?global=1';
-            //$content = Display::url(get_lang('LaunchVideoConferenceRoom'), $url);
             $items[] = [
                 'class' => 'video-conference',
-                'icon' => Display::return_icon('bbb.png', get_lang('VideoConference')),
+                'icon' => Display::return_icon(
+                    'bbb.png',
+                    get_lang('VideoConference')
+                ),
                 'link' => $url,
                 'title' => get_lang('VideoConference')
             ];
@@ -1121,7 +1121,6 @@ class IndexManager
     private static function returnRightBlockItems(array $items)
     {
         $my_account_content = '';
-
         foreach ($items as $item) {
             if (empty($item['link']) && empty($item['title'])) {
                 continue;
@@ -1139,6 +1138,8 @@ class IndexManager
     /**
      * Prints the session and course list (user_portal.php)
      * @param int $user_id
+     * @param bool $showSessions
+     * @param string $categoryCodeFilter
      * @return string
      */
     public function returnCoursesAndSessions($user_id, $showSessions = true, $categoryCodeFilter = '')

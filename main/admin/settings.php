@@ -150,7 +150,7 @@ if (!empty($_GET['category']) &&
                         }
                     }
                 }
-                //Reload settings
+                // Reload settings
                 $settings_array = getCategorySettings($my_category);
                 $settings = $settings_array['settings'];
                 $settings_by_access_list = $settings_array['settings_by_access_list'];

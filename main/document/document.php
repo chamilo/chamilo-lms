@@ -689,7 +689,7 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' &&
 
         $certificate = new Certificate();
         $text = $certificate->parse_certificate_variables($content_html['variables']);
-        $result = $certificate->generate_qr($text, $qr_code_filename);
+        $result = $certificate->generateQRImage($text, $qr_code_filename);
 
         $new_content_html = $content_html['content'];
         $path_image = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/images/gallery';

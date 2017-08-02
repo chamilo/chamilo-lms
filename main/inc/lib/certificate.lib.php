@@ -120,7 +120,7 @@ class Certificate extends Model
         $delete_db = false;
         if (!empty($this->certificate_data)) {
             if (!is_null($this->html_file) || $this->html_file != '' || strlen($this->html_file)) {
-                //Deleting HTML file
+                // Deleting HTML file
                 if (is_file($this->html_file)) {
                     @unlink($this->html_file);
                     if (is_file($this->html_file) === false) {
@@ -129,7 +129,7 @@ class Certificate extends Model
                         $delete_db = false;
                     }
                 }
-                //Deleting QR code PNG image file
+                // Deleting QR code PNG image file
                 if (is_file($this->qr_file)) {
                     @unlink($this->qr_file);
                 }
@@ -191,10 +191,10 @@ class Certificate extends Model
 
                     if ($my_category[0]->get_id() == strval(intval($this->certificate_data['cat_id']))) {
                         $name = $this->certificate_data['path_certificate'];
-                        $my_path_certificate = $this->certification_user_path.basename($name);
-                        if (file_exists($my_path_certificate) &&
+                        $myPathCertificate = $this->certification_user_path.basename($name);
+                        if (file_exists($myPathCertificate) &&
                             !empty($name) &&
-                            !is_dir($my_path_certificate) &&
+                            !is_dir($myPathCertificate) &&
                             $this->force_certificate_generation == false
                         ) {
                             //Seems that the file was already generated
@@ -202,14 +202,14 @@ class Certificate extends Model
                         } else {
                             // Creating new name
                             $name = md5($this->user_id.$this->certificate_data['cat_id']).'.html';
-                            $my_path_certificate = $this->certification_user_path.$name;
+                            $myPathCertificate = $this->certification_user_path.$name;
                             $path_certificate    = '/'.$name;
 
                             // Getting QR filename
                             $file_info = pathinfo($path_certificate);
                             $qr_code_filename = $this->certification_user_path.$file_info['filename'].'_qr.png';
 
-                            $my_new_content_html = str_replace(
+                            $newContent = str_replace(
                                 '((certificate_barcode))',
                                 Display::img(
                                     $this->certification_web_user_path.$file_info['filename'].'_qr.png',
@@ -218,13 +218,13 @@ class Certificate extends Model
                                 $new_content_html['content']
                             );
 
-                            $my_new_content_html = api_convert_encoding(
-                                $my_new_content_html,
+                            $newContent = api_convert_encoding(
+                                $newContent,
                                 'UTF-8',
                                 api_get_system_encoding()
                             );
 
-                            $result = @file_put_contents($my_path_certificate, $my_new_content_html);
+                            $result = @file_put_contents($myPathCertificate, $newContent);
                             if ($result) {
                                 // Updating the path
                                 self::update_user_info_about_certificate(
@@ -236,8 +236,10 @@ class Certificate extends Model
 
                                 if ($this->html_file_is_generated()) {
                                     if (!empty($file_info)) {
-                                        $text = $this->parse_certificate_variables($new_content_html['variables']);
-                                        $this->generate_qr($text, $qr_code_filename);
+                                        $text = $this->parse_certificate_variables(
+                                            $new_content_html['variables']
+                                        );
+                                        $this->generateQRImage($text, $qr_code_filename);
                                     }
                                 }
                             }
@@ -301,7 +303,7 @@ class Certificate extends Model
      * @param string $path file path of the image
      * @return bool
      **/
-    public function generate_qr($text, $path)
+    public function generateQRImage($text, $path)
     {
         //Make sure HTML certificate is generated
         if (!empty($text) && !empty($path)) {

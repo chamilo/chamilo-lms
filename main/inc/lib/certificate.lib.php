@@ -30,11 +30,10 @@ class Certificate extends Model
     public $qr_file = null;
     public $user_id;
 
-    /* If true every time we enter to the certificate URL
-    we would generate a new certificate (good thing because we can edit the
-    certificate and all users will have the latest certificate bad because we
-    load the certificate everytime*/
-
+    /** If true every time we enter to the certificate URL
+     * we would generate a new certificate (good thing because we can edit the
+     * certificate and all users will have the latest certificate bad because we
+     * load the certificate every time */
     public $force_certificate_generation = true;
 
     /**
@@ -169,6 +168,7 @@ class Certificate extends Model
             $my_category[0]->is_certificate_available($this->user_id)
         ) {
             $courseId = api_get_course_int_id();
+            $courseInfo = api_get_course_info();
             $sessionId = api_get_session_id();
 
             $skill = new Skill();
@@ -192,6 +192,7 @@ class Certificate extends Model
                     if ($my_category[0]->get_id() == strval(intval($this->certificate_data['cat_id']))) {
                         $name = $this->certificate_data['path_certificate'];
                         $myPathCertificate = $this->certification_user_path.basename($name);
+
                         if (file_exists($myPathCertificate) &&
                             !empty($name) &&
                             !is_dir($myPathCertificate) &&
@@ -203,7 +204,7 @@ class Certificate extends Model
                             // Creating new name
                             $name = md5($this->user_id.$this->certificate_data['cat_id']).'.html';
                             $myPathCertificate = $this->certification_user_path.$name;
-                            $path_certificate    = '/'.$name;
+                            $path_certificate = '/'.$name;
 
                             // Getting QR filename
                             $file_info = pathinfo($path_certificate);
@@ -239,7 +240,24 @@ class Certificate extends Model
                                         $text = $this->parse_certificate_variables(
                                             $new_content_html['variables']
                                         );
-                                        $this->generateQRImage($text, $qr_code_filename);
+                                        $this->generateQRImage(
+                                            $text,
+                                            $qr_code_filename
+                                        );
+
+                                        $subject = get_lang('NotificationCertificateSubject');
+                                        $message = nl2br(get_lang('NotificationCertificateTemplate'));
+                                        $score = $this->certificate_data['score_certificate'];
+
+                                        Certificate::sendNotification(
+                                            $subject,
+                                            $message,
+                                            api_get_user_info($this->user_id),
+                                            $courseInfo,
+                                            [
+                                                'score_certificate' => $score
+                                            ]
+                                        );
                                     }
                                 }
                             }
@@ -252,6 +270,82 @@ class Certificate extends Model
         }
 
         return false;
+    }
+
+    /**
+     * @return array
+     */
+    public static function notificationTags()
+    {
+        $tags = [
+            '((course_title))',
+            '((user_first_name))',
+            '((user_last_name))',
+            '((author_first_name))',
+            '((author_last_name))',
+            '((score))',
+            '((portal_name))'
+        ];
+
+        return $tags;
+    }
+
+    /**
+     * @param string $subject
+     * @param string $message
+     * @param array $userInfo
+     * @param array $courseInfo
+     * @param array $certificateInfo
+     *
+     * @return bool
+     */
+    public static function sendNotification(
+        $subject,
+        $message,
+        $userInfo,
+        $courseInfo,
+        $certificateInfo
+    ) {
+        if (empty($userInfo) || empty($courseInfo)) {
+            return false;
+        }
+
+        $currentUserInfo = api_get_user_info();
+
+        $replace = [
+            $courseInfo['title'],
+            $userInfo['firstname'],
+            $userInfo['lastname'],
+            $currentUserInfo['firstname'],
+            $currentUserInfo['lastname'],
+            $certificateInfo['score_certificate'],
+            api_get_setting('Institution')
+        ];
+        $message = str_replace(self::notificationTags(), $replace, $message);
+
+        MessageManager::send_message(
+            $userInfo['id'],
+            $subject,
+            $message,
+            [],
+            [],
+            0,
+            0,
+            0,
+            0,
+            $currentUserInfo['id']
+        );
+
+        $plugin = new AppPlugin();
+        $smsPlugin = $plugin->getSMSPluginLibrary();
+        if ($smsPlugin) {
+            $additionalParameters = array(
+                'smsType' => SmsPlugin::CERTIFICATE_NOTIFICATION,
+                'userId' => $userInfo['id'],
+                'direct_message' => $message
+            );
+            $smsPlugin->send($additionalParameters);
+        }
     }
 
     /**

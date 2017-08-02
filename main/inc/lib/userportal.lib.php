@@ -971,11 +971,11 @@ class IndexManager
         $settingLink = api_get_plugin_setting('bbb', 'enable_global_conference_link');
         if ($setting === 'true' && $settingLink === 'true') {
             $url = api_get_path(WEB_PLUGIN_PATH).'bbb/start.php?global=1';
-            $content = Display::url(get_lang('LaunchVideoConferenceRoom'), $url);
+            //$content = Display::url(get_lang('LaunchVideoConferenceRoom'), $url);
             $items[] = [
                 'class' => 'video-conference',
                 'icon' => Display::return_icon('bbb.png', get_lang('VideoConference')),
-                'link' => $content,
+                'link' => $url,
                 'title' => get_lang('VideoConference')
             ];
         }

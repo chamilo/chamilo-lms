@@ -63,21 +63,168 @@ class Chat extends Model
         );
     }
 
+    public function getLatestChat($currentUserId, $userId, $latestMessages)
+    {
+        $items = self::getPreviousMessages(
+            $currentUserId,
+            $userId,
+            0,
+            $latestMessages
+        );
+
+        return array_reverse($items);
+    }
+
+    /**
+     * @param array $chatHistory
+     * @param int $latestMessages
+     * @return mixed
+     */
+    public function getAllLatestChats($chatHistory, $latestMessages = 5)
+    {
+        $currentUserId = api_get_user_id();
+        $chats = [];
+        if (!empty($chatHistory)) {
+            foreach ($chatHistory as $chat) {
+                $userId = $chat['user_info']['user_id'];
+                $items = self::getLatestChat(
+                    $currentUserId,
+                    $userId,
+                    $latestMessages
+                );
+                $chats[$userId]['items'] = $items;
+            }
+
+        }
+        return $chats;
+    }
+
     /**
      * Starts a chat session and returns JSON array of status and chat history
      * @return void (prints output in JSON format)
      */
     public function startSession()
     {
-        $items = Session::read('chatHistory');
+        $chatList = Session::read('chatHistory');
+        $chats = self::getAllLatestChats($chatList);
         $return = array(
             'user_status' => $this->getUserStatus(),
             'me' => get_lang('Me'),
             'user_id' => api_get_user_id(),
-            'items' => $items
+            'items' => $chats
         );
         echo json_encode($return);
         exit;
+    }
+
+    /**
+     * @param int $fromUserId
+     * @param int $toUserId
+     * @return mixed
+     */
+    public function getCountMessagesExchangeBetweenUsers($fromUserId, $toUserId)
+    {
+        $row = Database::select(
+            'count(*) as count',
+            $this->table,
+            array(
+                'where' => array(
+                    '(from_user = ? AND to_user = ?) OR (from_user = ? AND to_user = ?) ' => [
+                        $fromUserId,
+                        $toUserId,
+                        $toUserId,
+                        $fromUserId
+                    ]
+                )
+            ),
+            'first'
+        );
+
+        return $row['count'];
+    }
+
+    /**
+     * @param int $fromUserId
+     * @param int $toUserId
+     * @param int $visibleMessages
+     * @param int $previousMessageCount messages to show
+     * @return array
+     */
+    public function getPreviousMessages(
+        $fromUserId,
+        $toUserId,
+        $visibleMessages = 1,
+        $previousMessageCount = 5
+    ) {
+        $currentUserId = api_get_user_id();
+        $toUserId = (int) $toUserId;
+        $fromUserId = (int) $fromUserId;
+        $previousMessageCount = (int) $previousMessageCount;
+        if (empty($toUserId) || empty($fromUserId)) {
+            return [];
+        }
+        $total = self::getCountMessagesExchangeBetweenUsers(
+            $fromUserId,
+            $toUserId
+        );
+        $show = $total - $visibleMessages;
+        $from = $show - $previousMessageCount;
+        if ($from < 0) {
+            return [];
+        }
+
+        $sql = "SELECT * FROM ".$this->table."
+                WHERE 
+                    (
+                        to_user = $toUserId AND 
+                        from_user = $fromUserId)
+                    OR
+                    (
+                        from_user = $toUserId AND 
+                        to_user =  $fromUserId
+                    )  
+                ORDER BY id ASC
+                LIMIT $from, $previousMessageCount
+                ";
+        $result = Database::query($sql);
+        $rows = Database::store_result($result);
+        $fromUserInfo = api_get_user_info($fromUserId, true);
+        $toUserInfo = api_get_user_info($toUserId, true);
+        $users = [
+            $fromUserId => $fromUserInfo,
+            $toUserId => $toUserInfo,
+        ];
+        $items = [];
+        $rows = array_reverse($rows);
+        foreach ($rows as $chat) {
+            $fromUserId = $chat['from_user'];
+            $userInfo = $users[$fromUserId];
+            $username = $userInfo['complete_name'];
+            if ($currentUserId == $fromUserId) {
+                $username = get_lang('Me');
+            }
+
+            $chat['message'] = Security::remove_XSS($chat['message']);
+            $item = array(
+                'id' => $chat['id'],
+                's' => '0',
+                'f' => $fromUserId,
+                'm' => $chat['message'],
+                'username' => $username,
+                'user_info' => [
+                    'username' => $username,
+                    'online' => $userInfo['user_is_online'],
+                    'avatar' => $userInfo['avatar_small'],
+                    'user_id' => $userInfo['user_id']
+                ],
+                'date' => api_strtotime($chat['sent'], 'UTC')
+            );
+            $items[] = $item;
+            $_SESSION['openChatBoxes'][$fromUserId] = api_strtotime($chat['sent'], 'UTC');
+        }
+        //array_unshift($_SESSION['chatHistory'][$fromUserId]['items'], $items);
+
+        return $items;
     }
 
     /**
@@ -99,33 +246,50 @@ class Chat extends Model
         }
 
         $items = array();
-        foreach ($chat_list as $from_user_id => $rows) {
+        foreach ($chat_list as $fromUserId => $rows) {
             $rows = $rows['items'];
-            $user_info = api_get_user_info($from_user_id, true);
+            $user_info = api_get_user_info($fromUserId, true);
+            $count = $this->getCountMessagesExchangeBetweenUsers(
+                $fromUserId,
+                $to_user_id
+            );
+
+            $chatItems = self::getLatestChat($fromUserId, $to_user_id, 5);
 
             // Cleaning tsChatBoxes
-            unset($_SESSION['tsChatBoxes'][$from_user_id]);
+            unset($_SESSION['tsChatBoxes'][$fromUserId]);
 
             foreach ($rows as $chat) {
-                $chat['message'] = Security::remove_XSS($chat['message']);
+                /*$chat['message'] = Security::remove_XSS($chat['message']);
                 $item = array(
                     's' => '0',
-                    'f' => $from_user_id,
+                    'f' => $fromUserId,
                     'm' => $chat['message'],
                     'username' => $user_info['complete_name'],
                     'date' => api_strtotime($chat['sent'], 'UTC'),
                     'id' => $chat['id']
                 );
-                $items[$from_user_id]['items'][] = $item;
-                $items[$from_user_id]['user_info']['user_name'] = $user_info['complete_name'];
-                $items[$from_user_id]['user_info']['online'] = $user_info['user_is_online'];
-                $items[$from_user_id]['user_info']['avatar'] = $user_info['avatar_small'];
-                $_SESSION['openChatBoxes'][$from_user_id] = api_strtotime($chat['sent'], 'UTC');
+                $items[$fromUserId]['items'][] = $item;
+                $items[$fromUserId]['total_messages'] = $count;
+                $items[$fromUserId]['user_info']['user_name'] = $user_info['complete_name'];
+                $items[$fromUserId]['user_info']['online'] = $user_info['user_is_online'];
+                $items[$fromUserId]['user_info']['avatar'] = $user_info['avatar_small'];*/
+                $_SESSION['openChatBoxes'][$fromUserId] = api_strtotime($chat['sent'], 'UTC');
             }
-            $_SESSION['chatHistory'][$from_user_id]['items'][] = $item;
-            $_SESSION['chatHistory'][$from_user_id]['user_info']['user_name'] = $user_info['complete_name'];
-            $_SESSION['chatHistory'][$from_user_id]['user_info']['online'] = $user_info['user_is_online'];
-            $_SESSION['chatHistory'][$from_user_id]['user_info']['avatar'] = $user_info['avatar_small'];
+
+            $items[$fromUserId]['items'] = $chatItems;
+            $items[$fromUserId]['total_messages'] = $count;
+            $items[$fromUserId]['user_info']['user_name'] = $user_info['complete_name'];
+            $items[$fromUserId]['user_info']['online'] = $user_info['user_is_online'];
+            $items[$fromUserId]['user_info']['avatar'] = $user_info['avatar_small'];
+            $items[$fromUserId]['user_info']['user_id'] = $user_info['user_id'];
+
+            $_SESSION['chatHistory'][$fromUserId]['items'] = $chatItems;
+            $_SESSION['chatHistory'][$fromUserId]['total_messages'] = $count;
+            $_SESSION['chatHistory'][$fromUserId]['user_info']['user_id'] = $user_info['user_id'];
+            $_SESSION['chatHistory'][$fromUserId]['user_info']['user_name'] = $user_info['complete_name'];
+            $_SESSION['chatHistory'][$fromUserId]['user_info']['online'] = $user_info['user_is_online'];
+            $_SESSION['chatHistory'][$fromUserId]['user_info']['avatar'] = $user_info['avatar_small'];
         }
 
         if (!empty($_SESSION['openChatBoxes'])) {
@@ -156,7 +320,7 @@ class Chat extends Model
                 WHERE to_user = '".$to_user_id."' AND recd = 0";
         Database::query($sql);
 
-        echo json_encode(array('items' => $items));
+        echo json_encode(['items' => $items]);
     }
 
     /**
@@ -188,7 +352,7 @@ class Chat extends Model
 
     /**
      * Sends a message from one user to another user
-     * @param int $from_user_id The ID of the user sending the message
+     * @param int $fromUserId The ID of the user sending the message
      * @param int $to_user_id The ID of the user receiving the message
      * @param string $message Message
      * @param boolean $printResult Optional. Whether print the result
@@ -197,14 +361,14 @@ class Chat extends Model
      * @return void Prints "1"
      */
     public function send(
-        $from_user_id,
+        $fromUserId,
         $to_user_id,
         $message,
         $printResult = true,
         $sanitize = true
     ) {
         $user_friend_relation = SocialManager::get_relation_between_contacts(
-            $from_user_id,
+            $fromUserId,
             $to_user_id
         );
 
@@ -225,25 +389,26 @@ class Chat extends Model
             }
             $item = array(
                 "s" => "1",
-                "f" => $from_user_id,
+                "f" => $fromUserId,
                 "m" => $messagesan,
                 'date' => api_strtotime($now, 'UTC'),
-                "username" => get_lang('Me')
+                'username' => get_lang('Me')
             );
             $_SESSION['chatHistory'][$to_user_id]['items'][] = $item;
             $_SESSION['chatHistory'][$to_user_id]['user_info']['user_name'] = $user_info['complete_name'];
             $_SESSION['chatHistory'][$to_user_id]['user_info']['online'] = $user_info['user_is_online'];
             $_SESSION['chatHistory'][$to_user_id]['user_info']['avatar'] = $user_info['avatar_small'];
+            $_SESSION['chatHistory'][$to_user_id]['user_info']['user_id'] = $user_info['user_id'];
 
             unset($_SESSION['tsChatBoxes'][$to_user_id]);
 
             $params = array();
-            $params['from_user'] = intval($from_user_id);
+            $params['from_user'] = intval($fromUserId);
             $params['to_user'] = intval($to_user_id);
             $params['message'] = $message;
             $params['sent'] = api_get_utc_datetime();
 
-            if (!empty($from_user_id) && !empty($to_user_id)) {
+            if (!empty($fromUserId) && !empty($to_user_id)) {
                 $this->save($params);
             }
 

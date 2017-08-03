@@ -134,11 +134,11 @@ function choose_image($file_name)
         $type['freemind'] = array('mm');
 
         $image['word'] = 'word.gif';
-        $image['web'] = 'file_html.gif';
-        $image['image'] = 'file_image.gif';
+        $image['web'] = 'file_html.png';
+        $image['image'] = 'file_image.png';
         $image['image_vect'] = 'file_svg.png';
         $image['audio'] = 'file_sound.gif';
-        $image['video'] = 'film.gif';
+        $image['video'] = 'film.png';
         $image['excel'] = 'excel.gif';
         $image['compressed'] = 'file_zip.gif';
         $image['code'] = 'icons/22/mime_code.png';
@@ -179,31 +179,31 @@ function choose_image($file_name)
 function chooseFolderIcon($folderPath)
 {
     if ($folderPath == '/shared_folder') {
-        return 'folder_users.gif';
+        return 'folder_users.png';
     }
 
     if (strstr($folderPath, 'shared_folder_session_')) {
-        return 'folder_users.gif';
+        return 'folder_users.png';
     }
 
     switch ($folderPath) {
         case '/audio':
-            return 'folder_audio.gif';
+            return 'folder_audio.png';
         case '/flash':
-            return 'folder_flash.gif';
+            return 'folder_flash.png';
         case '/images':
-            return 'folder_images.gif';
+            return 'folder_images.png';
         case '/video':
-            return 'folder_video.gif';
+            return 'folder_video.png';
         case '/images/gallery':
-            return 'folder_gallery.gif';
+            return 'folder_gallery.png';
         case '/chat_files':
-            return 'folder_chat.gif';
+            return 'folder_chat.png';
         case '/learning_path':
-            return 'folder_learningpath.gif';
+            return 'folder_learningpath.png';
     }
 
-    return 'folder_document.gif';
+    return 'folder_document.png';
 }
 
 /**

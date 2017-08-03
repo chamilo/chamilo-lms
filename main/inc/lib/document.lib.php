@@ -5697,38 +5697,38 @@ class DocumentManager
                 }
                 $icon = 'folder_users.png';
             } else {
-                $icon = 'folder_document.gif';
+                $icon = 'folder_document.png';
 
                 if ($path == '/audio') {
-                    $icon = 'folder_audio.gif';
+                    $icon = 'folder_audio.png';
                     if ($isAllowedToEdit) {
                         $basename = get_lang('HelpDefaultDirDocuments');
                     } else {
                         $basename = get_lang('Audio');
                     }
                 } elseif ($path == '/flash') {
-                    $icon = 'folder_flash.gif';
+                    $icon = 'folder_flash.png';
                     if ($isAllowedToEdit) {
                         $basename = get_lang('HelpDefaultDirDocuments');
                     } else {
                         $basename = get_lang('Flash');
                     }
                 } elseif ($path == '/images') {
-                    $icon = 'folder_images.gif';
+                    $icon = 'folder_images.png';
                     if ($isAllowedToEdit) {
                         $basename = get_lang('HelpDefaultDirDocuments');
                     } else {
                         $basename = get_lang('Images');
                     }
                 } elseif ($path == '/video') {
-                    $icon = 'folder_video.gif';
+                    $icon = 'folder_video.png';
                     if ($isAllowedToEdit) {
                         $basename = get_lang('HelpDefaultDirDocuments');
                     } else {
                         $basename = get_lang('Video');
                     }
                 } elseif ($path == '/images/gallery') {
-                    $icon = 'folder_gallery.gif';
+                    $icon = 'folder_gallery.png';
                     if ($isAllowedToEdit) {
                         $basename = get_lang('HelpDefaultDirDocuments');
                     } else {
@@ -5742,7 +5742,7 @@ class DocumentManager
                         $basename = get_lang('ChatFiles');
                     }
                 } elseif ($path == '/learning_path') {
-                    $icon = 'folder_learningpath.gif';
+                    $icon = 'folder_learningpath.png';
                     if ($isAllowedToEdit) {
                         $basename = get_lang('HelpFolderLearningPaths');
                     } else {
@@ -5756,7 +5756,7 @@ class DocumentManager
             return Display::img($icon, $basename, array(), false);
         }
 
-        return Display::return_icon($icon, $basename, array(), ICON_SIZE_MEDIUM);
+        return Display::return_icon($icon, $basename, array(), ICON_SIZE_SMALL);
     }
 
     /**

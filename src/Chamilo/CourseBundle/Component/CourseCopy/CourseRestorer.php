@@ -171,7 +171,10 @@ class CourseRestorer
                 }
             }
             $sample_text = implode("\n", $sample_text);
-            $this->course->encoding = api_detect_encoding($sample_text, $course_info['language']);
+            $this->course->encoding = api_detect_encoding(
+                $sample_text,
+                $course_info['language']
+            );
         }
 
         // Encoding conversion of the course, if it is needed.
@@ -179,7 +182,11 @@ class CourseRestorer
 
         foreach ($this->tools_to_restore as $tool) {
             $function_build = 'restore_'.$tool;
-            $this->$function_build($session_id, $respect_base_content, $destination_course_code);
+            $this->$function_build(
+                $session_id,
+                $respect_base_content,
+                $destination_course_code
+            );
         }
 
         if ($update_course_settings) {
@@ -253,7 +260,6 @@ class CourseRestorer
         $params['visibility'] = $course_info['visibility'];
         $params['department_name'] = $course_info['department_name'];
         $params['department_url'] = $course_info['department_url'];
-
         $params['category_code'] = $course_info['categoryCode'];
         $params['subscribe'] = $course_info['subscribe_allowed'];
         $params['unsubscribe'] = $course_info['unsubscribe'];
@@ -1356,7 +1362,9 @@ class CourseRestorer
             $new_id = Database::insert($link_cat_table, $params);
 
             if ($new_id) {
-                $sql = "UPDATE $link_cat_table SET id = iid WHERE iid = $new_id";
+                $sql = "UPDATE $link_cat_table 
+                        SET id = iid 
+                        WHERE iid = $new_id";
                 Database::query($sql);
                 api_set_default_visibility($new_id, TOOL_LINK_CATEGORY);
             }

@@ -2587,7 +2587,7 @@ class DocumentManager
      *
      * @return string	new content html with replaced urls or return false if content is not a string
      */
-    public static function replace_urls_inside_content_html_from_copy_course(
+    public static function replaceUrlWithNewCourseCode(
         $content_html,
         $origin_course_code,
         $destination_course_directory,
@@ -2621,7 +2621,6 @@ class DocumentManager
 
         if (!empty($orig_source_html)) {
             foreach ($orig_source_html as $source) {
-
                 // Get information about source url
                 $real_orig_url = $source[0]; // url
                 $scope_url = $source[1]; // scope (local, remote)

@@ -7602,6 +7602,8 @@ class SessionManager
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $sessionCourseUserTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_session_field_values = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $tbl_session_field_options = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
 
         $where = 'WHERE 1 = 1 ';
         $user_id = api_get_user_id();
@@ -7612,6 +7614,7 @@ class SessionManager
             $where .= " WHERE s.session_admin_id = $user_id ";
         }
 
+        $extraFieldTables = '';
         if (!empty($options['where'])) {
             $options['where'] = str_replace('course_title', 'c.title', $options['where']);
             $options['where'] = str_replace("( session_active = '0' )", '1=1', $options['where']);
@@ -7634,6 +7637,7 @@ class SessionManager
 
                 foreach ($options['extra'] as $extra) {
                     $options['where'] = str_replace($extra['field'], 'fv.field_id = '.$extra['id'].' AND fvo.option_value', $options['where']);
+                    $extraFieldTables = "$tbl_session_field_values fv, $tbl_session_field_options fvo, ";
                 }
             }
             $where .= ' AND '.$options['where'];
@@ -7648,7 +7652,7 @@ class SessionManager
                             (s.access_start_date <= '$today' AND ('0000-00-00 00:00:00' = s.access_end_date OR s.access_end_date IS NULL )) OR
                             ('$today' < s.access_end_date AND ('0000-00-00 00:00:00' = s.access_start_date OR s.access_start_date IS NULL) )
                         , 1, 0) as session_active
-                       FROM $tbl_session s
+                       FROM $extraFieldTables $tbl_session s
                        LEFT JOIN  $tbl_session_category sc
                        ON s.session_category_id = sc.id
                        INNER JOIN $tbl_user u

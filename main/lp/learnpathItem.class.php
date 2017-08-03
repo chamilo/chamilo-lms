@@ -789,9 +789,14 @@ class learnpathItem
             error_log('learnpathItem::get_max()', 0);
         }
         if ($this->type == 'sco') {
-            if (isset($this->view_max_score) && !empty($this->view_max_score) && $this->view_max_score > 0) {
+            if (isset($this->view_max_score) &&
+                !empty($this->view_max_score) &&
+                $this->view_max_score > 0
+            ) {
                 return $this->view_max_score;
-            } elseif (isset($this->view_max_score) && $this->view_max_score === '') {
+            } elseif (isset($this->view_max_score) &&
+                $this->view_max_score === ''
+            ) {
                 return $this->view_max_score;
             } else {
                 if (!empty($this->max_score)) {
@@ -996,10 +1001,10 @@ class learnpathItem
      * objects, java applets, or any other stuff included in the source of the
      * current item. The current item is expected to be an HTML file. If it
      * is not, then the function will return and empty list.
-     * @param    string   $type type (one of the Chamilo tools) - optional (otherwise takes the current item's type)
-     * @param    string   $abs_path absolute file path - optional (otherwise takes the current item's path)
-     * @param    int      $recursivity level of recursivity we're in
-     * @return   array    List of file paths.
+     * @param string $type (one of the Chamilo tools) - optional (otherwise takes the current item's type)
+     * @param string $abs_path absolute file path - optional (otherwise takes the current item's path)
+     * @param int $recursivity level of recursivity we're in
+     * @return array List of file paths.
      * An additional field containing 'local' or 'remote' helps determine if
      * the file should be copied into the zip or just linked
      */
@@ -2339,7 +2344,6 @@ class learnpathItem
                                     return $mycond;
                                 }
                             } else {
-
                                 // Nothing found there either. Now return the
                                 //  value of the corresponding resource completion status.
                                 if (self::DEBUG > 1) {
@@ -3097,10 +3101,12 @@ class learnpathItem
     }
 
     /**
-     * Sets the prevent_reinit attribute. This is based on the LP value and is set at creation time for
-     * each learnpathItem. It is a (bad?) way of avoiding a reference to the LP when saving an item.
-     * @param   integer 1 for "prevent", 0 for "don't prevent" saving freshened values (new "not attempted" status etc)
-     * @return  void
+     * Sets the prevent_reinit attribute.
+     * This is based on the LP value and is set at creation time for
+     * each learnpathItem. It is a (bad?) way of avoiding
+     * a reference to the LP when saving an item.
+     * @param int 1 for "prevent", 0 for "don't prevent"
+     * saving freshened values (new "not attempted" status etc)
      */
     public function set_prevent_reinit($prevent)
     {
@@ -3271,7 +3277,6 @@ class learnpathItem
      * Sets the item viewing time in a usable form, given that SCORM packages
      * often give it as 00:00:00.0000
      * @param    string    Time as given by SCORM
-     * @return  void
      */
     public function set_time($scorm_time, $format = 'scorm')
     {
@@ -3322,7 +3327,6 @@ class learnpathItem
     /**
      * Sets the item's title
      * @param    string  $string  Title
-     * @return  void
      */
     public function set_title($string = '')
     {
@@ -3539,7 +3543,7 @@ class learnpathItem
                 WHERE c_id = ' . $course_id.'
                     AND lp_item_id="' . $this->db_id.'"
                     AND lp_view_id="' . $this->view_id.'"
-                    AND view_count="' . $this->attempt_id.'" ;';
+                    AND view_count="' . $this->attempt_id.'"';
         Database::query($sql);
     }
 

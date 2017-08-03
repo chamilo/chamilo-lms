@@ -1439,12 +1439,12 @@ abstract class Question
 
         // Using the same method used in the course copy to transform URLs
         if ($this->course['id'] != $course_info['id']) {
-            $description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+            $description = DocumentManager::replaceUrlWithNewCourseCode(
                 $description,
                 $this->course['code'],
                 $course_info['id']
             );
-            $question = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+            $question = DocumentManager::replaceUrlWithNewCourseCode(
                 $question,
                 $this->course['code'],
                 $course_info['id']

@@ -25,7 +25,6 @@ class Category implements GradebookItem
     private $generateCertificates;
     private $isRequirement;
     public $studentList;
-
     public $evaluations;
     public $links;
     public $subCategories;
@@ -276,7 +275,6 @@ class Category implements GradebookItem
     {
         if ($from_db) {
             $cat_id = $this->get_id();
-
             $gradebook = new Gradebook();
             $skills = $gradebook->get_skills_by_gradebook($cat_id);
         } else {
@@ -463,7 +461,6 @@ class Category implements GradebookItem
         }
 
         $result = Database::query($sql);
-
         $categories = array();
         if (Database::num_rows($result) > 0) {
             $categories = self::create_category_objects_from_sql_result(
@@ -666,7 +663,10 @@ class Category implements GradebookItem
             $parent_id = $this->get_parent_id();
             $grade_model_id = $this->get_grade_model_id();
             if ($parent_id == 0) {
-                if (isset($grade_model_id) && !empty($grade_model_id) && $grade_model_id != '-1') {
+                if (isset($grade_model_id) &&
+                    !empty($grade_model_id) &&
+                    $grade_model_id != '-1'
+                ) {
                     $obj = new GradeModel();
                     $components = $obj->get_components($grade_model_id);
                     $default_weight_setting = api_get_setting('gradebook_default_weight');

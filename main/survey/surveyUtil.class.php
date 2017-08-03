@@ -500,7 +500,12 @@ class SurveyUtil
 
         echo '<div class="actions">';
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'">'.
-            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ReportingOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon(
+                'back.png',
+                get_lang('BackTo').' '.get_lang('ReportingOverview'),
+                '',
+                ICON_SIZE_MEDIUM
+            ).'</a>';
         echo '</div>';
 
         if ($survey_data['number_of_questions'] > 0) {
@@ -531,12 +536,11 @@ class SurveyUtil
 			        WHERE
 			            c_id = $course_id AND
                         survey_id='".Database::escape_string($_GET['survey_id'])."' AND
-                        type<>'pagebreak' AND type<>'comment'
+                        type <>'pagebreak' AND 
+                        type <>'comment'
                     ORDER BY sort ASC
                     $limitStatement";
             $result = Database::query($sql);
-            //$question = Database::fetch_array($result);
-
             while ($row = Database::fetch_array($result)) {
                 $questions[$row['question_id']] = $row;
             }
@@ -702,7 +706,6 @@ class SurveyUtil
         // Database table definitions
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-
         $course_id = api_get_course_int_id();
 
         // Getting the options
@@ -718,7 +721,8 @@ class SurveyUtil
         }
 
         // Getting the answers
-        $sql = "SELECT *, count(answer_id) as total FROM $table_survey_answer
+        $sql = "SELECT *, count(answer_id) as total 
+                FROM $table_survey_answer
                 WHERE
                    c_id = $course_id AND
                    survey_id='".Database::escape_string($_GET['survey_id'])."' AND
@@ -847,7 +851,9 @@ class SurveyUtil
 
         $display_extra_user_fields = false;
         if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter'] ||
-                isset($_POST['export_report']) && $_POST['export_report']) || !empty($_POST['fields_filter'])) {
+                isset($_POST['export_report']) && $_POST['export_report']) ||
+            !empty($_POST['fields_filter'])
+        ) {
             // Show user fields section with a big th colspan that spans over all fields
             $extra_user_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false, true);
             $num = count($extra_user_fields);
@@ -1140,7 +1146,7 @@ class SurveyUtil
                     count(options.question_option_id) as number_of_options
 				FROM $table_survey_question questions
                 LEFT JOIN $table_survey_question_option options
-				ON questions.question_id = options.question_id  AND options.c_id = $course_id
+				ON questions.question_id = options.question_id AND options.c_id = $course_id
 				WHERE
 				    questions.survey_id = '".intval($_GET['survey_id'])."' AND
                     questions.c_id = $course_id
@@ -1287,7 +1293,6 @@ class SurveyUtil
         if ($survey_data['anonymous'] == 0) {
             if (intval($user) !== 0) {
                 $userInfo = api_get_user_info($user);
-
                 if (!empty($userInfo)) {
                     $user_displayed = $userInfo['complete_name_with_username'];
                 } else {
@@ -1627,7 +1632,10 @@ class SurveyUtil
                         $my_answers_of_user = isset($answers_of_user[$question_id]) ? $answers_of_user[$question_id] : [];
                         $key = array_keys($my_answers_of_user);
                         if (isset($key[0]) && substr($key[0], 0, 4) == 'open') {
-                            $return[] = api_html_entity_decode(strip_tags($answers_of_user[$question_id][$key[0]]['option_id']), ENT_QUOTES);
+                            $return[] = api_html_entity_decode(
+                                strip_tags($answers_of_user[$question_id][$key[0]]['option_id']),
+                                ENT_QUOTES
+                            );
                         } elseif (!empty($answers_of_user[$question_id][$option_id])) {
                             if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
                                 $return[] = $answers_of_user[$question_id][$option_id]['value'];
@@ -1646,9 +1654,12 @@ class SurveyUtil
     }
 
     /**
-     * This function displays the comparative report which allows you to compare two questions
-     * A comparative report creates a table where one question is on the x axis and a second question is on the y axis.
-     * In the intersection is the number of people who have answerd positive on both options.
+     * This function displays the comparative report which
+     * allows you to compare two questions
+     * A comparative report creates a table where one question
+     * is on the x axis and a second question is on the y axis.
+     * In the intersection is the number of people who have
+     * answered positive on both options.
      *
      * @return	string	HTML code
      *
@@ -1903,8 +1914,10 @@ class SurveyUtil
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
         $sql = "SELECT * FROM $table_survey_answer
-                WHERE c_id = $course_id AND survey_id='".intval($survey_id)."'
-                AND question_id='".intval($question_id)."'
+                WHERE 
+                  c_id = $course_id AND 
+                  survey_id='".intval($survey_id)."' AND 
+                  question_id='".intval($question_id)."'
                 ORDER BY USER ASC";
         $result = Database::query($sql);
         $return = [];
@@ -1956,7 +1969,9 @@ class SurveyUtil
                 // Check if the user has given $option_x as answer
                 if (in_array($check_x, $answers)) {
                     // Check if the user has given $option_y as an answer
-                    if (!is_null($answers_y[$user]) && in_array($check_y, $answers_y[$user])) {
+                    if (!is_null($answers_y[$user]) &&
+                        in_array($check_y, $answers_y[$user])
+                    ) {
                         $counter++;
                     }
                 }
@@ -1988,7 +2003,7 @@ class SurveyUtil
 					survey_invitation.invitation_code as col2,
 					survey_invitation.invitation_date as col3,
 					'' as col4
-					FROM $table_survey_invitation survey_invitation
+                FROM $table_survey_invitation survey_invitation
                 LEFT JOIN $table_user user
                 ON survey_invitation.user = user.user_id
                 WHERE
@@ -2063,7 +2078,8 @@ class SurveyUtil
     }
 
     /**
-     * This function saves all the invitations of course users and additional users in the database
+     * This function saves all the invitations of course users
+     * and additional users in the database
      * and sends the invitations by email
      *
      * @param $users_array Users $array array can be both a list of course uids AND a list of additional emailaddresses
@@ -2213,7 +2229,8 @@ class SurveyUtil
         ) {
             $insertId = Database::insert($table, $params);
             if ($insertId) {
-                $sql = "UPDATE $table SET survey_invitation_id = $insertId
+                $sql = "UPDATE $table 
+                        SET survey_invitation_id = $insertId
                         WHERE iid = $insertId";
                 Database::query($sql);
             }
@@ -2276,7 +2293,7 @@ class SurveyUtil
         }
 
         // Sending the mail
-        $sender_name  = api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
+        $sender_name = api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
         $sender_email = $_user['mail'];
         $sender_user_id = api_get_user_id();
 
@@ -2871,7 +2888,10 @@ class SurveyUtil
             $array[8] = $survey[8];
 
             if ($mandatoryAllowed) {
-                $efvMandatory = $efv->get_values_by_handler_and_field_variable($survey[9], 'is_mandatory');
+                $efvMandatory = $efv->get_values_by_handler_and_field_variable(
+                    $survey[9],
+                    'is_mandatory'
+                );
 
                 $array[9] = $efvMandatory ? $efvMandatory['value'] : 0;
                 $array[10] = $survey[9];
@@ -2950,7 +2970,10 @@ class SurveyUtil
         while ($survey = Database::fetch_array($res)) {
             if ($mandatoryAllowed) {
                 $survey['col10'] = $survey['col9'];
-                $efvMandatory = $efv->get_values_by_handler_and_field_variable($survey['col9'], 'is_mandatory');
+                $efvMandatory = $efv->get_values_by_handler_and_field_variable(
+                    $survey['col9'],
+                    'is_mandatory'
+                );
                 $survey['col9'] = $efvMandatory['value'];
             }
             $surveys[] = $survey;
@@ -3062,7 +3085,8 @@ class SurveyUtil
     }
 
     /**
-     * Creates a multi array with the user fields that we can show. We look the visibility with the api_get_setting function
+     * Creates a multi array with the user fields that we can show.
+     * We look the visibility with the api_get_setting function
      * The username is always NOT able to change it.
      * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification
      * @return array  array[value_name][name], array[value_name][visibilty]
@@ -3234,7 +3258,8 @@ class SurveyUtil
 		            answered="1" AND 
 		            c_id = '.$course_id;
 
-        $sql2 = 'SELECT COUNT(*) as count FROM '.$table_survey.' s 
+        $sql2 = 'SELECT COUNT(*) as count 
+                 FROM '.$table_survey.' s 
                  INNER JOIN '.$table_survey_question.' q 
                  ON s.survey_id=q.survey_id
 				 WHERE 

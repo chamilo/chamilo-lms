@@ -707,4 +707,3 @@ $formModals = $formModalTpl->fetch($template);
 $tpl->assign('form_modals', $formModals);
 $social_layout = $tpl->get_template('social/profile.tpl');
 $tpl->display($social_layout);
-

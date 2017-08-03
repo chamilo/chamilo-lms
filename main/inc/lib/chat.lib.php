@@ -10,7 +10,6 @@ use ChamiloSession as Session;
  */
 class Chat extends Model
 {
-    public $table;
     public $columns = array(
         'id',
         'from_user',
@@ -36,7 +35,7 @@ class Chat extends Model
      * Get user chat status
      * @return int 0 if disconnected, 1 if connected
      */
-    public function get_user_status()
+    public function getUserStatus()
     {
         $status = UserManager::get_extra_user_data_by_field(
             api_get_user_id(),
@@ -57,7 +56,11 @@ class Chat extends Model
     */
     public function setUserStatus($status)
     {
-        UserManager::update_extra_field_value(api_get_user_id(), 'user_chat_status', $status);
+        UserManager::update_extra_field_value(
+            api_get_user_id(),
+            'user_chat_status',
+            $status
+        );
     }
 
     /**
@@ -66,13 +69,11 @@ class Chat extends Model
      */
     public function startSession()
     {
-        $items = array();
-        if (isset($_SESSION['chatHistory'])) {
-            $items = $_SESSION['chatHistory'];
-        }
+        $items = Session::read('chatHistory');
         $return = array(
-            'user_status' => $this->get_user_status(),
+            'user_status' => $this->getUserStatus(),
             'me' => get_lang('Me'),
+            'user_id' => api_get_user_id(),
             'items' => $items
         );
         echo json_encode($return);
@@ -88,12 +89,11 @@ class Chat extends Model
         $to_user_id = api_get_user_id();
 
         $sql = "SELECT * FROM ".$this->table."
-                WHERE to_user = '".intval($to_user_id)."' AND ( recd  = 0 )
+                WHERE to_user = '".intval($to_user_id)."' AND (recd = 0)
                 ORDER BY id ASC";
         $result = Database::query($sql);
 
         $chat_list = array();
-
         while ($chat = Database::fetch_array($result, 'ASSOC')) {
             $chat_list[$chat['from_user']]['items'][] = $chat;
         }
@@ -103,17 +103,17 @@ class Chat extends Model
             $rows = $rows['items'];
             $user_info = api_get_user_info($from_user_id, true);
 
-            //Cleaning tsChatBoxes
+            // Cleaning tsChatBoxes
             unset($_SESSION['tsChatBoxes'][$from_user_id]);
 
             foreach ($rows as $chat) {
                 $chat['message'] = Security::remove_XSS($chat['message']);
-
                 $item = array(
                     's' => '0',
                     'f' => $from_user_id,
                     'm' => $chat['message'],
                     'username' => $user_info['complete_name'],
+                    'date' => api_strtotime($chat['sent'], 'UTC'),
                     'id' => $chat['id']
                 );
                 $items[$from_user_id]['items'][] = $item;
@@ -136,7 +136,11 @@ class Chat extends Model
                     $message = sprintf(get_lang('SentAtX'), $time);
 
                     if ($now > 180) {
-                        $item = array('s' => '2', 'f' => $user_id, 'm' => $message);
+                        $item = array(
+                            's' => '2',
+                            'f' => $user_id,
+                            'm' => $message
+                        );
 
                         if (isset($_SESSION['chatHistory'][$user_id])) {
                             $_SESSION['chatHistory'][$user_id]['items'][] = $item;
@@ -147,7 +151,8 @@ class Chat extends Model
             }
         }
 
-        $sql = "UPDATE ".$this->table." SET recd = 1
+        $sql = "UPDATE ".$this->table." 
+                SET recd = 1
                 WHERE to_user = '".$to_user_id."' AND recd = 0";
         Database::query($sql);
 
@@ -204,10 +209,10 @@ class Chat extends Model
         );
 
         if ($user_friend_relation == USER_RELATION_TYPE_FRIEND) {
+            $now = api_get_utc_datetime();
             $user_info = api_get_user_info($to_user_id, true);
             $this->save_window($to_user_id);
-
-            $_SESSION['openChatBoxes'][$to_user_id] = api_get_utc_datetime();
+            $_SESSION['openChatBoxes'][$to_user_id] = $now;
 
             if ($sanitize) {
                 $messagesan = self::sanitize($message);
@@ -222,6 +227,7 @@ class Chat extends Model
                 "s" => "1",
                 "f" => $from_user_id,
                 "m" => $messagesan,
+                'date' => api_strtotime($now, 'UTC'),
                 "username" => get_lang('Me')
             );
             $_SESSION['chatHistory'][$to_user_id]['items'][] = $item;
@@ -242,12 +248,12 @@ class Chat extends Model
             }
 
             if ($printResult) {
-                echo "1";
+                echo '1';
                 exit;
             }
         } else {
             if ($printResult) {
-                echo "0";
+                echo '0';
                 exit;
             }
         }
@@ -269,7 +275,7 @@ class Chat extends Model
      * Filter chat messages to avoid XSS or other JS
      * @param string $text Unfiltered message
      *
-     * @return string Filterd mssage
+     * @return string Filtered mssage
      */
     public function sanitize($text)
     {
@@ -283,7 +289,7 @@ class Chat extends Model
 
     /**
      * SET Disable Chat
-     * @param boolean status to disable chat
+     * @param boolean $status to disable chat
      * @return void
      */
     public static function setDisableChat($status = true)

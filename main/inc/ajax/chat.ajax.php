@@ -9,6 +9,10 @@ $_dont_save_user_course_access = true;
 
 require_once __DIR__.'/../global.inc.php';
 
+if (api_get_setting('allow_global_chat') == 'false') {
+    exit;
+}
+
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 if (api_is_anonymous()) {
@@ -18,10 +22,6 @@ if (api_is_anonymous()) {
 // Course Chat
 if ($action == 'preview') {
     echo CourseChatUtils::prepareMessage($_REQUEST['message']);
-    exit;
-}
-
-if (api_get_setting('allow_global_chat') == 'false') {
     exit;
 }
 
@@ -94,7 +94,11 @@ switch ($action) {
         echo Display::tag('p', $videoChatLink, ['class' => 'lead']);
         break;
     case 'notify_not_support':
-        $chat->send(api_get_user_id(), $to_user_id, get_lang('TheXUserBrowserDoesNotSupportWebRTC'));
+        $chat->send(
+            api_get_user_id(),
+            $to_user_id,
+            get_lang('TheXUserBrowserDoesNotSupportWebRTC')
+        );
         break;
     default:
         echo '';

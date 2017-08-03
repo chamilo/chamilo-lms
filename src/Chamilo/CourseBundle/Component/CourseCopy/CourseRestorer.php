@@ -548,7 +548,7 @@ class CourseRestorer
                                     if (UTF8_CONVERT) {
                                         $content = utf8_encode($content);
                                     }
-                                    $content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                                    $content = DocumentManager::replaceUrlWithNewCourseCode(
                                         $content,
                                         $this->course->code,
                                         $this->course->destination_path,
@@ -668,7 +668,7 @@ class CourseRestorer
                                             if (UTF8_CONVERT) {
                                                 $content = utf8_encode($content);
                                             }
-                                            $content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                                            $content = DocumentManager::replaceUrlWithNewCourseCode(
                                                 $content,
                                                 $this->course->code,
                                                 $this->course->destination_path,
@@ -731,7 +731,7 @@ class CourseRestorer
                                             if (UTF8_CONVERT) {
                                                 $content = utf8_encode($content);
                                             }
-                                            $content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                                            $content = DocumentManager::replaceUrlWithNewCourseCode(
                                                 $content,
                                                 $this->course->code,
                                                 $this->course->destination_path,
@@ -797,7 +797,7 @@ class CourseRestorer
                                         if (UTF8_CONVERT) {
                                             $content = utf8_encode($content);
                                         }
-                                        $content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                                        $content = DocumentManager::replaceUrlWithNewCourseCode(
                                             $content,
                                             $this->course->code,
                                             $this->course->destination_path,
@@ -873,7 +873,7 @@ class CourseRestorer
                                 if (UTF8_CONVERT) {
                                     $content = utf8_encode($content);
                                 }
-                                $content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                                $content = DocumentManager::replaceUrlWithNewCourseCode(
                                     $content,
                                     $this->course->code,
                                     $this->course->destination_path,
@@ -1076,7 +1076,7 @@ class CourseRestorer
                 $params['forum_id'] = 0;
                 unset($params['iid']);
 
-                $params['forum_comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                $params['forum_comment'] = DocumentManager::replaceUrlWithNewCourseCode(
                     $params['forum_comment'],
                     $this->course->code,
                     $this->course->destination_path,
@@ -1136,7 +1136,7 @@ class CourseRestorer
                 if ($forum_cat && !$forum_cat->is_restored()) {
                     $params = (array) $forum_cat->obj;
                     $params['c_id'] = $this->destination_course_id;
-                    $params['cat_comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                    $params['cat_comment'] = DocumentManager::replaceUrlWithNewCourseCode(
                         $params['cat_comment'],
                         $this->course->code,
                         $this->course->destination_path,
@@ -1240,7 +1240,7 @@ class CourseRestorer
         $params['post_id'] = 0;
         unset($params['iid']);
 
-        $params['post_text'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+        $params['post_text'] = DocumentManager::replaceUrlWithNewCourseCode(
             $params['post_text'],
             $this->course->code,
             $this->course->destination_path,
@@ -1393,7 +1393,7 @@ class CourseRestorer
                             id='".self::DBUTF8escapestring($tool_intro->id)."'";
                 Database::query($sql);
 
-                $tool_intro->intro_text = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                $tool_intro->intro_text = DocumentManager::replaceUrlWithNewCourseCode(
                     $tool_intro->intro_text,
                     $this->course->code,
                     $this->course->destination_path,
@@ -1432,7 +1432,7 @@ class CourseRestorer
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_EVENT] as $id => $event) {
                 // check resources inside html from ckeditor tool and copy correct urls into recipient course
-                $event->content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                $event->content = DocumentManager::replaceUrlWithNewCourseCode(
                     $event->content,
                     $this->course->code,
                     $this->course->destination_path,
@@ -1552,7 +1552,7 @@ class CourseRestorer
                 $title = isset($courseDescription['title']) ? $courseDescription['title'] : '';
 
                 // check resources inside html from ckeditor tool and copy correct urls into recipient course
-                $description_content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                $description_content = DocumentManager::replaceUrlWithNewCourseCode(
                     $content,
                     $this->course->code,
                     $this->course->destination_path,
@@ -1596,7 +1596,7 @@ class CourseRestorer
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_ANNOUNCEMENT] as $id => $announcement) {
                 // check resources inside html from ckeditor tool and copy correct urls into recipient course
-                $announcement->content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                $announcement->content = DocumentManager::replaceUrlWithNewCourseCode(
                     $announcement->content,
                     $this->course->code,
                     $this->course->destination_path,
@@ -1744,7 +1744,7 @@ class CourseRestorer
 
                 if ($id != -1) {
                     // check resources inside html from ckeditor tool and copy correct urls into recipient course
-                    $quiz->description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                    $quiz->description = DocumentManager::replaceUrlWithNewCourseCode(
                         $quiz->description,
                         $this->course->code,
                         $this->course->destination_path,
@@ -1854,7 +1854,7 @@ class CourseRestorer
             $table_options = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
 
             // check resources inside html from ckeditor tool and copy correct urls into recipient course
-            $question->description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+            $question->description = DocumentManager::replaceUrlWithNewCourseCode(
                 $question->description,
                 $this->course->code,
                 $this->course->destination_path,
@@ -1909,7 +1909,7 @@ class CourseRestorer
 
                 foreach ($temp as $index => $answer) {
                     // check resources inside html from ckeditor tool and copy correct urls into recipient course
-                    $answer['answer'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                    $answer['answer'] = DocumentManager::replaceUrlWithNewCourseCode(
                         $answer['answer'],
                         $this->course->code,
                         $this->course->destination_path,
@@ -1917,7 +1917,7 @@ class CourseRestorer
                         $this->course->info['path']
                     );
 
-                    $answer['comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                    $answer['comment'] = DocumentManager::replaceUrlWithNewCourseCode(
                         $answer['comment'],
                         $this->course->code,
                         $this->course->destination_path,
@@ -1958,7 +1958,7 @@ class CourseRestorer
             } else {
                 foreach ($question->answers as $index => $answer) {
                     // check resources inside html from ckeditor tool and copy correct urls into recipient course
-                    $answer['answer'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                    $answer['answer'] = DocumentManager::replaceUrlWithNewCourseCode(
                         $answer['answer'],
                         $this->course->code,
                         $this->course->destination_path,
@@ -1966,7 +1966,7 @@ class CourseRestorer
                         $this->course->info['path']
                     );
 
-                    $answer['comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                    $answer['comment'] = DocumentManager::replaceUrlWithNewCourseCode(
                         $answer['comment'],
                         $this->course->code,
                         $this->course->destination_path,
@@ -2228,7 +2228,7 @@ class CourseRestorer
                 $result_check = Database::query($sql);
 
                 // check resources inside html from ckeditor tool and copy correct urls into recipient course
-                $survey->title = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                $survey->title = DocumentManager::replaceUrlWithNewCourseCode(
                     $survey->title,
                     $this->course->code,
                     $this->course->destination_path,
@@ -2236,7 +2236,7 @@ class CourseRestorer
                     $this->course->info['path']
                 );
 
-                $survey->subtitle = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                $survey->subtitle = DocumentManager::replaceUrlWithNewCourseCode(
                     $survey->subtitle,
                     $this->course->code,
                     $this->course->destination_path,
@@ -2244,7 +2244,7 @@ class CourseRestorer
                     $this->course->info['path']
                 );
 
-                $survey->intro = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                $survey->intro = DocumentManager::replaceUrlWithNewCourseCode(
                     $survey->intro,
                     $this->course->code,
                     $this->course->destination_path,
@@ -2252,7 +2252,7 @@ class CourseRestorer
                     $this->course->info['path']
                 );
 
-                $survey->surveythanks = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                $survey->surveythanks = DocumentManager::replaceUrlWithNewCourseCode(
                     $survey->surveythanks,
                     $this->course->code,
                     $this->course->destination_path,
@@ -2422,7 +2422,7 @@ class CourseRestorer
             $table_ans = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
             // check resources inside html from ckeditor tool and copy correct urls into recipient course
-            $question->survey_question = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+            $question->survey_question = DocumentManager::replaceUrlWithNewCourseCode(
                 $question->survey_question,
                 $this->course->code,
                 $this->course->destination_path,
@@ -2451,7 +2451,7 @@ class CourseRestorer
                 foreach ($question->answers as $index => $answer) {
 
                     // check resources inside html from ckeditor tool and copy correct urls into recipient course
-                    $answer['option_text'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                    $answer['option_text'] = DocumentManager::replaceUrlWithNewCourseCode(
                         $answer['option_text'],
                         $this->course->code,
                         $this->course->destination_path,
@@ -2955,7 +2955,7 @@ class CourseRestorer
                 }
 
                 // check resources inside html from ckeditor tool and copy correct urls into recipient course
-                $glossary->description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                $glossary->description = DocumentManager::replaceUrlWithNewCourseCode(
                     $glossary->description,
                     $this->course->code,
                     $this->course->destination_path,
@@ -3009,7 +3009,7 @@ class CourseRestorer
                 // the sql statement to insert the groups from the old course to the new course
 
                 // check resources inside html from ckeditor tool and copy correct urls into recipient course
-                $wiki->content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                $wiki->content = DocumentManager::replaceUrlWithNewCourseCode(
                     $wiki->content,
                     $this->course->code,
                     $this->course->destination_path,
@@ -3092,7 +3092,7 @@ class CourseRestorer
             foreach ($resources[RESOURCE_THEMATIC] as $id => $thematic) {
 
                 // check resources inside html from ckeditor tool and copy correct urls into recipient course
-                $thematic->params['content'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                $thematic->params['content'] = DocumentManager::replaceUrlWithNewCourseCode(
                     $thematic->params['content'],
                     $this->course->code,
                     $this->course->destination_path,
@@ -3183,7 +3183,7 @@ class CourseRestorer
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_ATTENDANCE] as $id => $obj) {
                 // check resources inside html from ckeditor tool and copy correct urls into recipient course
-                $obj->params['description'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                $obj->params['description'] = DocumentManager::replaceUrlWithNewCourseCode(
                     $obj->params['description'],
                     $this->course->code,
                     $this->course->destination_path,
@@ -3243,7 +3243,7 @@ class CourseRestorer
             foreach ($resources[RESOURCE_WORK] as $obj) {
 
                 // check resources inside html from ckeditor tool and copy correct urls into recipient course
-                $obj->params['description'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                $obj->params['description'] = DocumentManager::replaceUrlWithNewCourseCode(
                     $obj->params['description'],
                     $this->course->code,
                     $this->course->destination_path,

@@ -138,7 +138,7 @@ if (isset($_POST['create_course_category']) &&
     strlen(trim($_POST['title_course_category'])) > 0
 ) {
     if ($ctok == $_POST['sec_token']) {
-        $courses_controller->add_course_category($_POST['title_course_category']);
+        $courses_controller->addCourseCategory($_POST['title_course_category']);
     }
 }
 

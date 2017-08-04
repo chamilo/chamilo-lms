@@ -261,11 +261,11 @@ class CoursesController
     /**
      * Create a category
      * render to listing view
-     * @param   string  Category title
+     * @param string $title
      */
-    public function add_course_category($category_title)
+    public function addCourseCategory($title)
     {
-        $result = $this->model->store_course_category($category_title);
+        $result = $this->model->store_course_category($title);
         if ($result) {
             Display::addFlash(
                 Display::return_message(get_lang('CourseCategoryStored'))

@@ -147,9 +147,10 @@ class Certificate extends Model
      *  Generates an HTML Certificate and fills the path_certificate field in the DB
      *
      * @param array $params
+     * @param bool $sendNotification
      * @return bool|int
      */
-    public function generate($params = array())
+    public function generate($params = array(), $sendNotification = false)
     {
         // The user directory should be set
         if (empty($this->certification_user_path) &&
@@ -167,12 +168,12 @@ class Certificate extends Model
         if (isset($my_category[0]) &&
             $my_category[0]->is_certificate_available($this->user_id)
         ) {
-            $courseId = api_get_course_int_id();
-            $courseInfo = api_get_course_info();
-            $sessionId = api_get_session_id();
+            $courseInfo = api_get_course_info($my_category[0]->get_course_code());
+            $courseId = $courseInfo['real_id'];
+            $sessionId = $my_category[0]->get_session_id();
 
             $skill = new Skill();
-            $skill->add_skill_to_user(
+            $skill->addSkillToUser(
                 $this->user_id,
                 $this->certificate_data['cat_id'],
                 $courseId,
@@ -245,19 +246,20 @@ class Certificate extends Model
                                             $qr_code_filename
                                         );
 
-                                        $subject = get_lang('NotificationCertificateSubject');
-                                        $message = nl2br(get_lang('NotificationCertificateTemplate'));
-                                        $score = $this->certificate_data['score_certificate'];
-
-                                        Certificate::sendNotification(
-                                            $subject,
-                                            $message,
-                                            api_get_user_info($this->user_id),
-                                            $courseInfo,
-                                            [
-                                                'score_certificate' => $score
-                                            ]
-                                        );
+                                        if ($sendNotification) {
+                                            $subject = get_lang('NotificationCertificateSubject');
+                                            $message = nl2br(get_lang('NotificationCertificateTemplate'));
+                                            $score = $this->certificate_data['score_certificate'];
+                                            Certificate::sendNotification(
+                                                $subject,
+                                                $message,
+                                                api_get_user_info($this->user_id),
+                                                $courseInfo,
+                                                [
+                                                    'score_certificate' => $score
+                                                ]
+                                            );
+                                        }
                                     }
                                 }
                             }

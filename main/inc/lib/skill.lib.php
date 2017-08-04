@@ -852,10 +852,14 @@ class Skill extends Model
      * @param int $courseId
      * @param int $sessionId
      */
-    public function add_skill_to_user($user_id, $gradebook_id, $courseId = 0, $sessionId = 0)
-    {
+    public function addSkillToUser(
+        $user_id,
+        $gradebook_id,
+        $courseId = 0,
+        $sessionId = 0
+    ) {
         $skill_gradebook = new SkillRelGradebook();
-        $skill_rel_user  = new SkillRelUser();
+        $skill_rel_user = new SkillRelUser();
 
         $skill_gradebooks = $skill_gradebook->get_all(
             array('where' => array('gradebook_id = ?' => $gradebook_id))

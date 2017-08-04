@@ -2136,7 +2136,7 @@ class Category implements GradebookItem
 
         if ($skillToolEnabled) {
             $skill = new Skill();
-            $skill->add_skill_to_user(
+            $skill->addSkillToUser(
                 $user_id,
                 $category_id,
                 $courseId,

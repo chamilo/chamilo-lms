@@ -78,20 +78,13 @@ if ($filter === 'true') {
 
 $content = '';
 
-$tags = [
-    '((course_title))',
-    '((user_first_name))',
-    '((user_last_name))',
-    '((author_first_name))',
-    '((author_last_name))',
-    '((score))',
-    '((portal_name))'
-];
+$tags = Certificate::notificationTags();
 
 switch ($action) {
     case 'send_notifications':
         $currentUserInfo = api_get_user_info();
-        $originalMessage = isset($_POST['message']) ? $_POST['message'] : '';
+        $message = isset($_POST['message']) ? $_POST['message'] : '';
+        $subject = get_lang('NotificationCertificateSubject');
         if (!empty($originalMessage)) {
             foreach ($certificate_list as $index => $value) {
                 $userInfo = api_get_user_info($value['user_id']);
@@ -103,42 +96,14 @@ switch ($action) {
                     $cat_id
                 );
 
-                $subject = get_lang('NotificationCertificateSubject');
                 foreach ($list as $valueCertificate) {
-                    $replace = [
-                        $courseInfo['title'],
-                        $userInfo['firstname'],
-                        $userInfo['lastname'],
-                        $currentUserInfo['firstname'],
-                        $currentUserInfo['lastname'],
-                        $valueCertificate['score_certificate'],
-                        api_get_setting('Institution')
-                    ];
-                    $message = str_replace($tags, $replace, $originalMessage);
-
-                    MessageManager::send_message(
-                        $userInfo['id'],
+                    Certificate::sendNotification(
                         $subject,
                         $message,
-                        [],
-                        [],
-                        0,
-                        0,
-                        0,
-                        0,
-                        $currentUserInfo['id']
+                        $userInfo,
+                        $courseInfo,
+                        $valueCertificate
                     );
-
-                    $plugin = new AppPlugin();
-                    $smsPlugin = $plugin->getSMSPluginLibrary();
-                    if ($smsPlugin) {
-                        $additionalParameters = array(
-                            'smsType' => SmsPlugin::CERTIFICATE_NOTIFICATION,
-                            'userId' => $userInfo['id'],
-                            'direct_message' => $message
-                        );
-                        $smsPlugin->send($additionalParameters);
-                    }
                 }
             }
             Display::addFlash(Display::return_message(get_lang('Sent')));

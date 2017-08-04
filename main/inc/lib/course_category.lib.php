@@ -1158,6 +1158,11 @@ class CourseCategory
      */
     public static function saveImage($categoryId, $fileData)
     {
+        $categoryInfo = self::getCategoryById($categoryId);
+        if (empty($categoryInfo)) {
+            return;
+        }
+
         if (!empty($fileData['error'])) {
             return;
         }
@@ -1176,7 +1181,31 @@ class CourseCategory
         $image->send_image($fileDir.$fileName);
 
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        Database::update(
+            $table,
+            ['image' => $dirName.$fileName],
+            ['id = ?' => $categoryId]
+        );
+    }
 
-        Database::update($table, ['image' => $dirName.$fileName], ['id = ?' => $categoryId]);
+    /**
+     * @param $categoryId
+     * @param string $description
+     *
+     * @return string
+     */
+    public static function saveDescription($categoryId, $description)
+    {
+        $categoryInfo = self::getCategoryById($categoryId);
+        if (empty($categoryInfo)) {
+            return false;
+        }
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        Database::update(
+            $table,
+            ['description' => $description],
+            ['id = ?' => $categoryId]
+        );
+        return true;
     }
 }

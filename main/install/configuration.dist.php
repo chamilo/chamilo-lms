@@ -572,6 +572,7 @@ $_configuration['score_grade_model'] = [
 //$_configuration['show_simple_session_info'] = true;
 // Show course category list on My Courses page before the courses. Requires a DB change
 //ALTER TABLE course_category ADD image varchar(255) NULL;
+//ALTER TABLE course_category ADD description LONGTEXT NULL;
 //$_configuration['my_courses_list_as_category'] = false;
 // ------
 

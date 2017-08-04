@@ -321,19 +321,19 @@ class ExerciseShowFunctions
 
         $icon = in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION)) ? 'radio' : 'checkbox';
         $icon .= $studentChoice ? '_on' : '_off';
-        $icon .= '.gif';
+        $icon .= '.png';
         $iconAnswer = in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION)) ? 'radio' : 'checkbox';
         $iconAnswer .= $answerCorrect ? '_on' : '_off';
-        $iconAnswer .= '.gif';
+        $iconAnswer .= '.png';
 
         ?>
         <tr>
         <td width="5%">
-            <?php echo Display::return_icon($icon); ?>
+            <?php echo Display::return_icon($icon, null, null, ICON_SIZE_TINY); ?>
         </td>
         <td width="5%">
             <?php if (!$hide_expected_answer) {
-                echo Display::return_icon($iconAnswer);
+                echo Display::return_icon($iconAnswer, null, null, ICON_SIZE_TINY);
             } else {
                 echo "-";
             } ?>

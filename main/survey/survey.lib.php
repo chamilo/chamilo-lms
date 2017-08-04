@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CSurveyInvitation,
-    Doctrine\Common\Collections\Criteria;
+use Chamilo\CourseBundle\Entity\CSurveyInvitation;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * Class SurveyManager
@@ -56,7 +56,6 @@ class SurveyManager
     public static function delete_all_survey_invitations_by_user($user_id)
     {
         $user_id = intval($user_id);
-
         if (empty($user_id)) {
             return false;
         }
@@ -110,17 +109,22 @@ class SurveyManager
      * @param integer $survey_id the id of the survey
      * @param boolean $shared this parameter determines if
      * we have to get the information of a survey from the central (shared) database or from the
-     * 		  course database
+     *          course database
      * @param string course code optional
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      * @assert ('') === false
+     * @return array
      *
      * @todo this is the same function as in create_new_survey.php
      */
-    public static function get_survey($survey_id, $shared = 0, $course_code = '', $simple_return = false)
-    {
+    public static function get_survey(
+        $survey_id,
+        $shared = 0,
+        $course_code = '',
+        $simple_return = false
+    ) {
         // Table definition
         if (!empty($course_code)) {
             $my_course_id = $course_code;
@@ -551,7 +555,6 @@ class SurveyManager
 
             $sql = "UPDATE $table_survey SET survey_id = $return WHERE iid = $return";
             Database::query($sql);
-
         } else {
             $sql = "UPDATE $table_survey SET
                         code 			= '".Database::escape_string($values['survey_code'])."',
@@ -593,7 +596,7 @@ class SurveyManager
         }
 
         $course_info = api_get_course_info_by_id($course_id);
-        $course_id   = $course_info['real_id'];
+        $course_id = $course_info['real_id'];
 
         $table_survey = Database::get_course_table(TABLE_SURVEY);
         $table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
@@ -1204,6 +1207,7 @@ class SurveyManager
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
+     * @return int
      *
      * @todo editing of a shared question
      */
@@ -1264,8 +1268,11 @@ class SurveyManager
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version January 2007
      */
-    public static function move_survey_question($direction, $survey_question_id, $survey_id)
-    {
+    public static function move_survey_question(
+        $direction,
+        $survey_question_id,
+        $survey_id
+    ) {
         // Table definition
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $course_id = api_get_course_int_id();
@@ -1296,10 +1303,12 @@ class SurveyManager
             }
         }
 
-        $sql1 = "UPDATE $table_survey_question SET sort = '".Database::escape_string($question_sort_two)."'
+        $sql1 = "UPDATE $table_survey_question 
+                SET sort = '".Database::escape_string($question_sort_two)."'
 		        WHERE c_id = $course_id AND  question_id='".intval($question_id_one)."'";
         Database::query($sql1);
-        $sql2 = "UPDATE $table_survey_question SET sort = '".Database::escape_string($question_sort_one)."'
+        $sql2 = "UPDATE $table_survey_question 
+                SET sort = '".Database::escape_string($question_sort_one)."'
 		        WHERE c_id = $course_id AND question_id='".intval($question_id_two)."'";
         Database::query($sql2);
     }
@@ -1330,7 +1339,6 @@ class SurveyManager
 		        WHERE $course_condition survey_id='".intval($survey_id)."'";
 
         // Deleting the survey questions
-
         Database::query($sql);
 
         // Deleting all the options of the questions of the survey
@@ -1377,7 +1385,6 @@ class SurveyManager
      * This function deletes a shared survey question from the main database and all its options
      *
      * @param int $question_id the id of the question
-     * @param int $shared
      *
      * @todo delete all the options of this question
      *
@@ -1516,7 +1523,7 @@ class SurveyManager
         $course_id = api_get_course_int_id();
         $course_condition = " c_id = $course_id AND ";
         if ($shared) {
-            $course_condition = "";
+            $course_condition = '';
             $table_survey_question_option = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
         }
 
@@ -1542,15 +1549,18 @@ class SurveyManager
      * @author Julio Montoya
      * @version March 2007
      */
-    public static function delete_survey_question_option($survey_id, $question_id, $shared = false)
-    {
+    public static function delete_survey_question_option(
+        $survey_id,
+        $question_id,
+        $shared = false
+    ) {
         $course_id = api_get_course_int_id();
         $course_condition = " c_id = $course_id AND ";
 
         // Table definitions
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         if ($shared) {
-            $course_condition = "";
+            $course_condition = '';
             $table_survey_question_option = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
         }
 
@@ -1625,8 +1635,11 @@ class SurveyManager
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      */
-    public static function get_people_who_filled_survey($survey_id, $all_user_info = false, $course_id = null)
-    {
+    public static function get_people_who_filled_survey(
+        $survey_id,
+        $all_user_info = false,
+        $course_id = null
+    ) {
         // Database table definition
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -1722,9 +1735,18 @@ class SurveyManager
      *
      * @return string
      */
-    public static function generate_survey_link($survey_id, $course_id, $session_id, $group_id)
-    {
-        $code = self::generate_survey_hash($survey_id, $course_id, $session_id, $group_id);
+    public static function generate_survey_link(
+        $survey_id,
+        $course_id,
+        $session_id,
+        $group_id
+    ) {
+        $code = self::generate_survey_hash(
+            $survey_id,
+            $course_id,
+            $session_id,
+            $group_id
+        );
         return api_get_path(WEB_CODE_PATH).'survey/link.php?h='.$code.'&i='.$survey_id.'&c='.intval($course_id).'&s='.intval($session_id).'&g='.$group_id;
     }
 

@@ -56,7 +56,7 @@ if (empty($course_info)) {
 $course_id = $course_info['real_id'];
 $surveyCode = isset($_GET['scode']) ? Database::escape_string($_GET['scode']) : '';
 
-if ($surveyCode != "") {
+if ($surveyCode != '') {
     // Firstly we check if this survey is ready for anonymous use:
     $sql = "SELECT anonymous FROM $table_survey
             WHERE c_id = $course_id AND code ='".$surveyCode."'";
@@ -99,7 +99,6 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
         // Check availability
         $row = Database :: fetch_array($result, 'ASSOC');
         $tempdata = SurveyManager :: get_survey($row['survey_id']);
-
         check_time_availability($tempdata);
         // Check for double invitation records (insert should be done once)
         $sql = "SELECT user
@@ -129,7 +128,7 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
 $sql = "SELECT * FROM $table_survey_invitation
         WHERE
             c_id = $course_id AND
-            invitation_code = '".Database :: escape_string($invitationcode)."'";
+            invitation_code = '".Database::escape_string($invitationcode)."'";
 $result = Database::query($sql);
 if (Database::num_rows($result) < 1) {
     api_not_allowed(true, get_lang('WrongInvitationCode'));
@@ -154,7 +153,7 @@ if (!isset($_POST['finish_survey']) &&
 $sql = "SELECT * FROM $table_survey
         WHERE
             c_id = $course_id AND
-            code='".Database::escape_string($survey_invitation['survey_code'])."'";
+            code = '".Database::escape_string($survey_invitation['survey_code'])."'";
 $result = Database::query($sql);
 
 if (Database::num_rows($result) > 1) {
@@ -455,7 +454,7 @@ if ($survey_data['form_fields'] != '' &&
     }
 
     if (isset($list['phone']) && $list['phone'] == 1) {
-        //    PHONE
+        // PHONE
         $form->addElement('text', 'phone', get_lang('Phone'), array('size' => 20));
         if (api_get_setting('profile', 'phone') !== 'true') {
             $form->freeze('phone');
@@ -498,7 +497,7 @@ if ($survey_data['form_fields'] != '' &&
 check_time_availability($survey_data);
 
 // Header
-Display :: display_header(get_lang('ToolSurvey'));
+Display::display_header(get_lang('ToolSurvey'));
 
 // Displaying the survey title and subtitle (appears on every page)
 echo '<div class="survey-block">';
@@ -592,7 +591,10 @@ if (isset($_POST['finish_survey'])) {
         $survey_invitation['survey_code']
     );
 
-    SurveyUtil::flagSurveyAsAnswered($survey_invitation['survey_code'], $survey_invitation['c_id']);
+    SurveyUtil::flagSurveyAsAnswered(
+        $survey_invitation['survey_code'],
+        $survey_invitation['c_id']
+    );
 
     if ($course_info) {
         echo Display::toolbarButton(
@@ -604,7 +606,7 @@ if (isset($_POST['finish_survey'])) {
 
     unset($_SESSION['paged_questions']);
     unset($_SESSION['page_questions_sec']);
-    Display :: display_footer();
+    Display::display_footer();
     exit();
 }
 
@@ -626,7 +628,9 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
     if ($survey_data['survey_type'] === '0') {
         if (empty($_SESSION['paged_questions'])) {
             $sql = "SELECT * FROM $table_survey_question
-                    WHERE c_id = $course_id AND survey_id = '".intval($survey_invitation['survey_id'])."'
+                    WHERE
+                        c_id = $course_id AND 
+                        survey_id = '".intval($survey_invitation['survey_id'])."'
                     ORDER BY sort ASC";
             $result = Database::query($sql);
             while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -907,7 +911,6 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                 // 1 determinado
                 // 2 un solo valor
                 // 3 valores iguales
-
                 if ($group_cant > 0) {
                     //echo '$equal_count'.$group_cant;
                     // We only get highest 3
@@ -971,7 +974,6 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                     }
                     $paged_questions = $_SESSION['paged_questions']; // For the sake of pages counting
                     //$paged_questions = $paged_questions_sec; // For the sake of pages counting coming up at display time...
-
                     if ($shuffle == '') {
                         $shuffle = ' BY survey_question.sort, survey_question_option.sort ASC ';
                     }
@@ -1061,7 +1063,6 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                             survey_group_sec1='0' AND
                             survey_group_sec2='0'
                         ORDER ".$order_sql." ";
-                //echo '<br />'; echo '<br />';
                 $result = Database::query($sql);
                 $counter = 0;
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -1081,10 +1082,6 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
             } else {
                 $paged_questions = $_SESSION['paged_questions'];
             }
-
-            //print_r($paged_questions);
-            //print_r($paged_questions);
-            //if (key_exists($_GET['show'], $paged_questions)) {
             $order_sql = $shuffle;
             if ($shuffle == '') {
                 $order_sql = ' BY survey_question.sort, survey_question_option.sort ASC ';
@@ -1094,7 +1091,6 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
             //if ($survey_data['one_question_per_page'] == 0) {
             $val = $_GET['show'];
             //}
-            //echo '<pre>'; print_r($paged_questions); echo $val;
 
             $result = null;
             if ($val != '') {
@@ -1194,7 +1190,14 @@ $p_l = isset($_POST['language']) ? Security::remove_XSS($_POST['language']) : ''
 $add_parameters = isset($_GET['user_id']) ? 'user_id='.intval($_GET['user_id']).'&amp;' : '';
 
 $url = api_get_self().'?'.api_get_cidreq().'&'.$add_parameters.'course='.$g_c.'&invitationcode='.$g_ic.'&show='.$show;
-$form = new FormValidator('question', 'post', $url, null, null, FormValidator::LAYOUT_INLINE);
+$form = new FormValidator(
+    'question',
+    'post',
+    $url,
+    null,
+    null,
+    FormValidator::LAYOUT_INLINE
+);
 $form->addHidden('language', $p_l);
 
 if (isset($questions) && is_array($questions)) {
@@ -1217,13 +1220,28 @@ if ($survey_data['survey_type'] === '0') {
         // The normal survey as always
         if (($show < $numberofpages) || !$_GET['show']) {
             if ($show == 0) {
-                $form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'success');
+                $form->addButton(
+                    'next_survey_page',
+                    get_lang('StartSurvey'),
+                    'arrow-right',
+                    'success'
+                );
             } else {
-                $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right', 'success');
+                $form->addButton(
+                    'next_survey_page',
+                    get_lang('Next'),
+                    'arrow-right',
+                    'success'
+                );
             }
         }
         if ($show >= $numberofpages && $_GET['show']) {
-            $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right', 'success');
+            $form->addButton(
+                'finish_survey',
+                get_lang('FinishSurvey'),
+                'arrow-right',
+                'success'
+            );
         }
     } else {
         // The normal survey as always but with the form profile
@@ -1231,14 +1249,29 @@ if ($survey_data['survey_type'] === '0') {
             $numberofpages = count($paged_questions);
             if (($show < $numberofpages) || !$_GET['show']) { //$show = $_GET['show'] + 1
                 if ($show == 0) {
-                    $form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'success');
+                    $form->addButton(
+                        'next_survey_page',
+                        get_lang('StartSurvey'),
+                        'arrow-right',
+                        'success'
+                    );
                 } else {
-                    $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right', 'success');
+                    $form->addButton(
+                        'next_survey_page',
+                        get_lang('Next'),
+                        'arrow-right',
+                        'success'
+                    );
                 }
             }
 
             if ($show >= $numberofpages && $_GET['show']) {
-                $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right', 'success');
+                $form->addButton(
+                    'finish_survey',
+                    get_lang('FinishSurvey'),
+                    'arrow-right',
+                    'success'
+                );
             }
         }
     }
@@ -1248,7 +1281,6 @@ if ($survey_data['survey_type'] === '0') {
         if (!empty($paged_questions_sec) && count($paged_questions_sec) > 0) {
             // In case we're in the second phase, also sum the second group questions
             $numberofpages += count($paged_questions_sec);
-            //echo 'pagesec :';
         } else {
             // We need this variable only if personality == 1
             unset($_SESSION['page_questions_sec']);
@@ -1301,17 +1333,30 @@ $form->addHtml('</div>');
 $form->display();
 
 // Footer
-Display :: display_footer();
+Display::display_footer();
 
 /**
  * Check whether this survey has ended. If so, display message and exit rhis script
  */
-function check_time_availability($surv_data) {
-
-    $start_date = mktime(0, 0, 0, substr($surv_data['start_date'], 5, 2), substr($surv_data['start_date'], 8, 2), substr($surv_data['start_date'], 0, 4));
-    $end_date = mktime(0, 0, 0, substr($surv_data['end_date'], 5, 2), substr($surv_data['end_date'], 8, 2), substr($surv_data['end_date'], 0, 4));
+function check_time_availability($surv_data)
+{
+    $start_date = mktime(
+        0,
+        0,
+        0,
+        substr($surv_data['start_date'], 5, 2),
+        substr($surv_data['start_date'], 8, 2),
+        substr($surv_data['start_date'], 0, 4)
+    );
+    $end_date = mktime(
+        0,
+        0,
+        0,
+        substr($surv_data['end_date'], 5, 2),
+        substr($surv_data['end_date'], 8, 2),
+        substr($surv_data['end_date'], 0, 4)
+    );
     $cur_date = time();
-
     if ($cur_date < $start_date) {
         api_not_allowed(
             true,

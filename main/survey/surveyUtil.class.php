@@ -609,7 +609,6 @@ class SurveyUtil
                 echo self::drawChart($chartData, false, $chartContainerId);
 
                 // displaying the table: headers
-
                 echo '<table class="display-survey table">';
                 echo '	<tr>';
                 echo '		<th>&nbsp;</th>';
@@ -663,9 +662,7 @@ class SurveyUtil
                 echo '		<td class="total">&nbsp;</td>';
                 echo '		<td class="total">&nbsp;</td>';
                 echo '	</tr>';
-
                 echo '</table>';
-
                 echo '</div>';
             }
         }
@@ -855,7 +852,14 @@ class SurveyUtil
             !empty($_POST['fields_filter'])
         ) {
             // Show user fields section with a big th colspan that spans over all fields
-            $extra_user_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false, true);
+            $extra_user_fields = UserManager::get_extra_fields(
+                0,
+                0,
+                5,
+                'ASC',
+                false,
+                true
+            );
             $num = count($extra_user_fields);
             if ($num > 0) {
                 echo '<th '.($num > 0 ? ' colspan="'.$num.'"' : '').'>';
@@ -1274,11 +1278,11 @@ class SurveyUtil
     /**
      * Add a line to the csv file
      *
-     * @param	array	Possible answers
-     * @param	array	User's answers
-     * @param 	mixed	User ID or user details as string - Used as a string in the result string
-     * @param	boolean	Whether to display user fields or not
-     * @return	string	One line of the csv file
+     * @param array    Possible answers
+     * @param array User's answers
+     * @param mixed	User ID or user details as string - Used as a string in the result string
+     * @param boolean	Whether to display user fields or not
+     * @return string	One line of the csv file
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      */
@@ -1331,7 +1335,12 @@ class SurveyUtil
                                 str_replace(
                                     '"',
                                     '""',
-                                    api_html_entity_decode(strip_tags($answers_of_user[$question_id][$key[0]]['option_id']), ENT_QUOTES)
+                                    api_html_entity_decode(
+                                        strip_tags(
+                                            $answers_of_user[$question_id][$key[0]]['option_id']
+                                        ),
+                                        ENT_QUOTES
+                                    )
                                 ).
                                 '"';
                         } elseif (!empty($answers_of_user[$question_id][$option_id])) {
@@ -1453,7 +1462,6 @@ class SurveyUtil
 
         $line++;
         $column = 1;
-
         // Show extra field values
         if ($display_extra_user_fields) {
             // Show the fields names for user fields
@@ -1767,7 +1775,6 @@ class SurveyUtil
             }
             $tableHtml .= '</tr>';
             $chartData = array();
-
             // The main part
             for ($ij = 0; $ij < count($question_y['answers']); $ij++) {
                 $currentYQuestion = strip_tags($question_y['answers'][$ij]);
@@ -2805,8 +2812,13 @@ class SurveyUtil
      * @author Julio Montoya <gugli100@gmail.com>, Beeznest - Adding intvals
      * @version January 2007
      */
-    public static function get_survey_data($from, $number_of_items, $column, $direction, $isDrh = false)
-    {
+    public static function get_survey_data(
+        $from,
+        $number_of_items,
+        $column,
+        $direction,
+        $isDrh = false
+    ) {
         $table_survey = Database::get_course_table(TABLE_SURVEY);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
@@ -3309,7 +3321,7 @@ class SurveyUtil
         if (api_browser_support("svg")) {
             $htmlChart .= api_get_js("d3/d3.v3.5.4.min.js");
             $htmlChart .= api_get_js("dimple.v2.1.2.min.js").'
-            <script type="text/javascript">
+            <script>
             var svg = dimple.newSvg("#'.$chartContainerId.'", "100%", 400);
             var data = [';
             $serie = array();

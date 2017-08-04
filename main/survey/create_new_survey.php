@@ -167,9 +167,23 @@ $form->addElement('html', '<div id="advanced_params_options" style="display:none
 
 if (Gradebook::is_active()) {
     // An option: Qualify the fact that survey has been answered in the gradebook
-    $form->addElement('checkbox', 'survey_qualify_gradebook', null, get_lang('QualifyInGradebook'), 'onclick="javascript: if (this.checked) { document.getElementById(\'gradebook_options\').style.display = \'block\'; } else { document.getElementById(\'gradebook_options\').style.display = \'none\'; }"');
-    $form->addElement('html', '<div id="gradebook_options"'.($gradebook_link_id ? '' : ' style="display:none"').'>');
-    $form->addElement('text', 'survey_weight', get_lang('QualifyWeight'), 'value="0.00" style="width: 40px;" onfocus="javascript: this.select();"');
+    $form->addElement(
+        'checkbox',
+        'survey_qualify_gradebook',
+        null,
+        get_lang('QualifyInGradebook'),
+        'onclick="javascript: if (this.checked) { document.getElementById(\'gradebook_options\').style.display = \'block\'; } else { document.getElementById(\'gradebook_options\').style.display = \'none\'; }"'
+    );
+    $form->addElement(
+        'html',
+        '<div id="gradebook_options"'.($gradebook_link_id ? '' : ' style="display:none"').'>'
+    );
+    $form->addElement(
+        'text',
+        'survey_weight',
+        get_lang('QualifyWeight'),
+        'value="0.00" style="width: 40px;" onfocus="javascript: this.select();"'
+    );
     $form->applyFilter('survey_weight', 'html_filter');
 
     // Loading Gradebook select
@@ -179,7 +193,6 @@ if (Gradebook::is_active()) {
         $element = $form->getElement('category_id');
         $element->freeze();
     }
-
     $form->addElement('html', '</div>');
 }
 
@@ -204,7 +217,13 @@ $input_name_list = null;
 
 if (isset($_GET['action']) && $_GET['action'] == 'edit' && !empty($survey_id)) {
     if ($survey_data['anonymous'] == 0) {
-        $form->addElement('checkbox', 'show_form_profile', null, get_lang('ShowFormProfile'), 'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
+        $form->addElement(
+            'checkbox',
+            'show_form_profile',
+            null,
+            get_lang('ShowFormProfile'),
+            'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"'
+        );
 
         if ($survey_data['show_form_profile'] == 1) {
             $form->addElement('html', '<div id="options_field" style="display:block">');
@@ -262,7 +281,12 @@ if ($_GET['action'] == 'add') {
 $form->addRule('survey_title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('start_date', get_lang('InvalidDate'), 'date');
 $form->addRule('end_date', get_lang('InvalidDate'), 'date');
-$form->addRule(array('start_date', 'end_date'), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
+$form->addRule(
+    array('start_date', 'end_date'),
+    get_lang('StartDateShouldBeBeforeEndDate'),
+    'date_compare',
+    'lte'
+);
 
 // Setting the default values
 $form->setDefaults($defaults);

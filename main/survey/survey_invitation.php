@@ -31,15 +31,22 @@ if (empty($survey_data)) {
     api_not_allowed(true);
 }
 
-$urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
+$urlname = strip_tags(
+    api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40)
+);
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
     $urlname .= '...';
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id, 'name' => $urlname);
-
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
+    'name' => get_lang('SurveyList')
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id,
+    'name' => $urlname
+);
 
 // Displaying the header
 Display::display_header($tool_name);
@@ -47,24 +54,29 @@ Display::display_header($tool_name);
 // Getting all the people who have filled this survey
 $answered_data = SurveyManager::get_people_who_filled_survey($survey_id);
 if ($survey_data['anonymous'] == 1) {
-	echo Display::return_message(get_lang('AnonymousSurveyCannotKnowWhoAnswered').' '.count($answered_data).' '.get_lang('PeopleAnswered'));
-	$answered_data = array();
+    echo Display::return_message(
+        get_lang('AnonymousSurveyCannotKnowWhoAnswered').' '.count(
+            $answered_data
+        ).' '.get_lang('PeopleAnswered')
+    );
+    $answered_data = array();
 }
 
 if (!isset($_GET['view']) || $_GET['view'] == 'invited') {
-	echo get_lang('ViewInvited').' | ';
+    echo get_lang('ViewInvited').' | ';
 } else {
-	echo '	<a href="'.api_get_self().'?survey_id='.$survey_id.'&amp;view=invited">'.get_lang('ViewInvited').'</a> |';
+    echo '	<a href="'.api_get_self().'?survey_id='.$survey_id.'&amp;view=invited">'.get_lang('ViewInvited').'</a> |';
 }
 if ($_GET['view'] == 'answered') {
-	echo get_lang('ViewAnswered').' | ';
+    echo get_lang('ViewAnswered').' | ';
 } else {
-	echo '	<a href="'.api_get_self().'?survey_id='.$survey_id.'&amp;view=answered">'.get_lang('ViewAnswered').'</a> |';
+    echo '	<a href="'.api_get_self().'?survey_id='.$survey_id.'&amp;view=answered">'.get_lang('ViewAnswered').'</a> |';
 }
+
 if ($_GET['view'] == 'unanswered') {
-	echo get_lang('ViewUnanswered');
+    echo get_lang('ViewUnanswered');
 } else {
-	echo '	<a href="'.api_get_self().'?survey_id='.$survey_id.'&amp;view=unanswered">'.get_lang('ViewUnanswered').'</a>';
+    echo '	<a href="'.api_get_self().'?survey_id='.$survey_id.'&amp;view=unanswered">'.get_lang('ViewUnanswered').'</a>';
 }
 
 // Table header
@@ -117,4 +129,4 @@ while ($row = Database::fetch_assoc($res)) {
 echo '</table>';
 
 // Footer
-Display :: display_footer();
+Display::display_footer();

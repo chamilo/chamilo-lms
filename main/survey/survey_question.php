@@ -26,9 +26,9 @@ class survey_question
         $surveyId = isset($_GET['survey_id']) ? intval($_GET['survey_id']) : null;
 
         $toolName = Display::return_icon(
-                SurveyManager::icon_question(Security::remove_XSS($_GET['type'])),
-                get_lang(ucfirst(Security::remove_XSS($_GET['type']))),
-                array('align' => 'middle', 'height' => '22px')
+            SurveyManager::icon_question(Security::remove_XSS($_GET['type'])),
+            get_lang(ucfirst(Security::remove_XSS($_GET['type']))),
+            array('align' => 'middle', 'height' => '22px')
         ).' ';
 
         if ($action == 'add') {
@@ -62,8 +62,18 @@ class survey_question
         $form->addHidden('shared_question_id', Security::remove_XSS($sharedQuestionId));
         $form->addHidden('type', Security::remove_XSS($_GET['type']));
 
-        $config = array('ToolbarSet' => 'SurveyQuestion', 'Width' => '100%', 'Height' => '120');
-        $form->addHtmlEditor('question', get_lang('Question'), true, false, $config);
+        $config = array(
+            'ToolbarSet' => 'SurveyQuestion',
+            'Width' => '100%',
+            'Height' => '120'
+        );
+        $form->addHtmlEditor(
+            'question',
+            get_lang('Question'),
+            true,
+            false,
+            $config
+        );
 
         // When survey type = 1??
         if ($surveyData['survey_type'] == 1) {
@@ -78,7 +88,6 @@ class survey_question
             }
 
             $grouplist = $grouplist1 = $grouplist2 = $glist;
-
             if (!empty($formData['assigned'])) {
                 $grouplist = str_replace('<option value="'.$formData['assigned'].'"', '<option value="'.$formData['assigned'].'" selected', $glist);
             }
@@ -104,9 +113,6 @@ class survey_question
                 '><select name="assigned1">'.$grouplist1.'</select> '.
                 '<select name="assigned2">'.$grouplist2.'</select>'
                 .'</fieldset><br />';
-
-            //$form->addRadio('choose', get_lang('Primary'));
-            //$form->addRadio('choose', get_lang('Secondary'));
         }
 
         $this->setForm($form);

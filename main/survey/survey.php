@@ -50,8 +50,8 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 // Breadcrumbs
 $interbreadcrumb[] = array(
-        'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
-        'name' => get_lang('SurveyList'),
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
+    'name' => get_lang('SurveyList'),
 );
 
 // Getting the survey information
@@ -142,7 +142,7 @@ echo '<div class="actions">'.$survey_actions.'</div>';
 
 if ($survey_data['survey_type'] == 0) {
     $urlQuestion = api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&action=add';
-    
+
     echo '<div class="well">';
     echo Display::url(Display::return_icon('yesno.png', get_lang('YesNo'), null, ICON_SIZE_BIG), $urlQuestion.'&type=yesno&survey_id='.$survey_id);
     echo Display::url(Display::return_icon('mcua.png', get_lang('UniqueSelect'), null, ICON_SIZE_BIG), $urlQuestion.'&type=multiplechoice&survey_id='.$survey_id);
@@ -247,11 +247,19 @@ if ($is_survey_type_1) {
     echo '<br /><br /><b>'.get_lang('ManageGroups').'</b><br /><br />';
 
     if (in_array($_GET['sendmsg'], array('GroupUpdatedSuccessfully', 'GroupDeletedSuccessfully', 'GroupCreatedSuccessfully'))) {
-        echo Display::return_message(get_lang($_GET['sendmsg']), 'confirmation', false);
+        echo Display::return_message(
+            get_lang($_GET['sendmsg']),
+            'confirmation',
+            false
+        );
     }
 
     if (in_array($_GET['sendmsg'], array('GroupNeedName'))) {
-        echo Display::return_message(get_lang($_GET['sendmsg']), 'warning', false);
+        echo Display::return_message(
+            get_lang($_GET['sendmsg']),
+            'warning',
+            false
+        );
     }
     echo '<table border="0"><tr><td width="100">'.get_lang('Name').'</td><td>'.get_lang('Description').'</td></tr></table>';
     echo '<form action="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?action=addgroup&survey_id='.$survey_id.'" method="post">';

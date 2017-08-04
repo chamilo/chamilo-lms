@@ -24,9 +24,25 @@ class ch_yesno extends survey_question
         $this->getForm()->setDefaults($formData);
 
         // The options
-        $config = array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120');
-        $this->getForm()->addHtmlEditor('answers[0]', get_lang('AnswerOptions'), true, false, $config);
-        $this->getForm()->addHtmlEditor('answers[1]', null, true, false, $config);
+        $config = array(
+            'ToolbarSet' => 'Survey',
+            'Width' => '100%',
+            'Height' => '120'
+        );
+        $this->getForm()->addHtmlEditor(
+            'answers[0]',
+            get_lang('AnswerOptions'),
+            true,
+            false,
+            $config
+        );
+        $this->getForm()->addHtmlEditor(
+            'answers[1]',
+            null,
+            true,
+            false,
+            $config
+        );
     }
 
     /**

@@ -2179,7 +2179,7 @@ class Category implements GradebookItem
         $html = array();
         if (!empty($my_certificate)) {
             $certificate_obj = new Certificate($my_certificate['id']);
-            $fileWasGenerated = $certificate_obj->html_file_is_generated();
+            $fileWasGenerated = $certificate_obj->isHtmlFileGenerated();
 
             if (!empty($fileWasGenerated)) {
                 $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$my_certificate['id'];
@@ -2272,7 +2272,7 @@ class Category implements GradebookItem
                 foreach ($list_certificate as $value_certificate) {
                     $certificate_obj = new Certificate($value_certificate['id']);
                     $certificate_obj->generate(array('hide_print_button' => true));
-                    if ($certificate_obj->html_file_is_generated()) {
+                    if ($certificate_obj->isHtmlFileGenerated()) {
                         $certificate_path_list[] = $certificate_obj->html_file;
                     }
                 }

@@ -21,7 +21,7 @@ switch ($action) {
 
         $certificate->generate(array('hide_print_button' => true));
 
-        if ($certificate->html_file_is_generated()) {
+        if ($certificate->isHtmlFileGenerated()) {
             $certificatePathList[] = $certificate->html_file;
 
             $pdfParams = array(

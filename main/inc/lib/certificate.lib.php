@@ -229,16 +229,16 @@ class Certificate extends Model
                             $result = @file_put_contents($myPathCertificate, $newContent);
                             if ($result) {
                                 // Updating the path
-                                self::update_user_info_about_certificate(
+                                self::updateUserCertificateInfo(
                                     $this->certificate_data['cat_id'],
                                     $this->user_id,
                                     $path_certificate
                                 );
                                 $this->certificate_data['path_certificate'] = $path_certificate;
 
-                                if ($this->html_file_is_generated()) {
+                                if ($this->isHtmlFileGenerated()) {
                                     if (!empty($file_info)) {
-                                        $text = $this->parse_certificate_variables(
+                                        $text = $this->parseCertificateVariables(
                                             $new_content_html['variables']
                                         );
                                         $this->generateQRImage(
@@ -357,7 +357,7 @@ class Certificate extends Model
     * @param string $path_certificate the path name of the certificate
     * @return void
     */
-    public function update_user_info_about_certificate(
+    public function updateUserCertificateInfo(
         $cat_id,
         $user_id,
         $path_certificate
@@ -374,12 +374,11 @@ class Certificate extends Model
     }
 
     /**
-     *
      * Check if the file was generated
      *
      * @return boolean
      */
-    public function html_file_is_generated()
+    public function isHtmlFileGenerated()
     {
         if (empty($this->certification_user_path)) {
             return false;
@@ -416,7 +415,7 @@ class Certificate extends Model
      * second is an array of contents
      * @return string The translated string
      */
-    public function parse_certificate_variables($array)
+    public function parseCertificateVariables($array)
     {
         $headers = $array[0];
         $content = $array[1];

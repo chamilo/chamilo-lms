@@ -241,9 +241,15 @@ class SkillRelSkill extends Model
      * @param bool $user_id
      * @return array
      */
-    public function get_children($skill_id, $load_user_data = false, $user_id = false)
-    {
-        $skills = $this->find('all', array('where' => array('parent_id = ? ' => $skill_id)));
+    public function get_children(
+        $skill_id,
+        $load_user_data = false,
+        $user_id = false
+    ) {
+        $skills = $this->find(
+            'all',
+            array('where' => array('parent_id = ? ' => $skill_id))
+        );
         $skill_obj = new Skill();
         $skill_rel_user = new SkillRelUser();
 
@@ -325,6 +331,9 @@ class SkillRelGradebook extends Model
 {
     public $columns = array('id', 'gradebook_id', 'skill_id');
 
+    /**
+     * SkillRelGradebook constructor.
+     */
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_MAIN_SKILL_REL_GRADEBOOK);
@@ -382,7 +391,7 @@ class SkillRelGradebook extends Model
      * @param int $skill_id
      * @param array $gradebook_list
      */
-    public function update_gradebooks_by_skill($skill_id, $gradebook_list)
+    public function updateGradeBookListBySkill($skill_id, $gradebook_list)
     {
         $original_gradebook_list = $this->find(
             'all',
@@ -419,7 +428,10 @@ class SkillRelGradebook extends Model
 
         if (!empty($gradebooks_to_add)) {
             foreach ($gradebooks_to_add as $gradebook_id) {
-                $attributes = array('skill_id' => $skill_id, 'gradebook_id' => $gradebook_id);
+                $attributes = array(
+                    'skill_id' => $skill_id,
+                    'gradebook_id' => $gradebook_id
+                );
                 $this->save($attributes);
             }
         }
@@ -634,7 +646,8 @@ class Skill extends Model
         $skill_list = array_map('intval', $skill_list);
         $skill_list = implode("', '", $skill_list);
 
-        $sql = "SELECT * FROM {$this->table} WHERE id IN ('$skill_list') ";
+        $sql = "SELECT * FROM {$this->table} 
+                WHERE id IN ('$skill_list') ";
 
         $result = Database::query($sql);
         $users  = Database::store_result($result, 'ASSOC');
@@ -644,7 +657,10 @@ class Skill extends Model
                 continue;
             }
 
-            $user['icon_small'] = sprintf("badges/%s-small.png", sha1($user['name']));
+            $user['icon_small'] = sprintf(
+                "badges/%s-small.png",
+                sha1($user['name'])
+            );
         }
 
         return $users;
@@ -657,8 +673,12 @@ class Skill extends Model
      * @param int $parent_id
      * @return array
      */
-    public function get_all($load_user_data = false, $user_id = false, $id = null, $parent_id = null)
-    {
+    public function get_all(
+        $load_user_data = false,
+        $user_id = false,
+        $id = null,
+        $parent_id = null
+    ) {
         $id_condition = '';
         if (!empty($id)) {
             $id = intval($id);
@@ -743,7 +763,7 @@ class Skill extends Model
         $skill_rel_skill = new SkillRelSkill();
         if ($load_user_data) {
             $user_id = api_get_user_id();
-            $skills  = $skill_rel_skill->get_children($skill_id, true, $user_id);
+            $skills = $skill_rel_skill->get_children($skill_id, true, $user_id);
         } else {
             $skills = $skill_rel_skill->get_children($skill_id);
         }
@@ -824,8 +844,8 @@ class Skill extends Model
                 $relation_exists = $skill_rel_skill->relation_exists($skill_id, $parent_id);
                 if (!$relation_exists) {
                     $attributes = array(
-                        'skill_id'      => $skill_id,
-                        'parent_id'     => $parent_id,
+                        'skill_id' => $skill_id,
+                        'parent_id' => $parent_id,
                         'relation_type' => (isset($params['relation_type']) ? $params['relation_type'] : 0),
                         //'level'         => $params['level'],
                     );
@@ -837,7 +857,7 @@ class Skill extends Model
                 foreach ($params['gradebook_id'] as $gradebook_id) {
                     $attributes = array();
                     $attributes['gradebook_id'] = $gradebook_id;
-                    $attributes['skill_id']     = $skill_id;
+                    $attributes['skill_id'] = $skill_id;
                     $skill_rel_gradebook->save($attributes);
                 }
             }
@@ -913,7 +933,7 @@ class Skill extends Model
         if (!isset($params['parent_id'])) {
             $params['parent_id'] = 1;
         }
-        $skill_rel_skill     = new SkillRelSkill();
+        $skill_rel_skill = new SkillRelSkill();
         $skill_rel_gradebook = new SkillRelGradebook();
 
         //Saving name, description
@@ -932,8 +952,8 @@ class Skill extends Model
                 $relation_exists = $skill_rel_skill->relation_exists($skill_id, $parent_id);
                 if (!$relation_exists) {
                     $attributes = array(
-                        'skill_id'      => $skill_id,
-                        'parent_id'     => $parent_id,
+                        'skill_id' => $skill_id,
+                        'parent_id' => $parent_id,
                         'relation_type' => $params['relation_type'],
                         //'level'         => $params['level'],
                     );
@@ -941,7 +961,10 @@ class Skill extends Model
                 }
             }
 
-            $skill_rel_gradebook->update_gradebooks_by_skill($skill_id, $params['gradebook_id']);
+            $skill_rel_gradebook->updateGradeBookListBySkill(
+                $skill_id,
+                $params['gradebook_id']
+            );
             return $skill_id;
         }
         return null;
@@ -955,14 +978,14 @@ class Skill extends Model
      *
      * @return array
      */
-    public function get_user_skills($user_id, $get_skill_data = false)
+    public function get_user_skills($userId, $get_skill_data = false)
     {
-        $user_id = intval($user_id);
+        $userId = intval($userId);
         $sql = 'SELECT DISTINCT s.id, s.name, s.icon, u.id as issue
                 FROM '.$this->table_skill_rel_user.' u
                 INNER JOIN '.$this->table.' s
                 ON u.skill_id = s.id
-                WHERE user_id = '.$user_id;
+                WHERE user_id = '.$userId;
 
         $result = Database::query($sql);
         $skills = Database::store_result($result, 'ASSOC');
@@ -1071,7 +1094,6 @@ class Skill extends Model
                 }
 
                 $skill['data']['name'] = $skill['name'];
-
                 $skill['data']['status'] = $skill['status'];
 
                 // In order to paint all members of a family with the same color
@@ -1083,7 +1105,6 @@ class Skill extends Model
                     if ($skill['parent_id'] == $skill_id) {
                         $family[$skill['id']] = $this->get_all_children($skill['id']);
                     }
-
                     /*if ($skill_id == $skill['id']) {
                         $skill['parent_id'] = 1;
                     }*/
@@ -1211,7 +1232,11 @@ class Skill extends Model
                 $tmp['isSearched'] = self::isSearched($elem['id']);
 
                 if (isset($elem['children']) && is_array($elem['children'])) {
-                    $tmp['children'] = $this->get_skill_json($elem['children'], $depth + 1, $max_depth);
+                    $tmp['children'] = $this->get_skill_json(
+                        $elem['children'],
+                        $depth + 1,
+                        $max_depth
+                    );
                 } else {
                     //$tmp['colour'] = $this->colours[$depth][rand(0,3)];
                 }
@@ -1580,7 +1605,6 @@ class Skill extends Model
                 break;
             case STUDENT_BOSS:
                 $studentBosses = $userRepo->getStudentBosses($toUser);
-
                 foreach ($studentBosses as $studentBoss) {
                     if ($studentBoss->getId() !== $fromUser->getId()) {
                         continue;

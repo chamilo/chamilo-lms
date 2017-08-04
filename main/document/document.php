@@ -688,7 +688,7 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' &&
         $qr_code_web_filename = api_get_path(WEB_ARCHIVE_PATH).$filename;
 
         $certificate = new Certificate();
-        $text = $certificate->parse_certificate_variables($content_html['variables']);
+        $text = $certificate->parseCertificateVariables($content_html['variables']);
         $result = $certificate->generateQRImage($text, $qr_code_filename);
 
         $new_content_html = $content_html['content'];

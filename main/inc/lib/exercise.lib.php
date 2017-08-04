@@ -360,12 +360,13 @@ class ExerciseLib
                         );
 
                         $answer_input = null;
-
+                        $attributes['class'] = 'checkradios';
                         if ($answerType == UNIQUE_ANSWER_IMAGE) {
+                            $attributes['class'] = '';
                             $attributes['style'] = 'display: none;';
                             $answer = '<div class="thumbnail">'.$answer.'</div>';
                         }
-                        $attributes['class'] = 'checkradios';
+                        
                         $answer_input .= '<label class="radio '.$hidingClass.'">';
                         $answer_input .= Display::input(
                             'radio',

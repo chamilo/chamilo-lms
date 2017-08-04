@@ -521,7 +521,7 @@ class Auth
      */
     public function store_course_category($category_title)
     {
-        $tucc = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
+        $table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
 
         // protect data
         $current_user_id = api_get_user_id();
@@ -529,22 +529,23 @@ class Auth
         $result = false;
 
         // step 1: we determine the max value of the user defined course categories
-        $sql = "SELECT sort FROM $tucc 
+        $sql = "SELECT sort FROM $table 
                 WHERE user_id='".$current_user_id."' 
                 ORDER BY sort DESC";
         $rs_sort = Database::query($sql);
         $maxsort = Database::fetch_array($rs_sort);
         $nextsort = $maxsort['sort'] + 1;
 
-        // step 2: we check if there is already a category with this name, if not we store it, else we give an error.
-        $sql = "SELECT * FROM $tucc 
+        // step 2: we check if there is already a category with this name,
+        // if not we store it, else we give an error.
+        $sql = "SELECT * FROM $table 
                 WHERE 
                     user_id='".$current_user_id."' AND 
                     title='" . $category_title."'
                 ORDER BY sort DESC";
         $rs = Database::query($sql);
         if (Database::num_rows($rs) == 0) {
-            $sql = "INSERT INTO $tucc (user_id, title,sort)
+            $sql = "INSERT INTO $table (user_id, title,sort)
                     VALUES ('".$current_user_id."', '".api_htmlentities($category_title, ENT_QUOTES, api_get_system_encoding())."', '".$nextsort."')";
             $resultQuery = Database::query($sql);
             if (Database::affected_rows($resultQuery)) {

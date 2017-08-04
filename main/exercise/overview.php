@@ -70,7 +70,7 @@ if ($origin != 'learnpath') {
 
 $html = '';
 $message = '';
-$html .= '<div class="exercise">';
+$html .= '<div class="exercise-overview">';
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $edit_link = '';
 if ($is_allowed_to_edit && $objExercise->sessionId == $sessionId) {
@@ -323,9 +323,9 @@ if (!empty($exercise_url_button)) {
     $html .= Display::div(
         Display::div(
             $exercise_url_button,
-            array('class' => 'exercise_overview_options col-md-12')
+            array('class' => 'exercise_overview_options')
         ),
-        array('class' => ' row')
+        array('class' => 'options')
     );
 }
 

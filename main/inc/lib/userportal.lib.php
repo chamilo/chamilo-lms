@@ -1236,7 +1236,9 @@ class IndexManager
                     }
                 }
 
-                if (isset($courses['in_category']) && isset($courses['not_category'])) {
+                if (isset($courses['in_category']) &&
+                    isset($courses['not_category'])
+                ) {
                     foreach ($courses['in_category'] as $key1 => $value) {
                         if (isset($courses['in_category'][$key1]['courses'])) {
                             foreach ($courses['in_category'][$key1]['courses'] as $key2 => $courseInCatInfo) {
@@ -1353,7 +1355,10 @@ class IndexManager
 
             if ($specialCourses) {
                 if ($categoryCodeFilter) {
-                    $specialCourses = self::filterByCategory($specialCourses, $categoryCodeFilter);
+                    $specialCourses = self::filterByCategory(
+                        $specialCourses,
+                        $categoryCodeFilter
+                    );
                 }
 
                 $this->tpl->assign('courses', $specialCourses);
@@ -1365,8 +1370,14 @@ class IndexManager
 
             if ($courses['in_category'] || $courses['not_category']) {
                 if ($categoryCodeFilter) {
-                    $courses['in_category'] = self::filterByCategory($courses['in_category'], $categoryCodeFilter);
-                    $courses['not_category'] = self::filterByCategory($courses['not_category'], $categoryCodeFilter);
+                    $courses['in_category'] = self::filterByCategory(
+                        $courses['in_category'],
+                        $categoryCodeFilter
+                    );
+                    $courses['not_category'] = self::filterByCategory(
+                        $courses['not_category'],
+                        $categoryCodeFilter
+                    );
                 }
 
                 $this->tpl->assign('courses', $courses['not_category']);
@@ -2272,7 +2283,9 @@ class IndexManager
     private static function filterByCategory($courseList, $categoryCode)
     {
         return array_filter($courseList, function ($courseInfo) use ($categoryCode) {
-            if ($courseInfo['category_code'] === $categoryCode) {
+            if (isset($courseInfo['category_code']) &&
+                $courseInfo['category_code'] === $categoryCode
+            ) {
                 return true;
             }
 

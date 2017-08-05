@@ -397,13 +397,14 @@ class UniqueAnswerNoOption extends Question
         // sets the total weighting of the question
         $this->updateWeighting($questionWeighting);
         $this->save($exercise);
-	}
+    }
 
     /**
      * @inheritdoc
      */
 	public function return_header($exercise, $counter = null, $score = null)
     {
+        // ofaj
 	    $header = parent::return_header($exercise, $counter, $score);
 	    $header .= '<table class="'.$this->question_table_class.'">
 			<tr>

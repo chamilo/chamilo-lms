@@ -327,21 +327,25 @@ class GradebookDataGenerator
                         ];
                     //}
 
-                $display = $scoredisplay->display_score(
-                    $score,
-                    SCORE_DIV_PERCENT_WITH_CUSTOM
-                );
+                    $display = $scoredisplay->display_score(
+                        $score,
+                        SCORE_DIV_PERCENT_WITH_CUSTOM
+                    );
 
-                $type = $item->get_item_type();
-                if ($type == 'L' && get_class($item) == 'ExerciseLink') {
-                    $display = ExerciseLib::show_score($score[0], $score[1], false);
-                }
+                    $type = $item->get_item_type();
+                    if ($type == 'L' && get_class($item) == 'ExerciseLink') {
+                        $display = ExerciseLib::show_score(
+                            $score[0],
+                            $score[1],
+                            false
+                        );
+                    }
 
-                return array(
-                    'display' => $display,
-                    'score' => $score,
-                    'score_weight' => $scoreWeight,
-                );
+                    return array(
+                        'display' => $display,
+                        'score' => $score,
+                        'score_weight' => $scoreWeight,
+                    );
             }
         }
 
@@ -374,6 +378,7 @@ class GradebookDataGenerator
      * Returns the link to the certificate generation, if the score is enough, otherwise
      * returns an empty string. This only works with categories.
      * @param    object Item
+     * @return string
      */
     public function get_certificate_link($item)
     {

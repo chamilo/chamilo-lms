@@ -14,7 +14,8 @@ $dbTable = Database::get_course_table(TABLE_DOCUMENT);
 /**
  * Creates a hotpotato directory.
  *
- * If a directory of that name already exists, don't create any. If a file of that name exists, remove it and create a directory.
+ * If a directory of that name already exists, don't create any.
+ * If a file of that name exists, remove it and create a directory.
  * @param   string   $base_work_dir   Wanted path
  * @return  boolean     Always true so far
  */
@@ -95,7 +96,9 @@ function GetComment($path, $courseCode = '')
  * Sets the comment in the database for a particular path.
  * @param    string    $path File path
  * @param    string    $comment Comment to set
- * @return   Doctrine\DBAL\Driver\Statement|null    Result of the database operation (Database::query will output some message directly on error anyway)
+ * @return   Doctrine\DBAL\Driver\Statement|null
+ * Result of the database operation
+ * (Database::query will output some message directly on error anyway)
  */
 function SetComment($path, $comment)
 {
@@ -346,7 +349,7 @@ function GenerateHpFolder($folder)
                     if (is_dir($full_name)) {
                         $filelist[] = $file;
                     }
-               }
+                }
             }
         }
     }

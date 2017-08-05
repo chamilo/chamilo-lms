@@ -1,8 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
-*	@package chamilo.user
-*/
+ * @package chamilo.user
+ */
 
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
@@ -48,13 +49,25 @@ if (api_is_allowed_to_edit()) {
         $actionsLeft .= '<a href="class.php?'.api_get_cidreq().'&type=registered">'.
             Display::return_icon('back.png', get_lang("Classes"), array(), ICON_SIZE_MEDIUM).'</a>';
 
-        $form = new FormValidator('groups', 'post', api_get_self(), '', '', FormValidator::LAYOUT_INLINE);
+        $form = new FormValidator(
+            'groups',
+            'post',
+            api_get_self(),
+            '',
+            [],
+            FormValidator::LAYOUT_INLINE
+        );
         $options = [
             -1 => get_lang('All'),
             1 => get_lang('SocialGroups'),
             0 => get_lang('Classes')
         ];
-        $form->addSelect('group_filter', get_lang('Groups'), $options, ['id' => 'group_filter']);
+        $form->addSelect(
+            'group_filter',
+            get_lang('Groups'),
+            $options,
+            ['id' => 'group_filter']
+        );
         $form->setDefaults(['group_filter' => $groupFilter]);
         $actionsRight = $form->returnForm();
     }
@@ -89,7 +102,6 @@ if (api_is_allowed_to_edit()) {
 }
 
 //jqgrid will use this URL to do the selects
-
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups_teacher&type='.$type.'&group_filter='.$groupFilter;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
@@ -146,7 +158,16 @@ Display :: display_header($tool_name, "User");
 $(function() {
 <?php
     // grid definition see the $usergroup>display() function
-    echo Display::grid_js('usergroups', $url, $columns, $columnModel, $extraParams, array(), '', true);
+    echo Display::grid_js(
+        'usergroups',
+        $url,
+        $columns,
+        $columnModel,
+        $extraParams,
+        array(),
+        '',
+        true
+    );
 ?>
 });
 </script>

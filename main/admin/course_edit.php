@@ -1,11 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * @package chamilo.admin
- */
 
 use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Entity\CourseCategory;
+
+/**
+ * @package chamilo.admin
+ */
 
 $cidReset = true;
 
@@ -68,7 +69,7 @@ if (api_is_multiple_url_enabled()) {
             ON (u.user_id=url_rel_user.user_id)
             WHERE
                 url_rel_user.access_url_id = $urlId AND
-                status = 1" . $order_clause;
+                status = 1".$order_clause;
 } else {
     $sql = "SELECT user_id, lastname, firstname
             FROM $table_user WHERE status='1'".$order_clause;
@@ -103,7 +104,11 @@ if (count($course_teachers) == 0) {
 }
 
 // Build the form
-$form = new FormValidator('update_course', 'post', api_get_self().'?id='.$courseId);
+$form = new FormValidator(
+    'update_course',
+    'post',
+    api_get_self().'?id='.$courseId
+);
 $form->addElement('header', get_lang('Course').'  #'.$courseInfo['real_id'].' '.$course_code);
 $form->addElement('hidden', 'code', $course_code);
 
@@ -113,7 +118,11 @@ $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 // Code
-$element = $form->addElement('text', 'real_code', array(get_lang('CourseCode'), get_lang('ThisValueCantBeChanged')));
+$element = $form->addElement(
+    'text',
+    'real_code',
+    array(get_lang('CourseCode'), get_lang('ThisValueCantBeChanged'))
+);
 $element->freeze();
 
 // Visual code
@@ -135,55 +144,7 @@ $form->addText(
 $form->applyFilter('visual_code', 'strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
 
-$form->addElement('advmultiselect', 'course_teachers', get_lang('CourseTeachers'), $allTeachers);
-
-$courseInfo['course_teachers'] = $course_teachers;
-
-if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
-    $form->addElement('checkbox', 'add_teachers_to_sessions_courses', null, get_lang('TeachersWillBeAddedAsCoachInAllCourseSessions'));
-}
-
-$coursesInSession = SessionManager::get_session_by_course($courseInfo['real_id']);
-if (!empty($coursesInSession)) {
-    foreach ($coursesInSession as $session) {
-        $sessionId = $session['id'];
-        $coaches = SessionManager::getCoachesByCourseSession($sessionId, $courseInfo['real_id']);
-        $teachers = $allTeachers;
-
-        $sessionTeachers = array();
-        foreach ($coaches as $coachId) {
-            $userInfo = api_get_user_info($coachId);
-            $sessionTeachers[] = $coachId;
-
-            if (isset($teachers[$coachId])) {
-                unset($teachers[$coachId]);
-            }
-        }
-
-        $groupName = 'session_coaches['.$sessionId.']';
-        $platformTeacherId = 'platform_teachers_by_session_'.$sessionId;
-        $coachId = 'coaches_by_session_'.$sessionId;
-
-        $platformTeacherName = 'platform_teachers_by_session';
-        $coachName = 'coaches_by_session';
-
-        $sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId;
-        $form->addElement(
-            'advmultiselect',
-            $groupName,
-            Display::url(
-                $session['name'],
-                $sessionUrl,
-                array('target' => '_blank')
-            ).' - '.get_lang('Coaches'),
-            $allTeachers
-        );
-        $courseInfo[$groupName] = $sessionTeachers;
-    }
-}
-
 $countCategories = $courseCategoriesRepo->countAllInAccessUrl($urlId);
-
 if ($countCategories >= 100) {
     // Category code
     $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
@@ -207,7 +168,7 @@ if ($countCategories >= 100) {
 
     /** @var CourseCategory $category */
     foreach ($categories as $category) {
-        $categoriesOptions[$category->getCode()] = $category->__toString();
+        $categoriesOptions[$category->getCode()] = (string) $category;
     }
 
     $form->addSelect(
@@ -215,6 +176,63 @@ if ($countCategories >= 100) {
         get_lang('CourseFaculty'),
         $categoriesOptions
     );
+}
+
+
+$form->addElement(
+    'advmultiselect',
+    'course_teachers',
+    get_lang('CourseTeachers'),
+    $allTeachers
+);
+$courseInfo['course_teachers'] = $course_teachers;
+if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
+    $form->addElement(
+        'checkbox',
+        'add_teachers_to_sessions_courses',
+        null,
+        get_lang('TeachersWillBeAddedAsCoachInAllCourseSessions')
+    );
+}
+
+$coursesInSession = SessionManager::get_session_by_course($courseInfo['real_id']);
+if (!empty($coursesInSession)) {
+    foreach ($coursesInSession as $session) {
+        $sessionId = $session['id'];
+        $coaches = SessionManager::getCoachesByCourseSession(
+            $sessionId,
+            $courseInfo['real_id']
+        );
+        $teachers = $allTeachers;
+
+        $sessionTeachers = array();
+        foreach ($coaches as $coachId) {
+            $userInfo = api_get_user_info($coachId);
+            $sessionTeachers[] = $coachId;
+
+            if (isset($teachers[$coachId])) {
+                unset($teachers[$coachId]);
+            }
+        }
+
+        $groupName = 'session_coaches['.$sessionId.']';
+        $platformTeacherId = 'platform_teachers_by_session_'.$sessionId;
+        $coachId = 'coaches_by_session_'.$sessionId;
+        $platformTeacherName = 'platform_teachers_by_session';
+        $coachName = 'coaches_by_session';
+        $sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId;
+        $form->addElement(
+            'advmultiselect',
+            $groupName,
+            Display::url(
+                $session['name'],
+                $sessionUrl,
+                array('target' => '_blank')
+            ).' - '.get_lang('Coaches'),
+            $allTeachers
+        );
+        $courseInfo[$groupName] = $sessionTeachers;
+    }
 }
 
 $form->addText('department_name', get_lang('CourseDepartment'), false, array('size' => '60'));
@@ -251,7 +269,16 @@ $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 
 // Extra fields
 $extra_field = new ExtraField('course');
-$extra = $extra_field->addElements($form, $courseId);
+$extra = $extra_field->addElements(
+    $form,
+    $courseId,
+    [],
+    false,
+    false,
+    [],
+    [],
+    true
+);
 
 $htmlHeadXtra[] = '
 <script>
@@ -272,11 +299,10 @@ $form->setDefaults($courseInfo);
 // Validate form
 if ($form->validate()) {
     $course = $form->getSubmitValues();
-
     $visibility = $course['visibility'];
 
     global $_configuration;
-    
+
     if (isset($_configuration[$urlId]) &&
         isset($_configuration[$urlId]['hosting_limit_active_courses']) &&
         $_configuration[$urlId]['hosting_limit_active_courses'] > 0
@@ -371,7 +397,13 @@ if ($form->validate()) {
             }
         }
 
-        CourseManager::updateTeachers($courseInfo, $teachers, true, true, false);
+        CourseManager::updateTeachers(
+            $courseInfo,
+            $teachers,
+            true,
+            true,
+            false
+        );
     } else {
         // Normal behaviour
         CourseManager::updateTeachers($courseInfo, $teachers, true, false);

@@ -1,4 +1,5 @@
 {% if data_list is not empty %}
+<<<<<<< HEAD
     <div id="learning_path_toc" class="scorm-list">
         <div class="scorm-body">
             <div id="inner_lp_toc" class="inner_lp_toc scrollbar-light">
@@ -30,7 +31,7 @@
                 <div class="panel panel-default" data-lp-id="{{ item.id }}"
                     {{ item.parent ? 'data-lp-parent="' ~ item.parent ~ '"' : '' }}>
                     <div class="status-heading">
-                        <div class="panel-heading {{ item.current }}" role="tab" id="heading-{{ item.id }}">
+                        <div class="panel-heading" role="tab" id="heading-{{ item.id }}">
                             <a role="button" data-toggle="collapse"
                                data-parent="#scorm-panel{{ item.parent ? '-' ~ item.parent : '' }}"
                                href="#collapse-{{ item.id }}" aria-expanded="true"

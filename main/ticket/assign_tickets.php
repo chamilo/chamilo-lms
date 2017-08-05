@@ -6,11 +6,12 @@
  * @package chamilo.plugin.ticket
  */
 
+$cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
 if (!api_is_allowed_to_edit()) {
-	api_not_allowed();
+    api_not_allowed(true);
 }
 $course_info = api_get_course_info();
 $course_code = $course_info['code'];

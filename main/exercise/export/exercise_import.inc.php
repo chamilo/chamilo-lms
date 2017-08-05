@@ -30,8 +30,8 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
         return false;
     }
 
-    if (preg_match('/.zip$/i', $_FILES['userFile']['name']) &&
-        handle_uploaded_document(
+    if (preg_match('/.zip$/i', $_FILES['userFile']['name'])) {
+        $result = handle_uploaded_document(
             $_course,
             $_FILES['userFile'],
             $baseWorkDir,
@@ -46,9 +46,8 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
             null,
             null,
             false
-        )
-    ) {
-        return true;
+        );
+        return $result;
     }
     return false;
 }
@@ -85,7 +84,6 @@ function import_exercise($file)
     $exercise_info['name'] = preg_replace('/.zip$/i', '', $file);
     $exercise_info['question'] = array();
     $element_pile = array();
-
     // create parser and array to retrieve info from manifest
     $element_pile = array(); //pile to known the depth in which we are
 
@@ -178,7 +176,6 @@ function import_exercise($file)
     $last_exercise_id = $exercise->selectId();
     $courseId = api_get_course_int_id();
     if (!empty($last_exercise_id)) {
-        //var_dump($exercise_info);exit;
         // For each question found...
         foreach ($exercise_info['question'] as $question_array) {
             //2. Create question
@@ -190,12 +187,7 @@ function import_exercise($file)
             }
             $question->setAnswer();
             $description = '';
-            if (strlen($question_array['title']) < 50) {
-                $question->updateTitle(formatText(strip_tags($question_array['title'])).'...');
-            } else {
-                $question->updateTitle(formatText(substr(strip_tags($question_array['title']), 0, 50)));
-                $description .= $question_array['title'];
-            }
+            $question->updateTitle(formatText(strip_tags($question_array['title'])));
 
             if (isset($question_array['category'])) {
                 $category = formatText(strip_tags($question_array['category']));
@@ -228,38 +220,49 @@ function import_exercise($file)
             $last_question_id = $question->selectId();
             //3. Create answer
             $answer = new Answer($last_question_id);
-            $answer->new_nbrAnswers = count($question_array['answer']);
+            $answerList = $question_array['answer'];
+            $answer->new_nbrAnswers = count($answerList);
             $totalCorrectWeight = 0;
             $j = 1;
             $matchAnswerIds = array();
-            foreach ($question_array['answer'] as $key => $answers) {
-                if (preg_match('/_/', $key)) {
-                    $split = explode('_', $key);
-                    $i = $split[1];
-                } else {
-                    $i = $j;
-                    $j++;
-                    $matchAnswerIds[$key] = $j;
-                }
-                // Answer
-                $answer->new_answer[$i] = formatText($answers['value']);
-                // Comment
-                $answer->new_comment[$i] = isset($answers['feedback']) ? formatText($answers['feedback']) : null;
-                // Position
-                $answer->new_position[$i] = $i;
-                // Correct answers
-                if (in_array($key, $question_array['correct_answers'])) {
-                    $answer->new_correct[$i] = 1;
-                } else {
-                    $answer->new_correct[$i] = 0;
-                }
-                if (isset($question_array['weighting'][$key])) {
-                    $answer->new_weighting[$i] = $question_array['weighting'][$key];
-                }
-                if ($answer->new_correct[$i]) {
-                    $totalCorrectWeight += $answer->new_weighting[$i];
+            if (!empty($answerList)) {
+                foreach ($answerList as $key => $answers) {
+                    if (preg_match('/_/', $key)) {
+                        $split = explode('_', $key);
+                        $i = $split[1];
+                    } else {
+                        $i = $j;
+                        $j++;
+                        $matchAnswerIds[$key] = $j;
+                    }
+
+                    // Answer
+                    $answer->new_answer[$i] = isset($answers['value']) ? formatText($answers['value']) : '';
+                    // Comment
+                    $answer->new_comment[$i] = isset($answers['feedback']) ? formatText($answers['feedback']) : null;
+                    // Position
+                    $answer->new_position[$i] = $i;
+                    // Correct answers
+                    if (in_array($key, $question_array['correct_answers'])) {
+                        $answer->new_correct[$i] = 1;
+                    } else {
+                        $answer->new_correct[$i] = 0;
+                    }
+
+                    $answer->new_weighting[$i] = 0;
+                    if (isset($question_array['weighting'][$key])) {
+                        $answer->new_weighting[$i] = $question_array['weighting'][$key];
+                    }
+                    if ($answer->new_correct[$i]) {
+                        $totalCorrectWeight += $answer->new_weighting[$i];
+                    }
                 }
             }
+
+            if ($question->type == FREE_ANSWER) {
+                $totalCorrectWeight = $question_array['weighting'][0];
+            }
+
             $question->updateWeighting($totalCorrectWeight);
             $question->save($exercise);
             $answer->save();
@@ -267,6 +270,7 @@ function import_exercise($file)
 
         // delete the temp dir where the exercise was unzipped
         my_delete($baseWorkDir.$uploadPath);
+
         return $last_exercise_id;
     }
 
@@ -328,13 +332,13 @@ function qti_parse_file($exercisePath, $file, $questionFile)
         "TEXTENTRYINTERACTION",
         "FEEDBACKINLINE",
         "MATCHINTERACTION",
+        'EXTENDEDTEXTINTERACTION',
         "ITEMBODY",
         "BR",
         "IMG"
     );
 
     $question_format_supported = true;
-
     $xml_parser = xml_parser_create();
     xml_parser_set_option($xml_parser, XML_OPTION_SKIP_WHITE, false);
     if ($qtiMainVersion == 1) {
@@ -405,7 +409,18 @@ function startElementQti2($parser, $name, $attributes)
     if (sizeof($element_pile) >= 2) {
         $parent_element = $element_pile[sizeof($element_pile) - 2];
     } else {
-        $parent_element = "";
+        $parent_element = '';
+    }
+
+    if (sizeof($element_pile) >= 3) {
+        $grand_parent_element = $element_pile[sizeof($element_pile) - 3];
+    } else {
+        $grand_parent_element = '';
+    }
+    if (sizeof($element_pile) >= 4) {
+        $great_grand_parent_element = $element_pile[sizeof($element_pile) - 4];
+    } else {
+        $great_grand_parent_element = '';
     }
 
     if ($record_item_body) {
@@ -418,7 +433,6 @@ function startElementQti2($parser, $name, $attributes)
         } else {
             //in case of FIB question, we replace the IMS-QTI tag b y the correct answer between "[" "]",
             //we first save with claroline tags ,then when the answer will be parsed, the claroline tags will be replaced
-
             if ($current_element == 'INLINECHOICEINTERACTION') {
                 $current_question_item_body .= "**claroline_start**".$attributes['RESPONSEIDENTIFIER']."**claroline_end**";
             }
@@ -480,6 +494,9 @@ function startElementQti2($parser, $name, $attributes)
         case 'MATCHINTERACTION':
             $exercise_info['question'][$current_question_ident]['type'] = MATCHING;
             break;
+        case 'EXTENDEDTEXTINTERACTION':
+            $exercise_info['question'][$current_question_ident]['type'] = FREE_ANSWER;
+            break;
         case 'SIMPLEMATCHSET':
             if (!isset($current_match_set)) {
                 $current_match_set = 1;
@@ -499,7 +516,7 @@ function startElementQti2($parser, $name, $attributes)
             }
             break;
         case 'MAPENTRY':
-            if ($parent_element == "MAPPING") {
+            if ($parent_element == 'MAPPING' || $parent_element == 'MAPENTRY') {
                 $answer_id = $attributes['MAPKEY'];
                 if (!isset($exercise_info['question'][$current_question_ident]['weighting'])) {
                     $exercise_info['question'][$current_question_ident]['weighting'] = array();
@@ -616,7 +633,6 @@ function elementDataQti2($parser, $data)
     }
 
     //treat the record of the full content of itembody tag (needed for question statment and/or FIB text:
-
     if ($record_item_body && (!in_array($current_element, $non_HTML_tag_to_avoid))) {
         $current_question_item_body .= $data;
     }
@@ -640,13 +656,21 @@ function elementDataQti2($parser, $data)
             $exercise_info['question'][$current_question_ident]['answer'][$current_match_set][$currentAssociableChoice] = trim($data);
             break;
         case 'VALUE':
-            if ($parent_element == "CORRECTRESPONSE") {
-                if ($cardinality == "single") {
-                    $exercise_info['question'][$current_question_ident]['correct_answers'][$current_answer_id] = $data;
+            if ($parent_element == 'CORRECTRESPONSE') {
+                if ($cardinality == 'single') {
+                    $exercise_info['question'][$current_question_ident]['correct_answers'][$data] = $data;
                 } else {
                     $exercise_info['question'][$current_question_ident]['correct_answers'][] = $data;
                 }
             }
+
+            // Getting score of free answer
+            if ($grand_parent_element == 'OUTCOMEDECLARATION') {
+                if (!empty(trim($data))) {
+                    $exercise_info['question'][$current_question_ident]['weighting'][0] = trim($data);
+                }
+            }
+
             break;
         case 'ITEMBODY':
             // Replace relative links by links to the documents in the course
@@ -715,7 +739,7 @@ function startElementQti1($parser, $name, $attributes)
     if (sizeof($element_pile) >= 2) {
         $parent_element = $element_pile[sizeof($element_pile) - 2];
     } else {
-        $parent_element = "";
+        $parent_element = '';
     }
     if (sizeof($element_pile) >= 3) {
         $grand_parent_element = $element_pile[sizeof($element_pile) - 3];
@@ -861,7 +885,6 @@ function endElementQti1($parser, $name, $attributes)
     }
 
     //treat the record of the full content of itembody tag :
-
     if ($record_item_body && (!in_array($current_element, $non_HTML_tag_to_avoid))) {
         $current_question_item_body .= "</".$name.">";
     }
@@ -1003,7 +1026,6 @@ function elementDataQti1($parser, $data)
                 $exercise_info['question'][$current_question_ident]['weighting'][$lastLabelFieldValue] = $data;
             }
             break;
-
     }
 }
 
@@ -1017,6 +1039,9 @@ function isQtiQuestionBank($filePath)
     $data = file_get_contents($filePath);
     if (!empty($data)) {
         $match = preg_match('/ims_qtiasiv(\d)p(\d)/', $data);
+        // @todo allow other types
+        //$match2 = preg_match('/imsqti_v(\d)p(\d)/', $data);
+
         if ($match) {
             return true;
         }

@@ -11,7 +11,8 @@
             </li>
             {% if services_are_included %}
                 <li id="buy-services-tab" class="{{ showing_services ? 'active' : '' }}" role="presentation">
-                    <a href="service_catalog.php" aria-controls="buy-services" role="tab">{{ 'Services'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+                    <a href="service_catalog.php" aria-controls="buy-services"
+                       role="tab">{{ 'Services'|get_plugin_lang('BuyCoursesPlugin') }}</a>
                 </li>
             {% endif %}
         </ul>
@@ -30,12 +31,14 @@
                                 <div class="col-md-4 col-sm-6">
                                     <article class="items-course">
                                         <div class="items-course-image">
-                                            <img alt="{{ course.title }}" class="img-responsive" src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
+                                            <img alt="{{ course.title }}" class="img-responsive"
+                                                 src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
                                         </div>
                                         <div class="items-course-info">
                                             {% set course_description_url = _p.web_ajax ~ 'course_home.ajax.php?' ~ {'code': course.code, 'a': 'show_course_information'}|url_encode() %}
                                             <h4 class="title">
-                                                <a class="ajax" href="{{ course_description_url }}" data-title="{{ course.title }}">{{ course.title }}</a>
+                                                <a class="ajax" href="{{ course_description_url }}"
+                                                   data-title="{{ course.title }}">{{ course.title }}</a>
                                             </h4>
                                             <ul class="list-unstyled">
                                                 {% for teacher in course.teachers %}
@@ -53,10 +56,13 @@
                                                 </div>
                                             {% elseif course.enrolled == "NO" %}
                                                 <div class="toolbar">
-                                                    <a class="ajax btn btn-info btn-block btn-sm" title="" href="{{ course_description_url }}" data-title="{{ course.title }}">
+                                                    <a class="ajax btn btn-info btn-block btn-sm" title=""
+                                                       href="{{ course_description_url }}"
+                                                       data-title="{{ course.title }}">
                                                         <em class="fa fa-file-text"></em> {{ 'SeeDescription'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
-                                                    <a class="btn btn-success btn-block btn-sm" title="" href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'i': course.id, 't': 1}|url_encode() }}">
+                                                    <a class="btn btn-success btn-block btn-sm" title=""
+                                                       href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'i': course.id, 't': 1}|url_encode() }}">
                                                         <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
                                                 </div>
@@ -74,7 +80,8 @@
                                 <div class="col-md-4 col-sm-6">
                                     <article class="items-course">
                                         <div class="items-course-image">
-                                            <img alt="{{ session.name }}" class="img-responsive" src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
+                                            <img alt="{{ session.name }}" class="img-responsive"
+                                                 src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
                                         </div>
                                         <div class="items-course-info">
                                             <h4 class="title">
@@ -97,7 +104,7 @@
                                                             <ul>
                                                                 {% for coach in course.coaches %}
                                                                     <li>{{ coach }}</li>
-                                                                    {% endfor %}
+                                                                {% endfor %}
                                                             </ul>
                                                         {% endif %}
                                                     </li>
@@ -109,7 +116,8 @@
                                                 </div>
                                             {% elseif session.enrolled == "NO" %}
                                                 <div class="toolbar">
-                                                    <a class="btn btn-success btn-block btn-sm" href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'i': session.id, 't': 2}|url_encode() }}">
+                                                    <a class="btn btn-success btn-block btn-sm"
+                                                       href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'i': session.id, 't': 2}|url_encode() }}">
                                                         <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
                                                 </div>
@@ -127,26 +135,42 @@
                                 <div class="col-md-4 col-sm-6">
                                     <div class="items-course">
                                         <div class="items-course-image">
-                                            <a href="{{ _p.web }}service/{{ service.id }}"><img alt="{{ service.name }}" class="img-responsive" src="{{ service.image ? service.image : 'session_default.png'|icon() }}"></a>
+                                            <a href="{{ _p.web }}service/{{ service.id }}"><img alt="{{ service.name }}"
+                                                                                                class="img-responsive"
+                                                                                                src="{{ service.image ? service.image : 'session_default.png'|icon() }}"></a>
                                         </div>
                                         <div class="items-course-info">
                                             <h4 class="title">
-                                                <a title="{{ service.name }}" href="{{ _p.web }}service/{{ service.id }}" >
+                                                <a title="{{ service.name }}"
+                                                   href="{{ _p.web }}service/{{ service.id }}">
                                                     {{ service.name }}
                                                 </a>
                                             </h4>
                                             <ul class="list-unstyled">
-                                                <li><em class="fa fa-clock-o"></em> {{ 'Duration'|get_plugin_lang('BuyCoursesPlugin') }} : {{ service.duration_days == 0 ? 'NoLimit' | get_lang  : service.duration_days ~ ' ' ~ 'Days' | get_lang }}</li>
+                                                <li>
+                                                    <em class="fa fa-clock-o"></em> {{ 'Duration'|get_plugin_lang('BuyCoursesPlugin') }}
+                                                    : {{ service.duration_days == 0 ? 'NoLimit'|get_lang  : service.duration_days ~ ' ' ~ 'Days'|get_lang }}
+                                                </li>
                                                 {% if service.applies_to == 0 %}
-                                                    <li><em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'None' | get_lang }}</li>
+                                                    <li>
+                                                        <em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'None'|get_lang }}
+                                                    </li>
                                                 {% elseif service.applies_to == 1 %}
-                                                    <li><em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'User' | get_lang }}</li>
+                                                    <li>
+                                                        <em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'User'|get_lang }}
+                                                    </li>
                                                 {% elseif service.applies_to == 2 %}
-                                                    <li><em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'Course' | get_lang }}</li>
+                                                    <li>
+                                                        <em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'Course'|get_lang }}
+                                                    </li>
                                                 {% elseif service.applies_to == 3 %}
-                                                    <li><em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'Session' | get_lang }}</li>
+                                                    <li>
+                                                        <em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'Session'|get_lang }}
+                                                    </li>
                                                 {% elseif service.applies_to == 4 %}
-                                                    <li><em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'TemplateTitleCertificate' | get_plugin_lang('BuyCoursesPlugin') }}</li>
+                                                    <li>
+                                                        <em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'TemplateTitleCertificate'|get_plugin_lang('BuyCoursesPlugin') }}
+                                                    </li>
                                                 {% endif %}
                                                 <li><em class="fa fa-user"></em> {{ service.owner_name }}</li>
                                             </ul>
@@ -156,10 +180,12 @@
                                                 </span>
                                             </p>
                                             <div class="toolbar">
-                                                <a class="btn btn-info btn-block btn-sm" title="" href="{{ _p.web }}service/{{ service.id }}">
+                                                <a class="btn btn-info btn-block btn-sm" title=""
+                                                   href="{{ _p.web }}service/{{ service.id }}">
                                                     <em class="fa fa-info-circle"></em> {{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}
                                                 </a>
-                                                <a class="btn btn-success btn-block btn-sm" title="" href="{{ _p.web_plugin ~ 'buycourses/src/service_process.php?' ~ {'i': service.id, 't': service.applies_to}|url_encode() }}">
+                                                <a class="btn btn-success btn-block btn-sm" title=""
+                                                   href="{{ _p.web_plugin ~ 'buycourses/src/service_process.php?' ~ {'i': service.id, 't': service.applies_to}|url_encode() }}">
                                                     <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                 </a>
                                             </div>

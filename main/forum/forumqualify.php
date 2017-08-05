@@ -104,6 +104,8 @@ if (!empty($gradebook) && $gradebook == 'view') {
     );
 }
 
+$search = isset($_GET['search']) ? Security::remove_XSS(urlencode($_GET['search'])) : '';
+
 if ($origin == 'learnpath') {
     Display::display_reduced_header();
 } else {
@@ -118,12 +120,12 @@ if ($origin == 'learnpath') {
             "name" => get_lang('GroupSpace').' ('.$group_properties['name'].')'
         );
         $interbreadcrumb[] = array(
-            "url" => "viewforum.php?".api_get_cidreq()."&forum=".intval($_GET['forum'])."&search=".Security::remove_XSS(urlencode($_GET['search'])),
+            "url" => "viewforum.php?".api_get_cidreq()."&forum=".intval($_GET['forum'])."&search=".$search,
             "name" => prepare4display($currentForum['forum_title'])
         );
         if ($message <> 'PostDeletedSpecial') {
             $interbreadcrumb[] = array(
-                "url" => "viewthread.php?".api_get_cidreq()."&forum=".intval($_GET['forum'])."&gradebook=".$gradebook."&thread=".intval($_GET['thread']),
+                "url" => "viewthread.php?".api_get_cidreq()."&forum=".intval($_GET['forum'])."&thread=".intval($_GET['thread']),
                 "name" => prepare4display($currentThread['thread_title'])
             );
         }
@@ -137,7 +139,6 @@ if ($origin == 'learnpath') {
         Display::display_header('');
         api_display_tool_title($nameTools);
     } else {
-        $search = isset($_GET['search']) ? Security::remove_XSS(urlencode($_GET['search'])) : '';
         $info_thread = get_thread_information($currentForum['forum_id'], $_GET['thread']);
         $interbreadcrumb[] = array(
             "url" => "index.php?".api_get_cidreq()."&search=".$search,
@@ -294,7 +295,6 @@ if (isset($rows)) {
 
         // The check if there is an attachment
         $attachment_list = get_attachment($row['post_id']);
-
         if (!empty($attachment_list)) {
             echo '<tr ><td height="50%">';
             $realname = $attachment_list['path'];
@@ -344,9 +344,9 @@ if (api_is_allowed_to_edit() && $counter > 0) {
         $table_list .= '<tr><td>'.$userInfo['complete_name'].'</td>';
         $table_list .= '<td>'.$historyList[$i]['qualify'].'</td>';
         $table_list .= '<td>'.api_convert_and_format_date(
-                $historyList[$i]['qualify_time'],
-                DATE_TIME_FORMAT_LONG
-            );
+            $historyList[$i]['qualify_time'],
+            DATE_TIME_FORMAT_LONG
+        );
         $table_list .= '</td></tr>';
     }
     $table_list .= '</table>';

@@ -72,8 +72,8 @@ function APIobject() {
 // SCORM
 var API = new APIobject(); //for scorm 1.2
 var api = API;
-var API_1484_11 = new APIobject();  //for scorm 1.3
-var api_1484_11 = API_1484_11;
+//var API_1484_11 = new APIobject();  //for scorm 1.3
+//var api_1484_11 = API_1484_11;
 
 // SCORM-specific Error codes
 var G_NoError = 0;
@@ -458,7 +458,7 @@ function LMSGetValue(param) {
     } else if(param == 'cmi.core.student_name'){
         // ---- cmi.core.student_name
         <?php
-          $who = addslashes($user['complete_name']);
+          $who = addslashes($user['lastname']).', '.addslashes($user['firstname']);
           echo "result='$who';";
         ?>
     } else if(param == 'cmi.core.lesson_location'){

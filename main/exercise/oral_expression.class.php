@@ -72,13 +72,7 @@ class OralExpression extends Question
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
             <tr>
-                <th>&nbsp;</th>
-            </tr>
-            <tr>
                 <th>'.get_lang("Answer").'</th>
-            </tr>
-            <tr>
-                <th>&nbsp;</th>
             </tr>';
 
         return $header;

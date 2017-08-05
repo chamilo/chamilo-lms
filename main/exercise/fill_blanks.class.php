@@ -497,7 +497,6 @@ class FillBlanks extends Question
         $displayForStudent,
         $inBlankNumber
     ) {
-        $result = '';
         $inTabTeacherSolution = $listAnswersInfo['tabwords'];
         $inTeacherSolution = $inTabTeacherSolution[$inBlankNumber];
         switch (self::getFillTheBlankAnswerType($inTeacherSolution)) {
@@ -506,12 +505,14 @@ class FillBlanks extends Question
                 // the blank menu
                 // display a menu from answer separated with |
                 // if display for student, shuffle the correct answer menu
-                $listMenu = self::getFillTheBlankMenuAnswers($inTeacherSolution, $displayForStudent);
-                $resultOptions = ['' => '--'];
+                $listMenu = self::getFillTheBlankMenuAnswers(
+                    $inTeacherSolution,
+                    $displayForStudent
+                );
 
+                $resultOptions = ['' => '--'];
                 foreach ($listMenu as $item) {
                     $item = self::trimOption($item);
-
                     $resultOptions[$item] = $item;
                 }
 
@@ -749,7 +750,7 @@ class FillBlanks extends Question
             // remove [ and ] in string
             array_walk(
                 $listWords[0],
-                function(&$value, $key, $tabBlankChar) {
+                function (&$value, $key, $tabBlankChar) {
                     $trimChars = '';
                     for ($i = 0; $i < count($tabBlankChar); $i++) {
                         $trimChars .= $tabBlankChar[$i];
@@ -796,6 +797,7 @@ class FillBlanks extends Question
         }
 
         $listAnswerResults['commonwords'] = explode("::", $commonWords);
+        //echo strip_tags($commonWords);
 
         return $listAnswerResults;
     }
@@ -1231,11 +1233,11 @@ class FillBlanks extends Question
                 if (count($listCorrects) > 0) {
                     $firstCorrect = $listCorrects[0];
                 }
-                $correctAnswerHtml = "<span style='feedback-red'>".$firstCorrect."</span>";
+                $correctAnswerHtml = "<span class='feedback-red'>" . $firstCorrect . "</span>";
                 break;
             case self::FILL_THE_BLANK_STANDARD:
             default:
-                $correctAnswerHtml = "<span style='feedback-green'>".$correct."</span>";
+                $correctAnswerHtml = "<span class='feedback-green'>" . $correct . "</span>";
         }
 
         if ($hideExpectedAnswer) {
@@ -1243,9 +1245,9 @@ class FillBlanks extends Question
         }
 
         $result = "<div class='feedbaak-question'>";
-        $result .= "<span class='$style'>". $iconAnswer . ' ' . $answer."</span>";
-        $result .= "&nbsp;<span class='feedback-separator'>/</span>&nbsp;";
-        $result .= $correctAnswerHtml;
+        $result .= $iconAnswer . "<span class='$style'>" . $answer . "</span>";
+        $result .= "<span class='feedback-separator'> / </span>";
+        //$result .= $correctAnswerHtml;
         $result .= "</div>";
 
         return $result;

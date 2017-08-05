@@ -4,6 +4,13 @@
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\PluginBundle\Entity\StudentFollowUp\CarePost;
+use Fhaculty\Graph\Graph;
+use Graphp\GraphViz\GraphViz;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\NativeMailerHandler;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Handler\BufferHandler;
 
 if (PHP_SAPI != 'cli') {
     die('Run this script through the command line or comment this line in the code');
@@ -30,9 +37,12 @@ class ImportCsv
     public $defaultLanguage = 'dutch';
     public $extraFieldIdNameList = array(
         'session' => 'external_session_id',
+        'session_career' => 'external_career_id',
         'course' => 'external_course_id',
         'user' => 'external_user_id',
         'calendar_event' => 'external_calendar_event_id',
+        'career' => 'external_career_id',
+        'career_diagram' => 'career_diagram',
     );
     public $defaultAdminId = 1;
     public $defaultSessionVisibility = 1;
@@ -137,10 +147,13 @@ class ImportCsv
                         $method = 'importUnsubsessionsExtidStatic';
                     }
 
+                    if ($method == 'importCareersdiagram') {
+                        $method = 'importCareersDiagram';
+                    }
+
                     if ($method == 'importSubsessionsextidStatic') {
                         $method = 'importSubscribeUserToCourseSessionExtStatic';
                     }
-
                     if (method_exists($this, $method)) {
                         if ((
                                 $method == 'importSubscribeStatic' ||
@@ -186,6 +199,8 @@ class ImportCsv
                 'courseinsert-static',
                 'unsubscribe-static',
                 'care',
+                'careers',
+                'careersdiagram'
             );
 
             foreach ($sections as $section) {
@@ -198,7 +213,10 @@ class ImportCsv
                         $file = $fileInfo['file'];
 
                         echo 'File: '.$file.PHP_EOL;
+                        echo 'Method : '.$method.PHP_EOL;
+                        echo PHP_EOL;
                         $this->logger->addInfo("Reading file: $file");
+                        $this->logger->addInfo("Loading method $method ");
                         if ($method == 'importSessions') {
                             $this->$method(
                                 $file,
@@ -238,7 +256,10 @@ class ImportCsv
 
                         $file = $fileInfo['file'];
                         echo 'Static file: '.$file.PHP_EOL;
+                        echo 'Method : '.$method.PHP_EOL;
+                        echo PHP_EOL;
                         $this->logger->addInfo("Reading static file: $file");
+                        $this->logger->addInfo("Loading method $method ");
                         $this->$method(
                             $file,
                             true,
@@ -282,6 +303,12 @@ class ImportCsv
             'External session id'
         );
 
+        SessionManager::create_session_extra_field(
+            $this->extraFieldIdNameList['session_career'],
+            1,
+            'Career id'
+        );
+
         // Create calendar_event extra field extra_external_session_id
         $extraField = new ExtraField('calendar_event');
         $extraField->save(
@@ -289,6 +316,25 @@ class ImportCsv
                 'field_type' => ExtraField::FIELD_TYPE_TEXT,
                 'variable' => $this->extraFieldIdNameList['calendar_event'],
                 'display_text' => 'External calendar event id',
+            )
+        );
+
+        $extraField = new ExtraField('career');
+        $extraField->save(
+            array(
+                'visible_to_self' => 1,
+                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'variable' => $this->extraFieldIdNameList['career'],
+                'display_text' => 'External career id',
+            )
+        );
+
+        $extraField->save(
+            array(
+                'visible_to_self' => 1,
+                'field_type' => ExtraField::FIELD_TYPE_TEXTAREA,
+                'variable' => $this->extraFieldIdNameList['career_diagram'],
+                'display_text' => 'Career diagram',
             )
         );
     }
@@ -1318,7 +1364,8 @@ class ImportCsv
                     // Update
                     $params = array(
                         'title' => $row['title'],
-                        'category_code' => $row['course_category']
+                        'category_code' => $row['course_category'],
+                        'visibility' => $row['visibility']
                     );
 
                     $result = CourseManager::update_attributes(
@@ -1913,7 +1960,10 @@ class ImportCsv
             true,
             $this->defaultAdminId,
             $this->logger,
-            array('SessionID' => 'extra_'.$this->extraFieldIdNameList['session']),
+            array(
+                'SessionID' => 'extra_'.$this->extraFieldIdNameList['session'],
+                'CareerId' => 'extra_'.$this->extraFieldIdNameList['session_career']
+            ),
             $this->extraFieldIdNameList['session'],
             $this->daysCoachAccessBeforeBeginning,
             $this->daysCoachAccessAfterBeginning,
@@ -2193,6 +2243,253 @@ class ImportCsv
     }
 
     /**
+     * @param $file
+     * @param bool $moveFile
+     * @param array $teacherBackup
+     * @param array $groupBackup
+     * @return bool
+     */
+    private function importCareers(
+        $file,
+        $moveFile = false,
+        &$teacherBackup = array(),
+        &$groupBackup = array()
+    ) {
+        $data = Import::csv_reader($file);
+
+        if (!empty($data)) {
+            $this->logger->addInfo(count($data)." records found.");
+            $extraFieldValue = new ExtraFieldValue('career');
+            $extraFieldName = $this->extraFieldIdNameList['career'];
+            $externalEventId = null;
+
+            $extraField = new ExtraField('career');
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
+                $extraFieldName
+            );
+
+            if (empty($extraFieldInfo)) {
+                return false;
+            }
+
+            foreach ($data as $row) {
+                foreach ($row as $key => $value) {
+                    $key = (string)trim($key);
+                    // Remove utf8 bom
+                    $key = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $key);
+                    $row[$key] = $value;
+                }
+
+                $itemId = $row['CareerId'];
+                $item = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                    $extraFieldName,
+                    $itemId,
+                    false,
+                    false,
+                    false
+                );
+
+                $career = new Career();
+                if (empty($item)) {
+                    $params = [
+                        'status' => 1,
+                        'name' => $row['CareerName']
+                    ];
+                    $careerId = $career->save($params);
+                    if ($careerId) {
+                        $params = [
+                            'item_id' => $careerId,
+                            'extra_'.$extraFieldName => $itemId,
+                        ];
+                        $extraFieldValue->saveFieldValues($params);
+                    }
+                } else {
+                    if (isset($item['item_id'])) {
+                        $params = [
+                            'id' => $item['item_id'],
+                            'name' => $row['CareerName']
+                        ];
+                        $career->update($params);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @param $file
+     * @param bool $moveFile
+     * @param array $teacherBackup
+     * @param array $groupBackup
+     */
+    private function importCareersDiagram(
+        $file,
+        $moveFile = false,
+        &$teacherBackup = array(),
+        &$groupBackup = array()
+    ) {
+        $data = Import::csv_reader($file);
+
+        $extraFieldValue = new ExtraFieldValue('career');
+        $extraFieldName = $this->extraFieldIdNameList['career'];
+        $externalEventId = null;
+
+        $extraField = new ExtraField('career');
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
+            $extraFieldName
+        );
+
+        $careerDiagramExtraFieldName = $this->extraFieldIdNameList['career_diagram'];
+        $extraFieldDiagramInfo = $extraField->get_handler_field_info_by_field_variable(
+            $careerDiagramExtraFieldName
+        );
+
+        if (empty($extraFieldInfo) || empty($extraFieldDiagramInfo)) {
+            return false;
+        }
+
+        if (!empty($data)) {
+            $this->logger->addInfo(count($data)." records found.");
+            $values = [];
+            foreach ($data as $row) {
+                foreach ($row as $key => $value) {
+                    $key = (string) trim($key);
+                    // Remove utf8 bom
+                    $key = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $key);
+                    $row[$key] = $value;
+                }
+                $values[$row['Column']][] = $row;
+            }
+
+            $careerList = [];
+            $careerNameList = [];
+            ksort($values);
+            $careerChamiloIdList = [];
+            // 1. First create all items
+            foreach ($values as $column => $rowList) {
+                foreach ($rowList as $row) {
+                    $careerId = $row['CareerId'];
+                    $item = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                        $extraFieldName,
+                        $careerId,
+                        false,
+                        false,
+                        false
+                    );
+
+                    $chamiloCareerName = '';
+                    if (empty($item)) {
+                        $this->logger->addInfo("Career not found: $careerId");
+                        continue;
+                    } else {
+                        if (isset($item['item_id'])) {
+                            $careerChamiloId = $item['item_id'];
+                            $career = new Career();
+                            $career = $career->find($careerChamiloId);
+                            $chamiloCareerName = $career['name'];
+                            $careerNameList[$careerId] = $chamiloCareerName;
+                            $careerChamiloIdList[$careerId] = $careerChamiloId;
+                        } else {
+                            continue;
+                        }
+                    }
+
+                    if (empty($chamiloCareerName)) {
+                        $this->logger->addInfo("Career not found: $careerId");
+                        continue;
+                    }
+
+                    if (isset($careerList[$careerId])) {
+                        $graph = $careerList[$careerId];
+                    } else {
+                        $graph = new Graph($careerId);
+                        $graph->setAttribute('graphviz.graph.rankdir', 'LR');
+                        $careerList[$careerId] = $graph;
+                    }
+
+                    $currentCourseId = (int) $row['CourseId'];
+                    $name = $row['CourseName'];
+                    $color = $row['DefinedColor'];
+                    $notes = $row['Notes'];
+                    $groupValue = $row['Group'];
+                    $rowValue = $row['Row'];
+                    $arrow = $row['DrawArrowFrom'];
+                    $subGroup = $row['SubGroup'];
+                    $connections = $row['Connections'];
+
+                    if ($graph->hasVertex($currentCourseId)) {
+                        // Avoid double insertion
+                        continue;
+                    } else {
+                        $current = $graph->createVertex($currentCourseId);
+                        $current->setAttribute('graphviz.label', $name);
+                        $current->setAttribute('DefinedColor', $color);
+                        $current->setAttribute('Notes', $notes);
+                        $current->setAttribute('Row', $rowValue);
+                        $current->setAttribute('Group', $groupValue);
+                        $current->setAttribute('DrawArrowFrom', $arrow);
+                        $current->setAttribute('SubGroup', $subGroup);
+                        $current->setAttribute('Connections', $connections);
+
+                        //$current->setAttribute('graphviz.color', 'blue');
+                        $current->setAttribute('graphviz.shape', 'box');
+                        $current->setGroup($column);
+                    }
+                }
+            }
+
+            // 2. Create connections
+            // $column start with 1 (depending in Column row)
+            foreach ($values as $column => $rowList) {
+                foreach ($rowList as $row) {
+                    $careerId = $row['CareerId'];
+                    if (isset($careerList[$careerId])) {
+                        $graph = $careerList[$careerId];
+                    } else {
+                        continue;
+                    }
+
+                    $currentCourseId = (int) $row['CourseId'];
+                    if ($graph->hasVertex($currentCourseId)) {
+                        $current = $graph->getVertex($currentCourseId);
+                    } else {
+                        continue;
+                    }
+
+                    if (isset($row['DependedOn']) && !empty($row['DependedOn'])) {
+                        $parentList = explode(',', $row['DependedOn']);
+                        foreach ($parentList as $parentId) {
+                            $parentId = (int) $parentId;
+                            echo $parentId.PHP_EOL;
+                            if ($graph->hasVertex($parentId)) {
+                                /** @var Vertex $parent */
+                                $parent = $graph->getVertex($parentId);
+                                /*$parent->setAttribute('graphviz.color', 'red');
+                                $parent->setAttribute('graphviz.label', $name);
+                                $parent->setAttribute('graphviz.shape', 'square');*/
+                                $parent->createEdgeTo($current);
+                            }
+                        }
+                    }
+                }
+            }
+
+            /** @var Graph $graph */
+            foreach ($careerList as $id => $graph) {
+                if (isset($careerChamiloIdList[$id])) {
+                    $params = [
+                        'item_id' => $careerChamiloIdList[$id],
+                        'extra_'.$careerDiagramExtraFieldName => serialize($graph),
+                        'extra_'.$extraFieldName => $id,
+                    ];
+                    $extraFieldValue->saveFieldValues($params);
+                }
+            }
+        }
+    }
+
+
+    /**
      * @param string $file
      * @param bool $moveFile
      * @param array $teacherBackup
@@ -2451,14 +2748,7 @@ class ImportCsv
             Database::query($sql);
         }
     }
-
 }
-
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-use Monolog\Handler\NativeMailerHandler;
-use Monolog\Handler\RotatingFileHandler;
-use Monolog\Handler\BufferHandler;
 
 $logger = new Logger('cron');
 $emails = isset($_configuration['cron_notification_mails']) ? $_configuration['cron_notification_mails'] : null;

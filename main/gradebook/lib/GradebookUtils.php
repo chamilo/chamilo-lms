@@ -482,8 +482,14 @@ class GradebookUtils
      * @param null $mainCourseCategory
      * @return array
      */
-    public static function get_printable_data($cat, $users, $alleval, $alllinks, $params, $mainCourseCategory = null)
-    {
+    public static function get_printable_data(
+        $cat,
+        $users,
+        $alleval,
+        $alllinks,
+        $params,
+        $mainCourseCategory = null
+    ) {
         $datagen = new FlatViewDataGenerator(
             $users,
             $alleval,
@@ -684,8 +690,10 @@ class GradebookUtils
      * @param int $cat_id The category id
      * @return array
      */
-    public static function get_list_gradebook_certificates_by_user_id($user_id, $cat_id = null)
-    {
+    public static function get_list_gradebook_certificates_by_user_id(
+        $user_id,
+        $cat_id = null
+    ) {
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $sql = 'SELECT 
                     gc.score_certificate, 
@@ -1467,7 +1475,6 @@ class GradebookUtils
         }
 
         $pdf->params['student_info'] = $userInfo;
-
         $file = api_get_path(SYS_ARCHIVE_PATH).uniqid().'.html';
 
         $content =
@@ -1476,12 +1483,11 @@ class GradebookUtils
             '<br />'.get_lang('Feedback').'<br />
             <textarea rows="5" cols="100" ></textarea>';
 
-        $address = api_get_setting('institution_address');
+        /*$address = api_get_setting('institution_address');
         $phone = api_get_setting('administratorTelephone');
         $address = str_replace('\n', '<br />', $address);
 
-        $pdf->custom_header = array('html' => "<h5 align='right'>$address <br />$phone</h5>");
-
+        $pdf->custom_header = array('html' => "<h5 align='right'>$address <br />$phone</h5>");*/
         $result = $pdf->html_to_pdf_with_template(
             $content,
             $saveToFile,

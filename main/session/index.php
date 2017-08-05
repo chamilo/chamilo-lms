@@ -13,7 +13,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 if (empty($_GET['session_id'])) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
@@ -194,7 +194,11 @@ foreach ($session_list as $item) {
 
 // Session list form
 if (count($session_select) > 1) {
-    $form = new FormValidator('exercise_admin', 'get', api_get_self().'?session_id='.$session_id);
+    $form = new FormValidator(
+        'exercise_admin',
+        'get',
+        api_get_self().'?session_id='.$session_id
+    );
     $form->addElement(
         'select',
         'session_id',
@@ -351,7 +355,6 @@ if (!empty($courseList)) {
     }
 }
 
-
 $my_real_array = msort($my_real_array, 'date', 'asc');
 
 if (!empty($new_exercises)) {
@@ -375,10 +378,19 @@ if (!empty($start) && !empty($end)) {
     $dates = Display::tag('i', $start_only.' '.$end_only);
 }
 
-echo Display::tag('h1', $session_info['name']);
-echo $dates.'<br />';
+$editLink = '';
+if (api_is_platform_admin()) {
+    $editLink = '&nbsp;'.Display::url(
+        Display::return_icon('edit.png', get_lang('Edit')),
+        api_get_path(WEB_CODE_PATH).'session/session_edit.php?page=resume_session.php&id='.$session_id
+    );
+}
 
-if ($session_info['show_description'] == 1) {
+echo Display::tag('h1', $session_info['name'].$editLink);
+echo $dates.'<br />';
+$allow = api_get_setting('show_session_description') === 'true';
+
+if ($session_info['show_description'] == 1 && $allow) {
 ?>
     <div class="home-course-intro">
         <div class="page-course">
@@ -407,17 +419,6 @@ $column_model_courses = array(
 $extra_params_courses['height'] = '100%';
 $extra_params_courses['autowidth'] = 'true'; //use the width of the parent
 
-//$extra_params_courses['gridview'] = "false";
-/*$extra_params_courses['rowNum'] = 9000;
-
-$extra_params_courses['height'] = "100%";
-$extra_params_courses['autowidth'] = 'false'; //use the width of the parent
-$extra_params_courses['recordtext'] = '';
-$extra_params_courses['pgtext'] = '';
-$extra_params_courses['pgbuttons'] = false;*/
-//$extra_params_courses['width'] = '50%';
-//$extra_params_courses['autowidth'] = 'true';
-
 $url = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_default&session_id='.$session_id.'&course_id='.$course_id;
 $columns = array(
     get_lang('PublicationDate'),
@@ -433,22 +434,6 @@ $column_model = array(
 
 $extra_params = array();
 $extra_params['sortname'] = 'date';
-
-/*
-
-$extra_params['sortorder'] = 'asc';
-$extra_params['pgbuttons'] = false;
-$extra_params['recordtext'] = '';
-$extra_params['pgtext'] = '';
-$extra_params['height'] = "100%";
-*/
-//$extra_params['autowidth'] = 'true'; //use the width of the parent
-//$extra_params['width'] = '90%';
-
-//$extra_params['autowidth'] = 'true'; //use the width of the parent
-//$extra_params['forceFit'] = 'true'; //use the width of the parent
-//$extra_params['altRows'] = 'true'; //zebra style
-
 $extra_params['height'] = '100%';
 $extra_params['autowidth'] = 'true'; //use the width of the parent
 
@@ -533,8 +518,8 @@ function change_session() {
 }
 
 $(function() {
-	//js used when generating images on the fly see function Tracking::show_course_detail()
-    $(".dialog").dialog("destroy");
+    //js used when generating images on the fly see function Tracking::show_course_detail()
+    //$(".dialog").dialog("destroy");
     $(".dialog").dialog({
         autoOpen: false,
         show: "blind",
@@ -551,10 +536,19 @@ $(function() {
         return false;
     });
 
-    /* Binds a tab id in the url */
-    $("#tabs").bind('tabsselect', function(event, ui) {
-		window.location.href=ui.tab;
-    });
+    // Redirect to tab
+    var url = document.location.toString();
+    if (url.match('#')) {
+        var tabLink = url.split('#')[1];
+        $('.nav-tabs a[href="#' + tabLink + '"]').tab('show');
+
+        // Redirect to course part
+        var secondLink = url.split('#')[2];
+        if (secondLink) {
+            var aTag = $("a[href='#" + secondLink + "']");
+            $('html,body').animate({scrollTop: aTag.offset().top}, 'slow');
+        }
+    }
 <?php
      //Displays js code to use a jqgrid
     echo Display::grid_js(
@@ -615,7 +609,7 @@ if (!api_is_anonymous()) {
     $reportingTab = Tracking::show_user_progress(
         api_get_user_id(),
         $session_id,
-        '#tabs-4',
+        '#tabs-5',
         false,
         false
     );

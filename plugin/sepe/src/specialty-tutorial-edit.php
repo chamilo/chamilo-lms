@@ -12,7 +12,7 @@ $course_plugin = 'sepe';
 $plugin = SepePlugin::create();
 $_cid = 0;
 
-if ( !empty($_POST)) {
+if (!empty($_POST)) {
     $check = Security::check_token('post');
     if ($check) {
         $centerOrigin = Database::escape_string(trim($_POST['center_origin']));
@@ -132,7 +132,7 @@ if (api_is_platform_admin()) {
     }
     $startYear -= 5;
     $endYear += 5;
-    $endRangeYear = (($startYear + 15) < $endYear) ? ($endYear+1):($startYear +15);
+    $endRangeYear = (($startYear + 15) < $endYear) ? ($endYear + 1) : ($startYear + 15);
     while ($startYear <= $endRangeYear) {
         $listYears[] = $startYear;
         $startYear++;
@@ -154,5 +154,5 @@ if (api_is_platform_admin()) {
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 } else {
-    header('Location:' . api_get_path(WEB_PATH));
+    header('Location:'.api_get_path(WEB_PATH));
 }

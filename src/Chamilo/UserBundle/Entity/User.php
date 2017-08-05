@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 //use Sonata\UserBundle\Entity\BaseUser as BaseUser;
+use Doctrine\ORM\Query\Expr\Join;
 use Sonata\UserBundle\Model\User as BaseUser;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
@@ -404,6 +405,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     protected $portals;
 
     /**
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="generalCoach")
      **/
     protected $sessionAsGeneralCoach;
@@ -2439,5 +2441,42 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         $this->profileCompleted = $profileCompleted;
 
         return $this;
+    }
+
+    /**
+     * Get sessionAsGeneralCoach
+     * @return ArrayCollection
+     */
+    public function getSessionAsGeneralCoach()
+    {
+        return $this->sessionAsGeneralCoach;
+    }
+
+    /**
+     * Get the list of HRM who have assigned this user
+     * @return array
+     */
+    public function getHrm()
+    {
+        $em = \Database::getManager();
+        $qb = $em->createQueryBuilder();
+
+        $hrmList = $qb
+            ->select('uru')
+            ->from('ChamiloCoreBundle:UserRelUser', 'uru')
+            ->innerJoin('ChamiloCoreBundle:AccessUrlRelUser', 'auru', Join::WITH, 'auru.userId = uru.friendUserId')
+            ->where(
+                $qb->expr()->eq('auru.accessUrlId', api_get_current_access_url_id())
+            )
+            ->andWhere(
+                $qb->expr()->eq('uru.userId', $this->id)
+            )
+            ->andWhere(
+                $qb->expr()->eq('uru.relationType', USER_RELATION_TYPE_RRHH)
+            )
+            ->getQuery()
+            ->getResult();
+
+        return $hrmList;
     }
 }

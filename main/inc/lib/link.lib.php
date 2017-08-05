@@ -1945,4 +1945,48 @@ class Link extends Model
     {
         return self::moveLinkDisplayOrder($id, 'DESC');
     }
+
+    /**
+     * @param string $url
+     * @return bool
+     */
+    public static function checkUrl($url)
+    {
+        // Check if curl is available.
+        if (!in_array('curl', get_loaded_extensions())) {
+            return false;
+        }
+
+        // set URL and other appropriate options
+        $defaults = array(
+            CURLOPT_URL => $url,
+            CURLOPT_FOLLOWLOCATION => true, // follow redirects accept youtube.com
+            CURLOPT_HEADER => 0,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 4
+        );
+
+        $proxySettings = api_get_configuration_value('proxy_settings');
+
+        if (!empty($proxySettings) &&
+            isset($proxySettings['curl_setopt_array'])
+        ) {
+             $defaults[CURLOPT_PROXY] = $proxySettings['curl_setopt_array']['CURLOPT_PROXY'];
+             $defaults[CURLOPT_PROXYPORT] = $proxySettings['curl_setopt_array']['CURLOPT_PROXYPORT'];
+        }
+
+        // Create a new cURL resource
+        $ch = curl_init();
+        curl_setopt_array($ch, $defaults);
+
+        // grab URL and pass it to the browser
+        ob_start();
+        $result = curl_exec($ch);
+        ob_get_clean();
+
+        // close cURL resource, and free up system resources
+        curl_close($ch);
+
+        return $result;
+    }
 }

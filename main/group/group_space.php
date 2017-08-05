@@ -154,7 +154,7 @@ if (api_is_allowed_to_edit(false, true) ||
     }
 
     if ($current_group['calendar_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
-        $groupFilter = null;
+        $groupFilter = '';
         if (!empty($group_id)) {
             $groupFilter = "&type=course&user_id=GROUP:$group_id";
         }
@@ -248,10 +248,14 @@ if (api_is_allowed_to_edit(false, true) ||
     }
 
     if ($current_group['calendar_state'] == GroupManager::TOOL_PUBLIC) {
+        $groupFilter = '';
+        if (!empty($group_id)) {
+            $groupFilter = "&type=course&user_id=GROUP:$group_id";
+        }
         // Link to a group-specific part of agenda
         $actions_array[] = array(
-            'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda.php?'.api_get_cidreq(),
-            'content' => Display::return_icon('agenda.png', get_lang('GroupCalendar'), array(), ICON_SIZE_MEDIUM)
+            'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?'.api_get_cidreq().$groupFilter,
+            'content' => Display::return_icon('agenda.png', get_lang('GroupCalendar'), array(), 32)
         );
     }
 

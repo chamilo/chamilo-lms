@@ -3977,7 +3977,6 @@ $ApprovalForNewAccount = "Aprobación dunha conta nova";
 $ManageUser = "Xestionar usuario";
 $SubscribeUserToCourseAsTeacher = "Rexistrar usuarios neste curso como profesor";
 $PasswordEncryptedForSecurity = "O seu contrasinal está encriptado para a súa seguridade. Por iso, cando pulse no enlace para rexenerar a súa clave remitiráselle un novo correo que conterá o seu contrasinal.";
-$SystemUnableToSendEmailContact = "O sistema non puido enviar o correo electrónico";
 $OpenIDCouldNotBeFoundPleaseRegister = "Este OpenID non se encontra na nosa base de datos. Por favor, rexístrese para obter unha conta. Se xa ten unha conta con nós, edite o seu perfil na mesma para engadir este OpenID";
 $UsernameMaxXCharacters = "O nome de usuario pode ter como máximo unha lonxitude de %s caracteres";
 $PictureUploaded = "A súa imaxe foi enviada";

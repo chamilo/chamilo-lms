@@ -1678,7 +1678,7 @@ class CourseChatUtils
         }
         $history .= '</div>';
 
-        if ($isMaster || $GLOBALS['is_courseCoach']) {
+        if ($isMaster || $GLOBALS['is_session_general_coach']) {
             $history .= '
                 <div id="clear-chat">
                     <button type="button" id="chat-reset" class="btn btn-danger btn-sm">

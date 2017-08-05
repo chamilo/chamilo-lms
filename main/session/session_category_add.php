@@ -2,56 +2,58 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	@package chamilo.admin
-* 	@todo use formvalidator for the form
-*/
+ * @package chamilo.admin
+ * @todo use formvalidator for the form
+ */
 
 $cidReset = true;
-
 require_once __DIR__.'/../inc/global.inc.php';
-
 $xajax = new xajax();
 $xajax->registerFunction('search_coachs');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
-
 api_protect_admin_script(true);
 
 $formSent = 0;
 $errorMsg = '';
-//$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
-$interbreadcrumb[] = array('url' => "session_category_list.php", "name" => get_lang('ListSessionCategory'));
+$interbreadcrumb[] = array(
+    'url' => 'session_list.php',
+    'name' => get_lang('SessionList')
+);
+$interbreadcrumb[] = array(
+    'url' => "session_category_list.php",
+    "name" => get_lang('ListSessionCategory')
+);
 
 // Database Table Definitions
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
-	$formSent = 1;
-	$name = $_POST['name'];
-	$year_start = $_POST['year_start'];
-	$month_start = $_POST['month_start'];
-	$day_start = $_POST['day_start'];
-	$year_end = $_POST['year_end'];
-	$month_end = $_POST['month_end'];
-	$day_end = $_POST['day_end'];
-	$return = SessionManager::create_category_session(
-		$name,
-		$year_start,
-		$month_start,
-		$day_start,
-		$year_end,
-		$month_end,
-		$day_end
-	);
+    $formSent = 1;
+    $name = $_POST['name'];
+    $year_start = $_POST['year_start'];
+    $month_start = $_POST['month_start'];
+    $day_start = $_POST['day_start'];
+    $year_end = $_POST['year_end'];
+    $month_end = $_POST['month_end'];
+    $day_end = $_POST['day_end'];
+    $return = SessionManager::create_category_session(
+        $name,
+        $year_start,
+        $month_start,
+        $day_start,
+        $year_end,
+        $month_end,
+        $day_end
+    );
 
-	if ($return == strval(intval($return))) {
-		Display::addFlash(Display::return_message(get_lang('SessionCategoryAdded')));
-		header('Location: session_category_list.php');
-		exit();
-	}
+    if ($return == strval(intval($return))) {
+        Display::addFlash(Display::return_message(get_lang('SessionCategoryAdded')));
+        header('Location: session_category_list.php');
+        exit();
+    }
 }
 $thisYear = date('Y');
 $thisMonth = date('m');
@@ -61,7 +63,7 @@ $tool_name = get_lang('AddACategory');
 //display the header
 Display::display_header($tool_name);
 if (!empty($return)) {
-	echo Display::return_message($return, 'error', false);
+    echo Display::return_message($return, 'error', false);
 }
 ?>
 <div class="row">
@@ -225,17 +227,16 @@ if (!empty($return)) {
                 </div>
                 <div class="col-md-3"></div>
             </div>
-
         </form>
 </div>
-<script type="text/javascript">
+<script>
 function setDisable(select) {
-	document.form.day_start.disabled = (select.checked) ? true : false;
-	document.form.month_start.disabled = (select.checked) ? true : false;
-	document.form.year_start.disabled = (select.checked) ? true : false;
-	document.form.day_end.disabled = (select.checked) ? true : false;
-	document.form.month_end.disabled = (select.checked) ? true : false;
-	document.form.year_end.disabled = (select.checked) ? true : false;
+    document.form.day_start.disabled = (select.checked) ? true : false;
+    document.form.month_start.disabled = (select.checked) ? true : false;
+    document.form.year_start.disabled = (select.checked) ? true : false;
+    document.form.day_end.disabled = (select.checked) ? true : false;
+    document.form.month_end.disabled = (select.checked) ? true : false;
+    document.form.year_end.disabled = (select.checked) ? true : false;
 }
 </script>
 <?php

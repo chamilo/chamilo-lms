@@ -4,9 +4,9 @@
 use ChamiloSession as Session;
 
 /**
- *	This file allows record wav files.
+ * This file allows record wav files.
  *
- *	@package chamilo.document
+ * @package chamilo.document
  *
  * @author Juan Carlos Raña Trabado herodoto@telefonica.net
  * @since 7/jun/2012
@@ -37,28 +37,27 @@ $dir = $document_data['path'];
 //make some vars
 $webcamdir = $dir;
 if ($webcamdir == "/") {
- $webcamdir = "";
+    $webcamdir = '';
 }
 
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 // Please, do not modify this dirname formatting
-
 if (strstr($dir, '..')) {
-	$dir = '/';
+    $dir = '/';
 }
 
 if ($dir[0] == '.') {
-	$dir = substr($dir, 1);
+    $dir = substr($dir, 1);
 }
 
 if ($dir[0] != '/') {
-	$dir = '/'.$dir;
+    $dir = '/'.$dir;
 }
 
 if ($dir[strlen($dir) - 1] != '/') {
-	$dir .= '/';
+    $dir .= '/';
 }
 
 $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
@@ -71,24 +70,27 @@ if (!is_dir($filepath)) {
 $groupId = api_get_group_id();
 
 if (!empty($groupId)) {
-	$interbreadcrumb[] = array("url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace'));
-	$noPHP_SELF = true;
-	$group = GroupManager :: get_group_properties($groupId);
-	$path = explode('/', $dir);
-	if ('/'.$path[1] != $group['directory']) {
-		api_not_allowed(true);
-	}
+    $interbreadcrumb[] = array(
+        "url" => "../group/group_space.php?".api_get_cidreq(),
+        "name" => get_lang('GroupSpace')
+    );
+    $noPHP_SELF = true;
+    $group = GroupManager :: get_group_properties($groupId);
+    $path = explode('/', $dir);
+    if ('/'.$path[1] != $group['directory']) {
+        api_not_allowed(true);
+    }
 }
 
 $interbreadcrumb[] = array("url" => "./document.php?id=".$document_id."&".api_get_cidreq(), "name" => get_lang('Documents'));
 
 if (!api_is_allowed_in_course()) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 if (!($is_allowed_to_edit || $groupRights ||
-	DocumentManager::is_my_shared_folder(api_get_user_id(), Security::remove_XSS($dir), api_get_session_id()))) {
-	api_not_allowed(true);
+    DocumentManager::is_my_shared_folder(api_get_user_id(), Security::remove_XSS($dir), api_get_session_id()))) {
+    api_not_allowed(true);
 }
 
 /*	Header */
@@ -96,10 +98,10 @@ Event::event_access_tool(TOOL_DOCUMENT);
 
 $display_dir = $dir;
 if (isset ($group)) {
-	$display_dir = explode('/', $dir);
-	unset($display_dir[0]);
-	unset($display_dir[1]);
-	$display_dir = implode('/', $display_dir);
+    $display_dir = explode('/', $dir);
+    unset($display_dir[0]);
+    unset($display_dir[1]);
+    $display_dir = implode('/', $display_dir);
 }
 
 // Interbreadcrumb for the current directory root path
@@ -141,7 +143,7 @@ echo '</div>';
         <div id="chamilo-camera"></div>
     </div>
 	<!-- Configure a few settings and attach the camera to the div container -->
-	<script language="JavaScript">
+	<script>
 		Webcam.set({
             width: 320,
             height: 240,
@@ -152,7 +154,6 @@ echo '</div>';
         //This line Fix a minor bug that made a conflict with a videochat feature in another module file
         $('video').addClass('skip');
 	</script>
-
 	<!-- Using now Jquery to do the webcamJS Functions and handle the server response (see webcam_receiver.php now in webcamJS directory) -->
 	<script language="JavaScript">
 		$(document).ready(function() {
@@ -198,9 +199,8 @@ echo '</div>';
                   });
               });
         }
-	</script>
-
-     <script language=javascript>
+    </script>
+    <script>
 	   var interval=null;
 	   var timeout=null;
 	   var counter=0;
@@ -227,13 +227,10 @@ echo '</div>';
 			   interval=window.clearInterval(interval);
 		   }
 	   }
- </script>
-
-
+    </script>
 	</td><td width=50></td><td valign='top' align='center'>
 		<div id="upload_results" style="background-color:#ffffff;"></div>
 	</td></tr></table>
-
     <!-- Implementing Button html5 Tags instead Inputs and some cool bootstrap button styles -->
     <div>
         <br/>

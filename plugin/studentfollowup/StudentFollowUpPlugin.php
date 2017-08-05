@@ -125,37 +125,36 @@ class StudentFollowUpPlugin extends Plugin
                 if ($post) {
                     $isDrhRelatedViaPost = true;
                 }
+            }
 
-                // Check if course session coach
-                $sessions = SessionManager::get_sessions_by_user($studentId);
-
-                if (!empty($sessions)) {
-                    foreach ($sessions as $session) {
-                        $sessionId = $session['session_id'];
-                        $sessionDrhInfo = SessionManager::getSessionFollowedByDrh(
-                            $currentUserId,
-                            $sessionId
+            // Check if course session coach
+            $sessions = SessionManager::get_sessions_by_user($studentId);
+            if (!empty($sessions)) {
+                foreach ($sessions as $session) {
+                    $sessionId = $session['session_id'];
+                    $sessionDrhInfo = SessionManager::getSessionFollowedByDrh(
+                        $currentUserId,
+                        $sessionId
+                    );
+                    if (!empty($sessionDrhInfo)) {
+                        $isDrhRelatedToSession = true;
+                        break;
+                    }
+                    foreach ($session['courses'] as $course) {
+                        //$isCourseCoach = api_is_coach($sessionId, $course['real_id']);
+                        $coachList = SessionManager::getCoachesByCourseSession(
+                            $sessionId,
+                            $course['real_id']
                         );
-                        if (!empty($sessionDrhInfo)) {
-                            $isDrhRelatedToSession = true;
-                            break;
-                        }
-                        foreach ($session['courses'] as $course) {
-                            //$isCourseCoach = api_is_coach($sessionId, $course['real_id']);
-                            $coachList = SessionManager::getCoachesByCourseSession(
-                                $sessionId,
-                                $course['real_id']
-                            );
-                            if (!empty($coachList) && in_array($currentUserId, $coachList)) {
-                                $isCourseCoach = true;
-                                break(2);
-                            }
+                        if (!empty($coachList) && in_array($currentUserId, $coachList)) {
+                            $isCourseCoach = true;
+                            break(2);
                         }
                     }
                 }
-
-                $isCareTaker = $isDrhRelatedViaPost && $isDrhRelatedToSession;
             }
+
+            $isCareTaker = $isDrhRelatedViaPost && $isDrhRelatedToSession;
 
             $isAllow = $isAdmin || $isCareTaker || $isDrhRelatedToSession || $isCourseCoach;
             $showPrivate = $isAdmin || $isCareTaker;

@@ -236,6 +236,10 @@ if (api_get_setting('allow_group_categories') === 'true') {
             continue;
         }
 
+        if (empty($categoryId) && empty($group_list)) {
+            continue;
+        }
+
         $label = Display::label(count($group_list).' '.get_lang('ExistingGroups'), 'info');
         $actions = null;
         if (api_is_allowed_to_edit(false, true) && !empty($categoryId) && empty($sessionId)) {

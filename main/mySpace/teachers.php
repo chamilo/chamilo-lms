@@ -161,7 +161,7 @@ function get_users($from, $limit, $column, $direction)
             $detailsLink = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'&id_session='.$sessionId.'">
 				          '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>';
         } else {
-            $detailsLink = '<a href="myStudents.php?student='.$student_id.'">
+            $detailsLink = '<a href="myStudents.php?student='.$student_id.'&origin=teacher_details">
 				            '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>';
         }
         $row[] = $detailsLink;
@@ -260,8 +260,9 @@ $form->setDefaults($params);
 
 if ($export_csv) {
     // send the csv file if asked
-    $content = $table->return_table();
+    $content = $table->get_table_data();
     foreach ($content as &$row) {
+        $row[3] = strip_tags($row[3]);
         unset($row[4]);
     }
     $csv_content = array_merge($csv_header, $content);

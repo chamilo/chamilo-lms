@@ -26,7 +26,7 @@ class Accessurledituserstourl
      * @return xajaxResponse Xajax response block
      * @assert () === false
      */
-    function search_users($needle, $id)
+    public function search_users($needle, $id)
     {
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $xajax_response = new xajaxResponse();
@@ -58,7 +58,11 @@ class Accessurledituserstourl
                 }
             }
         }
-        $xajax_response -> addAssign('ajax_list_users', 'innerHTML', api_utf8_encode($return));
+        $xajax_response->addAssign(
+            'ajax_list_users',
+            'innerHTML',
+            api_utf8_encode($return)
+        );
         return $xajax_response;
     }
 }

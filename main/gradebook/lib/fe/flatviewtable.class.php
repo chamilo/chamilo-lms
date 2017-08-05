@@ -106,7 +106,6 @@ class FlatViewTable extends SortableTable
 
         $user_results = $this->datagen->get_data_to_graph2(false);
 
-        //if (empty($this->datagen->get_total_items_count()) || empty($total_users)) {
         if (empty($user_results) || empty($total_users)) {
             echo get_lang('NoResults');
             return '';
@@ -159,6 +158,7 @@ class FlatViewTable extends SortableTable
                 $i++;
             }
         }
+
 
         //fixing $resource_list
         $max = 0;
@@ -330,8 +330,13 @@ class FlatViewTable extends SortableTable
     /**
      * Function used by SortableTable to generate the data to display
      */
-    public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = null)
-    {
+    public function get_table_data(
+        $from = 1,
+        $per_page = null,
+        $column = null,
+        $direction = null,
+        $sort = null
+    ) {
         $is_western_name_order = api_is_western_name_order();
 
         // create page navigation if needed

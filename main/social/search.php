@@ -156,7 +156,7 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
         $results,
         'search-friends',
         null,
-        'friends-acorderon',
+        'friends-accordion',
         'friends-collapse'
     );
 
@@ -228,7 +228,7 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
         $block_groups,
         'search-groups',
         null,
-        'groups-acorderon',
+        'groups-accordion',
         'groups-collapse'
     );
 }

@@ -61,3 +61,11 @@ RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
 
 # Deny access
 RewriteRule ^(tests|.git) - [F,L,NC]
+
+# Add caching of woff font files to avoid loading 2*15KB each time with Chamilo
+# default OpenSans font
+AddType application/font-woff .woff .woff2
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType application/font-woff "access plus 1 month"
+</IfModule>

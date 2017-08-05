@@ -177,6 +177,37 @@ if ($type == 'course' && !empty($session_id)) {
     $type_label = get_lang('SessionCalendar');
 }
 
+$agendaColors = array_merge(
+    [
+        'platform' => 'red', //red
+        'course' => '#458B00', //green
+        'group' => '#A0522D', //siena
+        'session' => '#00496D', // kind of green
+        'other_session' => '#999', // kind of green
+        'personal' => 'steel blue', //steel blue
+        'student_publication' => '#FF8C00' //DarkOrange
+    ],
+    api_get_configuration_value('agenda_colors') ?: []
+);
+
+switch ($type_event_class) {
+    case 'admin_event':
+        $tpl->assign('type_event_color', $agendaColors['platform']);
+        break;
+    case 'course_event':
+        $tpl->assign('type_event_color', $agendaColors['course']);
+        break;
+    case 'group_event':
+        $tpl->assign('type_event_color', $agendaColors['group']);
+        break;
+    case 'session_event':
+        $tpl->assign('type_event_color', $agendaColors['session']);
+        break;
+    case 'personal_event':
+        $tpl->assign('type_event_color', $agendaColors['personal']);
+        break;
+}
+
 $tpl->assign('type_label', $type_label);
 $tpl->assign('type_event_class', $type_event_class);
 

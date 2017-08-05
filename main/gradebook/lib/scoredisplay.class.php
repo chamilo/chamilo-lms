@@ -20,11 +20,12 @@ class ScoreDisplay
     /**
      * Get the instance of this class
      * @param int $category_id
+     * @return ScoreDisplay
      */
     public static function instance($category_id = 0)
     {
         static $instance;
-        if (!isset ($instance)) {
+        if (!isset($instance)) {
             $instance = new ScoreDisplay($category_id);
         }
 
@@ -197,8 +198,11 @@ class ScoreDisplay
      * @param int   score color percent (optional)
      * @param int   gradebook category id (optional)
      */
-    public function update_custom_score_display_settings($displays, $scorecolpercent = 0, $category_id = null)
-    {
+    public function update_custom_score_display_settings(
+        $displays,
+        $scorecolpercent = 0,
+        $category_id = null
+    ) {
         $this->custom_display = $displays;
         $this->custom_display_conv = $this->convert_displays($this->custom_display);
 
@@ -293,6 +297,7 @@ class ScoreDisplay
      * @param int $what one of the following constants:
      * SCORE_BOTH, SCORE_ONLY_DEFAULT, SCORE_ONLY_CUSTOM (default: SCORE_BOTH)
      * (only taken into account if custom score display is enabled and for course/platform admin)
+     * @param bool $disableColor
      *
      * @return string
      */
@@ -300,7 +305,7 @@ class ScoreDisplay
         $score,
         $type = SCORE_DIV_PERCENT,
         $what = SCORE_BOTH,
-        $no_color = false
+        $disableColor = false
     ) {
         $my_score = $score == 0 ? 1 : $score;
 
@@ -321,13 +326,17 @@ class ScoreDisplay
             // if no custom display set, use default display
             $display = $this->display_default($my_score, $type);
         }
-
-        if ($this->coloring_enabled && $no_color != false) {
+        if ($this->coloring_enabled && $disableColor == false) {
             $my_score_denom = isset($score[1]) && !empty($score[1]) && $score[1] > 0 ? $score[1] : 1;
             $scoreCleaned = isset($score[0]) ? $score[0] : 0;
             if (($scoreCleaned / $my_score_denom) < ($this->color_split_value / 100)) {
-                $display = Display::tag('font', $display, array('color'=>'red'));
+                $display = Display::tag(
+                    'font',
+                    $display,
+                    array('color' => 'red')
+                );
             }
+
         }
 
         return $display;
@@ -443,6 +452,7 @@ class ScoreDisplay
     /**
      * Depends on the teacher's configuration of thresholds. i.e. [0 50] "Bad", [50:100] "Good"
      * @param array $score
+     * @return string
      */
     private function display_custom($score)
     {
@@ -559,7 +569,6 @@ class ScoreDisplay
     private function sort_display($item1, $item2)
     {
         if ($item1['score'] === $item2['score']) {
-
             return 0;
         } else {
             return ($item1['score'] < $item2['score'] ? -1 : 1);

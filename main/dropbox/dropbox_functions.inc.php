@@ -214,8 +214,8 @@ function display_move_form(
 /**
 * This function moves a file to a different category
 *
-* @param $id the id of the file we are moving
-* @param $target the id of the folder we are moving to
+* @param int $id the id of the file we are moving
+* @param int $target the id of the folder we are moving to
 * @param string $part are we moving a received file or a sent file?
 *
 * @return string string
@@ -649,7 +649,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     if (($dropbox_person->isCourseTutor || $dropbox_person->isCourseAdmin)
         && $allowGroups == 'true' || $allowStudentToStudent == 'true'
     ) {
-        $complete_group_list_for_dropbox = GroupManager::get_group_list(null, $course_info['code']);
+        $complete_group_list_for_dropbox = GroupManager::get_group_list(null, $course_info);
 
         if (count($complete_group_list_for_dropbox) > 0) {
             foreach ($complete_group_list_for_dropbox as $current_group) {

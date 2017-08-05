@@ -67,7 +67,7 @@ abstract class XapianIndexer
     /**
      * Connect to the database, and create it if it doesn't exist
      */
-    function connectDb($path = null, $dbMode = null, $lang = 'english')
+    public function connectDb($path = null, $dbMode = null, $lang = 'english')
     {
         if ($this->db != null) {
             return $this->db;
@@ -102,7 +102,7 @@ abstract class XapianIndexer
      * Simple getter for the db attribute
      * @return  object  The db attribute
      */
-    function getDb()
+    public function getDb()
     {
         return $this->db;
     }
@@ -112,7 +112,7 @@ abstract class XapianIndexer
      * @param  string  Chunk of text
      * @return  void
      */
-    function addChunk($chunk)
+    public function addChunk($chunk)
     {
         $this->chunks[] = $chunk;
     }
@@ -122,7 +122,7 @@ abstract class XapianIndexer
      *
      * @return integer  New Xapian document ID or null upon failure
      */
-    function index()
+    public function index()
     {
         try {
             if (!empty($this->chunks)) {
@@ -163,7 +163,7 @@ abstract class XapianIndexer
      * @param   int     did     Xapian::docid
      * @return  mixed   XapianDocument, or false on error
      */
-    function get_document($did)
+    public function get_document($did)
     {
         if ($this->db == null) {
             $this->connectDb();
@@ -183,7 +183,7 @@ abstract class XapianIndexer
      * @param XapianDocument $doc xapian document to push into the db
      * @return mixed xapian document data or FALSE if error
      */
-    function get_document_data($doc)
+    public function get_document_data($doc)
     {
         if ($this->db == null) {
             $this->connectDb();
@@ -209,7 +209,7 @@ abstract class XapianIndexer
      * (usually 'T' for title, 'A' for author)
      * @return  boolean false on error
      */
-    function update_terms($did, $terms, $prefix)
+    public function update_terms($did, $terms, $prefix)
     {
         $doc = $this->get_document($did);
         if ($doc === false) {
@@ -231,7 +231,7 @@ abstract class XapianIndexer
      *
      * @param int   did     Xapian::docid
      */
-    function remove_document($did)
+    public function remove_document($did)
     {
         if ($this->db == null) {
             $this->connectDb();
@@ -252,7 +252,7 @@ abstract class XapianIndexer
      * @param XapianDocument $doc The xapian document where to add the term
      * @return  mixed   XapianDocument, or false on error
      */
-    function add_term_to_doc($term, $doc)
+    public function add_term_to_doc($term, $doc)
     {
         if (!is_a($doc, 'XapianDocument')) {
             return false;
@@ -272,7 +272,7 @@ abstract class XapianIndexer
      * @param XapianDocument $doc The xapian document where to add the term
      * @return  mixed   XapianDocument, or false on error
      */
-    function remove_term_from_doc($term, $doc)
+    public function remove_term_from_doc($term, $doc)
     {
         if (!is_a($doc, 'XapianDocument')) {
             return false;
@@ -292,7 +292,7 @@ abstract class XapianIndexer
      * @param int $did xapian document id of the document to replace
      * @return mixed
      */
-    function replace_document($doc, $did)
+    public function replace_document($doc, $did)
     {
         if (!is_a($doc, 'XapianDocument')) {
             return false;
@@ -312,7 +312,7 @@ abstract class XapianIndexer
     /**
      * Class destructor
      */
-    function __destruct()
+    public function __destruct()
     {
         unset($this->db);
         unset($this->stemmer);

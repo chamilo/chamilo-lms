@@ -4008,7 +4008,7 @@ $ApprovalForNewAccount = "Validación de una nueva cuenta";
 $ManageUser = "Gestión de usuario";
 $SubscribeUserToCourseAsTeacher = "Inscribir profesores";
 $PasswordEncryptedForSecurity = "Su contraseña está encriptada para su seguridad. Por ello, cuando haya pulsado en el enlace para regenerar su clave se le remitirá un nuevo correo que contendrá su contraseña.";
-$SystemUnableToSendEmailContact = "El sistema no ha podido enviarle el correo electrónico";
+$ExtraFields = "Campos extras";
 $OpenIDCouldNotBeFoundPleaseRegister = "Este OpenID no se encuentra en nuestra base de datos. Por favor, regístrese para obtener una cuenta. Si ya tiene una cuenta con nosotros,  edite su perfil en la misma para añadir este OpenID";
 $UsernameMaxXCharacters = "El nombre de usuario puede tener como máximo una longitud de %s caracteres";
 $PictureUploaded = "Su imagen ha sido enviada";
@@ -5345,8 +5345,8 @@ $AddTimeLimit = "Añadir límite de tiempo";
 $EditTimeLimit = "Editar límite de tiempo";
 $TheTimeLimitsAreReferential = "El plazo de una categoría es referencial, no afectará a los límites de una sesión de formación";
 $FieldTypeTag = "User tag";
-$SendEmailToAdminTitle = "Aviso por correo electrónico, de la creación de un nuevo curso";
-$SendEmailToAdminComment = "Enviar un correo electrónico al administrador de la plataforma, cada vez que un profesor cree un nuevo curso";
+$SendEmailToAdminTitle = "Aviso e-mail a la creación de nuevos cursos";
+$SendEmailToAdminComment = "Enviar un correo electrónico al administrador de la plataforma cada vez que un profesor cree un nuevo curso";
 $UserTag = "Etiqueta de usuario";
 $SelectSession = "Seleccionar sesión";
 $SpecialCourse = "Curso especial";
@@ -8029,8 +8029,37 @@ $SendEmailToTeacherWhenStudentEndQuiz = "Enviar un correo al profesor cuando el 
 $SendEmailToTeacherWhenStudentEndQuizOnlyIfOpenQuestion = "Enviar un correo al profesor cuando el estudiante termina un ejercicio, solo si ha respondido a una pregunta abierta";
 $SendEmailToTeacherWhenStudentEndQuizOnlyIfOralQuestion = "Enviar un correo al profesor cuando el estudiante termina un ejercicio, solo si ha respondido a una pregunta oral";
 $StudentStartExercise = "Un ejercicio/examen ha sido iniciado por un estudiante";
-$TempScoreXQuestionsNotCorrectedYet = "Score temporaire: %s pregunta(s) abierta(s) no corregida(s) todavía.";
+$TempScoreXQuestionsNotCorrectedYet = "Nota temporal: %s pregunta(s) abierta(s) no corregida(s) todavía.";
 $Annotation = "Anotación";
 $TeacherPicture = "Foto del profesor";
 $FeedbackIfNotCorrect = "Feedback si no es correcta";
+$ScheduledAnnouncements = "Programación de anuncios";
+$SpecificDate = "Envio en fecha concreta";
+$BaseDate = "Envío en base a fecha de inicio/fin de la sesión";
+$AfterOrBefore = "Antes o después";
+$Before = "Antes de";
+$ScheduleAnnouncementDescription = "Este formulario permite programar anuncios/avisos para que sean enviados de manera automática a los alumnos que están realizando un curso en una sesión.
+
+Existe dos tipos de anuncios que se pueden enviar:
+
+Envío en una fecha concreta: En este caso se selecciona un día concreto para hacer el envío.
+
+Envío en base a la fecha de inicio/finalización de la sesión: en este caso se ha de indicar el número de días que han de pasar antes de enviar el anuncio. Y esos días pueden estar asociados a antes o después de la fecha de inicio/finalización. Por ejemplo: 3 días después de fecha de inicio.";
+$MandatorySurveyNoAnswered = "Usted tiene pendiente una encuesta obligatoria. Para ingresar al curso, primero deberá completarla";
+$ShowPreviousButton = "Mostrar el botón 'anterior'";
+$AllTickets = "Todos los tickets";
+$IsMandatory = "Obligatorio/a?";
+$StudentXHasBeenAssignedNewWorkInCourseY = "Nueva tarea asignada a %s en el curso %s";
+$AsHRMYouReceiveThisMailToAlertThatXHasNewWorkInCourseY = "Como su responsable RH, está recibiendo este correo para avisarle que una nueva tarea acaba de ser asignada a %s en el curso %s.";
+$DearXComma = "Estimado/a %s,";
+$UserLinkingRequests = "Solicitudes de vinculación a estudiantes";
+$NewHomeworkEmailAlertToHrmEnable = "Enviar un correo a los estudiantes y sus responsables de recursos humanos a la creación de una tarea";
+$UserLinkingRequestAccepted = "Solicitud de vinculación a estudiante aceptada";
+$UserLinkingTo = "Vinculado al estudiante";
+$RequestLinkingToUser = "Solicitar vinculación a estudiante";
+$LinkingRequestsAdded = "Solicitud de vinculación añadida";
+$HrmList = "Lista de responsables de recursos humanos";
+$AssignHrmToUser = "Asignar Director de Recursos Humanos a usuario";
+$AddHrmToUser = "Añadir Director de Recursos Humanos a usuario";
+$HrmAssignedUsersCourseList = "Lista de cursos de usuarios asignados al Director de Recursos Humanos";
 ?>

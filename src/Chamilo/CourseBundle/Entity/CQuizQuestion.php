@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="position", columns={"position"})
  *  }
  * )
- * @ORM\Entity(repositoryClass="CQuizQuestionRepository")
+ * @ORM\Entity()
  */
 class CQuizQuestion
 {
@@ -71,9 +71,9 @@ class CQuizQuestion
     private $position;
 
     /**
-     * @var boolean
+     * @var int
      *
-     * @ORM\Column(name="type", type="boolean", nullable=false)
+     * @ORM\Column(name="type", type="integer", nullable=false)
      */
     private $type;
 
@@ -208,7 +208,7 @@ class CQuizQuestion
     /**
      * Set type
      *
-     * @param boolean $type
+     * @param int $type
      * @return CQuizQuestion
      */
     public function setType($type)
@@ -221,7 +221,7 @@ class CQuizQuestion
     /**
      * Get type
      *
-     * @return boolean
+     * @return int
      */
     public function getType()
     {
@@ -364,5 +364,14 @@ class CQuizQuestion
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * Get iid
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
     }
 }

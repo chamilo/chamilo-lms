@@ -6,6 +6,8 @@
  * @package chamilo.plugin.ticket
  */
 
+$cidReset = true;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script(true);

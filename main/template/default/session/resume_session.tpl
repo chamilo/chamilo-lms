@@ -79,6 +79,7 @@
             </td>
         </tr>
     {% endif %}
+
     {% if url_list %}
         <tr>
             <td>URL</td>
@@ -96,6 +97,17 @@
             <td>{{ extra_field.value }}</td>
         </tr>
     {% endfor %}
+
+    {% if programmed_announcement %}
+        <tr>
+            <td>{{ 'ScheduledAnnouncements' | get_lang}}</td>
+            <td>
+                <a class="btn btn-default" href="{{ _p.web_main }}session/scheduled_announcement.php?session_id={{ session.id }}">
+                    {{ 'Edit' | get_lang }}
+                </a>
+            </td>
+        </tr>
+    {% endif %}
 </table>
 
 {{ course_list }}

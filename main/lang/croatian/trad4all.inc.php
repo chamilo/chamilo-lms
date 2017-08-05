@@ -2404,7 +2404,6 @@ $ApprovalForNewAccount = "Odobravanje novog računa";
 $ManageUser = "Upravljanje korisnikom";
 $SubscribeUserToCourseAsTeacher = "Upiši polaznike na ovaj kolegij nastavnika";
 $PasswordEncryptedForSecurity = "Vaša zaporka je šifrirana radi sigurnosnih razloga. Nakon odabira poveznice biti će vam poslana zaporka na vašu e-poštu.";
-$SystemUnableToSendEmailContact = "Sustav ne može naslovljenom poslati e-poštu";
 $OpenIDCouldNotBeFoundPleaseRegister = "Ovaj OpenID nije pronađen u našoj bazi podataka. Molim prijavite se za novi korisnički račun. Ukoliko već imate otvoreni korisnički račun, tada dodajte ovaj OpenID u vašim korisničkim postavkama.";
 $UsernameMaxXCharacters = "Korisničko ime može sadržavati najviše %s znakova";
 $PictureUploaded = "Vaša slika je učitana";

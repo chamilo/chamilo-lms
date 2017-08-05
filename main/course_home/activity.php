@@ -47,6 +47,8 @@ if ($enabled === 'true') {
 
 //	COURSE ADMIN ONLY VIEW
 
+$blocks = [];
+
 // Start of tools for CourseAdmins (teachers/tutors)
 if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, true)) {
     $content .= '<div class="alert alert-success" style="border:0px; margin-top: 0px;padding:0px;">
@@ -72,19 +74,30 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
     }
 
     $my_list = CourseHome::get_tools_category(TOOL_AUTHORING);
-    $items = CourseHome::show_tools_category($my_list);
-    $content .= return_block(get_lang('Authoring'), $items, 'course-tools-author');
 
-    $my_list = CourseHome::get_tools_category(TOOL_INTERACTION);
+    $blocks[] = [
+        'title' => get_lang('Authoring'),
+        'class' => 'course-tools-author',
+        'content' => CourseHome::show_tools_category($my_list)
+    ];
+
+    $list1 = CourseHome::get_tools_category(TOOL_INTERACTION);
     $list2 = CourseHome::get_tools_category(TOOL_COURSE_PLUGIN);
+    $my_list = array_merge($list1, $list2);
 
-    $my_list = array_merge($my_list, $list2);
-    $items = CourseHome::show_tools_category($my_list);
-    $content .= return_block(get_lang('Interaction'), $items, 'course-tools-interaction');
+    $blocks[] = [
+        'title' => get_lang('Interaction'),
+        'class' => 'course-tools-interaction',
+        'content' => CourseHome::show_tools_category($my_list)
+    ];
 
     $my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
-    $items = CourseHome::show_tools_category($my_list);
-    $content .= return_block(get_lang('Administration'), $items, 'course-tools-administration');
+
+    $blocks[] = [
+        'title' => get_lang('Administration'),
+        'class' => 'course-tools-administration',
+        'content' => CourseHome::show_tools_category($my_list)
+    ];
 
 } elseif (api_is_coach()) {
     $content .= $pluginExtra;
@@ -97,10 +110,11 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
         $content .= '</table></div></div>';
     }
 
-    $content .= '<div class="row">';
     $my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
-    $content .= CourseHome::show_tools_category($my_list);
-    $content .= '</div>';
+
+    $blocks[] = [
+        'content' => CourseHome::show_tools_category($my_list)
+    ];
 
     $sessionsCopy = api_get_setting('allow_session_course_copy_for_teachers');
     if ($sessionsCopy === 'true') {
@@ -116,8 +130,10 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
             }
         }
 
-        $items = CourseHome::show_tools_category($onlyMaintenanceList);
-        $content .= return_block(get_lang('Administration'), $items);
+        $blocks[] = [
+            'title' => get_lang('Administration'),
+            'content' => CourseHome::show_tools_category($onlyMaintenanceList)
+        ];
     }
 } else {
     $tools = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
@@ -155,34 +171,19 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
     }
 
     if (count($tools) > 0) {
-        $content .= '<div class="row">';
-        $content .= CourseHome::show_tools_category($tools);
-        $content .= '</div>';
+        $blocks[] = ['content' => CourseHome::show_tools_category($tools)];
     }
 
     if ($isDrhOfCourse) {
         $drhTool = CourseHome::get_tools_category(TOOL_DRH);
-        $content .= '<div class="row">';
-        $content .= CourseHome::show_tools_category($drhTool);
-        $content .= '</div>';
+
+        $blocks[] = ['content' => CourseHome::show_tools_category($drhTool)];
     }
 }
 
-/**
- * @param string $title
- * @param string $content
- * @param string $class
- *
- * @return string
- */
-function return_block($title, $content, $class = null)
-{
-    $html = '<div class="row">
-                <div class="col-xs-12 col-md-12">
-                    <div class="title-tools">' . $title.'</div>
-                </div>
-            </div>
-            <div class="row '.$class.'">'.$content.'</div>';
+$activityView = new Template('', false, false, false, false, false, false);
+$activityView->assign('blocks', $blocks);
 
-    return $html;
-}
+$content .= $activityView->fetch(
+    $activityView->get_template('course_home/activity.tpl')
+);

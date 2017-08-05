@@ -154,16 +154,65 @@ if (!isset($_GET['action']) ||
     $_GET['action'] == 'overview'
 ) {
     $myweb_survey_id = $survey_id;
-    echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&survey_id='.$myweb_survey_id.'&'.$cidReq.'&single_page=1">'.
-        Display::return_icon('survey_reporting_overall.png', get_lang('QuestionsOverallReport')).' '.get_lang('QuestionsOverallReport').'</a></div><div class="sectioncomment">'.get_lang('QuestionsOverallReportDetail').' </div>';
-    echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&survey_id='.$myweb_survey_id.'&'.$cidReq.'">'.
-        Display::return_icon('survey_reporting_question.gif', get_lang('DetailedReportByQuestion')).' '.get_lang('DetailedReportByQuestion').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByQuestionDetail').' </div>';
-    echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='.$myweb_survey_id.'&'.$cidReq.'">'.
-        Display::return_icon('survey_reporting_user.gif', get_lang('DetailedReportByUser')).' '.get_lang('DetailedReportByUser').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByUserDetail').'.</div>';
-    echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=comparativereport&survey_id='.$myweb_survey_id.'&'.$cidReq.'">'.
-        Display::return_icon('survey_reporting_comparative.gif', get_lang('ComparativeReport')).' '.get_lang('ComparativeReport').'</a></div><div class="sectioncomment">'.get_lang('ComparativeReportDetail').'.</div>';
-    echo '<div class="sectiontitle"><a href="reporting.php?action=completereport&survey_id='.$myweb_survey_id.'&'.$cidReq.'">'.
-        Display::return_icon('survey_reporting_complete.gif', get_lang('CompleteReport')).' '.get_lang('CompleteReport').'</a></div><div class="sectioncomment">'.get_lang('CompleteReportDetail').'</div>';
+    $html = null;
+    $url = api_get_path(WEB_CODE_PATH).'survey/reporting.php?';
+    
+    $html .= '<div class="survey-reports">';
+    $html .= '<div class="list-group">';
+    $html .= Display::url(
+        Display::return_icon(
+            'survey_reporting_overall.png',
+            get_lang('QuestionsOverallReport'),
+            null,
+            ICON_SIZE_MEDIUM).'<h4>'.get_lang('QuestionsOverallReport').'</h4><p>'.get_lang('QuestionsOverallReportDetail').'</p>',
+        $url.'action=questionreport&survey_id='.$survey_id.'&'.$cidReq.'&single_page=1',
+        array('class' => 'list-group-item')
+        );
+    
+    $html .= Display::url(
+        Display::return_icon(
+            'survey_reporting_question.png',
+            get_lang('DetailedReportByQuestion'),
+            null,
+            ICON_SIZE_MEDIUM).'<h4>'.get_lang('DetailedReportByQuestion').'</h4><p>'.get_lang('DetailedReportByQuestionDetail').'</p>',
+        $url.'action=questionreport&survey_id='.$survey_id.'&'.$cidReq,
+        array('class' => 'list-group-item')
+        );
+    
+    $html .= Display::url(
+        Display::return_icon(
+            'survey_reporting_user.png',
+            get_lang('DetailedReportByUser'),
+            null,
+            ICON_SIZE_MEDIUM).'<h4>'.get_lang('DetailedReportByUser').'</h4><p>'.get_lang('DetailedReportByUserDetail').'</p>',
+        $url.'action=comparativereport&survey_id='.$survey_id.'&'.$cidReq,
+        array('class' => 'list-group-item')
+        );
+    
+    $html .= Display::url(
+        Display::return_icon(
+            'survey_reporting_comparative.png',
+            get_lang('ComparativeReport'),
+            null,
+            ICON_SIZE_MEDIUM).'<h4>'.get_lang('ComparativeReport').'</h4><p>'.get_lang('ComparativeReportDetail').'</p>',
+        $url.'action=comparativereport&survey_id='.$survey_id.'&'.$cidReq,
+        array('class' => 'list-group-item')
+        );
+    
+    $html .= Display::url(
+        Display::return_icon(
+            'survey_reporting_complete.png',
+            get_lang('CompleteReport'),
+            null,
+            ICON_SIZE_MEDIUM).'<h4>'.get_lang('CompleteReport').'</h4><p>'.get_lang('CompleteReportDetail').'</p>',
+        $url.'action=comparativereport&survey_id='.$survey_id.'&'.$cidReq,
+        array('class' => 'list-group-item')
+        );
+    
+    $html .= '</div>';
+    $html .= '</div>';
+    
+    echo $html;
 }
 
 Display :: display_footer();

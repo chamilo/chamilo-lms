@@ -286,9 +286,15 @@ switch ($action) {
 
         break;
     case 'get_parent_names':
+        $newItemId = isset($_GET['new_item']) ? intval($_GET['new_item']) : 0;
+
+        if (!$newItemId) {
+            break;
+        }
+
         /** @var \learnpath $lp */
         $lp = Session::read('oLP');
-        $parentNames = $lp->getCurrentItemParentNames();
+        $parentNames = $lp->getCurrentItemParentNames($newItemId);
 
         $response = '';
 

@@ -12,7 +12,7 @@ $course_plugin = 'sepe';
 $plugin = SepePlugin::create();
 $_cid = 0;
 
-if ( !empty($_POST)) {
+if (!empty($_POST)) {
     $check = Security::check_token('post');
     if ($check) {
         $newSpecialty = intval($_POST['new_specialty']);
@@ -215,7 +215,7 @@ if (api_is_platform_admin()) {
         }
         if ($info['end_date'] != '0000-00-00' && $info['end_date'] != NULL) {
             $tpl->assign('day_end', date("j", strtotime($info['end_date'])));
-            $tpl->assign('month_end', date("n",strtotime($info['end_date'])));
+            $tpl->assign('month_end', date("n", strtotime($info['end_date'])));
             $tpl->assign('year_end', date("Y", strtotime($info['end_date'])));
             $endYear = date("Y", strtotime($info['end_date']));
         } elseif (strpos($info['end_date'], '0000') === false) {
@@ -236,7 +236,7 @@ if (api_is_platform_admin()) {
     }
     $registrationYear -= 5;
     $leaveYear += 5;
-    $endRangeYear = (($registrationYear + 15) < $leaveYear) ? ($leaveYear+1):($registrationYear + 15);
+    $endRangeYear = (($registrationYear + 15) < $leaveYear) ? ($leaveYear + 1) : ($registrationYear + 15);
     while ($registrationYear <= $endRangeYear) {
         $listYear[] = $registrationYear;
         $registrationYear++;
@@ -251,7 +251,7 @@ if (api_is_platform_admin()) {
     }
     $startYear -= 5;
     $endYear += 5;
-    $endRangeYear = (($startYear + 15) < $endYear) ? ($endYear+1):($startYear +15);
+    $endRangeYear = (($startYear + 15) < $endYear) ? ($endYear + 1) : ($startYear + 15);
     while ($startYear <= $endRangeYear) {
         $listYear[] = $startYear;
         $startYear++;
@@ -272,5 +272,5 @@ if (api_is_platform_admin()) {
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 } else {
-    header('Location:' . api_get_path(WEB_PATH));
+    header('Location:'.api_get_path(WEB_PATH));
 }

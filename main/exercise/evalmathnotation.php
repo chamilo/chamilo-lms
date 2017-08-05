@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 require_once  "../inc/global.inc.php";
+
 echo "<pre>".
 get_lang('SummationPlus')."\n".
 get_lang('SubstractionMinus')."\n".

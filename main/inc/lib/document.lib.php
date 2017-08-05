@@ -2167,11 +2167,23 @@ class DocumentManager
      * @return   array    List of file paths. An additional field containing 'local' or 'remote' helps determine
      * if the file should be copied into the zip or just linked
      */
-    public static function get_resources_from_source_html($source_html, $is_file = false, $type = null, $recursivity = 1)
-    {
+    public static function get_resources_from_source_html(
+        $source_html,
+        $is_file = false,
+        $type = null,
+        $recursivity = 1
+    ) {
         $max = 5;
         $attributes = array();
-        $wanted_attributes = array('src', 'url', '@import', 'href', 'value', 'flashvars', 'poster');
+        $wanted_attributes = array(
+            'src',
+            'url',
+            '@import',
+            'href',
+            'value',
+            'flashvars',
+            'poster'
+        );
         $explode_attributes = array('flashvars' => 'file');
         $abs_path = '';
 
@@ -2547,7 +2559,9 @@ class DocumentManager
                                 $value_modified = str_replace('&amp;', '&', $value);
                                 $value_array = explode('&', $value_modified);
                                 foreach ($value_array as $item) {
-                                    list($key, $item_value) = explode('=', $item);
+                                    $itemParts = explode('=', $item);
+                                    $key = $itemParts[0];
+                                    $item_value = !empty($itemParts[1]) ? $itemParts[1] : '';
                                     if ($key == $explode_variables[$name]) {
                                         $attributes[strtolower($name)][] = $item_value;
                                     }
@@ -5349,9 +5363,10 @@ class DocumentManager
 
         // Add class="invisible" on invisible files
         $visibility_class = $visibility == false ? ' class="muted"' : '';
-        $forcedownload_link = null;
-        $forcedownload_icon = null;
-        $prevent_multiple_click = null;
+        $forcedownload_link = '';
+        $forcedownload_icon = '';
+        $prevent_multiple_click = '';
+        $force_download_html = '';
 
         if (!$show_as_icon) {
             // Build download link (icon)

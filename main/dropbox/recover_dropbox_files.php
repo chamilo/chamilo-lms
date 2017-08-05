@@ -45,13 +45,18 @@ if (Database::num_rows($result)) {
                 $file['filename'],
                 api_convert_and_format_date($file['upload_date']),
                 Display::url(
-                    get_lang('Recover'), api_get_self().'?recover_id='.$file['id'],
+                    get_lang('Recover'),
+                    api_get_self().'?recover_id='.$file['id'],
                     array('class' => 'btn btn-default')
                 )
             );
         }
     }
-    $headers = array(get_lang('FileName'), get_lang('UploadedDate'), get_lang('Action'));
+    $headers = array(
+        get_lang('FileName'),
+        get_lang('UploadedDate'),
+        get_lang('Action')
+    );
     echo Display::table($headers, $rows);
 }
 Display::display_footer();

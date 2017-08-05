@@ -57,13 +57,13 @@ $column_model = array(
     array(
         'name' => 'name',
         'index' => 'name',
-        'width' => '80',
+        'width' => '200',
         'align' => 'left',
     ),
     array(
         'name' => 'description',
         'index' => 'description',
-        'width' => '500',
+        'width' => '400',
         'align' => 'left',
         'sortable' => 'false',
     ),
@@ -81,9 +81,16 @@ $extra_params['autowidth'] = 'true';
 //height auto
 $extra_params['height'] = 'auto';
 
+$diagramLink = '';
+$allow = api_get_configuration_value('allow_career_diagram');
+if ($allow) {
+    $diagramLink = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/career_diagram.php?id=\'+options.rowId+\'">'.get_lang('Diagram').'</a>';
+}
+
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
     return \'<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
+    $diagramLink.
     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
     '\';
@@ -93,7 +100,16 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 $(function() {
 <?php
     // grid definition see the $career->display() function
-    echo Display::grid_js('careers', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+    echo Display::grid_js(
+        'careers',
+        $url,
+        $columns,
+        $column_model,
+        $extra_params,
+        array(),
+        $action_links,
+        true
+    );
 ?>
 });
 </script>
@@ -103,7 +119,9 @@ $career = new Career();
 // Action handling: Add
 switch ($action) {
     case 'add':
-        if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+        if (api_get_session_id() != 0 &&
+            !api_is_allowed_to_session_edit(false, true)
+        ) {
             api_not_allowed();
         }
         Session::write('notebook_view', 'creation_date');

@@ -32,7 +32,7 @@ $sepeCenterTable->addColumn('url', \Doctrine\DBAL\Types\Type::STRING);
 $sepeCenterTable->addColumn('tracking_url', \Doctrine\DBAL\Types\Type::STRING);
 $sepeCenterTable->addColumn('phone', \Doctrine\DBAL\Types\Type::STRING);
 $sepeCenterTable->addColumn('mail', \Doctrine\DBAL\Types\Type::STRING);
-$sepeCenterTable->setPrimaryKey(array('d'));
+$sepeCenterTable->setPrimaryKey(array('id'));
 
 /* ========== PLUGIN_SEPE_ACTIONS ========== */
 $sepeActionsTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_ACTIONS);
@@ -248,7 +248,7 @@ $sepeCentrosTable->addColumn(
     \Doctrine\DBAL\Types\Type::STRING,
     array('length' => 16)
 );
-$sepeCentrosTable->setPrimaryKey(array('cod'));
+$sepeCentrosTable->setPrimaryKey(array('id'));
 
 /* ========== PLUGIN_SEPE_SPECIALTY_CLASSROOM ========== */
 $sepeSpecialtyClassroomTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_SPECIALTY_CLASSROOM);
@@ -267,7 +267,7 @@ $sepeSpecialtyClassroomTable->addColumn(
     \Doctrine\DBAL\Types\Type::INTEGER,
     array('unsigned' => true)
 );
-$sepeSpecialtyClassroomTable->setPrimaryKey(array('cod'));
+$sepeSpecialtyClassroomTable->setPrimaryKey(array('id'));
 $sepeSpecialtyClassroomTable->addForeignKeyConstraint(
     $sepeSpecialtyTable,
     array('specialty_id'),
@@ -416,7 +416,7 @@ $sepeTutorsCompanyTable->addColumn(
     \Doctrine\DBAL\Types\Type::STRING,
     array('length' => 2)
 );
-$sepeTutorsCompanyTable->setPrimaryKey(array('cod'));
+$sepeTutorsCompanyTable->setPrimaryKey(array('id'));
 
 /* ========== PLUGIN_SEPE_PARTICIPANTS ========== */ 
 $sepeParticipantsTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_PARTICIPANTS);
@@ -567,7 +567,7 @@ $sepeParticipantsSpecialtyTable->addColumn(
     \Doctrine\DBAL\Types\Type::STRING,
     array('length' => 4, 'notnull' => false)
 );
-$sepeParticipantsSpecialtyTable->setPrimaryKey(array('cod'));
+$sepeParticipantsSpecialtyTable->setPrimaryKey(array('id'));
 $sepeParticipantsSpecialtyTable->addForeignKeyConstraint(
     $sepeParticipantsTable,
     array('participant_id'),
@@ -624,7 +624,7 @@ $sepeCourseActionsTable->addColumn(
     \Doctrine\DBAL\Types\Type::INTEGER,
     array('unsigned' => true)
 );
-$sepeCourseActionsTable->setPrimaryKey(array('cod'));
+$sepeCourseActionsTable->setPrimaryKey(array('id'));
 $sepeCourseActionsTable->addForeignKeyConstraint(
     $sepeActionsTable,
     array('action_id'),
@@ -729,7 +729,7 @@ foreach ($competences as $competence) {
     Database::insert(
         $sepeTeachingCompetenceTable,
         array(
-            'cod' => $competence[0],
+            'id' => $competence[0],
             'code' => $competence[1],
             'value' => $competence[2]
         )
@@ -740,7 +740,7 @@ $sepeTutorsCompanyTable = Database::get_main_table(SepePlugin::TABLE_SEPE_TUTORS
 Database::insert(
     $sepeTutorsCompanyTable,
     array(
-        'cod' => 1,
+        'id' => 1,
         'alias' => 'Sin tutor',
         'company' => 'SI',
         'training' => 'SI'
@@ -752,7 +752,7 @@ $fieldlabel = 'sexo';
 $fieldtype = '3';
 $fieldtitle = 'Género';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 $sql = "INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES ('".$field_id."', 'Hombre', 'Hombre',1);";
 Database::query($sql);
 $sql = "INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES ('".$field_id."', 'Mujer', 'Mujer',2);";
@@ -764,28 +764,28 @@ $fieldlabel = 'edad';
 $fieldtype = '6';
 $fieldtitle = 'Fecha de nacimiento';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $fieldlabel = 'nivel_formativo';
 $fieldtype = '1';
 $fieldtitle = 'Nivel formativo';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $fieldlabel = 'situacion_laboral';
 $fieldtype = '1';
 $fieldtitle = 'Situación Laboral';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $fieldlabel = 'provincia_residencia';
 $fieldtype = '4';
 $fieldtitle = 'Provincia Residencia';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $provinces = 'Albacete;Alicante/Alacant;Almería;Araba/Álava;Asturias;Ávila;Badajoz;Balears, Illes;Barcelona;Bizkaia;Burgos;Cáceres;Cádiz;Cantabria;Castellón/Castelló;Ciudad Real;Córdoba;Coruña, A;Cuenca;Gipuzkoa;Girona;Granada;Guadalajara;Huelva;Huesca;Jaén;León;Lleida;Lugo;Madrid;Málaga;Murcia;Navarra;Ourense;Palencia;Palmas, Las;Pontevedr;Rioja, La;Salamanca;Santa Cruz de Tenerife;Segovia;Sevilla;Soria;Tarragona;Teruel;Toledo;Valencia/Valéncia;Valladolid;Zamora;Zaragoza;Ceuta;Melilla';
-$list_provinces = explode(';',$provinces);
+$list_provinces = explode(';', $provinces);
 $i = 1;
 foreach ($list_provinces as $value) {
     $sql = "INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES ('".$field_id."', '".$i."', '".$value."','".$i."');";
@@ -797,9 +797,9 @@ $fieldlabel = 'comunidad_residencia';
 $fieldtype = '4';
 $fieldtitle = 'Comunidad autonoma de residencia';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 $ccaa = ';Andalucía;Aragón;Asturias, Principado de;Balears, Illes;Canarias;Cantabria;Castilla y León;Castilla - La Mancha;Cataluña;Comunitat Valenciana;Extremadura;Galicia;Madrid, Comunidad de;Murcia, Región de;Navarra, Comunidad Foral de;País Vasco;Rioja, La;Ceuta;Melilla';
-$list_ccaa = explode(';',$ccaa);
+$list_ccaa = explode(';', $ccaa);
 $i = 1;
 foreach ($list_ccaa as $value) {
     $sql = "INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES ('".$field_id."', '".$i."', '".$value."','".$i."');";
@@ -812,9 +812,9 @@ $fieldtype = '4';
 $fieldtitle = 'Provincia Trabajo';
 $fielddefault = '';
 //$fieldoptions = ';Albacete;Alicante/Alacant;Almería;Araba/Álava;Asturias;Ávila;Badajoz;Balears, Illes;Barcelona;Bizkaia;Burgos;Cáceres;Cádiz;Cantabria;Castellón/Castelló;Ciudad Real;Córdoba;Coruña, A;Cuenca;Gipuzkoa;Girona;Granada;Guadalajara;Huelva;Huesca;Jaén;León;Lleida;Lugo;Madrid;Málaga;Murcia;Navarra;Ourense;Palencia;Palmas, Las;Pontevedr;Rioja, La;Salamanca;Santa Cruz de Tenerife;Segovia;Sevilla;Soria;Tarragona;Teruel;Toledo;Valencia/Valéncia;Valladolid;Zamora;Zaragoza;Ceuta;Melilla';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 $i = 1;
-foreach ($list_provincias as $value) {
+foreach ($list_provinces as $value) {
     $sql = "INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES ('".$field_id."', '".$i."', '".$value."','".$i."');";
     Database::query($sql);
     $i++;
@@ -825,7 +825,7 @@ $fieldtype = '4';
 $fieldtitle = 'Comunidad autonoma Trabajo';
 $fielddefault = '';
 //$fieldoptions = ';Andalucía;Aragón;Asturias, Principado de;Balears, Illes;Canarias;Cantabria;Castilla y León;Castilla - La Mancha;Cataluña;Comunitat Valenciana;Extremadura;Galicia;Madrid, Comunidad de;Murcia, Región de;Navarra, Comunidad Foral de;País Vasco;Rioja, La;Ceuta;Melilla';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 $i = 1;
 foreach ($list_ccaa as $value) {
     $sql = "INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES ('".$field_id."', '".$i."', '".$value."','".$i."');";
@@ -837,40 +837,40 @@ $fieldlabel = 'medio_conocimiento';
 $fieldtype = '2';
 $fieldtitle = 'Medio de conocimiento Acción formativa';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $fieldlabel = 'experiencia_anterior';
 $fieldtype = '2';
 $fieldtitle = 'Experiencia anterior en la realización de cursos on-line';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $fieldlabel = 'razones_teleformacion';
 $fieldtype = '2';
 $fieldtitle = 'Razones por la modalidad teleformación';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $fieldlabel = 'valoracion_modalidad';
 $fieldtype = '2';
 $fieldtitle = 'Valoración general sobre la modalidad';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $fieldlabel = 'categoria_profesional';
 $fieldtype = '1';
 $fieldtitle = 'Categoría profesional';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $fieldlabel = 'tamano_empresa';
 $fieldtype = '1';
 $fieldtitle = 'Tamaño de la empresa';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $fieldlabel = 'horario_accion_formativa';
 $fieldtype = '1';
 $fieldtitle = 'Horario de la acción formativa';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);

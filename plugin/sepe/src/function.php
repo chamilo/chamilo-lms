@@ -15,7 +15,7 @@ if ($_REQUEST['tab'] == 'delete_center_data') {
     if (!$res) {
         $sql = "DELETE FROM $tableSepeActions;";
         $res = Database::query($sql);
-        $content = $plugin->get_lang('ProblemToDeleteInfoCenter') . Database::error();
+        $content = $plugin->get_lang('ProblemToDeleteInfoCenter').Database::error();
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = $plugin->get_lang('DeleteOk');
@@ -28,7 +28,7 @@ if ($_REQUEST['tab'] == 'delete_action') {
     $sql = "DELETE FROM $tableSepeActions WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToDeleteInfoAction') . Database::error();
+        $content = $plugin->get_lang('ProblemToDeleteInfoAction').Database::error();
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = $plugin->get_lang('DeleteOk');
@@ -38,11 +38,11 @@ if ($_REQUEST['tab'] == 'delete_action') {
 }
 
 if ($_REQUEST['tab'] == 'delete_specialty') {
-    $id = intval(substr($_REQUEST['id'],9));
+    $id = intval(substr($_REQUEST['id'], 9));
     $sql = "DELETE FROM $tableSepeSpecialty WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToDeleteInfoSpecialty') . Database::error();
+        $content = $plugin->get_lang('ProblemToDeleteInfoSpecialty').Database::error();
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = $plugin->get_lang('DeleteOk');
@@ -51,11 +51,11 @@ if ($_REQUEST['tab'] == 'delete_specialty') {
 }
 
 if ($_REQUEST['tab'] == 'delete_specialty_participant') {
-    $id = intval(substr($_REQUEST['id'],9));
+    $id = intval(substr($_REQUEST['id'], 9));
     $sql = "DELETE FROM $tableSepeParticipantsSpecialty WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToDeleteInfoSpecialty') . Database::error();
+        $content = $plugin->get_lang('ProblemToDeleteInfoSpecialty').Database::error();
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = $plugin->get_lang('DeleteOk');
@@ -64,11 +64,11 @@ if ($_REQUEST['tab'] == 'delete_specialty_participant') {
 }
 
 if ($_REQUEST['tab'] == 'delete_classroom') {
-    $id = intval(substr($_REQUEST['id'],9));
+    $id = intval(substr($_REQUEST['id'], 9));
     $sql = "DELETE FROM $tableSepeSpecialtyClassroom WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToDeleteInfoSpecialtyClassroom') . Database::error();
+        $content = $plugin->get_lang('ProblemToDeleteInfoSpecialtyClassroom').Database::error();
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = $plugin->get_lang('DeleteOk');
@@ -87,8 +87,8 @@ if ($_REQUEST['tab'] == 'checkTutorEdit') {
             WHERE document_type='".$type."' AND document_number='".$number."' AND document_letter='".$letter."';";
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemDataBase') . Database::error();
-        error_log(print_r($content,1));
+        $content = $plugin->get_lang('ProblemDataBase').Database::error();
+        error_log(print_r($content, 1));
         exit;
     } else {
         $aux = Database::fetch_assoc($res);
@@ -102,11 +102,11 @@ if ($_REQUEST['tab'] == 'checkTutorEdit') {
 }
 
 if ($_REQUEST['tab'] == 'delete_tutor') {
-    $id = intval(substr($_REQUEST['id'],5));
+    $id = intval(substr($_REQUEST['id'], 5));
     $sql = "DELETE FROM $tableSepeSpecialtyTutors WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToDeleteInfoSpecialtyTutor') . Database::error();
+        $content = $plugin->get_lang('ProblemToDeleteInfoSpecialtyTutor').Database::error();
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = $plugin->get_lang('DeleteOk');
@@ -115,7 +115,7 @@ if ($_REQUEST['tab'] == 'delete_tutor') {
 }
 
 if ($_REQUEST['tab'] == 'delete_participant') {
-    $id = intval(substr($_REQUEST['id'],11));
+    $id = intval(substr($_REQUEST['id'], 11));
     $sql = "SELECT platform_user_id, action_id FROM $tableSepeParticipants WHERE id = $id;";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);
@@ -126,7 +126,7 @@ if ($_REQUEST['tab'] == 'delete_participant') {
     $sql = "DELETE FROM $tableSepeParticipants WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToDeleteInfoParticipant') . Database::error();
+        $content = $plugin->get_lang('ProblemToDeleteInfoParticipant').Database::error();
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = $plugin->get_lang('DeleteOk');
@@ -135,11 +135,11 @@ if ($_REQUEST['tab'] == 'delete_participant') {
 }
 
 if ($_REQUEST['tab'] == 'unlink_action') {
-    $id = intval(substr($_REQUEST['id'],16));
+    $id = intval(substr($_REQUEST['id'], 16));
     $sql = "DELETE FROM $tableSepeCourseActions WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToDesvincularInfoAction') . Database::error();
+        $content = $plugin->get_lang('ProblemToDesvincularInfoAction').Database::error();
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = $plugin->get_lang('DeleteOk');
@@ -148,7 +148,7 @@ if ($_REQUEST['tab'] == 'unlink_action') {
 }
 
 if ($_REQUEST['tab'] == 'assign_action') {
-    $course_id = intval(substr($_REQUEST['course_id'],9));
+    $course_id = intval(substr($_REQUEST['course_id'], 9));
     $action_id = intval($_REQUEST['action_id']);
     
     if ($action_id != 0 && $course_id != 0) {

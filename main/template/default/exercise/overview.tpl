@@ -13,7 +13,7 @@
         </div>
     {% endif %}
         <div class="page-header">
-            <h2>{{ "test-quiz.png" |img(32) }} {{ data.title }}</h2>
+            <h2>{{ data.title }}</h2>
         </div>
         <div class="exercise_description">
             {{ data.description }}

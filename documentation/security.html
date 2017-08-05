@@ -23,19 +23,20 @@
   <li><a href="#3.Using-safe-browsers">Using safe browsers</a></li>
   <li><a href="#4.Moving-config-file">Moving your configuration file out of the web directory</a></li>
   <li><a href="#5.Files-permissions">Restricting files permissions</a></li>
+  <li><a href="#6.HSTS">HTTP Headers Security</a></li>
 </ol>
 
 <h2><a name="1.Disclosing-server-info"></a>1. Disclosing server info</h2>
 <p>
 It is considered a safer behaviour not to disclose server information from your Chamilo page. In order to avoid
     both web server and PHP information disclosure, you might want to take the following actions:
+</p>
 <ul>
 <li>Locate the <i>ServerTokens</i> setting inside your Apache configuration and set it to "Prod"</li>
 <li>Locate the <i>ServerSignature</i> setting inside your Apache configuration and set it to "Off"</li>
 <li>Locate the <i>expose_php</i> setting inside your PHP configuration and set it to "Off"</li>
 <li>Reload Apache</li>
 </ul>
-</p>
 
 <h2><a name="2.Keeping-up-to-date"></a>2. Keeping up to date</h2>
 <p>
@@ -62,31 +63,46 @@ access to your database if that one isn't well protected and many other stuff we
     move the configuration file out of your web directory. If your Chamilo installation is in /var/www/, move your
     configuration to /etc/chamilo/configuration.php, for example. Then create a new app/config/configuration.php
     file, open it, and write the following:</p>
-<p>
 <pre>
 &lt;?php
 require '/etc/chamilo/configuration.php';
 </pre>
-</p>
 <p>
 This will prevent direct access to your settings and make it seem totally the same to Chamilo.
 </p>
 
 <h2><a name="5.Files-permissions"></a>5. Restricting files permissions</h2>
-        Making all the Chamilo files world-writable will help you install quickly, and it solves many
+        <p>Making all the Chamilo files world-writable will help you install quickly, and it solves many
         issues for people without much admin experience. However, it's more
         secure to make a distinct user owner of all the chamilo files and folders,
         and only give read access to the web server to all files, and write access
-        only to the directories previously mentioned. This way, these files need
+            only to the directories previously mentioned.</p>
+    <p>This way, these files need
         only be readable and writable by the Apache process owner, not by the
         entire world. It would also be advisable to make all writable directory
         refuse the interpretation of PHP files (except for the root of the courses
-        directories). Don't hesitate to hire an experienced administrator to do that,
+        directories).</p>
+    <p>Don't hesitate to hire an experienced administrator to do that,
         it might be a bit more expensive now, but you'll be happy not to have to loose
-        all of your data to a hacker who attacked your site.</li>
+        all of your data to a hacker who attacked your site.</p>
 
 
-    <hr />
+<hr />
+<h2><a name="6.HSTS">HTTP Headers Security</a></h2>
+    <p>A relatively recent development in web security, HTTP headers can be modified either
+    from the web server or from the application (like Chamilo) to increase the security
+        of your visitors.</p>
+    <p>These implies several aspects, from simple to complex, to deal with, from stuff like
+    indicating which websites you say media or libraries can be loaded from, to adding
+    extra info about your SSL certificate to make sure a hacked certification authority
+        will not immediately make your certificate useless.</p>
+    <p>In Chamilo 1.11.6, we have added several parameters, together with recommendations,
+    to main/install/configuration.dist.php, that you are free to use or ignore,
+        depending on the level of security you want to achieve.</p>>
+    <p>To check your portal for possible improvements in terms of headers security,
+        we highly recommend the <a href="https://securityheaders.io/">securityheaders.io</a>
+        website. If you want to read more about CSP and all related headers
+        security techniques, check <a href="https://scotthelme.co.uk/">Scott Helme's blog</a>.
 <h2>Authors</h2>
 <ul>
 <li>Yannick Warnier, Zend Certified PHP Engineer, BeezNest Belgium SPRL,

@@ -4,9 +4,11 @@
             <span aria-hidden="true">&times;</span>
         </button>
         <h4>{{ 'Warning'|get_lang }}</h4>
-        <p>
-            <em class="fa fa-warning"></em> {{ 'AvoidChangingPageAsThisWillCutYourCurrentVideoChatSession'|get_lang }}
-        </p>
+        <div id="dlg-webrtc-help">
+            <p>{{ 'WebRTCDialogHelp'|get_lang }}</p>
+            <img src="{{ _p.web_lib ~ 'javascript/chat/img/webrtc_' ~ (navigator_is_firefox ? 'firefox' : 'chrome') }}.png"
+                 alt="{{ 'Permissions'|get_lang }}" class="img-thumbnail img-responsive">
+        </div>
     </div>
     <div class="row">
         <div class="col-md-8 col-sm-7">
@@ -65,6 +67,10 @@
                     });
 
                     webRTC.on('readyToCall', function () {
+                        $('#dlg-webrtc-help').replaceWith("<p>" +
+                            "<em class=\"fa fa-warning\"></em> {{ 'AvoidChangingPageAsThisWillCutYourCurrentVideoChatSession'|get_lang }}" +
+                            "</p>");
+
                         webRTC.joinRoom('{{ room_name }}');
                     });
                     webRTC.on('videoAdded', function (video, peer) {

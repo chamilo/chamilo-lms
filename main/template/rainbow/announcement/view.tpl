@@ -1,8 +1,11 @@
-<h2 class="page-header">{{ "SystemAnnouncements" | get_lang }}</h2>
+<div class="page-header">
+    <h4>{{ "SystemAnnouncements" | get_lang }}</h4>
+</div>
 
 {% if not announcement is empty %}
-    <article id="announcement-{{ announcement.id }}}" title="{{ announcement.title }}">
+    <article id="announcement-{{ announcement.id }}}">
         <div class="page-header">
+            <h3>{{ announcement.title }}</h3>
             {{ announcement.content }}
         </div>
     </article>

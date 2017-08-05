@@ -3980,7 +3980,6 @@ $ApprovalForNewAccount = "Έγκριση νέου λογαριασμού";
 $ManageUser = "Διαχείριση χρήστη";
 $SubscribeUserToCourseAsTeacher = "Εισαγωγή εκπαιδευτών";
 $PasswordEncryptedForSecurity = "Your password is encrypted for security reasons. Thus, after pressing the link an e-mail will be sent to you again with your password.";
-$SystemUnableToSendEmailContact = "This platform was unable to send the email. Please contact";
 $OpenIDCouldNotBeFoundPleaseRegister = "This OpenID could not be found in our database. Please register for a new account. If you have already an account with us, please edit your profile inside your account to add this OpenID";
 $UsernameMaxXCharacters = "The login needs to be maximum %s characters long";
 $PictureUploaded = "Your picture has been uploaded";

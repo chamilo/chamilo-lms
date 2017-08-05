@@ -3554,7 +3554,6 @@ $ApprovalForNewAccount = "Kontu berria onartu da";
 $ManageUser = "Kudeatu erabiltzailea";
 $SubscribeUserToCourseAsTeacher = "Inskribatu irakasleak";
 $PasswordEncryptedForSecurity = "Segurtasuna dela eta, pasahitza enkriptatuta dago. Horrexegatik, pasahitza berrezartzeko lotura sakatu ondoren, zure pasahitza jasotzen duen mezu elektronikoa bidaliko zaizu.";
-$SystemUnableToSendEmailContact = "Plataforma honek ezin izan dizu mezu elektronikoa bidali";
 $OpenIDCouldNotBeFoundPleaseRegister = "OpenID hau ezin izan da gure datu basean aurkitu. Mesedez, kontu berria eskuratzeko, erregistratu. Jadanik baduzu kontu bat gurekin, editatu kontuaren barruan duzun profila, OpenID hau gehitzeko.";
 $UsernameMaxXCharacters = "Erabiltzailearen izenak, gehienez, %s karaktere eduki ditzake.";
 $PictureUploaded = "Zure irudia kargatu da";

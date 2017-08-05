@@ -72,16 +72,20 @@ if (isset($form)) {
                 'setting',
                 'Plugins',
                 $pluginName,
-                null,
-                null,
-                null,
+                '',
+                '',
+                '',
                 $_configuration['access_url'],
                 1
             );
         }
 
+        /** @var \Plugin $objPlugin */
+        $objPlugin = $pluginInfo['plugin_class']::create();
+        $objPlugin->get_settings(true);
+        $objPlugin->performActionsAfterConfigure();
+
         if (isset($values['show_main_menu_tab'])) {
-            $objPlugin = $pluginInfo['plugin_class']::create();
             $objPlugin->manageTab($values['show_main_menu_tab']);
         }
 

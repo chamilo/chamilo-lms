@@ -76,14 +76,6 @@ function add_image_form() {
 	}
 }
 
-function validate_text_empty (str,msg) {
-	var str = str.replace(/^\s*|\s*$/g,"");
-	if (str.length == 0) {
-		alert(msg);
-		return true;
-	}
-}
-
 </script>';
 
 $allowed_views = array('mygroups', 'newest', 'pop');

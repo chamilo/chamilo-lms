@@ -7,8 +7,8 @@ $cidReset = true;
 
 require_once 'main/inc/global.inc.php';
 
-$htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
-$htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
+$htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_PATH).'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_PATH).'web/assets/cropper/dist/cropper.min.js"></script>';
 
 $htmlHeadXtra[] ='<script>		
 $(document).ready(function() {		
@@ -382,7 +382,9 @@ $extra = $extraField->addElements(
             get_lang('ThemeField').' 4',
             get_lang('ThemeField').' 5'
         ],
-    ]
+    ],
+    [],
+    true
 );
 
 $form->addHtml('</div></div></div>');
@@ -721,7 +723,7 @@ if (!empty($filterToSend)) {
 
     // Special OFAJ date logic
     if ($userEndDate == '') {
-    $sql = " AND (
+        $sql = " AND (
             (s.access_start_date >= '$userStartDateMinus') OR 
             ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
         )";

@@ -33,9 +33,15 @@ if (defined('SYSTEM_INSTALLATION')) {
     if (is_dir($lpPath)) {
         @rrmdir($lpPath);
     }
+    // The ticket plugin has been moved to core in 1.11
     $ticketPluginPath = api_get_path(SYS_PLUGIN_PATH).'ticket';
     if (is_dir($ticketPluginPath)) {
         @rrmdir($ticketPluginPath);
+    }
+    // The Skype plugin has been moved to core in 1.11
+    $skypePluginPath = api_get_path(SYS_PLUGIN_PATH).'skype';
+    if (is_dir($skypePluginPath)) {
+        @rrmdir($skypePluginPath);
     }
 
     if ($debug) {

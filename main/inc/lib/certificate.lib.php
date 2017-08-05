@@ -91,7 +91,7 @@ class Certificate extends Model
     {
         $this->certification_user_path = null;
 
-        //Setting certification path
+        // Setting certification path
         $path_info = UserManager::getUserPathById($this->user_id, 'system');
         $web_path_info = UserManager::getUserPathById($this->user_id, 'web');
 
@@ -326,10 +326,10 @@ class Certificate extends Model
         $user_id,
         $path_certificate
     ) {
-        $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $now = api_get_utc_datetime();
         if (!UserManager::is_user_certified($cat_id, $user_id)) {
-            $sql = 'UPDATE '.$table_certificate.' SET 
+            $sql = 'UPDATE '.$table.' SET 
                         path_certificate="'.Database::escape_string($path_certificate).'",
                         created_at = "'.$now.'"
                     WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
@@ -359,9 +359,10 @@ class Certificate extends Model
 
     /**
      * Generates a QR code for the certificate. The QR code embeds the text given
-     * @param    string    $text Text to be added in the QR code
-     * @param    string    $path file path of the image
-     * */
+     * @param string $text Text to be added in the QR code
+     * @param string $path file path of the image
+     * @return bool
+     **/
     public function generate_qr($text, $path)
     {
         //Make sure HTML certificate is generated
@@ -491,6 +492,23 @@ class Certificate extends Model
         $user_certificate = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
         if (file_exists($user_certificate)) {
             $certificateContent = (string) file_get_contents($user_certificate);
+
+            if ($this->user_id == api_get_user_id() && !empty($this->certificate_data)) {
+                $certificateId = $this->certificate_data['id'];
+                $extraFieldValue = new ExtraFieldValue('user_certificate');
+                $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+                    $certificateId,
+                    'downloaded_at'
+                );
+                if (empty($value)) {
+                    $params = [
+                        'item_id' => $this->certificate_data['id'],
+                        'extra_downloaded_at' => api_get_utc_datetime(),
+                    ];
+                    $extraFieldValue->saveFieldValues($params);
+                }
+            }
+
             echo $certificateContent;
             exit;
         }

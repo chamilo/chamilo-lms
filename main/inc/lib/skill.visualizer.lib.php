@@ -8,29 +8,34 @@
 class SkillVisualizer
 {
     public $block_size = 120; //see CSS window class
-    public $canvas_x   = 1024;
-    public $canvas_y   = 800;
+    public $canvas_x = 1024;
+    public $canvas_y = 800;
 
-    public $offset_x   = 0;
-    public $offset_y   = 50;
+    public $offset_x = 0;
+    public $offset_y = 50;
 
     public $space_between_blocks_x = 100;
     public $space_between_blocks_y = 150;
 
     public $center_x = null;
 
-    private $html    = '';
-    private $type    = 'read';
-    private $js      = '';
+    private $html = '';
+    private $type = 'read';
+    private $js = '';
 
-    function __construct($skills, $type = 'read')
+    /**
+     * SkillVisualizer constructor.
+     * @param $skills
+     * @param string $type
+     */
+    public function __construct($skills, $type = 'read')
     {
         $this->skills   = $skills;
         $this->type     = $type;
         $this->center_x = intval($this->offset_x + $this->canvas_x / 2 - $this->block_size / 2);
     }
 
-    function prepare_skill_box($skill, $position, $class)
+    public function prepare_skill_box($skill, $position, $class)
     {
         $block_id = $skill['id'];
 
@@ -72,7 +77,6 @@ class SkillVisualizer
             $class = 'edit_window';
             $end_point = 'editEndpoint';
         } else {
-
             if ($skill['done_by_user'] == 1) {
                 $class = 'done_window';
                 $end_point = 'doneEndpoint';
@@ -121,9 +125,7 @@ class SkillVisualizer
         $skill_count = sizeof($this->skills);
         //$corner = 360 / $skill_count;
         $count = 0;
-
         $brothers = array();
-
         foreach ($this->skills as &$skill) {
             if (!in_array($skill['parent_id'], array(0, 1))) {
                 continue;
@@ -147,7 +149,7 @@ class SkillVisualizer
                 $x = $this->canvas_x / 2 - $this->block_size / 2;
             } else {
                 $max = isset($this->skills[$skill['parent_id']]['children']) ? count($this->skills[$skill['parent_id']]['children']) : 0;
-                foreach ($this->skills[$skill['parent_id']]['children'] as  $id => $sk) {
+                foreach ($this->skills[$skill['parent_id']]['children'] as $id => $sk) {
                     if ($skill['id'] == $sk['id']) {
                         break;
                     }

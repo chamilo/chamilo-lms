@@ -220,7 +220,8 @@ class UniqueAnswerImage extends UniqueAnswer
                     $selectQuestion
                 );
                 $group['url'.$i] = $form->createElement(
-                    'text', 'url'.$i,
+                    'text',
+                    'url'.$i,
                     get_lang('Other').': ',
                     array(
                         'class' => 'col-md-2',
@@ -317,7 +318,6 @@ class UniqueAnswerImage extends UniqueAnswer
               {
               $destinationStr.=$destination_id.';';
               } */
-
             $goodAnswer = $correct == $i ? true : false;
             if ($goodAnswer) {
                 $nbrGoodAnswers++;

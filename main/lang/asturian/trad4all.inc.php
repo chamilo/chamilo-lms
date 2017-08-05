@@ -3449,7 +3449,6 @@ $ApprovalForNewAccount = "Aprobar una cuenta nueva";
 $ManageUser = "Xestión d'usuarios";
 $SubscribeUserToCourseAsTeacher = "Matricular usuarios como profesores nesti cursu";
 $PasswordEncryptedForSecurity = "La so seña ta encriptada pola so seguridá. Poro, si calcó nel enllaz que rexenera la seña, va unviase-y un corréu nuevu cola so seña.";
-$SystemUnableToSendEmailContact = "El sistema nun pudo unvia-y el corréu electrónicu";
 $OpenIDCouldNotBeFoundPleaseRegister = "Esti OpenID nun s'atopa na base datos. Por favor, rexístrese pa tener una cuenta. Si yá la tien, edite'l so perfil y ameste esti OpenID.";
 $UsernameMaxXCharacters = "El nome d'usuariu pue tener, como muncho, %s carauteres";
 $PictureUploaded = "La so imaxe unvióse";

@@ -45,7 +45,7 @@ class TeacherTimeReport
      */
     public function compareCoaches($dataA, $dataB)
     {
-        return strnatcmp($dataA['coach']['completeName'], $dataB['coach']['completeName']);
+        return strnatcmp($dataA['coach']['complete_name'], $dataB['coach']['complete_name']);
     }
 
     /**
@@ -92,8 +92,8 @@ class TeacherTimeReport
                 $data[] = $row['course']['name'];
             }
 
-            $data[] = $row['coach']['completeName'];
-            $data[] = $row['totalTime'];
+            $data[] = $row['coach']['complete_name'];
+            $data[] = $row['total_time'];
 
             $dataToExport[] = $data;
         }

@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	Code library for HotPotatoes integration.
- *	@package chamilo.exercise
- * 	@author Istvan Mandak
+ * Code library for HotPotatoes integration.
+ * @package chamilo.exercise
+ * @author Istvan Mandak
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -28,10 +28,10 @@ my_delete($full_file_path.$user_id.'.t.html');
 $content = ReadFileCont($full_file_path.$user_id.'.t.html');
 
 if ($content == '') {
-	$content = ReadFileCont($full_file_path);
+    $content = ReadFileCont($full_file_path);
     // Do not move this like:
-	$mit = "function Finish(){";
-	$js_content = "
+    $mit = "function Finish(){";
+    $js_content = "
     // Code added - start
     var SaveScoreVariable = 0;
     function mySaveScore() {

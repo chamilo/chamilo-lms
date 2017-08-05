@@ -87,6 +87,11 @@
         <div class="lp-view-zone-container">
             <div class="title-learnpath pull-left">
                 <h4>{{ lp_title_scorm }}</h4>
+                <div id="item-parent-names">
+                    {% for parent_title in lp_item_parents %}
+                        <p class="h5 hidden-xs hidden-md">{{ parent_title }}</p>
+                    {% endfor %}
+                </div>
             </div>
             <div id="lp_navigation_elem" class="navegation-bar pull-right text-right">
                 <a href="#" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">
@@ -106,7 +111,7 @@
             </div>
 
             <div class="lp-view-tabs">
-                <ul id="navTabs" class="nav nav-tabs" role="tablist">
+                <ul id="navTabs" class="nav nav-tabs pull-left" style="margin-top: 75px;" role="tablist">
                     <li role="presentation" class="active">
                         <a href="#lp-view-content" aria-controls="lp-view-content" role="tab" data-toggle="tab">
                             <span class="fa fa-book fa-2x fa-fw" aria-hidden="true"></span><span
@@ -203,33 +208,32 @@
             {% endif %}
 
             if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
-              $('#wrapper-iframe').css({
-                'overflow' : 'auto',
-                'position' : 'relative',
-                '-webkit-overflow-scrolling': 'touch'
-              });
+                $('#wrapper-iframe').css({
+                    'overflow': 'auto',
+                    'position': 'relative',
+                    '-webkit-overflow-scrolling': 'touch'
+                });
             }
 
             {% if lp_mode == 'embedframe' %}
                 //$('#learning_path_main').addClass('lp-view-collapsed');
                 $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
-                e.preventDefault();
+                    e.preventDefault();
 
-                $('#learning_path_main').toggleClass('lp-view-collapsed');
+                    $('#learning_path_main').toggleClass('lp-view-collapsed');
 
-                $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
-                $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
-            });
+                    $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
+                    $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
+                });
             {% else %}
-            $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
-                e.preventDefault();
+                $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
+                    e.preventDefault();
 
-                $('#learning_path_main').toggleClass('lp-view-collapsed');
+                    $('#learning_path_main').toggleClass('lp-view-collapsed');
 
-                $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
-                $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
-            });
-
+                    $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
+                    $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
+                });
             {% endif %}
 
             $('.lp-view-tabs').on('click', '.disabled', function (e) {
@@ -270,47 +274,47 @@
                 (function () {
                     {% if show_glossary_in_documents == 'ismanual' %}
                         $.frameReady(
-                            function(){
+                            function () {
                                 //  $("<div>I am a div courses</div>").prependTo("body");
                             },
                             "top.content_name",
                             {
                                 load: [
-                                    { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
-                                    { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
-                                    { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
-                                    { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"},
+                                    {type: "script", id: "_fr1", src: "{{ jquery_web_path }}"},
+                                    {type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}"},
+                                    {type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}"},
+                                    {type: "script", id: "_fr2", src: "{{ _p.web_lib }}javascript/jquery.highlight.js"},
                                     {{ fix_link }}
                                 ]
                             }
                         );
                     {% elseif show_glossary_in_documents == 'isautomatic' %}
                         $.frameReady(
-                            function(){
+                            function () {
                                 //  $("<div>I am a div courses</div>").prependTo("body");
                             },
                             "top.content_name",
                             {
                                 load: [
-                                    { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
-                                    { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
-                                    { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
-                                    { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"},
+                                    {type: "script", id: "_fr1", src: "{{ jquery_web_path }}"},
+                                    {type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}"},
+                                    {type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}"},
+                                    {type: "script", id: "_fr2", src: "{{ _p.web_lib }}javascript/jquery.highlight.js"},
                                     {{ fix_link }}
                                 ]
                             }
                         );
                     {% elseif fix_link != '' %}
                         $.frameReady(
-                            function(){
+                            function () {
                                 //  $("<div>I am a div courses</div>").prependTo("body");
                             },
                             "top.content_name",
                             {
                                 load: [
-                                    { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
-                                    { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
-                                    { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
+                                    {type: "script", id: "_fr1", src: "{{ jquery_web_path }}"},
+                                    {type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}"},
+                                    {type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}"},
                                     {{ fix_link }}
                                 ]
                             }
@@ -319,21 +323,37 @@
                 })();
             {% endif %}
 
-            $('iframe#content_id')
-                .on('load', function () {
-                    $.frameReady(function () {
-                    }, 'top.content_name', {
+            $('iframe#content_id').on('load', function () {
+                $.frameReady(
+                    function () {
+
+                    },
+                    'top.content_name',
+                    {
                         load: [
                             {type: 'script', id: '_fr1', src: '{{ _p.web }}web/assets/jquery/dist/jquery.min.js'},
-                            {type: 'script', id: '_fr7', src: '{{ _p.web }}web/assets/MathJax/MathJax.js?config=AM_HTMLorMML'},
+                            {
+                                type: 'script',
+                                id: '_fr7',
+                                src: '{{ _p.web }}web/assets/MathJax/MathJax.js?config=AM_HTMLorMML'
+                            },
                             {type: 'script', id: '_fr4', src: '{{ _p.web }}web/assets/jquery-ui/jquery-ui.min.js'},
-                            {type: 'stylesheet', id: '_fr5', src: '{{ _p.web }}web/assets/jquery-ui/themes/smoothness/jquery-ui.min.css'},
-                            {type: 'stylesheet', id: '_fr6', src: '{{ _p.web }}web/assets/jquery-ui/themes/smoothness/theme.css'},
+                            {
+                                type: 'stylesheet',
+                                id: '_fr5',
+                                src: '{{ _p.web }}web/assets/jquery-ui/themes/smoothness/jquery-ui.min.css'
+                            },
+                            {
+                                type: 'stylesheet',
+                                id: '_fr6',
+                                src: '{{ _p.web }}web/assets/jquery-ui/themes/smoothness/theme.css'
+                            },
                             {type: 'script', id: '_fr2', src: '{{ _p.web_lib }}javascript/jquery.highlight.js'},
                             {type: 'script', id: '_fr3', src: '{{ _p.web_main }}glossary/glossary.js.php'}
                         ]
-                    });
-                });
+                    }
+                );
+            });
         });
 
         $(window).on('resize', function () {

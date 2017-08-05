@@ -167,7 +167,17 @@ function getCustomTabs()
     $result = Database::query($sql);
     $customTabs = array();
     while ($row = Database::fetch_assoc($result)) {
-        $customTabs[] = $row;
+        $shouldAdd = true;
+
+        if (strpos($row['subkey'], Plugin::TAB_FILTER_NO_STUDENT) !== false && api_is_student()) {
+            $shouldAdd = false;
+        } elseif (strpos($row['subkey'], Plugin::TAB_FILTER_ONLY_STUDENT) !== false && !api_is_student()) {
+            $shouldAdd = false;
+        }
+
+        if ($shouldAdd) {
+            $customTabs[] = $row;
+        }
     }
 
     return $customTabs;
@@ -205,6 +215,7 @@ function returnNotificationMenu()
     }
 
     $user_id = api_get_user_id();
+    $sessionId = api_get_session_id();
 
     $html = '';
 
@@ -240,11 +251,15 @@ function returnNotificationMenu()
                 .' '.$number_online_in_course.' </a></li>';
         }
 
-        if (isset($user_id) && api_get_session_id() != 0) {
+
+        if (isset($user_id) && $sessionId != 0) {
+            $numberOnlineInSession = getOnlineUsersInSessionCount($sessionId);
+
             $html .= '<li><a href="'.api_get_path(WEB_PATH)
                 .'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI'])
                 .'" target="_self">'
                 .Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array(), ICON_SIZE_TINY)
+                .' '.$numberOnlineInSession
                 .'</a></li>';
         }
     }
@@ -633,10 +648,17 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
                         $user_id
                     );
 
-                    $additonalBlocks .= Display::return_message(
-                        sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft),
-                        'information'
-                    );
+                    if ($daysLeft >= 0) {
+                        $additonalBlocks .= Display::return_message(
+                            sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft),
+                            'information'
+                        );
+                    } else {
+                        $additonalBlocks .= Display::return_message(
+                            get_lang('YourSessionTimeHasExpired'),
+                            'warning'
+                        );
+                    }
                 }
                 break;
         }
@@ -870,4 +892,39 @@ function getOnlineUsersInCourseCount($userId, $_course)
     }
 
     return $numberOnlineInCourse;
+}
+
+/**
+ * Helper function to get the number of users online in a session, using cache if available
+ * @param int $sessionId The session ID
+ * @return int The number of users currently online
+ */
+function getOnlineUsersInSessionCount($sessionId)
+{
+    $cacheAvailable = api_get_configuration_value('apc');
+
+    if (!$sessionId) {
+        return 0;
+    }
+
+    if ($cacheAvailable === true) {
+        $apcVar = api_get_configuration_value('apc_prefix').'my_campus_whoisonline_session_count_simple_'.$sessionId;
+
+        if (apcu_exists($apcVar)) {
+            return apcu_fetch($apcVar);
+        }
+
+        $numberOnlineInCourse = whoIsOnlineInIhisSessionCount(
+            api_get_setting('time_limit_whosonline'),
+            $sessionId
+        );
+        apcu_store($apcVar, $numberOnlineInCourse, 15);
+
+        return $numberOnlineInCourse;
+    }
+
+    return whoIsOnlineInIhisSessionCount(
+        api_get_setting('time_limit_whosonline'),
+        $sessionId
+    );
 }

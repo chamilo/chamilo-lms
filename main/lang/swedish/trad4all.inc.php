@@ -2415,7 +2415,6 @@ $ApprovalForNewAccount = "Godkännande av nytt konto";
 $ManageUser = "Hantera användare";
 $SubscribeUserToCourseAsTeacher = "Lägg till lärare till kursen";
 $PasswordEncryptedForSecurity = "Ditt lösenord blir krypterat av säkerhetsskäl. När du klickar på länken skickas e-post till dig med ditt lösenord.";
-$SystemUnableToSendEmailContact = "Systemet kunde inte skicka e-posten";
 $OpenIDCouldNotBeFoundPleaseRegister = "Angivet OpenID kunde inte hittas i vår databas. Om du redan finns registrerad hos oss kan du ändra i din profil för att lägga till inloggning med OpenID, annars behöver du registrera ett nytt konto.";
 $UsernameMaxXCharacters = "Användarnamnet kan vara max %s tecken långt";
 $PictureUploaded = "Din bild blev uppladdad";

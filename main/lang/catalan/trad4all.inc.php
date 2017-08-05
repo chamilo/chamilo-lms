@@ -3900,7 +3900,6 @@ $ApprovalForNewAccount = "Validació d'un nou compte";
 $ManageUser = "Gestió d'usuari";
 $SubscribeUserToCourseAsTeacher = "Inscriure professors";
 $PasswordEncryptedForSecurity = "La seva contrasenya està encriptada per a la seva seguretat. Per això, quan hagi premut en l'enllaç per a regenerar la seva clau se li remetrà un nou correu que contindrà la seva contrasenya.";
-$SystemUnableToSendEmailContact = "El sistema no ha pogut enviar-li el correu electrònic";
 $OpenIDCouldNotBeFoundPleaseRegister = "Aquest OpenID no es troba en la nostra base de dades. Per favor, registri's per a obtenir un compte. Si ja té un compte amb nosaltres, editi el seu perfil en la mateixa per a afegir aquest OpenID";
 $UsernameMaxXCharacters = "El nom d'usuari pot tenir com a màxim una longitud de %s caràcters";
 $PictureUploaded = "La seva imatge ha estat enviada";

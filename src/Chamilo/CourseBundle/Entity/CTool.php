@@ -96,8 +96,7 @@ class CTool
      *
      * @ORM\Column(name="target", type="string", length=20, nullable=false)
      */
-    private
-        $target;
+    private $target;
 
     /**
      * @var string

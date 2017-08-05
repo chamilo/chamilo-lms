@@ -31,8 +31,11 @@ class ScormQuestion extends Question
      * @param integer $js_id
      * @return string|array
      */
-    public static function export_question($questionId, $standalone = true, $js_id)
-    {
+    public static function export_question(
+        $questionId,
+        $standalone = true,
+        $js_id
+    ) {
         $question = new ScormQuestion();
         $qst = $question->read($questionId);
         if (!$qst) {
@@ -119,7 +122,7 @@ class ScormQuestion extends Question
         return true;
     }
 
-    function export()
+    public function export()
     {
         $html = $this->getQuestionHTML();
         $js = $this->getQuestionJS();
@@ -154,7 +157,7 @@ class ScormQuestion extends Question
     /**
      * Returns an HTML-formatted question
      */
-    function getQuestionHTML()
+    public function getQuestionHTML()
     {
         $title = $this->selectTitle();
         $description = $this->selectDescription();
@@ -209,7 +212,7 @@ class ScormAnswerMultipleChoice extends Answer
     /**
      * Return HTML code for possible answers
      */
-    function export()
+    public function export()
     {
         $js = '';
         $html = '<tr><td colspan="2"><table width="100%">';
@@ -322,7 +325,7 @@ class ScormAnswerTrueFalse extends Answer
      *
      * @author Amand Tihon <amand@alrj.org>
      */
-    function export()
+    public function export()
     {
         $js = '';
         $html = '<tr><td colspan="2"><table width="100%">';
@@ -375,7 +378,7 @@ class ScormAnswerFillInBlanks extends Answer
      * As a side effect, it stores two lists in the class :
      * the missing words and their respective weightings.
      */
-    function export()
+    public function export()
     {
         global $charset;
         $js = '';
@@ -451,7 +454,7 @@ class ScormAnswerMatching extends Answer
      * Export the question part as a matrix-choice, with only one possible answer per line.
      * @author Amand Tihon <amand@alrj.org>
      */
-    function export()
+    public function export()
     {
         $js = '';
         $html = '<tr><td colspan="2"><table width="100%">';
@@ -555,7 +558,7 @@ class ScormAnswerFree extends Answer
      * the missing words and their respective weightings.
      *
      */
-    function export()
+    public function export()
     {
         $js = '';
         $identifier = 'question_'.$this->questionJSId.'_free';
@@ -598,7 +601,7 @@ class ScormAnswerHotspot extends Answer
      * Returns the javascript code that goes with HotSpot exercises
      * @return string	The JavaScript code
      */
-    function get_js_header()
+    public function get_js_header()
     {
         if ($this->standalone) {
             $header = '<script>';
@@ -626,6 +629,7 @@ class ScormAnswerHotspot extends Answer
 
         return $header;
     }
+
     /**
      * Export the text with missing words.
      *
@@ -633,7 +637,7 @@ class ScormAnswerHotspot extends Answer
      * the missing words and their respective weightings.
      *
      */
-    function export()
+    public function export()
     {
         $js = $this->get_js_header();
         $html = '<tr><td colspan="2"><table width="100%">';
@@ -715,7 +719,7 @@ class ScormAssessmentItem
      * This opens the <item> block, with correct attributes.
      *
      */
-    function start_page()
+    public function start_page()
     {
         $head = '';
         if ($this->standalone) {
@@ -731,7 +735,7 @@ class ScormAssessmentItem
      * End the XML flow, closing the </item> tag.
      *
      */
-    function end_page()
+    public function end_page()
     {
         if ($this->standalone) {
             return '</html>';
@@ -743,7 +747,7 @@ class ScormAssessmentItem
     /**
      * Start document header
      */
-    function start_header()
+    public function start_header()
     {
         if ($this->standalone) {
             return '<head>';
@@ -755,7 +759,7 @@ class ScormAssessmentItem
     /**
      * Print CSS inclusion
      */
-    function css()
+    public function css()
     {
         $css = '';
         if ($this->standalone) {
@@ -775,7 +779,7 @@ class ScormAssessmentItem
     /**
      * End document header
      */
-    function end_header()
+    public function end_header()
     {
         if ($this->standalone) {
             return '</head>';

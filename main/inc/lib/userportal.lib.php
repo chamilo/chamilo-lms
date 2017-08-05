@@ -142,10 +142,12 @@ class IndexManager
     /**
      * Alias for the online_logout() function
      * @param bool $redirect Whether to ask online_logout to redirect to index.php or not
+     * @param array $logoutInfo Information stored by local.inc.php before new context ['uid'=> x, 'cid'=>y, 'sid'=>z]
      */
-    public function logout($redirect = true)
+    public function logout($redirect = true, $logoutInfo = [])
     {
         online_logout($this->user_id, true);
+        courseLogout($logoutInfo);
     }
 
     /**
@@ -1395,6 +1397,10 @@ class IndexManager
             }
 
             if ($specialCourses) {
+                if ($categoryCodeFilter) {
+                    $specialCourses = self::filterByCategory($specialCourses, $categoryCodeFilter);
+                }
+
                 $this->tpl->assign('courses', $specialCourses);
 
                 $specialCourseList = $this->tpl->fetch(
@@ -1403,6 +1409,11 @@ class IndexManager
             }
 
             if ($courses['in_category'] || $courses['not_category']) {
+                if ($categoryCodeFilter) {
+                    $courses['in_category'] = self::filterByCategory($courses['in_category'], $categoryCodeFilter);
+                    $courses['not_category'] = self::filterByCategory($courses['not_category'], $categoryCodeFilter);
+                }
+
                 $this->tpl->assign('courses', $courses['not_category']);
                 $this->tpl->assign('categories', $courses['in_category']);
 
@@ -1642,11 +1653,14 @@ class IndexManager
                                 continue;
                             }
 
+                            // Courses inside the current session.
                             $date_session_start = $session['access_start_date'];
                             $date_session_end = $session['access_end_date'];
                             $coachAccessStartDate = $session['coach_access_start_date'];
                             $coachAccessEndDate = $session['coach_access_end_date'];
+                            $count_courses_session = 0;
 
+                            // Loop course content
                             $html_courses_session = [];
                             $count = 0;
 
@@ -2111,11 +2125,15 @@ class IndexManager
             $rightActions = '<div class="pull-right">'.$courseParams['right_actions'].'</div>';
         }
 
+        $notifications = isset($courseParams['notifications']) ? $courseParams['notifications'] : '';
+
         return "<div>
                     $button
                     <span class='$class'>$icon
-                    <a class='sessionView' href='$courseLink'>$title</a>
-                    </span>".$courseParams['notifications']." $rightActions
+                        <a class='sessionView' href='$courseLink'>$title</a>
+                    </span> 
+                    $notifications 
+                    $rightActions 
                 </div>
                 $teachers";
     }
@@ -2253,5 +2271,49 @@ class IndexManager
         $strDetails[] = !empty($duration) ? $duration : $dates;
 
         return implode(' | ', $strDetails);
+    }
+
+    /**
+     * @param $userId
+     * @return array
+     */
+    public static function returnCourseCategoryListFromUser($userId)
+    {
+        $sessionCount = 0;
+
+        $courseList = CourseManager::get_courses_list_by_user_id($userId);
+        $categoryCodes = CourseManager::getCourseCategoriesFromCourseList($courseList);
+        $categories = [];
+
+        foreach ($categoryCodes as $categoryCode) {
+            $categories[] = CourseCategory::getCategory($categoryCode);
+        }
+
+        $template = new Template('', false, false, false, true, false, false);
+        $layout = $template->get_template('user_portal/course_categories.tpl');
+        $template->assign('course_categories', $categories);
+
+        return [
+            'html' => $template->fetch($layout),
+            'course_count' => count($courseList),
+            'session_count' => $sessionCount
+        ];
+    }
+
+    /**
+     * Filter the course list by category code
+     * @param array $courseList course list
+     * @param string $categoryCode
+     * @return array
+     */
+    private static function filterByCategory($courseList, $categoryCode)
+    {
+        return array_filter($courseList, function ($courseInfo) use ($categoryCode) {
+            if ($courseInfo['category_code'] === $categoryCode) {
+                return true;
+            }
+
+            return false;
+        });
     }
 }

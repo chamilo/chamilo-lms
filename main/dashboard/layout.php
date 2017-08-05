@@ -12,9 +12,9 @@ api_block_anonymous_users();
 $tool_name = get_lang('Dashboard');
 
 // Header
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 // Display
 echo $content;
 
-Display :: display_footer();
+Display::display_footer();

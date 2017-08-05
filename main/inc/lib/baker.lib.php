@@ -2,14 +2,14 @@
 
 /**
  * Php library to Bake the PNG Images
- * 
+ *
  */
 class PNGImageBaker
 {
     private $_contents;
     private $_size;
     private $_chunks;
-    
+
     /**
      * Prepares file for handling metadata.
      * Verifies that this file is a valid PNG file.
@@ -17,7 +17,8 @@ class PNGImageBaker
      *
      * @param string $contents File content as a string
      */
-    public function __construct($contents) {
+    public function __construct($contents)
+    {
         $this->_contents = $contents;
         $png_signature = pack("C8", 137, 80, 78, 71, 13, 10, 26, 10);
         // Read 8 bytes of PNG header and verify.
@@ -36,7 +37,7 @@ class PNGImageBaker
             $position += $chunk['size'] + 12;
         } while ($position < $this->_size);
     }
-  
+
     /**
      * Checks if a key already exists in the chunk of said type.
      * We need to avoid writing same keyword into file chunks.
@@ -46,7 +47,8 @@ class PNGImageBaker
      *
      * @return boolean (true|false) True if file is safe to write this keyword, false otherwise.
      */
-    public function checkChunks($type, $check) {
+    public function checkChunks($type, $check)
+    {
         if (array_key_exists($type, $this->_chunks)) {
             foreach (array_keys($this->_chunks[$type]) as $typekey) {
                 list($key, $data) = explode("\0", $this->_chunks[$type][$typekey]);
@@ -58,7 +60,7 @@ class PNGImageBaker
         }
         return true;
     }
-    
+
     /**
      * Add a chunk by type with given key and text
      *
@@ -68,19 +70,19 @@ class PNGImageBaker
      *
      * @return string $result File content with a new chunk as a string.
      */
-    public function addChunk($chunkType, $key, $value) {
-        
+    public function addChunk($chunkType, $key, $value)
+    {
         $chunkData = $key."\0".$value;
         $crc = pack("N", crc32($chunkType.$chunkData));
         $len = pack("N", strlen($chunkData));
-        
+
         $newChunk = $len.$chunkType.$chunkData.$crc;
         $result = substr($this->_contents, 0, $this->_size - 12)
                 . $newChunk
                 . substr($this->_contents, $this->_size - 12, 12);
         return $result;
     }
-    
+
     /**
      * removes a chunk by type with given key and text
      *
@@ -90,7 +92,8 @@ class PNGImageBaker
      *
      * @return string $result New File content.
      */
-    public function removeChunks($chunkType, $key, $png) {
+    public function removeChunks($chunkType, $key, $png)
+    {
         // Read the magic bytes and verify
         $retval = substr($png, 0, 8);
         $ipos = 8;
@@ -123,15 +126,16 @@ class PNGImageBaker
 
     /**
      * Extracts the baked PNG info by the Key
-     * 
+     *
      * @param string $png the png image
      * @param string $key Keyword that needs to be searched.
-     * 
+     *
      * @return mixed - If there is an error - boolean false is returned
      * If there is PNG information that matches the key an array is returned
-     * 
+     *
      */
-    public function extractBadgeInfo($png, $key = 'openbadges') {
+    public function extractBadgeInfo($png, $key = 'openbadges')
+    {
         // Read the magic bytes and verify
         $retval = substr($png, 0, 8);
         $ipos = 8;
@@ -150,7 +154,7 @@ class PNGImageBaker
                 $data = substr($png, $ipos, $chunk['size']);
                 $sections = explode("\0", $data);
                 if ($sections[0] == $key) {
-                   return $sections;
+                    return $sections;
                 }
             }
             // Extract the data and the CRC

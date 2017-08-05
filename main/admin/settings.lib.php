@@ -603,7 +603,6 @@ function storeRegions()
 
     // Get a list of all current 'Plugins' settings
     $installed_plugins = $plugin_obj->get_installed_plugins();
-
     $shortlist_installed = array();
     if (!empty($installed_plugins)) {
         foreach ($installed_plugins as $plugin) {
@@ -612,7 +611,6 @@ function storeRegions()
             }
         }
     }
-    $shortlist_installed = array_flip(array_flip($shortlist_installed));
 
     $plugin_list = $plugin_obj->read_plugins_from_path();
 
@@ -1083,20 +1081,31 @@ function addEditTemplate()
 
             // Store the information in the database (as insert or as update).
             $table_system_template = Database::get_main_table('system_template');
+            $cssFile = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/editor.css';
+            $style = '<link href="'.$cssFile.'" rel="stylesheet" media="screen" type="text/css" />';
+            $bootstrap = '<link href="'.api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css" />';
+            $viewport = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
+            
             if ($_GET['action'] == 'add') {
-                $content_template = Security::remove_XSS($values['template_text'], COURSEMANAGERLOWSECURITY);
+                $templateContent = '<head>'.$viewport.'<title>'.$values['title'].'</title>'.$style.$bootstrap.'</head>'
+                    . '<body>'.Database::escape_string($values['template_text']).'</body>';
+                $content_template = Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY);
                 $params = [
                     'title' =>  $values['title'],
                     'content' => $content_template,
                     'image' => $new_file_name
                 ];
+                
+                
                 Database::insert($table_system_template, $params);
 
                 // Display a feedback message.
                 echo Display::return_message(get_lang('TemplateAdded'), 'confirm');
                 echo '<a href="settings.php?category=Templates&action=add">'.Display::return_icon('new_template.png', get_lang('AddTemplate'), '', ICON_SIZE_MEDIUM).'</a>';
             } else {
-                $content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
+                
+                $content_template = '<head>'.$viewport.'<title>'.$values['title'].'</title>'.$style.$bootstrap.'</head>'
+                    . '<body>'.Database::escape_string($values['template_text']).'</body>';
                 $sql = "UPDATE $table_system_template set title = '".Database::escape_string($values['title'])."', content = '".$content_template."'";
                 if (!empty($new_file_name)) {
                     $sql .= ", image = '".Database::escape_string($new_file_name)."'";
@@ -1753,4 +1762,61 @@ function isStyleChangeable()
         $changeable = true;
     }
     return $changeable;
+}
+
+/**
+ * Get all settings of one category prepared for display in admin/settings.php
+ * @param string $category
+ * @return array
+ */
+function getCategorySettings($category = '')
+{
+    $url_id = api_get_current_access_url_id();
+    $settings_by_access_list = array();
+
+    if ($url_id == 1) {
+        $settings = api_get_settings($category, 'group', $url_id);
+    } else {
+        $url_info = api_get_access_url($url_id);
+        if ($url_info['active'] == 1) {
+            $categoryToSearch = $category;
+            if ($category == 'search_setting') {
+                $categoryToSearch = '';
+            }
+            // The default settings of Chamilo
+            $settings = api_get_settings($categoryToSearch, 'group', 1, 0);
+            // The settings that are changeable from a particular site.
+            $settings_by_access = api_get_settings($categoryToSearch, 'group', $url_id, 1);
+
+            foreach ($settings_by_access as $row) {
+                if (empty($row['variable'])) {
+                    $row['variable'] = 0;
+                }
+                if (empty($row['subkey'])) {
+                    $row['subkey'] = 0;
+                }
+                if (empty($row['category'])) {
+                    $row['category'] = 0;
+                }
+
+                // One more validation if is changeable.
+                if ($row['access_url_changeable'] == 1) {
+                    $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = $row;
+                } else {
+                    $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = array();
+                }
+            }
+        }
+    }
+
+    if (isset($category) && $category == 'search_setting') {
+        if (!empty($_REQUEST['search_field'])) {
+            $settings = searchSetting($_REQUEST['search_field']);
+        }
+    }
+
+    return array(
+        'settings' => $settings,
+        'settings_by_access_list' => $settings_by_access_list
+    );
 }

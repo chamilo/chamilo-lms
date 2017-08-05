@@ -13,6 +13,8 @@ $_in_course = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
+ob_start();
+
 api_protect_course_script(true);
 
 $course_code = api_get_course_id();
@@ -569,6 +571,8 @@ if (isset ($move_form)) {
     Display::addFlash(Display::return_message($move_form->toHtml(), 'normal', false));
 }
 
+$viewTitle = '';
+
 // DISPLAY HEADERS AND MESSAGES
 if (!isset($_GET['exportpdf'])) {
     if (isset ($_GET['studentoverview'])) {
@@ -576,22 +580,20 @@ if (!isset($_GET['exportpdf'])) {
             'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectCat,
             'name' => get_lang('ToolGradebook')
         );
-        Display :: display_header(get_lang('FlatView'));
+        $viewTitle = get_lang('FlatView');
     } elseif (isset($_GET['search'])) {
         $interbreadcrumb[] = array(
             'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectCat,
             'name' => get_lang('ToolGradebook')
         );
-        Display :: display_header(get_lang('SearchResults'));
+        $viewTitle = get_lang('SearchResults');
     } elseif (!empty($selectCat)) {
         $interbreadcrumb[] = array(
             'url' => '#',
             'name' => get_lang('ToolGradebook')
         );
-
-        Display :: display_header('');
     } else {
-        Display :: display_header(get_lang('ToolGradebook'));
+        $viewTitle = get_lang('ToolGradebook');
     }
 }
 
@@ -1004,4 +1006,10 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
 
 api_set_in_gradebook();
 
-Display :: display_footer();
+$contents = ob_get_contents();
+
+ob_end_clean();
+
+$view = new Template($viewTitle);
+$view->assign('content', $contents);
+$view->display_one_col_template();

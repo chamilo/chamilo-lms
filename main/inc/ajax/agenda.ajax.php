@@ -109,6 +109,7 @@ switch ($action) {
             $groupId,
             $userId
         );
+        header('Content-Type: application/json');
         echo $events;
         break;
     case 'get_user_agenda':

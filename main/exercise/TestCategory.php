@@ -745,8 +745,10 @@ class TestCategory
      *
      * @return string
      */
-    public static function get_stats_table_by_attempt($exerciseId, $category_list = array())
-    {
+    public static function get_stats_table_by_attempt(
+        $exerciseId,
+        $category_list = array()
+    ) {
         if (empty($category_list)) {
             return null;
         }

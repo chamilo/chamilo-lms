@@ -543,7 +543,15 @@ class SkillRelUser extends Model
  */
 class Skill extends Model
 {
-    public $columns = array('id', 'name', 'description', 'access_url_id', 'short_code', 'icon', 'criteria');
+    public $columns = array(
+        'id',
+        'name',
+        'description',
+        'access_url_id',
+        'short_code',
+        'icon',
+        'criteria'
+    );
     public $required = array('name');
 
     /** Array of colours by depth, for the coffee wheel. Each depth has 4 col */

@@ -360,12 +360,13 @@ class ExerciseLib
                         );
 
                         $answer_input = null;
-
+                        $attributes['class'] = 'checkradios';
                         if ($answerType == UNIQUE_ANSWER_IMAGE) {
+                            $attributes['class'] = '';
                             $attributes['style'] = 'display: none;';
                             $answer = '<div class="thumbnail">'.$answer.'</div>';
                         }
-
+                        
                         $answer_input .= '<label class="radio '.$hidingClass.'">';
                         $answer_input .= Display::input(
                             'radio',
@@ -418,7 +419,7 @@ class ExerciseLib
 
                         if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                             $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-
+                            $attributes['class'] = 'checkradios';
                             $answer_input = '<label class="checkbox">';
                             $answer_input .= Display::input(
                                 'checkbox',

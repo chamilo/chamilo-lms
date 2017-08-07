@@ -1504,6 +1504,10 @@ class bbb
                 'global_conference_allow_roles'
             );
 
+            if (api_is_platform_admin()) {
+                $userInfo['status'] = PLATFORM_ADMIN;
+            }
+
             $showGlobalLink = true;
             if (!empty($allowedRoles)) {
                 if (!in_array($userInfo['status'], $allowedRoles)) {

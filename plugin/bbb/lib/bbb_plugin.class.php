@@ -48,6 +48,7 @@ class BBBPlugin extends Plugin
                 'global_conference_allow_roles' => [
                     'type' => 'select',
                     'options' => [
+                        PLATFORM_ADMIN => get_lang('Administrator'),
                         COURSEMANAGER => get_lang('Teacher'),
                         STUDENT => get_lang('Student'),
                         STUDENT_BOSS => get_lang('StudentBoss')

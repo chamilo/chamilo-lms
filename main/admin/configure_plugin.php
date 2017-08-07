@@ -46,7 +46,12 @@ if (isset($pluginInfo['settings_form'])) {
 
 if (isset($form)) {
     if ($form->validate()) {
-        $values = $form->exportValues();
+        $values = $form->getSubmitValues();
+
+        if (!isset($values['global_conference_allow_roles'])) {
+            $values['global_conference_allow_roles'] = [];
+        }
+
         $accessUrlId = api_get_current_access_url_id();
 
         api_delete_settings_params(

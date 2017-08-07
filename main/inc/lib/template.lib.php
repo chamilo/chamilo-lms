@@ -530,6 +530,7 @@ class Template
     {
         return [
             'web' => api_get_path(WEB_PATH),
+            'web_url' => api_get_web_url(),
             'web_relative' => api_get_path(REL_PATH),
             'web_course' => api_get_path(WEB_COURSE_PATH),
             'web_main' => api_get_path(WEB_CODE_PATH),

@@ -6815,11 +6815,6 @@ function api_set_default_visibility(
     }
 
     $groupInfo = GroupManager::get_group_properties($group_id);
-    $groupIid = 0;
-    if ($groupInfo) {
-        $groupIid = $groupInfo['iid'];
-    }
-
     $original_tool_id = $tool_id;
 
     switch ($tool_id) {

@@ -34,7 +34,9 @@
                         <a href="{{ _p.web }}?language={{ current_language }}">{{ "CampusHomepage"|get_lang }}</a>
                     </li>
                     <li class="item-menu menu-2">
-                        <a href="{{ _p.web_url }}faq?_locale={{ document_language }}">{{ "FAQ"|get_lang }}</a>
+                        <a href="{{ _p.web_url }}faq?_locale={{ document_language }}">
+                            {{ "FAQ"|get_lang }}
+                        </a>
                     </li>
                     <li class="item-menu menu-3 {% if _p.basename == 'inscription.php' %} active {% endif %}">
                         <a href="{{ _p.web }}main/auth/inscription.php?language={{ current_language }}">{{ "Subscription"|get_lang }}</a>

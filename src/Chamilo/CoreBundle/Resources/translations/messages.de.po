@@ -1,0 +1,69 @@
+msgid "My courses"
+msgstr "Meine Kurse"
+
+msgid "Homepage"
+msgstr "Portal Startseite"
+
+msgid "Inbox"
+msgstr "Posteingang"
+
+msgid "Logout"
+msgstr "Logout"
+
+msgid "Personal agenda"
+msgstr "Mein Kalender"
+
+msgid "Reporting"
+msgstr "Meine Auswertung"
+
+msgid "Social network"
+msgstr "Soziales Netzwerk"
+
+msgid "Dashboard"
+msgstr "Kontroll-Anzeige"
+
+msgid "Administration"
+msgstr "Administration"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Latest publications"
+msgstr "Aktuelle Veröffentlichungen"
+
+msgid "Subscription"
+msgstr "Registrierung"
+
+msgid "My certificates"
+msgstr "Meine Zertifikate"
+
+msgid "Latest blocks"
+msgstr "Neueste Blöcke"
+
+msgid "Go up"
+msgstr "Nach oben"
+
+msgid "PoweredByX"
+msgstr "Powered by %s"
+
+msgid "URLOFAJ"
+msgstr "https://www.dfjw.org/"
+
+msgid "OFAJ"
+msgstr "Deutsch-Französisches Jugendwerk"
+
+msgid "DemoMenuLink"
+msgstr "https://parkur.ofaj.org/web/de/demo-seite?_locale=de"
+
+msgid "MentionsLegales"
+msgstr "Impressum"
+
+msgid "MentionsLegalesLink"
+msgstr "https://parkur.ofaj.org/web/de/impressum?_locale=de"
+
+msgid "CGU"
+msgstr "Nutzungsbedingungen"
+
+msgid "CGULink"
+msgstr "https://parkur.ofaj.org/doc/AllgemeineNutzungsbedingungenParkur.pdf"
+

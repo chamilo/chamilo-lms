@@ -1366,7 +1366,21 @@ class CourseRestorer
                         SET id = iid 
                         WHERE iid = $new_id";
                 Database::query($sql);
-                api_set_default_visibility($new_id, TOOL_LINK_CATEGORY);
+
+                $courseInfo = api_get_course_info_by_id($this->destination_course_id);
+                api_item_property_update(
+                    $courseInfo,
+                    TOOL_LINK_CATEGORY,
+                    $new_id,
+                    'LinkCategoryAdded',
+                    api_get_user_id()
+                );
+                api_set_default_visibility(
+                    $new_id,
+                    TOOL_LINK_CATEGORY,
+                    0,
+                    $courseInfo
+                );
             }
 
             $this->course->resources[RESOURCE_LINKCATEGORY][$id]->destination_id = $new_id;

@@ -452,12 +452,36 @@ if (api_is_platform_admin()) {
         $blocks['skills']['extra'] = null;
         $blocks['skills']['search_form'] = null;
     }
+
+    $allow = api_get_configuration_value('gradebook_dependency');
+    if ($allow) {
+        $blocks['gradebook']['icon'] = Display::return_icon(
+            'gradebook.png',
+            get_lang('Gradebook'),
+            array(),
+            ICON_SIZE_MEDIUM,
+            false
+        );
+        $blocks['gradebook']['label'] = get_lang('Gradebook');
+        $blocks['gradebook']['class'] = 'block-admin-gradebook';
+
+        $items = array();
+        $items[] = array(
+            'url' => 'gradebook_list.php',
+            'label' => get_lang('List')
+        );
+        $blocks['gradebook']['items'] = $items;
+        $blocks['gradebook']['extra'] = null;
+        $blocks['gradebook']['search_form'] = null;
+    }
 }
 
 if (api_is_platform_admin()) {
     /* Plugins */
     global $_plugins;
-    if (isset($_plugins['menu_administrator']) && count($_plugins['menu_administrator']) > 0) {
+    if (isset($_plugins['menu_administrator']) &&
+        count($_plugins['menu_administrator']) > 0
+    ) {
         $menuAdministratorItems = [];
 
         $plugin_obj = new AppPlugin();

@@ -579,3 +579,7 @@ $_configuration['score_grade_model'] = [
 // Skills can only visible for admins, teachers (related to a user via a course),
 // and HRM users (if related to a user).
 // $_configuration['allow_private_skills'] = false;
+// Additional gradebook dependencies BT#13099
+// ALTER TABLE gradebook_category ADD COLUMN depends TEXT DEFAULT NULL;
+// ALTER TABLE gradebook_category ADD COLUMN minimum_to_validate INT DEFAULT NULL;
+// $_configuration['gradebook_dependency'] = false;

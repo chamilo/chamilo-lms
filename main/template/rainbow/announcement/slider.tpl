@@ -1,6 +1,3 @@
-<div class="page-header">
-    <h4>{{ "SystemAnnouncements" | get_lang }}</h4>
-</div>
 <div id="carousel-announcement" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
     <ol class="carousel-indicators">
@@ -13,9 +10,6 @@
     <div class="carousel-inner" role="listbox">
     {% for announcement in announcements %}
         <div class="item {% if loop.index0 == 0 %} active {% endif %}">
-            <div class="carousel-caption">
-                {{ announcement.title }}
-            </div>
             <div class="carousel-content">
                 {% if announcement.readMore %}
                 <div class="block-text">

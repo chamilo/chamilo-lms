@@ -68,18 +68,25 @@ switch ($action) {
             ]
         );
 
-        $form->addText('minimum', get_lang('MinimumGradebookToValidate'));
+        $form->addText(
+            'minimum',
+            get_lang('MinimumGradebookToValidate'),
+            false
+        );
 
         $form->addButtonSave(get_lang('Add'));
         $contentForm = $form->returnForm();
         if ($form->validate()) {
             $values = $form->getSubmitValues();
-            $courseId = $values['course_id'];
+            $courseId = isset($values['course_id']) ? $values['course_id'] : 0;
             $courseInfo = api_get_course_info_by_id($courseId);
             $courseCode = $courseInfo['code'];
             $criteria = ['courseCode' => $courseCode];
             $exists = $repo->findBy($criteria);
-            if (empty($exists)) {
+            if (empty($exists) || empty($courseId)) {
+                if (empty($courseId)) {
+                    $courseCode = '';
+                }
                 $category = new GradebookCategory();
                 $category
                     ->setName($values['name'])
@@ -131,7 +138,11 @@ switch ($action) {
             );
             $form->addText('name', get_lang('Name'));
             $form->addText('weight', get_lang('Weight'));
-            $form->addText('minimum', get_lang('MinimumGradebookToValidate'));
+            $form->addText(
+                'minimum',
+                get_lang('MinimumGradebookToValidate'),
+                false
+            );
             $form->addLabel(get_lang('CourseCode'), $category->getCourseCode());
 
              $sql = "SELECT depends, minimum_to_validate 

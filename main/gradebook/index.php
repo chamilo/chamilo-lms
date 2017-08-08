@@ -755,7 +755,7 @@ if (!empty($selectCat)) {
     if ($show_message == '') {
         // Student
         if (!api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
-            $certificate = Category::register_user_certificate(
+            $certificate = Category::generateUserCertificate(
                 $selectCat,
                 $stud_id
             );

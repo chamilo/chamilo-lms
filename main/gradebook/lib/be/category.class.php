@@ -24,6 +24,9 @@ class Category implements GradebookItem
     private $grade_model_id;
     private $generateCertificates;
     private $isRequirement;
+    private $courseDependency;
+    private $minimumToValidate;
+
     public $studentList;
     public $evaluations;
     public $links;
@@ -47,6 +50,8 @@ class Category implements GradebookItem
         $this->grade_model_id = 0;
         $this->generateCertificates = false;
         $this->isRequirement = false;
+        $this->courseDependency = [];
+        $this->minimumToValidate = null;
     }
 
     /**
@@ -249,6 +254,44 @@ class Category implements GradebookItem
     }
 
     /**
+     * @param $value
+     */
+    public function setCourseListDependency($value)
+    {
+        $result = [];
+        if (@unserialize($value) !== false) {
+            $result = unserialize($value);
+        }
+
+        $this->courseDependency = $result;
+    }
+
+    /**
+     * Course id list
+     * @return array
+     */
+    public function getCourseListDependency()
+    {
+        return $this->courseDependency;
+    }
+
+    /**
+     * @param int $value
+     */
+    public function setMinimumToValidate($value)
+    {
+        $this->minimumToValidate = $value;
+    }
+
+    /**
+     * @return null
+     */
+    public function getMinimumToValidate()
+    {
+        return $this->minimumToValidate;
+    }
+
+    /**
      * @return null|integer
      */
     public function get_grade_model_id()
@@ -324,8 +367,10 @@ class Category implements GradebookItem
      *
      * @return array
      */
-    public static function load_session_categories($id = null, $session_id = null)
-    {
+    public static function load_session_categories(
+        $id = null,
+        $session_id = null
+    ) {
         if (isset($id) && (int) $id === 0) {
             $cats = array();
             $cats[] = self::create_root_category();
@@ -515,6 +560,9 @@ class Category implements GradebookItem
             $cat->set_locked($data['locked']);
             $cat->setGenerateCertificates($data['generate_certificates']);
             $cat->setIsRequirement($data['is_requirement']);
+            $cat->setCourseListDependency(isset($data['depends']) ? $data['depends'] : []);
+            $cat->setMinimumToValidate(isset($data['minimum_to_validate']) ? $data['minimum_to_validate'] : null);
+
             $categories[] = $cat;
         }
 
@@ -2070,16 +2118,17 @@ class Category implements GradebookItem
 
     /**
      * Generates a certificate for this user if everything matches
-     * @param int $category_id
+     * @param int $category_id gradebook id
      * @param int $user_id
+     * @param bool $sendNotification
+     *
      * @return bool|string
      */
-    public static function register_user_certificate($category_id, $user_id)
-    {
-        $courseId = api_get_course_int_id();
-        $courseCode = api_get_course_id();
-        $sessionId = api_get_session_id();
-
+    public static function generateUserCertificate(
+        $category_id,
+        $user_id,
+        $sendNotification = false
+    ) {
         // Generating the total score for a course
         $cats_course = self::load(
             $category_id,
@@ -2087,12 +2136,21 @@ class Category implements GradebookItem
             null,
             null,
             null,
-            $sessionId,
+            null,
             false
         );
 
         /** @var Category $category */
         $category = $cats_course[0];
+
+        if (empty($category)) {
+            return false;
+        }
+
+        $sessionId = $category->get_session_id();
+        $courseCode = $category->get_course_code();
+        $courseInfo = api_get_course_info($courseCode);
+        $courseId = $courseInfo['real_id'];
 
         //@todo move these in a function
         $sum_categories_weight_array = array();
@@ -2107,7 +2165,6 @@ class Category implements GradebookItem
             }
         }
 
-        $main_weight = $cats_course[0]->get_weight();
         $cattotal = self::load($category_id);
         $scoretotal = $cattotal[0]->calc_score($user_id);
 
@@ -2115,9 +2172,6 @@ class Category implements GradebookItem
         // file load this variable as a global
         $scoredisplay = ScoreDisplay::instance();
         $my_score_in_gradebook = $scoredisplay->display_score($scoretotal, SCORE_SIMPLE);
-
-        // A student always sees only the teacher's repartition
-        $scoretotal_display = $scoredisplay->display_score($scoretotal, SCORE_DIV_PERCENT);
         $userFinishedCourse = self::userFinishedCourse(
             $user_id,
             $cats_course[0],
@@ -2178,7 +2232,12 @@ class Category implements GradebookItem
 
         $html = array();
         if (!empty($my_certificate)) {
-            $certificate_obj = new Certificate($my_certificate['id']);
+            $certificate_obj = new Certificate(
+                $my_certificate['id'],
+                0,
+                $sendNotification
+            );
+
             $fileWasGenerated = $certificate_obj->isHtmlFileGenerated();
 
             if (!empty($fileWasGenerated)) {
@@ -2233,7 +2292,7 @@ class Category implements GradebookItem
     {
         if (!empty($userList)) {
             foreach ($userList as $userInfo) {
-                self::register_user_certificate($catId, $userInfo['user_id']);
+                self::generateUserCertificate($catId, $userInfo['user_id']);
             }
         }
     }

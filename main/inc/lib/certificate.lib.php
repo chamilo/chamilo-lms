@@ -19,7 +19,7 @@ class Certificate extends Model
     /**
      * Certification data
      */
-    public $certificate_data = array();
+    public $certificate_data = [];
 
     /**
      * Student's certification path
@@ -40,11 +40,15 @@ class Certificate extends Model
      * Constructor
      * @param int $certificate_id ID of the certificate.
      * @param int $userId
+     * @param bool $sendNotification send message to student
      *
      * If no ID given, take user_id and try to generate one
      */
-    public function __construct($certificate_id = 0, $userId = 0)
-    {
+    public function __construct(
+        $certificate_id = 0,
+        $userId = 0,
+        $sendNotification = false
+    ) {
         $this->table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $this->user_id = !empty($userId) ? $userId : api_get_user_id();
 
@@ -62,12 +66,12 @@ class Certificate extends Model
 
             // To force certification generation
             if ($this->force_certificate_generation) {
-                $this->generate();
+                $this->generate([], $sendNotification);
             }
 
             if (isset($this->certificate_data) && $this->certificate_data) {
                 if (empty($this->certificate_data['path_certificate'])) {
-                    $this->generate();
+                    $this->generate([], $sendNotification);
                 }
             }
         }
@@ -150,7 +154,7 @@ class Certificate extends Model
      * @param bool $sendNotification
      * @return bool|int
      */
-    public function generate($params = array(), $sendNotification = false)
+    public function generate($params = [], $sendNotification = false)
     {
         // The user directory should be set
         if (empty($this->certification_user_path) &&

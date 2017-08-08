@@ -70,10 +70,7 @@ try {
             Criteria::expr()->eq('relationType', Session::STUDENT)
         );
 
-        $subscriptions = $session
-            ->getUsers()
-            ->matching($criteria);
-
+        $subscriptions = $session->getUsers()->matching($criteria);
         $students = [];
 
         /** @var SessionRelUser $subscription */
@@ -152,9 +149,10 @@ try {
             continue;
         }
 
-        Category::register_user_certificate(
+        Category::generateUserCertificate(
             $gradebook->get_id(),
-            $student->getId()
+            $student->getId(),
+            true
         );
     }
 

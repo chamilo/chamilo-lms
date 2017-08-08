@@ -470,7 +470,7 @@ if ($_SESSION['oLP']->current == $_SESSION['oLP']->get_last()) {
             $userScore = $gradebookLinks[0]->calc_score($user_id, 'best');
 
             if ($userScore[0] >= $gradebookMinScore) {
-                Category::register_user_certificate($categories[0]->get_id(), $user_id);
+                Category::generateUserCertificate($categories[0]->get_id(), $user_id);
             }
         }
     }

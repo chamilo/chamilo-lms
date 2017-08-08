@@ -150,7 +150,7 @@ switch ($action) {
                 if ($userInfo['status'] == INVITEE) {
                     continue;
                 }
-                Category::register_user_certificate($cat_id, $userInfo['user_id']);
+                Category::generateUserCertificate($cat_id, $userInfo['user_id']);
             }
         }
         break;

@@ -119,7 +119,7 @@ if ($accessGranted == false) {
 
             if ($show_message == '') {
                 if (!api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
-                    $certificate = Category::register_user_certificate($categoryId, $userId);
+                    $certificate = Category::generateUserCertificate($categoryId, $userId);
 
                     if (!empty($certificate['pdf_url']) || !empty($certificate['badge_link'])) {
                         if (is_array($certificate) && isset($certificate['pdf_url'])) {

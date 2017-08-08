@@ -373,7 +373,6 @@ class Database
     public static function query($query)
     {
         $connection = self::getManager()->getConnection();
-
         if (api_get_setting('server_type') == 'test') {
             $result = $connection->executeQuery($query);
         } else {
@@ -528,8 +527,13 @@ class Database
      * @param string $option
      * @return array
      */
-    public static function select($columns, $table_name, $conditions = array(), $type_result = 'all', $option = 'ASSOC')
-    {
+    public static function select(
+        $columns,
+        $table_name,
+        $conditions = array(),
+        $type_result = 'all',
+        $option = 'ASSOC'
+    ) {
         $conditions = self::parse_conditions($conditions);
 
         //@todo we could do a describe here to check the columns ...

@@ -163,19 +163,21 @@ if ($sessionInfo['nbr_courses'] == 0) {
 
     foreach ($courses as $course) {
         // Select the number of users
-        $numberOfUsers = SessionManager::getCountUsersInCourseSession($course, $session);
+        $numberOfUsers = SessionManager::getCountUsersInCourseSession(
+            $course,
+            $session
+        );
         // Get coachs of the courses in session
         $namesOfCoaches = [];
         $coachSubscriptions = $session
             ->getUserCourseSubscriptionsByStatus($course, Session::COACH)
-            ->forAll(function($index, SessionRelCourseRelUser $subscription) use (&$namesOfCoaches) {
+            ->forAll(function ($index, SessionRelCourseRelUser $subscription) use (&$namesOfCoaches) {
                 $namesOfCoaches[] = $subscription->getUser()->getCompleteNameWithUserName();
 
                 return true;
             });
 
         $orderButtons = '';
-
         if (SessionManager::orderCourseIsEnabled()) {
             $orderButtons = Display::url(
                 Display::return_icon(
@@ -202,14 +204,15 @@ if ($sessionInfo['nbr_courses'] == 0) {
 
         // hide_course_breadcrumb the parameter has been added to hide the name
         // of the course, that appeared in the default $interbreadcrumb
-        $courseItem .= '
-		<tr>
-			<td class="title">'.Display::url(
+        $courseItem .= '<tr>
+			<td class="title">'.
+            Display::url(
                 $course->getTitle().' ('.$course->getVisualCode().')',
                 $courseUrl
-            ).'</td>
-			<td>'.($namesOfCoaches ? implode('<br>', $namesOfCoaches) : get_lang('None')).'</td>
-			<td>'.$numberOfUsers.'</td>
+            ).'</td>';
+        $courseItem .= '<td>'.($namesOfCoaches ? implode('<br>', $namesOfCoaches) : get_lang('None')).'</td>';
+        $courseItem .= '<td>'.$numberOfUsers.'</td>';
+        $courseItem .= '
 			<td>
                 <a href="'. $courseUrl.'">'.
                 Display::return_icon('course_home.gif', get_lang('Course')).'</a>

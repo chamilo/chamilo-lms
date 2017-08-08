@@ -8668,16 +8668,16 @@ class SessionManager
                 INNER JOIN ChamiloCoreBundle:SessionRelUser su
                     WITH scu.user = su.user
                     AND scu.session = su.session
-                WHERE scu.course = :course
-                    AND su.relationType != :rrhh
-                    AND scu.session = :session
+                WHERE 
+                    scu.course = :course AND 
+                    su.relationType <> :relationType AND 
+                    scu.session = :session
             ")
             ->setParameters([
                 'course' => $course->getId(),
-                'rrhh' => SESSION_RELATION_TYPE_RRHH,
+                'relationType' => SESSION_RELATION_TYPE_RRHH,
                 'session' => $session->getId()
             ])
             ->getSingleScalarResult();
-
     }
 }

@@ -1,7 +1,7 @@
 # Grading Electronic Form
-v0.6
+v0.7
 
-Generate a file necesary to the Grading Electronic form for RickyRescue
+Generate a file necessary to the Grading Electronic form for RickyRescue
 
 * Install the plugin
 * Asign the `content_top` region

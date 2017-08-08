@@ -22,21 +22,18 @@
             </div>
         </div>
     </div>
-
     <script>
         $(document).on('ready', function () {
             $('form[name="frm_grading_electronic"]').on('submit', function (e) {
                 e.preventDefault();
 
                 var $self = $(this);
-
-                $
-                    .post('{{ _p.web_plugin }}grading_electronic/generate.php', $self.serialize())
-                    .done(function (response) {
-                        $('#modal-grading-electronic-result').html(
-                            response
-                        );
-                    });
+                $.post('{{ _p.web_plugin }}grading_electronic/generate.php', $self.serialize())
+                .done(function (response) {
+                    $('#modal-grading-electronic-result').html(
+                        response
+                    );
+                });
             });
         });
     </script>

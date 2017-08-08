@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Course,
-    Chamilo\CoreBundle\Entity\Session,
-    Doctrine\Common\Collections\Criteria,
-    Chamilo\CoreBundle\Entity\SessionRelUser,
-    Chamilo\CoreBundle\Entity\CourseRelUser,
-    Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Doctrine\Common\Collections\Criteria;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\UserBundle\Entity\User;
 
 require_once '../../main/inc/global.inc.php';
 
@@ -152,7 +152,10 @@ try {
             continue;
         }
 
-        Category::register_user_certificate($gradebook->get_id(), $student->getId());
+        Category::register_user_certificate(
+            $gradebook->get_id(),
+            $student->getId()
+        );
     }
 
     $fileName = implode('_', [

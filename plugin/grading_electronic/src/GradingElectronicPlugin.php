@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+/**
+ * Class GradingElectronicPlugin
+ */
 class GradingElectronicPlugin extends Plugin
 {
     const EXTRAFIELD_STUDENT_ID = 'fcdice_or_acadis_student_id';
@@ -23,8 +26,8 @@ class GradingElectronicPlugin extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '0.6',
-            'Angel Fernando Quiroz Campos',
+            '0.7',
+            'Angel Fernando Quiroz Campos, Julio Montoya',
             array(
                 'tool_enable' => 'boolean',
             )
@@ -62,7 +65,9 @@ class GradingElectronicPlugin extends Plugin
     {
         $uExtraField = new ExtraField('user');
 
-        if (!$uExtraField->get_handler_field_info_by_field_variable(self::EXTRAFIELD_STUDENT_ID)) {
+        if (!$uExtraField->get_handler_field_info_by_field_variable(
+            self::EXTRAFIELD_STUDENT_ID
+        )) {
             $uExtraField->save([
                 'variable' => self::EXTRAFIELD_STUDENT_ID,
                 'field_type' => ExtraField::FIELD_TYPE_TEXT,
@@ -74,7 +79,9 @@ class GradingElectronicPlugin extends Plugin
 
         $cExtraField = new ExtraField('course');
 
-        if (!$cExtraField->get_handler_field_info_by_field_variable(self::EXTRAFIELD_COURSE_PROVIDER_ID)) {
+        if (!$cExtraField->get_handler_field_info_by_field_variable(
+            self::EXTRAFIELD_COURSE_PROVIDER_ID
+        )) {
             $cExtraField->save([
                 'variable' => self::EXTRAFIELD_COURSE_PROVIDER_ID,
                 'field_type' => ExtraField::FIELD_TYPE_TEXT,
@@ -84,7 +91,9 @@ class GradingElectronicPlugin extends Plugin
             ]);
         }
 
-        if (!$cExtraField->get_handler_field_info_by_field_variable(self::EXTRAFIELD_COURSE_ID)) {
+        if (!$cExtraField->get_handler_field_info_by_field_variable(
+            self::EXTRAFIELD_COURSE_ID
+        )) {
             $cExtraField->save([
                 'variable' => self::EXTRAFIELD_COURSE_ID,
                 'field_type' => ExtraField::FIELD_TYPE_TEXT,
@@ -94,7 +103,9 @@ class GradingElectronicPlugin extends Plugin
             ]);
         }
 
-        if (!$cExtraField->get_handler_field_info_by_field_variable(self::EXTRAFIELD_COURSE_HOURS)) {
+        if (!$cExtraField->get_handler_field_info_by_field_variable(
+            self::EXTRAFIELD_COURSE_HOURS
+        )) {
             $cExtraField->save([
                 'variable' => self::EXTRAFIELD_COURSE_HOURS,
                 'field_type' => ExtraField::FIELD_TYPE_TEXT,
@@ -111,21 +122,27 @@ class GradingElectronicPlugin extends Plugin
     private function setDownExtraFields()
     {
         $uExtraField = new ExtraField('user');
-
-        $studentIdField = $uExtraField->get_handler_field_info_by_field_variable(self::EXTRAFIELD_STUDENT_ID);
+        $studentIdField = $uExtraField->get_handler_field_info_by_field_variable(
+            self::EXTRAFIELD_STUDENT_ID
+        );
 
         if ($studentIdField) {
             $uExtraField->delete($studentIdField['id']);
         }
 
         $cExtraField = new ExtraField('course');
+        $providerIdField = $cExtraField->get_handler_field_info_by_field_variable(
+            self::EXTRAFIELD_COURSE_PROVIDER_ID
+        );
+        $courseIdField = $cExtraField->get_handler_field_info_by_field_variable(
+            self::EXTRAFIELD_COURSE_ID
+        );
+        $courseHoursField = $cExtraField->get_handler_field_info_by_field_variable(
+            self::EXTRAFIELD_COURSE_HOURS
+        );
 
-        $proviedIdField = $cExtraField->get_handler_field_info_by_field_variable(self::EXTRAFIELD_COURSE_PROVIDER_ID);
-        $courseIdField = $cExtraField->get_handler_field_info_by_field_variable(self::EXTRAFIELD_COURSE_ID);
-        $courseHoursField = $cExtraField->get_handler_field_info_by_field_variable(self::EXTRAFIELD_COURSE_HOURS);
-
-        if ($proviedIdField) {
-            $cExtraField->delete($proviedIdField['id']);
+        if ($providerIdField) {
+            $cExtraField->delete($providerIdField['id']);
         }
 
         if ($courseIdField) {
@@ -143,13 +160,15 @@ class GradingElectronicPlugin extends Plugin
     public function getForm()
     {
         $extraField = new ExtraField('course');
-        $courseIdField = $extraField->get_handler_field_info_by_field_variable(self::EXTRAFIELD_COURSE_ID);
+        $courseIdField = $extraField->get_handler_field_info_by_field_variable(
+            self::EXTRAFIELD_COURSE_ID
+        );
 
         if (!$courseIdField) {
             return null;
         }
 
-        $extraFieldValue =  new ExtraFieldValue('course');
+        $extraFieldValue = new ExtraFieldValue('course');
         $courseIdValue = $extraFieldValue->get_values_by_handler_and_field_variable(
             api_get_course_int_id(),
             self::EXTRAFIELD_COURSE_ID

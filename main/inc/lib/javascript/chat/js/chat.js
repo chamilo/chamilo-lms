@@ -356,6 +356,7 @@ function chatWith(user_id, user_name, status, userImage)
 {
 	createChatBox(user_id, user_name, 0, status, userImage);
 	$("#chatbox_"+user_id+" .chatboxtextarea").focus();
+	getMoreItems(user_id, 'last');
 }
 
 /**
@@ -524,8 +525,9 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 
 /**
  * @param int userId
+ * @param string scrollType
  */
-function getMoreItems(userId)
+function getMoreItems(userId, scrollType)
 {
     var visibleMessages = $("#chatbox_"+userId+" .chatboxcontent").find('div').length;
     $.ajax({
@@ -541,12 +543,22 @@ function getMoreItems(userId)
                     }
                     var chatBubble = createChatBubble(userId, item);
                     $("#chatbox_"+userId+" .chatboxcontent").prepend(chatBubble);
-                    $("#chatbox_"+userId+" .chatboxcontent").scrollTop(
-                        10
-                    );
+
                     if ($('#chatbox_'+userId+' .chatboxcontent').css('display') == 'none') {
                         $('#chatbox_'+userId+' .chatboxhead').toggleClass('chatboxblink');
                     }
+
+                    // When using scroll set the scroll window to the first
+                    var scrollValue = 10;
+                    if (scrollType === 'last') {
+                        // When loading for the first time show the last msg
+                        scrollValue = $("#chatbox_"+userId+" .chatboxcontent").height();
+                    }
+
+                    $("#chatbox_"+userId+" .chatboxcontent").scrollTop(
+                        scrollValue
+                    );
+
                 }
             });
 		}

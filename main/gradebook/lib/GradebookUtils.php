@@ -641,8 +641,8 @@ class GradebookUtils
      */
     public static function get_certificate_by_user_id($cat_id, $user_id)
     {
-        $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $sql = 'SELECT * FROM '.$table_certificate.'
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+        $sql = 'SELECT * FROM '.$table.'
                 WHERE cat_id="' . intval($cat_id).'" AND user_id="'.intval($user_id).'"';
 
         $result = Database::query($sql);

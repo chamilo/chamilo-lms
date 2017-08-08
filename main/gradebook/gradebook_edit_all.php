@@ -93,7 +93,7 @@ $parent_cat = Category::load($parent_id);
 
 $my_category = array();
 $cat = new Category();
-$my_category = $cat->shows_all_information_an_category($my_selectcat);
+$my_category = $cat->showAllCategoryInfo($my_selectcat);
 
 $original_total = $my_category['weight'];
 $masked_total = $parent_cat[0]->get_weight();

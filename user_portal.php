@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * This is the index file displayed when a user is logged in on Chamilo.
@@ -276,6 +277,118 @@ $controller->tpl->assign('course_history_page', $historyClass);
 if ($myCourseListAsCategory) {
     $controller->tpl->assign('header', get_lang('MyCourses'));
 }
+
+$allow = api_get_configuration_value('gradebook_dependency');
+
+if (!empty($courseAndSessions['courses']) && $allow) {
+    $courseList = api_get_configuration_value('gradebook_dependency_mandatory_courses');
+    $courseList = isset($courseList['courses']) ? $courseList['courses'] : [];
+    $mandatoryCourse = [];
+    if (!empty($courseList)) {
+        foreach ($courseList as $courseId) {
+            $courseInfo = api_get_course_info_by_id($courseId);
+            $mandatoryCourse[] = $courseInfo['code'];
+        }
+    }
+
+    // @todo improve calls of course info
+    $subscribedCourses = $courseAndSessions['courses'];
+    $mainCategoryList = [];
+    foreach ($subscribedCourses as $courseInfo) {
+        $courseCode = $courseInfo['course_code'];
+        $categories = Category::load(null, null, $courseCode);
+        /** @var Category $category */
+        $category = $categories[0];
+        $mainCategoryList[]= $category;
+    }
+
+    $total = [];
+    foreach ($mainCategoryList as $category) {
+        $parentScore = Category::getCurrentScore(
+            $userId,
+            $category->get_id(),
+            $category->get_course_code(),
+            0,
+            true
+        );
+
+        $dependencies = $category->getCourseListDependency();
+        $children = [];
+        $totalScoreWithChildren = 0;
+        if (!empty($dependencies)) {
+            foreach ($dependencies as $courseId) {
+                $courseInfo = api_get_course_info_by_id($courseId);
+                $courseCode = $courseInfo['code'];
+                $categories = Category::load(null, null, $courseCode);
+                /** @var Category $subCategory */
+                $subCategory = $categories[0];
+                $score = Category::getCurrentScore(
+                    $userId,
+                    $subCategory->get_id(),
+                    $subCategory->get_course_code(),
+                    0,
+                    true
+                );
+                $totalScoreWithChildren += $score;
+                $children[$subCategory->get_course_code()] = ['score' => $score];
+            }
+        }
+        $totalScoreWithChildren += $parentScore;
+        $totalScoreWithChildrenAverage = $parentScore;
+        if (!empty($children)) {
+            $totalScoreWithChildrenAverage = $totalScoreWithChildren / (1 + count($children));
+        }
+
+        $total[$category->get_course_code()] = [
+            'score' => $parentScore,
+            'total_score_with_children' => api_number_format($totalScoreWithChildrenAverage),
+            'children' => $children
+        ];
+    }
+
+    $finalScore = 0;
+    $customTotalPercentage = 0;
+    $maxPercentage = 80;
+    $maxCustomPercentageCounter = 0;
+    $validatedCoursesPercentage = 0;
+    foreach ($total as $courseCode => $data) {
+        $totalScoreWithChildren = $data['total_score_with_children'];
+        if (in_array($courseCode, $mandatoryCourse)) {
+            if ($totalScoreWithChildren == 100) {
+                $finalScore = 0;
+                $customTotalPercentage += 10;
+                $validatedCoursesPercentage += 10;
+                break;
+            }
+        } else {
+            $maxCustomPercentageCounter++;
+            if ($customTotalPercentage < $maxPercentage &&
+                $totalScoreWithChildren == 100
+            ) {
+                $customTotalPercentage += 10;
+            }
+        }
+        $finalScore += $totalScoreWithChildren;
+    }
+
+    $completed = false;
+    if ($validatedCoursesPercentage == 20 && $customTotalPercentage == 80) {
+        $completed = true;
+    }
+
+    $controller->tpl->assign(
+        'grade_book_result_validate',
+        $validatedCoursesPercentage
+    );
+    $controller->tpl->assign('grade_book_result_completed', $completed);
+    /*if ($finalScore > 0) {
+        $finalScore = (int) $finalScore / count($total);
+        if ($finalScore == 100) {
+            $completed = true;
+        }
+    }*/
+}
+
 $controller->tpl->display_two_col_template();
 
 // Deleting the session_id.

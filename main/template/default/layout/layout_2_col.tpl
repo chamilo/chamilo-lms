@@ -138,6 +138,37 @@
                 <!-- end block course -->
                 {% endif %}
 
+                {% if grade_book_result_validate is defined %}
+                    <div class="panel-group" id="skill" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default" id="gradebook_block">
+                        <div class="panel-heading" role="tab">
+                            <h4 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#skill" href="#skillCollapse" aria-expanded="true" aria-controls="skillCollapse">
+                                    {{ 'Gradebook' | get_lang }}
+                                </a>
+                            </h4>
+                        </div>
+                        <div style="" aria-expanded="true" id="skillCollapse" class="panel-collapse collapse in" role="tabpanel">
+                            <div class="panel-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item {{ item.class }}">
+                                        <span class="item-icon">
+                                            {{ 'Completed' | get_lang  }} :
+                                             {% if grade_book_result_completed == true %}
+                                                 {{ 'Yes' | get_lang }}
+                                             {% else %}
+                                                 {{ 'No' | get_lang }}
+                                             {% endif %}
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% endif %}
+
                 {% if skills_block %}
                 <!-- block skills -->
                 <div class="panel-group" id="skill" role="tablist" aria-multiselectable="true">

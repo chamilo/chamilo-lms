@@ -815,15 +815,14 @@ class Category implements GradebookItem
     /**
      * Shows all information of an category
      */
-    public function shows_all_information_an_category($categoryId = '')
+    public function showAllCategoryInfo($categoryId = '')
     {
         if ($categoryId == '') {
             return null;
         } else {
             $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-            $sql = 'SELECT name,description,user_id,course_code,parent_id,weight,visible,certif_min_score,session_id, generate_certificates, is_requirement
-                    FROM '.$table.' c
-                    WHERE c.id='.intval($categoryId);
+            $sql = 'SELECT * FROM '.$table.'
+                    WHERE id = '.intval($categoryId);
             $result = Database::query($sql);
             $row = Database::fetch_array($result, 'ASSOC');
 
@@ -2171,7 +2170,10 @@ class Category implements GradebookItem
         // Do not remove this the gradebook/lib/fe/gradebooktable.class.php
         // file load this variable as a global
         $scoredisplay = ScoreDisplay::instance();
-        $my_score_in_gradebook = $scoredisplay->display_score($scoretotal, SCORE_SIMPLE);
+        $my_score_in_gradebook = $scoredisplay->display_score(
+            $scoretotal,
+            SCORE_SIMPLE
+        );
         $userFinishedCourse = self::userFinishedCourse(
             $user_id,
             $cats_course[0],
@@ -2185,7 +2187,10 @@ class Category implements GradebookItem
             return false;
         }
 
-        $skillToolEnabled = Skill::hasAccessToUserSkill(api_get_user_id(), $user_id);
+        $skillToolEnabled = Skill::hasAccessToUserSkill(
+            api_get_user_id(),
+            $user_id
+        );
         $userHasSkills = false;
 
         if ($skillToolEnabled) {
@@ -2198,7 +2203,11 @@ class Category implements GradebookItem
             );
 
             $objSkillRelUser = new SkillRelUser();
-            $userSkills = $objSkillRelUser->get_user_skills($user_id, $courseId, $sessionId);
+            $userSkills = $objSkillRelUser->get_user_skills(
+                $user_id,
+                $courseId,
+                $sessionId
+            );
             $userHasSkills = !empty($userSkills);
 
             if (!$category->getGenerateCertificates() && $userHasSkills) {
@@ -2380,7 +2389,7 @@ class Category implements GradebookItem
      *         To check by the category ID
      * @param string $courseCode Optional. The course code
      * @param int $sessionId Optional. The session ID
-     * @param boolean $recalcutateScore Whether recalculate the score
+     * @param boolean $recalculateScore Whether recalculate the score
      * @return boolean
      */
     public static function userFinishedCourse(
@@ -2389,7 +2398,7 @@ class Category implements GradebookItem
         $categoryId = 0,
         $courseCode = null,
         $sessionId = 0,
-        $recalcutateScore = false
+        $recalculateScore = false
     ) {
         if (is_null($category) && empty($categoryId)) {
             return false;
@@ -2421,7 +2430,7 @@ class Category implements GradebookItem
             $category->get_id(),
             $courseCode,
             $sessionId,
-            $recalcutateScore
+            $recalculateScore
         );
 
         $minCertificateScore = $category->get_certificate_min_score();
@@ -2447,7 +2456,12 @@ class Category implements GradebookItem
         $recalculate = false
     ) {
         if ($recalculate) {
-            return self::calculateCurrentScore($userId, $categoryId, $courseCode, $sessionId);
+            return self::calculateCurrentScore(
+                $userId,
+                $categoryId,
+                $courseCode,
+                $sessionId
+            );
         }
 
         $resultData = Database::select(
@@ -2478,8 +2492,12 @@ class Category implements GradebookItem
      * @param int $sessionId Optional. The session id
      * @return float The score
      */
-    private static function calculateCurrentScore($userId, $categoryId, $courseCode, $sessionId)
-    {
+    private static function calculateCurrentScore(
+        $userId,
+        $categoryId,
+        $courseCode,
+        $sessionId
+    ) {
         $cats_course = self::load(
             $categoryId,
             null,

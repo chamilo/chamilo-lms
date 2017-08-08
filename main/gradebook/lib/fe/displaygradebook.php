@@ -356,7 +356,7 @@ class DisplayGradebook
                     Display::return_icon('new_folder.png', get_lang('AddGradebook'), array(), ICON_SIZE_MEDIUM).'</a></td>';
             }
             if ($selectcat != '0') {
-                $my_category = $catobj->shows_all_information_an_category($catobj->get_id());
+                $my_category = $catobj->showAllCategoryInfo($catobj->get_id());
                 if ($my_api_cidreq == '') {
                     $my_api_cidreq = 'cidReq='.$my_category['course_code'];
                 }
@@ -399,6 +399,15 @@ class DisplayGradebook
                         ),
                         "gradebook_display_summary.php?$my_api_cidreq&selectcat=".$selectcat
                     );
+
+                    $allow = api_get_configuration_value('gradebook_custom_student_report');
+                    if ($allow) {
+                        $actionsLeft .= Display::url(
+                            get_lang('GenerateCustomReport'),
+                            api_get_path(WEB_AJAX_PATH)."gradebook.ajax.php?$my_api_cidreq&a=generate_custom_report",
+                            ['class' => 'btn btn-default ajax']
+                        );
+                    }
 
                     // Right icons
                     $actionsRight = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&amp;cidReq='.$catobj->get_course_code().'&id_session='.$catobj->get_session_id().'">'.

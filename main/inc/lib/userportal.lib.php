@@ -1142,8 +1142,11 @@ class IndexManager
      * @param string $categoryCodeFilter
      * @return string
      */
-    public function returnCoursesAndSessions($user_id, $showSessions = true, $categoryCodeFilter = '')
-    {
+    public function returnCoursesAndSessions(
+        $user_id,
+        $showSessions = true,
+        $categoryCodeFilter = ''
+    ) {
         $gameModeIsActive = api_get_setting('gamification_mode');
         $listCourse = '';
         $specialCourseList = '';
@@ -1172,6 +1175,7 @@ class IndexManager
         $studentInfoProgress = (!empty($studentInfo['progress']) && $studentInfo['progress'] === true);
         $studentInfoScore = (!empty($studentInfo['score']) && $studentInfo['score'] === true);
         $studentInfoCertificate = (!empty($studentInfo['certificate']) && $studentInfo['certificate'] === true);
+        $courseCompleteList = [];
 
         // If we're not in the history view...
         if (!isset($_GET['history'])) {
@@ -1319,17 +1323,15 @@ class IndexManager
                             $courses['not_category'][$key]['student_info']['certificate'] = null;
 
                             if (isset($category[0])) {
+                                $certificateAvailable = $category[0]->is_certificate_available($user_id);
                                 if ($viewGrid == 'true') {
-                                    if ($category[0]->is_certificate_available($user_id)) {
+                                    if ($certificateAvailable) {
                                         $courses['not_category'][$key]['student_info']['certificate'] = get_lang('Yes');
                                     } else {
                                         $courses['not_category'][$key]['student_info']['certificate'] = get_lang('No');
                                     }
                                 } else {
-                                    if ($category[0]->is_certificate_available(
-                                        $user_id
-                                    )
-                                    ) {
+                                    if ($certificateAvailable) {
                                         $courses['not_category'][$key]['student_info']['certificate'] = Display::label(
                                             get_lang('Yes'),
                                             'success'
@@ -1389,6 +1391,7 @@ class IndexManager
                 $listCourse .= $this->tpl->fetch(
                     $this->tpl->get_template($coursesWithoutCategoryTemplate)
                 );
+                $courseCompleteList = $courses['in_category'] + $courses['not_category'];
             }
 
             $courseCount = count($specialCourses) + count($courses['in_category']) + count($courses['not_category']);
@@ -1797,6 +1800,8 @@ class IndexManager
         }
 
         return [
+            'courses' => $courseCompleteList,
+            'sessions' => $session_categories,
             'html' => trim($specialCourseList.$sessions_with_category.$sessions_with_no_category.$listCourse),
             'session_count' => $sessionCount,
             'course_count' => $courseCount
@@ -2012,6 +2017,8 @@ class IndexManager
 
         return [
             'html' => $html,
+            'sessions' => $session_categories,
+            'courses' => $listCoursesInfo,
             'session_count' => $sessionCount,
             'course_count' => $courseCount
         ];
@@ -2251,10 +2258,9 @@ class IndexManager
      * @param $userId
      * @return array
      */
-    public static function returnCourseCategoryListFromUser($userId)
+    public function returnCourseCategoryListFromUser($userId)
     {
         $sessionCount = 0;
-
         $courseList = CourseManager::get_courses_list_by_user_id($userId);
         $categoryCodes = CourseManager::getCourseCategoriesFromCourseList($courseList);
         $categories = [];

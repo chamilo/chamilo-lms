@@ -25,14 +25,13 @@ $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : '';
 if (empty($keyword)) {
     $gradeBookList = $repo->findAll();
 } else {
-    $criteria = new \Doctrine\Common\Collections\Criteria();
-    $criteria
-        ->where(
-            Criteria::expr()->orX(
-                Criteria::expr()->contains('courseCode', $keyword),
-                Criteria::expr()->contains('name', $keyword)
-            )
-        );
+    $criteria = new Criteria();
+    $criteria->where(
+        Criteria::expr()->orX(
+            Criteria::expr()->contains('courseCode', $keyword),
+            Criteria::expr()->contains('name', $keyword)
+        )
+    );
     $gradeBookList = $repo->matching($criteria);
 }
 
@@ -138,14 +137,9 @@ switch ($action) {
             );
             $form->addText('name', get_lang('Name'));
             $form->addText('weight', get_lang('Weight'));
-            $form->addText(
-                'minimum',
-                get_lang('MinimumGradebookToValidate'),
-                false
-            );
-            $form->addLabel(get_lang('CourseCode'), $category->getCourseCode());
+            $form->addLabel(get_lang('Course'), $category->getCourseCode());
 
-             $sql = "SELECT depends, minimum_to_validate 
+            $sql = "SELECT depends, minimum_to_validate 
                     FROM $table WHERE id = ".$categoryId;
             $result = Database::query($sql);
             $categoryData = Database::fetch_array($result, 'ASSOC');
@@ -167,6 +161,12 @@ switch ($action) {
                     'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
                     'multiple' => 'multiple'
                 ]
+            );
+
+            $form->addText(
+                'minimum',
+                get_lang('MinimumGradebookToValidate'),
+                false
             );
 
             $form->addButtonSave(get_lang('Edit'));

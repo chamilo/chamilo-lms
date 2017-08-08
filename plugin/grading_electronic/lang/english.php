@@ -7,7 +7,7 @@ $strings['plugin_comment'] = 'This plugin create a text file with information ab
 $strings['tool_enable'] = 'Enable tool';
 $strings['tool_enable_help'] = '
     Allow add the <i>Generate File</i> button in the <i>Assessments</i> page.
-    You nee assign the <code>content_top</code> region.
+    You need assign the <code>content_top</code> region.
 ';
 
 $strings['PluginDisabled'] = 'Grading Electronic is disabed';

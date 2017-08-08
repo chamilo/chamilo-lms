@@ -65,13 +65,14 @@ try {
         GradingElectronicPlugin::EXTRAFIELD_COURSE_HOURS
     );
 
+    $students = [];
+
     if ($session) {
         $criteria = Criteria::create()->where(
             Criteria::expr()->eq('relationType', Session::STUDENT)
         );
 
         $subscriptions = $session->getUsers()->matching($criteria);
-        $students = [];
 
         /** @var SessionRelUser $subscription */
         foreach ($subscriptions as $subscription) {

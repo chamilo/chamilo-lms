@@ -255,7 +255,7 @@ class AppPlugin
 
     /**
      * @param string $region
-     * @param string $template
+     * @param Template $template
      * @param bool   $forced
      *
      * @return null|string
@@ -348,7 +348,6 @@ class AppPlugin
         if (isset($_plugins[$region]) && is_array($_plugins[$region])) {
             // Load the plugin information
             foreach ($_plugins[$region] as $plugin_name) {
-
                 // The plugin_info variable is available inside the plugin index
                 $plugin_info = $this->getPluginInfo($plugin_name, $forced);
 
@@ -359,7 +358,6 @@ class AppPlugin
                 $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";
 
                 if (file_exists($plugin_file)) {
-
                     //Loading the lang variables of the plugin if exists
                     self::load_plugin_lang_variables($plugin_name);
 

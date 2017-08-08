@@ -1235,17 +1235,19 @@ class Template
     public function set_plugin_region($pluginRegion)
     {
         if (!empty($pluginRegion)) {
-            $regionContent = $this->plugin->load_region($pluginRegion, $this, $this->force_plugin_load);
+            $regionContent = $this->plugin->load_region(
+                $pluginRegion,
+                $this,
+                $this->force_plugin_load
+            );
 
             $pluginList = $this->plugin->get_installed_plugins();
             foreach ($pluginList as $plugin_name) {
-
                 // The plugin_info variable is available inside the plugin index
                 $pluginInfo = $this->plugin->getPluginInfo($plugin_name);
 
                 if (isset($pluginInfo['is_course_plugin']) && $pluginInfo['is_course_plugin']) {
                     $courseInfo = api_get_course_info();
-
                     if (!empty($courseInfo)) {
                         if (isset($pluginInfo['obj']) && $pluginInfo['obj'] instanceof Plugin) {
                             /** @var Plugin $plugin */

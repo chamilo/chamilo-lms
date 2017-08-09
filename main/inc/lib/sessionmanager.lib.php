@@ -603,6 +603,15 @@ class SessionManager
                         null,
                         true
                     );
+                    $courses = SessionManager::getCoursesInSession($session_id);
+                    $teachers = '';
+                    foreach ($courses as $courseId) {
+                        $courseInfo = api_get_course_info_by_id($courseId);
+                        $teachers .= CourseManager::get_teacher_list_from_course_code_to_string(
+                            $courseInfo['code']
+                        );
+                    }
+                    $session['teachers'] = $teachers;
                 }
                 $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
                 if (api_is_drh()) {
@@ -7760,6 +7769,17 @@ class SessionManager
                         'align' => 'left',
                         'search' => 'false',
                     );
+
+                    // ofaj
+                    $columns[] = get_lang('Teachers');
+                    $column_model[] = array(
+                        'name' => 'teachers',
+                        'index' => 'teachers',
+                        'width' => '20',
+                        'align' => 'left',
+                        'search' => 'false',
+                    );
+
                 }
                 break;
             case 'complete':

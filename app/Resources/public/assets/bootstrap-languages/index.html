@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Languages for Bootstrap 3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <meta property="og:url"         content="http://usrz.github.io/bootstrap-languages/" /> 
+    <meta property="og:title"       content="Languages for Bootstrap 3" /> 
+    <meta property="og:description" content="The Languages for Bootstrap 3 project provides a simple way to present language labels and names in a Bootstrap 3 project.">
+    <meta property="og:image"       content="http://www.usrz.com/logo-1000.jpg" /> 
+
+    <link rel="shortcut icon" href="http://usrz.github.io/bootstrap-languages/favicon.ico" />
+
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css"/>
+    <link rel="stylesheet" href="languages.min.css"/>
+
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+
+    <style>
+      h1            { padding-top: 50px; }
+      .mynavigation { padding-top: 70px; }
+
+      .panel-sample>h1 { padding-top: 0px; }
+      .panel-narrow {
+        margin-top: 20px;
+        margin-left: 40px;
+        margin-right: 40px;
+      }
+
+      .panel-sample {
+        text-align: center;
+      }
+
+      .panel-sample .dropdown-menu li {
+        text-align: left;
+        padding: 3px 5px;
+      }
+
+      .panel-code {
+        font-family: Menlo, Monaco, Consolas, "Courier New" , monospace;
+        background-color: #f9f2f4;
+        text-align: left;
+        white-space: pre;
+        overflow: scroll;
+      }
+
+      .panel-code:before {
+        content: '';
+      }
+
+      .panel-code:after {
+        content: '';
+      }
+
+
+      code>b {
+        color: #600;
+      }
+
+      li.list-group-item>a { padding: 0px; }
+      li.list-group-item.active>a { color: #fff; }
+      li.list-group-item>a:hover { background: none; }
+
+    </style>
+    <script>
+      $(document).ready(function() {
+        $('.panel-sample').each(function (index, element) {
+
+          /* Get the HTML of the element and split it by line */
+          var s = $(element).html();
+          var a = s.split(/\n/);
+
+          /* Remove leading and trailing empty lines */
+          var x;
+          for (x = 0; (x < a.length) && (a[x].match(/^\s*$/) != null); x++);
+          a.splice(0, x);
+          for (x = a.length; (x > 0) && (a[x - 1].match(/^\s*$/) != null); x --);
+          a.splice(x, a.length - x);
+
+          /* Calculate the leading whitespace in the code block */
+          var w = new Array(1000).join(' ');
+          for (x in a) {
+            /* Ignore empty lines */
+            if (a[x].match(/^\s*$/)) continue;
+            /* Figure out the leading space */
+            var l = a[x].match(/^\s*/);
+            if (l == null) continue;
+            var l = l.toString();
+            if (l.length < w.length) w = l;
+          }
+
+          /* Remove the leading whitespace in each line */
+          if (w.length < 999) for (x in a) a[x] = a[x].substring(w.length);
+
+          /* Prettify */
+          $('<div class="panel-body panel-code"/>')
+              .html(prettyPrintOne($('<div/>').text(a.join('\n')).html(), 'html'))
+              .insertBefore(element);
+        });
+      });
+    </script>
+  </head>
+  <body data-spy="scroll" data-target=".mynavigation">
+
+
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <span class="navbar-brand">Languages for Bootstrap 3</span>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="https://github.com/usrz/bootstrap-languages">GitHub Project</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="http://www.usrz.com/">&copy; USRZ.COM</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-2 mynavigation">
+          <ul class="list-group nav" data-spy="affix">
+            <li class="list-group-item"><a href="#navigation-1">Supported languages</a></li>
+            <li class="list-group-item"><a href="#navigation-2">Basic usage</a></li>
+            <li class="list-group-item"><a href="#navigation-3">Label types</a></li>
+            <li class="list-group-item"><a href="#navigation-4">Icon sizes</a></li>
+            <li class="list-group-item"><a href="#navigation-5">Usage in headings</a></li>
+            <li class="list-group-item"><a href="#navigation-6">Usage in text</a></li>
+            <li class="list-group-item"><a href="#navigation-7">Usage in buttons</a></li>
+            <li class="list-group-item"><a href="#navigation-8">Usage in drop downs</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-10">
+
+     <!-- + ================================================================ +
+          | SUPPORTED LANGUAGES                                              |
+          + ================================================================ + -->
+          <h1 id="navigation-1">Supported languages</h1>
+          <p>
+            <em>Languages for Bootstrap 3</em> provides an easy way to add
+            language labels to your <em>Bootstrap</em> code.
+          </p>
+          <p>
+            It currently supports the following 43 languages:
+          </p>
+
+          <div class="well panel-narrow">
+            <div class="row">
+              <div class="col-sm-4">
+                <p><span class="lang-sm lang-lbl-full" lang="ar"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="be"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="bg"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="cs"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="da"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="de"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="el"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="en"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="es"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="et"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="fi"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="fr"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="ga"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="hi"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="hr"></span></p>
+              </div>
+              <div class="col-sm-4">
+                <p><span class="lang-sm lang-lbl-full" lang="hu"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="in"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="is"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="it"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="iw"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="ja"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="ko"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="lt"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="lv"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="mk"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="ms"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="mt"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="nl"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="no"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="pl"></span></p>
+              </div>
+              <div class="col-sm-4">
+                <p><span class="lang-sm lang-lbl-full" lang="pt"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="ro"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="ru"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="sk"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="sl"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="sq"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="sr"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="sv"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="th"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="tr"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="uk"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="vi"></span></p>
+                <p><span class="lang-sm lang-lbl-full" lang="zh"></span></p>
+                <p>&nbsp;</p>
+                <p><span class="lang-sm lang-lbl-full"          ></span></p>
+              </div>
+            </div>
+          </div>
+
+     <!-- + ================================================================ +
+          | BASIC USAGE                                                      |
+          + ================================================================ + -->
+          <h1 id="navigation-2">Basic Usage</h1>
+
+          <p>
+            In order to use language labels and icons, first of all download
+            the latest <a href="languages.min.css" download>CSS</a> and
+            <a href="languages.png" download>sprites</a>. Upload them somewhere
+            and <code>&lt;link .../&gt;</code> the CSS from your HTML page.
+          </p>
+          <p>
+            After adding the CSS to your page, language labels can be added
+            using a <code>span</code> tag with a <code>lang</code>attribute.
+          </p>
+
+          <div class="panel panel-default panel-narrow">
+            <div class="panel-body panel-sample">
+              This is an exaple in the <span class="lang-sm lang-lbl" lang="en"></span> language.
+            </div>
+          </div>
+
+     <!-- + ================================================================ +
+          | LABEL TYPES                                                      |
+          + ================================================================ + -->
+          <h1 id="navigation-3">Label types</h1>
+          <p>Labels for the various icons can be applied automatically either in the native language, or in english, or both:</p>
+          <ul>
+            <li><b>native language</b>         using the <code>lang-lbl</code> class,</li>
+            <li><b>english</b>                 using the <code>lang-lbl-en</code> class,</li>
+            <li><b>both native and english</b> using the <code>lang-lbl-full</code> class,</li>
+          </ul>
+          <p>Labels are omitted when one of the above mentioned classes is not used.</p>
+
+          <div class="panel panel-default panel-narrow">
+            <div class="panel-body panel-sample">
+              A native label         &nbsp;<span class="lang-sm lang-lbl"      lang="ja"></span>&nbsp;,
+              then in english        &nbsp;<span class="lang-sm lang-lbl-en"   lang="ja"></span>&nbsp; and
+              and finally using both &nbsp;<span class="lang-sm lang-lbl-full" lang="ja"></span>&nbsp;.
+            </div>
+          </div>
+
+          <!-- + =========================================================== +
+               | LABEL TYPES                                                 |
+               + =========================================================== + -->
+          <h1 id="navigation-4">Icon sizes</h1>
+          <p>The icons for labels come in 3 different sizes:</p>
+          <ul>
+            <li><b>extra small</b> <small>(14x11 pixels)</small> using the <code>lang-xs</code> class,</li>
+            <li><b>small</b>       <small>(22x16 pixels)</small> using the <code>lang-sm</code> class and</li>
+            <li><b>large</b>       <small>(30x22 pixels)</small> using the <code>lang-lg</code> class.</li>
+          </ul>
+          <p>Icons are omitted when one of the above mentioned classes is not used.</p>
+
+          <div class="panel panel-default panel-narrow">
+            <div class="panel-body panel-sample">
+              Icons come in
+              extra small <span class="lang-xs"  lang="is"></span>
+              small       <span class="lang-sm"  lang="is"></span> or
+              large       <span class="lang-lg"  lang="is"></span>
+            </div>
+          </div>
+
+     <!-- + ================================================================ +
+          | USAGE IN HEADINGS                                                |
+          + ================================================================ + -->
+          <h1 id="navigation-5">Usage in headings</h1>
+
+          <p>
+            Label placement has been optimized for use in <em>Bootstrap</em>'s
+            default heading styles. Simply placing them within the various
+            <code>&lt;hX&gt;...&lt;/hX&gt;</code> tags should adjust their
+            position relative to the line.
+          </p>
+
+          <div class="panel panel-default panel-narrow">
+            <div class="panel-body panel-sample">
+              <h1><span class="lang-lg lang-lbl" lang="be"></span>   large in a <code>&lt;h1/&gt;</code> heading</h1>
+              <h1><span class="lang-sm lang-lbl" lang="bg"></span>   small in a <code>&lt;h1/&gt;</code> heading</h1>
+              <h1><span class="lang-xs lang-lbl" lang="cs"></span> x-small in a <code>&lt;h1/&gt;</code> heading</h1>
+              <hr/>
+              <h2><span class="lang-lg lang-lbl" lang="de"></span>   large in a <code>&lt;h2/&gt;</code> heading</h2>
+              <h2><span class="lang-sm lang-lbl" lang="el"></span>   small in a <code>&lt;h2/&gt;</code> heading</h2>
+              <h2><span class="lang-xs lang-lbl" lang="en"></span> x-small in a <code>&lt;h2/&gt;</code> heading</h2>
+              <hr/>
+              <h3><span class="lang-lg lang-lbl" lang="et"></span>   large in a <code>&lt;h3/&gt;</code> heading</h3>
+              <h3><span class="lang-sm lang-lbl" lang="fi"></span>   small in a <code>&lt;h3/&gt;</code> heading</h3>
+              <h3><span class="lang-xs lang-lbl" lang="fr"></span> x-small in a <code>&lt;h3/&gt;</code> heading</h3>
+              <hr/>
+              <h4><span class="lang-lg lang-lbl" lang="hi"></span>   large in a <code>&lt;h4/&gt;</code> heading</h4>
+              <h4><span class="lang-sm lang-lbl" lang="hr"></span>   small in a <code>&lt;h4/&gt;</code> heading</h4>
+              <h4><span class="lang-xs lang-lbl" lang="hu"></span> x-small in a <code>&lt;h4/&gt;</code> heading</h4>
+              <hr/>
+              <h5><span class="lang-sm lang-lbl" lang="it"></span>   small in a <code>&lt;h5/&gt;</code> heading</h5>
+              <h5><span class="lang-xs lang-lbl" lang="iw"></span> x-small in a <code>&lt;h5/&gt;</code> heading</h5>
+              <hr/>
+              <h6><span class="lang-xs lang-lbl" lang="lv"></span> x-small in a <code>&lt;h6/&gt;</code> heading</h6>
+            </div>
+          </div>
+
+     <!-- + ================================================================ +
+          | USAGE IN HEADINGS                                                |
+          + ================================================================ + -->
+          <h1 id="navigation-6">Usage in text</h1>
+
+          <p>
+            Label placement has also been optimized for use in <em>Bootstrap</em>'s
+            standard paragraphs.
+          </p>
+
+          <div class="panel panel-default panel-narrow">
+            <div class="panel-body panel-sample">
+              <p class="lead"><span class="lang-lg lang-lbl" lang="ms"></span>   large in a <code>.lead</code> paragraph</p>
+              <p class="lead"><span class="lang-sm lang-lbl" lang="mt"></span>   small in a <code>.lead</code> paragraph</p>
+              <p class="lead"><span class="lang-xs lang-lbl" lang="nl"></span> x-small in a <code>.lead</code> paragraph</p>
+              <hr/>
+              <p><span class="lang-sm lang-lbl" lang="pt"></span>   small in a standard paragraph</p>
+              <p><span class="lang-xs lang-lbl" lang="ro"></span> x-small in a standard paragraph</p>
+              <hr/>
+              <p><small><span class="lang-sm lang-lbl" lang="sl"></span>   small in a <code>&lt;small/&gt;</code> section</small></p>
+              <p><small><span class="lang-xs lang-lbl" lang="sq"></span> x-small in a <code>&lt;small/&gt;</code> section</small></p>
+            </div>
+          </div>
+
+     <!-- + ================================================================ +
+          | USAGE IN BUTTONS                                                 |
+          + ================================================================ + -->
+          <h1 id="navigation-7">Usage in buttons</h1>
+
+          <div class="panel panel-default panel-narrow">
+            <div class="panel-body panel-sample">
+              <p>In large buttons:</p>
+
+              <button type="button" class="btn btn-default btn-lg">
+                <span class="lang-lg lang-lbl" lang="sr"></span> (large)
+              </button>
+              <button type="button" class="btn btn-default btn-lg">
+                <span class="lang-sm lang-lbl" lang="sv"></span> (small)
+              </button>
+              <button type="button" class="btn btn-default btn-lg">
+                <span class="lang-xs lang-lbl" lang="th"></span> (extra small)
+              </button>
+
+              <hr/>
+              <p>In regular buttons:</p>
+
+              <button type="button" class="btn btn-default">
+                <span class="lang-sm lang-lbl" lang="tr"></span> (small)
+              </button>
+              <button type="button" class="btn btn-default">
+                <span class="lang-xs lang-lbl" lang="uk"></span> (extra small)
+              </button>
+
+              <hr/>
+              <p>In small and extra small buttons:</p>
+
+              <button type="button" class="btn btn-default btn-sm">
+                <span class="lang-xs lang-lbl" lang="vi"></span> (extra small)
+              </button>
+              <button type="button" class="btn btn-default btn-xs">
+                <span class="lang-xs lang-lbl" lang="zh"></span> (extra small)
+              </button>
+            </div>
+          </div>
+
+     <!-- + ================================================================ +
+          | USAGE IN DROP DOWNS                                              |
+          + ================================================================ + -->
+          <h1 id="navigation-8">Usage in drop downs</h1>
+
+          <div class="panel panel-default panel-narrow">
+            <div class="panel-body panel-sample">
+              <div class="btn-group dropup">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span class="lang-sm lang-lbl-full" lang="it"></span> <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><span class="lang-sm lang-lbl-full" lang="ar"></span></li>
+                  <li><span class="lang-sm lang-lbl-full" lang="be"></span></li>
+                  <li><span class="lang-sm lang-lbl-full" lang="bg"></span></li>
+                  <li><span class="lang-sm lang-lbl-full" lang="cs"></span></li>
+                  <li><span class="lang-sm lang-lbl-full" lang="da"></span></li>
+                  <li><span class="lang-sm lang-lbl-full" lang="de"></span></li>
+                  <li><span class="lang-sm lang-lbl-full" lang="el"></span></li>
+                  <li><span class="lang-sm lang-lbl-full" lang="en"></span></li>
+                  <li><span class="lang-sm lang-lbl-full" lang="es"></span></li>
+                  <li><span class="lang-sm lang-lbl-full" lang="et"></span></li>
+                  <li><span class="lang-sm lang-lbl-full" lang="fi"></span></li>
+                  <li><span class="lang-sm lang-lbl-full" lang="fr"></span></li>
+                  <li><span class="lang-sm lang-lbl-full" lang="ga"></span></li>
+                  <li><span class="lang-sm lang-lbl-full" lang="hi"></span></li>
+                  <li><span class="lang-sm lang-lbl-full" lang="hr"></span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr/>
+    <h6 class="text-center">
+      Copyright &copy; 2014 <a href="http://www.usrz.com/">USRZ.com</a> and
+      Pier Paolo Fumagalli. Distributed under the terms of the
+      <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache Software
+      License, Version 2.</a>
+    </h6>
+  </body>
+</html>

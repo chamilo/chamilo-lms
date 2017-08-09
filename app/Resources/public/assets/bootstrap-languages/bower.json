@@ -1,0 +1,25 @@
+{
+    "name": "bootstrap-languages",
+    "main": [
+                "languages.min.css",
+                "languages.png"
+            ],
+    "version": "1.0.0",
+    "homepage": "https://github.com/usrz/bootstrap-languages",
+    "authors": [
+        "Pier Fumagalli <pier@usrz.com>"
+    ],
+    "description": "Language labels and icons for Bootstrap 3",
+    "keywords": [
+        "language",
+        "flags"
+    ],
+    "license": "Apache v2",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ]
+}

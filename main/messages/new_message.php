@@ -204,7 +204,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = null)
         $forwardMessage = '---------- '.get_lang('ForwardedMessage').' ---------'.'<br />';
         $forwardMessage .= get_lang('Date').': '.api_get_local_time($message_reply_info['send_date']).'<br />';
         $forwardMessage .= get_lang('Subject').': '.$message_reply_info['title'].'<br />';
-        $forwardMessage .= get_lang('To').': '.$receiverInfo['email'].'<br />';
+        $forwardMessage .= get_lang('To').': '.$receiverInfo['complete_name'].' '.$receiverInfo['email'].'<br />';
         $default['content'] = '<p><br/></p>'.$forwardMessage.'<br />'.Security::filter_terms($message_reply_info['content']);
     }
 

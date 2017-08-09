@@ -2765,16 +2765,15 @@ class CourseManager
                 $specialCourseList = self::get_special_course_list();
 
                 if (!empty($specialCourseList)) {
-                    $specialCourseToString = '"'.implode(
-                            '","',
-                            $specialCourseList
-                        ).'"';
+                    $specialCourseToString = '"'.implode('","', $specialCourseList).'"';
                     $withSpecialCourses = ' AND course.id IN ('.$specialCourseToString.')';
                     $withoutSpecialCourses = ' AND course.id NOT IN ('.$specialCourseToString.')';
                 }
 
                 if (!empty($withSpecialCourses)) {
-                    $sql = "SELECT DISTINCT(course.code), course.id as real_id
+                    $sql = "SELECT DISTINCT (course.code), 
+                            course.id as real_id,
+                            course.category_code AS category
                             FROM $tbl_course_user course_rel_user
                             LEFT JOIN $tbl_course course
                             ON course.id = course_rel_user.c_id
@@ -2786,11 +2785,9 @@ class CourseManager
                             GROUP BY course.code
                             ORDER BY user_course_category.sort, course.title, course_rel_user.sort ASC
                     ";
-                    $rs_special_course = Database::query($sql);
-                    if (Database::num_rows($rs_special_course) > 0) {
-                        while ($result_row = Database::fetch_array(
-                            $rs_special_course
-                        )) {
+                    $result = Database::query($sql);
+                    if (Database::num_rows($result) > 0) {
+                        while ($result_row = Database::fetch_array($result, 'ASSOC')) {
                             $result_row['special_course'] = 1;
                             $course_list[] = $result_row;
                             $codes[] = $result_row['real_id'];
@@ -2832,7 +2829,9 @@ class CourseManager
         }
 
         if ($include_sessions === true) {
-            $sql = "SELECT DISTINCT(c.code), c.id as real_id, course.category_code AS category
+            $sql = "SELECT DISTINCT (c.code), 
+                        c.id as real_id, 
+                        course.category_code AS category
                     FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." s,
                     $tbl_course c
                     WHERE user_id = $user_id AND s.c_id = c.id";

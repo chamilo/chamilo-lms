@@ -453,7 +453,7 @@ class CourseCategory
                         get_lang('OpenNode'),
                         null,
                         ICON_SIZE_SMALL
-                    ).' '.$category['name'],
+                    ).' '.$category['name'].' ('.$category['code'].')',
                     $url
                 );
                 $content = array(

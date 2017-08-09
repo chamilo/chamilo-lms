@@ -1,0 +1,34 @@
+{
+  "name": "bootstrap-languages",
+  "main": [
+    "languages.min.css",
+    "languages.png"
+  ],
+  "homepage": "https://github.com/usrz/bootstrap-languages",
+  "authors": [
+    "Pier Fumagalli <pier@usrz.com>"
+  ],
+  "description": "Language labels and icons for Bootstrap 3",
+  "keywords": [
+    "language",
+    "flags"
+  ],
+  "license": "Apache v2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "81e4a03bb3",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "81e4a03bb304b649bf0e6ef406ce0249ddd4421d"
+  },
+  "_source": "https://github.com/usrz/bootstrap-languages.git",
+  "_target": "*",
+  "_originalSource": "bootstrap-language",
+  "_direct": true
+}

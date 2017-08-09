@@ -504,6 +504,8 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['allow_notification_setting_per_exercise'] = false;
 // Hide free/oral/annotation question result see BT#12613
 //$_configuration['hide_free_question_score'] = false;
+// Hide user information in the quiz result's page
+//$_configuration['hide_user_info_in_quiz_result'] = false;
 
 // Score model
 // Allow to convert a score into a text/color label
@@ -584,6 +586,9 @@ $_configuration['score_grade_model'] = [
 // ALTER TABLE gradebook_category ADD COLUMN minimum_to_validate INT DEFAULT NULL;
 // $_configuration['gradebook_dependency'] = false;
 // Courses id list to check in the gradebook sidebar see BT#13099
-$_configuration['gradebook_dependency_mandatory_courses'] = [
+/*$_configuration['gradebook_dependency_mandatory_courses'] = [
     'courses' => [1, 2]
-];
+];*/
+// Show language selector in main menu
+//$_configuration['show_language_selector_in_menu'] = false;
+

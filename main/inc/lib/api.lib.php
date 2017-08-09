@@ -4187,6 +4187,9 @@ function api_display_language_form($hide_if_no_choice = false)
         $user_selected_language = api_get_setting('platformLanguage');
     }
 
+    $currentLanguageId = api_get_language_id($user_selected_language);
+    $currentLanguageInfo = api_get_language_info($currentLanguageId);
+
     $original_languages = $language_list['name'];
     $folder = $language_list['folder']; // This line is probably no longer needed.
     $html = '<script>    
@@ -4203,7 +4206,7 @@ function api_display_language_form($hide_if_no_choice = false)
     </script>';
     $html .= '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">';
     $html .= '<label style="display: none;" for="language_list">'.get_lang('Language').'</label>';
-    $html .= '<select id="language_list" class="selectpicker show-tick form-control" name="language_list" >';
+    /*$html .= '<select id="language_list" class="selectpicker show-tick form-control" name="language_list" >';
 
     foreach ($original_languages as $key => $value) {
         if ($folder[$key] == $user_selected_language) {
@@ -4215,7 +4218,32 @@ function api_display_language_form($hide_if_no_choice = false)
         //echo substr($value, 0, 16); // Cut string to keep 800x600 aspect.
         $html .= $value.'</option>';
     }
-    $html .= '</select>';
+    $html .= '</select>';*/
+
+    switch ($currentLanguageInfo['isocode']) {
+        case 'zh-TW':
+            $currentLanguageInfo['isocode'] = 'zh';
+            break;
+        case 'pt-BR':
+            $currentLanguageInfo['isocode'] = 'pt';
+            break;
+    }
+    $html .= '<div class="btn-group dropup">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <span class="lang-sm" lang="'.$currentLanguageInfo['isocode'].'"></span> 
+                '.$currentLanguageInfo['original_name'].' 
+                <span class="caret">
+                </span>
+              </button>';
+    $html .= '<ul class="dropdown-menu" role="menu">';
+    $url = api_get_self();
+    foreach ($language_list['all'] as $key => $data) {
+        $urlLink = $url.'?language='.$data['english_name'];
+        $html .= '<li><a href="'.$urlLink.'"><span class="lang-sm" lang="'.$data['isocode'].'"></span> '.$data['original_name'].'</a></li>';
+    }
+    $html .= '</ul>';
+    $html .= '</div>';
+
     $html .= '<noscript><input type="submit" name="user_select_language" value="'.get_lang('Ok').'" /></noscript>';
     $html .= '</form>';
     return $html;
@@ -4237,6 +4265,7 @@ function api_get_languages()
     while ($row = Database::fetch_array($result)) {
         $language_list['name'][] = $row['original_name'];
         $language_list['folder'][] = $row['dokeos_folder'];
+        $language_list['all'][] = $row;
     }
     return $language_list;
 }

@@ -5863,11 +5863,16 @@ class Exercise
         $duration = null,
         $ip = null
     ) {
-        $array = array();
-
+        $array = [];
         if (!empty($user_data)) {
-            $array[] = array('title' => get_lang('Name'), 'content' => $user_data['complete_name']);
-            $array[] = array('title' => get_lang('Username'), 'content' => $user_data['username']);
+            $array[] = array(
+                'title' => get_lang('Name'),
+                'content' => $user_data['complete_name']
+            );
+            $array[] = array(
+                'title' => get_lang('Username'),
+                'content' => $user_data['username']
+            );
             if (!empty($user_data['official_code'])) {
                 $array[] = array(
                     'title' => get_lang('OfficialCode'),
@@ -5895,7 +5900,12 @@ class Exercise
             $array[] = array('title' => get_lang('IP'), 'content' => $ip);
         }
 
-        $icon = Display::return_icon('test-quiz.png', get_lang('Result'), null, ICON_SIZE_MEDIUM);
+        $icon = Display::return_icon(
+            'test-quiz.png',
+            get_lang('Result'),
+            null,
+            ICON_SIZE_MEDIUM
+        );
 
         $html = '<div class="question-result">';
 
@@ -5908,7 +5918,12 @@ class Exercise
             );
         }
 
-        $html .= Display::description($array);
+        $hide = api_get_configuration_value('hide_user_info_in_quiz_result');
+
+        if ($hide === false) {
+            $html .= Display::description($array);
+        }
+
         $html .= "</div>";
         return $html;
     }

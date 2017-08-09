@@ -4220,6 +4220,14 @@ function api_display_language_form($hide_if_no_choice = false)
     }
     $html .= '</select>';*/
 
+    switch ($currentLanguageInfo['isocode']) {
+        case 'zh-TW':
+            $currentLanguageInfo['isocode'] = 'zh';
+            break;
+        case 'pt-BR':
+            $currentLanguageInfo['isocode'] = 'pt';
+            break;
+    }
     $html .= '<div class="btn-group dropup">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 <span class="lang-sm" lang="'.$currentLanguageInfo['isocode'].'"></span> 

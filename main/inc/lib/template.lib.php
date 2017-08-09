@@ -202,6 +202,11 @@ class Template
         $this->assign('locale', api_get_language_isocode());
         $this->assign('login_class', null);
 
+        $allow = api_get_configuration_value('show_language_selector_in_menu');
+        if ($allow) {
+            $this->assign('language_form', api_display_language_form());
+        }
+
         $this->setLoginForm();
 
         // Chamilo plugins
@@ -597,7 +602,8 @@ class Template
             'jquery.scrollbar/jquery.scrollbar.css',
             'bootstrap-daterangepicker/daterangepicker.css',
             'bootstrap-select/dist/css/bootstrap-select.min.css',
-            'select2/dist/css/select2.min.css'
+            'select2/dist/css/select2.min.css',
+            'bootstrap-languages/languages.min.css'
         ];
 
         foreach ($bowerCSSFiles as $file) {

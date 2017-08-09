@@ -504,6 +504,8 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['allow_notification_setting_per_exercise'] = false;
 // Hide free/oral/annotation question result see BT#12613
 //$_configuration['hide_free_question_score'] = false;
+// Hide user information in the quiz result's page
+//$_configuration['hide_user_info_in_quiz_result'] = false;
 
 // Score model
 // Allow to convert a score into a text/color label

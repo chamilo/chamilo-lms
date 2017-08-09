@@ -634,8 +634,13 @@ if (!empty($student_id)) {
             echo '</td></tr>';
 
             echo '<tr><td>';
+            // Ofaj
             echo get_lang('Language').' : ';
-            echo $user_info['language'];
+            $languageId = api_get_language_id($user_info['language']);
+            if ($languageId) {
+                $languageInfo = api_get_language_info($languageId);
+                echo $languageInfo['original_name'];
+            }
             echo '</td></tr>';
 
             $startDate = UserManager::get_extra_user_data_by_field(

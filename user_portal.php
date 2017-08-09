@@ -132,9 +132,9 @@ $controller = new IndexManager(get_lang('MyCourses'));
 
 if (!$myCourseListAsCategory) {
     // Main courses and session list
-    if (isset($_COOKIE['defaultMyCourseView'.$userId])
-        && $_COOKIE['defaultMyCourseView'.$userId] == IndexManager::VIEW_BY_SESSION
-        && $displayMyCourseViewBySessionLink
+    if (isset($_COOKIE['defaultMyCourseView'.$userId]) &&
+        $_COOKIE['defaultMyCourseView'.$userId] == IndexManager::VIEW_BY_SESSION &&
+        $displayMyCourseViewBySessionLink
     ) {
         $courseAndSessions = $controller->returnCoursesAndSessionsViewBySession($userId);
         IndexManager::setDefaultMyCourseView(IndexManager::VIEW_BY_SESSION, $userId);
@@ -292,16 +292,17 @@ if (!empty($courseAndSessions['courses']) && $allow) {
     }
 
     // @todo improve calls of course info
-    $subscribedCourses = $courseAndSessions['courses'];
+    $subscribedCourses = !empty($courseAndSessions['courses']) ? $courseAndSessions['courses'] : [];
     $mainCategoryList = [];
     foreach ($subscribedCourses as $courseInfo) {
-        $courseCode = $courseInfo['course_code'];
+        $courseCode = $courseInfo['code'];
         $categories = Category::load(null, null, $courseCode);
         /** @var Category $category */
-        $category = $categories[0];
-        $mainCategoryList[]= $category;
+        $category = !empty($categories[0]) ? $categories[0] : [];
+        if (!empty($category)) {
+            $mainCategoryList[] = $category;
+        }
     }
-
     $total = [];
     foreach ($mainCategoryList as $category) {
         $parentScore = Category::getCurrentScore(
@@ -321,16 +322,18 @@ if (!empty($courseAndSessions['courses']) && $allow) {
                 $courseCode = $courseInfo['code'];
                 $categories = Category::load(null, null, $courseCode);
                 /** @var Category $subCategory */
-                $subCategory = $categories[0];
-                $score = Category::getCurrentScore(
-                    $userId,
-                    $subCategory->get_id(),
-                    $subCategory->get_course_code(),
-                    0,
-                    true
-                );
-                $totalScoreWithChildren += $score;
-                $children[$subCategory->get_course_code()] = ['score' => $score];
+                $subCategory = !empty($categories[0]) ? $categories[0] : null;
+                if (!empty($subCategory)) {
+                    $score = Category::getCurrentScore(
+                        $userId,
+                        $subCategory->get_id(),
+                        $subCategory->get_course_code(),
+                        0,
+                        true
+                    );
+                    $totalScoreWithChildren += $score;
+                    $children[$subCategory->get_course_code()] = ['score' => $score];
+                }
             }
         }
         $totalScoreWithChildren += $parentScore;
@@ -380,6 +383,7 @@ if (!empty($courseAndSessions['courses']) && $allow) {
         'grade_book_result_validate',
         $validatedCoursesPercentage
     );
+
     $controller->tpl->assign('grade_book_result_completed', $completed);
     /*if ($finalScore > 0) {
         $finalScore = (int) $finalScore / count($total);

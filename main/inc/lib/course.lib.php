@@ -3685,7 +3685,7 @@ class CourseManager
      * @param int $user_id
      * @param bool  $load_dirs Whether to show the document quick-loader or not
      * @param integer $user_id
-     * @return string
+     * @return array
      */
     public static function returnCourses($user_id, $load_dirs = false)
     {
@@ -3738,11 +3738,15 @@ class CourseManager
      *  Display courses inside a category (without special courses) as HTML dics of
      *  class userportal-course-item.
      * @param int      $user_category_id User category id
-     * @param bool     $load_dirs Whether to show the document quick-loader or not
+     * @param bool $load_dirs Whether to show the document quick-loader or not
+     * @param int $user_id
      * @return string
      */
-    public static function returnCoursesCategories($user_category_id, $load_dirs = false, $user_id = 0)
-    {
+    public static function returnCoursesCategories(
+        $user_category_id,
+        $load_dirs = false,
+        $user_id = 0
+    ) {
         $user_id = $user_id ?: api_get_user_id();
         $user_category_id = (int) $user_category_id;
 
@@ -3767,7 +3771,7 @@ class CourseManager
         $sql = "SELECT DISTINCT
                     course.id,
                     course_rel_user.status status,
-                    course.code as course_code
+                    course.code as course_code                    
                 FROM $TABLECOURS course 
                 INNER JOIN $TABLECOURSUSER course_rel_user
                 ON (course.id = course_rel_user.c_id)
@@ -3787,12 +3791,13 @@ class CourseManager
         $sql .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
         $result = Database::query($sql);
 
-        $courseList = array();
         $showCustomIcon = api_get_setting('course_images_in_courses_list');
         // Browse through all courses.
         $courseAdded = [];
+        $courseList = [];
         while ($row = Database::fetch_array($result)) {
             $course_info = api_get_course_info_by_id($row['id']);
+
             if (isset($course_info['visibility']) &&
                 $course_info['visibility'] == COURSE_VISIBILITY_HIDDEN
             ) {
@@ -3815,6 +3820,7 @@ class CourseManager
             $params = array();
             //Param (course_code) needed to get the student process
             $params['course_code'] = $row['course_code'];
+            $params['code'] = $row['course_code'];
 
             if ($showCustomIcon === 'true' && $iconName != 'course.png') {
                 $params['thumbnails'] = $course_info['course_image'];
@@ -3823,7 +3829,6 @@ class CourseManager
 
             $thumbnails = null;
             $image = null;
-
             if ($showCustomIcon === 'true' && $iconName != 'course.png') {
                 $thumbnails = $course_info['course_image'];
                 $image = $course_info['course_image_large'];
@@ -3858,7 +3863,10 @@ class CourseManager
             $courseUrl = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?id_session=0';
             $teachers = [];
             if (api_get_setting('display_teacher_in_courselist') === 'true') {
-                $teachers = self::getTeachersFromCourse($course_info['real_id'], true);
+                $teachers = self::getTeachersFromCourse(
+                    $course_info['real_id'],
+                    true
+                );
             }
 
             $params['status'] = $row['status'];
@@ -3867,7 +3875,6 @@ class CourseManager
             }
 
             $params['current_user_is_teacher'] = false;
-
             /** @var array $teacher */
             foreach ($teachers as $teacher) {
                 if ($teacher['id'] != $user_id) {

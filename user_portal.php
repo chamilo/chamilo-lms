@@ -172,6 +172,8 @@ if (!$myCourseListAsCategory) {
         $courseAndSessions = $controller->returnCourseCategoryListFromUser($userId);
     } else {
         $courseAndSessions = $controller->returnCoursesAndSessions($userId, false, $categoryCode);
+        $getCategory = CourseCategory::getCategory($categoryCode);
+        $controller->tpl->assign('category', $getCategory);
     }
 }
 

@@ -30,12 +30,12 @@ if (!empty($_POST)) {
         $actionId = intval($_POST['action_id']);
         $newTutor = intval($_POST['new_tutor']);
         $platformUserId = intval($_POST['platform_user_id']);
-    
+
         if ($sltUserExists == 1) {
             $sql = "SELECT * FROM $tableSepeTutors WHERE id = $existingTutor;";
             $rs = Database::query($sql);
             $tmp = Database::fetch_assoc($rs);
-                        
+
             $sql = "INSERT INTO $tableSepeSpecialtyTutors (
                         specialty_id, 
                         tutor_id,
@@ -71,10 +71,9 @@ if (!empty($_POST)) {
                         teaching_competence = '".$teachingCompetence."', 
                         experience_teleforming = $experienceTeleforming, 
                         training_teleforming = '".$trainingTeleforming."' 
-                        WHERE id = '".$aux['id']."';";     
+                        WHERE id = '".$aux['id']."';";
                 $res = Database::query($sql);
                 if (!$res) {
-                    error_log(Database::error());
                     $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
                 }
                 $newTutor = 0; //Reset variable, no create new tutor, exists tutor
@@ -108,13 +107,12 @@ if (!empty($_POST)) {
                         );";
                 $res = Database::query($sql);
                 if (!$res) {
-                    error_log(Database::error());
                     $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
                 } else {
                     $tutorId = Database::insert_id();
                 }
             }
-            
+
             if (isset($newTutor) && $newTutor != 1) {
                 $sql = "UPDATE $tableSepeSpecialtyTutors SET 
                         tutor_id = $tutorId, 
@@ -123,7 +121,7 @@ if (!empty($_POST)) {
                         teaching_competence = '".$teachingCompetence."', 
                         experience_teleforming = $experienceTeleforming, 
                         training_teleforming='".$trainingTeleforming."' 
-                        WHERE id = $specialtyTutorId;";    
+                        WHERE id = $specialtyTutorId;";
             } else {
                 $sql = "INSERT INTO $tableSepeSpecialtyTutors (
                             specialty_id,
@@ -145,7 +143,6 @@ if (!empty($_POST)) {
             }
             $res = Database::query($sql);
             if (!$res) {
-                error_log(Database::error());
                 $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
             } else {
                 if ($newTutor == 1) {
@@ -196,24 +193,24 @@ if (api_is_platform_admin()) {
         $tpl->assign('info', $info);
         $tpl->assign('new_tutor', '0');
         $platformUserId = $info['platform_user_id'];
-            
+
     }
     $tutorsList = getTutorsSpecialty(intval($_GET['specialty_id']));
     $tpl->assign('ExistingTutorsList', $tutorsList);
-    
+
     $listTeachers = CourseManager::getTeachersFromCourse($courseId);
     $listTeachers = freeTeacherList($listTeachers, intval($_GET['specialty_id']), $platformUserId);
     $tpl->assign('listTeachers', $listTeachers);
     if (isset($_SESSION['sepe_message_info'])) {
-        $tpl->assign('message_info', $_SESSION['sepe_message_info']);    
+        $tpl->assign('message_info', $_SESSION['sepe_message_info']);
         unset($_SESSION['sepe_message_info']);
     }
     if (isset($_SESSION['sepe_message_error'])) {
-        $tpl->assign('message_error', $_SESSION['sepe_message_error']);    
+        $tpl->assign('message_error', $_SESSION['sepe_message_error']);
         unset($_SESSION['sepe_message_error']);
     }
     $tpl->assign('sec_token', $token);
-        
+
     $listing_tpl = 'sepe/view/specialty-tutor-edit.tpl';
     $content = $tpl->fetch($listing_tpl);
     $tpl->assign('content', $content);

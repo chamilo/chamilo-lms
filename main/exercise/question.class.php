@@ -1140,12 +1140,10 @@ abstract class Question
                 if ($se_doc !== false) {
                     if (($se_doc_data = $di->get_document_data($se_doc)) !== false) {
                         $se_doc_data = unserialize($se_doc_data);
-                        if (
-                            isset($se_doc_data[SE_DATA]['type']) &&
+                        if (isset($se_doc_data[SE_DATA]['type']) &&
                             $se_doc_data[SE_DATA]['type'] == SE_DOCTYPE_EXERCISE_QUESTION
                         ) {
-                            if (
-                                isset($se_doc_data[SE_DATA]['exercise_ids']) &&
+                            if (isset($se_doc_data[SE_DATA]['exercise_ids']) &&
                                 is_array($se_doc_data[SE_DATA]['exercise_ids'])
                             ) {
                                 foreach ($se_doc_data[SE_DATA]['exercise_ids'] as $old_value) {
@@ -1632,7 +1630,11 @@ abstract class Question
             switch ($this->type) {
                 case UNIQUE_ANSWER:
                     $buttonGroup = array();
-                    $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
+                    $buttonGroup[] = $form->addButtonSave(
+                        $text,
+                        'submitQuestion',
+                        true
+                    );
                     $buttonGroup[] = $form->addButton(
                         'convertAnswer',
                         get_lang('ConvertToMultipleAnswer'),
@@ -1647,7 +1649,11 @@ abstract class Question
                     break;
                 case MULTIPLE_ANSWER:
                     $buttonGroup = array();
-                    $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
+                    $buttonGroup[] = $form->addButtonSave(
+                        $text,
+                        'submitQuestion',
+                        true
+                    );
                     $buttonGroup[] = $form->addButton(
                         'convertAnswer',
                         get_lang('ConvertToUniqueAnswer'),
@@ -2050,7 +2056,8 @@ abstract class Question
         $question_id = Database::insert($tbl_quiz_question, $params);
 
         if ($question_id) {
-            $sql = "UPDATE $tbl_quiz_question SET id = iid WHERE iid = $question_id";
+            $sql = "UPDATE $tbl_quiz_question  
+                    SET id = iid WHERE iid = $question_id";
             Database::query($sql);
 
             // Get the max question_order
@@ -2101,7 +2108,12 @@ abstract class Question
         $where_condition = array()
     ) {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $default_where = array('c_id = ? AND parent_id = 0 AND type = ?' => array($course_id, MEDIA_QUESTION));
+        $default_where = array(
+            'c_id = ? AND parent_id = 0 AND type = ?' => array(
+                $course_id,
+                MEDIA_QUESTION
+            )
+        );
         $result = Database::select(
             '*',
             $table_question,

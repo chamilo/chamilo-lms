@@ -366,7 +366,7 @@ class ExerciseLib
                             $attributes['style'] = 'display: none;';
                             $answer = '<div class="thumbnail">'.$answer.'</div>';
                         }
-                        
+
                         $answer_input .= '<label class="radio '.$hidingClass.'">';
                         $answer_input .= Display::input(
                             'radio',
@@ -1499,17 +1499,19 @@ HOTSPOT;
 
     /**
      * Gets count of exam results
-     * @todo this function should be moved in a library  + no global calls
+     * @param int $exerciseId
+     * @param array $conditions
+     * @return array
      */
-    public static function get_count_exam_results($exercise_id, $extra_where_conditions)
+    public static function get_count_exam_results($exerciseId, $conditions)
     {
         $count = self::get_exam_results_data(
             null,
             null,
             null,
             null,
-            $exercise_id,
-            $extra_where_conditions,
+            $exerciseId,
+            $conditions,
             true
         );
         return $count;
@@ -2173,13 +2175,14 @@ HOTSPOT;
 
                                 $delete_link = '<a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.intval($_GET['filter_by_user']).'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
                                 onclick="javascript:if(!confirm(\'' . sprintf(
-                                        get_lang('DeleteAttempt'),
-                                        $results[$i]['username'],
-                                        $dt
-                                    ).'\')) return false;">'.Display:: return_icon(
-                                        'delete.png',
-                                        get_lang('Delete')
-                                    ).'</a>';
+                                    get_lang('DeleteAttempt'),
+                                    $results[$i]['username'],
+                                    $dt
+                                ).'\')) return false;">'.
+                                    Display:: return_icon(
+                                    'delete.png',
+                                    get_lang('Delete')
+                                ).'</a>';
                                 $delete_link = utf8_encode($delete_link);
 
                                 if (api_is_drh() && !api_is_platform_admin()) {
@@ -2223,7 +2226,6 @@ HOTSPOT;
                 }
             }
         } else {
-            //$hpresults = StatsUtils::getManyResultsXCol($hpsql, 6);
             $hpresults = [];
             $res = Database::query($hpsql);
             if ($res !== false) {
@@ -2436,8 +2438,19 @@ HOTSPOT;
         return false;
     }
 
-    public static function addScoreModelInput(FormValidator & $form, $name, $weight, $selected)
-    {
+    /**
+     * @param FormValidator $form
+     * @param string $name
+     * @param $weight
+     * @param $selected
+     * @return bool
+     */
+    public static function addScoreModelInput(
+        FormValidator & $form,
+        $name,
+        $weight,
+        $selected
+    ) {
         $model = self::getCourseScoreModel();
         if (empty($model)) {
             return false;
@@ -2505,8 +2518,7 @@ HOTSPOT;
         });
 EOT;
 
-            return $js;
-
+        return $js;
     }
 
     /**
@@ -3147,8 +3159,7 @@ EOT;
         $courseId,
         $session_id,
         $user_count
-    )
-    {
+    ) {
         $user_results = Event::get_best_exercise_results_by_user(
             $exercise_id,
             $courseId,
@@ -3204,6 +3215,7 @@ EOT;
      * @param    int $exercise_id
      * @param    string $course_code
      * @param    int $session_id
+     * @return array
      *
      **/
     public static function get_student_stats_by_question(
@@ -3255,8 +3267,7 @@ EOT;
     public static function getNumberStudentsFillBlanksAnwserCount(
         $question_id,
         $exercise_id
-    )
-    {
+    ) {
         $listStudentsId = [];
         $listAllStudentInfo = CourseManager::get_student_list_from_course_code(
             api_get_course_id(),
@@ -3397,8 +3408,7 @@ EOT;
         $exercise_id,
         $course_code,
         $session_id
-    )
-    {
+    ) {
         $track_exercises = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_EXERCISES
         );
@@ -3765,7 +3775,8 @@ EOT;
                 $res .= "<option value='-1' disabled='disabled'>".$tabCategory["title"]."</option>";
                 $currentCatId = $tabCategory["id"];
             }
-            $res .= "<option ".$tabSelected[$tabGroups[$i]["id"]]."style='margin-left:40px' value='".$tabGroups[$i]["id"]."'>".$tabGroups[$i]["name"]."</option>";
+            $res .= "<option ".$tabSelected[$tabGroups[$i]["id"]]."style='margin-left:40px' value='".$tabGroups[$i]["id"]."'>".
+                    $tabGroups[$i]["name"]."</option>";
         }
         $res .= "</select>";
         return $res;
@@ -3898,7 +3909,6 @@ EOT;
             if (isset($exercise_stat_info['exe_user_id'])) {
                 $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
                 if ($user_info) {
-
                     // Shows exercise header
                     echo $objExercise->show_exercise_result_header(
                         $user_info,

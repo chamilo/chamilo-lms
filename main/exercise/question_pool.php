@@ -699,11 +699,40 @@ if ($fromExercise <= 0) {
 }
 // Display table
 $header = array(
-    array(get_lang('QuestionUpperCaseFirstLetter'), false, array("style"=>"text-align:center"), ''),
-    array(get_lang('Type'), false, array("style"=>"text-align:center"), array("style"=>"text-align:center"), ''),
-    array(get_lang('QuestionCategory'), false, array("style"=>"text-align:center"), array("style"=>"text-align:center"), ''),
-    array(get_lang('Difficulty'), false, array("style"=>"text-align:center"), array("style"=>"text-align:center"), ''),
-    array($actionLabel, false, array("style"=>"text-align:center"), array("style"=>"text-align:center"), '')
+    array(
+        get_lang('QuestionUpperCaseFirstLetter'),
+        false,
+        array("style" => "text-align:center"),
+        ''
+    ),
+    array(
+        get_lang('Type'),
+        false,
+        array("style" => "text-align:center"),
+        array("style" => "text-align:center"),
+        ''
+    ),
+    array(
+        get_lang('QuestionCategory'),
+        false,
+        array("style" => "text-align:center"),
+        array("style" => "text-align:center"),
+        ''
+    ),
+    array(
+        get_lang('Difficulty'),
+        false,
+        array("style" => "text-align:center"),
+        array("style" => "text-align:center"),
+        ''
+    ),
+    array(
+        $actionLabel,
+        false,
+        array("style" => "text-align:center"),
+        array("style" => "text-align:center"),
+        ''
+    )
 );
 
 $data = array();

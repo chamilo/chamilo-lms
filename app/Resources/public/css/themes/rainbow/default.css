@@ -668,6 +668,19 @@ footer #footer_right{
     border-top: 1px solid #96bd0d;
     border-radius: 0;
     font-weight: bold;
+    border-left: none;
+    border-right: none;
+}
+.well{
+    background-color: #84bd00;
+    border: none;
+    color: #FFFFFF;
+}
+.well-sm{
+    border-radius: 0;
+}
+.well .page-header{
+    color: #FFFFFF;
 }
 .hotspot-image{
     margin: auto;
@@ -1056,7 +1069,7 @@ ul.exercise-draggable-answer .touch-items:hover{
     background: transparent;
 }
 .drag_question .window{
-    padding: 10px 5px;
+    padding: 10px 20px;
     border: 1px solid #162A83;
     border-radius: 0;
     min-height: 45px;
@@ -1277,6 +1290,12 @@ svg circle{
 .question_options input[type="text"]{
     padding: 5px;
 }
+.alert.alert-info{
+   background-color: #84bd00;
+   border: none;
+   border-radius: 0;
+   color: #FFF;
+}
 .alert.alert-warning{
    background-color: #FFF;
    border-left: none;
@@ -1293,6 +1312,20 @@ svg circle{
     padding-right: 0;
     padding-top: 0;
     padding-bottom: 20px;
+}
+.btn-warning{
+    color: #fff;
+    background-color: #6B1D82;
+    border-color: #6B1D82;
+    border-radius: 0;
+}
+.remaining .alert.alert-info{
+    background: none;
+    color: #162A83;
+}
+.remaining .alert.alert-info p {
+    padding-bottom: 10px;
+    font-weight: bold;
 }
 /* Large desktop */
 @media (min-width: 1200px) {

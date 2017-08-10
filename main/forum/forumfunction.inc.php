@@ -4216,7 +4216,11 @@ function move_post_form()
 {
     $gradebook = Security::remove_XSS($_GET['gradebook']);
     // initiate the object
-    $form = new FormValidator('movepost', 'post', api_get_self().'?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&gradebook='.$gradebook.'&post='.Security::remove_XSS($_GET['post']).'&action='.Security::remove_XSS($_GET['action']).'&post='.Security::remove_XSS($_GET['post']));
+    $form = new FormValidator(
+        'movepost',
+        'post',
+        api_get_self().'?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&gradebook='.$gradebook.'&post='.Security::remove_XSS($_GET['post']).'&action='.Security::remove_XSS($_GET['action']).'&post='.Security::remove_XSS($_GET['post'])
+    );
     // The header for the form
     $form->addElement('header', '', get_lang('MovePost'));
 
@@ -4402,7 +4406,13 @@ function store_move_thread($values)
     // Fix group id, if forum is moved to a different group
     if (!empty($forumInfo['to_group_id'])) {
         $groupId = $forumInfo['to_group_id'];
-        $item = api_get_item_property_info($courseId, TABLE_FORUM_THREAD, $threadId, $sessionId, $groupId);
+        $item = api_get_item_property_info(
+            $courseId,
+            TABLE_FORUM_THREAD,
+            $threadId,
+            $sessionId,
+            $groupId
+        );
         $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $sessionCondition = api_get_session_condition($sessionId);
 
@@ -4484,7 +4494,11 @@ function prepare4display($input)
  */
 function forum_search()
 {
-    $form = new FormValidator('forumsearch', 'post', 'forumsearch.php?'.api_get_cidreq());
+    $form = new FormValidator(
+        'forumsearch',
+        'post',
+        'forumsearch.php?'.api_get_cidreq()
+    );
 
     // Setting the form elements.
     $form->addElement('header', '', get_lang('ForumSearch'));
@@ -4709,7 +4723,12 @@ function add_forum_attachment_file($file_comment, $last_id)
         $file_name = $attachment['name'];
 
         if (!filter_extension($new_file_name)) {
-            Display::addFlash(Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error'));
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('UplUnableToSaveFileFilteredExtension'),
+                    'error'
+                )
+            );
 
             return;
         }
@@ -4797,7 +4816,12 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
         $file_name = $attachment['name'];
 
         if (!filter_extension($new_file_name)) {
-            Display::addFlash(Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error'));
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('UplUnableToSaveFileFilteredExtension'),
+                    'error'
+                )
+            );
         } else {
             $new_file_name = uniqid('');
             $new_path = $updir.'/'.$new_file_name;
@@ -4912,7 +4936,8 @@ function delete_attachment($post_id, $id_attach = 0, $display = true)
     }
 
     // Delete from forum_attachment table.
-    $sql = "DELETE FROM $forum_table_attachment WHERE c_id = $course_id AND $cond ";
+    $sql = "DELETE FROM $forum_table_attachment 
+            WHERE c_id = $course_id AND $cond ";
     $result = Database::query($sql);
     if ($result !== false) {
         $affectedRows = Database::affected_rows($result);
@@ -4940,7 +4965,7 @@ function delete_attachment($post_id, $id_attach = 0, $display = true)
 /**
  * This function gets all the forum information of the all the forum of the group
  *
- * @param integer $groupId the id of the group we need the fora of (see forum.forum_of_group)
+ * @param array $groupInfo the id of the group we need the fora of (see forum.forum_of_group)
  * @return array
  *
  * @todo this is basically the same code as the get_forums function. Consider merging the two.
@@ -5153,7 +5178,6 @@ function get_notifications($content, $id)
     // Database table definition
     $table_users = Database::get_main_table(TABLE_MAIN_USER);
     $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
-
     $course_id = api_get_course_int_id();
 
     // Which database field contains the notification?
@@ -5165,9 +5189,10 @@ function get_notifications($content, $id)
 
     $sql = "SELECT user.user_id, user.firstname, user.lastname, user.email, user.user_id user
             FROM $table_users user, $table_notification notification
-            WHERE notification.c_id = $course_id AND user.active = 1 AND
-            user.user_id = notification.user_id AND
-            notification.$database_field= '".Database::escape_string($id)."'";
+            WHERE 
+                notification.c_id = $course_id AND user.active = 1 AND
+                user.user_id = notification.user_id AND
+                notification.$database_field= '".Database::escape_string($id)."'";
 
     $result = Database::query($sql);
     $return = array();
@@ -5673,7 +5698,8 @@ function editAttachedFile($array, $id, $courseId = null) {
         // Delete last comma
         $setString = substr($setString, 0, strlen($setString) - 2);
         $forumAttachmentTable = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
-        $sql = "UPDATE $forumAttachmentTable SET $setString WHERE c_id = $courseId AND id = $id";
+        $sql = "UPDATE $forumAttachmentTable 
+                SET $setString WHERE c_id = $courseId AND id = $id";
         $result = Database::query($sql);
         if ($result !== false) {
             $affectedRows = Database::affected_rows($result);

@@ -3767,6 +3767,15 @@ class CourseManager
             $userCategoryCondition = ' (course_rel_user.user_course_cat = 0 OR course_rel_user.user_course_cat IS NULL) ';
         }
 
+        $languageCondition = '';
+        $onlyInUserLanguage = api_get_configuration_value('my_courses_show_courses_in_user_language_only');
+        if ($onlyInUserLanguage) {
+            $userInfo = api_get_user_info();
+            if (!empty($userInfo['language'])) {
+                $languageCondition = " AND course.course_language = '".$userInfo['language']."' ";
+            }
+        }
+
         $sql = "SELECT DISTINCT
                     course.id,
                     course_rel_user.status status,
@@ -3779,8 +3788,9 @@ class CourseManager
                 WHERE
                     course_rel_user.user_id = '".$user_id."' AND
                     $userCategoryCondition
-                    $without_special_courses ";
-
+                    $without_special_courses
+                    $languageCondition
+                ";
         // If multiple URL access mode is enabled, only fetch courses
         // corresponding to the current URL.
         if (api_get_multiple_access_url() && $current_url_id != -1) {

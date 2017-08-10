@@ -591,3 +591,7 @@ $_configuration['score_grade_model'] = [
 ];*/
 // Show language selector in main menu
 //$_configuration['show_language_selector_in_menu'] = false;
+
+// When using the my-courses list filter by category, set this option to true
+// to only show courses in the user's configured language
+// $_configuration['my_courses_show_courses_in_user_language_only'] = false;

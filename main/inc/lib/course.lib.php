@@ -3579,6 +3579,16 @@ class CourseManager
             return [];
         }
 
+        // Filter by language
+        $languageCondition = '';
+        $onlyInUserLanguage = api_get_configuration_value('my_courses_show_courses_in_user_language_only');
+        if ($onlyInUserLanguage) {
+            $userInfo = api_get_user_info();
+            if (!empty($userInfo['language'])) {
+                $languageCondition = " AND course_language = '".$userInfo['language']."' ";
+            }
+        }
+
         $sql = "SELECT
                     id,
                     code,
@@ -3587,6 +3597,7 @@ class CourseManager
                 FROM $table                      
                 WHERE 
                     id IN ('".implode("','", $specialCourseList)."')
+                    $languageCondition
                 GROUP BY code";
 
         $rs_special_course = Database::query($sql);

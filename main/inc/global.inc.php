@@ -431,7 +431,6 @@ if (isset($this_script) && $this_script == 'sub_language') {
 $valid_languages = api_get_languages();
 
 if (!empty($valid_languages)) {
-
     if (!in_array($user_language, $valid_languages['folder'])) {
         $user_language = api_get_setting('platformLanguage');
     }
@@ -483,6 +482,12 @@ if (!empty($valid_languages)) {
     // If language is set via browser ignore the priority
     if (isset($_GET['language'])) {
         $language_interface = $user_language;
+    }
+
+    $allow = api_get_configuration_value('show_language_selector_in_menu');
+    // Overwrite all lang configs and use the menu language
+    if ($allow) {
+        $language_interface = $_SESSION['user_language_choice'];
     }
 }
 

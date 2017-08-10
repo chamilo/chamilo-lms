@@ -1225,7 +1225,7 @@ class learnpathItem
                                                             $in_files_list
                                                         );
                                                     }
-                                                } elseif (strstr($second_part,'..') === 0) {
+                                                } elseif (strstr($second_part, '..') === 0) {
                                                     // Link is relative but going back in the hierarchy.
                                                     $files_list[] = array(
                                                         $second_part,
@@ -1651,10 +1651,14 @@ class learnpathItem
 
     /**
      * @param string $origin
+     * @param string $time
+     *
      * @return string
      */
-    public static function getScormTimeFromParameter($origin = 'php', $time = null)
-    {
+    public static function getScormTimeFromParameter(
+        $origin = 'php',
+        $time = null
+    ) {
         $h = get_lang('h');
         if (!isset($time)) {
             if ($origin == 'js') {
@@ -1959,8 +1963,6 @@ class learnpathItem
 			}*/
             // If we don't init start time here, the time is sometimes calculated from the last start time.
             $this->current_start_time = time();
-
-            //error_log('New LP - reinit blocked by setting', 0);
         }
     }
 
@@ -2010,7 +2012,6 @@ class learnpathItem
         $this->prereq_alert = '';
         // First parse all parenthesis by using a sequential loop
         //  (looking for less-inclusives first).
-
         if ($prereqs_string == '_true_') {
 
             return true;
@@ -2132,7 +2133,6 @@ class learnpathItem
                     }
                 } else {
                     // No ANDs found, look for <>
-
                     if (self::DEBUG > 1) {
                         error_log(
                             'New LP - Didnt find any =, looking for <>',
@@ -2206,7 +2206,6 @@ class learnpathItem
                             }
                         } else {
                             // Finally, look for sets/groups
-
                             if (self::DEBUG > 1) {
                                 error_log(
                                     'New LP - Didnt find any ~, looking for groups',
@@ -2384,7 +2383,7 @@ class learnpathItem
                                             if ($returnstatus) {
                                                 //AND origin_lp_item_id = '.$user_id.'
                                                 $sql = 'SELECT exe_result, exe_weighting
-                                                        FROM ' . Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
+                                                        FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
                                                         WHERE
                                                             exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path.' AND
                                                             exe_user_id = ' . $user_id.' AND
@@ -2424,7 +2423,6 @@ class learnpathItem
                                             }
                                         } else {
                                             // 3. for multiple attempts we check that there are minimum 1 item completed.
-
                                             // Checking in the database.
                                             $sql = 'SELECT exe_result, exe_weighting
                                                     FROM ' . Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'

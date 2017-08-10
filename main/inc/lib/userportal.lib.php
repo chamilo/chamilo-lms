@@ -1164,7 +1164,7 @@ class IndexManager
             // Load sessions in category
             $session_categories = UserManager::get_sessions_by_category($user_id, false);
         }
-
+        
         $sessionCount = 0;
         $courseCount = 0;
 
@@ -1366,7 +1366,7 @@ class IndexManager
                 $coursesWithoutCategoryTemplate = '/user_portal/grid_courses_without_category.tpl';
                 $coursesWithCategoryTemplate = '/user_portal/grid_courses_with_category.tpl';
             }
-
+            
             if ($specialCourses) {
                 if ($categoryCodeFilter) {
                     $specialCourses = self::filterByCategory(
@@ -1374,7 +1374,6 @@ class IndexManager
                         $categoryCodeFilter
                     );
                 }
-
                 $this->tpl->assign('courses', $specialCourses);
                 $specialCourseList = $this->tpl->fetch(
                     $this->tpl->get_template($coursesWithoutCategoryTemplate)

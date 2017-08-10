@@ -5,7 +5,7 @@ for more information: see languages.txt in the lang folder.
 $OpenBadgesBannerText = "Pode xenerar insignias para recoñecer as habilidades aprendidas dos seus usuarios, dar un recoñecemento polo seu logro, co cal eles poderán mostrar as súas capacidades e competencias adquiridas a través de emblemas, que serán visualizados no seu perfil de usuario. Para máis información sobre os Open Badges en <a href=\"http://openbadges.org/\">www.openbadges.org</a>";
 $OpenBadgesIntroduction = "Agora pode establecer recoñecemento de habilidades por aprender en calquera curso deste campus virtual.";
 $DesignANewBadgeComment = "Deseñar unha nova insígnea, descargala e subila á plataforma";
-$TheBadgesWillBeSentToThatBackpack = "As insígneas mandaranse a esta mochila";
+$TheBadgesWillBeSentToThatBackpack = "As insígnias mandaranse a esta mochila";
 $BackpackDetails = "Detalles da mochila";
 $CriteriaToEarnTheBadge = "Criterios para lograr a insígnea";
 $BadgePreview = "Previsualización insígnea";

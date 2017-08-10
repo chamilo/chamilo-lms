@@ -2219,7 +2219,7 @@ $AnnouncementModified = "Ankündigung wurde verändert";
 $AnnouncementAdded = "Ankündigung wurde hinzugefügt";
 $AnnouncementDeleted = "Ankündigung wurde gelöscht";
 $AnnouncementPublishedOn = "Veröffentlicht am";
-$AddAnnouncement = "Als Ankündigung hinzugefügt";
+$AddAnnouncement = "Ankündigung hinzufügen";
 $AnnouncementDeleteAll = "Liste der Ankündigungen löschen";
 $professorMessage = "Mitteilung vom Kursleiter";
 $EmailSent = "und per E-Mail an Kursteilnehmer gesendet";
@@ -7972,4 +7972,5 @@ $NewPasswordRequirementMaxXLowercase = "Maximale %s Kleinbuchstaben";
 $NewPasswordRequirementMaxXUppercase = "Maximale %s Großbuchstaben";
 $NewPasswordRequirementMaxXNumeric = "Maximale %s numerische (0-9) Zeichen";
 $NewPasswordRequirementMaxXLength = "Maximale %s Zeichen insgesamt";
+$GoToSurvey = "Zur Umfrage";
 ?>

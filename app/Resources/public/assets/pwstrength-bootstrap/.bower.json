@@ -42,6 +42,6 @@
     "commit": "bc5b56e6a8f8158c13661ae1ec5522fcfb273db2"
   },
   "_source": "https://github.com/ablanco/jquery.pwstrength.bootstrap.git",
-  "_target": "*",
+  "_target": "2.1.0",
   "_originalSource": "pwstrength-bootstrap"
 }

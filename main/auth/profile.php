@@ -93,7 +93,7 @@ $user_data = api_get_user_info(
     false,
     false,
     false,
-    false,
+    true,
     true
 );
 $array_list_key = UserManager::get_api_keys(api_get_user_id());

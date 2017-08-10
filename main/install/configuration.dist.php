@@ -589,7 +589,8 @@ $_configuration['score_grade_model'] = [
 /*$_configuration['gradebook_dependency_mandatory_courses'] = [
     'courses' => [1, 2]
 ];*/
-// Show language selector in main menu
+// Show language selector in main menu an update the language in the user's
+// profile.
 //$_configuration['show_language_selector_in_menu'] = false;
 
 // When using the my-courses list filter by category, set this option to true

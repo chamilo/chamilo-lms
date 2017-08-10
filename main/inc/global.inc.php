@@ -487,7 +487,21 @@ if (!empty($valid_languages)) {
     $allow = api_get_configuration_value('show_language_selector_in_menu');
     // Overwrite all lang configs and use the menu language
     if ($allow) {
-        $language_interface = $_SESSION['user_language_choice'];
+        if (isset($_GET['language'])) {
+            $language_interface = $_SESSION['user_language_choice'];
+            $userEntity = api_get_user_entity(api_get_user_id());
+            if ($userEntity) {
+                $userEntity->setLanguage($language_interface);
+                Database::getManager()->merge($userEntity);
+                Database::getManager()->flush();
+            }
+        } else {
+            $userInfo = api_get_user_info();
+            if (!empty($userInfo['language'])) {
+                $_SESSION['user_language_choice'] = $userInfo['language'];
+                $language_interface = $userInfo['language'];
+            }
+        }
     }
 }
 

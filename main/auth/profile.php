@@ -696,7 +696,7 @@ if ($form->validate()) {
         false,
         false,
         false,
-        false,
+        true,
         true
     );
     Session::write('_user', $userInfo);
@@ -711,9 +711,7 @@ if ($form->validate()) {
 $actions = '';
 if (api_get_setting('allow_social_tool') !== 'true') {
     if (api_get_setting('extended_profile') === 'true') {
-        if (
-            api_get_setting('allow_message_tool') === 'true'
-        ) {
+        if (api_get_setting('allow_message_tool') === 'true') {
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
                 Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
@@ -757,6 +755,7 @@ if (api_get_setting('allow_social_tool') === 'true') {
     $tpl->assign('social_menu_block', $menu);
     $tpl->assign('social_right_content', $form->returnForm());
     $social_layout = $tpl->get_template('social/edit_profile.tpl');
+
     $tpl->display($social_layout);
 } else {
     $bigImage = UserManager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_BIG);

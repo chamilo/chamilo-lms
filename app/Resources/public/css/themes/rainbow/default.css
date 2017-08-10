@@ -668,6 +668,19 @@ footer #footer_right{
     border-top: 1px solid #96bd0d;
     border-radius: 0;
     font-weight: bold;
+    border-left: none;
+    border-right: none;
+}
+.well{
+    background-color: #84bd00;
+    border: none;
+    color: #FFFFFF;
+}
+.well-sm{
+    border-radius: 0;
+}
+.well .page-header{
+    color: #FFFFFF;
 }
 .hotspot-image{
     margin: auto;
@@ -1035,10 +1048,11 @@ ul.exercise-draggable-answer .touch-items:hover{
 }
 .question_options .droppable{
     background: none;
-    border: none;
+    border: 2px solid #96BD0D;
     border-radius: 0;
     display: inline-block;
-    width: 95%;
+    width: 98%;
+    margin-bottom: 10px;
 }
 .question_options .droppable .gallery .exercise-draggable-answer-option{
     background: #FFF;
@@ -1056,7 +1070,7 @@ ul.exercise-draggable-answer .touch-items:hover{
     background: transparent;
 }
 .drag_question .window{
-    padding: 10px 5px;
+    padding: 10px 20px;
     border: 1px solid #162A83;
     border-radius: 0;
     min-height: 45px;
@@ -1277,6 +1291,12 @@ svg circle{
 .question_options input[type="text"]{
     padding: 5px;
 }
+.alert.alert-info{
+   background-color: #84bd00;
+   border: none;
+   border-radius: 0;
+   color: #FFF;
+}
 .alert.alert-warning{
    background-color: #FFF;
    border-left: none;
@@ -1294,6 +1314,170 @@ svg circle{
     padding-top: 0;
     padding-bottom: 20px;
 }
+.btn-warning{
+    color: #fff;
+    background-color: #6B1D82;
+    border-color: #6B1D82;
+    border-radius: 0;
+}
+.remaining .alert.alert-info{
+    background: none;
+    color: #162A83;
+}
+.remaining .alert.alert-info p {
+    padding-bottom: 10px;
+    font-weight: bold;
+}
+.ck{
+    display: block;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    font-size-adjust: none;
+    font-stretch: normal;
+    font-feature-settings: normal;
+    font-language-override: normal;
+    font-kerning: auto;
+    font-synthesis: weight style;
+    font-variant: normal;
+}
+.ck-article{
+    text-transform: uppercase;
+    color: #E95839;
+    font-weight: bold;
+    background: url(../../main/img/document/border-title.png) repeat-x 0 80%;
+    padding-bottom: 2%;
+    margin-bottom: 10px;
+}
+.ck-article:before{
+    content: "\f15c";
+    margin-right: 5px;
+    font-family: FontAwesome;
+    font-weight: normal;
+}
+.ck-paragraph-box{
+    background-color: #F5EEE2;
+    padding: 2% 3%;
+    line-height: 20px;
+}
+
+.ck-title2{
+    padding-top: 0;
+    margin-top: 0;
+    font-weight: 500;
+    position: relative;
+    color: #000;
+}
+.ck-title2:after{
+    background-color:#E95839;
+    margin: 10px 0px 0px;
+    width: 50px;
+    height: 2px;
+    display: block;
+    content: "";
+    
+}
+.ck-parcours{
+    font-family: 'Verdana';
+    font-size: 18px;
+    font-weight: bold;
+    color: #162a83;
+}
+.ck-etape{
+    font-family: 'Verdana';
+    font-size: 14px;
+    font-weight: bold;
+    color: #162a83;
+}
+.ck-titre{
+    font-family: 'Verdana';
+    font-size: 30px;
+    color: #162a83;
+}
+.ck-texte{
+    font-family: 'Verdana';
+    font-size: 14px;
+    color: #162a83;
+}
+.ck-source{
+    font-family: 'Verdana';
+    font-size: 12px;
+    color: #162a83;
+}
+.ck-consignes{
+    font-family: 'Verdana';
+    font-size: 14px;
+    font-weight: bold;
+    color: #162a83;
+}
+figure .image.alignleft{
+    margin: 0 20px 20px 0;
+}
+figure .image.alignright{
+    margin: 0 20px 0px 20px;
+}
+figure .image{
+    margin: 0 20px 0px 20px;
+}
+figure figcaption{   
+    text-align: left;
+    background-color: #f3f3f3;
+    padding-top: 0px;
+    margin: 0px;
+    border-radius: 0px;
+    padding-left: 5px;
+}
+figure{
+    border: 1px solid #ddd;
+    margin-bottom: 20px !important;
+    padding: 5px;
+    border-radius: 5px;
+}
+blockquote {
+  background: #f9f9f9;
+  border-left: 8px solid #ccc;
+  font: 14px/20px italic Times, serif;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "\201C""\201D""\2018""\2019";
+  display: inline-block;
+}
+blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
+}
+blockquote p {
+  display: inline;
+}
+.ck-stand-out{
+    background-color: yellow;
+}
+/* line horizontal separation */
+.ck-title {
+    border-top: 1px solid #84bd00;
+    display: inline-block;
+    width: 100%;
+    padding-top: 15px;
+    font-weight: normal;
+    font-size: 25px;
+}
+.ck-style2 {
+    height: 6px;
+    background: url(../../main/img/document/hr-2.png) repeat-x 0 0;
+    border: 0;
+}
+.ck-title3 { 
+  border-top: 1px solid #84bd00;
+  display: inline-block;
+  width: 100%;
+  padding-top: 15px;
+  font-weight: bold;
+  font-size: 16px;
+} 
 /* Large desktop */
 @media (min-width: 1200px) {
 

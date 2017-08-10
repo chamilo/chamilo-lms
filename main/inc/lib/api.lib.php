@@ -4169,9 +4169,10 @@ function api_get_languages_combo($name = 'language')
  * Displays a form (drop down menu) so the user can select his/her preferred language.
  * The form works with or without javascript
  * @param  boolean Hide form if only one language available (defaults to false = show the box anyway)
+ * @param bool $showAsButton
  * @return null|string Display the box directly
  */
-function api_display_language_form($hide_if_no_choice = false)
+function api_display_language_form($hide_if_no_choice = false, $showAsButton = false)
 {
     // Retrieve a complete list of all the languages.
     $language_list = api_get_languages();
@@ -4192,7 +4193,7 @@ function api_display_language_form($hide_if_no_choice = false)
 
     $original_languages = $language_list['name'];
     $folder = $language_list['folder']; // This line is probably no longer needed.
-    $html = '<script>    
+    /*$html = '<script>
     $(document).ready(function() {
         $("#language_list").change(function() {
             jumpMenu("parent",this,0);
@@ -4203,9 +4204,9 @@ function api_display_language_form($hide_if_no_choice = false)
         eval(targ+".location=\'"+selObj.options[selObj.selectedIndex].value+"\'");
         if (restore) selObj.selectedIndex=0;
     }
-    </script>';
-    $html .= '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">';
-    $html .= '<label style="display: none;" for="language_list">'.get_lang('Language').'</label>';
+    </script>';*/
+    //$html .= '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">';
+    //$html .= '<label style="display: none;" for="language_list">'.get_lang('Language').'</label>';
     /*$html .= '<select id="language_list" class="selectpicker show-tick form-control" name="language_list" >';
 
     foreach ($original_languages as $key => $value) {
@@ -4219,35 +4220,114 @@ function api_display_language_form($hide_if_no_choice = false)
         $html .= $value.'</option>';
     }
     $html .= '</select>';*/
-
-    switch ($currentLanguageInfo['isocode']) {
-        case 'zh-TW':
-            $currentLanguageInfo['isocode'] = 'zh';
-            break;
-        case 'pt-BR':
-            $currentLanguageInfo['isocode'] = 'pt';
-            break;
-    }
-    $html .= '<div class="btn-group dropup">
+    $countryCode = languageToCountryIsoCode($currentLanguageInfo['isocode']);
+    $url = api_get_self();
+    if ($showAsButton) {
+         $html = '<div class="btn-group">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <span class="lang-sm" lang="'.$currentLanguageInfo['isocode'].'"></span> 
-                '.$currentLanguageInfo['original_name'].' 
+                <span class="flag-icon flag-icon-'.$countryCode.'"></span>
+                '.$currentLanguageInfo['original_name'].'
                 <span class="caret">
                 </span>
               </button>';
+    } else {
+            $html = '
+            <a href="'.$url.'" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                <span class="flag-icon flag-icon-'.$countryCode.'"></span> 
+                '.$currentLanguageInfo['original_name'].'
+                <span class="caret"></span>
+            </a>
+            ';
+    }
+
     $html .= '<ul class="dropdown-menu" role="menu">';
-    $url = api_get_self();
     foreach ($language_list['all'] as $key => $data) {
         $urlLink = $url.'?language='.$data['english_name'];
-        $html .= '<li><a href="'.$urlLink.'"><span class="lang-sm" lang="'.$data['isocode'].'"></span> '.$data['original_name'].'</a></li>';
+        $html .= '<li><a href="'.$urlLink.'"><span class="flag-icon flag-icon-'.languageToCountryIsoCode($data['isocode']).'"></span> '.$data['original_name'].'</a></li>';
     }
     $html .= '</ul>';
-    $html .= '</div>';
 
-    $html .= '<noscript><input type="submit" name="user_select_language" value="'.get_lang('Ok').'" /></noscript>';
-    $html .= '</form>';
+    if ($showAsButton) {
+        $html .= '</div>';
+    }
+
+    //$html .= '<noscript><input type="submit" name="user_select_language" value="'.get_lang('Ok').'" /></noscript>';
+    //$html .= '</form>';
+
     return $html;
 }
+
+/**
+ * @param string $languageIsoCode
+ * @return string
+ */
+function languageToCountryIsoCode($languageIsoCode)
+{
+    // @todo save in DB
+    switch ($languageIsoCode) {
+        case 'ko':
+            $country = 'kr';
+            break;
+        case 'ja':
+            $country = 'jp';
+            break;
+        case 'ca':
+            $country = 'es';
+            break;
+        case 'gl':
+            $country = 'es';
+            break;
+        case 'ka':
+            $country = 'ge';
+            break;
+        case 'sl':
+            $country = 'si';
+            break;
+        case 'eu':
+            $country = 'es';
+            break;
+        case 'cs':
+            $country = 'cz';
+            break;
+        case 'el':
+            $country = 'ae';
+            break;
+        case 'ar':
+            $country = 'ae';
+            break;
+        case 'en':
+            $country = 'gb';
+            break;
+        case 'he':
+            $country = 'il';
+            break;
+        case 'uk':
+            $country = 'ua'; //Ukraine
+            break;
+        case 'da':
+            $country = 'dk';
+            break;
+        case 'pt-BR':
+            $country = 'br';
+            break;
+        case 'qu':
+            $country = 'pe';
+            break;
+        case 'sv':
+            $country = 'se';
+            break;
+        case 'zh-TW':
+        case 'zh':
+            $country = 'cn';
+            break;
+        default:
+            $country = $languageIsoCode;
+            break;
+    }
+    $country = strtolower($country);
+    return $country;
+}
+
 
 /**
  * Returns a list of all the languages that are made available by the admin.

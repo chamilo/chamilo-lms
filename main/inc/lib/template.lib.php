@@ -603,7 +603,7 @@ class Template
             'bootstrap-daterangepicker/daterangepicker.css',
             'bootstrap-select/dist/css/bootstrap-select.min.css',
             'select2/dist/css/select2.min.css',
-            'bootstrap-languages/languages.min.css'
+            'flag-icon-css/css/flag-icon.min.css'
         ];
 
         foreach ($bowerCSSFiles as $file) {
@@ -1342,7 +1342,7 @@ class Template
             // Only display if the user isn't logged in.
             $this->assign(
                 'login_language_form',
-                api_display_language_form(true)
+                api_display_language_form(true, true)
             );
             if ($setLoginForm) {
                 $this->assign('login_form', $this->displayLoginForm());

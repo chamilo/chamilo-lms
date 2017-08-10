@@ -591,4 +591,3 @@ $_configuration['score_grade_model'] = [
 ];*/
 // Show language selector in main menu
 //$_configuration['show_language_selector_in_menu'] = false;
-

@@ -2275,7 +2275,7 @@ class IndexManager
     }
 
     /**
-     * @param $userId
+     * @param int $userId
      * @return array
      */
     public function returnCourseCategoryListFromUser($userId)
@@ -2284,7 +2284,6 @@ class IndexManager
         $courseList = CourseManager::get_courses_list_by_user_id($userId);
         $categoryCodes = CourseManager::getCourseCategoriesFromCourseList($courseList);
         $categories = [];
-
         foreach ($categoryCodes as $categoryCode) {
             $categories[] = CourseCategory::getCategory($categoryCode);
         }

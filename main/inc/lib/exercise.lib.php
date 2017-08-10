@@ -415,7 +415,7 @@ class ExerciseLib
                                 $attributes['selected'] = 1;
                             }
                         }
-
+                        
                         if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                             $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
                             $attributes['class'] = 'checkradios';
@@ -4143,7 +4143,9 @@ EOT;
         }
 
         if (!empty($remainingMessage)) {
+            echo '<div class="remaining">';
             echo Display::return_message($remainingMessage, 'normal', false);
+            echo '</div>';
         }
 
         if ($save_user_result) {

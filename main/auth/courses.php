@@ -267,9 +267,7 @@ switch ($action) {
         if (!$confirmed) {
             $template = new Template(null, false, false, false, false, false);
             $template->assign('session_id', $sessionId);
-
             $layout = $template->get_template('auth/confirm_session_subscription.tpl');
-
             echo $template->fetch($layout);
             exit;
         }

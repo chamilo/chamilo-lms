@@ -90,7 +90,6 @@ if (!empty($attendance_id)) {
 }
 
 $htmlHeadXtra[] = '<script>
-
 $(function() {
     $("table th img").click(function() {
         var col_id = this.id;

@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\CourseRelUser,
-    Chamilo\CoreBundle\Entity\SessionRelCourseRelUser,
-    Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\Course;
 
 require_once __DIR__.'/../inc/global.inc.php';
 

@@ -10,7 +10,8 @@ class IndexManager
     const VIEW_BY_SESSION = 1;
 
     // An instance of the template engine
-    //No need to initialize because IndexManager is not static, and the constructor immediately instantiates a Template
+    // No need to initialize because IndexManager is not static,
+    // and the constructor immediately instantiates a Template
     public $tpl;
     public $name = '';
     public $home = '';
@@ -314,7 +315,6 @@ class IndexManager
     public function return_notice()
     {
         $user_selected_language = api_get_interface_language();
-
         $html = '';
         // Notice
         $home_notice = @(string) file_get_contents($this->home.'home_notice_'.$user_selected_language.'.html');
@@ -1164,7 +1164,7 @@ class IndexManager
             // Load sessions in category
             $session_categories = UserManager::get_sessions_by_category($user_id, false);
         }
-        
+
         $sessionCount = 0;
         $courseCount = 0;
 
@@ -1366,7 +1366,7 @@ class IndexManager
                 $coursesWithoutCategoryTemplate = '/user_portal/grid_courses_without_category.tpl';
                 $coursesWithCategoryTemplate = '/user_portal/grid_courses_with_category.tpl';
             }
-            
+
             if ($specialCourses) {
                 if ($categoryCodeFilter) {
                     $specialCourses = self::filterByCategory(

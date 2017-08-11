@@ -184,7 +184,11 @@ if ($objExercise->expired_time != 0) {
 }
 
 // Generating the time control key for the user
-$current_expired_time_key = ExerciseLib::get_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
+$current_expired_time_key = ExerciseLib::get_time_control_key(
+    $objExercise->id,
+    $learnpath_id,
+    $learnpath_item_id
+);
 
 $_SESSION['duration_time'][$current_expired_time_key] = $current_timestamp;
 
@@ -854,14 +858,28 @@ if ($limit_time_exists) {
     if (!$permission_to_start || $exercise_timeover) {
         if (!api_is_allowed_to_edit(null, true)) {
             $message_warning = $permission_to_start ? get_lang('ReachedTimeLimit') : get_lang('ExerciseNoStartedYet');
-            echo Display::return_message(sprintf($message_warning, $exercise_title, $objExercise->selectAttempts()), 'warning');
+            echo Display::return_message(
+                sprintf(
+                    $message_warning,
+                    $exercise_title,
+                    $objExercise->selectAttempts()
+                ),
+                'warning'
+            );
             if ($origin != 'learnpath') {
                 Display :: display_footer();
             }
             exit;
         } else {
             $message_warning = $permission_to_start ? get_lang('ReachedTimeLimitAdmin') : get_lang('ExerciseNoStartedAdmin');
-            echo Display::return_message(sprintf($message_warning, $exercise_title, $objExercise->selectAttempts()), 'warning');
+            echo Display::return_message(
+                sprintf(
+                    $message_warning,
+                    $exercise_title,
+                    $objExercise->selectAttempts()
+                ),
+                'warning'
+            );
         }
     }
 }
@@ -1220,14 +1238,14 @@ if (!empty($error)) {
     </script>';
 
     echo '<form id="exercise_form" method="post" action="'.api_get_self().'?'.api_get_cidreq().'&autocomplete=off&&exerciseId='.$exerciseId.'" name="frm_exercise" '.$onsubmit.'>
-         <input type="hidden" name="formSent"				value="1" />
-         <input type="hidden" name="exerciseId" 			value="'.$exerciseId.'" />
-         <input type="hidden" name="num" 					value="'.$current_question.'" id="num_current_id" />
-         <input type="hidden" name="num_answer"             value="'.$currentAnswer.'" id="num_current_answer_id" />
-         <input type="hidden" name="exe_id" 				value="'.$exe_id.'" />
-         <input type="hidden" name="origin" 				value="'.$origin.'" />
-         <input type="hidden" name="learnpath_id" 			value="'.$learnpath_id.'" />
-         <input type="hidden" name="learnpath_item_id" 		value="'.$learnpath_item_id.'" />
+         <input type="hidden" name="formSent" value="1" />
+         <input type="hidden" name="exerciseId" value="'.$exerciseId.'" />
+         <input type="hidden" name="num" value="'.$current_question.'" id="num_current_id" />
+         <input type="hidden" name="num_answer" value="'.$currentAnswer.'" id="num_current_answer_id" />
+         <input type="hidden" name="exe_id" value="'.$exe_id.'" />
+         <input type="hidden" name="origin" value="'.$origin.'" />
+         <input type="hidden" name="learnpath_id" value="'.$learnpath_id.'" />
+         <input type="hidden" name="learnpath_item_id" value="'.$learnpath_item_id.'" />
          <input type="hidden" name="learnpath_item_view_id" value="'.$learnpath_item_view_id.'" />';
 
     // Show list of questions
@@ -1238,7 +1256,9 @@ if (!empty($error)) {
     }
 
     $remind_list = [];
-    if (isset($exercise_stat_info['questions_to_check']) && !empty($exercise_stat_info['questions_to_check'])) {
+    if (isset($exercise_stat_info['questions_to_check']) &&
+        !empty($exercise_stat_info['questions_to_check'])
+    ) {
         $remind_list = explode(',', $exercise_stat_info['questions_to_check']);
     }
 
@@ -1271,7 +1291,10 @@ if (!empty($error)) {
         if (isset($attempt_list[$questionId])) {
             $user_choice = $attempt_list[$questionId];
         } elseif ($objExercise->saveCorrectAnswers) {
-            $correctAnswers = $objExercise->getCorrectAnswersInAllAttempts($learnpath_id, $learnpath_item_id);
+            $correctAnswers = $objExercise->getCorrectAnswersInAllAttempts(
+                $learnpath_id,
+                $learnpath_item_id
+            );
 
             if (isset($correctAnswers[$questionId])) {
                 $user_choice = $correctAnswers[$questionId];
@@ -1281,7 +1304,9 @@ if (!empty($error)) {
         $remind_highlight = '';
 
         //Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
-        if ($objExercise->type == ALL_ON_ONE_PAGE && isset($_GET['reminder']) && $_GET['reminder'] == 2) {
+        if ($objExercise->type == ALL_ON_ONE_PAGE &&
+            isset($_GET['reminder']) && $_GET['reminder'] == 2
+        ) {
             $remind_highlight = 'no_remind_highlight';
         }
 
@@ -1329,7 +1354,10 @@ if (!empty($error)) {
         // Button save and continue
         switch ($objExercise->type) {
             case ONE_PER_PAGE:
-                $exercise_actions .= $objExercise->show_button($questionId, $current_question);
+                $exercise_actions .= $objExercise->show_button(
+                    $questionId,
+                    $current_question
+                );
                 break;
             case ALL_ON_ONE_PAGE :
                 $button = [
@@ -1362,7 +1390,10 @@ if (!empty($error)) {
                     'for' => 'remind_list['.$questionId.']'
                 )
             );
-            $exercise_actions .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));
+            $exercise_actions .= Display::div(
+                $remind_question_div,
+                array('class' => 'exercise_save_now_button')
+            );
         }
         echo Display::div($exercise_actions, array('class'=>'form-actions'));
         echo '</div>';

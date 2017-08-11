@@ -17,7 +17,6 @@ $this_section = SECTION_COURSES;
 api_protect_course_script();
 
 /* Constants and variables */
-
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
@@ -119,9 +118,7 @@ if (isset($is_success) && $is_success === true) {
     }
     // Display::addFlash(Display::return_message(get_lang('LPCreatedAddChapterStep'), 'normal', false));
     $gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;
-
     echo Display::page_subheader(get_lang('LearnPathAddedTitle'));
-
     echo '<ul id="lp_overview" class="thumbnails">';
     echo show_block(
         'lp_controller.php?'.api_get_cidreq().'&gradebook='.$gradebook.'&action=add_item&type=step&lp_id='.$_SESSION['oLP']->lp_id,
@@ -140,8 +137,8 @@ if (isset($is_success) && $is_success === true) {
 echo '</div>';
 echo '</div>';
 
-
-function show_block($link, $title, $subtitle, $icon) {
+function show_block($link, $title, $subtitle, $icon)
+{
     $html = '<li class="col-md-4">';
     $html .= '<div class="thumbnail">';
     $html .= '<a href="'.$link.'" title="'.$title.'">';

@@ -74,8 +74,7 @@ $currentItem = $lp->items[$currentItemId];
 $currentItemStatus = $currentItem->get_status();
 $accessGranted = false;
 
-if (
-    ($count - $completed == 0) ||
+if (($count - $completed == 0) ||
     ($count - $completed == 1 && ($currentItemStatus == 'incomplete') || ($currentItemStatus == 'not attempted'))
 ) {
     if ($lp->prerequisites_match($currentItemId)) {
@@ -95,10 +94,17 @@ if ($accessGranted == false) {
     echo Display::return_message(get_lang('LearnpathPrereqNotCompleted'), 'warning');
     $finalItemTemplate = '';
 } else {
-    $catLoad = Category::load(null, null, $courseCode, null, null, $sessionId, 'ORDER By id');
+    $catLoad = Category::load(
+        null,
+        null,
+        $courseCode,
+        null,
+        null,
+        $sessionId,
+        'ORDER By id'
+    );
     // If not gradebook has been defined
     if (empty($catLoad)) {
-
         $finalItemTemplate = generateLPFinalItemTemplate(
             $id,
             $courseCode,
@@ -110,7 +116,14 @@ if ($accessGranted == false) {
     } else {
         // A gradebook was found, proceed...
         $categoryId = $catLoad[0]->get_id();
-        $link = LinkFactory::load(null, null, $lpId, null, $courseCode, $categoryId);
+        $link = LinkFactory::load(
+            null,
+            null,
+            $lpId,
+            null,
+            $courseCode,
+            $categoryId
+        );
 
         if ($link) {
             $cat = new Category();
@@ -119,26 +132,53 @@ if ($accessGranted == false) {
 
             if ($show_message == '') {
                 if (!api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
-                    $certificate = Category::generateUserCertificate($categoryId, $userId);
+                    $certificate = Category::generateUserCertificate(
+                        $categoryId,
+                        $userId
+                    );
 
                     if (!empty($certificate['pdf_url']) || !empty($certificate['badge_link'])) {
                         if (is_array($certificate) && isset($certificate['pdf_url'])) {
-                            $downloadCertificateLink = generateLPFinalItemTemplateCertificateLinks($certificate);
+                            $downloadCertificateLink = generateLPFinalItemTemplateCertificateLinks(
+                                $certificate
+                            );
                         }
 
-                        if (is_array($certificate) && isset($certificate['badge_link'])) {
+                        if (is_array($certificate) &&
+                            isset($certificate['badge_link'])
+                        ) {
                             $courseId = api_get_course_int_id();
-                            $badgeLink = generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId);
+                            $badgeLink = generateLPFinalItemTemplateBadgeLinks(
+                                $userId,
+                                $courseId,
+                                $sessionId
+                            );
                         }
                     }
 
-                    $currentScore = Category::getCurrentScore($userId, $categoryId, $courseCode, $sessionId, true);
-                    Category::registerCurrentScore($currentScore, $userId, $categoryId);
+                    $currentScore = Category::getCurrentScore(
+                        $userId,
+                        $categoryId,
+                        $courseCode,
+                        $sessionId,
+                        true
+                    );
+                    Category::registerCurrentScore(
+                        $currentScore,
+                        $userId,
+                        $categoryId
+                    );
                 }
             }
         }
 
-        $finalItemTemplate = generateLPFinalItemTemplate($id, $courseCode, $sessionId, $downloadCertificateLink, $badgeLink);
+        $finalItemTemplate = generateLPFinalItemTemplate(
+            $id,
+            $courseCode,
+            $sessionId,
+            $downloadCertificateLink,
+            $badgeLink
+        );
 
         if (!$finalItemTemplate) {
             echo Display::return_message(get_lang('FileNotFound'), 'warning');
@@ -162,8 +202,13 @@ $tpl->display_blank_template();
  * @param string $badgeLink
  * @return mixed|string
  */
-function generateLPFinalItemTemplate($lpItemId, $courseCode, $sessionId = 0, $downloadCertificateLink = '', $badgeLink = '')
-{
+function generateLPFinalItemTemplate(
+    $lpItemId,
+    $courseCode,
+    $sessionId = 0,
+    $downloadCertificateLink = '',
+    $badgeLink = ''
+) {
     $documentInfo = DocumentManager::get_document_data_by_id(
         $lpItemId,
         $courseCode,

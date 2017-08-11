@@ -41,8 +41,7 @@ $sessionId = api_get_session_id();
 
 // Check if the learning path is visible for student - (LP requisites)
 if (!api_is_platform_admin()) {
-    if (
-        !api_is_allowed_to_edit(null, true, false, false) &&
+    if (!api_is_allowed_to_edit(null, true, false, false) &&
         !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())
     ) {
         api_not_allowed(true);
@@ -542,7 +541,6 @@ $template->assign('lp_title_scorm', $_SESSION['oLP']->name);
 $template->assign('data_list', $_SESSION['oLP']->getListArrayToc($get_toc_list));
 $template->assign('lp_id', $_SESSION['oLP']->lp_id);
 $template->assign('lp_current_item_id', $_SESSION['oLP']->get_current_item_id());
-
 $view = $template->get_template('learnpath/view.tpl');
 $content = $template->fetch($view);
 

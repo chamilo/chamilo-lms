@@ -487,10 +487,10 @@ if (!empty($valid_languages)) {
     $allow = api_get_configuration_value('show_language_selector_in_menu');
     // Overwrite all lang configs and use the menu language
     if ($allow) {
-        if (isset($_GET['language'])) {
+        if (isset($_SESSION['user_language_choice'])) {
             $language_interface = $_SESSION['user_language_choice'];
             $userEntity = api_get_user_entity(api_get_user_id());
-            if ($userEntity) {
+            if ($userEntity && isset($_GET['language'])) {
                 $userEntity->setLanguage($language_interface);
                 Database::getManager()->merge($userEntity);
                 Database::getManager()->flush();

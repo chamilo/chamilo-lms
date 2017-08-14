@@ -3250,8 +3250,10 @@ function api_is_anonymous($user_id = null, $db_check = false)
  * @param bool   $print_headers    Whether or not to print headers (default = false -> does not print them)
  * @param string $message
  */
-function api_not_allowed($print_headers = false, $message = null)
-{
+function api_not_allowed(
+    $print_headers = false,
+    $message = null
+) {
     if (api_get_setting('sso_authentication') === 'true') {
         global $osso;
         if ($osso) {
@@ -3279,15 +3281,19 @@ function api_not_allowed($print_headers = false, $message = null)
         $msg = $message;
     } else {
         $msg = Display::return_message(
-            get_lang('NotAllowedClickBack').'<br/><br/><button onclick="goBack();">'.get_lang('GoBack').'</button><script>function goBack(){window.history.back();}</script>',
+            get_lang('NotAllowedClickBack').'
+            <script>function goBack(){window.history.back();}</script>',
             'error',
             false
         );
+        $msg .= '<p class="text-center">
+             <a onclick="goBack();" class="btn btn-default" href="'.$home_url.'">'.get_lang('GoBack').'</a>
+             </p>';
     }
 
     $msg = Display::div($msg, array('align'=>'center'));
-    $show_headers = 0;
 
+    $show_headers = 0;
     if ($print_headers && $origin != 'learnpath') {
         $show_headers = 1;
     }
@@ -3327,29 +3333,7 @@ function api_not_allowed($print_headers = false, $message = null)
         }
 
         // If the user has no user ID, then his session has expired
-        $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
-        $action = str_replace('&amp;', '&', $action);
-        $form = new FormValidator(
-            'formLogin',
-            'post',
-            $action,
-            null,
-            array(),
-            FormValidator::LAYOUT_BOX_NO_LABEL
-        );
-        $form->addElement(
-            'text',
-            'login',
-            null,
-            array('placeholder' => get_lang('UserName'), 'autocapitalize' => 'none')
-        );
-        $form->addElement(
-            'password',
-            'password',
-            null,
-            array('placeholder' => get_lang('Password'), 'autocapitalize' => 'none')
-        );
-        $form->addButton('submitAuth', get_lang('LoginEnter'), '', 'primary');
+        $form = api_get_not_allowed_login_form();
 
         // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (above)
         $content = Display::return_message(get_lang('NotAllowed'), 'error', false);
@@ -3392,19 +3376,12 @@ function api_not_allowed($print_headers = false, $message = null)
     }
 
     $msg = null;
-
     // The session is over and we were not in a course,
     // or we try to get directly to a private course without being logged
     $courseId = api_get_course_int_id();
     if (!empty($courseId)) {
         api_set_firstpage_parameter(api_get_course_id());
         $tpl->setLoginBodyClass();
-        $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
-        $action = str_replace('&amp;', '&', $action);
-        $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));
-        $form->addElement('text', 'login', null, array('autocapitalize' => 'none', 'placeholder' => get_lang('UserName'), 'class' => 'col-md-3'));
-        $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password'), 'class' => 'col-md-3')); //new
-        $form->addButtonNext(get_lang('LoginEnter'), 'submitAuth');
 
         // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (bellow)
         $msg = Display::return_message(get_lang('NotAllowed'), 'error', false);
@@ -3417,6 +3394,7 @@ function api_not_allowed($print_headers = false, $message = null)
             $msg .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
             $msg .= "<div style='display:none;'>";
         }
+        $form = api_get_not_allowed_login_form();
         $msg .= '<div class="well">';
         $msg .= $form->returnForm();
         $msg .= '</div>';
@@ -3426,18 +3404,68 @@ function api_not_allowed($print_headers = false, $message = null)
     } else {
         // we were not in a course, return to home page
         $msg = Display::return_message(
-            get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('BackHome').'</a><br />',
+            get_lang('NotAllowed'),
             'error',
             false
         );
+
+        $msg .= '<p class="text-center">
+                 <a class="btn btn-default" href="'.$home_url.'">'.get_lang('BackHome').'</a>
+                 </p>';
+
         if (!empty($message)) {
             $msg = $message;
+        }
+
+        if (api_is_anonymous()) {
+            $form = api_get_not_allowed_login_form();
+            $msg .= '<div class="well">';
+            $msg .= $form->returnForm();
+            $msg .= '</div>';
         }
     }
 
     $tpl->assign('content', $msg);
     $tpl->display_one_col_template();
     exit;
+}
+
+/**
+ * @return FormValidator
+ */
+function api_get_not_allowed_login_form()
+{
+    $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
+    $action = str_replace('&amp;', '&', $action);
+    Session::write('redirect_after_not_allow_page', $action);
+    $action .= '&redirect_after_not_allow_page=1';
+
+    $form = new FormValidator(
+        'formLogin',
+        'post',
+        $action,
+        null,
+        array('class' => 'form-stacked')
+    );
+    $form->addElement(
+        'text',
+        'login',
+        null,
+        array(
+            'autocapitalize' => 'none',
+            'placeholder' => get_lang('UserName'),
+            'class' => 'col-md-3'
+        )
+    );
+    $form->addElement(
+        'password',
+        'password',
+        null,
+        array('placeholder' => get_lang('Password'), 'class' => 'col-md-3')
+    ); //new
+    $form->addButtonNext(get_lang('LoginEnter'), 'submitAuth');
+
+    return $form;
 }
 
 /**
@@ -7506,7 +7534,10 @@ function api_can_login_as($loginAsUserId, $userId = null)
     $isDrh = function() use($loginAsUserId) {
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
-                $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
+                $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
+                    'drh_all',
+                    api_get_user_id()
+                );
                 $userList = array();
                 if (is_array($users)) {
                     foreach ($users as $user) {
@@ -7517,7 +7548,9 @@ function api_can_login_as($loginAsUserId, $userId = null)
                     return true;
                 }
             } else {
-                if (api_is_drh() && UserManager::is_user_followed_by_drh($loginAsUserId, api_get_user_id())) {
+                if (api_is_drh() &&
+                    UserManager::is_user_followed_by_drh($loginAsUserId, api_get_user_id())
+                ) {
                     return true;
                 }
             }
@@ -7564,7 +7597,7 @@ function api_delete_firstpage_parameter()
  */
 function exist_firstpage_parameter()
 {
-    return (isset($_COOKIE['GotoCourse']) && $_COOKIE['GotoCourse'] != "");
+    return isset($_COOKIE['GotoCourse']) && $_COOKIE['GotoCourse'] != '';
 }
 
 /**

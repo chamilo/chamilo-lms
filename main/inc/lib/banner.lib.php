@@ -216,7 +216,6 @@ function returnNotificationMenu()
 
     $user_id = api_get_user_id();
     $sessionId = api_get_session_id();
-
     $html = '';
 
     if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
@@ -238,8 +237,7 @@ function returnNotificationMenu()
         }
 
         // Display the who's online for the course
-        if (
-            $number_online_in_course &&
+        if ($number_online_in_course &&
             (
                 is_array($_course) &&
                 api_get_setting('showonline', 'course') == 'true' && isset($_course['sysCode'])
@@ -250,7 +248,6 @@ function returnNotificationMenu()
                 .Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array(), ICON_SIZE_TINY)
                 .' '.$number_online_in_course.' </a></li>';
         }
-
 
         if (isset($user_id) && $sessionId != 0) {
             $numberOnlineInSession = getOnlineUsersInSessionCount($sessionId);

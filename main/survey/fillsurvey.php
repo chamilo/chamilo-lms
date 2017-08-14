@@ -9,6 +9,7 @@
  * @todo check if the user already filled the survey and if this is the case then the answers have to be updated and not stored again.
  * @todo performance could be improved if not the survey_id was stored with the invitation but the survey_code
  */
+
 // Unsetting the course id (because it is in the URL)
 if (!isset($_GET['cidReq'])) {
     $cidReset = true;
@@ -18,14 +19,6 @@ if (!isset($_GET['cidReq'])) {
 
 // Including the global initialization file
 require_once __DIR__.'/../inc/global.inc.php';
-
-// Breadcrumbs
-if (!empty($_user)) {
-    $interbreadcrumb[] = array(
-        'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cidReq='.Security::remove_XSS($_GET['course']),
-        'name' => get_lang('SurveyList')
-    );
-}
 
 // Database table definitions
 $table_survey = Database::get_course_table(TABLE_SURVEY);
@@ -51,6 +44,14 @@ if (isset($_GET['course'])) {
 
 if (empty($course_info)) {
     api_not_allowed();
+}
+
+// Breadcrumbs
+if (!empty($_user)) {
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cidReq='.$course_info['code'],
+        'name' => get_lang('SurveyList')
+    );
 }
 
 $course_id = $course_info['real_id'];

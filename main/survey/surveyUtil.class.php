@@ -3040,7 +3040,8 @@ class SurveyUtil
         $now = api_get_utc_datetime();
 
         $sql = "SELECT *
-                FROM $table_survey survey INNER JOIN
+                FROM $table_survey survey 
+                INNER JOIN
                 $table_survey_invitation survey_invitation
                 ON (
                     survey.code = survey_invitation.survey_code AND
@@ -3062,11 +3063,24 @@ class SurveyUtil
             echo '<tr>';
             if ($row['answered'] == 0) {
                 echo '<td>';
-                echo Display::return_icon('statistics.png', get_lang('CreateNewSurvey'), array(), ICON_SIZE_TINY);
+                echo Display::return_icon(
+                    'statistics.png',
+                    get_lang('CreateNewSurvey'),
+                    array(),
+                    ICON_SIZE_TINY
+                );
                 echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?course='.$_course['sysCode'].'&invitationcode='.$row['invitation_code'].'&cidReq='.$_course['sysCode'].'">'.$row['title'].'</a></td>';
             } else {
-                $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh($user_id, $_course);
-                $icon = Display::return_icon('statistics_na.png', get_lang('Survey'), array(), ICON_SIZE_TINY);
+                $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+                    $user_id,
+                    $_course
+                );
+                $icon = Display::return_icon(
+                    'statistics_na.png',
+                    get_lang('Survey'),
+                    array(),
+                    ICON_SIZE_TINY
+                );
                 $showLink = (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse)
                     && $row['visible_results'] != SURVEY_VISIBLE_TUTOR;
 
@@ -3086,7 +3100,10 @@ class SurveyUtil
             echo ($row['anonymous'] == 1) ? get_lang('Yes') : get_lang('No');
             echo '</td>';
             if ($mandatoryAllowed) {
-                $efvMandatory = $efv->get_values_by_handler_and_field_variable($row['survey_id'], 'is_mandatory');
+                $efvMandatory = $efv->get_values_by_handler_and_field_variable(
+                    $row['survey_id'],
+                    'is_mandatory'
+                );
                 echo '<td class="text-center">'.($efvMandatory['value'] ? get_lang('Yes') : get_lang('No')).'</td>';
             }
 

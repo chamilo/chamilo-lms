@@ -3,7 +3,7 @@
 {% block content %}
     <h3>
     {{ gradebook_category.name }}
-        {% if gradebook_category %}
+        {% if gradebook_category.courseCode is not empty %}
             ({{ gradebook_category.courseCode }})
         {% endif %}
     </h3>

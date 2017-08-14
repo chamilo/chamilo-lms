@@ -24,6 +24,7 @@
                     <a href="{{ current_url }}&action=edit&id={{ item.id }}">
                         <img src="{{ 'edit.png'|icon(22) }}" />
                     </a>
+
                     <a href="{{ _p.web_main }}admin/gradebook_dependency.php?id={{ item.id }}">
                         <img src="{{ '2rightarrow.png'|icon(22) }}" />
                     </a>

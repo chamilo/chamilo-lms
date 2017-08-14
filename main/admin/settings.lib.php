@@ -3,6 +3,7 @@
 
 use Symfony\Component\Filesystem\Filesystem;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\SystemTemplate;
 
 /**
  * Library of the settings.php file
@@ -984,8 +985,12 @@ function searchImageFilter($image)
  */
 function addEditTemplate()
 {
+    $em = Database::getManager();
     // Initialize the object.
     $id = isset($_GET['id']) ? '&id='.Security::remove_XSS($_GET['id']) : '';
+    /** @var SystemTemplate $template */
+    $template = $id ? $em->find('ChamiloCoreBundle:SystemTemplate', $_GET['id']) : new SystemTemplate();
+
     $form = new FormValidator('template', 'post', 'settings.php?category=Templates&action='.Security::remove_XSS($_GET['action']).$id);
 
     // Setting the form elements: the header.
@@ -1000,7 +1005,14 @@ function addEditTemplate()
     $form->addText('title', get_lang('Title'), false);
 
     // Setting the form elements: the content of the template (wysiwyg editor).
-    $form->addElement('html_editor', 'template_text', get_lang('Text'), null, array('ToolbarSet' => 'AdminTemplates', 'Width' => '100%', 'Height' => '400'));
+    $form->addHtmlEditor(
+        'template_text',
+        get_lang('Text'),
+        true,
+        true,
+        ['ToolbarSet' => 'Documents', 'Width' => '100%', 'Height' => '400'],
+        true
+    );
 
     // Setting the form elements: the form to upload an image to be used with the template.
     $form->addElement('file', 'template_image', get_lang('Image'), '');
@@ -1010,24 +1022,25 @@ function addEditTemplate()
 
     // Getting all the information of the template when editing a template.
     if ($_GET['action'] == 'edit') {
-        // Database table definition.
-        $table_system_template = Database::get_main_table('system_template');
-        $sql = "SELECT * FROM $table_system_template WHERE id = ".intval($_GET['id'])."";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-
         $defaults['template_id'] = intval($_GET['id']);
-        $defaults['template_text'] = $row['content'];
+        $defaults['template_text'] = $template->getContent();
         // Forcing get_lang().
-        $defaults['title'] = get_lang($row['title']);
+        $defaults['title'] = get_lang($template->getTitle());
 
         // Adding an extra field: a hidden field with the id of the template we are editing.
         $form->addElement('hidden', 'template_id');
 
         // Adding an extra field: a preview of the image that is currently used.
-        if (!empty($row['image'])) {
-            $form->addElement('static', 'template_image_preview', '',
-                '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/'.$row['image'].'" alt="'.get_lang('TemplatePreview').'"/>');
+        if (!empty($template->getImage())) {
+            $form->addElement(
+                'static',
+                'template_image_preview',
+                '',
+                '<img src="'.api_get_path(WEB_APP_PATH)
+                    .'home/default_platform_document/template_thumb/'.$template->getImage()
+                    .'" alt="'.get_lang('TemplatePreview')
+                    .'"/>'
+            );
         } else {
             $form->addElement('static', 'template_image_preview', '',
                 '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>');
@@ -1042,7 +1055,6 @@ function addEditTemplate()
     // Setting the rules: the required fields.
     $form->addRule('template_image', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addRule('template_text', get_lang('ThisFieldIsRequired'), 'required');
 
     // if the form validates (complies to all rules) we save the information, else we display the form again (with error message if needed)
     if ($form->validate()) {
@@ -1080,38 +1092,36 @@ function addEditTemplate()
             }
 
             // Store the information in the database (as insert or as update).
-            $table_system_template = Database::get_main_table('system_template');
-            $cssFile = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/editor.css';
-            $style = '<link href="'.$cssFile.'" rel="stylesheet" media="screen" type="text/css" />';
-            $bootstrap = '<link href="'.api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css" />';
+            $bootstrap = api_get_css(api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css');
             $viewport = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
             
             if ($_GET['action'] == 'add') {
-                $templateContent = '<head>'.$viewport.'<title>'.$values['title'].'</title>'.$style.$bootstrap.'</head>'
-                    . '<body>'.Database::escape_string($values['template_text']).'</body>';
-                $content_template = Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY);
-                $params = [
-                    'title' =>  $values['title'],
-                    'content' => $content_template,
-                    'image' => $new_file_name
-                ];
-                
-                
-                Database::insert($table_system_template, $params);
+                $templateContent = '<head>'.$viewport.'<title>'.$values['title'].'</title>'.$bootstrap.'</head>'
+                    .$values['template_text'];
+                $template
+                    ->setTitle($values['title'])
+                    ->setContent(Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY))
+                    ->setImage($new_file_name);
+                $em->persist($template);
+                $em->flush();
 
                 // Display a feedback message.
                 echo Display::return_message(get_lang('TemplateAdded'), 'confirm');
                 echo '<a href="settings.php?category=Templates&action=add">'.Display::return_icon('new_template.png', get_lang('AddTemplate'), '', ICON_SIZE_MEDIUM).'</a>';
             } else {
-                
-                $content_template = '<head>'.$viewport.'<title>'.$values['title'].'</title>'.$style.$bootstrap.'</head>'
-                    . '<body>'.Database::escape_string($values['template_text']).'</body>';
-                $sql = "UPDATE $table_system_template set title = '".Database::escape_string($values['title'])."', content = '".$content_template."'";
+
+                $templateContent = '<head>'.$viewport.'<title>'.$values['title'].'</title>'.$bootstrap.'</head>'
+                    .$values['template_text'];
+                $template
+                    ->setTitle($values['title'])
+                    ->setContent(Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY));
+
                 if (!empty($new_file_name)) {
-                    $sql .= ", image = '".Database::escape_string($new_file_name)."'";
+                    $template->setImage($new_file_name);
                 }
-                $sql .= " WHERE id = ".intval($_GET['id'])."";
-                Database::query($sql);
+
+                $em->persist($template);
+                $em->flush();
 
                 // Display a feedback message.
                 echo Display::return_message(get_lang('TemplateEdited'), 'confirm');

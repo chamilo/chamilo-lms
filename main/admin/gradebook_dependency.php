@@ -27,6 +27,7 @@ if (!$category) {
 $categoryObj = Category::load($categoryId);
 /** @var Category $categoryObj */
 $categoryObj = $categoryObj[0];
+
 $dependencies = $categoryObj->getCourseListDependency();
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
@@ -48,12 +49,20 @@ if (empty($dependencies)) {
 
 $content = '';
 $courseList = [];
+
+/*$mandatoryList = api_get_configuration_value('gradebook_dependency_mandatory_courses');
+$mandatoryList = isset($mandatoryList['courses']) ? $mandatoryList['courses'] : [];*/
+
 foreach ($dependencies as $courseId) {
     $courseInfo = api_get_course_info_by_id($courseId);
-    $subCategory = Category::load(null, null, $courseInfo['code']);
+    $courseCode = $courseInfo['code'];
+    $subCategory = Category::load(null, null, $courseCode);
     /** @var Category $subCategory */
-    $subCategory = $subCategory[0];
-    $userList = CourseManager::get_student_list_from_course_code($courseInfo['code']);
+    $subCategory = $subCategory ? $subCategory[0] : [];
+    if (empty($subCategory)) {
+        continue;
+    }
+    $userList = CourseManager::get_student_list_from_course_code($courseCode);
     $users = [];
     foreach ($userList as $user) {
         $userInfo = api_get_user_info($user['user_id']);
@@ -66,6 +75,7 @@ foreach ($dependencies as $courseId) {
         $users[] = $userInfo;
     }
     $courseInfo['users'] = $users;
+    //$courseInfo['is_mandatory'] = in_array($courseCode, $mandatoryList);
     $courseList[] = $courseInfo;
 }
 

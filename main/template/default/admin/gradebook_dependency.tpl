@@ -2,7 +2,9 @@
 
 {% block content %}
     {% for course in courses %}
-        <h3>{{ course.title }} ({{ course.code }})</h3>
+        <h3>
+            {{ course.title }} ({{ course.code }})
+        </h3>
 
         {% if course.users %}
             <table class="table">

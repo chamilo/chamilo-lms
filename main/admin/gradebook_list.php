@@ -39,8 +39,19 @@ $currentUrl = api_get_self().'?';
 $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 $contentForm = '';
 
+$toolbar = Display::url(
+    Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
+    $currentUrl.'&action=add'
+);
+
+$tpl = new Template(get_lang('Gradebook'));
+
 switch ($action) {
     case 'add':
+        $toolbar = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            $currentUrl
+        );
         $form = new FormValidator(
             'category_add',
             'post',
@@ -127,6 +138,10 @@ switch ($action) {
         }
         break;
     case 'edit':
+        $toolbar = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            $currentUrl
+        );
         /** @var GradebookCategory $category */
         $category = $repo->find($categoryId);
         if (!empty($category)) {
@@ -209,23 +224,31 @@ switch ($action) {
             }
         }
         break;
+    case 'list':
+    default:
+        $paginator = new Paginator();
+        $pagination = $paginator->paginate(
+            $gradeBookList,
+            $page,
+            5
+        );
+
+        // pagination.tpl needs current_url with out "page" param
+        $pagination->setCustomParameters(['current_url' => $currentUrl]);
+
+
+        $pagination->renderer = function ($data) use ($tpl) {
+            foreach ($data as $key => $value) {
+                $tpl->assign($key, $value);
+            }
+            $layout = $tpl->get_template('admin/pagination.tpl');
+            $content = $tpl->fetch($layout);
+
+            return $content;
+        };
+
+        break;
 }
-
-$paginator = new Paginator;
-$pagination = $paginator->paginate(
-    $gradeBookList,
-    $page,
-    5
-);
-
-// pagination.tpl needs current_url with out "page" param
-$pagination->setCustomParameters(['current_url' => $currentUrl]);
-
-$tpl = new Template(get_lang('Gradebook'));
-$toolbar = Display::url(
-    Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
-    $currentUrl.'&action=add'
-);
 
 $searchForm = new FormValidator(
     'course_filter',
@@ -238,16 +261,6 @@ $searchForm = new FormValidator(
 $searchForm->addText('keyword', '', false);
 $searchForm->addButtonSearch(get_lang('Search'));
 
-$pagination->renderer = function ($data) use ($tpl) {
-    foreach ($data as $key => $value) {
-        $tpl->assign($key, $value);
-    }
-    $layout = $tpl->get_template('admin/pagination.tpl');
-    $content = $tpl->fetch($layout);
-
-    return $content;
-};
-
 $tpl->assign('current_url', $currentUrl);
 $tpl->assign(
     'actions',
@@ -257,7 +270,10 @@ $tpl->assign(
         [1, 4]
     )
 );
+
 $tpl->assign('form', $contentForm);
-$tpl->assign('gradebook_list', $pagination);
+if (!empty($pagination)) {
+    $tpl->assign('gradebook_list', $pagination);
+}
 $layout = $tpl->get_template('admin/gradebook_list.tpl');
 $tpl->display($layout);

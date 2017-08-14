@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Entity\CourseCategory;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * @package chamilo.admin
@@ -178,12 +179,19 @@ if ($countCategories >= 100) {
     );
 }
 
+$courseTeacherNames = [];
 
-$form->addElement(
-    'advmultiselect',
+foreach ($course_teachers as $courseTeacherId) {
+    /** @var User $courseTeacher */
+    $courseTeacher = UserManager::getRepository()->find($courseTeacherId);
+    $courseTeacherNames[$courseTeacher->getUserId()] = $courseTeacher->getCompleteNameWithUsername();
+}
+
+$form->addSelectAjax(
     'course_teachers',
     get_lang('CourseTeachers'),
-    $allTeachers
+    $courseTeacherNames,
+    ['url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=teacher_to_basis_course', 'multiple' => 'multiple']
 );
 $courseInfo['course_teachers'] = $course_teachers;
 if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {

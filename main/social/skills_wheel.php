@@ -27,7 +27,7 @@ $userInfo = api_get_user_info();
 
 $skill = new Skill();
 $ranking = $skill->get_user_skill_ranking($userId);
-$skills = $skill->get_user_skills($userId, true);
+$skills = $skill->getUserSkills($userId, true);
 
 $dialogForm = new FormValidator('form', 'post', null, null, ['id' => 'add_item']);
 $dialogForm->addLabel(

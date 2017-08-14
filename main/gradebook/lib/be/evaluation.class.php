@@ -372,15 +372,15 @@ class Evaluation implements GradebookItem
     }
 
     /**
-     * @param int $idevaluation
+     * @param int $id
      */
-    public function add_evaluation_log($idevaluation)
+    public function addEvaluationLog($id)
     {
-        if (!empty($idevaluation)) {
+        if (!empty($id)) {
             $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
             $tbl_grade_linkeval_log = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
             $eval = new Evaluation();
-            $dateobject = $eval->load($idevaluation, null, null, null, null);
+            $dateobject = $eval->load($id, null, null, null, null);
             $arreval = get_object_vars($dateobject[0]);
             if (!empty($arreval['id'])) {
                 $sql = 'SELECT weight from '.$tbl_grade_evaluations.'
@@ -437,7 +437,7 @@ class Evaluation implements GradebookItem
         //recorded history
 
         $eval_log = new Evaluation();
-        $eval_log->add_evaluation_log($this->id);
+        $eval_log->addEvaluationLog($this->id);
         Database::query($sql);
     }
 
@@ -447,7 +447,8 @@ class Evaluation implements GradebookItem
     public function delete()
     {
         $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $sql = 'DELETE FROM '.$tbl_grade_evaluations.' WHERE id = '.intval($this->id);
+        $sql = 'DELETE FROM '.$tbl_grade_evaluations.' 
+                WHERE id = '.intval($this->id);
         Database::query($sql);
     }
 
@@ -464,9 +465,9 @@ class Evaluation implements GradebookItem
             $parent = $this->category;
         }
         $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $sql = 'SELECT count(id) AS number'
-            .' FROM '.$tbl_grade_evaluations
-            ." WHERE name = '".Database::escape_string($name)."'";
+        $sql = "SELECT count(id) AS number 
+                FROM $tbl_grade_evaluations 
+                WHERE name = '".Database::escape_string($name)."'";
 
         if (api_is_allowed_to_edit()) {
             $parent = Category::load($parent);
@@ -779,7 +780,7 @@ class Evaluation implements GradebookItem
      * @return array evaluation objects matching the search criterium
      * @todo can be written more efficiently using a new (but very complex) sql query
      */
-    public function find_evaluations($name_mask, $selectcat)
+    public function findEvaluations($name_mask, $selectcat)
     {
         $rootcat = Category::load($selectcat);
         $evals = $rootcat[0]->get_evaluations(

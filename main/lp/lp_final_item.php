@@ -115,7 +115,9 @@ if ($accessGranted == false) {
         // TODO: Missing validation of learning path completion
     } else {
         // A gradebook was found, proceed...
-        $categoryId = $catLoad[0]->get_id();
+        /** @var Category $category */
+        $category = $catLoad[0];
+        $categoryId = $category->get_id();
         $link = LinkFactory::load(
             null,
             null,
@@ -137,8 +139,12 @@ if ($accessGranted == false) {
                         $userId
                     );
 
-                    if (!empty($certificate['pdf_url']) || !empty($certificate['badge_link'])) {
-                        if (is_array($certificate) && isset($certificate['pdf_url'])) {
+                    if (!empty($certificate['pdf_url']) ||
+                        !empty($certificate['badge_link'])
+                    ) {
+                        if (is_array($certificate) &&
+                            isset($certificate['pdf_url'])
+                        ) {
                             $downloadCertificateLink = generateLPFinalItemTemplateCertificateLinks(
                                 $certificate
                             );
@@ -158,9 +164,7 @@ if ($accessGranted == false) {
 
                     $currentScore = Category::getCurrentScore(
                         $userId,
-                        $categoryId,
-                        $courseCode,
-                        $sessionId,
+                        $category,
                         true
                     );
                     Category::registerCurrentScore(
@@ -235,7 +239,7 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
 {
     $em = Database::getManager();
     $skillRelUser = new SkillRelUser();
-    $userSkills = $skillRelUser->get_user_skills($userId, $courseId, $sessionId);
+    $userSkills = $skillRelUser->getUserSkills($userId, $courseId, $sessionId);
     $skillList = '';
     $badgeLink = '';
 

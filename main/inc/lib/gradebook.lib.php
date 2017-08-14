@@ -191,7 +191,7 @@ class Gradebook extends Model
             )
         );
 
-        $selected_skills = self::get_skills_by_gradebook($gradebook_id);
+        $selected_skills = self::getSkillsByGradebook($gradebook_id);
         $clean_selected_skills = array();
         if (!empty($selected_skills)) {
             foreach ($selected_skills as $skill) {
@@ -209,7 +209,7 @@ class Gradebook extends Model
      * @param int $gradebook_id
      * @return array|resource
      */
-    public function get_skills_by_gradebook($gradebook_id)
+    public function getSkillsByGradebook($gradebook_id)
     {
         $gradebook_id = intval($gradebook_id);
         $sql = "SELECT skill.id, skill.name FROM {$this->table_skill} skill

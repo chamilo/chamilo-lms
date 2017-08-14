@@ -116,9 +116,6 @@ try {
         $userFinishedCourse = Category::userFinishedCourse(
             $student->getId(),
             $gradebook,
-            0,
-            $course->getCode(),
-            $session ? $session->getId() : 0,
             true
         );
 
@@ -133,8 +130,7 @@ try {
 
         $score =  Category::getCurrentScore(
             $student->getId(),
-            $gradebook->get_id(),
-            $course->getCode(),
+            $gradebook,
             $session ? $session->getId() : 0
         );
 

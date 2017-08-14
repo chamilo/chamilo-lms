@@ -1525,7 +1525,7 @@ switch ($action) {
             if ($item['parent_id'] != 0) {
                 continue;
             }
-            $skills = $obj->get_skills_by_gradebook($item['id']);
+            $skills = $obj->getSkillsByGradebook($item['id']);
 
             //Fixes bug when gradebook doesn't have names
             if (empty($item['name'])) {

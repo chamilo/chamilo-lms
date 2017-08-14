@@ -483,7 +483,7 @@ if (!empty($keyword)) {
         $alleval = array();
         $alllink = array();
     } else {
-        $alleval = Evaluation::find_evaluations($keyword, $cats[0]->get_id());
+        $alleval = Evaluation::findEvaluations($keyword, $cats[0]->get_id());
         $alllink = LinkFactory::find_links($keyword, $cats[0]->get_id());
     }
 } elseif (isset($_GET['studentoverview'])) {

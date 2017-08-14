@@ -254,7 +254,7 @@ class SkillRelSkill extends Model
         $skill_rel_user = new SkillRelUser();
 
         if ($load_user_data) {
-            $passed_skills = $skill_rel_user->get_user_skills($user_id);
+            $passed_skills = $skill_rel_user->getUserSkills($user_id);
             $done_skills   = array();
             foreach ($passed_skills as $done_skill) {
                 $done_skills[] = $done_skill['skill_id'];
@@ -510,7 +510,7 @@ class SkillRelUser extends Model
      * @param int $sessionId Optional. The session id
      * @return array The skill list. Otherwise return false
      */
-    public function get_user_skills($userId, $courseId = 0, $sessionId = 0)
+    public function getUserSkills($userId, $courseId = 0, $sessionId = 0)
     {
         if (empty($userId)) {
             return array();
@@ -886,7 +886,7 @@ class Skill extends Model
         );
         if (!empty($skill_gradebooks)) {
             foreach ($skill_gradebooks as $skill_gradebook) {
-                $user_has_skill = $this->user_has_skill(
+                $user_has_skill = $this->userHasSkill(
                     $user_id,
                     $skill_gradebook['skill_id'],
                     $courseId,
@@ -978,7 +978,7 @@ class Skill extends Model
      *
      * @return array
      */
-    public function get_user_skills($userId, $get_skill_data = false)
+    public function getUserSkills($userId, $get_skill_data = false)
     {
         $userId = intval($userId);
         $sql = 'SELECT DISTINCT s.id, s.name, s.icon, u.id as issue
@@ -1117,7 +1117,10 @@ class Skill extends Model
                 // User achieved the skill (depends in the gradebook with certification)
                 $skill['data']['achieved'] = false;
                 if ($user_id) {
-                    $skill['data']['achieved'] = $this->user_has_skill($user_id, $skill['id']);
+                    $skill['data']['achieved'] = $this->userHasSkill(
+                        $user_id,
+                        $skill['id']
+                    );
                 }
 
                 // Check if the skill has related gradebooks
@@ -1387,7 +1390,7 @@ class Skill extends Model
      * @param int $sessionId Optional. The session id
      * @return boolean Whether the user has the skill return true. Otherwise return false
      */
-    public function user_has_skill($userId, $skillId, $courseId = 0, $sessionId = 0)
+    public function userHasSkill($userId, $skillId, $courseId = 0, $sessionId = 0)
     {
         $courseId = intval($courseId);
         $sessionId = intval($sessionId);

@@ -177,7 +177,7 @@ class CatForm extends FormValidator
                 'skills' => $skills,
                 'weight' => $this->category_object->get_weight(),
                 'visible' => $this->category_object->is_visible(),
-                'certif_min_score' => $this->category_object->get_certificate_min_score(),
+                'certif_min_score' => $this->category_object->getCertificateMinScore(),
                 'generate_certificates' => $this->category_object->getGenerateCertificates(),
                 'is_requirement' => $this->category_object->getIsRequirement(),
             )

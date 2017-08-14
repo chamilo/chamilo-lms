@@ -1285,7 +1285,7 @@ class GradebookUtils
         $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $id = intval($id);
         $evaluation = new Evaluation();
-        $evaluation->add_evaluation_log($id);
+        $evaluation->addEvaluationLog($id);
         $sql = 'UPDATE '.$table_evaluation.'
                SET weight = '."'".Database::escape_string($weight)."'".'
                WHERE id = '.$id;

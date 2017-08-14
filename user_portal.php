@@ -313,9 +313,7 @@ if (!empty($courseAndSessions['courses']) && $allow) {
     foreach ($mainCategoryList as $category) {
         $parentScore = Category::getCurrentScore(
             $userId,
-            $category->get_id(),
-            $category->get_course_code(),
-            0,
+            $category,
             true
         );
 
@@ -332,9 +330,7 @@ if (!empty($courseAndSessions['courses']) && $allow) {
                 if (!empty($subCategory)) {
                     $score = Category::getCurrentScore(
                         $userId,
-                        $subCategory->get_id(),
-                        $subCategory->get_course_code(),
-                        0,
+                        $subCategory,
                         true
                     );
                     $totalScoreWithChildren += $score;

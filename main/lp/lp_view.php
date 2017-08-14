@@ -465,7 +465,7 @@ if ($_SESSION['oLP']->current == $_SESSION['oLP']->get_last()) {
             $gradebookLinks[0]->get_type() == LINK_LEARNPATH &&
             $gradebookLinks[0]->get_ref_id() == $_SESSION['oLP']->lp_id
         ) {
-            $gradebookMinScore = $categories[0]->get_certificate_min_score();
+            $gradebookMinScore = $categories[0]->getCertificateMinScore();
             $userScore = $gradebookLinks[0]->calc_score($user_id, 'best');
 
             if ($userScore[0] >= $gradebookMinScore) {

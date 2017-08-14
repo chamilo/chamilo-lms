@@ -20,8 +20,7 @@ if ($userId === 0 || $skillId === 0) {
 }
 
 $objSkill = new Skill();
-
-if (!$objSkill->user_has_skill($userId, $skillId, $courseId, $sessionId)) {
+if (!$objSkill->userHasSkill($userId, $skillId, $courseId, $sessionId)) {
     exit;
 }
 

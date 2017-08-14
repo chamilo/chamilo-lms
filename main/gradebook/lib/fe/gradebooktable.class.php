@@ -904,7 +904,7 @@ class GradebookTable extends SortableTable
      */
     private function build_certificate_min_score($item)
     {
-        return $item->get_certificate_min_score();
+        return $item->getCertificateMinScore();
     }
 
     /**

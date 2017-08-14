@@ -413,14 +413,14 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 switch ($action) {
     case 'lock':
-        $category_to_lock = Category :: load($_GET['category_id']);
-        $category_to_lock[0]->lock_all_items(1);
+        $category_to_lock = Category::load($_GET['category_id']);
+        $category_to_lock[0]->lockAllItems(1);
         $confirmation_message = get_lang('GradebookLockedAlert');
         break;
     case 'unlock':
         if (api_is_platform_admin()) {
-            $category_to_lock = Category :: load($_GET['category_id']);
-            $category_to_lock[0]->lock_all_items(0);
+            $category_to_lock = Category::load($_GET['category_id']);
+            $category_to_lock[0]->lockAllItems(0);
             $confirmation_message = get_lang('EvaluationHasBeenUnLocked');
         }
         break;
@@ -770,9 +770,7 @@ if (!empty($selectCat)) {
 
             $currentScore = Category::getCurrentScore(
                 $stud_id,
-                $selectCat,
-                $course_code,
-                $session_id,
+                $cats[0],
                 true
             );
             Category::registerCurrentScore($currentScore, $stud_id, $selectCat);

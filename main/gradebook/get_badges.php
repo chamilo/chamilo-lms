@@ -21,7 +21,7 @@ $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 
 $objSkillRelUser = new SkillRelUser();
-$userSkills = $objSkillRelUser->get_user_skills($userId, $courseId, $sessionId);
+$userSkills = $objSkillRelUser->getUserSkills($userId, $courseId, $sessionId);
 
 if (empty($userSkills)) {
     api_not_allowed(true);

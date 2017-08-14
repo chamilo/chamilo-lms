@@ -238,7 +238,6 @@ $searchForm = new FormValidator(
 $searchForm->addText('keyword', '', false);
 $searchForm->addButtonSearch(get_lang('Search'));
 
-
 $pagination->renderer = function ($data) use ($tpl) {
     foreach ($data as $key => $value) {
         $tpl->assign($key, $value);

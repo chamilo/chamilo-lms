@@ -347,7 +347,8 @@ if (!empty($courseAndSessions['courses']) && $allow) {
         $total[$category->get_course_code()] = [
             'score' => $parentScore,
             'total_score_with_children' => api_number_format($totalScoreWithChildrenAverage),
-            'children' => $children
+            'children' => $children,
+            'min_validated' => $category->getMinimumToValidate()
         ];
     }
 
@@ -356,8 +357,21 @@ if (!empty($courseAndSessions['courses']) && $allow) {
     $maxPercentage = 80;
     $maxCustomPercentageCounter = 0;
     $validatedCoursesPercentage = 0;
+
+    $countValidated = 0;
     foreach ($total as $courseCode => $data) {
         $totalScoreWithChildren = $data['total_score_with_children'];
+        if ($totalScoreWithChildren == 100) {
+            $countValidated++;
+        }
+    }
+
+    foreach ($total as $courseCode => $data) {
+        $totalScoreWithChildren = $data['total_score_with_children'];
+        if ($data['min_validated'] < $countValidated) {
+            $totalScoreWithChildren = 0;
+        }
+
         if (in_array($courseCode, $mandatoryCourse)) {
             if ($totalScoreWithChildren == 100) {
                 $finalScore = 0;

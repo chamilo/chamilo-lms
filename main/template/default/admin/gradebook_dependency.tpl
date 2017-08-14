@@ -2,7 +2,10 @@
 
 {% block content %}
     <h3>
-    {{ gradebook_category.name }}  ({{ gradebook_category.courseCode }})
+    {{ gradebook_category.name }}
+        {% if gradebook_category %}
+            ({{ gradebook_category.courseCode }})
+        {% endif %}
     </h3>
     <hr>
     {% for course in courses %}

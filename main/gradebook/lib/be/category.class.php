@@ -330,7 +330,7 @@ class Category implements GradebookItem
     /**
      * @return array
      */
-    public function get_skills_for_select()
+    public function getSkillsForSelect()
     {
         $skills = $this->get_skills();
         $skill_select = array();
@@ -638,7 +638,10 @@ class Category implements GradebookItem
                 $grade_model_id = $this->get_grade_model_id();
                 if ($parent_id == 0) {
                     //do something
-                    if (isset($grade_model_id) && !empty($grade_model_id) && $grade_model_id != '-1') {
+                    if (isset($grade_model_id) &&
+                        !empty($grade_model_id) &&
+                        $grade_model_id != '-1'
+                    ) {
                         $obj = new GradeModel();
                         $components = $obj->get_components($grade_model_id);
                         $default_weight_setting = api_get_setting('gradebook_default_weight');
@@ -754,7 +757,7 @@ class Category implements GradebookItem
      * Update link weights see #5168
      * @param type $new_weight
      */
-    public function update_children_weight($new_weight)
+    public function updateChildrenWeight($new_weight)
     {
         $links = $this->get_links();
         $old_weight = $this->get_weight();
@@ -1399,7 +1402,7 @@ class Category implements GradebookItem
                             $cat->get_name(),
                             $level + 1
                         );
-                        $targets = $this->add_target_subcategories(
+                        $targets = $this->addTargetSubcategories(
                             $targets,
                             $level + 1,
                             $cat->get_id()
@@ -1412,7 +1415,7 @@ class Category implements GradebookItem
             foreach ($indcats as $cat) {
                 if ($this->can_be_moved_to_cat($cat)) {
                     $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
-                    $targets = $this->add_target_subcategories(
+                    $targets = $this->addTargetSubcategories(
                         $targets,
                         $level + 1,
                         $cat->get_id()
@@ -1432,7 +1435,7 @@ class Category implements GradebookItem
      *
      * @return array
      */
-    private function add_target_subcategories($targets, $level, $catid)
+    private function addTargetSubcategories($targets, $level, $catid)
     {
         $subcats = self::load(null, null, null, $catid);
         foreach ($subcats as $cat) {
@@ -1442,7 +1445,7 @@ class Category implements GradebookItem
                     $cat->get_name(),
                     $level + 1
                 );
-                $targets = $this->add_target_subcategories(
+                $targets = $this->addTargetSubcategories(
                     $targets,
                     $level + 1,
                     $cat->get_id()
@@ -1454,7 +1457,7 @@ class Category implements GradebookItem
     }
 
     /**
-     * Internal function used by get_target_categories() and add_target_subcategories()
+     * Internal function used by get_target_categories() and addTargetSubcategories()
      * Can this category be moved to the given category ?
      * Impossible when origin and target are the same... children won't be processed
      * either. (a category can't be moved to one of its own children)
@@ -1476,7 +1479,7 @@ class Category implements GradebookItem
         $this->set_parent_id($cat->get_id());
         if ($this->get_course_code() != $cat->get_course_code()) {
             $this->set_course_code($cat->get_course_code());
-            $this->apply_course_code_to_children();
+            $this->applyCourseCodeToChildren();
         }
         $this->save();
     }
@@ -1484,7 +1487,7 @@ class Category implements GradebookItem
     /**
      * Internal function used by move_to_cat()
      */
-    private function apply_course_code_to_children()
+    private function applyCourseCodeToChildren()
     {
         $cats = self::load(null, null, null, $this->id, null);
         $evals = Evaluation::load(null, null, null, $this->id, null);
@@ -1497,11 +1500,11 @@ class Category implements GradebookItem
             $this->id,
             null
         );
-
+        /** @var Category $cat */
         foreach ($cats as $cat) {
             $cat->set_course_code($this->get_course_code());
             $cat->save();
-            $cat->apply_course_code_to_children();
+            $cat->applyCourseCodeToChildren();
         }
 
         foreach ($evals as $eval) {

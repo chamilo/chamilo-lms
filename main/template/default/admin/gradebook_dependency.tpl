@@ -1,10 +1,14 @@
 {% extends template ~ "/layout/layout_1_col.tpl" %}
 
 {% block content %}
+    <h3>
+    {{ gradebook_category.name }}  ({{ gradebook_category.courseCode }})
+    </h3>
+    <hr>
     {% for course in courses %}
-        <h3>
+        <h4>
             {{ course.title }} ({{ course.code }})
-        </h3>
+        </h4>
 
         {% if course.users %}
             <table class="table">

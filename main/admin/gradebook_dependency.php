@@ -35,7 +35,12 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $currentUrl = api_get_self().'?';
 $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
-$tpl = new Template(get_lang('Gradebook'));
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'admin/gradebook_list.php',
+    'name' => get_lang('Gradebook')
+);
+
+$tpl = new Template(get_lang('CourseList'));
 $toolbar = Display::url(
     Display::return_icon('back.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'admin/gradebook_list.php'
@@ -89,6 +94,7 @@ $tpl->assign(
     )
 );
 
+$tpl->assign('gradebook_category', $category);
 $tpl->assign('courses', $courseList);
 $layout = $tpl->get_template('admin/gradebook_dependency.tpl');
 $tpl->display($layout);

@@ -44,7 +44,20 @@ $toolbar = Display::url(
     $currentUrl.'&action=add'
 );
 
-$tpl = new Template(get_lang('Gradebook'));
+$toolName = get_lang('Gradebook');
+switch ($action) {
+    case 'add':
+    case 'edit':
+        $interbreadcrumb[] = array(
+            'url' => $currentUrl,
+            'name' => get_lang('Gradebook')
+        );
+        $toolName = get_lang(ucfirst($action));
+        break;
+}
+
+
+$tpl = new Template($toolName);
 
 switch ($action) {
     case 'add':
@@ -235,7 +248,6 @@ switch ($action) {
 
         // pagination.tpl needs current_url with out "page" param
         $pagination->setCustomParameters(['current_url' => $currentUrl]);
-
 
         $pagination->renderer = function ($data) use ($tpl) {
             foreach ($data as $key => $value) {

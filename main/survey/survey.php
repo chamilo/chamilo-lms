@@ -137,7 +137,14 @@ $survey_actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.p
 //$survey_actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
 $survey_actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/preview.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('preview_view.png', get_lang('Preview'), '', ICON_SIZE_MEDIUM).'</a>';
 $survey_actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('mail_send.png', get_lang('Publish'), '', ICON_SIZE_MEDIUM).'</a>';
-$survey_actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('stats.png', get_lang('Reporting'), '', ICON_SIZE_MEDIUM).'</a>';
+
+if (!api_get_configuration_value('hide_survey_reporting_button')) {
+    $survey_actions .= Display::url(
+        Display::return_icon('stats.png', get_lang('Reporting'), [], ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&survey_id='.$survey_id
+    );
+}
+
 echo '<div class="actions">'.$survey_actions.'</div>';
 
 if ($survey_data['survey_type'] == 0) {

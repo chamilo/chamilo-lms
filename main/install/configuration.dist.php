@@ -465,6 +465,8 @@ VALUES (12, 13, 'is_mandatory', 'IsMandatory', 1, 1, NOW());
 ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 */
 //$_configuration['allow_required_survey_questions'] = false;
+// Hide Survey Reporting button
+//$_configuration['hide_survey_reporting_button'] = false;
 // ------
 
 // Allow career diagram, requires a DB change:

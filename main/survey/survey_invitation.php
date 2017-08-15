@@ -114,7 +114,7 @@ while ($row = Database::fetch_assoc($res)) {
         echo '	<td>'.$row['invitation_date'].'</td>';
         echo '	<td>';
 
-        if (in_array($row['user'], $answered_data)) {
+        if (in_array($row['user'], $answered_data) && !api_get_configuration_value('hide_survey_reporting_button')) {
             echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&amp;survey_id='.$survey_id.'&amp;user='.$row['user'].'">'.get_lang('ViewAnswers').'</a>';
         } else {
             echo '-';

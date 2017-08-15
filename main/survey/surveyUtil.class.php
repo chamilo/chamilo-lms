@@ -2664,10 +2664,15 @@ class SurveyUtil
     {
         $survey_id = Security::remove_XSS($survey_id);
         $return = '';
+        $hideReportingButton = api_get_configuration_value('hide_survey_reporting_button');
+
+        $reportingLink = Display::url(
+            Display::return_icon('stats.png', get_lang('Reporting'), [], ICON_SIZE_SMALL),
+            api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&survey_id='.$survey_id
+        );
 
         if ($drh) {
-            return '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&survey_id='.$survey_id.'">'.
-            Display::return_icon('stats.png', get_lang('Reporting'), '', ICON_SIZE_SMALL).'</a>';
+            return $hideReportingButton ? '-' : $reportingLink;
         }
 
         // Coach can see that only if the survey is in his session
@@ -2693,8 +2698,7 @@ class SurveyUtil
             Display::return_icon('preview_view.png', get_lang('Preview'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
         $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invite.php?'.api_get_cidreq().'&survey_id='.$survey_id.'">'.
             Display::return_icon('mail_send.png', get_lang('Publish'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
-        $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&survey_id='.$survey_id.'">'.
-            Display::return_icon('stats.png', get_lang('Reporting'), '', ICON_SIZE_SMALL).'</a>';
+        $return .= $hideReportingButton ? '' : $reportingLink;
 
         if (api_is_allowed_to_edit() ||
             api_is_element_in_the_session(TOOL_SURVEY, $survey_id)

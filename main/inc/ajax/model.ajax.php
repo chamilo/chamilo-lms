@@ -120,12 +120,16 @@ if (!empty($searchString)) {
 
 if (($search || $forceSearch) && ($search !== 'false')) {
     $whereCondition = ' 1 = 1 ';
-    $whereConditionInForm = getWhereClause($searchField, $searchOperator, $searchString);
+    $whereConditionInForm = getWhereClause(
+        $searchField,
+        $searchOperator,
+        $searchString
+    );
 
     if (!empty($whereConditionInForm)) {
-        $whereCondition .= ' AND ('.$whereConditionInForm.') ';
+        $whereCondition .= ' AND ( ';
+        $whereCondition .= '  ('.$whereConditionInForm.') ';
     }
-
     $filters = isset($_REQUEST['filters']) && !is_array($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
 
     if (!empty($filters)) {
@@ -155,7 +159,10 @@ if (($search || $forceSearch) && ($search !== 'false')) {
                 $whereCondition .= $extraCondition;
 
                 // Question field
-                $resultQuestion = $extraField->getExtraFieldRules($filters, 'question_');
+                $resultQuestion = $extraField->getExtraFieldRules(
+                    $filters,
+                    'question_'
+                );
                 $questionFields = $resultQuestion['extra_fields'];
                 $condition_array = $resultQuestion['condition_array'];
 
@@ -164,7 +171,11 @@ if (($search || $forceSearch) && ($search !== 'false')) {
                     $extraQuestionCondition .= implode($filters->groupOp, $condition_array);
                     $extraQuestionCondition .= ' ) ';
                     // Remove conditions already added
-                    $extraQuestionCondition = str_replace($extraCondition, '', $extraQuestionCondition);
+                    $extraQuestionCondition = str_replace(
+                        $extraCondition,
+                        '',
+                        $extraQuestionCondition
+                    );
                 }
 
                 $whereCondition .= $extraQuestionCondition;
@@ -186,6 +197,10 @@ if (($search || $forceSearch) && ($search !== 'false')) {
             }
             $whereCondition .= ' ) ';
         }
+    }
+
+    if (!empty($whereConditionInForm)) {
+        $whereCondition .= ' ) ';
     }
 }
 

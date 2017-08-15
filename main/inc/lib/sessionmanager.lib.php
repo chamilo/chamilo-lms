@@ -433,10 +433,10 @@ class SessionManager
      * @assert (array(),true) !== false
      */
     public static function get_sessions_admin(
-        $options = array(),
+        $options = [],
         $get_count = false,
         $columns = [],
-        $extraFieldsToLoad = array()
+        $extraFieldsToLoad = []
     ) {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -452,12 +452,12 @@ class SessionManager
             }
         }
 
-        if (!api_is_platform_admin() && api_is_teacher() &&
+        if (!api_is_platform_admin() &&
+            api_is_teacher() &&
             api_get_setting('allow_teachers_to_create_sessions') == 'true'
         ) {
             $where .= " AND s.id_coach = $user_id ";
         }
-
         $extra_field = new ExtraFieldModel('session');
         $conditions = $extra_field->parseConditions($options);
         $inject_joins = $conditions['inject_joins'];
@@ -542,7 +542,6 @@ class SessionManager
         }
         $query .= $order;
         $query .= $limit;
-
         $result = Database::query($query);
 
         $categories = self::get_all_session_category();

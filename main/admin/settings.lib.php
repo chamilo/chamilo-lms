@@ -987,11 +987,16 @@ function addEditTemplate()
 {
     $em = Database::getManager();
     // Initialize the object.
-    $id = isset($_GET['id']) ? '&id='.Security::remove_XSS($_GET['id']) : '';
-    /** @var SystemTemplate $template */
-    $template = $id ? $em->find('ChamiloCoreBundle:SystemTemplate', $_GET['id']) : new SystemTemplate();
+    $id = isset($_GET['id']) ? '&id='.intval($_GET['id']) : 0;
 
-    $form = new FormValidator('template', 'post', 'settings.php?category=Templates&action='.Security::remove_XSS($_GET['action']).$id);
+    /** @var SystemTemplate $template */
+    $template = $id ? $em->find('ChamiloCoreBundle:SystemTemplate', $id) : new SystemTemplate();
+
+    $form = new FormValidator(
+        'template',
+        'post',
+        'settings.php?category=Templates&action='.Security::remove_XSS($_GET['action']).$id
+    );
 
     // Setting the form elements: the header.
     if ($_GET['action'] == 'add') {
@@ -1022,7 +1027,7 @@ function addEditTemplate()
 
     // Getting all the information of the template when editing a template.
     if ($_GET['action'] == 'edit') {
-        $defaults['template_id'] = intval($_GET['id']);
+        $defaults['template_id'] = $id;
         $defaults['template_text'] = $template->getContent();
         // Forcing get_lang().
         $defaults['title'] = get_lang($template->getTitle());
@@ -1042,8 +1047,12 @@ function addEditTemplate()
                     .'"/>'
             );
         } else {
-            $form->addElement('static', 'template_image_preview', '',
-                '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>');
+            $form->addElement(
+                'static',
+                'template_image_preview',
+                '',
+                '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>'
+            );
         }
 
         // Setting the information of the template that we are editing.
@@ -1053,10 +1062,15 @@ function addEditTemplate()
     $form->addButtonSave(get_lang('Ok'), 'submit');
 
     // Setting the rules: the required fields.
-    $form->addRule('template_image', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule(
+        'template_image',
+        get_lang('ThisFieldIsRequired'),
+        'required'
+    );
     $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
-    // if the form validates (complies to all rules) we save the information, else we display the form again (with error message if needed)
+    // if the form validates (complies to all rules) we save the information,
+    // else we display the form again (with error message if needed)
     if ($form->validate()) {
         $check = Security::check_token('post');
         if ($check) {
@@ -1083,7 +1097,6 @@ function addEditTemplate()
                     $picture_info = $temp->get_image_info();
 
                     $max_width_for_picture = 100;
-
                     if ($picture_info['width'] > $max_width_for_picture) {
                         $temp->resize($max_width_for_picture);
                     }
@@ -1094,7 +1107,7 @@ function addEditTemplate()
             // Store the information in the database (as insert or as update).
             $bootstrap = api_get_css(api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css');
             $viewport = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
-            
+
             if ($_GET['action'] == 'add') {
                 $templateContent = '<head>'.$viewport.'<title>'.$values['title'].'</title>'.$bootstrap.'</head>'
                     .$values['template_text'];
@@ -1106,12 +1119,17 @@ function addEditTemplate()
                 $em->flush();
 
                 // Display a feedback message.
-                echo Display::return_message(get_lang('TemplateAdded'), 'confirm');
-                echo '<a href="settings.php?category=Templates&action=add">'.Display::return_icon('new_template.png', get_lang('AddTemplate'), '', ICON_SIZE_MEDIUM).'</a>';
+                echo Display::return_message(
+                    get_lang('TemplateAdded'),
+                    'confirm'
+                );
+                echo '<a href="settings.php?category=Templates&action=add">'.
+                    Display::return_icon('new_template.png', get_lang('AddTemplate'), '', ICON_SIZE_MEDIUM).
+                    '</a>';
             } else {
-
                 $templateContent = '<head>'.$viewport.'<title>'.$values['title'].'</title>'.$bootstrap.'</head>'
                     .$values['template_text'];
+
                 $template
                     ->setTitle($values['title'])
                     ->setContent(Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY));
@@ -1149,9 +1167,10 @@ function addEditTemplate()
  */
 function deleteTemplate($id)
 {
+    $id = intval($id);
     // First we remove the image.
-    $table_system_template = Database::get_main_table('system_template');
-    $sql = "SELECT * FROM $table_system_template WHERE id = ".intval($id)."";
+    $table = Database::get_main_table('system_template');
+    $sql = "SELECT * FROM $table WHERE id = $id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     if (!empty($row['image'])) {
@@ -1159,7 +1178,7 @@ function deleteTemplate($id)
     }
 
     // Now we remove it from the database.
-    $sql = "DELETE FROM $table_system_template WHERE id = ".intval($id)."";
+    $sql = "DELETE FROM $table WHERE id = $id";
     Database::query($sql);
 
     // Display a feedback message.
@@ -1186,7 +1205,8 @@ function select_timezone_value()
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-function select_gradebook_number_decimals() {
+function select_gradebook_number_decimals()
+{
     return array('0', '1', '2');
 }
 
@@ -1226,7 +1246,11 @@ function generateSettingsForm($settings, $settings_by_access_list)
     $em = Database::getManager();
     $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
-    $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));
+    $form = new FormValidator(
+        'settings',
+        'post',
+        'settings.php?category='.Security::remove_XSS($_GET['category'])
+    );
 
     $form->addElement(
         'hidden',

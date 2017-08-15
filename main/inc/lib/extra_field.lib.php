@@ -2528,8 +2528,8 @@ JAVASCRIPT;
                              )
                             ";
                     } else {
-                        if (isset($extra_field_info['field_type'])
-                            && $extra_field_info['field_type'] == self::FIELD_TYPE_TAG
+                        if (isset($extra_field_info['field_type']) &&
+                            $extra_field_info['field_type'] == self::FIELD_TYPE_TAG
                         ) {
                             $options['where'] = str_replace(
                                 $extra_info['field'],
@@ -2539,10 +2539,12 @@ JAVASCRIPT;
 
                             $inject_joins .= "
                                 INNER JOIN $this->table_field_rel_tag tag_rel$counter
-                                ON (tag_rel$counter.field_id = ".$extra_info['id']." AND tag_rel$counter.item_id = s."
-                                    .$this->primaryKey.")
+                                ON (
+                                    tag_rel$counter.field_id = ".$extra_info['id']." AND 
+                                    tag_rel$counter.item_id = s.".$this->primaryKey."
+                                )
                                 INNER JOIN $this->table_field_tag tag$counter
-                                ON (tag$counter.id =  tag_rel$counter.tag_id)
+                                ON (tag$counter.id = tag_rel$counter.tag_id)
                             ";
                         } else {
                             //text, textarea, etc

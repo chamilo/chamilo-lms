@@ -1122,6 +1122,10 @@ class SurveyManager
                         'max_value' => $maxScore,
                     ];
 
+                    if (isset($form_content['is_required'])) {
+                        $params['is_required'] = true;
+                    }
+
                     $params = array_merge($params, $extraParams);
                     $question_id = Database::insert($tbl_survey_question, $params);
                     if ($question_id) {
@@ -1156,6 +1160,10 @@ class SurveyManager
                         'survey_question_comment' => $questionComment,
                         'display' => $form_content['horizontalvertical'],
                     ];
+
+                    if (isset($form_content['is_required'])) {
+                        $params['is_required'] = true;
+                    }
 
                     $params = array_merge($params, $extraParams);
 

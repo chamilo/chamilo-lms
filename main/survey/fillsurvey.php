@@ -28,6 +28,8 @@ $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION
 $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
+$allowRequiredSurveyQuestions = api_get_configuration_value('allow_required_survey_questions');
+
 // Check if user is anonymous or not
 if (api_is_anonymous(api_get_user_id(), true)) {
     $isAnonymous = true;
@@ -192,6 +194,8 @@ $survey_data['survey_id'] = $survey_invitation['survey_id'];
 // Storing the answers
 if (count($_POST) > 0) {
     if ($survey_data['survey_type'] === '0') {
+        $types = [];
+        $required = [];
         // Getting all the types of the question
         // (because of the special treatment of the score question type
         $sql = "SELECT * FROM $table_survey_question
@@ -202,6 +206,7 @@ if (count($_POST) > 0) {
 
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $types[$row['question_id']] = $row['type'];
+            $required[$row['question_id']] = $allowRequiredSurveyQuestions && $row['is_required'];
         }
 
         // Looping through all the post values
@@ -700,6 +705,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                             survey_question_option.question_option_id,
                             survey_question_option.option_text,
                             survey_question_option.sort as option_sort
+                            ".($allowRequiredSurveyQuestions ? ', survey_question.is_required' : '')."
                         FROM $table_survey_question survey_question
                         LEFT JOIN $table_survey_question_option survey_question_option
                             ON survey_question.question_id = survey_question_option.question_id AND
@@ -727,6 +733,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                     $questions[$row['sort']]['options'][$row['question_option_id']] = $row['option_text'];
                     $questions[$row['sort']]['maximum_score'] = $row['max_value'];
                     $questions[$row['sort']]['sort'] = $row['sort'];
+                    $questions[$row['sort']]['is_required'] = $allowRequiredSurveyQuestions && $row['is_required'];
                 } else {
                     // If the type is a pagebreak we are finished loading the questions for this page
                     break;
@@ -1113,6 +1120,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                                 survey_question_option.question_option_id,
                                 survey_question_option.option_text,
                                 survey_question_option.sort as option_sort
+                                ".($allowRequiredSurveyQuestions ? ', survey_question.is_required' : '')."
                             FROM $table_survey_question survey_question
                             LEFT JOIN $table_survey_question_option survey_question_option
                             ON survey_question.question_id = survey_question_option.question_id AND
@@ -1140,6 +1148,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                         $questions[$row['sort']]['type'] = $row['type'];
                         $questions[$row['sort']]['options'][$row['question_option_id']] = $row['option_text'];
                         $questions[$row['sort']]['maximum_score'] = $row['max_value'];
+                        $questions[$row['sort']]['is_required'] = $allowRequiredSurveyQuestions && $row['is_required'];
                         // Personality params
                         $questions[$row['sort']]['survey_group_sec1'] = $row['survey_group_sec1'];
                         $questions[$row['sort']]['survey_group_sec2'] = $row['survey_group_sec2'];

@@ -75,6 +75,11 @@ class survey_question
             $config
         );
 
+        if (api_get_configuration_value('allow_required_survey_questions') &&
+            in_array($_GET['type'], ['yesno', 'multiplechoice'])) {
+            $form->addCheckBox('is_required', get_lang('IsRequired'), get_lang('Yes'));
+        }
+
         // When survey type = 1??
         if ($surveyData['survey_type'] == 1) {
             $table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);

@@ -460,6 +460,11 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, v
 VALUES (12, 13, 'is_mandatory', 'IsMandatory', 1, 1, NOW());
 */
 //$_configuration['allow_mandatory_survey'] = false;
+// Allow required survey questions. Applies to yesno/multiplechoice question type. Requires DB change:
+/*
+ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
+*/
+//$_configuration['allow_required_survey_questions'] = false;
 // ------
 
 // Allow career diagram, requires a DB change:

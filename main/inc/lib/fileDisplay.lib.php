@@ -133,24 +133,24 @@ function choose_image($file_name)
         $type['java'] = array('class', 'jar');
         $type['freemind'] = array('mm');
 
-        $image['word'] = 'word.gif';
+        $image['word'] = 'word.png';
         $image['web'] = 'file_html.png';
         $image['image'] = 'file_image.png';
         $image['image_vect'] = 'file_svg.png';
-        $image['audio'] = 'file_sound.gif';
+        $image['audio'] = 'file_sound.png';
         $image['video'] = 'film.png';
-        $image['excel'] = 'excel.gif';
-        $image['compressed'] = 'file_zip.gif';
+        $image['excel'] = 'excel.png';
+        $image['compressed'] = 'file_zip.png';
         $image['code'] = 'icons/22/mime_code.png';
-        $image['acrobat'] = 'file_pdf.gif';
-        $image['powerpoint'] = 'powerpoint.gif';
-        $image['flash'] = 'file_flash.gif';
+        $image['acrobat'] = 'file_pdf.png';
+        $image['powerpoint'] = 'powerpoint.png';
+        $image['flash'] = 'file_flash.png';
         $image['text'] = 'icons/22/mime_text.png';
-        $image['oo_writer'] = 'file_oo_writer.gif';
-        $image['oo_calc'] = 'file_oo_calc.gif';
-        $image['oo_impress'] = 'file_oo_impress.gif';
-        $image['oo_draw'] = 'file_oo_draw.gif';
-        $image['epub'] = 'file_epub.gif';
+        $image['oo_writer'] = 'file_oo_writer.png';
+        $image['oo_calc'] = 'file_oo_calc.png';
+        $image['oo_impress'] = 'file_oo_impress.png';
+        $image['oo_draw'] = 'file_oo_draw.png';
+        $image['epub'] = 'file_epub.png';
         $image['java'] = 'file_java.png';
         $image['freemind'] = 'file_freemind.png';
     }

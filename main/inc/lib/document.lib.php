@@ -5568,7 +5568,7 @@ class DocumentManager
                         $url = 'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
                     } else {
                         $pdfPreview = Display::url(
-                            Display::return_icon('preview.gif', get_lang('Preview')),
+                            Display::return_icon('preview.png', get_lang('Preview'), null, ICON_SIZE_SMALL),
                             api_get_path(WEB_CODE_PATH).'document/showinframes.php?'.$courseParams.'&id='.$document_data['id'],
                             array('style' => 'float:right')
                         );

@@ -62,7 +62,7 @@ class ch_yesno extends survey_question
             $name = 'question'.$questionData['question_id'];
             $radioAttributes = ['radio-class' => $class, 'label-class' => $class];
 
-            if ($questionData['is_required']) {
+            if (!empty($questionData['is_required'])) {
                 $radioAttributes['required'] = 'required';
             }
 
@@ -74,7 +74,7 @@ class ch_yesno extends survey_question
             );
 
             if (!empty($answers)) {
-                $form->setDefaults([$name => $answers]);
+                $form->setDefaults([$name => is_array($answers) ? current($answers) : $answers]);
             }
         }
     }

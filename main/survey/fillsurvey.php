@@ -1219,7 +1219,34 @@ if (isset($questions) && is_array($questions)) {
         //$form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
         $form->addHtml('<h5 class="title">'.$question['sort'].'. '.strip_tags($question['survey_question']).'</h5>');
         //$form->addHtml($question['survey_question']);
-        $display->render($form, $question);
+
+        $userAnswerData = SurveyUtil::get_answers_of_question_by_user($question['survey_id'], $question['question_id']);
+        $finalAnswer = null;
+
+        if (!empty($userAnswerData[$user_id])) {
+            $userAnswer = $userAnswerData[$user_id];
+            switch ($question['type']) {
+                case 'score':
+                    $finalAnswer = array();
+
+                    foreach ($userAnswer as $userChoice) {
+                        list($choiceId, $choiceValue) = explode('*', $userChoice);
+
+                        $finalAnswer[$choiceId] = $choiceValue;
+                    }
+                    break;
+                case 'percentage':
+                    list($choiceId, $choiceValue) = explode('*', current($userAnswer));
+
+                    $finalAnswer = $choiceId;
+                    break;
+                default:
+                    $finalAnswer = $userAnswer;
+                    break;
+            }
+        }
+
+        $display->render($form, $question, $finalAnswer);
         $form->addHtml('</div>');
     }
 }

@@ -1007,6 +1007,19 @@ legend{
 }
 #exercise-description.panel-default .panel-heading{
     background: none;
+    border-radius: 0;
+    border-top: 1px solid #96BD0D;
+    border-bottom: 1px solid #96BD0D;
+    color: #162A83;
+}
+.section-mycourses .panel.panel-default{
+    border: none;
+}
+.section-mycourses .panel.panel-default .panel-body{
+    padding: 0;
+}
+.section-mycourses .panel.panel-default .panel-body .question_row_answer{
+    padding: 10px;
 }
 .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn){
     width: 350px;

@@ -547,7 +547,11 @@ class Certificate extends Model
 
         $skill = new Skill();
         $skills = $skill->getStudentSkills($this->user_id);
-        $time = api_time_to_hms(Tracking::get_time_spent_on_the_platform($this->user_id));
+        $timeInSeconds = Tracking::get_time_spent_on_the_platform(
+            $this->user_id,
+            'ever'
+        );
+        $time = api_time_to_hms($timeInSeconds);
 
         $tplContent = new Template(null, false, false, false, false, false);
 
@@ -558,7 +562,7 @@ class Certificate extends Model
         $tplContent->assign('terms_validation_date', api_get_local_time($termsValidationDate));
 
         // Ofaj
-        $tplContent->assign('time_in_platform_in_hours', round($time/3600, 1));
+        $tplContent->assign('time_in_platform_in_hours', round($timeInSeconds/3600, 1));
         $tplContent->assign(
             'certificate_generated_date_no_time',
             api_get_local_time(

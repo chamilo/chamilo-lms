@@ -369,6 +369,7 @@ if ($form->validate()) {
 
     Database::query($sql);
 
+    $title = str_replace('&amp;', '&', $title);
     $params = [
         'course_language' => $course_language,
         'title' => $title,

@@ -1159,8 +1159,9 @@ class AddCourse
     public static function register_course($params)
     {
         global $error_msg, $firstExpirationDelay;
-
         $title = $params['title'];
+        // Fix amp
+        $title = str_replace('&amp;', '&', $title);
         $code = $params['code'];
         $visual_code = $params['visual_code'];
         $directory = $params['directory'];

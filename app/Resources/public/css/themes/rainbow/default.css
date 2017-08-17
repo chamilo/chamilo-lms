@@ -564,11 +564,9 @@ footer #footer_right{
 .feedbaak-question{
     margin-top: 10px;
     margin-bottom: 10px;
-    display: inline-block;
-    width: 100%;
 }
 .feedbaak-question img{
-    padding-right: 10px;
+    padding-right: 5px;
 }
 .table.table-striped tr td span.feedback-red{
     color: #162a83 !important;

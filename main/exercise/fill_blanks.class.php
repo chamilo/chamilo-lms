@@ -1244,11 +1244,11 @@ class FillBlanks extends Question
             $correctAnswerHtml = "<span class='feedback-green' title='".get_lang("ExerciseWithFeedbackWithoutCorrectionComment")."'> - </span>";
         }
 
-        $result = "<div class='feedbaak-question'>";
+        $result = "<span class='feedbaak-question'>";
         $result .= $iconAnswer . "<span class='$style'>" . $answer . "</span>";
         $result .= "<span class='feedback-separator'> / </span>";
         //$result .= $correctAnswerHtml;
-        $result .= "</div>";
+        $result .= "</span>";
 
         return $result;
     }

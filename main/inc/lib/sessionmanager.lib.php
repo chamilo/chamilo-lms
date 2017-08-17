@@ -611,7 +611,7 @@ class SessionManager
                             $courseInfo['code']
                         );
                     }
-                    $session['teachers'] = $teachers;
+                    $session['teachers'] = Display::return_icon('teacher.png', addslashes($teachers));
                 }
                 $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
                 if (api_is_drh()) {

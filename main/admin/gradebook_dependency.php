@@ -178,7 +178,8 @@ foreach ($userResult as $userId => &$userData) {
     ;
     $userData['course_list_passed'] = $courseListPassed;
     $userData['course_list'] = count($userData['result_out_dependencies']);
-    $userData['final_result'] = $total >= $min;
+    // Min req must apply + mandatory should be 20
+    $userData['final_result'] = $total >= $min && $userData['result_mandatory_20'] == 20;
 }
 
 $tpl->assign('current_url', $currentUrl);

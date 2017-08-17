@@ -25,7 +25,7 @@
                     {{ course.title }} ({{ course.code }})
                 </th>
             {% endfor %}
-            <th>{{ 'RestCoursesSubscribed' | get_lang }}</th>
+            <th>{{ 'RestCoursesSubscribedResults' | get_lang }}</th>
             <th>{{ 'Progress' | get_lang }} Max 20 (Mandatory courses)</th>
             <th>{{ 'Progress' | get_lang }} Max 80 (Rest of courses)</th>
             <th>{{ 'Total' | get_lang }}</th>

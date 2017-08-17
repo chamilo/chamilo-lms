@@ -47,7 +47,11 @@
                                         {{ complete_name }}
                                     </h3>
                                     <p style="font-size: 16px;">
-                                        {{ 'UserHasParticipateDansDePlatformeXTheContratDateXCertificateDateXTimeX' | get_lang | format(_s.site_name, certificate_generated_date_no_time, terms_validation_date_no_time, time_in_platform_in_hours)}}
+                                                        {% if document_language == 'fr' %}
+                                                            {{ 'UserHasParticipateDansDePlatformeXTheContratDateXCertificateDateXTimeX' | get_lang | format(_s.site_name, terms_validation_date_no_time, certificate_generated_date_no_time)}}
+                                                        {% else %}
+                                                            {{ 'UserHasParticipateDansDePlatformeXTheContratDateXCertificateDateXTimeX' | get_lang | format(terms_validation_date_no_time, certificate_generated_date_no_time, _s.site_name)}}
+                                                        {% endif %}
                                     </p>
                                     <br />
                                     <p style="font-size: 16px;">{{ 'ThisTrainingHasXHours' | get_lang | format(time_in_platform_in_hours)}}</p><br />

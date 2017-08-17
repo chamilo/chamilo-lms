@@ -1880,19 +1880,17 @@ class Category implements GradebookItem
         $sessionId = 0
     ) {
         $evals = array();
-        if (empty($course_code)) {
-            $course_code = api_get_course_id();
-        }
-
-        if (empty($sessionId)) {
-            $sessionId = api_get_session_id();
-        }
+        $course_code = empty($course_code) ? $this->get_course_code() : $course_code;
+        $sessionId = empty($sessionId) ? $this->get_session_id() : $sessionId;
 
         // 1 student
         if (isset($studentId) && !empty($studentId)) {
             // Special case: this is the root
             if ($this->id == 0) {
-                $evals = Evaluation::get_evaluations_with_result_for_student(0, $studentId);
+                $evals = Evaluation::get_evaluations_with_result_for_student(
+                    0,
+                    $studentId
+                );
             } else {
                 $evals = Evaluation::load(
                     null,
@@ -1917,7 +1915,9 @@ class Category implements GradebookItem
                         $this->id,
                         null
                     );
-                } elseif (isset($this->course_code) && !empty($this->course_code)) {
+                } elseif (isset($this->course_code) &&
+                    !empty($this->course_code)
+                ) {
                     // inside a course
                     $evals = Evaluation::load(
                         null,
@@ -1986,13 +1986,8 @@ class Category implements GradebookItem
     ) {
         $links = array();
 
-        if (empty($course_code)) {
-            $course_code = api_get_course_id();
-        }
-
-        if (empty($sessionId)) {
-            $sessionId = api_get_session_id();
-        }
+        $course_code = empty($course_code) ? $this->get_course_code() : $course_code;
+        $sessionId = empty($sessionId) ? $this->get_session_id() : $sessionId;
 
         // no links in root or course independent categories
         if ($this->id == 0) {
@@ -2502,7 +2497,9 @@ class Category implements GradebookItem
         if (empty($category)) {
             return 0;
         }
-        $courseEvaluations = $category->get_evaluations($userId, true);
+        $courseEvaluations = $category->get_evaluations(
+            $userId, true
+        );
         $courseLinks = $category->get_links($userId, true);
         $evaluationsAndLinks = array_merge($courseEvaluations, $courseLinks);
         $categoryScore = 0;
@@ -2556,4 +2553,5 @@ class Category implements GradebookItem
     {
         $this->studentList = $list;
     }
+
 }

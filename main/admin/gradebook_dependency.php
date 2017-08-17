@@ -54,13 +54,23 @@ if (empty($dependencies)) {
 
 $content = '';
 $courseList = [];
-
-/*$mandatoryList = api_get_configuration_value('gradebook_dependency_mandatory_courses');
-$mandatoryList = isset($mandatoryList['courses']) ? $mandatoryList['courses'] : [];*/
-$userResult  = [];
+$mandatoryList = api_get_configuration_value('gradebook_dependency_mandatory_courses');
+$mandatoryList = isset($mandatoryList['courses']) ? $mandatoryList['courses'] : [];
+$mandatoryListCompleteList = [];
+foreach ($mandatoryList as $courseMandatoryId) {
+    $mandatoryListCompleteList[] = api_get_course_info_by_id($courseMandatoryId);
+}
 $totalDependencies = count($dependencies);
+$min = $categoryObj->getMinimumToValidate();
+$userResult  = [];
+
+$dependencyList = [];
 foreach ($dependencies as $courseId) {
-    $courseInfo = api_get_course_info_by_id($courseId);
+    $dependencyList[$courseId] = api_get_course_info_by_id($courseId);
+}
+$courseUserLoaded = [];
+
+foreach ($dependencyList as $courseId => $courseInfo) {
     $courseCode = $courseInfo['code'];
     $subCategory = Category::load(null, null, $courseCode);
     /** @var Category $subCategory */
@@ -68,28 +78,107 @@ foreach ($dependencies as $courseId) {
     if (empty($subCategory)) {
         continue;
     }
+
     $userList = CourseManager::get_student_list_from_course_code($courseCode);
-    $users = [];
     foreach ($userList as $user) {
         $userId = $user['user_id'];
+        if ($userId != 37056) {
+            //continue;
+        }
+
         $userInfo = api_get_user_info($userId);
+        $courseId = $courseInfo['real_id'];
+
+        $userCourseList = CourseManager::get_courses_list_by_user_id($userId);
+        $userCourseListCode = array_column($userCourseList, 'code');
+
+        if (!isset($userResult[$userId]['result_mandatory_20'])) {
+            $userResult[$userId]['result_mandatory_20'] = 0;
+        }
+        if (!isset($userResult[$userId]['result_not_mandatory_80'])) {
+            $userResult[$userId]['result_not_mandatory_80'] = 0;
+        }
+
+        foreach ($userCourseList as $courseItem) {
+            $myCourseCode = $courseItem['code'];
+            $myCourseId = $courseItem['real_id'];
+            if (in_array($myCourseId, $dependencies)) {
+                continue;
+            }
+
+            if (isset($courseUserLoaded[$userId][$myCourseId])) {
+                continue;
+            } else {
+                $courseUserLoaded[$userId][$myCourseId] = true;
+            }
+            //var_dump($myCourseCode);
+
+            $courseCategory = Category::load(
+                null,
+                null,
+                $myCourseCode
+            );
+            $courseCategory = isset($courseCategory[0]) ? $courseCategory[0] : [];
+            $userResult[$userId]['result_out_dependencies'][$myCourseCode] = false;
+            if (!empty($courseCategory)) {
+                $result = Category::userFinishedCourse(
+                    $userId,
+                    $courseCategory,
+                    true
+                );
+                $userResult[$userId]['result_out_dependencies'][$myCourseCode] = $result;
+
+                if (in_array($myCourseId, $mandatoryList)) {
+                    if ($userResult[$userId]['result_mandatory_20'] < 20 && $result) {
+                        $userResult[$userId]['result_mandatory_20'] += 10;
+                    }
+                } else {
+                    if ($userResult[$userId]['result_not_mandatory_80'] < 80 && $result) {
+                        $userResult[$userId]['result_not_mandatory_80'] += 10;
+                      //  var_dump($userResult[$userId]['result_80'] );
+                    }
+                }
+            }
+        }
+
         $result = Category::userFinishedCourse(
             $userId,
             $subCategory,
             true
         );
-        $userInfo['result'] = $result;
-        //$users[] = $userInfo;
-        $userResult[$userId]['result'][$courseCode] = $result;
+
+        $userResult[$userId]['result_dependencies'][$courseCode] = $result;
         $userResult[$userId]['user_info'] = $userInfo;
+
+        //var_dump("$courseCode : $result");
+
+        if (in_array($courseId, $mandatoryList)) {
+            if ($userResult[$userId]['result_mandatory_20'] < 20 && $result) {
+                $userResult[$userId]['result_mandatory_20'] += 10;
+            }
+        } else {
+            if ($userResult[$userId]['result_not_mandatory_80'] < 80 && $result) {
+                $userResult[$userId]['result_not_mandatory_80'] += 10;
+                //var_dump($userResult[$userId]['result_80'] );
+            }
+        }
     }
 
-    foreach ($userResult as $userId => &$userData) {
-        $userData['final_result'] = count(array_filter($userData['result'])) == $totalDependencies;
-    }
     //$courseInfo['users'] = $users;
     //$courseInfo['is_mandatory'] = in_array($courseCode, $mandatoryList);
     $courseList[] = $courseInfo;
+}
+
+
+foreach ($userResult as $userId => &$userData) {
+    $courseListPassed = count(array_filter($userData['result_out_dependencies']));
+    $total =
+        count(array_filter($userData['result_dependencies'])) +
+        $courseListPassed
+    ;
+    $userData['course_list_passed'] = $courseListPassed;
+    $userData['course_list'] = count($userData['result_out_dependencies']);
+    $userData['final_result'] = $total >= $min;
 }
 
 $tpl->assign('current_url', $currentUrl);
@@ -102,6 +191,9 @@ $tpl->assign(
     )
 );
 
+
+$tpl->assign('mandatory_courses', $mandatoryListCompleteList);
+$tpl->assign('min_to_validate', $min);
 $tpl->assign('gradebook_category', $category);
 $tpl->assign('courses', $courseList);
 $tpl->assign('users', $userResult);

@@ -169,17 +169,15 @@ foreach ($dependencyList as $courseId => $courseInfo) {
     $courseList[] = $courseInfo;
 }
 
-
 foreach ($userResult as $userId => &$userData) {
-    $courseListPassed = count(array_filter($userData['result_out_dependencies']));
-    $total =
-        count(array_filter($userData['result_dependencies'])) +
-        $courseListPassed
-    ;
-    $userData['course_list_passed'] = $courseListPassed;
-    $userData['course_list'] = count($userData['result_out_dependencies']);
+    $courseListPassedOutDependency = count(array_filter($userData['result_out_dependencies']));
+    $courseListPassedDependency = count(array_filter($userData['result_dependencies']));
+    $total = $courseListPassedDependency + $courseListPassedOutDependency;
+    $userData['course_list_passed_out_dependency'] = $courseListPassedOutDependency;
+    $userData['course_list_passed_out_dependency_count'] = count($userData['result_out_dependencies']);
     // Min req must apply + mandatory should be 20
-    $userData['final_result'] = $total >= $min && $userData['result_mandatory_20'] == 20;
+    //$userData['final_result'] = $total >= $min && $userData['result_mandatory_20'] == 20;
+    $userData['final_result'] = $total >= $min && $courseListPassedDependency == $totalDependencies;
 }
 
 $tpl->assign('current_url', $currentUrl);

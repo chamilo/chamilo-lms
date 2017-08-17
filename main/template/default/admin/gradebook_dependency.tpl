@@ -44,7 +44,8 @@
             {% endfor %}
 
             <td>
-                {{ user.course_list_passed }} / {{ user.course_list }}
+                {{ user.course_list_passed_out_dependency }} /
+                {{ user.course_list_passed_out_dependency_count }}
             </td>
 
             <td>

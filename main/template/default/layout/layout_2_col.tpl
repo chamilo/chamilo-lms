@@ -138,7 +138,7 @@
                 <!-- end block course -->
                 {% endif %}
 
-                {% if grade_book_result_validate is defined %}
+                {% if grade_book_sidebar %}
                     <div class="panel-group" id="skill" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default" id="gradebook_block">
                         <div class="panel-heading" role="tab">
@@ -152,14 +152,17 @@
                             <div class="panel-body">
                                 <ul class="list-group">
                                     <li class="list-group-item {{ item.class }}">
-                                        <span class="item-icon">
-                                            {{ 'Completed' | get_lang  }} :
-                                             {% if grade_book_result_completed == true %}
-                                                 {{ 'Yes' | get_lang }}
-                                             {% else %}
-                                                 {{ 'No' | get_lang }}
-                                             {% endif %}
-                                        </span>
+                                        {{ 'Progress' | get_lang  }} : {{ grade_book_progress }} %
+                                        <br />
+                                        {% for badge in grade_book_badge_list %}
+                                            {{ badge.name }} -
+                                            {% if badge.finished %}
+                                                Yes
+                                            {% else %}
+                                                No
+                                            {% endif %}
+                                            <br />
+                                        {% endfor %}
                                     </li>
                                 </ul>
                             </div>

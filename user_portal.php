@@ -297,13 +297,85 @@ if (!empty($courseAndSessions['courses']) && $allow) {
         }
     }
 
-    // @todo improve calls of course info
+
+     // @todo improve calls of course info
     $subscribedCourses = !empty($courseAndSessions['courses']) ? $courseAndSessions['courses'] : [];
     $mainCategoryList = [];
     foreach ($subscribedCourses as $courseInfo) {
         $courseCode = $courseInfo['code'];
         $categories = Category::load(null, null, $courseCode);
         /** @var Category $category */
+        $category = !empty($categories[0]) ? $categories[0] : [];
+        if (!empty($category)) {
+            $mainCategoryList[] = $category;
+        }
+    }
+
+    $result = [];
+    $result20 = 0;
+    $result80 = 0;
+    /** @var Category $category */
+    foreach ($mainCategoryList as $category) {
+        $userFinished = Category::userFinishedCourse(
+            $userId,
+            $category,
+            true
+        );
+
+        if ($userFinished) {
+            if (in_array($category->get_course_code(), $mandatoryCourse)) {
+                if ($result20 < 20) {
+                    $result20 += 10;
+                }
+            } else {
+                if ($result80 < 80) {
+                    $result80 += 10;
+                }
+            }
+        }
+    }
+
+    $finalResult = $result20 + $result80;
+
+    $gradeBookList = api_get_configuration_value('gradebook_badge_sidebar');
+    $gradeBookList = isset($gradeBookList['gradebooks']) ? $gradeBookList['gradebooks'] : [];
+    $badgeList = [];
+    foreach ($gradeBookList as $id) {
+        $categories = Category::load($id);
+        /** @var Category $category */
+        $category = !empty($categories[0]) ? $categories[0] : [];
+        $badgeList[$id]['name'] = $category->get_name();
+        $badgeList[$id]['finished'] = false;
+        if (!empty($category)) {
+            $userFinished = Category::userFinishedCourse(
+                $userId,
+                $category,
+                true
+            );
+            if ($userFinished) {
+                $badgeList[$id]['finished'] = true;
+            }
+        }
+    }
+    /*
+
+    $categoriesNoCourseList = Category::load(null, null, '');
+    $courseList = api_get_configuration_value('gradebook_dependency_mandatory_courses');
+    $courseList = isset($courseList['courses']) ? $courseList['courses'] : [];
+    $mandatoryCourse = [];
+    if (!empty($courseList)) {
+        foreach ($courseList as $courseId) {
+            $courseInfo = api_get_course_info_by_id($courseId);
+            $mandatoryCourse[] = $courseInfo['code'];
+        }
+    }
+
+    // @todo improve calls of course info
+    $subscribedCourses = !empty($courseAndSessions['courses']) ? $courseAndSessions['courses'] : [];
+    $mainCategoryList = [];
+    foreach ($subscribedCourses as $courseInfo) {
+        $courseCode = $courseInfo['code'];
+        $categories = Category::load(null, null, $courseCode);
         $category = !empty($categories[0]) ? $categories[0] : [];
         if (!empty($category)) {
             $mainCategoryList[] = $category;
@@ -325,7 +397,6 @@ if (!empty($courseAndSessions['courses']) && $allow) {
                 $courseInfo = api_get_course_info_by_id($courseId);
                 $courseCode = $courseInfo['code'];
                 $categories = Category::load(null, null, $courseCode);
-                /** @var Category $subCategory */
                 $subCategory = !empty($categories[0]) ? $categories[0] : null;
                 if (!empty($subCategory)) {
                     $score = Category::getCurrentScore(
@@ -352,20 +423,61 @@ if (!empty($courseAndSessions['courses']) && $allow) {
         ];
     }
 
+    $countTotalGradeBookValidated = 0;
+    foreach ($total as $courseCode => $data) {
+        $totalScoreWithChildren = $data['total_score_with_children'];
+        if ($totalScoreWithChildren == 100) {
+            $countTotalGradeBookValidated++;
+        }
+    }
+
+
     $finalScore = 0;
     $customTotalPercentage = 0;
     $maxPercentage = 80;
     $maxCustomPercentageCounter = 0;
     $validatedCoursesPercentage = 0;
+    $resultPerCategory = [];
 
-    $countValidated = 0;
-    foreach ($total as $courseCode => $data) {
-        $totalScoreWithChildren = $data['total_score_with_children'];
-        if ($totalScoreWithChildren == 100) {
-            $countValidated++;
+    $mandatoryPercentage = 0;
+    $nonMandatoryPercentage = 0;
+
+    foreach ($categoriesNoCourseList as $category) {
+        $dependencies = $category->getCourseListDependency();
+        $minValidated = $category->getMinimumToValidate();
+        $resultPerCategory[$category->get_id()] = '';
+        $subTotal = 0;
+        if (!empty($dependencies)) {
+            foreach ($dependencies as $courseId) {
+                $courseInfo = api_get_course_info_by_id($courseId);
+                $courseCode = $courseInfo['code'];
+                if (in_array($courseCode, $mandatoryCourse)) {
+                    if ($mandatoryPercentage <= 20) {
+                        $mandatoryPercentage += 10;
+                    }
+                } else {
+                    if ($nonMandatoryPercentage <= 80) {
+                        $nonMandatoryPercentage += 10;
+                    }
+                }
+                if (isset($total[$courseCode])) {
+                    $subTotal += $total[$courseCode]['total_score_with_children'];
+                }
+            }
+
+            if ($minValidated < $countTotalGradeBookValidated) {
+                $subTotal = 0;
+            }
+            $resultPerCategory[$category->get_id()] = $subTotal;
         }
-    }
 
+        $completed = false;
+        if ($mandatoryPercentage == 20 && $nonMandatoryPercentage == 80) {
+            $completed = true;
+        }
+    }*/
+
+    /*
     foreach ($total as $courseCode => $data) {
         $totalScoreWithChildren = $data['total_score_with_children'];
         if ($data['min_validated'] < $countValidated) {
@@ -393,14 +505,19 @@ if (!empty($courseAndSessions['courses']) && $allow) {
     $completed = false;
     if ($validatedCoursesPercentage == 20 && $customTotalPercentage == 80) {
         $completed = true;
-    }
+    }*/
 
     $controller->tpl->assign(
-        'grade_book_result_validate',
-        $validatedCoursesPercentage
+        'grade_book_sidebar',
+        true
     );
 
-    $controller->tpl->assign('grade_book_result_completed', $completed);
+    $controller->tpl->assign(
+        'grade_book_progress',
+        $finalResult
+    );
+
+    $controller->tpl->assign('grade_book_badge_list', $badgeList);
     /*if ($finalScore > 0) {
         $finalScore = (int) $finalScore / count($total);
         if ($finalScore == 100) {

@@ -596,6 +596,12 @@ $_configuration['score_grade_model'] = [
 /*$_configuration['gradebook_dependency_mandatory_courses'] = [
     'courses' => [1, 2]
 ];*/
+// Gradebook id list needed to build the gradebook sidebar see BT#13099
+/*
+$_configuration['gradebook_badge_sidebar'] = [
+    'gradebooks' => [1, 2, 3]
+];*/
+
 // Show language selector in main menu an update the language in the user's
 // profile.
 //$_configuration['show_language_selector_in_menu'] = false;

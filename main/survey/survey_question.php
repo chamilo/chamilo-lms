@@ -77,7 +77,7 @@ class survey_question
 
         if (api_get_configuration_value('allow_required_survey_questions') &&
             in_array($_GET['type'], ['yesno', 'multiplechoice'])) {
-            $form->addCheckBox('is_required', get_lang('IsRequired'), get_lang('Yes'));
+            $form->addCheckBox('is_required', get_lang('IsMandatory'), get_lang('Yes'));
         }
 
         // When survey type = 1??

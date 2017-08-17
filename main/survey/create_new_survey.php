@@ -153,7 +153,12 @@ $visibleResults = array(
     SURVEY_VISIBLE_TUTOR_STUDENT => get_lang('CoachAndStudent'),
     SURVEY_VISIBLE_PUBLIC => get_lang('Everyone')
 );
-$form->addElement('select', 'visible_results', get_lang('ResultsVisibility'), $visibleResults);
+
+if (api_get_configuration_value('hide_survey_reporting_button')) {
+    $form->addLabel(get_lang('ResultsVisibility'), get_lang('FeatureDisabledByAdministrator'));
+} else {
+    $form->addElement('select', 'visible_results', get_lang('ResultsVisibility'), $visibleResults);
+}
 //$defaults['visible_results'] = 0;
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));

@@ -57,7 +57,8 @@ $courseList = [];
 
 /*$mandatoryList = api_get_configuration_value('gradebook_dependency_mandatory_courses');
 $mandatoryList = isset($mandatoryList['courses']) ? $mandatoryList['courses'] : [];*/
-
+$userResult  = [];
+$totalDependencies = count($dependencies);
 foreach ($dependencies as $courseId) {
     $courseInfo = api_get_course_info_by_id($courseId);
     $courseCode = $courseInfo['code'];
@@ -70,16 +71,23 @@ foreach ($dependencies as $courseId) {
     $userList = CourseManager::get_student_list_from_course_code($courseCode);
     $users = [];
     foreach ($userList as $user) {
-        $userInfo = api_get_user_info($user['user_id']);
+        $userId = $user['user_id'];
+        $userInfo = api_get_user_info($userId);
         $result = Category::userFinishedCourse(
-            $user['user_id'],
+            $userId,
             $subCategory,
             true
         );
         $userInfo['result'] = $result;
-        $users[] = $userInfo;
+        //$users[] = $userInfo;
+        $userResult[$userId]['result'][$courseCode] = $result;
+        $userResult[$userId]['user_info'] = $userInfo;
     }
-    $courseInfo['users'] = $users;
+
+    foreach ($userResult as $userId => &$userData) {
+        $userData['final_result'] = count(array_filter($userData['result'])) == $totalDependencies;
+    }
+    //$courseInfo['users'] = $users;
     //$courseInfo['is_mandatory'] = in_array($courseCode, $mandatoryList);
     $courseList[] = $courseInfo;
 }
@@ -96,5 +104,6 @@ $tpl->assign(
 
 $tpl->assign('gradebook_category', $category);
 $tpl->assign('courses', $courseList);
+$tpl->assign('users', $userResult);
 $layout = $tpl->get_template('admin/gradebook_dependency.tpl');
 $tpl->display($layout);

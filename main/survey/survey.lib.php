@@ -951,6 +951,9 @@ class SurveyManager
         $return['horizontalvertical'] = $row['display'];
         $return['shared_question_id'] = $row['shared_question_id'];
         $return['maximum_score'] = $row['max_value'];
+        $return['is_required'] = api_get_configuration_value('allow_required_survey_questions')
+            ? $row['is_required']
+            : false;
 
         if ($row['survey_group_pri'] != 0) {
             $return['assigned'] = $row['survey_group_pri'];

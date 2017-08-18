@@ -888,8 +888,7 @@ class ExtraFieldValue extends Model
         $sql = "DELETE FROM {$this->table}
                 WHERE
                     item_id = '$item_id' AND
-                    field_id = '$field_id' AND
-                    extra_field_type = $extraFieldType
+                    field_id = '$field_id'
                 ";
         Database::query($sql);
     }

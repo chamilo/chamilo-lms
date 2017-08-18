@@ -1122,8 +1122,8 @@ class SurveyManager
                         'max_value' => $maxScore,
                     ];
 
-                    if (isset($form_content['is_required'])) {
-                        $params['is_required'] = true;
+                    if (api_get_configuration_value('allow_required_survey_questions')) {
+                        $params['is_required'] = isset($form_content['is_required']);
                     }
 
                     $params = array_merge($params, $extraParams);
@@ -1161,8 +1161,8 @@ class SurveyManager
                         'display' => $form_content['horizontalvertical'],
                     ];
 
-                    if (isset($form_content['is_required'])) {
-                        $params['is_required'] = true;
+                    if (api_get_configuration_value('allow_required_survey_questions')) {
+                        $params['is_required'] = isset($form_content['is_required']);
                     }
 
                     $params = array_merge($params, $extraParams);

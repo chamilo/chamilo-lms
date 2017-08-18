@@ -314,6 +314,7 @@ if (!empty($courseAndSessions['courses']) && $allow) {
     $result = [];
     $result20 = 0;
     $result80 = 0;
+    $countCoursesPassedNoDependency = 0;
     /** @var Category $category */
     foreach ($mainCategoryList as $category) {
         $userFinished = Category::userFinishedCourse(
@@ -328,6 +329,7 @@ if (!empty($courseAndSessions['courses']) && $allow) {
                     $result20 += 10;
                 }
             } else {
+                $countCoursesPassedNoDependency++;
                 if ($result80 < 80) {
                     $result80 += 10;
                 }
@@ -349,27 +351,27 @@ if (!empty($courseAndSessions['courses']) && $allow) {
         if (!empty($category)) {
             $minToValidate = $category->getMinimumToValidate();
             $dependencies = $category->getCourseListDependency();
-            $countDependenciesPast = 0;
+            $countDependenciesPassed = 0;
             foreach ($dependencies as $courseId) {
                 $courseInfo = api_get_course_info_by_id($courseId);
                 $courseCode = $courseInfo['code'];
                 $categories = Category::load(null, null, $courseCode);
                 $subCategory = !empty($categories[0]) ? $categories[0] : null;
                 if (!empty($subCategory)) {
-                    $score = Category::getCurrentScore(
+                    $score = Category::userFinishedCourse(
                         $userId,
                         $subCategory,
                         true
                     );
                     if ($score) {
-                        $countDependenciesPast++;
+                        $countDependenciesPassed++;
                     }
                 }
             }
 
             $userFinished =
-                $countDependenciesPast == count($dependencies) &&
-                (count($subscribedCourses) - count($dependencies) >= $minToValidate)
+                $countDependenciesPassed == count($dependencies) &&
+                $countCoursesPassedNoDependency >= $minToValidate
             ;
 
             if ($userFinished) {

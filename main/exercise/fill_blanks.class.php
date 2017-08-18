@@ -1246,7 +1246,7 @@ class FillBlanks extends Question
 
         $result = "<span class='feedbaak-question'>";
         $result .= $iconAnswer . "<span class='$style'>" . $answer . "</span>";
-        $result .= "<span class='feedback-separator'> / </span>";
+        //$result .= "<span class='feedback-separator'> / </span>";
         //$result .= $correctAnswerHtml;
         $result .= "</span>";
 

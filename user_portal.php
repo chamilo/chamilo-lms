@@ -347,11 +347,31 @@ if (!empty($courseAndSessions['courses']) && $allow) {
         $badgeList[$id]['name'] = $category->get_name();
         $badgeList[$id]['finished'] = false;
         if (!empty($category)) {
-            $userFinished = Category::userFinishedCourse(
-                $userId,
-                $category,
-                true
-            );
+            $minToValidate = $category->getMinimumToValidate();
+            $dependencies = $category->getCourseListDependency();
+            $countDependenciesPast = 0;
+            foreach ($dependencies as $courseId) {
+                $courseInfo = api_get_course_info_by_id($courseId);
+                $courseCode = $courseInfo['code'];
+                $categories = Category::load(null, null, $courseCode);
+                $subCategory = !empty($categories[0]) ? $categories[0] : null;
+                if (!empty($subCategory)) {
+                    $score = Category::getCurrentScore(
+                        $userId,
+                        $subCategory,
+                        true
+                    );
+                    if ($score) {
+                        $countDependenciesPast++;
+                    }
+                }
+            }
+
+            $userFinished =
+                $countDependenciesPast == count($dependencies) &&
+                (count($subscribedCourses) - count($dependencies) >= $minToValidate)
+            ;
+
             if ($userFinished) {
                 $badgeList[$id]['finished'] = true;
             }

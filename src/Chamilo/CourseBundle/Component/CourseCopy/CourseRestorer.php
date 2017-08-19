@@ -2455,6 +2455,12 @@ class CourseRestorer
                 'shared_question_id' => self::DBUTF8($question->shared_question_id),
                 'max_value' => self::DBUTF8($question->max_value),
             ];
+            if (api_get_configuration_value('allow_required_survey_questions')) {
+                if (isset($question->is_required)) {
+                    $params['is_required'] = $question->is_required;
+                }
+            }
+
 
             $new_id = Database::insert($table_que, $params);
             if ($new_id) {

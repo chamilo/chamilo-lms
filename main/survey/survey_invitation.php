@@ -92,7 +92,7 @@ $course_id = api_get_course_int_id();
 $sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email
         FROM $table_survey_invitation survey_invitation
         LEFT JOIN $table_user user
-        ON (survey_invitation.user = user.user_id AND survey_invitation.c_id = $course_id)
+        ON (survey_invitation.user = user.id AND survey_invitation.c_id = $course_id)
         WHERE
             survey_invitation.survey_code = '".Database::escape_string($survey_data['code'])."' ";
 

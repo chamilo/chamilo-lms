@@ -43,10 +43,11 @@ $toolbar = Display::url(
         'list_badges.png',
         get_lang('ManageSkills'),
         null,
-        ICON_SIZE_MEDIUM),
+        ICON_SIZE_MEDIUM
+    ),
     api_get_path(WEB_CODE_PATH).'admin/skill_list.php',
     ['title' => get_lang('ManageSkills')]
-    );
+);
 
 $tpl = new Template(get_lang('Skills'));
 $tpl->assign('errorMessage', $errorMessage);

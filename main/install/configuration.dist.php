@@ -467,6 +467,9 @@ ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 //$_configuration['allow_required_survey_questions'] = false;
 // Hide Survey Reporting button
 //$_configuration['hide_survey_reporting_button'] = false;
+// Hide survey edition tools for all or some surveys.
+//Set an asterisk to hide for all, otherwise set an array with the survey codes in which the options will be blocked
+//$_configuration['hide_survey_edition'] = ['codes' => []];
 // ------
 
 // Allow career diagram, requires a DB change:

@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+use Chamilo\CourseBundle\Entity\CSurvey;
 
 /**
  * This class offers a series of general utility functions for survey querying and display
@@ -2662,7 +2663,21 @@ class SurveyUtil
      */
     public static function modify_filter($survey_id, $drh = false)
     {
-        $survey_id = Security::remove_XSS($survey_id);
+        /** @var CSurvey $survey */
+        $survey = Database::getManager()->find('ChamiloCourseBundle:CSurvey', $survey_id);
+        $hideSurveyEdition = api_get_configuration_value('hide_survey_edition');
+
+        if (false !== $hideSurveyEdition) {
+            if ('*' === $hideSurveyEdition['codes']) {
+                return '';
+            }
+
+            if (in_array($survey->getCode(), $hideSurveyEdition['codes'])) {
+                return '';
+            }
+        }
+
+        $survey_id = $survey->getSurveyId();
         $return = '';
         $hideReportingButton = api_get_configuration_value('hide_survey_reporting_button');
 

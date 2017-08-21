@@ -2760,6 +2760,7 @@ class CourseManager
                 ";
         } else {
             $withSpecialCourses = $withoutSpecialCourses = '';
+            $languageCondition = '';
             $onlyInUserLanguage = api_get_configuration_value('my_courses_show_courses_in_user_language_only');
             if ($onlyInUserLanguage) {
                 $userInfo = api_get_user_info(api_get_user_id());

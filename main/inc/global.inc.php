@@ -495,6 +495,9 @@ if (!empty($valid_languages)) {
                     $userEntity->setLanguage($language_interface);
                     Database::getManager()->merge($userEntity);
                     Database::getManager()->flush();
+                    if (isset($_SESSION['_user'])) {
+                        $_SESSION['_user']['language'] = $language_interface;
+                    }
                 }
                 $language_interface = $_SESSION['user_language_choice'] = $userEntity->getLanguage();
             }

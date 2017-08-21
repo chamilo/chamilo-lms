@@ -2762,7 +2762,7 @@ class CourseManager
             $withSpecialCourses = $withoutSpecialCourses = '';
             $onlyInUserLanguage = api_get_configuration_value('my_courses_show_courses_in_user_language_only');
             if ($onlyInUserLanguage) {
-                $userInfo = api_get_user_info();
+                $userInfo = api_get_user_info(api_get_user_id());
                 if (!empty($userInfo['language'])) {
                     $languageCondition = " AND course.course_language = '".$userInfo['language']."' ";
                 }
@@ -3593,7 +3593,7 @@ class CourseManager
         $languageCondition = '';
         $onlyInUserLanguage = api_get_configuration_value('my_courses_show_courses_in_user_language_only');
         if ($onlyInUserLanguage) {
-            $userInfo = api_get_user_info();
+            $userInfo = api_get_user_info(api_get_user_id());
             if (!empty($userInfo['language'])) {
                 $languageCondition = " AND course_language = '".$userInfo['language']."' ";
             }
@@ -3791,7 +3791,7 @@ class CourseManager
         $languageCondition = '';
         $onlyInUserLanguage = api_get_configuration_value('my_courses_show_courses_in_user_language_only');
         if ($onlyInUserLanguage) {
-            $userInfo = api_get_user_info();
+            $userInfo = api_get_user_info(api_get_user_id());
             if (!empty($userInfo['language'])) {
                 $languageCondition = " AND course.course_language = '".$userInfo['language']."' ";
             }

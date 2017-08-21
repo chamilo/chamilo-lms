@@ -380,16 +380,16 @@ if (!empty($courseAndSessions['courses']) && $allow) {
             ;
 
             if ($userFinished) {
-                $objSkill = new Skill();
-                $skills = $category->get_skills();
-                $skillList = [];
-                foreach ($skills as $skill) {
-                    $skillList[] = $objSkill->get($skill['id']);
-                }
-
                 $badgeList[$id]['finished'] = true;
-                $badgeList[$id]['skills'] = $skillList;
             }
+
+            $objSkill = new Skill();
+            $skills = $category->get_skills();
+            $skillList = [];
+            foreach ($skills as $skill) {
+                $skillList[] = $objSkill->get($skill['id']);
+            }
+            $badgeList[$id]['skills'] = $skillList;
         }
     }
     /*

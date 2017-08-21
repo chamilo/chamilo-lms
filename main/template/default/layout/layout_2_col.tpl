@@ -155,9 +155,6 @@
                                         {{ 'Progress' | get_lang  }} : {{ grade_book_progress }} %
                                         <br />
                                         {% for badge in grade_book_badge_list %}
-                                            <div class="badge_sidebar_title">
-                                            {{ badge.name }}
-                                            </div>
                                             <div class="badge_sidebar">
                                             {% for skill in badge.skills %}
                                                 {% if badge.finished %}
@@ -169,6 +166,9 @@
                                                 {#{{ skill.name }}#}
                                                 {#</div>#}
                                             {% endfor %}
+                                            </div>
+                                            <div class="badge_sidebar_title">
+                                            {{ badge.name }}
                                             </div>
                                         {% endfor %}
                                     </li>

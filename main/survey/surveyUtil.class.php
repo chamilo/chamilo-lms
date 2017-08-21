@@ -2652,6 +2652,30 @@ class SurveyUtil
     }
 
     /**
+     * Check if the hide_survey_edition configurations setting is enabled
+     * @param string $surveyCode
+     * @return bool
+     */
+    public static function checkHideEditionToolsByCode($surveyCode)
+    {
+        $hideSurveyEdition = api_get_configuration_value('hide_survey_edition');
+
+        if (false === $hideSurveyEdition) {
+            return false;
+        }
+
+        if ('*' === $hideSurveyEdition['codes']) {
+            return true;
+        }
+
+        if (in_array($surveyCode, $hideSurveyEdition['codes'])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * This function changes the modify column of the sortable table
      *
      * @param integer $survey_id the id of the survey
@@ -2665,16 +2689,10 @@ class SurveyUtil
     {
         /** @var CSurvey $survey */
         $survey = Database::getManager()->find('ChamiloCourseBundle:CSurvey', $survey_id);
-        $hideSurveyEdition = api_get_configuration_value('hide_survey_edition');
+        $hideSurveyEdition = self::checkHideEditionToolsByCode($survey->getCode());
 
-        if (false !== $hideSurveyEdition) {
-            if ('*' === $hideSurveyEdition['codes']) {
-                return '';
-            }
-
-            if (in_array($survey->getCode(), $hideSurveyEdition['codes'])) {
-                return '';
-            }
+        if ($hideSurveyEdition) {
+            return '';
         }
 
         $survey_id = $survey->getSurveyId();
@@ -2894,10 +2912,15 @@ class SurveyUtil
 
         while ($survey = Database::fetch_array($res)) {
             $array[0] = $survey[0];
-            $array[1] = Display::url(
-                $survey[1],
-                api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey[0].'&'.api_get_cidreq()
-            );
+
+            if (self::checkHideEditionToolsByCode($survey['col2'])) {
+                $array[1] = $survey[1];
+            } else {
+                $array[1] = Display::url(
+                    $survey[1],
+                    api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey[0].'&'.api_get_cidreq()
+                );
+            }
 
             // Validation when belonging to a session
             $session_img = api_get_session_image($survey['session_id'], $_user['status']);

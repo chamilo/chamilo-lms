@@ -1172,9 +1172,10 @@ class IndexManager
         // courses list
         $studentInfo = api_get_configuration_value('course_student_info');
         $viewGrid = api_get_configuration_value('view_grid_courses');
-        $studentInfoProgress = (!empty($studentInfo['progress']) && $studentInfo['progress'] === true);
-        $studentInfoScore = (!empty($studentInfo['score']) && $studentInfo['score'] === true);
-        $studentInfoCertificate = (!empty($studentInfo['certificate']) && $studentInfo['certificate'] === true);
+
+        $studentInfoProgress = !empty($studentInfo['progress']) && $studentInfo['progress'] === true;
+        $studentInfoScore = !empty($studentInfo['score']) && $studentInfo['score'] === true;
+        $studentInfoCertificate = !empty($studentInfo['certificate']) && $studentInfo['certificate'] === true;
         $courseCompleteList = [];
         $coursesInCategoryCount = 0;
         $coursesNotInCategoryCount = 0;
@@ -1203,7 +1204,7 @@ class IndexManager
                                 $user_id,
                                 $specialCourseInfo['course_code']
                             );
-                            $specialCourses[$key]['student_info']['progress'] = ($progress === false) ? null : $progress;
+                            $specialCourses[$key]['student_info']['progress'] = $progress === false ? null : $progress;
                         }
 
                         if ($studentInfoScore) {
@@ -1251,7 +1252,7 @@ class IndexManager
                                         $user_id,
                                         $courseInCatInfo['course_code']
                                     );
-                                    $courses['in_category'][$key1]['courses'][$key2]['student_info']['progress'] = ($progress === false) ? null : $progress;
+                                    $courses['in_category'][$key1]['courses'][$key2]['student_info']['progress'] = $progress === false ? null : $progress;
                                 }
 
                                 if ($studentInfoScore) {
@@ -1277,13 +1278,9 @@ class IndexManager
                                     if (isset($category[0])) {
                                         if ($viewGrid == 'true') {
                                             if ($isCertificateAvailable) {
-                                                $courses['in_category'][$key1]['student_info']['certificate'] = get_lang(
-                                                    'Yes'
-                                                );
+                                                $courses['in_category'][$key1]['student_info']['certificate'] = get_lang('Yes');
                                             } else {
-                                                $courses['in_category'][$key1]['student_info']['certificate'] = get_lang(
-                                                    'No'
-                                                );
+                                                $courses['in_category'][$key1]['student_info']['certificate'] = get_lang('No');
                                             }
                                         } else {
                                             if ($isCertificateAvailable) {
@@ -1379,7 +1376,6 @@ class IndexManager
                     $this->tpl->get_template($coursesWithoutCategoryTemplate)
                 );
             }
-
             if ($courses['in_category'] || $courses['not_category']) {
                 foreach ($courses['in_category'] as $courseData) {
                     if (!empty($courseData['courses'])) {
@@ -1405,12 +1401,8 @@ class IndexManager
                 $this->tpl->assign('courses', $courses['not_category']);
                 $this->tpl->assign('categories', $courses['in_category']);
 
-                $listCourse = $this->tpl->fetch(
-                    $this->tpl->get_template($coursesWithCategoryTemplate)
-                );
-                $listCourse .= $this->tpl->fetch(
-                    $this->tpl->get_template($coursesWithoutCategoryTemplate)
-                );
+                $listCourse = $this->tpl->fetch($this->tpl->get_template($coursesWithCategoryTemplate));
+                $listCourse .= $this->tpl->fetch($this->tpl->get_template($coursesWithoutCategoryTemplate));
             }
 
             $courseCount = count($specialCourses) + $coursesInCategoryCount + $coursesNotInCategoryCount;
@@ -1418,7 +1410,6 @@ class IndexManager
 
         $sessions_with_category = '';
         $sessions_with_no_category = '';
-
         if ($showSessions) {
             $coursesListSessionStyle = api_get_configuration_value('courses_list_session_title_link');
             $coursesListSessionStyle = $coursesListSessionStyle === false ? 1 : $coursesListSessionStyle;
@@ -1435,9 +1426,8 @@ class IndexManager
                 foreach ($session_categories as $session_category) {
                     $session_category_id = $session_category['session_category']['id'];
                     // Sessions and courses that are not in a session category
-                    if (
-                        empty($session_category_id)
-                        && isset($session_category['sessions'])
+                    if (empty($session_category_id) &&
+                        isset($session_category['sessions'])
                     ) {
                         // Independent sessions
                         foreach ($session_category['sessions'] as $session) {
@@ -1510,11 +1500,10 @@ class IndexManager
                                         );
                                         if (isset($courseUserHtml[1])) {
                                             $course_session = $courseUserHtml[1];
-                                            $course_session['skill'] =
-                                                isset($courseUserHtml['skill']) ? $courseUserHtml['skill'] : '';
+                                            $course_session['skill'] = isset($courseUserHtml['skill']) ? $courseUserHtml['skill'] : '';
 
-                                            //Course option (show student progress)
-                                            //This code will add new variables (Progress, Score, Certificate)
+                                            // Course option (show student progress)
+                                            // This code will add new variables (Progress, Score, Certificate)
                                             if ($studentInfoProgress || $studentInfoScore || $studentInfoCertificate) {
                                                 if ($studentInfoProgress) {
                                                     $progress = Tracking::get_avg_student_progress(
@@ -1523,8 +1512,7 @@ class IndexManager
                                                         array(),
                                                         $session_id
                                                     );
-                                                    $course_session['student_info']['progress'] =
-                                                        ($progress === false) ? null : $progress;
+                                                    $course_session['student_info']['progress'] = $progress === false ? null : $progress;
                                                 }
 
                                                 if ($studentInfoScore) {
@@ -1549,11 +1537,9 @@ class IndexManager
                                                     $course_session['student_info']['certificate'] = null;
                                                     if (isset($category[0])) {
                                                         if ($category[0]->is_certificate_available($user_id)) {
-                                                            $course_session['student_info']['certificate'] =
-                                                                Display::label(get_lang('Yes'), 'success');
+                                                            $course_session['student_info']['certificate'] = Display::label(get_lang('Yes'), 'success');
                                                         } else {
-                                                            $course_session['student_info']['certificate'] =
-                                                                Display::label(get_lang('No'));
+                                                            $course_session['student_info']['certificate'] = Display::label(get_lang('No'));
                                                         }
                                                     }
                                                 }
@@ -1577,8 +1563,7 @@ class IndexManager
                                     'id' => $session_id
                                 );
                                 $session_box = Display::get_session_title_box($session_id);
-                                $actions =
-                                    api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session_id;
+                                $actions = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session_id;
                                 $coachId = $session_box['id_coach'];
                                 $extraFieldValue = new ExtraFieldValue('session');
                                 $imageField = $extraFieldValue->get_values_by_handler_and_field_variable(
@@ -1589,9 +1574,7 @@ class IndexManager
                                 $params['category_id'] = $session_box['category_id'];
                                 $params['title'] = $session_box['title'];
                                 $params['id_coach'] = $coachId;
-                                $params['coach_url'] =
-                                    api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='
-                                    .$coachId;
+                                $params['coach_url'] = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$coachId;
                                 $params['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;
                                 $params['coach_avatar'] = UserManager::getUserPicture(
                                     $coachId,
@@ -1599,11 +1582,9 @@ class IndexManager
                                 );
                                 $params['date'] = $session_box['dates'];
                                 $params['image'] = isset($imageField['value']) ? $imageField['value'] : null;
-                                $params['duration'] =
-                                    isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
+                                $params['duration'] = isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
                                 $params['edit_actions'] = $actions;
-                                $params['show_description'] =
-                                    $session_box['show_description'] == 1 && $portalShowDescription;
+                                $params['show_description'] = $session_box['show_description'] == 1 && $portalShowDescription;
                                 $params['description'] = $session_box['description'];
                                 $params['visibility'] = $session_box['visibility'];
                                 $params['show_simple_session_info'] = $showSimpleSessionInfo;
@@ -1652,7 +1633,6 @@ class IndexManager
                                 $date_session_end = $session['access_end_date'];
                                 $coachAccessStartDate = $session['coach_access_start_date'];
                                 $coachAccessEndDate = $session['coach_access_end_date'];
-
                                 $html_courses_session = [];
                                 $count = 0;
 
@@ -1713,18 +1693,14 @@ class IndexManager
                                     $session_box = Display::get_session_title_box($session_id);
                                     $sessionParams[0]['id'] = $session_id;
                                     $sessionParams[0]['date'] = $session_box['dates'];
-                                    $sessionParams[0]['duration'] =
-                                        isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
+                                    $sessionParams[0]['duration'] = isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
                                     $sessionParams[0]['course_list_session_style'] = $coursesListSessionStyle;
                                     $sessionParams[0]['title'] = $session_box['title'];
-                                    $sessionParams[0]['subtitle'] =
-                                        (!empty($session_box['coach']) ? $session_box['coach'].' | ' : '')
-                                        .$session_box['dates'];
+                                    $sessionParams[0]['subtitle'] = (!empty($session_box['coach']) ? $session_box['coach'].' | ' : '').$session_box['dates'];
                                     $sessionParams[0]['show_actions'] = api_is_platform_admin();
                                     $sessionParams[0]['courses'] = $html_courses_session;
                                     $sessionParams[0]['show_simple_session_info'] = $showSimpleSessionInfo;
-                                    $sessionParams[0]['coach_name'] =
-                                        !empty($session_box['coach']) ? $session_box['coach'] : null;
+                                    $sessionParams[0]['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;
 
                                     if ($showSimpleSessionInfo) {
                                         $sessionParams[0]['subtitle'] = self::getSimpleSessionDetails(
@@ -1763,9 +1739,8 @@ class IndexManager
                                 $session_category_end_date = '';
                             }
 
-                            if (
-                                !empty($session_category_start_date)
-                                && !empty($session_category_end_date)
+                            if (!empty($session_category_start_date) &&
+                                !empty($session_category_end_date)
                             ) {
                                 $categoryParams['subtitle'] = sprintf(
                                     get_lang('FromDateXToDateY'),

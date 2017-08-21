@@ -162,9 +162,9 @@
                                                 {% else %}
                                                     <img class="badge_sidebar_image badge_sidebar_image_transparency" src = "{{ skill.web_icon_path }}" />
                                                 {% endif %}
-                                                {#<div class="badge_sidebar_title">#}
-                                                {#{{ skill.name }}#}
-                                                {#</div>#}
+                                                <div class="badge_sidebar_title">
+                                                {{ skill.name }}
+                                                </div>
                                             {% endfor %}
                                             </div>
                                         {% endfor %}

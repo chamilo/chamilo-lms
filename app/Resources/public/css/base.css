@@ -6846,3 +6846,12 @@ input.form-control[type="color"] {
 @media (min-width: 1200px) {
 
 }
+
+
+.badge_sidebar_image {
+    width: 120px;
+}
+
+.badge_sidebar_image_transparency{
+    opacity: 0.5;
+}

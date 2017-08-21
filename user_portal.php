@@ -192,7 +192,9 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
         if (isset($sessions[0])) {
             $sessionInfo = $sessions[0];
             // Session only has 1 course.
-            if (isset($sessionInfo['courses']) && count($sessionInfo['courses']) == 1) {
+            if (isset($sessionInfo['courses']) &&
+                count($sessionInfo['courses']) == 1
+            ) {
                 $courseCode = $sessionInfo['courses'][0]['code'];
                 $courseInfo = api_get_course_info_by_id($sessionInfo['courses'][0]['real_id']);
                 $courseUrl = $courseInfo['course_public_url'].'?id_session='.$sessionInfo['session_id'];
@@ -211,7 +213,10 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
     }
 
     // User is subscribed to 1 course.
-    if (!isset($_SESSION['coursesAlreadyVisited']) && $count_of_sessions == 0 && $count_of_courses_no_sessions == 1) {
+    if (!isset($_SESSION['coursesAlreadyVisited']) &&
+        $count_of_sessions == 0 &&
+        $count_of_courses_no_sessions == 1
+    ) {
         $courses = CourseManager::get_courses_list_by_user_id(
             $userId
         );
@@ -297,7 +302,6 @@ if (!empty($courseAndSessions['courses']) && $allow) {
         }
     }
 
-
      // @todo improve calls of course info
     $subscribedCourses = !empty($courseAndSessions['courses']) ? $courseAndSessions['courses'] : [];
     $mainCategoryList = [];
@@ -348,6 +352,7 @@ if (!empty($courseAndSessions['courses']) && $allow) {
         $category = !empty($categories[0]) ? $categories[0] : [];
         $badgeList[$id]['name'] = $category->get_name();
         $badgeList[$id]['finished'] = false;
+        $badgeList[$id]['skills'] = [];
         if (!empty($category)) {
             $minToValidate = $category->getMinimumToValidate();
             $dependencies = $category->getCourseListDependency();
@@ -375,7 +380,15 @@ if (!empty($courseAndSessions['courses']) && $allow) {
             ;
 
             if ($userFinished) {
+                $objSkill = new Skill();
+                $skills = $category->get_skills();
+                $skillList = [];
+                foreach ($skills as $skill) {
+                    $skillList[] = $objSkill->get($skill['id']);
+                }
+
                 $badgeList[$id]['finished'] = true;
+                $badgeList[$id]['skills'] = $skillList;
             }
         }
     }
@@ -538,7 +551,6 @@ if (!empty($courseAndSessions['courses']) && $allow) {
         'grade_book_progress',
         $finalResult
     );
-
     $controller->tpl->assign('grade_book_badge_list', $badgeList);
     /*if ($finalScore > 0) {
         $finalScore = (int) $finalScore / count($total);

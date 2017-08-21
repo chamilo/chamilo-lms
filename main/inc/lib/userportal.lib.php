@@ -2267,6 +2267,7 @@ class IndexManager
         $template->assign('course_categories', $categories);
 
         return [
+            'courses' => $courseList,
             'html' => $template->fetch($layout),
             'course_count' => count($courseList),
             'session_count' => $sessionCount

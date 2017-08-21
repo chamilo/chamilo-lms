@@ -82,7 +82,6 @@ class CourseManager
                 $params['wanted_code'] = self::generate_course_code($substring);
             }
         }
-
         // Create the course keys
         $keys = AddCourse::define_course_keys($params['wanted_code']);
 
@@ -2761,6 +2760,14 @@ class CourseManager
                 ";
         } else {
             $withSpecialCourses = $withoutSpecialCourses = '';
+            $onlyInUserLanguage = api_get_configuration_value('my_courses_show_courses_in_user_language_only');
+            if ($onlyInUserLanguage) {
+                $userInfo = api_get_user_info();
+                if (!empty($userInfo['language'])) {
+                    $languageCondition = " AND course.course_language = '".$userInfo['language']."' ";
+                }
+            }
+
             if ($loadSpecialCourses) {
                 $specialCourseList = self::get_special_course_list();
 
@@ -2781,7 +2788,9 @@ class CourseManager
                             ON course_rel_user.user_course_cat = user_course_category.id
                             INNER JOIN $tableCourseUrl url 
                             ON (course.id = url.c_id)  
-                            WHERE url.access_url_id = $urlId $withSpecialCourses                        
+                            WHERE url.access_url_id = $urlId 
+                            $withSpecialCourses
+                            $languageCondition                        
                             GROUP BY course.code
                             ORDER BY user_course_category.sort, course.title, course_rel_user.sort ASC
                     ";
@@ -2811,6 +2820,7 @@ class CourseManager
                         url.access_url_id = $urlId AND 
                         cru.user_id = '$user_id' 
                         $withoutSpecialCourses
+                        $languageCondition
                     ORDER BY course.title
                     ";
         }

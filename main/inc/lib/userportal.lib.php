@@ -1185,10 +1185,15 @@ class IndexManager
     /**
      * Prints the session and course list (user_portal.php)
      * @param int $user_id
+     * @param bool $showSessions
+     * @param string $categoryCodeFilter
      * @return string
      */
-    public function returnCoursesAndSessions($user_id)
-    {
+    public function returnCoursesAndSessions(
+        $user_id,
+        $showSessions = true,
+        $categoryCodeFilter = ''
+    ) {
         $gameModeIsActive = api_get_setting('gamification_mode');
         $listCourse = '';
         $specialCourseList = '';

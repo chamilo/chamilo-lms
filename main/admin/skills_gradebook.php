@@ -89,7 +89,16 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 $(function() {
 <?php
     // grid definition see the $career->display() function
-    echo Display::grid_js('gradebooks', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+    echo Display::grid_js(
+        'gradebooks',
+        $url,
+        $columns,
+        $column_model,
+        $extra_params,
+        array(),
+        $action_links,
+        true
+    );
 ?>
 });
 </script>

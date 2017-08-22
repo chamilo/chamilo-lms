@@ -82,14 +82,17 @@ foreach ($dependencyList as $courseId => $courseInfo) {
     $userList = CourseManager::get_student_list_from_course_code($courseCode);
     foreach ($userList as $user) {
         $userId = $user['user_id'];
-        if ($userId != 37056) {
-            //continue;
-        }
-
         $userInfo = api_get_user_info($userId);
         $courseId = $courseInfo['real_id'];
 
-        $userCourseList = CourseManager::get_courses_list_by_user_id($userId);
+        $userCourseList = CourseManager::get_courses_list_by_user_id(
+            $userId,
+            false,
+            false,
+            true,
+            [],
+            false
+        );
         $userCourseListCode = array_column($userCourseList, 'code');
 
         if (!isset($userResult[$userId]['result_mandatory_20'])) {

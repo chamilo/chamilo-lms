@@ -145,9 +145,14 @@ if (!$myCourseListAsCategory) {
 
     // if teacher, session coach or admin, display the button to change te course view
 
-    if ($displayMyCourseViewBySessionLink
-        && (api_is_drh() || api_is_session_general_coach() || api_is_platform_admin() || api_is_session_admin()
-            || api_is_teacher())
+    if ($displayMyCourseViewBySessionLink &&
+        (
+            api_is_drh() ||
+            api_is_session_general_coach() ||
+            api_is_platform_admin() ||
+            api_is_session_admin() ||
+            api_is_teacher()
+        )
     ) {
         $courseAndSessions['html'] = "
             <div class='view-by-session-link'>
@@ -291,7 +296,14 @@ if ($myCourseListAsCategory) {
 
 $allow = api_get_configuration_value('gradebook_dependency');
 
-if (!empty($courseAndSessions['courses']) && $allow) {
+if ($allow) {
+    $courseAndSessions = $controller->returnCoursesAndSessions(
+        $userId,
+        true,
+        '',
+        false
+    );
+
     $courseList = api_get_configuration_value('gradebook_dependency_mandatory_courses');
     $courseList = isset($courseList['courses']) ? $courseList['courses'] : [];
     $mandatoryCourse = [];

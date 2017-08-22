@@ -1379,6 +1379,7 @@ class IndexManager
                 $specialCourseList = $this->tpl->fetch(
                     $this->tpl->get_template($coursesWithoutCategoryTemplate)
                 );
+                $courseCompleteList = array_merge($courseCompleteList, $specialCourses);
             }
             if ($courses['in_category'] || $courses['not_category']) {
                 foreach ($courses['in_category'] as $courseData) {

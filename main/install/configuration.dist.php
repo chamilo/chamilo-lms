@@ -477,7 +477,8 @@ ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 //UPDATE extra_field_values SET updated_at = NULL WHERE CAST(updated_at AS CHAR(20)) = '0000-00-00 00:00:00';
 //ALTER TABLE extra_field_values modify column value longtext null;
 //$_configuration['allow_career_diagram'] = false;
-// Allow scheduled emails to session users. See class ProgrammedAnnouncement
+// Allow scheduled emails to session users.
+//CREATE TABLE scheduled_announcements (id INT AUTO_INCREMENT NOT NULL, subject VARCHAR(255) NOT NULL, message LONGTEXT NOT NULL, date DATETIME DEFAULT NULL, sent TINYINT(1) NOT NULL, session_id INT NOT NULL, c_id INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 //$_configuration['allow_scheduled_announcements'] = false;
 // Add the list of emails as a bcc when sending an email.
 /*

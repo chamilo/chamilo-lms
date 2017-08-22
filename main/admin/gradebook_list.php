@@ -17,6 +17,8 @@ if ($allow == false) {
 $em = Database::getManager();
 $repo = $em->getRepository('ChamiloCoreBundle:GradebookCategory');
 
+$maxItems = 20;
+
 $page = isset($_REQUEST['page']) ? (int) $_REQUEST['page'] : 1;
 $categoryId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 1;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
@@ -243,7 +245,7 @@ switch ($action) {
         $pagination = $paginator->paginate(
             $gradeBookList,
             $page,
-            5
+            $maxItems
         );
 
         // pagination.tpl needs current_url with out "page" param

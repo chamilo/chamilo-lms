@@ -8,8 +8,6 @@
  * @package chamilo.plugin.clockworksms
  * @author  Imanol Losada <imanol.losada@beeznest.com>
  */
-/**
- * Initialization
- */
+
 require_once __DIR__.'/config.php';
 ClockworksmsPlugin::create()->install();

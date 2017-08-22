@@ -83,14 +83,14 @@ class ImsAnswerMultipleChoice extends Answer
         // @todo getAnswersList() converts the answers using api_html_entity_decode()
         $this->answerList = $this->getAnswersList(true);
         $out = '    <choiceInteraction responseIdentifier="'.$questionIdent.'" >'."\n";
-        $out .= '      <prompt><![CDATA['.formatExerciseQtiTitle($questionStatment).']]></prompt>'."\n";
+        $out .= '      <prompt><![CDATA['.formatExerciseQtiText($questionStatment).']]></prompt>'."\n";
         if (is_array($this->answerList)) {
             foreach ($this->answerList as $current_answer) {
                 $out .= '<simpleChoice identifier="answer_'.$current_answer['id'].'" fixed="false">
-                         <![CDATA['.formatExerciseQtiTitle($current_answer['answer']).']]>';
+                         <![CDATA['.formatExerciseQtiText($current_answer['answer']).']]>';
                 if (isset($current_answer['comment']) && $current_answer['comment'] != '') {
                     $out .= '<feedbackInline identifier="answer_'.$current_answer['id'].'">
-                             <![CDATA['.formatExerciseQtiTitle($current_answer['comment']).']]>
+                             <![CDATA['.formatExerciseQtiText($current_answer['comment']).']]>
                              </feedbackInline>';
                 }
                 $out .= '</simpleChoice>'."\n";
@@ -186,7 +186,7 @@ class ImsAnswerFillInBlanks extends Answer
                 $answer = $answer['answer'];
                 $out .= '  <responseDeclaration identifier="fill_'.$answerKey.'" cardinality="single" baseType="identifier">'."\n";
                 $out .= '    <correctResponse>'."\n";
-                $out .= '      <value><![CDATA['.formatExerciseQtiTitle($answer).']]></value>'."\n";
+                $out .= '      <value><![CDATA['.formatExerciseQtiText($answer).']]></value>'."\n";
                 $out .= '    </correctResponse>'."\n";
                 if (isset($this->gradeList[$answerKey])) {
                     $out .= '    <mapping>'."\n";
@@ -228,7 +228,7 @@ class ImsAnswerMatching extends Answer
             foreach ($this->leftList as $leftKey => $leftElement) {
                 $out .= '
                 <simpleAssociableChoice identifier="left_'.$leftKey.'" >
-                    <![CDATA['.formatExerciseQtiTitle($leftElement['answer']).']]>
+                    <![CDATA['.formatExerciseQtiText($leftElement['answer']).']]>
                 </simpleAssociableChoice>'. "\n";
             }
         }
@@ -242,7 +242,7 @@ class ImsAnswerMatching extends Answer
         if (is_array($this->rightList)) {
             foreach ($this->rightList as $rightKey => $rightElement) {
                 $out .= '<simpleAssociableChoice identifier="right_'.$i.'" >
-                        <![CDATA['.formatExerciseQtiTitle($rightElement['answer']).']]>
+                        <![CDATA['.formatExerciseQtiText($rightElement['answer']).']]>
                         </simpleAssociableChoice>'. "\n";
                 $i++;
             }
@@ -365,7 +365,7 @@ class ImsAnswerHotspot extends Answer
             foreach ($this->answerList as $answerKey => $answer) {
                 $answerKey = $answer['id'];
                 $answer = $answer['answer'];
-                $out .= '<value><![CDATA['.formatExerciseQtiTitle($answerKey).']]></value>';
+                $out .= '<value><![CDATA['.formatExerciseQtiText($answerKey).']]></value>';
             }
             $out .= '    </correctResponse>'."\n";
         }
@@ -385,9 +385,13 @@ class ImsAnswerFree extends Answer
      * TODO implement
      * Export the question part as a matrix-choice, with only one possible answer per line.
      */
-    public function imsExportResponses($questionIdent, $questionStatment, $questionDesc = '', $questionMedia = '')
-    {
-        //expectedLength="200"
+    public function imsExportResponses(
+        $questionIdent,
+        $questionStatment,
+        $questionDesc = '',
+        $questionMedia = ''
+    ) {
+        $questionDesc = formatExerciseQtiText($questionDesc);
         return '<extendedTextInteraction responseIdentifier="'.$questionIdent.'" >
             <prompt>
             '.$questionDesc.'

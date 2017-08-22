@@ -517,8 +517,8 @@ class ExtraField extends Model
         if ($filter) {
             $conditions = ['filter = ?' => 1];
         }
-        $extraFields = $this->get_all($conditions, 'option_order');
 
+        $extraFields = $this->get_all($conditions, 'option_order');
         $extra = $this->set_extra_fields_in_form(
             $form,
             $extraData,
@@ -2396,7 +2396,7 @@ EOF;
         $form->addElement('hidden', 'id', $id);
 
         // Setting the form elements
-        $header   = get_lang('Add');
+        $header = get_lang('Add');
         $defaults = array();
 
         if ($action == 'edit') {
@@ -2962,9 +2962,7 @@ JAVASCRIPT;
     public function getDataAndFormattedValues($itemId)
     {
         $valuesData = array();
-
         $fields = $this->get_all();
-
         $em = Database::getManager();
 
         foreach ($fields as $field) {
@@ -2973,7 +2971,11 @@ JAVASCRIPT;
             }
 
             $fieldValue = new ExtraFieldValue($this->type);
-            $valueData = $fieldValue->get_values_by_handler_and_field_id($itemId, $field['id'], true);
+            $valueData = $fieldValue->get_values_by_handler_and_field_id(
+                $itemId,
+                $field['id'],
+                true
+            );
 
             if ($field['field_type'] == ExtraField::FIELD_TYPE_TAG) {
                 $tags = $em
@@ -3168,8 +3170,12 @@ JAVASCRIPT;
      */
     public function searchOptionsFromTags($from, $search, $options)
     {
-        $extraFieldInfo = $this->get_handler_field_info_by_field_variable(str_replace('extra_', '', $from));
-        $extraFieldInfoTag = $this->get_handler_field_info_by_field_variable(str_replace('extra_', '', $search));
+        $extraFieldInfo = $this->get_handler_field_info_by_field_variable(
+            str_replace('extra_', '', $from)
+        );
+        $extraFieldInfoTag = $this->get_handler_field_info_by_field_variable(
+            str_replace('extra_', '', $search)
+        );
 
         if (empty($extraFieldInfo) || empty($extraFieldInfoTag)) {
             return [];

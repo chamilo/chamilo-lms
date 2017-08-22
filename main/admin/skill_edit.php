@@ -16,10 +16,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-
-if (api_get_setting('allow_skills_tool') != 'true') {
-    api_not_allowed();
-}
+Skill::isAllow();
 
 $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'skill_list.php', 'name' => get_lang('ManageSkills'));

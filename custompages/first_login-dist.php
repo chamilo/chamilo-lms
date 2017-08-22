@@ -67,14 +67,7 @@ $www = api_get_path('WEB_PATH');
 <head>
     <title>Custompage - login</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <!--[if !IE 6]><!-->
-    <link rel="stylesheet" type="text/css" href="/custompages/style.css" />
-    <!--<![endif]-->
-    <!--[if IE 6]>
-    <link rel="stylesheet" type="text/css" href="/custompages/style-ie6.css" />
-    <![endif]-->
-
-    <script type="text/javascript" src="<?php echo $www ?>web/assets/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="<?php echo $www ?>web/assets/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             if (top.location != location)

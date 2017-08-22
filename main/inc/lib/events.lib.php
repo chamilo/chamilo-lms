@@ -1874,7 +1874,8 @@ class Event
                     c_id = ".$courseId."  AND
                     session_id  = ".$sessionId." AND
                     login_course_date > '$time' - INTERVAL 3600 SECOND
-                ORDER BY login_course_date DESC LIMIT 0,1";
+                ORDER BY login_course_date DESC 
+                LIMIT 0,1";
         $result = Database::query($sql);
 
         // Ignore if we didn't find any course connection record in the last

@@ -206,7 +206,14 @@ if (api_is_course_admin() ||
     }
 
     $url = api_get_self().'?survey_id='.$survey_id.'&show='.$show;
-    $form = new FormValidator('question-survey', 'post', $url, null, null, FormValidator::LAYOUT_INLINE);
+    $form = new FormValidator(
+        'question-survey',
+        'post',
+        $url,
+        null,
+        null,
+        FormValidator::LAYOUT_INLINE
+    );
 
     if (is_array($questions) && count($questions) > 0) {
         foreach ($questions as $key => & $question) {

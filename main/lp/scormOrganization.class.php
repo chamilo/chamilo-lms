@@ -27,7 +27,6 @@ class scormOrganization
     public function __construct($type = 'manifest', &$element, $scorm_charset = 'UTF-8')
     {
         if (isset($element)) {
-
             // Parsing using PHP5 DOMXML methods.
             switch ($type) {
                 case 'db':
@@ -38,44 +37,55 @@ class scormOrganization
                     //if ($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function.
                     $children = $element->childNodes;
                     foreach ($children as $child) {
-                         switch ($child->nodeType) {
+                        switch ($child->nodeType) {
                             case XML_ELEMENT_NODE:
                                 switch ($child->tagName) {
                                     case 'item':
-                                         $oItem = new scormItem('manifest', $child);
-                                         if ($oItem->identifier != '') {
+                                        $oItem = new scormItem(
+                                            'manifest',
+                                            $child
+                                        );
+                                        if ($oItem->identifier != '') {
                                             $this->items[$oItem->identifier] = $oItem;
-                                         }
+                                        }
                                         break;
                                     case 'metadata':
-                                        $this->metadata = new scormMetadata('manifest', $child);
+                                        $this->metadata = new scormMetadata(
+                                            'manifest', $child
+                                        );
                                         break;
                                     case 'title':
                                         $tmp_children = $child->childNodes;
                                         if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
-                                            $this->title = api_utf8_decode(api_html_entity_decode($child->firstChild->nodeValue, ENT_QUOTES, 'UTF-8'));
+                                            $this->title = api_utf8_decode(
+                                                api_html_entity_decode(
+                                                    $child->firstChild->nodeValue,
+                                                    ENT_QUOTES,
+                                                    'UTF-8'
+                                                )
+                                            );
                                         }
                                         break;
                                 }
                                 break;
-                             case XML_TEXT_NODE:
-                                 break;
-                         }
+                            case XML_TEXT_NODE:
+                                break;
+                        }
                     }
 
                     if ($element->hasAttributes()) {
-                         $attributes = $element->attributes;
-                         //$keep_href = '';
-                         foreach ($attributes as $attrib) {
-                             switch ($attrib->name) {
-                                 case 'identifier':
-                                     $this->identifier = $attrib->value;
-                                     break;
-                                 case 'structure':
-                                     $this->structure = $attrib->value;
-                                     break;
-                             }
-                         }
+                        $attributes = $element->attributes;
+                        //$keep_href = '';
+                        foreach ($attributes as $attrib) {
+                            switch ($attrib->name) {
+                                case 'identifier':
+                                    $this->identifier = $attrib->value;
+                                    break;
+                                case 'structure':
+                                    $this->structure = $attrib->value;
+                                    break;
+                            }
+                        }
                     }
 
                     return true;

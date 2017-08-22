@@ -36,7 +36,11 @@ if (api_is_student_boss()) {
     $userList = $userGroup->getGroupUsersByUser($userId);
     $sessionsList = SessionManager::getSessionsFollowedForGroupAdmin($userId);
 } else {
-    $sessionsList = SessionManager::getSessionsCoachedByUser($userId, false, api_is_platform_admin());
+    $sessionsList = SessionManager::getSessionsCoachedByUser(
+        $userId,
+        false,
+        api_is_platform_admin()
+    );
 }
 
 foreach ($sessionsList as $session) {
@@ -62,7 +66,11 @@ if ($selectedSession > 0) {
     if (api_is_student_boss()) {
         $coursesList = CourseManager::getCoursesFollowedByGroupAdmin($userId);
     } else {
-        $coursesList = CourseManager::get_courses_list_by_user_id($userId, false, true);
+        $coursesList = CourseManager::get_courses_list_by_user_id(
+            $userId,
+            false,
+            true
+        );
 
         if (is_array($coursesList)) {
             foreach ($coursesList as &$course) {
@@ -102,7 +110,14 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
         exit;
     }
 
-    $gradebookCategories = Category::load(null, null, $selectedCourseInfo['code'], null, false, $selectedSession);
+    $gradebookCategories = Category::load(
+        null,
+        null,
+        $selectedCourseInfo['code'],
+        null,
+        false,
+        $selectedSession
+    );
 
     $gradebook = null;
 
@@ -197,7 +212,14 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
         $sessionCourseList = SessionManager::get_course_list_by_session_id($session['id']);
 
         foreach ($sessionCourseList as $sessionCourse) {
-            $gradebookCategories = Category::load(null, null, $sessionCourse['code'], null, false, $session['id']);
+            $gradebookCategories = Category::load(
+                null,
+                null,
+                $sessionCourse['code'],
+                null,
+                false,
+                $session['id']
+            );
 
             $gradebook = null;
 

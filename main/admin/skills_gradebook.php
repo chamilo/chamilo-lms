@@ -11,19 +11,14 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-
-if (api_get_setting('allow_skills_tool') != 'true') {
-    api_not_allowed();
-}
+Skill::isAllow();
 
 //Adds the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'display';
 
-
 // setting breadcrumbs
-
 $tool_name = get_lang('SkillsAndGradebooks');
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 if ($action == 'add_skill') {
@@ -31,11 +26,9 @@ if ($action == 'add_skill') {
     $tool_name = get_lang('Add');
 }
 
-
 Display::display_header($tool_name);
 
 //jqgrid will use this URL to do the selects
-
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_gradebooks';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
@@ -84,19 +77,28 @@ $extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-                        //certificates
-                        if (rowObject[4] == 1) {
-                            return \'<a href="?action=add_skill&id=\'+options.rowId+\'">'.Display::return_icon('add.png', get_lang('AddSkill'), '', ICON_SIZE_SMALL).'</a>'.'\';
-                        } else {
-                            return \''.Display::return_icon('add_na.png', get_lang('YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill'), '', ICON_SIZE_SMALL).''.'\';
-                        }
-                 }';
+    //certificates
+    if (rowObject[4] == 1) {
+        return \'<a href="?action=add_skill&id=\'+options.rowId+\'">'.Display::return_icon('add.png', get_lang('AddSkill'), '', ICON_SIZE_SMALL).'</a>'.'\';
+    } else {
+        return \''.Display::return_icon('add_na.png', get_lang('YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill'), '', ICON_SIZE_SMALL).''.'\';
+    }
+}';
 ?>
 <script>
 $(function() {
 <?php
     // grid definition see the $career->display() function
-    echo Display::grid_js('gradebooks', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+    echo Display::grid_js(
+        'gradebooks',
+        $url,
+        $columns,
+        $column_model,
+        $extra_params,
+        array(),
+        $action_links,
+        true
+    );
 ?>
 });
 </script>
@@ -120,7 +122,6 @@ switch ($action) {
             }
         }
         $form->display();
-        //echo Display::tag('h2',$gradebook_info['name']);
         break;
 }
 Display::display_footer();

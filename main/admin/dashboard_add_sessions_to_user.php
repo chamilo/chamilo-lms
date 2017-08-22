@@ -39,7 +39,7 @@ $ajax_search = false;
 // Setting the name of the tool
 if (UserManager::is_admin($user_id)) {
     $tool_name = get_lang('AssignSessionsToPlatformAdministrator');
-} else if ($user_info['status'] == SESSIONADMIN) {
+} elseif ($user_info['status'] == SESSIONADMIN) {
     $tool_name = get_lang('AssignSessionsToSessionsAdministrator');
 } else {
     $tool_name = get_lang('AssignSessionsToHumanResourcesManager');
@@ -276,7 +276,7 @@ $result = Database::query($sql);
                 <?php
                 if (UserManager::is_admin($user_id)) {
                     echo get_lang('AssignedSessionsListToPlatformAdministrator');
-                } else if ($user_info['status'] == SESSIONADMIN) {
+                } elseif ($user_info['status'] == SESSIONADMIN) {
                     echo get_lang('AssignedSessionsListToSessionsAdministrator');
                 } else {
                     echo get_lang('AssignedSessionsListToHumanResourcesManager');

@@ -34,9 +34,7 @@ class scormResource
     public function __construct($type = 'manifest', &$element)
     {
         if (isset($element)) {
-
             // Parsing using PHP5 DOMXML methods.
-
             switch ($type) {
                 case 'db':
                     // TODO: Implement this way of metadata object creation.

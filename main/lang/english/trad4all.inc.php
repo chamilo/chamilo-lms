@@ -5262,7 +5262,7 @@ $PleaseSelectInstallationProcessLanguage = "Please select the language you'd lik
 $AsciiSvgComment = "Enable the AsciiSVG plugin in the WYSIWYG editor to draw charts from mathematical functions.";
 $HereAreTheValuesYouEntered = "Here are the values you entered";
 $PrintThisPageToRememberPassAndOthers = "Print this page to remember your password and other settings";
-$TheInstallScriptWillEraseAllTables = "The install script will erase all tables of the selected databases. We heavily recommend you do a full backup of them before confirming this last install step.";
+$TheInstallScriptWillEraseAllTables = "The install script will erase all tables of the selected database. We heavily recommend you do a full backup of them before confirming this last install step.";
 $Published = "Published";
 $ReadWarningBelow = "read warning below";
 $SecurityAdvice = "Security advice";
@@ -6388,7 +6388,7 @@ $ShowGroupsToUsersComment = "Show the classes to users. Classes are a feature th
 $ExerciseWillBeActivatedFromXToY = "Exercise will be activated from %s to %s";
 $ExerciseAvailableFromX = "Exercise available from %s";
 $ExerciseAvailableUntilX = "Exercise available until %s";
-$HomepageViewActivityBig = "Big activity view (Ipad style)";
+$HomepageViewActivityBig = "Big icons view";
 $CheckFilePermissions = "Check file permissions";
 $AddedToALP = "Added to a LP";
 $NotAvailable = "Not available";
@@ -8031,4 +8031,19 @@ $HrmList = "Human Resource Managers list";
 $AssignHrmToUser = "Assign Human Resources Manager to user";
 $AddHrmToUser = "Add Human Resources Manager to user";
 $HrmAssignedUsersCourseList = "Human Resources Manager assigned users course list";
+$GoToSurvey = "Go to Survey";
+$NotificationCertificateSubject = "Certificate notification";
+$NotificationCertificateTemplate = "((user_first_name)),
+
+Congratulations on the completion of ((course_title)). Your final grade received for this class is ((score)). Please allow a few days for it to reflect in their system. We look forward to seeing you in future classes. If we can assist you further in any way, please feel free to contact us.
+
+Sincerely,
+((author_first_name)), ((author_last_name))
+((portal_name))";
+$SendCertificateNotifications = "Send certificate notification to all users";
+$MailSubjectForwardShort = "Fwd";
+$ForwardedMessage = "Forwarded message";
+$ForwardMessage = "Forward message";
+$MyCoursePageCategoryIntroduction = "You will find below the list of course categories.
+Click on one of them to see the list of courses it has.";
 ?>

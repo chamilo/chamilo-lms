@@ -17,7 +17,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array(
+    'url' => 'index.php',
+    'name' => get_lang('PlatformAdmin')
+);
 $toolName = get_lang('TeacherTimeReport');
 
 // Access restrictions.
@@ -81,7 +84,11 @@ foreach ($teacherList as $teacherItem) {
 
 $withFilter = false;
 $reportTitle = get_lang('TimeReportIncludingAllCoursesAndSessionsByTeacher');
-$reportSubTitle = sprintf(get_lang('TimeSpentBetweenXAndY'), $selectedFrom, $selectedUntil);
+$reportSubTitle = sprintf(
+    get_lang('TimeSpentBetweenXAndY'),
+    $selectedFrom,
+    $selectedUntil
+);
 
 $timeReport = new TeacherTimeReport();
 
@@ -112,7 +119,10 @@ if (!empty($selectedCourse)) {
                 'lastname' => $teacher['lastname'],
                 'firstname' => $teacher['firstname'],
                 'username' => $teacher['username'],
-                'complete_name' => api_get_person_name($teacher['firstname'], $teacher['lastname'])
+                'complete_name' => api_get_person_name(
+                    $teacher['firstname'],
+                    $teacher['lastname']
+                )
             ),
             'total_time' => $formattedTime
         );
@@ -121,7 +131,10 @@ if (!empty($selectedCourse)) {
     $sessionsByCourse = SessionManager::get_session_by_course($course['real_id']);
 
     foreach ($sessionsByCourse as $session) {
-        $coaches = CourseManager::get_coachs_from_course($session['id'], $course['real_id']);
+        $coaches = CourseManager::get_coachs_from_course(
+            $session['id'],
+            $course['real_id']
+        );
 
         if (!empty($coaches)) {
             foreach ($coaches as $coach) {
@@ -148,7 +161,10 @@ if (!empty($selectedCourse)) {
                         'lastname' => $coach['lastname'],
                         'firstname' => $coach['firstname'],
                         'username' => $coach['username'],
-                        'complete_name' => api_get_person_name($coach['firstname'], $coach['lastname'])
+                        'complete_name' => api_get_person_name(
+                            $coach['firstname'],
+                            $coach['lastname']
+                        )
                     ),
                     'total_time' => $formattedTime
                 );
@@ -175,7 +191,10 @@ if (!empty($selectedSession)) {
             'name' => $course['title']
         );
 
-        $coaches = CourseManager::get_coachs_from_course($selectedSession, $course['id']);
+        $coaches = CourseManager::get_coachs_from_course(
+            $selectedSession,
+            $course['id']
+        );
 
         if (!empty($coaches)) {
             foreach ($coaches as $coach) {
@@ -196,7 +215,10 @@ if (!empty($selectedSession)) {
                         'lastname' => $coach['lastname'],
                         'firstname' => $coach['firstname'],
                         'username' => $coach['username'],
-                        'complete_name' => api_get_person_name($coach['firstname'], $coach['lastname'])
+                        'complete_name' => api_get_person_name(
+                            $coach['firstname'],
+                            $coach['lastname']
+                        )
                     ),
                     'total_time' => $formattedTime
                 );
@@ -216,14 +238,19 @@ if (!empty($selectedTeacher)) {
         'complete_name' => $teacher['complete_name']
     );
 
-    $reportTitle = sprintf(get_lang('TimeReportForTeacherX'), $teacher['complete_name']);
+    $reportTitle = sprintf(
+        get_lang('TimeReportForTeacherX'),
+        $teacher['complete_name']
+    );
 
-    $courses = CourseManager::get_courses_list_by_user_id($selectedTeacher, false);
+    $courses = CourseManager::get_courses_list_by_user_id(
+        $selectedTeacher,
+        false
+    );
 
     if (!empty($courses)) {
         foreach ($courses as $course) {
             $courseInfo = api_get_course_info_by_id($course['real_id']);
-
             $totalTime = UserManager::getTimeSpentInCourses(
                 $selectedTeacher,
                 $course['real_id'],
@@ -275,7 +302,9 @@ if (!empty($selectedTeacher)) {
     }
 }
 
-if (empty($selectedCourse) && empty($selectedSession) && empty($selectedTeacher)) {
+if (empty($selectedCourse) && empty($selectedSession) &&
+    empty($selectedTeacher)
+) {
     foreach ($teacherList as &$teacher) {
         $timeReport->data[] = array(
             'coach' => array(
@@ -295,7 +324,6 @@ $timeReport->sortData($withFilter);
 
 if (isset($_GET['export'])) {
     $dataToExport = $timeReport->prepareDataToExport($withFilter);
-
     $fileName = get_lang('TeacherTimeReport').' '.api_get_local_time();
 
     switch ($_GET['export']) {
@@ -322,7 +350,6 @@ if (isset($_GET['export'])) {
             Export::export_table_xls_html($dataToExport, $fileName);
             break;
     }
-
     die;
 }
 
@@ -369,7 +396,12 @@ $form->setDefaults([
 ]);
 
 $leftActions = Display::url(
-    Display::return_icon('session.png', get_lang('Sessions'), [], ICON_SIZE_MEDIUM),
+    Display::return_icon(
+        'session.png',
+        get_lang('Sessions'),
+        [],
+        ICON_SIZE_MEDIUM
+    ),
     api_get_path(WEB_CODE_PATH).'admin/teachers_time_by_session_report.php'
 );
 $exportUrlParams = [
@@ -381,11 +413,21 @@ $exportUrlParams = [
     '_qf__teacher_time_report' => ''
 ];
 $rightActions = Display::url(
-    Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
+    Display::return_icon(
+        'pdf.png',
+        get_lang('ExportToPDF'),
+        [],
+        ICON_SIZE_MEDIUM
+    ),
     api_get_self().'?export=pdf&'.http_build_query($exportUrlParams)
 );
 $rightActions .= Display::url(
-    Display::return_icon('export_excel.png', get_lang('ExportExcel'), [], ICON_SIZE_MEDIUM),
+    Display::return_icon(
+        'export_excel.png',
+        get_lang('ExportExcel'),
+        [],
+        ICON_SIZE_MEDIUM
+    ),
     api_get_self().'?export=xls&'.http_build_query($exportUrlParams)
 );
 
@@ -404,9 +446,14 @@ $tpl->assign('form', $form->returnForm());
 $tpl->assign('rows', $timeReport->data);
 
 $templateName = $tpl->get_template('admin/teacher_time_report.tpl');
-
 $contentTemplate = $tpl->fetch($templateName);
 $tpl->assign('header', get_lang('TeacherTimeReport'));
-$tpl->assign('actions', Display::toolbarAction('teacher_time_report_actions', [$leftActions, $rightActions]));
+$tpl->assign(
+    'actions',
+    Display::toolbarAction(
+        'teacher_time_report_actions',
+        [$leftActions, $rightActions]
+    )
+);
 $tpl->assign('content', $contentTemplate);
 $tpl->display_one_col_template();

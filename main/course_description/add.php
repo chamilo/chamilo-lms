@@ -38,14 +38,18 @@ echo '</div>';
 
 // error messages
 if (isset($error) && intval($error) == 1) {
-	echo Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error', false);
+    echo Display::return_message(
+        get_lang('FormHasErrorsPleaseComplete'),
+        'error',
+        false
+    );
 }
 
 // default header title form
 $header = '';
 $description_type = intval($description_type);
 if ($description_type >= ADD_BLOCK) {
-	$header = $default_description_titles[ADD_BLOCK];
+    $header = $default_description_titles[ADD_BLOCK];
 }
 
 // display form
@@ -82,9 +86,9 @@ $form->addHtmlEditor(
 $form->addButtonCreate(get_lang('Save'));
 
 // display default questions
-if (isset ($question[$description_type])) {
-	$message = '<strong>'.get_lang('QuestionPlan').'</strong><br />';
-	$message .= $question[$description_type];
-	echo Display::return_message($message, 'normal', false);
+if (isset($question[$description_type])) {
+    $message = '<strong>'.get_lang('QuestionPlan').'</strong><br />';
+    $message .= $question[$description_type];
+    echo Display::return_message($message, 'normal', false);
 }
 $form->display();

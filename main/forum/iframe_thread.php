@@ -51,7 +51,9 @@ $current_forum_category = get_forumcategory_information(
 
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
-if (!api_is_allowed_to_edit(false, true) && ($current_forum['visibility'] == 0 || $current_thread['visibility'] == 0)) {
+if (!api_is_allowed_to_edit(false, true) &&
+    ($current_forum['visibility'] == 0 || $current_thread['visibility'] == 0)
+) {
     api_not_allowed(false);
 }
 

@@ -52,8 +52,12 @@ if (isset($current_thread['thread_id'])) {
                 $current_thread['locked'] == 0 ||
                 api_is_allowed_to_edit(false, true)
             ) {
-                if ($_user['user_id'] || ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
-                    if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
+                if ($_user['user_id'] ||
+                    ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])
+                ) {
+                    if (!api_is_anonymous() &&
+                        api_is_allowed_to_session_edit(false, true)
+                    ) {
                         $buttonReply = Display::toolbarButton(
                             get_lang('ReplyToMessage'),
                             'reply.php?'.api_get_cidreq().'&'.http_build_query([

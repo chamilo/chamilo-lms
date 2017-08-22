@@ -8,11 +8,9 @@ require_once __DIR__.'/../global.inc.php';
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 
-if (api_get_setting('allow_skills_tool') != 'true') {
-    exit;
-}
-
 api_block_anonymous_users();
+
+Skill::isAllow();
 
 $skill = new Skill();
 $gradebook = new Gradebook();
@@ -148,7 +146,7 @@ switch ($action) {
         break;
     case 'get_user_skill':
         $skillId = isset($_REQUEST['profile_id']) ? intval($_REQUEST['profile_id']) : 0;
-        $skill = $skill->user_has_skill($userId, $skillId);
+        $skill = $skill->userHasSkill($userId, $skillId);
         if ($skill) {
             echo 1;
         } else {
@@ -156,11 +154,11 @@ switch ($action) {
         }
         break;
     case 'get_all_user_skills':
-        $skills = $skill->get_user_skills($userId, true);
+        $skills = $skill->getUserSkills($userId, true);
         echo json_encode($skills);
         break;
     case 'get_user_skills':
-        $skills = $skill->get_user_skills($userId, true);
+        $skills = $skill->getUserSkills($userId, true);
         Display::display_no_header();
         Display::$global_template->assign('skills', $skills);
         $template = Display::$global_template->get_template('skill/user_skills.tpl');
@@ -224,7 +222,7 @@ switch ($action) {
             foreach ($users as $user) {
                 $user_info = api_get_user_info($user['user_id']);
                 $user_list[$user['user_id']]['user'] = $user_info;
-                $my_user_skills = $skill_rel_user->get_user_skills($user['user_id']);
+                $my_user_skills = $skill_rel_user->getUserSkills($user['user_id']);
 
                 $user_skill_list = array();
                 foreach ($my_user_skills as $skill_item) {

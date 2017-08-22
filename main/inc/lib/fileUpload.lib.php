@@ -1335,12 +1335,11 @@ function item_property_update_on_folder($_course, $path, $user_id)
     $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
     // Get the time
-    $time = date('Y-m-d H:i:s', time());
+    $time = api_get_utc_datetime();
 
     // Det all paths in the given path
     // /folder/subfolder/subsubfolder/file
     // if file is updated, subsubfolder, subfolder and folder are updated
-
     $exploded_path = explode('/', $path);
     $course_id = api_get_course_int_id();
     $newpath = '';
@@ -1348,15 +1347,18 @@ function item_property_update_on_folder($_course, $path, $user_id)
         // We don't want a slash before our first slash
         if ($key != 0) {
             $newpath .= '/'.$value;
-
-            //echo 'path= '.$newpath.'<br />';
             // Select ID of given folder
             $folder_id = DocumentManager::get_document_id($_course, $newpath);
 
             if ($folder_id) {
                 $sql = "UPDATE $table SET
-				        lastedit_date='$time',lastedit_type='DocumentInFolderUpdated', lastedit_user_id='$user_id'
-						WHERE c_id = $course_id AND tool='".TOOL_DOCUMENT."' AND ref='$folder_id'";
+				        lastedit_date = '$time',
+				        lastedit_type = 'DocumentInFolderUpdated', 
+				        lastedit_user_id='$user_id'
+						WHERE 
+						    c_id = $course_id AND 
+						    tool='".TOOL_DOCUMENT."' AND 
+						    ref = '$folder_id'";
                 Database::query($sql);
             }
         }

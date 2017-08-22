@@ -463,8 +463,18 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, v
 VALUES (12, 13, 'is_mandatory', 'IsMandatory', 1, 1, NOW());
 */
 //$_configuration['allow_mandatory_survey'] = false;
+// Allow required survey questions. Applies to yesno/multiplechoice question type. Requires DB change:
+/*
+ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
+*/
+//$_configuration['allow_required_survey_questions'] = false;
+// Hide Survey Reporting button
+//$_configuration['hide_survey_reporting_button'] = false;
+// Hide survey edition tools for all or some surveys.
+//Set an asterisk to hide for all, otherwise set an array with the survey codes in which the options will be blocked
+//$_configuration['hide_survey_edition'] = ['codes' => []];
 // ------
-//
+
 // Allow career diagram, requires a DB change:
 //UPDATE extra_field_values SET created_at = NULL WHERE CAST(created_at AS CHAR(20)) = '0000-00-00 00:00:00';
 //UPDATE extra_field_values SET updated_at = NULL WHERE CAST(updated_at AS CHAR(20)) = '0000-00-00 00:00:00';
@@ -507,6 +517,8 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['allow_notification_setting_per_exercise'] = false;
 // Hide free/oral/annotation question result see BT#12613
 //$_configuration['hide_free_question_score'] = false;
+// Hide user information in the quiz result's page
+//$_configuration['hide_user_info_in_quiz_result'] = false;
 
 // Score model
 // Allow to convert a score into a text/color label
@@ -551,12 +563,12 @@ $_configuration['score_grade_model'] = [
     ]
 ];
 */
-//Allow show link to request vinculation HRM-user
+
+// Allow show link to request relation between HRM and user
 //$_configuration['show_link_request_hrm_user'] = false;
-// Allow CKEditor start up with ShowBlocks plugin acive
+// Allow CKEditor start up with ShowBlocks plugin active
 //$_configuration['ckeditor_startup_outline_blocks'] = false;
-//
-// ------ SETTINGS FOT USER COURSE LIST
+// SETTINGS FOR USER COURSE LIST
 // Manage the links to Session Index page
 // 1 = Default. Works as it is now (default is to link to the special session page)
 // 0 = No link (not clickable)
@@ -575,6 +587,31 @@ $_configuration['score_grade_model'] = [
 //$_configuration['show_simple_session_info'] = true;
 // Show course category list on My Courses page before the courses. Requires a DB change
 //ALTER TABLE course_category ADD image varchar(255) NULL;
+//ALTER TABLE course_category ADD description LONGTEXT NULL;
 //$_configuration['my_courses_list_as_category'] = false;
 // ------
-//
+
+// Skills can only visible for admins, teachers (related to a user via a course),
+// and HRM users (if related to a user).
+// $_configuration['allow_private_skills'] = false;
+// Additional gradebook dependencies BT#13099
+// ALTER TABLE gradebook_category ADD COLUMN depends TEXT DEFAULT NULL;
+// ALTER TABLE gradebook_category ADD COLUMN minimum_to_validate INT DEFAULT NULL;
+// $_configuration['gradebook_dependency'] = false;
+// Courses id list to check in the gradebook sidebar see BT#13099
+/*$_configuration['gradebook_dependency_mandatory_courses'] = [
+    'courses' => [1, 2]
+];*/
+// Gradebook id list needed to build the gradebook sidebar see BT#13099
+/*
+$_configuration['gradebook_badge_sidebar'] = [
+    'gradebooks' => [1, 2, 3]
+];*/
+
+// Show language selector in main menu an update the language in the user's
+// profile.
+//$_configuration['show_language_selector_in_menu'] = false;
+
+// When using the my-courses list filter by category, set this option to true
+// to only show courses in the user's configured language
+// $_configuration['my_courses_show_courses_in_user_language_only'] = false;

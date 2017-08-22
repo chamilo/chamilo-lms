@@ -1983,7 +1983,10 @@ class Display
             return $text;
         }
 
-        return self::span($text, array('class' => 'boot-tooltip', 'title' => strip_tags($tip)));
+        return self::span(
+            $text,
+            array('class' => 'boot-tooltip', 'title' => strip_tags($tip))
+        );
     }
 
     /**

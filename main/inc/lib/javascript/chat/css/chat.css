@@ -23,21 +23,57 @@
 .user_status_main {
 	width:18px;
 	display:inline;
-	float:left;	
+	float:left;
 }
 .chatbox {
 	position: fixed;
 	position:expression("absolute");
-	width: 225px;
+	width: 320px;
 	display:none;
 	z-index: 9000;
 }
+
+.chatboxmessage_me {
+    background-color: #4080ff;
+    color: #fff;
+    width: 80%;
+    float:right !important;
+    border-radius: 12px;
+}
+
+.chatboxmessage {
+    background-color: #ebedf2;
+    color: #2a2f35;
+	margin-left:1em;
+    width: 80%;
+    float:left;
+    border-radius: 12px;
+}
+
+.chatboxmessagecontent {
+}
+
+.chatboxcontent {
+	font-family: arial,sans-serif;
+	font-size: 13px;
+	color: #333333;
+	height:200px;
+	overflow-y:auto;
+	overflow-x:auto;
+	padding:7px;
+	border-left:1px solid #cccccc;
+	border-right:1px solid #cccccc;
+	border-bottom:1px solid #eeeeee;
+	background-color: #ffffff;
+	line-height: 1.3em;
+}
+
 .user_status {
 	width:8px;
 	display:inline-block;
   margin-right: 5px;
 }
-.chatimage{
+.chatimage {
   display: inline-block;
   margin-right: 5px;
 }
@@ -61,7 +97,7 @@
 	color: #ffffff;
 	border-right:1px solid #222;
 	border-left:1px solid #222;
-	background-color: #222;	
+	background-color: #222;
 	background-repeat: repeat-x;
 	background-image: -khtml-gradient(linear, left top, left bottom, from(#333333), to(#222222));
 	background-image: -moz-linear-gradient(top, #333333, #222222);
@@ -80,7 +116,6 @@
 	background-color: #FF921F;
 	border-right:1px solid #EF7A00;
 	border-left:1px solid #EF7A00;
-    
     background-repeat: repeat-x;
 	background-image: -khtml-gradient(linear, left top, left bottom, from(#FF921F), to(#FF921F));
 	background-image: -moz-linear-gradient(top, #FF921F, #FFAC55);
@@ -89,23 +124,6 @@
 	background-image: -webkit-linear-gradient(top, #FF921F, #FF921F);
 	background-image: -o-linear-gradient(top, #FF921F, #FF921F);
 	background-image: linear-gradient(top, #FF921F, #FF921F);
-    
-}
-
-.chatboxcontent {
-	font-family: arial,sans-serif;
-	font-size: 13px;
-	color: #333333;
-	height:200px;
-	width:225px;
-	overflow-y:auto;
-	overflow-x:auto;
-	padding:7px;
-	border-left:1px solid #cccccc;
-	border-right:1px solid #cccccc;
-	border-bottom:1px solid #eeeeee;
-	background-color: #ffffff;
-	line-height: 1.3em;
 }
 
 .chatboxinput {
@@ -117,7 +135,7 @@
 }
 
 .chatboxtextarea {
-	width: 206px;
+	width: 300px;
 	height:44px;
 	padding:3px 0pt 3px 3px;
 	border: 1px solid #eeeeee;
@@ -129,11 +147,6 @@
 	border: 2px solid #f99d39;
 	margin:0;
 }
-
-.chatboxmessage {
-	margin-left:1em;
-}
-
 .chatboxinfo {
 	margin-left:-1em;
 	color:#666666;
@@ -142,9 +155,6 @@
 .chatboxmessagefrom {
 	margin-left:-1em;
 	font-weight: bold;
-}
-
-.chatboxmessagecontent {
 }
 
 .chatboxoptions {

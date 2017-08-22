@@ -23,13 +23,12 @@ if (!empty($_POST)) {
         $newClassroom = intval($_POST['new_classroom']);
         $actionId = intval($_POST['action_id']);
         $classroomId = intval($_POST['classroom_id']);
-        
+
         if ($sltCentersExists == 1) {
             $sql = "INSERT INTO $tableSepeSpecialtyClassroom (specialty_id, center_id) 
                     VALUES ($specialtyId, $existsCenterId);";
             $res = Database::query($sql);
             if (!$res) {
-                echo Database::error();
                 $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
             } else {
                 if ($newClassroom == 1) {
@@ -44,7 +43,7 @@ if (!empty($_POST)) {
             $rs_tmp = Database::query($sql);
             if (Database::num_rows($rs_tmp) > 0) {
                 $aux = Database::fetch_assoc($rs_tmp);
-                $centerId = $aux['id'];    
+                $centerId = $aux['id'];
             } else {
                 $params = array(
                     'center_origin' => $centerOrigin,
@@ -52,15 +51,14 @@ if (!empty($_POST)) {
                 );
                 $centerId = Database::insert($tableCenters, $params);
             }
-    
+
             if (isset($newClassroom) && $newClassroom != 1) {
-                $sql = "UPDATE $tableSepeSpecialtyClassroom SET center_id = $centerId WHERE id = $classroomId;";    
+                $sql = "UPDATE $tableSepeSpecialtyClassroom SET center_id = $centerId WHERE id = $classroomId;";
             } else {
                 $sql = "INSERT INTO $tableSepeSpecialtyClassroom (specialty_id, center_id) VALUES ($specialtyId, $centerId);";
             }
             $res = Database::query($sql);
             if (!$res) {
-                echo Database::error();
                 $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
             } else {
                 if ($newClassroom == 1) {
@@ -109,21 +107,21 @@ if (api_is_platform_admin()) {
         $info = getInfoSpecialtyClassroom(intval($_GET['classroom_id']));
         $tpl->assign('info', $info);
         $tpl->assign('new_classroom', '0');
-            
+
     }
     $centerList = getCentersList();
     $tpl->assign('listExistsCenters', $centerList);
-    
+
     if (isset($_SESSION['sepe_message_info'])) {
-        $tpl->assign('message_info', $_SESSION['sepe_message_info']);    
+        $tpl->assign('message_info', $_SESSION['sepe_message_info']);
         unset($_SESSION['sepe_message_info']);
     }
     if (isset($_SESSION['sepe_message_error'])) {
-        $tpl->assign('message_error', $_SESSION['sepe_message_error']);    
+        $tpl->assign('message_error', $_SESSION['sepe_message_error']);
         unset($_SESSION['sepe_message_error']);
     }
     $tpl->assign('sec_token', $token);
-        
+
     $listing_tpl = 'sepe/view/specialty-classroom-edit.tpl';
     $content = $tpl->fetch($listing_tpl);
     $tpl->assign('content', $content);

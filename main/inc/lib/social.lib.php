@@ -1970,7 +1970,6 @@ class SocialManager extends UserManager
         $friendHtml = '';
 
         if ($number_friends != 0) {
-
             $friendHtml .= '<div class="list-group">';
             $j = 1;
             for ($k = 0; $k < $number_friends; $k++) {
@@ -1990,11 +1989,21 @@ class SocialManager extends UserManager
                         $status = 0;
                     }
 
-                    $friendAvatarMedium = UserManager::getUserPicture($friend['friend_user_id'], USER_IMAGE_SIZE_MEDIUM);
-                    $friendAvatarSmall = UserManager::getUserPicture($friend['friend_user_id'], USER_IMAGE_SIZE_SMALL);
+                    $friendAvatarMedium = UserManager::getUserPicture(
+                        $friend['friend_user_id'],
+                        USER_IMAGE_SIZE_MEDIUM
+                    );
+                    $friendAvatarSmall = UserManager::getUserPicture(
+                        $friend['friend_user_id'],
+                        USER_IMAGE_SIZE_SMALL
+                    );
                     $friend_avatar = '<img src="'.$friendAvatarMedium.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" class="user-image"/>';
-                    $showLinkToChat = api_is_global_chat_enabled() &&
-                        $friend['friend_user_id'] != api_get_user_id();
+
+                    $relation = SocialManager::get_relation_between_contacts(
+                        $friend['friend_user_id'],
+                        api_get_user_id()
+                    );
+                    $showLinkToChat = api_is_global_chat_enabled() && $friend['friend_user_id'] != api_get_user_id() && $relation == USER_RELATION_TYPE_FRIEND;
 
                     if ($showLinkToChat) {
                         $friendHtml .= '<a onclick="javascript:chatWith(\''.$friend['friend_user_id'].'\', \''.$name_user.'\', \''.$status.'\',\''.$friendAvatarSmall.'\')" href="javascript:void(0);" class="list-group-item">';
@@ -2080,13 +2089,13 @@ class SocialManager extends UserManager
      */
     public static function getSkillBlock($userId)
     {
-        if (api_get_setting('allow_skills_tool') !== 'true') {
-            return null;
+        if (Skill::isAllow($userId, false) === false) {
+            return '';
         }
 
         $skill = new Skill();
         $ranking = $skill->get_user_skill_ranking($userId);
-        $skills = $skill->get_user_skills($userId, true);
+        $skills = $skill->getUserSkills($userId, true);
 
         $template = new Template(null, false, false, false, false, false);
         $template->assign('ranking', $ranking);

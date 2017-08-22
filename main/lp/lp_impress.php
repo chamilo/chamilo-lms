@@ -47,10 +47,9 @@ $debug = 0;
 
 if ($debug) { error_log('------ Entering lp_impress.php -------'); }
 
-$course_code    = api_get_course_id();
-$course_id      = api_get_course_int_id();
+$course_code = api_get_course_id();
+$course_id = api_get_course_int_id();
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/impress/impress-demo.css');
-
 $list = $_SESSION['oLP']->get_toc();
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);

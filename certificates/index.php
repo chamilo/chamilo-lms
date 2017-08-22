@@ -8,28 +8,29 @@
 require_once '../main/inc/global.inc.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-
 $certificate = new Certificate($_GET['id']);
 
 switch ($action) {
     case 'export':
         $hideExportLink = api_get_setting('hide_certificate_export_link');
         $hideExportLinkStudent = api_get_setting('hide_certificate_export_link_students');
-        if ($hideExportLink === 'true' || (api_is_student() && $hideExportLinkStudent === 'true')) {
+        if ($hideExportLink === 'true' ||
+            (api_is_student() && $hideExportLinkStudent === 'true')
+        ) {
             api_not_allowed(true);
         }
 
         $certificate->generate(array('hide_print_button' => true));
 
-        if ($certificate->html_file_is_generated()) {
+        if ($certificate->isHtmlFileGenerated()) {
             $certificatePathList[] = $certificate->html_file;
 
-            $pdfParams = array(
+            $pdfParams = [
                 'top' => 0,
                 'right' => 0,
                 'bottom' => 0,
                 'left' => 0
-            );
+            ];
 
             $orientation = api_get_configuration_value('certificate_pdf_orientation');
             $pdfParams['orientation'] = 'landscape';
@@ -39,7 +40,9 @@ switch ($action) {
 
             $pageFormat = $pdfParams['orientation'] === 'landscape' ? 'A4-L' : 'A4';
             $userInfo = api_get_user_info($certificate->user_id);
-            $pdfName = api_replace_dangerous_char(get_lang('Certificate').' '.$userInfo['username']);
+            $pdfName = api_replace_dangerous_char(
+                get_lang('Certificate').' '.$userInfo['username']
+            );
 
             $pdf = new PDF($pageFormat, $pdfParams['orientation'], $pdfParams);
             $pdf->html_to_pdf(

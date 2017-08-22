@@ -431,7 +431,6 @@ if (isset($this_script) && $this_script == 'sub_language') {
 $valid_languages = api_get_languages();
 
 if (!empty($valid_languages)) {
-
     if (!in_array($user_language, $valid_languages['folder'])) {
         $user_language = api_get_setting('platformLanguage');
     }
@@ -483,6 +482,43 @@ if (!empty($valid_languages)) {
     // If language is set via browser ignore the priority
     if (isset($_GET['language'])) {
         $language_interface = $user_language;
+    }
+
+    $allow = api_get_configuration_value('show_language_selector_in_menu');
+    // Overwrite all lang configs and use the menu language
+    if ($allow) {
+        if (isset($_SESSION['user_language_choice'])) {
+            $userEntity = api_get_user_entity(api_get_user_id());
+            if ($userEntity) {
+                if (isset($_GET['language'])) {
+                    $language_interface = $_SESSION['user_language_choice'];
+                    $userEntity->setLanguage($language_interface);
+                    Database::getManager()->merge($userEntity);
+                    Database::getManager()->flush();
+
+                    // Update cache
+                    api_get_user_info(
+                        api_get_user_id(),
+                        true,
+                        false,
+                        true,
+                        false,
+                        true,
+                        true
+                    );
+                    if (isset($_SESSION['_user'])) {
+                        $_SESSION['_user']['language'] = $language_interface;
+                    }
+                }
+                $language_interface = $_SESSION['user_language_choice'] = $userEntity->getLanguage();
+            }
+        } else {
+            $userInfo = api_get_user_info();
+            if (!empty($userInfo['language'])) {
+                $_SESSION['user_language_choice'] = $userInfo['language'];
+                $language_interface = $userInfo['language'];
+            }
+        }
     }
 }
 
@@ -606,3 +642,4 @@ if (empty($default_quota)) {
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 // Forcing PclZip library to use a custom temporary folder.
 define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
+

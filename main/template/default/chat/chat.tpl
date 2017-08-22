@@ -92,11 +92,10 @@ $(document).on('ready', function () {
             var chatHistoryContainer = ChChat.currentFriend ? ('#chat-history-' + ChChat.currentFriend) : '#chat-history';
 
             $(chatHistoryContainer)
-                    .html(messageList)
-                    .prop('scrollTop', function () {
-                        return this.scrollHeight;
-                    });
-
+                .html(messageList)
+                .prop('scrollTop', function () {
+                    return this.scrollHeight;
+                });
             $('#chat-alert').get(0).play();
         },
         setConnectedUsers: function (userList) {
@@ -104,7 +103,7 @@ $(document).on('ready', function () {
 
             userList.forEach(function (user) {
                 var buttonStatus = user.isConnected ? 'success' : 'muted',
-                        buttonTitle = user.isConnected ? '{{ 'StartAChat'|get_lang }}' : '{{ 'LeaveAMessage'|get_lang }}';
+                    buttonTitle = user.isConnected ? '{{ 'StartAChat'|get_lang }}' : '{{ 'LeaveAMessage'|get_lang }}';
 
                 html += '<li class="col-xs-12 chat-user">' +
                         '   <div>' +
@@ -117,7 +116,6 @@ $(document).on('ready', function () {
                             '               <i class="fa fa-comments text-' + buttonStatus + '"></i><span class="sr-only">' + buttonTitle + '</span>' +
                             '           </button>';
                 }
-
                 html += '           </li>' +
                         '           <li><small>' + user.username + '</small></li>' +
                         '       </ul>' +
@@ -203,9 +201,7 @@ $(document).on('ready', function () {
     $.emojiarea.icons = {{ icons|json_encode }};
 
     $('body').on('click', '#chat-reset', ChChat.onResetListener);
-
     $('#preview').on('click', ChChat.onPreviewListener);
-
     $('#emojis').on('click', function () {
         $('[data-toggle="tab"][href="#tab1"]').show().tab('show');
     });
@@ -214,59 +210,54 @@ $(document).on('ready', function () {
         button: '#emojis'
     });
 
-    $('body').delay(1500).find('.emoji-wysiwyg-editor').textcomplete([
-        {
-            match: /\B:([\-+\w]*)$/,
-            search: function (term, callback) {
-                var results = [];
-                var results2 = [];
-                var results3 = [];
-                $.each(emojiStrategy, function (shortname, data) {
-                    if (shortname.indexOf(term) > -1) {
-                        results.push(shortname);
-                    } else {
-                        if ((data.aliases !== null) && (data.aliases.indexOf(term) > -1)) {
-                            results2.push(shortname);
-                        } else if ((data.keywords !== null) && (data.keywords.indexOf(term) > -1)) {
-                            results3.push(shortname);
-                        }
+    $('body').delay(1500).find('.emoji-wysiwyg-editor').textcomplete([{
+        match: /\B:([\-+\w]*)$/,
+        search: function (term, callback) {
+            var results = [];
+            var results2 = [];
+            var results3 = [];
+            $.each(emojiStrategy, function (shortname, data) {
+                if (shortname.indexOf(term) > -1) {
+                    results.push(shortname);
+                } else {
+                    if ((data.aliases !== null) && (data.aliases.indexOf(term) > -1)) {
+                        results2.push(shortname);
+                    } else if ((data.keywords !== null) && (data.keywords.indexOf(term) > -1)) {
+                        results3.push(shortname);
                     }
-                });
-
-                if (term.length >= 3) {
-                    results.sort(function (a, b) {
-                        return (a.length > b.length);
-                    });
-                    results2.sort(function (a, b) {
-                        return (a.length > b.length);
-                    });
-                    results3.sort();
                 }
+            });
 
-                var newResults = results.concat(results2).concat(results3);
+            if (term.length >= 3) {
+                results.sort(function (a, b) {
+                    return (a.length > b.length);
+                });
+                results2.sort(function (a, b) {
+                    return (a.length > b.length);
+                });
+                results3.sort();
+            }
 
-                callback(newResults);
-            },
-            template: function (shortname) {
-                return '<img class="emojione" src="{{ _p.web_lib }}javascript/emojione/png/'
-                        + emojiStrategy[shortname].unicode
-                        + '.png"> :' + shortname + ':';
-            },
-            replace: function (shortname) {
-                return ':' + shortname + ': ';
-            },
-            index: 1,
-            maxCount: 10
-        }
-    ], {});
+            var newResults = results.concat(results2).concat(results3);
+            callback(newResults);
+        },
+        template: function (shortname) {
+            return '<img class="emojione" src="{{ _p.web_lib }}javascript/emojione/png/'
+                    + emojiStrategy[shortname].unicode
+                    + '.png"> :' + shortname + ':';
+        },
+        replace: function (shortname) {
+            return ':' + shortname + ': ';
+        },
+        index: 1,
+        maxCount: 10
+    }], {});
 
     $('button#chat-send-message').on('click', ChChat.onSendMessageListener);
-
     $('#chat-users').on('click', 'button.btn', function (e) {
         e.preventDefault();
-
         var jSelf = $(this),
-                userId = parseInt(jSelf.data('user')) || 0;
+            userId = parseInt(jSelf.data('user')) || 0;
 
         if (!userId) {
             return;
@@ -304,7 +295,6 @@ $(document).on('ready', function () {
     $('#chat-tabs ul.nav-tabs').on('shown.bs.tab', 'li a', function (e) {
         var jSelf = $(this);
         var userId = parseInt(jSelf.parent().data('user')) || 0;
-
         if (!userId) {
             ChChat.currentFriend = 0;
 

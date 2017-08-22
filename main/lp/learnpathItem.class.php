@@ -1569,7 +1569,7 @@ class learnpathItem
                 $sql = "SELECT status FROM $table
                         WHERE
                             c_id = $course_id AND
-                            id = '".$this->db_item_view_id."' AND
+                            iid = '".$this->db_item_view_id."' AND
                             view_count = '" . $this->get_attempt_id()."'";
 
                 if ($debug > 2) {
@@ -1699,7 +1699,7 @@ class learnpathItem
                         FROM $table
                         WHERE
                             c_id = $course_id AND
-                            id = '".$this->db_item_view_id."' AND
+                            iid = '".$this->db_item_view_id."' AND
                             view_count = '" . $this->get_attempt_id()."'";
                 $res = Database::query($sql);
                 $row = Database::fetch_array($res);
@@ -3025,7 +3025,7 @@ class learnpathItem
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
-            $this->db_item_view_id = $row['id'];
+            $this->db_item_view_id = $row['iid'];
             $this->attempt_id = $row['view_count'];
             $this->current_score = $row['score'];
             $this->current_data = $row['suspend_data'];

@@ -300,7 +300,37 @@ if (api_is_student()) {
     }
 }
 
-$controller->tpl->assign('profile_block', $controller->return_profile_block($diagnosisComplete));
+// ofaj
+$diagnosis = '';
+if (api_is_drh() || api_is_student_boss()) {
+    $diagnosis = Display::url(get_lang('DiagnosisManagement'), api_get_path(WEB_PATH).'load_search.php').'<br />';
+    $diagnosis .= Display::url(get_lang('DiagnosticForm'), api_get_path(WEB_PATH).'search.php');
+} else {
+    if (api_is_student()) {
+        if ($diagnosisComplete === false ||
+            is_array($diagnosisComplete) && empty($diagnosisComplete['value'])
+        ) {
+            $diagnosis = Display::url(
+                get_lang('DiagnosticForm'),
+                api_get_path(WEB_PATH).'search.php'
+            );
+        }
+    }
+}
+$block = '';
+if (!empty($diagnosis)) {
+    $block .= $controller->show_right_block(
+        get_lang('Diagnostic'),
+        $diagnosis,
+        'diagnosis_block',
+        null,
+        'diagnosis',
+        'diagnosisCollapse'
+    );
+}
+
+$controller->tpl->assign('diagnosis_block', $block);
+$controller->tpl->assign('profile_block', $controller->return_profile_block());
 $controller->tpl->assign('user_image_block', $controller->return_user_image_block());
 $controller->tpl->assign('course_block', $controller->return_course_block());
 $controller->tpl->assign('navigation_course_links', $controller->return_navigation_links());

@@ -879,7 +879,7 @@ class IndexManager
     /**
      * @return array
      */
-    public function return_profile_block($diagnosisComplete = null)
+    public function return_profile_block()
     {
         $userInfo = api_get_user_info();
         $userId = api_get_user_id();
@@ -977,34 +977,6 @@ class IndexManager
                 'title' => get_lang('VideoConference')
             ];
         }
-        // ofaj
-        /*$diagnosis = '';
-        if (api_is_drh() || api_is_student_boss()) {
-            $diagnosis = Display::url(get_lang('DiagnosisManagement'), api_get_path(WEB_PATH).'load_search.php').'<br />';
-            $diagnosis .= Display::url(get_lang('DiagnosticForm'), api_get_path(WEB_PATH).'search.php');
-        } else {
-            if (api_is_student()) {
-                if ($diagnosisComplete === false ||
-                    is_array($diagnosisComplete) && empty($diagnosisComplete['value'])
-                ) {
-                    $diagnosis = Display::url(
-                        get_lang('DiagnosticForm'),
-                        api_get_path(WEB_PATH).'search.php'
-                    );
-                }
-            }
-        }
-
-        if (!empty($diagnosis)) {
-            $html .= self::show_right_block(
-                get_lang('Diagnostic'),
-                $diagnosis,
-                'diagnosis_block',
-                null,
-                'diagnosis',
-                'diagnosisCollapse'
-            );
-        }*/
 
         return $items;
     }

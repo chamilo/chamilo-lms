@@ -108,6 +108,10 @@
                 <!-- end block profile -->
                 {% endif %}
 
+                {% if diagnosis_block %}
+                    {{ diagnosis_block }}
+                {% endif %}
+
                 {% if course_block %}
                 <!-- block course -->
                 <div class="panel-group" id="course" role="tablist" aria-multiselectable="true">

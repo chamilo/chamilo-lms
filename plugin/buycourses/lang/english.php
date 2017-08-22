@@ -134,3 +134,4 @@ $strings['ByUser'] = "By user";
 $strings['PaymentMethod'] = "Payment method";
 $strings['SWIFT'] = "SWIFT code";
 $strings['SWIFT_help'] = "Standard format of Bank Identifier Codes (BIC) and serves as a unique identifier for a bank or financial institution";
+$strings['PleaseSelectThePaymentMethodBeforeConfirmYourOrder'] = "Please select your favorite payment method before confirming your order";

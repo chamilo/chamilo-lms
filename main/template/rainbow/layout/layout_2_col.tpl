@@ -17,7 +17,7 @@
                     </div>
                 {% endif %}
 
-                {{ sniff_notification }}
+                {#{{ sniff_notification }}#}
 
                 {% if home_page_block %}
                     <article id="homepage-home">
@@ -208,10 +208,10 @@
                 <!-- end block skills -->
                 {% endif %}
 
-                {{ teacher_block }}
+                {#{{ teacher_block }}#}
                 {{ certificates_search_block }}
                 {{ notice_block }}
-                {{ help_block }}
+                {#{{ help_block }}#}
 
                 <!-- block navigation -->
                 {% if navigation_course_links %}

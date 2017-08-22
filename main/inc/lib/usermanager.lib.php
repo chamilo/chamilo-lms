@@ -5003,18 +5003,14 @@ class UserManager
      *
      * @param int $studentId
      * @param array $bossList
-     * @return int Affected rows
-     */
-    /**
-     * Subscribe boss to students
-     *
-     * @param int $studentId
-     * @param array $bossList
      * @param bool $sendNotification
      * @return int Affected rows
      */
-    public static function subscribeUserToBossList($studentId, $bossList, $sendNotification = false)
-    {
+    public static function subscribeUserToBossList(
+        $studentId,
+        $bossList,
+        $sendNotification = false
+    ) {
         if ($bossList) {
             $studentId = (int) $studentId;
             $studentInfo = api_get_user_info($studentId);

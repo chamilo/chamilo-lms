@@ -242,7 +242,7 @@ class ExtraField extends Model
      *
      * @return array
      */
-    public function get_all($conditions = array(), $order_field_options_by = null)
+    public function get_all($conditions = [], $order_field_options_by = null)
     {
         $conditions = Database::parse_conditions(array('where' => $conditions));
 
@@ -293,7 +293,10 @@ class ExtraField extends Model
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
-            $row['display_text'] = self::translateDisplayName($row['variable'], $row['display_text']);
+            $row['display_text'] = self::translateDisplayName(
+                $row['variable'],
+                $row['display_text']
+            );
 
             // All the options of the field
             $sql = "SELECT * FROM $this->table_field_options
@@ -593,7 +596,9 @@ class ExtraField extends Model
                     }
                 } else {
                     // Set default values
-                    if (isset($field['field_default_value']) && !empty($field['field_default_value'])) {
+                    if (isset($field['field_default_value']) &&
+                        !empty($field['field_default_value'])
+                    ) {
                         $extra_data['extra_'.$field['variable']] = $field['field_default_value'];
                     }
                 }
@@ -919,8 +924,14 @@ class ExtraField extends Model
                                 'id' => 'extra_'.$field_details['variable']
                             )
                         );
-                        $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
-                        $form->applyFilter('extra_'.$field_details['variable'], 'trim');
+                        $form->applyFilter(
+                            'extra_'.$field_details['variable'],
+                            'stripslashes'
+                        );
+                        $form->applyFilter(
+                            'extra_'.$field_details['variable'],
+                            'trim'
+                        );
                         if ($freezeElement) {
                             $form->freeze('extra_'.$field_details['variable']);
                         }
@@ -946,7 +957,9 @@ class ExtraField extends Model
                         break;
                     case self::FIELD_TYPE_RADIO:
                         $group = array();
-                        if (isset($field_details['options']) && !empty($field_details['options'])) {
+                        if (isset($field_details['options']) &&
+                            !empty($field_details['options'])
+                        ) {
                             foreach ($field_details['options'] as $option_details) {
                                 $options[$option_details['option_value']] = $option_details['display_text'];
                                 $group[] = $form->createElement(
@@ -969,7 +982,9 @@ class ExtraField extends Model
                         break;
                     case self::FIELD_TYPE_CHECKBOX:
                         $group = array();
-                        if (isset($field_details['options']) && !empty($field_details['options'])) {
+                        if (isset($field_details['options']) &&
+                            !empty($field_details['options'])
+                        ) {
                             foreach ($field_details['options'] as $option_details) {
                                 $options[$option_details['option_value']] = $option_details['display_text'];
                                 $group[] = $form->createElement(
@@ -983,7 +998,9 @@ class ExtraField extends Model
                         } else {
                             $fieldVariable = "extra_{$field_details['variable']}";
                             $checkboxAttributes = array();
-                            if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
+                            if (is_array($extraData) &&
+                                array_key_exists($fieldVariable, $extraData)
+                            ) {
                                 if (!empty($extraData[$fieldVariable])) {
                                     $checkboxAttributes['checked'] = 1;
                                 }
@@ -1032,7 +1049,9 @@ class ExtraField extends Model
                         }
 
                         if ($optionsExists) {
-                            if (isset($userInfo['status']) && !empty($userInfo['status'])) {
+                            if (isset($userInfo['status']) &&
+                                !empty($userInfo['status'])
+                            ) {
                                 $fieldWorkFlow = $app['orm.em']
                                     ->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
                                     ->findBy(
@@ -1080,8 +1099,8 @@ class ExtraField extends Model
                             }
 
                             if (isset($optionList[$defaultValueId])) {
-                                if (isset($optionList[$defaultValueId]['option_value'])
-                                    && $optionList[$defaultValueId]['option_value'] == 'aprobada'
+                                if (isset($optionList[$defaultValueId]['option_value']) &&
+                                    $optionList[$defaultValueId]['option_value'] == 'aprobada'
                                 ) {
                                     // @todo function don't exists api_is_question_manager
                                     /*if (api_is_question_manager() == false) {
@@ -1091,8 +1110,8 @@ class ExtraField extends Model
                             }
 
                             // Setting priority message
-                            if (isset($optionList[$defaultValueId])
-                                && isset($optionList[$defaultValueId]['priority'])
+                            if (isset($optionList[$defaultValueId]) &&
+                                isset($optionList[$defaultValueId]['priority'])
                             ) {
                                 if (!empty($optionList[$defaultValueId]['priority'])) {
                                     $priorityId = $optionList[$defaultValueId]['priority'];
@@ -1573,8 +1592,8 @@ class ExtraField extends Model
                             $field_details['display_text']
                         );
 
-                        if (is_array($extraData)
-                            && array_key_exists($fieldVariable, $extraData)
+                        if (is_array($extraData) &&
+                            array_key_exists($fieldVariable, $extraData)
                         ) {
                             if (file_exists(api_get_path(SYS_UPLOAD_PATH).$extraData[$fieldVariable])) {
                                 $fieldTexts[] = Display::url(
@@ -2449,8 +2468,8 @@ JAVASCRIPT;
                     $extra_field_info = $extra_field_obj->get($extra['id']);
                     $extra['extra_field_info'] = $extra_field_info;
 
-                    if (isset($extra_field_info['field_type'])
-                        && in_array(
+                    if (isset($extra_field_info['field_type']) &&
+                        in_array(
                             $extra_field_info['field_type'],
                             array(
                                 self::FIELD_TYPE_SELECT,
@@ -2505,8 +2524,8 @@ JAVASCRIPT;
                     $inject_joins .= " INNER JOIN $this->table_field_values fv$counter
                                        ON (s.".$this->primaryKey." = fv$counter.".$this->handler_id.") ";
                     // Add options
-                    if (isset($extra_field_info['field_type'])
-                        && in_array(
+                    if (isset($extra_field_info['field_type']) &&
+                        in_array(
                             $extra_field_info['field_type'],
                             array(
                                 self::FIELD_TYPE_SELECT,

@@ -508,8 +508,12 @@ class GlossaryManager
      *
      * @return array
      */
-    public static function get_glossary_data($from, $number_of_items, $column, $direction)
-    {
+    public static function get_glossary_data(
+        $from,
+        $number_of_items,
+        $column,
+        $direction
+    ) {
         $_user = api_get_user_info();
         $view = Session::read('glossary_view');
 
@@ -549,10 +553,12 @@ class GlossaryManager
 					glossary.description as col1,
 					$col2
 					glossary.session_id
-				FROM $t_glossary glossary, $t_item_propery ip
-				WHERE
-				    glossary.glossary_id = ip.ref AND
-					tool = '".TOOL_GLOSSARY."' $condition_session AND
+				FROM $t_glossary glossary 
+				INNER JOIN $t_item_propery ip
+				ON (glossary.glossary_id = ip.ref AND glossary.c_id = ip.c_id)
+				WHERE				    
+					tool = '".TOOL_GLOSSARY."' 
+					$condition_session AND
 					glossary.c_id = ".api_get_course_int_id()." AND
 					ip.c_id = ".api_get_course_int_id()."
 					$keywordCondition
@@ -571,6 +577,10 @@ class GlossaryManager
                 $array[1] = str_replace(array('<p>', '</p>'), array('', '<br />'), $data[1]);
             } else {
                 $array[1] = $data[1];
+            }
+
+            if (isset($_GET['action']) && $_GET['action'] == 'export') {
+                $array[1] = api_html_entity_decode($data[1]);
             }
 
             if (api_is_allowed_to_edit(null, true)) {

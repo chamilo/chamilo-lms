@@ -1490,6 +1490,12 @@ blockquote p {
   font-weight: bold;
   font-size: 16px;
 } 
+.result-body .panel.panel-default{
+    border: none;
+}
+.result-body .panel.panel-default .panel-body{
+    padding: 0;
+}
 /* Large desktop */
 @media (min-width: 1200px) {
 

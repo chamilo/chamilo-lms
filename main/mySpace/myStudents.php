@@ -377,7 +377,7 @@ if (api_is_drh() && !api_is_platform_admin()) {
     }
 }
 
-Display :: display_header($nameTools);
+Display::display_header($nameTools);
 
 if (isset($message)) {
     echo $message;

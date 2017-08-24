@@ -14,6 +14,7 @@
  * Defines the "OpenofficePresentation" child of class "OpenofficeDocument"
  */
 require_once 'openoffice_document.class.php';
+
 if (api_get_setting('search_enabled') == 'true') {
     require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
     require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
@@ -22,7 +23,6 @@ if (api_get_setting('search_enabled') == 'true') {
 
 class OpenofficePresentation extends OpenofficeDocument
 {
-
     public $take_slide_name;
 
     public function __construct($take_slide_name = false, $course_code = null, $resource_id = null, $user_id = null)
@@ -125,7 +125,15 @@ class OpenofficePresentation extends OpenofficeDocument
                 $slide_name
             );
 
-            api_item_property_update($_course, TOOL_THUMBNAIL, $document_id_thumb, 'DocumentAdded', api_get_user_id(), 0, 0);
+            api_item_property_update(
+                $_course,
+                TOOL_THUMBNAIL,
+                $document_id_thumb,
+                'DocumentAdded',
+                api_get_user_id(),
+                0,
+                0
+            );
 
             // Create an html file.
             $html_file = $file_name.'.html';
@@ -183,7 +191,7 @@ class OpenofficePresentation extends OpenofficeDocument
                 if (isset($_POST['index_document']) && $_POST['index_document']) {
                     $di = new ChamiloIndexer();
                     isset($_POST['language']) ? $lang = Database::escape_string($_POST['language']) : $lang = 'english';
-                    $di->connectDb(NULL, NULL, $lang);
+                    $di->connectDb(null, null, $lang);
                     $ic_slide = new IndexableChunk();
                     $ic_slide->addValue('title', $slide_name);
                     $specific_fields = get_specific_field_list();

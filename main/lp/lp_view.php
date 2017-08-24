@@ -41,8 +41,7 @@ $sessionId = api_get_session_id();
 
 // Check if the learning path is visible for student - (LP requisites)
 if (!api_is_platform_admin()) {
-    if (
-        !api_is_allowed_to_edit(null, true, false, false) &&
+    if (!api_is_allowed_to_edit(null, true, false, false) &&
         !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())
     ) {
         api_not_allowed(true);
@@ -322,7 +321,6 @@ if (!empty($_REQUEST['exeId']) &&
             if ($debug) {
                 error_log($sql);
             }
-
             Database::query($sql);
 
             $sql = "UPDATE $TBL_TRACK_EXERCICES SET
@@ -473,11 +471,11 @@ if ($_SESSION['oLP']->current == $_SESSION['oLP']->get_last()) {
             $gradebookLinks[0]->get_type() == LINK_LEARNPATH &&
             $gradebookLinks[0]->get_ref_id() == $_SESSION['oLP']->lp_id
         ) {
-            $gradebookMinScore = $categories[0]->get_certificate_min_score();
+            $gradebookMinScore = $categories[0]->getCertificateMinScore();
             $userScore = $gradebookLinks[0]->calc_score($user_id, 'best');
 
             if ($userScore[0] >= $gradebookMinScore) {
-                Category::register_user_certificate($categories[0]->get_id(), $user_id);
+                Category::generateUserCertificate($categories[0]->get_id(), $user_id);
             }
         }
     }

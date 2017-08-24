@@ -52,18 +52,17 @@ if (!empty($_POST)) {
                         VALUES ('".$tutorCompanyAlias."','".$tutorCompanyDocumentType."','".$tutorCompanyDocumentNumber."','".$tutorCompanyDocumentLetter."','1');";
                 $rs = Database::query($sql);
                 if (!$rs) {
-                    echo Database::error();    
                 } else {
                     $companyTutorId = Database::insert_id();
                 }
             }
         }
-        
+
         if (isset($trainingTutorId) && $trainingTutorId == 0) {
             $sql = "SELECT * FROM $tableTutorCompany 
                     WHERE document_type = '".$tutorTrainingDocumentType."' AND document_number = '".$tutorTrainingDocumentNumber."' AND document_letter = '".$tutorTrainingDocumentLetter."';";
             $rs = Database::query($sql);
-    
+
             if (Database::num_rows($rs) > 0) {
                 $row = Database::fetch_assoc($rs);
                 $trainingTutorId = $row['id'];
@@ -74,13 +73,12 @@ if (!empty($_POST)) {
                         VALUES ('".$tutorTrainingAlias."','".$tutorTrainingDocumentType."','".$tutorTrainingDocumentNumber."','".$tutorTrainingDocumentLetter."','1');";
                 $rs = Database::query($sql);
                 if (!$rs) {
-                    echo Database::error();    
                 } else {
                     $trainingTutorId = Database::insert_id();
                 }
             }
         }
-        
+
         if (isset($newParticipant) && $newParticipant != 1) {
             $sql = "UPDATE $tableSepeParticipants SET 
                         platform_user_id = '".$platformUserId."', 
@@ -114,7 +112,6 @@ if (!empty($_POST)) {
         }
         $res = Database::query($sql);
         if (!$res) {
-            error_log(Database::error());
             $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
         } else {
             if ($newParticipant == 1) {
@@ -133,7 +130,7 @@ if (!empty($_POST)) {
                 $sql = "UPDATE $tableSepeParticipants SET training_tutor_id = $trainingTutorId WHERE id = $participantId";
             }
             Database::query($sql);
-            
+
             $insertLog = checkInsertNewLog($platformUserId, $actionId);
             if ($insertLog) {
                 $sql = "INSERT INTO $tableSepeLogParticipant (
@@ -196,7 +193,7 @@ if (api_is_platform_admin()) {
         $tpl->assign('info', $info);
         $tpl->assign('new_participant', '0');
         $tpl->assign('participant_id', intval($_GET['participant_id']));
-        
+
         if ($info['platform_user_id'] != 0) {
             $infoUserPlatform = api_get_user_info($info['platform_user_id']);
             $tpl->assign('info_user_platform', $infoUserPlatform);
@@ -207,12 +204,12 @@ if (api_is_platform_admin()) {
     $courseCode = getCourseCode($actionId);
     $listStudentInfo = array();
     $listStudent = CourseManager::get_student_list_from_course_code($courseCode);
-    
+
     foreach ($listStudent as $value) {
         $sql = "SELECT 1 FROM $tableSepeParticipants WHERE platform_user_id = '".$value['user_id']."';";
         $res = Database::query($sql);
         if (Database::num_rows($res) == 0) {
-            $listStudentInfo[] = api_get_user_info($value['user_id']); 
+            $listStudentInfo[] = api_get_user_info($value['user_id']);
         }
     }
     $tpl->assign('listStudent', $listStudentInfo);
@@ -223,11 +220,11 @@ if (api_is_platform_admin()) {
     $listTutorTraining = listTutorType("training = '1'");
     $tpl->assign('list_tutor_training', $listTutorTraining);
     if (isset($_SESSION['sepe_message_info'])) {
-        $tpl->assign('message_info', $_SESSION['sepe_message_info']);    
+        $tpl->assign('message_info', $_SESSION['sepe_message_info']);
         unset($_SESSION['sepe_message_info']);
     }
     if (isset($_SESSION['sepe_message_error'])) {
-        $tpl->assign('message_error', $_SESSION['sepe_message_error']);    
+        $tpl->assign('message_error', $_SESSION['sepe_message_error']);
         unset($_SESSION['sepe_message_error']);
     }
     $tpl->assign('sec_token', $token);

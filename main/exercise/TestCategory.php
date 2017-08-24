@@ -374,7 +374,10 @@ class TestCategory
     public static function getListOfCategoriesNameForTest($exercise_id, $grouped_by_category = true)
     {
         $result = array();
-        $categories = self::getListOfCategoriesIDForTest($exercise_id, $grouped_by_category);
+        $categories = self::getListOfCategoriesIDForTest(
+            $exercise_id,
+            $grouped_by_category
+        );
 
         foreach ($categories as $catInfo) {
             $categoryId = $catInfo['id'];
@@ -461,7 +464,10 @@ class TestCategory
                 continue;
             }
 
-            $nbQuestionInThisCat = self::getNumberOfQuestionsInCategoryForTest($exerciseId, $category['id']);
+            $nbQuestionInThisCat = self::getNumberOfQuestionsInCategoryForTest(
+                $exerciseId,
+                $category['id']
+            );
 
             if ($nbQuestionInThisCat > $in_nbrandom) {
                 $count += $in_nbrandom;
@@ -604,11 +610,11 @@ class TestCategory
 
     /**
      * @param int $questionId
-     * @param int $in_display_category_name
+     * @param int $displayCategoryName
      */
-    public static function displayCategoryAndTitle($questionId, $in_display_category_name = 1)
+    public static function displayCategoryAndTitle($questionId, $displayCategoryName = 1)
     {
-        echo self::returnCategoryAndTitle($questionId, $in_display_category_name);
+        echo self::returnCategoryAndTitle($questionId, $displayCategoryName);
     }
 
     /**
@@ -727,7 +733,10 @@ class TestCategory
                 continue;
             }
 
-            $nbQuestionInThisCat = self::getNumberOfQuestionsInCategoryForTest($exerciseId, $category['id']);
+            $nbQuestionInThisCat = self::getNumberOfQuestionsInCategoryForTest(
+                $exerciseId,
+                $category['id']
+            );
 
             if ($nbQuestionInThisCat > $res_num_max) {
                 $res_num_max = $nbQuestionInThisCat;
@@ -740,7 +749,8 @@ class TestCategory
     /**
      * Returns a category summary report
      * @params int $exerciseId
-     * @params array pre filled array with the category_id, score, and weight
+     * @params array $category_list
+     * pre filled array with the category_id, score, and weight
      * example: array(1 => array('score' => '10', 'total' => 20));
      *
      * @return string
@@ -774,21 +784,75 @@ class TestCategory
         if (count($category_list) > 1) {
             foreach ($category_list as $category_id => $category_item) {
                 $table->setCellContents($row, 0, $category_name_list[$category_id]);
-                $table->setCellContents($row, 1, ExerciseLib::show_score($category_item['score'], $category_item['total'], false));
-                $table->setCellContents($row, 2, ExerciseLib::show_score($category_item['score'], $category_item['total'], true, false, true));
+                $table->setCellContents(
+                    $row,
+                    1,
+                    ExerciseLib::show_score(
+                        $category_item['score'],
+                        $category_item['total'],
+                        false
+                    )
+                );
+                $table->setCellContents(
+                    $row,
+                    2,
+                    ExerciseLib::show_score(
+                        $category_item['score'],
+                        $category_item['total'],
+                        true,
+                        false,
+                        true
+                    )
+                );
                 $row++;
             }
 
             if (!empty($none_category)) {
                 $table->setCellContents($row, 0, get_lang('None'));
-                $table->setCellContents($row, 1, ExerciseLib::show_score($none_category['score'], $none_category['total'], false));
-                $table->setCellContents($row, 2, ExerciseLib::show_score($none_category['score'], $none_category['total'], true, false, true));
+                $table->setCellContents(
+                    $row,
+                    1,
+                    ExerciseLib::show_score(
+                        $none_category['score'],
+                        $none_category['total'],
+                        false
+                    )
+                );
+                $table->setCellContents(
+                    $row,
+                    2,
+                    ExerciseLib::show_score(
+                        $none_category['score'],
+                        $none_category['total'],
+                        true,
+                        false,
+                        true
+                    )
+                );
                 $row++;
             }
             if (!empty($total)) {
                 $table->setCellContents($row, 0, get_lang('Total'));
-                $table->setCellContents($row, 1, ExerciseLib::show_score($total['score'], $total['total'], false));
-                $table->setCellContents($row, 2, ExerciseLib::show_score($total['score'], $total['total'], true, false, true));
+                $table->setCellContents(
+                    $row,
+                    1,
+                    ExerciseLib::show_score(
+                        $total['score'],
+                        $total['total'],
+                        false
+                    )
+                );
+                $table->setCellContents(
+                    $row,
+                    2,
+                    ExerciseLib::show_score(
+                        $total['score'],
+                        $total['total'],
+                        true,
+                        false,
+                        true
+                    )
+                );
             }
             return $table->toHtml();
         }
@@ -887,7 +951,12 @@ class TestCategory
         // Setting the form elements
         $form->addElement('header', $header);
         $form->addElement('hidden', 'category_id');
-        $form->addElement('text', 'category_name', get_lang('CategoryName'), array('class' => 'span6'));
+        $form->addElement(
+            'text',
+            'category_name',
+            get_lang('CategoryName'),
+            array('class' => 'span6')
+        );
         $form->add_html_editor(
             'category_description',
             get_lang('CategoryDescription'),
@@ -905,7 +974,12 @@ class TestCategory
                 '1' => get_lang('Visible'),
                 '0' => get_lang('Hidden')
         );
-        $form->addElement('select', 'visibility', get_lang('Visibility'), $options);
+        $form->addElement(
+            'select',
+            'visibility',
+            get_lang('Visibility'),
+            $options
+        );
         $script = null;
         if (!empty($this->parent_id)) {
             $parent_cat = new TestCategory();

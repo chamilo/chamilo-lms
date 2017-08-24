@@ -1,66 +1,60 @@
-<footer id="footer-section" class="sticky-footer bgfooter">
-    <div class="container">
-        <div class="pre-footer">
-            {% if plugin_pre_footer is not null %}
-            <div id="plugin_pre_footer">
+<footer class="sticky-footer"> <!-- start of #footer section -->
+    <div class="pre-footer">
+        {% if plugin_pre_footer is not null %}
+            <div id="plugin_pre_footer" class="text-center">
                 {{ plugin_pre_footer }}
             </div>
-            {% endif %}
-        </div>
-        <div class="sub-footer">
-            <div class="row">
-                <div class="col-md-4">
-                    {% if session_teachers is not null %}
+        {% endif %}
+    </div>
+    <div class="sub-footer">
+    <div class="container">
+        <div class="row">
+            <div id="footer_left" class="col-md-8">
+                <div class="partners">
+                    <a href="http://www.bosch-stiftung.de" target="_blank">
+                        <img src="{{ _p.web_css_theme }}images/rbs_logo_rgb.png"/>
+                    </a>
+                    <a href="http://www.cavilam.com" target="_blank">
+                        <img src="{{ _p.web_css_theme }}images/logo_cavilam.png"/>
+                    </a>
+                    <a href="http://www.dw.com" target="_blank">
+                        <img src="{{ _p.web_css_theme }}images/logo-dw.png"/>
+                    </a>
+                </div>
+            </div>
+            <div id="footer_right" class="col-md-4">
+                {% if session_teachers is not null %}
                     <div class="session-teachers">
                         {{ session_teachers }}
                     </div>
-                    {% endif %}
-                    {% if teachers is not null %}
-                    <div class="teachers">
+                {% endif %}
+                {% if teachers is not null %}
+                    <div id="teachers">
                         {{ teachers }}
                     </div>
-                    {% endif %}
-                    {% if plugin_footer_left is not null %}
-                    <div id="plugin_footer_left">
-                        {{ plugin_footer_left }}
+                {% endif %}
+                {% if administrator_name is not null %}
+                    <div id="admin_name">
+                        <a href="{{ "URLOFAJ" | get_lang }}">{{ "OFAJ" | get_lang }}</a>
                     </div>
-                    {% endif %}
+                {% endif %}
+                <div id="software_name">
+	                <a href="{{_p.web}}" target="_blank">{{ "PoweredByX" |get_lang | format(_s.software_name) }}</a>
+                    &copy; {{ "now"|date("Y") }}
                 </div>
-                <div class="col-md-4">
-                    {% if plugin_footer_center is not null %}
-                    <div id="plugin_footer_center">
-                        {{ plugin_footer_center }}
-                    </div>
-                    {% endif %}
+                <div id="mentions_legales">
+                        <a href="{{_p.web}}{{ "MentionsLegalesLink" |get_lang }}" target="_blank">{{ "MentionsLegales" |get_lang }}</a> - <a href="{{_p.web}}{{ "CGULink" |get_lang }}" target="_blank">{{ "CGU" |get_lang }}</a>
                 </div>
-                <div class="col-md-4 text-right">
-                    {% if administrator_name is not null %}
-                    <div class="administrator-name">
-                        {{ administrator_name }}
-                    </div>
-                    {% endif %}
-
-                    {% if _s.software_name is not empty %}
-                        <div class="software-name">
-                            <a href="{{_p.web}}" target="_blank">
-                                {{ "PoweredByX" |get_lang | format(_s.software_name) }}
-                            </a>&copy; {{ "now"|date("Y") }}
-                        </div>
-                    {% endif %}
-
-                    {% if plugin_footer_right is not null %}
-                    <div id="plugin_footer_right">
-                        {{ plugin_footer_right }}
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
+                &nbsp;
+            </div><!-- end of #footer_right -->
+        </div><!-- end of #row -->
         <div class="extra-footer">
             {{ footer_extra_content }}
         </div>
+    </div><!-- end of #container -->
     </div>
 </footer>
+
 
 <div class="modal fade" id="expand-image-modal" tabindex="-1" role="dialog" aria-labelledby="expand-image-modal-title" aria-hidden="true">
     <div class="modal-dialog modal-lg">

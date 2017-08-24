@@ -351,11 +351,11 @@ class ExerciseShowFunctions
         ?>
         <tr>
         <td width="5%">
-            <?php echo Display::return_icon($icon); ?>
+            <?php echo Display::return_icon($icon, null, null, ICON_SIZE_TINY); ?>
         </td>
         <td width="5%">
             <?php if (!$hide_expected_answer) {
-                echo Display::return_icon($iconAnswer);
+                echo Display::return_icon($iconAnswer, null, null, ICON_SIZE_TINY);
             } else {
                 echo "-";
             } ?>

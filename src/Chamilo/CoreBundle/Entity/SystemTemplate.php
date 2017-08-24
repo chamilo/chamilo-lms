@@ -50,6 +50,11 @@ class SystemTemplate
      */
     private $content;
 
+    public function __construct()
+    {
+        $this->comment = '';
+    }
+
     /**
      * Set title
      *

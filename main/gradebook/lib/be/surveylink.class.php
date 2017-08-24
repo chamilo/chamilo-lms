@@ -258,6 +258,10 @@ class SurveyLink extends AbstractLink
 
     public function get_link()
     {
+        if (api_get_configuration_value('hide_survey_reporting_button')) {
+            return null;
+        }
+
         if (api_is_allowed_to_edit()) { // Let students make access only through "Surveys" tool.
             $tbl_name = $this->get_survey_table();
             $session_id = api_get_session_id();

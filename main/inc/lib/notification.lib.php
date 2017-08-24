@@ -212,15 +212,15 @@ class Notification extends Model
 
     /**
      * Save message notification
-     * @param int	    $type message type
+     * @param int $type message type
      * NOTIFICATION_TYPE_MESSAGE,
      * NOTIFICATION_TYPE_INVITATION,
      * NOTIFICATION_TYPE_GROUP
-     * @param array	    $userList recipients: user list of ids
-     * @param string	$title
-     * @param string	$content
-     * @param array	    $senderInfo result of api_get_user_info() or GroupPortalManager:get_group_data()
-     * @param array	    $attachments
+     * @param array $userList recipients: user list of ids
+     * @param string $title
+     * @param string $content
+     * @param array $senderInfo result of api_get_user_info() or GroupPortalManager:get_group_data()
+     * @param array $attachments
      *
      */
     public function save_notification(
@@ -234,7 +234,6 @@ class Notification extends Model
         $this->type = intval($type);
         $content = $this->formatContent($content, $senderInfo);
         $titleToNotification = $this->formatTitle($title, $senderInfo);
-
         $settingToCheck = '';
         $avoid_my_self = false;
 

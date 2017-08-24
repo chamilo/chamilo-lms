@@ -3,6 +3,7 @@
 
 use Symfony\Component\Filesystem\Filesystem;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\SystemTemplate;
 
 /**
  * Library of the settings.php file
@@ -190,8 +191,16 @@ function handlePlugins()
 
             echo '<div class="btn-group">';
             if (in_array($pluginName, $installed_plugins)) {
-                echo Display::url('<em class="fa fa-cogs"></em> '.get_lang('Configure'), 'configure_plugin.php?name='.$pluginName, array('class' => 'btn btn-default'));
-                echo Display::url('<em class="fa fa-th-large"></em> '.get_lang('Regions'), 'settings.php?category=Regions&name='.$pluginName, array('class' => 'btn btn-default'));
+                echo Display::url(
+                    '<em class="fa fa-cogs"></em> '.get_lang('Configure'),
+                    'configure_plugin.php?name='.$pluginName,
+                    array('class' => 'btn btn-default')
+                );
+                echo Display::url(
+                    '<em class="fa fa-th-large"></em> '.get_lang('Regions'),
+                    'settings.php?category=Regions&name='.$pluginName,
+                    array('class' => 'btn btn-default')
+                );
             }
 
             if (file_exists(api_get_path(SYS_PLUGIN_PATH).$pluginName.'/readme.txt')) {
@@ -388,8 +397,17 @@ function handleStylesheets()
             . '</script>';
         }
     } elseif (isset($_POST['logo_upload'])) {
-        $logoForm->addRule('new_logo', get_lang('InvalidExtension').' ('.implode(',', $allowedFileTypes).')', 'filetype', $allowedFileTypes);
-        $logoForm->addRule('new_logo', get_lang('ThisFieldIsRequired'), 'required');
+        $logoForm->addRule(
+            'new_logo',
+            get_lang('InvalidExtension').' ('.implode(',', $allowedFileTypes).')',
+            'filetype',
+            $allowedFileTypes
+        );
+        $logoForm->addRule(
+            'new_logo',
+            get_lang('ThisFieldIsRequired'),
+            'required'
+        );
 
         if ($logoForm->validate()) {
             $imageInfo = getimagesize($_FILES['new_logo']['tmp_name']);
@@ -400,13 +418,16 @@ function handleStylesheets()
                     unlink($dir.$newLogoFileName);
                 }
 
-                $status = move_uploaded_file($_FILES['new_logo']['tmp_name'], $dir.$newLogoFileName);
+                $status = move_uploaded_file(
+                    $_FILES['new_logo']['tmp_name'],
+                    $dir.$newLogoFileName
+                );
 
                 if ($status) {
                     echo Display::return_message(get_lang('NewLogoUpdated'));
                     echo '<script>'
-                            . '$("#header-logo").attr("src","'.$url.$newLogoFileName.'");'
-                        . '</script>';
+                         . '$("#header-logo").attr("src","'.$url.$newLogoFileName.'");'
+                         . '</script>';
                 } else {
                     echo Display::return_message('Error - '.get_lang('UplNoFileUploaded'), 'error');
                 }
@@ -704,14 +725,24 @@ function handleSearch()
     require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
     $search_enabled = api_get_setting('search_enabled');
 
-    $form = new FormValidator('search-options', 'post', api_get_self().'?category=Search');
+    $form = new FormValidator(
+        'search-options',
+        'post',
+        api_get_self().'?category=Search'
+    );
     $values = api_get_settings_options('search_enabled');
     $form->addElement('header', null, get_lang('SearchEnabledTitle'));
 
     $group = formGenerateElementsGroup($form, $values, 'search_enabled');
 
-    //SearchEnabledComment
-    $form->addGroup($group, 'search_enabled', array(get_lang('SearchEnabledTitle'), get_lang('SearchEnabledComment')), null, false);
+    // SearchEnabledComment
+    $form->addGroup(
+        $group,
+        'search_enabled',
+        array(get_lang('SearchEnabledTitle'), get_lang('SearchEnabledComment')),
+        null,
+        false
+    );
 
     $search_enabled = api_get_setting('search_enabled');
 
@@ -725,20 +756,44 @@ function handleSearch()
 
     if ($search_enabled == 'true') {
         $values = api_get_settings_options('search_show_unlinked_results');
-
-        $group = formGenerateElementsGroup($form, $values, 'search_show_unlinked_results');
-        $form->addGroup($group, 'search_show_unlinked_results', array(get_lang('SearchShowUnlinkedResultsTitle'), get_lang('SearchShowUnlinkedResultsComment')), null, false);
+        $group = formGenerateElementsGroup(
+            $form,
+            $values,
+            'search_show_unlinked_results'
+        );
+        $form->addGroup(
+            $group,
+            'search_show_unlinked_results',
+            array(
+                get_lang('SearchShowUnlinkedResultsTitle'),
+                get_lang('SearchShowUnlinkedResultsComment')
+            ),
+            null,
+            false
+        );
         $default_values['search_show_unlinked_results'] = api_get_setting('search_show_unlinked_results');
 
         $sf_values = array();
         foreach ($specific_fields as $sf) {
             $sf_values[$sf['code']] = $sf['name'];
         }
-        $url = Display::div(Display::url(get_lang('AddSpecificSearchField'), 'specific_fields.php'), array('class'=>'sectioncomment'));
+        $url = Display::div(
+            Display::url(
+                get_lang('AddSpecificSearchField'),
+                'specific_fields.php'
+            ),
+            array('class' => 'sectioncomment')
+        );
         if (empty($sf_values)) {
             $form->addElement('label', [get_lang('SearchPrefilterPrefix'), $url]);
         } else {
-            $form->addElement('select', 'search_prefilter_prefix', array(get_lang('SearchPrefilterPrefix'), $url), $sf_values, '');
+            $form->addElement(
+                'select',
+                'search_prefilter_prefix',
+                array(get_lang('SearchPrefilterPrefix'), $url),
+                $sf_values,
+                ''
+            );
             $default_values['search_prefilter_prefix'] = api_get_setting('search_prefilter_prefix');
         }
     }
@@ -786,7 +841,10 @@ function handleSearch()
 
         //Testing specific fields
         if (empty($specific_fields)) {
-            $specific_fields_exists = Display::return_icon('bullet_red.png', get_lang('AddSpecificSearchField'));
+            $specific_fields_exists = Display::return_icon(
+                'bullet_red.png',
+                get_lang('AddSpecificSearchField')
+            );
         }
         //Testing xapian extension
         if (!extension_loaded('xapian')) {
@@ -874,8 +932,15 @@ function handleTemplates()
  */
 function displayTemplates()
 {
-    $table = new SortableTable('templates', 'getNumberOfTemplates', 'getTemplateData', 1);
-    $table->set_additional_parameters(array('category' => Security::remove_XSS($_GET['category'])));
+    $table = new SortableTable(
+        'templates',
+        'getNumberOfTemplates',
+        'getTemplateData',
+        1
+    );
+    $table->set_additional_parameters(
+        array('category' => Security::remove_XSS($_GET['category']))
+    );
     $table->set_header(0, get_lang('Image'), true, array('style' => 'width: 101px;'));
     $table->set_header(1, get_lang('Title'));
     $table->set_header(2, get_lang('Actions'), false, array('style' => 'width:50px;'));
@@ -896,10 +961,10 @@ function displayTemplates()
 function getNumberOfTemplates()
 {
     // Database table definition.
-    $table_system_template = Database::get_main_table('system_template');
+    $table = Database::get_main_table('system_template');
 
     // The sql statement.
-    $sql = "SELECT COUNT(id) AS total FROM $table_system_template";
+    $sql = "SELECT COUNT(id) AS total FROM $table";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
 
@@ -949,7 +1014,8 @@ function getTemplateData($from, $number_of_items, $column, $direction)
  * @version August 2008
  * @since v1.8.6
  */
-function actionsFilter($id) {
+function actionsFilter($id)
+{
     $return = '<a href="settings.php?category=Templates&action=edit&id='.Security::remove_XSS($id).'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';
     $return .= '<a href="settings.php?category=Templates&action=delete&id='.Security::remove_XSS($id).'" onClick="javascript:if(!confirm('."'".get_lang('ConfirmYourChoice')."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
     return $return;
@@ -984,9 +1050,18 @@ function searchImageFilter($image)
  */
 function addEditTemplate()
 {
+    $em = Database::getManager();
     // Initialize the object.
-    $id = isset($_GET['id']) ? '&id='.Security::remove_XSS($_GET['id']) : '';
-    $form = new FormValidator('template', 'post', 'settings.php?category=Templates&action='.Security::remove_XSS($_GET['action']).$id);
+    $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
+    /** @var SystemTemplate $template */
+    $template = $id ? $em->find('ChamiloCoreBundle:SystemTemplate', $id) : new SystemTemplate();
+
+    $form = new FormValidator(
+        'template',
+        'post',
+        'settings.php?category=Templates&action='.Security::remove_XSS($_GET['action']).'&id='.$id
+    );
 
     // Setting the form elements: the header.
     if ($_GET['action'] == 'add') {
@@ -1000,7 +1075,14 @@ function addEditTemplate()
     $form->addText('title', get_lang('Title'), false);
 
     // Setting the form elements: the content of the template (wysiwyg editor).
-    $form->addElement('html_editor', 'template_text', get_lang('Text'), null, array('ToolbarSet' => 'AdminTemplates', 'Width' => '100%', 'Height' => '400'));
+    $form->addHtmlEditor(
+        'template_text',
+        get_lang('Text'),
+        true,
+        true,
+        ['ToolbarSet' => 'Documents', 'Width' => '100%', 'Height' => '400'],
+        true
+    );
 
     // Setting the form elements: the form to upload an image to be used with the template.
     $form->addElement('file', 'template_image', get_lang('Image'), '');
@@ -1010,27 +1092,32 @@ function addEditTemplate()
 
     // Getting all the information of the template when editing a template.
     if ($_GET['action'] == 'edit') {
-        // Database table definition.
-        $table_system_template = Database::get_main_table('system_template');
-        $sql = "SELECT * FROM $table_system_template WHERE id = ".intval($_GET['id'])."";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-
-        $defaults['template_id'] = intval($_GET['id']);
-        $defaults['template_text'] = $row['content'];
+        $defaults['template_id'] = $id;
+        $defaults['template_text'] = $template->getContent();
         // Forcing get_lang().
-        $defaults['title'] = get_lang($row['title']);
+        $defaults['title'] = get_lang($template->getTitle());
 
         // Adding an extra field: a hidden field with the id of the template we are editing.
         $form->addElement('hidden', 'template_id');
 
         // Adding an extra field: a preview of the image that is currently used.
-        if (!empty($row['image'])) {
-            $form->addElement('static', 'template_image_preview', '',
-                '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/'.$row['image'].'" alt="'.get_lang('TemplatePreview').'"/>');
+        if (!empty($template->getImage())) {
+            $form->addElement(
+                'static',
+                'template_image_preview',
+                '',
+                '<img src="'.api_get_path(WEB_APP_PATH)
+                    .'home/default_platform_document/template_thumb/'.$template->getImage()
+                    .'" alt="'.get_lang('TemplatePreview')
+                    .'"/>'
+            );
         } else {
-            $form->addElement('static', 'template_image_preview', '',
-                '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>');
+            $form->addElement(
+                'static',
+                'template_image_preview',
+                '',
+                '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>'
+            );
         }
 
         // Setting the information of the template that we are editing.
@@ -1040,11 +1127,15 @@ function addEditTemplate()
     $form->addButtonSave(get_lang('Ok'), 'submit');
 
     // Setting the rules: the required fields.
-    $form->addRule('template_image', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule(
+        'template_image',
+        get_lang('ThisFieldIsRequired'),
+        'required'
+    );
     $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addRule('template_text', get_lang('ThisFieldIsRequired'), 'required');
 
-    // if the form validates (complies to all rules) we save the information, else we display the form again (with error message if needed)
+    // if the form validates (complies to all rules) we save the information,
+    // else we display the form again (with error message if needed)
     if ($form->validate()) {
         $check = Security::check_token('post');
         if ($check) {
@@ -1071,7 +1162,6 @@ function addEditTemplate()
                     $picture_info = $temp->get_image_info();
 
                     $max_width_for_picture = 100;
-
                     if ($picture_info['width'] > $max_width_for_picture) {
                         $temp->resize($max_width_for_picture);
                     }
@@ -1080,38 +1170,41 @@ function addEditTemplate()
             }
 
             // Store the information in the database (as insert or as update).
-            $table_system_template = Database::get_main_table('system_template');
-            $cssFile = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/editor.css';
-            $style = '<link href="'.$cssFile.'" rel="stylesheet" media="screen" type="text/css" />';
-            $bootstrap = '<link href="'.api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css" />';
+            $bootstrap = api_get_css(api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css');
             $viewport = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
-            
+
             if ($_GET['action'] == 'add') {
-                $templateContent = '<head>'.$viewport.'<title>'.$values['title'].'</title>'.$style.$bootstrap.'</head>'
-                    . '<body>'.Database::escape_string($values['template_text']).'</body>';
-                $content_template = Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY);
-                $params = [
-                    'title' =>  $values['title'],
-                    'content' => $content_template,
-                    'image' => $new_file_name
-                ];
-                
-                
-                Database::insert($table_system_template, $params);
+                $templateContent = '<head>'.$viewport.'<title>'.$values['title'].'</title>'.$bootstrap.'</head>'
+                    .$values['template_text'];
+                $template
+                    ->setTitle($values['title'])
+                    ->setContent(Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY))
+                    ->setImage($new_file_name);
+                $em->persist($template);
+                $em->flush();
 
                 // Display a feedback message.
-                echo Display::return_message(get_lang('TemplateAdded'), 'confirm');
-                echo '<a href="settings.php?category=Templates&action=add">'.Display::return_icon('new_template.png', get_lang('AddTemplate'), '', ICON_SIZE_MEDIUM).'</a>';
+                echo Display::return_message(
+                    get_lang('TemplateAdded'),
+                    'confirm'
+                );
+                echo '<a href="settings.php?category=Templates&action=add">'.
+                    Display::return_icon('new_template.png', get_lang('AddTemplate'), '', ICON_SIZE_MEDIUM).
+                    '</a>';
             } else {
-                
-                $content_template = '<head>'.$viewport.'<title>'.$values['title'].'</title>'.$style.$bootstrap.'</head>'
-                    . '<body>'.Database::escape_string($values['template_text']).'</body>';
-                $sql = "UPDATE $table_system_template set title = '".Database::escape_string($values['title'])."', content = '".$content_template."'";
+                $templateContent = '<head>'.$viewport.'<title>'.$values['title'].'</title>'.$bootstrap.'</head>'
+                    .$values['template_text'];
+
+                $template
+                    ->setTitle($values['title'])
+                    ->setContent(Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY));
+
                 if (!empty($new_file_name)) {
-                    $sql .= ", image = '".Database::escape_string($new_file_name)."'";
+                    $template->setImage($new_file_name);
                 }
-                $sql .= " WHERE id = ".intval($_GET['id'])."";
-                Database::query($sql);
+
+                $em->persist($template);
+                $em->flush();
 
                 // Display a feedback message.
                 echo Display::return_message(get_lang('TemplateEdited'), 'confirm');
@@ -1139,9 +1232,10 @@ function addEditTemplate()
  */
 function deleteTemplate($id)
 {
+    $id = intval($id);
     // First we remove the image.
-    $table_system_template = Database::get_main_table('system_template');
-    $sql = "SELECT * FROM $table_system_template WHERE id = ".intval($id)."";
+    $table = Database::get_main_table('system_template');
+    $sql = "SELECT * FROM $table WHERE id = $id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     if (!empty($row['image'])) {
@@ -1149,7 +1243,7 @@ function deleteTemplate($id)
     }
 
     // Now we remove it from the database.
-    $sql = "DELETE FROM $table_system_template WHERE id = ".intval($id)."";
+    $sql = "DELETE FROM $table WHERE id = $id";
     Database::query($sql);
 
     // Display a feedback message.
@@ -1176,7 +1270,8 @@ function select_timezone_value()
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-function select_gradebook_number_decimals() {
+function select_gradebook_number_decimals()
+{
     return array('0', '1', '2');
 }
 
@@ -1216,7 +1311,11 @@ function generateSettingsForm($settings, $settings_by_access_list)
     $em = Database::getManager();
     $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
-    $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));
+    $form = new FormValidator(
+        'settings',
+        'post',
+        'settings.php?category='.Security::remove_XSS($_GET['category'])
+    );
 
     $form->addElement(
         'hidden',
@@ -1491,8 +1590,13 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 );
                 break;
             case 'link':
-                $form->addElement('static', null, array(get_lang($row['title']), get_lang($row['comment'])),
-                    get_lang('CurrentValue').' : '.$row['selected_value'], $hideme);
+                $form->addElement(
+                    'static',
+                    null,
+                    array(get_lang($row['title']), get_lang($row['comment'])),
+                    get_lang('CurrentValue').' : '.$row['selected_value'],
+                    $hideme
+                );
                 break;
             case 'select':
                 /*
@@ -1541,7 +1645,12 @@ function generateSettingsForm($settings, $settings_by_access_list)
 
                 $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
                 $allowed_picture_types = array('jpg', 'jpeg', 'png', 'gif');
-                $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
+                $form->addRule(
+                    'pdf_export_watermark_path',
+                    get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
+                    'filetype',
+                    $allowed_picture_types
+                );
 
                 break;
             case 'timezone_value':

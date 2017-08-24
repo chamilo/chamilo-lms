@@ -6977,7 +6977,7 @@ CAS manage user authentication, LDAP activation isn't required.
 </div>
 <br />
 <h4>I. LDAP configuration</h4>
-<h5>Edit file main/inc/conf/auth.conf.php </h5>
+<h5>Edit file app/config/auth.conf.php </h5>
 -&gt; Edit values of array <code>&#36;extldap_config</code>
 <br />
 <br />
@@ -7003,7 +7003,7 @@ Die Array-Struktur wird in Datei main/auth/external_login/ldap.conf.php erkl&aum
 <br />
 <br />
 <h4>II. LDAP-Authentifizierung aktivieren</h4>
-<h5>In der Datei main/inc/conf/configuration.php</h5>-&gt; folgende Zeilen auskommentieren
+<h5>In der Datei app/config/configuration.php</h5>-&gt; folgende Zeilen auskommentieren
 <br />
 &#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration['root_sys'].&quot;main/auth/external_login/login.ldap.php&quot;;
 <br />
@@ -7045,7 +7045,7 @@ $FacebookMainActivateComment = "Zuerst muß eine Facebook Anwendung erstellt wer
 <br /><br />
 Danach die Datei
 <br /><br />
-<strong>main/inc/conf/auth.conf.php</strong>
+<strong>app/config/auth.conf.php</strong>
 <br /><br />
 öffnen und 'appId' und 'secret' für \$facebook_config aus der FB-Anwendung einfügen.
 Anschließend zu den <a href=\"/settings.php?category=Facebook\">Plugins</a> wechseln und 'Facebook Login' Button für die Plattform aktivieren.";
@@ -7974,4 +7974,5 @@ $NewPasswordRequirementMaxXLowercase = "Maximale %s Kleinbuchstaben";
 $NewPasswordRequirementMaxXUppercase = "Maximale %s Großbuchstaben";
 $NewPasswordRequirementMaxXNumeric = "Maximale %s numerische (0-9) Zeichen";
 $NewPasswordRequirementMaxXLength = "Maximale %s Zeichen insgesamt";
+$GoToSurvey = "Zur Umfrage";
 ?>

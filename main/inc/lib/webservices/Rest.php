@@ -8,6 +8,7 @@ use Chamilo\CourseBundle\Entity\Repository\CNotebookRepository;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\UserBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CNotebook;
 
 /**
  * Class RestApi
@@ -482,7 +483,7 @@ class Rest extends WebService
         $notebooks = $notebooksRepo->findByUser($this->user, $this->course, $this->session);
 
         return array_map(
-            function(\Chamilo\CourseBundle\Entity\CNotebook $notebook) {
+            function (CNotebook $notebook) {
                 return [
                     'id' => $notebook->getIid(),
                     'title' => $notebook->getTitle(),
@@ -687,13 +688,12 @@ class Rest extends WebService
         $sessionId = $this->session ? $this->session->getId() : 0;
         $categoriesTempList = learnpath::getCategories($this->course->getId());
 
-        $categoryNone = new \Chamilo\CourseBundle\Entity\CLpCategory();
+        $categoryNone = new CLpCategory();
         $categoryNone->setId(0);
         $categoryNone->setName(get_lang('WithOutCategory'));
         $categoryNone->setPosition(0);
 
         $categories = array_merge([$categoryNone], $categoriesTempList);
-
         $categoryData = array();
 
         /** @var CLpCategory $category */

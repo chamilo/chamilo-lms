@@ -15,7 +15,7 @@ if ($_REQUEST['tab'] == 'delete_center_data') {
     if (!$res) {
         $sql = "DELETE FROM $tableSepeActions;";
         $res = Database::query($sql);
-        $content = $plugin->get_lang('ProblemToDeleteInfoCenter').Database::error();
+        $content = $plugin->get_lang('ProblemToDeleteInfoCenter');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = $plugin->get_lang('DeleteOk');
@@ -28,7 +28,7 @@ if ($_REQUEST['tab'] == 'delete_action') {
     $sql = "DELETE FROM $tableSepeActions WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToDeleteInfoAction').Database::error();
+        $content = $plugin->get_lang('ProblemToDeleteInfoAction');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = $plugin->get_lang('DeleteOk');
@@ -42,7 +42,7 @@ if ($_REQUEST['tab'] == 'delete_specialty') {
     $sql = "DELETE FROM $tableSepeSpecialty WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToDeleteInfoSpecialty').Database::error();
+        $content = $plugin->get_lang('ProblemToDeleteInfoSpecialty');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = $plugin->get_lang('DeleteOk');
@@ -55,7 +55,7 @@ if ($_REQUEST['tab'] == 'delete_specialty_participant') {
     $sql = "DELETE FROM $tableSepeParticipantsSpecialty WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToDeleteInfoSpecialty').Database::error();
+        $content = $plugin->get_lang('ProblemToDeleteInfoSpecialty');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = $plugin->get_lang('DeleteOk');
@@ -68,7 +68,7 @@ if ($_REQUEST['tab'] == 'delete_classroom') {
     $sql = "DELETE FROM $tableSepeSpecialtyClassroom WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToDeleteInfoSpecialtyClassroom').Database::error();
+        $content = $plugin->get_lang('ProblemToDeleteInfoSpecialtyClassroom');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = $plugin->get_lang('DeleteOk');
@@ -81,13 +81,13 @@ if ($_REQUEST['tab'] == 'checkTutorEdit') {
     $number = Database::escape_string(trim($_REQUEST['number']));
     $letter = Database::escape_string(trim($_REQUEST['letter']));
     $platform_user_id = intval($_REQUEST['platform_user_id']);
-    
+
     $sql = "SELECT platform_user_id 
             FROM $tableSepeTutors 
             WHERE document_type='".$type."' AND document_number='".$number."' AND document_letter='".$letter."';";
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemDataBase').Database::error();
+        $content = $plugin->get_lang('ProblemDataBase');
         error_log(print_r($content, 1));
         exit;
     } else {
@@ -106,7 +106,7 @@ if ($_REQUEST['tab'] == 'delete_tutor') {
     $sql = "DELETE FROM $tableSepeSpecialtyTutors WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToDeleteInfoSpecialtyTutor').Database::error();
+        $content = $plugin->get_lang('ProblemToDeleteInfoSpecialtyTutor');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = $plugin->get_lang('DeleteOk');
@@ -119,14 +119,14 @@ if ($_REQUEST['tab'] == 'delete_participant') {
     $sql = "SELECT platform_user_id, action_id FROM $tableSepeParticipants WHERE id = $id;";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);
-    
+
     $sql = "UPDATE plugin_sepe_log_participant SET fecha_baja='".date("Y-m-d H:i:s")."' WHERE platform_user_id='".$row['platform_user_id']."' AND action_id='".$row['action_id']."';";
     $res = Database::query($sql);
-    
+
     $sql = "DELETE FROM $tableSepeParticipants WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToDeleteInfoParticipant').Database::error();
+        $content = $plugin->get_lang('ProblemToDeleteInfoParticipant');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = $plugin->get_lang('DeleteOk');
@@ -139,7 +139,7 @@ if ($_REQUEST['tab'] == 'unlink_action') {
     $sql = "DELETE FROM $tableSepeCourseActions WHERE id = $id;";
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToDesvincularInfoAction').Database::error();
+        $content = $plugin->get_lang('ProblemToDesvincularInfoAction');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = $plugin->get_lang('DeleteOk');
@@ -150,7 +150,7 @@ if ($_REQUEST['tab'] == 'unlink_action') {
 if ($_REQUEST['tab'] == 'assign_action') {
     $course_id = intval(substr($_REQUEST['course_id'], 9));
     $action_id = intval($_REQUEST['action_id']);
-    
+
     if ($action_id != 0 && $course_id != 0) {
         $sql = "SELECT * FROM $tableSepeCourseActions WHERE action_id = $action_id;";
         $rs = Database::query($sql);
@@ -164,18 +164,18 @@ if ($_REQUEST['tab'] == 'assign_action') {
                 $content = $plugin->get_lang('NoExistsCourse');
                 echo json_encode(array("status" => "false", "content" => $content));
             } else {
-                $sql = "INSERT INTO $tableSepeCourseActions (course_id, action_id) VALUES ($course_id, $action_id);";    
+                $sql = "INSERT INTO $tableSepeCourseActions (course_id, action_id) VALUES ($course_id, $action_id);";
                 $rs = Database::query($sql);
                 if (!$rs) {
-                    $content = $plugin->get_lang('NoSaveData'); 
+                    $content = $plugin->get_lang('NoSaveData');
                     echo json_encode(array("status" => "false", "content" => utf8_encode($content)));
                 } else {
-                    echo json_encode(array("status" => "true"));    
+                    echo json_encode(array("status" => "true"));
                 }
             }
         }
     } else {
-        $content = $plugin->get_lang('ErrorDataIncorrect'); 
+        $content = $plugin->get_lang('ErrorDataIncorrect');
         echo json_encode(array("status" => "false", "content" => $content));
     }
 }
@@ -189,7 +189,7 @@ if ($_REQUEST['tab'] == 'key_sepe_generator') {
     $api_service = 'dokeos';
     $num = UserManager::update_api_key($user_id, $api_service);
     $array_list_key = UserManager::get_api_keys($user_id, $api_service);
-    
+
     if (trim($array_list_key[$num]) != '') {
         $content = $array_list_key[$num];
         echo json_encode(array("status" => "true", "content" => $content));

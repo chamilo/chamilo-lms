@@ -836,13 +836,13 @@ class Answer
                 foreach ($temp as $index => $answer) {
                     if ($this->course['id'] != $course_info['id']) {
                         // check resources inside html from ckeditor tool and copy correct urls into recipient course
-                        $answer['answer'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                        $answer['answer'] = DocumentManager::replaceUrlWithNewCourseCode(
                             $answer['answer'],
                             $this->course['id'],
                             $course_info['id']
                         );
 
-                        $answer['comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                        $answer['comment'] = DocumentManager::replaceUrlWithNewCourseCode(
                             $answer['comment'],
                             $this->course['id'],
                             $course_info['id']
@@ -882,12 +882,12 @@ class Answer
             } else {
                 for ($i = 1; $i <= $this->nbrAnswers; $i++) {
                     if ($this->course['id'] != $course_info['id']) {
-                        $this->answer[$i] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                        $this->answer[$i] = DocumentManager::replaceUrlWithNewCourseCode(
                             $this->answer[$i],
                             $this->course['id'],
                             $course_info['id']
                         );
-                        $this->comment[$i] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                        $this->comment[$i] = DocumentManager::replaceUrlWithNewCourseCode(
                             $this->comment[$i],
                             $this->course['id'],
                             $course_info['id']

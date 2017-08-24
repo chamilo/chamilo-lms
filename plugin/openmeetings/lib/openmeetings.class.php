@@ -91,41 +91,6 @@ class OpenMeetings
         return api_is_course_admin() || api_is_coach() || api_is_platform_admin();
     }
 
-    /**
-     * Login the user with OM Server. This generates a session ID that is
-     * specific to the current user, but that does not require specific user data
-     *
-     * It is similar to opening a PHP session. In fact, the session ID is kept
-     * inside the $_SESSION['openmeetings_session'] session variable
-     * @return bool True if the user is correct and false when is incorrect
-     * @deprecated loginUser now called at object instanciation
-     */
-    /**
-    function loginUser()
-    {
-        try {
-            //Verifying if there is already an active session
-            if (empty($_SESSION['openmeetings_session'])) {
-                // Login user returns either 0 or >0, depending on the results
-                // Technically, as long as the SOAP user has been configured in OpenMeetings and OpenMeetings is on, this should always succeed.
-                if ($this->gateway->loginUser()) {
-                    $this->sessionId = $_SESSION['openmeetings_session'] = $this->gateway->session_id;
-                    return true;
-                } else {
-                    error_log('loginUser did not succeed');
-                    return false;
-                }
-            } else {
-                $this->sessionId = $_SESSION['openmeetings_session'];
-                return true;
-            }
-        } catch (SoapFault $e) {
-            error_log(__FILE__.'+'.__LINE__.' Warning: We have detected some problems. Fault: '.$e->faultstring);
-            return false;
-        }
-    }
-    */
-
     /*
      * Creating a Room for the meeting
     * @return bool True if the user is correct and false when is incorrect
@@ -152,8 +117,6 @@ class OpenMeetings
         );
 
         if ($meetingData != false && count($meetingData) > 0) {
-            //error_log(print_r($meetingData,1));
-            //error_log('Found previous room reference - reusing');
             // There has been a room in the past for this course. It should
             // still be on the server, so update (instead of creating a new one)
             // This fills the following attributes: status, name, comment, chamiloCourseId, chamiloSessionId
@@ -164,12 +127,9 @@ class OpenMeetings
             $roomId = $this->gateway->updateRoomWithModeration($room);
             if ($roomId != $meetingData['room_id']) {
                 $msg = 'Something went wrong: the updated room ID ('.$roomId.') is not the same as the one we had ('.$meetingData['room_id'].')';
-                error_log($msg);
                 die($msg);
             }
-
         } else {
-            //error_log('Found no previous room - creating');
             $room = new Room();
             $room->SID = $this->sessionId;
             $room->name = $this->roomName;
@@ -387,31 +347,8 @@ class OpenMeetings
                 )
             )
         );
-        /*$urlWsdl = $this->url."/services/RoomService?wsdl";
-        $omServices = new \SoapClient($urlWsdl);*/
         $room = new Room();
-
-        /*
-        try {
-            $rooms = $this->gateway->getRoomsWithCurrentUsersByType();
-            //$rooms = $omServices->getRoomsPublic(array(
-                //'SID' => $this->sessionId,
-                //'start' => 0,
-                //'max' => 10,
-                //'orderby' => 'name',
-                //'asc' => 'true',
-                //'externalRoomType' => 'chamilo',
-                //'roomtypes_id' => 'chamilo',
-                //)
-            //);
-        } catch (SoapFault $e) {
-            error_log(__FILE__.'+'.__LINE__.' '.$e->faultstring);
-            //error_log($rooms->getDebug());
-            return false;
-        }
-        */
         $room->SID = $this->sessionId;
-        //error_log(__FILE__.'+'.__LINE__.' Meetings found: '.print_r($room->SID,1));
         if (!empty($meetingsList)) {
             foreach ($meetingsList as $meetingDb) {
                 //$room->rooms_id = $meetingDb['room_id'];
@@ -593,7 +530,6 @@ class OpenMeetings
                     array('id = ? ' => $meetingId)
                 );
             }
-            //error_log(__FILE__.'+'.__LINE__.' Finished closing');
         } catch (SoapFault $e) {
             error_log(__FILE__.'+'.__LINE__.' Warning: We have detected some problems: Fault: '.$e->faultstring);
             exit;
@@ -619,7 +555,6 @@ class OpenMeetings
                 array('id = ? ' => $id)
             );
             return $id;
-            //error_log(__FILE__.'+'.__LINE__.' Finished closing');
         } catch (SoapFault $e) {
             error_log(__FILE__.'+'.__LINE__.' Warning: We have detected some problems: Fault: '.$e->faultstring);
             exit;

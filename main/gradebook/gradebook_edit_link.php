@@ -39,7 +39,7 @@ if ($session_id == 0) {
         false
     ); //already init
 } else {
-    $cats = Category :: load_session_categories(null, $session_id);
+    $cats = Category::loadSessionCategories(null, $session_id);
 }
 
 $form = new LinkAddEditForm(

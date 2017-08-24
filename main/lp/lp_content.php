@@ -33,7 +33,6 @@ if ($debug > 0) {
 }
 
 $list = $_SESSION['oLP']->get_toc();
-
 $dir = false;
 
 foreach ($list as $toc) {

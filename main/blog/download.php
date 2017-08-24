@@ -1,13 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	This file is responsible for  passing requested documents to the browser.
-*	Html files are parsed to fix a few problems with URLs,
-*	but this code will hopefully be replaced soon by an Apache URL
-*	rewrite mechanism.
-*
-*	@package chamilo.blogs
-*/
+ * This file is responsible for  passing requested documents to the browser.
+ * Html files are parsed to fix a few problems with URLs,
+ * but this code will hopefully be replaced soon by an Apache URL
+ * rewrite mechanism.
+ *
+ * @package chamilo.blogs
+ */
 
 session_cache_limiter('public');
 
@@ -37,7 +37,9 @@ $full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/b
 //if the rewrite rule asks for a directory, we redirect to the course view
 if (is_dir($full_file_name)) {
     //remove last slash if present
-    while ($doc_url{$dul = strlen($doc_url) - 1} == '/') $doc_url = substr($doc_url, 0, $dul);
+    while ($doc_url{$dul = strlen($doc_url) - 1} == '/') {
+        $doc_url = substr($doc_url, 0, $dul);
+    }
     //create the path
     $document_explorer = api_get_path(WEB_COURSE_PATH).api_get_course_path(); // home course path
     //redirect
@@ -60,7 +62,8 @@ if (Database::num_rows($result) > 0) {
     $row = Database::fetch_array($result);
     if (Security::check_abs_path(
         $full_file_name,
-        api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/blog/')
+        api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/blog/'
+    )
     ) {
         $result = DocumentManager::file_send_for_download(
             $full_file_name,

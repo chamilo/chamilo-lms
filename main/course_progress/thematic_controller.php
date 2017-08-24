@@ -30,7 +30,7 @@ class ThematicController
 
     /**
      * This method is used for thematic control (update, insert or listing)
-     * @param 	string	$action
+     * @param string $action
      * render to thematic.php
      */
     public function thematic($action)
@@ -202,7 +202,6 @@ class ThematicController
                 case 'export_documents':
                     //no break
                 case 'thematic_export_pdf':
-                    
                     $pdfOrientation = api_get_configuration_value('thematic_pdf_orientation');
 
                     $list = $thematic->get_thematic_list();
@@ -221,7 +220,7 @@ class ThematicController
                                 );
                             }
                             $theme['thematic_plan'] = $item;
-                            
+
                         }
                         $dataAdvance = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
                         if (!empty($dataAdvance)) {
@@ -272,9 +271,12 @@ class ThematicController
                 case 'export_single_thematic':
                     $theme = $thematic->get_thematic_list($thematic_id);
                     $plans = $thematic->get_thematic_plan_data($theme['id']);
-                    $plans = array_filter($plans, function($plan) {
-                        return !empty($plan['description']);
-                    });
+                    $plans = array_filter(
+                        $plans,
+                        function ($plan) {
+                            return !empty($plan['description']);
+                        }
+                    );
                     $advances = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
 
                     $view = new Template('', false, false, false, true, false, false);
@@ -301,7 +303,11 @@ class ThematicController
                                 'add_signatures' => $signatures
                             ]
                         );
-                        $pdf->exportFromHtmlToDocumentsArea($view->fetch($template), $fileName, $courseId);
+                        $pdf->exportFromHtmlToDocumentsArea(
+                            $view->fetch($template),
+                            $fileName,
+                            $courseId
+                        );
 
                         header('Location: '.api_get_self().'?'.api_get_cidreq());
                         exit;
@@ -380,7 +386,7 @@ class ThematicController
 
     /**
      * This method is used for thematic plan control (update, insert or listing)
-     * @param 	string	$action
+     * @param string $action
      * render to thematic_plan.php
      */
     public function thematic_plan($action)
@@ -388,7 +394,9 @@ class ThematicController
         $thematic = new Thematic();
         $data = array();
         if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
-            if (isset($_POST['action']) && ($_POST['action'] == 'thematic_plan_add' || $_POST['action'] == 'thematic_plan_edit')) {
+            if (isset($_POST['action']) &&
+                ($_POST['action'] == 'thematic_plan_add' || $_POST['action'] == 'thematic_plan_edit')
+            ) {
                 if (isset($_POST['title'])) {
                     if ($_POST['thematic_plan_token'] == $_SESSION['thematic_plan_token']) {
                         if (api_is_allowed_to_edit(null, true)) {
@@ -437,7 +445,10 @@ class ThematicController
                     $error = true;
                     $action = $_POST['action'];
                     $data['error'] = $error;
-                    $data['thematic_plan_data'] = $thematic->get_thematic_plan_data($_POST['thematic_id'], $_POST['description_type']);
+                    $data['thematic_plan_data'] = $thematic->get_thematic_plan_data(
+                        $_POST['thematic_id'],
+                        $_POST['description_type']
+                    );
                     $data['thematic_id'] = $_POST['thematic_id'];
                     $data['description_type'] = $_POST['description_type'];
                     $data['action'] = $action;
@@ -447,7 +458,7 @@ class ThematicController
                     $data['next_description_type'] = $thematic->get_next_description_type($_POST['thematic_id']);
 
                     // render to the view
-                    
+
                     $this->view->set_data($data);
                     $this->view->set_layout('layout');
                     $this->view->set_template('thematic_plan');
@@ -463,11 +474,13 @@ class ThematicController
         }
 
         $description_type = isset($_GET['description_type']) ? intval($_GET['description_type']) : null;
-
         if (!empty($thematic_id) && !empty($description_type)) {
             if ($action === 'thematic_plan_delete') {
                 if (api_is_allowed_to_edit(null, true)) {
-                    $thematic->thematic_plan_destroy($thematic_id, $description_type);
+                    $thematic->thematic_plan_destroy(
+                        $thematic_id,
+                        $description_type
+                    );
                 }
                 $data['thematic_plan_data'] = $thematic->get_thematic_plan_data($thematic_id);
                 $action = 'thematic_plan_list';
@@ -476,7 +489,7 @@ class ThematicController
             }
             $data['thematic_id'] = $thematic_id;
             $data['description_type'] = $description_type;
-        } else if (!empty($thematic_id) && $action === 'thematic_plan_list') {
+        } elseif (!empty($thematic_id) && $action === 'thematic_plan_list') {
             $data['thematic_plan_data'] = $thematic->get_thematic_plan_data($thematic_id);
             $data['thematic_id'] = $thematic_id;
         }
@@ -489,8 +502,7 @@ class ThematicController
         $data['default_thematic_plan_question'] = $thematic->get_default_question();
         $data['thematic_data'] = $thematic->get_thematic_list($thematic_id);
 
-        //render to the view
-        
+        // render to the view
         $this->view->set_data($data);
         $this->view->set_layout('layout');
         $this->view->set_template('thematic_plan');
@@ -509,7 +521,6 @@ class ThematicController
         $thematic = new Thematic();
         $attendance = new Attendance();
         $data = array();
-
         $displayHeader = (!empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header') ? false : true;
 
         // get data for attendance input select
@@ -576,7 +587,6 @@ class ThematicController
         $layoutName = $displayHeader ? 'layout' : 'layout_no_header';
 
         // render to the view
-        
         $this->view->set_data($data);
         $this->view->set_layout($layoutName);
         $this->view->set_template('thematic_advance');

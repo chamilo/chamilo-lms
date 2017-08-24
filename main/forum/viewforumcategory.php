@@ -114,12 +114,11 @@ if (!api_is_allowed_to_edit(false, true) &&
 }
 
 /* Action Links */
-$html  = '';
-$html .= '<div class="actions">';
+$html = '<div class="actions">';
 $html .= '<a href="index.php?gradebook='.$gradebook.'&'.api_get_cidreq().'">'.
     Display::return_icon('back.png', get_lang('BackToForumOverview'), '', ICON_SIZE_MEDIUM).'</a>';
 if (api_is_allowed_to_edit(false, true)) {
-    $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&forumcategory='
+    $html .= '<a href="'.api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&forumcategory='
         . $current_forum_category['cat_id'].'&action=add&content=forum"> '
         . Display::return_icon('new_forum.png', get_lang('AddForum'), '', ICON_SIZE_MEDIUM).'</a>';
 }

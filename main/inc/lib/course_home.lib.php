@@ -1295,7 +1295,7 @@ class CourseHome
                 $class = 'text';
                 $marginLeft = 170;
                 $item = $navigation_item['name'];
-            } else if (api_get_setting('show_navigation_menu') == 'icons') {
+            } elseif (api_get_setting('show_navigation_menu') == 'icons') {
                 $class = 'icons';
                 $marginLeft = 25;
                 $item = Display::return_icon(
@@ -1306,7 +1306,13 @@ class CourseHome
                 );
             } else {
                 $class = 'icons-text';
-                $item = $navigation_item['name'].Display::return_icon(substr($navigation_item['image'], 0, -3)."png", $navigation_item['name'], array('class'=>'tool-img'), ICON_SIZE_SMALL);
+                $item = $navigation_item['name'].
+                    Display::return_icon(
+                        substr($navigation_item['image'], 0, -3)."png",
+                        $navigation_item['name'],
+                        array('class' => 'tool-img'),
+                        ICON_SIZE_SMALL
+                    );
             }
 
             if (stristr($url_item['path'], $url_current['path'])) {

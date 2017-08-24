@@ -106,8 +106,10 @@ if (api_get_setting('allow_message_tool') === 'true') {
     $form->addElement(
         'file',
         'attach_1',
-        sprintf(get_lang('MaximunFileSizeX'),
-        format_file_size(api_get_setting('message_max_upload_filesize')))
+        sprintf(
+            get_lang('MaximunFileSizeX'),
+            format_file_size(api_get_setting('message_max_upload_filesize'))
+        )
     );
     $form->addButtonSend(get_lang('SendMessage'));
 

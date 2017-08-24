@@ -69,7 +69,15 @@ function save_item(
         error_log("finish: $lmsFinish - navigatesAway: $userNavigatesAway");
     }
 
-    $myLP = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
+    $courseCode = api_get_course_id();
+    if (!empty($courseId)) {
+        $courseInfo = api_get_course_info_by_id($courseId);
+        if ($courseInfo) {
+            $courseCode = $courseInfo['code'];
+        }
+    }
+
+    $myLP = learnpath::getLpFromSession($courseCode, $lp_id, $user_id);
 
     if (!is_a($myLP, 'learnpath')) {
         if ($debug) {
@@ -78,7 +86,6 @@ function save_item(
 
         return null;
     }
-
     $prerequisitesCheck = $myLP->prerequisites_match($item_id);
 
     /** @var learnpathItem $myLPI */

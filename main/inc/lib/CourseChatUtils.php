@@ -3,6 +3,7 @@
 
 use Michelf\MarkdownExtra;
 use Doctrine\Common\Collections\Criteria;
+use Chamilo\CourseBundle\Entity\CChatConnected;
 
 /**
  * Class CourseChat
@@ -319,7 +320,7 @@ class CourseChatUtils
             return;
         }
 
-        $connection = new \Chamilo\CourseBundle\Entity\CChatConnected();
+        $connection = new CChatConnected();
         $connection
             ->setCId($this->courseId)
             ->setUserId($this->userId)
@@ -1548,7 +1549,7 @@ class CourseChatUtils
 
         if ($this->groupId && !$friendId) {
             $filename_chat = 'messages-'.$date_now.'_gid-'.$this->groupId.'.log.html';
-        } else if ($this->sessionId && !$friendId) {
+        } elseif ($this->sessionId && !$friendId) {
             $filename_chat = 'messages-'.$date_now.'_sid-'.$this->sessionId.'.log.html';
         } elseif ($friendId) {
             if ($this->userId < $friendId) {
@@ -1593,7 +1594,7 @@ class CourseChatUtils
         $basename_chat = 'messages-'.$date_now;
         if ($this->groupId && !$friendId) {
             $basename_chat = 'messages-'.$date_now.'_gid-'.$this->groupId;
-        } else if ($this->sessionId && !$friendId) {
+        } elseif ($this->sessionId && !$friendId) {
             $basename_chat = 'messages-'.$date_now.'_sid-'.$this->sessionId;
         } elseif ($friendId) {
             if ($this->userId < $friendId) {

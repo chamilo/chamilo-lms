@@ -43,7 +43,10 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
+    'name' => get_lang('SurveyList')
+);
 if (api_is_course_admin()) {
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
@@ -103,7 +106,10 @@ $complete_user_list = CourseManager::get_user_list_from_course_code(
 );
 $possible_users = array();
 foreach ($complete_user_list as & $user) {
-    $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
+    $possible_users[$user['user_id']] = api_get_person_name(
+        $user['firstname'],
+        $user['lastname']
+    );
 }
 
 CourseManager::addUserGroupMultiSelect($form, array());
@@ -127,7 +133,6 @@ $form->addElement(
 $form->addElement('html', '<div id="check_mail">');
 $form->addElement('checkbox', 'send_mail', '', get_lang('SendMail'));
 $form->addElement('html', '</div>');
-
 $form->addElement('html', '<div id="mail_text_wrapper">');
 
 // The title of the mail

@@ -14,7 +14,8 @@ require_once __DIR__.'/../inc/global.inc.php';
  * Get all categories and users ids from gradebook
  * @return array Categories and users ids
  */
-function getAllCategoriesAndUsers() {
+function getAllCategoriesAndUsers()
+{
     $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
     $jointable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
     $joinStatement = ' JOIN '.$jointable.' ON '.$table.'.evaluation_id = '.$jointable.'.id';
@@ -26,7 +27,7 @@ function getAllCategoriesAndUsers() {
 
 if ($categoriesAndUsers = getAllCategoriesAndUsers()) {
     foreach ($categoriesAndUsers as $categoryAndUser) {
-        Category::register_user_certificate(
+        Category::generateUserCertificate(
             $categoryAndUser['category_id'],
             $categoryAndUser['user_id']
         );

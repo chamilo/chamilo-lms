@@ -1,9 +1,9 @@
 <div class ="row">
 
 {% if bbb_status == true %}
-    <div class ="span12" style="text-align:center">
+    <div class ="col-md-12" style="text-align:center">
+        {{ form }}
         {% if show_join_button == true %}
-            {{ form }}
             <p>
                 <a href="{{ conference_url }}" target="_blank" class="btn btn-primary btn-large">
                     {{ 'EnterConference'|get_lang }}
@@ -32,7 +32,7 @@
         {% endif %}
     </div>
 
-    <div class ="span12">
+    <div class ="col-md-12">
         <div class="page-header">
             <h2>{{ 'RecordList'|get_lang }}</h2>
         </div>
@@ -88,7 +88,7 @@
         </table>
     </div>
 {% else %}
-    <div class ="span12" style="text-align:center">
+    <div class ="col-md-12" style="text-align:center">
         {{ 'ServerIsNotRunning' | return_message('warning') }}
     </div>
 {% endif %}

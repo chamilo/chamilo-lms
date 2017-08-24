@@ -261,6 +261,8 @@
                     </section>
                 {% endif %}
 
+                {% if section_name == 'section-mycampus' %}
+
                 <div id="latest_blocks"></div>
 
                 <!-- block statistics -->
@@ -324,6 +326,7 @@
                 </script>
                 <div id="latest_pages"></div>
                 <!-- END CSS -->
+                {% endif %}
             </div>
         </div>
     </div>

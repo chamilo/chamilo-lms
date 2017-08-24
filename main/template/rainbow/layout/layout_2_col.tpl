@@ -105,6 +105,7 @@
                 </div>
                 <!-- end block profile -->
                 {% endif %}
+                {% if section_name != 'section-mycampus' %}
 
                 {% if course_block %}
                 <!-- block course -->
@@ -212,6 +213,7 @@
                 {{ certificates_search_block }}
                 {{ notice_block }}
                 {#{{ help_block }}#}
+                {% endif %}
 
                 <!-- block navigation -->
                 {% if navigation_course_links %}

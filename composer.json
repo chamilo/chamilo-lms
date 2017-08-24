@@ -64,6 +64,8 @@
         "symfony/security": "~2.8",
         "doctrine/data-fixtures": "~1.0@dev",
 
+        "doctrine/annotations": "1.4.*",
+
         "knplabs/gaufrette": "~0.1.6",
 
         "gedmo/doctrine-extensions": "~2.3",

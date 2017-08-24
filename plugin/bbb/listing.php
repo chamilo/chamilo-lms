@@ -129,7 +129,7 @@ $maxUsers = $bbb->getMaxUsersLimit();
 $status = $bbb->isServerRunning();
 $meetingExists = $bbb->meetingExists($bbb->getCurrentVideoConferenceName());
 $showJoinButton = false;
-if ($meetingExists && ($maxUsers == 0 || $maxUsers > $usersOnline)) {
+if (($meetingExists || $conferenceManager) && ($maxUsers == 0 || $maxUsers > $usersOnline)) {
     $showJoinButton = true;
 }
 $conferenceUrl = $bbb->getConferenceUrl();

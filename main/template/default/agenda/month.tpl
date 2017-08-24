@@ -393,19 +393,14 @@ $(document).ready(function() {
 		        }).removeData('qtip'); // this is an special hack to add multiple qtip in the same target
 		        */
             }
-			if (event.description) {
-                var comment = '';
-                if (event.comment) {
-                    comment = event.comment;
-                }
-
-				element.qtip({
-                    hide: {
-                        delay: 2000
-                    },
-		            content: event.description + ' ' + comment,
-		            position: { at:'top left' , my:'bottom left'}
-		        });
+            if (event.comment) {
+                element.qtip({
+                    content: event.comment,
+                    position: {
+                        at: 'top center',
+                        my: 'bottom center'
+                    }
+                });
 			}
 	    },
 		eventClick: function(calEvent, jsEvent, view) {

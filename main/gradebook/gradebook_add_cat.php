@@ -82,7 +82,7 @@ if ($form->validate()) {
         $cat->setIsRequirement(false);
     }
 
-    if (empty ($values['visible'])) {
+    if (empty($values['visible'])) {
         $visible = 0;
     } else {
         $visible = 1;

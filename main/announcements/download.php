@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *	This file is responsible for  passing requested documents to the browser.
- *	Html files are parsed to fix a few problems with URLs,
- *	but this code will hopefully be replaced soon by an Apache URL
- *	rewrite mechanism.
+ * This file is responsible for  passing requested documents to the browser.
+ * Html files are parsed to fix a few problems with URLs,
+ * but this code will hopefully be replaced soon by an Apache URL
+ * rewrite mechanism.
  *
- *	@package chamilo.announcements
+ * @package chamilo.announcements
  */
 
 session_cache_limiter('nocache');
@@ -28,7 +28,7 @@ $doc_url = str_replace('///', '&', $doc_url);
 $doc_url = str_replace(' ', '+', $doc_url);
 $doc_url = str_replace('/..', '', $doc_url); //echo $doc_url;
 
-if (strpos($doc_url, '../') OR strpos($doc_url, '/..')) {
+if (strpos($doc_url, '../') || strpos($doc_url, '/..')) {
     $doc_url = '';
 }
 
@@ -50,26 +50,27 @@ if (is_dir($full_file_name)) {
     $document_explorer = api_get_path(WEB_COURSE_PATH).api_get_course_path(); // home course path
     //redirect
     header('Location: '.$document_explorer);
+    exit;
 }
 
-$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
+$table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 
 // launch event
 Event::event_download($doc_url);
-
 $course_id = api_get_course_int_id();
-
 $doc_url = Database::escape_string($doc_url);
 
-$sql = "SELECT filename FROM $tbl_announcement_attachment
+$sql = "SELECT filename FROM $table
   	  	WHERE c_id = $course_id AND path LIKE BINARY '$doc_url'";
 
 $result = Database::query($sql);
 if (Database::num_rows($result) > 0) {
     $row = Database::fetch_array($result);
     $title = str_replace(' ', '_', $row['filename']);
-    if (Security::check_abs_path($full_file_name,
-        api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/announcements/')
+    if (Security::check_abs_path(
+        $full_file_name,
+        api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/announcements/'
+    )
     ) {
         $result = DocumentManager::file_send_for_download($full_file_name, true, $title);
         if ($result === false) {

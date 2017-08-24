@@ -287,10 +287,12 @@ class ScheduledAnnouncement extends Model
                     self::update(['id' => $result['id'], 'sent' => 1]);
 
                     $subject = $result['subject'];
-                    $message = $result['message'];
 
                     if ($users) {
                         foreach ($users as $user) {
+                            // Take original message
+                            $message = $result['message'];
+
                             $userInfo = api_get_user_info($user['user_id']);
                             $courseList = SessionManager::getCoursesInSession($sessionId);
                             $courseInfo = [];

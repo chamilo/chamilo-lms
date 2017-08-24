@@ -22,10 +22,9 @@ if (api_get_setting('search_enabled') == 'true') {
 /**
  * @package chamilo.learnpath.OpenofficeDocument
  */
-class OpenofficeText extends OpenofficeDocument {
-
+class OpenofficeText extends OpenofficeDocument
+{
     public $split_steps;
-
     /**
      * Class constructor. Calls the parent class and initialises the local attribute split_steps
      * @param	boolean	Whether to split steps (true) or make one large page (false)
@@ -33,7 +32,12 @@ class OpenofficeText extends OpenofficeDocument {
      * @param	integer	Resource ID
      * @param	integer Creator user id
      */
-    public function __construct($split_steps = false, $course_code = null, $resource_id = null, $user_id = null) {
+    public function __construct(
+        $split_steps = false,
+        $course_code = null,
+        $resource_id = null,
+        $user_id = null
+    ) {
         $this -> split_steps = $split_steps;
         parent::__construct($course_code, $resource_id, $user_id);
     }
@@ -112,7 +116,6 @@ class OpenofficeText extends OpenofficeDocument {
         // Empty the fake chapters.
         $new_index = 0;
         for ($i = 0; $i < count($matches_temp[0]); $i++) {
-
             if (trim($matches_temp[1][$i]) !== '') {
                 $matches[0][$new_index] = $matches_temp[0][$i];
                 $matches[1][$new_index] = $matches_temp[1][$i];
@@ -224,9 +227,7 @@ class OpenofficeText extends OpenofficeDocument {
             );
 
             $slide_name = '';
-
             if ($document_id) {
-
                 // Put the document in item_property update.
                 api_item_property_update(
                     $_course,
@@ -305,7 +306,8 @@ class OpenofficeText extends OpenofficeDocument {
      * Returns additional Java command parameters
      * @return	string	The additional parameters to be used in the Java call
      */
-    public function add_command_parameters() {
+    public function add_command_parameters()
+    {
         return ' -d woogie "'.$this->base_work_dir.'/'.$this->file_path.'"  "'.$this->base_work_dir.$this->created_dir.'/'.$this->file_name.'.html"';
     }
 
@@ -340,7 +342,6 @@ class OpenofficeText extends OpenofficeDocument {
             $defined_width = preg_match("|width=([^\s]*)|i", $images[0][$key], $img_width);
             $img_width = $img_width[1];
             if (!$defined_width) {
-
                 list($img_width, $img_height, $type) = getimagesize($this->base_work_dir.$this->created_dir.'/'.$image);
 
                 $new_width = $max_width - 10;
@@ -361,7 +362,7 @@ class OpenofficeText extends OpenofficeDocument {
     /**
      * Add documents to the visioconference (to be implemented)
      */
-    public function add_docs_to_visio() {
-
+    public function add_docs_to_visio()
+    {
     }
 }

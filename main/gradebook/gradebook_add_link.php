@@ -33,7 +33,7 @@ if ($session_id == 0) {
         $session_id
     );
 } else {
-    $all_categories = Category::load_session_categories(null, $session_id);
+    $all_categories = Category::loadSessionCategories(null, $session_id);
 }
 $category = Category :: load($selectCat);
 $url = api_get_self().'?selectcat='.$selectCat.'&newtypeselected='.$typeSelected.'&course_code='.api_get_course_id().'&'.api_get_cidreq();

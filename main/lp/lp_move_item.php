@@ -112,7 +112,7 @@ Display::display_header(get_lang('Move'), 'Path');
 
 $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 ?>
-<script type='text/javascript'>
+<script>
 /* <![CDATA[ */
 function stripslashes(str) {
     str=str.replace(/\\'/g,'\'');

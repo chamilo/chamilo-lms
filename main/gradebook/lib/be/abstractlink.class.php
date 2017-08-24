@@ -512,7 +512,7 @@ abstract class AbstractLink implements GradebookItem
         $crscats = Category::load(null, null, $this->get_course_code(), 0);
         foreach ($crscats as $cat) {
             $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
-            $targets = $this->add_target_subcategories(
+            $targets = $this->addTargetSubcategories(
                 $targets,
                 $level + 1,
                 $cat->get_id()
@@ -527,12 +527,12 @@ abstract class AbstractLink implements GradebookItem
      * @param integer $level
      * @return array
      */
-    private function add_target_subcategories($targets, $level, $catid)
+    private function addTargetSubcategories($targets, $level, $catid)
     {
         $subcats = Category::load(null, null, null, $catid);
         foreach ($subcats as $cat) {
             $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
-            $targets = $this->add_target_subcategories(
+            $targets = $this->addTargetSubcategories(
                 $targets,
                 $level + 1,
                 $cat->get_id()

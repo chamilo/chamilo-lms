@@ -45,10 +45,10 @@ if (!empty($_POST)) {
         $actionId = intval($_POST['action_id']);
         $specialtyId = intval($_POST['specialty_id']);
         $newSpecialty = intval($_POST['new_specialty']);
-            
+
         $startDate = $yearStart."-".$monthStart."-".$dayStart;
         $endDate = $yearEnd."-".$monthEnd."-".$dayEnd;
-        
+
         if (isset($newSpecialty) && $newSpecialty != 1) {
             $sql = "UPDATE plugin_sepe_specialty SET 
             specialty_origin='".$specialtyOrigin."', 
@@ -74,7 +74,7 @@ if (!empty($_POST)) {
             learning_activity_count = $learningActivityCount, 
             attempt_count = $attemptCount, 
             evaluation_activity_count = $evaluationActivityCount 
-            WHERE id = $specialtyId;";    
+            WHERE id = $specialtyId;";
         } else {
             $sql = "INSERT INTO plugin_sepe_specialty (
                         action_id,
@@ -130,7 +130,6 @@ if (!empty($_POST)) {
         }
         $res = Database::query($sql);
         if (!$res) {
-            echo Database::error();
             $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
         } else {
             if ($newSpecialty == 1) {
@@ -195,18 +194,18 @@ if (api_is_platform_admin()) {
         }
         $tpl->assign('new_action', '0');
         $tpl->assign('specialty_id', intval($_GET['specialty_id']));
-        
+
         $listClassroom = classroomList(intval($_GET['specialty_id']));
         $tpl->assign('listClassroom', $listClassroom);
         $listTutors = tutorsList(intval($_GET['specialty_id']));
-        $tpl->assign('listTutors', $listTutors);        
+        $tpl->assign('listTutors', $listTutors);
     }
-    
+
     $yearList = array();
     if ($yearStart > $yearEnd) {
         $tmp = $yearStart;
         $yearStart = $yearEnd;
-        $yearEnd = $tmp;    
+        $yearEnd = $tmp;
     }
     $yearStart -= 5;
     $yearEnd += 5;
@@ -217,11 +216,11 @@ if (api_is_platform_admin()) {
     }
     $tpl->assign('list_year', $yearList);
     if (isset($_SESSION['sepe_message_info'])) {
-        $tpl->assign('message_info', $_SESSION['sepe_message_info']);    
+        $tpl->assign('message_info', $_SESSION['sepe_message_info']);
         unset($_SESSION['sepe_message_info']);
     }
     if (isset($_SESSION['sepe_message_error'])) {
-        $tpl->assign('message_error', $_SESSION['sepe_message_error']);    
+        $tpl->assign('message_error', $_SESSION['sepe_message_error']);
         unset($_SESSION['sepe_message_error']);
     }
     $tpl->assign('sec_token', $token);

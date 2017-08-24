@@ -12,24 +12,19 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-
-if (api_get_setting('allow_skills_tool') != 'true') {
-    api_not_allowed();
-}
+Skill::isAllow();
 
 $interbreadcrumb[] = array(
     'url' => 'index.php',
     "name" => get_lang('PlatformAdmin'),
 );
 
-$skill           = new Skill();
-$skill_profile   = new SkillProfile();
-$skill_rel_user  = new SkillRelUser();
+$skill = new Skill();
+$skill_profile = new SkillProfile();
+$skill_rel_user = new SkillRelUser();
 
 $url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php';
-
 $tpl = new Template(get_lang('Skills'));
-
 $form = new FormValidator('profile_search');
 
 $form->addElement('header', get_lang('SearchSkills'));
@@ -69,7 +64,7 @@ if (!empty($users)) {
     foreach ($users as $user) {
         $user_info = api_get_user_info($user['user_id']);
         $user_list[$user['user_id']]['user'] = $user_info;
-        $my_user_skills = $skill_rel_user->get_user_skills($user['user_id']);
+        $my_user_skills = $skill_rel_user->getUserSkills($user['user_id']);
         $user_skills = array();
         $found_counts = 0;
         foreach ($my_user_skills as $my_skill) {

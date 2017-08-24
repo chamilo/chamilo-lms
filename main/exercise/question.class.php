@@ -479,14 +479,14 @@ abstract class Question
     {
         if (!empty($category_list)) {
             $this->deleteCategory();
-            $TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+            $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 
             // update or add category for a question
             foreach ($category_list as $category_id) {
                 $category_id = intval($category_id);
                 $question_id = intval($this->id);
                 $sql = "SELECT count(*) AS nb
-                        FROM $TBL_QUESTION_REL_CATEGORY
+                        FROM $table
                         WHERE
                             category_id = $category_id
                             AND question_id = $question_id
@@ -496,7 +496,7 @@ abstract class Question
                 if ($row['nb'] > 0) {
                     // DO nothing
                 } else {
-                    $sql = "INSERT INTO $TBL_QUESTION_REL_CATEGORY (c_id, question_id, category_id)
+                    $sql = "INSERT INTO $table (c_id, question_id, category_id)
                             VALUES (".api_get_course_int_id().", $question_id, $category_id)";
                     Database::query($sql);
                 }
@@ -1140,12 +1140,10 @@ abstract class Question
                 if ($se_doc !== false) {
                     if (($se_doc_data = $di->get_document_data($se_doc)) !== false) {
                         $se_doc_data = unserialize($se_doc_data);
-                        if (
-                            isset($se_doc_data[SE_DATA]['type']) &&
+                        if (isset($se_doc_data[SE_DATA]['type']) &&
                             $se_doc_data[SE_DATA]['type'] == SE_DOCTYPE_EXERCISE_QUESTION
                         ) {
-                            if (
-                                isset($se_doc_data[SE_DATA]['exercise_ids']) &&
+                            if (isset($se_doc_data[SE_DATA]['exercise_ids']) &&
                                 is_array($se_doc_data[SE_DATA]['exercise_ids'])
                             ) {
                                 foreach ($se_doc_data[SE_DATA]['exercise_ids'] as $old_value) {
@@ -1348,7 +1346,8 @@ abstract class Question
         // if the question must be removed from all exercises
         if (!$deleteFromEx) {
             //update the question_order of each question to avoid inconsistencies
-            $sql = "SELECT exercice_id, question_order FROM $TBL_EXERCISE_QUESTION
+            $sql = "SELECT exercice_id, question_order 
+                    FROM $TBL_EXERCISE_QUESTION
                     WHERE c_id = $course_id AND question_id = ".intval($id)."";
 
             $res = Database::query($sql);
@@ -1358,9 +1357,9 @@ abstract class Question
                         $sql = "UPDATE $TBL_EXERCISE_QUESTION
                                 SET question_order = question_order-1
                                 WHERE
-                                    c_id= $course_id
-                                    AND exercice_id = ".intval($row['exercice_id'])."
-                                    AND question_order > " . $row['question_order'];
+                                    c_id = $course_id AND 
+                                    exercice_id = ".intval($row['exercice_id'])." AND 
+                                    question_order > " . $row['question_order'];
                         Database::query($sql);
                     }
                 }
@@ -1439,12 +1438,12 @@ abstract class Question
 
         // Using the same method used in the course copy to transform URLs
         if ($this->course['id'] != $course_info['id']) {
-            $description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+            $description = DocumentManager::replaceUrlWithNewCourseCode(
                 $description,
                 $this->course['code'],
                 $course_info['id']
             );
-            $question = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+            $question = DocumentManager::replaceUrlWithNewCourseCode(
                 $question,
                 $this->course['code'],
                 $course_info['id']
@@ -1621,18 +1620,32 @@ abstract class Question
         if ($this->type != MEDIA_QUESTION) {
             // Advanced parameters
             $select_level = self::get_default_levels();
-            $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);
+            $form->addElement(
+                'select',
+                'questionLevel',
+                get_lang('Difficulty'),
+                $select_level
+            );
 
             // Categories
             $tabCat = TestCategory::getCategoriesIdAndName();
-            $form->addElement('select', 'questionCategory', get_lang('Category'), $tabCat);
+            $form->addElement(
+                'select',
+                'questionCategory',
+                get_lang('Category'),
+                $tabCat
+            );
 
             global $text;
 
             switch ($this->type) {
                 case UNIQUE_ANSWER:
                     $buttonGroup = array();
-                    $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
+                    $buttonGroup[] = $form->addButtonSave(
+                        $text,
+                        'submitQuestion',
+                        true
+                    );
                     $buttonGroup[] = $form->addButton(
                         'convertAnswer',
                         get_lang('ConvertToMultipleAnswer'),
@@ -1647,7 +1660,11 @@ abstract class Question
                     break;
                 case MULTIPLE_ANSWER:
                     $buttonGroup = array();
-                    $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
+                    $buttonGroup[] = $form->addButtonSave(
+                        $text,
+                        'submitQuestion',
+                        true
+                    );
                     $buttonGroup[] = $form->addButton(
                         'convertAnswer',
                         get_lang('ConvertToUniqueAnswer'),
@@ -1815,14 +1832,24 @@ abstract class Question
         echo '<li>';
         echo '<div class="icon_image_content">';
         if ($objExercise->exercise_was_added_in_lp == true) {
-            echo Display::return_icon('database_na.png', get_lang('GetExistingQuestion'), null, ICON_SIZE_BIG);
+            echo Display::return_icon(
+                'database_na.png',
+                get_lang('GetExistingQuestion'),
+                null,
+                ICON_SIZE_BIG
+            );
         } else {
             if ($feedback_type == 1) {
                 echo $url = "<a href=\"question_pool.php?".api_get_cidreq()."&type=1&fromExercise=$exerciseId\">";
             } else {
                 echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&fromExercise='.$exerciseId.'">';
             }
-            echo Display::return_icon('database.png', get_lang('GetExistingQuestion'), null, ICON_SIZE_BIG);
+            echo Display::return_icon(
+                'database.png',
+                get_lang('GetExistingQuestion'),
+                null,
+                ICON_SIZE_BIG
+            );
         }
         echo '</a>';
         echo '</div></li>';
@@ -1894,7 +1921,7 @@ abstract class Question
      * @param int $course_id
      * @return array
      */
-    static function readQuestionOption($question_id, $course_id)
+    public static function readQuestionOption($question_id, $course_id)
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
         $result = Database::select(
@@ -1972,7 +1999,10 @@ abstract class Question
         $header .= ExerciseLib::getQuestionRibbon($class, $score_label, $score['result'], $scoreCurrent);
         if ($this->type != READING_COMPREHENSION) {
             // Do not show the description (the text to read) if the question is of type READING_COMPREHENSION
-            $header .= Display::div($this->description, array('class' => 'question_description'));
+            $header .= Display::div(
+                $this->description,
+                array('class' => 'question_description')
+            );
         } else {
             if ($score['pass'] == true) {
                 $message = Display::div(
@@ -2054,7 +2084,8 @@ abstract class Question
         $question_id = Database::insert($tbl_quiz_question, $params);
 
         if ($question_id) {
-            $sql = "UPDATE $tbl_quiz_question SET id = iid WHERE iid = $question_id";
+            $sql = "UPDATE $tbl_quiz_question  
+                    SET id = iid WHERE iid = $question_id";
             Database::query($sql);
 
             // Get the max question_order
@@ -2105,7 +2136,12 @@ abstract class Question
         $where_condition = array()
     ) {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $default_where = array('c_id = ? AND parent_id = 0 AND type = ?' => array($course_id, MEDIA_QUESTION));
+        $default_where = array(
+            'c_id = ? AND parent_id = 0 AND type = ?' => array(
+                $course_id,
+                MEDIA_QUESTION
+            )
+        );
         $result = Database::select(
             '*',
             $table_question,

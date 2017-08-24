@@ -138,7 +138,7 @@ if (isset($_POST['create_course_category']) &&
     strlen(trim($_POST['title_course_category'])) > 0
 ) {
     if ($ctok == $_POST['sec_token']) {
-        $courses_controller->add_course_category($_POST['title_course_category']);
+        $courses_controller->addCourseCategory($_POST['title_course_category']);
     }
 }
 
@@ -267,9 +267,7 @@ switch ($action) {
         if (!$confirmed) {
             $template = new Template(null, false, false, false, false, false);
             $template->assign('session_id', $sessionId);
-
             $layout = $template->get_template('auth/confirm_session_subscription.tpl');
-
             echo $template->fetch($layout);
             exit;
         }

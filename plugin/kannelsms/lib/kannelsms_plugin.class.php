@@ -25,7 +25,7 @@ class KannelsmsPlugin extends SmsPlugin
     /**
      * Constructor
      */
-    protected function __construct()
+    public function __construct()
     {
         $fields = array(
             'tool_enable' => 'boolean',

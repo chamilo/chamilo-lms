@@ -28,8 +28,6 @@ $interbreadcrumb[] = array(
 );
 $tpl = new Template(get_lang('CareersAndPromotions'));
 
-Display :: display_header(null);
-
 $html = null;
 $form = new FormValidator('filter_form', 'GET', api_get_self());
 
@@ -150,5 +148,3 @@ $tpl->assign('form_filter', $html);
 $tpl->assign('data', $careers);
 $layout = $tpl->get_template('admin/career_dashboard.tpl');
 $tpl->display($layout);
-
-Display::display_footer();

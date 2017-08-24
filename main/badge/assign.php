@@ -1,8 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \Skill as SkillManager;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * Page for assign skills to a user
@@ -13,20 +15,21 @@ use Chamilo\CoreBundle\Entity\SkillRelUser;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (!api_is_platform_admin(false, true) && !api_is_student_boss()) {
+$userId = isset($_REQUEST['user']) ? (int) $_REQUEST['user'] : 0;
+
+if (empty($userId)) {
     api_not_allowed(true);
 }
 
-if (!isset($_REQUEST['user'])) {
-    api_not_allowed(true);
-}
+SkillManager::isAllow($userId);
 
 $entityManager = Database::getManager();
 $skillRepo = $entityManager->getRepository('ChamiloCoreBundle:Skill');
 $skillRelSkill = $entityManager->getRepository('ChamiloCoreBundle:SkillRelSkill');
 $skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
 $skillUserRepo = $entityManager->getRepository('ChamiloCoreBundle:SkillRelUser');
-$user = $entityManager->find('ChamiloUserBundle:User', $_REQUEST['user']);
+/** @var User $user */
+$user = $entityManager->find('ChamiloUserBundle:User', $userId);
 
 if (!$user) {
     Display::addFlash(
@@ -41,7 +44,7 @@ $skills = $skillRepo->findBy([
     'status' => Skill::STATUS_ENABLED
 ]);
 
-$url = api_get_path(WEB_CODE_PATH)."badge/assign.php?user=".$_REQUEST['user']."&id=";
+$url = api_get_path(WEB_CODE_PATH).'badge/assign.php?user='.$userId.'&id=';
 
 $htmlHeadXtra[] = '<script>
 $( document ).ready(function() {
@@ -60,11 +63,9 @@ foreach ($skills as $skill) {
 }
 
 $skillId = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : key($skillsOptions);
-
 $profile = $skillRepo->find($skillId)->getProfile();
 
 if (!$profile) {
-
     $skillRelSkill = new SkillRelSkill();
     $parents = $skillRelSkill->get_skill_parents($skillId);
 
@@ -116,14 +117,18 @@ $form->addSelect('acquired_level', get_lang('AcquiredLevel'), $acquiredLevel);
 $form->addRule('acquired_level', get_lang('ThisFieldIsRequired'), 'required');
 $form->addTextarea('argumentation', get_lang('Argumentation'), ['rows' => 6]);
 $form->addRule('argumentation', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('argumentation', sprintf(get_lang('ThisTextShouldBeAtLeastXCharsLong'), 10), 'mintext', 10);
+$form->addRule(
+    'argumentation',
+    sprintf(get_lang('ThisTextShouldBeAtLeastXCharsLong'), 10),
+    'mintext',
+    10
+);
 $form->applyFilter('argumentation', 'trim');
 $form->addButtonSave(get_lang('Save'));
 $form->setDefaults($formDefaultValues);
 
 if ($form->validate()) {
     $values = $form->exportValues();
-
     $skill = $skillRepo->find($values['skill']);
 
     if (!$skill) {
@@ -138,7 +143,11 @@ if ($form->validate()) {
     if ($user->hasSkill($skill)) {
         Display::addFlash(
             Display::return_message(
-                sprintf(get_lang('TheUserXHasAlreadyAchievedTheSkillY'), $user->getCompleteName(), $skill->getName()),
+                sprintf(
+                    get_lang('TheUserXHasAlreadyAchievedTheSkillY'),
+                    $user->getCompleteName(),
+                    $skill->getName()
+                ),
                 'warning'
             )
         );
@@ -162,7 +171,11 @@ if ($form->validate()) {
 
     Display::addFlash(
         Display::return_message(
-            sprintf(get_lang('SkillXAssignedToUserY'), $skill->getName(), $user->getCompleteName()),
+            sprintf(
+                get_lang('SkillXAssignedToUserY'),
+                $skill->getName(),
+                $user->getCompleteName()
+            ),
             'success'
         )
     );
@@ -174,7 +187,42 @@ if ($form->validate()) {
 $form->setDefaults(['user_name' => $user->getCompleteName()]);
 $form->freeze(['user_name']);
 
-$template = new Template('');
+if (api_is_drh()) {
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'mySpace/index.php',
+        "name" => get_lang('MySpace')
+    );
+    if ($user->getStatus() == COURSEMANAGER) {
+        $interbreadcrumb[] = array(
+            "url" => api_get_path(WEB_CODE_PATH).'mySpace/teachers.php',
+            'name' => get_lang('Teachers')
+        );
+    } else {
+        $interbreadcrumb[] = array(
+            "url" => api_get_path(WEB_CODE_PATH).'mySpace/student.php',
+            'name' => get_lang('MyStudents')
+        );
+    }
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userId,
+        'name' => $user->getCompleteName()
+    );
+} else {
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
+        'name' => get_lang('PlatformAdmin')
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'admin/user_list.php',
+        'name' => get_lang('UserList')
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId,
+        'name' => $user->getCompleteName()
+    );
+}
+
+$template = new Template(get_lang('AddSkill'));
 $template->assign('header', get_lang('AssignSkill'));
 $template->assign('content', $form->returnForm());
 $template->display_one_col_template();

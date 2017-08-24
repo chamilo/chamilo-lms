@@ -33,9 +33,12 @@ class aicc extends learnpath
     public $cstlist = array();
     public $orelist = array();
 
-    // Path between the scorm/ directory and the config files e.g. maritime_nav/maritime_nav. This is the path that will be used in the lp_path when importing a package.
+    // Path between the scorm/ directory and the config files
+    // e.g. maritime_nav/maritime_nav.
+    // This is the path that will be used in the lp_path when importing a package.
     public $subdir = '';
-    // Keeps the zipfile safe for the object's life so that we can use it if there is no title available.
+    // Keeps the zipfile safe for the object's life
+    // so that we can use it if there is no title available.
     public $zipname = '';
     // Keeps an index of the number of uses of the zipname so far.
     public $lastzipnameindex = 0;

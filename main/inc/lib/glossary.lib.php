@@ -396,6 +396,11 @@ class GlossaryManager
                 Display::return_icon('view_text.png', get_lang('TableView'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
+        $actionsLeft .= Display::url(
+            Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), [], ICON_SIZE_MEDIUM),
+            api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents'])
+        );
+
         /* BUILD SEARCH FORM */
         $form = new FormValidator(
             'search',
@@ -703,16 +708,43 @@ class GlossaryManager
             0,
             'ASC'
         );
-        $html = '<html><body>';
-        $html .= '<h2>'.get_lang('Glossary').'</h2><hr><br><br>';
-        foreach ($data as $item) {
-            $term = $item[0];
-            $description = $item[1];
-            $html .= '<h4>'.$term.'</h4><p>'.$description.'<p><hr>';
-        }
-        $html .= '</body></html>';
+        $template = new Template('', false, false, false, true, false, false);
+        $layout = $template->get_template('glossary/export_pdf.tpl');
+        $template->assign('items', $data);
+        $html = $template->fetch($layout);
         $courseCode = api_get_course_id();
         $pdf = new PDF();
         $pdf->content_to_pdf($html, '', get_lang('Glossary').'_'.$courseCode, $courseCode);
+    }
+
+    /**
+     * Generate a PDF with all glossary terms and move file to documents
+     */
+    public static function movePdfToDocuments()
+    {
+        $sessionId = api_get_session_id();
+        $courseId = api_get_course_int_id();
+        $data = self::get_glossary_data(
+            0,
+            self::get_number_glossary_terms($sessionId),
+            0,
+            'ASC'
+        );
+        $template = new Template('', false, false, false, true, false, false);
+        $layout = $template->get_template('glossary/export_pdf.tpl');
+        $template->assign('items', $data);
+        $fileName = get_lang('Glossary').'-'.api_get_local_time();
+        $signatures = ['Drh', 'Teacher', 'Date'];
+
+        $pdf = new PDF(
+            'A4-P',
+            'P',
+            [
+                'filename' => $fileName,
+                'pdf_title' => $fileName,
+                'add_signatures' => $signatures
+            ]
+        );
+        $pdf->exportFromHtmlToDocumentsArea($template->fetch($layout), $fileName, $courseId);
     }
 }

@@ -60,7 +60,6 @@ $interbreadcrumb[] = array(
     'name' => get_lang('NewStep'),
 );
 
-
 Display::display_header(get_lang('LearnpathPrerequisites'), 'Path');
 
 $suredel = trim(get_lang('AreYouSureToDeleteJS'));

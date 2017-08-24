@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\CourseRelUser,
-    Chamilo\CoreBundle\Entity\SessionRelCourseRelUser,
-    Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\Course;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -29,7 +29,14 @@ function formatCourseInfo(Course $course, $sessionId = 0, $showCourseCode = fals
         'code_course' => $showCourseCode ? $course->getCode() : null,
         'image' => file_exists($sysCoursePath.'/course-pic.png')
             ? $webCoursePath.'/course-pic.png'
-            : Display::returnIconPath('session_default.png'),
+            : Display::return_icon(
+                    'session_default.png',
+                    null,
+                    null,
+                    null,
+                    null,
+                    true
+                ),
         'teachers' => api_get_setting('display_teacher_in_courselist') === 'true'
             ? $teachers = CourseManager::getTeachersFromCourse($course->getId(), true)
             : []

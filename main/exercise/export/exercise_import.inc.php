@@ -342,19 +342,31 @@ function qti_parse_file($exercisePath, $file, $questionFile)
     $xml_parser = xml_parser_create();
     xml_parser_set_option($xml_parser, XML_OPTION_SKIP_WHITE, false);
     if ($qtiMainVersion == 1) {
-        xml_set_element_handler($xml_parser, 'startElementQti1', 'endElementQti1');
+        xml_set_element_handler(
+            $xml_parser,
+            'startElementQti1',
+            'endElementQti1'
+        );
         xml_set_character_data_handler($xml_parser, 'elementDataQti1');
     } else {
-        xml_set_element_handler($xml_parser, 'startElementQti2', 'endElementQti2');
+        xml_set_element_handler(
+            $xml_parser,
+            'startElementQti2',
+            'endElementQti2'
+        );
         xml_set_character_data_handler($xml_parser, 'elementDataQti2');
     }
     if (!xml_parse($xml_parser, $data, feof($fp))) {
         // if reading of the xml file in not successful :
         // set errorFound, set error msg, break while statement
-        $error = xml_get_error_code();
         Display::addFlash(
             Display::return_message(
-                get_lang('Error reading XML file').sprintf('[%d:%d]', xml_get_current_line_number($xml_parser), xml_get_current_column_number($xml_parser)),
+                get_lang('Error reading XML file').
+                sprintf(
+                    '[%d:%d]',
+                    xml_get_current_line_number($xml_parser),
+                    xml_get_current_column_number($xml_parser)
+                ),
                 'error'
             )
         );

@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CSurveyInvitation,
-    Doctrine\Common\Collections\Criteria;
+use Chamilo\CourseBundle\Entity\CSurveyInvitation;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * Class SurveyManager
@@ -43,6 +43,7 @@ class SurveyManager
                 break;
             }
         }
+
         return $code.$num;
     }
 
@@ -56,7 +57,6 @@ class SurveyManager
     public static function delete_all_survey_invitations_by_user($user_id)
     {
         $user_id = intval($user_id);
-
         if (empty($user_id)) {
             return false;
         }
@@ -101,6 +101,7 @@ class SurveyManager
                 WHERE c_id = {$course_info['real_id']} $session_condition ";
         $result = Database::query($sql);
         $result = Database::store_result($result, 'ASSOC');
+
         return $result;
     }
 
@@ -110,21 +111,26 @@ class SurveyManager
      * @param integer $survey_id the id of the survey
      * @param boolean $shared this parameter determines if
      * we have to get the information of a survey from the central (shared) database or from the
-     * 		  course database
+     *          course database
      * @param string course code optional
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      * @assert ('') === false
+     * @return array
      *
      * @todo this is the same function as in create_new_survey.php
      */
-    public static function get_survey($survey_id, $shared = 0, $course_code = '', $simple_return = false)
-    {
+    public static function get_survey(
+        $survey_id,
+        $shared = 0,
+        $course_code = '',
+        $simple_return = false
+    ) {
         // Table definition
         if (!empty($course_code)) {
             $my_course_id = $course_code;
-        } else if (isset($_GET['course'])) {
+        } elseif (isset($_GET['course'])) {
             $my_course_id = Security::remove_XSS($_GET['course']);
         } else {
             $my_course_id = api_get_course_id();
@@ -367,17 +373,20 @@ class SurveyManager
                 );
                 $return['type'] = 'error';
                 $return['id'] = isset($values['survey_id']) ? $values['survey_id'] : 0;
+
                 return $return;
             }
 
-            if (!isset($values['anonymous']) ||
-                (isset($values['anonymous']) && $values['anonymous'] == '')
+            if (!isset($values['anonymous'])
+                || (isset($values['anonymous']) && $values['anonymous'] == '')
             ) {
                 $values['anonymous'] = 0;
             }
 
             $values['shuffle'] = isset($values['shuffle']) ? $values['shuffle'] : null;
-            $values['one_question_per_page'] = isset($values['one_question_per_page']) ? $values['one_question_per_page'] : null;
+            $values['one_question_per_page'] = isset($values['one_question_per_page'])
+                ? $values['one_question_per_page']
+                : null;
             $values['show_form_profile'] = isset($values['show_form_profile']) ? $values['show_form_profile'] : null;
 
             $extraParams = [];
@@ -551,7 +560,6 @@ class SurveyManager
 
             $sql = "UPDATE $table_survey SET survey_id = $return WHERE iid = $return";
             Database::query($sql);
-
         } else {
             $sql = "UPDATE $table_survey SET
                         code 			= '".Database::escape_string($values['survey_code'])."',
@@ -593,7 +601,7 @@ class SurveyManager
         }
 
         $course_info = api_get_course_info_by_id($course_id);
-        $course_id   = $course_info['real_id'];
+        $course_id = $course_info['real_id'];
 
         $table_survey = Database::get_course_table(TABLE_SURVEY);
         $table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
@@ -626,6 +634,7 @@ class SurveyManager
             'SurveyDeleted',
             api_get_user_id()
         );
+
         return true;
     }
 
@@ -693,7 +702,7 @@ class SurveyManager
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $params = array(
-                'c_id' =>  $targetCourseId,
+                'c_id' => $targetCourseId,
                 'name' => $row['name'],
                 'description' => $row['description'],
                 'survey_id' => $new_survey_id
@@ -713,17 +722,17 @@ class SurveyManager
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $params = array(
-                'c_id' =>  $targetCourseId,
+                'c_id' => $targetCourseId,
                 'survey_id' => $new_survey_id,
                 'survey_question' => $row['survey_question'],
                 'survey_question_comment' => $row['survey_question_comment'],
                 'type' => $row['type'],
                 'display' => $row['display'],
                 'sort' => $row['sort'],
-                'shared_question_id' =>  $row['shared_question_id'],
-                'max_value' =>  $row['max_value'],
-                'survey_group_pri' =>  $row['survey_group_pri'],
-                'survey_group_sec1' =>  $row['survey_group_sec1'],
+                'shared_question_id' => $row['shared_question_id'],
+                'max_value' => $row['max_value'],
+                'survey_group_pri' => $row['survey_group_pri'],
+                'survey_group_sec1' => $row['survey_group_sec1'],
                 'survey_group_sec2' => $row['survey_group_sec2']
             );
             $insertId = Database::insert($table_survey_question, $params);
@@ -740,7 +749,7 @@ class SurveyManager
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $params = array(
-                'c_id' =>  $targetCourseId,
+                'c_id' => $targetCourseId,
                 'question_id' => $question_id[$row['question_id']],
                 'survey_id' => $new_survey_id,
                 'option_text' => $row['option_text'],
@@ -948,6 +957,9 @@ class SurveyManager
         $return['horizontalvertical'] = $row['display'];
         $return['shared_question_id'] = $row['shared_question_id'];
         $return['maximum_score'] = $row['max_value'];
+        $return['is_required'] = api_get_configuration_value('allow_required_survey_questions')
+            ? $row['is_required']
+            : false;
 
         if ($row['survey_group_pri'] != 0) {
             $return['assigned'] = $row['survey_group_pri'];
@@ -1039,6 +1051,7 @@ class SurveyManager
             if ($survey_data['survey_type'] == 1) {
                 if (empty($form_content['choose'])) {
                     $return_message = 'PleaseChooseACondition';
+
                     return $return_message;
                 }
 
@@ -1046,6 +1059,7 @@ class SurveyManager
                     ($form_content['assigned1'] == $form_content['assigned2'])
                 ) {
                     $return_message = 'ChooseDifferentCategories';
+
                     return $return_message;
                 }
             }
@@ -1103,7 +1117,9 @@ class SurveyManager
                         }
                     }
 
-                    $questionComment = isset($form_content['question_comment']) ? $form_content['question_comment'] : '';
+                    $questionComment = isset($form_content['question_comment'])
+                        ? $form_content['question_comment']
+                        : '';
                     $maxScore = isset($form_content['maximum_score']) ? $form_content['maximum_score'] : '';
                     $display = isset($form_content['horizontalvertical']) ? $form_content['horizontalvertical'] : '';
 
@@ -1118,6 +1134,10 @@ class SurveyManager
                         'shared_question_id' => $form_content['shared_question_id'],
                         'max_value' => $maxScore,
                     ];
+
+                    if (api_get_configuration_value('allow_required_survey_questions')) {
+                        $params['is_required'] = isset($form_content['is_required']);
+                    }
 
                     $params = array_merge($params, $extraParams);
                     $question_id = Database::insert($tbl_survey_question, $params);
@@ -1145,7 +1165,9 @@ class SurveyManager
                     }
 
                     $maxScore = isset($form_content['maximum_score']) ? $form_content['maximum_score'] : null;
-                    $questionComment = isset($form_content['question_comment']) ? $form_content['question_comment'] : null;
+                    $questionComment = isset($form_content['question_comment'])
+                        ? $form_content['question_comment']
+                        : null;
 
                     // Adding the question to the survey_question table
                     $params = [
@@ -1153,6 +1175,10 @@ class SurveyManager
                         'survey_question_comment' => $questionComment,
                         'display' => $form_content['horizontalvertical'],
                     ];
+
+                    if (api_get_configuration_value('allow_required_survey_questions')) {
+                        $params['is_required'] = isset($form_content['is_required']);
+                    }
 
                     $params = array_merge($params, $extraParams);
 
@@ -1193,6 +1219,7 @@ class SurveyManager
         if (!empty($return_message)) {
             Display::addFlash(Display::return_message(get_lang($return_message)));
         }
+
         return $return_message;
     }
 
@@ -1204,6 +1231,7 @@ class SurveyManager
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
+     * @return int
      *
      * @todo editing of a shared question
      */
@@ -1264,8 +1292,11 @@ class SurveyManager
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version January 2007
      */
-    public static function move_survey_question($direction, $survey_question_id, $survey_id)
-    {
+    public static function move_survey_question(
+        $direction,
+        $survey_question_id,
+        $survey_id
+    ) {
         // Table definition
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $course_id = api_get_course_int_id();
@@ -1296,10 +1327,12 @@ class SurveyManager
             }
         }
 
-        $sql1 = "UPDATE $table_survey_question SET sort = '".Database::escape_string($question_sort_two)."'
+        $sql1 = "UPDATE $table_survey_question 
+                SET sort = '".Database::escape_string($question_sort_two)."'
 		        WHERE c_id = $course_id AND  question_id='".intval($question_id_one)."'";
         Database::query($sql1);
-        $sql2 = "UPDATE $table_survey_question SET sort = '".Database::escape_string($question_sort_one)."'
+        $sql2 = "UPDATE $table_survey_question 
+                SET sort = '".Database::escape_string($question_sort_one)."'
 		        WHERE c_id = $course_id AND question_id='".intval($question_id_two)."'";
         Database::query($sql2);
     }
@@ -1330,7 +1363,6 @@ class SurveyManager
 		        WHERE $course_condition survey_id='".intval($survey_id)."'";
 
         // Deleting the survey questions
-
         Database::query($sql);
 
         // Deleting all the options of the questions of the survey
@@ -1377,7 +1409,6 @@ class SurveyManager
      * This function deletes a shared survey question from the main database and all its options
      *
      * @param int $question_id the id of the question
-     * @param int $shared
      *
      * @todo delete all the options of this question
      *
@@ -1516,7 +1547,7 @@ class SurveyManager
         $course_id = api_get_course_int_id();
         $course_condition = " c_id = $course_id AND ";
         if ($shared) {
-            $course_condition = "";
+            $course_condition = '';
             $table_survey_question_option = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
         }
 
@@ -1542,15 +1573,18 @@ class SurveyManager
      * @author Julio Montoya
      * @version March 2007
      */
-    public static function delete_survey_question_option($survey_id, $question_id, $shared = false)
-    {
+    public static function delete_survey_question_option(
+        $survey_id,
+        $question_id,
+        $shared = false
+    ) {
         $course_id = api_get_course_int_id();
         $course_condition = " c_id = $course_id AND ";
 
         // Table definitions
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         if ($shared) {
-            $course_condition = "";
+            $course_condition = '';
             $table_survey_question_option = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
         }
 
@@ -1560,6 +1594,7 @@ class SurveyManager
 		            $course_condition survey_id='".intval($survey_id)."' AND
 		            question_id='".intval($question_id)."'";
         Database::query($sql);
+
         return true;
     }
 
@@ -1587,6 +1622,7 @@ class SurveyManager
         $sql = "DELETE FROM $table_survey_answer 
                 WHERE c_id = $course_id AND survey_id=$survey_id";
         Database::query($sql);
+
         return true;
     }
 
@@ -1613,6 +1649,7 @@ class SurveyManager
         if (Database::num_rows($result)) {
             return true;
         }
+
         return false;
     }
 
@@ -1625,8 +1662,11 @@ class SurveyManager
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      */
-    public static function get_people_who_filled_survey($survey_id, $all_user_info = false, $course_id = null)
-    {
+    public static function get_people_who_filled_survey(
+        $survey_id,
+        $all_user_info = false,
+        $course_id = null
+    ) {
         // Database table definition
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -1641,7 +1681,9 @@ class SurveyManager
         }
 
         if ($all_user_info) {
-            $order_clause = api_sort_by_first_name() ? ' ORDER BY user.firstname, user.lastname' : ' ORDER BY user.lastname, user.firstname';
+            $order_clause = api_sort_by_first_name()
+                ? ' ORDER BY user.firstname, user.lastname'
+                : ' ORDER BY user.lastname, user.firstname';
             $sql = "SELECT DISTINCT
 			            answered_user.user as invited_user, 
 			            user.firstname, 
@@ -1680,6 +1722,7 @@ class SurveyManager
         if (extension_loaded('mcrypt')) {
             return true;
         }
+
         return false;
     }
 
@@ -1693,6 +1736,7 @@ class SurveyManager
     public static function generate_survey_hash($survey_id, $course_id, $session_id, $group_id)
     {
         $hash = hash('sha512', api_get_security_key().'_'.$course_id.'_'.$session_id.'_'.$group_id.'_'.$survey_id);
+
         return $hash;
     }
 
@@ -1711,6 +1755,7 @@ class SurveyManager
         if ($survey_generated_hash == $hash) {
             return true;
         }
+
         return false;
     }
 
@@ -1722,10 +1767,21 @@ class SurveyManager
      *
      * @return string
      */
-    public static function generate_survey_link($survey_id, $course_id, $session_id, $group_id)
-    {
-        $code = self::generate_survey_hash($survey_id, $course_id, $session_id, $group_id);
-        return api_get_path(WEB_CODE_PATH).'survey/link.php?h='.$code.'&i='.$survey_id.'&c='.intval($course_id).'&s='.intval($session_id).'&g='.$group_id;
+    public static function generate_survey_link(
+        $survey_id,
+        $course_id,
+        $session_id,
+        $group_id
+    ) {
+        $code = self::generate_survey_hash(
+            $survey_id,
+            $course_id,
+            $session_id,
+            $group_id
+        );
+
+        return api_get_path(WEB_CODE_PATH).'survey/link.php?h='.$code.'&i='.$survey_id.'&c='.intval($course_id).'&s='
+            .intval($session_id).'&g='.$group_id;
     }
 
     /**

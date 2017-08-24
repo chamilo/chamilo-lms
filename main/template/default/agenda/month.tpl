@@ -26,6 +26,10 @@ function clean_user_select() {
 var region_value = '{{ region_value }}';
 
 $(document).ready(function() {
+    var cookieData = Cookies.getJSON('agenda_cookies');
+    var defaultView = (cookieData && cookieData.view) || '{{ default_view }}';
+    var defaultStartDate = (cookieData && cookieData.start) || moment.now();
+
     // Reset button.
     $("button[type=reset]").click(function() {
         $("#session_id").find('option').removeAttr("selected");
@@ -229,7 +233,8 @@ $(document).ready(function() {
                 }
             ],
         {% endif %}
-        defaultView: '{{ default_view }}',
+        defaultView: defaultView,
+        defaultDate: defaultStartDate,
         firstHour: 8,
         firstDay: 1,
 		selectable	: true,
@@ -241,6 +246,13 @@ $(document).ready(function() {
                 api.destroy();
                 //api.render();
             }*/
+        },
+        viewRender: function(view, element) {
+            var data = {
+                'view': view.name,
+                'start': view.intervalStart.format("YYYY-MM-DD")
+            };
+            Cookies.set('agenda_cookies', data, 1); // Expires 1 day
         },
 		// Add event
 		select: function(start, end, jsEvent, view) {

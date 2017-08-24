@@ -36,11 +36,11 @@ $current_user_id = api_get_user_id();
 
 // setting the name of the tool
 if (UserManager::is_admin($user_id)) {
-	$tool_name = get_lang('AssignCoursesToPlatformAdministrator');
-} else if ($user_info['status'] == SESSIONADMIN) {
-	$tool_name = get_lang('AssignCoursesToSessionsAdministrator');
+    $tool_name = get_lang('AssignCoursesToPlatformAdministrator');
+} elseif ($user_info['status'] == SESSIONADMIN) {
+    $tool_name = get_lang('AssignCoursesToSessionsAdministrator');
 } else {
-	$tool_name = get_lang('AssignCoursesToHumanResourcesManager');
+    $tool_name = get_lang('AssignCoursesToHumanResourcesManager');
 }
 
 $add_type = 'multiple';
@@ -74,20 +74,20 @@ function search_courses($needle, $type)
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT c.code, c.title
                     FROM $tbl_course c
-					LEFT JOIN $tbl_course_rel_access_url a
+                    LEFT JOIN $tbl_course_rel_access_url a
                     ON (a.c_id = c.id)
-                	WHERE
-                		c.code LIKE '$needle%' $without_assigned_courses AND
-                		access_url_id = ".api_get_current_access_url_id();
+                    WHERE
+                        c.code LIKE '$needle%' $without_assigned_courses AND
+                        access_url_id = ".api_get_current_access_url_id();
         } else {
             $sql = "SELECT c.code, c.title
-            		FROM $tbl_course c
-                	WHERE
-                		c.code LIKE '$needle%'
-                		$without_assigned_courses ";
+                    FROM $tbl_course c
+                    WHERE
+                        c.code LIKE '$needle%'
+                        $without_assigned_courses ";
         }
 
-		$rs = Database::query($sql);
+        $rs = Database::query($sql);
 
         $return .= '<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" >';
         while ($course = Database :: fetch_array($rs)) {
@@ -103,51 +103,51 @@ $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '<script>
 function moveItem(origin , destination) {
-	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {
-			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
-			origin.options[i]=null;
-			i = i-1;
-		}
-	}
-	destination.selectedIndex = -1;
-	sortOptions(destination.options);
+    for(var i = 0 ; i<origin.options.length ; i++) {
+        if(origin.options[i].selected) {
+            destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
+            origin.options[i]=null;
+            i = i-1;
+        }
+    }
+    destination.selectedIndex = -1;
+    sortOptions(destination.options);
 }
 function sortOptions(options) {
-	var newOptions = new Array();
-	for (i = 0 ; i<options.length ; i++) {
-		newOptions[i] = options[i];
-	}
-	newOptions = newOptions.sort(mysort);
-	options.length = 0;
-	for(i = 0 ; i < newOptions.length ; i++){
-		options[i] = newOptions[i];
-	}
+    var newOptions = new Array();
+    for (i = 0 ; i<options.length ; i++) {
+        newOptions[i] = options[i];
+    }
+    newOptions = newOptions.sort(mysort);
+    options.length = 0;
+    for(i = 0 ; i < newOptions.length ; i++){
+        options[i] = newOptions[i];
+    }
 }
 function mysort(a, b) {
-	if (a.text.toLowerCase() > b.text.toLowerCase()) {
-		return 1;
-	}
-	if (a.text.toLowerCase() < b.text.toLowerCase()) {
-		return -1;
-	}
-	return 0;
+    if (a.text.toLowerCase() > b.text.toLowerCase()) {
+        return 1;
+    }
+    if (a.text.toLowerCase() < b.text.toLowerCase()) {
+        return -1;
+    }
+    return 0;
 }
 
 function valide() {
-	var options = document.getElementById("destination").options;
-	for (i = 0 ; i<options.length ; i++) {
-		options[i].selected = true;
-	}
-	document.forms.formulaire.submit();
+    var options = document.getElementById("destination").options;
+    for (i = 0 ; i<options.length ; i++) {
+        options[i].selected = true;
+    }
+    document.forms.formulaire.submit();
 }
 function remove_item(origin) {
-	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {
-			origin.options[i]=null;
-			i = i-1;
-		}
-	}
+    for(var i = 0 ; i<origin.options.length ; i++) {
+        if(origin.options[i].selected) {
+            origin.options[i]=null;
+            i = i-1;
+        }
+    }
 }
 </script>';
 
@@ -184,23 +184,23 @@ echo Display::page_header(
 $assigned_courses_to_hrm = CourseManager::get_courses_followed_by_drh($user_id);
 $assigned_courses_code = array_keys($assigned_courses_to_hrm);
 foreach ($assigned_courses_code as &$value) {
-	$value = "'".$value."'";
+    $value = "'".$value."'";
 }
 
 $without_assigned_courses = '';
 if (count($assigned_courses_code) > 0) {
-	$without_assigned_courses = " AND c.code NOT IN(".implode(',', $assigned_courses_code).")";
+    $without_assigned_courses = " AND c.code NOT IN(".implode(',', $assigned_courses_code).")";
 }
 
 $needle = '%';
 $firstLetter = null;
 if (isset($_POST['firstLetterCourse'])) {
-	$firstLetter = $_POST['firstLetterCourse'];
-	$needle = Database::escape_string($firstLetter.'%');
+    $firstLetter = $_POST['firstLetterCourse'];
+    $needle = Database::escape_string($firstLetter.'%');
 }
 
 if (api_is_multiple_url_enabled()) {
-	$sql = " SELECT c.code, c.title
+    $sql = " SELECT c.code, c.title
             FROM $tbl_course c
             LEFT JOIN $tbl_course_rel_access_url a
             ON (a.c_id = c.id)
@@ -210,8 +210,8 @@ if (api_is_multiple_url_enabled()) {
             ORDER BY c.title";
 
 } else {
-	$sql = " SELECT c.code, c.title
-	        FROM $tbl_course c
+    $sql = " SELECT c.code, c.title
+            FROM $tbl_course c
             WHERE  c.code LIKE '$needle' $without_assigned_courses
             ORDER BY c.title";
 }
@@ -223,7 +223,7 @@ $result = Database::query($sql);
 <input type="hidden" name="formSent" value="1" />
 <?php
 if (!empty($msg)) {
-	echo Display::return_message($msg, 'normal'); //main API
+    echo Display::return_message($msg, 'normal'); //main API
 }
 ?>
 
@@ -232,11 +232,11 @@ if (!empty($msg)) {
         <h5><?php echo get_lang('CoursesListInPlatform') ?> :</h5>
 
         <div id="ajax_list_courses_multiple">
-	<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" style="width:340px;">
-	<?php while ($enreg = Database::fetch_array($result)) { ?>
+    <select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" style="width:340px;">
+    <?php while ($enreg = Database::fetch_array($result)) { ?>
             <option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'], ENT_QUOTES).'"'; ?>><?php echo $enreg['title'].' ('.$enreg['code'].')'; ?></option>
-	<?php } ?>
-	</select>
+    <?php } ?>
+    </select>
         </div>
 
     </div>
@@ -268,13 +268,13 @@ if (!empty($msg)) {
     </div>
     <div class="col-md-4">
         <h5><?php
-	  	if (UserManager::is_admin($user_id)) {
-			echo get_lang('AssignedCoursesListToPlatformAdministrator');
-		} else if ($user_info['status'] == SESSIONADMIN) {
-			echo get_lang('AssignedCoursesListToSessionsAdministrator');
-		} else {
-			echo get_lang('AssignedCoursesListToHumanResourcesManager');
-		}
+        if (UserManager::is_admin($user_id)) {
+            echo get_lang('AssignedCoursesListToPlatformAdministrator');
+        } elseif ($user_info['status'] == SESSIONADMIN) {
+            echo get_lang('AssignedCoursesListToSessionsAdministrator');
+        } else {
+            echo get_lang('AssignedCoursesListToHumanResourcesManager');
+        }
             ?>: </h5>
 
         <select id='destination' name="CoursesList[]" multiple="multiple" size="20" style="width:320px;">

@@ -10,9 +10,9 @@
  * required files for getting data
  */
 
-use CpChart\Chart\Data as pData;
-use CpChart\Chart\Image as pImage;
-use CpChart\Chart\Cache as pCache;
+use CpChart\Data as pData;
+use CpChart\Image as pImage;
+use CpChart\Cache as pCache;
 
 /**
  * This class is used like controller for teacher graph block plugin,

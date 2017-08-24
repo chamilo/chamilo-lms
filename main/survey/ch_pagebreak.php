@@ -6,7 +6,4 @@
  */
 class ch_pagebreak extends survey_question
 {
-
 }
-
-

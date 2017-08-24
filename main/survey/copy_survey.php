@@ -41,7 +41,11 @@ if (Security::check_token('post')) {
 
 $surveys = SurveyManager::get_surveys(api_get_course_id(), api_get_session_id());
 $courses = CourseManager::get_courses_list();
-$form = new FormValidator('copy_survey', 'post', 'copy_survey.php?'.api_get_cidreq());
+$form = new FormValidator(
+    'copy_survey',
+    'post',
+    'copy_survey.php?'.api_get_cidreq()
+);
 if (!$surveys) {
     echo Display::return_message(get_lang('NoSurveyAvailable'), 'error');
 }

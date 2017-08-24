@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\SkillRelUserComment;
+
 /**
  * Show information about the issued badge
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
@@ -11,9 +13,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $issue = isset($_REQUEST['issue']) ? intval($_REQUEST['issue']) : 0;
 
-if (!$issue) {
-    header('Location: '.api_get_path(WEB_PATH));
-    exit;
+if (empty($issue)) {
+    api_not_allowed(true);
 }
 
 $entityManager = Database::getManager();
@@ -41,6 +42,8 @@ if (!$user || !$skill) {
     header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
+
+Skill::isAllow($user->getId());
 
 $userInfo = [
     'id' => $user->getId(),
@@ -104,6 +107,7 @@ $skillIssueComments = $skillIssue->getComments(true);
 $userId = $skillIssueInfo['user_id'];
 $skillId = $skillIssueInfo['skill_id'];
 
+/** @var SkillRelUserComment $comment */
 foreach ($skillIssueComments as $comment) {
     $commentDate = api_get_local_time($comment->getFeedbackDateTime());
 
@@ -120,7 +124,6 @@ $acquiredLevel = [];
 $profile = $skillRepo->find($skillId)->getProfile();
 
 if (!$profile) {
-
     $skillRelSkill = new SkillRelSkill();
     $parents = $skillRelSkill->get_skill_parents($skillId);
 
@@ -142,7 +145,6 @@ if (!$profile) {
 }
 
 if ($profile) {
-
     $profileId = $profile->getId();
 
     $levels = $skillLevelRepo->findBy([
@@ -159,7 +161,6 @@ if ($profile) {
         $profileId = key($profileLevel);
         $acquiredLevel[$profileId] = $profileLevel[$profileId];
     }
-
 }
 
 $formAcquiredLevel = new FormValidator('acquired_level');
@@ -196,14 +197,14 @@ $form->addButtonSend(get_lang('Send'));
 
 if ($form->validate() && $allowComment) {
     $values = $form->exportValues();
-
-    $skillUserComment = new Chamilo\CoreBundle\Entity\SkillRelUserComment();
+    $skillUserComment = new SkillRelUserComment();
     $skillUserComment
         ->setFeedbackDateTime(new DateTime)
         ->setFeedbackGiver($currentUser)
         ->setFeedbackText($values['comment'])
         ->setFeedbackValue($values['value'] ? $values['value'] : null)
-        ->setSkillRelUser($skillIssue);
+        ->setSkillRelUser($skillIssue)
+    ;
 
     $entityManager->persist($skillUserComment);
     $entityManager->flush();
@@ -228,14 +229,14 @@ if ($allowDownloadExport) {
     $objSkill = new Skill();
     $assertionUrl = $skillIssueInfo['badge_assertion'];
     $skills = $objSkill->get($skillId);
-    $unbakedBadge = api_get_path(SYS_UPLOAD_PATH)."badges/".$skills['icon'];
+    $unbakedBadge = api_get_path(SYS_UPLOAD_PATH).'badges/'.$skills['icon'];
     if (!is_file($unbakedBadge)) {
         $unbakedBadge = api_get_path(WEB_CODE_PATH).'img/icons/128/badges-default.png';
     }
 
     $unbakedBadge = file_get_contents($unbakedBadge);
     $badgeInfoError = false;
-    $personalBadge = "";
+    $personalBadge = '';
     $png = new PNGImageBaker($unbakedBadge);
 
     if ($png->checkChunks("tEXt", "openbadges")) {

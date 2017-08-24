@@ -1,3 +1,19 @@
+### 8.4.3
+- getFixedT lng parameter of array type -> pass as lngs to t function [PR949](https://github.com/i18next/i18next/pull/949)
+
+### 8.4.2
+- fixes merging options in clone instance...do not override passed values by values on main instance
+
+### 8.4.1
+- emits correct lng to changeLanguage event (fixes async detection behaviour) [PR933](https://github.com/i18next/i18next/pull/933)
+
+### 8.4.0
+- expose i18next.options.interpolation.format on i18next.format
+- i18next.dir if not passing lng use first of i18next.languages before using i18next.language
+
+### 8.3.0
+- allows nesting objects/arrays into objects [#925](https://github.com/i18next/i18next/issues/925)
+
 ### 8.2.1
 - fixes issue in async lng detection
 

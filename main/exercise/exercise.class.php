@@ -5884,13 +5884,22 @@ class Exercise
      * @param string $ip Optional. The user IP
      * @return string
      */
-    public function show_exercise_result_header($user_data, $start_date = null, $duration = null, $ip = null)
-    {
-        $array = array();
-
+    public function show_exercise_result_header(
+        $user_data,
+        $start_date = null,
+        $duration = null,
+        $ip = null
+    ) {
+        $array = [];
         if (!empty($user_data)) {
-            $array[] = array('title' => get_lang('Name'), 'content' => $user_data['complete_name']);
-            $array[] = array('title' => get_lang('Username'), 'content' => $user_data['username']);
+            $array[] = array(
+                'title' => get_lang('Name'),
+                'content' => $user_data['complete_name']
+            );
+            $array[] = array(
+                'title' => get_lang('Username'),
+                'content' => $user_data['username']
+            );
             if (!empty($user_data['official_code'])) {
                 $array[] = array(
                     'title' => get_lang('OfficialCode'),
@@ -5931,9 +5940,13 @@ class Exercise
                 $icon.PHP_EOL.$this->exercise.' : '.get_lang('Result')
             );
         }
-        $html .= "<div class='description'>";
-        $html .= Display::description($array);
-        $html .= "</div>";
+
+        $hide = api_get_configuration_value('hide_user_info_in_quiz_result');
+
+        if ($hide === false) {
+            $html .= Display::description($array);
+        }
+
         $html .= "</div>";
         return $html;
     }
@@ -6464,13 +6477,14 @@ class Exercise
     }
 
     /**
-     *
      * @params array question list
-     * @params bool expand or not question list (true show all questions, false show media question id instead of the question ids)
-     *
+     * @params bool expand or not question list (true show all questions,
+     * false show media question id instead of the question ids)
      **/
-    public function transformQuestionListWithMedias($question_list, $expand_media_questions = false)
-    {
+    public function transformQuestionListWithMedias(
+        $question_list,
+        $expand_media_questions = false
+    ) {
         $new_question_list = array();
         if (!empty($question_list)) {
             $media_questions = $this->getMediaList();
@@ -6675,7 +6689,9 @@ class Exercise
 
             if (empty($exercise_info['questions_to_check'])) {
                 if ($action == 'add') {
-                    $sql = "UPDATE $track_exercises SET questions_to_check = '$question_id' WHERE exe_id = $exe_id ";
+                    $sql = "UPDATE $track_exercises 
+                            SET questions_to_check = '$question_id' 
+                            WHERE exe_id = $exe_id ";
                     Database::query($sql);
                 }
             } else {
@@ -6707,7 +6723,9 @@ class Exercise
                     }
                 }
                 $remind_list_string = Database::escape_string($remind_list_string);
-                $sql = "UPDATE $track_exercises SET questions_to_check = '$remind_list_string' WHERE exe_id = $exe_id ";
+                $sql = "UPDATE $track_exercises 
+                        SET questions_to_check = '$remind_list_string' 
+                        WHERE exe_id = $exe_id ";
                 Database::query($sql);
             }
         }
@@ -7079,8 +7097,9 @@ class Exercise
             }
 
             // The $questionList contains the media id we check if this questionId is a media question type
-
-            if (isset($mediaQuestions[$questionId]) && $mediaQuestions[$questionId] != 999) {
+            if (isset($mediaQuestions[$questionId]) &&
+                $mediaQuestions[$questionId] != 999
+            ) {
                 // The question belongs to a media
                 $mediaQuestionList = $mediaQuestions[$questionId];
                 $objQuestionTmp = Question::read($questionId);
@@ -7151,7 +7170,7 @@ class Exercise
 
         if ($this->type == ALL_ON_ONE_PAGE) {
             $exercise_actions = $this->show_button($questionId, $currentQuestion);
-            echo Display::div($exercise_actions, array('class'=>'exercise_actions'));
+            echo Display::div($exercise_actions, ['class' => 'exercise_actions']);
         }
     }
 
@@ -7259,7 +7278,12 @@ class Exercise
             // Button save and continue
             switch ($this->type) {
                 case ONE_PER_PAGE:
-                    $exercise_actions .= $this->show_button($questionId, $current_question, null, $remindList);
+                    $exercise_actions .= $this->show_button(
+                        $questionId,
+                        $current_question,
+                        null,
+                        $remindList
+                    );
                     break;
                 case ALL_ON_ONE_PAGE:
                     $button = [
@@ -7300,7 +7324,9 @@ class Exercise
             }
 
             // Checkbox review answers
-            if ($this->review_answers && !in_array($question_obj->type, Question::question_type_no_review())) {
+            if ($this->review_answers &&
+                !in_array($question_obj->type, Question::question_type_no_review())
+            ) {
                 $remind_question_div = Display::tag(
                     'label',
                     Display::input(

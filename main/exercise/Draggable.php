@@ -49,7 +49,7 @@ class Draggable extends Question
             if (isset($_POST['moreOptions'])) {
                 $nb_options++;
             }
-        } else if (!empty($this->id)) {
+        } elseif (!empty($this->id)) {
             $defaults['orientation'] = in_array($this->extra, ['h', 'v']) ? $this->extra : 'h';
 
             $answer = new Answer($this->id);

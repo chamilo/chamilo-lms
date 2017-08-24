@@ -789,9 +789,14 @@ class learnpathItem
             error_log('learnpathItem::get_max()', 0);
         }
         if ($this->type == 'sco') {
-            if (isset($this->view_max_score) && !empty($this->view_max_score) && $this->view_max_score > 0) {
+            if (isset($this->view_max_score) &&
+                !empty($this->view_max_score) &&
+                $this->view_max_score > 0
+            ) {
                 return $this->view_max_score;
-            } elseif (isset($this->view_max_score) && $this->view_max_score === '') {
+            } elseif (isset($this->view_max_score) &&
+                $this->view_max_score === ''
+            ) {
                 return $this->view_max_score;
             } else {
                 if (!empty($this->max_score)) {
@@ -996,10 +1001,10 @@ class learnpathItem
      * objects, java applets, or any other stuff included in the source of the
      * current item. The current item is expected to be an HTML file. If it
      * is not, then the function will return and empty list.
-     * @param    string   $type type (one of the Chamilo tools) - optional (otherwise takes the current item's type)
-     * @param    string   $abs_path absolute file path - optional (otherwise takes the current item's path)
-     * @param    int      $recursivity level of recursivity we're in
-     * @return   array    List of file paths.
+     * @param string $type (one of the Chamilo tools) - optional (otherwise takes the current item's type)
+     * @param string $abs_path absolute file path - optional (otherwise takes the current item's path)
+     * @param int $recursivity level of recursivity we're in
+     * @return array List of file paths.
      * An additional field containing 'local' or 'remote' helps determine if
      * the file should be copied into the zip or just linked
      */
@@ -1220,7 +1225,7 @@ class learnpathItem
                                                             $in_files_list
                                                         );
                                                     }
-                                                } elseif (strstr($second_part,'..') === 0) {
+                                                } elseif (strstr($second_part, '..') === 0) {
                                                     // Link is relative but going back in the hierarchy.
                                                     $files_list[] = array(
                                                         $second_part,
@@ -1564,7 +1569,7 @@ class learnpathItem
                 $sql = "SELECT status FROM $table
                         WHERE
                             c_id = $course_id AND
-                            id = '".$this->db_item_view_id."' AND
+                            iid = '".$this->db_item_view_id."' AND
                             view_count = '" . $this->get_attempt_id()."'";
 
                 if ($debug > 2) {
@@ -1646,10 +1651,14 @@ class learnpathItem
 
     /**
      * @param string $origin
+     * @param string $time
+     *
      * @return string
      */
-    public static function getScormTimeFromParameter($origin = 'php', $time = null)
-    {
+    public static function getScormTimeFromParameter(
+        $origin = 'php',
+        $time = null
+    ) {
         $h = get_lang('h');
         if (!isset($time)) {
             if ($origin == 'js') {
@@ -1690,7 +1699,7 @@ class learnpathItem
                         FROM $table
                         WHERE
                             c_id = $course_id AND
-                            id = '".$this->db_item_view_id."' AND
+                            iid = '".$this->db_item_view_id."' AND
                             view_count = '" . $this->get_attempt_id()."'";
                 $res = Database::query($sql);
                 $row = Database::fetch_array($res);
@@ -1954,8 +1963,6 @@ class learnpathItem
 			}*/
             // If we don't init start time here, the time is sometimes calculated from the last start time.
             $this->current_start_time = time();
-
-            //error_log('New LP - reinit blocked by setting', 0);
         }
     }
 
@@ -2005,7 +2012,6 @@ class learnpathItem
         $this->prereq_alert = '';
         // First parse all parenthesis by using a sequential loop
         //  (looking for less-inclusives first).
-
         if ($prereqs_string == '_true_') {
 
             return true;
@@ -2127,7 +2133,6 @@ class learnpathItem
                     }
                 } else {
                     // No ANDs found, look for <>
-
                     if (self::DEBUG > 1) {
                         error_log(
                             'New LP - Didnt find any =, looking for <>',
@@ -2201,7 +2206,6 @@ class learnpathItem
                             }
                         } else {
                             // Finally, look for sets/groups
-
                             if (self::DEBUG > 1) {
                                 error_log(
                                     'New LP - Didnt find any ~, looking for groups',
@@ -2339,7 +2343,6 @@ class learnpathItem
                                     return $mycond;
                                 }
                             } else {
-
                                 // Nothing found there either. Now return the
                                 //  value of the corresponding resource completion status.
                                 if (self::DEBUG > 1) {
@@ -2380,7 +2383,7 @@ class learnpathItem
                                             if ($returnstatus) {
                                                 //AND origin_lp_item_id = '.$user_id.'
                                                 $sql = 'SELECT exe_result, exe_weighting
-                                                        FROM ' . Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
+                                                        FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
                                                         WHERE
                                                             exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path.' AND
                                                             exe_user_id = ' . $user_id.' AND
@@ -2420,7 +2423,6 @@ class learnpathItem
                                             }
                                         } else {
                                             // 3. for multiple attempts we check that there are minimum 1 item completed.
-
                                             // Checking in the database.
                                             $sql = 'SELECT exe_result, exe_weighting
                                                     FROM ' . Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
@@ -3023,7 +3025,7 @@ class learnpathItem
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
-            $this->db_item_view_id = $row['id'];
+            $this->db_item_view_id = $row['iid'];
             $this->attempt_id = $row['view_count'];
             $this->current_score = $row['score'];
             $this->current_data = $row['suspend_data'];
@@ -3097,10 +3099,12 @@ class learnpathItem
     }
 
     /**
-     * Sets the prevent_reinit attribute. This is based on the LP value and is set at creation time for
-     * each learnpathItem. It is a (bad?) way of avoiding a reference to the LP when saving an item.
-     * @param   integer 1 for "prevent", 0 for "don't prevent" saving freshened values (new "not attempted" status etc)
-     * @return  void
+     * Sets the prevent_reinit attribute.
+     * This is based on the LP value and is set at creation time for
+     * each learnpathItem. It is a (bad?) way of avoiding
+     * a reference to the LP when saving an item.
+     * @param int 1 for "prevent", 0 for "don't prevent"
+     * saving freshened values (new "not attempted" status etc)
      */
     public function set_prevent_reinit($prevent)
     {
@@ -3271,7 +3275,6 @@ class learnpathItem
      * Sets the item viewing time in a usable form, given that SCORM packages
      * often give it as 00:00:00.0000
      * @param    string    Time as given by SCORM
-     * @return  void
      */
     public function set_time($scorm_time, $format = 'scorm')
     {
@@ -3322,7 +3325,6 @@ class learnpathItem
     /**
      * Sets the item's title
      * @param    string  $string  Title
-     * @return  void
      */
     public function set_title($string = '')
     {
@@ -3539,7 +3541,7 @@ class learnpathItem
                 WHERE c_id = ' . $course_id.'
                     AND lp_item_id="' . $this->db_id.'"
                     AND lp_view_id="' . $this->view_id.'"
-                    AND view_count="' . $this->attempt_id.'" ;';
+                    AND view_count="' . $this->attempt_id.'"';
         Database::query($sql);
     }
 

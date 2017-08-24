@@ -50,7 +50,7 @@ class ImsAssessmentItem
             $category = new TestCategory();
             $category = $category->getCategory($this->question->category);
             if ($category) {
-                $categoryTitle = htmlspecialchars(formatExerciseQtiTitle($category->name));
+                $categoryTitle = htmlspecialchars(formatExerciseQtiText($category->name));
             }
         }
 
@@ -58,7 +58,7 @@ class ImsAssessmentItem
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd"
                 identifier="'.$this->questionIdent.'"
-                title = "'.htmlspecialchars(formatExerciseQtiTitle($this->question->selectTitle())).'"
+                title = "'.htmlspecialchars(formatExerciseQtiText($this->question->selectTitle())).'"
                 category = "'.$categoryTitle.'"
         >'."\n";
 
@@ -479,7 +479,7 @@ function formatExerciseQtiDescription($text)
  * @param $text
  * @return string
  */
-function formatExerciseQtiTitle($text)
+function formatExerciseQtiText($text)
 {
     return htmlspecialchars($text);
 }

@@ -1282,7 +1282,7 @@ class Agenda
         switch ($format) {
             case 'json':
                 if (empty($this->events)) {
-                    return '';
+                    return '[]';
                 }
 
                 return json_encode($this->events);

@@ -213,6 +213,7 @@ $(document).ready(function() {
 		},
         views: {
             CustomView: { // name of view
+                type: 'list',
                 buttonText: '{{ 'AgendaList' | get_lang | escape('js') }}',
                 duration: { month: 1 },
                 defaults: {

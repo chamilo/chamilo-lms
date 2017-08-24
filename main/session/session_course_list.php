@@ -23,9 +23,9 @@ if (empty($id_session)) {
     api_not_allowed();
 }
 
-$page   = intval($_GET['page']);
-$action = $_REQUEST['action'];
-$sort   = in_array($_GET['sort'], array('title', 'nbr_users')) ? $_GET['sort'] : 'title';
+$page   = isset($_GET['page']) ? intval($_GET['page']) : 0;
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$sort   = isset($_GET['sort']) && in_array($_GET['sort'], array('title', 'nbr_users')) ? $_GET['sort'] : 'title';
 
 $result = Database::query("SELECT name FROM $tbl_session WHERE id='$id_session'");
 

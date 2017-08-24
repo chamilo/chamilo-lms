@@ -140,7 +140,7 @@ echo '<script>
 
     function final_submit() {
         //Normal inputs
-        window.location = "exercise_result.php?origin='.$origin.'&exe_id='.$exe_id.'&" + lp_data;
+        window.location = "exercise_result.php?'.api_get_cidreq().'&exe_id='.$exe_id.'&" + lp_data;
     }
 
     function review_questions() {
@@ -167,7 +167,7 @@ echo '<script>
             action = "delete";
         }
         $.ajax({
-            url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=add_question_to_reminder",
+            url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
             data: "question_id="+question_id+"&exe_id='.$exe_id.'&action="+action,
             success: function(return_value) {
             }

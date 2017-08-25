@@ -1,7 +1,7 @@
 {{ agenda_actions }}
 
-{% for event in agenda_events %}
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    {% for event in agenda_events %}
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="heading-{{ event.id }}">
                 {% if is_allowed_to_edit and show_action %}
@@ -41,17 +41,18 @@
                     </a>
                 </h4>
             </div>
-            <div id="collapse-{{ event.id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{ event.id }}">
+            <div id="collapse-{{ event.id }}" class="panel-collapse collapse" role="tabpanel"
+                 aria-labelledby="heading-{{ event.id }}">
                 <ul class="list-group">
                     {% if event.description %}
                         <li class="list-group-item">
-                            {{ event.description}}
+                            {{ event.description }}
                         </li>
                     {% endif %}
 
                     {% if event.comment %}
                         <li class="list-group-item">
-                            {{ event.comment}}
+                            {{ event.comment }}
                         </li>
                     {% endif %}
 
@@ -61,5 +62,5 @@
                 </ul>
             </div>
         </div>
-    </div>
-{% endfor %}
+    {% endfor %}
+</div>

@@ -22,13 +22,8 @@ if ($debug > 0) {
 }
 
 // general parameters passed via POST/GET
-if (empty($origin)) {
-    if (!empty($_REQUEST['origin'])) {
-        $origin = Security::remove_XSS($_REQUEST['origin']);
-    } else {
-        $origin = '';
-    }
-}
+$origin = api_get_origin();
+
 if (empty($learnpath_id)) {
     if (!empty($_REQUEST['learnpath_id'])) {
         $learnpath_id = intval($_REQUEST['learnpath_id']);
@@ -97,9 +92,16 @@ if ($time_control) {
     $htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
 }
 
+$exe_id = 0;
+if (isset($_GET['exe_id'])) {
+    $exe_id = (int) $_GET['exe_id'];
+    $_SESSION['exe_id'] = $exe_id;
+}
+
 if (isset($_SESSION['exe_id'])) {
     $exe_id = intval($_SESSION['exe_id']);
 }
+
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
 if (!empty($exercise_stat_info['data_tracking'])) {
     $question_list = explode(',', $exercise_stat_info['data_tracking']);
@@ -124,8 +126,10 @@ if ($origin != 'learnpath') {
 // I'm in a preview mode as course admin. Display the action menu.
 if (api_is_course_admin() && $origin != 'learnpath') {
     echo '<div class="actions">';
-    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'), array(), 32).'</a>';
-    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('edit.png', get_lang('ModifyExercise'), array(), 32).'</a>';
+    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
+        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), array(), 32).'</a>';
+    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
+        Display::return_icon('edit.png', get_lang('ModifyExercise'), array(), 32).'</a>';
     echo '</div>';
 }
 echo Display::page_header(get_lang('QuestionsToReview'));
@@ -156,7 +160,7 @@ echo '<script>
             $("#message").addClass("warning-message");
             $("#message").html("'.addslashes(get_lang('SelectAQuestionToReview')).'");
         }
-        window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&reminder=2&origin='.$origin.'&" + lp_data;
+        window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&reminder=2&" + lp_data;
     }
 
     function save_remind_item(obj, question_id) {

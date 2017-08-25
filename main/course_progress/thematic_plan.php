@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
 * View (MVC patter) for thematic plan
 * @author Christian Fasanando <christian1827@gmail.com>
@@ -36,7 +38,7 @@ if (isset($message) && $message == 'ok') {
 if ($action === 'thematic_plan_list') {
     $token = Security::get_token();
 
-    ChamiloSession::write('thematic_plan_token', $token);
+    Session::write('thematic_plan_token', $token);
 
     $form = new FormValidator(
         'thematic_plan_add',
@@ -105,7 +107,7 @@ if ($action === 'thematic_plan_list') {
     }
     if (!$error) {
         $token = md5(uniqid(rand(), true));
-        $_SESSION['thematic_plan_token'] = $token;
+        Session::write('thematic_plan_token', $token);
     }
 
     // display form

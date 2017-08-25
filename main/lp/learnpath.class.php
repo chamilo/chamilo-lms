@@ -6201,7 +6201,7 @@ class learnpath
             'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                 'gradebook' => $gradebook,
                 'action' => 'view',
-                'lp_id' => $_SESSION['oLP']->lp_id,
+                'lp_id' => $this->lp_id,
                 'isStudentView' => 'true'
             ])
         );
@@ -6209,7 +6209,7 @@ class learnpath
             Display:: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'), '', ICON_SIZE_MEDIUM),
             'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                 'action' => 'admin_view',
-                'lp_id' => $_SESSION['oLP']->lp_id,
+                'lp_id' => $this->lp_id,
                 'updateaudio' => 'true'
             ])
         );
@@ -6219,7 +6219,7 @@ class learnpath
                 Display::return_icon('settings.png', get_lang('CourseSettings'), '', ICON_SIZE_MEDIUM),
                 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                     'action' => 'edit',
-                    'lp_id' => $_SESSION['oLP']->lp_id
+                    'lp_id' => $this->lp_id
                 ])
             );
         } else {
@@ -6227,7 +6227,7 @@ class learnpath
                 Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM),
                 'lp_controller.php?'.http_build_query([
                     'action' => 'build',
-                    'lp_id' => $_SESSION['oLP']->lp_id
+                    'lp_id' => $this->lp_id
                 ]).'&'.api_get_cidreq()
             );
         }
@@ -6247,18 +6247,22 @@ class learnpath
                     'title' => get_lang('SetPrerequisiteForEachItem'),
                     'href' => 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                         'action' => 'set_previous_step_as_prerequisite',
-                        'lp_id' => $_SESSION['oLP']->lp_id
+                        'lp_id' => $this->lp_id
                     ])
                 ),
                 array(
                     'title' => get_lang('ClearAllPrerequisites'),
                     'href' => 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                         'action' => 'clear_prerequisites',
-                        'lp_id' => $_SESSION['oLP']->lp_id
+                        'lp_id' => $this->lp_id
                     ])
                 ),
             );
-            $actionsRight = Display::groupButtonWithDropDown(get_lang('PrerequisitesOptions'), $buttons, true);
+            $actionsRight = Display::groupButtonWithDropDown(
+                get_lang('PrerequisitesOptions'),
+                $buttons,
+                true
+            );
         }
 
         $toolbar = Display::toolbarAction('actions-lp-controller', array($actionsLeft, $actionsRight));

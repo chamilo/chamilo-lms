@@ -2454,7 +2454,7 @@ function updateThread($values)
     // Simple update + set gradebook values to null
     $params = [
         'thread_title' => $values['thread_title'],
-        'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : null
+        'thread_sticky' => isset($values['thread_sticky'])
     ];
     $where = ['c_id = ? AND thread_id = ?' => [$courseId, $values['thread_id']]];
     Database::update($threadTable, $params, $where);

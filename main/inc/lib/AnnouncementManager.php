@@ -1411,6 +1411,12 @@ class AnnouncementManager
             $searchCondition .= " AND (ip.insert_user_id = $userIdToSearch)";
         }
 
+        $allowOnlyGroup = api_get_configuration_value('hide_base_course_announcements_in_group');
+        $extraGroupCondition = '';
+        if ($allowOnlyGroup) {
+            $extraGroupCondition = " AND ip.to_group_id = $group_id ";
+        }
+
         if (api_is_allowed_to_edit(false, true) ||
             ($allowUserEditSetting && !api_is_anonymous())
         ) {
@@ -1467,13 +1473,14 @@ class AnnouncementManager
                             (ip.to_group_id = $group_id OR ip.to_group_id='0' OR ip.to_group_id IS NULL)
                             $condition_session
                             $searchCondition
+                            $extraGroupCondition
                         ORDER BY display_order DESC";
                 //GROUP BY ip.ref
             } else {
                 // A.3 you are a course admin without any group or user filter
                 // A.3.a you are a course admin without user or group filter but WITH studentview
                 // => see all the messages of all the users and groups without editing possibilities
-                if (isset($isStudentView) && $isStudentView == "true") {
+                if (isset($isStudentView) && $isStudentView == 'true') {
                     $sql = "SELECT $select
                             FROM $tbl_announcement announcement 
                             INNER JOIN $tbl_item_property ip
@@ -1521,6 +1528,7 @@ class AnnouncementManager
                         $cond_user_id = " AND (
                             ip.lastedit_user_id = '".$user_id."' OR ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".$group_id.")
                         )";
+                        $cond_user_id .= $extraGroupCondition;
                     }
                 } else {
                     if ($group_id == 0) {
@@ -1528,9 +1536,10 @@ class AnnouncementManager
                             (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))
                         ) ";
                     } else {
-                       $cond_user_id = " AND (
+                        $cond_user_id = " AND (
                             (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".$group_id."))
                         )";
+                        $cond_user_id .= $extraGroupCondition;
                     }
                 }
 
@@ -1648,7 +1657,12 @@ class AnnouncementManager
                 }
                 $groupReference = ($myrow['to_group_id'] > 0) ? ' <span class="label label-info">'.get_lang('Group').'</span> ' : '';
                 $title = $myrow['title'].$groupReference.$sent_to_icon;
-                $item_visibility = api_get_item_visibility($_course, TOOL_ANNOUNCEMENT, $myrow['id'], $session_id);
+                $item_visibility = api_get_item_visibility(
+                    $_course,
+                    TOOL_ANNOUNCEMENT,
+                    $myrow['id'],
+                    $session_id
+                );
                 $myrow['visibility'] = $item_visibility;
 
                 // show attachment list

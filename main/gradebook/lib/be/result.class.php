@@ -223,7 +223,7 @@ class Result
     /**
      * insert log result
      */
-    public function add_result__log($userid, $evaluationid)
+    public function addResultLog($userid, $evaluationid)
     {
         if (isset($userid) && isset($evaluationid)) {
             $tbl_grade_results_log = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_LOG);

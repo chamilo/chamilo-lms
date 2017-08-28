@@ -18,8 +18,13 @@ class ResultTable extends SortableTable
     /**
      * Constructor
      */
-    public function __construct($evaluation, $results = array(), $iscourse, $addparams = null, $forprint = false)
-    {
+    public function __construct(
+        $evaluation,
+        $results = array(),
+        $iscourse,
+        $addparams = null,
+        $forprint = false
+    ) {
         parent:: __construct(
             'resultlist',
             null,

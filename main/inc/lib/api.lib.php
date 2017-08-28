@@ -6471,7 +6471,7 @@ function api_get_js($file) {
  */
 function api_get_asset($file)
 {
-    return '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>'."\n";
+    return '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"></script>'."\n";
 }
 
 /**
@@ -6480,7 +6480,7 @@ function api_get_asset($file)
  */
 function api_get_css_asset($file, $media = 'screen')
 {
-    return '<link href="'.api_get_path(WEB_PATH).'web/assets/'.$file.'" rel="stylesheet" media="'.$media.'" type="text/css" />'."\n";
+    return '<link href="'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'" rel="stylesheet" media="'.$media.'" type="text/css" />'."\n";
 }
 
 /**
@@ -6505,7 +6505,7 @@ function api_get_jquery_js()
  */
 function api_get_jquery_web_path()
 {
-    return api_get_path(WEB_PATH).'web/assets/jquery/dist/jquery.min.js';
+    return api_get_path(WEB_PUBLIC_PATH).'assets/jquery/dist/jquery.min.js';
 }
 
 /**
@@ -6513,7 +6513,7 @@ function api_get_jquery_web_path()
  */
 function api_get_jquery_ui_js_web_path()
 {
-    return api_get_path(WEB_PATH).'web/assets/jquery-ui/jquery-ui.min.js';
+    return api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/jquery-ui.min.js';
 }
 
 /**
@@ -6521,7 +6521,7 @@ function api_get_jquery_ui_js_web_path()
  */
 function api_get_jquery_ui_css_web_path()
 {
-    return api_get_path(WEB_PATH).'web/assets/jquery-ui/themes/smoothness/jquery-ui.min.css';
+    return api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/jquery-ui.min.css';
 }
 
 /**
@@ -6586,8 +6586,8 @@ function api_get_jquery_libraries_js($libraries) {
         $js .= api_get_asset('jquery-file-upload/js/jquery.fileupload-video.js');
         $js .= api_get_asset('jquery-file-upload/js/jquery.fileupload-validate.js');
 
-        $js .= api_get_css(api_get_path(WEB_PATH).'web/assets/jquery-file-upload/css/jquery.fileupload.css');
-        $js .= api_get_css(api_get_path(WEB_PATH).'web/assets/jquery-file-upload/css/jquery.fileupload-ui.css');
+        $js .= api_get_css(api_get_path(WEB_PUBLIC_PATH).'assets/jquery-file-upload/css/jquery.fileupload.css');
+        $js .= api_get_css(api_get_path(WEB_PUBLIC_PATH).'assets/jquery-file-upload/css/jquery.fileupload-ui.css');
     }
 
     // jquery datepicker

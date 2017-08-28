@@ -607,7 +607,7 @@ class Template
         ];
 
         foreach ($bowerCSSFiles as $file) {
-            $css[] = api_get_path(WEB_PATH).'web/assets/'.$file;
+            $css[] = api_get_path(WEB_PUBLIC_PATH).'assets/'.$file;
         }
 
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
@@ -768,7 +768,7 @@ class Template
         }
 
         foreach ($bowerJsFiles as $file) {
-            $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>'."\n";
+            $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"></script>'."\n";
         }
 
         foreach ($js_files as $file) {

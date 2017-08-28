@@ -3096,127 +3096,107 @@ class SessionManager
 
     /**
      * Assign a coach to course in session with status = 2
-     * @param int  $user_id
-     * @param int  $session_id
-     * @param int  $courseId
-     * @param bool $nocoach optional, if is true the user don't be a coach now,
+     * @param int $userId
+     * @param int $sessionId
+     * @param int $courseId
+     * @param bool $noCoach optional, if is true the user don't be a coach now,
      * otherwise it'll assign a coach
      * @return bool true if there are affected rows, otherwise false
      */
     public static function set_coach_to_course_session(
-        $user_id,
-        $session_id = 0,
+        $userId,
+        $sessionId = 0,
         $courseId = 0,
-        $nocoach = false
+        $noCoach = false
     ) {
         // Definition of variables
-        $user_id = intval($user_id);
+        $userId = intval($userId);
 
-        if (!empty($session_id)) {
-            $session_id = intval($session_id);
-        } else {
-            $session_id = api_get_session_id();
-        }
+        $sessionId = !empty($sessionId) ? intval($sessionId) : api_get_session_id();
+        $courseId = !empty($courseId) ? intval($courseId) : api_get_course_id();
 
-        if (!empty($courseId)) {
-            $courseId = intval($courseId);
-        } else {
-            $courseId = api_get_course_id();
-        }
-
-        if (empty($session_id) || empty($courseId) || empty($user_id)) {
+        if (empty($sessionId) || empty($courseId) || empty($userId)) {
             return false;
         }
 
         // Table definition
-        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+        $tblSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
 
         // check if user is a teacher
-        $sql = "SELECT * FROM $tbl_user
-                WHERE status = 1 AND user_id = $user_id";
+        $sql = "SELECT * FROM $tblUser
+                WHERE status = 1 AND user_id = $userId";
 
-        $rs_check_user = Database::query($sql);
+        $rsCheckUser = Database::query($sql);
 
-        if (Database::num_rows($rs_check_user) > 0) {
-            if ($nocoach) {
-                // check if user_id exists in session_rel_user (if the user is
-                // subscribed to the session in any manner)
-                $sql = "SELECT user_id FROM $tbl_session_rel_user
-                        WHERE
-                            session_id = $session_id AND
-                            user_id = $user_id";
-                $res = Database::query($sql);
-
-                if (Database::num_rows($res) > 0) {
-                    // The user is already subscribed to the session. Change the
-                    // record so the user is NOT a coach for this course anymore
-                    // and then exit
-                    $sql = "UPDATE $tbl_session_rel_course_rel_user
-                            SET status = 0
-                            WHERE
-                                session_id = $session_id AND
-                                c_id = $courseId AND
-                                user_id = $user_id ";
-                    $result = Database::query($sql);
-                    if (Database::affected_rows($result) > 0)
-                        return true;
-                    else
-                        return false;
-                } else {
-                    // The user is not subscribed to the session, so make sure
-                    // he isn't subscribed to a course in this session either
-                    // and then exit
-                    $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                            WHERE
-                                session_id = $session_id AND
-                                c_id = $courseId AND
-                                user_id = $user_id ";
-                    $result = Database::query($sql);
-                    if (Database::affected_rows($result) > 0) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            } else {
-                // Assign user as a coach to course
-                // First check if the user is registered to the course
-                $sql = "SELECT user_id FROM $tbl_session_rel_course_rel_user
-                        WHERE
-                            session_id = $session_id AND
-                            c_id = $courseId AND
-                            user_id = $user_id";
-                $rs_check = Database::query($sql);
-
-                // Then update or insert.
-                if (Database::num_rows($rs_check) > 0) {
-                    $sql = "UPDATE $tbl_session_rel_course_rel_user SET status = 2
-					        WHERE
-					            session_id = $session_id AND
-					            c_id = $courseId AND
-					            user_id = $user_id ";
-                    $result = Database::query($sql);
-                    if (Database::affected_rows($result) > 0) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else {
-                    $sql = "INSERT INTO $tbl_session_rel_course_rel_user(session_id, c_id, user_id, status)
-                            VALUES($session_id, $courseId, $user_id, 2)";
-                    $result = Database::query($sql);
-                    if (Database::affected_rows($result) > 0) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            }
-        } else {
+        if (Database::num_rows($rsCheckUser) <= 0) {
             return false;
         }
+
+        if ($noCoach) {
+            // check if user_id exists in session_rel_user (if the user is
+            // subscribed to the session in any manner)
+            $sql = "SELECT user_id FROM $tblSessionRelUser
+                    WHERE
+                        session_id = $sessionId AND
+                        user_id = $userId";
+            $res = Database::query($sql);
+
+            if (Database::num_rows($res) > 0) {
+                // The user is already subscribed to the session. Change the
+                // record so the user is NOT a coach for this course anymore
+                // and then exit
+                $sql = "UPDATE $tblSessionRelCourseRelUser
+                        SET status = 0
+                        WHERE
+                            session_id = $sessionId AND
+                            c_id = $courseId AND
+                            user_id = $userId ";
+                $result = Database::query($sql);
+
+                return Database::affected_rows($result) > 0;
+            }
+
+            // The user is not subscribed to the session, so make sure
+            // he isn't subscribed to a course in this session either
+            // and then exit
+            $sql = "DELETE FROM $tblSessionRelCourseRelUser
+                    WHERE
+                        session_id = $sessionId AND
+                        c_id = $courseId AND
+                        user_id = $userId ";
+            $result = Database::query($sql);
+
+            return Database::affected_rows($result) > 0;
+        }
+
+        // Assign user as a coach to course
+        // First check if the user is registered to the course
+        $sql = "SELECT user_id FROM $tblSessionRelCourseRelUser
+                WHERE
+                    session_id = $sessionId AND
+                    c_id = $courseId AND
+                    user_id = $userId";
+        $rs_check = Database::query($sql);
+
+        // Then update or insert.
+        if (Database::num_rows($rs_check) > 0) {
+            $sql = "UPDATE $tblSessionRelCourseRelUser SET status = 2
+                    WHERE
+                        session_id = $sessionId AND
+                        c_id = $courseId AND
+                        user_id = $userId ";
+            $result = Database::query($sql);
+
+            return Database::affected_rows($result) > 0;
+        }
+
+        $sql = "INSERT INTO $tblSessionRelCourseRelUser(session_id, c_id, user_id, status)
+                VALUES($sessionId, $courseId, $userId, 2)";
+        $result = Database::query($sql);
+
+        return Database::affected_rows($result) > 0;
     }
 
     /**

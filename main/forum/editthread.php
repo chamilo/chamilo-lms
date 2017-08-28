@@ -228,7 +228,7 @@ if (!empty($threadData)) {
     $defaults['weight_calification'] = 0;
     $defaults['thread_peer_qualify'] = 0;
 }
-$form->setDefaults(isset($defaults) ? $defaults : null);
+
 $form->addButtonUpdate(get_lang('ModifyThread'), 'SubmitPost');
 
 if ($form->validate()) {
@@ -242,11 +242,12 @@ if ($form->validate()) {
         header('Location: '.$redirectUrl);
         exit;
     }
-} else {
-    $token = Security::get_token();
-    $form->addElement('hidden', 'sec_token');
-    $form->setConstants(array('sec_token' => $token));
 }
+
+$form->setDefaults(isset($defaults) ? $defaults : null);
+$token = Security::get_token();
+$form->addElement('hidden', 'sec_token');
+$form->setConstants(array('sec_token' => $token));
 
 $originIsLearnPath = $origin == 'learnpath';
 

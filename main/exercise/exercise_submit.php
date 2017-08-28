@@ -35,8 +35,7 @@ $debug = false;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
-
-$origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
+$origin = api_get_origin();
 
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
@@ -166,7 +165,7 @@ $exercise_sound = $objExercise->selectSound();
 // If reminder ends we jump to the exercise_reminder
 if ($objExercise->review_answers) {
     if ($remind_question_id == -1) {
-        header('Location: exercise_reminder.php?origin='.$origin.'&exerciseId='.$exerciseId.'&'.api_get_cidreq());
+        header('Location: exercise_reminder.php?exerciseId='.$exerciseId.'&'.api_get_cidreq());
         exit;
     }
 }
@@ -464,7 +463,7 @@ if (!empty($exercise_stat_info['questions_to_check'])) {
     $my_remind_list = array_filter($my_remind_list);
 }
 
-$params = "exe_id=$exe_id&exerciseId=$exerciseId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
+$params = "exe_id=$exe_id&exerciseId=$exerciseId&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
 if ($debug) {
     error_log("6.1 params: ->  $params");
 }
@@ -690,16 +689,16 @@ if ($formSent && isset($_POST)) {
                         }
                     }
                 }
-                header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+                header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
                 exit;
             } else {
                 if ($debug) { error_log('10. Redirecting to exercise_show.php'); }
-                header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+                header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
                 exit;
             }
         } else {
             if ($debug) { error_log('10. Redirecting to exercise_submit.php'); }
-            header("Location: exercise_submit.php?".api_get_cidreq()."&exerciseId=$exerciseId&origin=$origin");
+            header("Location: exercise_submit.php?".api_get_cidreq()."&exerciseId=$exerciseId");
             exit;
         }
     }
@@ -759,7 +758,7 @@ if ($question_count != 0) {
                     header('Location: exercise_reminder.php?'.$params);
                     exit;
                 } else {
-                    header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+                    header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
                     exit;
                 }
             }

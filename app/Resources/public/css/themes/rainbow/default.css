@@ -687,7 +687,7 @@ footer #footer_right{
     padding: 10px;
 }
 .sidebar-well .well{
-   border-radius: 0; 
+   border-radius: 0;
 }
 .btn.btn-info{
    background-color: #84bd00;
@@ -1387,7 +1387,7 @@ svg circle{
     height: 2px;
     display: block;
     content: "";
-    
+
 }
 .ck-parcours{
     font-family: 'Verdana';
@@ -1431,7 +1431,7 @@ figure .image.alignright{
 figure .image{
     margin: 0 20px 0px 20px;
 }
-figure figcaption{   
+figure figcaption{
     text-align: left;
     background-color: #f3f3f3;
     padding-top: 0px;
@@ -1482,14 +1482,14 @@ blockquote p {
     background: url(../../main/img/document/hr-2.png) repeat-x 0 0;
     border: 0;
 }
-.ck-title3 { 
+.ck-title3 {
   border-top: 1px solid #84bd00;
   display: inline-block;
   width: 100%;
   padding-top: 15px;
   font-weight: bold;
   font-size: 16px;
-} 
+}
 .result-body .panel.panel-default{
     border: none;
 }
@@ -1835,4 +1835,8 @@ blockquote p {
     .chatboxcontent{
     	width: auto;
     }
+}
+
+.question_options .ui-state-active {
+    background-color: #96BD0D !important;
 }

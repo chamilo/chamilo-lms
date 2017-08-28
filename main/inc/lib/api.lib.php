@@ -8221,6 +8221,9 @@ function api_protect_limit_for_session_admin()
     }
 }
 
+/**
+ * @return bool
+ */
 function api_is_student_view_active()
 {
     $studentView = Session::read('studentview');

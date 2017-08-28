@@ -154,7 +154,12 @@ class GradebookDataGenerator
                 }
             } else {
                 // Category.
-                $result = $this->build_result_column($userId, $item, $ignore_score_color, true);
+                $result = $this->build_result_column(
+                    $userId,
+                    $item,
+                    $ignore_score_color,
+                    true
+                );
                 $row[] = $result['display'];
                 $row['result_score'] = $result['score'];
                 $row['result_score_weight'] = $result['score'];
@@ -284,8 +289,9 @@ class GradebookDataGenerator
         $ignore_score_color,
         $forceSimpleResult = false
     ) {
-        $scoredisplay = ScoreDisplay::instance();
+        $scoreDisplay = ScoreDisplay::instance();
         $score = $item->calc_score($userId);
+
 
         if (!empty($score)) {
             switch ($item->get_item_type()) {
@@ -293,19 +299,21 @@ class GradebookDataGenerator
                 case 'C':
                     if ($score != null) {
                         if ($forceSimpleResult) {
-                            return
-                                array(
-                                    'display' => $scoredisplay->display_score(
-                                        $score,
-                                        SCORE_DIV
-                                    ),
-                                    'score' => $score,
-                                    'score_weight' => $score
-                                );
+                            return array(
+                                'display' => $scoreDisplay->display_score(
+                                    $score,
+                                    SCORE_DIV
+                                ),
+                                'score' => $score,
+                                'score_weight' => $score
+                            );
                         }
 
                         return array(
-                            'display' => $scoredisplay->display_score($score, SCORE_DIV),
+                            'display' => $scoreDisplay->display_score(
+                                $score,
+                                SCORE_DIV
+                            ),
                             'score' => $score,
                             'score_weight' => $score
                         );
@@ -326,8 +334,7 @@ class GradebookDataGenerator
                             $item->get_weight()
                         ];
                     //}
-
-                    $display = $scoredisplay->display_score(
+                    $display = $scoreDisplay->display_score(
                         $score,
                         SCORE_DIV_PERCENT_WITH_CUSTOM
                     );
@@ -346,7 +353,7 @@ class GradebookDataGenerator
                         'score' => $score,
                         'score_weight' => $scoreWeight,
                     );
-            }
+                }
         }
 
         return array(

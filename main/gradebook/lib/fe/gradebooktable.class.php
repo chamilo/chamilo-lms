@@ -257,6 +257,8 @@ class GradebookTable extends SortableTable
             $type = 'simple';
         }
 
+        $model = ExerciseLib::getCourseScoreModel();
+
         // Categories.
         if (!empty($data_array)) {
             foreach ($data_array as $data) {
@@ -312,8 +314,9 @@ class GradebookTable extends SortableTable
                 );
 
                 if ($this->teacherView) {
-                    $row[] = $invisibility_span_open.Display::tag('p', $weight,
-                            array('class' => 'score')).$invisibility_span_close;
+                    $row[] = $invisibility_span_open.
+                        Display::tag('p', $weight, array('class' => 'score')).
+                        $invisibility_span_close;
                 } else {
                     $row[] = $invisibility_span_open.$weight.$invisibility_span_close;
                 }
@@ -373,7 +376,15 @@ class GradebookTable extends SortableTable
                         ];
 
                         // Student result
-                        $row[] = $value_data;
+                        if (empty($model)) {
+                            $row[] = $value_data;
+                        } else {
+                            $row[] = ExerciseLib::show_score(
+                                $data['result_score'][0],
+                                $data['result_score'][1]
+                            );
+                        }
+
                         $totalResultAverageValue = strip_tags(
                             $scoredisplay->display_score(
                                 $totalResult,

@@ -42,9 +42,9 @@ class ScoreDisplay
         } elseif (!isset($score2)) {
             return -1;
         } else {
-            $scoredisplay = self::instance();
-            $custom1 = $scoredisplay->display_custom($score1);
-            $custom2 = $scoredisplay->display_custom($score2);
+            $scoreDisplay = self::instance();
+            $custom1 = $scoreDisplay->display_custom($score1);
+            $custom2 = $scoreDisplay->display_custom($score2);
             if ($custom1 == $custom2) {
                 return 0;
             } else {
@@ -76,7 +76,7 @@ class ScoreDisplay
             }
         }
 
-        //Setting custom enabled
+        // Setting custom enabled
         $value = api_get_setting('gradebook_score_display_custom');
         $value = $value['my_display_custom'];
         $this->custom_enabled = $value == 'true' ? true : false;
@@ -456,8 +456,9 @@ class ScoreDisplay
      */
     private function display_custom($score)
     {
-        $my_score_denom = ($score[1] == 0) ? 1 : $score[1];
+        $my_score_denom = $score[1] == 0 ? 1 : $score[1];
         $scaledscore = $score[0] / $my_score_denom;
+
         if ($this->upperlimit_included) {
             foreach ($this->custom_display_conv as $displayitem) {
                 if ($scaledscore <= $displayitem['score']) {

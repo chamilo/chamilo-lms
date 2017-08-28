@@ -163,7 +163,7 @@ if (isset($_GET['visiblelog'])) {
 //move a category
 if (isset($_GET['movecat'])) {
     GradebookUtils::block_students();
-    $cats = Category :: load($_GET['movecat']);
+    $cats = Category::load($_GET['movecat']);
     if (!isset($_GET['targetcat'])) {
         $move_form = new CatForm(
             CatForm :: TYPE_MOVE,
@@ -179,7 +179,7 @@ if (isset($_GET['movecat'])) {
             exit;
         }
     } else {
-        $targetcat = Category :: load($_GET['targetcat']);
+        $targetcat = Category::load($_GET['targetcat']);
         $course_to_crsind = ($cats[0]->get_course_code() != null && $targetcat[0]->get_course_code() == null);
 
         if (!($course_to_crsind && !isset($_GET['confirm']))) {
@@ -934,7 +934,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $exportToPdf = true;
                 }
 
-                $gradebooktable = new GradebookTable(
+                $gradebookTable = new GradebookTable(
                     $cat,
                     $allcat,
                     $alleval,
@@ -944,11 +944,11 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                 );
 
                 if (api_is_allowed_to_edit()) {
-                    $gradebooktable->td_attributes = [
+                    $gradebookTable->td_attributes = [
                         4 => 'class="text-center"'
                     ];
                 } else {
-                    $gradebooktable->td_attributes = [
+                    $gradebookTable->td_attributes = [
                         3 => 'class="text-right"',
                         4 => 'class="text-center"',
                         5 => 'class="text-center"',
@@ -957,12 +957,12 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     ];
 
                     if ($action == 'export_table') {
-                        unset($gradebooktable->td_attributes[7]);
+                        unset($gradebookTable->td_attributes[7]);
                     }
                 }
 
-                $table = $gradebooktable->return_table();
-                $graph = $gradebooktable->getGraph();
+                $table = $gradebookTable->return_table();
+                $graph = $gradebookTable->getGraph();
 
                 if ($action == 'export_table') {
                     ob_clean();

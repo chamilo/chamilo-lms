@@ -69,7 +69,10 @@ class ResultsDataGenerator
         if ($count < 0) {
             $count = 0;
         }
-        $scoredisplay = ScoreDisplay::instance();
+
+        $model = ExerciseLib::getCourseScoreModel();
+
+        $scoreDisplay = ScoreDisplay::instance();
         // generate actual data array
         $table = array();
         foreach ($this->results as $result) {
@@ -92,7 +95,7 @@ class ResultsDataGenerator
                 );
             }
             $user['percentage_score'] = intval(
-                $scoredisplay->display_score(
+                $scoreDisplay->display_score(
                     array($result->get_score(), $this->evaluation->get_max()),
                     SCORE_PERCENT,
                     SCORE_BOTH,
@@ -102,12 +105,20 @@ class ResultsDataGenerator
             if ($pdf && $number_decimals == null) {
                 $user['scoreletter'] = $result->get_score();
             }
-            if ($scoredisplay->is_custom()) {
+            if ($scoreDisplay->is_custom()) {
                 $user['display'] = $this->get_score_display(
                     $result->get_score(),
                     false,
                     $ignore_score_color
                 );
+                if (!empty($model)) {
+                    $user['display'] .= '&nbsp;'.
+                        ExerciseLib::show_score(
+                            $result->get_score(),
+                            $this->evaluation->get_max()
+                        )
+                    ;
+                }
             }
             $table[] = $user;
         }
@@ -163,11 +174,22 @@ class ResultsDataGenerator
     }
 
     // Sort functions - used internally
+
+    /**
+     * @param array $item1
+     * @param array $item2
+     * @return int
+     */
     public function sort_by_last_name($item1, $item2)
     {
         return api_strcmp($item1['lastname'], $item2['lastname']);
     }
 
+    /**
+     * @param array $item1
+     * @param array $item2
+     * @return int
+     */
     public function sort_by_first_name($item1, $item2)
     {
         return api_strcmp($item1['firstname'], $item2['firstname']);
@@ -187,6 +209,11 @@ class ResultsDataGenerator
         }
     }
 
+    /**
+     * @param array $item1
+     * @param array $item2
+     * @return int
+     */
     public function sort_by_mask($item1, $item2)
     {
         $score1 = (isset($item1['score']) ? array($item1['score'], $this->evaluation->get_max()) : null);

@@ -633,6 +633,7 @@ class FlatViewDataGenerator
         $item_value_total = 0;
         $evaluationsAdded = array();
 
+        $model = ExerciseLib::getCourseScoreModel();
         for ($count = 0; $count < $items_count && ($items_start + $count < count($this->evals_links)); $count++) {
             /** @var AbstractLink $item */
             $item = $this->evals_links[$count + $items_start];
@@ -681,7 +682,6 @@ class FlatViewDataGenerator
                 SCORE_ONLY_SCORE
             );
 
-
             if (api_get_setting('gradebook_show_percentage_in_reports') == 'false') {
                 $real_score = $scoreDisplay->display_score(
                     $real_score,
@@ -698,6 +698,10 @@ class FlatViewDataGenerator
                     SCORE_DIV_PERCENT_WITH_CUSTOM
                 );
                 $temp_score = Display::tip($temp_score, $complete_score);
+            }
+
+            if (!empty($model)) {
+                $temp_score = $temp_score.'&nbsp;'.ExerciseLib::show_score($score[0], $score[1]);
             }
 
             if (!isset($this->params['only_total_category']) ||

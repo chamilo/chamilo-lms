@@ -30,11 +30,11 @@ class UniqueAnswerImage extends UniqueAnswer
     public function createAnswersForm($form)
     {
         $objExercise = Session::read('objExercise');
-        $editorConfig = array(
-            'ToolbarSet' => 'TestFreeAnswer',
+        $editorConfig = [
+            'ToolbarSet' => 'TestProposedAnswer',
             'Width' => '100%',
             'Height' => '125'
-        );
+        ];
 
         //this line defines how many questions by default appear when creating a choice question
         // The previous default value was 2. See task #1759.
@@ -56,10 +56,10 @@ class UniqueAnswerImage extends UniqueAnswer
             <thead>
                 <tr style="text-align: center;">
                     <th width="10">' . get_lang('Number').'</th>
-                    <th>' . get_lang('True').'</th>
-                    <th>' . get_lang('Answer').'</th>
-                        ' . $commentTitle.'
-                        ' . $feedbackTitle.'
+                    <th>'.get_lang('True').'</th>
+                    <th>'.get_lang('Answer').'</th>
+                        '.$commentTitle.'
+                        '.$feedbackTitle.'
                     <th width="15">' . get_lang('Weighting').'</th>
                 </tr>
             </thead>

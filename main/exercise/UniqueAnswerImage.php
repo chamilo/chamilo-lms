@@ -141,7 +141,7 @@ class UniqueAnswerImage extends UniqueAnswer
                 $listDestination = $itemList[2];
                 $url = $itemList[3];
 
-                $try = 0;
+                $tryResult = 0;
                 if ($try != 0) {
                     $tryResult = 1;
                 }

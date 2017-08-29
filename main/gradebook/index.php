@@ -943,18 +943,28 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $exportToPdf
                 );
 
+
+                $model = ExerciseLib::getCourseScoreModel();
+
                 if (api_is_allowed_to_edit()) {
                     $gradebookTable->td_attributes = [
                         4 => 'class="text-center"'
                     ];
                 } else {
-                    $gradebookTable->td_attributes = [
-                        3 => 'class="text-right"',
-                        4 => 'class="text-center"',
-                        5 => 'class="text-center"',
-                        6 => 'class="text-center"',
-                        7 => 'class="text-center"'
-                    ];
+                    if (empty($model)) {
+                        $gradebookTable->td_attributes = [
+                            3 => 'class="text-right"',
+                            4 => 'class="text-center"',
+                            5 => 'class="text-center"',
+                            6 => 'class="text-center"',
+                            7 => 'class="text-center"'
+                        ];
+                    } else {
+                        $gradebookTable->td_attributes = [
+                            3 => 'class="text-right"',
+                            4 => 'class="text-center"'
+                        ];
+                    }
 
                     if ($action == 'export_table') {
                         unset($gradebookTable->td_attributes[7]);

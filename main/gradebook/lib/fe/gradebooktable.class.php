@@ -89,6 +89,8 @@ class GradebookTable extends SortableTable
             $this->set_header($column++, get_lang('Description'), false);
         }
 
+        $model = ExerciseLib::getCourseScoreModel();
+
         if ($this->teacherView) {
             $this->set_header(
                 $column++,
@@ -99,9 +101,11 @@ class GradebookTable extends SortableTable
         } else {
             $this->set_header($column++, get_lang('Weight'), false);
             $this->set_header($column++, get_lang('Result'), false);
-            $this->set_header($column++, get_lang('Ranking'), false);
-            $this->set_header($column++, get_lang('BestScore'), false);
-            $this->set_header($column++, get_lang('Average'), false);
+            if (empty($model)) {
+                $this->set_header($column++, get_lang('Ranking'), false);
+                $this->set_header($column++, get_lang('BestScore'), false);
+                $this->set_header($column++, get_lang('Average'), false);
+            }
 
             if (!empty($cats)) {
                 if ($this->exportToPdf == false) {
@@ -223,7 +227,6 @@ class GradebookTable extends SortableTable
         }
 
         $this->datagen->userId = $this->userId;
-
         $data_array = $this->datagen->get_data(
             $sorting,
             $from,
@@ -394,12 +397,15 @@ class GradebookTable extends SortableTable
                         $this->dataForGraph['my_result'][] = floatval($totalResultAverageValue);
                         $totalAverageValue = strip_tags($scoredisplay->display_score($totalAverage, SCORE_AVERAGE));
                         $this->dataForGraph['average'][] = floatval($totalAverageValue);
-                        // Ranking
-                        $row[] = $ranking;
-                        // Best
-                        $row[] = $best;
-                        // Average
-                        $row[] = $average;
+
+                        if (empty($model)) {
+                            // Ranking
+                            $row[] = $ranking;
+                            // Best
+                            $row[] = $best;
+                            // Average
+                            $row[] = $average;
+                        }
 
                         if (get_class($item) == 'Category') {
                             if ($this->exportToPdf == false) {

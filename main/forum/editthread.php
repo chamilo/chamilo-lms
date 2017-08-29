@@ -34,15 +34,9 @@ $currentForumCategory = get_forumcategory_information($currentForum['forum_categ
 // the variable $forum_settings is declared in forumconfig.inc.php
 $forumSettings = $forum_setting;
 
-/* Breadcrumbs */
-
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = Security::remove_XSS($_SESSION['gradebook']);
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }

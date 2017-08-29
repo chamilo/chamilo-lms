@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use ChamiloSession as Session;
 
 /**
  * Class Category
@@ -2561,4 +2562,30 @@ class Category implements GradebookItem
         $this->studentList = $list;
     }
 
+    /**
+     * @return string
+     */
+    public static function getUrl()
+    {
+        $url = Session::read('gradebook_dest');
+
+        return $url;
+    }
+
+    /**
+     * Destination is index.php or gradebook.php
+     * @param string $url
+     */
+    public static function setUrl($url)
+    {
+        switch ($url) {
+            case 'gradebook.php':
+                $url = api_get_path(WEB_CODE_PATH).'gradebook/gradebook.php?';
+                break;
+            case 'index.php':
+                $url = api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq().'&';
+                break;
+        }
+        Session::write('gradebook_dest', $url);
+    }
 }

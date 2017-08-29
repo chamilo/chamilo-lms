@@ -12,11 +12,11 @@ GradebookUtils::block_students();
 $selectCat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 
 $interbreadcrumb[] = array(
-    'url' => $_SESSION['gradebook_dest'].'?',
+    'url' => Category::getUrl(),
     'name' => get_lang('Gradebook')
 );
 $interbreadcrumb[] = array(
-    'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectCat,
+    'url' => Category::getUrl().'selectcat='.$selectCat,
     'name' => get_lang('Details')
 );
 $interbreadcrumb[] = array(

@@ -41,15 +41,9 @@ $current_forum = get_forum_information($current_thread['forum_id']); // Note: Th
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 $whatsnew_post_info = $_SESSION['whatsnew_post_info'];
 
-/* Header and Breadcrumbs */
-
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }

@@ -985,7 +985,7 @@ class GradebookTable extends SortableTable
         switch ($item->get_item_type()) {
             // category
             case 'C':
-                $prms_uri = '?selectcat='.$item->get_id().'&amp;view='.$view;
+                $prms_uri = '?selectcat='.$item->get_id().'&view='.$view;
                 if (isset($_GET['isStudentView'])) {
                     if (isset($is_student) || (isset($_SESSION['studentview']) && $_SESSION['studentview'] == 'studentview')) {
                         $prms_uri = $prms_uri.'&amp;isStudentView='.Security::remove_XSS($_GET['isStudentView']);
@@ -995,7 +995,7 @@ class GradebookTable extends SortableTable
                 $cat = new Category();
                 $show_message = $cat->show_message_resource_delete($item->get_course_code());
 
-                return '&nbsp;<a href="'.Security::remove_XSS($_SESSION['gradebook_dest']).$prms_uri.'">'
+                return '&nbsp;<a href="'.Category::getUrl().$prms_uri.'">'
                     .$item->get_name()
                     .'</a>'
                     .($item->is_course() ? ' &nbsp;['.$item->get_course_code().']'.$show_message : '');

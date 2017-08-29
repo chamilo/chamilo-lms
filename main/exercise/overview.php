@@ -36,7 +36,10 @@ $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['l
 $learnpathItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? intval($_REQUEST['learnpath_item_view_id']) : null;
 $origin = api_get_origin();
 
-$interbreadcrumb[] = array("url" => "exercise.php?gradebook=$gradebook", "name" => get_lang('Exercises'));
+$interbreadcrumb[] = array(
+    "url" => "exercise.php?".api_get_path(),
+    "name" => get_lang('Exercises')
+);
 $interbreadcrumb[] = array("url" => "#", "name" => $objExercise->selectTitle(true));
 
 $time_control = false;
@@ -125,7 +128,7 @@ if (isset($exercise_stat_info['exe_id'])) {
 
 // 2. Exercise button
 // Notice we not add there the lp_item_view_id because is not already generated
-$exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
+$exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
 $exercise_url_button = Display::url(
     $label,
     $exercise_url,

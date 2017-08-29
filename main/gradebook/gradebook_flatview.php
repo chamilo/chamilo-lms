@@ -28,7 +28,7 @@ if (isset($_POST['submit']) && isset($_POST['keyword'])) {
 }
 
 $interbreadcrumb[] = array(
-    'url' => $_SESSION['gradebook_dest'].'?selectcat=1',
+    'url' => Category::getUrl().'selectcat=1',
     'name' => get_lang('ToolGradebook')
 );
 

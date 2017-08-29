@@ -5746,9 +5746,7 @@ class learnpath
             error_log('New LP - In learnpath::overview()', 0);
         }
 
-        $_SESSION['gradebook'] = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;
         $return = '';
-
         $update_audio = isset($_GET['updateaudio']) ? $_GET['updateaudio'] : null;
 
         // we need to start a form when we want to update all the mp3 files

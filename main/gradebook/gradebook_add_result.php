@@ -51,7 +51,7 @@ if ($add_result_form->validate()) {
     exit;
 }
 $interbreadcrumb[] = array(
-    'url' => Security::remove_XSS($_SESSION['gradebook_dest']),
+    'url' => Category::getUrl(),
     'name' => get_lang('Gradebook')
 );
 Display :: display_header(get_lang('AddResult'));

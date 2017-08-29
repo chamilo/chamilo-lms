@@ -37,20 +37,17 @@ $show_learn_path = true;
 $lp = $_SESSION['oLP'];
 $lp_theme_css = $lp->get_theme();
 
-/* SHOWING THE ADMIN TOOLS */
-
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
 
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
+$interbreadcrumb[] = array(
+    'url' => 'lp_controller.php?action=list',
+    'name' => get_lang('LearningPaths')
+);
 $interbreadcrumb[] = array(
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id",
     'name' => stripslashes($lp->get_name()),

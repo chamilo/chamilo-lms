@@ -19,7 +19,7 @@ if (!$isDrhOfCourse) {
 }
 
 $interbreadcrumb[] = array(
-    'url' => $_SESSION['gradebook_dest'],
+    'url' => Category::getUrl(),
     'name' => get_lang('Gradebook')
 );
 
@@ -513,7 +513,7 @@ if (isset($_GET['deleteall'])) {
 if (!isset($_GET['export']) && (!isset($_GET['import']))) {
     if (!isset($_GET['selectcat'])) {
         $interbreadcrumb[] = array(
-            'url' => $_SESSION['gradebook_dest'].'?selectcat='.$currentcat[0]->get_id().'&'.api_get_cidreq(),
+            'url' => Category::getUrl().'selectcat='.$currentcat[0]->get_id(),
             'name' => get_lang('Details')
         );
     }

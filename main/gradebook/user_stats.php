@@ -17,7 +17,7 @@ if (!$isDrhOfCourse) {
     GradebookUtils::block_students();
 }
 $interbreadcrumb[] = array(
-    'url' => $_SESSION['gradebook_dest'],
+    'url' => Category::getUrl(),
     'name' => get_lang('Gradebook')
 );
 

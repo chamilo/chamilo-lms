@@ -164,7 +164,10 @@ if (!$is_certificate_mode) {
         "name" => get_lang('Documents'),
     );
 } else {
-    $interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
+    $interbreadcrumb[] = array(
+        'url' => Category::getUrl(),
+        'name' => get_lang('Gradebook')
+    );
 }
 
 if (empty($document_data['parents'])) {

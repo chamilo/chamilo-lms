@@ -160,7 +160,7 @@ switch ($action) {
 }
 
 $interbreadcrumb[] = array(
-    'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?',
+    'url' => Category::getUrl(),
     'name' => get_lang('Gradebook'),
 );
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('GradebookListOfStudentsCertificates'));

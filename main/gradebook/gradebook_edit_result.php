@@ -48,7 +48,7 @@ if ($edit_result_form->validate()) {
 $table = $edit_result_form->toHtml();
 
 $interbreadcrumb[] = array(
-    'url' => $_SESSION['gradebook_dest'],
+    'url' => Category::getUrl(),
     'name' => get_lang('Gradebook')
 );
 $interbreadcrumb[] = array(

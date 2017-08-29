@@ -44,12 +44,12 @@ if ($form->validate()) {
     }
     $eval->set_visible($visible);
     $eval->save();
-    header('Location: '.$_SESSION['gradebook_dest'].'?editeval=&selectcat='.$eval->get_category_id().'&'.api_get_cidreq());
+    header('Location: '.Category::getUrl().'editeval=&selectcat='.$eval->get_category_id());
     exit;
 }
 $selectcat_inter = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 $interbreadcrumb[] = array(
-    'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectcat_inter,
+    'url' => Category::getUrl().'selectcat='.$selectcat_inter,
     'name' => get_lang('Gradebook')
 );
 

@@ -103,7 +103,7 @@ if (!$is_certificate_mode) {
     );
 } else {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('Gradebook')
     );
 }

@@ -22,7 +22,7 @@ $stud_id = api_get_user_id();
 $session_id = api_get_session_id();
 
 //make sure the destination for scripts is index.php instead of gradebook.php
-$_SESSION['gradebook_dest'] = 'index.php';
+Category::setUrl('index.php');
 
 $this_section = SECTION_COURSES;
 
@@ -150,7 +150,7 @@ if (isset($_GET['createallcategories'])) {
             unset($cat);
         }
     }
-    header('Location: '.$_SESSION['gradebook_dest'].'?addallcat=&selectcat=0');
+    header('Location: '.Category::getUrl().'addallcat=&selectcat=0');
     exit;
 }
 
@@ -575,15 +575,15 @@ $viewTitle = '';
 
 // DISPLAY HEADERS AND MESSAGES
 if (!isset($_GET['exportpdf'])) {
-    if (isset ($_GET['studentoverview'])) {
+    if (isset($_GET['studentoverview'])) {
         $interbreadcrumb[] = array(
-            'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectCat,
+            'url' => Category::getUrl().'selectcat='.$selectCat,
             'name' => get_lang('ToolGradebook')
         );
         $viewTitle = get_lang('FlatView');
     } elseif (isset($_GET['search'])) {
         $interbreadcrumb[] = array(
-            'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectCat,
+            'url' => Category::getUrl().'selectcat='.$selectCat,
             'name' => get_lang('ToolGradebook')
         );
         $viewTitle = get_lang('SearchResults');

@@ -37,7 +37,7 @@ if ($form->validate()) {
 }
 
 $interbreadcrumb[] = array(
-    'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$selectCat.'&'.api_get_cidreq(),
+    'url' => Category::getUrl().'selectcat='.$selectCat,
     'name' => get_lang('Gradebook')
 );
 Display :: display_header(get_lang('NewCategory'));

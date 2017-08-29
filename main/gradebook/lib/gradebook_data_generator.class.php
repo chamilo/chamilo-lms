@@ -193,7 +193,12 @@ class GradebookDataGenerator
 
                 $scoreDisplay = ScoreDisplay::instance();
                 $score = AbstractLink::getCurrentUserRanking($userId, $rankingStudentList);
-                $row['ranking'] = $scoreDisplay->display_score($score, SCORE_DIV, SCORE_BOTH, true);
+                $row['ranking'] = $scoreDisplay->display_score(
+                    $score,
+                    SCORE_DIV,
+                    SCORE_BOTH,
+                    true
+                );
                 if ($invalidateResults) {
                     $row['ranking'] = null;
                 }
@@ -219,7 +224,12 @@ class GradebookDataGenerator
         );
 
         $scoreDisplay = ScoreDisplay::instance();
-        $display = $scoreDisplay->display_score($score, SCORE_DIV_PERCENT_WITH_CUSTOM, SCORE_BOTH, true);
+        $display = $scoreDisplay->display_score(
+            $score,
+            SCORE_DIV_PERCENT_WITH_CUSTOM,
+            SCORE_BOTH,
+            true
+        );
         $type = $item->get_item_type();
         if ($type == 'L' && get_class($item) == 'ExerciseLink') {
             $display = ExerciseLib::show_score($score[0], $score[1], false);
@@ -240,7 +250,12 @@ class GradebookDataGenerator
     {
         $score = $item->calc_score(null, 'average');
         $scoreDisplay = ScoreDisplay::instance();
-        $display = $scoreDisplay->display_score($score, SCORE_DIV_PERCENT_WITH_CUSTOM, SCORE_BOTH, true);
+        $display = $scoreDisplay->display_score(
+            $score,
+            SCORE_DIV_PERCENT_WITH_CUSTOM,
+            SCORE_BOTH,
+            true
+        );
         $type = $item->get_item_type();
 
         if ($type == 'L' && get_class($item) == 'ExerciseLink') {
@@ -268,7 +283,11 @@ class GradebookDataGenerator
         $scoreDisplay = null;
         if (isset($score[0])) {
             $scoreDisplay = ScoreDisplay::instance();
-            $scoreDisplay = $scoreDisplay->display_score($score, SCORE_DIV, SCORE_BOTH);
+            $scoreDisplay = $scoreDisplay->display_score(
+                $score,
+                SCORE_DIV,
+                SCORE_BOTH
+            );
         }
 
         return array(

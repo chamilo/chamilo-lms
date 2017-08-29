@@ -26,7 +26,7 @@ $interbreadcrumb[] = array(
     'name' => get_lang('GradebookQualifyLog')
 );
 $this_section = SECTION_COURSES;
-Display :: display_header('');
+Display::display_header('');
 echo '<div class="actions">';
 api_display_tool_title(get_lang('GradebookQualifyLog'));
 echo '</div>';

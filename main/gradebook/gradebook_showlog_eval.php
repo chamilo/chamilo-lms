@@ -13,19 +13,18 @@ $selectCat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 
 $interbreadcrumb[] = array(
     'url' => $_SESSION['gradebook_dest'].'?',
-    'name' => get_lang('Gradebook'
-));
+    'name' => get_lang('Gradebook')
+);
 $interbreadcrumb[] = array(
     'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectCat,
-    'name' => get_lang('Details'
-));
+    'name' => get_lang('Details')
+);
 $interbreadcrumb[] = array(
     'url' => 'gradebook_showlog_eval.php?visiblelog='.Security::remove_XSS($_GET['visiblelog']).'&amp;selectcat='.$selectCat,
     'name' => get_lang('GradebookQualifyLog')
 );
 $this_section = SECTION_COURSES;
-Display :: display_header('');
-
+Display::display_header('');
 echo Display::page_header(get_lang('GradebookQualifyLog'));
 
 $t_linkeval_log = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);

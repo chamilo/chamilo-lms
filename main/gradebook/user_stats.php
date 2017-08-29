@@ -18,10 +18,10 @@ if (!$isDrhOfCourse) {
 }
 $interbreadcrumb[] = array(
     'url' => $_SESSION['gradebook_dest'],
-    'name' => get_lang('Gradebook'
-));
+    'name' => get_lang('Gradebook')
+);
 
-$category = Category :: load($_GET['selectcat']);
+$category = Category::load($_GET['selectcat']);
 $my_user_id = Security::remove_XSS($_GET['userid']);
 $allevals = $category[0]->get_evaluations($my_user_id, true);
 $alllinks = $category[0]->get_links($my_user_id, true);
@@ -40,9 +40,14 @@ if ($_GET['selectcat'] != null) {
 
 $user_table = new UserTable($my_user_id, $allevals, $alllinks, $addparams);
 
-if (isset ($_GET['exportpdf'])) {
+if (isset($_GET['exportpdf'])) {
     $datagen = new UserDataGenerator($my_user_id, $allevals, $alllinks);
-    $data_array = $datagen->get_data(UserDataGenerator :: UDG_SORT_NAME, 0, null, true);
+    $data_array = $datagen->get_data(
+        UserDataGenerator::UDG_SORT_NAME,
+        0,
+        null,
+        true
+    );
     $newarray = array();
     $displayscore = ScoreDisplay :: instance();
     foreach ($data_array as $data) {
@@ -95,15 +100,18 @@ if (isset ($_GET['exportpdf'])) {
 $actions = '<div class="actions">';
 
 if (isset($_GET['selectcat'])) {
-    $interbreadcrumb[] = array('url' => 'gradebook_flatview.php?selectcat='.Security::remove_XSS($_GET['selectcat']), 'name' => get_lang('FlatView'));
+    $interbreadcrumb[] = array(
+        'url' => 'gradebook_flatview.php?selectcat='.Security::remove_XSS($_GET['selectcat']),
+        'name' => get_lang('FlatView')
+    );
     $actions .= '<a href=gradebook_flatview.php?selectcat='.Security::remove_XSS($_GET['selectcat']).'>'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('FlatView'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
-if (isset ($_GET['selecteval'])) {
+if (isset($_GET['selecteval'])) {
     $interbreadcrumb[] = array(
         'url' => 'gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']),
-        'name' => get_lang('ViewResult'
-    ));
+        'name' => get_lang('ViewResult')
+    );
     $actions .= '<a href=gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'>
 	'.Display::return_icon('back.png', get_lang('BackToEvaluation'), '', ICON_SIZE_MEDIUM).'</a>';
 }
@@ -113,8 +121,8 @@ $actions .= '<a href="'.api_get_self().'?exportpdf=&userid='.Security::remove_XS
 
 $actions .= '</div>';
 
-Display :: display_header(get_lang('ResultsPerUser'));
+Display::display_header(get_lang('ResultsPerUser'));
 echo $actions;
-DisplayGradebook :: display_header_user($_GET['userid'], $category[0]->get_id());
+DisplayGradebook::display_header_user($_GET['userid'], $category[0]->get_id());
 $user_table->display();
-Display :: display_footer();
+Display::display_footer();

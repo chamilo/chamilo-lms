@@ -189,7 +189,6 @@ if (isset($_GET['exportpdf'])) {
             $params,
             $mainCourseCategory[0]
         );
-
     } else {
         Display :: display_header(get_lang('ExportPDF'));
     }

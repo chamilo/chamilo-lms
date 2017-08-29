@@ -68,15 +68,15 @@ if (isset($_GET['createallcategories'])) {
     header('Location: '.$_SESSION['gradebook_dest'].'?addallcat=&selectcat=0');
     exit;
 }
-//move a category
 
+//move a category
 if (isset($_GET['movecat'])) {
     $move_cat = (int) $_GET['movecat'];
     GradebookUtils::block_students();
     $cats = Category :: load($move_cat);
     if (!isset($_GET['targetcat'])) {
         $move_form = new CatForm(
-            CatForm :: TYPE_MOVE,
+            CatForm::TYPE_MOVE,
             $cats[0],
             'move_cat_form',
             null,
@@ -108,8 +108,9 @@ if (isset($_GET['moveeval'])) {
     GradebookUtils::block_students();
     $get_move_eval = Security::remove_XSS($_GET['moveeval']);
     $evals = Evaluation :: load($get_move_eval);
-    if (!isset ($_GET['targetcat'])) {
-        $move_form = new EvalForm(EvalForm :: TYPE_MOVE,
+    if (!isset($_GET['targetcat'])) {
+        $move_form = new EvalForm(
+            EvalForm::TYPE_MOVE,
             $evals[0],
             null,
             'move_eval_form',
@@ -142,9 +143,9 @@ if (isset($_GET['moveeval'])) {
 if (isset($_GET['movelink'])) {
     GradebookUtils::block_students();
     $get_move_link = Security::remove_XSS($_GET['movelink']);
-    $link = LinkFactory :: load($get_move_link);
+    $link = LinkFactory::load($get_move_link);
     $move_form = new LinkForm(
-        LinkForm :: TYPE_MOVE,
+        LinkForm::TYPE_MOVE,
         null,
         $link[0],
         'move_link_form',

@@ -73,7 +73,7 @@ class GradebookUtils
      * @param float
      * @return   bool    false on error, true on success
      */
-    public static function update_resource_from_course_gradebook($link_id, $course_code, $weight)
+    public static function updateResourceFromCourseGradebook($link_id, $course_code, $weight)
     {
         $course_code = Database::escape_string($course_code);
         if (!empty($link_id)) {
@@ -1299,8 +1299,10 @@ class GradebookUtils
      * @param bool $includeNonPublicCertificates Whether include the non-plublic certificates
      * @return array
      */
-    public static function getUserCertificatesInCourses($userId, $includeNonPublicCertificates = true)
-    {
+    public static function getUserCertificatesInCourses(
+        $userId,
+        $includeNonPublicCertificates = true
+    ) {
         $userId = intval($userId);
         $courseList = [];
         $courses = CourseManager::get_courses_list_by_user_id($userId);

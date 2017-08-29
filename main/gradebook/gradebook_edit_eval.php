@@ -15,7 +15,7 @@ if ($evaledit[0]->is_locked() && !api_is_platform_admin()) {
     api_not_allowed();
 }
 $form = new EvalForm(
-    EvalForm :: TYPE_EDIT,
+    EvalForm::TYPE_EDIT,
     $evaledit[0],
     null,
     'edit_eval_form',
@@ -72,6 +72,6 @@ $(document).ready( function() {
 });
 </script>';
 
-Display :: display_header(get_lang('EditEvaluation'));
+Display::display_header(get_lang('EditEvaluation'));
 $form->display();
-Display :: display_footer();
+Display::display_footer();

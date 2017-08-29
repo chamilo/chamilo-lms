@@ -29,15 +29,15 @@ if (empty($select_eval)) {
     api_not_allowed();
 }
 
-$displayscore = ScoreDisplay :: instance();
+$displayscore = ScoreDisplay::instance();
 $eval = Evaluation :: load($select_eval);
 $overwritescore = 0;
 if ($eval[0]->get_category_id() < 0) {
     // if category id is negative, then the evaluation's origin is a link
-    $link = LinkFactory :: get_evaluation_link($eval[0]->get_id());
-    $currentcat = Category :: load($link->get_category_id());
+    $link = LinkFactory::get_evaluation_link($eval[0]->get_id());
+    $currentcat = Category::load($link->get_category_id());
 } else {
-    $currentcat = Category:: load($eval[0]->get_category_id());
+    $currentcat = Category::load($eval[0]->get_category_id());
 }
 
 //load the result with the evaluation id
@@ -57,7 +57,7 @@ if (isset($_GET['editres'])) {
     $edit_res_xml = Security::remove_XSS($_GET['editres']);
     $resultedit = Result :: load($edit_res_xml);
     $edit_res_form = new EvalForm(
-        EvalForm :: TYPE_RESULT_EDIT,
+        EvalForm::TYPE_RESULT_EDIT,
         $eval[0],
         $resultedit[0],
         'edit_result_form',
@@ -75,7 +75,12 @@ if (isset($_GET['editres'])) {
         $result->set_evaluation_id($select_eval);
         $row_value = isset($values['score']) ? $values['score'] : 0;
         if (!empty($row_value) || $row_value == 0) {
-            $result->set_score(api_number_format($row_value, api_get_setting('gradebook_number_decimals')));
+            $result->set_score(
+                api_number_format(
+                    $row_value,
+                    api_get_setting('gradebook_number_decimals')
+                )
+            );
         }
         $result->save();
         unset($result);
@@ -185,7 +190,6 @@ if (isset($_GET['import'])) {
                 )
             );
             header('Location: '.api_get_self().'?import=&selecteval='.$select_eval.'&importnofile=');
-
             exit;
         }
         if ($overwritescore != 0) {
@@ -326,7 +330,6 @@ if (isset($_GET['export'])) {
                 );
             }
             $data_table = array();
-
             foreach ($data_array as $data) {
                 $result = array();
                 $user_info = api_get_user_info($data['id']);
@@ -406,7 +409,13 @@ if (isset($_GET['resultdelete'])) {
 if (isset($_POST['action'])) {
     $number_of_selected_items = count($_POST['id']);
     if ($number_of_selected_items == '0') {
-        Display::addFlash(Display::return_message(get_lang('NoItemsSelected'), 'warning', false));
+        Display::addFlash(
+            Display::return_message(
+                get_lang('NoItemsSelected'),
+                'warning',
+                false
+            )
+        );
     } else {
         switch ($_POST['action']) {
             case 'delete':

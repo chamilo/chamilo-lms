@@ -273,7 +273,7 @@ class MySpace
             if (is_numeric($avg_score)) {
                 $avg_score = round($avg_score, 2);
             } else {
-                $$avg_score = '-';
+                $avg_score = '-';
             }
 
             $return .= '    <td><div>'.$avg_score.'</div></td>';

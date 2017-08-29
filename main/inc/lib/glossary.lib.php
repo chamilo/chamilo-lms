@@ -755,6 +755,10 @@ class GlossaryManager
                 'add_signatures' => $signatures
             ]
         );
-        $pdf->exportFromHtmlToDocumentsArea($template->fetch($layout), $fileName, $courseId);
+        $pdf->exportFromHtmlToDocumentsArea(
+            $template->fetch($layout),
+            $fileName,
+            $courseId
+        );
     }
 }

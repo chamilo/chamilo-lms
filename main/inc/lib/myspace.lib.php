@@ -59,14 +59,32 @@ class MySpace
     {
         $menu_items = array();
         $menu_items[] = Display::url(
-            Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
+            Display::return_icon(
+                'stats.png',
+                get_lang('MyStats'),
+                '',
+                ICON_SIZE_MEDIUM
+            ),
             api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
         );
         $menu_items[] = Display::url(
-            Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), 32),
+            Display::return_icon(
+                'teacher.png',
+                get_lang('TeacherInterface'),
+                array(),
+                32
+            ),
             api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher'
         );
-        $menu_items[] = Display::url(Display::return_icon('star_na.png', get_lang('AdminInterface'), array(), 32), '#');
+        $menu_items[] = Display::url(
+            Display::return_icon(
+                'star_na.png',
+                get_lang('AdminInterface'),
+                array(),
+                32
+            ),
+            '#'
+        );
         $menu_items[] = Display::url(
             Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), 32),
             api_get_path(WEB_CODE_PATH).'tracking/exams.php'
@@ -565,12 +583,18 @@ class MySpace
 
     public static function sort_users($a, $b)
     {
-        return api_strcmp(trim(api_strtolower($a[$_SESSION['tracking_column']])), trim(api_strtolower($b[$_SESSION['tracking_column']])));
+        return api_strcmp(
+            trim(api_strtolower($a[$_SESSION['tracking_column']])),
+            trim(api_strtolower($b[$_SESSION['tracking_column']]))
+        );
     }
 
     public static function rsort_users($a, $b)
     {
-        return api_strcmp(trim(api_strtolower($b[$_SESSION['tracking_column']])), trim(api_strtolower($a[$_SESSION['tracking_column']])));
+        return api_strcmp(
+            trim(api_strtolower($b[$_SESSION['tracking_column']])),
+            trim(api_strtolower($a[$_SESSION['tracking_column']]))
+        );
     }
 
     /**
@@ -1033,9 +1057,13 @@ class MySpace
                 null,
                 false
             );
-            if ($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned
+            if ($last_login_date_tmp != false &&
+                $last_login_date == false
+            ) { // TODO: To be cleaned
                 $last_login_date = $last_login_date_tmp;
-            } elseif ($last_login_date_tmp != false && $last_login_date != false) { // TODO: Repeated previous condition. To be cleaned.
+            } elseif ($last_login_date_tmp != false &&
+                $last_login_date != false
+            ) { // TODO: Repeated previous condition. To be cleaned.
                 // Find the max and assign it to first_login_date
                 if (strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
                     $last_login_date = $last_login_date_tmp;
@@ -1220,7 +1248,7 @@ class MySpace
                 );
                 if ($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned.
                     $last_login_date = $last_login_date_tmp;
-                } else if ($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition. To be cleaned.
+                } elseif ($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition. To be cleaned.
                     // Find the max and assign it to first_login_date
                     if (strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
                         $last_login_date = $last_login_date_tmp;

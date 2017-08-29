@@ -140,7 +140,11 @@ class MoodleImport
                                 // Create a Forum category based on Moodle forum type.
                                 $catForumValues['forum_category_title'] = $moduleValues['type'];
                                 $catForumValues['forum_category_comment'] = '';
-                                $catId = store_forumcategory($catForumValues, $courseInfo, false);
+                                $catId = store_forumcategory(
+                                    $catForumValues,
+                                    $courseInfo,
+                                    false
+                                );
                                 $forumValues = [];
                                 $forumValues['forum_title'] = $moduleValues['name'];
                                 $forumValues['forum_image'] = '';
@@ -252,7 +256,10 @@ class MoodleImport
                                 $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
                                 $filesXml = @file_get_contents($destinationDir.'/files.xml');
                                 $moduleValues = $this->readResourceModule($moduleXml);
-                                $mainFileModuleValues = $this->readMainFilesXml($filesXml, $moduleValues['contextid']);
+                                $mainFileModuleValues = $this->readMainFilesXml(
+                                    $filesXml,
+                                    $moduleValues['contextid']
+                                );
                                 $fileInfo = array_merge($moduleValues, $mainFileModuleValues, $currentItem);
                                 $currentResourceFilePath = $destinationDir.'/files/';
                                 $dirs = new RecursiveDirectoryIterator($currentResourceFilePath);
@@ -646,8 +653,13 @@ class MoodleImport
      * @param array $importedFiles
      * @return integer db response
      */
-    public function processAnswers($questionList, $questionType, $questionInstance, $currentQuestion, $importedFiles)
-    {
+    public function processAnswers(
+        $questionList,
+        $questionType,
+        $questionInstance,
+        $currentQuestion,
+        $importedFiles
+    ) {
         switch ($questionType) {
             case 'multichoice':
                 $objAnswer = new Answer($questionInstance->id);
@@ -804,8 +816,13 @@ class MoodleImport
      * @param array $importedFiles
      * @return integer db response
      */
-    public function processUniqueAnswer($objAnswer, $answerValues, $position, &$questionWeighting, $importedFiles)
-    {
+    public function processUniqueAnswer(
+        $objAnswer,
+        $answerValues,
+        $position,
+        &$questionWeighting,
+        $importedFiles
+    ) {
         $correct = intval($answerValues['fraction']) ? intval($answerValues['fraction']) : 0;
         $answer = $answerValues['answertext'];
         $comment = $answerValues['feedback'];
@@ -841,8 +858,13 @@ class MoodleImport
      *
      * @return integer db response
      */
-    public function processTrueFalse($objAnswer, $answerValues, $position, &$questionWeighting, $importedFiles)
-    {
+    public function processTrueFalse(
+        $objAnswer,
+        $answerValues,
+        $position,
+        &$questionWeighting,
+        $importedFiles
+    ) {
         $correct = intval($answerValues['fraction']) ? intval($answerValues['fraction']) : 0;
         $answer = $answerValues['answertext'];
         $comment = $answerValues['feedback'];
@@ -879,8 +901,14 @@ class MoodleImport
      * @return integer db response
      *
      */
-    public function processFillBlanks($objAnswer, $questionType, $answerValues, &$placeholder, $position, $importedFiles)
-    {
+    public function processFillBlanks(
+        $objAnswer,
+        $questionType,
+        $answerValues,
+        &$placeholder,
+        $position,
+        $importedFiles
+    ) {
         $coursePath = api_get_course_path();
 
         switch ($questionType) {

@@ -4,10 +4,8 @@
  *	@package chamilo.admin
  */
 
-use Chamilo\CoreBundle\Entity\Session,
-    Chamilo\CoreBundle\Entity\Course,
-    Chamilo\UserBundle\Entity\User,
-    Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Course;
 
 // resetting the course id
 $cidReset = true;
@@ -38,7 +36,7 @@ if (!$session->getCourses()->count()) {
     exit;
 }
 
-$avoidedCourseIds = getAvoidedCourses($user, $session);
+$avoidedCourseIds = SessionManager::getAvoidedCoursesInSession($user, $session);
 
 $form = new FormValidator(
     'session_course_user',
@@ -141,27 +139,3 @@ function getSessionCourseList(Session $session)
 
     return $return;
 };
-
-/**
- * @param User $user
- * @param Session $session
- * @return array
- */
-function getAvoidedCourses(User $user, Session $session)
-{
-    $return = [];
-
-    /** @var SessionRelCourseRelUser $sessionCourse */
-    foreach ($session->getCourses() as $sessionCourse) {
-        /** @var Course $course */
-        $course = $sessionCourse->getCourse();
-
-        if ($session->getUserInCourse($user, $course)->count()) {
-            continue;
-        }
-
-        $return[] = $course->getId();
-    }
-
-    return $return;
-}

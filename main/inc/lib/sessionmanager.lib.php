@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * Class SessionManager
@@ -8658,5 +8659,30 @@ class SessionManager
                 'session' => $session->getId()
             ])
             ->getSingleScalarResult();
+    }
+
+    /**
+     * Get course IDs where user in not subscribed in session
+     * @param User $user
+     * @param Session $session
+     * @return array
+     */
+    public static function getAvoidedCoursesInSession(User $user, Session $session)
+    {
+        $courseIds = [];
+
+        /** @var SessionRelCourse $sessionCourse */
+        foreach ($session->getCourses() as $sessionCourse) {
+            /** @var Course $course */
+            $course = $sessionCourse->getCourse();
+
+            if ($session->getUserInCourse($user, $course)->count()) {
+                continue;
+            }
+
+            $courseIds[] = $course->getId();
+        }
+
+        return $courseIds;
     }
 }

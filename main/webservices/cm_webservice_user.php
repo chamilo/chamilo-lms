@@ -98,13 +98,22 @@ class WSCMUser extends WSCM
         return "0";
     }
 
-    public function send_invitation($username, $password, $userfriend_id, $content_message = '')
-    {
+    public function send_invitation(
+        $username,
+        $password,
+        $userfriend_id,
+        $content_message = ''
+    ) {
         global $charset;
         if ($this->verifyUserPass($username, $password) == "valid") {
-		    $user_id = UserManager::get_user_id_from_username($username);
+            $user_id = UserManager::get_user_id_from_username($username);
             $message_title = get_lang('Invitation');
-            $count_is_true = SocialManager::send_invitation_friend($user_id, $userfriend_id, $message_title, $content_message);
+            $count_is_true = SocialManager::send_invitation_friend(
+                $user_id,
+                $userfriend_id,
+                $message_title,
+                $content_message
+            );
 
             if ($count_is_true) {
                 return Display::return_message(
@@ -135,7 +144,11 @@ class WSCMUser extends WSCM
     {
         if ($this->verifyUserPass($username, $password) == "valid") {
             $user_id = UserManager::get_user_id_from_username($username);
-            UserManager::relate_users($userfriend_id, $user_id, USER_RELATION_TYPE_FRIEND);
+            UserManager::relate_users(
+                $userfriend_id,
+                $user_id,
+                USER_RELATION_TYPE_FRIEND
+            );
             SocialManager::invitation_accepted($userfriend_id, $user_id);
 
             return get_lang('AddedContactToList');

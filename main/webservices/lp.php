@@ -324,7 +324,6 @@ function WSGetLpList($params)
         );
 
         if (empty($sessionId)) {
-
             if ($debug) error_log('Session not found');
             return 'Session not found';
         }

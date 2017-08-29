@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 
 /**
  * This file was originally the copy of document.php, but many modifications happened since then ;
@@ -81,15 +82,29 @@ if (!$is_allowed_to_edit) {
     $categoryId = $_SESSION['oLP']->getCategoryId();
     $em = Database::getManager();
     if (!empty($categoryId)) {
-        /** @var \Chamilo\CourseBundle\Entity\CLpCategory $category */
+        /** @var CLpCategory $category */
         $category = $em->getRepository('ChamiloCourseBundle:CLpCategory')->find($categoryId);
+        $block = false;
         if ($category) {
             $users = $category->getUsers();
             if (!empty($users) && $users->count() > 0) {
                 $user = UserManager::getRepository()->find($user_id);
                 if (!$category->hasUserAdded($user)) {
-                    api_not_allowed(true);
+                    $block = true;
                 }
+            }
+
+            $isVisible = learnpath::categoryIsVisibleForStudent(
+                $category,
+                $user
+            );
+
+            if ($isVisible) {
+                $block = false;
+            }
+
+            if ($block) {
+                api_not_allowed(true);
             }
         }
     }

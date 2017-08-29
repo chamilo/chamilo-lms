@@ -13,6 +13,9 @@ use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
+use Chamilo\CourseBundle\Entity\CItemProperty;
+use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
+use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
 
 /**
  * Class learnpath
@@ -2346,12 +2349,12 @@ class learnpath
         $lp_id = (int) $lp_id;
         $sessionId = (int) $sessionId;
 
-        if (empty($sessionId)) {
-            $sessionId = api_get_session_id();
-        }
-
         if (empty($courseInfo)) {
             return false;
+        }
+
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
         }
 
         $itemInfo = api_get_item_property_info(
@@ -4420,6 +4423,44 @@ class learnpath
 
         if ($category->hasUserAdded($user)) {
             return true;
+        }
+
+        $groups = GroupManager::getAllGroupPerUserSubscription($user->getId());
+        if (!empty($groups)) {
+            $em = Database::getManager();
+
+            /** @var ItemPropertyRepository $itemRepo */
+            $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
+
+            /** @var CourseRepository $courseRepo */
+            $courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
+            $sessionId = api_get_session_id();
+            $session = null;
+            if (!empty($sessionId)) {
+                $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+            }
+
+            $course = $courseRepo->find(api_get_course_int_id());
+
+            // Subscribed groups to a LP
+            $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
+                'learnpath_category',
+                $category->getId(),
+                $course,
+                $session
+            );
+
+            if (!empty($subscribedGroupsInLp)) {
+                $groups = array_column($groups, 'iid');
+                /** @var CItemProperty $item */
+                foreach ($subscribedGroupsInLp as $item) {
+                    if ($item->getGroup() &&
+                        in_array($item->getGroup()->getId(), $groups)
+                    ) {
+                        return true;
+                    }
+                }
+            }
         }
 
         return false;

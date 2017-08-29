@@ -607,8 +607,7 @@ abstract class Question
         // if we really change the type
         if ($type != $this->type) {
             // if we don't change from "unique answer" to "multiple answers" (or conversely)
-            if (
-                !in_array($this->type, array(UNIQUE_ANSWER, MULTIPLE_ANSWER)) ||
+            if (!in_array($this->type, array(UNIQUE_ANSWER, MULTIPLE_ANSWER)) ||
                 !in_array($type, array(UNIQUE_ANSWER, MULTIPLE_ANSWER))
             ) {
                 // removes old answers

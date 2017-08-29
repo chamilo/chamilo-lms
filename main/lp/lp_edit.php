@@ -195,7 +195,15 @@ if (api_is_platform_admin()) {
     $defaults['use_max_score'] = $_SESSION['oLP']->use_max_score;
 }
 
-$form->addElement('checkbox', 'subscribe_users', null, get_lang('SubscribeUsersToLp'));
+$subscriptionSettings = learnpath::getSubscriptionSettings();
+if ($subscriptionSettings['allow_add_users_to_lp']) {
+    $form->addElement(
+        'checkbox',
+        'subscribe_users',
+        null,
+        get_lang('SubscribeUsersToLp')
+    );
+}
 
 // accumulate_scorm_time
 $form->addElement(

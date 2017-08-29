@@ -12097,5 +12097,25 @@ EOD;
 
         return array_reverse($return);
     }
+
+    /**
+     * Reads and process "lp_subscription_settings" setting
+     * @return array
+     */
+    public static function getSubscriptionSettings()
+    {
+        $subscriptionSettings = api_get_configuration_value('lp_subscription_settings');
+        if (empty($subscriptionSettings)) {
+            // By default allow both settings
+            $subscriptionSettings = [
+                'allow_add_users_to_lp' => true,
+                'allow_add_users_to_lp_category' => true,
+            ];
+        } else {
+            $subscriptionSettings = $subscriptionSettings['options'];
+        }
+
+        return $subscriptionSettings;
+    }
 }
 

@@ -20,6 +20,11 @@ if (empty($categoryId)) {
     api_not_allowed(true);
 }
 
+$subscriptionSettings = learnpath::getSubscriptionSettings();
+if ($subscriptionSettings['allow_add_users_to_lp_category'] == false) {
+    api_not_allowed(true);
+}
+
 $courseId = api_get_course_int_id();
 $courseCode = api_get_course_id();
 

@@ -335,8 +335,9 @@ class DisplayGradebook
             }
             if (!($is_course_admin &&
                 $message_resource === false &&
-                isset($_GET['selectcat']) && $_GET['selectcat'] != 0
-            ) && isset($_GET['studentoverview'])) {
+                isset($_GET['selectcat']) && $_GET['selectcat'] != 0) &&
+                isset($_GET['studentoverview'])
+            ) {
                 $header .= '<td style="vertical-align: top;"><a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&exportpdf=&selectcat='.$catobj->get_id().'" target="_blank">
 							 '.Display::return_icon('pdf.png', get_lang('ExportPDF'), [], ICON_SIZE_MEDIUM).'
 							' . get_lang('ExportPDF').'</a>';
@@ -349,7 +350,6 @@ class DisplayGradebook
 
         $actionsLeft = '';
         $my_api_cidreq = api_get_cidreq();
-
         if (api_is_allowed_to_edit(null, true)) {
             if (empty($grade_model_id) || $grade_model_id == -1) {
                 $actionsLeft .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat='.$catobj->get_id().'">'.

@@ -12,8 +12,8 @@ class Thematic extends Resource
 {
     public $params = array();
     public $thematic_advance_list = array();
-	public $thematic_plan_list = array();
-    
+    public $thematic_plan_list = array();
+
     /**
     * Create a new Thematic
     *
@@ -31,12 +31,18 @@ class Thematic extends Resource
         echo $this->params['title'];
     }
 
-    public function add_thematic_advance($data)
+    /**
+     * @param array $data
+     */
+    public function addThematicAdvance($data)
     {
         $this->thematic_advance_list[] = $data;
     }
 
-    public function add_thematic_plan($data)
+    /**
+     * @param array $data
+     */
+    public function addThematicPlan($data)
     {
         $this->thematic_plan_list[] = $data;
     }

@@ -1127,18 +1127,18 @@ class ScormSection
 
         list($js, $html) = $this->export_questions();
         $res = $this->start_page()
-            . $this->start_header()
-            . $this->css()
-            . $this->globalAssets()
-            . $this->start_js()
-            . $this->common_js()
-            . $js
-            . $this->end_js()
-            . $this->end_header()
-            . $this->start_body()
-            . $html
-            . $this->end_body()
-            . $this->end_page();
+            .$this->start_header()
+            .$this->css()
+            .$this->globalAssets()
+            .$this->start_js()
+            .$this->common_js()
+            .$js
+            .$this->end_js()
+            .$this->end_header()
+            .$this->start_body()
+            .$html
+            .$this->end_body()
+            .$this->end_page();
 
         return $res;
     }

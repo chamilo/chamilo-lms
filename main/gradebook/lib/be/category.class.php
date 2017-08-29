@@ -1814,7 +1814,6 @@ class Category implements GradebookItem
             // All students
             // Course admin
             if (api_is_allowed_to_edit() && !api_is_platform_admin()) {
-
                 // root
                 if ($this->id == 0) {
                     return $this->get_root_categories_for_teacher(
@@ -1857,7 +1856,15 @@ class Category implements GradebookItem
             } elseif (api_is_platform_admin()) {
                 // platform admin
                 // we explicitly avoid listing subcats from another session
-                return self::load(null, null, $course_code, $this->id, null, $session_id, $order);
+                return self::load(
+                    null,
+                    null,
+                    $course_code,
+                    $this->id,
+                    null,
+                    $session_id,
+                    $order
+                );
             }
         }
 

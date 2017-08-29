@@ -18,42 +18,6 @@ class ScoreDisplay
     private $custom_display_conv;
 
     /**
-     * Get the instance of this class
-     * @param int $category_id
-     * @return ScoreDisplay
-     */
-    public static function instance($category_id = 0)
-    {
-        static $instance;
-        if (!isset($instance)) {
-            $instance = new ScoreDisplay($category_id);
-        }
-
-        return $instance;
-    }
-
-    /**
-     * Compare the custom display of 2 scores, can be useful in sorting
-     */
-    public static function compare_scores_by_custom_display($score1, $score2)
-    {
-        if (!isset($score1)) {
-            return (isset($score2) ? 1 : 0);
-        } elseif (!isset($score2)) {
-            return -1;
-        } else {
-            $scoreDisplay = self::instance();
-            $custom1 = $scoreDisplay->display_custom($score1);
-            $custom2 = $scoreDisplay->display_custom($score2);
-            if ($custom1 == $custom2) {
-                return 0;
-            } else {
-                return (($score1[0] / $score1[1]) < ($score2[0] / $score2[1]) ? -1 : 1);
-            }
-        }
-    }
-
-    /**
      * Protected constructor - call instance() to instantiate
      */
     public function __construct($category_id = 0)
@@ -117,6 +81,42 @@ class ScoreDisplay
 
             if ($this->coloring_enabled) {
                 $this->color_split_value = $this->get_score_color_percent();
+            }
+        }
+    }
+
+    /**
+     * Get the instance of this class
+     * @param int $category_id
+     * @return ScoreDisplay
+     */
+    public static function instance($category_id = 0)
+    {
+        static $instance;
+        if (!isset($instance)) {
+            $instance = new ScoreDisplay($category_id);
+        }
+
+        return $instance;
+    }
+
+    /**
+     * Compare the custom display of 2 scores, can be useful in sorting
+     */
+    public static function compare_scores_by_custom_display($score1, $score2)
+    {
+        if (!isset($score1)) {
+            return (isset($score2) ? 1 : 0);
+        } elseif (!isset($score2)) {
+            return -1;
+        } else {
+            $scoreDisplay = self::instance();
+            $custom1 = $scoreDisplay->display_custom($score1);
+            $custom2 = $scoreDisplay->display_custom($score2);
+            if ($custom1 == $custom2) {
+                return 0;
+            } else {
+                return (($score1[0] / $score1[1]) < ($score2[0] / $score2[1]) ? -1 : 1);
             }
         }
     }

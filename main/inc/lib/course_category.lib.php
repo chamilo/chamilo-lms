@@ -813,8 +813,12 @@ class CourseCategory
      * @param string $parentCode the parent category of the categories added (default=null for root category)
      * @param string $padding the indent param (you shouldn't indicate something here)
      */
-    public static function setCategoriesInForm($element, $defaultCode = null, $parentCode = null, $padding = null)
-    {
+    public static function setCategoriesInForm(
+        $element,
+        $defaultCode = null,
+        $parentCode = null,
+        $padding = null
+    ) {
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);

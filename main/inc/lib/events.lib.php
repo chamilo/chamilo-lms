@@ -1855,7 +1855,7 @@ class Event
         $courseId,
         $userId,
         $sessionId,
-        $minutes = 1
+        $minutes = 5
     ) {
         if (Session::read('login_as')) {
             return false;

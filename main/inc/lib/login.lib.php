@@ -448,9 +448,13 @@ class Login
                     }
 
                     if (!isset($_SESSION['login_as'])) {
-                        //Course login
+                        // Course login
                         if (isset($_user['user_id'])) {
-                            Event::event_course_login(api_get_course_int_id(), $_user['user_id'], api_get_session_id());
+                            Event::eventCourseLogin(
+                                api_get_course_int_id(),
+                                $_user['user_id'],
+                                api_get_session_id()
+                            );
                         }
                     }
                 } else {

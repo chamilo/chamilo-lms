@@ -30,9 +30,9 @@ require __DIR__.'/../../main/inc/global.inc.php';
  * Old database configuration
  */
 $oldDBHost = 'localhost';
-$oldDBName = 'carmelitas19';
-$oldDBUser = 'carmelitas19';
-$oldDBPass = 'carmelitas19';
+$oldDBName = 'db1.9';
+$oldDBUser = 'db1.9';
+$oldDBPass = 'db1.9';
 try {
     $oldDBH = new PDO('mysql:host=localhost;dbname='.$oldDBName, $oldDBUser, $oldDBPass);
 } catch (PDOException $e) {
@@ -43,9 +43,9 @@ try {
  * New database configuration
  */
 $newDBHost = 'localhost';
-$newDBName = 'carmelitas11';
-$newDBUser = 'carmelitas11';
-$newDBPass = 'carmelitas11';
+$newDBName = 'db1.11';
+$newDBUser = 'db1.11';
+$newDBPass = 'db1.11';
 try {
     $newDBH = new PDO('mysql:host=localhost;dbname='.$newDBName, $newDBUser, $newDBPass);
 } catch (PDOException $e) {

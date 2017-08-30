@@ -1643,6 +1643,8 @@ class SessionManager
         $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
         $tbl_student_publication_assignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
         $userGroupSessionTable = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
+        $trackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $trackAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
         $ticket = Database::get_main_table(TABLE_TICKET_TICKET);
         $em = Database::getManager();
@@ -1721,6 +1723,9 @@ class SessionManager
         Database::query("DELETE FROM $tbl_session_rel_user WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $tbl_item_properties WHERE session_id IN ($id_checked)");
         Database::query("DELETE FROM $tbl_url_session WHERE session_id IN($id_checked)");
+
+        Database::query("DELETE FROM $trackCourseAccess WHERE session_id IN($id_checked)");
+        Database::query("DELETE FROM $trackAccess WHERE access_session_id IN($id_checked)");
 
         $sql = "UPDATE $ticket SET session_id = NULL WHERE session_id IN ($id_checked)";
         Database::query($sql);

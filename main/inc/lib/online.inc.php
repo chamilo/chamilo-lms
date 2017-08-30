@@ -518,6 +518,7 @@ function courseLogout($logoutInfo)
     }
 
     $sessionLifetime = api_get_configuration_value('session_lifetime');
+
     /*
      * When $_configuration['session_lifetime'] is larger than ~100 hours (in order to let users take exercises with no problems)
      * the function Tracking::get_time_spent_on_the_course() returns larger values (200h) due the condition:
@@ -535,17 +536,18 @@ function courseLogout($logoutInfo)
             $sessionId = intval($logoutInfo['sid']);
         }
         $currentDate = api_get_utc_datetime();
+        // UTC time
+        $time  = api_get_utc_datetime(time() - $sessionLifetime);
         $sql = "SELECT course_access_id
                 FROM $tableCourseAccess
                 WHERE 
                     user_id = $userId AND
                     c_id = $courseId  AND
                     session_id = $sessionId AND
-                    login_course_date > '$currentDate' - INTERVAL $sessionLifetime SECOND
+                    login_course_date > '$time'
                 ORDER BY login_course_date DESC 
                 LIMIT 1";
         $result = Database::query($sql);
-
         if (Database::num_rows($result) > 0) {
             $courseAccessId = Database::result($result, 0, 0);
             $sql = "UPDATE $tableCourseAccess SET 

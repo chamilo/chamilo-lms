@@ -230,8 +230,12 @@ class AnnouncementManager
      *
      * @return mixed
      */
-    public static function getAnnouncementsByTitle($title, $courseId, $sessionId = 0, $visibility = 1)
-    {
+    public static function getAnnouncementsByTitle(
+        $title,
+        $courseId,
+        $sessionId = 0,
+        $visibility = 1
+    ) {
         $dql = "SELECT a
                 FROM ChamiloCourseBundle:CAnnouncement a 
                 JOIN ChamiloCourseBundle:CItemProperty ip
@@ -264,8 +268,11 @@ class AnnouncementManager
      *
      * @return array
      */
-    public static function getAnnouncementInfoById($announcementId, $courseId, $userId)
-    {
+    public static function getAnnouncementInfoById(
+        $announcementId,
+        $courseId,
+        $userId
+    ) {
         if (api_is_allowed_to_edit(false, true) ||
             (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
         ) {
@@ -429,7 +436,12 @@ class AnnouncementManager
             $html .= ' - <span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
             if (api_is_allowed_to_edit(false, true)) {
                 $html .= Display::url(
-                    Display::return_icon('delete.png', get_lang('Delete'), '', 16),
+                    Display::return_icon(
+                        'delete.png',
+                        get_lang('Delete'),
+                        '',
+                        16
+                    ),
                     api_get_self()."?".api_get_cidreq()."&action=delete_attachment&id_attach=".$attachment_list['id']."&sec_token=".$stok
                 );
             }
@@ -1196,8 +1208,11 @@ class AnnouncementManager
      * @param array  uploaded file $_FILES
      * @return int  -1 if failed, 0 if unknown (should not happen), 1 if success
      */
-    public static function add_announcement_attachment_file($announcement_id, $file_comment, $file)
-    {
+    public static function add_announcement_attachment_file(
+        $announcement_id,
+        $file_comment,
+        $file
+    ) {
         $_course = api_get_course_info();
         $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $return = 0;
@@ -1236,7 +1251,8 @@ class AnnouncementManager
 
                 $insertId = Database::insert($tbl_announcement_attachment, $params);
                 if ($insertId) {
-                    $sql = "UPDATE $tbl_announcement_attachment SET id = iid WHERE iid = $insertId";
+                    $sql = "UPDATE $tbl_announcement_attachment SET id = iid 
+                            WHERE iid = $insertId";
                     Database::query($sql);
                 }
 
@@ -1254,8 +1270,11 @@ class AnnouncementManager
      * @param string file comment
      * @return int
      */
-    public static function edit_announcement_attachment_file($id_attach, $file, $file_comment)
-    {
+    public static function edit_announcement_attachment_file(
+        $id_attach,
+        $file,
+        $file_comment
+    ) {
         $_course = api_get_course_info();
         $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $return = 0;

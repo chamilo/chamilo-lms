@@ -267,8 +267,12 @@ class scorm extends learnpath
      *
      * @return bool    Returns -1 on error
      */
-    public function import_manifest($courseCode, $userMaxScore = 1, $sessionId = 0, $userId = 0)
-    {
+    public function import_manifest(
+        $courseCode,
+        $userMaxScore = 1,
+        $sessionId = 0,
+        $userId = 0
+    ) {
         if ($this->debug > 0) {
             error_log('New LP - Entered import_manifest('.$courseCode.')', 0);
         }
@@ -534,8 +538,11 @@ class scorm extends learnpath
      *
      * @return string    $current_dir Absolute path to the imsmanifest.xml file or empty string on error
      */
-    public function import_package($zip_file_info, $current_dir = '', $courseInfo = array())
-    {
+    public function import_package(
+        $zip_file_info,
+        $current_dir = '',
+        $courseInfo = array()
+    ) {
         if ($this->debug > 0) {
             error_log('In scorm::import_package('.print_r($zip_file_info, true).',"'.$current_dir.'") method', 0);
         }
@@ -699,7 +706,6 @@ class scorm extends learnpath
 
                         if ($safe_file != $file) {
                             $mydir = dirname($course_sys_dir.$new_dir.$safe_file);
-
                             if (!is_dir($mydir)) {
                                 $mysubdirs = explode('/', $mydir);
                                 $mybasedir = '/';
@@ -765,7 +771,8 @@ class scorm extends learnpath
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET theme = '$theme' WHERE c_id = ".$courseId." AND id = ".$lp;
+            $sql = "UPDATE $tbl_lp SET theme = '$theme' 
+                    WHERE c_id = ".$courseId." AND id = ".$lp;
             $res = Database::query($sql);
             return $res;
         } else {
@@ -784,7 +791,8 @@ class scorm extends learnpath
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' WHERE c_id = ".$courseId." AND id = ".$lp;
+            $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' 
+                    WHERE c_id = ".$courseId." AND id = ".$lp;
             $res = Database::query($sql);
             return $res;
         } else {
@@ -803,7 +811,8 @@ class scorm extends learnpath
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET author = '$author' WHERE c_id = ".$courseId." AND id = ".$lp;
+            $sql = "UPDATE $tbl_lp SET author = '$author' 
+                    WHERE c_id = ".$courseId." AND id = ".$lp;
             $res = Database::query($sql);
             return $res;
         } else {

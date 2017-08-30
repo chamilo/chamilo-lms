@@ -264,6 +264,7 @@ abstract class AbstractLink implements GradebookItem
      * To keep consistency, do not call this method but LinkFactory::load instead.
      * @param integer $id
      * @param integer $type
+     * @param integer $ref_id
      * @param integer $user_id
      * @param string $course_code
      * @param integer $category_id
@@ -452,20 +453,20 @@ abstract class AbstractLink implements GradebookItem
     }
 
     /**
-     * @param int $idevaluation
+     * @param int $evaluationId
      */
-    public static function add_link_log($idevaluation, $nameLog = null)
+    public static function add_link_log($evaluationId, $nameLog = null)
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
-        $dateobject = self::load($idevaluation, null, null, null, null);
+        $dateobject = self::load($evaluationId, null, null, null, null);
         $current_date_server = api_get_utc_datetime();
         $arreval = get_object_vars($dateobject[0]);
         $description_log = isset($arreval['description']) ? $arreval['description'] : '';
         if (empty($nameLog)) {
             if (isset($_POST['name_link'])) {
                 $name_log = isset($_POST['name_link']) ? $_POST['name_link'] : $arreval['course_code'];
-            } elseif (isset($_POST['link_'.$idevaluation]) && $_POST['link_'.$idevaluation]) {
-                $name_log = $_POST['link_'.$idevaluation];
+            } elseif (isset($_POST['link_'.$evaluationId]) && $_POST['link_'.$evaluationId]) {
+                $name_log = $_POST['link_'.$evaluationId];
             } else {
                 $name_log = $arreval['course_code'];
             }

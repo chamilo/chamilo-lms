@@ -146,7 +146,6 @@ class GradebookDataGenerator
 
                     // Ranking
                     $ranking = $this->buildRankingColumn($item, $userId, $userCount);
-
                     $row['ranking'] = $ranking['display'];
                     $row['ranking_score'] = $ranking['score'];
 

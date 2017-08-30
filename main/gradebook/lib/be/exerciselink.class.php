@@ -419,7 +419,8 @@ class ExerciseLink extends AbstractLink
         return false;
     }
 
-    public function is_allowed_to_change_name() {
+    public function is_allowed_to_change_name()
+    {
         return false;
     }
 

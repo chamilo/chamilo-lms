@@ -475,7 +475,6 @@ if (!empty($courseInfo)) {
         )
     );
 }
-
 // get information about connections on the platform by student
 $first_connection_date = Tracking::get_first_connection_date($user_info['user_id']);
 if ($first_connection_date == '') {

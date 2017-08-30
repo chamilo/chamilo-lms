@@ -11,7 +11,6 @@
  * @package chamilo.learnpath
  */
 
-$_SESSION['whereami'] = 'lp/build';
 $this_section = SECTION_COURSES;
 
 api_protect_course_script();

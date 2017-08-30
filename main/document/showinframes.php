@@ -156,7 +156,6 @@ if (empty($document_data['parents'])) {
 }
 
 $this_section = SECTION_COURSES;
-$_SESSION['whereami'] = 'document/view';
 $nameTools = get_lang('Documents');
 
 /**

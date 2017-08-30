@@ -17,8 +17,6 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
  */
 
 $use_anonymous = true;
-
-$_SESSION['whereami'] = 'lp/view';
 $this_section = SECTION_COURSES;
 
 if ($lp_controller_touched != 1) {

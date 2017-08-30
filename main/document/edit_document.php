@@ -52,7 +52,6 @@ $(document).ready(function() {
 
 </script>';
 
-$_SESSION['whereami'] = 'document/create';
 $this_section = SECTION_COURSES;
 $lib_path = api_get_path(LIBRARY_PATH);
 

@@ -8,7 +8,6 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$_SESSION['whereami'] = 'lp/impress';
 $this_section = SECTION_COURSES;
 
 //To prevent the template class

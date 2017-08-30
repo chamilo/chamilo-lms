@@ -78,7 +78,9 @@ class OpenofficeText extends OpenofficeDocument
 
         // Chamilo styles.
         $my_style = api_get_setting('stylesheets');
-        if (empty($my_style)) { $my_style = 'chamilo'; }
+        if (empty($my_style)) {
+            $my_style = 'chamilo';
+        }
         $style_to_import = "<style type=\"text/css\">\r\n";
         $style_to_import .= '@import "'.api_get_path(WEB_CODE_PATH).'css/'.$my_style.'/default.css";'."\n";
         $style_to_import .= "</style>\r\n";
@@ -128,9 +130,9 @@ class OpenofficeText extends OpenofficeDocument
         $items_to_create[get_lang('Introduction')] = $intro_content;
 
         for ($i = 0; $i < count($matches[0]); $i++) {
-
-            if (empty($matches[1][$i]))
+            if (empty($matches[1][$i])) {
                 continue;
+            }
 
             $content = strstr($content, $matches[0][$i]);
             if ($i + 1 !== count($matches[0])) {
@@ -254,7 +256,7 @@ class OpenofficeText extends OpenofficeDocument
                         //echo Display::return_message(print_r($_POST));
                         $di = new ChamiloIndexer();
                         isset($_POST['language']) ? $lang = Database::escape_string($_POST['language']) : $lang = 'english';
-                        $di->connectDb(NULL, NULL, $lang);
+                        $di->connectDb(null, null, $lang);
                         $ic_slide = new IndexableChunk();
                         $ic_slide->addValue('title', $slide_name);
                         $specific_fields = get_specific_field_list();
@@ -317,7 +319,8 @@ class OpenofficeText extends OpenofficeDocument
      * @param	string	Page content
      * @return	string	Formatted page content
      */
-    public function format_page_content($header, $content) {
+    public function format_page_content($header, $content)
+    {
         // Limit the width of the doc.
         list($max_width, $max_height) = explode('x', api_get_setting('service_ppt2lp', 'size'));
 

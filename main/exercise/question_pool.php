@@ -171,12 +171,11 @@ if ($is_allowedToEdit) {
     }
 }
 
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array('url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']), 'name' => get_lang('ToolGradebook'));
+if (api_is_in_gradebook()) {
+    $interbreadcrumb[] = array(
+        'url' => Category::getUrl(),
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
 // if admin of course

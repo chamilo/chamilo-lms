@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use ChamiloSession as Session;
 
 /**
  * Class Category
@@ -1814,7 +1815,6 @@ class Category implements GradebookItem
             // All students
             // Course admin
             if (api_is_allowed_to_edit() && !api_is_platform_admin()) {
-
                 // root
                 if ($this->id == 0) {
                     return $this->get_root_categories_for_teacher(
@@ -1857,7 +1857,15 @@ class Category implements GradebookItem
             } elseif (api_is_platform_admin()) {
                 // platform admin
                 // we explicitly avoid listing subcats from another session
-                return self::load(null, null, $course_code, $this->id, null, $session_id, $order);
+                return self::load(
+                    null,
+                    null,
+                    $course_code,
+                    $this->id,
+                    null,
+                    $session_id,
+                    $order
+                );
             }
         }
 
@@ -2554,4 +2562,30 @@ class Category implements GradebookItem
         $this->studentList = $list;
     }
 
+    /**
+     * @return string
+     */
+    public static function getUrl()
+    {
+        $url = Session::read('gradebook_dest');
+
+        return $url;
+    }
+
+    /**
+     * Destination is index.php or gradebook.php
+     * @param string $url
+     */
+    public static function setUrl($url)
+    {
+        switch ($url) {
+            case 'gradebook.php':
+                $url = api_get_path(WEB_CODE_PATH).'gradebook/gradebook.php?';
+                break;
+            case 'index.php':
+                $url = api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq().'&';
+                break;
+        }
+        Session::write('gradebook_dest', $url);
+    }
 }

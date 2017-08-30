@@ -15,13 +15,14 @@ class WSCMInbox extends WSCM
 {
     public function unreadMessage($username, $password)
     {
-        if ($this->verifyUserPass($username, $password) == "valid")
-        {
+        if ($this->verifyUserPass($username, $password) == "valid") {
             $table_message = Database::get_main_table(TABLE_MESSAGE);
             $user_id = UserManager::get_user_id_from_username($username);
             $condition_msg_status = ' msg_status = 1 '; // define('MESSAGE_STATUS_UNREAD', '1');
 
-            $sql_query = "SELECT COUNT(*) as number_messages FROM $table_message WHERE $condition_msg_status AND user_receiver_id=".$user_id;
+            $sql_query = "SELECT COUNT(*) as number_messages 
+                          FROM $table_message 
+                          WHERE $condition_msg_status AND user_receiver_id=".$user_id;
 
             $sql_result = Database::query($sql_query);
             $result = Database::fetch_array($sql_result);
@@ -29,7 +30,6 @@ class WSCMInbox extends WSCM
         }
         return "0";
     }
-
 
     public function get_message_id(
         $username,
@@ -57,7 +57,6 @@ class WSCMInbox extends WSCM
         } else {
             return get_lang('InvalidId');
         }
-
     }
 
     public function get_message_data($username, $password, $message_id, $field)
@@ -95,7 +94,7 @@ class WSCMInbox extends WSCM
 
             $sql_result = Database::query($sql_query);
             $result = Database::fetch_row($sql_result);
-            return (htmlcode) ? html_entity_decode($result[0]) : $result[0];
+            return $htmlcode ? html_entity_decode($result[0]) : $result[0];
 
         } else {
             return get_lang('InvalidId');
@@ -112,10 +111,9 @@ class WSCMInbox extends WSCM
             $user_id = UserManager::get_user_id_from_username($username);
 
             $table_message = Database::get_main_table(TABLE_MESSAGE);
-
-            $sql_query = "SELECT id FROM $table_message ".
-					 "WHERE user_sender_id=".$user_id." AND msg_status=".MESSAGE_STATUS_OUTBOX." ".
-					 "ORDER BY send_date LIMIT $from,$number_of_items";
+            $sql_query = "SELECT id FROM $table_message 
+                          WHERE user_sender_id=".$user_id." AND msg_status=".MESSAGE_STATUS_OUTBOX." 					 
+                          ORDER BY send_date LIMIT $from,$number_of_items";
 
             $sql_result = Database::query($sql_query);
             $message = "#";
@@ -138,17 +136,17 @@ class WSCMInbox extends WSCM
                 case 'sender':
                     $field_table = "user_sender_id";
                     break;
-                case 'title' :
+                case 'title':
                     $htmlcode = true;
                     $field_table = "title";
                     break;
-                case 'date' :
+                case 'date':
                     $field_table = "send_date";
                     break;
-                case 'status' :
+                case 'status':
                     $field_table = "msg_status";
                     break;
-                case 'content' :
+                case 'content':
                     $htmlcode = true;
                     $field_table = "content";
                     break;
@@ -163,10 +161,10 @@ class WSCMInbox extends WSCM
             $sql_result = Database::query($sql_query);
             $result = Database::fetch_row($sql_result);
 
-            return (htmlcode) ? html_entity_decode($result[0]) : $result[0];
-
-        } else
+            return $htmlcode ? html_entity_decode($result[0]) : $result[0];
+        } else {
             return get_lang('InvalidId');
+        }
     }
 
     public function message_send(
@@ -205,15 +203,13 @@ class WSCMInbox extends WSCM
         } else {
             return get_lang('InvalidId');
         }
-
     }
 
     protected function set_message_as_read($user_id, $message_id)
     {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $query = "UPDATE $table_message SET msg_status = '".MESSAGE_STATUS_NEW."' WHERE user_receiver_id=".$user_id." AND id='".$message_id."';";
-        $result = Database::query($query);
-
+        Database::query($query);
     }
 }
 

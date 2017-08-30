@@ -775,19 +775,17 @@ if ($question_count != 0) {
     }
 }
 
-if (!empty ($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
-    $_SESSION['gradebook'] = Security::remove_XSS($_GET['gradebook']);
-    $gradebook = $_SESSION['gradebook'];
-} elseif (empty ($_GET['gradebook'])) {
-    unset($_SESSION['gradebook']);
-    $gradebook = '';
+if (api_is_in_gradebook()) {
+    $interbreadcrumb[] = array(
+        'url' => Category::getUrl(),
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
-if (!empty ($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array('url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']), 'name' => get_lang('ToolGradebook'));
-}
-
-$interbreadcrumb[] = array("url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises'));
+$interbreadcrumb[] = array(
+    "url" => "exercise.php?".api_get_cidreq(),
+    "name" => get_lang('Exercises')
+);
 $interbreadcrumb[] = array("url" => "#", "name" => $objExercise->selectTitle(true));
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool

@@ -87,17 +87,9 @@ if ($page < 0) {
     $page = 1;
 }
 
-if (!empty($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
-    $_SESSION['gradebook'] = Security::remove_XSS($_GET['gradebook']);
-    $gradebook = $_SESSION['gradebook'];
-} elseif (empty($_GET['gradebook'])) {
-    unset($_SESSION['gradebook']);
-    $gradebook = '';
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }

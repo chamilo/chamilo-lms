@@ -111,15 +111,18 @@ switch ($action) {
 
 $course_code = api_get_course_id();
 
-$interbreadcrumb[] = array('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?', 'name' => get_lang('Gradebook'));
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('GradebookListOfStudentsReports'));
+$interbreadcrumb[] = array(
+    'url' => Category::getUrl(),
+    'name' => get_lang('Gradebook')
+);
+$interbreadcrumb[] = array(
+    'url' => '#',
+    'name' => get_lang('GradebookListOfStudentsReports')
+);
 
 $this_section = SECTION_COURSES;
-
 Display::display_header('');
-
 $token = Security::get_token();
-
 echo Display::page_header(get_lang('GradebookListOfStudentsReports'));
 
 echo '<div class="btn-group">';

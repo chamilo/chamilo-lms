@@ -40,7 +40,7 @@ function minItem(item) {
 </script>';
 
 $interbreadcrumb[] = array(
-    'url' => $_SESSION['gradebook_dest'].'?selectcat=1',
+    'url' => Category::getUrl().'selectcat=1',
     'name' => get_lang('ToolGradebook')
 );
 
@@ -100,16 +100,16 @@ if ($scoreform->validate()) {
 }
 
 $this_section = SECTION_COURSES;
-Display :: display_header(get_lang('ScoreEdit'));
+Display::display_header(get_lang('ScoreEdit'));
 
 if (((isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') ||
     (isset($_GET['selectcat']) && ($_SESSION['studentview'] == 'teacherview')))
 ) {
-    if (isset ($_GET['scoringupdated'])) {
+    if (isset($_GET['scoringupdated'])) {
         echo Display::return_message(get_lang('ScoringUpdated'), 'confirm', false);
     }
 
-    if (isset ($_GET['nouniqueranges'])) {
+    if (isset($_GET['nouniqueranges'])) {
         echo Display::return_message(get_lang('NoUniqueScoreRanges'), 'error', false);
     }
     $scoreform->display();

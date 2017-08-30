@@ -25,15 +25,10 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
 }
-/* SHOWING THE ADMIN TOOLS */
 
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }

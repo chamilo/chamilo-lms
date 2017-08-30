@@ -14,7 +14,6 @@ use ChamiloSession as Session;
 */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$_SESSION['whereami'] = 'document/editpaint';
 $this_section = SECTION_COURSES;
 $groupRights = Session::read('group_member_with_upload_rights');
 
@@ -42,11 +41,11 @@ $dir = str_replace('\\', '/', $dir); //and urlencode each url $curdirpath (hack 
 /* Constants & Variables */
 $current_session_id = api_get_session_id();
 //path for pixlr save
-$_SESSION['paint_dir'] = Security::remove_XSS($dir);
-if ($_SESSION['paint_dir'] == '/') {
-    $_SESSION['paint_dir'] = '';
+Session::write('paint_dir', Security::remove_XSS($dir));
+if ($dir == '/') {
+    Session::write('paint_dir', '');
 }
-$_SESSION['paint_file'] = basename(Security::remove_XSS($file_path));
+Session::write('paint_file', basename(Security::remove_XSS($file_path)));
 $get_file = Security::remove_XSS($file_path);
 $file = basename($get_file);
 $temp_file = explode(".", $file);
@@ -99,7 +98,7 @@ if (!$is_certificate_mode) {
     );
 } else {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('Gradebook')
     );
 }
@@ -141,7 +140,7 @@ $langpixlr = isset($pixlr_code_translation_table[$langpixlr]) ? $pixlredit_code_
 $loc = $langpixlr; // deprecated ?? TODO:check pixlr read user browser
 
 $exit_path = api_get_path(WEB_CODE_PATH).'document/exit_pixlr.php';
-$_SESSION['exit_pixlr'] = Security::remove_XSS($parent_id);
+Session::write('exit_pixlr', Security::remove_XSS($parent_id));
 $referrer = "Chamilo";
 $target_path = api_get_path(WEB_CODE_PATH).'document/save_pixlr.php';
 $target = $target_path;
@@ -202,12 +201,12 @@ $file_crip = $name_crip.'.'.$extension;
 $from = $filepath.$file;
 $to = api_get_path(SYS_ARCHIVE_PATH).'temp/images/'.$file_crip;
 copy($from, $to);
-$_SESSION['temp_realpath_image'] = $to;
+Session::write('temp_realpath_image', $to);
 
 //load image to url
 $to_url = api_get_path(WEB_ARCHIVE_PATH).'temp/images/'.$file_crip;
 $image = urlencode($to_url);
-$pixlr_url = api_get_protocol().'://pixlr.com/editor/?title='.$title.'&image='.$image.'&loc='.$loc.'&referrer='.$referrer.'&target='.$target.'&exit='.$exit_path.'&locktarget='.$locktarget.'&locktitle='.$locktitle.'&credentials='.$credentials;
+$pixlr_url = '//pixlr.com/editor/?title='.$title.'&image='.$image.'&loc='.$loc.'&referrer='.$referrer.'&target='.$target.'&exit='.$exit_path.'&locktarget='.$locktarget.'&locktitle='.$locktitle.'&credentials='.$credentials;
 
 //make frame an send image
 ?>

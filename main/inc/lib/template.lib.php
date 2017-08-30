@@ -446,12 +446,22 @@ class Template
     }
 
     /**
+     * If template not found in custom template folder, the default template
+     * will be used.
      * @param string $name
      *
      * @return string
      */
     public function get_template($name)
     {
+        if ($this->templateFolder != 'default') {
+            // Avoid missing template error, use the default file.
+            $file = api_get_path(SYS_CODE_PATH).'template/'.$this->templateFolder.'/'.$name;
+            if (!file_exists($file)) {
+                return 'default/'.$name;
+            }
+        }
+
         return $this->templateFolder.'/'.$name;
     }
 

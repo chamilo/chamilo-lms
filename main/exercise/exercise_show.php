@@ -135,16 +135,12 @@ if (!$is_allowedToEdit) {
     }
 }
 
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = Security::remove_XSS($_SESSION['gradebook']);
-}
-
 $allowRecordAudio = api_get_setting('enable_record_audio') === 'true';
 $allowTeacherCommentAudio = api_get_configuration_value('allow_teacher_comment_audio') === true;
 
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }

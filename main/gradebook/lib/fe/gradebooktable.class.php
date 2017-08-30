@@ -89,6 +89,8 @@ class GradebookTable extends SortableTable
             $this->set_header($column++, get_lang('Description'), false);
         }
 
+        $model = ExerciseLib::getCourseScoreModel();
+
         if ($this->teacherView) {
             $this->set_header(
                 $column++,
@@ -99,9 +101,11 @@ class GradebookTable extends SortableTable
         } else {
             $this->set_header($column++, get_lang('Weight'), false);
             $this->set_header($column++, get_lang('Result'), false);
-            $this->set_header($column++, get_lang('Ranking'), false);
-            $this->set_header($column++, get_lang('BestScore'), false);
-            $this->set_header($column++, get_lang('Average'), false);
+            if (empty($model)) {
+                $this->set_header($column++, get_lang('Ranking'), false);
+                $this->set_header($column++, get_lang('BestScore'), false);
+                $this->set_header($column++, get_lang('Average'), false);
+            }
 
             if (!empty($cats)) {
                 if ($this->exportToPdf == false) {
@@ -223,7 +227,6 @@ class GradebookTable extends SortableTable
         }
 
         $this->datagen->userId = $this->userId;
-
         $data_array = $this->datagen->get_data(
             $sorting,
             $from,
@@ -256,6 +259,8 @@ class GradebookTable extends SortableTable
         if ($this->exportToPdf) {
             $type = 'simple';
         }
+
+        $model = ExerciseLib::getCourseScoreModel();
 
         // Categories.
         if (!empty($data_array)) {
@@ -312,8 +317,9 @@ class GradebookTable extends SortableTable
                 );
 
                 if ($this->teacherView) {
-                    $row[] = $invisibility_span_open.Display::tag('p', $weight,
-                            array('class' => 'score')).$invisibility_span_close;
+                    $row[] = $invisibility_span_open.
+                        Display::tag('p', $weight, array('class' => 'score')).
+                        $invisibility_span_close;
                 } else {
                     $row[] = $invisibility_span_open.$weight.$invisibility_span_close;
                 }
@@ -373,7 +379,15 @@ class GradebookTable extends SortableTable
                         ];
 
                         // Student result
-                        $row[] = $value_data;
+                        if (empty($model)) {
+                            $row[] = $value_data;
+                        } else {
+                            $row[] = ExerciseLib::show_score(
+                                $data['result_score'][0],
+                                $data['result_score'][1]
+                            );
+                        }
+
                         $totalResultAverageValue = strip_tags(
                             $scoredisplay->display_score(
                                 $totalResult,
@@ -383,12 +397,15 @@ class GradebookTable extends SortableTable
                         $this->dataForGraph['my_result'][] = floatval($totalResultAverageValue);
                         $totalAverageValue = strip_tags($scoredisplay->display_score($totalAverage, SCORE_AVERAGE));
                         $this->dataForGraph['average'][] = floatval($totalAverageValue);
-                        // Ranking
-                        $row[] = $ranking;
-                        // Best
-                        $row[] = $best;
-                        // Average
-                        $row[] = $average;
+
+                        if (empty($model)) {
+                            // Ranking
+                            $row[] = $ranking;
+                            // Best
+                            $row[] = $best;
+                            // Average
+                            $row[] = $average;
+                        }
 
                         if (get_class($item) == 'Category') {
                             if ($this->exportToPdf == false) {
@@ -968,7 +985,7 @@ class GradebookTable extends SortableTable
         switch ($item->get_item_type()) {
             // category
             case 'C':
-                $prms_uri = '?selectcat='.$item->get_id().'&amp;view='.$view;
+                $prms_uri = '?selectcat='.$item->get_id().'&view='.$view;
                 if (isset($_GET['isStudentView'])) {
                     if (isset($is_student) || (isset($_SESSION['studentview']) && $_SESSION['studentview'] == 'studentview')) {
                         $prms_uri = $prms_uri.'&amp;isStudentView='.Security::remove_XSS($_GET['isStudentView']);
@@ -978,7 +995,7 @@ class GradebookTable extends SortableTable
                 $cat = new Category();
                 $show_message = $cat->show_message_resource_delete($item->get_course_code());
 
-                return '&nbsp;<a href="'.Security::remove_XSS($_SESSION['gradebook_dest']).$prms_uri.'">'
+                return '&nbsp;<a href="'.Category::getUrl().$prms_uri.'">'
                     .$item->get_name()
                     .'</a>'
                     .($item->is_course() ? ' &nbsp;['.$item->get_course_code().']'.$show_message : '');

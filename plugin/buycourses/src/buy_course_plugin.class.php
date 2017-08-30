@@ -433,7 +433,10 @@ class BuyCoursesPlugin extends Plugin
         $currency = $this->getSelectedCurrency();
 
         foreach ($courses as $course) {
-            $configurationCourses[] = $this->getCourseForConfiguration($course, $currency);
+            $configurationCourses[] = $this->getCourseForConfiguration(
+                $course,
+                $currency
+            );
         }
 
         return $configurationCourses;
@@ -527,7 +530,10 @@ class BuyCoursesPlugin extends Plugin
                 continue;
             }
 
-            $item = $this->getItemByProduct($session->getId(), self::PRODUCT_TYPE_SESSION);
+            $item = $this->getItemByProduct(
+                $session->getId(),
+                self::PRODUCT_TYPE_SESSION
+            );
 
             if (empty($item)) {
                 continue;
@@ -535,7 +541,10 @@ class BuyCoursesPlugin extends Plugin
 
             $sessionData = $this->getSessionInfo($session->getId());
             $sessionData['coach'] = $session->getGeneralCoach()->getCompleteName();
-            $sessionData['enrolled'] = $this->getUserStatusForSession(api_get_user_id(), $session);
+            $sessionData['enrolled'] = $this->getUserStatusForSession(
+                api_get_user_id(),
+                $session
+            );
             $sessionData['courses'] = array();
 
             foreach ($sessionCourses as $sessionCourse) {
@@ -580,7 +589,6 @@ class BuyCoursesPlugin extends Plugin
 
         $entityManager = Database::getManager();
         $cuRepo = $entityManager->getRepository('ChamiloCoreBundle:CourseRelUser');
-
         $buySaleTable = Database::get_main_table(self::TABLE_SALE);
 
         // Check if user bought the course
@@ -688,7 +696,10 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
-        $item = $this->getItemByProduct($course->getId(), self::PRODUCT_TYPE_COURSE);
+        $item = $this->getItemByProduct(
+            $course->getId(),
+            self::PRODUCT_TYPE_COURSE
+        );
 
         if (empty($item)) {
             return [];
@@ -737,7 +748,10 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
-        $item = $this->getItemByProduct($session->getId(), self::PRODUCT_TYPE_SESSION);
+        $item = $this->getItemByProduct(
+            $session->getId(),
+            self::PRODUCT_TYPE_SESSION
+        );
 
         if (empty($item)) {
             return [];
@@ -827,7 +841,6 @@ class BuyCoursesPlugin extends Plugin
             $paymentType,
             [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER, self::PAYMENT_TYPE_CULQI])
         ) {
-
             return false;
         }
 
@@ -972,7 +985,6 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $saleIsCompleted = false;
-
         switch ($sale['product_type']) {
             case self::PRODUCT_TYPE_COURSE:
                 $course = api_get_course_info_by_id($sale['product_id']);
@@ -1148,7 +1160,10 @@ class BuyCoursesPlugin extends Plugin
         $sessions = [];
 
         foreach ($sessionIds as $sessionId) {
-            $sessions[] = Database::getManager()->find('ChamiloCoreBundle:Session', $sessionId);
+            $sessions[] = Database::getManager()->find(
+                'ChamiloCoreBundle:Session',
+                $sessionId
+            );
         }
 
         return $sessions;
@@ -1211,7 +1226,10 @@ class BuyCoursesPlugin extends Plugin
 
         $courses = [];
         foreach ($courseIds as $courseId) {
-            $courses[] = Database::getManager()->find('ChamiloCoreBundle:Course', $courseId);
+            $courses[] = Database::getManager()->find(
+                'ChamiloCoreBundle:Course',
+                $courseId
+            );
         }
 
         return $courses;
@@ -1282,7 +1300,6 @@ class BuyCoursesPlugin extends Plugin
         $saleTable = Database::get_main_table(self::TABLE_SALE);
         $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
-
         $innerJoins = "
             INNER JOIN $currencyTable c ON s.currency_id = c.id
             INNER JOIN $userTable u ON s.user_id = u.id
@@ -1583,8 +1600,11 @@ class BuyCoursesPlugin extends Plugin
      * @param int $userId
      * @return array
      */
-    public function getPayouts($status = self::PAYOUT_STATUS_PENDING, $payoutId = false, $userId = false)
-    {
+    public function getPayouts(
+        $status = self::PAYOUT_STATUS_PENDING,
+        $payoutId = false,
+        $userId = false
+    ) {
         $condition = ($payoutId) ? 'AND p.id = '.intval($payoutId) : '';
         $condition2 = ($userId) ? ' AND p.user_id = '.intval($userId) : '';
         $typeResult = ($condition) ? 'first' : 'all';
@@ -1688,7 +1708,6 @@ class BuyCoursesPlugin extends Plugin
             2
         );
 
-
         $beneficiaries = $this->getBeneficiariesBySale($saleId);
         foreach ($beneficiaries as $beneficiary) {
             Database::insert(
@@ -1780,8 +1799,8 @@ class BuyCoursesPlugin extends Plugin
             ]
         );
 
-        if ($return && !empty($service['picture_crop_image_base_64'])
-            && !empty($service['picture_crop_result'])
+        if ($return && !empty($service['picture_crop_image_base_64']) &&
+            !empty($service['picture_crop_result'])
         ) {
             $img = str_replace('data:image/png;base64,', '', $service['picture_crop_image_base_64']);
             $img = str_replace(' ', '+', $img);
@@ -2096,7 +2115,10 @@ class BuyCoursesPlugin extends Plugin
      */
     public function cancelServiceSale($serviceSaleId)
     {
-        $this->updateServiceSaleStatus($serviceSaleId, self::SERVICE_STATUS_CANCELLED);
+        $this->updateServiceSaleStatus(
+            $serviceSaleId,
+            self::SERVICE_STATUS_CANCELLED
+        );
 
         return true;
     }
@@ -2113,7 +2135,10 @@ class BuyCoursesPlugin extends Plugin
             return true;
         }
 
-        $this->updateServiceSaleStatus($serviceSaleId, self::SERVICE_STATUS_COMPLETED);
+        $this->updateServiceSaleStatus(
+            $serviceSaleId,
+            self::SERVICE_STATUS_COMPLETED
+        );
 
         return true;
     }
@@ -2189,8 +2214,10 @@ class BuyCoursesPlugin extends Plugin
      * @param int $newStatus The new status
      * @return boolean
      */
-    private function updateServiceSaleStatus($serviceSaleId, $newStatus = self::SERVICE_STATUS_PENDING)
-    {
+    private function updateServiceSaleStatus(
+        $serviceSaleId,
+        $newStatus = self::SERVICE_STATUS_PENDING
+    ) {
         $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
 
         return Database::update(
@@ -2214,7 +2241,6 @@ class BuyCoursesPlugin extends Plugin
             $paymentType,
             [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER, self::PAYMENT_TYPE_CULQI])
         ) {
-
             return false;
         }
 

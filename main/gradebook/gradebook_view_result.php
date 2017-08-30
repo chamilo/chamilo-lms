@@ -19,7 +19,7 @@ if (!$isDrhOfCourse) {
 }
 
 $interbreadcrumb[] = array(
-    'url' => $_SESSION['gradebook_dest'],
+    'url' => Category::getUrl(),
     'name' => get_lang('Gradebook')
 );
 
@@ -29,15 +29,15 @@ if (empty($select_eval)) {
     api_not_allowed();
 }
 
-$displayscore = ScoreDisplay :: instance();
+$displayscore = ScoreDisplay::instance();
 $eval = Evaluation :: load($select_eval);
 $overwritescore = 0;
 if ($eval[0]->get_category_id() < 0) {
     // if category id is negative, then the evaluation's origin is a link
-    $link = LinkFactory :: get_evaluation_link($eval[0]->get_id());
-    $currentcat = Category :: load($link->get_category_id());
+    $link = LinkFactory::get_evaluation_link($eval[0]->get_id());
+    $currentcat = Category::load($link->get_category_id());
 } else {
-    $currentcat = Category:: load($eval[0]->get_category_id());
+    $currentcat = Category::load($eval[0]->get_category_id());
 }
 
 //load the result with the evaluation id
@@ -57,7 +57,7 @@ if (isset($_GET['editres'])) {
     $edit_res_xml = Security::remove_XSS($_GET['editres']);
     $resultedit = Result :: load($edit_res_xml);
     $edit_res_form = new EvalForm(
-        EvalForm :: TYPE_RESULT_EDIT,
+        EvalForm::TYPE_RESULT_EDIT,
         $eval[0],
         $resultedit[0],
         'edit_result_form',
@@ -69,13 +69,18 @@ if (isset($_GET['editres'])) {
         $values = $edit_res_form->exportValues();
         $result = new Result();
         $resultlog = new Result();
-        $resultlog->add_result__log($values['hid_user_id'], $select_eval);
+        $resultlog->addResultLog($values['hid_user_id'], $select_eval);
         $result->set_id($edit_res_xml);
         $result->set_user_id($values['hid_user_id']);
         $result->set_evaluation_id($select_eval);
         $row_value = isset($values['score']) ? $values['score'] : 0;
         if (!empty($row_value) || $row_value == 0) {
-            $result->set_score(api_number_format($row_value, api_get_setting('gradebook_number_decimals')));
+            $result->set_score(
+                api_number_format(
+                    $row_value,
+                    api_get_setting('gradebook_number_decimals')
+                )
+            );
         }
         $result->save();
         unset($result);
@@ -162,7 +167,9 @@ if (isset($_GET['import'])) {
                     $result = new Result();
                     $result->set_user_id($importedresult['user_id']);
                     if (!empty($importedresult['score'])) {
-                        $result->set_score(api_number_format($importedresult['score'], api_get_setting('gradebook_number_decimals')));
+                        $result->set_score(
+                            api_number_format($importedresult['score'], api_get_setting('gradebook_number_decimals'))
+                        );
                     }
                     if (!empty($importedresult['date'])) {
                         $result->set_date(api_get_utc_datetime($importedresult['date']));
@@ -183,7 +190,6 @@ if (isset($_GET['import'])) {
                 )
             );
             header('Location: '.api_get_self().'?import=&selecteval='.$select_eval.'&importnofile=');
-
             exit;
         }
         if ($overwritescore != 0) {
@@ -240,7 +246,7 @@ if (isset($_GET['export'])) {
         $export = $export_result_form->exportValues();
         $file_type = $export['file_type'];
         $filename = 'export_results_'.gmdate('Y-m-d_H-i-s');
-        $results = Result :: load(null, null, $select_eval);
+        $results = Result::load(null, null, $select_eval);
         $data = array(); //when file type is csv, add a header to the output file
         if ($file_type == 'csv') {
             $alldata[] = array(
@@ -307,12 +313,23 @@ if (isset($_GET['export'])) {
 
             // get data table
             if (api_sort_by_first_name()) {
-                $data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_FIRSTNAME, 0, null, false, true);
+                $data_array = $datagen->get_data(
+                    ResultsDataGenerator::RDG_SORT_FIRSTNAME,
+                    0,
+                    null,
+                    false,
+                    true
+                );
             } else {
-                $data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME, 0, null, false, true);
+                $data_array = $datagen->get_data(
+                    ResultsDataGenerator::RDG_SORT_LASTNAME,
+                    0,
+                    null,
+                    false,
+                    true
+                );
             }
             $data_table = array();
-
             foreach ($data_array as $data) {
                 $result = array();
                 $user_info = api_get_user_info($data['id']);
@@ -341,6 +358,7 @@ if (isset($_GET['export'])) {
                 }
                 $data_table[] = $result;
             }
+
             export_pdf_with_html(
                 $head_table,
                 $data_table,
@@ -364,11 +382,16 @@ if (isset($_GET['export'])) {
 
         switch ($file_type) {
             case 'xml':
-                Export :: arrayToXml($alldata, $filename, 'Result', 'XMLResults');
+                Export::arrayToXml(
+                    $alldata,
+                    $filename,
+                    'Result',
+                    'XMLResults'
+                );
                 exit;
                 break;
             case 'csv':
-                Export :: arrayToCsv($alldata, $filename);
+                Export::arrayToCsv($alldata, $filename);
                 exit;
                 break;
         }
@@ -386,7 +409,13 @@ if (isset($_GET['resultdelete'])) {
 if (isset($_POST['action'])) {
     $number_of_selected_items = count($_POST['id']);
     if ($number_of_selected_items == '0') {
-        Display::addFlash(Display::return_message(get_lang('NoItemsSelected'), 'warning', false));
+        Display::addFlash(
+            Display::return_message(
+                get_lang('NoItemsSelected'),
+                'warning',
+                false
+            )
+        );
     } else {
         switch ($_POST['action']) {
             case 'delete':
@@ -407,15 +436,35 @@ $addparams = array('selecteval' => $eval[0]->get_id());
 if (isset($_GET['print'])) {
     $datagen = new ResultsDataGenerator($eval[0], $allresults);
     if (api_sort_by_first_name()) {
-        $data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_FIRSTNAME, 0, null, true);
+        $data_array = $datagen->get_data(
+            ResultsDataGenerator :: RDG_SORT_FIRSTNAME,
+            0,
+            null,
+            true
+        );
     } else {
-        $data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME, 0, null, true);
+        $data_array = $datagen->get_data(
+            ResultsDataGenerator :: RDG_SORT_LASTNAME,
+            0,
+            null,
+            true
+        );
     }
     if ($displayscore->is_custom()) {
         if (api_is_western_name_order()) {
-            $header_names = array(get_lang('FirstName'), get_lang('LastName'), get_lang('Score'), get_lang('Display'));
+            $header_names = array(
+                get_lang('FirstName'),
+                get_lang('LastName'),
+                get_lang('Score'),
+                get_lang('Display')
+            );
         } else {
-            $header_names = array(get_lang('LastName'), get_lang('FirstName'), get_lang('Score'), get_lang('Display'));
+            $header_names = array(
+                get_lang('LastName'),
+                get_lang('FirstName'),
+                get_lang('Score'),
+                get_lang('Display')
+            );
         }
     } else {
         if (api_is_western_name_order()) {
@@ -429,7 +478,12 @@ if (isset($_GET['print'])) {
         $newarray[] = array_slice($data, 3);
     }
 
-    echo print_table($newarray, $header_names, get_lang('ViewResult'), $eval[0]->get_name());
+    echo print_table(
+        $newarray,
+        $header_names,
+        get_lang('ViewResult'),
+        $eval[0]->get_name()
+    );
     exit;
 } else {
     $resulttable = new ResultTable($eval[0], $allresults, $iscourse, $addparams);
@@ -459,7 +513,7 @@ if (isset($_GET['deleteall'])) {
 if (!isset($_GET['export']) && (!isset($_GET['import']))) {
     if (!isset($_GET['selectcat'])) {
         $interbreadcrumb[] = array(
-            'url' => $_SESSION['gradebook_dest'].'?selectcat='.$currentcat[0]->get_id().'&'.api_get_cidreq(),
+            'url' => Category::getUrl().'selectcat='.$currentcat[0]->get_id(),
             'name' => get_lang('Details')
         );
     }
@@ -498,19 +552,25 @@ if (isset($_GET['overwritemax'])) {
 if (isset($_GET['import_user_error'])) {
     $userinfo = api_get_user_info($_GET['import_user_error']);
     echo Display::return_message(
-        get_lang('UserInfoDoesNotMatch').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']),
+        get_lang('UserInfoDoesNotMatch').' '.
+        api_get_person_name($userinfo['firstname'], $userinfo['lastname']),
         'warning'
     );
 }
 if (isset($_GET['import_score_error'])) {
     $userinfo = api_get_user_info($_GET['import_score_error']);
-    echo Display::return_message(get_lang('ScoreDoesNotMatch').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']), 'warning');
+    echo Display::return_message(
+        get_lang('ScoreDoesNotMatch').' '.
+        api_get_person_name($userinfo['firstname'], $userinfo['lastname']),
+        'warning'
+    );
 }
+
 if ($file_type == null) {
     //show the result header
     if (isset($export_result_form) && !(isset($edit_res_form))) {
         echo $export_result_form->display();
-        DisplayGradebook :: display_header_result($eval[0], $currentcat[0]->get_id(), 1);
+        DisplayGradebook::display_header_result($eval[0], $currentcat[0]->get_id(), 1);
     } else {
         if (isset($import_result_form)) {
             echo $import_result_form->display();
@@ -518,9 +578,9 @@ if ($file_type == null) {
         if (isset($edit_res_form)) {
             echo $edit_res_form->toHtml();
         }
-        DisplayGradebook :: display_header_result($eval[0], $currentcat[0]->get_id(), 1);
+        DisplayGradebook::display_header_result($eval[0], $currentcat[0]->get_id(), 1);
     }
     // Letter-based scores are built from lib/results_data_generator.class.php::get_score_display()
     $resulttable->display();
-    Display :: display_footer();
+    Display::display_footer();
 }

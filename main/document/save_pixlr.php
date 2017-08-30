@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  * This file allows creating new svg and png documents with an online editor.
  *
@@ -23,7 +26,8 @@ if (!isset($_GET['title']) || !isset($_GET['type']) || !isset($_GET['image'])) {
     die();
 }
 
-if (!isset($_SESSION['paint_dir']) || !isset($_SESSION['whereami'])) {
+$paintDir = Session::read('paint_dir');
+if (empty($paintDir)) {
     api_not_allowed();
     die();
 }
@@ -40,10 +44,9 @@ $title = Database::escape_string(str_replace('_', ' ', $filename));
 $current_session_id = api_get_session_id();
 $groupId = api_get_group_id();
 $groupInfo = GroupManager::get_group_properties($groupId);
-$relativeUrlPath = $_SESSION['paint_dir'];
-$currentTool = $_SESSION['whereami'];
+$relativeUrlPath = Session::read('paint_dir');
 $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-$saveDir = $dirBaseDocuments.$_SESSION['paint_dir'];
+$saveDir = $dirBaseDocuments.$paintDir;
 $contents = file_get_contents($urlcontents);
 
 //Security. Verify that the URL is pointing to a file @ pixlr.com domain or an ip @ pixlr.com. Comment because sometimes return a ip number
@@ -149,12 +152,14 @@ if ($currentTool == 'document/createpaint') {
     //add new document to disk
     file_put_contents($documentPath, $contents);
 
+    $paintFile = Session::read('paint_file');
+
     //check path
-    if (!isset($_SESSION['paint_file'])) {
+    if (empty($paintFile)) {
         api_not_allowed();
         die();
     }
-    if ($_SESSION['paint_file'] == $paintFileName) {
+    if ($paintFile == $paintFileName) {
         $document_id = DocumentManager::get_document_id($_course, $relativeUrlPath.'/'.$paintFileName);
         update_existing_document($_course, $document_id, filesize($documentPath), null);
         api_item_property_update(
@@ -195,22 +200,22 @@ if ($currentTool == 'document/createpaint') {
 
 
 //delete temporal file
-$temp_file_2delete = $_SESSION['temp_realpath_image'];
+$temp_file_2delete = Session::read('temp_realpath_image');
 unlink($temp_file_2delete);
 
 //Clean sessions and return to Chamilo file list
-unset($_SESSION['paint_dir']);
-unset($_SESSION['paint_file']);
-unset($_SESSION['whereami']);
-unset($_SESSION['temp_realpath_image']);
+Session::erase('paint_dir');
+Session::erase('paint_file');
+Session::erase('temp_realpath_image');
 
-if (!isset($_SESSION['exit_pixlr'])) {
-    $location = api_get_path(WEB_CODE_PATH).'document/document.php';
+$exit = Session::read('exit_pixlr');
+if (empty($exit)) {
+    $location = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq();
     echo '<script>window.parent.location.href="'.$location.'"</script>';
     api_not_allowed(true);
 } else {
     echo '<div align="center" style="padding-top:150; font-family:Arial, Helvetica, Sans-serif;font-size:25px;color:#aaa;font-weight:bold;">'.get_lang('PleaseStandBy').'</div>';
-    $location = api_get_path(WEB_CODE_PATH).'document/document.php?id='.Security::remove_XSS($_SESSION['exit_pixlr']);
+    $location = api_get_path(WEB_CODE_PATH).'document/document.php?id='.Security::remove_XSS($exit).'&'.api_get_cidreq();
     echo '<script>window.parent.location.href="'.$location.'"</script>';
-    unset($_SESSION['exit_pixlr']);
+    Session::erase('exit_pixlr');
 }

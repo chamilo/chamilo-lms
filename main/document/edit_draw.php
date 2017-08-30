@@ -14,7 +14,6 @@ use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$_SESSION['whereami'] = 'document/editdraw';
 $this_section = SECTION_COURSES;
 $groupRights = Session::read('group_member_with_upload_rights');
 
@@ -27,6 +26,7 @@ $document_data = DocumentManager::get_document_data_by_id(
     true
 );
 
+$file_path = '';
 if (empty($document_data)) {
     api_not_allowed();
 } else {
@@ -44,11 +44,11 @@ $current_session_id = api_get_session_id();
 $group_id = api_get_group_id();
 
 //path for svg-edit save
-$_SESSION['draw_dir'] = Security::remove_XSS($dir);
-if ($_SESSION['draw_dir'] == '/') {
-    $_SESSION['draw_dir'] = '';
+Session::write('draw_dir', Security::remove_XSS($dir));
+if ($dir == '/') {
+    Session::write('draw_dir', '');
 }
-$_SESSION['draw_file'] = basename(Security::remove_XSS($file_path));
+Session::write('draw_file', basename(Security::remove_XSS($file_path)));
 $get_file = Security::remove_XSS($file_path);
 $file = basename($get_file);
 $temp_file = explode(".", $file);
@@ -103,7 +103,7 @@ if (!$is_certificate_mode) {
     );
 } else {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('Gradebook')
     );
 }

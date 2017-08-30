@@ -2,6 +2,7 @@
 /* See license terms in /license.txt */
 
 //use Chamilo\UserBundle\Entity\User;
+use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
@@ -1803,34 +1804,103 @@ class Event
      * Registers in track_e_course_access when user logs in for the first time to a course
      * @param int $courseId ID of the course
      * @param int $user_id ID of the user
-     * @param int $session_id ID of the session (if any)
+     * @param int $sessionId ID of the session (if any)
+     *
+     * @return bool
      */
-    public static function event_course_login($courseId, $user_id, $session_id)
+    public static function eventCourseLogin($courseId, $user_id, $sessionId)
     {
-        $course_tracking_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        if (Session::read('login_as')) {
+            return false;
+        }
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $loginDate = $logoutDate = api_get_utc_datetime();
 
-        //$counter represents the number of time this record has been refreshed
+        // $counter represents the number of time this record has been refreshed
         $counter = 1;
-
         $courseId = intval($courseId);
         $user_id = intval($user_id);
-        $session_id = intval($session_id);
+        $sessionId = intval($sessionId);
         $ip = api_get_real_ip();
 
-        $sql = "INSERT INTO $course_tracking_table(c_id, user_ip, user_id, login_course_date, logout_course_date, counter, session_id)
-                VALUES('".$courseId."', '".$ip."', '".$user_id."', '$loginDate', '$logoutDate', $counter, '".$session_id."')";
-        Database::query($sql);
+        $sql = "INSERT INTO $table(c_id, user_ip, user_id, login_course_date, logout_course_date, counter, session_id)
+                VALUES('".$courseId."', '".$ip."', '".$user_id."', '$loginDate', '$logoutDate', $counter, '".$sessionId."')";
+        $courseAccessId = Database::query($sql);
 
-        // Course catalog stats modifications see #4191
-        CourseManager::update_course_ranking(
-            null,
-            null,
-            null,
-            null,
-            true,
-            false
-        );
+        if ($courseAccessId) {
+            // Course catalog stats modifications see #4191
+            CourseManager::update_course_ranking(
+                null,
+                null,
+                null,
+                null,
+                true,
+                false
+            );
+            return true;
+        }
+    }
+
+    /**
+     * Updates the user - course - session every X minutes
+     * In order to avoid
+     * @param int $courseId
+     * @param int $userId
+     * @param int $sessionId
+     * @param int $minutes
+     *
+     * @return bool
+     */
+    public static function eventCourseUpdate(
+        $courseId,
+        $userId,
+        $sessionId,
+        $minutes = 5
+    ) {
+        if (Session::read('login_as')) {
+            return false;
+        }
+
+        if (empty($courseId) || empty($userId)) {
+            return false;
+        }
+
+        $courseId = intval($courseId);
+        $userId = intval($userId);
+        $sessionId = intval($sessionId);
+
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $sql = "SELECT course_access_id, logout_course_date 
+                FROM $table 
+                WHERE 
+                    c_id = $courseId AND
+                    session_id = $sessionId AND   
+                    user_id = $userId                     
+                ORDER BY login_course_date DESC
+                LIMIT 1";
+        $result = Database::query($sql);
+
+        // Save every 5 minutes by default
+        $seconds = $minutes * 60;
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result);
+            $id = $row['course_access_id'];
+            $logout = $row['logout_course_date'];
+            $now = time();
+            $logout = api_strtotime($logout, 'UTC');
+            if ($now - $logout > $seconds) {
+                $now = api_get_utc_datetime();
+                $sql = "UPDATE $table SET 
+                        logout_course_date = '$now', 
+                        counter = counter + 1
+                    WHERE course_access_id = $id";
+                Database::query($sql);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

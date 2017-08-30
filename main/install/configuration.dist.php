@@ -613,3 +613,14 @@ $_configuration['gradebook_badge_sidebar'] = [
 // When using the my-courses list filter by category, set this option to true
 // to only show courses in the user's configured language
 // $_configuration['my_courses_show_courses_in_user_language_only'] = false;
+
+// Hide base course announcements when entering a group.
+//$_configuration['hide_base_course_announcements_in_group'] = false;
+
+// Allow or block user subcriptions to a lp/lp category
+/*$_configuration['lp_subscription_settings'] = [
+    'options' => [
+        'allow_add_users_to_lp' => true,
+        'allow_add_users_to_lp_category' => true,
+    ]
+];*/

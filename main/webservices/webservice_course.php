@@ -705,9 +705,7 @@ class WSCourse extends WS
                 $descriptions = CourseDescription::get_descriptions($course_id);
                 $exists = false;
                 foreach ($descriptions as $description) {
-                    if ($description->get_description_type(
-                        ) == $course_desc_id
-                    ) {
+                    if ($description->get_description_type() == $course_desc_id) {
                         $exists = true;
                     }
                 }

@@ -195,7 +195,7 @@ class StudentPublicationLink extends AbstractLink
         $parentId = !$assignment ? 0 : $assignment->getId();
 
         if (empty($session)) {
-           $dql = 'SELECT a FROM ChamiloCourseBundle:CStudentPublication a
+            $dql = 'SELECT a FROM ChamiloCourseBundle:CStudentPublication a
                    WHERE
                         a.cId = :course AND
                         a.active = :active AND
@@ -209,7 +209,6 @@ class StudentPublicationLink extends AbstractLink
                 'parent' => $parentId,
                 'active' => true
             ];
-
         } else {
             $dql = 'SELECT a FROM ChamiloCourseBundle:CStudentPublication a
                     WHERE

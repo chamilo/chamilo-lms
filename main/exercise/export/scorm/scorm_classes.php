@@ -219,7 +219,6 @@ class ScormAnswerMultipleChoice extends Answer
         $type = $this->getQuestionType();
         $jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();';
         $jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;';
-
         $jstmpw .= 'questions_answers_correct['.$this->questionJSId.'] = new Array();';
 
         //not sure if we are going to export also the MULTIPLE_ANSWER_COMBINATION to SCORM
@@ -462,7 +461,6 @@ class ScormAnswerMatching extends Answer
         // - easiest display
         // - easiest randomisation if needed one day
         // (here I use array_values to change array keys from $code1 $code2 ... to 0 1 ...)
-
         // get max length of displayed array
 
         $nbrAnswers = $this->selectNbrAnswers();
@@ -938,21 +936,6 @@ class ScormSection
     public $standalone;
 
     /**
-     * Send a complete exercise in SCORM format, from its ID
-     *
-     * @param Exercise $exercise The exercise to export
-     * @param boolean $standalone Wether it should include XML tag and DTD line.
-     * @return string XML as a string, or an empty string if there's no exercise with given ID.
-     */
-    public static function export_exercise_to_scorm(Exercise $exercise, $standalone = true)
-    {
-        $ims = new ScormSection($exercise);
-        $xml = $ims->export($standalone);
-
-        return $xml;
-    }
-
-    /**
      * Constructor.
      * @param Exercise $exe The Exercise instance to export
      * @author Amand Tihon <amand@alrj.org>
@@ -960,6 +943,23 @@ class ScormSection
     public function __construct($exe)
     {
         $this->exercise = $exe;
+    }
+
+    /**
+     * Send a complete exercise in SCORM format, from its ID
+     *
+     * @param Exercise $exercise The exercise to export
+     * @param boolean $standalone Wether it should include XML tag and DTD line.
+     * @return string XML as a string, or an empty string if there's no exercise with given ID.
+     */
+    public static function export_exercise_to_scorm(
+        Exercise $exercise,
+        $standalone = true
+    ) {
+        $ims = new ScormSection($exercise);
+        $xml = $ims->export($standalone);
+
+        return $xml;
     }
 
     /**
@@ -1127,18 +1127,18 @@ class ScormSection
 
         list($js, $html) = $this->export_questions();
         $res = $this->start_page()
-            . $this->start_header()
-            . $this->css()
-            . $this->globalAssets()
-            . $this->start_js()
-            . $this->common_js()
-            . $js
-            . $this->end_js()
-            . $this->end_header()
-            . $this->start_body()
-            . $html
-            . $this->end_body()
-            . $this->end_page();
+            .$this->start_header()
+            .$this->css()
+            .$this->globalAssets()
+            .$this->start_js()
+            .$this->common_js()
+            .$js
+            .$this->end_js()
+            .$this->end_header()
+            .$this->start_body()
+            .$html
+            .$this->end_body()
+            .$this->end_page();
 
         return $res;
     }

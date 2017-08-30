@@ -4422,7 +4422,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
                     api_get_session_id()
                 );
             } else {
-                GradebookUtils::update_resource_from_course_gradebook(
+                GradebookUtils::updateResourceFromCourseGradebook(
                     $linkId,
                     $courseInfo['code'],
                     $params['weight']

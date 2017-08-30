@@ -70,14 +70,15 @@ function poly_compile($poly, $max, $test = false)
     $bords = array_fill(0, $bord_lenght, array()); // building this array
 
     /* adding the first point of the polygone */
-    if (is_array($bords[$poly[0]['y']])) //avoid warning
+    if (is_array($bords[$poly[0]['y']])) {
+        // avoid warning
         array_push($bords[$poly[0]['y']], $poly[0]['x']);
+    }
 
     $i = 1; // we re-use $i and $old_pente bellow the loop
     $old_pente = 0;
-    for (;    // for each points of the polygon but the first
-        $i < sizeof($poly) && (!empty($poly[$i]['x']) && !empty($poly[$i]['y'])); $i++) {
-
+     // for each points of the polygon but the first
+    for (; $i < sizeof($poly) && (!empty($poly[$i]['x']) && !empty($poly[$i]['y'])); $i++) {
         /* special cases */
         if ($poly[$i - 1]['y'] == $poly[$i]['y']) {
             if ($poly[$i - 1]['x'] == $poly[$i]['x'])
@@ -104,16 +105,20 @@ function poly_compile($poly, $max, $test = false)
         // if the sign of the elevation change from the one of the
         // previous edge, the point must be added a second time inside
         // $bords
-        if ($i > 1)
+        if ($i > 1) {
             if (($old_pente < 0 && $pente > 0)
-                    || ($old_pente > 0 && $pente < 0)) {
+                || ($old_pente > 0 && $pente < 0)) {
                 if (is_array($bords[$poly[$i]['y']])) //avoid warning
+                {
                     array_push($bords[$poly[$i]['y']], $poly[$i]['x']);
+                }
 
-                if (DEBUG)
+                if (DEBUG) {
                     echo '*('.$poly[$i]['x'].
                         ';'.$poly[$i]['y'].')   ';
+                }
             }
+        }
 
         /* detect the direction of the elevation in Y */
         $dy_inc = ($poly[$i]['y'] - $poly[$i - 1]['y']) > 0 ? 1 : -1;
@@ -141,10 +146,11 @@ function poly_compile($poly, $max, $test = false)
 
         // elevation between $poly[0]['x'] and $poly[1]['x'])
         $rest = $poly[0]['y'] - $poly[1]['y'];
-        if ($rest != 0)
+        if ($rest != 0) {
             $pente1 = ($poly[0]['x'] - $poly[1]['x']) / ($rest);
-        else
+        } else {
             $pente1 = 0;
+        }
 
         // elevation between $poly[$i-1]['x'] and $poly[0]['x'])
         $pente = ($poly[$i - 1]['x'] - $poly[0]['x']) /
@@ -173,13 +179,9 @@ function poly_compile($poly, $max, $test = false)
 //        if (DEBUG) echo "init: ".$poly[$i-1]['y']."  dy_inc: ".$dy_inc.
 //            "   end: ".$poly[0]['y'];
 
-        for ($dy = $poly[$i - 1]['y'] + $dy_inc;
-            $dy != $poly[0]['y'];
-            $dy += $dy_inc)
-        {
+        for ($dy = $poly[$i - 1]['y'] + $dy_inc; $dy != $poly[0]['y']; $dy += $dy_inc) {
             $x += $pente * $dy_inc;
             array_push($bords[$dy], round($x));
-//            if (DEBUG) echo '/('.$x.';'.$dy.')   ';
         }
     }
 
@@ -233,11 +235,13 @@ function poly_dump(&$poly, $max, $format = 'raw')
         $s = "<div style='font-size: 8px; line-height:3px'><pre>\n";
     }
     for ($i = 0; $i < $max['y']; $i++) {
-        for ($j = 0; $j < $max['x']; $j++)
-            if ($poly[$j][$i] == TRUE)
+        for ($j = 0; $j < $max['x']; $j++) {
+            if ($poly[$j][$i] == true) {
                 $s .= ($format == 'html' ? "<b>1</b>" : '1');
-            else
+            } else {
                 $s .= "0";
+            }
+        }
         $s .= ($format == 'html' ? "<br />\n" : "\n");
     }
     $s .= ($format == 'html' ? "</pre></div>\n" : "\n");
@@ -259,16 +263,19 @@ function poly_result(&$poly1, &$poly2, $max)
     $surfaceOf1 = 0;
     $surfaceOf2 = 0;
 
-    for ($i = 0; $i < $max['x']; $i++)
+    for ($i = 0; $i < $max['x']; $i++) {
         for ($j = 0; $j < $max['y']; $j++) {
             if (isset($poly1[$i][$j]) && ($poly1[$i][$j] == true)) {
                 $surfaceOf1++;
-                if (isset($poly2[$i][$j]) && ($poly2[$i][$j] == false))
+                if (isset($poly2[$i][$j]) && ($poly2[$i][$j] == false)) {
                     $onlyIn1++;
+                }
             }
-            if (isset($poly2[$i][$j]) && ($poly2[$i][$j] == true))
+            if (isset($poly2[$i][$j]) && ($poly2[$i][$j] == true)) {
                 $surfaceOf2++;
+            }
         }
+    }
 
     return array(
         "s1" => $surfaceOf1,

@@ -77,23 +77,16 @@ if ($current_forum['forum_of_group'] != 0) {
     }
 }
 
-/* Breadcrumbs */
-
-$gradebook = null;
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = Security::remove_XSS($_SESSION['gradebook']);
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
 $groupId = api_get_group_id();
 if (!empty($groupId)) {
     $_clean['toolgroup'] = $groupId;
-    $group_properties = GroupManager :: get_group_properties($_clean['toolgroup']);
+    $group_properties = GroupManager::get_group_properties($_clean['toolgroup']);
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),

@@ -958,7 +958,7 @@ if (isset($cidReset) && $cidReset) {
             if (!isset($_SESSION['login_as'])) {
                 //Course login
                 if (isset($_user['user_id'])) {
-                    Event::event_course_login(
+                    Event::eventCourseLogin(
                         api_get_course_int_id(),
                         api_get_user_id(),
                         api_get_session_id()
@@ -1506,6 +1506,12 @@ if ((isset($cas_login) && $cas_login && exist_firstpage_parameter()) ||
         $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH).$redirectCourseDir.'/';
     }
 }
+
+Event::eventCourseUpdate(
+    api_get_course_int_id(),
+    api_get_user_id(),
+    api_get_session_id()
+);
 
 Redirect::session_request_uri($logging_in, $user_id);
 

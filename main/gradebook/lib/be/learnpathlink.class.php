@@ -156,7 +156,6 @@ class LearnpathLink extends AbstractLink
             if ($rescount == 0) {
                 return null;
             } else {
-
                 switch ($type) {
                     case 'best':
                         return array($bestResult, 100);
@@ -246,8 +245,6 @@ class LearnpathLink extends AbstractLink
     {
         return false;
     }
-
-    // INTERNAL FUNCTIONS
 
     /**
      * Lazy load function to get the database table of the learnpath

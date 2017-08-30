@@ -14,7 +14,6 @@ use ChamiloSession as Session;
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$_SESSION['whereami'] = 'document/createaudio';
 $this_section = SECTION_COURSES;
 
 $nameTools = get_lang('CreateAudio');

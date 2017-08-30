@@ -72,10 +72,8 @@ class WSCMForum extends WSCM
         if ($this->verifyUserPass($username, $password) == "valid") {
             $threads_info = get_threads($forum_id);
             $threads_id = '#';
-            foreach ($threads_info as $thread)
-            {
-                if (isset($thread['thread_id']))
-                {
+            foreach ($threads_info as $thread) {
+                if (isset($thread['thread_id'])) {
                     $threads_id .= $thread['thread_id']."#";
                 }
             }
@@ -214,10 +212,8 @@ class WSCMForum extends WSCM
         $field
     ) {
         if ($this->verifyUserPass($username, $password) == "valid") {
-            $course_db = api_get_course_info($course_code);
-
-            $table_posts 	= Database::get_course_table(TABLE_FORUM_POST, $course_db['db_name']);
-            $table_users 	= Database::get_main_table(TABLE_MAIN_USER);
+            $table_posts = Database::get_course_table(TABLE_FORUM_POST);
+            $table_users = Database::get_main_table(TABLE_MAIN_USER);
 
             $sql = "SELECT * FROM ".$table_posts."posts, ".$table_users." users 
                     WHERE posts.poster_id=users.user_id AND posts.post_id='".Database::escape_string($post_id)."'";
@@ -247,9 +243,10 @@ class WSCMForum extends WSCM
                     $htmlcode = true;
                     $field_table = "title";
             }
-            return (htmlcode) ? html_entity_decode($post_info[$field_table]) : $post_info[$field_table];
-        } else
+            return ($htmlcode) ? html_entity_decode($post_info[$field_table]) : $post_info[$field_table];
+        } else {
             return get_lang('InvalidId');
+        }
     }
 
     public function send_post(
@@ -297,8 +294,9 @@ class WSCMForum extends WSCM
             $em->flush();
 
             return "Post enviado!";
-        } else
+        } else {
             return get_lang('InvalidId');
+        }
 
     }
 }

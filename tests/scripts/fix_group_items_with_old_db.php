@@ -62,7 +62,7 @@ $groups = getOldGroupsByCourse();
 
 // Set this optional filter to something else than empty if you want to only
 // check items of one course
-$optionalCourseFilter = '11';
+$optionalCourseFilter = '';
 $sqlOld = "SELECT * FROM c_item_property WHERE to_group_id IS NOT NULL AND to_group_id != 0";
 if (!empty($optionalCourseFilter)) {
     $sqlOld .= ' AND c_id = '.$optionalCourseFilter;
@@ -112,7 +112,7 @@ foreach ($oldDBH->query($sqlOld) as $oldRow) {
             }
         }
     } else {
-        //echo "xx> No corresponding c_item_property found".PHP_EOL;
+        echo "xx> No corresponding c_item_property found".PHP_EOL;
 
         // First check if the group referenced in the old database still exists.
         // This is originally the c_group_info.id, NOT the c_group_info.iid, so

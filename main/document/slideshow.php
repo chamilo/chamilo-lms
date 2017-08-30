@@ -27,9 +27,6 @@ if ($path != '/') {
 }
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 
-// Including the functions for the slideshow
-require_once 'slideshow.inc.php';
-
 // Breadcrumb navigation
 $url = 'document.php?curdirpath='.$pathurl;
 $originaltoolname = get_lang('Documents');
@@ -358,7 +355,7 @@ $course_id = api_get_course_int_id();
 
 if ($slide_id != 'all' && !empty($image_files_only)) {
     if (file_exists($image) && is_file($image)) {
-        $image_height_width = resize_image($image, $target_width, $target_height);
+        $image_height_width = DocumentManager::resizeImageSlideShow($image, $target_width, $target_height);
 
         $image_height = $image_height_width[0];
         $image_width = $image_height_width[1];

@@ -3368,7 +3368,7 @@ class learnpath
                 ON (li.lp_id = l.id AND l.c_id = li.c_id)
         		WHERE 
         		    li.id = $item_id AND
-        		    li.c_id = $course_id AND 
+        		    li.c_id = $course_id 
         		";
         if ($this->debug > 2) {
             error_log('New LP - In learnpath::get_link() - selecting item '.$sql, 0);

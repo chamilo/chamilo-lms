@@ -4802,8 +4802,8 @@ class DocumentManager
             copy($from_sys, $to_sys);
         }
 
-        //get  file from tmp directory
-        $_SESSION['temp_audio_nanogong'] = $to_sys;
+        // get file from tmp directory
+        Session::write('temp_audio_nanogong', $to_sys);
 
         return api_get_path(WEB_ARCHIVE_PATH).'temp/audio/'.$file_crip;
     }
@@ -4813,12 +4813,10 @@ class DocumentManager
      */
     public static function removeGeneratedAudioTempFile()
     {
-        if (isset($_SESSION['temp_audio_nanogong'])
-            && !empty($_SESSION['temp_audio_nanogong'])
-            && is_file($_SESSION['temp_audio_nanogong'])) {
-
-            unlink($_SESSION['temp_audio_nanogong']);
-            unset($_SESSION['temp_audio_nanogong']);
+        $tempAudio = Session::read('temp_audio_nanogong');
+        if (!empty(isset($tempAudio)) && is_file($tempAudio)) {
+            unlink($tempAudio);
+            Session::erase('temp_audio_nanogong');
         }
     }
 

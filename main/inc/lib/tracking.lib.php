@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
@@ -85,11 +86,33 @@ class Tracking
                 $messages = 0;
 
                 foreach ($users as $user_data) {
-                    $time += self::get_time_spent_on_the_course($user_data['user_id'], $course_info['code'], $sessionId);
-                    $avg_student_score += self::get_avg_student_score($user_data['user_id'], $course_info['code'], array(), $sessionId);
-                    $avg_student_progress += self::get_avg_student_progress($user_data['user_id'], $course_info['code'], array(), $sessionId);
-                    $work += self::count_student_assignments($user_data['user_id'], $course_info['code'], $sessionId);
-                    $messages += self::count_student_messages($user_data['user_id'], $course_info['code'], $sessionId);
+                    $time += self::get_time_spent_on_the_course(
+                        $user_data['user_id'],
+                        $course_info['code'],
+                        $sessionId
+                    );
+                    $avg_student_score += self::get_avg_student_score(
+                        $user_data['user_id'],
+                        $course_info['code'],
+                        array(),
+                        $sessionId
+                    );
+                    $avg_student_progress += self::get_avg_student_progress(
+                        $user_data['user_id'],
+                        $course_info['code'],
+                        array(),
+                        $sessionId
+                    );
+                    $work += self::count_student_assignments(
+                        $user_data['user_id'],
+                        $course_info['code'],
+                        $sessionId
+                    );
+                    $messages += self::count_student_messages(
+                        $user_data['user_id'],
+                        $course_info['code'],
+                        $sessionId
+                    );
                 }
 
                 $countUsers = count($users);
@@ -7052,17 +7075,19 @@ class TrackingCourseLog
 
     public function sort_users($a, $b)
     {
+        $tracking = ChamiloSession::read('tracking_column');
         return strcmp(
-            trim(api_strtolower($a[$_SESSION['tracking_column']])),
-            trim(api_strtolower($b[$_SESSION['tracking_column']]))
+            trim(api_strtolower($a[$tracking])),
+            trim(api_strtolower($b[$tracking]))
         );
     }
 
     public function sort_users_desc($a, $b)
     {
+        $tracking = ChamiloSession::read('tracking_column');
         return strcmp(
-            trim(api_strtolower($b[$_SESSION['tracking_column']])),
-            trim(api_strtolower($a[$_SESSION['tracking_column']]))
+            trim(api_strtolower($b[$tracking])),
+            trim(api_strtolower($a[$tracking]))
         );
     }
 

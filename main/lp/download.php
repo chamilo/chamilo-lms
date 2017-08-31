@@ -35,7 +35,6 @@ if ($_SESSION['oLP']) {
     $lp_item_id = $_SESSION['oLP']->current;
     $lp_item_info = new learnpathItem($lp_item_id);
     if (!empty($lp_item_info)) {
-        //if (basename($lp_item_info->path) == basename($doc_url)) {
         $visible = learnpath::is_lp_visible_for_student($lp_id, $user_id);
 
         if ($visible) {

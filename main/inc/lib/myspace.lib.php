@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
@@ -583,17 +584,19 @@ class MySpace
 
     public static function sort_users($a, $b)
     {
+        $tracking = Session::read('tracking_column');
         return api_strcmp(
-            trim(api_strtolower($a[$_SESSION['tracking_column']])),
-            trim(api_strtolower($b[$_SESSION['tracking_column']]))
+            trim(api_strtolower($a[$tracking])),
+            trim(api_strtolower($b[$tracking]))
         );
     }
 
     public static function rsort_users($a, $b)
     {
+        $tracking = Session::read('tracking_column');
         return api_strcmp(
-            trim(api_strtolower($b[$_SESSION['tracking_column']])),
-            trim(api_strtolower($a[$_SESSION['tracking_column']]))
+            trim(api_strtolower($b[$tracking])),
+            trim(api_strtolower($a[$tracking]))
         );
     }
 

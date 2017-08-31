@@ -32,7 +32,7 @@ $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 // Is this needed? This is probabaly done in the header file.
-$file = $_SESSION['file'];
+$file = Session::read('file');
 $oLP = unserialize(Session::read('lpobject'));
 $oItem = $oLP->items[$oLP->current];
 if (!is_object($oItem)) {

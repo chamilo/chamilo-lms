@@ -33,9 +33,8 @@ abstract class ChamiloForm
     public abstract function definition();
     public abstract function validation($data, $files = null);
 
-    public function validate(
-
-    ) {
+    public function validate()
+    {
         return $this->_form->validate();
     }
 
@@ -44,7 +43,8 @@ abstract class ChamiloForm
         return $this->_form->display();
     }
 
-    public function definition_after_data() {
+    public function definition_after_data()
+    {
     }
 
     public function return_form()

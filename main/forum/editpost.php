@@ -177,13 +177,31 @@ if ($origin != 'learnpath') {
     echo '<span style="float:right;">'.search_link().'</span>';
     if ($origin == 'group') {
         echo '<a href="../group/group_space.php?'.api_get_cidreq().'">'.
-            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('Groups'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon(
+                'back.png',
+                get_lang('BackTo').' '.get_lang('Groups'),
+                '',
+                ICON_SIZE_MEDIUM
+            ).
+            '</a>';
     } else {
         echo '<a href="index.php?'.api_get_cidreq().'">'.
-            Display::return_icon('back.png', get_lang('BackToForumOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon(
+                'back.png',
+                get_lang('BackToForumOverview'),
+                '',
+                ICON_SIZE_MEDIUM
+            ).
+            '</a>';
     }
     echo '<a href="viewforum.php?forum='.intval($_GET['forum']).'&'.api_get_cidreq().'">'.
-        Display::return_icon('forum.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon(
+            'forum.png',
+            get_lang('BackToForum'),
+            '',
+            ICON_SIZE_MEDIUM
+        ).
+        '</a>';
     echo '</div>';
 }
 

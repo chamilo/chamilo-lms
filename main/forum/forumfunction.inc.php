@@ -29,7 +29,6 @@ use Chamilo\CourseBundle\Entity\CForumThread;
  */
 
 define('FORUM_NEW_POST', 0);
-
 get_notifications_of_user();
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
@@ -156,17 +155,23 @@ function handle_forum_and_forumcategories($lp_id = null)
     // Change visibility of a forum or a forum category.
     if ($action_forum_cat == 'invisible' || $action_forum_cat == 'visible') {
         $return_message = change_visibility($get_content, $get_id, $action_forum_cat);
-        Display::addFlash(Display::return_message($return_message, 'confirmation', false));
+        Display::addFlash(
+            Display::return_message($return_message, 'confirmation', false)
+        );
     }
     // Change lock status of a forum or a forum category.
     if ($action_forum_cat == 'lock' || $action_forum_cat == 'unlock') {
         $return_message = change_lock_status($get_content, $get_id, $action_forum_cat);
-        Display::addFlash(Display::return_message($return_message, 'confirmation', false));
+        Display::addFlash(
+            Display::return_message($return_message, 'confirmation', false)
+        );
     }
     // Move a forum or a forum category.
     if ($action_forum_cat == 'move' && isset($_GET['direction'])) {
         $return_message = move_up_down($get_content, $_GET['direction'], $get_id);
-        Display::addFlash(Display::return_message($return_message, 'confirmation', false));
+        Display::addFlash(
+            Display::return_message($return_message, 'confirmation', false)
+        );
     }
     return $content;
 }
@@ -183,7 +188,11 @@ function handle_forum_and_forumcategories($lp_id = null)
  */
 function show_add_forumcategory_form($inputvalues = array(), $lp_id)
 {
-    $form = new FormValidator('forumcategory', 'post', 'index.php?'.api_get_cidreq());
+    $form = new FormValidator(
+        'forumcategory',
+        'post',
+        'index.php?'.api_get_cidreq()
+    );
     // hidden field if from learning path
     $form->addElement('hidden', 'lp_id', $lp_id);
     // Setting the form elements.
@@ -270,7 +279,12 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     foreach ($forum_categories as $key => $value) {
         $forum_categories_titles[$value['cat_id']] = $value['cat_title'];
     }
-    $form->addElement('select', 'forum_category', get_lang('InForumCategory'), $forum_categories_titles);
+    $form->addElement(
+        'select',
+        'forum_category',
+        get_lang('InForumCategory'),
+        $forum_categories_titles
+    );
     $form->applyFilter('forum_category', 'html_filter');
 
     if ($_course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD) {
@@ -354,14 +368,23 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
         $sysImagePath = api_get_path(SYS_COURSE_PATH).$baseImagePath;
 
         if (file_exists($sysImagePath)) {
-            $show_preview_image = Display::img($image_path, null, ['class' => 'img-responsive']);
+            $show_preview_image = Display::img(
+                $image_path,
+                null,
+                ['class' => 'img-responsive']
+            );
             $form->addElement('label', get_lang('PreviewImage'), $show_preview_image);
             $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
         }
     }
     $forum_image = isset($inputvalues['forum_image']) ? $inputvalues['forum_image'] : '';
     $form->addElement('file', 'picture', ($forum_image != '' ? get_lang('UpdateImage') : get_lang('AddImage')));
-    $form->addRule('picture', get_lang('OnlyImagesAllowed'), 'filetype', array('jpg', 'jpeg', 'png', 'gif'));
+    $form->addRule(
+        'picture',
+        get_lang('OnlyImagesAllowed'),
+        'filetype',
+        array('jpg', 'jpeg', 'png', 'gif')
+    );
     $form->addElement('html', '</div>');
 
     // The OK button
@@ -422,6 +445,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
+
         return $form->returnForm();
     }
 }
@@ -3594,7 +3618,12 @@ function show_edit_post_form(
     $defaults['status']['status'] = isset($current_post['status']) && !empty($current_post['status']) ? $current_post['status'] : 2;
 
     if ($forum_setting['allow_post_notification']) {
-        $form->addElement('checkbox', 'post_notification', '', get_lang('NotifyByEmail').' ('.$current_post['email'].')');
+        $form->addElement(
+            'checkbox',
+            'post_notification',
+            '',
+            get_lang('NotifyByEmail').' ('.$current_post['email'].')'
+        );
     }
 
     if ($forum_setting['allow_sticky'] &&
@@ -5800,8 +5829,13 @@ function getAttachmentsAjaxTable($postId = 0)
  *
  * @return array
  */
-function getAttachedFiles($forumId, $threadId, $postId = 0, $attachId = 0, $courseId = 0)
-{
+function getAttachedFiles(
+    $forumId,
+    $threadId,
+    $postId = 0,
+    $attachId = 0,
+    $courseId = 0
+) {
     $forumId = intval($forumId);
     $courseId = intval($courseId);
     $attachId = intval($attachId);

@@ -1088,7 +1088,12 @@ function return_lock_unlock_icon($content, $id, $current_lock_status, $additiona
     //check if the forum is blocked due
     if ($content == 'thread') {
         if (api_resource_is_locked_by_gradebook($id, LINK_FORUM_THREAD)) {
-            $html .= Display::return_icon('lock_na.png', get_lang('ResourceLockedByGradebook'), array(), ICON_SIZE_SMALL);
+            $html .= Display::return_icon(
+                'lock_na.png',
+                get_lang('ResourceLockedByGradebook'),
+                array(),
+                ICON_SIZE_SMALL
+            );
 
             return $html;
         }
@@ -2588,8 +2593,6 @@ function store_thread(
 
     $em = Database::getManager();
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
-
-    $gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : '';
     $upload_ok = 1;
     $has_attachment = false;
 
@@ -2651,19 +2654,15 @@ function store_thread(
         1 == $values['thread_qualify_gradebook']
     ) {
         // Add function gradebook.
-        $resourcetype = 5;
-        $resourceid = $lastThread->getIid();
         $resourcename = stripslashes($values['calification_notebook_title']);
-        $maxqualify = $values['numeric_calification'];
-        $weigthqualify = $values['weight_calification'];
         GradebookUtils::add_resource_to_course_gradebook(
             $values['category_id'],
             $courseCode,
-            $resourcetype,
-            $resourceid,
+            5,
+            $lastThread->getIid(),
             $resourcename,
-            $weigthqualify,
-            $maxqualify,
+            $values['weight_calification'],
+            $values['numeric_calification'],
             '',
             0,
             $sessionId
@@ -2819,7 +2818,7 @@ function store_thread(
     } else {
         $message .= get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'">'.
             get_lang('Forum').'</a><br />';
-        $message .= get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&gradebook='.$gradebook.'&thread='.$lastThread->getIid().'">'.
+        $message .= get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&thread='.$lastThread->getIid().'">'.
             get_lang('Message').'</a>';
     }
     $reply_info['new_post_id'] = $lastPostId;
@@ -2868,12 +2867,10 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
     $myThread = isset($_GET['thread']) ? (int) $_GET['thread'] : '';
     $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : '';
     $my_post = isset($_GET['post']) ? (int) $_GET['post'] : '';
-    $my_gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : '';
 
     $url = api_get_self().'?'.http_build_query([
         'action' => $action,
         'forum' => $forumId,
-        'gradebook' => $my_gradebook,
         'thread' => $myThread,
         'post' => $my_post
     ]).'&'.api_get_cidreq();
@@ -2889,7 +2886,6 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
     // Setting the form elements.
     $form->addElement('hidden', 'forum_id', $forumId);
     $form->addElement('hidden', 'thread_id', $myThread);
-    $form->addElement('hidden', 'gradebook', $my_gradebook);
     $form->addElement('hidden', 'action', $action);
 
     // If anonymous posts are allowed we also display a form to allow the user to put his name or username in.
@@ -3698,7 +3694,6 @@ function store_edit_post($forumInfo, $values)
 {
     $threadTable = Database::get_course_table(TABLE_FORUM_THREAD);
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
-    $gradebook = Security::remove_XSS($_GET['gradebook']);
     $course_id = api_get_course_int_id();
 
     //check if this post is the first of the thread
@@ -3779,7 +3774,7 @@ function store_edit_post($forumInfo, $values)
 
     $message = get_lang('EditPostStored').'<br />';
     $message .= get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&">'.get_lang('Forum').'</a><br />';
-    $message .= get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&gradebook='.$gradebook.'&thread='.$values['thread_id'].'&post='.Security::remove_XSS($_GET['post']).'">'.get_lang('Message').'</a>';
+    $message .= get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.$values['thread_id'].'&post='.Security::remove_XSS($_GET['post']).'">'.get_lang('Message').'</a>';
 
     Session::erase('formelements');
     Session::erase('origin');
@@ -4183,11 +4178,10 @@ function send_mail($user_info = array(), $thread_information = array())
  */
 function move_thread_form()
 {
-    $gradebook = Security::remove_XSS($_GET['gradebook']);
     $form = new FormValidator(
         'movepost',
         'post',
-        api_get_self().'?forum='.intval($_GET['forum']).'&gradebook='.$gradebook.'&thread='.intval($_GET['thread']).'&action='.Security::remove_XSS($_GET['action']).'&'.api_get_cidreq()
+        api_get_self().'?forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&action='.Security::remove_XSS($_GET['action']).'&'.api_get_cidreq()
     );
     // The header for the form
     $form->addElement('header', get_lang('MoveThread'));
@@ -4243,12 +4237,10 @@ function move_thread_form()
  */
 function move_post_form()
 {
-    $gradebook = Security::remove_XSS($_GET['gradebook']);
-    // initiate the object
     $form = new FormValidator(
         'movepost',
         'post',
-        api_get_self().'?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&gradebook='.$gradebook.'&post='.Security::remove_XSS($_GET['post']).'&action='.Security::remove_XSS($_GET['action']).'&post='.Security::remove_XSS($_GET['post'])
+        api_get_self().'?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&post='.Security::remove_XSS($_GET['post']).'&action='.Security::remove_XSS($_GET['action']).'&post='.Security::remove_XSS($_GET['post'])
     );
     // The header for the form
     $form->addElement('header', '', get_lang('MovePost'));
@@ -4566,7 +4558,6 @@ function display_forum_search_results($search_term)
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $session_id = api_get_session_id();
-    $gradebook = Security::remove_XSS($_GET['gradebook']);
     $course_id = api_get_course_int_id();
 
     // Defining the search strings as an array.
@@ -4648,7 +4639,7 @@ function display_forum_search_results($search_term)
                 prepare4display($categoryName).'</a> &gt; ';
             $search_results_item .= '<a href="viewforum.php?'.api_get_cidreq().'&forum='.$forumId.'&search='.urlencode($search_term).'">'.
                 prepare4display($forum_list[$row['forum_id']]['forum_title']).'</a> &gt; ';
-            $search_results_item .= '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&gradebook='.$gradebook.'&thread='.$row['thread_id'].'&search='.urlencode($search_term).'">'.
+            $search_results_item .= '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$row['thread_id'].'&search='.urlencode($search_term).'">'.
                 prepare4display($row['post_title']).'</a>';
             $search_results_item .= '<br />';
             if (api_strlen($row['post_title']) > 200) {

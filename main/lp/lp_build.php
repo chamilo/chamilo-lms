@@ -105,18 +105,16 @@ if (isset($is_success) && $is_success === true) {
     if ($is_new) {
         echo Display::return_message(get_lang('LearnpathAdded'), 'normal', false);
     }
-    // Display::addFlash(Display::return_message(get_lang('LPCreatedAddChapterStep'), 'normal', false));
-    $gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;
     echo Display::page_subheader(get_lang('LearnPathAddedTitle'));
     echo '<ul id="lp_overview" class="thumbnails">';
     echo show_block(
-        'lp_controller.php?'.api_get_cidreq().'&gradebook='.$gradebook.'&action=add_item&type=step&lp_id='.$_SESSION['oLP']->lp_id,
+        'lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.$_SESSION['oLP']->lp_id,
         get_lang("NewStep"),
         get_lang('NewStepComment'),
         'tools.png'
     );
     echo show_block(
-        'lp_controller.php?'.api_get_cidreq().'&gradebook='.$gradebook.'&action=view&lp_id='.$_SESSION['oLP']->lp_id,
+        'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$_SESSION['oLP']->lp_id,
         get_lang("Display"),
         get_lang('DisplayComment'),
         'view.png'

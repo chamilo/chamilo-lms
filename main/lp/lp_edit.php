@@ -49,7 +49,6 @@ function activate_end_date() {
 
 </script>';
 
-$gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;
 $defaults = array();
 $form = new FormValidator(
     'form1',

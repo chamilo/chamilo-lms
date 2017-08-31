@@ -23,10 +23,8 @@ $forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
 // Are we in a lp ?
 $origin = api_get_origin();
 $my_search = null;
-$gradebook = null;
 
 /* MAIN DISPLAY SECTION */
-
 /* Retrieving forum and forum category information */
 
 // We are getting all the information about the current forum and forum category.

@@ -108,9 +108,8 @@ if ($message != 'PostDeletedSpecial') {
     increase_thread_view($_GET['thread']);
 
     /* Action Links */
-
     echo '<div style="float:right;">';
-    $my_url = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&gradebook='.$gradebook.'&search='.Security::remove_XSS(urlencode($_GET['search']));
+    $my_url = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&search='.Security::remove_XSS(urlencode($_GET['search']));
     echo $my_url.'&view=flat">'.get_lang('FlatView').'</a> | ';
     echo $my_url.'&view=threaded">'.get_lang('ThreadedView').'</a> | ';
     echo $my_url.'&view=nested">'.get_lang('NestedView').'</a>';

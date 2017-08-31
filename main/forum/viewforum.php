@@ -338,8 +338,7 @@ echo '<div class="actions">';
 
 if ($origin != 'learnpath') {
     if (!empty($groupId)) {
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'group/group_space.php?'
-            . api_get_cidreq().'&gradebook='.$gradebook.'">'
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq().'">'
             . Display::return_icon('back.png', get_lang('BackTo')
             . ' '.get_lang('Groups'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {

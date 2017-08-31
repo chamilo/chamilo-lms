@@ -3268,18 +3268,14 @@ class learnpath
         $hide_teacher_icons_lp = api_get_configuration_value('hide_teacher_icons_lp');
         $html = '';
         if ($is_allowed_to_edit && $hide_teacher_icons_lp == false) {
-            $gradebook = '';
-            if (!empty($_GET['gradebook'])) {
-                $gradebook = Security::remove_XSS($_GET['gradebook']);
-            }
             if ($this->get_lp_session_id() == api_get_session_id()) {
                 $html .= '<div id="actions_lp" class="actions_lp"><hr>';
                 $html .= '<div class="btn-group">';
-                $html .= "<a class='btn btn-sm btn-default' href='lp_controller.php?".api_get_cidreq()."&gradebook=$gradebook&action=build&lp_id=".$this->lp_id."&isStudentView=false' target='_parent'>".
+                $html .= "<a class='btn btn-sm btn-default' href='lp_controller.php?".api_get_cidreq()."&action=build&lp_id=".$this->lp_id."&isStudentView=false' target='_parent'>".
                     Display::returnFontAwesomeIcon('street-view').get_lang('Overview')."</a>";
                 $html .= "<a class='btn btn-sm btn-default' href='lp_controller.php?".api_get_cidreq()."&action=add_item&type=step&lp_id=".$this->lp_id."&isStudentView=false' target='_parent'>".
                     Display::returnFontAwesomeIcon('pencil').get_lang('Edit')."</a>";
-                $html .= '<a class="btn btn-sm btn-default" href="lp_controller.php?'.api_get_cidreq()."&gradebook=$gradebook&action=edit&lp_id=".$this->lp_id.'&isStudentView=false">'.
+                $html .= '<a class="btn btn-sm btn-default" href="lp_controller.php?'.api_get_cidreq()."&action=edit&lp_id=".$this->lp_id.'&isStudentView=false">'.
                     Display::returnFontAwesomeIcon('cog').get_lang('Settings').'</a>';
                 $html .= '</div>';
                 $html .= '</div>';
@@ -6320,7 +6316,6 @@ class learnpath
         $isConfigPage = false,
         $allowExpand = true
     ) {
-        $gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;
         $actionsLeft = '';
         $actionsRight = '';
 
@@ -6332,7 +6327,6 @@ class learnpath
                 ICON_SIZE_MEDIUM
             ),
             'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
-                'gradebook' => $gradebook,
                 'action' => 'view',
                 'lp_id' => $this->lp_id,
                 'isStudentView' => 'true'
@@ -8041,11 +8035,9 @@ class learnpath
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset($this->arrMenu);
 
-        $gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;
-        $url = api_get_self().'?'.api_get_cidreq().'&gradeboook='.$gradebook.'&action='.$action.'&type='.$item_type.'&lp_id='.$this->lp_id;
+        $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&type='.$item_type.'&lp_id='.$this->lp_id;
 
         $form = new FormValidator('form', 'POST', $url);
-
         $defaults['title'] = api_html_entity_decode(
             $item_title,
             ENT_QUOTES,

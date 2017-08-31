@@ -873,13 +873,13 @@ Session::write('image_files_only', '');
 $image_files_only = '';
 if ($is_certificate_mode) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/index.php',
+        'url' => '../gradebook/index.php?'.api_get_cidreq(),
         'name' => get_lang('Gradebook')
     );
 } else {
     if ((isset($_GET['id']) && $_GET['id'] != 0) || isset($_GET['curdirpath']) || isset($_GET['createdir'])) {
         $interbreadcrumb[] = array(
-            'url' => 'document.php',
+            'url' => 'document.php?'.api_get_cidreq(),
             'name' => get_lang('Documents')
         );
     } else {
@@ -1349,7 +1349,7 @@ if ($isAllowedToEdit ||
                 $courseInfo,
                 api_get_user_id(),
                 $sessionId,
-                $groupIid,
+                api_get_group_id(),
                 $to_user_id,
                 $base_work_dir,
                 $dir_name,

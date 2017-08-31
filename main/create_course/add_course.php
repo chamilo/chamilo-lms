@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
+use Chamilo\CoreBundle\Entity\CourseCategory;
+
 /**
  * This script allows professors and administrative staff to create course sites.
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -11,9 +14,6 @@
  * "Course validation" feature, technical adaptation for Chamilo 1.8.8:
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>
  */
-
-use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
-use Chamilo\CoreBundle\Entity\CourseCategory;
 
 // Flag forcing the "current course" reset.
 $cidReset = true;
@@ -39,7 +39,9 @@ $accessUrlId = api_get_current_access_url_id();
 // true  - the new course is requested only and it is created after approval;
 // false - the new course is created immediately, after filling this form.
 $course_validation_feature = false;
-if (api_get_setting('course_validation') === 'true' && !api_is_platform_admin()) {
+if (api_get_setting('course_validation') === 'true' &&
+    !api_is_platform_admin()
+) {
     $course_validation_feature = true;
 }
 
@@ -191,7 +193,6 @@ $form->addElement(
 );
 
 if ($course_validation_feature) {
-
     // A special URL to terms and conditions that is set
     // in the platform settings page.
     $terms_and_conditions_url = trim(
@@ -291,7 +292,9 @@ if ($form->validate()) {
     }
 
     if ($wanted_code == '') {
-        $wanted_code = CourseManager::generate_course_code(api_substr($title, 0, CourseManager::MAX_COURSE_LENGTH_CODE));
+        $wanted_code = CourseManager::generate_course_code(
+            api_substr($title, 0, CourseManager::MAX_COURSE_LENGTH_CODE)
+        );
     }
 
     // Check whether the requested course code has already been occupied.

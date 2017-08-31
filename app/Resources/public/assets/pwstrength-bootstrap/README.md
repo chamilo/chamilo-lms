@@ -131,6 +131,16 @@ $("#passwdfield").pwstrength("ruleActive", "wordSequences", false);
 That would avoid looking for sequences in the password being tested.
 
 
+### Know if all password inputs pass a specific rule
+
+This method allows to make a quick check to test if all password inputs in the
+page pass a rule, the method returns a boolean value. Example:
+
+```javascript
+$("#passwdfield").pwstrength("ruleIsMet", "wordSequences");
+```
+
+
 ## Callback Functions
 
 The plugin provides three callback functions, onLoad, onKeyUp, and scoreCalculated.  You can use

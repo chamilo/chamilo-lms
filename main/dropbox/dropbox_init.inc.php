@@ -311,7 +311,9 @@ if (($postAction == 'download_received' || $postAction == 'download_sent') and !
  * Prevents access of all users that are not course members
  */
 
-if ((!$is_allowed_in_course || !$is_course_member) && !api_is_allowed_to_edit(null, true)) {
+if ((!$is_allowed_in_course || !$is_course_member) &&
+    !api_is_allowed_to_edit(null, true)
+) {
     if ($origin != 'learnpath') {
         api_not_allowed(true); //print headers/footers
     } else {

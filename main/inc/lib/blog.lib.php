@@ -2649,18 +2649,24 @@ class Blog
 
         // Get tasks for this month
         if ($_user['user_id']) {
-            $sql = " SELECT task_rel_user.*,  DAYOFMONTH(target_date) as task_day, task.title, blog.blog_name
-                FROM $tbl_blogs_tasks_rel_user task_rel_user
-                INNER JOIN $tbl_blogs_tasks task ON task_rel_user.task_id = task.task_id
-                INNER JOIN $tbl_blogs blog ON task_rel_user.blog_id = blog.blog_id
-                WHERE
-                    task_rel_user.c_id = $course_id AND
-                    task.c_id = $course_id AND
-                    blog.c_id = $course_id AND
-                    task_rel_user.user_id = ".$_user['user_id']." AND
-                    MONTH(target_date) = '$month' AND
-                    YEAR(target_date) = '$year'
-                ORDER BY target_date ASC";
+            $sql = "SELECT 
+                        task_rel_user.*,  
+                        DAYOFMONTH(target_date) as task_day, 
+                        task.title, 
+                        blog.blog_name
+                    FROM $tbl_blogs_tasks_rel_user task_rel_user
+                    INNER JOIN $tbl_blogs_tasks task 
+                    ON task_rel_user.task_id = task.task_id
+                    INNER JOIN $tbl_blogs blog 
+                    ON task_rel_user.blog_id = blog.blog_id
+                    WHERE
+                        task_rel_user.c_id = $course_id AND
+                        task.c_id = $course_id AND
+                        blog.c_id = $course_id AND
+                        task_rel_user.user_id = ".$_user['user_id']." AND
+                        MONTH(target_date) = '$month' AND
+                        YEAR(target_date) = '$year'
+                    ORDER BY target_date ASC";
             $result = Database::query($sql);
 
             if (Database::num_rows($result) > 0) {
@@ -2722,11 +2728,7 @@ class Blog
                         if (isset($tasks[$curday]) && is_array($tasks[$curday])) {
                             // Add tasks to calendar
                             foreach ($tasks[$curday] as $task) {
-                                $html .= '<a href="blog.php?action=execute_task&blog_id='.$task['blog_id'].'&task_id='.stripslashes(
-                                        $task['task_id']
-                                    ).'" title="'.$task['title'].' : '.get_lang(
-                                        'InBlog'
-                                    ).' : '.$task['blog_name'].' - '.get_lang('ExecuteThisTask').'">';
+                                $html .= '<a href="blog.php?action=execute_task&blog_id='.$task['blog_id'].'&task_id='.stripslashes($task['task_id']).'" title="'.$task['title'].' : '.get_lang('InBlog').' : '.$task['blog_name'].' - '.get_lang('ExecuteThisTask').'">';
                                 $html .= Display::return_icon('blog_task.gif', get_lang('ExecuteThisTask'));
                                 $html .= '</a>';
                             }
@@ -2752,11 +2754,14 @@ class Blog
      */
     public static function displayBlogCreateForm()
     {
-        $form = new FormValidator('add_blog', 'post', 'blog_admin.php?action=add');
+        $form = new FormValidator(
+            'add_blog',
+            'post',
+            'blog_admin.php?action=add'
+        );
         $form->addElement('header', get_lang('AddBlog'));
         $form->addElement('text', 'blog_name', get_lang('Title'));
         $form->addElement('textarea', 'blog_subtitle', get_lang('SubTitle'));
-
         $form->addElement('hidden', 'new_blog_submit', 'true');
         $form->addButtonSave(get_lang('SaveProject'));
 
@@ -2791,11 +2796,14 @@ class Blog
             $blog['blog_subtitle'] = Security::remove_XSS($_POST['blog_subtitle']);
         }
 
-        $form = new FormValidator('edit_blog', 'post', 'blog_admin.php?action=edit&blog_id='.intval($_GET['blog_id']));
+        $form = new FormValidator(
+            'edit_blog',
+            'post',
+            'blog_admin.php?action=edit&blog_id='.intval($_GET['blog_id'])
+        );
         $form->addElement('header', get_lang('EditBlog'));
         $form->addElement('text', 'blog_name', get_lang('Title'));
         $form->addElement('textarea', 'blog_subtitle', get_lang('SubTitle'));
-
         $form->addElement('hidden', 'edit_blog_submit', 'true');
         $form->addElement('hidden', 'blog_id', $blog['blog_id']);
         $form->addButtonSave(get_lang('Save'));
@@ -2916,8 +2924,10 @@ class Blog
 
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT path, filename, comment FROM $blog_table_attachment
-	        WHERE c_id = $course_id AND blog_id = $blog_id  $where";
+        $sql = "SELECT path, filename, comment 
+                FROM $blog_table_attachment
+	            WHERE c_id = $course_id AND blog_id = $blog_id  
+	            $where";
 
         $result = Database::query($sql);
         if (Database::num_rows($result) != 0) {
@@ -2997,27 +3007,28 @@ class Blog
         $userId = intval($userId);
 
         $sql = "SELECT DISTINCT blog.blog_id, post_id, title, full_text, post.date_creation
-			FROM $tbl_blogs blog
-			INNER JOIN $tbl_blog_post post
-			ON (blog.blog_id = post.blog_id AND blog.c_id = post.c_id)
-			WHERE
-				blog.c_id = $courseId AND
-				post.c_id = $courseId AND
-				author_id =  $userId AND 
-				visibility = 1
-			ORDER BY post.date_creation DESC ";
+                FROM $tbl_blogs blog
+                INNER JOIN $tbl_blog_post post
+                ON (blog.blog_id = post.blog_id AND blog.c_id = post.c_id)
+                WHERE
+                    blog.c_id = $courseId AND
+                    post.c_id = $courseId AND
+                    author_id =  $userId AND 
+                    visibility = 1
+                ORDER BY post.date_creation DESC ";
         $result = Database::query($sql);
         $return_data = '';
 
         if (Database::num_rows($result) != 0) {
             while ($row = Database::fetch_array($result)) {
                 $return_data .= '<div class="clear"></div><br />';
-                $return_data .= '<div class="actions" style="margin-left:5px;margin-right:5px;">'.Display::return_icon(
+                $return_data .= '<div class="actions" style="margin-left:5px;margin-right:5px;">'.
+                    Display::return_icon(
                         'blog_article.png',
                         get_lang('BlogPosts')
-                    ).' '.$row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.$courseCode.' " >'.get_lang(
-                        'SeeBlog'
-                    ).'</a></div></div>';
+                    ).' '.
+                    $row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.$courseCode.' " >'.
+                    get_lang('SeeBlog').'</a></div></div>';
                 $return_data .= '<br / >';
                 $return_data .= $row['full_text'];
                 $return_data .= '<br /><br />';
@@ -3043,22 +3054,22 @@ class Blog
         $courseId = intval($courseId);
 
         $sql = "SELECT DISTINCT blog.blog_id, comment_id, title, comment, comment.date_creation
-			FROM $tbl_blogs blog 
-			INNER JOIN  $tbl_blog_comment comment
-			ON (blog.blog_id = comment.blog_id AND blog.c_id = comment.c_id)
-			WHERE 	blog.c_id = $courseId AND
-					comment.c_id = $courseId AND
-					author_id = $userId AND
-					visibility = 1
-			ORDER BY blog_name";
+                FROM $tbl_blogs blog 
+                INNER JOIN  $tbl_blog_comment comment
+                ON (blog.blog_id = comment.blog_id AND blog.c_id = comment.c_id)
+                WHERE 	blog.c_id = $courseId AND
+                        comment.c_id = $courseId AND
+                        author_id = $userId AND
+                        visibility = 1
+                ORDER BY blog_name";
         $result = Database::query($sql);
         $return_data = '';
         if (Database::num_rows($result) != 0) {
             while ($row = Database::fetch_array($result)) {
                 $return_data .= '<div class="clear"></div><br />';
-                $return_data .= '<div class="actions" style="margin-left:5px;margin-right:5px;">'.$row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.Security::remove_XSS(
-                        $courseCode
-                    ).' " >'.get_lang('SeeBlog').'</a></div></div>';
+                $return_data .= '<div class="actions" style="margin-left:5px;margin-right:5px;">'.
+                    $row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.Security::remove_XSS($courseCode).' " >'.
+                    get_lang('SeeBlog').'</a></div></div>';
                 $return_data .= '<br / >';
                 $return_data .= $row['comment'];
                 $return_data .= '<br />';
@@ -3107,4 +3118,3 @@ class Blog
         return api_htmlentities($extract);
     }
 }
-

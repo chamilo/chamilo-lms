@@ -69,9 +69,9 @@ class Dropbox_Work
     public function __construct($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null)
     {
         if (func_num_args() > 1) {
-            $this->_createNewWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6);
+            $this->createNewWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6);
         } else {
-            $this->_createExistingWork($arg1);
+            $this->createExistingWork($arg1);
         }
     }
 
@@ -88,7 +88,7 @@ class Dropbox_Work
      * @todo    $author was originally a field but this has now been replaced by the first and lastname of the uploader (to prevent anonymous uploads)
      *            As a consequence this parameter can be removed
      */
-    public function _createNewWork($uploader_id, $title, $description, $author, $filename, $filesize)
+    public function createNewWork($uploader_id, $title, $description, $author, $filename, $filesize)
     {
         // Fill in the properties
         $this->uploader_id = intval($uploader_id);
@@ -173,7 +173,7 @@ class Dropbox_Work
      *
      * @param int $id
      */
-    public function _createExistingWork($id)
+    public function createExistingWork($id)
     {
         $course_id = api_get_course_int_id();
         $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -274,9 +274,9 @@ class Dropbox_SentWork extends Dropbox_Work
     public function __construct($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null)
     {
         if (func_num_args() > 1) {
-            $this->_createNewSentWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7);
+            $this->createNewSentWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7);
         } else {
-            $this->_createExistingSentWork($arg1);
+            $this->createExistingSentWork($arg1);
         }
     }
 
@@ -291,7 +291,7 @@ class Dropbox_SentWork extends Dropbox_Work
      * @param int $filesize
      * @param array $recipient_ids
      */
-    public function _createNewSentWork($uploader_id, $title, $description, $author, $filename, $filesize, $recipient_ids)
+    public function createNewSentWork($uploader_id, $title, $description, $author, $filename, $filesize, $recipient_ids)
     {
         $_course = api_get_course_info();
 
@@ -387,7 +387,7 @@ class Dropbox_SentWork extends Dropbox_Work
      *
      * @param int $id
      */
-    public function _createExistingSentWork($id)
+    public function createExistingSentWork($id)
     {
         $id = intval($id);
         $course_id = api_get_course_int_id();
@@ -517,13 +517,16 @@ class Dropbox_Person
         $id = intval($id);
         $sql = "DELETE FROM ".Database::get_course_table(TABLE_DROPBOX_FILE)."
                 WHERE c_id = $course_id AND cat_id = '".$id."' ";
-        if (!Database::query($sql)) return false;
+        Database::query($sql);
+
         $sql = "DELETE FROM ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)."
                 WHERE c_id = $course_id AND cat_id = '".$id."' ";
-        if (!Database::query($sql)) return false;
+        Database::query($sql);
+
         $sql = "DELETE FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
                 WHERE c_id = $course_id AND cat_id = '".$id."' ";
-        if (!Database::query($sql)) return false;
+        Database::query($sql);
+
         return true;
     }
 

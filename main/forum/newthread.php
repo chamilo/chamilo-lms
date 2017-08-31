@@ -41,7 +41,6 @@ require_once 'forumfunction.inc.php';
 
 // Are we in a lp ?
 $origin = api_get_origin();
-
 /* MAIN DISPLAY SECTION */
 $current_forum = get_forum_information($_GET['forum']);
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);

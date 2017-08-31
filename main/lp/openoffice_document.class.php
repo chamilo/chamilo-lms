@@ -16,7 +16,6 @@
  */
 abstract class OpenofficeDocument extends learnpath
 {
-
     public $first_item = 0;
     public $original_charset = 'utf-8';
     public $original_locale = 'en_US.UTF-8';
@@ -255,9 +254,7 @@ abstract class OpenofficeDocument extends learnpath
     }
 
     abstract function make_lp();
-
     abstract function add_docs_to_visio();
-
     abstract function add_command_parameters();
 
     /**
@@ -280,7 +277,6 @@ abstract class OpenofficeDocument extends learnpath
         $permissionFile = api_get_permissions_for_new_files();
         $permissionFolder = api_get_permissions_for_new_directories();
         if (file_exists($this->base_work_dir.'/'.$this->created_dir)) {
-
             return $ids;
         }
 
@@ -353,7 +349,6 @@ abstract class OpenofficeDocument extends learnpath
         }
 
         if (file_exists($this->base_work_dir.'/'.$this->created_dir)) {
-
             // Register Files to Document tool
             $ids[] = add_document(
                 $_course,

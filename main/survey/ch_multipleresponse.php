@@ -25,7 +25,13 @@ class ch_multipleresponse extends survey_question
         $config = array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120');
         if (is_array($formData['answers'])) {
             foreach ($formData['answers'] as $key => $value) {
-                $this->getForm()->addHtmlEditor('answers['.$key.']', null, false, false, $config);
+                $this->getForm()->addHtmlEditor(
+                    'answers['.$key.']',
+                    null,
+                    false,
+                    false,
+                    $config
+                );
             }
         }
 
@@ -37,8 +43,11 @@ class ch_multipleresponse extends survey_question
      * @param array $questionData
      * @param array $answers
      */
-    public function render(FormValidator $form, $questionData = array(), $answers = array())
-    {
+    public function render(
+        FormValidator $form,
+        $questionData = array(),
+        $answers = array()
+    ) {
         if ($questionData['display'] == 'vertical') {
             $class = 'checkbox';
         } else {
@@ -63,6 +72,5 @@ class ch_multipleresponse extends survey_question
         }
 
         $form->setDefaults($defaults);
-
     }
 }

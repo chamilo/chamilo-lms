@@ -37,10 +37,10 @@ if (!empty($_POST)) {
         $contactAction = Database::escape_string(trim($_POST['contact_action']));
         $actionId = intval($_POST['action_id']);
         $courseId = intval($_POST['course_id']);
-    
+
         $startDate = $yearStart."-".$monthStart."-".$dayStart;
         $endDate = $yearEnd."-".$monthEnd."-".$dayEnd;
-        
+
         if (!empty($actionId) && $actionId != '0') {
             $sql = "UPDATE plugin_sepe_actions SET 
                         action_origin='".$actionOrigin."', 
@@ -60,7 +60,7 @@ if (!empty($_POST)) {
                         schedule='".$schedule."', 
                         requirements='".$requirements."', 
                         contact_action='".$contactAction."' 
-                    WHERE id='".$actionId."';";    
+                    WHERE id='".$actionId."';";
         } else {
             $sql = "INSERT INTO plugin_sepe_actions (
                         action_origin, 
@@ -102,7 +102,6 @@ if (!empty($_POST)) {
         }
         $res = Database::query($sql);
         if (!$res) {
-            echo Database::error();
             $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
         } else {
             if ($actionId == '0') {
@@ -186,12 +185,12 @@ if (api_is_platform_admin()) {
         }
         $tpl->assign('new_action', '0');
     }
-    
+
     $yearList = array();
     if ($yearStart > $yearEnd) {
         $tmp = $yearStart;
         $yearStart = $yearEnd;
-        $yearEnd = $tmp;    
+        $yearEnd = $tmp;
     }
     $yearStart -= 5;
     $yearEnd += 5;
@@ -210,7 +209,7 @@ if (api_is_platform_admin()) {
         unset($_SESSION['sepe_message_error']);
     }
     $tpl->assign('sec_token', $token);
-    
+
     $listing_tpl = 'sepe/view/formative-action-edit.tpl';
     $content = $tpl->fetch($listing_tpl);
     $tpl->assign('content', $content);

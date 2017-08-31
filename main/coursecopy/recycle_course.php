@@ -58,7 +58,7 @@ if (Security::check_token('post') && (
     $recycle_type = '';
     if (isset($_POST['recycle_option']) && $_POST['recycle_option'] == 'full_backup') {
         $recycle_type = 'full_backup';
-    } else if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
+    } elseif (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
         $recycle_type = 'select_items';
     }
     $cr = new CourseRecycler($course);

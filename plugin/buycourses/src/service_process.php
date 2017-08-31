@@ -1,14 +1,14 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\Session;
+
 /**
  * Process payments for the Buy Courses plugin
  * @package chamilo.plugin.buycourses
  */
-
-use Chamilo\UserBundle\Entity\User,
-    Chamilo\CoreBundle\Entity\SessionRelCourseRelUser,
-    Chamilo\CoreBundle\Entity\Session;
 
 $cidReset = true;
 
@@ -79,7 +79,6 @@ if ($form->validate()) {
 
         header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_process_confirm.php');
     }
-
     exit;
 }
 
@@ -98,7 +97,10 @@ if (!$culqiEnabled) {
 }
 
 $form->addHtml(
-    Display::return_message($plugin->get_lang('PleaseSelectThePaymentMethodBeforeConfirmYourOrder'), 'info')
+    Display::return_message(
+        $plugin->get_lang('PleaseSelectThePaymentMethodBeforeConfirmYourOrder'),
+        'info'
+    )
 );
 $form->addRadio('payment_type', null, $paymentTypesOptions);
 $form->addHtml(
@@ -113,8 +115,11 @@ $selectOptions = [
 
 if ($typeUser) {
     $users = $em->getRepository('ChamiloUserBundle:User')->findAll();
-    $selectOptions[$userInfo['user_id']] = api_get_person_name($userInfo['firstname'], $userInfo['lastname'])
-        .' ('.get_lang('Myself').')';
+    $selectOptions[$userInfo['user_id']] = api_get_person_name(
+        $userInfo['firstname'],
+        $userInfo['lastname']
+    ).' ('.get_lang('Myself').')';
+
     if (!empty($users)) {
         /** @var User $user */
         foreach ($users as $user) {
@@ -134,7 +139,12 @@ if ($typeUser) {
         $selectOptions[$course->getCourse()->getId()] = $course->getCourse()->getTitle();
     }
     if (!$checker) {
-        $form->addHtml(Display::return_message($plugin->get_lang('YouNeedToBeRegisteredInAtLeastOneCourse'), 'error'));
+        $form->addHtml(
+            Display::return_message(
+                $plugin->get_lang('YouNeedToBeRegisteredInAtLeastOneCourse'),
+                'error'
+            )
+        );
     }
     $form->addSelect('info_select', get_lang('Course'), $selectOptions);
 } elseif ($typeSession) {
@@ -215,7 +225,12 @@ if ($typeUser) {
     $selectOptions = $selectOptions + $courseLpList + $sessionLpList;
 
     if (!$checker) {
-        $form->addHtml(Display::return_message($plugin->get_lang('YourCoursesNeedAtLeastOneLearningPath'), 'error'));
+        $form->addHtml(
+            Display::return_message(
+                $plugin->get_lang('YourCoursesNeedAtLeastOneLearningPath'),
+                'error'
+            )
+        );
     }
     $form->addSelect('info_select', get_lang('LearningPath'), $selectOptions);
 }

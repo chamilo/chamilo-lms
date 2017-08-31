@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Show information about OpenBadge citeria
+ * Show information about OpenBadge criteria
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.badge
  */

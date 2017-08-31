@@ -356,7 +356,7 @@ class DisplayGradebook
                     Display::return_icon('new_folder.png', get_lang('AddGradebook'), array(), ICON_SIZE_MEDIUM).'</a></td>';
             }
             if ($selectcat != '0') {
-                $my_category = $catobj->shows_all_information_an_category($catobj->get_id());
+                $my_category = $catobj->showAllCategoryInfo($catobj->get_id());
                 if ($my_api_cidreq == '') {
                     $my_api_cidreq = 'cidReq='.$my_category['course_code'];
                 }
@@ -400,6 +400,15 @@ class DisplayGradebook
                         "gradebook_display_summary.php?$my_api_cidreq&selectcat=".$selectcat
                     );
 
+                    $allow = api_get_configuration_value('gradebook_custom_student_report');
+                    if ($allow) {
+                        $actionsLeft .= Display::url(
+                            get_lang('GenerateCustomReport'),
+                            api_get_path(WEB_AJAX_PATH)."gradebook.ajax.php?$my_api_cidreq&a=generate_custom_report",
+                            ['class' => 'btn btn-default ajax']
+                        );
+                    }
+
                     // Right icons
                     $actionsRight = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&amp;cidReq='.$catobj->get_course_code().'&id_session='.$catobj->get_session_id().'">'.
                         Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -440,7 +449,7 @@ class DisplayGradebook
             $weight = intval($catobj->get_weight()) > 0 ? $catobj->get_weight() : 0;
             $weight = '<strong>'.get_lang('TotalWeight').' : </strong>'.$weight;
 
-            $min_certification = (intval($catobj->get_certificate_min_score() > 0) ? $catobj->get_certificate_min_score() : 0);
+            $min_certification = (intval($catobj->getCertificateMinScore() > 0) ? $catobj->getCertificateMinScore() : 0);
             $min_certification = get_lang('CertificateMinScore').' : '.$min_certification;
             $edit_icon = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&amp;cidReq='.$catobj->get_course_code().'&id_session='.$catobj->get_session_id().'">'.
                 Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';

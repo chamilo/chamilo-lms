@@ -7,8 +7,10 @@
  */
 
 $cidReset = true;
-
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_block_anonymous_users();
+Skill::isAllow();
 
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -79,7 +81,6 @@ $extra_params['autowidth'] = 'true';
 //height auto
 $extra_params['height'] = 'auto';
 //$extra_params['excel'] = 'excel';
-
 //$extra_params['rowList'] = array(10, 20 ,30);
 
 $jqgrid = Display::grid_js(

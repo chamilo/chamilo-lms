@@ -24,9 +24,25 @@ class ch_yesno extends survey_question
         $this->getForm()->setDefaults($formData);
 
         // The options
-        $config = array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120');
-        $this->getForm()->addHtmlEditor('answers[0]', get_lang('AnswerOptions'), true, false, $config);
-        $this->getForm()->addHtmlEditor('answers[1]', null, true, false, $config);
+        $config = array(
+            'ToolbarSet' => 'Survey',
+            'Width' => '100%',
+            'Height' => '120'
+        );
+        $this->getForm()->addHtmlEditor(
+            'answers[0]',
+            get_lang('AnswerOptions'),
+            true,
+            false,
+            $config
+        );
+        $this->getForm()->addHtmlEditor(
+            'answers[1]',
+            null,
+            true,
+            false,
+            $config
+        );
     }
 
     /**
@@ -44,16 +60,21 @@ class ch_yesno extends survey_question
             }
 
             $name = 'question'.$questionData['question_id'];
+            $radioAttributes = ['radio-class' => $class, 'label-class' => $class];
+
+            if (!empty($questionData['is_required'])) {
+                $radioAttributes['required'] = 'required';
+            }
 
             $form->addRadio(
                 $name,
                 null,
                 $questionData['options'],
-                ['radio-class' => $class, 'label-class' => $class]
+                $radioAttributes
             );
 
             if (!empty($answers)) {
-                $form->setDefaults([$name => $answers]);
+                $form->setDefaults([$name => is_array($answers) ? current($answers) : $answers]);
             }
         }
     }

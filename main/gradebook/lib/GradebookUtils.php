@@ -641,8 +641,8 @@ class GradebookUtils
      */
     public static function get_certificate_by_user_id($cat_id, $user_id)
     {
-        $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $sql = 'SELECT * FROM '.$table_certificate.'
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+        $sql = 'SELECT * FROM '.$table.'
                 WHERE cat_id="' . intval($cat_id).'" AND user_id="'.intval($user_id).'"';
 
         $result = Database::query($sql);
@@ -848,8 +848,20 @@ class GradebookUtils
         self::create_default_course_gradebook();
 
         // Cat list
-        $all_categories = Category::load(null, null, $course_code, null, null, $session_id, false);
-        $select_gradebook = $form->addElement('select', 'category_id', get_lang('SelectGradebook'));
+        $all_categories = Category::load(
+            null,
+            null,
+            $course_code,
+            null,
+            null,
+            $session_id,
+            false
+        );
+        $select_gradebook = $form->addElement(
+            'select',
+            'category_id',
+            get_lang('SelectGradebook')
+        );
 
         if (!empty($all_categories)) {
             foreach ($all_categories as $my_cat) {
@@ -1216,7 +1228,8 @@ class GradebookUtils
         $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
 
-        $sql = 'UPDATE '.$table_link.' SET weight = '."'".Database::escape_string($weight)."'".'
+        $sql = 'UPDATE '.$table_link.' 
+                SET weight = '."'".Database::escape_string($weight)."'".'
                 WHERE id = '.$linkId;
 
         Database::query($sql);
@@ -1272,7 +1285,7 @@ class GradebookUtils
         $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $id = intval($id);
         $evaluation = new Evaluation();
-        $evaluation->add_evaluation_log($id);
+        $evaluation->addEvaluationLog($id);
         $sql = 'UPDATE '.$table_evaluation.'
                SET weight = '."'".Database::escape_string($weight)."'".'
                WHERE id = '.$id;

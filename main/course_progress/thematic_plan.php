@@ -26,8 +26,6 @@ if (!empty($thematic_simple_list)) {
     }
 }
 
-//$i = 1;
-
 echo Display::tag('h2', $thematic_data['title']);
 echo $thematic_data['content'];
 
@@ -161,7 +159,13 @@ if ($action === 'thematic_plan_list') {
 
     // error messages
     if ($error) {
-        Display::addFlash(Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error', false));
+        Display::addFlash(
+            Display::return_message(
+                get_lang('FormHasErrorsPleaseComplete'),
+                'error',
+                false
+            )
+        );
     }
     $form->display();
 }

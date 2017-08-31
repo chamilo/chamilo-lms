@@ -1,0 +1,40 @@
+{% if grading_electronic.show %}
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-grading-electronic">
+        {{ 'GenerateFile'|get_plugin_lang('GradingElectronicPlugin') }}
+    </button>
+
+    <div class="modal fade" id="modal-grading-electronic" tabindex="-1" role="dialog"
+         aria-labelledby="modal-grading-electronic-title">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'Close'|get_lang }}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="modal-grading-electronic-title">
+                        {{ 'plugin_title'|get_plugin_lang('GradingElectronicPlugin') }}
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    {{ grading_electronic.form.display() }}
+                    <div id="modal-grading-electronic-result" class="text-center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).on('ready', function () {
+            $('form[name="frm_grading_electronic"]').on('submit', function (e) {
+                e.preventDefault();
+
+                var $self = $(this);
+                $.post('{{ _p.web_plugin }}grading_electronic/generate.php', $self.serialize())
+                .done(function (response) {
+                    $('#modal-grading-electronic-result').html(
+                        response
+                    );
+                });
+            });
+        });
+    </script>
+{% endif %}

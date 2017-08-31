@@ -133,24 +133,24 @@ function choose_image($file_name)
         $type['java'] = array('class', 'jar');
         $type['freemind'] = array('mm');
 
-        $image['word'] = 'word.gif';
-        $image['web'] = 'file_html.gif';
-        $image['image'] = 'file_image.gif';
+        $image['word'] = 'word.png';
+        $image['web'] = 'file_html.png';
+        $image['image'] = 'file_image.png';
         $image['image_vect'] = 'file_svg.png';
-        $image['audio'] = 'file_sound.gif';
-        $image['video'] = 'film.gif';
-        $image['excel'] = 'excel.gif';
-        $image['compressed'] = 'file_zip.gif';
+        $image['audio'] = 'file_sound.png';
+        $image['video'] = 'film.png';
+        $image['excel'] = 'excel.png';
+        $image['compressed'] = 'file_zip.png';
         $image['code'] = 'icons/22/mime_code.png';
-        $image['acrobat'] = 'file_pdf.gif';
-        $image['powerpoint'] = 'powerpoint.gif';
-        $image['flash'] = 'file_flash.gif';
+        $image['acrobat'] = 'file_pdf.png';
+        $image['powerpoint'] = 'powerpoint.png';
+        $image['flash'] = 'file_flash.png';
         $image['text'] = 'icons/22/mime_text.png';
-        $image['oo_writer'] = 'file_oo_writer.gif';
-        $image['oo_calc'] = 'file_oo_calc.gif';
-        $image['oo_impress'] = 'file_oo_impress.gif';
-        $image['oo_draw'] = 'file_oo_draw.gif';
-        $image['epub'] = 'file_epub.gif';
+        $image['oo_writer'] = 'file_oo_writer.png';
+        $image['oo_calc'] = 'file_oo_calc.png';
+        $image['oo_impress'] = 'file_oo_impress.png';
+        $image['oo_draw'] = 'file_oo_draw.png';
+        $image['epub'] = 'file_epub.png';
         $image['java'] = 'file_java.png';
         $image['freemind'] = 'file_freemind.png';
     }
@@ -179,31 +179,31 @@ function choose_image($file_name)
 function chooseFolderIcon($folderPath)
 {
     if ($folderPath == '/shared_folder') {
-        return 'folder_users.gif';
+        return 'folder_users.png';
     }
 
     if (strstr($folderPath, 'shared_folder_session_')) {
-        return 'folder_users.gif';
+        return 'folder_users.png';
     }
 
     switch ($folderPath) {
         case '/audio':
-            return 'folder_audio.gif';
+            return 'folder_audio.png';
         case '/flash':
-            return 'folder_flash.gif';
+            return 'folder_flash.png';
         case '/images':
-            return 'folder_images.gif';
+            return 'folder_images.png';
         case '/video':
-            return 'folder_video.gif';
+            return 'folder_video.png';
         case '/images/gallery':
-            return 'folder_gallery.gif';
+            return 'folder_gallery.png';
         case '/chat_files':
-            return 'folder_chat.gif';
+            return 'folder_chat.png';
         case '/learning_path':
-            return 'folder_learningpath.gif';
+            return 'folder_learningpath.png';
     }
 
-    return 'folder_document.gif';
+    return 'folder_document.png';
 }
 
 /**

@@ -520,7 +520,6 @@ if (is_array($forumCategories)) {
     }
 }
 
-
 $tpl = new Template($nameTools);
 $tpl->assign('introduction_section', $introduction);
 $tpl->assign('actions', $actions);

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Send a redirect to the user agent and exist
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
@@ -57,9 +59,17 @@ class Redirect
         $url = isset($_SESSION['request_uri']) ? Security::remove_XSS($_SESSION['request_uri']) : '';
         unset($_SESSION['request_uri']);
 
+        $afterLogin = Session::read('redirect_after_not_allow_page');
+
+        if (!empty($afterLogin) && isset($_GET['redirect_after_not_allow_page'])) {
+            Session::erase('redirect_after_not_allow_page');
+            self::navigate($afterLogin);
+        }
         if (!empty($url)) {
             self::navigate($url);
-        } elseif ($logging_in || (isset($_REQUEST['sso_referer']) && !empty($_REQUEST['sso_referer']))) {
+        } elseif ($logging_in ||
+            (isset($_REQUEST['sso_referer']) && !empty($_REQUEST['sso_referer']))
+        ) {
             if (isset($user_id)) {
                 // Make sure we use the appropriate role redirection in case one has been defined
                 $user_status = api_get_user_status($user_id);

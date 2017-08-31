@@ -33,7 +33,10 @@ Event::event_access_tool(TOOL_SURVEY);
  */
 
 $courseInfo = api_get_course_info();
-$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh($currentUserId, $courseInfo);
+$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+    $currentUserId,
+    $courseInfo
+);
 
 if ($isDrhOfCourse) {
     Display::display_header(get_lang('SurveyList'));

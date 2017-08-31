@@ -12,6 +12,9 @@
                 <div class="media-body">
                     <h4 class="media-heading">{{ category.name }}</h4>
                     <p>{{ category.code }}</p>
+                    {% if category.description %}
+                        <p>{{ category.description }}</p>
+                    {% endif %}
                     <a href="{{ _p.web_self ~ '?' ~ {'category':category.code}|url_encode }}" class="btn btn-default">
                         {{ 'View'|get_lang }} <span class="fa fa-arrow-right" aria-hidden="true"></span>
                     </a>

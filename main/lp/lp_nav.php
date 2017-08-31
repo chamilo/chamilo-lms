@@ -34,7 +34,6 @@ if ($myLP) {
     $display_mode = $myLP->mode;
     $scorm_css_header = true;
     $lp_theme_css = $myLP->get_theme();
-
     $my_style = api_get_visual_theme();
 
     // Setting up the CSS theme if exists

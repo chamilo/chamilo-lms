@@ -29,14 +29,14 @@ if (!empty($_POST)) {
         $newTutorial = intval($_POST['new_tutorial']);
         $starDate = $yearStart."-".$monthStart."-".$dayStart;
         $endDate = $yearEnd."-".$monthEnd."-".$dayEnd;
-    
+
         if (isset($newTutorial) && $newTutorial != 1) {
             $sql = "UPDATE $tableSepeParticipantsSpecialtyTutorials SET 
                         center_origin='".$centerOrigin."', 
                         center_code='".$centerCode."', 
                         start_date='".$starDate."', 
                         end_date='".$endDate."' 
-                    WHERE id = $tutorialId;";    
+                    WHERE id = $tutorialId;";
         } else {
             $sql = "INSERT INTO $tableSepeParticipantsSpecialtyTutorials (
                         participant_specialty_id, 
@@ -54,12 +54,11 @@ if (!empty($_POST)) {
         }
         $res = Database::query($sql);
         if (!$res) {
-            error_log(Database::error());
             $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
         } else {
             $_SESSION['sepe_message_info'] = $plugin->get_lang('SaveChange');
         }
-        
+
         session_write_close();
         $participantId = getParticipantId($specialtyId);
         header("Location: participant-specialty-edit.php?new_specialty=0&participant_id=".$participantId."&specialty_id=".$specialtyId."&action_id=".$actionId);
@@ -138,13 +137,13 @@ if (api_is_platform_admin()) {
         $startYear++;
     }
     $tpl->assign('list_year', $listYears);
-    
+
     if (isset($_SESSION['sepe_message_info'])) {
-        $tpl->assign('message_info', $_SESSION['sepe_message_info']);    
+        $tpl->assign('message_info', $_SESSION['sepe_message_info']);
         unset($_SESSION['sepe_message_info']);
     }
     if (isset($_SESSION['sepe_message_error'])) {
-        $tpl->assign('message_error', $_SESSION['sepe_message_error']);    
+        $tpl->assign('message_error', $_SESSION['sepe_message_error']);
         unset($_SESSION['sepe_message_error']);
     }
     $tpl->assign('sec_token', $token);

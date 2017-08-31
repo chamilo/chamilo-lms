@@ -54,8 +54,11 @@ if (!empty($action)) {
         if (!$ret) {
             $errorMsg = Display::return_message(get_lang('CatCodeAlreadyUsed'), 'error');
         } else {
-            if ($myCourseListAsCategory && isset($_FILES['image'])) {
-                CourseCategory::saveImage($ret, $_FILES['image']);
+            if ($myCourseListAsCategory) {
+                if (isset($_FILES['image'])) {
+                    CourseCategory::saveImage($ret, $_FILES['image']);
+                }
+                CourseCategory::saveDescription($ret, $_POST['description']);
             }
         }
 
@@ -129,12 +132,19 @@ if ($action == 'add' || $action == 'edit') {
     $form->addGroup($group, null, get_lang("AllowCoursesInCategory"));
 
     if ($myCourseListAsCategory) {
+        $form->addHtmlEditor(
+            'description',
+            get_lang('Description'),
+            false,
+            false,
+            ['ToolbarSet' => 'Minimal']
+        );
         $form->addFile('image', get_lang('Image'), ['accept' => 'image/*']);
-
         if ($action == 'edit' && !empty($categoryInfo['image'])) {
             $form->addHtml('
                 <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-8">'.Display::img(
+                    <div class="col-sm-offset-2 col-sm-8">'.
+                Display::img(
                     api_get_path(WEB_UPLOAD_PATH).$categoryInfo['image'],
                     get_lang('Image'),
                     ['width' => 256]

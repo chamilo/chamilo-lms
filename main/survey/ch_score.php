@@ -19,7 +19,13 @@ class ch_score extends survey_question
         $config = array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120');
         if (is_array($formData['answers'])) {
             foreach ($formData['answers'] as $key => $value) {
-                $this->getForm()->addHtmlEditor('answers['.$key.']', null, false, false, $config);
+                $this->getForm()->addHtmlEditor(
+                    'answers['.$key.']',
+                    null,
+                    false,
+                    false,
+                    $config
+                );
             }
         }
 
@@ -45,7 +51,9 @@ class ch_score extends survey_question
             $name = 'question'.$questionData['question_id'].'['.$key.']';
 
             $form->addSelect(
-                $name, $value, $options
+                $name,
+                $value,
+                $options
             );
 
             if (!empty($answers)) {

@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php
  *
@@ -34,7 +37,7 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
 // Theme calls.
 $show_learn_path = true;
 /** @var learnpath $lp */
-$lp = $_SESSION['oLP'];
+$lp = Session::read('oLP');
 $lp_theme_css = $lp->get_theme();
 
 if (api_is_in_gradebook()) {
@@ -91,7 +94,7 @@ echo '<div class="prerequisites">';
 $lpItem = new learnpathItem($_GET['id']);
 if (isset($is_success) && $is_success == true) {
     echo $lp->display_manipulate($_GET['id'], $lpItem->get_type());
-    echo Display::return_message(get_lang("PrerequisitesAdded"));
+    echo Display::return_message(get_lang('PrerequisitesAdded'));
 } else {
     echo $lp->display_manipulate($_GET['id'], $lpItem->get_type());
     echo $lp->display_item_prerequisites_form($_GET['id']);

@@ -95,12 +95,10 @@ if ($time_control) {
 $exe_id = 0;
 if (isset($_GET['exe_id'])) {
     $exe_id = (int) $_GET['exe_id'];
-    $_SESSION['exe_id'] = $exe_id;
+    Session::write('exe_id', $exe_id);
 }
 
-if (isset($_SESSION['exe_id'])) {
-    $exe_id = intval($_SESSION['exe_id']);
-}
+$exe_id = (int) Session::read('exe_id');
 
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
 if (!empty($exercise_stat_info['data_tracking'])) {

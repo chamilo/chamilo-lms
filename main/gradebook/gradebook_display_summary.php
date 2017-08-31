@@ -12,14 +12,11 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
 api_protect_course_script();
-
 set_time_limit(0);
 ini_set('max_execution_time', 0);
 api_block_anonymous_users();
 
-if (!api_is_allowed_to_edit()) {
-    api_not_allowed(true);
-}
+GradebookUtils::block_students();
 
 $cat_id = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : null;
 $action = isset($_GET['action']) && $_GET['action'] ? $_GET['action'] : null;

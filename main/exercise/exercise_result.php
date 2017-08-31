@@ -204,7 +204,7 @@ if ($origin != 'learnpath') {
     }
     Display::display_footer();
 } else {
-	$lp_mode = isset($_SESSION['lp_mode']) ? $_SESSION['lp_mode'] : null;
+	$lp_mode = Session::read('lp_mode');
 	$url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->feedback_type.'#atoc_'.$learnpath_item_id;
 	$href = $lp_mode == 'fullscreen' ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
 

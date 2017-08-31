@@ -1068,7 +1068,7 @@ if ($origin != 'learnpath') {
     Display::display_footer();
 } else {
     if (!isset($_GET['fb_type'])) {
-        $lp_mode = $_SESSION['lp_mode'];
+        $lp_mode = Session::read('lp_mode');
         $url = '../lp/lp_controller.php?'.api_get_cidreq().'&';
         $url .= http_build_url([
             'action' => 'view',

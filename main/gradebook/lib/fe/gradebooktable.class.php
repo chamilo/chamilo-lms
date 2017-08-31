@@ -986,12 +986,10 @@ class GradebookTable extends SortableTable
             // category
             case 'C':
                 $prms_uri = '?selectcat='.$item->get_id().'&view='.$view;
-                if (isset($_GET['isStudentView'])) {
-                    if (isset($is_student) || (isset($_SESSION['studentview']) && $_SESSION['studentview'] == 'studentview')) {
-                        $prms_uri = $prms_uri.'&amp;isStudentView='.Security::remove_XSS($_GET['isStudentView']);
-                    }
+                $isStudentView = api_is_student_view_active();
+                if (isset($is_student) || $isStudentView) {
+                    $prms_uri = $prms_uri.'&amp;isStudentView=studentview';
                 }
-
                 $cat = new Category();
                 $show_message = $cat->show_message_resource_delete($item->get_course_code());
 

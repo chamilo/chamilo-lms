@@ -122,13 +122,12 @@ if (empty($cats)) {
 $selectCat = (int) $cats[0]->get_id();
 $_GET['selectcat'] = $selectCat;
 
-if (isset($_GET['isStudentView'])) {
-    if ($selectCat > 0 && (isset($_SESSION['studentview']) && $_SESSION['studentview'] == 'true')) {
-        $interbreadcrumb[] = array(
-            'url' => 'index.php'.'?selectcat=0&isStudentView=true',
-            'name' => get_lang('ToolGradebook'),
-        );
-    }
+$isStudentView = api_is_student_view_active();
+if ($selectCat > 0 && $isStudentView) {
+    $interbreadcrumb[] = array(
+        'url' => 'index.php?selectcat=0&isStudentView=true',
+        'name' => get_lang('ToolGradebook'),
+    );
 }
 
 // ACTIONS

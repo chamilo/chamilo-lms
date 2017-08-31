@@ -2675,9 +2675,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
     }
 
     // The student preview was on
-    if ($check_student_view &&
-        isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview"
-    ) {
+    if ($check_student_view && api_is_student_view_active()) {
         return false;
     }
 
@@ -2956,10 +2954,7 @@ function api_is_allowed_to_edit(
     // Admins can edit anything.
     if (api_is_platform_admin(false)) {
         //The student preview was on
-        if ($check_student_view &&
-            isset($_SESSION['studentview']) &&
-            $_SESSION['studentview'] == "studentview"
-        ) {
+        if ($check_student_view && api_is_student_view_active()) {
             return false;
         } else {
             return true;

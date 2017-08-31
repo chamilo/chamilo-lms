@@ -14,20 +14,15 @@ $current_course_tool = TOOL_GRADEBOOK;
 
 api_protect_course_script(true);
 api_block_anonymous_users();
-
-if (!api_is_allowed_to_edit()) {
-    header('Location: /index.php');
-    exit;
-}
+GradebookUtils::block_students();
 
 $my_selectcat = isset($_GET['selectcat']) ? intval($_GET['selectcat']) : '';
 
 if (empty($my_selectcat)) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 $course_id = GradebookUtils::get_course_id_by_link_id($my_selectcat);
-
 $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);

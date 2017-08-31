@@ -1067,7 +1067,7 @@ class CourseCategory
                 $pageUrl .=
                     '&search_term='.$searchTerm.
                     '&search_course=1'.
-                    '&sec_token='.$_SESSION['sec_token'];
+                    '&sec_token='.Security::getTokenFromSession();
                 break;
             case 'display_courses':
                 // No break

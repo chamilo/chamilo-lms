@@ -71,7 +71,7 @@ if (api_is_platform_admin()) {
             [],
             ICON_SIZE_MEDIUM
         ),
-        api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$userId.'&sec_token='.$_SESSION['sec_token']
+        api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$userId.'&sec_token='.Security::getTokenFromSession()
     );
 
     $actions[] = Display::url(

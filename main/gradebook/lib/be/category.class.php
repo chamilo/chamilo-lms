@@ -2568,6 +2568,15 @@ class Category implements GradebookItem
     public static function getUrl()
     {
         $url = Session::read('gradebook_dest');
+        if (empty($url)) {
+            // We guess the link
+            $courseInfo = api_get_course_info();
+            if (!empty($courseInfo)) {
+                return api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq().'&';
+            } else {
+                return api_get_path(WEB_CODE_PATH).'gradebook/gradebook.php?';
+            }
+        }
 
         return $url;
     }

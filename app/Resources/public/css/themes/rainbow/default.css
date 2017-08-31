@@ -695,9 +695,9 @@ footer #footer_right{
    border-radius: 0;
    font-size: 12px;
 }
-.btn.btn-info:active:hover{
-   background-color: #772583;
-   border-color: #772583;
+.btn.btn-info:hover{
+   background-color: #6d9b00;
+   border-color: #6d9b00;
    border-radius: 0;
    font-size: 12px;
 }
@@ -897,6 +897,7 @@ legend{
 }
 .main-question {
     border-color: #FFFFFF;
+    padding: 0;
 }
 .main-question .question_title,
 .main-question .question_description,
@@ -907,6 +908,9 @@ legend{
     font-size: 14px;
     font-weight: bold;
     font-family: Verdana;
+}
+.question_options .ui-widget{
+    padding: 0;
 }
 .question-list-description-block select.selectpicker{
     display: block!important;
@@ -952,28 +956,28 @@ legend{
     color: #162a83 !important;
 }
 .btn-exercise,
-.form-actions .btn-warning{
-    background-color: #84bd00;
-    border-color: #84bd00;
-    border-radius: 0;
-    font-weight: bold;
-    font-size: 12px;
-}
-.btn-exercise:hover,
-.form-actions .btn-warning:hover{
-    background-color: #772583;
-    border-color: #772583;
-}
-.form-actions .btn-info{
+.form-actions .btn-warning.question-validate-btn{
     background-color: #162A83;
     border-color: #162A83;
     border-radius: 0;
     font-weight: bold;
     font-size: 12px;
 }
-.form-actions .btn-info:hover{
+.btn-exercise:hover,
+.form-actions .btn-warning.question-validate-btn:hover{
     background-color: #772583;
     border-color: #772583;
+}
+.form-actions .btn-info{
+    background-color: #84bd00;
+    border-color: #84bd00;
+    border-radius: 0;
+    font-weight: bold;
+    font-size: 12px;
+}
+.form-actions .btn-info:hover{
+    background-color: #6d9b00;
+    border-color: #6d9b00;
 }
 .exercise-btn{
     margin-top: 10px;
@@ -1010,6 +1014,9 @@ legend{
     border-top: 1px solid #96BD0D;
     border-bottom: 1px solid #96BD0D;
     color: #162A83;
+}
+.section-mycourses #exercise_form{
+    margin-left: 20px;
 }
 .section-mycourses .panel.panel-default{
     border: none;

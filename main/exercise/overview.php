@@ -295,7 +295,6 @@ if ($time_control) {
     $tpl->assign('time_control',$objExercise->return_time_left_div());
 }
 
-
 $tpl->assign('fluid', $fluid);
 $tpl->assign('data', $list);
 $tpl->assign('label', $label);

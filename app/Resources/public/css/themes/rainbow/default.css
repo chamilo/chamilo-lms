@@ -720,6 +720,13 @@ table.table-striped tr td span.label-success{
 .table-striped>tbody>tr:nth-of-type(odd){
     background-color: #FFF;
 }
+.remaining .alert .btn .fa{
+    display: none;
+}
+.remaining .alert .btn {
+    font-weight: bold;
+    font-size: 14px;
+}
 /* Jquery UI */
 .ui-accordion .ui-accordion-icons{
   padding-left: 0.2em;

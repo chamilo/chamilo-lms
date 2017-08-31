@@ -968,7 +968,8 @@ class IndexManager
         }
 
         if (bbb::showGlobalConferenceLink($userInfo)) {
-            $url = api_get_path(WEB_PLUGIN_PATH).'bbb/start.php?global=1';
+            $bbb = new bbb('', '', true, api_get_user_id());
+            $url = $bbb->getConferenceUrl();
             $items[] = [
                 'class' => 'video-conference',
                 'icon' => Display::return_icon(

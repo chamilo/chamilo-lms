@@ -60,7 +60,6 @@ class bbb
 
         // Initialize video server settings from global settings
         $this->plugin = BBBPlugin::create();
-
         $bbbPluginEnabled = $this->plugin->get('tool_enable');
 
         $bbb_host = !empty($host) ? $host : $this->plugin->get('host');
@@ -68,7 +67,7 @@ class bbb
 
         $this->logoutUrl = $this->getListingUrl();
         $this->table = Database::get_main_table('plugin_bbb_meeting');
-        $this->enableGlobalConference = (bool) $this->plugin->get('enable_global_conference');
+        $this->enableGlobalConference = $this->plugin->get('enable_global_conference') === 'true' ? true : false;
         $this->isGlobalConference = (bool) $isGlobalConference;
 
         $columns = Database::listTableColumns($this->table);
@@ -77,7 +76,7 @@ class bbb
         $this->accessUrl = api_get_current_access_url_id();
 
         if ($this->userSupport && !empty($isGlobalPerUser)) {
-            $this->enableGlobalConferencePerUser = (bool) $this->plugin->get('enable_global_conference_per_user');
+            $this->enableGlobalConferencePerUser = $this->plugin->get('enable_global_conference_per_user') === 'true' ? true : false;
             $this->userId = $isGlobalPerUser;
         } else {
             $this->enableGlobalConferencePerUser = false;
@@ -85,7 +84,7 @@ class bbb
 
         if ($this->groupSupport) {
             // Plugin check
-            $this->groupSupport = (bool) $this->plugin->get('enable_conference_in_course_groups');
+            $this->groupSupport = $this->plugin->get('enable_conference_in_course_groups') === 'true' ? true : false;
             if ($this->groupSupport) {
                 // Platform check
                 $bbbSetting = api_get_setting('bbb_enable_conference_in_course_groups');

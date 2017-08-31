@@ -314,8 +314,8 @@ class MultipleAnswerTrueFalse extends Question
         $header = parent::return_header($exercise, $counter, $score);
   	    $header .= '<table class="'.$this->question_table_class .'">
 		            <tr>
-                        <th>'.get_lang("Choice").'</th>
-                        <th>'. get_lang("ExpectedChoice").'</th>
+                        <th width="10%">'.get_lang("Choice").'</th>
+                        <th width="15%">'. get_lang("ExpectedChoice").'</th>
                         <th>'. get_lang("Answer").'</th>';
         $header .= '<th>'.get_lang('Status').'</th>';
 			if ($exercise->feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {

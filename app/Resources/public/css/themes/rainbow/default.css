@@ -1853,7 +1853,9 @@ blockquote p {
     	width: auto;
     }
 }
-
+.anwser svg circle {
+    stroke: rgb(22,42,131) !important
+}
 .question_options .ui-state-active {
     background-color: #96BD0D !important;
 }

@@ -62,7 +62,6 @@ class Agenda
 
                 // Check if teacher/admin rights.
                 $isAllowToEdit = api_is_allowed_to_edit(false, true);
-
                 // Check course setting.
                 if (api_get_course_setting('allow_user_edit_agenda') == '1'
                     && api_is_allowed_in_course()
@@ -1908,6 +1907,10 @@ class Agenda
                             $event['editable'] = false;
                         }
                     }
+                    // if user is author then he can edit the item
+                    if (api_get_user_id() == $row['insert_user_id']) {
+                        $event['editable'] = true;
+                    }
                 }
 
                 if (!empty($row['start_date'])) {
@@ -2930,7 +2933,8 @@ class Agenda
 
         $form = '';
         if (api_is_allowed_to_edit(false, true) ||
-            (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) &&
+            (api_get_course_setting('allow_user_edit_agenda') == '1' &&
+                !api_is_anonymous()) &&
             api_is_allowed_to_session_edit(false, true) ||
             (GroupManager::user_has_access(
                 api_get_user_id(),

@@ -1,14 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession;
+use ChamiloSession as Session;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 
 /**
  *  Class Tracking
@@ -1988,10 +1988,10 @@ class Tracking
      *                              0 for active <> 0
      * @param int $into_lp  1 for all exercises
      *                      0 for without LP
-     * @internal param \Student $mixed id
-     * @internal param \Course $string code
-     * @internal param \Exercise $int id (optional), filtered by exercise
-     * @internal param \Session $int id (optional), if param $session_id is null
+     * @param mixed id
+     * @param string code
+     * @param int id (optional), filtered by exercise
+     * @param int id (optional), if param $session_id is null
      * it'll return results including sessions, 0 = session is not filtered
      * @return   string    value (number %) Which represents a round integer about the score average.
      */
@@ -3884,8 +3884,11 @@ class Tracking
      * @param int $groupId
      * @return    int     The number of threads by course
      */
-    public static function count_number_of_threads_by_course($course_code, $session_id = null, $groupId = 0)
-    {
+    public static function count_number_of_threads_by_course(
+        $course_code,
+        $session_id = null,
+        $groupId = 0
+    ) {
         $course_info = api_get_course_info($course_code);
         if (empty($course_info)) {
             return null;
@@ -3948,8 +3951,11 @@ class Tracking
      * @param int $groupId
      * @return    int     The number of forums by course
      */
-    public static function count_number_of_forums_by_course($course_code, $session_id = null, $groupId = 0)
-    {
+    public static function count_number_of_forums_by_course(
+        $course_code,
+        $session_id = null,
+        $groupId = 0
+    ) {
         $course_info = api_get_course_info($course_code);
         if (empty($course_info)) {
             return null;
@@ -6321,7 +6327,7 @@ class Tracking
      * @param User $user
      * @param string $tool
      * @param Course $course
-     * @param Session|null $session Optional.
+     * @param SessionEntity |null $session Optional.
      * @return \Chamilo\CourseBundle\Entity\CStudentPublication|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
@@ -6329,7 +6335,7 @@ class Tracking
         User $user,
         $tool,
         Course $course,
-        Session $session = null
+        SessionEntity $session = null
     ) {
         return Database::getManager()
             ->createQuery("
@@ -7075,7 +7081,7 @@ class TrackingCourseLog
 
     public function sort_users($a, $b)
     {
-        $tracking = ChamiloSession::read('tracking_column');
+        $tracking = Session::read('tracking_column');
         return strcmp(
             trim(api_strtolower($a[$tracking])),
             trim(api_strtolower($b[$tracking]))
@@ -7084,7 +7090,7 @@ class TrackingCourseLog
 
     public function sort_users_desc($a, $b)
     {
-        $tracking = ChamiloSession::read('tracking_column');
+        $tracking = Session::read('tracking_column');
         return strcmp(
             trim(api_strtolower($b[$tracking])),
             trim(api_strtolower($a[$tracking]))
@@ -7331,8 +7337,8 @@ class TrackingCourseLog
 
             // we need to display an additional profile field
             if (isset($_GET['additional_profile_field'])) {
-                $data = \System\Session::read('additional_user_profile_info');
-                $extraFieldInfo = \System\Session::read('extra_field_info');
+                $data = Session::read('additional_user_profile_info');
+                $extraFieldInfo = Session::read('extra_field_info');
                 foreach ($_GET['additional_profile_field'] as $fieldId) {
                     if (isset($data[$fieldId]) && isset($data[$fieldId][$user['user_id']])) {
                         if (is_array($data[$fieldId][$user['user_id']])) {
@@ -7366,8 +7372,8 @@ class TrackingCourseLog
             $users[] = array_values($user_row);
         }
 
-        \System\Session::erase('additional_user_profile_info');
-        \System\Session::erase('extra_field_info');
+        Session::erase('additional_user_profile_info');
+        Session::erase('extra_field_info');
 
         return $users;
     }

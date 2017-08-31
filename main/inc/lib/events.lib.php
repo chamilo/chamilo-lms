@@ -57,7 +57,7 @@ class Event
      * @author Julio Montoya 2013
      * @desc Record information for login event when an user identifies himself with username & password
      */
-    public static function event_login($userId)
+    public static function eventLogin($userId)
     {
         $userInfo = api_get_user_info($userId);
         $userId = intval($userId);
@@ -1851,7 +1851,7 @@ class Event
      *
      * @return bool
      */
-    public static function eventCourseUpdate(
+    public static function eventCourseLoginUpdate(
         $courseId,
         $userId,
         $sessionId,
@@ -1878,6 +1878,7 @@ class Event
                     user_id = $userId                     
                 ORDER BY login_course_date DESC
                 LIMIT 1";
+
         $result = Database::query($sql);
 
         // Save every 5 minutes by default
@@ -1891,9 +1892,9 @@ class Event
             if ($now - $logout > $seconds) {
                 $now = api_get_utc_datetime();
                 $sql = "UPDATE $table SET 
-                        logout_course_date = '$now', 
-                        counter = counter + 1
-                    WHERE course_access_id = $id";
+                            logout_course_date = '$now', 
+                            counter = counter + 1
+                        WHERE course_access_id = $id";
                 Database::query($sql);
             }
 
@@ -1901,6 +1902,65 @@ class Event
         }
 
         return false;
+    }
+
+    /**
+     * Register the logout of the course (usually when logging out of the platform)
+     * from the track_e_course_access table
+     * @param   array $logoutInfo Information stored by local.inc.php
+     * before new context ['uid'=> x, 'cid'=>y, 'sid'=>z]
+     */
+    public static function courseLogout($logoutInfo)
+    {
+        if (empty($logoutInfo['uid']) || empty($logoutInfo['cid'])) {
+            return;
+        }
+
+        $sessionLifetime = api_get_configuration_value('session_lifetime');
+
+        /*
+         * When $_configuration['session_lifetime'] is larger than ~100 hours (in order to let users take exercises with no problems)
+         * the function Tracking::get_time_spent_on_the_course() returns larger values (200h) due the condition:
+         * login_course_date > now() - INTERVAL $session_lifetime SECOND
+         */
+        if (empty($sessionLifetime) || $sessionLifetime > 86400) {
+            $sessionLifetime = 3600; // 1 hour
+        }
+        if (!empty($logoutInfo) && !empty($logoutInfo['cid'])) {
+            $tableCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            $userId = intval($logoutInfo['uid']);
+            $courseId = intval($logoutInfo['cid']);
+            $sessionId = 0;
+            if (!empty($logoutInfo['sid'])) {
+                $sessionId = intval($logoutInfo['sid']);
+            }
+            $currentDate = api_get_utc_datetime();
+            // UTC time
+            $time  = api_get_utc_datetime(time() - $sessionLifetime);
+            $sql = "SELECT course_access_id
+                    FROM $tableCourseAccess
+                    WHERE 
+                        user_id = $userId AND
+                        c_id = $courseId  AND
+                        session_id = $sessionId AND
+                        login_course_date > '$time'
+                    ORDER BY login_course_date DESC 
+                    LIMIT 1";
+            $result = Database::query($sql);
+            if (Database::num_rows($result) > 0) {
+                $courseAccessId = Database::result($result, 0, 0);
+                $sql = "UPDATE $tableCourseAccess SET 
+                            logout_course_date = '$currentDate', 
+                            counter = counter + 1
+                        WHERE course_access_id = $courseAccessId";
+                Database::query($sql);
+            } else {
+                $ip = api_get_real_ip();
+                $sql = "INSERT INTO $tableCourseAccess (c_id, user_ip, user_id, login_course_date, logout_course_date, counter, session_id)
+                        VALUES ($courseId, '$ip', $userId, '$currentDate', '$currentDate', 1, $sessionId)";
+                Database::query($sql);
+            }
+        }
     }
 
     /**
@@ -1915,7 +1975,8 @@ class Event
      * @param int $courseId The course in which to add the time
      * @param int $userId The user for whom to add the time
      * @param int $sessionId The session in which to add the time (if any)
-     * @param string $virtualTime The amount of time to be added, in a hh:mm:ss format. If int, we consider it is expressed in hours.
+     * @param string $virtualTime The amount of time to be added,
+     * in a hh:mm:ss format. If int, we consider it is expressed in hours.
      * @param string $ip IP address to go on record for this time record
      *
      * @return True on successful insertion, false otherwise
@@ -2093,11 +2154,18 @@ class Event
     public static function check_if_mail_already_sent($event_name, $user_from, $user_to = null)
     {
         if ($user_to == null) {
-            $sql = 'SELECT COUNT(*) as total FROM '.Database::get_main_table(TABLE_EVENT_SENT).'
-                    WHERE user_from = '.$user_from.' AND event_type_name = "'.$event_name.'"';
+            $sql = 'SELECT COUNT(*) as total 
+                    FROM '.Database::get_main_table(TABLE_EVENT_SENT).'
+                    WHERE 
+                        user_from = '.$user_from.' AND 
+                        event_type_name = "'.$event_name.'"';
         } else {
-            $sql = 'SELECT COUNT(*) as total FROM '.Database::get_main_table(TABLE_EVENT_SENT).'
-                    WHERE user_from = '.$user_from.' AND user_to = '.$user_to.' AND event_type_name = "'.$event_name.'"';
+            $sql = 'SELECT COUNT(*) as total 
+                    FROM '.Database::get_main_table(TABLE_EVENT_SENT).'
+                    WHERE 
+                        user_from = '.$user_from.' AND 
+                        user_to = '.$user_to.' AND 
+                        event_type_name = "'.$event_name.'"';
         }
         $result = Database::store_result(Database::query($sql), 'ASSOC');
 

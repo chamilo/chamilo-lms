@@ -132,7 +132,7 @@ if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login
     Session::write('_user', $_user);
     Session::erase('conditional_login');
     $uidReset = true;
-    Event::event_login($_user['user_id']);
+    Event::eventLogin($_user['user_id']);
 }
 
 // parameters passed via GET
@@ -277,7 +277,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
     }
 
     if ((isset($_POST['login']) && isset($_POST['password'])) || ($cas_login)) {
-
         // $login && $password are given to log in
         if ($cas_login && empty($_POST['login'])) {
             $login = $cas_login;
@@ -406,7 +405,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user['status'] = $uData['status'];
                                         Session::write('_user', $_user);
-                                        Event::event_login($_user['user_id']);
+                                        Event::eventLogin($_user['user_id']);
                                         $logging_in = true;
                                     } else {
                                         $loginFailed = true;
@@ -419,7 +418,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                             .'index.php?loginFailed=1&error=access_url_inactive';
                                         if ($cas_login) {
                                             cas_logout(null, $location);
-                                            courseLogout($logoutInfo);
+                                            Event::courseLogout($logoutInfo);
                                         } else {
                                             header('Location: '.$location);
                                         }
@@ -433,7 +432,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user['status']  = $uData['status'];
                                         Session::write('_user', $_user);
-                                        Event::event_login($_user['user_id']);
+                                        Event::eventLogin($_user['user_id']);
                                         $logging_in = true;
                                     } else {
                                         //This means a secondary admin wants to login so we check as he's a normal user
@@ -441,7 +440,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                             $_user['user_id'] = $uData['user_id'];
                                             $_user['status']  = $uData['status'];
                                             Session::write('_user', $_user);
-                                            Event::event_login($_user['user_id']);
+                                            Event::eventLogin($_user['user_id']);
                                             $logging_in = true;
                                         } else {
                                             $loginFailed = true;
@@ -461,7 +460,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                 $_user['status'] = $uData['status'];
 
                                 Session::write('_user', $_user);
-                                Event::event_login($uData['user_id']);
+                                Event::eventLogin($uData['user_id']);
                                 $logging_in = true;
 
                             }
@@ -652,7 +651,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             if ($logout) {
                 // Make custom redirect after logout
                 online_logout($_SESSION['_user']['user_id'], false);
-                courseLogout($logoutInfo);
+                Event::courseLogout($logoutInfo);
                 $osso->logout(); //redirects and exits
             }
         } elseif (!$logout) {
@@ -724,7 +723,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             //if there was an attempted logout without a previous login, log
             // this anonymous user out as well but avoid redirect
             online_logout(null, false);
-            courseLogout($logoutInfo);
+            Event::courseLogout($logoutInfo);
             $osso->logout(); //redirects and exits
         }
     } elseif (api_get_setting('openid_authentication') == 'true') {
@@ -765,7 +764,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                     $_user['status'] = $uData['status'];
 
                                     Session::write('_user', $_user);
-                                    Event::event_login($_user['user_id']);
+                                    Event::eventLogin($_user['user_id']);
                                 } else {
                                     $loginFailed = true;
                                     Session::erase('_uid');
@@ -906,7 +905,7 @@ if (!isset($_SESSION['login_as'])) {
         if (isset($_dont_save_user_course_access) && $_dont_save_user_course_access == true) {
             $save_course_access = false;
         } else {
-            courseLogout($logoutInfo);
+            Event::courseLogout($logoutInfo);
         }
     }
 }
@@ -971,7 +970,7 @@ if (isset($cidReset) && $cidReset) {
         }
     } else {
         // Leave a logout time in the track_e_course_access table if we were in a course
-        courseLogout($logoutInfo);
+        Event::courseLogout($logoutInfo);
         Session::erase('_cid');
         Session::erase('_real_cid');
         Session::erase('_course');
@@ -1507,7 +1506,7 @@ if ((isset($cas_login) && $cas_login && exist_firstpage_parameter()) ||
     }
 }
 
-Event::eventCourseUpdate(
+Event::eventCourseLoginUpdate(
     api_get_course_int_id(),
     api_get_user_id(),
     api_get_session_id()

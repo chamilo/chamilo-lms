@@ -812,7 +812,7 @@ if ($form->validate()) {
     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
 
     // Stats
-    Event::event_login($user_id);
+    Event::eventLogin($user_id);
 
     // last user login date is now
     $user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970

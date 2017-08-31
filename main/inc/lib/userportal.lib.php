@@ -149,7 +149,7 @@ class IndexManager
     public function logout($redirect = true, $logoutInfo = [])
     {
         online_logout($this->user_id, true);
-        courseLogout($logoutInfo);
+        Event::courseLogout($logoutInfo);
     }
 
     /**

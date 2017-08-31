@@ -34,7 +34,7 @@ if ($loginLdapSucces) {
     $_user['user_id'] = $uData['user_id'];
     Session::write('_uid', $_uid);
     // Jand: copied from event_login in events.lib.php to enable login statistics:
-    Event::event_login($uData['user_id']);
+    Event::eventLogin($uData['user_id']);
 } else {
     $loginFailed = true;
     unset($_user['user_id']);

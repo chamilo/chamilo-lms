@@ -709,7 +709,10 @@ class bbb
             $item = array();
             $courseId = $meetingDB['c_id'];
             $courseInfo = api_get_course_info_by_id($courseId);
-            $courseCode = $courseInfo['code'];
+            $courseCode = '';
+            if (!empty($courseInfo)) {
+                $courseCode = $courseInfo['code'];
+            }
 
             if ($manager) {
                 $pass = $this->getUserMeetingPassword($courseCode);

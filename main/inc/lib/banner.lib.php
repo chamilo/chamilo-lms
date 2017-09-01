@@ -21,7 +21,7 @@ use ChamiloSession as Session;
  */
 function get_tabs($courseId = null)
 {
-    $_course = api_get_course_info($courseId);
+    $courseInfo = api_get_course_info($courseId);
 
     $navigation = array();
 
@@ -51,7 +51,7 @@ function get_tabs($courseId = null)
     // My Profile
     $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH)
         .'auth/profile.php'
-        .(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '');
+        .(!empty($courseInfo['path']) ? '?coursePath='.$courseInfo['path'].'&amp;courseCode='.$courseInfo['official_code'] : '');
     $navigation['myprofile']['title'] = get_lang('ModifyProfile');
     $navigation['myprofile']['key'] = 'profile';
     $navigation['myprofile']['icon'] = 'profile.png';
@@ -65,7 +65,7 @@ function get_tabs($courseId = null)
     if (api_get_setting('gradebook_enable') == 'true') {
         $navigation['mygradebook']['url'] = api_get_path(WEB_CODE_PATH)
             .'gradebook/gradebook.php'
-            .(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '');
+            .(!empty($courseInfo['path']) ? '?coursePath='.$courseInfo['path'].'&amp;courseCode='.$courseInfo['official_code'] : '');
         $navigation['mygradebook']['title'] = get_lang('MyGradebook');
         $navigation['mygradebook']['key'] = 'gradebook';
         $navigation['mygradebook']['icon'] = 'gradebook.png';
@@ -208,10 +208,10 @@ function return_logo($theme = '')
  */
 function returnNotificationMenu()
 {
-    $_course = api_get_course_info();
+    $courseInfo = api_get_course_info();
     $course_id = 0;
-    if (!empty($_course)) {
-        $course_id = $_course['code'];
+    if (!empty($courseInfo)) {
+        $course_id = $courseInfo['code'];
     }
 
     $user_id = api_get_user_id();
@@ -223,7 +223,7 @@ function returnNotificationMenu()
         (api_get_setting('showonline', 'course') == 'true' && $user_id && $course_id)
     ) {
         $number = getOnlineUsersCount();
-        $number_online_in_course = getOnlineUsersInCourseCount($user_id, $_course);
+        $number_online_in_course = getOnlineUsersInCourseCount($user_id, $courseInfo);
 
         // Display the who's online of the platform
         if ($number &&
@@ -239,11 +239,11 @@ function returnNotificationMenu()
         // Display the who's online for the course
         if ($number_online_in_course &&
             (
-                is_array($_course) &&
-                api_get_setting('showonline', 'course') == 'true' && isset($_course['sysCode'])
+                is_array($courseInfo) &&
+                api_get_setting('showonline', 'course') == 'true' && isset($courseInfo['sysCode'])
             )
         ) {
-            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode']
+            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$courseInfo['sysCode']
                 .'" target="_self">'
                 .Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array(), ICON_SIZE_TINY)
                 .' '.$number_online_in_course.' </a></li>';
@@ -596,16 +596,8 @@ function menuArray()
  */
 function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 {
-    /** @var \Chamilo\CoreBundle\Entity\Session $session */
-    $session = Database::getManager()
-        ->find('ChamiloCoreBundle:Session', api_get_session_id());
-    $_course = api_get_course_info();
+    $courseInfo = api_get_course_info();
     $user_id = api_get_user_id();
-    $course_id = 0;
-    if (!empty($_course)) {
-        $course_id = $_course['real_id'];
-    }
-
     $additionalBlocks = '';
 
     /*  Plugins for banner section */
@@ -615,12 +607,17 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     $navigation = array();
 
     // part 1: Course Homepage. If we are in a course then the first breadcrumb is a link to the course homepage
-    // hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
-    $my_session_name = $session ? ' ('.cut($session->getName(), MAX_LENGTH_BREADCRUMB).')' : null;
+    if (!empty($courseInfo) && !isset($_GET['hide_course_breadcrumb'])) {
+        $sessionId = api_get_session_id();
+        $sessionName = '';
+        if (!empty($sessionId)) {
+            /** @var \Chamilo\CoreBundle\Entity\Session $session */
+            $session = Database::getManager()->find('ChamiloCoreBundle:Session', $sessionId);
+            $sessionName = $session ? ' ('.cut($session->getName(), MAX_LENGTH_BREADCRUMB).')' : '';
+        }
 
-    if (!empty($_course) && !isset($_GET['hide_course_breadcrumb'])) {
-        $_course['name'] = api_htmlentities($_course['name']);
-        $course_title = cut($_course['name'], MAX_LENGTH_BREADCRUMB);
+        $courseInfo['name'] = api_htmlentities($courseInfo['name']);
+        $course_title = cut($courseInfo['name'], MAX_LENGTH_BREADCRUMB);
 
         switch (api_get_setting('breadcrumbs_course_homepage')) {
             case 'get_lang':
@@ -634,25 +631,24 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             case 'course_code':
                 $itemTitle = Display::return_icon(
                     'home.png',
-                    $_course['official_code'],
+                    $courseInfo['official_code'],
                     [],
                     ICON_SIZE_TINY
                 )
-                .' '.$_course['official_code'];
+                .' '.$courseInfo['official_code'];
                 break;
             case 'session_name_and_course_title':
                 //no break
             default:
                 $itemTitle = Display::return_icon(
                     'home.png',
-                    $_course['name'].$my_session_name,
+                    $courseInfo['name'].$sessionName,
                     [],
                     ICON_SIZE_TINY
                 )
-                .' '.$course_title.$my_session_name;
+                .' '.$course_title.$sessionName;
 
-                if ($session && ($session->getDuration() && !api_is_allowed_to_edit())
-                ) {
+                if (!empty($sessionId) && ($session->getDuration() && !api_is_allowed_to_edit())) {
                     $daysLeft = SessionManager::getDayLeftInSession(
                         ['id' => $session->getId(), 'duration' => $session->getDuration()],
                         $user_id
@@ -680,7 +676,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
          * $navigation[] = $navigation_item_my_courses;
          */
         $navigation[] = [
-            'url' => $web_course_path.$_course['path'].'/index.php'.($session ? '?id_session='.$session->getId() : ''),
+            'url' => $web_course_path.$courseInfo['path'].'/index.php'.($session ? '?id_session='.$session->getId() : ''),
             'title' => $itemTitle
         ];
     }
@@ -732,7 +728,6 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     }
 
     $navigation_right = array();
-
     if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
         foreach ($interbreadcrumb as $breadcrumb_step) {
             if (isset($breadcrumb_step['type']) && $breadcrumb_step['type'] == 'right') {
@@ -775,7 +770,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 
     /* Part 4 . Show the teacher view/student view button at the right of the breadcrumb */
     $view_as_student_link = null;
-    if ($user_id && isset($course_id)) {
+    if ($user_id && !empty($courseInfo)) {
         if ((
                 api_is_course_admin() ||
                 api_is_platform_admin() ||
@@ -872,23 +867,23 @@ function getOnlineUsersCount()
 /**
  * Helper function to get the number of users online in a course, using cache if available
  * @param   int $userId The user ID
- * @param   array $_course The course details
+ * @param   array $courseInfo The course details
  * @return  int     The number of users currently online
  */
-function getOnlineUsersInCourseCount($userId, $_course)
+function getOnlineUsersInCourseCount($userId, $courseInfo)
 {
     $cacheAvailable = api_get_configuration_value('apc');
     $numberOnlineInCourse = 0;
-    if (!empty($_course['id'])) {
+    if (!empty($courseInfo['id'])) {
         if ($cacheAvailable === true) {
-            $apcVar = api_get_configuration_value('apc_prefix').'my_campus_whoisonline_count_simple_'.$_course['id'];
+            $apcVar = api_get_configuration_value('apc_prefix').'my_campus_whoisonline_count_simple_'.$courseInfo['id'];
             if (apcu_exists($apcVar)) {
                 $numberOnlineInCourse = apcu_fetch($apcVar);
             } else {
                 $numberOnlineInCourse = who_is_online_in_this_course_count(
                     $userId,
                     api_get_setting('time_limit_whosonline'),
-                    $_course['id']
+                    $courseInfo['id']
                 );
                 apcu_store(
                     $apcVar,
@@ -900,7 +895,7 @@ function getOnlineUsersInCourseCount($userId, $_course)
             $numberOnlineInCourse = who_is_online_in_this_course_count(
                 $userId,
                 api_get_setting('time_limit_whosonline'),
-                $_course['id']
+                $courseInfo['id']
             );
         }
     }

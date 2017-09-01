@@ -196,7 +196,7 @@ if (!isset($_GET['action']) ||
             null,
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('DetailedReportByUser').'</h4><p>'.get_lang('DetailedReportByUserDetail').'</p>',
-        $url.'action=comparativereport&survey_id='.$survey_id.'&'.$cidReq,
+        $url.'action=userreport&survey_id='.$survey_id.'&'.$cidReq,
         array('class' => 'list-group-item')
     );
 
@@ -218,7 +218,7 @@ if (!isset($_GET['action']) ||
             null,
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('CompleteReport').'</h4><p>'.get_lang('CompleteReportDetail').'</p>',
-        $url.'action=comparativereport&survey_id='.$survey_id.'&'.$cidReq,
+        $url.'action=completereport&survey_id='.$survey_id.'&'.$cidReq,
         array('class' => 'list-group-item')
     );
 

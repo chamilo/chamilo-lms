@@ -974,7 +974,8 @@ function api_is_ldap_activated() {
  * @return bool     Return true if Facebook authentification is activated
  *
  */
-function api_is_facebook_auth_activated() {
+function api_is_facebook_auth_activated()
+{
     global $_configuration;
     return (isset($_configuration['facebook_auth']) && $_configuration['facebook_auth'] == 1);
 }
@@ -984,7 +985,8 @@ function api_is_facebook_auth_activated() {
  * @param string $path          The input path.
  * @return string               Returns the modified path.
  */
-function api_add_trailing_slash($path) {
+function api_add_trailing_slash($path)
+{
     return substr($path, -1) == '/' ? $path : $path.'/';
     // This code is about 20% faster than the preg_replace equivalent
     //return preg_replace('/([^\/])$/', '$1/', $path);
@@ -995,7 +997,8 @@ function api_add_trailing_slash($path) {
  * @param string $path          The input path.
  * @return string               Returns the modified path.
  */
-function api_remove_trailing_slash($path) {
+function api_remove_trailing_slash($path)
+{
     return substr($path, -1) == '/' ? substr($path, 0, -1) : $path;
 }
 
@@ -1384,30 +1387,50 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
 
     // Getting user avatar.
     if ($loadAvatars) {
-        $originalFile = UserManager::getUserPicture(
-            $user_id,
-            USER_IMAGE_SIZE_ORIGINAL,
-            null,
-            $result
-        );
-        $smallFile = UserManager::getUserPicture(
-            $user_id,
-            USER_IMAGE_SIZE_SMALL,
-            null,
-            $result
-        );
-        $mediumFile = UserManager::getUserPicture(
-            $user_id,
-            USER_IMAGE_SIZE_MEDIUM,
-            null,
-            $result
-        );
+        $result['avatar'] = '';
+        $result['avatar_no_query'] = '';
+        $result['avatar_small'] = '';
+        $result['avatar_medium'] = '';
 
-        $result['avatar'] = $originalFile;
-        $avatarString = explode('?', $originalFile);
-        $result['avatar_no_query'] = reset($avatarString);
-        $result['avatar_small'] = $smallFile;
-        $result['avatar_medium'] = $mediumFile;
+        if (!isset($user['avatar'])) {
+            $originalFile = UserManager::getUserPicture(
+                $user_id,
+                USER_IMAGE_SIZE_ORIGINAL,
+                null,
+                $result
+            );
+            $result['avatar'] = $originalFile;
+            $avatarString = explode('?', $result['avatar']);
+            $result['avatar_no_query'] = reset($avatarString);
+        } else {
+            $result['avatar'] = $user['avatar'];
+            $avatarString = explode('?', $user['avatar']);
+            $result['avatar_no_query'] = reset($avatarString);
+        }
+
+        if (!isset($user['avatar_small'])) {
+            $smallFile = UserManager::getUserPicture(
+                $user_id,
+                USER_IMAGE_SIZE_SMALL,
+                null,
+                $result
+            );
+            $result['avatar_small'] = $smallFile;
+        } else {
+            $result['avatar_small'] = $user['avatar_small'];
+        }
+
+        if (!isset($user['avatar_medium'])) {
+            $mediumFile = UserManager::getUserPicture(
+                $user_id,
+                USER_IMAGE_SIZE_MEDIUM,
+                null,
+                $result
+            );
+            $result['avatar_medium'] = $mediumFile;
+        } else {
+            $result['avatar_medium'] = $user['avatar_medium'];
+        }
     }
 
     if (isset($user['user_is_online'])) {
@@ -1483,12 +1506,20 @@ function api_get_user_info(
                     }
                     $user = apcu_fetch($apcVar);
                 } else {
-                    $user = _api_format_user($userFromSession, $showPassword, $loadAvatars);
+                    $user = _api_format_user(
+                        $userFromSession,
+                        $showPassword,
+                        $loadAvatars
+                    );
                     apcu_store($apcVar, $user, 60);
                 }
 
             } else {
-                $user = _api_format_user($userFromSession, $showPassword, $loadAvatars);
+                $user = _api_format_user(
+                    $userFromSession,
+                    $showPassword,
+                    $loadAvatars
+                );
             }
 
             return $user;

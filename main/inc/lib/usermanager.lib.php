@@ -1823,7 +1823,11 @@ class UserManager
             }
         }
 
-        $imageWebPath = self::get_user_picture_path_by_id($user_id, 'web', $userInfo);
+        $imageWebPath = self::get_user_picture_path_by_id(
+            $user_id,
+            'web',
+            $userInfo
+        );
         $pictureWebFile = $imageWebPath['file'];
         $pictureWebDir = $imageWebPath['dir'];
 

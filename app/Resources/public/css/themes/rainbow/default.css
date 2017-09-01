@@ -925,7 +925,7 @@ legend{
     display: block!important;
 }
 .exercise-container{
-    padding: 10px;
+    padding: 0;
 }
 .exercise-container .title{
     color: #162a83;
@@ -1023,9 +1023,10 @@ legend{
     border-top: 1px solid #96BD0D;
     border-bottom: 1px solid #96BD0D;
     color: #162A83;
+    margin-bottom: 20px;
 }
 .section-mycourses #exercise_form{
-    margin-left: 20px;
+    margin-left: 15px;
 }
 .section-mycourses .panel.panel-default{
     border: none;
@@ -1199,6 +1200,10 @@ svg circle{
     background: -webkit-linear-gradient(top, #9dd53a 0%,#7cbc0a 100%); /* Chrome10-25,Safari5.1-6 */
     background: linear-gradient(to bottom, #9dd53a 0%,#7cbc0a 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9dd53a', endColorstr='#7cbc0a',GradientType=0 ); /* IE6-9 */
+}
+.drag_question{
+    padding: 0;
+    margin-top: 30px;
 }
 @font-face {
   font-family: 'icomoon';

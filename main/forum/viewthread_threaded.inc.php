@@ -139,19 +139,12 @@ $next_img = Display::return_icon(
 $class_prev = '';
 $class_next = '';
 
+$threadLink = $forumUrl.'viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId;
 // Links
-$first_href = $forumUrl.'viewthread.php?'.api_get_cidreq().
-    '&forum='.$forumId.'&thread='.$threadId.
-    '&gradebook='.$gradebook.'&id=1&post='.$prev_next_array[0];
-$last_href = $forumUrl.'viewthread.php?'.api_get_cidreq().
-    '&forum='.$forumId.'&thread='.$threadId.
-    '&gradebook='.$gradebook.'&post='.$prev_next_array[$max - 1];
-$prev_href = $forumUrl.'viewthread.php?'.api_get_cidreq().
-    '&forum='.$forumId.'&thread='.$threadId.
-    '&gradebook='.$gradebook.'&post='.$prev_next_array[$prev_id];
-$next_href = $forumUrl.'viewthread.php?'.api_get_cidreq().
-    '&forum='.$forumId.'&thread='.$threadId.
-    '&post='.$prev_next_array[$next_id];
+$first_href = $threadLink.'&id=1&post='.$prev_next_array[0];
+$last_href = $threadLink.'&post='.$prev_next_array[$max - 1];
+$prev_href = $threadLink.'&post='.$prev_next_array[$prev_id];
+$next_href = $threadLink.'&post='.$prev_next_array[$next_id];
 
 echo '<center style="margin-top: 10px; margin-bottom: 10px;">';
 // Go to: first and previous

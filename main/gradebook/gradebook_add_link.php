@@ -134,14 +134,14 @@ if (isset($typeSelected) && $typeSelected != '0') {
             header('Location: gradebook_add_result.php?selecteval='.$link->get_ref_id().'&'.api_get_cidreq());
             exit;
         } else {
-            header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?linkadded=&selectcat='.$selectCat.'&'.api_get_cidreq());
+            header('Location: '.Category::getUrl().'linkadded=&selectcat='.$selectCat);
             exit;
         }
     }
 }
 
 $interbreadcrumb[] = array(
-    'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectCat.'&'.api_get_cidreq(),
+    'url' => Category::getUrl().'selectcat='.$selectCat,
     'name' => get_lang('Gradebook')
 );
 $this_section = SECTION_COURSES;

@@ -193,9 +193,9 @@ class ExerciseLink extends AbstractLink
      * Get the score of this exercise. Only the first attempts are taken into account.
      * @param int $stud_id student id (default: all students who have results -
      * then the average is returned)
-     * @return	array (score, max) if student is given
-     * 			array (sum of scores, number of scores) otherwise
-     * 			or null if no scores available
+     * @return    array (score, max) if student is given
+     *            array (sum of scores, number of scores) otherwise
+     *            or null if no scores available
      */
     public function calc_score($stud_id = null, $type = null)
     {
@@ -419,7 +419,8 @@ class ExerciseLink extends AbstractLink
         return false;
     }
 
-    public function is_allowed_to_change_name() {
+    public function is_allowed_to_change_name()
+    {
         return false;
     }
 

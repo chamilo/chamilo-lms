@@ -77,23 +77,15 @@ if ($current_forum['forum_of_group'] != 0) {
     }
 }
 
-/* Breadcrumbs */
-
-$gradebook = null;
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = Security::remove_XSS($_SESSION['gradebook']);
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
 $groupId = api_get_group_id();
 if (!empty($groupId)) {
-    $_clean['toolgroup'] = $groupId;
-    $group_properties = GroupManager :: get_group_properties($_clean['toolgroup']);
+    $group_properties = GroupManager::get_group_properties($groupId);
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
@@ -109,7 +101,7 @@ if (!empty($groupId)) {
         'name' => $current_forum['forum_title']
     );
     $interbreadcrumb[] = array(
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?gradebook='.$gradebook.'&forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
         'name' => $current_thread['thread_title']
     );
 
@@ -119,7 +111,7 @@ if (!empty($groupId)) {
     );
 } else {
     $interbreadcrumb[] = array(
-        'url' => 'index.php?gradebook='.$gradebook,
+        'url' => 'index.php?'.api_get_cidreq(),
         'name' => $nameTools
     );
     $interbreadcrumb[] = array(
@@ -131,7 +123,7 @@ if (!empty($groupId)) {
         'name' => $current_forum['forum_title']
     );
     $interbreadcrumb[] = array(
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?gradebook='.$gradebook.'&forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
         'name' => $current_thread['thread_title']
     );
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Reply'));
@@ -180,8 +172,13 @@ if ($origin == 'learnpath') {
 if ($origin != 'learnpath') {
     echo '<div class="actions">';
     echo '<span style="float:right;">'.search_link().'</span>';
-    echo '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&gradebook='.$gradebook.'&thread='.$threadId.'">'.
-        Display::return_icon('back.png', get_lang('BackToThread'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'">';
+    echo Display::return_icon(
+        'back.png',
+        get_lang('BackToThread'),
+        '',
+        ICON_SIZE_MEDIUM
+    ).'</a>';
     echo '</div>';
 }
 /*New display forum div*/

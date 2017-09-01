@@ -10,7 +10,8 @@
 /**
  * Validates imported data.
  */
-function validate_data($classes) {
+function validate_data($classes)
+{
     $errors = array();
     $usergroup = new UserGroup();
     foreach ($classes as $index => $class) {

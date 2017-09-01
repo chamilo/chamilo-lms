@@ -29,7 +29,7 @@ if ($isValid === 1) {
     Session::write('_user', $_user);
     $uidReset = true;
     $logging_in = true;
-    Event::event_login($_user['user_id']);
+    Event::eventLogin($_user['user_id']);
 } else {
     //error_log('WS authentication error - user not approved by external WS');
     $loginFailed = true;

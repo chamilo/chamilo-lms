@@ -803,14 +803,14 @@ class Blog
      */
     public static function deleteAssignedTask($blog_id, $task_id, $user_id)
     {
-        $tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
+        $table = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
         $course_id = api_get_course_int_id();
         $blog_id = intval($blog_id);
         $task_id = intval($task_id);
         $user_id = intval($user_id);
 
         // Delete posts
-        $sql = "DELETE FROM $tbl_blogs_tasks_rel_user
+        $sql = "DELETE FROM $table
                 WHERE
                     c_id = $course_id AND
                     blog_id = $blog_id AND
@@ -899,7 +899,8 @@ class Blog
             Database::query($sql);
 
             $sql = "DELETE FROM $tbl_tool
-                    WHERE c_id = $course_id AND name = '".Database::escape_string($title)."' LIMIT 1";
+                    WHERE c_id = $course_id AND name = '".Database::escape_string($title)."' 
+                    LIMIT 1";
             Database::query($sql);
         } else {
             // Change visibility state, add to course home.
@@ -1109,7 +1110,12 @@ class Blog
                 ).'" onclick="javascript:if(!confirm(\''.addslashes(
                     api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
                 ).'\')) return false;">';
-            $blogActions .= Display::return_icon('delete.png', get_lang('Delete'), null, ICON_SIZE_TINY);
+            $blogActions .= Display::return_icon(
+                'delete.png',
+                get_lang('Delete'),
+                null,
+                ICON_SIZE_TINY
+            );
             $blogActions .= '</a>';
         }
         $scoreRanking = self::displayRating('post', $blog_id, $post_id);
@@ -1121,7 +1127,10 @@ class Blog
             'author' => $blog_post['firstname'].' '.$blog_post['lastname'],
             'username' => $blog_post['username'],
             'title' => stripslashes($blog_post['title']),
-            'extract' => api_get_short_text_from_html(stripslashes($blog_post['full_text']), 400),
+            'extract' => api_get_short_text_from_html(
+                stripslashes($blog_post['full_text']),
+                400
+            ),
             'content' => $post_text,
             'post_date' => Display::dateToStringAgoAndLongDate($blog_post['date_creation']),
             'n_comments' => $blog_post_comments['number_of_comments'],
@@ -1247,7 +1256,12 @@ class Blog
                 'actions' => $commentActions,
                 'form_ranking' => $ratingSelect,
                 'score_ranking' => $scoreRanking,
-                'comments' => self::getThreadedComments($comment['iid'], $next_level, $blog_id, $post_id)
+                'comments' => self::getThreadedComments(
+                    $comment['iid'],
+                    $next_level,
+                    $blog_id,
+                    $post_id
+                )
             ];
 
             $listComments[] = $comments;
@@ -1668,8 +1682,7 @@ class Blog
                 $css_class = (($counter % 2) == 0) ? "row_odd" : "row_even";
                 $delete_icon = ($task['system_task'] == '1') ? "delete_na.png" : "delete.png";
                 $delete_title = ($task['system_task'] == '1') ? get_lang('DeleteSystemTask') : get_lang('DeleteTask');
-                $delete_link = ($task['system_task'] == '1') ? '#' : api_get_self(
-                    ).'?action=manage_tasks&blog_id='.$task['blog_id'].'&do=delete&task_id='.$task['task_id'];
+                $delete_link = ($task['system_task'] == '1') ? '#' : api_get_self().'?action=manage_tasks&blog_id='.$task['blog_id'].'&do=delete&task_id='.$task['task_id'];
                 $delete_confirm = ($task['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(
                         api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
                     ).'\')) return false;"';
@@ -1679,8 +1692,7 @@ class Blog
                 $html .= '<td>'.Security::remove_XSS($task['description']).'</td>';
                 $html .= '<td><span style="background-color: #'.$task['color'].'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>';
                 $html .= '<td width="50">';
-                $html .= '<a href="'.api_get_self(
-                    ).'?action=manage_tasks&blog_id='.$task['blog_id'].'&do=edit&task_id='.$task['task_id'].'">';
+                $html .= '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$task['blog_id'].'&do=edit&task_id='.$task['task_id'].'">';
                 $html .= Display::return_icon('edit.png', get_lang('EditTask'));
                 $html .= "</a>";
                 $html .= '<a href="'.$delete_link.'"';
@@ -1754,20 +1766,18 @@ class Blog
 
             $return .= '<tr class="'.$css_class.'" valign="top">';
             $return .= '<td width="240">'.Display::tag(
-                    'span',
-                    api_get_person_name($assignment['firstname'], $assignment['lastname']),
-                    array('title' => $username)
-                ).'</td>';
+                'span',
+                api_get_person_name($assignment['firstname'], $assignment['lastname']),
+                array('title' => $username)
+            ).'</td>';
             $return .= '<td>'.stripslashes($assignment['title']).'</td>';
             $return .= '<td>'.stripslashes($assignment['description']).'</td>';
             $return .= '<td>'.$assignment['target_date'].'</td>';
             $return .= '<td width="50">';
-            $return .= '<a href="'.api_get_self(
-                ).'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=edit_assignment&task_id='.$assignment['task_id'].'&user_id='.$assignment['user_id'].'">';
+            $return .= '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=edit_assignment&task_id='.$assignment['task_id'].'&user_id='.$assignment['user_id'].'">';
             $return .= Display::return_icon('edit.png', get_lang('EditTask'));
             $return .= "</a>";
-            $return .= '<a href="'.api_get_self(
-                ).'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=delete_assignment&task_id='.$assignment['task_id'].'&user_id='.$assignment['user_id'].'" ';
+            $return .= '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=delete_assignment&task_id='.$assignment['task_id'].'&user_id='.$assignment['user_id'].'" ';
             $return .= 'onclick="javascript:if(!confirm(\''.addslashes(
                     api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
                 ).'\')) return false;"';
@@ -2031,7 +2041,7 @@ class Blog
     /**
      * Returns an HTML form to assign a task
      * @param $blog_id
-     * @return string FormValidator
+     * @return FormValidator
      */
     public static function getTaskAssignmentForm($blog_id)
     {
@@ -2397,9 +2407,17 @@ class Blog
                 $username = api_htmlentities(sprintf(get_lang('LoginX'), $a_infosUser["username"]), ENT_QUOTES);
                 if ($is_western_name_order) {
                     $row[] = $a_infosUser["firstname"];
-                    $row[] = Display::tag('span', $a_infosUser["lastname"], array('title' => $username));
+                    $row[] = Display::tag(
+                        'span',
+                        $a_infosUser["lastname"],
+                        array('title' => $username)
+                    );
                 } else {
-                    $row[] = Display::tag('span', $a_infosUser["lastname"], array('title' => $username));
+                    $row[] = Display::tag(
+                        'span',
+                        $a_infosUser["lastname"],
+                        array('title' => $username)
+                    );
                     $row[] = $a_infosUser["firstname"];
                 }
                 $row[] = Display::icon_mailto_link($a_infosUser["email"]);
@@ -2493,9 +2511,17 @@ class Blog
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $myrow["username"]), ENT_QUOTES);
             if ($is_western_name_order) {
                 $row[] = $myrow["firstname"];
-                $row[] = Display::tag('span', $myrow["lastname"], array('title' => $username));
+                $row[] = Display::tag(
+                    'span',
+                    $myrow["lastname"],
+                    array('title' => $username)
+                );
             } else {
-                $row[] = Display::tag('span', $myrow["lastname"], array('title' => $username));
+                $row[] = Display::tag(
+                    'span',
+                    $myrow["lastname"],
+                    array('title' => $username)
+                );
                 $row[] = $myrow["firstname"];
             }
             $row[] = Display::icon_mailto_link($myrow["email"]);

@@ -86,7 +86,7 @@ if (api_is_drh()) {
 
 if ($export_csv) {
     if (!empty($session_id)) {
-        $_SESSION['id_session'] = $session_id;
+        Session::write('id_session', $session_id);
     }
     ob_start();
 }

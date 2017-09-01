@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This script is the Tickets plugin main entry point
  * @package chamilo.plugin.ticket
@@ -16,7 +18,7 @@ $libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
 
 $this_section = 'tickets';
-unset($_SESSION['this_section']);
+Session::erase('this_section');
 
 $table = new SortableTable(
     'TicketProject',

@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\UserBundle\Entity\Repository\UserRepository;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
@@ -51,7 +52,7 @@ class UserManager
 
     /**
      * Repository is use to query the DB, selects, etc
-     * @return Chamilo\UserBundle\Entity\Repository\UserRepository
+     * @return UserRepository
      */
     public static function getRepository()
     {
@@ -264,7 +265,12 @@ class UserManager
             $num = self::get_number_of_users();
             if ($num >= $_configuration[$access_url_id]['hosting_limit_users']) {
                 api_warn_hosting_contact('hosting_limit_users');
-                Display::addFlash(Display::return_message(get_lang('PortalUsersLimitReached'), 'warning'));
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('PortalUsersLimitReached'),
+                        'warning'
+                    )
+                );
 
                 return false;
             }
@@ -278,7 +284,12 @@ class UserManager
         ) {
             $num = self::get_number_of_users(1);
             if ($num >= $_configuration[$access_url_id]['hosting_limit_teachers']) {
-                Display::addFlash(Display::return_message(get_lang('PortalTeachersLimitReached'), 'warning'));
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('PortalTeachersLimitReached'),
+                        'warning'
+                    )
+                );
                 api_warn_hosting_contact('hosting_limit_teachers');
 
                 return false;
@@ -399,12 +410,28 @@ class UserManager
                 $courseFieldValue->saveFieldValues($extra);
             } else {
                 // Create notify settings by default
-                self::update_extra_field_value($userId, 'mail_notify_invitation', '1');
-                self::update_extra_field_value($userId, 'mail_notify_message', '1');
-                self::update_extra_field_value($userId, 'mail_notify_group_message', '1');
+                self::update_extra_field_value(
+                    $userId,
+                    'mail_notify_invitation',
+                    '1'
+                );
+                self::update_extra_field_value(
+                    $userId,
+                    'mail_notify_message',
+                    '1'
+                );
+                self::update_extra_field_value(
+                    $userId,
+                    'mail_notify_group_message',
+                    '1'
+                );
             }
 
-            self::update_extra_field_value($userId, 'already_logged_in', 'false');
+            self::update_extra_field_value(
+                $userId,
+                'already_logged_in',
+                'false'
+            );
 
             if (!empty($email) && $send_mail) {
                 $recipient_name = api_get_person_name(
@@ -444,7 +471,14 @@ class UserManager
                     }
                 }
 
-                $tplContent = new Template(null, false, false, false, false, false);
+                $tplContent = new Template(
+                    null,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                );
                 // variables for the default template
                 $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
                 $tplContent->assign('login_name', $loginName);
@@ -499,7 +533,14 @@ class UserManager
                 if ($sendEmailToAllAdmins) {
                     $adminList = self::get_all_administrators();
 
-                    $tplContent = new Template(null, false, false, false, false, false);
+                    $tplContent = new Template(
+                        null,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false
+                    );
                     // variables for the default template
                     $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
                     /*$lang = $user->getLanguage();
@@ -532,7 +573,11 @@ class UserManager
                     $emailBody = $tplContent->fetch($layoutContent);
                     $subject = '['.api_get_setting('siteName').'] '.get_lang('NewStudentRegistered');
                     foreach ($adminList as $adminId => $data) {
-                        MessageManager::send_message_simple($adminId, $subject, $emailBody);
+                        MessageManager::send_message_simple(
+                            $adminId,
+                            $subject,
+                            $emailBody
+                        );
                     }
 
                 }
@@ -548,7 +593,9 @@ class UserManager
             }
             Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $userId);
         } else {
-            Display::addFlash(Display::return_message(get_lang('ErrorContactPlatformAdmin')));
+            Display::addFlash(
+                Display::return_message(get_lang('ErrorContactPlatformAdmin'))
+            );
 
             return false;
         }
@@ -1098,7 +1145,12 @@ class UserManager
         if (!empty($email) && $send_email) {
             $recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
             $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-            $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+            $sender_name = api_get_person_name(
+                api_get_setting('administratorName'),
+                api_get_setting('administratorSurname'),
+                null,
+                PERSON_NAME_EMAIL_ADDRESS
+            );
             $email_admin = api_get_setting('emailAdministrator');
 
             if (api_is_multiple_url_enabled()) {
@@ -1227,8 +1279,10 @@ class UserManager
      * @return int User id
      * @assert ('0','---') === 0
      */
-    public static function get_user_id_from_original_id($original_user_id_value, $original_user_id_name)
-    {
+    public static function get_user_id_from_original_id(
+        $original_user_id_value,
+        $original_user_id_name
+    ) {
         $t_uf = Database::get_main_table(TABLE_EXTRA_FIELD);
         $t_ufv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $extraFieldType = EntityExtraField::USER_FIELD_TYPE;
@@ -1287,7 +1341,12 @@ class UserManager
             return false;
         }
 
-        $firstname = api_substr(preg_replace(USERNAME_PURIFIER, '', $firstname), 0, 1); // The first letter only.
+        // The first letter only.
+        $firstname = api_substr(
+            preg_replace(USERNAME_PURIFIER, '', $firstname),
+            0,
+            1
+        );
         //Looking for a space in the lastname
         $pos = api_strpos($lastname, ' ');
         if ($pos !== false) {
@@ -1363,7 +1422,11 @@ class UserManager
 
         // 1. Applying the shallow purifier.
         // 2. Length limitation.
-        return substr(preg_replace(USERNAME_PURIFIER_SHALLOW, '', $username), 0, USERNAME_MAX_LENGTH);
+        return substr(
+            preg_replace(USERNAME_PURIFIER_SHALLOW, '', $username),
+            0,
+            USERNAME_MAX_LENGTH
+        );
     }
 
     /**
@@ -1590,8 +1653,11 @@ class UserManager
      * the dir and file as the name implies if image does not exist it will
      * return the unknow image if anonymous parameter is true if not it returns an empty array
      */
-    public static function get_user_picture_path_by_id($id, $type = 'web', $userInfo = [])
-    {
+    public static function get_user_picture_path_by_id(
+        $id,
+        $type = 'web',
+        $userInfo = []
+    ) {
         switch ($type) {
             case 'system': // Base: absolute system path.
                 $base = api_get_path(SYS_CODE_PATH);
@@ -1870,8 +1936,12 @@ class UserManager
      * @return  mixed Returns the resulting common file name of created images which usually should be stored in database.
      * When deletion is requested returns empty string. In case of internal error or negative validation returns FALSE.
      */
-    public static function update_user_picture($user_id, $file = null, $source_file = null, $cropParameters = '')
-    {
+    public static function update_user_picture(
+        $user_id,
+        $file = null,
+        $source_file = null,
+        $cropParameters = ''
+    ) {
         if (empty($user_id)) {
             return false;
         }
@@ -1976,8 +2046,12 @@ class UserManager
      * @param null $source_file     The temporal filename
      * @return bool|null            return filename if success, but false
      */
-    public static function update_user_extra_file($user_id, $extra_field = '', $file = null, $source_file = null)
-    {
+    public static function update_user_extra_file(
+        $user_id,
+        $extra_field = '',
+        $file = null,
+        $source_file = null
+    ) {
         // Add Filter
         $source_file = Security::filter_filename($source_file);
         $file = Security::filter_filename($file);
@@ -2044,14 +2118,12 @@ class UserManager
     public static function build_production_list($user_id, $force = false, $showDelete = false)
     {
         if (!$force && !empty($_POST['remove_production'])) {
-
             return true; // postpone reading from the filesystem
         }
 
         $productions = self::get_user_productions($user_id);
 
         if (empty($productions)) {
-
             return false;
         }
 
@@ -2111,8 +2183,8 @@ class UserManager
     /**
      * Remove a user production.
      *
-     * @param int $user_id        User id
-     * @param string $production    The production to remove
+     * @param int $user_id User id
+     * @param string $production The production to remove
      */
     public static function remove_user_production($user_id, $production)
     {
@@ -2238,8 +2310,12 @@ class UserManager
      * @param bool $showDelete
      * @return bool|string
      */
-    public static function build_user_extra_file_list($user_id, $extra_field, $force = false, $showDelete = false)
-    {
+    public static function build_user_extra_file_list(
+        $user_id,
+        $extra_field,
+        $force = false,
+        $showDelete = false
+    ) {
         if (!$force && !empty($_POST['remove_'.$extra_field])) {
             return true; // postpone reading from the filesystem
         }
@@ -2339,8 +2415,12 @@ class UserManager
      * @param    string    $default Field's default value
      * @return int
      */
-    public static function create_extra_field($variable, $fieldType, $displayText, $default)
-    {
+    public static function create_extra_field(
+        $variable,
+        $fieldType,
+        $displayText,
+        $default
+    ) {
         $extraField = new ExtraField('user');
         $params = [
             'variable' => $variable,
@@ -2494,13 +2574,13 @@ class UserManager
         }
 
         $sql .= " AND extra_field_type = ".EntityExtraField::USER_FIELD_TYPE;
-
         $sql .= " ORDER BY f.field_order";
 
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             while ($row = Database::fetch_array($res)) {
-                $sqlu = "SELECT value as fval FROM $t_ufv v INNER JOIN $t_uf f
+                $sqlu = "SELECT value as fval FROM $t_ufv v 
+                         INNER JOIN $t_uf f
                          ON (v.field_id = f.id)
                          WHERE
                             extra_field_type = ".EntityExtraField::USER_FIELD_TYPE." AND
@@ -3242,8 +3322,11 @@ class UserManager
      * @param   string  $resourcetype resourcetype: images, all
      * @return    int        User ID (or false if not found)
      */
-    public static function get_user_upload_files_by_course($user_id, $course, $resourcetype = 'all')
-    {
+    public static function get_user_upload_files_by_course(
+        $user_id,
+        $course,
+        $resourcetype = 'all'
+    ) {
         $return = '';
         if (!empty($user_id) && !empty($course)) {
             $user_id = intval($user_id);
@@ -3392,7 +3475,8 @@ class UserManager
             return false;
         }
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
-        $sql = "SELECT id FROM $t_api WHERE user_id=".$user_id." AND api_service='".$api_service."'";
+        $sql = "SELECT id FROM $t_api 
+                WHERE user_id=".$user_id." AND api_service='".$api_service."'";
         $res = Database::query($sql);
         $num = Database::num_rows($res);
         if ($num == 1) {
@@ -3420,7 +3504,8 @@ class UserManager
             return false;
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
         $api_service = Database::escape_string($api_service);
-        $sql = "SELECT id FROM $t_api WHERE user_id=".$user_id." AND api_service='".$api_service."'";
+        $sql = "SELECT id FROM $t_api 
+                WHERE user_id=".$user_id." AND api_service='".$api_service."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) < 1) {
             return false;
@@ -3480,8 +3565,12 @@ class UserManager
      * @param string The message title
      * @param string The content message
      */
-    public static function send_message_in_outbox($email_administrator, $user_id, $title, $content)
-    {
+    public static function send_message_in_outbox(
+        $email_administrator,
+        $user_id,
+        $title,
+        $content
+    ) {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $title = api_utf8_decode($title);
@@ -4060,7 +4149,6 @@ class UserManager
         );
 
         // Extra fields
-
         $extraFields = self::get_extra_filtrable_fields();
         $defaults = [];
         if (is_array($extraFields) && count($extraFields) > 0) {
@@ -4181,8 +4269,11 @@ class UserManager
      * @author isaac flores paz <isaac.flores@dokeos.com>
      * @author Julio Montoya <gugli100@gmail.com> Cleaning code
      */
-    public static function remove_user_rel_user($friend_id, $real_removed = false, $with_status_condition = '')
-    {
+    public static function remove_user_rel_user(
+        $friend_id,
+        $real_removed = false,
+        $with_status_condition = ''
+    ) {
         $tbl_my_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $tbl_my_message = Database::get_main_table(TABLE_MESSAGE);
         $friend_id = intval($friend_id);
@@ -4193,10 +4284,14 @@ class UserManager
                 $extra_condition = ' AND relation_type = '.intval($with_status_condition);
             }
             $sql = 'DELETE FROM '.$tbl_my_friend.'
-                    WHERE relation_type <> '.USER_RELATION_TYPE_RRHH.' AND friend_user_id='.$friend_id.' '.$extra_condition;
+                    WHERE 
+                        relation_type <> '.USER_RELATION_TYPE_RRHH.' AND 
+                        friend_user_id='.$friend_id.' '.$extra_condition;
             Database::query($sql);
             $sql = 'DELETE FROM '.$tbl_my_friend.'
-                   WHERE relation_type <> '.USER_RELATION_TYPE_RRHH.' AND user_id='.$friend_id.' '.$extra_condition;
+                   WHERE 
+                    relation_type <> '.USER_RELATION_TYPE_RRHH.' AND 
+                    user_id='.$friend_id.' '.$extra_condition;
             Database::query($sql);
         } else {
             $user_id = api_get_user_id();
@@ -4340,16 +4435,13 @@ class UserManager
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_user_rel_user = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
         $userId = intval($userId);
-
         $limitCondition = '';
 
         if (isset($from) && isset($numberItems)) {
@@ -4538,8 +4630,11 @@ class UserManager
      * @param bool $deleteOtherAssignedUsers
      * @return int
      */
-    public static function subscribeUsersToHRManager($hr_dept_id, $users_id, $deleteOtherAssignedUsers = true)
-    {
+    public static function subscribeUsersToHRManager(
+        $hr_dept_id,
+        $users_id,
+        $deleteOtherAssignedUsers = true
+    ) {
         return self::subscribeUsersToUser(
             $hr_dept_id,
             $users_id,
@@ -4770,10 +4865,13 @@ class UserManager
             $session_condition = " AND session_id = $session_id";
         }
 
-        $sql = 'SELECT * FROM '.$tbl_grade_certificate.' WHERE cat_id = (SELECT id FROM '.$tbl_grade_category.'
-                WHERE
-                    course_code = "'.Database::escape_string($course_code).'" '.$session_condition.' LIMIT 1 ) AND
-                    user_id='.intval($user_id);
+        $sql = 'SELECT * FROM '.$tbl_grade_certificate.' 
+                WHERE cat_id = (
+                    SELECT id FROM '.$tbl_grade_category.'
+                    WHERE
+                        course_code = "'.Database::escape_string($course_code).'" '.$session_condition.' 
+                    LIMIT 1 
+                ) AND user_id='.intval($user_id);
 
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
@@ -4913,7 +5011,11 @@ class UserManager
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
             if ($last_login_date = Database::result($rs, 0, 0)) {
-                $last_login_date = api_get_local_time($last_login_date, null, date_default_timezone_get());
+                $last_login_date = api_get_local_time(
+                    $last_login_date,
+                    null,
+                    date_default_timezone_get()
+                );
                 if ($return_timestamp) {
                     return api_strtotime($last_login_date);
                 } else {
@@ -5313,7 +5415,11 @@ EOF;
      */
     public static function subscribeBossToUsers($bossId, $usersId)
     {
-        return self::subscribeUsersToUser($bossId, $usersId, USER_RELATION_TYPE_BOSS);
+        return self::subscribeUsersToUser(
+            $bossId,
+            $usersId,
+            USER_RELATION_TYPE_BOSS
+        );
     }
 
     /**
@@ -5324,8 +5430,11 @@ EOF;
      * @param bool $sendNotification
      * @return int Affected rows
      */
-    public static function subscribeUserToBossList($studentId, $bossList, $sendNotification = false)
-    {
+    public static function subscribeUserToBossList(
+        $studentId,
+        $bossList,
+        $sendNotification = false
+    ) {
         if ($bossList) {
             $studentId = (int) $studentId;
             $studentInfo = api_get_user_info($studentId);
@@ -5480,8 +5589,13 @@ EOF;
      * @param string $until Optional. Until date
      * @return int The time
      */
-    public static function getTimeSpentInCourses($userId, $courseId, $sessionId = 0, $from = '', $until = '')
-    {
+    public static function getTimeSpentInCourses(
+        $userId,
+        $courseId,
+        $sessionId = 0,
+        $from = '',
+        $until = ''
+    ) {
         $userId = intval($userId);
         $sessionId = intval($sessionId);
 
@@ -5656,7 +5770,10 @@ EOF;
      */
     public static function getUserProfileLinkWithPicture($userInfo)
     {
-        return Display::url(Display::img($userInfo['avatar']), $userInfo['profile_url']);
+        return Display::url(
+            Display::img($userInfo['avatar']),
+            $userInfo['profile_url']
+        );
     }
 
     /**
@@ -5835,7 +5952,10 @@ SQL;
      */
     public static function getCommonCoursesBetweenTeacherAndStudent($teacherId, $studentId)
     {
-        $courses = CourseManager::getCoursesFollowedByUser($teacherId, COURSEMANAGER);
+        $courses = CourseManager::getCoursesFollowedByUser(
+            $teacherId,
+            COURSEMANAGER
+        );
         if (empty($courses)) {
             return false;
         }

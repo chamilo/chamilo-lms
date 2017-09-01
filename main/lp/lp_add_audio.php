@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This is a learning path creation and player tool in Chamilo - previously
  * @author Julio Montoya  - Improving the list of templates
@@ -8,50 +10,50 @@
  */
 
 $this_section = SECTION_COURSES;
-
 api_protect_course_script();
-
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
-$isStudentView = isset($_REQUEST['isStudentView']) ? (int) $_REQUEST['isStudentView'] : null;
+$isStudentView = api_is_student_view_active();
 $learnpath_id = (int) $_REQUEST['lp_id'];
 $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
-
 $type = isset($_GET['type']) ? $_GET['type'] : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-if ((!$is_allowed_to_edit) || ($isStudentView)) {
+if ((!$is_allowed_to_edit) || $isStudentView) {
     error_log('New LP - User not authorized in lp_add_audio.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
 }
-/* SHOWING THE ADMIN TOOLS */
 
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
+/** @var learnpath $lp */
+$lp = Session::read('oLP');
 
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
 
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
-$interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", 'name' => $_SESSION['oLP']->get_name());
+$interbreadcrumb[] = array(
+    'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
+    'name' => get_lang('LearningPaths')
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
+    'name' => $lp->get_name()
+);
 
 switch ($type) {
     case 'dir':
         $interbreadcrumb[] = array(
-            'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$_SESSION['oLP']->get_id().'&'.api_get_cidreq(),
+            'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$lp->get_id().'&'.api_get_cidreq(),
             'name' => get_lang('NewStep'),
         );
         $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewChapter'));
         break;
     case 'document':
         $interbreadcrumb[] = array(
-            'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$_SESSION['oLP']->get_id().'&'.api_get_cidreq(),
+            'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$lp->get_id().'&'.api_get_cidreq(),
             'name' => get_lang('NewStep'),
         );
         break;
@@ -83,7 +85,7 @@ $form = new FormValidator(
 );
 $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 
-$lpPathInfo = $_SESSION['oLP']->generate_lp_folder(api_get_course_info());
+$lpPathInfo = $lp->generate_lp_folder(api_get_course_info());
 
 $file = null;
 if (isset($lp_item->audio) && !empty($lp_item->audio)) {
@@ -96,10 +98,10 @@ if (isset($lp_item->audio) && !empty($lp_item->audio)) {
     }
 }
 
-$page = $_SESSION['oLP']->build_action_menu(true);
+$page = $lp->build_action_menu(true);
 $page .= '<div class="row" style="overflow:hidden">';
 $page .= '<div id="lp_sidebar" class="col-md-4">';
-$page .= $_SESSION['oLP']->return_new_tree(null, true);
+$page .= $lp->return_new_tree(null, true);
 
 // Show the template list.
 $page .= '</div>';
@@ -133,8 +135,16 @@ if (!empty($file)) {
         Display::getMediaPlayer($file, array('url' => $urlFile)).
         "</div>";
     $form->addElement('label', get_lang('Listen'), $audioPlayer);
-    $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?lp_id='.$_SESSION['oLP']->get_id().'&action=add_audio&id='.$lp_item_id.'&delete_file=1&'.api_get_cidreq();
-    $form->addElement('label', null, Display::url(get_lang('RemoveAudio'), $url, array('class' => 'btn btn-danger')));
+    $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?lp_id='.$lp->get_id().'&action=add_audio&id='.$lp_item_id.'&delete_file=1&'.api_get_cidreq();
+    $form->addElement(
+        'label',
+        null,
+        Display::url(
+            get_lang('RemoveAudio'),
+            $url,
+            array('class' => 'btn btn-danger')
+        )
+    );
 } else {
     $form->addElement('file', 'file');
     $form->addElement('hidden', 'id', $lp_item_id);
@@ -150,7 +160,7 @@ $documentTree = DocumentManager::get_document_preview(
     api_get_session_id(),
     false,
     '',
-    urlencode('lp_controller.php?action=add_audio&lp_id='.$_SESSION['oLP']->get_id().'&id='.$lp_item_id),
+    urlencode('lp_controller.php?action=add_audio&lp_id='.$lp->get_id().'&id='.$lp_item_id),
     false,
     true
     //$folderId = false

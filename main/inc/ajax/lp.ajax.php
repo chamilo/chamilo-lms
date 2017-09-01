@@ -41,9 +41,11 @@ switch ($action) {
         break;
     case 'add_lp_item':
         if (api_is_allowed_to_edit(null, true)) {
-            if ($_SESSION['oLP']) {
+            /** @var learnpath $learningPath */
+            $learningPath = Session::read('oLP');
+            if ($learningPath) {
                 // Updating the lp.modified_on
-                $_SESSION['oLP']->set_modified_on();
+                $learningPath->set_modified_on();
                 $title = $_REQUEST['title'];
                 if ($_REQUEST['type'] == TOOL_QUIZ) {
                     $title = Exercise::format_title_variable($title);
@@ -52,7 +54,7 @@ switch ($action) {
                 $parentId = isset($_REQUEST['parent_id']) ? $_REQUEST['parent_id'] : '';
                 $previousId = isset($_REQUEST['previous_id']) ? $_REQUEST['previous_id'] : '';
 
-                echo $_SESSION['oLP']->add_item(
+                echo $learningPath->add_item(
                     $parentId,
                     $previousId,
                     $_REQUEST['type'],
@@ -187,7 +189,11 @@ switch ($action) {
             break;
         }
 
-        $learningPath = learnpath::getLpFromSession(api_get_course_id(), $lpId, api_get_user_id());
+        $learningPath = learnpath::getLpFromSession(
+            api_get_course_id(),
+            $lpId,
+            api_get_user_id()
+        );
         $lpItem = $learningPath->getItem($lpItemId);
 
         if (empty($lpItem)) {

@@ -43,8 +43,4 @@ $s->register(
     '',
     '',
     'Retorna o conteudo do campo informado de um anuncio de chave ID. Campos retornaveis: sender, date, title e content'
-
 );
-
-
-

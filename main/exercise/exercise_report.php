@@ -39,7 +39,6 @@ $_course = api_get_course_info();
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $origin = isset($origin) ? $origin : null;
-$gradebook = isset($gradebook) ? $gradebook : null;
 $path = isset($_GET['path']) ? Security::remove_XSS($_GET['path']) : null;
 
 /* 	Constants and variables */
@@ -330,10 +329,9 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
     }
 }
 
-
 if ($is_allowedToEdit || $is_tutor) {
     $interbreadcrumb[] = array(
-        "url" => "exercise.php?gradebook=$gradebook",
+        "url" => "exercise.php?".api_get_cidreq(),
         "name" => get_lang('Exercises')
     );
     $objExerciseTmp = new Exercise();
@@ -346,7 +344,7 @@ if ($is_allowedToEdit || $is_tutor) {
     }
 } else {
     $interbreadcrumb[] = array(
-        "url" => "exercise.php?gradebook=$gradebook",
+        "url" => "exercise.php?".api_get_cidreq(),
         "name" => get_lang('Exercises')
     );
     $objExerciseTmp = new Exercise();

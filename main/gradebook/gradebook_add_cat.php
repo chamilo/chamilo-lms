@@ -89,13 +89,13 @@ if ($form->validate()) {
     }
     $cat->set_visible($visible);
     $result = $cat->add();
-    header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?addcat=&selectcat='.$cat->get_parent_id().'&'.api_get_cidreq());
+    header('Location: '.Category::getUrl().'addcat=&selectcat='.$cat->get_parent_id());
     exit;
 }
 
 if (!$_in_course) {
     $interbreadcrumb[] = array(
-        'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$get_select_cat.'&'.api_get_cidreq(),
+        'url' => Category::getUrl().'selectcat='.$get_select_cat,
         'name' => get_lang('Gradebook')
     );
 }

@@ -14,7 +14,6 @@ use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$_SESSION['whereami'] = 'document/createdraw';
 $this_section = SECTION_COURSES;
 $groupRights = Session::read('group_member_with_upload_rights');
 $nameTools = get_lang('Draw');
@@ -49,9 +48,9 @@ $dir = $document_data['path'];
 /*	Constants and variables */
 
 //path for svg-edit save
-$_SESSION['draw_dir'] = Security::remove_XSS($dir);
-if ($_SESSION['draw_dir'] == '/') {
-    $_SESSION['draw_dir'] = '';
+Session::write('draw_dir', Security::remove_XSS($dir));
+if ($dir == '/') {
+    Session::write('draw_dir', '');
 }
 
 $dir = isset($dir) ? Security::remove_XSS($dir) : (isset($_POST['dir']) ? Security::remove_XSS($_POST['dir']) : '/');

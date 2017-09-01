@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  * @author Patrick Cool
  * @package chamilo.document
@@ -41,8 +44,7 @@ $originaltoolname = '<b>'.get_lang('SlideshowOptions').'</b>';
 $interbreadcrumb[] = array('url' => $url, 'name' => $originaltoolname);
 
 Display::display_header($originaltoolname, 'Doc');
-$image_resizing = isset($_SESSION['image_resizing']) ? $_SESSION['image_resizing'] : null;
-
+$image_resizing = Session::read('image_resizing');
 ?>
 <script>
 function enableresizing() { //v2.0
@@ -73,7 +75,7 @@ echo Display::toolbarAction('toolbar-slideshow', [$actions])
             <label>
                 <input name="radio_resizing" type="radio" onClick="disableresizing()" value="noresizing" <?php
                     if ($image_resizing == 'noresizing' || $image_resizing == '') {
-                            echo ' checked';
+                        echo ' checked';
                     }
         ?>>
             </label>
@@ -82,9 +84,9 @@ echo Display::toolbarAction('toolbar-slideshow', [$actions])
         <div class="radio">
             <label>
                 <input name="radio_resizing" type="radio" onClick="disableresizing()" value="autoresizing" <?php
-                        if ($image_resizing == 'resizing_auto' || $image_resizing == '') {
-                                echo ' checked';
-                        }
+                if ($image_resizing == 'resizing_auto' || $image_resizing == '') {
+                        echo ' checked';
+                }
         ?>>
             </label>
             <?php echo '<b>'.get_lang('ResizingAuto').'</b>, '.get_lang('ResizingAutoComment'); ?>
@@ -92,11 +94,11 @@ echo Display::toolbarAction('toolbar-slideshow', [$actions])
 	<div class="radio">
             <label>
                 <input class="checkbox" name="radio_resizing" type="radio" onClick="javascript: enableresizing();" value="resizing" <?php
-                    if ($image_resizing == 'resizing') {
-                            echo ' checked';
-                            $width = $_SESSION['image_resizing_width'];
-                            $height = $_SESSION['image_resizing_height'];
-                    }
+                if ($image_resizing == 'resizing') {
+                    echo ' checked';
+                    $width = Session::read('image_resizing_width');
+                    $height = Session::read('image_resizing_height');
+                }
         ?>>
             </label>
             <?php echo '<b>'.get_lang('Resizing').'</b>, '.get_lang('ResizingComment'); ?>
@@ -123,8 +125,8 @@ echo Display::toolbarAction('toolbar-slideshow', [$actions])
             echo ' value="'.$height.'"';
             echo ' class="enabled_input"';
         } else {
-                        echo ' class="disabled_input"';
-                }
+            echo ' class="disabled_input"';
+        }
         ?> >
             </div>
             <div class="col-sm-8"></div>

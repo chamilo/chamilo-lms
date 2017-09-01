@@ -8,6 +8,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
+GradebookUtils::block_students();
 
 if (api_get_setting('teachers_can_change_score_settings') != 'true') {
     api_not_allowed();
@@ -40,15 +41,15 @@ function minItem(item) {
 </script>';
 
 $interbreadcrumb[] = array(
-    'url' => $_SESSION['gradebook_dest'].'?selectcat=1',
+    'url' => Category::getUrl().'selectcat=1',
     'name' => get_lang('ToolGradebook')
 );
 
 $select_cat = intval($_GET['selectcat']);
-$displayscore = ScoreDisplay :: instance();
-$customdisplays = $displayscore->get_custom_score_display_settings();
+$displayScore = ScoreDisplay :: instance();
+$customdisplays = $displayScore->get_custom_score_display_settings();
 
-$nr_items = (count($customdisplays) != '0') ? count($customdisplays) : '1';
+$nr_items = count($customdisplays) != '0' ? count($customdisplays) : '1';
 $scoreform = new ScoreDisplayForm(
     'scoring_system_form',
     api_get_self().'?selectcat='.$select_cat.'&'.api_get_cidreq()
@@ -63,7 +64,7 @@ if ($scoreform->validate()) {
     // create new array of custom display settings
     // this loop also checks if all score ranges are unique
 
-    $scoringdisplay = array();
+    $scoringDisplay = array();
     $ranges_ok = true;
     $endscore = isset($values['endscore']) ? $values['endscore'] : null;
     $displaytext = isset($values['displaytext']) ? $values['displaytext'] : null;
@@ -72,46 +73,48 @@ if ($scoreform->validate()) {
         $setting['score'] = $endscore[$counter];
         $setting['display'] = $displaytext[$counter];
         if (!empty($setting['score'])) {
-            foreach ($scoringdisplay as $passed_entry) {
+            foreach ($scoringDisplay as $passed_entry) {
                 if ($passed_entry['score'] == $setting['score']) {
                     $ranges_ok = false;
                 }
             }
-            $scoringdisplay[] = $setting;
+            $scoringDisplay[] = $setting;
         }
     }
 
     if (!$ranges_ok) {
-        header('Location: '.api_get_self().'?nouniqueranges=&selectcat='.$select_cat.'&'.api_get_cidreq());
+        Display::addFlash(
+            Display::return_message(
+                get_lang('NoUniqueScoreRanges'),
+                'error',
+                false
+            )
+        );
+        header('Location: '.api_get_self().'?selectcat='.$select_cat.'&'.api_get_cidreq());
         exit;
     }
 
     $scorecolpercent = 0;
-
-    if ($displayscore->is_coloring_enabled()) {
+    if ($displayScore->is_coloring_enabled()) {
         $scorecolpercent = $values['scorecolpercent'];
     }
 
-    if ($displayscore->is_custom() && !empty($scoringdisplay)) {
-        $displayscore->update_custom_score_display_settings($scoringdisplay, $scorecolpercent);
+    if ($displayScore->is_custom() && !empty($scoringDisplay)) {
+        $displayScore->update_custom_score_display_settings(
+            $scoringDisplay,
+            $scorecolpercent
+        );
     }
-    header('Location:'.api_get_self().'?scoringupdated=&selectcat='.$select_cat.'&'.api_get_cidreq());
+
+    Display::addFlash(
+        Display::return_message(get_lang('ScoringUpdated'), 'confirm', false)
+    );
+
+    header('Location:'.api_get_self().'?selectcat='.$select_cat.'&'.api_get_cidreq());
     exit;
 }
 
 $this_section = SECTION_COURSES;
-Display :: display_header(get_lang('ScoreEdit'));
-
-if (((isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') ||
-    (isset($_GET['selectcat']) && ($_SESSION['studentview'] == 'teacherview')))
-) {
-    if (isset ($_GET['scoringupdated'])) {
-        echo Display::return_message(get_lang('ScoringUpdated'), 'confirm', false);
-    }
-
-    if (isset ($_GET['nouniqueranges'])) {
-        echo Display::return_message(get_lang('NoUniqueScoreRanges'), 'error', false);
-    }
-    $scoreform->display();
-}
+Display::display_header(get_lang('ScoreEdit'));
+$scoreform->display();
 Display::display_footer();

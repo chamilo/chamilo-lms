@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Homepage for the MySpace directory
  * @package chamilo.reporting
@@ -15,10 +17,9 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;
 //for HTML editor repository
-unset($_SESSION['this_section']);
+Session::erase('this_section');
 
 ob_start();
-
 $nameTools = get_lang('MySpace');
 $export_csv  = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;

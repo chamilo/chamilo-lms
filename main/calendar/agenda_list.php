@@ -13,6 +13,20 @@ $interbreadcrumb[] = array(
 );
 
 $currentCourseId = api_get_course_int_id();
+$currentGroupdId = api_get_group_id();
+
+if (!empty($currentGroupdId)) {
+    $groupProperties = GroupManager::get_group_properties($currentGroupdId);
+    $interbreadcrumb[] = array(
+        "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
+        "name" => get_lang('Groups')
+    );
+    $interbreadcrumb[] = array(
+        "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
+        "name" => get_lang('GroupSpace').' '.$groupProperties['name']
+    );
+}
+
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 $agenda = new Agenda($type);
 $events = $agenda->getEvents(

@@ -228,7 +228,6 @@ function fullexportspecial()
     $to_group_id = 0;
     $zip_folder = new PclZip($FileZip['TEMP_FILE_ZIP']);
     $list_course = CourseManager::get_course_list();
-
     $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
     $tbl_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -263,7 +262,8 @@ function fullexportspecial()
                     $FileZip['PATH_COURSE'].$_course['directory']."/document".$rows_course_file['path'],
                     PCLZIP_OPT_ADD_PATH,
                     $_course['directory'],
-                    PCLZIP_OPT_REMOVE_PATH, $FileZip['PATH_COURSE'].$_course['directory']."/document".$FileZip['PATH_REMOVE']
+                    PCLZIP_OPT_REMOVE_PATH,
+                    $FileZip['PATH_COURSE'].$_course['directory']."/document".$FileZip['PATH_REMOVE']
                 );
             }
 
@@ -276,7 +276,8 @@ function fullexportspecial()
             $query_session = Database::query($sql);
             while ($rows_session = Database::fetch_assoc($query_session)) {
                 $session_id = $rows_session['id'];
-                $sql_session_doc = "SELECT path FROM $tbl_document AS docs, $tbl_property AS props
+                $sql_session_doc = "SELECT path 
+                    FROM $tbl_document AS docs, $tbl_property AS props
                     WHERE props.tool='".TOOL_DOCUMENT."'
                         AND docs.id=props.ref
                         AND docs.path LIKE '".$querypath."/%'

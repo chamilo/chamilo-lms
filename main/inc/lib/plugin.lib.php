@@ -1,6 +1,8 @@
 <?php
 /* See license terms in /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Class AppPlugin
  */
@@ -408,10 +410,10 @@ class AppPlugin
      */
     public function getPluginInfo($plugin_name, $forced = false)
     {
-        static $plugin_data = array();
+        $pluginData = Session::read('plugin_data');
 
-        if (isset($plugin_data[$plugin_name]) && $forced == false) {
-            return $plugin_data[$plugin_name];
+        if (isset($pluginData[$plugin_name]) && $forced == false) {
+            return $pluginData[$plugin_name];
         } else {
             $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/plugin.php";
 
@@ -443,8 +445,8 @@ class AppPlugin
                 $settings_filtered[$item['variable']] = $item['selected_value'];
             }
             $plugin_info['settings'] = $settings_filtered;
-            $plugin_data[$plugin_name] = $plugin_info;
-
+            $pluginData[$plugin_name] = $plugin_info;
+            Session::write('plugin_data', $pluginData);
             return $plugin_info;
         }
     }

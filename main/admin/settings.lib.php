@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
 use Symfony\Component\Filesystem\Filesystem;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\SystemTemplate;
@@ -127,6 +128,7 @@ function handleExtensions()
  */
 function handlePlugins()
 {
+    Session::erase('plugin_data');
     $plugin_obj = new AppPlugin();
     $token = Security::get_token();
     if (isset($_POST['submit_plugins'])) {

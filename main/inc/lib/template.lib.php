@@ -216,7 +216,7 @@ class Template
                 //1. Showing installed plugins in regions
                 $pluginRegions = $this->plugin->get_plugin_regions();
                 foreach ($pluginRegions as $region) {
-                    $this->set_plugin_region($region);
+                    $this->setPluginRegion($region);
                 }
 
                 //2. Loading the course plugin info
@@ -1247,7 +1247,7 @@ class Template
      * @param string $pluginRegion
      * @return null
      */
-    public function set_plugin_region($pluginRegion)
+    public function setPluginRegion($pluginRegion)
     {
         if (!empty($pluginRegion)) {
             $regionContent = $this->plugin->load_region(
@@ -1261,10 +1261,14 @@ class Template
                 // The plugin_info variable is available inside the plugin index
                 $pluginInfo = $this->plugin->getPluginInfo($plugin_name);
 
-                if (isset($pluginInfo['is_course_plugin']) && $pluginInfo['is_course_plugin']) {
+                if (isset($pluginInfo['is_course_plugin']) &&
+                    $pluginInfo['is_course_plugin']
+                ) {
                     $courseInfo = api_get_course_info();
                     if (!empty($courseInfo)) {
-                        if (isset($pluginInfo['obj']) && $pluginInfo['obj'] instanceof Plugin) {
+                        if (isset($pluginInfo['obj']) &&
+                            $pluginInfo['obj'] instanceof Plugin
+                        ) {
                             /** @var Plugin $plugin */
                             $plugin = $pluginInfo['obj'];
                             $regionContent .= $plugin->renderRegion($pluginRegion);

@@ -6357,10 +6357,10 @@ class SessionManager
     public static function getDayLeftInSession(array $sessionInfo, $userId)
     {
         $sessionId = $sessionInfo['id'];
-        $userSubsubscription = self::getUserSession($userId, $sessionId);
-        $duration = empty($userSubsubscription['duration'])
+        $subscription = self::getUserSession($userId, $sessionId);
+        $duration = empty($subscription['duration'])
             ? $sessionInfo['duration']
-            : $sessionInfo['duration'] + $userSubsubscription['duration'];
+            : $sessionInfo['duration'] + $subscription['duration'];
 
         // Get an array with the details of the first access of the student to
         // this session
@@ -6377,7 +6377,6 @@ class SessionManager
         }
 
         $firstAccess = api_strtotime($courseAccess['login_course_date'], 'UTC');
-
         $endDateInSeconds = $firstAccess + $duration * 24 * 60 * 60;
         $leftDays = round(($endDateInSeconds - $currentTime) / 60 / 60 / 24);
 

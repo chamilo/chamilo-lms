@@ -4200,7 +4200,7 @@ ul.holder li.bit-box{
   min-width: 100%;
 }
 ul.exercise-draggable-answer.list-inline li {
-    float: left;
+    /*float: left;*/
 }
 ul.exercise-draggable-answer li {
   cursor: move;
@@ -6619,13 +6619,4 @@ input.form-control[type="color"] {
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
 
-}
-
-
-.badge_sidebar_image {
-    width: 120px;
-}
-
-.badge_sidebar_image_transparency{
-    opacity: 0.5;
 }

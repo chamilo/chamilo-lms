@@ -147,7 +147,7 @@ class IndexManager
     public function logout($redirect = true, $logoutInfo = [])
     {
         online_logout($this->user_id, true);
-        courseLogout($logoutInfo);
+        Event::courseLogout($logoutInfo);
     }
 
     /**
@@ -966,7 +966,8 @@ class IndexManager
         }
 
         if (bbb::showGlobalConferenceLink($userInfo)) {
-            $url = api_get_path(WEB_PLUGIN_PATH).'bbb/start.php?global=1';
+            $bbb = new bbb('', '', true, api_get_user_id());
+            $url = $bbb->getListingUrl();
             $items[] = [
                 'class' => 'video-conference',
                 'icon' => Display::return_icon(

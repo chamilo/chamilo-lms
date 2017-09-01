@@ -428,6 +428,32 @@ class Session
     }
 
     /**
+     * Remove course subscription for a user.
+     * If user status in session is student, then decrease number of course users
+     * @param User $user
+     * @param Course $course
+     */
+    public function removeUserCourseSubscription(User $user, Course $course)
+    {
+        /** @var SessionRelCourseRelUser $courseSubscription */
+        foreach ($this->userCourseSubscriptions as $i => $courseSubscription) {
+            if ($courseSubscription->getCourse()->getId() === $course->getId() &&
+                $courseSubscription->getUser()->getId() === $user->getId()) {
+
+                if ($this->userCourseSubscriptions[$i]->getStatus() === self::STUDENT) {
+                    $sessionCourse = $this->getCourseSubscription($course);
+
+                    $sessionCourse->setNbrUsers(
+                        $sessionCourse->getNbrUsers() - 1
+                    );
+                }
+
+                unset($this->userCourseSubscriptions[$i]);
+            }
+        }
+    }
+
+    /**
      * @param User $user
      * @param Course $course
      * @param int $status if not set it will check if the user is registered
@@ -917,6 +943,26 @@ class Session
     }
 
     /**
+     * @param Course $course
+     * @return SessionRelCourse
+     */
+    public function getCourseSubscription(Course $course)
+    {
+        $criteria = Criteria::create()->where(
+            Criteria::expr()->eq('course', $course)
+        );
+
+        /** @var SessionRelCourse $sessionCourse */
+        $sessionCourse = $this->courses
+            ->matching($criteria)
+            ->current();
+
+        return $sessionCourse;
+    }
+
+    /**
+     * Add a user course subscription.
+     * If user status in session is student, then increase number of course users
      * @param int $status
      * @param User $user
      * @param Course $course
@@ -929,6 +975,14 @@ class Session
         $userRelCourseRelSession->setSession($this);
         $userRelCourseRelSession->setStatus($status);
         $this->addUserCourseSubscription($userRelCourseRelSession);
+
+        if ($status === self::STUDENT) {
+            $sessionCourse = $this->getCourseSubscription($course);
+
+            $sessionCourse->setNbrUsers(
+                $sessionCourse->getNbrUsers() + 1
+            );
+        }
     }
 
     /**

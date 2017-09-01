@@ -23,10 +23,8 @@ $forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
 // Are we in a lp ?
 $origin = api_get_origin();
 $my_search = null;
-$gradebook = null;
 
 /* MAIN DISPLAY SECTION */
-
 /* Retrieving forum and forum category information */
 
 // We are getting all the information about the current forum and forum category.
@@ -38,16 +36,10 @@ $current_thread = get_thread_information($_GET['forum'], $_GET['thread']);
 $current_forum = get_forum_information($current_thread['forum_id']);
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 $whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
-/* Header and Breadcrumbs */
 
-if (!empty($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
-    $_SESSION['gradebook'] = Security::remove_XSS($_GET['gradebook']);
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }

@@ -56,7 +56,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSCourseList', // method name
+$server->register(
+    'WSCourseList', // method name
     array('username' => 'xsd:string',
           'signature' => 'xsd:string',
           'visibilities' => 'xsd:string'), // input parameters
@@ -97,7 +98,9 @@ function WSCourseList($username, $signature, $visibilities = 'public')
 
     $local_key = $username.$key;
 
-    if (!api_is_valid_secret_key($signature, $local_key) && !api_is_valid_secret_key($signature, $username.$_configuration['security_key'])) {
+    if (!api_is_valid_secret_key($signature, $local_key) &&
+        !api_is_valid_secret_key($signature, $username.$_configuration['security_key'])
+    ) {
         return -1; // The secret key is incorrect.
     }
     //public-registered = open

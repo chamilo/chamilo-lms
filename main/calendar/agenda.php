@@ -285,7 +285,9 @@ if ($allowToEdit) {
             $content = $form->returnForm();
             break;
         case "delete":
-            if (!(api_is_session_general_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $eventId))) {
+            if (!(api_is_session_general_coach() &&
+                !api_is_element_in_the_session(TOOL_AGENDA, $eventId))
+            ) {
                 // a coach can only delete an element belonging to his session
                 $content = $agenda->deleteEvent($eventId);
             }
@@ -318,5 +320,4 @@ $tpl = new Template($actionName);
 $tpl->assign('content', $content);
 $tpl->assign('actions', $actions);
 
-// Loading main Chamilo 1 col template
 $tpl->display_one_col_template();

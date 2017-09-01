@@ -604,7 +604,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
 
         if ($res_logout_date < time() - $_configuration['session_lifetime']) {
             // it isn't, we should create a fresh entry
-            Event::event_login($_user['user_id']);
+            Event::eventLogin($_user['user_id']);
             // now that it's created, we can get its ID and carry on
             $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
         }

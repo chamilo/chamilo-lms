@@ -140,7 +140,7 @@ class BlockEvaluationGraph extends Block
                     $alllinks = $cats[0]->get_links(null, true);
                     $users = GradebookUtils::get_all_users($alleval, $alllinks);
                     $datagen = new FlatViewDataGenerator($users, $alleval, $alllinks);
-                    $evaluation_sumary = $datagen->get_evaluation_sumary_results();
+                    $evaluation_sumary = $datagen->getEvaluationSummaryResults();
                     if (!empty($evaluation_sumary)) {
                         $items = array_keys($evaluation_sumary);
                         $max = $min = $avg = array();
@@ -318,7 +318,7 @@ class BlockEvaluationGraph extends Block
                         $alllinks = $cats[0]->get_links(null, true);
                         $users = GradebookUtils::get_all_users($alleval, $alllinks);
                         $datagen = new FlatViewDataGenerator($users, $alleval, $alllinks);
-                        $evaluation_sumary = $datagen->get_evaluation_sumary_results();
+                        $evaluation_sumary = $datagen->getEvaluationSummaryResults();
                         if (!empty($evaluation_sumary)) {
                             $items = array_keys($evaluation_sumary);
                             $max = $min = $avg = array();

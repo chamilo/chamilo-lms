@@ -17,13 +17,9 @@ require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 Event::event_access_tool(TOOL_SEARCH);
 
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }

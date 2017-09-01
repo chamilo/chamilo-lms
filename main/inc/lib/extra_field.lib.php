@@ -243,7 +243,7 @@ class ExtraField extends Model
      *
      * @return array
      */
-    public function get_all($conditions = array(), $order_field_options_by = null)
+    public function get_all($conditions = [], $order_field_options_by = null)
     {
         $conditions = Database::parse_conditions(array('where' => $conditions));
 
@@ -294,7 +294,10 @@ class ExtraField extends Model
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
-            $row['display_text'] = self::translateDisplayName($row['variable'], $row['display_text']);
+            $row['display_text'] = self::translateDisplayName(
+                $row['variable'],
+                $row['display_text']
+            );
 
             // All the options of the field
             $sql = "SELECT * FROM $this->table_field_options
@@ -610,7 +613,9 @@ class ExtraField extends Model
                     }
                 } else {
                     // Set default values
-                    if (isset($field['field_default_value']) && !empty($field['field_default_value'])) {
+                    if (isset($field['field_default_value']) &&
+                        !empty($field['field_default_value'])
+                    ) {
                         $extra_data['extra_'.$field['variable']] = $field['field_default_value'];
                     }
                 }
@@ -1124,8 +1129,8 @@ class ExtraField extends Model
                             }
 
                             // Setting priority message
-                            if (isset($optionList[$defaultValueId])
-                                && isset($optionList[$defaultValueId]['priority'])
+                            if (isset($optionList[$defaultValueId]) &&
+                                isset($optionList[$defaultValueId]['priority'])
                             ) {
                                 if (!empty($optionList[$defaultValueId]['priority'])) {
                                     $priorityId = $optionList[$defaultValueId]['priority'];
@@ -2695,7 +2700,8 @@ JAVASCRIPT;
                     $extra_field_info = $extra_field_obj->get($extra['id']);
                     $extra['extra_field_info'] = $extra_field_info;
 
-                    if (isset($extra_field_info['field_type']) && in_array(
+                    if (isset($extra_field_info['field_type']) &&
+                        in_array(
                             $extra_field_info['field_type'],
                             array(
                                 self::FIELD_TYPE_SELECT,
@@ -2750,7 +2756,8 @@ JAVASCRIPT;
                     $inject_joins .= " INNER JOIN $this->table_field_values fv$counter
                                        ON (s.".$this->primaryKey." = fv$counter.".$this->handler_id.") ";
                     // Add options
-                    if (isset($extra_field_info['field_type']) && in_array(
+                    if (isset($extra_field_info['field_type']) &&
+                        in_array(
                             $extra_field_info['field_type'],
                             array(
                                 self::FIELD_TYPE_SELECT,
@@ -2772,8 +2779,8 @@ JAVASCRIPT;
                              )
                             ";
                     } else {
-                        if (isset($extra_field_info['field_type'])
-                            && $extra_field_info['field_type'] == self::FIELD_TYPE_TAG
+                        if (isset($extra_field_info['field_type']) &&
+                            $extra_field_info['field_type'] == self::FIELD_TYPE_TAG
                         ) {
                             $options['where'] = str_replace(
                                 $extra_info['field'],
@@ -2783,10 +2790,12 @@ JAVASCRIPT;
 
                             $inject_joins .= "
                                 INNER JOIN $this->table_field_rel_tag tag_rel$counter
-                                ON (tag_rel$counter.field_id = ".$extra_info['id']." AND tag_rel$counter.item_id = s."
-                                    .$this->primaryKey.")
+                                ON (
+                                    tag_rel$counter.field_id = ".$extra_info['id']." AND 
+                                    tag_rel$counter.item_id = s.".$this->primaryKey."
+                                )
                                 INNER JOIN $this->table_field_tag tag$counter
-                                ON (tag$counter.id =  tag_rel$counter.tag_id)
+                                ON (tag$counter.id = tag_rel$counter.tag_id)
                             ";
                         } else {
                             //text, textarea, etc
@@ -2882,7 +2891,6 @@ JAVASCRIPT;
                 continue;
             }
             if (strpos($rule->field, '_second') === false) {
-
             } else {
                 $my_field = str_replace('_second', '', $rule->field);
                 $double_select[$my_field] = $rule->data;

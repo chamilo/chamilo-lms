@@ -1,8 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
- *	This file is responsible for  passing requested documents to the browser.
- *	@package chamilo.document
+ * This file is responsible for  passing requested documents to the browser.
+ * @package chamilo.document
  */
 
 session_cache_limiter('none');
@@ -29,13 +32,13 @@ if (strpos($doc_url, '../') || strpos($doc_url, '/..')) {
 }
 $sys_course_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/scorm';
 $user_id = api_get_user_id();
-
-if ($_SESSION['oLP']) {
-    $lp_id = $_SESSION['oLP']->get_id();
-    $lp_item_id = $_SESSION['oLP']->current;
+/** @var learnpath $lp */
+$lp = Session::read('oLP');
+if ($lp) {
+    $lp_id = $lp->get_id();
+    $lp_item_id = $lp->current;
     $lp_item_info = new learnpathItem($lp_item_id);
     if (!empty($lp_item_info)) {
-        //if (basename($lp_item_info->path) == basename($doc_url)) {
         $visible = learnpath::is_lp_visible_for_student($lp_id, $user_id);
 
         if ($visible) {

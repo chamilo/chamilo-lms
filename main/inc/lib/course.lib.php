@@ -4926,7 +4926,7 @@ class CourseManager
         $table_course_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
         //$table_course_access table uses the now() and interval ...
-        $now = api_get_utc_datetime(time());
+        $now = api_get_utc_datetime();
         $sql = "SELECT COUNT(course_access_id) course_count, a.c_id, visibility
                 FROM $table_course c
                 INNER JOIN $table_course_access a

@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CSurvey;
+use ChamiloSession as Session;
 
 /**
  * This class offers a series of general utility functions for survey querying and display
@@ -106,11 +107,12 @@ class SurveyUtil
 
         // Make the survey anonymous
         if ($survey_data['anonymous'] == 1) {
-            if (!isset($_SESSION['surveyuser'])) {
+            $surveyUser = Session::read('surveyuser');
+            if (empty($surveyUser)) {
                 $user = md5($user.time());
-                $_SESSION['surveyuser'] = $user;
+                Session::write('surveyuser', $user);
             } else {
-                $user = $_SESSION['surveyuser'];
+                $user = Session::read('surveyuser');
             }
         }
 

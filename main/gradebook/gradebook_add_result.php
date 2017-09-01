@@ -41,7 +41,7 @@ if ($add_result_form->validate()) {
         $res->set_evaluation_id($values['evaluation_id']);
         $res->set_user_id(key($scores));
         //if no scores are given, don't set the score
-        if ((!empty ($row)) || ($row == '0')) {
+        if ((!empty($row)) || ($row == '0')) {
             $res->set_score($row);
         }
         $res->add();
@@ -51,7 +51,7 @@ if ($add_result_form->validate()) {
     exit;
 }
 $interbreadcrumb[] = array(
-    'url' => Security::remove_XSS($_SESSION['gradebook_dest']),
+    'url' => Category::getUrl(),
     'name' => get_lang('Gradebook')
 );
 Display :: display_header(get_lang('AddResult'));

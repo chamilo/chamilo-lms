@@ -1,15 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Entity\CLp;
+
 /**
  * Responses to AJAX calls
  * @package chamilo.plugin.buycourses
  */
-
-use Chamilo\UserBundle\Entity\User,
-    Chamilo\CoreBundle\Entity\Course,
-    Chamilo\CoreBundle\Entity\Session,
-    Chamilo\CourseBundle\Entity\CLp;
 
 $cidReset = true;
 
@@ -75,8 +75,11 @@ switch ($action) {
         $html .= '<li><b>'.$plugin->get_lang('OrderPrice').':</b> '.$sale['price'].'</li>';
         $html .= '<li><b>'.$plugin->get_lang('CurrencyType').':</b> '.$currency['iso_code'].'</li>';
         $html .= '<li><b>'.$plugin->get_lang('ProductType').':</b> '.$productType.'</li>';
-        $html .= '<li><b>'.$plugin->get_lang('OrderDate').':</b> '.api_format_date($sale['date'],
-                DATE_TIME_FORMAT_LONG_24H).'</li>';
+        $html .= '<li><b>'.$plugin->get_lang('OrderDate').':</b> '.
+            api_format_date(
+                $sale['date'],
+                DATE_TIME_FORMAT_LONG_24H
+            ).'</li>';
         $html .= '<li><b>'.$plugin->get_lang('Buyer').':</b> '.$userInfo['complete_name'].'</li>';
         $html .= '<li><b>'.$plugin->get_lang('PaymentMethods').':</b> '.$paymentType.'</li>';
         $html .= '</ul>';
@@ -208,12 +211,19 @@ switch ($action) {
         $payouts = isset($_POST['payouts']) ? $_POST['payouts'] : '';
 
         if (!$payouts) {
-            echo Display::return_message(get_plugin_lang("SelectOptionToProceed", "BuyCoursesPlugin"), 'error', false);
+            echo Display::return_message(
+                get_plugin_lang("SelectOptionToProceed", "BuyCoursesPlugin"),
+                'error',
+                false
+            );
             break;
         }
 
         foreach ($payouts as $index => $id) {
-            $allPayouts[] = $plugin->getPayouts(BuyCoursesPlugin::PAYOUT_STATUS_PENDING, $id);
+            $allPayouts[] = $plugin->getPayouts(
+                BuyCoursesPlugin::PAYOUT_STATUS_PENDING,
+                $id
+            );
         }
 
         $currentCurrency = $plugin->getSelectedCurrency();
@@ -221,10 +231,17 @@ switch ($action) {
         $result = MassPayment($allPayouts, $isoCode);
         if ($result['ACK'] === 'Success') {
             foreach ($allPayouts as $payout) {
-                $plugin->setStatusPayouts($payout['id'], BuyCoursesPlugin::PAYOUT_STATUS_COMPLETED);
+                $plugin->setStatusPayouts(
+                    $payout['id'],
+                    BuyCoursesPlugin::PAYOUT_STATUS_COMPLETED
+                );
             }
 
-            echo Display::return_message(get_plugin_lang("PayoutSuccess", "BuyCoursesPlugin"), 'success', false);
+            echo Display::return_message(
+                get_plugin_lang("PayoutSuccess", "BuyCoursesPlugin"),
+                'success',
+                false
+            );
         } else {
             echo Display::return_message(
                 '<b>'.$result['L_SEVERITYCODE0'].' '.$result['L_ERRORCODE0'].'</b> - '.$result['L_SHORTMESSAGE0']
@@ -243,7 +260,10 @@ switch ($action) {
 
         // $payoutId only gets used in setStatusPayout(), where it is filtered
         $payoutId = isset($_POST['id']) ? $_POST['id'] : '';
-        $plugin->setStatusPayouts($payoutId, BuyCoursesPlugin::PAYOUT_STATUS_CANCELED);
+        $plugin->setStatusPayouts(
+            $payoutId,
+            BuyCoursesPlugin::PAYOUT_STATUS_CANCELED
+        );
 
         echo '';
 

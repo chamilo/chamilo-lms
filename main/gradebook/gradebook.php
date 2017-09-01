@@ -13,10 +13,10 @@ $_in_course = false;
 //make sure the destination for scripts is index.php instead of gradebook.php
 require_once __DIR__.'/../inc/global.inc.php';
 if (!empty($_GET['course'])) {
-    $_SESSION['gradebook_dest'] = 'index.php';
+    Category::setUrl('index.php');
     $this_section = SECTION_COURSES;
 } else {
-    $_SESSION['gradebook_dest'] = 'gradebook.php';
+    Category::setUrl('gradebook.php');
     $this_section = SECTION_MYGRADEBOOK;
     unset($_GET['course']);
 }
@@ -65,18 +65,18 @@ if (isset($_GET['createallcategories'])) {
             unset($cat);
         }
     }
-    header('Location: '.$_SESSION['gradebook_dest'].'?addallcat=&selectcat=0');
+    header('Location: '.Category::getUrl().'addallcat=&selectcat=0');
     exit;
 }
-//move a category
 
+//move a category
 if (isset($_GET['movecat'])) {
     $move_cat = (int) $_GET['movecat'];
     GradebookUtils::block_students();
     $cats = Category :: load($move_cat);
     if (!isset($_GET['targetcat'])) {
         $move_form = new CatForm(
-            CatForm :: TYPE_MOVE,
+            CatForm::TYPE_MOVE,
             $cats[0],
             'move_cat_form',
             null,
@@ -108,8 +108,9 @@ if (isset($_GET['moveeval'])) {
     GradebookUtils::block_students();
     $get_move_eval = Security::remove_XSS($_GET['moveeval']);
     $evals = Evaluation :: load($get_move_eval);
-    if (!isset ($_GET['targetcat'])) {
-        $move_form = new EvalForm(EvalForm :: TYPE_MOVE,
+    if (!isset($_GET['targetcat'])) {
+        $move_form = new EvalForm(
+            EvalForm::TYPE_MOVE,
             $evals[0],
             null,
             'move_eval_form',
@@ -142,9 +143,9 @@ if (isset($_GET['moveeval'])) {
 if (isset($_GET['movelink'])) {
     GradebookUtils::block_students();
     $get_move_link = Security::remove_XSS($_GET['movelink']);
-    $link = LinkFactory :: load($get_move_link);
+    $link = LinkFactory::load($get_move_link);
     $move_form = new LinkForm(
-        LinkForm :: TYPE_MOVE,
+        LinkForm::TYPE_MOVE,
         null,
         $link[0],
         'move_link_form',
@@ -420,24 +421,27 @@ if (isset($move_form)) {
 if (!isset($_GET['exportpdf']) && !isset($_GET['export_certificate'])) {
     if (isset($_GET['studentoverview'])) {
         $interbreadcrumb[] = array(
-            'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectcat.'&'.api_get_cidreq(),
+            'url' => Category::getUrl().'selectcat='.$selectcat,
             'name' => get_lang('ToolGradebook')
         );
         Display :: display_header(get_lang('FlatView'));
-    } elseif (isset ($_GET['search'])) {
-        if ($_SESSION['gradebook_dest'] == 'index.php') {
-            $gradebook_dest = Security::remove_XSS($_SESSION['gradebook_dest']).'?'.api_get_cidreq().'&amp;';
-        } else {
-            $gradebook_dest = Security::remove_XSS($_SESSION['gradebook_dest']);
-        }
-
-        $interbreadcrumb[] = array('url' => $gradebook_dest, 'name' => get_lang('Gradebook'));
+    } elseif (isset($_GET['search'])) {
+        $interbreadcrumb[] = array(
+            'url' => Category::getUrl(),
+            'name' => get_lang('Gradebook')
+        );
 
         if ((isset($_GET['selectcat']) && $_GET['selectcat'] > 0)) {
             if (!empty($_GET['course'])) {
-                $interbreadcrumb[] = array('url' => $gradebook_dest.'selectcat='.$selectcat, 'name' => get_lang('Details'));
+                $interbreadcrumb[] = array(
+                    'url' => Category::getUrl().'selectcat='.$selectcat,
+                    'name' => get_lang('Details')
+                );
             } else {
-                $interbreadcrumb[] = array('url' => $_SESSION['gradebook_dest'].'?selectcat=0', 'name' => get_lang('Details'));
+                $interbreadcrumb[] = array(
+                    'url' => Category::getUrl().'selectcat=0',
+                    'name' => get_lang('Details')
+                );
             }
         }
         Display :: display_header('');

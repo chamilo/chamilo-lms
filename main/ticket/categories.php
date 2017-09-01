@@ -24,7 +24,7 @@ $user_id = api_get_user_id();
 $isAdmin = api_is_platform_admin();
 
 $this_section = 'tickets';
-unset($_SESSION['this_section']);
+Session::erase('this_section');
 
 $table = new SortableTable(
     'TicketCategories',

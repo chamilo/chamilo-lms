@@ -263,10 +263,11 @@ switch ($action) {
 
             // @todo delete the stats.track_e_exercises records.
             // First implement this http://support.chamilo.org/issues/1334
-            $message = Display::return_message(
+            Display::addFlash(Display::return_message(
                 get_lang('LPWasReset'),
                 'success'
-            );
+            ));
+            Security::clear_token();
         }
         break;
     default:

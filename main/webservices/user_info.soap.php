@@ -83,8 +83,6 @@ function WSCourseListOfUser($username, $signature)
     if (empty($username) or empty($signature)) {
         return -1;
     }
-    global $_configuration;
-
     $info = api_get_user_info_from_username($username);
     $user_id = $info['user_id'];
     $list = UserManager::get_api_keys($user_id, 'dokeos');
@@ -106,9 +104,7 @@ function WSCourseListOfUser($username, $signature)
         $courses_list[] = array(
             'code' => $course['code'],
             'title' => api_utf8_encode($course_info['title']),
-            'url' => api_get_path(
-                    WEB_COURSE_PATH
-                ).$course_info['directory'].'/',
+            'url' => api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/',
             'teacher' => api_utf8_encode($course_info['tutor_name']),
             'language' => $course_info['course_language'],
         );
@@ -191,14 +187,13 @@ $server->register(
 function WSEventsList($username, $signature, $datestart = 0, $dateend = 0) {
 
     if (empty($username) or empty($signature)) { return -1; }
-    global $_configuration;
 
     $info = api_get_user_info_from_username($username);
     $user_id = $info['user_id'];
     $list = UserManager::get_api_keys($user_id, 'dokeos');
     $key = '';
     foreach ($list as $key) {
-    	break;
+        break;
     }
 
     $local_key = $username.$key;

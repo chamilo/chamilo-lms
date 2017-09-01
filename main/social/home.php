@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
@@ -15,7 +17,7 @@ $user_id = api_get_user_id();
 $show_full_profile = true;
 // social tab
 $this_section = SECTION_SOCIAL;
-unset($_SESSION['this_section']);
+Session::erase('this_section');
 
 api_block_anonymous_users();
 

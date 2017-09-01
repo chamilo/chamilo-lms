@@ -163,14 +163,9 @@ if ($form->validate()) {
     header('Location:admin.php?exerciseId='.$exercise_id.'&'.api_get_cidreq());
     exit;
 } else {
-    // DISPLAY FORM
-    if (isset($_SESSION['gradebook'])) {
-        $gradebook = $_SESSION['gradebook'];
-    }
-
-    if (!empty($gradebook) && $gradebook == 'view') {
+    if (api_is_in_gradebook()) {
         $interbreadcrumb[] = array(
-            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+            'url' => Category::getUrl(),
             'name' => get_lang('ToolGradebook')
         );
     }

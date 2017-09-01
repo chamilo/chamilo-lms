@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * @package chamilo.plugin.ticket
  */
@@ -15,7 +17,7 @@ if (!api_is_allowed_to_edit()) {
 }
 
 $this_section = 'Reports';
-unset($_SESSION['this_section']);
+Session::erase('this_section');
 
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){

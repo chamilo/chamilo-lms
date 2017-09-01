@@ -14,7 +14,6 @@ use ChamiloSession as Session;
 */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$_SESSION['whereami'] = 'document/webcamclip';
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('WebCamClip');
 $groupRights = Session::read('group_member_with_upload_rights');
@@ -22,12 +21,22 @@ $groupRights = Session::read('group_member_with_upload_rights');
 api_protect_course_script();
 api_block_anonymous_users();
 
-$document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
+$document_data = DocumentManager::get_document_data_by_id(
+    $_GET['id'],
+    api_get_course_id(),
+    true
+);
 if (empty($document_data)) {
     if (api_is_in_group()) {
-        $group_properties   = GroupManager::get_group_properties(api_get_group_id());
-        $document_id        = DocumentManager::get_document_id(api_get_course_info(), $group_properties['directory']);
-        $document_data      = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
+        $group_properties = GroupManager::get_group_properties(api_get_group_id());
+        $document_id = DocumentManager::get_document_id(
+            api_get_course_info(),
+            $group_properties['directory']
+        );
+        $document_data = DocumentManager::get_document_data_by_id(
+            $document_id,
+            api_get_course_id()
+        );
     }
 }
 
@@ -39,7 +48,6 @@ $webcamdir = $dir;
 if ($webcamdir == "/") {
     $webcamdir = '';
 }
-
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
@@ -63,8 +71,8 @@ if ($dir[strlen($dir) - 1] != '/') {
 $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
 
 if (!is_dir($filepath)) {
-	$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
-	$dir = '/';
+    $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
+    $dir = '/';
 }
 
 $groupId = api_get_group_id();
@@ -82,7 +90,10 @@ if (!empty($groupId)) {
     }
 }
 
-$interbreadcrumb[] = array("url" => "./document.php?id=".$document_id."&".api_get_cidreq(), "name" => get_lang('Documents'));
+$interbreadcrumb[] = array(
+    "url" => "./document.php?id=".$document_id."&".api_get_cidreq(),
+    "name" => get_lang('Documents')
+);
 
 if (!api_is_allowed_in_course()) {
     api_not_allowed(true);
@@ -97,7 +108,7 @@ if (!($is_allowed_to_edit || $groupRights ||
 Event::event_access_tool(TOOL_DOCUMENT);
 
 $display_dir = $dir;
-if (isset ($group)) {
+if (isset($group)) {
     $display_dir = explode('/', $dir);
     unset($display_dir[0]);
     unset($display_dir[1]);
@@ -115,7 +126,10 @@ if (isset($document_data['parents'])) {
                 continue;
             }
         }
-        $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+        $interbreadcrumb[] = array(
+            'url' => $document_sub_data['document_url'],
+            'name' => $document_sub_data['title']
+        );
         $counter++;
     }
 }
@@ -126,7 +140,13 @@ $webcamuserid = api_get_user_id();
 Display :: display_header($nameTools, 'Doc');
 echo '<div class="actions">';
 echo '<a href="document.php?id='.$document_id.'">'.
-	Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon(
+        'back.png',
+        get_lang('BackTo').' '.get_lang('DocumentsOverview'),
+        '',
+        ICON_SIZE_MEDIUM
+    )
+    .'</a>';
 echo '</div>';
 ?>
 
@@ -137,14 +157,14 @@ echo '</div>';
 <table><tr><td valign='top' align='center'>
 <h3 align='center'><?php echo get_lang('LocalInputImage'); ?></h3>
     <!-- Including New Lib WebCamJS upgrading from JPEGCam -->
-    <script type="text/javascript" src="<?php echo api_get_path(WEB_PATH); ?>web/assets/webcamjs/webcam.js"></script>
+    <script type="text/javascript" src="<?php echo api_get_path(WEB_PUBLIC_PATH); ?>assets/webcamjs/webcam.js"></script>
     <!-- Adding a div container for the new live camera with some cool style options-->
     <div class="webcamclip_bg">
         <div id="chamilo-camera"></div>
     </div>
-	<!-- Configure a few settings and attach the camera to the div container -->
-	<script>
-		Webcam.set({
+    <!-- Configure a few settings and attach the camera to the div container -->
+    <script>
+        Webcam.set({
             width: 320,
             height: 240,
             image_format: 'jpeg',
@@ -153,10 +173,10 @@ echo '</div>';
         Webcam.attach( '#chamilo-camera' );
         //This line Fix a minor bug that made a conflict with a videochat feature in another module file
         $('video').addClass('skip');
-	</script>
-	<!-- Using now Jquery to do the webcamJS Functions and handle the server response (see webcam_receiver.php now in webcamJS directory) -->
-	<script language="JavaScript">
-		$(document).ready(function() {
+    </script>
+    <!-- Using now Jquery to do the webcamJS Functions and handle the server response (see webcam_receiver.php now in webcamJS directory) -->
+    <script>
+        $(document).ready(function() {
            $('#btnCapture').click(function() {
                Webcam.freeze();
                return false;
@@ -199,38 +219,36 @@ echo '</div>';
                   });
               });
         }
-    </script>
-    <script>
-	   var interval=null;
-	   var timeout=null;
-	   var counter=0;
-	   var fps=1000;//one frame per second
-	   var maxclip=25;//maximum number of clips
-	   var maxtime=60000;//stop after one minute
+        var interval=null;
+        var timeout=null;
+        var counter=0;
+        var fps=1000;//one frame per second
+        var maxclip=25;//maximum number of clips
+        var maxtime=60000;//stop after one minute
 
-	   function stop_video() {
-			interval=window.clearInterval(interval);
+        function stop_video() {
+            interval=window.clearInterval(interval);
             return false;
-	   }
+        }
 
-	   function start_video() {
-		 	interval=window.setInterval("clip_send_video()",fps);
-	   }
+        function start_video() {
+            interval=window.setInterval("clip_send_video()",fps);
+        }
 
-	   function clip_send_video() {
-		   counter++;
-		   timeout=setTimeout('stop_video()',maxtime);
-		   if(maxclip>=counter){
-		       snap();// clip and upload
-		   }
-		   else {
-			   interval=window.clearInterval(interval);
-		   }
-	   }
+        function clip_send_video() {
+           counter++;
+           timeout=setTimeout('stop_video()',maxtime);
+           if(maxclip>=counter){
+               snap();// clip and upload
+           }
+           else {
+               interval=window.clearInterval(interval);
+           }
+        }
     </script>
-	</td><td width=50></td><td valign='top' align='center'>
-		<div id="upload_results" style="background-color:#ffffff;"></div>
-	</td></tr></table>
+    </td><td width=50></td><td valign='top' align='center'>
+        <div id="upload_results" style="background-color:#ffffff;"></div>
+    </td></tr></table>
     <!-- Implementing Button html5 Tags instead Inputs and some cool bootstrap button styles -->
     <div>
         <br/>

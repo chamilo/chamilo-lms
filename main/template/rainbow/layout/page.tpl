@@ -42,11 +42,7 @@
         </div>
     {% endif %}
 	<section id="content-section">
-        {% if fluid == true %}
-            <div class="container-fluid">
-        {% else %}
-            <div class="container">
-        {% endif %}
+        <div class="container{{ fluid == true ? '-fluid' : '' }}">
             {% block breadcrumb %}
                 <div id="page-breadcrumb">
                     {{ breadcrumb }}
@@ -62,6 +58,8 @@
     {% if show_footer == true %}
 	{% include template ~ "/layout/page_footer.tpl" %}
     {% endif %}
-    </div>
+
+    {% include template ~ '/layout/footer.js.tpl' %}
+</div>
   </body>
 </html>

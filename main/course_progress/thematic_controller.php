@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Thematic Controller script.
  * Prepares the common background variables to give to the scripts corresponding to
@@ -398,7 +400,8 @@ class ThematicController
                 ($_POST['action'] == 'thematic_plan_add' || $_POST['action'] == 'thematic_plan_edit')
             ) {
                 if (isset($_POST['title'])) {
-                    if ($_POST['thematic_plan_token'] == $_SESSION['thematic_plan_token']) {
+                    $token = Session::read('thematic_plan_token');
+                    if ($_POST['thematic_plan_token'] == $token) {
                         if (api_is_allowed_to_edit(null, true)) {
                             $title_list = $_REQUEST['title'];
                             $description_list = $_REQUEST['description'];
@@ -431,8 +434,7 @@ class ThematicController
                                 ]);
                             } else {
                                 $saveRedirect .= 'thematic_plan_save_message=ok';
-
-                                unset($_SESSION['thematic_plan_token']);
+                                Session::erase('thematic_plan_token');
                                 $data['message'] = 'ok';
                             }
 

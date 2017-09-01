@@ -42,8 +42,6 @@ if (isset($_GET['lp_item_id'])) {
 }
 
 $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'fullpage';
-
-$_SESSION['whereami'] = 'lp/build';
 if (isset($_SESSION['oLP']) && isset($_GET['id'])) {
     $_SESSION['oLP'] -> current = intval($_GET['id']);
 }

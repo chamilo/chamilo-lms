@@ -37,19 +37,17 @@ if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook'),
     );
 }
 
-$interbreadcrumb[] = array("url" => "exercise.php", "name" => get_lang('Exercises'));
-
+$interbreadcrumb[] = array(
+    "url" => "exercise.php",
+    "name" => get_lang('Exercises')
+);
 $nameTools = get_lang('adminHP');
 
 Display::display_header($nameTools, "Exercise");

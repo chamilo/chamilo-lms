@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  * @author Patrick Cool patrick.cool@UGent.be Ghent University Mai 2004
  * @author Julio Montoya Lots of improvements, cleaning, adding security
@@ -27,9 +30,6 @@ if ($path != '/') {
 }
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 
-// Including the functions for the slideshow
-require_once 'slideshow.inc.php';
-
 // Breadcrumb navigation
 $url = 'document.php?curdirpath='.$pathurl;
 $originaltoolname = get_lang('Documents');
@@ -39,9 +39,11 @@ $originaltoolname = get_lang('SlideShow');
 
 Display :: display_header($originaltoolname, 'Doc');
 
+$imageFilesOnlySession = Session::read('image_files_only');
+$image_files_only = [];
 // Loading the slides from the session
-if (isset($_SESSION['image_files_only'])) {
-    $image_files_only = $_SESSION['image_files_only'];
+if (!empty($imageFilesOnlySession)) {
+    $image_files_only = $imageFilesOnlySession;
 }
 
 // Calculating the current slide, next slide, previous slide and the number of slides
@@ -143,40 +145,35 @@ echo '<br />';
 // If we come from slideshowoptions.php we sessionize (new word !!! ;-) the options
 if (isset($_POST['Submit'])) {
     // We come from slideshowoptions.php
-    //$_SESSION["auto_image_resizing"]=Security::remove_XSS($_POST['auto_radio_resizing']);
-    $_SESSION["image_resizing"] = Security::remove_XSS($_POST['radio_resizing']);
+    Session::write('image_resizing', Security::remove_XSS($_POST['radio_resizing']));
     if ($_POST['radio_resizing'] == "resizing" && $_POST['width'] != '' && $_POST['height'] != '') {
-        //echo "resizing";
-        $_SESSION["image_resizing_width"] = Security::remove_XSS($_POST['width']);
-        $_SESSION["image_resizing_height"] = Security::remove_XSS($_POST['height']);
+        Session::write('image_resizing_width', Security::remove_XSS($_POST['width']));
+        Session::write('image_resizing_height', Security::remove_XSS($_POST['height']));
     } else {
-        //echo "unsetting the session heighte and width";
-        $_SESSION["image_resizing_width"] = null;
-        $_SESSION["image_resizing_height"] = null;
+        Session::write('image_resizing_width', null);
+        Session::write('image_resizing_height', null);
     }
 }
 $target_width = $target_height = null;
+$imageResize = Session::read('image_resizing');
 // The target height and width depends if we choose resizing or no resizing
-if (isset($_SESSION["image_resizing"]) && $_SESSION["image_resizing"] == "resizing") {
-    $target_width = $_SESSION["image_resizing_width"];
-    $target_height = $_SESSION["image_resizing_height"];
+if ($imageResize == 'resizing') {
+    $target_width = Session::read('image_resizing_width');
+    $target_height = Session::read('image_resizing_height');
 }
 
 /*	THUMBNAIL VIEW */
-
 // This is for viewing all the images in the slideshow as thumbnails.
 $image_tag = array();
 $html = '';
 if ($slide_id == 'all') {
     // Config for make thumbnails
     $allowed_thumbnail_types = array('jpg', 'jpeg', 'gif', 'png');
-    $max_thumbnail_width     = 250;
-    $max_thumbnail_height    = 250;
-    $png_compression	     = 0; //0(none)-9
+    $max_thumbnail_width = 250;
+    $max_thumbnail_height = 250;
+    $png_compression = 0; //0(none)-9
     $jpg_quality = 75; //from 0 to 100 (default is 75). More quality less compression
-
     $directory_thumbnails = $sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/';
-
     //Other parameters only for show tumbnails
     $row_items = 4; //only in slideshow.php
     $number_image = 7; //num icons cols to show
@@ -184,7 +181,6 @@ if ($slide_id == 'all') {
     $thumbnail_height_frame = $max_thumbnail_height;
 
     // Create the template_thumbnails folder (if no exist)
-
     if (!file_exists($directory_thumbnails)) {
         @mkdir($directory_thumbnails, api_get_permissions_for_new_directories());
     }
@@ -358,13 +354,13 @@ $course_id = api_get_course_int_id();
 
 if ($slide_id != 'all' && !empty($image_files_only)) {
     if (file_exists($image) && is_file($image)) {
-        $image_height_width = resize_image($image, $target_width, $target_height);
+        $image_height_width = DocumentManager::resizeImageSlideShow($image, $target_width, $target_height);
 
         $image_height = $image_height_width[0];
         $image_width = $image_height_width[1];
 
         $height_width_tags = null;
-        if (isset($_SESSION['image_resizing']) && $_SESSION['image_resizing'] == 'resizing') {
+        if ($imageResize == 'resizing') {
             $height_width_tags = 'width="'.$image_width.'" height="'.$image_height.'"';
         }
 
@@ -392,7 +388,7 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
 
         list($width, $height) = getimagesize($image);
         // Auto resize
-        if (isset($_SESSION["image_resizing"]) && $_SESSION["image_resizing"] == 'resizing') {
+        if ($imageResize == 'resizing') {
         ?>
         <script>
             var initial_width='<?php echo $width; ?>';
@@ -459,11 +455,11 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
             $aux = explode('.', htmlspecialchars($image_files_only[$slide]));
             $ext = $aux[count($aux) - 1];
 
-            if (isset($_SESSION['image_resizing']) && $_SESSION['image_resizing'] == 'resizing') {
+            if ($imageResize == 'resizing') {
                 $resize_info = get_lang('Resizing').'<br />';
-                $resize_width = $_SESSION["image_resizing_width"].' x ';
-                $resize_height = $_SESSION['image_resizing_height'];
-            } elseif (isset($_SESSION['image_resizing']) && $_SESSION['image_resizing'] != 'noresizing') {
+                $resize_width = Session::read('image_resizing_width').' x ';
+                $resize_height = Session::read('image_resizing_height');
+            } elseif ($imageResize != 'noresizing') {
                 $resize_info = get_lang('Resizing').'<br />';
                 $resize_width = get_lang('Auto').' x ';
                 $resize_height = get_lang('Auto');

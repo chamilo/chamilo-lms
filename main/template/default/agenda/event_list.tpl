@@ -1,64 +1,66 @@
 {{ agenda_actions }}
 
-
-<table class="data_table">
-    <tr>
-        <th>
-            {{ 'StartDate'| get_lang }}
-        </th>
-        <th>
-            {{ 'EndDate'| get_lang }}
-        </th>
-        <th>
-            {{ 'Title' | get_lang }}
-        </th>
-        {% if is_allowed_to_edit and show_action %}
-            <th>
-                {{ 'Actions' | get_lang }}
-            </th>
-        {% endif %}
-    </tr>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
     {% for event in agenda_events %}
-        <tr>
-            <td style="width:20%">
-                {{ event.start_date_localtime }}
-            </td>
-            <td style="width:20%">
-                {% if event.allDay %}
-                    {{ 'AllDay' | get_lang }}
-                {% else %}
-                    {{ event.end_date_localtime }}
-                {% endif %}
-            </td>
-            <td style="width:50%">
-                {{ event.title }}
-
-                {% if event.description %}
-                    <p>{{ event.description}}</p>
-                {% endif %}
-
-                {% if event.comment %}
-                    <p>{{ event.comment}}</p>
-                {% endif %}
-
-                {{ event.attachment }}
-            </td>
-
-            {% if is_allowed_to_edit and show_action %}
-                <td>
-                    {% if event.visibility == 1 %}
-                        <a class="btn btn-default" href="{% if url %}{{ url }}{% else %}{{ event.url }}{% endif %}&action=change_visibility&visibility=0&id={{ event.real_id }}&type={{ event.type }}">
-                            <img title="{{ 'Invisible' }}" src="{{'visible.png'|icon(32)}} " width="32" height="32">
-                        </a>
-                    {% else %}
-                        {% if event.type == 'course' or event.type == 'session' %}
-                            <a class="btn btn-default" href="{% if url %}{{ url }}{% else %}{{ event.url }}{% endif %}&action=change_visibility&visibility=1&id={{ event.real_id }}&type={{ event.type }}">
-                                <img title="{{ 'Visible' }}" src="{{'invisible.png'|icon(32)}} " width="32" height="32">
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading-{{ event.id }}">
+                {% if is_allowed_to_edit and show_action %}
+                    <div class="pull-right">
+                        {% if event.visibility == 1 %}
+                            <a class="btn btn-default btn-xs"
+                               href="{% if url %}{{ url }}{% else %}{{ event.url }}{% endif %}&action=change_visibility&visibility=0&id={{ event.real_id }}&type={{ event.type }}">
+                                <img title="{{ 'Invisible' }}" src="{{ 'visible.png'|icon(22) }}">
                             </a>
+                        {% else %}
+                            {% if event.type == 'course' or event.type == 'session' %}
+                                <a class="btn btn-default btn-xs"
+                                   href="{% if url %}{{ url }}{% else %}{{ event.url }}{% endif %}&action=change_visibility&visibility=1&id={{ event.real_id }}&type={{ event.type }}">
+                                    <img title="{{ 'Visible' }}" src="{{ 'invisible.png'|icon(22) }}">
+                                </a>
+                            {% endif %}
                         {% endif %}
+                    </div>
+                {% endif %}
+
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                       href="#collapse-{{ event.id }}" aria-expanded="false" aria-controls="collapse-{{ event.id }}">
+                        {{ event.title }}
+                        <br>
+                        <small>
+                            {{ event.start_date_localtime }}
+
+                            &dash;
+
+                            {% if event.allDay %}
+                                {{ 'AllDay' | get_lang }}
+                            {% else %}
+                                {{ event.end_date_localtime }}
+                            {% endif %}
+                        </small>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapse-{{ event.id }}" class="panel-collapse collapse" role="tabpanel"
+                 aria-labelledby="heading-{{ event.id }}">
+                <ul class="list-group">
+                    {% if event.description %}
+                        <li class="list-group-item">
+                            {{ event.description }}
+                        </li>
                     {% endif %}
-                </td>
-            {% endif %}
-        </tr>
+
+                    {% if event.comment %}
+                        <li class="list-group-item">
+                            {{ event.comment }}
+                        </li>
+                    {% endif %}
+
+                    {% if event.attachment %}
+                        <li class="list-group-item">{{ event.attachment }}</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
     {% endfor %}
-</table>
+</div>

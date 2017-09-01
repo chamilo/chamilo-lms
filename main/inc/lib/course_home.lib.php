@@ -367,12 +367,13 @@ class CourseHome
 
                 $tool_name = self::translate_tool_name($tool);
                 $html .= Display::return_icon(
-                        $tool['image'],
-                        $tool_name,
-                        array(),
-                        null,
-                        ICON_SIZE_MEDIUM
-                    ).'&nbsp;'.$tool_name.'</a>';
+                    $tool['image'],
+                    $tool_name,
+                    array(),
+                    null,
+                    ICON_SIZE_MEDIUM
+                ).'&nbsp;'.$tool_name.
+                '</a>';
 
                 // This part displays the links to hide or remove a tool.
                 // These links are only visible by the course manager.
@@ -463,8 +464,11 @@ class CourseHome
      * @param int $sessionId Optional
      * @return array
      */
-    public static function get_tools_category($course_tool_category, $courseId = 0, $sessionId = 0)
-    {
+    public static function get_tools_category(
+        $course_tool_category,
+        $courseId = 0,
+        $sessionId = 0
+    ) {
         $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
         $is_platform_admin = api_is_platform_admin();
         $all_tools_list = array();
@@ -990,7 +994,10 @@ class CourseHome
                 }*/
 
                 // Validation when belongs to a session
-                $session_img = api_get_session_image($tool['session_id'], (!empty($_user['status']) ? $_user['status'] : ''));
+                $session_img = api_get_session_image(
+                    $tool['session_id'],
+                    !empty($_user['status']) ? $_user['status'] : ''
+                );
                 if ($studentview) {
                     $tool_link_params['href'] .= '&isStudentView=true';
                 }
@@ -1004,9 +1011,7 @@ class CourseHome
                     $tool_link_params['href'],
                     $tool_link_params
                 );
-
                 $items[] = $item;
-
                 $i++;
             } // end of foreach
         }
@@ -1071,7 +1076,7 @@ class CourseHome
     /**
      * Shows the general data for a particular meeting
      *
-     * @param id	session id
+     * @param int $id_session
      * @return string	session data
      */
     public static function show_session_data($id_session)
@@ -1180,9 +1185,7 @@ class CourseHome
     {
         $query = parse_url($link, PHP_URL_QUERY);
         parse_str($query, $params);
-
         $id = isset($params['id']) ? (int) $params['id'] : 0;
-
         $em = Database::getManager();
         /** @var CLpCategory $category */
         $category = $em->find('ChamiloCourseBundle:CLpCategory', $id);
@@ -1202,7 +1205,6 @@ class CourseHome
         $sessionId = api_get_session_id();
 
         if (!empty($course_id)) {
-
             $course_tools_table = Database::get_course_table(TABLE_TOOL_LIST);
 
             /* 	Link to the Course homepage */

@@ -32,12 +32,12 @@ if ($form->validate()) {
     $cat = new Category();
     $cat->set_course_code($values['select_course']);
     $cat->set_name($values['name']);
-    header('location: gradebook_add_link.php?selectcat='.$selectCat.'&course_code='.Security::remove_XSS($values['select_course']).'&'.api_get_cidreq());
+    header('Location: gradebook_add_link.php?selectcat='.$selectCat.'&course_code='.Security::remove_XSS($values['select_course']).'&'.api_get_cidreq());
     exit;
 }
 
 $interbreadcrumb[] = array(
-    'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$selectCat.'&'.api_get_cidreq(),
+    'url' => Category::getUrl().'selectcat='.$selectCat,
     'name' => get_lang('Gradebook')
 );
 Display :: display_header(get_lang('NewCategory'));

@@ -102,7 +102,7 @@ if (isset($_POST['submit_image'])) {
             $_course,
             api_get_user_id(),
             api_get_session_id(),
-            $to_group_id,
+            api_get_group_id(),
             $to_user_id,
             $base_work_dir,
             $img_directory

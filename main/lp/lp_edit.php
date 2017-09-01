@@ -15,13 +15,9 @@ $nameTools = get_lang('Doc');
 $this_section = SECTION_COURSES;
 Event::event_access_tool(TOOL_LEARNPATH);
 
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
@@ -53,7 +49,6 @@ function activate_end_date() {
 
 </script>';
 
-$gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;
 $defaults = array();
 $form = new FormValidator(
     'form1',
@@ -195,7 +190,15 @@ if (api_is_platform_admin()) {
     $defaults['use_max_score'] = $_SESSION['oLP']->use_max_score;
 }
 
-$form->addElement('checkbox', 'subscribe_users', null, get_lang('SubscribeUsersToLp'));
+$subscriptionSettings = learnpath::getSubscriptionSettings();
+if ($subscriptionSettings['allow_add_users_to_lp']) {
+    $form->addElement(
+        'checkbox',
+        'subscribe_users',
+        null,
+        get_lang('SubscribeUsersToLp')
+    );
+}
 
 // accumulate_scorm_time
 $form->addElement(

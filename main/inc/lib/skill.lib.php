@@ -55,8 +55,9 @@ class SkillProfile extends Model
 
     /**
      * Call the save method of the parent class and the SkillRelProfile object
-     * @param array Params
-     * @param bool Whether to show the query in parent save() method
+     * @param array $params
+     * @param bool $show_query Whether to show the query in parent save() method
+     * 
      * @return mixed Profile ID or false if incomplete params
      */
     public function save($params, $show_query = false)

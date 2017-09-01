@@ -90,16 +90,9 @@ $currentForumCategory = get_forumcategory_information(
 );
 $groupId = api_get_group_id();
 
-/*
-    Header and Breadcrumbs
-*/
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
@@ -154,21 +147,16 @@ if ($origin == 'learnpath') {
         );
 
         if ($message <> 'PostDeletedSpecial') {
-            if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
-                $info_thread = get_thread_information($currentForum['forum_id'], $_GET['thread']);
-                $interbreadcrumb[] = array(
-                    "url" => "viewthread.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&thread=".intval($_GET['thread']),
-                    "name" => prepare4display($currentThread['thread_title'])
-                );
-            } else {
-                $interbreadcrumb[] = array(
-                    "url" => "viewthread.php?".api_get_cidreq()."&forum=".intval($_GET['forum'])."&thread=".intval($_GET['thread']),
-                    "name" => prepare4display($currentThread['thread_title'])
-                );
-            }
+            $interbreadcrumb[] = array(
+                "url" => "viewthread.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&thread=".intval($_GET['thread']),
+                "name" => prepare4display($currentThread['thread_title'])
+            );
         }
         // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
-        $interbreadcrumb[] = array("url" => "#", "name" => get_lang('QualifyThread'));
+        $interbreadcrumb[] = array(
+            "url" => "#",
+            "name" => get_lang('QualifyThread')
+        );
         Display::display_header('');
     }
 }
@@ -318,16 +306,13 @@ $form->display();
 
 // Show past data
 if (api_is_allowed_to_edit() && $counter > 0) {
-    if (isset($_GET['gradebook'])) {
-        $view_gradebook = '&gradebook=view';
-    }
     echo '<h4>'.get_lang('QualificationChangesHistory').'</h4>';
     if (isset($_GET['type']) && $_GET['type'] === 'false') {
-        $buttons = '<a class="btn btn-default" href="forumqualify.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&origin='.$origin.'&thread='.$threadId.'&user='.intval($_GET['user']).'&user_id='.intval($_GET['user_id']).'&type=true&idtextqualify='.$score.$view_gradebook.'#history">'.
+        $buttons = '<a class="btn btn-default" href="forumqualify.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&origin='.$origin.'&thread='.$threadId.'&user='.intval($_GET['user']).'&user_id='.intval($_GET['user_id']).'&type=true&idtextqualify='.$score.'#history">'.
             get_lang('MoreRecent').'</a> <a class="btn btn-default disabled" >'.get_lang('Older').'</a>';
     } else {
         $buttons = '<a class="btn btn-default">'.get_lang('MoreRecent').'</a>
-                        <a class="btn btn-default" href="forumqualify.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&origin='.$origin.'&thread='.$threadId.'&user='.intval($_GET['user']).'&user_id='.intval($_GET['user_id']).'&type=false&idtextqualify='.$score.$view_gradebook.'#history">'.
+                        <a class="btn btn-default" href="forumqualify.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&origin='.$origin.'&thread='.$threadId.'&user='.intval($_GET['user']).'&user_id='.intval($_GET['user_id']).'&type=false&idtextqualify='.$score.'#history">'.
             get_lang('Older').'</a>';
     }
 

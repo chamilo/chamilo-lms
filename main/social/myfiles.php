@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * @author Juan Carlos Trabado herodoto@telefonica.net
  * @package chamilo.social
@@ -80,13 +82,13 @@ if (isset($_GET['cidReq'])) {
 }
 
 if (api_get_setting('allow_social_tool') == 'true') {
-    $_SESSION['this_section'] = SECTION_SOCIAL;
+    Session::write('this_section', SECTION_SOCIAL);
     $interbreadcrumb[] = array(
         'url' => 'profile.php',
         'name' => get_lang('SocialNetwork')
     );
 } else {
-    $_SESSION['this_section'] = SECTION_COURSES;
+    Session::write('this_section', SECTION_COURSES);
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_PATH).'user_portal.php',
         'name' => get_lang('MyCourses')

@@ -69,7 +69,7 @@ if ($form->validate()) {
             //header('Location: gradebook_add_user.php?selecteval=' . $eval->get_id());
             exit;
         } else {
-            header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$eval->get_category_id().'&'.api_get_cidreq());
+            header('Location: '.Category::getUrl().'selectcat='.$eval->get_category_id());
             exit;
         }
     } else {
@@ -78,19 +78,19 @@ if ($form->validate()) {
             header('Location: gradebook_add_result.php?selecteval='.$eval->get_id().'&'.api_get_cidreq());
             exit;
         } else {
-            header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$eval->get_category_id().'&'.api_get_cidreq());
+            header('Location: '.Category::getUrl().'selectcat='.$eval->get_category_id());
             exit;
         }
     }
 }
 
 $interbreadcrumb[] = array(
-    'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$select_cat.'&'.api_get_cidreq(),
+    'url' => Category::getUrl().'selectcat='.$select_cat,
     'name' => get_lang('Gradebook'))
 ;
 $this_section = SECTION_COURSES;
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 $(document).ready( function() {
     $("#hid_category_id").change(function() {
        $("#hid_category_id option:selected").each(function () {

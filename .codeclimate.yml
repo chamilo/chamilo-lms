@@ -36,9 +36,12 @@ exclude_paths:
 - app/Resources/
 - main/admin/db.php
 - main/admin/ldap_synchro.php
-- main/auth/cas/lib/CAS/
+- main/auth/cas/lib/
 - main/auth/shibboleth
 - main/auth/openid
+- main/default_course_document
+- main/document/Wami.swf
+- main/inc/ajax/Wami.swf
 - main/inc/lib/browser/
 - main/inc/lib/freemindflashbrowser/
 - main/inc/lib/internationalization_database/

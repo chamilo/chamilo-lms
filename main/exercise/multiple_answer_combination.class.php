@@ -229,11 +229,11 @@ class MultipleAnswerCombination extends Question
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
             <tr>
-                <th>'.get_lang("Choice").'</th>
-                <th>'. get_lang("ExpectedChoice").'</th>
-                <th>'. get_lang("Answer").'</i></th>';
-        $header .= '<th>'.get_lang('Status').'</th>';
-        $header .= '<th>'.get_lang("Comment").'</th>';
+                <th width="10%">'.get_lang("Choice").'</th>
+                <th width="20%">'. get_lang("ExpectedChoice").'</th>
+                <th width="30%">'. get_lang("Answer").'</i></th>';
+        $header .= '<th width="10%">'.get_lang('Status').'</th>';
+        $header .= '<th width="30%">'.get_lang("Comment").'</th>';
         $header .= '</tr>';
 
         return $header;

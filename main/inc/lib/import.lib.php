@@ -49,7 +49,7 @@ class Import
      *   $result [0]['Email'] = 'john.doe@mail. com';
      *   $result [1]['FirstName'] = 'Adam';
      *   ...
-     * @param string $filename	The path to the CSV-file which should be imported.
+     * @param string $filename The path to the CSV-file which should be imported.
      * @return array Returns an array (in the system encoding) that contains all data from the CSV-file.
      *
      *

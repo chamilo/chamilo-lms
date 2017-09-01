@@ -26,16 +26,32 @@ function returnError($code)
     $fault = null;
     switch ($code) {
         case WS_ERROR_SECRET_KEY:
-            $fault = new soap_fault('Server', '', 'Secret key is not correct or params are not correctly set');
+            $fault = new soap_fault(
+                'Server',
+                '',
+                'Secret key is not correct or params are not correctly set'
+            );
             break;
         case WS_ERROR_NOT_FOUND_RESULT:
-            $fault = new soap_fault('Server', '', 'No result was found for this query');
+            $fault = new soap_fault(
+                'Server',
+                '',
+                'No result was found for this query'
+            );
             break;
         case WS_ERROR_INVALID_INPUT:
-            $fault = new soap_fault('Server', '', 'The input variables are invalid o are not correctly set');
+            $fault = new soap_fault(
+                'Server',
+                '',
+                'The input variables are invalid o are not correctly set'
+            );
             break;
         case WS_ERROR_SETTING:
-            $fault = new soap_fault('Server', '', 'Please check the configuration for this webservice');
+            $fault = new soap_fault(
+                'Server',
+                '',
+                'Please check the configuration for this webservice'
+            );
             break;
     }
     return $fault;
@@ -215,7 +231,10 @@ $server->wsdl->addComplexType(
     'SOAP-ENC:Array',
     array(),
     array(
-        array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_createUsers[]')
+        array(
+            'ref' => 'SOAP-ENC:arrayType',
+            'wsdl:arrayType' => 'tns:result_createUsers[]'
+        )
     ),
     'tns:result_createUsers'
 );
@@ -358,7 +377,10 @@ function WSCreateUsers($params)
         if ($userId) {
             if (api_is_multiple_url_enabled()) {
                 if (api_get_current_access_url_id() != -1) {
-                    UrlManager::add_user_to_url($userId, api_get_current_access_url_id());
+                    UrlManager::add_user_to_url(
+                        $userId,
+                        api_get_current_access_url_id()
+                    );
                 } else {
                     UrlManager::add_user_to_url($userId, 1);
                 }
@@ -465,7 +487,7 @@ $server->register('WSCreateUser', // method name
 // Define the method WSCreateUser
 function WSCreateUser($params)
 {
-    global $_user, $_configuration, $debug;
+    global $_user, $debug;
 
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
@@ -674,7 +696,12 @@ $server->wsdl->addComplexType(
     '',
     'SOAP-ENC:Array',
     array(),
-    array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:createUsersPassEncryptParams[]')),
+    array(
+        array(
+            'ref' => 'SOAP-ENC:arrayType',
+            'wsdl:arrayType' => 'tns:createUsersPassEncryptParams[]'
+        )
+    ),
     'tns:createUsersPassEncryptParams'
 );
 
@@ -687,8 +714,11 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'users'         => array('name' => 'users', 'type' => 'tns:createUsersPassEncryptParamsList'),
-        'secret_key'    => array('name' => 'secret_key', 'type' => 'xsd:string')
+        'users' => array(
+            'name' => 'users',
+            'type' => 'tns:createUsersPassEncryptParamsList'
+        ),
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
     )
 );
 
@@ -700,7 +730,10 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+        'original_user_id_value' => array(
+            'name' => 'original_user_id_value',
+            'type' => 'xsd:string'
+        ),
         'result' => array('name' => 'result', 'type' => 'xsd:string')
     )
 );
@@ -712,7 +745,12 @@ $server->wsdl->addComplexType(
     '',
     'SOAP-ENC:Array',
     array(),
-    array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_createUsersPassEncrypt[]')),
+    array(
+        array(
+            'ref' => 'SOAP-ENC:arrayType',
+            'wsdl:arrayType' => 'tns:result_createUsersPassEncrypt[]'
+        )
+    ),
     'tns:result_createUsersPassEncrypt'
 );
 
@@ -823,7 +861,8 @@ function WSCreateUsersPasswordCrypted($params)
         $count_row = Database::num_rows($res);
         if ($count_row > 0) {
             // Check if user is not active.
-            $sql = "SELECT user_id FROM $table_user WHERE user_id ='".$row[1]."' AND active= '0'";
+            $sql = "SELECT user_id FROM $table_user 
+                    WHERE user_id ='".$row[1]."' AND active= '0'";
             $resu = Database::query($sql);
             $r_check_user = Database::fetch_row($resu);
             $count_check_user = Database::num_rows($resu);
@@ -913,7 +952,10 @@ function WSCreateUsersPasswordCrypted($params)
 
             if (api_is_multiple_url_enabled()) {
                 if (api_get_current_access_url_id() != -1) {
-                    UrlManager::add_user_to_url($return, api_get_current_access_url_id());
+                    UrlManager::add_user_to_url(
+                        $return,
+                        api_get_current_access_url_id()
+                    );
                 } else {
                     UrlManager::add_user_to_url($return, 1);
                 }
@@ -1286,9 +1328,7 @@ function WSCreateUserPasswordCrypted($params)
         $r_check_user = Database::fetch_row($resu);
         $count_check_user = Database::num_rows($resu);
         if ($count_check_user > 0) {
-
             if ($debug) error_log('User id: '.$user_id.' exists and is NOT active. Updating user and setting setting active = 1');
-
             $sql = "UPDATE $table_user SET
                     lastname='".Database::escape_string($lastName)."',
                     firstname='".Database::escape_string($firstName)."',
@@ -1570,7 +1610,10 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+        'original_user_id_value' => array(
+            'name' => 'original_user_id_value',
+            'type' => 'xsd:string'
+        ),
         'result' => array('name' => 'result', 'type' => 'xsd:string')
     )
 );
@@ -1582,7 +1625,12 @@ $server->wsdl->addComplexType(
     '',
     'SOAP-ENC:Array',
     array(),
-    array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_editUsers[]')),
+    array(
+        array(
+            'ref' => 'SOAP-ENC:arrayType',
+            'wsdl:arrayType' => 'tns:result_editUsers[]'
+        )
+    ),
     'tns:result_editUsers'
 );
 
@@ -1673,17 +1721,12 @@ function WSEditUsers($params)
 
         if (!empty($lastname)) {
             $user->setLastname($lastname);
-            //$sql .= " lastname='".Database::escape_string($lastname)."', ";
         }
         if (!empty($firstname)) {
             $user->setFirstname($firstname);
-            //$sql .= " firstname='".Database::escape_string($firstname)."', ";
         }
         $user->setUsername($username);
-        //$sql .= " username='".Database::escape_string($username)."',";
         if (!is_null($password)) {
-            //$password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
-            //$sql .= " password='".Database::escape_string($password)."',";
             $user->setPlainPassword($password);
         }
         if (!is_null($auth_source)) {

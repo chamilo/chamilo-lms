@@ -129,7 +129,14 @@ $maxUsers = $bbb->getMaxUsersLimit();
 $status = $bbb->isServerRunning();
 $meetingExists = $bbb->meetingExists($bbb->getCurrentVideoConferenceName());
 $showJoinButton = false;
-if (($meetingExists || $conferenceManager) && ($maxUsers == 0 || $maxUsers > $usersOnline)) {
+
+// Only conference manager can see the join button
+$userCanSeeJoinButton = $conferenceManager;
+if ($bbb->isGlobalConference() && $bbb->isGlobalConferencePerUserEnabled()) {
+    // Any user can see the "join button" BT#12620
+    $userCanSeeJoinButton = true;
+}
+if (($meetingExists || $userCanSeeJoinButton) && ($maxUsers == 0 || $maxUsers > $usersOnline)) {
     $showJoinButton = true;
 }
 $conferenceUrl = $bbb->getConferenceUrl();

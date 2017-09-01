@@ -212,6 +212,8 @@ class Evaluation implements GradebookItem
      * @param string $course_code course code
      * @param int $category_id parent category
      * @param integer $visible visible
+     *
+     * @return array
      */
     public static function load(
         $id = null,
@@ -446,8 +448,8 @@ class Evaluation implements GradebookItem
      */
     public function delete()
     {
-        $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $sql = 'DELETE FROM '.$tbl_grade_evaluations.' 
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+        $sql = 'DELETE FROM '.$table.' 
                 WHERE id = '.intval($this->id);
         Database::query($sql);
     }
@@ -759,14 +761,14 @@ class Evaluation implements GradebookItem
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 
         $sql = "SELECT user_id,lastname,firstname,username 
-            FROM $tbl_user 
-            WHERE 
-                lastname LIKE '".Database::escape_string($first_letter_user)."%' AND 
-                status = ".STUDENT." AND user_id NOT IN (
-                    SELECT user_id FROM $table 
-                    WHERE evaluation_id = ".intval($this->id)."
-                )
-            ORDER BY lastname";
+                FROM $tbl_user 
+                WHERE 
+                    lastname LIKE '".Database::escape_string($first_letter_user)."%' AND 
+                    status = ".STUDENT." AND user_id NOT IN (
+                        SELECT user_id FROM $table 
+                        WHERE evaluation_id = ".intval($this->id)."
+                    )
+                ORDER BY lastname";
 
         $result = Database::query($sql);
         $users = Database::store_result($result);

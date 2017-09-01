@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  *	@package chamilo.tracking
  */
@@ -54,7 +56,7 @@ $session_id = intval($_REQUEST['id_session']);
 
 if ($export_csv) {
     if (!empty($session_id)) {
-        $_SESSION['id_session'] = $session_id;
+        Session::write('id_session', $session_id);
     }
     ob_start();
 }

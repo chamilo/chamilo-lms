@@ -104,12 +104,12 @@ if ($form->validate()) {
             'type' => LINK_STUDENTPUBLICATION
         ]);
 
-    header('Location: '.$_SESSION['gradebook_dest'].'?linkedited=&selectcat='.$link->get_category_id().'&'.api_get_cidreq());
+    header('Location: '.Category::getUrl().'linkedited=&selectcat='.$link->get_category_id());
     exit;
 }
 
 $interbreadcrumb[] = array(
-    'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$linkcat,
+    'url' => Category::getUrl().'selectcat='.$linkcat,
     'name' => get_lang('Gradebook')
 );
 

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This class provides methods for the notebook management.
  * Include/require it in your code to use its features.
@@ -258,25 +260,25 @@ class NotebookManager
             Display::return_icon('notes_order_by_title.png', get_lang('OrderByTitle'), '', '32').'</a>';
         echo '</div>';
 
-        if (!isset($_SESSION['notebook_view']) ||
-            !in_array($_SESSION['notebook_view'], array('creation_date', 'update_date', 'title'))
-        ) {
-            $_SESSION['notebook_view'] = 'creation_date';
+        $notebookView = Session::read('notebook_view');
+
+        if (!in_array($notebookView, array('creation_date', 'update_date', 'title'))) {
+            Session::write('notebook_view', 'creation_date');
         }
 
         // Database table definition
         $t_notebook = Database::get_course_table(TABLE_NOTEBOOK);
-        if ($_SESSION['notebook_view'] == 'creation_date' || $_SESSION['notebook_view'] == 'update_date') {
-            $order_by = " ORDER BY ".$_SESSION['notebook_view']." $sort_direction ";
+        if ($notebookView == 'creation_date' || $notebookView == 'update_date') {
+            $order_by = " ORDER BY ".$notebookView." $sort_direction ";
         } else {
-            $order_by = " ORDER BY ".$_SESSION['notebook_view']." $sort_direction ";
+            $order_by = " ORDER BY ".$notebookView." $sort_direction ";
         }
 
         //condition for the session
         $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id);
 
-        $cond_extra = ($_SESSION['notebook_view'] == 'update_date') ? " AND update_date <> ''" : " ";
+        $cond_extra = $notebookView == 'update_date' ? " AND update_date <> ''" : " ";
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT * FROM $t_notebook

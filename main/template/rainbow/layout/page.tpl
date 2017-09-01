@@ -42,7 +42,11 @@
         </div>
     {% endif %}
 	<section id="content-section">
-        <div class="container">
+        {% if fluid == true %}
+            <div class="container-fluid">
+        {% else %}
+            <div class="container">
+        {% endif %}
             {% block breadcrumb %}
                 <div id="page-breadcrumb">
                     {{ breadcrumb }}

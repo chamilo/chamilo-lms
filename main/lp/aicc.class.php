@@ -77,7 +77,7 @@ class aicc extends learnpath
      * If not defined, uses the base path of the course's scorm dir
      * @return array Structured array representing the config files' contents
      */
-    function parse_config_files($dir = '')
+    public function parse_config_files($dir = '')
     {
         if ($this->debug > 0) {error_log('New LP - In aicc::parse_config_files('.$dir.')', 0); }
         if (empty($dir)) {
@@ -472,8 +472,7 @@ class aicc extends learnpath
             }
         }
 
-        if ($package_type == '' || !$mandatory)
-        {
+        if ($package_type == '' || !$mandatory) {
             Display::addFlash(
                 Display::return_message(get_lang('FileError'))
             );
@@ -506,7 +505,9 @@ class aicc extends learnpath
             - parse & change relative html links
             - make sure the filenames are secure (filter funny characters or php extensions)
         */
-        if (is_dir($course_sys_dir.$new_dir) OR @mkdir($course_sys_dir.$new_dir, api_get_permissions_for_new_directories())) {
+        if (is_dir($course_sys_dir.$new_dir) ||
+            @mkdir($course_sys_dir.$new_dir, api_get_permissions_for_new_directories())
+        ) {
             // PHP method - slower...
             if ($this->debug >= 1) { error_log('New LP - Changing dir to '.$course_sys_dir.$new_dir, 0); }
             $saved_dir = getcwd();
@@ -581,7 +582,7 @@ class aicc extends learnpath
      * @param string $proxy Proximity setting
      * @return bool
      */
-    function set_proximity($proxy = '')
+    public function set_proximity($proxy = '')
     {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) { error_log('In aicc::set_proximity('.$proxy.') method', 0); }
@@ -601,7 +602,7 @@ class aicc extends learnpath
      * @param    string    Theme setting
      * @return bool
      */
-    function set_theme($theme = '')
+    public function set_theme($theme = '')
     {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) { error_log('In aicc::set_theme('.$theme.') method', 0); }
@@ -621,14 +622,15 @@ class aicc extends learnpath
      * @param    string $preview_image Theme setting
      * @return bool
      */
-    function set_preview_image($preview_image = '')
+    public function set_preview_image($preview_image = '')
     {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) {error_log('In aicc::set_preview_image('.$preview_image.') method', 0); }
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' WHERE c_id = ".$course_id." id = ".$lp;
+            $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' 
+                    WHERE c_id = ".$course_id." id = ".$lp;
             Database::query($sql);
             return true;
         } else {
@@ -641,7 +643,7 @@ class aicc extends learnpath
      * @param    string $author
      * @return true
      */
-    function set_author($author = '')
+    public function set_author($author = '')
     {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) { error_log('In aicc::set_author('.$author.') method', 0); }
@@ -662,7 +664,7 @@ class aicc extends learnpath
      * @param    string $maker
      * @return bool
      */
-    function set_maker($maker = '')
+    public function set_maker($maker = '')
     {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) { error_log('In aicc::set_maker method('.$maker.')', 0); }
@@ -683,7 +685,7 @@ class aicc extends learnpath
      * @param    integer    Learnpath ID (optional, taken from object context if not defined)
      * @return bool
      */
-    function export_zip($lp_id = null)
+    public function export_zip($lp_id = null)
     {
         if ($this->debug > 0) { error_log('In aicc::export_zip method('.$lp_id.')', 0); }
         if (empty($lp_id)) {
@@ -717,18 +719,14 @@ class aicc extends learnpath
         $zipfilename = $zipfoldername.'/'.$LPnamesafe.'.zip';
 
         // Get a temporary dir for creating the zip file.
-
-        //error_log('New LP - cleaning dir '.$zipfoldername, 0);
         removeDir($zipfoldername); //make sure the temp dir is cleared
         mkdir($zipfoldername, api_get_permissions_for_new_directories());
-        //error_log('New LP - made dir '.$zipfoldername, 0);
 
         // Create zipfile of given directory.
         $zip_folder = new PclZip($zipfilename);
         $zip_folder->create($scormfoldername.'/', PCLZIP_OPT_REMOVE_PATH, $scormfoldername.'/');
 
         //this file sending implies removing the default mime-type from php.ini
-        //DocumentManager::file_send_for_download($zipfilename, true, $LPnamesafe.".zip");
         DocumentManager::file_send_for_download($zipfilename, true);
 
         // Delete the temporary zip file and directory in fileManage.lib.php
@@ -743,7 +741,7 @@ class aicc extends learnpath
      * @param	string	Resource ID as used in resource array
      * @return string	The resource's path as declared in config file course.crs
      */
-    function get_res_path($id)
+    public function get_res_path($id)
     {
         if ($this->debug > 0) { error_log('In aicc::get_res_path('.$id.') method', 0); }
         $path = '';
@@ -759,7 +757,7 @@ class aicc extends learnpath
      * @param	string	Resource ID as used in resource array
      * @return string	The resource's type as declared in the assignable unit (.au) file
      */
-    function get_res_type($id)
+    public function get_res_type($id)
     {
         if ($this->debug > 0) { error_log('In aicc::get_res_type('.$id.') method', 0); }
         $type = '';
@@ -777,7 +775,7 @@ class aicc extends learnpath
      * Gets the default organisation's title
      * @return	string	The organization's title
      */
-    function get_title()
+    public function get_title()
     {
         if ($this->debug > 0) { error_log('In aicc::get_title() method', 0); }
         $title = '';
@@ -798,7 +796,7 @@ class aicc extends learnpath
      * updating the existing table... This will prove very useful in case initial data
      * from config files were not imported well enough.
      */
-    function reimport_aicc()
+    public function reimport_aicc()
     {
         if ($this->debug > 0) { error_log('In aicc::reimport_aicc() method', 0); }
         //query current items list
@@ -815,7 +813,7 @@ class aicc extends learnpath
      * @param	string	File path
      * @return	array	Structured array
      */
-    function parse_ini_file_quotes_safe($f)
+    public function parse_ini_file_quotes_safe($f)
     {
         $null = '';
         $r = $null;
@@ -868,7 +866,7 @@ class aicc extends learnpath
      * as containing only hard string data (no variables), provided in lower case
      * @return	array	Structured array
      */
-    function parse_ini_string_quotes_safe($s, $pure_strings = array())
+    public function parse_ini_string_quotes_safe($s, $pure_strings = array())
     {
         $null = '';
         $r = $null;
@@ -932,7 +930,7 @@ class aicc extends learnpath
      * @param	boolean	Might one field name happen more than once on the same line? (then split by comma in the values)
      * @return array	Simple structured array
      */
-    function parse_csv_file($f, $delim = ',', $enclosure = '"', $multiples = false)
+    public function parse_csv_file($f, $delim = ',', $enclosure = '"', $multiples = false)
     {
         $data = @file_get_contents($f);
         $data = api_convert_encoding($data, api_get_system_encoding(), $this->config_encoding);

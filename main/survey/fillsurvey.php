@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * @package chamilo.survey
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
@@ -138,12 +140,12 @@ if (Database::num_rows($result) < 1) {
 }
 
 $survey_invitation = Database::fetch_array($result, 'ASSOC');
-
+$surveyUserFromSession = Session::read('surveyuser');
 // Now we check if the user already filled the survey
 if (!isset($_POST['finish_survey']) &&
     (
         $isAnonymous &&
-        isset($_SESSION['surveyuser']) &&
+        !empty($surveyUserFromSession) &&
         SurveyUtil::isSurveyAnsweredFlagged($survey_invitation['survey_code'], $survey_invitation['c_id'])
     ) ||
     ($survey_invitation['answered'] == 1 && !isset($_GET['user_id']))
@@ -517,8 +519,8 @@ if (!empty($survey_data['survey_subtitle'])) {
 // Displaying the survey introduction
 if (!isset($_GET['show'])) {
     // The first thing we do is delete the session
-    unset($_SESSION['paged_questions']);
-    unset($_SESSION['page_questions_sec']);
+    Session::erase('paged_questions');
+    Session::erase('page_questions_sec');
     $paged_questions_sec = array();
 
     if (!empty($survey_data['survey_introduction'])) {
@@ -573,14 +575,14 @@ if ($survey_data['form_fields'] &&
         $_GET['show'] = 0;
         $show = 0;
         // We unset the sessions
-        unset($_SESSION['paged_questions']);
-        unset($_SESSION['page_questions_sec']);
+        Session::erase('paged_questions');
+        Session::erase('page_questions_sec');
         $paged_questions_sec = array();
     } else {
         echo '<div id="survey_content" class="survey_content">'.get_lang('UpdateInformation').'</div>';
         // We unset the sessions
-        unset($_SESSION['paged_questions']);
-        unset($_SESSION['page_questions_sec']);
+        Session::erase('paged_questions');
+        Session::erase('page_questions_sec');
         $paged_questions_sec = array();
         $form->display();
     }
@@ -610,8 +612,8 @@ if (isset($_POST['finish_survey'])) {
         );
     }
 
-    unset($_SESSION['paged_questions']);
-    unset($_SESSION['page_questions_sec']);
+    Session::erase('paged_questions');
+    Session::erase('page_questions_sec');
     Display::display_footer();
     exit();
 }
@@ -628,11 +630,10 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
     // As long as there is no pagebreak fount we keep adding questions to the page
     $questions_displayed = array();
     $counter = 0;
-    $paged_questions = array();
-
+    $paged_questions = Session::read('paged_questions');
     // If non-conditional survey
     if ($survey_data['survey_type'] === '0') {
-        if (empty($_SESSION['paged_questions'])) {
+        if (empty($paged_questions)) {
             $sql = "SELECT * FROM $table_survey_question
                     WHERE
                         c_id = $course_id AND 
@@ -647,21 +648,19 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                     $paged_questions[$counter][] = $row['question_id'];
                 }
             }
-            $_SESSION['paged_questions'] = $paged_questions;
-        } else {
-            $paged_questions = $_SESSION['paged_questions'];
+            Session::write('paged_questions', $paged_questions);
         }
 
         // Redefinition of variables and session ids to fix issue of survey not
         //  showing questions - see support.chamilo.org #5529
         $course_id = $survey_invitation['c_id'];
-        $_SESSION['_cid'] = $course_id;
-        $_SESSION['_real_cid'] = $course_id;
+        Session::write('_cid', $course_id);
+        Session::write('_real_cid', $course_id);
 
         if (array_key_exists($_GET['show'], $paged_questions)) {
             if (isset($_GET['user_id'])) {
                 // Get the user into survey answer table (user or anonymus)
-                $my_user_id = ($survey_data['anonymous'] == 1) ? $_SESSION['surveyuser'] : api_get_user_id();
+                $my_user_id = ($survey_data['anonymous'] == 1) ? $surveyUserFromSession : api_get_user_id();
 
                 $sql = "SELECT
                             survey_question.survey_group_sec1,
@@ -924,7 +923,6 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                     // We only get highest 3
                     $secondary = '';
                     $combi = '';
-
                     for ($i = 0; $i <= $group_cant; $i++) {
                         $group1 = $groups[$i];
                         $group2 = $groups[$i + 1];
@@ -946,12 +944,6 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                             }
                         }
                     }
-                    /*
-                      echo '<pre>';
-                      echo 'Pair of Groups <br /><br />';
-                      echo $combi;
-                      echo '</pre>';
-                     */
                     // Create the new select with the questions from the secondary phase
                     if (empty($_SESSION['page_questions_sec']) &&
                         !is_array($_SESSION['page_questions_sec']) &&
@@ -976,11 +968,11 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                                 $paged_questions_sec[$counter][] = $row['question_id'];
                             }
                         }
-                        $_SESSION['paged_questions_sec'] = $paged_questions_sec;
+                        Session::write('page_questions_sec', $paged_questions_sec);
                     } else {
-                        $paged_questions_sec = $_SESSION['paged_questions_sec'];
+                        $paged_questions_sec = Session::read('page_questions_sec');
                     }
-                    $paged_questions = $_SESSION['paged_questions']; // For the sake of pages counting
+                    $paged_questions = Session::read('paged_questions'); // For the sake of pages counting
                     //$paged_questions = $paged_questions_sec; // For the sake of pages counting coming up at display time...
                     if ($shuffle == '') {
                         $shuffle = ' BY survey_question.sort, survey_question_option.sort ASC ';
@@ -1053,7 +1045,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
             }
         } else {
             // We need this variable only in the 2nd set of questions when personality is set.
-            unset($_SESSION['page_questions_sec']);
+            Session::erase('page_questions_sec');
             $paged_questions_sec = array();
 
             // Only the questions from the basic group
@@ -1086,9 +1078,9 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                         }
                     }
                 }
-                $_SESSION['paged_questions'] = $paged_questions;
+                Session::write('paged_questions', $paged_questions);
             } else {
-                $paged_questions = $_SESSION['paged_questions'];
+                $paged_questions = Session::read('paged_questions');
             }
             $order_sql = $shuffle;
             if ($shuffle == '') {
@@ -1320,7 +1312,7 @@ if ($survey_data['survey_type'] === '0') {
             $numberofpages += count($paged_questions_sec);
         } else {
             // We need this variable only if personality == 1
-            unset($_SESSION['page_questions_sec']);
+            Session::erase('page_questions_sec');
             $paged_questions_sec = array();
         }
 

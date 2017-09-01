@@ -115,7 +115,6 @@ switch ($action) {
             // Setting the form elements
             $form->addElement('header', get_lang('TermEdit'));
             $form->addElement('hidden', 'glossary_id');
-            $form->addElement('text', 'name', get_lang('TermName'));
             if (api_get_configuration_value('save_titles_as_html')) {
                 $form->addHtmlEditor(
                     'name',

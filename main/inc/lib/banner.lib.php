@@ -608,13 +608,9 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 
     // part 1: Course Homepage. If we are in a course then the first breadcrumb is a link to the course homepage
     if (!empty($courseInfo) && !isset($_GET['hide_course_breadcrumb'])) {
-        $sessionId = api_get_session_id();
-        $sessionName = '';
-        if (!empty($sessionId)) {
-            /** @var \Chamilo\CoreBundle\Entity\Session $session */
-            $session = Database::getManager()->find('ChamiloCoreBundle:Session', $sessionId);
-            $sessionName = $session ? ' ('.cut($session->getName(), MAX_LENGTH_BREADCRUMB).')' : '';
-        }
+        /** @var \Chamilo\CoreBundle\Entity\Session $session */
+        $session = Database::getManager()->find('ChamiloCoreBundle:Session', api_get_session_id());
+        $sessionName = $session ? ' ('.cut($session->getName(), MAX_LENGTH_BREADCRUMB).')' : '';
 
         $courseInfo['name'] = api_htmlentities($courseInfo['name']);
         $course_title = cut($courseInfo['name'], MAX_LENGTH_BREADCRUMB);
@@ -648,7 +644,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
                 )
                 .' '.$course_title.$sessionName;
 
-                if (!empty($sessionId) && ($session->getDuration() && !api_is_allowed_to_edit())) {
+                if ($session && ($session->getDuration() && !api_is_allowed_to_edit())) {
                     $daysLeft = SessionManager::getDayLeftInSession(
                         ['id' => $session->getId(), 'duration' => $session->getDuration()],
                         $user_id

@@ -6680,7 +6680,8 @@ function api_get_multiple_access_url()
 /**
  * @return bool
  */
-function api_is_multiple_url_enabled() {
+function api_is_multiple_url_enabled()
+{
     return api_get_multiple_access_url();
 }
 

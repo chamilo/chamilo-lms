@@ -64,7 +64,6 @@ class Template
     ) {
         // Page title
         $this->title = $title;
-
         $this->show_learnpath = $show_learnpath;
 
         if (empty($this->show_learnpath)) {
@@ -1162,10 +1161,11 @@ class Template
             }
         }
 
+        $courseId = api_get_course_int_id();
+
         // Tutor name
         if (api_get_setting('show_tutor_data') == 'true') {
             // Course manager
-            $courseId = api_get_course_int_id();
             $id_session = api_get_session_id();
             if (!empty($courseId)) {
                 $tutor_data = '';
@@ -1194,7 +1194,6 @@ class Template
 
         if (api_get_setting('show_teacher_data') == 'true') {
             // course manager
-            $courseId = api_get_course_int_id();
             if (!empty($courseId)) {
                 $teacher_data = '';
                 $mail = CourseManager::get_emails_of_tutors_to_course($courseId);
@@ -1316,7 +1315,6 @@ class Template
         if ($clearFlashMessages) {
             Display::cleanFlashMessages();
         }
-
         echo $this->twig->render($template, $this->params);
     }
 

@@ -606,7 +606,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         $course_id = $_course['real_id'];
     }
 
-    $additonalBlocks = '';
+    $additionalBlocks = '';
 
     /*  Plugins for banner section */
     $web_course_path = api_get_path(WEB_COURSE_PATH);
@@ -624,20 +624,34 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 
         switch (api_get_setting('breadcrumbs_course_homepage')) {
             case 'get_lang':
-                $itemTitle = Display::return_icon('home.png', get_lang('CourseHomepageLink'), [], ICON_SIZE_TINY);
+                $itemTitle = Display::return_icon(
+                    'home.png',
+                    get_lang('CourseHomepageLink'),
+                    [],
+                    ICON_SIZE_TINY
+                );
                 break;
             case 'course_code':
-                $itemTitle = Display::return_icon('home.png', $_course['official_code'], [], ICON_SIZE_TINY)
-                    .' '.$_course['official_code'];
+                $itemTitle = Display::return_icon(
+                    'home.png',
+                    $_course['official_code'],
+                    [],
+                    ICON_SIZE_TINY
+                )
+                .' '.$_course['official_code'];
                 break;
             case 'session_name_and_course_title':
                 //no break
             default:
-                $itemTitle = Display::return_icon('home.png', $_course['name'].$my_session_name, [], ICON_SIZE_TINY)
-                    .' '.$course_title.$my_session_name;
+                $itemTitle = Display::return_icon(
+                    'home.png',
+                    $_course['name'].$my_session_name,
+                    [],
+                    ICON_SIZE_TINY
+                )
+                .' '.$course_title.$my_session_name;
 
-                if (
-                    $session && ($session->getDuration() && !api_is_allowed_to_edit())
+                if ($session && ($session->getDuration() && !api_is_allowed_to_edit())
                 ) {
                     $daysLeft = SessionManager::getDayLeftInSession(
                         ['id' => $session->getId(), 'duration' => $session->getDuration()],
@@ -645,12 +659,12 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
                     );
 
                     if ($daysLeft >= 0) {
-                        $additonalBlocks .= Display::return_message(
+                        $additionalBlocks .= Display::return_message(
                             sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft),
                             'information'
                         );
                     } else {
-                        $additonalBlocks .= Display::return_message(
+                        $additionalBlocks .= Display::return_message(
                             get_lang('YourSessionTimeHasExpired'),
                             'warning'
                         );
@@ -816,7 +830,11 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         if (!empty($navigation_right)) {
             foreach ($navigation_right as $item) {
                 $extra_class = isset($item['class']) ? $item['class'] : null;
-                $lis .= Display::tag('li', $item['title'], array('class' => $extra_class.' pull-right'));
+                $lis .= Display::tag(
+                    'li',
+                    $item['title'],
+                    array('class' => $extra_class.' pull-right')
+                );
             }
         }
 
@@ -825,7 +843,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         }
     }
 
-    return $html.$additonalBlocks;
+    return $html.$additionalBlocks;
 }
 
 /**

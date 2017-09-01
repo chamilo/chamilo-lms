@@ -246,7 +246,11 @@ class SortableTable extends HTML_Table
         $content = $this->get_table_html();
         if ($this->get_total_number_of_items() == 0) {
             $cols = $this->getColCount();
-            $this->setCellAttributes(1, 0, 'style="font-style: italic;text-align:center;" colspan='.$cols);
+            $this->setCellAttributes(
+                1,
+                0,
+                'style="font-style: italic;text-align:center;" colspan='.$cols
+            );
             $message_empty = api_xml_http_response_encode(get_lang('TheListIsEmpty'));
             $this->setCellContents(1, 0, $message_empty);
             $empty_table = true;

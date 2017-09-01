@@ -34,15 +34,9 @@ $currentForumCategory = get_forumcategory_information($currentForum['forum_categ
 // the variable $forum_settings is declared in forumconfig.inc.php
 $forumSettings = $forum_setting;
 
-/* Breadcrumbs */
-
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = Security::remove_XSS($_SESSION['gradebook']);
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
@@ -228,7 +222,7 @@ if (!empty($threadData)) {
     $defaults['weight_calification'] = 0;
     $defaults['thread_peer_qualify'] = 0;
 }
-$form->setDefaults(isset($defaults) ? $defaults : null);
+
 $form->addButtonUpdate(get_lang('ModifyThread'), 'SubmitPost');
 
 if ($form->validate()) {
@@ -242,11 +236,12 @@ if ($form->validate()) {
         header('Location: '.$redirectUrl);
         exit;
     }
-} else {
-    $token = Security::get_token();
-    $form->addElement('hidden', 'sec_token');
-    $form->setConstants(array('sec_token' => $token));
 }
+
+$form->setDefaults(isset($defaults) ? $defaults : null);
+$token = Security::get_token();
+$form->addElement('hidden', 'sec_token');
+$form->setConstants(array('sec_token' => $token));
 
 $originIsLearnPath = $origin == 'learnpath';
 

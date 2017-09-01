@@ -228,7 +228,12 @@ class CoursesController
         // The course must be open in order to access the auto subscription
         if (in_array(
             $courseInfo['visibility'],
-            array(COURSE_VISIBILITY_CLOSED, COURSE_VISIBILITY_REGISTERED, COURSE_VISIBILITY_HIDDEN))
+            array(
+                COURSE_VISIBILITY_CLOSED,
+                COURSE_VISIBILITY_REGISTERED,
+                COURSE_VISIBILITY_HIDDEN
+            )
+        )
         ) {
             Display::addFlash(
                 Display::return_message(
@@ -416,8 +421,11 @@ class CoursesController
      * @param array $limit
      * @return string The HTML block
      */
-    public function getCoursesCategoriesBlock($code = null, $hiddenLinks = false, $limit = null)
-    {
+    public function getCoursesCategoriesBlock(
+        $code = null,
+        $hiddenLinks = false,
+        $limit = null
+    ) {
         $categories = $this->model->browse_course_categories();
         $html = '';
         if (!empty($categories)) {
@@ -876,8 +884,14 @@ class CoursesController
                 'coach_id' => $coachId,
                 'coach_url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$coachId,
                 'coach_name' => $coachName,
-                'coach_avatar' => UserManager::getUserPicture($coachId, USER_IMAGE_SIZE_SMALL),
-                'is_subscribed' => SessionManager::isUserSubscribedAsStudent($session->getId(), $userId),
+                'coach_avatar' => UserManager::getUserPicture(
+                    $coachId,
+                    USER_IMAGE_SIZE_SMALL
+                ),
+                'is_subscribed' => SessionManager::isUserSubscribedAsStudent(
+                    $session->getId(),
+                    $userId
+                ),
                 'icon' => $this->getSessionIcon($session->getName()),
                 'date' => $sessionDates['display'],
                 'price' => !empty($isThisSessionOnSale['html']) ? $isThisSessionOnSale['html'] : '',

@@ -30,13 +30,15 @@ if (!$result) {
     api_not_allowed(true);
 }
 
-$gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : null;
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : null;
 $learnpathItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? intval($_REQUEST['learnpath_item_view_id']) : null;
 $origin = api_get_origin();
 
-$interbreadcrumb[] = array("url" => "exercise.php?gradebook=$gradebook", "name" => get_lang('Exercises'));
+$interbreadcrumb[] = array(
+    "url" => "exercise.php?".api_get_cidreq(),
+    "name" => get_lang('Exercises')
+);
 $interbreadcrumb[] = array("url" => "#", "name" => $objExercise->selectTitle(true));
 
 $time_control = false;
@@ -294,7 +296,6 @@ if ($objExercise->selectAttempts() && $visible_return['value'] == true) {
 if ($time_control) {
     $tpl->assign('time_control',$objExercise->return_time_left_div());
 }
-
 
 $tpl->assign('fluid', $fluid);
 $tpl->assign('data', $list);

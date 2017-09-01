@@ -238,10 +238,8 @@ if (isset($current_thread['thread_id'])) {
                 $current_thread['thread_qualify_max'] > 0 && $origin != 'learnpath'
             ) {
                 $my_forum_id = $clean_forum_id;
-                if (isset($_GET['gradebook'])) {
-                    $info_thread = get_thread_information($clean_forum_id, $clean_thread_id);
-                    $my_forum_id = $info_thread['forum_id'];
-                }
+                $info_thread = get_thread_information($clean_forum_id, $clean_thread_id);
+                $my_forum_id = $info_thread['forum_id'];
 
                 $userCanEdit = $current_thread['thread_peer_qualify'] == 1 && $row['poster_id'] != $userId;
                 /*if ($row['poster_id'] != $userId && $current_forum['moderated'] == 1 && $row['status']) {

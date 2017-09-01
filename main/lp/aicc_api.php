@@ -32,7 +32,7 @@ $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 // Is this needed? This is probabaly done in the header file.
-$file = $_SESSION['file'];
+$file = Session::read('file');
 $oLP = unserialize(Session::read('lpobject'));
 $oItem = $oLP->items[$oLP->current];
 if (!is_object($oItem)) {
@@ -141,10 +141,10 @@ function LMSGetValue(param) {
     }else if(param == 'cmi.core.student_id'){
         result='<?php echo $_user['user_id']; ?>';
     }else if(param == 'cmi.core.student_name'){
-      <?php
-        $who = addslashes(api_get_person_name($_user['firstName'], $_user['lastName']));
-        echo "result='$who';";
-      ?>
+    <?php
+    $who = addslashes(api_get_person_name($_user['firstName'], $_user['lastName']));
+    echo "result='$who';";
+    ?>
     }else if(param == 'cmi.core.lesson_location'){
         result=lesson_location;
     }else if(param == 'cmi.core.total_time'){
@@ -173,19 +173,19 @@ function LMSGetValue(param) {
     /*
     // Switch not working??? WTF???
     switch(param) {
-        case 'cmi.core._children'		:
+        case 'cmi.core._children':
             result='entry, exit, lesson_status, student_id, student_name, lesson_location, total_time, credit, lesson_mode, score, session_time';
             break;
-        case 'cmi.core_children'		:
+        case 'cmi.core_children':
             result='entry, exit, lesson_status, student_id, student_name, lesson_location, total_time, credit, lesson_mode, score, session_time';
             break;
-        case 'cmi.core.entry'			:
+        case 'cmi.core.entry':
             result='';
             break;
-        case 'cmi.core.exit'			:
+        case 'cmi.core.exit':
             result='';
             break;
-        case 'cmi.core.lesson_status'	:
+        case 'cmi.core.lesson_status':
             if(lesson_status != '') {
                 result=lesson_status;
             }
@@ -193,51 +193,51 @@ function LMSGetValue(param) {
                 result='not attempted';
             }
             break;
-        case 'cmi.core.student_id'	   :
+        case 'cmi.core.student_id':
             result='<?php echo $_user['user_id']; ?>';
             break;
-        case 'cmi.core.student_name'	:
+        case 'cmi.core.student_name':
           <?php
             $who = addslashes(api_get_person_name($_user['firstName'], $_user['lastName']));
             echo "result='$who';";
           ?>	break;
-        case 'cmi.core.lesson_location'	:
+        case 'cmi.core.lesson_location':
             result='';
             break;
-        case 'cmi.core.total_time'	:
+        case 'cmi.core.total_time':
             result=total_time;
             break;
-        case 'cmi.core.score._children'	:
+        case 'cmi.core.score._children':
             result='raw,min,max';
             break;
-        case 'cmi.core.score.raw'	:
+        case 'cmi.core.score.raw':
             result=score;
             break;
-        case 'cmi.core.score.max'	:
+        case 'cmi.core.score.max':
             result=max;
             break;
-        case 'cmi.core.score.min'	:
+        case 'cmi.core.score.min':
             result=min;
             break;
-        case 'cmi.core.score'		:
+        case 'cmi.core.score':
             result=score;
             break;
-        case 'cmi.core.credit'		:
+        case 'cmi.core.credit':
             result='no-credit';
             break;
-        case 'cmi.core.lesson_mode'	:
+        case 'cmi.core.lesson_mode':
             result='normal';
             break;
-        case 'cmi.suspend_data'		:
+        case 'cmi.suspend_data':
             result='<?php echo $oItem->get_suspend_data(); ?>';
             break;
-        case 'cmi.launch_data'		:
+        case 'cmi.launch_data':
             result='';
             break;
         case 'cmi.objectives._count':
             result='<?php echo $oItem->get_view_count(); ?>';
             break;
-        default 					:
+        default:
             result='';
             break;
     }

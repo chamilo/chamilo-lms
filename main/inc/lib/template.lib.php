@@ -446,12 +446,22 @@ class Template
     }
 
     /**
+     * If template not found in custom template folder, the default template
+     * will be used.
      * @param string $name
      *
      * @return string
      */
     public function get_template($name)
     {
+        if ($this->templateFolder != 'default') {
+            // Avoid missing template error, use the default file.
+            $file = api_get_path(SYS_CODE_PATH).'template/'.$this->templateFolder.'/'.$name;
+            if (!file_exists($file)) {
+                return 'default/'.$name;
+            }
+        }
+
         return $this->templateFolder.'/'.$name;
     }
 
@@ -608,7 +618,7 @@ class Template
         ];
 
         foreach ($bowerCSSFiles as $file) {
-            $css[] = api_get_path(WEB_PATH).'web/assets/'.$file;
+            $css[] = api_get_path(WEB_PUBLIC_PATH).'assets/'.$file;
         }
 
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
@@ -769,7 +779,7 @@ class Template
         }
 
         foreach ($bowerJsFiles as $file) {
-            $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>'."\n";
+            $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"></script>'."\n";
         }
 
         foreach ($js_files as $file) {

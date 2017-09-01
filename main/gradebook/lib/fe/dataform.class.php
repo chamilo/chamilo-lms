@@ -8,21 +8,27 @@
  */
 class DataForm extends FormValidator
 {
-	const TYPE_IMPORT = 1;
-	const TYPE_EXPORT = 2;
-	const TYPE_EXPORT_PDF = 3;
+    const TYPE_IMPORT = 1;
+    const TYPE_EXPORT = 2;
+    const TYPE_EXPORT_PDF = 3;
 
-	/**
-	 * Builds a form containing form items based on a given parameter
-	 * @param int form_type 1=import, 2=export
-	 * @param obj cat_obj the category object
-	 * @param obj res_obj the result object
-	 * @param string form name
-	 * @param method
-	 * @param action
-	 */
-    public function __construct($form_type, $form_name, $method = 'post', $action = null, $target = '', $locked_status)
-    {
+    /**
+     * Builds a form containing form items based on a given parameter
+     * @param int form_type 1=import, 2=export
+     * @param obj cat_obj the category object
+     * @param obj res_obj the result object
+     * @param string form name
+     * @param method
+     * @param action
+     */
+    public function __construct(
+        $form_type,
+        $form_name,
+        $method = 'post',
+        $action = null,
+        $target = '',
+        $locked_status
+    ) {
         parent:: __construct($form_name, $method, $action, $target);
         $this->form_type = $form_type;
         if ($this->form_type == self::TYPE_IMPORT) {

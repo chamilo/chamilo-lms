@@ -18,8 +18,13 @@ class ResultTable extends SortableTable
     /**
      * Constructor
      */
-    public function __construct($evaluation, $results = array(), $iscourse, $addparams = null, $forprint = false)
-    {
+    public function __construct(
+        $evaluation,
+        $results = array(),
+        $iscourse,
+        $addparams = null,
+        $forprint = false
+    ) {
         parent:: __construct(
             'resultlist',
             null,
@@ -71,8 +76,13 @@ class ResultTable extends SortableTable
     /**
      * Function used by SortableTable to generate the data to display
      */
-    public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = null) {
-
+    public function get_table_data(
+        $from = 1,
+        $per_page = null,
+        $column = null,
+        $direction = null,
+        $sort = null
+    ) {
         $is_western_name_order = api_is_western_name_order();
         $scoredisplay = ScoreDisplay::instance();
 
@@ -128,8 +138,12 @@ class ResultTable extends SortableTable
                 $row[] = $item['firstname'];
             }
 
-            $row[] = Display::bar_progress($item['percentage_score'], false, $item['score']);
-            //$row[] =  Display::bar_progress($item['percentage_score'], true);
+            $row[] = Display::bar_progress(
+                $item['percentage_score'],
+                false,
+                $item['score']
+            );
+
             if ($scoredisplay->is_custom()) {
                 $row[] = $item['display'];
             }

@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
 * Template (front controller in MVC pattern) used for distpaching to
  * the controllers depend on the current action
@@ -20,7 +23,7 @@ api_block_anonymous_users();
 
 // current section
 $this_section = SECTION_DASHBOARD;
-unset($_SESSION['this_section']); //for hmtl editor repository
+Session::erase('this_section'); //for hmtl editor repository
 
 // get actions
 $actions = array('listing', 'store_user_block', 'disable_block');

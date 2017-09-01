@@ -171,7 +171,6 @@ class CourseDescription
         return $data;
     }
 
-
     /**
      * Get maximum description type by session id,
      * first you must set session_id properties with the object CourseDescription

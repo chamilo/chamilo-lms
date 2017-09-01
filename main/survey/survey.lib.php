@@ -505,7 +505,7 @@ class SurveyManager
                         $session_id
                     );
                 } else {
-                    GradebookUtils::update_resource_from_course_gradebook(
+                    GradebookUtils::updateResourceFromCourseGradebook(
                         $gradebook_link_id,
                         $courseCode,
                         $survey_weight

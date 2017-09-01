@@ -19,7 +19,6 @@ $gradebook = Security::remove_XSS($_GET['gradebook']);
 $session_id = api_get_session_id();
 $cidReq = Security::remove_XSS($_GET['cidReq']);
 $type = Security::remove_XSS($_GET['type']);
-
 $doExerciseUrl = '';
 
 if (isset($_GET['doexercise'])) {

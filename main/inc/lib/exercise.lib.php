@@ -364,7 +364,8 @@ class ExerciseLib
                         $attributes['class'] = 'checkradios';
                         if ($answerType == UNIQUE_ANSWER_IMAGE) {
                             $attributes['class'] = '';
-                            $attributes['style'] = 'display: none;';
+                            // Ofaj used custom radio buttons
+                            //$attributes['style'] = 'display: none;';
                             $answer = '<div class="thumbnail">'.$answer.'</div>';
                         }
                         $attributes['class'] = 'checkradios';
@@ -417,7 +418,7 @@ class ExerciseLib
                                 $attributes['selected'] = 1;
                             }
                         }
-                        
+
                         if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                             $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
                             $attributes['class'] = 'checkradios';
@@ -430,7 +431,7 @@ class ExerciseLib
                             );
                             $answer_input .= $answer;
                             $answer_input .= '</label>';
-                            
+
                             if ($show_comment) {
                                 $s .= '<tr><td>';
                                 $s .= $answer_input;
@@ -1047,7 +1048,7 @@ HTML;
 
                             $s .= <<<HTML
                             </td>
-                            <td width="45%">
+                            <td width="45%" class="anwser">
 HTML;
 
                             if (isset($select_items[$lines_count])) {
@@ -4168,7 +4169,7 @@ EOT;
                 $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
                 if (api_is_allowed_to_session_edit()) {
-                    Event::update_event_exercise(
+                    Event::updateEventExercise(
                         $exercise_stat_info['exe_id'],
                         $objExercise->selectId(),
                         $total_score,
@@ -4218,10 +4219,10 @@ EOT;
                   </div> 
                   <h4>'.get_lang('Score').': '.$result.'</h4>';
         if ($hideLabel === true) {
-            
+
             $answerUsed = (int)$array['used'];
             $answerMissing = (int)$array['missing'] - $answerUsed;
-            
+
             for ($i = 1; $i <= $answerUsed; $i++) {
                 $html.= '<span class="score-img">'.Display::return_icon('attempt-check.png',null,null,ICON_SIZE_SMALL).'</span>';
             }

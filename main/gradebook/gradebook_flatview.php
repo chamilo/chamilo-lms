@@ -28,7 +28,7 @@ if (isset($_POST['submit']) && isset($_POST['keyword'])) {
 }
 
 $interbreadcrumb[] = array(
-    'url' => $_SESSION['gradebook_dest'].'?selectcat=1',
+    'url' => Category::getUrl().'selectcat=1',
     'name' => get_lang('ToolGradebook')
 );
 
@@ -55,7 +55,13 @@ if ($showlink) {
 }
 
 if (isset($export_flatview_form) && (!$file_type == 'pdf')) {
-    Display::addFlash(Display::return_message($export_flatview_form->toHtml(), 'normal', false));
+    Display::addFlash(
+        Display::return_message(
+            $export_flatview_form->toHtml(),
+            'normal',
+            false
+        )
+    );
 }
 
 if (isset($_GET['selectcat'])) {
@@ -107,7 +113,7 @@ $mainCourseCategory = Category::load(
     api_get_session_id()
 );
 
-$flatviewtable = new FlatViewTable(
+$flatViewTable = new FlatViewTable(
     $cat[0],
     $users,
     $alleval,
@@ -118,9 +124,9 @@ $flatviewtable = new FlatViewTable(
     $mainCourseCategory[0]
 );
 
-$flatviewtable->setAutoFill(false);
+$flatViewTable->setAutoFill(false);
 $parameters = array('selectcat' => intval($_GET['selectcat']));
-$flatviewtable->set_additional_parameters($parameters);
+$flatViewTable->set_additional_parameters($parameters);
 
 $params = array();
 if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
@@ -131,7 +137,7 @@ if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
     if ($cat[0]->is_locked() == true || api_is_platform_admin()) {
         Display :: set_header(null, false, false);
         GradebookUtils::export_pdf_flatview(
-            $flatviewtable,
+            $flatViewTable,
             $cat,
             $users,
             $alleval,
@@ -175,7 +181,7 @@ if (isset($_GET['exportpdf'])) {
         $params['export_pdf'] = true;
         $params['only_total_category'] = false;
         GradebookUtils::export_pdf_flatview(
-            $flatviewtable,
+            $flatViewTable,
             $cat,
             $users,
             $alleval,
@@ -183,7 +189,6 @@ if (isset($_GET['exportpdf'])) {
             $params,
             $mainCourseCategory[0]
         );
-
     } else {
         Display :: display_header(get_lang('ExportPDF'));
     }
@@ -276,7 +281,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
         $showlink,
         $simple_search_form
     );
-    $flatviewtable->display();
+    $flatViewTable->display();
 } elseif (isset($_GET['selectcat']) && ($_SESSION['studentview'] == 'teacherview')) {
     DisplayGradebook:: display_header_reduce_flatview(
         $cat[0],
@@ -286,10 +291,10 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
     );
 
     // Table
-    $flatviewtable->display();
+    $flatViewTable->display();
     //@todo load images with jquery
     echo '<div id="contentArea" style="text-align: center;" >';
-    $flatviewtable->display_graph_by_resource();
+    $flatViewTable->display_graph_by_resource();
     echo '</div>';
 }
 

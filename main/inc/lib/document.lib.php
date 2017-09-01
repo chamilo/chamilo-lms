@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  *  Class DocumentManager
  *  This is the document library for Chamilo.
@@ -4800,8 +4802,8 @@ class DocumentManager
             copy($from_sys, $to_sys);
         }
 
-        //get  file from tmp directory
-        $_SESSION['temp_audio_nanogong'] = $to_sys;
+        // get file from tmp directory
+        Session::write('temp_audio_nanogong', $to_sys);
 
         return api_get_path(WEB_ARCHIVE_PATH).'temp/audio/'.$file_crip;
     }
@@ -4811,12 +4813,10 @@ class DocumentManager
      */
     public static function removeGeneratedAudioTempFile()
     {
-        if (isset($_SESSION['temp_audio_nanogong'])
-            && !empty($_SESSION['temp_audio_nanogong'])
-            && is_file($_SESSION['temp_audio_nanogong'])) {
-
-            unlink($_SESSION['temp_audio_nanogong']);
-            unset($_SESSION['temp_audio_nanogong']);
+        $tempAudio = Session::read('temp_audio_nanogong');
+        if (!empty(isset($tempAudio)) && is_file($tempAudio)) {
+            unlink($tempAudio);
+            Session::erase('temp_audio_nanogong');
         }
     }
 
@@ -6652,5 +6652,40 @@ class DocumentManager
                 Database::query($query);
                 break;
         }
+    }
+
+    /**
+     * This function calculates the resized width and resized heigt
+     * according to the source and target widths
+     * and heights, height so that no distortions occur
+     * parameters
+     * $image = the absolute path to the image
+     * $target_width = how large do you want your resized image
+     * $target_height = how large do you want your resized image
+     * $slideshow (default=0) =
+     *      indicates weither we are generating images for a slideshow or not,
+     *		this overrides the $_SESSION["image_resizing"] a bit so that a thumbnail
+     *	    view is also possible when you choose not to resize the source images
+     */
+    public static function resizeImageSlideShow(
+        $image,
+        $target_width,
+        $target_height,
+        $slideshow = 0
+    ) {
+        // Modifications by Ivan Tcholakov, 04-MAY-2009.
+        $result = array();
+        $imageResize = Session::read('image_resizing');
+        if ($imageResize == 'resizing' || $slideshow == 1) {
+            $new_sizes = api_resize_image($image, $target_width, $target_height);
+            $result[] = $new_sizes['height'];
+            $result[] = $new_sizes['width'];
+        } else {
+            $size = api_getimagesize($image);
+            $result[] = $size['height'];
+            $result[] = $size['width'];
+        }
+
+        return $result;
     }
 }

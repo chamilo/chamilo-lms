@@ -74,7 +74,7 @@ if ($ldap_user !== false) {
     Session::write('_user', $_user);
     $uidReset = true;
     $logging_in = true;
-    Event::event_login($_user['user_id']);
+    Event::eventLogin($_user['user_id']);
 } else {
     if ($debug) {
         error_log('extldap_authenticate error');

@@ -363,6 +363,5 @@ class OpenOfficeTextDocument extends OpenofficeDocument
      */
     public function add_docs_to_visio()
     {
-
     }
 }

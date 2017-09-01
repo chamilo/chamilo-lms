@@ -10,7 +10,7 @@
 if (isset($_REQUEST['action']) && Security::remove_XSS($_REQUEST['action']) !== 'subscribe') {
     $stok = Security::get_token();
 } else {
-    $stok = $_SESSION['sec_token'];
+    $stok = Security::getTokenFromSession();
 }
 
 $showCourses = CoursesAndSessionsCatalog::showCourses();

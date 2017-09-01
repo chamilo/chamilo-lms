@@ -54,18 +54,18 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
     Course admin section
     - all the functions not available for students - always available in this case (page only shown to admin)
 */
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
 
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
 
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
+$interbreadcrumb[] = array(
+    'url' => 'lp_controller.php?action=list',
+    'name' => get_lang('LearningPaths')
+);
 
 Display::display_header(get_lang('LearnpathAddLearnpath'), 'Path');
 

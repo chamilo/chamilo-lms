@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
 * This file generates the ActionScript variables code used by the HotSpot .swf
 * @package chamilo.exercise
@@ -61,7 +63,7 @@ $i = 0;
 $nmbrTries = 0;
 $answer_type = $objQuestion->type;
 
-$answers = $_SESSION['tmp_answers'];
+$answers = Session::read('tmp_answers');
 $nbrAnswers = count($answers['answer']);
 
 for ($i = 1; $i <= $nbrAnswers; $i++) {

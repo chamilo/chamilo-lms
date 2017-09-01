@@ -480,7 +480,8 @@ ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 //UPDATE extra_field_values SET updated_at = NULL WHERE CAST(updated_at AS CHAR(20)) = '0000-00-00 00:00:00';
 //ALTER TABLE extra_field_values modify column value longtext null;
 //$_configuration['allow_career_diagram'] = false;
-// Allow scheduled emails to session users. See class ProgrammedAnnouncement
+// Allow scheduled emails to session users.
+//CREATE TABLE scheduled_announcements (id INT AUTO_INCREMENT NOT NULL, subject VARCHAR(255) NOT NULL, message LONGTEXT NOT NULL, date DATETIME DEFAULT NULL, sent TINYINT(1) NOT NULL, session_id INT NOT NULL, c_id INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 //$_configuration['allow_scheduled_announcements'] = false;
 // Add the list of emails as a bcc when sending an email.
 /*
@@ -615,3 +616,14 @@ $_configuration['gradebook_badge_sidebar'] = [
 // When using the my-courses list filter by category, set this option to true
 // to only show courses in the user's configured language
 // $_configuration['my_courses_show_courses_in_user_language_only'] = false;
+
+// Hide base course announcements when entering a group.
+//$_configuration['hide_base_course_announcements_in_group'] = false;
+
+// Allow or block user subcriptions to a lp/lp category
+/*$_configuration['lp_subscription_settings'] = [
+    'options' => [
+        'allow_add_users_to_lp' => true,
+        'allow_add_users_to_lp_category' => true,
+    ]
+];*/

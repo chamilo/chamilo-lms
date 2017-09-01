@@ -54,7 +54,7 @@ class GroupManager
     const GROUP_TOOL_CHAT = 6;
 
     /**
-     *
+     * GroupManager constructor.
      */
     public function __construct()
     {
@@ -964,8 +964,10 @@ class GroupManager
      * Returns the number of groups of the user with the greatest number of
      * subscriptions in the given category
      */
-    public static function get_current_max_groups_per_user($category_id = null, $course_code = null)
-    {
+    public static function get_current_max_groups_per_user(
+        $category_id = null,
+        $course_code = null
+    ) {
         $course_info = api_get_course_info($course_code);
         $group_table = Database::get_course_table(TABLE_GROUP);
         $group_user_table = Database::get_course_table(TABLE_GROUP_USER);
@@ -1295,7 +1297,11 @@ class GroupManager
 
 
         //now sort by # of group left
-        $complete_user_list = TableSort::sort_table($complete_user_list, 'number_groups_left', SORT_DESC);
+        $complete_user_list = TableSort::sort_table(
+            $complete_user_list,
+            'number_groups_left',
+            SORT_DESC
+        );
         $userToken = array();
         foreach ($complete_user_list as $this_user) {
             if ($this_user['number_groups_left'] > 0) {
@@ -2238,32 +2244,45 @@ class GroupManager
             if (count($tutorsids_of_group) > 0) {
                 foreach ($tutorsids_of_group as $tutor_id) {
                     $tutor = api_get_user_info($tutor_id);
-                    $username = api_htmlentities(sprintf(get_lang('LoginX'), $tutor['username']), ENT_QUOTES);
+                    $username = api_htmlentities(
+                        sprintf(get_lang('LoginX'), $tutor['username']),
+                        ENT_QUOTES
+                    );
                     if (api_get_setting('show_email_addresses') === 'true') {
                         $tutor_info .= Display::tag(
                             'span',
-                            Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])),
+                                Display::encrypted_mailto_link(
+                                    $tutor['mail'],
+                                    $tutor['complete_name']
+                                ),
                             array('title'=>$username)
                         ).', ';
                     } else {
                         if (api_is_allowed_to_edit()) {
                             $tutor_info .= Display::tag(
                                 'span',
-                                Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])),
+                                    Display::encrypted_mailto_link(
+                                        $tutor['mail'],
+                                        $tutor['complete_name']
+                                    ),
                                 array('title'=>$username)
                             ).', ';
                         } else {
                             $tutor_info .= Display::tag(
                                 'span',
-                                api_get_person_name($tutor['firstName'], $tutor['lastName']),
-                                array('title'=>$username)
+                                $tutor['complete_name'],
+                                array('title' => $username)
                             ).', ';
                         }
                     }
                 }
             }
 
-            $tutor_info = api_substr($tutor_info, 0, api_strlen($tutor_info) - 2);
+            $tutor_info = api_substr(
+                $tutor_info,
+                0,
+                api_strlen($tutor_info) - 2
+            );
             $row[] = $tutor_info;
 
             // Max number of members in group
@@ -2366,8 +2385,10 @@ class GroupManager
      * @param bool $deleteNotInArray
      * @return array
      */
-    public static function importCategoriesAndGroupsFromArray($groupData, $deleteNotInArray = false)
-    {
+    public static function importCategoriesAndGroupsFromArray(
+        $groupData,
+        $deleteNotInArray = false
+    ) {
         $result = array();
         $elementsFound = array(
             'categories' => array(),
@@ -2548,8 +2569,7 @@ class GroupManager
                             continue;
                         }
 
-                        if (
-                            !CourseManager::is_user_subscribed_in_course(
+                        if (!CourseManager::is_user_subscribed_in_course(
                                 $userInfo['user_id'],
                                 $courseCode,
                                 !empty($sessionId),
@@ -2783,7 +2803,11 @@ class GroupManager
                     $content .= '<h2>'.$category['title'].'</h2>';
                 }
                 if (!empty($keyword)) {
-                    $groups = self::getGroupListFilterByName($keyword, $category['id'], $courseId);
+                    $groups = self::getGroupListFilterByName(
+                        $keyword,
+                        $category['id'],
+                        $courseId
+                    );
                 } else {
                     $groups = self::get_group_list($category['id']);
                 }
@@ -2796,7 +2820,10 @@ class GroupManager
                 if (!empty($groups)) {
                     foreach ($groups as $group) {
                         $content .= '<li>';
-                        $content .= Display::tag('h3', Security::remove_XSS($group['name']));
+                        $content .= Display::tag(
+                            'h3',
+                            Security::remove_XSS($group['name'])
+                        );
                         $users = self::getTutors($group);
                         if (!empty($users)) {
                             $content .= '<ul>';

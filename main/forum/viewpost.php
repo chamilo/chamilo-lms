@@ -41,15 +41,9 @@ $current_forum = get_forum_information($current_thread['forum_id']); // Note: Th
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 $whatsnew_post_info = $_SESSION['whatsnew_post_info'];
 
-/* Header and Breadcrumbs */
-
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
@@ -114,9 +108,8 @@ if ($message != 'PostDeletedSpecial') {
     increase_thread_view($_GET['thread']);
 
     /* Action Links */
-
     echo '<div style="float:right;">';
-    $my_url = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&gradebook='.$gradebook.'&search='.Security::remove_XSS(urlencode($_GET['search']));
+    $my_url = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&search='.Security::remove_XSS(urlencode($_GET['search']));
     echo $my_url.'&view=flat">'.get_lang('FlatView').'</a> | ';
     echo $my_url.'&view=threaded">'.get_lang('ThreadedView').'</a> | ';
     echo $my_url.'&view=nested">'.get_lang('NestedView').'</a>';

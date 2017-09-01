@@ -326,6 +326,11 @@ class ImagickWrapper extends ImageWrapper
 class GDWrapper extends ImageWrapper
 {
     public $bg;
+
+    /**
+     * GDWrapper constructor.
+     * @param $path
+     */
     public function __construct($path)
     {
         parent::__construct($path);
@@ -547,7 +552,7 @@ class GDWrapper extends ImageWrapper
     /**
      * Convert image to black & white
      */
-    function convert2bw()
+    public function convert2bw()
     {
         if (!$this->image_validated) {
             return false;

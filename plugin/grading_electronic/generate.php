@@ -128,10 +128,10 @@ try {
             GradingElectronicPlugin::EXTRAFIELD_STUDENT_ID
         );
 
-        $score =  Category::getCurrentScore(
+        $score = Category::getCurrentScore(
             $student->getId(),
             $gradebook,
-            $session ? $session->getId() : 0
+            true
         );
 
         $fileData[] = sprintf(

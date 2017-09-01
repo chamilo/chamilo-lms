@@ -12,7 +12,8 @@
 /**
  * Validates imported data.
  */
-function validate_data($user_classes) {
+function validate_data($user_classes)
+{
     global $purification_option_for_usernames;
     $errors = array();
     $classcodes = array();
@@ -67,19 +68,16 @@ function validate_data($user_classes) {
 /**
  * Saves imported data.
  */
-function save_data($users_classes, $deleteUsersNotInList = false) {
+function save_data($users_classes, $deleteUsersNotInList = false)
+{
 
     global $purification_option_for_usernames;
-
     // Table definitions.
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
-
     $usergroup = new UserGroup();
-
     // Data parsing: purification + conversion (UserName, ClassName) --> (user_is, class_id)
     $csv_data = array();
     if (!empty($users_classes)) {
-
         foreach ($users_classes as $user_class) {
             $sql1 = "SELECT user_id FROM $user_table
                      WHERE username = '".Database::escape_string(UserManager::purify_username($user_class['UserName'], $purification_option_for_usernames))."'";
@@ -105,8 +103,14 @@ function save_data($users_classes, $deleteUsersNotInList = false) {
             $class_name = $user_data['class_name'];
             $user_list_name = $user_data['user_list_name'];
             $usergroup->subscribe_users_to_usergroup($class_id, $user_list, $deleteUsersNotInList);
-            $message .= Display::return_message(get_lang('Class').': '.$class_name.'<br />', 'normal', false);
-            $message .= Display::return_message(get_lang('Users').': '.implode(', ', $user_list_name));
+            $message .= Display::return_message(
+                get_lang('Class').': '.$class_name.'<br />',
+                'normal',
+                false
+            );
+            $message .= Display::return_message(
+                get_lang('Users').': '.implode(', ', $user_list_name)
+            );
         }
     }
     return $message;
@@ -117,7 +121,8 @@ function save_data($users_classes, $deleteUsersNotInList = false) {
  * @param string $file Path to the CSV-file
  * @return array All course-information read from the file
  */
-function parse_csv_data($file) {
+function parse_csv_data($file)
+{
     $courses = Import::csvToArray($file);
     return $courses;
 }

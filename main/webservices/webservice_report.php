@@ -11,7 +11,6 @@ require_once __DIR__.'/webservice.php';
  */
 class WSReport extends WS
 {
-
     /**
      * Gets the time spent on the platform by a given user
      *
@@ -332,7 +331,6 @@ class WSReport extends WS
             return $lp->items[$learnpath_item_id]->status;
         }
     }
-
 
     public function test()
     {

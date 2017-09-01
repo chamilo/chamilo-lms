@@ -94,7 +94,8 @@ class ChamiloSession extends System\Session
         session_name(self::NAME);
         // read_and_close option improve page load speed see:
         // http://php.net/manual/en/migration70.new-features.php#migration70.new-features.session-options
-        session_start([ 'read_and_close' => true]);
+        //session_start([ 'read_and_close' => true]);
+        session_start();
         $session = self::instance();
         if ($already_installed) {
             if (!isset($session['checkChamiloURL'])) {

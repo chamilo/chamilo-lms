@@ -321,8 +321,14 @@ $actions = '';
 
 if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     // Get all course categories
-    $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-    $interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
+    $interbreadcrumb[] = array(
+        'url' => 'index.php',
+        'name' => get_lang('PlatformAdmin')
+    );
+    $interbreadcrumb[] = array(
+        'url' => 'course_list.php',
+        'name' => get_lang('CourseList')
+    );
     $tool_name = get_lang('SearchACourse');
     $form = new FormValidator('advanced_course_search', 'get');
     $form->addElement('header', $tool_name);
@@ -364,7 +370,10 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     $form->setDefaults($defaults);
     $content .= $form->returnForm();
 } else {
-    $interbreadcrumb[] = array('url' => 'index.php', "name" => get_lang('PlatformAdmin'));
+    $interbreadcrumb[] = array(
+        'url' => 'index.php',
+        "name" => get_lang('PlatformAdmin')
+    );
     $tool_name = get_lang('CourseList');
     if (isset($_GET['delete_course'])) {
         CourseManager::delete_course($_GET['delete_course']);
@@ -391,7 +400,14 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     $advanced = '<a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'admin/course_list.php?search=advanced"><em class="fa fa-search"></em> '.get_lang('AdvancedSearch').'</a>';
 
     // Create a filter by session
-    $sessionFilter = new FormValidator('course_filter', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
+    $sessionFilter = new FormValidator(
+        'course_filter',
+        'get',
+        '',
+        '',
+        array(),
+        FormValidator::LAYOUT_INLINE
+    );
     $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
     $sessionSelect = $sessionFilter->addElement(
         'select_ajax',
@@ -408,13 +424,23 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
 
     $courseListUrl = api_get_self();
     $actions1 = Display::url(
-        Display::return_icon('new_course.png', get_lang('AddCourse'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon(
+            'new_course.png',
+            get_lang('AddCourse'),
+            [],
+            ICON_SIZE_MEDIUM
+        ),
         api_get_path(WEB_CODE_PATH).'admin/course_add.php'
     );
 
     if (api_get_setting('course_validation') === 'true') {
         $actions1 .= Display::url(
-            Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon(
+                'course_request_pending.png',
+                get_lang('ReviewCourseRequests'),
+                [],
+                ICON_SIZE_MEDIUM
+            ),
             api_get_path(WEB_CODE_PATH).'admin/course_request_review.php'
         );
     }

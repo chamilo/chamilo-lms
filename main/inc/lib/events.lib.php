@@ -66,11 +66,10 @@ class Event
             return false;
         }
 
-        $TABLETRACK_LOGIN = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $reallyNow = api_get_utc_datetime();
 
-        $sql = "INSERT INTO ".$TABLETRACK_LOGIN." (login_user_id, user_ip, login_date, logout_date) VALUES
+        $sql = "INSERT INTO ".$table." (login_user_id, user_ip, login_date, logout_date) VALUES
                     ('".$userId."',
                     '".Database::escape_string(api_get_real_ip())."',
                     '".$reallyNow."',

@@ -64,11 +64,12 @@
   background-color: #ffffff;
 }
 .title-learnpath{
-    padding-left: 20px;
+    padding-left: 30px;
     padding-top: 10px;
 }
 #learning_path_right_zone .tab-pane iframe {
-    padding-left: 10px;
+    padding-left: 15px;
+    margin-top: 20px;
 }
 .title-learnpath h4,
 .title-learnpath .h5 {

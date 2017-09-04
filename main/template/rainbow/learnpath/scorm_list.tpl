@@ -1,5 +1,4 @@
 {% if data_list is not empty %}
-<<<<<<< HEAD
     <div id="learning_path_toc" class="scorm-list">
         <div class="scorm-body">
             <div id="inner_lp_toc" class="inner_lp_toc scrollbar-light">
@@ -28,7 +27,7 @@
     <div id="learning_path_toc" class="scorm-list">
         <div class="panel-group" id="scorm-panel" role="tablist" aria-multiselectable="true">
             {% for item in data_panel.are_parents %}
-                <div class="panel panel-default" data-lp-id="{{ item.id }}"
+                <div class="panel panel-default {{ item.parent ? 'lower':'higher' }}" data-lp-id="{{ item.id }}"
                     {{ item.parent ? 'data-lp-parent="' ~ item.parent ~ '"' : '' }}>
                     <div class="status-heading">
                         <div class="panel-heading" role="tab" id="heading-{{ item.id }}">

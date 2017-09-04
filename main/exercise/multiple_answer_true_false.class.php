@@ -303,7 +303,7 @@ class MultipleAnswerTrueFalse extends Question
         $objAnswer->save();
         // sets the total weighting of the question
         $this->updateWeighting($questionWeighting);
-        $this->save();
+        $this->save($exercise);
     }
 
     /**
@@ -318,12 +318,12 @@ class MultipleAnswerTrueFalse extends Question
                         <th width="15%">'. get_lang("ExpectedChoice").'</th>
                         <th>'. get_lang("Answer").'</th>';
         $header .= '<th>'.get_lang('Status').'</th>';
-			if ($exercise->feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
-				$header .= '<th>'.get_lang("Comment").'</th>';
-			} else {
-				$header .= '<th>&nbsp;</th>';
-			}
+        if ($exercise->feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            $header .= '<th>'.get_lang("Comment").'</th>';
+        } else {
+            $header .= '<th>&nbsp;</th>';
+        }
         $header .= '</tr>';
         return $header;
-	}
+    }
 }

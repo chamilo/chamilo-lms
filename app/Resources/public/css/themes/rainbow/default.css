@@ -1292,6 +1292,9 @@ svg circle{
   display:inline-block;
   vertical-align:bottom;
 }
+.section-notifications{
+    display: none;
+}
 .radio {
     display: block;
     width: 100%;

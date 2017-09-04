@@ -9,8 +9,10 @@ default:
               browser: chrome
           default_session: selenium2
           javascript_session: selenium2
+          files_path: "%paths.base%/../../web/"
+
     suites:
         default:
-            paths: [ %paths.base%/features ]
+            paths: ["%paths.base%/features"]
     formatters:
         pretty: true

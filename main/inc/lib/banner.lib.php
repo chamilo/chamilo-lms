@@ -606,9 +606,10 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     /* If the user is a coach he can see the users who are logged in its session */
     $navigation = array();
 
-    // part 1: Course Homepage. If we are in a course then the first breadcrumb is a link to the course homepage
+    $sessionId = api_get_session_id();
+    // part 1: Course Homepage. If we are in a course then the first breadcrumb
+    // is a link to the course homepage
     if (!empty($courseInfo) && !isset($_GET['hide_course_breadcrumb'])) {
-        $sessionId = api_get_session_id();
         $sessionName = '';
         if (!empty($sessionId)) {
             /** @var \Chamilo\CoreBundle\Entity\Session $session */
@@ -676,7 +677,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
          * $navigation[] = $navigation_item_my_courses;
          */
         $navigation[] = [
-            'url' => $web_course_path.$courseInfo['path'].'/index.php'.($session ? '?id_session='.$session->getId() : ''),
+            'url' => $web_course_path.$courseInfo['path'].'/index.php?id_session='.$sessionId,
             'title' => $itemTitle
         ];
     }

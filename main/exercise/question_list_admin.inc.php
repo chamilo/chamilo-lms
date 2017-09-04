@@ -27,8 +27,7 @@ if ($deleteQuestion) {
     // destruction of the Question object
     unset($objQuestionTmp);
 }
-$ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()
-    ."&exercise_id=".intval($exerciseId);
+$ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&exercise_id=".intval($exerciseId);
 ?>
     <div id="dialog-confirm"
          title="<?php echo get_lang("ConfirmYourChoice"); ?>"
@@ -125,21 +124,21 @@ $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()
                     });
                 }
             })
-                .sortable({
-                    cursor: "move", // works?
-                    update: function (event, ui) {
-                        var order = $(this).sortable("serialize") + "&a=update_question_order&exercise_id=<?php echo intval($_GET['exerciseId']); ?>";
-                        $.post("<?php echo $ajax_url ?>", order, function (reponse) {
-                            $("#message").html(reponse);
-                        });
-                    },
-                    axis: "y",
-                    placeholder: "ui-state-highlight", //defines the yellow highlight
-                    handle: ".moved", //only the class "moved"
-                    stop: function () {
-                        stop = true;
-                    }
-                });
+            .sortable({
+                cursor: "move", // works?
+                update: function (event, ui) {
+                    var order = $(this).sortable("serialize") + "&a=update_question_order&exercise_id=<?php echo $exerciseId; ?>";
+                    $.post("<?php echo $ajax_url ?>", order, function (reponse) {
+                        $("#message").html(reponse);
+                    });
+                },
+                axis: "y",
+                placeholder: "ui-state-highlight", //defines the yellow highlight
+                handle: ".moved", //only the class "moved"
+                stop: function () {
+                    stop = true;
+                }
+            });
         });
     </script>
 <?php

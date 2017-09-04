@@ -54,38 +54,38 @@ $("#status_select").ready(function() {
     }
 });
 function enable_expiration_date() { //v2.0
-	document.user_add.radio_expiration_date[0].checked=false;
-	document.user_add.radio_expiration_date[1].checked=true;
+    document.user_add.radio_expiration_date[0].checked=false;
+    document.user_add.radio_expiration_date[1].checked=true;
 }
 
 function password_switch_radio_button() {
-	var input_elements = document.getElementsByTagName("input");
-	for (var i = 0; i < input_elements.length; i++) {
-		if (input_elements.item(i).name == "password[password_auto]" && input_elements.item(i).value == "0") {
-			input_elements.item(i).checked = true;
-		}
-	}
+    var input_elements = document.getElementsByTagName("input");
+    for (var i = 0; i < input_elements.length; i++) {
+        if (input_elements.item(i).name == "password[password_auto]" && input_elements.item(i).value == "0") {
+            input_elements.item(i).checked = true;
+        }
+    }
 }
 
 var is_platform_id = "'.$is_platform_admin.'";
 
 function display_drh_list(){
-	if (document.getElementById("status_select").value=='.STUDENT.') {
-		document.getElementById("drh_list").style.display="block";
+    if (document.getElementById("status_select").value=='.STUDENT.') {
+        document.getElementById("drh_list").style.display="block";
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="none";
 
-	} else if (document.getElementById("status_select").value=='.COURSEMANAGER.') {
-		document.getElementById("drh_list").style.display="none";
+    } else if (document.getElementById("status_select").value=='.COURSEMANAGER.') {
+        document.getElementById("drh_list").style.display="none";
 
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="block";
-	} else {
-		document.getElementById("drh_list").style.display="none";
+    } else {
+        document.getElementById("drh_list").style.display="none";
 
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="none";
-	}
+    }
 }
 </script>';
 
@@ -212,7 +212,7 @@ if (isset($extAuthSource) && count($extAuthSource) > 0) {
             $nb_ext_auth_source_added++;
         }
     }
-	if ($nb_ext_auth_source_added > 0) {
+    if ($nb_ext_auth_source_added > 0) {
         $group[] = $form->createElement('radio', 'password_auto', null, get_lang('ExternalAuthentication').' ', 2);
         $group[] = $form->createElement('select', 'auth_source', null, $auth_sources);
         $group[] = $form->createElement('static', '', '', '<br />');
@@ -344,7 +344,7 @@ $jquery_ready_content = $returnParams['jquery_ready_content'];
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
-	'.$jquery_ready_content.'
+    '.$jquery_ready_content.'
 });
 </script>';
 
@@ -355,11 +355,9 @@ $defaults['password']['password_auto'] = 1;
 $defaults['active'] = 1;
 $days = api_get_setting('account_valid_duration');
 $defaults['expiration_date'] = api_get_local_time('+'.$days.' day');
-
 $defaults['extra_mail_notify_invitation'] = 1;
 $defaults['extra_mail_notify_message'] = 1;
 $defaults['extra_mail_notify_group_message'] = 1;
-
 $defaults['radio_expiration_date'] = 0;
 $defaults['status'] = STUDENT;
 $form->setDefaults($defaults);
@@ -367,7 +365,6 @@ $form->setDefaults($defaults);
 // Submit button
 $html_results_enabled[] = $form->createElement('button', 'submit', get_lang('Add'), 'plus', 'primary');
 $html_results_enabled[] = $form->createElement('button', 'submit_plus', get_lang('Add').'+', 'plus', 'primary');
-
 $form->addGroup($html_results_enabled);
 
 // Validate form
@@ -405,7 +402,7 @@ if ($form->validate()) {
             $expiration_date = null;
         }
 
-		$active = intval($user['active']);
+        $active = intval($user['active']);
         if (api_get_setting('login_is_email') == 'true') {
             $username = $email;
         }
@@ -438,8 +435,8 @@ if ($form->validate()) {
             $platform_admin
         );
 
-		Security::clear_token();
-		$tok = Security::get_token();
+        Security::clear_token();
+        $tok = Security::get_token();
         if (!empty($user_id)) {
             if (!empty($picture['name'])) {
                 $picture_uri = UserManager::update_user_picture(
@@ -501,7 +498,7 @@ if ($form->validate()) {
 }
 
 if (!empty($message)) {
-	$message = Display::return_message(stripslashes($message));
+    $message = Display::return_message(stripslashes($message));
 }
 $content = $form->returnForm();
 
@@ -509,5 +506,3 @@ $tpl = new Template($tool_name);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
-
-

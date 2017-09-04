@@ -366,6 +366,22 @@ class ExerciseShowFunctions
             ?>
         </td>
 
+         <?php
+        $status = Display::label(get_lang('Incorrect'), 'danger');
+        if ($studentChoice) {
+            if ($answerCorrect) {
+                $status = Display::label(get_lang('Correct'), 'success');
+            }
+        }
+     ?>
+
+     <td width="20%">
+			<?php
+			echo $status;
+			?>
+		</td>
+
+
         <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
         <td width="20%">
             <?php
@@ -474,8 +490,12 @@ class ExerciseShowFunctions
         }
         ?>
         </td>
-        <td width="40%">
+        <td width="30%">
             <?php echo $answer; ?>
+        </td>
+
+        <td width="20%">
+            <?php echo $status; ?>
         </td>
 
         <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
@@ -573,14 +593,13 @@ class ExerciseShowFunctions
         }
         ?>
         </td>
-        <td width="40%">
+        <td width="30%">
             <?php
             //my answer
             echo $answer;
             ?>
         </td>
-
-         <?php
+        <?php
 
         $status = '';
         if (isset($studentChoice)) {

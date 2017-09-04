@@ -1401,7 +1401,8 @@ if (!empty($error)) {
     $endExercise = '';
     if ($objExercise->type == ALL_ON_ONE_PAGE) {
     	$endExercise = $objExercise->show_button($questionId, $current_question);
-        echo '<div class="form-actions">'.$endExercise.$btnExercise.'</div>';
+    	// Ofaj
+        echo '<div class="form-actions">'.$btnExercise.$endExercise.'</div>';
     }
     echo '</form>';
 

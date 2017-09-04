@@ -3925,13 +3925,6 @@ EOT;
             }
         }
 
-        // Display text when test is finished #4074 and for LP #4227
-        $end_of_message = $objExercise->selectTextWhenFinished();
-        if (!empty($end_of_message)) {
-            echo Display::return_message($end_of_message, 'normal', false);
-            echo "<div class='clear'>&nbsp;</div>";
-        }
-
         $question_list_answers = array();
         $media_list = array();
         $category_list = array();
@@ -4146,13 +4139,22 @@ EOT;
 
         // Ofaj change BT#11784
         if (!empty($objExercise->description)) {
-            echo Display::div($objExercise->description, array('class'=>'exercise_description'));
+            // ofaj
+            //echo Display::div($objExercise->description, array('class'=>'exercise_description'));
         }
 
         echo $exercise_content;
 
         if (!$show_only_score) {
             echo $total_score_text;
+        }
+
+        // Ofaj
+        // Display text when test is finished #4074 and for LP #4227
+        $end_of_message = $objExercise->selectTextWhenFinished();
+        if (!empty($end_of_message)) {
+            echo Display::return_message($end_of_message, 'normal', false);
+            echo "<div class='clear'>&nbsp;</div>";
         }
 
         if (!empty($remainingMessage)) {

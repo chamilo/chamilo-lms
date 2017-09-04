@@ -203,8 +203,10 @@
                     }
 
                     $panel.appendTo('#scorm-panel-' + parentId);
-
+                    $('#heading-'+parentId).addClass('on');
+                    
                     if ($('#collapse-' + id).is('.in')) {
+                        $('#heading-'+id).addClass('on');
                         $('#collapse-' + parentId).collapse('toggle');
                     }
                 });

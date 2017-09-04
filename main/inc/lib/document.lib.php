@@ -3163,22 +3163,21 @@ class DocumentManager
     {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+        $session_id = intval($session_id);
+        $group_id = intval($group_id);
+        $course_id = intval($course_id);
 
-        if (isset($course_id)) {
-            $course_id = intval($course_id);
-        } else {
+        if (!$course_id) {
             $course_id = api_get_course_int_id();
         }
 
         $group_condition = null;
-        if (isset($group_id)) {
-            $group_id = intval($group_id);
+        if ($group_id) {
             $group_condition = " AND props.to_group_id='".$group_id."' ";
         }
 
         $session_condition = null;
-        if (isset($session_id)) {
-            $session_id = intval($session_id);
+        if ($session_id) {
             $session_condition = " AND props.session_id='".$session_id."' ";
         }
 

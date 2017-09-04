@@ -153,13 +153,22 @@
 </div>
 {% if data_panel is not empty %}
     <script type="text/javascript">
-        $('#scorm-panel .panel .status-heading').on("click", function () {
-            $(this).siblings().find(".panel-heading").removeClass("on");
-            $(this).find(".panel-heading").toggleClass("on");
+        $( document ).ready(function() {
+            
+            $('#scorm-panel .panel.higher .status-heading').on("click", function () {
+                $(this).siblings().find(".panel-heading").removeClass("on");
+                $(this).find(".panel-heading").toggleClass("on");
+            });
+            $('#scorm-panel .panel.lower .status-heading').on("click", function () {
+                $(this).siblings().find(".panel-heading").removeClass("on");
+                $(this).find(".panel-heading").toggleClass("on");
+            });
+            
+            $('.section-list .list-item').click(function () {
+                $(this).addClass('active').siblings().removeClass('active');
+            });
         });
-        $('.section-list .list-item').click(function () {
-            $(this).addClass('active').siblings().removeClass('active');
-        });
+        
     </script>
 {% endif %}
 <script>

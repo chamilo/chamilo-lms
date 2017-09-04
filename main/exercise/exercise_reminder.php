@@ -89,7 +89,7 @@ if ($time_control) {
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
-    $htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
+    $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
 }
 
 $exe_id = 0;

@@ -64,6 +64,7 @@ class Template
     ) {
         // Page title
         $this->title = $title;
+
         $this->show_learnpath = $show_learnpath;
 
         if (empty($this->show_learnpath)) {
@@ -216,7 +217,7 @@ class Template
                 //1. Showing installed plugins in regions
                 $pluginRegions = $this->plugin->get_plugin_regions();
                 foreach ($pluginRegions as $region) {
-                    $this->setPluginRegion($region);
+                    $this->set_plugin_region($region);
                 }
 
                 //2. Loading the course plugin info
@@ -1161,11 +1162,10 @@ class Template
             }
         }
 
-        $courseId = api_get_course_int_id();
-
         // Tutor name
         if (api_get_setting('show_tutor_data') == 'true') {
             // Course manager
+            $courseId = api_get_course_int_id();
             $id_session = api_get_session_id();
             if (!empty($courseId)) {
                 $tutor_data = '';
@@ -1194,6 +1194,7 @@ class Template
 
         if (api_get_setting('show_teacher_data') == 'true') {
             // course manager
+            $courseId = api_get_course_int_id();
             if (!empty($courseId)) {
                 $teacher_data = '';
                 $mail = CourseManager::get_emails_of_tutors_to_course($courseId);
@@ -1247,7 +1248,7 @@ class Template
      * @param string $pluginRegion
      * @return null
      */
-    public function setPluginRegion($pluginRegion)
+    public function set_plugin_region($pluginRegion)
     {
         if (!empty($pluginRegion)) {
             $regionContent = $this->plugin->load_region(
@@ -1261,14 +1262,10 @@ class Template
                 // The plugin_info variable is available inside the plugin index
                 $pluginInfo = $this->plugin->getPluginInfo($plugin_name);
 
-                if (isset($pluginInfo['is_course_plugin']) &&
-                    $pluginInfo['is_course_plugin']
-                ) {
+                if (isset($pluginInfo['is_course_plugin']) && $pluginInfo['is_course_plugin']) {
                     $courseInfo = api_get_course_info();
                     if (!empty($courseInfo)) {
-                        if (isset($pluginInfo['obj']) &&
-                            $pluginInfo['obj'] instanceof Plugin
-                        ) {
+                        if (isset($pluginInfo['obj']) && $pluginInfo['obj'] instanceof Plugin) {
                             /** @var Plugin $plugin */
                             $plugin = $pluginInfo['obj'];
                             $regionContent .= $plugin->renderRegion($pluginRegion);
@@ -1319,6 +1316,7 @@ class Template
         if ($clearFlashMessages) {
             Display::cleanFlashMessages();
         }
+
         echo $this->twig->render($template, $this->params);
     }
 

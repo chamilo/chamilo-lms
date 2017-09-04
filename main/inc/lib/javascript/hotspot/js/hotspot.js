@@ -1144,13 +1144,13 @@ window.HotspotQuestion = (function () {
 
         switch (config.for) {
             case 'admin':
-                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript_admin.as.php', {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript_admin.as.php?' + _p.web_cid_query, {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
 
             case 'user':
-                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript.as.php', {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript.as.php?' + _p.web_cid_query, {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });
@@ -1159,7 +1159,7 @@ window.HotspotQuestion = (function () {
             case 'solution':
             //no break
             case 'preview':
-                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php', {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php?' + _p.web_cid_query, {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });
@@ -1774,19 +1774,19 @@ window.DelineationQuestion = (function () {
 
         switch (config.for) {
             case 'admin':
-                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript_admin.as.php', {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript_admin.as.php?' + _p.web_cid_query, {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
             case 'user':
-                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript.as.php', {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript.as.php?' + _p.web_cid_query, {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
             case 'solution':
             //no break
             case 'preview':
-                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php', {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php?' + _p.web_cid_query, {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });

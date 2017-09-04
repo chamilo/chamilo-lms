@@ -3051,8 +3051,12 @@ class Exercise
      * @param string $currentAnswer
      * @return string
      */
-    public function show_button($question_id, $questionNum, $questions_in_media = array(), $currentAnswer = '')
-    {
+    public function show_button(
+        $question_id,
+        $questionNum,
+        $questions_in_media = array(),
+        $currentAnswer = ''
+    ) {
         global $origin, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
         $nbrQuestions = $this->get_count_question_list();
         $all_button = [];
@@ -3101,7 +3105,8 @@ class Exercise
                     $label = get_lang('NextQuestion');
                     $class = 'btn btn-primary';
                 }
-				$class .= ' question-validate-btn'; // used to select it with jquery
+                // used to select it with jquery
+                $class .= ' question-validate-btn';
                 if ($this->type == ONE_PER_PAGE) {
                     if ($questionNum != 1) {
                         if ($this->showPreviousButton()) {
@@ -3119,7 +3124,7 @@ class Exercise
                         }
                     }
 
-                    //Next question
+                    // Next question
                     if (!empty($questions_in_media)) {
                         $all_button[] = Display::button(
                             'save_question_list',
@@ -3148,7 +3153,8 @@ class Exercise
                         $all_label = get_lang('EndTest');
                         $class = 'btn btn-warning';
                     }
-					$class .= ' question-validate-btn'; // used to select it with jquery
+                    // used to select it with jquery
+                    $class .= ' question-validate-btn';
                     $all_button[] = Display::button(
                         'validate_all',
                         $all_label,
@@ -3169,7 +3175,7 @@ class Exercise
      * @param string $time_left
      * @return string
      */
-    public function show_time_control_js($time_left)
+    public function showTimeControlJS($time_left)
     {
         $time_left = intval($time_left);
         return "<script>

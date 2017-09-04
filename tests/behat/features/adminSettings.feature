@@ -19,3 +19,10 @@ Feature: Settings update
     And I check the "allow_registration" radio button with "true" value
     And I press "Save settings"
     Then I should see "Update successful"
+
+  Scenario: Update 'allow_group_categories' setting
+    Given I am a platform administrator
+    And I am on "/main/admin/settings.php?search_field=allow_group_categories&category=search_setting"
+    And I check the "allow_group_categories" radio button with "true" value
+    And I press "Save settings"
+    Then I should see "Update successful"

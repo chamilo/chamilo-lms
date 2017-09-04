@@ -606,11 +606,16 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     /* If the user is a coach he can see the users who are logged in its session */
     $navigation = array();
 
-    // part 1: Course Homepage. If we are in a course then the first breadcrumb is a link to the course homepage
+    $sessionId = api_get_session_id();
+    // part 1: Course Homepage. If we are in a course then the first breadcrumb
+    // is a link to the course homepage
     if (!empty($courseInfo) && !isset($_GET['hide_course_breadcrumb'])) {
-        /** @var \Chamilo\CoreBundle\Entity\Session $session */
-        $session = Database::getManager()->find('ChamiloCoreBundle:Session', api_get_session_id());
-        $sessionName = $session ? ' ('.cut($session->getName(), MAX_LENGTH_BREADCRUMB).')' : '';
+        $sessionName = '';
+        if (!empty($sessionId)) {
+            /** @var \Chamilo\CoreBundle\Entity\Session $session */
+            $session = Database::getManager()->find('ChamiloCoreBundle:Session', $sessionId);
+            $sessionName = $session ? ' ('.cut($session->getName(), MAX_LENGTH_BREADCRUMB).')' : '';
+        }
 
         $courseInfo['name'] = api_htmlentities($courseInfo['name']);
         $course_title = cut($courseInfo['name'], MAX_LENGTH_BREADCRUMB);
@@ -644,7 +649,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
                 )
                 .' '.$course_title.$sessionName;
 
-                if ($session && ($session->getDuration() && !api_is_allowed_to_edit())) {
+                if (!empty($sessionId) && ($session->getDuration() && !api_is_allowed_to_edit())) {
                     $daysLeft = SessionManager::getDayLeftInSession(
                         ['id' => $session->getId(), 'duration' => $session->getDuration()],
                         $user_id
@@ -672,7 +677,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
          * $navigation[] = $navigation_item_my_courses;
          */
         $navigation[] = [
-            'url' => $web_course_path.$courseInfo['path'].'/index.php'.($session ? '?id_session='.$session->getId() : ''),
+            'url' => $web_course_path.$courseInfo['path'].'/index.php?id_session='.$sessionId,
             'title' => $itemTitle
         ];
     }

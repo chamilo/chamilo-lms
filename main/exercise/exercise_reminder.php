@@ -89,7 +89,7 @@ if ($time_control) {
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
-    $htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
+    $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
 }
 
 $exe_id = 0;
@@ -246,20 +246,20 @@ foreach ($question_list as $questionId) {
 
 echo Display::div($table, array('class'=>'question-check-test'));
 
-$exercise_actions = Display::url(
+$exerciseActions = Display::url(
+    get_lang('ReviewQuestions'),
+    'javascript://',
+    array('onclick'=>'review_questions();', 'class'=>'btn btn-success')
+);
+
+$exerciseActions .= '&nbsp;'.Display::url(
     get_lang('EndTest'),
     'javascript://',
     array('onclick' => 'final_submit();', 'class' => 'btn btn-warning')
 );
-$exercise_actions .= '&nbsp;'.
-    Display::url(
-        get_lang('ReviewQuestions'),
-        'javascript://',
-        array('onclick'=>'review_questions();', 'class'=>'btn btn-success')
-    );
 
 echo Display::div('', array('class'=>'clear'));
-echo Display::div($exercise_actions, array('class'=>'form-actions'));
+echo Display::div($exerciseActions, array('class'=>'form-actions'));
 
 if ($origin != 'learnpath') {
     // We are not in learnpath tool

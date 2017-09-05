@@ -3044,10 +3044,8 @@ class learnpathItem
             }
 
             // Now get the number of interactions for this little guy.
-            $item_view_interaction_table = Database::get_course_table(
-                TABLE_LP_IV_INTERACTION
-            );
-            $sql = "SELECT * FROM $item_view_interaction_table
+            $table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
+            $sql = "SELECT * FROM $table
                     WHERE
                         c_id = $course_id AND
                         lp_iv_id = '".$this->db_item_view_id."'";
@@ -3059,10 +3057,8 @@ class learnpathItem
                 $this->interactions_count = 0;
             }
             // Now get the number of objectives for this little guy.
-            $item_view_objective_table = Database::get_course_table(
-                TABLE_LP_IV_OBJECTIVE
-            );
-            $sql = "SELECT * FROM $item_view_objective_table
+            $table = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
+            $sql = "SELECT * FROM $table
                     WHERE
                         c_id = $course_id AND
                         lp_iv_id = '".$this->db_item_view_id."'";
@@ -3616,9 +3612,11 @@ class learnpathItem
                         );
 
                         $insertId = Database::insert($iva_table, $params);
-
-                        $sql = "UPDATE $iva_table SET id = iid WHERE iid = $insertId";
-                        Database::query($sql);
+                        if ($insertId) {
+                            $sql = "UPDATE $iva_table SET id = iid 
+                                    WHERE iid = $insertId";
+                            Database::query($sql);
+                        }
                     }
                 }
             }
@@ -3789,7 +3787,12 @@ class learnpathItem
                     );
                     $where = array(
                         'c_id = ? AND lp_item_id = ? AND lp_view_id = ? AND view_count = ?' =>
-                            array($course_id, $this->db_id, $this->view_id, $this->get_attempt_id())
+                            array(
+                                $course_id,
+                                $this->db_id,
+                                $this->view_id,
+                                $this->get_attempt_id()
+                            )
                     );
                     Database::update($item_view_table, $params, $where);
                 } else {
@@ -3958,7 +3961,9 @@ class learnpathItem
                 Database::query($sql);
             }
 
-            if (is_array($this->interactions) && count($this->interactions) > 0) {
+            if (is_array($this->interactions) &&
+                count($this->interactions) > 0
+            ) {
                 // Save interactions.
                 $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
                 $sql = "SELECT id FROM $tbl

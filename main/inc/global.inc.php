@@ -207,16 +207,7 @@ $charset = 'UTF-8';
 \Patchwork\Utf8\Bootup::initAll();
 
 // Start session after the internationalization library has been initialized.
-ChamiloSession::instance()->start($alreadyInstalled);
-
-// Remove quotes added by PHP  - get_magic_quotes_gpc() is deprecated in PHP 5 see #2970
-
-if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
-    array_walk_recursive_limited($_GET, 'stripslashes', true);
-    array_walk_recursive_limited($_POST, 'stripslashes', true);
-    array_walk_recursive_limited($_COOKIE, 'stripslashes', true);
-    array_walk_recursive_limited($_REQUEST, 'stripslashes', true);
-}
+ChamiloSession::start($alreadyInstalled);
 
 // access_url == 1 is the default chamilo location
 if ($_configuration['access_url'] != 1) {
@@ -334,7 +325,6 @@ foreach ($configurationFiles as $file) {
         require_once $file;
     }
 }
-
 
 /*  LOAD LANGUAGE FILES SECTION */
 

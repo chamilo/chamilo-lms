@@ -305,7 +305,7 @@ switch ($action) {
             // Getting information of the current exercise.
             $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
             $exercise_id = $exercise_stat_info['exe_exo_id'];
-            $attempt_list = array();
+            $attemptList = array();
 
             // First time here we create an attempt (getting the exe_id).
             if (!empty($exercise_stat_info)) {
@@ -313,8 +313,8 @@ switch ($action) {
                 $exe_id = $exercise_stat_info['exe_id'];
                 $total_score = $exercise_stat_info['exe_result'];
 
-                //Getting the list of attempts
-                $attempt_list = Event::getAllExerciseEventByExeId($exe_id);
+                // Getting the list of attempts
+                $attemptList = Event::getAllExerciseEventByExeId($exe_id);
             }
 
             // Updating Reminder algorythm.
@@ -423,7 +423,7 @@ switch ($action) {
                 }
 
                 // Deleting old attempt
-                if (isset($attempt_list) && !empty($attempt_list[$my_question_id])) {
+                if (isset($attemptList) && !empty($attemptList[$my_question_id])) {
                     if ($debug) {
                         error_log("delete_attempt  exe_id : $exe_id, my_question_id: $my_question_id");
                     }
@@ -444,10 +444,10 @@ switch ($action) {
                         );
                     }
 
-                    if (isset($attempt_list[$my_question_id]) &&
-                        isset($attempt_list[$my_question_id]['marks'])
+                    if (isset($attemptList[$my_question_id]) &&
+                        isset($attemptList[$my_question_id]['marks'])
                     ) {
-                        $total_score -= $attempt_list[$my_question_id]['marks'];
+                        $total_score -= $attemptList[$my_question_id]['marks'];
                     }
                 }
 

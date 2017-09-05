@@ -1728,14 +1728,14 @@ class Event
      */
     public static function getAllExerciseEventByExeId($exe_id)
     {
-        $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $exe_id = intval($exe_id);
-        $list = array();
 
-        $sql = "SELECT * FROM $table_track_attempt
+        $sql = "SELECT * FROM $table
                 WHERE exe_id = $exe_id
                 ORDER BY position";
         $res_question = Database::query($sql);
+        $list = array();
         if (Database::num_rows($res_question)) {
             while ($row = Database::fetch_array($res_question, 'ASSOC')) {
                 $list[$row['question_id']][] = $row;
@@ -1759,7 +1759,7 @@ class Event
         $session_id,
         $question_id
     ) {
-        $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $exe_id = intval($exe_id);
         $user_id = intval($user_id);
@@ -1767,7 +1767,7 @@ class Event
         $session_id = intval($session_id);
         $question_id = intval($question_id);
 
-        $sql = "DELETE FROM $table_track_attempt
+        $sql = "DELETE FROM $table
                 WHERE
                     exe_id = $exe_id AND
                     user_id = $user_id AND
@@ -1801,7 +1801,7 @@ class Event
         $question_id,
         $sessionId = null
     ) {
-        $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 
         $exe_id = intval($exe_id);
         $user_id = intval($user_id);
@@ -1811,7 +1811,7 @@ class Event
             $sessionId = api_get_session_id();
         }
 
-        $sql = "DELETE FROM $table_track_attempt
+        $sql = "DELETE FROM $table
                 WHERE   
                     hotspot_exe_id = $exe_id AND
                     hotspot_user_id = $user_id AND

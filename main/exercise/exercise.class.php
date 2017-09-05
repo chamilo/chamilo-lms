@@ -6662,7 +6662,12 @@ class Exercise
         return $new_array;
     }
 
-    public function edit_question_to_remind($exe_id, $question_id, $action = 'add')
+    /**
+     * @param int $exe_id
+     * @param int $question_id
+     * @param string $action
+     */
+    public function editQuestionToRemind($exe_id, $question_id, $action = 'add')
     {
         $exercise_info = self::get_stat_track_exercise_info_by_exe_id($exe_id);
         $question_id = intval($question_id);
@@ -6714,6 +6719,10 @@ class Exercise
         }
     }
 
+    /**
+     * @param string $answer
+     * @return mixed
+     */
     public function fill_in_blank_answer_to_array($answer)
     {
         api_preg_match_all('/\[[^]]+\]/', $answer, $teacher_answer_list);
@@ -6743,6 +6752,9 @@ class Exercise
         return $result;
     }
 
+    /**
+     * @return string
+     */
     public function return_time_left_div()
     {
         $html = '<div id="clock_warning" style="display:none">';
@@ -6760,7 +6772,7 @@ class Exercise
         return $html;
     }
 
-    function get_count_question_list()
+    public function get_count_question_list()
     {
         //Real question count
         $question_count = 0;
@@ -7079,7 +7091,8 @@ class Exercise
                 }
             }
 
-            // The $questionList contains the media id we check if this questionId is a media question type
+            // The $questionList contains the media id we check
+            // if this questionId is a media question type
             if (isset($mediaQuestions[$questionId]) &&
                 $mediaQuestions[$questionId] != 999
             ) {

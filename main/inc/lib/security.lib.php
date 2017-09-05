@@ -121,7 +121,7 @@ class Security
     /**
      * @return string
      */
-    public function getTokenFromSession()
+    public static function getTokenFromSession()
     {
         return Session::read('sec_token');
     }

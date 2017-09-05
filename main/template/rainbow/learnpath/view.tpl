@@ -197,16 +197,28 @@
                     var $panel = $(this),
                         parentId = $panel.data('lp-parent') || 0,
                         id = $panel.data('lp-id') || 0;
-
+                        
+                    
                     if (!parentId) {
                         return;
                     }
 
                     $panel.appendTo('#scorm-panel-' + parentId);
-                    $('#heading-'+parentId).addClass('on');
+                    
+                    if($('#scorm-panel-' + parentId + ' #collapse-' + id).is('.in')){
+                        $('#heading-'+parentId).addClass('on');
+                    }
+                    
                     
                     if ($('#collapse-' + id).is('.in')) {
-                        $('#heading-'+id).addClass('on');
+                        if($('#collapse-' + id + ' .section-list li').is('.scorm_highlight')){
+                            $('#heading-'+id).addClass('on');
+                        } else {
+                            $('#collapse-' + id +' .section-list li').click(function () {
+                                $('#heading-'+id).addClass('on');
+                            });
+                        }
+                        
                         $('#collapse-' + parentId).collapse('toggle');
                     }
                 });

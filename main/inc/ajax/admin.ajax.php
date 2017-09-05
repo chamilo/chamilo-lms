@@ -3,7 +3,6 @@
 /**
  * Responses to AJAX calls
  */
-
 require_once __DIR__.'/../global.inc.php';
 
 api_protect_admin_script();
@@ -29,6 +28,8 @@ switch ($action) {
         }
         break;
     case 'version':
+        // Fix session block when loading admin/index.php and changing page
+        session_write_close();
         echo version_check();
         break;
     case 'get_extra_content':

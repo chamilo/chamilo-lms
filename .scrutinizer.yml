@@ -139,6 +139,7 @@ filter:
         - 'main/auth/cas/lib/*'
         - 'main/auth/shibboleth/*'
         - 'main/auth/openid/*'
+        - 'main/chat/emoji_strategy.php'
         - 'main/default_course_document'
         - 'main/inc/lib/browser/*'
         - 'main/inc/lib/freemindflashbrowser/*'

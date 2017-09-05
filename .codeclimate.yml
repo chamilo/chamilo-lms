@@ -39,6 +39,7 @@ exclude_paths:
 - main/auth/cas/lib/
 - main/auth/shibboleth
 - main/auth/openid
+- main/chat/emoji_strategy.php
 - main/default_course_document
 - main/document/Wami.swf
 - main/inc/ajax/Wami.swf

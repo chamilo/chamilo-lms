@@ -91,7 +91,6 @@ class Event
     }
 
     /**
-     * @param tool name of the tool (name in mainDb.accueil table)
      * @author Sebastien Piraux <piraux_seb@hotmail.com>
      * @desc Record information for access event for courses
      */
@@ -132,7 +131,7 @@ class Event
     }
 
     /**
-     * @param tool name of the tool (name in mainDb.accueil table)
+     * @param string $tool name of the tool (name in mainDb.accueil table)
      * @author Sebastien Piraux <piraux_seb@hotmail.com>
      * @desc Record information for access event for tools
      *
@@ -143,7 +142,7 @@ class Event
      *  Values can be added if new modules are created (15char max)
      *  I encourage to use $nameTool as $tool when calling this function
      *
-     * 	Functionality for "what's new" notification is added by Toon Van Hoecke
+     * Functionality for "what's new" notification is added by Toon Van Hoecke
      * @return bool
      */
     public static function event_access_tool($tool, $id_session = 0)
@@ -213,34 +212,34 @@ class Event
      */
     public static function event_download($doc_url)
     {
-        $tbl_stats_downloads = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
         $doc_url = Database::escape_string($doc_url);
 
         $reallyNow = api_get_utc_datetime();
         $user_id = "'".api_get_user_id()."'";
         $_cid = api_get_course_int_id();
 
-        $sql = "INSERT INTO $tbl_stats_downloads (
-                     down_user_id,
-                     c_id,
-                     down_doc_path,
-                     down_date,
-                     down_session_id
-                    )
-                    VALUES (
-                     ".$user_id.",
-                     '".$_cid."',
-                     '".$doc_url."',
-                     '".$reallyNow."',
-                     '".api_get_session_id()."'
-                    )";
+        $sql = "INSERT INTO $table (
+                 down_user_id,
+                 c_id,
+                 down_doc_path,
+                 down_date,
+                 down_session_id
+                )
+                VALUES (
+                 ".$user_id.",
+                 '".$_cid."',
+                 '".$doc_url."',
+                 '".$reallyNow."',
+                 '".api_get_session_id()."'
+                )";
         Database::query($sql);
 
         return 1;
     }
 
     /**
-     * @param doc_id id of document (id in mainDb.document table)
+     * @param int $doc_id of document (id in mainDb.document table)
      * @author Sebastien Piraux <piraux_seb@hotmail.com>
      * @desc Record information for upload event
      * used in the works tool to record informations when
@@ -249,28 +248,28 @@ class Event
      */
     public static function event_upload($doc_id)
     {
-        $TABLETRACK_UPLOADS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
         $courseId = api_get_course_int_id();
         $reallyNow = api_get_utc_datetime();
         $user_id = api_get_user_id();
         $doc_id = intval($doc_id);
 
-        $sql = "INSERT INTO ".$TABLETRACK_UPLOADS."
-                    ( upload_user_id,
-                      c_id,
-                      upload_cours_id,
-                      upload_work_id,
-                      upload_date,
-                      upload_session_id
-                    )
-                    VALUES (
-                     ".$user_id.",
-                     '".$courseId."',
-                     '',
-                     '".$doc_id."',
-                     '".$reallyNow."',
-                     '".api_get_session_id()."'
-                    )";
+        $sql = "INSERT INTO $table
+                ( upload_user_id,
+                  c_id,
+                  upload_cours_id,
+                  upload_work_id,
+                  upload_date,
+                  upload_session_id
+                )
+                VALUES (
+                 ".$user_id.",
+                 '".$courseId."',
+                 '',
+                 '".$doc_id."',
+                 '".$reallyNow."',
+                 '".api_get_session_id()."'
+                )";
         Database::query($sql);
 
         return 1;
@@ -309,8 +308,8 @@ class Event
      * Update the TRACK_E_EXERCICES exercises
      *
      * @param   int     exeid id of the attempt
-     * @param   int     exo_id 	exercise id
-     * @param   mixed   result 	score
+     * @param   int     exo_id    exercise id
+     * @param   mixed   result    score
      * @param   int     weighting ( higher score )
      * @param   int     duration ( duration of the attempt in seconds )
      * @param   int     session_id
@@ -782,6 +781,8 @@ class Event
      * Get the users related to one event
      *
      * @param string $event_name
+     *
+     * @return string
      */
     public static function get_event_users($event_name)
     {
@@ -885,8 +886,8 @@ class Event
 
         // set activated at every save
         $sql = 'UPDATE '.Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).'
-                    SET activated = '.$activated.'
-                    WHERE event_type_name = "'.$event_name.'"';
+                SET activated = '.$activated.'
+                WHERE event_type_name = "'.$event_name.'"';
         Database::query($sql);
     }
 
@@ -1020,8 +1021,12 @@ class Event
      * @param array $course
      * @param int $session_id
      */
-    public static function delete_student_lp_events($user_id, $lp_id, $course, $session_id)
-    {
+    public static function delete_student_lp_events(
+        $user_id,
+        $lp_id,
+        $course,
+        $session_id
+    ) {
         $lp_view_table = Database::get_course_table(TABLE_LP_VIEW);
         $lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $lpInteraction = Database::get_course_table(TABLE_LP_IV_INTERACTION);
@@ -1214,6 +1219,7 @@ class Event
      * Gets all exercise results (NO Exercises in LPs ) from a given exercise id, course, session
      * @param   int  $courseId
      * @param   int     session id
+     * @param bool $get_count
      * @return  array   with the results
      *
      */
@@ -1258,8 +1264,11 @@ class Event
      * @return  array   with the results
      *
      */
-    public static function get_all_exercise_results_by_user($user_id, $courseId, $session_id = 0)
-    {
+    public static function get_all_exercise_results_by_user(
+        $user_id,
+        $courseId,
+        $session_id = 0
+    ) {
         $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $courseId = intval($courseId);
@@ -1345,7 +1354,7 @@ class Event
      * @param   int     session id
      * @param   int     lp id
      * @param   int     lp item id
-     * @param   string 	order asc or desc
+     * @param   string order asc or desc
      * @return  array   with the results
      *
      */
@@ -1630,11 +1639,11 @@ class Event
     }
 
     /**
-     * Gets all exercise events from a Learning Path within a Course 	nd Session
-     * @param	int $exercise_id
-     * @param	int $courseId
-     * @param 	int $session_id
-     * @return 	array
+     * Gets all exercise events from a Learning Path within a Course    nd Session
+     * @param int $exercise_id
+     * @param int $courseId
+     * @param int $session_id
+     * @return array
      */
     public static function get_all_exercise_event_from_lp(
         $exercise_id,

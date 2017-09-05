@@ -502,14 +502,16 @@ switch ($action) {
         );
         $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
         $form->addElement('hidden', 'id');
-        $htmlTags = "<b>".get_lang('Tags')."</b><br /><br />";
+        $htmlTags = '';
         $tags = AnnouncementManager::getTags();
-
         foreach ($tags as $tag) {
             $htmlTags .= "<b>".$tag."</b><br />";
         }
+        $form->addButtonAdvancedSettings('tags', get_lang('Tags'));
+        $form->addElement('html', '<div id="tags_options" style="display:none">');
+        $form->addLabel('', Display::return_message($htmlTags, 'normal', false));
+        $form->addElement('html', '</div>');
 
-        $form->addLabel('', "<div class='alert alert-info'>".$htmlTags."</div>");
         $form->addHtmlEditor(
             'content',
             get_lang('Description'),

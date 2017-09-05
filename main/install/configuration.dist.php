@@ -624,3 +624,6 @@ $_configuration['gradebook_badge_sidebar'] = [
         'allow_add_users_to_lp_category' => true,
     ]
 ];*/
+
+// Allow public courses access with no terms and conditions validation.
+//$_configuration['allow_public_course_with_no_terms_conditions'] = false;

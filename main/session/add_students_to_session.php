@@ -55,7 +55,7 @@ foreach ($session_list as $session) {
 Display::display_header($tool_name);
 ?>
 
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;" >
+<form name="formulaire" method="post" action="<?php echo api_get_self().'?id='.$id; ?>" style="margin:0px;" >
 <?php echo '<legend>'.$tool_name.' </legend>';
 echo $htmlResult;
 echo Display::input('hidden', 'form_sent', '1');

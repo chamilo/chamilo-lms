@@ -1150,9 +1150,20 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                         );
                     }
                 }
-                $url = api_get_path(WEB_CODE_PATH).'auth/inscription.php';
-                header("Location:".$url);
-                exit;
+
+                $redirect = true;
+                $allow = api_get_configuration_value('allow_public_course_with_no_terms_conditions');
+                if ($allow === true &&
+                    isset($_course['visibility']) &&
+                    $_course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
+                ) {
+                    $redirect = false;
+                }
+                if ($redirect) {
+                    $url = api_get_path(WEB_CODE_PATH).'auth/inscription.php';
+                    header("Location:".$url);
+                    exit;
+                }
             }
         }
     }

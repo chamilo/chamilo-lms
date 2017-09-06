@@ -152,7 +152,8 @@ if ($objExercise->selectAttempts() > 0) {
                 api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&'.http_build_query([
                     'exerciseId' => $objExercise->id,
                     'learnpath_id' => $learnpath_id,
-                    'learnpath_item_id' => $learnpath_item_id
+                    'learnpath_item_id' => $learnpath_item_id,
+                    'learnpath_item_view_id' => $learnpath_item_view_id
                 ]),
                 'pencil-square-o',
                 'info'

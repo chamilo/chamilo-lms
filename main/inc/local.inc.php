@@ -1088,6 +1088,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 $_course['id'],
                 $session_id
             ) || $user_pass_open_course;
+
             if (!$user_is_subscribed) {
                 $url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?course_code='.$_course['code'].'&session_id='.$session_id;
                 header('Location: '.$url);
@@ -1150,9 +1151,20 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                         );
                     }
                 }
-                $url = api_get_path(WEB_CODE_PATH).'auth/inscription.php';
-                header("Location:".$url);
-                exit;
+
+                $redirect = true;
+                $disable = api_get_configuration_value('allow_public_course_with_no_terms_conditions');
+                if ($disable === true &&
+                    isset($_course['visibility']) &&
+                    $_course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
+                ) {
+                    $redirect = false;
+                }
+                if ($redirect) {
+                    $url = api_get_path(WEB_CODE_PATH).'auth/inscription.php';
+                    header("Location:".$url);
+                    exit;
+                }
             }
         }
     }

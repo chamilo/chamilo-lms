@@ -543,6 +543,10 @@ footer #footer_right{
 .table.table-striped tr td span{
     color: #162A83 !important;
 }
+.table.table-striped tr td span.label-info{
+    background-color: #162A83 !important
+    color: #FFF !important;
+}
 .main-question .question_description p span{
     color: #162A83 !important;
 }
@@ -1516,6 +1520,7 @@ blockquote p {
 } 
 .result-body .panel.panel-default{
     border: none;
+    box-shadow: none;
 }
 .result-body .panel.panel-default .panel-body{
     padding: 0;

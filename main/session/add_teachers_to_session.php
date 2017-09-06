@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *   @package chamilo.admin
  */
@@ -9,32 +10,37 @@ $cidReset = true;
 // including some necessary files
 require_once __DIR__.'/../inc/global.inc.php';
 
-// setting the section (for the tabs)
+// Setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-// setting breadcrumbs
-//$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
+// Setting breadcrumbs
+$interbreadcrumb[] = array(
+    'url' => 'session_list.php',
+    'name' => get_lang('SessionList')
+);
 
 // Setting the name of the tool
 $tool_name = get_lang('EnrollTrainersFromExistingSessions');
 
-$form_sent  = 0;
-$errorMsg   = '';
+$form_sent = 0;
+$errorMsg = '';
 $id = intval($_GET['id']);
 
 SessionManager::protectSession($id);
 
-$htmlResult = null;
-
+$htmlResult = '';
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
 
-    if ($form_sent == 1 && isset($_POST['sessions']) && isset($_POST['courses'])) {
+    if ($form_sent == 1 &&
+        isset($_POST['sessions']) && isset($_POST['courses'])
+    ) {
         $sessions = $_POST['sessions'];
         $courses = $_POST['courses'];
-
-        $htmlResult = SessionManager::copyCoachesFromSessionToCourse($sessions, $courses);
+        $htmlResult = SessionManager::copyCoachesFromSessionToCourse(
+            $sessions,
+            $courses
+        );
     }
 }
 

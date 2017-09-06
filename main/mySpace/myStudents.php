@@ -588,18 +588,20 @@ $userGroups = $userGroupManager->getNameListByUser(
         if (!empty($course_code)) {
         ?>
             <tr>
-                <td colspan="2"><?php
-                    echo Display::url(
-                        get_lang('SeeAccesses'),
-                        'access_details.php?'.http_build_query([
-                            'student' => $student_id,
-                            'course' => $course_code,
-                            'origin' => $origin,
-                            'cidReq' => $course_code,
-                            'id_session' => $sessionId
-                        ])
-                    );
-                    ?></td>
+                <td colspan="2">
+                <?php
+                echo Display::url(
+                    get_lang('SeeAccesses'),
+                    'access_details.php?'.http_build_query([
+                        'student' => $student_id,
+                        'course' => $course_code,
+                        'origin' => $origin,
+                        'cidReq' => $course_code,
+                        'id_session' => $sessionId
+                    ])
+                );
+                ?>
+                </td>
             </tr>
         <?php
         }
@@ -689,7 +691,10 @@ $userGroups = $userGroupManager->getNameListByUser(
             $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $student_id);
             if ($isBoss || api_is_platform_admin()) {
                 $extraFieldValue = new ExtraFieldValue('user');
-                $value = $extraFieldValue->get_values_by_handler_and_field_variable($student_id, 'legal_accept');
+                $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+                    $student_id,
+                    'legal_accept'
+                );
                 $icon = Display::return_icon('accept_na.png');
                 if (isset($value['value'])) {
                     list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);

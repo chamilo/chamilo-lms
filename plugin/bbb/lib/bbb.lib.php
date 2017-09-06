@@ -682,6 +682,18 @@ class bbb
                     )
                 );
             }
+
+            if ($this->isGlobalConferencePerUserEnabled()) {
+                 $conditions = array(
+                     'where' => array(
+                         'c_id = ? AND session_id = ? AND user_id = ?' => array(
+                             $courseId,
+                             $sessionId,
+                             $this->userId
+                         ),
+                     ),
+                 );
+            }
         }
 
         if (!empty($dateRange)) {
@@ -797,19 +809,32 @@ class bbb
                     : get_lang('NoRecording');
 
                 if ($isAdminReport) {
-                    $this->forceCIdReq($courseInfo['code'], $meetingDB['session_id'], $meetingDB['group_id']);
+                    $this->forceCIdReq(
+                        $courseInfo['code'],
+                        $meetingDB['session_id'],
+                        $meetingDB['group_id']
+                    );
                 }
 
-                $actionLinks = $this->getActionLinks($meetingDB, $record, $isGlobal, $isAdminReport);
+                $actionLinks = $this->getActionLinks(
+                    $meetingDB,
+                    $record,
+                    $isGlobal,
+                    $isAdminReport
+                );
                 $item['show_links'] = $recordLink;
             } else {
-                $actionLinks = $this->getActionLinks($meetingDB, [], $isGlobal, $isAdminReport);
+                $actionLinks = $this->getActionLinks(
+                    $meetingDB,
+                    [],
+                    $isGlobal,
+                    $isAdminReport
+                );
 
                 $item['show_links'] = get_lang('NoRecording');
             }
 
             $item['action_links'] = implode(PHP_EOL, $actionLinks);
-
             $item['created_at'] = api_convert_and_format_date($meetingDB['created_at']);
             // created_at
             $meetingDB['created_at'] = $item['created_at']; //avoid overwrite in array_merge() below
@@ -1362,8 +1387,12 @@ class bbb
      * @param bool $isAdminReport
      * @return array
      */
-    private function getActionLinks($meetingInfo, $recordInfo, $isGlobal = false, $isAdminReport = false)
-    {
+    private function getActionLinks(
+        $meetingInfo,
+        $recordInfo,
+        $isGlobal = false,
+        $isAdminReport = false
+    ) {
         $isVisible = $meetingInfo['visibility'] != 0;
         $linkVisibility = $isVisible
             ? Display::url(

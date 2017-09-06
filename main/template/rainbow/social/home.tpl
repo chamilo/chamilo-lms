@@ -11,7 +11,9 @@
         <div class="col-md-6">
             {{ social_search_block }}
             {{ social_skill_block }}
+<!-- not ready for ofaj for the moment 
             {{ social_group_block }}
+-->
             {{ social_right_content }}
             <div id="message_ajax_reponse" class=""></div>
             <div id="display_response_id"></div>
@@ -37,7 +39,8 @@
                     </div>
                 </div>
             </div>
-            <!-- Block maps --> 
+            <!-- Block maps -->
+<!-- not ready for ofaj for the moment 
              <div class="panel-group" id="maps-block" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="headingOne">
@@ -54,6 +57,7 @@
                     </div>
                 </div>
              </div>
+-->
             <!-- end block maps -->
             <!-- Block session list -->
             {% if sessionList != null %}

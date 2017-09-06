@@ -1241,13 +1241,13 @@ class FillBlanks extends Question
         }
 
         if ($hideExpectedAnswer) {
-            $correctAnswerHtml = "<span class='feedback-green' title='".get_lang("ExerciseWithFeedbackWithoutCorrectionComment")."'> - </span>";
+            $correctAnswerHtml = "<span class='feedback-green' title='".get_lang("ExerciseWithFeedbackWithoutCorrectionComment")."'> &#8212; </span>";
         }
 
         $result = "<span class='feedbaak-question'>";
         $result .= $iconAnswer . "<span class='$style'>" . $answer . "</span>";
-        //$result .= "<span class='feedback-separator'> / </span>";
-        //$result .= $correctAnswerHtml;
+        $result .= "<span class='feedback-separator'> / </span>";
+        $result .= $correctAnswerHtml;
         $result .= "</span>";
 
         return $result;

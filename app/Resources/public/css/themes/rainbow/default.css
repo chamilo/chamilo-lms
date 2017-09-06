@@ -1520,6 +1520,7 @@ blockquote p {
 } 
 .result-body .panel.panel-default{
     border: none;
+    box-shadow: none;
 }
 .result-body .panel.panel-default .panel-body{
     padding: 0;

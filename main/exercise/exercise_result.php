@@ -152,7 +152,8 @@ if ($objExercise->selectAttempts() > 0) {
                 api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&'.http_build_query([
                     'exerciseId' => $objExercise->id,
                     'learnpath_id' => $learnpath_id,
-                    'learnpath_item_id' => $learnpath_item_id
+                    'learnpath_item_id' => $learnpath_item_id,
+                    'learnpath_item_view_id' => $learnpath_item_view_id
                 ]),
                 'pencil-square-o',
                 'info'
@@ -218,5 +219,6 @@ if ($origin != 'learnpath') {
     // Record the results in the learning path, using the SCORM interface (API)
     echo "<script>window.parent.API.void_save_asset('$total_score', '$max_score', 0, 'completed');</script>";
     echo '<script type="text/javascript">'.$href.'</script>';
-    echo '</body></html>';
+
+    Display::display_reduced_footer();
 }

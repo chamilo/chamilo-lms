@@ -567,7 +567,7 @@ class Template
     /**
      * Set system parameters
      */
-    private function set_system_parameters()
+    public function set_system_parameters()
     {
         $this->theme = api_get_visual_theme();
         if (!empty($this->preview_theme)) {

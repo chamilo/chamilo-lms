@@ -498,4 +498,8 @@ table.lp_overview img {
         right: 10px;
         top: 100px;
     }
+    #learning_path_main.lp-view-include-breadcrumb #learning_path_right_zone {
+    top: 0;
+        height: 97%;
+    }
 }

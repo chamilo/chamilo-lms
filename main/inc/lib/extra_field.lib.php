@@ -1614,22 +1614,22 @@ class ExtraField extends Model
                             }
 
                             if ($useTagAsSelect == false) {
-                                $complete_text = get_lang('StartToType');
-
-                                //if cache is set to true the jquery will be called 1 time
-
-                                $jquery_ready_content .= <<<EOF
-                            $("#extra_$variable").fcbkcomplete({
-                                json_url: "$url",
-                                cache: false,
-                                filter_case: true,
-                                filter_hide: true,
-                                complete_text:"$complete_text",
-                                firstselected: false,
-                                filter_selected: true,                        
-                                newel: true
-                            });
-EOF;
+                                $jquery_ready_content .= "
+                                    $('#extra_$variable').select2({
+                                        ajax: {
+                                            url: '$url?a=search_tags&field_id=$field_id&type={$this->type}',
+                                            processResults: function (data) {
+                                                return {
+                                                    results: data.items
+                                                }
+                                            }
+                                        },
+                                        cache: false,
+                                        tags: true,
+                                        tokenSeparators: [','],
+                                        placeholder: '".get_lang('StartToType')."'
+                                    });
+                                ";
                             }
                         }
 

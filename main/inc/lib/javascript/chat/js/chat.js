@@ -40,6 +40,16 @@ var widthBox = 320; // see css class .chatbox
 
 function set_user_status(status)
 {
+    if (status == 1) {
+        startChatHeartBeat();
+        $('.user_status_main').html(online_button);
+        $('#chatboxtitlemain').html(connect_lang);
+    } else {
+        stopChatHeartBeat();
+        $('.user_status_main').html(offline_button);
+        $('#chatboxtitlemain').html(disconnect_lang);
+    }
+
     $.ajax({
         url: ajax_url+"?action=set_status",
         data: "status="+status,
@@ -63,16 +73,10 @@ $(document).ready(function() {
 	/* "On" conditions, divs are created dynamically */
     // User name header toggle
 	$('body').on('click', '#chatboxtitlemain', function() {
-        if (user_status == 1) {
-            stopChatHeartBeat();
-            $('.user_status_main').html(offline_button);
-            $('#chatboxtitlemain').html(disconnect_lang);
+	    if (user_status == 1) {
             set_user_status(0);
         } else {
-            startChatHeartBeat();
-            $('.user_status_main').html(online_button);
-            $('#chatboxtitlemain').html(connect_lang);
-            set_user_status(1);
+	        set_user_status(1);
         }
 	});
 
@@ -354,6 +358,7 @@ function restructureChatBoxes()
  **/
 function chatWith(user_id, user_name, status, userImage)
 {
+    set_user_status(1);
 	createChatBox(user_id, user_name, 0, status, userImage);
 	$("#chatbox_"+user_id+" .chatboxtextarea").focus();
 	getMoreItems(user_id, 'last');

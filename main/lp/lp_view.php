@@ -37,6 +37,9 @@ api_protect_course_script();
 
 $lp_id = !empty($_GET['lp_id']) ? intval($_GET['lp_id']) : 0;
 $sessionId = api_get_session_id();
+$course_code = api_get_course_id();
+$course_id = api_get_course_int_id();
+$user_id = api_get_user_id();
 
 // Check if the learning path is visible for student - (LP requisites)
 if (!api_is_platform_admin()) {
@@ -84,10 +87,10 @@ if (!$is_allowed_to_edit) {
         $category = $em->getRepository('ChamiloCourseBundle:CLpCategory')->find($categoryId);
         $block = false;
         if ($category) {
+            $user = UserManager::getRepository()->find($user_id);
             $users = $category->getUsers();
             if (!empty($users) && $users->count() > 0) {
-                $user = UserManager::getRepository()->find($user_id);
-                if (!$category->hasUserAdded($user)) {
+                if ($user && !$category->hasUserAdded($user)) {
                     $block = true;
                 }
             }
@@ -108,9 +111,6 @@ if (!$is_allowed_to_edit) {
     }
 }
 
-$course_code = api_get_course_id();
-$course_id = api_get_course_int_id();
-$user_id = api_get_user_id();
 $platform_theme = api_get_setting('stylesheets'); // Platform's css.
 $my_style = $platform_theme;
 

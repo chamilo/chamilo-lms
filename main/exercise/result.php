@@ -85,4 +85,6 @@ ExerciseLib::displayQuestionListByAttempt(
 echo '</div>';
 if ($show_headers) {
     Display::display_footer();
+} else {
+    Display::display_reduced_footer();
 }

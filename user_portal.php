@@ -421,6 +421,7 @@ if ($allow) {
         if (!empty($category)) {
             $minToValidate = $category->getMinimumToValidate();
             $dependencies = $category->getCourseListDependency();
+            $gradeBooksToValidateInDependence = $category->getGradeBooksToValidateInDependence();
             $countDependenciesPassed = 0;
             foreach ($dependencies as $courseId) {
                 $courseInfo = api_get_course_info_by_id($courseId);
@@ -439,8 +440,13 @@ if ($allow) {
                 }
             }
 
-            $userFinished =
+            /*$userFinished =
                 $countDependenciesPassed == count($dependencies) &&
+                $countCoursesPassedNoDependency >= $minToValidate
+            ;*/
+
+            $userFinished =
+                $countDependenciesPassed >= $gradeBooksToValidateInDependence &&
                 $countCoursesPassedNoDependency >= $minToValidate
             ;
 

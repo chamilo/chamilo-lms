@@ -1415,6 +1415,8 @@ class ExtraField extends Model
                             $separateValue = $separateExtraMultipleSelect[$field_details['variable']];
                         }
 
+                        $selectedOptions = [];
+
                         if ($separateValue > 0) {
                             $em = Database::getManager();
                             $fieldTags = $em
@@ -1498,7 +1500,6 @@ class ExtraField extends Model
                             );
                             $tagsSelect->setMultiple(true);
 
-
                             if ($this->type === 'user') {
                                 // The magic should be here
                                 $user_tags = UserManager::get_user_tags(
@@ -1506,10 +1507,7 @@ class ExtraField extends Model
                                     $field_details['id']
                                 );
 
-                                if (is_array($user_tags) && count(
-                                        $user_tags
-                                    ) > 0
-                                ) {
+                                if (is_array($user_tags) && count($user_tags) > 0) {
                                     foreach ($user_tags as $tag) {
                                         $tagsSelect->addOption(
                                             $tag['tag'],
@@ -1519,11 +1517,10 @@ class ExtraField extends Model
                                                 'class' => 'selected',
                                             ]
                                         );
+                                        $selectedOptions[] = $tag['tag'];
                                     }
                                 }
-                                $url = api_get_path(
-                                        WEB_AJAX_PATH
-                                    ).'user_manager.ajax.php';
+                                $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
                             } else {
                                 $em = Database::getManager();
                                 $fieldTags = $em->getRepository(
@@ -1553,6 +1550,7 @@ class ExtraField extends Model
                                             'class' => 'selected',
                                         ]
                                     );
+                                    $selectedOptions[] = $tag->getTag();
                                 }
 
                                 if (!empty($extraData) && isset($extraData['extra_'.$field_details['variable']])) {
@@ -1601,13 +1599,15 @@ class ExtraField extends Model
 
                                         $tagsAdded[] = $tagText;
                                     }
-
                                 }
-
                                 $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php';
                             }
 
-                            $url = $url."?a=search_tags&field_id=$field_id&type={$this->type}";
+                            $form->setDefaults(
+                                [
+                                    'extra_'.$field_details['variable'] => $selectedOptions
+                                ]
+                            );
 
                             if (isset($specialUrlList[$field_details['variable']])) {
                                 //$url = $specialUrlList[$field_details['variable']]."&field_id=$field_id&type={$this->type}";

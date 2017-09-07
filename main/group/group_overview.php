@@ -112,18 +112,7 @@ $actions .= '<a href="../user/user.php?'.api_get_cidreq().'">'.
 Display::return_icon('user.png', get_lang('GoTo').' '.get_lang('Users'), '', ICON_SIZE_MEDIUM).'</a>';
 
 // Action links
-echo '<div class="actions">';
-echo '<div class="row">';
-echo '<div class="col-md-6">';
-echo $actions;
-echo '</div>';
-echo '<div class="col-md-6">';
-echo '<div class="pull-right">';
-echo GroupManager::getSearchForm();
-echo '</div>';
-echo '</div>';
-echo '</div>';
-echo '</div>';
+echo Display::toolbarAction('actions', [$actions, GroupManager::getSearchForm()]);
 
 echo GroupManager::getOverview($courseId, $keyword);
 

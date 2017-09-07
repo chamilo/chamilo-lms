@@ -94,6 +94,11 @@ switch ($action) {
         );
 
         $form->addText(
+            'gradebooks_to_validate_in_dependence',
+            get_lang('NumberOfGradebookToValidateInDependence')
+        );
+
+        $form->addText(
             'minimum',
             get_lang('MinimumGradebookToValidate'),
             false
@@ -136,6 +141,11 @@ switch ($action) {
                     if (!empty($values['minimum'])) {
                         $params['minimum_to_validate'] = (int) $values['minimum'];
                     }
+
+                    if (!empty($values['gradebooks_to_validate_in_dependence'])) {
+                        $params['gradebooks_to_validate_in_dependence'] = (int) $values['gradebooks_to_validate_in_dependence'];
+                    }
+
                     if (!empty($params)) {
                         Database::update(
                             $table,
@@ -169,7 +179,10 @@ switch ($action) {
             $form->addText('weight', get_lang('Weight'));
             $form->addLabel(get_lang('Course'), $category->getCourseCode());
 
-            $sql = "SELECT depends, minimum_to_validate 
+            $sql = "SELECT 
+                        depends, 
+                        minimum_to_validate, 
+                        gradebooks_to_validate_in_dependence
                     FROM $table WHERE id = ".$categoryId;
             $result = Database::query($sql);
             $categoryData = Database::fetch_array($result, 'ASSOC');
@@ -194,6 +207,11 @@ switch ($action) {
             );
 
             $form->addText(
+                'gradebooks_to_validate_in_dependence',
+                get_lang('NumberOfGradebookToValidateInDependence')
+            );
+
+            $form->addText(
                 'minimum',
                 get_lang('MinimumGradebookToValidate'),
                 false
@@ -203,6 +221,7 @@ switch ($action) {
             $defaults = [
                 'name' => $category->getName(),
                 'weight' => $category->getWeight(),
+                'gradebooks_to_validate_in_dependence' => $categoryData['gradebooks_to_validate_in_dependence'],
                 'depends' => array_keys($options),
                 'minimum' => $categoryData['minimum_to_validate']
             ];
@@ -225,6 +244,11 @@ switch ($action) {
                 if (!empty($values['minimum'])) {
                     $params['minimum_to_validate'] = (int) $values['minimum'];
                 }
+
+                if (!empty($values['gradebooks_to_validate_in_dependence'])) {
+                    $params['gradebooks_to_validate_in_dependence'] = (int) $values['gradebooks_to_validate_in_dependence'];
+                }
+
                 if (!empty($params)) {
                     Database::update(
                         $table,

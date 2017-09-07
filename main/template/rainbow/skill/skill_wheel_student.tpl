@@ -128,17 +128,19 @@
 
         /* Wheel skill popup form */
 
-        $("#skill_id").fcbkcomplete({
-            json_url: "{{ url }}&a=find_skills",
+        $("#skill_id").select2({
+            ajax: {
+                url: '{{ url }}&a=find_skills',
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            },
             cache: false,
-            filter_case: false,
-            filter_hide: true,
-            complete_text: "{{ 'EnterTheSkillNameToSearch'|get_lang }}",
-            firstselected: true,
-            //onremove: "testme",
-            onselect: "check_skills_sidebar",
-            filter_selected: true,
-            newel: true
+            placeholder: '{{ 'EnterTheSkillNameToSearch'|get_lang }}'
+        }).on('change', function () {
+            check_skills_sidebar();
         });
 
         load_nodes(0, main_depth);
@@ -146,6 +148,9 @@
         $('#frm-course-info').on('', function () {
             $('#frm-course-info').find('.modal-body').html('');
         });
+        $(".facebook-auto").css("width","100%");
+        $(".facebook-auto ul").css("width","100%");
+        $("ul.holder").css("width","100%");
     });
 
 </script>
@@ -162,7 +167,7 @@
                     <div class="panel-body">
                         <figure class="text-center">
                             <img width="100px" src="{{ user_info.avatar }}" class="img-circle center-block">
-                            <figcaption class="lead">{{ user_info.complete_name }}</figcaption>
+                            <figcaption class="avatar-author">{{ user_info.complete_name }}</figcaption>
                         </figure>
                         <p class="text-center">
                             <a href="{{ _p.web_main }}social/skills_ranking.php" class="btn btn-default" target="_blank">{{ 'YourSkillRankingX'|get_lang|format(ranking) }}</a>
@@ -199,7 +204,7 @@
                                 <div class="search-skill">
                                     <h5 class="page-header">{{ 'SkillsSearch'|get_lang }}</h5>
                                     <form id="skill_search" class="form-search">
-                                        <select id="skill_id" name="skill_id" /></select>
+                                        <select id="skill_id" name="skill_id" multiple style="width: 100%;"></select>
                                         <table id="skill_holder" class="table table-condensed"></table>
                                     </form>
                                 </div>

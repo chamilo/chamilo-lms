@@ -1165,7 +1165,7 @@ class GroupManager
                 SELECT gu
                 FROM ChamiloCourseBundle:CGroupRelUser gu
                 INNER JOIN ChamiloCourseBundle:CGroupInfo g
-                WITH gu.groupId = g.iid AND g.cId = gu.cId
+                WITH gu.groupId = g.id AND g.cId = gu.cId
                 WHERE gu.cId = :course AND g.id = :group
             ')
             ->setParameters([
@@ -2838,7 +2838,7 @@ class GroupManager
                             $content .= '</ul>';
                         }
 
-                        $users = self::getStudents($group['iid']);
+                        $users = self::getStudents($group['id']);
                         if (!empty($users)) {
                             $content .= '<ul>';
                             $content .= "<li>".Display::tag('h4', get_lang('Students'))."</li><ul>";

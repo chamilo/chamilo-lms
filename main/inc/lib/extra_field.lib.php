@@ -1415,6 +1415,8 @@ class ExtraField extends Model
                             $separateValue = $separateExtraMultipleSelect[$field_details['variable']];
                         }
 
+                        $selectedOptions = [];
+
                         if ($separateValue > 0) {
                             $em = Database::getManager();
                             $fieldTags = $em
@@ -1485,7 +1487,9 @@ class ExtraField extends Model
                         } else {
                             $tagsSelect = $form->addSelect(
                                 "extra_{$field_details['variable']}",
-                                $field_details['display_text']
+                                $field_details['display_text'],
+                                [],
+                                ['style' => 'width: 100%;']
                             );
 
                             if ($useTagAsSelect === false) {
@@ -1498,7 +1502,6 @@ class ExtraField extends Model
                             );
                             $tagsSelect->setMultiple(true);
 
-
                             if ($this->type === 'user') {
                                 // The magic should be here
                                 $user_tags = UserManager::get_user_tags(
@@ -1506,11 +1509,11 @@ class ExtraField extends Model
                                     $field_details['id']
                                 );
 
-                                if (is_array($user_tags) && count(
-                                        $user_tags
-                                    ) > 0
-                                ) {
+                                if (is_array($user_tags) && count($user_tags) > 0) {
                                     foreach ($user_tags as $tag) {
+                                        if (empty($tag['tag'])) {
+                                            continue;
+                                        }
                                         $tagsSelect->addOption(
                                             $tag['tag'],
                                             $tag['tag'],
@@ -1519,11 +1522,10 @@ class ExtraField extends Model
                                                 'class' => 'selected',
                                             ]
                                         );
+                                        $selectedOptions[] = $tag['tag'];
                                     }
                                 }
-                                $url = api_get_path(
-                                        WEB_AJAX_PATH
-                                    ).'user_manager.ajax.php';
+                                $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
                             } else {
                                 $em = Database::getManager();
                                 $fieldTags = $em->getRepository(
@@ -1547,12 +1549,9 @@ class ExtraField extends Model
                                     }
                                     $tagsSelect->addOption(
                                         $tag->getTag(),
-                                        $tag->getTag(),
-                                        [
-                                            'selected' => 'selected',
-                                            'class' => 'selected',
-                                        ]
+                                        $tag->getTag()
                                     );
+                                    $selectedOptions[] = $tag->getTag();
                                 }
 
                                 if (!empty($extraData) && isset($extraData['extra_'.$field_details['variable']])) {
@@ -1560,11 +1559,7 @@ class ExtraField extends Model
                                     foreach ($data as $option) {
                                         $tagsSelect->addOption(
                                             $option,
-                                            $option,
-                                            [
-                                                'selected' => 'selected',
-                                                'class' => 'selected',
-                                            ]
+                                            $option
                                         );
                                     }
                                 }
@@ -1601,35 +1596,37 @@ class ExtraField extends Model
 
                                         $tagsAdded[] = $tagText;
                                     }
-
                                 }
-
                                 $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php';
                             }
 
-                            $url = $url."?a=search_tags&field_id=$field_id&type={$this->type}";
+                            $form->setDefaults(
+                                [
+                                    'extra_'.$field_details['variable'] => $selectedOptions
+                                ]
+                            );
 
                             if (isset($specialUrlList[$field_details['variable']])) {
                                 //$url = $specialUrlList[$field_details['variable']]."&field_id=$field_id&type={$this->type}";
                             }
 
                             if ($useTagAsSelect == false) {
-                                $complete_text = get_lang('StartToType');
-
-                                //if cache is set to true the jquery will be called 1 time
-
-                                $jquery_ready_content .= <<<EOF
-                            $("#extra_$variable").fcbkcomplete({
-                                json_url: "$url",
-                                cache: false,
-                                filter_case: true,
-                                filter_hide: true,
-                                complete_text:"$complete_text",
-                                firstselected: false,
-                                filter_selected: true,                        
-                                newel: true
-                            });
-EOF;
+                                $jquery_ready_content .= "
+                                    $('#extra_$variable').select2({
+                                        ajax: {
+                                            url: '$url?a=search_tags&field_id=$field_id&type={$this->type}',
+                                            processResults: function (data) {
+                                                return {
+                                                    results: data.items
+                                                }
+                                            }
+                                        },
+                                        cache: false,
+                                        tags: true,
+                                        tokenSeparators: [','],
+                                        placeholder: '".get_lang('StartToType')."'
+                                    });
+                                ";
                             }
                         }
 

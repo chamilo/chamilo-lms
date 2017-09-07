@@ -595,6 +595,7 @@ $_configuration['score_grade_model'] = [
 // Additional gradebook dependencies BT#13099
 // ALTER TABLE gradebook_category ADD COLUMN depends TEXT DEFAULT NULL;
 // ALTER TABLE gradebook_category ADD COLUMN minimum_to_validate INT DEFAULT NULL;
+// ALTER TABLE gradebook_category ADD COLUMN gradebooks_to_validate_in_dependence INT DEFAULT NULL;
 // $_configuration['gradebook_dependency'] = false;
 // Courses id list to check in the gradebook sidebar see BT#13099
 /*$_configuration['gradebook_dependency_mandatory_courses'] = [

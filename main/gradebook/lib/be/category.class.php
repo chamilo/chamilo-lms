@@ -27,7 +27,8 @@ class Category implements GradebookItem
     private $isRequirement;
     private $courseDependency;
     private $minimumToValidate;
-
+    /** @var int */
+    private $gradeBooksToValidateInDependence;
     public $studentList;
     public $evaluations;
     public $links;
@@ -563,6 +564,7 @@ class Category implements GradebookItem
             $cat->setIsRequirement($data['is_requirement']);
             $cat->setCourseListDependency(isset($data['depends']) ? $data['depends'] : []);
             $cat->setMinimumToValidate(isset($data['minimum_to_validate']) ? $data['minimum_to_validate'] : null);
+            $cat->setGradeBooksToValidateInDependence(isset($data['gradebooks_to_validate_in_dependence']) ? $data['gradebooks_to_validate_in_dependence'] : null);
 
             $categories[] = $cat;
         }
@@ -2596,5 +2598,24 @@ class Category implements GradebookItem
                 break;
         }
         Session::write('gradebook_dest', $url);
+    }
+
+    /**
+     * @return int
+     */
+    public function getGradeBooksToValidateInDependence()
+    {
+        return $this->gradeBooksToValidateInDependence;
+    }
+
+    /**
+     * @param int $value
+     * @return Category
+     */
+    public function setGradeBooksToValidateInDependence($value)
+    {
+        $this->gradeBooksToValidateInDependence = $value;
+
+        return $this;
     }
 }

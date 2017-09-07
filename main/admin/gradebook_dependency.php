@@ -27,7 +27,6 @@ if (!$category) {
 $categoryObj = Category::load($categoryId);
 /** @var Category $categoryObj */
 $categoryObj = $categoryObj[0];
-
 $dependencies = $categoryObj->getCourseListDependency();
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
@@ -62,6 +61,7 @@ foreach ($mandatoryList as $courseMandatoryId) {
 }
 $totalDependencies = count($dependencies);
 $min = $categoryObj->getMinimumToValidate();
+$gradeBooksToValidateInDependence = $categoryObj->getGradeBooksToValidateInDependence();
 $userResult  = [];
 
 $dependencyList = [];
@@ -114,7 +114,6 @@ foreach ($dependencyList as $courseId => $courseInfo) {
             } else {
                 $courseUserLoaded[$userId][$myCourseId] = true;
             }
-            //var_dump($myCourseCode);
 
             $courseCategory = Category::load(
                 null,
@@ -166,9 +165,6 @@ foreach ($dependencyList as $courseId => $courseInfo) {
             }
         }
     }
-
-    //$courseInfo['users'] = $users;
-    //$courseInfo['is_mandatory'] = in_array($courseCode, $mandatoryList);
     $courseList[] = $courseInfo;
 }
 
@@ -180,7 +176,8 @@ foreach ($userResult as $userId => &$userData) {
     $userData['course_list_passed_out_dependency_count'] = count($userData['result_out_dependencies']);
     // Min req must apply + mandatory should be 20
     //$userData['final_result'] = $total >= $min && $userData['result_mandatory_20'] == 20;
-    $userData['final_result'] = $total >= $min && $courseListPassedDependency == $totalDependencies;
+    //$userData['final_result'] = $total >= $min && $courseListPassedDependency == $totalDependencies;
+    $userData['final_result'] = $total >= $min && $courseListPassedDependency >= $gradeBooksToValidateInDependence;
 }
 
 $tpl->assign('current_url', $currentUrl);

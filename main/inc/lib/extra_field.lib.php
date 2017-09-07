@@ -1487,7 +1487,9 @@ class ExtraField extends Model
                         } else {
                             $tagsSelect = $form->addSelect(
                                 "extra_{$field_details['variable']}",
-                                $field_details['display_text']
+                                $field_details['display_text'],
+                                [],
+                                ['style' => 'width: 100%;']
                             );
 
                             if ($useTagAsSelect === false) {
@@ -1509,6 +1511,9 @@ class ExtraField extends Model
 
                                 if (is_array($user_tags) && count($user_tags) > 0) {
                                     foreach ($user_tags as $tag) {
+                                        if (empty($tag['tag'])) {
+                                            continue;
+                                        }
                                         $tagsSelect->addOption(
                                             $tag['tag'],
                                             $tag['tag'],
@@ -1544,11 +1549,7 @@ class ExtraField extends Model
                                     }
                                     $tagsSelect->addOption(
                                         $tag->getTag(),
-                                        $tag->getTag(),
-                                        [
-                                            'selected' => 'selected',
-                                            'class' => 'selected',
-                                        ]
+                                        $tag->getTag()
                                     );
                                     $selectedOptions[] = $tag->getTag();
                                 }
@@ -1558,11 +1559,7 @@ class ExtraField extends Model
                                     foreach ($data as $option) {
                                         $tagsSelect->addOption(
                                             $option,
-                                            $option,
-                                            [
-                                                'selected' => 'selected',
-                                                'class' => 'selected',
-                                            ]
+                                            $option
                                         );
                                     }
                                 }

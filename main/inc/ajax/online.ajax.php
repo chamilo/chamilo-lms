@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+$_dont_save_user_course_access = true;
+
 require_once __DIR__.'/../global.inc.php';
 
 $action = isset($_GET['a']) ? $_GET['a'] : '';

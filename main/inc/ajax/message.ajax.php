@@ -1,12 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\UserBundle\Entity\Repository\UserRepository;
+
+$_dont_save_user_course_access = true;
+
 /**
  * Responses to AJAX calls
  */
-
-use Chamilo\UserBundle\Entity\User;
-use Chamilo\UserBundle\Entity\Repository\UserRepository;
 
 require_once __DIR__.'/../global.inc.php';
 

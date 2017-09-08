@@ -17,6 +17,7 @@ $currentGroupdId = api_get_group_id();
 
 if (!empty($currentGroupdId)) {
     $groupProperties = GroupManager::get_group_properties($currentGroupdId);
+    $currentGroupdId = $groupProperties['iid'];
     $interbreadcrumb[] = array(
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups')
@@ -33,7 +34,7 @@ $events = $agenda->getEvents(
     null,
     null,
     $currentCourseId,
-    api_get_group_id(),
+    $currentGroupdId,
     null,
     'array'
 );

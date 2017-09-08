@@ -67,6 +67,7 @@ class ExtraField extends Model
     const FIELD_TYPE_ALPHANUMERIC_SPACE = 23;
     const FIELD_TYPE_GEOLOCALIZATION = 24;
     const FIELD_TYPE_GEOLOCALIZATION_COORDINATES = 25;
+    const FIELD_TYPE_SELECT_WITH_TEXT_FIELD = 26;
 
     public $type = 'user';
     public $pageName;
@@ -441,6 +442,7 @@ class ExtraField extends Model
         $types[self::FIELD_TYPE_GEOLOCALIZATION_COORDINATES] = get_lang(
             'GeolocalizationCoordinates'
         );
+        $types[self::FIELD_TYPE_SELECT_WITH_TEXT_FIELD] = get_lang('FieldTypeSelectWithTextField');
 
         switch ($handler) {
             case 'course':
@@ -573,6 +575,8 @@ class ExtraField extends Model
                             $extra_data['extra_'.$field['variable']] = $tags;
                             break;
                         case self::FIELD_TYPE_DOUBLE_SELECT:
+                            //no break
+                        case self::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
                             $selected_options = explode(
                                 '::',
                                 $field_value
@@ -677,7 +681,7 @@ class ExtraField extends Model
         if (!empty($options)) {
             foreach ($options as $sub_options) {
                 $options = explode(':', $sub_options);
-                $sub_sub_options = explode(';', $options[1]);
+                $sub_sub_options = isset($options[1]) ? explode(';', $options[1]) : [];
                 $options_parsed[$id] = array(
                     'label' => $options[0],
                     'options' => $sub_sub_options,
@@ -741,6 +745,29 @@ class ExtraField extends Model
         }
 
         return $string;
+    }
+
+    /**
+     * @param array $options The result of the get_field_options_by_field() array
+     * @return string
+     */
+    public static function extrafieldSelectWithTextConvertArrayToString(array $options)
+    {
+        $string = '';
+        $parsedOptions = self::extra_field_double_select_convert_array_to_ordered_array($options);
+
+        if (empty($parsedOptions)) {
+            return '';
+        }
+
+        foreach ($parsedOptions as $options) {
+            $option = current($options);
+
+            $string .= $option['display_text'];
+            $string .= '|';
+        }
+
+        return rtrim($string, '|');
     }
 
     /**
@@ -915,6 +942,76 @@ class ExtraField extends Model
             null,
             $second_values,
             array('id' => $secondSelectId)
+        );
+        $form->addGroup(
+            $group,
+            'extra_'.$fieldDetails['variable'],
+            $fieldDetails['display_text']
+        );
+
+        if ($freezeElement) {
+            $form->freeze('extra_'.$fieldDetails['variable']);
+        }
+
+        return $jqueryReadyContent;
+    }
+
+    /**
+     * @param \FormValidator $form
+     * @param array $fieldDetails
+     * @param bool $freezeElement Optional
+     * @return string JavaScript code
+     */
+    private function addSelectWithTextFieldElement(
+        FormValidator $form,
+        array $fieldDetails,
+        $freezeElement = false
+    )
+    {
+        $firstSelectId = 'slct_extra_'.$fieldDetails['variable'];
+        $txtSelectId = 'txt_extra_'.$fieldDetails['variable'];
+
+        $jqueryReadyContent = "
+            $('#$firstSelectId').on('change', function() {
+                var id = $(this).val();
+
+                if (!id) {
+                    $('#$txtSelectId').val('');
+                }
+            });
+        ";
+
+        $options = self::extra_field_double_select_convert_array_to_ordered_array($fieldDetails['options']);
+        $values = array('' => get_lang('Select'));
+
+        if (!empty($options)) {
+            foreach ($options as $option) {
+                foreach ($option as $sub_option) {
+                    if ($sub_option['option_value'] != '0') {
+                        continue;
+                    }
+
+                    $values[$sub_option['id']] = $sub_option['display_text'];
+                }
+            }
+        }
+
+        $form
+            ->defaultRenderer()
+            ->setGroupElementTemplate('<p>{element}</p>', 'extra_'.$fieldDetails['variable']);
+        $group = array();
+        $group[] = $form->createElement(
+            'select',
+            'extra_'.$fieldDetails['variable'],
+            null,
+            $values,
+            array('id' => $firstSelectId)
+        );
+        $group[] = $form->createElement(
+            'text',
+            'extra_'.$fieldDetails['variable'].'_second',
+            null,
+            ['id' => $txtSelectId]
         );
         $form->addGroup(
             $group,
@@ -2042,6 +2139,13 @@ class ExtraField extends Model
                             </div>
                         ');
                         break;
+                    case self::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
+                        $jquery_ready_content .= self::addSelectWithTextFieldElement(
+                            $form,
+                            $field_details,
+                            $freezeElement
+                        );
+                        break;
                 }
             }
         }
@@ -2245,6 +2349,7 @@ class ExtraField extends Model
             self::FIELD_TYPE_SELECT,
             self::FIELD_TYPE_TAG,
             self::FIELD_TYPE_DOUBLE_SELECT,
+            self::FIELD_TYPE_SELECT_WITH_TEXT_FIELD
         );
 
         if ($action == 'edit') {
@@ -2304,9 +2409,6 @@ class ExtraField extends Model
 
         if ($action == 'edit') {
             $option = new ExtraFieldOption($this->type);
-            if ($defaults['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
-                $form->freeze('field_options');
-            }
             $defaults['field_options'] = $option->get_field_options_by_field_to_string($id);
             $form->addButtonUpdate(get_lang('Modify'));
         } else {

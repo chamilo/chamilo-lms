@@ -7060,6 +7060,17 @@ class TrackingCourseLog
                                 $row['value'] = ($value1.';'.$value2);
                             }
                         }
+
+                        if ($result_extra_field['field_type'] == ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD) {
+                            $parsedValue = explode('::', $row['value']);
+
+                            if ($parsedValue) {
+                                $value1 = $result_extra_field['options'][$parsedValue[0]]['display_text'];
+                                $value2 = $parsedValue[1];
+
+                                $row['value'] = "$value1: $value2";
+                            }
+                        }
                     }
                     // get other value from extra field
                     $return[$row['user_id']][] = $row['value'];

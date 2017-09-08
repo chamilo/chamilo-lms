@@ -180,11 +180,13 @@ class ExtraFieldOption extends Model
                     ExtraField::FIELD_TYPE_RADIO,
                     ExtraField::FIELD_TYPE_SELECT,
                     ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
-                    ExtraField::FIELD_TYPE_DOUBLE_SELECT
+                    ExtraField::FIELD_TYPE_DOUBLE_SELECT,
+                    ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD
                 )
             )
         ) {
-            if ($params['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
+            if ($params['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT ||
+                $params['field_type'] == ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD) {
                 //$params['field_options'] = France:Paris;Bretagne;Marseilles;Lyon|Belgique:Bruxelles;Namur;Liège;Bruges|Peru:Lima;Piura;
                 $options_parsed = ExtraField::extra_field_double_select_convert_string_to_array(
                     $params['field_options']
@@ -192,8 +194,6 @@ class ExtraFieldOption extends Model
 
                 if (!empty($options_parsed)) {
                     foreach ($options_parsed as $key => $option) {
-                        $sub_options = $option['options'];
-
                         $new_params = array(
                             'field_id' => $field_id,
                             'option_value' => 0,
@@ -215,7 +215,11 @@ class ExtraFieldOption extends Model
                             parent::update($new_params, $showQuery);
                         }
 
-                        foreach ($sub_options as $sub_option) {
+                        if ($params['field_type'] == ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD) {
+                            continue;
+                        }
+
+                        foreach ($option['options'] as $sub_option) {
                             if (!empty($sub_option)) {
                                 $new_params = array(
                                     'field_id' => $field_id,
@@ -538,6 +542,9 @@ class ExtraFieldOption extends Model
             switch ($field_info['field_type']) {
                 case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                     $html = ExtraField::extra_field_double_select_convert_array_to_string($options);
+                    break;
+                case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
+                    $html = ExtraField::extrafieldSelectWithTextConvertArrayToString($options);
                     break;
                 default:
                     foreach ($options as $option) {

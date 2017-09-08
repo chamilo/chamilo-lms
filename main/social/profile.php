@@ -369,7 +369,7 @@ if ($show_full_profile) {
             } else {
                 switch ($extraFieldInfo['field_type']) {
                     case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
-                        $id_options = explode(';', $data);
+                        $id_options = explode('::', $data);
                         $value_options = array();
                         // get option display text from user_field_options table
                         foreach ($id_options as $id_option) {
@@ -415,6 +415,20 @@ if ($show_full_profile) {
                             .$extraFieldInfo['display_text']
                             .'</a>';
                         $extra_information_value .= '<li class="list-group-item">'.$data.'</li>';
+                        break;
+                    case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
+                        $parsedData = explode('::', $data);
+
+                        if (!$parsedData) {
+                            break;
+                        }
+
+                        $objEfOption = new ExtraFieldOption('user');
+                        $optionInfo = $objEfOption->get($parsedData[0]);
+
+                        $extra_information_value .= '<li class="list-group-item">'
+                            .$optionInfo['display_text'].': '
+                            .$parsedData[1].'</li>';
                         break;
                     default:
                         $extra_information_value .= '<li class="list-group-item">'.ucfirst($extraFieldInfo['display_text']).': '.$data.'</li>';

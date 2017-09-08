@@ -41,7 +41,7 @@ $strings['ClickToContinue'] = 'Cliquez pour continuer';
 $strings['NoGroup'] = 'Sans groupe';
 $strings['UrlMeetingToShare'] = 'URL à partager';
 
-$strings['AdminView'] = 'View for administrators';
+$strings['AdminView'] = 'Vue administrateur';
 $strings['max_users_limit'] = 'Utilisateurs maximum';
 $strings['max_users_limit_help'] = 'Nombre maximum d\'utilisateurs simultanés dans une salle de vidéoconférence de cours ou cours-session. Laisser vide ou sur 0 pour ne pas assigner de limite.';
 $strings['MaxXUsersWarning'] = 'Cette salle de conférence est limitée à %s utilisateurs simultanés.';

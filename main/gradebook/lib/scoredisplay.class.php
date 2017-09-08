@@ -55,7 +55,10 @@ class ScoreDisplay
                     if (empty($data[1])) {
                         $data[1] = "";
                     }
-                    $portal_displays[$data[0]] = array('score' => $data[0], 'display' => $data[1]);
+                    $portal_displays[$data[0]] = array(
+                        'score' => $data[0],
+                        'display' => $data[1]
+                    );
                 }
                 sort($portal_displays);
             }
@@ -170,7 +173,7 @@ class ScoreDisplay
      */
     private function get_current_gradebook_category_id()
     {
-        $tbl_gradebook_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $curr_course_code = api_get_course_id();
         $curr_session_id = api_get_session_id();
 
@@ -180,7 +183,7 @@ class ScoreDisplay
             $session_condition = ' AND session_id = '.$curr_session_id;
         }
 
-        $sql = 'SELECT id FROM '.$tbl_gradebook_category.'
+        $sql = 'SELECT id FROM '.$table.'
                 WHERE course_code = "'.$curr_course_code.'" '.$session_condition;
         $rs  = Database::query($sql);
         $category_id = 0;
@@ -252,7 +255,7 @@ class ScoreDisplay
             100 => get_lang('GradebookExcellent')
         );
 
-        $tbl_display = Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
         foreach ($display as $value => $text) {
             $params = array(
                 'score' => $value,
@@ -260,7 +263,7 @@ class ScoreDisplay
                 'category_id' => $category_id,
                 'score_color_percent' => 0,
             );
-            Database::insert($tbl_display, $params);
+            Database::insert($table, $params);
         }
     }
 

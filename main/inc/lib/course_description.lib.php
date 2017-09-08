@@ -48,8 +48,8 @@ class CourseDescription
         } else {
             return array();
         }
-        $t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-        $sql = "SELECT * FROM $t_course_desc
+        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+        $sql = "SELECT * FROM $table
                 WHERE c_id = $course_id AND session_id = '0'";
         $sql_result = Database::query($sql);
         $results = array();

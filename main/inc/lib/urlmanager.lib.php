@@ -76,12 +76,12 @@ class UrlManager
         $tableUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $tableCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $tableSession = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $tableCourseCategory = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
         $tableGroup = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
 
         $sql = "DELETE FROM $tableCourse WHERE access_url_id = ".$id;
         Database::query($sql);
         /*
+         * $tableCourseCategory = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
         $sql = "DELETE FROM $tableCourseCategory WHERE access_url_id = ".$id;
         Database::query($sql);
         */
@@ -138,8 +138,8 @@ class UrlManager
      * */
     public static function url_count()
     {
-        $table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "SELECT count(id) as count_result FROM $table_access_url";
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+        $sql = "SELECT count(id) as count_result FROM $table";
         $res = Database::query($sql);
         $url = Database::fetch_array($res, 'ASSOC');
         $result = $url['count_result'];
@@ -407,8 +407,8 @@ class UrlManager
     * */
     public static function relation_url_course_exist($courseId, $urlId)
     {
-        $table_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "SELECT c_id FROM $table_url_rel_course
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $sql = "SELECT c_id FROM $table
                WHERE
                     access_url_id = ".intval($urlId)." AND
                     c_id = '".intval($courseId)."'";
@@ -448,10 +448,10 @@ class UrlManager
     * */
     public static function relation_url_session_exist($session_id, $url_id)
     {
-        $table_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $session_id = intval($session_id);
         $url_id = intval($url_id);
-        $sql = "SELECT session_id FROM $table_url_rel_session
+        $sql = "SELECT session_id FROM $table
                 WHERE
                     access_url_id = ".intval($url_id)." AND
                     session_id = ".Database::escape_string($session_id);
@@ -546,7 +546,10 @@ class UrlManager
         if (is_array($userGroupList) && is_array($urlList)) {
             foreach ($urlList as $urlId) {
                 foreach ($userGroupList as $userGroupId) {
-                    $count = self::relationUrlUsergroupExist($userGroupId, $urlId);
+                    $count = self::relationUrlUsergroupExist(
+                        $userGroupId,
+                        $urlId
+                    );
                     if ($count == 0) {
                         $result = self::addUserGroupToUrl($userGroupId, $urlId);
                         if ($result) {
@@ -775,7 +778,9 @@ class UrlManager
         $result = true;
         if (!empty($user_id) && !empty($url_id)) {
             $sql = "DELETE FROM $table
-                   WHERE user_id = ".intval($user_id)." AND access_url_id = ".intval($url_id);
+                   WHERE 
+                        user_id = ".intval($user_id)." AND 
+                        access_url_id = ".intval($url_id);
             $result = Database::query($sql);
         }
 
@@ -832,7 +837,7 @@ class UrlManager
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
         $sql = "DELETE FROM $table
-               WHERE usergroup_id = '".intval($userGroupId)."' AND
+                WHERE usergroup_id = '".intval($userGroupId)."' AND
                      access_url_id = ".intval($urlId);
         $result = Database::query($sql);
 
@@ -888,14 +893,14 @@ class UrlManager
      **/
     public static function update_urls_rel_user($user_list, $access_url_id)
     {
-        $table_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $sql = "SELECT user_id 
-                FROM $table_url_rel_user 
+                FROM $table 
                 WHERE access_url_id = ".intval($access_url_id);
         $result = Database::query($sql);
         $existing_users = array();
 
-        //Getting all users
+        // Getting all users
         while ($row = Database::fetch_array($result)) {
             $existing_users[] = $row['user_id'];
         }
@@ -961,7 +966,11 @@ class UrlManager
         foreach ($existing_courses as $courseId) {
             if (!in_array($courseId, $course_list)) {
                 self::delete_url_rel_course($courseId, $access_url_id);
-                CourseManager::update_course_ranking($courseId, 0, $access_url_id);
+                CourseManager::update_course_ranking(
+                    $courseId,
+                    0,
+                    $access_url_id
+                );
             }
         }
     }
@@ -1078,7 +1087,10 @@ class UrlManager
         foreach ($existing_sessions as $existing_session) {
             if (!in_array($existing_session, $session_list)) {
                 if (!empty($existing_session) && !empty($access_url_id)) {
-                    self::delete_url_rel_session($existing_session, $access_url_id);
+                    self::delete_url_rel_session(
+                        $existing_session,
+                        $access_url_id
+                    );
                 }
             }
         }
@@ -1148,8 +1160,8 @@ class UrlManager
      */
     public static function get_url_id($url)
     {
-        $table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "SELECT id FROM $table_access_url 
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+        $sql = "SELECT id FROM $table 
                 WHERE url = '".Database::escape_string($url)."'";
         $result = Database::query($sql);
         $access_url_id = Database::result($result, 0, 0);

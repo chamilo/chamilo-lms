@@ -18,7 +18,8 @@ class PDF
 
     /**
      * Creates the mPDF object
-     * @param string  $pageFormat format A4 A4-L see  http://mpdf1.com/manual/index.php?tid=184&searchstring=format
+     * @param string  $pageFormat format A4 A4-L see
+     * http://mpdf1.com/manual/index.php?tid=184&searchstring=format
      * @param string  $orientation orientation "P" = Portrait "L" = Landscape
      * @param array $params
      * @param Template $template
@@ -90,8 +91,11 @@ class PDF
      *
      * @return string
      */
-    public function html_to_pdf_with_template($content, $saveToFile = false, $returnHtml = false)
-    {
+    public function html_to_pdf_with_template(
+        $content,
+        $saveToFile = false,
+        $returnHtml = false
+    ) {
         if (empty($this->template)) {
             $tpl = new Template('', false, false, false);
         } else {
@@ -176,7 +180,8 @@ class PDF
      *     1 => array('title'=>'Bye','path'=>'file2.html')
      * );
      * @param string $pdf_name pdf name
-     * @param string $course_code (if you are using html that are located in the document tool you must provide this)
+     * @param string $course_code (if you are using html that are located
+     * in the document tool you must provide this)
      * @param bool $print_title add title
      * @param bool $complete_style show header and footer if true
      * @param bool $addStyle
@@ -476,8 +481,10 @@ class PDF
         //$document_html= str_replace('src="',$src_http_www, $document_html);
         //$document_html= str_replace('temp_template_path', 'src="/main/default_course_document/', $document_html);// restore src templates
 
-        api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.
-        $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8'); // TODO: Maybe it is better idea the title to be passed through
+        // The library mPDF expects UTF-8 encoded input data.
+        api_set_encoding_html($document_html, 'UTF-8');
+        // TODO: Maybe it is better idea the title to be passed through
+        $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');
         // $_GET[] too, as it is done with file name.
         // At the moment the title is retrieved from the html document itself.
 
@@ -528,6 +535,7 @@ class PDF
      * Gets the watermark from the platform or a course
      * @param   string  course code (optional)
      * @param   mixed   web path of the watermark image, false if there is nothing to return
+     * @return string
      */
     public static function get_watermark($course_code = null)
     {
@@ -812,11 +820,14 @@ class PDF
      * @param integer $courseId The course ID
      * @param int $sessionId Optional. The session ID
      */
-    public function exportFromHtmlToDocumentsArea($htmlContent, $fileName, $courseId, $sessionId = 0)
-    {
+    public function exportFromHtmlToDocumentsArea(
+        $htmlContent,
+        $fileName,
+        $courseId,
+        $sessionId = 0
+    ) {
         $userId = api_get_user_id();
         $courseInfo = api_get_course_info_by_id($courseId);
-
         $courseDirectory = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/document/';
 
         $docPath = $this->exportFromHtmlToFile(
@@ -839,7 +850,13 @@ class PDF
             $userId
         );
 
-        api_item_property_update($courseInfo, TOOL_DOCUMENT, $docId, 'DocumentAdded', $userId);
+        api_item_property_update(
+            $courseInfo,
+            TOOL_DOCUMENT,
+            $docId,
+            'DocumentAdded',
+            $userId
+        );
 
         Display::addFlash(Display::return_message(get_lang('ItemAdded')));
     }

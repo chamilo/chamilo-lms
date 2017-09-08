@@ -18,7 +18,7 @@ $this_section = SECTION_TRACKING;
 api_block_anonymous_users();
 
 $interbreadcrumb[] = array(
-    "url" => api_is_student_boss()?"#":api_get_path(WEB_CODE_PATH) . "mySpace/index.php?".api_get_cidreq(),
+    "url" => api_is_student_boss() ? "#" : api_get_path(WEB_CODE_PATH)."mySpace/index.php?".api_get_cidreq(),
     "name" => get_lang("MySpace")
 );
 
@@ -36,7 +36,11 @@ if (api_is_student_boss()) {
     $userList = $userGroup->getGroupUsersByUser($userId);
     $sessionsList = SessionManager::getSessionsFollowedForGroupAdmin($userId);
 } else {
-    $sessionsList = SessionManager::getSessionsCoachedByUser($userId, false, api_is_platform_admin());
+    $sessionsList = SessionManager::getSessionsCoachedByUser(
+        $userId,
+        false,
+        api_is_platform_admin()
+    );
 }
 
 foreach ($sessionsList as $session) {
@@ -62,7 +66,11 @@ if ($selectedSession > 0) {
     if (api_is_student_boss()) {
         $coursesList = CourseManager::getCoursesFollowedByGroupAdmin($userId);
     } else {
-        $coursesList = CourseManager::get_courses_list_by_user_id($userId, false, true);
+        $coursesList = CourseManager::get_courses_list_by_user_id(
+            $userId,
+            false,
+            true
+        );
 
         if (is_array($coursesList)) {
             foreach ($coursesList as &$course) {
@@ -102,7 +110,14 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
         exit;
     }
 
-    $gradebookCategories = Category::load(null, null, $selectedCourseInfo['code'], null, false, $selectedSession);
+    $gradebookCategories = Category::load(
+        null,
+        null,
+        $selectedCourseInfo['code'],
+        null,
+        false,
+        $selectedSession
+    );
 
     $gradebook = null;
 
@@ -111,7 +126,7 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
     }
 
     if (!is_null($gradebook)) {
-        $exportAllLink = api_get_path(WEB_CODE_PATH) . "gradebook/gradebook_display_certificate.php?";
+        $exportAllLink = api_get_path(WEB_CODE_PATH)."gradebook/gradebook_display_certificate.php?";
         $exportAllLink .= http_build_query(array(
             "action" => "export_all_certificates",
             "cidReq" => $selectedCourseInfo['code'],
@@ -197,7 +212,14 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
         $sessionCourseList = SessionManager::get_course_list_by_session_id($session['id']);
 
         foreach ($sessionCourseList as $sessionCourse) {
-            $gradebookCategories = Category::load(null, null, $sessionCourse['code'], null, false, $session['id']);
+            $gradebookCategories = Category::load(
+                null,
+                null,
+                $sessionCourse['code'],
+                null,
+                false,
+                $session['id']
+            );
 
             $gradebook = null;
 
@@ -246,7 +268,7 @@ $template = new Template(get_lang('GradebookListOfStudentsCertificates'));
 $form = new FormValidator(
     'certificate_report_form',
     'post',
-    api_get_path(WEB_CODE_PATH) . 'gradebook/certificate_report.php'
+    api_get_path(WEB_CODE_PATH).'gradebook/certificate_report.php'
 );
 $form->addSelect('session', get_lang('Sessions'), $sessions, ['id' => 'session']);
 $form->addSelect('course', get_lang('Courses'), $courses, ['id' => 'course']);
@@ -285,7 +307,7 @@ if (api_is_student_boss()) {
     $searchForm = new FormValidator(
         'certificate_report_form',
         'post',
-        api_get_path(WEB_CODE_PATH) . 'gradebook/certificate_report.php'
+        api_get_path(WEB_CODE_PATH).'gradebook/certificate_report.php'
     );
     $searchForm->addSelect('student', get_lang('Students'), $students, ['id' => 'student']);
     $searchForm->addButtonSearch();

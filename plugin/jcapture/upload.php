@@ -21,9 +21,9 @@ $folderName = 'captures';
 $documentId = DocumentManager::get_document_id($courseInfo, '/'.$folderName);
 $path = null;
 if (empty($documentId)) {
-    $course_dir = $courseInfo['path'] . '/document';
+    $course_dir = $courseInfo['path'].'/document';
     $sys_course_path = api_get_path(SYS_COURSE_PATH);
-    $dir = $sys_course_path . $course_dir;
+    $dir = $sys_course_path.$course_dir;
     $createdDir = create_unexisting_directory(
         $courseInfo,
         api_get_user_id(),

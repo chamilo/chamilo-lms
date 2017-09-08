@@ -26,19 +26,14 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 $nameTools = get_lang('ForumCategories');
-
-$origin = '';
-if (isset($_GET['origin'])) {
-    $origin =  Security::remove_XSS($_GET['origin']);
-    $origin_string = '&origin='.$origin;
-}
+$origin = api_get_origin();
 
 /* Including necessary files */
 require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
-$forumId = isset($_GET['forum']) ? (int)$_GET['forum'] : 0;
-$threadId = isset($_GET['thread']) ? (int)$_GET['thread'] : 0;
+$forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
+$threadId = isset($_GET['thread']) ? (int) $_GET['thread'] : 0;
 
 /* MAIN DISPLAY SECTION */
 
@@ -46,8 +41,8 @@ $threadId = isset($_GET['thread']) ? (int)$_GET['thread'] : 0;
 // We are getting all the information about the current forum and forum category.
 // Note pcool: I tried to use only one sql statement (and function) for this,
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
-$current_thread	= get_thread_information($forumId, $threadId); // Note: This has to be validated that it is an existing thread.
-$current_forum	= get_forum_information($current_thread['forum_id']); // Note: This has to be validated that it is an existing forum.
+$current_thread = get_thread_information($forumId, $threadId); // Note: This has to be validated that it is an existing thread.
+$current_forum = get_forum_information($current_thread['forum_id']); // Note: This has to be validated that it is an existing forum.
 $current_forum_category = get_forumcategory_information(Security::remove_XSS($current_forum['forum_category']));
 
 /* Is the user allowed here? */
@@ -82,23 +77,15 @@ if ($current_forum['forum_of_group'] != 0) {
     }
 }
 
-/* Breadcrumbs */
-
-$gradebook = null;
-if (isset($_SESSION['gradebook'])){
-    $gradebook = Security::remove_XSS($_SESSION['gradebook']);
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array (
-        'url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),
+if (api_is_in_gradebook()) {
+    $interbreadcrumb[] = array(
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
-
-if ($origin == 'group') {
-    $_clean['toolgroup'] = api_get_group_id();
-    $group_properties = GroupManager :: get_group_properties($_clean['toolgroup']);
+$groupId = api_get_group_id();
+if (!empty($groupId)) {
+    $group_properties = GroupManager::get_group_properties($groupId);
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
@@ -110,11 +97,11 @@ if ($origin == 'group') {
     );
 
     $interbreadcrumb[] = array(
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?origin='.$origin.'&forum='.$forumId.'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
         'name' => $current_forum['forum_title']
     );
     $interbreadcrumb[] = array(
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?origin='.$origin.'&gradebook='.$gradebook.'&forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
         'name' => $current_thread['thread_title']
     );
 
@@ -124,7 +111,7 @@ if ($origin == 'group') {
     );
 } else {
     $interbreadcrumb[] = array(
-        'url' => 'index.php?gradebook='.$gradebook,
+        'url' => 'index.php?'.api_get_cidreq(),
         'name' => $nameTools
     );
     $interbreadcrumb[] = array(
@@ -132,11 +119,11 @@ if ($origin == 'group') {
         'name' => $current_forum_category['cat_title']
     );
     $interbreadcrumb[] = array(
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?origin='.$origin.'&forum='.$forumId.'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
         'name' => $current_forum['forum_title']
     );
     $interbreadcrumb[] = array(
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?origin='.$origin.'&gradebook='.$gradebook.'&forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
         'name' => $current_thread['thread_title']
     );
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Reply'));
@@ -185,8 +172,13 @@ if ($origin == 'learnpath') {
 if ($origin != 'learnpath') {
     echo '<div class="actions">';
     echo '<span style="float:right;">'.search_link().'</span>';
-    echo '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&gradebook='.$gradebook.'&thread='.$threadId.'">'.
-        Display::return_icon('back.png', get_lang('BackToThread'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'">';
+    echo Display::return_icon(
+        'back.png',
+        get_lang('BackToThread'),
+        '',
+        ICON_SIZE_MEDIUM
+    ).'</a>';
     echo '</div>';
 }
 /*New display forum div*/
@@ -194,14 +186,15 @@ echo '<div class="forum_title">';
 echo '<h1>';
 echo Display::url(
     prepare4display($current_forum['forum_title']),
-    'viewforum.php?' . api_get_cidreq() . '&' . http_build_query(['forum' => $current_forum['forum_id']]),
+    'viewforum.php?'.api_get_cidreq().'&'.http_build_query(['forum' => $current_forum['forum_id']]),
     ['class' => empty($current_forum['visibility']) ? 'text-muted' : null]
 );
 echo '</h1>';
 echo '<p class="forum_description">'.prepare4display($current_forum['forum_comment']).'</p>';
 echo '</div>';
-
-$form->display();
+if ($form) {
+    $form->display();
+}
 
 if ($origin == 'learnpath') {
     Display::display_reduced_footer();

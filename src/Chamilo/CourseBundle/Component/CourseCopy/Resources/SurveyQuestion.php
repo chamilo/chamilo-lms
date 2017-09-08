@@ -46,16 +46,21 @@ class SurveyQuestion extends Resource
     public $options;
 
     /**
+     * Is this question required (0: no, 1: yes)
+     */
+    public $is_required;
+    /**
      * Create a new SurveyQuestion
-     * @param int	 $id
-     * @param int 	 $survey_id
+     * @param int $id
+     * @param int $survey_id
      * @param string $survey_question
      * @param string $survey_question_comment
      * @param string $type
      * @param string $display
-     * @param int	 $sort
-     * @param int	 $shared_question_id
-     * @param int	 $max_value
+     * @param int $sort
+     * @param int $shared_question_id
+     * @param int $max_value
+     * @param int $is_required
      */
     public function __construct(
         $id,
@@ -66,7 +71,8 @@ class SurveyQuestion extends Resource
         $display,
         $sort,
         $shared_question_id,
-        $max_value
+        $max_value,
+        $is_required = false
     ) {
         parent::__construct($id, RESOURCE_SURVEYQUESTION);
         $this->survey_id = $survey_id;
@@ -78,14 +84,17 @@ class SurveyQuestion extends Resource
         $this->shared_question_id = $shared_question_id;
         $this->max_value = $max_value;
         $this->answers = array();
+        if (api_get_configuration_value('allow_required_survey_questions')) {
+            $this->is_required = $is_required;
+        }
     }
 
     /**
      * Add an answer option to this SurveyQuestion
      * @param string $option_text
-     * @param int	 $sort
+     * @param int $sort
      */
-    public function add_answer($option_text,$sort)
+    public function add_answer($option_text, $sort)
     {
         $answer = array();
         $answer['option_text'] = $option_text;

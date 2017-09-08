@@ -56,6 +56,7 @@ $lpInfo = Database::select(
 );
 
 $userList = [];
+$showEmail = api_get_setting('show_email_addresses');
 
 if (!empty($users)) {
     foreach ($users as $user) {
@@ -97,6 +98,7 @@ if (!empty($users)) {
             'id' => $user['user_id'],
             'first_name' => $userInfo['firstname'],
             'last_name' => $userInfo['lastname'],
+            'email' => $showEmail === 'true' ? $userInfo['email'] : '',
             'lp_time' => api_time_to_hms($lpTime),
             'lp_score' => is_numeric($lpScore) ? "$lpScore%" : $lpScore,
             'lp_progress' => "$lpProgress%",
@@ -107,7 +109,7 @@ if (!empty($users)) {
 
 // View
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?'.api_get_cidreq(),
+    'url' => api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq(),
     'name' => get_lang('LearningPaths')
 ];
 
@@ -118,7 +120,7 @@ $actions = Display::url(
         array(),
         ICON_SIZE_MEDIUM
     ),
-    api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?' . api_get_cidreq()
+    api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq()
 );
 
 $template = new Template(get_lang('StudentScore'));
@@ -126,10 +128,14 @@ $template->assign('user_list', $userList);
 $template->assign('session_id', api_get_session_id());
 $template->assign('course_code', api_get_course_id());
 $template->assign('lp_id', $lpId);
+$template->assign('show_email', $showEmail === 'true');
 
 $layout = $template->get_template('learnpath/report.tpl');
 
 $template->assign('header', $lpInfo['name']);
-$template->assign('actions', $actions);
+$template->assign(
+    'actions',
+    Display::toolbarAction('lp_actions', [$actions])
+);
 $template->assign('content', $template->fetch($layout));
 $template->display_one_col_template();

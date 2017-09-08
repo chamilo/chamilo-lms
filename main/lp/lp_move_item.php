@@ -17,7 +17,7 @@ api_protect_course_script();
 
 /* Header and action code */
 $htmlHeadXtra[] = '<script>'.
-$_SESSION['oLP']->get_js_dropdown_array() .
+$_SESSION['oLP']->get_js_dropdown_array().
 "
     function load_cbo(id) {
         if (!id) {
@@ -41,13 +41,13 @@ $_SESSION['oLP']->get_js_dropdown_array() .
         $('#previous').selectpicker('refresh');
     }
 " .
-"\n" .
-'$().ready(function() {'."\n" .
-  'if ($(\'#previous\')) {'."\n" .
+"\n".
+'$().ready(function() {'."\n".
+  'if ($(\'#previous\')) {'."\n".
     'if(\'parent is\'+$(\'#idParent\').val()) {'.
-      'load_cbo($(\'#idParent\').val());'."\n" .
-  '}}'."\n" .
-'});</script>'."\n" ;
+      'load_cbo($(\'#idParent\').val());'."\n".
+  '}}'."\n".
+'});</script>'."\n";
 
 /* Constants and variables */
 
@@ -78,21 +78,16 @@ $therow = Database::fetch_array($result);
     Course admin section
     - all the functions not available for students - always available in this case (page only shown to admin)
 */
-/* SHOWING THE ADMIN TOOLS */
 
-if (isset($_SESSION['gradebook'])) {
-    $gradebook=	$_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array (
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+if (api_is_in_gradebook()) {
+    $interbreadcrumb[] = array(
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
 
 $interbreadcrumb[] = array(
-    'url' => 'lp_controller.php?action=list?'.api_get_cidreq(),
+    'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('LearningPaths'),
 );
 $interbreadcrumb[] = array(
@@ -112,7 +107,7 @@ Display::display_header(get_lang('Move'), 'Path');
 
 $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 ?>
-<script type='text/javascript'>
+<script>
 /* <![CDATA[ */
 function stripslashes(str) {
     str=str.replace(/\\'/g,'\'');

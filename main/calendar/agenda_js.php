@@ -21,13 +21,13 @@ $current_course_tool = TOOL_CALENDAR_EVENT;
 $this_section = SECTION_MYAGENDA;
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-ui-i18n'));
-
 $htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/fullcalendar.js');
 $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/locale-all.js');
 $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/gcal.js');
 $htmlHeadXtra[] = api_get_css_asset('fullcalendar/dist/fullcalendar.min.css');
 $htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
+$htmlHeadXtra[] = api_get_asset('js-cookie/src/js.cookie.js');
 
 if (api_is_platform_admin() && ($type == 'admin' || $type == 'platform')) {
     $type = 'admin';
@@ -36,7 +36,7 @@ if (api_is_platform_admin() && ($type == 'admin' || $type == 'platform')) {
 if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {
     if ($_REQUEST['cidReq'] == -1) {
         // When is out of the course tool (e.g My agenda)
-        header('Location: ' . api_get_self());
+        header('Location: '.api_get_self());
         exit;
     } else {
         $type = 'course';
@@ -55,7 +55,10 @@ $courseId = api_get_course_int_id();
 
 if (!empty($group_id)) {
     $group_properties = GroupManager::get_group_properties($group_id);
-    $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties['iid']);
+    $is_group_tutor = GroupManager::is_tutor_of_group(
+        api_get_user_id(),
+        $group_properties
+    );
     $interbreadcrumb[] = array(
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups')
@@ -109,29 +112,6 @@ switch ($type) {
         break;
 }
 
-//Setting translations
-/*$day_short = api_get_week_days_short();
-$days = api_get_week_days_long();
-$months = api_get_months_long();
-$months_short = api_get_months_short();*/
-
-//Setting calendar translations
-/*$tpl->assign('month_names', json_encode($months));
-$tpl->assign('month_names_short', json_encode($months_short));
-$tpl->assign('day_names', json_encode($days));
-$tpl->assign('day_names_short', json_encode($day_short));
-$tpl->assign(
-    'button_text',
-    json_encode(array(
-        'today' => get_lang('Today'),
-        'month' => get_lang('Month'),
-        'week' => get_lang('Week'),
-        'day' => get_lang('Day')
-    ))
-);*/
-
-//see http://docs.jquery.com/UI/Datepicker/$.datepicker.formatDate
-
 $tpl->assign('js_format_date', 'll');
 $region_value = api_get_language_isocode();
 
@@ -140,9 +120,33 @@ if ($region_value == 'en') {
 }
 $tpl->assign('region_value', $region_value);
 
-$export_icon = Display::return_icon('export.png', null, null, null, null, true, false);
-$export_icon_low = Display::return_icon('export_low_fade.png', null, null, null, null, true, false);
-$export_icon_high = Display::return_icon('export_high_fade.png', null, null, null, null, true, false);
+$export_icon = Display::return_icon(
+    'export.png',
+    null,
+    null,
+    null,
+    null,
+    true,
+    false
+);
+$export_icon_low = Display::return_icon(
+    'export_low_fade.png',
+    null,
+    null,
+    null,
+    null,
+    true,
+    false
+);
+$export_icon_high = Display::return_icon(
+    'export_high_fade.png',
+    null,
+    null,
+    null,
+    null,
+    true,
+    false
+);
 
 $tpl->assign(
     'export_ical_confidential_icon',
@@ -177,6 +181,37 @@ if ($type == 'course' && !empty($session_id)) {
     $type_label = get_lang('SessionCalendar');
 }
 
+$agendaColors = array_merge(
+    [
+        'platform' => 'red', //red
+        'course' => '#458B00', //green
+        'group' => '#A0522D', //siena
+        'session' => '#00496D', // kind of green
+        'other_session' => '#999', // kind of green
+        'personal' => 'steel blue', //steel blue
+        'student_publication' => '#FF8C00' //DarkOrange
+    ],
+    api_get_configuration_value('agenda_colors') ?: []
+);
+
+switch ($type_event_class) {
+    case 'admin_event':
+        $tpl->assign('type_event_color', $agendaColors['platform']);
+        break;
+    case 'course_event':
+        $tpl->assign('type_event_color', $agendaColors['course']);
+        break;
+    case 'group_event':
+        $tpl->assign('type_event_color', $agendaColors['group']);
+        break;
+    case 'session_event':
+        $tpl->assign('type_event_color', $agendaColors['session']);
+        break;
+    case 'personal_event':
+        $tpl->assign('type_event_color', $agendaColors['personal']);
+        break;
+}
+
 $tpl->assign('type_label', $type_label);
 $tpl->assign('type_event_class', $type_event_class);
 
@@ -203,7 +238,7 @@ $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
 $form = new FormValidator(
     'form',
     'get',
-    null,
+    api_get_self().'?'.api_get_cidreq(),
     null,
     array('id' => 'add_event_form')
 );
@@ -246,6 +281,7 @@ if ($agenda->type === 'course') {
 }
 
 $tpl->assign('form_add', $form->returnForm());
+$tpl->assign('legend_list', api_get_configuration_value('agenda_legend'));
 $templateName = $tpl->get_template('agenda/month.tpl');
 $content = $tpl->fetch($templateName);
 $tpl->assign('content', $content);

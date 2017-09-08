@@ -10,7 +10,7 @@
 
 use ChamiloSession as Session;
 
-require_once(dirname(__FILE__) . '/functions.inc.php');
+require_once __DIR__.'/functions.inc.php';
 
 //MAIN CODE
 //$login and $password variables are setted in main/inc/local.inc.php
@@ -46,7 +46,7 @@ if ($user !== false && ($chamilo_uid = external_add_user($user)) !== false) {
     // Can user create course
     $is_allowedCreateCourse = (bool) (($user['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $user['status'] == SESSIONADMIN));
 
-    Event::event_login($chamilo_uid);
+    Event::eventLogin($chamilo_uid);
 } else {
     $loginFailed = true;
     unset($_user['user_id']);

@@ -95,7 +95,8 @@ if (empty($action)) {
 
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_course_tutor() || api_is_session_admin() || api_is_drh() || api_is_student_boss();
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_course_tutor() || api_is_session_admin()
+    || api_is_drh() || api_is_student_boss();
 
 if (!empty($sessionId) && !$is_allowedToEdit) {
     if (api_is_course_session_coach(
@@ -134,26 +135,41 @@ if (!$is_allowedToEdit) {
     }
 }
 
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = Security::remove_XSS($_SESSION['gradebook']);
+$allowRecordAudio = api_get_setting('enable_record_audio') === 'true';
+$allowTeacherCommentAudio = api_get_configuration_value('allow_teacher_comment_audio') === true;
+
+if (api_is_in_gradebook()) {
+    $interbreadcrumb[] = array(
+        'url' => Category::getUrl(),
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
-if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('ToolGradebook'));
-}
-
-$interbreadcrumb[] = array("url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises'));
+$interbreadcrumb[] = array(
+    "url" => "exercise.php?".api_get_cidreq(),
+    'name' => get_lang('Exercises')
+);
 $interbreadcrumb[] = array(
     "url" => "overview.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(),
     "name" => $objExercise->selectTitle(true)
 );
-$interbreadcrumb[] = array("url" => "#", "name" => get_lang('Result'));
+$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Result'));
 
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/js/annotation.js"></script>';
+
+if ($allowRecordAudio && $allowTeacherCommentAudio) {
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordRTC.js"></script>';
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/recorder.js"></script>';
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/gui.js"></script>';
+    $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfobject.js"></script>';
+    $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
+}
+
+$scoreJsCode = ExerciseLib::getJsCode();
 
 if ($origin != 'learnpath') {
     Display::display_header('');
@@ -167,12 +183,13 @@ if ($origin != 'learnpath') {
 }
 ?>
     <script>
+        <?php echo $scoreJsCode; ?>
+
         var maxEditors = <?php echo intval($maxEditors); ?>;
         function showfck(sid, marksid) {
-            document.getElementById(sid).style.display = 'block';
-            document.getElementById(marksid).style.display = 'block';
-            var comment = 'feedback_' + sid;
-            document.getElementById(comment).style.display = 'none';
+            $('#' + sid).toggleClass('hidden');
+            $('#' + marksid).toggleClass('hidden');
+            $('#feedback_' + sid).toggleClass('hidden', !$('#' + sid).is('.hidden'));
         }
 
         function openEmailWrapper() {
@@ -188,7 +205,7 @@ if ($origin != 'learnpath') {
                 oHidn.type = "hidden";
                 var selname = oHidn.name = "marks_" + m_id[i];
                 var selid = document.forms['marksform_' + m_id[i]].marks.selectedIndex;
-                oHidn.value = document.forms['marksform_' + m_id[i]].marks.options[selid].text;
+                oHidn.value = document.forms['marksform_' + m_id[i]].marks.options[selid].value;
                 f.appendChild(oHidn);
             }
 
@@ -224,7 +241,11 @@ if (!empty($track_exercise_info)) {
             $show_only_total_score = true;
             if ($origin != 'learnpath') {
                 if ($currentUserId == $student_id) {
-                    echo Display::return_message(get_lang('ThankYouForPassingTheTest'), 'warning', false);
+                    echo Display::return_message(
+                        get_lang('ThankYouForPassingTheTest'),
+                        'warning',
+                        false
+                    );
                 }
             }
         } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
@@ -276,7 +297,6 @@ if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLa
 }
 
 $i = $totalScore = $totalWeighting = 0;
-
 if ($debug > 0) {
     error_log("ExerciseResult: ".print_r($exerciseResult, 1));
     error_log("QuestionList: ".print_r($questionList, 1));
@@ -294,12 +314,12 @@ $sql = "SELECT attempts.question_id, answer
             quizz_rel_questions.exercice_id=stats_exercises.exe_exo_id AND
             quizz_rel_questions.question_id = attempts.question_id AND
             quizz_rel_questions.c_id=".api_get_course_int_id()."
-        INNER JOIN " . $TBL_QUESTIONS." AS questions
+        INNER JOIN ".$TBL_QUESTIONS." AS questions
         ON
-            questions.id=quizz_rel_questions.question_id AND
-            questions.c_id = " . api_get_course_int_id()."
+            questions.id = quizz_rel_questions.question_id AND
+            questions.c_id = ".api_get_course_int_id()."
         WHERE
-            attempts.exe_id = " . intval($id)." $user_restriction
+            attempts.exe_id = ".intval($id)." $user_restriction
 		GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 $result = Database::query($sql);
 $question_list_from_database = array();
@@ -349,6 +369,7 @@ if (!empty($maxEditors) && count($questionList) > $maxEditors) {
     $useAdvancedEditor = false;
 }
 
+$countPendingQuestions = 0;
 foreach ($questionList as $questionId) {
     $choice = $exerciseResult[$questionId];
     // destruction of the Question object
@@ -367,7 +388,6 @@ foreach ($questionList as $questionId) {
     }
 
     $relPath = api_get_path(WEB_CODE_PATH);
-
     switch ($answerType) {
         case MULTIPLE_ANSWER_COMBINATION:
             //no break
@@ -526,30 +546,42 @@ foreach ($questionList as $questionId) {
                     $final_excess = 100;
                 }
 
-                $table_resume = '<table class="data_table">
-                    <tr class="row_odd" >
-                    <td></td>
-                    <td ><b>' . get_lang('Requirements').'</b></td>
-                    <td><b>' . get_lang('YourAnswer').'</b></td>
-                    </tr>
-        
-                    <tr class="row_even">
-                    <td><b>' . get_lang('Overlap').'</b></td>
-                    <td>' . get_lang('Min').' '.$threadhold1.'</td>
-                        <td><div style="color:' . $overlap_color.'">'.(($final_overlap < 0) ? 0 : intval($final_overlap)).'</div></td>
-                    </tr>
-        
-                    <tr>
-                        <td><b>' . get_lang('Excess').'</b></td>
-                        <td>' . get_lang('Max').' '.$threadhold2.'</td>
-                        <td><div style="color:' . $excess_color.'">'.(($final_excess < 0) ? 0 : intval($final_excess)).'</div></td>
-                    </tr>
-        
-                    <tr class="row_even">
-                        <td><b>' . get_lang('Missing').'</b></td>
-                        <td>' . get_lang('Max').' '.$threadhold3.'</td>
-                        <td><div style="color:' . $missing_color.'">'.(($final_missing < 0) ? 0 : intval($final_missing)).'</div></td>
-                    </tr></table>';
+                $table_resume = '
+                    <table class="data_table">
+                        <tr class="row_odd" >
+                            <td>&nbsp;</td>
+                            <td><b>'.get_lang('Requirements').'</b></td>
+                            <td><b>'.get_lang('YourAnswer').'</b></td>
+                        </tr>
+                        <tr class="row_even">
+                            <td><b>'.get_lang('Overlap').'</b></td>
+                            <td>'.get_lang('Min').' '.$threadhold1.'</td>
+                            <td>
+                                <div style="color:'.$overlap_color.'">
+                                    '.(($final_overlap < 0) ? 0 : intval($final_overlap)).'
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>'.get_lang('Excess').'</b></td>
+                            <td>'.get_lang('Max').' '.$threadhold2.'</td>
+                            <td>
+                                <div style="color:'.$excess_color.'">
+                                    '.(($final_excess < 0) ? 0 : intval($final_excess)).'
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="row_even">
+                            <td><b>'.get_lang('Missing').'</b></td>
+                            <td>'.get_lang('Max').' '.$threadhold3.'</td>
+                            <td>
+                                <div style="color:'.$missing_color.'">
+                                    '.(($final_missing < 0) ? 0 : intval($final_missing)).'
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                ';
 
                 if ($answerType != HOT_SPOT_DELINEATION) {
                     $item_list = explode('@@', $destination);
@@ -590,7 +622,7 @@ foreach ($questionList as $questionId) {
 
                 //showing the score
                 $queryfree = "SELECT marks from ".$TBL_TRACK_ATTEMPT." 
-                              WHERE exe_id = " . intval($id)." AND question_id= ".intval($questionId)."";
+                              WHERE exe_id = ".intval($id)." AND question_id= ".intval($questionId)."";
                 $resfree = Database::query($queryfree);
                 $questionScore = Database::result($resfree, 0, "marks");
                 $totalScore += $questionScore;
@@ -659,11 +691,7 @@ foreach ($questionList as $questionId) {
 
     $comnt = null;
     if ($show_results) {
-        if ($is_allowedToEdit &&
-            $locked == false &&
-            !api_is_drh() &&
-            $isCoachAllowedToEdit
-        ) {
+        if ($is_allowedToEdit && $locked == false && !api_is_drh() && $isCoachAllowedToEdit) {
             $isFeedbackAllowed = true;
         } elseif (!$isCoachAllowedToEdit && $allowCoachFeedbackExercises) {
             $isFeedbackAllowed = true;
@@ -686,33 +714,34 @@ foreach ($questionList as $questionId) {
                     $url_name = get_lang('AddComments');
                 }
             }
-            echo '<br />';
-            echo Display::url(
+            echo '<p>';
+            echo Display::button(
+                'show_ck',
                 $url_name,
-                'javascript://',
-                array(
-                    'class' => 'btn',
+                [
+                    'type' => 'button',
+                    'class' => 'btn btn-default',
                     'onclick' => "showfck('".$name."', '".$marksname."');",
-                )
+                ]
             );
-            echo '<br />';
+            echo '</p>';
 
-            echo '<div id="feedback_'.$name.'" style="width:100%">';
-            $comnt = trim(Event::get_comments($id, $questionId));
-            if (empty($comnt)) {
-                echo '<br />';
-            } else {
-                echo '<div id="question_feedback">'.$comnt.'</div>';
+            echo '<div id="feedback_'.$name.'" class="show">';
+            $comnt = Event::get_comments($id, $questionId);
+            if (!empty($comnt)) {
+                echo ExerciseLib::getFeedbackText($comnt);
+                echo ExerciseLib::getOralFeedbackAudio($id, $questionId, $student_id);
             }
             echo '</div>';
 
-            echo '<div id="'.$name.'" style="display:none">';
+            echo '<div id="'.$name.'" class="row hidden">';
+            echo '<div class="col-sm-'.($allowTeacherCommentAudio ? 7 : 12).'">';
+
             $arrid[] = $questionId;
-            $feedback_form = new FormValidator('frmcomments'.$questionId, 'post', '');
-            $feedback_form->addElement('html', '<br>');
-            $renderer = & $feedback_form->defaultRenderer();
-            $renderer->setFormTemplate('<form{attributes}><div align="left">{content}</div></form>');
-            $renderer->setCustomElementTemplate('<div align="left">{element}</div>');
+            $feedback_form = new FormValidator('frmcomments'.$questionId);
+            $renderer = &$feedback_form->defaultRenderer();
+            $renderer->setFormTemplate('<form{attributes}><div>{content}</div></form>');
+            $renderer->setCustomElementTemplate('<div>{element}</div>');
             $comnt = Event::get_comments($id, $questionId);
             $default = array('comments_'.$questionId => $comnt);
 
@@ -731,9 +760,17 @@ foreach ($questionList as $questionId) {
             } else {
                 $feedback_form->addElement('textarea', 'comments_'.$questionId);
             }
-            $feedback_form->addElement('html', '<br>');
             $feedback_form->setDefaults($default);
             $feedback_form->display();
+
+            echo '</div>';
+
+            if ($allowRecordAudio && $allowTeacherCommentAudio) {
+                echo '<div class="col-sm-5">';
+                echo ExerciseLib::getOralFeedbackForm($id, $questionId, $student_id);
+                echo '</div>';
+            }
+
             echo '</div>';
 
         } else {
@@ -741,32 +778,59 @@ foreach ($questionList as $questionId) {
             echo '<br />';
             if (!empty($comnt)) {
                 echo '<b>'.get_lang('Feedback').'</b>';
-                echo '<div id="question_feedback">'.$comnt.'</div>';
+                echo ExerciseLib::getFeedbackText($comnt);
+                echo ExerciseLib::getOralFeedbackAudio($id, $questionId, $student_id);
             }
         }
 
         if ($is_allowedToEdit && $isFeedbackAllowed) {
             if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION))) {
                 $marksname = "marksName".$questionId;
-                echo '<div id="'.$marksname.'" style="display:none">';
-                echo '<form name="marksform_'.$questionId.'" method="post" action="">';
                 $arrmarks[] = $questionId;
+
+                echo '<div id="'.$marksname.'" class="hidden">';
+                // @todo use FormValidator
+                /*$formMark = new FormValidator("marksform_'.$questionId.'", 'post');
+                $options = [
+                  1,
+                  2
+                ];
+                $formMark->addSelect('marks', get_lang('AssignMarks'), $options);
+                $formMark->display();*/
+                echo '<form name="marksform_'.$questionId.'" method="post" action="">';
                 echo get_lang("AssignMarks");
-                echo "&nbsp;<select name='marks' id='marks'>";
-                for ($i = 0; $i <= $questionWeighting; $i++) {
-                    echo '<option '.(($i == $questionScore) ? "selected='selected'" : '').'>'.$i.'</option>';
+                echo "&nbsp;<select name='marks' id='select_marks_".$questionId."' class='selectpicker exercise_mark_select'>";
+                $model = ExerciseLib::getCourseScoreModel();
+                if (empty($model)) {
+                    for ($i = 0; $i <= $questionWeighting; $i++) {
+                        echo '<option value="'.$i.'" '.(($i == $questionScore) ? "selected='selected'" : '').'>'.$i.'</option>';
+                    }
+                } else {
+                    foreach ($model['score_list'] as $item) {
+                        $i = api_number_format($item['score_to_qualify'] / 100 * $questionWeighting, 2);
+                        $model = ExerciseLib::getModelStyle($item, $i);
+                        echo '<option class = "'.$item['css_class'].'" value="'.$i.'" '.(($i == $questionScore) ? "selected='selected'" : '').'>'.$model.'</option>';
+                    }
                 }
                 echo '</select>';
                 echo '</form><br /></div>';
 
                 if ($questionScore == -1) {
                     $questionScore = 0;
-                    echo Display::return_message(get_lang('notCorrectedYet'));
+                    echo ExerciseLib::getNotCorrectedYetText();
                 }
             } else {
                 $arrmarks[] = $questionId;
-                echo '<div id="'.$marksname.'" style="display:none"><form name="marksform_'.$questionId.'" method="post" action="">
-					  <select name="marks" id="marks" style="display:none;"><option>' . $questionScore.'</option></select></form><br/ ></div>';
+                echo '
+                    <div id="'.$marksname.'" class="hidden">
+                        <form name="marksform_'.$questionId.'" method="post" action="">
+                            <select name="marks" id="select_marks_'.$questionId.'" style="display:none;" class="exercise_mark_select">
+                                <option value="'.$questionScore.'" >'.$questionScore.'</option>
+                            </select>
+                        </form>
+                        <br/>
+                    </div>
+                ';
             }
         } else {
             if ($questionScore == -1) {
@@ -822,7 +886,7 @@ foreach ($questionList as $questionId) {
 
     $score = array();
     if ($show_results) {
-        $score['result'] = get_lang('Score')." : ".ExerciseLib::show_score(
+        $score['result'] = ExerciseLib::show_score(
             $my_total_score,
             $my_total_weight,
             false,
@@ -835,21 +899,31 @@ foreach ($questionList as $questionId) {
         $score['comments'] = isset($comnt) ? $comnt : null;
     }
 
+    if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+        $check = $objQuestionTmp->isQuestionWaitingReview($score);
+        if ($check === false) {
+            $countPendingQuestions++;
+        }
+    }
+
     unset($objAnswerTmp);
     $i++;
 
     $contents = ob_get_clean();
-
     $question_content = '<div class="question_row">';
 
     if ($show_results) {
         //Shows question title an description
-        $question_content .= $objQuestionTmp->return_header(null, $counter, $score);
+        $question_content .= $objQuestionTmp->return_header(
+            $objExercise,
+            $counter,
+            $score
+        );
     }
     $counter++;
     $question_content .= $contents;
     $question_content .= '</div>';
-    $exercise_content .= $question_content;
+    $exercise_content .= Display::panel($question_content);
 } // end of large foreach on questions
 
 $total_score_text = null;
@@ -862,11 +936,12 @@ if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])
         if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
             $my_total_score_temp = 0;
         }
-        $total_score_text .= ExerciseLib::get_question_ribbon(
+        $total_score_text .= ExerciseLib::getTotalScoreRibbon(
             $objExercise,
             $my_total_score_temp,
             $totalWeighting,
-            true
+            true,
+            $countPendingQuestions
         );
         $total_score_text .= '</div>';
     }
@@ -878,7 +953,10 @@ if (!empty($category_list) && ($show_results || $show_only_total_score || $showT
         'score' => $my_total_score_temp,
         'total' => $totalWeighting
     );
-    echo TestCategory::get_stats_table_by_attempt($objExercise->id, $category_list);
+    echo TestCategory::get_stats_table_by_attempt(
+        $objExercise->id,
+        $category_list
+    );
 }
 
 echo $total_score_text;
@@ -920,7 +998,13 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
             'exeid' => $id
         ]);
 
-        $emailForm = new FormValidator('myform', 'post', $formUrl, '', ['id' => 'myform']);
+        $emailForm = new FormValidator(
+            'myform',
+            'post',
+            $formUrl,
+            '',
+            ['id' => 'myform']
+        );
     }
 
     $emailForm->addCheckBox(
@@ -939,9 +1023,12 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
 
     if (empty($track_exercise_info['orig_lp_id']) || empty($track_exercise_info['orig_lp_item_id'])) {
         // Default url
-        $url = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.api_get_session_id();
+        $url = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq()
+            .'&show_headers=1&id_session='.api_get_session_id();
     } else {
-        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view&item_id='.$track_exercise_info['orig_lp_item_id'].'&lp_id='.$track_exercise_info['orig_lp_id'].'&'.api_get_cidreq().'&id_session='.api_get_session_id();
+        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view&item_id='
+            .$track_exercise_info['orig_lp_item_id'].'&lp_id='.$track_exercise_info['orig_lp_id'].'&'.api_get_cidreq()
+            .'&id_session='.api_get_session_id();
     }
 
     $content = ExerciseLib::getEmailNotification(
@@ -963,7 +1050,7 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
 //Came from lpstats in a lp
 if ($origin == 'student_progress') { ?>
     <button type="button" class="back" onclick="window.history.go(-1);" value="<?php echo get_lang('Back'); ?>">
-    <?php echo get_lang('Back'); ?>
+        <?php echo get_lang('Back'); ?>
     </button>
     <?php
 } elseif ($origin == 'myprogress') {
@@ -981,7 +1068,7 @@ if ($origin != 'learnpath') {
     Display::display_footer();
 } else {
     if (!isset($_GET['fb_type'])) {
-        $lp_mode = $_SESSION['lp_mode'];
+        $lp_mode = Session::read('lp_mode');
         $url = '../lp/lp_controller.php?'.api_get_cidreq().'&';
         $url .= http_build_url([
             'action' => 'view',
@@ -990,13 +1077,18 @@ if ($origin != 'learnpath') {
             'exeId' => $exeId,
             'fb_type' => $feedback_type
         ]);
-        $href = ($lp_mode == 'fullscreen') ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'" ';
+        $href = ($lp_mode == 'fullscreen')
+            ? ' window.opener.location.href="'.$url.'" '
+            : ' top.location.href="'.$url.'" ';
         echo '<script type="text/javascript">'.$href.'</script>';
         // Record the results in the learning path, using the SCORM interface (API)
         echo "<script>window.parent.API.void_save_asset('$totalScore', '$totalWeighting', 0, 'completed'); </script>";
         echo '</body></html>';
     } else {
-        echo Display::return_message(get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'), 'normal');
+        echo Display::return_message(
+            get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'),
+            'normal'
+        );
         echo '<br />';
     }
 }

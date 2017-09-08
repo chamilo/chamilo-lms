@@ -12,7 +12,7 @@ api_protect_course_script(true);
 $action = $_REQUEST['a'];
 
 $course_id = api_get_course_int_id();
-$tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 $sessionId = api_get_session_id();
 
 switch ($action) {
@@ -41,9 +41,11 @@ switch ($action) {
         break;
     case 'add_lp_item':
         if (api_is_allowed_to_edit(null, true)) {
-            if ($_SESSION['oLP']) {
+            /** @var learnpath $learningPath */
+            $learningPath = Session::read('oLP');
+            if ($learningPath) {
                 // Updating the lp.modified_on
-                $_SESSION['oLP']->set_modified_on();
+                $learningPath->set_modified_on();
                 $title = $_REQUEST['title'];
                 if ($_REQUEST['type'] == TOOL_QUIZ) {
                     $title = Exercise::format_title_variable($title);
@@ -52,7 +54,7 @@ switch ($action) {
                 $parentId = isset($_REQUEST['parent_id']) ? $_REQUEST['parent_id'] : '';
                 $previousId = isset($_REQUEST['previous_id']) ? $_REQUEST['previous_id'] : '';
 
-                echo $_SESSION['oLP']->add_item(
+                echo $learningPath->add_item(
                     $parentId,
                     $previousId,
                     $_REQUEST['type'],
@@ -84,7 +86,7 @@ switch ($action) {
             foreach ($tab_parents_id as $parent_id) {
                 $Same_parent_LP_item_list = $LP_item_list->get_item_with_same_parent($parent_id);
                 $previous_item_id = 0;
-                for ($i=0; $i < count($Same_parent_LP_item_list->list); $i++) {
+                for ($i = 0; $i < count($Same_parent_LP_item_list->list); $i++) {
                     $item_id = $Same_parent_LP_item_list->list[$i]->id;
                     // display_order
                     $display_order = $i + 1;
@@ -95,7 +97,7 @@ switch ($action) {
                     // next_item_id
                     $next_item_id = 0;
                     if ($i < count($Same_parent_LP_item_list->list) - 1) {
-                        $next_item_id = $Same_parent_LP_item_list->list[$i+1]->id;
+                        $next_item_id = $Same_parent_LP_item_list->list[$i + 1]->id;
                     }
                     $LP_item_list->set_parameters_for_id($item_id, $next_item_id, "next_item_id");
                 }
@@ -119,7 +121,7 @@ switch ($action) {
                     )
                 );
             }
-            Display::display_confirmation_message(get_lang('Saved'));
+            echo Display::return_message(get_lang('Saved'), 'confirm');
         }
         break;
     case 'record_audio':
@@ -187,7 +189,11 @@ switch ($action) {
             break;
         }
 
-        $learningPath = learnpath::getLpFromSession(api_get_course_id(), $lpId, api_get_user_id());
+        $learningPath = learnpath::getLpFromSession(
+            api_get_course_id(),
+            $lpId,
+            api_get_user_id()
+        );
         $lpItem = $learningPath->getItem($lpItemId);
 
         if (empty($lpItem)) {
@@ -283,6 +289,26 @@ switch ($action) {
         }
 
         echo json_encode($position);
+
+        break;
+    case 'get_parent_names':
+        $newItemId = isset($_GET['new_item']) ? intval($_GET['new_item']) : 0;
+
+        if (!$newItemId) {
+            break;
+        }
+
+        /** @var \learnpath $lp */
+        $lp = Session::read('oLP');
+        $parentNames = $lp->getCurrentItemParentNames($newItemId);
+
+        $response = '';
+
+        foreach ($parentNames as $parentName) {
+            $response .= '<p class="h5 hidden-xs hidden-md">'.$parentName.'</p>';
+        }
+
+        echo $response;
 
         break;
     default:

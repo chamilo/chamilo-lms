@@ -14,7 +14,7 @@ use ChamiloSession as Session;
 $wsUrl = '';
 
 // include common authentication functions
-require_once dirname(__FILE__) . '/functions.inc.php';
+require_once __DIR__.'/functions.inc.php';
 // call the login checker (defined below)
 $isValid = loginWSAuthenticate($login, $password, $wsUrl);
 
@@ -29,7 +29,7 @@ if ($isValid === 1) {
     Session::write('_user', $_user);
     $uidReset = true;
     $logging_in = true;
-    Event::event_login($_user['user_id']);
+    Event::eventLogin($_user['user_id']);
 } else {
     //error_log('WS authentication error - user not approved by external WS');
     $loginFailed = true;
@@ -62,7 +62,7 @@ function loginWSAuthenticate($username, $password, $wsUrl)
     $key = '-+*%$({[]})$%*+-';
     // Complete password con PKCS7-specific padding
     $blockSize = 16;
-    $padding = $blockSize - (strlen($password)%$blockSize);
+    $padding = $blockSize - (strlen($password) % $blockSize);
     $password .= str_repeat(chr($padding), $padding);
     $cipher = new Crypt_AES(CRYPT_AES_MODE_CFB);
     $cipher->setKeyLength(128);

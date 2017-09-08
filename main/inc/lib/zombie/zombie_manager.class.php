@@ -50,7 +50,7 @@ class ZombieManager
                     access.login_date';
 
         if (api_is_multiple_url_enabled()) {
-            $access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+            $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $current_url_id = api_get_current_access_url_id();
 
             $sql .= " FROM $user_table as user, $login_table as access, $access_url_rel_user_table as url
@@ -79,7 +79,7 @@ class ZombieManager
         $count = intval($count);
         $from = intval($from);
 
-        $sql .=  " ORDER BY $column $direction";
+        $sql .= " ORDER BY $column $direction";
         $sql .= " LIMIT $count, $from ";
 
         $result = Database::query($sql);
@@ -93,8 +93,8 @@ class ZombieManager
     static function deactivate_zombies($ceiling)
     {
         $zombies = self::list_zombies($ceiling);
-        $ids  = array();
-        foreach($zombies as $zombie) {
+        $ids = array();
+        foreach ($zombies as $zombie) {
             $ids[] = $zombie['user_id'];
         }
         UserManager::deactivate_users($ids);

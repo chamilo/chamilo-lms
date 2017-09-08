@@ -26,6 +26,10 @@ function clean_user_select() {
 var region_value = '{{ region_value }}';
 
 $(document).ready(function() {
+    var cookieData = Cookies.getJSON('agenda_cookies');
+    var defaultView = (cookieData && cookieData.view) || '{{ default_view }}';
+    var defaultStartDate = (cookieData && cookieData.start) || moment.now();
+
     // Reset button.
     $("button[type=reset]").click(function() {
         $("#session_id").find('option').removeAttr("selected");
@@ -125,9 +129,7 @@ $(document).ready(function() {
             for (dayIndex = 0; dayIndex < segsByDay.length; dayIndex++) {
                 daySegs = segsByDay[dayIndex];
                 if (daySegs) { // sparse array, so might be undefined
-
                     this.sortEventSegs(daySegs);
-
                     for (i = 0; i < daySegs.length; i++) {
                         var event = daySegs[i].event;
                         if (jQuery.inArray(event.id, eventList) !== -1) {
@@ -211,6 +213,7 @@ $(document).ready(function() {
 		},
         views: {
             CustomView: { // name of view
+                type: 'list',
                 buttonText: '{{ 'AgendaList' | get_lang | escape('js') }}',
                 duration: { month: 1 },
                 defaults: {
@@ -231,7 +234,8 @@ $(document).ready(function() {
                 }
             ],
         {% endif %}
-        defaultView: '{{ default_view }}',
+        defaultView: defaultView,
+        defaultDate: defaultStartDate,
         firstHour: 8,
         firstDay: 1,
 		selectable	: true,
@@ -243,6 +247,13 @@ $(document).ready(function() {
                 api.destroy();
                 //api.render();
             }*/
+        },
+        viewRender: function(view, element) {
+            var data = {
+                'view': view.name,
+                'start': view.intervalStart.format("YYYY-MM-DD")
+            };
+            Cookies.set('agenda_cookies', data, 1); // Expires 1 day
         },
 		// Add event
 		select: function(start, end, jsEvent, view) {
@@ -290,10 +301,12 @@ $(document).ready(function() {
                     $('#end_date').html('');
                 }
 
-				$('#color_calendar').html('{{ type_label | escape('js')}}');
-				$('#color_calendar').removeClass('group_event');
-				$('#color_calendar').addClass('label_tag');
-				$('#color_calendar').addClass('{{ type_event_class | escape('js') }}');
+				$('#color_calendar')
+                    .html('{{ type_label | escape('js')}}')
+                    .removeClass('group_event')
+                    .addClass('label_tag')
+                    .addClass('{{ type_event_class | escape('js') }}')
+                    .css('background-color', '{{ type_event_color }}');
 
                 //It shows the CKEDITOR while Adding an Event
                 $('#cke_content').show();
@@ -380,19 +393,14 @@ $(document).ready(function() {
 		        }).removeData('qtip'); // this is an special hack to add multiple qtip in the same target
 		        */
             }
-			if (event.description) {
-                var comment = '';
-                if (event.comment) {
-                    comment = event.comment;
-                }
-
-				element.qtip({
-                    hide: {
-                        delay: 2000
-                    },
-		            content: event.description + ' ' + comment,
-		            position: { at:'top left' , my:'bottom left'}
-		        });
+            if (event.comment) {
+                element.qtip({
+                    content: event.comment,
+                    position: {
+                        at: 'top center',
+                        my: 'bottom center'
+                    }
+                });
 			}
 	    },
 		eventClick: function(calEvent, jsEvent, view) {
@@ -481,10 +489,9 @@ $(document).ready(function() {
                 $("#comment").hide();
 
 				allFields.removeClass( "ui-state-error" );
-
 				$("#dialog-form").dialog("open");
 
-				var url = '{{ web_agenda_ajax_url }}&a=edit_event&id='+calEvent.id+'&start='+calEvent.start.unix()+'&end='+calEvent.end.unix()+'&all_day='+calEvent.allDay+'&view='+view.name;
+				var url = '{{ web_agenda_ajax_url }}&a=edit_event&id='+calEvent.id+'&view='+view.name;
 				var delete_url = '{{ web_agenda_ajax_url }}&a=delete_event&id='+calEvent.id;
 
 				$("#dialog-form").dialog({
@@ -525,7 +532,7 @@ $(document).ready(function() {
 						},
                         {% endif %}
                         '{{ "Edit"|get_lang }}' : function() {
-                            url =  "{{ _p.web_main }}calendar/agenda.php?action=edit&type=fromjs&id=" + calEvent.id+'&course_id='+calEvent.course_id+"";
+                            url =  "{{ _p.web_main }}calendar/agenda.php?action=edit&type=fromjs&id="+calEvent.id+'&course_id='+calEvent.course_id+"";
                             window.location.href = url;
                             $("#dialog-form").dialog( "close" );
                         },
@@ -644,7 +651,6 @@ $(document).ready(function() {
                         '<div class="form-group"><label class="col-sm-3 control-label">{{ 'Session' | get_lang }}</label>' +
                         '<div class="col-sm-9">' + calEvent.session_name+"</div></div>"
                     );
-
                 } else {
                     $("#calendar_session_info").html('');
                 }
@@ -652,7 +658,6 @@ $(document).ready(function() {
                 $("#simple_title").html(calEvent.title);
                 $("#simple_content").html(calEvent.description);
                 $("#simple_comment").html(calEvent.comment);
-
                 $("#simple-dialog-form").dialog("open");
                 $("#simple-dialog-form").dialog({
 					buttons: {
@@ -706,12 +711,6 @@ $(document).ready(function() {
 			else $('#loading').hide();
 		}
 	});
-
-
-
-
-
-
 });
 </script>
 {{ actions_div }}
@@ -764,6 +763,13 @@ $(document).ready(function() {
         {{ form_add }}
 	</div>
 </div>
+
+{% if legend_list %}
+    {% for color, text in legend_list %}
+        <span style="background-color: {{ color }}" class="label label-default">&nbsp;</span> {{ text }} &nbsp;&nbsp;
+    {% endfor %}
+    <br /><br />
+{% endif %}
 <div id="loading" style="margin-left:150px;position:absolute;display:none">
     {{ "Loading" | get_lang }}...
 </div>

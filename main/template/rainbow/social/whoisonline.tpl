@@ -29,7 +29,7 @@
                 page = $("#link_load_more_items").attr("data_link");
                 $.ajax({
                     beforeSend: function() {
-                        $("#link_load_more_items").html("{{ 'Loading' | get_lang }} <em class='fa fa-spinner fa-pulse fa-fw'></em>");
+                        $("#link_load_more_items").html("{{ 'Loading' | get_lang|escape('js') }} <em class='fa fa-spinner fa-pulse fa-fw'></em>");
                     },
                     type: "GET",
                     url: "main/inc/ajax/online.ajax.php?a=load_online_user",
@@ -38,7 +38,7 @@
                         if (data != "end") {
                             $("#link_load_more_items").attr("data_link", parseInt(page) + 1);
                             $("#user-list").append(data);
-                            $("#link_load_more_items").html("{{ 'More' | get_lang }}");
+                            $("#link_load_more_items").html("{{ 'More' | get_lang|escape('js')}}");
                         } else {
                             $("#link_load_more_items").remove();
                         }

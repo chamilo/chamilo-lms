@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 require_once  "../inc/global.inc.php";
+
 echo "<pre>".
 get_lang('SummationPlus')."\n".
 get_lang('SubstractionMinus')."\n".
 get_lang('MultiplicationStar')."\n".
 get_lang('DivisionSlash')."\n".
 get_lang('ExponentiationCircumflex')."\n".
-get_lang('ModuloPercentage') . "\n" .
+get_lang('ModuloPercentage')."\n".
 "\n".
 get_lang('SquareRootSqrt')."\n".
 get_lang('AbsoluteValueAbs')."\n".

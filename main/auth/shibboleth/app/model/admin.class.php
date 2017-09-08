@@ -2,7 +2,7 @@
 
 namespace Shibboleth;
 
-require_once dirname(__FILE__) . '/scaffold/admin.class.php';
+require_once __DIR__.'/scaffold/admin.class.php';
 
 /**
  * A Chamilo admin. Model for the Admin table.

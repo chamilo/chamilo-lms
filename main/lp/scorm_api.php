@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * API event handler functions for Scorm 1.1 and 1.2 and 1.3 (latter not fully supported)
  * This script is divided into three sections.
@@ -25,9 +27,9 @@ $use_anonymous = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$file   = (empty($_SESSION['file'])?'':$_SESSION['file']);
+$file = Session::read('file');
 /** @var learnpath $oLP */
-$oLP = unserialize($_SESSION['lpobject']);
+$oLP = unserialize(Session::read('lpobject'));
 /** @var learnpathItem $oItem */
 $oItem = isset($oLP->items[$oLP->current]) ? $oLP->items[$oLP->current] : null;
 
@@ -41,7 +43,7 @@ $userId = api_get_user_id();
 
 header('Content-type: text/javascript');
 
-?>var scorm_logs=<?php echo ((empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin()) )?'0':'3');?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
+?>var scorm_logs=<?php echo ((empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin())) ? '0' : '3'); ?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
 var lms_logs = 0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
 
 // API Object initialization (eases access later on)
@@ -72,8 +74,8 @@ function APIobject() {
 // SCORM
 var API = new APIobject(); //for scorm 1.2
 var api = API;
-var API_1484_11 = new APIobject();  //for scorm 1.3
-var api_1484_11 = API_1484_11;
+//var API_1484_11 = new APIobject();  //for scorm 1.3
+//var api_1484_11 = API_1484_11;
 
 // SCORM-specific Error codes
 var G_NoError = 0;
@@ -144,25 +146,25 @@ olms.finishSignalReceived = 0;
 olms.statusSignalReceived = 0;
 
 // Strictly scorm variables
-olms.score=<?php echo $oItem->get_score();?>;
-olms.max='<?php echo $oItem->get_max();?>';
-olms.min='<?php echo $oItem->get_min();?>';
-olms.lesson_status='<?php echo $oItem->get_status();?>';
-olms.session_time='<?php echo $oItem->get_scorm_time('js');?>';
-olms.suspend_data = '<?php echo $oItem->get_suspend_data();?>';
-olms.lesson_location = '<?php echo $oItem->get_lesson_location();?>';
-olms.total_time = '<?php echo $oItem->get_scorm_time('js');?>';
-olms.mastery_score = '<?php echo $oItem->get_mastery_score();?>';
+olms.score=<?php echo $oItem->get_score(); ?>;
+olms.max='<?php echo $oItem->get_max(); ?>';
+olms.min='<?php echo $oItem->get_min(); ?>';
+olms.lesson_status='<?php echo $oItem->get_status(); ?>';
+olms.session_time='<?php echo $oItem->get_scorm_time('js'); ?>';
+olms.suspend_data = '<?php echo $oItem->get_suspend_data(); ?>';
+olms.lesson_location = '<?php echo $oItem->get_lesson_location(); ?>';
+olms.total_time = '<?php echo $oItem->get_scorm_time('js'); ?>';
+olms.mastery_score = '<?php echo $oItem->get_mastery_score(); ?>';
 olms.launch_data = '<?php echo $oItem->get_launch_data(); ?>';
-olms.max_time_allowed = '<?php echo $oItem->get_max_time_allowed();?>';
-olms.interactions = new Array(<?php echo $oItem->get_interactions_js_array();?>);
+olms.max_time_allowed = '<?php echo $oItem->get_max_time_allowed(); ?>';
+olms.interactions = new Array(<?php echo $oItem->get_interactions_js_array(); ?>);
 olms.item_objectives = new Array();
 olms.info_lms_item = new Array();
 
 // Chamilo internal variables (not SCORM)
 // olms.saved_lesson_status = 'not attempted';
-olms.lms_lp_id = <?php echo $oLP->get_id();?>;
-olms.lms_item_id = <?php echo $oItem->get_id();?>;
+olms.lms_lp_id = <?php echo $oLP->get_id(); ?>;
+olms.lms_item_id = <?php echo $oItem->get_id(); ?>;
 olms.lms_initialized = 0;
 // switch_finished indicates if the switch process is finished (if it has gone
 // through LMSInitialize() for the new item. Until then, all LMSSetValue()
@@ -171,26 +173,26 @@ olms.lms_initialized = 0;
 olms.switch_finished = 0;
 
 //olms.lms_total_lessons = <?php echo $oLP->get_total_items_count(); ?>;
-//olms.lms_complete_lessons = <?php echo $oLP->get_complete_items_count();?>;
-//olms.lms_progress_bar_mode = '<?php echo $oLP->progress_bar_mode;?>';
+//olms.lms_complete_lessons = <?php echo $oLP->get_complete_items_count(); ?>;
+//olms.lms_progress_bar_mode = '<?php echo $oLP->progress_bar_mode; ?>';
 //if(lms_progress_bar_mode == ''){lms_progress_bar_mode='%';}
 
-olms.lms_view_id = '<?php echo $oLP->get_view();?>';
+olms.lms_view_id = '<?php echo $oLP->get_view(); ?>';
 if(olms.lms_view_id == ''){ olms.lms_view_id = 1;}
-olms.lms_user_id = '<?php echo $userId;?>';
-olms.lms_next_item = '<?php echo $oLP->get_next_item_id();?>';
-olms.lms_previous_item = '<?php echo $oLP->get_previous_item_id();?>';
-olms.lms_lp_type = '<?php echo $oLP->get_type();?>';
-olms.lms_item_type = '<?php echo $oItem->get_type();?>';
-olms.lms_item_credit = '<?php echo $oItem->get_credit();?>';
-olms.lms_item_lesson_mode = '<?php echo $oItem->get_lesson_mode();?>';
-olms.lms_item_launch_data = '<?php echo addslashes($oItem->get_launch_data());?>';
-olms.lms_item_core_exit = '<?php echo $oItem->get_core_exit();?>';
+olms.lms_user_id = '<?php echo $userId; ?>';
+olms.lms_next_item = '<?php echo $oLP->get_next_item_id(); ?>';
+olms.lms_previous_item = '<?php echo $oLP->get_previous_item_id(); ?>';
+olms.lms_lp_type = '<?php echo $oLP->get_type(); ?>';
+olms.lms_item_type = '<?php echo $oItem->get_type(); ?>';
+olms.lms_item_credit = '<?php echo $oItem->get_credit(); ?>';
+olms.lms_item_lesson_mode = '<?php echo $oItem->get_lesson_mode(); ?>';
+olms.lms_item_launch_data = '<?php echo addslashes($oItem->get_launch_data()); ?>';
+olms.lms_item_core_exit = '<?php echo $oItem->get_core_exit(); ?>';
 olms.lms_course_id = '<?php echo $oLP->get_course_int_id(); ?>';
 olms.lms_session_id = '<?php echo api_get_session_id(); ?>';
 olms.lms_course_code = '<?php echo $oLP->getCourseCode(); ?>';
 olms.lms_course_id =  '<?php echo $oLP->get_course_int_id(); ?>';
-<?php echo $oLP->get_items_details_as_js('olms.lms_item_types');?>
+<?php echo $oLP->get_items_details_as_js('olms.lms_item_types'); ?>
 
 // Following definition of cmi.core.score.raw in SCORM 1.2, "LMS should
 // initialize this to an empty string ("") upon initial launch of a SCO. The
@@ -205,8 +207,9 @@ if (olms.score == 0 && olms.lms_item_type == 'sco' && olms.lesson_status == 'not
 olms.asset_timer = 0;
 olms.userfname = '<?php echo str_replace("'", "\\'", $user['firstname']); ?>';
 olms.userlname = '<?php echo str_replace("'", "\\'", $user['lastname']); ?>';
-
 olms.execute_stats = false;
+
+var courseUrl = '?cidReq='+olms.lms_course_code+'&id_session='+olms.lms_session_id;
 
 /**
  * Add the "addListeners" function to the "onload" event of the window and
@@ -227,8 +230,8 @@ $(document).ready(function() {
     logit_scorm('Other SCORM calls are shown in orange.', 1);
     logit_lms('To add new messages to these logs, use logit_lms() or logit_scorm().');
 
-    olms.info_lms_item[0] = '<?php echo $oItem->get_id();?>';
-    olms.info_lms_item[1] = '<?php echo $oItem->get_id();?>';
+    olms.info_lms_item[0] = '<?php echo $oItem->get_id(); ?>';
+    olms.info_lms_item[1] = '<?php echo $oItem->get_id(); ?>';
 
     $("#content_id").load(function() {
         logit_lms('#content_id load event starts');
@@ -293,7 +296,7 @@ function LMSInitialize() {
 
         $.ajax({
             type: "POST",
-            url: "lp_ajax_initialize.php",
+            url: "lp_ajax_initialize.php" + courseUrl,
             data: params,
             dataType: 'script',
             async: false,
@@ -458,7 +461,7 @@ function LMSGetValue(param) {
     } else if(param == 'cmi.core.student_name'){
         // ---- cmi.core.student_name
         <?php
-          $who = addslashes($user['complete_name']);
+          $who = addslashes($user['lastname']).', '.addslashes($user['firstname']);
           echo "result='$who';";
         ?>
     } else if(param == 'cmi.core.lesson_location'){
@@ -499,7 +502,7 @@ function LMSGetValue(param) {
         result = 'id,score,status';
     } else if(param == 'cmi.objectives._count'){
     // ---- cmi.objectives._count
-        //result='<?php echo $oItem->get_view_count();?>';
+        //result='<?php echo $oItem->get_view_count(); ?>';
         result = olms.item_objectives.length;
     } else if(param.substring(0,15)== 'cmi.objectives.'){
         var myres = '';
@@ -1363,8 +1366,11 @@ function update_progress_bar(nbr_complete, nbr_total, mode) {
 /**
  * Update the gamification values (number of stars and score)
  */
-function updateGamificationValues() {
-    var fetchValues = $.ajax('<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php', {
+function updateGamificationValues()
+{
+    var fetchValues = $.ajax(
+        '<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php?' + courseUrl,
+        {
         dataType: 'json',
         data: {
             a: 'update_gamification'
@@ -1648,8 +1654,10 @@ function switch_item(current_item, next_item){
     //(4) refresh the audio player if needed
     $.ajax({
         type: "POST",
-        url: "lp_nav.php",
-        data: "",
+        url: "lp_nav.php"+courseUrl,
+        data: {
+            lp_item: next_item
+        },
         beforeSend: function() {
             $.each($('audio'), function () {
                 var player = new MediaElementPlayer($(this));
@@ -1674,10 +1682,12 @@ function switch_item(current_item, next_item){
  * Hide or show the navigation buttons if the current item is the First or Last
  */
 var checkCurrentItemPosition = function(lpItemId) {
-    var currentItem = $.getJSON('<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php', {
-            a: 'check_item_position',
-            lp_item: lpItemId
-        }
+    var currentItem = $.getJSON(
+        '<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php' + courseUrl,
+    {
+        a: 'check_item_position',
+        lp_item: lpItemId
+    }
     ).done(function(parsedResponse,statusText,jqXhr) {
         var position = jqXhr.responseJSON;
         if (position == 'first') {
@@ -1701,7 +1711,8 @@ var checkCurrentItemPosition = function(lpItemId) {
  * Get a forum info when the learning path item has a associated forum
  */
 var loadForumThread = function(lpId, lpItemId) {
-    var loadForum = $.getJSON('<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php', {
+    var loadForum = $.getJSON(
+        '<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php' + courseUrl, {
             a: 'get_forum_thread',
             lp: lpId,
             lp_item: lpItemId
@@ -1819,7 +1830,7 @@ function xajax_save_item(
         $.ajax({
             type:"POST",
             data: params,
-            url: "lp_ajax_save_item.php",
+            url: "lp_ajax_save_item.php" + courseUrl,
             dataType: "script",
             async: false
         });
@@ -1933,7 +1944,7 @@ function xajax_save_item_scorm(
     $.ajax({
         type:"POST",
         data: params,
-        url: "lp_ajax_save_item.php",
+        url: "lp_ajax_save_item.php" + courseUrl,
         dataType: "script",
         async: false
     });
@@ -1951,7 +1962,7 @@ function xajax_start_timer() {
     logit_lms('xajax_start_timer() called',3);
     $.ajax({
         type: "GET",
-        url: "lp_ajax_start_timer.php",
+        url: "lp_ajax_start_timer.php" + courseUrl,
         dataType: "script",
         async: false,
         success: function(time) {
@@ -1995,7 +2006,7 @@ function xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,ite
     $.ajax({
         type: "POST",
         data: params,
-        url: "lp_ajax_save_objectives.php",
+        url: "lp_ajax_save_objectives.php" + courseUrl,
         dataType: "script",
         async: false
     });
@@ -2025,7 +2036,7 @@ function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id
     $.ajax({
         type: "POST",
         data: params,
-        url: "lp_ajax_switch_item.php",
+        url: "lp_ajax_switch_item.php" + courseUrl,
         dataType: "script",
         async: false
     });
@@ -2054,7 +2065,7 @@ function xajax_switch_item_toc(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,
     $.ajax({
         type: "POST",
         data: params,
-        url: "lp_ajax_switch_item_toc.php",
+        url: "lp_ajax_switch_item_toc.php" + courseUrl,
         dataType: "script",
         async: false
     });
@@ -2084,7 +2095,7 @@ function attach_glossary_into_scorm(type) {
     my_protocol = location.protocol;
     my_pathname=location.pathname;
     work_path = my_pathname.substr(0,my_pathname.indexOf('<?php echo api_get_path(REL_COURSE_PATH) ?>'));
-    var ajaxRequestUrl = '<?php echo api_get_path(WEB_CODE_PATH).'glossary/glossary_ajax_request.php'; ?>';
+    var ajaxRequestUrl = '<?php echo api_get_path(WEB_CODE_PATH).'glossary/glossary_ajax_request.php'; ?>' + courseUrl;
 
     if (type == 'automatic') {
         $.ajax({

@@ -20,13 +20,17 @@ if ($userId === 0 || $skillId === 0) {
 }
 
 $objSkill = new Skill();
-
-if (!$objSkill->user_has_skill($userId, $skillId, $courseId, $sessionId)) {
+if (!$objSkill->userHasSkill($userId, $skillId, $courseId, $sessionId)) {
     exit;
 }
 
 $objSkillRelUser = new SkillRelUser();
-$userSkill = $objSkillRelUser->getByUserAndSkill($userId, $skillId, $courseId, $sessionId);
+$userSkill = $objSkillRelUser->getByUserAndSkill(
+    $userId,
+    $skillId,
+    $courseId,
+    $sessionId
+);
 
 if ($userSkill == false) {
     exit;
@@ -42,10 +46,10 @@ $json = array(
         'identity' => $user['email']
     ),
     'issuedOn' => strtotime($userSkill['acquired_skill_at']),
-    'badge' => api_get_path(WEB_CODE_PATH) . "badge/class.php?id=$skillId",
+    'badge' => api_get_path(WEB_CODE_PATH)."badge/class.php?id=$skillId",
     'verify' => array(
         'type' => 'hosted',
-        'url' => api_get_path(WEB_CODE_PATH) . "badge/assertion.php?" . http_build_query(array(
+        'url' => api_get_path(WEB_CODE_PATH)."badge/assertion.php?".http_build_query(array(
             'user' => $userId,
             'skill' => $skillId,
             'course' => $courseId,

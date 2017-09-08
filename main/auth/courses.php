@@ -62,6 +62,7 @@ if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
 }
 
 $categoryCode = isset($_GET['category_code']) && !empty($_GET['category_code']) ? $_GET['category_code'] : 'ALL';
+$searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : '';
 
 $nameTools = CourseCategory::getCourseCatalogNameTools($action);
 if (empty($nameTools)) {
@@ -95,7 +96,7 @@ if (isset($_GET['move'])) {
             $_GET['category']
         );
     }
-    if (isset($_GET['category']) && !$_GET['course']) {
+    if (isset($_GET['category']) && !isset($_GET['course'])) {
         $courses_controller->move_category($_GET['move'], $_GET['category']);
     }
 }
@@ -137,14 +138,22 @@ if (isset($_POST['create_course_category']) &&
     strlen(trim($_POST['title_course_category'])) > 0
 ) {
     if ($ctok == $_POST['sec_token']) {
-        $courses_controller->add_course_category($_POST['title_course_category']);
+        $courses_controller->addCourseCategory($_POST['title_course_category']);
     }
 }
 
 // search courses
 if (isset($_REQUEST['search_course'])) {
     if ($ctok == $_REQUEST['sec_token']) {
-        $courses_controller->search_courses($_REQUEST['search_term'], null, null, null, $limit, true);
+        $courses_controller->search_courses(
+            $searchTerm,
+            null,
+            null,
+            null,
+            $limit,
+            true
+        );
+        exit;
     }
 }
 
@@ -153,7 +162,7 @@ if (isset($_REQUEST['subscribe_course'])) {
     if ($ctok == $_GET['sec_token']) {
         $courses_controller->subscribe_user(
             $_GET['subscribe_course'],
-            $_GET['search_term'],
+            $searchTerm,
             $categoryCode
         );
     }
@@ -161,9 +170,12 @@ if (isset($_REQUEST['subscribe_course'])) {
 
 // We are unsubscribing from a course (=Unsubscribe from course).
 if (isset($_GET['unsubscribe'])) {
-    $search_term = isset($_GET['search_term']) ? $_GET['search_term'] : null;
     if ($ctok == $_GET['sec_token']) {
-        $courses_controller->unsubscribe_user_from_course($_GET['unsubscribe'], $search_term, $categoryCode);
+        $courses_controller->unsubscribe_user_from_course(
+            $_GET['unsubscribe'],
+            $searchTerm,
+            $categoryCode
+        );
     }
 }
 
@@ -173,12 +185,11 @@ if (isset($_POST['unsubscribe'])) {
         $courses_controller->unsubscribe_user_from_course($_POST['unsubscribe']);
     }
 }
-
 switch ($action) {
     case 'subscribe_user_with_password':
         $courses_controller->subscribe_user(
             isset($_POST['subscribe_user_with_password']) ? $_POST['subscribe_user_with_password'] : '',
-            isset($_POST['search_term']) ? $_POST['search_term'] : '',
+            $searchTerm,
             isset($_POST['category_code']) ? $_POST['category_code'] : ''
         );
         break;
@@ -195,8 +206,9 @@ switch ($action) {
         if (!$user_can_view_page) {
             api_not_allowed(true);
         }
-
-        if (!CoursesAndSessionsCatalog::is(CATALOG_SESSIONS)) {
+        header('Location: '.api_get_self());
+        exit;
+        /* if (!CoursesAndSessionsCatalog::is(CATALOG_SESSIONS)) {
             $courses_controller->courses_categories(
                 $action,
                 $categoryCode,
@@ -208,7 +220,7 @@ switch ($action) {
         } else {
             header('Location: ' . api_get_self());
             exit;
-        }
+        }*/
         break;
     case 'display_random_courses':
         if (!$user_can_view_page) {
@@ -255,9 +267,7 @@ switch ($action) {
         if (!$confirmed) {
             $template = new Template(null, false, false, false, false, false);
             $template->assign('session_id', $sessionId);
-
             $layout = $template->get_template('auth/confirm_session_subscription.tpl');
-
             echo $template->fetch($layout);
             exit;
         }
@@ -282,7 +292,7 @@ switch ($action) {
                 $continueWithSubscription = SequenceResourceManager::checkSequenceAreCompleted($requirementsData);
 
                 if (!$continueWithSubscription) {
-                    header('Location: ' .  api_get_path(WEB_CODE_PATH) . 'auth/courses.php');
+                    header('Location: '.api_get_path(WEB_CODE_PATH).'auth/courses.php');
                     exit;
                 }
             }
@@ -300,16 +310,16 @@ switch ($action) {
 
             if ($count <= 0) {
                 // no course in session -> return to catalog
-                $url = api_get_path(WEB_CODE_PATH) . 'auth/courses.php';
+                $url = api_get_path(WEB_CODE_PATH).'auth/courses.php';
             } elseif ($count == 1) {
                 // only one course, so redirect directly to this course
                 foreach ($coursesList as $course) {
-                    $url = api_get_path(WEB_COURSE_PATH) . $course['directory'] . '/index.php?id_session=' . intval($_GET['session_id']);
+                    $url = api_get_path(WEB_COURSE_PATH).$course['directory'].'/index.php?id_session='.intval($_GET['session_id']);
                 }
             } else {
-                $url = api_get_path(WEB_CODE_PATH) . 'session/index.php?session_id=' . intval($_GET['session_id']);
+                $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.intval($_GET['session_id']);
             }
-            header('Location: ' . $url);
+            header('Location: '.$url);
             exit;
         }
         //else show error message?

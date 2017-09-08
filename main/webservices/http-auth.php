@@ -12,7 +12,7 @@ $nonce = uniqid();
 $digest = getDigest();
 
 // If there was no digest, show login
-if (is_null($digest)) requireLogin($realm,$nonce);
+if (is_null($digest)) requireLogin($realm, $nonce);
 
 $digestParts = digestParse($digest);
 
@@ -26,7 +26,7 @@ $A2 = md5("{$_SERVER['REQUEST_METHOD']}:{$digestParts['uri']}");
 $validResponse = md5("{$A1}:{$digestParts['nonce']}:{$digestParts['nc']}:{$digestParts['cnonce']}:{$digestParts['qop']}:{$A2}");
 
 if ($digestParts['response'] != $validResponse)
-  requireLogin($realm,$nonce);
+  requireLogin($realm, $nonce);
 else {
   // We're in!
   echo 'a7532ae474e5e66a0c16eddab02e02a7';
@@ -34,27 +34,29 @@ else {
 }
 
 // This function returns the digest string
-function getDigest() {
-
+function getDigest()
+{
     // mod_php
     if (isset($_SERVER['PHP_AUTH_DIGEST'])) {
         $digest = $_SERVER['PHP_AUTH_DIGEST'];
-    // most other servers
+        // most other servers
+    } elseif (isset($_SERVER['HTTP_AUTHENTICATION'])) {
+        if (strpos(
+                strtolower($_SERVER['HTTP_AUTHENTICATION']),
+                'digest'
+            ) === 0) {
+            $digest = substr($_SERVER['HTTP_AUTHORIZATION'], 7);
+        }
+    } elseif (isset($_SERVER['HTTP_WWW_AUTHENTICATE'])) {
+        $digest = $_SERVER['HTTP_WWW_AUTHENTICATE'];
     }
-    elseif (isset($_SERVER['HTTP_AUTHENTICATION'])) {
-      if (strpos(strtolower($_SERVER['HTTP_AUTHENTICATION']),'digest')===0)
-        $digest = substr($_SERVER['HTTP_AUTHORIZATION'], 7);
-    }
-    elseif (isset($_SERVER['HTTP_WWW_AUTHENTICATE'])) {
-      $digest = $_SERVER['HTTP_WWW_AUTHENTICATE'];
-    }
-    return $digest;
 
+    return $digest;
 }
 
 // This function forces a login prompt
-function requireLogin($realm,$nonce) {
-    header('WWW-Authenticate: Digest realm="' . $realm . '",qop="auth",nonce="' . $nonce . '",opaque="' . md5($realm) . '"');
+function requireLogin($realm, $nonce) {
+    header('WWW-Authenticate: Digest realm="'.$realm.'",qop="auth",nonce="'.$nonce.'",opaque="'.md5($realm).'"');
     header('HTTP/1.1 401');
     echo 'Authentication Canceled';
     die();

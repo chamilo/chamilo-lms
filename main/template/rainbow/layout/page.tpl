@@ -6,7 +6,7 @@
 <html lang="{{ document_language }}" class="no-js"> <!--<![endif]-->
 <head>
 {% block head %}
-    {% include template ~ "/layout/head.tpl" %}
+{% include template ~ "/layout/head.tpl" %}
 {% endblock %}
 </head>
 <body dir="{{ text_direction }}" class="{{ section_name }} {{ login_class }}">
@@ -42,11 +42,13 @@
         </div>
     {% endif %}
 	<section id="content-section">
-        <div class="container">
+        <div class="container{{ fluid == true ? '-fluid' : '' }}">
             {% block breadcrumb %}
-                {{ breadcrumb }}
+                <div id="page-breadcrumb">
+                    {{ breadcrumb }}
+                </div>
             {% endblock %}
-            
+
             {% block body %}
                 {{ content }}
             {% endblock %}
@@ -56,6 +58,8 @@
     {% if show_footer == true %}
 	{% include template ~ "/layout/page_footer.tpl" %}
     {% endif %}
-    </div>
+
+    {% include template ~ '/layout/footer.js.tpl' %}
+</div>
   </body>
 </html>

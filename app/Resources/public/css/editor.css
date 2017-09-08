@@ -36,7 +36,7 @@
 
 
 body{
-    color: #666;
+    color: #162a83;
     font-family: 'Open Sans', sans-serif;
     line-height: 30px;
    
@@ -45,7 +45,8 @@ body{
     display: block;
     font-style: normal;
     font-weight: normal;
-    line-height: 1;
+/* Commenting Ck line height to use the general configuration cf BT#13092 */ 
+/*    line-height: 1; */
     font-size-adjust: none;
     font-stretch: normal;
     font-feature-settings: normal;
@@ -73,11 +74,7 @@ body{
     padding: 2% 3%;
     line-height: 20px;
 }
-.ck-title{
-    display: block;
-    font-weight: bold;
-    color: #000;
-}
+
 .ck-title2{
     padding-top: 0;
     margin-top: 0;
@@ -94,7 +91,39 @@ body{
     content: "";
     
 }
-
+.ck-parcours{
+    font-family: 'Verdana';
+    font-size: 18px;
+    font-weight: bold;
+    color: #162a83;
+}
+.ck-etape{
+    font-family: 'Verdana';
+    font-size: 14px;
+    font-weight: bold;
+    color: #162a83;
+}
+.ck-titre{
+    font-family: 'Verdana';
+    font-size: 23px;
+    color: #162a83;
+}
+.ck-texte{
+    font-family: 'Verdana';
+    font-size: 14px;
+    color: #162a83;
+}
+.ck-source{
+    font-family: 'Verdana';
+    font-size: 12px;
+    color: #162a83;
+}
+.ck-consignes{
+    font-family: 'Verdana';
+    font-size: 14px;
+    font-weight: bold;
+    color: #162a83;
+}
 figure .image.alignleft{
     margin: 0 20px 20px 0;
 }
@@ -142,35 +171,36 @@ blockquote p {
     background-color: yellow;
 }
 /* line horizontal separation */
-.ck-style1 {
-    height: 6px;
-    background: url(../../main/img/document/hr-1.png) repeat-x 0 0;
-    border: 0;
+.ck-title {
+    border-top: 1px solid #84bd00;
+    display: inline-block;
+    width: 100%;
+    padding-top: 15px;
+    font-weight: normal;
+    font-size: 25px;
 }
 .ck-style2 {
     height: 6px;
     background: url(../../main/img/document/hr-2.png) repeat-x 0 0;
     border: 0;
 }
-.ck-style3 { 
-  border-top: 1px dashed #8c8b8b; 
+.ck-title3 { 
+  border-top: 1px solid #84bd00;
+  display: inline-block;
+  width: 100%;
+  padding-top: 15px;
+  font-weight: bold;
+  font-size: 16px;
 } 
-.ck-style3:after { 
-  content: '\002702'; 
-  display: inline-block; 
-  position: relative; 
-  top: -12px; 
-  left: 40px; 
-  padding: 0 3px; 
-  background: #FFF;
-  color: #8c8b8b; 
-  font-size: 18px; 
-}
+
 .alert {
   padding: 15px;
   margin-bottom: 20px;
   border: 1px solid transparent;
   border-radius: 4px;
+}
+.alert-dismissible {
+    padding-right: 35px;
 }
 .alert h4 {
   margin-top: 0;
@@ -197,10 +227,14 @@ blockquote p {
 .alert-success .alert-link {
   color: #2b542c;
 }
-.alert-info {
-  color: #31708f;
-  background-color: #d9edf7;
-  border-color: #bce8f1;
+.result-body .exercise-message .alert-info {
+  color: #FFFFFF !important;
+  background-color: #84bd00 !important;
+  border-color: #84bd00 !important;
+  border-radius: 0;
+}
+.result-body .exercise-message .alert-info p span{
+    color: #FFFFFF !important;
 }
 .alert-info hr {
   border-top-color: #a6e1ec;
@@ -229,4 +263,59 @@ blockquote p {
 }
 .alert-danger .alert-link {
   color: #843534;
+}
+.img-responsive {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.img-va-baseline {
+    vertical-align: baseline;
+}
+.img-va-top {
+    vertical-align: top;
+}
+.img-va-bottom {
+    vertical-align: bottom;
+}
+.img-va-middle {
+    vertical-align: middle;
+}
+.img-va-super {
+    vertical-align: super;
+}
+.img-va-sub {
+    vertical-align: sub;
+}
+.img-va-text-top {
+    vertical-align: text-top;
+}
+.img-va-text-bottom {
+    vertical-align: text-bottom;
+}
+
+@media (max-width: 767px) {
+    .img-responsive {
+        display: block;
+    }
+}
+
+.result-body .alert.alert-info{
+    background: none;
+    color: #162A83;
+    border:none;
+    border-top: 1px solid #84BD00;
+}
+.result-body .alert.alert-info p{
+    padding-bottom: 10px;
+}
+.result-body .alert.alert-info .btn.btn-info {
+    color: #fff;
+    background-color: #84BD00;
+    border-color: #84BD00;
+}
+.result-body .alert.alert-info .btn.btn-info:hover {
+    color: #fff;
+    background-color: #772583;
+    border-color: #772583;
 }

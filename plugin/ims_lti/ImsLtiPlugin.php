@@ -1,5 +1,9 @@
 <?php
 /* For license terms, see /license.txt */
+
+use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CoreBundle\Entity\Course;
+
 /**
  * Description of MsiLti
  *
@@ -111,7 +115,7 @@ class ImsLtiPlugin extends Plugin
             return false;
         }
 
-        $sql = 'DROP TABLE IF EXISTS ' . self::TABLE_TOOL;
+        $sql = 'DROP TABLE IF EXISTS '.self::TABLE_TOOL;
         Database::query($sql);
 
         return true;
@@ -124,14 +128,14 @@ class ImsLtiPlugin extends Plugin
     {
         $button = Display::toolbarButton(
             $this->get_lang('AddExternalTool'),
-            api_get_path(WEB_PLUGIN_PATH) . 'ims_lti/add.php',
+            api_get_path(WEB_PLUGIN_PATH).'ims_lti/add.php',
             'cog',
             'primary'
         );
 
         $this->course_settings = [
             [
-                'name' => $this->get_lang('ImsLtiDescription') . $button . '<hr>',
+                'name' => $this->get_lang('ImsLtiDescription').$button.'<hr>',
                 'type' => 'html'
             ]
         ];
@@ -139,22 +143,20 @@ class ImsLtiPlugin extends Plugin
 
     /**
      * Add the course tool
-     * @param \Chamilo\CoreBundle\Entity\Course $course
+     * @param Course $course
      * @param ImsLtiTool $tool
      */
-    public function addCourseTool(\Chamilo\CoreBundle\Entity\Course $course, ImsLtiTool $tool)
+    public function addCourseTool(Course $course, ImsLtiTool $tool)
     {
         $em = Database::getManager();
-
         $cToolId = AddCourse::generateToolId($course->getId());
-
-        $cTool = new \Chamilo\CourseBundle\Entity\CTool();
+        $cTool = new CTool();
         $cTool
             ->setId($cToolId)
             ->setCId($course->getId())
             ->setName($tool->getName())
-            ->setLink($this->get_name() . '/start.php?' . http_build_query(['id' => $tool->getId()]))
-            ->setImage($this->get_name() . '.png')
+            ->setLink($this->get_name().'/start.php?'.http_build_query(['id' => $tool->getId()]))
+            ->setImage($this->get_name().'.png')
             ->setVisibility(1)
             ->setAdmin(0)
             ->setAddress('squaregray.gif')
@@ -167,12 +169,15 @@ class ImsLtiPlugin extends Plugin
         $em->flush();
     }
 
+    /**
+     * @return string
+     */
     protected function getConfigExtraText()
     {
         $text = $this->get_lang('ImsLtiDescription');
         $text .= sprintf(
             $this->get_lang('ManageToolButton'),
-            api_get_path(WEB_PLUGIN_PATH) . 'ims_lti/list.php'
+            api_get_path(WEB_PLUGIN_PATH).'ims_lti/list.php'
         );
 
         return $text;

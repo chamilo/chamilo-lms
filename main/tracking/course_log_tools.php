@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  *	@package chamilo.tracking
  */
@@ -54,7 +56,7 @@ $session_id = intval($_REQUEST['id_session']);
 
 if ($export_csv) {
     if (!empty($session_id)) {
-        $_SESSION['id_session'] = $session_id;
+        Session::write('id_session', $session_id);
     }
     ob_start();
 }
@@ -62,8 +64,8 @@ $csv_content = array();
 
 // Breadcrumbs.
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
-    $interbreadcrumb[] = array('url' => '../admin/index.php','name' => get_lang('PlatformAdmin'));
-    $interbreadcrumb[] = array('url' => '../session/session_list.php','name' => get_lang('SessionList'));
+    $interbreadcrumb[] = array('url' => '../admin/index.php', 'name' => get_lang('PlatformAdmin'));
+    $interbreadcrumb[] = array('url' => '../session/session_list.php', 'name' => get_lang('SessionList'));
     $interbreadcrumb[] = array('url' => '../session/resume_session.php?id_session='.api_get_session_id(), 'name' => get_lang('SessionOverview'));
 }
 
@@ -75,7 +77,7 @@ Display::display_header($nameTools, 'Tracking');
 
 // getting all the students of the course
 if (empty($session_id)) {
-	// Registered students in a course outside session.
+    // Registered students in a course outside session.
     $a_students = CourseManager:: get_student_list_from_course_code(
         api_get_course_id(),
         false,
@@ -86,7 +88,7 @@ if (empty($session_id)) {
         api_get_group_id()
     );
 } else {
-	// Registered students in session.
+    // Registered students in session.
     $a_students = CourseManager:: get_student_list_from_course_code(
         api_get_course_id(),
         true,
@@ -131,10 +133,10 @@ echo Display::url(
 
 echo '<span style="float:right; padding-top:0px;">';
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
-    Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv">
-	'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a>';
+	'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
 
 echo '</span>';
 echo '</div>';
@@ -247,7 +249,7 @@ if ($exerciseReporting) {
             $quiz_avg_score = round(($quiz_avg_score / $studentCount), 2).'%';
             $url = api_get_path(
                     WEB_CODE_PATH
-                ) . 'exercise/overview.php?exerciseId='.$quiz['id'].$course_path_params;
+                ).'exercise/overview.php?exerciseId='.$quiz['id'].$course_path_params;
 
             echo '<tr><td>'.Display::url(
                     $quiz['title'],

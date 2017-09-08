@@ -37,10 +37,11 @@ class Export
      * Export tabular data to CSV-file
      * @param array $data
      * @param string $filename
+     * @param bool $writeOnly Whether to only write on disk or also send for download
      *
-     * @return mixed csv file | false if no data to export
+     * @return mixed csv raw data | false if no data to export | string file path if success in $writeOnly mode
      */
-    public static function arrayToCsv($data, $filename = 'export')
+    public static function arrayToCsv($data, $filename = 'export', $writeOnly = false)
     {
         if (empty($data)) {
             return false;
@@ -52,13 +53,20 @@ class Export
         $writer->setStream(fopen($filePath, 'w'));
 
         foreach ($data as $item) {
+            if (empty($item)) {
+                $writer->writeItem([]);
+                continue;
+            }
             $item = array_map('trim', $item);
             $writer->writeItem($item);
         }
         $writer->finish();
 
-        DocumentManager::file_send_for_download($filePath, true, $filename.'.csv');
-        exit;
+        if (!$writeOnly) {
+            DocumentManager::file_send_for_download($filePath, true, $filename.'.csv');
+            exit;
+        }
+        return $filePath;
     }
 
     /**
@@ -94,7 +102,7 @@ class Export
         $file = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xls';
         $handle = fopen($file, 'a+');
         $systemEncoding = api_get_system_encoding();
-        fwrite($handle, '<!DOCTYPE html><html><meta http-equiv="Content-Type" content="text/html" charset="utf-8" /><body><table>');
+        fwrite($handle, '<!DOCTYPE html><html><meta http-equiv="Content-Type" content="text/html" charset="'.$encoding.'" /><body><table>');
         foreach ($data as $id => $row) {
             foreach ($row as $id2 => $row2) {
                 $data[$id][$id2] = api_htmlentities($row2);
@@ -102,7 +110,7 @@ class Export
         }
         foreach ($data as $row) {
             $string = implode("</td><td>", $row);
-            $string = '<tr><td>' . $string . '</td></tr>';
+            $string = '<tr><td>'.$string.'</td></tr>';
             if ($encoding != 'utf-8') {
                 $string = api_convert_encoding($string, $encoding, $systemEncoding);
             }
@@ -149,7 +157,7 @@ class Export
             fwrite($handle, '</'.$wrapper_tagname.'>'."\n");
         }
         fclose($handle);
-        DocumentManager :: file_send_for_download($file, true, $filename.'.xml');
+        DocumentManager::file_send_for_download($file, true, $filename.'.xml');
         exit;
     }
 
@@ -176,12 +184,12 @@ class Export
             fwrite($handle, '<'.$wrapper_tagname.'>');
         }
         $s = self::_export_complex_table_xml_helper($data);
-        fwrite($handle,$s);
+        fwrite($handle, $s);
         if (!is_null($wrapper_tagname)) {
             fwrite($handle, '</'.$wrapper_tagname.'>'."\n");
         }
         fclose($handle);
-        DocumentManager :: file_send_for_download($file, true, $filename.'.xml');
+        DocumentManager::file_send_for_download($file, true, $filename.'.xml');
         return false;
     }
 
@@ -198,10 +206,10 @@ class Export
         }
         $string = '';
         foreach ($data as $row) {
-            $string .= "\n".str_repeat("\t",$level).'<'.$row['name'].'>';
+            $string .= "\n".str_repeat("\t", $level).'<'.$row['name'].'>';
             if (is_array($row['value'])) {
-            	$string .= self::_export_complex_table_xml_helper($row['value'],$level+1)."\n";
-                $string .= str_repeat("\t",$level).'</'.$row['name'].'>';
+            	$string .= self::_export_complex_table_xml_helper($row['value'], $level + 1)."\n";
+                $string .= str_repeat("\t", $level).'</'.$row['name'].'>';
             } else {
                 $string .= $row['value'];
                 $string .= '</'.$row['name'].'>';

@@ -1,5 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Entity\CLp;
+
 /**
  * Responses to AJAX calls
  * @package chamilo.plugin.buycourses
@@ -20,6 +26,8 @@ $commissionsEnable = $plugin->get('commissions_enable');
 $culqiEnable = $plugin->get('culqi_enable');
 
 $action = isset($_GET['a']) ? $_GET['a'] : null;
+
+$em = Database::getManager();
 
 switch ($action) {
     case 'verifyPaypal':
@@ -46,30 +54,38 @@ switch ($action) {
         $sale = $plugin->getSale($saleId);
         $productType = ($sale['product_type'] == 1) ? get_lang('Course') : get_lang('Session');
         $paymentType = ($sale['payment_type'] == 1) ? 'Paypal' : $plugin->get_lang('BankTransfer');
-        $productInfo = ($sale['product_type'] == 1) ? api_get_course_info_by_id($sale['product_id']) : api_get_session_info($sale['product_id']);
+        $productInfo = ($sale['product_type'] == 1)
+            ? api_get_course_info_by_id($sale['product_id'])
+            : api_get_session_info($sale['product_id']);
         $currency = $plugin->getSelectedCurrency();
         if ($sale['product_type'] == 1) {
             $productImage = $productInfo['course_image_large'];
         } else {
-            $productImage = ($productInfo['image']) ? $productInfo['image'] : Template::get_icon_path('session_default.png');
+            $productImage = ($productInfo['image'])
+                ? $productInfo['image']
+                : Template::get_icon_path('session_default.png');
         }
 
         $userInfo = api_get_user_info($sale['user_id']);
 
-        $html = '<h2>' . $sale['product_name'] .'</h2>';
+        $html = '<h2>'.$sale['product_name'].'</h2>';
         $html .= '<div class="row">';
         $html .= '<div class="col-sm-6 col-md-6">';
         $html .= '<ul>';
-        $html .= '<li><b>'. $plugin->get_lang('OrderPrice') . ':</b> '. $sale['price'] . '</li>';
-        $html .= '<li><b>'. $plugin->get_lang('CurrencyType') . ':</b> '. $currency['iso_code'] . '</li>';
-        $html .= '<li><b>'. $plugin->get_lang('ProductType') . ':</b> '. $productType . '</li>';
-        $html .= '<li><b>'. $plugin->get_lang('OrderDate') . ':</b> '. api_format_date($sale['date'], DATE_TIME_FORMAT_LONG_24H) . '</li>';
-        $html .= '<li><b>'. $plugin->get_lang('Buyer') . ':</b> '. $userInfo['complete_name'] . '</li>';
-        $html .= '<li><b>'. $plugin->get_lang('PaymentMethods') . ':</b> '. $paymentType . '</li>';
+        $html .= '<li><b>'.$plugin->get_lang('OrderPrice').':</b> '.$sale['price'].'</li>';
+        $html .= '<li><b>'.$plugin->get_lang('CurrencyType').':</b> '.$currency['iso_code'].'</li>';
+        $html .= '<li><b>'.$plugin->get_lang('ProductType').':</b> '.$productType.'</li>';
+        $html .= '<li><b>'.$plugin->get_lang('OrderDate').':</b> '.
+            api_format_date(
+                $sale['date'],
+                DATE_TIME_FORMAT_LONG_24H
+            ).'</li>';
+        $html .= '<li><b>'.$plugin->get_lang('Buyer').':</b> '.$userInfo['complete_name'].'</li>';
+        $html .= '<li><b>'.$plugin->get_lang('PaymentMethods').':</b> '.$paymentType.'</li>';
         $html .= '</ul>';
         $html .= '</div>';
         $html .= '<div class="col-sm-6 col-md-6">';
-        $html .= '<img class="thumbnail" src="'. $productImage .'" >';
+        $html .= '<img class="thumbnail" src="'.$productImage.'" >';
         $html .= '</div>';
         $html .= '</div>';
 
@@ -112,13 +128,19 @@ switch ($action) {
         }
 
         $html = '<div class="row">'
-        . '<p>'
-            . '<ul>'
-                . '<li>'. get_plugin_lang("PayoutsTotalCompleted", "BuyCoursesPlugin") .' <b>'. $stats['completed_count'] .'</b> - '. get_plugin_lang("TotalAmount", "BuyCoursesPlugin") .' <b>'. $stats['completed_total_amount'] .' '. $currency['iso_code'] . '</b></li>'
-                . '<li>'. get_plugin_lang("PayoutsTotalPending", "BuyCoursesPlugin") .' <b>'. $stats['pending_count'] .'</b> - '. get_plugin_lang("TotalAmount", "BuyCoursesPlugin") .' <b>'. $stats['pending_total_amount'] .' '. $currency['iso_code'] . '</b></li>'
-                . '<li>'. get_plugin_lang("PayoutsTotalCanceled", "BuyCoursesPlugin") .' <b>'. $stats['canceled_count'] .'</b> - '. get_plugin_lang("TotalAmount", "BuyCoursesPlugin") .' <b>'. $stats['canceled_total_amount'] .' '. $currency['iso_code'] . '</b></li>'
-            . '</ul>'
-        . '</p>';
+            .'<p>'
+            .'<ul>'
+            .'<li>'.get_plugin_lang("PayoutsTotalCompleted", "BuyCoursesPlugin").' <b>'.$stats['completed_count']
+            .'</b> - '.get_plugin_lang("TotalAmount", "BuyCoursesPlugin").' <b>'.$stats['completed_total_amount'].' '
+            .$currency['iso_code'].'</b></li>'
+            .'<li>'.get_plugin_lang("PayoutsTotalPending", "BuyCoursesPlugin").' <b>'.$stats['pending_count'].'</b> - '
+            .get_plugin_lang("TotalAmount", "BuyCoursesPlugin").' <b>'.$stats['pending_total_amount'].' '
+            .$currency['iso_code'].'</b></li>'
+            .'<li>'.get_plugin_lang("PayoutsTotalCanceled", "BuyCoursesPlugin").' <b>'.$stats['canceled_count']
+            .'</b> - '.get_plugin_lang("TotalAmount", "BuyCoursesPlugin").' <b>'.$stats['canceled_total_amount'].' '
+            .$currency['iso_code'].'</b></li>'
+            .'</ul>'
+            .'</p>';
         $html .= '</div>';
         echo $html;
         break;
@@ -154,15 +176,15 @@ switch ($action) {
 
         $currentCurrency = $plugin->getSelectedCurrency();
         $isoCode = $currentCurrency['iso_code'];
-        $html .= '<p>'. get_plugin_lang("VerifyTotalAmountToProceedPayout", "BuyCoursesPlugin") .'</p>';
+        $html .= '<p>'.get_plugin_lang("VerifyTotalAmountToProceedPayout", "BuyCoursesPlugin").'</p>';
         $html .= ''
-        . '<p>'
-            . '<ul>'
-                . '<li>'. get_plugin_lang("TotalAcounts", "BuyCoursesPlugin") .' <b>'. $totalAccounts .'</b></li>'
-                . '<li>'. get_plugin_lang("TotalPayout", "BuyCoursesPlugin") .' <b>'. $isoCode .' '. $totalPayout .'</b></li>'
-            . '</ul>'
-        . '</p>';
-        $html .= '<p>'. get_plugin_lang("CautionThisProcessCantBeCanceled", "BuyCoursesPlugin") .'</p>';
+            .'<p>'
+            .'<ul>'
+            .'<li>'.get_plugin_lang("TotalAcounts", "BuyCoursesPlugin").' <b>'.$totalAccounts.'</b></li>'
+            .'<li>'.get_plugin_lang("TotalPayout", "BuyCoursesPlugin").' <b>'.$isoCode.' '.$totalPayout.'</b></li>'
+            .'</ul>'
+            .'</p>';
+        $html .= '<p>'.get_plugin_lang("CautionThisProcessCantBeCanceled", "BuyCoursesPlugin").'</p>';
         $html .= '<br /><br />';
         $html .= '<div id="spinner" class="text-center"></div>';
 
@@ -189,12 +211,19 @@ switch ($action) {
         $payouts = isset($_POST['payouts']) ? $_POST['payouts'] : '';
 
         if (!$payouts) {
-            echo Display::return_message(get_plugin_lang("SelectOptionToProceed", "BuyCoursesPlugin"), 'error', false);
+            echo Display::return_message(
+                get_plugin_lang("SelectOptionToProceed", "BuyCoursesPlugin"),
+                'error',
+                false
+            );
             break;
         }
 
         foreach ($payouts as $index => $id) {
-            $allPayouts[] = $plugin->getPayouts(BuyCoursesPlugin::PAYOUT_STATUS_PENDING, $id);
+            $allPayouts[] = $plugin->getPayouts(
+                BuyCoursesPlugin::PAYOUT_STATUS_PENDING,
+                $id
+            );
         }
 
         $currentCurrency = $plugin->getSelectedCurrency();
@@ -202,12 +231,24 @@ switch ($action) {
         $result = MassPayment($allPayouts, $isoCode);
         if ($result['ACK'] === 'Success') {
             foreach ($allPayouts as $payout) {
-                $plugin->setStatusPayouts($payout['id'], BuyCoursesPlugin::PAYOUT_STATUS_COMPLETED);
+                $plugin->setStatusPayouts(
+                    $payout['id'],
+                    BuyCoursesPlugin::PAYOUT_STATUS_COMPLETED
+                );
             }
 
-            echo Display::return_message(get_plugin_lang("PayoutSuccess", "BuyCoursesPlugin"), 'success', false);
+            echo Display::return_message(
+                get_plugin_lang("PayoutSuccess", "BuyCoursesPlugin"),
+                'success',
+                false
+            );
         } else {
-            echo Display::return_message('<b>'.$result['L_SEVERITYCODE0'].' '.$result['L_ERRORCODE0'].'</b> - '.$result['L_SHORTMESSAGE0'].'<br /><ul><li>'. $result['L_LONGMESSAGE0'].'</li></ul>', 'error', false);
+            echo Display::return_message(
+                '<b>'.$result['L_SEVERITYCODE0'].' '.$result['L_ERRORCODE0'].'</b> - '.$result['L_SHORTMESSAGE0']
+                .'<br /><ul><li>'.$result['L_LONGMESSAGE0'].'</li></ul>',
+                'error',
+                false
+            );
         }
 
         break;
@@ -219,7 +260,10 @@ switch ($action) {
 
         // $payoutId only gets used in setStatusPayout(), where it is filtered
         $payoutId = isset($_POST['id']) ? $_POST['id'] : '';
-        $plugin->setStatusPayouts($payoutId, BuyCoursesPlugin::PAYOUT_STATUS_CANCELED);
+        $plugin->setStatusPayouts(
+            $payoutId,
+            BuyCoursesPlugin::PAYOUT_STATUS_CANCELED
+        );
 
         echo '';
 
@@ -253,7 +297,9 @@ switch ($action) {
         $culqi = new Culqi\Culqi(array('api_key' => $SECRET_API_KEY));
 
         $environment = $culqiParams['integration'];
-        $environment = $environment ? BuyCoursesPlugin::CULQI_INTEGRATION_TYPE : BuyCoursesPlugin::CULQI_PRODUCTION_TYPE;
+        $environment = $environment
+            ? BuyCoursesPlugin::CULQI_INTEGRATION_TYPE
+            : BuyCoursesPlugin::CULQI_PRODUCTION_TYPE;
 
         $culqi->setEnv($environment);
 
@@ -343,7 +389,9 @@ switch ($action) {
         $culqi = new Culqi\Culqi(array('api_key' => $SECRET_API_KEY));
 
         $environment = $culqiParams['integration'];
-        $environment = $environment ? BuyCoursesPlugin::CULQI_INTEGRATION_TYPE : BuyCoursesPlugin::CULQI_PRODUCTION_TYPE;
+        $environment = $environment
+            ? BuyCoursesPlugin::CULQI_INTEGRATION_TYPE
+            : BuyCoursesPlugin::CULQI_PRODUCTION_TYPE;
 
         $culqi->setEnv($environment);
         $user = api_get_user_info();
@@ -370,7 +418,10 @@ switch ($action) {
                 if ($saleIsCompleted) {
                     Display::addFlash(
                         Display::return_message(
-                            sprintf($plugin->get_lang('SubscriptionToCourseXSuccessful'), $serviceSale['service']['name']),
+                            sprintf(
+                                $plugin->get_lang('SubscriptionToCourseXSuccessful'),
+                                $serviceSale['service']['name']
+                            ),
                             'success'
                         )
                     );
@@ -411,8 +462,8 @@ switch ($action) {
             break;
         }
 
-        $ajaxCallFile = $plugin->getPath('SRC') . 'buycourses.ajax.php';
-        $serviceImg = $plugin->getPath('SERVICE_IMAGES') . $serviceSale['service']['image'];
+        $ajaxCallFile = $plugin->getPath('SRC').'buycourses.ajax.php';
+        $serviceImg = $plugin->getPath('SERVICE_IMAGES').$serviceSale['service']['image'];
         $html = "<img class='img-responsive text-center' src='$serviceImg'>";
         $html .= "<br />";
         $html .= "<legend>{$plugin->get_lang('ServiceInformation')}</legend>";
@@ -425,16 +476,34 @@ switch ($action) {
         $nodeTitle = "";
         if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_USER) {
             $nodeType = get_lang('User');
-        } else if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_COURSE) {
-            $nodeType = get_lang('Course');
-        } else if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_SESSION) {
-            $nodeType = get_lang('Session');
-        } else if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM) {
-            $nodeType = get_lang('TemplateTitleCertificate');
+            /** @var User $user */
+            $user = UserManager::getManager()->find($serviceSale['node_id']);
+            $nodeName = $user ? $user->getCompleteNameWithUsername() : null;
+        } else {
+            if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_COURSE) {
+                $nodeType = get_lang('Course');
+                /** @var Course $course */
+                $course = $em->find('ChamiloCoreBundle:Course', $serviceSale['node_id']);
+                $nodeName = $course ? $course->getTitle() : null;
+            } else {
+                if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_SESSION) {
+                    $nodeType = get_lang('Session');
+                    /** @var Session $session */
+                    $session = $em->find('ChamiloCoreBundle:Session', $serviceSale['node_id']);
+                    $nodeName = $session ? $session->getName() : null;
+                } else {
+                    if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM) {
+                        $nodeType = get_lang('TemplateTitleCertificate');
+                        /** @var CLp $lp */
+                        $lp = $em->find('ChamiloCourseBundle:CLp', $serviceSale['node_id']);
+                        $nodeName = $lp ? $lp->getName() : null;
+                    }
+                }
+            }
         }
         $html .= "<li><b>{$plugin->get_lang('AppliesTo')}:</b> $nodeType</li> ";
         $html .= "<li><b>{$plugin->get_lang('Price')}:</b> {$serviceSale['service']['price']} {$serviceSale['currency']}</li> ";
-        $duration = $serviceSale['service']['duration_days'] . ' ' . $plugin->get_lang('Days');
+        $duration = $serviceSale['service']['duration_days'].' '.$plugin->get_lang('Days');
         $html .= "</ul>";
         $html .= "<legend>{$plugin->get_lang('SaleInfo')}</legend>";
         $html .= "<ul>";
@@ -446,10 +515,14 @@ switch ($action) {
         $paymentType = $serviceSale['payment_type'];
         if ($paymentType == BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL) {
             $paymentType = 'PayPal';
-        } else if ($paymentType == BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER) {
-            $paymentType = $plugin->get_lang('BankTransfer');
-        } else if ($paymentType == BuyCoursesPlugin::PAYMENT_TYPE_CULQI) {
-            $paymentType = 'Culqi';
+        } else {
+            if ($paymentType == BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER) {
+                $paymentType = $plugin->get_lang('BankTransfer');
+            } else {
+                if ($paymentType == BuyCoursesPlugin::PAYMENT_TYPE_CULQI) {
+                    $paymentType = 'Culqi';
+                }
+            }
         }
         $html .= "<li><b>{$plugin->get_lang('PaymentMethod')}:</b> $paymentType</li> ";
         $html .= "<li><b>$nodeType:</b> $nodeName</li> ";
@@ -457,14 +530,18 @@ switch ($action) {
         $buttons = "";
         if ($status == BuyCoursesPlugin::SERVICE_STATUS_COMPLETED) {
             $status = $plugin->get_lang('Active');
-        } else if ($status == BuyCoursesPlugin::SERVICE_STATUS_PENDING) {
-            $status = $plugin->get_lang('Pending');
-            if ($isAdmin) {
-                $buttons .= "<a id='{$serviceSale['id']}' tag='service_sale_confirm' class='btn btn-success pull-left'>{$plugin->get_lang('ConfirmOrder')}</a>";
-                $buttons .= "<a id='{$serviceSale['id']}' tag='service_sale_cancel' class='btn btn-danger pull-right'>{$plugin->get_lang('CancelOrder')}</a>";
+        } else {
+            if ($status == BuyCoursesPlugin::SERVICE_STATUS_PENDING) {
+                $status = $plugin->get_lang('Pending');
+                if ($isAdmin) {
+                    $buttons .= "<a id='{$serviceSale['id']}' tag='service_sale_confirm' class='btn btn-success pull-left'>{$plugin->get_lang('ConfirmOrder')}</a>";
+                    $buttons .= "<a id='{$serviceSale['id']}' tag='service_sale_cancel' class='btn btn-danger pull-right'>{$plugin->get_lang('CancelOrder')}</a>";
+                }
+            } else {
+                if ($status == BuyCoursesPlugin::SERVICE_STATUS_CANCELLED) {
+                    $status = $plugin->get_lang('Cancelled');
+                }
             }
-        } else if ($status == BuyCoursesPlugin::SERVICE_STATUS_CANCELLED) {
-            $status = $plugin->get_lang('Cancelled');
         }
         $html .= "<li><b>{$plugin->get_lang('Status')}:</b> $status</li> ";
         $html .= "</ul>";
@@ -513,10 +590,10 @@ switch ($action) {
                 'success'
             );
         } else {
-            $html .= Display::return_message('Error - ' . $plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
+            $html .= Display::return_message('Error - '.$plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
         }
 
-        $html .= "<a id='finish-button' class='btn btn-primary'>" . $plugin->get_lang('ClickHereToFinish') . "</a>";
+        $html .= "<a id='finish-button' class='btn btn-primary'>".$plugin->get_lang('ClickHereToFinish')."</a>";
         $html .= "</div>";
         $html .= "<script>";
         $html .= "$('#finish-button').click(function() {";
@@ -539,10 +616,10 @@ switch ($action) {
                 'warning'
             );
         } else {
-            $html .= Display::return_message('Error - ' . $plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
+            $html .= Display::return_message('Error - '.$plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
         }
 
-        $html .= "<a id='finish-button' class='btn btn-primary'>" . $plugin->get_lang('ClickHereToFinish') . "</a>";
+        $html .= "<a id='finish-button' class='btn btn-primary'>".$plugin->get_lang('ClickHereToFinish')."</a>";
         $html .= "</div>";
         $html .= "<script>";
         $html .= "$('#finish-button').click(function() {";

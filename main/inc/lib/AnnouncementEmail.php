@@ -119,7 +119,6 @@ class AnnouncementEmail
 
         $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tool = TOOL_ANNOUNCEMENT;
-
         $id = $this->announcement('id');
         $course_id = $this->course('real_id');
         $sessionCondition = api_get_session_condition($this->session_id);
@@ -173,11 +172,11 @@ class AnnouncementEmail
         }
 
         if (!empty($groups)) {
-            $group_users = GroupManager::get_groups_users($groups);
-            $group_users = UserManager::get_user_list_by_ids($group_users, true);
+            $groupUsers = GroupManager::get_groups_users($groups);
+            $groupUsers = UserManager::get_user_list_by_ids($groupUsers, true);
 
-            if (!empty($group_users)) {
-                $users = array_merge($users, $group_users);
+            if (!empty($groupUsers)) {
+                $users = array_merge($users, $groupUsers);
             }
         }
 
@@ -186,7 +185,7 @@ class AnnouncementEmail
         }
 
         // Clean users just in case
-        $newListUsers = array();
+        $newListUsers = [];
         if (!empty($users)) {
             foreach ($users as $user) {
                 $newListUsers[$user['user_id']] = ['user_id' => $user['user_id']];
@@ -203,7 +202,7 @@ class AnnouncementEmail
      *
      * @return array
      */
-    public function sender($key = '',  $userId = '')
+    public function sender($key = '', $userId = '')
     {
         $_user = api_get_user_info($userId);
 

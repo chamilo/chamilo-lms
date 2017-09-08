@@ -43,11 +43,11 @@ class MoodleImport
             }
 
             $folder = api_get_unique_id();
-            $destinationDir = api_get_path(SYS_ARCHIVE_PATH) . $folder;
+            $destinationDir = api_get_path(SYS_ARCHIVE_PATH).$folder;
             $coursePath = api_get_course_path();
             $sessionId = api_get_session_id();
             $groupId = api_get_group_id();
-            $documentPath = api_get_path(SYS_COURSE_PATH) . $coursePath . '/document';
+            $documentPath = api_get_path(SYS_COURSE_PATH).$coursePath.'/document';
             $courseInfo = api_get_course_info();
 
             mkdir($destinationDir, api_get_permissions_for_new_directories(), true);
@@ -140,7 +140,11 @@ class MoodleImport
                                 // Create a Forum category based on Moodle forum type.
                                 $catForumValues['forum_category_title'] = $moduleValues['type'];
                                 $catForumValues['forum_category_comment'] = '';
-                                $catId = store_forumcategory($catForumValues, $courseInfo, false);
+                                $catId = store_forumcategory(
+                                    $catForumValues,
+                                    $courseInfo,
+                                    false
+                                );
                                 $forumValues = [];
                                 $forumValues['forum_title'] = $moduleValues['name'];
                                 $forumValues['forum_image'] = '';
@@ -252,7 +256,10 @@ class MoodleImport
                                 $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
                                 $filesXml = @file_get_contents($destinationDir.'/files.xml');
                                 $moduleValues = $this->readResourceModule($moduleXml);
-                                $mainFileModuleValues = $this->readMainFilesXml($filesXml, $moduleValues['contextid']);
+                                $mainFileModuleValues = $this->readMainFilesXml(
+                                    $filesXml,
+                                    $moduleValues['contextid']
+                                );
                                 $fileInfo = array_merge($moduleValues, $mainFileModuleValues, $currentItem);
                                 $currentResourceFilePath = $destinationDir.'/files/';
                                 $dirs = new RecursiveDirectoryIterator($currentResourceFilePath);
@@ -646,8 +653,13 @@ class MoodleImport
      * @param array $importedFiles
      * @return integer db response
      */
-    public function processAnswers($questionList, $questionType, $questionInstance, $currentQuestion, $importedFiles)
-    {
+    public function processAnswers(
+        $questionList,
+        $questionType,
+        $questionInstance,
+        $currentQuestion,
+        $importedFiles
+    ) {
         switch ($questionType) {
             case 'multichoice':
                 $objAnswer = new Answer($questionInstance->id);
@@ -804,8 +816,13 @@ class MoodleImport
      * @param array $importedFiles
      * @return integer db response
      */
-    public function processUniqueAnswer($objAnswer, $answerValues, $position, &$questionWeighting, $importedFiles)
-    {
+    public function processUniqueAnswer(
+        $objAnswer,
+        $answerValues,
+        $position,
+        &$questionWeighting,
+        $importedFiles
+    ) {
         $correct = intval($answerValues['fraction']) ? intval($answerValues['fraction']) : 0;
         $answer = $answerValues['answertext'];
         $comment = $answerValues['feedback'];
@@ -814,7 +831,7 @@ class MoodleImport
         if ($weighting > 0) {
             $questionWeighting += $weighting;
         }
-        $goodAnswer =  $correct ? true : false;
+        $goodAnswer = $correct ? true : false;
 
         $this->fixPathInText($importedFiles, $answer);
 
@@ -841,8 +858,13 @@ class MoodleImport
      *
      * @return integer db response
      */
-    public function processTrueFalse($objAnswer, $answerValues, $position, &$questionWeighting, $importedFiles)
-    {
+    public function processTrueFalse(
+        $objAnswer,
+        $answerValues,
+        $position,
+        &$questionWeighting,
+        $importedFiles
+    ) {
         $correct = intval($answerValues['fraction']) ? intval($answerValues['fraction']) : 0;
         $answer = $answerValues['answertext'];
         $comment = $answerValues['feedback'];
@@ -851,7 +873,7 @@ class MoodleImport
         if ($weighting > 0) {
             $questionWeighting += $weighting;
         }
-        $goodAnswer =  $correct ? true : false;
+        $goodAnswer = $correct ? true : false;
 
         $this->fixPathInText($importedFiles, $answer);
 
@@ -879,8 +901,14 @@ class MoodleImport
      * @return integer db response
      *
      */
-    public function processFillBlanks($objAnswer, $questionType, $answerValues, &$placeholder, $position, $importedFiles)
-    {
+    public function processFillBlanks(
+        $objAnswer,
+        $questionType,
+        $answerValues,
+        &$placeholder,
+        $position,
+        $importedFiles
+    ) {
         $coursePath = api_get_course_path();
 
         switch ($questionType) {
@@ -952,7 +980,7 @@ class MoodleImport
                         $answer['questiontext']
                     );
 
-                    $placeholder .= '<p> ' . strip_tags($answer['questiontext']).' '.$currentAnswers . ' </p>';
+                    $placeholder .= '<p> '.strip_tags($answer['questiontext']).' '.$currentAnswers.' </p>';
                 }
 
                 return $optionsValues;

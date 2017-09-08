@@ -1585,7 +1585,7 @@ class PHPMailer {
     if (strlen($str)/3 < $x) {
       $encoding = 'B';
       // Modified by Ivan Tcholakov, 24-JAN-2010.
-      //if (function_exists('mb_strlen') && $this->HasMultiBytes($str)) {
+      //if (function_exists('mb_strlen') && $this->HasMultiBytes($str))
       if ($this->HasMultiBytes($str)) {
       //
         // Use a custom function which correctly encodes and wraps long
@@ -1597,10 +1597,17 @@ class PHPMailer {
         $encoded = trim(chunk_split($encoded, $maxlen, "\n"));
       }
     } else {
-      $encoding = 'Q';
-      $encoded = $this->EncodeQ($str, $position);
-      $encoded = $this->WrapText($encoded, $maxlen, true);
-      $encoded = str_replace('='.$this->LE, "\n", trim($encoded));
+      if ($this->HasMultiBytes($str)) {
+          // Although the string might be long, processing UTF-8 long strings with the Q encoding
+          // generates issues which can be avoided encoding in Base64
+          $encoding = 'B';
+          $encoded = $this->Base64EncodeWrapMB($str);
+      } else {
+          $encoding = 'Q';
+          $encoded = $this->EncodeQ($str, $position);
+          $encoded = $this->WrapText($encoded, $maxlen, true);
+          $encoded = str_replace('=' . $this->LE, "\n", trim($encoded));
+      }
     }
 
     $encoded = preg_replace('/^(.*)$/m', " =?".$this->CharSet."?$encoding?\\1?=", $encoded);

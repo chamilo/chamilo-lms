@@ -322,7 +322,7 @@ $AllowMemberLeaveGroup = "Erlauben Mitgliedern die Gruppe zu verlassen";
 $WorkFileNotUploadedDirXDoesNotExist = "Aufgabe konnte nicht hochgeladen werden, da Ordner %s nicht existiert";
 $DeleteUsersNotInList = "Teilnehmer abmelden, die nicht in der importierten Liste stehen";
 $IfSessionExistsUpdate = "Wenn eine Session existiert, diese aktualisieren";
-$CreatedByXYOnZ = "Erstelle um <a href='%s'>%s</a> am %s";
+$CreatedByXYOnZ = "Erstellt von <a href='%s'>%s</a> am %s";
 $LoginWithExternalAccount = "Login ohne ein institutionelles Konto";
 $ImportAikenQuizExplanationExample = "Dies ist der Text für Frage 1";
 $ImportAikenQuizExplanation = "Das Aiken-Format umfasst eine einfache Text (.txt)-Datei mit mehreren Frageblöcken, jeweils durch eine Leerzeile getrennt. Die erste Zeile ist die Frage, die Antwortzeilen sind durch einen Buchstaben und einen Punkt vorangestellt, und die richtige Antwort folgt mit dem Präfix ANTWORT: Siehe Beispiel unten.";
@@ -581,7 +581,6 @@ $Forbidden = "Nicht erlaubt";
 $CourseAccessConfigTip = "In der Grundeinstellung ist ein Kurs auch anderen zugänglich. Wenn Sie den Zugriff einschränken möchten, öffnen Sie die Selbst-Registrierung während einer Registrierungsfrist (z.B. eine Woche) und bitten Sie die Benutzer sich einzuschreiben. Im Anschluss sperren Sie die  Selbst-Registrierung und überprüfen die Kursteilnehmerliste auf 'Trittbrettfahrer'.";
 $OpenToTheWorld = "Offen - Zugang erlaubt für alle";
 $OpenToThePlatform = "Offen - Zugang für alle Portal-Benutzer";
-$OpenToThePlatform = "Offen - Zugang möglich nur für die im Kurs registrierten Teilnehmer";
 $TipLang = "Diese Sprache wird für alle Besucher Ihrer Webseite gültig sein.";
 $Vid = "Video";
 $Work = "Unterlagen für Kurseilnehmer";
@@ -2047,7 +2046,7 @@ $UsersWereEdited = "Benutzer-Zugänge wurden aktualisiert";
 $AtLeastOneUserAndOneURL = "Mindestens ein Benutzer und eine URL müssen ausgewählt sein";
 $UsersBelongURL = "Die Benutzer-Zugänge wurden der URL zugefügt";
 $LPTestScore = "Kurs-Bewertung";
-$ScormAndLPTestTotalAverage = "Durchschnittliches Ergebnisse der Tests in den Lernpfaden";
+$ScormAndLPTestTotalAverage = "Durchschnittliches Ergebnis der Tests in den Lernpfaden";
 $ImportUsersToACourse = "Importiere Benutzer-Liste";
 $ImportCourses = "Importiere Kurs-Liste";
 $ManageUsers = "Benutzer verwalten";
@@ -3647,7 +3646,7 @@ $SurveyAdded = "Umfrage hinzugefügt";
 $WikiAdded = "Wiki hinzugefügt";
 $ReadOnly = "Nur Lesen";
 $Unacceptable = "Unakzeptabel";
-$DisplayTrainingList = "Kurliste anzeigen";
+$DisplayTrainingList = "Kursliste anzeigen";
 $HistoryTrainingSession = "Kurs-Verlauf";
 $Until = "Bis";
 $FirstPage = "Erste Seite";
@@ -3965,12 +3964,11 @@ $RequestSentToPlatformAdmin = "Der Wunsch kann für diese Art von Benutzerkonto 
 $ProgressIntroduction = "Beginnen Sie unten mit der Auswahl eines Session-Kurs<br/>Sie können dann Ihren Fortschritt für jeden Kurs sehen, den Sie belegt haben.";
 $NeverExpires = "Läuft nie ab";
 $ActiveAccount = "Aktiver Zugang";
-$YourAccountHasToBeApproved = "Der Zugang muss genehmigt werden";
+$YourAccountHasToBeApproved = "Der Zugang wird erst nach Genehmigung freigeschalten";
 $ApprovalForNewAccount = "Genehmigung für neuen Zugang";
 $ManageUser = "Benutzer verwalten";
 $SubscribeUserToCourseAsTeacher = "Als Kursleiter in diesen Kurs einschreiben";
 $PasswordEncryptedForSecurity = "Ihr Passwort wurde zur Sicherheit verschlüsselt. Daher wird nach dem Klick auf den Link eine E-Mail mit Ihrem Passwort an Ihre E-Mail Adresse verschickt.";
-$SystemUnableToSendEmailContact = "System konnte E-Mail Kontakt nicht versenden";
 $OpenIDCouldNotBeFoundPleaseRegister = "Diese OpenID konnte in unserer Datenbank nicht gefunden werden. Registrieren Sie sich bitte für einen neuen Zugang. Sollten Sie bereits einen Zugang bei uns haben, bearbeiten Sie bitte Ihr Profil in Ihrem Zugang, und fügen Sie diese OpenID hinzu.";
 $UsernameMaxXCharacters = "Der Benutzername darf höchstens %s Zeichen lang sein";
 $PictureUploaded = "Ihr Bild wurde hochgeladen";
@@ -5351,7 +5349,7 @@ $MyFriends = "Meine Freunde";
 $CreateAgroup = "Eine Gruppe anlegen";
 $UsersGroups = "Benutzer, Gruppen";
 $SorryNoResults = "Sorry, keine Ergebnisse";
-$GroupPermissions = "Gruppen Rechte";
+$GroupPermissions = "Gruppenrechte";
 $Closed = "Geschlossen";
 $AddGroup = "Gruppe hinzufügen";
 $Privacy = "Privatsphäre";
@@ -5936,7 +5934,7 @@ $EditExtraFieldOptions = "Zusatzfeld-Optionen bearbeiten";
 $ExerciseDescriptionLabel = "Beschreibung";
 $UserInactivedSinceX = "Benutzer inaktiv seit %s";
 $ContactInformationDescription = "Hallo,<br />\n<br />\nSie sind dabei eine der besten Open Source E-Learning Plattformen auf dem Markt  zu starten. Wie viele andere Open Source Projekte, basiert dieses Projekt auf einer großen Community von Studenten, Dozenten, Lehrern, Entwicklern und Autoren die alle bemüht sind, das Projekt bekannt zu machen.<br /><br />\nWenn wir etwas mehr von Ihnen wissen, denn Sie sind einer unsere wichtigsten User, der Sie dieses E-Learning-System verwalten, können wir andere wissen lassen, dass Sie unsere Software benutzen und Sie darüber informieren, wenn wir Events organisieren, die vielleicht für Sie wichtig sein könnten.<br /><br />\n\nMit dem Ausfüllen dieses Formulars akzeptieren Sie, das die Chamilo Association oder ihre Mitgleider Ihnen Informationen per Email zu senden darf, soweit es sich um Events der Chamilo Community oder Updates der Chamilo-Software handelt. Dies hilft der Community als Organsation zu wachsen, die ständig bemüht ist Ihre zeit und Ihre Privatsphäre zu achten und zu respektieren.<br />\n<br />\nBitte beachten Sie, das <b>nicht verpflichtet</b> sind, dieses Formular auszufüllen.Wenn Sie anonym bleiben wollen, haben Sie keine Möglichkeit die Vorteile eines registrierten Portal-Administrators zu nutzen, aber wir respektieren Ihre Entscheidung. Lassen Sie dann einfach dieses Formular leer und klicken Sie auf\"Weiter\".<br /><br />";
-$CompanyActivity = "Tätigkeitsbereich Hrer Firma / Organisation";
+$CompanyActivity = "Tätigkeitsbereich Ihrer Firma / Organisation";
 $PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses = "Bitte um etwas Geduld für die Registrierung zu den Kursen. Bei Verdacht auf Vergessen bitte den Plattform-Administrator kontaktieren, welcher üblicherweise im Fußbereich angezeigt wird.";
 $ManageSessionFields = "Session-Felder verwalten";
 $DateUnLock = "Termin freigeben";
@@ -6110,7 +6108,7 @@ $RemoveSearchResults = "Suchergebnisse löschen";
 $ExerciseCantBeEditedAfterAddingToTheLP = "Tests können nicht bearbeitet werden, während Sie in einen Lernpfad eingefügt sind.";
 $CourseTool = "Kurs Werkzeug";
 $LPExerciseResultsBySession = "Ergebnisse der Tests aus den Lernpfaden pro Sitzung";
-$LPQuestionListResults = "Ergbenisliste Lernpfad-Tests";
+$LPQuestionListResults = "Ergebnisliste Lernpfad-Tests";
 $PleaseSelectACourse = "Bitte einen Kurs wählen";
 $StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts = "Die Durchschnittsbewertung errechnet sich aus allen Lernpfaden und allen Versuchen";
 $AverageScore = "Durchschnitt";
@@ -6287,7 +6285,7 @@ $ItemCopied = "Inhalt kopiert";
 $MyStatistics = "Meine Auswertungen";
 $PublishedExercises = "Verfügbare Tests";
 $DoneExercises = "Abslovierte Prüfungen";
-$AverageExerciseResult = "Durchschnittliches Prüfunsgergebnis";
+$AverageExerciseResult = "Durchschnittliches Prüfungsergebnis";
 $LPProgress = "Lernpfad-Fortschritt";
 $Ranking = "Reihenfolge";
 $BestResultInCourse = "Bestes Ergebnis im Kurs";
@@ -6622,10 +6620,10 @@ $CertificateOnlineLink = "Link zum Zertifikat";
 $NewExercises = "Neue Tests";
 $MyAverage = "Mein Durchschnitt";
 $AllAttempts = "Alle Versuche";
-$QuestionsToReview = "Fragen die überprüft werden müssen";
+$QuestionsToReview = "Zu wiederholende Fragen";
 $QuestionWithNoAnswer = "Fragen ohne Antworten";
 $ValidateAnswers = "Antworten bestätigen";
-$ReviewQuestions = "Ausgewählte Fragen bewerten";
+$ReviewQuestions = "Ausgewählte Fragen wiederholen";
 $YouTriedToResolveThisExerciseEarlier = "Sie haben bereits früher versucht den Test zu lösen";
 $NoCookies = "Der Browser unterstützt keine Cookies. Chamilo benötigt \"Cookies\", um gewisse Dinge (wie z.B. Lernfortschritt oder Login-Status) temporär zu speichern. Dies bedeutet: ohne Cookies kein Login. Bitte im Browser daher Cookies erlauben, und danach diese Seite neu laden.";
 $NoJavascript = "Der Browser unterstützt kein JavaScript. Chamilo benötigt JavaScript, um ein möglichst angenehmes Lernerlebnis zu gewährleisten. Das bedeutet: viele Features werden funktionieren, aber der ein oder andere Effekt in Sachen Benutzerfreundlichkeit könnte ausbleiben. Daher ist es ratsam, JavaScript im Browser zu aktivieren, und diese Seite neu zu laden.";
@@ -6795,7 +6793,7 @@ $TextWhenFinished = "Text, der am Ende des Tests erscheint";
 $Validated = "Bestätigt";
 $NotValidated = "Nicht bestätigt";
 $Revised = "Korrigiert";
-$SelectAQuestionToReview = "Wählen Sie eine Frage zur Korrektur";
+$SelectAQuestionToReview = "Wählen Sie eine Frage zur Wiederholung";
 $ReviewQuestionLater = "Korrigiere Frage später";
 $NumberStudentWhoSelectedIt = "Anzahl Teilnehmer die ausgewählt haben";
 $QuestionsAlreadyAnswered = "Betreits beantwortete Fragen";
@@ -6979,7 +6977,7 @@ CAS manage user authentication, LDAP activation isn't required.
 </div>
 <br />
 <h4>I. LDAP configuration</h4>
-<h5>Edit file main/inc/conf/auth.conf.php </h5>
+<h5>Edit file app/config/auth.conf.php </h5>
 -&gt; Edit values of array <code>&#36;extldap_config</code>
 <br />
 <br />
@@ -7005,7 +7003,7 @@ Die Array-Struktur wird in Datei main/auth/external_login/ldap.conf.php erkl&aum
 <br />
 <br />
 <h4>II. LDAP-Authentifizierung aktivieren</h4>
-<h5>In der Datei main/inc/conf/configuration.php</h5>-&gt; folgende Zeilen auskommentieren
+<h5>In der Datei app/config/configuration.php</h5>-&gt; folgende Zeilen auskommentieren
 <br />
 &#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration['root_sys'].&quot;main/auth/external_login/login.ldap.php&quot;;
 <br />
@@ -7047,7 +7045,7 @@ $FacebookMainActivateComment = "Zuerst muß eine Facebook Anwendung erstellt wer
 <br /><br />
 Danach die Datei
 <br /><br />
-<strong>main/inc/conf/auth.conf.php</strong>
+<strong>app/config/auth.conf.php</strong>
 <br /><br />
 öffnen und 'appId' und 'secret' für \$facebook_config aus der FB-Anwendung einfügen.
 Anschließend zu den <a href=\"/settings.php?category=Facebook\">Plugins</a> wechseln und 'Facebook Login' Button für die Plattform aktivieren.";
@@ -7632,7 +7630,7 @@ $AssociateForumToLPItem = "Diesem Lernpfad-Element ein Forum zuordnen";
 $ForumDissociated = "Forum getrennt";
 $ClickOrDropOneFileHere = "Klicken oder eine Datei hier ablegen";
 $ModuloPercentage = "Modul:			%";
-$LastXDays = "Letzte % Tage";
+$LastXDays = "Letzte %s Tage";
 $ExportBadges = "Abzeichen exportieren";
 $LanguagesDisableAllExceptDefault = "Alle Sprachen mit Ausnahme der Plattformstandardsprache deaktivieren";
 $ThereAreUsersUsingThisLanguagesDisableItManually = "Es gibt Benutzer, die derzeit diese Sprache verwenden. Bitte manuell deaktivieren.";
@@ -7864,7 +7862,9 @@ $TooManyRepetitions = "Zu viele Wiederholungen";
 $YourPasswordContainsSequences = "Ihr Passwort enthält Sequenzen";
 $PasswordVeryWeak = "Sehr schwach";
 $UserXHasBeenAssignedToBoss = "Der Schüler %s, die Ihnen zugeordnet";
-$UserXHasBeenAssignedToBossWithUrlX = "Sie wurden Vormund für den Lernenden %s ernannt. Sie können sein Profil zugreifen hier:% s";
+$UserXHasBeenAssignedToBossWithUrlX = "Sie wurden Vormund für den Lernenden %s ernannt.
+
+Sie können sein Profil zugreifen hier:% s";
 $ShortName = "Kurzname";
 $Portal = "Portal";
 $CourseUserDocument = "Kursbenutzerdokument";
@@ -7974,4 +7974,5 @@ $NewPasswordRequirementMaxXLowercase = "Maximale %s Kleinbuchstaben";
 $NewPasswordRequirementMaxXUppercase = "Maximale %s Großbuchstaben";
 $NewPasswordRequirementMaxXNumeric = "Maximale %s numerische (0-9) Zeichen";
 $NewPasswordRequirementMaxXLength = "Maximale %s Zeichen insgesamt";
+$GoToSurvey = "Zur Umfrage";
 ?>

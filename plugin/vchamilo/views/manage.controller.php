@@ -112,9 +112,9 @@ switch ($action) {
         $vid = isset($_REQUEST['vid']) ? $_REQUEST['vid'] : '';
         if ($vid) {
             $vhosts = Database::select('*', 'vchamilo', array('where' => array('id = ?' => $vid)));
-            $vhost = (object)array_pop($vhosts);
+            $vhost = (object) array_pop($vhosts);
         } else {
-            $vhost = (object)$_configuration;
+            $vhost = (object) $_configuration;
             $vhost->slug = Virtual::getSlugFromUrl($vhost->root_web);
             $vhost->id = 0;
         }
@@ -162,7 +162,6 @@ switch ($action) {
                 $content .= '</div>';
 
                 $tpl = new Template(get_lang('Snapshot'), true, true, false, true, false);
-                $tpl->assign('actions', '');
                 $tpl->assign('message', '<h4>'.$plugin->get_lang('vchamilosnapshot1').'</h4>');
                 $tpl->assign('content', $content);
                 $tpl->display_one_col_template();
@@ -227,7 +226,6 @@ switch ($action) {
                     }
 
                     $tpl = new Template(get_lang('Snapshot'), true, true, false, true, false);
-                    $tpl->assign('actions', '');
                     $tpl->assign('message', '<h4>'.$message.'</h4>');
                     $tpl->assign('content', $content);
                     $tpl->display_one_col_template();
@@ -290,7 +288,6 @@ switch ($action) {
                 $content .= '</form>';
 
                 $tpl = new Template(get_lang('Snapshot'), true, true, false, true, false);
-                $tpl->assign('actions', '');
                 $tpl->assign('message', $plugin->get_lang('vchamilosnapshot3'));
                 $tpl->assign('content', $content);
                 $tpl->display_one_col_template();
@@ -302,16 +299,16 @@ switch ($action) {
     case 'clearcache':
         // Removes cache directory.
         if (empty($automation)) {
-            if (array_key_exists('vids', $_REQUEST))  {
+            if (array_key_exists('vids', $_REQUEST)) {
                 $toclear = Database::select('*', 'vchamilo', array('where' => array("id IN ('$vidlist')" => array())));
             } else {
                 $vid = isset($_REQUEST['vid']) ? $_REQUEST['vid'] : 0;
                 if ($vid) {
                     $vhosts = Database::select('*', 'vchamilo', array('where' => array('id = ?' => $vid)));
-                    $vhost = (object)array_pop($vhosts);
+                    $vhost = (object) array_pop($vhosts);
                     $toclear[$vhost->id] = $vhost;
                 } else {
-                    $toclear[0] = (object)$_configuration;
+                    $toclear[0] = (object) $_configuration;
                 }
             }
         } else {
@@ -334,7 +331,7 @@ switch ($action) {
                 //$uploadPath = Virtual::getConfig('vchamilo', 'upload_real_root');
 
                 // Get instance archive
-                $archivepath = api_get_path(SYS_ARCHIVE_PATH, (array)$instance);
+                $archivepath = api_get_path(SYS_ARCHIVE_PATH, (array) $instance);
                 $templatepath = $archivePath.'/'.$instance['slug'].'/twig';
                 Display::addFlash(Display::return_message("Deleting cache $templatepath \n"));
                 removeDir($templatepath);

@@ -18,6 +18,7 @@ class LinkFactory
      * @param string $course_code course code
      * @param int $category_id parent category
      * @param int $visible visible
+     * @return array
      */
     public static function load(
         $id = null,
@@ -44,7 +45,7 @@ class LinkFactory
      */
     public function get_evaluation_link($eval_id)
     {
-        $links = AbstractLink :: load(null, null, $eval_id);
+        $links = AbstractLink::load(null, null, $eval_id);
         foreach ($links as $link) {
             if (is_a($link, 'EvalLink')) {
                 return $link;
@@ -58,7 +59,7 @@ class LinkFactory
      * @param string $name_mask search string
      * @return array link objects matching the search criterium
      */
-    public function find_links($name_mask,$selectcat)
+    public function find_links($name_mask, $selectcat)
     {
         return AbstractLink::find_links($name_mask, $selectcat);
     }
@@ -98,7 +99,7 @@ class LinkFactory
     public static function get_all_types()
     {
         //LINK_DROPBOX,
-        return array (
+        return array(
             LINK_EXERCISE,
             //LINK_DROPBOX,
             LINK_HOTPOTATOES,

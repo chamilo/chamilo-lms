@@ -22,9 +22,8 @@ if (!in_array($pluginName, $installedPlugins) || empty($pluginInfo)) {
     api_not_allowed(true);
 }
 
-global $_configuration;
 $content = '';
-$currentUrl = api_get_self() . "?name=$pluginName";
+$currentUrl = api_get_self()."?name=$pluginName";
 
 if (isset($pluginInfo['settings_form'])) {
     /** @var FormValidator $form */
@@ -33,7 +32,6 @@ if (isset($pluginInfo['settings_form'])) {
         // We override the form attributes
         $attributes = array('action' => $currentUrl, 'method' => 'POST');
         $form->updateAttributes($attributes);
-
         if (isset($pluginInfo['settings'])) {
             $form->setDefaults($pluginInfo['settings']);
         }
@@ -48,7 +46,12 @@ if (isset($pluginInfo['settings_form'])) {
 
 if (isset($form)) {
     if ($form->validate()) {
-        $values = $form->exportValues();
+        $values = $form->getSubmitValues();
+
+        if (!isset($values['global_conference_allow_roles'])) {
+            $values['global_conference_allow_roles'] = [];
+        }
+
         $accessUrlId = api_get_current_access_url_id();
 
         api_delete_settings_params(
@@ -58,30 +61,33 @@ if (isset($form)) {
                     $accessUrlId,
                     $pluginName,
                     'setting',
-                    "status"
+                    'status'
                 )
             )
         );
 
         foreach ($values as $key => $value) {
-            $value = trim($value);
             api_add_setting(
                 $value,
-                Database::escape_string($pluginName . '_' . $key),
+                Database::escape_string($pluginName.'_'.$key),
                 $pluginName,
                 'setting',
                 'Plugins',
                 $pluginName,
-                null,
-                null,
-                null,
-                $_configuration['access_url'],
+                '',
+                '',
+                '',
+                api_get_current_access_url_id(),
                 1
             );
         }
 
+        /** @var \Plugin $objPlugin */
+        $objPlugin = $pluginInfo['plugin_class']::create();
+        $objPlugin->get_settings(true);
+        $objPlugin->performActionsAfterConfigure();
+
         if (isset($values['show_main_menu_tab'])) {
-            $objPlugin = $pluginInfo['plugin_class']::create();
             $objPlugin->manageTab($values['show_main_menu_tab']);
         }
 
@@ -97,15 +103,14 @@ if (isset($form)) {
 }
 
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH) . 'admin/index.php',
+    'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
     'name' => get_lang('PlatformAdmin')
 );
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH) . 'admin/settings.php?category=Plugins',
+    'url' => api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins',
     'name' => get_lang('Plugins')
 );
 
 $tpl = new Template($pluginName, true, true, false, true, false);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
-

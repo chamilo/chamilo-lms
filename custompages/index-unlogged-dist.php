@@ -4,11 +4,9 @@
  * Redirect script
  * @package chamilo.custompages
  */
-/**
- * Initialization
- */
-require_once(api_get_path(SYS_PATH).'main/inc/global.inc.php');
-require_once(api_get_path(SYS_PATH).'custompages/language.php');
+
+require_once api_get_path(SYS_PATH).'main/inc/global.inc.php';
+require_once __DIR__.'/language.php';
 
 /**
  * Homemade micro-controller
@@ -46,13 +44,7 @@ $rootWeb = api_get_path('WEB_PATH');
 <head>
 	<title>Custompage - login</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<!--[if !IE 6]><!-->
-	<link rel="stylesheet" type="text/css" href="<?php echo $rootWeb ?>custompages/style.css" />
-	<!--<![endif]-->
-	<!--[if IE 6]>
-	<link rel="stylesheet" type="text/css" href="/custompages/style-ie6.css" />
-	<![endif]-->
-    <script type="text/javascript" src="<?php echo $rootWeb ?>web/assets/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="<?php echo $rootWeb ?>web/assets/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			if (top.location != location) {
@@ -79,7 +71,7 @@ $rootWeb = api_get_path('WEB_PATH');
 		<div id="login-form-box" class="form-box">
             <div id="login-form-info" class="form-info">
             <?php if (isset($content['info']) && !empty($content['info'])) {
-              echo $content['info'];
+                echo $content['info'];
             }
             ?>
             </div>
@@ -89,14 +81,14 @@ $rootWeb = api_get_path('WEB_PATH');
             ?>
             <form id="login-form" class="form" action="<?php echo api_get_path(WEB_PATH)?>index.php" method="post">
                 <div>
-                    <label for="login">*<?php echo custompages_get_lang('User');?></label>
+                    <label for="login">*<?php echo custompages_get_lang('User'); ?></label>
                     <input name="login" type="text" /><br />
-                    <label for="password">*<?php echo custompages_get_lang('Password');?></label>
+                    <label for="password">*<?php echo custompages_get_lang('Password'); ?></label>
                     <input name="password" type="password" /><br />
                 </div>
             </form>
             <div id="login-form-submit" class="form-submit" onclick="document.forms['login-form'].submit();">
-                <span><?php echo custompages_get_lang('LoginEnter');?></span>
+                <span><?php echo custompages_get_lang('LoginEnter'); ?></span>
             </div> <!-- #form-submit -->
 			<div id="links">
 

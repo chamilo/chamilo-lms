@@ -32,6 +32,8 @@ jQuery(document).ready(function(){
         </div>
         <div id="skillList" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
             <div class="panel-body">
+                <p>{{ 'FunctionalityAvailableShortly'|get_lang }}</p>
+<!-- Not showing the functionnality for the moment until its ready for OFAJ
                 {% if skills %}
                     <div class="scrollbar-inner badges-sidebar">
                         <ul class="list-unstyled list-badges">
@@ -53,6 +55,7 @@ jQuery(document).ready(function(){
                         <a href="{{ _p.web_main ~ 'social/skills_wheel.php' }}">{{ 'SkillsWheel'|get_lang }}</a>
                     </p>
                 {% endif %}
+-->
             </div>
         </div>
     </div>

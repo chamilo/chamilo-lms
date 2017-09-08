@@ -2,17 +2,17 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	This is the tracking library for Chamilo.
-*
-*	@package chamilo.reporting
-*
-* Calculates the time spent on the course
-* @param integer $user_id the user id
-* @param string $course_code the course code
-* @author Julio Montoya <gugli100@gmail.com>
-* @author Jorge Frisancho Jibaja - select between dates
-*
-*/
+ * This is the tracking library for Chamilo.
+ *
+ * @package chamilo.reporting
+ *
+ * Calculates the time spent on the course
+ * @param integer $user_id the user id
+ * @param string $course_code the course code
+ * @author Julio Montoya <gugli100@gmail.com>
+ * @author Jorge Frisancho Jibaja - select between dates
+ *
+ */
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -27,8 +27,7 @@ $session_id = intval($_GET['id_session']);
 $type = isset($_REQUEST['type']) ? Security::remove_XSS($_REQUEST['type']) : '';
 $course_code = isset($_REQUEST['course']) ? Security::remove_XSS($_REQUEST['course']) : '';
 $courseInfo = api_get_course_info($course_code);
-$courseId = (!empty($courseInfo['real_id'])?$courseInfo['real_id']:null);
-$connections = MySpace::get_connections_to_course($user_id, $courseId, $session_id);
+$courseId = (!empty($courseInfo['real_id']) ? $courseInfo['real_id'] : null);
 $quote_simple = "'";
 
 $form = new FormValidator(
@@ -55,7 +54,11 @@ $group = array(
     $form->createElement(
         'label',
         null,
-        Display::url(get_lang('Search'), 'javascript://', array('onclick'=> 'loadGraph();', 'class' => 'btn btn-default'))
+        Display::url(
+            get_lang('Search'),
+            'javascript://',
+            array('onclick' => 'loadGraph();', 'class' => 'btn btn-default')
+        )
     )
 );
 $form->addGroup($group);
@@ -70,7 +73,7 @@ if ($form->validate()) {
     $course = $values['course'];
 }
 
-$url = api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail_by_date&course='.$course.'&student='.$user_id;
+$url = api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail_by_date&course='.$course.'&student='.$user_id.'&session_id='.$session_id;
 
 $htmlHeadXtra[] = '<script src="slider.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="slider.css" />';
@@ -121,12 +124,12 @@ $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AccessDetails'));
 Display :: display_header('');
 $userInfo = api_get_user_info($user_id);
 $result_to_print = '';
-$sql_result = MySpace::get_connections_to_course($user_id, $courseId);
+$sql_result = MySpace::get_connections_to_course($user_id, $courseInfo);
 $result_to_print = convert_to_string($sql_result);
 
 echo Display::page_header(get_lang('DetailsStudentInCourse'));
 echo Display::page_subheader(
-    get_lang('User').': '.$userInfo['complete_name'].' - '.get_lang('Course').': '.$courseInfo['title'] . ' (' . $course_code . ')'
+    get_lang('User').': '.$userInfo['complete_name'].' - '.get_lang('Course').': '.$courseInfo['title'].' ('.$course_code.')'
 );
 
 $form->setDefaults(array('from' => $from, 'to' => $to));
@@ -144,14 +147,14 @@ $form->display();
         </div><br />
         <div id="cev_cont_stats">
             <?php
-            if ($result_to_print != "")  {
-                $rst = get_stats($user_id, $courseId);
+            if ($result_to_print != '') {
+                $rst = get_stats($user_id, $courseInfo, $session_id);
                 $foo_stats = '<strong>'.get_lang('Total').': </strong>'.$rst['total'].'<br />';
                 $foo_stats .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';
                 $foo_stats .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';
                 echo $foo_stats;
             } else {
-                echo Display::display_warning_message(get_lang('NoDataAvailable'));
+                echo Display::return_message(get_lang('NoDataAvailable'), 'warning');
             }
             ?>
         </div>

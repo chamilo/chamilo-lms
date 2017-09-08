@@ -75,7 +75,7 @@ class VM
 
         foreach ($vmList as $vm) {
             if (isset($vm['enabled']) && $vm['enabled'] == true) {
-                $className = $vm['name'] . 'VM';
+                $className = $vm['name'].'VM';
 
                 return new $className($vm);
                 break;

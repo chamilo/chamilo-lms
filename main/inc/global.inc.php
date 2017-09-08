@@ -42,7 +42,7 @@ if (file_exists($kernel->getConfigurationFile())) {
     if (!$alreadyInstalled) {
         $global_error_code = 2;
         // The system has not been installed yet.
-        require_once __DIR__ . '/../inc/global_error_message.inc.php';
+        require_once __DIR__.'/../inc/global_error_message.inc.php';
         die();
     }
 }
@@ -72,7 +72,7 @@ api_check_php_version($includePath.'/');
 // 2. Empty username is formally valid, but it is reserved for the anonymous user.
 // 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
 
-$defaultUserNameLength = 40;
+$defaultUserNameLength = 50;
 if (api_get_setting('login_is_email') == 'true') {
     $defaultUserNameLength = 100;
 }
@@ -163,9 +163,9 @@ if (!empty($_configuration['multiple_access_urls'])) {
     $request_url_root = '';
     if (empty($_SERVER['HTTP_HOST'])) {
         if (empty($_SERVER['SERVER_NAME'])) {
-            $request_url_root = $protocol . 'localhost/';
+            $request_url_root = $protocol.'localhost/';
         } else {
-            $request_url_root = $protocol . $_SERVER['SERVER_NAME'] . '/';
+            $request_url_root = $protocol.$_SERVER['SERVER_NAME'].'/';
         }
     } else {
         $request_url_root = $protocol.$_SERVER['HTTP_HOST'].'/';
@@ -194,8 +194,11 @@ if (!empty($_configuration['multiple_access_urls'])) {
 
 // Check if APCu is available. If so, store the value in $_configuration
 if (extension_loaded('apcu')) {
-    $_configuration['apc'] = true;
-    $_configuration['apc_prefix'] = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
+    $apcEnabled = ini_get('apc.enabled');
+    if (!empty($apcEnabled) && $apcEnabled != 'Off' && $apcEnabled != 'off') {
+        $_configuration['apc'] = true;
+        $_configuration['apc_prefix'] = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
+    }
 }
 
 $charset = 'UTF-8';
@@ -246,6 +249,7 @@ foreach ($result as & $row) {
 
         if ($row['access_url_changeable'] == 1 && $url_info['active'] == 1) {
             if (isset($settings_by_access_list[$var]) &&
+                isset($settings_by_access_list[$var][$subkey]) &&
                 $settings_by_access_list[$var][$subkey][$category]['selected_value'] != '') {
                 if ($row['subkey'] == null) {
                     $_setting[$row['variable']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];
@@ -290,6 +294,7 @@ foreach ($result as & $row) {
 if (api_get_setting('server_type') == 'test') {
     ini_set('display_errors', '1');
     ini_set('log_errors', '1');
+    ini_set('html_errors', '1');
     error_reporting(-1);
 
     if (function_exists('opcache_reset')) {
@@ -426,7 +431,6 @@ if (isset($this_script) && $this_script == 'sub_language') {
 $valid_languages = api_get_languages();
 
 if (!empty($valid_languages)) {
-
     if (!in_array($user_language, $valid_languages['folder'])) {
         $user_language = api_get_setting('platformLanguage');
     }
@@ -468,7 +472,7 @@ if (!empty($valid_languages)) {
     }
 
     if (!empty($language_priority1) && api_get_language_from_type($language_priority1) !== false) {
-        $language_interface =  api_get_language_from_type($language_priority1);
+        $language_interface = api_get_language_from_type($language_priority1);
     } else {
         if (isset($_course['language'])) {
             $language_interface = $_course['language'];
@@ -478,6 +482,43 @@ if (!empty($valid_languages)) {
     // If language is set via browser ignore the priority
     if (isset($_GET['language'])) {
         $language_interface = $user_language;
+    }
+
+    $allow = api_get_configuration_value('show_language_selector_in_menu');
+    // Overwrite all lang configs and use the menu language
+    if ($allow) {
+        if (isset($_SESSION['user_language_choice'])) {
+            $userEntity = api_get_user_entity(api_get_user_id());
+            if ($userEntity) {
+                if (isset($_GET['language'])) {
+                    $language_interface = $_SESSION['user_language_choice'];
+                    $userEntity->setLanguage($language_interface);
+                    Database::getManager()->merge($userEntity);
+                    Database::getManager()->flush();
+
+                    // Update cache
+                    api_get_user_info(
+                        api_get_user_id(),
+                        true,
+                        false,
+                        true,
+                        false,
+                        true,
+                        true
+                    );
+                    if (isset($_SESSION['_user'])) {
+                        $_SESSION['_user']['language'] = $language_interface;
+                    }
+                }
+                $language_interface = $_SESSION['user_language_choice'] = $userEntity->getLanguage();
+            }
+        } else {
+            $userInfo = api_get_user_info();
+            if (!empty($userInfo['language'])) {
+                $_SESSION['user_language_choice'] = $userInfo['language'];
+                $language_interface = $userInfo['language'];
+            }
+        }
     }
 }
 
@@ -543,7 +584,7 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
 if (!isset($_SESSION['login_as']) && isset($_user)) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
 
-    $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+    $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
     $sql = "SELECT login_id, login_date
             FROM $tbl_track_login
             WHERE
@@ -563,7 +604,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
 
         if ($res_logout_date < time() - $_configuration['session_lifetime']) {
             // it isn't, we should create a fresh entry
-            Event::event_login($_user['user_id']);
+            Event::eventLogin($_user['user_id']);
             // now that it's created, we can get its ID and carry on
             $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
         }
@@ -601,3 +642,4 @@ if (empty($default_quota)) {
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 // Forcing PclZip library to use a custom temporary folder.
 define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
+

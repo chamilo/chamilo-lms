@@ -133,7 +133,6 @@ class CourseDescriptionController
                 $this->view->render();
             }
         } else {
-
             $data['default_description_titles'] = $course_description->get_default_description_title();
             $data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
             $data['default_description_icon'] = $course_description->get_default_description_icon();
@@ -153,7 +152,7 @@ class CourseDescriptionController
                 if (isset($_GET['id_session'])) {
                     $session_id = intval($_GET['id_session']);
                 }
-		        $course_description_data = $course_description->get_data_by_id(
+                $course_description_data = $course_description->get_data_by_id(
                     $id,
                     null,
                     $session_id
@@ -162,7 +161,7 @@ class CourseDescriptionController
                 $data['description_title'] = $course_description_data['description_title'];
                 $data['description_content'] = $course_description_data['description_content'];
                 $data['progress'] = $course_description_data['progress'];
-		        $data['descriptions'] = $course_description->get_data_by_description_type(
+                $data['descriptions'] = $course_description->get_data_by_description_type(
                     $description_type,
                     null,
                     $session_id

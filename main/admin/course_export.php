@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* 	This tool allows platform admins to export courses to CSV file
-*	@package chamilo.admin
-*/
+ * This tool allows platform admins to export courses to CSV file
+ * @package chamilo.admin
+ */
 
 $cidReset = true;
 
@@ -14,7 +14,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 $tool_name = get_lang('ExportCourses');
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
 
@@ -43,7 +43,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $courses = $course_list;
     }
 
-	if (!empty($courses)) {
+    if (!empty($courses)) {
         $archiveFile = 'export_courses_list_'.api_get_local_time();
         $listToExport[] = [
             'Code',
@@ -57,31 +57,28 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         ];
 
         $dataToExport = [];
-
         foreach ($courses as $course) {
-            $dataToExport['code'] = str_replace(';',',',$course['code']);
-            $dataToExport['title'] = str_replace(';',',',$course['title']);
-            $dataToExport['category_code'] = str_replace(';',',',$course['category_code']);
+            $dataToExport['code'] = str_replace(';', ',', $course['code']);
+            $dataToExport['title'] = str_replace(';', ',', $course['title']);
+            $dataToExport['category_code'] = str_replace(';', ',', $course['category_code']);
             $categoryInfo = CourseCategory::getCategory($course['category_code']);
             if ($categoryInfo) {
-                $dataToExport['category_name'] = str_replace(';',',',$categoryInfo['name']);
+                $dataToExport['category_name'] = str_replace(';', ',', $categoryInfo['name']);
             } else {
                 $dataToExport['category_name'] = '';
             }
-            $dataToExport['tutor_name'] = str_replace(';',',',$course['tutor_name']);
-            $dataToExport['course_language'] = str_replace(';',',',$course['course_language']);
-
+            $dataToExport['tutor_name'] = str_replace(';', ',', $course['tutor_name']);
+            $dataToExport['course_language'] = str_replace(';', ',', $course['course_language']);
             $dataToExport['students'] = '';
             $dataToExport['teachers'] = '';
-
             $usersInCourse = CourseManager::get_user_list_from_course_code($course['code']);
 
             if (is_array($usersInCourse) && !empty($usersInCourse)) {
                 foreach ($usersInCourse as $user) {
                     if ($user['status_rel'] == COURSEMANAGER) {
-                        $dataToExport['teachers'] .= $user['username'] . '|';
+                        $dataToExport['teachers'] .= $user['username'].'|';
                     } else {
-                        $dataToExport['students'] .= $user['username'] . '|';
+                        $dataToExport['students'] .= $user['username'].'|';
                     }
                 }
             }
@@ -99,48 +96,49 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                 break;
             case 'csv':
                 Export::arrayToCsv($listToExport, $archiveFile);
+                break;
             case 'xls':
                 Export::arrayToXls($listToExport, $archiveFile);
                 break;
         }
-	} else {
+    } else {
         Display::addFlash(
             Display::return_message(
                 get_lang('ThereAreNotSelectedCoursesOrCoursesListIsEmpty')
             )
         );
-	}
+    }
 }
 
-Display:: display_header($tool_name);
+Display::display_header($tool_name);
 
 $form = new FormValidator('export', 'post', api_get_self());
 $form->addHeader($tool_name);
 $form->addHidden('formSent', 1);
 $form->addElement(
-	'radio',
-	'select_type',
-	get_lang('Option'),
-	get_lang('ExportAllCoursesList'),
-	 '1',
-	 ['onclick' => "javascript: if(this.checked){document.getElementById('div-course-list').style.display='none';}"]
+    'radio',
+    'select_type',
+    get_lang('Option'),
+    get_lang('ExportAllCoursesList'),
+    '1',
+    ['onclick' => "javascript: if(this.checked){document.getElementById('div-course-list').style.display='none';}"]
 );
 
 $form->addElement(
-	'radio',
-	'select_type',
-	'',
-	get_lang('ExportSelectedCoursesFromCoursesList'),
-	'2',
-	['onclick' => "javascript: if(this.checked){document.getElementById('div-course-list').style.display='block';}"]
+    'radio',
+    'select_type',
+    '',
+    get_lang('ExportSelectedCoursesFromCoursesList'),
+    '2',
+    ['onclick' => "javascript: if(this.checked){document.getElementById('div-course-list').style.display='block';}"]
 );
 
 if (!empty($course_list)) {
-	$form->addHtml('<div id="div-course-list" style="display:none">');
-	$coursesInList = [];
-	foreach ($course_list as $course) {
-		$coursesInList[$course['code']] = $course['title'].' ('.$course['code'].')';
-	}
+    $form->addHtml('<div id="div-course-list" style="display:none">');
+    $coursesInList = [];
+    foreach ($course_list as $course) {
+        $coursesInList[$course['code']] = $course['title'].' ('.$course['code'].')';
+    }
 
     $form->addSelect(
         'course_code',
@@ -149,11 +147,11 @@ if (!empty($course_list)) {
         ['multiple' => 'multiple']
     );
 
-	$form->addHtml('</div>');
+    $form->addHtml('</div>');
 }
 
-$form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV' , 'csv', null);
-$form->addElement('radio', 'file_type', '' , 'XLS' , 'xls', null);
+$form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV', 'csv', null);
+$form->addElement('radio', 'file_type', '', 'XLS', 'xls', null);
 $form->addElement('radio', 'file_type', null, 'XML', 'xml', null, array('id' => 'file_type_xml'));
 
 $form->setDefaults(['select_type' => '1', 'file_type' => 'csv']);

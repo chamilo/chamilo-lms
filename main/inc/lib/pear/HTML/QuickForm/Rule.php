@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * Abstract base class for QuickForm validation rules
@@ -42,7 +41,7 @@ class HTML_QuickForm_Rule
     * @var  string
     * @access   public
     */
-    var $name;
+    public $name;
 
    /**
     * Validates a value

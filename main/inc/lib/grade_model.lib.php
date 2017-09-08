@@ -16,7 +16,7 @@ class GradeModel extends Model
     public function __construct()
     {
         parent::__construct();
-        $this->table =  Database::get_main_table(TABLE_GRADE_MODEL);
+        $this->table = Database::get_main_table(TABLE_GRADE_MODEL);
     }
 
     /**
@@ -55,7 +55,7 @@ class GradeModel extends Model
     {
 		// action links
 		echo '<div class="actions" style="margin-bottom:20px">';
-        echo '<a href="grade_models.php">'.Display::return_icon('back.png',get_lang('Back'),'', ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="grade_models.php">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
 		echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
 		echo '</div>';
         echo Display::grid_html('grade_model');
@@ -115,7 +115,7 @@ class GradeModel extends Model
         }
 
         $form->addElement('hidden', 'maxvalue', '100');
-		$form->addElement('hidden', 'minvalue', '0');
+        $form->addElement('hidden', 'minvalue', '0');
         $renderer = & $form->defaultRenderer();
 
         $component_array = array();
@@ -129,7 +129,7 @@ class GradeModel extends Model
             $form->addElement('hidden', 'components['.$i.'][id]', null);
 
             $template_percentage =
-            '<div id=' . $i . ' style="display: '.(($i<=$nr_items)?'inline':'none').';" class="form-group">                
+            '<div id='.$i.' style="display: '.(($i <= $nr_items) ? 'inline' : 'none').';" class="form-group">                
                 <label for="" class="col-sm-2 control-label">
                     {label}
                 </label>
@@ -143,11 +143,11 @@ class GradeModel extends Model
 
             $template_title =
             '&nbsp{element} <!-- BEGIN error --> <span class="form_error">{error}</span><!-- END error -->
-             <a href="javascript:plusItem(' . ($counter+1) . ')">
-                '.Display::return_icon('add.png', get_lang('Add'), ['id' => 'plus-' . ($counter+1), 'style' => 'display: '.(($counter>=$nr_items) ? 'inline':'none') ]).'
+             <a href="javascript:plusItem(' . ($counter + 1).')">
+                '.Display::return_icon('add.png', get_lang('Add'), ['id' => 'plus-'.($counter + 1), 'style' => 'display: '.(($counter >= $nr_items) ? 'inline' : 'none')]).'
             </a>
-            <a href="javascript:minItem(' . ($counter) . ')">
-                '.Display::return_icon('delete.png', get_lang('Delete'), ['id' => 'min-' . ($counter), 'style' => 'display: '.(($counter>=$nr_items) ? 'inline':'none') ]).'
+            <a href="javascript:minItem(' . ($counter).')">
+                '.Display::return_icon('delete.png', get_lang('Delete'), ['id' => 'min-'.($counter), 'style' => 'display: '.(($counter >= $nr_items) ? 'inline' : 'none')]).'
             </a>
             </div></div>';
             $renderer->setElementTemplate($template_title, 'components['.$i.'][title]');
@@ -191,7 +191,7 @@ class GradeModel extends Model
         // Setting the rules
         $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
-		return $form;
+        return $form;
     }
 
     /**

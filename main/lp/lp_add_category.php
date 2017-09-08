@@ -17,7 +17,7 @@ if (!$is_allowed_to_edit) {
 }
 
 $interbreadcrumb[] = array(
-    'url' => 'lp_controller.php?action=list?'.api_get_cidreq(),
+    'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('LearningPaths'),
 );
 
@@ -31,8 +31,17 @@ $form = new FormValidator(
 $form->addElement('header', null, get_lang('AddLPCategory'));
 
 // Title
-$form->addElement('text', 'name', api_ucfirst(get_lang('Name')));
-$form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+if (api_get_configuration_value('save_titles_as_html')) {
+    $form->addHtmlEditor(
+        'name',
+        get_lang('Name'),
+        true,
+        false,
+        ['ToolbarSet' => 'Minimal']
+    );
+} else {
+    $form->addText('name', get_lang('Name'), true);
+}
 
 $form->addElement('hidden', 'action', 'add_lp_category');
 $form->addElement('hidden', 'c_id', api_get_course_int_id());

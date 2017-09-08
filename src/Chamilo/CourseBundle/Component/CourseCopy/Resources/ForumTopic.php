@@ -47,6 +47,6 @@ class ForumTopic extends Resource
             $user_info = api_get_user_info($this->obj->thread_poster_id);
             $extra = $user_info['complete_name'].', '.$extra;
         }
-        echo $this->obj->thread_title . ' (' . $extra . ')';
+        echo $this->obj->thread_title.' ('.$extra.')';
     }
 }

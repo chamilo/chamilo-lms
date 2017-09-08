@@ -4200,7 +4200,7 @@ ul.holder li.bit-box{
   min-width: 100%;
 }
 ul.exercise-draggable-answer.list-inline li {
-    float: left;
+    /*float: left;*/
 }
 ul.exercise-draggable-answer li {
   cursor: move;
@@ -6054,6 +6054,11 @@ ul#toolnavbox-two li a.btn{
     display: inline-block;
     margin-right: 10px;
     vertical-align: middle;
+}
+.exercise-btn{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

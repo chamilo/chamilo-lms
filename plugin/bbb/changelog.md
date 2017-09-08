@@ -1,3 +1,11 @@
+Version 2.6 - 2017-05
+---------------------
+* Add max users limit
+  * Requires the following database changes
+    * INSERT INTO chamilo111x.settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable, access_url_locked) VALUES ('bbb_max_users_limit', 'bbb', 'setting', 'Plugins', '3', 'bbb', null, null, null, 1, 1, 0);
+    * INSERT INTO chamilo111x.extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES (2, 15, 'plugin_bbb_course_users_limit', 'MaxUsersInConferenceRoom', '0', 1, 1, 0, 1, null, '2017-05-28 01:19:32');
+    * INSERT INTO chamilo111x.extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES (3, 15, 'plugin_bbb_session_users_limit', 'MaxUsersInConferenceRoom', null, 1, 1, 0, 1, null, '2017-05-28 01:19:32');
+
 Version 2.5 - 2016-07
 ---------------------
 * User global conference support

@@ -8,21 +8,21 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 // the section (tabs)
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 
 // notice for unauthorized people.
 api_protect_course_script(true);
 
 // breadcrumbs
-$interbreadcrumb[]=array("url" => "exercise.php","name" => get_lang('Exercises'));
+$interbreadcrumb[] = array("url" => "exercise.php", "name" => get_lang('Exercises'));
 
 // Tool name
-$nameTools=get_lang('AddQuestionToExercise');
+$nameTools = get_lang('AddQuestionToExercise');
 
 // The form
-$form = new FormValidator('add_question','post',api_get_self().'?'.api_get_cidreq());
+$form = new FormValidator('add_question', 'post', api_get_self().'?'.api_get_cidreq());
 // form title
-$form->addElement('header','',get_lang('AddQuestionToExercise'));
+$form->addElement('header', '', get_lang('AddQuestionToExercise'));
 
 $question_list = Question::get_question_type_list();
 $question_list_options = array();
@@ -38,10 +38,10 @@ $form->addElement(
 );
 
 //session id
-$session_id  = api_get_session_id();
+$session_id = api_get_session_id();
 
 // the exercises
-$tbl_exercises = Database :: get_course_table(TABLE_QUIZ_TEST);
+$tbl_exercises = Database::get_course_table(TABLE_QUIZ_TEST);
 $course_id = api_get_course_int_id();
 
 $sql = "SELECT id,title,type,description, results_disabled
@@ -51,17 +51,17 @@ $sql = "SELECT id,title,type,description, results_disabled
 $result = Database::query($sql);
 $exercises['-'] = '-'.get_lang('SelectExercise').'-';
 while ($row = Database :: fetch_array($result)) {
-	$exercises[$row['id']] = cut($row['title'], EXERCISE_MAX_NAME_SIZE);
+    $exercises[$row['id']] = cut($row['title'], EXERCISE_MAX_NAME_SIZE);
 }
 $form->addElement('select', 'exercise', get_lang('Exercise'), $exercises);
 
 // generate default content
 $form->addElement(
-	'checkbox',
-	'is_content',
-	null,
-	get_lang('GenerateDefaultContent'),
-	array('checked' => true)
+    'checkbox',
+    'is_content',
+    null,
+    get_lang('GenerateDefaultContent'),
+    array('checked' => true)
 );
 
 // the submit button
@@ -93,12 +93,12 @@ if ($form->validate()) {
     }
     header('Location: admin.php?exerciseId='.$values['exercise'].'&newQuestion=yes&isContent='.$values['is_content'].'&answerType='.$answer_type);
     exit;
-    } else {
+} else {
     // header
     Display::display_header($nameTools);
 
     echo '<div class="actions">';
-    echo '<a href="exercise.php?show=test">'.Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="exercise.php?show=test">'.Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
 
     // displaying the form
@@ -108,7 +108,8 @@ if ($form->validate()) {
     Display::display_footer();
 }
 
-function check_question_type($parameter) {
+function check_question_type($parameter)
+{
     $question_list = Question::get_question_type_list();
     foreach ($question_list as $key => $value) {
         $valid_question_types[] = $key;

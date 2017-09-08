@@ -2,7 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CItemProperty;
+use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
 use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -20,6 +24,10 @@ if (empty($lpId)) {
     api_not_allowed(true);
 }
 
+$subscriptionSettings = learnpath::getSubscriptionSettings();
+if ($subscriptionSettings['allow_add_users_to_lp'] == false) {
+    api_not_allowed(true);
+}
 
 $oLP = new learnpath(api_get_course_id(), $lpId, api_get_user_id());
 
@@ -35,23 +43,38 @@ $interbreadcrumb[] = array(
 
 $courseId = api_get_course_int_id();
 $courseCode = api_get_course_id();
+$sessionId = api_get_session_id();
 
 $url = api_get_self().'?'.api_get_cidreq().'&lp_id='.$lpId;
-$lp = new \learnpath($courseCode, $lpId, api_get_user_id());
+$lp = new learnpath($courseCode, $lpId, api_get_user_id());
 $em = Database::getManager();
+/** @var CourseRepository $courseRepo */
+$courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
+/** @var ItemPropertyRepository $itemRepo */
+$itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
 
+/** @var Session $session */
 $session = null;
 if (!empty($sessionId)) {
     $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
 }
 
-// Find course.
-$course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);
+$course = $courseRepo->find($courseId);
+$subscribedUsers = [];
 
 // Getting subscribe users to the course.
-$subscribedUsers = $em->getRepository('ChamiloCoreBundle:Course')->getSubscribedStudents($course);
-$subscribedUsers = $subscribedUsers->getQuery();
-$subscribedUsers = $subscribedUsers->execute();
+if (!$session) {
+    $subscribedUsers = $courseRepo->getSubscribedStudents($course)
+        ->getQuery()
+        ->getResult();
+} else {
+    $session->getUserCourseSubscriptionsByStatus($course, Session::STUDENT)
+        ->forAll(
+            function ($i, SessionRelCourseRelUser $sessionCourseUser) use (&$subscribedUsers) {
+                $subscribedUsers[$i] = $sessionCourseUser->getUser();
+            }
+        );
+}
 
 // Getting all users in a nice format.
 $choices = array();
@@ -61,22 +84,28 @@ foreach ($subscribedUsers as $user) {
 }
 
 // Getting subscribed users to a LP.
-$subscribedUsersInLp = $em->getRepository('ChamiloCourseBundle:CItemProperty')->getUsersSubscribedToItem(
+$subscribedUsersInLp = $itemRepo->getUsersSubscribedToItem(
     'learnpath',
     $lpId,
     $course,
     $session
 );
+
 $selectedChoices = array();
 foreach ($subscribedUsersInLp as $itemProperty) {
     $selectedChoices[] = $itemProperty->getToUser()->getId();
 }
 
 //Building the form for Users
-$formUsers = new \FormValidator('lp_edit', 'post', $url);
+$formUsers = new FormValidator('lp_edit', 'post', $url);
 $formUsers->addElement('hidden', 'user_form', 1);
 
-$userMultiSelect = $formUsers->addElement('advmultiselect', 'users', get_lang('Users'), $choices);
+$userMultiSelect = $formUsers->addElement(
+    'advmultiselect',
+    'users',
+    get_lang('Users'),
+    $choices
+);
 $formUsers->addButtonSave(get_lang('Save'));
 
 $defaults = array();
@@ -87,9 +116,8 @@ if (!empty($selectedChoices)) {
 
 $formUsers->setDefaults($defaults);
 
-//Building the form for Groups
-
-$form = new \FormValidator('lp_edit', 'post', $url);
+// Building the form for Groups
+$form = new FormValidator('lp_edit', 'post', $url);
 $form->addElement('hidden', 'group_form', 1);
 
 // Group list
@@ -101,7 +129,7 @@ $groupList = \CourseManager::get_group_list_of_course(
 $groupChoices = array_column($groupList, 'name', 'id');
 
 // Subscribed groups to a LP
-$subscribedGroupsInLp = $em->getRepository('ChamiloCourseBundle:CItemProperty')->getGroupsSubscribedToItem(
+$subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
     'learnpath',
     $lpId,
     $course,
@@ -114,10 +142,17 @@ foreach ($subscribedGroupsInLp as $itemProperty) {
     $selectedGroupChoices[] = $itemProperty->getGroup()->getId();
 }
 
-$groupMultiSelect = $form->addElement('advmultiselect', 'groups', get_lang('Groups'), $groupChoices);
+$groupMultiSelect = $form->addElement(
+    'advmultiselect',
+    'groups',
+    get_lang('Groups'),
+    $groupChoices
+);
 
 // submit button
 $form->addButtonSave(get_lang('Save'));
+
+Display::addFlash(Display::return_message(get_lang('UserLpSubscriptionDescription')));
 
 $defaults = array();
 if (!empty($selectedGroupChoices)) {
@@ -127,7 +162,7 @@ $form->setDefaults($defaults);
 
 $tpl = new Template();
 
-$currentUser = $em->getRepository('ChamiloUserBundle:User')->find(api_get_user_id());
+$currentUser = api_get_user_entity(api_get_user_id());
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();
@@ -137,7 +172,7 @@ if ($form->validate()) {
     $userForm = isset($values['user_form']) ? $values['user_form'] : [];
 
     if (!empty($userForm)) {
-        $em->getRepository('ChamiloCourseBundle:CItemProperty')->subscribeUsersToItem(
+        $itemRepo->subscribeUsersToItem(
             $currentUser,
             'learnpath',
             $course,
@@ -153,7 +188,7 @@ if ($form->validate()) {
     $groupForm = isset($values['group_form']) ? $values['group_form'] : [];
 
     if (!empty($groupForm)) {
-        $em->getRepository('ChamiloCourseBundle:CItemProperty')->subscribeGroupsToItem(
+        $itemRepo->subscribeGroupsToItem(
             $currentUser,
             'learnpath',
             $course,
@@ -167,8 +202,11 @@ if ($form->validate()) {
     header("Location: $url");
     exit;
 } else {
-    $headers = [get_lang('SubscribeUsersToLp'), get_lang('SubscribeGroupsToLp')];
-    $tabs = Display::tabs($headers, [$formUsers->toHtml(),$form->toHtml()]);
+    $headers = [
+        get_lang('SubscribeUsersToLp'),
+        get_lang('SubscribeGroupsToLp')
+    ];
+    $tabs = Display::tabs($headers, [$formUsers->toHtml(), $form->toHtml()]);
     $tpl->assign('tabs', $tabs);
 }
 

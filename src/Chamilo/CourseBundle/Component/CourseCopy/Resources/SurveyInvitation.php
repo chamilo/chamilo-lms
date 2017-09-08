@@ -33,7 +33,7 @@ class SurveyInvitation extends Resource
 
     /**
      * Create a new SurveyInvitation
-     * @param int	 $id
+     * @param int $id
      * @param string $code
      * @param string $user
      * @param string $invitation_code

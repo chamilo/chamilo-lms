@@ -964,7 +964,7 @@ class Course
      */
     public function setSubscribe($subscribe)
     {
-        $this->subscribe = intval($subscribe);
+        $this->subscribe = boolval($subscribe);
 
         return $this;
     }
@@ -988,7 +988,7 @@ class Course
      */
     public function setUnsubscribe($unsubscribe)
     {
-        $this->unsubscribe = intval($unsubscribe);
+        $this->unsubscribe = boolval($unsubscribe);
 
         return $this;
     }
@@ -1191,7 +1191,7 @@ class Course
      */
     public function hasPicture()
     {
-        return file_exists(api_get_path(SYS_COURSE_PATH) . $this->directory . '/course-pic85x85.png');
+        return file_exists(api_get_path(SYS_COURSE_PATH).$this->directory.'/course-pic85x85.png');
     }
 
     /**
@@ -1206,9 +1206,9 @@ class Course
         }
 
         if ($fullSize) {
-            return api_get_path(WEB_COURSE_PATH) . $this->directory . '/course-pic.png';
+            return api_get_path(WEB_COURSE_PATH).$this->directory.'/course-pic.png';
         }
 
-        return api_get_path(WEB_COURSE_PATH) . $this->directory . '/course-pic85x85.png';
+        return api_get_path(WEB_COURSE_PATH).$this->directory.'/course-pic85x85.png';
     }
 }

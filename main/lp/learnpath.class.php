@@ -8,15 +8,23 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CLpItemView;
+use Chamilo\CourseBundle\Entity\CItemProperty;
+use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
+use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
 
 /**
  * Class learnpath
  * This class defines the parent attributes and methods for Chamilo learnpaths
  * and SCORM learnpaths. It is used by the scorm class.
- *
+ * @todo decouple class
  * @package chamilo.learnpath
- * @author	Yannick Warnier <ywarnier@beeznest.org>
- * @author	Julio Montoya   <gugli100@gmail.com> Several improvements and fixes
+ * @author  Yannick Warnier <ywarnier@beeznest.org>
+ * @author  Julio Montoya   <gugli100@gmail.com> Several improvements and fixes
  */
 class learnpath
 {
@@ -56,12 +64,12 @@ class learnpath
     public $progress_bar_mode = '%';
 
     // Percentage progress as saved in the db.
-    public $progress_db = '0';
+    public $progress_db = 0;
     public $proximity; // Wether the content is distant or local or unknown.
-    public $refs_list = array (); //list of items by ref => db_id. Used only for prerequisites match.
+    public $refs_list = array(); //list of items by ref => db_id. Used only for prerequisites match.
     // !!!This array (refs_list) is built differently depending on the nature of the LP.
     // If SCORM, uses ref, if Chamilo, uses id to keep a unique value.
-    public $type; //type of learnpath. Could be 'dokeos', 'scorm', 'scorm2004', 'aicc', ...
+    public $type; //type of learnpath. Could be 'chamilo', 'scorm', 'scorm2004', 'aicc', ...
     // TODO: Check if this type variable is useful here (instead of just in the controller script).
     public $user_id; //ID of the user that is viewing/using the course
     public $update_queue = array();
@@ -73,10 +81,10 @@ class learnpath
     public $prerequisite = 0;
     public $use_max_score = 1; // 1 or 0
     public $subscribeUsers = 0; // Subscribe users or not
-    public $created_on      = '';
-    public $modified_on     = '';
-    public $publicated_on   = '';
-    public $expired_on      = '';
+    public $created_on = '';
+    public $modified_on = '';
+    public $publicated_on = '';
+    public $expired_on = '';
     public $ref = null;
     public $course_int_id;
     public $course_info = array();
@@ -89,7 +97,6 @@ class learnpath
      * @param   string $course Course code
      * @param   integer $lp_id
      * @param   integer $user_id
-     * @return  mixed True on success, false on error
      */
     public function __construct($course, $lp_id, $user_id)
     {
@@ -98,37 +105,32 @@ class learnpath
             error_log('New LP - In learnpath::__construct('.$course.','.$lp_id.','.$user_id.')', 0);
         }
         if (empty($course)) {
-            $this->error = 'Course code is empty';
-            return false;
+            $course = api_get_course_id();
+        }
+        $course_info = api_get_course_info($course);
+        if (!empty($course_info)) {
+            $this->cc = $course_info['code'];
+            $this->course_info = $course_info;
+            $course_id = $course_info['real_id'];
         } else {
-            $course_info = api_get_course_info($course);
-            if (!empty($course_info)) {
-                $this->cc = $course_info['code'];
-                $this->course_info = $course_info;
-                $course_id = $course_info['real_id'];
-            } else {
-                $this->error = 'Course code does not exist in database.';
-                return false;
-            }
+            $this->error = 'Course code does not exist in database.';
         }
 
+        $lp_id = (int) $lp_id;
+        $course_id = (int) $course_id;
         $this->set_course_int_id($course_id);
-
         // Check learnpath ID.
-        if (empty($lp_id)) {
-            $this->error = 'Learnpath ID is empty';
-            return false;
+        if (empty($lp_id) || empty($course_id)) {
+            $this->error = "Parameter is empty: LpId:'$lp_id', courseId: '$lp_id'";
         } else {
             // TODO: Make it flexible to use any course_code (still using env course code here).
             $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-            $lp_id = intval($lp_id);
             $sql = "SELECT * FROM $lp_table
                     WHERE id = '$lp_id' AND c_id = $course_id";
             if ($this->debug > 2) {
                 error_log('New LP - learnpath::__construct() '.__LINE__.' - Querying lp: '.$sql, 0);
             }
             $res = Database::query($sql);
-
             if (Database::num_rows($res) > 0) {
                 $this->lp_id = $lp_id;
                 $row = Database::fetch_array($res);
@@ -160,7 +162,7 @@ class learnpath
                 }
 
                 if (!empty($row['expired_on'])) {
-                    $this->expired_on  = $row['expired_on'];
+                    $this->expired_on = $row['expired_on'];
                 }
                 if ($this->type == 2) {
                     if ($row['force_commit'] == 1) {
@@ -168,270 +170,267 @@ class learnpath
                     }
                 }
                 $this->mode = $row['default_view_mod'];
-            } else {
-                $this->error = 'Learnpath ID does not exist in database ('.$sql.')';
 
-                return false;
-            }
-        }
+                // Check user ID.
+                if (empty($user_id)) {
+                    $this->error = 'User ID is empty';
+                } else {
+                    $user_info = api_get_user_info($user_id);
+                    if (!empty($user_info)) {
+                        $this->user_id = $user_info['user_id'];
+                    } else {
+                        $this->error = 'User ID does not exist in database ('.$sql.')';
+                    }
+                }
 
-        // Check user ID.
-        if (empty($user_id)) {
-            $this->error = 'User ID is empty';
+                // End of variables checking.
+                $session_id = api_get_session_id();
+                //  Get the session condition for learning paths of the base + session.
+                $session = api_get_session_condition($session_id);
+                // Now get the latest attempt from this user on this LP, if available, otherwise create a new one.
+                $lp_table = Database::get_course_table(TABLE_LP_VIEW);
 
-            return false;
-        } else {
-            $user_info = api_get_user_info($user_id);
-            if (!empty($user_info)) {
-                $this->user_id = $user_info['user_id'];
-            } else {
-                $this->error = 'User ID does not exist in database ('.$sql.')';
+                // Selecting by view_count descending allows to get the highest view_count first.
+                $sql = "SELECT * FROM $lp_table
+                        WHERE 
+                            c_id = $course_id AND 
+                            lp_id = '$lp_id' AND 
+                            user_id = '$user_id' 
+                            $session
+                        ORDER BY view_count DESC";
+                $res = Database::query($sql);
+                if ($this->debug > 2) {
+                    error_log('New LP - learnpath::__construct() '.__LINE__.' - querying lp_view: '.$sql, 0);
+                }
 
-                return false;
-            }
-        }
+                if (Database::num_rows($res) > 0) {
+                    if ($this->debug > 2) {
+                        error_log('New LP - learnpath::__construct() '.__LINE__.' - Found previous view', 0);
+                    }
+                    $row = Database::fetch_array($res);
+                    $this->attempt = $row['view_count'];
+                    $this->lp_view_id = $row['id'];
+                    $this->last_item_seen = $row['last_item'];
+                    $this->progress_db = $row['progress'];
+                    $this->lp_view_session_id = $row['session_id'];
+                } elseif (!api_is_invitee()) {
+                    if ($this->debug > 2) {
+                        error_log('New LP - learnpath::__construct() '.__LINE__.' - NOT Found previous view', 0);
+                    }
+                    $this->attempt = 1;
+                    $params = [
+                        'c_id' => $course_id,
+                        'lp_id' => $lp_id,
+                        'user_id' => $user_id,
+                        'view_count' => 1,
+                        'session_id' => $session_id,
+                        'last_item' => 0
+                    ];
+                    $this->lp_view_id = Database::insert($lp_table, $params);
+                    if (!empty($this->lp_view_id)) {
+                        $sql = "UPDATE $lp_table SET id = iid
+                                WHERE iid = ".$this->lp_view_id;
+                        Database::query($sql);
+                    }
+                }
 
-        // End of variables checking.
-        $session_id = api_get_session_id();
-        //  Get the session condition for learning paths of the base + session.
-        $session = api_get_session_condition($session_id);
-        // Now get the latest attempt from this user on this LP, if available, otherwise create a new one.
-        $lp_table = Database::get_course_table(TABLE_LP_VIEW);
+                // Initialise items.
+                $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
+                $sql = "SELECT * FROM $lp_item_table
+                        WHERE c_id = $course_id AND lp_id = '".$this->lp_id."'
+                        ORDER BY parent_item_id, display_order";
+                $res = Database::query($sql);
 
-        // Selecting by view_count descending allows to get the highest view_count first.
-        $sql = "SELECT * FROM $lp_table
-                WHERE c_id = $course_id AND lp_id = '$lp_id' AND user_id = '$user_id' $session
-                ORDER BY view_count DESC";
-        $res = Database::query($sql);
-        if ($this->debug > 2) {
-            error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0);
-        }
+                if ($this->debug > 2) {
+                    error_log('New LP - learnpath::__construct() '.__LINE__.' - query lp items: '.$sql, 0);
+                    error_log('-- Start while--', 0);
+                }
 
-        if (Database :: num_rows($res) > 0) {
-            if ($this->debug > 2) {
-                error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Found previous view', 0);
-            }
-            $row = Database :: fetch_array($res);
-            $this->attempt = $row['view_count'];
-            $this->lp_view_id = $row['id'];
-            $this->last_item_seen = $row['last_item'];
-            $this->progress_db = $row['progress'];
-            $this->lp_view_session_id = $row['session_id'];
-        } else if (!api_is_invitee()) {
-            if ($this->debug > 2) {
-                error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - NOT Found previous view', 0);
-            }
-            $this->attempt = 1;
-            $params = [
-                'c_id' => $course_id,
-                'lp_id' => $lp_id,
-                'user_id' => $user_id,
-                'view_count' => 1,
-                'session_id' => $session_id,
-                'last_item' => 0
-            ];
-            Database::insert($lp_table, $params);
-            $this->lp_view_id = Database::insert_id();
+                $lp_item_id_list = array();
+                while ($row = Database::fetch_array($res)) {
+                    $lp_item_id_list[] = $row['id'];
+                    switch ($this->type) {
+                        case 3: //aicc
+                            $oItem = new aiccItem('db', $row['id'], $course_id);
+                            if (is_object($oItem)) {
+                                $my_item_id = $oItem->get_id();
+                                $oItem->set_lp_view($this->lp_view_id, $course_id);
+                                $oItem->set_prevent_reinit($this->prevent_reinit);
+                                // Don't use reference here as the next loop will make the pointed object change.
+                                $this->items[$my_item_id] = $oItem;
+                                $this->refs_list[$oItem->ref] = $my_item_id;
+                                if ($this->debug > 2) {
+                                    error_log(
+                                        'New LP - learnpath::__construct() - '.
+                                        'aicc object with id '.$my_item_id.
+                                        ' set in items[]',
+                                        0
+                                    );
+                                }
+                            }
+                            break;
+                        case 2:
+                            $oItem = new scormItem('db', $row['id'], $course_id);
+                            if (is_object($oItem)) {
+                                $my_item_id = $oItem->get_id();
+                                $oItem->set_lp_view($this->lp_view_id, $course_id);
+                                $oItem->set_prevent_reinit($this->prevent_reinit);
+                                // Don't use reference here as the next loop will make the pointed object change.
+                                $this->items[$my_item_id] = $oItem;
+                                $this->refs_list[$oItem->ref] = $my_item_id;
+                                if ($this->debug > 2) {
+                                    error_log('New LP - object with id '.$my_item_id.' set in items[]', 0);
+                                }
+                            }
+                            break;
+                        case 1:
+                        default:
+                            if ($this->debug > 2) {
+                                error_log('New LP - learnpath::__construct() '.__LINE__.' - calling learnpathItem', 0);
+                            }
+                            $oItem = new learnpathItem($row['id'], $user_id, $course_id, $row);
 
-            if ($this->debug > 2) {
-                error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - inserting new lp_view: ' . $sql, 0);
-            }
+                            if ($this->debug > 2) {
+                                error_log('New LP - learnpath::__construct() '.__LINE__.' - end calling learnpathItem', 0);
+                            }
+                            if (is_object($oItem)) {
+                                $my_item_id = $oItem->get_id();
+                                //$oItem->set_lp_view($this->lp_view_id); // Moved down to when we are sure the item_view exists.
+                                $oItem->set_prevent_reinit($this->prevent_reinit);
+                                // Don't use reference here as the next loop will make the pointed object change.
+                                $this->items[$my_item_id] = $oItem;
+                                $this->refs_list[$my_item_id] = $my_item_id;
+                                if ($this->debug > 2) {
+                                    error_log(
+                                        'New LP - learnpath::__construct() '.__LINE__.
+                                        ' - object with id '.$my_item_id.' set in items[]',
+                                        0
+                                    );
+                                }
+                            }
+                            break;
+                    }
 
-            $sql = "UPDATE $lp_table SET id = iid WHERE iid = ".$this->lp_view_id;
-            Database::query($sql);
-        }
+                    // Setting the object level with variable $this->items[$i][parent]
+                    foreach ($this->items as $itemLPObject) {
+                        $level = self::get_level_for_item(
+                            $this->items,
+                            $itemLPObject->db_id
+                        );
+                        $itemLPObject->level = $level;
+                    }
 
-        // Initialise items.
-        $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM $lp_item_table
-                WHERE c_id = $course_id AND lp_id = '".$this->lp_id."'
-                ORDER BY parent_item_id, display_order";
-        $res = Database::query($sql);
+                    // Setting the view in the item object.
+                    if (is_object($this->items[$row['id']])) {
+                        $this->items[$row['id']]->set_lp_view($this->lp_view_id, $course_id);
+                        if ($this->items[$row['id']]->get_type() == TOOL_HOTPOTATOES) {
+                            $this->items[$row['id']]->current_start_time = 0;
+                            $this->items[$row['id']]->current_stop_time = 0;
+                        }
+                    }
+                }
 
-        if ($this->debug > 2) {
-            error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - query lp items: ' . $sql, 0);
-            error_log('-- Start while--', 0);
-        }
+                if ($this->debug > 2) {
+                    error_log('New LP - learnpath::__construct() '.__LINE__.' ----- end while ----', 0);
+                }
 
-        $lp_item_id_list = array();
+                if (!empty($lp_item_id_list)) {
+                    $lp_item_id_list_to_string = implode("','", $lp_item_id_list);
+                    if (!empty($lp_item_id_list_to_string)) {
+                        // Get last viewing vars.
+                        $itemViewTable = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+                        // This query should only return one or zero result.
+                        $sql = "SELECT lp_item_id, status
+                                FROM $itemViewTable
+                                WHERE
+                                    c_id = $course_id AND
+                                    lp_view_id = ".$this->lp_view_id." AND
+                                    lp_item_id IN ('".$lp_item_id_list_to_string."')
+                                ORDER BY view_count DESC ";
 
-        while ($row = Database::fetch_array($res)) {
-            $lp_item_id_list[] = $row['id'];
-            switch ($this->type) {
-                case 3: //aicc
-                    $oItem = new aiccItem('db', $row['id'], $course_id);
-                    if (is_object($oItem)) {
-                        $my_item_id = $oItem->get_id();
-                        $oItem->set_lp_view($this->lp_view_id, $course_id);
-                        $oItem->set_prevent_reinit($this->prevent_reinit);
-                        // Don't use reference here as the next loop will make the pointed object change.
-                        $this->items[$my_item_id] = $oItem;
-                        $this->refs_list[$oItem->ref] = $my_item_id;
                         if ($this->debug > 2) {
                             error_log(
-                                'New LP - learnpath::__construct() - ' .
-                                'aicc object with id ' . $my_item_id .
-                                ' set in items[]',
+                                'New LP - learnpath::__construct() - Selecting item_views: '.$sql,
                                 0
                             );
                         }
-                    }
-                    break;
-                case 2:
-                    $oItem = new scormItem('db', $row['id'], $course_id);
-                    if (is_object($oItem)) {
-                        $my_item_id = $oItem->get_id();
-                        $oItem->set_lp_view($this->lp_view_id, $course_id);
-                        $oItem->set_prevent_reinit($this->prevent_reinit);
-                        // Don't use reference here as the next loop will make the pointed object change.
 
-                        $this->items[$my_item_id] = $oItem;
+                        $status_list = array();
+                        $res = Database::query($sql);
+                        while ($row = Database:: fetch_array($res)) {
+                            $status_list[$row['lp_item_id']] = $row['status'];
+                        }
 
-                        $this->refs_list[$oItem->ref] = $my_item_id;
-                        if ($this->debug > 2) {
-                            error_log('New LP - object with id ' . $my_item_id . ' set in items[]', 0);
+                        foreach ($lp_item_id_list as $item_id) {
+                            if (isset($status_list[$item_id])) {
+                                $status = $status_list[$item_id];
+                                if (is_object($this->items[$item_id])) {
+                                    $this->items[$item_id]->set_status($status);
+                                    if (empty($status)) {
+                                        $this->items[$item_id]->set_status(
+                                            $this->default_status
+                                        );
+                                    }
+                                }
+                            } else {
+                                if (!api_is_invitee()) {
+                                    if (is_object($this->items[$item_id])) {
+                                        $this->items[$item_id]->set_status(
+                                            $this->default_status
+                                        );
+                                    }
+
+                                    if (!empty($this->lp_view_id)) {
+                                        // Add that row to the lp_item_view table so that we have something to show in the stats page.
+                                        $params = [
+                                            'c_id' => $course_id,
+                                            'lp_item_id' => $item_id,
+                                            'lp_view_id' => $this->lp_view_id,
+                                            'view_count' => 1,
+                                            'status' => 'not attempted',
+                                            'start_time' => time(),
+                                            'total_time' => 0,
+                                            'score' => 0
+                                        ];
+                                        $insertId = Database::insert($itemViewTable, $params);
+
+                                        if ($insertId) {
+                                            $sql = "UPDATE $itemViewTable SET id = iid
+                                                    WHERE iid = $insertId";
+                                            Database::query($sql);
+                                        }
+
+                                        $this->items[$item_id]->set_lp_view(
+                                            $this->lp_view_id,
+                                            $course_id
+                                        );
+                                    }
+                                }
+                            }
                         }
                     }
-                    break;
-                case 1:
-                default:
-                    if ($this->debug > 2) {
-                        error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - calling learnpathItem', 0);
-                    }
-                    $oItem = new learnpathItem($row['id'], $user_id, $course_id, $row);
-
-                    if ($this->debug > 2) {
-                        error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - end calling learnpathItem', 0);
-                    }
-                    if (is_object($oItem)) {
-                        $my_item_id = $oItem->get_id();
-                        //$oItem->set_lp_view($this->lp_view_id); // Moved down to when we are sure the item_view exists.
-                        $oItem->set_prevent_reinit($this->prevent_reinit);
-                        // Don't use reference here as the next loop will make the pointed object change.
-                        $this->items[$my_item_id] = $oItem;
-                        $this->refs_list[$my_item_id] = $my_item_id;
-                        if ($this->debug > 2) {
-                            error_log(
-                                'New LP - learnpath::__construct() ' . __LINE__ .
-                                ' - object with id ' . $my_item_id . ' set in items[]',
-                                0);
-                        }
-                    }
-                    break;
-            }
-
-            // Setting the object level with variable $this->items[$i][parent]
-            foreach ($this->items as $itemLPObject) {
-                $level = learnpath::get_level_for_item($this->items, $itemLPObject->db_id);
-                $itemLPObject->level = $level;
-            }
-
-            // Setting the view in the item object.
-            if (is_object($this->items[$row['id']])) {
-                $this->items[$row['id']]->set_lp_view($this->lp_view_id, $course_id);
-                if ($this->items[$row['id']]->get_type() == TOOL_HOTPOTATOES) {
-                    $this->items[$row['id']]->current_start_time = 0;
-                    $this->items[$row['id']]->current_stop_time	= 0;
                 }
-            }
-        }
 
-        if ($this->debug > 2) {
-            error_log('New LP - learnpath::__construct() ' . __LINE__ . ' ----- end while ----', 0);
-        }
-
-        if (!empty($lp_item_id_list)) {
-            $lp_item_id_list_to_string = implode("','", $lp_item_id_list);
-            if (!empty($lp_item_id_list_to_string)) {
-                // Get last viewing vars.
-                $lp_item_view_table = Database:: get_course_table(
-                    TABLE_LP_ITEM_VIEW
+                $this->ordered_items = self::get_flat_ordered_items_list(
+                    $this->get_id(),
+                    0,
+                    $course_id
                 );
-                // This query should only return one or zero result.
-                $sql = "SELECT lp_item_id, status
-                        FROM $lp_item_view_table
-                        WHERE
-                            c_id = $course_id AND
-                            lp_view_id = ".$this->lp_view_id." AND
-                            lp_item_id IN ('".$lp_item_id_list_to_string."')
-                        ORDER BY view_count DESC ";
-
-                if ($this->debug > 2) {
-                    error_log(
-                        'New LP - learnpath::__construct() - Selecting item_views: '.$sql,
-                        0
-                    );
-                }
-
-                $status_list = array();
-                $res = Database::query($sql);
-                while ($row = Database:: fetch_array($res)) {
-                    $status_list[$row['lp_item_id']] = $row['status'];
-                }
-
-                foreach ($lp_item_id_list as $item_id) {
-                    if (isset($status_list[$item_id])) {
-                        $status = $status_list[$item_id];
-                        if (is_object($this->items[$item_id])) {
-                            $this->items[$item_id]->set_status($status);
-                            if (empty($status)) {
-                                $this->items[$item_id]->set_status(
-                                    $this->default_status
-                                );
-                            }
-                        }
-                    } else {
-                        if (!api_is_invitee()) {
-                            if (is_object($this->items[$item_id])) {
-                                $this->items[$item_id]->set_status(
-                                    $this->default_status
-                                );
-                            }
-
-                            // Add that row to the lp_item_view table so that we have something to show in the stats page.
-                            $sql = "INSERT INTO $lp_item_view_table (c_id, lp_item_id, lp_view_id, view_count, status, start_time, total_time, score)
-                                    VALUES ($course_id, ".$item_id.",".$this->lp_view_id.", 1, 'not attempted', '".time()."', 0, 0)";
-
-                            if ($this->debug > 2) {
-                                error_log(
-                                    'New LP - learnpath::__construct() '.__LINE__.' - Inserting blank item_view : '.$sql,
-                                    0
-                                );
-                            }
-                            $this->items[$item_id]->set_lp_view(
-                                $this->lp_view_id,
-                                $course_id
-                            );
-
-                            Database::query($sql);
-                            $insertId = Database::insert_id();
-
-                            $sql = "UPDATE $lp_item_view_table SET id = iid
-                                    WHERE iid = $insertId";
-                            Database::query($sql);
-                        }
+                $this->max_ordered_items = 0;
+                foreach ($this->ordered_items as $index => $dummy) {
+                    if ($index > $this->max_ordered_items && !empty($dummy)) {
+                        $this->max_ordered_items = $index;
                     }
                 }
+                // TODO: Define the current item better.
+                $this->first();
+                if ($this->debug > 2) {
+                    error_log('New LP - learnpath::__construct() '.__LINE__.' - End of learnpath constructor for learnpath '.$this->get_id(), 0);
+                }
+            } else {
+                $this->error = 'Learnpath ID does not exist in database ('.$sql.')';
             }
         }
-
-        $this->ordered_items = self::get_flat_ordered_items_list(
-            $this->get_id(),
-            0,
-            $course_id
-        );
-        $this->max_ordered_items = 0;
-        foreach ($this->ordered_items as $index => $dummy) {
-            if ($index > $this->max_ordered_items && !empty($dummy)) {
-                $this->max_ordered_items = $index;
-            }
-        }
-        // TODO: Define the current item better.
-        $this->first();
-        if ($this->debug > 2) {
-            error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - End of learnpath constructor for learnpath ' . $this->get_id(), 0);
-        }
-        return true;
     }
 
     /**
@@ -456,22 +455,22 @@ class learnpath
      */
     public function set_course_int_id($course_id)
     {
-        return $this->course_int_id = intval($course_id);
+        return $this->course_int_id = (int) $course_id;
     }
 
     /**
      * Get the depth level of LP item
-     * @param $in_tab_items
-     * @param $in_current_item_id
+     * @param array $items
+     * @param int $currentItemId
      * @return int
      */
-    private static function get_level_for_item($in_tab_items, $in_current_item_id)
+    private static function get_level_for_item($items, $currentItemId)
     {
-        $parent_item_id = $in_tab_items[$in_current_item_id]->parent;
-        if ($parent_item_id == 0) {
+        $parentItemId = $items[$currentItemId]->parent;
+        if ($parentItemId == 0) {
             return 0;
         } else {
-            return learnpath::get_level_for_item($in_tab_items, $parent_item_id) + 1;
+            return self::get_level_for_item($items, $parentItemId) + 1;
         }
     }
 
@@ -506,7 +505,7 @@ class learnpath
     ) {
         $course_id = $this->course_info['real_id'];
         if ($this->debug > 0) {
-            error_log('New LP - In learnpath::add_item(' . $parent . ',' . $previous . ',' . $type . ',' . $id . ',' . $title . ')', 0);
+            error_log('New LP - In learnpath::add_item('.$parent.','.$previous.','.$type.','.$id.','.$title.')', 0);
         }
         if (empty($course_id)) {
             // Sometimes Oogie doesn't catch the course info but sets $this->cc
@@ -515,7 +514,7 @@ class learnpath
         }
         $userId = empty($userId) ? api_get_user_id() : $userId;
         $sessionId = api_get_session_id();
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $_course = $this->course_info;
         $parent = intval($parent);
         $previous = intval($previous);
@@ -528,25 +527,25 @@ class learnpath
                 FROM $tbl_lp_item
                 WHERE
                     c_id = $course_id AND
-                    lp_id = " . $this->get_id() . " AND
-                    parent_item_id = " . $parent;
+                    lp_id = ".$this->get_id()." AND
+                    parent_item_id = ".$parent;
 
         $res_count = Database::query($sql);
-        $row = Database :: fetch_array($res_count);
+        $row = Database::fetch_array($res_count);
         $num = $row['num'];
 
         if ($num > 0) {
-            if ($previous == 0) {
+            if (empty($previous)) {
                 $sql = "SELECT id, next_item_id, display_order
-                        FROM " . $tbl_lp_item . "
+                        FROM $tbl_lp_item
                         WHERE
                             c_id = $course_id AND
-                            lp_id = " . $this->get_id() . " AND
-                            parent_item_id = " . $parent . " AND
+                            lp_id = ".$this->get_id()." AND
+                            parent_item_id = ".$parent." AND
                             previous_item_id = 0 OR
-                            previous_item_id=" . $parent;
+                            previous_item_id= ".$parent;
                 $result = Database::query($sql);
-                $row = Database :: fetch_array($result);
+                $row = Database::fetch_array($result);
                 $tmp_previous = 0;
                 $next = $row['id'];
                 $display_order = 0;
@@ -556,8 +555,8 @@ class learnpath
 						FROM $tbl_lp_item
                         WHERE
                             c_id = $course_id AND
-                            lp_id = " . $this->get_id() . " AND
-                            id = " . $previous;
+                            lp_id = ".$this->get_id()." AND
+                            id = ".$previous;
 
                 $result = Database::query($sql);
                 $row = Database:: fetch_array($result);
@@ -576,8 +575,8 @@ class learnpath
         $typeCleaned = Database::escape_string($type);
         if ($type == 'quiz') {
             $sql = 'SELECT SUM(ponderation)
-                    FROM ' . Database :: get_course_table(TABLE_QUIZ_QUESTION) . ' as quiz_question
-                    INNER JOIN  ' . Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION) . ' as quiz_rel_question
+                    FROM '.Database::get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
+                    INNER JOIN '.Database::get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
                     ON
                         quiz_question.id = quiz_rel_question.question_id AND
                         quiz_question.c_id = quiz_rel_question.c_id
@@ -586,7 +585,7 @@ class learnpath
                         quiz_question.c_id = $course_id AND
                         quiz_rel_question.c_id = $course_id ";
             $rsQuiz = Database::query($sql);
-            $max_score = Database :: result($rsQuiz, 0, 0);
+            $max_score = Database::result($rsQuiz, 0, 0);
 
             // Disabling the exercise if we add it inside a LP
             $exercise = new Exercise($course_id);
@@ -623,44 +622,50 @@ class learnpath
         $new_item_id = Database::insert($tbl_lp_item, $params);
 
         if ($this->debug > 2) {
-            error_log('New LP - Inserting dir/chapter: ' . $new_item_id, 0);
+            error_log('New LP - Inserting dir/chapter: '.$new_item_id, 0);
         }
 
         if ($new_item_id) {
             $sql = "UPDATE $tbl_lp_item SET id = iid WHERE iid = $new_item_id";
             Database::query($sql);
 
-            // Update the item that should come after the new item.
-            $sql = " UPDATE $tbl_lp_item SET
-                        previous_item_id =  $new_item_id,
-                        next_item_id = $new_item_id,
-                        id = $new_item_id
-                     WHERE iid = $new_item_id";
+            $sql = "UPDATE $tbl_lp_item
+                    SET previous_item_id = $new_item_id 
+                    WHERE c_id = $course_id AND id = $next";
+            Database::query($sql);
+
+            // Update the item that should be before the new item.
+            $sql = "UPDATE $tbl_lp_item
+                    SET next_item_id = $new_item_id
+                    WHERE c_id = $course_id AND id = $tmp_previous";
             Database::query($sql);
 
             // Update all the items after the new item.
-            $sql = "UPDATE " . $tbl_lp_item . "
+            $sql = "UPDATE ".$tbl_lp_item."
                         SET display_order = display_order + 1
                     WHERE
                         c_id = $course_id AND
-                        lp_id = " . $this->get_id() . " AND
-                        id <> " . $new_item_id . " AND
-                        parent_item_id = " . $parent . " AND
+                        lp_id = ".$this->get_id()." AND
+                        id <> " . $new_item_id." AND
+                        parent_item_id = " . $parent." AND
                         display_order > " . $display_order;
             Database::query($sql);
 
             // Update the item that should come after the new item.
-            $sql = "UPDATE " . $tbl_lp_item . "
-                    SET ref = " . $new_item_id . "
-                    WHERE c_id = $course_id AND id = " . $new_item_id;
+            $sql = "UPDATE ".$tbl_lp_item."
+                    SET ref = " . $new_item_id."
+                    WHERE c_id = $course_id AND id = ".$new_item_id;
             Database::query($sql);
 
             // Upload audio.
             if (!empty($_FILES['mp3']['name'])) {
                 // Create the audio folder if it does not exist yet.
-                $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document/';
-                if (!is_dir($filepath . 'audio')) {
-                    mkdir($filepath . 'audio', api_get_permissions_for_new_directories());
+                $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
+                if (!is_dir($filepath.'audio')) {
+                    mkdir(
+                        $filepath.'audio',
+                        api_get_permissions_for_new_directories()
+                    );
                     $audio_id = add_document(
                         $_course,
                         '/audio',
@@ -703,7 +708,7 @@ class learnpath
                 $file_path = handle_uploaded_document(
                     $_course,
                     $_FILES['mp3'],
-                    api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document',
+                    api_get_path(SYS_COURSE_PATH).$_course['path'].'/document',
                     '/audio',
                     $userId,
                     '',
@@ -719,8 +724,8 @@ class learnpath
 
                 // Store the mp3 file in the lp_item table.
                 $sql = "UPDATE $tbl_lp_item SET
-                            audio = '" . Database::escape_string($file) . "'
-                        WHERE id = '" . intval($new_item_id) . "'";
+                            audio = '".Database::escape_string($file)."'
+                        WHERE id = '" . intval($new_item_id)."'";
                 Database::query($sql);
             }
         }
@@ -730,13 +735,17 @@ class learnpath
 
     /**
      * Static admin function allowing addition of a learnpath to a course.
-     * @param	string	Course code
-     * @param	string	Learnpath name
-     * @param	string	Learnpath description string, if provided
-     * @param	string	Type of learnpath (default = 'guess', others = 'dokeos', 'aicc',...)
-     * @param	string	Type of files origin (default = 'zip', others = 'dir','web_dir',...)
-     * @param	string	Zip file containing the learnpath or directory containing the learnpath
-     * @return	integer	The new learnpath ID on success, 0 on failure
+     * @param string    Course code
+     * @param string    Learnpath name
+     * @param string    Learnpath description string, if provided
+     * @param string    Type of learnpath (default = 'guess', others = 'dokeos', 'aicc',...)
+     * @param string    Type of files origin (default = 'zip', others = 'dir','web_dir',...)
+     * @param string $zipname Zip file containing the learnpath or directory containing the learnpath
+     * @param string $publicated_on
+     * @param string $expired_on
+     * @param int $categoryId
+     * @param int $userId
+     * @return integer    The new learnpath ID on success, 0 on failure
      */
     public static function add_lp(
         $courseCode,
@@ -760,7 +769,7 @@ class learnpath
             $courseInfo = api_get_course_info();
         }
 
-        $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
+        $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
         // Check course code exists.
         // Check lp_name doesn't exist, otherwise append something.
         $i = 0;
@@ -776,14 +785,6 @@ class learnpath
         $res_name = Database::query($check_name);
 
         if (empty($publicated_on)) {
-            //by default the publication date is the same that the creation date
-            //The behaviour above was changed due BT#2800
-//            global $_custom;
-//            if (isset($_custom['lps_hidden_when_no_start_date']) && $_custom['lps_hidden_when_no_start_date']) {
-//                $publicated_on = null;
-//            } else {
-//                $publicated_on = null;
-//            }
             $publicated_on = null;
         } else {
             $publicated_on = Database::escape_string(api_get_utc_datetime($publicated_on));
@@ -795,11 +796,12 @@ class learnpath
             $expired_on = Database::escape_string(api_get_utc_datetime($expired_on));
         }
 
-        while (Database :: num_rows($res_name)) {
+        while (Database::num_rows($res_name)) {
             // There is already one such name, update the current one a bit.
             $i++;
-            $name = $name . ' - ' . $i;
-            $check_name = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND name = '$name'";
+            $name = $name.' - '.$i;
+            $check_name = "SELECT * FROM $tbl_lp 
+                           WHERE c_id = $course_id AND name = '$name'";
             $res_name = Database::query($check_name);
         }
         // New name does not exist yet; keep it.
@@ -824,12 +826,13 @@ class learnpath
                 break;
             case 'manual':
             default:
-                $get_max = "SELECT MAX(display_order) FROM $tbl_lp WHERE c_id = $course_id";
+                $get_max = "SELECT MAX(display_order) 
+                            FROM $tbl_lp WHERE c_id = $course_id";
                 $res_max = Database::query($get_max);
-                if (Database :: num_rows($res_max) < 1) {
+                if (Database::num_rows($res_max) < 1) {
                     $dsp = 1;
                 } else {
-                    $row = Database :: fetch_array($res_max);
+                    $row = Database::fetch_array($res_max);
                     $dsp = $row[0] + 1;
                 }
 
@@ -865,7 +868,6 @@ class learnpath
                     'subscribe_users' => 0,
                     'accumulate_scorm_time' => 1
                 ];
-
                 $id = Database::insert($tbl_lp, $params);
 
                 if ($id > 0) {
@@ -880,7 +882,14 @@ class learnpath
                         'LearnpathAdded',
                         $userId
                     );
-                    api_set_default_visibility($id, TOOL_LEARNPATH, 0, $courseInfo, $session_id, $userId);
+                    api_set_default_visibility(
+                        $id,
+                        TOOL_LEARNPATH,
+                        0,
+                        $courseInfo,
+                        $session_id,
+                        $userId
+                    );
                     return $id;
                 }
                 break;
@@ -889,7 +898,7 @@ class learnpath
 
     /**
      * Auto completes the parents of an item in case it's been completed or passed
-     * @param	integer	$item Optional ID of the item from which to look for parents
+     * @param int $item Optional ID of the item from which to look for parents
      */
     public function autocomplete_parents($item)
     {
@@ -911,7 +920,7 @@ class learnpath
                 // if $item points to an object and there is a parent.
                 if ($debug) {
                     error_log(
-                        'Autocompleting parent of item ' . $item . ' "'.$currentItem->get_title().'" (item ' . $parent_id . ' "'.$parent->get_title().'") ',
+                        'Autocompleting parent of item '.$item.' "'.$currentItem->get_title().'" (item '.$parent_id.' "'.$parent->get_title().'") ',
                         0
                     );
                 }
@@ -939,7 +948,7 @@ class learnpath
                         if ($childItemId != $item) {
                             if ($debug) {
                                 error_log(
-                                    'Looking at brother #'.$childItemId . ' "' . $childItem->get_title() . '", status is ' . $childItem->get_status(),
+                                    'Looking at brother #'.$childItemId.' "'.$childItem->get_title().'", status is '.$childItem->get_status(),
                                     0
                                 );
                             }
@@ -959,7 +968,7 @@ class learnpath
                             } else {
                                 if ($debug > 2) {
                                     error_log(
-                                        'Found one incomplete child of parent #' . $parent_id . ': child #'.$childItemId . ' "' . $childItem->get_title() . '", is ' . $childItem->get_status().' db_item_view_id:#'.$childItem->db_item_view_id,
+                                        'Found one incomplete child of parent #'.$parent_id.': child #'.$childItemId.' "'.$childItem->get_title().'", is '.$childItem->get_status().' db_item_view_id:#'.$childItem->db_item_view_id,
                                         0
                                     );
                                 }
@@ -1005,7 +1014,6 @@ class learnpath
      */
     public function autosave()
     {
-
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::autosave()', 0);
         }
@@ -1017,14 +1025,14 @@ class learnpath
      * Stops the timer
      * Saves into the database if required
      * Clears the current resource data from this object
-     * @return	boolean	True on success, false on failure
+     * @return boolean    True on success, false on failure
      */
     public function close()
     {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::close()', 0);
         }
-        if (empty ($this->lp_id)) {
+        if (empty($this->lp_id)) {
             $this->error = 'Trying to close this learnpath but no ID is set';
             return false;
         }
@@ -1038,10 +1046,10 @@ class learnpath
 
     /**
      * Static admin function allowing removal of a learnpath
-     * @param	array $courseInfo
-     * @param	integer	Learnpath ID
-     * @param	string	Whether to delete data or keep it (default: 'keep', others: 'remove')
-     * @return	boolean	True on success, false on failure (might change that to return number of elements deleted)
+     * @param array $courseInfo
+     * @param integer $id    Learnpath ID
+     * @param string $delete Whether to delete data or keep it (default: 'keep', others: 'remove')
+     * @return boolean    True on success, false on failure (might change that to return number of elements deleted)
      */
     public function delete($courseInfo = null, $id = null, $delete = 'keep')
     {
@@ -1053,27 +1061,29 @@ class learnpath
         // TODO: Implement a way of getting this to work when the current object is not set.
         // In clear: implement this in the item class as well (abstract class) and use the given ID in queries.
         // If an ID is specifically given and the current LP is not the same, prevent delete.
-        if (!empty ($id) && ($id != $this->lp_id)) {
+        if (!empty($id) && ($id != $this->lp_id)) {
             return false;
         }
 
-        $lp = Database:: get_course_table(TABLE_LP_MAIN);
-        $lp_item = Database:: get_course_table(TABLE_LP_ITEM);
-        $lp_view = Database:: get_course_table(TABLE_LP_VIEW);
-        $lp_item_view = Database:: get_course_table(TABLE_LP_ITEM_VIEW);
+        $lp = Database::get_course_table(TABLE_LP_MAIN);
+        $lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $lp_view = Database::get_course_table(TABLE_LP_VIEW);
+        $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
         // Delete lp item id.
         foreach ($this->items as $id => $dummy) {
             $sql = "DELETE FROM $lp_item_view
-                    WHERE c_id = $course_id AND lp_item_id = '" . $id . "'";
+                    WHERE c_id = $course_id AND lp_item_id = '".$id."'";
             Database::query($sql);
         }
 
         // Proposed by Christophe (nickname: clefevre)
-        $sql = "DELETE FROM $lp_item WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
+        $sql = "DELETE FROM $lp_item
+                WHERE c_id = ".$course_id." AND lp_id = ".$this->lp_id;
         Database::query($sql);
 
-        $sql = "DELETE FROM $lp_view WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
+        $sql = "DELETE FROM $lp_view 
+                WHERE c_id = ".$course_id." AND lp_id = ".$this->lp_id;
         Database::query($sql);
 
         self::toggle_publish($this->lp_id, 'i');
@@ -1081,46 +1091,50 @@ class learnpath
         if ($this->type == 2 || $this->type == 3) {
             // This is a scorm learning path, delete the files as well.
             $sql = "SELECT path FROM $lp
-                    WHERE c_id = ".$course_id." AND id = " . $this->lp_id;
+                    WHERE c_id = ".$course_id." AND id = ".$this->lp_id;
             $res = Database::query($sql);
-            if (Database :: num_rows($res) > 0) {
-                $row = Database :: fetch_array($res);
+            if (Database::num_rows($res) > 0) {
+                $row = Database::fetch_array($res);
                 $path = $row['path'];
                 $sql = "SELECT id FROM $lp
-                        WHERE c_id = ".$course_id." AND path = '$path' AND id != " . $this->lp_id;
+                        WHERE 
+                            c_id = ".$course_id." AND
+                            path = '$path' AND 
+                            id != ".$this->lp_id;
                 $res = Database::query($sql);
-                if (Database :: num_rows($res) > 0) {
+                if (Database::num_rows($res) > 0) {
                     // Another learning path uses this directory, so don't delete it.
                     if ($this->debug > 2) {
-                        error_log('New LP - In learnpath::delete(), found other LP using path ' . $path . ', keeping directory', 0);
+                        error_log('New LP - In learnpath::delete(), found other LP using path '.$path.', keeping directory', 0);
                     }
                 } else {
                     // No other LP uses that directory, delete it.
-                    $course_rel_dir = api_get_course_path() . '/scorm/'; // scorm dir web path starting from /courses
-                    $course_scorm_dir = api_get_path(SYS_COURSE_PATH) . $course_rel_dir; // The absolute system path for this course.
-                    if ($delete == 'remove' && is_dir($course_scorm_dir . $path) and !empty ($course_scorm_dir)) {
+                    $course_rel_dir = api_get_course_path().'/scorm/'; // scorm dir web path starting from /courses
+                    $course_scorm_dir = api_get_path(SYS_COURSE_PATH).$course_rel_dir; // The absolute system path for this course.
+                    if ($delete == 'remove' && is_dir($course_scorm_dir.$path) && !empty($course_scorm_dir)) {
                         if ($this->debug > 2) {
-                            error_log('New LP - In learnpath::delete(), found SCORM, deleting directory: ' . $course_scorm_dir . $path, 0);
+                            error_log('New LP - In learnpath::delete(), found SCORM, deleting directory: '.$course_scorm_dir.$path, 0);
                         }
                         // Proposed by Christophe (clefevre).
                         if (strcmp(substr($path, -2), "/.") == 0) {
                             $path = substr($path, 0, -1); // Remove "." at the end.
                         }
                         //exec('rm -rf ' . $course_scorm_dir . $path); // See Bug #5208, this is not OS-portable way.
-                        rmdirr($course_scorm_dir . $path);
+                        rmdirr($course_scorm_dir.$path);
                     }
                 }
             }
         }
 
-        $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
+        $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
         $link = 'lp/lp_controller.php?action=view&lp_id='.$this->lp_id;
         // Delete tools
         $sql = "DELETE FROM $tbl_tool
                 WHERE c_id = ".$course_id." AND (link LIKE '$link%' AND image='scormbuilder.gif')";
         Database::query($sql);
 
-        $sql = "DELETE FROM $lp WHERE c_id = ".$course_id." AND id = " . $this->lp_id;
+        $sql = "DELETE FROM $lp 
+                WHERE c_id = ".$course_id." AND id = ".$this->lp_id;
         Database::query($sql);
         // Updates the display order of all lps.
         $this->update_display_order();
@@ -1139,6 +1153,7 @@ class learnpath
             $id,
             api_get_session_id()
         );
+
         if ($link_info !== false) {
             GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
         }
@@ -1151,26 +1166,28 @@ class learnpath
 
     /**
      * Removes all the children of one item - dangerous!
-     * @param	integer	$id Element ID of which children have to be removed
-     * @return	integer	Total number of children removed
+     * @param    integer $id Element ID of which children have to be removed
+     * @return    integer    Total number of children removed
      */
     public function delete_children_items($id)
     {
         $course_id = $this->course_info['real_id'];
         if ($this->debug > 0) {
-            error_log('New LP - In learnpath::delete_children_items(' . $id . ')', 0);
+            error_log('New LP - In learnpath::delete_children_items('.$id.')', 0);
         }
         $num = 0;
-        if (empty ($id) || $id != strval(intval($id))) {
+        if (empty($id) || $id != strval(intval($id))) {
             return false;
         }
-        $lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM $lp_item WHERE c_id = ".$course_id." AND parent_item_id = $id";
+        $lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $sql = "SELECT * FROM $lp_item 
+                WHERE c_id = ".$course_id." AND parent_item_id = $id";
         $res = Database::query($sql);
-        while ($row = Database :: fetch_array($res)) {
+        while ($row = Database::fetch_array($res)) {
             $num += $this->delete_children_items($row['id']);
-            $sql_del = "DELETE FROM $lp_item WHERE c_id = ".$course_id." AND id = " . $row['id'];
-            Database::query($sql_del);
+            $sql = "DELETE FROM $lp_item 
+                    WHERE c_id = ".$course_id." AND id = ".$row['id'];
+            Database::query($sql);
             $num++;
         }
         return $num;
@@ -1178,10 +1195,10 @@ class learnpath
 
     /**
      * Removes an item from the current learnpath
-     * @param	integer	$id Elem ID (0 if first)
-     * @param	integer	$remove Whether to remove the resource/data from the
+     * @param    integer $id Elem ID (0 if first)
+     * @param    integer $remove Whether to remove the resource/data from the
      * system or leave it (default: 'keep', others 'remove')
-     * @return	integer	Number of elements moved
+     * @return    integer    Number of elements moved
      * @todo implement resource removal
      */
     public function delete_item($id, $remove = 'keep')
@@ -1191,17 +1208,17 @@ class learnpath
             error_log('New LP - In learnpath::delete_item()', 0);
         }
         // TODO: Implement the resource removal.
-        if (empty ($id) || $id != strval(intval($id))) {
+        if (empty($id) || $id != strval(intval($id))) {
             return false;
         }
         // First select item to get previous, next, and display order.
-        $lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql_sel = "SELECT * FROM $lp_item WHERE c_id = ".$course_id." AND id = $id";
         $res_sel = Database::query($sql_sel);
-        if (Database :: num_rows($res_sel) < 1) {
+        if (Database::num_rows($res_sel) < 1) {
             return false;
         }
-        $row = Database :: fetch_array($res_sel);
+        $row = Database::fetch_array($res_sel);
         $previous = $row['previous_item_id'];
         $next = $row['next_item_id'];
         $display = $row['display_order'];
@@ -1210,12 +1227,12 @@ class learnpath
         // Delete children items.
         $num = $this->delete_children_items($id);
         if ($this->debug > 2) {
-            error_log('New LP - learnpath::delete_item() - deleted ' . $num . ' children of element ' . $id, 0);
+            error_log('New LP - learnpath::delete_item() - deleted '.$num.' children of element '.$id, 0);
         }
         // Now delete the item.
         $sql_del = "DELETE FROM $lp_item WHERE c_id = $course_id AND id = $id";
         if ($this->debug > 2) {
-            error_log('New LP - Deleting item: ' . $sql_del, 0);
+            error_log('New LP - Deleting item: '.$sql_del, 0);
         }
         Database::query($sql_del);
         // Now update surrounding items.
@@ -1227,7 +1244,11 @@ class learnpath
         Database::query($sql_upd);
         // Now update all following items with new display order.
         $sql_all = "UPDATE $lp_item SET display_order = display_order-1
-                    WHERE c_id = ".$course_id." AND lp_id = $lp AND parent_item_id = $parent AND display_order > $display";
+                    WHERE 
+                        c_id = ".$course_id." AND 
+                        lp_id = $lp AND 
+                        parent_item_id = $parent AND 
+                        display_order > $display";
         Database::query($sql_all);
 
         //Removing prerequisites since the item will not longer exist
@@ -1236,17 +1257,21 @@ class learnpath
 
         // Remove from search engine if enabled.
         if (api_get_setting('search_enabled') == 'true') {
-            $tbl_se_ref = Database :: get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-            $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d LIMIT 1';
+            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+            $sql = 'SELECT * FROM %s 
+                    WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d 
+                    LIMIT 1';
             $sql = sprintf($sql, $tbl_se_ref, $this->cc, TOOL_LEARNPATH, $lp, $id);
             $res = Database::query($sql);
-            if (Database :: num_rows($res) > 0) {
-                $row2 = Database :: fetch_array($res);
+            if (Database::num_rows($res) > 0) {
+                $row2 = Database::fetch_array($res);
                 require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
                 $di = new ChamiloIndexer();
                 $di->remove_document((int) $row2['search_did']);
             }
-            $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d LIMIT 1';
+            $sql = 'DELETE FROM %s 
+                    WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d 
+                    LIMIT 1';
             $sql = sprintf($sql, $tbl_se_ref, $this->cc, TOOL_LEARNPATH, $lp, $id);
             Database::query($sql);
         }
@@ -1282,23 +1307,24 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::edit_item()', 0);
         }
-        if (empty ($max_time_allowed)) {
+        if (empty($max_time_allowed)) {
             $max_time_allowed = 0;
         }
-        if (empty ($id) || ($id != strval(intval($id))) || empty ($title)) {
+        if (empty($id) || ($id != strval(intval($id))) || empty($title)) {
             return false;
         }
 
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $sql_select = "SELECT * FROM " . $tbl_lp_item . " WHERE c_id = ".$course_id." AND id = " . $id;
-        $res_select = Database::query($sql_select);
-        $row_select = Database :: fetch_array($res_select);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $sql = "SELECT * FROM $tbl_lp_item 
+                WHERE c_id = ".$course_id." AND id = ".$id;
+        $res_select = Database::query($sql);
+        $row_select = Database::fetch_array($res_select);
         $audio_update_sql = '';
-        if (is_array($audio) && !empty ($audio['tmp_name']) && $audio['error'] === 0) {
+        if (is_array($audio) && !empty($audio['tmp_name']) && $audio['error'] === 0) {
             // Create the audio folder if it does not exist yet.
-            $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document/';
-            if (!is_dir($filepath . 'audio')) {
-                mkdir($filepath . 'audio', api_get_permissions_for_new_directories());
+            $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
+            if (!is_dir($filepath.'audio')) {
+                mkdir($filepath.'audio', api_get_permissions_for_new_directories());
                 $audio_id = add_document(
                     $_course,
                     '/audio',
@@ -1336,11 +1362,23 @@ class learnpath
             $pi = pathinfo($audio['name']);
             if ($pi['extension'] == 'mp3') {
                 $c_det = api_get_course_info($this->cc);
-                $bp = api_get_path(SYS_COURSE_PATH) . $c_det['path'] . '/document';
-                $path = handle_uploaded_document($c_det, $audio, $bp, '/audio', api_get_user_id(), 0, null, 0, 'rename', false, 0);
+                $bp = api_get_path(SYS_COURSE_PATH).$c_det['path'].'/document';
+                $path = handle_uploaded_document(
+                    $c_det,
+                    $audio,
+                    $bp,
+                    '/audio',
+                    api_get_user_id(),
+                    0,
+                    null,
+                    0,
+                    'rename',
+                    false,
+                    0
+                );
                 $path = substr($path, 7);
                 // Update reference in lp_item - audio path is the path from inside de document/audio/ dir.
-                $audio_update_sql = ", audio = '" . Database::escape_string($path) . "' ";
+                $audio_update_sql = ", audio = '".Database::escape_string($path)."' ";
             }
         }
 
@@ -1350,13 +1388,13 @@ class learnpath
         // TODO: htmlspecialchars to be checked for encoding related problems.
         if ($same_parent && $same_previous) {
             // Only update title and description.
-            $sql = "UPDATE " . $tbl_lp_item . "
-                    SET title = '" . Database::escape_string($title) . "',
-                        prerequisite = '" . $prerequisites . "',
-                        description = '" . Database::escape_string($description) . "'
-                        " . $audio_update_sql . ",
-                        max_time_allowed = '" . Database::escape_string($max_time_allowed) . "'
-                    WHERE c_id = ".$course_id." AND id = " . $id;
+            $sql = "UPDATE ".$tbl_lp_item."
+                    SET title = '" . Database::escape_string($title)."',
+                        prerequisite = '".$prerequisites."',
+                        description = '".Database::escape_string($description)."'
+                        ".$audio_update_sql.",
+                        max_time_allowed = '".Database::escape_string($max_time_allowed)."'
+                    WHERE c_id = ".$course_id." AND id = ".$id;
             Database::query($sql);
         } else {
             $old_parent = $row_select['parent_item_id'];
@@ -1368,50 +1406,49 @@ class learnpath
 
             /* BEGIN -- virtually remove the current item id */
             /* for the next and previous item it is like the current item doesn't exist anymore */
-
             if ($old_previous != 0) {
                 // Next
-                $sql = "UPDATE " . $tbl_lp_item . "
-                        SET next_item_id = " . $old_next . "
-                        WHERE c_id = ".$course_id." AND id = " . $old_previous;
+                $sql = "UPDATE ".$tbl_lp_item."
+                        SET next_item_id = " . $old_next."
+                        WHERE c_id = ".$course_id." AND id = ".$old_previous;
                 Database::query($sql);
             }
 
             if ($old_next != 0) {
                 // Previous
-                $sql = "UPDATE " . $tbl_lp_item . "
-                        SET previous_item_id = " . $old_previous . "
-                        WHERE c_id = ".$course_id." AND id = " . $old_next;
+                $sql = "UPDATE ".$tbl_lp_item."
+                        SET previous_item_id = " . $old_previous."
+                        WHERE c_id = ".$course_id." AND id = ".$old_next;
                 Database::query($sql);
             }
 
-            // display_order - 1 for every item with a display_order bigger then the display_order of the current item.
-            $sql = "UPDATE " . $tbl_lp_item . "
+            // display_order - 1 for every item with a display_order
+            // bigger then the display_order of the current item.
+            $sql = "UPDATE ".$tbl_lp_item."
                     SET display_order = display_order - 1
                     WHERE
                         c_id = ".$course_id." AND
-                        display_order > " . $old_order . " AND
-                        lp_id = " . $this->lp_id . " AND
+                        display_order > " . $old_order." AND
+                        lp_id = " . $this->lp_id." AND
                         parent_item_id = " . $old_parent;
             Database::query($sql);
             /* END -- virtually remove the current item id */
 
             /* BEGIN -- update the current item id to his new location */
-
             if ($previous == 0) {
                 // Select the data of the item that should come after the current item.
                 $sql = "SELECT id, display_order
-                        FROM " . $tbl_lp_item . "
+                        FROM " . $tbl_lp_item."
                         WHERE
                             c_id = ".$course_id." AND
-                            lp_id = " . $this->lp_id . " AND
-                            parent_item_id = " . $parent . " AND
+                            lp_id = " . $this->lp_id." AND
+                            parent_item_id = " . $parent." AND
                             previous_item_id = " . $previous;
                 $res_select_old = Database::query($sql);
                 $row_select_old = Database::fetch_array($res_select_old);
 
                 // If the new parent didn't have children before.
-                if (Database :: num_rows($res_select_old) == 0) {
+                if (Database::num_rows($res_select_old) == 0) {
                     $new_next = 0;
                     $new_order = 1;
                 } else {
@@ -1421,67 +1458,67 @@ class learnpath
             } else {
                 // Select the data of the item that should come before the current item.
                 $sql = "SELECT next_item_id, display_order
-                        FROM " . $tbl_lp_item . "
-                        WHERE c_id = ".$course_id." AND id = " . $previous;
+                        FROM " . $tbl_lp_item."
+                        WHERE c_id = ".$course_id." AND id = ".$previous;
                 $res_select_old = Database::query($sql);
-                $row_select_old = Database :: fetch_array($res_select_old);
+                $row_select_old = Database::fetch_array($res_select_old);
                 $new_next = $row_select_old['next_item_id'];
                 $new_order = $row_select_old['display_order'] + 1;
             }
 
             // TODO: htmlspecialchars to be checked for encoding related problems.
             // Update the current item with the new data.
-            $sql = "UPDATE " . $tbl_lp_item . "
+            $sql = "UPDATE $tbl_lp_item
                     SET
-                        title = '" . Database::escape_string($title) . "',
-                        description = '" . Database::escape_string($description) . "',
-                        parent_item_id = " . $parent . ",
-                        previous_item_id = " . $previous . ",
-                        next_item_id = " . $new_next . ",
-                        display_order = " . $new_order . "
-                        " . $audio_update_sql . "
-                    WHERE c_id = ".$course_id." AND id = " . $id;
+                        title = '".Database::escape_string($title)."',
+                        description = '".Database::escape_string($description)."',
+                        parent_item_id = ".$parent.",
+                        previous_item_id = ".$previous.",
+                        next_item_id = ".$new_next.",
+                        display_order = ".$new_order."
+                        ".$audio_update_sql."
+                    WHERE c_id = ".$course_id." AND id = ".$id;
             Database::query($sql);
 
             if ($previous != 0) {
                 // Update the previous item's next_item_id.
-                $sql = "UPDATE " . $tbl_lp_item . "
-                        SET next_item_id = " . $id . "
-                        WHERE c_id = ".$course_id." AND id = " . $previous;
+                $sql = "UPDATE ".$tbl_lp_item."
+                        SET next_item_id = " . $id."
+                        WHERE c_id = ".$course_id." AND id = ".$previous;
                 Database::query($sql);
             }
 
             if ($new_next != 0) {
                 // Update the next item's previous_item_id.
-                $sql = "UPDATE " . $tbl_lp_item . "
-                        SET previous_item_id = " . $id . "
-                        WHERE c_id = ".$course_id." AND id = " . $new_next;
+                $sql = "UPDATE ".$tbl_lp_item."
+                        SET previous_item_id = " . $id."
+                        WHERE c_id = ".$course_id." AND id = ".$new_next;
                 Database::query($sql);
             }
 
             if ($old_prerequisite != $prerequisites) {
-                $sql = "UPDATE " . $tbl_lp_item . "
-                        SET prerequisite = '" . $prerequisites . "'
-                        WHERE c_id = ".$course_id." AND id = " . $id;
+                $sql = "UPDATE ".$tbl_lp_item."
+                        SET prerequisite = '" . $prerequisites."'
+                        WHERE c_id = ".$course_id." AND id = ".$id;
                 Database::query($sql);
             }
 
             if ($old_max_time_allowed != $max_time_allowed) {
                 // update max time allowed
-                $sql = "UPDATE " . $tbl_lp_item . "
-                        SET max_time_allowed = " . $max_time_allowed . "
-                        WHERE c_id = ".$course_id." AND id = " . $id;
+                $sql = "UPDATE ".$tbl_lp_item."
+                        SET max_time_allowed = " . $max_time_allowed."
+                        WHERE c_id = ".$course_id." AND id = ".$id;
                 Database::query($sql);
             }
 
             // Update all the items with the same or a bigger display_order than the current item.
-            $sql = "UPDATE " . $tbl_lp_item . "
+            $sql = "UPDATE ".$tbl_lp_item."
                     SET display_order = display_order + 1
                     WHERE
                        c_id = ".$course_id." AND
-                       lp_id = " . $this->get_id() . " AND
-                       id <> " . $id . " AND
-                       parent_item_id = " . $parent . " AND
+                       lp_id = " . $this->get_id()." AND
+                       id <> " . $id." AND
+                       parent_item_id = " . $parent." AND
                        display_order >= " . $new_order;
 
             Database::query($sql);
@@ -1496,26 +1533,30 @@ class learnpath
 
     /**
      * Updates an item's prereq in place
-     * @param	integer	$id Element ID
-     * @param	string	$prerequisite_id Prerequisite Element ID
-     * @param	int 	$mastery_score Prerequisite min score
-     * @param	int 	$max_score Prerequisite max score
+     * @param    integer $id Element ID
+     * @param    string $prerequisite_id Prerequisite Element ID
+     * @param    int $mastery_score Prerequisite min score
+     * @param    int $max_score Prerequisite max score
      *
-     * @return	boolean	True on success, false on error
+     * @return    boolean    True on success, false on error
      */
-    public function edit_item_prereq($id, $prerequisite_id, $mastery_score = 0, $max_score = 100)
-    {
+    public function edit_item_prereq(
+        $id,
+        $prerequisite_id,
+        $mastery_score = 0,
+        $max_score = 100
+    ) {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
-            error_log('New LP - In learnpath::edit_item_prereq(' . $id . ',' . $prerequisite_id . ',' . $mastery_score . ',' . $max_score . ')', 0);
+            error_log('New LP - In learnpath::edit_item_prereq('.$id.','.$prerequisite_id.','.$mastery_score.','.$max_score.')', 0);
         }
 
-        if (empty($id) || ($id != strval(intval($id))) || empty ($prerequisite_id)) {
+        if (empty($id) || ($id != strval(intval($id))) || empty($prerequisite_id)) {
             return false;
         }
 
         $prerequisite_id = intval($prerequisite_id);
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
         if (!is_numeric($mastery_score) || $mastery_score < 0) {
             $mastery_score = 0;
@@ -1543,26 +1584,17 @@ class learnpath
                     prerequisite_max_score = $max_score
                  WHERE c_id = $course_id AND id = $id";
         Database::query($sql);
-
-        if ($prerequisite_id != 'NULL' && $prerequisite_id != '') {
-            // Will this be enough to ensure unicity?
-            /*$sql = " UPDATE $tbl_lp_item
-                     SET mastery_score = $mastery_score
-                     WHERE c_id = $course_id AND ref = '$prerequisite_id'";
-
-            Database::query($sql);*/
-        }
         // TODO: Update the item object (can be ignored for now because refreshed).
         return true;
     }
 
     /**
      * Static admin function exporting a learnpath into a zip file
-     * @param	string	Export type (scorm, zip, cd)
-     * @param	string	Course code
-     * @param	integer Learnpath ID
-     * @param	string	Zip file name
-     * @return	string	Zip file path (or false on error)
+     * @param    string    Export type (scorm, zip, cd)
+     * @param    string    Course code
+     * @param    integer Learnpath ID
+     * @param    string    Zip file name
+     * @return   string    Zip file path (or false on error)
      */
     public function export_lp($type, $course, $id, $zipname)
     {
@@ -1584,8 +1616,8 @@ class learnpath
     /**
      * Gets all the chapters belonging to the same parent as the item/chapter given
      * Can also be called as abstract method
-     * @param	integer	Item ID
-     * @return	array	A list of all the "brother items" (or an empty array on failure)
+     * @param    integer $id Item ID
+     * @return    array    A list of all the "brother items" (or an empty array on failure)
      */
     public function getSiblingDirectories($id)
     {
@@ -1595,16 +1627,15 @@ class learnpath
         }
 
         if (empty($id) || $id != strval(intval($id))) {
-
-            return array ();
+            return array();
         }
 
-        $lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql_parent = "SELECT * FROM $lp_item
                        WHERE c_id = ".$course_id." AND id = $id AND item_type='dir'";
         $res_parent = Database::query($sql_parent);
-        if (Database :: num_rows($res_parent) > 0) {
-            $row_parent = Database :: fetch_array($res_parent);
+        if (Database::num_rows($res_parent) > 0) {
+            $row_parent = Database::fetch_array($res_parent);
             $parent = $row_parent['parent_item_id'];
             $sql = "SELECT * FROM $lp_item
                     WHERE
@@ -1616,7 +1647,7 @@ class learnpath
             $res_bros = Database::query($sql);
 
             $list = array();
-            while ($row_bro = Database :: fetch_array($res_bros)) {
+            while ($row_bro = Database::fetch_array($res_bros)) {
                 $list[] = $row_bro;
             }
 
@@ -1629,36 +1660,38 @@ class learnpath
     /**
      * Gets all the items belonging to the same parent as the item given
      * Can also be called as abstract method
-     * @param	integer	Item ID
-     * @return	array	A list of all the "brother items" (or an empty array on failure)
+     * @param    integer $id Item ID
+     * @return    array    A list of all the "brother items" (or an empty array on failure)
      */
     public function get_brother_items($id)
     {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
-            error_log('New LP - In learnpath::get_brother_items(' . $id . ')', 0);
+            error_log('New LP - In learnpath::get_brother_items('.$id.')', 0);
         }
 
-        if (empty ($id) || $id != strval(intval($id))) {
+        if (empty($id) || $id != strval(intval($id))) {
             return array();
         }
 
-        $lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $sql_parent = "SELECT * FROM $lp_item WHERE c_id = $course_id AND id = $id";
+        $lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $sql_parent = "SELECT * FROM $lp_item 
+                       WHERE c_id = $course_id AND id = $id";
         $res_parent = Database::query($sql_parent);
-        if (Database :: num_rows($res_parent) > 0) {
-            $row_parent = Database :: fetch_array($res_parent);
+        if (Database::num_rows($res_parent) > 0) {
+            $row_parent = Database::fetch_array($res_parent);
             $parent = $row_parent['parent_item_id'];
-            $sql_bros = "SELECT * FROM $lp_item WHERE c_id = ".$course_id." AND parent_item_id = $parent
-                         ORDER BY display_order";
-            $res_bros = Database::query($sql_bros);
-            $list = array ();
-            while ($row_bro = Database :: fetch_array($res_bros)) {
+            $sql = "SELECT * FROM $lp_item 
+                    WHERE c_id = ".$course_id." AND parent_item_id = $parent
+                    ORDER BY display_order";
+            $res_bros = Database::query($sql);
+            $list = [];
+            while ($row_bro = Database::fetch_array($res_bros)) {
                 $list[] = $row_bro;
             }
             return $list;
         }
-        return array ();
+        return [];
     }
 
     /**
@@ -1719,7 +1752,7 @@ class learnpath
 
     /**
      * Gets the current item ID
-     * @return	integer	The current learnpath item id
+     * @return    integer    The current learnpath item id
      */
     public function get_current_item_id()
     {
@@ -1731,14 +1764,14 @@ class learnpath
             $current = $this->current;
         }
         if ($this->debug > 2) {
-            error_log('New LP - In learnpath::get_current_item_id() - Returning ' . $current, 0);
+            error_log('New LP - In learnpath::get_current_item_id() - Returning '.$current, 0);
         }
         return $current;
     }
 
     /**
      * Force to get the first learnpath item id
-     * @return	integer	The current learnpath item id
+     * @return    integer    The current learnpath item id
      */
     public function get_first_item_id()
     {
@@ -1751,7 +1784,7 @@ class learnpath
 
     /**
      * Gets the total number of items available for viewing in this SCORM
-     * @return	integer	The total number of items
+     * @return    integer    The total number of items
      */
     public function get_total_items_count()
     {
@@ -1763,7 +1796,7 @@ class learnpath
 
     /**
      * Gets the total number of items available for viewing in this SCORM but without chapters
-     * @return	integer	The total no-chapters number of items
+     * @return    integer    The total no-chapters number of items
      */
     public function getTotalItemsCountWithoutDirs()
     {
@@ -1782,7 +1815,7 @@ class learnpath
 
     /**
      * Gets the first element URL.
-     * @return	string	URL to load into the viewer
+     * @return    string    URL to load into the viewer
      */
     public function first()
     {
@@ -1810,7 +1843,7 @@ class learnpath
             //&& !$this->items[$this->last_item_seen]->is_done()
         ) {
             if ($this->debug > 2) {
-                error_log('New LP - In learnpath::first() - Last item seen is ' . $this->last_item_seen.' of type '.$this->items[$this->last_item_seen]->get_type(), 0);
+                error_log('New LP - In learnpath::first() - Last item seen is '.$this->last_item_seen.' of type '.$this->items[$this->last_item_seen]->get_type(), 0);
             }
             $index = -1;
             foreach ($this->ordered_items as $myindex => $item_id) {
@@ -1822,7 +1855,7 @@ class learnpath
             if ($index == -1) {
                 // Index hasn't changed, so item not found - panic (this shouldn't happen).
                 if ($this->debug > 2) {
-                    error_log('New LP - Last item (' . $this->last_item_seen . ') was found in items but not in ordered_items, panic!', 0);
+                    error_log('New LP - Last item ('.$this->last_item_seen.') was found in items but not in ordered_items, panic!', 0);
                 }
                 return false;
             } else {
@@ -1837,27 +1870,27 @@ class learnpath
             $index = 0;
             // Loop through all ordered items and stop at the first item that is
             // not a directory *and* that has not been completed yet.
-            while ( !empty($this->ordered_items[$index]) AND
-                is_a($this->items[$this->ordered_items[$index]], 'learnpathItem') AND
+            while (!empty($this->ordered_items[$index]) &&
+                is_a($this->items[$this->ordered_items[$index]], 'learnpathItem') &&
                 (
-                    $this->items[$this->ordered_items[$index]]->get_type() == 'dir' OR
+                    $this->items[$this->ordered_items[$index]]->get_type() == 'dir' ||
                     $this->items[$this->ordered_items[$index]]->is_done() === true
-                ) AND $index < $this->max_ordered_items) {
+                ) && $index < $this->max_ordered_items) {
                 $index++;
             }
-            $this->last     = $this->current;
+            $this->last = $this->current;
             // current is
-            $this->current  = isset($this->ordered_items[$index]) ? $this->ordered_items[$index] : null;
-            $this->index    = $index;
+            $this->current = isset($this->ordered_items[$index]) ? $this->ordered_items[$index] : null;
+            $this->index = $index;
             if ($this->debug > 2) {
-                error_log('$index ' . $index);
+                error_log('$index '.$index);
             }
             if ($this->debug > 2) {
-                error_log('New LP - In learnpath::first() - No last item seen. New last = ' . $this->last . '(' . $this->ordered_items[$index] . ')', 0);
+                error_log('New LP - In learnpath::first() - No last item seen. New last = '.$this->last.'('.$this->ordered_items[$index].')', 0);
             }
         }
         if ($this->debug > 2) {
-            error_log('New LP - In learnpath::first() - First item is ' . $this->get_current_item_id());
+            error_log('New LP - In learnpath::first() - First item is '.$this->get_current_item_id());
         }
     }
 
@@ -1870,7 +1903,7 @@ class learnpath
     public function get_js_info($item_id = 0)
     {
         if ($this->debug > 0) {
-            error_log('New LP - In learnpath::get_js_info(' . $item_id . ')', 0);
+            error_log('New LP - In learnpath::get_js_info('.$item_id.')', 0);
         }
 
         $info = '';
@@ -1880,34 +1913,34 @@ class learnpath
             //if item is defined, return values from DB
             $oItem = $this->items[$item_id];
             $info .= '<script language="javascript">';
-            $info .= "top.set_score(" . $oItem->get_score() . ");\n";
-            $info .= "top.set_max(" . $oItem->get_max() . ");\n";
-            $info .= "top.set_min(" . $oItem->get_min() . ");\n";
-            $info .= "top.set_lesson_status('" . $oItem->get_status() . "');";
-            $info .= "top.set_session_time('" . $oItem->get_scorm_time('js') . "');";
-            $info .= "top.set_suspend_data('" . $oItem->get_suspend_data() . "');";
-            $info .= "top.set_saved_lesson_status('" . $oItem->get_status() . "');";
+            $info .= "top.set_score(".$oItem->get_score().");\n";
+            $info .= "top.set_max(".$oItem->get_max().");\n";
+            $info .= "top.set_min(".$oItem->get_min().");\n";
+            $info .= "top.set_lesson_status('".$oItem->get_status()."');";
+            $info .= "top.set_session_time('".$oItem->get_scorm_time('js')."');";
+            $info .= "top.set_suspend_data('".$oItem->get_suspend_data()."');";
+            $info .= "top.set_saved_lesson_status('".$oItem->get_status()."');";
             $info .= "top.set_flag_synchronized();";
             $info .= '</script>';
             if ($this->debug > 2) {
-                error_log('New LP - in learnpath::get_js_info(' . $item_id . ') - returning: ' . $info, 0);
+                error_log('New LP - in learnpath::get_js_info('.$item_id.') - returning: '.$info, 0);
             }
             return $info;
 
         } else {
             // If item_id is empty, just update to default SCORM data.
             $info .= '<script language="javascript">';
-            $info .= "top.set_score(" . learnpathItem :: get_score() . ");\n";
-            $info .= "top.set_max(" . learnpathItem :: get_max() . ");\n";
-            $info .= "top.set_min(" . learnpathItem :: get_min() . ");\n";
-            $info .= "top.set_lesson_status('" . learnpathItem :: get_status() . "');";
-            $info .= "top.set_session_time('" . learnpathItem :: getScormTimeFromParameter('js') . "');";
-            $info .= "top.set_suspend_data('" . learnpathItem :: get_suspend_data() . "');";
-            $info .= "top.set_saved_lesson_status('" . learnpathItem :: get_status() . "');";
+            $info .= "top.set_score(".learnpathItem::get_score().");\n";
+            $info .= "top.set_max(".learnpathItem::get_max().");\n";
+            $info .= "top.set_min(".learnpathItem::get_min().");\n";
+            $info .= "top.set_lesson_status('".learnpathItem::get_status()."');";
+            $info .= "top.set_session_time('".learnpathItem::getScormTimeFromParameter('js')."');";
+            $info .= "top.set_suspend_data('".learnpathItem::get_suspend_data()."');";
+            $info .= "top.set_saved_lesson_status('".learnpathItem::get_status()."');";
             $info .= "top.set_flag_synchronized();";
             $info .= '</script>';
             if ($this->debug > 2) {
-                error_log('New LP - in learnpath::get_js_info(' . $item_id . ') - returning: ' . $info, 0);
+                error_log('New LP - in learnpath::get_js_info('.$item_id.') - returning: '.$info, 0);
             }
             return $info;
         }
@@ -1915,12 +1948,12 @@ class learnpath
 
     /**
      * Gets the js library from the database
-     * @return	string	The name of the javascript library to be used
+     * @return    string    The name of the javascript library to be used
      */
     public function get_js_lib()
     {
         $lib = '';
-        if (!empty ($this->js_lib)) {
+        if (!empty($this->js_lib)) {
             $lib = $this->js_lib;
         }
         return $lib;
@@ -1932,7 +1965,7 @@ class learnpath
      */
     public function get_id()
     {
-        if (!empty ($this->lp_id)) {
+        if (!empty($this->lp_id)) {
             return $this->lp_id;
         } else {
             return 0;
@@ -1983,29 +2016,29 @@ class learnpath
             $navbar = '
                   <span id="'.$idBar.'" class="buttons">
                     <a class="icon-toolbar" href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onclick="window.parent.API.save_asset();return true;" target="content_name" title="'.$reportingText.'" id="stats_link">
-                        <span class="fa fa-info"></span><span class="sr-only">' . $reportingText . '</span>
+                        <span class="fa fa-info"></span><span class="sr-only">' . $reportingText.'</span>
                     </a>
-                    <a class="icon-toolbar" id="scorm-previous" href="#" onclick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="'.$previousText.'">
-                        <span class="fa fa-chevron-left"></span><span class="sr-only">' . $previousText . '</span>
+                    <a class="icon-toolbar" id="scorm-previous" href="#" onclick="switch_item(' . $mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
+                        <span class="fa fa-chevron-left"></span><span class="sr-only">' . $previousText.'</span>
                     </a>
-                    <a class="icon-toolbar" id="scorm-next" href="#" onclick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="'.$nextText.'">
-                        <span class="fa fa-chevron-right"></span><span class="sr-only">' . $nextText. '</span>
+                    <a class="icon-toolbar" id="scorm-next" href="#" onclick="switch_item(' . $mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
+                        <span class="fa fa-chevron-right"></span><span class="sr-only">' . $nextText.'</span>
                     </a>
                     <a class="icon-toolbar" id="view-embedded" href="lp_controller.php?action=mode&mode=embedded" target="_top" title="'.$fullScreenText.'">
-                        <span class="fa fa-columns"></span><span class="sr-only">' . $fullScreenText . '</span>
+                        <span class="fa fa-columns"></span><span class="sr-only">' . $fullScreenText.'</span>
                     </a>
                   </span>';
         } else {
             $navbar = '
                 <span id="'.$idBar.'" class="buttons text-right">
                     <a class="icon-toolbar" href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onclick="window.parent.API.save_asset();return true;" target="content_name" title="'.$reportingText.'" id="stats_link">
-                        <span class="fa fa-info"></span><span class="sr-only">' . $reportingText. '</span>
+                        <span class="fa fa-info"></span><span class="sr-only">' . $reportingText.'</span>
                     </a>
-                    <a class="icon-toolbar" id="scorm-previous" href="#" onclick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="'.$previousText.'">
-                        <span class="fa fa-chevron-left"></span><span class="sr-only">' . $previousText. '</span>
+                    <a class="icon-toolbar" id="scorm-previous" href="#" onclick="switch_item(' . $mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
+                        <span class="fa fa-chevron-left"></span><span class="sr-only">' . $previousText.'</span>
                     </a>
-                    <a class="icon-toolbar" id="scorm-next" href="#" onclick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="'.$nextText.'">
-                        <span class="fa fa-chevron-right"></span><span class="sr-only">' . $nextText . '</span>
+                    <a class="icon-toolbar" id="scorm-next" href="#" onclick="switch_item(' . $mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
+                        <span class="fa fa-chevron-right"></span><span class="sr-only">' . $nextText.'</span>
                     </a>
                 </span>';
         }
@@ -2026,11 +2059,11 @@ class learnpath
         $index = $this->index;
         $index++;
         if ($this->debug > 2) {
-            error_log('New LP - Now looking at ordered_items[' . ($index) . '] - type is ' . $this->items[$this->ordered_items[$index]]->type, 0);
+            error_log('New LP - Now looking at ordered_items['.($index).'] - type is '.$this->items[$this->ordered_items[$index]]->type, 0);
         }
-        while (!empty ($this->ordered_items[$index]) AND ($this->items[$this->ordered_items[$index]]->get_type() == 'dir') AND $index < $this->max_ordered_items) {
+        while (!empty ($this->ordered_items[$index]) && ($this->items[$this->ordered_items[$index]]->get_type() == 'dir') && $index < $this->max_ordered_items) {
             $index++;
-            if ($index == $this->max_ordered_items){
+            if ($index == $this->max_ordered_items) {
                 if ($this->items[$this->ordered_items[$index]]->get_type() == 'dir') {
                     return $this->index;
                 } else {
@@ -2042,7 +2075,7 @@ class learnpath
             return $this->index;
         }
         if ($this->debug > 2) {
-            error_log('New LP - index is now ' . $index, 0);
+            error_log('New LP - index is now '.$index, 0);
         }
         return $index;
     }
@@ -2060,7 +2093,7 @@ class learnpath
         if (!empty ($new_index)) {
             if (isset ($this->ordered_items[$new_index])) {
                 if ($this->debug > 2) {
-                    error_log('New LP - In learnpath::get_next_index() - Returning ' . $this->ordered_items[$new_index], 0);
+                    error_log('New LP - In learnpath::get_next_index() - Returning '.$this->ordered_items[$new_index], 0);
                 }
                 return $this->ordered_items[$new_index];
             }
@@ -2123,7 +2156,10 @@ class learnpath
                     break; // Exit the foreach loop.
                 } elseif (
                     preg_match('/aicc\//i', $thisContent['filename']) ||
-                    in_array(strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION)), array( 'crs','au','des','cst'))
+                    in_array(
+                        strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION)),
+                        array('crs', 'au', 'des', 'cst')
+                    )
                 ) {
                     $ext = strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION));
                     switch ($ext) {
@@ -2165,7 +2201,7 @@ class learnpath
             error_log('New LP - In learnpath::get_previous_index()', 0);
         }
         $index = $this->index;
-        if (isset ($this->ordered_items[$index -1])) {
+        if (isset ($this->ordered_items[$index - 1])) {
             $index--;
             while (isset($this->ordered_items[$index]) && ($this->items[$this->ordered_items[$index]]->get_type() == 'dir')) {
                 $index--;
@@ -2175,7 +2211,7 @@ class learnpath
             }
         } else {
             if ($this->debug > 2) {
-                error_log('New LP - get_previous_index() - there was no previous index available, reusing ' . $index, 0);
+                error_log('New LP - get_previous_index() - there was no previous index available, reusing '.$index, 0);
             }
             // There is no previous item.
         }
@@ -2198,6 +2234,7 @@ class learnpath
     /**
      * Gets the progress value from the progress_db attribute
      * @return	integer	Current progress value
+     * @deprecated This method does not seem to be used as of 20170514
      */
     public function get_progress()
     {
@@ -2212,40 +2249,45 @@ class learnpath
 
     /**
      * Returns the HTML necessary to print a mediaplayer block inside a page
+     * @param int $lpItemId
+     * @param string $autostart
      * @return string	The mediaplayer HTML
      */
-    public function get_mediaplayer($autostart = 'true')
+    public function get_mediaplayer($lpItemId, $autostart = 'true')
     {
         $course_id = api_get_course_int_id();
         $_course = api_get_course_info();
-        $tbl_lp_item 		= Database :: get_course_table(TABLE_LP_ITEM);
-        $tbl_lp_item_view 	= Database :: get_course_table(TABLE_LP_ITEM_VIEW);
+        if (empty($_course)) {
+            return '';
+        }
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
         // Getting all the information about the item.
         $sql = "SELECT * FROM $tbl_lp_item as lp
                 INNER JOIN $tbl_lp_item_view as lp_view
                 ON (lp.id = lp_view.lp_item_id AND lp.c_id = lp_view.c_id)
                 WHERE
-                    lp.id = '".$_SESSION['oLP']->current."' AND
+                    lp.id = '$lpItemId' AND
                     lp.c_id = $course_id AND
                     lp_view.c_id = $course_id";
         $result = Database::query($sql);
-        $row 	= Database::fetch_assoc($result);
+        $row = Database::fetch_assoc($result);
         $output = '';
 
         if (!empty ($row['audio'])) {
             $list = $_SESSION['oLP']->get_toc();
             $type_quiz = false;
 
-            foreach($list as $toc) {
-                if ($toc['id'] == $_SESSION['oLP']->current && ($toc['type']=='quiz') ) {
+            foreach ($list as $toc) {
+                if ($toc['id'] == $_SESSION['oLP']->current && ($toc['type'] == 'quiz')) {
                     $type_quiz = true;
                 }
             }
 
             if ($type_quiz) {
                 if ($_SESSION['oLP']->prevent_reinit == 1) {
-                    $row['status'] === 'completed' ? $autostart_audio = 'false' : $autostart_audio = 'true';
+                    $autostart_audio = $row['status'] === 'completed' ? 'false' : 'true';
                 } else {
                     $autostart_audio = $autostart;
                 }
@@ -2285,23 +2327,29 @@ class learnpath
     }
 
     /**
-     * @param int $lpId
+     * @param int $studentId
+     * @param int $prerequisite
      * @param array $courseInfo
+     * @param int $sessionId
+     *
      * @return bool
      *
      */
-    public static function isBlockedByPrerequisite($student_id, $prerequisite, $courseInfo, $sessionId)
-    {
+    public static function isBlockedByPrerequisite(
+        $studentId,
+        $prerequisite,
+        $courseInfo,
+        $sessionId
+    ) {
         $isBlocked = false;
 
         if (!empty($prerequisite)) {
             $progress = self::getProgress(
                 $prerequisite,
-                $student_id,
+                $studentId,
                 $courseInfo['real_id'],
                 $sessionId
             );
-            $progress = intval($progress);
             if ($progress < 100) {
                 $isBlocked = true;
             }
@@ -2324,11 +2372,15 @@ class learnpath
         $lp_id,
         $student_id,
         $courseCode = null,
-        $sessionId = null
+        $sessionId = 0
     ) {
-        $lp_id = (int)$lp_id;
         $courseInfo = api_get_course_info($courseCode);
-        $sessionId = intval($sessionId);
+        $lp_id = (int) $lp_id;
+        $sessionId = (int) $sessionId;
+
+        if (empty($courseInfo)) {
+            return false;
+        }
 
         if (empty($sessionId)) {
             $sessionId = api_get_session_id();
@@ -2460,19 +2512,19 @@ class learnpath
         $progress = 0;
 
         $sessionCondition = api_get_session_condition($sessionId);
-        $table = Database :: get_course_table(TABLE_LP_VIEW);
+        $table = Database::get_course_table(TABLE_LP_VIEW);
         $sql = "SELECT * FROM $table
                 WHERE
                     c_id = ".$courseId." AND
                     lp_id = $lpId AND
                     user_id = $userId $sessionCondition";
         $res = Database::query($sql);
-        if (Database :: num_rows($res) > 0) {
+        if (Database::num_rows($res) > 0) {
             $row = Database:: fetch_array($res);
             $progress = $row['progress'];
         }
 
-        return $progress;
+        return (int) $progress;
     }
 
     /**
@@ -2484,10 +2536,10 @@ class learnpath
      */
     public static function get_progress_bar($percentage = -1, $text_add = '')
     {
-        $text = $percentage . $text_add;
+        $text = $percentage.$text_add;
         $output = '<div class="progress">
-                        <div id="progress_bar_value" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="' .$percentage. '" aria-valuemin="0" aria-valuemax="100" style="width: '.$text.';">
-                        '. $text .'
+                        <div id="progress_bar_value" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="' .$percentage.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$text.';">
+                        '. $text.'
                         </div>
                     </div>';
 
@@ -2523,16 +2575,16 @@ class learnpath
         }
         $total_items = $this->getTotalItemsCountWithoutDirs();
         if ($this->debug > 2) {
-            error_log('New LP - Total items available in this learnpath: ' . $total_items, 0);
+            error_log('New LP - Total items available in this learnpath: '.$total_items, 0);
         }
         $completeItems = $this->get_complete_items_count();
         if ($this->debug > 2) {
-            error_log('New LP - Items completed so far: ' . $completeItems, 0);
+            error_log('New LP - Items completed so far: '.$completeItems, 0);
         }
         if ($add != 0) {
             $completeItems += $add;
             if ($this->debug > 2) {
-                error_log('New LP - Items completed so far (+modifier): ' . $completeItems, 0);
+                error_log('New LP - Items completed so far (+modifier): '.$completeItems, 0);
             }
         }
         $text = '';
@@ -2550,7 +2602,7 @@ class learnpath
             $text = '%';
         } elseif ($mode == 'abs') {
             $percentage = $completeItems;
-            $text = '/' . $total_items;
+            $text = '/'.$total_items;
         }
 
         return array(
@@ -2609,7 +2661,7 @@ class learnpath
 
     /**
      * Gets the learnpath session id
-     * @return	string	Learnpath theme
+     * @return int
      */
     public function get_lp_session_id()
     {
@@ -2617,7 +2669,7 @@ class learnpath
             error_log('New LP - In learnpath::get_lp_session_id()', 0);
         }
         if (!empty ($this->lp_session_id)) {
-            return $this->lp_session_id;
+            return (int) $this->lp_session_id;
         } else {
             return 0;
         }
@@ -2740,14 +2792,14 @@ class learnpath
                 // It's a simple string item from which the ID can be found in the refs list,
                 // so we can transform it directly to an ID for export.
                 return $this->items[$this->refs_list[$prereq]]->ref;
-            } else if (isset($this->refs_list['ITEM_'.$prereq])) {
+            } elseif (isset($this->refs_list['ITEM_'.$prereq])) {
                 return $this->items[$this->refs_list['ITEM_'.$prereq]]->ref;
             } else {
                 // The last case, if it's a complex form, then find all the IDs (SCORM strings)
                 // and replace them, one by one, by the internal IDs (chamilo db)
                 // TODO: Modify the '*' replacement to replace the multiplier in front of it
                 // by a space as well.
-                $find = array (
+                $find = array(
                     '&',
                     '|',
                     '~',
@@ -2759,7 +2811,7 @@ class learnpath
                     '(',
                     ')'
                 );
-                $replace = array (
+                $replace = array(
                     ' ',
                     ' ',
                     ' ',
@@ -2776,7 +2828,7 @@ class learnpath
                 foreach ($ids as $id) {
                     $id = trim($id);
                     if (isset ($this->refs_list[$id])) {
-                        $prereq = preg_replace('/[^a-zA-Z_0-9](' . $id . ')[^a-zA-Z_0-9]/', 'ITEM_' . $this->refs_list[$id], $prereq);
+                        $prereq = preg_replace('/[^a-zA-Z_0-9]('.$id.')[^a-zA-Z_0-9]/', 'ITEM_'.$this->refs_list[$id], $prereq);
                     }
                 }
 
@@ -2822,9 +2874,9 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_items_status_list()', 0);
         }
-        $list = array ();
+        $list = array();
         foreach ($this->ordered_items as $item_id) {
-            $list[] = array (
+            $list[] = array(
                 $item_id => $this->items[$item_id]->get_status()
             );
         }
@@ -2840,7 +2892,7 @@ class learnpath
      */
     public static function get_interactions_count_from_db($lp_iv_id, $course_id)
     {
-        $table = Database :: get_course_table(TABLE_LP_IV_INTERACTION);
+        $table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
         $lp_iv_id = intval($lp_iv_id);
         $course_id = intval($course_id);
 
@@ -2866,7 +2918,7 @@ class learnpath
     {
         $course_id = api_get_course_int_id();
         $list = array();
-        $table = Database :: get_course_table(TABLE_LP_IV_INTERACTION);
+        $table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
 
         if (empty($lp_iv_id)) {
             return array();
@@ -2876,9 +2928,9 @@ class learnpath
                 WHERE c_id = ".$course_id." AND lp_iv_id = $lp_iv_id
                 ORDER BY order_id ASC";
         $res = Database::query($sql);
-        $num = Database :: num_rows($res);
+        $num = Database::num_rows($res);
         if ($num > 0) {
-            $list[] = array (
+            $list[] = array(
                 'order_id' => api_htmlentities(get_lang('Order'), ENT_QUOTES),
                 'id' => api_htmlentities(get_lang('InteractionID'), ENT_QUOTES),
                 'type' => api_htmlentities(get_lang('Type'), ENT_QUOTES),
@@ -2888,8 +2940,8 @@ class learnpath
                 'result' => api_htmlentities(get_lang('Result'), ENT_QUOTES),
                 'latency' => api_htmlentities(get_lang('LatencyTimeSpent'), ENT_QUOTES)
             );
-            while ($row = Database :: fetch_array($res)) {
-                $list[] = array (
+            while ($row = Database::fetch_array($res)) {
+                $list[] = array(
                     'order_id' => ($row['order_id'] + 1),
                     'id' => urldecode($row['interaction_id']), //urldecode because they often have %2F or stuff like that
                     'type' => $row['interaction_type'],
@@ -2914,7 +2966,7 @@ class learnpath
      */
     public static function get_objectives_count_from_db($lp_iv_id, $course_id)
     {
-        $table = Database :: get_course_table(TABLE_LP_IV_OBJECTIVE);
+        $table = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
         $course_id = intval($course_id);
         $lp_iv_id = intval($lp_iv_id);
         $sql = "SELECT count(*) FROM $table
@@ -2923,7 +2975,7 @@ class learnpath
         $res = Database::query($sql);
         $num = 0;
         if (Database::num_rows($res)) {
-            $row = Database :: fetch_array($res);
+            $row = Database::fetch_array($res);
             $num = $row[0];
         }
 
@@ -2940,12 +2992,12 @@ class learnpath
     public static function get_iv_objectives_array($lp_iv_id = 0)
     {
         $course_id = api_get_course_int_id();
-        $table = Database :: get_course_table(TABLE_LP_IV_OBJECTIVE);
+        $table = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
         $sql = "SELECT * FROM $table
                 WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id
                 ORDER BY order_id ASC";
         $res = Database::query($sql);
-        $num = Database :: num_rows($res);
+        $num = Database::num_rows($res);
         $list = array();
         if ($num > 0) {
             $list[] = array(
@@ -2956,8 +3008,8 @@ class learnpath
                 'score_min' => api_htmlentities(get_lang('ObjectiveMinScore'), ENT_QUOTES),
                 'status' => api_htmlentities(get_lang('ObjectiveStatus'), ENT_QUOTES)
             );
-            while ($row = Database :: fetch_array($res)) {
-                $list[] = array (
+            while ($row = Database::fetch_array($res)) {
+                $list[] = array(
                     'order_id' => ($row['order_id'] + 1),
                     'objective_id' => urldecode($row['objective_id']), // urldecode() because they often have %2F or stuff like that.
                     'score_raw' => $row['score_raw'],
@@ -2984,7 +3036,7 @@ class learnpath
         $toc = array();
         foreach ($this->ordered_items as $item_id) {
             if ($this->debug > 2) {
-                error_log('learnpath::get_toc(): getting info for item ' . $item_id, 0);
+                error_log('learnpath::get_toc(): getting info for item '.$item_id, 0);
             }
             // TODO: Change this link generation and use new function instead.
             $toc[] = array(
@@ -2995,10 +3047,11 @@ class learnpath
                 'type' => $this->items[$item_id]->get_type(),
                 'description' => $this->items[$item_id]->get_description(),
                 'path' => $this->items[$item_id]->get_path(),
-            );
+                'parent' => $this->items[$item_id]->get_parent(),
+            ); 
         }
         if ($this->debug > 2) {
-            error_log('New LP - In learnpath::get_toc() - TOC array: ' . print_r($toc, true), 0);
+            error_log('New LP - In learnpath::get_toc() - TOC array: '.print_r($toc, true), 0);
         }
         return $toc;
     }
@@ -3015,10 +3068,10 @@ class learnpath
         }
         $toc = $varname.' = new Array();';
         foreach ($this->ordered_items as $item_id) {
-            $toc.= $varname."['i$item_id'] = '".$this->items[$item_id]->get_type()."';";
+            $toc .= $varname."['i$item_id'] = '".$this->items[$item_id]->get_type()."';";
         }
         if ($this->debug > 2) {
-            error_log('New LP - In learnpath::get_items_details_as_js() - TOC array: ' . print_r($toc, true), 0);
+            error_log('New LP - In learnpath::get_items_details_as_js() - TOC array: '.print_r($toc, true), 0);
         }
         return $toc;
     }
@@ -3034,39 +3087,35 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_type()', 0);
         }
-        if (!empty ($this->type)) {
-            if ($get_name) {
-                // Get it from the lp_type table in main db.
-            } else {
-                $res = $this->type;
-            }
+        if (!empty ($this->type) && (!$get_name)) {
+            $res = $this->type;
         }
         if ($this->debug > 2) {
-            error_log('New LP - In learnpath::get_type() - Returning ' . ($res ? $res : 'false'), 0);
+            error_log('New LP - In learnpath::get_type() - Returning '.($res ? $res : 'false'), 0);
         }
         return $res;
     }
 
     /**
      * Gets the learning path type as static method
-     * @param	boolean		Return the name? If false, return the ID. Default is false.
+     * @param	int $lp_id
      * @return	mixed		Type ID or name, depending on the parameter
      */
     public static function get_type_static($lp_id = 0)
     {
         $course_id = api_get_course_int_id();
-        $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
+        $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = intval($lp_id);
         $sql = "SELECT lp_type FROM $tbl_lp
-                WHERE c_id = $course_id AND id = '" . $lp_id . "'";
+                WHERE c_id = $course_id AND id = '".$lp_id."'";
         $res = Database::query($sql);
         if ($res === false) {
             return null;
         }
-        if (Database :: num_rows($res) <= 0) {
+        if (Database::num_rows($res) <= 0) {
             return null;
         }
-        $row = Database :: fetch_array($res);
+        $row = Database::fetch_array($res);
         return $row['lp_type'];
     }
 
@@ -3075,9 +3124,9 @@ class learnpath
      * This method can be used as abstract and is recursive
      * @param	integer	Learnpath ID
      * @param	integer	Parent ID of the items to look for
-     * @return	mixed	Ordered list of item IDs or false on error
+     * @return	array	Ordered list of item IDs (empty array on error)
      */
-    public static function get_flat_ordered_items_list($lp, $parent = 0, $course_id = null)
+    public static function get_flat_ordered_items_list($lp, $parent = 0, $course_id = 0)
     {
         if (empty($course_id)) {
             $course_id = api_get_course_int_id();
@@ -3087,20 +3136,24 @@ class learnpath
         $list = array();
 
         if (empty($lp)) {
-            return false;
+            return $list;
         }
 
         $lp = intval($lp);
         $parent = intval($parent);
 
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT id FROM $tbl_lp_item
                 WHERE c_id = $course_id AND lp_id = $lp AND parent_item_id = $parent
                 ORDER BY display_order";
 
         $res = Database::query($sql);
-        while ($row = Database :: fetch_array($res)) {
-            $sublist = learnpath :: get_flat_ordered_items_list($lp, $row['id'], $course_id);
+        while ($row = Database::fetch_array($res)) {
+            $sublist = self::get_flat_ordered_items_list(
+                $lp,
+                $row['id'],
+                $course_id
+            );
             $list[] = $row['id'];
             foreach ($sublist as $item) {
                 $list[] = $item;
@@ -3118,30 +3171,97 @@ class learnpath
             'dir'
         );
     }
-
+    
     /**
-     * Uses the table generated by get_toc() and returns an HTML-formatted string ready to display
+     * Uses the table generated by get_toc() and returns an HTML-formattedstring ready to display
      * @return	string	HTML TOC ready to display
      */
-    public function get_html_toc($toc_list = null)
+    public function getParentToc($tree)
     {
         if ($this->debug > 0) {
             error_log('In learnpath::get_html_toc()', 0);
         }
-        if (empty($toc_list)) {
-            $toc_list = $this->get_toc();
+        if (empty($tree)) {
+            $tree = $this->get_toc();
         }
-        $html = '<div class="scorm-body">';
-        $html .= '<div id="inner_lp_toc" class="inner_lp_toc scrollbar-light">';
-
-        // Temporary variables.
+        $dirTypes = self::getChapterTypes();
+        $myCurrentId = $this->get_current_item_id();
+        $listParent = [];
+        $listChildren = [];
+        $listNotParent = [];
+        $list = [];
+        foreach ($tree as $subtree) {
+            if (in_array($subtree['type'], $dirTypes)){
+                $listChildren = $this->getChildrenToc($tree, $subtree['id']);
+                $subtree['children'] = $listChildren;
+                if (!empty($subtree['children'])) {
+                     foreach ($subtree['children'] as $subItem) {
+                          if ($subItem['id'] == $this->current) {
+                              $subtree['parent_current'] = 'in';
+                              $subtree['current'] = 'on';
+                          }
+                     }
+                }
+                $listParent[] =  $subtree;
+            }
+            if (!in_array($subtree['type'], $dirTypes) && $subtree['parent'] == null ) {
+                $classStatus = [
+                    'not attempted' => 'scorm_not_attempted',
+                    'incomplete' => 'scorm_not_attempted',
+                    'failed' => 'scorm_failed',
+                    'completed' => 'scorm_completed',
+                    'passed' => 'scorm_completed',
+                    'succeeded' => 'scorm_completed',
+                    'browsed' => 'scorm_completed',
+                ];
+                
+                if (isset($classStatus[$subtree['status']])) {
+                    $cssStatus = $classStatus[$subtree['status']];
+                }
+                
+                $title = Security::remove_XSS($subtree['title']);
+                unset($subtree['title']);
+                
+                if (empty ($title)) {
+                    $title = self::rl_get_resource_name(api_get_course_id(), $this->get_id(), $subtree['id']);
+                }
+                $classStyle = null;
+                if ($subtree['id'] == $this->current) {
+                    $classStyle = 'scorm_item_normal '. $classStyle . 'scorm_highlight';
+                } elseif (!in_array($subtree['type'], $dirTypes)) {
+                    $classStyle = 'scorm_item_normal '. $classStyle . ' ';
+                }
+                $subtree['title'] = $title;
+                $subtree['class'] = $cssStatus . ' ' .$classStyle;
+                $subtree['url'] = $this->get_link('http', $subtree['id'], $tree);
+                $subtree['current_id'] = $myCurrentId;
+                $listNotParent[] = $subtree;
+            }
+        }
+        
+        $list['are_parents'] = $listParent;
+        $list['not_parents'] = $listNotParent;
+        
+        return $list;
+    }
+    
+    /**
+     * Uses the table generated by get_toc() and returns an HTML-formattedstring ready to display
+     * @return	string	HTML TOC ready to display
+     */
+    public function getChildrenToc($tree, $id, $parent = true)
+    {
+        if ($this->debug > 0) {
+            error_log('In learnpath::get_html_toc()', 0);
+        }
+        if (empty($tree)) {
+            $tree = $this->get_toc();
+        }
+        
+        $dirTypes = self::getChapterTypes();
         $mycurrentitemid = $this->get_current_item_id();
-        $color_counter = 0;
-        $i = 0;
-
-        foreach ($toc_list as $item) {
-            // Style Status
-            $class_name = [
+        $list = [];
+        $classStatus = [
                 'not attempted' => 'scorm_not_attempted',
                 'incomplete' => 'scorm_not_attempted',
                 'failed' => 'scorm_failed',
@@ -3151,61 +3271,132 @@ class learnpath
                 'browsed' => 'scorm_completed',
             ];
 
-            $rowColor = ' ';
+        foreach ($tree as $subtree) {
+            
+                $subtree['tree'] = null;
+
+                if (!in_array($subtree['type'], $dirTypes) && $subtree['parent'] == $id ) {
+                    if ($subtree['id'] == $this->current) {
+                        $subtree['current'] = 'active';
+                    } else {
+                        $subtree['current'] = null;
+                    }
+                    if (isset($classStatus[$subtree['status']])) {
+                        $cssStatus = $classStatus[$subtree['status']];
+                    }
+                    
+                    $title = Security::remove_XSS($subtree['title']);
+                    unset($subtree['title']);
+                    if (empty ($title)) {
+                        $title = self::rl_get_resource_name(api_get_course_id(), $this->get_id(), $subtree['id']);
+                    }
+
+                    $classStyle = null;
+                    if ($subtree['id'] == $this->current) {
+                        $classStyle = 'scorm_item_normal '. $classStyle . 'scorm_highlight';
+                    } elseif (!in_array($subtree['type'], $dirTypes)) {
+                        $classStyle = 'scorm_item_normal '. $classStyle . ' ';
+                    }
+
+                    if (in_array($subtree['type'], $dirTypes)) {
+                        $subtree['title'] = stripslashes($title);
+                    } else {
+                        $subtree['title'] = $title;
+                        $subtree['class'] = $cssStatus . ' ' .$classStyle;
+                        $subtree['url'] = $this->get_link('http', $subtree['id'], $tree);
+                        $subtree['current_id'] = $mycurrentitemid;
+                    }
+                    $list[] =  $subtree;                
+                }            
+        }
+
+        return $list;
+    }
+    /**
+     * Uses the table generated by get_toc() and returns an HTML-formatted string ready to display
+     * @return	string	HTML TOC ready to display
+     */
+    public function getListArrayToc($toc_list = null)
+    {
+        if ($this->debug > 0) {
+            error_log('In learnpath::get_html_toc()', 0);
+        }
+        if (empty($toc_list)) {
+            $toc_list = $this->get_toc();
+        }
+        // Temporary variables.
+        $mycurrentitemid = $this->get_current_item_id();
+        $list = [];
+        $arrayList = [];
+        $classStatus = [
+            'not attempted' => 'scorm_not_attempted',
+            'incomplete' => 'scorm_not_attempted',
+            'failed' => 'scorm_failed',
+            'completed' => 'scorm_completed',
+            'passed' => 'scorm_completed',
+            'succeeded' => 'scorm_completed',
+            'browsed' => 'scorm_completed',
+        ];
+
+        foreach ($toc_list as $item) {
+            $list['id'] = $item['id'];
+            $list['status'] = $item['status'];
+            $cssStatus = null;
+
+            if (isset($classStatus[$item['status']])) {
+                $cssStatus = $classStatus[$item['status']];
+            }
+
+            $classStyle = ' ';
             $dirTypes = self::getChapterTypes();
 
             if (in_array($item['type'], $dirTypes)) {
-                $rowColor ='scorm_item_section ';
+                $classStyle = 'scorm_item_section ';
             }
             if ($item['id'] == $this->current) {
-                $rowColor = 'scorm_item_normal '.$rowColor.' scorm_highlight';
+                $classStyle = 'scorm_item_normal '.$classStyle.'scorm_highlight';
             } elseif (!in_array($item['type'], $dirTypes)) {
-                $rowColor = 'scorm_item_normal '.$rowColor.' ';
+                $classStyle = 'scorm_item_normal '.$classStyle.' ';
             }
-
-            $html .= '<div id="toc_' . $item['id'] . '" class="' . $rowColor . ' ' . $class_name[$item['status']] . '">';
-
-            // Learning path title
             $title = $item['title'];
-            if (empty ($title)) {
-                $title = self::rl_get_resource_name(api_get_course_id(), $this->get_id(), $item['id']);
+            if (empty($title)) {
+                $title = self::rl_get_resource_name(
+                    api_get_course_id(),
+                    $this->get_id(),
+                    $item['id']
+                );
             }
-            $title = Security::remove_XSS($title);
+            $title = Security::remove_XSS($item['title']);
 
-            // Learning path personalization
-            // build the LP tree
-            // The anchor atoc_ will let us center the TOC on the currently viewed item &^D
-            $description = $item['description'];
-            if (empty($description)) {
-                $description = $title;
-            }
-            if (in_array($item['type'], $dirTypes)) {
-                // Chapters
-                $html .= '<div class="section level_'.$item['level'].'" title="'.$description.'" >';
+            if (empty($item['description'])) {
+                $list['description'] = $title;
             } else {
-                $html .= '<div class="item level_'.$item['level'].' scorm_type_'.learnpath::format_scorm_type_item($item['type']).'" title="'.$description.'" >';
-                $html .= '<a name="atoc_'.$item['id'].'"></a>';
+                $list['description'] = $item['description'];
+            }
+
+            $list['class'] = $classStyle.' '.$cssStatus;
+            $list['level'] = $item['level'];
+            $list['type'] = $item['type'];
+
+            if (in_array($item['type'], $dirTypes)) {
+                $list['css_level'] = 'level_'.$item['level'];
+            } else {
+                $list['css_level'] = 'level_'.$item['level']
+                    .' scorm_type_'
+                    .learnpath::format_scorm_type_item($item['type']);
             }
 
             if (in_array($item['type'], $dirTypes)) {
-                // Chapter
-                // if you want to put an image before, you should use css
-                $html .= stripslashes($title);
+                $list['title'] = stripslashes($title);
             } else {
-                $this->get_link('http', $item['id'], $toc_list);
-                $html .= '<a class="items-list" href="#" onclick="switch_item(' .$mycurrentitemid . ',' .$item['id'] . ');' .'return false;" >' . stripslashes($title) . '</a>';
+                $list['title'] = stripslashes($title);
+                $list['url'] = $this->get_link('http', $item['id'], $toc_list);
+                $list['current_id'] = $mycurrentitemid;
             }
-            $html .= "</div>";
-
-            if ($rowColor != '') {
-                $html .= '</div>';
-            }
-
-            $color_counter++;
+            $arrayList[] = $list;
         }
-        $html .= "</div>";
-        $html .= "</div>";
-        return $html;
+
+        return $arrayList;
     }
 
     /**
@@ -3218,21 +3409,16 @@ class learnpath
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
         $hide_teacher_icons_lp = api_get_configuration_value('hide_teacher_icons_lp');
         $html = '';
-
         if ($is_allowed_to_edit && $hide_teacher_icons_lp == false) {
-            $gradebook = '';
-            if (!empty($_GET['gradebook'])) {
-                $gradebook = Security:: remove_XSS($_GET['gradebook']);
-            }
             if ($this->get_lp_session_id() == api_get_session_id()) {
                 $html .= '<div id="actions_lp" class="actions_lp"><hr>';
                 $html .= '<div class="btn-group">';
-                $html .= "<a class='btn btn-sm btn-default' href='lp_controller.php?" . api_get_cidreq()."&gradebook=$gradebook&action=build&lp_id=" . $this->lp_id . "&isStudentView=false' target='_parent'>" .
-                    Display::returnFontAwesomeIcon('street-view') . get_lang('Overview') . "</a>";
-                $html .= "<a class='btn btn-sm btn-default' href='lp_controller.php?" . api_get_cidreq()."&action=add_item&type=step&lp_id=" . $this->lp_id . "&isStudentView=false' target='_parent'>" .
-                    Display::returnFontAwesomeIcon('pencil') . get_lang('Edit') . "</a>";
-                $html .= '<a class="btn btn-sm btn-default" href="lp_controller.php?'.api_get_cidreq()."&gradebook=$gradebook&action=edit&lp_id=" . $this->lp_id.'&isStudentView=false">' .
-                    Display::returnFontAwesomeIcon('cog') . get_lang('Settings').'</a>';
+                $html .= "<a class='btn btn-sm btn-default' href='lp_controller.php?".api_get_cidreq()."&action=build&lp_id=".$this->lp_id."&isStudentView=false' target='_parent'>".
+                    Display::returnFontAwesomeIcon('street-view').get_lang('Overview')."</a>";
+                $html .= "<a class='btn btn-sm btn-default' href='lp_controller.php?".api_get_cidreq()."&action=add_item&type=step&lp_id=".$this->lp_id."&isStudentView=false' target='_parent'>".
+                    Display::returnFontAwesomeIcon('pencil').get_lang('Edit')."</a>";
+                $html .= '<a class="btn btn-sm btn-default" href="lp_controller.php?'.api_get_cidreq()."&action=edit&lp_id=".$this->lp_id.'&isStudentView=false">'.
+                    Display::returnFontAwesomeIcon('cog').get_lang('Settings').'</a>';
                 $html .= '</div>';
                 $html .= '</div>';
             }
@@ -3284,11 +3470,11 @@ class learnpath
         $course_id = $this->get_course_int_id();
 
         if ($this->debug > 0) {
-            error_log('New LP - In learnpath::get_link(' . $type . ',' . $item_id . ')', 0);
+            error_log('New LP - In learnpath::get_link('.$type.','.$item_id.')', 0);
         }
         if (empty($item_id)) {
             if ($this->debug > 2) {
-                error_log('New LP - In learnpath::get_link() - no item id given in learnpath::get_link(), using current: ' . $this->get_current_item_id(), 0);
+                error_log('New LP - In learnpath::get_link() - no item id given in learnpath::get_link(), using current: '.$this->get_current_item_id(), 0);
             }
             $item_id = $this->get_current_item_id();
         }
@@ -3317,14 +3503,17 @@ class learnpath
                     li.parameters as liparams
         		FROM $lp_table l
                 INNER JOIN $lp_item_table li
-                    ON (li.lp_id = l.id AND l.c_id = $course_id AND li.c_id = $course_id )
-        		WHERE li.id = $item_id ";
+                ON (li.lp_id = l.id AND l.c_id = li.c_id)
+        		WHERE 
+        		    li.id = $item_id AND
+        		    li.c_id = $course_id 
+        		";
         if ($this->debug > 2) {
-            error_log('New LP - In learnpath::get_link() - selecting item ' . $sql, 0);
+            error_log('New LP - In learnpath::get_link() - selecting item '.$sql, 0);
         }
         $res = Database::query($sql);
-        if (Database :: num_rows($res) > 0) {
-            $row = Database :: fetch_array($res);
+        if (Database::num_rows($res) > 0) {
+            $row = Database::fetch_array($res);
             $lp_type = $row['ltype'];
             $lp_path = $row['lpath'];
             $lp_item_type = $row['litype'];
@@ -3334,21 +3523,25 @@ class learnpath
             if (empty($lp_item_params) && strpos($lp_item_path, '?') !== false) {
                 list($lp_item_path, $lp_item_params) = explode('?', $lp_item_path);
             }
-            $sys_course_path = api_get_path(SYS_COURSE_PATH) . api_get_course_path();
+            $sys_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
             if ($type == 'http') {
-                $course_path = api_get_path(WEB_COURSE_PATH) . api_get_course_path(); //web path
+                //web path
+                $course_path = api_get_path(WEB_COURSE_PATH).api_get_course_path();
             } else {
                 $course_path = $sys_course_path; //system path
             }
 
-            // Fixed issue BT#1272 - If the item type is a Chamilo Item (quiz, link, etc), then change the lp type to thread it as a normal Chamilo LP not a SCO.
-            if (in_array($lp_item_type, array('quiz', 'document', 'final_item', 'link', 'forum', 'thread', 'student_publication'))) {
+            // Fixed issue BT#1272 - If the item type is a Chamilo Item (quiz, link, etc),
+            // then change the lp type to thread it as a normal Chamilo LP not a SCO.
+            if (in_array($lp_item_type,
+                array('quiz', 'document', 'final_item', 'link', 'forum', 'thread', 'student_publication'))
+            ) {
                 $lp_type = 1;
             }
 
             if ($this->debug > 2) {
-                error_log('New LP - In learnpath::get_link() - $lp_type ' . $lp_type, 0);
-                error_log('New LP - In learnpath::get_link() - $lp_item_type ' . $lp_item_type, 0);
+                error_log('New LP - In learnpath::get_link() - $lp_type '.$lp_type, 0);
+                error_log('New LP - In learnpath::get_link() - $lp_item_type '.$lp_item_type, 0);
             }
 
             // Now go through the specific cases to get the end of the path
@@ -3362,7 +3555,7 @@ class learnpath
                         $this->get_view_id()
                     );
                     if ($this->debug > 0) {
-                        error_log('rl_get_resource_link_for_learnpath - file: ' . $file, 0);
+                        error_log('rl_get_resource_link_for_learnpath - file: '.$file, 0);
                     }
 
                     switch ($lp_item_type) {
@@ -3372,10 +3565,10 @@ class learnpath
                         case 'link':
                             if (Link::is_youtube_link($file)) {
                                 $src = Link::get_youtube_video_id($file);
-                                $file = api_get_path(WEB_CODE_PATH) . 'lp/embed.php?type=youtube&source='.$src;
+                                $file = api_get_path(WEB_CODE_PATH).'lp/embed.php?type=youtube&source='.$src;
                             } elseif (Link::isVimeoLink($file)) {
                                 $src = Link::getVimeoLinkId($file);
-                                $file = api_get_path(WEB_CODE_PATH) . 'lp/embed.php?type=vimeo&source='.$src;
+                                $file = api_get_path(WEB_CODE_PATH).'lp/embed.php?type=vimeo&source='.$src;
                             } else {
                                 // If the current site is HTTPS and the link is
                                 // HTTP, browsers will refuse opening the link
@@ -3386,9 +3579,7 @@ class learnpath
                                     $linkProtocol = substr($file, 0, 5);
                                     if ($linkProtocol === 'http:') {
                                         //this is the special intervention case
-                                        $file = api_get_path(
-                                                WEB_CODE_PATH
-                                            ) . 'lp/embed.php?type=nonhttps&source='.urlencode($file);
+                                        $file = api_get_path(WEB_CODE_PATH).'lp/embed.php?type=nonhttps&source='.urlencode($file);
                                     }
                                 }
                             }
@@ -3434,7 +3625,7 @@ class learnpath
                                             status='completed'";
                                 $result = Database::query($sql);
                                 $row_count = Database:: fetch_row($result);
-                                $count_item_view = (int)$row_count[0];
+                                $count_item_view = (int) $row_count[0];
                                 $not_multiple_attempt = 0;
                                 if ($prevent_reinit === 1 && $count_item_view > 0) {
                                     $not_multiple_attempt = 1;
@@ -3442,7 +3633,7 @@ class learnpath
                                 $file .= '&not_multiple_attempt='.$not_multiple_attempt;
                             }
                             break;
-                        }
+                    }
 
                     $tmp_array = explode('/', $file);
                     $document_name = $tmp_array[count($tmp_array) - 1];
@@ -3453,7 +3644,7 @@ class learnpath
                     break;
                 case 2 :
                     if ($this->debug > 2) {
-                        error_log('New LP - In learnpath::get_link() ' . __LINE__ . ' - Item type: ' . $lp_item_type, 0);
+                        error_log('New LP - In learnpath::get_link() '.__LINE__.' - Item type: '.$lp_item_type, 0);
                     }
 
                     if ($lp_item_type != 'dir') {
@@ -3467,19 +3658,19 @@ class learnpath
                         //if ($this->prerequisites_match($item_id)) {
                         if (preg_match('#^[a-zA-Z]{2,5}://#', $lp_item_path) != 0) {
                             if ($this->debug > 2) {
-                                error_log('New LP - In learnpath::get_link() ' . __LINE__ . ' - Found match for protocol in ' . $lp_item_path, 0);
+                                error_log('New LP - In learnpath::get_link() '.__LINE__.' - Found match for protocol in '.$lp_item_path, 0);
                             }
                             // Distant url, return as is.
                             $file = $lp_item_path;
                         } else {
                             if ($this->debug > 2) {
-                                error_log('New LP - In learnpath::get_link() ' . __LINE__ . ' - No starting protocol in ' . $lp_item_path, 0);
+                                error_log('New LP - In learnpath::get_link() '.__LINE__.' - No starting protocol in '.$lp_item_path, 0);
                             }
                             // Prevent getting untranslatable urls.
                             $lp_item_path = preg_replace('/%2F/', '/', $lp_item_path);
                             $lp_item_path = preg_replace('/%3A/', ':', $lp_item_path);
                             // Prepare the path.
-                            $file = $course_path . '/scorm/' . $lp_path . '/' . $lp_item_path;
+                            $file = $course_path.'/scorm/'.$lp_path.'/'.$lp_item_path;
                             // TODO: Fix this for urls with protocol header.
                             $file = str_replace('//', '/', $file);
                             $file = str_replace(':/', '://', $file);
@@ -3487,12 +3678,11 @@ class learnpath
                                 $lp_path = substr($lp_path, 0, -1);
                             }
 
-                            if (!is_file(realpath($sys_course_path . '/scorm/' . $lp_path . '/' . $lp_item_path))) {
+                            if (!is_file(realpath($sys_course_path.'/scorm/'.$lp_path.'/'.$lp_item_path))) {
                                 // if file not found.
                                 $decoded = html_entity_decode($lp_item_path);
                                 list ($decoded) = explode('?', $decoded);
-                                if (!is_file(realpath($sys_course_path . '/scorm/' . $lp_path . '/' . $decoded))) {
-
+                                if (!is_file(realpath($sys_course_path.'/scorm/'.$lp_path.'/'.$decoded))) {
                                     $file = self::rl_get_resource_link_for_learnpath(
                                         $course_id,
                                         $this->get_id(),
@@ -3511,14 +3701,15 @@ class learnpath
                                         }
                                     }
                                 } else {
-                                    $file = $course_path . '/scorm/' . $lp_path . '/' . $decoded;
+                                    $file = $course_path.'/scorm/'.$lp_path.'/'.$decoded;
                                 }
                             }
                         }
 
                         // We want to use parameters if they were defined in the imsmanifest
                         if (strpos($file, 'blank.php') === false) {
-                            $file .= (strstr($file, '?') === false ? '?' : '') . $lp_item_params;
+                            $lp_item_params = ltrim($lp_item_params, '?');
+                            $file .= (strstr($file, '?') === false ? '?' : '').$lp_item_params;
                         }
                     } else {
                         $file = 'lp_content.php?type=dir';
@@ -3526,12 +3717,12 @@ class learnpath
                     break;
                 case 3 :
                     if ($this->debug > 2) {
-                        error_log('New LP - In learnpath::get_link() ' . __LINE__ . ' - Item type: ' . $lp_item_type, 0);
+                        error_log('New LP - In learnpath::get_link() '.__LINE__.' - Item type: '.$lp_item_type, 0);
                     }
                     // Formatting AICC HACP append URL.
-                    $aicc_append = '?aicc_sid=' . urlencode(session_id()) . '&aicc_url=' . urlencode(api_get_path(WEB_CODE_PATH) . 'lp/aicc_hacp.php') . '&';
+                    $aicc_append = '?aicc_sid='.urlencode(session_id()).'&aicc_url='.urlencode(api_get_path(WEB_CODE_PATH).'lp/aicc_hacp.php').'&';
                     if (!empty($lp_item_params)) {
-                        $aicc_append .= $lp_item_params . '&';
+                        $aicc_append .= $lp_item_params.'&';
                     }
                     if ($lp_item_type != 'dir') {
                         // Quite complex here:
@@ -3540,10 +3731,9 @@ class learnpath
                         // some contents use this form: resource.htm?resource=http://blablabla
                         // which means we have to find a protocol at the path's start, otherwise
                         // it should not be considered as an external URL.
-
                         if (preg_match('#^[a-zA-Z]{2,5}://#', $lp_item_path) != 0) {
                             if ($this->debug > 2) {
-                                error_log('New LP - In learnpath::get_link() ' . __LINE__ . ' - Found match for protocol in ' . $lp_item_path, 0);
+                                error_log('New LP - In learnpath::get_link() '.__LINE__.' - Found match for protocol in '.$lp_item_path, 0);
                             }
                             // Distant url, return as is.
                             $file = $lp_item_path;
@@ -3556,19 +3746,19 @@ class learnpath
                             if (stripos($file, '<servername>') !== false) {
                                 //$file = str_replace('<servername>',$course_path.'/scorm/'.$lp_path.'/',$lp_item_path);
                                 $web_course_path = str_replace('https://', '', str_replace('http://', '', $course_path));
-                                $file = str_replace('<servername>', $web_course_path . '/scorm/' . $lp_path, $lp_item_path);
+                                $file = str_replace('<servername>', $web_course_path.'/scorm/'.$lp_path, $lp_item_path);
                             }
                             //
                             $file .= $aicc_append;
                         } else {
                             if ($this->debug > 2) {
-                                error_log('New LP - In learnpath::get_link() ' . __LINE__ . ' - No starting protocol in ' . $lp_item_path, 0);
+                                error_log('New LP - In learnpath::get_link() '.__LINE__.' - No starting protocol in '.$lp_item_path, 0);
                             }
                             // Prevent getting untranslatable urls.
                             $lp_item_path = preg_replace('/%2F/', '/', $lp_item_path);
                             $lp_item_path = preg_replace('/%3A/', ':', $lp_item_path);
                             // Prepare the path - lp_path might be unusable because it includes the "aicc" subdir name.
-                            $file = $course_path . '/scorm/' . $lp_path . '/' . $lp_item_path;
+                            $file = $course_path.'/scorm/'.$lp_path.'/'.$lp_item_path;
                             // TODO: Fix this for urls with protocol header.
                             $file = str_replace('//', '/', $file);
                             $file = str_replace(':/', '://', $file);
@@ -3580,14 +3770,14 @@ class learnpath
                     break;
                 case 4 :
                     break;
-                default :
+                default:
                     break;
             }
             // Replace &amp; by & because &amp; will break URL with params
             $file = !empty($file) ? str_replace('&amp;', '&', $file) : '';
         }
         if ($this->debug > 2) {
-            error_log('New LP - In learnpath::get_link() - returning "' . $file . '" from get_link', 0);
+            error_log('New LP - In learnpath::get_link() - returning "'.$file.'" from get_link', 0);
         }
         return $file;
     }
@@ -3604,33 +3794,33 @@ class learnpath
         }
         $search = '';
         // Use $attempt_num to enable multi-views management (disabled so far).
-        if ($attempt_num != 0 AND intval(strval($attempt_num)) == $attempt_num) {
-            $search = 'AND view_count = ' . $attempt_num;
+        if ($attempt_num != 0 && intval(strval($attempt_num)) == $attempt_num) {
+            $search = 'AND view_count = '.$attempt_num;
         }
         // When missing $attempt_num, search for a unique lp_view record for this lp and user.
-        $lp_view_table = Database :: get_course_table(TABLE_LP_VIEW);
+        $lp_view_table = Database::get_course_table(TABLE_LP_VIEW);
 
         $course_id = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
         $sql = "SELECT id, view_count FROM $lp_view_table
         		WHERE
-        		    c_id = " . $course_id . " AND
-        		    lp_id = " . $this->get_id() . " AND
-        		    user_id = " . $this->get_user_id() . " AND
+        		    c_id = ".$course_id." AND
+        		    lp_id = " . $this->get_id()." AND
+        		    user_id = " . $this->get_user_id()." AND
         		    session_id = $sessionId
         		    $search
                 ORDER BY view_count DESC";
         $res = Database::query($sql);
-        if (Database :: num_rows($res) > 0) {
-            $row = Database :: fetch_array($res);
+        if (Database::num_rows($res) > 0) {
+            $row = Database::fetch_array($res);
             $this->lp_view_id = $row['id'];
-        } else if (!api_is_invitee()) {
+        } elseif (!api_is_invitee()) {
             // There is no database record, create one.
             $sql = "INSERT INTO $lp_view_table (c_id, lp_id,user_id, view_count, session_id) VALUES
-            		($course_id, " . $this->get_id() . "," . $this->get_user_id() . ", 1, $sessionId)";
+            		($course_id, ".$this->get_id().",".$this->get_user_id().", 1, $sessionId)";
             Database::query($sql);
-            $id = Database :: insert_id();
+            $id = Database::insert_id();
             $this->lp_view_id = $id;
 
             $sql = "UPDATE $lp_view_table SET id = iid WHERE iid = $id";
@@ -3728,22 +3918,25 @@ class learnpath
     {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
-            error_log('New LP - In learnpath::move_item(' . $id . ',' . $direction . ')', 0);
+            error_log('New LP - In learnpath::move_item('.$id.','.$direction.')', 0);
         }
         if (empty($id) || empty($direction)) {
             return false;
         }
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql_sel = "SELECT *
-                    FROM " . $tbl_lp_item . "
-                    WHERE c_id = ".$course_id." AND id = " . $id;
+                    FROM $tbl_lp_item
+                    WHERE 
+                        c_id = $course_id AND 
+                        id = $id
+                    ";
         $res_sel = Database::query($sql_sel);
         // Check if elem exists.
-        if (Database :: num_rows($res_sel) < 1) {
+        if (Database::num_rows($res_sel) < 1) {
             return false;
         }
         // Gather data.
-        $row = Database :: fetch_array($res_sel);
+        $row = Database::fetch_array($res_sel);
         $previous = $row['previous_item_id'];
         $next = $row['next_item_id'];
         $display = $row['display_order'];
@@ -3755,20 +3948,19 @@ class learnpath
                 if ($this->debug > 2) {
                     error_log('Movement up detected', 0);
                 }
-                if ($display <= 1) { /*do nothing*/
-                } else {
+                if ($display > 1) {
                     $sql_sel2 = "SELECT * FROM $tbl_lp_item
                                  WHERE c_id = ".$course_id." AND id = $previous";
 
                     if ($this->debug > 2) {
-                        error_log('Selecting previous: ' . $sql_sel2, 0);
+                        error_log('Selecting previous: '.$sql_sel2, 0);
                     }
                     $res_sel2 = Database::query($sql_sel2);
-                    if (Database :: num_rows($res_sel2) < 1) {
+                    if (Database::num_rows($res_sel2) < 1) {
                         $previous_previous = 0;
                     }
                     // Gather data.
-                    $row2 = Database :: fetch_array($res_sel2);
+                    $row2 = Database::fetch_array($res_sel2);
                     $previous_previous = $row2['previous_item_id'];
                     // Update previous_previous item (switch "next" with current).
                     if ($previous_previous != 0) {
@@ -3814,36 +4006,39 @@ class learnpath
                         }
                         Database::query($sql_upd2);
                     }
-                    $display = $display -1;
+                    $display = $display - 1;
                 }
                 break;
             case 'down':
                 if ($this->debug > 2) {
                     error_log('Movement down detected', 0);
                 }
-                if ($next == 0) { /* Do nothing. */
-                } else {
-                    $sql_sel2 = "SELECT * FROM $tbl_lp_item WHERE c_id = ".$course_id." AND id = $next";
+                if ($next != 0) {
+                    $sql_sel2 = "SELECT * FROM $tbl_lp_item 
+                                 WHERE c_id = ".$course_id." AND id = $next";
                     if ($this->debug > 2) {
-                        error_log('Selecting next: ' . $sql_sel2, 0);
+                        error_log('Selecting next: '.$sql_sel2, 0);
                     }
                     $res_sel2 = Database::query($sql_sel2);
-                    if (Database :: num_rows($res_sel2) < 1) {
+                    if (Database::num_rows($res_sel2) < 1) {
                         $next_next = 0;
                     }
                     // Gather data.
-                    $row2 = Database :: fetch_array($res_sel2);
+                    $row2 = Database::fetch_array($res_sel2);
                     $next_next = $row2['next_item_id'];
                     // Update previous item (switch with current).
                     if ($previous != 0) {
-                        $sql_upd2 = "UPDATE $tbl_lp_item SET next_item_id = $next
+                        $sql_upd2 = "UPDATE $tbl_lp_item 
+                                     SET next_item_id = $next
                                      WHERE c_id = ".$course_id." AND id = $previous";
                         Database::query($sql_upd2);
                     }
                     // Update current item (switch with previous).
                     if ($id != 0) {
                         $sql_upd2 = "UPDATE $tbl_lp_item SET
-                                     previous_item_id = $next, next_item_id = $next_next, display_order = display_order+1
+                                     previous_item_id = $next, 
+                                     next_item_id = $next_next, 
+                                     display_order = display_order + 1
                                      WHERE c_id = ".$course_id." AND id = $id";
                         Database::query($sql_upd2);
                     }
@@ -3851,7 +4046,9 @@ class learnpath
                     // Update next item (new previous item).
                     if ($next != 0) {
                         $sql_upd2 = "UPDATE $tbl_lp_item SET
-                                     previous_item_id = $previous, next_item_id = $id, display_order = display_order-1
+                                     previous_item_id = $previous, 
+                                     next_item_id = $id, 
+                                     display_order = display_order-1
                                      WHERE c_id = ".$course_id." AND id = $next";
                         Database::query($sql_upd2);
                     }
@@ -3863,42 +4060,52 @@ class learnpath
                                      WHERE c_id = ".$course_id." AND id = $next_next";
                         Database::query($sql_upd2);
                     }
-                    $display = $display +1;
+                    $display = $display + 1;
                 }
                 break;
-            default :
+            default:
                 return false;
         }
         return $display;
     }
 
     /**
-     * Move a learnpath up (display_order)
-     * @param	integer	$lp_id Learnpath ID
+     * Move a LP up (display_order)
+     * @param int $lp_id Learnpath ID
+     * @param int $categoryId
+     * @return bool
      */
-    public static function move_up($lp_id)
+    public static function move_up($lp_id, $categoryId = 0)
     {
-        $course_id = api_get_course_int_id();
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $courseId = api_get_course_int_id();
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+
+        $categoryCondition = '';
+        if (!empty($categoryId)) {
+            $categoryId = (int) $categoryId;
+            $categoryCondition = " AND category_id = $categoryId";
+        }
         $sql = "SELECT * FROM $lp_table
-                WHERE c_id = $course_id
+                WHERE c_id = $courseId
+                $categoryCondition
                 ORDER BY display_order";
         $res = Database::query($sql);
-        if ($res === false)
+        if ($res === false) {
             return false;
-        $lps = array ();
-        $lp_order = array();
-        $num = Database :: num_rows($res);
+        }
+
+        $lps = [];
+        $lp_order = [];
+        $num = Database::num_rows($res);
         // First check the order is correct, globally (might be wrong because
         // of versions < 1.8.4)
         if ($num > 0) {
             $i = 1;
-            while ($row = Database :: fetch_array($res)) {
+            while ($row = Database::fetch_array($res)) {
                 if ($row['display_order'] != $i) { // If we find a gap in the order, we need to fix it.
-                    $need_fix = true;
-                    $sql_u = "UPDATE $lp_table SET display_order = $i
-                              WHERE c_id = ".$course_id." AND id = " . $row['id'];
-                    Database::query($sql_u);
+                    $sql = "UPDATE $lp_table SET display_order = $i
+                            WHERE c_id = $courseId AND id = ".$row['id'];
+                    Database::query($sql);
                 }
                 $row['display_order'] = $i;
                 $lps[$row['id']] = $row;
@@ -3909,45 +4116,57 @@ class learnpath
         if ($num > 1) { // If there's only one element, no need to sort.
             $order = $lps[$lp_id]['display_order'];
             if ($order > 1) { // If it's the first element, no need to move up.
-                $sql_u1 = "UPDATE $lp_table SET display_order = $order
-                           WHERE c_id = ".$course_id." AND id = " . $lp_order[$order - 1];
-                Database::query($sql_u1);
-                $sql_u2 = "UPDATE $lp_table SET display_order = " . ($order - 1) . "
-                           WHERE c_id = ".$course_id." AND id = " . $lp_id;
-                Database::query($sql_u2);
+                $sql = "UPDATE $lp_table SET display_order = $order
+                        WHERE c_id = $courseId AND id = ".$lp_order[$order - 1];
+                Database::query($sql);
+                $sql = "UPDATE $lp_table SET display_order = ".($order - 1)."
+                        WHERE c_id = $courseId AND id = ".$lp_id;
+                Database::query($sql);
             }
         }
+
+        return true;
     }
 
     /**
      * Move a learnpath down (display_order)
-     * @param	integer	$lp_id Learnpath ID
+     * @param int $lp_id Learnpath ID
+     * @param int $categoryId
+     * @return bool
      */
-    public static function move_down($lp_id)
+    public static function move_down($lp_id, $categoryId = 0)
     {
-        $course_id = api_get_course_int_id();
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $courseId = api_get_course_int_id();
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+
+        $categoryCondition = '';
+        if (!empty($categoryId)) {
+            $categoryId = (int) $categoryId;
+            $categoryCondition = " AND category_id = $categoryId";
+        }
+
         $sql = "SELECT * FROM $lp_table
-                WHERE c_id = $course_id
+                WHERE c_id = $courseId
+                $categoryCondition
                 ORDER BY display_order";
         $res = Database::query($sql);
         if ($res === false) {
             return false;
         }
-        $lps = array();
-        $lp_order = array();
-        $num = Database :: num_rows($res);
+        $lps = [];
+        $lp_order = [];
+        $num = Database::num_rows($res);
         $max = 0;
         // First check the order is correct, globally (might be wrong because
         // of versions < 1.8.4).
         if ($num > 0) {
             $i = 1;
-            while ($row = Database :: fetch_array($res)) {
+            while ($row = Database::fetch_array($res)) {
                 $max = $i;
-                if ($row['display_order'] != $i) { // If we find a gap in the order, we need to fix it.
-                    $need_fix = true;
+                if ($row['display_order'] != $i) {
+                    // If we find a gap in the order, we need to fix it.
                     $sql_u = "UPDATE $lp_table SET display_order = $i
-                              WHERE c_id = ".$course_id." AND id = " . $row['id'];
+                              WHERE c_id = ".$courseId." AND id = ".$row['id'];
                     Database::query($sql_u);
                 }
                 $row['display_order'] = $i;
@@ -3960,13 +4179,15 @@ class learnpath
             $order = $lps[$lp_id]['display_order'];
             if ($order < $max) { // If it's the first element, no need to move up.
                 $sql_u1 = "UPDATE $lp_table SET display_order = $order
-                           WHERE c_id = ".$course_id." AND id = " . $lp_order[$order + 1];
+                           WHERE c_id = ".$courseId." AND id = ".$lp_order[$order + 1];
                 Database::query($sql_u1);
-                $sql_u2 = "UPDATE $lp_table SET display_order = " . ($order + 1) . "
-                           WHERE c_id = ".$course_id." AND id = " . $lp_id;
+                $sql_u2 = "UPDATE $lp_table SET display_order = ".($order + 1)."
+                           WHERE c_id = ".$courseId." AND id = ".$lp_id;
                 Database::query($sql_u2);
             }
         }
+
+        return true;
     }
 
     /**
@@ -3979,19 +4200,22 @@ class learnpath
             error_log('New LP - In learnpath::next()', 0);
         }
         $this->last = $this->get_current_item_id();
-        $this->items[$this->last]->save(false, $this->prerequisites_match($this->last));
+        $this->items[$this->last]->save(
+            false,
+            $this->prerequisites_match($this->last)
+        );
         $this->autocomplete_parents($this->last);
         $new_index = $this->get_next_index();
         if ($this->debug > 2) {
-            error_log('New LP - New index: ' . $new_index, 0);
+            error_log('New LP - New index: '.$new_index, 0);
         }
         $this->index = $new_index;
         if ($this->debug > 2) {
-            error_log('New LP - Now having orderedlist[' . $new_index . '] = ' . $this->ordered_items[$new_index], 0);
+            error_log('New LP - Now having orderedlist['.$new_index.'] = '.$this->ordered_items[$new_index], 0);
         }
         $this->current = $this->ordered_items[$new_index];
         if ($this->debug > 2) {
-            error_log('New LP - new item id is ' . $this->current . '-' . $this->get_current_item_id(), 0);
+            error_log('New LP - new item id is '.$this->current.'-'.$this->get_current_item_id(), 0);
         }
     }
 
@@ -4055,7 +4279,7 @@ class learnpath
             // Clean spaces.
             $prereq_string = str_replace(' ', '', $prereq_string);
             if ($debug > 0) {
-                error_log('Found prereq_string: ' . $prereq_string, 0);
+                error_log('Found prereq_string: '.$prereq_string, 0);
             }
             // Now send to the parse_prereq() function that will check this component's prerequisites.
             $result = $currentItem->parse_prereq(
@@ -4071,12 +4295,12 @@ class learnpath
         } else {
             $result = true;
             if ($debug > 1) {
-                error_log('$this->items[' . $itemId . '] was not an object', 0);
+                error_log('$this->items['.$itemId.'] was not an object', 0);
             }
         }
 
         if ($debug > 1) {
-            error_log('End of prerequisites_match(). Error message is now ' . $this->error, 0);
+            error_log('End of prerequisites_match(). Error message is now '.$this->error, 0);
         }
         return $result;
     }
@@ -4091,7 +4315,10 @@ class learnpath
             error_log('New LP - In learnpath::previous()', 0);
         }
         $this->last = $this->get_current_item_id();
-        $this->items[$this->last]->save(false, $this->prerequisites_match($this->last));
+        $this->items[$this->last]->save(
+            false,
+            $this->prerequisites_match($this->last)
+        );
         $this->autocomplete_parents($this->last);
         $new_index = $this->get_previous_index();
         $this->index = $new_index;
@@ -4102,8 +4329,9 @@ class learnpath
      * Publishes a learnpath. This basically means show or hide the learnpath
      * to normal users.
      * Can be used as abstract
-     * @param	integer	Learnpath ID
-     * @param	string	New visibility
+     * @param integer    Learnpath ID
+     * @param string    New visibility
+     * @return bool
      */
     public static function toggle_visibility($lp_id, $set_visibility = 1)
     {
@@ -4123,6 +4351,45 @@ class learnpath
     }
 
     /**
+     * Publishes a learnpath category.
+     * This basically means show or hide the learnpath category to normal users.
+     * @param int $id
+     * @param int $visibility
+     * @return bool
+     */
+    public static function toggleCategoryVisibility($id, $visibility = 1)
+    {
+        $action = 'visible';
+
+        if ($visibility != 1) {
+            $action = 'invisible';
+            $list = new LearnpathList(
+                api_get_user_id(),
+                null,
+                null,
+                null,
+                false,
+                $id
+            );
+
+            $lpList = $list->get_flat_list();
+            foreach ($lpList as $lp) {
+                learnpath::toggle_visibility($lp['iid'], 0);
+            }
+
+            learnpath::toggleCategoryPublish($id, 0);
+        }
+
+        return api_item_property_update(
+            api_get_course_info(),
+            TOOL_LEARNPATH_CATEGORY,
+            $id,
+            $action,
+            api_get_user_id()
+        );
+    }
+
+    /**
      * Publishes a learnpath. This basically means show or hide the learnpath
      * on the course homepage
      * Can be used as abstract
@@ -4133,13 +4400,13 @@ class learnpath
     public static function toggle_publish($lp_id, $set_visibility = 'v')
     {
         $course_id = api_get_course_int_id();
-        $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
+        $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = intval($lp_id);
         $sql = "SELECT * FROM $tbl_lp
                 WHERE c_id = $course_id AND id = $lp_id";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
-            $row = Database :: fetch_array($result);
+            $row = Database::fetch_array($result);
             $name = Database::escape_string($row['name']);
             if ($set_visibility == 'i') {
                 $v = 0;
@@ -4151,7 +4418,7 @@ class learnpath
             $session_id = api_get_session_id();
             $session_condition = api_get_session_condition($session_id);
 
-            $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
+            $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
             $link = 'lp/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
             $oldLink = 'newscorm/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
 
@@ -4168,7 +4435,7 @@ class learnpath
                     ";
 
             $result = Database::query($sql);
-            $num = Database :: num_rows($result);
+            $num = Database::num_rows($result);
             if ($set_visibility == 'i' && $num > 0) {
                 $sql = "DELETE FROM $tbl_tool
                         WHERE 
@@ -4214,6 +4481,219 @@ class learnpath
     }
 
     /**
+     * Generate the link for a learnpath category as course tool
+     * @param int $categoryId
+     * @return string
+     */
+    private static function getCategoryLinkForTool($categoryId)
+    {
+        $link = 'lp/lp_controller.php?'.api_get_cidreq().'&'
+            .http_build_query(
+                [
+                    'action' => 'view_category',
+                    'id' => $categoryId
+                ]
+            );
+
+        return $link;
+    }
+
+    /**
+     * Publishes a learnpath.
+     * Show or hide the learnpath category on the course homepage
+     * @param int $id
+     * @param int $setVisibility
+     * @return bool
+     */
+    public static function toggleCategoryPublish($id, $setVisibility = 1)
+    {
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+        $sessionCondition = api_get_session_condition(
+            $sessionId,
+            true,
+            false,
+            't.sessionId'
+        );
+
+        $em = Database::getManager();
+
+        /** @var CLpCategory $category */
+        $category = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+
+        if (!$category) {
+            return false;
+        }
+
+        $link = self::getCategoryLinkForTool($id);
+
+        /** @var CTool $tool */
+        $tool = $em
+            ->createQuery("
+                SELECT t FROM ChamiloCourseBundle:CTool t
+                WHERE
+                    t.cId = :course AND
+                    t.link = :link1 AND
+                    t.image = 'lp_category.gif' AND
+                    t.link LIKE :link2
+                    $sessionCondition
+            ")
+            ->setParameters([
+                'course' => (int) $courseId,
+                'link1' => $link,
+                'link2' => "$link%"
+            ])
+            ->getOneOrNullResult();
+
+        if ($setVisibility == 0 && $tool) {
+            $em->remove($tool);
+            $em->flush();
+
+            return true;
+        }
+
+        if ($setVisibility == 1 && !$tool) {
+            $tool = new CTool();
+            $tool
+                ->setCategory('authoring')
+                ->setCId($courseId)
+                ->setName(strip_tags($category->getName()))
+                ->setLink($link)
+                ->setImage('lp_category.gif')
+                ->setVisibility(1)
+                ->setAdmin(0)
+                ->setAddress('pastillegris.gif')
+                ->setAddedTool(0)
+                ->setSessionId($sessionId)
+                ->setTarget('_self');
+
+            $em->persist($tool);
+            $em->flush();
+
+            $tool->setId($tool->getIid());
+
+            $em->persist($tool);
+            $em->flush();
+
+            return true;
+        }
+
+        if ($setVisibility == 1 && $tool) {
+            $tool
+                ->setName(strip_tags($category->getName()))
+                ->setVisibility(1);
+
+            $em->persist($tool);
+            $em->flush();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if the learnpath category is visible for a user
+     * @param CLpCategory $category
+     * @param User $user
+     * @return bool
+     */
+    public static function categoryIsVisibleForStudent(
+        CLpCategory $category,
+        User $user
+    ) {
+        $isAllowedToEdit = api_is_allowed_to_edit(null, true);
+
+        if ($isAllowedToEdit) {
+            return true;
+        }
+
+        $users = $category->getUsers();
+
+        if (empty($users) || !$users->count()) {
+            return true;
+        }
+
+        if ($category->hasUserAdded($user)) {
+            return true;
+        }
+
+        $groups = GroupManager::getAllGroupPerUserSubscription($user->getId());
+        if (!empty($groups)) {
+            $em = Database::getManager();
+
+            /** @var ItemPropertyRepository $itemRepo */
+            $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
+
+            /** @var CourseRepository $courseRepo */
+            $courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
+            $sessionId = api_get_session_id();
+            $session = null;
+            if (!empty($sessionId)) {
+                $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+            }
+
+            $course = $courseRepo->find(api_get_course_int_id());
+
+            // Subscribed groups to a LP
+            $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
+                'learnpath_category',
+                $category->getId(),
+                $course,
+                $session
+            );
+
+            if (!empty($subscribedGroupsInLp)) {
+                $groups = array_column($groups, 'iid');
+                /** @var CItemProperty $item */
+                foreach ($subscribedGroupsInLp as $item) {
+                    if ($item->getGroup() &&
+                        in_array($item->getGroup()->getId(), $groups)
+                    ) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if a learnpath category is published as course tool
+     * @param CLpCategory $category
+     * @param int $courseId
+     * @return bool
+     */
+    public static function categoryIsPublished(
+        CLpCategory $category,
+        $courseId
+    ) {
+        $link = self::getCategoryLinkForTool($category->getId());
+        $em = Database::getManager();
+
+        $tools = $em
+            ->createQuery("
+                SELECT t FROM ChamiloCourseBundle:CTool t
+                WHERE t.cId = :course AND 
+                    t.name = :name AND
+                    t.image = 'lp_category.gif' AND
+                    t.link LIKE :link
+            ")
+            ->setParameters([
+                'course' => $courseId,
+                'name' => strip_tags($category->getName()),
+                'link' => "$link%"
+            ])
+            ->getResult();
+
+        /** @var CTool $tool */
+        $tool = current($tools);
+
+        return $tool ? $tool->getVisibility() : false;
+    }
+
+    /**
      * Restart the whole learnpath. Return the URL of the first element.
      * Make sure the results are saved with anoter method. This method should probably be
      * redefined in children classes.
@@ -4233,11 +4713,11 @@ class learnpath
         }
         $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
-        $lp_view_table = Database :: get_course_table(TABLE_LP_VIEW);
+        $lp_view_table = Database::get_course_table(TABLE_LP_VIEW);
         $sql = "INSERT INTO $lp_view_table (c_id, lp_id, user_id, view_count, session_id)
-                VALUES ($course_id, " . $this->lp_id . "," . $this->get_user_id() . "," . ($this->attempt + 1) . ", $session_id)";
+                VALUES ($course_id, ".$this->lp_id.",".$this->get_user_id().",".($this->attempt + 1).", $session_id)";
         if ($this->debug > 2) {
-            error_log('New LP - Inserting new lp_view for restart: ' . $sql, 0);
+            error_log('New LP - Inserting new lp_view for restart: '.$sql, 0);
         }
         Database::query($sql);
         $view_id = Database::insert_id();
@@ -4273,15 +4753,18 @@ class learnpath
         // TODO: Do a better check on the index pointing to the right item (it is supposed to be working
         // on $ordered_items[] but not sure it's always safe to use with $items[]).
         if ($this->debug > 2) {
-            error_log('New LP - save_current() saving item ' . $this->current, 0);
+            error_log('New LP - save_current() saving item '.$this->current, 0);
         }
         if ($this->debug > 2) {
-            error_log('' . print_r($this->items, true), 0);
+            error_log(''.print_r($this->items, true), 0);
         }
         if (isset($this->items[$this->current]) &&
             is_object($this->items[$this->current])
         ) {
-            $res = $this->items[$this->current]->save(false, $this->prerequisites_match($this->current));
+            $res = $this->items[$this->current]->save(
+                false,
+                $this->prerequisites_match($this->current)
+            );
             $this->autocomplete_parents($this->current);
             $status = $this->items[$this->current]->get_status();
             $this->update_queue[$this->current] = $status;
@@ -4292,7 +4775,7 @@ class learnpath
 
     /**
      * Saves the given item
-     * @param	integer	$item_id. Optional (will take from $_REQUEST if null)
+     * @param	integer	$item_id Optional (will take from $_REQUEST if null)
      * @param	boolean	$from_outside Save from url params (true) or from current attributes (false). Optional. Defaults to true
      * @return	boolean
      */
@@ -4300,7 +4783,7 @@ class learnpath
     {
         $debug = $this->debug;
         if ($debug) {
-            error_log('In learnpath::save_item(' . $item_id . ',' . intval($from_outside). ')', 0);
+            error_log('In learnpath::save_item('.$item_id.','.intval($from_outside).')', 0);
         }
         // TODO: Do a better check on the index pointing to the right item (it is supposed to be working
         // on $ordered_items[] but not sure it's always safe to use with $items[]).
@@ -4310,7 +4793,9 @@ class learnpath
         if (empty($item_id)) {
             $item_id = $this->get_current_item_id();
         }
-        if (isset($this->items[$item_id]) && is_object($this->items[$item_id])) {
+        if (isset($this->items[$item_id]) &&
+            is_object($this->items[$item_id])
+        ) {
             if ($debug) {
                 error_log('Object exists');
             }
@@ -4323,7 +4808,7 @@ class learnpath
 
             if ($debug) {
                 error_log('update_queue before:');
-                error_log(print_r($this->update_queue,1));
+                error_log(print_r($this->update_queue, 1));
             }
             $this->autocomplete_parents($item_id);
 
@@ -4331,9 +4816,9 @@ class learnpath
             $this->update_queue[$item_id] = $status;
 
             if ($debug) {
-                error_log('get_status(): ' . $status);
+                error_log('get_status(): '.$status);
                 error_log('update_queue after:');
-                error_log(print_r($this->update_queue,1));
+                error_log(print_r($this->update_queue, 1));
             }
             return $res;
         }
@@ -4349,36 +4834,40 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::save_last()', 0);
         }
-        $session_condition = api_get_session_condition(api_get_session_id(), true, false);
-        $table = Database :: get_course_table(TABLE_LP_VIEW);
+        $session_condition = api_get_session_condition(
+            api_get_session_id(),
+            true,
+            false
+        );
+        $table = Database::get_course_table(TABLE_LP_VIEW);
 
         if (isset($this->current) && !api_is_invitee()) {
             if ($this->debug > 2) {
-                error_log('New LP - Saving current item (' . $this->current . ') for later review', 0);
+                error_log('New LP - Saving current item ('.$this->current.') for later review', 0);
             }
             $sql = "UPDATE $table SET
-                        last_item = " . intval($this->get_current_item_id()). "
+                        last_item = ".intval($this->get_current_item_id())."
                     WHERE
                         c_id = $course_id AND
-                        lp_id = " . $this->get_id() . " AND
+                        lp_id = ".$this->get_id()." AND
                         user_id = " . $this->get_user_id()." ".$session_condition;
 
             if ($this->debug > 2) {
-                error_log('New LP - Saving last item seen : ' . $sql, 0);
+                error_log('New LP - Saving last item seen : '.$sql, 0);
             }
             Database::query($sql);
         }
 
         if (!api_is_invitee()) {
             // Save progress.
-            list($progress, $text) = $this->get_progress_bar_text('%');
+            list($progress,) = $this->get_progress_bar_text('%');
             if ($progress >= 0 && $progress <= 100) {
                 $progress = (int) $progress;
                 $sql = "UPDATE $table SET
                             progress = $progress
                         WHERE
                             c_id = ".$course_id." AND
-                            lp_id = " . $this->get_id() . " AND
+                            lp_id = " . $this->get_id()." AND
                             user_id = " . $this->get_user_id()." ".$session_condition;
                 // Ignore errors as some tables might not have the progress field just yet.
                 Database::query($sql);
@@ -4394,7 +4883,7 @@ class learnpath
     public function set_current_item($item_id = null)
     {
         if ($this->debug > 0) {
-            error_log('New LP - In learnpath::set_current_item(' . $item_id . ')', 0);
+            error_log('New LP - In learnpath::set_current_item('.$item_id.')', 0);
         }
         if (empty ($item_id)) {
             if ($this->debug > 2) {
@@ -4403,7 +4892,7 @@ class learnpath
             // Do nothing.
         } else {
             if ($this->debug > 2) {
-                error_log('New LP - New current item given is ' . $item_id . '...', 0);
+                error_log('New LP - New current item given is '.$item_id.'...', 0);
             }
             if (is_numeric($item_id)) {
                 $item_id = intval($item_id);
@@ -4418,10 +4907,10 @@ class learnpath
                     }
                 }
                 if ($this->debug > 2) {
-                    error_log('New LP - set_current_item(' . $item_id . ') done. Index is now : ' . $this->index, 0);
+                    error_log('New LP - set_current_item('.$item_id.') done. Index is now : '.$this->index, 0);
                 }
             } else {
-                error_log('New LP - set_current_item(' . $item_id . ') failed. Not a numeric value: ', 0);
+                error_log('New LP - set_current_item('.$item_id.') failed. Not a numeric value: ', 0);
             }
         }
     }
@@ -4429,6 +4918,7 @@ class learnpath
     /**
      * Sets the encoding
      * @param	string	New encoding
+     * @return bool
      * TODO (as of Chamilo 1.8.8): Check in the future whether this method is needed.
      */
     public function set_encoding($enc = 'UTF-8')
@@ -4445,9 +4935,9 @@ class learnpath
         if (api_is_encoding_supported($enc)) {
             $lp = $this->get_id();
             if ($lp != 0) {
-                $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
+                $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
                 $sql = "UPDATE $tbl_lp SET default_encoding = '$enc' 
-                        WHERE c_id = ".$course_id." AND id = " . $lp;
+                        WHERE c_id = ".$course_id." AND id = ".$lp;
                 $res = Database::query($sql);
                 return $res;
             }
@@ -4470,9 +4960,9 @@ class learnpath
         $course_id = api_get_course_int_id();
 
         if ($lp != 0) {
-            $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
+            $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET js_lib = '$lib' 
-                    WHERE c_id = ".$course_id." AND id = " . $lp;
+                    WHERE c_id = ".$course_id." AND id = ".$lp;
             $res = Database::query($sql);
             return $res;
         } else {
@@ -4493,14 +4983,14 @@ class learnpath
         if (empty ($name))
             return false;
         $this->maker = $name;
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $course_id = api_get_course_int_id();
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET
-                content_maker = '" . Database::escape_string($this->maker) . "'
+                content_maker = '".Database::escape_string($this->maker)."'
                 WHERE c_id = ".$course_id." AND id = '$lp_id'";
         if ($this->debug > 2) {
-            error_log('New LP - lp updated with new content_maker : ' . $this->maker, 0);
+            error_log('New LP - lp updated with new content_maker : '.$this->maker, 0);
         }
         Database::query($sql);
         return true;
@@ -4520,22 +5010,22 @@ class learnpath
             return false;
         }
         $this->name = Database::escape_string($name);
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $course_id = $this->course_info['real_id'];
         $sql = "UPDATE $lp_table SET
-                name = '" . Database::escape_string($this->name). "'
+                name = '".Database::escape_string($this->name)."'
                 WHERE c_id = ".$course_id." AND id = '$lp_id'";
         if ($this->debug > 2) {
-            error_log('New LP - lp updated with new name : ' . $this->name, 0);
+            error_log('New LP - lp updated with new name : '.$this->name, 0);
         }
         $result = Database::query($sql);
         // If the lp is visible on the homepage, change his name there.
         if (Database::affected_rows($result)) {
             $session_id = api_get_session_id();
             $session_condition = api_get_session_condition($session_id);
-            $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
-            $link = 'lp/lp_controller.php?action=view&lp_id=' . $lp_id.'&id_session='.$session_id;
+            $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
+            $link = 'lp/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
             $sql = "UPDATE $tbl_tool SET name = '$this->name'
             	    WHERE
             	        c_id = $course_id AND
@@ -4578,16 +5068,16 @@ class learnpath
         require_once api_get_path(LIBRARY_PATH).'search/xapian/XapianQuery.php';
         require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
 
-        $items_table = Database :: get_course_table(TABLE_LP_ITEM);
+        $items_table = Database::get_course_table(TABLE_LP_ITEM);
         // TODO: Make query secure agains XSS : use member attr instead of post var.
         $lp_id = intval($_POST['lp_id']);
         $sql = "SELECT * FROM $items_table WHERE c_id = $course_id AND lp_id = $lp_id";
         $result = Database::query($sql);
         $di = new ChamiloIndexer();
 
-        while ($lp_item = Database :: fetch_array($result)) {
+        while ($lp_item = Database::fetch_array($result)) {
             // Get search_did.
-            $tbl_se_ref = Database :: get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
             $sql = 'SELECT * FROM %s
                     WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d
                     LIMIT 1';
@@ -4596,7 +5086,7 @@ class learnpath
             //echo $sql; echo '<br>';
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
-                $se_ref = Database :: fetch_array($res);
+                $se_ref = Database::fetch_array($res);
 
                 // Compare terms.
                 $doc = $di->get_document($se_ref['search_did']);
@@ -4607,21 +5097,18 @@ class learnpath
                 }
 
                 $dterms = $terms;
-
                 $missing_terms = array_diff($dterms, $xterms);
                 $deprecated_terms = array_diff($xterms, $dterms);
 
                 // Save it to search engine.
                 foreach ($missing_terms as $term) {
-                    $doc->add_term($prefix . $term, 1);
+                    $doc->add_term($prefix.$term, 1);
                 }
                 foreach ($deprecated_terms as $term) {
-                    $doc->remove_term($prefix . $term);
+                    $doc->remove_term($prefix.$term);
                 }
                 $di->getDb()->replace_document((int) $se_ref['search_did'], $doc);
                 $di->getDb()->flush();
-            } else {
-                //@todo What we should do here?
             }
         }
         return true;
@@ -4639,12 +5126,12 @@ class learnpath
             error_log('New LP - In learnpath::set_theme()', 0);
         }
         $this->theme = $name;
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
-        $sql = "UPDATE $lp_table SET theme = '" . Database::escape_string($this->theme). "'
+        $sql = "UPDATE $lp_table SET theme = '".Database::escape_string($this->theme)."'
                 WHERE c_id = ".$course_id." AND id = '$lp_id'";
         if ($this->debug > 2) {
-            error_log('New LP - lp updated with new theme : ' . $this->theme, 0);
+            error_log('New LP - lp updated with new theme : '.$this->theme, 0);
         }
         Database::query($sql);
 
@@ -4664,13 +5151,13 @@ class learnpath
         }
 
         $this->preview_image = $name;
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET
-                preview_image = '" . Database::escape_string($this->preview_image). "'
+                preview_image = '".Database::escape_string($this->preview_image)."'
                 WHERE c_id = ".$course_id." AND id = '$lp_id'";
         if ($this->debug > 2) {
-            error_log('New LP - lp updated with new preview image : ' . $this->preview_image, 0);
+            error_log('New LP - lp updated with new preview image : '.$this->preview_image, 0);
         }
         Database::query($sql);
         return true;
@@ -4688,12 +5175,12 @@ class learnpath
             error_log('New LP - In learnpath::set_author()', 0);
         }
         $this->author = $name;
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
-        $sql = "UPDATE $lp_table SET author = '" . Database::escape_string($name). "'
+        $sql = "UPDATE $lp_table SET author = '".Database::escape_string($name)."'
                 WHERE c_id = ".$course_id." AND id = '$lp_id'";
         if ($this->debug > 2) {
-            error_log('New LP - lp updated with new preview author : ' . $this->author, 0);
+            error_log('New LP - lp updated with new preview author : '.$this->author, 0);
         }
         Database::query($sql);
 
@@ -4713,13 +5200,13 @@ class learnpath
         }
         if (intval($hide) == $hide) {
             $this->hide_toc_frame = $hide;
-            $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+            $lp_table = Database::get_course_table(TABLE_LP_MAIN);
             $lp_id = $this->get_id();
             $sql = "UPDATE $lp_table SET
-                    hide_toc_frame = '" . (int) $this->hide_toc_frame . "'
+                    hide_toc_frame = '".(int) $this->hide_toc_frame."'
                     WHERE c_id = ".$course_id." AND id = '$lp_id'";
             if ($this->debug > 2) {
-                error_log('New LP - lp updated with new preview hide_toc_frame : ' . $this->author, 0);
+                error_log('New LP - lp updated with new preview hide_toc_frame : '.$this->author, 0);
             }
             Database::query($sql);
 
@@ -4741,12 +5228,12 @@ class learnpath
             error_log('New LP - In learnpath::set_prerequisite()', 0);
         }
         $this->prerequisite = intval($prerequisite);
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET prerequisite = '".$this->prerequisite."'
                 WHERE c_id = ".$course_id." AND id = '$lp_id'";
         if ($this->debug > 2) {
-            error_log('New LP - lp updated with new preview requisite : ' . $this->requisite, 0);
+            error_log('New LP - lp updated with new preview requisite : '.$this->requisite, 0);
         }
         Database::query($sql);
         return true;
@@ -4767,13 +5254,13 @@ class learnpath
             return false;
 
         $this->proximity = $name;
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET
-                    content_local = '" . Database::escape_string($name) . "'
+                    content_local = '".Database::escape_string($name)."'
                 WHERE c_id = ".$course_id." AND id = '$lp_id'";
         if ($this->debug > 2) {
-            error_log('New LP - lp updated with new proximity : ' . $this->proximity, 0);
+            error_log('New LP - lp updated with new proximity : '.$this->proximity, 0);
         }
         Database::query($sql);
         return true;
@@ -4804,14 +5291,14 @@ class learnpath
         }
         $use_max_score = intval($use_max_score);
         $this->use_max_score = $use_max_score;
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET
-                    use_max_score = '" . $this->use_max_score . "'
+                    use_max_score = '".$this->use_max_score."'
                 WHERE c_id = ".$course_id." AND id = '$lp_id'";
 
         if ($this->debug > 2) {
-            error_log('New LP - lp updated with new use_max_score : ' . $this->use_max_score, 0);
+            error_log('New LP - lp updated with new use_max_score : '.$this->use_max_score, 0);
         }
         Database::query($sql);
 
@@ -4825,26 +5312,34 @@ class learnpath
      */
     public function set_expired_on($expired_on)
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_expired_on()', 0);
         }
 
-        if (!empty($expired_on)) {
-            $this->expired_on = api_get_utc_datetime($expired_on);
-        } else {
-            $this->expired_on = null;
-        }
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        if ($this->debug > 2) {
-            error_log('New LP - lp updated with new expired_on : ' . $this->expired_on, 0);
+        $em = Database::getManager();
+        /** @var CLp $lp */
+        $lp = $em
+            ->getRepository('ChamiloCourseBundle:CLp')
+            ->findOneBy(
+                [
+                    'id' => $this->get_id(),
+                    'cId' => api_get_course_int_id()
+                ]
+            );
+
+        if (!$lp) {
+            return false;
         }
 
-        $params = [
-            'expired_on' => $this->expired_on,
-        ];
-        Database::update($lp_table, $params, ['c_id = ? AND id = ?' => [$course_id, $lp_id]]);
+        $this->expired_on = !empty($expired_on) ? api_get_utc_datetime($expired_on, false, true) : null;
+
+        $lp->setExpiredOn($this->expired_on);
+        $em->persist($lp);
+        $em->flush();
+
+        if ($this->debug > 2) {
+            error_log('New LP - lp updated with new expired_on : '.$this->expired_on, 0);
+        }
 
         return true;
     }
@@ -4856,24 +5351,33 @@ class learnpath
      */
     public function set_publicated_on($publicated_on)
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_expired_on()', 0);
         }
-        if (!empty($publicated_on)) {
-            $this->publicated_on = api_get_utc_datetime($publicated_on);
-        } else {
-            $this->publicated_on = '';
+
+        $em = Database::getManager();
+        /** @var CLp $lp */
+        $lp = $em
+            ->getRepository('ChamiloCourseBundle:CLp')
+            ->findOneBy(
+                [
+                    'id' => $this->get_id(),
+                    'cId' => api_get_course_int_id()
+                ]
+            );
+
+        if (!$lp) {
+            return false;
         }
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        $sql = "UPDATE $lp_table SET
-                publicated_on = '" . Database::escape_string($this->publicated_on) . "'
-                WHERE c_id = ".$course_id." AND id = '$lp_id'";
+
+        $this->publicated_on = !empty($publicated_on) ? api_get_utc_datetime($publicated_on, false, true) : null;
+        $lp->setPublicatedOn($this->publicated_on);
+        $em->persist($lp);
+        $em->flush();
+
         if ($this->debug > 2) {
-            error_log('New LP - lp updated with new publicated_on : ' . $this->publicated_on, 0);
+            error_log('New LP - lp updated with new publicated_on : '.$this->publicated_on, 0);
         }
-        Database::query($sql);
 
         return true;
     }
@@ -4889,12 +5393,12 @@ class learnpath
             error_log('New LP - In learnpath::set_expired_on()', 0);
         }
         $this->modified_on = api_get_utc_datetime();
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
-        $sql = "UPDATE $lp_table SET modified_on = '" . $this->modified_on . "'
+        $sql = "UPDATE $lp_table SET modified_on = '".$this->modified_on."'
                 WHERE c_id = ".$course_id." AND id = '$lp_id'";
         if ($this->debug > 2) {
-            error_log('New LP - lp updated with new expired_on : ' . $this->modified_on, 0);
+            error_log('New LP - lp updated with new expired_on : '.$this->modified_on, 0);
         }
         Database::query($sql);
 
@@ -4941,9 +5445,8 @@ class learnpath
                 $prereq_check = $this->prerequisites_match($this->current);
                 $this->items[$this->current]->save(false, $prereq_check);
                 //$this->update_queue[$this->last] = $this->items[$this->last]->get_status();
-            } else {
-                // If sco, then it is supposed to have been updated by some other call.
             }
+            // If sco, then it is supposed to have been updated by some other call.
             if ($item_type == 'sco') {
                 $this->items[$this->current]->restart();
             }
@@ -4966,13 +5469,13 @@ class learnpath
 
         if ($this->last != 0 && $this->last != $this->current && is_object($this->items[$this->last])) {
             if ($this->debug > 2) {
-                error_log('New LP - In learnpath::stop_previous_item() - ' . $this->last . ' is object', 0);
+                error_log('New LP - In learnpath::stop_previous_item() - '.$this->last.' is object', 0);
             }
             switch ($this->get_type()) {
                 case '3':
                     if ($this->items[$this->last]->get_type() != 'au') {
                         if ($this->debug > 2) {
-                            error_log('New LP - In learnpath::stop_previous_item() - ' . $this->last . ' in lp_type 3 is <> au', 0);
+                            error_log('New LP - In learnpath::stop_previous_item() - '.$this->last.' in lp_type 3 is <> au', 0);
                         }
                         $this->items[$this->last]->close();
                         //$this->autocomplete_parents($this->last);
@@ -4982,10 +5485,11 @@ class learnpath
                             error_log('New LP - In learnpath::stop_previous_item() - Item is an AU, saving is managed by AICC signals', 0);
                         }
                     }
+                    break;
                 case '2':
                     if ($this->items[$this->last]->get_type() != 'sco') {
                         if ($this->debug > 2) {
-                            error_log('New LP - In learnpath::stop_previous_item() - ' . $this->last . ' in lp_type 2 is <> sco', 0);
+                            error_log('New LP - In learnpath::stop_previous_item() - '.$this->last.' in lp_type 2 is <> sco', 0);
                         }
                         $this->items[$this->last]->close();
                         //$this->autocomplete_parents($this->last);
@@ -4999,7 +5503,7 @@ class learnpath
                 case '1':
                 default:
                     if ($this->debug > 2) {
-                        error_log('New LP - In learnpath::stop_previous_item() - ' . $this->last . ' in lp_type 1 is asset', 0);
+                        error_log('New LP - In learnpath::stop_previous_item() - '.$this->last.' in lp_type 1 is asset', 0);
                     }
                     $this->items[$this->last]->close();
                     break;
@@ -5023,12 +5527,12 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::update_default_view_mode()', 0);
         }
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $lp_table
-                WHERE c_id = ".$course_id." AND id = " . $this->get_id();
+                WHERE c_id = ".$course_id." AND id = ".$this->get_id();
         $res = Database::query($sql);
-        if (Database :: num_rows($res) > 0) {
-            $row = Database :: fetch_array($res);
+        if (Database::num_rows($res) > 0) {
+            $row = Database::fetch_array($res);
             $default_view_mode = $row['default_view_mod'];
             $view_mode = $default_view_mode;
             switch ($default_view_mode) {
@@ -5046,14 +5550,14 @@ class learnpath
                     break;
             }
             $sql = "UPDATE $lp_table SET default_view_mod = '$view_mode'
-                    WHERE c_id = ".$course_id." AND id = " . $this->get_id();
+                    WHERE c_id = ".$course_id." AND id = ".$this->get_id();
             Database::query($sql);
             $this->mode = $view_mode;
 
             return $view_mode;
         } else {
             if ($this->debug > 2) {
-                error_log('New LP - Problem in update_default_view() - could not find LP ' . $this->get_id() . ' in DB', 0);
+                error_log('New LP - Problem in update_default_view() - could not find LP '.$this->get_id().' in DB', 0);
             }
         }
         return -1;
@@ -5069,12 +5573,12 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::update_default_scorm_commit()', 0);
         }
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $lp_table
-                WHERE c_id = ".$course_id." AND id = " . $this->get_id();
+                WHERE c_id = ".$course_id." AND id = ".$this->get_id();
         $res = Database::query($sql);
-        if (Database :: num_rows($res) > 0) {
-            $row = Database :: fetch_array($res);
+        if (Database::num_rows($res) > 0) {
+            $row = Database::fetch_array($res);
             $force = $row['force_commit'];
             if ($force == 1) {
                 $force = 0;
@@ -5084,14 +5588,14 @@ class learnpath
                 $force_return = true;
             }
             $sql = "UPDATE $lp_table SET force_commit = $force
-                    WHERE c_id = ".$course_id." AND id = " . $this->get_id();
+                    WHERE c_id = ".$course_id." AND id = ".$this->get_id();
             Database::query($sql);
             $this->force_commit = $force_return;
 
             return $force_return;
         } else {
             if ($this->debug > 2) {
-                error_log('New LP - Problem in update_default_scorm_commit() - could not find LP ' . $this->get_id() . ' in DB', 0);
+                error_log('New LP - Problem in update_default_scorm_commit() - could not find LP '.$this->get_id().' in DB', 0);
             }
         }
         return -1;
@@ -5104,23 +5608,24 @@ class learnpath
     public function update_display_order()
     {
         $course_id = api_get_course_int_id();
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
 
         $sql = "SELECT * FROM $lp_table WHERE c_id = ".$course_id." ORDER BY display_order";
         $res = Database::query($sql);
-        if ($res === false)
+        if ($res === false) {
             return false;
+        }
 
-        $num = Database :: num_rows($res);
+        $num = Database::num_rows($res);
         // First check the order is correct, globally (might be wrong because
         // of versions < 1.8.4).
         if ($num > 0) {
             $i = 1;
-            while ($row = Database :: fetch_array($res)) {
+            while ($row = Database::fetch_array($res)) {
                 if ($row['display_order'] != $i) {
                     // If we find a gap in the order, we need to fix it.
                     $sql = "UPDATE $lp_table SET display_order = $i
-                            WHERE c_id = ".$course_id." AND id = " . $row['id'];
+                            WHERE c_id = ".$course_id." AND id = ".$row['id'];
                     Database::query($sql);
                 }
                 $i++;
@@ -5139,12 +5644,12 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::update_reinit()', 0);
         }
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $lp_table
-                WHERE c_id = ".$course_id." AND id = " . $this->get_id();
+                WHERE c_id = ".$course_id." AND id = ".$this->get_id();
         $res = Database::query($sql);
-        if (Database :: num_rows($res) > 0) {
-            $row = Database :: fetch_array($res);
+        if (Database::num_rows($res) > 0) {
+            $row = Database::fetch_array($res);
             $force = $row['prevent_reinit'];
             if ($force == 1) {
                 $force = 0;
@@ -5152,13 +5657,13 @@ class learnpath
                 $force = 1;
             }
             $sql = "UPDATE $lp_table SET prevent_reinit = $force
-                    WHERE c_id = ".$course_id." AND id = " . $this->get_id();
+                    WHERE c_id = ".$course_id." AND id = ".$this->get_id();
             Database::query($sql);
             $this->prevent_reinit = $force;
             return $force;
         } else {
             if ($this->debug > 2) {
-                error_log('New LP - Problem in update_reinit() - could not find LP ' . $this->get_id() . ' in DB', 0);
+                error_log('New LP - Problem in update_reinit() - could not find LP '.$this->get_id().' in DB', 0);
             }
         }
         return -1;
@@ -5174,11 +5679,11 @@ class learnpath
     {
         //Set default value for seriousgame_mode
         if (!isset($this->seriousgame_mode)) {
-            $this->seriousgame_mode=0;
+            $this->seriousgame_mode = 0;
         }
         // Set default value for prevent_reinit
         if (!isset($this->prevent_reinit)) {
-            $this->prevent_reinit =1;
+            $this->prevent_reinit = 1;
         }
         if ($this->seriousgame_mode == 1 && $this->prevent_reinit == 1) {
             return 'seriousgame';
@@ -5222,11 +5727,11 @@ class learnpath
         }
         $this->prevent_reinit = $prevent_reinit;
         $this->seriousgame_mode = $sg_mode;
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $sql = "UPDATE $lp_table SET
                 prevent_reinit = $prevent_reinit ,
                 seriousgame_mode = $sg_mode
-                WHERE c_id = ".$course_id." AND id = " . $this->get_id();
+                WHERE c_id = ".$course_id." AND id = ".$this->get_id();
         $res = Database::query($sql);
         if ($res) {
             return true;
@@ -5277,11 +5782,12 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_seriousgame_mode()', 0);
         }
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
-        $sql = "SELECT * FROM $lp_table WHERE c_id = ".$course_id." AND id = " . $this->get_id();
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+        $sql = "SELECT * FROM $lp_table 
+                WHERE c_id = ".$course_id." AND id = ".$this->get_id();
         $res = Database::query($sql);
-        if (Database :: num_rows($res) > 0) {
-            $row = Database :: fetch_array($res);
+        if (Database::num_rows($res) > 0) {
+            $row = Database::fetch_array($res);
             $force = $row['seriousgame_mode'];
             if ($force == 1) {
                 $force = 0;
@@ -5289,13 +5795,13 @@ class learnpath
                 $force = 1;
             }
             $sql = "UPDATE $lp_table SET seriousgame_mode = $force
-			        WHERE c_id = ".$course_id." AND id = " . $this->get_id();
+			        WHERE c_id = ".$course_id." AND id = ".$this->get_id();
             Database::query($sql);
             $this->seriousgame_mode = $force;
             return $force;
         } else {
             if ($this->debug > 2) {
-                error_log('New LP - Problem in set_seriousgame_mode() - could not find LP ' . $this->get_id() . ' in DB', 0);
+                error_log('New LP - Problem in set_seriousgame_mode() - could not find LP '.$this->get_id().' in DB', 0);
             }
         }
         return -1;
@@ -5311,12 +5817,12 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::update_scorm_debug()', 0);
         }
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $lp_table
-                WHERE c_id = ".$course_id." AND id = " . $this->get_id();
+                WHERE c_id = ".$course_id." AND id = ".$this->get_id();
         $res = Database::query($sql);
-        if (Database :: num_rows($res) > 0) {
-            $row = Database :: fetch_array($res);
+        if (Database::num_rows($res) > 0) {
+            $row = Database::fetch_array($res);
             $force = $row['debug'];
             if ($force == 1) {
                 $force = 0;
@@ -5324,13 +5830,13 @@ class learnpath
                 $force = 1;
             }
             $sql = "UPDATE $lp_table SET debug = $force
-                    WHERE c_id = ".$course_id." AND id = " . $this->get_id();
+                    WHERE c_id = ".$course_id." AND id = ".$this->get_id();
             Database::query($sql);
             $this->scorm_debug = $force;
             return $force;
         } else {
             if ($this->debug > 2) {
-                error_log('New LP - Problem in update_scorm_debug() - could not find LP ' . $this->get_id() . ' in DB', 0);
+                error_log('New LP - Problem in update_scorm_debug() - could not find LP '.$this->get_id().' in DB', 0);
             }
         }
         return -1;
@@ -5359,7 +5865,7 @@ class learnpath
      * @param int $depth
      * @param array $tmp
      */
-    public function create_tree_array($array, $parent = 0, $depth = -1, $tmp = array ())
+    public function create_tree_array($array, $parent = 0, $depth = -1, $tmp = array())
     {
         if ($this->debug > 1) {
             error_log('New LP - In learnpath::create_tree_array())', 0);
@@ -5414,14 +5920,16 @@ class learnpath
      *
      * @return array
      */
-    public function sort_tree_array($array) {
+    public function sort_tree_array($array)
+    {
         foreach ($array as $key => $row) {
             $parent[$key] = $row['parent_item_id'];
             $position[$key] = $row['display_order'];
         }
 
-        if (count($array) > 0)
+        if (count($array) > 0) {
             array_multisort($parent, SORT_ASC, $position, SORT_ASC, $array);
+        }
 
         return $array;
     }
@@ -5429,7 +5937,6 @@ class learnpath
     /**
      * Function that creates a html list of learning path items so that we can add audio files to them
      * @author Kevin Van Den Haute
-     * @param int $lp_id
      * @return string
      */
     public function overview()
@@ -5438,29 +5945,27 @@ class learnpath
             error_log('New LP - In learnpath::overview()', 0);
         }
 
-        $_SESSION['gradebook'] = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
         $return = '';
-
         $update_audio = isset($_GET['updateaudio']) ? $_GET['updateaudio'] : null;
 
         // we need to start a form when we want to update all the mp3 files
         if ($update_audio == 'true') {
-            $return .= '<form action="' . api_get_self() . '?'.api_get_cidreq().'&updateaudio=' . Security :: remove_XSS($_GET['updateaudio']) .'&action=' . Security :: remove_XSS($_GET['action']) . '&lp_id=' . $_SESSION['oLP']->lp_id . '" method="post" enctype="multipart/form-data" name="updatemp3" id="updatemp3">';
+            $return .= '<form action="'.api_get_self().'?'.api_get_cidreq().'&updateaudio='.Security::remove_XSS($_GET['updateaudio']).'&action='.Security::remove_XSS($_GET['action']).'&lp_id='.$_SESSION['oLP']->lp_id.'" method="post" enctype="multipart/form-data" name="updatemp3" id="updatemp3">';
         }
         $return .= '<div id="message"></div>';
         if (count($this->items) == 0) {
-            $return .= Display::display_normal_message(get_lang('YouShouldAddItemsBeforeAttachAudio'));
+            $return .= Display::return_message(get_lang('YouShouldAddItemsBeforeAttachAudio'), 'normal');
         } else {
             $return_audio = '<table class="data_table">';
             $return_audio .= '<tr>';
-            $return_audio .= '<th width="40%">' . get_lang('Title') . '</th>';
-            $return_audio .= '<th>' . get_lang('Audio') . '</th>';
+            $return_audio .= '<th width="40%">'.get_lang('Title').'</th>';
+            $return_audio .= '<th>'.get_lang('Audio').'</th>';
             $return_audio .= '</tr>';
 
             if ($update_audio != 'true') {
                 $return .= '<div class="col-md-12">';
                 $return .= self::return_new_tree($update_audio);
-                $return .='</div>';
+                $return .= '</div>';
                 $return .= Display::div(
                     Display::url(get_lang('Save'), '#', array('id' => 'listSubmit', 'class' => 'btn btn-primary')),
                     array('style' => 'float:left; margin-top:15px;width:100%')
@@ -5498,22 +6003,21 @@ class learnpath
     public function return_new_tree($update_audio = 'false', $drop_element_here = false)
     {
         $return = '';
-        $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
-
+        $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
         $course_id = api_get_course_int_id();
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
         $sql = "SELECT * FROM $tbl_lp_item
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
 
         $result = Database::query($sql);
         $arrLP = array();
-        while ($row = Database :: fetch_array($result)) {
+        while ($row = Database::fetch_array($result)) {
 
             $arrLP[] = array(
                 'id' => $row['id'],
                 'item_type' => $row['item_type'],
-                'title' => Security :: remove_XSS($row['title']),
+                'title' => Security::remove_XSS($row['title']),
                 'path' => $row['path'],
                 'description' => Security::remove_XSS($row['description']),
                 'parent_item_id' => $row['parent_item_id'],
@@ -5532,26 +6036,24 @@ class learnpath
 
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
-        unset ($this->arrMenu);
+        unset($this->arrMenu);
         $default_data = null;
         $default_content = null;
-
         $elements = array();
         $return_audio = null;
 
         for ($i = 0; $i < count($arrLP); $i++) {
             $title = $arrLP[$i]['title'];
-
             $title_cut = cut($arrLP[$i]['title'], 25);
 
             // Link for the documents
             if ($arrLP[$i]['item_type'] == 'document') {
-                $url = api_get_self() . '?'.api_get_cidreq().'&action=view_item&mode=preview_document&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id;
+                $url = api_get_self().'?'.api_get_cidreq().'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
                 $title_cut = Display::url(
                     $title_cut,
                     $url,
                     array(
-                            'class' => 'ajax moved',
+                        'class' => 'ajax moved',
                         'data-title' => $title_cut
                     )
                 );
@@ -5567,15 +6069,14 @@ class learnpath
             } else {
                 $oddClass = 'row_even';
             }
-            $return_audio .= '<tr id ="lp_item_'.$arrLP[$i]['id'] .'" class="' . $oddClass . '">';
-
+            $return_audio .= '<tr id ="lp_item_'.$arrLP[$i]['id'].'" class="'.$oddClass.'">';
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
 
-            if (file_exists('../img/lp_' . $icon_name . '.png')) {
-                $icon = Display::return_icon('lp_' . $icon_name . '.png');
+            if (file_exists('../img/lp_'.$icon_name.'.png')) {
+                $icon = Display::return_icon('lp_'.$icon_name.'.png');
             } else {
-                if (file_exists('../img/lp_' . $icon_name . '.gif')) {
-                    $icon = Display::return_icon('lp_' . $icon_name . '.gif');
+                if (file_exists('../img/lp_'.$icon_name.'.gif')) {
+                    $icon = Display::return_icon('lp_'.$icon_name.'.gif');
                 } else {
                     if ($arrLP[$i]['item_type'] === TOOL_LP_FINAL_ITEM) {
                         $icon = Display::return_icon('certificate.png');
@@ -5586,25 +6087,29 @@ class learnpath
             }
 
             // The audio column.
-            $return_audio  .= '<td align="left" style="padding-left:10px;">';
+            $return_audio .= '<td align="left" style="padding-left:10px;">';
             $audio = '';
             if (!$update_audio || $update_audio <> 'true') {
-                if (!empty($arrLP[$i]['audio'])) {
-                } else {
+                if (empty($arrLP[$i]['audio'])) {
                     $audio .= '';
                 }
             } else {
                 $types = self::getChapterTypes();
                 if (!in_array($arrLP[$i]['item_type'], $types)) {
-                    $audio .= '<input type="file" name="mp3file' . $arrLP[$i]['id'] . '" id="mp3file" />';
+                    $audio .= '<input type="file" name="mp3file'.$arrLP[$i]['id'].'" id="mp3file" />';
                     if (!empty ($arrLP[$i]['audio'])) {
                         $audio .= '<br />'.Security::remove_XSS($arrLP[$i]['audio']).'<br />
-                        <input type="checkbox" name="removemp3' . $arrLP[$i]['id'] . '" id="checkbox' . $arrLP[$i]['id'] . '" />' . get_lang('RemoveAudio');
+                        <input type="checkbox" name="removemp3' . $arrLP[$i]['id'].'" id="checkbox'.$arrLP[$i]['id'].'" />'.get_lang('RemoveAudio');
                     }
                 }
             }
 
-            $return_audio .= Display::span($icon.' '.$title).Display::tag('td', $audio, array('style'=>''));
+            $return_audio .= Display::span($icon.' '.$title).
+            Display::tag(
+                'td',
+                $audio,
+                array('style' => '')
+            );
             $return_audio .= '</td>';
             $move_icon = '';
             $move_item_icon = '';
@@ -5619,7 +6124,12 @@ class learnpath
                 if (!$update_audio || $update_audio <> 'true') {
                     if ($arrLP[$i]['item_type'] !== TOOL_LP_FINAL_ITEM) {
                         $move_icon .= '<a class="moved" href="#">';
-                        $move_icon .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
+                        $move_icon .= Display::return_icon(
+                            'move_everywhere.png',
+                            get_lang('Move'),
+                            array(),
+                            ICON_SIZE_TINY
+                        );
                         $move_icon .= '</a>';
                     }
                 }
@@ -5627,8 +6137,13 @@ class learnpath
                 // No edit for this item types
                 if (!in_array($arrLP[$i]['item_type'], array('sco', 'asset', 'final_item'))) {
                     if ($arrLP[$i]['item_type'] != 'dir') {
-                        $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&view=build&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '&path_item=' . $arrLP[$i]['path'] . '" class="btn btn-default">';
-                        $edit_icon .= Display::return_icon('edit.png', get_lang('LearnpathEditModule'), array(), ICON_SIZE_TINY);
+                        $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&view=build&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'&path_item='.$arrLP[$i]['path'].'" class="btn btn-default">';
+                        $edit_icon .= Display::return_icon(
+                            'edit.png',
+                            get_lang('LearnpathEditModule'),
+                            array(),
+                            ICON_SIZE_TINY
+                        );
                         $edit_icon .= '</a>';
 
                         if (!in_array($arrLP[$i]['item_type'], ['forum', 'thread'])) {
@@ -5637,7 +6152,7 @@ class learnpath
                                 $this->lp_session_id
                             );
                             if ($forumThread) {
-                                $forumIconUrl = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+                                $forumIconUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
                                     'action' => 'dissociate_forum',
                                     'id' => $arrLP[$i]['id'],
                                     'lp_id' => $this->lp_id
@@ -5648,7 +6163,7 @@ class learnpath
                                     ['class' => 'btn btn-default lp-btn-dissociate-forum']
                                 );
                             } else {
-                                $forumIconUrl = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+                                $forumIconUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
                                     'action' => 'create_forum',
                                     'id' => $arrLP[$i]['id'],
                                     'lp_id' => $this->lp_id
@@ -5661,38 +6176,106 @@ class learnpath
                             }
                         }
                     } else {
-                        $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '&path_item=' . $arrLP[$i]['path'] . '" class="btn btn-default">';
-                        $edit_icon .= Display::return_icon('edit.png', get_lang('LearnpathEditModule'), array(), ICON_SIZE_TINY);
+                        $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'&path_item='.$arrLP[$i]['path'].'" class="btn btn-default">';
+                        $edit_icon .= Display::return_icon(
+                            'edit.png',
+                            get_lang('LearnpathEditModule'),
+                            array(),
+                            ICON_SIZE_TINY
+                        );
+                        $edit_icon .= '</a>';
+                    }
+                } else {
+                    if ($arrLP[$i]['item_type'] == TOOL_LP_FINAL_ITEM) {
+                        $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'" class="btn btn-default">';
+                        $edit_icon .= Display::return_icon(
+                            'edit.png',
+                            get_lang('Edit'),
+                            array(),
+                            ICON_SIZE_TINY
+                        );
                         $edit_icon .= '</a>';
                     }
                 }
 
-                $delete_icon .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_item&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . addslashes($title) . '\');" class="btn btn-default">';
-                $delete_icon .= Display::return_icon('delete.png', get_lang('LearnpathDeleteModule'), array(), ICON_SIZE_TINY);
+                $delete_icon .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'" onclick="return confirmation(\''.addslashes($title).'\');" class="btn btn-default">';
+                $delete_icon .= Display::return_icon(
+                    'delete.png',
+                    get_lang('LearnpathDeleteModule'),
+                    [],
+                    ICON_SIZE_TINY
+                );
                 $delete_icon .= '</a>';
 
-                $url = api_get_self() . '?'.api_get_cidreq().'&view=build&id='.$arrLP[$i]['id'] .'&lp_id='.$this->lp_id;
+                $url = api_get_self().'?'.api_get_cidreq().'&view=build&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
+                $previewImage = Display::return_icon(
+                    'preview_view.png',
+                    get_lang('Preview'),
+                    [],
+                    ICON_SIZE_TINY
+                );
 
-                if (in_array($arrLP[$i]['item_type'], ['document', 'final_item'])) {
-                    $urlPreviewLink = api_get_self().'?'.api_get_cidreq().'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
-                    $previewIcon = Display::url(
-                        Display::return_icon('preview_view.png', get_lang('Preview'), array(), ICON_SIZE_TINY),
-                        $urlPreviewLink,
-                        array(
-                            'class' => 'btn btn-default ajax',
-                            'data-title' => $arrLP[$i]['title']
-                        )
-                    );
-                } else {
-                    $previewIcon = Display::url(
-                        Display::return_icon('preview_view.png', get_lang('Preview'), array(), ICON_SIZE_TINY),
-                        $url.'&action=view_item', ['class' => 'btn btn-default']
-                    );
+                switch ($arrLP[$i]['item_type']) {
+                    case TOOL_DOCUMENT:
+                    case TOOL_LP_FINAL_ITEM:
+                        $urlPreviewLink = api_get_self().'?'.api_get_cidreq().'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
+                        $previewIcon = Display::url(
+                            $previewImage,
+                            $urlPreviewLink,
+                            array(
+                                'target' => '_blank',
+                                'class' => 'btn btn-default',
+                                'data-title' => $arrLP[$i]['title']
+                            )
+                        );
+                        break;
+                    case TOOL_THREAD:
+                    case TOOL_FORUM:
+                    case TOOL_QUIZ:
+                    case TOOL_STUDENTPUBLICATION:
+                    case TOOL_LP_FINAL_ITEM:
+                    case TOOL_LINK:
+                        //$target = '';
+                        //$class = 'btn btn-default ajax';
+                        //if ($arrLP[$i]['item_type'] == TOOL_LINK) {
+                        $class = 'btn btn-default';
+                        $target = '_blank';
+                        //}
+
+                        $link = self::rl_get_resource_link_for_learnpath(
+                            $this->course_int_id,
+                            $this->lp_id,
+                            $arrLP[$i]['id'],
+                            0,
+                            ''
+                        );
+                        $previewIcon = Display::url(
+                            $previewImage,
+                            $link,
+                            [
+                                'class' => $class,
+                                'data-title' => $arrLP[$i]['title'],
+                                'target' => $target
+                            ]
+                        );
+                        break;
+                    default:
+                        $previewIcon = Display::url(
+                            $previewImage,
+                            $url.'&action=view_item',
+                            ['class' => 'btn btn-default', 'target' => '_blank']
+                        );
+                        break;
                 }
 
                 if ($arrLP[$i]['item_type'] != 'dir') {
                     $prerequisities_icon = Display::url(
-                        Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_TINY),
+                        Display::return_icon(
+                            'accept.png',
+                            get_lang('LearnpathPrerequisites'),
+                            array(),
+                            ICON_SIZE_TINY
+                        ),
                         $url.'&action=edit_item_prereq', ['class' => 'btn btn-default']
                     );
                     if ($arrLP[$i]['item_type'] != 'final_item') {
@@ -5708,15 +6291,20 @@ class learnpath
                         );
                     }
                     $audio_icon = Display::url(
-                        Display::return_icon('audio.png', get_lang('UplUpload'), array(), ICON_SIZE_TINY),
+                        Display::return_icon(
+                            'audio.png',
+                            get_lang('UplUpload'),
+                            array(),
+                            ICON_SIZE_TINY
+                        ),
                         $url.'&action=add_audio',
                         ['class' => 'btn btn-default']
                     );
                 }
             }
             if ($update_audio != 'true') {
-                $row = $move_icon . ' ' . $icon .
-                    Display::span($title_cut) .
+                $row = $move_icon.' '.$icon.
+                    Display::span($title_cut).
                     Display::tag(
                         'div',
                         "<div class=\"btn-group btn-group-xs\">$previewIcon $audio $edit_icon $forumIcon $prerequisities_icon $move_item_icon $audio_icon $delete_icon</div>",
@@ -5737,8 +6325,8 @@ class learnpath
                 $parent_arrays = array();
                 if ($arrLP[$i]['depth'] > 1) {
                     //Getting list of parents
-                    for($j = 0; $j < $arrLP[$i]['depth']; $j++) {
-                        foreach($arrLP as $item) {
+                    for ($j = 0; $j < $arrLP[$i]['depth']; $j++) {
+                        foreach ($arrLP as $item) {
                             if ($item['id'] == $parent_id) {
                                 if ($item['parent_item_id'] == 0) {
                                     $parent_id = $item['id'];
@@ -5760,8 +6348,8 @@ class learnpath
                     $parent_arrays = array_reverse($parent_arrays);
                     $val = '$elements';
                     $x = 0;
-                    foreach($parent_arrays as $item) {
-                        if ($x != count($parent_arrays) -1) {
+                    foreach ($parent_arrays as $item) {
+                        if ($x != count($parent_arrays) - 1) {
                             $val .= '["'.$item.'"]["children"]';
                         } else {
                             $val .= '["'.$item.'"]["children"]';
@@ -5779,7 +6367,11 @@ class learnpath
         }
 
         $list = '<ul id="lp_item_list">';
-        $tree = self::print_recursive($elements, $default_data, $default_content);
+        $tree = self::print_recursive(
+            $elements,
+            $default_data,
+            $default_content
+        );
 
         if (!empty($tree)) {
             $list .= $tree;
@@ -5830,7 +6422,7 @@ class learnpath
                 if (isset($_REQUEST['id']) && $key == $_REQUEST['id']) {
                     $active = 'active';
                 }
-                $return  .= Display::tag(
+                $return .= Display::tag(
                     'li',
                     Display::div($item['data'], array('class'=>"item_data $active")).$sub_list,
                     array('id'=>$key, 'class'=>'record li_container')
@@ -5860,52 +6452,84 @@ class learnpath
      * @param bool $allowExpand Optional. Allow show the expand/contract button
      * @return string
      */
-    public function build_action_menu($returnContent = false, $showRequirementButtons = true, $isConfigPage = false, $allowExpand = true)
-    {
-        $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
+    public function build_action_menu(
+        $returnContent = false,
+        $showRequirementButtons = true,
+        $isConfigPage = false,
+        $allowExpand = true
+    ) {
         $actionsLeft = '';
         $actionsRight = '';
 
         $actionsLeft .= Display::url(
-            Display:: return_icon('preview_view.png', get_lang('Display'), '', ICON_SIZE_MEDIUM),
-            'lp_controller.php?'.api_get_cidreq().'&' . http_build_query([
-                'gradebook' => $gradebook,
+            Display::return_icon(
+                'preview_view.png',
+                get_lang('Display'),
+                '',
+                ICON_SIZE_MEDIUM
+            ),
+            'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                 'action' => 'view',
-                'lp_id' => $_SESSION['oLP']->lp_id,
+                'lp_id' => $this->lp_id,
                 'isStudentView' => 'true'
             ])
         );
         $actionsLeft .= Display::url(
-            Display:: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'), '', ICON_SIZE_MEDIUM),
-            'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+            Display::return_icon(
+                'upload_audio.png',
+                get_lang('UpdateAllAudioFragments'),
+                '',
+                ICON_SIZE_MEDIUM
+            ),
+            'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                 'action' => 'admin_view',
-                'lp_id' => $_SESSION['oLP']->lp_id,
+                'lp_id' => $this->lp_id,
                 'updateaudio' => 'true'
             ])
         );
 
         if (!$isConfigPage) {
             $actionsLeft .= Display::url(
-                Display :: return_icon('settings.png', get_lang('CourseSettings'),'',ICON_SIZE_MEDIUM),
-                'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+                Display::return_icon(
+                    'settings.png',
+                    get_lang('CourseSettings'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                     'action' => 'edit',
-                    'lp_id' => $_SESSION['oLP']->lp_id
+                    'lp_id' => $this->lp_id
                 ])
             );
         } else {
             $actionsLeft .= Display::url(
-                Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM),
-                'lp_controller.php?' . http_build_query([
+                Display::return_icon(
+                    'edit.png',
+                    get_lang('Edit'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                'lp_controller.php?'.http_build_query([
                     'action' => 'build',
-                    'lp_id' => $_SESSION['oLP']->lp_id
-                ]) . '&' . api_get_cidreq()
+                    'lp_id' => $this->lp_id
+                ]).'&'.api_get_cidreq()
             );
         }
 
         if ($allowExpand) {
             $actionsLeft .= Display::url(
-                Display::return_icon('expand.png', get_lang('Expand'), array('id' => 'expand'), ICON_SIZE_MEDIUM) .
-                Display::return_icon('contract.png', get_lang('Collapse'), array('id' => 'contract', 'class' => 'hide'), ICON_SIZE_MEDIUM),
+                Display::return_icon(
+                    'expand.png',
+                    get_lang('Expand'),
+                    array('id' => 'expand'),
+                    ICON_SIZE_MEDIUM
+                ).
+                Display::return_icon(
+                    'contract.png',
+                    get_lang('Collapse'),
+                    array('id' => 'contract', 'class' => 'hide'),
+                    ICON_SIZE_MEDIUM
+                ),
                 '#',
                 ['role' => 'button', 'id' => 'hide_bar_template']
             );
@@ -5915,23 +6539,30 @@ class learnpath
             $buttons = array(
                 array(
                     'title' => get_lang('SetPrerequisiteForEachItem'),
-                    'href' => 'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+                    'href' => 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                         'action' => 'set_previous_step_as_prerequisite',
-                        'lp_id' => $_SESSION['oLP']->lp_id
+                        'lp_id' => $this->lp_id
                     ])
                 ),
                 array(
                     'title' => get_lang('ClearAllPrerequisites'),
-                    'href' => 'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+                    'href' => 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                         'action' => 'clear_prerequisites',
-                        'lp_id' => $_SESSION['oLP']->lp_id
+                        'lp_id' => $this->lp_id
                     ])
                 ),
             );
-            $actionsRight = Display::groupButtonWithDropDown(get_lang('PrerequisitesOptions'), $buttons);
+            $actionsRight = Display::groupButtonWithDropDown(
+                get_lang('PrerequisitesOptions'),
+                $buttons,
+                true
+            );
         }
 
-        $toolbar = Display::toolbarAction('actions-lp-controller', array($actionsLeft, $actionsRight));
+        $toolbar = Display::toolbarAction(
+            'actions-lp-controller',
+            [$actionsLeft, $actionsRight]
+        );
 
         if ($returnContent) {
 
@@ -5952,7 +6583,7 @@ class learnpath
     {
         // Creating learning_path folder
         $dir = '/learning_path';
-        $filepath = api_get_path(SYS_COURSE_PATH).$course['path'] . '/document';
+        $filepath = api_get_path(SYS_COURSE_PATH).$course['path'].'/document';
         $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
 
         $folder = false;
@@ -5998,14 +6629,14 @@ class learnpath
         $folder = self::generate_learning_path_folder($course, $creatorId);
 
         // Limits title size
-        $title = api_substr(api_replace_dangerous_char($lp_name), 0 , 80);
+        $title = api_substr(api_replace_dangerous_char($lp_name), 0, 80);
         $dir = $dir.$title;
 
         // Creating LP folder
         $documentId = null;
 
         if ($folder) {
-            $filepath = api_get_path(SYS_COURSE_PATH) . $course['path'] . '/document';
+            $filepath = api_get_path(SYS_COURSE_PATH).$course['path'].'/document';
             if (!is_dir($filepath.'/'.$dir)) {
                 $folderData = create_unexisting_directory(
                     $course,
@@ -6027,7 +6658,7 @@ class learnpath
             }
             $dir = $dir.'/';
             if ($folder) {
-                $filepath = api_get_path(SYS_COURSE_PATH) . $course['path'] . '/document'.$dir;
+                $filepath = api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$dir;
             }
         }
 
@@ -6057,8 +6688,14 @@ class learnpath
      *
      * @return string
      */
-    public function create_document($courseInfo, $content = '', $title = '', $extension = 'html', $parentId = 0, $creatorId = 0)
-    {
+    public function create_document(
+        $courseInfo,
+        $content = '',
+        $title = '',
+        $extension = 'html',
+        $parentId = 0,
+        $creatorId = 0
+    ) {
         if (!empty($courseInfo)) {
             $course_id = $courseInfo['real_id'];
         } else {
@@ -6072,13 +6709,19 @@ class learnpath
         $result = $this->generate_lp_folder($courseInfo);
         $dir = $result['dir'];
 
-        if (empty($parentId)) {
-            $postDir = isset($_POST['dir']) ? $_POST['dir'] : '';
-            $dir = isset ($_GET['dir']) ? $_GET['dir'] : $postDir; // Please, do not modify this dirname formatting.
+        if (empty($parentId) || $parentId == '/') {
+            $postDir = isset($_POST['dir']) ? $_POST['dir'] : $dir;
+            $dir = isset($_GET['dir']) ? $_GET['dir'] : $postDir; // Please, do not modify this dirname formatting.
+
+            if ($parentId === '/') {
+                $dir = '/';
+            }
+
             // Please, do not modify this dirname formatting.
             if (strstr($dir, '..')) {
                 $dir = '/';
             }
+
             if (!empty($dir[0]) && $dir[0] == '.') {
                 $dir = substr($dir, 1);
             }
@@ -6089,17 +6732,19 @@ class learnpath
                 $dir .= '/';
             }
         } else {
-            $parentInfo = DocumentManager::get_document_data_by_id($parentId, $courseInfo['code']);
+            $parentInfo = DocumentManager::get_document_data_by_id(
+                $parentId,
+                $courseInfo['code']
+            );
             if (!empty($parentInfo)) {
                 $dir = $parentInfo['path'].'/';
             }
         }
 
-        $filepath = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'] . '/document'.$dir;
-
+        $filepath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/'.$dir;
         if (!is_dir($filepath)) {
             $dir = '/';
-            $filepath = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'] . '/document'.$dir;
+            $filepath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/'.$dir;
         }
 
         // stripslashes() before calling api_replace_dangerous_char() because $_POST['title']
@@ -6118,11 +6763,11 @@ class learnpath
         $tmp_filename = $filename;
 
         $i = 0;
-        while (file_exists($filepath . $tmp_filename . '.'.$extension)){
-            $tmp_filename = $filename . '_' . ++ $i;
+        while (file_exists($filepath.$tmp_filename.'.'.$extension)) {
+            $tmp_filename = $filename.'_'.++ $i;
         }
 
-        $filename = $tmp_filename . '.'.$extension;
+        $filename = $tmp_filename.'.'.$extension;
         if ($extension == 'html') {
             $content = stripslashes($content);
             $content = str_replace(
@@ -6157,12 +6802,12 @@ class learnpath
             );
         }
 
-        if (!file_exists($filepath . $filename)) {
-            if ($fp = @ fopen($filepath . $filename, 'w')) {
+        if (!file_exists($filepath.$filename)) {
+            if ($fp = @ fopen($filepath.$filename, 'w')) {
                 fputs($fp, $content);
                 fclose($fp);
 
-                $file_size = filesize($filepath . $filename);
+                $file_size = filesize($filepath.$filename);
                 $save_file_path = $dir.$filename;
 
                 $document_id = add_document(
@@ -6197,15 +6842,15 @@ class learnpath
                     $new_title = $originalTitle;
 
                     if ($new_comment || $new_title) {
-                        $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
+                        $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
                         $ct = '';
                         if ($new_comment)
-                            $ct .= ", comment='" . Database::escape_string($new_comment). "'";
+                            $ct .= ", comment='".Database::escape_string($new_comment)."'";
                         if ($new_title)
-                            $ct .= ", title='" . Database::escape_string($new_title)."' ";
+                            $ct .= ", title='".Database::escape_string($new_title)."' ";
 
-                        $sql = "UPDATE " . $tbl_doc ." SET " . substr($ct, 1)."
-                               WHERE c_id = ".$course_id." AND id = " . $document_id;
+                        $sql = "UPDATE ".$tbl_doc." SET ".substr($ct, 1)."
+                               WHERE c_id = ".$course_id." AND id = ".$document_id;
                         Database::query($sql);
                     }
                 }
@@ -6224,50 +6869,60 @@ class learnpath
         $course_id = api_get_course_int_id();
         $urlAppend = api_get_configuration_value('url_append');
         // Please, do not modify this dirname formatting.
-        $dir = isset($_GET['dir']) ? $_GET['dir'] : $_POST['dir'];
+        $postDir = isset($_POST['dir']) ? $_POST['dir'] : '';
+        $dir = isset($_GET['dir']) ? $_GET['dir'] : $postDir;
 
-        if (strstr($dir, '..'))
+        if (strstr($dir, '..')) {
             $dir = '/';
-
-        if ($dir[0] == '.')
-            $dir = substr($dir, 1);
-
-        if ($dir[0] != '/')
-            $dir = '/' . $dir;
-
-        if ($dir[strlen($dir) - 1] != '/')
-            $dir .= '/';
-
-        $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document' . $dir;
-
-        if (!is_dir($filepath)) {
-            $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document/';
         }
 
-        $table_doc = Database :: get_course_table(TABLE_DOCUMENT);
+        if (isset($dir[0]) && $dir[0] == '.') {
+            $dir = substr($dir, 1);
+        }
+
+        if (isset($dir[0]) && $dir[0] != '/') {
+            $dir = '/'.$dir;
+        }
+
+        if (isset($dir[strlen($dir) - 1]) && $dir[strlen($dir) - 1] != '/') {
+            $dir .= '/';
+        }
+
+        $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
+
+        if (!is_dir($filepath)) {
+            $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
+        }
+
+        $table_doc = Database::get_course_table(TABLE_DOCUMENT);
+
         if (isset($_POST['path']) && !empty($_POST['path'])) {
             $document_id = intval($_POST['path']);
-            $sql = "SELECT path FROM " . $table_doc . "
-                    WHERE c_id = $course_id AND id = " . $document_id;
+            $sql = "SELECT path FROM ".$table_doc."
+                    WHERE c_id = $course_id AND id = ".$document_id;
             $res = Database::query($sql);
-            $row = Database :: fetch_array($res);
+            $row = Database::fetch_array($res);
             $content = stripslashes($_POST['content_lp']);
-            $file = $filepath . $row['path'];
+            $file = $filepath.$row['path'];
 
-            if ($fp = @ fopen($file, 'w')) {
-                $content = str_replace(api_get_path(WEB_COURSE_PATH), $urlAppend.api_get_path(REL_COURSE_PATH), $content);
-
+            if ($fp = @fopen($file, 'w')) {
+                $content = str_replace(
+                    api_get_path(WEB_COURSE_PATH),
+                    $urlAppend.api_get_path(REL_COURSE_PATH),
+                    $content
+                );
                 // Change the path of mp3 to absolute.
                 // The first regexp deals with :// urls.
-                $content = preg_replace("|(flashvars=\"file=)([^:/]+)/|", "$1" . api_get_path(REL_COURSE_PATH) . $_course['path'] . '/document/', $content);
+                $content = preg_replace("|(flashvars=\"file=)([^:/]+)/|", "$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/', $content);
                 // The second regexp deals with audio/ urls.
-                $content = preg_replace("|(flashvars=\"file=)([^:/]+)/|", "$1" . api_get_path(REL_COURSE_PATH) . $_course['path'] . '/document/$2/', $content);
+                $content = preg_replace("|(flashvars=\"file=)([^:/]+)/|", "$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/$2/', $content);
                 fputs($fp, $content);
                 fclose($fp);
 
-                $sql = "UPDATE " . $table_doc ." SET
+                $sql = "UPDATE ".$table_doc." SET
                             title='".Database::escape_string($_POST['title'])."'
-                        WHERE c_id = ".$course_id." AND id = " . $document_id;
+                        WHERE c_id = ".$course_id." AND id = ".$document_id;
+
                 Database::query($sql);
             }
         }
@@ -6284,13 +6939,13 @@ class learnpath
         $course_id = api_get_course_int_id();
         $return = '';
         if (is_numeric($item_id)) {
-            $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+            $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "SELECT lp.* FROM $tbl_lp_item as lp
                     WHERE 
                         c_id = $course_id AND 
-                        lp.id = " . intval($item_id);
+                        lp.id = ".intval($item_id);
             $result = Database::query($sql);
-            while ($row = Database :: fetch_array($result,'ASSOC')) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $_SESSION['parent_item_id'] = $row['item_type'] == 'dir' ? $item_id : 0;
 
                 // Prevents wrong parent selection for document, see Bug#1251.
@@ -6303,11 +6958,33 @@ class learnpath
                 }
                 $return .= '<div style="padding:10px;">';
 
-                if ($msg != '')
+                if ($msg != '') {
                     $return .= $msg;
+                }
 
                 $return .= '<h3>'.$row['title'].'</h3>';
+
                 switch ($row['item_type']) {
+                    case TOOL_THREAD:
+                        $link = $this->rl_get_resource_link_for_learnpath(
+                            $course_id,
+                            $row['lp_id'],
+                            $item_id,
+                            0
+                        );
+                        $return .= Display::url(
+                            get_lang('GoToThread'),
+                            $link,
+                            ['class' => 'btn btn-primary']
+                        );
+                        break;
+                    case TOOL_FORUM:
+                        $return .= Display::url(
+                            get_lang('GoToForum'),
+                            api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$row['path'],
+                            ['class' => 'btn btn-primary']
+                        );
+                        break;
                     case TOOL_QUIZ:
                         if (!empty($row['path'])) {
                             $exercise = new Exercise();
@@ -6315,7 +6992,7 @@ class learnpath
                             $return .= $exercise->description.'<br />';
                             $return .= Display::url(
                                 get_lang('GoToExercise'),
-                                api_get_path(WEB_CODE_PATH) . 'exercise/overview.php?' . api_get_cidreq() . '&exerciseId=' . $exercise->id,
+                                api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$exercise->id,
                                 ['class' => 'btn btn-primary']
                             );
                         }
@@ -6324,9 +7001,9 @@ class learnpath
                         $return .= $this->getSavedFinalItem();
                         break;
                     case TOOL_DOCUMENT:
-                        $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
-                        $sql_doc = "SELECT path FROM " . $tbl_doc . "
-                                    WHERE c_id = ".$course_id." AND id = " . intval($row['path']);
+                        $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
+                        $sql_doc = "SELECT path FROM ".$tbl_doc."
+                                    WHERE c_id = ".$course_id." AND id = ".intval($row['path']);
                         $result = Database::query($sql_doc);
                         $path_file = Database::result($result, 0, 0);
                         $path_parts = pathinfo($path_file);
@@ -6369,9 +7046,9 @@ class learnpath
         $course_id = api_get_course_int_id();
         $return = '';
         if (is_numeric($item_id)) {
-            $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+            $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "SELECT * FROM $tbl_lp_item
-                    WHERE c_id = ".$course_id." AND id = " . intval($item_id);
+                    WHERE c_id = ".$course_id." AND id = ".intval($item_id);
             $res = Database::query($sql);
             $row = Database::fetch_array($res);
             switch ($row['item_type']) {
@@ -6380,56 +7057,83 @@ class learnpath
                 case 'sco':
                     if (isset($_GET['view']) && $_GET['view'] == 'build') {
                         $return .= $this->display_manipulate($item_id, $row['item_type']);
-                        $return .= $this->display_item_form($row['item_type'], get_lang('EditCurrentChapter') . ' :', 'edit', $item_id, $row);
+                        $return .= $this->display_item_form(
+                            $row['item_type'],
+                            get_lang('EditCurrentChapter').' :',
+                            'edit',
+                            $item_id,
+                            $row
+                        );
                     } else {
-                        $return .= $this->display_item_small_form($row['item_type'], get_lang('EditCurrentChapter') . ' :', $row);
+                        $return .= $this->display_item_small_form(
+                            $row['item_type'],
+                            get_lang('EditCurrentChapter').' :',
+                            $row
+                        );
                     }
                     break;
                 case TOOL_DOCUMENT:
-                    $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
+                    $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
                     $sql = "SELECT lp.*, doc.path as dir
-                            FROM " . $tbl_lp_item . " as lp
-                            LEFT JOIN " . $tbl_doc . " as doc
-                            ON doc.id = lp.path
-                            WHERE
-                                lp.c_id = $course_id AND
-                                doc.c_id = $course_id AND
-                                lp.id = " . intval($item_id);
-                    $res_step = Database::query($sql);
-                    $row_step = Database :: fetch_array($res_step, 'ASSOC');
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_document_form('edit', $item_id, $row_step);
-                    break;
-                case TOOL_LINK:
-                    $link_id = (string) $row['path'];
-                    if (ctype_digit($link_id)) {
-                        $tbl_link = Database :: get_course_table(TABLE_LINK);
-                        $sql_select = 'SELECT url FROM ' . $tbl_link . '
-                                       WHERE c_id = '.$course_id.' AND id = ' . intval($link_id);
-                        $res_link = Database::query($sql_select);
-                        $row_link = Database :: fetch_array($res_link);
-                        if (is_array($row_link)) {
-                            $row['url'] = $row_link['url'];
-                        }
-                    }
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_link_form('edit', $item_id, $row);
-                    break;
-                case TOOL_LP_FINAL_ITEM:
-                    Session::write('finalItem', true);
-                    $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
-                    $sql = "SELECT lp.*, doc.path as dir
-                            FROM " . $tbl_lp_item . " as lp
-                            LEFT JOIN " . $tbl_doc . " as doc
+                            FROM $tbl_lp_item as lp
+                            LEFT JOIN $tbl_doc as doc
                             ON (doc.id = lp.path AND lp.c_id = doc.c_id)
                             WHERE
                                 lp.c_id = $course_id AND
                                 doc.c_id = $course_id AND
-                                lp.id = " . intval($item_id);
+                                lp.id = ".intval($item_id);
                     $res_step = Database::query($sql);
-                    $row_step = Database :: fetch_array($res_step, 'ASSOC');
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_document_form('edit', $item_id, $row_step);
+                    $row_step = Database::fetch_array($res_step, 'ASSOC');
+                    $return .= $this->display_manipulate(
+                        $item_id,
+                        $row['item_type']
+                    );
+                    $return .= $this->display_document_form(
+                        'edit',
+                        $item_id,
+                        $row_step
+                    );
+                    break;
+                case TOOL_LINK:
+                    $link_id = (string) $row['path'];
+                    if (ctype_digit($link_id)) {
+                        $tbl_link = Database::get_course_table(TABLE_LINK);
+                        $sql_select = 'SELECT url FROM '.$tbl_link.'
+                                       WHERE c_id = '.$course_id.' AND id = '.intval($link_id);
+                        $res_link = Database::query($sql_select);
+                        $row_link = Database::fetch_array($res_link);
+                        if (is_array($row_link)) {
+                            $row['url'] = $row_link['url'];
+                        }
+                    }
+                    $return .= $this->display_manipulate(
+                        $item_id,
+                        $row['item_type']
+                    );
+                    $return .= $this->display_link_form('edit', $item_id, $row);
+                    break;
+                case TOOL_LP_FINAL_ITEM:
+                    Session::write('finalItem', true);
+                    $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
+                    $sql = "SELECT lp.*, doc.path as dir
+                            FROM $tbl_lp_item as lp
+                            LEFT JOIN $tbl_doc as doc
+                            ON (doc.id = lp.path AND lp.c_id = doc.c_id)
+                            WHERE
+                                lp.c_id = $course_id AND
+                                doc.c_id = $course_id AND
+                                lp.id = ".intval($item_id);
+                    $res_step = Database::query($sql);
+                    $row_step = Database::fetch_array($res_step, 'ASSOC');
+                    $return .= $this->display_manipulate(
+                        $item_id,
+                        $row['item_type']
+                    );
+                    $return .= $this->display_document_form(
+                        'edit',
+                        $item_id,
+                        $row_step
+                    );
                     break;
                 case TOOL_QUIZ:
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
@@ -6486,7 +7190,7 @@ class learnpath
 
         $headers = array(
             Display::return_icon('folder_document.png', get_lang('Documents'), array(), ICON_SIZE_BIG),
-            Display::return_icon('quiz.png',  get_lang('Quiz'), array(), ICON_SIZE_BIG),
+            Display::return_icon('quiz.png', get_lang('Quiz'), array(), ICON_SIZE_BIG),
             Display::return_icon('links.png', get_lang('Links'), array(), ICON_SIZE_BIG),
             Display::return_icon('works.png', get_lang('Works'), array(), ICON_SIZE_BIG),
             Display::return_icon('forum.png', get_lang('Forums'), array(), ICON_SIZE_BIG),
@@ -6494,8 +7198,7 @@ class learnpath
             Display::return_icon('certificate.png', get_lang('Certificate'), [], ICON_SIZE_BIG),
         );
 
-
-        echo Display::display_normal_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'));
+        echo Display::return_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'), 'normal');
         $dir = $_SESSION['oLP']->display_item_form('dir', get_lang('EnterDataNewChapter'), 'add_item');
         echo Display::tabs(
             $headers,
@@ -6536,17 +7239,17 @@ class learnpath
         $_course = api_get_course_info();
         $course_id = api_get_course_int_id();
         $return = '';
-        $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
-        $sql_doc = "SELECT * FROM " . $tbl_doc . "
-                    WHERE c_id = ".$course_id." AND id = " . $id;
+        $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
+        $sql_doc = "SELECT * FROM ".$tbl_doc."
+                    WHERE c_id = ".$course_id." AND id = ".$id;
         $res_doc = Database::query($sql_doc);
-        $row_doc = Database :: fetch_array($res_doc);
+        $row_doc = Database::fetch_array($res_doc);
 
         // TODO: Add a path filter.
         if ($iframe) {
-            $return .= '<iframe id="learnpath_preview_frame" frameborder="0" height="400" width="100%" scrolling="auto" src="' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document' . str_replace('%2F', '/', urlencode($row_doc['path'])) . '?' . api_get_cidreq() . '"></iframe>';
+            $return .= '<iframe id="learnpath_preview_frame" frameborder="0" height="400" width="100%" scrolling="auto" src="'.api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.str_replace('%2F', '/', urlencode($row_doc['path'])).'?'.api_get_cidreq().'"></iframe>';
         } else {
-            $return .= file_get_contents(api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document' . $row_doc['path']);
+            $return .= file_get_contents(api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/'.$row_doc['path']);
         }
 
         return $return;
@@ -6554,24 +7257,24 @@ class learnpath
 
     /**
      * Return HTML form to add/edit a quiz
-     * @param	string	Action (add/edit)
-     * @param	integer	Item ID if already exists
-     * @param	mixed	Extra information (quiz ID if integer)
+     * @param	string	$action Action (add/edit)
+     * @param	integer	$id Item ID if already exists
+     * @param	mixed	$extra_info Extra information (quiz ID if integer)
      * @return	string	HTML form
      */
     public function display_quiz_form($action = 'add', $id = 0, $extra_info = '')
     {
         $course_id = api_get_course_int_id();
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $tbl_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
 
         if ($id != 0 && is_array($extra_info)) {
             $item_title = $extra_info['title'];
             $item_description = $extra_info['description'];
         } elseif (is_numeric($extra_info)) {
             $sql = "SELECT title, description
-                    FROM " . $tbl_quiz . "
-                    WHERE c_id = ".$course_id." AND id = " . $extra_info;
+                    FROM $tbl_quiz
+                    WHERE c_id = $course_id AND id = ".$extra_info;
 
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
@@ -6581,21 +7284,22 @@ class learnpath
             $item_title = '';
             $item_description = '';
         }
-        $item_title			= Security::remove_XSS($item_title);
-        $item_description 	= Security::remove_XSS($item_description);
+        $item_title = Security::remove_XSS($item_title);
+        $item_description = Security::remove_XSS($item_description);
 
-        if ($id != 0 && is_array($extra_info))
+        if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
-        else
+        } else {
             $parent = 0;
+        }
 
-        $sql = "SELECT * FROM " . $tbl_lp_item . "
-                WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
+        $sql = "SELECT * FROM $tbl_lp_item 
+                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
 
         $result = Database::query($sql);
-        $arrLP = array ();
-        while ($row = Database :: fetch_array($result)) {
-            $arrLP[] = array (
+        $arrLP = array();
+        while ($row = Database::fetch_array($result)) {
+            $arrLP[] = array(
                 'id' => $row['id'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
@@ -6615,9 +7319,13 @@ class learnpath
 
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
-        unset ($this->arrMenu);
+        unset($this->arrMenu);
 
-        $form = new FormValidator('quiz_form', 'POST', api_get_self() . '?' .$_SERVER['QUERY_STRING']);
+        $form = new FormValidator(
+            'quiz_form',
+            'POST',
+            $this->getCurrentBuildingModeURL()
+        );
         $defaults = [];
 
         if ($action == 'add') {
@@ -6629,7 +7337,7 @@ class learnpath
         }
 
         if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
-            $legend .= Display :: return_message(get_lang('Warning') . ' ! ' . get_lang('WarningEditingDocument'));
+            $legend .= Display::return_message(get_lang('Warning').' ! '.get_lang('WarningEditingDocument'));
         }
 
         $form->addHeader($legend);
@@ -6648,7 +7356,7 @@ class learnpath
         );
         $selectParent->addOption($this->name, 0);
 
-        $arrHide = array (
+        $arrHide = array(
             $id
         );
         for ($i = 0; $i < count($arrLP); $i++) {
@@ -6661,7 +7369,7 @@ class learnpath
                     $selectParent->addOption(
                         $arrLP[$i]['title'],
                         $arrLP[$i]['id'],
-                        ['style' => 'padding-left: ' . (20 + $arrLP[$i]['depth'] * 20) . 'px']
+                        ['style' => 'padding-left: '.(20 + $arrLP[$i]['depth'] * 20).'px']
                     );
 
                     if ($parent == $arrLP[$i]['id']) {
@@ -6674,7 +7382,7 @@ class learnpath
                 if ($arrLP[$i]['item_type'] == 'dir') {
                     $selectParent->addOption(
                         $arrLP[$i]['title'],
-                        $arrLP[$i]['id'], ['style' => 'padding-left: ' . (20 + $arrLP[$i]['depth'] * 20) . 'px']
+                        $arrLP[$i]['id'], ['style' => 'padding-left: '.(20 + $arrLP[$i]['depth'] * 20).'px']
                     );
 
                     if ($parent == $arrLP[$i]['id']) {
@@ -6687,12 +7395,22 @@ class learnpath
             reset($arrLP);
         }
 
-        $selectPrevious = $form->addSelect('previous', get_lang('Position'), [], ['id' => 'previous']);
+        $selectPrevious = $form->addSelect(
+            'previous',
+            get_lang('Position'),
+            [],
+            ['id' => 'previous']
+        );
         $selectPrevious->addOption(get_lang('FirstPosition'), 0);
 
         for ($i = 0; $i < count($arrLP); $i++) {
-            if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
-                $selectPrevious->addOption(get_lang('After') . ' "' . $arrLP[$i]['title'] . '"', $arrLP[$i]['id']);
+            if ($arrLP[$i]['parent_item_id'] == $parent &&
+                $arrLP[$i]['id'] != $id
+            ) {
+                $selectPrevious->addOption(
+                    get_lang('After').' "'.$arrLP[$i]['title'].'"',
+                    $arrLP[$i]['id']
+                );
 
                 if (is_array($extra_info)) {
                     if ($extra_info['previous_item_id'] == $arrLP[$i]['id']) {
@@ -6714,7 +7432,7 @@ class learnpath
                     }
                 }
             }
-            $arrHide = array ();
+            $arrHide = array();
             for ($i = 0; $i < count($arrLP); $i++) {
                 if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir') {
                     if (is_array($extra_info)) {
@@ -6727,34 +7445,6 @@ class learnpath
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
                 }
             }
-            /*// Commented the prerequisites, only visible in edit (exercise).
-            $return .= '<tr>';
-            $return .= '<td class="label"><label for="idPrerequisites">'.get_lang('LearnpathPrerequisites').'</label></td>';
-            $return .= '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang('NoPrerequisites').'</option>';
-
-                foreach($arrHide as $key => $value){
-                    if($key==$s_selected_position && $action == 'add'){
-                        $return .= '<option value="'.$key.'" selected="selected">'.$value['value'].'</option>';
-                    }
-                    elseif($key==$id_prerequisite && $action == 'edit'){
-                        $return .= '<option value="'.$key.'" selected="selected">'.$value['value'].'</option>';
-                    }
-                    else{
-                        $return .= '<option value="'.$key.'">'.$value['value'].'</option>';
-                    }
-                }
-
-            $return .= "</select></td>";
-            */
-            /*$return .= '<tr>';
-            $return .= '<td class="label"><label for="maxTimeAllowed">' . get_lang('MaxTimeAllowed') . '</label></td>';
-            $return .= '<td class="input"><input name="maxTimeAllowed" style="width:98%;" id="maxTimeAllowed" value="' . $extra_info['max_time_allowed'] . '" /></td>';
-
-            // Remove temporarily the test description.
-            //$return .= '<td class="label"><label for="idDescription">'.get_lang('Description').' :</label></td>';
-            //$return .= '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>';
-
-            $return .= '</tr>'; */
         }
 
         if ($action == 'add') {
@@ -6776,10 +7466,9 @@ class learnpath
 
         $form->addHidden('type', TOOL_QUIZ);
         $form->addHidden('post_time', time());
-
         $form->setDefaults($defaults);
 
-        return '<div class="sectioncomment">' . $form->returnForm() . '</div>';
+        return '<div class="sectioncomment">'.$form->returnForm().'</div>';
     }
 
     /**
@@ -6793,19 +7482,19 @@ class learnpath
     {
         $course_id = api_get_course_int_id();
         $uploadPath = DIR_HOTPOTATOES; //defined in main_api
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
             $item_description = stripslashes($extra_info['description']);
         } elseif (is_numeric($extra_info)) {
-            $TBL_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
+            $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 
-            $sql = "SELECT * FROM " . $TBL_DOCUMENT . "
+            $sql = "SELECT * FROM ".$TBL_DOCUMENT."
                     WHERE
                         c_id = ".$course_id." AND
-                        path LIKE '" . $uploadPath . "/%/%htm%' AND
-                        id = " . (int) $extra_info . "
+                        path LIKE '" . $uploadPath."/%/%htm%' AND
+                        id = " . (int) $extra_info."
                     ORDER BY id ASC";
 
             $res_hot = Database::query($sql);
@@ -6829,11 +7518,11 @@ class learnpath
         }
 
         $sql = "SELECT * FROM $tbl_lp_item
-                WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
+                WHERE c_id = ".$course_id." AND lp_id = ".$this->lp_id;
         $result = Database::query($sql);
-        $arrLP = array ();
-        while ($row = Database :: fetch_array($result)) {
-            $arrLP[] = array (
+        $arrLP = array();
+        while ($row = Database::fetch_array($result)) {
+            $arrLP[] = array(
                 'id' => $row['id'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
@@ -6870,10 +7559,10 @@ class learnpath
         $return .= $legend;
         $return .= '<table cellpadding="0" cellspacing="0" class="lp_form">';
         $return .= '<tr>';
-        $return .= '<td class="label"><label for="idParent">' . get_lang('Parent') . ' :</label></td>';
+        $return .= '<td class="label"><label for="idParent">'.get_lang('Parent').' :</label></td>';
         $return .= '<td class="input">';
         $return .= '<select id="idParent" name="parent" onChange="javascript: load_cbo(this.value);" size="1">';
-        $return .= '<option class="top" value="0">' . $this->name . '</option>';
+        $return .= '<option class="top" value="0">'.$this->name.'</option>';
         $arrHide = array(
             $id
         );
@@ -6881,14 +7570,17 @@ class learnpath
         if (count($arrLP) > 0) {
             for ($i = 0; $i < count($arrLP); $i++) {
                 if ($action != 'add') {
-                    if ($arrLP[$i]['item_type'] == 'dir' && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
-                        $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
+                    if ($arrLP[$i]['item_type'] == 'dir' &&
+                        !in_array($arrLP[$i]['id'], $arrHide) &&
+                        !in_array($arrLP[$i]['parent_item_id'], $arrHide)
+                    ) {
+                        $return .= '<option '.(($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '').'style="padding-left:'.($arrLP[$i]['depth'] * 10).'px;" value="'.$arrLP[$i]['id'].'">'.$arrLP[$i]['title'].'</option>';
                     } else {
                         $arrHide[] = $arrLP[$i]['id'];
                     }
                 } else {
                     if ($arrLP[$i]['item_type'] == 'dir')
-                        $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
+                        $return .= '<option '.(($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '').'style="padding-left:'.($arrLP[$i]['depth'] * 10).'px;" value="'.$arrLP[$i]['id'].'">'.$arrLP[$i]['title'].'</option>';
                 }
             }
             reset($arrLP);
@@ -6898,10 +7590,10 @@ class learnpath
         $return .= '</td>';
         $return .= '</tr>';
         $return .= '<tr>';
-        $return .= '<td class="label"><label for="previous">' . get_lang('Position') . ' :</label></td>';
+        $return .= '<td class="label"><label for="previous">'.get_lang('Position').' :</label></td>';
         $return .= '<td class="input">';
         $return .= '<select id="previous" name="previous" size="1">';
-        $return .= '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
+        $return .= '<option class="top" value="0">'.get_lang('FirstPosition').'</option>';
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
@@ -6911,7 +7603,7 @@ class learnpath
                 else
                     $selected = '';
 
-                $return .= '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">' . get_lang('After') . ' "' . $arrLP[$i]['title'] . '"</option>';
+                $return .= '<option '.$selected.'value="'.$arrLP[$i]['id'].'">'.get_lang('After').' "'.$arrLP[$i]['title'].'"</option>';
             }
         }
 
@@ -6921,8 +7613,8 @@ class learnpath
 
         if ($action != 'move') {
             $return .= '<tr>';
-            $return .= '<td class="label"><label for="idTitle">' . get_lang('Title') . ' :</label></td>';
-            $return .= '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>';
+            $return .= '<td class="label"><label for="idTitle">'.get_lang('Title').' :</label></td>';
+            $return .= '<td class="input"><input id="idTitle" name="title" type="text" value="'.$item_title.'" /></td>';
             $return .= '</tr>';
             $id_prerequisite = 0;
             if (is_array($arrLP) && count($arrLP) > 0) {
@@ -6933,7 +7625,7 @@ class learnpath
                     }
                 }
 
-                $arrHide = array ();
+                $arrHide = array();
                 for ($i = 0; $i < count($arrLP); $i++) {
                     if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir') {
                         if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
@@ -6946,22 +7638,22 @@ class learnpath
         }
 
         $return .= '<tr>';
-        $return .= '<td>&nbsp; </td><td><button class="save" name="submit_button" action="edit" type="submit">' . get_lang('SaveHotpotatoes') . '</button></td>';
+        $return .= '<td>&nbsp; </td><td><button class="save" name="submit_button" action="edit" type="submit">'.get_lang('SaveHotpotatoes').'</button></td>';
         $return .= '</tr>';
         $return .= '</table>';
 
         if ($action == 'move') {
-            $return .= '<input name="title" type="hidden" value="' . $item_title . '" />';
-            $return .= '<input name="description" type="hidden" value="' . $item_description . '" />';
+            $return .= '<input name="title" type="hidden" value="'.$item_title.'" />';
+            $return .= '<input name="description" type="hidden" value="'.$item_description.'" />';
         }
 
         if (is_numeric($extra_info)) {
-            $return .= '<input name="path" type="hidden" value="' . $extra_info . '" />';
+            $return .= '<input name="path" type="hidden" value="'.$extra_info.'" />';
         } elseif (is_array($extra_info)) {
-            $return .= '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />';
+            $return .= '<input name="path" type="hidden" value="'.$extra_info['path'].'" />';
         }
-        $return .= '<input name="type" type="hidden" value="' . TOOL_HOTPOTATOES . '" />';
-        $return .= '<input name="post_time" type="hidden" value="' . time() . '" />';
+        $return .= '<input name="type" type="hidden" value="'.TOOL_HOTPOTATOES.'" />';
+        $return .= '<input name="post_time" type="hidden" value="'.time().'" />';
         $return .= '</form>';
 
         return $return;
@@ -6977,18 +7669,18 @@ class learnpath
     public function display_forum_form($action = 'add', $id = 0, $extra_info = '')
     {
         $course_id = api_get_course_int_id();
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $tbl_forum = Database :: get_course_table(TABLE_FORUM);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $tbl_forum = Database::get_course_table(TABLE_FORUM);
 
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
         } elseif (is_numeric($extra_info)) {
             $sql = "SELECT forum_title as title, forum_comment as comment
-                    FROM " . $tbl_forum . "
-                    WHERE c_id = ".$course_id." AND forum_id = " . $extra_info;
+                    FROM " . $tbl_forum."
+                    WHERE c_id = ".$course_id." AND forum_id = ".$extra_info;
 
             $result = Database::query($sql);
-            $row = Database :: fetch_array($result);
+            $row = Database::fetch_array($result);
 
             $item_title = $row['title'];
             $item_description = $row['comment'];
@@ -7003,15 +7695,14 @@ class learnpath
             $parent = 0;
         }
 
-        $sql = "SELECT * FROM " . $tbl_lp_item . "
+        $sql = "SELECT * FROM ".$tbl_lp_item."
                 WHERE
                     c_id = ".$course_id." AND
                     lp_id = " . $this->lp_id;
         $result = Database::query($sql);
         $arrLP = array();
-
-        while ($row = Database :: fetch_array($result)) {
-            $arrLP[] = array (
+        while ($row = Database::fetch_array($result)) {
+            $arrLP[] = array(
                 'id' => $row['id'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
@@ -7040,13 +7731,22 @@ class learnpath
             $legend = get_lang('EditCurrentForum');
         }
 
-        $form = new FormValidator('forum_form', 'POST', api_get_self() . '?' .$_SERVER['QUERY_STRING']);
+        $form = new FormValidator(
+            'forum_form',
+            'POST',
+            $this->getCurrentBuildingModeURL()
+        );
         $defaults = [];
 
         $form->addHeader($legend);
 
         if ($action != 'move') {
-            $form->addText('title', get_lang('Title'), true, ['id' => 'idTitle', 'class' => 'learnpath_item_form']);
+            $form->addText(
+                'title',
+                get_lang('Title'),
+                true,
+                ['id' => 'idTitle', 'class' => 'learnpath_item_form']
+            );
             $defaults['title'] = $item_title;
         }
 
@@ -7065,11 +7765,14 @@ class learnpath
         //$parent_item_id = $_SESSION['parent_item_id'];
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
-                if ($arrLP[$i]['item_type'] == 'dir' && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
+                if ($arrLP[$i]['item_type'] == 'dir' &&
+                    !in_array($arrLP[$i]['id'], $arrHide) &&
+                    !in_array($arrLP[$i]['parent_item_id'], $arrHide)
+                ) {
                     $selectParent->addOption(
                         $arrLP[$i]['title'],
                         $arrLP[$i]['id'],
-                        ['style' => 'padding-left: ' . (20 + $arrLP[$i]['depth'] * 20) . 'px']
+                        ['style' => 'padding-left: '.(20 + $arrLP[$i]['depth'] * 20).'px']
                     );
 
                     if ($parent == $arrLP[$i]['id']) {
@@ -7083,7 +7786,7 @@ class learnpath
                     $selectParent->addOption(
                         $arrLP[$i]['title'],
                         $arrLP[$i]['id'],
-                        ['style' => 'padding-left: ' . (20 + $arrLP[$i]['depth'] * 20) . 'px']
+                        ['style' => 'padding-left: '.(20 + $arrLP[$i]['depth'] * 20).'px']
                     );
 
                     if ($parent == $arrLP[$i]['id']) {
@@ -7106,10 +7809,17 @@ class learnpath
         $selectPrevious->addOption(get_lang('FirstPosition'), 0);
 
         for ($i = 0; $i < count($arrLP); $i++) {
-            if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
-                $selectPrevious->addOption(get_lang('After') . ' "' . $arrLP[$i]['title'] . '"', $arrLP[$i]['id']);
+            if ($arrLP[$i]['parent_item_id'] == $parent &&
+                $arrLP[$i]['id'] != $id
+            ) {
+                $selectPrevious->addOption(
+                    get_lang('After').' "'.$arrLP[$i]['title'].'"',
+                    $arrLP[$i]['id']
+                );
 
-                if (isset($extra_info['previous_item_id']) && $extra_info['previous_item_id'] == $arrLP[$i]['id']) {
+                if (isset($extra_info['previous_item_id']) &&
+                    $extra_info['previous_item_id'] == $arrLP[$i]['id']
+                ) {
                     $selectPrevious->setSelected($arrLP[$i]['id']);
                 } elseif ($action == 'add') {
                     $selectPrevious->setSelected($arrLP[$i]['id']);
@@ -7131,9 +7841,13 @@ class learnpath
             $arrHide = array();
             for ($i = 0; $i < count($arrLP); $i++) {
                 if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir') {
-                    if (isset($extra_info['previous_item_id']) && $extra_info['previous_item_id'] == $arrLP[$i]['id'])
+                    if (isset($extra_info['previous_item_id']) &&
+                        $extra_info['previous_item_id'] == $arrLP[$i]['id']
+                    ) {
                         $s_selected_position = $arrLP[$i]['id'];
-                    elseif ($action == 'add') $s_selected_position = 0;
+                    } elseif ($action == 'add') {
+                        $s_selected_position = 0;
+                    }
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
                 }
             }
@@ -7159,7 +7873,7 @@ class learnpath
         $form->addHidden('post_time', time());
         $form->setDefaults($defaults);
 
-        return '<div class="sectioncomment">' . $form->returnForm() . '</div>';
+        return '<div class="sectioncomment">'.$form->returnForm().'</div>';
     }
 
     /**
@@ -7175,17 +7889,17 @@ class learnpath
         if (empty($course_id)) {
             return null;
         }
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $tbl_forum = Database :: get_course_table(TABLE_FORUM_THREAD);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $tbl_forum = Database::get_course_table(TABLE_FORUM_THREAD);
 
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
         } elseif (is_numeric($extra_info)) {
             $sql = "SELECT thread_title as title FROM $tbl_forum
-                    WHERE c_id = $course_id AND thread_id = " . $extra_info;
+                    WHERE c_id = $course_id AND thread_id = ".$extra_info;
 
             $result = Database::query($sql);
-            $row = Database :: fetch_array($result);
+            $row = Database::fetch_array($result);
 
             $item_title = $row['title'];
             $item_description = '';
@@ -7200,15 +7914,13 @@ class learnpath
             $parent = 0;
         }
 
-        $sql = "SELECT * FROM " . $tbl_lp_item . "
-                WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
-
+        $sql = "SELECT * FROM ".$tbl_lp_item."
+                WHERE c_id = ".$course_id." AND lp_id = ".$this->lp_id;
         $result = Database::query($sql);
 
-        $arrLP = array ();
-
-        while ($row = Database :: fetch_array($result)) {
-            $arrLP[] = array (
+        $arrLP = array();
+        while ($row = Database::fetch_array($result)) {
+            $arrLP[] = array(
                 'id' => $row['id'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
@@ -7227,9 +7939,13 @@ class learnpath
 
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
-        unset ($this->arrMenu);
+        unset($this->arrMenu);
 
-        $form = new FormValidator('thread_form', 'POST', api_get_self() . '?' .$_SERVER['QUERY_STRING']);
+        $form = new FormValidator(
+            'thread_form',
+            'POST',
+            $this->getCurrentBuildingModeURL()
+        );
         $defaults = [];
 
         if ($action == 'add') {
@@ -7249,7 +7965,7 @@ class learnpath
         );
         $selectParent->addOption($this->name, 0);
 
-        $arrHide = array (
+        $arrHide = array(
             $id
         );
 
@@ -7263,7 +7979,7 @@ class learnpath
                     $selectParent->addOption(
                         $arrLP[$i]['title'],
                         $arrLP[$i]['id'],
-                        ['style' => 'padding-left: ' . (20 + $arrLP[$i]['depth'] * 20) . 'px']
+                        ['style' => 'padding-left: '.(20 + $arrLP[$i]['depth'] * 20).'px']
                     );
 
                     if ($parent == $arrLP[$i]['id']) {
@@ -7277,7 +7993,7 @@ class learnpath
                     $selectParent->addOption(
                         $arrLP[$i]['title'],
                         $arrLP[$i]['id'],
-                        ['style' => 'padding-left: ' . (20 + $arrLP[$i]['depth'] * 20) . 'px']
+                        ['style' => 'padding-left: '.(20 + $arrLP[$i]['depth'] * 20).'px']
                     );
 
                     if ($parent == $arrLP[$i]['id']) {
@@ -7291,13 +8007,18 @@ class learnpath
             reset($arrLP);
         }
 
-        $selectPrevious = $form->addSelect('previous', get_lang('Position'), [], ['id' => 'previous']);
+        $selectPrevious = $form->addSelect(
+            'previous',
+            get_lang('Position'),
+            [],
+            ['id' => 'previous']
+        );
         $selectPrevious->addOption(get_lang('FirstPosition'), 0);
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
                 $selectPrevious->addOption(
-                    get_lang('After')  . ' "' . $arrLP[$i]['title'] . '"',
+                    get_lang('After').' "'.$arrLP[$i]['title'].'"',
                     $arrLP[$i]['id']
                 );
 
@@ -7310,7 +8031,12 @@ class learnpath
         }
 
         if ($action != 'move') {
-            $form->addText('title', get_lang('Title'), true, ['id' => 'idTitle']);
+            $form->addText(
+                'title',
+                get_lang('Title'),
+                true,
+                ['id' => 'idTitle']
+            );
             $defaults['title'] = $item_title;
 
             $id_prerequisite = 0;
@@ -7325,7 +8051,6 @@ class learnpath
 
             $arrHide = array();
             $s_selected_position = 0;
-
             for ($i = 0; $i < count($arrLP); $i++) {
                 if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir') {
                     if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
@@ -7385,20 +8110,25 @@ class learnpath
      * @param	mixed	Extra info
      * @return	string 	HTML form
      */
-    public function display_item_form($item_type, $title = '', $action = 'add_item', $id = 0, $extra_info = 'new')
-    {
+    public function display_item_form(
+        $item_type,
+        $title = '',
+        $action = 'add_item',
+        $id = 0,
+        $extra_info = 'new'
+    ) {
         $course_id = api_get_course_int_id();
         $_course = api_get_course_info();
 
         global $charset;
 
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
         if ($id != 0 && is_array($extra_info)) {
             $item_title = $extra_info['title'];
             $item_description = $extra_info['description'];
-            $item_path = api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/scorm/' . $this->path . '/' . stripslashes($extra_info['path']);
-            $item_path_fck = '/scorm/' . $this->path . '/' . stripslashes($extra_info['path']);
+            $item_path = api_get_path(WEB_COURSE_PATH).$_course['path'].'/scorm/'.$this->path.'/'.stripslashes($extra_info['path']);
+            $item_path_fck = '/scorm/'.$this->path.'/'.stripslashes($extra_info['path']);
         } else {
             $item_title = '';
             $item_description = '';
@@ -7412,19 +8142,20 @@ class learnpath
         }
 
         $id  = intval($id);
-        $sql = "SELECT * FROM " . $tbl_lp_item . "
+        $sql = "SELECT * FROM ".$tbl_lp_item."
                 WHERE
                     c_id = ".$course_id." AND
-                    lp_id = " . $this->lp_id . " AND
+                    lp_id = " . $this->lp_id." AND
                     id != $id";
 
-        if ($item_type == 'dir')
+        if ($item_type == 'dir') {
             $sql .= " AND parent_item_id = 0";
+        }
 
         $result = Database::query($sql);
-        $arrLP = array ();
+        $arrLP = [];
 
-        while ($row = Database :: fetch_array($result)) {
+        while ($row = Database::fetch_array($result)) {
             $arrLP[] = array(
                 'id' => $row['id'],
                 'item_type' => $row['item_type'],
@@ -7446,24 +8177,28 @@ class learnpath
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset($this->arrMenu);
 
-        $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
-        $url = api_get_self() . '?' .api_get_cidreq().'&gradeboook='.$gradebook.'&action='.$action.'&type='.$item_type.'&lp_id='.$this->lp_id;
+        $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&type='.$item_type.'&lp_id='.$this->lp_id;
 
-        $form = new FormValidator('form', 'POST',  $url);
-
-        $defaults['title'] = api_html_entity_decode($item_title, ENT_QUOTES, $charset);
+        $form = new FormValidator('form', 'POST', $url);
+        $defaults['title'] = api_html_entity_decode(
+            $item_title,
+            ENT_QUOTES,
+            $charset
+        );
         $defaults['description'] = $item_description;
 
         $form->addElement('header', $title);
 
         //$arrHide = array($id);
-        $arrHide[0]['value'] = Security :: remove_XSS($this->name);
+        $arrHide[0]['value'] = Security::remove_XSS($this->name);
         $arrHide[0]['padding'] = 20;
         $charset = api_get_system_encoding();
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
-                if ($arrLP[$i]['item_type'] == 'dir' && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
+                if ($arrLP[$i]['item_type'] == 'dir' && !in_array($arrLP[$i]['id'], $arrHide) &&
+                    !in_array($arrLP[$i]['parent_item_id'], $arrHide)
+                ) {
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
                     $arrHide[$arrLP[$i]['id']]['padding'] = 20 + $arrLP[$i]['depth'] * 20;
                     if ($parent == $arrLP[$i]['id']) {
@@ -7489,10 +8224,23 @@ class learnpath
             $form->addElement('hidden', 'title');
         }
 
-        $parent_select = $form->addElement('select', 'parent', get_lang('Parent'), '', array('id' => 'idParent', 'onchange' => "javascript: load_cbo(this.value);"));
+        $parent_select = $form->addElement(
+            'select',
+            'parent',
+            get_lang('Parent'),
+            '',
+            array(
+                'id' => 'idParent',
+                'onchange' => "javascript: load_cbo(this.value);",
+            )
+        );
 
         foreach ($arrHide as $key => $value) {
-            $parent_select->addOption($value['value'], $key, 'style="padding-left:' . $value['padding'] . 'px;"');
+            $parent_select->addOption(
+                $value['value'],
+                $key,
+                'style="padding-left:'.$value['padding'].'px;"'
+            );
         }
         if (!empty($s_selected_parent)) {
             $parent_select->setSelected($s_selected_parent);
@@ -7508,22 +8256,30 @@ class learnpath
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
                 //this is the same!
-                if (isset($extra_info['previous_item_id']) && $extra_info['previous_item_id'] == $arrLP[$i]['id']) {
+                if (isset($extra_info['previous_item_id']) &&
+                    $extra_info['previous_item_id'] == $arrLP[$i]['id']
+                ) {
                     $s_selected_position = $arrLP[$i]['id'];
                 } elseif ($action == 'add') {
                     $s_selected_position = $arrLP[$i]['id'];
                 }
 
-                $arrHide[$arrLP[$i]['id']]['value'] = get_lang('After') . ' "' . $arrLP[$i]['title'] . '"';
+                $arrHide[$arrLP[$i]['id']]['value'] = get_lang('After').' "'.$arrLP[$i]['title'].'"';
             }
         }
 
-        $position = $form->addElement('select', 'previous', get_lang('Position'), '', array('id' => 'previous'));
+        $position = $form->addElement(
+            'select',
+            'previous',
+            get_lang('Position'),
+            '',
+            array('id' => 'previous')
+        );
         $padding = isset($value['padding']) ? $value['padding'] : 0;
-        $position->addOption(get_lang('FirstPosition'), 0, 'style="padding-left:' . $padding . 'px;"');
+        $position->addOption(get_lang('FirstPosition'), 0, 'style="padding-left:'.$padding.'px;"');
 
         foreach ($arrHide as $key => $value) {
-            $position->addOption($value['value'] . '"', $key, 'style="padding-left:' . $padding . 'px;"');
+            $position->addOption($value['value'].'"', $key, 'style="padding-left:'.$padding.'px;"');
         }
 
         if (!empty ($s_selected_position)) {
@@ -7550,7 +8306,10 @@ class learnpath
         //$item_type == 'asset' ||
         if (($item_type == 'sco') && ($extension == 'html' || $extension == 'htm')) {
             if ($item_type == 'sco') {
-                $form->addElement('html', '<script>alert("' . get_lang('WarningWhenEditingScorm') . '")</script>');
+                $form->addElement(
+                    'html',
+                    '<script>alert("'.get_lang('WarningWhenEditingScorm').'")</script>'
+                );
             }
             $renderer = $form->defaultRenderer();
             $renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}', 'content_lp');
@@ -7579,24 +8338,39 @@ class learnpath
     }
 
     /**
+     * @return string
+     */
+    public function getCurrentBuildingModeURL()
+    {
+        $pathItem = isset($_GET['path_item']) ? (int) $_GET['path_item'] : '';
+        $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : '';
+        $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : '';
+
+        $currentUrl = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&lp_id='.$this->lp_id.'&path_item='.$pathItem.'&view='.$view.'&id='.$id;
+
+        return $currentUrl;
+    }
+
+    /**
      * Returns the form to update or create a document
-     * @param	string	Action (add/edit)
-     * @param	integer	ID of the lp_item (if already exists)
-     * @param	mixed	Integer if document ID, string if info ('new')
+     * @param	string	$action (add/edit)
+     * @param	integer	$id ID of the lp_item (if already exists)
+     * @param	mixed	$extra_info Integer if document ID, string if info ('new')
      * @return	string	HTML form
      */
     public function display_document_form($action = 'add', $id = 0, $extra_info = 'new')
     {
         $course_id = api_get_course_int_id();
         $_course = api_get_course_info();
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
 
         $no_display_edit_textarea = false;
         $item_description = '';
         //If action==edit document
         //We don't display the document form if it's not an editable document (html or txt file)
-        if ($action == "edit") {
+        if ($action == 'edit') {
             if (is_array($extra_info)) {
                 $path_parts = pathinfo($extra_info['dir']);
                 if ($path_parts['extension'] != "txt" && $path_parts['extension'] != "html") {
@@ -7608,14 +8382,14 @@ class learnpath
 
         // If action==add an existing document
         // We don't display the document form if it's not an editable document (html or txt file).
-        if ($action == "add") {
+        if ($action == 'add') {
             if (is_numeric($extra_info)) {
-                $sql_doc = "SELECT path FROM " . $tbl_doc . "
-                            WHERE c_id = ".$course_id." AND id = " . intval($extra_info);
+                $sql_doc = "SELECT path FROM $tbl_doc 
+                            WHERE c_id = $course_id AND id = ".intval($extra_info);
                 $result = Database::query($sql_doc);
-                $path_file = Database :: result($result, 0, 0);
+                $path_file = Database::result($result, 0, 0);
                 $path_parts = pathinfo($path_file);
-                if ($path_parts['extension'] != "txt" && $path_parts['extension'] != "html") {
+                if ($path_parts['extension'] != 'txt' && $path_parts['extension'] != 'html') {
                     $no_display_add = true;
                 }
             }
@@ -7629,13 +8403,12 @@ class learnpath
                 $item_title = stripslashes($path_parts['filename']);
             }
         } elseif (is_numeric($extra_info)) {
-            $sql_doc = "SELECT path, title FROM " . $tbl_doc . "
-                        WHERE
-                            c_id = ".$course_id." AND
-                            id = " . intval($extra_info);
-
-            $result = Database::query($sql_doc);
-            $row 	= Database::fetch_array($result);
+            $sql = "SELECT path, title FROM $tbl_doc
+                    WHERE
+                        c_id = ".$course_id." AND
+                        id = " . intval($extra_info);
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
             $item_title = $row['title'];
             $item_title = str_replace('_', ' ', $item_title);
             if (empty ($item_title)) {
@@ -7658,8 +8431,8 @@ class learnpath
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
 
         $result = Database::query($sql);
-        $arrLP = array ();
-        while ($row = Database :: fetch_array($result)) {
+        $arrLP = array();
+        while ($row = Database::fetch_array($result)) {
             $arrLP[] = array(
                 'id' => $row['id'],
                 'item_type' => $row['item_type'],
@@ -7679,7 +8452,7 @@ class learnpath
 
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
-        unset ($this->arrMenu);
+        unset($this->arrMenu);
 
         if ($action == 'add') {
             $return .= get_lang('CreateTheDocument');
@@ -7688,14 +8461,22 @@ class learnpath
         } else {
             $return .= get_lang('EditTheCurrentDocument');
         }
-
         $return .= '</legend>';
 
-        if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
-            $return .= Display :: return_message('<strong>' . get_lang('Warning') . ' !</strong><br />' . get_lang('WarningEditingDocument'), false);
+        if (isset($_GET['edit']) && $_GET['edit'] == 'true') {
+            $return .= Display::return_message(
+                '<strong>'.get_lang('Warning').' !</strong><br />'.get_lang('WarningEditingDocument'),
+                false
+            );
         }
-        $form = new FormValidator('form', 'POST', api_get_self() . '?' .$_SERVER['QUERY_STRING'], '', array('enctype'=> "multipart/form-data"));
-        $defaults['title'] = Security :: remove_XSS($item_title);
+        $form = new FormValidator(
+            'form',
+            'POST',
+            $this->getCurrentBuildingModeURL(),
+            '',
+            array('enctype' => 'multipart/form-data')
+        );
+        $defaults['title'] = Security::remove_XSS($item_title);
         if (empty($item_title)) {
             $defaults['title'] = Security::remove_XSS($item_title);
         }
@@ -7704,26 +8485,32 @@ class learnpath
 
         if ($action != 'move') {
             $data = $this->generate_lp_folder($_course);
-
-            $folders = DocumentManager::get_all_document_folders(
-                $_course,
-                0,
-                true
-            );
-            DocumentManager::build_directory_selector(
-                $folders,
-                '',
-                array(),
-                true,
-                $form,
-                'directory_parent_id'
-            );
+            if ($action != 'edit') {
+                $folders = DocumentManager::get_all_document_folders(
+                    $_course,
+                    0,
+                    true
+                );
+                DocumentManager::build_directory_selector(
+                    $folders,
+                    '',
+                    array(),
+                    true,
+                    $form,
+                    'directory_parent_id'
+                );
+            }
 
             if (isset($data['id'])) {
                 $defaults['directory_parent_id'] = $data['id'];
             }
 
-            $form->addElement('text', 'title', get_lang('Title'), array('id' => 'idTitle', 'class' => 'col-md-4'));
+            $form->addElement(
+                'text',
+                'title',
+                get_lang('Title'),
+                array('id' => 'idTitle', 'class' => 'col-md-4')
+            );
             $form->applyFilter('title', 'html_filter');
         }
 
@@ -7732,7 +8519,10 @@ class learnpath
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
-                if ($arrLP[$i]['item_type'] == 'dir' && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
+                if ($arrLP[$i]['item_type'] == 'dir' &&
+                    !in_array($arrLP[$i]['id'], $arrHide) &&
+                    !in_array($arrLP[$i]['parent_item_id'], $arrHide)
+                ) {
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
                     $arrHide[$arrLP[$i]['id']]['padding'] = 20 + $arrLP[$i]['depth'] * 20;
                     if ($parent == $arrLP[$i]['id']) {
@@ -7750,16 +8540,33 @@ class learnpath
             }
         }
 
-        $parent_select = $form->addSelect('parent', get_lang('Parent'), [], ['id' => 'idParent', 'onchange' => 'javascript: load_cbo(this.value);']);
-        $my_count=0;
+        $parent_select = $form->addSelect(
+            'parent',
+            get_lang('Parent'),
+            [],
+            [
+                'id' => 'idParent',
+                'onchange' => 'javascript: load_cbo(this.value);',
+            ]
+        );
+
+        $my_count = 0;
         foreach ($arrHide as $key => $value) {
-            if ($my_count!=0) {
+            if ($my_count != 0) {
                 // The LP name is also the first section and is not in the same charset like the other sections.
-                $value['value'] = Security :: remove_XSS($value['value']);
-                $parent_select->addOption($value['value'], $key, 'style="padding-left:' . $value['padding'] . 'px;"');
+                $value['value'] = Security::remove_XSS($value['value']);
+                $parent_select->addOption(
+                    $value['value'],
+                    $key,
+                    'style="padding-left:'.$value['padding'].'px;"'
+                );
             } else {
-                $value['value'] = Security :: remove_XSS($value['value']);
-                $parent_select->addOption($value['value'], $key, 'style="padding-left:' . $value['padding'] . 'px;"');
+                $value['value'] = Security::remove_XSS($value['value']);
+                $parent_select->addOption(
+                    $value['value'],
+                    $key,
+                    'style="padding-left:'.$value['padding'].'px;"'
+                );
             }
             $my_count++;
         }
@@ -7767,7 +8574,7 @@ class learnpath
         if (!empty($id)) {
             $parent_select->setSelected($parent);
         } else {
-            $parent_item_id = isset($_SESSION['parent_item_id']) ? $_SESSION['parent_item_id'] : 0 ;
+            $parent_item_id = Session::read('parent_item_id', 0);
             $parent_select->setSelected($parent_item_id);
         }
 
@@ -7778,24 +8585,43 @@ class learnpath
         $arrHide = array();
         $s_selected_position = null;
 
-        //POSITION
+        // POSITION
+        $lastPosition = null;
+
         for ($i = 0; $i < count($arrLP); $i++) {
-            if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id || $arrLP[$i]['item_type'] == TOOL_LP_FINAL_ITEM) {
-                if (isset($extra_info['previous_item_id']) && $extra_info['previous_item_id'] == $arrLP[$i]['id'] || $action == 'add') {
+            if (($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) ||
+                $arrLP[$i]['item_type'] == TOOL_LP_FINAL_ITEM
+            ) {
+                if ((isset($extra_info['previous_item_id']) &&
+                    $extra_info['previous_item_id'] == $arrLP[$i]['id']) || $action == 'add'
+                ) {
                     $s_selected_position = $arrLP[$i]['id'];
                 }
-                $arrHide[$arrLP[$i]['id']]['value'] = get_lang('After') . ' "' . $arrLP[$i]['title'] . '"';
+                $arrHide[$arrLP[$i]['id']]['value'] = get_lang('After').' "'.$arrLP[$i]['title'].'"';
             }
+            $lastPosition = $arrLP[$i]['id'];
         }
 
-        $position = $form->addSelect('previous', get_lang('Position'), [], ['id' => 'previous']);
+        if (empty($s_selected_position)) {
+            $s_selected_position = $lastPosition;
+        }
+
+        $position = $form->addSelect(
+            'previous',
+            get_lang('Position'),
+            [],
+            ['id' => 'previous']
+        );
         $position->addOption(get_lang('FirstPosition'), 0);
 
         foreach ($arrHide as $key => $value) {
-            $padding = isset($value['padding']) ? $value['padding']: 20;
-            $position->addOption($value['value'], $key, 'style="padding-left:' . $padding . 'px;"');
+            $padding = isset($value['padding']) ? $value['padding'] : 20;
+            $position->addOption(
+                $value['value'],
+                $key,
+                'style="padding-left:'.$padding.'px;"'
+            );
         }
-
         $position->setSelected($s_selected_position);
 
         if (is_array($arrLP)) {
@@ -7815,31 +8641,42 @@ class learnpath
 
             $arrHide = array();
             for ($i = 0; $i < count($arrLP); $i++) {
-                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir' && $arrLP[$i]['item_type'] !== TOOL_LP_FINAL_ITEM) {
-                    if (isset($extra_info['previous_item_id']) && $extra_info['previous_item_id'] == $arrLP[$i]['id'])
+                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir' &&
+                    $arrLP[$i]['item_type'] !== TOOL_LP_FINAL_ITEM
+                ) {
+                    if (isset($extra_info['previous_item_id']) && $extra_info['previous_item_id'] == $arrLP[$i]['id']) {
                         $s_selected_position = $arrLP[$i]['id'];
-                    elseif ($action == 'add') $s_selected_position = $arrLP[$i]['id'];
-
+                    } elseif ($action == 'add') {
+                        $s_selected_position = $arrLP[$i]['id'];
+                    }
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
-
                 }
             }
 
             if (!$no_display_add) {
                 $item_type = isset($extra_info['item_type']) ? $extra_info['item_type'] : null;
                 $edit = isset($_GET['edit']) ? $_GET['edit'] : null;
-                if (($extra_info == 'new' || $item_type == TOOL_DOCUMENT || $item_type == TOOL_LP_FINAL_ITEM || $edit == 'true')) {
-                    if (isset ($_POST['content']))
+                if ($extra_info == 'new' || $item_type == TOOL_DOCUMENT || $item_type == TOOL_LP_FINAL_ITEM || $edit == 'true') {
+                    if (isset ($_POST['content'])) {
                         $content = stripslashes($_POST['content']);
-                    elseif (is_array($extra_info)) {
+                    } elseif (is_array($extra_info)) {
                         //If it's an html document or a text file
                         if (!$no_display_edit_textarea) {
-                            $content = $this->display_document($extra_info['path'], false, false);
+                            $content = $this->display_document(
+                                $extra_info['path'],
+                                false,
+                                false
+                            );
                         }
-                    } elseif (is_numeric($extra_info))
-                        $content = $this->display_document($extra_info, false, false);
-                    else
+                    } elseif (is_numeric($extra_info)) {
+                        $content = $this->display_document(
+                            $extra_info,
+                            false,
+                            false
+                        );
+                    } else {
                         $content = '';
+                    }
 
                     if (!$no_display_edit_textarea) {
                         // We need to calculate here some specific settings for the online editor.
@@ -7863,7 +8700,7 @@ class learnpath
                             $relative_path 	 = array_slice($relative_path, 1, $cnt);
                             $relative_path 	 = implode('/', $relative_path);
                             if (strlen($relative_path) > 0) {
-                                $relative_path = $relative_path . '/';
+                                $relative_path = $relative_path.'/';
                             }
                         } else {
                             $result = $this->generate_lp_folder($_course);
@@ -7872,13 +8709,13 @@ class learnpath
                         }
 
                         $editor_config = array(
-                            'ToolbarSet'=> 'LearningPathDocuments',
-                            'Width' 				=> '100%',
-                            'Height' 				=> '500',
-                            'FullPage' 				=> true,
-                            'CreateDocumentDir' 	=> $relative_prefix,
-                            'CreateDocumentWebDir' 	=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/document/',
-                            'BaseHref' 				=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/document/'.$relative_path
+                            'ToolbarSet' => 'LearningPathDocuments',
+                            'Width' => '100%',
+                            'Height' => '500',
+                            'FullPage' => true,
+                            'CreateDocumentDir' => $relative_prefix,
+                            'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
+                            'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/'.$relative_path
                         );
 
                         if ($_GET['action'] == 'add_item') {
@@ -7906,6 +8743,12 @@ class learnpath
                     $form->addElement('html', $return);
                 }
             }
+        }
+        if (isset($extra_info['item_type']) &&
+            $extra_info['item_type'] == TOOL_LP_FINAL_ITEM
+        ) {
+            $parent_select->freeze();
+            $position->freeze();
         }
 
         if ($action == 'move') {
@@ -7936,8 +8779,8 @@ class learnpath
     public function display_link_form($action = 'add', $id = 0, $extra_info = '')
     {
         $course_id = api_get_course_int_id();
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $tbl_link = Database :: get_course_table(TABLE_LINK);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $tbl_link = Database::get_course_table(TABLE_LINK);
 
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
@@ -7945,10 +8788,10 @@ class learnpath
             $item_url = stripslashes($extra_info['url']);
         } elseif (is_numeric($extra_info)) {
             $extra_info = intval($extra_info);
-            $sql = "SELECT title, description, url FROM " . $tbl_link . "
-                    WHERE c_id = ".$course_id." AND id = " . $extra_info;
+            $sql = "SELECT title, description, url FROM ".$tbl_link."
+                    WHERE c_id = ".$course_id." AND id = ".$extra_info;
             $result = Database::query($sql);
-            $row = Database :: fetch_array($result);
+            $row = Database::fetch_array($result);
             $item_title       = $row['title'];
             $item_description = $row['description'];
             $item_url = $row['url'];
@@ -7958,21 +8801,24 @@ class learnpath
             $item_url = '';
         }
 
-        $form = new FormValidator('edit_link', 'POST', api_get_self() . '?' .$_SERVER['QUERY_STRING']);
+        $form = new FormValidator(
+            'edit_link',
+            'POST',
+            $this->getCurrentBuildingModeURL()
+        );
         $defaults = [];
-
         if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
         } else {
             $parent = 0;
         }
 
-        $sql = "SELECT * FROM " . $tbl_lp_item . "
-                WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
+        $sql = "SELECT * FROM ".$tbl_lp_item."
+                WHERE c_id = ".$course_id." AND lp_id = ".$this->lp_id;
         $result = Database::query($sql);
         $arrLP = array();
 
-        while ($row = Database :: fetch_array($result)) {
+        while ($row = Database::fetch_array($result)) {
             $arrLP[] = array(
                 'id' => $row['id'],
                 'item_type' => $row['item_type'],
@@ -7992,7 +8838,7 @@ class learnpath
 
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
-        unset ($this->arrMenu);
+        unset($this->arrMenu);
 
         if ($action == 'add') {
             $legend = get_lang('CreateTheLink');
@@ -8020,7 +8866,7 @@ class learnpath
             $id
         );
 
-        $parent_item_id = isset($_SESSION['parent_item_id']) ? $_SESSION['parent_item_id'] : 0;
+        $parent_item_id = Session::read('parent_item_id', 0);
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
@@ -8032,7 +8878,7 @@ class learnpath
                     $selectParent->addOption(
                         $arrLP[$i]['title'],
                         $arrLP[$i]['id'],
-                        ['style' => 'padding-left: ' . (20 + $arrLP[$i]['depth'] * 20) . 'px;']
+                        ['style' => 'padding-left: '.(20 + $arrLP[$i]['depth'] * 20).'px;']
                     );
 
                     if ($parent == $arrLP[$i]['id']) {
@@ -8046,7 +8892,7 @@ class learnpath
                     $selectParent->addOption(
                         $arrLP[$i]['title'],
                         $arrLP[$i]['id'],
-                        ['style' => 'padding-left: ' . (20 + $arrLP[$i]['depth'] * 20) . 'px']
+                        ['style' => 'padding-left: '.(20 + $arrLP[$i]['depth'] * 20).'px']
                     );
 
                     if ($parent_item_id == $arrLP[$i]['id']) {
@@ -8070,7 +8916,10 @@ class learnpath
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
-                $selectPrevious->addOption($arrLP[$i]['title'], $arrLP[$i]['id']);
+                $selectPrevious->addOption(
+                    $arrLP[$i]['title'],
+                    $arrLP[$i]['id']
+                );
 
                 if ($extra_info['previous_item_id'] == $arrLP[$i]['id']) {
                     $selectPrevious->setSelected($arrLP[$i]['id']);
@@ -8130,10 +8979,9 @@ class learnpath
         }
         $form->addHidden('type', TOOL_LINK);
         $form->addHidden('post_time', time());
-
         $form->setDefaults($defaults);
 
-        return '<div class="sectioncomment">' . $form->returnForm() . '</div>';
+        return '<div class="sectioncomment">'.$form->returnForm().'</div>';
     }
 
     /**
@@ -8143,11 +8991,14 @@ class learnpath
      * @param	mixed	Extra info (work ID if integer)
      * @return	string	HTML form
      */
-    public function display_student_publication_form($action = 'add', $id = 0, $extra_info = '')
-    {
+    public function display_student_publication_form(
+        $action = 'add',
+        $id = 0,
+        $extra_info = ''
+    ) {
         $course_id = api_get_course_int_id();
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $tbl_publication = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $tbl_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
@@ -8156,10 +9007,10 @@ class learnpath
             $extra_info = intval($extra_info);
             $sql = "SELECT title, description
                     FROM $tbl_publication
-                    WHERE c_id = $course_id AND id = " . $extra_info;
+                    WHERE c_id = $course_id AND id = ".$extra_info;
 
             $result = Database::query($sql);
-            $row = Database :: fetch_array($result);
+            $row = Database::fetch_array($result);
 
             $item_title = $row['title'];
         } else {
@@ -8173,11 +9024,11 @@ class learnpath
         }
 
         $sql = "SELECT * FROM $tbl_lp_item 
-                WHERE c_id = $course_id AND lp_id = " . $this->lp_id;
+                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
 
         $result = Database::query($sql);
         $arrLP = array();
-        while ($row = Database :: fetch_array($result)) {
+        while ($row = Database::fetch_array($result)) {
             $arrLP[] = array(
                 'id' => $row['id'],
                 'item_type' => $row['item_type'],
@@ -8210,7 +9061,12 @@ class learnpath
         }
 
         if ($action != 'move') {
-            $form->addText('title', get_lang('Title'), true, ['class' => 'learnpath_item_form', 'id' => 'idTitle']);
+            $form->addText(
+                'title',
+                get_lang('Title'),
+                true,
+                ['class' => 'learnpath_item_form', 'id' => 'idTitle']
+            );
         }
 
         $parentSelect = $form->addSelect(
@@ -8225,7 +9081,6 @@ class learnpath
         );
 
         $arrHide = array($id);
-
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
                 if (
@@ -8236,7 +9091,7 @@ class learnpath
                     $parentSelect->addOption(
                         $arrLP[$i]['title'],
                         $arrLP[$i]['id'],
-                        ['style' => 'padding-left: ' . (($arrLP[$i]['depth'] * 10) + 20) . 'px;']
+                        ['style' => 'padding-left: '.(($arrLP[$i]['depth'] * 10) + 20).'px;']
                     );
 
                     if ($parent == $arrLP[$i]['id']) {
@@ -8250,7 +9105,7 @@ class learnpath
                     $parentSelect->addOption(
                         $arrLP[$i]['title'],
                         $arrLP[$i]['id'],
-                        ['style' => 'padding-left: ' . (($arrLP[$i]['depth'] * 10) + 20) . 'px;']
+                        ['style' => 'padding-left: '.(($arrLP[$i]['depth'] * 10) + 20).'px;']
                     );
 
                     if ($parent == $arrLP[$i]['id']) {
@@ -8274,7 +9129,7 @@ class learnpath
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
                 $previousSelect->addOption(
-                    get_lang('After') . ' "' . $arrLP[$i]['title'] . '"',
+                    get_lang('After').' "'.$arrLP[$i]['title'].'"',
                     $arrLP[$i]['id']
                 );
 
@@ -8296,7 +9151,7 @@ class learnpath
                     }
                 }
             }
-            $arrHide = array ();
+            $arrHide = array();
             for ($i = 0; $i < count($arrLP); $i++) {
                 if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir') {
                     if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
@@ -8374,10 +9229,10 @@ class learnpath
                 break;
         }
 
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $item_id = intval($item_id);
-        $sql = "SELECT * FROM " . $tbl_lp_item . " as lp
-                WHERE lp.c_id = ".$course_id." AND lp.id = " . $item_id;
+        $sql = "SELECT * FROM ".$tbl_lp_item." as lp
+                WHERE lp.c_id = ".$course_id." AND lp.id = ".$item_id;
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
 
@@ -8391,32 +9246,54 @@ class learnpath
             $audio_player .= '<script>
                 var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
                 s1.addParam("allowscriptaccess","always");
-                s1.addParam("flashvars","file=../..'.api_get_path(REL_COURSE_PATH).$_course['path'] . '/document/audio/' . $row['audio'] . '&autostart=true");
+                s1.addParam("flashvars","file=../..'.api_get_path(REL_COURSE_PATH).$_course['path'].'/document/audio/'.$row['audio'].'&autostart=true");
                 s1.write("container");
             </script>';
         }
 
-        $url = api_get_self().'?cidReq='.api_get_cidreq().'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
+        $url = api_get_self().'?'.api_get_cidreq().'&view=build&id='.$item_id.'&lp_id='.$this->lp_id;
 
-        $return .= Display::url(
-            Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
-            $url.'&action=edit_item&path_item=' . $row['path']
-        );
+        if ($item_type != TOOL_LP_FINAL_ITEM) {
+            $return .= Display::url(
+                Display::return_icon(
+                    'edit.png',
+                    get_lang('Edit'),
+                    array(),
+                    ICON_SIZE_SMALL
+                ),
+                $url.'&action=edit_item&path_item='.$row['path']
+            );
 
-        $return .= Display::url(
-            Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_SMALL),
-            $url.'&action=move_item'
-        );
+            $return .= Display::url(
+                Display::return_icon(
+                    'move.png',
+                    get_lang('Move'),
+                    array(),
+                    ICON_SIZE_SMALL
+                ),
+                $url.'&action=move_item'
+            );
+        }
 
         // Commented for now as prerequisites cannot be added to chapters.
         if ($item_type != 'dir') {
             $return .= Display::url(
-                Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_SMALL),
+                Display::return_icon(
+                    'accept.png',
+                    get_lang('LearnpathPrerequisites'),
+                    array(),
+                    ICON_SIZE_SMALL
+                ),
                 $url.'&action=edit_item_prereq'
             );
         }
         $return .= Display::url(
-            Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL),
+            Display::return_icon(
+                'delete.png',
+                get_lang('Delete'),
+                array(),
+                ICON_SIZE_SMALL
+            ),
             $url.'&action=delete_item'
         );
 
@@ -8446,46 +9323,46 @@ class learnpath
     public function get_js_dropdown_array()
     {
         $course_id = api_get_course_int_id();
-        $return = 'var child_name = new Array();' . "\n";
-        $return .= 'var child_value = new Array();' . "\n\n";
-        $return .= 'child_name[0] = new Array();' . "\n";
-        $return .= 'child_value[0] = new Array();' . "\n\n";
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $sql_zero = "SELECT * FROM " . $tbl_lp_item . "
-                    WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id . " AND parent_item_id = 0
-                    ORDER BY display_order ASC";
-        $res_zero = Database::query($sql_zero);
+        $return = 'var child_name = new Array();'."\n";
+        $return .= 'var child_value = new Array();'."\n\n";
+        $return .= 'child_name[0] = new Array();'."\n";
+        $return .= 'child_value[0] = new Array();'."\n\n";
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $sql = "SELECT * FROM ".$tbl_lp_item."
+                WHERE c_id = ".$course_id." AND lp_id = ".$this->lp_id." AND parent_item_id = 0
+                ORDER BY display_order ASC";
+        $res_zero = Database::query($sql);
         $i = 0;
 
-        while ($row_zero = Database :: fetch_array($res_zero)) {
+        while ($row_zero = Database::fetch_array($res_zero)) {
             if ($row_zero['item_type'] !== TOOL_LP_FINAL_ITEM) {
                 if ($row_zero['item_type'] == TOOL_QUIZ) {
                     $row_zero['title'] = Exercise::get_formated_title_variable($row_zero['title']);
                 }
                 $js_var = json_encode(get_lang('After').' '.$row_zero['title']);
-                $return .= 'child_name[0][' . $i . '] = '.$js_var.' ;' . "\n";
-                $return .= 'child_value[0][' . $i++ . '] = "' . $row_zero['id'] . '";' . "\n";
+                $return .= 'child_name[0]['.$i.'] = '.$js_var.' ;'."\n";
+                $return .= 'child_value[0]['.$i++.'] = "'.$row_zero['id'].'";'."\n";
             }
         }
         $return .= "\n";
-        $sql = "SELECT * FROM " . $tbl_lp_item . "
-                WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
+        $sql = "SELECT * FROM ".$tbl_lp_item."
+                WHERE c_id = ".$course_id." AND lp_id = ".$this->lp_id;
         $res = Database::query($sql);
-        while ($row = Database :: fetch_array($res)) {
-            $sql_parent = "SELECT * FROM " . $tbl_lp_item . "
+        while ($row = Database::fetch_array($res)) {
+            $sql_parent = "SELECT * FROM ".$tbl_lp_item."
                            WHERE
                                 c_id = ".$course_id." AND
-                                parent_item_id = " . $row['id'] . "
+                                parent_item_id = " . $row['id']."
                            ORDER BY display_order ASC";
             $res_parent = Database::query($sql_parent);
             $i = 0;
-            $return .= 'child_name[' . $row['id'] . '] = new Array();' . "\n";
-            $return .= 'child_value[' . $row['id'] . '] = new Array();' . "\n\n";
+            $return .= 'child_name['.$row['id'].'] = new Array();'."\n";
+            $return .= 'child_value['.$row['id'].'] = new Array();'."\n\n";
 
-            while ($row_parent = Database :: fetch_array($res_parent)) {
+            while ($row_parent = Database::fetch_array($res_parent)) {
                 $js_var = json_encode(get_lang('After').' '.$row_parent['title']);
-                $return .= 'child_name[' . $row['id'] . '][' . $i . '] =   '.$js_var.' ;' . "\n";
-                $return .= 'child_value[' . $row['id'] . '][' . $i++ . '] = "' . $row_parent['id'] . '";' . "\n";
+                $return .= 'child_name['.$row['id'].']['.$i.'] =   '.$js_var.' ;'."\n";
+                $return .= 'child_value['.$row['id'].']['.$i++.'] = "'.$row_parent['id'].'";'."\n";
             }
             $return .= "\n";
         }
@@ -8495,7 +9372,7 @@ class learnpath
 
     /**
      * Display the form to allow moving an item
-     * @param	integer		Item ID
+     * @param	integer $item_id		Item ID
      * @return	string		HTML form
      */
     public function display_move_item($item_id)
@@ -8504,19 +9381,24 @@ class learnpath
         $return = '';
 
         if (is_numeric($item_id)) {
-            $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+            $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
-            $sql = "SELECT * FROM " . $tbl_lp_item . "
-                    WHERE c_id = ".$course_id." AND id = " . $item_id;
-
+            $sql = "SELECT * FROM ".$tbl_lp_item."
+                    WHERE c_id = ".$course_id." AND id = ".$item_id;
             $res = Database::query($sql);
-            $row = Database :: fetch_array($res);
+            $row = Database::fetch_array($res);
 
             switch ($row['item_type']) {
                 case 'dir':
                 case 'asset':
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_item_form($row['item_type'], get_lang('MoveCurrentChapter'), 'move', $item_id, $row);
+                    $return .= $this->display_item_form(
+                        $row['item_type'],
+                        get_lang('MoveCurrentChapter'),
+                        'move',
+                        $item_id,
+                        $row
+                    );
                     break;
                 case TOOL_DOCUMENT:
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
@@ -8561,7 +9443,7 @@ class learnpath
      */
     public function display_item_small_form($item_type, $title = '', $data = array())
     {
-        $url = api_get_self() . '?' .api_get_cidreq().'&action=edit_item&lp_id='.$this->lp_id;
+        $url = api_get_self().'?'.api_get_cidreq().'&action=edit_item&lp_id='.$this->lp_id;
         $form = new FormValidator('small_form', 'post', $url);
         $form->addElement('header', $title);
         $form->addElement('text', 'title', get_lang('Title'));
@@ -8583,11 +9465,11 @@ class learnpath
     public function display_item_prerequisites_form($item_id)
     {
         $course_id = api_get_course_int_id();
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $item_id = intval($item_id);
         /* Current prerequisite */
         $sql = "SELECT * FROM $tbl_lp_item
-                WHERE c_id = $course_id AND id = " . $item_id;
+                WHERE c_id = $course_id AND id = ".$item_id;
         $result = Database::query($sql);
         $row    = Database::fetch_array($result);
         $prerequisiteId = $row['prerequisite'];
@@ -8595,28 +9477,34 @@ class learnpath
         $return .= get_lang('AddEditPrerequisites');
         $return .= '</legend>';
         $return .= '<form method="POST">';
-        $return .= '<table class="data_table">';
+        $return .= '<div class="table-responsive">';
+        $return .= '<table class="table table-hover">';
+        $return .= '<thead>';
         $return .= '<tr>';
-        $return .= '<th height="24">' . get_lang('LearnpathPrerequisites') . '</th>';
-        $return .= '<th width="70" >' . get_lang('Minimum') . '</th>';
-        $return .= '<th width="70">' . get_lang('Maximum') . '</th>';
+        $return .= '<th>'.get_lang('LearnpathPrerequisites').'</th>';
+        $return .= '<th width="140">'.get_lang('Minimum').'</th>';
+        $return .= '<th width="140">'.get_lang('Maximum').'</th>';
         $return .= '</tr>';
+        $return .= '</thead>';
 
         // Adding the none option to the prerequisites see http://www.chamilo.org/es/node/146
-        $return .= '<tr >';
-        $return .= '<td colspan="3" class="radio">';
-        $return .= '<input checked="checked" id="idNone" name="prerequisites"  style="margin-left:0px; margin-right:10px;" type="radio" />';
-        $return .= '<label for="idNone">' . get_lang('None') . '</label>';
+        $return .= '<tbody>';
+        $return .= '<tr>';
+        $return .= '<td colspan="3">';
+        $return .= '<div class="radio learnpath"><label for="idNone">';
+        $return .= '<input checked="checked" id="idNone" name="prerequisites" type="radio" />';
+        $return .= get_lang('None').'</label>';
+        $return .= '</div>';
         $return .= '</tr>';
 
         $sql = "SELECT * FROM $tbl_lp_item
-                WHERE c_id = $course_id AND lp_id = " . $this->lp_id;
+                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         $result = Database::query($sql);
         $arrLP = array();
 
         $selectedMinScore = array();
         $selectedMaxScore = array();
-        while ($row = Database :: fetch_array($result)) {
+        while ($row = Database::fetch_array($result)) {
             if ($row['id'] == $item_id) {
                 $selectedMinScore[$row['prerequisite']] = $row['prerequisite_min_score'];
                 $selectedMaxScore[$row['prerequisite']] = $row['prerequisite_max_score'];
@@ -8653,25 +9541,28 @@ class learnpath
             }
 
             $selectedMaxScoreValue = isset($selectedMaxScore[$item['id']]) ? $selectedMaxScore[$item['id']] : $item['max_score'];
-            $selectedMinScoreValue = isset($selectedMinScore[$item['id']]) ? $selectedMinScore[$item['id']]: 0;
+            $selectedMinScoreValue = isset($selectedMinScore[$item['id']]) ? $selectedMinScore[$item['id']] : 0;
 
             $return .= '<tr>';
-            $return .= '<td class="radio"' . (($item['item_type'] != TOOL_QUIZ && $item['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . '>';
-            $return .= '<input' . (in_array($prerequisiteId, array($item['id'], $item['ref'])) ? ' checked="checked" ' : '') . ($item['item_type'] == 'dir' ? ' disabled="disabled" ' : ' ') . 'id="id' . $item['id'] . '" name="prerequisites" style="margin-left:' . $item['depth'] * 10 . 'px; margin-right:10px;" type="radio" value="' . $item['id'] . '" />';
-            $return .= '<label for="id' . $item['id'] . '">';
+            $return .= '<td '.(($item['item_type'] != TOOL_QUIZ && $item['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '').'>';
+            $return .= '<div style="margin-left:'.($item['depth'] * 20).'px;" class="radio learnpath">';
+            $return .= '<label for="id'.$item['id'].'">';
+            $return .= '<input'.(in_array($prerequisiteId, array($item['id'], $item['ref'])) ? ' checked="checked" ' : '').($item['item_type'] == 'dir' ? ' disabled="disabled" ' : ' ').'id="id'.$item['id'].'" name="prerequisites"  type="radio" value="'.$item['id'].'" />';
+
             $icon_name = str_replace(' ', '', $item['item_type']);
 
-            if (file_exists('../img/lp_' . $icon_name . '.png')) {
-                $return .= Display::return_icon('lp_' . $icon_name . '.png');
+            if (file_exists('../img/lp_'.$icon_name.'.png')) {
+                $return .= Display::return_icon('lp_'.$icon_name.'.png');
             } else {
-                if (file_exists('../img/lp_' . $icon_name . '.gif')) {
-                    $return .= Display::return_icon('lp_' . $icon_name . '.gif');
+                if (file_exists('../img/lp_'.$icon_name.'.png')) {
+                    $return .= Display::return_icon('lp_'.$icon_name.'.png');
                 } else {
-                    $return .= Display::return_icon('folder_document.gif','',array('style'=>'margin-right:5px;'));
+                    $return .= Display::return_icon('folder_document.png');
                 }
             }
 
-            $return .=  $item['title'] . '</label>';
+            $return .= $item['title'].'</label>';
+            $return .= '</div>';
             $return .= '</td>';
 
             if ($item['item_type'] == TOOL_QUIZ) {
@@ -8684,29 +9575,31 @@ class learnpath
                 $tmp_obj_lp_item->update_in_bdd();
                 $item['max_score'] = $tmp_obj_lp_item->max_score;
 
-                $return .= '<td class="exercise">';
-                $return .= '<input size="4" maxlength="3" name="min_' . $item['id'] . '" type="number" min="0" step="any" max="'.$item['max_score'].'" value="' . $selectedMinScoreValue. '" />';
+                $return .= '<td>';
+                $return .= '<input class="form-control" size="4" maxlength="3" name="min_'.$item['id'].'" type="number" min="0" step="1" max="'.$item['max_score'].'" value="'.$selectedMinScoreValue.'" />';
                 $return .= '</td>';
-                $return .= '<td class="exercise">';
-                $return .= '<input size="4" maxlength="3" name="max_' . $item['id'] . '" type="number" min="0" step="any" max="'.$item['max_score'].'" value="' . $selectedMaxScoreValue . '" />';
+                $return .= '<td>';
+                $return .= '<input class="form-control" size="4" maxlength="3" readonly name="max_'.$item['id'].'" type="number" min="0" step="1" max="'.$item['max_score'].'" value="'.$selectedMaxScoreValue.'" />';
                 $return .= '</td>';
             }
 
             if ($item['item_type'] == TOOL_HOTPOTATOES) {
-                $return .= '<td class="exercise">';
-                $return .= '<center><input size="4" maxlength="3" name="min_' . $item['id'] . '" type="number" min="0" step="any" max="'.$item['max_score'].'" value="' . $selectedMinScoreValue . '" /></center>';
+                $return .= '<td>';
+                $return .= '<input size="4" maxlength="3" name="min_'.$item['id'].'" type="number" min="0" step="1" max="'.$item['max_score'].'" value="'.$selectedMinScoreValue.'" />';
                 $return .= '</td>';
-                $return .= '<td class="exercise"">';
-                $return .= '<center><input size="4" maxlength="3" name="max_' . $item['id'] . '" type="number" min="0" step="any" max="'.$item['max_score'].'"  value="'.$selectedMaxScoreValue . '" /></center>';
+                $return .= '<td>';
+                $return .= '<input size="4" maxlength="3" name="max_'.$item['id'].'" readonly type="number" min="0" step="1" max="'.$item['max_score'].'"  value="'.$selectedMaxScoreValue.'" />';
                 $return .= '</td>';
             }
             $return .= '</tr>';
         }
         $return .= '<tr>';
         $return .= '</tr>';
+        $return .= '</tbody>';
         $return .= '</table>';
-        $return .= '<div style="padding-top:3px;">';
-        $return .= '<button class="btn btn-primary" name="submit_button" type="submit">' . get_lang('ModifyPrerequisites') . '</button>';
+        $return .= '</div>';
+        $return .= '<div class="form-group">';
+        $return .= '<button class="btn btn-primary" name="submit_button" type="submit">'.get_lang('ModifyPrerequisites').'</button>';
         $return .= '</form>';
 
         return $return;
@@ -8721,12 +9614,12 @@ class learnpath
     {
         $course_id = api_get_course_int_id();
         $lp_id = $this->lp_id;
-        $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
+        $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 
         // get current prerequisite
         $sql = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $lp_id ";
         $result = Database::query($sql);
-        $row = Database :: fetch_array($result);
+        $row = Database::fetch_array($result);
         $prerequisiteId = $row['prerequisite'];
         $session_id = api_get_session_id();
         $session_condition = api_get_session_condition($session_id, true, true);
@@ -8742,7 +9635,7 @@ class learnpath
                 if ($row['id'] == $lp_id) {
                     continue;
                 }
-                $return .= '<option value="'.$row['id'].'" '.(($row['id']==$prerequisiteId)?' selected ' : '').'>'.$row['name'].'</option>';
+                $return .= '<option value="'.$row['id'].'" '.(($row['id'] == $prerequisiteId) ? ' selected ' : '').'>'.$row['name'].'</option>';
             }
         }
         $return .= '</select>';
@@ -8781,9 +9674,9 @@ class learnpath
         $form = new FormValidator(
             'form_upload',
             'POST',
-            api_get_self().'?'.$_SERVER['QUERY_STRING'],
+            $this->getCurrentBuildingModeURL(),
             '',
-            array('enctype' => "multipart/form-data")
+            array('enctype' => 'multipart/form-data')
         );
 
         $folders = DocumentManager::get_all_document_folders(
@@ -8801,9 +9694,30 @@ class learnpath
             'directory_parent_id'
         );
 
-        $form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lang('UplDoNothing'), 'nothing');
-        $form->addElement('radio', 'if_exists', '', get_lang('UplOverwriteLong'), 'overwrite');
-        $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename');
+        $group = array(
+            $form->createElement(
+                'radio',
+                'if_exists',
+                get_lang("UplWhatIfFileExists"),
+                get_lang('UplDoNothing'),
+                'nothing'
+            ),
+            $form->createElement(
+                'radio',
+                'if_exists',
+                null,
+                get_lang('UplOverwriteLong'),
+                'overwrite'
+            ),
+            $form->createElement(
+                'radio',
+                'if_exists',
+                null,
+                get_lang('UplRenameLong'),
+                'rename'
+            )
+        );
+        $form->addGroup($group, null, get_lang('UplWhatIfFileExists'));
         $form->setDefaults(['if_exists' => 'rename']);
 
         // Check box options
@@ -8817,8 +9731,11 @@ class learnpath
         $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath=';
         $form->addMultipleUpload($url);
         $new = $this->display_document_form('add', 0);
-
-        $tabs = Display::tabs($headers, array($documentTree, $new, $form->returnForm()), 'subtab');
+        $tabs = Display::tabs(
+            $headers,
+            array($documentTree, $new, $form->returnForm()),
+            'subtab'
+        );
 
         return $tabs;
     }
@@ -8830,61 +9747,99 @@ class learnpath
     public function get_exercises()
     {
         $course_id = api_get_course_int_id();
+        $session_id = api_get_session_id();
+        $userInfo = api_get_user_info();
 
         // New for hotpotatoes.
         $uploadPath = DIR_HOTPOTATOES; //defined in main_api
-        $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
-        $tbl_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
-
-        $session_id = api_get_session_id();
+        $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
+        $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
         $condition_session = api_get_session_condition($session_id, true, true);
-
         $setting = api_get_configuration_value('show_invisible_exercise_in_lp_list');
 
-        $activeCondition = " active <> -1 ";
+        $activeCondition = ' active <> -1 ';
         if ($setting) {
-            $activeCondition = " active = 1 ";
+            $activeCondition = ' active = 1 ';
         }
 
         $sql_quiz = "SELECT * FROM $tbl_quiz
                      WHERE c_id = $course_id AND $activeCondition $condition_session
                      ORDER BY title ASC";
 
-        $sql_hot  = "SELECT * FROM $tbl_doc
-                     WHERE c_id = $course_id AND path LIKE '" . $uploadPath . "/%/%htm%'  $condition_session
+        $sql_hot = "SELECT * FROM $tbl_doc
+                     WHERE c_id = $course_id AND path LIKE '".$uploadPath."/%/%htm%'  $condition_session
                      ORDER BY id ASC";
 
         $res_quiz = Database::query($sql_quiz);
         $res_hot  = Database::query($sql_hot);
 
         $return = '<ul class="lp_resource">';
-
         $return .= '<li class="lp_resource_element">';
         $return .= Display::return_icon('new_exercice.png');
-        $return .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'exercise/exercise_admin.php?'.api_get_cidreq().'&lp_id=' . $this->lp_id . '">' .
-            get_lang('NewExercise') . '</a>';
+        $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&lp_id='.$this->lp_id.'">'.
+            get_lang('NewExercise').'</a>';
         $return .= '</li>';
 
+        $previewIcon = Display::return_icon(
+            'preview_view.png',
+            get_lang('Preview')
+        );
+        $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/showinframes.php?'.api_get_cidreq();
+
         // Display hotpotatoes
-        while ($row_hot = Database :: fetch_array($res_hot)) {
+        while ($row_hot = Database::fetch_array($res_hot)) {
+            $link = Display::url(
+                $previewIcon,
+                $exerciseUrl.'&file='.$row_hot['path'],
+                ['target' => '_blank']
+            );
             $return .= '<li class="lp_resource_element" data_id="'.$row_hot['id'].'" data_type="hotpotatoes" title="'.$row_hot['title'].'" >';
             $return .= '<a class="moved" href="#">';
-            $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
+            $return .= Display::return_icon(
+                'move_everywhere.png',
+                get_lang('Move'),
+                array(),
+                ICON_SIZE_TINY
+            );
             $return .= '</a> ';
             $return .= Display::return_icon('hotpotatoes_s.png');
-            $return .= '<a href="' . api_get_self() . '?' . api_get_cidreq().'&action=add_item&type=' . TOOL_HOTPOTATOES . '&file=' . $row_hot['id'] . '&lp_id=' . $this->lp_id . '">'.
-                ((!empty ($row_hot['comment'])) ? $row_hot['comment'] : Security :: remove_XSS($row_hot['title'])) . '</a>';
+            $return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_HOTPOTATOES.'&file='.$row_hot['id'].'&lp_id='.$this->lp_id.'">'.
+                ((!empty ($row_hot['comment'])) ? $row_hot['comment'] : Security::remove_XSS($row_hot['title'])).$link.'</a>';
             $return .= '</li>';
         }
 
-        while ($row_quiz = Database :: fetch_array($res_quiz)) {
-            $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['id'].'" data_type="quiz" title="'.$row_quiz['title'].'" >';
+        $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq();
+        while ($row_quiz = Database::fetch_array($res_quiz)) {
+            $title = strip_tags(
+                api_html_entity_decode($row_quiz['title'])
+            );
+
+            $link = Display::url(
+                $previewIcon,
+                $exerciseUrl.'&exerciseId='.$row_quiz['id'],
+                ['target' => '_blank']
+            );
+            $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['id'].'" data_type="quiz" title="'.$title.'" >';
             $return .= '<a class="moved" href="#">';
-            $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
+            $return .= Display::return_icon(
+                'move_everywhere.png',
+                get_lang('Move'),
+                array(),
+                ICON_SIZE_TINY
+            );
             $return .= '</a> ';
-            $return .= Display::return_icon('quizz_small.gif', '', array(), ICON_SIZE_TINY);
-            $return .= '<a class="moved" href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_QUIZ . '&file=' . $row_quiz['id'] . '&lp_id=' . $this->lp_id . '">' .
-                Security :: remove_XSS(cut($row_quiz['title'], 80)).
+            $return .= Display::return_icon(
+                'quizz_small.gif',
+                '',
+                array(),
+                ICON_SIZE_TINY
+            );
+            $sessionStar = api_get_session_image(
+                $row_quiz['session_id'],
+                $userInfo['status']
+            );
+            $return .= '<a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$row_quiz['id'].'&lp_id='.$this->lp_id.'">'.
+                Security::remove_XSS(cut($title, 80)).$link.$sessionStar.
                 '</a>';
 
             $return .= '</li>';
@@ -8903,10 +9858,17 @@ class learnpath
         $selfUrl = api_get_self();
         $courseIdReq = api_get_cidreq();
         $course = api_get_course_info();
+        $userInfo = api_get_user_info();
+
         $course_id = $course['real_id'];
         $tbl_link = Database::get_course_table(TABLE_LINK);
         $linkCategoryTable = Database::get_course_table(TABLE_LINK_CATEGORY);
-        $moveEverywhereIcon = Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
+        $moveEverywhereIcon = Display::return_icon(
+            'move_everywhere.png',
+            get_lang('Move'),
+            array(),
+            ICON_SIZE_TINY
+        );
 
         $session_id = api_get_session_id();
         $condition_session = api_get_session_condition(
@@ -8919,6 +9881,7 @@ class learnpath
         $sql = "SELECT 
                     link.id as link_id,
                     link.title as link_title,
+                    link.session_id as link_session_id,
                     link.category_id as category_id,
                     link_category.category_title as category_title
                 FROM $tbl_link as link
@@ -8926,17 +9889,16 @@ class learnpath
                 ON (link.category_id = link_category.id AND link.c_id = link_category.c_id)
                 WHERE link.c_id = ".$course_id." $condition_session
                 ORDER BY link_category.category_title ASC, link.title ASC";
-        $links = Database::query($sql);
-
+        $result = Database::query($sql);
         $categorizedLinks = array();
         $categories = array();
 
-        while ($link = Database :: fetch_array($links)) {
+        while ($link = Database::fetch_array($result)) {
             if (!$link['category_id']) {
                 $link['category_title'] = get_lang('Uncategorized');
             }
             $categories[$link['category_id']] = $link['category_title'];
-            $categorizedLinks[$link['category_id']][$link['link_id']] = $link['link_title'];
+            $categorizedLinks[$link['category_id']][$link['link_id']] = $link;
         }
 
         $linksHtmlCode =
@@ -8962,7 +9924,9 @@ class learnpath
 
         foreach ($categorizedLinks as $categoryId => $links) {
             $linkNodes = null;
-            foreach ($links as $key => $title) {
+            foreach ($links as $key => $linkInfo) {
+                $title = $linkInfo['link_title'];
+                $linkSessionId = $linkInfo['link_session_id'];
 
                 $link = Display::url(
                     Display::return_icon('preview_view.png', get_lang('Preview')),
@@ -8970,7 +9934,8 @@ class learnpath
                     ['target' => '_blank']
                 );
 
-                if (api_get_item_visibility($course, TOOL_LINK, $key, $session_id) != 2)  {
+                if (api_get_item_visibility($course, TOOL_LINK, $key, $session_id) != 2) {
+                    $sessionStar = api_get_session_image($linkSessionId, $userInfo['status']);
                     $linkNodes .=
                         '<li class="lp_resource_element" data_id="'.$key.'" data_type="'.TOOL_LINK.'" title="'.$title.'" >
                         <a class="moved" href="#">'.
@@ -8979,7 +9944,7 @@ class learnpath
                         '.Display::return_icon('lp_link.png').'
                         <a class="moved" href="'.$selfUrl.'?'.$courseIdReq.'&action=add_item&type='.
                         TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id.'">'.
-                        Security::remove_XSS($title).
+                        Security::remove_XSS($title).$sessionStar.$link.
                         '</a>
                     </li>';
                 }
@@ -9008,8 +9973,8 @@ class learnpath
         $return = '<ul class="lp_resource">';
         $return .= '<li class="lp_resource_element">';
         $return .= Display::return_icon('works_new.gif');
-        $return .= ' <a href="' . api_get_self() . '?' . api_get_cidreq() . '&action=add_item&type=' . TOOL_STUDENTPUBLICATION . '&lp_id=' . $this->lp_id . '">' .
-            get_lang('AddAssignmentPage') . '</a>';
+        $return .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_STUDENTPUBLICATION.'&lp_id='.$this->lp_id.'">'.
+            get_lang('AddAssignmentPage').'</a>';
         $return .= '</li>';
         $sessionId = api_get_session_id();
 
@@ -9024,14 +9989,19 @@ class learnpath
                         ['target' => '_blank']
                     );
 
-                    $return .= '<li class="lp_resource_element" data_id="'.$work['iid'].'" data_type="'.TOOL_STUDENTPUBLICATION.'" title="'.Security :: remove_XSS(cut(strip_tags($work['title']), 80)).'">';
+                    $return .= '<li class="lp_resource_element" data_id="'.$work['iid'].'" data_type="'.TOOL_STUDENTPUBLICATION.'" title="'.Security::remove_XSS(cut(strip_tags($work['title']), 80)).'">';
                     $return .= '<a class="moved" href="#">';
-                    $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
+                    $return .= Display::return_icon(
+                        'move_everywhere.png',
+                        get_lang('Move'),
+                        array(),
+                        ICON_SIZE_TINY
+                    );
                     $return .= '</a> ';
 
                     $return .= Display::return_icon('works.gif');
-                    $return .= ' <a class="moved" href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_STUDENTPUBLICATION . '&file=' . $work['iid'] . '&lp_id=' . $this->lp_id . '">' .
-                        Security :: remove_XSS(cut(strip_tags($work['title']), 80)).' '.$link.'
+                    $return .= ' <a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_STUDENTPUBLICATION.'&file='.$work['iid'].'&lp_id='.$this->lp_id.'">'.
+                        Security::remove_XSS(cut(strip_tags($work['title']), 80)).' '.$link.'
                     </a>';
 
                     $return .= '</li>';
@@ -9076,7 +10046,9 @@ class learnpath
             $forumsInCategory = get_forums_in_category($forumCategory['cat_id']);
             if (!empty($forumsInCategory)) {
                 foreach ($forumList as $forum) {
-                    if (isset($forum['forum_category']) && $forum['forum_category'] == $forumCategory['cat_id']) {
+                    if (isset($forum['forum_category']) &&
+                        $forum['forum_category'] == $forumCategory['cat_id']
+                    ) {
                         $a_forums[] = $forum;
                     }
                 }
@@ -9090,7 +10062,7 @@ class learnpath
         $return .= Display::return_icon('new_forum.png');
         $return .= Display::url(
             get_lang('CreateANewForum'),
-            api_get_path(WEB_CODE_PATH) . 'forum/index.php?' . api_get_cidreq() . '&' . http_build_query([
+            api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&'.http_build_query([
                 'action' => 'add',
                 'content' => 'forum',
                 'lp_id' => $this->lp_id
@@ -9124,15 +10096,15 @@ class learnpath
                 $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
                 $return .= ' </a>';
                 $return .= Display::return_icon('lp_forum.png', '', array(), ICON_SIZE_TINY);
-                $return .= '<a onclick="toggle_forum(' . $forum['forum_id'] . ');" style="cursor:hand; vertical-align:middle">
-                                <img src="' . Display::returnIconPath('add.gif').'" id="forum_' . $forum['forum_id'] . '_opener" align="absbottom" />
+                $return .= '<a onclick="javascript:toggle_forum('.$forum['forum_id'].');" style="cursor:hand; vertical-align:middle">
+                                <img src="' . Display::returnIconPath('add.gif').'" id="forum_'.$forum['forum_id'].'_opener" align="absbottom" />
                             </a>
-                            <a class="moved" href="' . api_get_self() . '?'.api_get_cidreq().'&action=add_item&type=' . TOOL_FORUM . '&forum_id=' . $forum['forum_id'] . '&lp_id=' . $this->lp_id . '" style="vertical-align:middle">' .
-                    Security :: remove_XSS($forum['forum_title']) . '</a>';
+                            <a class="moved" href="' . api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_FORUM.'&forum_id='.$forum['forum_id'].'&lp_id='.$this->lp_id.'" style="vertical-align:middle">'.
+                    Security::remove_XSS($forum['forum_title']).' '.$link.'</a>';
 
                 $return .= '</li>';
 
-                $return .= '<div style="display:none" id="forum_' . $forum['forum_id'] . '_content">';
+                $return .= '<div style="display:none" id="forum_'.$forum['forum_id'].'_content">';
                 $a_threads = get_threads($forum['forum_id']);
                 if (is_array($a_threads)) {
                     foreach ($a_threads as $thread) {
@@ -9147,8 +10119,8 @@ class learnpath
                         $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
                         $return .= ' </a>';
                         $return .= Display::return_icon('forumthread.png', get_lang('Thread'), array(), ICON_SIZE_TINY);
-                        $return .= '<a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type=' . TOOL_THREAD . '&thread_id=' . $thread['thread_id'] . '&lp_id=' . $this->lp_id . '">' .
-                            Security :: remove_XSS($thread['thread_title']) . ' '.$link.'</a>';
+                        $return .= '<a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_THREAD.'&thread_id='.$thread['thread_id'].'&lp_id='.$this->lp_id.'">'.
+                            Security::remove_XSS($thread['thread_title']).' '.$link.'</a>';
                         $return .= '</li>';
                     }
                 }
@@ -9221,8 +10193,12 @@ class learnpath
         ) {
             // Remove the possible . at the end of the path.
             $dest_path_to_lp = substr($this->path, -1) == '.' ? substr($this->path, 0, -1) : $this->path;
-            $dest_path_to_scorm_folder = str_replace('//','/',$temp_zip_dir.'/scorm/'.$dest_path_to_lp);
-            mkdir($dest_path_to_scorm_folder, api_get_permissions_for_new_directories(), true);
+            $dest_path_to_scorm_folder = str_replace('//', '/', $temp_zip_dir.'/scorm/'.$dest_path_to_lp);
+            mkdir(
+                $dest_path_to_scorm_folder,
+                api_get_permissions_for_new_directories(),
+                true
+            );
             copyr(
                 $current_course_path.'/scorm/'.$this->path,
                 $dest_path_to_scorm_folder,
@@ -9296,7 +10272,7 @@ class learnpath
                 if ($item->type === 'sco') {
                     $inc_docs = $item->get_resources_from_source(
                         null,
-                        api_get_path(SYS_COURSE_PATH) . api_get_course_path() . '/' . 'scorm/' . $this->path . '/' . $item->get_path()
+                        api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.'scorm/'.$this->path.'/'.$item->get_path()
                     );
                 } else {
                     $inc_docs = $item->get_resources_from_source();
@@ -9308,10 +10284,20 @@ class learnpath
                 $my_item->setAttribute('identifierref', 'RESOURCE_'.$my_item_id);
                 $my_item->setAttribute('isvisible', 'true');
                 // Give a child element <title> to the <item> element.
-                $my_title = $xmldoc->createElement('title', htmlspecialchars(api_utf8_encode($item->get_title()), ENT_QUOTES, 'UTF-8'));
+                $my_title = $xmldoc->createElement(
+                    'title',
+                    htmlspecialchars(
+                        api_utf8_encode($item->get_title()),
+                        ENT_QUOTES,
+                        'UTF-8'
+                    )
+                );
                 $my_item->appendChild($my_title);
                 // Give a child element <adlcp:prerequisites> to the <item> element.
-                $my_prereqs = $xmldoc->createElement('adlcp:prerequisites', $this->get_scorm_prereq_string($my_item_id));
+                $my_prereqs = $xmldoc->createElement(
+                    'adlcp:prerequisites',
+                    $this->get_scorm_prereq_string($my_item_id)
+                );
                 $my_prereqs->setAttribute('type', 'aicc_script');
                 $my_item->appendChild($my_prereqs);
                 // Give a child element <adlcp:maxtimeallowed> to the <item> element - not yet supported.
@@ -9321,7 +10307,10 @@ class learnpath
                 // Give a child element <adlcp:datafromlms> to the <item> element - not yet supported.
                 //$xmldoc->createElement('adlcp:datafromlms','');
                 // Give a child element <adlcp:masteryscore> to the <item> element.
-                $my_masteryscore = $xmldoc->createElement('adlcp:masteryscore', $item->get_mastery_score());
+                $my_masteryscore = $xmldoc->createElement(
+                    'adlcp:masteryscore',
+                    $item->get_mastery_score()
+                );
                 $my_item->appendChild($my_masteryscore);
 
                 // Attach this item to the organization element or hits parent if there is one.
@@ -9517,7 +10506,7 @@ class learnpath
                                         $file_path = substr($file_path, strlen($current_dir)); // We get the relative path.
                                         $zip_files[] = $my_sub_dir.'/'.$file_path;
                                         $link_updates[$my_file_path][] = array('orig' => $doc_info[0], 'dest' => $file_path);
-                                        $my_dep_file->setAttribute('href','document/'.$file_path);
+                                        $my_dep_file->setAttribute('href', 'document/'.$file_path);
                                         $my_dep->setAttribute('xml:base', '');
                                     }
                                 }
@@ -9573,7 +10562,14 @@ class learnpath
                         $my_item->setAttribute('identifierref', 'RESOURCE_'.$item->get_id());
                         $my_item->setAttribute('isvisible', 'true');
                         // Give a child element <title> to the <item> element.
-                        $my_title = $xmldoc->createElement('title', htmlspecialchars(api_utf8_encode($item->get_title()), ENT_QUOTES, 'UTF-8'));
+                        $my_title = $xmldoc->createElement(
+                            'title',
+                            htmlspecialchars(
+                                api_utf8_encode($item->get_title()),
+                                ENT_QUOTES,
+                                'UTF-8'
+                            )
+                        );
                         $my_item->appendChild($my_title);
                         // Give a child element <adlcp:prerequisites> to the <item> element.
                         $my_prereqs = $xmldoc->createElement('adlcp:prerequisites', $item->get_prereq_string());
@@ -9605,10 +10601,10 @@ class learnpath
                         }
 
                         $my_file_path = 'link_'.$item->get_id().'.html';
-                        $sql = 'SELECT url, title FROM '.Database :: get_course_table(TABLE_LINK).'
+                        $sql = 'SELECT url, title FROM '.Database::get_course_table(TABLE_LINK).'
                                 WHERE c_id = '.$course_id.' AND id='.$item->path;
                         $rs = Database::query($sql);
-                        if ($link = Database :: fetch_array($rs)) {
+                        if ($link = Database::fetch_array($rs)) {
                             $url = $link['url'];
                             $title = stripslashes($link['title']);
                             $links_to_create[$my_file_path] = array('title' => $title, 'url' => $url);
@@ -9641,13 +10637,20 @@ class learnpath
                         $my_item->setAttribute('identifierref', 'RESOURCE_'.$item->get_id());
                         $my_item->setAttribute('isvisible', 'true');
                         // Give a child element <title> to the <item> element.
-                        $my_title = $xmldoc->createElement('title', htmlspecialchars(api_utf8_encode($item->get_title()), ENT_QUOTES, 'UTF-8'));
+                        $my_title = $xmldoc->createElement(
+                            'title',
+                            htmlspecialchars(
+                                api_utf8_encode($item->get_title()),
+                                ENT_QUOTES,
+                                'UTF-8'
+                            )
+                        );
                         $my_item->appendChild($my_title);
                         $my_max_score = $xmldoc->createElement('max_score', $item->get_max());
                         //$my_item->appendChild($my_max_score);
                         // Give a child element <adlcp:prerequisites> to the <item> element.
                         $my_prereqs = $xmldoc->createElement('adlcp:prerequisites', $item->get_prereq_string());
-                        $my_prereqs->setAttribute('type','aicc_script');
+                        $my_prereqs->setAttribute('type', 'aicc_script');
                         $my_item->appendChild($my_prereqs);
                         // Give a child element <adlcp:masteryscore> to the <item> element.
                         $my_masteryscore = $xmldoc->createElement('adlcp:masteryscore', $item->get_mastery_score());
@@ -9684,7 +10687,10 @@ class learnpath
                         $my_file_path = 'quiz_'.$item->get_id().'.html';
                         // Write the contents of the exported exercise into a (big) html file
                         // to later pack it into the exported SCORM. The file will be removed afterwards.
-                        $contents = ScormSection::export_exercise_to_scorm($exe, true);
+                        $contents = ScormSection::export_exercise_to_scorm(
+                            $exe,
+                            true
+                        );
 
                         $tmp_file_path = $archive_path.$temp_dir_short.'/'.$my_file_path;
                         $res = file_put_contents($tmp_file_path, $contents);
@@ -9712,7 +10718,7 @@ class learnpath
                         $my_resource->appendChild($my_file);
 
                         // Get included docs.
-                        $inc_docs = $item->get_resources_from_source(null,$tmp_file_path);
+                        $inc_docs = $item->get_resources_from_source(null, $tmp_file_path);
                         // Dependency to other files - not yet supported.
                         $i = 1;
                         foreach ($inc_docs as $doc_info) {
@@ -9771,7 +10777,7 @@ class learnpath
                                         $my_dep_file->setAttribute('href', $file_path);
                                         $my_dep->setAttribute('xml:base', '');
 
-                                        if (strstr($file_path,$main_path) !== false) {
+                                        if (strstr($file_path, $main_path) !== false) {
                                             // The calculated real path is really inside the chamilo root path.
                                             // Reduce file path to what's under the DocumentRoot.
                                             $file_path = substr($file_path, strlen($root_path));
@@ -9789,7 +10795,7 @@ class learnpath
                                             $file_path = $_SERVER['DOCUMENT_ROOT'].$doc_info[0];
                                             $file_path = str_replace('//', '/', $file_path);
                                             if (file_exists($file_path)) {
-                                                $file_path = substr($file_path,strlen($current_dir)); // We get the relative path.
+                                                $file_path = substr($file_path, strlen($current_dir)); // We get the relative path.
                                                 $zip_files[] = $my_sub_dir.'/'.$file_path;
                                                 $link_updates[$my_file_path][] = array('orig' => $doc_info[0], 'dest' => $file_path);
                                                 $my_dep_file->setAttribute('href', 'document/'.$file_path);
@@ -9885,7 +10891,6 @@ class learnpath
         // TODO: Add a readme file here, with a short description and a link to the Reload player
         // then add the file to the zip, then destroy the file (this is done automatically).
         // http://www.reload.ac.uk/scormplayer.html - once done, don't forget to close FS#138
-
         foreach ($zip_files as $file_path) {
             if (empty($file_path)) {
                 continue;
@@ -9947,7 +10952,9 @@ class learnpath
                         ->exclude('certificates')
                     ;
 
-                    if (is_dir($containerOrigin) && is_dir($containerDestination)) {
+                    if (is_dir($containerOrigin) &&
+                        is_dir($containerDestination)
+                    ) {
                         $fs = new Filesystem();
                         $fs->mirror(
                             $containerOrigin,
@@ -10042,7 +11049,7 @@ EOD;
         file_put_contents($archive_path.$temp_dir_short.'/document/non_exportable.html', $file_content);
 
         // Add the extra files that go along with a SCORM package.
-        $main_code_path = api_get_path(SYS_CODE_PATH) . 'lp/packaging/';
+        $main_code_path = api_get_path(SYS_CODE_PATH).'lp/packaging/';
 
         $fs = new Filesystem();
         $fs->mirror($main_code_path, $archive_path.$temp_dir_short);
@@ -10082,7 +11089,6 @@ EOD;
         $course_data = api_get_course_info($this->cc);
         if (!empty($course_data)) {
             $scorm_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/scorm/'.$this->path;
-
             $list = self::get_flat_ordered_items_list($lp_id);
             if (!empty($list)) {
                 foreach ($list as $item_id) {
@@ -10093,28 +11099,47 @@ EOD;
                             $file_data = DocumentManager::get_document_data_by_id($item->path, $this->cc);
                             // Try loading document from the base course.
                             if (empty($file_data) && !empty($sessionId)) {
-                                $file_data = DocumentManager::get_document_data_by_id($item->path, $this->cc, false, 0);
+                                $file_data = DocumentManager::get_document_data_by_id(
+                                    $item->path,
+                                    $this->cc,
+                                    false,
+                                    0
+                                );
                             }
                             $file_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document'.$file_data['path'];
                             if (file_exists($file_path)) {
-                                $files_to_export[] = array('title'=>$item->get_title(),'path'=>$file_path);
+                                $files_to_export[] = array(
+                                    'title' => $item->get_title(),
+                                    'path' => $file_path
+                                );
                             }
                             break;
                         case 'asset': //commes from a scorm package generated by chamilo
                         case 'sco':
                             $file_path = $scorm_path.'/'.$item->path;
                             if (file_exists($file_path)) {
-                                $files_to_export[] = array('title'=>$item->get_title(), 'path' => $file_path);
+                                $files_to_export[] = array(
+                                    'title' => $item->get_title(),
+                                    'path' => $file_path
+                                );
                             }
                             break;
                         case 'dir':
-                            $files_to_export[] = array('title'=> $item->get_title(), 'path'=>null);
+                            $files_to_export[] = array(
+                                'title' => $item->get_title(),
+                                'path' => null
+                            );
                             break;
                     }
                 }
             }
             $pdf = new PDF();
-            $result = $pdf->html_to_pdf($files_to_export, $this->name, $this->cc, true);
+            $result = $pdf->html_to_pdf(
+                $files_to_export,
+                $this->name,
+                $this->cc,
+                true
+            );
             return $result;
         }
 
@@ -10132,15 +11157,14 @@ EOD;
 
         // IS_WINDOWS_OS has been defined in main_api.lib.php
         $path_built = IS_WINDOWS_OS ? '' : '/';
-
         foreach ($path_bits as $bit) {
             if (!empty ($bit)) {
-                $new_path = $path_built . $bit;
+                $new_path = $path_built.$bit;
                 if (is_dir($new_path)) {
-                    $path_built = $new_path . '/';
+                    $path_built = $new_path.'/';
                 } else {
                     mkdir($new_path, api_get_permissions_for_new_directories());
-                    $path_built = $new_path . '/';
+                    $path_built = $new_path.'/';
                 }
             }
         }
@@ -10181,15 +11205,13 @@ EOD;
 
         if ($upload_ok) {
             if ($has_attachment) {
-                $courseDir = api_get_course_path() . '/upload/learning_path/images';
+                $courseDir = api_get_course_path().'/upload/learning_path/images';
                 $sys_course_path = api_get_path(SYS_COURSE_PATH);
-                $updir = $sys_course_path . $courseDir;
+                $updir = $sys_course_path.$courseDir;
                 // Try to add an extension to the file if it hasn't one.
                 $new_file_name = add_ext_on_mime(stripslashes($image_array['name']), $image_array['type']);
 
-                if (!filter_extension($new_file_name)) {
-
-                } else {
+                if (filter_extension($new_file_name)) {
                     $file_extension = explode('.', $image_array['name']);
                     $file_extension = strtolower($file_extension[sizeof($file_extension) - 1]);
                     $filename = uniqid('');
@@ -10230,13 +11252,24 @@ EOD;
 
         // Setting everything to autolaunch = 0
         $attributes['autolaunch'] = 0;
-        $where = array('session_id = ? AND c_id = ? '=> array(api_get_session_id(), $course_id));
+        $where = array(
+            'session_id = ? AND c_id = ? ' => array(
+                api_get_session_id(),
+                $course_id
+            )
+        );
         Database::update($lp_table, $attributes, $where);
         if ($status == 1) {
             //Setting my lp_id to autolaunch = 1
             $attributes['autolaunch'] = 1;
-            $where = array('id = ? AND session_id = ? AND c_id = ?'=> array($lp_id, api_get_session_id(), $course_id));
-            Database::update($lp_table, $attributes, $where );
+            $where = array(
+                'id = ? AND session_id = ? AND c_id = ?' => array(
+                    $lp_id,
+                    api_get_session_id(),
+                    $course_id
+                )
+            );
+            Database::update($lp_table, $attributes, $where);
         }
     }
 
@@ -10255,13 +11288,16 @@ EOD;
 
         // Get the max order of the items
         $sql = "SELECT max(display_order) AS display_order FROM $table_lp_item
-                WHERE c_id = $course_id AND lp_id = '" . $this->lp_id . "'";
+                WHERE c_id = $course_id AND lp_id = '".$this->lp_id."'";
         $rs_max_order = Database::query($sql);
         $row_max_order = Database::fetch_object($rs_max_order);
         $max_order = $row_max_order->display_order;
         // Get the previous item ID
         $sql = "SELECT id as previous FROM $table_lp_item
-                WHERE c_id = $course_id AND lp_id = '" . $this->lp_id . "' AND display_order = '".$max_order."' ";
+                WHERE 
+                    c_id = $course_id AND 
+                    lp_id = '".$this->lp_id."' AND 
+                    display_order = '".$max_order."' ";
         $rs_max = Database::query($sql);
         $row_max = Database::fetch_object($rs_max);
 
@@ -10290,11 +11326,23 @@ EOD;
         //Course restorer
         $course_restorer = new CourseRestorer($course);
         $course_restorer->set_add_text_in_items(true);
-        $course_restorer->set_tool_copy_settings(array('learnpaths' => array('reset_dates' => true)));
-        $course_restorer->restore(api_get_course_id(), api_get_session_id(), false, false);
+        $course_restorer->set_tool_copy_settings(
+            array('learnpaths' => array('reset_dates' => true))
+        );
+        $course_restorer->restore(
+            api_get_course_id(),
+            api_get_session_id(),
+            false,
+            false
+        );
     }
 
-    public function verify_document_size($s)
+    /**
+     * Verify document size
+     * @param string $s
+     * @return bool
+     */
+    public static function verify_document_size($s)
     {
         $post_max = ini_get('post_max_size');
         if (substr($post_max, -1, 1) == 'M') {
@@ -10311,9 +11359,9 @@ EOD;
         $documents_total_space = DocumentManager::documents_total_space();
         $course_max_space = DocumentManager::get_course_quota();
         $total_size = filesize($s) + $documents_total_space;
-        if (filesize($s)>$post_max || filesize($s)>$upl_max  || $total_size>$course_max_space ){
+        if (filesize($s) > $post_max || filesize($s) > $upl_max || $total_size > $course_max_space) {
             return true;
-        } else{
+        } else {
             return false;
         }
     }
@@ -10327,7 +11375,7 @@ EOD;
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::clear_prerequisites()', 0);
         }
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $lp_id = $this->get_id();
         //Cleaning prerequisites
         $sql = "UPDATE $tbl_lp_item SET prerequisite = ''
@@ -10342,7 +11390,7 @@ EOD;
 
     public function set_previous_step_as_prerequisite_for_all_items()
     {
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $course_id = $this->get_course_int_id();
         $lp_id = $this->get_id();
 
@@ -10353,7 +11401,9 @@ EOD;
             $last_item_not_dir = null;
             $last_item_not_dir_type = null;
             $last_item_not_dir_max = null;
-            foreach ($this->items as $item) {
+
+            foreach ($this->ordered_items as $itemId) {
+                $item = $this->getItem($itemId);
                 // if there was a previous item... (otherwise jump to set it)
                 if (!empty($previous_item_id)) {
                     $current_item_id = $item->get_id(); //save current id
@@ -10492,7 +11542,7 @@ EOD;
     /**
      * @param int $id
      *
-     * @return mixed
+     * @return CLpCategory
      */
     public static function getCategory($id)
     {
@@ -10589,7 +11639,6 @@ EOD;
     public static function getLpFromSession($courseCode, $lp_id, $user_id)
     {
         $learnPath = null;
-
         $lpObject = Session::read('lpobject');
         if ($lpObject !== null) {
             $learnPath = unserialize($lpObject);
@@ -10630,9 +11679,8 @@ EOD;
     public function setCategoryId($categoryId)
     {
         $this->categoryId = intval($categoryId);
-
         $courseId = api_get_course_int_id();
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET category_id = ".$this->categoryId."
                 WHERE c_id = $courseId AND id = $lp_id";
@@ -10654,15 +11702,16 @@ EOD;
     /**
      * Set whether this is a learning path with the possibility to subscribe
      * users or not
-     * @param int $subscribeUsers (0 = false, 1 = true)
+     * @param int $value (0 = false, 1 = true)
+     * @return bool
      */
     public function setSubscribeUsers($value)
     {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_subscribe_users()', 0);
         }
-        $this->subscribeUsers = intval($value);;
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $this->subscribeUsers = (int) $value;
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET subscribe_users = ".$this->subscribeUsers."
                 WHERE c_id = ".$this->course_int_id." AND id = $lp_id";
@@ -10684,7 +11733,12 @@ EOD;
     public function getCalculateStars($sessionId = 0)
     {
         $stars = 0;
-        $progress = self::getProgress($this->lp_id, $this->user_id, $this->course_int_id, $sessionId);
+        $progress = self::getProgress(
+            $this->lp_id,
+            $this->user_id,
+            $this->course_int_id,
+            $sessionId
+        );
 
         if ($progress >= 50) {
             $stars++;
@@ -10805,7 +11859,6 @@ EOD;
         // Calculate stars chapters evaluation
         $exercisesItems = $this->getExercisesItems();
         $finalEvaluationItem = $this->getFinalEvaluationItem();
-
         $totalExercisesResult = 0;
         $totalEvaluationResult = 0;
 
@@ -10940,15 +11993,12 @@ EOD;
             'first'
         );
 
-        if ($resultData['qty'] > 0) {
-            return true;
-        }
-
-        return false;
+        return $resultData['qty'] > 0;
     }
 
     /**
      * Get the forum for this learning path
+     * @param int $sessionId
      * @return boolean
      */
     public function getForum($sessionId = 0)
@@ -11004,7 +12054,7 @@ EOD;
      */
     public function createForum($forumCategoryId)
     {
-        require_once api_get_path(SYS_CODE_PATH) . '/forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH).'/forum/forumfunction.inc.php';
 
         $forumId = store_forum(
             [
@@ -11052,7 +12102,7 @@ EOD;
      */
     private function getFinalItemTemplate()
     {
-        return file_get_contents(api_get_path(SYS_CODE_PATH) . 'lp/final_item_template/template.html');
+        return file_get_contents(api_get_path(SYS_CODE_PATH).'lp/final_item_template/template.html');
     }
 
     /**
@@ -11063,8 +12113,10 @@ EOD;
     private function getSavedFinalItem()
     {
         $finalItem = $this->getFinalItem();
-
-        $doc = DocumentManager::get_document_data_by_id($finalItem->path, $this->cc);
+        $doc = DocumentManager::get_document_data_by_id(
+            $finalItem->path,
+            $this->cc
+        );
         if ($doc && file_exists($doc['absolute_path'])) {
             return file_get_contents($doc['absolute_path']);
         }
@@ -11102,11 +12154,11 @@ EOD;
             'Height' => '500',
             'FullPage' => true,
             'CreateDocumentDir' => $relative_prefix,
-            'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH) . api_get_course_path() . '/document/',
-            'BaseHref' => api_get_path(WEB_COURSE_PATH) . api_get_course_path() . '/document/' . $relative_path
+            'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
+            'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/'.$relative_path
         ];
 
-        $url = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+        $url = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
             'type' => 'document',
             'lp_id' => $this->lp_id
         ]);
@@ -11125,7 +12177,14 @@ EOD;
         $renderer = $form->defaultRenderer();
         $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp_certificate');
 
-        $form->addHtmlEditor('content_lp_certificate', null, true, false, $editorConfig, true);
+        $form->addHtmlEditor(
+            'content_lp_certificate',
+            null,
+            true,
+            false,
+            $editorConfig,
+            true
+        );
         $form->addHidden('action', 'add_final_item');
         $form->addHidden('path', Session::read('pathItem'));
         $form->addHidden('previous', $this->get_last());
@@ -11227,9 +12286,10 @@ EOD;
             error_log('New LP - In learnpath::setAccumulateScormTime()', 0);
         }
         $this->accumulateScormTime = intval($value);
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
-        $sql = "UPDATE $lp_table SET accumulate_scorm_time = ".$this->accumulateScormTime."
+        $sql = "UPDATE $lp_table 
+                SET accumulate_scorm_time = ".$this->accumulateScormTime."
                 WHERE c_id = ".$this->course_int_id." AND id = $lp_id";
         Database::query($sql);
 
@@ -11243,124 +12303,119 @@ EOD;
      * The function is a big switch on tool type.
      * In each case, we query the corresponding table for information and build the link
      * with that information.
-     * @author	Yannick Warnier <ywarnier@beeznest.org> - rebranding based on previous work (display_addedresource_link_in_learnpath())
-     * @param	int	$course_id Course code
-     * @param	int $learningPathId The learning path ID (in lp table)
-     * @param   int $id_in_path the unique index in the items table
-     * @param   int $lpViewId
+     * @author Yannick Warnier <ywarnier@beeznest.org> - rebranding based on
+     * previous work (display_addedresource_link_in_learnpath())
+     * @param int	$course_id Course code
+     * @param int $learningPathId The learning path ID (in lp table)
+     * @param int $id_in_path the unique index in the items table
+     * @param int $lpViewId
+     * @param string $origin
      * @return string
      */
-    public static function rl_get_resource_link_for_learnpath($course_id, $learningPathId, $id_in_path, $lpViewId)
-    {
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $course_info = api_get_course_info_by_id($course_id);
-        $course_id = $course_info['real_id'];
-        $course_code = $course_info['code'];
+    public static function rl_get_resource_link_for_learnpath(
+        $course_id,
+        $learningPathId,
+        $id_in_path,
+        $lpViewId,
+        $origin = 'learnpath'
+    ) {
         $session_id = api_get_session_id();
         $learningPathId = intval($learningPathId);
         $id_in_path = intval($id_in_path);
         $lpViewId = intval($lpViewId);
-
         $em = Database::getManager();
+        $lpItemRepo = $em->getRepository('ChamiloCourseBundle:CLpItem');
+        /** @var CLpItem $rowItem */
+        $rowItem = $lpItemRepo->findOneBy([
+            'cId' => $course_id,
+            'lpId' => $learningPathId,
+            'id' => $id_in_path
+        ]);
 
-        $sql = "SELECT * FROM $tbl_lp_item
-                 WHERE
-                    c_id = $course_id AND
-                    lp_id = $learningPathId AND
-                    id = $id_in_path
-                ";
-        $res_item = Database::query($sql);
-        if (Database::num_rows($res_item) < 1) {
+        if (!$rowItem) {
             return -1;
         }
-        $row_item = Database::fetch_array($res_item, 'ASSOC');
 
-        $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        // Get the lp_item_view with the highest view_count.
-        $sql = "SELECT * FROM $item_view_table
-                WHERE
-                    c_id = $course_id AND
-                    lp_item_id = " . $row_item['id'] . " AND
-                    lp_view_id = " . $lpViewId . "
-                ORDER BY view_count DESC";
-        $learnpathItemViewResult = Database::query($sql);
-        $learnpathItemViewData = Database::fetch_array($learnpathItemViewResult, 'ASSOC');
-        $learnpathItemViewId = 0;
-        if (isset($learnpathItemViewData)) {
-            $learnpathItemViewId = $learnpathItemViewData['id'];
-        }
-
-        $type = strtolower($row_item['item_type']);
-        $id = (strcmp($row_item['path'], '') == 0) ? '0' : $row_item['path'];
-        $origin = 'learnpath';
+        $course_info = api_get_course_info_by_id($course_id);
+        $course_code = $course_info['code'];
+        $type = $rowItem->getItemType();
+        $id = empty($rowItem->getPath()) ? '0' : $rowItem->getPath();
         $main_dir_path = api_get_path(WEB_CODE_PATH);
         $main_course_path = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
         $link = '';
-
+        $extraParams = api_get_cidreq(true, true, 'learnpath').'&session_id='.$session_id;
         switch ($type) {
             case 'dir':
-                $link .= $main_dir_path . 'lp/blank.php';
+                return $main_dir_path.'lp/blank.php';
             case TOOL_CALENDAR_EVENT:
-                $link .= $main_dir_path.'calendar/agenda.php?origin='.$origin.'&agenda_id='.$id;
-                break;
+                return $main_dir_path.'calendar/agenda.php?agenda_id='.$id.'&'.$extraParams;
             case TOOL_ANNOUNCEMENT:
-                $link .= $main_dir_path.'announcements/announcements.php?origin='.$origin.'&ann_id='.$id;
-                break;
+                return $main_dir_path.'announcements/announcements.php?ann_id='.$id.'&'.$extraParams;
             case TOOL_LINK:
-                $TABLETOOLLINK = Database::get_course_table(TABLE_LINK);
-                $result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE c_id = $course_id AND id=$id");
-                $myrow = Database::fetch_array($result);
-                $thelink = $myrow["url"];
-                $link .= $thelink;
-                break;
+                $linkInfo = Link::get_link_info($id);
+
+                return $linkInfo['url'];
             case TOOL_QUIZ:
-                if (!empty($id)) {
-                    $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-                    $sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id";
-                    $result= Database::query($sql);
-                    $myrow = Database::fetch_array($result);
-                    if ($row_item['title'] != '') {
-                        $myrow['title'] = $row_item['title'];
-                    }
-                    $link .= $main_dir_path . 'exercise/overview.php?cidReq='.$course_code.'&session_id='.$session_id.'&lp_init=1&origin='.$origin.'&learnpath_item_view_id='.$learnpathItemViewId.'&learnpath_id='.$learningPathId.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
+                if (empty($id)) {
+                    return '';
                 }
-                break;
-            case 'hotpotatoes': //lowercase because of strtolower above
+
+                // Get the lp_item_view with the highest view_count.
+                $learnpathItemViewResult = $em
+                    ->getRepository('ChamiloCourseBundle:CLpItemView')
+                    ->findBy(
+                        ['cId' => $course_id, 'lpItemId' => $rowItem->getId(), 'lpViewId' => $lpViewId],
+                        ['viewCount' => 'DESC'],
+                        1
+                    );
+                /** @var CLpItemView $learnpathItemViewData */
+                $learnpathItemViewData = current($learnpathItemViewResult);
+                $learnpathItemViewId = $learnpathItemViewData ? $learnpathItemViewData->getId() : 0;
+
+                return $main_dir_path.'exercise/overview.php?'.$extraParams.'&'
+                    .http_build_query([
+                        'lp_init' => 1,
+                        'learnpath_item_view_id' => $learnpathItemViewId,
+                        'learnpath_id' => $learningPathId,
+                        'learnpath_item_id' => $id_in_path,
+                        'exerciseId' => $id
+                    ]);
+            case TOOL_HOTPOTATOES: //lowercase because of strtolower above
                 $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
                 $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND id=$id");
                 $myrow = Database::fetch_array($result);
                 $path = $myrow['path'];
-                $link .= $main_dir_path . 'exercise/showinframes.php?file='.$path.'&origin='.$origin.'&cid='.$course_code.'&uid='.api_get_user_id().'' .
-                        '&learnpath_id='.$learningPathId.'&learnpath_item_id='.$id_in_path.'&lp_view_id='.$lpViewId;
-                break;
+
+                return $main_dir_path.'exercise/showinframes.php?file='.$path.'&cid='.$course_code.'&uid='
+                    .api_get_user_id().'&learnpath_id='.$learningPathId.'&learnpath_item_id='.$id_in_path
+                    .'&lp_view_id='.$lpViewId.'&'.$extraParams;
             case TOOL_FORUM:
-                $link .= $main_dir_path.'forum/viewforum.php?forum='.$id.'&lp=true&origin=learnpath';
-                break;
+                return $main_dir_path.'forum/viewforum.php?forum='.$id.'&lp=true&'.$extraParams;
             case TOOL_THREAD:  //forum post
                 $tbl_topics = Database::get_course_table(TABLE_FORUM_THREAD);
-                if (!empty($id)) {
-                    $sql = "SELECT * FROM $tbl_topics WHERE c_id = $course_id AND thread_id=$id";
-                    $result = Database::query($sql);
-                    $myrow = Database::fetch_array($result);
-                    $link .= $main_dir_path.'forum/viewthread.php?origin=learnpath&thread='.$id.'' .
-                            '&forum='.$myrow['forum_id'].'&lp=true';
+                if (empty($id)) {
+                    return '';
                 }
-                break;
+                $sql = "SELECT * FROM $tbl_topics WHERE c_id = $course_id AND thread_id=$id";
+                $result = Database::query($sql);
+                $myrow = Database::fetch_array($result);
+
+                return $main_dir_path.'forum/viewthread.php?thread='.$id.'&forum='.$myrow['forum_id'].'&lp=true&'
+                    .$extraParams;
             case TOOL_POST:
                 $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
                 $result = Database::query("SELECT * FROM $tbl_post WHERE c_id = $course_id AND post_id=$id");
                 $myrow = Database::fetch_array($result);
-                $link .= $main_dir_path.'forum/viewthread.php?post='.$id.'' .
-                        '&thread='.$myrow['thread_id'].'&forum='.$myrow['forum_id'].'' .
-                        '&lp=true';
-                break;
+
+                return $main_dir_path.'forum/viewthread.php?post='.$id.'&thread='.$myrow['thread_id'].'&forum='
+                    .$myrow['forum_id'].'&lp=true&'.$extraParams;
             case TOOL_DOCUMENT:
                 $document = $em
                     ->getRepository('ChamiloCourseBundle:CDocument')
                     ->findOneBy(['cId' => $course_id, 'id' => $id]);
 
                 if (!$document) {
-                    break;
+                    return '';
                 }
 
                 $documentPathInfo = pathinfo($document->getPath());
@@ -11368,53 +12423,37 @@ EOD;
                 $extension = isset($documentPathInfo['extension']) ? $documentPathInfo['extension'] : '';
                 $showDirectUrl = !in_array($extension, $jplayer_supported_files);
 
-                if ($showDirectUrl) {
-                    $link = $main_course_path . 'document' . $document->getPath() . '?' . api_get_cidreq();
-                } else {
-                    $link = api_get_path(WEB_CODE_PATH) . 'document/showinframes.php?' . http_build_query([
-                        'cidReq' => $course_code,
-                        'id' => $id,
-                        'origin' => 'learnpathitem'
-                    ]);
-                }
-
                 $openmethod = 2;
                 $officedoc = false;
-                Session::write('openmethod',$openmethod);
-                Session::write('officedoc',$officedoc);
-                break;
-            case TOOL_LP_FINAL_ITEM:
-                $link .= api_get_path(WEB_CODE_PATH) . 'lp/lp_final_item.php?'.api_get_cidreq().'&id='.$id.'&lp_id='.$learningPathId;
-                break;
-            case 'assignments':
-                $link .= $main_dir_path.'work/work.php?origin='.$origin;
-                break;
-            case TOOL_DROPBOX:
-                $link .= $main_dir_path.'dropbox/index.php?origin=learnpath';
-                break;
-            case 'introduction_text': //DEPRECATED
-                $link .= '';
-                break;
-            case TOOL_COURSE_DESCRIPTION:
-                $link .= $main_dir_path.'course_description?origin=learnpath';
-                break;
-            case TOOL_GROUP:
-                $link .= $main_dir_path.'group/group.php?origin='.$origin;
-                break;
-            case TOOL_USER:
-                $link .= $main_dir_path.'user/user.php?origin='.$origin;
-                break;
-            case TOOL_STUDENTPUBLICATION:
-                if (!empty($row_item['path'])) {
-                    $link .= $main_dir_path.'work/work_list.php?'.api_get_cidreq().'&id='.$row_item['path'].'&origin=learnpath';
-                    break;
+                Session::write('openmethod', $openmethod);
+                Session::write('officedoc', $officedoc);
+
+                if ($showDirectUrl) {
+                    return $main_course_path.'document'.$document->getPath().'?'.$extraParams;
                 }
 
-                $link .= $main_dir_path . 'work/work.php?' . api_get_cidreq() . '&' . http_build_query([
-                        'id' => $row_item['path'],
-                        'origin' => 'learnpath'
-                    ]);
-                break;
+                return api_get_path(WEB_CODE_PATH).'document/showinframes.php?id='.$id.'&'.$extraParams;
+            case TOOL_LP_FINAL_ITEM:
+                return api_get_path(WEB_CODE_PATH).'lp/lp_final_item.php?&id='.$id.'&lp_id='.$learningPathId.'&'
+                    .$extraParams;
+            case 'assignments':
+                return $main_dir_path.'work/work.php?'.$extraParams;
+            case TOOL_DROPBOX:
+                return $main_dir_path.'dropbox/index.php?'.$extraParams;
+            case 'introduction_text': //DEPRECATED
+                return '';
+            case TOOL_COURSE_DESCRIPTION:
+                return $main_dir_path.'course_description?'.$extraParams;
+            case TOOL_GROUP:
+                return $main_dir_path.'group/group.php?'.$extraParams;
+            case TOOL_USER:
+                return $main_dir_path.'user/user.php?'.$extraParams;
+            case TOOL_STUDENTPUBLICATION:
+                if (!empty($rowItem->getPath())) {
+                    return $main_dir_path.'work/work_list.php?id='.$rowItem->getPath().'&'.$extraParams;
+                }
+
+                return $main_dir_path.'work/work.php?'.api_get_cidreq().'&id='.$rowItem->getPath().'&'.$extraParams;
         } //end switch
 
         return $link;
@@ -11424,9 +12463,10 @@ EOD;
      * Gets the name of a resource (generally used in learnpath when no name is provided)
      *
      * @author Yannick Warnier <ywarnier@beeznest.org>
-     * @param string 	Course code
-     * @param string 	The tool type (using constants declared in main_api.lib.php)
-     * @param integer 	The resource ID
+     * @param string    Course code
+     * @param string    The tool type (using constants declared in main_api.lib.php)
+     * @param integer    The resource ID
+     * @return string
      */
     public static function rl_get_resource_name($course_code, $learningPathId, $id_in_path)
     {
@@ -11527,10 +12567,46 @@ EOD;
         }
         return stripslashes($output);
     }
-}
 
-if (!function_exists('trim_value')) {
-    function trim_value(& $value) {
-        $value = trim($value);
+    /**
+     * Get the parent names for the current item
+     * @param int $newItemId Optional. The item ID
+     * @return array
+     */
+    public function getCurrentItemParentNames($newItemId = 0)
+    {
+        $newItemId = $newItemId ?: $this->get_current_item_id();
+        $return = [];
+        $item = $this->getItem($newItemId);
+        $parent = $this->getItem($item->get_parent());
+
+        while ($parent) {
+            $return[] = $parent->get_title();
+
+            $parent = $this->getItem($parent->get_parent());
+        }
+
+        return array_reverse($return);
+    }
+
+    /**
+     * Reads and process "lp_subscription_settings" setting
+     * @return array
+     */
+    public static function getSubscriptionSettings()
+    {
+        $subscriptionSettings = api_get_configuration_value('lp_subscription_settings');
+        if (empty($subscriptionSettings)) {
+            // By default allow both settings
+            $subscriptionSettings = [
+                'allow_add_users_to_lp' => true,
+                'allow_add_users_to_lp_category' => true,
+            ];
+        } else {
+            $subscriptionSettings = $subscriptionSettings['options'];
+        }
+
+        return $subscriptionSettings;
     }
 }
+

@@ -47,12 +47,9 @@ $formDefaultValues = [
     'owner_id' => intval($service['owner_id']),
     'applies_to' => intval($service['applies_to']),
     'visibility' => ($service['visibility'] == 1) ? true : false,
-    'image' =>
-    is_file(api_get_path(SYS_PLUGIN_PATH).'buycourses/uploads/services/images/simg-'.$serviceId.'.png')
-        ?
-    api_get_path(WEB_PLUGIN_PATH).'buycourses/uploads/services/images/simg-'.$serviceId.'.png'
-        :
-    api_get_path(WEB_CODE_PATH).'img/session_default.png',
+    'image' => is_file(api_get_path(SYS_PLUGIN_PATH).'buycourses/uploads/services/images/simg-'.$serviceId.'.png')
+            ? api_get_path(WEB_PLUGIN_PATH).'buycourses/uploads/services/images/simg-'.$serviceId.'.png'
+            : api_get_path(WEB_CODE_PATH).'img/session_default.png',
     'video_url' => $service['video_url'],
     'service_information' => $service['service_information']
 ];
@@ -115,9 +112,7 @@ $form->addSelect(
 $form->addCheckBox('visibility', $plugin->get_lang('VisibleInCatalog'));
 $form->addFile(
     'picture',
-    ($formDefaultValues['image'] != '' ? get_lang('UpdateImage') : get_lang(
-        'AddImage'
-    )),
+    $formDefaultValues['image'] != '' ? get_lang('UpdateImage') : get_lang('AddImage'),
     array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '16 / 9')
 );
 $form->addText('video_url', get_lang('VideoUrl'), false);
@@ -131,21 +126,16 @@ if ($form->validate()) {
     $values = $form->getSubmitValues();
 
     if (isset($values['delete_service'])) {
-
         $plugin->deleteService($serviceId);
         Display::addFlash(
             Display::return_message($plugin->get_lang('ServiceDeleted'), 'error')
         );
     } else {
-
         $plugin->updateService($values, $serviceId);
         Display::addFlash(
             Display::return_message($plugin->get_lang('ServiceEdited'), 'success')
         );
     }
-
-
-
     header('Location: configuration.php');
     exit;
 }

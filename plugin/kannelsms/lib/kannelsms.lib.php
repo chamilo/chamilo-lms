@@ -22,7 +22,6 @@ class Kannelsms implements SmsPluginLibraryInterface
     /**
      * Constructor (generates a connection to the API)
      * @param   string  Kannelsms API key required to use the plugin
-     * @return  void
      */
     public function __construct($apiKey = null)
     {
@@ -47,7 +46,9 @@ class Kannelsms implements SmsPluginLibraryInterface
     public function getMobilePhoneNumberById($userId)
     {
         $mobilePhoneNumberExtraField = new ExtraField('user');
-        $mobilePhoneNumberExtraField = $mobilePhoneNumberExtraField->get_handler_field_info_by_field_variable('mobile_phone_number');
+        $mobilePhoneNumberExtraField = $mobilePhoneNumberExtraField->get_handler_field_info_by_field_variable(
+            'mobile_phone_number'
+        );
 
         $mobilePhoneNumberExtraFieldValue = new ExtraFieldValue('user');
         $mobilePhoneNumberExtraFieldValue = $mobilePhoneNumberExtraFieldValue->get_values_by_handler_and_field_id(
@@ -75,14 +76,13 @@ class Kannelsms implements SmsPluginLibraryInterface
         $trimmedKey = trim(CONFIG_SECURITY_API_KEY);
         if (!empty($trimmedKey)) {
             $message = array(
-                "to" => array_key_exists("mobilePhoneNumber",$additionalParameters) ?
-                    $additionalParameters['mobilePhoneNumber'] :
-                    $this->getMobilePhoneNumberById($additionalParameters['userId']),
+                "to" => array_key_exists("mobilePhoneNumber", $additionalParameters) ?
+                    $additionalParameters['mobilePhoneNumber'] : $this->getMobilePhoneNumberById($additionalParameters['userId']),
                 "message" => $this->getSms($additionalParameters)
             );
 
             if (!empty($message['message'])) {
-                if(extension_loaded('curl')) {
+                if (extension_loaded('curl')) {
                     $url = $this->hostAddress.'?username='.
                         $this->username.'&password='.$this->password.'&from='.
                         $this->from.'&to='.$message['to'].'&msg='.urlencode($message['message']);

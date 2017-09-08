@@ -1,10 +1,6 @@
-{#  Actions  #}
 {% if actions != '' %}
-    <div class="actions">
-        {{ actions }}
-    </div>
+    {{ actions }}
 {% endif %}
-
 {{ flash_messages }}
 <span id="js_alerts"></span>
 

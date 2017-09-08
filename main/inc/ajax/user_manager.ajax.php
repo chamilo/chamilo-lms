@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+use Doctrine\Common\Collections\Criteria,
+    Chamilo\UserBundle\Entity\User,
+    Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Responses to AJAX calls
@@ -71,7 +74,7 @@ switch ($action) {
                 <div class="row">
                     <div class="col-sm-10 col-sm-offset-2">
                         <a class="btn btn-primary" id="send_message_link">
-                            <em class="fa fa-envelope"></em> ' . get_lang('Send') . '
+                            <em class="fa fa-envelope"></em> ' . get_lang('Send').'
                         </a>
                     </div>
                 </div>
@@ -90,13 +93,22 @@ switch ($action) {
         }
         break;
     case 'search_tags':
+        header('Content-Type: application/json');
+
+        $result = ['items' => []];
+
         if (api_is_anonymous()) {
-            echo '';
-        } else {
-            if (isset($_GET['tag']) && isset($_GET['field_id'])) {
-                echo UserManager::get_tags($_GET['tag'], $_GET['field_id'], 'json', '10');
-            }
+            echo json_encode($result);
+            break;
         }
+
+        if (!isset($_GET['q'], $_GET['field_id'])) {
+            echo json_encode($result);
+            break;
+        }
+
+        $result['items'] = UserManager::get_tags($_GET['q'], $_GET['field_id'], null, '10');
+        echo json_encode($result);
         break;
     case 'generate_api_key':
         if (api_is_anonymous()) {
@@ -123,7 +135,7 @@ switch ($action) {
             $status  = intval($_GET['status']);
 
             if (!empty($user_id)) {
-                $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+                $user_table = Database::get_main_table(TABLE_MAIN_USER);
                 $sql = "UPDATE $user_table 
                         SET active='".$status."' 
                         WHERE user_id='".$user_id."'";
@@ -136,13 +148,13 @@ switch ($action) {
                     $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
                     $email_admin = api_get_setting('emailAdministrator');
                     $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-                    $emailbody=get_lang('Dear')." ".stripslashes($recipient_name).",\n\n";
+                    $emailbody = get_lang('Dear')." ".stripslashes($recipient_name).",\n\n";
 
-                    $emailbody.=sprintf(get_lang('YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators'), api_get_setting('siteName'))."\n";
-                    $emailbody.=sprintf(get_lang('YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided'), api_get_path(WEB_PATH)).",\n\n";
-                    $emailbody.=get_lang('HaveFun')."\n\n";
+                    $emailbody .= sprintf(get_lang('YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators'), api_get_setting('siteName'))."\n";
+                    $emailbody .= sprintf(get_lang('YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided'), api_get_path(WEB_PATH)).",\n\n";
+                    $emailbody .= get_lang('HaveFun')."\n\n";
                     //$emailbody.=get_lang('Problem'). "\n\n". get_lang('SignatureFormula');
-                    $emailbody.=api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+                    $emailbody .= api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
 
                     $additionalParameters = array(
                         'smsType' => SmsPlugin::ACCOUNT_APPROVED_CONNECT,
@@ -170,8 +182,93 @@ switch ($action) {
             echo '-1';
         }
         break;
+    case 'user_by_role':
+        api_block_anonymous_users(false);
+
+        $criteria = new Criteria();
+        $criteria
+            ->where(
+                Criteria::expr()->orX(
+                    Criteria::expr()->contains('username', $_REQUEST['q']),
+                    Criteria::expr()->contains('firstname', $_REQUEST['q']),
+                    Criteria::expr()->contains('lastname', $_REQUEST['q'])
+                )
+            )
+            ->andWhere(
+                Criteria::expr()->eq('status', DRH)
+            );
+
+        $users = UserManager::getRepository()->matching($criteria);
+
+        if (!$users->count()) {
+            echo json_encode([]);
+            break;
+        }
+
+        $items = [];
+
+        /** @var User $user */
+        foreach ($users as $user) {
+            $items[] = [
+                'id' => $user->getId(),
+                'text' => $user->getCompleteNameWithUsername()
+            ];
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode(['items' => $items]);
+        break;
+    case 'teacher_to_basis_course':
+        api_block_anonymous_users(false);
+
+        $sortByFirstName = api_sort_by_first_name();
+        $urlId = api_get_current_access_url_id();
+
+        $qb = UserManager::getRepository()->createQueryBuilder('u');
+        $qb->where(
+            $qb->expr()->orX(
+                $qb->expr()->like('u.username', ':q'),
+                $qb->expr()->like('u.firstname', ':q'),
+                $qb->expr()->like('u.lastname', ':q')
+            )
+        );
+
+        if (api_is_multiple_url_enabled()) {
+            $qb
+                ->innerJoin('ChamiloCoreBundle:AccessUrlRelUser', 'uru', Join::WITH, 'u.userId = uru.userId')
+                ->andWhere('uru.accessUrlId = '.$urlId);
+        }
+
+        $qb
+            ->andWhere('u.status != '.DRH.' AND u.status != '.ANONYMOUS)
+            ->orderBy(
+                $sortByFirstName
+                    ? 'u.firstname, u.firstname'
+                    : 'u.firstname, u.lastname'
+            )
+            ->setParameter('q', '%'.$_REQUEST['q'].'%');
+
+        $users = $qb->getQuery()->getResult();
+
+        if (!$users) {
+            echo json_encode([]);
+            break;
+        }
+
+        $items = [];
+
+        /** @var User $user */
+        foreach ($users as $user) {
+            $items[] = [
+                'id' => $user->getId(),
+                'text' => $user->getCompleteNameWithUsername()
+            ];
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode(['items' => $items]);
+        break;
     default:
         echo '';
 }
 exit;
-

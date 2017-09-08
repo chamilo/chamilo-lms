@@ -16,6 +16,13 @@ $htmlHeadXtra[] = '<script>
     var chamilo_xajax_handler = window.parent.oxajax;
 </script>';
 
+$lpItemId = isset($_REQUEST['lp_item']) ? intval($_REQUEST['lp_item']) : 0;
+
+if (!$lpItemId) {
+    echo '';
+    exit;
+}
+
 $progress_bar = '';
 $navigation_bar = '';
 $display_mode = '';
@@ -27,7 +34,6 @@ if ($myLP) {
     $display_mode = $myLP->mode;
     $scorm_css_header = true;
     $lp_theme_css = $myLP->get_theme();
-
     $my_style = api_get_visual_theme();
 
     // Setting up the CSS theme if exists
@@ -44,7 +50,7 @@ if ($myLP) {
 
     $progress_bar = $myLP->getProgressBar();
     $navigation_bar = $myLP->get_navigation_bar();
-    $mediaplayer = $myLP->get_mediaplayer($autostart);
+    $mediaplayer = $myLP->get_mediaplayer($lpItemId, $autostart);
 }
 session_write_close();
 ?>

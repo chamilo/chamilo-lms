@@ -1,4 +1,5 @@
 <?php
+/* For license terms, see /license.txt */
 /**
  * @package chamilo.profiling
  */
@@ -10,8 +11,11 @@
  * in your php config also disable the .htaccess line about the tests/
  * directory.
  */
-if (extension_loaded('tideways')) {
-    //include_once dirname(__FILE__).'/xhprof_lib/utils/xhprof_lib.php';
-    //include_once dirname(__FILE__).'/xhprof_lib/utils/xhprof_runs.php';
+
+$isAjaxRequest = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
+
+if (extension_loaded('tideways') && !$isAjaxRequest) {
+    //include_once __DIR__.'/xhprof_lib/utils/xhprof_lib.php';
+    //include_once __DIR__.'/xhprof_lib/utils/xhprof_runs.php';
     tideways_enable(TIDEWAYS_FLAGS_NO_SPANS);
 }

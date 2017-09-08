@@ -36,7 +36,6 @@ switch ($sale['product_type']) {
 }
 
 $paypalParams = $plugin->getPaypalParams();
-
 $pruebas = $paypalParams['sandbox'] == 1;
 $paypalUsername = $paypalParams['username'];
 $paypalPassword = $paypalParams['password'];
@@ -44,19 +43,23 @@ $paypalSignature = $paypalParams['signature'];
 
 require_once("paypalfunctions.php");
 
-$form = new FormValidator('success', 'POST', api_get_self(), null, null, FormValidator::LAYOUT_INLINE);
+$form = new FormValidator(
+    'success',
+    'POST',
+    api_get_self(),
+    null,
+    null,
+    FormValidator::LAYOUT_INLINE
+);
 $form->addButton('confirm', $plugin->get_lang('ConfirmOrder'), 'check', 'success');
 $form->addButtonCancel($plugin->get_lang('CancelOrder'), 'cancel');
 
 if ($form->validate()) {
     $formValues = $form->getSubmitValues();
-
     if (isset($formValues['cancel'])) {
         $plugin->cancelSale($sale['id']);
-
         unset($_SESSION['bc_sale_id']);
-
-        header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/index.php');
+        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/index.php');
         exit;
     }
 
@@ -74,13 +77,12 @@ if ($form->validate()) {
         exit;
     }
 
-    $transactionId = $confirmPayments["PAYMENTINFO_0_TRANSACTIONID"];
-    $transactionType = $confirmPayments["PAYMENTINFO_0_TRANSACTIONTYPE"];
+    $transactionId = $confirmPayments['PAYMENTINFO_0_TRANSACTIONID'];
+    $transactionType = $confirmPayments['PAYMENTINFO_0_TRANSACTIONTYPE'];
 
-    switch ($confirmPayments["PAYMENTINFO_0_PAYMENTSTATUS"]) {
+    switch ($confirmPayments['PAYMENTINFO_0_PAYMENTSTATUS']) {
         case 'Completed':
             $saleIsCompleted = $plugin->completeSale($sale['id']);
-
             if ($saleIsCompleted && $buyingSession) {
                 Display::addFlash(
                     Display::return_message(
@@ -165,7 +167,7 @@ if ($form->validate()) {
     }
 
     unset($_SESSION['bc_sale_id']);
-    header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/course_catalog.php');
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/course_catalog.php');
     exit;
 }
 

@@ -2,11 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * 	File containing the FreeAnswer class.
- * 	This class allows to instantiate an object of type FREE_ANSWER,
- * 	extending the class question
- * 	@package chamilo.exercise
- * 	@author Eric Marguin
+ * File containing the FreeAnswer class.
+ * This class allows to instantiate an object of type FREE_ANSWER,
+ * extending the class question
+ * @package chamilo.exercise
+ * @author Eric Marguin
  */
 class FreeAnswer extends Question
 {
@@ -42,26 +42,24 @@ class FreeAnswer extends Question
     }
 
     /**
-     * abstract function which creates the form to create/edit the answers of the question
-     * @param FormValidator $form
+     * @inheritdoc
      */
-    function processAnswersCreation($form)
+    public function processAnswersCreation($form, $exercise)
     {
         $this->weighting = $form->getSubmitValue('weighting');
-        $this->save();
+        $this->save($exercise);
     }
 
-    function return_header($feedback_type = null, $counter = null, $score = null)
+    /**
+     * @inheritdoc
+     */
+    public function return_header($exercise, $counter = null, $score = [])
     {
-        if (!empty($score['comments']) || $score['score'] > 0) {
-            $score['revised'] = true;
-        } else {
-            $score['revised'] = false;
-        }
-        $header = parent::return_header($feedback_type, $counter, $score);
-        $header .= '<table class="' . $this->question_table_class . '" >
+        $score['revised'] = $this->isQuestionWaitingReview($score);
+        $header = parent::return_header($exercise, $counter, $score);
+        $header .= '<table class="'.$this->question_table_class.'" >
         <tr>
-        <th>' . get_lang("Answer") . '</th>
+        <th>' . get_lang("Answer").'</th>
         </tr>';
 
         return $header;

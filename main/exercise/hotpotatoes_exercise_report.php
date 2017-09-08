@@ -30,10 +30,10 @@ $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh();
 $is_tutor = api_is_allowed_to_edit(true);
 
-$TBL_QUESTIONS = Database :: get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_TRACK_EXERCISES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$TBL_TRACK_HOTPOTATOES_EXERCISES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-$TBL_LP_ITEM_VIEW = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
+$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+$TBL_TRACK_HOTPOTATOES_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+$TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 $course_id = api_get_course_int_id();
 $hotpotatoes_path = isset($_REQUEST['path']) ? Security::remove_XSS($_REQUEST['path']) : null;
@@ -54,7 +54,7 @@ if (!empty($_REQUEST['path'])) {
 $origin = isset($origin) ? $origin : null;
 
 if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
-    if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
+    if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_session_general_coach()) {
         $load_extra_data = false;
         if (isset($_REQUEST['extra_data']) && $_REQUEST['extra_data'] == 1) {
             $load_extra_data = true;
@@ -71,13 +71,13 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 $actions = null;
 if ($is_allowedToEdit && $origin != 'learnpath') {
     // the form
-    if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
+    if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_session_general_coach()) {
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&path='.$hotpotatoes_path.' ">'.
-            Display::return_icon('save.png',   get_lang('Export'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 } else {
-    $actions .= '<a href="exercise.php">' .
-        Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
+    $actions .= '<a href="exercise.php">'.
+        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 if ($is_allowedToEdit) {
@@ -99,13 +99,13 @@ $nameTools = get_lang('Results');
 
 if ($is_allowedToEdit || $is_tutor) {
     $nameTools = get_lang('StudentScore');
-    $interbreadcrumb[] = array("url" => "exercise.php","name" => get_lang('Exercises'));
+    $interbreadcrumb[] = array("url" => "exercise.php", "name" => get_lang('Exercises'));
     $objExerciseTmp = new Exercise();
     /*if ($objExerciseTmp->read($exercise_id)) {
         $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exercise_id, "name" => $objExerciseTmp->name);
     }*/
 } else {
-    $interbreadcrumb[] = array("url" => "exercise.php","name" => get_lang('Exercises'));
+    $interbreadcrumb[] = array("url" => "exercise.php", "name" => get_lang('Exercises'));
     $objExerciseTmp = new Exercise();
     /*if ($objExerciseTmp->read($exercise_id)) {
         $nameTools = get_lang('Results').': '.$objExerciseTmp->name;
@@ -168,7 +168,7 @@ $action_links = '';
 // Generating group list
 
 $group_list = GroupManager::get_group_list();
-$group_parameters = array('group_all:'.get_lang('All'),'group_none:'.get_lang('None'));
+$group_parameters = array('group_all:'.get_lang('All'), 'group_none:'.get_lang('None'));
 
 foreach ($group_list as $group) {
     $group_parameters[] = $group['id'].':'.$group['name'];
@@ -290,10 +290,17 @@ function exportExcel() {
 
 $(function() {
 <?php
-    echo Display::grid_js('results', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
-
+    echo Display::grid_js(
+        'results',
+        $url,
+        $columns,
+        $column_model,
+        $extra_params,
+        array(),
+        $action_links,
+        true
+    );
     if ($is_allowedToEdit || $is_tutor) { ?>
-
         //setSearchSelect("status");
         //
         //view:true, del:false, add:false, edit:false, excel:true}

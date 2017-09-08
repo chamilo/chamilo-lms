@@ -9,6 +9,6 @@
  * @author Laurent Opprecht
  */
 
-require_once dirname(__FILE__) . '/lib/rss_plugin.class.php';
+require_once __DIR__.'/lib/rss_plugin.class.php';
 
 $plugin_info = RssPlugin::create()->get_info();

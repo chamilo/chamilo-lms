@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * @package chamilo.admin
  * @todo use formvalidator
@@ -23,21 +25,23 @@ $xajax->registerFunction(array('search_courses', 'AddCourseToSession', 'search_c
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array(
+    'url' => 'session_list.php',
+    'name' => get_lang('SessionList')
+);
 $interbreadcrumb[] = array(
     'url' => "resume_session.php?id_session=".$sessionId,
     'name' => get_lang('SessionOverview')
 );
 
 // Database Table Definitions
-$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 // setting the name of the tool
-$tool_name= get_lang('SubscribeCoursesToSession');
+$tool_name = get_lang('SubscribeCoursesToSession');
 
 $add_type = 'multiple';
 if (isset($_GET['add_type']) && $_GET['add_type'] != '') {
@@ -76,7 +80,6 @@ function remove_item(origin)
 }
 </script>';
 
-$errorMsg = '';
 $CourseList = $SessionList = array();
 $courses = $sessions = array();
 
@@ -130,7 +133,7 @@ if ($ajax_search) {
             ON
                 course.id = session_rel_course.c_id AND
                 session_rel_course.session_id = ".$sessionId."
-			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',', $courses).")) DESC,":"")." title";
+			ORDER BY ".(sizeof($courses) ? "(code IN(".implode(',', $courses).")) DESC," : "")." title";
 
     if (api_is_multiple_url_enabled()) {
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -144,7 +147,7 @@ if ($ajax_search) {
                         INNER JOIN $tbl_course_rel_access_url url_course
                         ON (url_course.c_id = course.id)
                     WHERE access_url_id = $access_url_id
-                    ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
+                    ORDER BY ".(sizeof($courses) ? "(code IN(".implode(',', $courses).")) DESC," : "")." title";
         }
     }
 
@@ -160,7 +163,7 @@ if ($ajax_search) {
             ON
                 course.id = session_rel_course.c_id AND
                 session_rel_course.session_id = ".$sessionId."
-			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
+			ORDER BY ".(sizeof($courses) ? "(code IN(".implode(',', $courses).")) DESC," : "")." title";
 
     if (api_is_multiple_url_enabled()) {
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -175,16 +178,16 @@ if ($ajax_search) {
                     INNER JOIN $tbl_course_rel_access_url url_course
                     ON (url_course.c_id = course.id)
                     WHERE access_url_id = $access_url_id
-                    ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
+                    ORDER BY ".(sizeof($courses) ? "(code IN(".implode(',', $courses).")) DESC," : "")." title";
         }
     }
     $result = Database::query($sql);
     $Courses = Database::store_result($result);
     foreach ($Courses as $course) {
         if ($course['session_id'] == $sessionId) {
-            $sessionCourses[$course['id']] = $course ;
+            $sessionCourses[$course['id']] = $course;
         } else {
-            $nosessionCourses[$course['id']] = $course ;
+            $nosessionCourses[$course['id']] = $course;
         }
     }
 }
@@ -206,22 +209,16 @@ if (!api_is_platform_admin() && api_is_teacher()) {
 
 unset($Courses);
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $sessionId; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $sessionId; ?><?php if (!empty($_GET['add'])) echo '&add=true'; ?>" style="margin:0px;" <?php if ($ajax_search) {echo ' onsubmit="valide();"'; }?>>
     <legend><?php echo $tool_name.' ('.$session_info['name'].')'; ?></legend>
     <input type="hidden" name="formSent" value="1" />
-
-    <?php
-    if (!empty($errorMsg)) {
-        Display::display_normal_message($errorMsg); //main API
-    }
-    ?>
     <div id="multiple-add-session" class="row">
         <div class="col-md-4">
             <label><?php echo get_lang('CourseListInPlatform') ?> :</label>
             <?php
             if (!($add_type == 'multiple')) {
                 ?>
-                <input type="text" id="course_to_add" onkeyup="xajax_search_courses(this.value,'single')" class="form-control"/>
+                <input type="text" id="course_to_add" onkeyup="xajax_search_courses(this.value, 'single', <?php echo $sessionId; ?>)" class="form-control"/>
                 <div id="ajax_list_courses_single"></div>
             <?php
             } else {
@@ -229,7 +226,7 @@ unset($Courses);
                 <div id="ajax_list_courses_multiple">
                     <select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" class="form-control">
                         <?php foreach ($nosessionCourses as $enreg) { ?>
-                            <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES).'"'; if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>>
+                            <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')', ENT_QUOTES).'"'; if (in_array($enreg['code'], $CourseList)) echo 'selected="selected"'; ?>>
                                 <?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?>
                             </option>
                         <?php } ?>
@@ -241,15 +238,15 @@ unset($Courses);
             ?>
         </div>
         <div class="col-md-4">
-            <?php if($add_type == 'multiple') { ?>
+            <?php if ($add_type == 'multiple') { ?>
                 <div class="code-course">
                     <?php echo get_lang('FirstLetterCourse'); ?> :
 
-                    <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple')" class="selectpicker show-tick form-control">
+                    <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple', <?php echo $sessionId; ?>)" class="selectpicker show-tick form-control">
                         <option value="%">--</option>
                         <?php
                         echo Display :: get_alphabet_options();
-                        echo Display :: get_numeric_options(0,9,'');
+                        echo Display :: get_numeric_options(0, 9, '');
                         ?>
                     </select>
                 </div>
@@ -299,9 +296,9 @@ unset($Courses);
             <select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" class="form-control">
 
                 <?php
-                foreach($sessionCourses as $enreg) {
+                foreach ($sessionCourses as $enreg) {
                     ?>
-                    <option value="<?php echo $enreg['id']; ?>" title="<?php echo htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES); ?>">
+                    <option value="<?php echo $enreg['id']; ?>" title="<?php echo htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')', ENT_QUOTES); ?>">
                         <?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?>
                     </option>
                 <?php

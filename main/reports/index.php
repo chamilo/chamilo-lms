@@ -22,11 +22,12 @@ api_block_anonymous_users();
 $this_section = SECTION_REPORTS;
 
 // setting the name of the tool
-$tool_name=get_lang('Reports');
+$tool_name = get_lang('Reports');
 
 // Displaying the header
-foreach (array('jquery.ba-bbq.min.js', 'jquery.validate.js', 'jquery.form.js', 'jquery.form.wizard.js', 'jquery.dataTables.min.js') as $js)
+foreach (array('jquery.ba-bbq.min.js', 'jquery.validate.js', 'jquery.form.js', 'jquery.form.wizard.js', 'jquery.dataTables.min.js') as $js) {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$js.'" type="text/javascript" language="javascript"></script>'."\n";
+}
 
 // FIXME
 $htmlHeadXtra[] = '    <style type="text/css">
@@ -134,14 +135,14 @@ Display::display_header($tool_name);
                         <select class="input_field_12em link required" name="type" id="type">
 <?php
 foreach ($reports_template as $key => $value) {
-	echo '<option value="'.$key.'">'.$value['description'].'</option>';
+    echo '<option value="'.$key.'">'.$value['description'].'</option>';
 }
 ?>
                         </select><br />
                     </span>
 <?php
 foreach ($reports_template as $key => $value) {
-	echo $value['wizard'];
+    echo $value['wizard'];
 }
 ?>
                     <span id="format" class="step submit_step">

@@ -15,7 +15,14 @@
                         <li class="item">
                             {{ user.complete_name }}
                         </li>
-                        {% if show_full_profile  %}
+                        {% if _u.is_admin == 1 %}
+                            <li class="item">
+                                <a href="{{ _p.web }}main/admin/user_edit.php?user_id={{ user.id }}">
+                                    <img src="{{ "edit.png" | icon }}" alt="{{ "Edit" | get_lang }}">
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if show_full_profile %}
                             <li class="item">
                                 <a href="{{ _p.web }}main/messages/new_message.php">
                                 <img src="{{ "instant_message.png" | icon }}" alt="{{ "Email" | get_lang }}">
@@ -41,7 +48,7 @@
                                 {% endif %}
                             {% endfor %}
 
-                            {% if 'allow_show_skype_account'|get_setting == 'true' and not skype_account is empty %}
+                            {% if 'allow_show_skype_account'|api_get_setting == 'true' and not skype_account is empty %}
                                 <li class="item">
                                     <a href="skype:{{ skype_account }}?chat">
                                         <span class="fa fa-skype fa-fw" aria-hidden="true"></span> {{ 'Skype'|get_lang }}
@@ -49,7 +56,7 @@
                                 </li>
                             {% endif %}
 
-                            {% if 'allow_show_linkedin_url'|get_setting == 'true' and not linkedin_url is empty %}
+                            {% if 'allow_show_linkedin_url'|api_get_setting == 'true' and not linkedin_url is empty %}
                                 <li class="item">
                                     <a href="{{ linkedin_url }}" target="_blank">
                                         <span class="fa fa-linkedin fa-fw" aria-hidden="true"></span> {{ 'LinkedIn'|get_lang }}

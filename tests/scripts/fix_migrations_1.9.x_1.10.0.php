@@ -1,5 +1,4 @@
 <?php
-
 /* For license terms, see /license.txt */
 /**
  * Fix failed migration 1.9.x to 1.10.0
@@ -7,7 +6,7 @@
  */
 exit;
 
-require_once dirname(__FILE__) . '/../../main/inc/global.inc.php';
+require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_admin_script();
 

@@ -1,5 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\SkillRelUser;
+use Chamilo\CoreBundle\Entity\SkillRelUserComment;
+
 /**
  * Show information about all issued badges with same skill by user
  *
@@ -12,16 +17,14 @@ $userId = isset($_GET['user']) ? intval($_GET['user']) : 0;
 $skillId = isset($_GET['skill']) ? intval($_GET['skill']) : 0;
 
 if (!$userId || !$skillId) {
-    header('Location: ' . api_get_path(WEB_PATH));
-    exit;
+    api_not_allowed(true);
 }
 
-$entityManager = Database::getManager();
-$user = $entityManager->find('ChamiloUserBundle:User', $userId);
-$skill = $entityManager->find('ChamiloCoreBundle:Skill', $skillId);
-$skillRepo = $entityManager->getRepository('ChamiloCoreBundle:Skill');
-$skillUserRepo = $entityManager->getRepository('ChamiloCoreBundle:SkillRelUser');
-$skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
+Skill::isAllow($userId);
+
+$em = Database::getManager();
+$user = $em->find('ChamiloUserBundle:User', $userId);
+$skill = $em->find('ChamiloCoreBundle:Skill', $skillId);
 
 $currentUserId = api_get_user_id();
 
@@ -30,9 +33,14 @@ if (!$user || !$skill) {
         Display::return_message(get_lang('NoResults'), 'error')
     );
 
-    header('Location: ' . api_get_path(WEB_PATH));
+    header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
+
+
+$skillRepo = $em->getRepository('ChamiloCoreBundle:Skill');
+$skillUserRepo = $em->getRepository('ChamiloCoreBundle:SkillRelUser');
+$skillLevelRepo = $em->getRepository('ChamiloSkillBundle:Level');
 
 $userSkills = $skillUserRepo->findBy([
     'user' => $user,
@@ -55,9 +63,10 @@ $skillInfo = [
 ];
 
 $allUserBadges = [];
-
+/** @var SkillRelUser $skillIssue */
 foreach ($userSkills as $index => $skillIssue) {
-    $currentUser = $entityManager->find('ChamiloUserBundle:User', $currentUserId);
+    /** @var User $currentUser */
+    $currentUser = $em->find('ChamiloUserBundle:User', $currentUserId);
     $allowDownloadExport = $currentUser ? $currentUser->getId() === $user->getId() : false;
     $allowComment = $currentUser ? Skill::userCanAddFeedbackToUser($currentUser, $user) : false;
     $skillIssueDate = api_get_local_time($skillIssue->getAcquiredSkillAt());
@@ -95,7 +104,6 @@ foreach ($userSkills as $index => $skillIssue) {
 
     foreach ($skillIssueComments as $comment) {
         $commentDate = api_get_local_time($comment->getFeedbackDateTime());
-
         $skillIssueInfo['comments'][] = [
             'text' => $comment->getFeedbackText(),
             'value' => $comment->getFeedbackValue(),
@@ -105,11 +113,9 @@ foreach ($userSkills as $index => $skillIssue) {
     }
 
     $acquiredLevel = [];
-
     $profile = $skillRepo->find($skillId)->getProfile();
 
     if (!$profile) {
-
         $skillRelSkill = new SkillRelSkill();
         $parents = $skillRelSkill->get_skill_parents($skillId);
 
@@ -164,14 +170,18 @@ foreach ($userSkills as $index => $skillIssue) {
         $level = $skillLevelRepo->find($values['acquired_level']);
         $skillIssue->setAcquiredLevel($level);
 
-        $entityManager->persist($skillIssue);
-        $entityManager->flush();
+        $em->persist($skillIssue);
+        $em->flush();
 
-        header("Location: " . $skillIssue->getIssueUrlAll());
+        header("Location: ".$skillIssue->getIssueUrlAll());
         exit;
     }
 
-    $form = new FormValidator('comment'.$skillIssue->getId(), 'post', $skillIssue->getIssueUrlAll());
+    $form = new FormValidator(
+        'comment'.$skillIssue->getId(),
+        'post',
+        $skillIssue->getIssueUrlAll()
+    );
     $form->addTextarea('comment', get_lang('NewComment'), ['rows' => 4]);
     $form->applyFilter('comment', 'trim');
     $form->addRule('comment', get_lang('ThisFieldIsRequired'), 'required');
@@ -187,7 +197,7 @@ foreach ($userSkills as $index => $skillIssue) {
     if ($form->validate() && $allowComment) {
         $values = $form->exportValues();
 
-        $skillUserComment = new Chamilo\CoreBundle\Entity\SkillRelUserComment();
+        $skillUserComment = new SkillRelUserComment();
         $skillUserComment
             ->setFeedbackDateTime(new DateTime)
             ->setFeedbackGiver($currentUser)
@@ -195,10 +205,10 @@ foreach ($userSkills as $index => $skillIssue) {
             ->setFeedbackValue($values['value'] ? $values['value'] : null)
             ->setSkillRelUser($skillIssue);
 
-        $entityManager->persist($skillUserComment);
-        $entityManager->flush();
+        $em->persist($skillUserComment);
+        $em->flush();
 
-        header("Location: " . $skillIssue->getIssueUrlAll());
+        header("Location: ".$skillIssue->getIssueUrlAll());
         exit;
     }
 
@@ -207,18 +217,17 @@ foreach ($userSkills as $index => $skillIssue) {
 
     if ($allowDownloadExport) {
         $backpack = 'https://backpack.openbadges.org/';
-
         $configBackpack = api_get_setting('openbadges_backpack');
 
         if (strcmp($backpack, $configBackpack) !== 0) {
             $backpack = $configBackpack;
         }
 
-        $htmlHeadXtra[] = '<script src="' . $backpack . 'issuer.js"></script>';
+        $htmlHeadXtra[] = '<script src="'.$backpack.'issuer.js"></script>';
         $objSkill = new Skill();
         $assertionUrl = $skillIssueInfo['badge_assertion'];
         $skills = $objSkill->get($skillId);
-        $unbakedBadge = api_get_path(SYS_UPLOAD_PATH) . "badges/".$skills['icon'];
+        $unbakedBadge = api_get_path(SYS_UPLOAD_PATH)."badges/".$skills['icon'];
         if (!is_file($unbakedBadge)) {
             $unbakedBadge = api_get_path(WEB_CODE_PATH).'img/icons/128/badges-default.png';
         }
@@ -236,12 +245,12 @@ foreach ($userSkills as $index => $skillIssue) {
                 mkdir($bakedBadge, api_get_permissions_for_new_directories(), true);
             }
             $skillRelUserId = $skillIssueInfo['id'];
-            if (!file_exists($bakedBadge . "/badge_" . $skillRelUserId)) {
-                file_put_contents($bakedBadge . "/badge_" . $skillRelUserId . ".png", $bakedInfo);
+            if (!file_exists($bakedBadge."/badge_".$skillRelUserId)) {
+                file_put_contents($bakedBadge."/badge_".$skillRelUserId.".png", $bakedInfo);
             }
 
             //Process to validate a baked badge
-            $badgeContent = file_get_contents($bakedBadge . "/badge_" . $skillRelUserId . ".png");
+            $badgeContent = file_get_contents($bakedBadge."/badge_".$skillRelUserId.".png");
             $verifyBakedBadge = $png->extractBadgeInfo($badgeContent);
             if (!is_array($verifyBakedBadge)) {
                 $badgeInfoError = true;
@@ -249,7 +258,7 @@ foreach ($userSkills as $index => $skillIssue) {
 
             if (!$badgeInfoError) {
                 $personalBadge = UserManager::getUserPathById($userId, "web");
-                $personalBadge = $personalBadge."badges/badge_" . $skillRelUserId . ".png";
+                $personalBadge = $personalBadge."badges/badge_".$skillRelUserId.".png";
             }
         }
     }
@@ -261,7 +270,6 @@ foreach ($userSkills as $index => $skillIssue) {
     $allUserBadges[$index]['acquired_level_form'] = $formAcquiredLevel->returnForm();
     $allUserBadges[$index]['badge_error'] = $badgeInfoError;
     $allUserBadges[$index]['personal_badge'] = $personalBadge;
-
 }
 
 $template = new Template(get_lang('IssuedBadgeInformation'));

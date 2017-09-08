@@ -59,18 +59,17 @@ class Announcement extends Resource
         $size,
         $comment
     ) {
-        parent::__construct($id,RESOURCE_ANNOUNCEMENT);
+        parent::__construct($id, RESOURCE_ANNOUNCEMENT);
 
-        $this->content	= $content;
-        $this->title 	= $title;
-        $this->date 	= $date;
-        $this->display_order	= $display_order;
-        $this->email_sent	 	= $email_sent;
-
-        $this->attachment_path 	= $path;
+        $this->content = $content;
+        $this->title = $title;
+        $this->date = $date;
+        $this->display_order = $display_order;
+        $this->email_sent = $email_sent;
+        $this->attachment_path = $path;
         $this->attachment_filename = $filename;
-        $this->attachment_size 	= $size;
-        $this->attachment_comment 	= $comment;
+        $this->attachment_size = $size;
+        $this->attachment_comment = $comment;
     }
 
     /**

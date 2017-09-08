@@ -40,24 +40,14 @@ require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 // Are we in a lp ?
-$origin = '';
-if (isset($_GET['origin'])) {
-    $origin = Security::remove_XSS($_GET['origin']);
-}
-
+$origin = api_get_origin();
 /* MAIN DISPLAY SECTION */
 $current_forum = get_forum_information($_GET['forum']);
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 
-/* Breadcrumbs */
-
-if (isset($_SESSION['gradebook'])){
-    $gradebook = Security::remove_XSS($_SESSION['gradebook']);
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array (
-        'url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),
+if (api_is_in_gradebook()) {
+    $interbreadcrumb[] = array(
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
@@ -75,7 +65,7 @@ if (!api_is_allowed_to_edit(false, true) &&
 
 // 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category['visibility'] && $current_forum_category['locked'] <> 0) OR $current_forum['locked'] <> 0)
+    (($current_forum_category['visibility'] && $current_forum_category['locked'] <> 0) || $current_forum['locked'] <> 0)
 ) {
     api_not_allowed();
 }
@@ -87,7 +77,7 @@ if (!api_is_allowed_to_edit(false, true) &&
     api_not_allowed();
 }
 // 4. anonymous posts are not allowed and the user is not logged in
-if (!$_user['user_id'] AND $current_forum['allow_anonymous'] <> 1) {
+if (!$_user['user_id'] && $current_forum['allow_anonymous'] <> 1) {
     api_not_allowed();
 }
 
@@ -114,7 +104,7 @@ if (!empty($groupId)) {
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.$cidreq, 'name' => get_lang('Groups'));
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.$cidreq, 'name' => get_lang('GroupSpace').' '.$groupProperties['name']);
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']), 'name' => $current_forum['forum_title']);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.intval($_GET['forum']),'name' => get_lang('NewTopic'));
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.intval($_GET['forum']), 'name' => get_lang('NewTopic'));
 } else {
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq, 'name' => $nameTools);
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?'.$cidreq.'&forumcategory='.$current_forum_category['cat_id'], 'name' => $current_forum_category['cat_title']);
@@ -168,7 +158,7 @@ if ($form) {
     $form->display();
 }
 
-if (isset($origin) && $origin == 'learnpath') {
+if ($origin == 'learnpath') {
     Display::display_reduced_footer();
 } else {
     Display::display_footer();

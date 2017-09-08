@@ -109,7 +109,7 @@ class Documents extends Basic
             ],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
-            [   'Styles',
+            ['Styles',
                 'Format',
                 'Font',
                 'FontSize',
@@ -118,6 +118,9 @@ class Documents extends Basic
                 'Underline',
                 'TextColor',
                 'BGColor',
+            ],
+            [
+                'ShowBlocks',
                 'Source',
             ],
             api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],

@@ -16,10 +16,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-
-if (api_get_setting('allow_skills_tool') != 'true') {
-    api_not_allowed();
-}
+Skill::isAllow();
 
 $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'skill_list.php', 'name' => get_lang('ManageSkills'));
@@ -85,7 +82,7 @@ $jquery_ready_content = $returnParams['jquery_ready_content'];
 if (!empty($jquery_ready_content)) {
     $htmlHeadXtra[] = '<script>
     $(document).ready(function(){
-        ' . $jquery_ready_content . '
+        ' . $jquery_ready_content.'
     });
     </script>';
 }
@@ -114,7 +111,7 @@ if ($editForm->validate()) {
         );
     }
 
-    header('Location: '.api_get_path(WEB_CODE_PATH) . 'admin/skill_list.php');
+    header('Location: '.api_get_path(WEB_CODE_PATH).'admin/skill_list.php');
     exit;
 }
 

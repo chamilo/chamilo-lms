@@ -26,9 +26,9 @@ class Accessurleditsessionstourl
      * @return string Xajax response block
      * @assert () === false
      */
-    function search_sessions($needle, $id)
+    public function search_sessions($needle, $id)
     {
-        $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $xajax_response = new xajaxResponse();
         $return = '';
 
@@ -43,17 +43,21 @@ class Accessurleditsessionstourl
                     ORDER BY name, id
                     LIMIT 11';
             $rs = Database::query($sql);
-            $i=0;
-            while ($session = Database :: fetch_array($rs)) {
+            $i = 0;
+            while ($session = Database::fetch_array($rs)) {
                 $i++;
-                if ($i<=10) {
+                if ($i <= 10) {
                      $return .= '<a href="#" onclick="add_user_to_url(\''.addslashes($session['id']).'\',\''.addslashes($session['name']).' ('.addslashes($session['id']).')'.'\')">'.$session['name'].' </a><br />';
                 } else {
                     $return .= '...<br />';
                 }
             }
         }
-        $xajax_response -> addAssign('ajax_list_courses','innerHTML',api_utf8_encode($return));
+        $xajax_response->addAssign(
+            'ajax_list_courses',
+            'innerHTML',
+            api_utf8_encode($return)
+        );
         return $xajax_response;
     }
 }

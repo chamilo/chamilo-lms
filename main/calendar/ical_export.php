@@ -42,12 +42,12 @@ if (isset($_GET['course_id'])) {
 $event = $agenda->get_event($id);
 
 if (!empty($event)) {
-	define('ICAL_LANG', api_get_language_isocode());
+    define('ICAL_LANG', api_get_language_isocode());
 
     $ical = new vcalendar();
-    $ical->setConfig('unique_id',api_get_path(WEB_PATH));
-    $ical->setProperty( 'method', 'PUBLISH' );
-    $ical->setConfig('url',api_get_path(WEB_PATH));
+    $ical->setConfig('unique_id', api_get_path(WEB_PATH));
+    $ical->setProperty('method', 'PUBLISH');
+    $ical->setConfig('url', api_get_path(WEB_PATH));
     $vevent = new vevent();
 
     switch ($_GET['class']) {

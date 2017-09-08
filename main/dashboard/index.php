@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
 * Template (front controller in MVC pattern) used for distpaching to
  * the controllers depend on the current action
@@ -20,13 +23,13 @@ api_block_anonymous_users();
 
 // current section
 $this_section = SECTION_DASHBOARD;
-unset($_SESSION['this_section']);//for hmtl editor repository
+Session::erase('this_section'); //for hmtl editor repository
 
 // get actions
 $actions = array('listing', 'store_user_block', 'disable_block');
 $action = 'listing';
-if (isset($_GET['action']) && in_array($_GET['action'],$actions)) {
-	$action = $_GET['action'];
+if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
+    $action = $_GET['action'];
 }
 
 // load styles from dashboard plugins
@@ -37,7 +40,7 @@ $htmlHeadXtra[] = $dashboar_plugin_styles;
 $dashboard_controller = new DashboardController();
 
 if (isset($_GET['path'])) {
-	$path = $_GET['path'];
+    $path = $_GET['path'];
 }
 
 // distpacher actions to controller

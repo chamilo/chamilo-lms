@@ -47,10 +47,10 @@ abstract class EvalLink extends AbstractLink
         $eval = $this->get_evaluation();
         // course/platform admin can go to the view_results page
         if (api_is_allowed_to_edit()) {
-            return 'gradebook_view_result.php?' . api_get_cidreq() . '&selecteval=' . $eval->get_id();
+            return 'gradebook_view_result.php?'.api_get_cidreq().'&selecteval='.$eval->get_id();
         } // students can go to the statistics page (if custom display enabled)
-        elseif (ScoreDisplay :: instance()->is_custom()) {
-            return 'gradebook_statistics.php?' . api_get_cidreq() . '&selecteval=' . $eval->get_id();
+        elseif (ScoreDisplay::instance()->is_custom()) {
+            return 'gradebook_statistics.php?'.api_get_cidreq().'&selecteval='.$eval->get_id();
         } else {
             return null;
         }
@@ -176,8 +176,8 @@ abstract class EvalLink extends AbstractLink
                 $eval = new Evaluation();
                 $eval->set_category_id(-1);
                 $eval->set_date(api_get_utc_datetime()); // these values will be changed
-                $eval->set_weight(0);    //   when the link setter
-                $eval->set_visible(0);   //     is called
+                $eval->set_weight(0); //   when the link setter
+                $eval->set_visible(0); //     is called
                 $eval->set_id(-1); // a 'real' id will be set when eval is added to db
                 $eval->set_user_id($this->get_user_id());
                 $eval->set_course_code($this->get_course_code());

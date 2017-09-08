@@ -110,10 +110,10 @@ function utf8_sort($array)
 {
 	$old_locale = setlocale(LC_ALL, null);
 	$code = api_get_language_isocode();
-	$locale_list = array($code.'.utf8', 'en.utf8','en_US.utf8','en_GB.utf8');
+	$locale_list = array($code.'.utf8', 'en.utf8', 'en_US.utf8', 'en_GB.utf8');
 	$try_sort = false;
 
-	foreach($locale_list as $locale) {
+	foreach ($locale_list as $locale) {
 		$my_local = setlocale(LC_COLLATE, $locale);
 		if ($my_local) {
 			$try_sort = true;
@@ -151,7 +151,7 @@ function array_flatten(array $array)
     $flatten = array();
     array_walk_recursive(
         $array,
-        function ($value) use (&$flatten) {
+        function($value) use (&$flatten) {
             $flatten[] = $value;
         }
     );

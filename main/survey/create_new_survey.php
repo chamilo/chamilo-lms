@@ -2,14 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * 	@package chamilo.survey
- * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
+ * @package chamilo.survey
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
  *  refactoring and rewriting large parts (if not all) of the code
- * 	@author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality
+ * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality
  * Test modification and rewriting large parts of the code
- * 	@version $Id: create_new_survey.php 22297 2009-07-22 22:08:30Z cfasanando $
+ * @version $Id: create_new_survey.php 22297 2009-07-22 22:08:30Z cfasanando $
  *
- * 	@todo only the available platform languages should be used => need an
+ * @todo only the available platform languages should be used => need an
  *  api get_languages and and api_get_available_languages (or a parameter)
  */
 
@@ -18,15 +18,15 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 // Database table definitions
-$table_survey = Database :: get_course_table(TABLE_SURVEY);
-$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-$table_gradebook_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+$table_survey = Database::get_course_table(TABLE_SURVEY);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
+$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$table_gradebook_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code) */
 // If user is not teacher or if he's a coach trying to access an element out of his session
 if (!api_is_allowed_to_edit()) {
-    if (!api_is_course_coach() ||
+    if (!api_is_session_general_coach() ||
         (!empty($_GET['survey_id']) &&
         !api_is_element_in_the_session(TOOL_SURVEY, $_GET['survey_id']))
     ) {
@@ -100,7 +100,7 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 $form = new FormValidator(
     'survey',
     'post',
-    api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$survey_id. '&' . api_get_cidreq()
+    api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$survey_id.'&'.api_get_cidreq()
 );
 
 $form->addElement('header', $tool_name);
@@ -153,10 +153,18 @@ $visibleResults = array(
     SURVEY_VISIBLE_TUTOR_STUDENT => get_lang('CoachAndStudent'),
     SURVEY_VISIBLE_PUBLIC => get_lang('Everyone')
 );
-$form->addElement('select', 'visible_results', get_lang('ResultsVisibility'), $visibleResults);
+
+if (api_get_configuration_value('hide_survey_reporting_button')) {
+    $form->addLabel(get_lang('ResultsVisibility'), get_lang('FeatureDisabledByAdministrator'));
+} else {
+    $form->addElement('select', 'visible_results', get_lang('ResultsVisibility'), $visibleResults);
+}
 //$defaults['visible_results'] = 0;
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
+
+$extraField = new ExtraField('survey');
+$extraField->addElements($form, $survey_id);
 
 // Additional Parameters
 $form->addButtonAdvancedSettings('advanced_params');
@@ -164,9 +172,23 @@ $form->addElement('html', '<div id="advanced_params_options" style="display:none
 
 if (Gradebook::is_active()) {
     // An option: Qualify the fact that survey has been answered in the gradebook
-    $form->addElement('checkbox', 'survey_qualify_gradebook', null, get_lang('QualifyInGradebook'), 'onclick="javascript: if (this.checked) { document.getElementById(\'gradebook_options\').style.display = \'block\'; } else { document.getElementById(\'gradebook_options\').style.display = \'none\'; }"');
-    $form->addElement('html', '<div id="gradebook_options"'.($gradebook_link_id ? '' : ' style="display:none"').'>');
-    $form->addElement('text', 'survey_weight', get_lang('QualifyWeight'), 'value="0.00" style="width: 40px;" onfocus="javascript: this.select();"');
+    $form->addElement(
+        'checkbox',
+        'survey_qualify_gradebook',
+        null,
+        get_lang('QualifyInGradebook'),
+        'onclick="javascript: if (this.checked) { document.getElementById(\'gradebook_options\').style.display = \'block\'; } else { document.getElementById(\'gradebook_options\').style.display = \'none\'; }"'
+    );
+    $form->addElement(
+        'html',
+        '<div id="gradebook_options"'.($gradebook_link_id ? '' : ' style="display:none"').'>'
+    );
+    $form->addElement(
+        'text',
+        'survey_weight',
+        get_lang('QualifyWeight'),
+        'value="0.00" style="width: 40px;" onfocus="javascript: this.select();"'
+    );
     $form->applyFilter('survey_weight', 'html_filter');
 
     // Loading Gradebook select
@@ -176,7 +198,6 @@ if (Gradebook::is_active()) {
         $element = $form->getElement('category_id');
         $element->freeze();
     }
-
     $form->addElement('html', '</div>');
 }
 
@@ -201,7 +222,13 @@ $input_name_list = null;
 
 if (isset($_GET['action']) && $_GET['action'] == 'edit' && !empty($survey_id)) {
     if ($survey_data['anonymous'] == 0) {
-        $form->addElement('checkbox', 'show_form_profile', null, get_lang('ShowFormProfile'), 'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
+        $form->addElement(
+            'checkbox',
+            'show_form_profile',
+            null,
+            get_lang('ShowFormProfile'),
+            'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"'
+        );
 
         if ($survey_data['show_form_profile'] == 1) {
             $form->addElement('html', '<div id="options_field" style="display:block">');
@@ -216,7 +243,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit' && !empty($survey_id)) {
             foreach ($field_list as $key => & $field) {
                 if ($field['visibility'] == 1) {
                     $form->addElement('checkbox', 'profile_'.$key, ' ', '&nbsp;&nbsp;'.$field['name']);
-                    $input_name_list.= 'profile_'.$key.',';
+                    $input_name_list .= 'profile_'.$key.',';
                 }
             }
 
@@ -259,7 +286,12 @@ if ($_GET['action'] == 'add') {
 $form->addRule('survey_title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('start_date', get_lang('InvalidDate'), 'date');
 $form->addRule('end_date', get_lang('InvalidDate'), 'date');
-$form->addRule(array('start_date', 'end_date'), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
+$form->addRule(
+    array('start_date', 'end_date'),
+    get_lang('StartDateShouldBeBeforeEndDate'),
+    'date_compare',
+    'lte'
+);
 
 // Setting the default values
 $form->setDefaults($defaults);
@@ -270,6 +302,10 @@ if ($form->validate()) {
     $values = $form->getSubmitValues();
     // Storing the survey
     $return = SurveyManager::store_survey($values);
+
+    $values['item_id'] = $return['id'];
+    $extraFieldValue = new ExtraFieldValue('survey');
+    $extraFieldValue->saveFieldValues($values);
 
     // Redirecting to the survey page (whilst showing the return message)
     header('location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$return['id'].'&'.api_get_cidreq());

@@ -43,47 +43,8 @@ gulp.task( 'hint', [ 'hint-js', 'hint-test', 'hint-task', 'jsonlint' ]);
 // https://www.npmjs.com/package/gulp-requirejs-optimize/
 
 var gutil = require('gulp-util');
-var through = require('through2');
-var requirejs = require('requirejs');
 var chalk = require('chalk');
-
-function rjsOptimize( options ) {
-  options = options || {};
-
-  requirejs.define('node/print', [], function() {
-    return function(msg) {
-      if( msg.substring(0, 5) === 'Error' ) {
-        gutil.log( chalk.red( msg ) );
-      } else {
-        gutil.log( msg );
-      }
-    };
-  });
-
-  var stream = through.obj(function (file, enc, cb) {
-    if ( file.isNull() ) {
-      return cb( null, file );
-    }
-
-    options.logLevel = 2;
-
-    options.out = function( text ) {
-      var outFile = new gutil.File({
-        path: file.relative,
-        contents: new Buffer( text )
-      });
-      cb( null, outFile );
-    };
-
-    gutil.log('RequireJS optimizing');
-    requirejs.optimize( options, null, function( err ) {
-      var gulpError = new gutil.PluginError( 'requirejsOptimize', err.message );
-      stream.emit( 'error', gulpError );
-    });
-  });
-
-  return stream;
-}
+var rjsOptimize = require('gulp-requirejs-optimize');
 
 // regex for banner comment
 var reBannerComment = new RegExp('^\\s*(?:\\/\\*[\\s\\S]*?\\*\\/)\\s*');
@@ -156,11 +117,6 @@ gulp.task( 'version', function() {
 
   gulp.src( [ 'bower.json', 'package.json' ] )
     .pipe( replace( /"version": "\d+\.\d+\.\d+"/, '"version": "' + version + '"' ) )
-    .pipe( gulp.dest('.') );
-  // replace CDN links in README
-  var minorVersion = version.match( /^\d+\.\d+/ )[0];
-  gulp.src('README.md')
-    .pipe( replace( /imagesloaded@\d+\.\d+/g, 'imagesloaded@' + minorVersion ))
     .pipe( gulp.dest('.') );
 });
 

@@ -4,9 +4,7 @@
  * to OpenMeetings from Chamilo by calling its web services
  * @package chamilo.plugin.openmeetings
  */
-/**
- * Initialization
- */
+
 namespace Chamilo\Plugin\OpenMeetings;
 
 include_once __DIR__.'/session.class.php';
@@ -49,9 +47,9 @@ class OpenMeetings
         $om_user   = $plugin->get('user');
         $om_pass   = $plugin->get('pass');
         $accessUrl = api_get_access_url($_configuration['access_url']);
-        $this->externalType = substr($accessUrl['url'], strpos($accessUrl['url'], '://')+3, -1);
+        $this->externalType = substr($accessUrl['url'], strpos($accessUrl['url'], '://') + 3, -1);
         if (strcmp($this->externalType, 'localhost') == 0) {
-            $this->externalType = substr(api_get_path(WEB_PATH), strpos(api_get_path(WEB_PATH), '://')+3, -1);
+            $this->externalType = substr(api_get_path(WEB_PATH), strpos(api_get_path(WEB_PATH), '://') + 3, -1);
         }
         $this->externalType = 'chamilolms.'.$this->externalType;
         $this->table = \Database::get_main_table('plugin_openmeetings');
@@ -93,41 +91,6 @@ class OpenMeetings
         return api_is_course_admin() || api_is_coach() || api_is_platform_admin();
     }
 
-    /**
-     * Login the user with OM Server. This generates a session ID that is
-     * specific to the current user, but that does not require specific user data
-     *
-     * It is similar to opening a PHP session. In fact, the session ID is kept
-     * inside the $_SESSION['openmeetings_session'] session variable
-     * @return bool True if the user is correct and false when is incorrect
-     * @deprecated loginUser now called at object instanciation
-     */
-    /**
-    function loginUser()
-    {
-        try {
-            //Verifying if there is already an active session
-            if (empty($_SESSION['openmeetings_session'])) {
-                // Login user returns either 0 or >0, depending on the results
-                // Technically, as long as the SOAP user has been configured in OpenMeetings and OpenMeetings is on, this should always succeed.
-                if ($this->gateway->loginUser()) {
-                    $this->sessionId = $_SESSION['openmeetings_session'] = $this->gateway->session_id;
-                    return true;
-                } else {
-                    error_log('loginUser did not succeed');
-                    return false;
-                }
-            } else {
-                $this->sessionId = $_SESSION['openmeetings_session'];
-                return true;
-            }
-        } catch (SoapFault $e) {
-            error_log(__FILE__.'+'.__LINE__.' Warning: We have detected some problems. Fault: '.$e->faultstring);
-            return false;
-        }
-    }
-    */
-
     /*
      * Creating a Room for the meeting
     * @return bool True if the user is correct and false when is incorrect
@@ -154,31 +117,26 @@ class OpenMeetings
         );
 
         if ($meetingData != false && count($meetingData) > 0) {
-            //error_log(print_r($meetingData,1));
-            //error_log('Found previous room reference - reusing');
             // There has been a room in the past for this course. It should
             // still be on the server, so update (instead of creating a new one)
             // This fills the following attributes: status, name, comment, chamiloCourseId, chamiloSessionId
             $room = new Room();
             $room->loadRoomId($meetingData['room_id']);
-            $roomArray = (array)$room;
+            $roomArray = (array) $room;
             $roomArray['SID'] = $this->sessionId;
             $roomId = $this->gateway->updateRoomWithModeration($room);
             if ($roomId != $meetingData['room_id']) {
                 $msg = 'Something went wrong: the updated room ID ('.$roomId.') is not the same as the one we had ('.$meetingData['room_id'].')';
-                error_log($msg);
                 die($msg);
             }
-
         } else {
-            //error_log('Found no previous room - creating');
             $room = new Room();
             $room->SID = $this->sessionId;
             $room->name = $this->roomName;
             //$room->roomtypes_id = $room->roomtypes_id;
-            $room->comment = urlencode(get_lang('Course').': ' . $params['meeting_name'] . ' - '.$_configuration['software_name']);
+            $room->comment = urlencode(get_lang('Course').': '.$params['meeting_name'].' - '.$_configuration['software_name']);
             //$room->numberOfPartizipants = $room->numberOfPartizipants;
-            $room->ispublic = $room->getString('isPublic', 'false');
+            $room->ispublic = boolval($room->getString('isPublic', 'false'));
             //$room->appointment = $room->getString('appointment');
             //$room->isDemoRoom = $room->getString('isDemoRoom');
             //$room->demoTime = $room->demoTime;
@@ -200,7 +158,7 @@ class OpenMeetings
             $params['room_id'] = $roomId;
             $params['c_id'] = api_get_course_int_id();
             $params['session_id'] = api_get_session_id();
-            $params['record'] = ($room->allowRecording?1:0);
+            $params['record'] = ($room->allowRecording ? 1 : 0);
 
             $id = \Database::insert($this->table, $params);
 
@@ -238,7 +196,7 @@ class OpenMeetings
         }
         $params = array('room_id' => $meetingData['room_id']);
         $returnVal = $this->setUserObjectAndGenerateRoomHashByURLAndRecFlag($params);
-        $iframe = $this->url . "/?" ."secureHash=" . $returnVal;
+        $iframe = $this->url."/?"."secureHash=".$returnVal;
         printf("<iframe src='%s' width='%s' height = '%s' />", $iframe, "100%", 640);
     }
 
@@ -346,7 +304,7 @@ class OpenMeetings
         $userId = $_SESSION['_user']['user_id'];
         $systemType = 'Chamilo';
         $room_id = $params['room_id'];
-        $becomeModerator = ( $this->isTeacher() ? 1 : 0 );
+        $becomeModerator = ($this->isTeacher() ? 1 : 0);
         $allowRecording = 1; //Provisional
 
         $urlWsdl = $this->url."/services/UserService?wsdl";
@@ -389,38 +347,15 @@ class OpenMeetings
                 )
             )
         );
-        /*$urlWsdl = $this->url."/services/RoomService?wsdl";
-        $omServices = new \SoapClient($urlWsdl);*/
         $room = new Room();
-
-        /*
-        try {
-            $rooms = $this->gateway->getRoomsWithCurrentUsersByType();
-            //$rooms = $omServices->getRoomsPublic(array(
-                //'SID' => $this->sessionId,
-                //'start' => 0,
-                //'max' => 10,
-                //'orderby' => 'name',
-                //'asc' => 'true',
-                //'externalRoomType' => 'chamilo',
-                //'roomtypes_id' => 'chamilo',
-                //)
-            //);
-        } catch (SoapFault $e) {
-            error_log(__FILE__.'+'.__LINE__.' '.$e->faultstring);
-            //error_log($rooms->getDebug());
-            return false;
-        }
-        */
         $room->SID = $this->sessionId;
-        //error_log(__FILE__.'+'.__LINE__.' Meetings found: '.print_r($room->SID,1));
         if (!empty($meetingsList)) {
             foreach ($meetingsList as $meetingDb) {
                 //$room->rooms_id = $meetingDb['room_id'];
                 error_log(__FILE__.'+'.__LINE__.' Meetings found: '.print_r($meetingDb, 1));
                 $remoteMeeting = array();
                 $meetingDb['created_at'] = api_get_local_time($meetingDb['created_at']);
-                $meetingDb['closed_at'] = (!empty($meetingDb['closed_at']) ? api_get_local_time($meetingDb['closed_at']):'');
+                $meetingDb['closed_at'] = (!empty($meetingDb['closed_at']) ? api_get_local_time($meetingDb['closed_at']) : '');
                 // Fixed value for now
                 $meetingDb['participantCount'] = 40;
                 $rec = $this->gateway->getFlvRecordingByRoomId($meetingDb['room_id']);
@@ -436,7 +371,7 @@ class OpenMeetings
                         \Display::url('[.avi]', $link2, array('target' => '_blank'));
 
                 }
-                $item['show_links']  = implode('<br />', $links);
+                $item['show_links'] = implode('<br />', $links);
 
                 // The following code is currently commented because the web service
                 // says this is not allowed by the SOAP user.
@@ -486,7 +421,7 @@ class OpenMeetings
                 $remoteMeeting = $current_room;
                 */
 
-                if (empty( $remoteMeeting )) {
+                if (empty($remoteMeeting)) {
                 /*
                     error_log(__FILE__.'+'.__LINE__.' Empty remote Meeting for now');
                     if ($meetingDb['status'] == 1 && $this->isTeacher()) {
@@ -595,7 +530,6 @@ class OpenMeetings
                     array('id = ? ' => $meetingId)
                 );
             }
-            //error_log(__FILE__.'+'.__LINE__.' Finished closing');
         } catch (SoapFault $e) {
             error_log(__FILE__.'+'.__LINE__.' Warning: We have detected some problems: Fault: '.$e->faultstring);
             exit;
@@ -621,7 +555,6 @@ class OpenMeetings
                 array('id = ? ' => $id)
             );
             return $id;
-            //error_log(__FILE__.'+'.__LINE__.' Finished closing');
         } catch (SoapFault $e) {
             error_log(__FILE__.'+'.__LINE__.' Warning: We have detected some problems: Fault: '.$e->faultstring);
             exit;

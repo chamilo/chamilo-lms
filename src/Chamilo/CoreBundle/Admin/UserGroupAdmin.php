@@ -25,18 +25,22 @@ class UserGroupAdmin extends AbstractAdmin
         $formMapper
             ->add('name')
             ->add('description', 'ckeditor')
-            ->add('users', 'sonata_type_collection', array(
+            ->add(
+                'users',
+                'sonata_type_collection',
+                array(
                     'cascade_validation' => true,
-                ), array(
-                   // 'allow_delete' => true,
+                ),
+                array(
+                    // 'allow_delete' => true,
                     'by_reference' => false,
-                    'edit'              => 'inline',
-                    'inline'            => 'table',
+                    'edit' => 'inline',
+                    'inline' => 'table',
                     //'btn_add' => true,
                     //'multiple' => true
                     //'sortable'          => 'position',
                     //'link_parameters'   => array('content' => $users),
-                    'admin_code'        => 'sonata.admin.user_group_rel_user'
+                    'admin_code' => 'sonata.admin.user_group_rel_user',
                 )
             )
         ;

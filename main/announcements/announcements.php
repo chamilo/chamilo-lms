@@ -67,7 +67,6 @@ $sessionId = api_get_session_id();
 
 if (!empty($group_id)) {
     $group_properties = GroupManager:: get_group_properties($group_id);
-
     $interbreadcrumb[] = array(
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups'),
@@ -152,12 +151,12 @@ switch ($action) {
         break;
     case 'view':
         $interbreadcrumb[] = array(
-            "url" => api_get_path(WEB_CODE_PATH)."announcements/announcements.php?".api_get_cidreq(),
+            "url" => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
             "name" => $nameTools,
         );
 
         $nameTools = get_lang('View');
-        $content = AnnouncementManager::display_announcement($announcement_id);
+        $content = AnnouncementManager::displayAnnouncement($announcement_id);
         break;
     case 'list':
         $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -196,7 +195,12 @@ switch ($action) {
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_course_announcements&'.api_get_cidreq().'&title_to_search='.$keyword.'&user_id_to_search='.$userIdToSearch;
         $deleteUrl = api_get_path(WEB_AJAX_PATH).'announcement.ajax.php?a=delete_item&'.api_get_cidreq();
-        $columns = array(get_lang('Title'), get_lang('By'), get_lang('LastUpdateDate'), get_lang('Actions'));
+        $columns = array(
+            get_lang('Title'),
+            get_lang('By'),
+            get_lang('LastUpdateDate'),
+            get_lang('Actions')
+        );
 
         // Column config
         $columnModel = array(
@@ -215,8 +219,8 @@ switch ($action) {
                 'sortable' => 'false',
             ),
             array(
-                'name' => 'insert_date',
-                'index' => 'insert_date',
+                'name' => 'lastedit_date',
+                'index' => 'lastedit_date',
                 'width' => '200',
                 'align' => 'left',
                 'sortable' => 'false',
@@ -266,7 +270,11 @@ switch ($action) {
         });
         </script>';
 
-        $count = AnnouncementManager::getAnnouncements($stok, $announcement_number, true);
+        $count = AnnouncementManager::getAnnouncements(
+            $stok,
+            $announcement_number,
+            true
+        );
 
         if (empty($count)) {
             $html = '';
@@ -297,7 +305,7 @@ switch ($action) {
             api_not_allowed();
         }
 
-        if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
+        if (!api_is_session_general_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
             AnnouncementManager::delete_announcement($_course, $id);
             Display::addFlash(Display::return_message(get_lang('AnnouncementDeleted')));
         }
@@ -331,7 +339,7 @@ switch ($action) {
                     api_not_allowed();
                 }
 
-                if (!api_is_course_coach() ||
+                if (!api_is_session_general_coach() ||
                     api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $_GET['id'])
                 ) {
                     AnnouncementManager::change_visibility_announcement(
@@ -398,12 +406,14 @@ switch ($action) {
                 // we want to remind inactive users. The $_GET['since'] parameter
                 // determines which users have to be warned (i.e the users who have been inactive for x days or more
                 $since = isset($_GET['since']) ? intval($_GET['since']) : 6;
-                // getting the users who have to be reminded
-                $to = Tracking:: getInactiveStudentsInCourse(
+
+                // Getting the users who have to be reminded
+                $to = Tracking::getInactiveStudentsInCourse(
                     api_get_course_int_id(),
                     $since,
                     $sessionId
                 );
+
                 // setting the variables for the form elements: the users who need to receive the message
                 foreach ($to as &$user) {
                     $user = 'USER:'.$user;
@@ -436,11 +446,10 @@ switch ($action) {
 
             $element = CourseManager::addUserGroupMultiSelect($form, array());
         } else {
-            $element = CourseManager::addGroupMultiSelect($form, $group_properties['iid'], array());
+            $element = CourseManager::addGroupMultiSelect($form, $group_properties, array());
         }
 
         $form->addHtml('</div>');
-//        $form->setRequired($element);
         $form->addCheckBox('email_ann', '', get_lang('EmailOption'));
 
         if (!isset($announcement_to_modify)) {
@@ -485,11 +494,16 @@ switch ($action) {
         }
 
         $defaults['email_ann'] = true;
-
-        $form->addElement('text', 'title', get_lang('EmailTitle'));
+        $form->addElement(
+            'text',
+            'title',
+            get_lang('EmailTitle'),
+            array("onkeypress" => "return event.keyCode != 13;")
+        );
+        $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
         $form->addElement('hidden', 'id');
         $htmlTags = "<b>".get_lang('Tags')."</b><br /><br />";
-        $tags = AnnouncementManager::get_tags();
+        $tags = AnnouncementManager::getTags();
 
         foreach ($tags as $tag) {
             $htmlTags .= "<b>".$tag."</b><br />";
@@ -499,7 +513,7 @@ switch ($action) {
         $form->addHtmlEditor(
             'content',
             get_lang('Description'),
-            false,
+            true,
             false,
             array('ToolbarSet' => 'Announcements')
         );
@@ -667,7 +681,7 @@ if ($allowToEdit) {
 }
 
 if ($show_actions) {
-    echo Display::toolbarAction('toolbar', array($actionsLeft, $searchFormToString), 2, false);
+    echo Display::toolbarAction('toolbar', array($actionsLeft, $searchFormToString));
 }
 
 echo $content;

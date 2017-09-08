@@ -15,7 +15,6 @@ class Block
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -23,7 +22,6 @@ class Block
      */
     public function display_small()
     {
-
     }
 
     /**
@@ -31,7 +29,6 @@ class Block
      */
     public function display_large()
     {
-
     }
 
     public function get_block_path()

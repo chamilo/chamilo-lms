@@ -1,10 +1,7 @@
 {% if actions != '' %}
-    <div class="actions">
-        {{ actions }}
-    </div>
+    {{ actions }}
 {% endif %}
 {{ flash_messages }}
-<span id="js_alerts"></span>
 {% if header != '' %}
     <div class="section-page">
         <div class="page-header">
@@ -12,6 +9,17 @@
         </div>
     </div>
 {% endif %}
+{% if category != '' %}
+<div class="section-category">
+    <div class="page-header">
+        <h3>{{ category.name }}</h3>
+    </div>
+    <div class="description">
+        {{ category.description }}
+    </div>
+</div>
+{% endif %}
+
 {% if message != '' %}
     <section id="messages">
         {{ message}}

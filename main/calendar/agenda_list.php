@@ -13,6 +13,20 @@ $interbreadcrumb[] = array(
 );
 
 $currentCourseId = api_get_course_int_id();
+$currentGroupdId = api_get_group_id();
+
+if (!empty($currentGroupdId)) {
+    $groupProperties = GroupManager::get_group_properties($currentGroupdId);
+    $interbreadcrumb[] = array(
+        "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
+        "name" => get_lang('Groups')
+    );
+    $interbreadcrumb[] = array(
+        "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
+        "name" => get_lang('GroupSpace').' '.$groupProperties['name']
+    );
+}
+
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 $agenda = new Agenda($type);
 $events = $agenda->getEvents(
@@ -28,7 +42,7 @@ $this_section = SECTION_MYAGENDA;
 
 if (!empty($currentCourseId) && $currentCourseId != -1) {
     // Agenda is inside a course tool
-    $url = api_get_self() . '?' . api_get_cidreq();
+    $url = api_get_self().'?'.api_get_cidreq();
     $this_section = SECTION_COURSES;
 
     // Order by start date
@@ -51,7 +65,7 @@ if (!empty($currentCourseId) && $currentCourseId != -1) {
     if (!empty($events)) {
         foreach ($events as &$event) {
             $courseId = isset($event['course_id']) ? $event['course_id'] : '';
-            $event['url'] = api_get_self() . '?cid=' . $courseId . '&type=' . $event['type'];
+            $event['url'] = api_get_self().'?cid='.$courseId.'&type='.$event['type'];
         }
     }
 }
@@ -77,7 +91,7 @@ if (api_is_allowed_to_edit()) {
         } else {
             $courseCondition = '&'.api_get_cidreq();
         }
-        header('Location: '. api_get_self().'?type='.$agenda->type.$courseCondition);
+        header('Location: '.api_get_self().'?type='.$agenda->type.$courseCondition);
         exit;
     }
 }

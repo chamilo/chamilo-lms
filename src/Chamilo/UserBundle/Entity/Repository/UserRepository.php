@@ -282,7 +282,7 @@ class UserRepository extends EntityRepository
                         INNER JOIN ChamiloUserBundle:User AS U WITH UF.friendUserId = U
                         WHERE
                             U.status != 6 AND
-                            UF.relationType NOT IN(" . USER_RELATION_TYPE_DELETED . ", " . USER_RELATION_TYPE_RRHH . ") AND
+                            UF.relationType NOT IN(" . USER_RELATION_TYPE_DELETED.", ".USER_RELATION_TYPE_RRHH.") AND
                             UF.userId = $currentUserId AND
                             UF.friendUserId != $currentUserId AND
                             U = R.user AND
@@ -306,7 +306,7 @@ class UserRepository extends EntityRepository
                 $dql = "SELECT DISTINCT U
                         FROM ChamiloUserBundle:User U
                         INNER JOIN ChamiloCoreBundle:TrackEOnline T WITH U.id = T.loginUserId
-                        WHERE T.loginDate >= '" . $limit_date . "'";
+                        WHERE T.loginDate >= '" . $limit_date."'";
             }
         }
 

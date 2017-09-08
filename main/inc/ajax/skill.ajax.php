@@ -8,16 +8,13 @@ require_once __DIR__.'/../global.inc.php';
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 
-if (api_get_setting('allow_skills_tool') != 'true') {
-    exit;
-}
-
 api_block_anonymous_users();
+
+Skill::isAllow();
 
 $skill = new Skill();
 $gradebook = new Gradebook();
 $skill_gradebook = new SkillRelGradebook();
-
 $userId = api_get_user_id();
 
 switch ($action) {
@@ -37,13 +34,17 @@ switch ($action) {
         }
         break;
     case 'find_skills':
-        $skills = $skill->find('all', array('where' => array('name LIKE %?% '=>$_REQUEST['tag'])));
-        $return_skills = array();
+        $skills = $skill->find('all', array('where' => array('name LIKE %?% '=>$_REQUEST['q'])));
+        $return_skills = array([
+            'items' => []
+        ]);
         foreach ($skills as $skill) {
-            $skill['key'] = $skill['name'];
-            $skill['value'] =  $skill['id'];
-            $return_skills[] = $skill;
+            $return_skills['items'][] = [
+                'id' => $skill['id'],
+                'text' => $skill['name']
+            ];
         }
+        header('Content-Type: application/json');
         echo json_encode($return_skills);
         break;
     case 'get_gradebooks':
@@ -53,7 +54,7 @@ switch ($action) {
         if (!empty($gradebooks)) {
             foreach ($gradebooks as $gradebook) {
                 if ($gradebook['parent_id'] == 0 && !empty($gradebook['certif_min_score']) && !empty($gradebook['document_id'])) {
-                    $gradebook_list[]  = $gradebook;
+                    $gradebook_list[] = $gradebook;
                     //$gradebook['name'] = $gradebook['name'];
                     //$gradebook_list[]  = $gradebook;
                 } else {
@@ -69,7 +70,7 @@ switch ($action) {
         $return = array();
         foreach ($gradebooks as $item) {
             $item['key'] = $item['name'];
-            $item['value'] =  $item['id'];
+            $item['value'] = $item['id'];
             $return[] = $item;
         }
         echo json_encode($return);
@@ -95,13 +96,13 @@ switch ($action) {
         }
         break;
     case 'get_skills_by_profile':
-        $skill_rel_profile   = new SkillRelProfile();
+        $skill_rel_profile = new SkillRelProfile();
         $profile_id = isset($_REQUEST['profile_id']) ? $_REQUEST['profile_id'] : null;
         $skills = $skill_rel_profile->get_skills_by_profile($profile_id);
         echo json_encode($skills);
         break;
     case 'get_saved_profiles':
-        $skill_profile   = new SkillProfile();
+        $skill_profile = new SkillProfile();
         $profiles = $skill_profile->get_all();
         Display::display_no_header();
         Display::$global_template->assign('profiles', $profiles);
@@ -124,9 +125,7 @@ switch ($action) {
         $skill_info = $skill->get_skill_info($id);
         $courses = $skill->get_courses_by_skill($id);
         $sessions = $skill->getSessionsBySkill($id);
-
         $html = '';
-
         if (!empty($courses) || !empty($sessions)) {
             Display::display_no_header();
             Display::$global_template->assign('skill', $skill_info);
@@ -147,7 +146,7 @@ switch ($action) {
         break;
     case 'get_user_skill':
         $skillId = isset($_REQUEST['profile_id']) ? intval($_REQUEST['profile_id']) : 0;
-        $skill = $skill->user_has_skill($userId, $skillId);
+        $skill = $skill->userHasSkill($userId, $skillId);
         if ($skill) {
             echo 1;
         } else {
@@ -155,11 +154,11 @@ switch ($action) {
         }
         break;
     case 'get_all_user_skills':
-        $skills = $skill->get_user_skills($userId, true);
+        $skills = $skill->getUserSkills($userId, true);
         echo json_encode($skills);
         break;
     case 'get_user_skills':
-        $skills = $skill->get_user_skills($userId, true);
+        $skills = $skill->getUserSkills($userId, true);
         Display::display_no_header();
         Display::$global_template->assign('skills', $skills);
         $template = Display::$global_template->get_template('skill/user_skills.tpl');
@@ -171,7 +170,7 @@ switch ($action) {
         echo json_encode($info);
         break;
     case 'load_children':
-        $id             = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
+        $id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
         $load_user_data = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
         $skills = $skill->get_children($id, $load_user_data);
 
@@ -190,7 +189,7 @@ switch ($action) {
             $success = false;
         }
 
-        $result = array (
+        $result = array(
             'success' => $success,
             'data' => $return
         );
@@ -201,7 +200,7 @@ switch ($action) {
         $skills = $skill->get_direct_parents($id);
         $return = array();
         foreach ($skills as $skill) {
-            $return [$skill['data']['id']] = array (
+            $return [$skill['data']['id']] = array(
                 'id'        => $skill['data']['id'],
                 'parent_id' => $skill['data']['parent_id'],
                 'name'      => $skill['data']['name']
@@ -210,8 +209,8 @@ switch ($action) {
         echo json_encode($return);
         break;
     case 'profile_matches':
-        $skill_rel_user  = new SkillRelUser();
-        $skills = (!empty($_REQUEST['skill_id'])?$_REQUEST['skill_id']:array());
+        $skill_rel_user = new SkillRelUser();
+        $skills = (!empty($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : array());
 
         $total_skills_to_search = $skills;
         $users  = $skill_rel_user->get_user_by_skills($skills);
@@ -223,7 +222,7 @@ switch ($action) {
             foreach ($users as $user) {
                 $user_info = api_get_user_info($user['user_id']);
                 $user_list[$user['user_id']]['user'] = $user_info;
-                $my_user_skills = $skill_rel_user->get_user_skills($user['user_id']);
+                $my_user_skills = $skill_rel_user->getUserSkills($user['user_id']);
 
                 $user_skill_list = array();
                 foreach ($my_user_skills as $skill_item) {
@@ -333,7 +332,6 @@ switch ($action) {
     case 'delete_profile':
         if (api_is_platform_admin() || api_is_drh()) {
             $profileId = $_REQUEST['profile'];
-
             $skillProfile = new SkillProfile();
             $isDeleted = $skillProfile->delete($profileId);
 

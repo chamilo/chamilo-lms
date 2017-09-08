@@ -20,7 +20,7 @@ class Basic extends Toolbar
         'adobeair',
         'ajax',
         'audio',
-        'image2',
+        'image2_chamilo',
         'bidi',
         'colorbutton',
         'colordialog',
@@ -102,7 +102,7 @@ class Basic extends Toolbar
 
         if (api_get_setting('enabled_mathjax') == 'true') {
             $plugins[] = 'mathjax';
-            $config['mathJaxLib'] = api_get_path(WEB_PATH).'web/assets/MathJax/MathJax.js?config=AM_HTMLorMML';
+            $config['mathJaxLib'] = api_get_path(WEB_PUBLIC_PATH).'assets/MathJax/MathJax.js?config=TeX-AMS_HTML';
         }
 
         if (api_get_setting('enabled_asciisvg') == 'true') {
@@ -147,8 +147,8 @@ class Basic extends Toolbar
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
 
-        $config['customConfig'] = api_get_path(WEB_LIBRARY_JS_PATH) . 'ckeditor/config_js.php';
-        $config['flash_flvPlayer'] = api_get_path(WEB_LIBRARY_JS_PATH) . 'ckeditor/plugins/flash/swf/player.swf';
+        $config['customConfig'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/config_js.php';
+        $config['flash_flvPlayer'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/plugins/flash/swf/player.swf';
 
         /*filebrowserFlashBrowseUrl
         filebrowserFlashUploadUrl
@@ -173,8 +173,23 @@ class Basic extends Toolbar
             'wordLimit' => 'unlimited'
         );*/
 
-        $config['skin'] = 'bootstrapck,' . api_get_path(WEB_LIBRARY_JS_PATH) . 'ckeditor/skins/bootstrapck/';
-        //$config['skin'] = 'moono';
+        $config['skin'] = 'bootstrapck,'.api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/skins/bootstrapck/';
+        //$config['skin'] = 'moono-lisa';
+
+        $config['image2_chamilo_alignClasses'] = [
+            'pull-left',
+            'block-center',
+            'pull-right',
+            'img-va-baseline',
+            'img-va-top',
+            'img-va-bottom',
+            'img-va-middle',
+            'img-va-super',
+            'img-va-sub',
+            'img-va-text-top',
+            'img-va-text-bottom'
+        ];
+        $config['startupOutlineBlocks'] = api_get_configuration_value('ckeditor_startup_outline_blocks') === true;
 
         if (isset($this->config)) {
             $this->config = array_merge($config, $this->config);
@@ -205,7 +220,7 @@ class Basic extends Toolbar
         return [
             $this->getNewPageBlock(),
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Oembed','Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['Link', 'Image', 'Video', 'Oembed', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],

@@ -16,7 +16,7 @@ if ($userNotAllowed) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = array ('url' => api_is_student_boss()?'#':'index.php', 'name' => get_lang('MySpace'));
+$interbreadcrumb[] = array('url' => api_is_student_boss() ? '#' : 'index.php', 'name' => get_lang('MySpace'));
 $tool_name = get_lang('Report');
 
 $this_section = SECTION_TRACKING;
@@ -42,13 +42,13 @@ $columns = array(
 
 //Column config
 $column_model = array(
-    array('name'=>'course',         'index'=>'title',       'width'=>'180', 'align'=>'left', 'wrap_cell' => 'true'),
-    array('name'=>'user',           'index'=>'user',        'width'=>'100', 'align'=>'left','sortable'=>'false', 'wrap_cell' => 'true'),
-    array('name'=>'email',          'index'=>'email',       'width'=>'100', 'align'=>'left','sortable'=>'false', 'wrap_cell' => 'true'),
-    array('name'=>'time',           'index'=>'time',        'width'=>'50',  'align'=>'left','sortable'=>'false'),
-    array('name'=>'certificate',    'index'=>'certificate', 'width'=>'50',  'align'=>'left','sortable'=>'false'),
-    array('name'=>'progress_100',   'index'=>'progress_100',       'width'=>'50',  'align'=>'left','sortable'=>'false'),
-    array('name'=>'progress',       'index'=>'progress',    'width'=>'50',  'align'=>'left','sortable'=>'false')
+    array('name'=>'course', 'index'=>'title', 'width'=>'180', 'align'=>'left', 'wrap_cell' => 'true'),
+    array('name'=>'user', 'index'=>'user', 'width'=>'100', 'align'=>'left', 'sortable'=>'false', 'wrap_cell' => 'true'),
+    array('name'=>'email', 'index'=>'email', 'width'=>'100', 'align'=>'left', 'sortable'=>'false', 'wrap_cell' => 'true'),
+    array('name'=>'time', 'index'=>'time', 'width'=>'50', 'align'=>'left', 'sortable'=>'false'),
+    array('name'=>'certificate', 'index'=>'certificate', 'width'=>'50', 'align'=>'left', 'sortable'=>'false'),
+    array('name'=>'progress_100', 'index'=>'progress_100', 'width'=>'50', 'align'=>'left', 'sortable'=>'false'),
+    array('name'=>'progress', 'index'=>'progress', 'width'=>'50', 'align'=>'left', 'sortable'=>'false')
 );
 
 if (!empty($extra_fields)) {
@@ -67,7 +67,7 @@ if (!empty($extra_fields)) {
 }
 
 if (api_is_student_boss()) {
-    $column_model[] = array('name'=>'group', 'index'=>'group', 'width'=>'50', 'align'=>'left','sortable'=>'false');
+    $column_model[] = array('name'=>'group', 'index'=>'group', 'width'=>'50', 'align'=>'left', 'sortable'=>'false');
     $columns[] = get_lang('Group');
 }
 
@@ -78,7 +78,7 @@ $extra_params['height'] = 'auto';
 
 $htmlHeadXtra[] = '<script>
 $(function() {
-    '.Display::grid_js('user_course_report',  $url, $columns, $column_model, $extra_params, array(), null, true).'
+    '.Display::grid_js('user_course_report', $url, $columns, $column_model, $extra_params, array(), null, true).'
     jQuery("#user_course_report").jqGrid("navGrid","#user_course_report_pager",{
         view:false,
         edit:false,
@@ -102,11 +102,11 @@ $actions = null;
 if (api_is_student_boss()) {
     $actions .= Display::url(
         Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH) . "auth/my_progress.php"
+        api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
     );
     $actions .= Display::url(
         Display::return_icon('user.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH) . "mySpace/student.php"
+        api_get_path(WEB_CODE_PATH)."mySpace/student.php"
     );
     $actions .= Display::url(
         Display::return_icon("statistics.png", get_lang("CompanyReport"), array(), ICON_SIZE_MEDIUM),
@@ -119,7 +119,7 @@ if (api_is_student_boss()) {
             [],
             ICON_SIZE_MEDIUM
         ),
-        api_get_path(WEB_CODE_PATH) . "gradebook/certificate_report.php"
+        api_get_path(WEB_CODE_PATH)."gradebook/certificate_report.php"
     );
 }
 
@@ -130,13 +130,13 @@ if (!empty($actions)) {
 }
 $content .= Display::url(
     get_lang("CompanyReportResumed"),
-    api_get_path(WEB_CODE_PATH) . "mySpace/company_reports_resumed.php",
+    api_get_path(WEB_CODE_PATH)."mySpace/company_reports_resumed.php",
     array(
         'class' => 'btn btn-success'
     )
 );
 $content .= '</div>';
-$content .= '<h1 class="page-header">' . get_lang('CompanyReport') . '</h1>';
+$content .= '<h1 class="page-header">'.get_lang('CompanyReport').'</h1>';
 $content .= Display::grid_html('user_course_report');
 
 $tpl = new Template($tool_name);

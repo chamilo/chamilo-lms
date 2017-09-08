@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Show information about OpenBadge citeria
+ * Show information about OpenBadge criteria
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.badge
  */
@@ -16,7 +16,7 @@ if (!$skill) {
         Display::return_message(get_lang('SkillNotFound'), 'error')
     );
 
-    header('Location: ' . api_get_path(WEB_PATH));
+    header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
 

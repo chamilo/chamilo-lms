@@ -146,7 +146,6 @@ class GradebookDataGenerator
 
                     // Ranking
                     $ranking = $this->buildRankingColumn($item, $userId, $userCount);
-
                     $row['ranking'] = $ranking['display'];
                     $row['ranking_score'] = $ranking['score'];
 
@@ -154,7 +153,12 @@ class GradebookDataGenerator
                 }
             } else {
                 // Category.
-                $result = $this->build_result_column($userId, $item, $ignore_score_color, true);
+                $result = $this->build_result_column(
+                    $userId,
+                    $item,
+                    $ignore_score_color,
+                    true
+                );
                 $row[] = $result['display'];
                 $row['result_score'] = $result['score'];
                 $row['result_score_weight'] = $result['score'];
@@ -188,7 +192,12 @@ class GradebookDataGenerator
 
                 $scoreDisplay = ScoreDisplay::instance();
                 $score = AbstractLink::getCurrentUserRanking($userId, $rankingStudentList);
-                $row['ranking'] = $scoreDisplay->display_score($score, SCORE_DIV, SCORE_BOTH, true);
+                $row['ranking'] = $scoreDisplay->display_score(
+                    $score,
+                    SCORE_DIV,
+                    SCORE_BOTH,
+                    true
+                );
                 if ($invalidateResults) {
                     $row['ranking'] = null;
                 }
@@ -213,11 +222,16 @@ class GradebookDataGenerator
             api_get_session_id()
         );
 
-        $scoreDisplay = ScoreDisplay :: instance();
-        $display = $scoreDisplay->display_score($score, SCORE_DIV_PERCENT_WITH_CUSTOM, SCORE_BOTH, true);
+        $scoreDisplay = ScoreDisplay::instance();
+        $display = $scoreDisplay->display_score(
+            $score,
+            SCORE_DIV_PERCENT_WITH_CUSTOM,
+            SCORE_BOTH,
+            true
+        );
         $type = $item->get_item_type();
         if ($type == 'L' && get_class($item) == 'ExerciseLink') {
-            $display  = ExerciseLib::show_score($score[0], $score[1], false);
+            $display = ExerciseLib::show_score($score[0], $score[1], false);
         }
 
         return array(
@@ -234,12 +248,17 @@ class GradebookDataGenerator
     private function buildAverageResultColumn(GradebookItem $item)
     {
         $score = $item->calc_score(null, 'average');
-        $scoreDisplay = ScoreDisplay :: instance();
-        $display = $scoreDisplay->display_score($score, SCORE_DIV_PERCENT_WITH_CUSTOM, SCORE_BOTH, true);
+        $scoreDisplay = ScoreDisplay::instance();
+        $display = $scoreDisplay->display_score(
+            $score,
+            SCORE_DIV_PERCENT_WITH_CUSTOM,
+            SCORE_BOTH,
+            true
+        );
         $type = $item->get_item_type();
 
         if ($type == 'L' && get_class($item) == 'ExerciseLink') {
-            $display  = ExerciseLib::show_score($score[0], $score[1], false);
+            $display = ExerciseLib::show_score($score[0], $score[1], false);
         }
 
         return array(
@@ -263,7 +282,11 @@ class GradebookDataGenerator
         $scoreDisplay = null;
         if (isset($score[0])) {
             $scoreDisplay = ScoreDisplay::instance();
-            $scoreDisplay = $scoreDisplay->display_score($score, SCORE_DIV, SCORE_BOTH);
+            $scoreDisplay = $scoreDisplay->display_score(
+                $score,
+                SCORE_DIV,
+                SCORE_BOTH
+            );
         }
 
         return array(
@@ -284,8 +307,9 @@ class GradebookDataGenerator
         $ignore_score_color,
         $forceSimpleResult = false
     ) {
-        $scoredisplay = ScoreDisplay::instance();
+        $scoreDisplay = ScoreDisplay::instance();
         $score = $item->calc_score($userId);
+
 
         if (!empty($score)) {
             switch ($item->get_item_type()) {
@@ -293,19 +317,21 @@ class GradebookDataGenerator
                 case 'C':
                     if ($score != null) {
                         if ($forceSimpleResult) {
-                            return
-                                array(
-                                    'display' => $scoredisplay->display_score(
-                                        $score,
-                                        SCORE_DIV
-                                    ),
-                                    'score' => $score,
-                                    'score_weight' => $score
-                                );
+                            return array(
+                                'display' => $scoreDisplay->display_score(
+                                    $score,
+                                    SCORE_DIV
+                                ),
+                                'score' => $score,
+                                'score_weight' => $score
+                            );
                         }
 
                         return array(
-                            'display' => $scoredisplay->display_score($score, SCORE_DIV),
+                            'display' => $scoreDisplay->display_score(
+                                $score,
+                                SCORE_DIV
+                            ),
                             'score' => $score,
                             'score_weight' => $score
                         );
@@ -326,23 +352,26 @@ class GradebookDataGenerator
                             $item->get_weight()
                         ];
                     //}
+                    $display = $scoreDisplay->display_score(
+                        $score,
+                        SCORE_DIV_PERCENT_WITH_CUSTOM
+                    );
 
-                $display = $scoredisplay->display_score(
-                    $score,
-                    SCORE_DIV_PERCENT_WITH_CUSTOM
-                );
+                    $type = $item->get_item_type();
+                    if ($type == 'L' && get_class($item) == 'ExerciseLink') {
+                        $display = ExerciseLib::show_score(
+                            $score[0],
+                            $score[1],
+                            false
+                        );
+                    }
 
-                $type = $item->get_item_type();
-                if ($type == 'L' && get_class($item) == 'ExerciseLink') {
-                    $display = ExerciseLib::show_score($score[0], $score[1], false);
+                    return array(
+                        'display' => $display,
+                        'score' => $score,
+                        'score_weight' => $scoreWeight,
+                    );
                 }
-
-                return array(
-                    'display' => $display,
-                    'score' => $score,
-                    'score_weight' => $scoreWeight,
-                );
-            }
         }
 
         return array(
@@ -374,12 +403,13 @@ class GradebookDataGenerator
      * Returns the link to the certificate generation, if the score is enough, otherwise
      * returns an empty string. This only works with categories.
      * @param    object Item
+     * @return string
      */
     public function get_certificate_link($item)
     {
         if (is_a($item, 'Category')) {
             if ($item->is_certificate_available(api_get_user_id())) {
-                $link = '<a href="'.Security::remove_XSS($_SESSION['gradebook_dest']).'?export_certificate=1&cat='.$item->get_id().'&user='.api_get_user_id().'">'.
+                $link = '<a href="'.Category::getUrl().'export_certificate=1&cat='.$item->get_id().'&user='.api_get_user_id().'">'.
                     get_lang('Certificate').'</a>';
                 return $link;
             }
@@ -415,7 +445,7 @@ class GradebookDataGenerator
     public function sort_by_type($item1, $item2)
     {
         if ($item1->get_item_type() == $item2->get_item_type()) {
-            return $this->sort_by_name($item1,$item2);
+            return $this->sort_by_name($item1, $item2);
         } else {
             return ($item1->get_item_type() < $item2->get_item_type() ? -1 : 1);
         }
@@ -430,7 +460,7 @@ class GradebookDataGenerator
     {
         $result = api_strcmp($item1->get_description(), $item2->get_description());
         if ($result == 0) {
-            return $this->sort_by_name($item1,$item2);
+            return $this->sort_by_name($item1, $item2);
         }
         return $result;
     }

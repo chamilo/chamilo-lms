@@ -26,10 +26,10 @@
  * @licence http://www.gnu.org/licenses/gpl.txt
  */
 
-require_once(dirname(__FILE__)."/pens_config.php");
-require_once(dirname(__FILE__)."/pens_message.php");
-require_once(dirname(__FILE__)."/pens_exception.php");
-require_once(dirname(__FILE__)."/lib/rfc2396regexes.php");
+require_once __DIR__.'/pens_config.php';
+require_once __DIR__.'/pens_message.php';
+require_once __DIR__.'/pens_exception.php';
+require_once __DIR__.'/lib/rfc2396regexes.php';
 
 /**
  * PENSRequest

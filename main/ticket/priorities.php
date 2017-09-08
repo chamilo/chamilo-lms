@@ -1,10 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This script is the Tickets plugin main entry point
  * @package chamilo.plugin.ticket
  */
+
+$cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -16,7 +20,7 @@ $libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
 
 $this_section = 'tickets';
-unset($_SESSION['this_section']);
+Session::erase('this_section');
 
 $table = new SortableTable(
     'TicketProject',
@@ -65,7 +69,7 @@ switch ($action) {
         $form = TicketManager::getPriorityForm($url);
         $formToString = $form->returnForm();
         if ($form->validate()) {
-            $values =$form->getSubmitValues();
+            $values = $form->getSubmitValues();
 
             $params = [
                 'name' => $values['name'],
@@ -95,7 +99,7 @@ switch ($action) {
         );
         $formToString = $form->returnForm();
         if ($form->validate()) {
-            $values =$form->getSubmitValues();
+            $values = $form->getSubmitValues();
             $params = [
                 'name' => $values['name'],
                 'description' => $values['description']

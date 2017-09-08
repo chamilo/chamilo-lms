@@ -125,9 +125,7 @@ $(document).ready(function() {
             for (dayIndex = 0; dayIndex < segsByDay.length; dayIndex++) {
                 daySegs = segsByDay[dayIndex];
                 if (daySegs) { // sparse array, so might be undefined
-
                     this.sortEventSegs(daySegs);
-
                     for (i = 0; i < daySegs.length; i++) {
                         var event = daySegs[i].event;
                         if (jQuery.inArray(event.id, eventList) !== -1) {
@@ -290,10 +288,12 @@ $(document).ready(function() {
                     $('#end_date').html('');
                 }
 
-				$('#color_calendar').html('{{ type_label | escape('js')}}');
-				$('#color_calendar').removeClass('group_event');
-				$('#color_calendar').addClass('label_tag');
-				$('#color_calendar').addClass('{{ type_event_class | escape('js') }}');
+				$('#color_calendar')
+                    .html('{{ type_label | escape('js')}}')
+                    .removeClass('group_event')
+                    .addClass('label_tag')
+                    .addClass('{{ type_event_class | escape('js') }}')
+                    .css('background-color', '{{ type_event_color }}');
 
                 //It shows the CKEDITOR while Adding an Event
                 $('#cke_content').show();
@@ -481,10 +481,9 @@ $(document).ready(function() {
                 $("#comment").hide();
 
 				allFields.removeClass( "ui-state-error" );
-
 				$("#dialog-form").dialog("open");
 
-				var url = '{{ web_agenda_ajax_url }}&a=edit_event&id='+calEvent.id+'&start='+calEvent.start.unix()+'&end='+calEvent.end.unix()+'&all_day='+calEvent.allDay+'&view='+view.name;
+				var url = '{{ web_agenda_ajax_url }}&a=edit_event&id='+calEvent.id+'&view='+view.name;
 				var delete_url = '{{ web_agenda_ajax_url }}&a=delete_event&id='+calEvent.id;
 
 				$("#dialog-form").dialog({
@@ -525,7 +524,7 @@ $(document).ready(function() {
 						},
                         {% endif %}
                         '{{ "Edit"|get_lang }}' : function() {
-                            url =  "{{ _p.web_main }}calendar/agenda.php?action=edit&type=fromjs&id=" + calEvent.id+'&course_id='+calEvent.course_id+"";
+                            url =  "{{ _p.web_main }}calendar/agenda.php?action=edit&type=fromjs&id="+calEvent.id+'&course_id='+calEvent.course_id+"";
                             window.location.href = url;
                             $("#dialog-form").dialog( "close" );
                         },
@@ -644,7 +643,6 @@ $(document).ready(function() {
                         '<div class="form-group"><label class="col-sm-3 control-label">{{ 'Session' | get_lang }}</label>' +
                         '<div class="col-sm-9">' + calEvent.session_name+"</div></div>"
                     );
-
                 } else {
                     $("#calendar_session_info").html('');
                 }
@@ -652,7 +650,6 @@ $(document).ready(function() {
                 $("#simple_title").html(calEvent.title);
                 $("#simple_content").html(calEvent.description);
                 $("#simple_comment").html(calEvent.comment);
-
                 $("#simple-dialog-form").dialog("open");
                 $("#simple-dialog-form").dialog({
 					buttons: {
@@ -706,12 +703,6 @@ $(document).ready(function() {
 			else $('#loading').hide();
 		}
 	});
-
-
-
-
-
-
 });
 </script>
 {{ actions_div }}
@@ -764,6 +755,13 @@ $(document).ready(function() {
         {{ form_add }}
 	</div>
 </div>
+
+{% if legend_list %}
+    {% for color, text in legend_list %}
+        <span style="background-color: {{ color }}" class="label label-default">&nbsp;</span> {{ text }} &nbsp;&nbsp;
+    {% endfor %}
+    <br /><br />
+{% endif %}
 <div id="loading" style="margin-left:150px;position:absolute;display:none">
     {{ "Loading" | get_lang }}...
 </div>

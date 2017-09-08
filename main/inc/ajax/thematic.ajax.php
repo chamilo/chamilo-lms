@@ -112,7 +112,7 @@ switch ($action) {
 
             $label = get_lang('StartDate');
             if (!empty($attendance_calendar)) {
-                $input_select .= '<select id="start_date_select_calendar" name="start_date_by_attendance" size="5">';
+                $input_select .= '<select id="start_date_select_calendar" name="start_date_by_attendance" size="7" class="form-control">';
                 foreach ($attendance_calendar as $calendar) {
                     $selected = null;
                     $insert = true;
@@ -139,7 +139,7 @@ switch ($action) {
         ?>
         <div class="form-group">
             <label class="col-sm-2 control-label"><?php echo $label ?></label>
-            <div class="col-sm-10"><?php echo $input_select ?></div>
+            <div class="col-sm-8"><?php echo $input_select ?></div>
         </div>
         <?php
         break;
@@ -148,7 +148,7 @@ switch ($action) {
         $total_average = 0;
         if (!empty($thematic_advance_id)) {
             $thematic = new Thematic();
-            $affected_rows  = $thematic->update_done_thematic_advances($thematic_advance_id);
+            $affected_rows = $thematic->update_done_thematic_advances($thematic_advance_id);
             $total_average = $thematic->get_total_average_of_thematic_advances(
                 api_get_course_id(),
                 api_get_session_id()

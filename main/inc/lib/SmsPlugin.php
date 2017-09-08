@@ -52,6 +52,7 @@ class SmsPlugin extends Plugin
     const BEEN_INVITED_COMPLETE_SURVEY_COURSE = 40;
     const REMINDER_ASSIGNMENT_COURSE_DUE = 41;
     const USER_DETAILS_MODIFIED = 42;
+    const CERTIFICATE_NOTIFICATION = 43;
 
     public $isCoursePlugin = true;
     public $isMailPlugin = true;

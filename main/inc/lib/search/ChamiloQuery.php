@@ -18,12 +18,12 @@ require 'xapian/XapianQuery.php';
  * @param   array     extra           Extra queries to join with. Optional
  * @return  array
  */
-function chamilo_query_query($query_string, $offset=0, $length=10, $extra=NULL) {
+function chamilo_query_query($query_string, $offset = 0, $length = 10, $extra = NULL) {
     list($count, $results) = xapian_query($query_string, NULL, $offset, $length, $extra);
     return chamilo_preprocess_results($results);
 }
 
-function chamilo_query_simple_query($query_string, $offset=0, $length=10, $extra=NULL) {
+function chamilo_query_simple_query($query_string, $offset = 0, $length = 10, $extra = NULL) {
     return xapian_query($query_string, NULL, $offset, $length, $extra);
 }
 
@@ -42,7 +42,7 @@ function chamilo_get_boolean_query($term) {
 function chamilo_preprocess_results($results) {
     // group by toolid
     $results_by_tool = array();
-    if (count($results)>0) {
+    if (count($results) > 0) {
 
 	    foreach ($results as $key => $row) {
 	        $results_by_tool[$row['toolid']][] = $row;
@@ -50,8 +50,8 @@ function chamilo_preprocess_results($results) {
 
 	    $processed_results = array();
 	    foreach ($results_by_tool as $toolid => $rows) {
-	        $tool_processor_class = $toolid .'_processor';
-	        $tool_processor_path = api_get_path(LIBRARY_PATH) .'search/tool_processors/'. $tool_processor_class .'.class.php';
+	        $tool_processor_class = $toolid.'_processor';
+	        $tool_processor_path = api_get_path(LIBRARY_PATH).'search/tool_processors/'.$tool_processor_class.'.class.php';
 	        if (file_exists($tool_processor_path)) {
 	            require_once($tool_processor_path);
 	            $tool_processor = new $tool_processor_class($rows);
@@ -71,6 +71,6 @@ function chamilo_preprocess_results($results) {
  * @param string $op
  * @return XapianQuery query joined
  */
-function chamilo_join_queries($query1, $query2=NULL, $op='or') {
+function chamilo_join_queries($query1, $query2 = NULL, $op = 'or') {
 	return xapian_join_queries($query1, $query2, $op);
 }

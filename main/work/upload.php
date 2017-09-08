@@ -4,7 +4,7 @@
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool  = TOOL_STUDENTPUBLICATION;
+$current_course_tool = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
 
@@ -53,9 +53,9 @@ if (!empty($workInfo) && !empty($workInfo['qualification'])) {
     if ($count >= 1) {
         Display::display_header();
         if (api_get_course_setting('student_delete_own_publication') == '1') {
-            Display::display_warning_message(get_lang('CantUploadDeleteYourPaperFirst'));
+            echo Display::return_message(get_lang('CantUploadDeleteYourPaperFirst'), 'warning');
         } else {
-            Display::display_warning_message(get_lang('YouAlreadySentAPaperYouCantUpload'));
+            echo Display::return_message(get_lang('YouAlreadySentAPaperYouCantUpload'), 'warning');
         }
         Display::display_footer();
         exit;
@@ -123,21 +123,30 @@ $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'
 $htmlHeadXtra[] = to_javascript_work();
 Display :: display_header(null);
 
-$headers = array(
-    get_lang('Upload'),
-    get_lang('Upload').' ('.get_lang('Simple').')',
-);
+// Only text
+if ($workInfo['allow_text_assignment'] == 1) {
+    $tabs = $form->returnForm();
+} else {
+    $headers = array(
+        get_lang('Upload'),
+        get_lang('Upload').' ('.get_lang('Simple').')',
+    );
 
-$multipleForm = new FormValidator('post');
-$multipleForm->addMultipleUpload($url);
+    $multipleForm = new FormValidator('post');
+    $multipleForm->addMultipleUpload($url);
 
-$tabs = Display::tabs($headers, array($multipleForm->returnForm(), $form->returnForm()), 'tabs');
+    $tabs = Display::tabs(
+        $headers,
+        array($multipleForm->returnForm(), $form->returnForm()),
+        'tabs'
+    );
+}
 
 if (!empty($work_id)) {
     echo $validationStatus['message'];
     if ($is_allowed_to_edit) {
         if (api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION)) {
-            echo Display::display_warning_message(get_lang('ResourceLockedByGradebook'));
+            echo Display::return_message(get_lang('ResourceLockedByGradebook'), 'warning');
         } else {
             echo $tabs;
         }

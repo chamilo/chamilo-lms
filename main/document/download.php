@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *  This file is responsible for passing requested documents to the browser.
- *  Many functions updated and moved to lib/document.lib.php
- *	@package chamilo.document
+ * This file is responsible for passing requested documents to the browser.
+ * Many functions updated and moved to lib/document.lib.php
+ * @package chamilo.document
  */
 
 session_cache_limiter('none');
@@ -97,7 +97,7 @@ if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
     }
 
     if (!api_is_allowed_to_edit() && !$is_visible) {
-        Display::display_error_message(get_lang('ProtectedDocument')); //api_not_allowed backbutton won't work.
+        echo Display::return_message(get_lang('ProtectedDocument'), 'error'); //api_not_allowed backbutton won't work.
         exit; // You shouldn't be here anyway.
     }
     // Launch event

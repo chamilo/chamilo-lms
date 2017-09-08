@@ -18,10 +18,10 @@ class EventEmailTemplate extends Model
     /**
      * Constructor
      */
-	public function __construct()
+    public function __construct()
     {
-        $this->table =  Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE);
-	}
+        $this->table = Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE);
+    }
 
     /**
      * @param array $where_conditions
@@ -39,12 +39,12 @@ class EventEmailTemplate extends Model
     /**
      * Displays the title + grid
      */
-	public function display()
+    public function display()
     {
-		// action links
-		$content = Display::actions(array(
+        // action links
+        $content = Display::actions(array(
                 array(
-                    'url' => 'event_type.php' ,
+                    'url' => 'event_type.php',
                     'content' => Display::return_icon(
                         'new_document.png',
                         get_lang('Add'),
@@ -56,7 +56,7 @@ class EventEmailTemplate extends Model
         );
         $content .= Display::grid_html('event_email_template');
         return $content;
-	}
+    }
 
     /**
      * @return array
@@ -100,7 +100,7 @@ class EventEmailTemplate extends Model
                 'Height' => '250',
             )
         );
-	    $status_list = $this->get_status_list();
+        $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
         if ($action == 'edit') {
             $form->addElement('text', 'created_at', get_lang('CreatedAt'));
@@ -117,22 +117,22 @@ class EventEmailTemplate extends Model
         $defaults = $this->get($id);
 
         if (!empty($defaults['created_at'])) {
-        	$defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
+            $defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
         }
         if (!empty($defaults['updated_at'])) {
-        	$defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);
+            $defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);
         }
         $form->setDefaults($defaults);
 
         // Setting the rules
         $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
-		return $form;
+        return $form;
     }
 
     public function get_count()
     {
-        $row = Database::select('count(*) as count', $this->table, array(),'first');
+        $row = Database::select('count(*) as count', $this->table, array(), 'first');
 
         return $row['count'];
     }

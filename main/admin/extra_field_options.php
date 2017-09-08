@@ -9,7 +9,6 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
-
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
 api_protect_admin_script();
@@ -18,7 +17,7 @@ api_protect_admin_script();
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
 $tool_name = null;
 
@@ -39,23 +38,23 @@ $check = Security::check_token('request');
 $token = Security::get_token();
 
 if ($action == 'add') {
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type,'name' => $extra_field->pageName);
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],'name' => $extra_field_info['display_text']);
-    $interbreadcrumb[]=array('url' => 'extra_field_options.php?type='.$extra_field->type.'&field_id='.$extra_field_info['id'], 'name' => get_lang('EditExtraFieldOptions'));
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
+    $interbreadcrumb[] = array('url' => 'extra_fields.php?type='.$extra_field->type, 'name' => $extra_field->pageName);
+    $interbreadcrumb[] = array('url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'], 'name' => $extra_field_info['display_text']);
+    $interbreadcrumb[] = array('url' => 'extra_field_options.php?type='.$extra_field->type.'&field_id='.$extra_field_info['id'], 'name' => get_lang('EditExtraFieldOptions'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Add'));
 } elseif ($action == 'edit') {
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type,'name' => $extra_field->pageName);
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],'name' => $extra_field_info['display_text']);
-    $interbreadcrumb[]=array('url' => 'extra_field_options.php?type='.$extra_field->type.'&field_id='.$extra_field_info['id'], 'name' => get_lang('EditExtraFieldOptions'));
+    $interbreadcrumb[] = array('url' => 'extra_fields.php?type='.$extra_field->type, 'name' => $extra_field->pageName);
+    $interbreadcrumb[] = array('url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'], 'name' => $extra_field_info['display_text']);
+    $interbreadcrumb[] = array('url' => 'extra_field_options.php?type='.$extra_field->type.'&field_id='.$extra_field_info['id'], 'name' => get_lang('EditExtraFieldOptions'));
 
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
 } else {
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type,'name' => $extra_field->pageName);
-    $interbreadcrumb[]=array(
+    $interbreadcrumb[] = array('url' => 'extra_fields.php?type='.$extra_field->type, 'name' => $extra_field->pageName);
+    $interbreadcrumb[] = array(
         'url' =>  'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],
         'name' => $extra_field_info['display_text']
     );
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('EditExtraFieldOptions'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('EditExtraFieldOptions'));
 }
 
 //jqgrid will use this URL to do the selects
@@ -108,12 +107,12 @@ $extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-    return \'<a href="?action=edit&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("ConfirmYourChoice"))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
+    return \'<a href="?action=edit&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("ConfirmYourChoice"))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
     '\';
  }';
 
-$htmlHeadXtra[]='<script>
+$htmlHeadXtra[] = '<script>
 $(function() {
     // grid definition see the $obj->display() function
     '.Display::grid_js(
@@ -135,7 +134,7 @@ Display::display_header($tool_name);
 echo Display::page_header($extra_field_info['display_text']);
 
 $obj = new ExtraFieldOption($extra_field->type);
-$obj->field_id = $field_id;
+$obj->fieldId = $field_id;
 
 // Action handling: Add
 switch ($action) {
@@ -152,7 +151,7 @@ switch ($action) {
                 $values = $form->exportValues();
                 $res = $obj->save_one_item($values);
                 if ($res) {
-                    Display::display_confirmation_message(get_lang('ItemAdded'));
+                    echo Display::return_message(get_lang('ItemAdded'), 'confirmation');
                 }
             }
             $obj->display();
@@ -172,7 +171,7 @@ switch ($action) {
             if ($check) {
                 $values = $form->exportValues();
                 $res = $obj->update($values);
-                Display::display_confirmation_message(sprintf(get_lang('ItemUpdated'), $values['display_text']), false);
+                echo Display::return_message(sprintf(get_lang('ItemUpdated'), $values['display_text']), 'confirmation', false);
             }
             $obj->display();
         } else {
@@ -186,7 +185,7 @@ switch ($action) {
         if ($check) {
             $res = $obj->delete($_GET['id']);
             if ($res) {
-                Display::display_confirmation_message(get_lang('ItemDeleted'));
+                echo Display::return_message(get_lang('ItemDeleted'), 'confirmation');
             }
         }
         $obj->display();
@@ -195,4 +194,4 @@ switch ($action) {
         $obj->display();
         break;
 }
-Display :: display_footer();
+Display::display_footer();

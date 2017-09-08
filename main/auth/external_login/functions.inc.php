@@ -21,7 +21,7 @@ function external_get_user_info($login, $password)
     //Those are the mandatory fields for user creation.
     //See external_add_user function for all the fields you can have.
     $table = USERINFO_TABLE;
-    $sql = "SELECT * from $table where username='" . Database::escape_string($login) . "'";
+    $sql = "SELECT * from $table where username='".Database::escape_string($login)."'";
     $result = Database::query($sql);
 
     if (Database::num_rows($result) == 0) { //false password

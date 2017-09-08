@@ -53,7 +53,7 @@ switch ($action) {
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed(true);
         }
-        $tool_name =  get_lang('Add');
+        $tool_name = get_lang('Add');
         $form = new FormValidator(
             'glossary',
             'post',
@@ -61,12 +61,17 @@ switch ($action) {
         );
         // Setting the form elements
         $form->addElement('header', get_lang('TermAddNew'));
-        $form->addElement(
-            'text',
-            'name',
-            get_lang('TermName'),
-            array('id' => 'glossary_title')
-        );
+        if (api_get_configuration_value('save_titles_as_html')) {
+            $form->addHtmlEditor(
+                'name',
+                get_lang('TermName'),
+                false,
+                false,
+                ['ToolbarSet' => 'Minimal']
+            );
+        } else {
+            $form->addElement('text', 'name', get_lang('TermName'), array('id' => 'glossary_title'));
+        }
 
         $form->addElement(
             'html_editor',
@@ -111,6 +116,17 @@ switch ($action) {
             $form->addElement('header', get_lang('TermEdit'));
             $form->addElement('hidden', 'glossary_id');
             $form->addElement('text', 'name', get_lang('TermName'));
+            if (api_get_configuration_value('save_titles_as_html')) {
+                $form->addHtmlEditor(
+                    'name',
+                    get_lang('TermName'),
+                    false,
+                    false,
+                    ['ToolbarSet' => 'Minimal']
+                );
+            } else {
+                $form->addElement('text', 'name', get_lang('TermName'), array('id' => 'glossary_title'));
+            }
 
             $form->addElement(
                 'html_editor',
@@ -184,7 +200,7 @@ switch ($action) {
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed(true);
         }
-        $tool_name =  get_lang('ImportGlossary');
+        $tool_name = get_lang('ImportGlossary');
         $form = new FormValidator(
             'glossary',
             'post',
@@ -212,7 +228,7 @@ switch ($action) {
                 foreach (GlossaryManager::get_glossary_terms() as $term) {
                     if (!GlossaryManager::delete_glossary($term['id'], false)) {
                         Display::addFlash(
-                            Display::return_message(get_lang("CannotDeleteGlossary") . ':' . $term['id'], 'error')
+                            Display::return_message(get_lang("CannotDeleteGlossary").':'.$term['id'], 'error')
                         );
                     } else {
                         $termsDeleted[] = $term['name'];
@@ -309,7 +325,7 @@ switch ($action) {
             if (count($badList) > 0) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang("GlossaryTermAlreadyExists").': ' . implode(', ', $badList),
+                        get_lang("GlossaryTermAlreadyExists").': '.implode(', ', $badList),
                         'error'
                     )
                 );
@@ -352,7 +368,7 @@ switch ($action) {
         GlossaryManager::export_to_pdf();
         break;
     case 'changeview':
-        if (in_array($_GET['view'], array('list','table'))) {
+        if (in_array($_GET['view'], array('list', 'table'))) {
             Session::write('glossary_view', $_GET['view']);
         } else {
             $view = Session::read('glossary_view');
@@ -362,6 +378,9 @@ switch ($action) {
         }
         header('Location: '.$currentUrl);
         exit;
+        break;
+    case 'export_documents':
+        GlossaryManager::movePdfToDocuments();
         break;
     default:
         $tool_name = get_lang('List');

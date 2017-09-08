@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
- * 	@package chamilo.admin
+ * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -21,12 +22,13 @@ if (!empty($categoryId)) {
 }
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-$errorMsg = '';
+$myCourseListAsCategory = api_get_configuration_value('my_courses_list_as_category');
+
 if (!empty($action)) {
     if ($action == 'delete') {
         CourseCategory::deleteNode($categoryId);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
-        header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
+        header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         exit();
     } elseif (($action == 'add' || $action == 'edit') && isset($_POST['formSent']) && $_POST['formSent']) {
         if ($action == 'add') {
@@ -37,7 +39,7 @@ if (!empty($action)) {
                 $category
             );
 
-            Display::addFlash(Display::return_message(get_lang('Created')));
+            $errorMsg = Display::return_message(get_lang('Created'));
         } else {
             $ret = CourseCategory::editNode(
                 $_POST['code'],
@@ -45,16 +47,27 @@ if (!empty($action)) {
                 $_POST['auth_course_child'],
                 $categoryId
             );
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            $categoryInfo = CourseCategory::getCategory($_POST['code']);
+            $ret = $categoryInfo['id'];
+            $errorMsg = Display::return_message(get_lang('Updated'));
         }
-        if ($ret) {
-            $action = '';
+        if (!$ret) {
+            $errorMsg = Display::return_message(get_lang('CatCodeAlreadyUsed'), 'error');
         } else {
-            $errorMsg = get_lang('CatCodeAlreadyUsed');
+            if ($myCourseListAsCategory) {
+                if (isset($_FILES['image'])) {
+                    CourseCategory::saveImage($ret, $_FILES['image']);
+                }
+                CourseCategory::saveDescription($ret, $_POST['description']);
+            }
         }
+
+        Display::addFlash($errorMsg);
+        header('Location: '.api_get_path(WEB_CODE_PATH).'admin/course_category.php');
+        exit;
     } elseif ($action == 'moveUp') {
         CourseCategory::moveNodeUp($categoryId, $_GET['tree_pos'], $category);
-        header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
+        header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         Display::addFlash(Display::return_message(get_lang('Updated')));
         exit();
     }
@@ -78,22 +91,68 @@ if ($action == 'add' || $action == 'edit') {
 
     $form_title = ($action == 'add') ? get_lang('AddACategory') : get_lang('EditNode');
     if (!empty($category)) {
-        $form_title .= ' ' . get_lang('Into') . ' ' . Security::remove_XSS($category);
+        $form_title .= ' '.get_lang('Into').' '.Security::remove_XSS($category);
     }
     $url = api_get_self().'?action='.Security::remove_XSS($action).'&category='.Security::remove_XSS($category).'&id='.Security::remove_XSS($categoryId);
     $form = new FormValidator('course_category', 'post', $url);
     $form->addElement('header', '', $form_title);
     $form->addElement('hidden', 'formSent', 1);
-
     $form->addElement('text', 'code', get_lang("CategoryCode"));
-    $form->addElement('text', 'name', get_lang("CategoryName"));
-    $form->addRule('name', get_lang('PleaseEnterCategoryInfo'), 'required');
+
+    if (api_get_configuration_value('save_titles_as_html')) {
+        $form->addHtmlEditor(
+            'name',
+            get_lang('CategoryName'),
+            true,
+            false,
+            ['ToolbarSet' => 'Minimal']
+        );
+    } else {
+        $form->addElement('text', 'name', get_lang("CategoryName"));
+        $form->addRule('name', get_lang('PleaseEnterCategoryInfo'), 'required');
+    }
+
     $form->addRule('code', get_lang('PleaseEnterCategoryInfo'), 'required');
     $group = array(
-        $form->createElement('radio', 'auth_course_child', get_lang("AllowCoursesInCategory"), get_lang('Yes'), 'TRUE'),
-        $form->createElement('radio', 'auth_course_child', null, get_lang('No'), 'FALSE')
+        $form->createElement(
+            'radio',
+            'auth_course_child',
+            get_lang("AllowCoursesInCategory"),
+            get_lang('Yes'),
+            'TRUE'
+        ),
+        $form->createElement(
+            'radio',
+            'auth_course_child',
+            null,
+            get_lang('No'),
+            'FALSE'
+        ),
     );
     $form->addGroup($group, null, get_lang("AllowCoursesInCategory"));
+
+    if ($myCourseListAsCategory) {
+        $form->addHtmlEditor(
+            'description',
+            get_lang('Description'),
+            false,
+            false,
+            ['ToolbarSet' => 'Minimal']
+        );
+        $form->addFile('image', get_lang('Image'), ['accept' => 'image/*']);
+        if ($action == 'edit' && !empty($categoryInfo['image'])) {
+            $form->addHtml('
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-8">'.
+                Display::img(
+                    api_get_path(WEB_UPLOAD_PATH).$categoryInfo['image'],
+                    get_lang('Image'),
+                    ['width' => 256]
+                ).'</div>
+                </div>
+            ');
+        }
+    }
 
     if (!empty($categoryInfo)) {
         $class = "save";
@@ -111,7 +170,7 @@ if ($action == 'add' || $action == 'edit') {
 } else {
     // If multiple URLs and not main URL, prevent deletion and inform user
     if ($action == 'delete' && api_get_multiple_access_url() && api_get_current_access_url_id() != 1) {
-        Display::display_warning_message(get_lang('CourseCategoriesAreGlobal'));
+        echo Display::return_message(get_lang('CourseCategoriesAreGlobal'), 'warning');
     }
     echo '<div class="actions">';
     $link = null;

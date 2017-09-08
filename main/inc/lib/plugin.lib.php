@@ -158,9 +158,9 @@ class AppPlugin
             'setting',
             'Plugins',
             $pluginName,
-            null,
-            null,
-            null,
+            '',
+            '',
+            '',
             $urlId,
             1
         );
@@ -175,9 +175,9 @@ class AppPlugin
     }
 
     /**
-    * @param string $pluginName
-    * @param int    $urlId
-    */
+     * @param string $pluginName
+     * @param int    $urlId
+     */
     public function uninstall($pluginName, $urlId = null)
     {
         if (empty($urlId)) {
@@ -254,12 +254,12 @@ class AppPlugin
     }
 
     /**
-    * @param string $region
-    * @param string $template
-    * @param bool   $forced
-    *
-    * @return null|string
-    */
+     * @param string $region
+     * @param Template $template
+     * @param bool   $forced
+     *
+     * @return null|string
+     */
     public function load_region($region, $template, $forced = false)
     {
         if ($region == 'course_tool_plugin') {
@@ -348,7 +348,6 @@ class AppPlugin
         if (isset($_plugins[$region]) && is_array($_plugins[$region])) {
             // Load the plugin information
             foreach ($_plugins[$region] as $plugin_name) {
-
                 // The plugin_info variable is available inside the plugin index
                 $plugin_info = $this->getPluginInfo($plugin_name, $forced);
 
@@ -359,7 +358,6 @@ class AppPlugin
                 $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";
 
                 if (file_exists($plugin_file)) {
-
                     //Loading the lang variables of the plugin if exists
                     self::load_plugin_lang_variables($plugin_name);
 
@@ -419,19 +417,29 @@ class AppPlugin
 
             $plugin_info = array();
             if (file_exists($plugin_file)) {
-
                 require $plugin_file;
             }
 
+            // @todo check if settings are already added
             // Extra options
             $plugin_settings = api_get_settings_params(
                 array(
-                    "subkey = ? AND category = ? AND type = ? " => array($plugin_name, 'Plugins','setting')
+                    "subkey = ? AND category = ? AND type = ? AND access_url = ?" => array(
+                        $plugin_name,
+                        'Plugins',
+                        'setting',
+                        api_get_current_access_url_id()
+                    )
                 )
             );
 
             $settings_filtered = array();
             foreach ($plugin_settings as $item) {
+                if (!empty($item['selected_value'])) {
+                    if (@unserialize($item['selected_value']) !== false) {
+                        $item['selected_value'] = unserialize($item['selected_value']);
+                    }
+                }
                 $settings_filtered[$item['variable']] = $item['selected_value'];
             }
             $plugin_info['settings'] = $settings_filtered;
@@ -479,7 +487,6 @@ class AppPlugin
      */
     public function add_to_region($plugin, $region)
     {
-        $access_url_id = api_get_current_access_url_id();
         api_add_setting(
             $plugin,
             $region,
@@ -487,10 +494,10 @@ class AppPlugin
             'region',
             'Plugins',
             $plugin,
-            null,
-            null,
-            null,
-            $access_url_id,
+            '',
+            '',
+            '',
+            api_get_current_access_url_id(),
             1
         );
     }
@@ -532,7 +539,7 @@ class AppPlugin
             if (!empty($obj->course_settings)) {
                 if (is_file(api_get_path(SYS_CODE_PATH).'img/icons/'.ICON_SIZE_SMALL.'/'.$plugin_name.'.png')) {
                     $icon = Display::return_icon(
-                        $plugin_name . '.png',
+                        $plugin_name.'.png',
                         Security::remove_XSS($pluginTitle),
                         '',
                         ICON_SIZE_SMALL
@@ -548,18 +555,18 @@ class AppPlugin
 
                 $form->addHtml('<div class="panel panel-default">');
                 $form->addHtml('
-                    <div class="panel-heading" role="tab" id="heading-' . $plugin_name . '-settings">
+                    <div class="panel-heading" role="tab" id="heading-' . $plugin_name.'-settings">
                         <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-' . $plugin_name . '-settings" aria-expanded="false" aria-controls="collapse-' . $plugin_name . '-settings">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-' . $plugin_name.'-settings" aria-expanded="false" aria-controls="collapse-'.$plugin_name.'-settings">
                 ');
-                $form->addHtml($icon . ' ' . $pluginTitle);
+                $form->addHtml($icon.' '.$pluginTitle);
                 $form->addHtml('
                             </a>
                         </h4>
                     </div>
                 ');
                 $form->addHtml('
-                    <div id="collapse-' . $plugin_name . '-settings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-' . $plugin_name . '-settings">
+                    <div id="collapse-' . $plugin_name.'-settings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-'.$plugin_name.'-settings">
                         <div class="panel-body">
                 ');
 

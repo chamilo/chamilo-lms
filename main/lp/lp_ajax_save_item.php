@@ -69,7 +69,15 @@ function save_item(
         error_log("finish: $lmsFinish - navigatesAway: $userNavigatesAway");
     }
 
-    $myLP = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
+    $courseCode = api_get_course_id();
+    if (!empty($courseId)) {
+        $courseInfo = api_get_course_info_by_id($courseId);
+        if ($courseInfo) {
+            $courseCode = $courseInfo['code'];
+        }
+    }
+
+    $myLP = learnpath::getLpFromSession($courseCode, $lp_id, $user_id);
 
     if (!is_a($myLP, 'learnpath')) {
         if ($debug) {
@@ -78,7 +86,6 @@ function save_item(
 
         return null;
     }
-
     $prerequisitesCheck = $myLP->prerequisites_match($item_id);
 
     /** @var learnpathItem $myLPI */
@@ -163,7 +170,7 @@ function save_item(
         // Set status to completed for hotpotatoes if score > 80%.
         if ($my_type == 'hotpotatoes') {
             if ((empty($status) || $status == 'undefined' || $status == 'not attempted') && $max > 0) {
-                if (($score/$max) > 0.8) {
+                if (($score / $max) > 0.8) {
                     $myStatus = 'completed';
                     if ($debug > 1) {
                         error_log('Calling set_status('.$myStatus.') for hotpotatoes', 0);
@@ -174,7 +181,7 @@ function save_item(
                         error_log('Done calling set_status for hotpotatoes - now '.$myLPI->get_status(false), 0);
                     }
                 }
-            } elseif ($status == 'completed' && $max > 0 && ($score/$max) < 0.8) {
+            } elseif ($status == 'completed' && $max > 0 && ($score / $max) < 0.8) {
                 $myStatus = 'failed';
                 if ($debug > 1) {
                     error_log('Calling set_status('.$myStatus.') for hotpotatoes', 0);
@@ -367,7 +374,7 @@ function save_item(
             $myLPI->current_data = $suspend;
         }
 
-        if (isset($location) && $location != '' && $location!='undefined') {
+        if (isset($location) && $location != '' && $location != 'undefined') {
             $myLPI->set_lesson_location($location);
         }
 
@@ -437,7 +444,7 @@ function save_item(
 
     if (!isset($_SESSION['login_as'])) {
         // If $_SESSION['login_as'] is set, then the user is an admin logged as the user.
-        $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
         $sql = "SELECT login_id, login_date
                 FROM $tbl_track_login

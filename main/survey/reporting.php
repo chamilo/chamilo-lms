@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	@package chamilo.survey
- * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
- * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
- * 	@version $Id: reporting.php 21652 2009-06-27 17:07:35Z herodoto $
+ * @package chamilo.survey
+ * @author unknown, the initial survey that did not make it in 1.8 because of bad code
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
+ * @version $Id: reporting.php 21652 2009-06-27 17:07:35Z herodoto $
  *
- * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
+ * @todo The question has to be more clearly indicated (same style as when filling the survey)
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -88,28 +88,37 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse) {
-    Display :: display_header(get_lang('ToolSurvey'));
     // Show error message if the survey can be seen only by tutors
-    if ($survey_data['visible_results'] != SURVEY_VISIBLE_TUTOR) {
-        SurveyUtil::handle_reporting_actions($survey_data, $people_filled);
-    } else {
-        Display :: display_error_message(get_lang('NotAllowed'), false);
+    if ($survey_data['visible_results'] == SURVEY_VISIBLE_TUTOR) {
+        api_not_allowed(true);
+        exit;
     }
+
+    Display :: display_header(get_lang('ToolSurvey'));
+    SurveyUtil::handle_reporting_actions($survey_data, $people_filled);
     Display :: display_footer();
     exit;
 }
 
 // Database table definitions
-$table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database:: get_main_table(TABLE_MAIN_USER);
-$urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
+$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
+$urlname = strip_tags(
+    api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40)
+);
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
     $urlname .= '...';
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id, 'name' => $urlname);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
+    'name' => get_lang('SurveyList')
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id,
+    'name' => $urlname
+);
 
 if (!isset($_GET['action']) || isset($_GET['action']) && $_GET['action'] == 'overview') {
     $tool_name = get_lang('Reporting');
@@ -144,7 +153,7 @@ SurveyUtil::handle_reporting_actions($survey_data, $people_filled);
 // Actions bar
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'">'.
-    Display::return_icon('back.png', get_lang('BackToSurvey'),'',ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('BackToSurvey'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 // Content
@@ -153,16 +162,70 @@ if (!isset($_GET['action']) ||
     $_GET['action'] == 'overview'
 ) {
     $myweb_survey_id = $survey_id;
-    echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&survey_id='.$myweb_survey_id.'&'.$cidReq.'&single_page=1">'.
-        Display::return_icon('survey_reporting_overall.png',get_lang('QuestionsOverallReport')).' '.get_lang('QuestionsOverallReport').'</a></div><div class="sectioncomment">'.get_lang('QuestionsOverallReportDetail').' </div>';
-    echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&survey_id='.$myweb_survey_id.'&'.$cidReq.'">'.
-        Display::return_icon('survey_reporting_question.gif',get_lang('DetailedReportByQuestion')).' '.get_lang('DetailedReportByQuestion').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByQuestionDetail').' </div>';
-    echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='.$myweb_survey_id.'&'.$cidReq.'">'.
-        Display::return_icon('survey_reporting_user.gif',get_lang('DetailedReportByUser')).' '.get_lang('DetailedReportByUser').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByUserDetail').'.</div>';
-    echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=comparativereport&survey_id='.$myweb_survey_id.'&'.$cidReq.'">'.
-        Display::return_icon('survey_reporting_comparative.gif',get_lang('ComparativeReport')).' '.get_lang('ComparativeReport').'</a></div><div class="sectioncomment">'.get_lang('ComparativeReportDetail').'.</div>';
-    echo '<div class="sectiontitle"><a href="reporting.php?action=completereport&survey_id='.$myweb_survey_id.'&'.$cidReq.'">'.
-        Display::return_icon('survey_reporting_complete.gif',get_lang('CompleteReport')).' '.get_lang('CompleteReport').'</a></div><div class="sectioncomment">'.get_lang('CompleteReportDetail').'</div>';
+    $html = null;
+    $url = api_get_path(WEB_CODE_PATH).'survey/reporting.php?';
+
+    $html .= '<div class="survey-reports">';
+    $html .= '<div class="list-group">';
+    $html .= Display::url(
+        Display::return_icon(
+            'survey_reporting_overall.png',
+            get_lang('QuestionsOverallReport'),
+            null,
+            ICON_SIZE_MEDIUM
+        ).'<h4>'.get_lang('QuestionsOverallReport').'</h4><p>'.get_lang('QuestionsOverallReportDetail').'</p>',
+        $url.'action=questionreport&survey_id='.$survey_id.'&'.$cidReq.'&single_page=1',
+        array('class' => 'list-group-item')
+    );
+
+    $html .= Display::url(
+        Display::return_icon(
+            'survey_reporting_question.png',
+            get_lang('DetailedReportByQuestion'),
+            null,
+            ICON_SIZE_MEDIUM
+        ).'<h4>'.get_lang('DetailedReportByQuestion').'</h4><p>'.get_lang('DetailedReportByQuestionDetail').'</p>',
+        $url.'action=questionreport&survey_id='.$survey_id.'&'.$cidReq,
+        array('class' => 'list-group-item')
+    );
+
+    $html .= Display::url(
+        Display::return_icon(
+            'survey_reporting_user.png',
+            get_lang('DetailedReportByUser'),
+            null,
+            ICON_SIZE_MEDIUM
+        ).'<h4>'.get_lang('DetailedReportByUser').'</h4><p>'.get_lang('DetailedReportByUserDetail').'</p>',
+        $url.'action=comparativereport&survey_id='.$survey_id.'&'.$cidReq,
+        array('class' => 'list-group-item')
+    );
+
+    $html .= Display::url(
+        Display::return_icon(
+            'survey_reporting_comparative.png',
+            get_lang('ComparativeReport'),
+            null,
+            ICON_SIZE_MEDIUM
+        ).'<h4>'.get_lang('ComparativeReport').'</h4><p>'.get_lang('ComparativeReportDetail').'</p>',
+        $url.'action=comparativereport&survey_id='.$survey_id.'&'.$cidReq,
+        array('class' => 'list-group-item')
+    );
+
+    $html .= Display::url(
+        Display::return_icon(
+            'survey_reporting_complete.png',
+            get_lang('CompleteReport'),
+            null,
+            ICON_SIZE_MEDIUM
+        ).'<h4>'.get_lang('CompleteReport').'</h4><p>'.get_lang('CompleteReportDetail').'</p>',
+        $url.'action=comparativereport&survey_id='.$survey_id.'&'.$cidReq,
+        array('class' => 'list-group-item')
+    );
+
+    $html .= '</div>';
+    $html .= '</div>';
+
+    echo $html;
 }
 
 Display :: display_footer();

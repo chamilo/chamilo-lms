@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserRelUser;
+
 /**
  * Script showing information about a user (name, e-mail, courses and sessions)
  * @author Bart Mollet
@@ -22,6 +25,8 @@ if (empty($user)) {
     api_not_allowed(true);
 }
 
+/** @var User $userEntity */
+$userEntity = api_get_user_entity($user['user_id']);
 $myUserId = api_get_user_id();
 
 if (!api_is_student_boss()) {
@@ -37,29 +42,39 @@ $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdm
 $interbreadcrumb[] = array("url" => 'user_list.php', "name" => get_lang('UserList'));
 
 $userId = $user['user_id'];
-$tool_name = $user['complete_name'].(empty($user['official_code'])?'':' ('.$user['official_code'].')');
-$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
+$tool_name = $userEntity->getCompleteName();
+$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$csvContent = [];
 
 // only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
-$login_as_icon = '';
-$editUser = '';
-$exportLink = '';
-$vCardExportLink = '';
+$actions = [
+    Display::url(
+        Display::return_icon(
+            'statistics.png',
+            get_lang('Reporting'),
+            [],
+            ICON_SIZE_MEDIUM
+        ),
+        api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?'.http_build_query([
+            'student' => intval($_GET['user_id'])
+        ]),
+        ['title' => get_lang('Reporting')]
+    )
+];
 
 if (api_is_platform_admin()) {
-    $login_as_icon =
-        '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php'
-        .'?action=login_as&user_id='.$userId.'&'
-        .'sec_token='.$_SESSION['sec_token'].'">'
-        .Display::return_icon(
+    $actions[] = Display::url(
+        Display::return_icon(
             'login_as.png',
             get_lang('LoginAs'),
-            array(),
+            [],
             ICON_SIZE_MEDIUM
-        ).'</a>';
+        ),
+        api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$userId.'&sec_token='.Security::getTokenFromSession()
+    );
 
-    $editUser = Display::url(
+    $actions[] = Display::url(
         Display::return_icon(
             'edit.png',
             get_lang('Edit'),
@@ -69,26 +84,42 @@ if (api_is_platform_admin()) {
         api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$userId
     );
 
-    $exportLink = Display::url(
+    $actions[] = Display::url(
         Display::return_icon(
             'export_csv.png',
             get_lang('ExportAsCSV'),
-            '',
+            [],
             ICON_SIZE_MEDIUM
         ),
         api_get_self().'?user_id='.$userId.'&action=export'
     );
-    $vCardExportLink = Display::url(
+    $actions[] = Display::url(
         Display::return_icon(
             'vcard.png',
             get_lang('UserInfo'),
-            '',
+            [],
             ICON_SIZE_MEDIUM
         ),
         api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.$userId
     );
-}
+    $actions[] = Display::url(
+        Display::return_icon('new_group.png', get_lang('AddHrmToUser'), [], ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'admin/add_drh_to_user.php?u='.$userId
+    );
 
+    if (Skill::isAllow($userId, false)) {
+        $actions[] = Display::url(
+            Display::return_icon(
+                'skill-badges.png',
+                get_lang('AddSkill'),
+                array(),
+                ICON_SIZE_MEDIUM,
+                false
+            ),
+            api_get_path(WEB_CODE_PATH).'badge/assign.php?user='.$userId
+        );
+    }
+}
 
 $studentBossList = UserManager::getStudentBossList($userId);
 $studentBossListToString = '';
@@ -105,52 +136,6 @@ if ($studentBossList) {
         $row++;
     }
     $studentBossListToString = $table->toHtml();
-}
-
-if (isset($_GET['action'])) {
-    switch ($_GET['action']) {
-        case 'send_legal':
-            LegalManager::sendLegal($userId);
-            break;
-        case 'delete_legal':
-            LegalManager::deleteLegal($userId);
-            break;
-        case 'unsubscribe':
-            $courseCode = empty($_GET['course_code']) ? '' : intval($_GET['course_code']);
-            $sessionId = empty($_GET['id_session']) ? 0 : intval($_GET['id_session']);
-            $courseInfo = api_get_course_info($courseCode);
-
-            if (empty($courseInfo)) {
-                break;
-            }
-
-            if (CourseManager::getUserInCourseStatus($userId, $courseInfo['real_id']) == STUDENT) {
-                CourseManager::unsubscribe_user($userId, $courseCode, $sessionId);
-                Display::addFlash(Display::return_message(get_lang('UserUnsubscribed')));
-            } else {
-                Display::addFlash(Display::return_message(
-                    get_lang('CannotUnsubscribeUserFromCourse'),
-                    'error',
-                    false
-                ));
-            }
-            break;
-        case 'unsubscribeSessionCourse':
-            $userId = empty($_GET['user_id']) ? 0 : intval($_GET['user_id']);
-            $courseCode = empty($_GET['course_code']) ? '' : intval($_GET['course_code']);
-            $sessionId = empty($_GET['id_session']) ? 0 : intval($_GET['id_session']);
-            SessionManager::removeUsersFromCourseSession(
-                array($userId),
-                $sessionId,
-                api_get_course_info($courseCode)
-            );
-            Display::addFlash(Display::return_message(get_lang('UserUnsubscribed')));
-            break;
-        case 'export':
-            Export :: arrayToCsv($csvContent, 'user_information_'.$user);
-            exit;
-            break;
-    }
 }
 
 // Show info about who created this user and when
@@ -198,8 +183,8 @@ $table = new HTML_Table(array('class' => 'data_table'));
 $table->setHeaderContents(0, 0, get_lang('Tracking'));
 $csvContent[] = [get_lang('Tracking')];
 $data = array(
-    get_lang('FirstLogin') => Tracking :: get_first_connection_date($userId),
-    get_lang('LatestLogin') => Tracking :: get_last_connection_date($userId, true)
+    get_lang('FirstLogin') => Tracking::get_first_connection_date($userId),
+    get_lang('LatestLogin') => Tracking::get_last_connection_date($userId, true)
 );
 
 if (api_get_setting('allow_terms_conditions') === 'true') {
@@ -237,13 +222,6 @@ foreach ($data as $label => $item) {
     $row++;
 }
 $trackingInformation = $table->toHtml();
-
-$tbl_session_course = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_course_user = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_session = Database:: get_main_table(TABLE_MAIN_SESSION);
-$tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
-$tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
-
 $socialInformation = '';
 
 /**
@@ -314,7 +292,7 @@ if (count($sessions) > 0) {
         $csvContent[] = $headerList;
         foreach ($session_item['courses'] as $my_course) {
             $courseInfo = api_get_course_info_by_id($my_course['real_id']);
-            $sessionStatus = SessionManager::get_user_status_in_session(
+            $sessionStatus = SessionManager::get_user_status_in_course_session(
                 $userId,
                 $courseInfo['real_id'],
                 $id_session
@@ -368,7 +346,7 @@ if (count($sessions) > 0) {
             $csvContent[] = array_map('strip_tags', $row);
             $data[] = $row;
 
-            $result = TrackingUserLogCSV::getToolInformation(
+            $result = Tracking::getToolInformation(
                 $userId,
                 $courseInfo,
                 $id_session
@@ -402,7 +380,7 @@ if (count($sessions) > 0) {
 } else {
     $sessionInformation = '<p>'.get_lang('NoSessionsForThisUser').'</p>';
 }
-$courseToolInformationTotal = null;
+$courseToolInformationTotal = '';
 
 /**
  * Show the courses in which this user is subscribed
@@ -441,7 +419,7 @@ if (Database::num_rows($res) > 0) {
         $tools = '<a href="course_information.php?code='.$courseCode.'">'.
             Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
             '<a href="'.$courseInfo['course_public_url'].'">'.
-            Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .
+            Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>'.
             '<a href="course_edit.php?id='.$course->c_id.'">'.
             Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
         if ($course->status == STUDENT) {
@@ -475,7 +453,7 @@ if (Database::num_rows($res) > 0) {
         $csvContent[] = array_map('strip_tags', $row);
         $data[] = $row;
 
-        $result = TrackingUserLogCSV::getToolInformation(
+        $result = Tracking::getToolInformation(
             $userId,
             $courseInfo,
             0
@@ -532,8 +510,65 @@ if (api_is_multiple_url_enabled()) {
 
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
+        case 'send_legal':
+            /*$subject = get_lang('SendLegalSubject');
+            $content = sprintf(
+                get_lang('SendLegalDescriptionToUrlX'),
+                api_get_path(WEB_PATH)
+            );
+            MessageManager::send_message_simple($userId, $subject, $content);
+            Display::addFlash(Display::return_message(get_lang('Sent')));
+            */
+            // ofaj
+            LegalManager::sendLegal($userId);
+            
+            break;
+        case 'delete_legal':
+            // ofaj
+            LegalManager::deleteLegal($userId);
+            /*$extraFieldValue = new ExtraFieldValue('user');
+            $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
+            $result = $extraFieldValue->delete($value['id']);
+            if ($result) {
+                Display::addFlash(Display::return_message(get_lang('Deleted')));
+            }*/
+            break;
+        case 'unsubscribe':
+            $courseCode = empty($_GET['course_code']) ? '' : intval($_GET['course_code']);
+            $sessionId = empty($_GET['id_session']) ? 0 : intval($_GET['id_session']);
+            $courseInfo = api_get_course_info($courseCode);
+
+            if (empty($courseInfo)) {
+                break;
+            }
+
+            if (CourseManager::getUserInCourseStatus($userId, $courseInfo['real_id']) == STUDENT) {
+                CourseManager::unsubscribe_user($userId, $courseCode, $sessionId);
+                Display::addFlash(Display::return_message(get_lang('UserUnsubscribed')));
+            } else {
+                Display::addFlash(Display::return_message(
+                    get_lang('CannotUnsubscribeUserFromCourse'),
+                    'error',
+                    false
+                ));
+            }
+            break;
+        case 'unsubscribeSessionCourse':
+            $userId = empty($_GET['user_id']) ? 0 : intval($_GET['user_id']);
+            $courseCode = empty($_GET['course_code']) ? '' : intval($_GET['course_code']);
+            $sessionId = empty($_GET['id_session']) ? 0 : intval($_GET['id_session']);
+            SessionManager::removeUsersFromCourseSession(
+                array($userId),
+                $sessionId,
+                api_get_course_info($courseCode)
+            );
+            Display::addFlash(Display::return_message(get_lang('UserUnsubscribed')));
+            break;
         case 'export':
-            Export :: arrayToCsv($csvContent, 'user_information_'.$user);
+            Export::arrayToCsv(
+                $csvContent,
+                'user_information_'.$user['user_id']
+            );
             exit;
             break;
     }
@@ -541,16 +576,7 @@ if (isset($_GET['action'])) {
 
 Display::display_header($tool_name);
 
-echo '<div class="actions">
-        <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.intval($_GET['user_id']).'" title="'.get_lang('Reporting').'">'.
-        Display::return_icon('statistics.png', get_lang('Reporting'), '', ICON_SIZE_MEDIUM).'
-        </a>
-        '.$login_as_icon.'
-        '.$editUser.'
-        '.$exportLink.'
-        '.$vCardExportLink.'
-    </div>';
-
+echo Display::toolbarAction('toolbar-user-information', [implode(PHP_EOL, $actions)]);
 echo Display::page_header($tool_name);
 
 $fullUrlBig = UserManager::getUserPicture(
@@ -566,7 +592,7 @@ $fullUrl = UserManager::getUserPicture(
 echo '<div class="row">';
 
 echo '<div class="col-md-2">';
-echo '<a class="expand-image" href="'.$fullUrlBig.'">'
+echo '<a class="thumbnail expand-image" href="'.$fullUrlBig.'">'
     .'<img src="'.$fullUrl.'" /></a><br />';
 echo '</div>';
 
@@ -582,6 +608,61 @@ echo '</div>';
 if ($studentBossList) {
     echo Display::page_subheader(get_lang('StudentBossList'));
     echo $studentBossListToString;
+}
+
+$hrmList = $userEntity->getHrm();
+
+if ($hrmList) {
+    echo Display::page_subheader(get_lang('HrmList'));
+    echo '<div class="row">';
+
+    /** @var UserRelUser $hrm */
+    foreach ($hrmList as $hrm) {
+        $hrmInfo = api_get_user_info($hrm->getFriendUserId());
+        $userPicture = isset($hrmInfo["avatar_medium"]) ? $hrmInfo["avatar_medium"] : $hrmInfo["avatar"];
+
+        echo '<div class="col-sm-4 col-md-3">';
+        echo '<div class="media">';
+        echo '<div class="media-left">';
+        echo Display::img($userPicture, $hrmInfo['complete_name'], ['class' => 'media-object'], false);
+        echo '</div>';
+        echo '<div class="media-body">';
+        echo '<h4 class="media-heading">'.$hrmInfo['complete_name'].'</h4>';
+        echo $hrmInfo['username'];
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+    }
+
+    echo '</div>';
+}
+
+if ($user['status'] == DRH) {
+    $usersAssigned = UserManager::get_users_followed_by_drh($userId);
+
+    if ($usersAssigned) {
+        echo Display::page_subheader(get_lang('AssignedUsersListToHumanResourcesManager'));
+        echo '<div class="row">';
+
+        foreach ($usersAssigned as $userAssigned) {
+            $userAssigned = api_get_user_info($userAssigned['user_id']);
+            $userPicture = isset($userAssigned["avatar_medium"]) ? $userAssigned["avatar_medium"] : $userAssigned["avatar"];
+
+            echo '<div class="col-sm-4 col-md-3">';
+            echo '<div class="media">';
+            echo '<div class="media-left">';
+            echo Display::img($userPicture, $userAssigned['complete_name'], ['class' => 'media-object'], false);
+            echo '</div>';
+            echo '<div class="media-body">';
+            echo '<h4 class="media-heading">'.$userAssigned['complete_name'].'</h4>';
+            echo $userAssigned['username'];
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+        }
+
+        echo '</div>';
+    }
 }
 
 if (api_get_setting('allow_social_tool') === 'true') {

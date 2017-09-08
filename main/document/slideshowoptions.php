@@ -1,24 +1,26 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
- *	@author Patrick Cool
- *	@package chamilo.document
+ * @author Patrick Cool
+ * @package chamilo.document
  * @author Patrick Cool, patrick.cool@UGent.be, Ghent University, May 2004, http://icto.UGent.be
  * Please bear in mind that this is only an beta release.
  * I wrote this quite quick and didn't think too much about it in advance.
  * It is not perfect at all but it is workable and usefull (I think)
  * Do not consider this as a powerpoint replacement, although it has
  * the same starting point.
- *	This is a plugin for the documents tool. It looks for .jpg, .jpeg, .gif, .png
- * 	files (since these are the files that can be viewed in a browser) and creates
- *	a slideshow with it by allowing to go to the next/previous image.
- *	You can also have a quick overview (thumbnail view) of all the images in
- *	that particular folder.
- *	Maybe it is important to notice that each slideshow is folder based. Only
- *	the images of the chosen folder are shown.
- *
- *	On this page the options of the slideshow can be set: maintain the original file
- *	or resize the file to a given width.
+ * This is a plugin for the documents tool. It looks for .jpg, .jpeg, .gif, .png
+ * files (since these are the files that can be viewed in a browser) and creates
+ * a slideshow with it by allowing to go to the next/previous image.
+ * You can also have a quick overview (thumbnail view) of all the images in
+ * that particular folder.
+ * Maybe it is important to notice that each slideshow is folder based. Only
+ * the images of the chosen folder are shown.
+ * On this page the options of the slideshow can be set: maintain the original file
+ * or resize the file to a given width.
  */
 require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script();
@@ -39,69 +41,67 @@ $interbreadcrumb[] = array('url' => $url, 'name' => $originaltoolname);
 // bypass the $nametools thing and use <b></b> tags in the $interbreadcrump array
 $url = 'slideshowoptions.php?curdirpath='.$pathurl;
 $originaltoolname = '<b>'.get_lang('SlideshowOptions').'</b>';
-$interbreadcrumb[] = array('url' => $url, 'name' => $originaltoolname );
+$interbreadcrumb[] = array('url' => $url, 'name' => $originaltoolname);
 
-Display::display_header($originalToolName, 'Doc');
-$image_resizing = isset($_SESSION['image_resizing']) ? $_SESSION['image_resizing'] : null;
-
+Display::display_header($originaltoolname, 'Doc');
+$image_resizing = Session::read('image_resizing');
 ?>
-
-<script type="text/javascript">
+<script>
 function enableresizing() { //v2.0
-	document.options.width.disabled=false;
-	//document.options.width.className='enabled_input';
-	document.options.height.disabled=false;
-	//document.options.height.className='enabled_input';
+    document.options.width.disabled=false;
+    //document.options.width.className='enabled_input';
+    document.options.height.disabled=false;
+    //document.options.height.className='enabled_input';
 }
 function disableresizing() { //v2.0
-	document.options.width.disabled=true;
-	//document.options.width.className='disabled_input';
-	document.options.height.disabled=true;
-	//document.options.height.className='disabled_input';
+    document.options.width.disabled=true;
+    //document.options.width.className='disabled_input';
+    document.options.height.disabled=true;
+    //document.options.height.className='disabled_input';
 }
 window.onload = <?php echo $image_resizing == 'resizing' ? 'enableresizing' : 'disableresizing'; ?>;
 </script>
 
 <?php
-$actions = '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-$actions .= '<a href="slideshow.php?curdirpath='.$pathurl.'">'.Display::return_icon('slideshow.png',get_lang('BackTo').' '.get_lang('SlideShow'),'',ICON_SIZE_MEDIUM).'</a>';
-Display::toolbarAction('toolbar-slideshow', $content)
+$actions = '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+$actions .= '<a href="slideshow.php?curdirpath='.$pathurl.'">'.Display::return_icon('slideshow.png', get_lang('BackTo').' '.get_lang('SlideShow'), '', ICON_SIZE_MEDIUM).'</a>';
+echo Display::toolbarAction('toolbar-slideshow', [$actions])
 ?>
 <div class="panel panel-default">
     <div class="panel-body">
-<form action="slideshow.php?curdirpath=<?php echo $pathurl; ?>" method="post" name="options" id="options" class="form-horizontal">
+    <form action="slideshow.php?curdirpath=<?php echo $pathurl; ?>" method="post" name="options" id="options" class="form-horizontal">
 	<legend><?php echo get_lang('SlideshowOptions') ?></legend>
         <div class="radio">
             <label>
                 <input name="radio_resizing" type="radio" onClick="disableresizing()" value="noresizing" <?php
                     if ($image_resizing == 'noresizing' || $image_resizing == '') {
-                            echo ' checked';
+                        echo ' checked';
                     }
         ?>>
             </label>
-            <?php echo '<b>'. get_lang('NoResizing') . '</b>, ' . get_lang('NoResizingComment') ;?>
+            <?php echo '<b>'.get_lang('NoResizing').'</b>, '.get_lang('NoResizingComment'); ?>
         </div>
         <div class="radio">
             <label>
                 <input name="radio_resizing" type="radio" onClick="disableresizing()" value="autoresizing" <?php
-                        if ($image_resizing == 'resizing_auto' || $image_resizing == '') {
-                                echo ' checked';
-                        }
+                if ($image_resizing == 'resizing_auto' || $image_resizing == '') {
+                        echo ' checked';
+                }
         ?>>
             </label>
-            <?php echo '<b>'. get_lang('ResizingAuto') . '</b>, ' . get_lang('ResizingAutoComment');?>
+            <?php echo '<b>'.get_lang('ResizingAuto').'</b>, '.get_lang('ResizingAutoComment'); ?>
 	</div>
 	<div class="radio">
             <label>
                 <input class="checkbox" name="radio_resizing" type="radio" onClick="javascript: enableresizing();" value="resizing" <?php
-                    if ($image_resizing == 'resizing') {
-                            echo ' checked';
-                            $width = $_SESSION['image_resizing_width'];
-                            $height = $_SESSION['image_resizing_height'];
-                    }
+                if ($image_resizing == 'resizing') {
+                    echo ' checked';
+                    $width = Session::read('image_resizing_width');
+                    $height = Session::read('image_resizing_height');
+                }
         ?>>
             </label>
-            <?php echo '<b>'. get_lang('Resizing') . '</b>, ' . get_lang('ResizingComment'); ?>
+            <?php echo '<b>'.get_lang('Resizing').'</b>, '.get_lang('ResizingComment'); ?>
 	</div>
         <div class="form-group">
             <label class="col-sm-1 control-label"><?php echo get_lang('Width'); ?></label>
@@ -125,8 +125,8 @@ Display::toolbarAction('toolbar-slideshow', $content)
             echo ' value="'.$height.'"';
             echo ' class="enabled_input"';
         } else {
-                        echo ' class="disabled_input"';
-                }
+            echo ' class="disabled_input"';
+        }
         ?> >
             </div>
             <div class="col-sm-8"></div>

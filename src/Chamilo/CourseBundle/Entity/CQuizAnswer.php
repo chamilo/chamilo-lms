@@ -125,7 +125,7 @@ class CQuizAnswer
         $this->idAuto = 0;
         $this->correct = null;
         $this->comment = null;
-        $this->ponderation = 0;
+        $this->ponderation = 0.0;
         $this->hotspotCoordinates = null;
         $this->hotspotType = null;
         $this->destination = null;
@@ -248,20 +248,20 @@ class CQuizAnswer
     }
 
     /**
-     * Set ponderation
+     * Set weight
      *
-     * @param float $ponderation
+     * @param float $weight
      * @return CQuizAnswer
      */
-    public function setPonderation($ponderation)
+    public function setPonderation($weight)
     {
-        $this->ponderation = empty($ponderation) ? 0 : $ponderation;
+        $this->ponderation = empty($weight) ? 0.0 : $weight;
 
         return $this;
     }
 
     /**
-     * Get ponderation
+     * Get weight
      *
      * @return float
      */

@@ -13,10 +13,10 @@ class View
 
     /**
      * Constructor, init tool path for rendering
-     * @param string  tool name (optional)
+     * @param string $toolname tool name (optional)
      * @param string $template_path
      */
-    public function __construct($toolname = '', $template_path=null)
+    public function __construct($toolname = '', $template_path = null)
     {
         if (!empty($toolname)) {
             if (isset($template_path)) {
@@ -27,7 +27,7 @@ class View
             if (is_dir($path)) {
                 $this->tool_path = $path;
             } else {
-                throw new Exception('View::__construct() $path directory does not exist ' . $path);
+                throw new Exception('View::__construct() $path directory does not exist '.$path);
             }
         }
     }
@@ -39,7 +39,7 @@ class View
     public function set_data($data)
     {
         if (!is_array($data)) {
-            throw new Exception('View::set_data() $data must to be an array, you have sent a' . gettype( $data ));
+            throw new Exception('View::set_data() $data must to be an array, you have sent a'.gettype($data));
         }
         $this->data = $data;
     }
@@ -49,7 +49,7 @@ class View
      * @param string layout view
      * @param string $layout
      */
-    public function set_layout( $layout )
+    public function set_layout($layout)
     {
         $this->layout = $layout;
     }

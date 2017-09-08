@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Course;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Plugin class for the BuyCourses plugin
@@ -55,6 +56,7 @@ class BuyCoursesPlugin extends Plugin
     public static function create()
     {
         static $result = null;
+
         return $result ? $result : $result = new self();
     }
 
@@ -76,13 +78,14 @@ class BuyCoursesPlugin extends Plugin
             ",
             array(
                 'show_main_menu_tab' => 'boolean',
+                'public_main_menu_tab' => 'boolean',
                 'include_sessions' => 'boolean',
                 'include_services' => 'boolean',
                 'paypal_enable' => 'boolean',
                 'transfer_enable' => 'boolean',
                 'culqi_enable' => 'boolean',
                 'commissions_enable' => 'boolean',
-                'unregistered_users_enable' => 'boolean'
+                'unregistered_users_enable' => 'boolean',
             )
         );
     }
@@ -113,7 +116,7 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_PAYPAL_PAYOUTS,
             self::TABLE_SERVICES,
             self::TABLE_SERVICES_SALE,
-            self::TABLE_GLOBAL_CONFIG
+            self::TABLE_GLOBAL_CONFIG,
         );
         $em = Database::getManager();
         $cn = $em->getConnection();
@@ -124,7 +127,7 @@ class BuyCoursesPlugin extends Plugin
             return false;
         }
 
-        require_once api_get_path(SYS_PLUGIN_PATH) . 'buycourses/database.php';
+        require_once api_get_path(SYS_PLUGIN_PATH).'buycourses/database.php';
     }
 
     /**
@@ -144,7 +147,7 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_PAYPAL_PAYOUTS,
             self::TABLE_SERVICES_SALE,
             self::TABLE_SERVICES,
-            self::TABLE_GLOBAL_CONFIG
+            self::TABLE_GLOBAL_CONFIG,
         );
 
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
@@ -156,9 +159,9 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * This function verify if the plugin is enable and return the price info for a course or session in the new grid catalog
-     * for 1.11.x , the main purpose is to show if a course or session is in sale it shows in the main platform course catalog
-     * so the old buycourses plugin catalog can be deprecated.
+     * This function verify if the plugin is enable and return the price info for a course or session in the new grid
+     * catalog for 1.11.x , the main purpose is to show if a course or session is in sale it shows in the main platform
+     * course catalog so the old buycourses plugin catalog can be deprecated.
      * @param int $productId course or session id
      * @param int $productType course or session type
      * @return mixed bool|string html
@@ -170,13 +173,15 @@ class BuyCoursesPlugin extends Plugin
         $transfer = $this->get('transfer_enable') === 'true';
 
         if ($paypal || $transfer) {
-            $item = $this->getItemByProduct(intval($productId), $productType);
+            $item = $this->getItemByProduct($productId, $productType);
             $return['html'] = '<div class="buycourses-price">';
             if ($item) {
-                $return['html'] .= '<span class="label label-primary"><b>'. $item['iso_code'] .' ' . $item['price'] . '</b></span>';
+                $return['html'] .= '<span class="label label-primary"><strong>'.$item['iso_code'].' '.$item['price']
+                    .'</strong></span>';
                 $return['verificator'] = true;
             } else {
-                $return['html'] .= '<span class="label label-primary"><b>'. $this->get_lang('Free'). '</b></span>';
+                $return['html'] .= '<span class="label label-primary"><strong>'.$this->get_lang('Free')
+                    .'</strong></span>';
                 $return['verificator'] = false;
             }
             $return['html'] .= '</div>';
@@ -195,15 +200,10 @@ class BuyCoursesPlugin extends Plugin
      */
     public function returnBuyCourseButton($productId, $productType)
     {
-        $url = api_get_path(WEB_PLUGIN_PATH) .
-            'buycourses/src/process.php?i=' .
-            intval($productId) .
-            '&t=' .
-            $productType
-        ;
+        $url = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.intval($productId).'&t='.$productType;
 
-        $html = ' <a class="btn btn-success btn-sm" title="' . $this->get_lang('Buy') . '" href="' . $url . '">' .
-            Display::returnFontAwesomeIcon('fa fa-shopping-cart') . '</a>';
+        $html = '<a class="btn btn-success btn-sm" title="'.$this->get_lang('Buy').'" href="'.$url.'">'.
+            Display::returnFontAwesomeIcon('fa fa-shopping-cart').'</a>';
 
         return $html;
     }
@@ -216,9 +216,9 @@ class BuyCoursesPlugin extends Plugin
     {
         return Database::select(
             '*',
-            Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY),
+            Database::get_main_table(self::TABLE_CURRENCY),
             [
-                'where' => ['status = ?' => true]
+                'where' => ['status = ?' => true],
             ],
             'first'
         );
@@ -232,7 +232,7 @@ class BuyCoursesPlugin extends Plugin
     {
         return Database::select(
             '*',
-            Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY)
+            Database::get_main_table(self::TABLE_CURRENCY)
         );
     }
 
@@ -243,7 +243,7 @@ class BuyCoursesPlugin extends Plugin
     public function selectCurrency($selectedId)
     {
         $currencyTable = Database::get_main_table(
-            BuyCoursesPlugin::TABLE_CURRENCY
+            self::TABLE_CURRENCY
         );
 
         Database::update(
@@ -265,12 +265,12 @@ class BuyCoursesPlugin extends Plugin
     public function savePaypalParams($params)
     {
         return Database::update(
-            Database::get_main_table(BuyCoursesPlugin::TABLE_PAYPAL),
+            Database::get_main_table(self::TABLE_PAYPAL),
             [
                 'username' => $params['username'],
                 'password' => $params['password'],
                 'signature' => $params['signature'],
-                'sandbox' => isset($params['sandbox'])
+                'sandbox' => isset($params['sandbox']),
             ],
             ['id = ?' => 1]
         );
@@ -284,7 +284,7 @@ class BuyCoursesPlugin extends Plugin
     {
         return Database::select(
             '*',
-            Database::get_main_table(BuyCoursesPlugin::TABLE_PAYPAL),
+            Database::get_main_table(self::TABLE_PAYPAL),
             ['id = ?' => 1],
             'first'
         );
@@ -302,7 +302,7 @@ class BuyCoursesPlugin extends Plugin
             [
                 'name' => $params['tname'],
                 'account' => $params['taccount'],
-                'swift' => $params['tswift']
+                'swift' => $params['tswift'],
             ]
         );
     }
@@ -338,23 +338,49 @@ class BuyCoursesPlugin extends Plugin
      */
     private function getCourses()
     {
-        $entityManager = Database::getManager();
-        $query = $entityManager->createQueryBuilder();
+        $em = Database::getManager();
+        $urlId = api_get_current_access_url_id();
 
-        $courses = $query
+        $qb = $em->createQueryBuilder();
+        $qb2 = $em->createQueryBuilder();
+        $qb3 = $em->createQueryBuilder();
+
+        $qb = $qb
             ->select('c')
             ->from('ChamiloCoreBundle:Course', 'c')
-            ->leftJoin(
-                'ChamiloCoreBundle:SessionRelCourse',
-                'sc',
-                \Doctrine\ORM\Query\Expr\Join::WITH,
-                'c = sc.course'
-            )
             ->where(
-                $query->expr()->isNull('sc.course')
+                $qb->expr()->notIn(
+                    'c',
+                    $qb2
+                        ->select('course2')
+                        ->from('ChamiloCoreBundle:SessionRelCourse', 'sc')
+                        ->join('sc.course', 'course2')
+                        ->innerJoin(
+                            'ChamiloCoreBundle:AccessUrlRelSession',
+                            'us',
+                            Join::WITH,
+                            'us.sessionId = sc.session'
+                        )->where(
+                            $qb->expr()->eq('us.accessUrlId ', $urlId)
+                        )
+                        ->getDQL()
+                )
+            )->andWhere(
+                $qb->expr()->in(
+                    'c',
+                    $qb3
+                        ->select('course3')
+                        ->from('ChamiloCoreBundle:AccessUrlRelCourse', 'uc')
+                        ->join('uc.course', 'course3')
+                        ->where(
+                            $qb3->expr()->eq('uc.url ', $urlId)
+                        )
+                        ->getDQL()
+                )
             )
-            ->getQuery()
-            ->getResult();
+            ->getQuery();
+
+        $courses = $qb->getResult();
 
         return $courses;
     }
@@ -367,8 +393,8 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getItemByProduct($productId, $itemType)
     {
-        $buyItemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
-        $buyCurrencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+        $buyItemTable = Database::get_main_table(self::TABLE_ITEM);
+        $buyCurrencyTable = Database::get_main_table(self::TABLE_CURRENCY);
 
         $fakeItemFrom = "
             $buyItemTable i
@@ -383,9 +409,9 @@ class BuyCoursesPlugin extends Plugin
                 'where' => [
                     'i.product_id = ? AND i.product_type = ?' => [
                         intval($productId),
-                        intval($itemType)
-                    ]
-                ]
+                        intval($itemType),
+                    ],
+                ],
             ],
             'first'
         );
@@ -400,14 +426,17 @@ class BuyCoursesPlugin extends Plugin
         $courses = $this->getCourses();
 
         if (empty($courses)) {
-            return[];
+            return [];
         }
 
         $configurationCourses = [];
         $currency = $this->getSelectedCurrency();
 
         foreach ($courses as $course) {
-            $configurationCourses[] = $this->getCourseForConfiguration($course, $currency);
+            $configurationCourses[] = $this->getCourseForConfiguration(
+                $course,
+                $currency
+            );
         }
 
         return $configurationCourses;
@@ -457,9 +486,9 @@ class BuyCoursesPlugin extends Plugin
                         $userId,
                         self::PRODUCT_TYPE_SESSION,
                         $session->getId(),
-                        self::SALE_STATUS_PENDING
-                    ]
-                ]
+                        self::SALE_STATUS_PENDING,
+                    ],
+                ],
             ],
             'first'
         );
@@ -471,7 +500,7 @@ class BuyCoursesPlugin extends Plugin
         // Check if user is already subscribe to session
         $userSubscription = $scuRepo->findBy([
             'session' => $session,
-            'user' => $userId
+            'user' => $userId,
         ]);
 
         if (!empty($userSubscription)) {
@@ -501,7 +530,10 @@ class BuyCoursesPlugin extends Plugin
                 continue;
             }
 
-            $item = $this->getItemByProduct($session->getId(), self::PRODUCT_TYPE_SESSION);
+            $item = $this->getItemByProduct(
+                $session->getId(),
+                self::PRODUCT_TYPE_SESSION
+            );
 
             if (empty($item)) {
                 continue;
@@ -509,7 +541,10 @@ class BuyCoursesPlugin extends Plugin
 
             $sessionData = $this->getSessionInfo($session->getId());
             $sessionData['coach'] = $session->getGeneralCoach()->getCompleteName();
-            $sessionData['enrolled'] = $this->getUserStatusForSession(api_get_user_id(), $session);
+            $sessionData['enrolled'] = $this->getUserStatusForSession(
+                api_get_user_id(),
+                $session
+            );
             $sessionData['courses'] = array();
 
             foreach ($sessionCourses as $sessionCourse) {
@@ -517,7 +552,7 @@ class BuyCoursesPlugin extends Plugin
 
                 $sessionCourseData = [
                     'title' => $course->getTitle(),
-                    'coaches' => []
+                    'coaches' => [],
                 ];
 
                 $userCourseSubscriptions = $session->getUserCourseSubscriptionsByStatus(
@@ -554,7 +589,6 @@ class BuyCoursesPlugin extends Plugin
 
         $entityManager = Database::getManager();
         $cuRepo = $entityManager->getRepository('ChamiloCoreBundle:CourseRelUser');
-
         $buySaleTable = Database::get_main_table(self::TABLE_SALE);
 
         // Check if user bought the course
@@ -567,9 +601,9 @@ class BuyCoursesPlugin extends Plugin
                         $userId,
                         self::PRODUCT_TYPE_COURSE,
                         $course->getId(),
-                        self::SALE_STATUS_PENDING
-                    ]
-                ]
+                        self::SALE_STATUS_PENDING,
+                    ],
+                ],
             ],
             'first'
         );
@@ -581,7 +615,7 @@ class BuyCoursesPlugin extends Plugin
         // Check if user is already subscribe to course
         $userSubscription = $cuRepo->findBy([
             'course' => $course,
-            'user' => $userId
+            'user' => $userId,
         ]);
 
         if (!empty($userSubscription)) {
@@ -607,7 +641,6 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $courseCatalog = [];
-
         foreach ($courses as $course) {
             $item = $this->getItemByProduct(
                 $course->getId(),
@@ -626,7 +659,7 @@ class BuyCoursesPlugin extends Plugin
                 'price' => $item['price'],
                 'currency' => $item['iso_code'],
                 'teachers' => [],
-                'enrolled' => $this->getUserStatusForCourse(api_get_user_id(), $course)
+                'enrolled' => $this->getUserStatusForCourse(api_get_user_id(), $course),
             ];
 
             foreach ($course->getTeachers() as $courseUser) {
@@ -640,9 +673,7 @@ class BuyCoursesPlugin extends Plugin
             $possiblePath .= '/course-pic.png';
 
             if (file_exists($possiblePath)) {
-                $courseItem['course_img'] = api_get_path(WEB_COURSE_PATH)
-                    . $course->getDirectory()
-                    . '/course-pic.png';
+                $courseItem['course_img'] = api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic.png';
             }
 
             $courseCatalog[] = $courseItem;
@@ -665,7 +696,10 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
-        $item = $this->getItemByProduct($course->getId(), self::PRODUCT_TYPE_COURSE);
+        $item = $this->getItemByProduct(
+            $course->getId(),
+            self::PRODUCT_TYPE_COURSE
+        );
 
         if (empty($item)) {
             return [];
@@ -680,7 +714,7 @@ class BuyCoursesPlugin extends Plugin
             'teachers' => [],
             'price' => $item['price'],
             'currency' => $item['iso_code'],
-            'course_img' => null
+            'course_img' => null,
         ];
 
         $courseTeachers = $course->getTeachers();
@@ -694,9 +728,7 @@ class BuyCoursesPlugin extends Plugin
         $possiblePath .= '/course-pic.png';
 
         if (file_exists($possiblePath)) {
-            $courseInfo['course_img'] = api_get_path(WEB_COURSE_PATH)
-                . $course->getDirectory()
-                . '/course-pic.png';
+            $courseInfo['course_img'] = api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic.png';
         }
 
         return $courseInfo;
@@ -716,7 +748,10 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
-        $item = $this->getItemByProduct($session->getId(), self::PRODUCT_TYPE_SESSION);
+        $item = $this->getItemByProduct(
+            $session->getId(),
+            self::PRODUCT_TYPE_SESSION
+        );
 
         if (empty($item)) {
             return [];
@@ -728,7 +763,7 @@ class BuyCoursesPlugin extends Plugin
             'access_start_date' => $session->getAccessStartDate(),
             'access_end_date' => $session->getAccessEndDate(),
             'coach_access_start_date' => $session->getCoachAccessStartDate(),
-            'coach_access_end_date' => $session->getCoachAccessEndDate()
+            'coach_access_end_date' => $session->getCoachAccessEndDate(),
         ]);
 
         $sessionInfo = [
@@ -738,7 +773,7 @@ class BuyCoursesPlugin extends Plugin
             'courses' => [],
             'price' => $item['price'],
             'currency' => $item['iso_code'],
-            'image' => null
+            'image' => null,
         ];
 
         $fieldValue = new ExtraFieldValue('session');
@@ -748,7 +783,7 @@ class BuyCoursesPlugin extends Plugin
         );
 
         if (!empty($sessionImage)) {
-            $sessionInfo['image'] = api_get_path(WEB_UPLOAD_PATH) . $sessionImage['value'];
+            $sessionInfo['image'] = api_get_path(WEB_UPLOAD_PATH).$sessionImage['value'];
         }
 
         $sessionCourses = $session->getCourses();
@@ -758,7 +793,7 @@ class BuyCoursesPlugin extends Plugin
 
             $sessionCourseData = [
                 'title' => $course->getTitle(),
-                'coaches' => []
+                'coaches' => [],
             ];
 
             $userCourseSubscriptions = $session->getUserCourseSubscriptionsByStatus(
@@ -788,7 +823,7 @@ class BuyCoursesPlugin extends Plugin
             '*',
             Database::get_main_table(self::TABLE_ITEM),
             [
-                'where' => ['id = ?' => intval($itemId)]
+                'where' => ['id = ?' => intval($itemId)],
             ],
             'first'
         );
@@ -802,7 +837,10 @@ class BuyCoursesPlugin extends Plugin
      */
     public function registerSale($itemId, $paymentType)
     {
-        if (!in_array($paymentType, [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER, self::PAYMENT_TYPE_CULQI])) {
+        if (!in_array(
+            $paymentType,
+            [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER, self::PAYMENT_TYPE_CULQI])
+        ) {
             return false;
         }
 
@@ -845,7 +883,7 @@ class BuyCoursesPlugin extends Plugin
             'product_id' => $item['product_id'],
             'price' => $item['price'],
             'status' => self::SALE_STATUS_PENDING,
-            'payment_type' => intval($paymentType)
+            'payment_type' => intval($paymentType),
         ];
 
         return Database::insert(self::TABLE_SALE, $values);
@@ -862,7 +900,7 @@ class BuyCoursesPlugin extends Plugin
             '*',
             Database::get_main_table(self::TABLE_SALE),
             [
-                'where' => ['id = ?' => intval($saleId)]
+                'where' => ['id = ?' => intval($saleId)],
             ],
             'first'
         );
@@ -875,8 +913,8 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getSaleListByPaymentType($paymentType = self::PAYMENT_TYPE_PAYPAL)
     {
-        $saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
-        $currencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+        $saleTable = Database::get_main_table(self::TABLE_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
         $innerJoins = "
@@ -888,8 +926,13 @@ class BuyCoursesPlugin extends Plugin
             ['c.iso_code', 'u.firstname', 'u.lastname', 's.*'],
             "$saleTable s $innerJoins",
             [
-                'where' => ['s.payment_type = ? AND s.status = ?' => [intval($paymentType), self::SALE_STATUS_COMPLETED]],
-                'order' => 'id DESC'
+                'where' => [
+                    's.payment_type = ? AND s.status = ?' => [
+                        intval($paymentType),
+                        self::SALE_STATUS_COMPLETED
+                    ]
+                ],
+                'order' => 'id DESC',
             ]
         );
     }
@@ -903,9 +946,9 @@ class BuyCoursesPlugin extends Plugin
     {
         return Database::select(
             '*',
-            Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY),
+            Database::get_main_table(self::TABLE_CURRENCY),
             [
-                'where' => ['id = ?' => intval($currencyId)]
+                'where' => ['id = ?' => intval($currencyId)],
             ],
             'first'
         );
@@ -942,7 +985,6 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $saleIsCompleted = false;
-
         switch ($sale['product_type']) {
             case self::PRODUCT_TYPE_COURSE:
                 $course = api_get_course_info_by_id($sale['product_id']);
@@ -985,7 +1027,7 @@ class BuyCoursesPlugin extends Plugin
         return [
             self::PAYMENT_TYPE_PAYPAL => 'PayPal',
             self::PAYMENT_TYPE_TRANSFER => $this->get_lang('BankTransfer'),
-            self::PAYMENT_TYPE_CULQI => 'Culqi'
+            self::PAYMENT_TYPE_CULQI => 'Culqi',
         ];
     }
 
@@ -996,8 +1038,8 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getSaleListByStatus($status = self::SALE_STATUS_PENDING)
     {
-        $saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
-        $currencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+        $saleTable = Database::get_main_table(self::TABLE_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
         $innerJoins = "
@@ -1010,7 +1052,7 @@ class BuyCoursesPlugin extends Plugin
             "$saleTable s $innerJoins",
             [
                 'where' => ['s.status = ?' => intval($status)],
-                'order' => 'id DESC'
+                'order' => 'id DESC',
             ]
         );
     }
@@ -1024,7 +1066,7 @@ class BuyCoursesPlugin extends Plugin
         return [
             self::SALE_STATUS_CANCELED => $this->get_lang('SaleStatusCanceled'),
             self::SALE_STATUS_PENDING => $this->get_lang('SaleStatusPending'),
-            self::SALE_STATUS_COMPLETED => $this->get_lang('SaleStatusCompleted')
+            self::SALE_STATUS_COMPLETED => $this->get_lang('SaleStatusCompleted'),
         ];
     }
 
@@ -1037,7 +1079,7 @@ class BuyCoursesPlugin extends Plugin
         return [
             self::PAYOUT_STATUS_CANCELED => $this->get_lang('PayoutStatusCanceled'),
             self::PAYOUT_STATUS_PENDING => $this->get_lang('PayoutStatusPending'),
-            self::PAYOUT_STATUS_COMPLETED => $this->get_lang('PayoutStatusCompleted')
+            self::PAYOUT_STATUS_COMPLETED => $this->get_lang('PayoutStatusCompleted'),
         ];
     }
 
@@ -1049,7 +1091,7 @@ class BuyCoursesPlugin extends Plugin
     {
         return [
             self::PRODUCT_TYPE_COURSE => get_lang('Course'),
-            self::PRODUCT_TYPE_SESSION => get_lang('Session')
+            self::PRODUCT_TYPE_SESSION => get_lang('Session'),
         ];
     }
 
@@ -1063,7 +1105,7 @@ class BuyCoursesPlugin extends Plugin
             self::SERVICE_TYPE_USER => get_lang('User'),
             self::SERVICE_TYPE_COURSE => get_lang('Course'),
             self::SERVICE_TYPE_SESSION => get_lang('Session'),
-            self::SERVICE_TYPE_LP_FINAL_ITEM => get_lang('TemplateTitleCertificate')
+            self::SERVICE_TYPE_LP_FINAL_ITEM => get_lang('TemplateTitleCertificate'),
         ];
     }
 
@@ -1078,6 +1120,7 @@ class BuyCoursesPlugin extends Plugin
     {
         if (empty($name) && empty($min) && empty($max)) {
             $auth = new Auth();
+
             return $auth->browseSessions();
         }
 
@@ -1089,7 +1132,7 @@ class BuyCoursesPlugin extends Plugin
 
         $innerJoin = "$itemTable i ON s.id = i.product_id";
         $whereConditions = [
-            'i.product_type = ? ' => self::PRODUCT_TYPE_SESSION
+            'i.product_type = ? ' => self::PRODUCT_TYPE_SESSION,
         ];
 
         if (!empty($name)) {
@@ -1117,7 +1160,10 @@ class BuyCoursesPlugin extends Plugin
         $sessions = [];
 
         foreach ($sessionIds as $sessionId) {
-            $sessions[] = Database::getManager()->find('ChamiloCoreBundle:Session', $sessionId);
+            $sessions[] = Database::getManager()->find(
+                'ChamiloCoreBundle:Session',
+                $sessionId
+            );
         }
 
         return $sessions;
@@ -1138,13 +1184,15 @@ class BuyCoursesPlugin extends Plugin
 
         $itemTable = Database::get_main_table(self::TABLE_ITEM);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $urlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+
+        $urlId = api_get_current_access_url_id();
 
         $min = floatval($min);
         $max = floatval($max);
 
-        $innerJoin = "$itemTable i ON c.id = i.product_id";
         $whereConditions = [
-            'i.product_type = ? ' => self::PRODUCT_TYPE_COURSE
+            'i.product_type = ? ' => self::PRODUCT_TYPE_COURSE,
         ];
 
         if (!empty($name)) {
@@ -1159,9 +1207,16 @@ class BuyCoursesPlugin extends Plugin
             $whereConditions['AND i.price <= ?'] = $max;
         }
 
+        $whereConditions['AND url.access_url_id = ?'] = $urlId;
+
         $courseIds = Database::select(
             'c.id',
-            "$courseTable c INNER JOIN $innerJoin",
+            "$courseTable c 
+            INNER JOIN $itemTable i 
+            ON c.id = i.product_id 
+            INNER JOIN $urlTable url 
+            ON c.id = url.c_id
+            ",
             ['where' => $whereConditions]
         );
 
@@ -1171,7 +1226,10 @@ class BuyCoursesPlugin extends Plugin
 
         $courses = [];
         foreach ($courseIds as $courseId) {
-            $courses[] = Database::getManager()->find('ChamiloCoreBundle:Course', $courseId);
+            $courses[] = Database::getManager()->find(
+                'ChamiloCoreBundle:Course',
+                $courseId
+            );
         }
 
         return $courses;
@@ -1201,7 +1259,7 @@ class BuyCoursesPlugin extends Plugin
 
         $str = '';
 
-        srand((double)microtime() * 1000000);
+        srand((double) microtime() * 1000000);
 
         for ($i = 0; $i < $length; $i++) {
             $numbers = rand(0, strlen($salt) - 1);
@@ -1239,10 +1297,9 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
-        $saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
-        $currencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+        $saleTable = Database::get_main_table(self::TABLE_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
-
         $innerJoins = "
             INNER JOIN $currencyTable c ON s.currency_id = c.id
             INNER JOIN $userTable u ON s.user_id = u.id
@@ -1255,9 +1312,9 @@ class BuyCoursesPlugin extends Plugin
                 'where' => [
                     'u.username LIKE %?% OR ' => $term,
                     'u.lastname LIKE %?% OR ' => $term,
-                    'u.firstname LIKE %?%' => $term
+                    'u.firstname LIKE %?%' => $term,
                 ],
-                'order' => 'id DESC'
+                'order' => 'id DESC',
             ]
         );
     }
@@ -1273,8 +1330,8 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
-        $saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
-        $currencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+        $saleTable = Database::get_main_table(self::TABLE_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
         $innerJoins = "
@@ -1287,9 +1344,9 @@ class BuyCoursesPlugin extends Plugin
             "$saleTable s $innerJoins",
             [
                 'where' => [
-                    'u.id = ? AND s.status = ?' => [intval($id), BuyCoursesPlugin::SALE_STATUS_COMPLETED]
+                    'u.id = ? AND s.status = ?' => [intval($id), self::SALE_STATUS_COMPLETED],
                 ],
-                'order' => 'id DESC'
+                'order' => 'id DESC',
             ]
         );
     }
@@ -1310,8 +1367,8 @@ class BuyCoursesPlugin extends Plugin
             'course_title' => $course->getTitle(),
             'course_visibility' => $course->getVisibility(),
             'visible' => false,
-            'currency' =>  empty($defaultCurrency) ? null : $defaultCurrency['iso_code'],
-            'price' => 0.00
+            'currency' => empty($defaultCurrency) ? null : $defaultCurrency['iso_code'],
+            'price' => 0.00,
         ];
 
         $item = $this->getItemByProduct($course->getId(), self::PRODUCT_TYPE_COURSE);
@@ -1334,8 +1391,8 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getSessionForConfiguration(Session $session, $defaultCurrency = null)
     {
-        $buyItemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
-        $buyCurrencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+        $buyItemTable = Database::get_main_table(self::TABLE_ITEM);
+        $buyCurrencyTable = Database::get_main_table(self::TABLE_CURRENCY);
 
         $fakeItemFrom = "
             $buyItemTable i
@@ -1350,8 +1407,8 @@ class BuyCoursesPlugin extends Plugin
             'session_display_start_date' => null,
             'session_display_end_date' => null,
             'visible' => false,
-            'currency' =>  empty($defaultCurrency) ? null : $defaultCurrency['iso_code'],
-            'price' => 0.00
+            'currency' => empty($defaultCurrency) ? null : $defaultCurrency['iso_code'],
+            'price' => 0.00,
         ];
 
         $displayStartDate = $session->getDisplayStartDate();
@@ -1377,8 +1434,8 @@ class BuyCoursesPlugin extends Plugin
             [
                 'where' => [
                     'i.product_id = ? AND ' => $session->getId(),
-                    'i.product_type = ?' => self::PRODUCT_TYPE_SESSION
-                ]
+                    'i.product_type = ?' => self::PRODUCT_TYPE_SESSION,
+                ],
             ],
             'first'
         );
@@ -1405,9 +1462,11 @@ class BuyCoursesPlugin extends Plugin
         return Database::select(
             '*',
             $beneficiaryTable,
-            ['where' => [
-                'item_id = ?' => intval($itemId)
-            ]]
+            [
+                'where' => [
+                    'item_id = ?' => intval($itemId),
+                ]
+            ]
         );
     }
 
@@ -1418,7 +1477,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function deleteItem($itemId)
     {
-        $itemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
+        $itemTable = Database::get_main_table(self::TABLE_ITEM);
         $affectedRows = Database::delete(
             $itemTable,
             ['id = ?' => intval($itemId)]
@@ -1438,7 +1497,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function registerItem(array $itemData)
     {
-        $itemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
+        $itemTable = Database::get_main_table(self::TABLE_ITEM);
 
         return Database::insert($itemTable, $itemData);
     }
@@ -1452,14 +1511,14 @@ class BuyCoursesPlugin extends Plugin
      */
     public function updateItem(array $itemData, $productId, $productType)
     {
-        $itemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
+        $itemTable = Database::get_main_table(self::TABLE_ITEM);
 
         return Database::update(
             $itemTable,
             $itemData,
             [
                 'product_id = ? AND ' => intval($productId),
-                'product_type' => $productType
+                'product_type' => $productType,
             ]
         );
     }
@@ -1471,7 +1530,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function deleteItemBeneficiaries($itemId)
     {
-        $beneficiaryTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM_BENEFICIARY);
+        $beneficiaryTable = Database::get_main_table(self::TABLE_ITEM_BENEFICIARY);
 
         return Database::delete(
             $beneficiaryTable,
@@ -1486,7 +1545,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function registerItemBeneficiaries($itemId, array $userIds)
     {
-        $beneficiaryTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM_BENEFICIARY);
+        $beneficiaryTable = Database::get_main_table(self::TABLE_ITEM_BENEFICIARY);
 
         $this->deleteItemBeneficiaries($itemId);
 
@@ -1496,7 +1555,7 @@ class BuyCoursesPlugin extends Plugin
                 [
                     'item_id' => intval($itemId),
                     'user_id' => intval($userId),
-                    'commissions' => intval($commissions)
+                    'commissions' => intval($commissions),
                 ]
             );
         }
@@ -1541,14 +1600,17 @@ class BuyCoursesPlugin extends Plugin
      * @param int $userId
      * @return array
      */
-    public function getPayouts($status = self::PAYOUT_STATUS_PENDING, $payoutId = false, $userId = false)
-    {
-        $condition = ($payoutId) ? 'AND p.id = '. intval($payoutId) : '';
-        $condition2 = ($userId) ? ' AND p.user_id = ' . intval($userId) : '';
+    public function getPayouts(
+        $status = self::PAYOUT_STATUS_PENDING,
+        $payoutId = false,
+        $userId = false
+    ) {
+        $condition = ($payoutId) ? 'AND p.id = '.intval($payoutId) : '';
+        $condition2 = ($userId) ? ' AND p.user_id = '.intval($userId) : '';
         $typeResult = ($condition) ? 'first' : 'all';
-        $payoutsTable = Database::get_main_table(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS);
-        $saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
-        $currencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+        $payoutsTable = Database::get_main_table(self::TABLE_PAYPAL_PAYOUTS);
+        $saleTable = Database::get_main_table(self::TABLE_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
         $extraFieldValues = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
@@ -1557,7 +1619,7 @@ class BuyCoursesPlugin extends Plugin
             "*",
             $extraFieldTable,
             [
-                'where' => ['variable = ?' => 'paypal']
+                'where' => ['variable = ?' => 'paypal'],
             ],
             'first'
         );
@@ -1571,14 +1633,14 @@ class BuyCoursesPlugin extends Plugin
             INNER JOIN $saleTable s ON s.id = p.sale_id
             INNER JOIN $currencyTable c ON s.currency_id = c.id
             LEFT JOIN  $extraFieldValues efv ON p.user_id = efv.item_id 
-            AND field_id = " . intval($paypalExtraField['id']) . "
+            AND field_id = ".intval($paypalExtraField['id'])."
         ";
 
         $payouts = Database::select(
             "p.* , u.firstname, u.lastname, efv.value as paypal_account, s.reference as sale_reference, s.price as item_price, c.iso_code",
             "$payoutsTable p $innerJoins",
             [
-                'where' => ['p.status = ? '.$condition . ' ' .$condition2 => $status]
+                'where' => ['p.status = ? '.$condition.' '.$condition2 => $status],
             ],
             $typeResult
         );
@@ -1600,7 +1662,7 @@ class BuyCoursesPlugin extends Plugin
             "*",
             $extraFieldTable,
             [
-                'where' => ['variable = ?' => 'paypal']
+                'where' => ['variable = ?' => 'paypal'],
             ],
             'first'
         );
@@ -1614,7 +1676,7 @@ class BuyCoursesPlugin extends Plugin
             "value",
             $extraFieldValues,
             [
-                'where' => ['field_id = ? AND item_id = ?' => [intval($paypalFieldId), intval($userId)]]
+                'where' => ['field_id = ? AND item_id = ?' => [intval($paypalFieldId), intval($userId)]],
             ],
             'first'
         );
@@ -1637,12 +1699,14 @@ class BuyCoursesPlugin extends Plugin
      */
     public function storePayouts($saleId)
     {
-        $payoutsTable = Database::get_main_table(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS);
+        $payoutsTable = Database::get_main_table(self::TABLE_PAYPAL_PAYOUTS);
         $platformCommission = $this->getPlatformCommission();
 
         $sale = $this->getSale($saleId);
-        $teachersCommission = number_format((floatval($sale['price']) * intval($platformCommission['commission']))/100, 2);
-
+        $teachersCommission = number_format(
+            (floatval($sale['price']) * intval($platformCommission['commission'])) / 100,
+            2
+        );
 
         $beneficiaries = $this->getBeneficiariesBySale($saleId);
         foreach ($beneficiaries as $beneficiary) {
@@ -1653,8 +1717,11 @@ class BuyCoursesPlugin extends Plugin
                     'payout_date' => getdate(),
                     'sale_id' => intval($saleId),
                     'user_id' => $beneficiary['user_id'],
-                    'commission' => number_format((floatval($teachersCommission) * intval($beneficiary['commissions']))/100, 2),
-                    'status' => self::PAYOUT_STATUS_PENDING
+                    'commission' => number_format(
+                        (floatval($teachersCommission) * intval($beneficiary['commissions'])) / 100,
+                        2
+                    ),
+                    'status' => self::PAYOUT_STATUS_PENDING,
                 ]
             );
         }
@@ -1668,7 +1735,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function setStatusPayouts($payoutId, $status)
     {
-        $payoutsTable = Database::get_main_table(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS);
+        $payoutsTable = Database::get_main_table(self::TABLE_PAYPAL_PAYOUTS);
 
         Database::update(
             $payoutsTable,
@@ -1685,7 +1752,7 @@ class BuyCoursesPlugin extends Plugin
     {
         return Database::select(
             '*',
-            Database::get_main_table(BuyCoursesPlugin::TABLE_COMMISSION),
+            Database::get_main_table(self::TABLE_COMMISSION),
             ['id = ?' => 1],
             'first'
         );
@@ -1698,7 +1765,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function updateCommission($params)
     {
-        $commissionTable = Database::get_main_table(BuyCoursesPlugin::TABLE_COMMISSION);
+        $commissionTable = Database::get_main_table(self::TABLE_COMMISSION);
 
         return Database::update(
             $commissionTable,
@@ -1714,7 +1781,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function storeService($service)
     {
-        $servicesTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES);
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
 
         $return = Database::insert(
             $servicesTable,
@@ -1728,12 +1795,12 @@ class BuyCoursesPlugin extends Plugin
                 'visibility' => intval($service['visibility']),
                 'image' => '',
                 'video_url' => $service['video_url'],
-                'service_information' => $service['service_information']
+                'service_information' => $service['service_information'],
             ]
         );
 
-        if ($return && !empty($service['picture_crop_image_base_64'])
-            && !empty($service['picture_crop_result'])
+        if ($return && !empty($service['picture_crop_image_base_64']) &&
+            !empty($service['picture_crop_result'])
         ) {
             $img = str_replace('data:image/png;base64,', '', $service['picture_crop_image_base_64']);
             $img = str_replace(' ', '+', $img);
@@ -1759,7 +1826,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function updateService($service, $id)
     {
-        $servicesTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES);
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         if (!empty($service['picture_crop_image_base_64'])) {
             $img = str_replace('data:image/png;base64,', '', $service['picture_crop_image_base_64']);
             $img = str_replace(' ', '+', $img);
@@ -1780,7 +1847,7 @@ class BuyCoursesPlugin extends Plugin
                 'visibility' => intval($service['visibility']),
                 'image' => 'simg-'.$id.'.png',
                 'video_url' => $service['video_url'],
-                'service_information' => $service['service_information']
+                'service_information' => $service['service_information'],
             ],
             ['id = ?' => intval($id)]
         );
@@ -1811,7 +1878,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getServices($id = null)
     {
-        $servicesTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES);
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
         $conditions = null;
@@ -1880,7 +1947,7 @@ class BuyCoursesPlugin extends Plugin
         return [
             self::SERVICE_STATUS_CANCELLED => $this->get_lang('SaleStatusCancelled'),
             self::SERVICE_STATUS_PENDING => $this->get_lang('SaleStatusPending'),
-            self::SERVICE_STATUS_COMPLETED => $this->get_lang('SaleStatusCompleted')
+            self::SERVICE_STATUS_COMPLETED => $this->get_lang('SaleStatusCompleted'),
         ];
     }
 
@@ -1902,8 +1969,8 @@ class BuyCoursesPlugin extends Plugin
         $nodeId = 0,
         $hot = false
     ) {
-        $servicesTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES);
-        $servicesSaleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES_SALE);
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
+        $servicesSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
 
         $conditions = null;
         $showData = 'all';
@@ -1932,11 +1999,23 @@ class BuyCoursesPlugin extends Plugin
         }
 
         if ($nodeType && $nodeId) {
-            $conditions = ['WHERE' => ['ss.node_type = ? AND ss.node_id = ?' => [$nodeType, $nodeId]], 'ORDER' => 'id ASC'];
+            $conditions = [
+                'WHERE' => ['ss.node_type = ? AND ss.node_id = ?' => [$nodeType, $nodeId]], 'ORDER' => 'id ASC'
+            ];
         }
 
         if ($nodeType && $nodeId && $buyerId && is_numeric($status)) {
-            $conditions = ['WHERE' => ['ss.node_type = ? AND ss.node_id = ? AND ss.buyer_id = ? AND ss.status = ?' => [$nodeType, $nodeId, $buyerId, $status]], 'ORDER' => 'id ASC'];
+            $conditions = [
+                'WHERE' => [
+                    'ss.node_type = ? AND ss.node_id = ? AND ss.buyer_id = ? AND ss.status = ?' => [
+                        $nodeType,
+                        $nodeId,
+                        $buyerId,
+                        $status
+                    ]
+                ],
+                'ORDER' => 'id ASC'
+            ];
         }
 
         if ($hot) {
@@ -2004,7 +2083,10 @@ class BuyCoursesPlugin extends Plugin
             $servicesSale[$index]['service']['duration_days'] = $service['duration_days'];
             $servicesSale[$index]['service']['applies_to'] = $service['applies_to'];
             $servicesSale[$index]['service']['owner']['id'] = $service['owner_id'];
-            $servicesSale[$index]['service']['owner']['name'] = api_get_person_name($owner['firstname'], $owner['lastname']);
+            $servicesSale[$index]['service']['owner']['name'] = api_get_person_name(
+                $owner['firstname'],
+                $owner['lastname']
+            );
             $servicesSale[$index]['service']['visibility'] = $service['visibility'];
             $servicesSale[$index]['service']['image'] = $service['image'];
             $servicesSale[$index]['reference'] = $service['reference'];
@@ -2033,7 +2115,10 @@ class BuyCoursesPlugin extends Plugin
      */
     public function cancelServiceSale($serviceSaleId)
     {
-        $this->updateServiceSaleStatus($serviceSaleId, self::SERVICE_STATUS_CANCELLED);
+        $this->updateServiceSaleStatus(
+            $serviceSaleId,
+            self::SERVICE_STATUS_CANCELLED
+        );
 
         return true;
     }
@@ -2050,7 +2135,10 @@ class BuyCoursesPlugin extends Plugin
             return true;
         }
 
-        $this->updateServiceSaleStatus($serviceSaleId, self::SERVICE_STATUS_COMPLETED);
+        $this->updateServiceSaleStatus(
+            $serviceSaleId,
+            self::SERVICE_STATUS_COMPLETED
+        );
 
         return true;
     }
@@ -2065,11 +2153,11 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getCatalogServiceList($name = null, $min = 0, $max = 0, $appliesTo = '')
     {
-        $servicesTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES);
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
         $whereConditions = [
-            's.id <> ? ' => 0
+            's.visibility <> ? ' => 0,
         ];
 
         if (!empty($name)) {
@@ -2110,7 +2198,9 @@ class BuyCoursesPlugin extends Plugin
             $services[$index]['owner_id'] = $service['owner_id'];
             $services[$index]['owner_name'] = api_get_person_name($service['firstname'], $service['lastname']);
             $services[$index]['visibility'] = $service['visibility'];
-            $services[$index]['image'] = !empty($service['image']) ? api_get_path(WEB_PLUGIN_PATH).'buycourses/uploads/services/images/'.$service['image'] : null;
+            $services[$index]['image'] = !empty($service['image'])
+                ? api_get_path(WEB_PLUGIN_PATH).'buycourses/uploads/services/images/'.$service['image']
+                : null;
             $services[$index]['video_url'] = $service['video_url'];
             $services[$index]['service_information'] = $service['service_information'];
         }
@@ -2124,8 +2214,10 @@ class BuyCoursesPlugin extends Plugin
      * @param int $newStatus The new status
      * @return boolean
      */
-    private function updateServiceSaleStatus($serviceSaleId, $newStatus = self::SERVICE_STATUS_PENDING)
-    {
+    private function updateServiceSaleStatus(
+        $serviceSaleId,
+        $newStatus = self::SERVICE_STATUS_PENDING
+    ) {
         $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
 
         return Database::update(
@@ -2145,7 +2237,10 @@ class BuyCoursesPlugin extends Plugin
      */
     public function registerServiceSale($serviceId, $paymentType, $infoSelect, $trial = null)
     {
-        if (!in_array($paymentType, [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER, self::PAYMENT_TYPE_CULQI])) {
+        if (!in_array(
+            $paymentType,
+            [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER, self::PAYMENT_TYPE_CULQI])
+        ) {
             return false;
         }
 
@@ -2172,9 +2267,15 @@ class BuyCoursesPlugin extends Plugin
             'buyer_id' => $userId,
             'buy_date' => api_get_utc_datetime(),
             'date_start' => api_get_utc_datetime(),
-            'date_end' => date_format(date_add(date_create(api_get_utc_datetime()), date_interval_create_from_date_string($service['duration_days'].' days')), 'Y-m-d H:i:s'),
+            'date_end' => date_format(
+                date_add(
+                    date_create(api_get_utc_datetime()),
+                    date_interval_create_from_date_string($service['duration_days'].' days')
+                ),
+                'Y-m-d H:i:s'
+            ),
             'status' => self::SERVICE_STATUS_PENDING,
-            'payment_type' => intval($paymentType)
+            'payment_type' => intval($paymentType),
         ];
 
         $returnedServiceSaleId = Database::insert(self::TABLE_SERVICES_SALE, $values);
@@ -2190,11 +2291,11 @@ class BuyCoursesPlugin extends Plugin
     public function saveCulqiParameters($params)
     {
         return Database::update(
-            Database::get_main_table(BuyCoursesPlugin::TABLE_CULQI),
+            Database::get_main_table(self::TABLE_CULQI),
             [
                 'commerce_code' => $params['commerce_code'],
                 'api_key' => $params['api_key'],
-                'integration' => $params['integration']
+                'integration' => $params['integration'],
             ],
             ['id = ?' => 1]
         );
@@ -2208,7 +2309,7 @@ class BuyCoursesPlugin extends Plugin
     {
         return Database::select(
             '*',
-            Database::get_main_table(BuyCoursesPlugin::TABLE_CULQI),
+            Database::get_main_table(self::TABLE_CULQI),
             ['id = ?' => 1],
             'first'
         );
@@ -2222,9 +2323,9 @@ class BuyCoursesPlugin extends Plugin
     public function saveGlobalParameters($params)
     {
         return Database::update(
-            Database::get_main_table(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG),
+            Database::get_main_table(self::TABLE_GLOBAL_CONFIG),
             [
-                'terms_and_conditions' => $params['terms_and_conditions']
+                'terms_and_conditions' => $params['terms_and_conditions'],
             ],
             ['id = ?' => 1]
         );
@@ -2238,7 +2339,7 @@ class BuyCoursesPlugin extends Plugin
     {
         return Database::select(
             '*',
-            Database::get_main_table(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG),
+            Database::get_main_table(self::TABLE_GLOBAL_CONFIG),
             ['id = ?' => 1],
             'first'
         );
@@ -2251,17 +2352,17 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getPath($var)
     {
-        $pluginPath = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/';
+        $pluginPath = api_get_path(WEB_PLUGIN_PATH).'buycourses/';
         $paths = [
-            'SERVICE_IMAGES' => $pluginPath . 'uploads/services/images/',
-            'SRC' => $pluginPath . 'src/',
-            'VIEW' => $pluginPath . 'view/',
-            'UPLOADS' => $pluginPath . 'uploads/',
-            'LANGUAGES' => $pluginPath . 'lang/',
-            'RESOURCES' => $pluginPath . 'resources/',
-            'RESOURCES_IMG' => $pluginPath . 'resources/img/',
-            'RESOURCES_CSS' => $pluginPath . 'resources/css/',
-            'RESOURCES_JS' => $pluginPath . 'resources/js/',
+            'SERVICE_IMAGES' => $pluginPath.'uploads/services/images/',
+            'SRC' => $pluginPath.'src/',
+            'VIEW' => $pluginPath.'view/',
+            'UPLOADS' => $pluginPath.'uploads/',
+            'LANGUAGES' => $pluginPath.'lang/',
+            'RESOURCES' => $pluginPath.'resources/',
+            'RESOURCES_IMG' => $pluginPath.'resources/img/',
+            'RESOURCES_CSS' => $pluginPath.'resources/css/',
+            'RESOURCES_JS' => $pluginPath.'resources/js/',
         ];
 
         return $paths[$var];

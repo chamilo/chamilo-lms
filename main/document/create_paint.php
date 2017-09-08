@@ -4,9 +4,9 @@
 use ChamiloSession as Session;
 
 /**
- *	This file allows creating audio files from a text.
+ * This file allows creating audio files from a text.
  *
- *	@package chamilo.document
+ * @package chamilo.document
  *
  * @author Juan Carlos Raña Trabado
  * @since 30/January/2011
@@ -14,7 +14,6 @@ use ChamiloSession as Session;
 */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$_SESSION['whereami'] = 'document/createpaint';
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('PhotoRetouching');
 $groupRights = Session::read('group_member_with_upload_rights');
@@ -43,14 +42,14 @@ $dir = $document_data['path'];
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 //path for pixlr save
-$_SESSION['paint_dir'] = Security::remove_XSS($dir);
-if ($_SESSION['paint_dir'] == '/') {
-    $_SESSION['paint_dir'] = '';
+$paintDir = Security::remove_XSS($dir);
+if ($paintDir == '/') {
+    $paintDir = '';
 }
-$_SESSION['paint_file'] = get_lang('NewImage');
+Session::write('paint_dir', $paintDir);
+Session::write('paint_file', get_lang('NewImage'));
 
 // Please, do not modify this dirname formatting
-
 if (strstr($dir, '..')) {
 	$dir = '/';
 }
@@ -109,49 +108,58 @@ Event::event_access_tool(TOOL_DOCUMENT);
 $display_dir = $dir;
 if (isset ($group)) {
     $display_dir = explode('/', $dir);
-    unset ($display_dir[0]);
-    unset ($display_dir[1]);
+    unset($display_dir[0]);
+    unset($display_dir[1]);
     $display_dir = implode('/', $display_dir);
 }
 
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {
-	$interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+    $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
 } else {
     foreach ($document_data['parents'] as $document_sub_data) {
-        $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+        $interbreadcrumb[] = array(
+            'url' => $document_sub_data['document_url'],
+            'name' => $document_sub_data['title']
+        );
     }
 }
 Display :: display_header($nameTools, 'Doc');
 
 echo '<div class="actions">';
 echo '<a href="document.php?id='.$document_id.'">'.
-    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon(
+        'back.png',
+        get_lang('BackTo').' '.get_lang('DocumentsOverview'),
+        '',
+        ICON_SIZE_MEDIUM
+    ).
+    '</a>';
 echo '</div>';
 
 // pixlr
 // max size 1 Mb ??
-$title = urlencode(utf8_encode(get_lang('NewImage')));//TODO:check
+$title = urlencode(utf8_encode(get_lang('NewImage'))); //TODO:check
 //
 $image = Display::returnIconPath('canvas1024x768.png');
 //
 $pixlr_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');
-$langpixlr  = api_get_language_isocode();
+$langpixlr = api_get_language_isocode();
 $langpixlr = isset($pixlr_code_translation_table[$langpixlr]) ? $pixlredit_code_translation_table[$langpixlr] : $langpixlr;
-$loc=$langpixlr;// deprecated ?? TODO:check pixlr read user browser
+$loc = $langpixlr; // deprecated ?? TODO:check pixlr read user browser
 
-$exit_path=api_get_path(WEB_CODE_PATH).'document/exit_pixlr.php';
-$_SESSION['exit_pixlr']=$document_data['path'];
-$referrer="Chamilo";
-$target_path=api_get_path(WEB_CODE_PATH).'document/save_pixlr.php';
-$target=$target_path;
-$locktarget="true";
-$locktitle="false";
+$exit_path = api_get_path(WEB_CODE_PATH).'document/exit_pixlr.php';
+Session::write('exit_pixlr', $document_data['path']);
+$referrer = "Chamilo";
+$target_path = api_get_path(WEB_CODE_PATH).'document/save_pixlr.php';
+$target = $target_path;
+$locktarget = "true";
+$locktitle = "false";
 
-if ($_SERVER['HTTP_HOST']=="localhost") {
-	$path_and_file= api_get_path(SYS_PATH).'/crossdomain.xml';
+if ($_SERVER['HTTP_HOST'] == "localhost") {
+	$path_and_file = api_get_path(SYS_PATH).'/crossdomain.xml';
 	if (!file_exists($path_and_file)) {
-		$crossdomain='<?xml version="1.0"?>
+		$crossdomain = '<?xml version="1.0"?>
 			<!DOCTYPE cross-domain-policy SYSTEM "http://www.adobe.com/xml/dtds/cross-domain-policy.dtd">
 			<cross-domain-policy>
 				<allow-access-from domain="cdn.pixlr.com" />
@@ -164,7 +172,7 @@ if ($_SERVER['HTTP_HOST']=="localhost") {
 } else {
     $credentials = "false";
 }
-$pixlr_url = api_get_protocol().'://pixlr.com/editor/?title='.$title.'&image='.$image.'&loc='.$loc.'&referrer='.$referrer.'&target='.$target.'&exit='.$exit_path.'&locktarget='.$locktarget.'&locktitle='.$locktitle.'&credentials='.$credentials;
+$pixlr_url = '//pixlr.com/editor/?title='.$title.'&image='.$image.'&loc='.$loc.'&referrer='.$referrer.'&target='.$target.'&exit='.$exit_path.'&locktarget='.$locktarget.'&locktitle='.$locktitle.'&credentials='.$credentials;
 ?>
 <script>
 

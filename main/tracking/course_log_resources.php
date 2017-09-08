@@ -30,10 +30,51 @@ if (!$is_allowedToTrack) {
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$exportXls = isset($_GET['export']) && $_GET['export'] == 'xls' ? true : false;
 $session_id = intval($_REQUEST['id_session']);
 
-if ($export_csv) {
-    ob_start();
+if ($export_csv || $exportXls) {
+    $csvData = TrackingCourseLog::get_item_resources_data(0, 0, '', '');
+    array_walk(
+        $csvData,
+        function (&$item) {
+            $item[0] = strip_tags($item[0]);
+            $item[2] = strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', PHP_EOL, $item[2]));
+            $item[3] = strip_tags($item[3]);
+            $item[4] = strip_tags($item[4]);
+
+            unset(
+                $item['col0'],
+                $item['col1'],
+                $item['ref'],
+                $item['col3'],
+                $item['col6'],
+                $item['user_id'],
+                $item['col7']
+            );
+        }
+    );
+
+    array_unshift(
+        $csvData,
+        [
+            get_lang('Tool'),
+            get_lang('EventType'),
+            get_lang('Session'),
+            get_lang('UserName'),
+            get_lang('IPAddress'),
+            get_lang('Document'),
+            get_lang('Date')
+        ]
+    );
+
+    if ($export_csv) {
+        Export::arrayToCsv($csvData);
+    }
+    if ($exportXls) {
+        Export::arrayToXls($csvData);
+    }
+    die;
 }
 
 if (empty($session_id)) {
@@ -42,8 +83,8 @@ if (empty($session_id)) {
 
 // Breadcrumbs.
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'admin/index.php','name' => get_lang('PlatformAdmin'));
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'session/session_list.php','name' => get_lang('SessionList'));
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin'));
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'session/session_list.php', 'name' => get_lang('SessionList'));
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.api_get_session_id(), 'name' => get_lang('SessionOverview'));
 }
 
@@ -73,21 +114,23 @@ echo Display::url(
 echo Display::return_icon('tools_na.png', get_lang('ResourcesTracking'), array(), ICON_SIZE_MEDIUM);
 echo '<span style="float:right; padding-top:0px;">';
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
-    Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).
+    Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).
 '</a>';
 
 $addional_param = '';
 if (isset($_GET['additional_profile_field'])) {
-    $addional_param ='additional_profile_field='.intval($_GET['additional_profile_field']);
+    $addional_param = 'additional_profile_field='.intval($_GET['additional_profile_field']);
 }
 
 $users_tracking_per_page = '';
 if (isset($_GET['users_tracking_per_page'])) {
-    $users_tracking_per_page= '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
+    $users_tracking_per_page = '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
 }
 
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.$users_tracking_per_page.'">
-'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a>';
+'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=xls&'.$addional_param.$users_tracking_per_page.'">
+'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
 
 echo '</span>';
 echo '</div>';
@@ -115,7 +158,7 @@ $table = new SortableTable(
     'resources',
     array('TrackingCourseLog', 'count_item_resources'),
     array('TrackingCourseLog', 'get_item_resources_data'),
-    5,
+    6,
     20,
     'DESC'
 );

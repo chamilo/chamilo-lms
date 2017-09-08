@@ -29,7 +29,6 @@ class CourseDescription
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -75,16 +74,23 @@ class CourseDescription
      */
     public function get_description_data()
     {
-        $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-        $condition_session = api_get_session_condition($this->session_id, true, true);
+        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+        $condition_session = api_get_session_condition(
+            $this->session_id,
+            true,
+            true
+        );
         $course_id = api_get_course_int_id();
-        $sql = "SELECT * FROM $tbl_course_description
+        $sql = "SELECT * FROM $table
 		        WHERE c_id = $course_id $condition_session
 		        ORDER BY id ";
         $rs = Database::query($sql);
         $data = array();
         while ($description = Database::fetch_array($rs)) {
-            $data['descriptions'][$description['id']] = Security::remove_XSS($description, STUDENT);
+            $data['descriptions'][$description['id']] = Security::remove_XSS(
+                $description,
+                STUDENT
+            );
         }
 
         return $data;
@@ -103,7 +109,7 @@ class CourseDescription
         $courseId = null,
         $session_id = null
     ) {
-        $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
@@ -113,8 +119,11 @@ class CourseDescription
         }
         $condition_session = api_get_session_condition($session_id);
         $description_type = intval($description_type);
-        $sql = "SELECT * FROM $tbl_course_description
-		        WHERE c_id = $courseId AND description_type='$description_type' $condition_session ";
+        $sql = "SELECT * FROM $table
+		        WHERE 
+		            c_id = $courseId AND 
+		            description_type = '$description_type' 
+		            $condition_session ";
         $rs = Database::query($sql);
         $data = array();
         if ($description = Database::fetch_array($rs)) {
@@ -136,7 +145,7 @@ class CourseDescription
      */
     public function get_data_by_id($id, $course_code = '', $session_id = null)
     {
-        $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
         $course_id = api_get_course_int_id();
 
         if (!isset($session_id)) {
@@ -148,7 +157,7 @@ class CourseDescription
             $course_id = $course_info['real_id'];
         }
         $id = intval($id);
-        $sql = "SELECT * FROM $tbl_course_description
+        $sql = "SELECT * FROM $table
 		        WHERE c_id = $course_id AND id='$id' $condition_session ";
         $rs = Database::query($sql);
         $data = array();
@@ -162,7 +171,6 @@ class CourseDescription
         return $data;
     }
 
-
     /**
      * Get maximum description type by session id,
      * first you must set session_id properties with the object CourseDescription
@@ -170,12 +178,12 @@ class CourseDescription
      */
     public function get_max_description_type()
     {
-        $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT MAX(description_type) as MAX
-                FROM $tbl_course_description
-		        WHERE c_id = $course_id AND session_id='" . $this->session_id . "'";
+                FROM $table
+		        WHERE c_id = $course_id AND session_id='".$this->session_id."'";
         $rs = Database::query($sql);
         $max = Database::fetch_array($rs);
 
@@ -216,7 +224,7 @@ class CourseDescription
             'session_id' => $this->session_id
         ];
 
-        $last_id  = Database::insert($table, $params);
+        $last_id = Database::insert($table, $params);
 
         if ($last_id > 0) {
             $sql = "UPDATE $table SET id = iid WHERE iid = $last_id";
@@ -244,7 +252,7 @@ class CourseDescription
      */
     public function insert_stats($description_type)
     {
-        $tbl_stats_item_property = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
         $description_id = $this->get_id_by_description_type($description_type);
         $course_id = api_get_course_int_id();
         $course_code = api_get_course_id();
@@ -266,7 +274,7 @@ class CourseDescription
             'session_id' => $this->session_id,
         ];
 
-        $result = Database::insert($tbl_stats_item_property, $params);
+        $result = Database::insert($table, $params);
 
         return $result ? 1 : 0;
     }
@@ -279,7 +287,6 @@ class CourseDescription
     public function update()
     {
         $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-
         $params = [
             'title' => $this->title,
             'content' => $this->content,
@@ -319,13 +326,13 @@ class CourseDescription
      */
     public function delete()
     {
-        $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
         $course_id = api_get_course_int_id();
-        $sql = "DELETE FROM $tbl_course_description
+        $sql = "DELETE FROM $table
 			 	WHERE
 			 	    c_id = $course_id AND
-			 	    id = '" . intval($this->id) . "' AND
-			 	    session_id = '" . intval($this->session_id) . "'";
+			 	    id = '".intval($this->id)."' AND
+			 	    session_id = '" . intval($this->session_id)."'";
         $result = Database::query($sql);
         $affected_rows = Database::affected_rows($result);
         if ($this->id > 0) {
@@ -350,11 +357,13 @@ class CourseDescription
      */
     public function get_id_by_description_type($description_type)
     {
-        $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT id FROM $tbl_course_description
-		        WHERE c_id = $course_id AND description_type = '" . intval($description_type) . "'";
+        $sql = "SELECT id FROM $table
+		        WHERE 
+		            c_id = $course_id AND 
+		            description_type = '".intval($description_type)."'";
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
         $description_id = $row['id'];
@@ -497,7 +506,6 @@ class CourseDescription
     }
 
     /**
-     *
      * Set description session id
      *
      * @param int $session_id
@@ -517,7 +525,6 @@ class CourseDescription
     }
 
     /**
-     *
      * Set progress of a description
      *
      * @param string $progress

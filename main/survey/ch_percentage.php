@@ -21,10 +21,12 @@ class ch_percentage extends survey_question
             $options[$key] = $value;
         }
 
-        $name = 'question' . $questionData['question_id'];
+        $name = 'question'.$questionData['question_id'];
 
         $form->addSelect(
-            $name, null, $options
+            $name,
+            null,
+            $options
         );
 
         if (!empty($answers)) {

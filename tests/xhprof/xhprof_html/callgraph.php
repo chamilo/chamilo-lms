@@ -31,7 +31,7 @@
 
 // by default assume that xhprof_html & xhprof_lib directories
 // are at the same level.
-$GLOBALS['XHPROF_LIB_ROOT'] = dirname(__FILE__) . '/../xhprof_lib';
+$GLOBALS['XHPROF_LIB_ROOT'] = __DIR__.'/../xhprof_lib';
 
 require_once $GLOBALS['XHPROF_LIB_ROOT'].'/display/xhprof.php';
 

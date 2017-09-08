@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php
  *
@@ -27,43 +30,35 @@ $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 /* MAIN CODE */
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
     error_log('New LP - User not authorized in lp_edit_item_prereq.php');
-    header('location:lp_controller.php?action=view&lp_id=' . $learnpath_id);
+    header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
 }
-$course_id = api_get_course_int_id();
 
-$sql = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
-$result = Database::query($sql);
-$therow = Database::fetch_array($result);
+// Theme calls.
+$show_learn_path = true;
+/** @var learnpath $lp */
+$lp = Session::read('oLP');
+$lp_theme_css = $lp->get_theme();
 
-/* SHOWING THE ADMIN TOOLS */
-
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
 
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
+$interbreadcrumb[] = array(
+    'url' => 'lp_controller.php?action=list',
+    'name' => get_lang('LearningPaths')
+);
 $interbreadcrumb[] = array(
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id",
-    'name' => stripslashes("{$therow['name']}"),
+    'name' => stripslashes($lp->get_name()),
 );
 $interbreadcrumb[] = array(
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
     'name' => get_lang('NewStep'),
 );
-
-// Theme calls.
-$show_learn_path = true;
-/** @var learnpath $lp */
-$lp = $_SESSION['oLP'];
-$lp_theme_css = $lp->get_theme();
 
 Display::display_header(get_lang('LearnpathPrerequisites'), 'Path');
 
@@ -89,21 +84,21 @@ $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 <?php
 
 /* DISPLAY SECTION */
-
 echo $lp->build_action_menu();
-
 echo '<div class="row">';
 echo '<div class="col-md-3">';
 echo $lp->return_new_tree();
 echo '</div>';
 echo '<div class="col-md-9">';
+echo '<div class="prerequisites">';
+$lpItem = new learnpathItem($_GET['id']);
 if (isset($is_success) && $is_success == true) {
-    echo $lp->display_manipulate($_GET['id'], null);
-    echo Display::return_message(get_lang("PrerequisitesAdded"));
+    echo $lp->display_manipulate($_GET['id'], $lpItem->get_type());
+    echo Display::return_message(get_lang('PrerequisitesAdded'));
 } else {
-    echo $lp->display_manipulate($_GET['id'], null);
+    echo $lp->display_manipulate($_GET['id'], $lpItem->get_type());
     echo $lp->display_item_prerequisites_form($_GET['id']);
 }
 echo '</div>';
-
+echo '</div>';
 Display::display_footer();

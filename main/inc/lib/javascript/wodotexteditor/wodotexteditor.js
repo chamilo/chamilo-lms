@@ -22,16 +22,17 @@
  * @source: https://github.com/kogmbh/WebODF/
  */
 
+/*global window, document, alert, navigator, require, dojo, runtime, core, gui, ops, odf, WodoFromSource*/
+
 /**
  * Namespace of the Wodo.TextEditor
  * @namespace
+ * @name Wodo
  */
-var Wodo = Wodo || (function () {
+window.Wodo = window.Wodo || (function () {
     "use strict";
 
-    var installationPath = (function() {
-        "use strict";
-
+    function getInstallationPath() {
         /**
          * Sees to get the url of this script on top of the stack trace.
          * @param {!string|undefined} stack
@@ -41,7 +42,9 @@ var Wodo = Wodo || (function () {
             var url, matches;
 
             if (typeof stack === "string" && stack) {
+                /*jslint regexp: true*/
                 matches = stack.match(/((?:http[s]?|file):\/\/[\/]?.+?\/[^:\)]*?)(?::\d+)(?::\d+)?/);
+                /*jslint regexp: false*/
                 url = matches && matches[1];
             }
             if (typeof url === "string" && url) {
@@ -56,9 +59,7 @@ var Wodo = Wodo || (function () {
          * @return {!string|undefined}
          */
         function getCurrentScriptElementSrcByTricks() {
-            var i,
-                pageUrl = window.location.href,
-                scriptElements = document.getElementsByTagName("script");
+            var scriptElements = document.getElementsByTagName("script");
 
             // if there is only one script, it must be this
             if (scriptElements.length === 1) {
@@ -68,8 +69,7 @@ var Wodo = Wodo || (function () {
             // otherwise get it from the stacktrace
             try {
                 throw new Error();
-            }
-            catch (err) {
+            } catch (err) {
                 return getScriptUrlFromStack(err.stack);
             }
         }
@@ -87,6 +87,11 @@ var Wodo = Wodo || (function () {
             a = document.createElement('a');
             a.href = scriptElementSrc;
             pathname = a.pathname;
+            if (pathname.charAt(0) !== "/") {
+                // Various versions of Internet Explorer seems to neglect the leading slash under some conditions
+                // (not when watching it with the dev tools of course!). This was confirmed in IE10 + IE11
+                pathname = "/" + pathname;
+            }
 
             pos = pathname.lastIndexOf("/");
             if (pos !== -1) {
@@ -96,28 +101,12 @@ var Wodo = Wodo || (function () {
             alert("Could not estimate installation path of the Wodo.TextEditor.");
         }
         return path;
-    }());
+    }
 
-    window.dojoConfig = (function() {
-        var WebODFEditorDojoLocale = "C";
-
-        if (navigator && navigator.language && navigator.language.match(/^(de)/)) {
-            WebODFEditorDojoLocale = navigator.language.substr(0, 2);
-        }
-
-        return {
-            locale: WebODFEditorDojoLocale,
-            paths: {
-                "webodf/editor": installationPath,
-                "dijit":         installationPath + "/dijit",
-                "dojox":         installationPath + "/dojox",
-                "dojo":          installationPath + "/dojo",
-                "resources":     installationPath + "/resources"
-            }
-        };
-    }());
-
-    var /** @inner @type{!boolean} */
+    var /** @inner @const
+            @type{!string} */
+        installationPath = getInstallationPath(),
+        /** @inner @type{!boolean} */
         isInitalized = false,
         /** @inner @type{!Array.<!function():undefined>} */
         pendingInstanceCreationCalls = [],
@@ -141,11 +130,38 @@ var Wodo = Wodo || (function () {
         BorderContainer, ContentPane, FullWindowZoomHelper, EditorSession, Tools,
         /** @inner @const
             @type{!string} */
+        MODUS_FULLEDITING = "fullediting",
+        /** @inner @const
+            @type{!string} */
+        MODUS_REVIEW = "review",
+        /** @inner @const
+            @type{!string} */
         EVENT_UNKNOWNERROR = "unknownError",
+        /** @inner @const
+            @type {!string} */
+        EVENT_DOCUMENTMODIFIEDCHANGED = "documentModifiedChanged",
         /** @inner @const
             @type {!string} */
         EVENT_METADATACHANGED = "metadataChanged";
 
+    window.dojoConfig = (function () {
+        var WebODFEditorDojoLocale = "C";
+
+        if (navigator && navigator.language && navigator.language.match(/^(de)/)) {
+            WebODFEditorDojoLocale = navigator.language.substr(0, 2);
+        }
+
+        return {
+            locale: WebODFEditorDojoLocale,
+            paths: {
+                "webodf/editor": installationPath,
+                "dijit":         installationPath + "/dijit",
+                "dojox":         installationPath + "/dojox",
+                "dojo":          installationPath + "/dojo",
+                "resources":     installationPath + "/resources"
+            }
+        };
+    }());
 
     /**
      * @return {undefined}
@@ -166,7 +182,7 @@ var Wodo = Wodo || (function () {
 
                 BorderContainer = BC;
                 ContentPane = CP;
-                FullWindowZoomHelper = FWZH,
+                FullWindowZoomHelper = FWZH;
                 EditorSession = ES;
                 Tools = T;
 
@@ -198,6 +214,9 @@ var Wodo = Wodo || (function () {
                     isInitalized = true;
                     pendingInstanceCreationCalls.forEach(function (create) { create(); });
                 });
+
+                // only done to make jslint see the var used
+                return t;
             }
         );
     }
@@ -242,8 +261,7 @@ var Wodo = Wodo || (function () {
             return editorOptions.allFeaturesEnabled ? (isFeatureEnabled !== false) : isFeatureEnabled;
         }
 
-        var self = this,
-            userData,
+        var userData,
             //
             mainContainerElement = document.getElementById(mainContainerElementId),
             canvasElement,
@@ -275,15 +293,17 @@ var Wodo = Wodo || (function () {
             //
             loadOdtFile = editorOptions.loadCallback,
             saveOdtFile = editorOptions.saveCallback,
+            saveAsOdtFile = editorOptions.saveAsCallback,
+            downloadOdtFile = editorOptions.downloadCallback,
             close =       editorOptions.closeCallback,
             //
+            reviewModeEnabled = (editorOptions.modus === MODUS_REVIEW),
             directTextStylingEnabled = isEnabled(editorOptions.directTextStylingEnabled),
             directParagraphStylingEnabled = isEnabled(editorOptions.directParagraphStylingEnabled),
-            paragraphStyleSelectingEnabled = isEnabled(editorOptions.paragraphStyleSelectingEnabled),
-            paragraphStyleEditingEnabled = isEnabled(editorOptions.paragraphStyleEditingEnabled),
-            imageEditingEnabled = isEnabled(editorOptions.imageEditingEnabled),
+            paragraphStyleSelectingEnabled = (!reviewModeEnabled) && isEnabled(editorOptions.paragraphStyleSelectingEnabled),
+            paragraphStyleEditingEnabled =   (!reviewModeEnabled) && isEnabled(editorOptions.paragraphStyleEditingEnabled),
+            imageEditingEnabled =            (!reviewModeEnabled) && isEnabled(editorOptions.imageEditingEnabled),
             hyperlinkEditingEnabled = isEnabled(editorOptions.hyperlinkEditingEnabled),
-            reviewModeEnabled = Boolean(editorOptions.reviewModeEnabled), // needs to be explicitly enabled
             annotationsEnabled = reviewModeEnabled || isEnabled(editorOptions.annotationsEnabled),
             undoRedoEnabled = isEnabled(editorOptions.undoRedoEnabled),
             zoomingEnabled = isEnabled(editorOptions.zoomingEnabled),
@@ -293,10 +313,11 @@ var Wodo = Wodo || (function () {
             //
             eventNotifier = new core.EventNotifier([
                 EVENT_UNKNOWNERROR,
+                EVENT_DOCUMENTMODIFIEDCHANGED,
                 EVENT_METADATACHANGED
             ]);
 
-        runtime.assert(Boolean(mainContainerElement), "No id of an existing element passed to Wodo.createTextEditor(): "+mainContainerElementId);
+        runtime.assert(Boolean(mainContainerElement), "No id of an existing element passed to Wodo.createTextEditor(): " + mainContainerElementId);
 
         /**
          * @param {!Object} changes
@@ -304,6 +325,14 @@ var Wodo = Wodo || (function () {
          */
         function relayMetadataSignal(changes) {
             eventNotifier.emit(EVENT_METADATACHANGED, changes);
+        }
+
+        /**
+         * @param {!Object} changes
+         * @return {undefined}
+         */
+        function relayModifiedSignal(modified) {
+            eventNotifier.emit(EVENT_DOCUMENTMODIFIEDCHANGED, modified);
         }
 
         /**
@@ -332,6 +361,7 @@ var Wodo = Wodo || (function () {
             });
             if (undoRedoEnabled) {
                 editorSession.sessionController.setUndoManager(new gui.TrivialUndoManager());
+                editorSession.sessionController.getUndoManager().subscribe(gui.UndoManager.signalDocumentModifiedChanged, relayModifiedSignal);
             }
 
             // Relay any metadata changes to the Editor's consumer as an event
@@ -374,7 +404,7 @@ var Wodo = Wodo || (function () {
          * @param {!function(!Error=):undefined} callback Called once the document has been opened, passes an error object in case of error
          * @return {undefined}
          */
-        this.openDocumentFromUrl = function(docUrl, editorReadyCallback) {
+        this.openDocumentFromUrl = function (docUrl, editorReadyCallback) {
             runtime.assert(docUrl, "document should be defined here.");
             runtime.assert(!pendingEditorReadyCallback, "pendingEditorReadyCallback should not exist here.");
             runtime.assert(!editorSession, "editorSession should not exist here.");
@@ -395,7 +425,7 @@ var Wodo = Wodo || (function () {
             };
 
             odfCanvas.load(docUrl);
-        }
+        };
 
         /**
          * Closes the document, and does cleanup.
@@ -404,7 +434,7 @@ var Wodo = Wodo || (function () {
          * @param {!function(!Error=):undefined} callback  Called once the document has been closed, passes an error object in case of error
          * @return {undefined}
          */
-        this.closeDocument = function(callback) {
+        this.closeDocument = function (callback) {
             runtime.assert(session, "session should exist here.");
 
             endEditing();
@@ -437,7 +467,7 @@ var Wodo = Wodo || (function () {
                     });
                 }
             });
-        }
+        };
 
         /**
          * @name TextEditor#getDocumentAsByteArray
@@ -445,19 +475,19 @@ var Wodo = Wodo || (function () {
          * @param {!function(err:?Error, file:!Uint8Array=):undefined} callback Called with the current document as ODT file as bytearray, passes an error object in case of error
          * @return {undefined}
          */
-        this.getDocumentAsByteArray = function(callback) {
+        this.getDocumentAsByteArray = function (callback) {
             var odfContainer = odfCanvas.odfContainer();
 
             if (odfContainer) {
-                odfContainer.createByteArray(function(ba) {
+                odfContainer.createByteArray(function (ba) {
                     callback(null, ba);
-                }, function(errorString) {
-                    callback(new Error(errorString ? errorString : "Could not create bytearray from OdfContainer."));
+                }, function (errorString) {
+                    callback(new Error(errorString || "Could not create bytearray from OdfContainer."));
                 });
             } else {
                 callback(new Error("No odfContainer set!"));
             }
-        }
+        };
 
         /**
          * Sets the metadata fields from the given properties map.
@@ -479,7 +509,7 @@ var Wodo = Wodo || (function () {
          * @param {?Array.<!string>} removedProperties An array of metadata field names (prefixed).
          * @return {undefined}
          */
-        this.setMetadata = function(setProperties, removedProperties) {
+        this.setMetadata = function (setProperties, removedProperties) {
             runtime.assert(editorSession, "editorSession should exist here.");
 
             editorSession.sessionController.getMetadataController().setMetadata(setProperties, removedProperties);
@@ -493,7 +523,7 @@ var Wodo = Wodo || (function () {
          * dc:creator
          * @return {?string}
          */
-        this.getMetadata = function(property) {
+        this.getMetadata = function (property) {
             runtime.assert(editorSession, "editorSession should exist here.");
 
             return editorSession.sessionController.getMetadataController().getMetadata(property);
@@ -520,9 +550,45 @@ var Wodo = Wodo || (function () {
          * @function
          * @return {!Object.<!string,!string>}
          */
-        this.getUserData = function() {
+        this.getUserData = function () {
             return cloneUserData(userData);
-        }
+        };
+
+        /**
+         * Sets the current state of the document to be either the unmodified state
+         * or a modified state.
+         * If @p modified is @true and the current state was already a modified state,
+         * this call has no effect and also does not remove the unmodified flag
+         * from the state which has it set.
+         *
+         * @name TextEditor#setDocumentModified
+         * @function
+         * @param {!boolean} modified
+         * @return {undefined}
+         */
+        this.setDocumentModified = function (modified) {
+            runtime.assert(editorSession, "editorSession should exist here.");
+
+            if (undoRedoEnabled) {
+                editorSession.sessionController.getUndoManager().setDocumentModified(modified);
+            }
+        };
+
+        /**
+         * Returns if the current state of the document matches the unmodified state.
+         * @name TextEditor#isDocumentModified
+         * @function
+         * @return {!boolean}
+         */
+        this.isDocumentModified = function () {
+            runtime.assert(editorSession, "editorSession should exist here.");
+
+            if (undoRedoEnabled) {
+                return editorSession.sessionController.getUndoManager().isDocumentModified();
+            }
+
+            return false;
+        };
 
         /**
          * @return {undefined}
@@ -548,7 +614,7 @@ var Wodo = Wodo || (function () {
          * @param {!function(!Error=):undefined} callback Called once the destruction has been completed, passes an error object in case of error
          * @return {undefined}
          */
-        this.destroy = function(callback) {
+        this.destroy = function (callback) {
             var destroyCallbacks = [];
 
             // TODO: decide if some forced close should be done here instead of enforcing proper API usage
@@ -565,7 +631,7 @@ var Wodo = Wodo || (function () {
             ]);
 
             core.Async.destroyAll(destroyCallbacks, callback);
-        }
+        };
 
         // TODO:
         // this.openDocumentFromByteArray = openDocumentFromByteArray; see also https://github.com/kogmbh/WebODF/issues/375
@@ -635,6 +701,11 @@ var Wodo = Wodo || (function () {
             // to style also all dialogs, which are attached directly to body
             document.body.classList.add("claro");
 
+            // prevent browser translation service messing up internal address system
+            // TODO: this should be done more centrally, but where exactly?
+            canvasElement.setAttribute("translate", "no");
+            canvasElement.classList.add("notranslate");
+
             // create widgets
             mainContainer = new BorderContainer({}, mainContainerElementId);
 
@@ -649,6 +720,8 @@ var Wodo = Wodo || (function () {
                 onToolDone: setFocusToOdfCanvas,
                 loadOdtFile: loadOdtFile,
                 saveOdtFile: saveOdtFile,
+                saveAsOdtFile: saveAsOdtFile,
+                downloadOdtFile: downloadOdtFile,
                 close: close,
                 directTextStylingEnabled: directTextStylingEnabled,
                 directParagraphStylingEnabled: directParagraphStylingEnabled,
@@ -717,8 +790,11 @@ var Wodo = Wodo || (function () {
      * @function
      * @param {!string} editorContainerElementId id of the existing div element which will contain the editor (should be empty before)
      * @param editorOptions options to configure the features of the editor. All entries are optional
+     * @param [editorOptions.modus=Wodo.MODUS_FULLEDITING] set the editing modus. Current options: Wodo.MODUS_FULLEDITING, Wodo.MODUS_REVIEW
      * @param [editorOptions.loadCallback] parameter-less callback method, adds a "Load" button to the toolbar which triggers this method
      * @param [editorOptions.saveCallback] parameter-less callback method, adds a "Save" button to the toolbar which triggers this method
+     * @param [editorOptions.saveAsCallback] parameter-less callback method, adds a "Save as" button to the toolbar which triggers this method
+     * @param [editorOptions.downloadCallback] parameter-less callback method, adds a "Download" button to the right of the toolbar which triggers this method
      * @param [editorOptions.closeCallback] parameter-less callback method, adds a "Save" button to the toolbar which triggers this method
      * @param [editorOptions.allFeaturesEnabled=false] if set to 'true', switches the default for all features from 'false' to 'true'
      * @param [editorOptions.directTextStylingEnabled=false] if set to 'true', enables the direct styling of text (e.g. bold/italic or font)
@@ -767,8 +843,14 @@ var Wodo = Wodo || (function () {
     return {
         createTextEditor: createTextEditor,
         // flags
+        /** Id of full editing modus */
+        MODUS_FULLEDITING: MODUS_FULLEDITING,
+        /** Id of review modus */
+        MODUS_REVIEW: MODUS_REVIEW,
         /** Id of event for an unkown error */
         EVENT_UNKNOWNERROR: EVENT_UNKNOWNERROR,
+        /** Id of event if documentModified state changes */
+        EVENT_DOCUMENTMODIFIEDCHANGED: EVENT_DOCUMENTMODIFIEDCHANGED,
         /** Id of event if metadata changes */
         EVENT_METADATACHANGED: EVENT_METADATACHANGED
     };

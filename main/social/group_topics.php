@@ -10,7 +10,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
-if (api_get_setting('allow_social_tool') !='true') {
+if (api_get_setting('allow_social_tool') != 'true') {
     api_not_allowed();
 }
 
@@ -67,7 +67,7 @@ if (isset($_POST['action'])) {
     }
 
     if ($_POST['action'] == 'edit_message_group') {
-        $edit_message_id =  intval($_POST['message_id']);
+        $edit_message_id = intval($_POST['message_id']);
         $res = MessageManager::send_message(
             0,
             $title,
@@ -99,7 +99,7 @@ if (isset($_POST['action'])) {
 
     // display error messages
     if (!$res) {
-        $social_right_content .= Display::return_message(get_lang('Error'),'error');
+        $social_right_content .= Display::return_message(get_lang('Error'), 'error');
     }
     $topic_id = isset($_GET['topic_id']) ? intval($_GET['topic_id']) : null;
     if ($_POST['action'] == 'add_message_group') {
@@ -147,24 +147,6 @@ function add_image_form() {
 	}
 }
 
-function show_icon_edit(element_html) {
-    ident="#edit_image";
-    $(ident).show();
-}
-
-function hide_icon_edit(element_html)  {
-    ident="#edit_image";
-    $(ident).hide();
-}
-
-function validate_text_empty(str,msg) {
-	var str = str.replace(/^\s*|\s*$/g,"");
-	if (str.length == 0) {
-		alert(msg);
-		return true;
-	}
-}
-
 $(document).ready(function() {
 	if ($("#msg_'.$message_id.'").length) {
 		$("html,body").animate({
@@ -197,9 +179,9 @@ $(document).ready(function() {
 </script>';
 
 $this_section = SECTION_SOCIAL;
-$interbreadcrumb[] = array('url' => 'groups.php',   'name' => get_lang('Groups'));
+$interbreadcrumb[] = array('url' => 'groups.php', 'name' => get_lang('Groups'));
 $interbreadcrumb[] = array('url' => 'group_view.php?id='.$group_id, 'name' => Security::remove_XSS($group_info['name']));
-$interbreadcrumb[] = array('url' => '#',  'name' => get_lang('Discussions'));
+$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Discussions'));
 
 $social_left_content = SocialManager::show_social_menu('member_list', $group_id);
 $show_message = null;

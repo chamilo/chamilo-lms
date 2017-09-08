@@ -6,8 +6,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 $exercise_id = isset($_GET['exerciseId']) && !empty($_GET['exerciseId']) ? intval($_GET['exerciseId']) : 0;
-$gradebook = isset($gradebook) ? $gradebook : null;
-
 $objExercise = new Exercise();
 $result = $objExercise->read($exercise_id);
 
@@ -68,13 +66,13 @@ if (!empty($question_list)) {
         $data[$question_id]['type'] = $question_obj->get_question_type_name();
         $percentange = 0;
         if ($count_students) {
-            $percentange = $count_users / $count_students*100;
+            $percentange = $count_users / $count_students * 100;
         }
 
         $data[$question_id]['students_who_try_exercise'] = Display::bar_progress(
             $percentange,
             false,
-            $count_users .' / '.$count_students
+            $count_users.' / '.$count_students
         );
         $data[$question_id]['lowest_score'] = round($exercise_stats['min'], 2);
         $data[$question_id]['average_score'] = round($exercise_stats['average'], 2);
@@ -152,7 +150,7 @@ if (!empty($question_list)) {
                         $data[$id]['answer'] = $answer_item;
 
                         $answer_item = api_substr($answer_item, 1);
-                        $answer_item = api_substr($answer_item, 0, api_strlen($answer_item) -1);
+                        $answer_item = api_substr($answer_item, 0, api_strlen($answer_item) - 1);
 
                         $data[$id]['answer'] = $answer_item;
                         $data[$id]['correct'] = '-';
@@ -162,7 +160,7 @@ if (!empty($question_list)) {
 
                         $percentage = 0;
                         if (!empty($count_students)) {
-                            $percentage = $count/$count_students*100;
+                            $percentage = $count / $count_students * 100;
                         }
                         $data[$id]['attempts'] = Display::bar_progress(
                             $percentage,
@@ -203,7 +201,7 @@ if (!empty($question_list)) {
                         );
                         $percentage = 0;
                         if (!empty($count_students)) {
-                            $percentage = $count/$count_students*100;
+                            $percentage = $count / $count_students * 100;
                         }
                         $data[$id]['attempts'] = Display::bar_progress(
                             $percentage,
@@ -230,7 +228,7 @@ if (!empty($question_list)) {
                     );
                     $percentage = 0;
                     if (!empty($count_students)) {
-                        $percentage = $count/$count_students*100;
+                        $percentage = $count / $count_students * 100;
                     }
                     $data[$id]['attempts'] = Display::bar_progress(
                         $percentage,
@@ -256,7 +254,7 @@ if (!empty($question_list)) {
                     );
                     $percentage = 0;
                     if (!empty($count_students)) {
-                        $percentage = $count/$count_students*100;
+                        $percentage = $count / $count_students * 100;
                     }
                     $data[$id]['attempts'] = Display::bar_progress(
                         $percentage,
@@ -291,16 +289,16 @@ foreach ($data as $row_table) {
 $content .= $table->toHtml();
 
 $interbreadcrumb[] = array(
-    "url" => "exercise.php?gradebook=$gradebook&".api_get_cidreq(),
+    "url" => "exercise.php?".api_get_cidreq(),
     "name" => get_lang('Exercises'),
 );
 $interbreadcrumb[] = array(
     "url" => "admin.php?exerciseId=$exercise_id&".api_get_cidreq(),
-    "name" => $objExercise->name,
+    "name" => $objExercise->selectTitle(true),
 );
 
 $tpl = new Template(get_lang('ReportByQuestion'));
-$actions = '<a href="exercise_report.php?exerciseId='.intval($_GET['exerciseId']).'&'.api_get_cidreq().'">' .
+$actions = '<a href="exercise_report.php?exerciseId='.intval($_GET['exerciseId']).'&'.api_get_cidreq().'">'.
     Display:: return_icon(
         'back.png',
         get_lang('GoBackToQuestionList'),

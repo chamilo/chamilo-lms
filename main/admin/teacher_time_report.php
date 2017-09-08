@@ -17,18 +17,18 @@ require_once __DIR__.'/../inc/global.inc.php';
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-
+$interbreadcrumb[] = array(
+    'url' => 'index.php',
+    'name' => get_lang('PlatformAdmin')
+);
 $toolName = get_lang('TeacherTimeReport');
 
 // Access restrictions.
 api_protect_admin_script();
 
-$form = new FormValidator('teacher_time_report');
-
+$form = new FormValidator('teacher_time_report', 'get');
 $startDate = new DateTime(api_get_local_time());
 $startDate->modify('first day of this month');
-
 $limitDate = new DateTime(api_get_local_time());
 
 $selectedCourse = null;
@@ -57,27 +57,38 @@ $optionsCourses = [0 => get_lang('None')];
 $optionsSessions = [0 => get_lang('None')];
 $optionsTeachers = [0 => get_lang('None')];
 
-$courseList = CourseManager::get_courses_list(0, 0, 'title');
-$sessionsList = SessionManager::get_sessions_list(array(), array('name'));
+$courseList = CourseManager::get_courses_list(
+    0,
+    0,
+    'title',
+    'ASC',
+    -1,
+    null,
+    api_get_current_access_url_id()
+);
 
-$teacherList = UserManager::getTeachersList();
+$sessionList = SessionManager::get_sessions_list(array(), array('name'));
+$teacherList = UserManager::get_user_list(['status' => COURSEMANAGER]);
 
 foreach ($courseList as $courseItem) {
     $optionsCourses[$courseItem['code']] = $courseItem['title'];
 }
 
-foreach ($sessionsList as $sessionItem) {
+foreach ($sessionList as $sessionItem) {
     $optionsSessions[$sessionItem['id']] = $sessionItem['name'];
 }
 
 foreach ($teacherList as $teacherItem) {
-    $optionsTeachers[$teacherItem['user_id']] = $teacherItem['completeName'];
+    $optionsTeachers[$teacherItem['user_id']] = $teacherItem['complete_name'];
 }
 
 $withFilter = false;
-
 $reportTitle = get_lang('TimeReportIncludingAllCoursesAndSessionsByTeacher');
-$reportSubTitle = sprintf(get_lang('TimeSpentBetweenXAndY'), $selectedFrom, $selectedUntil);
+$reportSubTitle = sprintf(
+    get_lang('TimeSpentBetweenXAndY'),
+    $selectedFrom,
+    $selectedUntil
+);
 
 $timeReport = new TeacherTimeReport();
 
@@ -108,16 +119,22 @@ if (!empty($selectedCourse)) {
                 'lastname' => $teacher['lastname'],
                 'firstname' => $teacher['firstname'],
                 'username' => $teacher['username'],
-                'completeName' => api_get_person_name($teacher['firstname'], $teacher['lastname'])
+                'complete_name' => api_get_person_name(
+                    $teacher['firstname'],
+                    $teacher['lastname']
+                )
             ),
-            'totalTime' => $formattedTime
+            'total_time' => $formattedTime
         );
     }
 
     $sessionsByCourse = SessionManager::get_session_by_course($course['real_id']);
 
     foreach ($sessionsByCourse as $session) {
-        $coaches = CourseManager::get_coachs_from_course($session['id'], $course['real_id']);
+        $coaches = CourseManager::get_coachs_from_course(
+            $session['id'],
+            $course['real_id']
+        );
 
         if (!empty($coaches)) {
             foreach ($coaches as $coach) {
@@ -144,9 +161,12 @@ if (!empty($selectedCourse)) {
                         'lastname' => $coach['lastname'],
                         'firstname' => $coach['firstname'],
                         'username' => $coach['username'],
-                        'completeName' => api_get_person_name($coach['firstname'], $coach['lastname'])
+                        'complete_name' => api_get_person_name(
+                            $coach['firstname'],
+                            $coach['lastname']
+                        )
                     ),
-                    'totalTime' => $formattedTime
+                    'total_time' => $formattedTime
                 );
             }
         }
@@ -171,7 +191,10 @@ if (!empty($selectedSession)) {
             'name' => $course['title']
         );
 
-        $coaches = CourseManager::get_coachs_from_course($selectedSession, $course['id']);
+        $coaches = CourseManager::get_coachs_from_course(
+            $selectedSession,
+            $course['id']
+        );
 
         if (!empty($coaches)) {
             foreach ($coaches as $coach) {
@@ -192,9 +215,12 @@ if (!empty($selectedSession)) {
                         'lastname' => $coach['lastname'],
                         'firstname' => $coach['firstname'],
                         'username' => $coach['username'],
-                        'completeName' => api_get_person_name($coach['firstname'], $coach['lastname'])
+                        'complete_name' => api_get_person_name(
+                            $coach['firstname'],
+                            $coach['lastname']
+                        )
                     ),
-                    'totalTime' => $formattedTime
+                    'total_time' => $formattedTime
                 );
             }
         }
@@ -203,25 +229,28 @@ if (!empty($selectedSession)) {
 
 if (!empty($selectedTeacher)) {
     $withFilter = true;
-
     $teacher = api_get_user_info();
-
     $teacherData = array(
         'userId' => $teacher['user_id'],
         'lastname' => $teacher['lastname'],
         'firstname' => $teacher['firstname'],
         'username' => $teacher['username'],
-        'completeName' => $teacher['complete_name']
+        'complete_name' => $teacher['complete_name']
     );
 
-    $reportTitle = sprintf(get_lang('TimeReportForTeacherX'), $teacher['complete_name']);
+    $reportTitle = sprintf(
+        get_lang('TimeReportForTeacherX'),
+        $teacher['complete_name']
+    );
 
-    $courses = CourseManager::get_courses_list_by_user_id($selectedTeacher, false);
+    $courses = CourseManager::get_courses_list_by_user_id(
+        $selectedTeacher,
+        false
+    );
 
     if (!empty($courses)) {
         foreach ($courses as $course) {
             $courseInfo = api_get_course_info_by_id($course['real_id']);
-
             $totalTime = UserManager::getTimeSpentInCourses(
                 $selectedTeacher,
                 $course['real_id'],
@@ -238,7 +267,7 @@ if (!empty($selectedTeacher)) {
                     'name' => $courseInfo['title']
                 ),
                 'coach' => $teacherData,
-                'totalTime' => $formattedTime
+                'total_time' => $formattedTime
             );
         }
     }
@@ -268,19 +297,21 @@ if (!empty($selectedTeacher)) {
                 'name' => $course->getTitle()
             ),
             'coach' => $teacherData,
-            'totalTime' => $formattedTime
+            'total_time' => $formattedTime
         );
     }
 }
 
-if (empty($selectedCourse) && empty($selectedSession) && empty($selectedTeacher)) {
+if (empty($selectedCourse) && empty($selectedSession) &&
+    empty($selectedTeacher)
+) {
     foreach ($teacherList as &$teacher) {
         $timeReport->data[] = array(
             'coach' => array(
                 'username' => $teacher['username'],
-                'completeName' => $teacher['completeName'],
+                'complete_name' => $teacher['complete_name'],
             ),
-            'totalTime' => SessionManager::getTotalUserTimeInPlatform(
+            'total_time' => SessionManager::getTotalUserTimeInPlatform(
                 $teacher['user_id'],
                 $selectedFrom,
                 $selectedUntil
@@ -293,13 +324,11 @@ $timeReport->sortData($withFilter);
 
 if (isset($_GET['export'])) {
     $dataToExport = $timeReport->prepareDataToExport($withFilter);
-
-    $fileName = get_lang('TeacherTimeReport') . ' ' . api_get_local_time();
+    $fileName = get_lang('TeacherTimeReport').' '.api_get_local_time();
 
     switch ($_GET['export']) {
         case 'pdf':
             $params = array(
-                'add_signatures' => false,
                 'filename' => $fileName,
                 'pdf_title' => "$reportTitle - $reportSubTitle",
                 'pdf_description' => get_lang('TeacherTimeReport'),
@@ -321,7 +350,6 @@ if (isset($_GET['export'])) {
             Export::export_table_xls_html($dataToExport, $fileName);
             break;
     }
-
     die;
 }
 
@@ -367,6 +395,42 @@ $form->setDefaults([
     'until' => $selectedUntil
 ]);
 
+$leftActions = Display::url(
+    Display::return_icon(
+        'session.png',
+        get_lang('Sessions'),
+        [],
+        ICON_SIZE_MEDIUM
+    ),
+    api_get_path(WEB_CODE_PATH).'admin/teachers_time_by_session_report.php'
+);
+$exportUrlParams = [
+    'from' => $selectedFrom,
+    'until' => $selectedUntil,
+    'course' => $selectedCourse,
+    'session' => $selectedSession,
+    'teacher' => $selectedTeacher,
+    '_qf__teacher_time_report' => ''
+];
+$rightActions = Display::url(
+    Display::return_icon(
+        'pdf.png',
+        get_lang('ExportToPDF'),
+        [],
+        ICON_SIZE_MEDIUM
+    ),
+    api_get_self().'?export=pdf&'.http_build_query($exportUrlParams)
+);
+$rightActions .= Display::url(
+    Display::return_icon(
+        'export_excel.png',
+        get_lang('ExportExcel'),
+        [],
+        ICON_SIZE_MEDIUM
+    ),
+    api_get_self().'?export=xls&'.http_build_query($exportUrlParams)
+);
+
 $tpl = new Template($toolName);
 $tpl->assign('report_title', $reportTitle);
 $tpl->assign('report_sub_title', $reportSubTitle);
@@ -377,13 +441,19 @@ $tpl->assign('selected_from', $selectedFrom);
 $tpl->assign('selected_until', $selectedUntil);
 $tpl->assign('with_filter', $withFilter);
 $tpl->assign('courses', $courseList);
-$tpl->assign('sessions', $sessionsList);
-//$tpl->assign('courseCoaches', $teacherList);
+$tpl->assign('sessions', $sessionList);
 $tpl->assign('form', $form->returnForm());
 $tpl->assign('rows', $timeReport->data);
 
 $templateName = $tpl->get_template('admin/teacher_time_report.tpl');
-
 $contentTemplate = $tpl->fetch($templateName);
+$tpl->assign('header', get_lang('TeacherTimeReport'));
+$tpl->assign(
+    'actions',
+    Display::toolbarAction(
+        'teacher_time_report_actions',
+        [$leftActions, $rightActions]
+    )
+);
 $tpl->assign('content', $contentTemplate);
 $tpl->display_one_col_template();

@@ -131,6 +131,9 @@ $form = new FormValidator('registration');
 $user_already_registered_show_terms = false;
 if (api_get_setting('allow_terms_conditions') == 'true') {
     $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
+    if (api_is_anonymous() === true) {
+        $user_already_registered_show_terms = false;
+    }
 }
 
 $sessionPremiumChecker = Session::read('SessionIsPremium');
@@ -141,7 +144,6 @@ $sessionRedirect = isset($_REQUEST['s']) && !empty($_REQUEST['s']) ? $_REQUEST['
 $onlyOneCourseSessionRedirect = isset($_REQUEST['cr']) && !empty($_REQUEST['cr']) ? $_REQUEST['cr'] : null;
 
 if (api_get_configuration_value('allow_redirect_to_session_after_inscription_about')) {
-
     if (!empty($sessionRedirect)) {
         Session::write('session_redirect', $sessionRedirect);
         Session::write('only_one_course_session_redirect', $onlyOneCourseSessionRedirect);
@@ -459,9 +461,7 @@ $defaults['status'] = STUDENT;
 $defaults['extra_mail_notify_invitation'] = 1;
 $defaults['extra_mail_notify_message'] = 1;
 $defaults['extra_mail_notify_group_message'] = 1;
-
 $form->setDefaults($defaults);
-
 $content = null;
 
 if (!CustomPages::enabled()) {
@@ -493,7 +493,7 @@ if (!CustomPages::enabled()) {
         }
     }
 
-    $tool_name = get_lang('Registration', null, (!empty($_POST['language'])?$_POST['language']: $_user['language']));
+    $tool_name = get_lang('Registration', null, (!empty($_POST['language']) ? $_POST['language'] : $_user['language']));
 
     if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_registered_show_terms) {
         $tool_name = get_lang('TermsAndConditions');
@@ -514,7 +514,7 @@ if (!CustomPages::enabled()) {
     }
 
     if (file_exists($home.'register_top_'.$user_selected_language.'.html')) {
-        $home_top_temp = @(string)file_get_contents($home.'register_top_'.$user_selected_language.'.html');
+        $home_top_temp = @(string) file_get_contents($home.'register_top_'.$user_selected_language.'.html');
         $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
         if (!empty($open)) {
@@ -872,7 +872,7 @@ if ($form->validate()) {
                 Database::query($sql);
 
                 // 2. Send mail to all platform admin
-                $emailsubject  = get_lang('ApprovalForNewAccount', null, $values['language']).': '.$values['username'];
+                $emailsubject = get_lang('ApprovalForNewAccount', null, $values['language']).': '.$values['username'];
                 $emailbody = get_lang('ApprovalForNewAccount', null, $values['language'])."\n";
                 $emailbody .= get_lang('UserName', null, $values['language']).': '.$values['username']."\n";
 
@@ -929,7 +929,11 @@ if ($form->validate()) {
             if (!empty($cond_array[0]) && !empty($cond_array[1])) {
                 $time = time();
                 $condition_to_save = intval($cond_array[0]).':'.intval($cond_array[1]).':'.$time;
-                UserManager::update_extra_field_value($user_id, 'legal_accept', $condition_to_save);
+                UserManager::update_extra_field_value(
+                    $user_id,
+                    'legal_accept',
+                    $condition_to_save
+                );
 
                 $bossList = UserManager::getStudentBossList($user_id);
                 if ($bossList) {
@@ -973,7 +977,7 @@ if ($form->validate()) {
     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
 
     // Stats
-    Event::event_login($user_id);
+    Event::eventLogin($user_id);
 
     // last user login date is now
     $user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970
@@ -1051,13 +1055,20 @@ if ($form->validate()) {
     }
 
     if ($sessionPremiumChecker && $sessionId) {
-        header('Location:' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/process.php?i=' . $sessionId . '&t=2');
+        header('Location:'.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$sessionId.'&t=2');
         Session::erase('SessionIsPremium');
         Session::erase('sessionId');
         exit;
     }
 
     SessionManager::redirectToSession();
+
+    $redirectBuyCourse = Session::read('buy_course_redirect');
+    if (!empty($redirectBuyCourse)) {
+        $form_data['action'] = api_get_path(WEB_PATH).$redirectBuyCourse;
+        Session::erase('buy_course_redirect');
+    }
+
     $form_data = CourseManager::redirectToCourse($form_data);
 
     $form_register = new FormValidator('form_register', 'post', $form_data['action']);

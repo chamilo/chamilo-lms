@@ -23,7 +23,7 @@ if (isset($params['waminame']) && isset($params['wamidir']) && isset($params['wa
     die();
 }
 
-if ($wamiuserid != api_get_user_id() || api_get_user_id() == 0 || $wamiuserid == 0) {
+if (empty($wamiuserid)) {
     api_not_allowed();
     die();
 }
@@ -50,7 +50,7 @@ if ($ext != 'wav') {
 // Do not use here check Fileinfo method because return: text/plain
 
 $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-$saveDir = $dirBaseDocuments . $wamidir;
+$saveDir = $dirBaseDocuments.$wamidir;
 
 if (!is_dir($saveDir)) {
     DocumentManager::createDefaultAudioFolder($_course);
@@ -58,14 +58,14 @@ if (!is_dir($saveDir)) {
 
 //avoid duplicates
 $waminame_to_save = $waminame;
-$waminame_noex = basename($waminame, ".wav");
-if (file_exists($saveDir.'/'.$waminame_noex.'.'.$ext)) {
-    $i = 1;
-    while (file_exists($saveDir.'/'.$waminame_noex.'_'.$i.'.'.$ext)) {
-        $i++;
-    }
-    $waminame_to_save = $waminame_noex.'_'.$i.'.'.$ext;
-}
+//$waminame_noex = basename($waminame, ".wav");
+//if (file_exists($saveDir.'/'.$waminame_noex.'.'.$ext)) {
+//    $i = 1;
+//    while (file_exists($saveDir.'/'.$waminame_noex.'_'.$i.'.'.$ext)) {
+//        $i++;
+//    }
+//    $waminame_to_save = $waminame_noex.'_'.$i.'.'.$ext;
+//}
 
 $documentPath = $saveDir.'/'.$waminame_to_save;
 
@@ -90,7 +90,7 @@ $output = true;
 ob_start();
 
 // Strangely the file path changes with a double extension
-copy($documentPath, $documentPath . '.wav');
+copy($documentPath, $documentPath.'.wav');
 
 $documentData = DocumentManager::upload_document(
     $file,
@@ -129,9 +129,7 @@ if (!empty($documentData)) {
             $lp->set_modified_on();
             $lpItem = new learnpathItem($lpItemId);
             $lpItem->add_audio_from_documents($newDocId);
-            Display::addFlash(
-                Display::return_message(get_lang('Updated'), 'info')
-            );
+            echo Display::return_message(get_lang('Updated'), 'info');
         }
     }
 
@@ -139,5 +137,5 @@ if (!empty($documentData)) {
     // Remove file with one extension
     unlink($documentPath);
 } else {
-    Display::addFlash($contents);
+    echo $contents;
 }

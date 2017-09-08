@@ -75,6 +75,23 @@
    text-align: center;
 }
 
+.webodfeditor-dijitSaveAsIcon {
+   background-image: url("images/saveas.png");
+   background-repeat: no-repeat;
+   width: 18px;
+   height: 18px;
+   text-align: center;
+}
+
+/* Fix toolbar not adapting size to floating toolbar elements */
+.dijitToolbar:after {
+   content: ".";
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}
+
 .dijitDialog {
     border: none !important;
     box-shadow: 0 1px 50px rgba(0, 0, 0, 0.25) !important;

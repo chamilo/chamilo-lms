@@ -55,7 +55,7 @@ if ($form->validate()) {
         Display::return_message(get_lang('MailingTestSent'), 'warning')
     );
 
-    header('Location: ' . api_get_self());
+    header('Location: '.api_get_self());
     exit;
 }
 

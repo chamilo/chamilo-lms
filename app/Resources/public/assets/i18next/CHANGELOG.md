@@ -1,3 +1,52 @@
+### 8.4.3
+- getFixedT lng parameter of array type -> pass as lngs to t function [PR949](https://github.com/i18next/i18next/pull/949)
+
+### 8.4.2
+- fixes merging options in clone instance...do not override passed values by values on main instance
+
+### 8.4.1
+- emits correct lng to changeLanguage event (fixes async detection behaviour) [PR933](https://github.com/i18next/i18next/pull/933)
+
+### 8.4.0
+- expose i18next.options.interpolation.format on i18next.format
+- i18next.dir if not passing lng use first of i18next.languages before using i18next.language
+
+### 8.3.0
+- allows nesting objects/arrays into objects [#925](https://github.com/i18next/i18next/issues/925)
+
+### 8.2.1
+- fixes issue in async lng detection
+
+### 8.2.0
+- supports now async language detection - when language detector has member async = true
+
+### 8.1.0
+- option to disable nesting by calling `i18next.t('key', { nest: false })` [PR920](https://github.com/i18next/i18next/pull/920)
+- fixes passing lng from options to formatter function if available
+
+### 8.0.0
+- nonExplicitWhitelist flag now not only gets considered on a fallback lng but also on user language. Eg. userlng 'de-AT' and whitelist ['de'] will now let de-AT pass as whitelisted if nonExplicitWhitelist is set true.
+
+### 7.2.3
+- rebuild seems we had a mistake in pushing latest build
+
+### 7.2.2
+- fixes issue in accepting string as a result of "nested" lookup [PR909](https://github.com/i18next/i18next/pull/909)
+
+### 7.2.1
+- fixes iterating over object's own properties [#904](https://github.com/i18next/i18next/pull/904)
+
+### 7.2.0
+- new init option simplifyPluralSuffix - setting it to false will treat all plurals using suffix numbers even for locals only having singular and plural
+- even if no lng set or detected at least load the fallback languages
+- delay init call on createInstance if not set initImmediate to false [#879](https://github.com/i18next/i18next/issues/879)
+
+### 7.1.3
+- fixes issue in returnObject tree called with options including ns: [react-i18next #240](https://github.com/i18next/react-i18next/issues/240)
+
+### 7.1.2
+- remove regex escape from format separators [#896](https://github.com/i18next/i18next/pull/896)
+
 ### 7.1.1
 - change to named plugins for 3rd party - just calling init
 

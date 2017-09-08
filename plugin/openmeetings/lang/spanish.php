@@ -16,7 +16,7 @@ $strings['VideoConferenceXCourseX']             = "Videoconferencia #%s, curso %
 $strings['VideoConferenceAddedToTheCalendar']   = "Videoconferencia añadida al calendario";
 $strings['VideoConferenceAddedToTheLinkTool']   = "Videoconferencia añadida como enlace. Puede editar y publicar el enlace en la página principal del curso desde la herramienta de enlace.";
 
-$strings['GoToTheVideoConference']   = "Ir a la videoconferencia";
+$strings['GoToTheVideoConference'] = "Ir a la videoconferencia";
 
 $strings['Records']             = "Grabación";
 $strings['Meeting']             = "Sala de conferencia";
@@ -27,7 +27,7 @@ $strings['CopyToLinkTool']      = "Añadir como enlace del curso";
 $strings['EnterConference']     = "Entrar a la videoconferencia";
 $strings['RecordList']          = "Lista de grabaciones";
 $strings['ServerIsNotRunning']  = "El servidor de videoconferencia no está funcionando";
-$strings['ServerIsNotConfigured']  = "El servidor de videoconferencia no está configurado correctamente";
+$strings['ServerIsNotConfigured'] = "El servidor de videoconferencia no está configurado correctamente";
 
 $strings['XUsersOnLine']        = "%s usuario(s) en la sala";
 

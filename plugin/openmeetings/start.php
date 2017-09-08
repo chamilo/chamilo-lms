@@ -6,7 +6,7 @@
  * Initialization
  */
 $course_plugin = 'openmeetings'; //needed in order to load the plugin lang variables
-require_once dirname(__FILE__).'/config.php';
+require_once __DIR__.'/config.php';
 $tool_name = get_lang('Videoconference');
 $tpl = new Template($tool_name);
 $om = new \Chamilo\Plugin\OpenMeetings\OpenMeetings();

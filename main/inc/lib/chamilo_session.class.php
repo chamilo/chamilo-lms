@@ -35,7 +35,7 @@ class ChamiloSession extends System\Session
      * Generate new session instance
      * @return ChamiloSession
      */
-    static function instance()
+    public static function instance()
     {
         static $result = null;
         if (empty($result)) {
@@ -48,12 +48,11 @@ class ChamiloSession extends System\Session
      * Returns the session lifetime
      * @return int The session lifetime as defined in the config file, in seconds
      */
-    static function session_lifetime()
+    public static function session_lifetime()
     {
         global $_configuration;
         return $_configuration['session_lifetime'];
     }
-
 
     /**
      * Starts the Chamilo session.
@@ -67,7 +66,7 @@ class ChamiloSession extends System\Session
      * @param  string variable - the variable name to save into the session
      * @return void
      */
-    static function start($already_installed = true)
+    public static function start($already_installed = true)
     {
         /*
          * Prevent Session fixation bug fixes
@@ -122,7 +121,7 @@ class ChamiloSession extends System\Session
      * Session start time: that is the last time the user loaded a page (before this time)
      * @return int timestamp
      */
-    function start_time()
+    public function start_time()
     {
         return self::read('starttime');
     }
@@ -132,7 +131,7 @@ class ChamiloSession extends System\Session
      * load time + a number of seconds
      * @return int UNIX timestamp (server's timezone)
      */
-    function end_time()
+    public function end_time()
     {
         $start_time = $this->start_time();
         $lifetime = self::session_lifetime();

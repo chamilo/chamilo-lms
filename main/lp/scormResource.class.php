@@ -34,9 +34,7 @@ class scormResource
     public function __construct($type = 'manifest', &$element)
     {
         if (isset($element)) {
-
             // Parsing using PHP5 DOMXML methods.
-
             switch ($type) {
                 case 'db':
                     // TODO: Implement this way of metadata object creation.
@@ -69,7 +67,7 @@ class scormResource
                         }
                     }
                     //$keep_href = '';
-                    if ($element->hasAttributes()){ //in some cases we get here with an empty attributes array
+                    if ($element->hasAttributes()) { //in some cases we get here with an empty attributes array
                         // TODO: Find when and why we get such a case (empty array).
                         $attributes = $element->attributes;
                         foreach ($attributes as $attrib) {

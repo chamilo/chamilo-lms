@@ -200,7 +200,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         //"lms_progress_bar_mode='".$myprogress_mode."';" .
         "olms.lms_view_id=".$view_id.";".
         "olms.lms_user_id=".$user_id.";".
-        "olms.next_item=".$new_item_id.";". // This one is very important to replace possible literal strings.
+        "olms.next_item=".$new_item_id.";".// This one is very important to replace possible literal strings.
         "olms.lms_next_item=".$mynext.";".
         "olms.lms_previous_item=".$myprevious.";".
         "olms.lms_item_type = '".$myitemtype."';".
@@ -217,6 +217,9 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         "update_toc('$mylesson_status','".$new_item_id."');".
         "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');";
     $return .= 'updateGamificationValues(); ';
+    $return .= "$('#item-parent-names').load('"
+        .api_get_path(WEB_AJAX_PATH)
+        ."lp.ajax.php?a=get_parent_names&new_item=$new_item_id');";
 
     $mylp->set_error_msg('');
     $mylp->prerequisites_match(); // Check the prerequisites are all complete.

@@ -26,24 +26,29 @@ class survey_question
         $surveyId = isset($_GET['survey_id']) ? intval($_GET['survey_id']) : null;
 
         $toolName = Display::return_icon(
-                SurveyManager::icon_question(Security::remove_XSS($_GET['type'])),
-                get_lang(ucfirst(Security::remove_XSS($_GET['type']))),
-                array('align' => 'middle', 'height' => '22px')
+            SurveyManager::icon_question(Security::remove_XSS($_GET['type'])),
+            get_lang(ucfirst(Security::remove_XSS($_GET['type']))),
+            array('align' => 'middle', 'height' => '22px')
         ).' ';
 
         if ($action == 'add') {
-            $toolName .= get_lang('AddQuestion');
-        }
-        if ($action == 'edit') {
-            $toolName .= get_lang('EditQuestion');
+            $toolName .= get_lang('AddQuestion').': ';
+        } elseif ($action == 'edit') {
+            $toolName .= get_lang('EditQuestion').': ';
         }
 
-        if ($_GET['type'] == 'yesno') {
-            $toolName .= ': '.get_lang('YesNo');
-        } else if ($_GET['type'] == 'multiplechoice') {
-            $toolName .= ': '.get_lang('UniqueSelect');
-        } else {
-            $toolName .= ': '.get_lang(api_ucfirst(Security::remove_XSS($_GET['type'])));
+        switch ($_GET['type']) {
+            case 'yesno':
+                $toolName .= get_lang('YesNo');
+                break;
+            case 'multiplechoice':
+                $toolName .= get_lang('UniqueSelect');
+                break;
+            case 'multipleresponse':
+                $toolName .= get_lang('MultipleResponse');
+                break;
+            default:
+                $toolName .= get_lang(api_ucfirst(Security::remove_XSS($_GET['type'])));
         }
 
         $sharedQuestionId = isset($formData['shared_question_id']) ? $formData['shared_question_id'] : null;
@@ -57,14 +62,29 @@ class survey_question
         $form->addHidden('shared_question_id', Security::remove_XSS($sharedQuestionId));
         $form->addHidden('type', Security::remove_XSS($_GET['type']));
 
-        $config = array('ToolbarSet' => 'SurveyQuestion', 'Width' => '100%', 'Height' => '120');
-        $form->addHtmlEditor('question', get_lang('Question'), true, false, $config);
+        $config = array(
+            'ToolbarSet' => 'SurveyQuestion',
+            'Width' => '100%',
+            'Height' => '120'
+        );
+        $form->addHtmlEditor(
+            'question',
+            get_lang('Question'),
+            true,
+            false,
+            $config
+        );
+
+        if (api_get_configuration_value('allow_required_survey_questions') &&
+            in_array($_GET['type'], ['yesno', 'multiplechoice'])) {
+            $form->addCheckBox('is_required', get_lang('IsMandatory'), get_lang('Yes'));
+        }
 
         // When survey type = 1??
         if ($surveyData['survey_type'] == 1) {
             $table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
             $sql = 'SELECT id,name FROM '.$table_survey_question_group.'
-                    WHERE survey_id = '.(int)$_GET['survey_id'].'
+                    WHERE survey_id = '.(int) $_GET['survey_id'].'
                     ORDER BY name';
             $rs = Database::query($sql);
             $glist = null;
@@ -73,17 +93,16 @@ class survey_question
             }
 
             $grouplist = $grouplist1 = $grouplist2 = $glist;
-
             if (!empty($formData['assigned'])) {
-                $grouplist = str_replace('<option value="'.$formData['assigned'].'"','<option value="'.$formData['assigned'].'" selected',$glist);
+                $grouplist = str_replace('<option value="'.$formData['assigned'].'"', '<option value="'.$formData['assigned'].'" selected', $glist);
             }
 
             if (!empty($formData['assigned1'])) {
-                $grouplist1 = str_replace('<option value="'.$formData['assigned1'].'"','<option value="'.$formData['assigned1'].'" selected',$glist);
+                $grouplist1 = str_replace('<option value="'.$formData['assigned1'].'"', '<option value="'.$formData['assigned1'].'" selected', $glist);
             }
 
             if (!empty($formData['assigned2'])) {
-                $grouplist2 = str_replace('<option value="'.$formData['assigned2'].'"','<option value="'.$formData['assigned2'].'" selected',$glist);
+                $grouplist2 = str_replace('<option value="'.$formData['assigned2'].'"', '<option value="'.$formData['assigned2'].'" selected', $glist);
             }
 
             $this->html .= '	<tr><td colspan="">
@@ -95,13 +114,10 @@ class survey_question
 
             $this->html .= '
 			<b>'.get_lang('Secondary').'</b><br />
-			'.'<input type="radio" name="choose" value="2" '.(($formData['choose']==2)?'checked':'').
+			'.'<input type="radio" name="choose" value="2" '.(($formData['choose'] == 2) ? 'checked' : '').
                 '><select name="assigned1">'.$grouplist1.'</select> '.
                 '<select name="assigned2">'.$grouplist2.'</select>'
                 .'</fieldset><br />';
-
-            //$form->addRadio('choose', get_lang('Primary'));
-            //$form->addRadio('choose', get_lang('Secondary'));
         }
 
         $this->setForm($form);
@@ -131,7 +147,7 @@ class survey_question
                     <div class="form-group">
                         <label class="col-sm-2 control-label"></label>
                         <div class="col-sm-8">
-                            <div class="alert alert-info">' . get_lang('YouCantNotEditThisQuestionBecauseAlreadyExistAnswers') . '</div>
+                            <div class="alert alert-info">' . get_lang('YouCantNotEditThisQuestionBecauseAlreadyExistAnswers').'</div>
                         </div>
                         <div class="col-sm-2"></div>
                     </div>
@@ -304,7 +320,8 @@ class survey_question
             'button',
             'remove_answer',
             get_lang('RemoveAnswer'),
-            'minus'
+            'minus',
+            'default'
         );
 
         if (count($data['answers']) <= 2) {
@@ -317,7 +334,8 @@ class survey_question
             'button',
             'add_answer',
             get_lang('AddAnswer'),
-            'plus'
+            'plus',
+            'default'
         );
     }
 

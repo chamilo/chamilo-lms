@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * Rule to compare two form fields
@@ -40,7 +39,7 @@ class HTML_QuickForm_Rule_Compare extends HTML_QuickForm_Rule
     * @var array
     * @access private
     */
-    var $_operators = array(
+    public $_operators = array(
         'eq'  => '===',
         'neq' => '!==',
         'gt'  => '>',
@@ -72,21 +71,23 @@ class HTML_QuickForm_Rule_Compare extends HTML_QuickForm_Rule
         }
     }
 
-    function validate($values, $operator = null)
+    /**
+     * @param array $values
+     * @param string $operator
+     * @return mixed
+     */
+    public function validate($values, $operator = null)
     {
         $operator = $this->_findOperator($operator);
-
         if ('===' != $operator && '!==' != $operator) {
             $compareFn = create_function('$a, $b', 'return floatval($a) ' . $operator . ' floatval($b);');
         } else {
             $compareFn = create_function('$a, $b', 'return strval($a) ' . $operator . ' strval($b);');
         }
-
         return $compareFn($values[0], $values[1]);
     }
 
-
-    function getValidationScript($operator = null)
+    public function getValidationScript($operator = null)
     {
         $operator = $this->_findOperator($operator);
         if ('===' != $operator && '!==' != $operator) {

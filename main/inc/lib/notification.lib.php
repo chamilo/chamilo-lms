@@ -212,15 +212,15 @@ class Notification extends Model
 
     /**
      * Save message notification
-     * @param int	    $type message type
+     * @param int $type message type
      * NOTIFICATION_TYPE_MESSAGE,
      * NOTIFICATION_TYPE_INVITATION,
      * NOTIFICATION_TYPE_GROUP
-     * @param array	    $userList recipients: user list of ids
-     * @param string	$title
-     * @param string	$content
-     * @param array	    $senderInfo result of api_get_user_info() or GroupPortalManager:get_group_data()
-     * @param array	    $attachments
+     * @param array $userList recipients: user list of ids
+     * @param string $title
+     * @param string $content
+     * @param array $senderInfo result of api_get_user_info() or GroupPortalManager:get_group_data()
+     * @param array $attachments
      *
      */
     public function save_notification(
@@ -234,7 +234,6 @@ class Notification extends Model
         $this->type = intval($type);
         $content = $this->formatContent($content, $senderInfo);
         $titleToNotification = $this->formatTitle($title, $senderInfo);
-
         $settingToCheck = '';
         $avoid_my_self = false;
 
@@ -368,7 +367,7 @@ class Notification extends Model
                 $newMessageText = '';
                 $linkToNewMessage = Display::url(
                     get_lang('SeeMessage'),
-                    api_get_path(WEB_CODE_PATH) . 'messages/inbox.php'
+                    api_get_path(WEB_CODE_PATH).'messages/inbox.php'
                 );
                 break;
             case self::NOTIFICATION_TYPE_MESSAGE:
@@ -383,7 +382,7 @@ class Notification extends Model
                 }
                 $linkToNewMessage = Display::url(
                     get_lang('SeeMessage'),
-                    api_get_path(WEB_CODE_PATH) . 'messages/inbox.php'
+                    api_get_path(WEB_CODE_PATH).'messages/inbox.php'
                 );
                 break;
             case self::NOTIFICATION_TYPE_INVITATION:
@@ -398,7 +397,7 @@ class Notification extends Model
                 }
                 $linkToNewMessage = Display::url(
                     get_lang('SeeInvitation'),
-                    api_get_path(WEB_CODE_PATH) . 'social/invitations.php'
+                    api_get_path(WEB_CODE_PATH).'social/invitations.php'
                 );
                 break;
             case self::NOTIFICATION_TYPE_GROUP:
@@ -496,7 +495,7 @@ class Notification extends Model
         }
 
         $headers = [
-            'Authorization: key=' . $gdcApiKey,
+            'Authorization: key='.$gdcApiKey,
             'Content-Type: application/json'
         ];
 

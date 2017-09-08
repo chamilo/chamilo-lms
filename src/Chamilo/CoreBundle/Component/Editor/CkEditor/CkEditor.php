@@ -55,7 +55,7 @@ class CkEditor extends Editor
     public function createHtmlStyle()
     {
         $style = '';
-        if (trim($this->value) == '<html><head><title></title></head><body></body></html>' || $this->value == '' ) {
+        if (trim($this->value) == '<html><head><title></title></head><body></body></html>' || $this->value == '') {
             $cssFile = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/editor.css';
             if (!is_file($cssFile)) {
                 $cssFile = api_get_path(WEB_CSS_PATH).'editor.css';
@@ -78,10 +78,13 @@ class CkEditor extends Editor
      */
     public function editorReplace()
     {
-        $toolbar = new Toolbar\Basic($this->toolbarSet, $this->config, 'CkEditor');
+        $toolbar = new Toolbar\Basic(
+            $this->toolbarSet,
+            $this->config,
+            'CkEditor'
+        );
         $toolbar->setLanguage($this->getLocale());
         $config = $toolbar->getConfig();
-
         $javascript = $this->toJavascript($config);
 
         $html = "<script>
@@ -105,14 +108,14 @@ class CkEditor extends Editor
         }
         /** @var \Chamilo\CoreBundle\Entity\SystemTemplate $template */
         $templateList = array();
-
-        $search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}');
+        $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
+        $search = array('{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}','{CSS}');
         $replace = array(
-            '',
+            $cssTheme,
             api_get_path(REL_CODE_PATH).'img/',
             api_get_path(REL_PATH),
-            //api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
-            //api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH)
+            api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
+            ''
         );
 
         foreach ($templates as $template) {
@@ -147,14 +150,14 @@ class CkEditor extends Editor
         return [[
             'title' => get_lang('EmptyTemplate'),
             'description' => null,
-            'image' => api_get_path(WEB_APP_PATH) . 'home/default_platform_document/template_thumb/empty.gif',
+            'image' => api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/empty.gif',
             'html' => '
                 <!DOCYTPE html>
                 <html>
                     <head>
-                        <meta charset="' . api_get_system_encoding() . '" />
+                        <meta charset="' . api_get_system_encoding().'" />
                     </head>
-                    <body  dir="' . api_get_text_direction() . '">
+                    <body  dir="' . api_get_text_direction().'">
                         <p>
                             <br/>
                         </p>
@@ -173,14 +176,14 @@ class CkEditor extends Editor
     {
         $entityManager = \Database::getManager();
         $systemTemplates = $entityManager->getRepository('ChamiloCoreBundle:SystemTemplate')->findAll();
-
-        $search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}');
+        $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
+        $search = array('{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}','{CSS}');
         $replace = array(
-            '',
-            api_get_path(REL_CODE_PATH) . 'img/',
+            $cssTheme,
+            api_get_path(REL_CODE_PATH).'img/',
             api_get_path(REL_PATH),
             api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
-            api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH)
+            '',
         );
 
         $templateList = array();
@@ -188,7 +191,7 @@ class CkEditor extends Editor
         foreach ($systemTemplates as $template) {
             $image = $template->getImage();
             $image = !empty($image) ? $image : 'empty.gif';
-            $image = api_get_path(WEB_APP_PATH) . 'home/default_platform_document/template_thumb/' . $image;
+            $image = api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/'.$image;
 
             /*$image = $this->urlGenerator->generate(
                 'get_document_template_action',
@@ -240,12 +243,12 @@ class CkEditor extends Editor
             $templateItem['image'] = api_get_path(WEB_APP_PATH)
                 . 'home/default_platform_document/template_thumb/noimage.gif';
             $templateItem['html'] = file_get_contents(api_get_path(SYS_COURSE_PATH)
-                . $courseDirectory . '/document' . $templateData['path']);
+                . $courseDirectory.'/document'.$templateData['path']);
 
             $image = $template->getImage();
             if (!empty($image)) {
                 $templateItem['image'] = api_get_path(WEB_COURSE_PATH)
-                    . $courseDirectory . '/upload/template_thumbnails/' . $template->getImage();
+                    . $courseDirectory.'/upload/template_thumbnails/'.$template->getImage();
             }
 
             $templateList[] = $templateItem;

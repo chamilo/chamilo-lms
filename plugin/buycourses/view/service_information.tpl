@@ -24,19 +24,22 @@
                     <div class="panel-body">
                         <p><em class="fa fa-flag-o"></em> <b>{{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }}</b> :
                             {% if service.applies_to == 1 %}
-                                {{ 'User' | get_lang }}
+                                {{ 'User'|get_lang }}
                             {% elseif service.applies_to == 2 %}
-                                {{ 'Course' | get_lang }}
+                                {{ 'Course'|get_lang }}
                             {% elseif service.applies_to == 3 %}
-                                {{ 'Session' | get_lang }}
+                                {{ 'Session'|get_lang }}
                             {% elseif service.applies_to == 4 %}
-                                {{ 'TemplateTitleCertificate' | get_lang }}
+                                {{ 'TemplateTitleCertificate'|get_lang }}
                             {% endif %}
                         </p>
-                        <p><em class="fa fa-money"></em> <b>{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</b> : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}</p>
-                        <p><em class="fa fa-align-justify"></em> <b>{{ 'Details' | get_lang }}</b> : {{ service.description }}</p>
+                        <p><em class="fa fa-money"></em> <b>{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</b>
+                            : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}</p>
+                        <p><em class="fa fa-align-justify"></em> <b>{{ 'Details'|get_lang }}</b>
+                            : {{ service.description }}</p>
                         <div class="text-right" style="padding-bottom: 20px;">
-                            <a href="{{ _p.web_plugin ~ 'buycourses/src/service_process.php?t=4&i=' ~ service.id }}" class="btn btn-success btn-lg">
+                            <a href="{{ _p.web_plugin ~ 'buycourses/src/service_process.php?t=4&i=' ~ service.id }}"
+                               class="btn btn-success btn-lg">
                                 <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                             </a>
                         </div>
@@ -65,13 +68,16 @@
                 </div>
                 <div class="panel-body">
                     <div class="icons-social text-center">
-                        <a href="https://www.facebook.com/sharer/sharer.php?{{ {'u': pageUrl}|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
+                        <a href="https://www.facebook.com/sharer/sharer.php?{{ {'u': pageUrl}|url_encode }}"
+                           target="_blank" class="btn bnt-link btn-lg">
                             <em class="fa fa-facebook fa-2x"></em>
                         </a>
-                        <a href="https://twitter.com/home?{{ {'status': session.getName() ~ ' ' ~ pageUrl}|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
+                        <a href="https://twitter.com/home?{{ {'status': session.getName() ~ ' ' ~ pageUrl}|url_encode }}"
+                           target="_blank" class="btn bnt-link btn-lg">
                             <em class="fa fa-twitter fa-2x"></em>
                         </a>
-                        <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': pageUrl, 'title': session.getName() }|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
+                        <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': pageUrl, 'title': session.getName() }|url_encode }}"
+                           target="_blank" class="btn bnt-link btn-lg">
                             <em class="fa fa-linkedin fa-2x"></em>
                         </a>
                     </div>

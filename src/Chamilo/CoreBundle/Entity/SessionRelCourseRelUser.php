@@ -88,7 +88,7 @@ class SessionRelCourseRelUser
     }
 
     /**
-     * @return mixed
+     * @return \Chamilo\UserBundle\Entity\User
      */
     public function getUser()
     {
@@ -104,7 +104,7 @@ class SessionRelCourseRelUser
     }
 
     /**
-     * @return mixed
+     * @return Session
      */
     public function getSession()
     {
@@ -112,7 +112,7 @@ class SessionRelCourseRelUser
     }
 
     /**
-     * @param mixed $session
+     * @param Session $session
      */
     public function setSession($session)
     {
@@ -120,7 +120,7 @@ class SessionRelCourseRelUser
     }
 
     /**
-     * @return mixed
+     * @return Course
      */
     public function getCourse()
     {
@@ -128,7 +128,7 @@ class SessionRelCourseRelUser
     }
 
     /**
-     * @param mixed $course
+     * @param Course $course
      */
     public function setCourse($course)
     {

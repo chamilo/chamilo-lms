@@ -9,12 +9,8 @@ use ChamiloSession as Session;
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-
-$_SESSION['whereami'] = 'document/voicerecord';
 $this_section = SECTION_COURSES;
-
 $groupRights = Session::read('group_member_with_upload_rights');
-
 $nameTools = get_lang('VoiceRecord');
 
 api_protect_course_script();
@@ -47,7 +43,7 @@ $dir = $document_data['path'];
 //make some vars
 $wamidir = $dir;
 if ($wamidir == "/") {
-	$wamidir = "";
+    $wamidir = '';
 }
 $wamiurlplay = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$wamidir."/";
 $groupId = api_get_group_id();
@@ -80,7 +76,7 @@ if (!is_dir($filepath)) {
 
 //groups //TODO: clean
 if (!empty($groupId)) {
-    $interbreadcrumb[] = array ("url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace'));
+    $interbreadcrumb[] = array("url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace'));
     $noPHP_SELF = true;
     $group = GroupManager :: get_group_properties($groupId);
     $path = explode('/', $dir);
@@ -109,10 +105,10 @@ if (!($is_allowed_to_edit || $groupRights ||
 Event::event_access_tool(TOOL_DOCUMENT);
 
 $display_dir = $dir;
-if (isset ($group)) {
+if (isset($group)) {
     $display_dir = explode('/', $dir);
-    unset ($display_dir[0]);
-    unset ($display_dir[1]);
+    unset($display_dir[0]);
+    unset($display_dir[1]);
     $display_dir = implode('/', $display_dir);
 }
 
@@ -138,14 +134,16 @@ if (isset($document_data['parents'])) {
 //make some vars
 $wamiuserid = api_get_user_id();
 
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'rtc/RecordRTC.js"></script>';
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'wami-recorder/recorder.js"></script>';
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'wami-recorder/gui.js"></script>';
-$htmlHeadXtra[] = '<script type="text/javascript" src="' . api_get_path(WEB_LIBRARY_PATH) . 'swfobject/swfobject.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordRTC.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/recorder.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/gui.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfobject.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfobject.js"></script>';
+$htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 
 $actions = Display::toolbarButton(
-    get_lang('BackTo') . ' ' . get_lang('DocumentsOverview'),
-    'document.php?' . api_get_cidreq() . "&id=$document_id",
+    get_lang('BackTo').' '.get_lang('DocumentsOverview'),
+    'document.php?'.api_get_cidreq()."&id=$document_id",
     'arrow-left',
     'default',
     [],
@@ -159,6 +157,9 @@ $template->assign('user_id', api_get_user_id());
 $layout = $template->get_template('document/record_audio.tpl');
 $content = $template->fetch($layout);
 
-$template->assign('actions', $actions);
+$template->assign(
+    'actions',
+    Display::toolbarAction('toolbar', [$actions])
+);
 $template->assign('content', $content);
 $template->display_one_col_template();

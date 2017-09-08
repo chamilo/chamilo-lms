@@ -756,10 +756,6 @@ class PEAR
     // }}}
 }
 
-if (PEAR_ZE2) {
-    include_once 'PEAR5.php';
-}
-
 // {{{ _PEAR_call_destructors()
 
 // Added by Chamilo team, 16-MAR-2010

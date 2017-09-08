@@ -546,6 +546,8 @@ footer #footer_right{
 .table.table-striped tr td span.label-info{
     background-color: #162A83 !important;
     color: #FFF !important;
+    width: 40%;
+    display: inline-block;
 }
 .main-question .question_description p span{
     color: #162A83 !important;
@@ -718,7 +720,7 @@ table.table-striped tr td span.label-success{
     background-color: #96BD0D;
     color: #FFF !important;
     border-radius: 0;
-    width: 100%;
+    width: 40%;
     display: inline-block;
 }
 .table-striped>tbody>tr:nth-of-type(odd){

@@ -896,6 +896,7 @@ if (isset($uidReset) && $uidReset) {
     $is_allowedCreateCourse = isset($_SESSION['is_allowedCreateCourse']) ? $_SESSION['is_allowedCreateCourse'] : false;
 }
 
+$logoutCourseCalled = false;
 if (!isset($_SESSION['login_as'])) {
     $save_course_access = true;
     $_course = Session::read('_course');
@@ -905,6 +906,7 @@ if (!isset($_SESSION['login_as'])) {
         if (isset($_dont_save_user_course_access) && $_dont_save_user_course_access == true) {
             $save_course_access = false;
         } else {
+            $logoutCourseCalled = true;
             Event::courseLogout($logoutInfo);
         }
     }
@@ -970,7 +972,9 @@ if (isset($cidReset) && $cidReset) {
         }
     } else {
         // Leave a logout time in the track_e_course_access table if we were in a course
-        Event::courseLogout($logoutInfo);
+        if ($logoutCourseCalled == false) {
+            Event::courseLogout($logoutInfo);
+        }
         Session::erase('_cid');
         Session::erase('_real_cid');
         Session::erase('_course');

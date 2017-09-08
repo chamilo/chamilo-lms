@@ -834,6 +834,102 @@ class ExtraField extends Model
     }
 
     /**
+     * @param \FormValidator $form
+     * @param array $fieldDetails
+     * @param array $extraData
+     * @param bool $freezeElement
+     * @return string JavaScript code
+     */
+    private function addDoubleSelectElement(FormValidator $form, $fieldDetails, $extraData, $freezeElement = false)
+    {
+        $firstSelectId = 'first_extra_'.$fieldDetails['variable'];
+        $secondSelectId = 'second_extra_'.$fieldDetails['variable'];
+
+        $jqueryReadyContent = "
+            $('#$firstSelectId').on('change', function() {
+                var id = $(this).val();
+
+                if (!id) {
+                    $('#$secondSelectId').empty().selectpicker('refresh');
+                    
+                    return;
+                }
+
+                $.getJSON(_p.web_ajax + 'extra_field.ajax.php?1=1&a=get_second_select_options', {
+                    'type': '{$this->type}',
+                    'field_id': {$fieldDetails['id']},
+                    'option_value_id': id
+                })
+                    .done(function(data) {
+                        $('#$secondSelectId').empty();
+                        $.each(data, function(index, value) {
+                            $('#second_extra_{$fieldDetails['variable']}').append(
+                                $('<option>', {value: index, text: value})
+                            );
+                        });
+                        $('#$secondSelectId').selectpicker('refresh');
+                    });
+            });
+        ";
+
+        $firstId = null;
+        if (!empty($extraData)) {
+            if (isset($extraData['extra_'.$fieldDetails['variable']])) {
+                $firstId = $extraData['extra_'.$fieldDetails['variable']]['extra_'.$fieldDetails['variable']];
+            }
+        }
+
+        $options = self::extra_field_double_select_convert_array_to_ordered_array($fieldDetails['options']);
+        $values = array('' => get_lang('Select'));
+
+        $second_values = array();
+        if (!empty($options)) {
+            foreach ($options as $option) {
+                foreach ($option as $sub_option) {
+                    if ($sub_option['option_value'] == '0') {
+                        $values[$sub_option['id']] = $sub_option['display_text'];
+
+                        continue;
+                    }
+
+                    if ($firstId === $sub_option['option_value']) {
+                        $second_values[$sub_option['id']] = $sub_option['display_text'];
+                    }
+                }
+            }
+        }
+        $form
+            ->defaultRenderer()
+            ->setGroupElementTemplate('<p>{element}</p>', 'extra_'.$fieldDetails['variable']);
+        $group = array();
+        $group[] = $form->createElement(
+            'select',
+            'extra_'.$fieldDetails['variable'],
+            null,
+            $values,
+            array('id' => $firstSelectId)
+        );
+        $group[] = $form->createElement(
+            'select',
+            'extra_'.$fieldDetails['variable'].'_second',
+            null,
+            $second_values,
+            array('id' => $secondSelectId)
+        );
+        $form->addGroup(
+            $group,
+            'extra_'.$fieldDetails['variable'],
+            $fieldDetails['display_text']
+        );
+
+        if ($freezeElement) {
+            $form->freeze('extra_'.$fieldDetails['variable']);
+        }
+
+        return $jqueryReadyContent;
+    }
+
+    /**
      * Add an element that matches the given extra field to the given $form object
      * @param FormValidator $form
      * @param array $extraData
@@ -858,7 +954,6 @@ class ExtraField extends Model
         $showOnlyTheseFields = [],
         $orderFields = []
     ) {
-        $type = $this->type;
         $jquery_ready_content = null;
         if (!empty($extra)) {
             $newOrder = [];
@@ -1233,83 +1328,12 @@ class ExtraField extends Model
                         }
                         break;
                     case self::FIELD_TYPE_DOUBLE_SELECT:
-                        $first_select_id = 'first_extra_'.$field_details['variable'];
-                        $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
-
-                        $jquery_ready_content .= '
-                        $("#'.$first_select_id.'").on("change", function() {
-                            var id = $(this).val();
-                            if (id) {
-                                $.ajax({
-                                    url: "'.$url.'&a=get_second_select_options",
-                                    dataType: "json",
-                                    data: "type='.$type.'&field_id='.$field_details['id'].'&option_value_id="+id,
-                                    success: function(data) {
-                                        $("#second_extra_'.$field_details['variable'].'").empty();
-                                        $.each(data, function(index, value) {
-                                            $("#second_extra_'.$field_details['variable'].'").append($("<option/>", {
-                                                value: index,
-                                                text: value
-                                            }));
-                                        });
-                                        $("#second_extra_'.$field_details['variable'].'").selectpicker("refresh");
-                                    },
-                                });
-                            } else {
-                                $("#second_extra_'.$field_details['variable'].'").empty();
-                            }
-                        });';
-
-                        $first_id = null;
-                        if (!empty($extraData)) {
-                            if (isset($extraData['extra_'.$field_details['variable']])) {
-                                $first_id = $extraData['extra_'.$field_details['variable']]['extra_'.$field_details['variable']];
-                            }
-                        }
-
-                        $options = self::extra_field_double_select_convert_array_to_ordered_array(
-                            $field_details['options']
+                        $jquery_ready_content .= self::addDoubleSelectElement(
+                            $form,
+                            $field_details,
+                            $extraData,
+                            $freezeElement
                         );
-                        $values = array('' => get_lang('Select'));
-
-                        $second_values = array();
-                        if (!empty($options)) {
-                            foreach ($options as $option) {
-                                foreach ($option as $sub_option) {
-                                    if ($sub_option['option_value'] == '0') {
-                                        $values[$sub_option['id']] = $sub_option['display_text'];
-                                    } else {
-                                        if ($first_id === $sub_option['option_value']) {
-                                            $second_values[$sub_option['id']] = $sub_option['display_text'];
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        $group = array();
-                        $group[] = $form->createElement(
-                            'select',
-                            'extra_'.$field_details['variable'],
-                            null,
-                            $values,
-                            array('id' => $first_select_id)
-                        );
-                        $group[] = $form->createElement(
-                            'select',
-                            'extra_'.$field_details['variable'].'_second',
-                            null,
-                            $second_values,
-                            array('id' => 'second_extra_'.$field_details['variable'])
-                        );
-                        $form->addGroup(
-                            $group,
-                            'extra_'.$field_details['variable'],
-                            $field_details['display_text']
-                        );
-
-                        if ($freezeElement) {
-                            $form->freeze('extra_'.$field_details['variable']);
-                        }
                         break;
                     case self::FIELD_TYPE_DIVIDER:
                         $form->addHtml('

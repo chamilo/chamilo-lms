@@ -1349,6 +1349,9 @@ class ExtraField extends Model
 
                             if (is_array($user_tags) && count($user_tags) > 0) {
                                 foreach ($user_tags as $tag) {
+                                    if (empty($tag['tag'])) {
+                                        continue;
+                                    }
                                     $tagsSelect->addOption(
                                         $tag['tag'],
                                         $tag['tag']
@@ -1409,15 +1412,15 @@ class ExtraField extends Model
 
                                     $tagsAdded[] = $tagText;
                                 }
-
                             }
-
                             $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php';
                         }
 
-                        $form->setDefaults([
-                            'extra_'.$field_details['variable'] => $selectedOptions
-                        ]);
+                        $form->setDefaults(
+                            [
+                                'extra_'.$field_details['variable'] => $selectedOptions
+                            ]
+                        );
 
                         if ($useTagAsSelect == false) {
                             $jquery_ready_content .= "

@@ -49,16 +49,19 @@ class WebService
     public static function findUserApiKey($username, $serviceName)
     {
         $user = UserManager::getManager()->findUserByUsername($username);
+        if ($user) {
+            $apiKeys = UserManager::get_api_keys($user->getId(), $serviceName);
 
-        $apiKeys = UserManager::get_api_keys($user->getId(), $serviceName);
+            if (empty($apiKeys)) {
+                UserManager::add_api_key($user->getId(), $serviceName);
+            }
 
-        if (empty($apiKeys)) {
-            UserManager::add_api_key($user->getId(), $serviceName);
+            $apiKeys = UserManager::get_api_keys($user->getId(), $serviceName);
+
+            return current($apiKeys);
         }
 
-        $apiKeys = UserManager::get_api_keys($user->getId(), $serviceName);
-
-        return current($apiKeys);
+        return '';
     }
 
     /**
@@ -75,13 +78,16 @@ class WebService
         }
 
         /** @var \Chamilo\UserBundle\Entity\User $user */
-        $user = UserManager::getRepository()
-            ->findOneBy(['username' => $username]);
+        $user = UserManager::getRepository()->findOneBy(['username' => $username]);
 
         if (!$user) {
             return false;
         }
 
-        return UserManager::isPasswordValid($user->getPassword(), $password, $user->getSalt());
+        return UserManager::isPasswordValid(
+            $user->getPassword(),
+            $password,
+            $user->getSalt()
+        );
     }
 }

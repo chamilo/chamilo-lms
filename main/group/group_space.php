@@ -29,7 +29,10 @@ if (empty($current_group)) {
 
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('GroupSpace');
-$interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
+$interbreadcrumb[] = array(
+    'url' => 'group.php?'.api_get_cidreq(),
+    'name' => get_lang('Groups')
+);
 
 /*	Ensure all private groups // Juan Carlos Raña Trabado */
 
@@ -71,8 +74,13 @@ Display::display_header(
 Display::display_introduction_section(TOOL_GROUP);
 
 echo '<div class="actions">';
-echo '<a href="group.php">'.
-    Display::return_icon('back.png', get_lang('BackToGroupList'), '', ICON_SIZE_MEDIUM).
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq().'">'.
+    Display::return_icon(
+        'back.png',
+        get_lang('BackToGroupList'),
+        '',
+        ICON_SIZE_MEDIUM
+    ).
     '</a>';
 
 /*

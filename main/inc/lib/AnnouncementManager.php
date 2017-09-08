@@ -208,7 +208,10 @@ class AnnouncementManager
      */
     public static function delete_all_announcements($_course)
     {
-        $announcements = self::get_all_annoucement_by_course($_course, api_get_session_id());
+        $announcements = self::get_all_annoucement_by_course(
+            $_course,
+            api_get_session_id()
+        );
         if (!empty($announcements)) {
             foreach ($announcements as $annon) {
                 api_item_property_update(
@@ -548,7 +551,9 @@ class AnnouncementManager
             }
 
             // store in item_property (first the groups, then the users
-            if (empty($sentTo) || (!empty($sentTo) && isset($sentTo[0]) && $sentTo[0] == 'everyone')) {
+            if (empty($sentTo) ||
+                (!empty($sentTo) && isset($sentTo[0]) && $sentTo[0] == 'everyone')
+            ) {
                 // The message is sent to EVERYONE, so we set the group to 0
                 api_item_property_update(
                     $courseInfo,
@@ -567,7 +572,9 @@ class AnnouncementManager
                 $batchSize = 20;
                 $em = Database::getManager();
                 // Storing the selected groups
-                if (is_array($send_to['groups']) && !empty($send_to['groups'])) {
+                if (is_array($send_to['groups']) &&
+                    !empty($send_to['groups'])
+                ) {
                     $counter = 1;
                     foreach ($send_to['groups'] as $group) {
                         $groupInfo = GroupManager::get_group_properties($group);
@@ -662,7 +669,8 @@ class AnnouncementManager
 
         // Store the attach file
         if ($last_id) {
-            $sql = "UPDATE $tbl_announcement SET id = iid WHERE iid = $last_id";
+            $sql = "UPDATE $tbl_announcement SET id = iid 
+                    WHERE iid = $last_id";
             Database::query($sql);
 
             if (!empty($file)) {
@@ -773,9 +781,17 @@ class AnnouncementManager
 
         if (!empty($file)) {
             if (empty($id_attach)) {
-                self::add_announcement_attachment_file($id, $file_comment, $file);
+                self::add_announcement_attachment_file(
+                    $id,
+                    $file_comment,
+                    $file
+                );
             } else {
-                self::edit_announcement_attachment_file($id_attach, $file, $file_comment);
+                self::edit_announcement_attachment_file(
+                    $id_attach,
+                    $file,
+                    $file_comment
+                );
             }
         }
 
@@ -965,12 +981,12 @@ class AnnouncementManager
      * Returns announcement info from its id
      *
      * @param int $course_id
-     * @param int $annoucement_id
+     * @param int $id
      * @return array
      */
-    public static function get_by_id($course_id, $annoucement_id)
+    public static function get_by_id($course_id, $id)
     {
-        $annoucement_id = intval($annoucement_id);
+        $id = intval($id);
         $course_id = $course_id ? intval($course_id) : api_get_course_int_id();
 
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
@@ -988,7 +1004,7 @@ class AnnouncementManager
                WHERE
                     announcement.c_id = $course_id AND
                     ip.tool='announcement' AND
-                    announcement.id = $annoucement_id
+                    announcement.id = $id
                 ";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
@@ -1029,12 +1045,12 @@ class AnnouncementManager
      */
     public static function load_edit_users($tool, $id)
     {
-        $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tool = Database::escape_string($tool);
         $id = intval($id);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT * FROM $tbl_item_property
+        $sql = "SELECT * FROM $table
                 WHERE c_id = $course_id AND tool='$tool' AND ref = $id";
         $result = Database::query($sql);
         $to = array();
@@ -1059,11 +1075,14 @@ class AnnouncementManager
 
     /**
      * constructs the form to display all the groups and users the message has been sent to
-     * input:    $sent_to_array is a 2 dimensional array containing the groups and the users
-     *            the first level is a distinction between groups and users:
-     *            $sent_to_array['groups'] * and $sent_to_array['users']
-     *            $sent_to_array['groups'] (resp. $sent_to_array['users']) is also an array
-     *            containing all the id's of the groups (resp. users) who have received this message.
+     * @param array $sent_to_array
+     * input:
+     * $sent_to_array is a 2 dimensional array containing the groups and the users
+     * the first level is a distinction between groups and users:
+     * $sent_to_array['groups'] * and $sent_to_array['users']
+     * $sent_to_array['groups'] (resp. $sent_to_array['users']) is also an array
+     * containing all the id's of the groups (resp. users) who have received this message.
+     * @return string
      * @author Patrick Cool <patrick.cool@>
      */
     public static function sent_to_form($sent_to_array)
@@ -1139,8 +1158,7 @@ class AnnouncementManager
      */
     public static function sent_to($tool, $id)
     {
-        $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
+        $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tool = Database::escape_string($tool);
         $id = (int) $id;
 
@@ -1149,7 +1167,7 @@ class AnnouncementManager
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT to_group_id, to_user_id
-                FROM $tbl_item_property
+                FROM $table
                 WHERE c_id = $course_id AND tool = '$tool' AND ref=".$id;
         $result = Database::query($sql);
 
@@ -1214,7 +1232,7 @@ class AnnouncementManager
         $file
     ) {
         $_course = api_get_course_info();
-        $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
+        $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $return = 0;
         $announcement_id = intval($announcement_id);
         $course_id = api_get_course_int_id();
@@ -1249,9 +1267,9 @@ class AnnouncementManager
                     'size' => intval($file['size']),
                 ];
 
-                $insertId = Database::insert($tbl_announcement_attachment, $params);
+                $insertId = Database::insert($table, $params);
                 if ($insertId) {
-                    $sql = "UPDATE $tbl_announcement_attachment SET id = iid 
+                    $sql = "UPDATE $table SET id = iid 
                             WHERE iid = $insertId";
                     Database::query($sql);
                 }
@@ -1276,7 +1294,7 @@ class AnnouncementManager
         $file_comment
     ) {
         $_course = api_get_course_info();
-        $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
+        $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $return = 0;
         $course_id = api_get_course_int_id();
 
@@ -1287,13 +1305,19 @@ class AnnouncementManager
             $updir = $sys_course_path.$courseDir;
 
             // Try to add an extension to the file if it hasn't one
-            $new_file_name = add_ext_on_mime(stripslashes($file['name']), $file['type']);
+            $new_file_name = add_ext_on_mime(
+                stripslashes($file['name']),
+                $file['type']
+            );
             // user's file name
             $file_name = $file ['name'];
 
             if (!filter_extension($new_file_name)) {
                 $return = -1;
-                echo Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error');
+                echo Display::return_message(
+                    get_lang('UplUnableToSaveFileFilteredExtension'),
+                    'error'
+                );
             } else {
                 $new_file_name = uniqid('');
                 $new_path = $updir.'/'.$new_file_name;
@@ -1302,7 +1326,7 @@ class AnnouncementManager
                 $safe_file_name = Database::escape_string($file_name);
                 $safe_new_file_name = Database::escape_string($new_file_name);
                 $id_attach = intval($id_attach);
-                $sql = "UPDATE $tbl_announcement_attachment SET 
+                $sql = "UPDATE $table SET 
                             filename = '$safe_file_name', 
                             comment = '$safe_file_comment', 
                             path = '$safe_new_file_name', 
@@ -1311,7 +1335,10 @@ class AnnouncementManager
                 $result = Database::query($sql);
                 if ($result === false) {
                     $return = -1;
-                    echo Display::return_message(get_lang('UplUnableToSaveFile'), 'error');
+                    echo Display::return_message(
+                        get_lang('UplUnableToSaveFile'),
+                        'error'
+                    );
                 } else {
                     $return = 1;
                 }
@@ -1444,7 +1471,9 @@ class AnnouncementManager
 
             //if (!empty($user_id)) {
             if (0) {
-                if (is_array($group_memberships) && count($group_memberships) > 0) {
+                if (is_array($group_memberships) &&
+                    count($group_memberships) > 0
+                ) {
                     $sql = "SELECT $select
                             FROM $tbl_announcement announcement 
                             INNER JOIN $tbl_item_property ip
@@ -1825,9 +1854,14 @@ class AnnouncementManager
         } else {
             // students only get to see the visible announcements
             if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
-                $group_memberships = GroupManager::get_group_ids($_course['real_id'], $userId);
+                $group_memberships = GroupManager::get_group_ids(
+                    $_course['real_id'],
+                    $userId
+                );
 
-                if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+                if ((api_get_course_setting('allow_user_edit_announcement') &&
+                    !api_is_anonymous())
+                ) {
                     if (api_get_group_id() == 0) {
                         $cond_user_id = " AND (
                         ip.lastedit_user_id = '".$userId."' OR (
@@ -1881,7 +1915,9 @@ class AnnouncementManager
                     // the user is not member of any group
                     // this is an identified user => show the general announcements AND his personal announcements
                     if ($userId) {
-                        if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+                        if ((api_get_course_setting('allow_user_edit_announcement') &&
+                            !api_is_anonymous())
+                        ) {
                             $cond_user_id = " AND (
                                 ip.lastedit_user_id = '".$userId."' OR
                                 ( ip.to_user_id='".$userId."' OR ip.to_group_id='0' OR ip.to_group_id IS NULL)

@@ -390,6 +390,9 @@ class GroupManager
      */
     public static function delete_groups($groupInfo, $course_code = null)
     {
+        if (empty($groupInfo['iid'])) {
+            return false;
+        }
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
 
@@ -400,16 +403,16 @@ class GroupManager
         if ($groupInfo) {
             $groupIid = $groupInfo['iid'];
             $groupId = $groupInfo['id'];
-            $directory = $groupInfo['secret_directory'];
             // Unsubscribe all users
             self::unsubscribe_all_users($groupInfo);
             self::unsubscribe_all_tutors($groupInfo);
-            // move group-documents to garbage
-            $source_directory = api_get_path(SYS_COURSE_PATH).$course_info['path']."/document".$directory;
-            // File to renamed
-            $destination_dir = api_get_path(SYS_COURSE_PATH).$course_info['path']."/document".$directory.'_DELETED_'.$groupInfo['id'];
 
-            if (!empty($directory)) {
+            if (!empty($groupInfo['secret_directory'])) {
+                $directory = $groupInfo['secret_directory'];
+                // move group-documents to garbage
+                $source_directory = api_get_path(SYS_COURSE_PATH).$course_info['path']."/document".$directory;
+                // File to renamed
+                $destination_dir = api_get_path(SYS_COURSE_PATH).$course_info['path']."/document".$directory.'_DELETED_'.$groupInfo['id'];
                 //Deleting from document tool
                 DocumentManager::delete_document(
                     $course_info,
@@ -2431,7 +2434,6 @@ class GroupManager
                     $data['category_id'] = $categoryId;
                     $result['updated']['category'][] = $data;
                 } else {
-
                     // Add
                     $categoryId = self::create_category(
                         $data['category'],
@@ -2469,7 +2471,6 @@ class GroupManager
                 }
 
                 if (empty($groupInfo)) {
-
                     // Add
                     $groupId = self::create_group(
                         $data['group'],
@@ -2524,8 +2525,6 @@ class GroupManager
                     $groupInfo = self::get_group_properties($groupId);
                 }
 
-
-
                 $students = isset($data['students']) ? explode(',', $data['students']) : [];
                 if (!empty($students)) {
                     $studentUserIdList = array();
@@ -2536,8 +2535,7 @@ class GroupManager
                             continue;
                         }
 
-                        if (
-                            !CourseManager::is_user_subscribed_in_course(
+                        if (!CourseManager::is_user_subscribed_in_course(
                                 $userInfo['user_id'],
                                 $courseCode,
                                 !empty($sessionId),
@@ -2546,11 +2544,13 @@ class GroupManager
                         ) {
                             Display::addFlash(
                                 Display::return_message(
-                                    sprintf(get_lang('StudentXIsNotSubscribedToCourse'), $userInfo['complete_name']),
+                                    sprintf(
+                                        get_lang('StudentXIsNotSubscribedToCourse'),
+                                        $userInfo['complete_name']
+                                    ),
                                     'warning'
                                 )
                             );
-
                             continue;
                         }
 

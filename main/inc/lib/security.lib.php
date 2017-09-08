@@ -380,6 +380,13 @@ class Security
                         'controls' => 'Bool',
                     )
                 );
+                $def->addElement(
+                    'source',
+                    'Block',
+                    'Flow',
+                    'Common',
+                    array('src' => 'URI', 'type' => 'Text',)
+                );
             }
 
             $purifier[$user_status] = new HTMLPurifier($config);

@@ -316,6 +316,9 @@ $allowed_tags_student['video']['src'] = array();
 $allowed_tags_student['video']['controls'] = array();
 $allowed_tags_student['video']['id'] = array();
 
+$allowed_tags_student['source'] = array();
+$allowed_tags_student['source']['type'] = array();
+$allowed_tags_student['source']['src'] = array();
 
 // font
 $allowed_tags_student['font'] = array();

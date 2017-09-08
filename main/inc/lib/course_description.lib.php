@@ -57,6 +57,7 @@ class CourseDescription
             $desc_tmp = new CourseDescription();
             $desc_tmp->set_id($row['id']);
             $desc_tmp->set_title($row['title']);
+
             $desc_tmp->set_content($row['content']);
             $desc_tmp->set_session_id($row['session_id']);
             $desc_tmp->set_description_type($row['description_type']);
@@ -87,10 +88,7 @@ class CourseDescription
         $rs = Database::query($sql);
         $data = array();
         while ($description = Database::fetch_array($rs)) {
-            $data['descriptions'][$description['id']] = Security::remove_XSS(
-                $description,
-                STUDENT
-            );
+            $data['descriptions'][$description['id']] = $description;
         }
 
         return $data;

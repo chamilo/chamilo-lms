@@ -353,7 +353,12 @@ if (api_is_platform_admin()) {
     $blocks['settings']['label'] = api_ucfirst(get_lang('System'));
     $blocks['settings']['class'] = 'block-admin-settings';
 
-    $items = array();
+    $items = [];
+    $items[] = array(
+        'url' => 'archive_cleanup.php',
+        'label' => get_lang('ArchiveDirCleanup')
+    );
+
     $items[] = array(
         'url' => 'special_exports.php',
         'label' => get_lang('SpecialExports')
@@ -369,10 +374,6 @@ if (api_is_platform_admin()) {
         );
     }
 
-    $items[] = array(
-        'url' => 'archive_cleanup.php',
-        'label' => get_lang('ArchiveDirCleanup')
-    );
     $items[] = array(
         'url' => 'resource_sequence.php',
         'label' => get_lang('ResourcesSequencing')

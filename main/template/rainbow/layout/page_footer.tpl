@@ -9,7 +9,7 @@
     <div class="sub-footer">
     <div class="container">
         <div class="row">
-            <div id="footer_left" class="col-md-8">
+            <div id="footer_left" class="col-md-9">
                 <div class="partners">
                     <a href="http://www.bosch-stiftung.de" target="_blank">
                         <img src="{{ _p.web_css_theme }}images/rbs_logo_rgb.png"/>
@@ -20,9 +20,12 @@
                     <a href="http://www.dw.com" target="_blank">
                         <img src="{{ _p.web_css_theme }}images/logo-dw.png"/>
                     </a>
+                    <a href="http://www.dw.com" target="_blank">
+                        <img src="{{ _p.web_css_theme }}images/carlduisberg.png"/>
+                    </a>
                 </div>
             </div>
-            <div id="footer_right" class="col-md-4">
+            <div id="footer_right" class="col-md-3">
                 {% if session_teachers is not null %}
                     <div class="session-teachers">
                         {{ session_teachers }}

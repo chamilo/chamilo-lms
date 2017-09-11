@@ -173,83 +173,91 @@ class ExtraFieldOption extends Model
             return false;
         }
 
-        if (!empty($params['field_options']) &&
-            in_array(
-                $params['field_type'],
-                array(
-                    ExtraField::FIELD_TYPE_RADIO,
-                    ExtraField::FIELD_TYPE_SELECT,
-                    ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
-                    ExtraField::FIELD_TYPE_DOUBLE_SELECT,
-                    ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD
-                )
+        $parseOptions = in_array(
+            $params['field_type'],
+            array(
+                ExtraField::FIELD_TYPE_RADIO,
+                ExtraField::FIELD_TYPE_SELECT,
+                ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
+                ExtraField::FIELD_TYPE_DOUBLE_SELECT,
+                ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD
             )
-        ) {
-            if ($params['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT ||
-                $params['field_type'] == ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD) {
+        );
+
+        if (empty($params['field_options']) || !$parseOptions) {
+            return true;
+        };
+
+        switch ($params['field_type']) {
+            case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                 //$params['field_options'] = France:Paris;Bretagne;Marseilles;Lyon|Belgique:Bruxelles;Namur;Liège;Bruges|Peru:Lima;Piura;
+                //no break;
+            case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
+                //$params['field_options'] = Option 1|Option 2|Option 3
                 $options_parsed = ExtraField::extra_field_double_select_convert_string_to_array(
                     $params['field_options']
                 );
 
-                if (!empty($options_parsed)) {
-                    foreach ($options_parsed as $key => $option) {
-                        $new_params = array(
-                            'field_id' => $field_id,
-                            'option_value' => 0,
-                            'display_text' => $option['label'],
-                            'option_order' => 0,
-                        );
+                if (empty($options_parsed)) {
+                    break;
+                }
 
-                        // Looking if option already exists:
-                        $option_info = self::get_field_option_by_field_id_and_option_display_text(
-                            $field_id,
-                            $option['label']
-                        );
+                foreach ($options_parsed as $key => $option) {
+                    $new_params = array(
+                        'field_id' => $field_id,
+                        'option_value' => 0,
+                        'display_text' => $option['label'],
+                        'option_order' => 0,
+                    );
+                    // Looking if option already exists:
+                    $option_info = self::get_field_option_by_field_id_and_option_display_text(
+                        $field_id,
+                        $option['label']
+                    );
 
-                        if (empty($option_info)) {
-                            $sub_id = parent::save($new_params, $showQuery);
-                        } else {
-                            $sub_id = $option_info['id'];
-                            $new_params['id'] = $sub_id;
-                            parent::update($new_params, $showQuery);
-                        }
+                    if (empty($option_info)) {
+                        $sub_id = parent::save($new_params, $showQuery);
+                    } else {
+                        $sub_id = $option_info['id'];
+                        $new_params['id'] = $sub_id;
+                        parent::update($new_params, $showQuery);
+                    }
 
-                        if ($params['field_type'] == ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD) {
+                    if ($params['field_type'] == ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD) {
+                        continue;
+                    }
+
+                    foreach ($option['options'] as $sub_option) {
+                        if (empty($sub_option)) {
                             continue;
                         }
 
-                        foreach ($option['options'] as $sub_option) {
-                            if (!empty($sub_option)) {
-                                $new_params = array(
-                                    'field_id' => $field_id,
-                                    'option_value' => $sub_id,
-                                    'display_text' => $sub_option,
-                                    'option_order' => 0,
-                                );
+                        $new_params = array(
+                            'field_id' => $field_id,
+                            'option_value' => $sub_id,
+                            'display_text' => $sub_option,
+                            'option_order' => 0,
+                        );
+                        $option_info = self::getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
+                            $field_id,
+                            $sub_option,
+                            $sub_id
+                        );
 
-                                $option_info = self::getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
-                                    $field_id,
-                                    $sub_option,
-                                    $sub_id
-                                );
+                        if (empty($option_info)) {
+                            parent::save($new_params, $showQuery);
 
-                                if (empty($option_info)) {
-                                    parent::save($new_params, $showQuery);
-                                } else {
-                                    $new_params['id'] = $option_info['id'];
-                                    parent::update($new_params, $showQuery);
-                                }
-                            }
+                            continue;
                         }
+
+                        $new_params['id'] = $option_info['id'];
+                        parent::update($new_params, $showQuery);
                     }
                 }
-                $list = array();
-            } else {
+                break;
+            default:
                 $list = explode(';', $params['field_options']);
-            }
 
-            if (!empty($list)) {
                 foreach ($list as $option) {
                     $option_info = self::get_field_option_by_field_and_option($field_id, $option);
 
@@ -257,19 +265,21 @@ class ExtraFieldOption extends Model
                     $optionValue = api_replace_dangerous_char($option);
                     $option = trim($option);
 
-                    if ($option_info == false) {
-                        $order = self::get_max_order($field_id);
-
-                        $new_params = array(
-                            'field_id' => $field_id,
-                            'option_value' => trim($optionValue),
-                            'display_text' => trim($option),
-                            'option_order' => $order,
-                        );
-                        parent::save($new_params, $showQuery);
+                    if ($option_info != false) {
+                        continue;
                     }
+
+                    $order = self::get_max_order($field_id);
+
+                    $new_params = array(
+                        'field_id' => $field_id,
+                        'option_value' => trim($optionValue),
+                        'display_text' => trim($option),
+                        'option_order' => $order,
+                    );
+                    parent::save($new_params, $showQuery);
                 }
-            }
+                break;
         }
 
         return true;

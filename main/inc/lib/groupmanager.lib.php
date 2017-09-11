@@ -511,9 +511,10 @@ class GroupManager
     /**
      * @param string $name
      * @param string $courseCode
+     * @param int $sessionId
      * @return array
      */
-    public static function getGroupByName($name, $courseCode = null)
+    public static function getGroupByName($name, $courseCode = null, $sessionId = 0)
     {
         $name = trim($name);
 
@@ -524,9 +525,15 @@ class GroupManager
         $course_info = api_get_course_info($courseCode);
         $course_id = $course_info['real_id'];
         $name = Database::escape_string($name);
-        $table_group = Database::get_course_table(TABLE_GROUP);
-        $sql = "SELECT * FROM $table_group
-                WHERE c_id = $course_id AND name = '$name'
+        $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
+        $sessionCondition = api_get_session_condition($sessionId);
+
+        $table = Database::get_course_table(TABLE_GROUP);
+        $sql = "SELECT * FROM $table
+                WHERE 
+                  c_id = $course_id AND 
+                  name = '$name'
+                  $sessionCondition
                 LIMIT 1";
         $res = Database::query($sql);
         $group = array();
@@ -2459,7 +2466,10 @@ class GroupManager
                 $elementsFound['categories'][] = $categoryId;
             } else {
                 $groupInfo = self::getGroupByName($data['group']);
-                $categoryInfo = self::getCategoryByTitle($data['category']);
+                $categoryInfo = [];
+                if (isset($data['category'])) {
+                    $categoryInfo = self::getCategoryByTitle($data['category']);
+                }
                 $categoryId = null;
                 if (!empty($categoryInfo)) {
                     $categoryId = $categoryInfo['id'];

@@ -25,8 +25,8 @@ use Question;
 class CourseRestorer
 {
     /**
-    * The course-object
-    */
+     * The course-object
+     */
     public $course;
     public $destination_course_info;
 
@@ -45,7 +45,7 @@ class CourseRestorer
         'events',
         'forum_category',
         'forums',
-       // 'forum_topics',
+        // 'forum_topics',
         'glossary',
         'quizzes',
         'test_category',
@@ -1800,8 +1800,14 @@ class CourseRestorer
                         'end_time' => $quiz->end_time,
                         'save_correct_answers' => 0,
                         'display_category_name' => 0,
+                        'save_correct_answers' => $quiz->save_correct_answers,
                         'hide_question_title' => isset($quiz->hide_question_title) ? $quiz->hide_question_title : 0,
                     );
+
+                    $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
+                    if ($allow) {
+                        $params['notifications'] = $quiz->notifications;
+                    }
 
                     if ($respect_base_content) {
                         $my_session_id = $quiz->session_id;
@@ -2892,15 +2898,15 @@ class CourseRestorer
     }
 
     /**
-    * copy all directory and sub directory
-    * @param string The path origin
-    * @param string The path destination
-    * @param boolean Option Overwrite
-    * @param string $source
-    * @param string $dest
-    * @return void
-    * @deprecated
-    */
+     * copy all directory and sub directory
+     * @param string The path origin
+     * @param string The path destination
+     * @param boolean Option Overwrite
+     * @param string $source
+     * @param string $dest
+     * @return void
+     * @deprecated
+     */
     public function allow_create_all_directory($source, $dest, $overwrite = false)
     {
         if (!is_dir($dest)) {
@@ -2913,13 +2919,13 @@ class CourseRestorer
                 if ($file != '.' && $file != '..') {
                     $path = $source.'/'.$file;
                     if (is_file($path)) {
-                       /* if (!is_file($dest . '/' . $file) || $overwrite)
-                        if (!@copy($path, $dest . '/' . $file)) {
-                            echo '<font color="red">File ('.$path.') '.get_lang('NotHavePermission').'</font>';
-                        }*/
+                        /* if (!is_file($dest . '/' . $file) || $overwrite)
+                         if (!@copy($path, $dest . '/' . $file)) {
+                             echo '<font color="red">File ('.$path.') '.get_lang('NotHavePermission').'</font>';
+                         }*/
                     } elseif (is_dir($path)) {
                         if (!is_dir($dest.'/'.$file)) {
-                                                mkdir($dest.'/'.$file);
+                            mkdir($dest.'/'.$file);
                         }
                         self:: allow_create_all_directory($path, $dest.'/'.$file, $overwrite);
                     }
@@ -3443,7 +3449,7 @@ class CourseRestorer
                                         break;
                                 }
 
-                                 if ($this->course->has_resources($type) &&
+                                if ($this->course->has_resources($type) &&
                                     isset($this->course->resources[$type][$itemId])
                                 ) {
                                     $item = $this->course->resources[$type][$itemId];

@@ -1800,8 +1800,14 @@ class CourseRestorer
                         'end_time' => $quiz->end_time,
                         'save_correct_answers' => 0,
                         'display_category_name' => 0,
+                        'save_correct_answers' => $quiz->save_correct_answers,
                         'hide_question_title' => isset($quiz->hide_question_title) ? $quiz->hide_question_title : 0,
                     );
+
+                    $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
+                    if ($allow) {
+                        $params['notifications'] = $quiz->notifications;
+                    }
 
                     if ($respect_base_content) {
                         $my_session_id = $quiz->session_id;

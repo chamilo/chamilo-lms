@@ -89,7 +89,7 @@
     </div>
 {% else %}
     <div class ="col-md-12" style="text-align:center">
-        {{ 'ServerIsNotRunning' | return_message('warning') }}
+        {{ 'ServerIsNotRunning' | get_plugin_lang('BBBPlugin') | return_message('warning') }}
     </div>
 {% endif %}
 </div>

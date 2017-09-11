@@ -1526,7 +1526,7 @@ class GroupManager
                 }
             }
 
-            $result = self::number_of_students($group_id) < self:: maximum_number_of_students($groupIid);
+            $result = self::number_of_students($group_id) < self::maximum_number_of_students($groupIid);
 
             if ($result == false) {
                 return false;
@@ -1657,15 +1657,15 @@ class GroupManager
     public static function subscribe_users($user_ids, $groupInfo, $course_id = null)
     {
         $user_ids = is_array($user_ids) ? $user_ids : array($user_ids);
-        $course_id = isset($course_id) && !empty($course_id) ? intval($course_id) : api_get_course_int_id();
+        $course_id = empty($course_id) ? api_get_course_int_id() : (int) $course_id;
         $group_id = $groupInfo['id'];
 
-        $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
+        $table = Database::get_course_table(TABLE_GROUP_USER);
         if (!empty($user_ids)) {
             foreach ($user_ids as $user_id) {
                 if (self::can_user_subscribe($user_id, $groupInfo)) {
                     $user_id = intval($user_id);
-                    $sql = "INSERT INTO ".$table_group_user." (c_id, user_id, group_id)
+                    $sql = "INSERT INTO ".$table." (c_id, user_id, group_id)
                             VALUES ('$course_id', '".$user_id."', '".$group_id."')";
                     Database::query($sql);
                 }

@@ -42,6 +42,7 @@ exclude_paths:
 - main/chat/emoji_strategy.php
 - main/default_course_document
 - main/document/Wami.swf
+- main/fonts/
 - main/inc/ajax/Wami.swf
 - main/inc/lib/browser/
 - main/inc/lib/freemindflashbrowser/

@@ -1297,7 +1297,11 @@ class MessageManager
                 if ($my_group_role == GROUP_USER_PERMISSION_ADMIN ||
                     $my_group_role == GROUP_USER_PERMISSION_MODERATOR
                 ) {
-                    $actions = '<br />'.Display::url(get_lang('Delete'), api_get_path(WEB_CODE_PATH).'social/group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic['id'], array('class' => 'btn btn-default'));
+                    $actions = '<br />'.Display::url(
+                        get_lang('Delete'),
+                        api_get_path(WEB_CODE_PATH).'social/group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic['id'],
+                        array('class' => 'btn btn-default')
+                    );
                 }
 
                 $date = '';
@@ -1456,10 +1460,16 @@ class MessageManager
         $date = '';
         if ($main_message['send_date'] != $main_message['update_date']) {
             if (!empty($main_message['update_date'])) {
-                $date = '<div class="date"> '.Display::returnFontAwesomeIcon('calendar').' '.get_lang('LastUpdate').' '.date_to_str_ago($main_message['update_date']).'</div>';
+                $date = '<div class="date"> '.
+                    Display::returnFontAwesomeIcon('calendar').' '.get_lang('LastUpdate').' '.
+                    date_to_str_ago($main_message['update_date']).
+                    '</div>';
             }
         } else {
-            $date = '<div class="date"> '.Display::returnFontAwesomeIcon('calendar').' '.get_lang('Created').' '.date_to_str_ago($main_message['send_date']).'</div>';
+            $date = '<div class="date"> '.
+                Display::returnFontAwesomeIcon('calendar').' '.get_lang('Created').' '.
+                date_to_str_ago($main_message['send_date']).
+                '</div>';
         }
         $attachment = '<div class="message-attach">'.(!empty($files_attachments) ? implode('<br />', $files_attachments) : '').'</div>';
         $main_content .= '<div class="col-md-10">';
@@ -1497,7 +1507,9 @@ class MessageManager
                 $name = $user_sender_info['complete_name'];
 
                 $links .= '<div class="btn-group btn-group-sm">';
-                if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) || $topic['user_sender_id'] == $current_user_id) {
+                if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) ||
+                    $topic['user_sender_id'] == $current_user_id
+                ) {
                     $links .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?height=400&width=800&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="ajax btn btn-default" data-size="lg" data-title="'.get_lang('Edit').'" title="'.get_lang('Edit').'">'.
                         Display::returnFontAwesomeIcon('pencil').'</a>';
                 }

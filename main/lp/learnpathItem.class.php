@@ -1208,7 +1208,8 @@ class learnpathItem
                                                 }
                                             } elseif (strpos($second_part, '=') > 0) {
                                                 if (substr($second_part,0,1) === '/') {
-                                                    // Link starts with a /, making it absolute (relative to DocumentRoot).
+                                                    // Link starts with a /,
+                                                    // making it absolute (relative to DocumentRoot).
                                                     $files_list[] = array(
                                                         $second_part,
                                                         'local',
@@ -3875,16 +3876,10 @@ class learnpathItem
                             }
                         } else {
                             // Multiple attempts are allowed.
-                            if (in_array(
-                                    $this->get_status(false),
-                                    $case_completed
-                                ) && $my_type_lp == 2
-                            ) {
+                            if (in_array($this->get_status(false), $case_completed) && $my_type_lp == 2) {
                                 // Reset zero new attempt ?
                                 $my_status = " status = '".$this->get_status(false)."' ,";
-                            } elseif (!in_array($this->get_status(false), $case_completed) &&
-                                $my_type_lp == 2
-                            ) {
+                            } elseif (!in_array($this->get_status(false), $case_completed) && $my_type_lp == 2) {
                                 $total_time = " total_time = ".$this->get_total_time().", ";
                                 $my_status = " status = '".$this->get_status(false)."' ,";
                             } else {

@@ -141,6 +141,7 @@ filter:
         - 'main/auth/openid/*'
         - 'main/chat/emoji_strategy.php'
         - 'main/default_course_document'
+        - 'main/fonts/*'
         - 'main/inc/lib/browser/*'
         - 'main/inc/lib/freemindflashbrowser/*'
         - 'main/inc/lib/internationalization_database/*'

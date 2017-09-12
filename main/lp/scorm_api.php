@@ -1369,7 +1369,7 @@ function update_progress_bar(nbr_complete, nbr_total, mode) {
 function updateGamificationValues()
 {
     var fetchValues = $.ajax(
-        '<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php?' + courseUrl,
+        '<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php' + courseUrl,
         {
         dataType: 'json',
         data: {

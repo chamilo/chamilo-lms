@@ -103,7 +103,9 @@ function check_group_members($value)
     if ($value['max_member_no_limit'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
         return true;
     }
-    if (isset($value['max_member']) && isset($value['group_members']) && $value['max_member'] < count($value['group_members'])) {
+    if (isset($value['max_member']) && isset($value['group_members']) &&
+        $value['max_member'] < count($value['group_members'])
+    ) {
         return array('group_members' => get_lang('GroupTooMuchMembers'));
     }
     return true;
@@ -137,11 +139,14 @@ usort($complete_user_list, 'sort_users');
 
 $possible_users = array();
 foreach ($complete_user_list as $index => $user) {
-    $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+    $possible_users[$user['user_id']] = api_get_person_name(
+        $user['firstname'],
+        $user['lastname']
+    ).' ('.$user['username'].')';
 }
 
 // Group tutors
-$group_tutor_list = GroupManager :: get_subscribed_tutors($current_group);
+$group_tutor_list = GroupManager::get_subscribed_tutors($current_group);
 $selected_users = array();
 $selected_tutors = array();
 foreach ($group_tutor_list as $index => $user) {
@@ -168,7 +173,10 @@ foreach ($group_member_list as $index => $user) {
 $possible_users = array();
 foreach ($complete_user_list as $index => $user) {
      if ($user['number_groups_left'] > 0 || in_array($user['user_id'], $selected_users)) {
-        $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+         $possible_users[$user['user_id']] = api_get_person_name(
+             $user['firstname'],
+             $user['lastname']
+         ).' ('.$user['username'].')';
      }
 }
 

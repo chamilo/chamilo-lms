@@ -476,7 +476,12 @@ class AppPlugin
         if (!empty($plugin)) {
             api_delete_settings_params(
                 array(
-                    'category = ? AND type = ? AND access_url = ? AND subkey = ? ' => array('Plugins', 'region', $access_url_id, $plugin)
+                    'category = ? AND type = ? AND access_url = ? AND subkey = ? ' => array(
+                        'Plugins',
+                        'region',
+                        $access_url_id,
+                        $plugin,
+                    ),
                 )
             );
         }

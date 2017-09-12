@@ -277,8 +277,6 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                 if ($debug > 0) error_log('New LP - found row - type '.$type.' - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                 switch ($type) {
                     case 1:
-                        if ($debug > 0) error_log('New LP - found row - type dokeos - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
-
                         $oLP = new learnpath(api_get_course_id(), $lp_id, api_get_user_id());
                         if ($oLP !== false) {
                             $lp_found = true;
@@ -287,7 +285,6 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         }
                         break;
                     case 2:
-                        if ($debug > 0) error_log('New LP - found row - type scorm - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                         $oLP = new scorm(api_get_course_id(), $lp_id, api_get_user_id());
                         if ($oLP !== false) {
                             $lp_found = true;
@@ -296,7 +293,6 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         }
                         break;
                     case 3:
-                        if ($debug > 0) error_log('New LP - found row - type aicc - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                         $oLP = new aicc(api_get_course_id(), $lp_id, api_get_user_id());
                         if ($oLP !== false) {
                             $lp_found = true;
@@ -305,7 +301,6 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         }
                         break;
                     default:
-                        if ($debug > 0) error_log('New LP - found row - type other - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                         $oLP = new learnpath(api_get_course_id(), $lp_id, api_get_user_id());
                         if ($oLP !== false) {
                             $lp_found = true;
@@ -437,7 +432,8 @@ switch ($action) {
                             $prerequisites
                         );
                     } else {
-                        // For all other item types than documents, load the item using the item type and path rather than its ID.
+                        // For all other item types than documents,
+                        // load the item using the item type and path rather than its ID.
                         $new_item_id = $_SESSION['oLP']->add_item(
                             $parent,
                             $previous,
@@ -773,7 +769,8 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for view item', 0); require 'lp_list.php';
+            error_log('New LP - No learnpath given for view item', 0);
+            require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
             require 'lp_view_item.php';

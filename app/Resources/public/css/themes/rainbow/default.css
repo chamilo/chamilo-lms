@@ -1369,6 +1369,18 @@ svg circle{
     padding-bottom: 10px;
     font-weight: bold;
 }
+.data_table tr td .label-danger{
+    background-color: #162a83;
+    display: inline-block;
+    width: 100%;
+    border-radius: 0;
+}
+.data_table tr td .label-success{
+    background-color: #84bd00;
+    display: inline-block;
+    width: 100%;
+    border-radius: 0;
+}
 .ck{
     display: block;
     font-style: normal;

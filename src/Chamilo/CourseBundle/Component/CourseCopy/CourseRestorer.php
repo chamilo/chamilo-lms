@@ -2178,7 +2178,10 @@ class CourseRestorer
                             break;
                         case FILE_OVERWRITE:
                             // get category from source
-                            $destinationCategoryId = TestCategory::get_category_id_for_title($title, $destinationCourseId);
+                            $destinationCategoryId = TestCategory::get_category_id_for_title(
+                                $title,
+                                $destinationCourseId
+                            );
                             if ($destinationCategoryId) {
                                 $my_cat = new TestCategory();
                                 $my_cat = $my_cat->getCategory($destinationCategoryId, $destinationCourseId);
@@ -2335,7 +2338,8 @@ class CourseRestorer
                             }
                             break;
                         case FILE_OVERWRITE:
-                            // Delete the existing survey with the same code and language and import the one of the source course
+                            // Delete the existing survey with the same code and language and
+                            // import the one of the source course
                             // getting the information of the survey (used for when the survey is shared)
 
                             $sql = "SELECT * FROM $table_sur
@@ -2347,9 +2351,17 @@ class CourseRestorer
 
                             // if the survey is shared => also delete the shared content
                             if (isset($survey_data['survey_share']) && is_numeric($survey_data['survey_share'])) {
-                                SurveyManager::delete_survey($survey_data['survey_share'], true, $this->destination_course_id);
+                                SurveyManager::delete_survey(
+                                    $survey_data['survey_share'],
+                                    true,
+                                    $this->destination_course_id
+                                );
                             }
-                            SurveyManager::delete_survey($survey_data['survey_id'], false, $this->destination_course_id);
+                            SurveyManager::delete_survey(
+                                $survey_data['survey_id'],
+                                false,
+                                $this->destination_course_id
+                            );
 
                             // Insert the new source survey
                             $new_id = Database::insert($table_sur, $params);
@@ -2542,10 +2554,18 @@ class CourseRestorer
 
                 // Adding the author's image
                 if (!empty($lp->preview_image)) {
-                    $new_filename = uniqid('').substr($lp->preview_image, strlen($lp->preview_image) - 7,
-                            strlen($lp->preview_image));
-                    if (file_exists($origin_path.$lp->preview_image) && !is_dir($origin_path.$lp->preview_image)) {
-                        $copy_result = copy($origin_path.$lp->preview_image, $destination_path.$new_filename);
+                    $new_filename = uniqid('').substr(
+                        $lp->preview_image,
+                        strlen($lp->preview_image) - 7,
+                        strlen($lp->preview_image)
+                    );
+                    if (file_exists($origin_path.$lp->preview_image) &&
+                        !is_dir($origin_path.$lp->preview_image)
+                    ) {
+                        $copy_result = copy(
+                            $origin_path.$lp->preview_image,
+                            $destination_path.$new_filename
+                        );
                         if ($copy_result) {
                             $lp->preview_image = $new_filename;
                         } else {
@@ -2869,9 +2889,16 @@ class CourseRestorer
                     }
                 }
 
-                $sql = 'SELECT sa.id, sa.expires_on,sa.ends_on,sa.add_to_calendar, sa.enable_qualification, sa.publication_id
+                $sql = 'SELECT 
+                          sa.id, 
+                          sa.expires_on,
+                          sa.ends_on,
+                          sa.add_to_calendar, 
+                          sa.enable_qualification, 
+                          sa.publication_id
                         FROM '.$work_assignment_table.' sa
-                        INNER JOIN '.$work_table.' sp ON sa.publication_id=sp.id
+                        INNER JOIN '.$work_table.' sp 
+                        ON sa.publication_id=sp.id
                         WHERE
                             sp.c_id = '.$this->course_origin_id.' AND
                             sa.c_id = '.$this->course_origin_id.' AND

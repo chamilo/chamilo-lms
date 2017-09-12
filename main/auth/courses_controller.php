@@ -259,6 +259,9 @@ class CoursesController
                 Display::addFlash(
                     Display::return_message($result['message'], 'normal', false)
                 );
+                if (isset($result['content'])) {
+                    Display::addFlash($result['content']);
+                }
             }
         }
     }

@@ -151,10 +151,9 @@ class CourseArchiver
 
         // Copy work folders (only folders)
         if (isset($course->resources[RESOURCE_WORK]) && is_array($course->resources[RESOURCE_WORK])) {
-            $doc_dir = dirname($backup_dir.'/upload/work/');
+            $doc_dir = $backup_dir.'work';
             @mkdir($doc_dir, $perm_dirs, true);
-            // @todo: adjust to only create subdirs, but not copy files
-            copyDirTo($course->path.'upload/work/', $doc_dir, false);
+            copyDirWithoutFilesTo($course->path.'work/', $doc_dir);
         }
 
         if (isset($course->resources[RESOURCE_ASSET]) && is_array($course->resources[RESOURCE_ASSET])) {

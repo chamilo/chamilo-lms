@@ -156,7 +156,7 @@ class CourseBuilder
         }
 
         // Add asset
-        if (basename($course['course_image_source'] != 'course.png')) {
+        if ($course['course_image_source'] && basename($course['course_image_source']) != 'course.png') {
             // Add course image courses/XXX/course-pic85x85.png
             $asset = new Asset(
                 $course['course_image_source'],

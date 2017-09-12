@@ -3325,15 +3325,6 @@ class CourseRestorer
                         }
                         break;
                     case FILE_OVERWRITE:
-                        // Creating folder.
-                        $workData = get_work_data_by_path(
-                            $path,
-                            $this->destination_course_info['real_id']
-                        );
-                        break;
-                    case FILE_RENAME:
-                        $obj->params['new_dir'] = $obj->params['title'];
-
                         if (!empty($this->course_origin_id)) {
                             $sql = 'SELECT * FROM '.$table_work_assignment.'
                                     WHERE
@@ -3352,32 +3343,41 @@ class CourseRestorer
                             $obj->params['ends_on'] = $row['ends_on'];
                             $obj->params['enable_qualification'] = $row['enable_qualification'];
                             $obj->params['add_to_calendar'] = !empty($row['add_to_calendar']) ? 1 : 0;
-
-                            if (empty($workData)) {
-                                addDir(
-                                    $obj->params,
-                                    api_get_user_id(),
-                                    $this->destination_course_info,
-                                    0,
-                                    $sessionId
-                                );
-                            } else {
-                                $workId = $workData['iid'];
-                                updateWork(
-                                    $workId,
-                                    $obj->params,
-                                    $this->destination_course_info,
-                                    $sessionId
-                                );
-                                updatePublicationAssignment(
-                                    $workId,
-                                    $obj->params,
-                                    $this->destination_course_info,
-                                    0
-                                );
-                            }
                         }
+                        //No break
+                    case FILE_RENAME:
+                        $workData = get_work_data_by_path(
+                            $path,
+                            $this->destination_course_info['real_id']
+                        );
                         break;
+                }
+
+                $obj->params['work_title'] = $obj->params['title'];
+                $obj->params['new_dir'] = $obj->params['title'];
+
+                if (empty($workData)) {
+                    addDir(
+                        $obj->params,
+                        api_get_user_id(),
+                        $this->destination_course_info,
+                        0,
+                        $sessionId
+                    );
+                } else {
+                    $workId = $workData['iid'];
+                    updateWork(
+                        $workId,
+                        $obj->params,
+                        $this->destination_course_info,
+                        $sessionId
+                    );
+                    updatePublicationAssignment(
+                        $workId,
+                        $obj->params,
+                        $this->destination_course_info,
+                        0
+                    );
                 }
             }
         }

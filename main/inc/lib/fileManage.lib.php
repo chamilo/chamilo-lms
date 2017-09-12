@@ -266,6 +266,44 @@ function copyDirTo($source, $destination, $move = true)
 }
 
 /**
+ * Copy a directory and its directories (not files) to an other area
+ *
+ * @param string $source the path of the directory to move
+ * @param string $destination the path of the new area
+ * @return bool false on error
+ */
+function copyDirWithoutFilesTo($source, $destination)
+{
+    $fs = new Filesystem();
+
+    if (!is_dir($source)) {
+        return false;
+    }
+
+    if (!$fs->exists($destination)) {
+        $fs->mkdir($destination);
+    }
+
+    $dirIterator = new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS);
+    $iterator = new RecursiveIteratorIterator($dirIterator, RecursiveIteratorIterator::SELF_FIRST);
+
+    /** @var \SplFileInfo $item */
+    foreach ($iterator as $item) {
+        if ($item->isFile()) {
+            continue;
+        }
+
+        $newDir = $destination.'/'.$item->getFilename();
+
+        if (!$fs->exists($newDir)) {
+            $fs->mkdir($destination.'/'.$item->getFilename());
+        }
+    }
+
+    return true;
+}
+
+/**
  * Extracting extension of a filename
  *
  * @returns array

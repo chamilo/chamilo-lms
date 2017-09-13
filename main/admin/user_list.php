@@ -672,6 +672,24 @@ function modify_filter($user_id, $url_params, $row)
         }
     }
 
+    $allowDelete = api_get_configuration_value('allow_delete_user_for_session_admin');
+
+    if (api_is_session_admin() && $allowDelete) {
+        if ($user_id != api_get_user_id() &&
+            !$user_is_anonymous &&
+            api_global_admin_can_edit_admin($user_id, null, true)
+        ) {
+            // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
+            $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.
+                Display::return_icon(
+                    'delete.png',
+                    get_lang('Delete'),
+                    array(),
+                    ICON_SIZE_SMALL
+                ).
+                '</a>';
+        }
+    }
     if (api_is_platform_admin()) {
         $result .= ' <a data-title="'.get_lang('FreeBusyCalendar').'" href="'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&user_id='.$user_id.'&modal_size=lg" class="agenda_opener ajax">'.
             Display::return_icon(
@@ -798,13 +816,17 @@ if (!empty($action)) {
                 }
                 break;
             case 'delete_user':
-                if (api_is_platform_admin()) {
+
+                $allowDelete = api_get_configuration_value('allow_delete_user_for_session_admin');
+                if (api_is_platform_admin() ||
+                    ($allowDelete && api_is_session_admin())
+                ) {
                     $user_to_delete = $_GET['user_id'];
                     $userToDeleteInfo = api_get_user_info($user_to_delete);
                     $current_user_id = api_get_user_id();
 
                     if ($userToDeleteInfo && $deleteUserAvailable &&
-                        api_global_admin_can_edit_admin($_GET['user_id'])
+                        api_global_admin_can_edit_admin($_GET['user_id'], null, $allowDelete)
                     ) {
                         if ($user_to_delete != $current_user_id &&
                             UserManager::delete_user($_GET['user_id'])

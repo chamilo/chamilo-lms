@@ -1,8 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
-use Doctrine\Common\Collections\Criteria,
-    Chamilo\UserBundle\Entity\User,
-    Doctrine\ORM\Query\Expr\Join;
+
+use Doctrine\Common\Collections\Criteria;
+use Chamilo\UserBundle\Entity\User;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Responses to AJAX calls
@@ -130,7 +131,10 @@ switch ($action) {
         }
         break;
     case 'active_user':
-        if (api_is_platform_admin() && api_global_admin_can_edit_admin($_GET['user_id'])) {
+        $allow = api_get_configuration_value('allow_disable_user_for_session_admin');
+        if ((api_is_platform_admin() && api_global_admin_can_edit_admin($_GET['user_id'])) ||
+            ($allow && api_is_session_admin() && api_global_admin_can_edit_admin($_GET['user_id'], null, true))
+        ) {
             $user_id = intval($_GET['user_id']);
             $status  = intval($_GET['status']);
 

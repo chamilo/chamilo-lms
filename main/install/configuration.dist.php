@@ -628,3 +628,8 @@ $_configuration['gradebook_badge_sidebar'] = [
 
 // Allow public courses access with no terms and conditions validation.
 //$_configuration['allow_public_course_with_no_terms_conditions'] = false;
+
+// Allow delete user for session admin
+//$_configuration['allow_delete_user_for_session_admin'] = false;
+// Allow enable/disable user accounts for session admin
+//$_configuration['allow_disable_user_for_session_admin'] = false;

@@ -6322,7 +6322,7 @@ class learnpath
         $actionsLeft .= Display::url(
             Display::return_icon(
                 'preview_view.png',
-                get_lang('Display'),
+                get_lang('Preview'),
                 '',
                 ICON_SIZE_MEDIUM
             ),
@@ -11056,42 +11056,41 @@ EOD;
      */
     public function upload_image($image_array)
     {
-        if (!empty ($image_array['name'])) {
+        if (!empty($image_array['name'])) {
             $upload_ok = process_uploaded_file($image_array);
             $has_attachment = true;
         }
 
-        if ($upload_ok) {
-            if ($has_attachment) {
-                $courseDir = api_get_course_path().'/upload/learning_path/images';
-                $sys_course_path = api_get_path(SYS_COURSE_PATH);
-                $updir = $sys_course_path.$courseDir;
-                // Try to add an extension to the file if it hasn't one.
-                $new_file_name = add_ext_on_mime(stripslashes($image_array['name']), $image_array['type']);
+        if ($upload_ok && $has_attachment) {
+            $courseDir = api_get_course_path().'/upload/learning_path/images';
+            $sys_course_path = api_get_path(SYS_COURSE_PATH);
+            $updir = $sys_course_path.$courseDir;
+            // Try to add an extension to the file if it hasn't one.
+            $new_file_name = add_ext_on_mime(stripslashes($image_array['name']), $image_array['type']);
 
-                if (filter_extension($new_file_name)) {
-                    $file_extension = explode('.', $image_array['name']);
-                    $file_extension = strtolower($file_extension[sizeof($file_extension) - 1]);
-                    $filename = uniqid('');
-                    $new_file_name = $filename.'.'.$file_extension;
-                    $new_path = $updir.'/'.$new_file_name;
+            if (filter_extension($new_file_name)) {
+                $file_extension = explode('.', $image_array['name']);
+                $file_extension = strtolower($file_extension[sizeof($file_extension) - 1]);
+                $filename = uniqid('');
+                $new_file_name = $filename.'.'.$file_extension;
+                $new_path = $updir.'/'.$new_file_name;
 
-                    // Resize the image.
-                    $temp = new Image($image_array['tmp_name']);
-                    $temp->resize(104);
-                    $result = $temp->send_image($new_path);
+                // Resize the image.
+                $temp = new Image($image_array['tmp_name']);
+                $temp->resize(104);
+                $result = $temp->send_image($new_path);
 
-                    // Storing the image filename.
-                    if ($result) {
-                        $this->set_preview_image($new_file_name);
+                // Storing the image filename.
+                if ($result) {
+                    $this->set_preview_image($new_file_name);
 
-                        //Resize to 64px to use on course homepage
-                        $temp->resize(64);
-                        $temp->send_image($updir.'/'.$filename.'.64.'.$file_extension);
-                        return true;
-                    }
+                    //Resize to 64px to use on course homepage
+                    $temp->resize(64);
+                    $temp->send_image($updir.'/'.$filename.'.64.'.$file_extension);
+                    return true;
                 }
             }
+
         }
 
         return false;

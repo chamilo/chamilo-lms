@@ -214,7 +214,7 @@ class CourseHome
                 }
                 if (is_array($lnk)) {
                     foreach ($lnk as & $this_lnk) {
-                        if ($tool['adminlink']) {
+                        if (isset($tool['adminlink']) && $tool['adminlink']) {
                             $cell_content .= '<a href="'.$properties['adminlink'].'">'.
                                 Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
                         } else {

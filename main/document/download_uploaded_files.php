@@ -13,7 +13,9 @@ $courseCode = isset($_GET['code']) ? $_GET['code'] : '';
 $type = isset($_GET['type']) ? $_GET['type'] : '';
 $file = isset($_GET['file']) ? $_GET['file'] : '';
 $courseInfo = api_get_course_info($courseCode);
-
+if (empty($courseInfo)) {
+    $courseInfo = api_get_course_info();
+}
 if (empty($courseInfo) || empty($type) || empty($file)) {
     api_not_allowed(true);
 }

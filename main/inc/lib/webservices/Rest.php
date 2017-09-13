@@ -35,6 +35,7 @@ class Rest extends WebService
     const GET_COURSE_FORUM_THREAD = 'course_forumthread';
     const GET_COURSE_LEARNPATHS = 'course_learnpaths';
     const GET_COURSE_LEARNPATH = 'course_learnpath';
+    const SAVE_COURSE = 'save_course';
     const SAVE_FORUM_POST = 'save_forum_post';
     const GET_USER_SESSIONS = 'user_sessions';
     const SAVE_USER_MESSAGE = 'save_user_message';
@@ -1014,5 +1015,141 @@ class Rest extends WebService
         return [
             'registered' => $id
         ];
+    }
+
+    /**
+     * @param array $course_param
+     * @return array
+     */
+    public function saveNewCourse($course_param){
+
+        $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $extra_list= array();
+
+        $title = isset($course_param['title']) ? $course_param['title'] : '';
+        $category_code = isset($course_param['category_code']) ? $course_param['category_code'] : '';
+        $wanted_code = isset($course_param['wanted_code']) ? intval($course_param['wanted_code']) : 0;
+        $tutor_name = isset($course_param['tutor_name']) ? $course_param['tutor_name'] : '';
+        $admin_id = isset($course_param['admin_id']) ? $course_param['admin_id'] : null;
+        $language = isset($course_param['language']) ? $course_param['language'] : null;
+        $original_course_id = isset($course_param['original_course_id']) ? $course_param['original_course_id'] : null;
+        $diskQuota = isset($course_param['disk_quota']) ? $course_param['disk_quota'] : '100';
+        $visibility = isset($course_param['visibility']) ? $course_param['visibility'] : null;;
+
+        if (isset($course_param['visibility'])) {
+            if ($course_param['visibility'] &&
+                $course_param['visibility'] >= 0 &&
+                $course_param['visibility'] <= 3
+            ) {
+                $visibility = $course_param['visibility'];
+            }
+        }
+
+        // Check whether exits $x_course_code into user_field_values table.
+        $courseInfo = CourseManager::getCourseInfoFromOriginalId(
+            "id",
+            $course_param['original_course_id_name']
+        );
+
+        if (!empty($courseInfo)) {
+            if ($courseInfo['visibility'] != 0) {
+                $sql = "UPDATE $table_course SET
+                            course_language='".Database::escape_string($course_language)."',
+                            title='".Database::escape_string($title)."',
+                            category_code='".Database::escape_string($category_code)."',
+                            tutor_name='".Database::escape_string($tutor_name)."',
+                            visual_code='".Database::escape_string($wanted_code)."'";
+                if ($visibility !== null) {
+                    $sql .= ", visibility = '$visibility' ";
+                }
+                $sql .= " WHERE id='".$courseInfo['real_id']."'";
+                Database::query($sql);
+                if (is_array($extra_list) && count($extra_list) > 0) {
+                    foreach ($extra_list as $extra) {
+                        $extra_field_name = $extra['field_name'];
+                        $extra_field_value = $extra['field_value'];
+                        // Save the external system's id into course_field_value table.
+                        CourseManager::update_course_extra_field_value(
+                            $courseInfo['code'],
+                            $extra_field_name,
+                            $extra_field_value
+                        );
+                    }
+                }
+                $results[] = $courseInfo['code'];
+                continue;
+            } else {
+                $results[] = 0;
+                continue; // Original course id already exits.
+            }
+        }
+
+        if (!empty($course_param['course_language'])) {
+            $course_language = $course_param['course_language'];
+        }
+
+        $params = array();
+        $params['title'] = $title;
+        $params['wanted_code'] = $wanted_code;
+        $params['category_code'] = $category_code;
+        $params['course_category'] = $category_code;
+        $params['tutor_name'] = $tutor_name;
+        $params['course_language'] = $course_language;
+        $params['user_id'] = $this->user->getId();
+        $params['visibility'] = $visibility;
+        $params['disk_quota'] = $diskQuota;
+
+        if (isset($subscribe) && $subscribe != '') { // Valid values: 0, 1
+            $params['subscribe'] = $subscribe;
+        }
+        if (isset($unsubscribe) && $subscribe != '') { // Valid values: 0, 1
+            $params['unsubscribe'] = $unsubscribe;
+        }
+
+        $course_info = CourseManager::create_course($params, $params['user_id']);
+
+        if (!empty($course_info)) {
+            $course_code = $course_info['code'];
+
+            // Save new field label into course_field table
+            CourseManager::create_course_extra_field(
+                $original_course_id_name,
+                1,
+                $original_course_id_name,
+                ''
+            );
+
+            // Save the external system's id into user_field_value table.
+            CourseManager::update_course_extra_field_value(
+                $course_code,
+                $original_course_id_name,
+                $original_course_id_value
+            );
+
+            if (is_array($extra_list) && count($extra_list) > 0) {
+                foreach ($extra_list as $extra) {
+                    $extra_field_name  = $extra['field_name'];
+                    $extra_field_value = $extra['field_value'];
+                    // Save new fieldlabel into course_field table.
+                    CourseManager::create_course_extra_field(
+                        $extra_field_name,
+                        1,
+                        $extra_field_name,
+                        ''
+                    );
+                    // Save the external system's id into course_field_value table.
+                    CourseManager::update_course_extra_field_value(
+                        $course_code,
+                        $extra_field_name,
+                        $extra_field_value
+                    );
+                }
+            }
+            $results[] = $course_code;
+        } else {
+            $results[] = 0;
+        }
+
+        return $results;
     }
 }

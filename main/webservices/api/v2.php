@@ -116,8 +116,12 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::GET_COURSE_LEARNPATH:
-            $lpId = isset($_REQUEST['lp_id']) ? intval($_REQUEST['lp_id']) : 0;
+            $lpId = isset($_REQUEST['lp_id']) ? intval($_REQUEST['lp_id']) : 1;
             $restApi->showLearningPath($lpId);
+            break;
+        case Rest::SAVE_COURSE:
+            $data = $restApi->saveNewCourse($_POST)
+            $restResponse->setData($data);
             break;
         case Rest::SAVE_FORUM_POST:
             if (

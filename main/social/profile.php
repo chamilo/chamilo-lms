@@ -430,6 +430,20 @@ if ($show_full_profile) {
                             .$optionInfo['display_text'].': '
                             .$parsedData[1].'</li>';
                         break;
+                    case ExtraField::FIELD_TYPE_TRIPLE_SELECT:
+                        $optionIds = explode(';', $data);
+                        $optionValues = array();
+
+                        foreach ($optionIds as $optionId) {
+                            $objEfOption = new ExtraFieldOption('user');
+                            $optionInfo = $objEfOption->get($optionId);
+
+                            $optionValues[] = $optionInfo['display_text'];
+                        }
+                        $extra_information_value .= '<li class="list-group-item">'
+                            .ucfirst($extraFieldInfo['display_text']).': '
+                            .implode(' ', $optionValues).'</li>';
+                        break;
                     default:
                         $extra_information_value .= '<li class="list-group-item">'.ucfirst($extraFieldInfo['display_text']).': '.$data.'</li>';
                         break;

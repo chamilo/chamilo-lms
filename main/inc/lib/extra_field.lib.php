@@ -68,6 +68,7 @@ class ExtraField extends Model
     const FIELD_TYPE_GEOLOCALIZATION = 24;
     const FIELD_TYPE_GEOLOCALIZATION_COORDINATES = 25;
     const FIELD_TYPE_SELECT_WITH_TEXT_FIELD = 26;
+    const FIELD_TYPE_TRIPLE_SELECT = 27;
 
     public $type = 'user';
     public $pageName;
@@ -443,6 +444,7 @@ class ExtraField extends Model
             'GeolocalizationCoordinates'
         );
         $types[self::FIELD_TYPE_SELECT_WITH_TEXT_FIELD] = get_lang('FieldTypeSelectWithTextField');
+        $types[self::FIELD_TYPE_TRIPLE_SELECT] = get_lang('FieldTypeTripleSelect');
 
         switch ($handler) {
             case 'course':
@@ -563,6 +565,7 @@ class ExtraField extends Model
                 }
 
                 if ($field_value) {
+                    $variable = $field['variable'];
                     $field_value = $field_value['value'];
                     switch ($field['field_type']) {
                         case self::FIELD_TYPE_TAG:
@@ -593,6 +596,13 @@ class ExtraField extends Model
                             break;
                         case self::FIELD_TYPE_RADIO:
                             $extra_data['extra_'.$field['variable']]['extra_'.$field['variable']] = $field_value;
+                            break;
+                        case self::FIELD_TYPE_TRIPLE_SELECT:
+                            list($level1, $level2, $level3) = explode(';', $field_value);
+
+                            $extra_data["extra_$variable"]["extra_$variable"] = $level1;
+                            $extra_data["extra_$variable"]["extra_{$variable}_second"] = $level2;
+                            $extra_data["extra_$variable"]["extra_{$variable}_third"] = $level3;
                             break;
                         default:
                             $extra_data['extra_'.$field['variable']] = $field_value;
@@ -694,6 +704,44 @@ class ExtraField extends Model
     }
 
     /**
+     * @param $string
+     * @return array
+     */
+    public static function tripleSelectConvertStringToArray($string)
+    {
+        $options = [];
+
+        foreach (explode('|', $string) as $i => $item0) {
+            $level1 = explode('\\', $item0);
+
+            foreach ($level1 as $j => $item1) {
+                if (0 === $j) {
+                    $options[] = ['label' => $item1, 'options' => []];
+
+                    continue;
+                }
+
+
+                foreach (explode(':', $item1) as $k => $item2) {
+                    if (0 === $k) {
+                        $options[$i]['options'][] = ['label' => $item2, 'options' => []];
+
+                        continue;
+                    }
+
+                    $options[$i]['options'][$j - 1]['options'][] = explode(';', $item2);
+                }
+            }
+        }
+
+        array_walk_recursive($options, function (&$item) {
+            $item = trim($item);
+        });
+
+        return $options;
+    }
+
+    /**
      * @param array $options
      *
      * @return array
@@ -712,6 +760,38 @@ class ExtraField extends Model
         }
 
         return $options_parsed;
+    }
+
+    /**
+     * @param array $options
+     * @param int $parentId
+     * @return array
+     */
+    private static function getOptionsFromTripleSelect(array $options, $parentId) {
+        return array_filter($options, function ($option) use ($parentId) {
+            return $option['option_value'] == $parentId;
+        });
+    }
+
+    /**
+     * @param array $options
+     * @return array
+     */
+    public static function tripleSelectConvertArrayToOrderedArray(array $options)
+    {
+        $level1 = self::getOptionsFromTripleSelect($options, 0);
+        $level2 = [];
+        $level3 = [];
+
+        foreach ($level1 as $item1) {
+            $level2 += self::getOptionsFromTripleSelect($options, $item1['id']);
+        }
+
+        foreach ($level2 as $item2) {
+            $level3 += self::getOptionsFromTripleSelect($options, $item2['id']);
+        }
+
+        return ['level1' => $level1, 'level2' => $level2, 'level3' => $level3];
     }
 
     /**
@@ -768,6 +848,32 @@ class ExtraField extends Model
         }
 
         return rtrim($string, '|');
+    }
+
+    /**
+     * @param array $options
+     * @return string
+     */
+    public static function tripleSelectConvertArrayToString(array $options)
+    {
+        $string = '';
+        $parsedOptions = self::tripleSelectConvertArrayToOrderedArray($options);
+
+        foreach ($parsedOptions['level1'] as $item1) {
+            $string .= $item1['display_text'];
+            $level2 = self::getOptionsFromTripleSelect($parsedOptions['level2'], $item1['id']);
+
+            foreach ($level2 as $item2) {
+                $string .= '\\'.$item2['display_text'].':';
+                $level3 = self::getOptionsFromTripleSelect($parsedOptions['level3'], $item2['id']);
+
+                $string .= implode(';', array_column($level3, 'display_text'));
+            }
+
+            $string .= '|';
+        }
+
+        return trim($string, '\\|;');
     }
 
     /**
@@ -1024,6 +1130,138 @@ class ExtraField extends Model
         }
 
         return $jqueryReadyContent;
+    }
+
+    /**
+     * @param \FormValidator $form
+     * @param array $fieldDetails
+     * @param array $extraData
+     * @param boolean $freezeElement
+     * @return string
+     */
+    private function addTripleSelectElement(
+        FormValidator $form,
+        array $fieldDetails,
+        array $extraData,
+        $freezeElement
+    )
+    {
+        $variable = $fieldDetails['variable'];
+        $id = $fieldDetails['id'];
+        $slctFirstId = "first_extra$variable";
+        $slctSecondId = "second_extra$variable";
+        $slctThirdId = "thrid_extra$variable";
+        $langSelect = get_lang('Select');
+
+        $js = "
+            (function () {
+                var slctFirst = $('#$slctFirstId'),
+                    slctSecond = $('#$slctSecondId'),
+                    slctThrid = $('#$slctThirdId');
+                    
+                slctFirst.on('change', function () {
+                    slctSecond.empty().selectpicker('refresh');
+                    slctThrid.empty().selectpicker('refresh');
+    
+                    var level = $(this).val();
+    
+                    if (!level) {
+                        return;
+                    }
+    
+                    $.getJSON(_p.web_ajax + 'extra_field.ajax.php', {
+                        'a': 'get_second_select_options',
+                        'type': '$this->type',
+                        'field_id': $id,
+                        'option_value_id': level
+                    })
+                        .done(function (data) {
+                            slctSecond.append(
+                                $('<option>', {value: '', text: '$langSelect'})
+                            );
+
+                            $.each(data, function (index, value) {
+                                slctSecond.append(
+                                    $('<option>', {value: index, text: value})
+                                );
+                            });
+    
+                            slctSecond.selectpicker('refresh');
+                        });
+                });
+                slctSecond.on('change', function () {
+                    slctThrid.empty().selectpicker('refresh');
+    
+                    var level = $(this).val();
+                    
+                    if (!level) {
+                        return;
+                    }
+                    
+                    $.getJSON(_p.web_ajax + 'extra_field.ajax.php', {
+                        'a': 'get_second_select_options',
+                        'type': '$this->type',
+                        'field_id': $id,
+                        'option_value_id': level
+                    })
+                        .done(function (data) {
+                            slctThrid.append(
+                                $('<option>', {value: '', text: '$langSelect'})
+                            );
+
+                            $.each(data, function (index, value) {
+                                slctThrid.append(
+                                    $('<option>', {value: index, text: value})
+                                );
+                            });
+    
+                            slctThrid.selectpicker('refresh');
+                        });
+                });
+            })();
+        ";
+
+        $firstId = isset($extraData["extra_$variable"]["extra_$variable"])
+            ? $extraData["extra_$variable"]["extra_$variable"]
+            : '';
+        $secondId = isset($extraData["extra_$variable"]["extra_{$variable}_second"])
+            ? $extraData["extra_$variable"]["extra_{$variable}_second"]
+            : '';
+
+        $options = self::tripleSelectConvertArrayToOrderedArray($fieldDetails['options']);
+        $values1 = ['' => $langSelect];
+        $values2 = ['' => $langSelect];
+        $values3 = ['' => $langSelect];
+        $level1 = self::getOptionsFromTripleSelect($options['level1'], 0);
+        $level2 = self::getOptionsFromTripleSelect($options['level2'], $firstId);
+        $level3 = self::getOptionsFromTripleSelect($options['level3'], $secondId);
+
+        foreach ($level1 as $item1) {
+            $values1[$item1['id']] = $item1['display_text'];
+        }
+
+        foreach ($level2 as $item2) {
+            $values2[$item2['id']] = $item2['display_text'];
+        }
+
+        foreach ($level3 as $item3) {
+            $values3[$item3['id']] = $item3['display_text'];
+        }
+
+        $form
+            ->defaultRenderer()
+            ->setGroupElementTemplate('<p>{element}</p>', "extra_$variable");
+        $group = [];
+        $group[] = $form->createElement('select', "extra_$variable", null, $values1, ['id' => $slctFirstId]);
+        $group[] = $form->createElement('select', "extra_{$variable}_second", null, $values2, ['id' => $slctSecondId]);
+        $group[] = $form->createElement('select', "extra_{$variable}_third", null, $values3, ['id' => $slctThirdId]);
+        $form->addGroup($group, "extra_$variable", $fieldDetails['display_text']);
+
+        if ($freezeElement) {
+            $form->freeze('extra_'.$fieldDetails['variable']);
+        }
+
+        return $js;
     }
 
     /**
@@ -2146,6 +2384,14 @@ class ExtraField extends Model
                             $freezeElement
                         );
                         break;
+                    case self::FIELD_TYPE_TRIPLE_SELECT:
+                        $jquery_ready_content .= self::addTripleSelectElement(
+                            $form,
+                            $field_details,
+                            $extraData,
+                            $freezeElement
+                        );
+                        break;
                 }
             }
         }
@@ -2349,7 +2595,8 @@ class ExtraField extends Model
             self::FIELD_TYPE_SELECT,
             self::FIELD_TYPE_TAG,
             self::FIELD_TYPE_DOUBLE_SELECT,
-            self::FIELD_TYPE_SELECT_WITH_TEXT_FIELD
+            self::FIELD_TYPE_SELECT_WITH_TEXT_FIELD,
+            self::FIELD_TYPE_TRIPLE_SELECT
         );
 
         if ($action == 'edit') {

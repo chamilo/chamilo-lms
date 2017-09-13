@@ -598,6 +598,19 @@ class ExtraFieldValue extends Model
                                     .$options[1];
                             }
                             break;
+                        case ExtraField::FIELD_TYPE_TRIPLE_SELECT:
+                            $optionIds = explode(';', $result['value']);
+                            $optionValues = [];
+
+                            foreach ($optionIds as $optionId) {
+                                $objEfOption = new ExtraFieldOption('user');
+                                $optionInfo = $objEfOption->get($optionId);
+
+                                $optionValues[] = $optionInfo['display_text'];
+                            }
+
+                            $result['value'] = implode(' / ', $optionValues);
+                            break;
                     }
                 }
             }
@@ -708,6 +721,21 @@ class ExtraFieldValue extends Model
                                 .'&rarr;'
                                 .$options[1];
                         }
+                    }
+                }
+                if ($result['field_type'] == ExtraField::FIELD_TYPE_TRIPLE_SELECT) {
+                    if (!empty($result['value'])) {
+                        $optionIds = explode(';', $result['value']);
+                        $optionValues = [];
+
+                        foreach ($optionIds as $optionId) {
+                            $objEfOption = new ExtraFieldOption('user');
+                            $optionInfo = $objEfOption->get($optionId);
+
+                            $optionValues[] = $optionInfo['display_text'];
+                        }
+
+                        $result['value'] = implode(' / ', $optionValues);
                     }
                 }
             }

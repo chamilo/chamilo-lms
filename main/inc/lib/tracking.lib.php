@@ -7071,6 +7071,14 @@ class TrackingCourseLog
                                 $row['value'] = "$value1: $value2";
                             }
                         }
+
+                        if ($result_extra_field['field_type'] == ExtraField::FIELD_TYPE_TRIPLE_SELECT) {
+                            list($level1, $level2, $level3) = explode(';', $row['value']);
+
+                            $row['value'] = $result_extra_field['options'][$level1]['display_text'].' / ';
+                            $row['value'] .= $result_extra_field['options'][$level2]['display_text'].' / ';
+                            $row['value'] .= $result_extra_field['options'][$level3]['display_text'];
+                        }
                     }
                     // get other value from extra field
                     $return[$row['user_id']][] = $row['value'];

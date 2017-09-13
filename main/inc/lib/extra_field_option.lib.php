@@ -180,7 +180,8 @@ class ExtraFieldOption extends Model
                 ExtraField::FIELD_TYPE_SELECT,
                 ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
                 ExtraField::FIELD_TYPE_DOUBLE_SELECT,
-                ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD
+                ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD,
+                ExtraField::FIELD_TYPE_TRIPLE_SELECT
             )
         );
 
@@ -252,6 +253,80 @@ class ExtraFieldOption extends Model
 
                         $new_params['id'] = $option_info['id'];
                         parent::update($new_params, $showQuery);
+                    }
+                }
+                break;
+            case ExtraField::FIELD_TYPE_TRIPLE_SELECT:
+                //Format: Option1\Option11:Option111;Option112\Option12:Option121|Option2\Option21:Option211
+                $options = ExtraField::tripleSelectConvertStringToArray($params['field_options']);
+
+                if (!$options) {
+                    break;
+                }
+
+                foreach ($options as $level1) {
+                    $level1Params = [
+                        'field_id' => $field_id,
+                        'option_value' => 0,
+                        'display_text' => $level1['label'],
+                        'option_order' => 0,
+                    ];
+                    $optionInfo = self::get_field_option_by_field_id_and_option_display_text(
+                        $field_id,
+                        $level1['label']
+                    );
+
+                    if (empty($optionInfo)) {
+                        $level1Id = parent::save($level1Params);
+                    } else {
+                        $level1Id = $optionInfo['id'];
+                        $level1Params['id'] = $level1Id;
+                        parent::update($level1Params);
+                    }
+
+                    foreach ($level1['options'] as $level2) {
+                        $level2Params = [
+                            'field_id' => $field_id,
+                            'option_value' => $level1Id,
+                            'display_text' => $level2['label'],
+                            'display_order' => 0
+                        ];
+                        $optionInfo = self::getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
+                            $field_id,
+                            $level2['label'],
+                            $level1Id
+                        );
+
+                        if (empty($optionInfo)) {
+                            $level2Id = parent::save($level2Params);
+                        } else {
+                            $level2Id = $optionInfo['id'];
+                            $level2Params['id'] = $level2Id;
+                            parent::update($level2Params);
+                        }
+
+                        foreach ($level2['options'] as $level3) {
+                            foreach ($level3 as $item) {
+                                $level3Params = [
+                                    'field_id' => $field_id,
+                                    'option_value' => $level2Id,
+                                    'display_text' => $item,
+                                    'display_order' => 0
+                                ];
+                                $optionInfo = self::getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
+                                    $field_id,
+                                    $item,
+                                    $level2Id
+                                );
+
+                                if (empty($optionInfo)) {
+                                    parent::save($level3Params);
+                                } else {
+                                    $level3Params['id'] = $optionInfo['id'];
+                                    parent::update($level3Params);
+                                }
+                            }
+                        }
                     }
                 }
                 break;
@@ -555,6 +630,9 @@ class ExtraFieldOption extends Model
                     break;
                 case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
                     $html = ExtraField::extrafieldSelectWithTextConvertArrayToString($options);
+                    break;
+                case ExtraField::FIELD_TYPE_TRIPLE_SELECT:
+                    $html = ExtraField::tripleSelectConvertArrayToString($options);
                     break;
                 default:
                     foreach ($options as $option) {

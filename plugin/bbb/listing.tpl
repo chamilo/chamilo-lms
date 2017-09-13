@@ -40,7 +40,7 @@
         <table class="table">
             <tr>
                 <!-- th>#</th -->
-                <th>{{ 'CreatedAt'|get_lang }}</th>
+                <th>{{ 'CreatedAt'| get_plugin_lang('BBBPlugin') }}</th>
                 <th>{{ 'Status'| get_lang }}</th>
                 <th>{{ 'Records'| get_plugin_lang('BBBPlugin') }}</th>
 

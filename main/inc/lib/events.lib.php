@@ -1921,13 +1921,16 @@ class Event
 
         // Save every 5 minutes by default
         $seconds = $minutes * 60;
+        $maxSeconds = 3600; // Only update if max diff is one hour
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result);
             $id = $row['course_access_id'];
             $logout = $row['logout_course_date'];
             $now = time();
             $logout = api_strtotime($logout, 'UTC');
-            if ($now - $logout > $seconds) {
+            if ($now - $logout > $seconds &&
+                $now - $logout < $maxSeconds
+            ) {
                 $now = api_get_utc_datetime();
                 $sql = "UPDATE $table SET 
                             logout_course_date = '$now', 
@@ -1955,9 +1958,9 @@ class Event
         }
 
         $sessionLifetime = api_get_configuration_value('session_lifetime');
-
         /*
-         * When $_configuration['session_lifetime'] is larger than ~100 hours (in order to let users take exercises with no problems)
+         * When $_configuration['session_lifetime'] is larger than ~100 hours
+         * (in order to let users take exercises with no problems)
          * the function Tracking::get_time_spent_on_the_course() returns larger values (200h) due the condition:
          * login_course_date > now() - INTERVAL $session_lifetime SECOND
          */
@@ -1974,8 +1977,9 @@ class Event
             }
             $currentDate = api_get_utc_datetime();
             // UTC time
-            $time  = api_get_utc_datetime(time() - $sessionLifetime);
-            $sql = "SELECT course_access_id
+            $diff = time() - $sessionLifetime;
+            $time = api_get_utc_datetime($diff);
+            $sql = "SELECT course_access_id, logout_course_date
                     FROM $tableCourseAccess
                     WHERE 
                         user_id = $userId AND
@@ -1985,14 +1989,26 @@ class Event
                     ORDER BY login_course_date DESC 
                     LIMIT 1";
             $result = Database::query($sql);
+            $insert = false;
             if (Database::num_rows($result) > 0) {
-                $courseAccessId = Database::result($result, 0, 0);
-                $sql = "UPDATE $tableCourseAccess SET 
-                            logout_course_date = '$currentDate', 
-                            counter = counter + 1
-                        WHERE course_access_id = $courseAccessId";
-                Database::query($sql);
+                $row = Database::fetch_array($result, 'ASSOC');
+                $courseAccessId = $row['course_access_id'];
+                /*$logout = $row['logout_course_date'];
+                $now = time();
+                $logout = api_strtotime($logout, 'UTC');
+                */
+                //if ($now - $logout < $sessionLifetime) {
+                    $sql = "UPDATE $tableCourseAccess SET 
+                                logout_course_date = '$currentDate', 
+                                counter = counter + 1
+                            WHERE course_access_id = $courseAccessId";
+                    Database::query($sql);
+                //}
             } else {
+                $insert = true;
+            }
+
+            if ($insert) {
                 $ip = api_get_real_ip();
                 $sql = "INSERT INTO $tableCourseAccess (c_id, user_ip, user_id, login_course_date, logout_course_date, counter, session_id)
                         VALUES ($courseId, '$ip', $userId, '$currentDate', '$currentDate', 1, $sessionId)";
@@ -2051,10 +2067,10 @@ class Event
         // hour. In this case it wouldn't be right to add a "fake" time record.
         if (Database::num_rows($result) > 0) {
             // Found the latest connection
-            $row = Database::fetch_row($result);
-            $courseAccessId = $row[0];
-            $courseAccessLoginDate = $row[3];
-            $counter = $row[5];
+            $row = Database::fetch_array($result);
+            $courseAccessId = $row['course_access_id'];
+            $courseAccessLoginDate = $row['login_course_date'];
+            $counter = $row['counter'];
             $counter = $counter ? $counter : 0;
             // Insert a new record, copy of the current one (except the logout
             // date that we update to the current time)

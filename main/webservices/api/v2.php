@@ -120,7 +120,11 @@ try {
             $restApi->showLearningPath($lpId);
             break;
         case Rest::SAVE_COURSE:
-            $data = $restApi->saveNewCourse($_POST)
+            $data = $restApi->saveNewCourse($_POST);
+            $restResponse->setData($data);
+            break;
+        case Rest::SAVE_USER:
+            $data = $restApi->saveNewUser($_POST);
             $restResponse->setData($data);
             break;
         case Rest::SAVE_FORUM_POST:

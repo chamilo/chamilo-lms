@@ -49,3 +49,4 @@ $strings['MaxXUsersReached'] = 'La limite de %s utilisateurs simultanés a été
 $strings['MaxXUsersReachedManager'] = 'La limite de %s utilisateurs simultanés a été atteinte dans cette salle de conférence. Pour augmenter la limite, prenez contact avec l\'administrateur du portail.';
 $strings['MaxUsersInConferenceRoom'] = 'Nombre max d\'utilisateurs simultanés dans une salle de conférence';
 $strings['global_conference_allow_roles'] = "Visibilité du lien de vidéo conférence global pour les profils suivant";
+$strings['CreatedAt'] = "Créé à";

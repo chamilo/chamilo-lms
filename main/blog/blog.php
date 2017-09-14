@@ -381,7 +381,7 @@ switch ($action) {
                 );
             }
             if (isset($_GET['do']) && $_GET['do'] == 'edit_assignment') {
-                $taks .= Blog::displayAssignedTaskEditForm(
+                $task .= Blog::displayAssignedTaskEditForm(
                     $blog_id,
                     intval($_GET['task_id']),
                     intval($_GET['user_id'])

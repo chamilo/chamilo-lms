@@ -928,10 +928,10 @@ class Blog
      */
     public static function getSearchResults($blog_id, $query_string)
     {
-        $query_string = Database::escape_string($query_string);
         $query_string_parts = explode(' ', $query_string);
         $query_string = array();
         foreach ($query_string_parts as $query_part) {
+            $query_part = Database::escape_string($query_part);
             $query_string[] = " full_text LIKE '%".$query_part."%' OR title LIKE '%".$query_part."%' ";
         }
         $query_string = '('.implode('OR', $query_string).')';
@@ -956,18 +956,18 @@ class Blog
 
         $course_id = api_get_course_int_id();
         $blog_id = intval($blog_id);
-        $filter = Database::escape_string($filter);
         $max_number_of_posts = intval($max_number_of_posts);
-
         // Get posts and authors
         $sql = "SELECT post.*, user.lastname, user.firstname, user.username
                 FROM $tbl_blogs_posts post
                 INNER JOIN $tbl_users user
                 ON post.author_id = user.user_id
-                WHERE 	post.blog_id = $blog_id AND
-                        post.c_id = $course_id AND
-                        $filter
-                ORDER BY post_id DESC LIMIT 0, $max_number_of_posts";
+                WHERE 	
+                    post.blog_id = $blog_id AND
+                    post.c_id = $course_id AND
+                    $filter
+                ORDER BY post_id DESC 
+                LIMIT 0, $max_number_of_posts";
         $result = Database::query($sql);
 
         // Display
@@ -1031,13 +1031,11 @@ class Blog
      */
     public static function getDailyResults($blog_id, $query_string)
     {
-        //$date_output = $query_string;
         $date = explode('-', $query_string);
-        $query_string = ' DAYOFMONTH(date_creation) ='.intval($date[2]).' AND MONTH(date_creation) ='.intval($date[1]).' AND YEAR(date_creation) ='.intval($date[0]);
-        // Put date in correct output format
-        //$date_output = api_format_date($date_output, DATE_FORMAT_LONG);
-        // Display the posts
-        //echo '<span class="blogpost_title">' . get_lang('PostsOf') . ': ' . $date_output . '</span>';
+        $query_string = ' 
+            DAYOFMONTH(date_creation) ='.intval($date[2]).' AND 
+            MONTH(date_creation) ='.intval($date[1]).' AND 
+            YEAR(date_creation) ='.intval($date[0]);
         $list = self::getPosts($blog_id, $query_string);
 
         return $list;

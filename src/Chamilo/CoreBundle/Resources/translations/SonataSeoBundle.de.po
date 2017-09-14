@@ -1,0 +1,3 @@
+
+msgid "sonata_seo_homepage_breadcrumb"
+msgstr "Startseite"

@@ -7,7 +7,7 @@ $strings['plugin_comment'] = "Add a videoconference room in a Chamilo course usi
 $strings['Videoconference'] = "Videokonferenz";
 $strings['MeetingOpened'] = "Offen";
 $strings['MeetingClosed'] = "Abgeschlossen";
-$strings['MeetingClosedComment'] = "If you have asked for your sessions to be recorded, the recording will be available in the list below when it has been completely generated.";
+$strings['MeetingClosedComment'] = "Wenn Sie die Videokonferenz aufgezeichnet haben, ist die Videoaufzeichnung in der Liste unten in wenigen Augenblicken verfügbar.";
 $strings['CloseMeeting'] = "Session beenden";
 
 $strings['VideoConferenceXCourseX'] = "Videoconference #%s course %s";

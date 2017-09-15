@@ -40,7 +40,8 @@ See https://support.chamilo.org/issues/6976
   padding-bottom: 5px;
 }
 #learning_path_left_zone .description-autor{
-
+  text-align: left;
+  padding-top: 10px;
 }
 .inner_lp_toc .scorm_item a {
     font-weight: bold;

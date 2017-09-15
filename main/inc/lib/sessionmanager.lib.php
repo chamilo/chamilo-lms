@@ -6466,6 +6466,36 @@ class SessionManager
     }
 
     /**
+     * Check if user is subscribed inside a session as a HRM
+     * @param int $sessionId The session id
+     * @param int $userId The user id
+     * @return boolean Whether is subscribed
+     */
+    public static function isUserSubscribedAsHRM($sessionId, $userId)
+    {
+        $sessionRelUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+
+        $sessionId = intval($sessionId);
+        $userId = intval($userId);
+
+        // COUNT(1) actually returns the number of rows from the table (as if
+        // counting the results from the first column)
+        $sql = "SELECT COUNT(1) AS qty FROM $sessionRelUserTable
+                WHERE
+                    session_id = $sessionId AND
+                    user_id = $userId AND
+                    relation_type = ".SESSION_RELATION_TYPE_RRHH;
+
+        $result = Database::fetch_assoc(Database::query($sql));
+
+        if (!empty($result) && $result['qty'] > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Get the session coached by a user (general coach and course-session coach)
      * @param int $coachId The coach id
      * @param boolean $checkSessionRelUserVisibility Check the session visibility
@@ -8689,4 +8719,5 @@ class SessionManager
 
         return $courseIds;
     }
+
 }

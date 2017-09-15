@@ -90,6 +90,15 @@ class Agenda
                     }
                 }
 
+                if (!empty($sessionId)) {
+                    $allowDhrToEdit = api_get_configuration_value('allow_agenda_edit_for_hrm');
+                    if ($allowDhrToEdit) {
+                        $isHrm = SessionManager::isUserSubscribedAsHRM($sessionId, api_get_user_id());
+                        if ($isHrm) {
+                            $isAllowToEdit = true;
+                        }
+                    }
+                }
                 break;
             case 'admin':
                 $isAllowToEdit = api_is_platform_admin();
@@ -1026,8 +1035,23 @@ class Agenda
                 break;
             case 'course':
                 $course_id = api_get_course_int_id();
+                $sessionId = api_get_session_id();
+                $isAllowToEdit = api_is_allowed_to_edit(null, true);
 
-                if (!empty($course_id) && api_is_allowed_to_edit(null, true)) {
+                if ($isAllowToEdit == false && !empty($sessionId)) {
+                    $allowDhrToEdit = api_get_configuration_value('allow_agenda_edit_for_hrm');
+                    if ($allowDhrToEdit) {
+                        $isHrm = SessionManager::isUserSubscribedAsHRM(
+                            $sessionId,
+                            api_get_user_id()
+                        );
+                        if ($isHrm) {
+                            $isAllowToEdit = true;
+                        }
+                    }
+                }
+
+                if (!empty($course_id) && $isAllowToEdit) {
                     // Delete
                     $eventInfo = $this->get_event($id);
                     if ($deleteAllItemsFromSerie) {
@@ -1645,7 +1669,7 @@ class Agenda
         $end,
         $courseInfo,
         $groupId = 0,
-        $session_id = 0,
+        $sessionId = 0,
         $user_id = 0,
         $color = ''
     ) {
@@ -1661,14 +1685,14 @@ class Agenda
             return array();
         }
 
-        $session_id = intval($session_id);
+        $sessionId = intval($sessionId);
         $user_id = intval($user_id);
 
         $groupList = GroupManager::get_group_list(
             null,
             $courseInfo,
             null,
-            $session_id
+            $sessionId
         );
 
         $groupNameList = array();
@@ -1685,6 +1709,17 @@ class Agenda
                 api_get_user_id(),
                 $courseInfo['code']
             );
+        }
+
+        $isAllowToEditByHrm = false;
+        if (!empty($sessionId)) {
+            $allowDhrToEdit = api_get_configuration_value('allow_agenda_edit_for_hrm');
+            if ($allowDhrToEdit) {
+                $isHrm = SessionManager::isUserSubscribedAsHRM($sessionId, api_get_user_id());
+                if ($isHrm) {
+                    $isAllowToEdit = $isAllowToEditByHrm = true;
+                }
+            }
         }
 
         $groupMemberships = [];
@@ -1709,7 +1744,7 @@ class Agenda
         $tlb_course_agenda = Database::get_course_table(TABLE_AGENDA);
         $tbl_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-        if (empty($session_id)) {
+        if (empty($sessionId)) {
             $sessionCondition = "
             (
                 agenda.session_id = 0 AND (ip.session_id IS NULL OR ip.session_id = 0)
@@ -1717,8 +1752,8 @@ class Agenda
         } else {
             $sessionCondition = "
             (
-                agenda.session_id = $session_id AND
-                ip.session_id = $session_id
+                agenda.session_id = $sessionId AND
+                ip.session_id = $sessionId
             ) ";
         }
 
@@ -1826,8 +1861,8 @@ class Agenda
         $result = Database::query($sql);
 
         $coachCanEdit = false;
-        if (!empty($session_id)) {
-            $coachCanEdit = api_is_coach($session_id, $courseId) || api_is_platform_admin();
+        if (!empty($sessionId)) {
+            $coachCanEdit = api_is_coach($sessionId, $courseId) || api_is_platform_admin();
         }
 
         if (Database::num_rows($result)) {
@@ -1842,7 +1877,6 @@ class Agenda
                 }
 
                 $eventsAdded[] = $event['unique_id'];
-
                 $eventId = $row['ref'];
                 $items = $this->getUsersAndGroupSubscribedToEvent(
                     $eventId,
@@ -1880,7 +1914,7 @@ class Agenda
 
                 $sessionInfo = [];
                 if (isset($row['session_id']) && !empty($row['session_id'])) {
-                    $sessionInfo = api_get_session_info($session_id);
+                    $sessionInfo = api_get_session_info($sessionId);
                     $event['borderColor'] = $event['backgroundColor'] = $this->event_session_color;
                 }
 
@@ -1902,9 +1936,12 @@ class Agenda
                 $event['editable'] = false;
                 if ($this->getIsAllowedToEdit() && $this->type == 'course') {
                     $event['editable'] = true;
-                    if (!empty($session_id)) {
+                    if (!empty($sessionId)) {
                         if ($coachCanEdit == false) {
                             $event['editable'] = false;
+                        }
+                        if ($isAllowToEditByHrm) {
+                            $event['editable'] = true;
                         }
                     }
                     // if user is author then he can edit the item

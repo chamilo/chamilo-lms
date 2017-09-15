@@ -633,3 +633,5 @@ $_configuration['gradebook_badge_sidebar'] = [
 //$_configuration['allow_delete_user_for_session_admin'] = false;
 // Allow enable/disable user accounts for session admin
 //$_configuration['allow_disable_user_for_session_admin'] = false;
+// Allow edit/delete agenda events for HRM users
+//$_configuration['allow_agenda_edit_for_hrm'] = false;

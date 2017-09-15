@@ -470,8 +470,10 @@ class Statistics
 
         $period = get_lang('PeriodMonth');
         $periodCollection = api_get_months_long();
-        $sql = "SELECT DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date , count( login_id ) AS number_of_logins
-                FROM ".$table.$table_url.$where_url."
+        $sql = "SELECT 
+                DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date , 
+                count( login_id ) AS number_of_logins
+                FROM $table $table_url $where_url
                 GROUP BY stat_date
                 ORDER BY login_date DESC";
         $sql_last_x = null;
@@ -479,24 +481,31 @@ class Statistics
         switch ($type) {
             case 'hour':
                 $period = get_lang('PeriodHour');
-                $sql = "SELECT DATE_FORMAT( login_date, '%H' ) AS stat_date , count( login_id ) AS number_of_logins 
-                        FROM $table.$table_url $where_url 
+                $sql = "SELECT 
+                          DATE_FORMAT( login_date, '%H') AS stat_date, 
+                          count( login_id ) AS number_of_logins 
+                        FROM $table $table_url $where_url 
                         GROUP BY stat_date 
                         ORDER BY stat_date ";
-                $sql_last_x = "SELECT DATE_FORMAT( login_date, '%H' ) AS stat_date , count( login_id ) AS number_of_logins 
-                               FROM ".$table.$table_url.$where_url.sprintf($where_url_last, 'DAY')." 
+                $sql_last_x = "SELECT 
+                                DATE_FORMAT( login_date, '%H' ) AS stat_date, 
+                                count( login_id ) AS number_of_logins 
+                               FROM $table $table_url $where_url ".sprintf($where_url_last, 'DAY')." 
                                GROUP BY stat_date 
                                ORDER BY stat_date ";
                 break;
             case 'day':
                 $periodCollection = api_get_week_days_long();
                 $period = get_lang('PeriodDay');
-                $sql = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , count( login_id ) AS number_of_logins 
-                        FROM ".$table.$table_url.$where_url." 
+                $sql = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , 
+                        count( login_id ) AS number_of_logins 
+                        FROM  $table $table_url $where_url 
                         GROUP BY stat_date 
                         ORDER BY DATE_FORMAT( login_date, '%w' ) ";
-                $sql_last_x = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date, count( login_id ) AS number_of_logins 
-                               FROM ".$table.$table_url.$where_url.sprintf($where_url_last, 'WEEK')." 
+                $sql_last_x = "SELECT 
+                                DATE_FORMAT( login_date, '%w' ) AS stat_date, 
+                                count( login_id ) AS number_of_logins 
+                               FROM $table $table_url $where_url ".sprintf($where_url_last, 'WEEK')." 
                                GROUP BY stat_date 
                                ORDER BY DATE_FORMAT( login_date, '%w' ) ";
                 break;

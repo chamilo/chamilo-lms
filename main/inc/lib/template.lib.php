@@ -518,9 +518,9 @@ class Template
     }
 
     /**
-     * Get theme dir
+     * Get CSS themes sub-directory
      * @param string $theme
-     * @return string
+     * @return string with a trailing slash, e.g. 'themes/chamilo_red/'
      */
     public static function getThemeDir($theme)
     {
@@ -538,7 +538,7 @@ class Template
     }
 
     /**
-     * Get the web paths
+     * Get an array of all the web paths available (e.g. 'web' => 'https://my.chamilo.site/')
      * @return array
      */
     private function getWebPaths()
@@ -564,7 +564,9 @@ class Template
     }
 
     /**
-     * Set system parameters
+     * Set system parameters from api_get_configuration into _s array for use in TPLs
+     * Also fills the _p array from getWebPaths()
+     * @uses self::getWebPaths()
      */
     public function set_system_parameters()
     {

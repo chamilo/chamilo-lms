@@ -1629,28 +1629,14 @@ class Link extends Model
             echo Display::return_icon('forum_nestedview.png', get_lang('NestedView'), '', ICON_SIZE_MEDIUM).'</a>';
         }
         echo '</div>';
-
-        // Displaying the links which have no category (thus category = 0 or NULL),
-        // if none present this will not be displayed
-        $sql = "
-            SELECT COUNT(1) AS count FROM $tbl_link l
-            INNER JOIN $tblCIP c
-                ON (l.c_id = c.c_id AND l.iid = c.ref)
-            WHERE
-                c.tool = 'link' AND
-                c.visibility != 2 AND
-                l.c_id = $course_id AND
-                (l.category_id = 0 OR l.category_id IS NULL)
-        ";
-        $result = Database::query($sql);
-        $count = Database::result($result, 0, 'count');
-
         $linksPerCategory = self::showLinksPerCategory(0, $course_id, $session_id);
 
-        if ($count && !$countCategories) {
+        if (empty($countCategories)) {
             echo $linksPerCategory;
-        } elseif ($count && $countCategories) {
-            echo Display::panel($linksPerCategory, get_lang('NoCategory'));
+        } else {
+            if (!empty($linksPerCategory)) {
+                echo Display::panel($linksPerCategory, get_lang('NoCategory'));
+            }
         }
 
         $counter = 0;

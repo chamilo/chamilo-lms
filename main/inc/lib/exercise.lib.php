@@ -4097,8 +4097,9 @@ EOT;
                 if ($show_results) {
                     $question_content .= '</div>';
                 }
-                $exercise_content .= Display::panel($question_content);
-
+                if(!$show_only_score){
+                    $exercise_content .= Display::div(Display::panel($question_content),array('class' => 'question-panel'));
+                }
             } // end foreach() block that loops over all questions
         }
 

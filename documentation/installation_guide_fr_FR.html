@@ -145,17 +145,26 @@
                 <li>Activer le module "rewrite" d'Apache (en ligne de commande, faites simplement un "<i>sudo a2enmod rewrite</i>")</li>
                 <li>Configurer le VirtualHost d'Apache pour qu'il inclue le bloc suivant, ce qui permettra l'interprétation des fichiers .htaccess</li>
             </ul>
-            Pour Apache <=2.2:
+            Pour Apache <=2.2 (remplacez /var/www/chamilo par le chemin vers votre répertoire de Chamilo):
             <pre>
     &lt;Directory /&gt;
         AllowOverride All
         Order allow,deny
         allow from all
     &lt;/Directory&gt;
+    &lt;Directory /var/www/chamilo/&gt;
+        AllowOverride All
+        Order allow,deny
+        allow from all
+    &lt;/Directory&gt;
     </pre>
-            et pour Apache >=2.4:
-            <pre>
+    et pour Apache >=2.4:
+    <pre>
     &lt;Directory /&gt;
+        AllowOverride All
+        Require all granted
+    &lt;/Directory&gt;
+    &lt;Directory /var/www/chamilo/&gt;
         AllowOverride All
         Require all granted
     &lt;/Directory&gt;

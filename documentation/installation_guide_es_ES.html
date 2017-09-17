@@ -126,9 +126,14 @@ Nota:Esto se ha simplificado en gran medida desde la versión 1.9, ya que antes 
         <li>Activar el módulo "rewrite" de Apache (en línea de comando con "<i>sudo a2enmod rewrite</i>")</li>
         <li>Configurar el VirtualHost de Apache para que incluya el bloque siguiente, autorizando la interpretación de los archivos .htaccess</li>
     </ul>
-    Para Apache <=2.2:
+    Para Apache <=2.2 (remplace /var/www/chamilo/ por la ruta de su carpeta Chamilo en el servidor):
     <pre>
     &lt;Directory /&gt;
+        AllowOverride All
+        Order allow,deny
+        allow from all
+    &lt;/Directory&gt;
+    &lt;Directory /var/www/chamilo/&gt;
         AllowOverride All
         Order allow,deny
         allow from all
@@ -137,6 +142,10 @@ Nota:Esto se ha simplificado en gran medida desde la versión 1.9, ya que antes 
     y para Apache >=2.4:
     <pre>
     &lt;Directory /&gt;
+        AllowOverride All
+        Require all granted
+    &lt;/Directory&gt;
+    &lt;Directory /var/www/chamilo/&gt;
         AllowOverride All
         Require all granted
     &lt;/Directory&gt;

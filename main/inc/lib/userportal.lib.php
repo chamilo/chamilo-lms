@@ -1017,7 +1017,7 @@ class IndexManager
     }
 
     /**
-     * @return null|string
+     * @return array
      */
     public function return_course_block()
     {
@@ -1142,7 +1142,7 @@ class IndexManager
      * @param bool $showSessions
      * @param string $categoryCodeFilter
      * @param bool $useUserLanguageFilterIfAvailable
-     * @return string
+     * @return array
      */
     public function returnCoursesAndSessions(
         $user_id,

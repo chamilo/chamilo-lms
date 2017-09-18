@@ -39,7 +39,6 @@ class WSCMInbox extends WSCM
     ) {
         if ($this->verifyUserPass($username, $password) == "valid") {
             $user_id = UserManager::get_user_id_from_username($username);
-
             $table_message = Database::get_main_table(TABLE_MESSAGE);
 
             $sql_query = "SELECT id FROM $table_message ".
@@ -190,11 +189,11 @@ class WSCMInbox extends WSCM
 
             $query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
                            " VALUES ('$user_sender_id', '$receiver_user_id', '1', '".api_get_utc_datetime()."','$subject','$content','$group_id','$parent_id', '".api_get_utc_datetime()."')";
-            $result = Database::query($query);
+            Database::query($query);
 
             $query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
                            " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".api_get_utc_datetime()."','$subject','$content','$group_id','$parent_id', '".api_get_utc_datetime()."')";
-            $result = Database::query($query);
+            Database::query($query);
 
             $inbox_last_id = Database::insert_id();
 

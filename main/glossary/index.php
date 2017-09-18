@@ -371,8 +371,12 @@ switch ($action) {
             Session::write('glossary_view', $_GET['view']);
         } else {
             $view = Session::read('glossary_view');
+            $defaultView = api_get_configuration_value('default_glossary_view');
+            if (empty($defaultView)) {
+                $defaultView = 'table';
+            }
             if (empty($view)) {
-                Session::write('glossary_view', 'table');
+                Session::write('glossary_view', $defaultView);
             }
         }
         header('Location: '.$currentUrl);

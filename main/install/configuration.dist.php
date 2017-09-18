@@ -618,6 +618,9 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Hide base course announcements when entering a group.
 //$_configuration['hide_base_course_announcements_in_group'] = false;
 
+// Disable delete all announcements button
+//$_configuration['disable_delete_all_announcements'] = false;
+
 // Allow or block user subcriptions to a lp/lp category
 /*$_configuration['lp_subscription_settings'] = [
     'options' => [

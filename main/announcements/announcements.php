@@ -314,9 +314,13 @@ switch ($action) {
         break;
     case 'delete_all':
         if (api_is_allowed_to_edit()) {
-            AnnouncementManager::delete_all_announcements($_course);
-            Display::addFlash(Display::return_message(get_lang('AnnouncementDeletedAll')));
-            header('Location: '.$homeUrl);
+            $allow = api_get_configuration_value('disable_delete_all_announcements');
+            if ($allow === false) {
+                AnnouncementManager::delete_all_announcements($_course);
+                Display::addFlash(Display::return_message(get_lang('AnnouncementDeletedAll')));
+
+            }
+            header('Location: ' . $homeUrl);
             exit;
         }
         break;
@@ -668,16 +672,19 @@ if ($allowToEdit && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
     }
 }
 
-if ($allowToEdit) {
-    if (api_get_group_id() == 0) {
-        if (!isset($_GET['action'])) {
-            $actionsLeft .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".
+if ($allowToEdit && api_get_group_id() == 0) {
+    $allow = api_get_configuration_value('disable_delete_all_announcements');
+    if ($allow === false) {
+        if (!isset($_GET['action']) ||
+            isset($_GET['action']) && $_GET['action'] == 'list'
+        ) {
+            $actionsLeft .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=delete_all\" onclick=\"javascript:if(!confirm('" . get_lang("ConfirmYourChoice") . "')) return false;\">" .
                 Display::return_icon(
                     'delete_announce.png',
                     get_lang('AnnouncementDeleteAll'),
                     '',
                     ICON_SIZE_MEDIUM
-                )."</a>";
+                ) . "</a>";
         }
     }
 }

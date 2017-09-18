@@ -44,6 +44,7 @@ class Rest extends WebService
 
     const SAVE_COURSE = 'save_course';
     const SAVE_USER = 'save_user';
+    const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
 
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
 
@@ -83,7 +84,8 @@ class Rest extends WebService
         /** @var Course $course */
         $course = $em->find('ChamiloCoreBundle:Course', $id);
 
-        if (!$course) {
+        if (!$course)
+        {
             throw new Exception(get_lang('NoCourse'));
         }
 
@@ -1023,7 +1025,8 @@ class Rest extends WebService
      * @param array $course_param
      * @return array
      */
-    public function saveNewCourse($course_param){
+    public function saveNewCourse($course_param)
+    {
 
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $extra_list= array();
@@ -1079,10 +1082,8 @@ class Rest extends WebService
                     }
                 }
                 $results[] = $courseInfo['code'];
-                continue;
             } else {
                 $results[] = 0;
-                continue; // Original course id already exits.
             }
         }
 
@@ -1157,7 +1158,8 @@ class Rest extends WebService
 
     /**
      */
-    public function saveNewUser($user_param){
+    public function saveNewUser($user_param)
+    {
         global $_user;
         $results = array();
         $orig_user_id_value = array();
@@ -1194,49 +1196,6 @@ class Rest extends WebService
             $expiration_date = $user_param['expiration_date'];
         }
 
-        // Check if exits x_user_id into user_field_values table.
-        $user_id = UserManager::get_user_id_from_original_id(
-            $original_user_id_value,
-            $original_user_id_name
-        );
-        if ($user_id > 0) {
-            /** @var User $user */
-            $user = $userRepository->find($user_id);
-
-            if ($user && $user->isActive() == false) {
-                if (!is_null($password)) {
-                    $user->setPlainPassword($password);
-                }
-                if (!is_null($auth_source)) {
-                    $user->setAuthSource($auth_source);
-                }
-
-                if (!empty($user_param['expiration_date'])) {
-                    $expiration_date = new DateTime($user_param['expiration_date']);
-                }
-
-                $user->setLastname($lastName)
-                    ->setFirstname($firstName)
-                    ->setUsername($loginName)
-                    ->setEmail($email)
-                    ->setStatus($status)
-                    ->setOfficialCode($official_code)
-                    ->setPhone($phone)
-                    ->setExpirationDate($expiration_date)
-                    ->setHrDeptId($hr_dept_id)
-                    ->setActive(true);
-                $userManager->updateUser($user, true);
-                $results[] = $user_id;
-                continue;
-                //return $r_check_user[0];
-            } else {
-                $results[] = 0;
-                continue;
-                //return 0;
-                // user id already exits.
-            }
-        }
-
         // Default language.
         if (empty($language)) {
             $language = api_get_setting('platformLanguage');
@@ -1251,7 +1210,6 @@ class Rest extends WebService
         // First check wether the login already exists.
         if (!UserManager::is_username_available($loginName)) {
             $results[] = 0;
-            continue;
         }
 
         $userId = UserManager::create_user(
@@ -1319,24 +1277,37 @@ class Rest extends WebService
                     );
                 }
             }
+            $results[] = $userId;
         } else {
             $results[] = 0;
-            continue;
         }
 
-        $results[] = $userId;
-
-
-        $count_results = count($results);
-        $output = array();
-        for ($i = 0; $i < $count_results; $i++) {
-            $output[] = array(
-                'original_user_id_value' => $orig_user_id_value[$i],
-                'result' => $results[$i]
-            );
-        }
-
-        return $output;
+        // $results[] = $userId;
+        return $results;
     }
 
+    /**
+     * Subscribe User to Course
+     */
+    public function subscribeUserToCourse($params)
+    {
+        $course_id = $params['course_id'];
+        $course_code = $params['course_code'];
+        $user_id = $params['user_id'];
+        if (!$course_id && !$course_code)
+        {
+            return [false];
+        }
+        if (!$course_code)
+        {
+            $course_code = CourseManager::get_course_code_from_course_id($course_id);
+        }
+        if (CourseManager::subscribe_user($user_id, $course_code))
+        {
+            return [true];
+        } else {
+            return [false];
+        }
+        return [true];
+    }
 }

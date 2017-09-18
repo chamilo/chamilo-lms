@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 require_once __DIR__.'/../../inc/global.inc.php';
 
 $hash = isset($_REQUEST['hash']) ? $_REQUEST['hash'] : null;
@@ -125,6 +124,10 @@ try {
             break;
         case Rest::SAVE_USER:
             $data = $restApi->saveNewUser($_POST);
+            $restResponse->setData($data);
+            break;
+        case Rest::SUBSCRIBE_USER_TO_COURSE:
+            $data = $restApi->subscribeUserToCourse($_POST);
             $restResponse->setData($data);
             break;
         case Rest::SAVE_FORUM_POST:

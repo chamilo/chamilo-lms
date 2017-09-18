@@ -305,10 +305,10 @@ class MessageManager
             }
         }
 
-        if (empty($sender_id)) {
-            $user_sender_id = api_get_user_id();
-        } else {
-            $user_sender_id = intval($sender_id);
+        $user_sender_id = empty($sender_id) ? api_get_user_id() : (int) $sender_id;
+        if (empty($user_sender_id)) {
+            Display::addFlash(Display::return_message(get_lang('UserDoesNotExist')));
+            return false;
         }
 
         $total_filesize = 0;
@@ -1130,6 +1130,7 @@ class MessageManager
 
         $title = Security::remove_XSS($row['title'], STUDENT, true);
         $content = Security::remove_XSS($row['content'], STUDENT, true);
+
 
         $from_user = api_get_user_info($user_sender_id);
         $name = $from_user['complete_name'];

@@ -33,6 +33,7 @@ switch ($action) {
     case 'get_user_popup':
         $user_info = api_get_user_info($_REQUEST['user_id']);
         $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
+        $isAnonymous = api_is_anonymous();
 
         echo '<div class="row">';
         echo '<div class="col-sm-5">';
@@ -40,19 +41,33 @@ switch ($action) {
         echo '<img src="'.$user_info['avatar'].'" /> ';
         echo '</div>';
         echo '</div>';
+
         echo '<div class="col-sm-7">';
+
         if (api_get_setting('show_email_addresses') == 'false') {
             $user_info['mail'] = ' ';
         } else {
             $user_info['mail'] = ' '.$user_info['mail'].' ';
         }
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_info['user_id'].'">';
-        echo '<h3>'.$user_info['complete_name'].'</h3>'.$user_info['mail'].$user_info['official_code'];
-        echo '</a>';
+
+        if ($isAnonymous) {
+            $user_info['mail'] = ' ';
+        }
+
+        $userData = '<h3>'.$user_info['complete_name'].'</h3>'.$user_info['mail'].$user_info['official_code'];
+        if ($isAnonymous) {
+            echo $userData;
+        } else {
+            echo Display::url($userData,
+                api_get_path(WEB_CODE_PATH).'social/profile.php?u=' . $user_info['user_id']
+            );
+        }
         echo '</div>';
         echo '</div>';
 
-        if (api_get_setting('allow_message_tool') == 'true') {
+        if ($isAnonymous === false &&
+            api_get_setting('allow_message_tool') == 'true'
+        ) {
             echo '<script>';
             echo '
                 $("#send_message_link").on("click", function() {

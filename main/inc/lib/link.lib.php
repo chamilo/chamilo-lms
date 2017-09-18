@@ -1106,55 +1106,43 @@ class Link extends Model
                     }
                 }
 
-                $iconLink = Display::return_icon(
-                    'url.png',
-                    get_lang('Link'),
-                    null,
-                    ICON_SIZE_SMALL
-                );
-
+                $showLink = false;
+                $titleClass = '';
                 if ($myrow['visibility'] == '1') {
+                    $showLink = true;
+                } else {
+                    if (api_is_allowed_to_edit(null, true)) {
+                        $showLink = true;
+                        $titleClass = 'text-muted';
+                    }
+                }
+
+                if ($showLink) {
+                    $iconLink = Display::return_icon(
+                        'url.png',
+                        get_lang('Link'),
+                        null,
+                        ICON_SIZE_SMALL
+                    );
+                    $url = api_get_path(WEB_CODE_PATH).'link/link_goto.php?'.api_get_cidreq().'&link_id='.$linkId.'&link_url='.urlencode($myrow['url']);
                     $content .= '<div class="list-group-item">';
                     $content .= '<div class="pull-right"><div class="btn-group">'.$toolbar.'</div></div>';
                     $content .= '<h4 class="list-group-item-heading">';
                     $content .= $iconLink;
-                    $url = api_get_path(WEB_CODE_PATH).'link/link_goto.php?'.api_get_cidreq().'&link_id='.$linkId.'&link_url='.urlencode($myrow['url']);
                     $content .= Display::tag(
                         'a',
                         Security::remove_XSS($myrow['title']),
                         array(
                             'href' => $url,
-                            'target' => $myrow['target']
+                            'target' => $myrow['target'],
+                            'class' => $titleClass
                         )
                     );
                     $content .= $link_validator;
                     $content .= $session_img;
                     $content .= '</h4>';
-
                     $content .= '<p class="list-group-item-text">'.$myrow['description'].'</p>';
                     $content .= '</div>';
-                } else {
-                    if (api_is_allowed_to_edit(null, true)) {
-                        $content .= '<div class="list-group-item">';
-                        $content .= '<div class="pull-right"><div class="btn-group">'.$toolbar.'</div></div>';
-                        $content .= '<h4 class="list-group-item-heading">';
-                        $content .= $iconLink;
-                        $url = api_get_path(WEB_CODE_PATH).'link/link_goto.php?'.api_get_cidreq().'&link_id='.$linkId."&link_url=".urlencode($myrow['url']);
-                        $content .= Display::tag(
-                            'a',
-                            Security::remove_XSS($myrow['title']),
-                            array(
-                                'href' => $url,
-                                'target' => '_blank',
-                                'class' => 'text-muted'
-                            )
-                        );
-                        $content .= $link_validator;
-                        $content .= $session_img;
-                        $content .= '</h4>';
-                        $content .= '<p class="list-group-item-text">'.$myrow['description'].'</p>';
-                        $content .= '</div>';
-                    }
                 }
                 $i++;
             }

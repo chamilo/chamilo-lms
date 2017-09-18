@@ -154,7 +154,7 @@
 {% if data_panel is not empty %}
     <script type="text/javascript">
         $( document ).ready(function() {
-            
+
             $('#scorm-panel .panel.higher .status-heading').on("click", function () {
                 $(this).siblings().find(".panel-heading").removeClass("on");
                 $(this).find(".panel-heading").toggleClass("on");
@@ -163,12 +163,12 @@
                 $(this).siblings().find(".panel-heading").removeClass("on");
                 $(this).find(".panel-heading").toggleClass("on");
             });
-            
+
             $('.section-list .list-item').click(function () {
                 $(this).addClass('active').siblings().removeClass('active');
             });
         });
-        
+
     </script>
 {% endif %}
 <script>
@@ -197,19 +197,19 @@
                     var $panel = $(this),
                         parentId = $panel.data('lp-parent') || 0,
                         id = $panel.data('lp-id') || 0;
-                        
-                    
+
+
                     if (!parentId) {
                         return;
                     }
 
                     $panel.appendTo('#scorm-panel-' + parentId);
-                    
+
                     if($('#scorm-panel-' + parentId + ' #collapse-' + id).is('.in')){
                         $('#heading-'+parentId).addClass('on');
                     }
-                    
-                    
+
+
                     if ($('#collapse-' + id).is('.in')) {
                         if($('#collapse-' + id + ' .section-list li').is('.scorm_highlight')){
                             $('#heading-'+id).addClass('on');
@@ -218,7 +218,7 @@
                                 $('#heading-'+id).addClass('on');
                             });
                         }
-                        
+
                         $('#collapse-' + parentId).collapse('toggle');
                     }
                 });
@@ -280,13 +280,13 @@
             LPViewUtils.setHeightLPToc();
 
             $('.scorm_item_normal a, #scorm-previous, #scorm-next').on('click', function () {
-                $('.lp-view-tabs').fadeOut();
+                $('.lp-view-tabs').animate({opacity: 0}, 500);
             });
 
             $('#learning_path_right_zone #lp-view-content iframe').on('load', function () {
                 $('.lp-view-tabs a[href="#lp-view-content"]').tab('show');
 
-                $('.lp-view-tabs').fadeIn();
+                $('.lp-view-tabs').animate({opacity: 1}, 500);
             });
 
             loadForumThread({{ lp_id }}, {{ lp_current_item_id }});

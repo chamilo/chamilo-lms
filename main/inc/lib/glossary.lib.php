@@ -355,21 +355,34 @@ class GlossaryManager
     }
 
     /**
+     * @return string
+     */
+    public static function getGlossaryView()
+    {
+        $view = Session::read('glossary_view');
+        if (empty($view)) {
+            $defaultView = api_get_configuration_value('default_glossary_view');
+            if (empty($defaultView)) {
+                $defaultView = 'table';
+            }
+            return $defaultView;
+        } else {
+            return $view;
+        }
+    }
+
+    /**
      * This is the main function that displays the list or the table with all
      * the glossary terms
-     * @param  string  View ('table' or 'list'). Optional parameter.
      * Defaults to 'table' and prefers glossary_view from the session by default.
      *
      * @return string
      */
-    public static function display_glossary($view = 'table')
+    public static function display_glossary()
     {
         // This function should always be called with the corresponding
         // parameter for view type. Meanwhile, use this cheap trick.
-        $view = Session::read('glossary_view');
-        if (empty($view)) {
-            Session::write('glossary_view', $view);
-        }
+        $view = self::getGlossaryView();
         // action links
         //echo '<div class="actions">';
         $actionsLeft = '';
@@ -515,7 +528,7 @@ class GlossaryManager
         $direction
     ) {
         $_user = api_get_user_info();
-        $view = Session::read('glossary_view');
+        $view = self::getGlossaryView();
 
         // Database table definition
         $t_glossary = Database::get_course_table(TABLE_GLOSSARY);

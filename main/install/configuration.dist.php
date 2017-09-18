@@ -621,6 +621,9 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Disable delete all announcements button
 //$_configuration['disable_delete_all_announcements'] = false;
 
+// Default glossary view "table" or "list"
+//$_configuration['default_glossary_view'] = 'table';
+
 // Allow or block user subcriptions to a lp/lp category
 /*$_configuration['lp_subscription_settings'] = [
     'options' => [

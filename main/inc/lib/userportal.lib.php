@@ -2299,4 +2299,145 @@ class IndexManager
             return false;
         });
     }
+
+    /**
+     * Set grade book dependency progress bar see BT#13099
+     * @param $userId
+     *
+     * @return bool
+     */
+    public function setGradeBookDependencyBar($userId)
+    {
+        $allow = api_get_configuration_value('gradebook_dependency');
+
+        if (api_is_anonymous()) {
+            return false;
+        }
+
+        if ($allow) {
+            $courseAndSessions = $this->returnCoursesAndSessions(
+                $userId,
+                false,
+                '',
+                false,
+                false
+            );
+
+            $courseList = api_get_configuration_value('gradebook_dependency_mandatory_courses');
+            $courseList = isset($courseList['courses']) ? $courseList['courses'] : [];
+            $mandatoryCourse = [];
+            if (!empty($courseList)) {
+                foreach ($courseList as $courseId) {
+                    $courseInfo = api_get_course_info_by_id($courseId);
+                    $mandatoryCourse[] = $courseInfo['code'];
+                }
+            }
+
+            // @todo improve calls of course info
+            $subscribedCourses = !empty($courseAndSessions['courses']) ? $courseAndSessions['courses'] : [];
+            $mainCategoryList = [];
+            foreach ($subscribedCourses as $courseInfo) {
+                $courseCode = $courseInfo['code'];
+                $categories = Category::load(null, null, $courseCode);
+                /** @var Category $category */
+                $category = !empty($categories[0]) ? $categories[0] : [];
+                if (!empty($category)) {
+                    $mainCategoryList[] = $category;
+                }
+            }
+
+            $result20 = 0;
+            $result80 = 0;
+            $countCoursesPassedNoDependency = 0;
+            /** @var Category $category */
+            foreach ($mainCategoryList as $category) {
+                $userFinished = Category::userFinishedCourse(
+                    $userId,
+                    $category,
+                    true
+                );
+
+                if ($userFinished) {
+                    if (in_array($category->get_course_code(), $mandatoryCourse)) {
+                        if ($result20 < 20) {
+                            $result20 += 10;
+                        }
+                    } else {
+                        $countCoursesPassedNoDependency++;
+                        if ($result80 < 80) {
+                            $result80 += 10;
+                        }
+                    }
+                }
+            }
+
+            $finalResult = $result20 + $result80;
+
+            $gradeBookList = api_get_configuration_value('gradebook_badge_sidebar');
+            $gradeBookList = isset($gradeBookList['gradebooks']) ? $gradeBookList['gradebooks'] : [];
+            $badgeList = [];
+            foreach ($gradeBookList as $id) {
+                $categories = Category::load($id);
+                /** @var Category $category */
+                $category = !empty($categories[0]) ? $categories[0] : [];
+                $badgeList[$id]['name'] = $category->get_name();
+                $badgeList[$id]['finished'] = false;
+                $badgeList[$id]['skills'] = [];
+                if (!empty($category)) {
+                    $minToValidate = $category->getMinimumToValidate();
+                    $dependencies = $category->getCourseListDependency();
+                    $gradeBooksToValidateInDependence = $category->getGradeBooksToValidateInDependence();
+                    $countDependenciesPassed = 0;
+                    foreach ($dependencies as $courseId) {
+                        $courseInfo = api_get_course_info_by_id($courseId);
+                        $courseCode = $courseInfo['code'];
+                        $categories = Category::load(null, null, $courseCode);
+                        $subCategory = !empty($categories[0]) ? $categories[0] : null;
+                        if (!empty($subCategory)) {
+                            $score = Category::userFinishedCourse(
+                                $userId,
+                                $subCategory,
+                                true
+                            );
+                            if ($score) {
+                                $countDependenciesPassed++;
+                            }
+                        }
+                    }
+
+                    $userFinished =
+                        $countDependenciesPassed >= $gradeBooksToValidateInDependence &&
+                        $countCoursesPassedNoDependency >= $minToValidate
+                    ;
+
+                    if ($userFinished) {
+                        $badgeList[$id]['finished'] = true;
+                    }
+
+                    $objSkill = new Skill();
+                    $skills = $category->get_skills();
+                    $skillList = [];
+                    foreach ($skills as $skill) {
+                        $skillList[] = $objSkill->get($skill['id']);
+                    }
+                    $badgeList[$id]['skills'] = $skillList;
+                }
+            }
+
+            $this->tpl->assign(
+                'grade_book_sidebar',
+                true
+            );
+
+            $this->tpl->assign(
+                'grade_book_progress',
+                $finalResult
+            );
+            $this->tpl->assign('grade_book_badge_list', $badgeList);
+
+            return true;
+        }
+
+        return false;
+    }
 }

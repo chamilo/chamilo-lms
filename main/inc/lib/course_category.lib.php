@@ -686,7 +686,8 @@ class CourseCategory
                 $result = Database::query($sql);
                 list($num_records) = Database::fetch_row($result);
 
-                $sql = "SELECT course.id FROM $tbl_course course
+                $sql = "SELECT course.id, course.id as real_id 
+                        FROM $tbl_course course
                         INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = course.id)
                         WHERE
@@ -697,7 +698,7 @@ class CourseCategory
                         ORDER BY RAND()
                         LIMIT 0, $random_value";
             } else {
-                $sql = "SELECT id FROM $tbl_course course
+                $sql = "SELECT id, id as real_id FROM $tbl_course course
                         WHERE 
                             RAND()*$num_records< $random_value 
                             $without_special_courses 
@@ -718,12 +719,12 @@ class CourseCategory
             if ($id_in === null) {
                 return [];
             }
-            $sql = "SELECT * FROM $tbl_course WHERE id IN($id_in)";
+            $sql = "SELECT *, id as real_id FROM $tbl_course WHERE id IN($id_in)";
         } else {
             $limitFilter = self::getLimitFilterFromArray($limit);
             $category_code = Database::escape_string($category_code);
             if (empty($category_code) || $category_code == "ALL") {
-                $sql = "SELECT * FROM $tbl_course
+                $sql = "SELECT *, id as real_id FROM $tbl_course
                     WHERE
                         1=1
                         $without_special_courses
@@ -733,7 +734,7 @@ class CourseCategory
                 if ($category_code == 'NONE') {
                     $category_code = '';
                 }
-                $sql = "SELECT * FROM $tbl_course
+                $sql = "SELECT *, id as real_id FROM $tbl_course
                         WHERE
                             category_code='$category_code'
                             $without_special_courses
@@ -746,7 +747,7 @@ class CourseCategory
                 $url_access_id = api_get_current_access_url_id();
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 if ($category_code != "ALL") {
-                    $sql = "SELECT * FROM $tbl_course as course
+                    $sql = "SELECT *, course.id real_id FROM $tbl_course as course
                             INNER JOIN $tbl_url_rel_course as url_rel_course
                             ON (url_rel_course.c_id = course.id)
                             WHERE
@@ -756,7 +757,7 @@ class CourseCategory
                                 $visibilityCondition
                             ORDER BY title $limitFilter";
                 } else {
-                    $sql = "SELECT * FROM $tbl_course as course
+                    $sql = "SELECT *, course.id real_id FROM $tbl_course as course
                             INNER JOIN $tbl_url_rel_course as url_rel_course
                             ON (url_rel_course.c_id = course.id)
                             WHERE
@@ -784,7 +785,7 @@ class CourseCategory
             }
             $point_info = CourseManager::get_course_ranking($row['id'], 0);
             $courses[] = array(
-                'real_id' => $row['id'],
+                'real_id' => $row['real_id'],
                 'point_info' => $point_info,
                 'code' => $row['code'],
                 'directory' => $row['directory'],

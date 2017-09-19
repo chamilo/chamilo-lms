@@ -39,6 +39,7 @@ $userId = api_get_user_id();
 $load_dirs = api_get_setting('show_documents_preview');
 $displayMyCourseViewBySessionLink = api_get_setting('my_courses_view_by_session') === 'true';
 $nameTools = get_lang('MyCourses');
+$loadHistory = isset($_GET['history']) && intval($_GET['history']) == 1 ? true : false;
 
 // Load course notification by ajax
 $loadNotificationsByAjax = api_get_configuration_value('user_portal_load_notification_by_ajax');
@@ -139,7 +140,7 @@ if (!$myCourseListAsCategory) {
         $courseAndSessions = $controller->returnCoursesAndSessionsViewBySession($userId);
         IndexManager::setDefaultMyCourseView(IndexManager::VIEW_BY_SESSION, $userId);
     } else {
-        $courseAndSessions = $controller->returnCoursesAndSessions($userId);
+        $courseAndSessions = $controller->returnCoursesAndSessions($userId, true, null, true, $loadHistory);
         IndexManager::setDefaultMyCourseView(IndexManager::VIEW_BY_DEFAULT, $userId);
     }
 
@@ -179,7 +180,9 @@ if (!$myCourseListAsCategory) {
         $courseAndSessions = $controller->returnCoursesAndSessions(
             $userId,
             false,
-            $categoryCode
+            $categoryCode,
+            true,
+            $loadHistory
         );
         $getCategory = CourseCategory::getCategory($categoryCode);
         $controller->tpl->assign('category', $getCategory);
@@ -301,6 +304,7 @@ if ($allow) {
         $userId,
         false,
         '',
+        false,
         false
     );
 
@@ -387,11 +391,6 @@ if ($allow) {
                 }
             }
 
-            /*$userFinished =
-                $countDependenciesPassed == count($dependencies) &&
-                $countCoursesPassedNoDependency >= $minToValidate
-            ;*/
-
             $userFinished =
                 $countDependenciesPassed >= $gradeBooksToValidateInDependence &&
                 $countCoursesPassedNoDependency >= $minToValidate
@@ -421,12 +420,6 @@ if ($allow) {
         $finalResult
     );
     $controller->tpl->assign('grade_book_badge_list', $badgeList);
-    /*if ($finalScore > 0) {
-        $finalScore = (int) $finalScore / count($total);
-        if ($finalScore == 100) {
-            $completed = true;
-        }
-    }*/
 }
 
 $controller->tpl->display_two_col_template();

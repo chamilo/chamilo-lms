@@ -1142,25 +1142,26 @@ class IndexManager
      * @param bool $showSessions
      * @param string $categoryCodeFilter
      * @param bool $useUserLanguageFilterIfAvailable
+     * @param bool $loadHistory
      * @return array
      */
     public function returnCoursesAndSessions(
         $user_id,
         $showSessions = true,
         $categoryCodeFilter = '',
-        $useUserLanguageFilterIfAvailable = true
+        $useUserLanguageFilterIfAvailable = true,
+        $loadHistory = false
     ) {
         $gameModeIsActive = api_get_setting('gamification_mode');
         $listCourse = '';
         $specialCourseList = '';
-        $load_history = isset($_GET['history']) && intval($_GET['history']) == 1 ? true : false;
         $viewGridCourses = api_get_configuration_value('view_grid_courses') === 'true';
         $showSimpleSessionInfo = api_get_configuration_value('show_simple_session_info');
 
         $coursesWithoutCategoryTemplate = '/user_portal/classic_courses_without_category.tpl';
         $coursesWithCategoryTemplate = '/user_portal/classic_courses_with_category.tpl';
 
-        if ($load_history) {
+        if ($loadHistory) {
             // Load sessions in category in *history*
             $session_categories = UserManager::get_sessions_by_category($user_id, true);
         } else {

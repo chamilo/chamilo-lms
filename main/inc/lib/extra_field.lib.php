@@ -969,6 +969,192 @@ class ExtraField extends Model
     /**
      * @param \FormValidator $form
      * @param array $fieldDetails
+     * @param int $defaultValueId
+     * @param bool $freezeElement
+     */
+    private function addSelectElement(FormValidator $form, array $fieldDetails, $defaultValueId, $freezeElement = false)
+    {
+        $get_lang_variables = false;
+        if (in_array(
+            $fieldDetails['variable'],
+            array('mail_notify_message', 'mail_notify_invitation', 'mail_notify_group_message')
+        )) {
+            $get_lang_variables = true;
+        }
+
+        // Get extra field workflow
+        $userInfo = api_get_user_info();
+        $addOptions = array();
+        $optionsExists = false;
+        global $app;
+        // Check if exist $app['orm.em'] object
+        if (isset($app['orm.em']) && is_object($app['orm.em'])) {
+            $optionsExists = $app['orm.em']
+                ->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
+                ->findOneBy(array('fieldId' => $fieldDetails['id']));
+        }
+
+        if ($optionsExists) {
+            if (isset($userInfo['status'])
+                && !empty($userInfo['status'])
+            ) {
+                $fieldWorkFlow = $app['orm.em']
+                    ->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
+                    ->findBy(
+                        array(
+                            'fieldId' => $fieldDetails['id'],
+                            'relatedFieldOptionId' => $defaultValueId,
+                            'roleId' => $userInfo['status']
+                        )
+                    );
+                foreach ($fieldWorkFlow as $item) {
+                    $addOptions[] = $item->getFieldOptionId();
+                }
+            }
+        }
+
+        $options = array();
+        if (empty($defaultValueId)) {
+            $options[''] = get_lang('SelectAnOption');
+        }
+
+        $optionList = array();
+        if (!empty($fieldDetails['options'])) {
+            foreach ($fieldDetails['options'] as $option_details) {
+                $optionList[$option_details['id']] = $option_details;
+                if ($get_lang_variables) {
+                    $options[$option_details['option_value']] = $option_details['display_text'];
+                } else {
+                    if ($optionsExists) {
+                        // Adding always the default value
+                        if ($option_details['id'] == $defaultValueId) {
+                            $options[$option_details['option_value']] = $option_details['display_text'];
+                        } else {
+                            if (isset($addOptions) && !empty($addOptions)) {
+                                // Parsing filters
+                                if (in_array($option_details['id'], $addOptions)) {
+                                    $options[$option_details['option_value']] = $option_details['display_text'];
+                                }
+                            }
+                        }
+                    } else {
+                        // Normal behaviour
+                        $options[$option_details['option_value']] = $option_details['display_text'];
+                    }
+                }
+            }
+
+            if (isset($optionList[$defaultValueId])) {
+                if (isset($optionList[$defaultValueId]['option_value'])
+                    && $optionList[$defaultValueId]['option_value'] == 'aprobada'
+                ) {
+                    // @todo function don't exists api_is_question_manager
+                    /*if (api_is_question_manager() == false) {
+                        $form->freeze();
+                    }*/
+                }
+            }
+
+            // Setting priority message
+            if (isset($optionList[$defaultValueId])
+                && isset($optionList[$defaultValueId]['priority'])
+            ) {
+                if (!empty($optionList[$defaultValueId]['priority'])) {
+                    $priorityId = $optionList[$defaultValueId]['priority'];
+                    $option = new ExtraFieldOption($this->type);
+                    $messageType = $option->getPriorityMessageType($priorityId);
+                    $form->addElement(
+                        'label',
+                        null,
+                        Display::return_message(
+                            $optionList[$defaultValueId]['priority_message'],
+                            $messageType
+                        )
+                    );
+                }
+            }
+        }
+
+        /** @var \HTML_QuickForm_select $slct */
+        $slct = $form->addElement(
+            'select',
+            'extra_'.$fieldDetails['variable'],
+            $fieldDetails['display_text'],
+            [],
+            array('id' => 'extra_'.$fieldDetails['variable'])
+        );
+
+        foreach ($options as $value => $text) {
+            if (empty($value)) {
+                $slct->addOption($text, $value);
+                continue;
+            }
+
+            $valueParts = explode('#', $text);
+            $dataValue = count($valueParts) > 1 ? array_shift($valueParts) : '';
+
+            $slct->addOption(implode('', $valueParts), $value, ['data-value' => $dataValue]);
+        }
+
+        /* Enable this when field_loggeable is introduced as a table field (2.0)
+        if ($optionsExists && $field_details['field_loggeable'] && !empty($defaultValueId)) {
+
+            $form->addElement(
+                'textarea',
+                'extra_' . $field_details['variable'] . '_comment',
+                $field_details['display_text'] . ' ' . get_lang('Comment')
+            );
+
+            $extraFieldValue = new ExtraFieldValue($this->type);
+            $repo = $app['orm.em']->getRepository($extraFieldValue->entityName);
+            $repoLog = $app['orm.em']->getRepository('Gedmo\Loggable\Entity\LogEntry');
+            $newEntity = $repo->findOneBy(
+                array(
+                    $this->handlerEntityId => $itemId,
+                    'fieldId' => $field_details['id']
+                )
+            );
+            // @todo move this in a function inside the class
+            if ($newEntity) {
+                $logs = $repoLog->getLogEntries($newEntity);
+                if (!empty($logs)) {
+                    $html = '<b>' . get_lang('LatestChanges') . '</b><br /><br />';
+
+                    $table = new HTML_Table(array('class' => 'data_table'));
+                    $table->setHeaderContents(0, 0, get_lang('Value'));
+                    $table->setHeaderContents(0, 1, get_lang('Comment'));
+                    $table->setHeaderContents(0, 2, get_lang('ModifyDate'));
+                    $table->setHeaderContents(0, 3, get_lang('Username'));
+                    $row = 1;
+                    foreach ($logs as $log) {
+                        $column = 0;
+                        $data = $log->getData();
+                        $fieldValue = isset($data['fieldValue']) ? $data['fieldValue'] : null;
+                        $comment = isset($data['comment']) ? $data['comment'] : null;
+
+                        $table->setCellContents($row, $column, $fieldValue);
+                        $column++;
+                        $table->setCellContents($row, $column, $comment);
+                        $column++;
+                        $table->setCellContents($row, $column, api_get_local_time($log->getLoggedAt()->format('Y-m-d H:i:s')));
+                        $column++;
+                        $table->setCellContents($row, $column, $log->getUsername());
+                        $row++;
+                    }
+                    $form->addElement('label', null, $html.$table->toHtml());
+                }
+            }
+        }
+        */
+
+        if ($freezeElement) {
+            $form->freeze('extra_'.$fieldDetails['variable']);
+        }
+    }
+
+    /**
+     * @param \FormValidator $form
+     * @param array $fieldDetails
      * @param array $extraData
      * @param bool $freezeElement
      * @return string JavaScript code
@@ -1181,8 +1367,11 @@ class ExtraField extends Model
                             );
 
                             $.each(data, function (index, value) {
+                                var valueParts = value.split('#'),
+                                    dataValue = valueParts.length > 1 ? valueParts.shift() : '';
+
                                 slctSecond.append(
-                                    $('<option>', {value: index, text: value})
+                                    $('<option>', {value: index, text: valueParts.join(''), 'data-value': dataValue})
                                 );
                             });
     
@@ -1210,8 +1399,11 @@ class ExtraField extends Model
                             );
 
                             $.each(data, function (index, value) {
+                                var valueParts = value.split('#'),
+                                    dataValue = valueParts.length > 1 ? valueParts.shift() : '';
+
                                 slctThrid.append(
-                                    $('<option>', {value: index, text: value})
+                                    $('<option>', {value: index, text: valueParts.join(''), 'data-value': dataValue})
                                 );
                             });
     
@@ -1235,27 +1427,35 @@ class ExtraField extends Model
         $level1 = self::getOptionsFromTripleSelect($options['level1'], 0);
         $level2 = self::getOptionsFromTripleSelect($options['level2'], $firstId);
         $level3 = self::getOptionsFromTripleSelect($options['level3'], $secondId);
+        /** @var \HTML_QuickForm_select $slctFirst */
+        $slctFirst = $form->createElement('select', "extra_$variable", null, $values1, ['id' => $slctFirstId]);
+        /** @var \HTML_QuickForm_select $slctFirst */
+        $slctSecond = $form->createElement('select', "extra_{$variable}_second", null, $values2, ['id' => $slctSecondId]);
+        /** @var \HTML_QuickForm_select $slctFirst */
+        $slctThird = $form->createElement('select', "extra_{$variable}_third", null, $values3, ['id' => $slctThirdId]);
 
         foreach ($level1 as $item1) {
-            $values1[$item1['id']] = $item1['display_text'];
+            $valueParts = explode('#', $item1['display_text']);
+            $dataValue = count($valueParts) > 1 ? array_shift($valueParts) : '';
+            $slctFirst->addOption(implode('', $valueParts), $item1['id'], ['data-value' => $dataValue]);
         }
 
         foreach ($level2 as $item2) {
-            $values2[$item2['id']] = $item2['display_text'];
+            $valueParts = explode('#', $item2['display_text']);
+            $dataValue = count($valueParts) > 1 ? array_shift($valueParts) : '';
+            $slctSecond->addOption(implode('', $valueParts), $item2['id'], ['data-value' => $dataValue]);
         }
 
         foreach ($level3 as $item3) {
-            $values3[$item3['id']] = $item3['display_text'];
+            $valueParts = explode('#', $item3['display_text']);
+            $dataValue = count($valueParts) > 1 ? array_shift($valueParts) : '';
+            $slctThird->addOption(implode('', $valueParts), $item3['id'], ['data-value' => $dataValue]);
         }
 
         $form
             ->defaultRenderer()
             ->setGroupElementTemplate('<p>{element}</p>', "extra_$variable");
-        $group = [];
-        $group[] = $form->createElement('select', "extra_$variable", null, $values1, ['id' => $slctFirstId]);
-        $group[] = $form->createElement('select', "extra_{$variable}_second", null, $values2, ['id' => $slctSecondId]);
-        $group[] = $form->createElement('select', "extra_{$variable}_third", null, $values3, ['id' => $slctThirdId]);
-        $form->addGroup($group, "extra_$variable", $fieldDetails['display_text']);
+        $form->addGroup([$slctFirst, $slctSecond, $slctThird], "extra_$variable", $fieldDetails['display_text']);
 
         if ($freezeElement) {
             $form->freeze('extra_'.$fieldDetails['variable']);
@@ -1457,171 +1657,7 @@ class ExtraField extends Model
                         }
                         break;
                     case self::FIELD_TYPE_SELECT:
-                        $get_lang_variables = false;
-                        if (in_array(
-                            $field_details['variable'],
-                            array('mail_notify_message', 'mail_notify_invitation', 'mail_notify_group_message')
-                        )
-                        ) {
-                            $get_lang_variables = true;
-                        }
-
-                        // Get extra field workflow
-                        $userInfo = api_get_user_info();
-                        $addOptions = array();
-                        $optionsExists = false;
-                        global $app;
-                        // Check if exist $app['orm.em'] object
-                        if (isset($app['orm.em']) && is_object($app['orm.em'])) {
-                            $optionsExists = $app['orm.em']
-                                ->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
-                                ->findOneBy(array('fieldId' => $field_details['id']));
-                        }
-
-                        if ($optionsExists) {
-                            if (isset($userInfo['status']) &&
-                                !empty($userInfo['status'])
-                            ) {
-                                $fieldWorkFlow = $app['orm.em']
-                                    ->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
-                                    ->findBy(
-                                        array(
-                                            'fieldId' => $field_details['id'],
-                                            'relatedFieldOptionId' => $defaultValueId,
-                                            'roleId' => $userInfo['status']
-                                        )
-                                    );
-                                foreach ($fieldWorkFlow as $item) {
-                                    $addOptions[] = $item->getFieldOptionId();
-                                }
-                            }
-                        }
-
-                        $options = array();
-                        if (empty($defaultValueId)) {
-                            $options[''] = get_lang('SelectAnOption');
-                        }
-
-                        $optionList = array();
-                        if (!empty($field_details['options'])) {
-                            foreach ($field_details['options'] as $option_details) {
-                                $optionList[$option_details['id']] = $option_details;
-                                if ($get_lang_variables) {
-                                    $options[$option_details['option_value']] = $option_details['display_text'];
-                                } else {
-                                    if ($optionsExists) {
-                                        // Adding always the default value
-                                        if ($option_details['id'] == $defaultValueId) {
-                                            $options[$option_details['option_value']] = $option_details['display_text'];
-                                        } else {
-                                            if (isset($addOptions) && !empty($addOptions)) {
-                                                // Parsing filters
-                                                if (in_array($option_details['id'], $addOptions)) {
-                                                    $options[$option_details['option_value']] = $option_details['display_text'];
-                                                }
-                                            }
-                                        }
-                                    } else {
-                                        // Normal behaviour
-                                        $options[$option_details['option_value']] = $option_details['display_text'];
-                                    }
-                                }
-                            }
-
-                            if (isset($optionList[$defaultValueId])) {
-                                if (isset($optionList[$defaultValueId]['option_value']) &&
-                                    $optionList[$defaultValueId]['option_value'] == 'aprobada'
-                                ) {
-                                    // @todo function don't exists api_is_question_manager
-                                    /*if (api_is_question_manager() == false) {
-                                        $form->freeze();
-                                    }*/
-                                }
-                            }
-
-                            // Setting priority message
-                            if (isset($optionList[$defaultValueId]) &&
-                                isset($optionList[$defaultValueId]['priority'])
-                            ) {
-                                if (!empty($optionList[$defaultValueId]['priority'])) {
-                                    $priorityId = $optionList[$defaultValueId]['priority'];
-                                    $option = new ExtraFieldOption($this->type);
-                                    $messageType = $option->getPriorityMessageType($priorityId);
-                                    $form->addElement(
-                                        'label',
-                                        null,
-                                        Display::return_message(
-                                            $optionList[$defaultValueId]['priority_message'],
-                                            $messageType
-                                        )
-                                    );
-                                }
-                            }
-                        }
-
-                        // chzn-select doesn't work for sessions??
-                        $form->addElement(
-                            'select',
-                            'extra_'.$field_details['variable'],
-                            $field_details['display_text'],
-                            $options,
-                            array('id' => 'extra_'.$field_details['variable'])
-                        );
-
-                        /* Enable this when field_loggeable is introduced as a table field (2.0)
-                        if ($optionsExists && $field_details['field_loggeable'] && !empty($defaultValueId)) {
-
-                            $form->addElement(
-                                'textarea',
-                                'extra_' . $field_details['variable'] . '_comment',
-                                $field_details['display_text'] . ' ' . get_lang('Comment')
-                            );
-
-                            $extraFieldValue = new ExtraFieldValue($this->type);
-                            $repo = $app['orm.em']->getRepository($extraFieldValue->entityName);
-                            $repoLog = $app['orm.em']->getRepository('Gedmo\Loggable\Entity\LogEntry');
-                            $newEntity = $repo->findOneBy(
-                                array(
-                                    $this->handlerEntityId => $itemId,
-                                    'fieldId' => $field_details['id']
-                                )
-                            );
-                            // @todo move this in a function inside the class
-                            if ($newEntity) {
-                                $logs = $repoLog->getLogEntries($newEntity);
-                                if (!empty($logs)) {
-                                    $html = '<b>' . get_lang('LatestChanges') . '</b><br /><br />';
-
-                                    $table = new HTML_Table(array('class' => 'data_table'));
-                                    $table->setHeaderContents(0, 0, get_lang('Value'));
-                                    $table->setHeaderContents(0, 1, get_lang('Comment'));
-                                    $table->setHeaderContents(0, 2, get_lang('ModifyDate'));
-                                    $table->setHeaderContents(0, 3, get_lang('Username'));
-                                    $row = 1;
-                                    foreach ($logs as $log) {
-                                        $column = 0;
-                                        $data = $log->getData();
-                                        $fieldValue = isset($data['fieldValue']) ? $data['fieldValue'] : null;
-                                        $comment = isset($data['comment']) ? $data['comment'] : null;
-
-                                        $table->setCellContents($row, $column, $fieldValue);
-                                        $column++;
-                                        $table->setCellContents($row, $column, $comment);
-                                        $column++;
-                                        $table->setCellContents($row, $column, api_get_local_time($log->getLoggedAt()->format('Y-m-d H:i:s')));
-                                        $column++;
-                                        $table->setCellContents($row, $column, $log->getUsername());
-                                        $row++;
-                                    }
-                                    $form->addElement('label', null, $html.$table->toHtml());
-                                }
-                            }
-                        }
-                        */
-
-                        if ($freezeElement) {
-                            $form->freeze('extra_'.$field_details['variable']);
-                        }
+                        self::addSelectElement($form, $field_details, $defaultValueId, $freezeElement);
                         break;
                     case self::FIELD_TYPE_SELECT_MULTIPLE:
                         $options = array();

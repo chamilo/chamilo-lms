@@ -14,7 +14,7 @@
                 var audioId = Math.floor( Math.random()*99999 );
                 flashVars = flashVars.replace('&autostart=false', '');
                 flashVars = flashVars.replace('&autostart=true', '');
-                var audioDiv = '<audio id="'+audioId+'" controls="controls" style="width:400px;" width:"400px;"><source src="'+flashVars+'" type="audio/mp3"  ></source></audio>';
+                var audioDiv = '<audio id="'+audioId+'" controls="controls" style="width:400px;" width:"400px;" src="'+flashVars+'" ><source src="'+flashVars+'" type="audio/mp3"  ></source></audio>';
                 $(this).hide();
                 $(this).after(audioDiv);
             }

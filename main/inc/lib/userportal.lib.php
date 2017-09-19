@@ -1185,7 +1185,7 @@ class IndexManager
         $coursesNotInCategoryCount = 0;
 
         // If we're not in the history view...
-        if (!isset($_GET['history'])) {
+        if ($loadHistory == false) {
             // Display special courses.
             $specialCourses = CourseManager::returnSpecialCourses(
                 $user_id,

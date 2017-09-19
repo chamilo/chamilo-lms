@@ -168,7 +168,6 @@ if ($showCourses && $action != 'display_sessions') {
 
     if (!empty($browse_courses_in_category)) {
         echo '<div class="grid-courses row">';
-
         foreach ($browse_courses_in_category as $course) {
             $course_hidden = $course['visibility'] == COURSE_VISIBILITY_HIDDEN;
 
@@ -198,13 +197,13 @@ if ($showCourses && $action != 'display_sessions') {
                 $course['category_title'] = isset($categoryList[$course['category']]) ? $categoryList[$course['category']] : '';
             }
 
-            // display thumbnail
+            // Display thumbnail
             $html .= returnThumbnail($course, $userRegistered);
 
             $separator = null;
             $subscribeButton = return_register_button($course, $stok, $code, $searchTerm);
 
-            // start buycourse validation
+            // Start buy course validation
             // display the course price and buy button if the buycourses plugin is enabled and this course is configured
             $plugin = BuyCoursesPlugin::create();
             $isThisCourseInSale = $plugin->buyCoursesForGridCatalogValidator(
@@ -223,7 +222,7 @@ if ($showCourses && $action != 'display_sessions') {
                     );
                 }
             }
-            // end buycourse validation
+            // end buy course validation
 
             // display course title and button bloc
             $html .= '<div class="description">';
@@ -377,10 +376,9 @@ function return_teacher($courseInfo)
  */
 function return_title($course, $registeredUser)
 {
-    $html = '';
     $linkCourse = api_get_course_url($course['code']);
 
-    $html .= '<div class="block-title"><h4 class="title">';
+    $html = '<div class="block-title"><h4 class="title">';
 
     if (!$registeredUser) {
         $html .= $course['title'];

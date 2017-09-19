@@ -163,7 +163,7 @@ class CoursesController
      * @param string $message
      * @param string $error
      * @param string $content
-     * @param $limit
+     * @param array $limit
      * @param boolean $justVisible Whether to search only in courses visibles in the catalogue
      */
     public function search_courses(

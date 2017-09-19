@@ -6,6 +6,20 @@
         $.datepicker.setDefaults($.datepicker.regional["{{ locale }}"]);
         $.datepicker.regional["local"] = $.datepicker.regional["{{ locale }}"];
 
+        // Fix old calls of "inc/lib/mediaplayer/player.swf" and convert to <audio> tag, then rendered by media element js
+        // see BT#13405
+        $('embed').each( function () {
+            var flashVars = $(this).attr('flashvars');
+            if (flashVars && flashVars.indexOf("file") == -1) {
+                var audioId = Math.floor( Math.random()*99999 );
+                flashVars = flashVars.replace('&autostart=false', '');
+                flashVars = flashVars.replace('&autostart=true', '');
+                var audioDiv = '<audio id="'+audioId+'" controls="controls" style="width:400px;" width:"400px;" src="'+flashVars+'" ><source src="'+flashVars+'" type="audio/mp3"  ></source></audio>';
+                $(this).hide();
+                $(this).after(audioDiv);
+            }
+        });
+
         // Chosen select
         $(".chzn-select").chosen({
             disable_search_threshold: 10,

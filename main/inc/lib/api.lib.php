@@ -7502,16 +7502,21 @@ function api_get_user_blocked_by_captcha($username)
 /**
  * Remove tags from HTML anf return the $in_number_char first non-HTML char
  * Postfix the text with "..." if it has been truncated.
- * @param integer $in_number_char
+ * @param string $text
+ * @param integer $number
+ *
  * @return string
  * @author hubert borderiou
  */
-function api_get_short_text_from_html($in_html, $in_number_char)
+function api_get_short_text_from_html($text, $number)
 {
-    $out_res = api_remove_tags_with_space($in_html, false);
+    // Delete script and style tags
+    $text =  preg_replace('/(<(script|style)\b[^>]*>).*?(<\/\2>)/is', "$1$3", $text);
+    $text = api_html_entity_decode($text);
+    $out_res = api_remove_tags_with_space($text, false);
     $postfix = "...";
-    if (strlen($out_res) > $in_number_char) {
-        $out_res = substr($out_res, 0, $in_number_char).$postfix;
+    if (strlen($out_res) > $number) {
+        $out_res = substr($out_res, 0, $number).$postfix;
     }
     return $out_res;
 }

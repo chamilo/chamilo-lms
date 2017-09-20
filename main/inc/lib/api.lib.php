@@ -7512,6 +7512,7 @@ function api_get_short_text_from_html($text, $number)
 {
     // Delete script and style tags
     $text =  preg_replace('/(<(script|style)\b[^>]*>).*?(<\/\2>)/is', "$1$3", $text);
+    $text = api_html_entity_decode($text);
     $out_res = api_remove_tags_with_space($text, false);
     $postfix = "...";
     if (strlen($out_res) > $number) {

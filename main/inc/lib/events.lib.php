@@ -55,6 +55,8 @@ class Event
     /**
      * @author Sebastien Piraux <piraux_seb@hotmail.com> old code
      * @author Julio Montoya 2013
+     * @param int $userId
+     * @return bool
      * @desc Record information for login event when an user identifies himself with username & password
      */
     public static function eventLogin($userId)
@@ -88,6 +90,7 @@ class Event
                 }
             }
         }
+        return true;
     }
 
     /**

@@ -185,7 +185,7 @@ $js_glossary_in_documents = '
         { type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
         { type:"stylesheet", id:"_fr6", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/theme.css"},
         { type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-        { type:"script", id:"_fr3", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php"}
+        { type:"script", id:"_fr3", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"}
     ]
   });';
 

@@ -45,7 +45,7 @@ if ($origin == 'learnpath') {
     $showGlossary = in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'));
 }
 if ($showGlossary) {
-    $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?add_ready=1"></script>';
+    $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?add_ready=1&'.api_get_cidreq().'"></script>';
     $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
 }
 

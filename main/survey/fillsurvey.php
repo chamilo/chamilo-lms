@@ -159,6 +159,7 @@ $sql = "SELECT * FROM $table_survey
         WHERE
             c_id = $course_id AND
             code = '".Database::escape_string($survey_invitation['survey_code'])."'";
+$sql .= api_get_session_condition(api_get_session_id());
 $result = Database::query($sql);
 
 if (Database::num_rows($result) > 1) {

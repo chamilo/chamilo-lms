@@ -1564,9 +1564,6 @@ class GradebookUtils
         $table = $gradebooktable->return_table();
         $graph = $gradebooktable->getGraph();
 
-        $sessionName = api_get_session_name(api_get_session_id());
-        $sessionName = !empty($sessionName) ? " - $sessionName" : '';
-
         $params = array(
             'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['name']),
             'session_info' => '',
@@ -1593,11 +1590,6 @@ class GradebookUtils
             '<br />'.get_lang('Feedback').'<br />
             <textarea rows="5" cols="100" ></textarea>';
 
-        /*$address = api_get_setting('institution_address');
-        $phone = api_get_setting('administratorTelephone');
-        $address = str_replace('\n', '<br />', $address);
-
-        $pdf->custom_header = array('html' => "<h5 align='right'>$address <br />$phone</h5>");*/
         $result = $pdf->html_to_pdf_with_template(
             $content,
             $saveToFile,

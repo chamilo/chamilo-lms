@@ -643,3 +643,6 @@ $_configuration['gradebook_badge_sidebar'] = [
 //$_configuration['allow_agenda_edit_for_hrm'] = false;
 // Allow double validation in registration page
 //$_configuration['allow_double_validation_in_registration'] = false;
+// Allow multiple anon users see BT#13324
+//$_configuration['max_anonymous_users'] = 0;
+

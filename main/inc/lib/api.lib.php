@@ -1715,6 +1715,8 @@ function api_get_course_setting($setting_name, $course_code = null)
     return -1;
 }
 
+
+
 /**
  * Gets an anonymous user ID
  *
@@ -1726,8 +1728,44 @@ function api_get_course_setting($setting_name, $course_code = null)
  */
 function api_get_anonymous_id()
 {
+    // Find if another anon is connected now
+    $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+    $now = api_get_utc_datetime();
+    $ip = api_get_real_ip();
+    $max = api_get_configuration_value('max_anonymous_users');
+
+    if ($max >= 2) {
+        $sql = "SELECT * FROM $table 
+                WHERE ('$now' BETWEEN login_date AND logout_date) AND user_ip = '$ip'";
+        $result = Database::query($sql);
+        if (empty(Database::num_rows($result))) {
+            $login = uniqid('anon_');
+            $anonList = UserManager::get_user_list(['status' => ANONYMOUS], ['registration_date ASC']);
+            if (count($anonList) == $max) {
+                foreach ($anonList as $userToDelete) {
+                    // Delete next older anon. Avoid the default anon user_id = 2 .
+                    if ($userToDelete['user_id'] != 2) {
+                        UserManager::delete_user($userToDelete['user_id']);
+                        break;
+                    }
+                }
+            }
+            $userId = UserManager::create_user(
+                $login,
+                'anon',
+                ANONYMOUS,
+                ' anonymous@localhost',
+                $login,
+                $login
+            );
+            return $userId;
+        }
+    }
+
     $table = Database::get_main_table(TABLE_MAIN_USER);
-    $sql = "SELECT user_id FROM $table WHERE status = ".ANONYMOUS;
+    $sql = "SELECT user_id 
+            FROM $table 
+            WHERE status = ".ANONYMOUS." ";
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
         $row = Database::fetch_array($res);
@@ -2190,10 +2228,16 @@ function api_set_anonymous()
     if (!empty($_user['user_id'])) {
         return false;
     }
+
     $user_id = api_get_anonymous_id();
     if ($user_id == 0) {
         return false;
     }
+
+    if (isset($_user['is_anonymous'])) {
+        return false;
+    }
+
     Session::erase('_user');
     $_user['user_id'] = $user_id;
     $_user['is_anonymous'] = true;

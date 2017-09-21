@@ -343,6 +343,9 @@ class CourseManager
      */
     public static function unsubscribe_user($user_id, $course_code, $session_id = 0)
     {
+        if (empty($user_id)) {
+            return;
+        }
         if (!is_array($user_id)) {
             $user_id = array($user_id);
         }

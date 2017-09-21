@@ -32,7 +32,7 @@ class PageController extends Controller
             'site' => $site,
             'decorate' => 1,
             'routeName' => 'page_slug',
-            'metaKeyword' => null,
+            'metaKeyword' => 'news',
         ];
         $order = ['createdAt' => 'desc'];
         // Get latest pages

@@ -105,6 +105,12 @@
                 </div>
                 <!-- end block profile -->
                 {% endif %}
+
+
+                {% if diagnosis_block %}
+                    {{ diagnosis_block }}
+                {% endif %}
+
                 {% if section_name != 'section-mycampus' %}
 
                 {% if course_block %}

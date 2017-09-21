@@ -321,7 +321,7 @@ $block = '';
 if (!empty($diagnosis)) {
     $block .= $controller->show_right_block(
         get_lang('Diagnostic'),
-        $diagnosis,
+        '<ul class="list-group"><li class="list-group-item">'.$diagnosis.'</li></ul>',
         'diagnosis_block',
         null,
         'diagnosis',

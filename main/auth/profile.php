@@ -437,6 +437,12 @@ function check_user_email($email)
 $filtered_extension = false;
 
 if ($form->validate()) {
+    $hook = HookUpdateUser::create();
+
+    if ($hook) {
+        $hook->notifyUpdateUser(HOOK_EVENT_TYPE_PRE);
+    }
+
     $wrong_current_password = false;
     $user_data = $form->getSubmitValues(1);
     /** @var User $user */
@@ -700,6 +706,10 @@ if ($form->validate()) {
         true
     );
     Session::write('_user', $userInfo);
+
+    if ($hook) {
+        $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
+    }
 
     $url = api_get_self();
     header("Location: ".$url);

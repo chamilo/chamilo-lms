@@ -54,7 +54,7 @@ class Event
 
     /**
      * @author Sebastien Piraux <piraux_seb@hotmail.com> old code
-     * @author Julio Montoya 2013
+     * @author Julio Montoya
      * @param int $userId
      * @return bool
      * @desc Record information for login event when an user identifies himself with username & password
@@ -189,7 +189,11 @@ class Event
         // "what's new" notification
         $sql = "UPDATE $TABLETRACK_LASTACCESS
                 SET access_date = '$reallyNow'
-                WHERE access_user_id = ".$user_id." AND c_id = '".$courseId."' AND access_tool = '".$tool."' AND access_session_id=".$id_session;
+                WHERE 
+                    access_user_id = ".$user_id." AND 
+                    c_id = '".$courseId."' AND 
+                    access_tool = '".$tool."' AND 
+                    access_session_id=".$id_session;
         $result = Database::query($sql);
         if (Database::affected_rows($result) == 0) {
             $sql = "INSERT INTO $TABLETRACK_LASTACCESS (access_user_id, c_id, access_tool, access_date, access_session_id)
@@ -1734,17 +1738,17 @@ class Event
     }
 
     /**
-     * @param int $exe_id
+     * @param int $exeId
      *
      * @return array
      */
-    public static function getAllExerciseEventByExeId($exe_id)
+    public static function getAllExerciseEventByExeId($exeId)
     {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $exe_id = intval($exe_id);
+        $exeId = intval($exeId);
 
         $sql = "SELECT * FROM $table
-                WHERE exe_id = $exe_id
+                WHERE exe_id = $exeId
                 ORDER BY position";
         $res_question = Database::query($sql);
         $list = array();
@@ -1758,14 +1762,14 @@ class Event
 
     /**
      *
-     * @param int $exe_id
+     * @param int $exeId
      * @param int $user_id
      * @param int $courseId
      * @param int $session_id
      * @param int $question_id
      */
     public static function delete_attempt(
-        $exe_id,
+        $exeId,
         $user_id,
         $courseId,
         $session_id,
@@ -1773,7 +1777,7 @@ class Event
     ) {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $exe_id = intval($exe_id);
+        $exeId = intval($exeId);
         $user_id = intval($user_id);
         $courseId = intval($courseId);
         $session_id = intval($session_id);
@@ -1781,7 +1785,7 @@ class Event
 
         $sql = "DELETE FROM $table
                 WHERE
-                    exe_id = $exe_id AND
+                    exe_id = $exeId AND
                     user_id = $user_id AND
                     c_id = $courseId AND
                     session_id = $session_id AND
@@ -1791,7 +1795,7 @@ class Event
         self::addEvent(
             LOG_QUESTION_RESULT_DELETE,
             LOG_EXERCISE_ATTEMPT_QUESTION_ID,
-            $exe_id.'-'.$question_id,
+            $exeId.'-'.$question_id,
             null,
             null,
             $courseId,
@@ -1800,14 +1804,14 @@ class Event
     }
 
     /**
-     * @param $exe_id
+     * @param $exeId
      * @param $user_id
      * @param int $courseId
      * @param $question_id
      * @param int $sessionId
      */
     public static function delete_attempt_hotspot(
-        $exe_id,
+        $exeId,
         $user_id,
         $courseId,
         $question_id,
@@ -1815,7 +1819,7 @@ class Event
     ) {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 
-        $exe_id = intval($exe_id);
+        $exeId = intval($exeId);
         $user_id = intval($user_id);
         $courseId = intval($courseId);
         $question_id = intval($question_id);
@@ -1825,7 +1829,7 @@ class Event
 
         $sql = "DELETE FROM $table
                 WHERE   
-                    hotspot_exe_id = $exe_id AND
+                    hotspot_exe_id = $exeId AND
                     hotspot_user_id = $user_id AND
                     c_id = $courseId AND
                     hotspot_question_id = $question_id ";
@@ -1833,7 +1837,7 @@ class Event
         self::addEvent(
             LOG_QUESTION_RESULT_DELETE,
             LOG_EXERCISE_ATTEMPT_QUESTION_ID,
-            $exe_id.'-'.$question_id,
+            $exeId.'-'.$question_id,
             null,
             null,
             $courseId,

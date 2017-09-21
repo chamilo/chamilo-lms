@@ -609,11 +609,18 @@ class SessionManager
                     $teachers = '';
                     foreach ($courses as $courseId) {
                         $courseInfo = api_get_course_info_by_id($courseId);
-                        $teachers .= CourseManager::get_teacher_list_from_course_code_to_string(
+                        // Ofaj
+                        $teachers = CourseManager::get_coachs_from_course_to_string($session_id, $courseInfo['real_id']);
+                        /*$teachers .= CourseManager::get_teacher_list_from_course_code_to_string(
                             $courseInfo['code']
-                        );
+                        );*/
                     }
-                    $session['teachers'] = Display::return_icon('teacher.png', addslashes($teachers));
+                    // ofaj
+                    $session['teachers'] = '';
+                    if (!empty($teachers)) {
+                        $session['teachers'] = Display::return_icon('teacher.png', addslashes($teachers));
+                    }
+
                 }
                 $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
                 if (api_is_drh()) {

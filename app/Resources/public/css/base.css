@@ -6862,7 +6862,7 @@ input.form-control[type="color"] {
     height: 39px;
     position: absolute;
     left: 50%;
-    top: 200px;
+    top: 100px;
     transform: translate(-50%, -50%);
     -o-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);

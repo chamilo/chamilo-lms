@@ -205,7 +205,6 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  *
  * So far only use for unzip_uploaded_document function.
  * If no output wanted on success, set to false.
- * @param string $comment
  * @return string path of the saved file
  */
 function handle_uploaded_document(
@@ -1121,6 +1120,15 @@ function unzip_uploaded_document(
 function clean_up_files_in_zip($p_event, &$p_header)
 {
     $originalStoredFileName = $p_header['stored_filename'];
+    $baseName = basename($originalStoredFileName);
+    // Skip files
+    $skipFiles = [
+        '__MACOSX',
+        '.Thumbs.db',
+    ];
+    if (in_array($baseName, $skipFiles)) {
+        return 0;
+    }
     $modifiedStoredFileName = clean_up_path($originalStoredFileName);
     $p_header['filename'] = str_replace($originalStoredFileName, $modifiedStoredFileName, $p_header['filename']);
 
@@ -1904,7 +1912,7 @@ function add_all_documents_in_folder_to_database(
                     if ($documentId) {
                         $newFolderData = DocumentManager::get_document_data_by_id(
                             $documentId,
-                            $courseInfo,
+                            $courseInfo['code'],
                             false,
                             $sessionId
                         );

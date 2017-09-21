@@ -6855,3 +6855,215 @@ input.form-control[type="color"] {
 .badge_sidebar_image_transparency{
     opacity: 0.2;
 }
+
+/* CSS FormValidator loader */
+.cssload-loader-walk {
+    width: 97px;
+    height: 39px;
+    position: absolute;
+    left: 50%;
+    top: 200px;
+    transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+}
+.cssload-loader-walk > div {
+    content: "";
+    width: 19px;
+    height: 19px;
+    background: rgb(51,121,183);
+    border-radius: 100%;
+    position: absolute;
+    animation: cssload-animate 2.3s linear infinite;
+    -o-animation: cssload-animate 2.3s linear infinite;
+    -ms-animation: cssload-animate 2.3s linear infinite;
+    -webkit-animation: cssload-animate 2.3s linear infinite;
+    -moz-animation: cssload-animate 2.3s linear infinite;
+}
+.cssload-loader-walk > div:nth-of-type(1) {
+    animation-delay: -0.46s;
+    -o-animation-delay: -0.46s;
+    -ms-animation-delay: -0.46s;
+    -webkit-animation-delay: -0.46s;
+    -moz-animation-delay: -0.46s;
+}
+.cssload-loader-walk > div:nth-of-type(2) {
+    animation-delay: -0.92s;
+    -o-animation-delay: -0.92s;
+    -ms-animation-delay: -0.92s;
+    -webkit-animation-delay: -0.92s;
+    -moz-animation-delay: -0.92s;
+}
+.cssload-loader-walk > div:nth-of-type(3) {
+    animation-delay: -1.38s;
+    -o-animation-delay: -1.38s;
+    -ms-animation-delay: -1.38s;
+    -webkit-animation-delay: -1.38s;
+    -moz-animation-delay: -1.38s;
+}
+.cssload-loader-walk > div:nth-of-type(4) {
+    animation-delay: -1.84s;
+    -o-animation-delay: -1.84s;
+    -ms-animation-delay: -1.84s;
+    -webkit-animation-delay: -1.84s;
+    -moz-animation-delay: -1.84s;
+}
+
+
+
+@keyframes cssload-animate {
+    0% {
+        left: 97px;
+        top: 0;
+    }
+    80% {
+        left: 0;
+        top: 0;
+    }
+    85% {
+        left: 0;
+        top: -19px;
+        width: 19px;
+        height: 19px;
+    }
+    90% {
+        width: 39px;
+        height: 15px;
+    }
+    95% {
+        left: 97px;
+        top: -19px;
+        width: 19px;
+        height: 19px;
+    }
+    100% {
+        left: 97px;
+        top: 0;
+    }
+}
+
+@-o-keyframes cssload-animate {
+    0% {
+        left: 97px;
+        top: 0;
+    }
+    80% {
+        left: 0;
+        top: 0;
+    }
+    85% {
+        left: 0;
+        top: -19px;
+        width: 19px;
+        height: 19px;
+    }
+    90% {
+        width: 39px;
+        height: 15px;
+    }
+    95% {
+        left: 97px;
+        top: -19px;
+        width: 19px;
+        height: 19px;
+    }
+    100% {
+        left: 97px;
+        top: 0;
+    }
+}
+
+@-ms-keyframes cssload-animate {
+    0% {
+        left: 97px;
+        top: 0;
+    }
+    80% {
+        left: 0;
+        top: 0;
+    }
+    85% {
+        left: 0;
+        top: -19px;
+        width: 19px;
+        height: 19px;
+    }
+    90% {
+        width: 39px;
+        height: 15px;
+    }
+    95% {
+        left: 97px;
+        top: -19px;
+        width: 19px;
+        height: 19px;
+    }
+    100% {
+        left: 97px;
+        top: 0;
+    }
+}
+
+@-webkit-keyframes cssload-animate {
+    0% {
+        left: 97px;
+        top: 0;
+    }
+    80% {
+        left: 0;
+        top: 0;
+    }
+    85% {
+        left: 0;
+        top: -19px;
+        width: 19px;
+        height: 19px;
+    }
+    90% {
+        width: 39px;
+        height: 15px;
+    }
+    95% {
+        left: 97px;
+        top: -19px;
+        width: 19px;
+        height: 19px;
+    }
+    100% {
+        left: 97px;
+        top: 0;
+    }
+}
+
+@-moz-keyframes cssload-animate {
+    0% {
+        left: 97px;
+        top: 0;
+    }
+    80% {
+        left: 0;
+        top: 0;
+    }
+    85% {
+        left: 0;
+        top: -19px;
+        width: 19px;
+        height: 19px;
+    }
+    90% {
+        width: 39px;
+        height: 15px;
+    }
+    95% {
+        left: 97px;
+        top: -19px;
+        width: 19px;
+        height: 19px;
+    }
+    100% {
+        left: 97px;
+        top: 0;
+    }
+}

@@ -1153,13 +1153,16 @@ EOT;
         // Add div-element which is to hold the progress bar
         $id = $this->getAttribute('id');
         if (isset($this->with_progress_bar) && $this->with_progress_bar) {
-            $icon = Display::return_icon('progress_bar.gif');
+            // Deprecated
+            // $icon = Display::return_icon('progress_bar.gif');
 
             // @todo improve UI
             $returnValue .= '<br />
 
             <div id="loading_div_'.$id.'" class="loading_div" style="display:none;margin-left:40%; margin-top:10px; height:50px;">
-                '.$icon.'
+                <div class="cssload-loader-walk">
+                    <div></div><div></div><div></div><div></div><div></div>
+                </div>
             </div>
             ';
         }

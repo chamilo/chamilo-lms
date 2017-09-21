@@ -401,6 +401,7 @@ $defaults['status'] = STUDENT;
 $defaults['extra_mail_notify_invitation'] = 1;
 $defaults['extra_mail_notify_message'] = 1;
 $defaults['extra_mail_notify_group_message'] = 1;
+
 $form->setDefaults($defaults);
 $content = null;
 
@@ -525,7 +526,36 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     }
 }
 
-$form->addButtonCreate(get_lang('RegisterUser'));
+$allow = api_get_configuration_value('allow_double_validation_in_registration');
+
+if ($allow) {
+    $htmlHeadXtra[] = '<script>
+        $(document).ready(function() {
+            $("#pre_validation").click(function() {
+                $(this).hide();
+                $("#final_button").show();
+            });
+        });
+    </script>';
+
+    $form->addLabel(
+        null,
+        Display::url(
+            get_lang('Ok'),
+            'javascript:void',
+            ['class' => 'btn btn-default', 'id' => 'pre_validation']
+        )
+    );
+    $form->addHtml('<div id="final_button" style="display: none">');
+    $form->addLabel(
+        null,
+        Display::return_message(get_lang('DoubleValidationMessage'), 'info')
+    );
+    $form->addButtonCreate(get_lang('RegisterUser'));
+    $form->addHtml('</div>');
+} else {
+    $form->addButtonCreate(get_lang('RegisterUser'));
+}
 
 $course_code_redirect = Session::read('course_redirect');
 $sessionToRedirect = Session::read('session_redirect');

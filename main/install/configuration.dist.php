@@ -641,3 +641,5 @@ $_configuration['gradebook_badge_sidebar'] = [
 //$_configuration['allow_disable_user_for_session_admin'] = false;
 // Allow edit/delete agenda events for HRM users
 //$_configuration['allow_agenda_edit_for_hrm'] = false;
+// Allow double validation in registration page
+//$_configuration['allow_double_validation_in_registration'] = false;

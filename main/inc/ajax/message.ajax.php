@@ -77,8 +77,7 @@ switch ($action) {
         }
 
         /** @var UserRepository $repo */
-        $repo = Database::getManager()
-            ->getRepository('ChamiloUserBundle:User');
+        $repo = Database::getManager()->getRepository('ChamiloUserBundle:User');
 
         $users = $repo->findUsersToSendMessage(
             api_get_user_id(),
@@ -91,7 +90,7 @@ switch ($action) {
 
         /** @var User $user */
         foreach ($users as $user) {
-            $userName = $user->getCompleteName();
+            $userName = $user->getCompleteNameWithUsername();
 
             if ($showEmail) {
                 $userName .= " ({$user->getEmail()})";

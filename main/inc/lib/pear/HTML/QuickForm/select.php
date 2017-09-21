@@ -648,4 +648,12 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                 break;
         }
     }
+
+    /**
+     * Remove all options
+     */
+    public function clearOptions()
+    {
+        $this->_options = [];
+    }
 }

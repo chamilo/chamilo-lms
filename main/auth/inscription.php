@@ -478,6 +478,8 @@ if (!CustomPages::enabled()) {
     }
 }
 
+$showTerms = false;
+
 // Terms and conditions
 if (api_get_setting('allow_terms_conditions') == 'true') {
     if (!api_is_platform_admin()) {
@@ -524,11 +526,12 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
         $preview = LegalManager::show_last_condition($term_preview);
         $form->addElement('label', null, $preview);
     }
+    $showTerms = true;
 }
 
 $allow = api_get_configuration_value('allow_double_validation_in_registration');
 
-if ($allow) {
+if ($allow && $showTerms == false) {
     $htmlHeadXtra[] = '<script>
         $(document).ready(function() {
             $("#pre_validation").click(function() {

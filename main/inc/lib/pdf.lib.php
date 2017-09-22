@@ -506,13 +506,13 @@ class PDF
 
         if ($addDefaultCss) {
             $basicStyles = [
-                api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css',
-                api_get_path(WEB_CSS_PATH).'base.css',
-                api_get_path(WEB_CSS_PATH).api_get_visual_theme().'/default.css'
+                api_get_path(SYS_PATH).'web/assets/bootstrap/dist/css/bootstrap.min.css',
+                api_get_path(SYS_PATH).'web/css/base.css',
+                api_get_path(SYS_PATH).'web/css/themes/'.api_get_visual_theme().'/default.css'
             ];
             foreach ($basicStyles as $style) {
                 $cssContent = file_get_contents($style);
-                $this->pdf->WriteHTML("<style>$cssContent</style>", 1);
+                $this->pdf->WriteHTML($cssContent, 1);
             }
         }
 

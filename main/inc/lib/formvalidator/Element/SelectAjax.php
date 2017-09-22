@@ -95,9 +95,14 @@ class SelectAjax extends HTML_QuickForm_select
                                 };
                             },
                             processResults: function (data, page) {
-                                //parse the results into the format expected by Select2
+                                // Parse the results into the format expected by Select2                                
+                                if (data.items) {                                    
+                                    return {
+                                        results: data.items
+                                    };
+                                }                                
                                 return {
-                                    results: data.items
+                                    results: ''
                                 };
                             }
                             $formatCondition

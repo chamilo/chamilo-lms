@@ -45,7 +45,7 @@ class PDF
         $params['bottom'] = isset($params['bottom']) ? $params['bottom'] : 30;
 
         $this->params['filename'] = isset($params['filename']) ? $params['filename'] : api_get_local_time();
-        $this->params['pdf_title'] = isset($params['pdf_title']) ? $params['pdf_title'] : get_lang('Untitled');
+        $this->params['pdf_title'] = isset($params['pdf_title']) ? $params['pdf_title'] : '';
         $this->params['course_info'] = isset($params['course_info']) ? $params['course_info'] : api_get_course_info();
         $this->params['session_info'] = isset($params['session_info']) ? $params['session_info'] : api_get_session_info(api_get_session_id());
         $this->params['course_code'] = isset($params['course_code']) ? $params['course_code'] : api_get_course_id();
@@ -88,13 +88,15 @@ class PDF
      * @param $content
      * @param bool|false $saveToFile
      * @param bool|false $returnHtml
+     * @param bool $addDefaultCss
      *
      * @return string
      */
     public function html_to_pdf_with_template(
         $content,
         $saveToFile = false,
-        $returnHtml = false
+        $returnHtml = false,
+        $addDefaultCss = false
     ) {
         if (empty($this->template)) {
             $tpl = new Template('', false, false, false);
@@ -151,7 +153,6 @@ class PDF
             $css_file = api_get_path(SYS_CSS_PATH).'print.css';
         }
         $css = file_get_contents($css_file);
-
         $html = self::content_to_pdf(
             $html,
             $css,
@@ -160,7 +161,8 @@ class PDF
             'D',
             $saveToFile,
             null,
-            $returnHtml
+            $returnHtml,
+            $addDefaultCss
         );
 
         if ($returnHtml) {
@@ -399,6 +401,11 @@ class PDF
      * @param   string $course_code course code
      * (if you are using html that are located in the document tool you must provide this)
      * @param string $outputMode the MPDF output mode can be:
+     * @param bool $saveInFile
+     * @param string $fileToSave
+     * @param bool $returnHtml
+     * @param bool $addDefaultCss
+     *
      * 'I' (print on standard output),
      * 'D' (download file) (this is the default value),
      * 'F' (save to local file) or
@@ -413,7 +420,8 @@ class PDF
         $outputMode = 'D',
         $saveInFile = false,
         $fileToSave = null,
-        $returnHtml = false
+        $returnHtml = false,
+        $addDefaultCss = false
     ) {
         $urlAppend = api_get_configuration_value('url_append');
 
@@ -450,7 +458,7 @@ class PDF
             $document_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/';
 
             $doc = new DOMDocument();
-            $result = @$doc->loadHTML($document_html);
+            @$doc->loadHTML($document_html);
 
             //Fixing only images @todo do the same thing with other elements
             $elements = $doc->getElementsByTagName('img');
@@ -495,6 +503,19 @@ class PDF
         if (!empty($css)) {
             $this->pdf->WriteHTML($css, 1);
         }
+
+        if ($addDefaultCss) {
+            $basicStyles = [
+                api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css',
+                api_get_path(WEB_CSS_PATH).'base.css',
+                api_get_path(WEB_CSS_PATH).api_get_visual_theme().'/default.css'
+            ];
+            foreach ($basicStyles as $style) {
+                $cssContent = file_get_contents($style);
+                $this->pdf->WriteHTML("<style>$cssContent</style>", 1);
+            }
+        }
+
         $this->pdf->WriteHTML($document_html);
 
         if (empty($pdf_name)) {

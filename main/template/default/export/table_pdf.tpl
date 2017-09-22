@@ -1,4 +1,6 @@
+{% if pdf_title %}
 <h2 align="center"> {{ pdf_title }} </h2>
+{% endif %}
 
 {% if pdf_description %}
     {{ pdf_description }}

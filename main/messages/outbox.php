@@ -56,7 +56,6 @@ if ($allowMessage) {
         Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
 }
 
-
 $info_delete_outbox = array();
 $info_delete_outbox = isset($_GET['form_delete_outbox']) ? explode(',', $_GET['form_delete_outbox']) : '';
 $count_delete_outbox = count($info_delete_outbox) - 1;

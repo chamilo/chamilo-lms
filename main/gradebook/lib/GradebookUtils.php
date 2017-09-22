@@ -1159,20 +1159,22 @@ class GradebookUtils
 
         if (!empty($current_session)) {
             $sql = "SELECT user.user_id, user.username, lastname, firstname, official_code
-                    FROM $tbl_session_course_user as scru, $tbl_user as user
-                    WHERE
-                        scru.user_id = user.user_id AND
-                        scru.status=0  AND
+                    FROM $tbl_session_course_user as scru 
+                    INNER JOIN $tbl_user as user
+                    ON (scru.user_id = user.user_id)
+                    WHERE                        
+                        scru.status = 0 AND
                         scru.c_id='$courseId' AND
                         session_id ='$current_session'
                     $order_clause
                     ";
         } else {
             $sql = 'SELECT user.user_id, user.username, lastname, firstname, official_code
-                    FROM '.$tbl_course_user.' as course_rel_user, '.$tbl_user.' as user
+                    FROM '.$tbl_course_user.' as course_rel_user 
+                    INNER JOIN '.$tbl_user.' as user
+                    ON (course_rel_user.user_id=user.user_id)
                     WHERE
-                        course_rel_user.user_id=user.user_id AND
-                        course_rel_user.status='.STUDENT.' AND
+                        course_rel_user.status = '.STUDENT.' AND
                         course_rel_user.c_id = "'.$courseId.'" '.
                     $order_clause;
         }

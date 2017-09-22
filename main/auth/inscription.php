@@ -540,6 +540,7 @@ if (!CustomPages::enabled()) {
 
 $blockButton = false;
 $termActivated = false;
+
 // Terms and conditions
 if (api_get_setting('allow_terms_conditions') == 'true') {
     if (!api_is_platform_admin()) {
@@ -682,7 +683,7 @@ if ($blockButton) {
 } else {
     $allow = api_get_configuration_value('allow_double_validation_in_registration');
 
-    if ($allow) {
+    if ($allow && $termActivated == false) {
         $htmlHeadXtra[] = '<script>
             $(document).ready(function() {
                 $("#pre_validation").click(function() {

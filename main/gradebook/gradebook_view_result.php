@@ -50,7 +50,7 @@ if (isset($_GET['delete_mark'])) {
 
 if (isset($_GET['selecteval'])) {
     $allresults = Result :: load(null, null, $select_eval);
-    $iscourse = $currentcat[0]->get_course_code() == null ? 1 : 0;
+    $iscourse = !empty(api_get_course_id());
 }
 
 if (isset($_GET['editres'])) {
@@ -97,7 +97,7 @@ if (isset($_GET['import'])) {
         'name' => get_lang('ViewResult')
     );
     $import_result_form = new DataForm(
-        DataForm :: TYPE_IMPORT,
+        DataForm::TYPE_IMPORT,
         'import_result_form',
         null,
         api_get_self().'?import=&selecteval='.$select_eval,
@@ -425,7 +425,8 @@ if (isset($_POST['action'])) {
                     $result[0]->delete();
                     $number_of_deleted_results++;
                 }
-                header('Location: gradebook_view_result.php?massdelete=&selecteval='.$select_eval);
+                Display::addFlash(Display::return_message(get_lang('ResultsDeleted'), 'confirmation', false));
+                header('Location: gradebook_view_result.php?massdelete=&selecteval='.$select_eval.'&'.api_get_cidreq());
                 exit;
                 break;
         }
@@ -437,14 +438,14 @@ if (isset($_GET['print'])) {
     $datagen = new ResultsDataGenerator($eval[0], $allresults);
     if (api_sort_by_first_name()) {
         $data_array = $datagen->get_data(
-            ResultsDataGenerator :: RDG_SORT_FIRSTNAME,
+            ResultsDataGenerator::RDG_SORT_FIRSTNAME,
             0,
             null,
             true
         );
     } else {
         $data_array = $datagen->get_data(
-            ResultsDataGenerator :: RDG_SORT_LASTNAME,
+            ResultsDataGenerator::RDG_SORT_LASTNAME,
             0,
             null,
             true
@@ -523,13 +524,6 @@ if (!isset($_GET['export']) && (!isset($_GET['import']))) {
     );
     Display :: display_header('');
 }
-if (isset($_GET['addresultnostudents'])) {
-    echo Display::return_message(get_lang('AddResultNoStudents'), 'warning', false);
-}
-
-if (isset($_GET['addresult'])) {
-    echo Display::return_message(get_lang('ResultAdded'), 'confirmation', false);
-}
 
 if (isset($_GET['adduser'])) {
     echo Display::return_message(get_lang('UserAdded'), 'confirmation', false);
@@ -539,9 +533,6 @@ if (isset($_GET['incorrectdata'])) {
     echo Display::return_message(get_lang('IncorrectData'), 'warning', false);
 }
 
-if (isset($_GET['massdelete'])) {
-    echo Display::return_message(get_lang('ResultsDeleted'), 'confirmation', false);
-}
 if (isset($_GET['nouser'])) {
     echo Display::return_message(get_lang('NoUser'), 'warning', false);
 }

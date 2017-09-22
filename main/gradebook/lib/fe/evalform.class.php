@@ -52,6 +52,7 @@ class EvalForm extends FormValidator
         if (isset($extra1)) {
             $this->extra = $extra1;
         }
+
         switch ($form_type) {
             case self::TYPE_EDIT:
                 $this->build_editing_form();

@@ -206,9 +206,19 @@ function ldap_put_user_info_locally($login, $info_array) {
 
     $language = api_get_setting('platformLanguage');
     if (empty($language)) { $language = 'english'; }
-    $_userId = UserManager::create_user($prenom, $nom, $status,
-                     $email, $uname, $password, $official_code,
-                     $language, '', '', 'ldap');
+    $_userId = UserManager::create_user(
+        $prenom,
+        $nom,
+        $status,
+        $email,
+        $uname,
+        $password,
+        $official_code,
+        $language,
+        '',
+        '',
+        'ldap'
+    );
 
     //echo "new user added to Chamilo, id = $_userId";
 
@@ -516,12 +526,40 @@ function ldap_add_user_by_array($data, $update_if_exists = true) {
     // Adding user
     $user_id = 0;
     if (UserManager::is_username_available($username)) {
-        $user_id = UserManager::create_user($firstname, $lastname, $status, $email, $username, $password, $official_code, api_get_setting('platformLanguage'), $phone, $picture_uri, $auth_source, $expiration_date, $active);
+        $user_id = UserManager::create_user(
+            $firstname,
+            $lastname,
+            $status,
+            $email,
+            $username,
+            $password,
+            $official_code,
+            api_get_setting('platformLanguage'),
+            $phone,
+            $picture_uri,
+            $auth_source,
+            $expiration_date,
+            $active
+        );
     } else {
         if ($update_if_exists) {
             $user = api_get_user_info($username);
             $user_id = $user['user_id'];
-            UserManager::update_user($user_id, $firstname, $lastname, $username, null, null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active);
+            UserManager::update_user(
+                $user_id,
+                $firstname,
+                $lastname,
+                $username,
+                null,
+                null,
+                $email,
+                $status,
+                $official_code,
+                $phone,
+                $picture_uri,
+                $expiration_date,
+                $active
+            );
         }
     }
     return $user_id;

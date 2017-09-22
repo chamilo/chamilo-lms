@@ -106,8 +106,19 @@ function cas_is_authenticated()
                     case PLATFORM_AUTH_SOURCE :
                         // user will have to modify firstname, lastname, email in chamilo profil edit
                         $userdata = get_lang("EditInProfil");
-                        UserManager::create_user($userdata, $userdata, '5', $userdata, $login, 'casplaceholder', '', '',
-                            '', '', CAS_AUTH_SOURCE);
+                        UserManager::create_user(
+                            $userdata,
+                            $userdata,
+                            '5',
+                            $userdata,
+                            $login,
+                            'casplaceholder',
+                            '',
+                            '',
+                            '',
+                            '',
+                            CAS_AUTH_SOURCE
+                        );
                         $user_added = $login;
                         break;
                     case LDAP_AUTH_SOURCE :

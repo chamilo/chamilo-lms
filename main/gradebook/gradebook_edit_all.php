@@ -152,9 +152,7 @@ foreach ($evaluations as $evaluationRow) {
 
     $output .= '<tr>
                 <td>'.GradebookUtils::build_type_icon_tag('evalnotempty').'</td>
-                <td>'.$evaluationRow['name'].' '.Display::label(
-            get_lang('Evaluation')
-        ).'</td>';
+                <td>'.$evaluationRow['name'].' '.Display::label(get_lang('Evaluation')).'</td>';
     $output .= '<td>
                     <input type="hidden" name="eval_'.$evaluationRow['id'].'" value="'.$evaluationRow['name'].'" />
                     <input type="text" size="10" name="evaluation['.$evaluationRow['id'].']" value="'.$item_weight.'"/>

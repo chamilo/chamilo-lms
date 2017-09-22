@@ -12,10 +12,10 @@ api_block_anonymous_users();
 $eval = Evaluation :: load($_GET['selecteval']);
 if ($eval[0]->get_category_id() < 0) {
     // if category id is negative, then the evaluation's origin is a link
-    $link = LinkFactory :: get_evaluation_link($eval[0]->get_id());
-    $currentcat = Category :: load($link->get_category_id());
+    $link = LinkFactory::get_evaluation_link($eval[0]->get_id());
+    $currentcat = Category::load($link->get_category_id());
 } else {
-    $currentcat = Category :: load($eval[0]->get_category_id());
+    $currentcat = Category::load($eval[0]->get_category_id());
 }
 
 $interbreadcrumb[] = array(
@@ -25,11 +25,11 @@ $interbreadcrumb[] = array(
 
 if (api_is_allowed_to_edit()) {
     $interbreadcrumb[] = array(
-        'url' => 'gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq(),
+        'url' => 'gradebook_view_result.php?selecteval='.intval($_GET['selecteval']).'&'.api_get_cidreq(),
         'name' => get_lang('ViewResult')
     );
 }
-$displayscore = ScoreDisplay :: instance();
+$displayscore = ScoreDisplay::instance();
 
 Display::display_header(get_lang('EvaluationStatistics'));
 DisplayGradebook::display_header_result(

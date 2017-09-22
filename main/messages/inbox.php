@@ -108,13 +108,12 @@ $interbreadcrumb[] = array(
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Inbox'));
 
 $actions = '';
+
 // Comes from normal profile
-if ($allowSocial && $allowMessage) {
+if ($allowSocial == false && $allowMessage) {
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
         Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
-}
 
-if ($allowMessage) {
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
         Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
@@ -122,7 +121,6 @@ if ($allowMessage) {
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
         Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
 }
-
 
 // LEFT CONTENT
 $social_menu_block = '';

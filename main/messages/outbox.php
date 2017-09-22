@@ -26,7 +26,10 @@ if (isset($_GET['messages_page_nr'])) {
 
 if ($allowSocial) {
     $this_section = SECTION_SOCIAL;
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'main/social/home.php', 'name' => get_lang('Social'));
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_PATH).'main/social/home.php',
+        'name' => get_lang('SocialNetwork'),
+    );
 } else {
     $this_section = SECTION_MYPROFILE;
     $interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'main/auth/profile.php', 'name' => get_lang('Profile'));

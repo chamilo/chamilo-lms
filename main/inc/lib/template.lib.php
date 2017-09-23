@@ -446,14 +446,24 @@ class Template
     }
 
     /**
-     * If template not found in custom template folder, the default template
-     * will be used.
+     * Returns the sub-folder and filename for the given tpl file.
+     * If template not found in overrides/ or custom template folder, the
+     * default template will be used.
      * @param string $name
      *
      * @return string
      */
     public function get_template($name)
     {
+        // Check if the tpl file is present in the main/template/overrides/ dir
+        // Overrides is a special directory meant for temporary template
+        // customization. It must be taken into account before anything else
+        $file = api_get_path(SYS_CODE_PATH).'template/overrides/'.$name;
+        if (is_readable($file)) {
+            return 'overrides/'.$name;
+        }
+        // If a template folder has been manually defined, search for the right
+        // file, and if not found, go for the same file in the default template
         if ($this->templateFolder != 'default') {
             // Avoid missing template error, use the default file.
             $file = api_get_path(SYS_CODE_PATH).'template/'.$this->templateFolder.'/'.$name;
@@ -466,7 +476,9 @@ class Template
     }
 
     /**
-     * Set course parameters
+     * Prepare the _c array for template files. The _c array contains
+     * information about the current course
+     * @return void
      */
     private function set_course_parameters()
     {
@@ -494,7 +506,10 @@ class Template
     }
 
     /**
-     * Set user parameters
+     * Prepare the _u array for template files. The _u array contains
+     * information about the current user, as returned by
+     * api_get_user_info()
+     * @return void
      */
     private function set_user_parameters()
     {

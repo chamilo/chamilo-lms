@@ -860,7 +860,6 @@ class Template
     {
         global $httpHeadXtra, $interbreadcrumb, $language_file, $_configuration, $this_section;
         $_course = api_get_course_info();
-        $help = $this->help;
         $nameTools = $this->title;
         $navigation = return_navigation_array();
         $this->menu_navigation = $navigation['menu_navigation'];
@@ -913,9 +912,9 @@ class Template
         $this->assign('title_string', $title_string);
 
         // Setting the theme and CSS files
-        $css = $this->setCssFiles();
+        $this->setCssFiles();
         $this->set_js_files();
-        $this->setCssCustomFiles($css);
+        $this->setCssCustomFiles();
 
         $browser = api_browser_support('check_browser');
         if ($browser[0] == 'Internet Explorer' && $browser[1] >= '11') {
@@ -1525,7 +1524,7 @@ class Template
 
         $html = $form->returnForm();
         if (api_get_setting('openid_authentication') == 'true') {
-            include_once 'main/auth/openid/login.php';
+            include_once api_get_path(SYS_CODE_PATH).'auth/openid/login.php';
             $html .= '<div>'.openid_form().'</div>';
         }
 

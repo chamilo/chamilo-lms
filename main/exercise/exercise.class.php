@@ -78,6 +78,7 @@ class Exercise
     public $questionTypeWithFeedback;
     public $showPreviousButton;
     public $notifications;
+    public $export = false;
 
     /**
      * Constructor of the class
@@ -4416,7 +4417,8 @@ class Exercise
                                 0,
                                 0,
                                 $results_disabled,
-                                $showTotalScoreAndUserChoicesInLastAttempt
+                                $showTotalScoreAndUserChoicesInLastAttempt,
+                                $this->export
                             );
                         } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
                             ExerciseShowFunctions::display_multiple_answer_true_false(

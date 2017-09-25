@@ -36,6 +36,7 @@ abstract class Question
     public $question_table_class = 'table table-striped';
     public $questionTypeWithFeedback;
     public $extra;
+    public $export = false;
     public static $questionTypes = array(
         UNIQUE_ANSWER => array('unique_answer.class.php', 'UniqueAnswer'),
         MULTIPLE_ANSWER => array('multiple_answer.class.php', 'MultipleAnswer'),

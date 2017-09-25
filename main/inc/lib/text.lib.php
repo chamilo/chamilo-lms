@@ -869,3 +869,19 @@ function trim_value(& $value)
 {
     $value = trim($value);
 }
+
+/**
+ *
+ * Strips only the given tags in the given HTML string.
+ * @param string $html
+ * @param array $tags
+ * @return string
+ */
+function strip_tags_blacklist($html, $tags)
+{
+    foreach ($tags as $tag) {
+        $regex = '#<\s*' . $tag . '[^>]*>.*?<\s*/\s*'. $tag . '>#msi';
+        $html = preg_replace($regex, '', $html);
+    }
+    return $html;
+}

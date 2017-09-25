@@ -369,13 +369,15 @@ foreach ($questionList as $questionId) {
 }
 
 $counter = 1;
-$exercise_content = null;
+$exercise_content = '';
 $category_list = array();
 $useAdvancedEditor = true;
 
 if (!empty($maxEditors) && count($questionList) > $maxEditors) {
     $useAdvancedEditor = false;
 }
+
+$objExercise->export = $action === 'export';
 
 $countPendingQuestions = 0;
 foreach ($questionList as $questionId) {
@@ -922,7 +924,8 @@ foreach ($questionList as $questionId) {
     $question_content = '<div class="question_row">';
 
     if ($show_results) {
-        //Shows question title an description
+        $objQuestionTmp->export = $action == 'export';
+        // Shows question title an description
         $question_content .= $objQuestionTmp->return_header(
             $objExercise,
             $counter,

@@ -462,11 +462,11 @@ class PDF
 
             //Fixing only images @todo do the same thing with other elements
             $elements = $doc->getElementsByTagName('img');
+            $protocol = api_get_protocol();
             if (!empty($elements)) {
                 foreach ($elements as $item) {
                     $old_src = $item->getAttribute('src');
-                    //$old_src= str_replace('../','',$old_src);
-                    if (strpos($old_src, 'http') === false) {
+                    if (strpos($old_src, $protocol) === false) {
                         if (strpos($old_src, '/main/default_course_document') === false) {
                             if (strpos($old_src, '/main/inc/lib/') === false) {
                                 $old_src_fixed = str_replace(api_get_path(REL_COURSE_PATH).$course_data['path'].'/document/', '', $old_src);

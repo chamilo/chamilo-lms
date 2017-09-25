@@ -192,7 +192,7 @@ class UniqueAnswerImage extends UniqueAnswer
             $answerNumber->freeze();
 
             $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox"');
-            $form->addHtmlEditor('answer['.$i.']', null, null, true, $editorConfig);
+            $form->addHtmlEditor('answer['.$i.']', null, null, false, $editorConfig);
 
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 

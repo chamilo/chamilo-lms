@@ -105,7 +105,8 @@ class UniqueAnswer extends Question
                 }
                 $question = Question::read($questionid);
                 $select_question[$questionid] = 'Q'.$key.' :'.cut(
-                    $question->selectTitle(), 20
+                    $question->selectTitle(),
+                    20
                 );
             }
         }
@@ -214,7 +215,7 @@ class UniqueAnswer extends Question
                 'class="checkbox"'
             );
 
-            $form->addHtmlEditor('answer['.$i.']', null, null, true, $editor_config);
+            $form->addHtmlEditor('answer['.$i.']', null, null, false, $editor_config);
 
             $form->addRule(
                 'answer['.$i.']',

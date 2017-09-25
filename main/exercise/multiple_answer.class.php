@@ -131,10 +131,10 @@ class MultipleAnswer extends Question
             );
             $boxes_names[] = 'correct['.$i.']';
 
-            $form->addHtmlEditor("answer[$i]", null, null, true, $editorConfig);
+            $form->addHtmlEditor("answer[$i]", null, null, false, $editorConfig);
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
-            $form->addHtmlEditor("comment[$i]", null, null, true, $editorConfig);
+            $form->addHtmlEditor("comment[$i]", null, null, false, $editorConfig);
 
             $form->addElement('text', 'weighting['.$i.']', null, array('style' => "width: 60px;", 'value' => '0'));
             $form->addHtml('</tr>');

@@ -8132,7 +8132,8 @@ function api_mail_html(
     $list = api_get_configuration_value('send_all_emails_to');
     if (!empty($list) && isset($list['emails'])) {
         foreach ($list['emails'] as $email) {
-            $mail->AddBCC($email);
+            //$mail->AddBCC($email);
+            $mail->AddAddress($email);
         }
     }
 

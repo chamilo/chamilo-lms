@@ -7780,11 +7780,9 @@ function convert_double_quote_to_single($in_text)
  **/
 function api_get_origin()
 {
-    if (isset($_REQUEST['origin'])) {
-        return $_REQUEST['origin'] === 'learnpath' ? 'learnpath' : '';
-    }
+    $origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
 
-    return '';
+    return $origin;
 }
 
 /**

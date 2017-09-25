@@ -690,14 +690,14 @@ class PDF
                 }
             }
 
-            $organization = ChamiloApi::getPlatformLogo();
+            $organization = ChamiloApi::getPlatformLogo('', [], true);
             // Use custom logo image.
             $pdfLogo = api_get_setting('pdf_logo_header');
             if ($pdfLogo === 'true') {
                 $visualTheme = api_get_visual_theme();
                 $img = api_get_path(SYS_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
                 if (file_exists($img)) {
-                    $img = api_get_path(WEB_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
+                    //$img = api_get_path(WEB_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
                     $organization = "<img src='$img'>";
                 }
             }

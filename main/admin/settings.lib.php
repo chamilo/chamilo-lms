@@ -355,7 +355,7 @@ function handleStylesheets()
     $url = api_get_path(WEB_CSS_PATH).'/'.$themeDir.'/images/';
     $logoFileName = 'header-logo.png';
     $newLogoFileName = 'header-logo-custom'.api_get_current_access_url_id().'.png';
-    $webPlatformLogoPath = ChamiloApi::getWebPlatformLogoPath($selected);
+    $webPlatformLogoPath = ChamiloApi::getPlatformLogoPath($selected);
 
     $logoForm = new FormValidator(
         'logo_upload',

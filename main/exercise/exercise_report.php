@@ -127,6 +127,9 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
     }
 }
 
+$objExerciseTmp = new Exercise();
+$exerciseExists = $objExerciseTmp->read($exercise_id);
+
 //Send student email @todo move this code in a class, library
 if (isset($_REQUEST['comments']) &&
     $_REQUEST['comments'] == 'update' &&
@@ -143,8 +146,11 @@ if (isset($_REQUEST['comments']) &&
     $student_id = $track_exercise_info['exe_user_id'];
     $session_id = $track_exercise_info['session_id'];
     $lp_id = $track_exercise_info['orig_lp_id'];
+    $lpItemId = $track_exercise_info['orig_lp_item_id'];
     $lp_item_view_id = $track_exercise_info['orig_lp_item_view_id'];
     $exerciseId = $track_exercise_info['exe_exo_id'];
+    $exeWeighting = $track_exercise_info['exe_weighting'];
+
     $course_info = api_get_course_info();
     $url = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.$session_id;
 
@@ -242,17 +248,54 @@ if (isset($_REQUEST['comments']) &&
 
     // Updating LP score here
     if (in_array($origin, array('tracking_course', 'user_course', 'correct_exercise_in_lp'))) {
+        $statusCondition = '';
+        $item = new learnpathItem($lpItemId, api_get_user_id(), api_get_course_int_id());
+        if ($item) {
+            $minScore = $item->getPrerequisiteMinScore();
+            $maxScore = $item->getPrerequisiteMaxScore();
+
+            $passed = false;
+            // Check lp item min/max
+            if (isset($minScore) && isset($maxScore)) {
+                if ($tot >= $minScore && $tot <= $maxScore) {
+                    $passed = true;
+                }
+            }
+
+            if ($passed == false) {
+                if (!empty($objExerciseTmp->pass_percentage)) {
+                    $passed = ExerciseLib::isSuccessExerciseResult(
+                        $tot,
+                        $exeWeighting,
+                        $objExerciseTmp->pass_percentage
+                    );
+                } else {
+                    $passed = false;
+                }
+            }
+
+            if ($passed) {
+                $statusCondition = ', status = "completed" ';
+            } else {
+                $statusCondition = ', status = "failed" ';
+            }
+            Display::addFlash(Display::return_message(get_lang('LearnpathUpdated')));
+        }
+
         $sql = "UPDATE $TBL_LP_ITEM_VIEW 
                 SET score = '".floatval($tot)."'
+                $statusCondition
                 WHERE c_id = ".$course_id." AND id = ".$lp_item_view_id;
         Database::query($sql);
+
+
         if ($origin == 'tracking_course') {
             //Redirect to the course detail in lp
             header('location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?course='.Security::remove_XSS($_GET['course']));
             exit;
         } else {
             // Redirect to the reporting
-            header('Location: '.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?origin='.$origin.'&student='.$student_id.'&details=true&course='.$course_id.'&session_id='.$session_id);
+            header('Location: '.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?origin='.$origin.'&student='.$student_id.'&details=true&course='.api_get_course_id().'&session_id='.$session_id);
             exit;
         }
     }
@@ -334,11 +377,11 @@ if ($is_allowedToEdit || $is_tutor) {
         "url" => "exercise.php?".api_get_cidreq(),
         "name" => get_lang('Exercises')
     );
-    $objExerciseTmp = new Exercise();
+
     $nameTools = get_lang('StudentScore');
-    if ($objExerciseTmp->read($exercise_id)) {
+    if ($exerciseExists) {
         $interbreadcrumb[] = array(
-            "url" => "admin.php?exerciseId=".$exercise_id,
+            "url" => "admin.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(),
             "name" => $objExerciseTmp->selectTitle(true)
         );
     }
@@ -347,8 +390,7 @@ if ($is_allowedToEdit || $is_tutor) {
         "url" => "exercise.php?".api_get_cidreq(),
         "name" => get_lang('Exercises')
     );
-    $objExerciseTmp = new Exercise();
-    if ($objExerciseTmp->read($exercise_id)) {
+    if ($exerciseExists) {
         $nameTools = get_lang('Results').': '.$objExerciseTmp->selectTitle(true);
     }
 }

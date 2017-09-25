@@ -720,7 +720,7 @@ table.table-striped tr td span.label-success{
     background-color: #96BD0D;
     color: #FFF !important;
     border-radius: 0;
-    width: 40%;
+    width: 100%;
     display: inline-block;
 }
 .table-striped>tbody>tr:nth-of-type(odd){

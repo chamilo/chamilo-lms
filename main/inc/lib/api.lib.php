@@ -7730,7 +7730,23 @@ function api_get_firstpage_parameter()
  */
 function api_is_https()
 {
-    return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off');
+    if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
+        $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_configuration['force_https_forwarded_proto'])
+    ) {
+        $protocol = 'https';
+    } else {
+        if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+            $protocol = 'https';
+        } else {
+            $protocol = 'http';
+            // last chance
+            if (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) {
+                $protocol = 'https';
+            }
+        }
+    }
+
+    return $protocol === 'https';
 }
 
 /**

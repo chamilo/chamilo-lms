@@ -411,6 +411,7 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
     $online_time = time() - $time_limit * 60;
     $current_date = api_get_utc_datetime($online_time);
     $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+    $tableUser = Database::get_main_table(TABLE_MAIN_USER);
     $course_code = Database::escape_string($course_code);
     $courseInfo = api_get_course_info($course_code);
     $courseId = $courseInfo['real_id'];
@@ -418,8 +419,13 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
     $from = intval($from);
     $number_of_items = intval($number_of_items);
 
-    $query = "SELECT login_user_id, login_date FROM $track_online_table
-              WHERE login_user_id <> 2 AND c_id = $courseId AND login_date >= '$current_date'
+    $query = "SELECT o.login_user_id, o.login_date
+              FROM $track_online_table o INNER JOIN $tableUser u
+              ON (o.login_user_id = u.id)
+              WHERE
+                u.status <> '".ANONYMOUS."' AND 
+                o.c_id = $courseId AND 
+                o.login_date >= '$current_date'
               LIMIT $from, $number_of_items ";
 
     $result = Database::query($query);
@@ -447,6 +453,8 @@ function who_is_online_in_this_course_count(
         return false;
     }
     $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+    $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+
     $time_limit = Database::escape_string($time_limit);
 
     $online_time = time() - $time_limit * 60;
@@ -458,9 +466,10 @@ function who_is_online_in_this_course_count(
     }
 
     $query = "SELECT count(login_user_id) as count
-              FROM $track_online_table
+              FROM $track_online_table o INNER JOIN $tableUser u 
+              ON (login_user_id = u.id)
               WHERE 
-                login_user_id <> 2 AND
+                u.status <> '".ANONYMOUS."' AND
                 c_id = $courseId AND 
                 login_date >= '$current_date' ";
     $result = Database::query($query);
@@ -477,7 +486,6 @@ function who_is_online_in_this_course_count(
  * @param string $timeLimit
  * @param int $sessionId
  * @return bool
- * @internal param int $uid
  */
 function whoIsOnlineInThisSessionCount($timeLimit, $sessionId)
 {
@@ -486,14 +494,20 @@ function whoIsOnlineInThisSessionCount($timeLimit, $sessionId)
     }
 
     $tblTrackOnline = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+    $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+
     $timeLimit = Database::escape_string($timeLimit);
 
     $online_time = time() - $timeLimit * 60;
     $current_date = api_get_utc_datetime($online_time);
 
     $query = "SELECT count(login_user_id) as count
-              FROM $tblTrackOnline
-              WHERE login_user_id <> 2 AND session_id = $sessionId AND login_date >= '$current_date' ";
+              FROM $tblTrackOnline o INNER JOIN $tableUser u 
+              ON (login_user_id = u.id)
+              WHERE 
+                    u.status <> '".ANONYMOUS."' AND 
+                    session_id = $sessionId AND 
+                    login_date >= '$current_date' ";
     $result = Database::query($query);
 
     if (Database::num_rows($result) > 0) {

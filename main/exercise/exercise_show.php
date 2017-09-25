@@ -974,6 +974,9 @@ echo $total_score_text;
 
 if ($action == 'export') {
     $content = ob_get_clean();
+    // needed in order to mpdf to work
+    ob_clean();
+
     $params = array(
         'filename' => api_replace_dangerous_char(
             $objExercise->name.' '.

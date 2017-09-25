@@ -88,7 +88,7 @@ class PDF
      * @param $content
      * @param bool|false $saveToFile
      * @param bool|false $returnHtml
-     * @param bool $addDefaultCss
+     * @param bool $addDefaultCss (bootstrap/default/base.css)
      *
      * @return string
      */
@@ -524,7 +524,6 @@ class PDF
             $pdf_name = api_replace_dangerous_char($pdf_name);
             $output_file = $pdf_name.'.pdf';
         }
-        //$this->pdf->Output($output_file, $outputMode); // F to save the pdf in a file
 
         if ($outputMode == 'F') {
             $output_file = api_get_path(SYS_ARCHIVE_PATH).$output_file;

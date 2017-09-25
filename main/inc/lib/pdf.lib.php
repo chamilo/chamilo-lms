@@ -480,6 +480,13 @@ class PDF
             }
         }
 
+        // Use sys path to correct export images
+        $document_html = str_replace(
+            api_get_path(WEB_CODE_PATH).'img/',
+            api_get_path(SYS_CODE_PATH).'img/',
+            $document_html
+        );
+
         //replace relative path by absolute path for resources
         //$document_html= str_replace('src="/chamilo/main/default_course_document/', 'temp_template_path', $document_html);// before save src templates not apply
         //$document_html= str_replace('src="/', 'temp_template_path', $document_html);// before save src templates not apply

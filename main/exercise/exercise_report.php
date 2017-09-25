@@ -38,7 +38,7 @@ $_course = api_get_course_info();
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
-$origin = isset($origin) ? $origin : null;
+$origin = api_get_origin();
 $path = isset($_GET['path']) ? Security::remove_XSS($_GET['path']) : null;
 
 /* 	Constants and variables */

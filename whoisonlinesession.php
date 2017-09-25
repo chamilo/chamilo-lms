@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Shows who is online in a specific session
  * @package chamilo.main
@@ -18,8 +19,8 @@ $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_US
 
 Display::display_header(get_lang('UserOnlineListSession'));
 ?>
-<br /><br />
-<table class="data_table" width="60%">
+<br />
+<table class="data_table">
     <tr class="tableName">
         <td colspan="4">
             <strong><?php echo get_lang('UserOnlineListSession'); ?></strong>
@@ -109,12 +110,12 @@ if (isset($_user['user_id']) && $_user['user_id'] != '') {
                 ";
             echo $student_online['name'];
             echo "	</td>
-                    <td align='center'>
+                    <td>
                  ";
             $courseInfo = api_get_course_info_by_id($student_online['c_id']);
             echo $courseInfo['title'];
             echo "	</td>
-                    <td align='center'>
+                    <td>
                  ";
             if (!empty($student_online['email'])) {
                 echo $student_online['email'];
@@ -122,7 +123,7 @@ if (isset($_user['user_id']) && $_user['user_id'] != '') {
                 echo get_lang('NoEmail');
             }
             echo "	</td>
-                    <td align='center'>
+                    <td>
                  ";
             echo '<a href="main/chat/chat.php?cidReq='.$courseInfo['code'].'&id_session='.$student_online['access_session_id'].'"> -> </a>';
             echo "	</td>

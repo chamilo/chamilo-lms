@@ -816,12 +816,17 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
     //    $gidReset = true;
 } // end else
 
+$maxAnons = api_get_configuration_value('max_anonymous_users');
+
  // Now check for anonymous user mode
 if (isset($use_anonymous) && $use_anonymous) {
     //if anonymous mode is set, then try to set the current user as anonymous
     //if he doesn't have a login yet
-
-    api_set_anonymous();
+    $anonResult = api_set_anonymous();
+    if ($maxAnons >= 2 && $anonResult) {
+        $uidReset = true;
+        Event::eventLogin($_user['user_id']);
+    }
 } else {
     //if anonymous mode is not set, then check if this user is anonymous. If it
     //is, clean it from being anonymous (make him a nobody :-))
@@ -843,7 +848,12 @@ if (isset($uidReset) && $uidReset) {
     unset($_SESSION['_user']['uidReset']);
     $is_platformAdmin = false;
     $is_allowedCreateCourse = false;
-    if (isset($_user['user_id']) && $_user['user_id'] && !api_is_anonymous()) {
+    $isAnonymous = api_is_anonymous();
+    if ($maxAnons >= 2) {
+        $isAnonymous = false;
+    }
+
+    if (isset($_user['user_id']) && $_user['user_id'] && !$isAnonymous) {
         // a uid is given (log in succeeded)
         $_SESSION['loginFailed'] = false;
         unset($_SESSION['loginFailedCount']);

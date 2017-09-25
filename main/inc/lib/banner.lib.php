@@ -252,9 +252,7 @@ function returnNotificationMenu()
         if (isset($user_id) && $sessionId != 0) {
             $numberOnlineInSession = getOnlineUsersInSessionCount($sessionId);
 
-            $html .= '<li><a href="'.api_get_path(WEB_PATH)
-                .'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI'])
-                .'" target="_self">'
+            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'" target="_self">'
                 .Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array(), ICON_SIZE_TINY)
                 .' '.$numberOnlineInSession
                 .'</a></li>';

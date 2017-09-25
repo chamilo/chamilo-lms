@@ -1420,15 +1420,16 @@ class AnnouncementManager
         $user_id = $userId ?: api_get_user_id();
         $group_id = api_get_group_id();
         $session_id = $sessionId ?: api_get_session_id();
+        $course_id = $courseId ?: api_get_course_int_id();
+
         $condition_session = api_get_session_condition(
             $session_id,
             true,
             true,
             'announcement.session_id'
         );
-        $course_id = $courseId ?: api_get_course_int_id();
-        $_course = api_get_course_info();
 
+        $_course = api_get_course_info();
         $group_memberships = GroupManager::get_group_ids(
             $course_id,
             api_get_user_id()
@@ -1522,6 +1523,7 @@ class AnnouncementManager
                             $condition_session
                             $searchCondition
                             $extraGroupCondition
+                        GROUP BY announcement.iid
                         ORDER BY display_order DESC";
                 //GROUP BY ip.ref
             } else {
@@ -1540,6 +1542,7 @@ class AnnouncementManager
                                 ip.visibility='1'
                                 $condition_session
                                 $searchCondition
+                            GROUP BY announcement.iid
                             ORDER BY display_order DESC";
 
                     //GROUP BY ip.ref
@@ -1557,6 +1560,7 @@ class AnnouncementManager
                                 (ip.visibility='0' OR ip.visibility='1')
                                 $condition_session
                                 $searchCondition
+                            GROUP BY announcement.iid
                             ORDER BY display_order DESC";
                 }
             }
@@ -1603,6 +1607,7 @@ class AnnouncementManager
                             $condition_session
                             $searchCondition
                             AND ip.visibility='1'
+                        GROUP BY announcement.iid
                         ORDER BY display_order DESC";
             } else {
                 if ($user_id) {
@@ -1628,6 +1633,7 @@ class AnnouncementManager
     						$searchCondition
     						AND ip.visibility='1'
     						AND announcement.session_id IN(0, ".$session_id.")
+                        GROUP BY announcement.iid
 						ORDER BY display_order DESC";
                 } else {
                     if (($allowUserEditSetting && !api_is_anonymous())) {
@@ -1650,7 +1656,10 @@ class AnnouncementManager
                                 $condition_session
                                 $searchCondition  AND
                                 ip.visibility='1' AND
-                                announcement.session_id IN ( 0,".api_get_session_id().")";
+                                announcement.session_id IN ( 0,".api_get_session_id().")
+                            GROUP BY announcement.iid
+                            ";
+
                 }
             }
         }

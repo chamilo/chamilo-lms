@@ -123,7 +123,8 @@ $form->addElement('select', 'category_id', get_lang('Category'), $items);
 $form->addElement(
     'checkbox',
     'accumulate_scorm_time',
-    [get_lang('AccumulateScormTime'), get_lang('AccumulateScormTimeInfo')]
+    [null, get_lang('AccumulateScormTimeInfo')],
+    get_lang('AccumulateScormTime')
 );
 
 // Start date

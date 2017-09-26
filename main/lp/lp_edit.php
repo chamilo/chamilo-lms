@@ -204,7 +204,8 @@ if ($subscriptionSettings['allow_add_users_to_lp']) {
 $form->addElement(
     'checkbox',
     'accumulate_scorm_time',
-    [get_lang('AccumulateScormTime'), get_lang('AccumulateScormTimeInfo')]
+    [null, get_lang('AccumulateScormTimeInfo')],
+    get_lang('AccumulateScormTime')
 );
 
 $enableLpExtraFields = false;

@@ -34,7 +34,8 @@ function display_action_links($id, $cur_dir_path, $action)
 
     if (!empty($id)) {
         $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_back_id.'">'.
-            Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).
+            '</a>';
     }
 
     if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
@@ -3643,7 +3644,12 @@ function setWorkUploadForm($form, $uploadFormType = 0)
     switch ($uploadFormType) {
         case 0:
             // File and text.
-            $form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
+            $form->addElement(
+                'file',
+                'file',
+                get_lang('UploadADocument'),
+                'size="40" onchange="updateDocumentTitle(this.value)"'
+            );
             $form->addProgress();
             $form->addHtmlEditor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
             break;
@@ -3654,7 +3660,12 @@ function setWorkUploadForm($form, $uploadFormType = 0)
             break;
         case 2:
             // Only file.
-            $form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
+            $form->addElement(
+                'file',
+                'file',
+                get_lang('UploadADocument'),
+                'size="40" onchange="updateDocumentTitle(this.value)"'
+            );
             $form->addProgress();
             $form->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
             break;
@@ -4513,7 +4524,6 @@ function deleteWorkItem($item_id, $courseInfo)
         $count = Database::num_rows($result);
 
         if ($count > 0) {
-
             // If the "considered_working_time" option is enabled, check
             // whether some time should be removed from track_e_course_access
             $consideredWorkingTime = api_get_configuration_value('considered_working_time');

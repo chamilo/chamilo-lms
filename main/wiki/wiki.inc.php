@@ -129,8 +129,8 @@ class Wiki
                 unset($input_array[$key + 1]);
                 //replace blank spaces by _ within the links. But to remove links at the end add a blank space
                 $all_links[] = Database::escape_string(
-                        str_replace(' ', '_', $link)
-                    ).' ';
+                    str_replace(' ', '_', $link)
+                ).' ';
             }
         }
         $output = implode($all_links);
@@ -263,19 +263,9 @@ class Wiki
                     strtolower(str_replace(' ', '_', $link))
                 )) {
                     $link = api_html_entity_decode($link);
-                    $input_array[$key] = '<a href="'.api_get_path(
-                            WEB_PATH
-                        ).'main/wiki/index.php?'.api_get_cidreq(
-                        ).'&action=addnew&amp;title='.Security::remove_XSS(
-                            $link
-                        ).'&group_id='.$groupId.'" class="new_wiki_link">'.$title.'</a>';
+                    $input_array[$key] = '<a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?'.api_get_cidreq().'&action=addnew&amp;title='.Security::remove_XSS($link).'&group_id='.$groupId.'" class="new_wiki_link">'.$title.'</a>';
                 } else {
-                    $input_array[$key] = '<a href="'.api_get_path(
-                            WEB_PATH
-                        ).'main/wiki/index.php?'.api_get_cidreq(
-                        ).'&action=showpage&amp;title='.urlencode(
-                            strtolower(str_replace(' ', '_', $link))
-                        ).'&group_id='.$groupId.'" class="wiki_link">'.$title.'</a>';
+                    $input_array[$key] = '<a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?'.api_get_cidreq().'&action=showpage&amp;title='.urlencode(strtolower(str_replace(' ', '_', $link))).'&group_id='.$groupId.'" class="wiki_link">'.$title.'</a>';
                 }
                 unset($input_array[$key - 1]);
                 unset($input_array[$key + 1]);
@@ -1248,8 +1238,7 @@ class Wiki
                     )
                 ) {
                     // menu discuss page
-                    $actionsRight .= '<a href="index.php?'.api_get_cidreq(
-                        ).'&action=discuss&title='.api_htmlentities(
+                    $actionsRight .= '<a href="index.php?'.api_get_cidreq().'&action=discuss&title='.api_htmlentities(
                             urlencode($page)
                         ).'" '.self::is_active_navigation_tab('discuss').'>'.
                         Display::return_icon(
@@ -1261,8 +1250,7 @@ class Wiki
                 }
 
                 //menu history
-                $actionsRight .= '<a href="index.php?'.api_get_cidreq(
-                    ).'&action=history&title='.api_htmlentities(
+                $actionsRight .= '<a href="index.php?'.api_get_cidreq().'&action=history&title='.api_htmlentities(
                         urlencode($page)
                     ).'" '.self::is_active_navigation_tab('history').'>'.
                     Display::return_icon(
@@ -1272,8 +1260,7 @@ class Wiki
                         ICON_SIZE_MEDIUM
                     ).'</a>';
                 //menu linkspages
-                $actionsRight .= '<a href="index.php?'.api_get_cidreq(
-                    ).'action=links&title='.api_htmlentities(
+                $actionsRight .= '<a href="index.php?'.api_get_cidreq().'action=links&title='.api_htmlentities(
                         urlencode($page)
                     ).'" '.self::is_active_navigation_tab('links').'>'.
                     Display::return_icon(
@@ -1287,8 +1274,7 @@ class Wiki
                 if (api_is_allowed_to_edit(false, true) ||
                     api_is_platform_admin()
                 ) {
-                    $actionsRight .= '<a href="index.php?action=delete&'.api_get_cidreq(
-                        ).'&title='.api_htmlentities(
+                    $actionsRight .= '<a href="index.php?action=delete&'.api_get_cidreq().'&title='.api_htmlentities(
                             urlencode($page)
                         ).'"'.self::is_active_navigation_tab('delete').'>'.
                         Display::return_icon(
@@ -1299,8 +1285,7 @@ class Wiki
                         ).'</a>';
                 }
 
-                $actionsRight .= '<a href="index.php?'.api_get_cidreq(
-                    ).'&action=showpage&actionpage='.$lock_unlock_notify_page.'&title='.api_htmlentities(
+                $actionsRight .= '<a href="index.php?'.api_get_cidreq().'&action=showpage&actionpage='.$lock_unlock_notify_page.'&title='.api_htmlentities(
                         urlencode($page)
                     ).'">'.
                     $notify_page.'</a>';
@@ -1309,8 +1294,7 @@ class Wiki
                 if (api_is_allowed_to_edit(false, true) ||
                     api_is_platform_admin()
                 ) {
-                    $actionsRight .= '<a href="index.php?'.api_get_cidreq(
-                        ).'&action=export2doc&wiki_id='.$row['id'].'">'.
+                    $actionsRight .= '<a href="index.php?'.api_get_cidreq().'&action=export2doc&wiki_id='.$row['id'].'">'.
                         Display::return_icon(
                             'export_to_documents.png',
                             get_lang('ExportToDocArea'),
@@ -1319,8 +1303,7 @@ class Wiki
                         ).'</a>';
                 }
 
-                $actionsRight .= '<a href="index.php?'.api_get_cidreq(
-                    ).'&action=export_to_pdf&wiki_id='.$row['id'].'">'.
+                $actionsRight .= '<a href="index.php?'.api_get_cidreq().'&action=export_to_pdf&wiki_id='.$row['id'].'">'.
                     Display::return_icon(
                         'pdf.png',
                         get_lang('ExportToPDF'),
@@ -1393,13 +1376,10 @@ class Wiki
                 )
             );
 
-            $footerWiki = get_lang(
-                    'Progress'
-                ).': '.($row['progress'] * 10).'%&nbsp;&nbsp;&nbsp;'.get_lang(
-                    'Rating'
-                ).': '.$row['score'].'&nbsp;&nbsp;&nbsp;'.get_lang(
-                    'Words'
-                ).': '.self::word_count($content);
+            $footerWiki =
+                get_lang('Progress').': '.($row['progress'] * 10).'%&nbsp;&nbsp;&nbsp;'.
+                get_lang('Rating').': '.$row['score'].'&nbsp;&nbsp;&nbsp;'.
+                get_lang('Words').': '.self::word_count($content);
 
             echo Display::panel($pageWiki, $pageTitle, $footerWiki);
         } //end filter visibility
@@ -1771,9 +1751,7 @@ class Wiki
             }
 
             $sql = 'UPDATE '.$tbl_wiki.' SET
-                    addlock_disc="'.Database::escape_string(
-                    $status_addlock_disc
-                ).'"
+                    addlock_disc="'.Database::escape_string($status_addlock_disc).'"
                     WHERE
                         c_id = '.$course_id.' AND
                         reflink = "'.Database::escape_string($page).'" AND

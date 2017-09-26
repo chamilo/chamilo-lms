@@ -1,12 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	This is the array library for Chamilo.
-*	Include/require it in your code to use its functionality.
-*
-*	@package chamilo.library
-*/
-
+ * This is the array library for Chamilo.
+ * Include/require it in your code to use its functionality.
+ *
+ * @package chamilo.library
+ */
 
 /**
  * Removes duplicate values from a dimensional array
@@ -108,24 +107,24 @@ function array_walk_recursive_limited(
  */
 function utf8_sort($array)
 {
-	$old_locale = setlocale(LC_ALL, null);
-	$code = api_get_language_isocode();
-	$locale_list = array($code.'.utf8', 'en.utf8', 'en_US.utf8', 'en_GB.utf8');
-	$try_sort = false;
+    $old_locale = setlocale(LC_ALL, null);
+    $code = api_get_language_isocode();
+    $locale_list = array($code.'.utf8', 'en.utf8', 'en_US.utf8', 'en_GB.utf8');
+    $try_sort = false;
 
-	foreach ($locale_list as $locale) {
-		$my_local = setlocale(LC_COLLATE, $locale);
-		if ($my_local) {
-			$try_sort = true;
-			break;
-		}
-	}
+    foreach ($locale_list as $locale) {
+        $my_local = setlocale(LC_COLLATE, $locale);
+        if ($my_local) {
+            $try_sort = true;
+            break;
+        }
+    }
 
-	if ($try_sort) {
-		uasort($array, 'strcoll');
-	}
-	setlocale(LC_COLLATE, $old_locale);
-	return $array;
+    if ($try_sort) {
+        uasort($array, 'strcoll');
+    }
+    setlocale(LC_COLLATE, $old_locale);
+    return $array;
 }
 
 /**
@@ -151,7 +150,7 @@ function array_flatten(array $array)
     $flatten = array();
     array_walk_recursive(
         $array,
-        function($value) use (&$flatten) {
+        function ($value) use (&$flatten) {
             $flatten[] = $value;
         }
     );

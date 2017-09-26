@@ -22,6 +22,9 @@
             <button class="btn btn-success hidden" type="button" id="btn-save-record-{{ question_id }}" disabled>
                 <span class="fa fa-send fa-fw" aria-hidden="true"></span> {{ 'SaveRecordedAudio'|get_lang }}
             </button>
+            <button id="hide_description_{{ question_id }}" type="button" class="btn btn-default advanced_options" data-toggle="button" aria-pressed="false" autocomplete="off">
+                <em class="fa fa-bars"></em> {{ 'AddText' | get_lang }}
+            </button>
         </div>
         <div class="form-group">
             <audio class="skip hidden center-block" controls id="record-preview-{{ question_id }}"></audio>

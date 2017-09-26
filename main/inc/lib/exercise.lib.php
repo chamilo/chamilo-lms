@@ -186,6 +186,7 @@ class ExerciseLib
                 );
                 $s .= $form->returnForm();
             } elseif ($answerType == ORAL_EXPRESSION) {
+
                 // Add nanog
                 if (api_get_setting('enable_record_audio') == 'true') {
                     //@todo pass this as a parameter
@@ -211,9 +212,10 @@ class ExerciseLib
                 }
 
                 $form = new FormValidator('free_choice_'.$questionId);
-                $config = array(
-                    'ToolbarSet' => 'TestFreeAnswer'
-                );
+                $config = ['ToolbarSet' => 'TestFreeAnswer'];
+
+                //$form->addButtonAdvancedSettings('hide_description_'.$questionId, get_lang('AddDescription'));
+                $form->addHtml('<div id="'.'hide_description_'.$questionId.'_options" style="display: none;">');
                 $form->addHtmlEditor(
                     "choice[".$questionId."]",
                     null,
@@ -221,6 +223,7 @@ class ExerciseLib
                     false,
                     $config
                 );
+                $form->addHtml('</div>');
                 $s .= $form->returnForm();
             }
 

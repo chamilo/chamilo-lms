@@ -707,21 +707,33 @@ footer #footer_right{
    border-radius: 0;
    font-size: 12px;
 }
-table.matching tr td span.label-danger,
-table.table-striped tr td span.label-danger{
+table.matching tr td span.label-danger{
     background-color: #162a83;
     color: #FFF !important;
     border-radius: 0;
     width: 100%;
     display: inline-block;
 }
-table.matching tr td span.label-success,
-table.table-striped tr td span.label-success{
+table.table-striped tr td span.label-danger{
+    background-color: #162a83;
+    color: #FFF !important;
+    border-radius: 0;
+    width: 40%;
+    display: inline-block;
+}
+table.matching tr td span.label-success{
     background-color: #96BD0D;
     color: #FFF !important;
     border-radius: 0;
     width: 100%;
-    display: inline-block;
+    display: block;
+}
+table.table-striped tr td span.label-success{
+    background-color: #96BD0D;
+    color: #FFF !important;
+    border-radius: 0;
+    width: 40%;
+    display: block;
 }
 .table-striped>tbody>tr:nth-of-type(odd){
     background-color: #FFF;

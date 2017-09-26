@@ -284,7 +284,6 @@ foreach ($result as & $row) {
 // Error reporting settings.
 if (api_get_setting('server_type') == 'test') {
     ini_set('display_errors', '1');
-    ini_set('log_errors', '1');
     ini_set('html_errors', '1');
     error_reporting(-1);
 
@@ -294,6 +293,8 @@ if (api_get_setting('server_type') == 'test') {
 } else {
     error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 }
+
+ini_set('log_errors', '1');
 
 // Load allowed tag definitions for kses and/or HTMLPurifier.
 require_once $libraryPath.'formvalidator/Rule/allowed_tags.inc.php';

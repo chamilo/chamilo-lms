@@ -552,12 +552,12 @@ if ($allow && $showTerms == false) {
     $form->addHtml('<div id="final_button" style="display: none">');
     $form->addLabel(
         null,
-        Display::return_message(get_lang('DoubleValidationMessage'), 'info')
+        Display::return_message(get_lang('DoubleValidationMessage'), 'info', false)
     );
-    $form->addButtonCreate(get_lang('RegisterUser'));
+    $form->addButton('submit', get_lang('RegisterUser'), '', 'primary');
     $form->addHtml('</div>');
 } else {
-    $form->addButtonCreate(get_lang('RegisterUser'));
+    $form->addButtonNext(get_lang('RegisterUser'));
 }
 
 $course_code_redirect = Session::read('course_redirect');

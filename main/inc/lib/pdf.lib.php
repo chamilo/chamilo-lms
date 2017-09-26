@@ -737,9 +737,6 @@ class PDF
      */
     public function format_pdf($course_data, $complete = true)
     {
-        if ($complete === false) {
-            error_log('Asked with no decoration');
-        }
         $course_code = null;
         if (!empty($course_data)) {
             $course_code = $course_data['code'];

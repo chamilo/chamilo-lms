@@ -63,9 +63,9 @@ if (empty($formSent)) {
 if (empty($exerciseResult)) {
     $exerciseResult = Session::read('exerciseResult');
 }
-if (empty($questionId)) {
-    $questionId = isset($_REQUEST['questionId']) ? $_REQUEST['questionId'] : null;
-}
+
+$questionId = isset($_REQUEST['questionId']) ? $_REQUEST['questionId'] : null;
+
 if (empty($choice)) {
     $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
 }
@@ -81,12 +81,9 @@ if (empty($questionList)) {
 if (empty($objExercise)) {
     $objExercise = Session::read('objExercise');
 }
-if (empty($exeId)) {
-    $exeId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
-}
-if (empty($action)) {
-    $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
-}
+
+$exeId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
@@ -227,6 +224,7 @@ if ($action != 'export') {
     </script>
 <?php
 }
+
 $show_results = true;
 $show_only_total_score = false;
 $showTotalScoreAndUserChoicesInLastAttempt = true;

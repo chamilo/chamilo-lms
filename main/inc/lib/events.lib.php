@@ -1469,13 +1469,15 @@ class Event
      * @param   int     $exercise_id
      * @param   int     $courseId
      * @param   int     $session_id
+     * @param int $userId
      * @return  array   with the results
      * @todo rename this function
      */
     public static function get_best_exercise_results_by_user(
         $exercise_id,
         $courseId,
-        $session_id = 0
+        $session_id = 0,
+        $userId = 0
     ) {
         $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -1490,8 +1492,13 @@ class Event
                     exe_exo_id = '$exercise_id' AND
                     session_id = $session_id AND
                     orig_lp_id = 0 AND
-                    orig_lp_item_id = 0
-                ORDER BY exe_id";
+                    orig_lp_item_id = 0";
+
+        if (!empty($userId)) {
+            $userId = (int) $userId;
+            $sql .= " AND exe_user_id = $userId ";
+        }
+        $sql .= " ORDER BY exe_id";
 
         $res = Database::query($sql);
         $list = array();

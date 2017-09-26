@@ -3190,6 +3190,36 @@ EOT;
     }
 
     /**
+     * Get average score by score (NO Exercises in LPs )
+     * @param    int        exercise id
+     * @param    int $courseId
+     * @param    int        session id
+     * @return    float    Best average score
+     */
+    public static function getBestScoreByExercise(
+        $exercise_id,
+        $courseId,
+        $session_id
+    ) {
+        $user_results = Event::get_best_exercise_results_by_user(
+            $exercise_id,
+            $courseId,
+            $session_id
+        );
+        $avg_score = 0;
+        if (!empty($user_results)) {
+            foreach ($user_results as $result) {
+                if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
+                    $score = $result['exe_result'] / $result['exe_weighting'];
+                    $avg_score += $score;
+                }
+            }
+        }
+
+        return $avg_score;
+    }
+
+    /**
      * @param string $course_code
      * @param int $session_id
      *

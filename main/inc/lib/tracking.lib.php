@@ -4587,7 +4587,8 @@ class Tracking
                           '.Display::tag('th', get_lang('Course'), array('width'=>'300px')).'
                           '.Display::tag('th', get_lang('TimeSpentInTheCourse')).'
                           '.Display::tag('th', get_lang('Progress')).'
-                          '.Display::tag('th', get_lang('BestScore')).'
+                          '.Display::tag('th', get_lang('BestScoreInLearningPath')).'
+                          '.Display::tag('th', get_lang('BestScoreNotInLearningPath')).'
                           '.Display::tag('th', get_lang('LastConnexion')).'
                           '.Display::tag('th', get_lang('Details')).'
                         </tr>';
@@ -4616,6 +4617,39 @@ class Tracking
                         true
                     );
 
+                    $exerciseList = ExerciseLib::get_all_exercises(
+                        $courseInfo,
+                        0,
+                        false,
+                        null,
+                        false,
+                        1
+                    );
+
+                    $bestScoreAverageNotInLP = 0;
+                    if (!empty($exerciseList)) {
+                        foreach ($exerciseList as $exerciseData) {
+                            $results = Event::get_best_exercise_results_by_user(
+                                $exerciseData['id'],
+                                $courseInfo['real_id'],
+                                0,
+                                $user_id
+                            );
+                            $best = 0;
+                            if (!empty($results)) {
+                                foreach ($results as $result) {
+                                    $score = $result['exe_result'] / $result['exe_weighting'];
+                                    if ($score > $best) {
+                                        $best = $score;
+                                    }
+                                }
+                            }
+                            $bestScoreAverageNotInLP += $best;
+                        }
+
+                        $bestScoreAverageNotInLP = round($bestScoreAverageNotInLP / count($exerciseList) * 100, 2);
+                    }
+
                     $last_connection = self::get_last_connection_date_on_the_course(
                         $user_id,
                         $courseInfo
@@ -4636,11 +4670,12 @@ class Tracking
                         $html .= '<tr class="row_even">';
                     }
                     $url = api_get_course_url($course_code, $session_id);
-                    $course_url = Display::url($course_title, $url, array('target'=>SESSION_LINK_TARGET));
+                    $course_url = Display::url($course_title, $url, array('target' => SESSION_LINK_TARGET));
                     $html .= '<td>'.$course_url.'</td>';
-                    $html .= '<td align="center">'.$time.'</td>';
-                    $html .= '<td align="center">'.$progress.'</td>';
-                    $html .= '<td align="center">';
+                    $html .= '<td>'.$time.'</td>';
+                    $html .= '<td>'.$progress.'</td>';
+                    $html .= '<td>';
+
                     if (empty($bestScore)) {
                         $html .= '-';
                     } else {
@@ -4648,8 +4683,20 @@ class Tracking
                     }
 
                     $html .= '</td>';
-                    $html .= '<td align="center">'.$last_connection.'</td>';
-                    $html .= '<td align="center">';
+
+
+                    $html .= '<td>';
+
+                    if (empty($bestScoreAverageNotInLP)) {
+                        $html .= '-';
+                    } else {
+                        $html .= $bestScoreAverageNotInLP.'%';
+                    }
+
+                    $html .= '</td>';
+
+                    $html .= '<td>'.$last_connection.'</td>';
+                    $html .= '<td>';
                     if (isset($_GET['course']) &&
                         $course_code == $_GET['course'] &&
                         empty($_GET['session_id'])
@@ -4926,7 +4973,12 @@ class Tracking
                         get_lang('LPProgress'),
                     ],
                     'score'  => [
-                        get_lang('Score').Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')),
+                        get_lang('Score').
+                        Display::return_icon(
+                            'info3.gif',
+                            get_lang('ScormAndLPTestTotalAverage'),
+                            array('align' => 'absmiddle', 'hspace' => '3px')
+                        ),
                     ],
                     'best_score'  => [
                         get_lang('BestScore'),
@@ -5325,25 +5377,25 @@ class Tracking
                             );
                         }
 
-                        $html .= Display::tag('td', $attempts, array('align'=>'center'));
-                        $html .= Display::tag('td', $percentage_score_result, array('align'=>'center'));
-                        $html .= Display::tag('td', $position, array('align'=>'center'));
-                        $html .= Display::tag('td', $best_score, array('align'=>'center'));
-                        $html .= Display::tag('td', $graph, array('align'=>'center'));
+                        $html .= Display::tag('td', $attempts);
+                        $html .= Display::tag('td', $percentage_score_result);
+                        $html .= Display::tag('td', $position);
+                        $html .= Display::tag('td', $best_score);
+                        $html .= Display::tag('td', $graph);
                         //$html .= Display::tag('td', $latest_attempt_url,       array('align'=>'center', 'width'=>'25'));
 
                     } else {
                         // Exercise configuration NO results
-                        $html .= Display::tag('td', $attempts, array('align'=>'center'));
-                        $html .= Display::tag('td', '-', array('align'=>'center'));
-                        $html .= Display::tag('td', '-', array('align'=>'center'));
-                        $html .= Display::tag('td', '-', array('align'=>'center'));
-                        $html .= Display::tag('td', '-', array('align'=>'center'));
+                        $html .= Display::tag('td', $attempts);
+                        $html .= Display::tag('td', '-');
+                        $html .= Display::tag('td', '-');
+                        $html .= Display::tag('td', '-');
+                        $html .= Display::tag('td', '-');
                     }
                     $html .= '</tr>';
                 }
             } else {
-                $html .= '<tr><td colspan="5" align="center">'.get_lang('NoEx').'</td></tr>';
+                $html .= '<tr><td colspan="5">'.get_lang('NoEx').'</td></tr>';
             }
             $html .= '</tbody></table></div>';
 
@@ -5478,16 +5530,14 @@ class Tracking
                     if (in_array('time', $columnHeadersKeys)) {
                         $html .= Display::tag(
                             'td',
-                            $time_spent_in_lp,
-                            array('align' => 'center')
+                            $time_spent_in_lp
                         );
                     }
 
                     if (in_array('progress', $columnHeadersKeys)) {
                         $html .= Display::tag(
                             'td',
-                            $progress,
-                            array('align' => 'center')
+                            $progress
                         );
                     }
 
@@ -5499,7 +5549,7 @@ class Tracking
                     }
 
                     if (in_array('last_connection', $columnHeadersKeys)) {
-                        $html .= Display::tag('td', $last_connection, array('align'=>'center', 'width'=>'180px'));
+                        $html .= Display::tag('td', $last_connection, array('width'=>'180px'));
                     }
                     $html .= '</tr>';
                 }

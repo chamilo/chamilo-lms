@@ -29,6 +29,9 @@
         <div class="form-group">
             <audio class="skip hidden center-block" controls id="record-preview-{{ question_id }}"></audio>
         </div>
+        <div class="well">
+            {{ 'OralExpressionHelpText' | get_lang }}
+        </div>
     </div>
 </div>
 

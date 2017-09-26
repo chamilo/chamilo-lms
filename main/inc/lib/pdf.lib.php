@@ -99,7 +99,7 @@ class PDF
         $addDefaultCss = false
     ) {
         if (empty($this->template)) {
-            $tpl = new Template('', false, false, false);
+            $tpl = new Template('', false, false, false, false, true, false);
         } else {
             $tpl = $this->template;
         }

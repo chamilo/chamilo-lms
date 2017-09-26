@@ -247,9 +247,7 @@ class Database
      */
     public static function escape_string($string)
     {
-        $string = self::getManager()->getConnection()->quote($string);
-
-        return trim($string, "'");
+        return self::getManager()->getConnection()->quote($string);
     }
 
     /**

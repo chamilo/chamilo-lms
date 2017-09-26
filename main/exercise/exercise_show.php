@@ -164,9 +164,8 @@ if ($allowRecordAudio && $allowTeacherCommentAudio) {
     $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 }
 
-$scoreJsCode = ExerciseLib::getJsCode();
-
 if ($action != 'export') {
+    $scoreJsCode = ExerciseLib::getJsCode();
     if ($origin != 'learnpath') {
         Display::display_header('');
     } else {
@@ -184,7 +183,6 @@ if ($action != 'export') {
             api_get_self().'?'.api_get_cidreq().'&id='.$id.'&action=export&'
         )
     ]);
-}
 ?>
     <script>
         <?php echo $scoreJsCode; ?>
@@ -228,6 +226,7 @@ if ($action != 'export') {
         }
     </script>
 <?php
+}
 $show_results = true;
 $show_only_total_score = false;
 $showTotalScoreAndUserChoicesInLastAttempt = true;

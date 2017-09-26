@@ -841,8 +841,9 @@ class MySpace
                 $form->addButtonSave(get_lang('Ok'), 'submit');
 
                 // setting the default values for the form that contains all the extra fields
-                if (is_array($_SESSION['additional_export_fields'])) {
-                    foreach ($_SESSION['additional_export_fields'] as $key => $value) {
+                $exportFields = Session::read('additional_export_fields');
+                if (is_array($exportFields)) {
+                    foreach ($exportFields as $key => $value) {
                         $defaults['extra_export_field'.$value] = 1;
                     }
                 }
@@ -856,25 +857,28 @@ class MySpace
                 $values = $form->exportValues();
 
                 // re-initialising the session that contains the additional fields that need to be exported
-                $_SESSION['additional_export_fields'] = array();
+                Session::write('additional_export_fields', []);
 
                 // adding the fields that are checked to the session
                 $message = '';
+                $additionalExportFields = [];
                 foreach ($values as $field_ids => $value) {
                     if ($value == 1 && strstr($field_ids, 'extra_export_field')) {
-                        $_SESSION['additional_export_fields'][] = str_replace('extra_export_field', '', $field_ids);
+                        $additionalExportFields[] = str_replace('extra_export_field', '', $field_ids);
                     }
                 }
+                Session::write('additional_export_fields', $additionalExportFields);
 
                 // adding the fields that will be also exported to a message string
-                if (is_array($_SESSION['additional_export_fields'])) {
-                    foreach ($_SESSION['additional_export_fields'] as $key => $extra_field_export) {
+                $additionalExportFields = Session::read('additional_export_fields');
+                if (is_array($additionalExportFields)) {
+                    foreach ($additionalExportFields as $key => $extra_field_export) {
                         $message .= '<li>'.$extrafields[$extra_field_export][3].'</li>';
                     }
                 }
 
                 // Displaying a feedback message
-                if (!empty($_SESSION['additional_export_fields'])) {
+                if (!empty($additionalExportFields)) {
                     echo Display::return_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>', 'confirm', false);
                 } else {
                     echo Display::return_message(
@@ -888,11 +892,12 @@ class MySpace
             }
 
         } else {
-            if (!empty($_SESSION['additional_export_fields'])) {
+            $additionalExportFields = Session::read('additional_export_fields');
+            if (!empty($additionalExportFields)) {
                 // get all the defined extra fields
                 $extrafields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
 
-                foreach ($_SESSION['additional_export_fields'] as $key => $extra_field_export) {
+                foreach ($additionalExportFields as $key => $extra_field_export) {
                     $message .= '<li>'.$extrafields[$extra_field_export][3].'</li>';
                 }
 
@@ -1805,8 +1810,10 @@ class MySpace
 
         $fields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
 
-        if (is_array($_SESSION['additional_export_fields'])) {
-            foreach ($_SESSION['additional_export_fields'] as $key => $extra_field_export) {
+        $additionalExportFields = Session::read('additional_export_fields');
+
+        if (is_array($additionalExportFields)) {
+            foreach ($additionalExportFields as $key => $extra_field_export) {
                 $csv_row[] = $fields[$extra_field_export][3];
                 $field_names_to_be_exported[] = 'extra_'.$fields[$extra_field_export][1];
             }

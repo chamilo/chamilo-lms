@@ -4727,7 +4727,8 @@ class Exercise
                                     $questionId,
                                     $answerId,
                                     $results_disabled,
-                                    $showTotalScoreAndUserChoicesInLastAttempt
+                                    $showTotalScoreAndUserChoicesInLastAttempt,
+                                    $this->export
                                 );
                             } else {
                                 ExerciseShowFunctions::display_unique_or_multiple_answer(
@@ -4741,7 +4742,8 @@ class Exercise
                                     $questionId,
                                     '',
                                     $results_disabled,
-                                    $showTotalScoreAndUserChoicesInLastAttempt
+                                    $showTotalScoreAndUserChoicesInLastAttempt,
+                                    $this->export
                                 );
                             }
                             break;

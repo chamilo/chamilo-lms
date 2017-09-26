@@ -3682,4 +3682,7 @@ $ChooseRecipients = "Valitse vastaanottaja";
 $ExerciseInvisibleInSessionTitle = "Harjoitus näkymätön istunnossa";
 $NewPasswordRequirementsNotMatched = "Uusi salasana ei täytä vähimmäistä turvallisuusvaatimusta";
 $YouCantNotEditThisQuestionBecauseAlreadyExistAnswers = "Et voi muokata tätä kysymystä, koska siinä on jo vastauksia";
+$AddHrmToUser = "Lisää henkilöstöjohtaja käyttäjälle";
+$GoToSurvey = "Mene kyselyyn";
+$MyCoursePageCategoryIntroduction = "Alla näet listan kurssikategorioista. Klikkaa nimeä nähdäksesi listan kursseista";
 ?>

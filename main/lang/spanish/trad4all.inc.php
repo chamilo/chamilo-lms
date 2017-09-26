@@ -8070,4 +8070,9 @@ $MailSubjectForwardShort = "Tr";
 $ForwardedMessage = "Mensaje transferido";
 $ForwardMessage = "Transferir mensaje";
 $MyCoursePageCategoryIntroduction = "A continuación encontrará una lista de categorías de cursos. Haga clic en una de ellas para ver los cursos que contiene.";
+$FeatureDisabledByAdministrator = "Funcionalidad desactivada por el administrador de la plataforma";
+$SubscribeUsersToLpCategory = "Suscribir usuarios a la categoría de lecciones";
+$SubscribeGroupsToLpCategory = "Suscribir grupos a la categoría de lecciones";
+$FieldTypeSelectWithTextField = "Lista desplegable con campo de texto";
+$FieldTypeTripleSelect = "Campo de tipo selección triple";
 ?>

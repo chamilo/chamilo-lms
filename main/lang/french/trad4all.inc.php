@@ -339,7 +339,7 @@ C. Réponse 3
 D. Réponse 4
 ANSWER: D
 
-ANSWER_EXPLANATION: C'est un commentaire optionnel de retour qui apparaîtra à côté de la bonne réponse.";
+ANSWER_EXPLANATION: C'est un commentaire facultatif de retour qui apparaîtra à côté de la bonne réponse.";
 $ImportAikenQuizExplanation = "Le format Aiken est un fichier (.txt) avec un texte simple, avec plusieurs blocs de questions, chacune séparée par une ligne blanche. La première ligne est la question, les lignes de réponse sont préfixés par une lettre et un point, et la bonne réponse vient avec le préfixe 'ANSWER'.
 Voir l'exemple ci-dessous.";
 $ExerciseAikenErrorNoAnswerOptionGiven = "Le fichier importé comporte au moins une question sans réponse (ou les réponses ne comprennent pas la lettre de préfixe requis). Assurez-vous que chaque question a au moins une réponse et qu'elle est précédée par une lettre et un point ou une parenthèse, comme ceci: 
@@ -3432,7 +3432,7 @@ $UplGenericError = "Le fichier envoyé n'a pas été reçu avec succès. Merci d
 $MyGradebook = "Mon cahier de notes";
 $Gradebook = "Cahier de notes";
 $OpenIDWhatIs = "OpenID, qu'est-ce que c'est?";
-$OpenIDDescription = "OpenID élimine le besoin de nom d'utilisateurs multiples pour accéder à différents sites web, simplifiant ainsi votre expérience en ligne. Vous pouvez choisir un fournisseur OpenID en qui vous avez confiance et qui vous convient le mieux. En même temps, vous gardez votre OpenID, quel que soit le fournisseur que vous choisissez. Et le mieux c'est que la technologie OpenID n'est pas propriétaire et est totalement gratuite. <br /><br /><a href=\"http://openid.net/what/\">Pour en savoir plus...</a>";
+$OpenIDDescription = "OpenID élimine le besoin de noms d'utilisateurs multiples pour accéder à différents sites web, simplifiant ainsi votre expérience en ligne. Vous pouvez choisir un fournisseur OpenID en qui vous avez confiance et qui vous convient le mieux. En même temps, vous gardez votre OpenID, quel que soit le fournisseur que vous choisissez. Et le mieux c'est que la technologie OpenID n'est pas propriétaire et est totalement gratuite. <br /><br /><a href=\"http://openid.net/what/\">Pour en savoir plus...</a>";
 $NoManager = "Pas de responsable";
 $ExportiCal = "Export Outlook";
 $ExportiCalPublic = "Export comme invitation Outlook";
@@ -4694,7 +4694,7 @@ $YouMustSelectAtLeastOneDestinee = "Vous devez sélectionner au moins un destina
 $DropboxFileTooBig = "Le fichier dropbox est trop grand.";
 $TheFileIsNotUploaded = "Le fichier n'a pas été envoyé.";
 $MailingNonMailingError = "Les fichiers envoyés par publipostage ne peuvent être écrasés par les fichiers envoyés simplement et vice-versa";
-$MailingSelectNoOther = "On ne peut envoyer par publipostage et de façon classique en même temps";
+$MailingSelectNoOther = "On ne peut envoyer simultanément par publipostage et de façon classique";
 $MailingJustUploadSelectNoOther = "On ne peut combiner l'envoi simple avec d'autres destinataires";
 $PlatformUnsubscribeComment = "Quand les utilisateurs se désinscrivent toutes leurs données sont effacées de façon permanente.";
 $NewDropboxFileUploaded = "Un nouveau fichier a été envoyé dans le partage de fichiers";
@@ -4718,7 +4718,7 @@ $Keyword = "Mot-clé";
 $KeywordTip = "séparez-les par des virgules (lettres, chiffres, -.)";
 $Coverage = "Objectif";
 $CoverageTip = "p.e. Baccalauréat en ...";
-$KwNote = "Si vous changez la langue de la description, n'ajoutez pas de nouveaux mots clé en même temps.";
+$KwNote = "Si vous changez la langue de la description, n'ajoutez pas simultanément de nouveaux mots-clés.";
 $Location = "URL/URI";
 $LocationTip = "clickez pour ouvrir l'objet";
 $Store = "Enregistrer";
@@ -5213,7 +5213,7 @@ $ClarContent4 = "Effacer le contenu";
 $ClarContent1 = "Effacer le contenu";
 $ClarContent2 = "Effacer le contenu";
 $HGroups = "Aide Groupes";
-$GroupsContent = "<p>L'outil de groupes vous permet de fournir à des groupes d'étudiants des espaces privatifs pour échanger des documents et discuter dans un forum. L'outil de documents des groupes leur permet, en outre, de publier un document dans 'Travaux' une fois ce document jugé définitif. On peut ainsi passer d'une logique de travail confiné à une logique de diffusion vers l'enseignant/formateur ou vers les membres des autres groupes.</p><b>Compléter les groupes</b><p>Il existe 3 manières de compléter les groupes:<ol><li>soit les participants s'auto-inscrivent dans les groupes dans la limite des places disponibles,</li><li>soit ils sont inscrits manuellement un à un par le formateur,</li><li>soit les groupes sont complétés de façon automatique au hasard</li></ol>Pour 1 : il faut éditer les Paramètres des groupes (milieu de la page) pour vérifier que la case 'auto-inscription' est cochée.<br/>Pour 2 : il faut créer des groupes (coin supérieur gauche) puis éditer chacun des groupes et le compléter en faisant passer les personnes du menu de gauche vers le menu de droite (CTRL+ clic ou POMME+ clic pour sélectionner plusieurs personnes en même temps).<br/>Pour 3 : il faut cliquer sur 'Remplir les groupes au hasard'.<br/>Attention : 2 et 3 ne fonctionnent que si les participants sont préalablement inscrits au cours.</p><b>Éditer les groupes</b><p>Éditer les espaces des groupes (crayon jaune) permet de les renommer, de leur ajouter un descriptif (tâches du groupe, numéro de téléphone du tuteur...), de modifier leurs paramètres et de modifier leur composition, de leur ajouter un modérateur (ou tuteur). Pour créer un groupe restreints aux modérateurs eux-mêmes, en créer un dont le nombre maximum de participants est zéro (car les modérateurs ont tous accès à tous les groupes par défaut).";
+$GroupsContent = "<p>L'outil de groupes vous permet de fournir à des groupes d'étudiants des espaces privatifs pour échanger des documents et discuter dans un forum. L'outil de documents des groupes leur permet, en outre, de publier un document dans 'Travaux' une fois ce document jugé définitif. On peut ainsi passer d'une logique de travail confiné à une logique de diffusion vers l'enseignant/formateur ou vers les membres des autres groupes.</p><b>Compléter les groupes</b><p>Il existe 3 manières de compléter les groupes:<ol><li>soit les participants s'auto-inscrivent dans les groupes dans la limite des places disponibles,</li><li>soit ils sont inscrits manuellement un à un par le formateur,</li><li>soit les groupes sont complétés de façon automatique au hasard</li></ol>Pour 1 : il faut éditer les Paramètres des groupes (milieu de la page) pour vérifier que la case 'auto-inscription' est cochée.<br/>Pour 2 : il faut créer des groupes (coin supérieur gauche) puis éditer chacun des groupes et le compléter en faisant passer les personnes du menu de gauche vers le menu de droite (CTRL+ clic ou POMME+ clic pour sélectionner plusieurs personnes simultanément).<br/>Pour 3 : il faut cliquer sur 'Remplir les groupes au hasard'.<br/>Attention : 2 et 3 ne fonctionnent que si les participants sont préalablement inscrits au cours.</p><b>Éditer les groupes</b><p>Éditer les espaces des groupes (crayon jaune) permet de les renommer, de leur ajouter un descriptif (tâches du groupe, numéro de téléphone du tuteur...), de modifier leurs paramètres et de modifier leur composition, de leur ajouter un modérateur (ou tuteur). Pour créer un groupe restreints aux modérateurs eux-mêmes, en créer un dont le nombre maximum de participants est zéro (car les modérateurs ont tous accès à tous les groupes par défaut).";
 $Guide = "Manuel";
 $YouShouldWriteAMessage = "Vous devriez écrire un message";
 $MessageOfNewCourseToAdmin = "Ce petit message pour vous informer qu'un nouveau cours a été créé sur la plateforme";
@@ -5544,13 +5544,13 @@ $CoursesListInPlatform = "Liste des cours de la plateforme";
 $AssignedCoursesListToHumanResourceManager = "Cours assignés au directeur RH";
 $AssignedCoursesTo = "Cours assignés à";
 $AssignCoursesToHumanResourcesManager = "Assigner des cours au directeur RH";
-$TimezoneValueTitle = "Zone de temps";
-$TimezoneValueComment = "Ceci est la zone de temps configurée pour ce portail. Si vous ne configurez pas de zone de temps, la zone de temps du serveur sera utilisée. Si vous configurez une zone de temps, tous les temps de cette plateforme seront basés sur cette zone de temps. Ce";
-$UseUsersTimezoneTitle = "Utiliser les zones de temps utilisateurs";
-$UseUsersTimezoneComment = "Activer la possibilité pour les utilisateurs de sélectionner leur zone horaire. Le champ de zone horaire doit être rendu visible et modifiable dans les options de profiling du panneau d'administration avant que les utilisateurs ne puissent choisir leur propre zone.
-Une fois configurée, les utilisateurs pourront voir toutes les heures du portail (heure de remise des travaux, événements, etc) converties dans leur propre zone horaire.";
-$FieldTypeTimezone = "Zone horaire";
-$Timezone = "Zones horaires";
+$TimezoneValueTitle = "Fuseau horaire";
+$TimezoneValueComment = "Le fuseau horaire de ce portail devrait être réglé sur celui du siège de l'organisation. Si vous ne configurez pas de fuseau horaire, celui du serveur sera utilisé. Si vous en configurez un, toutes les heures de cette plateforme seront affichées sur base de ce fuseau. Ce paramètre a une priorité inférieure à celui de l'utilisateur, s'il en a activé et sélectionné personnellement dans son profil étendu.";
+$UseUsersTimezoneTitle = "Utiliser les fuseaux horaires utilisateurs";
+$UseUsersTimezoneComment = "Activer la possibilité pour les utilisateurs de sélectionner leur fuseau horaire. Le champ de fuseau horaire doit être rendu visible et modifiable dans les options de profiling du panneau d'administration avant que les utilisateurs ne puissent choisir leur propre fuseau.
+Une fois configuré, les utilisateurs pourront voir toutes les heures du portail (heure de remise des travaux, événements, etc) converties dans leur fuseau horaire personnel.";
+$FieldTypeTimezone = "Fuseau horaire";
+$Timezone = "Fuseaux horaires";
 $AssignedSessionsHaveBeenUpdatedSuccessfully = "Les sessions assignées ont été mises à jour";
 $AssignedCoursesHaveBeenUpdatedSuccessfully = "Les assignations de cours ont été mises à jour";
 $AssignedUsersHaveBeenUpdatedSuccessfully = "Les utilisateurs assignés ont été mis à jour";
@@ -5570,7 +5570,7 @@ $YourStudents = "Vos apprenants";
 $GoToThematicAdvance = "Aller à la progression du cours";
 $TeachersInformationsGraph = "Graphique de rapport enseignants";
 $StudentsInformationsGraph = "Graphique de rapport apprenants";
-$Timezones = "Zones horaires";
+$Timezones = "Fuseaux horaires";
 $TimeSpentOnThePlatformLastWeekByDay = "Temps de connexion la semaine passée, par jour";
 $AttendancesFaults = "Absences";
 $AttendanceSheetReport = "Rapport de présences";
@@ -6653,7 +6653,7 @@ $ArchiveDirCleanupSucceeded = "Le répertoire app/cache/ a été vidangé.";
 $ArchiveDirCleanupFailed = "Pour une raison inconnue, le répertoire app/cache/ n'a pas pu être vidé entièrement. Veuillez le vider manuellement en vous connectant au serveur et en supprimant tous les fichiers et liens symboliques du répertoire chamilo/app/cache, excepté le fichier .htaccess. Par exemple, sous Linux, on fera: # find app/cache/ \( -type f -or -type l \) -not -name .htaccess -exec echo rm -v \{} \;";
 $EnableStartTime = "Activer date de début";
 $EnableEndTime = "Utiliser date de fin";
-$LocalTimeUsingPortalTimezoneXIsY = "L'heure locale selon la zone horaire du portail (%s) est %s";
+$LocalTimeUsingPortalTimezoneXIsY = "L'heure locale selon le fuseau horaire du portail (%s) est %s";
 $AllEvents = "Tous les évènements";
 $StartTest = "Démarrer le test";
 $ExportAsDOC = "Exporter en .doc";
@@ -7468,7 +7468,7 @@ $ThanksForRegisteringToSite = "Merci de vous êtes inscrit à %s.";
 $AllowCoachFeedbackExercisesTitle = "Permettre aux tuteurs de commenter les réponses aux exercices";
 $AllowCoachFeedbackExercisesComment = "Permettre aux tuteurs d'éditer les commentaires lors de la révision des exercices";
 $PreventMultipleSimultaneousLoginTitle = "Empêcher les logins simultanés";
-$PreventMultipleSimultaneousLoginComment = "Empêche les utilisateurs de se connecter avec le même compte plusieurs fois en même temps. C'est une bonne option pour les portails d'accès payant, mais cela peut s'avérer un peu gênant durant des tests, vu qu'un seul navigateur peut se connecter à un compte utilisateur désigné.";
+$PreventMultipleSimultaneousLoginComment = "Empêche les utilisateurs de se connecter simultanément plusieurs fois avec le même compte. C'est une bonne option pour les portails d'accès payants, mais cela peut s'avérer un peu gênant durant des tests, puisque seul un navigateur peut se connecter à un compte utilisateur désigné.";
 $ShowAdditionalColumnsInStudentResultsPageTitle = "Colonnes additionnelles cahier de notes";
 $ShowAdditionalColumnsInStudentResultsPageComment = "Montrer des colonnes additionnelles dans la vue étudiant du cahier de notes: meilleur score de tous les étudiants, classement relatif de l'étudiant par rapport aux autres et moyenne des scores de tous les étudiants réunis.";
 $CourseCatalogIsPublicTitle = "Publier le catalogue de cours";

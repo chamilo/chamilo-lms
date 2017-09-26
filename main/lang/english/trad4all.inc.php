@@ -8046,4 +8046,10 @@ $ForwardedMessage = "Forwarded message";
 $ForwardMessage = "Forward message";
 $MyCoursePageCategoryIntroduction = "You will find below the list of course categories.
 Click on one of them to see the list of courses it has.";
+$FeatureDisabledByAdministrator = "Feature disabled by administrator";
+$SubscribeUsersToLpCategory = "Subscribe users to category";
+$SubscribeGroupsToLpCategory = "Subscribe groups to category";
+$FieldTypeSelectWithTextField = "Select with text field";
+$FieldTypeTripleSelect = "Triple select";
+$AddText = "Add text";
 ?>

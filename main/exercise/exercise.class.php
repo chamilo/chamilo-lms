@@ -2048,32 +2048,109 @@ class Exercise
                 if ($this->selectNbrQuestions() == 0) {
                     // feedback type
                     $radios_feedback = array();
-                    $radios_feedback[] = $form->createElement('radio', 'exerciseFeedbackType', null, get_lang('ExerciseAtTheEndOfTheTest'), '0', array('id' =>'exerciseType_0', 'onclick' => 'check_feedback()'));
+                    $radios_feedback[] = $form->createElement(
+                        'radio',
+                        'exerciseFeedbackType',
+                        null,
+                        get_lang('ExerciseAtTheEndOfTheTest'),
+                        '0',
+                        array('id' => 'exerciseType_0', 'onclick' => 'check_feedback()')
+                    );
 
                     if (api_get_setting('enable_quiz_scenario') == 'true') {
-                        $radios_feedback[] = $form->createElement('radio', 'exerciseFeedbackType', null, get_lang('DirectFeedback'), '1', array('id' =>'exerciseType_1', 'onclick' => 'check_direct_feedback()'));
+                        $radios_feedback[] = $form->createElement(
+                            'radio',
+                            'exerciseFeedbackType',
+                            null,
+                            get_lang('DirectFeedback'),
+                            '1',
+                            array('id' => 'exerciseType_1', 'onclick' => 'check_direct_feedback()')
+                        );
                     }
-                    $radios_feedback[] = $form->createElement('radio', 'exerciseFeedbackType', null, get_lang('NoFeedback'), '2', array('id' =>'exerciseType_2'));
-                    $form->addGroup($radios_feedback, null, array(get_lang('FeedbackType'), get_lang('FeedbackDisplayOptions')));
+                    $radios_feedback[] = $form->createElement(
+                        'radio',
+                        'exerciseFeedbackType',
+                        null,
+                        get_lang('NoFeedback'),
+                        '2',
+                        array('id' => 'exerciseType_2')
+                    );
+                    $form->addGroup(
+                        $radios_feedback,
+                        null,
+                        array(get_lang('FeedbackType'), get_lang('FeedbackDisplayOptions'))
+                    );
 
                     //$form->addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
                     $radios_results_disabled = array();
-                    $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
-                    $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('DoNotShowScoreNorRightAnswer'), '1', array('id'=>'result_disabled_1', 'onclick' => 'check_results_disabled()'));
-                    $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('OnlyShowScore'), '2', array('id'=>'result_disabled_2', 'onclick' => 'check_results_disabled()'));
+                    $radios_results_disabled[] = $form->createElement(
+                        'radio',
+                        'results_disabled',
+                        null,
+                        get_lang('ShowScoreAndRightAnswer'),
+                        '0',
+                        array('id' => 'result_disabled_0')
+                    );
+                    $radios_results_disabled[] = $form->createElement(
+                        'radio',
+                        'results_disabled',
+                        null,
+                        get_lang('DoNotShowScoreNorRightAnswer'),
+                        '1',
+                        array('id' => 'result_disabled_1', 'onclick' => 'check_results_disabled()')
+                    );
+                    $radios_results_disabled[] = $form->createElement(
+                        'radio',
+                        'results_disabled',
+                        null,
+                        get_lang('OnlyShowScore'),
+                        '2',
+                        array('id' => 'result_disabled_2', 'onclick' => 'check_results_disabled()')
+                    );
                     $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'), '');
 
                     // Type of questions disposition on page
                     $radios = array();
                     $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'), '1');
-                    $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'), '2');
+                    $radios[] = $form->createElement(
+                        'radio',
+                        'exerciseType',
+                        null,
+                        get_lang('SequentialExercise'),
+                        '2'
+                    );
                     $form->addGroup($radios, null, get_lang('ExerciseType'));
                 } else {
                     //Show options freeze
-                    $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
-                    $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('DoNotShowScoreNorRightAnswer'), '1', array('id'=>'result_disabled_1', 'onclick' => 'check_results_disabled()'));
-                    $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('OnlyShowScore'), '2', array('id'=>'result_disabled_2', 'onclick' => 'check_results_disabled()'));
-                    $result_disable_group = $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'));
+                    $radios_results_disabled[] = $form->createElement(
+                        'radio',
+                        'results_disabled',
+                        null,
+                        get_lang('ShowScoreAndRightAnswer'),
+                        '0',
+                        array('id' => 'result_disabled_0')
+                    );
+                    $radios_results_disabled[] = $form->createElement(
+                        'radio',
+                        'results_disabled',
+                        null,
+                        get_lang('DoNotShowScoreNorRightAnswer'),
+                        '1',
+                        array('id' => 'result_disabled_1', 'onclick' => 'check_results_disabled()')
+                    );
+                    $radios_results_disabled[] = $form->createElement(
+                        'radio',
+                        'results_disabled',
+                        null,
+                        get_lang('OnlyShowScore'),
+                        '2',
+                        array('id' => 'result_disabled_2', 'onclick' => 'check_results_disabled()')
+                    );
+                    $result_disable_group = $form->addGroup(
+                        $radios_results_disabled,
+                        null,
+                        get_lang('ShowResultsToStudents')
+                    );
                     $result_disable_group->freeze();
 
                     //we force the options to the DirectFeedback exercisetype
@@ -2621,7 +2698,7 @@ class Exercise
         $this->save($type);
     }
 
-    function search_engine_save()
+    public function search_engine_save()
     {
         if ($_POST['index_document'] != 1) {
             return;
@@ -2666,7 +2743,7 @@ class Exercise
 
         $di = new ChamiloIndexer();
         isset($_POST['language']) ? $lang = Database::escape_string($_POST['language']) : $lang = 'english';
-        $di->connectDb(NULL, NULL, $lang);
+        $di->connectDb(null, null, $lang);
         $di->addChunk($ic_slide);
 
         //index and return search engine document id
@@ -2681,7 +2758,7 @@ class Exercise
         }
     }
 
-    function search_engine_edit()
+    public function search_engine_edit()
     {
         // update search enchine and its values table if enabled
         if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
@@ -2762,7 +2839,9 @@ class Exercise
         if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
             $course_id = api_get_course_id();
             $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-            $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level IS NULL LIMIT 1';
+            $sql = 'SELECT * FROM %s
+                    WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level IS NULL 
+                    LIMIT 1';
             $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
@@ -2785,7 +2864,9 @@ class Exercise
                     }
                 }
             }
-            $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level IS NULL LIMIT 1';
+            $sql = 'DELETE FROM %s 
+                    WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level IS NULL 
+                    LIMIT 1';
             $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
             Database::query($sql);
 
@@ -2895,7 +2976,7 @@ class Exercise
         $exercise_obj->save();
 
         $new_exercise_id = $exercise_obj->selectId();
-        $question_list 	 = $exercise_obj->selectQuestionList();
+        $question_list = $exercise_obj->selectQuestionList();
 
         if (!empty($question_list)) {
             //Question creation
@@ -3426,15 +3507,14 @@ class Exercise
         $orderedHotspots = [];
 
         if ($answerType == HOT_SPOT || $answerType == ANNOTATION) {
-            $orderedHotspots = $em
-                ->getRepository('ChamiloCoreBundle:TrackEHotspot')
-                ->findBy([
-                        'hotspotQuestionId' => $questionId,
-                        'cId' => $course_id,
-                        'hotspotExeId' => $exeId
-                    ],
-                    ['hotspotAnswerId' => 'ASC']
-                );
+            $orderedHotspots = $em->getRepository('ChamiloCoreBundle:TrackEHotspot')->findBy(
+                [
+                    'hotspotQuestionId' => $questionId,
+                    'cId' => $course_id,
+                    'hotspotExeId' => $exeId,
+                ],
+                ['hotspotAnswerId' => 'ASC']
+            );
         }
 
         if ($debug) error_log('Start answer loop ');
@@ -3681,7 +3761,7 @@ class Exercise
                         $last = count($pre_array) - 1;
                         $is_set_switchable = explode('@', $pre_array[$last]);
                         $switchable_answer_set = false;
-                        if (isset ($is_set_switchable[1]) && $is_set_switchable[1] == 1) {
+                        if (isset($is_set_switchable[1]) && $is_set_switchable[1] == 1) {
                             $switchable_answer_set = true;
                         }
                         $answer = '';
@@ -3975,9 +4055,7 @@ class Exercise
                         }
                         // adds the correct word, followed by ] to close the blank
 
-                        if (
-                            $this->results_disabled != EXERCISE_FEEDBACK_TYPE_EXAM
-                        ) {
+                        if ($this->results_disabled != EXERCISE_FEEDBACK_TYPE_EXAM) {
                             $answer .= ' / <font color="green"><b>'.$realCorrectTags[$i].'</b></font>';
                         }
 
@@ -4388,24 +4466,21 @@ class Exercise
                 if ($debug) error_log('Showing questions $from '.$from);
                 if ($from == 'exercise_result') {
                     //display answers (if not matching type, or if the answer is correct)
-                    if (
-                        !in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE]) ||
+                    if (!in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE]) ||
                         $answerCorrect
                     ) {
-                        if (
-                            in_array(
-                                $answerType,
-                                array(
-                                    UNIQUE_ANSWER,
-                                    UNIQUE_ANSWER_IMAGE,
-                                    UNIQUE_ANSWER_NO_OPTION,
-                                    MULTIPLE_ANSWER,
-                                    MULTIPLE_ANSWER_COMBINATION,
-                                    GLOBAL_MULTIPLE_ANSWER,
-                                    READING_COMPREHENSION,
-                                )
+                        if (in_array(
+                            $answerType,
+                            array(
+                                UNIQUE_ANSWER,
+                                UNIQUE_ANSWER_IMAGE,
+                                UNIQUE_ANSWER_NO_OPTION,
+                                MULTIPLE_ANSWER,
+                                MULTIPLE_ANSWER_COMBINATION,
+                                GLOBAL_MULTIPLE_ANSWER,
+                                READING_COMPREHENSION,
                             )
-                        ) {
+                        )) {
                             ExerciseShowFunctions::display_unique_or_multiple_answer(
                                 $feedback_type,
                                 $answerType,
@@ -4611,8 +4686,7 @@ class Exercise
                                     }
 
                                     // if pass
-                                    if (
-                                        $final_overlap >= $threadhold1 &&
+                                    if ($final_overlap >= $threadhold1 &&
                                         $final_missing <= $threadhold3 &&
                                         $final_excess <= $threadhold2
                                     ) {
@@ -4671,7 +4745,8 @@ class Exercise
                                         $url_hotspot = $destination_items[4];
                                     }
                                 }
-                            } else {	// the first delineation feedback
+                            } else {
+                                // the first delineation feedback
                                 if ($debug > 0) {
                                     error_log(__LINE__.' first', 0);
                                 }
@@ -4710,7 +4785,7 @@ class Exercise
                             //no break
                         case MULTIPLE_ANSWER:
                             //no break
-                        case GLOBAL_MULTIPLE_ANSWER :
+                        case GLOBAL_MULTIPLE_ANSWER:
                             //no break
                         case MULTIPLE_ANSWER_COMBINATION:
                             //no break
@@ -4843,7 +4918,8 @@ class Exercise
                             break;
                         case ORAL_EXPRESSION:
                             echo '<tr>
-                                <td valign="top">' . ExerciseShowFunctions::display_oral_expression_answer(
+                                <td valign="top">'.
+                                ExerciseShowFunctions::display_oral_expression_answer(
                                     $feedback_type,
                                     $choice,
                                     $exeId,
@@ -5338,7 +5414,6 @@ class Exercise
         // Store results directly in the database
         // For all in one page exercises, the results will be
         // stored by exercise_results.php (using the session)
-
         if ($saved_results) {
             if ($debug) error_log("Save question results $saved_results");
             if ($debug) error_log(print_r($choice, 1));
@@ -5690,7 +5765,6 @@ class Exercise
      * @param array $question_list_answers
      * @param string $origin
      * @param int $exe_id
-     * @return null
      */
     private function send_notification_for_open_questions(
         $question_list_answers,
@@ -5780,7 +5854,9 @@ class Exercise
      * @param array $question_list_answers
      * @param string $origin
      * @param int $exe_id
-     * @return null
+     * @param array $user_info
+     * @param string $url_email
+     * @param array $teachers
      */
     private function send_notification_for_oral_questions(
         $question_list_answers,
@@ -7231,13 +7307,13 @@ class Exercise
             <div id="ajaxquestiondiv'.$questionId.'"></div>';
             echo $script;
         } else {
-
             global $origin;
             $question_obj = Question::read($questionId);
             $user_choice = isset($attemptList[$questionId]) ? $attemptList[$questionId] : null;
             $remind_highlight = null;
 
-            //Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
+            // Hides questions when reviewing a ALL_ON_ONE_PAGE exercise
+            // see #4542 no_remind_highlight class hide with jquery
             if ($this->type == ALL_ON_ONE_PAGE && isset($_GET['reminder']) && $_GET['reminder'] == 2) {
                 $remind_highlight = 'no_remind_highlight';
                 if (in_array($question_obj->type, Question::question_type_no_review())) {

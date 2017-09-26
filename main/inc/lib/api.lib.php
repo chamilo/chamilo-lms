@@ -7733,20 +7733,20 @@ function api_is_https()
     if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
         $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_configuration['force_https_forwarded_proto'])
     ) {
-        $protocol = 'https';
+        $isSecured = true;
     } else {
         if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
-            $protocol = 'https';
+            $isSecured = true;
         } else {
-            $protocol = 'http';
+            $isSecured = false;
             // last chance
             if (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) {
-                $protocol = 'https';
+                $isSecured = true;
             }
         }
     }
 
-    return $protocol === 'https';
+    return $isSecured;
 }
 
 /**

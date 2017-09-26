@@ -117,7 +117,7 @@ class AnnouncementManager
     public static function get_all_annoucement_by_course($course_info, $session_id = 0)
     {
         $session_id = intval($session_id);
-        $course_id = $course_info['real_id'];
+        $courseId = $course_info['real_id'];
 
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -132,8 +132,8 @@ class AnnouncementManager
 				WHERE
                     i.tool='announcement' AND
                     announcement.session_id  = '$session_id' AND
-                    announcement.c_id = $course_id AND
-                    i.c_id = $course_id
+                    announcement.c_id = $courseId AND
+                    i.c_id = $courseId
 				ORDER BY display_order DESC";
         $rs = Database::query($sql);
         $num_rows = Database::num_rows($rs);
@@ -152,22 +152,22 @@ class AnnouncementManager
     /**
      * This functions switches the visibility a course resource
      * using the visibility field in 'item_property'
-     * @param    array $_course
+     * @param    array $courseInfo
      * @param    int     $id ID of the element of the corresponding type
      * @return   bool    False on failure, True on success
      */
-    public static function change_visibility_announcement($_course, $id)
+    public static function change_visibility_announcement($courseInfo, $id)
     {
         $session_id = api_get_session_id();
         $item_visibility = api_get_item_visibility(
-            $_course,
+            $courseInfo,
             TOOL_ANNOUNCEMENT,
             $id,
             $session_id
         );
         if ($item_visibility == '1') {
             api_item_property_update(
-                $_course,
+                $courseInfo,
                 TOOL_ANNOUNCEMENT,
                 $id,
                 'invisible',
@@ -175,7 +175,7 @@ class AnnouncementManager
             );
         } else {
             api_item_property_update(
-                $_course,
+                $courseInfo,
                 TOOL_ANNOUNCEMENT,
                 $id,
                 'visible',
@@ -188,13 +188,13 @@ class AnnouncementManager
 
     /**
      * Deletes an announcement
-     * @param array $_course the course array
+     * @param array $courseInfo the course array
      * @param int $id the announcement id
      */
-    public static function delete_announcement($_course, $id)
+    public static function delete_announcement($courseInfo, $id)
     {
         api_item_property_update(
-            $_course,
+            $courseInfo,
             TOOL_ANNOUNCEMENT,
             $id,
             'delete',
@@ -204,18 +204,18 @@ class AnnouncementManager
 
     /**
      * Deletes all announcements by course
-     * @param array $_course the course array
+     * @param array $courseInfo the course array
      */
-    public static function delete_all_announcements($_course)
+    public static function delete_all_announcements($courseInfo)
     {
         $announcements = self::get_all_annoucement_by_course(
-            $_course,
+            $courseInfo,
             api_get_session_id()
         );
         if (!empty($announcements)) {
             foreach ($announcements as $annon) {
                 api_item_property_update(
-                    $_course,
+                    $courseInfo,
                     TOOL_ANNOUNCEMENT,
                     $annon['id'],
                     'delete',
@@ -467,10 +467,10 @@ class AnnouncementManager
         }
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 
-        $course_id = $courseInfo['real_id'];
+        $courseId = $courseInfo['real_id'];
         $sql = "SELECT MAX(display_order)
                 FROM $tbl_announcement
-                WHERE c_id = $course_id ";
+                WHERE c_id = $courseId ";
         $res_max = Database::query($sql);
 
         $order = 0;
@@ -513,7 +513,7 @@ class AnnouncementManager
             return false;
         }
 
-        $course_id = $courseInfo['real_id'];
+        $courseId = $courseInfo['real_id'];
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 
         $authorId = empty($authorId) ? api_get_user_id() : $authorId;
@@ -526,7 +526,7 @@ class AnnouncementManager
 
         // store in the table announcement
         $params = array(
-            'c_id' => $course_id,
+            'c_id' => $courseId,
             'content' => $newContent,
             'title' => $title,
             'end_date' => $end_date,
@@ -646,18 +646,18 @@ class AnnouncementManager
         $file_comment = '',
         $sendToUsersInSession = false
     ) {
-        $_course = api_get_course_info();
+        $courseInfo = api_get_course_info();
 
         // Database definitions
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        $order = self::get_last_announcement_order($_course);
+        $order = self::get_last_announcement_order($courseInfo);
 
         $now = api_get_utc_datetime();
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
 
         // store in the table announcement
         $params = [
-            'c_id' => $course_id,
+            'c_id' => $courseId,
             'content' => $newContent,
             'title' => $title,
             'end_date' => $now,
@@ -691,7 +691,7 @@ class AnnouncementManager
                     foreach ($send_to['groups'] as $group) {
                         $groupInfo = GroupManager::get_group_properties($group);
                         api_item_property_update(
-                            $_course,
+                            $courseInfo,
                             TOOL_ANNOUNCEMENT,
                             $last_id,
                             'AnnouncementAdded',
@@ -711,7 +711,7 @@ class AnnouncementManager
                         $groupInfo = GroupManager::get_group_properties($group);
                         foreach ($to_users as $user) {
                             api_item_property_update(
-                                $_course,
+                                $courseInfo,
                                 TOOL_ANNOUNCEMENT,
                                 $last_id,
                                 'AnnouncementAdded',
@@ -753,8 +753,8 @@ class AnnouncementManager
         $file_comment = '',
         $sendToUsersInSession = false
     ) {
-        $_course = api_get_course_info();
-        $course_id = api_get_course_int_id();
+        $courseInfo = api_get_course_info();
+        $courseId = api_get_course_int_id();
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 
@@ -768,7 +768,7 @@ class AnnouncementManager
         Database::update(
             $tbl_announcement,
             $params,
-            ['c_id = ? AND id = ?' => [$course_id, $id]]
+            ['c_id = ? AND id = ?' => [$courseId, $id]]
         );
 
         // save attachment file
@@ -797,7 +797,7 @@ class AnnouncementManager
 
         // We remove everything from item_property for this
         $sql = "DELETE FROM $tbl_item_property
-                WHERE c_id = $course_id AND ref='$id' AND tool='announcement'";
+                WHERE c_id = $courseId AND ref='$id' AND tool='announcement'";
         Database::query($sql);
 
         if ($sendToUsersInSession) {
@@ -814,7 +814,7 @@ class AnnouncementManager
                 foreach ($send_to['groups'] as $group) {
                     $groupInfo = GroupManager::get_group_properties($group);
                     api_item_property_update(
-                        $_course,
+                        $courseInfo,
                         TOOL_ANNOUNCEMENT,
                         $id,
                         'AnnouncementUpdated',
@@ -828,7 +828,7 @@ class AnnouncementManager
             if (is_array($send_to['users'])) {
                 foreach ($send_to['users'] as $user) {
                     api_item_property_update(
-                        $_course,
+                        $courseInfo,
                         TOOL_ANNOUNCEMENT,
                         $id,
                         'AnnouncementUpdated',
@@ -842,7 +842,7 @@ class AnnouncementManager
             // Send to everyone
             if (isset($to[0]) && $to[0] === 'everyone') {
                 api_item_property_update(
-                    $_course,
+                    $courseInfo,
                     TOOL_ANNOUNCEMENT,
                     $id,
                     'AnnouncementUpdated',
@@ -853,7 +853,7 @@ class AnnouncementManager
         } else {
             // the message is sent to everyone, so we set the group to 0
             api_item_property_update(
-                $_course,
+                $courseInfo,
                 TOOL_ANNOUNCEMENT,
                 $id,
                 'AnnouncementUpdated',
@@ -869,7 +869,7 @@ class AnnouncementManager
     public static function addAnnouncementToAllUsersInSessions($announcementId)
     {
         $courseCode = api_get_course_id();
-        $_course = api_get_course_info();
+        $courseInfo = api_get_course_info();
         $sessionList = SessionManager::get_session_by_course(api_get_course_int_id());
 
         if (!empty($sessionList)) {
@@ -883,7 +883,7 @@ class AnnouncementManager
                 if (!empty($userList)) {
                     foreach ($userList as $user) {
                         api_item_property_update(
-                            $_course,
+                            $courseInfo,
                             TOOL_ANNOUNCEMENT,
                             $announcementId,
                             "AnnouncementUpdated",
@@ -911,10 +911,10 @@ class AnnouncementManager
             return false;
         }
         $insert_id = intval($insert_id);
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
         // store the modifications in the table tbl_annoucement
         $sql = "UPDATE $tbl_announcement SET email_sent='1'
-                WHERE c_id = $course_id AND id = $insert_id";
+                WHERE c_id = $courseId AND id = $insert_id";
         Database::query($sql);
     }
 
@@ -927,7 +927,7 @@ class AnnouncementManager
     public static function get_all_annoucement_by_user_course($course_code, $user_id)
     {
         $course_info = api_get_course_info($course_code);
-        $course_id = $course_info['real_id'];
+        $courseId = $course_info['real_id'];
 
         if (empty($user_id)) {
             return false;
@@ -944,8 +944,8 @@ class AnnouncementManager
 					INNER JOIN $tbl_item_property ip
 					ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
 					WHERE
-						announcement.c_id = $course_id AND
-						ip.c_id = $course_id AND						
+						announcement.c_id = $courseId AND
+						ip.c_id = $courseId AND						
 						ip.tool='announcement' AND
 						(
 						  ip.insert_user_id='$user_id' AND
@@ -980,14 +980,14 @@ class AnnouncementManager
     /**
      * Returns announcement info from its id
      *
-     * @param int $course_id
+     * @param int $courseId
      * @param int $id
      * @return array
      */
-    public static function get_by_id($course_id, $id)
+    public static function get_by_id($courseId, $id)
     {
         $id = intval($id);
-        $course_id = $course_id ? intval($course_id) : api_get_course_int_id();
+        $courseId = $courseId ? intval($courseId) : api_get_course_int_id();
 
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -1002,7 +1002,7 @@ class AnnouncementManager
                     announcement.id = ip.ref AND
                     announcement.c_id = ip.c_id
                WHERE
-                    announcement.c_id = $course_id AND
+                    announcement.c_id = $courseId AND
                     ip.tool='announcement' AND
                     announcement.id = $id
                 ";
@@ -1048,10 +1048,10 @@ class AnnouncementManager
         $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tool = Database::escape_string($tool);
         $id = intval($id);
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
 
         $sql = "SELECT * FROM $table
-                WHERE c_id = $course_id AND tool='$tool' AND ref = $id";
+                WHERE c_id = $courseId AND tool='$tool' AND ref = $id";
         $result = Database::query($sql);
         $to = array();
         while ($row = Database::fetch_array($result)) {
@@ -1164,11 +1164,11 @@ class AnnouncementManager
 
         $sent_to_group = array();
         $sent_to = array();
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
 
         $sql = "SELECT to_group_id, to_user_id
                 FROM $table
-                WHERE c_id = $course_id AND tool = '$tool' AND ref=".$id;
+                WHERE c_id = $courseId AND tool = '$tool' AND ref=".$id;
         $result = Database::query($sql);
 
         while ($row = Database::fetch_array($result)) {
@@ -1207,11 +1207,11 @@ class AnnouncementManager
     {
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $announcementId = intval($announcementId);
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
         $row = array();
         $sql = 'SELECT id, path, filename, comment 
                 FROM '.$table.'
-				WHERE c_id = ' . $course_id.' AND announcement_id = '.$announcementId;
+				WHERE c_id = ' . $courseId.' AND announcement_id = '.$announcementId;
         $result = Database::query($sql);
         if (Database::num_rows($result) != 0) {
             $row = Database::fetch_array($result, 'ASSOC');
@@ -1231,15 +1231,15 @@ class AnnouncementManager
         $file_comment,
         $file
     ) {
-        $_course = api_get_course_info();
+        $courseInfo = api_get_course_info();
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $return = 0;
         $announcement_id = intval($announcement_id);
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
 
         if (is_array($file) && $file['error'] == 0) {
             // TODO: This path is obsolete. The new document repository scheme should be kept in mind here.
-            $courseDir = $_course['path'].'/upload/announcements';
+            $courseDir = $courseInfo['path'].'/upload/announcements';
             $sys_course_path = api_get_path(SYS_COURSE_PATH);
             $updir = $sys_course_path.$courseDir;
 
@@ -1259,7 +1259,7 @@ class AnnouncementManager
                 copy($file['tmp_name'], $new_path);
 
                 $params = [
-                    'c_id' => $course_id,
+                    'c_id' => $courseId,
                     'filename' => $file_name,
                     'comment' => $file_comment,
                     'path' => $new_file_name,
@@ -1293,14 +1293,14 @@ class AnnouncementManager
         $file,
         $file_comment
     ) {
-        $_course = api_get_course_info();
+        $courseInfo = api_get_course_info();
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $return = 0;
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
 
         if (is_array($file) && $file['error'] == 0) {
             // TODO: This path is obsolete. The new document repository scheme should be kept in mind here.
-            $courseDir = $_course['path'].'/upload/announcements';
+            $courseDir = $courseInfo['path'].'/upload/announcements';
             $sys_course_path = api_get_path(SYS_COURSE_PATH);
             $updir = $sys_course_path.$courseDir;
 
@@ -1331,7 +1331,7 @@ class AnnouncementManager
                             comment = '$safe_file_comment', 
                             path = '$safe_new_file_name', 
                             size ='".intval($file['size'])."'
-					 	WHERE c_id = $course_id AND id = '$id_attach'";
+					 	WHERE c_id = $courseId AND id = '$id_attach'";
                 $result = Database::query($sql);
                 if ($result === false) {
                     $return = -1;
@@ -1356,12 +1356,12 @@ class AnnouncementManager
     {
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $id = intval($id);
-        $course_id = api_get_course_int_id();
-        if (empty($course_id) || empty($id)) {
+        $courseId = api_get_course_int_id();
+        if (empty($courseId) || empty($id)) {
             return false;
         }
         $sql = "DELETE FROM $table
-                WHERE c_id = $course_id AND id = $id";
+                WHERE c_id = $courseId AND id = $id";
         Database::query($sql);
 
         return true;
@@ -1420,7 +1420,17 @@ class AnnouncementManager
         $user_id = $userId ?: api_get_user_id();
         $group_id = api_get_group_id();
         $session_id = $sessionId ?: api_get_session_id();
-        $course_id = $courseId ?: api_get_course_int_id();
+        if (empty($courseId)) {
+            $courseInfo = api_get_course_info();
+            $courseId = $courseInfo['real_id'];
+        } else {
+            $courseId = (int) $courseId;
+            $courseInfo = api_get_course_info($courseId);
+        }
+
+        if (empty($courseInfo)) {
+            return [];
+        }
 
         $condition_session = api_get_session_condition(
             $session_id,
@@ -1429,9 +1439,9 @@ class AnnouncementManager
             'announcement.session_id'
         );
 
-        $_course = api_get_course_info();
+
         $group_memberships = GroupManager::get_group_ids(
-            $course_id,
+            $courseId,
             api_get_user_id()
         );
         $allowUserEditSetting = api_get_course_setting('allow_user_edit_announcement');
@@ -1480,8 +1490,8 @@ class AnnouncementManager
                             INNER JOIN $tbl_item_property ip
                             ON (announcement.id = ip.ref AND ip.c_id = announcement.c_id)
                             WHERE
-                                announcement.c_id = $course_id AND
-                                ip.c_id = $course_id AND                                
+                                announcement.c_id = $courseId AND
+                                ip.c_id = $courseId AND                                
                                 ip.tool = 'announcement' AND
                                 (
                                     ip.to_user_id = $user_id OR
@@ -1498,8 +1508,8 @@ class AnnouncementManager
                             INNER JOIN $tbl_item_property ip
                             ON (announcement.id = ip.ref AND ip.c_id = announcement.c_id)
                             WHERE
-                                announcement.c_id = $course_id AND
-                                ip.c_id = $course_id AND
+                                announcement.c_id = $courseId AND
+                                ip.c_id = $courseId AND
                                 ip.tool ='announcement' AND
                                 (ip.to_user_id = $user_id OR ip.to_group_id='0' OR ip.to_group_id IS NULL) AND
                                 ip.visibility IN ('1', '0')
@@ -1516,8 +1526,8 @@ class AnnouncementManager
                         ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
                         WHERE
                             ip.tool='announcement' AND
-                            announcement.c_id = $course_id AND
-                            ip.c_id = $course_id AND
+                            announcement.c_id = $courseId AND
+                            ip.c_id = $courseId AND
                             ip.visibility<>'2' AND
                             (ip.to_group_id = $group_id OR ip.to_group_id='0' OR ip.to_group_id IS NULL)
                             $condition_session
@@ -1537,8 +1547,8 @@ class AnnouncementManager
                             ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
                             WHERE
                                 ip.tool='announcement' AND
-                                announcement.c_id = $course_id AND
-                                ip.c_id = $course_id AND                                
+                                announcement.c_id = $courseId AND
+                                ip.c_id = $courseId AND                                
                                 ip.visibility='1'
                                 $condition_session
                                 $searchCondition
@@ -1555,8 +1565,8 @@ class AnnouncementManager
                             ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
                             WHERE
                                 ip.tool = 'announcement' AND
-                                announcement.c_id = $course_id AND
-                                ip.c_id = $course_id  AND
+                                announcement.c_id = $courseId AND
+                                ip.c_id = $courseId  AND
                                 (ip.visibility='0' OR ip.visibility='1')
                                 $condition_session
                                 $searchCondition
@@ -1600,8 +1610,8 @@ class AnnouncementManager
                         $tbl_item_property ip
                         ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
                         WHERE
-                            announcement.c_id = $course_id AND
-                            ip.c_id = $course_id AND                            
+                            announcement.c_id = $courseId AND
+                            ip.c_id = $courseId AND                            
                             ip.tool='announcement' 
                             $cond_user_id
                             $condition_session
@@ -1625,8 +1635,8 @@ class AnnouncementManager
 						INNER JOIN $tbl_item_property ip
 						ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
 						WHERE
-    						announcement.c_id = $course_id AND
-							ip.c_id = $course_id AND    						
+    						announcement.c_id = $courseId AND
+							ip.c_id = $courseId AND    						
     						ip.tool='announcement'
     						$cond_user_id
     						$condition_session
@@ -1649,8 +1659,8 @@ class AnnouncementManager
                             INNER JOIN $tbl_item_property ip
                             ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
                             WHERE
-                                announcement.c_id = $course_id AND
-                                ip.c_id = $course_id AND                            
+                                announcement.c_id = $courseId AND
+                                ip.c_id = $courseId AND                            
                                 ip.tool='announcement'
                                 $cond_user_id
                                 $condition_session
@@ -1715,7 +1725,7 @@ class AnnouncementManager
                 $groupReference = ($myrow['to_group_id'] > 0) ? ' <span class="label label-info">'.get_lang('Group').'</span> ' : '';
                 $title = $myrow['title'].$groupReference.$sent_to_icon;
                 $item_visibility = api_get_item_visibility(
-                    $_course,
+                    $courseInfo,
                     TOOL_ANNOUNCEMENT,
                     $myrow['id'],
                     $session_id
@@ -1822,8 +1832,8 @@ class AnnouncementManager
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
         $session_id = api_get_session_id();
-        $_course = api_get_course_info();
-        $course_id = $_course['real_id'];
+        $courseInfo = api_get_course_info();
+        $courseId = $courseInfo['real_id'];
         $userId = api_get_user_id();
         $condition_session = api_get_session_condition(
             $session_id,
@@ -1850,8 +1860,8 @@ class AnnouncementManager
                         INNER JOIN $tbl_item_property ip
                         ON (announcement.c_id = ip.c_id AND announcement.id = ip.ref)
                         WHERE
-                            announcement.c_id = $course_id AND
-                            ip.c_id = $course_id AND                    
+                            announcement.c_id = $courseId AND
+                            ip.c_id = $courseId AND                    
                             ip.tool = 'announcement' AND
                             ip.visibility <> '2'
                             $group_condition
@@ -1864,7 +1874,7 @@ class AnnouncementManager
             // students only get to see the visible announcements
             if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
                 $group_memberships = GroupManager::get_group_ids(
-                    $_course['real_id'],
+                    $courseInfo['real_id'],
                     $userId
                 );
 
@@ -1911,8 +1921,8 @@ class AnnouncementManager
                             INNER JOIN $tbl_item_property ip
                             ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
                             WHERE
-                                announcement.c_id = $course_id AND
-                                ip.c_id = $course_id AND                                
+                                announcement.c_id = $courseId AND
+                                ip.c_id = $courseId AND                                
                                 ip.tool='announcement' AND 
                                 ip.visibility='1'
                                 $cond_user_id
@@ -1939,8 +1949,8 @@ class AnnouncementManager
                                 INNER JOIN $tbl_item_property ip
                                 ON (announcement.c_id = ip.c_id AND announcement.id = ip.ref)
                                 WHERE
-                                    announcement.c_id = $course_id AND
-                                    ip.c_id = $course_id AND 
+                                    announcement.c_id = $courseId AND
+                                    ip.c_id = $courseId AND 
                                     ip.tool='announcement' AND 
                                     ip.visibility='1'
                                     $cond_user_id
@@ -1967,8 +1977,8 @@ class AnnouncementManager
                                 INNER JOIN $tbl_item_property ip
                                 ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
                                 WHERE
-                                    announcement.c_id = $course_id AND
-                                    ip.c_id = $course_id AND 
+                                    announcement.c_id = $courseId AND
+                                    ip.c_id = $courseId AND 
                                     ip.tool='announcement' AND 
                                     ip.visibility='1' AND 
                                     ip.to_group_id='0'

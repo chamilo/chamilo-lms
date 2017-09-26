@@ -2436,12 +2436,10 @@ class learnpathItem
                                             $rs_quiz = Database::query($sql);
                                             if (Database::num_rows($rs_quiz) > 0) {
                                                 while ($quiz = Database::fetch_array($rs_quiz)) {
-
                                                     $minScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMinScore();
                                                     $maxScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMaxScore();
 
                                                     if (isset($minScore) && isset($minScore)) {
-
                                                         // Taking min/max prerequisites values see BT#5776
                                                         if ($quiz['exe_result'] >= $minScore && $quiz['exe_result'] <= $maxScore) {
                                                             $returnstatus = true;

@@ -579,7 +579,6 @@ class SocialManager extends UserManager
      * @param string $subject
      * @param string $content
      *
-     * @return string message invitation
      */
     public static function sendInvitationToUser($userId, $subject = '', $content = '')
     {
@@ -1071,11 +1070,18 @@ class SocialManager extends UserManager
                 api_get_user_id()
             );
 
-            if (isset($invitation_sent_list[$user_id]) && is_array($invitation_sent_list[$user_id]) && count($invitation_sent_list[$user_id]) > 0) {
-                $links .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">'.Display::return_icon('invitation.png', get_lang('YouAlreadySentAnInvitation')).'&nbsp;&nbsp;'.get_lang('YouAlreadySentAnInvitation').'</a></li>';
+            if (isset($invitation_sent_list[$user_id]) && is_array($invitation_sent_list[$user_id]) &&
+                count($invitation_sent_list[$user_id]) > 0
+            ) {
+                $links .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">'.
+                    Display::return_icon('invitation.png', get_lang('YouAlreadySentAnInvitation'))
+                    .'&nbsp;&nbsp;'.get_lang('YouAlreadySentAnInvitation').'</a></li>';
             } else {
                 if (!$show_full_profile) {
-                    $links .= '<li><a class="btn-to-send-invitation" href="#" data-send-to="'.$user_id.'" title="'.get_lang('SendInvitation').'">'.Display::return_icon('invitation.png', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a></li>';
+                    $links .= '<li>
+                        <a class="btn-to-send-invitation" href="#" data-send-to="'.$user_id.'" title="'.get_lang('SendInvitation').'">'.
+                        Display::return_icon('invitation.png', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').
+                        '</a></li>';
                 }
             }
 
@@ -1119,7 +1125,10 @@ class SocialManager extends UserManager
 
                         if (!empty($content)) {
                             $url = Display::url(
-                                Display::return_icon('announcement.png', get_lang('Announcements')).$course_info['name'].' ('.$content['count'].')',
+                                Display::return_icon(
+                                    'announcement.png',
+                                    get_lang('Announcements')
+                                ).$course_info['name'].' ('.$content['count'].')',
                                 api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cidReq='.$course['code']
                             );
                             $announcements[] = Display::tag('li', $url);
@@ -1232,6 +1241,7 @@ class SocialManager extends UserManager
     /**
      * Displays the information of an individual user
      * @param int $user_id
+     * @return string
      */
     public static function display_individual_user($user_id)
     {
@@ -1598,7 +1608,9 @@ class SocialManager extends UserManager
             $media .= '</div>';
             $media .= '<div class="col-md-9 col-xs-9 social-post-answers">';
             $media .= '<div class="user-data">';
-            $media .= '<div class="username">'.'<a href="'.$url.'">'.$nameComplete.'</a> <span>'.Security::remove_XSS($message['content']).'</span></div>';
+            $media .= '<div class="username">'.'<a href="'.$url.'">'.$nameComplete.'</a> 
+                        <span>'.Security::remove_XSS($message['content']).'</span>
+                       </div>';
             $media .= '<div class="time timeago" title="'.$date.'">'.$date.'</div>';
             $media .= '<br />';
             $media .= '</div>';
@@ -1842,6 +1854,7 @@ class SocialManager extends UserManager
      * group_add, home, messages, messages_inbox, messages_compose,
      * messages_outbox, invitations, shared_profile, friends, groups, search
      * @param int $groupId Optional. Group ID
+     * @param bool $show_full_profile
      * @return string The HTML code with the social block
      */
     public static function setSocialUserBlock(

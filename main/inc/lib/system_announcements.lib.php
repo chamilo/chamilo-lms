@@ -116,13 +116,19 @@ class SystemAnnouncementManager
                     $display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG);
                     echo '<a name="'.$announcement->id.'"></a>
                         <div class="system_announcement">
-                            <div class="system_announcement_title"><a name="ann'.$announcement->id.'" href="'.$show_url.'">'.$announcement->title.'</a></div><div class="system_announcement_date">'.$display_date.'</div>
+                            <div class="system_announcement_title">
+                                <a name="ann'.$announcement->id.'" href="'.$show_url.'">'.
+                                $announcement->title.'</a>
+                            </div>
+                            <div class="system_announcement_date">'.$display_date.'</div>
                         </div>';
                 } else {
                     echo '<div class="system_announcement">
                             <div class="system_announcement_title">'
                                 .$announcement->display_date.'
-                                <a name="ann'.$announcement->id.'" href="'.$url.'?'.$query_string.'#ann'.$announcement->id.'">'.$announcement->title.'</a>
+                                <a name="ann'.$announcement->id.'" href="'.$url.'?'.$query_string.'#ann'.$announcement->id.'">'.
+                                    $announcement->title.'
+                                </a>
                             </div>';
                 }
                 echo '<br />';
@@ -204,10 +210,11 @@ class SystemAnnouncementManager
                 $content .= '<tr><td>';
                 $content .= '<a name="'.$announcement->id.'"></a>
                         <div class="system_announcement">
-                        <h2>'.$announcement->title.'</h2><div class="system_announcement_date">'.$display_date.'</div>
+                        <h2>'.$announcement->title.'</h2>
+                        <div class="system_announcement_date">'.$display_date.'</div>
                         <br />
                         <div class="system_announcement_content">'
-                                .$announcement->content.'
+                            .$announcement->content.'
                         </div>
                       </div><br />';
                 $content .= '</tr></td>';
@@ -520,6 +527,9 @@ class SystemAnnouncementManager
      * @param array $date_start start date (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
      * @param array $date_end end date of (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
      * @param array $visibility
+     * @param array $lang
+     * @param int $send_mail
+     * @param bool $sendEmailTest
      * @return bool    True on success, false on failure
      */
     public static function update_announcement(

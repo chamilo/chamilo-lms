@@ -241,8 +241,7 @@ class Thematic
 
     /**
      * get thematic list
-     * @param int Thematic id (optional), get list by id
-     * @param integer $thematic_id
+     * @param integer $thematic_id Thematic id (optional), get list by id
      * @param string $course_code
      * @param integer $session_id
      * @return array    Thematic data
@@ -1112,14 +1111,13 @@ class Thematic
 
     /**
      * update done thematic advances from thematic details interface
-     * @param int Thematic id
      * @param int $thematic_advance_id
      * @return int Affected rows
      */
     public function update_done_thematic_advances($thematic_advance_id)
     {
         $_course = api_get_course_info();
-        $thematic_data = $this->get_thematic_list(null, api_get_course_id());
+        $thematic_data = self::get_thematic_list(null, api_get_course_id());
         $thematic_advance_data = $this->get_thematic_advance_list(
             null,
             api_get_course_id(),
@@ -1235,7 +1233,7 @@ class Thematic
      */
     public function get_last_done_thematic_advance()
     {
-        $thematic_data = $this->get_thematic_list();
+        $thematic_data = self::get_thematic_list();
         $thematic_advance_data = $this->get_thematic_advance_list(
             null,
             api_get_course_id(),
@@ -1270,7 +1268,7 @@ class Thematic
      */
     public function get_next_thematic_advance_not_done($offset = 1)
     {
-        $thematic_data = $this->get_thematic_list();
+        $thematic_data = self::get_thematic_list();
         $thematic_advance_data = $this->get_thematic_advance_list();
         $a_thematic_advance_ids = array();
         $next_advance_not_done = 0;
@@ -1308,9 +1306,9 @@ class Thematic
             $course_code = api_get_course_id();
         }
         if (api_get_session_id()) {
-            $thematic_data = $this->get_thematic_list(null, $course_code);
+            $thematic_data = self::get_thematic_list(null, $course_code);
         } else {
-            $thematic_data = $this->get_thematic_list(null, $course_code, 0);
+            $thematic_data = self::get_thematic_list(null, $course_code, 0);
         }
         $new_thematic_data = array();
         if (!empty($thematic_data)) {
@@ -1345,7 +1343,6 @@ class Thematic
     /**
      * Get average of advances by thematic
      * @param	int		Thematic id
-     * @param	string	Course code (optional)
      * @param string $course_code
      * @return 	float	Average of thematic advances
      */
@@ -1409,13 +1406,12 @@ class Thematic
 
     /**
      * set attributes for fields of thematic_advance table
-     * @param	int		Thematic advance id
+     * @param	int		$id Thematic advance id
      * @param	int		Thematic id
      * @param	int		Attendance id
      * @param	string	Content
      * @param	string	Date and time
      * @param	int		Duration in hours
-     * @param integer $id
      * @return void
      */
     public function set_thematic_advance_attributes(

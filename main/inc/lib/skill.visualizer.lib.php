@@ -52,7 +52,7 @@ class SkillVisualizer
         $content .= Display::url('+', '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block btn'));
         $content .= '</div>';
 
-        $this->html .= $content.' '.$gradebook_string;
+        $this->html .= $content;
 
         if ($this->type == 'edit' && $skill['parent_id'] != 0) {
             //$this->html .= Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), '#', array('id'=>'edit_block_'.$block_id,'class'=>'edit_block'));

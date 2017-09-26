@@ -7983,4 +7983,6 @@ $ForwardedMessage = "Message transféré";
 $ForwardMessage = "Transférer message";
 $MyCoursePageCategoryIntroduction = "Vous trouverez ci-dessous la liste des catégories de cours.
 Cliquez sur l'une pour voir la liste des cours qu'elle contient.";
+$BestScoreInLearningPath = "Meilleur score parcours";
+$BestScoreNotInLearningPath = "Meilleur score hors-parcours";
 ?>

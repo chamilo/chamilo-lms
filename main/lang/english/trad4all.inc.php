@@ -8052,4 +8052,6 @@ $SubscribeGroupsToLpCategory = "Subscribe groups to category";
 $FieldTypeSelectWithTextField = "Select with text field";
 $FieldTypeTripleSelect = "Triple select";
 $AddText = "Add text";
+$BestScoreInLearningPath = "Best score in learning path";
+$BestScoreNotInLearningPath = "Best score not in learning path";
 ?>

@@ -21,10 +21,6 @@ use Chamilo\CourseBundle\Entity\CForumThread;
  * - quoting a message
  *
  * @package chamilo.forum
- *
- * @todo several functions have to be moved to the itemmanager library
- * @todo displaying icons => display library
- * @todo complete the missing phpdoc the correct order should be
  * @todo convert into a class
  */
 
@@ -117,7 +113,9 @@ function handle_forum_and_forumcategories($lp_id = null)
     }
 
     // Adding a forum
-    if ((($action_forum_cat == 'add' || $action_forum_cat == 'edit') && $get_content == 'forum') || $post_submit_forum) {
+    if ((($action_forum_cat == 'add' || $action_forum_cat == 'edit') && $get_content == 'forum') ||
+        $post_submit_forum
+    ) {
         if ($action_forum_cat == 'edit' && $get_id || $post_submit_forum) {
             $inputvalues = get_forums($get_id);
         } else {
@@ -127,7 +125,9 @@ function handle_forum_and_forumcategories($lp_id = null)
     }
 
     // Edit a forum category
-    if (($action_forum_cat == 'edit' && $get_content == 'forumcategory') || (isset($_POST['SubmitEditForumCategory'])) ? true : false) {
+    if (($action_forum_cat == 'edit' && $get_content == 'forumcategory') ||
+        (isset($_POST['SubmitEditForumCategory'])) ? true : false
+    ) {
         $forum_category = get_forum_categories($get_id);
         $content = show_edit_forumcategory_form($forum_category);
     }
@@ -181,6 +181,7 @@ function handle_forum_and_forumcategories($lp_id = null)
  *
  * @param  array $inputvalues (deprecated, set to null when calling)
  * @param  int $lp_id Learning path ID
+ * @return string
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Juan Carlos Raña Trabado (return to lp_id)
@@ -482,12 +483,9 @@ function delete_forum_image($forum_id)
 
 /**
  * This function displays the form that is used to edit a forum category.
- * This is more or less a copy from the show_add_forumcategory_form function with the only difference that is uses
- * some default values. I tried to have both in one function but this gave problems with the handle_forum_and_forumcategories function
- * (storing was done twice)
  *
  * @param array
- * @return void HTML
+ * @return string
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
@@ -892,7 +890,7 @@ function deleteForumCategoryThread($content, $id)
         $return_message = get_lang('ForumDeleted');
 
         if (!empty($number_threads)) {
-            $sql = "SELECT thread_id FROM $table_forum_thread
+            $sql = "SELECT thread_id FROM $table_forum_thread 
                     WHERE c_id = $course_id AND forum_id = $id ";
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
@@ -1350,7 +1348,7 @@ function move_up_down($content, $direction, $id)
     }
 
     // Committing the switch.
-    // We do an extra check if we do not have illegal values. If your remove this if statment you will
+    // We do an extra check if we do not have illegal values. If your remove this if statement you will
     // be able to mess with the sorting by refreshing the page over and over again.
     if ($this_sort != '' && $next_sort != '' && $next_id != '' && $this_id != '') {
         $sql = "UPDATE $table SET $sort_column='".Database::escape_string($this_sort)."'
@@ -1956,11 +1954,10 @@ function get_threads($forum_id, $courseId = null, $sessionId = null)
  */
 function getThreadInfo($threadId, $cId)
 {
-    $em = Database::getManager();
-    $forumThread = $em->getRepository('ChamiloCourseBundle:CForumThread')->findOneBy(['threadId' => $threadId, 'cId' => $cId]);
+    $repo = Database::getManager()->getRepository('ChamiloCourseBundle:CForumThread');
+    $forumThread = $repo->findOneBy(['threadId' => $threadId, 'cId' => $cId]);
 
     $thread = [];
-
     if ($forumThread) {
         $thread['threadId'] = $forumThread->getThreadId();
         $thread['threadTitle'] = $forumThread->getThreadTitle();
@@ -2022,7 +2019,9 @@ function getPosts(
             $filterModerated = false;
         }
     } else {
-        if (GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo) || api_is_allowed_to_edit(false, true)) {
+        if (GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo) ||
+            api_is_allowed_to_edit(false, true)
+        ) {
             $filterModerated = false;
         }
     }
@@ -2425,7 +2424,9 @@ function get_forumcategory_information($cat_id)
 
     $course_id = api_get_course_int_id();
     $sql = "SELECT *
-            FROM ".$table_categories." forumcategories, ".$table_item_property." item_properties
+            FROM $table_categories forumcategories 
+            INNER JOIN $table_item_property item_properties
+            ON (forumcategories.c_id = item_properties.c_id)
             WHERE
                 forumcategories.c_id = $course_id AND
                 item_properties.c_id = $course_id AND
@@ -2854,8 +2855,10 @@ function store_thread(
  * @param string $action is the parameter that determines if we are
  *  1. newthread: adding a new thread (both empty) => No I-frame
  *  2. replythread: Replying to a thread ($action = replythread) => I-frame with the complete thread (if enabled)
- *  3. replymessage: Replying to a message ($action =replymessage) => I-frame with the complete thread (if enabled) (I first thought to put and I-frame with the message only)
- *  4. quote: Quoting a message ($action= quotemessage) => I-frame with the complete thread (if enabled). The message will be in the reply. (I first thought not to put an I-frame here)
+ *  3. replymessage: Replying to a message ($action =replymessage) => I-frame with the complete thread (if enabled)
+ * (I first thought to put and I-frame with the message only)
+ *  4. quote: Quoting a message ($action= quotemessage) => I-frame with the complete thread (if enabled).
+ * The message will be in the reply. (I first thought not to put an I-frame here)
  * @return FormValidator
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
@@ -3183,14 +3186,12 @@ function saveThreadScore(
 
                 return 'insert';
             } else {
-
                 saveThreadScoreHistory(
                     '1',
                     $course_id,
                     $user_id,
                     $thread_id
                 );
-
 
                 // Update
                 $sql = "UPDATE $table_threads_qualify
@@ -3333,7 +3334,6 @@ function saveThreadScoreHistory(
     if ($user_id == strval(intval($user_id)) &&
         $thread_id == strval(intval($thread_id)) && $option == 1
     ) {
-
         // Extract information of thread_qualify.
         $sql = "SELECT qualify, qualify_time
                 FROM $table_threads_qualify
@@ -4165,7 +4165,18 @@ function send_mail($user_info = array(), $thread_information = array())
     $email_body .= get_lang('ThreadCanBeFoundHere')." : <br /><a href=\"".$thread_link."\">".$thread_link."</a>\n";
 
     if ($user_info['user_id'] <> $user_id) {
-        MessageManager::send_message($user_info['user_id'], $subject, $email_body, [], [], null, null, null, null, $user_id);
+        MessageManager::send_message(
+            $user_info['user_id'],
+            $subject,
+            $email_body,
+            [],
+            [],
+            null,
+            null,
+            null,
+            null,
+            $user_id
+        );
     }
 }
 
@@ -4496,13 +4507,18 @@ function prepare4display($input)
         }
         $counter = 0;
         foreach ($search_terms as $key => $search_term) {
-            $input = api_preg_replace('/'.preg_quote(trim($search_term), '/').'/i', '<span style="background-color: '.$highlightcolors[$counter].'">$0</span>', $input);
+            $input = api_preg_replace(
+                '/'.preg_quote(trim($search_term), '/').'/i',
+                '<span style="background-color: '.$highlightcolors[$counter].'">$0</span>',
+                $input
+            );
             $counter++;
         }
     }
 
     // TODO: Security should be implemented outside this function.
-    // Change this to COURSEMANAGERLOWSECURITY or COURSEMANAGER to lower filtering and allow more styles (see comments of Security::remove_XSS() method to learn about other levels).
+    // Change this to COURSEMANAGERLOWSECURITY or COURSEMANAGER to lower filtering and allow more styles
+    // (see comments of Security::remove_XSS() method to learn about other levels).
 
     return Security::remove_XSS($input, STUDENT, true);
 }
@@ -5533,7 +5549,12 @@ function get_all_post_from_user($user_id, $course_code)
                         $post_counter = count($post_list);
                         if (is_array($post_list) && count($post_list) > 0) {
                             $hand_forums .= '<div id="social-thread">';
-                            $hand_forums .= Display::return_icon('thread.png', get_lang('Thread'), '', ICON_SIZE_MEDIUM);
+                            $hand_forums .= Display::return_icon(
+                                'thread.png',
+                                get_lang('Thread'),
+                                '',
+                                ICON_SIZE_MEDIUM
+                            );
                             $hand_forums .= '&nbsp;'.Security::remove_XSS($thread['thread_title'], STUDENT);
                             $hand_forums .= '</div>';
 

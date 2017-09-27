@@ -165,7 +165,7 @@ class ssoTCC
                                         $_user = api_get_user_info($_user['user_id']);
                                         $_user['uidReset'] = true;
                                         Session::write('_user', $_user);
-                                        Event::event_login($_user['user_id']);
+                                        Event::eventLogin($_user['user_id']);
                                         // Redirect to homepage
                                         $sso_target = '';
                                         if (!empty($sso['ruri'])) {
@@ -205,7 +205,7 @@ class ssoTCC
                                     $is_platformAdmin = $uData['status'] == COURSEMANAGER;
                                     Session::write('is_platformAdmin', $is_platformAdmin);
                                     Session::write('_user', $_user);
-                                    Event::event_login($_user['user_id']);
+                                    Event::eventLogin($_user['user_id']);
                                 } else {
                                     //Secondary URL admin wants to login
                                     // so we check as a normal user
@@ -213,7 +213,7 @@ class ssoTCC
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user = api_get_user_info($_user['user_id']);
                                         Session::write('_user', $_user);
-                                        Event::event_login($_user['user_id']);
+                                        Event::eventLogin($_user['user_id']);
                                     } else {
                                         $loginFailed = true;
                                         Session::erase('_uid');

@@ -535,6 +535,7 @@ switch ($action) {
         }
         if (isset($_REQUEST['id'])) {
             learnpath::deleteCategory($_REQUEST['id']);
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
         }
         require 'lp_list.php';
         break;

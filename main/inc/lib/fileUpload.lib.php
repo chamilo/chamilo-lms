@@ -1125,6 +1125,7 @@ function clean_up_files_in_zip($p_event, &$p_header)
     $skipFiles = [
         '__MACOSX',
         '.Thumbs.db',
+        'Thumbs.db',
     ];
     if (in_array($baseName, $skipFiles)) {
         return 0;

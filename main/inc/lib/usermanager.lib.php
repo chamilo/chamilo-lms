@@ -516,12 +516,11 @@ class UserManager
                         $additionalParameters
                     );
 
-
-                    $notification = api_get_configuration_value(' send_notification_when_user_added');
+                    $notification = api_get_configuration_value('send_notification_when_user_added');
                     if (!empty($notification) && isset($notification['admins']) && is_array($notification['admins'])) {
                         foreach ($notification['admins'] as $adminId) {
-                            $emailSubject .= get_lang('UserAdded').': '.api_get_person_name($firstName, $lastName);
-                            MessageManager::send_message_simple($adminId, $emailSubject, $emailBody);
+                            $emailSubjectToAdmin = get_lang('UserAdded').': '.api_get_person_name($firstName, $lastName);
+                            MessageManager::send_message_simple($adminId, $emailSubjectToAdmin, $emailBody);
                         }
                     }
                 }

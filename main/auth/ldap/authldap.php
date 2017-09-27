@@ -626,42 +626,110 @@ function ldap_add_user_to_session($UserList, $id_session) {
            " WHERE id='$id_session'");
 }
 
-function syncro_users() {
-    global $ldap_basedn, $ldap_host, $ldap_port, $ldap_rdn, $ldap_pass, $ldap_search_dn;
-    echo "Connecting ...";
+/**
+ * Synchronize users from the configured LDAP connection (in auth.conf.php). If
+ * configured to disable old users,
+ * @param   bool    $disableOldUsers Whether to disable users who have disappeared from LDAP (true) or just leave them be (default: false)
+ * @param   bool    $deleteCompletely Go one step further and delete completely users missing from LDAP
+ * @return  int     Total number of users added (not counting possible removals)
+ */
+function syncro_users($disableOldUsers = false, $deleteCompletely = false)
+{
+    global $ldap_basedn, $ldap_host, $ldap_port, $ldap_rdn, $ldap_pass, $ldap_search_dn, $debug;
+    $i = 0;
+    if ($debug) {
+        error_log('Connecting... ('.__FUNCTION__.')');
+    }
     $ldap_connect = ldap_connect($ldap_host, $ldap_port);
     ldap_set_version($ldap_connect);
     if ($ldap_connect) {
-        //echo " Connect to LDAP server successful ";
-        //echo "Binding ...";
+        if ($debug) {
+            error_log('Connected to LDAP server successfully! Binding... ('.__FUNCTION__.')');
+        }
         $ldap_bind = false;
         $ldap_bind_res = ldap_handle_bind($ldap_connect, $ldap_bind);
         if ($ldap_bind_res) {
-            //echo " LDAP bind successful... ";
-            //echo " Searching for uid... ";
-            // Search surname entry
-            //OLD: $sr=ldap_search($ldapconnect,"dc=rug, dc=ac, dc=be", "uid=$login");
-            //echo "<p> ldapDc = '$LDAPbasedn' </p>";
+            if ($debug) {
+                error_log('Bind successful! Searching for uid in LDAP DC: '.$ldap_search_dn);
+            }
             $all_user_query = "uid=*";
             if (!empty($ldap_search_dn)) {
                 $sr = ldap_search($ldap_connect, $ldap_search_dn, $all_user_query);
             } else {
+                //OLD: $sr=ldap_search($ldapconnect,"dc=rug, dc=ac, dc=be", "uid=$login");
                 $sr = ldap_search($ldap_connect, $ldap_basedn, $all_user_query);
             }
-            //echo " Number of entries returned is ".ldap_count_entries($ldapconnect,$sr);
-            //echo " Getting entries ...";
+            if ($debug) {
+                error_log('Entries returned: '.ldap_count_entries($ldap_connect, $sr));
+            }
             $info = ldap_get_entries($ldap_connect, $sr);
             for ($key = 0; $key < $info['count']; $key++) {
                 $user_id = ldap_add_user_by_array($info[$key], false);
                 if ($user_id) {
-                    echo "User #$user_id created ";
+                    if ($debug) {
+                        error_log('User #'.$user_id.' created from LDAP');
+                    }
+                    $i++;
                 } else {
-                    echo "User was not created ";
+                    if ($debug) {
+                        error_log('User '.$info[$key]['sn'][0].' ('.$info[$key]['mail'][0].') could not be created');
+                    }
                 }
             }
+            if ($disableOldUsers === true) {
+                if ($debug) {
+                    error_log('Disable mode selected in '.__FUNCTION__);
+                    if ($deleteCompletely) {
+                        error_log('...with complete deletion of users if disabled');
+                    }
+                }
+                // Get a big array of all user IDs, usernames only if they are
+                // registered as auth_source = 'ldap'
+                // This array will take about 60 bytes per user in memory, so
+                // having  100K users should only take a few (6?) MB and will
+                // highly reduce the number of DB queries
+                $usersDBShortList = [];
+                $usersLDAPShortList = [];
+                $sql = "SELECT id, username FROM user WHERE auth_source = 'ldap' ORDER BY username";
+                $res = Database::query($sql);
+                if ($res !== false) {
+                    // First build a list of users present in LDAP
+                    for ($key = 0; $key < $info['count']; $key++) {
+                        $dn_array = ldap_explode_dn($info[$key]['dn'], 1);
+                        $usersLDAPShortList[$dn_array[0]] = 1;
+                    }
+                    // Go through all 'extldap' users. For any that cannot
+                    // be found in the LDAP list, disable
+                    while ($row = Database::fetch_assoc($res)) {
+                        $usersDBShortList[$row['username']] = $row['id'];
+                        // If any of those users is NOT in LDAP, disable or remove
+                        if (empty($usersLDAPShortList[$row['username']])) {
+                            if ($deleteCompletely === true) {
+                                UserManager::delete_user($usersDBShortList[$row['username']]);
+                                if ($debug) {
+                                    error_log('User '.$row['username'].' removed from Chamilo');
+                                }
+                            } else {
+                                UserManager::disable($usersDBShortList[$row['username']]);
+                                if ($debug) {
+                                    error_log('User '.$row['username'].' disabled in Chamilo');
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+            if ($debug) {
+                error_log('Data for '.$info['count'].' items processed');
+            }
             //echo "Data for ".$info["count"]." items returned:<p>";
-        } // else: could echo "LDAP bind failed...";
-        //echo "Closing LDAP connection<hr>";
+        } else {
+            error_log('Could not bind to LDAP server');
+        }
         ldap_close($ldap_connect);
-    } // else: could echo "<h3>Unable to connect to LDAP server</h3>";
+    } else {
+        error_log('Could not connect to LDAP server');
+    }
+    error_log('Ended execution of function '.__FUNCTION__);
 }

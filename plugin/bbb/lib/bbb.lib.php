@@ -1070,21 +1070,30 @@ class bbb
             'first'
         );
 
-        $recordingParams = array(
-            /*
-             * NOTE: Set the recordId below to a valid id after you have
-             * created a recorded meeting, and received a real recordID
-             * back from your BBB server using the
-             * getRecordingsWithXmlResponseArray method.
-             */
+        $delete = false;
+        // Check if there are recordings for this meeting
+        $recordings = $this->api->getRecordingsWithXmlResponseArray(['meetingId' => $meetingData['remote_id']]);
+        if (!empty($recordings) && isset($recordings['messageKey']) && $recordings['messageKey'] == 'noRecordings') {
+            $delete = true;
+        } else {
+            $recordingParams = array(
+                /*
+                 * NOTE: Set the recordId below to a valid id after you have
+                 * created a recorded meeting, and received a real recordID
+                 * back from your BBB server using the
+                 * getRecordingsWithXmlResponseArray method.
+                 */
 
-            // REQUIRED - We have to know which recording:
-            'recordId' => $meetingData['remote_id'],
-        );
+                // REQUIRED - We have to know which recording:
+                'recordId' => $meetingData['remote_id'],
+            );
+            $result = $this->api->deleteRecordingsWithXmlResponseArray($recordingParams);
+            if (!empty($result) && isset($result['deleted']) && $result['deleted'] === 'true') {
+                $delete = true;
+            }
+        }
 
-        $result = $this->api->deleteRecordingsWithXmlResponseArray($recordingParams);
-
-        if (!empty($result) && isset($result['deleted']) && $result['deleted'] === 'true') {
+        if ($delete) {
             Database::delete(
                 'plugin_bbb_room',
                 array('meeting_id = ?' => array($id))

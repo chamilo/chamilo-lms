@@ -478,8 +478,14 @@ function modify_filter($user_id, $url_params, $row) {
     if (!empty($_GET['id_session'])) {
         $query_string .= '&amp;id_session='.Security::remove_XSS($_GET['id_session']);
     }
+    $icon = '';
+    if (UserManager::is_username_available($user_id)) {
+        $icon = 'invitation_friend.png';
+    } else {
+        $icon = 'reload.png';
+    }
     //$url_params_id="id=".$row[0];
-    $result = '<a href="ldap_users_list.php?action=add_user&amp;user_id='.$user_id.'&amp;'.$query_string.'&amp;sec_token='.Security::getTokenFromSession().'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, api_get_system_encoding()))."'".')) return false;">'.Display::return_icon('add_user.gif', get_lang('AddUsers')).'</a>';
+    $result = '<a href="ldap_users_list.php?action=add_user&amp;user_id='.$user_id.'&amp;'.$query_string.'&amp;sec_token='.Security::getTokenFromSession().'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, api_get_system_encoding()))."'".')) return false;">'.Display::return_icon($icon, get_lang('AddUsers')).'</a>';
     return $result;
 }
 
@@ -630,39 +636,43 @@ function ldap_add_user_to_session($UserList, $id_session) {
  * Synchronize users from the configured LDAP connection (in auth.conf.php). If
  * configured to disable old users,
  * @param   bool    $disableOldUsers Whether to disable users who have disappeared from LDAP (true) or just leave them be (default: false)
- * @param   bool    $deleteCompletely Go one step further and delete completely users missing from LDAP
+ * @param   bool    $deleteStudents Go one step further and delete completely students missing from LDAP
+ * @param   bool    $deleteTeachers Go even one step further and also delete completely teachers missing from LDAP
  * @return  int     Total number of users added (not counting possible removals)
  */
-function syncro_users($disableOldUsers = false, $deleteCompletely = false)
-{
+function syncro_users(
+  $disableOldUsers = false,
+  $deleteStudents = false,
+  $deleteTeachers = false
+) {
     global $ldap_basedn, $ldap_host, $ldap_port, $ldap_rdn, $ldap_pass, $ldap_search_dn, $debug;
     $i = 0;
     if ($debug) {
         error_log('Connecting... ('.__FUNCTION__.')');
     }
-    $ldap_connect = ldap_connect($ldap_host, $ldap_port);
-    ldap_set_version($ldap_connect);
-    if ($ldap_connect) {
+    $ldapConnect = ldap_connect($ldap_host, $ldap_port);
+    ldap_set_version($ldapConnect);
+    if ($ldapConnect) {
         if ($debug) {
             error_log('Connected to LDAP server successfully! Binding... ('.__FUNCTION__.')');
         }
-        $ldap_bind = false;
-        $ldap_bind_res = ldap_handle_bind($ldap_connect, $ldap_bind);
-        if ($ldap_bind_res) {
+        $ldapBind = false;
+        $ldapBindRes = ldap_handle_bind($ldapConnect, $ldapBind);
+        if ($ldapBindRes) {
             if ($debug) {
                 error_log('Bind successful! Searching for uid in LDAP DC: '.$ldap_search_dn);
             }
-            $all_user_query = "uid=*";
+            $allUserQuery = "uid=*";
             if (!empty($ldap_search_dn)) {
-                $sr = ldap_search($ldap_connect, $ldap_search_dn, $all_user_query);
+                $sr = ldap_search($ldapConnect, $ldap_search_dn, $allUserQuery);
             } else {
                 //OLD: $sr=ldap_search($ldapconnect,"dc=rug, dc=ac, dc=be", "uid=$login");
-                $sr = ldap_search($ldap_connect, $ldap_basedn, $all_user_query);
+                $sr = ldap_search($ldapConnect, $ldap_basedn, $allUserQuery);
             }
             if ($debug) {
-                error_log('Entries returned: '.ldap_count_entries($ldap_connect, $sr));
+                error_log('Entries returned: '.ldap_count_entries($ldapConnect, $sr));
             }
-            $info = ldap_get_entries($ldap_connect, $sr);
+            $info = ldap_get_entries($ldapConnect, $sr);
             for ($key = 0; $key < $info['count']; $key++) {
                 $user_id = ldap_add_user_by_array($info[$key], false);
                 if ($user_id) {
@@ -679,7 +689,7 @@ function syncro_users($disableOldUsers = false, $deleteCompletely = false)
             if ($disableOldUsers === true) {
                 if ($debug) {
                     error_log('Disable mode selected in '.__FUNCTION__);
-                    if ($deleteCompletely) {
+                    if ($deleteStudents) {
                         error_log('...with complete deletion of users if disabled');
                     }
                 }
@@ -690,7 +700,7 @@ function syncro_users($disableOldUsers = false, $deleteCompletely = false)
                 // highly reduce the number of DB queries
                 $usersDBShortList = [];
                 $usersLDAPShortList = [];
-                $sql = "SELECT id, username FROM user WHERE auth_source = 'ldap' ORDER BY username";
+                $sql = "SELECT id, username, status FROM user WHERE auth_source = 'ldap' ORDER BY username";
                 $res = Database::query($sql);
                 if ($res !== false) {
                     // First build a list of users present in LDAP
@@ -704,10 +714,15 @@ function syncro_users($disableOldUsers = false, $deleteCompletely = false)
                         $usersDBShortList[$row['username']] = $row['id'];
                         // If any of those users is NOT in LDAP, disable or remove
                         if (empty($usersLDAPShortList[$row['username']])) {
-                            if ($deleteCompletely === true) {
+                            if ($deleteStudents === true && $row['status'] == 5) {
                                 UserManager::delete_user($usersDBShortList[$row['username']]);
                                 if ($debug) {
-                                    error_log('User '.$row['username'].' removed from Chamilo');
+                                    error_log('Student '.$row['username'].' removed from Chamilo');
+                                }
+                            } else if ($deleteTeachers === true && $row['status'] == 1) {
+                                UserManager::delete_user($usersDBShortList[$row['username']]);
+                                if ($debug) {
+                                    error_log('Teacher '.$row['username'].' removed from Chamilo');
                                 }
                             } else {
                                 UserManager::disable($usersDBShortList[$row['username']]);
@@ -727,7 +742,7 @@ function syncro_users($disableOldUsers = false, $deleteCompletely = false)
         } else {
             error_log('Could not bind to LDAP server');
         }
-        ldap_close($ldap_connect);
+        ldap_close($ldapConnect);
     } else {
         error_log('Could not connect to LDAP server');
     }

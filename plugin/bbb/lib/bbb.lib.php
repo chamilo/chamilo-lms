@@ -1105,7 +1105,7 @@ class bbb
             );
         }
 
-        return $result;
+        return $delete;
     }
 
     /**

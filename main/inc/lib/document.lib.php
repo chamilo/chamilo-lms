@@ -2954,9 +2954,6 @@ class DocumentManager
         $sys_course_path = api_get_path(SYS_COURSE_PATH);
         $base_work_dir = $sys_course_path.$course_dir;
 
-        $group_properties = GroupManager::get_group_properties(api_get_group_id());
-        $groupIid = isset($group_properties['iid']) ? $group_properties['iid'] : 0;
-
         if (isset($files[$fileKey])) {
             $upload_ok = process_uploaded_file($files[$fileKey], $show_output);
 
@@ -2967,7 +2964,7 @@ class DocumentManager
                     $base_work_dir,
                     $path,
                     api_get_user_id(),
-                    $groupIid,
+                    api_get_group_id(),
                     null,
                     $unzip,
                     $if_exists,

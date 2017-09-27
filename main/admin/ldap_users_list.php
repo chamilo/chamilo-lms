@@ -72,7 +72,6 @@ if (isset ($_GET['action']))
                     ldap_add_user_to_session($UserList, $_GET['id_session']);
                     header('Location: resume_session.php?id_session='.intval($_GET['id_session']));
                 } else {
-                    Display::display_header($tool_name);
                     if (count($userid_match_login) > 0) {
                         $message = get_lang('LDAPUsersAddedOrUpdated').':<br />';
                         foreach ($userid_match_login as $user_id => $login) {

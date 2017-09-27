@@ -204,8 +204,12 @@ $connection->executeQuery('set sql_mode=""');
     public static function escape_string($string)
     {
         $string = self::getManager()->getConnection()->quote($string);
-
-        return trim($string, "'");
+        // The quote method from PDO also adds quotes around the string, which
+        // is not how the legacy mysql_real_escape_string() was used in
+        // Chamilo, so we need to remove the quotes around. Using trim will
+        // remove more than one quote if they are sequenced, generating
+        // broken queries and SQL injection risks
+        return substr($string, 1, -1);
     }
 
     /**

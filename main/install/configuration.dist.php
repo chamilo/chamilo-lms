@@ -646,3 +646,5 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Allow multiple anon users see BT#13324
 //$_configuration['max_anonymous_users'] = 0;
 
+// Send email notification to admin when a user is created
+//$_configuration['send_notification_when_user_added'] = ['admins' => 1 ];

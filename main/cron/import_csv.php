@@ -1150,11 +1150,12 @@ class ImportCsv
 
                     $emailBody = get_lang('Dear').' ((user_firstname)) <br />'.
                         sprintf(
-                        get_lang('YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX'),
-                        $courseTitle,
-                        $date,
-                        $event['comment']
-                    );
+                            get_lang('YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX'),
+                            $courseTitle,
+                            $date,
+                            $event['comment']
+                        )
+                    ;
 
                     $subject = sprintf(
                         get_lang('AgendaAvailableInCourseX'),

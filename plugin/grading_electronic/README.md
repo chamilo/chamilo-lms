@@ -1,5 +1,5 @@
 # Grading Electronic Form
-v0.7
+v0.8
 
 Generate a file necessary to the Grading Electronic form for RickyRescue
 

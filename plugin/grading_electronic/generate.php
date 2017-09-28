@@ -100,8 +100,13 @@ try {
     /** @var \Category $gradebook */
     $gradebook = $cats[0];
 
-    $dateStart = new DateTime($values['range_start'], new DateTimeZone('UTC'));
-    $dateEnd = new DateTime($values['range_end'], new DateTimeZone('UTC'));
+    /** @var \ExerciseLink $exerciseLink */
+    $exerciseLink = $gradebook->get_links()[0];
+    $exerciseId = $exerciseLink->get_ref_id();
+    $exerciseInfo = ExerciseLib::get_exercise_by_id($exerciseId, $course->getId());
+
+    $dateStart = new DateTime($values['range_start'].' 00:00:00', new DateTimeZone('UTC'));
+    $dateEnd = new DateTime($values['range_end'].' 23:59:59', new DateTimeZone('UTC'));
 
     $fileData = [];
     $fileData[] = sprintf(
@@ -113,13 +118,22 @@ try {
 
     /** @var User $student */
     foreach ($students as $student) {
-        $userFinishedCourse = Category::userFinishedCourse(
-            $student->getId(),
-            $gradebook,
-            true
+        $exerciseResult = Event::get_best_exercise_results_by_user(
+            $exerciseId,
+            $course->getId(),
+            $session ? $session->getId() : 0,
+            $student->getId()
         );
+        $exerciseResult = current($exerciseResult);
 
-        if (!$userFinishedCourse) {
+        if (!$exerciseResult) {
+            continue;
+        }
+
+        $attemptDate = new DateTime($exerciseResult['exe_date'], new DateTimeZone('UTC'));
+        $dateIsRange = $attemptDate >= $dateStart && $attemptDate <= $dateEnd;
+
+        if (!$dateEnd) {
             continue;
         }
 

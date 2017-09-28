@@ -485,6 +485,7 @@ class UserManager
 
                 $layoutContent = $tplContent->get_template('mail/content_registration_platform.tpl');
                 $emailBody = $tplContent->fetch($layoutContent);
+
                 /* MANAGE EVENT WITH MAIL */
                 if (EventsMail::check_if_using_class('user_registration')) {
                     $values["about_user"] = $return;
@@ -514,6 +515,14 @@ class UserManager
                         null,
                         $additionalParameters
                     );
+
+                    $notification = api_get_configuration_value('send_notification_when_user_added');
+                    if (!empty($notification) && isset($notification['admins']) && is_array($notification['admins'])) {
+                        foreach ($notification['admins'] as $adminId) {
+                            $emailSubjectToAdmin = get_lang('UserAdded').': '.api_get_person_name($firstName, $lastName);
+                            MessageManager::send_message_simple($adminId, $emailSubjectToAdmin, $emailBody);
+                        }
+                    }
                 }
 
                 if ($sendEmailToAllAdmins) {

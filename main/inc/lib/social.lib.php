@@ -1179,7 +1179,7 @@ class SocialManager extends UserManager
     {
         $html = null;
 
-        if (isset($_GET['id']) or count($user_list) < 1) {
+        if (isset($_GET['id']) || count($user_list) < 1) {
             return false;
         }
 
@@ -1189,7 +1189,7 @@ class SocialManager extends UserManager
         }
 
         foreach ($user_list as $uid) {
-            $user_info = api_get_user_info($uid, $checkIfUserOnline = true);
+            $user_info = api_get_user_info($uid, true);
             $lastname = $user_info['lastname'];
             $firstname = $user_info['firstname'];
             $completeName = $firstname.', '.$lastname;

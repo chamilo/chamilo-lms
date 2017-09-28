@@ -1534,7 +1534,7 @@ function api_get_user_info(
     // Re-use user information if not stale and already stored in APCu
     if ($cacheAvailable === true) {
         $apcVar = api_get_configuration_value('apc_prefix').'userinfo_'.$user_id;
-        if (apcu_exists($apcVar) && $updateCache == false) {
+        if (apcu_exists($apcVar) && $updateCache == false && $checkIfUserOnline == false) {
             $user = apcu_fetch($apcVar);
 
             return $user;
@@ -7827,6 +7827,8 @@ function api_get_configuration_value($variable)
     global $_configuration;
     // Check the current url id, id = 1 by default
     $urlId = isset($_configuration['access_url']) ? (int) $_configuration['access_url'] : 1;
+
+    $variable = trim($variable);
 
     // Check if variable exists
     if (isset($_configuration[$variable])) {

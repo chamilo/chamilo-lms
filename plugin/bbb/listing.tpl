@@ -76,7 +76,9 @@
                 {% if allow_to_edit %}
                     <td>
                     {% if meeting.status == 1 %}
-                        <a class="btn btn-default" href="{{ meeting.end_url }} "> {{ 'CloseMeeting'|get_plugin_lang('BBBPlugin') }}</a>
+                        <a class="btn btn-default" href="{{ meeting.end_url }} ">
+                            {{ 'CloseMeeting'|get_plugin_lang('BBBPlugin') }}
+                        </a>
                     {% else %}
                         {{ meeting.action_links }}
                     {% endif %}

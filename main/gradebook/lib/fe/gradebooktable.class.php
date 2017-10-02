@@ -367,8 +367,8 @@ class GradebookTable extends SortableTable
                         ];
 
                         $totalBest = [
-                            $totalBest[0] + $data['best_score'][0],
-                            $totalBest[1] + $data['best_score'][1],
+                            $scoredisplay->format_score($totalBest[0] + $data['best_score'][0]),
+                            $scoredisplay->format_score($totalBest[1] + $data['best_score'][1]),
                         ];
 
                         $totalAverage = [

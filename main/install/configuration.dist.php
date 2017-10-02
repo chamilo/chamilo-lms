@@ -338,6 +338,15 @@ $_configuration['tracking_columns'] = [
         'score' => true,
         'best_score' => true,
         'last_connection' => true,
+    ],
+    'my_progress_courses' => [
+        'course_title' => true,
+        'time_spent' => true,
+        'progress' => true,
+        'best_score_in_lp' => true,
+        'best_score_not_in_lp' => true,
+        'latest_login' => true,
+        'details' => true
     ]
 ];
 */

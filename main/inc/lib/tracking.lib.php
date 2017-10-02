@@ -4580,19 +4580,32 @@ class Tracking
                         ICON_SIZE_SMALL
                     ).' '.get_lang('MyCourses')
                 );
+
+                $columns = [
+                    'course_title' => get_lang('Course'),
+                    'time_spent' => get_lang('TimeSpentInTheCourse'),
+                    'progress' => get_lang('Progress'),
+                    'best_score_in_lp' => get_lang('BestScoreInLearningPath'),
+                    'best_score_not_in_lp' => get_lang('BestScoreNotInLearningPath'),
+                    'latest_login' => get_lang('LastConnexion'),
+                    'details' => get_lang('Details')
+                ];
+                $availableColumns = [];
+                if (isset($trackingColumns['my_progress_courses'])) {
+                    $availableColumns = $trackingColumns['my_progress_courses'];
+                }
                 $html .= '<div class="table-responsive">';
                 $html .= '<table class="table table-striped table-hover">';
-                $html .= '<thead>';
-                $html .= '<tr>
-                          '.Display::tag('th', get_lang('Course'), array('width'=>'300px')).'
-                          '.Display::tag('th', get_lang('TimeSpentInTheCourse')).'
-                          '.Display::tag('th', get_lang('Progress')).'
-                          '.Display::tag('th', get_lang('BestScoreInLearningPath')).'
-                          '.Display::tag('th', get_lang('BestScoreNotInLearningPath')).'
-                          '.Display::tag('th', get_lang('LastConnexion')).'
-                          '.Display::tag('th', get_lang('Details')).'
-                        </tr>';
-                $html .= '</thead><tbody>';
+                $html .= '<thead><tr>';
+                foreach ($columns as $columnKey => $name) {
+                    if (!empty($availableColumns)) {
+                        if (isset($availableColumns[$columnKey]) && $availableColumns[$columnKey] == false) {
+                            continue;
+                        }
+                    }
+                    $html .= Display::tag('th', $name);
+                }
+                $html .= '</tr></thead><tbody>';
 
                 foreach ($courses as $course_code => $course_title) {
                     $courseInfo = api_get_course_info($course_code);
@@ -4648,7 +4661,6 @@ class Tracking
                             }
                             $bestScoreAverageNotInLP += $best;
                         }
-
                         $bestScoreAverageNotInLP = round($bestScoreAverageNotInLP / count($exerciseList) * 100, 2);
                     }
 
@@ -4673,44 +4685,53 @@ class Tracking
                     }
                     $url = api_get_course_url($course_code, $session_id);
                     $course_url = Display::url($course_title, $url, array('target' => SESSION_LINK_TARGET));
-                    $html .= '<td>'.$course_url.'</td>';
-                    $html .= '<td>'.$time.'</td>';
-                    $html .= '<td>'.$progress.'</td>';
-                    $html .= '<td>';
-
+                    $bestScoreResult = '';
                     if (empty($bestScore)) {
-                        $html .= '-';
+                        $bestScoreResult = '-';
                     } else {
-                        $html .= $bestScore.'%';
+                        $bestScoreResult = $bestScore.'%';
                     }
-
-                    $html .= '</td>';
-
-
-                    $html .= '<td>';
-
+                    $bestScoreNotInLP = '';
                     if (empty($bestScoreAverageNotInLP)) {
-                        $html .= '-';
+                        $bestScoreNotInLP = '-';
                     } else {
-                        $html .= $bestScoreAverageNotInLP.'%';
+                        $bestScoreNotInLP = $bestScoreAverageNotInLP.'%';
                     }
 
-                    $html .= '</td>';
-
-                    $html .= '<td>'.$last_connection.'</td>';
-                    $html .= '<td>';
+                    $detailsLink = '';
                     if (isset($_GET['course']) &&
                         $course_code == $_GET['course'] &&
                         empty($_GET['session_id'])
                     ) {
-                        $html .= '<a href="#course_session_header">';
-                        $html .= Display::return_icon('2rightarrow_na.png', get_lang('Details'));
+                        $detailsLink .= '<a href="#course_session_header">';
+                        $detailsLink .= Display::return_icon('2rightarrow_na.png', get_lang('Details'));
+                        $detailsLink .= '</a>';
                     } else {
-                        $html .= '<a href="'.api_get_self().'?course='.$course_code.$extra_params.'#course_session_header">';
-                        $html .= Display::return_icon('2rightarrow.png', get_lang('Details'));
+                        $detailsLink .= '<a href="'.api_get_self().'?course='.$course_code.$extra_params.'#course_session_header">';
+                        $detailsLink .= Display::return_icon('2rightarrow.png', get_lang('Details'));
+                        $detailsLink .= '</a>';
                     }
-                    $html .= '</a>';
-                    $html .= '</td></tr>';
+
+                    $result = [
+                        'course_title' => $course_url,
+                        'time_spent' => $time,
+                        'progress' => $progress,
+                        'best_score_in_lp' => $bestScoreResult,
+                        'best_score_not_in_lp' => $bestScoreNotInLP,
+                        'latest_login' => $last_connection,
+                        'details' => $detailsLink
+                    ];
+
+                    foreach ($result as $columnKey => $data) {
+                        if (!empty($availableColumns)) {
+                            if (isset($availableColumns[$columnKey]) && $availableColumns[$columnKey] == false) {
+                                continue;
+                            }
+                        }
+                        $html .= '<td>'.$data.'</td>';
+                    }
+
+                    $html .= '</tr>';
                 }
                 $html .= '</tbody></table>';
                 $html .= '</div>';

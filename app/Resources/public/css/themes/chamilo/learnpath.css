@@ -83,14 +83,6 @@ div.lp_tree {
 	overflow-y : auto;
 	width:190px;
 }
-hr {
-	background:#999999;
-	border:0;
-	color:#999999;
-	height:1px;
-	margin:10px auto;
-	width:75%;
-}
 option.bottom {
 	border-top:1px solid #999999;
 	margin-top:2px;

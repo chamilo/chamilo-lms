@@ -62,7 +62,7 @@ class DisplayGradebook
         $scoredisplay = ScoreDisplay::instance();
         $student_score = '';
         $average = '';
-        if (($evalobj->has_results())) {
+        if ($evalobj->has_results()) {
             // TODO this check needed ?
             $score = $evalobj->calc_score();
             if ($score != null) {
@@ -74,7 +74,7 @@ class DisplayGradebook
                 );
             }
         }
-        $description = "";
+        $description = '';
         if (!$evalobj->get_description() == '') {
             $description = get_lang('Description').' :<b> '.$evalobj->get_description().'</b><br>';
         }
@@ -322,14 +322,14 @@ class DisplayGradebook
             $total_score = array($item_value_total, $item_total);
             $scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
             if ((!$catobj->get_id() == '0') && (!isset($_GET['studentoverview'])) && (!isset($_GET['search']))) {
-                $aditionalButtons = null;
+                $additionalButtons = null;
                 if (!empty($certificateLinkInfo)) {
-                    $aditionalButtons .= '<div class="btn-group pull-right">';
-                    $aditionalButtons .= isset($certificateLinkInfo['certificate_link']) ? $certificateLinkInfo['certificate_link'] : '';
-                    $aditionalButtons .= isset($certificateLinkInfo['badge_link']) ? $certificateLinkInfo['badge_link'] : '';
-                    $aditionalButtons .= '</div>';
+                    $additionalButtons .= '<div class="btn-group pull-right">';
+                    $additionalButtons .= isset($certificateLinkInfo['certificate_link']) ? $certificateLinkInfo['certificate_link'] : '';
+                    $additionalButtons .= isset($certificateLinkInfo['badge_link']) ? $certificateLinkInfo['badge_link'] : '';
+                    $additionalButtons .= '</div>';
                 }
-                $scoreinfo .= '<strong>'.sprintf(get_lang('TotalX'), $scorecourse_display.$aditionalButtons).'</strong>';
+                $scoreinfo .= '<strong>'.sprintf(get_lang('TotalX'), $scorecourse_display.$additionalButtons).'</strong>';
 
             }
             echo Display::return_message($scoreinfo, 'normal', false);
@@ -503,14 +503,14 @@ class DisplayGradebook
             $weight = intval($catobj->get_weight()) > 0 ? $catobj->get_weight() : 0;
             $weight = '<strong>'.get_lang('TotalWeight').' : </strong>'.$weight;
 
-            $min_certification = (intval($catobj->getCertificateMinScore() > 0) ? $catobj->getCertificateMinScore() : 0);
+            $min_certification = intval($catobj->getCertificateMinScore() > 0) ? $catobj->getCertificateMinScore() : 0;
             $min_certification = get_lang('CertificateMinScore').' : '.$min_certification;
             $edit_icon = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&amp;cidReq='.$catobj->get_course_code().'&id_session='.$catobj->get_session_id().'">'.
                 Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
-            //$msg = Display::tag('h3', $weight.' - '.$min_certification);
+
             $msg = $weight.' - '.$min_certification.$edit_icon;
             //@todo show description
-            $description = (($catobj->get_description() == "" || is_null($catobj->get_description())) ? '' : '<strong>'.get_lang('GradebookDescriptionLog').'</strong>'.': '.$catobj->get_description());
+            $description = (($catobj->get_description() == '' || is_null($catobj->get_description())) ? '' : '<strong>'.get_lang('GradebookDescriptionLog').'</strong>'.': '.$catobj->get_description());
             echo Display::return_message($msg, 'normal', false);
             if (!empty($description)) {
                 echo Display::div($description, array());

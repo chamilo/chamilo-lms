@@ -332,7 +332,6 @@ class GradebookTable extends SortableTable
                 } else {
                     $cattotal = Category::load($_GET['selectcat']);
                     $scoretotal = $cattotal[0]->calc_score($this->userId);
-                    $item_value = $scoredisplay->display_score($scoretotal, SCORE_SIMPLE);
                 }
 
                 // Edit (for admins).
@@ -356,7 +355,6 @@ class GradebookTable extends SortableTable
                     }
 
                     // Students get the results and certificates columns
-                    //if (count($this->evals_links) > 0 && $status_user != 1) {
                     if (1) {
                         $value_data = isset($data[4]) ? $data[4] : null;
                         $best = isset($data['best']) ? $data['best'] : null;
@@ -395,6 +393,7 @@ class GradebookTable extends SortableTable
                             )
                         );
                         $this->dataForGraph['my_result'][] = floatval($totalResultAverageValue);
+                        $this->dataForGraph['my_result_no_float'][] = $data['result_score'][0];
                         $totalAverageValue = strip_tags($scoredisplay->display_score($totalAverage, SCORE_AVERAGE));
                         $this->dataForGraph['average'][] = floatval($totalAverageValue);
 
@@ -500,14 +499,12 @@ class GradebookTable extends SortableTable
                             } else {
                                 $cattotal = Category::load($_GET['selectcat']);
                                 $scoretotal = $cattotal[0]->calc_score($this->userId);
-                                $item_value = $scoretotal[0];
                             }
 
                             // Admins get an edit column.
                             if (api_is_allowed_to_edit(null, true) &&
                                 isset($_GET['user_id']) == false &&
-                                (isset($_GET['action']) && $_GET['action'] != 'export_all' || !isset($_GET['action'])
-                                )
+                                (isset($_GET['action']) && $_GET['action'] != 'export_all' || !isset($_GET['action']))
                             ) {
                                 $cat = new Category();
                                 $show_message = $cat->show_message_resource_delete($item->get_course_code());
@@ -626,13 +623,21 @@ class GradebookTable extends SortableTable
         } else {
             // Total for student.
             if (count($main_cat) > 1) {
+                $weights = [];
+                foreach ($main_categories as $cat) {
+                    $weights[] = $cat['weight'];
+                }
                 $main_weight = intval($main_cat[0]->get_weight());
-
                 $global = null;
                 $average = null;
+                $myTotal = 0;
+                foreach ($this->dataForGraph['my_result_no_float'] as $result) {
+                    $myTotal += $result;
+                }
+
+                $totalResult[0] = $myTotal;
                 // Overwrite main weight
                 $totalResult[1] = $main_weight;
-
                 $totalResult = $scoredisplay->display_score(
                     $totalResult,
                     SCORE_DIV

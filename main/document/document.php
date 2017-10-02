@@ -738,7 +738,7 @@ $tool_visibility = $tool_row['visibility'];*/
 
 $htmlHeadXtra[] = '<script>
 function confirmation (name) {
-    if (confirm(" '.get_lang('AreYouSureToDeleteJS').' "+ name + " ?")) {
+    if (confirm(" '.addslashes(get_lang('AreYouSureToDeleteJS')).' "+ name + " ?")) {
         return true;
     } else {
         return false;

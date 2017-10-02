@@ -207,8 +207,6 @@ class Template
             $this->assign('language_form', api_display_language_form());
         }
 
-        $this->setLoginForm();
-
         // Chamilo plugins
         if ($this->show_header) {
             if ($this->load_plugins) {

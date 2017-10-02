@@ -546,7 +546,7 @@ footer #footer_right{
 .table.table-striped tr td span.label-info{
     background-color: #162A83 !important;
     color: #FFF !important;
-    width: 40%;
+    width: 100%;
     display: inline-block;
 }
 .main-question .question_description p span{
@@ -718,7 +718,7 @@ table.table-striped tr td span.label-danger{
     background-color: #162a83;
     color: #FFF !important;
     border-radius: 0;
-    width: 40%;
+    width: 100%;
     display: inline-block;
 }
 table.matching tr td span.label-success{
@@ -732,7 +732,7 @@ table.table-striped tr td span.label-success{
     background-color: #96BD0D;
     color: #FFF !important;
     border-radius: 0;
-    width: 40%;
+    width: 100%;
     display: block;
 }
 .table-striped>tbody>tr:nth-of-type(odd){

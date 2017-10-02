@@ -185,21 +185,24 @@ if (!empty($attempts)) {
             'id' => $attempt_result['exe_id']
         ]);
         $attempt_url .= $url_suffix;
-
-        $attempt_link = Display::url(
+        $attempt_link = '<div class="row">';
+        $attempt_link .= '<div class="col-md-6">';
+        $attempt_link .= Display::url(
             get_lang('Show'),
             $attempt_url,
             [
-                'class' => $btn_class.'btn btn-default',
+                'class' => $btn_class.'btn btn-default btn-sm btn-block',
                 'data-title' => get_lang('Show'),
                 'data-size' => 'lg'
             ]
         );
-
+        $attempt_link .= '</div>';
+        $attempt_link .= '<div class="col-md-6">';
         $teacher_revised = Display::label(get_lang('Validated'), 'success');
         if ($attempt_result['attempt_revised'] == 0) {
             $teacher_revised = Display::label(get_lang('NotValidated'), 'info');
         }
+        
         $row = array(
             'count' => $i,
             'date' => api_convert_and_format_date(
@@ -208,7 +211,9 @@ if (!empty($attempts)) {
             ),
             'userIp' => $attempt_result['user_ip']
         );
-        $attempt_link .= "&nbsp;&nbsp;&nbsp;".$teacher_revised;
+        $attempt_link .= $teacher_revised;
+        $attempt_link .= '</div>';
+        $attempt_link .= '</div>';
 
         if (in_array(
             $objExercise->results_disabled,

@@ -101,14 +101,23 @@ foreach ($links as &$row) {
     $item_weight = $row['weight'];
     $sql = 'SELECT * FROM '.GradebookUtils::get_table_type_course($row['type']).'
             WHERE c_id = '.$course_id.' AND '.$table_evaluated[$row['type']][2].' = '.$row['ref_id'];
+
     $result = Database::query($sql);
     $resource_name = Database::fetch_array($result);
 
     if (isset($resource_name['lp_type'])) {
         $resource_name = $resource_name[4];
     } else {
-        $resource_name = $resource_name[3];
+        switch ($row['type']) {
+            case LINK_EXERCISE:
+                $resource_name = $resource_name['title'];
+                break;
+            default:
+                $resource_name = $resource_name[3];
+                break;
+        }
     }
+
     $row['resource_name'] = $resource_name;
 
     // Update only if value changed

@@ -5681,4 +5681,33 @@ SQL;
 
         return false;
     }
+
+    /**
+     * Send user confirmation mail
+     *
+     * @param User $user
+     */
+    public static function sendUserConfirmationMail(User $user)
+    {
+        $uniqueId = api_get_unique_id();
+        $user->setConfirmationToken($uniqueId);
+
+        Database::getManager()->persist($user);
+        Database::getManager()->flush();
+
+        $url = api_get_path(WEB_CODE_PATH).'auth/user_mail_confirmation.php?token='.$uniqueId;
+        $mailSubject = get_lang('InscriptionConfirmation');
+        $mailBody = sprintf(
+            get_lang('ToCompleteYourPlatformInscriptionYouNeedToConfirmYourAccountClickingTheFollowingLink'),
+            $url
+        );
+
+        api_mail_html(
+            $user->getCompleteName(),
+            $user->getEmail(),
+            $mailSubject,
+            $mailBody
+        );
+        Display::addFlash(Display::return_message(get_lang('CheckYourEmailAndFollowInstructions')));
+    }
 }

@@ -785,6 +785,26 @@ if ($form->validate()) {
                 echo $content;
                 Display::display_footer();
                 exit;
+            } else if (api_get_setting('allow_registration') === 'confirmation') {
+                $TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
+                // 1. set account inactive
+                $sql = "UPDATE $TABLE_USER SET active='0' WHERE user_id = ".$user_id;
+                Database::query($sql);
+
+                // 2. Send mail to the user
+                /** @var \Chamilo\UserBundle\Entity\User $thisUser */
+                $thisUser = Database::getManager()->getRepository('ChamiloUserBundle:User')->find($user_id);
+
+                UserManager::sendUserConfirmationMail($thisUser);
+
+                // 3. exit the page
+                unset($user_id);
+
+                Display::display_header(get_lang('ConfirmationForNewAccount', null, $values['language']));
+                echo Display::page_header(get_lang('YouNeedToConfirmYourAccountViaMailToAccessPlatform', null, $values['language']));
+                echo $content;
+                Display::display_footer();
+                exit;
             }
         }
     }

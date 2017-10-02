@@ -4638,9 +4638,11 @@ class Tracking
                             $best = 0;
                             if (!empty($results)) {
                                 foreach ($results as $result) {
-                                    $score = $result['exe_result'] / $result['exe_weighting'];
-                                    if ($score > $best) {
-                                        $best = $score;
+                                    if (!empty($result['exe_weighting'])) {
+                                        $score = $result['exe_result'] / $result['exe_weighting'];
+                                        if ($score > $best) {
+                                            $best = $score;
+                                        }
                                     }
                                 }
                             }

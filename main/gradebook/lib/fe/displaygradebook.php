@@ -314,13 +314,14 @@ class DisplayGradebook
                 if (!empty($score)) {
                     $divide = $score[1] == 0 ? 1 : $score[1];
                     $item_value = $score[0] / $divide * $item->get_weight();
-                    $item_value_total += $item_value;
+                    $item_value_total += $scoredisplay->format_score($item_value);
                 }
             }
 
             $item_total = $main_weight;
             $total_score = array($item_value_total, $item_total);
             $scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
+
             if ((!$catobj->get_id() == '0') && (!isset($_GET['studentoverview'])) && (!isset($_GET['search']))) {
                 $additionalButtons = null;
                 if (!empty($certificateLinkInfo)) {

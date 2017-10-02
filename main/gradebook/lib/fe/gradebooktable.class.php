@@ -385,13 +385,13 @@ class GradebookTable extends SortableTable
                                 $data['result_score'][1]
                             );
                         }
-
                         $totalResultAverageValue = strip_tags(
                             $scoredisplay->display_score(
                                 $totalResult,
                                 SCORE_AVERAGE
                             )
                         );
+
                         $this->dataForGraph['my_result'][] = floatval($totalResultAverageValue);
                         $this->dataForGraph['my_result_no_float'][] = $data['result_score'][0];
                         $totalAverageValue = strip_tags($scoredisplay->display_score($totalAverage, SCORE_AVERAGE));
@@ -631,8 +631,9 @@ class GradebookTable extends SortableTable
                 $global = null;
                 $average = null;
                 $myTotal = 0;
+
                 foreach ($this->dataForGraph['my_result_no_float'] as $result) {
-                    $myTotal += $result;
+                    $myTotal += $scoredisplay->format_score($result);
                 }
 
                 $totalResult[0] = $myTotal;

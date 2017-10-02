@@ -167,7 +167,9 @@ class IndexManager
         $sql_result = Database::query($sql_query);
         while ($course = Database::fetch_array($sql_result)) {
             if (!$setting_show_also_closed_courses) {
-                if ((api_get_user_id() > 0 && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) || ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)) {
+                if ((api_get_user_id() > 0 && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) ||
+                    ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)
+                ) {
                     return true; //at least one open course
                 }
             } else {
@@ -595,7 +597,9 @@ class IndexManager
                     // If we do not show the closed courses
                     // we only show the courses that are open to the world (to everybody)
                     // and the courses that are open to the platform (if the current user is a registered user.
-                    if (($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) || ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)) {
+                    if (($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) ||
+                        ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)
+                    ) {
                         $courses_shown++;
                         $courses_list_string .= "<li>";
                         $courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">'.$course['title'].'</a><br />';
@@ -606,7 +610,9 @@ class IndexManager
                         if (api_get_setting('display_teacher_in_courselist') === 'true') {
                             $course_details[] = CourseManager::get_teacher_list_from_course_code_to_string($course['code']);
                         }
-                        if (api_get_setting('show_different_course_language') === 'true' && $course['course_language'] != api_get_setting('platformLanguage')) {
+                        if (api_get_setting('show_different_course_language') === 'true' &&
+                            $course['course_language'] != api_get_setting('platformLanguage')
+                        ) {
                             $course_details[] = $course['course_language'];
                         }
                         $courses_list_string .= implode(' - ', $course_details);
@@ -651,13 +657,16 @@ class IndexManager
                             $course_details[] = $course['tutor_name'];
                         }
                     }
-                    if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] != api_get_setting('platformLanguage')) {
+                    if (api_get_setting('show_different_course_language') == 'true' &&
+                        $course['course_language'] != api_get_setting('platformLanguage')
+                    ) {
                         $course_details[] = $course['course_language'];
                     }
 
                     $courses_list_string .= implode(' - ', $course_details);
                     // We display a subscription link if:
-                    // 1. it is allowed to register for the course and if the course is not already in the courselist of the user and if the user is identiefied
+                    // 1. it is allowed to register for the course and if the course is not already in
+                    // the courselist of the user and if the user is identified
                     // 2.
                     if ($user_identified && !array_key_exists($course['code'], $courses_of_user)) {
                         if ($course['subscribe'] == '1') {
@@ -804,7 +813,8 @@ class IndexManager
             $search_content = '<form action="main/search/" method="post">
                 <div class="form-group">
                 <input type="text" id="query" class="form-control" name="query" value="" />
-                <button class="btn btn-default" type="submit" name="submit" value="'.$search_btn.'" />'.$search_btn.' </button>
+                <button class="btn btn-default" type="submit" name="submit" value="'.$search_btn.'" />'.
+                $search_btn.' </button>
                 </div></form>';
             $html .= self::show_right_block(get_lang('Search'), $search_content, 'search_block');
         }

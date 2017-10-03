@@ -91,13 +91,15 @@ echo '		<th>'.get_lang('Answered').'</th>';
 echo '	</tr>';
 
 $course_id = api_get_course_int_id();
+$sessionId = api_get_session_id();
+$sessionCondition = api_get_session_condition($sessionId);
 
 $sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email
         FROM $table_survey_invitation survey_invitation
         LEFT JOIN $table_user user
         ON (survey_invitation.user = user.id AND survey_invitation.c_id = $course_id)
         WHERE
-            survey_invitation.survey_code = '".Database::escape_string($survey_data['code'])."' ";
+            survey_invitation.survey_code = '".Database::escape_string($survey_data['code'])."' $sessionCondition";
 
 $res = Database::query($sql);
 while ($row = Database::fetch_assoc($res)) {

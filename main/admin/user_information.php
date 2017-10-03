@@ -140,9 +140,6 @@ if ($studentBossList) {
     $studentBossListToString = $table->toHtml();
 }
 
-// Show info about who created this user and when
-$creatorId = $user['creator_id'];
-$creatorInfo = api_get_user_info($creatorId);
 $registrationDate = $user['registration_date'];
 
 $table = new HTML_Table(array('class' => 'data_table'));
@@ -154,21 +151,21 @@ $data = array(
     get_lang('Email') => $user['email'],
     get_lang('Phone') => $user['phone'],
     get_lang('OfficialCode') => $user['official_code'],
-    get_lang('Online') => !empty($user['user_is_online']) ?
-        Display::return_icon('online.png') : Display::return_icon(
-            'offline.png'
-        ),
-    get_lang('Status') => $user['status'] == 1 ? get_lang('Teacher') : get_lang(
-        'Student'
-    ),
-    null => sprintf(
+    get_lang('Online') => !empty($user['user_is_online']) ? Display::return_icon('online.png') : Display::return_icon('offline.png'),
+    get_lang('Status') => $user['status'] == 1 ? get_lang('Teacher') : get_lang('Student'),
+);
+
+// Show info about who created this user and when
+$creatorId = $user['creator_id'];
+$creatorInfo = api_get_user_info($creatorId);
+if (!empty($creatorId) && !empty($creatorInfo)) {
+    $data[null] = sprintf(
         get_lang('CreatedByXYOnZ'),
-        'user_information.php?user_id='
-        .$creatorId,
+        'user_information.php?user_id='.$creatorId,
         $creatorInfo['username'],
         api_get_utc_datetime($registrationDate)
-    )
-);
+    );
+}
 
 $row = 1;
 foreach ($data as $label => $item) {

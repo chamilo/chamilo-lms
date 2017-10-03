@@ -158,11 +158,15 @@ function get_users($from, $limit, $column, $direction)
         $row[] = $string_date;
 
         if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
-            $detailsLink = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'&id_session='.$sessionId.'">
-				          '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>';
+            $detailsLink = Display::url(
+                Display::return_icon('2rightarrow.png', get_lang('Details')),
+                "myStudents.php?student=$student_id&id_coach=$coach_id&id_session=$sessionId"
+            );
         } else {
-            $detailsLink = '<a href="myStudents.php?student='.$student_id.'&origin=teacher_details">
-				            '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>';
+            $detailsLink = Display::url(
+                Display::return_icon('2rightarrow.png', get_lang('Details')),
+                "myStudents.php?student=$student_id&origin=teacher_details"
+            );
         }
         $row[] = $detailsLink;
         $all_datas[] = $row;

@@ -19,6 +19,7 @@ $origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
 $course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
 $courseInfo = api_get_course_info($course_code);
 $student_id = isset($_GET['student']) ? (int) $_GET['student'] : 0;
+$coachId = isset($_GET['id_coach']) ? (int) $_GET['id_coach'] : 0;
 $details = isset($_GET['details']) ? Security::remove_XSS($_GET['details']) : '';
 $currentUrl = api_get_self().'?student='.$student_id.'&course='.$course_code.'&id_session='.$sessionId.'&origin='.$origin.'&details='.$details;
 $allowMessages = api_get_configuration_value('private_messages_about_user');
@@ -129,13 +130,13 @@ if (!empty($details)) {
                     "url" => api_is_student_boss() ? "#" : "index.php",
                     "name" => get_lang('MySpace')
                 );
-                if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
+                if (!empty($coachId)) {
                     $interbreadcrumb[] = array(
-                        "url" => "student.php?id_coach=".Security::remove_XSS($_GET['id_coach']),
+                        "url" => "student.php?id_coach=".$coachId,
                         "name" => get_lang("CoachStudents")
                     );
                     $interbreadcrumb[] = array(
-                        "url" => "myStudents.php?student=".$student_id.'&id_coach='.Security::remove_XSS($_GET['id_coach']),
+                        "url" => "myStudents.php?student=".$student_id.'&id_coach='.$coachId,
                         "name" => get_lang("StudentDetails")
                     );
                 } else {
@@ -174,15 +175,15 @@ if (!empty($details)) {
             "url" => api_is_student_boss() ? "#" : "index.php",
             "name" => get_lang('MySpace')
         );
-        if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
+        if (!empty($coachId)) {
             if ($sessionId) {
                 $interbreadcrumb[] = array(
-                    "url" => "student.php?id_coach=".Security::remove_XSS($_GET['id_coach'])."&id_session=".$sessionId,
+                    "url" => "student.php?id_coach=".$coachId."&id_session=".$sessionId,
                     "name" => get_lang("CoachStudents")
                 );
             } else {
                 $interbreadcrumb[] = array(
-                    "url" => "student.php?id_coach=".Security::remove_XSS($_GET['id_coach']),
+                    "url" => "student.php?id_coach=".$coachId,
                     "name" => get_lang("CoachStudents")
                 );
             }
@@ -398,13 +399,13 @@ echo $send_mail;
 if (!empty($student_id) && !empty($course_code)) {
     // Only show link to connection details if course and student were defined in the URL
     echo '<a href="access_details.php?student='.$student_id.'&course='.$course_code.'&origin='.$origin.'&cidReq='.$course_code.'&id_session='.$sessionId.'">'.
-        Display::return_icon('statistics.png', get_lang('AccessDetails'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('statistics.png', get_lang('AccessDetails'), '', ICON_SIZE_MEDIUM).
+        '</a>';
 }
 if (api_can_login_as($student_id)) {
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$student_id.'&sec_token='.$token.'">'.
         Display::return_icon('login_as.png', get_lang('LoginAs'), null, ICON_SIZE_MEDIUM).'</a>&nbsp;&nbsp;';
 }
-
 
 if (Skill::isAllow($student_id, false)) {
     echo Display::url(
@@ -906,8 +907,8 @@ if (empty($details)) {
                     <td >'.$attendances_faults_avg.'</td>
                     <td >'.$scoretotal_display.'</td>';
 
-                    if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
-                        echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$courseInfoItem['code'].'&id_coach='.Security::remove_XSS($_GET['id_coach']).'&origin='.$origin.'&id_session='.$sId.'#infosStudent">
+                    if (!empty($coachId)) {
+                        echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$courseInfoItem['code'].'&id_coach='.$coachId.'&origin='.$origin.'&id_session='.$sId.'#infosStudent">
                         '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>';
                     } else {
                         echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$courseInfoItem['code'].'&origin='.$origin.'&id_session='.$sId.'#infosStudent">

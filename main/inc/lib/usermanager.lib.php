@@ -148,7 +148,7 @@ class UserManager
      * @param string $raw
      * @param User   $user
      *
-     * @return bool
+     * @return string
      */
     public static function encryptPassword($raw, User $user)
     {
@@ -1353,18 +1353,20 @@ class UserManager
      * Creates a unique username, using:
      * 1. the first name and the last name of a user;
      * 2. an already created username but not checked for uniqueness yet.
-     * @param string $firstname                The first name of a given user. If the second parameter $lastname is NULL, then this
+     * @param string $firstname The first name of a given user. If the second parameter $lastname is NULL, then this
      * parameter is treated as username which is to be checked for uniqueness and to be modified when it is necessary.
      * @param string $lastname                The last name of the user.
-     * @return string                        Returns a username that contains only ASCII-letters and digits, and that is unique within the system.
-     * Note: When the method is called several times with same parameters, its results look like the following sequence: ivan, ivan2, ivan3, ivan4, ...
+     * @return string Returns a username that contains only ASCII-letters and digits and that is unique within the system.
+     * Note: When the method is called several times with same parameters,
+     * its results look like the following sequence: ivan, ivan2, ivan3, ivan4, ...
      * @author Ivan Tcholakov, 2009
      */
     public static function create_unique_username($firstname, $lastname = null)
     {
         if (is_null($lastname)) {
             // In this case the actual input parameter $firstname should contain ASCII-letters and digits only.
-            // For making this method tolerant of mistakes, let us transliterate and purify the suggested input username anyway.
+            // For making this method tolerant of mistakes,
+            // let us transliterate and purify the suggested input username anyway.
             // So, instead of the sentence $username = $firstname; we place the following:
             $username = strtolower(preg_replace(USERNAME_PURIFIER, '', $firstname));
         } else {
@@ -2124,7 +2126,11 @@ class UserManager
         if (count($productions) > 0) {
             $production_list = '<div class="files-production"><ul id="productions">';
             foreach ($productions as $file) {
-                $production_list .= '<li><img src="'.$add_image.'" /><a href="'.$production_dir.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
+                $production_list .= '<li>
+                    <img src="'.$add_image.'" />
+                    <a href="'.$production_dir.urlencode($file).'" target="_blank">
+                        '.htmlentities($file).'
+                    </a>';
                 if ($showDelete) {
                     $production_list .= '&nbsp;&nbsp;<input style="width:16px;" type="image" name="remove_production['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($file).'" onclick="javascript: return confirmation(\''.htmlentities($file).'\');" /></li>';
                 }
@@ -2174,6 +2180,7 @@ class UserManager
      *
      * @param int $user_id User id
      * @param string $production The production to remove
+     * @return bool
      */
     public static function remove_user_production($user_id, $production)
     {
@@ -2324,7 +2331,10 @@ class UserManager
             $extra_file_list = '<div class="files-production"><ul id="productions">';
             foreach ($extra_files as $file) {
                 $filename = substr($file, strlen($extra_field) + 1);
-                $extra_file_list .= '<li>'.Display::return_icon('archive.png').'<a href="'.$path.$extra_field.'/'.urlencode($filename).'" target="_blank">'.htmlentities($filename).'</a> ';
+                $extra_file_list .= '<li>'.Display::return_icon('archive.png').
+                    '<a href="'.$path.$extra_field.'/'.urlencode($filename).'" target="_blank">
+                        '.htmlentities($filename).
+                    '</a> ';
                 if ($showDelete) {
                     $extra_file_list .= '<input style="width:16px;" type="image" name="remove_extra_'.$extra_field.'['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($filename).'" onclick="javascript: return confirmation(\''.htmlentities($filename).'\');" /></li>';
                 }
@@ -3084,12 +3094,12 @@ class UserManager
                         session.id as session_id,
                         session.name as session_name
                     FROM $tbl_session_course_user as session_course_user
-                        INNER JOIN $tbl_course AS course
-                            ON course.id = session_course_user.c_id
-                        INNER JOIN $tbl_session as session
-                            ON session.id = session_course_user.session_id
-                        LEFT JOIN $tbl_user as user
-                            ON user.id = session_course_user.user_id OR session.id_coach = user.id
+                    INNER JOIN $tbl_course AS course
+                        ON course.id = session_course_user.c_id
+                    INNER JOIN $tbl_session as session
+                        ON session.id = session_course_user.session_id
+                    LEFT JOIN $tbl_user as user
+                        ON user.id = session_course_user.user_id OR session.id_coach = user.id
                     WHERE
                         session_course_user.session_id = $session_id AND (
                             (session_course_user.user_id = $user_id AND session_course_user.status = 2)
@@ -3309,7 +3319,7 @@ class UserManager
      * @param    string  $user_id   User ID
      * @param   string  $course course directory
      * @param   string  $resourcetype resourcetype: images, all
-     * @return    int        User ID (or false if not found)
+     * @return    string
      */
     public static function get_user_upload_files_by_course(
         $user_id,
@@ -3428,22 +3438,28 @@ class UserManager
      */
     public static function delete_api_key($key_id)
     {
-        if ($key_id != strval(intval($key_id)))
+        if ($key_id != strval(intval($key_id))) {
             return false;
-        if ($key_id === false)
+        }
+        if ($key_id === false) {
             return false;
+        }
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
         $sql = "SELECT * FROM $t_api WHERE id = ".$key_id;
         $res = Database::query($sql);
-        if ($res === false)
-            return false; //error during query
-        $num = Database::num_rows($res);
-        if ($num !== 1)
+        if ($res === false) {
             return false;
+        } //error during query
+        $num = Database::num_rows($res);
+        if ($num !== 1) {
+            return false;
+        }
         $sql = "DELETE FROM $t_api WHERE id = ".$key_id;
         $res = Database::query($sql);
-        if ($res === false)
-            return false; //error during query
+        if ($res === false) {
+            return false;
+        } //error during query
+
         return true;
     }
 
@@ -3455,10 +3471,12 @@ class UserManager
      */
     public static function update_api_key($user_id, $api_service)
     {
-        if ($user_id != strval(intval($user_id)))
+        if ($user_id != strval(intval($user_id))) {
             return false;
-        if ($user_id === false)
+        }
+        if ($user_id === false) {
             return false;
+        }
         $service_name = Database::escape_string($api_service);
         if (is_string($service_name) === false) {
             return false;
@@ -3475,6 +3493,7 @@ class UserManager
         } elseif ($num == 0) {
             $num = self::add_api_key($user_id, $api_service);
         }
+
         return $num;
     }
 
@@ -3485,12 +3504,15 @@ class UserManager
      */
     public static function get_api_key_id($user_id, $api_service)
     {
-        if ($user_id != strval(intval($user_id)))
+        if ($user_id != strval(intval($user_id))) {
             return false;
-        if ($user_id === false)
+        }
+        if ($user_id === false) {
             return false;
-        if (empty($api_service))
+        }
+        if (empty($api_service)) {
             return false;
+        }
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
         $api_service = Database::escape_string($api_service);
         $sql = "SELECT id FROM $t_api 
@@ -3500,6 +3522,7 @@ class UserManager
             return false;
         }
         $row = Database::fetch_array($res, 'ASSOC');
+
         return $row['id'];
     }
 
@@ -3575,11 +3598,11 @@ class UserManager
         }
         //allow to insert messages in outbox
         for ($i = 0; $i < count($array_users_administrator); $i++) {
-            $sql_insert_outbox = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
+            $sql = "INSERT INTO $table_message (user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
                 " VALUES (".
                 "'".(int) $user_id."', '".(int) ($array_users_administrator[$i])."', '4', '".api_get_utc_datetime()."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
                 ")";
-            Database::query($sql_insert_outbox);
+            Database::query($sql);
         }
     }
 
@@ -4652,7 +4675,7 @@ class UserManager
 
     /**
      * Remove the requests for assign a user to a HRM
-     * @param \Chamilo\UserBundle\Entity\User $hrmId
+     * @param User $hrmId
      */
     public static function clearHrmRequestsForUser(User $hrmId)
     {
@@ -5551,7 +5574,7 @@ SQL;
      * This function defines globals.
      * @param  int $userId
      * @param bool $checkIfUserCanLoginAs
-     * @return array
+     * @return bool
      * @author Evie Embrechts
      * @author Yannick Warnier <yannick.warnier@dokeos.com>
     */

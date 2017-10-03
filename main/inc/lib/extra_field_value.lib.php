@@ -106,7 +106,6 @@ class ExtraFieldValue extends Model
 
         // Parse params.
         foreach ($extraFields as $fieldDetails) {
-
             $field_variable = $fieldDetails['variable'];
 
             // if the field is not visible to the user in the end, we need to apply special rules

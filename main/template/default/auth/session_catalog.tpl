@@ -1,7 +1,7 @@
 {% extends template ~ "/layout/page.tpl" %}
 
 {% block body %}
-    <script type="text/javascript">
+    <script>
         $(document).ready(function () {
             $('#date').datepicker({
                 dateFormat: 'yy-mm-dd'
@@ -44,7 +44,6 @@
                             </div>
                         </form>
                     </div>
-
                 {% if show_courses %}
                     <div class="col-md-4">
                 {% else %}
@@ -136,7 +135,7 @@
                                 <div class="toolbar row">
                                     {% if item.price %}
                                         <div class="col-sm-4">
-                                                {{ item.price }}
+                                            {{ item.price }}
                                         </div>
                                     {% endif %}
                                     {% if _u.logged %}
@@ -158,56 +157,54 @@
                                 </div>
                             </div>
                             {% if _u.logged %}
-                                <script>
-                                    $('#session-{{ item.id }}-sequences').popover({
-                                        placement: 'bottom',
-                                        html: true,
-                                        trigger: 'click',
-                                        content: function () {
-                                            var content = '';
+                            <script>
+                                $('#session-{{ item.id }}-sequences').popover({
+                                    placement: 'bottom',
+                                    html: true,
+                                    trigger: 'click',
+                                    content: function () {
+                                        var content = '';
+                                        {% if item.sequences %}
+                                            {% for sequence in item.sequences %}
+                                                content += '<p class="lead">{{ sequence.name }}</p>';
+                                                {% if sequence.requirements %}
+                                                    content += '<p><em class="fa fa-sort-amount-desc"></em> {{ 'RequiredSessions'|get_lang }}</p>';
+                                                    content += '<ul>';
 
-                                            {% if item.sequences %}
-                                                {% for sequence in item.sequences %}
-                                                    content += '<p class="lead">{{ sequence.name }}</p>';
+                                                    {% for requirement in sequence.requirements %}
+                                                        content += '<li>';
+                                                        content += '<a href="{{ _p.web ~ 'session/' ~ requirement.id ~ '/about/' }}">{{ requirement.name }}</a>';
+                                                        content += '</li>';
+                                                    {% endfor %}
 
-                                                    {% if sequence.requirements %}
-                                                        content += '<p><em class="fa fa-sort-amount-desc"></em> {{ 'RequiredSessions'|get_lang }}</p>';
-                                                        content += '<ul>';
+                                                    content += '</ul>';
+                                                {% endif %}
 
-                                                        {% for requirement in sequence.requirements %}
-                                                            content += '<li>';
-                                                            content += '<a href="{{ _p.web ~ 'session/' ~ requirement.id ~ '/about/' }}">{{ requirement.name }}</a>';
-                                                            content += '</li>';
-                                                        {% endfor %}
+                                                {% if sequence.dependencies %}
+                                                    content += '<p><em class="fa fa-sort-amount-desc"></em> {{ 'DependentSessions'|get_lang }}</p>';
+                                                    content += '<ul>';
 
-                                                        content += '</ul>';
-                                                    {% endif %}
+                                                    {% for dependency in sequence.dependencies %}
+                                                        content += '<li>';
+                                                        content += '<a href="{{ _p.web ~ 'session/' ~ dependency.id ~ '/about/' }}">{{ dependency.name }}</a>';
+                                                        content += '</li>';
+                                                    {% endfor %}
 
-                                                    {% if sequence.dependencies %}
-                                                        content += '<p><em class="fa fa-sort-amount-desc"></em> {{ 'DependentSessions'|get_lang }}</p>';
-                                                        content += '<ul>';
+                                                    content += '</ul>';
+                                                {% endif %}
 
-                                                        {% for dependency in sequence.dependencies %}
-                                                            content += '<li>';
-                                                            content += '<a href="{{ _p.web ~ 'session/' ~ dependency.id ~ '/about/' }}">{{ dependency.name }}</a>';
-                                                            content += '</li>';
-                                                        {% endfor %}
+                                                {% if item.sequences|length > 1 %}
+                                                    content += '<hr>';
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            content = "{{ 'NoDependencies'|get_lang }}";
+                                        {% endif %}
 
-                                                        content += '</ul>';
-                                                    {% endif %}
-
-                                                    {% if item.sequences|length > 1 %}
-                                                        content += '<hr>';
-                                                    {% endif %}
-                                                {% endfor %}
-                                            {% else %}
-                                                content = "{{ 'NoDependencies'|get_lang }}";
-                                            {% endif %}
-
-                                            return content;
-                                        }
-                                    });
-                                </script>
+                                        return content;
+                                    }
+                                });
+                            </script>
                             {% endif %}
                         </div>
                     </div>

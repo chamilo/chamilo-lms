@@ -5696,9 +5696,9 @@ SQL;
         Database::getManager()->flush();
 
         $url = api_get_path(WEB_CODE_PATH).'auth/user_mail_confirmation.php?token='.$uniqueId;
-        $mailSubject = get_lang('InscriptionConfirmation');
+        $mailSubject = get_lang('RegistrationConfirmation');
         $mailBody = sprintf(
-            get_lang('ToCompleteYourPlatformInscriptionYouNeedToConfirmYourAccountClickingTheFollowingLink'),
+            get_lang('ToCompleteYourPlatformRegistrationYouNeedToConfirmYourAccountByClickingTheFollowingLinkX'),
             $url
         );
 

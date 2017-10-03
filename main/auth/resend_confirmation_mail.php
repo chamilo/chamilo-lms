@@ -16,7 +16,7 @@ if ($form->validate()) {
     $thisUser = Database::getManager()->getRepository('ChamiloUserBundle:User')->findBy(['username' => $values['user']]);
 
     UserManager::sendUserConfirmationMail($thisUser);
-    Display::addFlash(Display::return_message(get_lang('EmailSend')));
+    Display::addFlash(Display::return_message(get_lang('EmailSent')));
     header('Location: '.api_get_path(WEB_PATH));
     exit;
 }

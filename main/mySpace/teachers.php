@@ -123,7 +123,11 @@ function get_users($from, $limit, $column, $direction)
                 $courseInfo = api_get_course_info($course_code);
                 $courseId = $courseInfo['real_id'];
                 if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
-                    $avg_time_spent += Tracking :: get_time_spent_on_the_course($student_id, $courseId, $_GET['id_session']);
+                    $avg_time_spent += Tracking:: get_time_spent_on_the_course(
+                        $student_id,
+                        $courseId,
+                        $_GET['id_session']
+                    );
                     $my_average = Tracking :: get_avg_student_score($student_id, $course_code);
                     if (is_numeric($my_average)) {
                         $avg_student_score += $my_average;
@@ -184,11 +188,20 @@ $sort_by_first_name = api_sort_by_first_name();
 $actionsLeft = '';
 if (api_is_drh()) {
     $menu_items = array(
-        Display::url(Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH)."auth/my_progress.php"),
+        Display::url(
+            Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+        ),
         Display::url(Display::return_icon('user.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM), 'student.php'),
-        Display::url(Display::return_icon('teacher_na.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM), 'teachers.php'),
+        Display::url(
+            Display::return_icon('teacher_na.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM),
+            'teachers.php'
+        ),
         Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM), 'course.php'),
-        Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM), 'session.php'),
+        Display::url(
+            Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM),
+            'session.php'
+        ),
     );
 
     $nb_menu_items = count($menu_items);
@@ -209,7 +222,6 @@ $actionsRight .= Display::url(
     Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM),
     api_get_self().'?export=csv&keyword='.$keyword
 );
-
 
 $toolbar = Display::toolbarAction('toolbar-teachers', [$actionsLeft, $actionsRight]);
 

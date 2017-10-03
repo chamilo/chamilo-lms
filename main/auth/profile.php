@@ -204,10 +204,17 @@ $form->applyFilter('phone', 'html_filter');
 if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
     $form->addFile(
         'picture',
-        ($user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang(
-            'AddImage'
-        )),
-        array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1')
+        [
+            $user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang('AddImage'),
+            get_lang('OnlyImagesAllowed')
+        ],
+        [
+            'id' => 'picture',
+            'class' => 'picture-form',
+            'crop_image' => true,
+            'crop_ratio' => '1 / 1',
+            'accept' => 'image/*'
+        ]
     );
 
     $form->addProgress();

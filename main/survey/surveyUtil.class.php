@@ -2433,13 +2433,17 @@ class SurveyUtil
      * value.
      *
      * @param string Survey code
-     * @return void
+     * @param int $courseId
+     * @param int $sessionId
+     * @return int
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version January 2007
      */
-    public static function update_count_invited($survey_code)
+    public static function update_count_invited($survey_code, $courseId = 0, $sessionId = 0)
     {
-        $course_id = api_get_course_int_id();
+        $courseId = $courseId ?: api_get_course_int_id();
+        $sessionId = $sessionId ?: api_get_session_id();
+        $sessionCondition = api_get_session_condition($sessionId);
 
         // Database table definition
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
@@ -2449,9 +2453,10 @@ class SurveyUtil
         $sql = "SELECT count(user) as total
                 FROM $table_survey_invitation
 		        WHERE
-		            c_id = $course_id AND
+		            c_id = $courseId AND
 		            survey_code = '".Database::escape_string($survey_code)."' AND
 		            user <> ''
+		            $sessionCondition
                 ";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -2461,10 +2466,13 @@ class SurveyUtil
         $sql = "UPDATE $table_survey
 		        SET invited = '".Database::escape_string($total_invited)."'
 		        WHERE
-		            c_id = $course_id AND
+		            c_id = $courseId AND
 		            code = '".Database::escape_string($survey_code)."'
+		            $sessionCondition
                 ";
         Database::query($sql);
+
+        return $total_invited;
     }
 
     /**

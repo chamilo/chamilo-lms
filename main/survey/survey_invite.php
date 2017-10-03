@@ -229,18 +229,9 @@ if ($form->validate()) {
     );
 
     // Updating the invited field in the survey table
-    SurveyUtil::update_count_invited($survey_data['code']);
-    $total_count = $count_course_users + $counter_additional_users;
-    $table_survey = Database::get_course_table(TABLE_SURVEY);
     // Counting the number of people that are invited
-    $sql = "SELECT * FROM $table_survey
-            WHERE
-                c_id = $course_id AND
-                code = '".Database::escape_string($survey_data['code'])."'
-            ";
-    $result = Database::query($sql);
-    $row = Database::fetch_array($result);
-    $total_invited = $row['invited'];
+    $total_invited = SurveyUtil::update_count_invited($survey_data['code']);
+    $total_count = $count_course_users + $counter_additional_users;
     if ($total_invited > 0) {
         $message  = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey_data['survey_id'].'">'.
             $survey_data['answered'].'</a> ';

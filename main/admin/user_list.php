@@ -12,10 +12,50 @@ use ChamiloSession as Session;
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-api_protect_admin_script(true);
-
 $urlId = api_get_current_access_url_id();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+
+// Login as can be used by different roles
+if (isset($_GET['user_id']) && $action == 'login_as') {
+    $check = Security::check_token('get');
+    if ($check && api_can_login_as($_GET['user_id'])) {
+        $result = UserManager::loginAsUser($_GET['user_id']);
+        if ($result) {
+            $userInfo = api_get_user_info();
+            $firstname = $userInfo['firstname'];
+            $lastname = $userInfo['lastname'];
+            $userId = $userInfo['id'];
+
+            if (api_is_western_name_order()) {
+                $message = sprintf(
+                    get_lang('AttemptingToLoginAs'),
+                    $firstname,
+                    $lastname,
+                    $userId
+                );
+            } else {
+                $message = sprintf(
+                    get_lang('AttemptingToLoginAs'),
+                    $lastname,
+                    $firstname,
+                    $userId
+                );
+            }
+
+            $target_url = api_get_path(WEB_PATH)."user_portal.php";
+            $message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'), '<a href="'.$target_url.'">'.$target_url.'</a>');
+            Display::display_header(get_lang('UserList'));
+            echo Display::return_message($message, 'normal', false);
+            Display::display_footer();
+            exit;
+        } else {
+            api_not_allowed(true);
+        }
+    }
+    Security::clear_token();
+}
+
+api_protect_admin_script(true);
 
 // Blocks the possibility to delete a user
 $deleteUserAvailable = true;
@@ -151,45 +191,6 @@ function load_calendar(user_id, month, year) {
 </script>';
 
 $this_section = SECTION_PLATFORM_ADMIN;
-
-if ($action == 'login_as') {
-    $check = Security::check_token('get');
-    if (isset($_GET['user_id']) && $check) {
-        $result = UserManager::loginAsUser($_GET['user_id']);
-        if ($result) {
-            $userInfo = api_get_user_info();
-            $firstname = $userInfo['firstname'];
-            $lastname = $userInfo['lastname'];
-            $userId = $userInfo['id'];
-
-            if (api_is_western_name_order()) {
-                $message = sprintf(
-                    get_lang('AttemptingToLoginAs'),
-                    $firstname,
-                    $lastname,
-                    $userId
-                );
-            } else {
-                $message = sprintf(
-                    get_lang('AttemptingToLoginAs'),
-                    $lastname,
-                    $firstname,
-                    $userId
-                );
-            }
-
-            $target_url = api_get_path(WEB_PATH)."user_portal.php";
-            $message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'), '<a href="'.$target_url.'">'.$target_url.'</a>');
-            Display :: display_header(get_lang('UserList'));
-            echo Display::return_message($message, 'normal', false);
-            Display :: display_footer();
-            exit;
-        } else {
-            api_not_allowed(true);
-        }
-    }
-    Security::clear_token();
-}
 
 /**
  * Prepares the shared SQL query for the user table.

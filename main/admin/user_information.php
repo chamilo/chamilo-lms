@@ -63,7 +63,7 @@ $actions = [
     )
 ];
 
-if (api_is_platform_admin()) {
+if (api_can_login_as($userId)) {
     $actions[] = Display::url(
         Display::return_icon(
             'login_as.png',
@@ -73,7 +73,9 @@ if (api_is_platform_admin()) {
         ),
         api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$userId.'&sec_token='.Security::getTokenFromSession()
     );
+}
 
+if (api_is_platform_admin()) {
     $actions[] = Display::url(
         Display::return_icon(
             'edit.png',

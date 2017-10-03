@@ -163,10 +163,10 @@ function get_users($from, $limit, $column, $direction)
 
         if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
             $detailsLink = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'&id_session='.$sessionId.'">
-				            '.Display::return_icon('2rightarrow.png').'</a>';
+				            '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>';
         } else {
             $detailsLink = '<a href="myStudents.php?student='.$student_id.'">
-				             '.Display::return_icon('2rightarrow.png').'</a>';
+				             '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>';
         }
 
         $lostPasswordLink = '';

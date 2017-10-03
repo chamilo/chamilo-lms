@@ -451,19 +451,19 @@ $result = Database::query($sql);
             </div>
         <?php } else { ?>
             <div class="separate-action">
-                <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+                <button id="add_user_button" class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
                 <em class="fa fa-chevron-right"></em>
             </button>
             </div>
             <div class="separate-action">
-                <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+                <button id="remove_user_button" class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
                 <em class="fa fa-chevron-left"></em>
                 </button>
             </div>
         <?php } ?>
             <div class="separate-action">
         <?php
-        echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
+        echo '<button id="assign_user" class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
         ?>
             </div>
         </div>

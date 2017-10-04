@@ -726,26 +726,28 @@ class UserGroup extends Model
         // Deleting items.
         if (!empty($delete_items)) {
             $user_list = self::get_users_by_usergroup($usergroup_id);
-            if (!empty($user_list)) {
-                foreach ($delete_items as $course_id) {
-                    $course_info = api_get_course_info_by_id($course_id);
-                    if ($course_info) {
+
+            foreach ($delete_items as $course_id) {
+                $course_info = api_get_course_info_by_id($course_id);
+                if ($course_info) {
+                    if (!empty($user_list)) {
                         foreach ($user_list as $user_id) {
                             CourseManager::unsubscribe_user(
                                 $user_id,
                                 $course_info['code']
                             );
                         }
-                        Database::delete(
-                            $this->usergroup_rel_course_table,
-                            array(
-                                'usergroup_id = ? AND course_id = ?' => array(
-                                    $usergroup_id,
-                                    $course_id
-                                )
-                            )
-                        );
                     }
+
+                    Database::delete(
+                        $this->usergroup_rel_course_table,
+                        array(
+                            'usergroup_id = ? AND course_id = ?' => array(
+                                $usergroup_id,
+                                $course_id
+                            )
+                        )
+                    );
                 }
             }
         }

@@ -74,7 +74,7 @@ Feature: Users management as admin
     And I fill in select bootstrap static input "#status_select" select "5"
     And I press "submit"
     Then I should see "The user has been added"
-#
+
   Scenario: HRM follows teacher
     Given I am a platform administrator
     And I am on "/main/admin/user_list.php?keyword=hrm&submit=&_qf__search_simple="
@@ -101,8 +101,7 @@ Feature: Users management as admin
     Given I am logged as "hrm"
     And I am on "/main/mySpace/teachers.php"
     Then I should see "teacher lastname"
-    And wait for the page to be loaded
-    When I follow "details_teacher"
+    Then I follow "teacher lastname"
     And wait for the page to be loaded
     And I follow "Login as"
     And wait for the page to be loaded
@@ -112,8 +111,7 @@ Feature: Users management as admin
     Given I am logged as "hrm"
     And I am on "/main/mySpace/student.php"
     Then I should see "student lastname"
-    And wait for the page to be loaded
-    When I follow "details_student"
+    Then I follow "student lastname"
     And wait for the page to be loaded
     And I follow "Login as"
     And wait for the page to be loaded

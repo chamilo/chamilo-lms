@@ -164,12 +164,14 @@ function get_users($from, $limit, $column, $direction)
         if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
             $detailsLink = Display::url(
                 Display::return_icon('2rightarrow.png', get_lang('Details').' '.$student_data['username']),
-                "myStudents.php?student=$student_id&id_coach=$coach_id&id_session=$sessionId"
+                "myStudents.php?student=$student_id&id_coach=$coach_id&id_session=$sessionId",
+                ['id' => 'details_'.$student_data['username']]
             );
         } else {
             $detailsLink = Display::url(
                 Display::return_icon('2rightarrow.png', get_lang('Details').' '.$student_data['username']),
-                "myStudents.php?student=$student_id&origin=teacher_details"
+                "myStudents.php?student=$student_id&origin=teacher_details",
+                ['id' => 'details_'.$student_data['username']]
             );
         }
         $row[] = $detailsLink;

@@ -25,7 +25,6 @@ if (isset($_GET['messages_page_nr'])) {
     }
 }
 
-
 $nameTools = get_lang('Messages');
 $show_message = null;
 if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
@@ -111,9 +110,6 @@ $actions = '';
 
 // Comes from normal profile
 if ($allowSocial == false && $allowMessage) {
-    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
-        Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
-
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
         Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.

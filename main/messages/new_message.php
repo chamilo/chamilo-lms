@@ -318,10 +318,6 @@ if ($group_id != 0) {
     if ($allowSocial) {
     } else {
         $social_right_content .= '<div class=actions>';
-        if ($allowSocial && api_get_setting('allow_message_tool') === 'true') {
-            $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
-                Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
-        }
         if (api_get_setting('allow_message_tool') === 'true') {
             $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
                 Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';

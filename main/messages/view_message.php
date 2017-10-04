@@ -24,10 +24,6 @@ if ($allowSocial) {
 $interbreadcrumb[] = array('url' => 'inbox.php', 'name' => get_lang('Messages'));
 
 $social_right_content = '<div class="actions">';
-if ($allowSocial && $allowMessage) {
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
-        Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
-}
 if (api_get_setting('allow_message_tool') === 'true') {
     $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
         Display::return_icon('new-message.png', get_lang('ComposeMessage')).'</a>';

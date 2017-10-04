@@ -41,12 +41,6 @@ $interbreadcrumb[] = array(
 );
 
 $actions = '';
-
-if ($allowSocial && $allowMessage) {
-    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
-        Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
-}
-
 if ($allowMessage) {
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
         Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';

@@ -99,7 +99,7 @@ Feature: Users management as admin
     Given I am logged as "hrm"
     And I am on "/main/mySpace/teachers.php"
     And I should see "teacher lastname"
-    And I follow "Details"
+    And I follow "Details teacher"
     And wait for the page to be loaded
     And I follow "Login as"
     And wait for the page to be loaded
@@ -109,7 +109,7 @@ Feature: Users management as admin
     Given I am logged as "hrm"
     And I am on "/main/mySpace/student.php"
     And I should see "student lastname"
-    And I follow "Details"
+    And I follow "Details student"
     And wait for the page to be loaded
     And I follow "Login as"
     And wait for the page to be loaded

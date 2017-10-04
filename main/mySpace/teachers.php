@@ -113,7 +113,7 @@ function get_users($from, $limit, $column, $direction)
     foreach ($students as $student_data) {
         $student_id = $student_data['user_id'];
         if (isset($_GET['id_session'])) {
-            $courses = Tracking :: get_course_list_in_session_from_student($student_id, $_GET['id_session']);
+            $courses = Tracking::get_course_list_in_session_from_student($student_id, $_GET['id_session']);
         }
 
         $avg_time_spent = $avg_student_score = $avg_student_progress = 0;
@@ -123,16 +123,16 @@ function get_users($from, $limit, $column, $direction)
                 $courseInfo = api_get_course_info($course_code);
                 $courseId = $courseInfo['real_id'];
                 if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
-                    $avg_time_spent += Tracking:: get_time_spent_on_the_course(
+                    $avg_time_spent += Tracking::get_time_spent_on_the_course(
                         $student_id,
                         $courseId,
                         $_GET['id_session']
                     );
-                    $my_average = Tracking :: get_avg_student_score($student_id, $course_code);
+                    $my_average = Tracking::get_avg_student_score($student_id, $course_code);
                     if (is_numeric($my_average)) {
                         $avg_student_score += $my_average;
                     }
-                    $avg_student_progress += Tracking :: get_avg_student_progress($student_id, $course_code);
+                    $avg_student_progress += Tracking::get_avg_student_progress($student_id, $course_code);
                     $nb_courses_student++;
                 }
             }
@@ -156,19 +156,19 @@ function get_users($from, $limit, $column, $direction)
             $row[] = $student_data['lastname'];
             $row[] = $student_data['firstname'];
         }
-        $string_date = Tracking :: get_last_connection_date($student_id, true);
-        $first_date = Tracking :: get_first_connection_date($student_id);
+        $string_date = Tracking::get_last_connection_date($student_id, true);
+        $first_date = Tracking::get_first_connection_date($student_id);
         $row[] = $first_date;
         $row[] = $string_date;
 
         if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
             $detailsLink = Display::url(
-                Display::return_icon('2rightarrow.png', get_lang('Details')),
+                Display::return_icon('2rightarrow.png', get_lang('Details').' '.$student_data['username']),
                 "myStudents.php?student=$student_id&id_coach=$coach_id&id_session=$sessionId"
             );
         } else {
             $detailsLink = Display::url(
-                Display::return_icon('2rightarrow.png', get_lang('Details')),
+                Display::return_icon('2rightarrow.png', get_lang('Details').' '.$student_data['username']),
                 "myStudents.php?student=$student_id&origin=teacher_details"
             );
         }

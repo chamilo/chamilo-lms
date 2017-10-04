@@ -104,6 +104,7 @@ $column_model = array(
         'sortable' => 'false'
     )
 );
+
 //Autowidth
 $extra_params['autowidth'] = 'true';
 //height auto
@@ -157,7 +158,9 @@ switch ($action) {
             $obj->display();
         } else {
             echo '<div class="actions">';
-            echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+            echo '<a href="'.api_get_self().'">'.
+                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).
+                '</a>';
             echo '</div>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
@@ -179,7 +182,9 @@ switch ($action) {
             $obj->display();
         } else {
             echo '<div class="actions">';
-            echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+            echo '<a href="'.api_get_self().'">'.
+                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).
+                '</a>';
             echo '</div>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
@@ -201,4 +206,4 @@ switch ($action) {
         break;
 }
 echo '<script> $(document).ready(function(){ $("input").removeClass("form-control"); }); </script>';
-Display :: display_footer();
+Display::display_footer();

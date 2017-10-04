@@ -26,7 +26,8 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 //Ajax request
 if (isset($_POST['sent_http_request'])) {
-    if (isset($_POST['visibility']) && $_POST['visibility'] == strval(intval($_POST['visibility'])) && $_POST['visibility'] == 0) {
+    if (isset($_POST['visibility']) &&
+        $_POST['visibility'] == strval(intval($_POST['visibility'])) && $_POST['visibility'] == 0) {
         if (isset($_POST['id']) && $_POST['id'] == strval(intval($_POST['id']))) {
             if (SubLanguageManager::check_if_language_is_used($_POST['id']) == false) {
                 SubLanguageManager::make_unavailable_language($_POST['id']);
@@ -36,7 +37,9 @@ if (isset($_POST['sent_http_request'])) {
             }
         }
     }
-    if (isset($_POST['visibility']) && $_POST['visibility'] == strval(intval($_POST['visibility'])) && $_POST['visibility'] == 1) {
+    if (isset($_POST['visibility']) &&
+        $_POST['visibility'] == strval(intval($_POST['visibility'])) && $_POST['visibility'] == 1
+    ) {
         if (isset($_POST['id']) && $_POST['id'] == strval(intval($_POST['id']))) {
             SubLanguageManager::make_available_language($_POST['id']);
             echo 'set_visible';
@@ -193,9 +196,9 @@ if ($action == 'disable_all_except_default') {
 
 if (isset($_POST['Submit']) && $_POST['Submit']) {
     // changing the name
-    $sql_update = "UPDATE $tbl_admin_languages SET original_name='{$_POST['txt_name']}'
-                   WHERE id='{$_POST['edit_id']}'";
-    $result = Database::query($sql_update);
+    $sql = "UPDATE $tbl_admin_languages SET original_name='{$_POST['txt_name']}'
+            WHERE id='{$_POST['edit_id']}'";
+    $result = Database::query($sql);
     // changing the Platform language
     if ($_POST['platformlanguage'] && $_POST['platformlanguage'] <> '') {
         //$sql_update_2 = "UPDATE $tbl_settings_current SET selected_value='{$_POST['platformlanguage']}' WHERE variable='platformLanguage'";
@@ -204,7 +207,7 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
     }
 } elseif (isset($_POST['action'])) {
     switch ($_POST['action']) {
-        case 'makeavailable' :
+        case 'makeavailable':
             if (count($_POST['id']) > 0) {
                 $ids = array();
                 foreach ($_POST['id'] as $index => $id) {
@@ -214,7 +217,7 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
                 Database::query($sql);
             }
             break;
-        case 'makeunavailable' :
+        case 'makeunavailable':
             if (count($_POST['id']) > 0) {
                 $ids = array();
                 foreach ($_POST['id'] as $index => $id) {
@@ -290,9 +293,7 @@ while ($row = Database::fetch_array($result_select)) {
 
     $allow_delete_sub_language = null;
     $allow_add_term_sub_language = null;
-
     if (api_get_setting('allow_use_sub_language') == 'true') {
-
         $verified_if_is_sub_language = SubLanguageManager::check_if_language_is_sub_language($row['id']);
 
         if ($verified_if_is_sub_language === false) {

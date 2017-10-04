@@ -60,7 +60,10 @@ if ($course_validation_feature) {
     }
 } else {
     $link_to_setting = api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Platform#course_validation';
-    $message = sprintf(get_lang('PleaseActivateCourseValidationFeature'), sprintf('<strong><a href="%s">%s</a></strong>', $link_to_setting, get_lang('EnableCourseValidation')));
+    $message = sprintf(
+        get_lang('PleaseActivateCourseValidationFeature'),
+        sprintf('<strong><a href="%s">%s</a></strong>', $link_to_setting, get_lang('EnableCourseValidation'))
+    );
     $is_error_message = true;
 }
 
@@ -125,7 +128,15 @@ function modify_filter($id)
     $result = '<a href="course_request_edit.php?id='.$id.'&caller=1">'.
         Display::return_icon('edit.png', get_lang('Edit'), array('style' => 'vertical-align: middle;')).'</a>'.
         '&nbsp;<a href="?delete_course_request='.$id.'">'.
-        Display::return_icon('delete.png', get_lang('DeleteThisCourseRequest'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ACourseRequestWillBeDeleted'), $code), ENT_QUOTES)).'\')) return false;')).'</a>';
+        Display::return_icon(
+            'delete.png',
+            get_lang('DeleteThisCourseRequest'),
+            array(
+                'style' => 'vertical-align: middle;',
+                'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ACourseRequestWillBeDeleted'), $code), ENT_QUOTES)).'\')) return false;',
+            )
+        ).
+        '</a>';
 
     return $result;
 }
@@ -159,8 +170,10 @@ $form->addButtonSearch(get_lang('Search'));
 
 // The action bar.
 echo '<div style="float: right; margin-top: 5px; margin-right: 5px;">';
-echo ' <a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests')).get_lang('ReviewCourseRequests').'</a>';
-echo ' <a href="course_request_rejected.php">'.Display::return_icon('course_request_rejected.gif', get_lang('RejectedCourseRequests')).get_lang('RejectedCourseRequests').'</a>';
+echo ' <a href="course_request_review.php">'.
+    Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests')).get_lang('ReviewCourseRequests').'</a>';
+echo ' <a href="course_request_rejected.php">'.
+    Display::return_icon('course_request_rejected.gif', get_lang('RejectedCourseRequests')).get_lang('RejectedCourseRequests').'</a>';
 echo '</div>';
 echo '<div class="actions">';
 $form->display();

@@ -80,9 +80,9 @@ if (count($output) > 0) {
       <li>
           <a href="filler.php?fill=courses">
           <?php
-            echo Display::return_icon('new-course.png', get_lang('FillCourses'), null, ICON_SIZE_SMALL).' '.
-                get_lang('FillCourses');
-        ?>
+          echo Display::return_icon('new-course.png', get_lang('FillCourses'), null, ICON_SIZE_SMALL).
+              ' '.get_lang('FillCourses');
+            ?>
         </a>
       </li>
     </ul>

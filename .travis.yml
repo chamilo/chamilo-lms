@@ -41,7 +41,7 @@ before_install:
   - sh -e /etc/init.d/xvfb start
   - export DISPLAY=:99.0
   # Get Selenium
-  - wget http://selenium-release.storage.googleapis.com/3.1/selenium-server-standalone-3.1.0.jar
+  - wget http://selenium-release.storage.googleapis.com/3.6/selenium-server-standalone-3.6.0.jar
   # Check java
   - java -version
   - sudo apt-get install oracle-java8-installer

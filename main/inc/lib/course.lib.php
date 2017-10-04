@@ -2850,7 +2850,7 @@ class CourseManager
         if ($include_sessions === true) {
             $sql = "SELECT DISTINCT (c.code), 
                         c.id as real_id, 
-                        course.category_code AS category
+                        c.category_code AS category
                     FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." s,
                     $tbl_course c
                     WHERE user_id = $user_id AND s.c_id = c.id";

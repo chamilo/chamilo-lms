@@ -193,8 +193,9 @@ class Version20160907150300 extends AbstractMigrationChamilo
             if (!$schema->hasTable($name)) {
                 continue;
             }
-            error_log($name);
-            $this->addSql("ALTER TABLE $name ENGINE=InnoDB");
+            $sql = "ALTER TABLE $name ENGINE=InnoDB";
+            $this->addSql($sql);
+            error_log($sql);
         }
     }
 

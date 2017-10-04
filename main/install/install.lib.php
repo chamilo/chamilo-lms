@@ -2114,10 +2114,6 @@ function migrate($chamiloVersion, EntityManager $manager)
 
     $migration = new \Doctrine\DBAL\Migrations\Migration($config);
     $versions = $config->getMigrations();
-    error_log('Versions to execute: ');
-    foreach ($versions as $version) {
-        error_log($version->getVersion());
-    }
 
     /** @var Doctrine\DBAL\Migrations\Version $migrationItem */
     foreach ($versions as $version) {

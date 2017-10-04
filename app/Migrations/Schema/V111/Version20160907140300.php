@@ -235,7 +235,6 @@ class Version20160907140300 extends AbstractMigrationChamilo
                 $this->addSql("ALTER TABLE $table CHANGE $field $field DATE");
             }
         }
-        error_log("finished");
     }
 
     public function down(Schema $schema)

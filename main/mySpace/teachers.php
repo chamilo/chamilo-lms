@@ -109,7 +109,7 @@ function get_users($from, $limit, $column, $direction)
     }
 
     $all_datas = array();
-
+    $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php';
     foreach ($students as $student_data) {
         $student_id = $student_data['user_id'];
         if (isset($_GET['id_session'])) {
@@ -164,13 +164,13 @@ function get_users($from, $limit, $column, $direction)
         if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
             $detailsLink = Display::url(
                 Display::return_icon('2rightarrow.png', get_lang('Details').' '.$student_data['username']).'&nbsp;',
-                "myStudents.php?student=$student_id&id_coach=$coach_id&id_session=$sessionId",
+                $url."?student=$student_id&id_coach=$coach_id&id_session=$sessionId",
                 ['id' => 'details_'.$student_data['username']]
             );
         } else {
             $detailsLink = Display::url(
                 Display::return_icon('2rightarrow.png', get_lang('Details').' '.$student_data['username']).'&nbsp;',
-                "myStudents.php?student=$student_id&origin=teacher_details",
+                $url."?student=$student_id&origin=teacher_details",
                 ['id' => 'details_'.$student_data['username']]
             );
         }

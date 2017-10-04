@@ -2693,11 +2693,10 @@ EOT;
                 'order' => 'title'
             );
         } else {
-            if ($session_id == 0) {
+            if (empty($session_id)) {
                 $conditions = array(
                     'where' => array(
-                        $active_sql.' session_id = ? AND c_id = ? '.$needle_where.$time_conditions => array(
-                            $session_id,
+                        $active_sql.' (session_id = 0 OR session_id IS NULL) AND c_id = ? '.$needle_where.$time_conditions => array(
                             $course_id,
                             $needle
                         )
@@ -2719,7 +2718,6 @@ EOT;
         }
 
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
-
         return Database::select('*', $table, $conditions);
     }
 

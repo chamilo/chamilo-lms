@@ -287,7 +287,7 @@ if (!empty($filters) && !empty($filterData)) {
 }
 
 if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
-    $user_list = $_POST['UsersList'];
+    $user_list = isset($_POST['UsersList']) ? $_POST['UsersList'] : null;
     switch ($userStatus) {
         case DRH:
             //no break;
@@ -391,12 +391,13 @@ if (!empty($conditions)) {
 
 if (api_is_multiple_url_enabled()) {
     $sql = "SELECT user.user_id, username, lastname, firstname
-            FROM $tbl_user user  LEFT JOIN $tbl_access_url_rel_user au 
+            FROM $tbl_user user  
+            LEFT JOIN $tbl_access_url_rel_user au 
             ON (au.user_id = user.user_id)
             WHERE
                 $without_assigned_users
                 user.user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
-                status NOT IN(".DRH.", ".SESSIONADMIN.") $search_user AND
+                status NOT IN(".DRH.", ".SESSIONADMIN.", ".ANONYMOUS.") $search_user AND
                 access_url_id = ".api_get_current_access_url_id()."
                 $sqlConditions
             ORDER BY firstname";
@@ -406,7 +407,7 @@ if (api_is_multiple_url_enabled()) {
             WHERE
                 $without_assigned_users
                 user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
-                status NOT IN(".DRH.", ".SESSIONADMIN.")
+                status NOT IN(".DRH.", ".SESSIONADMIN.", ".ANONYMOUS.")
                 $search_user
                 $sqlConditions
             ORDER BY firstname ";
@@ -423,11 +424,11 @@ $result = Database::query($sql);
                 <div id="ajax_list_users_multiple">
                     <select id="origin" class="form-control" name="NoAssignedUsersList[]" multiple="multiple" size="15">
                         <?php
-                            while ($enreg = Database::fetch_array($result)) {
-                                $person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']); ?>
-                                <option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name, ENT_QUOTES).'"'; ?>>
-                                <?php echo $person_name.' ('.$enreg['username'].')'; ?>
-                                </option>
+                        while ($enreg = Database::fetch_array($result)) {
+                            $person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']); ?>
+                            <option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name, ENT_QUOTES).'"'; ?>>
+                            <?php echo $person_name.' ('.$enreg['username'].')'; ?>
+                            </option>
                         <?php } ?>
                     </select>
                 </div>

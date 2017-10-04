@@ -74,11 +74,12 @@ Feature: Users management as admin
     And I fill in select bootstrap static input "#status_select" select "5"
     And I press "submit"
     Then I should see "The user has been added"
-
+#
   Scenario: HRM follows teacher
     Given I am a platform administrator
     And I am on "/main/admin/user_list.php?keyword=hrm&submit=&_qf__search_simple="
     And I should see "HRM lastname"
+    And I should see "Human Resources Manager"
     And I follow "Assign users"
     And I select "teacher firstname teacher lastname" from "NoAssignedUsersList[]"
     And I press "add_user_button"
@@ -89,6 +90,7 @@ Feature: Users management as admin
     Given I am a platform administrator
     And I am on "/main/admin/user_list.php?keyword=hrm&submit=&_qf__search_simple="
     And I should see "HRM lastname"
+    And I should see "Human Resources Manager"
     And I follow "Assign users"
     And I select "student firstname student lastname" from "NoAssignedUsersList[]"
     And I press "add_user_button"

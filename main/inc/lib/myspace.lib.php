@@ -525,7 +525,7 @@ class MySpace
             $table_row[] = $nb_courses;
             $table_row[] = $nb_sessions;
             $table_row[] = '<a href="session.php?id_coach='.$coaches['user_id'].'">
-                '.Display::return_icon('2rightarrow.png').'
+                '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
             </a>';
             $all_datas[] = $table_row;
 
@@ -1985,7 +1985,7 @@ class MySpace
 
             //set the "from" value to know if I access the Reporting by the chamilo tab or the course link
             $table_row[] = '<center><a href="../../tracking/courseLog.php?cidReq='.$course_code.'&from=myspace&id_session='.$session_id.'">
-                             '.Display::return_icon('2rightarrow.png').'
+                             '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
                              </a>
                             </center>';
             $csv_content[] = array(

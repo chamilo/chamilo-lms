@@ -7393,7 +7393,7 @@ class TrackingCourseLog
 
             $user['link'] = '<center>
                              <a href="../mySpace/myStudents.php?student='.$user['user_id'].'&details=true&course='.$course_code.'&origin=tracking_course&id_session='.$session_id.'">
-                             '.Display::return_icon('2rightarrow.png').'
+                             '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
                              </a>
                          </center>';
 

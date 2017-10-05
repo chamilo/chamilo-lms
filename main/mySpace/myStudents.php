@@ -707,12 +707,25 @@ if (!empty($student_id)) {
                             echo $extraFieldInfo['display_text'].' : ';
                             $answers = $item->getValue();
                             $list = [];
-                            foreach ($answers as $answer) {
-                                $list[] = $optionValues[$answer];
+                            if (is_array($answers)) {
+                                foreach ($answers as $answer) {
+                                    $list[] = $optionValues[$answer];
+                                }
+                            } else {
+                                foreach ($options as $option) {
+                                    $answers = trim($answers, '.');
+                                    $answers = str_replace('-', '_', $answers);
+
+                                    if ($option['option_value'] != api_underscore_to_camel_case($answers)) {
+                                        continue;
+                                    }
+
+                                    $list[] = $option['display_text'];
+                                }
                             }
-                            echo '<li>';
+                            echo '<ul><li>';
                             echo implode('</li><li>', $list);
-                            echo '</li>';
+                            echo '</li></ul>';
 
                             echo '</td></tr>';
                         }

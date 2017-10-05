@@ -6857,213 +6857,272 @@ input.form-control[type="color"] {
 }
 
 /* CSS FormValidator loader */
-.cssload-loader-walk {
-    width: 97px;
-    height: 39px;
+@-moz-keyframes wobblebar-loader {
+    0% {
+        left: 4px;
+    }
+    3% {
+        left: 204px;
+    }
+    6% {
+        left: 4px;
+    }
+    9% {
+        left: 204px;
+    }
+    12% {
+        left: 4px;
+    }
+    15% {
+        left: 204px;
+    }
+    18% {
+        left: 32px;
+    }
+    27% {
+        left: 32px;
+    }
+    30% {
+        left: 204px;
+    }
+    33% {
+        left: 4px;
+    }
+    36% {
+        left: 204px;
+    }
+    39% {
+        left: 4px;
+    }
+    42% {
+        left: 204px;
+    }
+    45% {
+        left: 4px;
+    }
+    48% {
+        left: 204px;
+    }
+    51% {
+        left: 152px;
+    }
+    63% {
+        left: 152px;
+    }
+    66% {
+        left: 4px;
+    }
+    69% {
+        left: 204px;
+    }
+    72% {
+        left: 4px;
+    }
+    75% {
+        left: 204px;
+    }
+    78% {
+        left: 4px;
+    }
+    81% {
+        left: 204px;
+    }
+    84% {
+        left: 72px;
+    }
+    94% {
+        left: 72px;
+    }
+    97% {
+        left: 204px;
+    }
+}
+@-webkit-keyframes wobblebar-loader {
+    0% {
+        left: 4px;
+    }
+    3% {
+        left: 204px;
+    }
+    6% {
+        left: 4px;
+    }
+    9% {
+        left: 204px;
+    }
+    12% {
+        left: 4px;
+    }
+    15% {
+        left: 204px;
+    }
+    18% {
+        left: 32px;
+    }
+    27% {
+        left: 32px;
+    }
+    30% {
+        left: 204px;
+    }
+    33% {
+        left: 4px;
+    }
+    36% {
+        left: 204px;
+    }
+    39% {
+        left: 4px;
+    }
+    42% {
+        left: 204px;
+    }
+    45% {
+        left: 4px;
+    }
+    48% {
+        left: 204px;
+    }
+    51% {
+        left: 152px;
+    }
+    63% {
+        left: 152px;
+    }
+    66% {
+        left: 4px;
+    }
+    69% {
+        left: 204px;
+    }
+    72% {
+        left: 4px;
+    }
+    75% {
+        left: 204px;
+    }
+    78% {
+        left: 4px;
+    }
+    81% {
+        left: 204px;
+    }
+    84% {
+        left: 72px;
+    }
+    94% {
+        left: 72px;
+    }
+    97% {
+        left: 204px;
+    }
+}
+@keyframes wobblebar-loader {
+    0% {
+        left: 4px;
+    }
+    3% {
+        left: 204px;
+    }
+    6% {
+        left: 4px;
+    }
+    9% {
+        left: 204px;
+    }
+    12% {
+        left: 4px;
+    }
+    15% {
+        left: 204px;
+    }
+    18% {
+        left: 32px;
+    }
+    27% {
+        left: 32px;
+    }
+    30% {
+        left: 204px;
+    }
+    33% {
+        left: 4px;
+    }
+    36% {
+        left: 204px;
+    }
+    39% {
+        left: 4px;
+    }
+    42% {
+        left: 204px;
+    }
+    45% {
+        left: 4px;
+    }
+    48% {
+        left: 204px;
+    }
+    51% {
+        left: 152px;
+    }
+    63% {
+        left: 152px;
+    }
+    66% {
+        left: 4px;
+    }
+    69% {
+        left: 204px;
+    }
+    72% {
+        left: 4px;
+    }
+    75% {
+        left: 204px;
+    }
+    78% {
+        left: 4px;
+    }
+    81% {
+        left: 204px;
+    }
+    84% {
+        left: 72px;
+    }
+    94% {
+        left: 72px;
+    }
+    97% {
+        left: 204px;
+    }
+}
+/* :not(:required) hides this rule from IE9 and below */
+.wobblebar-loader:not(:required) {
+    background: #2E6DA4;
+    -moz-border-radius: 10.66667px;
+    -webkit-border-radius: 10.66667px;
+    border-radius: 10.66667px;
+    display: inline-block;
+    overflow: hidden;
+    text-indent: -9999px;
+    width: 228px;
+    height: 21.33333px;
+    position: relative;
+}
+.wobblebar-loader:not(:required)::after {
+    -moz-animation: wobblebar-loader 15000ms infinite ease;
+    -webkit-animation: wobblebar-loader 15000ms infinite ease;
+    animation: wobblebar-loader 15000ms infinite ease;
+    background: white;
+    display: block;
+    -moz-border-radius: 7.11111px;
+    -webkit-border-radius: 7.11111px;
+    border-radius: 7.11111px;
+    content: '';
     position: absolute;
-    left: 50%;
-    top: 100px;
-    transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-}
-.cssload-loader-walk > div {
-    content: "";
-    width: 19px;
-    height: 19px;
-    background: rgb(51,121,183);
-    border-radius: 100%;
-    position: absolute;
-    animation: cssload-animate 2.3s linear infinite;
-    -o-animation: cssload-animate 2.3s linear infinite;
-    -ms-animation: cssload-animate 2.3s linear infinite;
-    -webkit-animation: cssload-animate 2.3s linear infinite;
-    -moz-animation: cssload-animate 2.3s linear infinite;
-}
-.cssload-loader-walk > div:nth-of-type(1) {
-    animation-delay: -0.46s;
-    -o-animation-delay: -0.46s;
-    -ms-animation-delay: -0.46s;
-    -webkit-animation-delay: -0.46s;
-    -moz-animation-delay: -0.46s;
-}
-.cssload-loader-walk > div:nth-of-type(2) {
-    animation-delay: -0.92s;
-    -o-animation-delay: -0.92s;
-    -ms-animation-delay: -0.92s;
-    -webkit-animation-delay: -0.92s;
-    -moz-animation-delay: -0.92s;
-}
-.cssload-loader-walk > div:nth-of-type(3) {
-    animation-delay: -1.38s;
-    -o-animation-delay: -1.38s;
-    -ms-animation-delay: -1.38s;
-    -webkit-animation-delay: -1.38s;
-    -moz-animation-delay: -1.38s;
-}
-.cssload-loader-walk > div:nth-of-type(4) {
-    animation-delay: -1.84s;
-    -o-animation-delay: -1.84s;
-    -ms-animation-delay: -1.84s;
-    -webkit-animation-delay: -1.84s;
-    -moz-animation-delay: -1.84s;
-}
-
-
-
-@keyframes cssload-animate {
-    0% {
-        left: 97px;
-        top: 0;
-    }
-    80% {
-        left: 0;
-        top: 0;
-    }
-    85% {
-        left: 0;
-        top: -19px;
-        width: 19px;
-        height: 19px;
-    }
-    90% {
-        width: 39px;
-        height: 15px;
-    }
-    95% {
-        left: 97px;
-        top: -19px;
-        width: 19px;
-        height: 19px;
-    }
-    100% {
-        left: 97px;
-        top: 0;
-    }
-}
-
-@-o-keyframes cssload-animate {
-    0% {
-        left: 97px;
-        top: 0;
-    }
-    80% {
-        left: 0;
-        top: 0;
-    }
-    85% {
-        left: 0;
-        top: -19px;
-        width: 19px;
-        height: 19px;
-    }
-    90% {
-        width: 39px;
-        height: 15px;
-    }
-    95% {
-        left: 97px;
-        top: -19px;
-        width: 19px;
-        height: 19px;
-    }
-    100% {
-        left: 97px;
-        top: 0;
-    }
-}
-
-@-ms-keyframes cssload-animate {
-    0% {
-        left: 97px;
-        top: 0;
-    }
-    80% {
-        left: 0;
-        top: 0;
-    }
-    85% {
-        left: 0;
-        top: -19px;
-        width: 19px;
-        height: 19px;
-    }
-    90% {
-        width: 39px;
-        height: 15px;
-    }
-    95% {
-        left: 97px;
-        top: -19px;
-        width: 19px;
-        height: 19px;
-    }
-    100% {
-        left: 97px;
-        top: 0;
-    }
-}
-
-@-webkit-keyframes cssload-animate {
-    0% {
-        left: 97px;
-        top: 0;
-    }
-    80% {
-        left: 0;
-        top: 0;
-    }
-    85% {
-        left: 0;
-        top: -19px;
-        width: 19px;
-        height: 19px;
-    }
-    90% {
-        width: 39px;
-        height: 15px;
-    }
-    95% {
-        left: 97px;
-        top: -19px;
-        width: 19px;
-        height: 19px;
-    }
-    100% {
-        left: 97px;
-        top: 0;
-    }
-}
-
-@-moz-keyframes cssload-animate {
-    0% {
-        left: 97px;
-        top: 0;
-    }
-    80% {
-        left: 0;
-        top: 0;
-    }
-    85% {
-        left: 0;
-        top: -19px;
-        width: 19px;
-        height: 19px;
-    }
-    90% {
-        width: 39px;
-        height: 15px;
-    }
-    95% {
-        left: 97px;
-        top: -19px;
-        width: 19px;
-        height: 19px;
-    }
-    100% {
-        left: 97px;
-        top: 0;
-    }
+    top: 3.55556px;
+    left: 4px;
+    width: 21.33333px;
+    height: 14.22222px;
 }

@@ -473,6 +473,7 @@ class UserGroup extends Model
     {
         $relationCondition = '';
         if (!empty($relationList)) {
+            $relationList = array_map('intval', $relationList);
             $relationListToString = implode("', '", $relationList);
             $relationCondition = " AND relation_type IN('$relationListToString')";
         }
@@ -482,6 +483,7 @@ class UserGroup extends Model
         } else {
             $conditions = array('where' => array("usergroup_id = ? $relationCondition "=> $id));
         }
+
         $results = Database::select(
             'user_id',
             $this->usergroup_rel_user_table,
@@ -493,17 +495,19 @@ class UserGroup extends Model
                 $array[] = $row['user_id'];
             }
         }
-
         return $array;
     }
 
     /**
      * Gets a list of user ids by user group
      * @param   int    $id user group id
+     * @param int $relation
      * @return  array   with a list of user ids
      */
-    public function getUsersByUsergroupAndRelation($id, $relation = '')
+    public function getUsersByUsergroupAndRelation($id, $relation = 0)
     {
+        $relation = (int) $relation;
+
         $conditions = array('where' => array('usergroup_id = ? AND relation_type = ?' => [$id, $relation]));
         $results = Database::select(
             'user_id',
@@ -755,20 +759,21 @@ class UserGroup extends Model
 
     /**
      * Subscribe users to a group
-     * @param int     $usergroup_id usergroup id
-     * @param array   $list list of user ids     *
+     * @param int $usergroup_id usergroup id
+     * @param array $list list of user ids
      * @param bool $delete_users_not_present_in_list
-     * @param array $relationType
+     * @param int $relationType
      */
     public function subscribe_users_to_usergroup(
         $usergroup_id,
         $list,
         $delete_users_not_present_in_list = true,
-        $relationType = ''
+        $relationType = 0
     ) {
         $current_list = self::get_users_by_usergroup($usergroup_id);
         $course_list = self::get_courses_by_usergroup($usergroup_id);
         $session_list = self::get_sessions_by_usergroup($usergroup_id);
+        $relationType = (int) $relationType;
 
         $delete_items = array();
         $new_items = array();
@@ -805,10 +810,29 @@ class UserGroup extends Model
                         SessionManager::unsubscribe_user_from_session($session_id, $user_id);
                     }
                 }
-                Database::delete(
-                    $this->usergroup_rel_user_table,
-                    array('usergroup_id = ? AND user_id = ? AND relation_type = ?' => array($usergroup_id, $user_id, $relationType))
-                );
+
+                if (empty($relationType)) {
+                    Database::delete(
+                        $this->usergroup_rel_user_table,
+                        array(
+                            'usergroup_id = ? AND user_id = ? AND (relation_type = "0" OR relation_type IS NULL OR relation_type = "")' => array(
+                                $usergroup_id,
+                                $user_id,
+                            ),
+                        )
+                    );
+                } else {
+                    Database::delete(
+                        $this->usergroup_rel_user_table,
+                        array(
+                            'usergroup_id = ? AND user_id = ? AND relation_type = ?' => array(
+                                $usergroup_id,
+                                $user_id,
+                                $relationType,
+                            ),
+                        )
+                    );
+                }
             }
         }
 
@@ -829,7 +853,11 @@ class UserGroup extends Model
                         CourseManager::subscribe_user($user_id, $course_info['code']);
                     }
                 }
-                $params = array('user_id' => $user_id, 'usergroup_id' => $usergroup_id, 'relation_type' => $relationType);
+                $params = array(
+                    'user_id' => $user_id,
+                    'usergroup_id' => $usergroup_id,
+                    'relation_type' => $relationType,
+                );
                 Database::insert($this->usergroup_rel_user_table, $params);
             }
         }

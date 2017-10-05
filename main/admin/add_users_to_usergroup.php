@@ -111,6 +111,9 @@ $usergroup = new UserGroup();
 if (empty($id)) {
     api_not_allowed(true);
 }
+
+$groupInfo = $usergroup->get($id);
+
 $first_letter_user = '';
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
@@ -121,7 +124,15 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     if (!is_array($elements_posted)) {
         $elements_posted = array();
     }
+
+    if ($groupInfo['group_type'] == 1 && empty($relation)) {
+        Display::addFlash(Display::return_message(get_lang('SelectRole')));
+        header('Location: add_users_to_usergroup.php?id='.$id);
+        exit;
+    }
+
     if ($form_sent == 1) {
+        Display::addFlash(Display::return_message(get_lang('Updated')));
         //added a parameter to send emails when registering a user
         $usergroup->subscribe_users_to_usergroup(
             $id,
@@ -135,7 +146,6 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 }
 
 if (isset($_GET['action']) && $_GET['action'] == 'export') {
-    $groupInfo = $usergroup->get($id);
     $users = $usergroup->getUserListByUserGroup($id);
     if (!empty($users)) {
         $data = array(

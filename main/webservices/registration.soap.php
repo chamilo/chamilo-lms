@@ -2864,6 +2864,7 @@ function WSCreateCourse($params)
     $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $courses_params = $params['courses'];
     $results = array();
+    $sessionAdminId = 1;
     $orig_course_id_value = array();
     foreach ($courses_params as $course_param) {
         $title = $course_param['title'];
@@ -2943,7 +2944,7 @@ function WSCreateCourse($params)
         $params['course_category'] = $category_code;
         $params['tutor_name'] = $tutor_name;
         $params['course_language'] = $course_language;
-        $params['user_id'] = api_get_user_id();
+        $params['user_id'] = $sessionAdminId;
         $params['visibility'] = $visibility;
         $params['disk_quota'] = $diskQuota;
 
@@ -2954,7 +2955,7 @@ function WSCreateCourse($params)
             $params['unsubscribe'] = $unsubscribe;
         }
 
-        $course_info = CourseManager::create_course($params);
+        $course_info = CourseManager::create_course($params, $sessionAdminId);
 
         if (!empty($course_info)) {
             $course_code = $course_info['code'];
@@ -3098,7 +3099,7 @@ function WSCreateCourseByTitle($params)
     }
 
     $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-
+    $sessionAdminId = 1;
     $courses_params = $params['courses'];
     $results = array();
     $orig_course_id_value = array();
@@ -3179,8 +3180,8 @@ function WSCreateCourseByTitle($params)
             $params['category_code'] = $category_code;
             $params['tutor_name'] = $tutor_name;
             $params['course_language'] = $course_language;
-            $params['user_id'] = api_get_user_id();
-            $course_info = CourseManager::create_course($params);
+            $params['user_id'] = $sessionAdminId;
+            $course_info = CourseManager::create_course($params, $sessionAdminId);
             if (!empty($course_info)) {
                 $course_code = $course_info['code'];
 
@@ -5799,6 +5800,8 @@ function WSUnsuscribeCoursesFromSession($params)
         return returnError(WS_ERROR_SECRET_KEY);
     }
 
+    $sessionAdminId = 1;
+
     // Initialisation
     $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -5809,7 +5812,6 @@ function WSUnsuscribeCoursesFromSession($params)
     $orig_session_id_value = array();
 
     foreach ($coursessessions_params as $coursesession_param) {
-
         $original_session_id_value = $coursesession_param['original_session_id_value'];
         $original_session_id_name = $coursesession_param['original_session_id_name'];
         $original_course_id_name = $coursesession_param['original_course_id_name'];
@@ -5867,7 +5869,7 @@ function WSUnsuscribeCoursesFromSession($params)
                 LOG_COURSE_ID,
                 $courseId,
                 api_get_utc_datetime(),
-                api_get_user_id(),
+                $sessionAdminId,
                 $courseId,
                 $id_session
             );

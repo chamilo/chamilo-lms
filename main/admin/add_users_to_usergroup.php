@@ -39,12 +39,9 @@ $(document).ready( function() {
 });
 
 function add_user_to_session (code, content) {
-
     document.getElementById("user_to_add").value = "";
     document.getElementById("ajax_list_users_single").innerHTML = "";
-
     destination = document.getElementById("elements_in");
-
     for (i=0;i<destination.length;i++) {
         if(destination.options[i].text == content) {
                 return false;
@@ -125,10 +122,9 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         $elements_posted = array();
     }
 
+    // If "social group" you need to select a role
     if ($groupInfo['group_type'] == 1 && empty($relation)) {
         Display::addFlash(Display::return_message(get_lang('SelectRole')));
-        header('Location: add_users_to_usergroup.php?id='.$id);
-        exit;
     }
 
     if ($form_sent == 1) {
@@ -231,7 +227,6 @@ if ($orderListByOfficialCode === 'true') {
 }
 
 $conditions = array();
-
 if (!empty($first_letter_user)) {
     $conditions['lastname'] = $first_letter_user;
 }
@@ -308,9 +303,10 @@ if (!empty($user_list)) {
         }
 
         // Avoid anonymous users
-        if ($item['status'] == 6) {
+        if ($item['status'] == ANONYMOUS) {
             continue;
         }
+
         $officialCode = !empty($item['official_code']) ? ' - '.$item['official_code'] : null;
         $person_name = api_get_person_name(
             $item['firstname'],

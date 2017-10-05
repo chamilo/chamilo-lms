@@ -473,9 +473,18 @@ class UserGroup extends Model
     {
         $relationCondition = '';
         if (!empty($relationList)) {
-            $relationList = array_map('intval', $relationList);
-            $relationListToString = implode("', '", $relationList);
-            $relationCondition = " AND relation_type IN('$relationListToString')";
+            $relationConditionArray = [];
+            foreach ($relationList as $relation) {
+                $relation = (int) $relation;
+                if (empty($relation)) {
+                    $relationConditionArray[] = " (relation_type = 0 OR relation_type IS NULL OR relation_type = '') ";
+                } else {
+                    $relationConditionArray[] = " relation_type = $relation ";
+                }
+            }
+            $relationCondition = " AND ( ";
+            $relationCondition .= implode("AND", $relationConditionArray);
+            $relationCondition .= " ) ";
         }
 
         if (empty($id)) {
@@ -507,8 +516,12 @@ class UserGroup extends Model
     public function getUsersByUsergroupAndRelation($id, $relation = 0)
     {
         $relation = (int) $relation;
+        if (empty($relation)) {
+            $conditions = array('where' => array('usergroup_id = ? AND (relation_type = 0 OR relation_type IS NULL OR relation_type = "") ' => [$id]));
+        } else {
+            $conditions = array('where' => array('usergroup_id = ? AND relation_type = ?' => [$id, $relation]));
+        }
 
-        $conditions = array('where' => array('usergroup_id = ? AND relation_type = ?' => [$id, $relation]));
         $results = Database::select(
             'user_id',
             $this->usergroup_rel_user_table,

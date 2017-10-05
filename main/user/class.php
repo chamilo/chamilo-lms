@@ -86,6 +86,8 @@ if (api_is_allowed_to_edit()) {
                     false
                 );
                 Display::addFlash(Display::return_message(get_lang('Added')));
+                header('Location: class.php?'.api_get_cidreq().'&type=registered');
+                exit;
             }
             break;
         case 'remove_class_from_course':

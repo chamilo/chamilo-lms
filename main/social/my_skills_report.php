@@ -9,7 +9,8 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-Skill::isAllow();
+$userId = api_get_user_id();
+Skill::isAllow($userId);
 
 $isStudent = api_is_student();
 $isStudentBoss = api_is_student_boss();
@@ -20,7 +21,6 @@ if (!$isStudent && !$isStudentBoss && !$isDRH) {
     exit;
 }
 
-$userId = api_get_user_id();
 $skillTable = Database::get_main_table(TABLE_MAIN_SKILL);
 $skillRelUserTable = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
 $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);

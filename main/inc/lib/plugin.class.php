@@ -894,4 +894,29 @@ class Plugin
     {
         return $this;
     }
+
+    /**
+     * Get the admin URL for the plugin if Plugin::isAdminPlugin is true
+     * @return null|string
+     */
+    public function getAdminUrl()
+    {
+        if (!$this->isAdminPlugin) {
+            return null;
+        }
+
+        $name = $this->get_name();
+        $sysPath = api_get_path(SYS_PLUGIN_PATH).$name;
+        $webPath = api_get_path(WEB_PLUGIN_PATH).$name;
+
+        if (file_exists("$sysPath/admin.php")) {
+            return "$webPath/admin.php";
+        }
+
+        if (file_exists("$sysPath/start.php")) {
+            return "$webPath/start.php";
+        }
+
+        return null;
+    }
 }

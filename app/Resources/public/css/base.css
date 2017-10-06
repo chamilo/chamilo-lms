@@ -7126,3 +7126,24 @@ input.form-control[type="color"] {
     width: 21.33333px;
     height: 14.22222px;
 }
+.popover{
+    width:400px;
+}
+.popover-title{
+    text-align: left;
+}
+.popover-content {
+    max-width:400px;
+    display: inline-block;
+}
+.popover-content .popover-teacher{
+    display: block;
+    width: 50%;
+    float: left;
+}
+.popover-content .popover-teacher .ajax{
+    float: left;
+}
+.popover-content .popover-teacher .teachers-details{
+    text-align: left;
+}

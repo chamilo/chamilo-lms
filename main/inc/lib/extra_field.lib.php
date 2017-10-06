@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
+use Chamilo\CoreBundle\Entity\Tag;
 
 /**
  * Class ExtraField
@@ -1757,16 +1759,17 @@ class ExtraField extends Model
                             $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
                         } else {
                             $em = Database::getManager();
-
                             $fieldTags = $em
                                 ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
-                                ->findBy([
-                                    'fieldId' => $field_id,
-                                    'itemId' => $itemId
-                                ]);
-                            /** @var \Chamilo\CoreBundle\Entity\ExtraFieldRelTag $fieldTag */
+                                ->findBy(
+                                    [
+                                        'fieldId' => $field_id,
+                                        'itemId' => $itemId,
+                                    ]
+                                );
+                            /** @var ExtraFieldRelTag $fieldTag */
                             foreach ($fieldTags as $fieldTag) {
-                                /** @var \Chamilo\CoreBundle\Entity\Tag $tag */
+                                /** @var Tag $tag */
                                 $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
 
                                 if (empty($tag)) {

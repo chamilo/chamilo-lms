@@ -9,7 +9,8 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-Skill::isAllow();
+$userId = api_get_user_id();
+Skill::isAllow($userId);
 
 $isStudent = api_is_student();
 $isStudentBoss = api_is_student_boss();
@@ -19,8 +20,6 @@ if (!$isStudent && !$isStudentBoss && !$isDRH) {
     header('Location: '.api_get_path(WEB_CODE_PATH).'social/skills_wheel.php');
     exit;
 }
-
-$userId = api_get_user_id();
 
 $action = isset($_GET['a']) ? $_GET['a'] : '';
 switch ($action) {

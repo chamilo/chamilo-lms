@@ -3,6 +3,7 @@
 /**
  *  Class EventsDispatcher
  * Entry point for every event in the application.
+ * @deprecated to be removed in 2.x
  * Fires the functions linked to the events according to the event's conf.
  * Every function got its own filter, it's fired inside the functiones fired
  * by this class. The filter config is next to the event config, in conf/events.conf.php

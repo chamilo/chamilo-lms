@@ -1520,7 +1520,6 @@ class UserManager
      * @param array $conditions a list of condition (example : status=>STUDENT)
      * @param array $order_by a list of fields on which sort
      * @return array An array with all users of the platform.
-     * @todo optional course code parameter, optional sorting parameters...
      * @todo security filter order by
      */
     public static function get_user_list(
@@ -1531,14 +1530,17 @@ class UserManager
     ) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $userUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $urlId = api_get_current_access_url_id();
-
         $return_array = array();
-        $sql = "SELECT user.* FROM $user_table user
-                INNER JOIN $userUrlTable url_user
-                ON (user.user_id = url_user.user_id)
-                WHERE url_user.access_url_id = $urlId
-        ";
+        $sql = "SELECT user.* FROM $user_table user ";
+
+        if (api_is_multiple_url_enabled()) {
+            $urlId = api_get_current_access_url_id();
+            $sql .= " INNER JOIN $userUrlTable url_user
+                      ON (user.user_id = url_user.user_id)
+                      WHERE url_user.access_url_id = $urlId";
+        } else {
+            $sql .= " WHERE 1=1 ";
+        }
 
         if (count($conditions) > 0) {
             foreach ($conditions as $field => $value) {
@@ -3554,12 +3556,19 @@ class UserManager
     {
         $t_u = Database::get_main_table(TABLE_MAIN_USER);
         $t_a = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $sql = "SELECT count(u.id) 
-                FROM $t_u u 
-                INNER JOIN $t_a url_user
-                ON (u.id = url_user.user_id)
-                WHERE url_user.access_url_id = $access_url_id                
-        ";
+
+        if (api_is_multiple_url_enabled()) {
+            $sql = "SELECT count(u.id) 
+                    FROM $t_u u 
+                    INNER JOIN $t_a url_user
+                    ON (u.id = url_user.user_id)
+                    WHERE url_user.access_url_id = $access_url_id                
+            ";
+        } else {
+            $sql = "SELECT count(u.id) 
+                    FROM $t_u u
+                    WHERE 1 = 1 ";
+        }
         if (is_int($status) && $status > 0) {
             $sql .= " AND u.status = $status ";
         }

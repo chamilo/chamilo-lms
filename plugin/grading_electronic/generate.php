@@ -118,6 +118,14 @@ try {
 
     /** @var User $student */
     foreach ($students as $student) {
+        $userFinishedCourse = Category::userFinishedCourse(
+            $student->getId(),
+            $gradebook,
+            true
+        );
+        if (!$userFinishedCourse) {
+             continue;
+        }
         $exerciseResult = Event::get_best_exercise_results_by_user(
             $exerciseId,
             $course->getId(),

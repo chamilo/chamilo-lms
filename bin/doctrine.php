@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Symfony\Component\Console\Helper\HelperSet;
+use Doctrine\DBAL\Types\Type;
+
 /**
  * Very useful script in order to create a Migration file based in the
  * current differences of the database:
@@ -14,11 +18,6 @@
  * etc
  *
  **/
-
-
-use Doctrine\ORM\Tools\Console\ConsoleRunner;
-use Symfony\Component\Console\Helper\HelperSet;
-use Doctrine\DBAL\Types\Type;
 
 (@include_once __DIR__.'/../vendor/autoload.php') || @include_once __DIR__.'/../../../autoload.php';
 
@@ -48,10 +47,10 @@ Type::overrideType(
     Database::getUTCDateTimeTypeClass()
 );
 
-Type::addType(
+/*Type::addType(
     'json',
     'Sonata\Doctrine\Types\JsonType'
-);
+);*/
 
 $commands = array(
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand(),

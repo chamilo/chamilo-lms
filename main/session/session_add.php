@@ -277,7 +277,7 @@ $(function() {
                             if (item.value) {
                                 $.each(item.value, function(i, tagItem) {
                                     // Select2 changes
-                                    console.log(tagItem.value);
+                                    //console.log(tagItem.value);
                                     //$('#'+fieldName)[0].addItem(tagItem.value, tagItem.value);
                                     var option = new Option(tagItem.value, tagItem.value);
                                     option.selected = true;

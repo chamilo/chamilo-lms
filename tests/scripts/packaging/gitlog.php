@@ -18,7 +18,7 @@
  */
 require 'php-git/src/Git.php';
 $repository = __DIR__.'/../..';
-$number = 500; //the number of commits to check (including minor)
+$number = 2000; //the number of commits to check (including minor)
 $formatHTML = true;
 $showDate = false;
 $endCommit = false;
@@ -27,7 +27,7 @@ if (!empty($argv[1])) {
         $showDate = true;
     } else {
         $endCommit = $argv[1];
-        echo "End commit has been defined as ".$endCommit.PHP_EOL;
+        echo "An initial commit has been defined as ".$endCommit.PHP_EOL;
     }
 }
 

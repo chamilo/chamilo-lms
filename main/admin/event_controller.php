@@ -13,6 +13,9 @@ if (api_get_setting('activate_email_template') != 'true') {
 }
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
+$action_links = '';
+$tool_name = '';
+$message = '';
 
 switch ($action) {
     case 'show':

@@ -43,27 +43,46 @@
     <li>Changelog</li>
 </ul>
 <h1>Chamilo&nbsp;Changelog</h1>
-<p>This is our technical changelog, aimed at providing you a list of the new features, small changes and bug fixes as well as the security issues, style changes and known issues that remain present. This changelog is provided version by version, latest versions first and helps you locate when a specific feature has been made available in Chamilo. If you would like a shorter list of features or a list of overall features, please check our website: <a href="http://www.chamilo.org/">http://www.chamilo.org/</a></p>
+<p>This is our technical changelog, aimed at providing you a list of the new
+    features, small changes and bug fixes as well as the security issues, style
+    changes and known issues that remain present. Some changes might have been
+    removed from this list because of repeated changes applying to the same,
+    more generic topic, in the benefit of readability. You can always find the
+    complete, detailed list of changes for the 1.11 and previous versions on
+    <a href="https://github.com/chamilo/chamilo-lms/commits/1.11.x">Github</a>.
+    <br /><br />
+    This changelog is provided
+    version by version, latest versions first, and should helps you locate when
+    specific feature has been made available in Chamilo. If you would like a
+    shorter, more visual, list of features or a list of overall features,
+    please check our version releases announcements on our website:
+    <a href="http://www.chamilo.org/">http://www.chamilo.org/</a></p>
 <p><i>Note: most #wxyz references are issue numbers you can find in
     <a href="http://support.chamilo.org/projects/chamilo-18/issues"
-       target="_blank">our public bug tracking system</a> or
+       target="_blank">our previous public bug tracking system (in which case
+    they will be prefixed by the marker "CT")</a> or
     <a href="https://github.com/chamilo/chamilo-lms/issues">on Github</a>.
+    <br />
     Some references marked BT#xyz are developments made externally for BeezNest
     customers and integrated into Chamilo. The details of these tasks cannot
     be seen for confidentiality reasons, but the code change is public and can
-    be reviewed by anyone <a href="https://github.com/chamilo/chamilo-lms/commits">on Github</a>.</i></p>
+    be reviewed by anyone <a href="https://github.com/chamilo/chamilo-lms/commits">on Github</a>.</i>
+</p>
 <p>&nbsp;</p>
 
     <a name="1.11.6"></a>
 
-    <h1>Chamilo 1.11.6 - ?, ? 2017</h1>
+    <h1>Chamilo 1.11.6 - Poznán,  ?/10/2017</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.11.6 is a minor, bugfix release on top of 1.11.4.</p>
     <h3>Release name</h3>
-
+    <p><a href="https://en.wikipedia.org/wiki/Pozna%C5%84">Poznán<a> is a city on the Warta river in west-central Poland. It is best known for its renaissance Old Town and Ostrów Tumski Cathedral. Poznań is among the oldest and largest cities in Poland. It has often topped rankings as a city with very high quality of education and a very high standard of living. Giving the stability version 1.11.6 has achieved and its high benefits to education, we believe Poznán is a fitting name for us.</a></p>
     <h3>Security fixes</h3>
-
+    <ul>
+    </ul>
     <h3>Possibly breaking changes</h3>
+    <ul>
+    </ul>
 
     <h3>Notable new Features</h3>
     <h4>For end-users, teachers and Chamilo admins</h4>
@@ -76,22 +95,30 @@
 
     <h3>Improvements (minor features) and debug</h3>
     <ul>
+
     </ul>
 
     <h3>Stylesheets and theming</h3>
     <ul>
+        <li>Additional templates in main/template/ will now work as override: you don't need to copy the full default/ folder anymore, just create the .tpl you need to change and its dependencies (see "extend" statements in some .tpl)</li>
     </ul>
 
     <h3>Web services</h3>
     <ul>
+
     </ul>
 
     <h3>Removals</h3>
     <ul>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/168abf1d428f5b0fabb2ca55064f4f9acf03f5b8">168abf1d</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1897">GH#1897</a>) Remove - datepicker</li>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/68f204610c59452ab8a9e2b045e680a5fbbee9b8">68f20461</a> - <a href="https://task.beeznest.com/issues/12554">BT#12554</a>) Survey: Remove unused code</li>
+        <li>Old (and broken) e-mail customizer option has been marked for deprecation in 2.0</li>
     </ul>
 
     <h3>Known issues</h3>
     <ul>
+        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/a285f48555774f1ef2df4df4b9b27c32187b07c0">a285f485</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1956">GH#1956</a>) Document: Add note about text-to-speech being broken in 1.11.4</li>
+        <li>Several issues have been reported migrating from 1.9 to 1.11.4. Some have been fixed in 1.11.6, but did not have the capacity (in terms of human resources) to review the migration process in-depth. Please make sure you undertake any critical production-environment migration with a specialist. Try Chamilo Official Providers, for example.</li>
     </ul>
 
 
@@ -413,7 +440,6 @@
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/35f8dc45e914c9254743bd0ff1ecb785750cb65e">35f8dc45</a> - <a href="https://task.beeznest.com/issues/12663">BT#12663</a>) Reduce database usage of get_all_exercise_results_by_course() by removing query of which results are unused. In test case with 1000 students and 5M records in track_e_attempt, provides a performance gain of 29% for "My progress" page</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/7a83fddccf3b423d0cb46669208610e19da95349">7a83fddc</a> - <a href="https://task.beeznest.com/issues/12663">BT#12663</a>) Reduce memory usage of get_all_exercise_results_by_course() by 60%</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/b90565686e5228720f5515920368c0e370622f92">b9056568</a> - <a href="https://task.beeznest.com/issues/12635">BT#12635</a>) Fix wrong Skill Wheel template</li>
-        <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/0d7196ed65faa6e65ba3d18d64446ecc5550262f">0d7196ed</a>) Fix warnings in student skills wheel view</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/213fdf397eb9ad2f30f61ac4916ee5aa5ecd5ef4">213fdf39</a>) Fix undefined variable in SkillVisualizer</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c046a987bddfe64ebdf8bba17d94080893fefc4b">c046a987</a> - <a href="https://task.beeznest.com/issues/12660">BT#12660</a>) Fix session list for DRH on Works In Session report</li>
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/6f5f7282f8684989bf4d46e0619bcdc16151ad3f">6f5f7282</a> - <a href="https://task.beeznest.com/issues/12441">BT#12441</a>) Add pdf header when exporting</li>
@@ -7572,11 +7598,15 @@ providers (see our website, <i>Support</i> tab).
 </ul>
 
 <a  name="1.8.6.1"></a>
-
+<p>
+    Chamilo was initially a fork of the Dokeos project, which was a 2004 fork of the Claroline project.
+    In the interest of science, we have added below the retrievable code changes history of both projects.<br /><br />
+</p>
 <h1>Dokeos 1.8.6.1 - August 2009</h1>
 
 <h3>Release notes - summary</h3>
-<p>Dokeos 1.8.6.1 is a minor&nbsp;release including just a few new features, mostly focused on internationalization, and several bugfixes.</p>
+<p>Dokeos 1.8.6.1 is a minor&nbsp;release including just
+    a few new features, mostly focused on internationalization, and several bugfixes.</p>
 <h3>New Features</h3>
 <ul>
   <li>Implemented new sub-language feature by which language terms redefinition becomes possible through the admin section (FS#4321)</li>
@@ -8227,6 +8257,85 @@ a simple videoconferencing interface.</p>
             them to a developper, check state of progress and inform users that their
             todo is taken into account, at what stage and by who.</li>
     </ul>
+</div>
+<div>
+    <h2>Syntax and terminology</h2>
+    <p>To ensure a quality report, we are using a specific syntax and terms for this changelog, provided below:</p>
+    <h3>Versions</h3>
+    <p>
+        Each version is shortly described, with:
+    <ul>
+        <li>a version number using <a href="http://semver.org/">Semantic Versioning</a></li>
+        <li>a version name, which is the name of a town or village visited at least once by one of our development team members, preferably with a link to the place in OpenStreetmap or on Wikipedia</li>
+        <li>a release date</li>
+        <li>an optional, short history explaining the relationship between the version and the place</li>
+    </ul>
+    </p>
+    <h3>Sections</h3>
+    <p>
+        Inside each version block, different sections are laid out to ease the reading of the changelog:
+    <ul>
+        <li>Security fixes: indicate if any known vulnerability was fixed in this version. This section is very important as each version with a vulnerability fix indicates that you should *really* upgrade to that version if you value your Chamilo portal's security and the data of your users</li>
+        <li>Possibly breaking changes: indicate if any change we made in Chamilo is non-backwards compatible, meaning something will break if you upgrade to this version from a previous version (rather than installing it fresh) without taking some special action</li>
+        <li>Notable new Features: lists (in two different subsections) the features that are most likely to be noted by normal Chamilo users when changing versions, or that are most likely to be directly useful to them.</li>
+        <li>For end-users, teachers and Chamilo admins: this section indicates changes that are directly visible to the Chamilo end user</li>
+        <li>For developers and sysadmins: indicate changes that are not directly visible to Chamilo end users, or that are most important to the sysadmins and developers out there</li>
+        <li>Improvements (minor features) and debug: an almost unfiltered list of fixes and improvements that have been made between the previous version and this new one. We remove all "Minor" commits, all unit testing commits, all minor visual fixes (icons and stuff) and as many duplicate topics as we can, with the goal to give you a series of links to the changes from which you can find all the related changes by yourself from their Git history if you need them.</li>
+        <li>Stylesheets and theming: if you use your own stylesheet or template, you should watch this section to avoid errors appearing because a new tpl is missing from your template and stuff like that</li>
+        <li>Web services: if you integrate Chamilo with some other tool through the use of web services, make sure you check this section to know what's new and what has changed, as you might need to change your integration to make it work with this new version. Of course, we try to make the less changes possible and prefer creating new methods than modifying old ones, but sometimes security issues might force us to do so.</li>
+        <li>Removals: when a tool or stylesheet is not maintained anymore, or when we replaced some library with another, we will remove deprecated files. This is a list of such files that might have been removed or simply marked for deprecation or removal in later versions.</li>
+        <li>Known issues: sometimes we are made aware that some Chamilo features will not work anymore. We will report those here to make sure our users are aware of them.</li>
+    </ul>
+    </p>
+    <h3>Syntax</h3>
+    <p>
+        Every change comes with a link to the change in our versions tracking system, a link to the reported issue or task (if any) and a description of the change's purpose.
+    </p>
+    <h3>Tools terminology</h3>
+    <p>
+        We use a short terminology to try and group all changes applying to the same tool. We use the singular version. The names we use for these tools are:
+        <ul>
+            <li>Admin</li>
+            <li>Announcement</li>
+            <li>Attendance</li>
+            <li>Blog</li>
+            <li>Calendar</li>
+            <li>Chat</li>
+            <li>Description</li>
+            <li>Course Progress</li>
+            <li>Cron</li>
+            <li>Dashboard</li>
+            <li>Document</li>
+            <li>Dropbox</li>
+            <li>Quiz (not exercise)</li>
+            <li>Extra Fields</li>
+            <li>Forum</li>
+            <li>Glossary</li>
+            <li>Gradebook</li>
+            <li>Group</li>
+            <li>Help</li>
+            <li>Install (includes upgrade stuff)</li>
+            <li>Language</li>
+            <li>Link</li>
+            <li>Learnpath (for LP or Learning Paths)</li>
+            <li>Maintenance</li>
+            <li>Message</li>
+            <li>Notebook</li>
+            <li>Search (for fulltext search)</li>
+            <li>Session</li>
+            <li>Skill</li>
+            <li>Social (for social network)</li>
+            <li>SSO (for Single Sign On methods)</li>
+            <li>Survey</li>
+            <li>Template</li>
+            <li>Ticket</li>
+            <li>Tracking</li>
+            <li>User</li>
+            <li>Webservice</li>
+            <li>Wiki</li>
+            <li>Work</li>
+        </ul>
+    </p>
 </div>
 <hr />
     <a href="http://validator.w3.org/check?uri=referer"><img src="//www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>

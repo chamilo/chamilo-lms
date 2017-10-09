@@ -256,7 +256,6 @@ $server->register(
 // Define the method WSCreateUsers
 function WSCreateUsers($params)
 {
-    global $_user;
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
@@ -346,11 +345,7 @@ function WSCreateUsers($params)
             $language = api_get_setting('platformLanguage');
         }
 
-        if (!empty($_user['user_id'])) {
-            $creator_id = $_user['user_id'];
-        } else {
-            $creator_id = '';
-        }
+        $creatorId = DEFAULT_ADMIN_USER_ID;
 
         // First check wether the login already exists.
         if (!UserManager::is_username_available($loginName)) {
@@ -372,7 +367,15 @@ function WSCreateUsers($params)
             $auth_source,
             $expiration_date,
             $active,
-            $hr_dept_id
+            $hr_dept_id,
+            [],
+            '',
+            false,
+            false,
+            '',
+            false,
+            null,
+            $creatorId
         );
 
         if ($userId) {
@@ -472,9 +475,9 @@ $server->wsdl->addComplexType(
     )
 );
 
-
 // Register the method to expose
-$server->register('WSCreateUser', // method name
+$server->register(
+    'WSCreateUser', // method name
     array('createUser' => 'tns:createUser'), // input parameters
     array('return' => 'xsd:string'), // output parameters
     'urn:WSRegistration', // namespace
@@ -484,11 +487,10 @@ $server->register('WSCreateUser', // method name
     'This service adds a user'                   // documentation
 );
 
-
 // Define the method WSCreateUser
 function WSCreateUser($params)
 {
-    global $_user, $debug;
+    global $debug;
 
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
@@ -569,11 +571,7 @@ function WSCreateUser($params)
         $language = api_get_setting('platformLanguage');
     }
 
-    if (!empty($_user['user_id'])) {
-        $creator_id = $_user['user_id'];
-    } else {
-        $creator_id = '';
-    }
+    $creatorId = DEFAULT_ADMIN_USER_ID;
 
     // First check wether the login already exists
     if (!UserManager::is_username_available($loginName)) {
@@ -600,7 +598,15 @@ function WSCreateUser($params)
         $auth_source,
         $expiration_date,
         $active,
-        $hr_dept_id
+        $hr_dept_id,
+        [],
+        '',
+        false,
+        false,
+        '',
+        false,
+        null,
+        $creatorId
     );
 
     if ($userId) {
@@ -768,7 +774,7 @@ $server->register(
 // Define the method WSCreateUsersPasswordCrypted
 function WSCreateUsersPasswordCrypted($params)
 {
-    global $_user, $_configuration;
+    global $_configuration;
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
@@ -914,11 +920,8 @@ function WSCreateUsersPasswordCrypted($params)
             $language = api_get_setting('platformLanguage');
         }
 
-        if (!empty($_user['user_id'])) {
-            $creator_id = $_user['user_id'];
-        } else {
-            $creator_id = '';
-        }
+        $creator_id = DEFAULT_ADMIN_USER_ID;
+
         // First check wether the login already exists
         if (!UserManager::is_username_available($loginName)) {
             $results[] = 0;
@@ -1245,7 +1248,7 @@ $server->register(
 // Define the method WSCreateUserPasswordCrypted
 function WSCreateUserPasswordCrypted($params)
 {
-    global $_user, $_configuration, $debug;
+    global $_configuration, $debug;
     $debug = 1;
     if ($debug) error_log('WSCreateUserPasswordCrypted');
     if ($debug) error_log(print_r($params, 1));
@@ -1376,11 +1379,7 @@ function WSCreateUserPasswordCrypted($params)
         $language = api_get_setting('platformLanguage');
     }
 
-    if (!empty($_user['user_id'])) {
-        $creator_id = $_user['user_id'];
-    } else {
-        $creator_id = '';
-    }
+    $creator_id = DEFAULT_ADMIN_USER_ID;
 
     // First check wether the login already exists
     if (!UserManager::is_username_available($loginName)) {
@@ -3154,20 +3153,7 @@ function WSCreateCourseByTitle($params)
             }
         }
 
-        // Set default values.
-        if (isset($_user['language']) && $_user['language'] != '') {
-            $values['course_language'] = $_user['language'];
-        } else {
-            $values['course_language'] = api_get_setting('platformLanguage');
-        }
-
-        $values['tutor_name'] = api_get_person_name(
-            $_user['firstName'],
-            $_user['lastName'],
-            null,
-            null,
-            $values['course_language']
-        );
+        $values['course_language'] = api_get_setting('platformLanguage');
 
         $keys = AddCourse::define_course_keys($wanted_code, '', $_configuration['db_prefix']);
 
@@ -4201,8 +4187,6 @@ $server->register('WSEditSession', // method name
 // define the method WSEditSession
 function WSEditSession($params)
 {
-    global $_user;
-
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
@@ -4296,7 +4280,7 @@ function WSEditSession($params)
                 $sessionInfo['show_description'],
                 $duration,
                 null,
-                $_user['user_id']
+                DEFAULT_ADMIN_USER_ID
             );
 
             if (is_array($extra_list) && count($extra_list) > 0) {
@@ -6500,7 +6484,6 @@ $server->register(
 
 function WSCertificatesList($startingDate = '', $endingDate = '')
 {
-    global $_configuration;
     $certificatesCron = api_get_setting('add_gradebook_certificates_cron_task_enabled');
     if ($certificatesCron === 'true') {
         require_once api_get_path(SYS_CODE_PATH).'cron/add_gradebook_certificates.php';
@@ -6608,7 +6591,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSUpdateGroup', // method name
+$server->register(
+    'WSUpdateGroup', // method name
     array('updateGroup' => 'tns:updateGroup'), // input parameters
     array('return' => 'xsd:string'), // output parameters
     'urn:WSRegistration', // namespace
@@ -6649,7 +6633,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSDeleteGroup', // method name
+$server->register(
+    'WSDeleteGroup', // method name
     array('deleteGroup' => 'tns:deleteGroup'), // input parameters
     array('return' => 'xsd:string'), // output parameters
     'urn:WSRegistration', // namespace
@@ -6690,7 +6675,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('GroupBindToParent', // method name
+$server->register(
+    'GroupBindToParent', // method name
     array('groupBindToParent' => 'tns:groupBindToParent'), // input parameters
     array('return' => 'xsd:string'), // output parameters
     'urn:WSRegistration', // namespace
@@ -6730,7 +6716,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('GroupUnbindFromParent', // method name
+$server->register(
+    'GroupUnbindFromParent', // method name
     array('groupUnbindFromParent' => 'tns:groupUnbindFromParent'), // input parameters
     array('return' => 'xsd:string'), // output parameters
     'urn:WSRegistration', // namespace
@@ -6813,7 +6800,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSUpdateUserRoleInGroup', // method name
+$server->register(
+    'WSUpdateUserRoleInGroup', // method name
     array('updateUserRoleInGroup' => 'tns:updateUserRoleInGroup'), // input parameters
     array('return' => 'xsd:string'), // output parameters
     'urn:WSRegistration', // namespace
@@ -6858,7 +6846,8 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSDeleteUserFromGroup', // method name
+$server->register(
+    'WSDeleteUserFromGroup', // method name
     array('deleteUserFromGroup' => 'tns:deleteUserFromGroup'), // input parameters
     array('return' => 'xsd:string'), // output parameters
     'urn:WSRegistration', // namespace
@@ -6881,7 +6870,6 @@ function WSDeleteUserFromGroup($params)
         $params['group_id']
     );
 }
-
 
 /* Delete user from group Web Service end */
 

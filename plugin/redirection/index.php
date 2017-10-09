@@ -6,6 +6,8 @@
 * @package chamilo.plugin.redirection
 */
 
+use ChamiloSession as Session;
+
 require_once __DIR__.'/config.php';
 $redirecciones = PluginRedirection::get();
 

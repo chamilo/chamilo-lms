@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * Install
- * @author Enrique.Alcaraz.Lopez
+ * @author Enrique Alcaraz Lopez
  * @package chamilo.plugin.redirection
  */
 

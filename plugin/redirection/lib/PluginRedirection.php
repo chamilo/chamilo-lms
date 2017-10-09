@@ -6,7 +6,8 @@
  * @package chamilo.plugin.redirection
  */
 
-class PluginRedirection {    
+class PluginRedirection 
+{    
     # Insertamos la redirección
     public static function insert($user_id, $url)
     {

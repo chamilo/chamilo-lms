@@ -11,11 +11,11 @@ $redirecciones = PluginRedirection::get();
 
 if (isset($_REQUEST["id"])) {
     PluginRedirection::delete($_REQUEST["id"]);
-    header ("Location: index.php");
+    header("Location: index.php");
     exit();
 } elseif (isset($_POST["submit_button"])) {    
     PluginRedirection::insert($_POST["user_id"], $_POST["url"]);
-    header ("Location: index.php");
+    header("Location: index.php");
     exit();
 }
 

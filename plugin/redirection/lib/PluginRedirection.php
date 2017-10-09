@@ -2,11 +2,11 @@
 /* For licensing terms, see /license.txt */
 /**
  * Config the plugin
- * @author Enrique Alcaraz Lopez
+ * @author Enrique Alcaraz Lopez 
  * @package chamilo.plugin.redirection
  */
 
-class PluginRedirection {
+class PluginRedirection {    
     # Insertamos la redirección
     public static function insert($user_id, $url)
     {
@@ -36,4 +36,3 @@ class PluginRedirection {
         return Database::select('*', $table);
     }
 }
-

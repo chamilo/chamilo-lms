@@ -13,8 +13,7 @@ if (isset($_REQUEST["id"])) {
     PluginRedirection::delete($_REQUEST["id"]);
     header ("Location: index.php");
     exit();
-}
-else if (isset($_POST["submit_button"])) {    
+} elseif (isset($_POST["submit_button"])) {    
     PluginRedirection::insert($_POST["user_id"], $_POST["url"]);
     header ("Location: index.php");
     exit();

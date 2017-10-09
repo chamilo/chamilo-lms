@@ -7,15 +7,15 @@
  */
 
 require_once __DIR__.'/config.php';
-$redirecciones = Redirection::get();
+$redirecciones = PluginRedirection::get();
 
 if (isset($_REQUEST["id"])) {
-    Redirection::delete($_REQUEST["id"]);
+    PluginRedirection::delete($_REQUEST["id"]);
     header ("Location: index.php");
     exit();
 }
 else if (isset($_POST["submit_button"])) {    
-    Redirection::insert($_POST["user_id"], $_POST["url"]);
+    PluginRedirection::insert($_POST["user_id"], $_POST["url"]);
     header ("Location: index.php");
     exit();
 }

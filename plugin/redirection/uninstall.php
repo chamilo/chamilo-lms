@@ -5,3 +5,5 @@
  * @author Enrique Alcaraz Lopez
  * @package chamilo.plugin.redirection
  */
+
+RedirectionPlugin::create()->uninstall();

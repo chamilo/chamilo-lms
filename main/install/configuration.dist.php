@@ -660,3 +660,5 @@ $_configuration['gradebook_badge_sidebar'] = [
 
 // Hide email content forcing using to click in a link to visit the portal to check the message
 //$_configuration['messages_hide_mail_content'] = false;
+// If you install plugin redirection you need to change to true
+//$_configuration['plugin_redirection_enabled'] = false;

@@ -15,4 +15,3 @@ $sql = "CREATE TABLE IF NOT EXISTS $table (
         )";
 
 Database::query($sql);
-

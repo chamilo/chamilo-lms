@@ -16,7 +16,7 @@ class ImsLtiPlugin extends Plugin
     public $isAdminPlugin = true;
 
     /**
-     * Class cronstructor
+     * Class constructor
      */
     protected function __construct()
     {

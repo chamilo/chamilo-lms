@@ -258,27 +258,32 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
         }
         return '<script>
         $(document).ready(function() {
-            var $image = $("#'.$id.'_preview_image");
-            var $input = $("[name=\''.$id.'_crop_result\']");
-            var $cropButton = $("#'.$id.'_crop_button");
-            var canvas = "";
-            var imageWidth = "";
-            var imageHeight = "";
+            var $inputFile = $(\'#'.$id.'\'),
+                $image = $(\'#'.$id.'_preview_image\'),
+                $input = $(\'[name="'.$id.'_crop_result"]\'),
+                $cropButton = $(\'#'.$id.'_crop_button\'),
+                $formGroup = $(\'#'.$id.'-form-group\');
+
+            function isValidType(file) {
+                var fileTypes = [\'image/jpg\', \'image/jpeg\', \'image/gif\', \'image/png\'];
+        
+                for(var i = 0; i < fileTypes.length; i++) {
+                    if(file.type === fileTypes[i]) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
             
-            $("#'.$id.'").change(function() {
-                var oFReader = new FileReader();
-                oFReader.readAsDataURL(document.getElementById("'.$id.'").files[0]);
-        
-                oFReader.onload = function (oFREvent) {
-                    $image.attr("src", this.result);
-                    $("#'.$id.'_label_crop_image").html("'.get_lang('Preview').'");
-                    $("#'.$id.'_crop_image").addClass("thumbnail");
-                    $cropButton.removeClass("hidden");
-                    // Destroy cropper
-                    $image.cropper("destroy");
-        
-                    $image.cropper({
-                        aspectRatio: ' . $ratio . ',
+            function imageCropper() {
+                $formGroup.show();
+                $cropButton.show();
+
+                $image
+                    .cropper(\'destroy\')
+                    .cropper({
+                        aspectRatio: '.$ratio.',
                         responsive : true,
                         center : false,
                         guides : false,
@@ -288,20 +293,48 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                         scalable: false,
                         crop: function(e) {
                             // Output the result data for cropping image.
-                            $input.val(e.x+","+e.y+","+e.width+","+e.height);
+                            $input.val(e.x + \',\' + e.y + \',\' + e.width + \',\' + e.height);
                         }
                     });
+            }
+
+            $inputFile.on(\'change\', function () {
+                var inputFile = this,
+                    file = inputFile.files[0],
+                    fileReader = new FileReader();
+
+                if (!isValidType(file)) {
+                    $formGroup.hide();
+                    $cropButton.hide();
+
+                    if (inputFile.setCustomValidity) {
+                        inputFile.setCustomValidity(
+                            inputFile.title ? inputFile.title : \''.get_lang('OnlyImagesAllowed').'\'
+                        );
+                    }
+
+                    return;
+                }
+
+                if (inputFile.setCustomValidity) {
+                    inputFile.setCustomValidity(\'\');
+                }
+
+                fileReader.readAsDataURL(file);
+                fileReader.onload = function () {
+                    $image
+                        .attr(\'src\', this.result)
+                        .on(\'load\', imageCropper);
                 };
             });
-            
-            $("#'.$id.'_crop_button").on("click", function() {
-                var canvas = $image.cropper("getCroppedCanvas");
-                var dataUrl = canvas.toDataURL();
-                $image.attr("src", dataUrl);
-                $image.cropper("destroy");
-                $cropButton.addClass("hidden");
-                $("[name='.$id.'_crop_image_base_64]").val($("#'.$id.'_preview_image").attr("src"));
-                return false;
+
+            $cropButton.on(\'click\', function () {
+                var canvas = $image.cropper(\'getCroppedCanvas\'),
+                    dataUrl = canvas.toDataURL();
+
+                $image.attr(\'src\', dataUrl).cropper(\'destroy\').off(\'load\', imageCropper);
+                $(\'[name="'.$id.'_crop_image_base_64]"\').val(dataUrl);
+                $cropButton.hide();
             });
         });
         </script>';

@@ -6,4 +6,6 @@
  * @package chamilo.plugin.redirection
  */
 
+api_protect_admin_script();
+
 RedirectionPlugin::create()->uninstall();

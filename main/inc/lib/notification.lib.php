@@ -371,7 +371,7 @@ class Notification extends Model
                 );
                 break;
             case self::NOTIFICATION_TYPE_MESSAGE:
-                $allow = api_get_configuration_value('hide_email_content');
+                $allow = api_get_configuration_value('messages_hide_mail_content');
                 if ($allow) {
                     $content = '';
                 }

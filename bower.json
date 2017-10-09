@@ -14,7 +14,7 @@
     "jquery": "2.2.*",
     "jquery-ui": "1.11.*",
     "bootstrap-daterangepicker": "2.1.*",
-    "ckeditor": "*",
+    "ckeditor": "4.6.2",
     "jquery-timeago": "1.4.*",
     "mediaelement": "4.*",
     "modernizr": "2.8.*",

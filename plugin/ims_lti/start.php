@@ -6,13 +6,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 $toolId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 if (empty($toolId)) {
-    if (api_is_platform_admin()) {
-        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/list.php');
-        exit;
-    }
-
     api_not_allowed(true);
-    exit;
 }
 
 api_protect_course_script();

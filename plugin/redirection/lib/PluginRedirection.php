@@ -7,7 +7,6 @@
  */
 
 class PluginRedirection {
-    
     # Insertamos la redirección
     public static function insert($user_id, $url)
     {

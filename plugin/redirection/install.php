@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Install
- * @author Enrique Alcaraz Lopez
- * @package chamilo.plugin.redirection
- */
+* Install
+* @author Enrique Alcaraz Lopez
+* @package chamilo.plugin.redirection
+*/
 
 $table = Database::get_main_table('plugin_redirection');
 

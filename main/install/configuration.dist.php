@@ -657,3 +657,8 @@ $_configuration['gradebook_badge_sidebar'] = [
 
 // Send email notification to admin when a user is created
 //$_configuration['send_notification_when_user_added'] = ['admins' => [1] ];
+
+// Hide email content forcing using to click in a link to visit the portal to check the message
+//$_configuration['messages_hide_mail_content'] = false;
+// If you install plugin redirection you need to change to true
+//$_configuration['plugin_redirection_enabled'] = false;

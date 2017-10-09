@@ -202,6 +202,7 @@ class UserManager
      * @param  string $address
      * @param  bool $sendEmailToAllAdmins
      * @param FormValidator $form
+     * @param int $creatorId
      *
      * @return mixed   new user id - if the new user creation succeeds, false otherwise
      * @desc The function tries to retrieve user id from the session.
@@ -230,9 +231,10 @@ class UserManager
         $isAdmin = false,
         $address = '',
         $sendEmailToAllAdmins = false,
-        $form = null
+        $form = null,
+        $creatorId = 0
     ) {
-        $currentUserId = api_get_user_id();
+        $creatorId = empty($creatorId) ? api_get_user_id() : 0;
         $hook = HookCreateUser::create();
         if (!empty($hook)) {
             $hook->notifyCreateUser(HOOK_EVENT_TYPE_PRE);
@@ -326,12 +328,6 @@ class UserManager
             }
         }
 
-        if (!empty($currentUserId)) {
-            $creator_id = $currentUserId;
-        } else {
-            $creator_id = 0;
-        }
-
         $currentDate = api_get_utc_datetime();
         $now = new DateTime();
 
@@ -366,7 +362,7 @@ class UserManager
             ->setEmail($email)
             ->setOfficialCode($official_code)
             ->setPictureUri($picture_uri)
-            ->setCreatorId($creator_id)
+            ->setCreatorId($creatorId)
             ->setAuthSource($authSource)
             ->setPhone($phone)
             ->setAddress($address)

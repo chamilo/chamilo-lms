@@ -371,6 +371,10 @@ class Notification extends Model
                 );
                 break;
             case self::NOTIFICATION_TYPE_MESSAGE:
+                $allow = api_get_configuration_value('messages_hide_mail_content');
+                if ($allow) {
+                    $content = '';
+                }
                 if (!empty($senderInfo)) {
                     $senderName = api_get_person_name(
                         $senderInfo['firstname'],

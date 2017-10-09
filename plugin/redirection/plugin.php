@@ -23,3 +23,4 @@ $form->addElement('text', 'url', get_lang('url'));
 $form->addButtonSave(get_lang('Save'), 'submit_button');
 
 $plugin_info['settings_form'] = $form;
+

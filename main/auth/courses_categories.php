@@ -349,17 +349,35 @@ function return_teacher($courseInfo)
     }
 
     $html = '<div class="block-author">';
-    foreach ($teachers as $value) {
-        $name = $value['firstname'].' '.$value['lastname'];
-        if ($length > 2) {
-             $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
-                    <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
-        } else {
+    if($length > 6){
+        $html .= '<a id="plist" data-trigger="focus" tabindex="0" role="button" class="btn btn-default panel_popover" data-toggle="popover" title="'.get_lang('CourseTeachers').'" data-html="true">
+                                        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                                    </a>';
+        $html .= '<div id="popover-content-plist" class="hide">';
+        foreach ($teachers as $value) {
+            $name = $value['firstname'].' '.$value['lastname'];
+            $html .= '<div class="popover-teacher">';
             $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
-                    <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
-            $html .= '<div class="teachers-details"><h5>
-                    <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
-                    . $name.'</a></h5><p>'.get_lang('Teacher').'</p></div>';
+                        <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
+                $html .= '<div class="teachers-details"><h5>
+                        <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
+                        . $name.'</a></h5></div>';
+            $html .= '</div>';
+        }
+        $html .= '</div>';
+    } else {
+        foreach ($teachers as $value) {
+            $name = $value['firstname'].' '.$value['lastname'];
+            if ($length > 2) {
+                 $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
+                        <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
+            } else {
+                $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
+                        <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
+                $html .= '<div class="teachers-details"><h5>
+                        <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
+                        . $name.'</a></h5><p>'.get_lang('Teacher').'</p></div>';
+            }
         }
     }
     $html .= '</div>';

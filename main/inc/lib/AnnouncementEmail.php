@@ -199,10 +199,11 @@ class AnnouncementEmail
      * Sender info
      *
      * @param string $key
+     * @param int $userId
      *
      * @return array
      */
-    public function sender($key = '', $userId = '')
+    public function sender($key = '', $userId = 0)
     {
         $_user = api_get_user_info($userId);
 

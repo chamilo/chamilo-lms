@@ -85,7 +85,7 @@ if (!empty($users)) {
         $lpLastConnection = Tracking::get_last_connection_time_in_lp(
             $user['user_id'],
             $courseCode,
-            array($lpId),
+            $lpId,
             $sessionId
         );
 

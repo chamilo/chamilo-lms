@@ -1104,7 +1104,7 @@ class GradebookUtils
         }
 
         $pdfParams = array(
-            'filename' => get_lang('FlatView').'_'.api_get_utc_datetime(),
+            'filename' => get_lang('FlatView').'_'.api_get_local_time(),
             'pdf_title' => $title,
             'course_code' => $course_code,
             'add_signatures' => ['Drh', 'Teacher', 'Date']

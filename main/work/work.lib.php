@@ -3445,6 +3445,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
         Display::addFlash(
             Display::return_message(get_lang('CommentAdded'))
         );
+
         $sql = "UPDATE $commentTable SET id = iid WHERE iid = $commentId";
         Database::query($sql);
     }
@@ -3473,6 +3474,11 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
             if (!empty($teachers)) {
                 $userIdListToSend = array_values($teachers);
             }
+        }
+
+        $sendNotification = api_get_course_setting('email_to_teachers_on_new_work_feedback', api_get_course_id());
+        if ($sendNotification != 1) {
+            $userIdListToSend = [];
         }
     }
 

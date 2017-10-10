@@ -5548,7 +5548,8 @@ class CourseManager
             'show_system_folders',
             'exercise_invisible_in_session',
             'enable_forum_auto_launch',
-            'show_course_in_user_language'
+            'show_course_in_user_language',
+            'email_to_teachers_on_new_work_feedback'
         );
 
         if (!empty(ExerciseLib::getScoreModels())) {

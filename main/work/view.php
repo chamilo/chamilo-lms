@@ -16,7 +16,6 @@ if (empty($id) || empty($work)) {
 if ($work['active'] != 1) {
     api_not_allowed(true);
 }
-
 $work['title'] = isset($work['title']) ? Security::remove_XSS($work['title']) : '';
 $work['description'] = isset($work['description']) ? Security::remove_XSS($work['description']) : '';
 

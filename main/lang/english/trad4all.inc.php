@@ -8049,9 +8049,18 @@ Click on one of them to see the list of courses it has.";
 $FeatureDisabledByAdministrator = "Feature disabled by administrator";
 $SubscribeUsersToLpCategory = "Subscribe users to category";
 $SubscribeGroupsToLpCategory = "Subscribe groups to category";
+$UserLpSubscriptionDescription = "Note that if the inscription of users in a category is available, then if you have already subscribe user to the category it will override the inscription of users here in the Learning Path";
+$UserLpCategorySubscriptionDescription = "Note that the inscription of users in a category will override the inscription of users in the Learning Path";
 $FieldTypeSelectWithTextField = "Select with text field";
 $FieldTypeTripleSelect = "Triple select";
+$DoubleValidationMessage = "You confirm that you really want to subscribe to this plateform.";
 $AddText = "Add text";
+$OralExpressionHelpText = "When you start recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied? To transmit the recording click on \"Save recorded audio\".";
 $BestScoreInLearningPath = "Best score in learning path";
 $BestScoreNotInLearningPath = "Best score not in learning path";
+$ReSendConfirmationMail = "Send confirmation mail again";
+$UserConfirmedNowYouCanLogInThePlatform = "User confirmed. Now you can login the platform.";
+$AgendaAvailableInCourseX = "Agenda available in course %s";
+$YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX = "You have been subscribed to the course %s the start date is %s and %s";
+$EmailToTeachersWhenNewWorkFeedback = "E-mail to teachers on new user's student publication feedback.";
 ?>

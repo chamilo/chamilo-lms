@@ -35,7 +35,10 @@ if (isset($current_thread['thread_id'])) {
         LINK_FORUM_THREAD
     );
 
-    $closedPost = null;
+    $buttonReply = '';
+    $buttonQuote = '';
+    $closedPost = '';
+
     if (!empty($rows)) {
         $postCount = count($rows);
         foreach ($rows as $row) {
@@ -309,7 +312,6 @@ if (isset($current_thread['thread_id'])) {
             }
             // The post title
             // The check if there is an attachment
-
             $attachment_list = getAllAttachment($row['post_id']);
             if (!empty($attachment_list) && is_array($attachment_list)) {
                 foreach ($attachment_list as $attachment) {

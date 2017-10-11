@@ -1,6 +1,6 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * See the progress for a user when the gamification mode is active
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>

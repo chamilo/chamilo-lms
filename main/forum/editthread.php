@@ -94,22 +94,39 @@ if (api_is_invitee()) {
 
 $groupId = api_get_group_id();
 if (!empty($groupId)) {
-    $groupProperties = GroupManager :: get_group_properties($groupId);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.$cidreq, 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.$cidreq, 'name' => get_lang('GroupSpace').' '.$groupProperties['name']);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.$forumId, 'name' => $currentForum['forum_title']);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.$forumId, 'name' => get_lang('EditThread'));
+    $groupProperties = GroupManager:: get_group_properties($groupId);
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.$cidreq,
+        'name' => get_lang('Groups'),
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.$cidreq,
+        'name' => get_lang('GroupSpace').' '.$groupProperties['name'],
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.$forumId,
+        'name' => $currentForum['forum_title'],
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.$forumId,
+        'name' => get_lang('EditThread'),
+    );
 } else {
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq, 'name' => $nameTools);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?'.$cidreq.'&forumcategory='.$currentForumCategory['cat_id'], 'name' => $currentForumCategory['cat_title']);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.$forumId, 'name' => $currentForum['forum_title']);
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?'.$cidreq.'&forumcategory='.$currentForumCategory['cat_id'],
+        'name' => $currentForumCategory['cat_title'],
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.$forumId,
+        'name' => $currentForum['forum_title'],
+    );
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('EditThread'));
 }
 
 $tableLink = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 /* Header */
-
 $htmlHeadXtra[] = <<<JS
     <script>
     $(document).on('ready', function() {

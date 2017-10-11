@@ -4241,7 +4241,6 @@ function move_thread_form()
 
 /**
  * This function displays the form for moving a post message to a different (already existing) or a new thread.
- * @return void HTML
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8

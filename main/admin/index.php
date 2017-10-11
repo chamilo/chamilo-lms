@@ -502,12 +502,12 @@ if (api_is_platform_admin()) {
             $items = array();
 
             foreach ($menuAdministratorItems as $pluginName) {
-                $pluginInfo = $plugin_obj->getPluginInfo($pluginName);
+                $pluginInfo = $plugin_obj->getPluginInfo($pluginName, true);
                 /** @var \Plugin $plugin */
                 $plugin = $pluginInfo['obj'];
                 $pluginUrl = $plugin->getAdminUrl();
 
-                if (!$pluginUrl) {
+                if (empty($pluginUrl)) {
                     continue;
                 }
 
@@ -518,7 +518,7 @@ if (api_is_platform_admin()) {
             }
 
             $blocks['plugins']['items'] = $items;
-            $blocks['plugins']['extra'] = null;
+            $blocks['plugins']['extra'] = '';
         }
     }
 

@@ -8,6 +8,8 @@
  */
 class RedirectionPlugin extends Plugin
 {
+    public $isAdminPlugin = true;
+
     /**
      * Class constructor
      */
@@ -15,11 +17,13 @@ class RedirectionPlugin extends Plugin
     {
         $version = '1.0';
         $author = 'Enrique Alcaraz, Julio Montoya';
-
         parent::__construct($version, $author, ['enabled' => 'boolean']);
+        $this->isAdminPlugin = true;
     }
 
-
+    /**
+     * @return RedirectionPlugin
+     */
     public static function create()
     {
         static $result = null;

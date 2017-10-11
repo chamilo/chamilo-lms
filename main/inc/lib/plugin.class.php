@@ -897,12 +897,12 @@ class Plugin
 
     /**
      * Get the admin URL for the plugin if Plugin::isAdminPlugin is true
-     * @return null|string
+     * @return string
      */
     public function getAdminUrl()
     {
         if (!$this->isAdminPlugin) {
-            return null;
+            return '';
         }
 
         $name = $this->get_name();
@@ -917,6 +917,6 @@ class Plugin
             return "$webPath/start.php";
         }
 
-        return null;
+        return '';
     }
 }

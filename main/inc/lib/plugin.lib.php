@@ -411,7 +411,6 @@ class AppPlugin
     public function getPluginInfo($plugin_name, $forced = false)
     {
         $pluginData = Session::read('plugin_data');
-
         if (isset($pluginData[$plugin_name]) && $forced == false) {
             return $pluginData[$plugin_name];
         } else {

@@ -432,7 +432,7 @@ class Database
      * @param array     $attributes
      * @param bool      $show_query
      *
-     * @return false|string
+     * @return false|int
      */
     public static function insert($table_name, $attributes, $show_query = false)
     {
@@ -455,7 +455,7 @@ class Database
             }
 
             if ($result) {
-                return self::getManager()->getConnection()->lastInsertId();
+                return (int) self::getManager()->getConnection()->lastInsertId();
             }
         }
 

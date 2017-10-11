@@ -26,6 +26,7 @@ class SepePlugin extends Plugin
     const TABLE_SEPE_LOG = 'plugin_sepe_log';
     
     public $isAdminPlugin = true;
+
     /**
      *
      * @return StaticPlugin

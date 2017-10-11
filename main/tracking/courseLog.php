@@ -408,7 +408,7 @@ if (count($a_students) > 0) {
         $html .= $extra_field_select;
     }
 
-    $html .= $form->return_form();
+    $html .= $form->returnForm();
 
     if ($export_csv) {
         $csv_content = array();

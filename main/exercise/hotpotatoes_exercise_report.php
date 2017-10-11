@@ -153,7 +153,7 @@ $form->addElement('radio', 'export_format', null, get_lang('ExportAsCSV'), 'csv'
 //$form->addElement('radio', 'export_format', null, get_lang('ExportAsXLS'), 'xls', array('id' => 'export_format_xls_label'));
 //$form->addElement('checkbox', 'load_extra_data', null, get_lang('LoadExtraData'), '0', array('id' => 'export_format_xls_label'));
 $form->setDefaults(array('export_format' => 'csv'));
-$extra .= $form->return_form();
+$extra .= $form->returnForm();
 $extra .= '</div>';
 
 if ($is_allowedToEdit) {

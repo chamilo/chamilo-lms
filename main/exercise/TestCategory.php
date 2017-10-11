@@ -101,6 +101,8 @@ class TestCategory
     /**
      * Removes the category from the database
      * if there were question in this category, the link between question and category is removed
+     * @param int $id
+     * @return bool
      */
     public function removeCategory($id)
     {
@@ -367,7 +369,7 @@ class TestCategory
      * Return the list of different categories NAME for a test
      * @param int exercise id
      * @param bool
-     * @return integer of string
+     * @return array
      *
      * @author function rewrote by jmontoya
      */
@@ -452,10 +454,13 @@ class TestCategory
     /**
      * return the number of question for a test using random by category
      * input  : test_id, number of random question (min 1)
+     * @param int $exerciseId
+     * @param int $random
+     * @return int
      * hubert.borderiou 07-04-2011
      * question without categories are not counted
      */
-    public static function getNumberOfQuestionRandomByCategory($exerciseId, $in_nbrandom)
+    public static function getNumberOfQuestionRandomByCategory($exerciseId, $random)
     {
         $count = 0;
         $categories = self::getListOfCategoriesIDForTest($exerciseId);
@@ -469,8 +474,8 @@ class TestCategory
                 $category['id']
             );
 
-            if ($nbQuestionInThisCat > $in_nbrandom) {
-                $count += $in_nbrandom;
+            if ($nbQuestionInThisCat > $random) {
+                $count += $random;
             } else {
                 $count += $nbQuestionInThisCat;
             }
@@ -481,7 +486,7 @@ class TestCategory
 
     /**
      * Return an array (id=>name)
-     * tabresult[0] = get_lang('NoCategory');
+     * array[0] = get_lang('NoCategory');
      *
      * @param int $courseId
      *
@@ -506,13 +511,12 @@ class TestCategory
      * Returns an array of question ids for each category
      * $categories[1][30] = 10, array with category id = 1 and question_id = 10
      * A question has "n" categories
-     * @param int exercise
+     * @param int $exerciseId
      * @param array $check_in_question_list
      * @param array $categoriesAddedInExercise
-    *
-    * @param int $exerciseId
-    * @return array
-    */
+     *
+     * @return array
+     */
     public static function getQuestionsByCat(
         $exerciseId,
         $check_in_question_list = array(),
@@ -642,15 +646,16 @@ class TestCategory
     }
 
     /**
-    * Display signs [+] and/or (>0) after question title if question has options
-    * scoreAlwaysPositive and/or uncheckedMayScore
-    */
-    public function displayQuestionOption($in_objQuestion)
+     * Display signs [+] and/or (>0) after question title if question has options
+     * scoreAlwaysPositive and/or uncheckedMayScore
+     * @param $objQuestion
+     */
+    public function displayQuestionOption($objQuestion)
     {
-        if ($in_objQuestion->type == MULTIPLE_ANSWER && $in_objQuestion->scoreAlwaysPositive) {
+        if ($objQuestion->type == MULTIPLE_ANSWER && $objQuestion->scoreAlwaysPositive) {
             echo "<span style='font-size:75%'> (>0)</span>";
         }
-        if ($in_objQuestion->type == MULTIPLE_ANSWER && $in_objQuestion->uncheckedMayScore) {
+        if ($objQuestion->type == MULTIPLE_ANSWER && $objQuestion->uncheckedMayScore) {
             echo "<span style='font-size:75%'> [+]</span>";
         }
     }
@@ -748,8 +753,8 @@ class TestCategory
 
     /**
      * Returns a category summary report
-     * @params int $exerciseId
-     * @params array $category_list
+     * @param int $exerciseId
+     * @param array $category_list
      * pre filled array with the category_id, score, and weight
      * example: array(1 => array('score' => '10', 'total' => 20));
      *
@@ -882,7 +887,7 @@ class TestCategory
      * @param string $order
      * @param bool $shuffle
      * @param bool $excludeCategoryWithNoQuestions
-     * @return array|bool
+     * @return array
      */
     public function getCategoryExerciseTree(
         $exercise,
@@ -908,7 +913,6 @@ class TestCategory
         }
 
         $categories = array();
-
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -932,7 +936,7 @@ class TestCategory
     }
 
     /**
-     * @param $form
+     * @param FormValidator $form
      * @param string $action
      */
     public function getForm(& $form, $action = 'new')
@@ -1067,8 +1071,8 @@ class TestCategory
 
     /**
      * Sorts an array
-     * @param $array
-     * @return mixed
+     * @param array $array
+     * @return array
      */
     public function sort_tree_array($array)
     {

@@ -665,11 +665,9 @@ class Plugin
      * configuration should trigger the use of a callback method
      * @param array $values sent back from the course configuration script
      *
-     * @return void
      */
     public function course_settings_updated($values = array())
     {
-
     }
 
     /**

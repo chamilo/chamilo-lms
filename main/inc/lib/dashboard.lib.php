@@ -111,10 +111,9 @@ class DashboardManager
      * display checkboxes for dashboard plugin list
      * @param string  $plugin_path
      *
-     * @return void
      */
-    public static function display_dashboard_plugin_checkboxes($plugin_path) {
-
+    public static function display_dashboard_plugin_checkboxes($plugin_path)
+    {
         $tbl_block = Database::get_main_table(TABLE_MAIN_BLOCK);
 
         $sql = "SELECT * FROM $tbl_block
@@ -313,8 +312,8 @@ class DashboardManager
 
     /**
      * get data about enabled dashboard block (stored insise block table)
-     * @param  string	$path plugin path
-     * @return array 	data
+     * @param  string $path plugin path
+     * @return array    data
      */
     public static function get_enabled_dashboard_blocks($path = '')
     {
@@ -339,7 +338,6 @@ class DashboardManager
     /**
      * display user dashboard list
      * @param int  User id
-     * @return void
      */
     public static function display_user_dashboard_list($user_id)
     {
@@ -419,7 +417,6 @@ class DashboardManager
      * display checkboxes for user dashboard list
      * @param int    User id
      * @param int    Block id
-     * @return void
      */
     public static function display_user_dashboard_list_checkboxes($user_id, $block_id)
     {
@@ -493,9 +490,9 @@ class DashboardManager
 
     /**
      * This function update extra user blocks data after closing a dashboard block
-     * @param int        User id
+     * @param int $user_id       User id
      * @param string    plugin path
-     * @param integer $user_id
+     *
      * @return bool
      */
     public static function close_user_block($user_id, $path)
@@ -525,8 +522,8 @@ class DashboardManager
      * get links for styles from dashboard plugins
      * @return string   links
      */
-    public static function get_links_for_styles_from_dashboard_plugins() {
-
+    public static function get_links_for_styles_from_dashboard_plugins()
+    {
         return '<link rel="stylesheet" href="'.api_get_path(WEB_PLUGIN_PATH).'dashboard/css/default.css" type="text/css" />'.PHP_EOL;
     }
 }

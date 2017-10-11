@@ -223,7 +223,7 @@ class Career extends Model
     /**
      * @param array $params
      * @param bool $show_query
-     * @return bool
+     * @return int
      */
     public function save($params, $show_query = false)
     {

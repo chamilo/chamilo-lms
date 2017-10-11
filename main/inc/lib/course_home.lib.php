@@ -234,9 +234,9 @@ class CourseHome
     /**
      * Displays the tools of a certain category.
      *
-     * @return void
-     * @param string $course_tool_category	contains the category of tools to display:
+     * @param string $course_tool_category contains the category of tools to display:
      * "Public", "PublicButHide", "courseAdmin", "claroAdmin"
+     * @return string
      */
     public static function show_tool_2column($course_tool_category)
     {

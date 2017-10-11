@@ -67,6 +67,8 @@ class MessageManager
 
     /**
      * Gets the total number of messages, used for the inbox sortable table
+     * @param bool $unread
+     * @return int
      */
     public static function get_number_of_messages($unread = false)
     {
@@ -100,6 +102,7 @@ class MessageManager
      * Gets information about some messages, used for the inbox sortable table
      * @param int $from
      * @param int $number_of_items
+     * @param string $column
      * @param string $direction
      * @return array
      */
@@ -1221,6 +1224,7 @@ class MessageManager
      * Displays messages of a group with nested view
      *
      * @param int $group_id
+     * @return string
      */
     public static function display_messages_for_group($group_id)
     {
@@ -1517,10 +1521,14 @@ class MessageManager
                 $date = '';
                 if ($topic['send_date'] != $topic['update_date']) {
                     if (!empty($topic['update_date'])) {
-                        $date = '<div class="date"> '.Display::returnFontAwesomeIcon('calendar').' '.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).'</div>';
+                        $date = '<div class="date"> '.
+                            Display::returnFontAwesomeIcon('calendar').' '.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).
+                        '</div>';
                     }
                 } else {
-                    $date = '<div class="date"> '.Display::returnFontAwesomeIcon('calendar').get_lang('Created').' '.date_to_str_ago($topic['send_date']).'</div>';
+                    $date = '<div class="date"> '.
+                            Display::returnFontAwesomeIcon('calendar').get_lang('Created').' '.date_to_str_ago($topic['send_date']).
+                    '</div>';
                 }
                 $attachment = '<div class="message-attach">'.(!empty($files_attachments) ? implode('<br />', $files_attachments) : '').'</div>';
                 $html_items .= '<div class="col-md-10">';
@@ -1528,7 +1536,9 @@ class MessageManager
                 $html_items .= $links;
                 $html_items .= '<div class="username">'.$user_link.'</div>';
                 $html_items .= $date;
-                $html_items .= '<div class="message">'.Security::remove_XSS($topic['content'], STUDENT, true).'</div>'.$attachment.'</div>';
+                $html_items .= '<div class="message">'.
+                    Security::remove_XSS($topic['content'], STUDENT, true).
+                    '</div>'.$attachment.'</div>';
                 $html_items .= '</div>';
                 $html_items .= '</div>';
 
@@ -1826,14 +1836,14 @@ class MessageManager
 
     /**
      * @param string $keyword
-     * @return null|string
+     * @return string
      */
     public static function outbox_display($keyword = '')
     {
         Session::write('message_sent_search_keyword', $keyword);
         $success = get_lang('SelectedMessagesDeleted').'&nbsp</b><br /><a href="outbox.php">'.get_lang('BackToOutbox').'</a>';
 
-        $html = null;
+        $html = '';
         if (isset($_REQUEST['action'])) {
             switch ($_REQUEST['action']) {
                 case 'delete':
@@ -1927,7 +1937,7 @@ class MessageManager
         $lastId = intval($lastId);
 
         if (empty($userId)) {
-            return 0;
+            return [];
         }
 
         $messagesTable = Database::get_main_table(TABLE_MESSAGE);
@@ -2008,9 +2018,14 @@ class MessageManager
             FormValidator::LAYOUT_INLINE
         );
 
-        $form->addElement('text', 'keyword', false, array(
-            'aria-label' => get_lang('Search')
-        ));
+        $form->addElement(
+            'text',
+            'keyword',
+            false,
+            array(
+                'aria-label' => get_lang('Search'),
+            )
+        );
         $form->addButtonSearch(get_lang('Search'));
 
         return $form;

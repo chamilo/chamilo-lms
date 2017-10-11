@@ -167,7 +167,7 @@ class Model
      * Saves an element into the DB
      * @param array $params
      * @param bool  $show_query Whether to show the query in logs or not (passed to Database::insert())
-     * @return bool
+     * @return bool|int
      *
      */
     public function save($params, $show_query = false)

@@ -479,7 +479,6 @@ class Notification extends Model
         $content = html_entity_decode($content, ENT_QUOTES);
 
         $gcmRegistrationIds = [];
-
         foreach ($userIds as $userId) {
             $extraFieldValue = new ExtraFieldValue('user');
             $valueInfo = $extraFieldValue->get_values_by_handler_and_field_variable(

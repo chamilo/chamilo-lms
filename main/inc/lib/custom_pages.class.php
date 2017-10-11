@@ -64,7 +64,7 @@ class CustomPages
      *
      * @param int $url_id
      *
-     * @return string
+     * @return array
      */
     public static function getURLImages($url_id = null)
     {

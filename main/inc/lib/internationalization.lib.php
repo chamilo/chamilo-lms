@@ -815,7 +815,7 @@ function api_get_months_long($language = null)
  * This parameter has meaning with the format PERSON_NAME_COMMON_CONVENTION only.
  * @param string $encoding (optional)    The used internally by this function
  * character encoding. If it is omitted, the platform character set will be used by default.
- * @return bool The result is sort of full name of the person.
+ * @return string The result is sort of full name of the person.
  * Sample results:
  * Peter Ustinoff or Dr. Peter Ustinoff     - the Western order
  * Ustinoff Peter or Dr. Ustinoff Peter     - the Eastern order

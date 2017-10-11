@@ -1,11 +1,11 @@
 <?php
 /* See license terms in /license.txt */
 /**
-*	This is the file display library for Dokeos.
-*	Include/require it in your code to use its functionality.
-*   @todo move this file to DocumentManager
-*	@package chamilo.library
-*/
+ * This is the file display library for Dokeos.
+ * Include/require it in your code to use its functionality.
+ * @todo move this file to DocumentManager
+ * @package chamilo.library
+ */
 
 /* FILE DISPLAY FUNCTIONS */
 /**
@@ -264,9 +264,9 @@ function folder_size($dir_name)
  * Calculates the total size of a directory by adding the sizes (that
  * are stored in the database) of all files & folders in this directory.
  *
- * @param 	string  $path
- * @param 	boolean $can_see_invisible
- * @return 	int Total size
+ * @param    string $path
+ * @param    boolean $can_see_invisible
+ * @return    int Total size
  */
 function get_total_folder_size($path, $can_see_invisible = false)
 {

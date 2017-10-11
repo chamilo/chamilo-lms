@@ -49,8 +49,7 @@ class Chat extends Model
 
     /**
     * Set user chat status
-    * @param int 0 if disconnected, 1 if connected
-    * @param integer $status
+    * @param int $status 0 if disconnected, 1 if connected
      *
     * @return void
     */
@@ -63,6 +62,12 @@ class Chat extends Model
         );
     }
 
+    /**
+     * @param int $currentUserId
+     * @param int $userId
+     * @param bool $latestMessages
+     * @return array
+     */
     public function getLatestChat($currentUserId, $userId, $latestMessages)
     {
         $items = self::getPreviousMessages(

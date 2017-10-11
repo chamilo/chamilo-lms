@@ -98,12 +98,12 @@ class NotebookManager
 
     /**
      * @param int $notebook_id
-     * @return array|mixed
+     * @return array
      */
     public static function get_note_information($notebook_id)
     {
         if (empty($notebook_id)) {
-            return array();
+            return [];
         }
 
         // Database table definition
@@ -212,6 +212,7 @@ class NotebookManager
             'delete',
             api_get_user_id()
         );
+
         return true;
     }
 

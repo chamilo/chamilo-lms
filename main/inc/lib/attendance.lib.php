@@ -1313,6 +1313,7 @@ class Attendance
         $tbl_attendance_cal = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $user_id = intval($user_id);
         $attendance_id = intval($attendance_id);
+        $groupId = (int) $groupId;
         $course_id = api_get_course_int_id();
         if (empty($groupId)) {
             $sql = "SELECT score FROM $tbl_attendance_result
@@ -1385,7 +1386,7 @@ class Attendance
         $attendance_id,
         $type = 'all',
         $calendar_id = null,
-        $groupId = null,
+        $groupId = 0,
         $showAll = false
     ) {
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);

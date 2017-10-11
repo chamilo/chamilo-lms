@@ -153,6 +153,7 @@ class AttendanceController
      * It's used for delete attendaces
      * render to attendance_list view
      * @param int $attendance_id
+     * @return bool
      */
     public function attendance_delete($attendance_id)
     {
@@ -172,6 +173,7 @@ class AttendanceController
             $message['message_attendance_delete'] = true;
         }
         $this->attendance_list();
+        return true;
     }
 
     /**

@@ -36,6 +36,7 @@ class Attendance
 
     /**
      * Get the total number of attendance inside current course and current session
+     * @param int $active
      * @see SortableTable#get_total_number_of_items()
      */
     public static function get_number_of_attendances($active = -1)
@@ -62,7 +63,7 @@ class Attendance
      * @param   int     $session_id session id (optional)
      * @return  array    attendances list
      */
-    public function get_attendances_list($course_id = '', $session_id = null)
+    public function get_attendances_list($course_id = '', $session_id = 0)
     {
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $data = array();
@@ -73,7 +74,7 @@ class Attendance
             $course_id = intval($course_id);
         }
 
-        $session_id = isset($session_id) ? intval($session_id) : api_get_session_id();
+        $session_id = !empty($session_id) ? intval($session_id) : api_get_session_id();
         $condition_session = api_get_session_condition($session_id);
 
         // Get attendance data
@@ -636,7 +637,7 @@ class Attendance
      * @param int $groupId
      * @return array  users data
      */
-    public function get_users_rel_course($attendance_id = 0, $groupId = null)
+    public function get_users_rel_course($attendance_id = 0, $groupId = 0)
     {
         $current_session_id = api_get_session_id();
         $current_course_id  = api_get_course_id();
@@ -731,7 +732,7 @@ class Attendance
             $value['username'] = $user_data['username'];
             $value['user_id'] = $uid;
 
-            //Sending only 5 items in the array instead of 60
+            // Sending only 5 items in the array instead of 60
             $a_users[$key] = $value;
         }
 
@@ -1176,7 +1177,7 @@ class Attendance
     public function get_users_attendance_sheet(
         $attendance_id,
         $user_id = 0,
-        $groupId = null
+        $groupId = 0
     ) {
         $tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
@@ -1301,9 +1302,10 @@ class Attendance
      * Get user' score from current attendance
      * @param int $user_id
      * @param int $attendance_id
+     * @param int $groupId
      * @return int score
      */
-    public function get_user_score($user_id, $attendance_id, $groupId = null)
+    public function get_user_score($user_id, $attendance_id, $groupId = 0)
     {
         $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
         $tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);

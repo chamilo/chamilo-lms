@@ -102,7 +102,6 @@ class AppPlugin
     }
 
     /**
-     * @return array
      */
     public function setInstalledPluginListObject()
     {
@@ -468,6 +467,7 @@ class AppPlugin
 
     /**
      * Remove all regions of an specific plugin
+     * @param string $plugin
      */
     public function remove_all_regions($plugin)
     {
@@ -636,7 +636,6 @@ class AppPlugin
      * When saving the plugin values in the course settings, check whether
      * a callback method should be called and send it the updated settings
      * @param array $values The new settings the user just saved
-     * @return void
      */
     public function saveCourseSettingsHook($values)
     {

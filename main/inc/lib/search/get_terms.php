@@ -6,9 +6,7 @@
  * related with the term passed
  * @package chamilo.include.search
  */
-/**
- * Code
- */
+
 $terms_list = array();
 
 // verify parameter and return a right value to avoid problems parsing it
@@ -26,7 +24,8 @@ require_once api_get_path(LIBRARY_PATH).'search/ChamiloQuery.php';
  * @param array $specific_fields
  * @return array $sf_terms
  */
-function get_usual_sf_terms($filter, $specific_fields) {
+function get_usual_sf_terms($filter, $specific_fields)
+{
     $sf_terms = array();
     $dkterms = chamilo_query_simple_query('', 0, 1000, $filter);
 

@@ -8,7 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Chat
  *
- * @ORM\Table(name="chat", indexes={@ORM\Index(name="idx_chat_to_user", columns={"to_user"}), @ORM\Index(name="idx_chat_from_user", columns={"from_user"})})
+ * @ORM\Table(name="chat", indexes={
+ *     @ORM\Index(name="idx_chat_to_user", columns={"to_user"}),
+ *     @ORM\Index(name="idx_chat_from_user", columns={"from_user"})
+ * })
  * @ORM\Entity
  */
 class Chat

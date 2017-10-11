@@ -132,6 +132,4 @@ class SequenceResource
 
         return $this;
     }
-
-
 }

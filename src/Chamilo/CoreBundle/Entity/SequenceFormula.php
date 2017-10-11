@@ -34,7 +34,6 @@ class SequenceFormula
      **/
     private $variable;
 
-
     /**
      * Get id
      *
@@ -82,6 +81,4 @@ class SequenceFormula
 
         return $this;
     }
-
-
 }

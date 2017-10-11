@@ -34,7 +34,6 @@ class SequenceValid
      **/
     private $condition;
 
-
     /**
      * Get id
      *
@@ -84,5 +83,4 @@ class SequenceValid
 
         return $this;
     }
-
 }

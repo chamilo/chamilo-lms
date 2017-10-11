@@ -161,6 +161,4 @@ class SequenceCondition
 
         return $this;
     }
-
-
 }

@@ -161,6 +161,4 @@ class SequenceMethod
 
         return $this;
     }
-
-
 }

@@ -112,5 +112,4 @@ class SequenceTypeEntity
 
         return $this;
     }
-
 }

@@ -167,5 +167,4 @@ class CourseRelUserCatalogue
     {
         return $this->visible;
     }
-
 }

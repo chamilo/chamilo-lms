@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class
+ * ClassItem
  *
  * @ORM\Table(name="class_item")
  * @ORM\Entity
@@ -40,7 +40,7 @@ class ClassItem
      * Set code
      *
      * @param string $code
-     * @return Class
+     * @return ClassItem
      */
     public function setCode($code)
     {
@@ -63,7 +63,7 @@ class ClassItem
      * Set name
      *
      * @param string $name
-     * @return Class
+     * @return ClassItem
      */
     public function setName($name)
     {
@@ -91,6 +91,4 @@ class ClassItem
     {
         return $this->id;
     }
-
-
 }

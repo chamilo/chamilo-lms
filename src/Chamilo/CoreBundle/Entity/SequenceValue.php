@@ -300,6 +300,4 @@ class SequenceValue
 
         return $this;
     }
-
-
 }

@@ -3411,7 +3411,7 @@ class DocumentManager
         $session_id = 0,
         $add_move_button = false,
         $filter_by_folder = null,
-        $overwrite_url = null,
+        $overwrite_url = '',
         $showInvisibleFiles = false,
         $showOnlyFolders = false,
         $folderId = false
@@ -3420,7 +3420,6 @@ class DocumentManager
             return '';
         }
 
-        $overwrite_url = Security::remove_XSS($overwrite_url);
         $user_id = api_get_user_id();
         $userInfo = api_get_user_info();
 
@@ -3746,7 +3745,7 @@ class DocumentManager
         // Show the "image name" not the filename of the image.
         if ($lp_id) {
             // LP URL
-            $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&amp;action=add_item&amp;type='.TOOL_DOCUMENT.'&amp;file='.$documentId.'&amp;lp_id='.$lp_id;
+            $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&file='.$documentId.'&lp_id='.$lp_id;
             if (!empty($overwrite_url)) {
                 $url = $overwrite_url.'&cidReq='.$course_info['code'].'&id_session='.$session_id.'&document_id='.$documentId.'';
             }
@@ -3764,12 +3763,13 @@ class DocumentManager
         }
 
         $link = Display::url(
-            '<img alt="" src="'.$img.'" title="" />&nbsp;'.$my_file_title, $url,
+            '<img alt="" src="'.$img.'" title="" />&nbsp;'.$my_file_title,
+            $url,
             array('target' => $target, 'class' => 'moved')
         );
 
         $directUrl = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&id_session='.$session_id.'&id='.$documentId;
-        $link .= Display::url(
+        $link .= '&nbsp;'.Display::url(
             Display::return_icon('preview_view.png', get_lang('Preview')),
             $directUrl,
             ['target' => '_blank']
@@ -3909,7 +3909,7 @@ class DocumentManager
         $lp_id = false,
         $target = '',
         $add_move_button = false,
-        $overwrite_url = null,
+        $overwrite_url = '',
         $folderId = false
     ) {
         $return = '';

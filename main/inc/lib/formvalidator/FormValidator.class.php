@@ -99,7 +99,10 @@ class FormValidator extends HTML_QuickForm
         $renderer->setHeaderTemplate('<legend>{header}</legend>');
 
         //Set required field template
-        $this->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
+        $this->setRequiredNote(
+            '<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>'
+        );
+
         $noteTemplate = <<<EOT
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-10">{requiredNote}</div>
@@ -468,16 +471,16 @@ EOT;
         );
     }
 
-
     /**
      * Returns a button with the primary color and a paper-plane icon
      * @param string $label Text appearing on the button
      * @param string $name Element name (for form treatment purposes)
      * @param bool $createElement Whether to use the create or add method
+     * @param array $attributes
      *
      * @return HTML_QuickForm_button
      */
-    public function addButtonSend($label, $name = 'submit', $createElement = false, $attributes = array())
+    public function addButtonSend($label, $name = 'submit', $createElement = false, $attributes = [])
     {
         return $this->addButton(
             $name,
@@ -514,7 +517,7 @@ EOT;
      * @param array $attributes Additional attributes
      * @return HTML_QuickForm_button
      */
-    public function addButtonNext($label, $name = 'submit', $attributes = array())
+    public function addButtonNext($label, $name = 'submit', $attributes = [])
     {
         return $this->addButton(
             $name,
@@ -726,7 +729,7 @@ EOT;
      *
      * @return HTML_QuickForm_checkbox
      */
-    public function addCheckBox($name, $label, $text = '', $attributes = array())
+    public function addCheckBox($name, $label, $text = '', $attributes = [])
     {
         return $this->addElement('checkbox', $name, $label, $text, $attributes);
     }
@@ -762,9 +765,9 @@ EOT;
      * @param array  $options
      * @param array  $attributes
      *
-     * @return HTML_QuickForm_radio
+     * @return HTML_QuickForm_group
      */
-    public function addRadio($name, $label, $options = array(), $attributes = array())
+    public function addRadio($name, $label, $options = [], $attributes = [])
     {
         $group = array();
         foreach ($options as $key => $value) {
@@ -782,7 +785,7 @@ EOT;
      *
      * @return HTML_QuickForm_select
      */
-    public function addSelect($name, $label, $options = array(), $attributes = array())
+    public function addSelect($name, $label, $options = [], $attributes = [])
     {
         return $this->addElement('select', $name, $label, $options, $attributes);
     }
@@ -938,7 +941,9 @@ EOT;
 
         if ($geolocalization) {
             $gmapsApiKey = $gMapsPlugin->get('api_key');
-            $this->addHtml('<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key='.$gmapsApiKey.'" ></script>');
+            $this->addHtml(
+                '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key='.$gmapsApiKey.'" ></script>'
+            );
         }
         $this->addElement(
             'text',
@@ -952,8 +957,13 @@ EOT;
             <div class="form-group">
                 <label for="geolocalization_'.$name.'" class="col-sm-2 control-label"></label>
                 <div class="col-sm-8">
-                    <button class="null btn btn-default " id="geolocalization_'.$name.'" name="geolocalization_'.$name.'" type="submit"><em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'</button>
-                    <button class="null btn btn-default " id="myLocation_'.$name.'" name="myLocation_'.$name.'" type="submit"><em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'</button>
+                    <button class="null btn btn-default " id="geolocalization_'.$name.'" name="geolocalization_'.$name.'" type="submit">
+                        <em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'
+                    </button>
+                    <button class="null btn btn-default " id="myLocation_'.$name.'" name="myLocation_'.$name.'" type="submit">
+                    <em class="fa fa-crosshairs"></em> 
+                    '.get_lang('MyLocation').'
+                    </button>
                 </div>
             </div>
         ');
@@ -993,7 +1003,6 @@ EOT;
                             return false;
                         }
                     });
-
                 } else {
                     $("#map_'.$name.'").html("<div class=\"alert alert-info\">'.get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap').'</div>");
                 }
@@ -1015,7 +1024,6 @@ EOT;
                     var geoOptions = {
                         enableHighAccuracy: true
                     };
-
                     navigator.geolocation.getCurrentPosition(geoPosition, geoError, geoOptions);
                 }
             }
@@ -1277,7 +1285,7 @@ EOT;
      * @param bool $required Optional. Is the form-element required (default=true)
      * @param array $attributes Optional. List of attributes for the form-element
      */
-    public function addUrl($name, $label, $required = true, $attributes = array())
+    public function addUrl($name, $label, $required = true, $attributes = [])
     {
         $this->addElement('url', $name, $label, $attributes);
         $this->applyFilter($name, 'trim');
@@ -1753,7 +1761,7 @@ EOT;
      * @param string $label
      * @param string $imageSize Optional. Small, medium or large image
      * @param string $subtitle Optional. The subtitle for the field
-     * @return \InputAvatar
+     * @return \UserAvatar
      */
     public function addUserAvatar($name, $label, $imageSize = 'small', $subtitle = '')
     {
@@ -1763,9 +1771,9 @@ EOT;
 
 /**
  * Cleans HTML text filter
- * @param string $html			HTML to clean
+ * @param string $html HTML to clean
  * @param int $mode (optional)
- * @return string				The cleaned HTML
+ * @return string The cleaned HTML
  */
 function html_filter($html, $mode = NO_HTML)
 {
@@ -1796,8 +1804,8 @@ function html_filter_student_fullpage($html)
 
 /**
  * Cleans mobile phone number text
- * @param string $mobilePhoneNumber     Mobile phone number to clean
- * @return string                       The cleaned mobile phone number
+ * @param string $mobilePhoneNumber Mobile phone number to clean
+ * @return string The cleaned mobile phone number
  */
 function mobile_phone_number_filter($mobilePhoneNumber)
 {

@@ -3001,25 +3001,6 @@ class DocumentManager
                     if (!empty($documentId)) {
                         $table_document = Database::get_course_table(TABLE_DOCUMENT);
                         $params = array();
-                        /*if ($if_exists == 'rename') {
-                            // Remove prefix
-                            $suffix = self::getDocumentSuffix(
-                                $course_info,
-                                $sessionId,
-                                api_get_group_id()
-                            );
-                            $new_path = basename($new_path);
-                            $new_path = str_replace($suffix, '', $new_path);
-                            error_log('renamed');
-                            error_log($new_path);
-                            $params['title'] = get_document_title($new_path);
-                        } else {
-                            if (!empty($title)) {
-                                $params['title'] = get_document_title($title);
-                            } else {
-                                $params['title'] = get_document_title($files['file']['name']);
-                            }
-                        }*/
 
                         if (!empty($title)) {
                             $params['title'] = $title;
@@ -3059,7 +3040,6 @@ class DocumentManager
                             false,
                             $sessionId
                         );
-
                         return $documentData;
                     }
                 }
@@ -5247,8 +5227,10 @@ class DocumentManager
      *
      * @param array    An array containing the folders we want to be able to select
      * @param string    The current folder (path inside of the "document" directory, including the prefix "/")
-     * @param string    Group directory, if empty, prevents documents to be uploaded (because group documents cannot be uploaded in root)
-     * @param boolean    Whether to change the renderer (this will add a template <span> to the QuickForm object displaying the form)
+     * @param string    Group directory, if empty, prevents documents to be uploaded
+     * (because group documents cannot be uploaded in root)
+     * @param boolean    Whether to change the renderer (this will add a template <span>
+     * to the QuickForm object displaying the form)
      * @return string html form
      */
     public static function build_directory_selector(
@@ -5347,7 +5329,7 @@ class DocumentManager
      *
      * @param array $document_data
      * @param array $course_info
-     * @param int $show_as_icon - if it is true, only a clickable icon will be shown
+     * @param bool $show_as_icon - if it is true, only a clickable icon will be shown
      * @param int $visibility (1/0)
      * @param int $counter
      * @param int $size
@@ -5891,13 +5873,18 @@ class DocumentManager
      * @param int $visibility
      * @param array $documentData
      * @param boolean $isCertificateMode
-     * @parem int $parentId
+     * @param int $parentId
      * @return null|string
      */
-    private static function getButtonVisibility($isReadOnly, $visibility, array $documentData, $isCertificateMode, $parentId)
-    {
-        $visibility_icon = ($visibility == 0) ? 'invisible' : 'visible';
-        $visibility_command = ($visibility == 0) ? 'set_visible' : 'set_invisible';
+    private static function getButtonVisibility(
+        $isReadOnly,
+        $visibility,
+        array $documentData,
+        $isCertificateMode,
+        $parentId
+    ) {
+        $visibility_icon = $visibility == 0 ? 'invisible' : 'visible';
+        $visibility_command = $visibility == 0 ? 'set_visible' : 'set_invisible';
         $courseParams = api_get_cidreq();
 
         if ($isReadOnly) {
@@ -5933,8 +5920,13 @@ class DocumentManager
      * @param int $parentId
      * @return string
      */
-    private static function getButtonDelete($isReadOnly, array $documentData, $isCertificateMode, $curDirPath, $parentId)
-    {
+    private static function getButtonDelete(
+        $isReadOnly,
+        array $documentData,
+        $isCertificateMode,
+        $curDirPath,
+        $parentId
+    ) {
         $iconEn = Display::return_icon('delete.png', get_lang('Delete'));
         $iconDis = Display::return_icon('delete_na.png', get_lang('ThisFolderCannotBeDeleted'));
         $path = $documentData['path'];
@@ -6023,7 +6015,7 @@ class DocumentManager
         $curdirpath = urlencode($curdirpath);
         $extension = pathinfo($path, PATHINFO_EXTENSION);
         //@todo Implement remote support for converter
-        $usePpt2lp = (api_get_setting('service_ppt2lp', 'active') == 'true' && api_get_setting('service_ppt2lp', 'host') == 'localhost');
+        $usePpt2lp = api_get_setting('service_ppt2lp', 'active') == 'true' && api_get_setting('service_ppt2lp', 'host') == 'localhost';
         $formatTypeList = self::getFormatTypeListConvertor('from', $extension);
         $formatType = current($formatTypeList);
 
@@ -6114,7 +6106,6 @@ class DocumentManager
      * @param $curdirpath
      * @param $move_file
      * @param string $group_dir
-     * @param $form
      *
      * @return string
      */
@@ -6236,7 +6227,7 @@ class DocumentManager
                 $path_displayed .= $tmp_folders_titles[$tmp_path];
             } else {
                 $sql = 'SELECT title FROM '.Database::get_course_table(TABLE_DOCUMENT).'
-                    WHERE c_id = ' . $course_id.' AND path LIKE BINARY "'.$tmp_path.'"';
+                        WHERE c_id = ' . $course_id.' AND path LIKE BINARY "'.$tmp_path.'"';
                 $rs = Database::query($sql);
                 $tmp_title = '/'.Database::result($rs, 0, 0);
                 $path_displayed .= $tmp_title;
@@ -6263,12 +6254,13 @@ class DocumentManager
         $form->addButtonCreate(get_lang('CreateFolder'));
 
         return $form->returnForm();
-
     }
 
     /**
      * Checks whether the user is in shared folder
-     * @return return bool Return true when user is into shared folder
+     * @param string $curdirpath
+     * @param int $current_session_id
+     * @return bool Return true when user is into shared folder
      */
     public static function is_shared_folder($curdirpath, $current_session_id)
     {
@@ -6284,7 +6276,9 @@ class DocumentManager
 
     /**
      * Checks whether the user is into any user shared folder
-     * @return return bool Return true when user is in any user shared folder
+     * @param string $curdirpath
+     * @param int $current_session_id
+     * @return bool Return true when user is in any user shared folder
      */
     public static function is_any_user_shared_folder($path, $current_session_id)
     {
@@ -6300,6 +6294,9 @@ class DocumentManager
 
     /**
      * Checks whether the user is into his shared folder or into a subfolder
+     * @param int $user_id
+     * @param string $path
+     * @param int $current_session_id
      * @return bool Return true when user is in his user shared folder or into a subfolder
      */
     public static function is_my_shared_folder($user_id, $path, $current_session_id)
@@ -6495,11 +6492,10 @@ class DocumentManager
     }
 
     /**
-     * @param int $id
-     * @param array $courseInfo
-     * @param int $sessionId
-     * @return bool
-     */
+    * @param int $id
+    * @param array $courseInfo
+    * @param int $sessionId
+    */
     public static function downloadDeletedDocument($id, $courseInfo, $sessionId)
     {
         $document = self::getDeletedDocument($id, $courseInfo, $sessionId);
@@ -6618,9 +6614,10 @@ class DocumentManager
      * Update the file or directory path in the document db document table
      *
      * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
-     * @param  - action (string) - action type require : 'delete' or 'update'
-     * @param  - old_path (string) - old path info stored to change
-     * @param  - new_path (string) - new path info to substitute
+     * @param string $action - action type require : 'delete' or 'update'
+     * @param string $old_path - old path info stored to change
+     * @param string $new_path - new path info to substitute
+     *
      * @desc Update the file or directory path in the document db document table
      *
      */
@@ -6661,13 +6658,14 @@ class DocumentManager
      * according to the source and target widths
      * and heights, height so that no distortions occur
      * parameters
-     * $image = the absolute path to the image
-     * $target_width = how large do you want your resized image
-     * $target_height = how large do you want your resized image
-     * $slideshow (default=0) =
+     * @param $image = the absolute path to the image
+     * @param $target_width = how large do you want your resized image
+     * @param $target_height = how large do you want your resized image
+     * @param $slideshow (default=0) =
      *      indicates weither we are generating images for a slideshow or not,
      *		this overrides the $_SESSION["image_resizing"] a bit so that a thumbnail
      *	    view is also possible when you choose not to resize the source images
+     * @return array
      */
     public static function resizeImageSlideShow(
         $image,

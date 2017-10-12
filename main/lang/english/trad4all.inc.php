@@ -8063,4 +8063,5 @@ $UserConfirmedNowYouCanLogInThePlatform = "User confirmed. Now you can login the
 $AgendaAvailableInCourseX = "Agenda available in course %s";
 $YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX = "You have been subscribed to the course %s the start date is %s and %s";
 $EmailToTeachersWhenNewWorkFeedback = "E-mail to teachers on new user's student publication feedback.";
+$YourSessionTimeIsExpired = "Your session time is expired.";
 ?>

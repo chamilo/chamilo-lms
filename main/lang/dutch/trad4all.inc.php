@@ -6804,6 +6804,7 @@ $LatestLoginInPlatform = "Meest recente toegang tot platform";
 $FirstLoginInPlatform = "Eerste toegang tot platform";
 $FirstLoginInCourse = "Eerste bezoek aan cursus";
 $GroupReporting = "Opvolging groep";
+$AreYouSureToDeleteJS = "Bent u zeker dat u wenst te verwijderen?";
 $XDays = "%s dagen";
 $SkillProfile = "Competentieprofiel";
 $AchievedSkills = "Gerealiseerde competenties";
@@ -6849,4 +6850,8 @@ $YourPasswordContainsSequences = "Uw wachtwoord bevat reeksen";
 $PasswordVeryWeak = "Heel zwak";
 $UserXHasBeenAssignedToBoss = "U bent toegewezen aan de student %s";
 $UserXHasBeenAssignedToBossWithUrlX = "U bent als tutor toegewezen aan student %s. U kunt zijn profiel bekijken van hier: %s";
+$AgendaAvailableInCourseX = "Voor module %s is jouw agenda beschikbaar.";
+$YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX = "<br />Je bent ingeschreven voor de module %s . Je kan de lesmomenten, lestijden en leslokalen in jouw agenda op de ELO terugvinden. <br />
+Indien je nog geen toegang hebt tot onze ELO, zal je bij de eerste les de nodige info ontvangen van jouw lesgever.<br /> <br />
+Het eerstvolgende moment dat voor deze module werd ingevuld is: <br />%s <br /> %s";
 ?>

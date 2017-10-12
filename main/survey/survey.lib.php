@@ -582,12 +582,14 @@ class SurveyManager
      * This function deletes a survey (and also all the question in that survey
      *
      * @param int $survey_id id of the survey that has to be deleted
+     * @param bool $shared
+     * @param int $course_id
      * @return true
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version January 2007
      */
-    public static function delete_survey($survey_id, $shared = false, $course_id = '')
+    public static function delete_survey($survey_id, $shared = false, $course_id = 0)
     {
         // Database table definitions
         if (empty($course_id)) {
@@ -776,14 +778,15 @@ class SurveyManager
      * @author Eric Marguin <e.marguin@elixir-interactive.com>, Elixir Interactive
      * @version October 2007
      */
-    public static function empty_survey($survey_id, $courseId = null)
+    public static function empty_survey($survey_id, $courseId = 0)
     {
         // Database table definitions
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $table_survey = Database::get_course_table(TABLE_SURVEY);
 
-        $course_id = $courseId ? $courseId : api_get_course_int_id();
+        $courseId = (int) $courseId;
+        $courseId = empty($courseId) ? api_get_course_int_id() : $courseId;
 
         $datas = self::get_survey($survey_id);
         $session_where = '';
@@ -793,16 +796,16 @@ class SurveyManager
 
         $sql = 'DELETE FROM '.$table_survey_invitation.'
 		        WHERE
-		            c_id = '.$course_id.' AND
+		            c_id = '.$courseId.' AND
 		            survey_code = "'.Database::escape_string($datas['code']).'" '.$session_where.' ';
         Database::query($sql);
 
         $sql = 'DELETE FROM '.$table_survey_answer.'
-		        WHERE c_id = '.$course_id.' AND survey_id='.intval($survey_id);
+		        WHERE c_id = '.$courseId.' AND survey_id='.intval($survey_id);
         Database::query($sql);
 
         $sql = 'UPDATE '.$table_survey.' SET invited=0, answered=0
-		        WHERE c_id = '.$course_id.' AND survey_id='.intval($survey_id);
+		        WHERE c_id = '.$courseId.' AND survey_id='.intval($survey_id);
         Database::query($sql);
 
         return true;
@@ -811,8 +814,10 @@ class SurveyManager
     /**
      * This function recalculates the number of people who have taken the survey (=filled at least one question)
      *
-     * @param int $survey_id the id of the survey somebody
-     * @return true
+     * @param array $survey_data
+     * @param array $user
+     * @param string $survey_code
+     * @return bool
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
@@ -911,6 +916,7 @@ class SurveyManager
      * This function retrieves all the information of a question
      *
      * @param integer $question_id the id of the question
+     * @param bool $shared
      * @return array
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -989,6 +995,7 @@ class SurveyManager
      * This function gets all the question of any given survey
      *
      * @param integer $survey_id the id of the survey
+     * @param int $course_id
      * @return array containing all the questions of the survey
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -996,12 +1003,13 @@ class SurveyManager
      *
      * @todo one sql call should do the trick
      */
-    public static function get_questions($survey_id, $course_id = '')
+    public static function get_questions($survey_id, $course_id = 0)
     {
         // Table definitions
         $tbl_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
+        $course_id = (int) $course_id;
         if (empty($course_id)) {
             $course_id = api_get_course_int_id();
         }

@@ -3503,11 +3503,13 @@ class DocumentManager
                 $cleanedPath = $parentData['path'];
                 $num = substr_count($cleanedPath, '/');
 
-                $notLikeCondition = null;
+                $notLikeCondition = '';
                 for ($i = 1; $i <= $num; $i++) {
                     $repeat = str_repeat('/%', $i + 1);
                     $notLikeCondition .= " AND docs.path NOT LIKE '".Database::escape_string($cleanedPath.$repeat)."' ";
                 }
+
+                $folderId = (int) $folderId;
 
                 $folderCondition = " AND
                     docs.id <> $folderId AND

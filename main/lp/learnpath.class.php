@@ -9428,10 +9428,9 @@ class learnpath
             if ($item['item_type'] == TOOL_QUIZ) {
                 // lets update max_score Quiz information depending of the Quiz Advanced properties
                 $tmp_obj_lp_item = new LpItem($course_id, $item['id']);
-                $tmp_obj_exercice = new Exercise();
+                $tmp_obj_exercice = new Exercise($course_id);
                 $tmp_obj_exercice->read($tmp_obj_lp_item->path);
                 $tmp_obj_lp_item->max_score = $tmp_obj_exercice->get_max_score();
-
                 $tmp_obj_lp_item->update_in_bdd();
                 $item['max_score'] = $tmp_obj_lp_item->max_score;
 

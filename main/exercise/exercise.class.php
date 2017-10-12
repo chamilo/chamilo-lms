@@ -7483,14 +7483,13 @@ class Exercise
         if ($this->random > 0 && $this->randomByCat == 0) {
             $numberRandomQuestions = $this->random;
             $questionScoreList = array();
-            for ($i = 1; $i <= count($questionList); $i++) {
-                if (isset($questionList[$i])) {
-                    $tmpobj_question = Question::read($questionList[$i]);
-                    if (is_object($tmpobj_question)) {
-                        $questionScoreList[] = $tmpobj_question->weighting;
-                    }
+            foreach ($questionList as $questionId) {
+                $tmpobj_question = Question::read($questionId);
+                if (is_object($tmpobj_question)) {
+                    $questionScoreList[] = $tmpobj_question->weighting;
                 }
             }
+
             rsort($questionScoreList);
             // add the first $numberRandomQuestions value of score array to get max_score
             for ($i = 0; $i < min($numberRandomQuestions, count($questionScoreList)); $i++) {
@@ -7499,16 +7498,17 @@ class Exercise
         } elseif ($this->random > 0 && $this->randomByCat > 0) {
             // test is random by category
             // get the $numberRandomQuestions best score question of each category
-
             $numberRandomQuestions = $this->random;
             $tab_categories_scores = array();
-            for ($i = 1; $i <= count($questionList); $i++) {
-                $question_category_id = TestCategory::getCategoryForQuestion($questionList[$i]);
+            foreach ($questionList as $questionId) {
+                $question_category_id = TestCategory::getCategoryForQuestion($questionId);
                 if (!is_array($tab_categories_scores[$question_category_id])) {
                     $tab_categories_scores[$question_category_id] = array();
                 }
-                $tmpobj_question = Question::read($questionList[$i]);
-                $tab_categories_scores[$question_category_id][] = $tmpobj_question->weighting;
+                $tmpobj_question = Question::read($questionId);
+                if (is_object($tmpobj_question)) {
+                    $tab_categories_scores[$question_category_id][] = $tmpobj_question->weighting;
+                }
             }
 
             // here we've got an array with first key, the category_id, second key, score of question for this cat

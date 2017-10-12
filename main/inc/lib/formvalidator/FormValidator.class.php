@@ -949,131 +949,126 @@ EOT;
         $this->applyFilter($name, 'stripslashes');
         $this->applyFilter($name, 'trim');
         $this->addHtml('
-                            <div class="form-group">
-                                <label for="geolocalization_'.$name.'" class="col-sm-2 control-label"></label>
-                                <div class="col-sm-8">
-                                    <button class="null btn btn-default " id="geolocalization_'.$name.'" name="geolocalization_'.$name.'" type="submit"><em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'</button>
-                                    <button class="null btn btn-default " id="myLocation_'.$name.'" name="myLocation_'.$name.'" type="submit"><em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'</button>
-                                </div>
-                            </div>
-                        ');
+            <div class="form-group">
+                <label for="geolocalization_'.$name.'" class="col-sm-2 control-label"></label>
+                <div class="col-sm-8">
+                    <button class="null btn btn-default " id="geolocalization_'.$name.'" name="geolocalization_'.$name.'" type="submit"><em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'</button>
+                    <button class="null btn btn-default " id="myLocation_'.$name.'" name="myLocation_'.$name.'" type="submit"><em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'</button>
+                </div>
+            </div>
+        ');
 
         $this->addHtml('
-                            <div class="form-group">
-                                <label for="map_'.$name.'" class="col-sm-2 control-label">
-                                    '.$label.' - '.get_lang('Map').'
-                                </label>
-                                <div class="col-sm-8">
-                                    <div name="map_'.$name.'" id="map_'.$name.'" style="width:100%; height:300px;">
-                                    </div>
-                                </div>
-                            </div>
-                        ');
+            <div class="form-group">
+                <label for="map_'.$name.'" class="col-sm-2 control-label">
+                    '.$label.' - '.get_lang('Map').'
+                </label>
+                <div class="col-sm-8">
+                    <div name="map_'.$name.'" id="map_'.$name.'" style="width:100%; height:300px;">
+                    </div>
+                </div>
+            </div>
+        ');
 
-        $this->addHtml(
-            '<script>
-                $(document).ready(function() {
+        $this->addHtml('<script>
+            $(document).ready(function() {
+                if (typeof google === "object") {
+                    var address = $("#' . $name.'").val();
+                    initializeGeo'.$name.'(address, false);
 
-                    if (typeof google === "object") {
-
-                        var address = $("#' . $name.'").val();
+                    $("#geolocalization_'.$name.'").on("click", function() {
+                        var address = $("#'.$name.'").val();
                         initializeGeo'.$name.'(address, false);
+                        return false;
+                    });
 
-                        $("#geolocalization_'.$name.'").on("click", function() {
-                            var address = $("#'.$name.'").val();
-                            initializeGeo'.$name.'(address, false);
+                    $("#myLocation_'.$name.'").on("click", function() {
+                        myLocation'.$name.'();
+                        return false;
+                    });
+
+                    $("#'.$name.'").keypress(function (event) {
+                        if (event.which == 13) {
+                            $("#geolocalization_'.$name.'").click();
                             return false;
-                        });
+                        }
+                    });
 
-                        $("#myLocation_'.$name.'").on("click", function() {
-                            myLocation'.$name.'();
-                            return false;
-                        });
-
-                        $("#'.$name.'").keypress(function (event) {
-                            if (event.which == 13) {
-                                $("#geolocalization_'.$name.'").click();
-                                return false;
-                            }
-                        });
-
-                    } else {
-                        $("#map_'.$name.'").html("<div class=\"alert alert-info\">'.get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap').'</div>");
-                    }
-
-                });
-
-                function myLocation'.$name.'() {
-                    if (navigator.geolocation) {
-                        var geoPosition = function(position) {
-                            var lat = position.coords.latitude;
-                            var lng = position.coords.longitude;
-                            var latLng = new google.maps.LatLng(lat, lng);
-                            initializeGeo'.$name.'(false, latLng)
-                        };
-
-                        var geoError = function(error) {
-                            alert("Geocode ' . get_lang('Error').': " + error);
-                        };
-
-                        var geoOptions = {
-                            enableHighAccuracy: true
-                        };
-
-                        navigator.geolocation.getCurrentPosition(geoPosition, geoError, geoOptions);
-                    }
+                } else {
+                    $("#map_'.$name.'").html("<div class=\"alert alert-info\">'.get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap').'</div>");
                 }
+            });
 
-                function initializeGeo'.$name.'(address, latLng) {
-                    var geocoder = new google.maps.Geocoder();
-                    var latlng = new google.maps.LatLng(-34.397, 150.644);
-                    var myOptions = {
-                        zoom: 15,
-                        center: latlng,
-                        mapTypeControl: true,
-                        mapTypeControlOptions: {
-                            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
-                        },
-                        navigationControl: true,
-                        mapTypeId: google.maps.MapTypeId.ROADMAP
+            function myLocation'.$name.'() {
+                if (navigator.geolocation) {
+                    var geoPosition = function(position) {
+                        var lat = position.coords.latitude;
+                        var lng = position.coords.longitude;
+                        var latLng = new google.maps.LatLng(lat, lng);
+                        initializeGeo'.$name.'(false, latLng)
                     };
 
-                    map_'.$name.' = new google.maps.Map(document.getElementById("map_'.$name.'"), myOptions);
+                    var geoError = function(error) {
+                        alert("Geocode ' . get_lang('Error').': " + error);
+                    };
 
-                    var parameter = address ? { "address": address } : latLng ? { "latLng": latLng } : false;
+                    var geoOptions = {
+                        enableHighAccuracy: true
+                    };
 
-                    if (geocoder && parameter) {
-                        geocoder.geocode(parameter, function(results, status) {
-                            if (status == google.maps.GeocoderStatus.OK) {
-                                if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
-                                    map_'.$name.'.setCenter(results[0].geometry.location);
-                                    if (!address) {
-                                        $("#'.$name.'").val(results[0].formatted_address);
-                                    }
-                                    var infowindow = new google.maps.InfoWindow({
-                                        content: "<b>" + $("#'.$name.'").val() + "</b>",
-                                        size: new google.maps.Size(150, 50)
-                                    });
-
-                                    var marker = new google.maps.Marker({
-                                        position: results[0].geometry.location,
-                                        map: map_'.$name.',
-                                        title: $("#'.$name.'").val()
-                                    });
-                                    google.maps.event.addListener(marker, "click", function() {
-                                        infowindow.open(map_'.$name.', marker);
-                                    });
-                                } else {
-                                    alert("' . get_lang("NotFound").'");
-                                }
-
-                            } else {
-                                alert("Geocode ' . get_lang('Error').': '.get_lang("AddressField").' '.get_lang("NotFound").'");
-                            }
-                        });
-                    }
+                    navigator.geolocation.getCurrentPosition(geoPosition, geoError, geoOptions);
                 }
-            </script>
+            }
+
+            function initializeGeo'.$name.'(address, latLng) {
+                var geocoder = new google.maps.Geocoder();
+                var latlng = new google.maps.LatLng(-34.397, 150.644);
+                var myOptions = {
+                    zoom: 15,
+                    center: latlng,
+                    mapTypeControl: true,
+                    mapTypeControlOptions: {
+                        style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+                    },
+                    navigationControl: true,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+
+                map_'.$name.' = new google.maps.Map(document.getElementById("map_'.$name.'"), myOptions);
+
+                var parameter = address ? { "address": address } : latLng ? { "latLng": latLng } : false;
+
+                if (geocoder && parameter) {
+                    geocoder.geocode(parameter, function(results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
+                                map_'.$name.'.setCenter(results[0].geometry.location);
+                                if (!address) {
+                                    $("#'.$name.'").val(results[0].formatted_address);
+                                }
+                                var infowindow = new google.maps.InfoWindow({
+                                    content: "<b>" + $("#'.$name.'").val() + "</b>",
+                                    size: new google.maps.Size(150, 50)
+                                });
+
+                                var marker = new google.maps.Marker({
+                                    position: results[0].geometry.location,
+                                    map: map_'.$name.',
+                                    title: $("#'.$name.'").val()
+                                });
+                                google.maps.event.addListener(marker, "click", function() {
+                                    infowindow.open(map_'.$name.', marker);
+                                });
+                            } else {
+                                alert("' . get_lang("NotFound").'");
+                            }
+                        } else {
+                            alert("Geocode ' . get_lang('Error').': '.get_lang("AddressField").' '.get_lang("NotFound").'");
+                        }
+                    });
+                }
+            }
+        </script>
         ');
     }
 
@@ -1643,7 +1638,7 @@ EOT;
             }).on('fileuploadadd', function (e, data) {
                 data.context = $('<div class=\"row\" style=\"margin-bottom:35px\" />').appendTo('#files');
                 $.each(data.files, function (index, file) {
-                    var node = $('<div class=\"col-sm-5\">').text(file.name);                    
+                    var node = $('<div class=\"col-sm-5 file_name\">').text(file.name);                    
                     node.appendTo(data.context);
                 });
             }).on('fileuploadprocessalways', function (e, data) {
@@ -1676,8 +1671,10 @@ EOT;
                         var link = $('<a>')
                             .attr('target', '_blank')
                             .prop('href', file.url);
-                        $(data.context.children()[index]).parent().wrap(link);                        
-                        var successMessage = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-success\"/>').text('" . addslashes(get_lang('UplUploadSucceeded'))."'));
+                        $(data.context.children()[index]).parent().wrap(link);
+                        // Update file name with new one from Chamilo
+                        $(data.context.children()[index]).parent().find('.file_name').html(file.name);                        
+                        var successMessage = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."'));
                         $(data.context.children()[index]).parent().append(successMessage);
                     } else if (file.error) {
                         var error = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-danger\"/>').text(file.error));

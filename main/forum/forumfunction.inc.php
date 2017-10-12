@@ -5,6 +5,7 @@ use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * These files are a complete rework of the forum. The database structure is
@@ -2074,14 +2075,15 @@ function getPosts(
 
         $posterId = $post->getPosterId();
         if (!empty($posterId)) {
+            /** @var User $user */
             $user = $em->find('ChamiloUserBundle:User', $posterId);
-
             if ($user) {
                 $postInfo['user_id'] = $user->getUserId();
                 $postInfo['username'] = $user->getUsername();
                 $postInfo['username_canonical'] = $user->getUsernameCanonical();
                 $postInfo['lastname'] = $user->getLastname();
                 $postInfo['firstname'] = $user->getFirstname();
+                $postInfo['complete_name'] = $user->getCompleteName();
             }
         }
 
@@ -3412,6 +3414,16 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
     $post_date = api_get_utc_datetime();
     $userId = $userId ?: api_get_user_id();
 
+    if ($current_forum['allow_anonymous'] == 1) {
+        if (api_is_anonymous() && empty($userId)) {
+            $userId = api_get_anonymous_id();
+        }
+    }
+
+    if (empty($userId)) {
+        return false;
+    }
+
     if ($current_forum['approval_direct_post'] == '1' &&
         !api_is_allowed_to_edit(null, true)
     ) {
@@ -3421,7 +3433,7 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
     }
 
     $upload_ok = 1;
-    $return = array();
+    $return = [];
 
     if ($upload_ok) {
         // We first store an entry in the forum_post table.

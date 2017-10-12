@@ -37,6 +37,8 @@ $postCount = 1;
 $allowUserImageForum = api_get_course_setting('allow_user_image_forum');
 
 foreach ($posts as $post) {
+    $posterId = isset($post['user_id']) ? $post['user_id'] : 0;
+
     // The style depends on the status of the message: approved or not.
     if ($post['visible'] == '0') {
         $titleclass = 'forum_message_post_title_2_be_approved';
@@ -56,27 +58,29 @@ foreach ($posts as $post) {
     $html .= '<div class="panel-body">';
     $html .= '<div class="row">';
     $html .= '<div class="col-md-2">';
-
-    $username = sprintf(get_lang('LoginX'), $post['username']);
-    if ($post['user_id'] == '0') {
+    $username = '';
+    if (isset($post['username'])) {
+        $username = sprintf(get_lang('LoginX'), $post['username']);
+    }
+    if (empty($posterId)) {
         $name = $post['poster_name'];
     } else {
-        $name = api_get_person_name($post['firstname'], $post['lastname']);
+        $name = $post['complete_name'];
     }
 
     if ($origin != 'learnpath') {
         if ($allowUserImageForum) {
-            $html .= '<div class="thumbnail">'.display_user_image($post['user_id'], $name, $origin).'</div>';
+            $html .= '<div class="thumbnail">'.display_user_image($posterId, $name, $origin).'</div>';
         }
 
         $html .= Display::tag(
             'h4',
-            display_user_link($post['user_id'], $name, $origin, $username),
+            display_user_link($posterId, $name, $origin, $username),
             array('class' => 'title-username')
         );
     } else {
         if ($allowUserImageForum) {
-            $html .= '<div class="thumbnail">'.display_user_image($post['user_id'], $name, $origin).'</div>';
+            $html .= '<div class="thumbnail">'.display_user_image($posterId, $name, $origin).'</div>';
         }
 
         $html .= Display::tag(
@@ -115,7 +119,7 @@ foreach ($posts as $post) {
     $tutorGroup = GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo);
 
     if ((isset($groupInfo['iid']) && $tutorGroup) ||
-        ($current_forum['allow_edit'] == 1 && $post['user_id'] == $userId) ||
+        ($current_forum['allow_edit'] == 1 && $posterId == $userId) ||
         (api_is_allowed_to_edit(false, true) &&
         !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
     ) {
@@ -197,7 +201,7 @@ foreach ($posts as $post) {
         if ($count > 0) {
             $current_qualify_thread = showQualify(
                 '1',
-                $post['user_id'],
+                $posterId,
                 $_GET['thread']
             );
             if ($locked == false) {

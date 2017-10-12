@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	@package chamilo.work
+ * @package chamilo.work
  **/
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -34,7 +34,7 @@ $_course = api_get_course_info();
 $tool_name = get_lang('StudentPublications');
 
 $item_id = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
-$origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
+$origin = api_get_origin();
 $course_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'];
 $base_work_dir = $course_dir.'/work';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
@@ -93,7 +93,9 @@ if (!empty($groupId)) {
     }
 } else {
     if ($origin != 'learnpath') {
-        if (isset($_GET['id']) && !empty($_GET['id']) || $display_upload_form || $action == 'settings' || $action == 'create_dir') {
+        if (isset($_GET['id']) &&
+            !empty($_GET['id']) || $display_upload_form || $action == 'settings' || $action == 'create_dir'
+        ) {
             $interbreadcrumb[] = array(
                 'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
                 'name' => get_lang('StudentPublications'),
@@ -169,7 +171,7 @@ switch ($action) {
             'post',
             $addUrl
         );
-        $form->addElement('header', get_lang('CreateAssignment'));
+        $form->addHeader(get_lang('CreateAssignment'));
         $form->addElement('hidden', 'action', 'add');
         // Set default values
         $defaults = !empty($_POST) ? $_POST : ['allow_text_assignment' => 2];
@@ -345,7 +347,8 @@ switch ($action) {
             $content .= '</div>';
             $content .= '</div>';
             $content .= '<div id="student-list-work" style="display: none" class="table-responsive">';
-            $content .= '<div class="toolbar"><a id="closed-view-list" href="#"><em class="fa fa-times-circle"></em> '.get_lang('Close').'</a></div>';
+            $content .= '<div class="toolbar"><a id="closed-view-list" href="#">
+                         <em class="fa fa-times-circle"></em> '.get_lang('Close').'</a></div>';
             $content .= showStudentList($work_id);
             $content .= '</div>';
         } else {

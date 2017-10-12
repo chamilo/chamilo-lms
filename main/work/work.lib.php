@@ -4639,7 +4639,7 @@ function deleteWorkItem($item_id, $courseInfo)
  * @param integer $workId
  * @return FormValidator
  */
-function getFormWork($form, $defaults = array(), $workId = 0)
+function getFormWork($form, $defaults = [], $workId = 0)
 {
     $sessionId = api_get_session_id();
     if (!empty($defaults)) {

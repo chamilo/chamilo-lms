@@ -334,7 +334,7 @@ class Diagnoser
         if ($setting == '') {
             $setting = null;
         }
-        $req_setting = null;
+        $req_setting = 'UTF-8';
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
         $array[] = $this->build_setting(
             $status,

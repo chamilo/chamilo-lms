@@ -269,6 +269,7 @@ class MessageManager
      * @param int $sender_id
      * @param bool $directMessage
      * @param int $forwardId
+     * @param array $smsParameters
      *
      * @return bool
      */
@@ -284,7 +285,8 @@ class MessageManager
         $topic_id = 0,
         $sender_id = null,
         $directMessage = false,
-        $forwardId = 0
+        $forwardId = 0,
+        $smsParameters = []
     ) {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $group_id = intval($group_id);
@@ -493,6 +495,8 @@ class MessageManager
      * @param int $sender_id
      * @param bool $sendCopyToDrhUsers send copy to related DRH users
      * @param bool $directMessage
+     * @param bool $smsParameters
+     * @param bool $uploadFiles Do not upload files using the MessageManager class
      *
      * @return bool
      */
@@ -502,20 +506,28 @@ class MessageManager
         $message,
         $sender_id = null,
         $sendCopyToDrhUsers = false,
-        $directMessage = false
+        $directMessage = false,
+        $smsParameters = [],
+        $uploadFiles = true
     ) {
+        $files = $_FILES ? $_FILES : [];
+        if ($uploadFiles === false) {
+            $files = [];
+        }
         $result = self::send_message(
             $receiver_user_id,
             $subject,
             $message,
-            $_FILES ? $_FILES : [],
+            $files,
             [],
             null,
             null,
             null,
             null,
             $sender_id,
-            $directMessage
+            $directMessage,
+            0,
+            $smsParameters
         );
 
         if ($sendCopyToDrhUsers) {
@@ -677,7 +689,7 @@ class MessageManager
         // user's file name
         $file_name = $file_attach['name'];
         if (!filter_extension($new_file_name)) {
-            echo Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error');
+            Display::addFlash(Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error'));
         } else {
             $new_file_name = uniqid('');
             if (!empty($receiver_user_id)) {
@@ -699,11 +711,11 @@ class MessageManager
             }
 
             $path_message_attach = $path_user_info['dir'].'message_attachments/';
-
             // If this directory does not exist - we create it.
             if (!file_exists($path_message_attach)) {
                 @mkdir($path_message_attach, api_get_permissions_for_new_directories(), true);
             }
+
             $new_path = $path_message_attach.$new_file_name;
             if (is_uploaded_file($file_attach['tmp_name'])) {
                 @copy($file_attach['tmp_name'], $new_path);

@@ -221,6 +221,7 @@ class Notification extends Model
      * @param string $content
      * @param array $senderInfo result of api_get_user_info() or GroupPortalManager:get_group_data()
      * @param array $attachments
+     * @param array $smsParameters
      *
      */
     public function save_notification(
@@ -228,8 +229,9 @@ class Notification extends Model
         $userList,
         $title,
         $content,
-        $senderInfo = array(),
-        $attachments = array()
+        $senderInfo = [],
+        $attachments = [],
+        $smsParameters = []
     ) {
         $this->type = intval($type);
         $content = $this->formatContent($content, $senderInfo);
@@ -297,7 +299,6 @@ class Notification extends Model
                     case self::NOTIFY_INVITATION_AT_ONCE:
                     case self::NOTIFY_GROUP_AT_ONCE:
                         $extraHeaders = [];
-
                         if (isset($senderInfo['email'])) {
                             $extraHeaders = array(
                                 'reply_to' => array(
@@ -316,7 +317,9 @@ class Notification extends Model
                                 $this->adminName,
                                 $this->adminEmail,
                                 $extraHeaders,
-                                $attachments
+                                $attachments,
+                                false,
+                                $smsParameters
                             );
                         }
                         $sendDate = api_get_utc_datetime();

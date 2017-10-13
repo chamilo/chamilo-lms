@@ -2381,7 +2381,7 @@ function send_reminder_users_without_publication($task_data)
     foreach ($list_users as $user) {
         $name_user = api_get_person_name($user[1], $user[0], null, PERSON_NAME_EMAIL_ADDRESS);
         $dear_line = get_lang('Dear')." ".api_get_person_name($user[1], $user[0]).", \n\n";
-        $body      = $dear_line.$content;
+        $body = $dear_line.$content;
         MessageManager::send_message($user[3], $subject, $body);
         $mails_sent_to[] = $name_user;
     }
@@ -2389,18 +2389,18 @@ function send_reminder_users_without_publication($task_data)
 }
 
 /**
- * @param int $courseId The course ID
  * @param int $workId The work ID
+ * @param int $courseId The course ID
  * @param int $sessionId Optional. The session ID
  */
-function sendEmailToDrhOnHomeworkCreation($courseId, $workId, $sessionId = 0)
+function sendEmailToDrhOnHomeworkCreation($workId, $courseId, $sessionId = 0)
 {
     $courseInfo = api_get_course_info_by_id($courseId);
     $assignment = get_work_assignment_by_id($workId, $courseId);
     $work = get_work_data_by_id($workId, $courseId, $sessionId);
     $workInfo = array_merge($assignment, $work);
 
-    if (empty($session_id)) {
+    if (empty($sessionId)) {
         $students = CourseManager::get_student_list_from_course_code($courseInfo['code']);
     } else {
         $students = CourseManager::get_student_list_from_course_code($courseInfo['code'], true, $sessionId);
@@ -2409,14 +2409,17 @@ function sendEmailToDrhOnHomeworkCreation($courseId, $workId, $sessionId = 0)
     $bodyView = new Template(null, false, false, false, false, false);
 
     foreach ($students as $student) {
-        $student['complete_name'] = api_get_person_name($student["firstname"], $student["lastname"]);
-        $hrms = UserManager::getDrhListFromUser($student['id']);
+        $studentInfo = api_get_user_info($student['user_id']);
+        if (empty($studentInfo)) {
+            continue;
+        }
 
+        $hrms = UserManager::getDrhListFromUser($student['id']);
         foreach ($hrms as $hrm) {
             $hrmName = api_get_person_name($hrm['firstname'], $hrm['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
 
             $bodyView->assign('hrm_name', $hrmName);
-            $bodyView->assign('student', $student);
+            $bodyView->assign('student', $studentInfo);
             $bodyView->assign('course', $courseInfo);
             $bodyView->assign('course_link', api_get_course_url($courseInfo['code'], $sessionId));
             $bodyView->assign('work', $workInfo);
@@ -2439,20 +2442,19 @@ function sendEmailToDrhOnHomeworkCreation($courseId, $workId, $sessionId = 0)
 /**
  * Sends an email to the students of a course when a homework is created
  *
- * @param int $courseId course_id
- * @param int $sessionId session_id
- * @param int $workId work_id
- *
+ * @param int $workId
+ * @param int $courseId
+ * @param int $sessionId
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  * @author Julio Montoya <gugli100@gmail.com> Adding session support - 2011
  */
-function sendEmailToStudentsOnHomeworkCreation($courseId, $sessionId = 0, $workId)
+function sendEmailToStudentsOnHomeworkCreation($workId, $courseId, $sessionId = 0)
 {
     $courseInfo = api_get_course_info_by_id($courseId);
     $courseCode = $courseInfo['code'];
     // Get the students of the course
-    if (empty($session_id)) {
+    if (empty($sessionId)) {
         $students = CourseManager::get_student_list_from_course_code($courseCode);
     } else {
         $students = CourseManager::get_student_list_from_course_code($courseCode, true, $sessionId);
@@ -2461,43 +2463,30 @@ function sendEmailToStudentsOnHomeworkCreation($courseId, $sessionId = 0, $workI
     $currentUser = api_get_user_info(api_get_user_id());
     if (!empty($students)) {
         foreach ($students as $student) {
-            $user_info = api_get_user_info($student["user_id"]);
-            if (!empty($user_info["mail"])) {
-                $name_user = api_get_person_name(
-                    $user_info["firstname"],
-                    $user_info["lastname"],
-                    null,
-                    PERSON_NAME_EMAIL_ADDRESS
-                );
-                $link = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId;
-                $emailbody = get_lang('Dear')." ".$name_user.",\n\n";
+            $user_info = api_get_user_info($student['user_id']);
+            if (!empty($user_info)) {
+                $link = api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$workId;
+                $emailbody = get_lang('Dear')." ".$user_info['complete_name'].",\n\n";
                 $emailbody .= get_lang('HomeworkHasBeenCreatedForTheCourse')." ".$courseCode.". "."\n\n".
                     '<a href="'.$link.'">'.get_lang('PleaseCheckHomeworkPage').'</a>';
-                $emailbody .= "\n\n".api_get_person_name($currentUser["firstname"], $currentUser["lastname"]);
+                $emailbody .= "\n\n".$currentUser['complete_name'];
 
                 $additionalParameters = array(
                     'smsType' => SmsPlugin::ASSIGNMENT_BEEN_CREATED_COURSE,
-                    'userId' => $student["user_id"],
+                    'userId' => $student['user_id'],
                     'courseTitle' => $courseCode,
                     'link' => $link
                 );
 
-                api_mail_html(
-                    $name_user,
-                    $user_info["mail"],
+                MessageManager::send_message_simple(
+                    $student['user_id'],
                     $emailsubject,
                     $emailbody,
-                    api_get_person_name(
-                        $currentUser["firstname"],
-                        $currentUser["lastname"],
-                        null,
-                        PERSON_NAME_EMAIL_ADDRESS
-                    ),
-                    $currentUser["mail"],
                     null,
-                    null,
-                    null,
-                    $additionalParameters
+                    false,
+                    false,
+                    $additionalParameters,
+                    false
                 );
             }
         }
@@ -4112,7 +4101,7 @@ function processWorkForm(
  * @param int $user_id
  * @param array $courseInfo
  * @param int $groupId
- * @param int $session_id
+ * @param int $sessionId
  * @return bool|int
  * @note $params can have the following elements, but should at least have the 2 first ones: (
  *       'new_dir' => 'some-name',
@@ -4122,7 +4111,7 @@ function processWorkForm(
  *       'allow_text_assignment' => 0/1/2,
  * @todo Rename createAssignment or createWork, or something like that
  */
-function addDir($formValues, $user_id, $courseInfo, $groupId, $session_id)
+function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
 {
     $em = Database::getManager();
 
@@ -4135,7 +4124,8 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $session_id)
         $groupInfo = GroupManager::get_group_properties($groupId);
         $groupIid = $groupInfo['iid'];
     }
-    $session = $em->find('ChamiloCoreBundle:Session', $session_id);
+    $sessionId = (int) $sessionId;
+    $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
 
     $base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
     $course_id = $courseInfo['real_id'];
@@ -4224,16 +4214,16 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $session_id)
     switch ($sendEmailAlert) {
         case 1:
             sendEmailToStudentsOnHomeworkCreation(
+                $workTable->getIid(),
                 $course_id,
-                $session ? $session->getId() : 0,
-                $workTable->getIid()
+                $sessionId
             );
             //no break
         case 2:
             sendEmailToDrhOnHomeworkCreation(
-                $course_id,
                 $workTable->getIid(),
-                $session ? $session->getId() : 0
+                $course_id,
+                $sessionId
             );
             break;
     }

@@ -1,5 +1,5 @@
 <p>{{ 'DearXComma'|get_lang|format(hrm_name) }}</p>
-<p>{{ 'AsHRMYouReceiveThisMailToAlertThatXHasNewWorkInCourseY'|get_lang }}</p>
+<p>{{ 'AsHRMYouReceiveThisMailToAlertThatXHasNewWorkInCourseY'|get_lang | format(student.complete_name, course.name) }}</p>
 <dl>
     <dt>{{ 'Student'|get_lang }}</dt>
     <dd>{{ student.complete_name }}</dd>

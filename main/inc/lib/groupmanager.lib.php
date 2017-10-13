@@ -1786,24 +1786,30 @@ class GroupManager
      * Is the user a tutor of this group?
      * @param int $user_id the id of the user
      * @param array $groupInfo
+     * @param int $courseId
      * @return boolean true/false
      * @todo use the function user_has_access that includes this function
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      */
-    public static function is_tutor_of_group($user_id, $groupInfo)
+    public static function is_tutor_of_group($user_id, $groupInfo, $courseId = 0)
     {
         if (empty($groupInfo)) {
             return false;
         }
 
-        $table_group_tutor = Database::get_course_table(TABLE_GROUP_TUTOR);
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+        if (empty($courseId)) {
+            return false;
+        }
+
         $user_id = intval($user_id);
         $group_id = intval($groupInfo['id']);
-        $course_id = api_get_course_int_id();
 
-        $sql = "SELECT * FROM $table_group_tutor
+        $table = Database::get_course_table(TABLE_GROUP_TUTOR);
+
+        $sql = "SELECT * FROM $table
                 WHERE 
-                    c_id = $course_id AND 
+                    c_id = $courseId AND 
                     user_id = $user_id AND 
                     group_id = $group_id";
         $result = Database::query($sql);

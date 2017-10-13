@@ -8274,9 +8274,8 @@ function api_mail_html(
 }
 
 /**
- * @param string $tool Possible values:
- * GroupManager::GROUP_TOOL_*
- *
+ * @param string $tool Possible values: GroupManager::GROUP_TOOL_*
+ * @param bool $showHeader
  */
 function api_protect_course_group($tool, $showHeader = true)
 {

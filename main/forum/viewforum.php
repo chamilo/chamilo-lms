@@ -29,6 +29,7 @@ $current_course_tool = TOOL_FORUM;
 
 // Notification for unauthorized people.
 api_protect_course_script(true);
+api_protect_course_group(GroupManager::GROUP_TOOL_FORUM);
 
 // The section (tabs).
 $this_section = SECTION_COURSES;
@@ -74,12 +75,6 @@ $is_group_tutor = false;
 if (!empty($groupId)) {
     //Group info & group category info
     $group_properties = GroupManager::get_group_properties($groupId);
-    //User has access in the group?
-    $user_has_access_in_group = GroupManager::user_has_access(
-        $userId,
-        $group_properties['iid'],
-        GroupManager::GROUP_TOOL_FORUM
-    );
     $is_group_tutor = GroupManager::is_tutor_of_group(
         api_get_user_id(),
         $group_properties
@@ -88,7 +83,7 @@ if (!empty($groupId)) {
     // Course
     if (!api_is_allowed_to_edit(false, true) && //is a student
         (($current_forum_category && $current_forum_category['visibility'] == 0) ||
-        $current_forum['visibility'] == 0 || !$user_has_access_in_group)
+        $current_forum['visibility'] == 0)
     ) {
         api_not_allowed(true);
     }

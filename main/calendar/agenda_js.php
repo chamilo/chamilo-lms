@@ -57,7 +57,8 @@ if (!empty($group_id)) {
     $group_properties = GroupManager::get_group_properties($group_id);
     $is_group_tutor = GroupManager::is_tutor_of_group(
         api_get_user_id(),
-        $group_properties
+        $group_properties,
+        $courseId
     );
     $interbreadcrumb[] = array(
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),

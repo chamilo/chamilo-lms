@@ -132,6 +132,7 @@ class ExtraFieldValue extends Model
 
             $commentVariable = 'extra_'.$field_variable.'_comment';
             $comment = isset($params[$commentVariable]) ? $params[$commentVariable] : null;
+            $dirPermissions = api_get_permissions_for_new_directories();
 
             switch ($extraFieldInfo['field_type']) {
                 case ExtraField::FIELD_TYPE_TAG:
@@ -214,7 +215,6 @@ class ExtraFieldValue extends Model
                     $em->flush();
                     break;
                 case ExtraField::FIELD_TYPE_FILE_IMAGE:
-                    $dirPermissions = api_get_permissions_for_new_directories();
                     switch ($this->type) {
                         case 'course':
                             $fileDir = api_get_path(SYS_UPLOAD_PATH)."courses/";
@@ -227,6 +227,10 @@ class ExtraFieldValue extends Model
                         case 'user':
                             $fileDir = UserManager::getUserPathById($params['item_id'], 'system');
                             $fileDirStored = UserManager::getUserPathById($params['item_id'], 'last');
+                            break;
+                        case 'work':
+                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'work/';
+                            $fileDirStored = 'work/';
                             break;
                     }
 
@@ -254,20 +258,22 @@ class ExtraFieldValue extends Model
                     }
                     break;
                 case ExtraField::FIELD_TYPE_FILE:
-                    $dirPermissions = api_get_permissions_for_new_directories();
-
                     switch ($this->type) {
                         case 'course':
-                            $fileDir = api_get_path(SYS_UPLOAD_PATH)."courses/";
+                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'courses/';
                             $fileDirStored = "courses/";
                             break;
                         case 'session':
-                            $fileDir = api_get_path(SYS_UPLOAD_PATH)."sessions/";
+                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'sessions/';
                             $fileDirStored = "sessions/";
                             break;
                         case 'user':
                             $fileDir = UserManager::getUserPathById($params['item_id'], 'system');
                             $fileDirStored = UserManager::getUserPathById($params['item_id'], 'last');
+                            break;
+                        case 'work':
+                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'work/';
+                            $fileDirStored = "work/";
                             break;
                     }
 

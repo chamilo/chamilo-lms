@@ -92,6 +92,8 @@ if (!empty($my_folder_data['description'])) {
     $content .= Display::panel($contentWork, get_lang('Description'));
 }
 
+$content .= workGetExtraFieldData($workId);
+
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $item_id = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
 

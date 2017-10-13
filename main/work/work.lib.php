@@ -4732,8 +4732,8 @@ function getFormWork($form, $defaults = [], $workId = 0)
     $form->addElement('select', 'allow_text_assignment', get_lang('DocumentType'), getUploadDocumentType());
 
     // Extra fields
-    $extra_field = new ExtraField('work');
-    $extra = $extra_field->addElements($form, $workId);
+    $extraField = new ExtraField('work');
+    $extra = $extraField->addElements($form, $workId);
 
     $htmlHeadXtra[] = '
         <script>
@@ -5628,4 +5628,24 @@ function deleteCorrection($courseInfo, $work)
             }
         }
     }
+}
+
+/**
+ * @param int $workId
+ * @return string
+ */
+function workGetExtraFieldData($workId)
+{
+    $sessionField = new ExtraField('work');
+    $extraFieldData = $sessionField->getDataAndFormattedValues($workId);
+    $result = '';
+    if (!empty($extraFieldData)) {
+        $result .= '<div class="well">';
+        foreach ($extraFieldData as $data) {
+            $result .= $data['text'].': '.$data['value'];
+        }
+        $result .= '</div>';
+    }
+
+    return $result;
 }

@@ -180,8 +180,9 @@ switch ($action) {
         $form->addButtonCreate(get_lang('CreateDirectory'));
 
         if ($form->validate()) {
+            $values = $form->getSubmitValues();
             $result = addDir(
-                $_POST,
+                $values,
                 $user_id,
                 $courseInfo,
                 $groupId,
@@ -357,7 +358,7 @@ switch ($action) {
         break;
 }
 
-Display :: display_header(null);
+Display::display_header(null);
 Display::display_introduction_section(TOOL_STUDENTPUBLICATION);
 
 if ($origin === 'learnpath') {

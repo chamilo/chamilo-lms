@@ -192,7 +192,6 @@ if (isset($_REQUEST['comments']) &&
             'teacher_comment' => $my_comments
         ];
 
-
         Database::update(
             $TBL_TRACK_ATTEMPT,
             $params,
@@ -247,11 +246,21 @@ if (isset($_REQUEST['comments']) &&
     }
 
     // Updating LP score here
-    if (in_array($origin, array('tracking_course', 'user_course', 'correct_exercise_in_lp'))) {
+    if (in_array($origin, array('tracking_course', 'user_course', 'correct_exercise_in_lp', 'tracking'))) {
         $statusCondition = '';
         $item = new learnpathItem($lpItemId, api_get_user_id(), api_get_course_int_id());
         if ($item) {
+            $prereqId = $item->get_prereq_string();
             $minScore = $item->getPrerequisiteMinScore();
+            $maxScore = $item->getPrerequisiteMaxScore();
+            $passed = false;
+            $lp = new learnpath(api_get_course_id(), $lp_id, $student_id);
+            $prereqCheck = $lp->prerequisites_match($lpItemId);
+            if ($prereqCheck) {
+                $passed = true;
+            }
+
+            /*$minScore = $item->getPrerequisiteMinScore();
             $maxScore = $item->getPrerequisiteMaxScore();
 
             $passed = false;
@@ -260,7 +269,7 @@ if (isset($_REQUEST['comments']) &&
                 if ($tot >= $minScore && $tot <= $maxScore) {
                     $passed = true;
                 }
-            }
+            }*/
 
             if ($passed == false) {
                 if (!empty($objExerciseTmp->pass_percentage)) {

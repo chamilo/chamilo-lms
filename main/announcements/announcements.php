@@ -19,10 +19,16 @@ $use_anonymous = true;
 // setting the global file that gets the general configuration, the databases, the languages, ...
 require_once __DIR__.'/../inc/global.inc.php';
 
-/*	Sessions */
+api_protect_course_script(true);
+api_protect_course_group(GroupManager::GROUP_TOOL_ANNOUNCEMENT);
 
 $ctok = Security::get_existing_token();
 $stok = Security::get_token();
+
+$course_id = api_get_course_int_id();
+$_course = api_get_course_info_by_id($course_id);
+$group_id = api_get_group_id();
+$sessionId = api_get_session_id();
 
 $current_course_tool = TOOL_ANNOUNCEMENT;
 $this_section = SECTION_COURSES;
@@ -40,9 +46,6 @@ if (!empty($sessionId) && $drhHasAccessToSessionContent) {
     $allowToEdit = $allowToEdit || api_is_drh();
 }
 
-/* ACCESS RIGHTS */
-api_protect_course_script(true);
-
 // Configuration settings
 $display_announcement_list = true;
 $display_form = false;
@@ -59,12 +62,7 @@ $tbl_courses = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_sessions = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-$course_id = api_get_course_int_id();
-$_course = api_get_course_info_by_id($course_id);
-$group_id = api_get_group_id();
-$sessionId = api_get_session_id();
-
+$isTutor = false;
 if (!empty($group_id)) {
     $group_properties = GroupManager:: get_group_properties($group_id);
     $interbreadcrumb[] = array(
@@ -75,9 +73,15 @@ if (!empty($group_id)) {
         "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
         "name" => get_lang('GroupSpace').' '.$group_properties['name']
     );
-}
 
-api_protect_course_group(GroupManager::GROUP_TOOL_ANNOUNCEMENT);
+    if ($allowToEdit === false) {
+        // Check if user is tutor group
+        $isTutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties, $course_id);
+        if ($isTutor) {
+            $allowToEdit = true;
+        }
+    }
+}
 
 /*	Tracking	*/
 Event::event_access_tool(TOOL_ANNOUNCEMENT);
@@ -240,7 +244,7 @@ switch ($action) {
         // height auto
         $extra_params['height'] = 'auto';
         $editOptions = '';
-        if (api_is_allowed_to_edit()) {
+        if (api_is_allowed_to_edit() || $isTutor) {
             $extra_params['multiselect'] = true;
             $editOptions = '
             $("#announcements").jqGrid(
@@ -655,14 +659,15 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 // Actions
 $show_actions = false;
 $actionsLeft = '';
-if ($allowToEdit && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
-) {
+if ($allowToEdit && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')) {
     if (in_array($action, array('add', 'modify', 'view'))) {
         $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."'>".
-            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM)."</a>";
+            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).
+            "</a>";
     } else {
         $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."&action=add'>".
-            Display::return_icon('new_announce.png', get_lang('AddAnnouncement'), '', ICON_SIZE_MEDIUM)."</a>";
+            Display::return_icon('new_announce.png', get_lang('AddAnnouncement'), '', ICON_SIZE_MEDIUM).
+            "</a>";
     }
     $show_actions = true;
 } else {

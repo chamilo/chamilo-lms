@@ -995,7 +995,8 @@ class AnnouncementManager
         $sql = "SELECT DISTINCT 
                     announcement.id, 
                     announcement.title, 
-                    announcement.content
+                    announcement.content,
+                    ip.to_group_id
                FROM $tbl_announcement announcement
                INNER JOIN $tbl_item_property ip
                ON
@@ -1693,7 +1694,7 @@ class AnnouncementManager
         $results = [];
         $actionUrl = api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq();
         $emailIcon = Display::return_icon(
-            'email.gif',
+            'email.png',
             get_lang('AnnounceSentByEmail')
         );
         $attachmentIcon = Display::return_icon(
@@ -1714,6 +1715,15 @@ class AnnouncementManager
             '',
             ICON_SIZE_SMALL
         );
+
+        if (!empty($group_id)) {
+            $groupInfo = GroupManager::get_group_properties(api_get_group_id());
+            //User has access in the group?
+            $isTutor = GroupManager::is_tutor_of_group(
+                api_get_user_id(),
+                $groupInfo
+            );
+        }
 
         while ($myrow = Database::fetch_array($result, 'ASSOC')) {
             if (!in_array($myrow['id'], $displayed)) {
@@ -1758,8 +1768,9 @@ class AnnouncementManager
                 // we can edit if : we are the teacher OR the element belongs to
                 // the session we are coaching OR the option to allow users to edit is on
                 if (api_is_allowed_to_edit(false, true) ||
-                    (api_is_session_general_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $myrow['id']))
-                    || (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+                    (api_is_session_general_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $myrow['id'])) ||
+                    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ||
+                    ($myrow['to_group_id'] == $group_id && $isTutor)
                 ) {
                     $modify_icons = "<a href=\"".$actionUrl."&action=modify&id=".$myrow['id']."\">".$editIcon."</a>";
                     if ($myrow['visibility'] == 1) {

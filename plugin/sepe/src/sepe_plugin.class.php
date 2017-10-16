@@ -28,8 +28,7 @@ class SepePlugin extends Plugin
     public $isAdminPlugin = true;
 
     /**
-     *
-     * @return StaticPlugin
+     * @return SepePlugin
      */
     public static function create()
     {
@@ -40,11 +39,11 @@ class SepePlugin extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '2.0', 
+            '2.0',
             '
                 Jose Angel Ruiz - NoSoloRed (original author) <br>
                 Julio Montoya (SOAP integration)
-            ', 
+            ',
             array('sepe_enable' => 'boolean')
         );
     }
@@ -52,7 +51,7 @@ class SepePlugin extends Plugin
     /**
      * This method creates the tables required to this plugin
      */
-    function install()
+    public function install()
     {
         $tablesToBeCompared = array(
             self::TABLE_SEPE_CENTER,
@@ -87,7 +86,7 @@ class SepePlugin extends Plugin
     /**
      * This method drops the plugin tables
      */
-    function uninstall()
+    public function uninstall()
     {
         $tablesToBeDeleted = array(
             self::TABLE_SEPE_CENTER,
@@ -116,7 +115,10 @@ class SepePlugin extends Plugin
         $this->manageTab(false);
     }
 
-    function update()
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function update()
     {
         $oldTableCenters = 'plugin_sepe_centros';
         $oldTableTutorsCompany = 'plugin_sepe_tutors_empresa';

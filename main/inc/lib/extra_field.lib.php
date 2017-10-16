@@ -2212,13 +2212,13 @@ class ExtraField extends Model
                                 <label for="geolocalization_extra_'.$field_details['variable'].'"
                                     class="col-sm-2 control-label"></label>
                                 <div class="col-sm-8">
-                                    <button class="null btn btn-default "
+                                    <button class="null btn btn-default"
                                         id="geolocalization_extra_'.$field_details['variable'].'"
                                         name="geolocalization_extra_'.$field_details['variable'].'"
                                         type="submit">
                                         <em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'
                                     </button>
-                                    <button class="null btn btn-default " id="myLocation_extra_'.$field_details['variable'].'"
+                                    <button class="null btn btn-default" id="myLocation_extra_'.$field_details['variable'].'"
                                         name="myLocation_extra_'.$field_details['variable'].'"
                                         type="submit">
                                         <em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'
@@ -2465,18 +2465,22 @@ class ExtraField extends Model
     {
         // action links
         echo '<div class="actions">';
-        echo '<a href="../admin/index.php">'.Display::return_icon(
-                'back.png',
-                get_lang('BackTo').' '.get_lang('PlatformAdmin'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
-        echo '<a href="'.api_get_self().'?action=add&type='.$this->type.'">'.Display::return_icon(
-                'add_user_fields.png',
-                get_lang('Add'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
+        echo '<a href="../admin/index.php">';
+        echo Display::return_icon(
+            'back.png',
+            get_lang('BackTo').' '.get_lang('PlatformAdmin'),
+            '',
+            ICON_SIZE_MEDIUM
+        );
+        echo '</a>';
+        echo '<a href="'.api_get_self().'?action=add&type='.$this->type.'">';
+        echo Display::return_icon(
+            'add_user_fields.png',
+            get_lang('Add'),
+            '',
+            ICON_SIZE_MEDIUM
+        );
+        echo '</a>';
         echo '</div>';
         echo Display::grid_html($this->type.'_fields');
     }
@@ -2922,7 +2926,6 @@ JAVASCRIPT;
         }
 
         $field_value_to_join = array();
-
         //filter can be all/any = and/or
         $inject_joins = null;
         $inject_where = null;
@@ -3359,6 +3362,7 @@ JAVASCRIPT;
     /**
      * @param string $from
      * @param string $search
+     * @param array $options
      *
      * @return array
      */

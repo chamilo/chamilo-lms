@@ -114,14 +114,18 @@ class Event
         } else {
             $user_id = "0"; // no one
         }
-        $sql = "INSERT INTO ".$TABLETRACK_ACCESS."  (user_ip, access_user_id, c_id, access_date, access_session_id) VALUES
-                ('".$ip."', ".$user_id.", '".$courseId."', '".$now."','".$id_session."')";
+        $sql = "INSERT INTO ".$TABLETRACK_ACCESS."  (user_ip, access_user_id, c_id, access_date, access_session_id) 
+                VALUES ('".$ip."', ".$user_id.", '".$courseId."', '".$now."','".$id_session."')";
 
         Database::query($sql);
 
         // added for "what's new" notification
         $sql = "UPDATE $TABLETRACK_LASTACCESS  SET access_date = '$now'
-                WHERE access_user_id = $user_id AND c_id = '$courseId' AND access_tool IS NULL AND access_session_id=".$id_session;
+                WHERE 
+                  access_user_id = $user_id AND
+                  c_id = '$courseId' AND 
+                  access_tool IS NULL AND 
+                  access_session_id=".$id_session;
         $result = Database::query($sql);
 
         if (Database::affected_rows($result) == 0) {
@@ -204,7 +208,7 @@ class Event
     }
 
     /**
-     * @param doc_id id of document (id in mainDb.document table)
+     * @param string $doc_url
      * @author Sebastien Piraux <piraux_seb@hotmail.com>
      * @desc Record information for download event
      * (when an user click to d/l a document)
@@ -283,7 +287,7 @@ class Event
     }
 
     /**
-     * @param link_id (id in coursDb liens table)
+     * @param int $link_id (id in coursDb liens table)
      * @author Sebastien Piraux <piraux_seb@hotmail.com>
      * @desc Record information for link event (when an user click on an added link)
      * it will be used in a redirection page
@@ -411,11 +415,11 @@ class Event
      * @param    integer Exercise ID (from c_quiz)
      * @param    bool update results?
      * @param    $fileName string  Filename (for audio answers - using nanogong)
-     * @param    integer User ID The user who's going to get this score. Default value of null means "get from context".
-     * @param    integer    Course ID (from the "id" column of course table). Default value of null means "get from context".
-     * @param    integer    Session ID (from the session table). Default value of null means "get from context".
-     * @param    integer    Learnpath ID (from c_lp table). Default value of null means "get from context".
-     * @param    integer    Learnpath item ID (from the c_lp_item table). Default value of null means "get from context".
+     * @param    int User ID The user who's going to get this score. Default value of null means "get from context".
+     * @param    int Course ID (from the "id" column of course table). Default value of null means "get from context".
+     * @param    int Session ID (from the session table). Default value of null means "get from context".
+     * @param    int Learnpath ID (from c_lp table). Default value of null means "get from context".
+     * @param    int Learnpath item ID (from the c_lp_item table). Default value of null means "get from context".
      * @return    boolean    Result of the insert query
      */
     public static function saveQuestionAttempt(
@@ -759,7 +763,7 @@ class Event
 
     /**
      * Get every email stored in the database
-     *
+     * @deprecated
      * @return array
      * @assert () !== false
      */

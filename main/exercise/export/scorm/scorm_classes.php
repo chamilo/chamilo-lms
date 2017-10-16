@@ -28,7 +28,6 @@ class ScormQuestion extends Question
      * @param int  $js_id The JavaScript ID for this question.
      * Due to the nature of interactions, we must have a natural sequence for
      * questions in the generated JavaScript.
-     * @param integer $js_id
      * @return string|array
      */
     public static function export_question(
@@ -122,6 +121,10 @@ class ScormQuestion extends Question
         return true;
     }
 
+    /**
+     * @return array
+     * @throws Exception
+     */
     public function export()
     {
         $html = $this->getQuestionHTML();
@@ -384,8 +387,6 @@ class ScormAnswerFillInBlanks extends Answer
         $html = '<tr><td colspan="2"><table width="100%">';
         // get all enclosed answers
         $blankList = array();
-        // build replacement
-        $replacementList = array();
         foreach ($this->answer as $i => $answer) {
             $blankList[] = '['.$answer.']';
         }
@@ -589,6 +590,7 @@ class ScormAnswerFree extends Answer
         return array($js, $html);
     }
 }
+
 /**
  * This class handles the SCORM export of hotpot questions
  * @package chamilo.exercise.scorm
@@ -597,7 +599,7 @@ class ScormAnswerHotspot extends Answer
 {
     /**
      * Returns the javascript code that goes with HotSpot exercises
-     * @return string	The JavaScript code
+     * @return string    The JavaScript code
      */
     public function get_js_header()
     {

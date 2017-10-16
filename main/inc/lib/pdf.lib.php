@@ -567,17 +567,22 @@ class PDF
     public static function get_watermark($course_code = null)
     {
         $web_path = false;
+        $urlId = api_get_current_access_url_id();
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
             $course_info = api_get_course_info($course_code);
-            $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png'; // course path
+            // course path
+            $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.$urlId.'_pdf_watermark.png';
             if (file_exists($store_path)) {
-                $web_path = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';
+                $web_path = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/'.$urlId.'_pdf_watermark.png';
             }
         } else {
-            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png'; // course path
-            if (file_exists($store_path))
-                $web_path = api_get_path(WEB_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';
+            // course path
+            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/'.$urlId.'_pdf_watermark.png';
+            if (file_exists($store_path)) {
+                $web_path = api_get_path(WEB_CODE_PATH).'default_course_document/images/'.$urlId.'_pdf_watermark.png';
+            }
         }
+
         return $web_path;
     }
 
@@ -589,13 +594,14 @@ class PDF
      */
     public function delete_watermark($course_code = null)
     {
+        $urlId = api_get_current_access_url_id();
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
             $course_info = api_get_course_info($course_code);
             // course path
-            $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';
+            $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.$urlId.'_pdf_watermark.png';
         } else {
             // course path
-            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';
+            $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/'.$urlId.'_pdf_watermark.png';
         }
         if (file_exists($store_path)) {
             unlink($store_path);
@@ -613,15 +619,16 @@ class PDF
      */
     public function upload_watermark($filename, $source_file, $course_code = null)
     {
+        $urlId = api_get_current_access_url_id();
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
             $course_info = api_get_course_info($course_code);
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path']; // course path
             $web_path   = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/pdf_watermark.png';
         } else {
             $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images'; // course path
-            $web_path   = api_get_path(WEB_CODE_PATH).'default_course_document/images/'.api_get_current_access_url_id().'_pdf_watermark.png';
+            $web_path   = api_get_path(WEB_CODE_PATH).'default_course_document/images/'.$urlId.'_pdf_watermark.png';
         }
-        $course_image = $store_path.'/'.api_get_current_access_url_id().'_pdf_watermark.png';
+        $course_image = $store_path.'/'.$urlId.'_pdf_watermark.png';
 
         if (file_exists($course_image)) {
             @unlink($course_image);

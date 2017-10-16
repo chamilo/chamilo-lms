@@ -391,15 +391,20 @@ class GlossaryManager
                 Display::return_icon('new_glossary_term.png', get_lang('TermAddNew'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
-        $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export">'.
-            Display::return_icon('export_csv.png', get_lang('ExportGlossaryAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
+        if (!api_is_anonymous()) {
+            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export">'.
+                Display::return_icon('export_csv.png', get_lang('ExportGlossaryAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
+        }
+
         if (api_is_allowed_to_edit(null, true)) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=import">'.
                 Display::return_icon('import_csv.png', get_lang('ImportGlossary'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
-        $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export_to_pdf">'.
-            Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+        if (!api_is_anonymous()) {
+            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export_to_pdf">'.
+                Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+        }
 
         if (($view == 'table') || (!isset($view))) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=list">'.
@@ -409,10 +414,12 @@ class GlossaryManager
                 Display::return_icon('view_text.png', get_lang('TableView'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
-        $actionsLeft .= Display::url(
-            Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), [], ICON_SIZE_MEDIUM),
-            api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents'])
-        );
+        if (!api_is_anonymous()) {
+            $actionsLeft .= Display::url(
+                Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), [], ICON_SIZE_MEDIUM),
+                api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents'])
+            );
+        }
 
         /* BUILD SEARCH FORM */
         $form = new FormValidator(

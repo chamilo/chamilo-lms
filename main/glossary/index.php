@@ -364,6 +364,9 @@ switch ($action) {
         Export::arrayToCsv($list, $filename);
         break;
     case 'export_to_pdf':
+        if (!api_is_allowed_to_edit(null, true)) {
+            api_not_allowed(true);
+        }
         GlossaryManager::export_to_pdf();
         break;
     case 'changeview':

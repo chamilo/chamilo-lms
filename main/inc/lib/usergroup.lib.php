@@ -2419,9 +2419,9 @@ class UserGroup extends Model
      * @param int $group_id
      * @param int $parent_group_id if 0, we delete the parent_group association
      * @param int $relation_type
-     * @return resource
+     * @return \Doctrine\DBAL\Statement
      **/
-    public static function set_parent_group($group_id, $parent_group_id, $relation_type = 1)
+    public function setParentGroup($group_id, $parent_group_id, $relation_type = 1)
     {
         $table = Database::get_main_table(TABLE_USERGROUP_REL_USERGROUP);
         $group_id = intval($group_id);

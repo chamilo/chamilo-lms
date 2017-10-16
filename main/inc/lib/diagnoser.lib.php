@@ -30,22 +30,43 @@ class Diagnoser
      */
     public function show_html()
     {
-        $sections = array('chamilo', 'php', 'database', 'webserver');
+        $sections = [
+            'chamilo' => [
+                'lang' => 'Chamilo',
+                'info' => 'State of Chamilo requirements'
+            ],
+            'php' => [
+                'lang' => 'PHP',
+                'info' => 'State of PHP settings on the server'
+            ],
+            'database' => [
+                'lang' => 'Database',
+                'info' => 'Configuration settings of the database server. To check the database consistency after an upgrade, if you have access to the command line, you can use "php bin/doctrine.php orm:schema-tool:update --dump-sql". This will print a list of database changes that should be applied to your system in order to get the right structure. Index name changes can be ignored. Use "--force" instead of "--dump" to try and execute them in order.'
+            ],
+            'webserver' => [
+                'lang' => get_lang('WebServer'),
+                'info' => 'Information about your webserver\'s configuration '
+            ],
+            'paths' => [
+                'lang' => 'Paths',
+                'info' => 'The following paths are called by their constant throughout Chamilo\'s code using the api_get_path() function. Here is a list of these paths and what they would be translated to on this portal.'
+            ],
+        ];
         $currentSection = isset($_GET['section']) ? $_GET['section'] : '';
-        if (!in_array(trim($currentSection), $sections)) {
+        if (!in_array(trim($currentSection), array_keys($sections))) {
             $currentSection = 'chamilo';
         }
 
         $html = '<div class="tabbable"><ul class="nav nav-tabs">';
 
-        foreach ($sections as $section) {
+        foreach ($sections as $section => $details) {
             if ($currentSection === $section) {
                 $html .= '<li class="active">';
             } else {
                 $html .= '<li>';
             }
             $params['section'] = $section;
-            $html .= '<a href="system_status.php?section='.$section.'">'.get_lang($section).'</a></li>';
+            $html .= '<a href="system_status.php?section='.$section.'">'.$details['lang'].'</a></li>';
         }
 
         $html .= '</ul><div class="tab-pane">';
@@ -54,8 +75,10 @@ class Diagnoser
         echo $html;
 
         if ($currentSection != 'paths') {
-            $table = new SortableTableFromArray($data, 1, 100);
+            echo '<br />';
+            echo Display::return_message($sections[$currentSection]['info'], 'normal');
 
+            $table = new SortableTableFromArray($data, 1, 100);
             $table->set_header(0, '', false);
             $table->set_header(1, get_lang('Section'), false);
             $table->set_header(2, get_lang('Setting'), false);
@@ -65,6 +88,9 @@ class Diagnoser
 
             $table->display();
         } else {
+            echo '<br />';
+            echo Display::return_message($sections[$currentSection]['info'], 'normal');
+
             $headers = $data['headers'];
             $results = $data['data'];
             $table = new HTML_Table(array('class' => 'data_table'));

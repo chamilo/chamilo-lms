@@ -17,8 +17,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script(true);
 
 $toolName = get_lang('Categories');
-
-$libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
 $user_id = api_get_user_id();
 $isAdmin = api_is_platform_admin();

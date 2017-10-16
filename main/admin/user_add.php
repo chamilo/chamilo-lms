@@ -2,13 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	@package chamilo.admin
-*/
+ * @package chamilo.admin
+ */
 
 $cidReset = true;
 // Including necessary libraries.
 require_once __DIR__.'/../inc/global.inc.php';
-$libpath = api_get_path(LIBRARY_PATH);
 
 // Section for the tabs
 $this_section = SECTION_PLATFORM_ADMIN;

@@ -5,7 +5,6 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once __DIR__.'/cm_webservice.php';
-$libpath = api_get_path(LIBRARY_PATH);
 
 /**
  * SOAP error handler. Handles an error sending a SOAP fault

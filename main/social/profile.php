@@ -151,8 +151,6 @@ if ($user_info['user_id'] == api_get_user_id()) {
     $isSelfUser = false;
 }
 $userIsOnline = user_is_online($user_id);
-
-$libpath = api_get_path(LIBRARY_PATH);
 $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
 $socialAjaxUrl = api_get_path(WEB_AJAX_PATH).'social.ajax.php';
 $javascriptDir = api_get_path(LIBRARY_PATH).'javascript/';

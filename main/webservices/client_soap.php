@@ -15,8 +15,6 @@
 exit; //Uncomment this in order to execute the page
 
 require_once __DIR__.'/../inc/global.inc.php';
-$libpath = api_get_path(LIBRARY_PATH);
-
 // Create the client instance
 $url = api_get_path(WEB_CODE_PATH)."webservices/registration.soap.php?wsdl";
 //$url = api_get_path(WEB_CODE_PATH)."webservices/access_url.php?wsdl";

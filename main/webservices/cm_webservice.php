@@ -9,8 +9,6 @@ use Chamilo\UserBundle\Entity\User;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$libpath = api_get_path(LIBRARY_PATH);
-
 /**
  * Error returned by one of the methods of the web service. Contains an error code and an error message
  */

@@ -76,8 +76,6 @@ if ($geolocalization) {
 
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
-
-$libpath = api_get_path(LIBRARY_PATH);
 $noPHP_SELF = true;
 $tool_name = get_lang('ModifyUserInfo');
 

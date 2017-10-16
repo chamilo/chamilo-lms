@@ -47,7 +47,7 @@ $(document).ready(function() {
             }
         });
 
-        $("input#responseno").click(function () {
+        $(".responseno").click(function () {
             if(!confirm("' . get_lang('AreYouSure').' : '.strtoupper(get_lang('No')).'")){
                 return false;
             }

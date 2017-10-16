@@ -5435,7 +5435,7 @@ class DocumentManager
             $tooltip_title_alt = get_lang('DefaultCourseImages');
         }
 
-        $copy_to_myfiles = $open_in_new_window_link = null;
+        $copyToMyFiles = $open_in_new_window_link = '';
         $curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
         $send_to = null;
         $checkExtension = $path;
@@ -5470,15 +5470,15 @@ class DocumentManager
 
             // Copy files to user's myfiles
             if (api_get_setting('allow_my_files') === 'true' &&
-                api_get_setting('users_copy_files') === 'true'
+                api_get_setting('users_copy_files') === 'true' && api_is_anonymous() === false
             ) {
-                $copy_myfiles_link = ($filetype == 'file') ? api_get_self().'?'.$courseParams.'&action=copytomyfiles&id='.$document_data['id'] : api_get_self().'?'.$courseParams;
+                $copy_myfiles_link = $filetype == 'file' ? api_get_self().'?'.$courseParams.'&action=copytomyfiles&id='.$document_data['id'] : api_get_self().'?'.$courseParams;
                 if ($filetype == 'file') {
-                    $copy_to_myfiles = '<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.
+                    $copyToMyFiles = '<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.
                         Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), array(), ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
 
                     if (api_get_setting('allow_my_files') === 'false') {
-                        $copy_to_myfiles = '';
+                        $copyToMyFiles = '';
                     }
                 }
 
@@ -5511,7 +5511,7 @@ class DocumentManager
                 ) {
                     return '<span style="float:left" '.$visibility_class.'>'.
                     $title.
-                    '</span>'.$force_download_html.$send_to.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
+                    '</span>'.$force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
                 } elseif (
 
                     // Show preview
@@ -5539,7 +5539,7 @@ class DocumentManager
                             'style' => 'float:left;'
                         ]
                     )
-                    . $force_download_html.$send_to.$copy_to_myfiles
+                    . $force_download_html.$send_to.$copyToMyFiles
                     . $open_in_new_window_link.$pdf_icon;
                 } else {
                     // For a "PDF Download" of the file.
@@ -5555,11 +5555,11 @@ class DocumentManager
                     }
                     // No plugin just the old and good showinframes.php page
                     return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" style="float:left" '.$visibility_class.' >'.$title.'</a>'.
-                    $pdfPreview.$force_download_html.$send_to.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
+                    $pdfPreview.$force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
                 }
             } else {
                 return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.$title.'</a>'.
-                $force_download_html.$send_to.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
+                $force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
             }
             // end copy files to users myfiles
         } else {

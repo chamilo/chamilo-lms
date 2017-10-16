@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *
  * Exercise results from Learning paths
  *
  * @todo implement pagination
@@ -34,7 +33,7 @@ if (api_is_platform_admin()) {
 
 if ($global) {
     $temp_course_list = CourseManager :: get_courses_list();
-    foreach ($temp_course_list  as $temp_course_item) {
+    foreach ($temp_course_list as $temp_course_item) {
         $course_item = api_get_course_info($temp_course_item['code']);
         $course_list[] = array(
             'code' => $course_item['code'],
@@ -254,6 +253,6 @@ function export_complete_report_csv($filename, $array)
         Export :: arrayToCsv($array, $filename);
     }
     exit;
-
 }
+
 Display :: display_footer();

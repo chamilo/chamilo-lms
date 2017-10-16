@@ -705,7 +705,7 @@ class Database
      */
     public static function getDoctrineConfig($path)
     {
-        $isDevMode = false;
+        $isDevMode = true; // Forces doctrine to use ArrayCache instead of apc/xcache/memcache/redis
         $isSimpleMode = false; // related to annotations @Entity
         $cache = null;
         $path = !empty($path) ? $path : api_get_path(SYS_PATH);

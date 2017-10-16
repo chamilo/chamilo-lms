@@ -248,9 +248,6 @@ class NotebookManager
                 echo '<a href="index.php?'.api_get_cidreq().'&action=addnote">'.
                     Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32').'</a>';
             }
-        } else {
-            echo '<a href="javascript:void(0)">'.
-                Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32').'</a>';
         }
 
         echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=creation_date&direction='.$link_sort_direction.'">'.
@@ -262,6 +259,9 @@ class NotebookManager
         echo '</div>';
 
         $notebookView = Session::read('notebook_view');
+        if (empty($notebookView)) {
+            $notebookView = 'creation_date';
+        }
 
         if (!in_array($notebookView, array('creation_date', 'update_date', 'title'))) {
             Session::write('notebook_view', 'creation_date');
@@ -269,13 +269,9 @@ class NotebookManager
 
         // Database table definition
         $t_notebook = Database::get_course_table(TABLE_NOTEBOOK);
-        if ($notebookView == 'creation_date' || $notebookView == 'update_date') {
-            $order_by = " ORDER BY ".$notebookView." $sort_direction ";
-        } else {
-            $order_by = " ORDER BY ".$notebookView." $sort_direction ";
-        }
+        $order_by = " ORDER BY ".$notebookView." $sort_direction ";
 
-        //condition for the session
+        // Condition for the session
         $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id);
 

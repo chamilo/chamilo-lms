@@ -481,16 +481,20 @@ if ($reminder == 2 && empty($my_remind_list)) {
  * If the expired time is major that zero(0) then the expired time is compute on this time.
  */
 if ($time_control) {
-    if ($debug) error_log('7.1. Time control is enabled');
-    if ($debug) error_log('7.2. $current_expired_time_key  '.$current_expired_time_key);
-    if ($debug) error_log('7.3. $_SESSION[expired_time][$current_expired_time_key]  '.$_SESSION['expired_time'][$current_expired_time_key]);
+    if ($debug) {
+        error_log('7.1. Time control is enabled');
+        error_log('7.2. $current_expired_time_key  '.$current_expired_time_key);
+        error_log('7.3. $_SESSION[expired_time][$current_expired_time_key]  '.$_SESSION['expired_time'][$current_expired_time_key]);
+    }
 
     if (!isset($_SESSION['expired_time'][$current_expired_time_key])) {
         //Timer - Get expired_time for a student
         if (!empty($exercise_stat_info)) {
-            if ($debug) {error_log('7.4 Seems that the session ends and the user want to retake the exam'); };
             $expired_time_of_this_attempt = $exercise_stat_info['expired_time_control'];
-            if ($debug) {error_log('7.5 $expired_time_of_this_attempt: '.$expired_time_of_this_attempt); }
+            if ($debug) {
+                error_log('7.4 Seems that the session ends and the user want to retake the exam');
+                error_log('7.5 $expired_time_of_this_attempt: '.$expired_time_of_this_attempt);
+            }
             // Get the last attempt of an exercise
             $last_attempt_date = Event::getLastAttemptDateOfExercise($exercise_stat_info['exe_id']);
 
@@ -505,32 +509,33 @@ if ($time_control) {
                 $diff = $current_timestamp - api_strtotime($last_attempt_date, 'UTC');
                 $last_attempt_date = api_get_utc_datetime(api_strtotime($last_attempt_date, 'UTC') + $diff);
             }
-            if ($debug) {error_log('7.6. $last_attempt_date: '.$last_attempt_date); }
 
             //New expired time - it is due to the possible closure of session
             $new_expired_time_in_seconds = api_strtotime($expired_time_of_this_attempt, 'UTC') - api_strtotime($last_attempt_date, 'UTC');
-            if ($debug) {error_log('7.7. $new_expired_time_in_seconds: '.$new_expired_time_in_seconds); }
-
             $expected_time = $current_timestamp + $new_expired_time_in_seconds;
-            if ($debug) {error_log('7.8. $expected_time1: '.$expected_time); }
-
             $clock_expired_time = api_get_utc_datetime($expected_time);
-            if ($debug) {error_log('7.9. $clock_expired_time: '.$clock_expired_time); }
 
             // First we update the attempt to today
             /* How the expired time is changed into "track_e_exercises" table,
                then the last attempt for this student should be changed too */
             $sql = "UPDATE $exercise_attempt_table SET
-                    tms = '".api_get_utc_datetime()."'
+                      tms = '".api_get_utc_datetime()."'
                     WHERE
                         exe_id = '".$exercise_stat_info['exe_id']."' AND
                         tms = '".$last_attempt_date."' ";
-            if ($debug) {error_log('7.10. $sql: '.$sql); }
             Database::query($sql);
 
-            //Sessions  that contain the expired time
+            // Sessions that contain the expired time
             $_SESSION['expired_time'][$current_expired_time_key] = $clock_expired_time;
-            if ($debug) {error_log('7.11. Setting the $_SESSION[expired_time]: '.$_SESSION['expired_time'][$current_expired_time_key]); };
+
+            if ($debug) {
+                error_log('7.6. $last_attempt_date: '.$last_attempt_date);
+                error_log('7.7. $new_expired_time_in_seconds: '.$new_expired_time_in_seconds);
+                error_log('7.8. $expected_time1: '.$expected_time);
+                error_log('7.9. $clock_expired_time: '.$clock_expired_time);
+                error_log('7.10. $sql: '.$sql);
+                error_log('7.11. Setting the $_SESSION[expired_time]: '.$_SESSION['expired_time'][$current_expired_time_key]);
+            }
         }
     } else {
         $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key];
@@ -560,7 +565,6 @@ if (!isset($_SESSION['questionList'])) {
         $questionList = explode(',', $exercise_stat_info['data_tracking']);
     }
     Session::write('questionList', $questionList);
-    if ($debug > 0) { error_log('$_SESSION[questionList] was set'); }
 } else {
     if (isset($objExercise) && isset($_SESSION['objExercise'])) {
         $questionList = $_SESSION['questionList'];
@@ -586,7 +590,9 @@ if ($current_question > $question_count) {
 }
 
 if ($formSent && isset($_POST)) {
-    if ($debug) { error_log('9. $formSent was set'); }
+    if ($debug) {
+        error_log('9. $formSent was set');
+    }
 
     // Initializing
     if (!is_array($exerciseResult)) {
@@ -605,7 +611,6 @@ if ($formSent && isset($_POST)) {
         if ($debug) { error_log('9.1. $choice is an array '.print_r($choice, 1)); }
         // Also store hotspot spots in the session ($exerciseResultCoordinates
         // will be stored in the session at the end of this script)
-
         if (isset($_POST['hotspot'])) {
             $exerciseResultCoordinates = $_POST['hotspot'];
             if ($debug) { error_log('9.2. $_POST[hotspot] data '.print_r($exerciseResultCoordinates, 1)); }
@@ -649,13 +654,15 @@ if ($formSent && isset($_POST)) {
                 }
             }
         }
-        if ($debug) { error_log('9.3.  $choice is an array - end'); }
-        if ($debug) { error_log('9.4.  $exerciseResult '.print_r($exerciseResult, 1)); }
+        if ($debug) {
+            error_log('9.3.  $choice is an array - end');
+            error_log('9.4.  $exerciseResult '.print_r($exerciseResult, 1));
+        }
     }
 
     // the script "exercise_result.php" will take the variable $exerciseResult from the session
     Session::write('exerciseResult', $exerciseResult);
-//    Session::write('remind_list', $remind_list);
+    // Session::write('remind_list', $remind_list);
     Session::write('exerciseResultCoordinates', $exerciseResultCoordinates);
 
     // if all questions on one page OR if it is the last question (only for an exercise with one question per page)
@@ -664,7 +671,6 @@ if ($formSent && isset($_POST)) {
             // goes to the script that will show the result of the exercise
             if ($objExercise->type == ALL_ON_ONE_PAGE) {
                 if ($debug) { error_log('10. Exercise ALL_ON_ONE_PAGE -> Redirecting to exercise_result.php'); }
-
                 //We check if the user attempts before sending to the exercise_result.php
                 if ($objExercise->selectAttempts() > 0) {
                     $attempt_count = Event::get_attempt_count(
@@ -913,7 +919,6 @@ if ($origin != 'learnpath') {
 
 if ($reminder == 2) {
     if ($debug) { error_log(' $reminder == 2'); }
-
     $data_tracking  = $exercise_stat_info['data_tracking'];
     $data_tracking  = explode(',', $data_tracking);
     $current_question = 1; //set by default the 1st question
@@ -1412,7 +1417,6 @@ if (!empty($error)) {
         echo '<br>';
     }
     echo '</form>';
-
 }
 
 if ($origin != 'learnpath') {

@@ -1715,8 +1715,6 @@ function api_get_course_setting($setting_name, $course_code = null)
     return -1;
 }
 
-
-
 /**
  * Gets an anonymous user ID
  *
@@ -3966,6 +3964,11 @@ function api_item_property_update(
         $objCourse = $em->find('ChamiloCoreBundle:Course', intval($course_id));
         $objTime = new DateTime('now', new DateTimeZone('UTC'));
         $objUser = $em->find('ChamiloUserBundle:User', intval($user_id));
+        if (empty($objUser)) {
+            // Use anonymous
+            $user_id = api_get_anonymous_id();
+            $objUser = $em->find('ChamiloUserBundle:User', $user_id);
+        }
         $objGroup = $em->find('ChamiloCourseBundle:CGroupInfo', intval($to_group_id));
         $objToUser = $em->find('ChamiloUserBundle:User', intval($to_user_id));
         $objSession = $em->find('ChamiloCoreBundle:Session', intval($session_id));
@@ -7118,7 +7121,7 @@ function api_set_default_visibility(
             null,
             null,
             null,
-            api_get_session_id()
+            $sessionId
         );
 
         // Fixes default visibility for tests

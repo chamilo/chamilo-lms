@@ -1907,9 +1907,9 @@ class Tracking
         $courseId = intval($courseId);
         $session_id = intval($session_id);
         $count = 0;
-        $tbl_track_e_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $sql = "SELECT count(*) as count_connections
-                FROM $tbl_track_e_course_access
+                FROM $table
                 WHERE
                     c_id = $courseId AND
                     session_id = $session_id

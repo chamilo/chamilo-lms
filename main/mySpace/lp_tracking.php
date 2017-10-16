@@ -21,7 +21,7 @@ $session_id = isset($_REQUEST['id_session']) && !empty($_REQUEST['id_session']) 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $user_id = isset($_GET['student_id']) ? intval($_GET['student_id']) : api_get_user_id();
 $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : api_get_course_id();
-$origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : null;
+$origin = api_get_origin();
 $lp_id = intval($_GET['lp_id']);
 $csv_content = array();
 $course_info = api_get_course_info($courseCode);

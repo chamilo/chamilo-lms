@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * 	Saving the scores.
- * 	@package chamilo.exercise
+ * Saving the scores.
+ * @package chamilo.exercise
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $courseInfo = api_get_course_info();
@@ -21,7 +21,7 @@ $TABLETRACK_HOTPOTATOES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPO
 $TABLE_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 $score = $_REQUEST['score'];
-$origin = $_REQUEST['origin'];
+$origin = api_get_origin();
 $learnpath_item_id = intval($_REQUEST['learnpath_item_id']);
 $lpViewId = isset($_REQUEST['lp_view_id']) ? intval($_REQUEST['lp_view_id']) : null;
 $course_id = $courseInfo['real_id'];

@@ -492,7 +492,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     $_user = api_get_user_info();
     $is_courseAdmin = api_is_course_admin();
     $is_courseTutor = api_is_course_tutor();
-    $origin = isset($_GET['origin']) ? $_GET['origin'] : null;
+    $origin = api_get_origin();
 
     $token = Security::get_token();
     $dropbox_person = new Dropbox_Person(

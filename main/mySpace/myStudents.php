@@ -15,7 +15,7 @@ api_block_anonymous_users();
 
 $export = isset($_GET['export']) ? $_GET['export'] : false;
 $sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : 0;
-$origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
+$origin = api_get_origin();
 $course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
 $courseInfo = api_get_course_info($course_code);
 $student_id = isset($_GET['student']) ? (int) $_GET['student'] : 0;

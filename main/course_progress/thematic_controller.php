@@ -93,7 +93,7 @@ class ThematicController
                     if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
                         if (api_is_allowed_to_edit(null, true)) {
                             $thematic_ids = $_POST['id'];
-                            $affected_rows = $thematic->thematic_destroy($thematic_ids);
+                            $thematic->delete($thematic_ids);
                         }
                         $action = 'thematic_details';
                     }
@@ -102,7 +102,7 @@ class ThematicController
                     // Delete a thematic
                     if (isset($thematic_id)) {
                         if (api_is_allowed_to_edit(null, true)) {
-                            $thematic->thematic_destroy($thematic_id);
+                            $thematic->delete($thematic_id);
                         }
                         $thematic_id = null;
                         $action = 'thematic_details';
@@ -117,7 +117,7 @@ class ThematicController
                         // Remove current thematic.
                         $list = $thematic->get_thematic_list();
                         foreach ($list as $i) {
-                            $thematic->thematic_destroy($i);
+                            $thematic->delete($i);
                         }
                     }
 

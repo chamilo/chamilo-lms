@@ -368,7 +368,7 @@ class Thematic
      * @param int|array One or many thematic ids
      * @return int            Affected rows
      */
-    public function thematic_destroy($thematic_id)
+    public function delete($thematic_id)
     {
         $_course = api_get_course_info();
         $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);

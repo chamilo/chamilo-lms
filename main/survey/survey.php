@@ -149,21 +149,50 @@ echo '<div class="actions">'.$survey_actions.'</div>';
 
 if ($survey_data['survey_type'] == 0) {
     $urlQuestion = api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&action=add';
-
     echo '<div class="well">';
-    echo Display::url(Display::return_icon('yesno.png', get_lang('YesNo'), null, ICON_SIZE_BIG), $urlQuestion.'&type=yesno&survey_id='.$survey_id);
-    echo Display::url(Display::return_icon('mcua.png', get_lang('UniqueSelect'), null, ICON_SIZE_BIG), $urlQuestion.'&type=multiplechoice&survey_id='.$survey_id);
-    echo Display::url(Display::return_icon('mcma.png', get_lang('MultipleResponse'), null, ICON_SIZE_BIG), $urlQuestion.'&type=multipleresponse&survey_id='.$survey_id);
-    echo Display::url(Display::return_icon('open_answer.png', get_lang('Open'), null, ICON_SIZE_BIG), $urlQuestion.'&type=open&survey_id='.$survey_id);
-    echo Display::url(Display::return_icon('dropdown.png', get_lang('Dropdown'), null, ICON_SIZE_BIG), $urlQuestion.'&type=dropdown&survey_id='.$survey_id);
-    echo Display::url(Display::return_icon('percentagequestion.png', get_lang('Percentage'), null, ICON_SIZE_BIG), $urlQuestion.'&type=percentage&survey_id='.$survey_id);
-    echo Display::url(Display::return_icon('scorequestion.png', get_lang('Score'), null, ICON_SIZE_BIG), $urlQuestion.'&type=score&survey_id='.$survey_id);
-    echo Display::url(Display::return_icon('commentquestion.png', get_lang('Comment'), null, ICON_SIZE_BIG), $urlQuestion.'&type=comment&survey_id='.$survey_id);
-    echo Display::url(Display::return_icon('page_end.png', get_lang('Pagebreak'), null, ICON_SIZE_BIG), $urlQuestion.'&type=pagebreak&survey_id='.$survey_id);
+    echo Display::url(
+        Display::return_icon('yesno.png', get_lang('YesNo'), null, ICON_SIZE_BIG),
+        $urlQuestion.'&type=yesno&survey_id='.$survey_id
+    );
+    echo Display::url(
+        Display::return_icon('mcua.png', get_lang('UniqueSelect'), null, ICON_SIZE_BIG),
+        $urlQuestion.'&type=multiplechoice&survey_id='.$survey_id
+    );
+    echo Display::url(
+        Display::return_icon('mcma.png', get_lang('MultipleResponse'), null, ICON_SIZE_BIG),
+        $urlQuestion.'&type=multipleresponse&survey_id='.$survey_id
+    );
+    echo Display::url(
+        Display::return_icon('open_answer.png', get_lang('Open'), null, ICON_SIZE_BIG),
+        $urlQuestion.'&type=open&survey_id='.$survey_id
+    );
+    echo Display::url(
+        Display::return_icon('dropdown.png', get_lang('Dropdown'), null, ICON_SIZE_BIG),
+        $urlQuestion.'&type=dropdown&survey_id='.$survey_id
+    );
+    echo Display::url(
+        Display::return_icon('percentagequestion.png', get_lang('Percentage'), null, ICON_SIZE_BIG),
+        $urlQuestion.'&type=percentage&survey_id='.$survey_id
+    );
+    echo Display::url(
+        Display::return_icon('scorequestion.png', get_lang('Score'), null, ICON_SIZE_BIG),
+        $urlQuestion.'&type=score&survey_id='.$survey_id
+    );
+    echo Display::url(
+        Display::return_icon('commentquestion.png', get_lang('Comment'), null, ICON_SIZE_BIG),
+        $urlQuestion.'&type=comment&survey_id='.$survey_id
+    );
+    echo Display::url(
+        Display::return_icon('page_end.png', get_lang('Pagebreak'), null, ICON_SIZE_BIG),
+        $urlQuestion.'&type=pagebreak&survey_id='.$survey_id
+    );
     echo '</div>';
 } else {
     echo '<div class="well">';
-    echo Display::url(Display::return_icon('yesno.png', get_lang('YesNo'), null, ICON_SIZE_BIG), $urlQuestion.'&type=personality&survey_id='.$survey_id);
+    echo Display::url(
+        Display::return_icon('yesno.png', get_lang('YesNo'), null, ICON_SIZE_BIG),
+        $urlQuestion.'&type=personality&survey_id='.$survey_id
+    );
     echo '</a></div>';
 }
 
@@ -195,10 +224,12 @@ while ($row = Database::fetch_array($result)) {
 $sql = "SELECT survey_question.*, count(survey_question_option.question_option_id) as number_of_options
         FROM $table_survey_question survey_question
         LEFT JOIN $table_survey_question_option survey_question_option
-        ON survey_question.question_id = survey_question_option.question_id AND survey_question_option.c_id = $course_id
+        ON 
+            survey_question.question_id = survey_question_option.question_id AND 
+            survey_question_option.c_id = $course_id
         WHERE
             survey_question.survey_id 	= ".intval($survey_id)." AND
-             survey_question.c_id 		= $course_id
+            survey_question.c_id 		= $course_id
         GROUP BY survey_question.question_id
         ORDER BY survey_question.sort ASC";
 
@@ -252,8 +283,10 @@ echo '</table>';
 
 if ($is_survey_type_1) {
     echo '<br /><br /><b>'.get_lang('ManageGroups').'</b><br /><br />';
-
-    if (in_array($_GET['sendmsg'], array('GroupUpdatedSuccessfully', 'GroupDeletedSuccessfully', 'GroupCreatedSuccessfully'))) {
+    if (in_array(
+        $_GET['sendmsg'],
+        array('GroupUpdatedSuccessfully', 'GroupDeletedSuccessfully', 'GroupCreatedSuccessfully'))
+    ) {
         echo Display::return_message(
             get_lang($_GET['sendmsg']),
             'confirmation',

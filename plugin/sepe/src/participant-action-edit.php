@@ -1,11 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \ChamiloSession as Session;
+
 /**
  *    This script displays a participant edit form.
  */
 
-use \ChamiloSession as Session;
 require_once '../config.php';
 
 $course_plugin = 'sepe';
@@ -15,8 +16,8 @@ $_cid = 0;
 if (!empty($_POST)) {
     $check = Security::check_token('post');
     if ($check) {
-        $companyTutorId = (!empty($_POST['company_tutor_id']) ? intval($_POST['company_tutor_id']) : NULL);
-        $trainingTutorId = (!empty($_POST['training_tutor_id']) ? intval($_POST['training_tutor_id']) : NULL);
+        $companyTutorId = (!empty($_POST['company_tutor_id']) ? intval($_POST['company_tutor_id']) : null);
+        $trainingTutorId = (!empty($_POST['training_tutor_id']) ? intval($_POST['training_tutor_id']) : null);
         $tutorCompanyDocumentType = Database::escape_string(trim($_POST['tutor_company_document_type']));
         $tutorCompanyDocumentNumber = Database::escape_string(trim($_POST['tutor_company_document_number']));
         $tutorCompanyDocumentLetter = Database::escape_string(trim($_POST['tutor_company_document_letter']));
@@ -158,6 +159,7 @@ if (!empty($_POST)) {
         }
         session_write_close();
         header("Location: participant-action-edit.php?new_participant=0&participant_id=".$participantId."&action_id=".$actionId);
+        exit;
     } else {
         $participantId = intval($_POST['participant_id']);
         $actionId = intval($_POST['action_id']);
@@ -167,6 +169,7 @@ if (!empty($_POST)) {
         $_SESSION['sepe_message_error'] = $plugin->get_lang('ProblemToken');
         session_write_close();
         header("Location: participant-action-edit.php?new_participant=".$newParticipant."&participant_id=".$participantId."&action_id=".$actionId);
+        exit;
     }
 } else {
     $token = Security::get_token();

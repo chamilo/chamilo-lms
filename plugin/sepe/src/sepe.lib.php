@@ -78,7 +78,7 @@ function getCourseCode($actionId)
 {
     global $tableCourse;
     $courseId = getCourse($actionId);
-    $sql = "SELECT code FROM $tableCourse WHERE id = $courseId";    
+    $sql = "SELECT code FROM $tableCourse WHERE id = $courseId";
     $rs = Database::query($sql);
     $aux = Database::fetch_assoc($rs);
     return $aux['code'];
@@ -186,7 +186,7 @@ function getCentersList()
 function listTutorType($condition)
 {
     global $tableTutorCompany;
-       $sql = "SELECT * FROM $tableTutorCompany WHERE ".$condition." ORDER BY alias ASC, document_number ASC;";
+    $sql = "SELECT * FROM $tableTutorCompany WHERE ".$condition." ORDER BY alias ASC, document_number ASC;";
     $res = Database::query($sql);
     $aux = array();
     while ($row = Database::fetch_assoc($res)) {
@@ -195,7 +195,7 @@ function listTutorType($condition)
         if (trim($row['alias']) != '') {
             $tmp['alias'] = $row['alias'].' - '.$row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];    
         } else {
-            $tmp['alias'] = $row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];    
+            $tmp['alias'] = $row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];
         }
         $aux[] = $tmp;
     }
@@ -224,7 +224,7 @@ function getTutorsSpecialty($specialtyId)
             if (trim($row['firstname']) != '' || trim($row['lastname']) != '') {
                 $tutor['data'] = $row['firstname'].' '.$row['lastname'].' ('.$row['document_type'].' '.$row['document_number'].' '.$row['document_letter'].' )';    
             } else {
-                $tutor['data'] = $row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];    
+                $tutor['data'] = $row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];
             }
             $aux[] = $tutor;
         }

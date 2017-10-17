@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \ChamiloSession as Session;
+
 /**
  *    This script displays a administrator menu.
  */
-
-use \ChamiloSession as Session;
 
 require_once '../config.php';
 

@@ -1,10 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \ChamiloSession as Session;
+
 /**
  * This script displays a data center edit form.
  */
-use \ChamiloSession as Session;
 
 require_once '../config.php';
 $plugin = SepePlugin::create();
@@ -30,7 +31,7 @@ if (!empty($_POST)) {
                         tracking_url = '".$trackingUrl."', 
                         phone = '".$phone."', 
                         mail = '".$mail."' 
-                    WHERE id = $id";    
+                    WHERE id = $id";
         } else {
             $sql = "INSERT INTO $tableSepeCenter (
                         id, 

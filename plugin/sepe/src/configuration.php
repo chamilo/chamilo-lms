@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \ChamiloSession as Session;
+
 /**
  * This script displays setting api key user.
  */
-
-use \ChamiloSession as Session;
 
 require_once '../config.php';
 
@@ -22,7 +22,6 @@ if (api_is_platform_admin()) {
     if (Database::num_rows($result) > 0) {
         $tmp = Database::fetch_assoc($result);
         $info = $tmp['api'];
-        
     } else {
         $info = '';
     }

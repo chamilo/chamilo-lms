@@ -957,7 +957,7 @@ if (empty($details)) {
 
     if ($user_info['status'] != INVITEE) {
         $csv_content[] = array();
-        $csv_content[] = array(str_replace('&nbsp;', '', $table_title));
+        $csv_content[] = array(str_replace('&nbsp;', '', strip_tags($table_title)));
         $trackingColumns = api_get_configuration_value('tracking_columns');
         if (isset($trackingColumns['my_students_lp'])) {
             foreach ($columnHeaders as $key => $value) {

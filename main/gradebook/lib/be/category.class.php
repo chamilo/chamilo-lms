@@ -2165,7 +2165,7 @@ class Category implements GradebookItem
      * @param int $user_id
      * @param bool $sendNotification
      *
-     * @return bool|string
+     * @return array
      */
     public static function generateUserCertificate(
         $category_id,
@@ -2538,7 +2538,7 @@ class Category implements GradebookItem
      * @param float $score The achieved score
      * @param int $userId The user id
      * @param int $categoryId The gradebook category
-     * @return false|string The insert id
+     * @return int The insert id
      */
     public static function registerCurrentScore($score, $userId, $categoryId)
     {

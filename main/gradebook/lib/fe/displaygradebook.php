@@ -242,14 +242,17 @@ class DisplayGradebook
      * Displays the header for the gradebook containing the navigation tree and links
      * @param Category $catobj
      * @param int $showtree '1' will show the browse tree and naviation buttons
+     * @param $selectcat
      * @param boolean $is_course_admin
      * @param boolean $is_platform_admin
-     * @param boolean Whether to show or not the link to add a new qualification
+     * @param bool $simple_search_form
+     * @param boolean $show_add_qualification Whether to show or not the link to add a new qualification
      * (we hide it in case of the course-embedded tool where we have only one
-     * calification per course or session)
-     * @param boolean Whether to show or not the link to add a new item inside
+     * per course or session)
+     * @param boolean $show_add_link Whether to show or not the link to add a new item inside
      * the qualification (we hide it in case of the course-embedded tool
-     * where we have only one calification per course or session)
+     * where we have only one qualification per course or session)
+     * @param array $certificateLinkInfo
      * @return void Everything is printed on screen upon closing
      */
     public static function header(
@@ -261,7 +264,7 @@ class DisplayGradebook
         $simple_search_form,
         $show_add_qualification = true,
         $show_add_link = true,
-        $certificateLinkInfo = null
+        $certificateLinkInfo = []
     ) {
         $userId = api_get_user_id();
         $courseId = api_get_course_int_id();
@@ -284,7 +287,6 @@ class DisplayGradebook
         $message_resource = $objcat->show_message_resource_delete($course_id);
         $grade_model_id = $catobj->get_grade_model_id();
         $header = null;
-
         if (isset($catobj) && !empty($catobj)) {
             $categories = Category::load(
                 null,

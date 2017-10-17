@@ -456,7 +456,7 @@ class Evaluation implements GradebookItem
 
     /**
      * Check if an evaluation name (with the same parent category) already exists
-     * @param $name name to check (if not given, the name property of this object will be checked)
+     * @param string $name to check (if not given, the name property of this object will be checked)
      * @param $parent parent category
      * @return bool
      */

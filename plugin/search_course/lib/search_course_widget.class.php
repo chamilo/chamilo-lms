@@ -1,8 +1,6 @@
 <?php
 /* For license terms, see /license.txt */
 
-require_once __DIR__.'/register_course_widget.class.php';
-
 /**
  * Search course widget.
  * Display a search form and a list of courses that matches the search.
@@ -418,5 +416,4 @@ EOT;
         }
         return $courses;
     }
-
 }

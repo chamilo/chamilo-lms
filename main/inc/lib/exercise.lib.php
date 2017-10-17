@@ -3283,7 +3283,7 @@ EOT;
      * @param int $exercise_id
      * @return int
      */
-    public static function getNumberStudentsFillBlanksAnwserCount(
+    public static function getNumberStudentsFillBlanksAnswerCount(
         $question_id,
         $exercise_id
     ) {

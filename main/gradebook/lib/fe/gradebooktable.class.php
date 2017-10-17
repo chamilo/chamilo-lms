@@ -251,7 +251,7 @@ class GradebookTable extends SortableTable
         $total_categories_weight = 0;
         $scoredisplay = ScoreDisplay::instance();
 
-        $totalResult = [0, 0];
+        $totalUserResult = [0, 0];
         $totalBest = [0, 0];
         $totalAverage = [0, 0];
 
@@ -365,6 +365,9 @@ class GradebookTable extends SortableTable
                             $data['result_score'][0],
                             $data['result_score'][1],
                         ];
+
+                        $totalUserResult[0] += $totalResult[0] / ($totalResult[1] ?: 1) * $data[3];
+                        $totalUserResult[1] += $data[3];
 
                         $totalBest = [
                             $scoredisplay->format_score($totalBest[0] + $data['best_score'][0]),
@@ -800,6 +803,26 @@ class GradebookTable extends SortableTable
                     }
                 }
             }
+        }
+
+        if (!$this->teacherView) {
+            $rowTotal = [];
+            $rowTotal[] = ' ';
+            $rowTotal[] = get_lang('FinalScore');
+
+            if (!$this->exportToPdf) {
+                $rowTotal[] = ' ';
+            }
+            $rowTotal[] = ' ';
+            $rowTotal[] = $scoredisplay->display_score(
+                $totalUserResult,
+                SCORE_DIV_PERCENT_WITH_CUSTOM
+            );
+            $rowTotal[] = ' ';
+            $rowTotal[] = ' ';
+            $rowTotal[] = ' ';
+
+            $sortable_data[] = $rowTotal;
         }
 
         return $sortable_data;

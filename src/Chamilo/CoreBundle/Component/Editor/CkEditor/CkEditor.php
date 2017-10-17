@@ -109,7 +109,7 @@ class CkEditor extends Editor
         /** @var \Chamilo\CoreBundle\Entity\SystemTemplate $template */
         $templateList = array();
         $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
-        $search = array('{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}','{CSS}');
+        $search = array('{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}');
         $replace = array(
             $cssTheme,
             api_get_path(REL_CODE_PATH).'img/',
@@ -177,7 +177,7 @@ class CkEditor extends Editor
         $entityManager = \Database::getManager();
         $systemTemplates = $entityManager->getRepository('ChamiloCoreBundle:SystemTemplate')->findAll();
         $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
-        $search = array('{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}','{CSS}');
+        $search = array('{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}');
         $replace = array(
             $cssTheme,
             api_get_path(REL_CODE_PATH).'img/',

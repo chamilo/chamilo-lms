@@ -1623,7 +1623,7 @@ if ($allowMessages === true) {
             $senderId = $message->getUserSenderId();
             $senderInfo = api_get_user_info($senderId);
             echo Display::panelCollapse(
-                $localTime.' '.$senderInfo['complete_name']. ' '.$message->getTitle(),
+                $localTime.' '.$senderInfo['complete_name'].' '.$message->getTitle(),
                 $message->getContent().'<br />'.$date.'<br />'.get_lang(
                     'Author'
                 ).': '.$senderInfo['complete_name_with_message_link'],

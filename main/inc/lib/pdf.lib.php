@@ -304,15 +304,15 @@ class PDF
                     $doc = new DOMDocument();
                     $result = @$doc->loadHTML($document_html);
 
-                    //Fixing only images @todo do the same thing with other elements
+                    // Fixing only images @todo do the same thing with other elements
                     $elements = $doc->getElementsByTagName('img');
+                    $protocol = api_get_protocol();
                     if (!empty($elements)) {
                         foreach ($elements as $item) {
                             $old_src = $item->getAttribute('src');
-                            if (strpos($old_src, 'http') === false) {
+                            if (strpos($old_src, $protocol) === false) {
                                 if (strpos($old_src, '/main/default_course_document') === false) {
                                     $old_src_fixed = '';
-
                                     if (strpos($old_src, '/main/img') === false) {
                                         if (api_get_path(REL_PATH) != '/') {
                                             $old_src_fixed = str_replace(

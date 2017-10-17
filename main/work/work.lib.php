@@ -5632,7 +5632,7 @@ function workGetExtraFieldData($workId)
     if (!empty($extraFieldData)) {
         $result .= '<div class="well">';
         foreach ($extraFieldData as $data) {
-            $result .= $data['text'].': '.$data['value'];
+            $result .= $data['text'].': <b>'.$data['value'].'</b>';
         }
         $result .= '</div>';
     }

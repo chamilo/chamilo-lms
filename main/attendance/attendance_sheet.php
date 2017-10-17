@@ -361,7 +361,7 @@ if (api_is_allowed_to_edit(null, true) ||
                                     echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
                                     echo '<span class="anchor_'.$calendar['id'].'"></span>';
                                 } else {
-                                    echo $presence ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null , ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY);
+                                    echo $presence ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY);
                                 }
                             } else {
                                 switch ($presence) {

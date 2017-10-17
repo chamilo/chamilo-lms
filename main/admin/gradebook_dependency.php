@@ -62,7 +62,7 @@ foreach ($mandatoryList as $courseMandatoryId) {
 $totalDependencies = count($dependencies);
 $min = $categoryObj->getMinimumToValidate();
 $gradeBooksToValidateInDependence = $categoryObj->getGradeBooksToValidateInDependence();
-$userResult  = [];
+$userResult = [];
 
 $dependencyList = [];
 foreach ($dependencies as $courseId) {

@@ -1207,7 +1207,7 @@ class learnpathItem
                                                     );
                                                 }
                                             } elseif (strpos($second_part, '=') > 0) {
-                                                if (substr($second_part,0,1) === '/') {
+                                                if (substr($second_part, 0, 1) === '/') {
                                                     // Link starts with a /,
                                                     // making it absolute (relative to DocumentRoot).
                                                     $files_list[] = array(
@@ -1252,7 +1252,7 @@ class learnpathItem
                                                     }
                                                 } else {
                                                     // No starting '/', making it relative to current document's path.
-                                                    if (substr($second_part, 0,2) == './') {
+                                                    if (substr($second_part, 0, 2) == './') {
                                                         $second_part = substr(
                                                             $second_part,
                                                             2

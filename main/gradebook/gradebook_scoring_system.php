@@ -56,14 +56,12 @@ $scoreform = new ScoreDisplayForm(
 );
 
 if ($scoreform->validate()) {
-    $value_export = '';
     $value_export = $scoreform->exportValues();
     $value_export = isset($value_export) ? $scoreform->exportValues() : '';
     $values = $value_export;
 
     // create new array of custom display settings
     // this loop also checks if all score ranges are unique
-
     $scoringDisplay = array();
     $ranges_ok = true;
     $endscore = isset($values['endscore']) ? $values['endscore'] : null;

@@ -16,7 +16,6 @@ api_block_anonymous_users();
 GradebookUtils::block_students();
 
 $edit_cat = isset($_REQUEST['editcat']) ? intval($_REQUEST['editcat']) : '';
-
 $get_select_cat = intval($_GET['selectcat']);
 
 $catadd = new Category();
@@ -33,7 +32,7 @@ if ($_in_course) {
 
 $catadd->set_course_code(api_get_course_id());
 $form = new CatForm(
-    CatForm :: TYPE_ADD,
+    CatForm::TYPE_ADD,
     $catadd,
     'add_cat_form',
     null,

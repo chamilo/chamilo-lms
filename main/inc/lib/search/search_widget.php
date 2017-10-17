@@ -4,8 +4,6 @@
  * Search widget. Shows the search screen contents.
  * @package chamilo.include.search
  */
-
-require_once __DIR__.'/IndexableChunk.class.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 /**

@@ -1265,7 +1265,6 @@ class learnpath
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 $row2 = Database::fetch_array($res);
-                require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
                 $di = new ChamiloIndexer();
                 $di->remove_document((int) $row2['search_did']);
             }
@@ -4890,9 +4889,7 @@ class learnpath
             return false;
 
         require_once 'xapian.php'; // TODO: Try catch every xapian use or make wrappers on API.
-        require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
         require_once api_get_path(LIBRARY_PATH).'search/xapian/XapianQuery.php';
-        require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
 
         $items_table = Database::get_course_table(TABLE_LP_ITEM);
         // TODO: Make query secure agains XSS : use member attr instead of post var.

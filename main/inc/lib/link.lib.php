@@ -218,8 +218,6 @@ class Link extends Model
                 if ((api_get_setting('search_enabled') == 'true') &&
                     $link_id && extension_loaded('xapian')
                 ) {
-                    require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
-                    require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
                     require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
                     $course_int_id = $_course['real_id'];
@@ -459,8 +457,7 @@ class Link extends Model
             $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
             $res = Database:: query($sql);
             if (Database:: num_rows($res) > 0) {
-                $row = Database:: fetch_array($res);
-                require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
+                $row = Database::fetch_array($res);
                 $di = new ChamiloIndexer();
                 $di->remove_document((int) $row['search_did']);
             }
@@ -603,8 +600,6 @@ class Link extends Model
             $res = Database:: query($sql);
 
             if (Database:: num_rows($res) > 0) {
-                require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
-                require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
                 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
                 $se_ref = Database:: fetch_array($res);

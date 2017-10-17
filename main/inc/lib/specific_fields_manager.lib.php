@@ -1,6 +1,7 @@
 <?php
 /**
  * Manage specific tools
+ * @todo convert into a class
  * @package chamilo.library
  */
 

@@ -2704,8 +2704,6 @@ class Exercise
         }
         $course_id = api_get_course_id();
 
-        require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
-        require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
         require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
         $specific_fields = get_specific_field_list();
@@ -2772,8 +2770,6 @@ class Exercise
             $res = Database::query($sql);
 
             if (Database::num_rows($res) > 0) {
-                require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
-                require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
                 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
                 $se_ref = Database::fetch_array($res);
@@ -2845,7 +2841,6 @@ class Exercise
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 $row = Database::fetch_array($res);
-                require_once(api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php');
                 $di = new ChamiloIndexer();
                 $di->remove_document((int) $row['search_did']);
                 unset($di);

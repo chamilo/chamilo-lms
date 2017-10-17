@@ -2,20 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *
- * @package chamilo.include.search
- */
-include_once __DIR__.'/../../../global.inc.php';
-require_once __DIR__.'/search_processor.class.php';
-
-/**
  * Process exercises before pass it to search listing scripts
  * @package chamilo.include.search
  */
 class quiz_processor extends search_processor
 {
     public $exercices = array();
-
     public function __construct($rows)
     {
         $this->rows = $rows;
@@ -26,7 +18,7 @@ class quiz_processor extends search_processor
             switch ($row_val['xapian_data'][SE_DATA]['type']) {
                 case SE_DOCTYPE_EXERCISE_EXERCISE:
                     $exercise_id = $se_data['exercise_id'];
-                    $question = NULL;
+                    $question = null;
                     $item = array(
                         'courseid' => $courseid,
                         'question' => $question,

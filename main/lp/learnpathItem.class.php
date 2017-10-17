@@ -331,7 +331,6 @@ class learnpathItem
 
         if (api_get_setting('search_enabled') == 'true') {
             if (!is_null($this->search_did)) {
-                require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
                 $di = new ChamiloIndexer();
                 $di->remove_document($this->search_did);
             }
@@ -3230,7 +3229,6 @@ class learnpathItem
         global $charset;
         $course_id = api_get_course_int_id();
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
         $a_terms = preg_split('/,/', $terms);
         $i_terms = preg_split('/,/', $this->get_terms());
         foreach ($i_terms as $term) {

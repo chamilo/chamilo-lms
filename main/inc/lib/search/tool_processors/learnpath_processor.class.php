@@ -2,14 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *
- * @package chamilo.include.search
- */
-include_once __DIR__.'/../../../global.inc.php';
-require_once __DIR__.'/search_processor.class.php';
-require_once __DIR__.'/../IndexableChunk.class.php';
-
-/**
  * Process learning paths before pass it to search listing scripts
  * @package chamilo.include.search
  */

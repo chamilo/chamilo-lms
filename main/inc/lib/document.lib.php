@@ -1349,7 +1349,6 @@ class DocumentManager
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 $row2 = Database::fetch_array($res);
-                require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
                 $di = new ChamiloIndexer();
                 $di->remove_document((int) $row2['search_did']);
             }
@@ -4116,10 +4115,6 @@ class DocumentManager
                 $file_title = $row['title'];
                 $file_content = self::get_text_content($doc_path, $doc_mime);
                 $course_code = Database::escape_string($course_code);
-
-                require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
-                require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
-
                 $ic_slide = new IndexableChunk();
                 $ic_slide->addValue('title', $file_title);
                 $ic_slide->addCourseId($course_code);

@@ -2190,6 +2190,11 @@ class Category implements GradebookItem
             return false;
         }
 
+        // Block certification links depending gradebook configuration (generate certifications)
+        if (empty($category->getGenerateCertificates())) {
+            return false;
+        }
+
         $sessionId = $category->get_session_id();
         $courseCode = $category->get_course_code();
         $courseInfo = api_get_course_info($courseCode);

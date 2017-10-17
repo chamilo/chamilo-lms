@@ -341,11 +341,6 @@ class StudentPublicationLink extends AbstractLink
         return isset($this->exercise_data['description']) ? $this->exercise_data['description'] : null;
     }
 
-    public function get_test_id()
-    {
-        return 'DEBUG:ID';
-    }
-
     public function get_link()
     {
         $session_id = api_get_session_id();

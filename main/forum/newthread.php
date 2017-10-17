@@ -130,22 +130,21 @@ if (!empty($groupId)) {
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewTopic'));
 }
 
-$htmlHeadXtra[] = <<<JS
+$htmlHeadXtra[] = "
     <script>
-    $(document).on('ready', function() {
-        $('#reply-add-attachment').on('click', function(e) {
-            e.preventDefault();
-
-            var newInputFile = $('<input>', {
-                type: 'file',
-                name: 'user_upload[]'
+        $(document).on('ready', function() {
+            $('#reply-add-attachment').on('click', function(e) {
+                e.preventDefault();
+    
+                var newInputFile = $('<input>', {
+                    type: 'file',
+                    name: 'user_upload[]'
+                });
+                $('[name=\"user_upload[]\"]').parent().append(newInputFile);
             });
-
-            $('[name="user_upload[]"]').parent().append(newInputFile);
         });
-    });
     </script>
-JS;
+";
 
 $form = show_add_post_form(
     $current_forum,

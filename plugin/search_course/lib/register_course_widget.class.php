@@ -12,7 +12,6 @@
 class RegisterCourseWidget
 {
     const ACTION_SUBSCRIBE = 'subscribe';
-
     const PARAM_SUBSCRIBE = 'subscribe';
     const PARAM_PASSCODE = 'course_registration_code';
 
@@ -62,29 +61,27 @@ class RegisterCourseWidget
     function action_subscribe_user()
     {
         $action = self::get('action');
-        if ($action != self::ACTION_SUBSCRIBE)
-        {
+        if ($action != self::ACTION_SUBSCRIBE) {
             return false;
         }
 
         $course_code = self::post(self::PARAM_SUBSCRIBE);
-        if (empty($course_code))
-        {
+        if (empty($course_code)) {
             return false;
         }
 
         $registration_code = self::post(self::PARAM_PASSCODE);
 
-        if ($this->subscribe_user($course_code, $registration_code))
-        {
+        if ($this->subscribe_user($course_code, $registration_code)) {
             echo Display::return_message(get_lang('EnrollToCourseSuccessful'), 'confirmation');
+
             return;
         }
-        if (!empty($registration_code))
-        {
+        if (!empty($registration_code)) {
             echo Display::return_message(get_lang('CourseRegistrationCodeIncorrect'), 'error');
         }
         $this->display_form($course_code);
+
         return true;
     }
 
@@ -101,18 +98,16 @@ class RegisterCourseWidget
     {
         $course = api_get_course_info($course_code);
         $course_regisration_code = $course['registration_code'];
-        if (!empty($course_regisration_code) && $registration_code != $course_regisration_code)
-        {
+        if (!empty($course_regisration_code) && $registration_code != $course_regisration_code) {
             return false;
         }
 
-        if (empty($user_id))
-        {
+        if (empty($user_id)) {
             global $_user;
             $user_id = $_user['user_id'];
         }
 
-        return (bool) CourseManager::add_user_to_course($user_id, $course_code);
+        return (bool)CourseManager::add_user_to_course($user_id, $course_code);
     }
 
     /**

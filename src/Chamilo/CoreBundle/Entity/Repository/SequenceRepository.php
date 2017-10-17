@@ -70,7 +70,6 @@ class SequenceRepository extends EntityRepository
      *
      * @param int $resourceId
      * @param int $type
-     * @return boolean
      */
     public function deleteResource($resourceId, $type)
     {

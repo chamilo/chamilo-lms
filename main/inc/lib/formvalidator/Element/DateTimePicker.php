@@ -202,5 +202,4 @@ class DateTimePicker extends HTML_QuickForm_text
                 break;
         }
     }
-
 }

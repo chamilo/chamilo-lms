@@ -2,13 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	This script displays an area where teachers can edit the group properties and member list.
- *	Groups are also often called "teams" in the Dokeos code.
+ * This script displays an area where teachers can edit the group properties and member list.
+ * Groups are also often called "teams" in the Dokeos code.
  *
- *	@author various contributors
- *	@author Roan Embrechts (VUB), partial code cleanup, initial virtual course support
- *	@package chamilo.group
- *	@todo course admin functionality to create groups based on who is in which course (or class).
+ * @author various contributors
+ * @author Roan Embrechts (VUB), partial code cleanup, initial virtual course support
+ * @package chamilo.group
+ * @todo course admin functionality to create groups based on who is in which course (or class).
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -191,10 +191,8 @@ $form->addButtonSave(get_lang('SaveSettings'));
 
 if ($form->validate()) {
     $values = $form->exportValues();
-
     // Storing the users (we first remove all users and then add only those who were selected)
     GroupManager:: unsubscribe_all_users($current_group);
-
     if (isset($_POST['group_members']) && count($_POST['group_members']) > 0) {
         GroupManager:: subscribe_users(
             $values['group_members'],
@@ -228,7 +226,6 @@ switch ($action) {
 }
 
 $defaults = $current_group;
-
 $defaults['group_members'] = $selected_users;
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 $defaults['action'] = $action;
@@ -242,7 +239,6 @@ Display::display_header($nameTools, 'Group');
 
 $form->setDefaults($defaults);
 echo GroupManager::getSettingBar('member');
-
 $form->display();
 
-Display :: display_footer();
+Display::display_footer();

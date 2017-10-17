@@ -15,7 +15,6 @@ if (api_get_setting('allow_social_tool') != 'true') {
 }
 
 $this_section = SECTION_SOCIAL;
-
 $group_id = intval($_GET['id']);
 $usergroup = new UserGroup();
 

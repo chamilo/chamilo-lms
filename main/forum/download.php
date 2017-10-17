@@ -89,8 +89,8 @@ $forum_forum_visibility = api_get_item_visibility(
 if ($forum_thread_visibility == 1 && $forum_forum_visibility == 1) {
     if (Security::check_abs_path(
         $full_file_name,
-        api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/upload/forum/')
-    ) {
+        api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/upload/forum/'
+    )) {
         DocumentManager::file_send_for_download(
             $full_file_name,
             true,

@@ -127,7 +127,6 @@ Display::display_header($tool_name);
 $where = '';
 $rows_category_session = array();
 if ((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_GET['id_category'])) {
-
     $where = 'WHERE session_category_id != '.$categoryId.' OR session_category_id IS NULL';
     $sql = 'SELECT id, name  FROM '.$tbl_session.' WHERE session_category_id ='.$categoryId.' ORDER BY name';
     $result = Database::query($sql);

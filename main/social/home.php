@@ -152,9 +152,13 @@ foreach ($results as $result) {
     } else {
         $result['count'] = $result['count'].' '.get_lang('Members');
     }
-    $result['name'] = '<div class="group-name">'.Display::url(
-            api_ucwords(cut($result['name'], 40, true)), $group_url)
-        .'</div><div class="count-username">'.Display::returnFontAwesomeIcon('user').$result['count'].'</div>';
+    $result['name'] = '<div class="group-name">'.
+        Display::url(
+            api_ucwords(cut($result['name'], 40, true)),
+            $group_url
+        )
+        .'</div><div class="count-username">'.
+        Display::returnFontAwesomeIcon('user').$result['count'].'</div>';
 
     $picture = $userGroup->get_picture_group(
         $id,

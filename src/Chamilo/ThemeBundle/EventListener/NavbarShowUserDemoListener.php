@@ -1,16 +1,15 @@
 <?php
-/**
- * NavbarShowUserListener.php
- * avanzu-admin
- * Date: 23.02.14
- */
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\ThemeBundle\EventListener;
-
 
 use Chamilo\ThemeBundle\Event\ShowUserEvent;
 use Chamilo\ThemeBundle\Model\UserModel;
 
+/**
+ * Class NavbarShowUserDemoListener
+ * @package Chamilo\ThemeBundle\EventListener
+ */
 class NavbarShowUserDemoListener
 {
     public function onShowUser(ShowUserEvent $event)

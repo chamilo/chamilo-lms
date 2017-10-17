@@ -14,7 +14,6 @@ namespace Chamilo\ThemeBundle\Model;
  */
 class MenuItemModel implements MenuItemInterface
 {
-
     /**
      * @var mixed
      */

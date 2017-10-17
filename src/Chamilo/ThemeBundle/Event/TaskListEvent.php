@@ -1,15 +1,14 @@
 <?php
-/**
- * TaskListEvent.php
- * avanzu-admin
- * Date: 23.02.14
- */
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\ThemeBundle\Event;
 
-
 use Chamilo\ThemeBundle\Model\TaskInterface;
 
+/**
+ * Class TaskListEvent
+ * @package Chamilo\ThemeBundle\Event
+ */
 class TaskListEvent extends ThemeEvent
 {
     protected $tasks = array();

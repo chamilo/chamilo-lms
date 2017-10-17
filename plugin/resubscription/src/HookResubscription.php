@@ -9,14 +9,14 @@
  */
 class HookResubscription extends HookObserver implements HookResubscribeObserverInterface
 {
-
     /**
      * Class constructor
      */
     public function __construct()
     {
         parent::__construct(
-            'plugin/resubscription/src/Resubscription.php', 'resubscription'
+            'plugin/resubscription/src/Resubscription.php',
+            'resubscription'
         );
     }
 
@@ -28,7 +28,6 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
     {
         $data = $hook->getEventData();
         if ($data['type'] === HOOK_EVENT_TYPE_PRE) {
-
             $resubscriptionLimit = Resubscription::create()->get('resubscription_limit');
 
              // Initialize variables as a calendar year by default

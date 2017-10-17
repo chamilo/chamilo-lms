@@ -464,7 +464,6 @@ if ($show_full_profile) {
     }
 
     // If there are information to show Block Extra Information
-
     if (!empty($extra_information_value)) {
         $social_extra_info_block = $extra_information;
     }

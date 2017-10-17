@@ -27,7 +27,6 @@ if (isset($_REQUEST['user_friend'])) {
 $group_id = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;
 $message_id = isset($_GET['message_id']) ? intval($_GET['message_id']) : null;
 $actions = array('add_message_group', 'edit_message_group', 'reply_message_group');
-
 $allowed_action = isset($_GET['action']) && in_array($_GET['action'], $actions) ? Security::remove_XSS($_GET['action']) : '';
 
 $to_group = '';

@@ -40,5 +40,4 @@ class ExtraFieldRelTagRepository extends EntityRepository
 
         return $queryBuilder->getQuery()->getResult();
     }
-
 }

@@ -9,17 +9,17 @@
  */
 class SearchCoursePlugin extends Plugin
 {
-
     /**
      *
-     * @return SearchCoursePlugin 
+     * @return SearchCoursePlugin
      */
     static function create()
     {
         static $result = null;
+
         return $result ? $result : $result = new self();
     }
-    
+
     function get_name()
     {
         return 'search_course';
@@ -29,5 +29,4 @@ class SearchCoursePlugin extends Plugin
     {
         parent::__construct('1.1', 'Laurent Opprecht');
     }
-
 }

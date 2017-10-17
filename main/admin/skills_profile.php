@@ -47,7 +47,6 @@ if ($form->validate()) {
         $skills = array_filter($skills);
         $skills = array_unique($skills);
         Session::write('skills', $skills);
-
     } else {
         $skills = Session::read('skills', []);
     }

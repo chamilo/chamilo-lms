@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Get the intro steps for the web page
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>

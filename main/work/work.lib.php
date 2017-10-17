@@ -134,7 +134,7 @@ function settingsForm($defaults)
  *
  * @return array
  */
-function get_work_data_by_path($path, $courseId = null)
+function get_work_data_by_path($path, $courseId = 0)
 {
     $path = Database::escape_string($path);
     if (empty($courseId)) {
@@ -161,7 +161,7 @@ function get_work_data_by_path($path, $courseId = null)
  * @param int $sessionId
  * @return array
  */
-function get_work_data_by_id($id, $courseId = null, $sessionId = null)
+function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
 {
     $id = intval($id);
 
@@ -1339,9 +1339,7 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
     }
 
     $extra_conditions .= " AND parent_id  = ".$work_id."  ";
-
     $where_condition = null;
-
     if (!empty($notMeUserId)) {
         $where_condition .= " AND u.user_id <> ".intval($notMeUserId);
     }
@@ -1818,7 +1816,6 @@ function get_work_user_list_from_documents(
 
     $currentUserId = api_get_user_id();
     $work_data = get_work_data_by_id($workId);
-
     $qualificationExists = false;
 
     if (!empty($work_data['qualification']) && intval($work_data['qualification']) > 0) {
@@ -2523,7 +2520,7 @@ function is_work_exist_by_url($url)
  * @param int $sessionId
  * @return bool
  */
-function user_is_author($itemId, $userId = null, $courseId = null, $sessionId = null)
+function user_is_author($itemId, $userId = null, $courseId = 0, $sessionId = 0)
 {
     if (empty($itemId)) {
         return false;
@@ -2539,7 +2536,6 @@ function user_is_author($itemId, $userId = null, $courseId = null, $sessionId = 
     if ($is_allowed_to_edit) {
         $isAuthor = true;
     } else {
-
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
@@ -2573,7 +2569,7 @@ function user_is_author($itemId, $userId = null, $courseId = null, $sessionId = 
  * @author cvargas
  * @author Julio Montoya <gugli100@gmail.com> Fixing query
  */
-function get_list_users_without_publication($task_id, $studentId = null)
+function get_list_users_without_publication($task_id, $studentId = 0)
 {
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -3506,6 +3502,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
 
 /**
  * @param array $work
+ * @param array $workParent
  *
  * @return string
  */
@@ -3543,8 +3540,6 @@ function getWorkCommentForm($work, $workParent)
                     $work['qualification']
                 );
             }
-
-
             $form->addFile('file', get_lang('Correction'));
             $form->setDefaults(['qualification' => $work['qualification']]);
         }
@@ -3569,7 +3564,7 @@ function getWorkCommentForm($work, $workParent)
 
 /**
  * @param array $homework result of get_work_assignment_by_id()
- * @return string
+ * @return array
  */
 function getWorkDateValidationStatus($homework)
 {
@@ -3871,9 +3866,9 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
 /**
  * Check if the current uploaded work filename already exists in the current assement
  *
- * @param $filename
- * @param $workId
- * @return mixed
+ * @param string $filename
+ * @param int $workId
+ * @return array
  */
 function checkExistingWorkFileName($filename, $workId)
 {
@@ -4367,9 +4362,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
     $qualification = isset($params['qualification']) && !empty($params['qualification']) ? 1 : 0;
     $expiryDate = isset($params['enableExpiryDate']) && (int) $params['enableExpiryDate'] == 1 ? api_get_utc_datetime($params['expires_on']) : '';
     $endDate = isset($params['enableEndDate']) && (int) $params['enableEndDate'] == 1 ? api_get_utc_datetime($params['ends_on']) : '';
-
     $data = get_work_assignment_by_id($workId, $course_id);
-
     if (!empty($expiryDate)) {
         $expiryDateCondition = "expires_on = '".Database::escape_string($expiryDate)."', ";
     } else {
@@ -4513,7 +4506,8 @@ function deleteWorkItem($item_id, $courseInfo)
         )
     ) {
         // We found the current user is the author
-        $sql = "SELECT url, contains_file, user_id, session_id, parent_id FROM $work_table
+        $sql = "SELECT url, contains_file, user_id, session_id, parent_id 
+                FROM $work_table
                 WHERE c_id = $course_id AND id = $item_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -4756,6 +4750,7 @@ function getUploadDocumentType()
  * @param array $courseInfo
  * @param bool $showScore
  * @param bool $studentDeleteOwnPublication
+ * @return bool
  */
 function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
 {
@@ -4805,6 +4800,7 @@ function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
         ];
         Database::insert($table_course_setting, $params);
     }
+    return true;
 }
 
 /**
@@ -5237,8 +5233,8 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
 
                 if (Security::check_abs_path(
                     $full_file_name,
-                    api_get_path(SYS_COURSE_PATH).api_get_course_path().'/')
-                ) {
+                    api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'
+                )) {
                     Event::event_download($title);
 
                     return array(

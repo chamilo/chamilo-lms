@@ -125,5 +125,4 @@ class Profile
 
         return $this;
     }
-
 }

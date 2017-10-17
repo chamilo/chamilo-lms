@@ -8,7 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SettingsCurrent
  *
- * @ORM\Table(name="settings_current", uniqueConstraints={@ORM\UniqueConstraint(name="unique_setting", columns={"variable", "subkey", "access_url"})}, indexes={@ORM\Index(name="access_url", columns={"access_url"})})
+ * @ORM\Table(
+ *     name="settings_current",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="unique_setting", columns={"variable", "subkey", "access_url"})},
+ *     indexes={@ORM\Index(name="access_url", columns={"access_url"})})
  * @ORM\Entity
  */
 class SettingsCurrent

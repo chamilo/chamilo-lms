@@ -1,12 +1,7 @@
 <?php
-/**
- * TaskModel.php
- * avanzu-admin
- * Date: 23.02.14
- */
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\ThemeBundle\Model;
-
 
 /**
  * Class TaskModel
@@ -15,7 +10,6 @@ namespace Chamilo\ThemeBundle\Model;
  */
 class TaskModel implements TaskInterface
 {
-
     /**
      *
      */

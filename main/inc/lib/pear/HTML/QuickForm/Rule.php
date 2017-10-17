@@ -49,7 +49,7 @@ class HTML_QuickForm_Rule
     * @access public
     * @abstract
     */
-    function validate($value, $options)
+    public function validate($value, $options)
     {
         return true;
     }
@@ -60,7 +60,7 @@ class HTML_QuickForm_Rule
     * @param  string    rule name
     * @access public
     */
-    function setName($ruleName)
+    public function setName($ruleName)
     {
         $this->name = $ruleName;
     }

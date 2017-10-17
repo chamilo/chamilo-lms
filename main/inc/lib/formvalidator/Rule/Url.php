@@ -20,6 +20,5 @@ class HTML_QuickForm_Rule_Url extends HTML_QuickForm_Rule
     {
         return (bool) filter_var($url, FILTER_VALIDATE_URL);
     }
-
 }
 

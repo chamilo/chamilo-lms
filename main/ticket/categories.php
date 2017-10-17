@@ -173,7 +173,7 @@ function modify_filter($id, $params, $row)
         );
     }
 
-	return $result;
+    return $result;
 }
 
 $table->set_header(0, '', false);

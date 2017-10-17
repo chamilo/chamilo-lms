@@ -78,7 +78,8 @@ $extraField = new ExtraField('skill');
 $returnParams = $extraField->addElements($editForm, $skillId);
 $jquery_ready_content = $returnParams['jquery_ready_content'];
 
-// the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
+// the $jquery_ready_content variable collects all functions that will be load
+// in the $(document).ready javascript function
 if (!empty($jquery_ready_content)) {
     $htmlHeadXtra[] = '<script>
     $(document).ready(function(){

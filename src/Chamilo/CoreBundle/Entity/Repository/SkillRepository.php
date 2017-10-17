@@ -58,5 +58,4 @@ class SkillRepository extends EntityRepository
 
         return $qb->getQuery()->getOneOrNullResult();
     }
-
 }

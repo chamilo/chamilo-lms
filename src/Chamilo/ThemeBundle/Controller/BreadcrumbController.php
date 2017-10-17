@@ -15,9 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
  * Controller to handle breadcrumb display inside the layout
  *
  */
-class BreadcrumbController extends Controller {
-
-
+class BreadcrumbController extends Controller
+{
     /**
      * Controller Reference action to be called inside the layout.
      *
@@ -78,5 +77,4 @@ class BreadcrumbController extends Controller {
     {
         return $this->get('event_dispatcher');
     }
-
 }

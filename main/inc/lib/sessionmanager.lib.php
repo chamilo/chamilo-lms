@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
 
 /**
  * Class SessionManager
@@ -321,7 +322,6 @@ class SessionManager
 
         $where = 'WHERE 1=1 ';
         $user_id = api_get_user_id();
-
         $extraJoin = '';
 
         if (api_is_session_admin() &&
@@ -465,7 +465,6 @@ class SessionManager
         $where .= $conditions['where'];
         $inject_where = $conditions['inject_where'];
         $inject_extra_fields = $conditions['inject_extra_fields'];
-
         $order = $conditions['order'];
         $limit = $conditions['limit'];
 
@@ -582,7 +581,7 @@ class SessionManager
                         true
                     );
                 }
-                 $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
+                $url = api_get_path(WEB_CODE_PATH)."session/resume_session.php?id_session=".$session['id'];
                 if (api_is_drh()) {
                     $url = api_get_path(WEB_CODE_PATH)."session/about.php?session_id=".$session['id'];
                 }
@@ -741,7 +740,7 @@ class SessionManager
 
         $sessionCond = 'and session_id = %s';
         if ($sessionId == 'T') {
-            $sessionCond = "";
+            $sessionCond = '';
         }
 
         $where = " WHERE c_id = '%s' AND s.status <> 2 $sessionCond";
@@ -774,7 +773,7 @@ class SessionManager
             $users[$user['user_id']] = $user;
         }
 
-        //Get lessons
+        // Get lessons
         $lessons = LearnpathList::get_course_lessons($course['code'], $sessionId);
 
         $table = array();
@@ -1160,8 +1159,17 @@ class SessionManager
             $lessons_done = ($lessons_progress * $lessons_total) / 100;
             $lessons_left = $lessons_total - $lessons_done;
 
-            //Exercises
-            $exercises_progress = str_replace('%', '', Tracking::get_exercise_student_progress($exercises, $user['user_id'], $course['real_id'], $user['id_session']));
+            // Exercises
+            $exercises_progress = str_replace(
+                '%',
+                '',
+                Tracking::get_exercise_student_progress(
+                    $exercises,
+                    $user['user_id'],
+                    $course['real_id'],
+                    $user['id_session']
+                )
+            );
             $exercises_done = round(($exercises_progress * $exercises_total) / 100);
             $exercises_left = $exercises_total - $exercises_done;
 
@@ -1174,8 +1182,8 @@ class SessionManager
                 $assignments_progress = 0;
             }
 
-            //Wiki
-            //total revisions per user
+            // Wiki
+            // total revisions per user
             $sql = "SELECT count(*) as count
                     FROM $wiki
                     WHERE c_id = %s and session_id = %s and user_id = %s";
@@ -1226,7 +1234,7 @@ class SessionManager
                 $forums_progress = 0;
             }
 
-            //Overall Total
+            // Overall Total
             $overall_total = ($course_description_progress + $exercises_progress + $forums_progress + $assignments_progress + $wiki_progress + $surveys_progress) / 6;
 
             $link = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$user[0].'&details=true&course='.$course['code'].'&id_session='.$user['id_session'].'"> %s </a>';
@@ -1389,7 +1397,6 @@ class SessionManager
             $data[] = $user;
         }
 
-        //foreach
         foreach ($data as $key => $info) {
             $sql = "SELECT
                     name
@@ -1415,12 +1422,20 @@ class SessionManager
 
         foreach ($return as $key => $info) {
             //Search for ip, we do less querys if we iterate the final array
-            $sql = sprintf("SELECT user_ip FROM $track_e_login WHERE login_user_id = %d AND login_date < '%s' ORDER BY login_date DESC LIMIT 1", $info['user_id'], $info['logindate']); //TODO add select by user too
+            $sql = sprintf(
+                "SELECT user_ip FROM $track_e_login WHERE login_user_id = %d AND login_date < '%s' ORDER BY login_date DESC LIMIT 1",
+                $info['user_id'],
+                $info['logindate']
+            ); //TODO add select by user too
             $result = Database::query($sql);
             $ip = Database::fetch_assoc($result);
             //if no ip founded, we search the closest higher ip
             if (empty($ip['user_ip'])) {
-                $sql = sprintf("SELECT user_ip FROM $track_e_login WHERE login_user_id = %d AND login_date > '%s'  ORDER BY login_date ASC LIMIT 1", $info['user_id'], $info['logindate']); //TODO add select by user too
+                $sql = sprintf(
+                    "SELECT user_ip FROM $track_e_login WHERE login_user_id = %d AND login_date > '%s'  ORDER BY login_date ASC LIMIT 1",
+                    $info['user_id'],
+                    $info['logindate']
+                ); //TODO add select by user too
                 $result = Database::query($sql);
                 $ip = Database::fetch_assoc($result);
             }
@@ -1524,13 +1539,19 @@ class SessionManager
             );
 
             return false;
-        } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i') && !api_is_valid_date($startDate, 'Y-m-d H:i:s')) {
+        } elseif (!empty($startDate) &&
+            !api_is_valid_date($startDate, 'Y-m-d H:i') &&
+            !api_is_valid_date($startDate, 'Y-m-d H:i:s')
+        ) {
             Display::addFlash(
                 Display::return_message(get_lang('InvalidStartDate'), 'warning')
             );
 
             return false;
-        } elseif (!empty($endDate) && !api_is_valid_date($endDate, 'Y-m-d H:i') && !api_is_valid_date($endDate, 'Y-m-d H:i:s')) {
+        } elseif (!empty($endDate) &&
+            !api_is_valid_date($endDate, 'Y-m-d H:i') &&
+            !api_is_valid_date($endDate, 'Y-m-d H:i:s')
+        ) {
             Display::addFlash(
                 Display::return_message(get_lang('InvalidEndDate'), 'warning')
             );
@@ -1651,7 +1672,7 @@ class SessionManager
         $em = Database::getManager();
         $userId = api_get_user_id();
 
-        /** @var \Chamilo\CoreBundle\Entity\Repository\SequenceRepository $repo */
+        /** @var SequenceRepository $repo */
         $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
         $sequenceResource = $repo->findRequirementForResource(
             $id_checked,
@@ -2216,7 +2237,6 @@ class SessionManager
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
-
         $session_visibility = intval($session_visibility);
 
         if ($removeUsersNotInList) {
@@ -2336,7 +2356,6 @@ class SessionManager
 
         // Get the list of courses related to this session
         $course_list = self::get_course_list_by_session_id($session_id);
-
         if (!empty($course_list)) {
             foreach ($course_list as $course) {
                 $courseId = $course['id'];
@@ -2443,7 +2462,6 @@ class SessionManager
                         $existingCourse['c_id'],
                         $sessionId
                     );
-
                     $nbr_courses--;
                 }
             }
@@ -2917,10 +2935,10 @@ class SessionManager
     /**
      * Delete sessions categories
      * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>, from existing code
-     * @param	array	id_checked
-     * @param	bool	include delete session
-     * @param	bool	optional, true if the function is called by a webservice, false otherwise.
-     * @return	void	Nothing, or false on error
+     * @param    array    id_checked
+     * @param    bool    include delete session
+     * @param    bool    optional, true if the function is called by a webservice, false otherwise.
+     * @return    bool    Nothing, or false on error
      * The parameters is a array to delete sessions
      * */
     public static function delete_session_category($id_checked, $delete_session = false, $from_ws = false)
@@ -3378,7 +3396,7 @@ class SessionManager
             return $row;
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -3559,7 +3577,6 @@ class SessionManager
                     continue;
                 }
                 $imageFilename = \ExtraField::FIELD_TYPE_FILE_IMAGE.'_'.$row['id'].'.png';
-
                 $row['image'] = is_file($sysUploadPath.$imageFilename) ? $webUploadPath.$imageFilename : $imgPath;
 
                 if ($row['display_start_date'] == '0000-00-00 00:00:00' || $row['display_start_date'] == '0000-00-00') {
@@ -3616,9 +3633,7 @@ class SessionManager
     ) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-
         $session_id = intval($session_id);
-
         $sqlSelect = "*, c.id, c.id as real_id";
 
         if ($getCount) {
@@ -3677,6 +3692,7 @@ class SessionManager
      * @param null $column
      * @param null $direction
      * @param bool $getCount
+     * @param string $keyword
      * @return array
      */
     public static function getAllCoursesFollowedByUser(
@@ -3687,7 +3703,7 @@ class SessionManager
         $column = null,
         $direction = null,
         $getCount = false,
-        $keyword = null
+        $keyword = ''
     ) {
         if (empty($sessionId)) {
             $sessionsSQL = self::get_sessions_followed_by_drh(
@@ -3795,9 +3811,10 @@ class SessionManager
     /**
      * Gets the count of courses by session filtered by access_url
      * @param int session id
+     * @param string $keyword
      * @return array list of courses
      */
-    public static function getCourseCountBySessionId($session_id, $keyword = null)
+    public static function getCourseCountBySessionId($session_id, $keyword = '')
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -4009,7 +4026,7 @@ class SessionManager
      * @param int $userId
      * @param int $sessionId
      *
-     * @return \Chamilo\CoreBundle\Entity\SessionRelUser
+     * @return SessionRelUser
      */
     public static function getUserStatusInSession($userId, $sessionId)
     {
@@ -4504,7 +4521,6 @@ class SessionManager
         &$groupBackup = array()
     ) {
         $content = file($file);
-
         $error_message = null;
         $session_counter = 0;
         $defaultUserId = empty($defaultUserId) ? api_get_user_id() : (int) $defaultUserId;
@@ -4592,7 +4608,6 @@ class SessionManager
                 $dateEnd = explode('/', $enreg['DateEnd']);
                 $dateStart = $dateStart[0].'-'.$dateStart[1].'-'.$dateStart[2].' 00:00:00';
                 $dateEnd = $dateEnd[0].'-'.$dateEnd[1].'-'.$dateEnd[2].' 23:59:59';
-
                 $session_category_id = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
                 $sessionDescription = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
 

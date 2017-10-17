@@ -108,7 +108,7 @@ if (isset($_GET['import'])) {
         Display :: display_header(get_lang('Import'));
     }
     $eval[0]->check_lock_permissions();
-    if ($_POST['formSent']) {
+    if (isset($_POST['formSent']) && $_POST['formSent']) {
         if (!empty($_FILES['import_file']['name'])) {
             $values = $import_result_form->exportValues();
             $file_type = $_POST['file_type'];
@@ -487,7 +487,7 @@ if (isset($_GET['print'])) {
     );
     exit;
 } else {
-    $resulttable = new ResultTable($eval[0], $allresults, $iscourse, $addparams);
+    $resultTable = new ResultTable($eval[0], $allresults, $iscourse, $addparams);
 }
 
 $htmlHeadXtra[] = '<script>
@@ -572,6 +572,6 @@ if ($file_type == null) {
         DisplayGradebook::display_header_result($eval[0], $currentcat[0]->get_id(), 1);
     }
     // Letter-based scores are built from lib/results_data_generator.class.php::get_score_display()
-    $resulttable->display();
+    $resultTable->display();
     Display::display_footer();
 }

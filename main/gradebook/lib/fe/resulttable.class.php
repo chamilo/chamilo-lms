@@ -16,13 +16,18 @@ class ResultTable extends SortableTable
     private $iscourse;
 
     /**
-     * Constructor
+     * ResultTable constructor.
+     * @param string $evaluation
+     * @param array $results
+     * @param null|string $iscourse
+     * @param array $addparams
+     * @param bool $forprint
      */
     public function __construct(
         $evaluation,
         $results = array(),
         $iscourse,
-        $addparams = null,
+        $addparams = [],
         $forprint = false
     ) {
         parent:: __construct(
@@ -98,7 +103,7 @@ class ResultTable extends SortableTable
                     $sorting = ResultsDataGenerator::RDG_SORT_LASTNAME;
                 }
                 break;
-            // first name or last name
+                // first name or last name
             case (1 + $col_adjust):
                 if ($isWesternNameOrder) {
                     $sorting = ResultsDataGenerator::RDG_SORT_LASTNAME;
@@ -106,7 +111,7 @@ class ResultTable extends SortableTable
                     $sorting = ResultsDataGenerator::RDG_SORT_FIRSTNAME;
                 }
                 break;
-            // Score
+                // Score
             case (2 + $col_adjust):
                 $sorting = ResultsDataGenerator::RDG_SORT_SCORE;
                 break;

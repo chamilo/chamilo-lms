@@ -63,6 +63,7 @@ function get_users($from, $limit, $column, $direction)
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
     $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
     $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+    $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 
     $lastConnectionDate = null;
     if (!empty($sleepingDays)) {
@@ -157,12 +158,21 @@ function get_users($from, $limit, $column, $direction)
 
         $row = array();
         if ($is_western_name_order) {
-            $row[] = Display::url($student_data['firstname'], $urlDetails);
-            $row[] = Display::url($student_data['lastname'], $urlDetails);
+            $first = Display::url($student_data['firstname'], $urlDetails);
+            $last = Display::url($student_data['lastname'], $urlDetails);
         } else {
-            $row[] = Display::url($student_data['lastname'], $urlDetails);
-            $row[] = Display::url($student_data['firstname'], $urlDetails);
+            $first = Display::url($student_data['lastname'], $urlDetails);
+            $last = Display::url($student_data['firstname'], $urlDetails);
         }
+
+        if ($export_csv) {
+            $row[] = strip_tags($first);
+            $row[] = strip_tags($last);
+        } else {
+            $row[] = $first;
+            $row[] = $last;
+        }
+
         $string_date = Tracking::get_last_connection_date($student_id, true);
         $first_date = Tracking::get_first_connection_date($student_id);
         $row[] = $first_date;
@@ -231,7 +241,7 @@ if (api_is_drh()) {
             $actionsLeft .= $item;
         }
     }
-} else if (api_is_student_boss()) {
+} elseif (api_is_student_boss()) {
     $actionsLeft .= Display::url(
         Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
@@ -324,13 +334,12 @@ $form->setDefaults($params);
 if ($export_csv) {
     // send the csv file if asked
     $content = $table->get_table_data();
-
     foreach ($content as &$row) {
         unset($row[4]);
     }
     $csv_content = array_merge($csv_header, $content);
     ob_end_clean();
-    Export :: arrayToCsv($csv_content, 'reporting_student_list');
+    Export::arrayToCsv($csv_content, 'reporting_student_list');
     exit;
 } else {
     Display::display_header($nameTools);
@@ -349,4 +358,4 @@ if ($export_csv) {
     $table->display();
 }
 
-Display :: display_footer();
+Display::display_footer();

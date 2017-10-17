@@ -4,14 +4,14 @@
 use ChamiloSession as Session;
 
 /**
- *	API event handler functions for AICC / CMIv4 in HACP communication mode
+ * API event handler functions for AICC / CMIv4 in HACP communication mode
  *
- *	@author   Denes Nagy <darkden@freemail.hu>
- *  @author   Yannick Warnier <ywarnier@beeznest.org>
- *	@version  v 1.0
- *	@access   public
- *	@package  chamilo.learnpath
- * 	@license	GNU/GPL
+ * @author   Denes Nagy <darkden@freemail.hu>
+ * @author   Yannick Warnier <ywarnier@beeznest.org>
+ * @version  v 1.0
+ * @access   public
+ * @package  chamilo.learnpath
+ * @license    GNU/GPL
  */
 
 /**

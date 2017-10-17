@@ -593,7 +593,10 @@ class Diagnoser
             '[Database]',
             'driver',
             '',
-            $driver, null, null, get_lang('Driver')
+            $driver,
+            null,
+            null,
+            get_lang('Driver')
         );
 
         $array[] = $this->build_setting(
@@ -601,7 +604,10 @@ class Diagnoser
             '[Database]',
             'host',
             '',
-            $host, null, null, get_lang('MysqlHostInfo')
+            $host,
+            null,
+            null,
+            get_lang('MysqlHostInfo')
         );
 
         $array[] = $this->build_setting(
@@ -609,7 +615,10 @@ class Diagnoser
             '[Database]',
             'port',
             '',
-            $port, null, null, get_lang('Port')
+            $port,
+            null,
+            null,
+            get_lang('Port')
         );
 
 
@@ -618,7 +627,10 @@ class Diagnoser
             '[Database]',
             'Database name',
             '',
-            $db, null, null, get_lang('Name')
+            $db,
+            null,
+            null,
+            get_lang('Name')
         );
 
         return $array;
@@ -740,16 +752,16 @@ class Diagnoser
         $comment
     ) {
         switch ($status) {
-            case self::STATUS_OK :
+            case self::STATUS_OK:
                 $img = 'bullet_green.png';
                 break;
-            case self::STATUS_WARNING :
+            case self::STATUS_WARNING:
                 $img = 'bullet_orange.png';
                 break;
-            case self::STATUS_ERROR :
+            case self::STATUS_ERROR:
                 $img = 'bullet_red.png';
                 break;
-            case self::STATUS_INFORMATION :
+            case self::STATUS_INFORMATION:
                 $img = 'bullet_blue.png';
                 break;
         }
@@ -781,30 +793,41 @@ class Diagnoser
         return '<a href="'.$url.'" target="about:bank">'.$title.'</a>';
     }
 
+    /**
+     * @param int $value
+     * @return string
+     */
     public function format_yes_no_optional($value)
     {
-    	$return = '';
-    	switch ($value) {
-     		case 0:
-     			$return = get_lang('No');
-     			break;
-     		case 1:
-     			$return = get_lang('Yes');
-     			break;
-			case 2:
-				$return = get_lang('Optional');
-				break;
-    	}
-    	return $return;
-
+        $return = '';
+        switch ($value) {
+            case 0:
+                $return = get_lang('No');
+                break;
+            case 1:
+                $return = get_lang('Yes');
+                break;
+            case 2:
+                $return = get_lang('Optional');
+                break;
+        }
+        return $return;
     }
 
-    function format_yes_no($value)
+    /**
+     * @param $value
+     * @return string
+     */
+    public function format_yes_no($value)
     {
         return $value ? get_lang('Yes') : get_lang('No');
     }
 
-    function format_on_off($value)
+    /**
+     * @param int $value
+     * @return string
+     */
+    public function format_on_off($value)
     {
         $value = intval($value);
         if ($value > 1) {

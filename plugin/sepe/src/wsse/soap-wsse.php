@@ -40,7 +40,8 @@
  * @version    1.1.0-dev
  */
 
-require('xmlseclibs.php');
+use RobRichards\XMLSecLibs\XMLSecurityDSig;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 
 class WSSESoap {
     const WSSENS = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd';

@@ -301,6 +301,13 @@ class PDF
                     $document_html = str_replace('../', '', $document_html);
                     $document_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/';
 
+                    // Fix app/upload links convert web to system paths
+                    $document_html = str_replace(
+                        api_get_path(WEB_UPLOAD_PATH),
+                        api_get_path(SYS_UPLOAD_PATH),
+                        $document_html
+                    );
+
                     $doc = new DOMDocument();
                     $result = @$doc->loadHTML($document_html);
 
@@ -310,6 +317,7 @@ class PDF
                     if (!empty($elements)) {
                         foreach ($elements as $item) {
                             $old_src = $item->getAttribute('src');
+
                             if (strpos($old_src, $protocol) === false) {
                                 if (strpos($old_src, '/main/default_course_document') === false) {
                                     $old_src_fixed = '';

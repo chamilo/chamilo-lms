@@ -5412,10 +5412,9 @@ class SessionManager
         if (!empty($coaches)) {
             foreach ($coaches as $coachId) {
                 $userInfo = api_get_user_info($coachId);
-                $list[] = api_get_person_name(
-                    $userInfo['firstname'],
-                    $userInfo['lastname']
-                );
+                if ($userInfo) {
+                    $list[] = $userInfo['complete_name'];
+                }
             }
         }
 
@@ -5746,7 +5745,7 @@ class SessionManager
     /**
      * @param array $sessions
      * @param array $sessionsDestination
-     * @return string
+     * @return array
      */
     public static function copyStudentsFromSession($sessions, $sessionsDestination)
     {
@@ -6051,7 +6050,7 @@ class SessionManager
      * Calls the methods bound to each tool when a course is registered into a session
      * @param int $sessionId
      * @param int $courseId
-     * @return void
+     * @return bool
      */
     public static function installCourse($sessionId, $courseId)
     {
@@ -6147,7 +6146,6 @@ class SessionManager
      * @param array $userSessionList format see self::importSessionDrhCSV()
      * @param bool $sendEmail
      * @param bool $removeOldRelationShips
-     * @return string
      */
     public static function subscribeDrhToSessionList(
         $userSessionList,
@@ -6460,7 +6458,6 @@ class SessionManager
     public static function isUserSubscribedAsStudent($sessionId, $userId)
     {
         $sessionRelUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-
         $sessionId = intval($sessionId);
         $userId = intval($userId);
 
@@ -6578,7 +6575,6 @@ class SessionManager
     {
         $sessionId = intval($sessionId);
         $courseCode = Database::escape_string($courseCode);
-
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $sessionRelCourseTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
@@ -6621,11 +6617,16 @@ class SessionManager
 
         if ($idResult != false) {
             foreach ($idResult as $idData) {
-                $userResult = Database::select('user_id, lastname, firstname, username', $userTable, array(
-                    'where' => array(
-                        'user_id = ?' => $idData['user_id'],
+                $userResult = Database::select(
+                    'user_id, lastname, firstname, username',
+                    $userTable,
+                    array(
+                        'where' => array(
+                            'user_id = ?' => $idData['user_id'],
+                        ),
                     ),
-                ), 'first');
+                    'first'
+                );
 
                 if ($userResult != false) {
                     $coaches[] = array(
@@ -7061,7 +7062,7 @@ class SessionManager
      * @param array $extraFieldsToInclude Extra fields to include in the session data
      * @return array The list
      */
-    public static function searchSession($term, $extraFieldsToInclude = array())
+    public static function searchSession($term, $extraFieldsToInclude = [])
     {
         $sTable = Database::get_main_table(TABLE_MAIN_SESSION);
         $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
@@ -7100,14 +7101,13 @@ class SessionManager
     }
 
     /**
-     * @param $sessionId
+     * @param int $sessionId
      * @param array $extraFieldsToInclude
      * @return array
      */
     public static function getFilteredExtraFields($sessionId, $extraFieldsToInclude = array())
     {
         $extraData = array();
-
         $variables = array();
         $variablePlaceHolders = array();
 
@@ -7307,7 +7307,7 @@ class SessionManager
      * @params array $sessionInfo An array with all the session dates
      * @param bool $showTime
      *
-     * @return string
+     * @return array
      */
     public static function parseSessionDates($sessionInfo, $showTime = false)
     {
@@ -7738,6 +7738,7 @@ class SessionManager
 
     /**
      * @param string $list_type
+     * @param array $extraFields
      * @return array
      */
     public static function getGridColumns(
@@ -8052,9 +8053,7 @@ class SessionManager
                 }
             }
             $options['where'] = str_replace('course_title', 'c.title', $options['where']);
-
             $options['where'] = str_replace("( session_active = '0' )", '1=1', $options['where']);
-
             $options['where'] = str_replace(
                 array("AND session_active = '1'  )", " AND (  session_active = '1'  )"),
                 array(') GROUP BY s.name HAVING session_active = 1 ', " GROUP BY s.name HAVING session_active = 1 ")
@@ -8283,7 +8282,7 @@ class SessionManager
      * main coach for a session the course is in
      * for a session category (or woth no session category if empty)
      *
-     * @param $userId
+     * @param int $userId
      *
      * @return array
      */
@@ -8291,10 +8290,8 @@ class SessionManager
     {
         // list of COURSES where user is COURSE session coach
         $listCourseCourseCoachSession = self::getCoursesForCourseSessionCoach($userId);
-
         // list of courses where user is MAIN session coach
         $listCourseMainCoachSession = self::getCoursesForMainSessionCoach($userId);
-
         // merge these 2 array
         $listResCourseSession = $listCourseCourseCoachSession;
         foreach ($listCourseMainCoachSession as $courseId2 => $listSessionId2) {
@@ -8434,7 +8431,7 @@ class SessionManager
      *                              sessionId
      *                              sessionName
      *
-     * @param $userId
+     * @param int $userId
      *
      * @return array
      *

@@ -63,6 +63,7 @@ class ScheduledAnnouncement extends Model
 
     /**
      * Displays the title + grid
+     * @param int $sessionId
      */
     public function getGrid($sessionId)
     {
@@ -93,6 +94,7 @@ class ScheduledAnnouncement extends Model
      * Returns a Form validator Obj
      * @param   string  $url
      * @param   string  $action add, edit
+     * @param array $sessionInfo
      *
      * @return  FormValidator form validator obj
      */

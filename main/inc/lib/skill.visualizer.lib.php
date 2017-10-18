@@ -93,7 +93,7 @@ class SkillVisualizer
 
         $this->js .= 'var e'.$block_id.' = prepare("block_'.$block_id.'",  '.$end_point.');'."\n";
         $this->js .= 'var e'.$skill['parent_id'].' = prepare("block_'.$skill['parent_id'].'",  '.$end_point.');'."\n";
-        $this->js .= 'jsPlumb.connect({source: e'.$block_id.', target:e'.$skill['parent_id'].'});'."\n"; ;
+        $this->js .= 'jsPlumb.connect({source: e'.$block_id.', target:e'.$skill['parent_id'].'});'."\n";
     }
 
     /**

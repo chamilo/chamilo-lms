@@ -2849,7 +2849,14 @@ class Tracking
                                 // Case of a TOOL_QUIZ element
                                 $item_id = $row_max_score['iid'];
                                 $item_path = $row_max_score['path'];
-                                $lp_item_view_id = $row_max_score['lp_item_view_id'];
+                                $lp_item_view_id = (int) $row_max_score['lp_item_view_id'];
+
+                                $lpItemCondition = '';
+                                if (empty($lp_item_view_id)) {
+                                    $lpItemCondition = ' (orig_lp_item_view_id = 0 OR orig_lp_item_view_id IS NULL) ';
+                                } else {
+                                    $lpItemCondition = " orig_lp_item_view_id = $lp_item_view_id ";
+                                }
 
                                 // Get last attempt to this exercise through
                                 // the current lp for the current user
@@ -2863,7 +2870,7 @@ class Tracking
                                             exe_exo_id = '$item_path' AND
                                             exe_user_id = $user_id AND
                                             orig_lp_item_id = $item_id AND
-                                            orig_lp_item_view_id = $lp_item_view_id AND
+                                            $lpItemCondition AND
                                             c_id = $course_id AND
                                             session_id = $session_id AND
                                             status = ''

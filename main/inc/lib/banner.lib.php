@@ -118,13 +118,6 @@ function get_tabs($courseId = null)
         $navigation['dashboard']['icon'] = 'dashboard.png';
     }
 
-    // Reports
-    /*
-	if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
-        $navigation['reports']['url'] = api_get_path(WEB_CODE_PATH).'reports/index.php';
-        $navigation['reports']['title'] = get_lang('Reports');
-	}*/
-
     // Custom Tabs See BT#7180
     $customTabs = getCustomTabs();
     if (!empty($customTabs)) {
@@ -374,19 +367,6 @@ function return_navigation_array()
                 $navigation['platform_admin'] = $possible_tabs['platform_admin'];
             } else {
                 $menu_navigation['platform_admin'] = $possible_tabs['platform_admin'];
-            }
-        }
-
-        // Reports
-        if (!empty($possible_tabs['reports'])) {
-            if (api_get_setting('show_tabs', 'reports') == 'true') {
-                if ((api_is_platform_admin() || api_is_drh() || api_is_session_admin())
-                        && Rights::hasRight('show_tabs:reports')
-                ) {
-                    $navigation['reports'] = $possible_tabs['reports'];
-                }
-            } else {
-                $menu_navigation['reports'] = $possible_tabs['reports'];
             }
         }
 

@@ -153,7 +153,6 @@ class UserManager
     public static function encryptPassword($raw, User $user)
     {
         $encoder = self::getEncoder($user);
-
         $encodedPassword = $encoder->encodePassword(
             $raw,
             $user->getSalt()
@@ -868,7 +867,7 @@ class UserManager
      * @assert (-1) === false
      * @assert (array(-1)) === false
      */
-    public static function delete_users($ids = array())
+    public static function delete_users($ids = [])
     {
         $result = false;
         $ids = is_array($ids) ? $ids : func_get_args();
@@ -897,7 +896,7 @@ class UserManager
      * @assert (null) === false
      * @assert (array(-1)) === false
      */
-    public static function deactivate_users($ids = array())
+    public static function deactivate_users($ids = [])
     {
         if (empty($ids)) {
             return false;
@@ -927,7 +926,7 @@ class UserManager
      * @assert (null) === false
      * @assert (array(-1)) === false
      */
-    public static function activate_users($ids = array())
+    public static function activate_users($ids = [])
     {
         if (empty($ids)) {
             return false;
@@ -1352,7 +1351,7 @@ class UserManager
      * @param string $firstname The first name of a given user. If the second parameter $lastname is NULL, then this
      * parameter is treated as username which is to be checked for uniqueness and to be modified when it is necessary.
      * @param string $lastname                The last name of the user.
-     * @return string Returns a username that contains only ASCII-letters and digits and that is unique within the system.
+     * @return string Returns a username that contains only ASCII-letters and digits and that is unique in the system.
      * Note: When the method is called several times with same parameters,
      * its results look like the following sequence: ivan, ivan2, ivan3, ivan4, ...
      * @author Ivan Tcholakov, 2009
@@ -1415,7 +1414,7 @@ class UserManager
     /**
      * Checks whether the user id exists in the database
      *
-     * @param int User id
+     * @param int $userId User id
      * @return bool True if user id was found, false otherwise
      */
     public static function is_user_id_valid($userId)
@@ -1437,8 +1436,10 @@ class UserManager
     }
 
     /**
-     * Checks whether a given username matches to the specification strictly. The empty username is assumed here as invalid.
-     * Mostly this function is to be used in the user interface built-in validation routines for providing feedback while usernames are enterd manually.
+     * Checks whether a given username matches to the specification strictly.
+     * The empty username is assumed here as invalid.
+     * Mostly this function is to be used in the user interface built-in validation routines
+     * for providing feedback while usernames are enterd manually.
      * @param string $username The input username.
      * @return bool Returns TRUE if the username is valid, FALSE otherwise.
      */
@@ -1448,7 +1449,8 @@ class UserManager
     }
 
     /**
-     * Checks whether a username is empty. If the username contains whitespace characters, such as spaces, tabulators, newlines, etc.,
+     * Checks whether a username is empty. If the username contains whitespace characters,
+     * such as spaces, tabulators, newlines, etc.,
      * it is assumed as empty too. This function is safe for validation unpurified data (during importing).
      * @param string $username The given username.
      * @return bool  Returns TRUE if length of the username exceeds the limit, FALSE otherwise.
@@ -1922,7 +1924,7 @@ class UserManager
      * @see     UserManager::delete_user_picture() as the prefered way for deletion.
      * @param   string $source_file The full system name of the image from which user photos will be created.
      * @param   string $cropParameters Optional string that contents "x,y,width,height" of a cropped image format
-     * @return  mixed Returns the resulting common file name of created images which usually should be stored in database.
+     * @return bool Returns the resulting common file name of created images which usually should be stored in database.
      * When deletion is requested returns empty string. In case of internal error or negative validation returns FALSE.
      */
     public static function update_user_picture(
@@ -1941,7 +1943,6 @@ class UserManager
 
         // User-reserved directory where photos have to be placed.
         $path_info = self::getUserPicturePathById($user_id, 'system');
-
         $path = $path_info['dir'];
 
         // If this directory does not exist - we create it.
@@ -2032,8 +2033,8 @@ class UserManager
      * @param int $user_id          The user internal identification number
      * @param string $extra_field   The $extra_field The extra field name
      * @param null $file            The filename
-     * @param null $source_file     The temporal filename
-     * @return bool|null            return filename if success, but false
+     * @param null $source_file The temporal filename
+     * @return bool|null return filename if success, but false
      */
     public static function update_user_extra_file(
         $user_id,
@@ -2075,7 +2076,6 @@ class UserManager
         }
         return false; // this should be returned if anything went wrong with the upload
     }
-
 
     /**
      * Deletes user photos.
@@ -2193,9 +2193,9 @@ class UserManager
 
     /**
      * Update an extra field value for a given user
-     * @param    integer   $userId User ID
-     * @param    string    $variable Field variable name
-     * @param    string    $value Field value
+     * @param    integer $userId User ID
+     * @param    string $variable Field variable name
+     * @param    string $value Field value
      *
      * @return    boolean    true if field updated, false otherwise
      */
@@ -2383,9 +2383,9 @@ class UserManager
 
     /**
      * Remove an {$extra_file} from the user folder $user_folder/{$extra_field}/
-     * @param $user_id
-     * @param $extra_field
-     * @param $extra_file
+     * @param int $user_id
+     * @param string $extra_field
+     * @param string $extra_file
      * @return bool
      */
     public static function remove_user_extra_file($user_id, $extra_field, $extra_file)
@@ -2727,8 +2727,8 @@ class UserManager
      */
     public static function get_extra_user_data_by_field_variable($variable)
     {
-        $extra_information_by_variable = self::get_extra_field_information_by_name($variable);
-        $field_id = intval($extra_information_by_variable['id']);
+        $extraInfo = self::get_extra_field_information_by_name($variable);
+        $field_id = intval($extraInfo['id']);
 
         $extraField = new ExtraFieldValue('user');
         $data = $extraField->getValuesByFieldId($field_id);
@@ -3000,8 +3000,7 @@ class UserManager
             }
         }
 
-        $coachCourseConditions = null;
-
+        $coachCourseConditions = '';
         // Getting sessions that are related to a coach in the session_rel_course_rel_user table
         if (api_is_allowed_to_create_course()) {
             $sessionListFromCourseCoach = array();
@@ -3025,7 +3024,6 @@ class UserManager
         // Get the list of sessions where the user is subscribed
         // This is divided into two different queries
         $sessions = array();
-
         $sessionLimitRestriction = '';
         if (!empty($sessionLimit)) {
             $sessionLimit = (int) $sessionLimit;
@@ -3286,8 +3284,8 @@ class UserManager
 
     /**
      * Get user id from a username
-     * @param    string    $username
-     * @return    int        User ID (or false if not found)
+     * @param string $username
+     * @return int User ID (or false if not found)
      */
     public static function get_user_id_from_username($username)
     {
@@ -3370,18 +3368,21 @@ class UserManager
 
     /**
      * Gets the API key (or keys) and return them into an array
-     * @param   int     Optional user id (defaults to the result of api_get_user_id())
+     * @param int     Optional user id (defaults to the result of api_get_user_id())
+     * @param string $api_service
      * @return  array   Non-indexed array containing the list of API keys for this user, or FALSE on error
      */
     public static function get_api_keys($user_id = null, $api_service = 'dokeos')
     {
-        if ($user_id != strval(intval($user_id)))
+        if ($user_id != strval(intval($user_id))) {
             return false;
+        }
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
-        if ($user_id === false)
+        if ($user_id === false) {
             return false;
+        }
         $service_name = Database::escape_string($api_service);
         if (is_string($service_name) === false) {
             return false;
@@ -3389,11 +3390,13 @@ class UserManager
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
         $sql = "SELECT * FROM $t_api WHERE user_id = $user_id AND api_service='$api_service';";
         $res = Database::query($sql);
-        if ($res === false)
-            return false; //error during query
-        $num = Database::num_rows($res);
-        if ($num == 0)
+        if ($res === false) {
             return false;
+        } //error during query
+        $num = Database::num_rows($res);
+        if ($num == 0) {
+            return false;
+        }
         $list = array();
         while ($row = Database::fetch_array($res)) {
             $list[$row['id']] = $row['api_key'];
@@ -3404,17 +3407,20 @@ class UserManager
     /**
      * Adds a new API key to the users' account
      * @param   int     Optional user ID (defaults to the results of api_get_user_id())
+     * @param string $api_service
      * @return  boolean True on success, false on failure
      */
     public static function add_api_key($user_id = null, $api_service = 'dokeos')
     {
-        if ($user_id != strval(intval($user_id)))
+        if ($user_id != strval(intval($user_id))) {
             return false;
+        }
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
-        if ($user_id === false)
+        if ($user_id === false) {
             return false;
+        }
         $service_name = Database::escape_string($api_service);
         if (is_string($service_name) === false) {
             return false;
@@ -3423,10 +3429,11 @@ class UserManager
         $md5 = md5((time() + ($user_id * 5)) - rand(10000, 10000)); //generate some kind of random key
         $sql = "INSERT INTO $t_api (user_id, api_key,api_service) VALUES ($user_id,'$md5','$service_name')";
         $res = Database::query($sql);
-        if ($res === false)
-            return false; //error during query
+        if ($res === false) {
+            return false;
+        } //error during query
         $num = Database::insert_id();
-        return ($num == 0) ? false : $num;
+        return $num == 0 ? false : $num;
     }
 
     /**
@@ -3612,7 +3619,6 @@ class UserManager
     }
 
     /**
-     *
      * Gets the tags of a specific field_id
      * USER TAGS
      *
@@ -3756,7 +3762,9 @@ class UserManager
         $tag_tmp = array();
         foreach ($user_tags as $tag) {
             if ($show_links) {
-                $tag_tmp[] = '<a href="'.api_get_path(WEB_PATH).'main/search/index.php?q='.$tag['tag'].'">'.$tag['tag'].'</a>';
+                $tag_tmp[] = '<a href="'.api_get_path(WEB_PATH).'main/search/index.php?q='.$tag['tag'].'">'.
+                    $tag['tag'].
+                '</a>';
             } else {
                 $tag_tmp[] = $tag['tag'];
             }
@@ -3886,8 +3894,7 @@ class UserManager
      * Deletes an user tag
      * @param int $user_id
      * @param int $field_id
-     *
-     */
+     **/
     public static function delete_user_tags($user_id, $field_id)
     {
         // database table definition
@@ -3997,7 +4004,6 @@ class UserManager
         }
 
         // all the information of the field
-
         if ($getCount) {
             $select = "SELECT count(DISTINCT u.id) count";
         } else {
@@ -4060,19 +4066,18 @@ class UserManager
     }
 
     /**
-      * Get extra filtrable user fields (only type select)
+      * Get extra filterable user fields (only type select)
       * @return array
       */
-    public static function get_extra_filtrable_fields()
+    public static function getExtraFilterableFields()
     {
         $extraFieldList = self::get_extra_fields();
-
-        $extraFiltrableFields = array();
+        $fields = array();
         if (is_array($extraFieldList)) {
             foreach ($extraFieldList as $extraField) {
                 // If is enabled to filter and is a "<select>" field type
                 if ($extraField[8] == 1 && $extraField[2] == 4) {
-                    $extraFiltrableFields[] = array(
+                    $fields[] = array(
                         'name' => $extraField[3],
                         'variable' => $extraField[1],
                         'data' => $extraField[9]
@@ -4081,8 +4086,8 @@ class UserManager
             }
         }
 
-        if (is_array($extraFiltrableFields) && count($extraFiltrableFields) > 0) {
-            return $extraFiltrableFields;
+        if (is_array($fields) && count($fields) > 0) {
+            return $fields;
         }
     }
 
@@ -4093,7 +4098,7 @@ class UserManager
     public static function get_search_form_where_extra_fields()
     {
         $useExtraFields = false;
-        $extraFields = self::get_extra_filtrable_fields();
+        $extraFields = self::getExtraFilterableFields();
         $extraFieldResult = array();
         if (is_array($extraFields) && count($extraFields) > 0) {
             foreach ($extraFields as $extraField) {
@@ -4166,12 +4171,11 @@ class UserManager
         );
 
         // Extra fields
-        $extraFields = self::get_extra_filtrable_fields();
+        $extraFields = self::getExtraFilterableFields();
         $defaults = [];
         if (is_array($extraFields) && count($extraFields) > 0) {
             foreach ($extraFields as $extraField) {
                 $varName = 'field_'.$extraField['variable'];
-
                 $options = [
                     0 => get_lang('Select')
                 ];
@@ -4196,7 +4200,6 @@ class UserManager
             $defaults = array_merge($defaults, $defaultParams);
         }
         $form->setDefaults($defaults);
-
         $form->addButtonSearch(get_lang('Search'));
 
         $js = '<script>
@@ -4229,6 +4232,7 @@ class UserManager
      * @param int $friend_id user friend id
      * @param int $my_user_id user id
      * @param int $relation_type relation between users see constants definition
+     * @return bool
      */
     public static function relate_users($friend_id, $my_user_id, $relation_type)
     {
@@ -4283,6 +4287,7 @@ class UserManager
      * Deletes a contact
      * @param int user friend id
      * @param bool true will delete ALL friends relationship from $friend_id
+     * @param string $with_status_condition
      * @author isaac flores paz <isaac.flores@dokeos.com>
      * @author Julio Montoya <gugli100@gmail.com> Cleaning code
      */
@@ -4958,14 +4963,14 @@ class UserManager
      */
     public static function is_session_course_coach($user_id, $courseId, $session_id)
     {
-        $tbl_session_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         // Protect data
         $user_id = intval($user_id);
         $courseId = intval($courseId);
         $session_id = intval($session_id);
         $result = false;
 
-        $sql = "SELECT session_id FROM $tbl_session_course_rel_user
+        $sql = "SELECT session_id FROM $table
                 WHERE
                   session_id = $session_id AND
                   c_id = $courseId AND
@@ -5321,9 +5326,7 @@ class UserManager
     ) {
         $userId = intval($userId);
         $sessionId = intval($sessionId);
-
         $trackCourseAccessTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-
         $whereConditions = array(
             'user_id = ? ' => $userId,
             'AND c_id = ? ' => $courseId,
@@ -5438,7 +5441,7 @@ class UserManager
      * @param string $s Size in pixels, defaults to 80px [ 1 - 2048 ]
      * @param string $d Default imageset to use [ 404 | mm | identicon | monsterid | wavatar ]
      * @param string $r Maximum rating (inclusive) [ g | pg | r | x ]
-     * @param boole $img True to return a complete IMG tag False for just the URL
+     * @param bool $img True to return a complete IMG tag False for just the URL
      * @param array $atts Optional, additional key/value attributes to include in the IMG tag
      * @return String containing either just a URL or a complete image tag
      * @source http://gravatar.com/site/implement/images/php/
@@ -5509,7 +5512,6 @@ class UserManager
     {
         $firstname = Database::escape_string($firstname);
         $lastname = Database::escape_string($lastname);
-
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
         $sql = <<<SQL
@@ -5519,9 +5521,7 @@ class UserManager
                 firstname LIKE '$firstname%' AND
                 lastname LIKE '$lastname%'
 SQL;
-
         $result = Database::query($sql);
-
         $users = [];
         while ($resultData = Database::fetch_object($result)) {
             $users[] = $resultData;
@@ -5634,15 +5634,14 @@ SQL;
     /**
      * Remove all login records from the track_e_online stats table,
      * for the given user ID.
-     * @param int User ID
-     * @param integer $user_id
+     * @param int $userId User ID
      * @return void
      */
-    public static function loginDelete($user_id)
+    public static function loginDelete($userId)
     {
         $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-        $user_id = intval($user_id);
-        $query = "DELETE FROM ".$online_table." WHERE login_user_id = $user_id";
+        $userId = intval($userId);
+        $query = "DELETE FROM ".$online_table." WHERE login_user_id = $userId";
         Database::query($query);
     }
 
@@ -5701,8 +5700,8 @@ SQL;
     }
 
     /**
-     * @param $teacherId
-     * @param $studentId
+     * @param int $teacherId
+     * @param int $studentId
      * @return bool
      */
     public static function isTeacherOfStudent($teacherId, $studentId)

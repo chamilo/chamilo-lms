@@ -24,7 +24,7 @@ $interbreadcrumb[] = array(
 
 $query = isset($_GET['q']) ? Security::remove_XSS($_GET['q']) : null;
 $query_search_type = isset($_GET['search_type']) && in_array($_GET['search_type'], array('0', '1', '2')) ? $_GET['search_type'] : null;
-$extra_fields = UserManager::get_extra_filtrable_fields();
+$extra_fields = UserManager::getExtraFilterableFields();
 $query_vars = array('q' => $query, 'search_type' => $query_search_type);
 if (!empty($extra_fields)) {
     foreach ($extra_fields as $extra_field) {

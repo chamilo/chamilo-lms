@@ -1326,9 +1326,9 @@ class TicketManager
     }
 
     /**
-     * @param $status_id
-     * @param $ticketId
-     * @param $userId
+     * @param int $status_id
+     * @param int $ticketId
+     * @param int $userId
      * @return bool
      */
     public static function update_ticket_status(
@@ -1445,7 +1445,7 @@ class TicketManager
     }
 
     /**
-     *
+     * @throws \Doctrine\DBAL\DBALException
      */
     public static function close_old_tickets()
     {
@@ -1692,10 +1692,12 @@ class TicketManager
                 $row['responsable'] = $row['responsable']['firstname'].' '.$row['responsable']['lastname'];
             }
             $row['sys_insert_datetime'] = api_format_date(
-                    $row['sys_insert_datetime'], '%d/%m/%y - %I:%M:%S %p'
+                $row['sys_insert_datetime'],
+                '%d/%m/%y - %I:%M:%S %p'
             );
             $row['sys_lastedit_datetime'] = api_format_date(
-                    $row['sys_lastedit_datetime'], '%d/%m/%y - %I:%M:%S %p'
+                $row['sys_lastedit_datetime'],
+                '%d/%m/%y - %I:%M:%S %p'
             );
             $row['category'] = utf8_decode($row['category']);
             $row['programa'] = utf8_decode($row['fullname']);

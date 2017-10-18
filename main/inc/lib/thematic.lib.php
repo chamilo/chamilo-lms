@@ -112,10 +112,25 @@ class Thematic
                         $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].'">'.
                             Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
                     } else {
-                        $actions .= Display::return_icon('lesson_plan_na.png', get_lang('ThematicPlan'), '', ICON_SIZE_SMALL).'&nbsp;';
-                        $actions .= Display::return_icon('lesson_plan_calendar_na.png', get_lang('ThematicAdvance'), '', ICON_SIZE_SMALL).'&nbsp;';
+                        $actions .= Display::return_icon(
+                            'lesson_plan_na.png',
+                            get_lang('ThematicPlan'),
+                            '',
+                            ICON_SIZE_SMALL
+                        ).'&nbsp;';
+                        $actions .= Display::return_icon(
+                            'lesson_plan_calendar_na.png',
+                            get_lang('ThematicAdvance'),
+                            '',
+                            ICON_SIZE_SMALL
+                        ).'&nbsp;';
                         $actions .= Display::return_icon('edit_na.png', get_lang('Edit'), '', ICON_SIZE_SMALL);
-                        $actions .= Display::return_icon('delete_na.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'&nbsp;';
+                        $actions .= Display::return_icon(
+                            'delete_na.png',
+                            get_lang('Delete'),
+                            '',
+                            ICON_SIZE_SMALL
+                        ).'&nbsp;';
                         $actions .= Display::url(
                             Display::return_icon('cd.gif', get_lang('Copy')),
                             'index.php?'.api_get_cidreq().'&action=thematic_copy&thematic_id='.$thematic[0]
@@ -240,7 +255,7 @@ class Thematic
     }
 
     /**
-     * get thematic list
+     * Get thematic list
      * @param integer $thematic_id Thematic id (optional), get list by id
      * @param string $course_code
      * @param integer $session_id
@@ -293,7 +308,7 @@ class Thematic
     }
 
     /**
-     * insert or update a thematic
+     * Insert or update a thematic
      * @return int last thematic id
      */
     public function thematic_save()
@@ -469,11 +484,11 @@ class Thematic
     public static function get_number_of_thematic_advances()
     {
         global $thematic_id;
-        $tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
+        $table = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT COUNT(id) AS total_number_of_items 
-                FROM $tbl_thematic_advance
+                FROM $table
                 WHERE c_id = $course_id AND thematic_id = $thematic_id ";
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
@@ -493,9 +508,9 @@ class Thematic
     public static function get_thematic_advance_data($from, $number_of_items, $column, $direction)
     {
         global $thematic_id;
-        $tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
+        $table = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
         $column = intval($column);
-        $from   = intval($from);
+        $from = intval($from);
         $number_of_items = intval($number_of_items);
         if (!in_array($direction, array('ASC', 'DESC'))) {
             $direction = 'ASC';
@@ -504,7 +519,7 @@ class Thematic
         $course_id = api_get_course_int_id();
         if (api_is_allowed_to_edit(null, true)) {
             $sql = "SELECT id AS col0, start_date AS col1, duration AS col2, content AS col3
-                    FROM $tbl_thematic_advance
+                    FROM $table
                     WHERE c_id = $course_id AND thematic_id = $thematic_id
                     ORDER BY col$column $direction
                     LIMIT $from,$number_of_items ";
@@ -656,7 +671,7 @@ class Thematic
     }
 
     /**
-     * get thematic advance list
+     * Get thematic advance list
      * @param int $thematic_advance_id Thematic advance id (optional), get data by thematic advance list
      * @param string $course_code Course code (optional)
      * @param bool $force_session_id Force to have a session id
@@ -729,7 +744,7 @@ class Thematic
     {
         $_course = api_get_course_info();
         // definition database table
-        $tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
+        $table = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
 
         // protect data
         $id = intval($this->thematic_advance_id);
@@ -752,10 +767,10 @@ class Thematic
                 'duration' => $duration,
                 'done_advance' => 0
             ];
-            $last_id = Database::insert($tbl_thematic_advance, $params);
+            $last_id = Database::insert($table, $params);
 
             if ($last_id) {
-                $sql = "UPDATE $tbl_thematic_advance SET id = iid WHERE iid = $last_id";
+                $sql = "UPDATE $table SET id = iid WHERE iid = $last_id";
                 Database::query($sql);
 
                 api_item_property_update(
@@ -776,7 +791,7 @@ class Thematic
             ];
 
             Database::update(
-                $tbl_thematic_advance,
+                $table,
                 $params,
                 ['id = ? AND c_id = ?' => [$id, $this->course_int_id]]
             );
@@ -796,30 +811,30 @@ class Thematic
     /**
      * delete  thematic advance
      * @param int        Thematic advance id
-     * @param integer $thematic_advance_id
+     * @param integer $id
      * @return int        Affected rows
      */
-    public function thematic_advance_destroy($thematic_advance_id)
+    public function thematic_advance_destroy($id)
     {
         $_course = api_get_course_info();
         $course_id = api_get_course_int_id();
 
         // definition database table
-        $tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
+        $table = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
 
         // protect data
-        $thematic_advance_id = intval($thematic_advance_id);
+        $id = intval($id);
         $user_id = api_get_user_id();
 
-        $sql = "DELETE FROM $tbl_thematic_advance
-                WHERE c_id = $course_id AND id = $thematic_advance_id ";
+        $sql = "DELETE FROM $table
+                WHERE c_id = $course_id AND id = $id ";
         $result = Database::query($sql);
         $affected_rows = Database::affected_rows($result);
         if ($affected_rows) {
             api_item_property_update(
                 $_course,
                 'thematic_advance',
-                $thematic_advance_id,
+                $id,
                 'ThematicAdvanceDeleted',
                 $user_id
             );
@@ -1123,7 +1138,7 @@ class Thematic
             api_get_course_id(),
             true
         );
-        $tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
+        $table = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
 
         $affected_rows = 0;
         $user_id       = api_get_user_id();
@@ -1160,7 +1175,7 @@ class Thematic
                         if ($item_info['session_id'] == $sessionId) {
                             $a_thematic_advance_ids[] = $thematic_advance['id'];
                             // update done thematic for previous advances ((done_advance = 1))
-                            $upd = "UPDATE $tbl_thematic_advance SET
+                            $upd = "UPDATE $table SET
                                     done_advance = 1
                                     WHERE c_id = $course_id AND id = ".$thematic_advance['id']." ";
                             $result = Database::query($upd);
@@ -1188,7 +1203,7 @@ class Thematic
         if (!empty($a_thematic_advance_ids) && count($a_thematic_advance_ids) > 0) {
             $diff = array_diff($all, $a_thematic_advance_ids);
             if (!empty($diff)) {
-                $upd = "UPDATE $tbl_thematic_advance SET done_advance = 0
+                $upd = "UPDATE $table SET done_advance = 0
                         WHERE c_id = $course_id AND id IN(".implode(',', $diff).") ";
                 Database::query($upd);
             }
@@ -1342,9 +1357,9 @@ class Thematic
 
     /**
      * Get average of advances by thematic
-     * @param	int		Thematic id
+     * @param int Thematic id
      * @param string $course_code
-     * @return 	float	Average of thematic advances
+     * @return    float    Average of thematic advances
      */
     public function get_average_of_advances_by_thematic($thematic_id, $course_code = null)
     {
@@ -1370,10 +1385,10 @@ class Thematic
 
     /**
      * set attributes for fields of thematic table
-     * @param	int		Thematic id
-     * @param	string	Thematic title
-     * @param	string	Thematic content
-     * @param	int		Session id
+     * @param    int        Thematic id
+     * @param    string    Thematic title
+     * @param    string    Thematic content
+     * @param    int        Session id
      * @return void
      */
     public function set_thematic_attributes($id = null, $title = '', $content = '', $session_id = 0)
@@ -1386,10 +1401,10 @@ class Thematic
 
     /**
      * set attributes for fields of thematic_plan table
-     * @param	int		Thematic id
-     * @param	string	Thematic plan title
-     * @param	string	Thematic plan description
-     * @param	int		Thematic plan description type
+     * @param    int        Thematic id
+     * @param    string    Thematic plan title
+     * @param    string    Thematic plan description
+     * @param    int        Thematic plan description type
      * @return void
      */
     public function set_thematic_plan_attributes(
@@ -1406,12 +1421,12 @@ class Thematic
 
     /**
      * set attributes for fields of thematic_advance table
-     * @param	int		$id Thematic advance id
-     * @param	int		Thematic id
-     * @param	int		Attendance id
-     * @param	string	Content
-     * @param	string	Date and time
-     * @param	int		Duration in hours
+     * @param    int $id Thematic advance id
+     * @param    int        Thematic id
+     * @param    int        Attendance id
+     * @param    string    Content
+     * @param    string    Date and time
+     * @param    int        Duration in hours
      * @return void
      */
     public function set_thematic_advance_attributes(
@@ -1432,7 +1447,7 @@ class Thematic
 
     /**
      * set thematic id
-     * @param	int	 Thematic id
+     * @param    int     Thematic id
      * @return void
      */
     public function set_thematic_id($thematic_id)

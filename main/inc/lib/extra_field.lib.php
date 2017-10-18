@@ -905,7 +905,7 @@ class ExtraField extends Model
      * @param array $params
      * @param bool $show_query
      *
-     * @return bool
+     * @return int
      */
     public function save($params, $show_query = false)
     {
@@ -1260,8 +1260,7 @@ class ExtraField extends Model
         FormValidator $form,
         array $fieldDetails,
         $freezeElement = false
-    )
-    {
+    ) {
         $firstSelectId = 'slct_extra_'.$fieldDetails['variable'];
         $txtSelectId = 'txt_extra_'.$fieldDetails['variable'];
 
@@ -1332,8 +1331,7 @@ class ExtraField extends Model
         array $fieldDetails,
         array $extraData,
         $freezeElement
-    )
-    {
+    ) {
         $variable = $fieldDetails['variable'];
         $id = $fieldDetails['id'];
         $slctFirstId = "first_extra$variable";

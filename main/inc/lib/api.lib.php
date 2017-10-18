@@ -814,6 +814,7 @@ function api_get_path($path = '', $configuration = [])
         // Initialization of a table that contains common-purpose paths.
         $paths[$root_web][REL_PATH] = $root_rel;
         $paths[$root_web][REL_COURSE_PATH] = $root_rel.$course_folder;
+        $paths[$root_web][REL_CODE_PATH] = $root_rel.$code_folder;
         $paths[$root_web][REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[$root_web][REL_PATH].'main/default_course_document/';
 
         $paths[$root_web][WEB_PATH] = $slashed_root_web;

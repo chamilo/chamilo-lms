@@ -1939,7 +1939,7 @@ class DocumentManager
         $extraField = new ExtraField('user');
         $extraFields = $extraField->get_all(['filter = ? AND visible_to_self = ?' => [1, 1]]);
 
-        //Student information
+        // Student information
         $user_info = api_get_user_info($user_id);
         $first_name = $user_info['firstname'];
         $last_name = $user_info['lastname'];
@@ -1970,7 +1970,6 @@ class DocumentManager
         $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$info_grade_certificate['id'];
         $externalStyleFile = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/certificate.css';
         $externalStyle = '';
-
         if (is_file($externalStyleFile)) {
             $externalStyle = file_get_contents($externalStyleFile);
         }
@@ -1995,7 +1994,7 @@ class DocumentManager
             $externalStyle
         );
 
-        $info_to_be_replaced_in_content_html = array(
+        $tags = array(
             '((user_firstname))',
             '((user_lastname))',
             '((gradebook_institution))',
@@ -2017,12 +2016,12 @@ class DocumentManager
         if (!empty($extraFields)) {
             foreach ($extraFields as $extraField) {
                 $valueExtra = isset($extra_user_info_data[$extraField['variable']]) ? $extra_user_info_data[$extraField['variable']] : '';
-                $info_to_be_replaced_in_content_html[] = '(('.strtolower($extraField['variable']).'))';
+                $tags[] = '(('.strtolower($extraField['variable']).'))';
                 $info_to_replace_in_content_html[] = $valueExtra;
             }
         }
 
-        $info_list[] = $info_to_be_replaced_in_content_html;
+        $info_list[] = $tags;
         $info_list[] = $info_to_replace_in_content_html;
 
         return $info_list;

@@ -384,7 +384,7 @@ class PDF
                     $this->pdf->WriteHTML($document_html.$page_break);
                 }
             } elseif (in_array($extension, array('jpg', 'jpeg', 'png', 'gif'))) {
-                //Images
+                // Images
                 $image = Display::img($file);
                 $this->pdf->WriteHTML('<html><body>'.$image.'</body></html>'.$page_break);
             }

@@ -360,13 +360,13 @@ class AnnouncementEmail
             }
         }
 
-        $this->log_mail_sent();
+        $this->logMailSent();
     }
 
     /**
      * Store that emails where sent
      */
-    public function log_mail_sent()
+    public function logMailSent()
     {
         $id = $this->announcement('id');
         $course_id = $this->course('id');

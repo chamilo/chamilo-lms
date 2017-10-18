@@ -1415,20 +1415,33 @@ class GradebookUtils
                 }
             }
 
-            $courseGradebookCategory = Category::load(null, null, $course['code']);
+            $category = Category::load(null, null, $course['code']);
 
-            if (empty($courseGradebookCategory)) {
+            if (empty($category)) {
                 continue;
             }
 
-            $courseGradebookId = $courseGradebookCategory[0]->get_id();
-            $certificateInfo = self::get_certificate_by_user_id($courseGradebookId, $userId);
+            if (!isset($category[0])) {
+                continue;
+            }
+            /** @var Category $category */
+            $category = $category[0];
+
+            if (empty($category->getGenerateCertificates())) {
+                continue;
+            }
+
+            $categoryId = $category->get_id();
+            $certificateInfo = self::get_certificate_by_user_id($categoryId, $userId);
 
             if (empty($certificateInfo)) {
                 continue;
             }
 
             $courseInfo = api_get_course_info_by_id($course['real_id']);
+            if (empty($courseInfo)) {
+                continue;
+            }
 
             $courseList[] = [
                 'course' => $courseInfo['title'],
@@ -1459,6 +1472,10 @@ class GradebookUtils
             }
             $sessionCourses = SessionManager::get_course_list_by_session_id($session['session_id']);
 
+            if (empty($sessionCourses)) {
+                continue;
+            }
+
             foreach ($sessionCourses as $course) {
                 if (!$includeNonPublicCertificates) {
                     $allowPublicCertificates = api_get_course_setting('allow_public_certificates', $course['code']);
@@ -1468,7 +1485,7 @@ class GradebookUtils
                     }
                 }
 
-                $courseGradebookCategory = Category::load(
+                $category = Category::load(
                     null,
                     null,
                     $course['code'],
@@ -1477,13 +1494,25 @@ class GradebookUtils
                     $session['session_id']
                 );
 
-                if (empty($courseGradebookCategory)) {
+                if (empty($category)) {
                     continue;
                 }
 
-                $courseGradebookId = $courseGradebookCategory[0]->get_id();
+                if (!isset($category[0])) {
+                    continue;
+                }
+
+                /** @var Category $category */
+                $category = $category[0];
+
+                // Don't allow generate of certifications
+                if (empty($category->getGenerateCertificates())) {
+                    continue;
+                }
+
+                $categoryId = $category->get_id();
                 $certificateInfo = self::get_certificate_by_user_id(
-                    $courseGradebookId,
+                    $categoryId,
                     $userId
                 );
 

@@ -15,12 +15,28 @@ $list = RedirectionPlugin::getAll();
 
 $url = api_get_path(WEB_PLUGIN_PATH).'redirection/admin.php';
 
+$form = new FormValidator('add', 'post', api_get_self());
+$form->addHeader('Redirection');
+$form->addSelectAjax(
+    'user_id',
+    get_lang('User'),
+    null,
+    [
+        'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like',
+        'id' => 'user_id',
+    ]
+);
+$form->addUrl('url', 'URL');
+$form->addButtonSend(get_lang('Add'));
+
 if (isset($_REQUEST['id'])) {
     RedirectionPlugin::delete($_REQUEST['id']);
     Display::addFlash(Display::return_message(get_lang('Deleted')));
     header('Location: admin.php');
     exit;
-} elseif (isset($_POST['submit_button'])) {
+}
+
+if ($form->validate()) {
     $result = RedirectionPlugin::insert($_POST['user_id'], $_POST['url']);
     if ($result) {
         Display::addFlash(Display::return_message(get_lang('Added')));
@@ -31,18 +47,8 @@ if (isset($_REQUEST['id'])) {
     exit;
 }
 
-$content = '
-<form action="'.$url.'" method="post">
-    <div class="table-responsive well">
-        <table class="table table-condensed">
-            <thead>
-            <td><input type="text" class="form-control" placeholder="User Id" name="user_id"/></td>
-            <td><input type="text" class="form-control" placeholder="URL" name="url"/></td>
-            <td><input type=\'submit\' value=\'Add\' name="submit_button" class=\'btn btn-primary\'/></td>
-            </thead>
-        </table>
-    </div>
-</form>
+$content = $form->returnForm();
+$content .= '
 <div class="table-responsive">
     <table class="table table-bordered table-condensed">
         <tr>

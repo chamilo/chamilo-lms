@@ -116,7 +116,7 @@ class RedirectionPlugin extends Plugin
     public static function uninstall()
     {
         $table = Database::get_main_table('plugin_redirection');
-        $sql = "DROP TABLE $table";
+        $sql = "DROP TABLE IF EXISTS $table";
         Database::query($sql);
     }
 }

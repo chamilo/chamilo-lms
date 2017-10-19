@@ -2550,6 +2550,8 @@ class Tracking
 
         if (!empty($sessionId)) {
             $conditions[] = " session_id = $sessionId ";
+        } else {
+            $conditions[] = " (session_id = 0 OR session_id IS NULL) ";
         }
 
         $conditionToString = implode('AND', $conditions);
@@ -2561,7 +2563,6 @@ class Tracking
                 $groupBy
             ORDER BY view_count DESC
         ";
-
         $result = Database::query($sql);
 
         $progress = array();

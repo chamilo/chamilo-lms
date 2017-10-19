@@ -4603,11 +4603,23 @@ class SessionManager
                     continue;
                 }
 
+                $displayAccessStartDate = isset($enreg['DisplayStartDate']) ? $enreg['DisplayStartDate'] : $enreg['DateStart'];
+                $displayAccessEndDate = isset($enreg['DisplayEndDate']) ? $enreg['DisplayEndDate'] : $enreg['DateEnd'];
+                $coachAccessStartDate = isset($enreg['CoachStartDate']) ? $enreg['CoachStartDate'] : $enreg['DateStart'];
+                $coachAccessEndDate = isset($enreg['CoachEndDate']) ? $enreg['CoachEndDate'] : $enreg['DateEnd'];
                 // We assume the dates are already in UTC
                 $dateStart = explode('/', $enreg['DateStart']);
                 $dateEnd = explode('/', $enreg['DateEnd']);
                 $dateStart = $dateStart[0].'-'.$dateStart[1].'-'.$dateStart[2].' 00:00:00';
                 $dateEnd = $dateEnd[0].'-'.$dateEnd[1].'-'.$dateEnd[2].' 23:59:59';
+                $displayAccessStartDate = explode('/', $displayAccessStartDate);
+                $displayAccessStartDate = implode('-', $displayAccessStartDate).' 00:00:00';
+                $displayAccessEndDate = explode('/', $displayAccessEndDate);
+                $displayAccessEndDate = implode('-', $displayAccessEndDate).' 23:59:59';
+                $coachAccessStartDate = explode('/', $coachAccessStartDate);
+                $coachAccessStartDate = implode('-', $coachAccessStartDate).' 00:00:00';
+                $coachAccessEndDate = explode('/', $coachAccessEndDate);
+                $coachAccessEndDate = implode('-', $coachAccessEndDate).' 23:59:59';
                 $session_category_id = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
                 $sessionDescription = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
 
@@ -4641,6 +4653,10 @@ class SessionManager
 
                 $dateStart = api_get_utc_datetime($dateStart);
                 $dateEnd = api_get_utc_datetime($dateEnd);
+                $displayAccessStartDate = api_get_utc_datetime($displayAccessStartDate);
+                $displayAccessEndDate = api_get_utc_datetime($displayAccessEndDate);
+                $coachAccessStartDate = api_get_utc_datetime($coachAccessStartDate);
+                $coachAccessEndDate = api_get_utc_datetime($coachAccessEndDate);
 
                 $extraSessionParameters = null;
                 if (!empty($sessionDescription)) {
@@ -4702,8 +4718,10 @@ class SessionManager
                             id_coach = '$coach_id',
                             access_start_date = '$dateStart',
                             access_end_date = '$dateEnd',
-                            display_start_date = '$dateStart',
-                            display_end_date = '$dateEnd',
+                            display_start_date = '$displayAccessStartDate',
+                            display_end_date = '$displayAccessEndDate',
+                            coach_access_start_date = '$coachAccessStartDate',
+                            coach_access_end_date = '$coachAccessEndDate',
                             visibility = '$visibilityAfterExpirationPerSession',                            
                             session_admin_id = ".$defaultUserId." 
                             $sessionCondition $extraParameters $extraSessionParameters";
@@ -4744,8 +4762,10 @@ class SessionManager
                                 id_coach = '$coach_id',
                                 access_start_date = '$dateStart',
                                 access_end_date = '$dateEnd',
-                                display_start_date = '$dateStart',
-                                display_end_date = '$dateEnd',
+                                display_start_date = '$displayAccessStartDate',
+                                display_end_date = '$displayAccessEndDate',
+                                coach_access_start_date = '$coachAccessStartDate',
+                                coach_access_end_date = '$coachAccessEndDate',
                                 visibility = '$visibilityAfterExpirationPerSession' 
                                 $extraParameters 
                                 $extraSessionParameters
@@ -4801,6 +4821,10 @@ class SessionManager
                             'access_end_date' => $dateEnd,
                             'display_start_date' => $dateStart,
                             'display_end_date' => $dateEnd,
+                            'display_start_date' => $displayAccessStartDate,
+                            'display_end_date' => $displayAccessEndDate,
+                            'coach_access_start_date' => $coachAccessStartDate,
+                            'coach_access_end_date' => $coachAccessEndDate,
                             'visibility' => $visibilityAfterExpirationPerSession,
                             'session_category_id' => $session_category_id,
                         );

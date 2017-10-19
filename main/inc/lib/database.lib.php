@@ -529,6 +529,8 @@ class Database
      * @param array $conditions
      * @param string $type_result
      * @param string $option
+     * @param bool $debug
+     *
      * @return array
      */
     public static function select(
@@ -536,7 +538,8 @@ class Database
         $table_name,
         $conditions = array(),
         $type_result = 'all',
-        $option = 'ASSOC'
+        $option = 'ASSOC',
+        $debug = false
     ) {
         $conditions = self::parse_conditions($conditions);
 
@@ -552,6 +555,9 @@ class Database
         }
 
         $sql = "SELECT $clean_columns FROM $table_name $conditions";
+        if ($debug) {
+            var_dump($sql);
+        }
         $result = self::query($sql);
         $array = array();
 

@@ -76,6 +76,7 @@ class learnpathItem
     private $last_scorm_session_time = 0;
     private $prerequisiteMaxScore;
     private $prerequisiteMinScore;
+    public $oldTotalTime;
 
     /**
      * Prepares the learning path item for later launch.
@@ -141,6 +142,7 @@ class learnpathItem
         $this->max_time_allowed = $row['max_time_allowed'];
         $this->setPrerequisiteMaxScore($row['prerequisite_max_score']);
         $this->setPrerequisiteMinScore($row['prerequisite_min_score']);
+        $this->oldTotalTime = 0;
 
         if (isset($row['launch_data'])) {
             $this->launch_data = $row['launch_data'];
@@ -1786,8 +1788,10 @@ class learnpathItem
             }
             $this->current_start_time = time();
         }
-        //$this->current_stop_time=time();
-        if (time() < $this->current_stop_time || $this->current_stop_time == 0) {
+
+        if (time() < $this->current_stop_time ||
+            $this->current_stop_time == 0
+        ) {
             if (self::DEBUG > 2) {
                 error_log(
                     'learnpathItem::get_total_time() - Current stop time was '
@@ -1800,7 +1804,9 @@ class learnpathItem
             // might be used in some unknown goal.
             $this->current_stop_time = time();
         }
+
         $time = $this->current_stop_time - $this->current_start_time;
+
         if ($time < 0) {
             if (self::DEBUG > 2) {
                 error_log(
@@ -1810,12 +1816,25 @@ class learnpathItem
             }
             return 0;
         } else {
+            // Code based from Event::courseLogout
+            $sessionLifetime = api_get_configuration_value('session_lifetime');
+            // If session life time too big use 1 hour
+            if (empty($sessionLifetime) || $sessionLifetime > 86400) {
+                $sessionLifetime = 3600;
+            }
+
+            $fixedAddedMinute = 5 * 60; // Add only 5 minutes
+            if ($time > $sessionLifetime) {
+                if (self::DEBUG > 2) {
+                    error_log("Total time is too big: $time replaced with: $fixedAddedMinute");
+                }
+                $time = $fixedAddedMinute;
+            }
+
             if (self::DEBUG > 2) {
                 error_log(
-                    'learnpathItem::get_total_time() - Current start time = '.
-                    $this->current_start_time.', current stop time = '.
-                    $this->current_stop_time.' Returning '.$time."-----------\n",
-                    0
+                    'Current start time = '.$this->current_start_time.', current stop time = '.
+                    $this->current_stop_time.' Returning '.$time."-----------\n"
                 );
             }
             return $time;
@@ -2701,7 +2720,6 @@ class learnpathItem
         }
         // First check if parameters passed via GET can be saved here
         // in case it's a SCORM, we should get:
-
         if ($this->type == 'sco' || $this->type == 'au') {
             $status = $this->get_status(true);
             if ($this->prevent_reinit == 1 &&
@@ -3443,7 +3461,7 @@ class learnpathItem
     public function scorm_update_time($total_sec = 0)
     {
         if (self::DEBUG > 0) {
-            error_log('Funcion called: scorm_update_time');
+            error_log('learnpathItem::scorm_update_time()');
             error_log("total_sec: $total_sec");
         }
 
@@ -3467,7 +3485,7 @@ class learnpathItem
             $total_time = $row['total_time'];
         }
         if (self::DEBUG > 0) {
-            error_log("total_time: $total_time");
+            error_log("Original total_time: $total_time");
         }
 
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
@@ -3492,6 +3510,11 @@ class learnpathItem
             if ($total_time < 0) {
                 $total_time = $total_sec;
             }
+        }
+
+        if (self::DEBUG > 0) {
+            error_log("accumulate_scorm_time: $accumulateScormTime");
+            error_log("total_time modified: $total_time");
         }
 
         // Step 3 update db only if status != completed, passed, browsed or seriousgamemode not activated
@@ -3645,12 +3668,12 @@ class learnpathItem
         $my_status = ' ';
 
         $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        $sql = 'SELECT status FROM '.$item_view_table.'
+        $sql = 'SELECT status, total_time FROM '.$item_view_table.'
                 WHERE
-                    c_id = ' . $course_id.' AND
-                    lp_item_id="' . $this->db_id.'" AND
-                    lp_view_id="' . $this->view_id.'" AND
-                    view_count="' . $this->get_attempt_id().'" ';
+                    c_id = '.$course_id.' AND
+                    lp_item_id="'.$this->db_id.'" AND
+                    lp_view_id="'.$this->view_id.'" AND
+                    view_count="'.$this->get_attempt_id().'" ';
         $rs_verified = Database::query($sql);
         $row_verified = Database::fetch_array($rs_verified);
 
@@ -3661,8 +3684,10 @@ class learnpathItem
             'failed'
         );
 
-        $save = true;
+        $oldTotalTime = $row_verified['total_time'];
+        $this->oldTotalTime = $oldTotalTime;
 
+        $save = true;
         if (isset($row_verified) && isset($row_verified['status'])) {
             if (in_array($row_verified['status'], $my_case_completed)) {
                 $save = false;
@@ -3671,7 +3696,7 @@ class learnpathItem
 
         if ((($save === false && $this->type == 'sco') ||
            ($this->type == 'sco' && ($credit == 'no-credit' || $mode == 'review' || $mode == 'browse'))) &&
-            ($this->seriousgame_mode != 1 && $this->type == 'sco')
+           ($this->seriousgame_mode != 1 && $this->type == 'sco')
         ) {
             if (self::DEBUG > 1) {
                 error_log(
@@ -3686,7 +3711,6 @@ class learnpathItem
         } else {
             // Check the row exists.
             $inserted = false;
-
             // This a special case for multiple attempts and Chamilo exercises.
             if ($this->type == 'quiz' &&
                 $this->get_prevent_reinit() == 0 &&
@@ -3764,7 +3788,6 @@ class learnpathItem
                 }
 
                 $this->db_item_view_id = Database::insert($item_view_table, $params);
-
                 if ($this->db_item_view_id) {
                     $sql = "UPDATE $item_view_table SET id = iid
                             WHERE iid = ".$this->db_item_view_id;
@@ -3902,7 +3925,7 @@ class learnpathItem
                                     $my_status = '';
                                     $total_time = '';
                                 } else {
-                                    $total_time = " total_time = total_time +".$this->get_total_time().", ";
+                                    $total_time = " total_time = total_time + ".$this->get_total_time().", ";
                                 }
                             }
                         }

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Config the plugin
+ * Admin interface for the plugin configuration
  * @author Enrique Alcaraz Lopez
  * @package chamilo.plugin.redirection
  */

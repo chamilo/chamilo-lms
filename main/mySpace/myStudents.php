@@ -222,7 +222,7 @@ switch ($action) {
     case 'send_legal':
         $subject = get_lang('SendLegalSubject');
         $content = sprintf(
-            get_lang('SendLegalDescriptionToUrlX'),
+            get_lang('SendTermsDescriptionToUrlX'),
             api_get_path(WEB_PATH)
         );
         MessageManager::send_message_simple($student_id, $subject, $content);

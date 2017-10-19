@@ -938,6 +938,9 @@ class ExtraField extends Model
         if (isset($params['id'])) {
             $field_option = new ExtraFieldOption($this->type);
             $params['field_id'] = $params['id'];
+            if (empty($params['field_type'])) {
+                $params['field_type'] = $this->type;
+            }
             $field_option->save($params);
         }
 

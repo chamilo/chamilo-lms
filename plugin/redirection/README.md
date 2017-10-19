@@ -1,8 +1,15 @@
-# chamilo-plugin-redirection
-Plugin chamilo para la redirección de usuarios.
+Redirection plugin
+===
 
-Requiere agregar:
+Chamilo plugin for the redirection of specific users after they login.
 
-<code>
+Requires the addition of the following in configuration.php:
+
+```
 $_configuration['plugin_redirection_enabled'] = true;
-</code>
+```
+
+This setting is defined in configuration.php rather than in settings_current to reduce the
+load, as it is used on every login.
+
+@TODO Check the load difference for *just* checking it in settings_current rather than building the plugin object

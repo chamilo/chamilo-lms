@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Config the plugin
+ * Redirection plugin. Allows the configuration of redirection of specific users right after they login
  * @author Enrique Alcaraz Lopez
  * @package chamilo.plugin.redirection
  */
@@ -31,6 +31,7 @@ class RedirectionPlugin extends Plugin
     }
 
     /**
+     * Inser a new redirection (and delete the previous one for this user, if any)
      * @param int $userId
      * @param string $url
      * @return false|string
@@ -62,6 +63,7 @@ class RedirectionPlugin extends Plugin
     }
 
     /**
+     * Get the current redirection for a given user (if any)
      * @param $userId
      * @return array
      * @throws \Doctrine\DBAL\DBALException
@@ -79,6 +81,7 @@ class RedirectionPlugin extends Plugin
     }
 
     /**
+     * Deletes an existing redirection
      * @param int $id
      */
     public static function delete($id)
@@ -91,6 +94,7 @@ class RedirectionPlugin extends Plugin
     }
 
     /**
+     * Get all current redirection records
      * @return array
      */
     public static function getAll()
@@ -100,6 +104,9 @@ class RedirectionPlugin extends Plugin
         return Database::select('*', $table);
     }
 
+    /**
+     * Install the required DB structure to store the plugin data
+     */
     public static function install()
     {
         $table = Database::get_main_table('plugin_redirection');
@@ -113,6 +120,9 @@ class RedirectionPlugin extends Plugin
         Database::query($sql);
     }
 
+    /**
+     * Uninstall the plugin, cleaning up the database structure created on install
+     */
     public static function uninstall()
     {
         $table = Database::get_main_table('plugin_redirection');

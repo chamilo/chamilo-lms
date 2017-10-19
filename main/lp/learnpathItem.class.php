@@ -1787,8 +1787,7 @@ class learnpathItem
             $this->current_start_time = time();
         }
         //$this->current_stop_time=time();
-        if (time() < $this->current_stop_time || $this->current_stop_time == 0
-        ) {
+        if (time() < $this->current_stop_time || $this->current_stop_time == 0) {
             if (self::DEBUG > 2) {
                 error_log(
                     'learnpathItem::get_total_time() - Current stop time was '
@@ -2385,10 +2384,10 @@ class learnpathItem
                                                 $sql = 'SELECT exe_result, exe_weighting
                                                         FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
                                                         WHERE
-                                                            exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path.' AND
-                                                            exe_user_id = ' . $user_id.' AND
-                                                            orig_lp_id = ' . $this->lp_id.' AND
-                                                            orig_lp_item_id = ' . $prereqs_string.' AND
+                                                            exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.' AND
+                                                            exe_user_id = '.$user_id.' AND
+                                                            orig_lp_id = '.$this->lp_id.' AND
+                                                            orig_lp_item_id = '.$prereqs_string.' AND
                                                             status <> "incomplete"
                                                         ORDER BY exe_date DESC
                                                         LIMIT 0, 1';
@@ -2425,12 +2424,12 @@ class learnpathItem
                                             // 3. for multiple attempts we check that there are minimum 1 item completed.
                                             // Checking in the database.
                                             $sql = 'SELECT exe_result, exe_weighting
-                                                    FROM ' . Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
+                                                    FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
                                                     WHERE
-                                                        exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path.' AND
-                                                        exe_user_id = ' . $user_id.' AND
-                                                        orig_lp_id = ' . $this->lp_id.' AND
-                                                        orig_lp_item_id = ' . $prereqs_string.' ';
+                                                        exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.' AND
+                                                        exe_user_id = '.$user_id.' AND
+                                                        orig_lp_id = '.$this->lp_id.' AND
+                                                        orig_lp_item_id = '.$prereqs_string.' ';
 
                                             $rs_quiz = Database::query($sql);
                                             if (Database::num_rows($rs_quiz) > 0) {
@@ -3889,10 +3888,10 @@ class learnpathItem
                                 // Verify current status in multiples attempts.
                                 $sql = 'SELECT status FROM '.$item_view_table.'
                                         WHERE
-                                            c_id = ' . $course_id.' AND
-                                            lp_item_id="' . $this->db_id.'" AND
-                                            lp_view_id="' . $this->view_id.'" AND
-                                            view_count="' . $this->get_attempt_id().'" ';
+                                            c_id = '.$course_id.' AND
+                                            lp_item_id="'.$this->db_id.'" AND
+                                            lp_view_id="'.$this->view_id.'" AND
+                                            view_count="'.$this->get_attempt_id().'" ';
                                 $rs_status = Database::query($sql);
                                 $current_status = Database::result(
                                     $rs_status,
@@ -3917,29 +3916,29 @@ class learnpathItem
                                     score = ".$this->get_score().",
                                     $my_status
                                     max_score = '".$this->get_max()."',
-                                    suspend_data = '" . Database::escape_string($this->current_data)."',
-                                    lesson_location = '" . $this->lesson_location."'
+                                    suspend_data = '".Database::escape_string($this->current_data)."',
+                                    lesson_location = '".$this->lesson_location."'
                                 WHERE
                                     c_id = $course_id AND
                                     lp_item_id = ".$this->db_id." AND
-                                    lp_view_id = " . $this->view_id."  AND
-                                    view_count = " . $this->get_attempt_id();
+                                    lp_view_id = ".$this->view_id."  AND
+                                    view_count = ".$this->get_attempt_id();
 
                     } else {
                         //" max_time_allowed = '".$this->get_max_time_allowed()."'," .
                         $sql = "UPDATE $item_view_table SET
                                     $total_time
                                     start_time = ".$this->get_current_start_time().",
-                                    score = " . $this->get_score().",
+                                    score = ".$this->get_score().",
                                     $my_status
                                     max_score = '".$this->get_max()."',
-                                    suspend_data = '" . Database::escape_string($this->current_data)."',
-                                    lesson_location = '" . $this->lesson_location."'
+                                    suspend_data = '".Database::escape_string($this->current_data)."',
+                                    lesson_location = '".$this->lesson_location."'
                                 WHERE
                                     c_id = $course_id AND
                                     lp_item_id = ".$this->db_id." AND
-                                    lp_view_id = " . $this->view_id." AND
-                                    view_count = " . $this->get_attempt_id();
+                                    lp_view_id = ".$this->view_id." AND
+                                    view_count = ".$this->get_attempt_id();
                     }
                     $this->current_start_time = time();
                 }

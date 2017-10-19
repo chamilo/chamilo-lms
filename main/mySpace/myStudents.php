@@ -226,9 +226,10 @@ switch ($action) {
         exit;
         break;
     case 'send_legal':
-        $subject = get_lang('SendLegalSubject');
+        $subject = get_lang('SendtermsSubject');
         $content = sprintf(
             get_lang('SendTermsDescriptionToUrlX'),
+            $user_info['complete_name'],
             api_get_path(WEB_PATH)."courses/FORUMDAIDE/index.php"
         );
         MessageManager::send_message_simple($student_id, $subject, $content);

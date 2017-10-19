@@ -7476,4 +7476,146 @@ class TrackingCourseLog
 
         return $users;
     }
+
+    /**
+     * Get data for users list in sortable with pagination
+     * @param $from
+     * @param $number_of_items
+     * @param $column
+     * @param $direction
+     * @param $includeInvitedUsers boolean Whether include the invited users
+     * @return array
+     */
+    public static function getTotalTimeReport(
+        $from,
+        $number_of_items,
+        $column,
+        $direction,
+        $includeInvitedUsers = false
+    ) {
+        global $user_ids, $course_code, $export_csv, $csv_content, $session_id;
+
+        $course_code = Database::escape_string($course_code);
+        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $access_url_id = api_get_current_access_url_id();
+
+        // get all users data from a course for sortable with limit
+        if (is_array($user_ids)) {
+            $user_ids = array_map('intval', $user_ids);
+            $condition_user = " WHERE user.user_id IN (".implode(',', $user_ids).") ";
+        } else {
+            $user_ids = intval($user_ids);
+            $condition_user = " WHERE user.user_id = $user_ids ";
+        }
+
+        $url_table = null;
+        $url_condition = null;
+        if (api_is_multiple_url_enabled()) {
+            $url_table = ", ".$tbl_url_rel_user." as url_users";
+            $url_condition = " AND user.user_id = url_users.user_id AND access_url_id='$access_url_id'";
+        }
+
+        $invitedUsersCondition = '';
+        if (!$includeInvitedUsers) {
+            $invitedUsersCondition = " AND user.status != ".INVITEE;
+        }
+
+        $sql = "SELECT  user.user_id as user_id,
+                    user.official_code  as col0,
+                    user.lastname       as col1,
+                    user.firstname      as col2,
+                    user.username       as col3
+                FROM $tbl_user as user $url_table
+                $condition_user $url_condition $invitedUsersCondition";
+
+        if (!in_array($direction, array('ASC', 'DESC'))) {
+            $direction = 'ASC';
+        }
+
+        $column = intval($column);
+        $from = intval($from);
+        $number_of_items = intval($number_of_items);
+
+        $sql .= " ORDER BY col$column $direction ";
+        $sql .= " LIMIT $from,$number_of_items";
+
+        $res = Database::query($sql);
+        $users = array();
+
+        $course_info = api_get_course_info($course_code);
+
+        while ($user = Database::fetch_array($res, 'ASSOC')) {
+            $courseInfo = api_get_course_info($course_code);
+            $courseId = $courseInfo['real_id'];
+
+            $user['official_code'] = $user['col0'];
+            $user['lastname'] = $user['col1'];
+            $user['firstname'] = $user['col2'];
+            $user['username'] = $user['col3'];
+
+            $totalCourseTime = Tracking::get_time_spent_on_the_course(
+                $user['user_id'],
+                $courseId,
+                $session_id
+            );
+
+            $user['time'] = api_time_to_hms($totalCourseTime);
+            $totalLpTime = Tracking::get_time_spent_in_lp(
+                $user['user_id'],
+                $course_code,
+                array(),
+                $session_id
+            );
+
+            $user['total_lp_time'] = $totalLpTime;
+            $warning = '';
+            if ($totalLpTime > $totalCourseTime) {
+                $warning = '&nbsp;'.Display::label(get_lang('TimeDifference'), 'danger');
+            }
+
+            $user['total_lp_time'] = api_time_to_hms($totalLpTime).$warning;
+
+            $user['first_connection'] = Tracking::get_first_connection_date_on_the_course(
+                $user['user_id'],
+                $courseId,
+                $session_id
+            );
+            $user['last_connection'] = Tracking::get_last_connection_date_on_the_course(
+                $user['user_id'],
+                $courseInfo,
+                $session_id,
+                $export_csv === false
+            );
+
+            $user['link'] = '<center>
+                             <a href="../mySpace/myStudents.php?student='.$user['user_id'].'&details=true&course='.$course_code.'&origin=tracking_course&id_session='.$session_id.'">
+                             '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
+                             </a>
+                         </center>';
+
+            // store columns in array $users
+            $is_western_name_order = api_is_western_name_order();
+            $user_row = array();
+            $user_row['official_code'] = $user['official_code']; //0
+            if ($is_western_name_order) {
+                $user_row['firstname'] = $user['firstname'];
+                $user_row['lastname'] = $user['lastname'];
+            } else {
+                $user_row['lastname'] = $user['lastname'];
+                $user_row['firstname'] = $user['firstname'];
+            }
+            $user_row['username'] = $user['username'];
+            $user_row['time'] = $user['time'];
+            $user_row['total_lp_time'] = $user['total_lp_time'];
+            $user_row['first_connection'] = $user['first_connection'];
+            $user_row['last_connection'] = $user['last_connection'];
+
+            $user_row['link'] = $user['link'];
+            $users[] = array_values($user_row);
+        }
+
+        return $users;
+    }
+
 }

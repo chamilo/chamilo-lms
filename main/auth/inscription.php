@@ -529,9 +529,9 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     $showTerms = true;
 }
 
-$allow = api_get_configuration_value('allow_double_validation_in_registration');
+$allowDoubleValidation = api_get_configuration_value('allow_double_validation_in_registration');
 
-if ($allow && $showTerms == false) {
+if ($allowDoubleValidation && $showTerms == false) {
     $htmlHeadXtra[] = '<script>
         $(document).ready(function() {
             $("#pre_validation").click(function() {

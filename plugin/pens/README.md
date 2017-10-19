@@ -1,23 +1,28 @@
-<h1>Introduction</h1>
+PENS plugin
+===
 
 This plugin implements PENS in Chamilo, using the library php-pens available here: http://github.com/guillaumev/php-pens
 
-<h1>Requirements</h1>
+Requirements
+---
 
 You need the curl extension installed to use this library.
 
-<h1>How to install ?</h1>
+How to install
+---
 
 Install the plugin and create a file at the root of your chamilo server called pens.php. Put the following code in the pens.php file you created:
-<pre>
+```
 require_once __DIR__ . '/plugin/pens/pens.php';
-</pre>
+```
 
-<h1>Licence</h1>
+Licence
+---
 
 The chamilo-pens plugin is published under the GNU/GPLv3+ licence (see COPYING)
 
-<h1>Credits</h1>
+Credits
+---
 
 The original author of the plugin is Guillaume Viguier-Just <guillaume@viguierjust.com>.
 

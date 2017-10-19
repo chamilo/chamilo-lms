@@ -227,10 +227,11 @@ switch ($action) {
         break;
     case 'send_legal':
         $subject = get_lang('SendTermsSubject');
+        $linkLegal = api_get_path(WEB_PATH)."courses/FORUMDAIDE/index.php";
         $content = sprintf(
             get_lang('SendTermsDescriptionToUrlX'),
             $user_info['complete_name'],
-            api_get_path(WEB_PATH)."courses/FORUMDAIDE/index.php"
+            "<a href=\"".$linkLegal."\">".$linkLegal."</a>";
         );
         MessageManager::send_message_simple($student_id, $subject, $content);
         Display::addFlash(Display::return_message(get_lang('Sent')));

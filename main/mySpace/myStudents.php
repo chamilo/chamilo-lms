@@ -226,7 +226,7 @@ switch ($action) {
         exit;
         break;
     case 'send_legal':
-        $subject = get_lang('SendtermsSubject');
+        $subject = get_lang('SendTermsSubject');
         $content = sprintf(
             get_lang('SendTermsDescriptionToUrlX'),
             $user_info['complete_name'],

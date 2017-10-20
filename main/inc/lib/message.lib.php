@@ -1128,8 +1128,9 @@ class MessageManager
             $source
         );
 
-        $title = Security::remove_XSS($row['title'], STUDENT, true);
-        $content = Security::remove_XSS($row['content'], STUDENT, true);
+        $title = Security::remove_XSS($row['title']);
+        // ofaj
+        $content = $row['content'];
 
         $from_user = api_get_user_info($user_sender_id);
         $name = $from_user['complete_name'];
@@ -1180,7 +1181,7 @@ class MessageManager
 		        <hr style="color:#ddd" />
 		        <table width="100%">
 		            <tr>
-		              <td valign=top class="view-message-content">' . str_replace("\\", "", $content).'</td>
+		              <td valign=top class="view-message-content">' . $content.'</td>
 		            </tr>
 		        </table>
 		        <div id="message-attach">' . (!empty($files_attachments) ? implode('<br />', $files_attachments) : '').'</div>

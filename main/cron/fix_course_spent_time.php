@@ -68,6 +68,7 @@ if ($sendMessage && !empty($log)) {
     MessageManager::send_message_simple(
         $userId,
         'Course time spent fixes',
-        $log
+        $log,
+        1
     );
 }

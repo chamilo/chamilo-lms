@@ -50,7 +50,8 @@ if ($sendMessage && !empty($log)) {
     $log = nl2br($log);
     MessageManager::send_message_simple(
         $userId,
-        'Course time spent fixes',
-        $log
+        'LP time abusive fixes',
+        $log,
+        1
     );
 }

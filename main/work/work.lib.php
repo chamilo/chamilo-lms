@@ -3453,7 +3453,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
         } else {
             $teachers = SessionManager::getCoachesByCourseSession(
                 $sessionId,
-                $courseInfo['code']
+                $courseInfo['real_id']
             );
 
             if (!empty($teachers)) {

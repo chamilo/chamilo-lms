@@ -231,7 +231,7 @@ switch ($action) {
         $content = sprintf(
             get_lang('SendTermsDescriptionToUrlX'),
             $user_info['complete_name'],
-            "<a href=\"".$linkLegal."\">".$linkLegal."</a>";
+            "<a href=\"".$linkLegal."\">".$linkLegal."</a>"
         );
         MessageManager::send_message_simple($student_id, $subject, $content);
         Display::addFlash(Display::return_message(get_lang('Sent')));

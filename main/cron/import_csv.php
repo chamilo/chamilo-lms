@@ -1163,8 +1163,8 @@ class ImportCsv
                     );
 
                     $coaches = SessionManager::getCoachesByCourseSession(
-                        $courseInfo['real_id'],
-                        $event['session_id']
+                        $event['session_id'],
+                        $courseInfo['real_id']
                     );
 
                     // Search if an announcement exists:

@@ -662,3 +662,10 @@ $_configuration['gradebook_badge_sidebar'] = [
 //$_configuration['messages_hide_mail_content'] = false;
 // If you install plugin redirection you need to change to true
 //$_configuration['plugin_redirection_enabled'] = false;
+// Customize on hover agenda view. Show agenda comment and/or description
+/*$_configuration['agenda_on_hover_info'] = [
+    'options' => [
+        'comment' => true,
+        'description' => true,
+    ]
+];*/

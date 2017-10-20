@@ -77,6 +77,14 @@ class LocaleListener implements EventSubscriberInterface
             $request->setLocale($locale);
             $request->getSession()->set('_locale', $locale);
         }
+
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine')->getManager();
+        $criteria = ['variable' => 'header_extra_content'];
+        $setting = $em->getRepository('ChamiloCoreBundle:SettingsCurrent')->findOneBy($criteria);
+        if ($setting)  {
+            $this->container->get('twig')->addGlobal('header_extra_content', $setting->getSelectedValue());
+        }
     }
 
     /**

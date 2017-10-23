@@ -985,7 +985,7 @@ if ($form->validate()) {
     Session::erase('session_redirect');
     Session::erase('only_one_course_session_redirect');
 
-    if (CustomPages::enabled()) {
+    if (CustomPages::enabled() && CustomPages::exists(CustomPages::REGISTRATION_FEEDBACK)) {
         CustomPages::display(
             CustomPages::REGISTRATION_FEEDBACK,
             array('info' => $text_after_registration)
@@ -1000,7 +1000,7 @@ if ($form->validate()) {
     }
 } else {
     // Custom pages
-    if (CustomPages::enabled()) {
+    if (CustomPages::enabled() && CustomPages::exists(CustomPages::REGISTRATION)) {
         CustomPages::display(
             CustomPages::REGISTRATION,
             array('form' => $form)

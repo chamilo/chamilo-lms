@@ -43,28 +43,33 @@
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 
-class WSSESoapServer {
+/**
+ * Class WSSESoapServer
+ */
+class WSSESoapServer
+{
     const WSSENS = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd';
     const WSSENS_2003 = 'http://schemas.xmlsoap.org/ws/2003/06/secext';
     const WSUNS = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd';
     const WSSEPFX = 'wsse';
     const WSUPFX = 'wsu';
     private $soapNS, $soapPFX;
-    private $soapDoc = NULL;
-    private $envelope = NULL;
-    private $SOAPXPath = NULL;
-    private $secNode = NULL;
-    public $signAllHeaders = FALSE;
+    private $soapDoc = null;
+    private $envelope = null;
+    private $SOAPXPath = null;
+    private $secNode = null;
+    public $signAllHeaders = false;
 
-    private function locateSecurityHeader($setActor=NULL) {
-        $wsNamespace = NULL;
-        if ($this->secNode == NULL) {
-            $secnode = NULL;
+    private function locateSecurityHeader($setActor = null)
+    {
+        $wsNamespace = null;
+        if ($this->secNode == null) {
+            $secnode = null;
             $headers = $this->SOAPXPath->query('//wssoap:Envelope/wssoap:Header');
             if ($header = $headers->item(0)) {
                 $secnodes = $this->SOAPXPath->query('./*[local-name()="Security"]', $header);
 
-                foreach ($secnodes AS $node) {
+                foreach ($secnodes as $node) {
                     $nsURI = $node->namespaceURI;
                     if (($nsURI == self::WSSENS) || ($nsURI == self::WSSENS_2003)) {
                         $actor = $node->getAttributeNS($this->soapNS, 'actor');
@@ -110,11 +115,11 @@ class WSSESoapServer {
         $objXMLSecDSig->canonicalizeSignedInfo();
         $retVal = $objXMLSecDSig->validateReference();
 
-        if (! $retVal) {
+        if (!$retVal) {
             throw new Exception("Validation Failed");
         }
 
-        $key = NULL;
+        $key = null;
         $objKey = $objXMLSecDSig->locateKey();
 
         if ($objKey) {
@@ -133,7 +138,6 @@ class WSSESoapServer {
                 $nodeset = $this->SOAPXPath->query($query, $refNode);
                 if ($encmeth = $nodeset->item(0)) {
                     if ($uri = $encmeth->getAttribute("URI")) {
-
                         $arUrl = parse_url($uri);
 
                         if (empty($arUrl['path']) && ($identifier = $arUrl['fragment'])) {
@@ -183,7 +187,7 @@ class WSSESoapServer {
             $node = $nextNode;
         }
         $this->secNode->parentNode->removeChild($this->secNode);
-        $this->secNode = NULL;
+        $this->secNode = null;
 
         return true;
     }
@@ -198,4 +202,3 @@ class WSSESoapServer {
         return $this->soapDoc->save($file);
     }
 }
-

@@ -61,7 +61,10 @@ if (!empty($_POST)) {
 
         if (isset($trainingTutorId) && $trainingTutorId == 0) {
             $sql = "SELECT * FROM $tableTutorCompany 
-                    WHERE document_type = '".$tutorTrainingDocumentType."' AND document_number = '".$tutorTrainingDocumentNumber."' AND document_letter = '".$tutorTrainingDocumentLetter."';";
+                    WHERE 
+                        document_type = '".$tutorTrainingDocumentType."' AND 
+                        document_number = '".$tutorTrainingDocumentNumber."' AND 
+                        document_letter = '".$tutorTrainingDocumentLetter."';";
             $rs = Database::query($sql);
 
             if (Database::num_rows($rs) > 0) {
@@ -178,9 +181,18 @@ if (!empty($_POST)) {
 if (api_is_platform_admin()) {
     $actionId = intval($_GET['action_id']);
     $courseId = getCourse($actionId);
-    $interbreadcrumb[] = array("url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe'));
-    $interbreadcrumb[] = array("url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList'));
-    $interbreadcrumb[] = array("url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction'));
+    $interbreadcrumb[] = array(
+        "url" => "/plugin/sepe/src/sepe-administration-menu.php",
+        "name" => $plugin->get_lang('MenuSepe'),
+    );
+    $interbreadcrumb[] = array(
+        "url" => "formative-actions-list.php",
+        "name" => $plugin->get_lang('FormativesActionsList'),
+    );
+    $interbreadcrumb[] = array(
+        "url" => "formative-action.php?cid=".$courseId,
+        "name" => $plugin->get_lang('FormativeAction'),
+    );
     if (isset($_GET['new_participant']) && intval($_GET['new_participant']) == 1) {
         $templateName = $plugin->get_lang('NewParticipantAction');
         $tpl = new Template($templateName);
@@ -237,4 +249,5 @@ if (api_is_platform_admin()) {
     $tpl->display_one_col_template();
 } else {
     header('Location:'.api_get_path(WEB_PATH));
+    exit;
 }

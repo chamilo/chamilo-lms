@@ -241,4 +241,5 @@ if (api_is_platform_admin()) {
 
 } else {
     header('Location:'.api_get_path(WEB_PATH));
+    exit;
 }

@@ -46,16 +46,17 @@ if (api_is_platform_admin() && $enable) {
             $htmlText .= '</div>';
         $htmlText .= '</div>';
     $htmlText .= '</div>';
-    
+
     $templateName = $plugin->get_lang('MenuSepeAdministrator');
     $interbreadcrumb[] = array("url" => "/main/admin/index.php", "name" => get_lang('Administration'));
     $tpl = new Template($templateName);
     $tpl->assign('html_text', $htmlText);
-        
+
     $listing_tpl = 'sepe/view/sepe-administration-menu.tpl';
     $content = $tpl->fetch($listing_tpl);
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 } else {
     header('Location:'.api_get_path(WEB_PATH));
+    exit;
 }

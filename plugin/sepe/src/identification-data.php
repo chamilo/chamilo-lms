@@ -15,7 +15,10 @@ $_cid = 0;
 if (api_is_platform_admin()) {
     $info = getInfoIdentificationData();
     $templateName = $plugin->get_lang('DataCenter');
-    $interbreadcrumb[] = array("url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe'));
+    $interbreadcrumb[] = array(
+        "url" => "/plugin/sepe/src/sepe-administration-menu.php",
+        "name" => $plugin->get_lang('MenuSepe'),
+    );
     $tpl = new Template($templateName);
 
     if (isset($_SESSION['sepe_message_info'])) {

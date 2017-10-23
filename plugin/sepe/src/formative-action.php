@@ -20,8 +20,14 @@ if (api_is_platform_admin()) {
         header("Location: formative-actions-list.php");
     }
     $templateName = $plugin->get_lang('FormativeActionData');
-    $interbreadcrumb[] = array("url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe'));
-    $interbreadcrumb[] = array("url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList'));
+    $interbreadcrumb[] = array(
+        "url" => "/plugin/sepe/src/sepe-administration-menu.php",
+        "name" => $plugin->get_lang('MenuSepe'),
+    );
+    $interbreadcrumb[] = array(
+        "url" => "formative-actions-list.php",
+        "name" => $plugin->get_lang('FormativesActionsList'),
+    );
     $tpl = new Template($templateName);
 
     if (isset($_SESSION['sepe_message_info'])) {
@@ -32,7 +38,7 @@ if (api_is_platform_admin()) {
         $tpl->assign('message_error', $_SESSION['sepe_message_error']);
         unset($_SESSION['sepe_message_error']);
     }
-    
+
     $tpl->assign('info', $info);
     $tpl->assign('start_date', date("d/m/Y", strtotime($info['start_date'])));
     $tpl->assign('end_date', date("d/m/Y", strtotime($info['end_date'])));

@@ -26,15 +26,16 @@ if (api_is_platform_admin()) {
     $courseActionList = listCourseAction();
     $courseFreeList = listCourseFree();
     $actionFreeList = listActionFree();
-    
+
     $tpl->assign('course_action_list', $courseActionList);
     $tpl->assign('course_free_list', $courseFreeList);
     $tpl->assign('action_free_list', $actionFreeList);
-    
+
     $listing_tpl = 'sepe/view/formative-actions-list.tpl';
     $content = $tpl->fetch($listing_tpl);
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 } else {
     header('Location:'.api_get_path(WEB_PATH));
+    exit;
 }

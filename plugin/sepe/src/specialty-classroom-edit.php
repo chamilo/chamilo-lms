@@ -130,4 +130,5 @@ if (api_is_platform_admin()) {
     $tpl->display_one_col_template();
 } else {
     header('Location:'.api_get_path(WEB_PATH));
+    exit;
 }

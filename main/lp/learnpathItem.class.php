@@ -1815,21 +1815,7 @@ class learnpathItem
             }
             return 0;
         } else {
-            // Code based from Event::courseLogout
-            $sessionLifetime = api_get_configuration_value('session_lifetime');
-            // If session life time too big use 1 hour
-            if (empty($sessionLifetime) || $sessionLifetime > 86400) {
-                $sessionLifetime = 3600;
-            }
-
-            $fixedAddedMinute = 5 * 60; // Add only 5 minutes
-            if ($time > $sessionLifetime) {
-                if (self::DEBUG > 2) {
-                    error_log("Total time is too big: $time replaced with: $fixedAddedMinute");
-                }
-                $time = $fixedAddedMinute;
-            }
-
+            $time = self::fixAbusiveTime($time);
             if (self::DEBUG > 2) {
                 error_log(
                     'Current start time = '.$this->current_start_time.', current stop time = '.
@@ -1838,6 +1824,30 @@ class learnpathItem
             }
             return $time;
         }
+    }
+
+    /**
+     * @param int $time
+     * @return int
+     */
+    public static function fixAbusiveTime($time)
+    {
+        // Code based from Event::courseLogout
+        $sessionLifetime = api_get_configuration_value('session_lifetime');
+        // If session life time too big use 1 hour
+        if (empty($sessionLifetime) || $sessionLifetime > 86400) {
+            $sessionLifetime = 3600;
+        }
+
+        $fixedAddedMinute = 5 * 60; // Add only 5 minutes
+        if ($time > $sessionLifetime) {
+            if (self::DEBUG > 2) {
+                error_log("Total time is too big: $time replaced with: $fixedAddedMinute");
+            }
+            $time = $fixedAddedMinute;
+        }
+
+        return $time;
     }
 
     /**
@@ -3502,6 +3512,7 @@ class learnpathItem
             $total_time += $total_sec;
         } else {
             // Step 2.2 : if not cumulative mode total_time = total_time - last_update + total_sec
+            $total_sec = self::fixAbusiveTime($total_sec);
             $total_time = $total_time - $this->last_scorm_session_time + $total_sec;
             $this->last_scorm_session_time = $total_sec;
 
@@ -3546,15 +3557,15 @@ class learnpathItem
      **/
     public function scorm_init_time()
     {
-        $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $course_id = api_get_course_int_id();
-        $sql = 'UPDATE '.$item_view_table.'
+        $sql = 'UPDATE '.$table.'
                 SET total_time = 0, 
-                    start_time=' . time().'
-                WHERE c_id = ' . $course_id.'
-                    AND lp_item_id="' . $this->db_id.'"
-                    AND lp_view_id="' . $this->view_id.'"
-                    AND view_count="' . $this->attempt_id.'"';
+                    start_time = '.time().'
+                WHERE c_id = '.$course_id.'
+                    AND lp_item_id = "'.$this->db_id.'"
+                    AND lp_view_id = "'.$this->view_id.'"
+                    AND view_count = "'.$this->attempt_id.'"';
         Database::query($sql);
     }
 
@@ -3803,12 +3814,12 @@ class learnpathItem
                     );
                     $where = array(
                         'c_id = ? AND lp_item_id = ? AND lp_view_id = ? AND view_count = ?' =>
-                            array(
-                                $course_id,
-                                $this->db_id,
-                                $this->view_id,
-                                $this->get_attempt_id()
-                            )
+                        array(
+                            $course_id,
+                            $this->db_id,
+                            $this->view_id,
+                            $this->get_attempt_id()
+                        )
                     );
                     Database::update($item_view_table, $params, $where);
                 } else {
@@ -3817,11 +3828,11 @@ class learnpathItem
                         $my_status = ' ';
                         $total_time = ' ';
                         if (!empty($_REQUEST['exeId'])) {
-                            $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+                            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
                             $safe_exe_id = intval($_REQUEST['exeId']);
-                            $sql = "SELECT start_date,exe_date
-                                    FROM $TBL_TRACK_EXERCICES
+                            $sql = "SELECT start_date, exe_date
+                                    FROM $table
                                     WHERE exe_id = $safe_exe_id";
                             $res = Database::query($sql);
                             $row_dates = Database::fetch_array($res);
@@ -3833,6 +3844,7 @@ class learnpathItem
                                 $row_dates['exe_date']
                             );
                             $mytime = ((int) $time_exe_date - (int) $time_start_date);
+                            $mytime = self::fixAbusiveTime($mytime);
                             $total_time = " total_time = ".$mytime.", ";
                         }
                     } else {
@@ -3853,10 +3865,10 @@ class learnpathItem
                             // Process of status verified into data base.
                             $sql = 'SELECT status FROM '.$item_view_table.'
                                     WHERE
-                                        c_id = ' . $course_id.' AND
-                                        lp_item_id="' . $this->db_id.'" AND
-                                        lp_view_id="' . $this->view_id.'" AND
-                                        view_count="' . $this->get_attempt_id().'"
+                                        c_id = '.$course_id.' AND
+                                        lp_item_id="'.$this->db_id.'" AND
+                                        lp_view_id="'.$this->view_id.'" AND
+                                        view_count="'.$this->get_attempt_id().'"
                                     ';
                             $rs_verified = Database::query($sql);
                             $row_verified = Database::fetch_array($rs_verified);
@@ -3980,8 +3992,8 @@ class learnpathItem
                         WHERE
                             c_id = $course_id AND
                             lp_item_id = ".$this->db_id." AND
-                            lp_view_id = " . $this->view_id." AND
-                            view_count = " . $this->get_attempt_id();
+                            lp_view_id = ".$this->view_id." AND
+                            view_count = ".$this->get_attempt_id();
                 $res = Database::query($sql);
                 if (Database::num_rows($res) > 0) {
                     $row = Database::fetch_array($res);

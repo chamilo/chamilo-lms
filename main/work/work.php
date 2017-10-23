@@ -27,8 +27,6 @@ $curdirpath = '';
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = to_javascript_work();
 
-$_course = api_get_course_info();
-
 /*	Constants and variables */
 
 $tool_name = get_lang('StudentPublications');
@@ -126,6 +124,16 @@ if (!empty($groupId)) {
 // Stats
 Event::event_access_tool(TOOL_STUDENTPUBLICATION);
 
+$groupId = api_get_group_id();
+$isTutor = false;
+if (!empty($groupId)) {
+    $groupInfo = GroupManager::get_group_properties($groupId);
+    $isTutor = GroupManager::is_tutor_of_group(
+        api_get_user_id(),
+        $groupInfo
+    );
+}
+
 $is_allowed_to_edit = api_is_allowed_to_edit();
 $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
 
@@ -162,8 +170,8 @@ switch ($action) {
         break;
     case 'add':
     case 'create_dir':
-        if (!$is_allowed_to_edit) {
-            api_not_allowed();
+        if (!($is_allowed_to_edit || $isTutor)) {
+            api_not_allowed(true);
         }
         $addUrl = api_get_path(WEB_CODE_PATH).'work/work.php?action=create_dir&'.api_get_cidreq();
         $form = new FormValidator(
@@ -365,7 +373,7 @@ if ($origin === 'learnpath') {
     echo '<div style="height:15px">&nbsp;</div>';
 }
 
-display_action_links($work_id, $curdirpath, $action);
+displayWorkActionLinks($work_id, $action, $isTutor);
 echo $content;
 
 Display::display_footer();

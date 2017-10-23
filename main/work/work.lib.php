@@ -17,57 +17,63 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
- * @param   string  Current dir
  * @param   integer Whether to show tool options
  * @param   integer Whether to show upload form option
+ * @param bool $isTutor
  * @return  void
  */
-function display_action_links($id, $cur_dir_path, $action)
+function displayWorkActionLinks($id, $action, $isTutor)
 {
     $id = $my_back_id = intval($id);
     if ($action == 'list') {
         $my_back_id = 0;
     }
 
-    $display_output = '';
+    $output = '';
     $origin = api_get_origin();
 
     if (!empty($id)) {
-        $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_back_id.'">'.
+        $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_back_id.'">'.
             Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).
             '</a>';
     }
 
-    if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
+
+    if (($isTutor || api_is_allowed_to_edit(null, true)) &&
+        $origin != 'learnpath'
+    ) {
         // Create dir
         if (empty($id)) {
-            $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=create_dir">';
-            $display_output .= Display::return_icon(
-                'new_work.png',
-                get_lang('CreateAssignment'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).
-            '</a>';
+            $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=create_dir">';
+            $output .= Display::return_icon(
+                    'new_work.png',
+                    get_lang('CreateAssignment'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ).
+                '</a>';
         }
+    }
+
+    if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
         if (empty($id)) {
             // Options
-            $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=settings">';
-            $display_output .= Display::return_icon(
+            $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=settings">';
+            $output .= Display::return_icon(
                 'settings.png',
                 get_lang('EditToolOptions'),
                 '',
                 ICON_SIZE_MEDIUM
             ).'</a>';
         }
-        $display_output .= '<a id="open-view-list" href="#">'.
-        Display::return_icon(
-            'listwork.png',
-            get_lang('ViewStudents'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).
-        '</a>';
+        $output .= '<a id="open-view-list" href="#">'.
+            Display::return_icon(
+                'listwork.png',
+                get_lang('ViewStudents'),
+                '',
+                ICON_SIZE_MEDIUM
+            ).
+            '</a>';
 
     }
 
@@ -83,9 +89,9 @@ function display_action_links($id, $cur_dir_path, $action)
         }
     }
 
-    if ($display_output != '') {
+    if ($output != '') {
         echo '<div class="actions">';
-        echo $display_output;
+        echo $output;
         echo '</div>';
     }
 }

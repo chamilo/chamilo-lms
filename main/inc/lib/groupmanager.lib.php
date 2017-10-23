@@ -2279,7 +2279,7 @@ class GroupManager
                                 'span',
                                     Display::encrypted_mailto_link(
                                         $tutor['mail'],
-                                        $tutor['complete_name']
+                                        $tutor['complete_name_with_username']
                                     ),
                                 array('title'=>$username)
                             ).', ';

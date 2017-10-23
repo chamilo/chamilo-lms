@@ -130,7 +130,9 @@
     <header>
         {% if header_extra_content %}
             <div class="extra-header">
+                {% autoescape false %}
                 {{ header_extra_content }}
+                {% endautoescape %}
             </div>
         {% endif %}
 

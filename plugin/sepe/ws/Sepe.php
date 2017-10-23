@@ -5,7 +5,6 @@
  */
 class Sepe
 {
-
     /**
      * @param crearCentroInput[] $crearCentroInput
      *
@@ -104,7 +103,7 @@ class Sepe
 
     /**
      *
-     * @return array
+     * @return stdClass
      */
     public function obtenerDatosCentro()
     {
@@ -398,7 +397,8 @@ class Sepe
                         foreach ($centroList as $centro) {
                             $centerOrigin = $centro->ORIGEN_CENTRO;
                             $centerCode = $centro->CODIGO_CENTRO;
-                            $sql = "SELECT id FROM $tableCenters WHERE center_origin='".$centerOrigin."' AND center_code='".$centerCode."';";
+                            $sql = "SELECT id FROM $tableCenters 
+                                    WHERE center_origin='".$centerOrigin."' AND center_code='".$centerCode."';";
                             $res = Database::query($sql);
                             if (Database::num_rows($res) > 0) {
                                 $aux_row = Database::fetch_assoc($res);
@@ -448,7 +448,9 @@ class Sepe
 
                                 /* check tutor not exists */
                                 $sql = "SELECT id FROM $tableTutors WHERE 
-                                document_type='".$documentType."' AND document_number='".$documentNumber."' AND document_letter='".$documentLetter."';";
+                                          document_type='".$documentType."' AND 
+                                          document_number='".$documentNumber."' AND 
+                                          document_letter='".$documentLetter."';";
                                 $res = Database::query($sql);
                                 if (Database::num_rows($res) > 0) {
                                     $aux_row = Database::fetch_assoc($res);
@@ -530,7 +532,13 @@ class Sepe
                     $documentNumberTraining = isset($participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->NUM_DOCUMENTO) ? $participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->NUM_DOCUMENTO : null;
                     $documentLetterTraining = isset($participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->LETRA_NIF) ? $participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->LETRA_NIF : null;
                     if (!empty($documentTypeTraining) || !empty($documentNumberTraining) || !empty($documentLetterTraining)) {
-                        $tmp_f = Database::query('SELECT id FROM '.$tableTutorsCompany.' WHERE document_type="'.$documentTypeTraining.'" AND document_number="'.$documentNumberTraining.'" AND document_letter="'.$documentLetterTraining.'";');
+                        $tmp_f = Database::query('
+                            SELECT id FROM '.$tableTutorsCompany.' 
+                            WHERE
+                                document_type="'.$documentTypeTraining.'" AND 
+                                document_number="'.$documentNumberTraining.'" AND 
+                                document_letter="'.$documentLetterTraining.'";'
+                        );
                         if (Database::num_rows($tmp_f) > 0) {
                             $row_tmp = Database::fetch_assoc($tmp_f);
                             $tutorIdTraining = $row_tmp['id'];
@@ -768,7 +776,13 @@ class Sepe
                         $classroomCenter = new stdClass();
                         $classroomCenter->ORIGEN_CENTRO = $auxCenter['center_origin'];
                         $classroomCenter->CODIGO_CENTRO = $auxCenter['center_code'];
-                        $classroomCenter = new SoapVar($classroomCenter, SOAP_ENC_OBJECT, null, null, 'CENTRO_PRESENCIAL');
+                        $classroomCenter = new SoapVar(
+                            $classroomCenter,
+                            SOAP_ENC_OBJECT,
+                            null,
+                            null,
+                            'CENTRO_PRESENCIAL'
+                        );
                         $classroomCenterList->append($classroomCenter);
                     }
                     $sql = "SELECT * FROM $specialityTutorTable
@@ -1290,7 +1304,6 @@ class Sepe
     protected function checkAuth()
     {
         if (!$this->authenticated) {
-//            HTML_Output::error(403);
             error_log('403');
         }
     }

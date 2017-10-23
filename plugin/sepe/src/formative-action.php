@@ -18,6 +18,7 @@ if (api_is_platform_admin()) {
     $info = getActionInfo($actionId);
     if ($info === false) {
         header("Location: formative-actions-list.php");
+        exit;
     }
     $templateName = $plugin->get_lang('FormativeActionData');
     $interbreadcrumb[] = array(

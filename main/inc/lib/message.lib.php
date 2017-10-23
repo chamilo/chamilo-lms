@@ -165,7 +165,8 @@ class MessageManager
             }
 
             $userInfo = api_get_user_info($result[1]);
-            $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.$result[2].'</a><br />'.$userInfo['complete_name_with_username'];
+            $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.
+                $result[2].'</a><br />'.$userInfo['complete_name_with_username'];
 
             $message[3] =
                 Display::url(
@@ -495,7 +496,7 @@ class MessageManager
      * @param int $sender_id
      * @param bool $sendCopyToDrhUsers send copy to related DRH users
      * @param bool $directMessage
-     * @param bool $smsParameters
+     * @param array $smsParameters
      * @param bool $uploadFiles Do not upload files using the MessageManager class
      *
      * @return bool
@@ -573,8 +574,8 @@ class MessageManager
         $receiver_user_id = intval($receiver_user_id);
         $message_id = intval($message_id);
         // first get data from message id (parent)
-        $sql_message = "SELECT * FROM $table_message WHERE id = '$parent_id'";
-        $rs_message = Database::query($sql_message);
+        $sql = "SELECT * FROM $table_message WHERE id = '$parent_id'";
+        $rs_message = Database::query($sql);
         $row_message = Database::fetch_array($rs_message);
 
         // get message id from data found early for other receiver user
@@ -785,7 +786,7 @@ class MessageManager
      * update messages by user id and message id
      * @param  int $user_id
      * @param  int $message_id
-     * @return resource
+     * @return bool
      */
     public static function update_message($user_id, $message_id)
     {
@@ -793,14 +794,15 @@ class MessageManager
             return false;
         }
 
-        $table_message = Database::get_main_table(TABLE_MESSAGE);
-        $sql = "UPDATE $table_message SET 
+        $table = Database::get_main_table(TABLE_MESSAGE);
+        $sql = "UPDATE $table SET 
                     msg_status = '".MESSAGE_STATUS_NEW."'
                 WHERE
                     msg_status <> ".MESSAGE_STATUS_OUTBOX." AND
                     user_receiver_id=".intval($user_id)." AND
                     id='" . intval($message_id)."'";
         Database::query($sql);
+        return true;
     }
 
     /**
@@ -906,14 +908,14 @@ class MessageManager
     }
 
     /**
-     * get messages by parent id optionally with limit
+     * Get messages by parent id optionally with limit
      * @param  int        parent id
      * @param  int        group id (optional)
      * @param  int        offset (optional)
      * @param  int        limit (optional)
      * @return array
      */
-    public static function get_messages_by_parent($parent_id, $group_id = '', $offset = 0, $limit = 0)
+    public static function get_messages_by_parent($parent_id, $group_id = 0, $offset = 0, $limit = 0)
     {
         if ($parent_id != strval(intval($parent_id))) {
             return false;
@@ -921,12 +923,12 @@ class MessageManager
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $parent_id = intval($parent_id);
         $condition_group_id = '';
-        if ($group_id !== '') {
+        if (!empty($group_id)) {
             $group_id = intval($group_id);
             $condition_group_id = " AND group_id = '$group_id' ";
         }
 
-        $condition_limit = "";
+        $condition_limit = '';
         if ($offset && $limit) {
             $offset = ($offset - 1) * $limit;
             $condition_limit = " LIMIT $offset,$limit ";
@@ -1037,7 +1039,8 @@ class MessageManager
             if ($request === true) {
                 $message[1] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.$userInfo['complete_name_with_username'].'</a>';
                 $message[2] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.str_replace("\\", "", $result[2]).'</a>';
-                $message[3] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG); //date stays the same
+                //date stays the same
+                $message[3] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG);
                 $message[4] = '&nbsp;&nbsp;<a title="'.addslashes(get_lang('DeleteMessage')).'" onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.
                     Display::returnFontAwesomeIcon('trash', 2).'</a>';
             } else {
@@ -1174,9 +1177,11 @@ class MessageManager
             $message_content .= '</div>';
         } else {
             if ($source == 'outbox') {
-                $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.$receiverUserInfo['complete_name'].'</b>';
+                $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.
+                    $receiverUserInfo['complete_name'].'</b>';
             } else {
-                $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.get_lang('Me').'</b>';
+                $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.
+                    get_lang('Me').'</b>';
             }
         }
 
@@ -1679,7 +1684,8 @@ class MessageManager
                     $filesize = format_file_size($row_file['size']);
                     $filecomment = Security::remove_XSS($row_file['comment']);
                     $filename = Security::remove_XSS($filename);
-                    $links_attach_file[] = $attach_icon.'&nbsp;<a href="'.$archiveURL.$archiveFile.'">'.$filename.'</a>&nbsp;('.$filesize.')'.(!empty($filecomment) ? '&nbsp;-&nbsp;<i>'.$filecomment.'</i>' : '');
+                    $links_attach_file[] = $attach_icon.'&nbsp;<a href="'.$archiveURL.$archiveFile.'">'.$filename.'</a>
+                        &nbsp;('.$filesize.')'.(!empty($filecomment) ? '&nbsp;-&nbsp;<i>'.$filecomment.'</i>' : '');
                 }
             }
         }
@@ -1853,7 +1859,8 @@ class MessageManager
     public static function outbox_display($keyword = '')
     {
         Session::write('message_sent_search_keyword', $keyword);
-        $success = get_lang('SelectedMessagesDeleted').'&nbsp</b><br /><a href="outbox.php">'.get_lang('BackToOutbox').'</a>';
+        $success = get_lang('SelectedMessagesDeleted').'&nbsp</b><br />
+                    <a href="outbox.php">'.get_lang('BackToOutbox').'</a>';
 
         $html = '';
         if (isset($_REQUEST['action'])) {

@@ -11,7 +11,7 @@
  *
  * @package chamilo.include
  * @todo remove the code that displays the button that links to the install page
- * 		but use a redirect immediately. By doing so the $alreadyInstalled variable can be removed.
+ * but use a redirect immediately. By doing so the $alreadyInstalled variable can be removed.
  *
  */
 
@@ -569,7 +569,7 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
 
 // ===== end "who is logged in?" module section =====
 
-//Update of the logout_date field in the table track_e_login
+// Update of the logout_date field in the table track_e_login
 // (needed for the calculation of the total connection time)
 if (!isset($_SESSION['login_as']) && isset($_user)) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
@@ -632,4 +632,3 @@ if (empty($default_quota)) {
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 // Forcing PclZip library to use a custom temporary folder.
 define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
-

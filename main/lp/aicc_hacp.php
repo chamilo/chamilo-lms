@@ -44,14 +44,20 @@ $use_anonymous = true;
 // Use session ID as provided by the request.
 if (!empty($_REQUEST['aicc_sid'])) {
     session_id($_REQUEST['aicc_sid']);
-    if ($debug > 1) { error_log('New LP - '.__FILE__.','.__LINE__.' - reusing session ID '.$_REQUEST['aicc_sid'], 0); }
+    if ($debug > 1) {
+        error_log('New LP - '.__FILE__.','.__LINE__.' - reusing session ID '.$_REQUEST['aicc_sid']);
+    }
 } elseif (!empty($_REQUEST['session_id'])) {
     session_id($_REQUEST['session_id']);
-    if ($debug > 1) { error_log('New LP - '.__FILE__.','.__LINE__.' - reusing session ID '.$_REQUEST['session_id'], 0); }
+    if ($debug > 1) {
+        error_log('New LP - '.__FILE__.','.__LINE__.' - reusing session ID '.$_REQUEST['session_id']);
+    }
 }
 //Load common libraries using a compatibility script to bridge between 1.6 and 1.8.
 require_once __DIR__.'/../inc/global.inc.php';
-if ($debug > 2) { error_log('New LP - '.__FILE__.','.__LINE__.' - Current session ID: '.session_id(), 0); }
+if ($debug > 2) {
+    error_log('New LP - '.__FILE__.','.__LINE__.' - Current session ID: '.session_id());
+}
 
 // Is this needed? This is probabaly done in the header file.
 //$_user							= $_SESSION['_user'];

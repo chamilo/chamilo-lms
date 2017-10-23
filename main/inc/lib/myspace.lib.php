@@ -133,6 +133,7 @@ class MySpace
             @chmod($file_name, api_get_permissions_for_new_files());
 
             header("Location:".$archive_url.$file_name);
+            exit;
         }
         return $message;
     }
@@ -266,9 +267,9 @@ class MySpace
             // course code
             $return .= '    <td width="157px" >'.cut($courseCode, 20, true).'</td>';
             // time spent in the course
-            $return .= '    <td><div>'.api_time_to_hms(Tracking::get_time_spent_on_the_course($user_id, $courseId)).'</div></td>';
+            $return .= '<td><div>'.api_time_to_hms(Tracking::get_time_spent_on_the_course($user_id, $courseId)).'</div></td>';
             // student progress in course
-            $return .= '    <td><div>'.round(Tracking::get_avg_student_progress($user_id, $courseCode), 2).'</div></td>';
+            $return .= '<td><div>'.round(Tracking::get_avg_student_progress($user_id, $courseCode), 2).'</div></td>';
             // student score
             $avg_score = Tracking::get_avg_student_score($user_id, $courseCode);
             if (is_numeric($avg_score)) {
@@ -325,16 +326,58 @@ class MySpace
             0
         );
         $table->additional_parameters = $addparams;
-        $table->set_header(0, get_lang('OfficialCode'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
+        $table->set_header(
+            0,
+            get_lang('OfficialCode'),
+            true,
+            array('style' => 'font-size:8pt'),
+            array('style' => 'font-size:8pt')
+        );
         if (api_is_western_name_order()) {
-            $table->set_header(1, get_lang('FirstName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-            $table->set_header(2, get_lang('LastName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
+            $table->set_header(
+                1,
+                get_lang('FirstName'),
+                true,
+                array('style' => 'font-size:8pt'),
+                array('style' => 'font-size:8pt')
+            );
+            $table->set_header(
+                2,
+                get_lang('LastName'),
+                true,
+                array('style' => 'font-size:8pt'),
+                array('style' => 'font-size:8pt')
+            );
         } else {
-            $table->set_header(1, get_lang('LastName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-            $table->set_header(2, get_lang('FirstName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
+            $table->set_header(
+                1,
+                get_lang('LastName'),
+                true,
+                array('style' => 'font-size:8pt'),
+                array('style' => 'font-size:8pt')
+            );
+            $table->set_header(
+                2,
+                get_lang('FirstName'),
+                true,
+                array('style' => 'font-size:8pt'),
+                array('style' => 'font-size:8pt')
+            );
         }
-        $table->set_header(3, get_lang('LoginName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-        $table->set_header(4, $t_head, false, array('style' => 'width:90%;border:0;padding:0;font-size:7.5pt;'), array('style' => 'width:90%;padding:0;font-size:7.5pt;'));
+        $table->set_header(
+            3,
+            get_lang('LoginName'),
+            true,
+            array('style' => 'font-size:8pt'),
+            array('style' => 'font-size:8pt')
+        );
+        $table->set_header(
+            4,
+            $t_head,
+            false,
+            array('style' => 'width:90%;border:0;padding:0;font-size:7.5pt;'),
+            array('style' => 'width:90%;padding:0;font-size:7.5pt;')
+        );
         $table->set_column_filter(4, array('MySpace', 'course_info_tracking_filter'));
         $table->display();
     }
@@ -676,13 +719,13 @@ class MySpace
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_lp_progress&session_id='.$sessionId.'&course_id='.$courseId.'&date_to='.$date_to.'&date_from='.$date_from;
 
-        //Table Id
+        // Table Id
         $tableId = 'lpProgress';
 
-        //Autowidth
+        // Autowidth
         $extra_params['autowidth'] = 'true';
 
-        //height auto
+        // height auto
         $extra_params['height'] = 'auto';
 
         $table = Display::grid_js(
@@ -879,7 +922,11 @@ class MySpace
 
                 // Displaying a feedback message
                 if (!empty($additionalExportFields)) {
-                    echo Display::return_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>', 'confirm', false);
+                    echo Display::return_message(
+                        get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>',
+                        'confirm',
+                        false
+                    );
                 } else {
                     echo Display::return_message(
                         get_lang('NoAdditionalFieldsWillBeExported'),
@@ -901,7 +948,11 @@ class MySpace
                     $message .= '<li>'.$extrafields[$extra_field_export][3].'</li>';
                 }
 
-                echo Display::return_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>', 'normal', false);
+                echo Display::return_message(
+                    get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>',
+                    'normal',
+                    false
+                );
             }
         }
     }
@@ -1254,9 +1305,11 @@ class MySpace
                     null,
                     false
                 );
-                if ($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned.
+                if ($last_login_date_tmp != false && $last_login_date == false) {
+                    // TODO: To be cleaned.
                     $last_login_date = $last_login_date_tmp;
-                } elseif ($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition. To be cleaned.
+                } elseif ($last_login_date_tmp != false && $last_login_date == false) {
+                    // TODO: Repeated previous condition. To be cleaned.
                     // Find the max and assign it to first_login_date
                     if (strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
                         $last_login_date = $last_login_date_tmp;
@@ -1322,18 +1375,18 @@ class MySpace
      */
     public static function display_tracking_session_overview()
     {
-        $t_head = '<table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
-        $t_head .= '<tr>';
-        $t_head .= '<th width="155px" style="border-left:0;border-bottom:0"><span>'.get_lang('Course').'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgStudentsProgress'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgCourseScore'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfMessages'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfAssignments'), 6, true).'</span></th>';
-        $t_head .= '<th width="105px" style="border-bottom:0"><span>'.get_lang('TotalExercisesScoreObtained').'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalExercisesAnswered'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
-        $t_head .= '</tr></table>';
+        $head = '<table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
+        $head .= '<tr>';
+        $head .= '<th width="155px" style="border-left:0;border-bottom:0"><span>'.get_lang('Course').'</span></th>';
+        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
+        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgStudentsProgress'), 6, true).'</span></th>';
+        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgCourseScore'), 6, true).'</span></th>';
+        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfMessages'), 6, true).'</span></th>';
+        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfAssignments'), 6, true).'</span></th>';
+        $head .= '<th width="105px" style="border-bottom:0"><span>'.get_lang('TotalExercisesScoreObtained').'</span></th>';
+        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalExercisesAnswered'), 6, true).'</span></th>';
+        $head .= '<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
+        $head .= '</tr></table>';
 
         $addparams = array('view' => 'admin', 'display' => 'sessionoverview');
         $table = new SortableTable(
@@ -1345,8 +1398,20 @@ class MySpace
         $table->additional_parameters = $addparams;
 
         $table->set_header(0, '', false, null, array('style' => 'display: none'));
-        $table->set_header(1, get_lang('Session'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-        $table->set_header(2, $t_head, false, array('style' => 'width:90%;border:0;padding:0;font-size:7.5pt;'), array('style' => 'width:90%;padding:0;font-size:7.5pt;'));
+        $table->set_header(
+            1,
+            get_lang('Session'),
+            true,
+            array('style' => 'font-size:8pt'),
+            array('style' => 'font-size:8pt')
+        );
+        $table->set_header(
+            2,
+            $head,
+            false,
+            array('style' => 'width:90%;border:0;padding:0;font-size:7.5pt;'),
+            array('style' => 'width:90%;padding:0;font-size:7.5pt;')
+        );
         $table->set_column_filter(2, array('MySpace', 'session_tracking_filter'));
         $table->display();
     }
@@ -1465,7 +1530,12 @@ class MySpace
                 }
                 $nb_messages += Tracking::count_student_messages($row_user->user_id, $row->code, $session_id);
                 $nb_assignments += Tracking::count_student_assignments($row_user->user_id, $row->code, $session_id);
-                $last_login_date_tmp = Tracking::get_last_connection_date_on_the_course($row_user->user_id, $courseInfo, $session_id, false);
+                $last_login_date_tmp = Tracking::get_last_connection_date_on_the_course(
+                    $row_user->user_id,
+                    $courseInfo,
+                    $session_id,
+                    false
+                );
                 if ($last_login_date_tmp != false && $last_login_date == false) {
                     // TODO: To be cleaned.
                     $last_login_date = $last_login_date_tmp;
@@ -1493,7 +1563,11 @@ class MySpace
                 $avg_score = '-';
             }
             if ($last_login_date) {
-                $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT, date_default_timezone_get());
+                $last_login_date = api_convert_and_format_date(
+                    $last_login_date,
+                    DATE_FORMAT_SHORT,
+                    date_default_timezone_get()
+                );
             } else {
                 $last_login_date = '-';
             }
@@ -1616,10 +1690,22 @@ class MySpace
                 while ($row_user = Database::fetch_object($result_users)) {
                     // get time spent in the course and session
                     $time_spent += Tracking::get_time_spent_on_the_course($row_user->user_id, $courseId, $session_id);
-                    $progress_tmp = Tracking::get_avg_student_progress($row_user->user_id, $row->code, array(), $session_id, true);
+                    $progress_tmp = Tracking::get_avg_student_progress(
+                        $row_user->user_id,
+                        $row->code,
+                        array(),
+                        $session_id,
+                        true
+                    );
                     $progress += $progress_tmp[0];
                     $nb_progress_lp += $progress_tmp[1];
-                    $score_tmp = Tracking::get_avg_student_score($row_user->user_id, $row->code, array(), $session_id, true);
+                    $score_tmp = Tracking::get_avg_student_score(
+                        $row_user->user_id,
+                        $row->code,
+                        array(),
+                        $session_id,
+                        true
+                    );
                     if (is_array($score_tmp)) {
                         $score += $score_tmp[0];
                         $nb_score_lp += $score_tmp[1];
@@ -1642,9 +1728,11 @@ class MySpace
                         $session_id,
                         false
                     );
-                    if ($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned.
+                    if ($last_login_date_tmp != false && $last_login_date == false) {
+                        // TODO: To be cleaned.
                         $last_login_date = $last_login_date_tmp;
-                    } else if ($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition. To be cleaned.
+                    } else if ($last_login_date_tmp != false && $last_login_date == false) {
+                        // TODO: Repeated previous condition. To be cleaned.
                         // Find the max and assign it to first_login_date
                         if (strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
                             $last_login_date = $last_login_date_tmp;
@@ -1667,7 +1755,11 @@ class MySpace
                     $avg_score = '-';
                 }
                 if ($last_login_date) {
-                    $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT, date_default_timezone_get());
+                    $last_login_date = api_convert_and_format_date(
+                        $last_login_date,
+                        DATE_FORMAT_SHORT,
+                        date_default_timezone_get()
+                    );
                 } else {
                     $last_login_date = '-';
                 }
@@ -1958,7 +2050,11 @@ class MySpace
                 $avg_progress_in_course = Tracking::get_avg_student_progress($users, $course_code, array(), $session_id);
                 $avg_score_in_course = Tracking::get_avg_student_score($users, $course_code, array(), $session_id);
                 $avg_score_in_exercise = Tracking::get_avg_student_exercise_score($users, $course_code, 0, $session_id);
-                $avg_time_spent_in_course = Tracking::get_time_spent_on_the_course($users, $courseInfo['real_id'], $session_id);
+                $avg_time_spent_in_course = Tracking::get_time_spent_on_the_course(
+                    $users,
+                    $courseInfo['real_id'],
+                    $session_id
+                );
 
                 $avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course, 2);
                 if (is_numeric($avg_score_in_course)) {
@@ -2134,7 +2230,8 @@ class MySpace
     /**
      * Checks if there are repeted users in a given array
      * @param  array $usernames list of the usernames in the uploaded file
-     * @param  array $user_array $user_array['username'] and $user_array['sufix'] where sufix is the number part in a login i.e -> jmontoya2
+     * @param  array $user_array $user_array['username'] and $user_array['sufix']
+     * where suffix is the number part in a login i.e -> jmontoya2
      * @return array with the $usernames array and the $user_array array
      * @author Julio Montoya
      */
@@ -2223,7 +2320,8 @@ class MySpace
                         $user_name = $user['UserName'];
                         $sql_select = "SELECT user_id FROM $table_user WHERE username ='$user_name' ";
                         $rs = Database::query($sql_select);
-                        $user['create'] = Database::result($rs, 0, 0); // This should be the ID because the user exists.
+                        $user['create'] = Database::result($rs, 0, 0);
+                        // This should be the ID because the user exists.
                     } else {
                         $user['create'] = $is_session_avail;
                     }
@@ -2242,8 +2340,7 @@ class MySpace
     /**
      * This functions checks whether there are users that are already
      * registered in the DB by different creator than the current coach.
-     * @param string a given username
-     * @param array $users the array with the course list ids
+     * @param array $users
      * @return array
      * @author Julio Montoya Armas
      */
@@ -2272,7 +2369,7 @@ class MySpace
 
     /**
      * Validates imported data.
-     * @param $users list of users
+     * @param array $users list of users
      */
     function validate_data($users, $id_session = null)
     {
@@ -2467,7 +2564,8 @@ class MySpace
                 } else {
                     $addedto = get_lang('UserNotAdded');
                 }
-                $registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';
+                $registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".
+                    api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';
             }
         }
         Display::addFlash(Display::return_message($registered_users));
@@ -2932,7 +3030,8 @@ function convert_to_array($sql_result)
 {
     $result_to_print = '<table>';
     foreach ($sql_result as $key => $data) {
-        $result_to_print .= '<tr><td>'.date('d-m-Y (H:i:s)', $data['login']).'</td><td>'.api_time_to_hms($data['logout'] - $data['login']).'</tr></td>'."\n";
+        $result_to_print .= '<tr><td>'.date('d-m-Y (H:i:s)', $data['login']).'</td><td>'.
+            api_time_to_hms($data['logout'] - $data['login']).'</tr></td>'."\n";
     }
     $result_to_print .= '</table>';
     $result_to_print = array("result"=>$result_to_print);

@@ -11,7 +11,7 @@
  */
 class learnpathItem
 {
-    const DEBUG = 0; // Logging parameter.
+    const DEBUG = 5; // Logging parameter.
     public $attempt_id; // Also called "objectives" SCORM-wise.
     public $audio; // The path to an audio file (stored in document/audio/).
     public $children = array(); // Contains the ids of children items.
@@ -102,8 +102,7 @@ class learnpathItem
         if (self::DEBUG > 0) {
             error_log(
                 "learnpathItem constructor: id: $id user_id: ".
-                "$user_id course_id: $course_id item_content: $item_content",
-                0
+                "$user_id course_id: $course_id item_content: ".print_r($item_content, 1)
             );
         }
         $id = intval($id);
@@ -1919,10 +1918,10 @@ class learnpathItem
      *                     0 if it is not allowed but the item has to be finished
      *                     1 if it is allowed. Defaults to 1
      */
-    public function is_restart_allowed()
+    public function isRestartAllowed()
     {
         if (self::DEBUG > 2) {
-            error_log('learnpathItem::is_restart_allowed()', 0);
+            error_log('learnpathItem::isRestartAllowed()', 0);
         }
         $restart = 1;
         $mystatus = $this->get_status(true);
@@ -1941,7 +1940,7 @@ class learnpathItem
         }
         if (self::DEBUG > 2) {
             error_log(
-                'New LP - End of learnpathItem::is_restart_allowed() - Returning '.$restart,
+                'New LP - End of learnpathItem::isRestartAllowed() - Returning '.$restart,
                 0
             );
         }
@@ -2004,10 +2003,10 @@ class learnpathItem
     /**
      * Parses the prerequisites string with the AICC logic language
      * @param    string   $prereqs_string The prerequisites string as it figures in imsmanifest.xml
-     * @param    Array    $items Array of items in the current learnpath object.
+     * @param    array    $items Array of items in the current learnpath object.
      * Although we're in the learnpathItem object, it's necessary to have
      * a list of all items to be able to check the current item's prerequisites
-     * @param    Array    $refs_list List of references
+     * @param    array    $refs_list List of references
      * (the "ref" column in the lp_item table) that are strings used in the
      * expression of prerequisites.
      * @param    integer  $user_id The user ID. In some cases like Chamilo quizzes,
@@ -2031,7 +2030,6 @@ class learnpathItem
         // First parse all parenthesis by using a sequential loop
         //  (looking for less-inclusives first).
         if ($prereqs_string == '_true_') {
-
             return true;
         }
 
@@ -2374,7 +2372,6 @@ class learnpathItem
                                     isset($items[$refs_list[$prereqs_string]])
                                 ) {
                                     if ($items[$refs_list[$prereqs_string]]->type == 'quiz') {
-
                                         // 1. Checking the status in current items.
                                         $status = $items[$refs_list[$prereqs_string]]->get_status(true);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
@@ -2674,7 +2671,7 @@ class learnpathItem
         }
         $this->save();
 
-        $allowed = $this->is_restart_allowed();
+        $allowed = $this->isRestartAllowed();
         if ($allowed === -1) {
             // Nothing allowed, do nothing.
         } elseif ($allowed === 1) {
@@ -2857,7 +2854,8 @@ class learnpathItem
                     // Do nothing, just let the local attributes be used.
                 }
             }
-        } else { // If not SCO, such messages should not be expected.
+        } else {
+            // If not SCO, such messages should not be expected.
             $type = strtolower($this->type);
             switch ($type) {
                 case 'asset':
@@ -3739,7 +3737,6 @@ class learnpathItem
                     );
                 }
                 $this->db_item_view_id = Database::insert($item_view_table, $params);
-
                 if ($this->db_item_view_id) {
                     $sql = "UPDATE $item_view_table SET id = iid
                             WHERE iid = ".$this->db_item_view_id;

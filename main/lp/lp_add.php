@@ -95,7 +95,7 @@ $form = new FormValidator(
 );
 
 // Form title
-$form->addElement('header', get_lang('AddLpToStart'));
+$form->addHeader(get_lang('AddLpToStart'));
 
 // Title
 $form->addElement(

@@ -5,9 +5,7 @@
  * @package chamilo.admin
  * Copyright (c) 2007 Mustapha Alouani (supervised by Michel Moreau-Belliard)
  */
-/**
- * Code
- */
+
 // resetting the course id
 $cidReset = true;
 require_once('../inc/global.inc.php');
@@ -51,166 +49,131 @@ $id_session = $_POST['id_session'];
 
 // form1 annee = 0; composante= 0 etape = 0
 //if ($annee == "" && $composante == "" && $etape == "") {
-if (empty($annee) && empty($id_session))
-{
-		Display::display_header($tool_name);
-		echo '<div style="align:center">';
-		echo Display::return_icon('group.gif', get_lang('LDAPSelectFilterOnUsersOU')).' '.get_lang('LDAPSelectFilterOnUsersOU');
-		echo '<form method="get" action="'.api_get_self().'"><br />';
-		echo '<em>'.get_lang('LDAPOUAttributeFilter').' :</em> ';
-		echo '<input  type="text" name="annee" size="4" maxlength="30" value="'.$annee_base.'"> ';
-		echo '<input type="submit" value="'.get_lang('Submit').'">';
-		echo '</form>';
-		echo '</div>';
+if (empty($annee) && empty($id_session)) {
+    Display::display_header($tool_name);
+    echo '<div style="align:center">';
+    echo Display::return_icon('group.gif', get_lang('LDAPSelectFilterOnUsersOU')).' '.get_lang('LDAPSelectFilterOnUsersOU');
+    echo '<form method="get" action="'.api_get_self().'"><br />';
+    echo '<em>'.get_lang('LDAPOUAttributeFilter').' :</em> ';
+    echo '<input  type="text" name="annee" size="4" maxlength="30" value="'.$annee_base.'"> ';
+    echo '<input type="submit" value="'.get_lang('Submit').'">';
+    echo '</form>';
+    echo '</div>';
 
-}
-elseif (!empty($annee) && empty($id_session))
-{
-	Display::display_header($tool_name);
-	echo '<div style="align:center">';
-	echo Display::return_icon(
-			'course.png',
-			get_lang('SelectSessionToImportUsersTo')).' '.get_lang('SelectSessionToImportUsersTo').'<br />';
-	echo '<form method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'"><br />';
-	echo '<select name="id_session">';
+} elseif (!empty($annee) && empty($id_session)) {
+    Display::display_header($tool_name);
+    echo '<div style="align:center">';
+    echo Display::return_icon(
+            'course.png',
+            get_lang('SelectSessionToImportUsersTo')
+        ).' '.get_lang('SelectSessionToImportUsersTo').'<br />';
+    echo '<form method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'"><br />';
+    echo '<select name="id_session">';
 
-	$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-	$sql = "SELECT id,name,nbr_courses,access_start_date,access_end_date ".
-		" FROM $tbl_session ".
-		" ORDER BY name";
-	$result = Database::query($sql);
+    $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+    $sql = "SELECT id,name,nbr_courses,access_start_date,access_end_date ".
+        " FROM $tbl_session ".
+        " ORDER BY name";
+    $result = Database::query($sql);
 
-	$sessions = Database::store_result($result);
-	$nbr_results = count($sessions);
-	foreach ($sessions as $row) {
-		echo '<option value="'.$row['id'].'">'.api_htmlentities($row['name']).' ('.$row['access_start_date'].' - '.$row['access_end_date'].')</option>';
-	}
-	echo '</select>';
-	echo '<input type="submit" value="'.get_lang('Submit').'">';
-	echo '</form>';
-	echo '</div>';
+    $sessions = Database::store_result($result);
+    $nbr_results = count($sessions);
+    foreach ($sessions as $row) {
+        echo '<option value="'.$row['id'].'">'.api_htmlentities($row['name']).' ('.$row['access_start_date'].' - '.$row['access_end_date'].')</option>';
+    }
+    echo '</select>';
+    echo '<input type="submit" value="'.get_lang('Submit').'">';
+    echo '</form>';
+    echo '</div>';
 }
 // form4  annee != 0; composante != 0 etape != 0
 //elseif ($annee <> "" && $composante <> "" && $etape <> "" && $listeok != 'yes') {
-elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed']))
-{
-	Display::display_header($tool_name);
-	echo '<div style="align: center;">';
-	echo '<br />';
-	echo '<br />';
-	echo '<h3>'.Display::return_icon('group.gif', get_lang('SelectStudents')).' '.get_lang('SelectStudents').'</h3>';
-	//echo "Connection ...";
-	$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
-	ldap_set_version($ds);
+elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed'])) {
+    Display::display_header($tool_name);
+    echo '<div style="align: center;">';
+    echo '<br />';
+    echo '<br />';
+    echo '<h3>'.Display::return_icon('group.gif', get_lang('SelectStudents')).' '.get_lang('SelectStudents').'</h3>';
+    //echo "Connection ...";
+    $ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
+    ldap_set_version($ds);
+    if ($ds) {
+        $r = false;
+        $res = ldap_handle_bind($ds, $r);
 
-	if ($ds) {
+        //$sr = @ ldap_search($ds, "ou=people,$LDAPbasedn", "(|(edupersonprimaryorgunitdn=ou=$etape,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn)(edupersonprimaryorgunitdn=ou=02PEL,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn))");
+        //echo "(ou=*$annee,ou=$composante)";
+        $sr = @ ldap_search($ds, $ldap_basedn, "(ou=*$annee)");
 
-		$r = false;
-		$res = ldap_handle_bind($ds, $r);
+        $info = ldap_get_entries($ds, $sr);
 
-		//$sr = @ ldap_search($ds, "ou=people,$LDAPbasedn", "(|(edupersonprimaryorgunitdn=ou=$etape,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn)(edupersonprimaryorgunitdn=ou=02PEL,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn))");
-		//echo "(ou=*$annee,ou=$composante)";
-		$sr = @ ldap_search($ds, $ldap_basedn, "(ou=*$annee)");
-
-		$info = ldap_get_entries($ds, $sr);
-
-		for ($key = 0; $key < $info["count"]; $key++) {
-			$nom_form[] = $info[$key]["sn"][0];
-			$prenom_form[] = $info[$key]["givenname"][0];
-			$email_form[] = $info[$key]["mail"][0];
-			// Get uid from dn
-			//$dn_array=ldap_explode_dn($info[$key]["dn"],1);
-			//$username_form[] = $dn_array[0]; // uid is first key
-			$username_form[] = $info[$key]['uid'][0];
-			$outab[] = $info[$key]["eduPersonPrimaryAffiliation"][0]; // Ici "student"
-			//$val = ldap_get_values_len($ds, $entry, "userPassword");
-			//$password_form[] = $val[0];
-			$password_form[] = $info[$key]['userPassword'][0];
-		}
-		ldap_unbind($ds);
-
-		/*-----------------------------------------------*/
-
-		asort($nom_form);
-		reset($nom_form);
-
-		$statut = 5;
-		include ('ldap_form_add_users_group.php');
-	} else {
-		echo '<h4>'.get_lang('UnableToConnectTo').' '.$host.'</h4>';
-	}
-	echo '<br /><br />';
+        for ($key = 0; $key < $info["count"]; $key++) {
+            $nom_form[] = $info[$key]["sn"][0];
+            $prenom_form[] = $info[$key]["givenname"][0];
+            $email_form[] = $info[$key]["mail"][0];
+            // Get uid from dn
+            //$dn_array=ldap_explode_dn($info[$key]["dn"],1);
+            //$username_form[] = $dn_array[0]; // uid is first key
+            $username_form[] = $info[$key]['uid'][0];
+            $outab[] = $info[$key]["eduPersonPrimaryAffiliation"][0]; // Ici "student"
+            //$val = ldap_get_values_len($ds, $entry, "userPassword");
+            //$password_form[] = $val[0];
+            $password_form[] = $info[$key]['userPassword'][0];
+        }
+        ldap_unbind($ds);
+        asort($nom_form);
+        reset($nom_form);
+        $statut = 5;
+        include('ldap_form_add_users_group.php');
+    } else {
+        echo '<h4>'.get_lang('UnableToConnectTo').' '.$host.'</h4>';
+    }
+    echo '<br /><br />';
     echo '<a href="ldap_import_students.php?annee=">'.get_lang('BackToNewSearch').'</a>';
     echo '<br /><br />';
     echo '</div>';
+} elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed'] == 'yes')) {
+    $id = $_POST['username_form'];
+    $UserList = array();
+    $userid_match_login = array();
+    foreach ($id as $form_index => $user_id) {
+        if (is_array($_POST['checkboxes']) && in_array($form_index, array_values($_POST['checkboxes']))) {
+            $tmp = ldap_add_user($user_id);
+            $UserList[] = $tmp;
+            $userid_match_login[$tmp] = $user_id;
+        }
+    }
+    if (!empty($_POST['id_session'])) {
+        $num = 0;
+        $tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        foreach ($UserList as $user_id) {
+            $res_user = Database::insert(
+                $tbl_session_user,
+                [
+                    'session_id' => intval($id_session),
+                    'user_id' => intval($user_id),
+                    'registered_at' => api_get_utc_datetime(),
+                ]
+            );
+            if ($res_user !== false) {
+                $num++;
+            }
+        }
 
-}
-elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed'] == 'yes'))
-{
-	$id = $_POST['username_form'];
-	$UserList = array();
-	$userid_match_login = array();
-	foreach ($id as $form_index=>$user_id)
-	{
-		if (is_array($_POST['checkboxes']) && in_array($form_index, array_values($_POST['checkboxes'])))
-		{
-			$tmp = ldap_add_user($user_id);
-			$UserList[] = $tmp;
-			$userid_match_login[$tmp] = $user_id;
-		}
-	}
-	if (!empty($_POST['id_session'])) {
-		$num = 0;
-		$tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-		foreach ($UserList as $user_id) {
-                    $res_user = Database::insert(
-                        $tbl_session_user,
-                        [
-                            'session_id' => intval($id_session),
-                            'user_id' => intval($user_id),
-                            'registered_at' => api_get_utc_datetime()
-                        ]
-                    );
-                    if ($res_user !== false) {
-                        $num++;
-                    }
-		}
-
-		if ($num > 0) {
-			$sql = 'UPDATE '.$tbl_session.' SET nbr_users = (nbr_users + '.$num.') WHERE id = '.intval($id_session);
-			$res = Database::query($sql);
-		}
-		header('Location: resume_session.php?id_session='.Security::remove_XSS($_POST['id_session']));
-	}
-	/*
-	else
-	{
-		Display :: display_header($tool_name);
-		if(count($userid_match_login)>0)
-		{
-			$message=get_lang('LDAPUsersAddedOrUpdated').':<br />';
-			foreach($userid_match_login as $user_id => $login)
-			{
-				$message .= '- '.$login.'<br />';
-			}
-		}
-		else
-		{
-			$message=get_lang('NoUserAdded');
-		}
-		Display::addFlash(Display::return_message($message, 'normal', false));
-	}
-	*/
-	else
-	{
-		$message = get_lang('NoUserAdded');
-		Display::addFlash(Display::return_message($message, 'normal', false));
+        if ($num > 0) {
+            $sql = 'UPDATE '.$tbl_session.' SET nbr_users = (nbr_users + '.$num.') WHERE id = '.intval($id_session);
+            $res = Database::query($sql);
+        }
+        header('Location: resume_session.php?id_session='.Security::remove_XSS($_POST['id_session']));
+        exit;
+    } else {
+        $message = get_lang('NoUserAdded');
+        Display::addFlash(Display::return_message($message, 'normal', false));
         Display::display_header($tool_name);
-	}
-	echo '<br /><br />';
+    }
+    echo '<br /><br />';
     echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('BackToNewSearch').'</a>';
     echo '<br /><br />';
 }
 Display::display_footer();
-?>

@@ -307,7 +307,7 @@ class Blog
         Database::query($sql);
 
         // Delete from course homepage
-        $sql = "DELETE FROM $tbl_tool WHERE c_id = $course_id AND link = 'blog/blog.php?blog_id=$blog_id";
+        $sql = "DELETE FROM $tbl_tool WHERE c_id = $course_id AND link = 'blog/blog.php?blog_id=".$blog_id."'";
         Database::query($sql);
 
         //update item_property (delete)

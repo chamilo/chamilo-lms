@@ -3562,17 +3562,18 @@ class learnpathItem
         $sql = 'UPDATE '.$table.'
                 SET total_time = 0, 
                     start_time = '.time().'
-                WHERE c_id = '.$course_id.'
-                    AND lp_item_id = "'.$this->db_id.'"
-                    AND lp_view_id = "'.$this->view_id.'"
-                    AND view_count = "'.$this->attempt_id.'"';
+                WHERE 
+                    c_id = '.$course_id.' AND 
+                    lp_item_id = "'.$this->db_id.'" AND 
+                    lp_view_id = "'.$this->view_id.'" AND 
+                    view_count = "'.$this->attempt_id.'"';
         Database::query($sql);
     }
 
     /**
      * Write objectives to DB. This method is separate from write_to_db() because otherwise
      * objectives are lost as a side effect to AJAX and session concurrent access
-     * @return    boolean        True or false on error
+     * @return boolean True or false on error
      */
     public function write_objectives_to_db()
     {
@@ -3761,8 +3762,8 @@ class learnpathItem
                     WHERE
                         c_id = $course_id AND
                         lp_item_id = ".$this->db_id." AND
-                        lp_view_id = " . $this->view_id." AND
-                        view_count = " . intval($this->get_attempt_id());
+                        lp_view_id = ".$this->view_id." AND
+                        view_count = ".intval($this->get_attempt_id());
             if (self::DEBUG > 2) {
                 error_log(
                     'learnpathItem::write_to_db() - Querying item_view: '.$sql,
@@ -4151,7 +4152,6 @@ class learnpathItem
         }
 
         $key = 'file';
-
         if (!isset($_FILES[$key]['name']) || !isset($_FILES[$key]['tmp_name'])) {
             return false;
         }

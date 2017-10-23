@@ -102,7 +102,7 @@ class Basic extends Toolbar
 
         if (api_get_setting('enabled_mathjax') == 'true') {
             $plugins[] = 'mathjax';
-            $config['mathJaxLib'] = api_get_path(WEB_PUBLIC_PATH).'assets/MathJax/MathJax.js?config=TeX-AMS_HTML';
+            $config['mathJaxLib'] = api_get_path(WEB_PUBLIC_PATH).'assets/MathJax/MathJax.js?config=AM_HTMLorMML';
         }
 
         if (api_get_setting('enabled_asciisvg') == 'true') {
@@ -174,7 +174,7 @@ class Basic extends Toolbar
         );*/
 
         $config['skin'] = 'bootstrapck,'.api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/skins/bootstrapck/';
-        //$config['skin'] = 'moono-lisa';
+        $config['skin'] = 'moono-lisa';
 
         $config['image2_chamilo_alignClasses'] = [
             'pull-left',

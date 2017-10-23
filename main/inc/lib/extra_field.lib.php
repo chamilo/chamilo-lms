@@ -2428,7 +2428,7 @@ class ExtraField extends Model
                         $jquery_ready_content .= self::addTripleSelectElement(
                             $form,
                             $field_details,
-                            $extraData,
+                            is_array($extraData) ? $extraData : [],
                             $freezeElement
                         );
                         break;

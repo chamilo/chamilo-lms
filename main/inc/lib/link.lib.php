@@ -39,7 +39,7 @@ class Link extends Model
     private $course;
 
     /**
-     *
+     * Link constructor.
      */
     public function __construct()
     {

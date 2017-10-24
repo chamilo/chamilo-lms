@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
+use Chamilo\CoreBundle\Entity\Tag;
 
 /**
  * Class ExtraField
@@ -1538,7 +1540,9 @@ class ExtraField extends Model
                                         ]
                                     );
 
+                                /** @var ExtraFieldRelTag $fieldTag */
                                 foreach ($fieldTags as $fieldTag) {
+                                    /** @var Tag $tag */
                                     $tag = $em->find(
                                         'ChamiloCoreBundle:Tag',
                                         $fieldTag->getTagId()
@@ -1556,11 +1560,13 @@ class ExtraField extends Model
 
                                 if (!empty($extraData) && isset($extraData['extra_'.$field_details['variable']])) {
                                     $data = $extraData['extra_'.$field_details['variable']];
-                                    foreach ($data as $option) {
-                                        $tagsSelect->addOption(
-                                            $option,
-                                            $option
-                                        );
+                                    if (!empty($data)) {
+                                        foreach ($data as $option) {
+                                            $tagsSelect->addOption(
+                                                $option,
+                                                $option
+                                            );
+                                        }
                                     }
                                 }
 

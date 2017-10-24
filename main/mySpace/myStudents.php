@@ -226,10 +226,14 @@ switch ($action) {
         exit;
         break;
     case 'send_legal':
-        $subject = get_lang('SendLegalSubject');
+        $currentUserInfo = api_get_user_info();
+        $subject = get_lang('SendTermsSubject');
+        $linkLegal = api_get_path(WEB_PATH)."courses/FORUMDAIDE/index.php";
         $content = sprintf(
-            get_lang('SendLegalDescriptionToUrlX'),
-            api_get_path(WEB_PATH)
+            get_lang('SendTermsDescriptionToUrlX'),
+            $user_info['firstname'],
+            "<a href=\"".$linkLegal."\">".$linkLegal."</a>",
+            $currentUserInfo['firstname']
         );
         MessageManager::send_message_simple($student_id, $subject, $content);
         Display::addFlash(Display::return_message(get_lang('Sent')));
@@ -707,12 +711,25 @@ if (!empty($student_id)) {
                             echo $extraFieldInfo['display_text'].' : ';
                             $answers = $item->getValue();
                             $list = [];
-                            foreach ($answers as $answer) {
-                                $list[] = $optionValues[$answer];
+                            if (is_array($answers)) {
+                                foreach ($answers as $answer) {
+                                    $list[] = $optionValues[$answer];
+                                }
+                            } else {
+                                foreach ($options as $option) {
+                                    $answers = trim($answers, '.');
+                                    $answers = str_replace('-', '_', $answers);
+
+                                    if ($option['option_value'] != api_underscore_to_camel_case($answers)) {
+                                        continue;
+                                    }
+
+                                    $list[] = $option['display_text'];
+                                }
                             }
-                            echo '<li>';
+                            echo '<ul><li>';
                             echo implode('</li><li>', $list);
-                            echo '</li>';
+                            echo '</li></ul>';
 
                             echo '</td></tr>';
                         }

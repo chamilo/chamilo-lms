@@ -51,7 +51,6 @@
 
     {% set bug_notification_link = '' %}
     {% set help_content = '' %}
-    {% set header_extra_content = '' %}
 
     {% set template = 'rainbow' %}
     {% set notification_menu = '' %}
@@ -129,9 +128,13 @@
     {% endblock %}
 
     <header>
-        <div class="extra-header">
-            {{ header_extra_content }}
-        </div>
+        {% if header_extra_content %}
+            <div class="extra-header">
+                {% autoescape false %}
+                {{ header_extra_content }}
+                {% endautoescape %}
+            </div>
+        {% endif %}
 
         <section id="main" class="container">
             {% if plugin_header_main %}
@@ -179,7 +182,7 @@
                           </div>
                           <div class="collapse navbar-collapse" id="menu-faq">
                                 {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:leftMenu', {'automenu': 'navbar', 'stacked' : false}) }}
-                                {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:rightMenu', {'automenu': 'navbar', 'pull-right' : true} ) }} 
+                                {{ mopa_bootstrap_menu('ChamiloCoreBundle:NavBuilder:rightMenu', {'automenu': 'navbar', 'pull-right' : true} ) }}
                           </div>
                         </div>
                     </nav>

@@ -73,6 +73,15 @@ if (!empty($course_user_list)) {
 $content = Tracking::show_user_progress(api_get_user_id(), $sessionId);
 $content .= Tracking::show_course_detail(api_get_user_id(), $courseCode, $sessionId);
 
+// Ofaj
+$courseId = 0;
+if (empty($courseCode)) {
+    $content .= '<br />';
+    $content .= Tracking::displayUserSkills(
+        $user_id
+    );
+}
+
 if (!empty($dates)) {
     if (!empty($content)) {
         $content .= '';

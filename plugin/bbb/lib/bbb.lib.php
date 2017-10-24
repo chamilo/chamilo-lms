@@ -804,7 +804,7 @@ class bbb
                         $record['playbackFormatUrl'],
                         ['target' => '_blank']
                     )
-                    : get_lang('NoRecording');
+                    : $this->plugin->get_lang('NoRecording');
 
                 if ($isAdminReport) {
                     $this->forceCIdReq(
@@ -829,7 +829,7 @@ class bbb
                     $isAdminReport
                 );
 
-                $item['show_links'] = get_lang('NoRecording');
+                $item['show_links'] = $this->plugin->get_lang('NoRecording');
             }
 
             $item['action_links'] = implode(PHP_EOL, $actionLinks);

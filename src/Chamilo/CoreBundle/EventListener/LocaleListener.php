@@ -82,8 +82,12 @@ class LocaleListener implements EventSubscriberInterface
         $em = $this->container->get('doctrine')->getManager();
         $criteria = ['variable' => 'header_extra_content'];
         $setting = $em->getRepository('ChamiloCoreBundle:SettingsCurrent')->findOneBy($criteria);
-        if ($setting)  {
-            $this->container->get('twig')->addGlobal('header_extra_content', $setting->getSelectedValue());
+        if ($setting) {
+            $content = '';
+            if (is_file($setting->getSelectedValue())) {
+                $content = file_get_contents($setting->getSelectedValue());
+            }
+            $this->container->get('twig')->addGlobal('header_extra_content', $content);
         }
     }
 

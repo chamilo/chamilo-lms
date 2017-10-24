@@ -11,7 +11,7 @@
  */
 class learnpathItem
 {
-    const DEBUG = 5; // Logging parameter.
+    const DEBUG = 0; // Logging parameter.
     public $attempt_id; // Also called "objectives" SCORM-wise.
     public $audio; // The path to an audio file (stored in document/audio/).
     public $children = array(); // Contains the ids of children items.
@@ -3299,7 +3299,8 @@ class learnpathItem
      */
     public function set_time($scorm_time, $format = 'scorm')
     {
-        if (self::DEBUG > 0) {
+        $debug = self::DEBUG;
+        if ($debug > 0) {
             error_log('learnpathItem::set_time('.$scorm_time.')', 0);
         }
 
@@ -3310,7 +3311,7 @@ class learnpathItem
             $my_time = time() - $this->current_start_time;
             if ($my_time > 0) {
                 $this->update_time($my_time);
-                if (self::DEBUG > 0) {
+                if ($debug > 0) {
                     error_log(
                         'learnpathItem::set_time('.$scorm_time.') - '.
                             'found asset - set time to '.$my_time,
@@ -3333,6 +3334,9 @@ class learnpathItem
                         $sec = $res[3];
                         // Getting total number of seconds spent.
                         $total_sec = $hour * 3600 + $min * 60 + $sec;
+                        if ($debug > 0) {
+                            error_log("total_sec : $total_sec");
+                        }
                         $this->scorm_update_time($total_sec);
                     }
                     break;
@@ -3471,7 +3475,8 @@ class learnpathItem
      **/
     public function scorm_update_time($total_sec = 0)
     {
-        if (self::DEBUG > 0) {
+        $debug = self::DEBUG;
+        if ($debug > 0) {
             error_log('learnpathItem::scorm_update_time()');
             error_log("total_sec: $total_sec");
         }
@@ -3495,7 +3500,7 @@ class learnpathItem
         } else {
             $total_time = $row['total_time'];
         }
-        if (self::DEBUG > 0) {
+        if ($debug > 0) {
             error_log("Original total_time: $total_time");
         }
 
@@ -3524,7 +3529,7 @@ class learnpathItem
             }
         }
 
-        if (self::DEBUG > 0) {
+        if ($debug > 0) {
             error_log("accumulate_scorm_time: $accumulateScormTime");
             error_log("total_time modified: $total_time");
         }
@@ -3548,7 +3553,7 @@ class learnpathItem
                         lp_item_id = {$this->db_id} AND 
                         lp_view_id = {$this->view_id} AND 
                         view_count = {$this->get_attempt_id()}";
-            if (self::DEBUG > 0) {
+            if ($debug > 0) {
                 error_log($sql);
             }
             Database::query($sql);

@@ -1815,7 +1815,7 @@ class learnpathItem
             }
             return 0;
         } else {
-            $time = self::fixAbusiveTime($time);
+            $time = $this->fixAbusiveTime($time);
             if (self::DEBUG > 2) {
                 error_log(
                     'Current start time = '.$this->current_start_time.', current stop time = '.
@@ -1827,10 +1827,14 @@ class learnpathItem
     }
 
     /**
+     * Sometimes time recorded for a learning path item is superior to the maximum allowed duration of the session.
+     * In this case, this session resets the time for that particular learning path item to 5 minutes
+     * (something more realistic, that is also used when leaving the portal without closing one's session).
+     *
      * @param int $time
      * @return int
      */
-    public static function fixAbusiveTime($time)
+    public function fixAbusiveTime($time)
     {
         // Code based from Event::courseLogout
         $sessionLifetime = api_get_configuration_value('session_lifetime');
@@ -1841,9 +1845,8 @@ class learnpathItem
 
         $fixedAddedMinute = 5 * 60; // Add only 5 minutes
         if ($time > $sessionLifetime) {
-            if (self::DEBUG > 2) {
-                error_log("Total time is too big: $time replaced with: $fixedAddedMinute");
-            }
+            error_log("fixAbusiveTime: Total time is too big: $time replaced with: $fixedAddedMinute");
+            error_log("item_id : ".$this->db_id." lp_item_view.iid: ".$this->db_item_view_id);
             $time = $fixedAddedMinute;
         }
 
@@ -3512,7 +3515,7 @@ class learnpathItem
             $total_time += $total_sec;
         } else {
             // Step 2.2 : if not cumulative mode total_time = total_time - last_update + total_sec
-            $total_sec = self::fixAbusiveTime($total_sec);
+            $total_sec = $this->fixAbusiveTime($total_sec);
             $total_time = $total_time - $this->last_scorm_session_time + $total_sec;
             $this->last_scorm_session_time = $total_sec;
 
@@ -3845,7 +3848,7 @@ class learnpathItem
                                 $row_dates['exe_date']
                             );
                             $mytime = ((int) $time_exe_date - (int) $time_start_date);
-                            $mytime = self::fixAbusiveTime($mytime);
+                            $mytime = $this->fixAbusiveTime($mytime);
                             $total_time = " total_time = ".$mytime.", ";
                         }
                     } else {

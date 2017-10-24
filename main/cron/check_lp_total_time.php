@@ -17,6 +17,7 @@ $testCourseId = 97;
 $max = 10;
 $counter = 0;
 // Check Sessions
+$_configuration['access_url'] = 6;
 $sessions = SessionManager::get_sessions_admin();
 foreach ($sessions as $session) {
     $sessionId = $session['id'];
@@ -46,8 +47,7 @@ foreach ($sessions as $session) {
         );
 
         foreach ($users as $user) {
-            $userId = $user['user_id'];
-            $result = compareLpTimeAndCourseTime($userId, $courseInfo, $sessionId);
+            $result = compareLpTimeAndCourseTime($user, $courseInfo, $sessionId);
             if ($result) {
                 $counter++;
             }
@@ -72,13 +72,14 @@ foreach($courses as $courseInfo) {
 }*/
 
 /**
- * @param int $userId
+ * @param array $user
  * @param array $courseInfo
  * @param int $sessionId
  * @return bool
  */
-function compareLpTimeAndCourseTime($userId, $courseInfo, $sessionId = 0)
+function compareLpTimeAndCourseTime($user, $courseInfo, $sessionId = 0)
 {
+    $userId = $user['user_id'];
     $defaultValue = 1800; // 30 min
     $courseCode = $courseInfo['code'];
     $courseId = $courseInfo['real_id'];
@@ -103,8 +104,7 @@ function compareLpTimeAndCourseTime($userId, $courseInfo, $sessionId = 0)
     if ($totalLpTime > $totalCourseTime) {
         $totalCourseTime = api_time_to_hms($totalCourseTime);
         $totalLpTime = api_time_to_hms($totalLpTime);
-
-        $content = "Total course: $totalCourseTime / Total LP: $totalLpTime";
+        $content = "User: ".$user['user_id']." - Total course: $totalCourseTime / Total LP: $totalLpTime";
         $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userId.'&course='.$courseCode.'&id_session='.$sessionId;
         $content .= Display::url('Check', $url, ['target' => '_blank']);
         $content .= PHP_EOL;

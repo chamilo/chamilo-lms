@@ -474,12 +474,12 @@ class CourseHome
         $all_tools_list = array();
 
         // Condition for the session
-        $session_id = $sessionId ?: api_get_session_id();
+        $sessionId = $sessionId ?: api_get_session_id();
         $course_id = $courseId ?: api_get_course_int_id();
         $userId = api_get_user_id();
         $user = api_get_user_entity($userId);
         $condition_session = api_get_session_condition(
-            $session_id,
+            $sessionId,
             true,
             true,
             't.session_id'
@@ -544,13 +544,12 @@ class CourseHome
         $list = api_get_settings('Tools', 'list', api_get_current_access_url_id());
         $hide_list = array();
         $check = false;
-
         foreach ($list as $line) {
             // Admin can see all tools even if the course_hide_tools configuration is set
             if ($is_platform_admin) {
                 continue;
             }
-            if ($line['variable'] == 'course_hide_tools' and $line['selected_value'] == 'true') {
+            if ($line['variable'] == 'course_hide_tools' && $line['selected_value'] == 'true') {
                 $hide_list[] = $line['subkey'];
                 $check = true;
             }
@@ -567,17 +566,17 @@ class CourseHome
                 $add = true;
             }
 
-            if ($allowEditionInSession && !empty($session_id)) {
+            if ($allowEditionInSession && !empty($sessionId)) {
                 // Checking if exist row in session
                 $criteria = [
                     'cId' => $course_id,
                     'name' => $temp_row['name'],
-                    'sessionId' => $session_id,
+                    'sessionId' => $sessionId,
                 ];
                 /** @var CTool $tool */
                 $toolObj = Database::getManager()->getRepository('ChamiloCourseBundle:CTool')->findOneBy($criteria);
                 if ($toolObj) {
-                    if ($toolObj->getVisibility() == 0) {
+                    if (api_is_allowed_to_edit() == false && $toolObj->getVisibility() == 0) {
                         continue;
                     }
                 }
@@ -621,7 +620,7 @@ class CourseHome
         $course_link_table = Database::get_course_table(TABLE_LINK);
         $course_item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $condition_session = api_get_session_condition(
-            $session_id,
+            $sessionId,
             true,
             true,
             'tip.session_id'

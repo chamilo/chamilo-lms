@@ -787,6 +787,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                         }
                     } else {
                         // Redirect to the subscription form
+                        Session::write('loginFailed', '1');
                         header(
                             'Location: '.api_get_path(WEB_CODE_PATH)
                             .'auth/inscription.php?username='.$res['openid.sreg.nickname']
@@ -794,7 +795,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                             .'&openid='.$res['openid.identity']
                             .'&openid_msg=idnotfound'
                         );
-                        Session::write('loginFailed', '1');
                         exit;
                         //$loginFailed = true;
                     }
@@ -888,7 +888,8 @@ if (isset($uidReset) && $uidReset) {
             Session::write('is_platformAdmin', $is_platformAdmin);
             Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
         } else {
-            header('location:'.api_get_path(WEB_PATH));
+            header('Location:'.api_get_path(WEB_PATH));
+            exit;
             //exit("WARNING UNDEFINED UID !! ");
         }
     } else {

@@ -34,8 +34,8 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
         Database::query($sql);
     }
 
-    $oldTotalTime = round($oldTotalTime / 3600 , 2) ;
-    $report = "Previous total_time : ".round($oldTotalTime/3600,2)." hours";
+    $oldTotalTime = round($oldTotalTime / 3600, 2);
+    $report = "Previous total_time : ".round($oldTotalTime / 3600, 2)." hours";
     $report .= PHP_EOL;
     $report .= "New total_time: $valueToUpdate";
     $report .= PHP_EOL;

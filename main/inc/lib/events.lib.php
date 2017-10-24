@@ -1966,13 +1966,18 @@ class Event
     /**
      * Register the logout of the course (usually when logging out of the platform)
      * from the track_e_course_access table
-     * @param   array $logoutInfo Information stored by local.inc.php
+     * @param array $logoutInfo Information stored by local.inc.php
      * before new context ['uid'=> x, 'cid'=>y, 'sid'=>z]
+     * @return bool
      */
     public static function courseLogout($logoutInfo)
     {
+        if (Session::read('login_as')) {
+            return false;
+        }
+
         if (empty($logoutInfo['uid']) || empty($logoutInfo['cid'])) {
-            return;
+            return false;
         }
 
         $sessionLifetime = api_get_configuration_value('session_lifetime');
@@ -2032,6 +2037,8 @@ class Event
                         VALUES ($courseId, '$ip', $userId, '$currentDate', '$currentDate', 1, $sessionId)";
                 Database::query($sql);
             }
+
+            return true;
         }
     }
 

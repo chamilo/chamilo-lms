@@ -977,7 +977,8 @@ if (isset($cidReset) && $cidReset) {
             }
         } else {
             //exit("WARNING UNDEFINED CID !! ");
-            header('location:'.api_get_path(WEB_PATH));
+            header('Location:'.api_get_path(WEB_PATH));
+            exit;
         }
     } else {
         // Leave a logout time in the track_e_course_access table if we were in a course

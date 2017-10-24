@@ -682,7 +682,7 @@ class Database
      */
     public static function getDoctrineConfig($path)
     {
-        $isDevMode = false;
+        $isDevMode = true;
         $isSimpleMode = false; // related to annotations @Entity
         $cache = null;
         $path = !empty($path) ? $path : api_get_path(SYS_PATH);

@@ -12,6 +12,8 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_admin_script();
 
+opcache_reset();
+
 $testSessionId = 182;
 $testCourseId = 97;
 $max = 10;
@@ -80,7 +82,7 @@ foreach($courses as $courseInfo) {
 function compareLpTimeAndCourseTime($user, $courseInfo, $sessionId = 0)
 {
     $userId = $user['user_id'];
-    $defaultValue = 1800; // 30 min
+    $defaultValue = 600; // 10 min
     $courseCode = $courseInfo['code'];
     $courseId = $courseInfo['real_id'];
 
@@ -102,9 +104,12 @@ function compareLpTimeAndCourseTime($user, $courseInfo, $sessionId = 0)
     );
     $content = '';
     if ($totalLpTime > $totalCourseTime) {
-        $totalCourseTime = api_time_to_hms($totalCourseTime);
-        $totalLpTime = api_time_to_hms($totalLpTime);
-        $content = "User: ".$user['user_id']." - Total course: $totalCourseTime / Total LP: $totalLpTime";
+        $totalCourseTimeFormatted = api_time_to_hms($totalCourseTime);
+        $totalLpTimeFormatted = api_time_to_hms($totalLpTime);
+        $diff = $totalLpTime - $totalCourseTime;
+
+        $content = PHP_EOL."User: ".$user['user_id']." - Total course: $totalCourseTimeFormatted / Total LP: $totalLpTimeFormatted".PHP_EOL;
+        $content .= PHP_EOL."Diff: ".api_time_to_hms($diff).PHP_EOL;
         $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userId.'&course='.$courseCode.'&id_session='.$sessionId;
         $content .= Display::url('Check', $url, ['target' => '_blank']);
         $content .= PHP_EOL;
@@ -121,6 +126,7 @@ function compareLpTimeAndCourseTime($user, $courseInfo, $sessionId = 0)
                 ORDER BY total_time desc
                 LIMIT 1
                 ";
+        echo $sql.PHP_EOL;
         $result = Database::query($sql);
         $results = Database::store_result($result, 'ASSOC');
         if (!empty($results)) {
@@ -132,7 +138,12 @@ function compareLpTimeAndCourseTime($user, $courseInfo, $sessionId = 0)
                 $content .= "total_time = ".api_time_to_hms($item['total_time']).PHP_EOL;
                 $content .= Display::url('See report before update', $link, ['target' => '_blank']).PHP_EOL;
                 $content .= "SQL with possible fix:".PHP_EOL;
-                $content .= "UPDATE c_lp_item_view SET total_time = '$defaultValue' WHERE iid = ".$item['iid'].";".PHP_EOL.PHP_EOL;
+
+                if ($item['total_time'] < $defaultValue) {
+                    $content .= "Skip because total_time is too short. total_time: ".$item['total_time'].' value to rest'.$defaultValue.PHP_EOL;
+                    continue;
+                }
+                $content .= "UPDATE c_lp_item_view SET total_time = total_time - '$defaultValue' WHERE iid = ".$item['iid'].";".PHP_EOL.PHP_EOL;
             }
         }
     }

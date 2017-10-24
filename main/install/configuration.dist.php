@@ -669,3 +669,5 @@ $_configuration['gradebook_badge_sidebar'] = [
         'description' => true,
     ]
 ];*/
+// Disable jquery, jquery-ui libs added in the learning path view
+//$_configuration['disable_js_in_lp_view'] = true;

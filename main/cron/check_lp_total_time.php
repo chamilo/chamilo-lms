@@ -11,17 +11,32 @@ exit;
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_admin_script();
+
+$testSessionId = 182;
+$testCourseId = 97;
 $max = 10;
 $counter = 0;
 // Check Sessions
 $sessions = SessionManager::get_sessions_admin();
-foreach($sessions as $session) {
+foreach ($sessions as $session) {
     $sessionId = $session['id'];
+    if (!empty($testSessionId)) {
+        if ($sessionId != $testSessionId) {
+            continue;
+        }
+    }
     $courses = SessionManager::getCoursesInSession($sessionId);
 
-    foreach($courses as $courseId) {
+    foreach ($courses as $courseId) {
+        if (!empty($testCourseId)) {
+            if ($testCourseId != $courseId) {
+                continue;
+            }
+        }
+
         $courseInfo = api_get_course_info_by_id($courseId);
         $courseCode = $courseInfo['code'];
+
         $users = CourseManager::get_user_list_from_course_code(
             $courseCode,
             $sessionId,
@@ -38,7 +53,7 @@ foreach($sessions as $session) {
             }
 
             if ($counter > $max) {
-                //break 3;
+                break 3;
             }
         }
     }
@@ -60,11 +75,11 @@ foreach($courses as $courseInfo) {
  * @param int $userId
  * @param array $courseInfo
  * @param int $sessionId
- * @return string
+ * @return bool
  */
 function compareLpTimeAndCourseTime($userId, $courseInfo, $sessionId = 0)
 {
-    $defaultValue = 3600; // 1 hour
+    $defaultValue = 1800; // 30 min
     $courseCode = $courseInfo['code'];
     $courseId = $courseInfo['real_id'];
 
@@ -94,9 +109,9 @@ function compareLpTimeAndCourseTime($userId, $courseInfo, $sessionId = 0)
         $content .= Display::url('Check', $url, ['target' => '_blank']);
         $content .= PHP_EOL;
 
-
-        // Check posible records with high values
-        $sql = "SELECT iv.iid, lp_id, total_time FROM c_lp_view v 
+        // Check possible records with high values
+        $sql = "SELECT iv.iid, lp_id, total_time 
+                FROM c_lp_view v 
                 INNER JOIN c_lp_item_view iv
                 ON (iv.c_id = v.c_id AND v.id = iv.lp_view_id)
                 WHERE 
@@ -104,12 +119,12 @@ function compareLpTimeAndCourseTime($userId, $courseInfo, $sessionId = 0)
                     v.c_id = $courseId AND 
                     session_id = $sessionId
                 ORDER BY total_time desc
-                LIMIT 10
+                LIMIT 1
                 ";
         $result = Database::query($sql);
         $results = Database::store_result($result, 'ASSOC');
         if (!empty($results)) {
-            $content .= 'Top 10 high lp item times'.PHP_EOL.PHP_EOL;
+            $content .= 'Top 1 high lp item times'.PHP_EOL.PHP_EOL;
             foreach ($results as $item) {
                 $lpId = $item['lp_id'];
                 $link = api_get_path(WEB_CODE_PATH).'mySpace/lp_tracking.php?cidReq='.$courseCode.'&course='.$courseCode.'&origin=&lp_id='.$lpId.'&student_id='.$userId.'&id_session='.$sessionId;

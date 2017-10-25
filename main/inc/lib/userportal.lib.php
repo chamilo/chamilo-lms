@@ -1158,13 +1158,18 @@ class IndexManager
 
         $coursesWithoutCategoryTemplate = '/user_portal/classic_courses_without_category.tpl';
         $coursesWithCategoryTemplate = '/user_portal/classic_courses_with_category.tpl';
+        $showAllSessions = api_get_configuration_value('show_all_sessions_on_my_course_page') === true;
 
-        if ($load_history) {
-            // Load sessions in category in *history*
-            $session_categories = UserManager::get_sessions_by_category($user_id, true);
+        if ($showAllSessions) {
+            $session_categories = UserManager::get_sessions_by_category($user_id, false, true, true);
         } else {
-            // Load sessions in category
-            $session_categories = UserManager::get_sessions_by_category($user_id, false);
+            if ($load_history) {
+                // Load sessions in category in *history*
+                $session_categories = UserManager::get_sessions_by_category($user_id, true);
+            } else {
+                // Load sessions in category
+                $session_categories = UserManager::get_sessions_by_category($user_id, false);
+            }
         }
 
         $sessionCount = 0;
@@ -1453,6 +1458,8 @@ class IndexManager
                             // Loop course content
                             $html_courses_session = [];
                             $atLeastOneCourseIsVisible = false;
+                            $markAsOld = false;
+                            $markAsFuture = false;
 
                             foreach ($session['courses'] as $course) {
                                 $is_coach_course = api_is_coach($session_id, $course['real_id']);
@@ -1465,7 +1472,7 @@ class IndexManager
                                     } else {
                                         $allowed_time = api_strtotime($date_session_start);
                                     }
-
+                                    $endSessionToTms = null;
                                     if (!isset($_GET['history'])) {
                                         if (!empty($date_session_end)) {
                                             if ($is_coach_course) {
@@ -1491,10 +1498,20 @@ class IndexManager
                                     }
                                 }
 
+                                if ($showAllSessions) {
+                                    if ($allowed_time < $session_now && $allowedEndTime == false) {
+                                        $markAsOld = true;
+                                    }
+                                    if ($allowed_time > $session_now && $endSessionToTms > $session_now) {
+                                        $markAsFuture = true;
+                                    }
+                                    $allowedEndTime = true;
+                                    $allowed_time = 0;
+                                }
+
                                 if ($session_now >= $allowed_time && $allowedEndTime) {
                                     // Read only and accessible.
                                     $atLeastOneCourseIsVisible = true;
-
                                     if (api_get_setting('hide_courses_in_sessions') == 'false') {
                                         $courseUserHtml = CourseManager::get_logged_user_course_html(
                                             $course,
@@ -1609,6 +1626,8 @@ class IndexManager
                                     $html_courses_session
                                 );
                                 $params['courses'] = $html_courses_session;
+                                $params['is_old'] = $markAsOld;
+                                $params['is_future'] = $markAsFuture;
 
                                 if ($showSimpleSessionInfo) {
                                     $params['subtitle'] = self::getSimpleSessionDetails(
@@ -1725,10 +1744,16 @@ class IndexManager
                                     }
 
                                     $this->tpl->assign('session', $sessionParams);
-                                    $html_sessions .= $this->tpl->fetch(
-                                        $this->tpl->get_template('user_portal/classic_session.tpl')
-                                    );
 
+                                    if ($viewGridCourses) {
+                                        $html_sessions .= $this->tpl->fetch(
+                                            $this->tpl->get_template('/user_portal/grid_session.tpl')
+                                        );
+                                    } else {
+                                        $html_sessions .= $this->tpl->fetch(
+                                            $this->tpl->get_template('user_portal/classic_session.tpl')
+                                        );
+                                    }
                                     $sessionCount++;
                                 }
                             }
@@ -1810,7 +1835,8 @@ class IndexManager
         return [
             'courses' => $courseCompleteList,
             'sessions' => $session_categories,
-            'html' => trim($specialCourseList.$sessions_with_category.$sessions_with_no_category.$listCourse),
+            // Ofaj
+            'html' => trim($specialCourseList.$sessions_with_no_category.$sessions_with_category),
             'session_count' => $sessionCount,
             'course_count' => $courseCount
         ];

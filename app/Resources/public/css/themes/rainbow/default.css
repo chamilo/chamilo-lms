@@ -1546,7 +1546,7 @@ blockquote p {
   padding-top: 15px;
   font-weight: bold;
   font-size: 16px;
-} 
+}
 .result-body .panel.panel-default{
     border: none;
     box-shadow: none;
@@ -1899,4 +1899,20 @@ blockquote p {
 }
 .question_options .ui-state-active {
     background-color: #96BD0D !important;
+}
+
+.old_session {
+    border: 1px solid #666666 !important;
+}
+
+.future_session {
+    border: 1px solid #666666 !important;
+}
+
+.future_session img {
+    filter: grayscale(100%);
+}
+
+.future_session a {
+    color: #666 !important;
 }

@@ -1732,13 +1732,13 @@ function api_get_anonymous_id()
 {
     // Find if another anon is connected now
     $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-    $now = api_get_utc_datetime();
     $ip = api_get_real_ip();
     $max = api_get_configuration_value('max_anonymous_users');
 
     if ($max >= 2) {
         $sql = "SELECT * FROM $table 
-                WHERE ('$now' BETWEEN login_date AND logout_date) AND user_ip = '$ip'";
+                WHERE user_ip = '$ip'";
+
         $result = Database::query($sql);
         if (empty(Database::num_rows($result))) {
             $login = uniqid('anon_');

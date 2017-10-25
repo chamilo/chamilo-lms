@@ -677,7 +677,7 @@ footer #footer_right{
     border-right: none;
 }
 .well{
-    background-color: #84bd00;
+    background-color: #96bd22;
     border: none;
     color: #FFFFFF;
 }
@@ -1518,6 +1518,9 @@ blockquote:before {
 }
 blockquote p {
   display: inline;
+  color: #000;
+  font-family: Verdana, Helvetica, Arial, sans-serif !important;
+  font-size: 12px;
 }
 .ck-stand-out{
     background-color: yellow;

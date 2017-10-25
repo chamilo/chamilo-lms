@@ -84,6 +84,53 @@ class Certificate extends Model
             $pathinfo = pathinfo($this->certificate_data['path_certificate']);
             $this->html_file = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
             $this->qr_file = $this->certification_user_path.$pathinfo['filename'].'_qr.png';
+        } else {
+            // General certificate
+            $name = md5($this->user_id).'.html';
+            $my_path_certificate = $this->certification_user_path.$name;
+            $path_certificate = '/'.$name;
+
+            // Getting QR filename
+            $file_info = pathinfo($path_certificate);
+            $qr_code_filename = $this->certification_user_path.$file_info['filename'].'_qr.png';
+            $content = $this->generateCustomCertificate();
+
+            $my_new_content_html = str_replace(
+                '((certificate_barcode))',
+                Display::img(
+                    $this->certification_web_user_path.$file_info['filename'].'_qr.png',
+                    'QR'
+                ),
+                $content
+            );
+
+            $my_new_content_html = mb_convert_encoding(
+                $my_new_content_html,
+                'UTF-8',
+                api_get_system_encoding()
+            );
+
+            $this->html_file = $my_path_certificate;
+            $result = @file_put_contents($my_path_certificate, $my_new_content_html);
+
+            if ($result) {
+                // Updating the path
+                self::updateUserCertificateInfo(
+                    0,
+                    $this->user_id,
+                    $path_certificate
+                );
+                $this->certificate_data['path_certificate'] = $path_certificate;
+
+                if ($this->isHtmlFileGenerated()) {
+                    if (!empty($file_info)) {
+                        //$text = $this->parse_certificate_variables($new_content_html['variables']);
+                        //$this->generate_qr($text, $qr_code_filename);
+                    }
+                }
+            }
+
+            return $result;
         }
     }
 
@@ -355,12 +402,12 @@ class Certificate extends Model
     }
 
     /**
-    * update user info about certificate
-    * @param int $cat_id category id
-    * @param int $user_id user id
-    * @param string $path_certificate the path name of the certificate
-    * @return void
-    */
+     * Update user info about certificate
+     * @param int $cat_id category id
+     * @param int $user_id user id
+     * @param string $path_certificate the path name of the certificate
+     *
+     */
     public function updateUserCertificateInfo(
         $cat_id,
         $user_id,
@@ -552,5 +599,145 @@ class Certificate extends Model
             exit;
         }
         api_not_allowed(true);
+    }
+
+    /**
+     * @return string
+     */
+    public function generateCustomCertificate()
+    {
+        $myCertificate = GradebookUtils::get_certificate_by_user_id(
+            0,
+            $this->user_id
+        );
+
+        if (empty($myCertificate)) {
+            GradebookUtils::registerUserInfoAboutCertificate(
+                0,
+                $this->user_id,
+                100,
+                api_get_utc_datetime()
+            );
+        }
+
+        $userInfo = api_get_user_info($this->user_id);
+
+        $extraFieldValue = new ExtraFieldValue('user');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($this->user_id, 'legal_accept');
+        list($id, $id2, $termsValidationDate) = explode(':', $value['value']);
+
+        $sessions = SessionManager::get_sessions_by_user($this->user_id);
+        $sessionsApproved = [];
+        if ($sessions) {
+            foreach ($sessions as $session) {
+                $allCoursesApproved = [];
+                foreach ($session['courses'] as $course) {
+                    $courseInfo = api_get_course_info_by_id($course['real_id']);
+                    $gradebookCategories = Category::load(
+                        null,
+                        null,
+                        $courseInfo['code'],
+                        null,
+                        false,
+                        $session['session_id']
+                    );
+
+                    if (isset($gradebookCategories[0])) {
+                        /** @var Category $category */
+                        $category = $gradebookCategories[0];
+                        //  $categoryId = $category->get_id();
+                        // @todo how we check if user pass a gradebook?
+                        //$certificateInfo = GradebookUtils::get_certificate_by_user_id($categoryId, $this->user_id);
+
+                        $result = Category::userFinishedCourse(
+                            $this->user_id,
+                            $category,
+                            null,
+                            $courseInfo['code'],
+                            $session['session_id'],
+                            true
+                        );
+
+                        if ($result) {
+                            $allCoursesApproved[] = true;
+                        }
+                    }
+                }
+
+                if (count($allCoursesApproved) == count($session['courses'])) {
+                    $sessionsApproved[] = $session;
+                }
+            }
+        }
+
+        $skill = new Skill();
+        $skills = $skill->getStudentSkills($this->user_id);
+        $time = api_time_to_hms(Tracking::get_time_spent_on_the_platform($this->user_id));
+
+        $tplContent = new Template(null, false, false, false, false, false);
+
+        // variables for the default template
+        $tplContent->assign('complete_name', $userInfo['complete_name']);
+        $tplContent->assign('time_in_platform', $time);
+        $tplContent->assign('certificate_generated_date', api_get_local_time($myCertificate['created_at']));
+        $tplContent->assign('terms_validation_date', api_get_local_time($termsValidationDate));
+
+        // Ofaj
+        $tplContent->assign('time_in_platform_in_hours', round($time/3600, 1));
+        $tplContent->assign(
+            'certificate_generated_date_no_time',
+            api_get_local_time(
+                $myCertificate['created_at'],
+                null,
+                null,
+                false,
+                false
+            )
+        );
+        $tplContent->assign(
+            'terms_validation_date_no_time',
+            api_get_local_time(
+                $termsValidationDate,
+                null,
+                null,
+                false,
+                false
+            )
+        );
+        $tplContent->assign('skills', $skills);
+        $tplContent->assign('sessions', $sessionsApproved);
+
+        $layoutContent = $tplContent->get_template('gradebook/custom_certificate.tpl');
+        $content = $tplContent->fetch($layoutContent);
+
+        return $content;
+    }
+
+    /**
+     * Ofaj
+     */
+    public function generatePdfFromCustomCertificate()
+    {
+        $orientation = api_get_configuration_value('certificate_pdf_orientation');
+
+        $params['orientation'] = 'landscape';
+        if (!empty($orientation)) {
+            $params['orientation'] = $orientation;
+        }
+
+        $params['left'] = 0;
+        $params['right'] = 0;
+        $params['top'] = 0;
+        $params['bottom'] = 0;
+        $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
+        $pdf = new PDF($page_format, $params['orientation'], $params);
+
+        $pdf->html_to_pdf(
+            $this->html_file,
+            get_lang('Certificates'),
+            null,
+            false,
+            false
+        );
     }
 }

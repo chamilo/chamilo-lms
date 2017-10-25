@@ -2798,8 +2798,14 @@ class UserManager
                 LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
                 INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.sessionId = s.id
                 LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
-                WHERE (scu.user = :user OR s.generalCoach = :user) AND url.accessUrlId = :url
-                ORDER BY sc.name, s.name";
+                WHERE (scu.user = :user OR s.generalCoach = :user) AND url.accessUrlId = :url ";
+
+        $order = "ORDER BY sc.name, s.name";
+        $showAllSessions = api_get_configuration_value('show_all_sessions_on_my_course_page') === true;
+        if ($showAllSessions) {
+            $order = "ORDER BY s.accessStartDate";
+        }
+        $dql .= $order;
 
         $dql = Database::getManager()
             ->createQuery($dql)

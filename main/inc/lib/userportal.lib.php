@@ -1170,6 +1170,7 @@ class IndexManager
 
         $coursesWithoutCategoryTemplate = '/user_portal/classic_courses_without_category.tpl';
         $coursesWithCategoryTemplate = '/user_portal/classic_courses_with_category.tpl';
+        $showAllSessions = api_get_configuration_value('show_all_sessions_on_my_course_page') === true;
 
         if ($loadHistory) {
             // Load sessions in category in *history*
@@ -1186,6 +1187,7 @@ class IndexManager
         // courses list
         $studentInfo = api_get_configuration_value('course_student_info');
         $viewGrid = api_get_configuration_value('view_grid_courses');
+
 
         $studentInfoProgress = !empty($studentInfo['progress']) && $studentInfo['progress'] === true;
         $studentInfoScore = !empty($studentInfo['score']) && $studentInfo['score'] === true;
@@ -1465,6 +1467,8 @@ class IndexManager
                             // Loop course content
                             $html_courses_session = [];
                             $atLeastOneCourseIsVisible = false;
+                            $markAsOld = false;
+                            $markAsFuture = false;
 
                             foreach ($session['courses'] as $course) {
                                 $is_coach_course = api_is_coach($session_id, $course['real_id']);
@@ -1478,6 +1482,7 @@ class IndexManager
                                         $allowed_time = api_strtotime($date_session_start);
                                     }
 
+                                    $endSessionToTms = null;
                                     if (!isset($_GET['history'])) {
                                         if (!empty($date_session_end)) {
                                             if ($is_coach_course) {
@@ -1501,6 +1506,17 @@ class IndexManager
                                             }
                                         }
                                     }
+                                }
+
+                                if ($showAllSessions) {
+                                    if ($allowed_time < $session_now && $allowedEndTime == false) {
+                                        $markAsOld = true;
+                                    }
+                                    if ($allowed_time > $session_now && $endSessionToTms > $session_now) {
+                                        $markAsFuture = true;
+                                    }
+                                    $allowedEndTime = true;
+                                    $allowed_time = 0;
                                 }
 
                                 if ($session_now >= $allowed_time && $allowedEndTime) {
@@ -1612,6 +1628,8 @@ class IndexManager
                                     $html_courses_session
                                 );
                                 $params['courses'] = $html_courses_session;
+                                $params['is_old'] = $markAsOld;
+                                $params['is_future'] = $markAsFuture;
 
                                 if ($showSimpleSessionInfo) {
                                     $params['subtitle'] = self::getSimpleSessionDetails(
@@ -1728,10 +1746,16 @@ class IndexManager
                                     }
 
                                     $this->tpl->assign('session', $sessionParams);
-                                    $html_sessions .= $this->tpl->fetch(
-                                        $this->tpl->get_template('user_portal/classic_session.tpl')
-                                    );
 
+                                    if ($viewGridCourses) {
+                                        $html_sessions .= $this->tpl->fetch(
+                                            $this->tpl->get_template('/user_portal/grid_session.tpl')
+                                        );
+                                    } else {
+                                        $html_sessions .= $this->tpl->fetch(
+                                            $this->tpl->get_template('user_portal/classic_session.tpl')
+                                        );
+                                    }
                                     $sessionCount++;
                                 }
                             }

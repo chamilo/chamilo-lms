@@ -43,7 +43,8 @@ if (isset($_GET['user_id']) && $action == 'login_as') {
             }
 
             $target_url = api_get_path(WEB_PATH)."user_portal.php";
-            $message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'), '<a href="'.$target_url.'">'.$target_url.'</a>');
+            $message .= '<br />'.
+                sprintf(get_lang('LoginSuccessfulGoToX'), '<a href="'.$target_url.'">'.$target_url.'</a>');
             Display::display_header(get_lang('UserList'));
             echo Display::return_message($message, 'normal', false);
             Display::display_footer();
@@ -406,7 +407,6 @@ function prepare_user_sql_query($is_count)
 function get_number_of_users()
 {
     $sql = prepare_user_sql_query(true);
-
     $res = Database::query($sql);
     $obj = Database::fetch_object($res);
 
@@ -817,7 +817,6 @@ if (!empty($action)) {
                 }
                 break;
             case 'delete_user':
-
                 $allowDelete = api_get_configuration_value('allow_delete_user_for_session_admin');
                 if (api_is_platform_admin() ||
                     ($allowDelete && api_is_session_admin())

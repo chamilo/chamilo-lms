@@ -1719,7 +1719,7 @@ function api_get_anonymous_id()
 
     if ($max >= 2) {
         $sql = "SELECT * FROM $table 
-                WHERE ('$now' BETWEEN login_date AND logout_date) AND user_ip = '$ip'";
+                WHERE user_ip = '$ip'";
         $result = Database::query($sql);
         if (empty(Database::num_rows($result))) {
             $login = uniqid('anon_');

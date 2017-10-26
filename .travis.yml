@@ -100,4 +100,4 @@ script:
 notifications:
   # IRC notifications - disabled for creating a lot of noise on the channel
   irc: "irc.freenode.org#chamilodev"
-
+  slack: chamilo-lms:mdpKzUpOkK6iw4ksxGjsscz6

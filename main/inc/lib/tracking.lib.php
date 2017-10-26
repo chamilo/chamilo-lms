@@ -1613,7 +1613,7 @@ class Tracking
     /**
      * Calculates the time spent on the course
      * @param integer $user_id
-     * @param integer  $courseId
+     * @param integer $courseId
      * @param int Session id (optional)
      *
      * @return int Time in seconds
@@ -1624,30 +1624,33 @@ class Tracking
         $session_id = 0
     ) {
         $courseId = intval($courseId);
+
+        if (empty($courseId) || empty($user_id)) {
+            return 0;
+        }
+
         $session_id  = intval($session_id);
-        $tbl_track_course = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         if (is_array($user_id)) {
             $user_id = array_map('intval', $user_id);
-            $condition_user = " AND user_id IN (".implode(',', $user_id).") ";
+            $conditionUser = " AND user_id IN (".implode(',', $user_id).") ";
         } else {
             $user_id = intval($user_id);
-            $condition_user = " AND user_id = $user_id ";
+            $conditionUser = " AND user_id = $user_id ";
         }
 
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $sql = "SELECT
                 SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds
-                FROM $tbl_track_course
-                WHERE UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) ";
-
-        if ($courseId != 0) {
-            $sql .= "AND c_id = '$courseId' ";
-        }
+                FROM $table
+                WHERE 
+                    UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) AND 
+                    c_id = '$courseId' ";
 
         if ($session_id != -1) {
             $sql .= "AND session_id = '$session_id' ";
         }
 
-        $sql .= $condition_user;
+        $sql .= $conditionUser;
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
 

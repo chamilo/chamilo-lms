@@ -360,7 +360,7 @@ class CourseManager
             $session_id = api_get_session_id();
         }
 
-        $user_list = array();
+        $userList = array();
 
         // Cleaning the $user_id variable
         if (is_array($user_id)) {
@@ -369,11 +369,11 @@ class CourseManager
                 $new_user_id_list[] = intval($my_user_id);
             }
             $new_user_id_list = array_filter($new_user_id_list);
-            $user_list = $new_user_id_list;
+            $userList = $new_user_id_list;
             $user_ids = implode(',', $new_user_id_list);
         } else {
             $user_ids = intval($user_id);
-            $user_list[] = $user_id;
+            $userList[] = $user_id;
         }
 
         $course_info = api_get_course_info($course_code);
@@ -389,9 +389,9 @@ class CourseManager
 
         // Erase user student publications (works) in the course - by André Boivin
 
-        if (!empty($user_list)) {
+        if (!empty($userList)) {
             require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
-            foreach ($user_list as $userId) {
+            foreach ($userList as $userId) {
                 // Getting all work from user
                 $workList = getWorkPerUser($userId);
                 if (!empty($workList)) {
@@ -436,7 +436,7 @@ class CourseManager
                         user_id IN ($user_ids)";
             Database::query($sql);
 
-            foreach ($user_list as $uid) {
+            foreach ($userList as $uid) {
                 // check if a user is register in the session with other course
                 $sql = "SELECT user_id FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
                         WHERE session_id='$session_id' AND user_id='$uid'";
@@ -504,7 +504,7 @@ class CourseManager
                 $course_id
             );
 
-            foreach ($user_list as $userId) {
+            foreach ($userList as $userId) {
                 $userInfo = api_get_user_info($userId);
                 Event::addEvent(
                     LOG_UNSUBSCRIBE_USER_FROM_COURSE,
@@ -2142,26 +2142,6 @@ class CourseManager
         }
 
         return $html;
-    }
-
-    /**
-     * Return user info array of all users registered in the specified course
-     * this includes the users of the course itself and the users of all linked courses.
-     *
-     * @param string $course_code
-     * @param bool $with_sessions
-     * @param int $session_id
-     * @return array with user info
-     */
-    public static function get_real_and_linked_user_list($course_code, $with_sessions = true, $session_id = 0)
-    {
-        $list = array();
-        $userList = self::get_user_list_from_course_code($course_code, $session_id);
-        foreach ($userList as $user) {
-            $list[] = $user;
-        }
-
-        return $list;
     }
 
     /**
@@ -5861,26 +5841,29 @@ class CourseManager
     /**
      * this function gets all the users of the course,
      * including users from linked courses
+     * @param $filterByActive
+     *
+     * @return array
      */
-    public static function getCourseUsers()
+    public static function getCourseUsers($filterByActive = null)
     {
-        //this would return only the users from real courses:
-        $session_id = api_get_session_id();
-        if ($session_id != 0) {
-            $user_list = self::get_real_and_linked_user_list(
-                api_get_course_id(),
-                true,
-                $session_id
-            );
-        } else {
-            $user_list = self::get_real_and_linked_user_list(
-                api_get_course_id(),
-                false,
-                0
-            );
-        }
+        // This would return only the users from real courses:
+        $userList = self::get_user_list_from_course_code(
+            api_get_course_id(),
+            api_get_session_id(),
+            null,
+            null,
+            null,
+            null,
+            false,
+            false,
+            [],
+            [],
+            [],
+            $filterByActive
+        );
 
-        return $user_list;
+        return $userList;
     }
 
     /**
@@ -5915,11 +5898,11 @@ class CourseManager
      */
     public static function addUserGroupMultiSelect(&$form, $to_already_selected)
     {
-        $user_list = self::getCourseUsers();
+        $userList = self::getCourseUsers(null);
         $group_list = self::getCourseGroups();
         $array = self::buildSelectOptions(
             $group_list,
-            $user_list,
+            $userList,
             $to_already_selected
         );
 
@@ -5996,13 +5979,13 @@ class CourseManager
     /**
      * this function shows the form for sending a message to a specific group or user.
      * @param array $group_list
-     * @param array $user_list
+     * @param array $userList
      * @param array $to_already_selected
      * @return array
      */
     public static function buildSelectOptions(
         $group_list = array(),
-        $user_list = array(),
+        $userList = array(),
         $to_already_selected = array()
     ) {
         if (empty($to_already_selected)) {
@@ -6032,8 +6015,8 @@ class CourseManager
         }
 
         // adding the individual users to the select form
-        if ($user_list) {
-            foreach ($user_list as $user) {
+        if ($userList) {
+            foreach ($userList as $user) {
                 if (is_array($to_already_selected)) {
                     if (!in_array(
                         "USER:".$user['user_id'],

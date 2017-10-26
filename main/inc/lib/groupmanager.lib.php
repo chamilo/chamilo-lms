@@ -1255,10 +1255,8 @@ class GroupManager
         $group_table = Database::get_course_table(TABLE_GROUP);
         $group_user_table = Database::get_course_table(TABLE_GROUP_USER);
         $session_id = api_get_session_id();
-
-        $complete_user_list = CourseManager::get_real_and_linked_user_list(
+        $complete_user_list = CourseManager::get_user_list_from_course_code(
             $_course['code'],
-            true,
             $session_id
         );
         $number_groups_per_user = $groups_per_user == self::GROUP_PER_MEMBER_NO_LIMIT ? self::INFINITE : $groups_per_user;
@@ -2155,9 +2153,8 @@ class GroupManager
         }
 
         $session_id = api_get_session_id();
-        $complete_user_list = CourseManager::get_real_and_linked_user_list(
+        $complete_user_list = CourseManager::get_user_list_from_course_code(
             $_course['code'],
-            true,
             $session_id
         );
 

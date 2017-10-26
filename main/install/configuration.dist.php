@@ -673,3 +673,5 @@ $_configuration['gradebook_badge_sidebar'] = [
 //$_configuration['disable_js_in_lp_view'] = true;
 // Show all sessions (old, current, future) in my course page
 //$_configuration['show_all_sessions_on_my_course_page'] = true;
+// Redirect to home tool after uploading a student publication or a adding a comment
+//$_configuration['allow_redirect_to_main_page_after_work_upload'] = false;

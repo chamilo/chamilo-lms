@@ -1561,11 +1561,12 @@ EOT;
 
     /**
      * @param string $url
+     * @param string $urlToRedirect after upload redirect to this page
      */
-    public function addMultipleUpload($url)
+    public function addMultipleUpload($url, $urlToRedirect = '')
     {
         $inputName = 'input_file_upload';
-        $this->addMultipleUploadJavascript($url, $inputName);
+        $this->addMultipleUploadJavascript($url, $inputName, $urlToRedirect);
 
         $this->addHtml('
             <div class="description-upload">
@@ -1595,9 +1596,14 @@ EOT;
      *
      * @param string $url page that will handle the upload
      * @param string $inputName
+     * @param string $urlToRedirect
      */
-    private function addMultipleUploadJavascript($url, $inputName)
+    private function addMultipleUploadJavascript($url, $inputName, $urlToRedirect = '')
     {
+        $redirectCondition = '';
+        if (!empty($urlToRedirect)) {
+            $redirectCondition = "window.location.replace('$urlToRedirect'); ";
+        }
         $icon = Display::return_icon('file_txt.gif');
         $this->addHtml("
         <script>
@@ -1683,13 +1689,14 @@ EOT;
                         // Update file name with new one from Chamilo
                         $(data.context.children()[index]).parent().find('.file_name').html(file.name);                        
                         var successMessage = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."'));
-                        $(data.context.children()[index]).parent().append(successMessage);
+                        $(data.context.children()[index]).parent().append(successMessage);                    
                     } else if (file.error) {
                         var error = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-danger\"/>').text(file.error));
-                        $(data.context.children()[index]).parent().append(error);
+                        $(data.context.children()[index]).parent().append(error);                        
                     }
-                });
-                $('#dropzone').removeClass('hover');
+                });                
+                $('#dropzone').removeClass('hover');                
+                ".$redirectCondition."
             }).on('fileuploadfail', function (e, data) {
                 $.each(data.files, function (index) {
                     var failedMessage = '" . addslashes(get_lang('UplUploadFailed'))."';

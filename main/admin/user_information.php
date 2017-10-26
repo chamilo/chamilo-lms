@@ -306,7 +306,12 @@ if (count($sessions) > 0) {
                     $status = get_lang('CourseCoach');
                     break;
             }
-            $tools = '<a href="course_information.php?code='.$courseInfo['code'].'&id_session='.$id_session.'">'.
+
+            $tools = Display::url(
+                Display::return_icon('statistics.gif', get_lang('Stats')),
+                api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.$userId.'&id_session='.$id_session.'&course='.$courseInfo['code']
+            );
+            $tools .= '&nbsp;<a href="course_information.php?code='.$courseInfo['code'].'&id_session='.$id_session.'">'.
                 Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
                 '<a href="'.$courseInfo['course_public_url'].'?id_session='.$id_session.'">'.
                 Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>';
@@ -415,7 +420,12 @@ if (Database::num_rows($res) > 0) {
         $courseCode = $courseInfo['code'];
         $courseToolInformation = null;
 
-        $tools = '<a href="course_information.php?code='.$courseCode.'">'.
+        $tools = Display::url(
+            Display::return_icon('statistics.gif', get_lang('Stats')),
+            api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.$userId.'&id_session=0&course='.$courseCode
+        );
+
+        $tools .= '&nbsp;<a href="course_information.php?code='.$courseCode.'">'.
             Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
             '<a href="'.$courseInfo['course_public_url'].'">'.
             Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>'.
@@ -427,10 +437,9 @@ if (Database::num_rows($res) > 0) {
         }
 
         $timeSpent = api_time_to_hms(
-            Tracking :: get_time_spent_on_the_course(
+            Tracking::get_time_spent_on_the_course(
                 $userId,
-                $courseInfo['real_id'],
-                0
+                $courseInfo['real_id']
             )
         );
 

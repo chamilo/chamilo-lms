@@ -393,9 +393,12 @@ switch ($action) {
         );
 
         $nameTools = $form_name;
-        $form->addElement('header', $form_name);
-        $form->addButtonAdvancedSettings('choose_recipients', [get_lang('ChooseRecipients'), get_lang('AnnouncementChooseRecipientsDescription')]);
-        $form->addHtml('<div id="choose_recipients_options" style="display: none;">');
+        $form->addHeader($form_name);
+        $form->addButtonAdvancedSettings(
+            'choose_recipients',
+            [get_lang('ChooseRecipients'), get_lang('AnnouncementChooseRecipientsDescription')]
+        );
+        $form->addHtml('<div id="choose_recipients_options" style="display:none;">');
 
         $to = [];
         if (empty($group_id)) {
@@ -451,10 +454,9 @@ switch ($action) {
                     );
                 }
             }
-
-            $element = CourseManager::addUserGroupMultiSelect($form, array());
+            $element = CourseManager::addUserGroupMultiSelect($form, []);
         } else {
-            $element = CourseManager::addGroupMultiSelect($form, $group_properties, array());
+            $element = CourseManager::addGroupMultiSelect($form, $group_properties, []);
         }
 
         $form->addHtml('</div>');
@@ -467,7 +469,7 @@ switch ($action) {
         $announcementInfo = AnnouncementManager::get_by_id($course_id, $id);
 
         if (isset($announcementInfo) && !empty($announcementInfo)) {
-            $to = AnnouncementManager::load_edit_users("announcement", $id);
+            $to = AnnouncementManager::load_edit_users('announcement', $id);
 
             $defaults = array(
                 'title' => $announcementInfo['title'],
@@ -548,7 +550,6 @@ switch ($action) {
         if ($form->validate()) {
             $data = $form->getSubmitValues();
             $data['users'] = isset($data['users']) ? $data['users'] : ['everyone'];
-
             $sendToUsersInSession = isset($data['send_to_users_in_session']) ? true : false;
 
             if (isset($id) && $id) {

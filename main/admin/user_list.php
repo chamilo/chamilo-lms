@@ -136,7 +136,7 @@ function active_user(element_div) {
             data: "user_id="+user_id[1]+"&status="+status,
             success: function(data) {
                 if (data == 1) {
-                    $(ident).attr("src", "'.Display::returnIconPath('accept.png').'");
+                    $(ident).attr("src", "'.Display::returnIconPath('accept.png', ICON_SIZE_TINY).'");
                     $(ident).attr("title","'.get_lang('Lock').'");
                 }
                 if (data == 0) {

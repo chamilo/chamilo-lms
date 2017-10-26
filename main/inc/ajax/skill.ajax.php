@@ -77,7 +77,7 @@ switch ($action) {
         break;
     case 'get_course_info_popup':
         $course_info = api_get_course_info($_REQUEST['code']);
-        $courses = CourseManager::process_hot_course_item(
+        $courses = CourseManager::processHotCourseItem(
             [
                 ['c_id' => $course_info['real_id']]
             ]

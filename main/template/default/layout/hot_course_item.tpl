@@ -2,9 +2,8 @@
     {% if item.title %}
         <div class="col-xs-12 col-sm-6 col-md-4">
             <div class="items items-hotcourse">
-                
                 <div class="image">
-                    {% if item.is_registerd %}
+                    {% if item.is_registered %}
                         <a title="{{ item.title}}" href="{{ item.course_public_url }}">
                             <img src="{{ item.course_image_large }}" class="img-responsive" alt="{{ item.title }}">
                         </a>
@@ -19,9 +18,11 @@
                 </div>
                 <div class="description">
                     <div class="block-title">
-                        {% if item.is_registerd %}
+                        {% if item.is_registered or _u.is_admin %}
                             <h4 class="title">
-                                <a alt="{{ item.title }}" title="{{ item.title }}" href="{{ item.course_public_url }}">{{ item.title_cut}}</a>
+                                <a alt="{{ item.title }}" title="{{ item.title }}" href="{{ item.course_public_url }}">
+                                    {{ item.title_cut}}
+                                </a>
                             </h4>
                         {% else %}
                             <h4 class="title" title="{{ item.title }}">
@@ -70,13 +71,13 @@
                                             </a>
                                         </h5>
                                         <p>{{ 'Teacher' | get_lang }}</p>
-                                    </div>                                       
+                                    </div>
                                 {% elseif item.teachers | length <= 6 %}
                                     <a href="{{ teacher.url }}" class="ajax"
                                        data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
                                         <img src="{{ teacher.avatar }}"/>
                                     </a>
-                                {% endif %} 
+                                {% endif %}
                             {% endfor %}
                         {% endif %}
                     </div>

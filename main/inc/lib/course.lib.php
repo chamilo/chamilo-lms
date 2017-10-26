@@ -4925,7 +4925,7 @@ class CourseManager
 
         if (Database::num_rows($result)) {
             $courses = Database::store_result($result, 'ASSOC');
-            $courses = self::process_hot_course_item($courses, $my_course_code_list);
+            $courses = self::processHotCourseItem($courses, $my_course_code_list);
         }
 
         return $courses;
@@ -4936,7 +4936,7 @@ class CourseManager
      * @param array $my_course_code_list
      * @return mixed
      */
-    public static function process_hot_course_item($courses, $my_course_code_list = array())
+    public static function processHotCourseItem($courses, $my_course_code_list = array())
     {
         $hotCourses = [];
         $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
@@ -4957,42 +4957,12 @@ class CourseManager
                 $my_course_code_list
             );
 
-            $userRegisterdInCourse = self::is_user_subscribed_in_course($user_id, $course_info['code']);
-            $userRegisterdInCourseAsTeacher = self::is_course_teacher($user_id, $course_info['code']);
-            $userRegisterd = ($userRegisterdInCourse && $userRegisterdInCourseAsTeacher);
-
-            $my_course['is_registerd'] = $userRegisterd;
-
+            $userRegisteredInCourse = self::is_user_subscribed_in_course($user_id, $course_info['code']);
+            $userRegisteredInCourseAsTeacher = self::is_course_teacher($user_id, $course_info['code']);
+            $userRegistered = $userRegisteredInCourse && $userRegisteredInCourseAsTeacher;
+            $my_course['is_registered'] = $userRegistered;
             $my_course['title_cut'] = cut($course_info['title'], 45);
-            // if user registered as student
-            /* if ($userRegisterdInCourse) {
-                $icon = '<em class="fa fa-graduation-cap"></em>';
-                $title = get_lang("AlreadyRegisteredToCourse");
-                $my_course['already_register_as'] = Display::tag(
-                    'button',
-                    $icon,
-                    array(
-                        'id' => 'register',
-                        'class' => 'btn btn-default btn-sm',
-                        'title' => $title,
-                        'aria-label' => $title
-                    )
-                );
-            } elseif ($userRegisterdInCourseAsTeacher) {
-                // if user registered as teacher
-                $icon = '<em class="fa fa-suitcase"></em>';
-                $title = get_lang("YouAreATeacherOfThisCourse");
-                $my_course['already_register_as'] = Display::tag(
-                    'button',
-                    $icon,
-                    array(
-                        'id' => 'register',
-                        'class' => 'btn btn-default btn-sm',
-                        'title' => $title,
-                        'aria-label' => $title
-                    )
-                );
-            } */
+
 
             //Course visibility
             if ($access_link && in_array('register', $access_link)) {

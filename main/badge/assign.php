@@ -28,8 +28,7 @@ $skillRepo = $entityManager->getRepository('ChamiloCoreBundle:Skill');
 $skillRelSkill = $entityManager->getRepository('ChamiloCoreBundle:SkillRelSkill');
 $skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
 $skillUserRepo = $entityManager->getRepository('ChamiloCoreBundle:SkillRelUser');
-/** @var User $user */
-$user = $entityManager->find('ChamiloUserBundle:User', $userId);
+$user = api_get_user_entity($userId);
 
 if (!$user) {
     Display::addFlash(
@@ -184,7 +183,7 @@ if ($form->validate()) {
     exit;
 }
 
-$form->setDefaults(['user_name' => $user->getCompleteName()]);
+$form->setDefaults(['user_name' => $user->getCompleteNameWithUsername()]);
 $form->freeze(['user_name']);
 
 if (api_is_drh()) {

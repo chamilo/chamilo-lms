@@ -211,10 +211,11 @@ if ($refresh == 1) {
     // If refresh is set, we regenerate the oLP object from the database (kind of flush).
     Session::erase('refresh');
     $myrefresh = 1;
-    if ($debug > 0) error_log('New LP - Refresh asked', 0);
 }
 
-if ($debug > 0) error_log('New LP - Passed refresh check', 0);
+if ($debug > 0) {
+    error_log('New LP - $myrefresh: '.$myrefresh);
+}
 
 if (!empty($_REQUEST['dialog_box'])) {
     $dialog_box = stripslashes(urldecode($_REQUEST['dialog_box']));
@@ -231,10 +232,13 @@ if (!empty($lpObject)) {
         if ($myrefresh == 1 ||
             empty($oLP->cc) ||
             $oLP->cc != api_get_course_id() ||
-            $oLP->lp_view_session_id != $session_id ||
-            $oLP->scorm_debug == '1'
+            $oLP->lp_view_session_id != $session_id
         ) {
-            if ($debug > 0) error_log('New LP - Course has changed, discard lp object', 0);
+            if ($debug > 0) {
+                error_log('New LP - Course has changed, discard lp object');
+                error_log('New LP - $oLP->lp_view_session_id: '.$oLP->lp_view_session_id);
+                error_log('New LP - $oLP->cc: '.$oLP->cc);
+            }
             if ($myrefresh == 1) {
                 $myrefresh_id = $oLP->get_id();
             }
@@ -1265,8 +1269,7 @@ switch ($action) {
         if (!$lp_found) {
             error_log('New LP - No learnpath given for return_to_course_homepage', 0);
             require 'lp_list.php';
-        }
-        else {
+        } else {
             $_SESSION['oLP']->save_current();
             $_SESSION['oLP']->save_last();
             $url = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php?id_session='.api_get_session_id();

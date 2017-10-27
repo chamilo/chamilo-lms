@@ -1453,7 +1453,9 @@ class AnnouncementManager
                         ip.insert_user_id, 
                         ip.insert_date, 
                         ip.lastedit_date';
+        $groupBy = ' GROUP BY announcement.iid';
         if ($getCount) {
+            $groupBy = '';
             $select = ' COUNT(DISTINCT announcement.iid) count';
         }
 
@@ -1533,7 +1535,7 @@ class AnnouncementManager
                             $condition_session
                             $searchCondition
                             $extraGroupCondition
-                        GROUP BY announcement.iid
+                        $groupBy
                         ORDER BY display_order DESC";
                 //GROUP BY ip.ref
             } else {
@@ -1552,7 +1554,7 @@ class AnnouncementManager
                                 ip.visibility='1'
                                 $condition_session
                                 $searchCondition
-                            GROUP BY announcement.iid
+                            $groupBy
                             ORDER BY display_order DESC";
 
                     //GROUP BY ip.ref
@@ -1570,7 +1572,7 @@ class AnnouncementManager
                                 (ip.visibility='0' OR ip.visibility='1')
                                 $condition_session
                                 $searchCondition
-                            GROUP BY announcement.iid
+                            $groupBy
                             ORDER BY display_order DESC";
                 }
             }
@@ -1617,7 +1619,7 @@ class AnnouncementManager
                             $condition_session
                             $searchCondition
                             AND ip.visibility='1'
-                        GROUP BY announcement.iid
+                        $groupBy
                         ORDER BY display_order DESC";
             } else {
                 if ($user_id) {
@@ -1643,7 +1645,7 @@ class AnnouncementManager
     						$searchCondition
     						AND ip.visibility='1'
     						AND announcement.session_id IN(0, ".$session_id.")
-                        GROUP BY announcement.iid
+                        $groupBy
 						ORDER BY display_order DESC";
                 } else {
                     if (($allowUserEditSetting && !api_is_anonymous())) {
@@ -1667,7 +1669,7 @@ class AnnouncementManager
                                 $searchCondition  AND
                                 ip.visibility='1' AND
                                 announcement.session_id IN ( 0,".api_get_session_id().")
-                            GROUP BY announcement.iid
+                            $groupBy
                             ";
 
                 }

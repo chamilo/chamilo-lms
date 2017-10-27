@@ -1262,7 +1262,10 @@ switch ($action) {
         require 'lp_message.php';
         break;
     case 'return_to_course_homepage':
-        if (!$lp_found) { error_log('New LP - No learnpath given for stats', 0); require 'lp_list.php'; }
+        if (!$lp_found) {
+            error_log('New LP - No learnpath given for return_to_course_homepage', 0);
+            require 'lp_list.php';
+        }
         else {
             $_SESSION['oLP']->save_current();
             $_SESSION['oLP']->save_last();

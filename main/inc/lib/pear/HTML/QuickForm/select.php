@@ -629,7 +629,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                         <!-- END label_2 -->
 
                         <!-- BEGIN error -->
-                            <span class="help-inline">{error}</span>
+                            <span class="help-inline help-block">{error}</span>
                         <!-- END error -->
                     </div>
                     <div class="col-sm-'.$size[2].'">

@@ -3521,6 +3521,13 @@ class learnpathItem
         } else {
             // Step 2.2 : if not cumulative mode total_time = total_time - last_update + total_sec
             $total_sec = $this->fixAbusiveTime($total_sec);
+
+            if ($debug > 0) {
+                error_log("after fix abusive: $total_sec");
+                error_log("total_time: $total_time");
+                error_log("this->last_scorm_session_time: ".$this->last_scorm_session_time);
+            }
+
             $total_time = $total_time - $this->last_scorm_session_time + $total_sec;
             $this->last_scorm_session_time = $total_sec;
 

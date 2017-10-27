@@ -1258,13 +1258,6 @@ switch ($action) {
     case 'intro_cmdAdd':
         // Add introduction section page.
         break;
-    case 'js_api_refresh':
-        if (!$lp_found) { error_log('New LP - No learnpath given for js_api_refresh', 0); require 'lp_message.php'; }
-        if (isset($_REQUEST['item_id'])) {
-            $htmlHeadXtra[] = $_SESSION['oLP']->get_js_info($_REQUEST['item_id']);
-        }
-        require 'lp_message.php';
-        break;
     case 'return_to_course_homepage':
         if (!$lp_found) {
             error_log('New LP - No learnpath given for return_to_course_homepage', 0);
@@ -1272,6 +1265,10 @@ switch ($action) {
         } else {
             $_SESSION['oLP']->save_current();
             $_SESSION['oLP']->save_last();
+            if ($debug > 0) {
+                error_log('New LP - save_current()');
+                error_log('New LP - save_last()');
+            }
             $url = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php?id_session='.api_get_session_id();
             if (isset($_GET['redirectTo']) && $_GET['redirectTo'] == 'lp_list') {
                 $url = 'lp_controller.php?'.api_get_cidreq();
@@ -1291,7 +1288,9 @@ switch ($action) {
             error_log('New LP - No learnpath given for view', 0);
             require 'lp_list.php';
         } else {
-            if ($debug > 0) {error_log('New LP - Trying to impress this LP item to '.$_REQUEST['item_id'], 0); }
+            if ($debug > 0) {
+                error_log('New LP - Trying to impress this LP item to '.$_REQUEST['item_id'], 0);
+            }
             if (!empty($_REQUEST['item_id'])) {
                 $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
             }
@@ -1310,7 +1309,8 @@ switch ($action) {
         Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
         header('Location: '.$url);
         break;
-    case 'toggle_seriousgame': //activate/deactive seriousgame_mode
+    case 'toggle_seriousgame':
+        // activate/deactive seriousgame_mode
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }

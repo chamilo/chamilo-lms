@@ -5868,7 +5868,7 @@ class CourseManager
      */
     public static function addUserGroupMultiSelect(&$form, $to_already_selected)
     {
-        $userList = self::getCourseUsers(null);
+        $userList = self::getCourseUsers(true);
         $group_list = self::getCourseGroups();
         $array = self::buildSelectOptions(
             $group_list,

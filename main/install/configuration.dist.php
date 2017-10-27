@@ -675,3 +675,5 @@ $_configuration['gradebook_badge_sidebar'] = [
 //$_configuration['show_all_sessions_on_my_course_page'] = true;
 // Redirect to home tool after uploading a student publication or a adding a comment
 //$_configuration['allow_redirect_to_main_page_after_work_upload'] = false;
+// Empty the session student list when subscribing multiple users
+//$_configuration['not_empty_session_student_list_for_multiple_subscription'] = false;

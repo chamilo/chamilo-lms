@@ -4563,20 +4563,23 @@ class learnpath
      */
     public function save_current()
     {
-        if ($this->debug > 0) {
+        $debug = $this->debug;
+        if ($debug > 0) {
             error_log('learnpath::save_current()', 0);
         }
         // TODO: Do a better check on the index pointing to the right item (it is supposed to be working
         // on $ordered_items[] but not sure it's always safe to use with $items[]).
-        if ($this->debug > 2) {
+        if ($debug > 2) {
             error_log('New LP - save_current() saving item '.$this->current, 0);
-        }
-        if ($this->debug > 2) {
             error_log(''.print_r($this->items, true), 0);
         }
         if (isset($this->items[$this->current]) &&
             is_object($this->items[$this->current])
         ) {
+            if ($debug) {
+                error_log('Before save last_scorm_session_time: '.$this->items[$this->current]->last_scorm_session_time);
+            }
+
             $res = $this->items[$this->current]->save(
                 false,
                 $this->prerequisites_match($this->current)
@@ -4584,6 +4587,11 @@ class learnpath
             $this->autocomplete_parents($this->current);
             $status = $this->items[$this->current]->get_status();
             $this->update_queue[$this->current] = $status;
+
+            if ($debug) {
+                error_log('After save last_scorm_session_time: '.$this->items[$this->current]->last_scorm_session_time);
+            }
+
             return $res;
         }
         return false;

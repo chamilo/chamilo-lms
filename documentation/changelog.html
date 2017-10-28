@@ -99,6 +99,8 @@
 
     <h4>For developers and sysadmins</h4>
     <ul aria-role="log" aria-live="off">
+        <li>[2017-10-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/755aa93118c3c277dc5cf10c58e082864d2985c4">755aa931</a> - <a href="https://task.beeznest.com/issues/13590">BT#13590</a>) Admin: Add configuration setting "show_all_sessions_on_my_course_page"</li>
+        <li>[2017-10-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/32ed97ad07f9a4c8894815d227b35f2ff2bd0601">32ed97ad</a> - <a href="https://task.beeznest.com/issues/13575">BT#13575</a>) Admin: Add configuration setting "disable_js_in_lp_view"</li>
         <li>[2017-10-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/acb161458f45cc8d37d82188671b8ad55cc004cf">acb16145</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2176">GH#2176</a> - <a href="https://task.beeznest.com/issues/13461">BT#13461</a>) Plugin: Add redirection plugin to redirect users arbitrarily once logged in</li>
         <li>[2017-10-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/8a889c9487f2a9b951a3df8ce5cead37a1a79347">8a889c94</a>) Admin: Add configuration setting 'hide_email_content' to force users to click a link in their e-mail to get the full message</li>
         <li>[2017-10-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/8acc91a93ca0336026b59a02219ed2c856e27df4">8acc91a9</a> - <a href="https://task.beeznest.com/issues/10851">BT#10851</a>) Session: Add session template feature to pre-fill some sessions when doing repetitive session creation processes</li>
@@ -147,6 +149,26 @@
 
     <h3>Improvements (minor features) and debug</h3>
     <ul aria-role="log" aria-live="off">
+        <li>[2017-10-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/646494190327cdbbede2d0a56b9d64abb74dc3ef">64649419</a>) Internal: Ignore date validation when creating a new anon user. Only check IP.</li>
+        <li>[2017-10-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/568fa6ae60401bc0c11ce50978f159edf36e654a">568fa6ae</a> - <a href="https://task.beeznest.com/issues/13574">BT#13574</a>) Gradebook: Add general certificate</li>
+        <li>[2017-10-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/c49cfa81a4345639d00975b67f1c22cb171c338e">c49cfa81</a> - <a href="https://task.beeznest.com/issues/13552">BT#13552</a>) Global: When closing tab/windows execute a Event::courseLogout</li>
+        <li>[2017-10-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/711964f2b5aa65764ac93350c534e3dbe9283101">711964f2</a>) Internal: Remove $_SESSION['login_as'] already checked inside the function (in user time logging).</li>
+        <li>[2017-10-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/0a70fe1c5ccf41f60c4138cd27571eea3569fec1">0a70fe1c</a> - <a href="https://task.beeznest.com/issues/13557">BT#13557</a>) Internal: Fixed setting "allow_edit_tool_visibility_in_session"</li>
+        <li>[2017-10-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/bbb4948d439bb9074409cafdb252d475a377114a">bbb4948d</a> - <a href="https://task.beeznest.com/issues/13566">BT#13566</a>) Custom pages: Show custom pages when pages existing</li>
+        <li>[2017-10-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/dab9dc8506d54b14e682b45bf5db065f7b5aeda0">dab9dc85</a> - <a href="https://task.beeznest.com/issues/13552">BT#13552</a>) Learnpath: More fixes to avoid high times values</li>
+        <li>[2017-10-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/e0a8a36229d971a67be98849b09831073ba79019">e0a8a362</a> - <a href="https://task.beeznest.com/issues/13558">BT#13558</a>) Work: Group's tutor can add new assignment</li>
+        <li>[2017-10-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/bdd7ad45182166e19e737e897168318535fc3d8e">bdd7ad45</a> - <a href="https://task.beeznest.com/issues/13564">BT#13564</a>) Internal: Update mathjax + asciihtml libraries</li>
+        <li>[2017-10-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/64bc00be859d5b4d6fbadd02b32b8d00ef2701f6">64bc00be</a>) Session: Fix correct parameter in function "getCoachesByCourseSession"</li>
+        <li>[2017-10-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/eafba336abb29f20ecf6f45e539ee4d452ab8728">eafba336</a> - <a href="https://task.beeznest.com/issues/13518">BT#13518</a>) Work: Fix course parameter id instead of code</li>
+        <li>[2017-10-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/0f7eda7256dbc5558d23ecaebfa34f423c4354f0">0f7eda72</a> - <a href="https://task.beeznest.com/issues/13559">BT#13559</a>) Calendar: Add config value "agenda_on_hover_info"</li>
+        <li>[2017-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/2234d06bf2423070f8c03a6b2e99fcfd08c47b25">2234d06b</a>) Learnpath: WIP: If time is not set then update the stop time.</li>
+        <li>[2017-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/83c1818849e23d301b4b7bdf4257ded65ea56657">83c18188</a>) Learnpath: Show correct progress value to force use of session_id = 0</li>
+        <li>[2017-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/c206d791e02224677568cc8ec475f85670abe950">c206d791</a>) Learnpath: Add script that checks lp item high time values.</li>
+        <li>[2017-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/caad47cde94bef511b9a01945e8ae5fffb764646">caad47cd</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2200">GH#2200</a>) Internal: Bump php-markdown version to get the latest syntax fixes</li>
+        <li>[2017-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/96446928cce584c0917a21464645efef91712444">96446928</a>) Learnpath: Add report to see difference between total course time and total LP time</li>
+        <li>[2017-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/e31e926965e8d2c662c00f5dddd79250d35f992e">e31e9269</a>) Learnpath: Reduce registered time to 5 minutes if total time is bigger than session lifetime</li>
+        <li>[2017-10-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/ea51af06282b89e0918f6abd49450ed55e471bdf">ea51af06</a> - <a href="https://task.beeznest.com/issues/13531">BT#13531</a>) Admin: Allow CSV session import with display/coach dates</li>
+
         <li>[2017-10-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/41b5d31c022e6983fc9163bdb2c79ac5df1ceb0f">41b5d31c</a> - <a href="https://task.beeznest.com/issues/13552">BT#13552</a>) Cron: Add cron script to clean excessive c_lp_item_view.total_time records</li>
         <li>[2017-10-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/3d39c1eb2325003d17d39ee4cd5088d5f4236041">3d39c1eb</a>) Cron: Add cron to fix course total time and send email with queries to exec</li>
         <li>[2017-10-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/e64253a9a50ebd7d104844ce6b421a522f5e730b">e64253a9</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2199">GH#2199</a>) Learnpath: Fix query if "lp_item_view_id" is null or 0</li>
@@ -842,6 +864,7 @@
 
     <h3>Removals</h3>
     <ul aria-role="log" aria-live="off">
+        <li>[2017-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/fe4fb5d0d1d5e099c3b766b3250fb35a4b489867">fe4fb5d0</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2200">GH#2200</a>) Remove "Text" plugin as it duplicates the "Static" plugin features</li>
         <li>[2017-10-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/070043ec4c6e733127e51a040ac245f649f45c84">070043ec</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2198">GH#2198</a>) Internal: Remove unused and unmaintained main/reports code</li>
         <li>[2017-10-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/280e06aa60f6f21ff4926c0463f845020bc96dd5">280e06aa</a>) Internal: Remove unused get_test_id</li>
         <li>[2017-10-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/ae72f14b7c6d227f15ef30b02439206b456d84f4">ae72f14b</a>) Internal: Remove unused function "array_walk_recursive_limited"</li>

@@ -49,10 +49,10 @@
                             </div>
                             <div class="block-author">
                                 {% if item.teachers | length > 6 %}
-                                    <a id="plist" data-trigger="focus" tabindex="0" role="button" class="btn btn-default panel_popover" data-toggle="popover" title="{{ 'CourseTeachers' | get_lang }}" data-html="true">
+                                    <a id="plist-{{ loop.index }}" data-trigger="focus" tabindex="0" role="button" class="btn btn-default panel_popover" data-toggle="popover" title="{{ 'CourseTeachers' | get_lang }}" data-html="true">
                                         <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                                     </a>
-                                    <div id="popover-content-plist" class="hide">
+                                    <div id="popover-content-plist-{{ loop.index }}" class="hide">
                                         {% for teacher in item.teachers %}
                                         <div class="popover-teacher">
                                             <a href="{{ teacher.url }}" class="ajax"

@@ -1971,6 +1971,7 @@ class CourseManager
             $teachers['email'] = $teacher['email'];
             $teachers['username'] = $teacher['username'];
             $teachers['status'] = $teacher['status'];
+            $teachers['fullname'] = api_get_person_name($teacher['firstname'], $teacher['lastname']);
             $teachers['avatar'] = '';
             if ($loadAvatars) {
                 $userPicture = UserManager::getUserPicture($teacher['user_id'], USER_IMAGE_SIZE_SMALL);

@@ -43,7 +43,7 @@
                                     <div class="popover-teacher">
                                         <a href="{{ teacher.url }}" class="ajax"
                                            data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                            <img src="{{ teacher.avatar }}"/>
+                                            <img src="{{ teacher.avatar }}" alt="{{ teacher.fullname }}"/>
                                         </a>
                                         <div class="teachers-details">
                                             <h5>
@@ -61,7 +61,7 @@
                                 {% if item.teachers | length <= 2 %}
                                     <a href="{{ teacher.url }}" class="ajax"
                                        data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                        <img src="{{ teacher.avatar }}"/>
+                                        <img src="{{ teacher.avatar }}" alt="{{ teacher.fullname }}"/>
                                     </a>
                                     <div class="teachers-details">
                                         <h5>
@@ -75,7 +75,7 @@
                                 {% elseif item.teachers | length <= 6 %}
                                     <a href="{{ teacher.url }}" class="ajax"
                                        data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                        <img src="{{ teacher.avatar }}"/>
+                                        <img src="{{ teacher.avatar }}" alt="{{ teacher.fullname }}"/>
                                     </a>
                                 {% endif %}
                             {% endfor %}

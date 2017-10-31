@@ -6178,6 +6178,32 @@ ul#toolnavbox-two li a.btn{
     position: relative;
     top: -30px;
 }
+a.panel-image:hover{
+    background-color: #f5f5f5;
+}
+a.panel-image{
+    display: inline-block;
+    width: 100%;
+    border: 1px solid #DDD;
+    padding: 15px;
+    border-radius: 5px;
+}
+.files .panel-image .row{
+    margin-bottom: 0;
+}
+.file_name a{
+    color: #333;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    padding-top: 15px;
+}
+.message-image-success,
+.message-image-danger{
+    display: inline-block;
+    width: 100%;
+    padding-top: 15px;
+}
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {

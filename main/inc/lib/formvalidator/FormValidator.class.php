@@ -1645,12 +1645,12 @@ EOT;
                 // which actually support image resizing, but fail to
                 // send Blob objects via XHR requests:
                 disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
-                previewMaxWidth: 100,
-                previewMaxHeight: 100,
+                previewMaxWidth: 50,
+                previewMaxHeight: 50,
                 previewCrop: true,
                 dropzone: $('#dropzone'),                                
             }).on('fileuploadadd', function (e, data) {
-                data.context = $('<div class=\"row\" style=\"margin-bottom:35px\" />').appendTo('#files');
+                data.context = $('<div class=\"row\" />').appendTo('#files');
                 $.each(data.files, function (index, file) {
                     var node = $('<div class=\"col-sm-5 file_name\">').text(file.name);                    
                     node.appendTo(data.context);
@@ -1683,15 +1683,15 @@ EOT;
                 $.each(data.result.files, function (index, file) {
                     if (file.url) {
                         var link = $('<a>')
-                            .attr('target', '_blank')
+                            .attr({target: '_blank', class : 'panel-image'})
                             .prop('href', file.url);
                         $(data.context.children()[index]).parent().wrap(link);
                         // Update file name with new one from Chamilo
                         $(data.context.children()[index]).parent().find('.file_name').html(file.name);                        
-                        var successMessage = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."'));
+                        var successMessage = $('<div class=\"col-sm-3\">').html($('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."'));
                         $(data.context.children()[index]).parent().append(successMessage);                    
                     } else if (file.error) {
-                        var error = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-danger\"/>').text(file.error));
+                        var error = $('<div class=\"col-sm-3\">').html($('<span class=\"message-image-danger\"/>').text(file.error));
                         $(data.context.children()[index]).parent().append(error);                        
                     }
                 });                

@@ -210,7 +210,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = null)
                 <div id="paths-description" class="form-group">
                     <label class="col-sm-4">'.get_lang('Description').'</label>
                     <div class="col-sm-8">
-                    <input id="file-descrtiption" style="width:100%;" type="text" name="legend[]" />
+                    <input id="file-descrtiption" class="form-control" type="text" name="legend[]" />
                     </div>
                 </div>
             </div>

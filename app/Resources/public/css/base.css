@@ -5840,11 +5840,13 @@ footer{
   bottom: 0;
   left: 0px;
   margin-bottom: 0px;
-  padding-top: 20px;
-  padding-bottom: 10px;
+  padding: 10px 20px;
   border-top: 1px solid #DCE4EC;
   background: #ffffff;
   width: 100%;
+}
+.bottom_actions_fixed .btn-primary{
+    font-size: 12px;
 }
 #toolshortcuts_horizontal{
     padding-top: 15px;
@@ -6204,6 +6206,9 @@ a.panel-image{
 }
 #resource_tab #subtab #ul_subtab li a{
     padding: 10px 15px;
+}
+.feeback-form .form-group .form-control{
+    width: 100%;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

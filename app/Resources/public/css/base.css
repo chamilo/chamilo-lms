@@ -3967,9 +3967,6 @@ ul.holder li.bit-box{
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
 }
-#file-descrtiption.form-control{
-  width: 80%;
-}
 .session-course-edit .control{
   padding-top: 2em;
   padding-bottom: 2em;
@@ -6055,7 +6052,8 @@ ul#toolnavbox-two li a.btn{
           transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 .select2-container .select2-search--inline .select2-search__field{
-    margin-top: 3px !important;
+    margin-top: 6px !important;
+    margin-bottom: 4px !important;
 }
 .select2-dropdown{
     background-color: #FFF !important;

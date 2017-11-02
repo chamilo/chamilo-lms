@@ -1129,8 +1129,9 @@ function format_feedback($feedback)
 
 /**
 * this function returns the code for the form for adding a new feedback message to a dropbox file.
+* @param $url  url string
 * @return string code
-*
+* 
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */

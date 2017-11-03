@@ -593,8 +593,8 @@ if ($is_allowedToEdit || $is_tutor) {
                 'value' => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang('NotValidated')),
             //for the top bar
             'editoptions' => array('value' => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang('NotValidated'))),
-        array('name' => 'lp', 'index' => 'lp', 'width' => '60', 'align' => 'left', 'search' => 'false'),
-        array('name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false')
+        array('name' => 'lp', 'index' => 'orig_lp_id', 'width' => '60', 'align' => 'left', 'search' => 'false'),
+        array('name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false', 'sortable' => 'false')
     );
 
     if ($officialCodeInList == 'true') {

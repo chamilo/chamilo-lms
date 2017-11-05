@@ -90,6 +90,7 @@ if ($profile) {
     $levels = $skillLevelRepo->findBy([
         'profile' => $profileId
     ]);
+    $profileLevels = [];
 
     foreach ($levels as $level) {
         $profileLevels[$level->getPosition()][$level->getId()] = $level->getName();

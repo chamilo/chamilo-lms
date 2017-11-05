@@ -3526,15 +3526,19 @@ function api_get_not_allowed_login_form()
         null,
         array('class' => 'form-stacked')
     );
+    $params = [
+        'placeholder' => get_lang('UserName'),
+        'class' => 'col-md-3'
+    ];
+    if (api_browser_support('autocapitalize')) {
+        $params['autocapitalize'] = 'none';
+    }
+
     $form->addElement(
         'text',
         'login',
         null,
-        array(
-            'autocapitalize' => 'none',
-            'placeholder' => get_lang('UserName'),
-            'class' => 'col-md-3'
-        )
+        $params
     );
     $form->addElement(
         'password',
@@ -6356,10 +6360,12 @@ function api_get_template($path_type = 'rel')
 }
 
 /**
- * Check browser support for type files
- * This function check if the users browser support a file format or
- * return the current browser and major ver when $format=check_browser
- * @param string $format
+ * Check browser support for specific file types or features
+ * This function checks if the user's browser supports a file format or given
+ * feature, or returns the current browser and major version when
+ * $format=check_browser. Only a limited number of formats and features are
+ * checked by this method. Make sure you check its definition first.
+ * @param string $format Can be a file format (extension like svg, webm, ...) or a feature (like autocapitalize, ...)
  *
  * @return bool or return text array if $format=check_browser
  * @author Juan Carlos Raña Trabado
@@ -6535,6 +6541,14 @@ function api_browser_support($format = '')
             return true;
         } else {
             $result[$format] = false;
+            return false;
+        }
+    } elseif ($format == 'autocapitalize') {
+        // Help avoiding showing the autocapitalize option if the browser doesn't
+        // support it: this attribute is against the HTML5 standard
+        if ($current_browser == 'Safari' || $current_browser == 'iPhone') {
+            return true;
+        } else {
             return false;
         }
     } elseif ($format == "check_browser") {

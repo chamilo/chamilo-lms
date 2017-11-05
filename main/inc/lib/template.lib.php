@@ -1444,32 +1444,39 @@ class Template
             null,
             FormValidator::LAYOUT_BOX_NO_LABEL
         );
-
+        $params = [
+            'id' => 'login',
+            'autofocus' => 'autofocus',
+            'icon' => 'user fa-fw',
+            'placeholder' => get_lang('UserName'),
+        ];
+        $browserAutoCapitalize= false;
+        // Avoid showing the autocapitalize option if the browser doesn't
+        // support it: this attribute is against the HTML5 standard
+        if (api_browser_support('autocapitalize')) {
+            $browserAutoCapitalize = false;
+            $params['autocapitalize'] = 'none';
+        }
         $form->addText(
             'login',
             get_lang('UserName'),
             true,
-            array(
-                'id' => 'login',
-                'autofocus' => 'autofocus',
-                'icon' => 'user fa-fw',
-                'placeholder' => get_lang('UserName'),
-                'autocapitalize' => 'none'
-            )
+            $params
         );
-
+        $params = [
+            'id' => 'password',
+            'icon' => 'lock fa-fw',
+            'placeholder' => get_lang('Pass'),
+        ];
+        if ($browserAutoCapitalize) {
+            $params['autocapitalize'] = 'none';
+        }
         $form->addElement(
             'password',
             'password',
             get_lang('Pass'),
-            array(
-                'id' => 'password',
-                'icon' => 'lock fa-fw',
-                'placeholder' => get_lang('Pass'),
-                'autocapitalize' => 'none',
-            )
+            $params
         );
-
         // Captcha
         $captcha = api_get_setting('allow_captcha');
         $allowCaptcha = $captcha === 'true';

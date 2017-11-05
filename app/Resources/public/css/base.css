@@ -3967,9 +3967,6 @@ ul.holder li.bit-box{
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
 }
-#file-descrtiption.form-control{
-  width: 80%;
-}
 .session-course-edit .control{
   padding-top: 2em;
   padding-bottom: 2em;
@@ -5843,11 +5840,13 @@ footer{
   bottom: 0;
   left: 0px;
   margin-bottom: 0px;
-  padding-top: 20px;
-  padding-bottom: 10px;
+  padding: 10px 20px;
   border-top: 1px solid #DCE4EC;
   background: #ffffff;
   width: 100%;
+}
+.bottom_actions_fixed .btn-primary{
+    font-size: 12px;
 }
 #toolshortcuts_horizontal{
     padding-top: 15px;
@@ -6055,7 +6054,8 @@ ul#toolnavbox-two li a.btn{
           transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 .select2-container .select2-search--inline .select2-search__field{
-    margin-top: 3px !important;
+    margin-top: 6px !important;
+    margin-bottom: 4px !important;
 }
 .select2-dropdown{
     background-color: #FFF !important;
@@ -6177,6 +6177,38 @@ ul#toolnavbox-two li a.btn{
 .lp-accordion .panel-heading .tools-actions{
     position: relative;
     top: -30px;
+}
+a.panel-image:hover{
+    background-color: #f5f5f5;
+}
+a.panel-image{
+    display: inline-block;
+    width: 100%;
+    border: 1px solid #DDD;
+    padding: 15px;
+    border-radius: 5px;
+}
+.files .panel-image .row{
+    margin-bottom: 0;
+}
+.file_name a{
+    color: #333;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    padding-top: 15px;
+}
+.message-image-success,
+.message-image-danger{
+    display: inline-block;
+    width: 100%;
+    padding-top: 15px;
+}
+#resource_tab #subtab #ul_subtab li a{
+    padding: 10px 15px;
+}
+.feeback-form .form-group .form-control{
+    width: 100%;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

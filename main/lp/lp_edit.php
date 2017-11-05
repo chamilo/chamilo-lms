@@ -144,10 +144,12 @@ $publicated_on = $_SESSION['oLP']->publicated_on;
 $form->addElement('html', '<div class="form-group">');
 $items = $_SESSION['oLP']->display_lp_prerequisites_list();
 $form->addElement('html', '<label class="col-md-2">'.get_lang('LearnpathPrerequisites').'</label>');
-$form->addElement('html', '<div class="col-md-10">');
+$form->addElement('html', '<div class="col-md-8">');
 $form->addElement('html', $items);
-$form->addElement('html', '<div class="help-block">'.get_lang('LpPrerequisiteDescription').'</div></div></div>');
-
+$form->addElement('html', '<div class="help-block">'.get_lang('LpPrerequisiteDescription').'</div>');
+$form->addElement('html', '</div>');
+$form->addElement('html', '<div class="col-md-2"></div>');
+$form->addElement('html', '</div>');
 //Start date
 $form->addElement(
     'checkbox',

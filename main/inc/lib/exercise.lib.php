@@ -4401,10 +4401,14 @@ EOT;
         $fileName = "{$questionId}_{$userId}".DocumentManager::getDocumentSuffix($courseInfo, $sessionId, $groupId);
         $filePath = null;
 
-        if (file_exists("$sysCourseDir/exercises/teacher_audio/$attemptId/$fileName.ogg")) {
-            $filePath = "$webCourseDir/exercises/teacher_audio/$attemptId/$fileName.ogg";
-        } elseif (file_exists("$sysCourseDir/exercises/teacher_audio/$attemptId/$fileName.wav.wav")) {
-            $filePath = "$webCourseDir/exercises/teacher_audio/$attemptId/$fileName.wav.wav";
+        $relFilePath = "/exercises/teacher_audio/$attemptId/$fileName";
+
+        if (file_exists($sysCourseDir.$relFilePath.'.ogg')) {
+            $filePath = $webCourseDir.$relFilePath.'.ogg';
+        } elseif (file_exists($sysCourseDir.$relFilePath.'.wav.wav')) {
+            $filePath = $webCourseDir.$relFilePath.'.wav.wav';
+        } elseif (file_exists($sysCourseDir.$relFilePath.'.wav')) {
+            $filePath = $webCourseDir.$relFilePath.'.wav';
         }
 
         if (!$filePath) {

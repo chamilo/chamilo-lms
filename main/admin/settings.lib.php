@@ -240,8 +240,9 @@ function handlePlugins()
     echo '</table>';
 
     echo '<div class="form-actions bottom_actions">';
-    echo '<button class="btn btn-success" type="submit" name="submit_plugins">'.
-            get_lang('EnablePlugins').'</button>';
+    echo '<button class="btn btn-primary" type="submit" name="submit_plugins">';
+    echo '<i class="fa fa-check" aria-hidden="true"></i> ';
+    echo  get_lang('EnablePlugins').'</button>';
     echo '</div>';
     echo '</form>';
 }

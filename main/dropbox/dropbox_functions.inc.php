@@ -1099,13 +1099,13 @@ function store_add_dropbox($file = [], $work = null)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version march 2006
  */
-function feedback($array)
+function feedback($array, $url)
 {
     $output = null;
     foreach ($array as $value) {
         $output .= format_feedback($value);
     }
-    $output .= feedback_form();
+    $output .= feedback_form($url);
     return $output;
 }
 
@@ -1129,21 +1129,32 @@ function format_feedback($feedback)
 
 /**
 * this function returns the code for the form for adding a new feedback message to a dropbox file.
+* @param $url  url string
 * @return string code
-*
+* 
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function feedback_form()
+function feedback_form($url)
 {
-    $return = get_lang('AddNewFeedback').'<br />';
+    $return = '<div class="feeback-form">';
     $number_users_who_see_file = check_if_file_exist($_GET['id']);
     if ($number_users_who_see_file) {
         $token = Security::get_token();
-        $return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea>';
+        $return .= '<div class="form-group">';
         $return .= '<input type="hidden" name="sec_token" value="'.$token.'"/>';
-        $return .= '<br /><button type="submit" class="btn btn-primary" name="store_feedback" value="'.get_lang('Ok').'"
+        $return .= '<label class="col-sm-3 control-label">'.get_lang('AddNewFeedback');
+        $return .= '</label>';
+        $return .= '<div class="col-sm-6">';
+        $return .= '<textarea name="feedback" class="form-control" rows="4"></textarea>';
+        $return .= '</div>';
+        $return .= '<div class="col-sm-3">';
+        $return .= '<div class="pull-right"><a class="btn btn-default btn-sm" href="'.$url.'"><i class="fa fa-times" aria-hidden="true"></i></a></div>';
+        $return .= '<button type="submit" class="btn btn-primary btn-sm" name="store_feedback" value="'.get_lang('Ok').'"
                     onclick="javascript: document.form_dropbox.attributes.action.value = document.location;">'.get_lang('AddComment').'</button>';
+        $return .= '</div>';
+        $return .= '</div>';
+        $return .= '</div>';
     } else {
         $return .= get_lang('AllUsersHaveDeletedTheFileAndWillNotSeeFeedback');
     }

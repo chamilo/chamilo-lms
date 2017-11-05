@@ -676,4 +676,6 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Redirect to home tool after uploading a student publication or a adding a comment
 //$_configuration['allow_redirect_to_main_page_after_work_upload'] = false;
 // Empty the session student list when subscribing multiple users
-//$_configuration['not_empty_session_student_list_for_multiple_subscription'] = false;
+//$_configuration['session_multiple_subscription_students_list_avoid_emptying'] = false;
+// Disable the option to set course coach in session when editing course
+//$_configuration['disabled_edit_session_coaches_course_editing_course'] = false;

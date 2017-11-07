@@ -522,16 +522,13 @@ $form->display();
 
 ?>
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
-<blockquote>
 <pre>
 <strong>SessionName</strong>;Coach;<strong>DateStart</strong>;<strong>DateEnd</strong>;Users;Courses;VisibilityAfterExpiration;DisplayStartDate;DisplayEndDate;CoachStartDate;CoachEndDate
-<strong>Example 1</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,username2,...]|course2[coach1][username1,username2,...];read_only
-<strong>Example 2</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,username2,...]|course2[coach1][username1,username2,...];accessible
-<strong>Example 3</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,username2,...]|course2[coach1][username1,username2,...];not_accessible
+<strong>Example 1</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,...]|course2[coach1][username1,...];read_only;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd
+<strong>Example 2</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,...]|course2[coach1][username1,...];accessible;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd
+<strong>Example 3</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,...]|course2[coach1][username1,...];not_accessible;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd
 </pre>
-</blockquote>
 <p><?php echo get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
-<blockquote>
 <pre>
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;Sessions&gt;
@@ -587,7 +584,6 @@ $form->display();
     &lt;/Session&gt;
 &lt;/Sessions&gt;
 </pre>
-</blockquote>
 
 <?php
 

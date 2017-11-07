@@ -241,7 +241,7 @@ switch ($action) {
 	    'item_id' => $student_id,
             'extra_termactivated' => 1,
         ];
-        $extraFieldValue->saveFieldValues($params);
+        $extraFieldValue->saveFieldValues($params, true, false, ['termactivated']);
 	Display::addFlash(Display::return_message(get_lang('Sent')));
         break;
     case 'delete_legal':

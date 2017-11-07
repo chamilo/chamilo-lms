@@ -4622,6 +4622,7 @@ class SessionManager
                 $coachAccessEndDate = implode('-', $coachAccessEndDate).' 23:59:59';
                 $session_category_id = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
                 $sessionDescription = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
+                $classes = isset($enreg['Classes']) ? explode('|', $enreg['Classes']) : [];
 
                 $extraParameters = null;
                 if (!is_null($showDescription)) {
@@ -5384,6 +5385,8 @@ class SessionManager
                 $sql = "UPDATE $tbl_session SET nbr_users = '$user_counter', nbr_courses = '$course_counter' 
                         WHERE id = '$session_id'";
                 Database::query($sql);
+
+                self::addClassesByName($session_id, $classes);
             }
         }
 
@@ -5392,6 +5395,27 @@ class SessionManager
             'session_counter' => $session_counter,
             'session_list' => $sessionList,
         );
+    }
+
+    /**
+     * Add classes (by their names) to a session
+     * @param int $sessionId
+     * @param array $classesNames
+     */
+    private static function addClassesByName($sessionId, $classesNames)
+    {
+        if (!$classesNames) {
+            return;
+        }
+
+        $usergroup = new UserGroup();
+
+        foreach ($classesNames as $className) {
+            $usergroup->subscribe_sessions_to_usergroup(
+                $usergroup->get_id_by_name($className),
+                [$sessionId]
+            );
+        }
     }
 
     /**

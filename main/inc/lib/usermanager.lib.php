@@ -4225,7 +4225,7 @@ class UserManager
                 WHERE
                     friend_user_id='.$friend_id.' AND
                     user_id='.$my_user_id.' AND
-                    relation_type <> '.USER_RELATION_TYPE_RRHH.' ';
+                    relation_type NOT IN('.USER_RELATION_TYPE_RRHH.', '.USER_RELATION_TYPE_BOSS.') ';
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
         $current_date = api_get_utc_datetime();
@@ -4241,13 +4241,13 @@ class UserManager
                 WHERE
                     friend_user_id='.$friend_id.' AND
                     user_id='.$my_user_id.' AND
-                    relation_type <> '.USER_RELATION_TYPE_RRHH.' ';
+                    relation_type NOT IN('.USER_RELATION_TYPE_RRHH.', '.USER_RELATION_TYPE_BOSS.') ';
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
 
         if ($row['count'] == 1) {
-            //only for the case of a RRHH
-            if ($row['relation_type'] != $relation_type && $relation_type == USER_RELATION_TYPE_RRHH) {
+            //only for the case of a RRHH or a Student BOSS
+            if ($row['relation_type'] != $relation_type && ($relation_type == USER_RELATION_TYPE_RRHH || $relation_type == USER_RELATION_TYPE_BOSS)) {
                 $sql = 'INSERT INTO '.$tbl_my_friend.'(friend_user_id,user_id,relation_type,last_edit)
                         VALUES ('.$friend_id.','.$my_user_id.','.$relation_type.',"'.$current_date.'")';
             } else {

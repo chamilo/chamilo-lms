@@ -1666,6 +1666,9 @@ blockquote p {
 	padding-top: 0;
 	text-align: center;
     }
+    .partners a img {
+        width: 125px;
+    }
     footer #footer_right {
 	text-align: center;
     }

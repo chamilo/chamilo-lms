@@ -1662,8 +1662,8 @@ blockquote p {
         display: none;
     }
     .partners {
-	padding-bottom: 20px;
-	padding-top: 20px;
+	padding-bottom: 0;
+	padding-top: 0;
 	text-align: center;
     }
     footer #footer_right {

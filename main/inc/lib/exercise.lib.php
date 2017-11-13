@@ -268,7 +268,7 @@ class ExerciseLib
                     )
                 )) {
                     $header = Display::tag('th', get_lang('Options'));
-                    if ($exercise_feedback == EXERCISE_FEEDBACK_TYPE_END) {
+                    if ($exercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END) {
                         $header .= Display::tag('th', get_lang('Feedback'));
                     }
                     $s .= '<table class="table table-hover table-striped">';

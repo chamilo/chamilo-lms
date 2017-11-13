@@ -224,7 +224,7 @@ class Notification extends Model
      * @param array $smsParameters
      *
      */
-    public function save_notification(
+    public function saveNotification(
         $type,
         $userList,
         $title,

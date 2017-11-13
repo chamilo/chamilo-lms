@@ -256,7 +256,7 @@ class SocialManager extends UserManager
 
             $sender_info = api_get_user_info($user_id);
             $notification = new Notification();
-            $notification->save_notification(
+            $notification->saveNotification(
                 Notification::NOTIFICATION_TYPE_INVITATION,
                 array($friend_id),
                 $message_title,

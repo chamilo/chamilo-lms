@@ -311,16 +311,16 @@ class MessageManager
             return false;
         }
 
-        $total_filesize = 0;
+        $totalFileSize = 0;
         if (is_array($file_attachments)) {
             foreach ($file_attachments as $file_attach) {
                 $fileSize = isset($file_attach['size']) ? $file_attach['size'] : 0;
                 if (is_array($fileSize)) {
                     foreach ($fileSize as $size) {
-                        $total_filesize += $size;
+                        $totalFileSize += $size;
                     }
                 } else {
-                    $total_filesize += $fileSize;
+                    $totalFileSize += $fileSize;
                 }
             }
         }
@@ -334,7 +334,7 @@ class MessageManager
                 )
             );
             return false;
-        } elseif ($total_filesize > intval(api_get_setting('message_max_upload_filesize'))) {
+        } elseif ($totalFileSize > intval(api_get_setting('message_max_upload_filesize'))) {
             $warning = sprintf(
                 get_lang("FilesSizeExceedsX"),
                 format_file_size(api_get_setting('message_max_upload_filesize'))
@@ -440,7 +440,7 @@ class MessageManager
                 if ($directMessage) {
                     $type = Notification::NOTIFICATION_TYPE_DIRECT_MESSAGE;
                 }
-                $notification->save_notification(
+                $notification->saveNotification(
                     $type,
                     array($receiver_user_id),
                     $subject,
@@ -472,7 +472,7 @@ class MessageManager
                     'group_info' => $group_info,
                     'user_info' => $sender_info,
                 );
-                $notification->save_notification(
+                $notification->saveNotification(
                     Notification::NOTIFICATION_TYPE_GROUP,
                     $new_user_list,
                     $subject,

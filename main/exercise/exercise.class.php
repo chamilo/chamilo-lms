@@ -223,7 +223,7 @@ class Exercise
 
             // Checking if question_order is correctly set
             if ($parseQuestionList) {
-                $this->setQuestionList(true, $checkCurrentUserQuestionList);
+                $this->setQuestionList(true);
             }
 
             //overload questions list with recorded questions list

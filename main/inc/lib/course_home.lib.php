@@ -489,43 +489,49 @@ class CourseHome
             case TOOL_STUDENT_VIEW:
                 $conditions = ' WHERE visibility = 1 AND (category = "authoring" OR category = "interaction" OR category = "plugin") ';
                 if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
-                    $conditions = ' WHERE (visibility = 1 AND (category = "authoring" OR category = "interaction" OR category = "plugin") OR (name = "'.TOOL_TRACKING.'") )   ';
+                    $conditions = ' WHERE (
+                        visibility = 1 AND (
+                            category = "authoring" OR 
+                            category = "interaction" OR 
+                            category = "plugin"
+                        ) OR (name = "'.TOOL_TRACKING.'") 
+                    )';
                 }
                 $sql = "SELECT *
                         FROM $course_tool_table t
                         $conditions AND
                         c_id = $course_id $condition_session
-                        ORDER BY id";
+                        ";
                 $result = Database::query($sql);
                 break;
             case TOOL_AUTHORING:
                 $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'authoring' AND c_id = $course_id $condition_session
-                        ORDER BY id";
+                        ";
                 $result = Database::query($sql);
                 break;
             case TOOL_INTERACTION:
                 $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'interaction' AND c_id = $course_id $condition_session
-                        ORDER BY id";
+                        ";
                 $result = Database::query($sql);
                 break;
             case TOOL_ADMIN_VISIBLE:
                 $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'admin' AND visibility ='1' AND c_id = $course_id $condition_session
-                        ORDER BY id";
+                        ";
                 $result = Database::query($sql);
                 break;
             case TOOL_ADMIN_PLATFORM:
                 $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'admin' AND c_id = $course_id $condition_session
-                        ORDER BY id";
+                        ";
                 $result = Database::query($sql);
                 break;
             case TOOL_DRH:
                 $sql = "SELECT * FROM $course_tool_table t
                         WHERE name IN ('tracking') AND c_id = $course_id $condition_session
-                        ORDER BY id";
+                        ";
                 $result = Database::query($sql);
                 break;
             case TOOL_COURSE_PLUGIN:
@@ -533,12 +539,14 @@ class CourseHome
                 // but plugins are not present in the tool table, only globally and inside the course_settings table once configured
                 $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'plugin' AND name <> 'courseblock' AND c_id = $course_id $condition_session
-                        ORDER BY id";
+                        ";
                 $result = Database::query($sql);
                 break;
         }
 
-        //Get the list of hidden tools - this might imply performance slowdowns
+        $sql .= " ORDER BY id ";
+
+        // Get the list of hidden tools - this might imply performance slowdowns
         // if the course homepage is loaded many times, so the list of hidden
         // tools might benefit from a shared memory storage later on
         $list = api_get_settings('Tools', 'list', api_get_current_access_url_id());
@@ -556,7 +564,20 @@ class CourseHome
         }
 
         $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
-        while ($temp_row = Database::fetch_assoc($result)) {
+
+        $tools = [];
+        while ($row = Database::fetch_assoc($result)) {
+            $tools[] = $row;
+        }
+
+        $toolWithSessionValue = [];
+        foreach ($tools as $row) {
+            if (!empty($row['session_id'])) {
+                $toolWithSessionValue[$row['name']] = $row;
+            }
+        }
+
+        foreach ($tools as $temp_row) {
             $add = false;
             if ($check) {
                 if (!in_array($temp_row['name'], $hide_list)) {
@@ -566,6 +587,13 @@ class CourseHome
                 $add = true;
             }
 
+            if (isset($toolWithSessionValue[$temp_row['name']])) {
+                if (!empty($temp_row['session_id'])) {
+                    continue;
+                }
+                //$temp_row = $toolWithSessionValue[$temp_row['name']];
+            }
+
             if ($allowEditionInSession && !empty($sessionId)) {
                 // Checking if exist row in session
                 $criteria = [
@@ -573,10 +601,10 @@ class CourseHome
                     'name' => $temp_row['name'],
                     'sessionId' => $sessionId,
                 ];
-                /** @var CTool $tool */
+                /** @var CTool $toolObj */
                 $toolObj = Database::getManager()->getRepository('ChamiloCourseBundle:CTool')->findOneBy($criteria);
                 if ($toolObj) {
-                    if (api_is_allowed_to_edit() == false && $toolObj->getVisibility() == 0) {
+                    if (api_is_allowed_to_edit() == false && $toolObj->getVisibility() == false) {
                         continue;
                     }
                 }
@@ -590,6 +618,7 @@ class CourseHome
                     $userId
                 );
                 $path = $lp->get_preview_image_path(ICON_SIZE_BIG);
+
                 $add = learnpath::is_lp_visible_for_student(
                     $lp_id,
                     $userId,
@@ -674,7 +703,6 @@ class CourseHome
         // Edited by Kevin Van Den Haute (kevin@develop-it.be) for integrating Smartblogs
         if ($sql_links != null) {
             $result_links = Database::query($sql_links);
-
             if (Database::num_rows($result_links) > 0) {
                 while ($links_row = Database::fetch_array($result_links, 'ASSOC')) {
                     $properties = array();
@@ -717,8 +745,64 @@ class CourseHome
                 }
             }
         }
+        $all_tools_list = CourseHome::filterPluginTools($all_tools_list, $course_tool_category);
 
         return $all_tools_list;
+    }
+
+    /**
+     * Filter tool icons. Only show if $patronKey is = :teacher
+     * Example dataIcons[i]['name']: parameter titleIcons1:teacher || titleIcons2 || titleIcons3:teacher
+     * @param array $dataIcons array Reference to icons
+     * @param string $courseToolCategory Current tools category
+     * @return array
+     */
+    private static function filterPluginTools($dataIcons, $courseToolCategory)
+    {
+        $patronKey = ':teacher';
+
+        if ($courseToolCategory == TOOL_STUDENT_VIEW) {
+            //Fix only coach can see external pages - see #8236 - icpna
+            if (api_is_coach()) {
+                foreach ($dataIcons as $index => $array) {
+                    if (isset($array['name'])) {
+                        $dataIcons[$index]['name'] = str_replace($patronKey, '', $array['name']);
+                    }
+                }
+
+                return $dataIcons;
+            }
+
+            $flagOrder = false;
+
+            foreach ($dataIcons as $index => $array) {
+                if (!isset($array['name'])) {
+                    continue;
+                }
+
+                $pos = strpos($array['name'], $patronKey);
+
+                if ($pos !== false) {
+                    unset($dataIcons[$index]);
+                    $flagOrder = true;
+                }
+            }
+
+            if ($flagOrder) {
+                return array_values($dataIcons);
+            }
+
+            return $dataIcons;
+        }
+
+        // clean patronKey of name icons
+        foreach ($dataIcons as $index => $array) {
+            if (isset($array['name'])) {
+                $dataIcons[$index]['name'] = str_replace($patronKey, '', $array['name']);
+            }
+        }
+
+        return $dataIcons;
     }
 
     /**
@@ -726,7 +810,7 @@ class CourseHome
      * @param array $all_tools_list List of tools as returned by get_tools_category()
      * @param bool  $rows
      *
-     * @return string
+     * @return array
      */
     public static function show_tools_category($all_tools_list, $rows = false)
     {
@@ -838,9 +922,13 @@ class CourseHome
                         /** @var CTool $tool */
                         $toolObj = Database::getManager()->getRepository('ChamiloCourseBundle:CTool')->findOneBy($criteria);
                         if ($toolObj) {
-                            $visibility = $toolObj->getVisibility();
+                            $visibility = (int) $toolObj->getVisibility();
                             switch ($visibility) {
                                 case '0':
+                                    $info = pathinfo($tool['image']);
+                                    $basename = basename($tool['image'], '.'.$info['extension']); // $file is set to "index"
+                                    $tool['image'] = $basename.'_na.'.$info['extension'];
+
                                     $link['name'] = Display::return_icon(
                                         'invisible.png',
                                         get_lang('Activate'),
@@ -876,7 +964,9 @@ class CourseHome
                         }
                     }
                     if (!empty($tool['adminlink'])) {
-                        $item['extra'] = '<a href="'.$tool['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+                        $item['extra'] = '<a href="'.$tool['adminlink'].'">'.
+                            Display::return_icon('edit.gif', get_lang('Edit')).
+                        '</a>';
                     }
                 }
 
@@ -891,7 +981,8 @@ class CourseHome
                 if (isset($lnk) && is_array($lnk)) {
                     foreach ($lnk as $this_link) {
                         if (empty($tool['adminlink'])) {
-                            $item['visibility'] .= '<a class="make_visible_and_invisible" href="'.api_get_self().'?'.api_get_cidreq().'&id='.$tool['iid'].'&'.$this_link['cmd'].'">'.
+                            $item['visibility'] .=
+                                '<a class="make_visible_and_invisible" href="'.api_get_self().'?'.api_get_cidreq().'&id='.$tool['iid'].'&'.$this_link['cmd'].'">'.
                                 $this_link['name'].'</a>';
                         }
                     }

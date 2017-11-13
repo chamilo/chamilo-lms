@@ -317,7 +317,7 @@ switch ($action) {
                 $attemptList = Event::getAllExerciseEventByExeId($exe_id);
             }
 
-            // Updating Reminder algorythm.
+            // Updating Reminder algorithm.
             if ($objExercise->type == ONE_PER_PAGE) {
                 $bd_reminder_list = explode(',', $exercise_stat_info['questions_to_check']);
 

@@ -8197,6 +8197,11 @@ function api_mail_html(
     }
 
     $mailView = new Template(null, false, false, false, false, false, false);
+
+    $noReply = api_get_setting('noreply_email_address');
+    if (!empty($noReply)) {
+        $message .= "<br />".get_lang('ThisIsAutomaticEmailNoReply');
+    }
     $mailView->assign('content', $message);
 
     if (isset($additionalParameters['link'])) {

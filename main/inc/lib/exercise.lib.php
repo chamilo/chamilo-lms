@@ -16,6 +16,7 @@ class ExerciseLib
     /**
      * Shows a question
      *
+     * @param Exercise $exercise
      * @param int $questionId $questionId question id
      * @param bool $only_questions if true only show the questions, no exercise title
      * @param bool $origin i.e = learnpath
@@ -24,12 +25,12 @@ class ExerciseLib
      * @param bool $freeze
      * @param array $user_choice
      * @param bool $show_comment
-     * @param null $exercise_feedback
      * @param bool $show_answers
      *
      * @return bool|int
      */
     public static function showQuestion(
+        $exercise,
         $questionId,
         $only_questions = false,
         $origin = false,
@@ -38,7 +39,6 @@ class ExerciseLib
         $freeze = false,
         $user_choice = array(),
         $show_comment = false,
-        $exercise_feedback = null,
         $show_answers = false
     ) {
         $course_id = api_get_course_int_id();
@@ -52,7 +52,7 @@ class ExerciseLib
             return false;
         }
 
-        if ($exercise_feedback != EXERCISE_FEEDBACK_TYPE_END) {
+        if ($exercise->feedback_type != EXERCISE_FEEDBACK_TYPE_END) {
             $show_comment = false;
         }
 
@@ -99,7 +99,7 @@ class ExerciseLib
 
             echo '<div class="question_options">';
             // construction of the Answer object (also gets all answers details)
-            $objAnswerTmp = new Answer($questionId);
+            $objAnswerTmp = new Answer($questionId, api_get_course_int_id(), $exercise);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
             $quiz_question_options = Question::readQuestionOption(
                 $questionId,

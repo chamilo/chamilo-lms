@@ -145,6 +145,7 @@ class Exercise
         if (empty($this->course_id)) {
             return false;
         }
+
         $sql = "SELECT * FROM $table 
                 WHERE c_id = ".$this->course_id." AND id = ".$id;
         $result = Database::query($sql);
@@ -222,7 +223,7 @@ class Exercise
 
             // Checking if question_order is correctly set
             if ($parseQuestionList) {
-                $this->setQuestionList(true);
+                $this->setQuestionList(true, $checkCurrentUserQuestionList);
             }
 
             //overload questions list with recorded questions list
@@ -6507,9 +6508,7 @@ class Exercise
     {
         // Getting question list.
         $questionList = $this->selectQuestionList(true, $adminView);
-
         $this->setMediaList($questionList);
-
         $this->questionList = $this->transformQuestionListWithMedias(
             $questionList,
             false

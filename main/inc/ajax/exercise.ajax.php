@@ -555,6 +555,7 @@ switch ($action) {
 
         echo '<p class="lead">'.$objQuestion->get_question_type_name().'</p>';
         ExerciseLib::showQuestion(
+            $objExercise,
             $questionId,
             false,
             null,
@@ -563,7 +564,6 @@ switch ($action) {
             true,
             false,
             true,
-            $objExercise->feedback_type,
             true
         );
         break;

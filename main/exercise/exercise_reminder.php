@@ -16,12 +16,6 @@ $this_section = SECTION_COURSES;
 /* ACCESS RIGHTS  */
 // notice for unauthorized people.
 api_protect_course_script(true);
-
-if ($debug > 0) {
-    error_log('Entered exercise_result.php: '.print_r($_POST, 1));
-}
-
-// general parameters passed via POST/GET
 $origin = api_get_origin();
 
 if (empty($learnpath_id)) {

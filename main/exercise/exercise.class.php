@@ -3126,23 +3126,24 @@ class Exercise
      * @param int $questionNum
      * @param array $questions_in_media
      * @param string $currentAnswer
+     * @param array $myRemindList
      * @return string
      */
     public function show_button(
         $question_id,
         $questionNum,
-        $questions_in_media = array(),
-        $currentAnswer = ''
+        $questions_in_media = [],
+        $currentAnswer = '',
+        $myRemindList = []
     ) {
         global $origin, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
         $nbrQuestions = $this->get_count_question_list();
-        $all_button = [];
+        $buttonList = [];
         $html = $label = '';
         $hotspot_get = isset($_POST['hotspot']) ? Security::remove_XSS($_POST['hotspot']) : null;
 
         if ($this->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT && $this->type == ONE_PER_PAGE) {
             $urlTitle = get_lang('ContinueTest');
-
             if ($questionNum == count($this->questionList)) {
                 $urlTitle = get_lang('EndTest');
             }
@@ -3158,7 +3159,8 @@ class Exercise
                     'nbrQuestions' => $nbrQuestions,
                     'num' => $questionNum,
                     'exerciseType' => $this->type,
-                    'exerciseId' => $this->id
+                    'exerciseId' => $this->id,
+                    'reminder' => empty($myRemindList) ? null : 2
                 ]),
                 [
                     'class' => 'ajax btn btn-default',
@@ -3170,7 +3172,14 @@ class Exercise
         } else {
             // User
             if (api_is_allowed_to_session_edit()) {
-                if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum) {
+                $endReminderValue = false;
+                if (!empty($myRemindList)) {
+                    $endValue = end($myRemindList);
+                    if ($endValue == $question_id) {
+                        $endReminderValue = true;
+                    }
+                }
+                if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum || $endReminderValue) {
                     if ($this->review_answers) {
                         $label = get_lang('ReviewQuestions');
                         $class = 'btn btn-success';
@@ -3188,22 +3197,49 @@ class Exercise
                     if ($questionNum != 1) {
                         if ($this->showPreviousButton()) {
                             $prev_question = $questionNum - 2;
-                            $all_button[] = Display::button(
-                                'previous_question_and_save',
-                                get_lang('PreviousQuestion'),
-                                [
-                                    'type' => 'button',
-                                    'class' => 'btn btn-default',
-                                    'data-prev' => $prev_question,
-                                    'data-question' => $question_id
-                                ]
-                            );
+                            $showPreview = true;
+                            if (!empty($myRemindList)) {
+                                $beforeId = null;
+                                for ($i = 0; $i < count($myRemindList); $i++) {
+                                    if (isset($myRemindList[$i]) && $myRemindList[$i] == $question_id) {
+                                        $beforeId = isset($myRemindList[$i - 1]) ? $myRemindList[$i - 1] : null;
+                                        break;
+                                    }
+                                }
+
+                                if (empty($beforeId)) {
+                                    $showPreview = false;
+                                } else {
+                                    $num = 0;
+                                    foreach ($this->questionList as $originalQuestionId) {
+                                        if ($originalQuestionId == $beforeId) {
+                                            break;
+                                        }
+                                        $num++;
+                                    }
+                                    $prev_question = $num;
+                                    //$question_id = $beforeId;
+                                }
+                            }
+
+                            if ($showPreview) {
+                                $buttonList[] = Display::button(
+                                    'previous_question_and_save',
+                                    get_lang('PreviousQuestion'),
+                                    [
+                                        'type' => 'button',
+                                        'class' => 'btn btn-default',
+                                        'data-prev' => $prev_question,
+                                        'data-question' => $question_id
+                                    ]
+                                );
+                            }
                         }
                     }
 
                     // Next question
                     if (!empty($questions_in_media)) {
-                        $all_button[] = Display::button(
+                        $buttonList[] = Display::button(
                             'save_question_list',
                             $label,
                             [
@@ -3213,15 +3249,15 @@ class Exercise
                             ]
                         );
                     } else {
-                        $all_button[] = Display::button(
+                        $buttonList[] = Display::button(
                             'save_now',
                             $label,
                             ['type' => 'button', 'class' => $class, 'data-question' => $question_id]
                         );
                     }
-                    $all_button[] = '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>&nbsp;';
+                    $buttonList[] = '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>&nbsp;';
 
-                    $html .= implode(PHP_EOL, $all_button);
+                    $html .= implode(PHP_EOL, $buttonList);
                 } else {
                     if ($this->review_answers) {
                         $all_label = get_lang('ReviewQuestions');
@@ -3232,13 +3268,14 @@ class Exercise
                     }
                     // used to select it with jquery
                     $class .= ' question-validate-btn';
-                    $all_button[] = Display::button(
+                    $buttonList[] = Display::button(
                         'validate_all',
                         $all_label,
                         ['type' => 'button', 'class' => $class]
                     );
-                    $all_button[] = '&nbsp;'.Display::span(null, ['id' => 'save_all_reponse']);
-                    $html .= implode(PHP_EOL, $all_button);
+                    $buttonList[] = '&nbsp;'.Display::span(null, ['id' => 'save_all_response']);
+                    $html .= implode(PHP_EOL, $buttonList);
+
                 }
             }
         }
@@ -6733,7 +6770,6 @@ class Exercise
         $exe_id = intval($exe_id);
         $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         if ($exercise_info) {
-
             if (empty($exercise_info['questions_to_check'])) {
                 if ($action == 'add') {
                     $sql = "UPDATE $track_exercises 
@@ -6743,16 +6779,20 @@ class Exercise
                 }
             } else {
                 $remind_list = explode(',', $exercise_info['questions_to_check']);
-
                 $remind_list_string = '';
                 if ($action == 'add') {
                     if (!in_array($question_id, $remind_list)) {
+                        $newRemindList = [];
                         $remind_list[] = $question_id;
-                        if (!empty($remind_list)) {
-                            sort($remind_list);
-                            array_filter($remind_list);
+                        $questionListInSession = Session::read('questionList');
+                        if (!empty($questionListInSession)) {
+                            foreach ($questionListInSession as $originalQuestionId) {
+                                if (in_array($originalQuestionId, $remind_list)) {
+                                    $newRemindList[] = $originalQuestionId;
+                                }
+                            }
                         }
-                        $remind_list_string = implode(',', $remind_list);
+                        $remind_list_string = implode(',', $newRemindList);
                     }
                 } elseif ($action == 'delete') {
                     if (!empty($remind_list)) {
@@ -6769,9 +6809,9 @@ class Exercise
                         }
                     }
                 }
-                $remind_list_string = Database::escape_string($remind_list_string);
+                $value = Database::escape_string($remind_list_string);
                 $sql = "UPDATE $track_exercises 
-                        SET questions_to_check = '$remind_list_string' 
+                        SET questions_to_check = '$value' 
                         WHERE exe_id = $exe_id ";
                 Database::query($sql);
             }

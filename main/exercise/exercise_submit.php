@@ -170,7 +170,7 @@ $templateName = $template->get_template('exercise/submit.js.tpl');
 $htmlHeadXtra[] = $template->fetch($templateName);
 
 $current_timestamp = time();
-$my_remind_list = array();
+$myRemindList = array();
 
 $time_control = false;
 if ($objExercise->expired_time != 0) {
@@ -454,17 +454,17 @@ if ($debug) {
 };
 
 if (!empty($exercise_stat_info['questions_to_check'])) {
-    $my_remind_list = $exercise_stat_info['questions_to_check'];
-    $my_remind_list = explode(',', $my_remind_list);
-    $my_remind_list = array_filter($my_remind_list);
+    $myRemindList = $exercise_stat_info['questions_to_check'];
+    $myRemindList = explode(',', $myRemindList);
+    $myRemindList = array_filter($myRemindList);
 }
 
-$params = "exe_id=$exe_id&exerciseId=$exerciseId&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
+$params = "exe_id=$exe_id&exerciseId=$exerciseId&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq().'&reminder='.$reminder;
 if ($debug) {
     error_log("6.1 params: ->  $params");
 }
 
-if ($reminder == 2 && empty($my_remind_list)) {
+if ($reminder == 2 && empty($myRemindList)) {
     if ($debug) {
         error_log("6.2 calling the exercise_reminder.php ");
     };
@@ -658,7 +658,6 @@ if ($formSent && isset($_POST)) {
 
     // the script "exercise_result.php" will take the variable $exerciseResult from the session
     Session::write('exerciseResult', $exerciseResult);
-    // Session::write('remind_list', $remind_list);
     Session::write('exerciseResultCoordinates', $exerciseResultCoordinates);
 
     // if all questions on one page OR if it is the last question (only for an exercise with one question per page)
@@ -666,7 +665,9 @@ if ($formSent && isset($_POST)) {
         if (api_is_allowed_to_session_edit()) {
             // goes to the script that will show the result of the exercise
             if ($objExercise->type == ALL_ON_ONE_PAGE) {
-                if ($debug) { error_log('10. Exercise ALL_ON_ONE_PAGE -> Redirecting to exercise_result.php'); }
+                if ($debug) {
+                    error_log('10. Exercise ALL_ON_ONE_PAGE -> Redirecting to exercise_result.php');
+                }
                 //We check if the user attempts before sending to the exercise_result.php
                 if ($objExercise->selectAttempts() > 0) {
                     $attempt_count = Event::get_attempt_count(
@@ -913,7 +914,7 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
     }
 }
 
-//Timer control
+// Timer control
 if ($time_control) {
     echo $objExercise->return_time_left_div();
     echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciseExpiredTimeMessage').'</div>';
@@ -931,15 +932,15 @@ if ($reminder == 2) {
     $data_tracking = explode(',', $data_tracking);
     $current_question = 1; //set by default the 1st question
 
-    if (!empty($my_remind_list)) {
-        //Checking which questions we are going to call from the remind list
+    if (!empty($myRemindList)) {
+        // Checking which questions we are going to call from the remind list
         for ($i = 0; $i < count($data_tracking); $i++) {
-            for ($j = 0; $j < count($my_remind_list); $j++) {
+            for ($j = 0; $j < count($myRemindList); $j++) {
                 if (!empty($remind_question_id)) {
-                    if ($remind_question_id == $my_remind_list[$j]) {
+                    if ($remind_question_id == $myRemindList[$j]) {
                         if ($remind_question_id == $data_tracking[$i]) {
-                            if (isset($my_remind_list[$j + 1])) {
-                                $remind_question_id = $my_remind_list[$j + 1];
+                            if (isset($myRemindList[$j + 1])) {
+                                $remind_question_id = $myRemindList[$j + 1];
                                 $current_question = $i + 1;
                             } else {
                                 // We end the remind list we go to the exercise_reminder.php please
@@ -950,9 +951,9 @@ if ($reminder == 2) {
                         }
                     }
                 } else {
-                    if ($my_remind_list[$j] == $data_tracking[$i]) {
-                        if (isset($my_remind_list[$j + 1])) {
-                            $remind_question_id = $my_remind_list[$j + 1];
+                    if ($myRemindList[$j] == $data_tracking[$i]) {
+                        if (isset($myRemindList[$j + 1])) {
+                            $remind_question_id = $myRemindList[$j + 1];
                             $current_question = $i + 1; // last question
                         } else {
                             // We end the remind list we go to the exercise_reminder.php please
@@ -966,7 +967,9 @@ if ($reminder == 2) {
         }
     } else {
         if ($objExercise->review_answers) {
-            if ($debug) { error_log('. redirecting to exercise_reminder.php '); }
+            if ($debug) {
+                error_log('. redirecting to exercise_reminder.php ');
+            }
             header("Location: exercise_reminder.php?$params");
             exit;
         }
@@ -1000,13 +1003,17 @@ if (!empty($error)) {
                 if ($current_question != $i) {
                     continue;
                 } else {
-                    if ($objQuestionTmp->selectType() == HOT_SPOT || $objQuestionTmp->selectType() == HOT_SPOT_DELINEATION) {
+                    if ($objQuestionTmp->selectType() == HOT_SPOT ||
+                        $objQuestionTmp->selectType() == HOT_SPOT_DELINEATION
+                    ) {
                         $number_of_hotspot_questions++;
                     }
                     break;
                 }
             } else {
-                if ($objQuestionTmp->selectType() == HOT_SPOT || $objQuestionTmp->selectType() == HOT_SPOT_DELINEATION) {
+                if ($objQuestionTmp->selectType() == HOT_SPOT ||
+                    $objQuestionTmp->selectType() == HOT_SPOT_DELINEATION
+                ) {
                     $number_of_hotspot_questions++;
                 }
             }
@@ -1218,8 +1225,7 @@ if (!empty($error)) {
             });
 
             free_answers = $.param(free_answers);
-
-            $("#save_all_reponse").html(\'' . Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');
+            $("#save_all_response").html(\'' . Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');
 
             $.ajax({
                 type:"post",
@@ -1228,14 +1234,14 @@ if (!empty($error)) {
                 data: "'.$params.'&type=all&"+my_choice+"&"+hotspot+"&"+free_answers+"&"+remind_list,
                 success: function(return_value) {
                     if (return_value == "ok") {
-                        //$("#save_all_reponse").html(\'' . Display::return_icon('accept.png').'\');
+                        //$("#save_all_response").html(\'' . Display::return_icon('accept.png').'\');
                         if (validate == "validate") {
                             window.location = "'.$script_php.'?'.$params.'";
                         } else {
-                            $("#save_all_reponse").html(\'' . Display::return_icon('accept.png').'\');
+                            $("#save_all_response").html(\'' . Display::return_icon('accept.png').'\');
                         }
                     } else {
-                        $("#save_all_reponse").html(\'' . Display::return_icon('wrong.gif').'\');
+                        $("#save_all_response").html(\'' . Display::return_icon('wrong.gif').'\');
                     }
                 }
             });
@@ -1247,15 +1253,16 @@ if (!empty($error)) {
         }
     </script>';
 
-    echo '<form id="exercise_form" method="post" action="'.api_get_self().'?'.api_get_cidreq().'&autocomplete=off&&exerciseId='.$exerciseId.'" name="frm_exercise" '.$onsubmit.'>
+    echo '<form id="exercise_form" method="post" action="'.api_get_self().'?'.api_get_cidreq().'&reminder='.$reminder.'&autocomplete=off&&exerciseId='.$exerciseId.'" name="frm_exercise" '.$onsubmit.'>
          <input type="hidden" name="formSent" value="1" />
          <input type="hidden" name="exerciseId" value="'.$exerciseId.'" />
          <input type="hidden" name="num" value="'.$current_question.'" id="num_current_id" />
          <input type="hidden" name="num_answer" value="'.$currentAnswer.'" id="num_current_answer_id" />
          <input type="hidden" name="exe_id" value="'.$exe_id.'" />
          <input type="hidden" name="origin" value="'.$origin.'" />
+         <input type="hidden" name="reminder" value="'.$reminder.'" />
          <input type="hidden" name="learnpath_id" value="'.$learnpath_id.'" />
-         <input type="hidden" name="learnpath_item_id" value="'.$learnpath_item_id.'" />
+         <input type="hidden" name="learnpath_item_id" value="'.$learnpath_item_id.'" />         
          <input type="hidden" name="learnpath_item_view_id" value="'.$learnpath_item_view_id.'" />';
 
     // Show list of questions
@@ -1334,8 +1341,8 @@ if (!empty($error)) {
         // Showing the exercise description
         if (!empty($objExercise->description)) {
             if ($objExercise->type == ONE_PER_PAGE || ($objExercise->type != ONE_PER_PAGE && $i == 1)) {
-                echo Display::panelCollapse('<span>'.
-                    get_lang('ExerciseDescriptionLabel').'</span>',
+                echo Display::panelCollapse(
+                    '<span>'.get_lang('ExerciseDescriptionLabel').'</span>',
                     $objExercise->description,
                     'exercise-description',
                     [],
@@ -1367,10 +1374,13 @@ if (!empty($error)) {
             case ONE_PER_PAGE:
                 $exerciseActions .= $objExercise->show_button(
                     $questionId,
-                    $current_question
+                    $current_question,
+                    [],
+                    [],
+                    $myRemindList
                 );
                 break;
-            case ALL_ON_ONE_PAGE :
+            case ALL_ON_ONE_PAGE:
                 $button = [
                     Display::button(
                         'save_now',

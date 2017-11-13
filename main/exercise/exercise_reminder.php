@@ -132,7 +132,7 @@ if ($time_control) {
 
 echo Display::div('', array('id'=>'message'));
 echo '<script>
-    lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
+    var lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
 
     function final_submit() {
         //Normal inputs
@@ -203,7 +203,6 @@ $counter = 0;
 foreach ($question_list as $questionId) {
     // destruction of the Question object
     unset($objQuestionTmp);
-
     // creates a temporary Question object
     $objQuestionTmp = Question:: read($questionId);
     $quesId = $objQuestionTmp->selectId();

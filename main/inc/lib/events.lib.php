@@ -950,6 +950,7 @@ class Event
      * @param   int lp id
      * @param   int lp item id
      * @param   int lp item view id
+     * @return int
      */
     public static function get_attempt_count(
         $user_id,

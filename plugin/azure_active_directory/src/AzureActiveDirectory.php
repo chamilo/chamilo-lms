@@ -39,9 +39,9 @@ class AzureActiveDirectory extends Plugin
     /**
      * Instance the plugin
      * @staticvar null $result
-     * @return Tour
+     * @return $this
      */
-    static function create()
+    public static function create()
     {
         static $result = null;
 

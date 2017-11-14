@@ -2765,20 +2765,20 @@ class SessionManager
 
     /**
      * Get the session information by name
-     * @param string $session_name
+     * @param string $name
      * @return mixed false if the session does not exist, array if the session exist
      * */
-    public static function get_session_by_name($session_name)
+    public static function get_session_by_name($name)
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $session_name = trim($session_name);
-        if (empty($session_name)) {
+        $name = Database::escape_string(trim($name));
+        if (empty($name)) {
             return false;
         }
 
         $sql = 'SELECT *
-		        FROM ' . $tbl_session.'
-		        WHERE name = "' . Database::escape_string($session_name).'"';
+		        FROM '.$tbl_session.'
+		        WHERE name = "'.$name.'"';
         $result = Database::query($sql);
         $num = Database::num_rows($result);
         if ($num > 0) {
@@ -6244,7 +6244,7 @@ class SessionManager
                         }
                     }
 
-                    $message .= '<strong>'.get_lang('User').'</strong> '.$userInfo['complete_name'].' <br />';
+                    $message .= '<strong>'.get_lang('User').'</strong>: '.$userInfo['complete_name'].' <br />';
 
                     if (!in_array($userInfo['status'], array(DRH)) && !api_is_platform_admin_by_id($userInfo['user_id'])) {
                         $message .= get_lang('UserMustHaveTheDrhRole').'<br />';

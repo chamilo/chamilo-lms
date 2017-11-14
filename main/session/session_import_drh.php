@@ -15,7 +15,6 @@ api_protect_limit_for_session_admin();
 $form_sent = 0;
 $tool_name = get_lang('ImportSessionDrhList');
 
-//$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
 
 set_time_limit(0);

@@ -1,4 +1,6 @@
 <?php
+/* For license terms, see /license.txt */
+
 /**
  * AzureActiveDirectory plugin class
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>

@@ -141,7 +141,7 @@ class Notification extends Model
 
     /**
      * @param string $title
-     * @param array  $senderInfo
+     * @param array $senderInfo
      *
      * @return string
      */
@@ -380,13 +380,10 @@ class Notification extends Model
                     $content = '';
                 }
                 if (!empty($senderInfo)) {
-                    $senderName = api_get_person_name(
-                        $senderInfo['firstname'],
-                        $senderInfo['lastname'],
-                        null,
-                        PERSON_NAME_EMAIL_ADDRESS
+                    $newMessageText = sprintf(
+                        get_lang('YouHaveANewMessageFromX'),
+                        $senderInfo['complete_name_with_email']
                     );
-                    $newMessageText = sprintf(get_lang('YouHaveANewMessageFromX'), $senderName);
                 }
                 $linkToNewMessage = Display::url(
                     get_lang('SeeMessage'),
@@ -395,13 +392,10 @@ class Notification extends Model
                 break;
             case self::NOTIFICATION_TYPE_INVITATION:
                 if (!empty($senderInfo)) {
-                    $senderName = api_get_person_name(
-                        $senderInfo['firstname'],
-                        $senderInfo['lastname'],
-                        null,
-                        PERSON_NAME_EMAIL_ADDRESS
+                    $newMessageText = sprintf(
+                        get_lang('YouHaveANewInvitationFromX'),
+                        $senderInfo['complete_name_with_email']
                     );
-                    $newMessageText = sprintf(get_lang('YouHaveANewInvitationFromX'), $senderName);
                 }
                 $linkToNewMessage = Display::url(
                     get_lang('SeeInvitation'),
@@ -413,14 +407,8 @@ class Notification extends Model
                 if (!empty($senderInfo)) {
                     $senderName = $senderInfo['group_info']['name'];
                     $newMessageText = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $senderName);
-                    $senderName = api_get_person_name(
-                        $senderInfo['user_info']['firstname'],
-                        $senderInfo['user_info']['lastname'],
-                        null,
-                        PERSON_NAME_EMAIL_ADDRESS
-                    );
                     $senderName = Display::url(
-                        $senderName,
+                        $senderInfo['complete_name_with_email'],
                         api_get_path(WEB_CODE_PATH).'social/profile.php?'.$senderInfo['user_info']['user_id']
                     );
                     $newMessageText .= '<br />'.get_lang('User').': '.$senderName;

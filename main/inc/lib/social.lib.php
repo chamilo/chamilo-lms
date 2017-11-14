@@ -254,14 +254,14 @@ class SocialManager extends UserManager
             ];
             Database::insert($tbl_message, $params);
 
-            $sender_info = api_get_user_info($user_id);
+            $senderInfo = api_get_user_info($user_id);
             $notification = new Notification();
             $notification->saveNotification(
                 Notification::NOTIFICATION_TYPE_INVITATION,
                 array($friend_id),
                 $message_title,
                 $message_content,
-                $sender_info
+                $senderInfo
             );
 
             return true;

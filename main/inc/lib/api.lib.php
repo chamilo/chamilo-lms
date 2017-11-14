@@ -1337,11 +1337,26 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         $result['lastname'] = isset($user['lastName']) ? $user['lastName'] : null;
     }
 
+    if (isset($user['email'])) {
+        $result['mail'] = isset($user['email']) ? $user['email'] : null;
+        $result['email'] = isset($user['email']) ? $user['email'] : null;
+    } else {
+        $result['mail'] = isset($user['mail']) ? $user['mail'] : null;
+        $result['email'] = isset($user['mail']) ? $user['mail'] : null;
+    }
+
     $result['complete_name'] = api_get_person_name($result['firstname'], $result['lastname']);
     $result['complete_name_with_username'] = $result['complete_name'];
 
     if (!empty($user['username'])) {
         $result['complete_name_with_username'] = $result['complete_name'].' ('.$user['username'].')';
+    }
+
+    $showEmail = api_get_setting('show_email_addresses') === 'true';
+    if (!empty($user['email']) && $showEmail) {
+        $result['complete_name_with_email'] = $result['complete_name'].' ('.$user['email'].')';
+    } else {
+        $result['complete_name_with_email'] = $result['complete_name'];
     }
 
     // Kept for historical reasons
@@ -1378,13 +1393,6 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         $result[$attribute] = isset($user[$attribute]) ? $user[$attribute] : null;
     }
 
-    if (isset($user['email'])) {
-        $result['mail'] = isset($user['email']) ? $user['email'] : null;
-        $result['email'] = isset($user['email']) ? $user['email'] : null;
-    } else {
-        $result['mail'] = isset($user['mail']) ? $user['mail'] : null;
-        $result['email'] = isset($user['mail']) ? $user['mail'] : null;
-    }
     $user_id = intval($user['user_id']);
     // Maintain the user_id index for backwards compatibility
     $result['user_id'] = $result['id'] = $user_id;

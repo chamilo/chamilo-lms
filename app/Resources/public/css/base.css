@@ -5277,10 +5277,7 @@ div#chat-remote-video video {
   font-weight:normal;
   color:#333333;
 }
-.select2-container .select2-selection--single{
-  height: 32px !important;
-  border-color: #CCCCCC !important;
-}
+
 #dialog-form .dialog-form-content{
   font-size: 12px;
 }
@@ -6044,7 +6041,11 @@ ul#toolnavbox-two li a.btn{
 #session-table .table{
     margin-bottom: 5px;
 }
-.select2-container--default .select2-selection--multiple{
+.select2-container .select2-selection--single {
+    height: 32px !important;
+    border-color: #CCCCCC !important;
+}
+.select2-container--default .select2-selection--multiple {
     background-color: #FFF !important;
     border: 1px solid #CCC !important;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);

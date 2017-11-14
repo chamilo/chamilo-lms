@@ -277,8 +277,13 @@ foreach ($result as & $row) {
     if (isset($_setting[$key]) && is_string($_setting[$key])) {
         $_setting[$key] = array();
     }
-    $_setting[$key][] = $row['selected_value'];
-    $_plugins[$key][] = $row['selected_value'];
+    if ($row['subkey'] == null) {
+        $_setting[$key][] = $row['selected_value'];
+        $_plugins[$key][] = $row['selected_value'];
+    } else {
+        $_setting[$key][$row['subkey']] = $row['selected_value'];
+        $_plugins[$key][$row['subkey']] = $row['selected_value'];
+    }
 }
 
 // Error reporting settings.

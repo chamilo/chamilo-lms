@@ -5945,11 +5945,10 @@ ul#toolnavbox-two li a.btn{
     background-color: #FFF !important;
     border: 1px solid #CCC !important;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-       -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-          height: 38px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 .select2-container .select2-search--inline .select2-search__field{
     margin-top: 3px !important;
@@ -6280,7 +6279,7 @@ ul#toolnavbox-two li a.btn{
         margin-right: 5px;
         margin-bottom: 5px;
         display: inline-block;
-    
+
     }
     .btn{
         font-size: 12px;

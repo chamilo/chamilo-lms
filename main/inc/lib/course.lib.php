@@ -1963,7 +1963,7 @@ class CourseManager
         $rs = Database::query($sql);
         $listTeachers = array();
         $teachers = array();
-        $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup';
+        $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&course_id='.$courseId;
         while ($teacher = Database::fetch_array($rs)) {
             $teachers['id'] = $teacher['user_id'];
             $teachers['lastname'] = $teacher['lastname'];
@@ -1992,7 +1992,7 @@ class CourseManager
      * @param bool $orderList
      * @return string List of teachers teaching the course
      */
-    public static function get_teacher_list_from_course_code_to_string(
+    public static function getTeacherListFromCourseCodeToString(
         $course_code,
         $separator = self::USER_SEPARATOR,
         $add_link_to_profile = false,
@@ -2025,7 +2025,10 @@ class CourseManager
                 if ($orderList === true) {
                     $html .= '<ul class="user-teacher">';
                     foreach ($list as $teacher) {
-                        $html .= Display::tag('li', Display::return_icon('teacher.png', $teacher, null, ICON_SIZE_TINY).' '.$teacher);
+                        $html .= Display::tag(
+                            'li',
+                            Display::return_icon('teacher.png', $teacher, null, ICON_SIZE_TINY).' '.$teacher
+                        );
                     }
                     $html .= '</ul>';
                 } else {
@@ -2107,7 +2110,7 @@ class CourseManager
             foreach ($coachList as $coach_course) {
                 $coach_name = $coach_course['full_name'];
                 if ($add_link_to_profile) {
-                    $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$coach_course['user_id'];
+                    $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$coach_course['user_id'].'&course_id='.$courseId.'&session_id='.$session_id;
                     $coach_name = Display::url(
                         $coach_name,
                         $url,
@@ -4210,6 +4213,7 @@ class CourseManager
             null,
             true
         );
+        $params['real_id'] = $course_info['real_id'];
 
         // Display the "what's new" icons
         $notifications = '';
@@ -6329,7 +6333,7 @@ class CourseManager
         }
         $teachers = '';
         if (api_get_setting('display_teacher_in_courselist') === 'true') {
-            $teachers = self::get_teacher_list_from_course_code_to_string(
+            $teachers = self::getTeacherListFromCourseCodeToString(
                 $course['code'],
                 self::USER_SEPARATOR,
                 true

@@ -31,8 +31,10 @@ switch ($action) {
         echo json_encode($result);
         break;
     case 'get_user_popup':
+        $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
+        $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : 0;
+
         $user_info = api_get_user_info($_REQUEST['user_id']);
-        $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
         $isAnonymous = api_is_anonymous();
 
         echo '<div class="row">';
@@ -66,13 +68,15 @@ switch ($action) {
         echo '</div>';
         echo '</div>';
 
+        $url = api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=send_message&user_id='.$user_info['user_id'].'&course_id='.$courseId.'&session_id='.$sessionId;
+
         if ($isAnonymous === false &&
             api_get_setting('allow_message_tool') == 'true'
         ) {
             echo '<script>';
             echo '
                 $("#send_message_link").on("click", function() {
-                    var url = "'.$ajax_url.'?a=send_message&user_id='.$user_info['user_id'].'";
+                    var url = "'.$url.'";
                     var params = $("#send_message").serialize();
                     $.ajax({
                         url: url+"&"+params,
@@ -156,45 +160,45 @@ switch ($action) {
             )
         ) {
             $user_id = intval($_GET['user_id']);
-            $status  = intval($_GET['status']);
+            $status = intval($_GET['status']);
 
             if (!empty($user_id)) {
                 $user_table = Database::get_main_table(TABLE_MAIN_USER);
                 $sql = "UPDATE $user_table 
-                        SET active='".$status."' 
-                        WHERE user_id='".$user_id."'";
+                        SET active = '".$status."' 
+                        WHERE user_id = '".$user_id."'";
                 $result = Database::query($sql);
 
-                //Send and email if account is active
+                // Send and email if account is active
                 if ($status == 1) {
                     $user_info = api_get_user_info($user_id);
-                    $recipient_name = api_get_person_name(
+                    $recipientName = api_get_person_name(
                         $user_info['firstname'],
                         $user_info['lastname'],
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-                    $email_admin = api_get_setting('emailAdministrator');
+
+                    $subject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+                    $emailAdmin = api_get_setting('emailAdministrator');
                     $sender_name = api_get_person_name(
                         api_get_setting('administratorName'),
                         api_get_setting('administratorSurname'),
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $emailbody = get_lang('Dear')." ".stripslashes($recipient_name).",\n\n";
-
-                    $emailbody .= sprintf(
+                    $body = get_lang('Dear')." ".stripslashes($recipientName).",\n\n";
+                    $body .= sprintf(
                         get_lang('YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators'),
                         api_get_setting('siteName')
                     )."\n";
-                    $emailbody .= sprintf(
+                    $body .= sprintf(
                         get_lang('YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided'),
                         api_get_path(WEB_PATH)
                     ).",\n\n";
-                    $emailbody .= get_lang('HaveFun')."\n\n";
-                    //$emailbody.=get_lang('Problem'). "\n\n". get_lang('SignatureFormula');
-                    $emailbody .= api_get_person_name(
+                    $body .= get_lang('HaveFun')."\n\n";
+                    //$body.=get_lang('Problem'). "\n\n". get_lang('SignatureFormula');
+                    $body .= api_get_person_name(
                         api_get_setting('administratorName'),
                         api_get_setting('administratorSurname')
                     )."\n".
@@ -207,17 +211,27 @@ switch ($action) {
                         'userId' => $user_id
                     );
 
-                    $result = api_mail_html(
-                        $recipient_name,
+                    MessageManager::send_message_simple(
+                        $user_id,
+                        $subject,
+                        $body,
+                        null,
+                        false,
+                        false,
+                        $additionalParameters
+                    );
+
+                    /*$result = api_mail_html(
+                        $recipientName,
                         $user_info['mail'],
-                        $emailsubject,
-                        $emailbody,
+                        $subject,
+                        $body,
                         $sender_name,
-                        $email_admin,
+                        $emailAdmin,
                         null,
                         null,
                         $additionalParameters
-                    );
+                    );*/
                     Event::addEvent(LOG_USER_ENABLE, LOG_USER_ID, $user_id);
                 } else {
                     Event::addEvent(LOG_USER_DISABLE, LOG_USER_ID, $user_id);

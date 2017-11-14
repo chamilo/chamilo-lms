@@ -429,6 +429,25 @@ class Notification extends Model
             $content = $content.'<br /><br />'.$linkToNewMessage;
         }
 
+        /*$courseInfo = api_get_course_info();
+        // Add course info
+        if (!empty($courseInfo)) {
+            $sessionId = api_get_session_id();
+            if (empty($sessionId)) {
+                $courseNotification = sprintf(get_lang('ThisEmailWasSentViaCourseX'), $courseInfo['title']);
+            } else {
+                $sessionInfo = api_get_session_info($sessionId);
+                if (!empty($sessionInfo)) {
+                    $courseNotification = sprintf(
+                        get_lang('ThisEmailWasSentViaCourseXInSessionX'),
+                        $courseInfo['title'],
+                        $sessionInfo['title']
+                    );
+                }
+            }
+            $content = $content.'<br /><br />'.$courseNotification;
+        }*/
+
         // You have received this message because you are subscribed text
         $content = $content.'<br /><hr><i>'.
             sprintf(

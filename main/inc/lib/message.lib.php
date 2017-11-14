@@ -446,7 +446,8 @@ class MessageManager
                     $subject,
                     $content,
                     $sender_info,
-                    $file_attachments
+                    $file_attachments,
+                    $smsParameters
                 );
             } else {
                 $usergroup = new UserGroup();
@@ -478,7 +479,8 @@ class MessageManager
                     $subject,
                     $content,
                     $group_info,
-                    $file_attachments
+                    $file_attachments,
+                    $smsParameters
                 );
             }
 

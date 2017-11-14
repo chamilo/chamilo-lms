@@ -5994,6 +5994,7 @@ $ToAttend = "Por asistir";
 $AllUsersAreAutomaticallyRegistered = "Todos los usuarios serán agregados automaticamente";
 $AssignCoach = "Asignar tutor";
 $YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "Su cuenta en %s ha sido aprobada por nuestra administración";
+$StudentHadEnoughSkills = "Un alumno ha obtenido la cantidad de competencias secundarias necesarias para validar la competencia madre.";
 $Off = "Desactivado";
 $WebServer = "Webserver";
 $NotInserted = "No insertado";
@@ -8079,4 +8080,5 @@ $AddText = "Añadir texto";
 $OralExpressionHelpText = "Cuando lanza la grabación, puede pausar cuando lo desee. Si no está satisfecho, grabese de nuevo. Esto sobrescribirá la versión anterior. Satisfecho? Para transmitir la grabación haga clic en \"Guardar el audio grabado\".";
 $BestScoreInLearningPath = "Mejor nota en las lecciones";
 $BestScoreNotInLearningPath = "Mejor nota fuera de lecciones";
+$StudentXHadEnoughSkillsToGetSkillXToAssignClickHereX = "El alumno %s tiene suficiente competencias secundarias para obtener la competencia %s. Para asignar esta competencia, es posible ir aquí : %s";
 ?>

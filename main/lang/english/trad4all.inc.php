@@ -5996,6 +5996,7 @@ $ToAttend = "To attend";
 $AllUsersAreAutomaticallyRegistered = "All users are automatically registered";
 $AssignCoach = "Assign coach";
 $YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "Your account on %s has just been approved by one of our administrators.";
+$StudentHadEnoughSkills = "A student has obtained the number of sub-skills needed to validate the mother skill.";
 $Off = "Off";
 $WebServer = "Web server";
 $NotInserted = "Not inserted";
@@ -8061,4 +8062,7 @@ $AgendaAvailableInCourseX = "Agenda available in course %s";
 $YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX = "You have been subscribed to the course %s the start date is %s and %s";
 $EmailToTeachersWhenNewWorkFeedback = "E-mail to teachers on new user's student publication feedback.";
 $YourSessionTimeIsExpired = "Your session time is expired.";
+$StudentXHadEnoughSkillsToGetSkillXToAssignClickHereX = "Learner %s has enough sub-skill to get skill %s. To assign this skill it is possible to go here : %s";
+$ThisEmailWasSentViaCourseX = "This e-mail was sent via course %s";
+$ThisEmailWasSentViaCourseXInSessionX = "This e-mail was sent via course %s in session %s";
 ?>

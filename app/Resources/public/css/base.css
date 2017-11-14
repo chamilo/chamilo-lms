@@ -5952,7 +5952,8 @@ ul#toolnavbox-two li a.btn{
           height: 38px;
 }
 .select2-container .select2-search--inline .select2-search__field{
-    margin-top: 3px !important;
+    margin-top: 6px !important;
+    margin-bottom: 4px !important;
 }
 .select2-dropdown{
     background-color: #FFF !important;

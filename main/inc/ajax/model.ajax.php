@@ -427,7 +427,7 @@ switch ($action) {
         break;
     case 'get_user_skill_ranking':
         $skill = new Skill();
-        $count = $skill->get_user_list_skill_ranking_count();
+        $count = $skill->getUserListSkillRankingCount();
         break;
     case 'get_course_announcements':
         $count = AnnouncementManager::getAnnouncements(null, null, true);
@@ -942,7 +942,7 @@ switch ($action) {
             'currently_learning',
             'rank'
         );
-        $result = $skill->get_user_list_skill_ranking(
+        $result = $skill->getUserListSkillRanking(
             $start,
             $limit,
             $sidx,
@@ -961,7 +961,7 @@ switch ($action) {
                 $count_skill_by_course = array();
                 foreach ($personal_course_list as $course_item) {
                     if (!isset($skills_in_course[$course_item['code']])) {
-                        $count_skill_by_course[$course_item['code']] = $skill->get_count_skills_by_course($course_item['code']);
+                        $count_skill_by_course[$course_item['code']] = $skill->getCountSkillsByCourse($course_item['code']);
                         $skills_in_course[$course_item['code']] = $count_skill_by_course[$course_item['code']];
                     } else {
                         $count_skill_by_course[$course_item['code']] = $skills_in_course[$course_item['code']];

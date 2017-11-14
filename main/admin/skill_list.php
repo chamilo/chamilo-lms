@@ -77,7 +77,7 @@ switch ($action) {
             $entityManager->persist($skill);
 
             $skillObj = new Skill();
-            $childrens = $skillObj->get_children($skill->getId());
+            $childrens = $skillObj->getChildren($skill->getId());
 
             foreach ($childrens as $children) {
                 $skill = $entityManager->find(

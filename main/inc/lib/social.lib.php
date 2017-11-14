@@ -2137,7 +2137,7 @@ class SocialManager extends UserManager
         }
 
         $skill = new Skill();
-        $ranking = $skill->get_user_skill_ranking($userId);
+        $ranking = $skill->getUserSkillRanking($userId);
         $skills = $skill->getUserSkills($userId, true);
 
         $template = new Template(null, false, false, false, false, false);

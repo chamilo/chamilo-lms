@@ -26,9 +26,7 @@ $skillId = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 
 $objSkill = new Skill();
 $objGradebook = new Gradebook();
-
-$skillInfo = $objSkill->get_skill_info($skillId);
-
+$skillInfo = $objSkill->getSkillInfo($skillId);
 $allSkills = $objSkill->get_all();
 $allGradebooks = $objGradebook->find('all');
 

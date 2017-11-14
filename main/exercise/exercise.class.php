@@ -3542,7 +3542,9 @@ class Exercise
             );
         }
 
-        if ($debug) error_log('Start answer loop ');
+        if ($debug) {
+            error_log('Start answer loop ');
+        }
 
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
@@ -3656,7 +3658,9 @@ class Exercise
                     }
                     $totalScore += $answerWeighting;
 
-                    if ($debug) error_log("studentChoice: $studentChoice");
+                    if ($debug) {
+                        error_log("studentChoice: $studentChoice");
+                    }
                     break;
                 case GLOBAL_MULTIPLE_ANSWER:
                     if ($from_database) {
@@ -3681,7 +3685,9 @@ class Exercise
                         $real_answers[$answerId] = (bool) $studentChoice;
                     }
                     $totalScore += $answerWeighting;
-                    if ($debug) error_log("studentChoice: $studentChoice");
+                    if ($debug) {
+                        error_log("studentChoice: $studentChoice");
+                    }
                     break;
                 case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
                     if ($from_database) {

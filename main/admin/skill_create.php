@@ -30,7 +30,7 @@ $objSkill = new Skill();
 $objGradebook = new Gradebook();
 
 if ($skillParentId > 0) {
-    $skillParentInfo = $objSkill->get_skill_info($skillParentId);
+    $skillParentInfo = $objSkill->getSkillInfo($skillParentId);
 
     $formDefaultValues = [
         'parent_id' => $skillParentInfo['id'],

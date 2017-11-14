@@ -120,7 +120,7 @@ class PDF
 
                 );
             } else {
-                $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string(
+                $teacher_list = CourseManager::getTeacherListFromCourseCodeToString(
                     $this->params['course_code']
                 );
             }

@@ -1045,12 +1045,10 @@ class SocialManager extends UserManager
                     'new-message.png',
                     $sendMessageText
                 );
-                $sendMessageUrl = api_get_path(WEB_AJAX_PATH)
-                    . 'user_manager.ajax.php?'
-                    . http_build_query([
-                        'a' => 'get_user_popup',
-                        'user_id' => $user_id,
-                    ]);
+                $sendMessageUrl = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?'. http_build_query([
+                    'a' => 'get_user_popup',
+                    'user_id' => $user_id,
+                ]);
 
                 $links .= '<li>';
                 $links .= Display::url(

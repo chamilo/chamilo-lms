@@ -94,12 +94,10 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
                              <em class="fa fa-user"></em> '.get_lang('SendInvitation').'</a>';
             }
 
-            $sendMessageUrl = api_get_path(WEB_AJAX_PATH)
-                . 'user_manager.ajax.php?'
-                . http_build_query([
-                    'a' => 'get_user_popup',
-                    'user_id' => $user_info['user_id']
-                ]);
+            $sendMessageUrl = api_get_path(WEB_AJAX_PATH). 'user_manager.ajax.php?'.http_build_query([
+                'a' => 'get_user_popup',
+                'user_id' => $user_info['user_id']
+            ]);
             $sendMessage = Display::toolbarButton(
                 get_lang('SendMessage'),
                 $sendMessageUrl,

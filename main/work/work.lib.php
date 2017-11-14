@@ -5328,7 +5328,7 @@ function exportAllStudentWorkFromPublication(
 
     $courseCode = $courseInfo['code'];
     $header = get_lang('Course').': '.$courseInfo['title'];
-    $teachers = CourseManager::get_teacher_list_from_course_code_to_string(
+    $teachers = CourseManager::getTeacherListFromCourseCodeToString(
         $courseCode
     );
 

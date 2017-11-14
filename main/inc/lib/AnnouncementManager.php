@@ -60,7 +60,7 @@ class AnnouncementManager
     ) {
         $readerInfo = api_get_user_info($userId);
         $courseInfo = api_get_course_info($courseCode);
-        $teacherList = CourseManager::get_teacher_list_from_course_code_to_string(
+        $teacherList = CourseManager::getTeacherListFromCourseCodeToString(
             $courseInfo['code']
         );
 

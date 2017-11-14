@@ -608,7 +608,7 @@ class IndexManager
                             $course_details[] = $course['visual_code'];
                         }
                         if (api_get_setting('display_teacher_in_courselist') === 'true') {
-                            $course_details[] = CourseManager::get_teacher_list_from_course_code_to_string($course['code']);
+                            $course_details[] = CourseManager::getTeacherListFromCourseCodeToString($course['code']);
                         }
                         if (api_get_setting('show_different_course_language') === 'true' &&
                             $course['course_language'] != api_get_setting('platformLanguage')

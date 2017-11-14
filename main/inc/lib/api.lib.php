@@ -2301,12 +2301,12 @@ function api_get_session_name($session_id = 0)
 
 /**
  * Gets the session info by id
- * @param int       Session ID
+ * @param int $id       Session ID
  * @return array    information of the session
  */
-function api_get_session_info($session_id)
+function api_get_session_info($id)
 {
-    return SessionManager::fetch($session_id);
+    return SessionManager::fetch($id);
 }
 
 /**

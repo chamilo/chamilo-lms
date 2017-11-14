@@ -230,7 +230,7 @@ if ($session_id) {
         ICON_SIZE_SMALL
     ).' '.$courseInfo['name'];
 }
-$teacherList = CourseManager::get_teacher_list_from_course_code_to_string(
+$teacherList = CourseManager::getTeacherListFromCourseCodeToString(
     $courseInfo['code'],
     ',',
     false,

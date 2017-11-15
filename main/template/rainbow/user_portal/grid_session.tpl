@@ -1,5 +1,5 @@
 {% if _u.status == '5' %}
-<!-- list cuourses in sessions users -->
+<!-- list courses in sessions users -->
 <div class="grid-courses">
 <div class="row">
     {% for item in all_courses %}
@@ -46,7 +46,7 @@
     <div class="row">
     {% for item in session %}
         <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="items session">
+            <div class="items session {{ item.is_old ? 'old_session' : '' }} {{ item.is_future ? 'future_session' : '' }} ">
                 <div class="image">
                    <img class="img-responsive" src="{{ item.image ? _p.web_upload ~ item.image : _p.web_img ~ 'session_default.png' }}">
                     <div class="black-shadow">

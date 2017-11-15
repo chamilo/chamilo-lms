@@ -642,4 +642,5 @@ $_configuration['gradebook_badge_sidebar'] = [
 //$_configuration['allow_double_validation_in_registration'] = false;
 // Allow multiple anon users see BT#13324
 //$_configuration['max_anonymous_users'] = 0;
-
+// Show all sessions (old, current, future) in my course page
+//$_configuration['show_all_sessions_on_my_course_page'] = true;

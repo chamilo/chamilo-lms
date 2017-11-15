@@ -2801,8 +2801,13 @@ class UserManager
                 LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
                 INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.sessionId = s.id
                 LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
-                WHERE (scu.user = :user OR s.generalCoach = :user) AND url.accessUrlId = :url
-                ORDER BY sc.name, s.name";
+                WHERE (scu.user = :user OR s.generalCoach = :user) AND url.accessUrlId = :url ";
+        $order = "ORDER BY sc.name, s.name";
+        $showAllSessions = api_get_configuration_value('show_all_sessions_on_my_course_page') === true;
+        if ($showAllSessions) {
+            $order = "ORDER BY s.accessStartDate";
+        }
+        $dql .= $order;
 
         $dql = Database::getManager()
             ->createQuery($dql)
@@ -2925,7 +2930,6 @@ class UserManager
                         continue 2;
                     }
             }
-
             $categories[$row['session_category_id']]['sessions'][$row['id']] = array(
                 'session_name' => $row['name'],
                 'session_id' => $row['id'],
@@ -4225,7 +4229,7 @@ class UserManager
                 WHERE
                     friend_user_id='.$friend_id.' AND
                     user_id='.$my_user_id.' AND
-                    relation_type <> '.USER_RELATION_TYPE_RRHH.' ';
+                    relation_type NOT IN('.USER_RELATION_TYPE_RRHH.', '.USER_RELATION_TYPE_BOSS.') ';
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
         $current_date = api_get_utc_datetime();
@@ -4241,13 +4245,13 @@ class UserManager
                 WHERE
                     friend_user_id='.$friend_id.' AND
                     user_id='.$my_user_id.' AND
-                    relation_type <> '.USER_RELATION_TYPE_RRHH.' ';
+                    relation_type NOT IN('.USER_RELATION_TYPE_RRHH.', '.USER_RELATION_TYPE_BOSS.') ';
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
 
         if ($row['count'] == 1) {
-            //only for the case of a RRHH
-            if ($row['relation_type'] != $relation_type && $relation_type == USER_RELATION_TYPE_RRHH) {
+            //only for the case of a RRHH or a Student BOSS
+            if ($row['relation_type'] != $relation_type && ($relation_type == USER_RELATION_TYPE_RRHH || $relation_type == USER_RELATION_TYPE_BOSS)) {
                 $sql = 'INSERT INTO '.$tbl_my_friend.'(friend_user_id,user_id,relation_type,last_edit)
                         VALUES ('.$friend_id.','.$my_user_id.','.$relation_type.',"'.$current_date.'")';
             } else {

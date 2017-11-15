@@ -236,7 +236,13 @@ switch ($action) {
             $currentUserInfo['firstname']
         );
         MessageManager::send_message_simple($student_id, $subject, $content);
-        Display::addFlash(Display::return_message(get_lang('Sent')));
+        $extraFieldValue = new ExtraFieldValue('user');
+        $params = [
+	    'item_id' => $student_id,
+            'extra_termactivated' => 1,
+        ];
+        $extraFieldValue->saveFieldValues($params, true, false, ['termactivated']);
+	Display::addFlash(Display::return_message(get_lang('Sent')));
         break;
     case 'delete_legal':
         $extraFieldValue = new ExtraFieldValue('user');

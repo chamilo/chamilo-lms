@@ -66,7 +66,7 @@ $profile = $skillRepo->find($skillId)->getProfile();
 
 if (!$profile) {
     $skillRelSkill = new SkillRelSkill();
-    $parents = $skillRelSkill->get_skill_parents($skillId);
+    $parents = $skillRelSkill->getSkillParents($skillId);
 
     krsort($parents);
 
@@ -108,6 +108,7 @@ if ($profile) {
 $formDefaultValues = ['skill' => $skillId];
 
 $form = new FormValidator('assign_skill');
+$form->addHeader(get_lang('AssignSkill'));
 $form->addText('user_name', get_lang('UserName'), false);
 $form->addSelect('skill', get_lang('Skill'), $skillsOptions, ['id' => 'skill']);
 $form->addHidden('user', $user->getId());
@@ -223,6 +224,5 @@ if (api_is_drh()) {
 }
 
 $template = new Template(get_lang('AddSkill'));
-$template->assign('header', get_lang('AssignSkill'));
 $template->assign('content', $form->returnForm());
 $template->display_one_col_template();

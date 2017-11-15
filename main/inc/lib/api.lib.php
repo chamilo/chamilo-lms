@@ -1353,10 +1353,14 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
     }
 
     $showEmail = api_get_setting('show_email_addresses') === 'true';
-    if (!empty($user['email']) && $showEmail) {
-        $result['complete_name_with_email'] = $result['complete_name'].' ('.$user['email'].')';
+    if (!empty($user['email'])) {
+        $result['complete_name_with_email_forced'] = $result['complete_name'].' ('.$user['email'].')';
+        if ($showEmail) {
+            $result['complete_name_with_email'] = $result['complete_name'].' ('.$user['email'].')';
+        }
     } else {
         $result['complete_name_with_email'] = $result['complete_name'];
+        $result['complete_name_with_email_forced'] = $result['complete_name'];
     }
 
     // Kept for historical reasons

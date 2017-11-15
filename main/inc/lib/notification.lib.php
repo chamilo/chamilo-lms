@@ -365,6 +365,14 @@ class Notification extends Model
         }
 
         $newMessageText = $linkToNewMessage = '';
+        $showEmail = api_get_configuration_value('show_user_email_in_notification');
+        $senderInfoName = '';
+        if (!empty($senderInfo)) {
+            $senderInfoName = $senderInfo['complete_name'];
+            if ($showEmail) {
+                $senderInfoName = $senderInfo['complete_name_with_email_forced'];
+            }
+        }
 
         switch ($this->type) {
             case self::NOTIFICATION_TYPE_DIRECT_MESSAGE:
@@ -382,7 +390,7 @@ class Notification extends Model
                 if (!empty($senderInfo)) {
                     $newMessageText = sprintf(
                         get_lang('YouHaveANewMessageFromX'),
-                        $senderInfo['complete_name_with_email']
+                        $senderInfoName
                     );
                 }
                 $linkToNewMessage = Display::url(
@@ -394,7 +402,7 @@ class Notification extends Model
                 if (!empty($senderInfo)) {
                     $newMessageText = sprintf(
                         get_lang('YouHaveANewInvitationFromX'),
-                        $senderInfo['complete_name_with_email']
+                        $senderInfoName
                     );
                 }
                 $linkToNewMessage = Display::url(
@@ -408,7 +416,7 @@ class Notification extends Model
                     $senderName = $senderInfo['group_info']['name'];
                     $newMessageText = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $senderName);
                     $senderName = Display::url(
-                        $senderInfo['complete_name_with_email'],
+                        $senderInfoName,
                         api_get_path(WEB_CODE_PATH).'social/profile.php?'.$senderInfo['user_info']['user_id']
                     );
                     $newMessageText .= '<br />'.get_lang('User').': '.$senderName;

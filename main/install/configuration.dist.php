@@ -679,3 +679,5 @@ $_configuration['gradebook_badge_sidebar'] = [
 //$_configuration['session_multiple_subscription_students_list_avoid_emptying'] = false;
 // Disable the option to set course coach in session when editing course
 //$_configuration['disabled_edit_session_coaches_course_editing_course'] = false;
+// Show sender's email when receiving email notifications.
+//$_configuration['show_user_email_in_notification'] = false;

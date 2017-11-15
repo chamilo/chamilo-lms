@@ -51,6 +51,17 @@ foreach ($skills as $skill) {
 $skillIdFromGet = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $currentLevel = isset($_REQUEST['current']) ? (int) str_replace('assign_skill_sub_skill_id_', '', $_REQUEST['current']) : 0;
 $subSkillList = isset($_REQUEST['sub_skill_list']) ? explode(',', $_REQUEST['sub_skill_list']) : [];
+$subSkillList = array_unique($subSkillList);
+
+if (!empty($currentLevel)) {
+    $level = $currentLevel + 1;
+    if ($level < count($subSkillList)) {
+        $remove = count($subSkillList) - $currentLevel;
+        $newSubSkillList = array_slice($subSkillList, 0, count($subSkillList) - $level);
+        $subSkillList = $newSubSkillList;
+    }
+}
+
 
 $skillId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : key($skillsOptions);
 $skill = $skillRepo->find($skillId);
@@ -59,10 +70,14 @@ if ($skill) {
     $profile = $skill->getProfile();
 }
 
+if (!empty($subSkillList)) {
+    $skillId = end($subSkillList);
+}
+
+
 if (!$profile) {
     $skillRelSkill = new SkillRelSkill();
     $parents = $skillRelSkill->getSkillParents($skillId);
-
     krsort($parents);
 
     foreach ($parents as $parent) {
@@ -101,59 +116,60 @@ if ($profile) {
 
 $formDefaultValues = ['skill' => $skillId];
 
-$form = new FormValidator('assign_skill');
+$form = new FormValidator('assign_skill', 'POST', api_get_self().'?user='.$userId.'&');
 $form->addHeader(get_lang('AssignSkill'));
 $form->addText('user_name', get_lang('UserName'), false);
 $form->addSelect('skill', get_lang('Skill'), $skillsOptions, ['id' => 'skill']);
 
 $newSubSkillList = [];
+$disableList = [];
 if (!empty($skillIdFromGet)) {
     if (empty($subSkillList)) {
         $subSkillList[] = $skillIdFromGet;
     }
-    $subSkillList = array_unique($subSkillList);
     $oldSkill = $skillRepo->find($skillIdFromGet);
     $counter = 0;
     foreach ($subSkillList as $subSkillId) {
-        if ($skillIdFromGet == $subSkillId) {
-            //continue;
-        }
-
-        if (!empty($currentLevel)) {
-            if ($counter == $currentLevel) {
-                break;
-            }
-        }
-
         $children = $skillManager->getChildren($subSkillId);
-
-        /*$oldSkill = $skillManager->getDirectParents($subSkillId);
-        $oldSkill = $oldSkill[0];*/
 
         if (isset($subSkillList[$counter-1])) {
             $oldSkill = $skillRepo->find($subSkillList[$counter]);
         }
+        $skillsOptions = [];
+        if ($oldSkill) {
+            $skillsOptions = [$oldSkill->getId() => ' -- '.$oldSkill->getName()];
+        }
 
-        $skillsOptions = [$oldSkill->getId() => ' -- '.$oldSkill->getName()];
+        if ($counter < count($subSkillList) - 1) {
+            $disableList[] =  'sub_skill_id_'.($counter+1);
+        }
+
         foreach ($children as $child) {
             $skillsOptions[$child['id']] = $child['data']['name'];
         }
-        $form->addSelect('sub_skill_id_'.$counter, get_lang('SubSkill'), $skillsOptions, ['class' => 'sub_skill']);
+
+        $form->addSelect(
+            'sub_skill_id_'.($counter+1),
+            get_lang('SubSkill'),
+            $skillsOptions,
+            [
+                'id' => 'sub_skill_id_'.($counter+1),
+                'class' => 'sub_skill'
+            ]
+        );
 
         if (isset($subSkillList[$counter+1])) {
             $nextSkill = $skillRepo->find($subSkillList[$counter+1]);
-            $formDefaultValues['sub_skill_id_'.$counter] = $nextSkill->getId();
+            $formDefaultValues['sub_skill_id_'.($counter+1)] = $nextSkill->getId();
         }
         $newSubSkillList[] = $subSkillId;
         $counter++;
     }
     $subSkillList = $newSubSkillList;
 }
-var_dump($formDefaultValues);
 
 $subSkillListToString = implode(',', $subSkillList);
 $form->addHidden('sub_skill_list', $subSkillListToString);
-
 $form->addHidden('user', $user->getId());
 $form->addHidden('id', $skillId);
 $form->addRule('skill', get_lang('ThisFieldIsRequired'), 'required');
@@ -266,16 +282,25 @@ if (api_is_drh()) {
     );
 }
 
-$url = api_get_path(WEB_CODE_PATH).'badge/assign.php?user='.$userId.'&id='.$skillIdFromGet;
+$url = api_get_path(WEB_CODE_PATH).'badge/assign.php?user='.$userId.'&id=';
+
+$disableSelect = '';
+if ($disableList) {
+    foreach ($disableList as $name) {
+        $disableSelect .= "$('#".$name."').prop('disabled', true);";
+        $disableSelect .= "$('#".$name."').selectpicker('refresh');";
+    }
+}
 
 $htmlHeadXtra[] = '<script>
-$( document ).ready(function() {
+$(document).ready(function() {
     $("#skill").on("change", function() {
         $(location).attr("href", "'. $url.'"+$(this).val());
     });
     $(".sub_skill").on("change", function() {
-        $(location).attr("href", "'.$url.'&current="+$(this).attr("id")+"&sub_skill_list='.$subSkillListToString.',"+$(this).val());
+        $(location).attr("href", "'.$url.'&id='.$skillIdFromGet.'&current="+$(this).attr("id")+"&sub_skill_list='.$subSkillListToString.',"+$(this).val());
     });
+    '.$disableSelect.'
 });
 </script>';
 

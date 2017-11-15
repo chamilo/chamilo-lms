@@ -71,7 +71,11 @@ if ($skill) {
 }
 
 if (!empty($subSkillList)) {
-    $skillId = end($subSkillList);
+   // $skillId = end($subSkillList);
+    $skillFromLastSkill = $skillRepo->find(end($subSkillList));
+    if ($skillFromLastSkill) {
+        $profile = $skillFromLastSkill->getProfile();
+    }
 }
 
 if (!$profile) {

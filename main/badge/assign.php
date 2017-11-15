@@ -23,35 +23,22 @@ if (empty($userId)) {
 
 SkillManager::isAllow($userId);
 
+$user = api_get_user_entity($userId);
+
+if (!$user) {
+    api_not_allowed(true);
+}
+
 $entityManager = Database::getManager();
+$skillManager = new SkillManager();
 $skillRepo = $entityManager->getRepository('ChamiloCoreBundle:Skill');
 $skillRelSkill = $entityManager->getRepository('ChamiloCoreBundle:SkillRelSkill');
 $skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
 $skillUserRepo = $entityManager->getRepository('ChamiloCoreBundle:SkillRelUser');
-$user = api_get_user_entity($userId);
-
-if (!$user) {
-    Display::addFlash(
-        Display::return_message(get_lang('NoUser'), 'error')
-    );
-
-    header('Location: '.api_get_path(WEB_PATH));
-    exit;
-}
 
 $skills = $skillRepo->findBy([
     'status' => Skill::STATUS_ENABLED
 ]);
-
-$url = api_get_path(WEB_CODE_PATH).'badge/assign.php?user='.$userId.'&id=';
-
-$htmlHeadXtra[] = '<script>
-$( document ).ready(function() {
-    $("#skill").on("change", function() {
-        $(location).attr("href", "'. $url.'"+$(this).val());
-    });
-});
-</script>';
 
 $skillsOptions = [];
 $acquiredLevel = [];
@@ -61,8 +48,16 @@ foreach ($skills as $skill) {
     $skillsOptions[$skill->getId()] = $skill->getName();
 }
 
-$skillId = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : key($skillsOptions);
-$profile = $skillRepo->find($skillId)->getProfile();
+$skillIdFromGet = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$currentLevel = isset($_REQUEST['current']) ? (int) str_replace('assign_skill_sub_skill_id_', '', $_REQUEST['current']) : 0;
+$subSkillList = isset($_REQUEST['sub_skill_list']) ? explode(',', $_REQUEST['sub_skill_list']) : [];
+
+$skillId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : key($skillsOptions);
+$skill = $skillRepo->find($skillId);
+$profile = false;
+if ($skill) {
+    $profile = $skill->getProfile();
+}
 
 if (!$profile) {
     $skillRelSkill = new SkillRelSkill();
@@ -102,7 +97,6 @@ if ($profile) {
         $profileId = key($profileLevel);
         $acquiredLevel[$profileId] = $profileLevel[$profileId];
     }
-
 }
 
 $formDefaultValues = ['skill' => $skillId];
@@ -111,6 +105,55 @@ $form = new FormValidator('assign_skill');
 $form->addHeader(get_lang('AssignSkill'));
 $form->addText('user_name', get_lang('UserName'), false);
 $form->addSelect('skill', get_lang('Skill'), $skillsOptions, ['id' => 'skill']);
+
+$newSubSkillList = [];
+if (!empty($skillIdFromGet)) {
+    if (empty($subSkillList)) {
+        $subSkillList[] = $skillIdFromGet;
+    }
+    $subSkillList = array_unique($subSkillList);
+    $oldSkill = $skillRepo->find($skillIdFromGet);
+    $counter = 0;
+    foreach ($subSkillList as $subSkillId) {
+        if ($skillIdFromGet == $subSkillId) {
+            //continue;
+        }
+
+        if (!empty($currentLevel)) {
+            if ($counter == $currentLevel) {
+                break;
+            }
+        }
+
+        $children = $skillManager->getChildren($subSkillId);
+
+        /*$oldSkill = $skillManager->getDirectParents($subSkillId);
+        $oldSkill = $oldSkill[0];*/
+
+        if (isset($subSkillList[$counter-1])) {
+            $oldSkill = $skillRepo->find($subSkillList[$counter]);
+        }
+
+        $skillsOptions = [$oldSkill->getId() => ' -- '.$oldSkill->getName()];
+        foreach ($children as $child) {
+            $skillsOptions[$child['id']] = $child['data']['name'];
+        }
+        $form->addSelect('sub_skill_id_'.$counter, get_lang('SubSkill'), $skillsOptions, ['class' => 'sub_skill']);
+
+        if (isset($subSkillList[$counter+1])) {
+            $nextSkill = $skillRepo->find($subSkillList[$counter+1]);
+            $formDefaultValues['sub_skill_id_'.$counter] = $nextSkill->getId();
+        }
+        $newSubSkillList[] = $subSkillId;
+        $counter++;
+    }
+    $subSkillList = $newSubSkillList;
+}
+var_dump($formDefaultValues);
+
+$subSkillListToString = implode(',', $subSkillList);
+$form->addHidden('sub_skill_list', $subSkillListToString);
+
 $form->addHidden('user', $user->getId());
 $form->addHidden('id', $skillId);
 $form->addRule('skill', get_lang('ThisFieldIsRequired'), 'required');
@@ -222,6 +265,19 @@ if (api_is_drh()) {
         'name' => $user->getCompleteName()
     );
 }
+
+$url = api_get_path(WEB_CODE_PATH).'badge/assign.php?user='.$userId.'&id='.$skillIdFromGet;
+
+$htmlHeadXtra[] = '<script>
+$( document ).ready(function() {
+    $("#skill").on("change", function() {
+        $(location).attr("href", "'. $url.'"+$(this).val());
+    });
+    $(".sub_skill").on("change", function() {
+        $(location).attr("href", "'.$url.'&current="+$(this).attr("id")+"&sub_skill_list='.$subSkillListToString.',"+$(this).val());
+    });
+});
+</script>';
 
 $template = new Template(get_lang('AddSkill'));
 $template->assign('content', $form->returnForm());

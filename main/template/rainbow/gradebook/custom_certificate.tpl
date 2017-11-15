@@ -5,7 +5,19 @@
 	<title>{{ 'Certificate' | get_lang }}</title>
 </head>
 <body>
-<table border="0" bgcolor="#92c647" cellpadding="0" cellspacing="0" align="center" width="80%">
+    <table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td colspan="3">
+                <img src="{{ _p.web_css_theme }}images/cuadro.png">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img src="{{ _p.web_css_theme }}images/cuadro.png">
+            </td>
+            <td>
+                
+                <table border="0" bgcolor="#92c647" cellpadding="0" cellspacing="0" align="center" width="80%">
     <tr>
         <td bgcolor="#92c647"><img src="{{ _p.web_css_theme }}images/header_top.png" style="display: block;"></td>
     </tr>
@@ -83,6 +95,19 @@
         </td>
     </tr>
 </table>
+                
+            </td>
+            <td>
+                <img src="{{ _p.web_css_theme }}images/cuadro.png">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <img src="{{ _p.web_css_theme }}images/cuadro.png">
+            </td>
+        </tr>
+    </table>
+
 </body>
 </html>
 

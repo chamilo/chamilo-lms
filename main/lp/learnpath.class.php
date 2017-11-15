@@ -4564,12 +4564,9 @@ class learnpath
     public function save_current()
     {
         $debug = $this->debug;
-        if ($debug > 0) {
-            error_log('learnpath::save_current()', 0);
-        }
         // TODO: Do a better check on the index pointing to the right item (it is supposed to be working
         // on $ordered_items[] but not sure it's always safe to use with $items[]).
-        if ($debug > 2) {
+        if ($debug) {
             error_log('New LP - save_current() saving item '.$this->current, 0);
             error_log(''.print_r($this->items, true), 0);
         }
@@ -4674,7 +4671,7 @@ class learnpath
                     WHERE
                         c_id = $course_id AND
                         lp_id = ".$this->get_id()." AND
-                        user_id = " . $this->get_user_id()." ".$session_condition;
+                        user_id = ".$this->get_user_id()." ".$session_condition;
 
             if ($this->debug > 2) {
                 error_log('New LP - Saving last item seen : '.$sql, 0);

@@ -390,7 +390,7 @@ switch ($action) {
             if (isset($_POST['submit_button']) && !empty($post_title)) {
                 // If a title was submitted:
 
-                //Updating the lp.modified_on
+                // Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
 
                 if (isset($_SESSION['post_time']) && $_SESSION['post_time'] == $_POST['post_time']) {

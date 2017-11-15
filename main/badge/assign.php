@@ -74,7 +74,6 @@ if (!empty($subSkillList)) {
     $skillId = end($subSkillList);
 }
 
-
 if (!$profile) {
     $skillRelSkill = new SkillRelSkill();
     $parents = $skillRelSkill->getSkillParents($skillId);
@@ -101,7 +100,6 @@ if ($profile) {
         'profile' => $profileId
     ]);
     $profileLevels = [];
-
     foreach ($levels as $level) {
         $profileLevels[$level->getPosition()][$level->getId()] = $level->getName();
     }
@@ -174,7 +172,7 @@ $form->addHidden('user', $user->getId());
 $form->addHidden('id', $skillId);
 $form->addRule('skill', get_lang('ThisFieldIsRequired'), 'required');
 $form->addSelect('acquired_level', get_lang('AcquiredLevel'), $acquiredLevel);
-$form->addRule('acquired_level', get_lang('ThisFieldIsRequired'), 'required');
+//$form->addRule('acquired_level', get_lang('ThisFieldIsRequired'), 'required');
 $form->addTextarea('argumentation', get_lang('Argumentation'), ['rows' => 6]);
 $form->addRule('argumentation', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule(
@@ -189,7 +187,7 @@ $form->setDefaults($formDefaultValues);
 
 if ($form->validate()) {
     $values = $form->exportValues();
-    $skill = $skillRepo->find($values['skill']);
+    $skill = $skillRepo->find($values['id']);
 
     if (!$skill) {
         Display::addFlash(

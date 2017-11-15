@@ -139,7 +139,9 @@ if (!$profile) {
 
         if (!$profile && $parent['parent_id'] == 0) {
             $profile = $skillLevelRepo->findAll();
-            $profile = $profile[0];
+            if ($profile) {
+                $profile = $profile[0];
+            }
         }
     }
 }

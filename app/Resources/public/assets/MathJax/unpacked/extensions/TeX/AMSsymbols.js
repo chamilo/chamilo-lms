@@ -9,7 +9,7 @@
  *  
  *  ---------------------------------------------------------------------
  *  
- *  Copyright (c) 2009-2015 The MathJax Consortium
+ *  Copyright (c) 2009-2017 The MathJax Consortium
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
  */
 
 MathJax.Extension["TeX/AMSsymbols"] = {
-  version: "2.5.0"
+  version: "2.7.2"
 };
 
 MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
@@ -116,7 +116,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       boxdot:                 '22A1',
       circledcirc:            '229A',
       boxplus:                '229E',
-      centerdot:              '22C5',
+      centerdot:              ['22C5',{variantForm: true}],
       divideontimes:          '22C7',
       intercal:               '22BA',
 

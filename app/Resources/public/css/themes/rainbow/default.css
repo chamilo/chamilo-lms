@@ -182,8 +182,8 @@ a:focus {
 }
 .partners a{
     display: inline-block;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 .big_icon img{
     box-shadow: none;
@@ -757,8 +757,8 @@ table.table-striped tr td span.label-success{
 }
 footer .sub-footer{
   background-color:#ECECEC;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 footer{
   color: #333333;
@@ -1675,9 +1675,12 @@ blockquote p {
         display: none;
     }
     .partners {
-	padding-bottom: 20px;
-	padding-top: 20px;
+	padding-bottom: 0;
+	padding-top: 0;
 	text-align: center;
+    }
+    .partners a img {
+        width: 125px;
     }
     footer #footer_right {
 	text-align: center;
@@ -1912,4 +1915,20 @@ blockquote p {
 }
 .question_options .ui-state-active {
     background-color: #96BD0D !important;
+}
+
+.old_session {
+    border: 1px solid #666666 !important;
+}
+
+.future_session {
+    border: 1px solid #666666 !important;
+}
+
+.future_session img {
+    filter: grayscale(100%);
+}
+
+.future_session a {
+    color: #666 !important;
 }

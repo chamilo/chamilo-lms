@@ -1670,6 +1670,8 @@ class IndexManager
                                 $coachAccessEndDate = $session['coach_access_end_date'];
                                 $html_courses_session = [];
                                 $count = 0;
+                                $markAsOld = false;
+                                $markAsFuture = false;
 
                                 foreach ($session['courses'] as $course) {
                                     $is_coach_course = api_is_coach($session_id, $course['real_id']);
@@ -1708,6 +1710,17 @@ class IndexManager
                                         }
                                     }
 
+                                    if ($showAllSessions) {
+                                        if ($allowed_time < $session_now && $allowedEndTime == false) {
+                                            $markAsOld = true;
+                                        }
+                                        if ($allowed_time > $session_now && $endSessionToTms > $session_now) {
+                                            $markAsFuture = true;
+                                        }
+                                        $allowedEndTime = true;
+                                        $allowed_time = 0;
+                                    }
+
                                     if ($session_now >= $allowed_time && $allowedEndTime) {
                                         if (api_get_setting('hide_courses_in_sessions') === 'false') {
                                             $c = CourseManager::get_logged_user_course_html(
@@ -1736,6 +1749,8 @@ class IndexManager
                                     $sessionParams[0]['courses'] = $html_courses_session;
                                     $sessionParams[0]['show_simple_session_info'] = $showSimpleSessionInfo;
                                     $sessionParams[0]['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;
+                                    $sessionParams[0]['is_old'] = $markAsOld;
+                                    $sessionParams[0]['is_future'] = $markAsFuture;
 
                                     if ($showSimpleSessionInfo) {
                                         $sessionParams[0]['subtitle'] = self::getSimpleSessionDetails(

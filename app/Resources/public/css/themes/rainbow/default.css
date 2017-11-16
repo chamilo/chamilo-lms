@@ -1561,6 +1561,15 @@ blockquote p {
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
+    #admin_name{
+        display: none;
+    }
+    #software_name{
+        display: none;
+    }
+    #teachers{
+        display: none;
+    }
     .grid-courses .items{
         height: 300px;
     }
@@ -1597,7 +1606,11 @@ blockquote p {
     }
     .partners{
         text-align: center;
-        padding-top: 30px;
+        padding-top: 2px;
+    }
+    #footer_left{
+        padding-left: 0;
+        padding-right: 0;
     }
     footer #footer_right {
 	text-align: center;

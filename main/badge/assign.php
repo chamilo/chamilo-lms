@@ -187,6 +187,36 @@ if ($form->validate()) {
         exit;
     }
 
+    if ($user->hasSkill($skill)) {
+        Display::addFlash(
+            Display::return_message(
+                sprintf(
+                    get_lang('TheUserXHasAlreadyAchievedTheSkillY'),
+                    $user->getCompleteName(),
+                    $skill->getName()
+                ),
+                'warning'
+            )
+        );
+
+        header('Location: '.$currentUrl);
+        exit;
+    }
+
+    $skillUser = new SkillRelUser();
+    $skillUser->setUser($user);
+    $skillUser->setSkill($skill);
+    $level = $skillLevelRepo->find(intval($values['acquired_level']));
+    $skillUser->setAcquiredLevel($level);
+    $skillUser->setArgumentation($values['argumentation']);
+    $skillUser->setArgumentationAuthorId(api_get_user_id());
+    $skillUser->setAcquiredSkillAt(new DateTime());
+    $skillUser->setAssignedBy(0);
+
+    $entityManager->persist($skillUser);
+    $entityManager->flush();
+
+    // Send email depending of children_auto_threshold
     $skillRelSkill = new SkillRelSkill();
     $skillModel = new \Skill();
     $parents = $skillRelSkill->get_skill_parents($values['skill']);
@@ -228,34 +258,8 @@ if ($form->validate()) {
         }
     }
 
-    if ($user->hasSkill($skill)) {
-        Display::addFlash(
-            Display::return_message(
-                sprintf(
-                    get_lang('TheUserXHasAlreadyAchievedTheSkillY'),
-                    $user->getCompleteName(),
-                    $skill->getName()
-                ),
-                'warning'
-            )
-        );
 
-        header('Location: '.$currentUrl);
-        exit;
-    }
 
-    $skillUser = new SkillRelUser();
-    $skillUser->setUser($user);
-    $skillUser->setSkill($skill);
-    $level = $skillLevelRepo->find(intval($values['acquired_level']));
-    $skillUser->setAcquiredLevel($level);
-    $skillUser->setArgumentation($values['argumentation']);
-    $skillUser->setArgumentationAuthorId(api_get_user_id());
-    $skillUser->setAcquiredSkillAt(new DateTime());
-    $skillUser->setAssignedBy(0);
-
-    $entityManager->persist($skillUser);
-    $entityManager->flush();
 
     Display::addFlash(
         Display::return_message(

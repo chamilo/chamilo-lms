@@ -1713,24 +1713,26 @@ function api_get_anonymous_id()
 {
     // Find if another anon is connected now
     $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+    $tableU = Database::get_main_table(TABLE_MAIN_USER);
     $now = api_get_utc_datetime();
     $ip = api_get_real_ip();
     $max = api_get_configuration_value('max_anonymous_users');
-
     if ($max >= 2) {
-        $sql = "SELECT * FROM $table 
-                WHERE user_ip = '$ip'";
-        $result = Database::query($sql);
+        $sql = "SELECT * FROM $table as TEL 
+		JOIN $tableU as U
+		ON U.user_id = TEL.login_user_id
+                WHERE TEL.user_ip = '$ip'
+		AND U.status = ".ANONYMOUS."
+                AND U.user_id != 2 ";
+
+	$result = Database::query($sql);
         if (empty(Database::num_rows($result))) {
             $login = uniqid('anon_');
             $anonList = UserManager::get_user_list(['status' => ANONYMOUS], ['registration_date ASC']);
             if (count($anonList) == $max) {
                 foreach ($anonList as $userToDelete) {
-                    // Delete next older anon. Avoid the default anon user_id = 2 .
-                    if ($userToDelete['user_id'] != 2) {
-                        UserManager::delete_user($userToDelete['user_id']);
-                        break;
-                    }
+                    UserManager::delete_user($userToDelete['user_id']);
+                    break;
                 }
             }
             $userId = UserManager::create_user(
@@ -1742,6 +1744,9 @@ function api_get_anonymous_id()
                 $login
             );
             return $userId;
+	} else {
+            $row = Database::fetch_array($result, 'ASSOC');
+	    return $row['user_id'];
         }
     }
 
@@ -1751,7 +1756,7 @@ function api_get_anonymous_id()
             WHERE status = ".ANONYMOUS." ";
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
-        $row = Database::fetch_array($res);
+        $row = Database::fetch_array($res, 'ASSOC');
         return $row['user_id'];
     }
 

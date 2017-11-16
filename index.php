@@ -85,7 +85,7 @@ if (!empty($_POST['submitAuth'])) {
     }
 } else {
     // Only if login form was not sent because if the form is sent the user was already on the page.
-    Event::event_open();
+    Event::open();
 }
 if (api_get_setting('display_categories_on_homepage') === 'true') {
     $controller->tpl->assign('course_category_block', $controller->return_courses_in_categories());

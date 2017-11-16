@@ -17,7 +17,7 @@ class Event
      * @author Sebastien Piraux <piraux_seb@hotmail.com>
      * @desc Record information for open event (when homepage is opened)
      */
-    public static function event_open()
+    public static function open()
     {
         global $_configuration;
         global $TABLETRACK_OPEN;
@@ -1091,19 +1091,20 @@ class Event
         }
 
         $sql = "DELETE FROM $lp_view_table
-            WHERE
-                c_id = $course_id AND
-                user_id = $user_id AND
-                lp_id= $lp_id AND
-                session_id = $session_id
+                WHERE
+                    c_id = $course_id AND
+                    user_id = $user_id AND
+                    lp_id= $lp_id AND
+                    session_id = $session_id
             ";
         Database::query($sql);
 
         $sql = "SELECT exe_id FROM $track_e_exercises
-                WHERE   exe_user_id = $user_id AND
-                        session_id = $session_id AND
-                        c_id = $course_id AND
-                        orig_lp_id = $lp_id";
+                WHERE   
+                    exe_user_id = $user_id AND
+                    session_id = $session_id AND
+                    c_id = $course_id AND
+                    orig_lp_id = $lp_id";
         $result = Database::query($sql);
         $exe_list = array();
         while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -2216,6 +2217,7 @@ class Event
      * It's called by EventsDispatcher and fires the good function
      * with the good require_once.
      *
+     * @deprecated
      * @param string $event_name
      * @param array $params
      */
@@ -2261,7 +2263,8 @@ class Event
 
     /**
      * Basic template event message filter (to be used by other filters as default)
-     * @param array $values (passing by reference)
+     * @deprecated
+     * @param array $values (passing by reference)     *
      * @return boolean True if everything is OK, false otherwise
      */
     public function event_send_mail_filter_func(&$values)
@@ -2271,6 +2274,7 @@ class Event
 
     /**
      * user_registration - send_mail filter
+     * @deprecated
      * @param array $values (passing by reference)
      * @return boolean True if everything is OK, false otherwise
      */
@@ -2283,6 +2287,7 @@ class Event
 
     /**
      * portal_homepage_edited - send_mail filter
+     * @deprecated
      * @param array $values (passing by reference)
      * @return boolean True if everything is OK, false otherwise
      */

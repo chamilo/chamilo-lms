@@ -2461,6 +2461,7 @@ class ImportCsv
                     $arrow = $row['DrawArrowFrom'];
                     $subGroup = $row['SubGroup'];
                     $connections = $row['Connections'];
+                    $linkedElement = isset($row['LinkedElement']) ? $row['LinkedElement'] : null;
 
                     if ($graph->hasVertex($currentCourseId)) {
                         // Avoid double insertion
@@ -2475,6 +2476,7 @@ class ImportCsv
                         $current->setAttribute('DrawArrowFrom', $arrow);
                         $current->setAttribute('SubGroup', $subGroup);
                         $current->setAttribute('Connections', $connections);
+                        $current->setAttribute('LinkedElement', $linkedElement);
 
                         //$current->setAttribute('graphviz.color', 'blue');
                         $current->setAttribute('graphviz.shape', 'box');

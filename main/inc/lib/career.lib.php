@@ -308,6 +308,11 @@ class Career extends Model
         /** @var Vertex $vertex */
         foreach ($graph->getVertices() as $vertex) {
             $group = $vertex->getAttribute('Group');
+
+            $groupData = explode(':', $group);
+            $group = $groupData[0];
+            $groupLabel = isset($groupData[1]) ? $groupData[1] : '';
+
             $subGroup = $vertex->getAttribute('SubGroup');
             $subGroupData = explode(':', $subGroup);
             $column = $vertex->getGroup();
@@ -316,6 +321,7 @@ class Career extends Model
             $label = isset($subGroupData[1]) ? $subGroupData[1] : '';
             $list[$group][$subGroupId]['columns'][$column][$row] = $vertex;
             $list[$group][$subGroupId]['label'] = $label;
+            $list[$group]['label'] = $groupLabel;
         }
 
         $maxGroups = count($list);
@@ -419,6 +425,7 @@ class Career extends Model
             $graphHtml .= self::parseSubGroups(
                 $groupCourseList,
                 $group,
+                $list[$group]['label'],
                 $showGroupLine,
                 $subGroupList,
                 $widthGroup
@@ -433,6 +440,7 @@ class Career extends Model
     /**
      * @param array $groupCourseList list of groups and their courses
      * @param int $group
+     * @param string $groupLabel
      * @param bool $showGroupLine
      * @param array $subGroupList
      * @param $widthGroup
@@ -441,6 +449,7 @@ class Career extends Model
     public static function parseSubGroups(
         $groupCourseList,
         $group,
+        $groupLabel,
         $showGroupLine,
         $subGroupList,
         $widthGroup
@@ -456,6 +465,10 @@ class Career extends Model
         $borderLine = $showGroupLine === true ? 'border-style:solid;' : '';
         // padding:15px;
         $graphHtml = '<div id="'.$groupIdTag.'" class="career_group" style=" '.$borderLine.' padding:15px; float:left; margin-left:'.$leftGroup.'; width:'.$widthGroup.'%">';
+
+        if (!empty($groupLabel)) {
+            $graphHtml .= '<h3>'.$groupLabel.'</h3>';
+        }
 
         foreach ($subGroupList as $subGroup => $subGroupData) {
             $subGroupLabel = $subGroupData['label'];
@@ -540,9 +553,14 @@ class Career extends Model
                             $content = $vertex->getAttribute('Notes');
                             $content .= '<div class="pull-right">['.$id.']</div>';
 
+                            $title = $vertex->getAttribute('graphviz.label');
+                            if (!empty($vertex->getAttribute('LinkedElement'))) {
+                                $title = Display::url($title, $vertex->getAttribute('LinkedElement'));
+                            }
+
                             $graphHtml .= Display::panel(
                                 $content,
-                                $vertex->getAttribute('graphviz.label'),
+                                $title,
                                 null,
                                 null,
                                 null,

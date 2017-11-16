@@ -1749,13 +1749,13 @@ function api_get_anonymous_id()
     $max = api_get_configuration_value('max_anonymous_users');
     if ($max >= 2) {
         $sql = "SELECT * FROM $table as TEL 
-		JOIN $tableU as U
-		ON U.user_id = TEL.login_user_id
+                JOIN $tableU as U
+                ON U.user_id = TEL.login_user_id
                 WHERE TEL.user_ip = '$ip'
-		AND U.status = ".ANONYMOUS."
-                AND U.user_id != 2 ";
+                    AND U.status = ".ANONYMOUS."
+                    AND U.user_id != 2 ";
 
-	$result = Database::query($sql);
+        $result = Database::query($sql);
         if (empty(Database::num_rows($result))) {
             $login = uniqid('anon_');
             $anonList = UserManager::get_user_list(['status' => ANONYMOUS], ['registration_date ASC']);
@@ -1774,9 +1774,9 @@ function api_get_anonymous_id()
                 $login
             );
             return $userId;
-	} else {
+        } else {
             $row = Database::fetch_array($result, 'ASSOC');
-	    return $row['user_id'];
+            return $row['user_id'];
         }
     }
 
@@ -2811,7 +2811,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
         }
     }
 
-    return (count($sessionIsCoach) > 0);
+    return count($sessionIsCoach) > 0;
 }
 
 /**
@@ -2980,7 +2980,11 @@ function api_display_tool_view_option()
             return '';
         }
         $sourceurl = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
-        $sourceurl = str_replace('lp/lp_header.php', 'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.intval($_GET['lp_id']).'&isStudentView='.($_SESSION['studentview'] == 'studentview' ? 'false' : 'true'), $sourceurl);
+        $sourceurl = str_replace(
+            'lp/lp_header.php',
+            'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.intval($_GET['lp_id']).'&isStudentView='.($_SESSION['studentview'] == 'studentview' ? 'false' : 'true'),
+            $sourceurl
+        );
         //showinframes doesn't handle student view anyway...
         //return '';
         $is_framed = true;
@@ -3435,7 +3439,10 @@ function api_not_allowed(
 
         if (api_is_cas_activated()) {
             $content .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
-            $content .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_id())."'>".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", array('align'=>'center'));
+            $content .= Display::div(
+                "<br/><a href='".get_cas_direct_URL(api_get_course_id())."'>".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>",
+                array('align' => 'center')
+            );
             $content .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
             $content .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
             $content .= "<div style='display:none;'>";

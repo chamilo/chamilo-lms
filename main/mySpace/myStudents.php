@@ -1395,11 +1395,7 @@ if (empty($details)) {
     } else {
         echo '<tr><td colspan="6">'.get_lang('NoExercise').'</td></tr>';
     }
-    ?>
-    </tbody>
-    </table>
-    </div>
-    <?php
+    echo '</tbody></table></div>';
     }
 
     // @when using sessions we do not show the survey list

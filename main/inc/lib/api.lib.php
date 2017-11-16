@@ -1742,6 +1742,35 @@ function api_get_anonymous_id()
                 $login
             );
             return $userId;
+        } else {
+            $row = Database::fetch_array($result, 'ASSOC');
+            $userId = $row['login_user_id'];
+
+            $courseInfo = api_get_course_info();
+            if (!empty($courseInfo)) {
+                $sessionId = api_get_session_id();
+
+                $list = new LearnpathList(
+                    $userId,
+                    $courseInfo['code'],
+                    $sessionId,
+                    null,
+                    false
+                );
+                $flatList = $list->get_flat_list();
+                foreach ($flatList as $lpData) {
+                    if (!empty($lpData)) {
+                        Event::delete_student_lp_events(
+                            $userId,
+                            $lpData['lp_old_id'],
+                            $courseInfo,
+                            $sessionId
+                        );
+                    }
+                }
+            }
+
+            return $row['login_user_id'];
         }
     }
 
@@ -1751,7 +1780,7 @@ function api_get_anonymous_id()
             WHERE status = ".ANONYMOUS." ";
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
-        $row = Database::fetch_array($res);
+        $row = Database::fetch_array($res, 'ASSOC');
         return $row['user_id'];
     }
 

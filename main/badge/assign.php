@@ -240,12 +240,13 @@ if ($form->validate()) {
             if ($counter >= $requiredSkills) {
                 $bossList = UserManager::getStudentBossList($userId);
                 $url = api_get_path(WEB_CODE_PATH).'badge/assign.php?user='.$userId.'&id='.$parentId;
+                $link = Display::url($url, $url);
                 $subject = get_lang("StudentHadEnoughSkills");
                 $message = sprintf(
                     get_lang("StudentXHadEnoughSkillsToGetSkillXToAssignClickHereX"),
                     $user->getCompleteName(),
                     $parentData['name'],
-                    $url
+                    $link
                 );
                 foreach ($bossList as $boss) {
                     MessageManager::send_message_simple(

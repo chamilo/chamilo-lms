@@ -116,15 +116,20 @@ if ($profile) {
     }
 }
 
-$formDefaultValues = ['skill' => $skillId];
 
-$form = new FormValidator('assign_skill', 'POST', api_get_self().'?user='.$userId.'&');
+
+
+$formDefaultValues = ['skill' => $skillId];
+$newSubSkillList = [];
+$disableList = [];
+
+$currentUrl = api_get_self().'?user='.$userId.'&current='.$currentLevel;
+
+$form = new FormValidator('assign_skill', 'POST', $currentUrl);
 $form->addHeader(get_lang('AssignSkill'));
 $form->addText('user_name', get_lang('UserName'), false);
 $form->addSelect('skill', get_lang('Skill'), $skillsOptions, ['id' => 'skill']);
 
-$newSubSkillList = [];
-$disableList = [];
 if (!empty($skillIdFromGet)) {
     if (empty($subSkillList)) {
         $subSkillList[] = $skillIdFromGet;
@@ -171,6 +176,9 @@ if (!empty($skillIdFromGet)) {
 }
 
 $subSkillListToString = implode(',', $subSkillList);
+
+$currentUrl = api_get_self().'?user='.$userId.'&current='.$currentLevel.'&sub_skill_list='.$subSkillListToString;
+
 $form->addHidden('sub_skill_list', $subSkillListToString);
 $form->addHidden('user', $user->getId());
 $form->addHidden('id', $skillId);
@@ -191,14 +199,24 @@ $form->setDefaults($formDefaultValues);
 
 if ($form->validate()) {
     $values = $form->exportValues();
-    $skill = $skillRepo->find($values['id']);
+    $skillToProcess = $values['id'];
+    if (!empty($subSkillList)) {
+        $counter = 1;
+        foreach ($subSkillList as $subSkill) {
+            if (isset($values["sub_skill_id_$counter"])) {
+                $skillToProcess = $values["sub_skill_id_$counter"];
+            }
+            $counter++;
+        }
+    }
+    $skill = $skillRepo->find($skillToProcess);
 
     if (!$skill) {
         Display::addFlash(
             Display::return_message(get_lang('SkillNotFound'), 'error')
         );
 
-        header('Location: '.api_get_self().'?'.http_build_query(['user' => $user->getId()]));
+        header('Location: '.api_get_self().'?'.$currentUrl);
         exit;
     }
 
@@ -214,7 +232,7 @@ if ($form->validate()) {
             )
         );
 
-        header('Location: '.api_get_self().'?'.http_build_query(['user' => $user->getId()]));
+        header('Location: '.$currentUrl);
         exit;
     }
 

@@ -1554,6 +1554,12 @@ blockquote p {
 .result-body .panel.panel-default .panel-body{
     padding: 0;
 }
+#footer_left{
+    padding: 0;
+}
+.session-teachers{
+    display: none;
+}
 /* Large desktop */
 @media (min-width: 1200px) {
 
@@ -1628,6 +1634,9 @@ blockquote p {
         font-size: 12px;
     }
     #user_image_block{
+        display: none;
+    }
+    .session-teachers{
         display: none;
     }
 }

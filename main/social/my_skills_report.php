@@ -61,7 +61,7 @@ if ($isStudent) {
         while ($resultData = Database::fetch_assoc($result)) {
             $tableRow = array(
                 'completeName' => $followedStudents[$selectedStudent]['completeName'],
-                'skillName' => $resultData['name'],
+                'skillName' => Skill::translate($resultData['name']),
                 'achievedAt' => api_format_date($resultData['acquired_skill_at'], DATE_FORMAT_NUMBER),
                 'courseImage' => Display::return_icon(
                     'course.png',

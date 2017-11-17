@@ -128,7 +128,17 @@ $currentUrl = api_get_self().'?user='.$userId.'&current='.$currentLevel;
 $form = new FormValidator('assign_skill', 'POST', $currentUrl);
 $form->addHeader(get_lang('AssignSkill'));
 $form->addText('user_name', get_lang('UserName'), false);
-$form->addSelect('skill', get_lang('Skill'), $skillsOptions, ['id' => 'skill']);
+
+$levels = api_get_configuration_value('skill_levels_names');
+
+$levelName = get_lang('Skill');
+if (!empty($levels)) {
+    if (isset($levels['levels'][1])) {
+        $levelName = get_lang($levels['levels'][1]);
+    }
+}
+
+$form->addSelect('skill', $levelName, $skillsOptions, ['id' => 'skill']);
 
 if (!empty($skillIdFromGet)) {
     if (empty($subSkillList)) {
@@ -155,9 +165,16 @@ if (!empty($skillIdFromGet)) {
             $skillsOptions[$child['id']] = $child['data']['name'];
         }
 
+        $levelName = get_lang('SubSkill');
+        if (!empty($levels)) {
+            if (isset($levels['levels'][$counter + 2])) {
+                $levelName = get_lang($levels['levels'][$counter + 2]);
+            }
+        }
+
         $form->addSelect(
             'sub_skill_id_'.($counter+1),
-            get_lang('SubSkill'),
+            $levelName,
             $skillsOptions,
             [
                 'id' => 'sub_skill_id_'.($counter+1),

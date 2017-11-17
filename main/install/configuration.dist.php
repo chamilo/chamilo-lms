@@ -681,3 +681,11 @@ $_configuration['gradebook_badge_sidebar'] = [
 //$_configuration['disabled_edit_session_coaches_course_editing_course'] = false;
 // Show sender's email when receiving email notifications.
 //$_configuration['show_user_email_in_notification'] = false;
+// Set skill levels name, then later it will be parsed using get_lang BT#13586
+/*$_configuration['skill_levels_names'] = [
+    'levels' => [
+        1 => 'Skills',
+        2 => 'Capability',
+        3 => 'Dimension',
+    ]
+];*/

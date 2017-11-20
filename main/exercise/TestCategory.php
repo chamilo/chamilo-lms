@@ -67,7 +67,7 @@ class TestCategory
 
         // check if name already exists
         $sql = "SELECT count(*) AS nb FROM $table
-                WHERE title = '".$this->name."' AND c_id=$courseId";
+                WHERE title = '".$this->name."' AND c_id = $courseId";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         // lets add in BDD if not the same name
@@ -242,6 +242,8 @@ class TestCategory
     public static function getCategoryForQuestion($questionId, $courseId = 0)
     {
         $courseId = (int) $courseId;
+        $questionId = (int) $questionId;
+
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
@@ -251,7 +253,6 @@ class TestCategory
         }
 
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $questionId = intval($questionId);
         $sql = "SELECT category_id
                 FROM $table
                 WHERE question_id = $questionId AND c_id = $courseId";
@@ -630,7 +631,6 @@ class TestCategory
     public static function returnCategoryAndTitle($questionId, $in_display_category_name = 1)
     {
         $is_student = !(api_is_allowed_to_edit(null, true) || api_is_session_admin());
-        // @todo fix $_SESSION['objExercise']
         $objExercise = Session::read('objExercise');
         if (!empty($objExercise)) {
             $in_display_category_name = $objExercise->display_category_name;
@@ -733,7 +733,6 @@ class TestCategory
         $res_num_max = 0;
         // foreach question
         $categories = self::getListOfCategoriesIDForTest($exerciseId);
-
         foreach ($categories as $category) {
             if (empty($category['id'])) {
                 continue;

@@ -254,6 +254,7 @@ class SkillRelSkill extends Model
         $user_id = false,
         $order = ''
     ) {
+        $skill_id = (int) $skill_id;
         $sql = 'SELECT parent.* FROM '.$this->tableSkill.' skill
                 INNER JOIN '.$this->table.' parent
                 ON parent.id = skill.id
@@ -352,19 +353,19 @@ class SkillRelGradebook extends Model
     }
 
     /**
-     * @param int $gradebook_id
-     * @param int $skill_id
+     * @param int $gradebookId
+     * @param int $skillId
      * @return bool
      */
-    public function existsGradeBookSkill($gradebook_id, $skill_id)
+    public function existsGradeBookSkill($gradebookId, $skillId)
     {
         $result = $this->find(
             'all',
             array(
                 'where' => array(
                     'gradebook_id = ? AND skill_id = ?' => array(
-                        $gradebook_id,
-                        $skill_id
+                        $gradebookId,
+                        $skillId
                     )
                 )
             )
@@ -378,7 +379,7 @@ class SkillRelGradebook extends Model
     /**
      * Gets an element
      */
-    public function getSkillInfo($skill_id, $gradebook_id)
+    public function getSkillInfo($skill_id, $gradebookId)
     {
         if (empty($skill_id)) {
             return array();
@@ -390,7 +391,7 @@ class SkillRelGradebook extends Model
                 'where' => array(
                     'skill_id = ? AND gradebook_id = ? ' => array(
                         $skill_id,
-                        $gradebook_id
+                        $gradebookId
                     )
                 )
             ),
@@ -530,7 +531,6 @@ class SkillRelUser extends Model
 
         $courseId = intval($courseId);
         $sessionId = $sessionId ? intval($sessionId) : null;
-
         $whereConditions = array(
             'user_id = ? ' => intval($userId)
         );
@@ -882,13 +882,13 @@ class Skill extends Model
 
     /**
      * @param int $user_id
-     * @param int $gradebook_id
+     * @param int $gradebookId
      * @param int $courseId
      * @param int $sessionId
      */
     public function addSkillToUser(
         $user_id,
-        $gradebook_id,
+        $gradebookId,
         $courseId = 0,
         $sessionId = 0
     ) {
@@ -896,7 +896,7 @@ class Skill extends Model
         $skill_rel_user = new SkillRelUser();
 
         $skill_gradebooks = $skill_gradebook->get_all(
-            array('where' => array('gradebook_id = ?' => $gradebook_id))
+            array('where' => array('gradebook_id = ?' => $gradebookId))
         );
         if (!empty($skill_gradebooks)) {
             foreach ($skill_gradebooks as $skill_gradebook) {

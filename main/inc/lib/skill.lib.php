@@ -995,7 +995,8 @@ class Skill extends Model
     public function getUserSkills($userId, $get_skill_data = false)
     {
         $userId = intval($userId);
-        $sql = 'SELECT DISTINCT s.id, s.name, s.icon, u.id as issue
+        $sql = 'SELECT DISTINCT 
+                s.id, s.name, s.icon, u.id as issue, u.acquired_skill_at, u.course_id
                 FROM '.$this->table_skill_rel_user.' u
                 INNER JOIN '.$this->table.' s
                 ON u.skill_id = s.id
@@ -1005,12 +1006,13 @@ class Skill extends Model
         $skills = Database::store_result($result, 'ASSOC');
         $uploadPath = api_get_path(WEB_UPLOAD_PATH);
         $clean_skill = array();
+        $defaultIcon = Display::returnIconPath('badges-default.png', ICON_SIZE_BIG);
+
         if (!empty($skills)) {
             foreach ($skills as $skill) {
                 if ($get_skill_data) {
                     $iconThumb = null;
                     $iconPath = null;
-
                     if (!empty($skill['icon'])) {
                         $iconThumb = sprintf(
                             "badges/%s-small.png",
@@ -1021,7 +1023,14 @@ class Skill extends Model
                             "badges/%s.png",
                             sha1($skill['name'])
                         );
+                        $skill['icon_image'] = Display::img($uploadPath.$iconThumb, $skill['name']);
+                        $skill['icon'] = $uploadPath.$iconThumb;
+                    } else {
+                        $iconImage = Display::return_icon('badges-default.png', $skill['name'], null, ICON_SIZE_BIG);
+                        $skill['icon_image'] = $iconImage;
+                        $skill['icon'] = $defaultIcon;
                     }
+
                     $clean_skill[$skill['id']] = array_merge(
                         $skill,
                         array(
@@ -1731,7 +1740,7 @@ class Skill extends Model
      */
     public function getStudentSkills($userId)
     {
-        $sql = "SELECT s.name, sru.acquired_skill_at
+        $sql = "SELECT s.id, s.name, sru.acquired_skill_at
                 FROM {$this->table} s
                 INNER JOIN {$this->table_skill_rel_user} sru
                 ON s.id = sru.skill_id

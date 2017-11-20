@@ -10,23 +10,25 @@
     <table class="table">
         <thead>
             <tr>
+                <th>{{ 'Badge' | get_lang }}</th>
                 <th>{{ 'Skill' | get_lang }}</th>
                 <th>{{ 'Date' | get_lang }}</th>
                 <th>{{ 'Course' | get_lang }}</th>
             </tr>
         </thead>
         <tbody>
-            {% for row in rows %}
-                <tr>
-                    <td>{{ row.skillName }}</td>
-                    <td>{{ row.achievedAt }}</td>
-                    {% if row.courseName %}
-                        <td><img src="{{ row.courseImage }}" alt="{{ row.courseName }}" width="32"> {{ row.courseName }}</td>
-                    {% else %}
-                        <td> - </td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
+        {% for row in rows %}
+            <tr>
+                <td>{{ row.skill_badge }}</td>
+                <td>{{ row.skill_name }}</td>
+                <td>{{ row.achieved_at }}</td>
+                {% if row.course_name %}
+                    <td><img src="{{ row.course_image }}" alt="{{ row.course_name }}" width="32"> {{ row.course_name }}</td>
+                {% else %}
+                    <td> - </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
 {% else %}

@@ -36,18 +36,28 @@ $skillRelSkill = $entityManager->getRepository('ChamiloCoreBundle:SkillRelSkill'
 $skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
 $skillUserRepo = $entityManager->getRepository('ChamiloCoreBundle:SkillRelUser');
 
-$skills = $skillRepo->findBy([
-    'status' => Skill::STATUS_ENABLED
-]);
+$levels = api_get_configuration_value('skill_levels_names');
 
 $skillsOptions = [];
 $acquiredLevel = [];
 $formDefaultValues = [];
 
-foreach ($skills as $skill) {
-    $skillsOptions[$skill->getId()] = $skill->getName();
-}
+if (empty($levels)) {
+    $skills = $skillRepo->findBy([
+        'status' => Skill::STATUS_ENABLED,
+    ]);
+    /** @var Skill $skill */
+    foreach ($skills as $skill) {
+        $skillsOptions[$skill->getId()] = $skill->getName();
+    }
+} else {
+    // Get only root elements
+    $skills = $skillManager->getChildren(1);
+    foreach ($skills as $skill) {
+        $skillsOptions[$skill['data']['id']] = $skill['data']['name'];
+    }
 
+}
 $skillIdFromGet = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $currentLevel = isset($_REQUEST['current']) ? (int) str_replace('assign_skill_sub_skill_id_', '', $_REQUEST['current']) : 0;
 $subSkillList = isset($_REQUEST['sub_skill_list']) ? explode(',', $_REQUEST['sub_skill_list']) : [];
@@ -62,7 +72,6 @@ if (!empty($currentLevel)) {
     }
 }
 
-
 $skillId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : key($skillsOptions);
 $skill = $skillRepo->find($skillId);
 $profile = false;
@@ -71,7 +80,6 @@ if ($skill) {
 }
 
 if (!empty($subSkillList)) {
-   // $skillId = end($subSkillList);
     $skillFromLastSkill = $skillRepo->find(end($subSkillList));
     if ($skillFromLastSkill) {
         $profile = $skillFromLastSkill->getProfile();
@@ -82,7 +90,6 @@ if (!$profile) {
     $skillRelSkill = new SkillRelSkill();
     $parents = $skillRelSkill->getSkillParents($skillId);
     krsort($parents);
-
     foreach ($parents as $parent) {
         $skillParentId = $parent['skill_id'];
         $profile = $skillRepo->find($skillParentId)->getProfile();
@@ -101,7 +108,7 @@ if (!$profile) {
 if ($profile) {
     $profileId = $profile->getId();
     $levels = $skillLevelRepo->findBy([
-        'profile' => $profileId
+        'profile' => $profileId,
     ]);
     $profileLevels = [];
     foreach ($levels as $level) {
@@ -116,9 +123,6 @@ if ($profile) {
     }
 }
 
-
-
-
 $formDefaultValues = ['skill' => $skillId];
 $newSubSkillList = [];
 $disableList = [];
@@ -128,8 +132,6 @@ $currentUrl = api_get_self().'?user='.$userId.'&current='.$currentLevel;
 $form = new FormValidator('assign_skill', 'POST', $currentUrl);
 $form->addHeader(get_lang('AssignSkill'));
 $form->addText('user_name', get_lang('UserName'), false);
-
-$levels = api_get_configuration_value('skill_levels_names');
 
 $levelName = get_lang('Skill');
 if (!empty($levels)) {
@@ -178,7 +180,7 @@ if (!empty($skillIdFromGet)) {
             $skillsOptions,
             [
                 'id' => 'sub_skill_id_'.($counter+1),
-                'class' => 'sub_skill'
+                'class' => 'sub_skill',
             ]
         );
 
@@ -287,35 +289,35 @@ $form->freeze(['user_name']);
 if (api_is_drh()) {
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'mySpace/index.php',
-        "name" => get_lang('MySpace')
+        "name" => get_lang('MySpace'),
     );
     if ($user->getStatus() == COURSEMANAGER) {
         $interbreadcrumb[] = array(
             "url" => api_get_path(WEB_CODE_PATH).'mySpace/teachers.php',
-            'name' => get_lang('Teachers')
+            'name' => get_lang('Teachers'),
         );
     } else {
         $interbreadcrumb[] = array(
             "url" => api_get_path(WEB_CODE_PATH).'mySpace/student.php',
-            'name' => get_lang('MyStudents')
+            'name' => get_lang('MyStudents'),
         );
     }
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userId,
-        'name' => $user->getCompleteName()
+        'name' => $user->getCompleteName(),
     );
 } else {
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
-        'name' => get_lang('PlatformAdmin')
+        'name' => get_lang('PlatformAdmin'),
     );
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'admin/user_list.php',
-        'name' => get_lang('UserList')
+        'name' => get_lang('UserList'),
     );
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId,
-        'name' => $user->getCompleteName()
+        'name' => $user->getCompleteName(),
     );
 }
 

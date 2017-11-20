@@ -170,6 +170,7 @@ class SkillRelSkill extends Model
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_MAIN_SKILL_REL_SKILL);
+        $this->tableSkill = Database::get_main_table(TABLE_MAIN_SKILL);
     }
 
     /**
@@ -250,18 +251,23 @@ class SkillRelSkill extends Model
     public function getChildren(
         $skill_id,
         $load_user_data = false,
-        $user_id = false
+        $user_id = false,
+        $order = ''
     ) {
-        $skills = $this->find(
-            'all',
-            array('where' => array('parent_id = ? ' => $skill_id))
-        );
+        $sql = 'SELECT parent.* FROM '.$this->tableSkill.' skill
+                INNER JOIN '.$this->table.' parent
+                ON parent.id = skill.id
+                WHERE parent_id = '.$skill_id.'
+                ORDER BY skill.name ASC';
+        $result = Database::query($sql);
+        $skills = Database::store_result($result, 'ASSOC');
+
         $skill_obj = new Skill();
         $skill_rel_user = new SkillRelUser();
 
         if ($load_user_data) {
             $passed_skills = $skill_rel_user->getUserSkills($user_id);
-            $done_skills   = array();
+            $done_skills = array();
             foreach ($passed_skills as $done_skill) {
                 $done_skills[] = $done_skill['skill_id'];
             }
@@ -652,7 +658,7 @@ class Skill extends Model
         $skill_list = array_map('intval', $skill_list);
         $skill_list = implode("', '", $skill_list);
 
-        $sql = "SELECT * FROM {$this->table} 
+        $sql = "SELECT * FROM {$this->table}
                 WHERE id IN ('$skill_list') ";
 
         $result = Database::query($sql);
@@ -1566,9 +1572,9 @@ class Skill extends Model
 
         $sql = "SELECT s.id, s.name
                 FROM {$this->table_gradebook} g
-                INNER JOIN {$this->table_skill_rel_gradebook} sg 
+                INNER JOIN {$this->table_skill_rel_gradebook} sg
                 ON g.id = sg.gradebook_id
-                INNER JOIN {$this->sessionTable} s 
+                INNER JOIN {$this->sessionTable} s
                 ON g.session_id = s.id
                 WHERE sg.skill_id = $skillId
                 AND g.session_id > 0";

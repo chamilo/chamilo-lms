@@ -1,16 +1,23 @@
 <?php
 /* For licensing terms, see /license.txt */
 use ChamiloSession as Session;
+
 /**
  * @package chamilo.main
  */
 define('CHAMILO_HOMEPAGE', true);
 define('CHAMILO_LOAD_WYSIWYG', false);
+
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore. */
 // Maybe we should change this into an api function? an example: CourseManager::unset();
 $cidReset = true;
 require_once 'main/inc/global.inc.php';
-//require_once 'main/auth/external_login/facebook.inc.php';
+
+$allow = api_get_configuration_value('plugin_redirection_enabled');
+if ($allow) {
+    RedirectionPlugin::redirectUser(api_get_user_id());
+}
+
 // The section (for the tabs).
 $this_section = SECTION_CAMPUS;
 $header_title = null;

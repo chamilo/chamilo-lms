@@ -73,21 +73,9 @@ class Redirect
             if (isset($user_id)) {
                 $allow = api_get_configuration_value('plugin_redirection_enabled');
                 if ($allow) {
-                    // Check redirection plugin
-                    $plugin = new AppPlugin();
-                    $pluginList = $plugin->get_installed_plugins();
-                    $redirectionInstalled = in_array('redirection', $pluginList);
-                    if ($redirectionInstalled) {
-                        $pluginInfo = $plugin->getPluginInfo('redirection');
-                        if (!empty($pluginInfo) && isset($pluginInfo['obj'])) {
-                            /** @var RedirectionPlugin $redirectionPlugin */
-                            $redirectionPlugin = $pluginInfo['obj'];
-                            $record = $redirectionPlugin->getUrlFromUser($user_id);
-                            if (!empty($record) && !empty($record['url'])) {
-                                header('Location: '.$record['url']);
-                                exit;
-                            }
-                        }
+                    $allow = api_get_configuration_value('plugin_redirection_enabled');
+                    if ($allow) {
+                        RedirectionPlugin::redirectUser($user_id);
                     }
                 }
 
@@ -143,7 +131,6 @@ class Redirect
             if (!empty($page_after_login)) {
                 self::navigate(api_get_path(WEB_PATH).$page_after_login);
             }
-
         }
     }
 

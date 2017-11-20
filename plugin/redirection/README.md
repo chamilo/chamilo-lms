@@ -1,7 +1,8 @@
 Redirection plugin
 ===
 
-Chamilo plugin for the redirection of specific users after they login.
+Chamilo plugin for the redirection of specific users after they login and
+redirect from the index.php to the selected URL.
 
 Requires the addition of the following in configuration.php:
 

@@ -18,37 +18,40 @@ class MySpace
      */
     public static function getAdminActions()
     {
-        $actions = array(
-            //array('url' => api_get_path(WEB_CODE_PATH).'mySpace/index.php', 'content' => get_lang('Home')),
-            array(
+        $actions = [
+            [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=coaches',
                 'content' => get_lang('DisplayCoaches'),
-            ),
-            array(
+            ],
+            [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=user',
                 'content' => get_lang('DisplayUserOverview'),
-            ),
-            array(
+            ],
+            [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=session',
                 'content' => get_lang('DisplaySessionOverview'),
-            ),
-            array(
+            ],
+            [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=course',
                 'content' => get_lang('DisplayCourseOverview'),
-            ),
-            array(
+            ],
+            [
                 'url' => api_get_path(WEB_CODE_PATH).'tracking/question_course_report.php?view=admin',
                 'content' => get_lang('LPQuestionListResults'),
-            ),
-            array(
+            ],
+            [
                 'url' => api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin',
                 'content' => get_lang('LPExerciseResultsBySession'),
-            ),
+            ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=accessoverview',
                 'content' => get_lang('DisplayAccessOverview').' ('.get_lang('Beta').')',
             ],
-        );
+            [
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/exercise_category_report.php',
+                'content' => get_lang('ExerciseCategoryAllSessionsReport'),
+            ],
+        ];
 
         return Display::actions($actions, null);
     }

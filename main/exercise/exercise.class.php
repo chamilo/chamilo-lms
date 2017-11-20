@@ -3475,7 +3475,7 @@ class Exercise
         }
 
         // Construction of the Answer object
-        $objAnswerTmp = new Answer($questionId);
+        $objAnswerTmp = new Answer($questionId, $course_id);
         $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
         if ($debug) {

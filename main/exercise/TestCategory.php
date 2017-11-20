@@ -316,13 +316,14 @@ class TestCategory
      * return : array of category id (integer)
      * hubert.borderiou 07-04-2011
      * @param int $exerciseId
+     * @param int $courseId
      *
      * @return array
      */
-    public static function getListOfCategoriesIDForTest($exerciseId)
+    public static function getListOfCategoriesIDForTest($exerciseId, $courseId = 0)
     {
         // parcourir les questions d'un test, recup les categories uniques dans un tableau
-        $exercise = new Exercise();
+        $exercise = new Exercise($courseId);
         $exercise->read($exerciseId, false);
         $categoriesInExercise = $exercise->getQuestionWithCategories();
         // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???
@@ -337,14 +338,14 @@ class TestCategory
     }
 
     /**
-     * @param Exercise $exercise_obj
+     * @param Exercise $exercise
      * @return array
      */
-    public static function getListOfCategoriesIDForTestObject(Exercise $exercise_obj)
+    public static function getListOfCategoriesIDForTestObject(Exercise $exercise)
     {
         // parcourir les questions d'un test, recup les categories uniques dans un tableau
         $categories_in_exercise = array();
-        $question_list = $exercise_obj->getQuestionOrderedListByName();
+        $question_list = $exercise->getQuestionOrderedListByName();
 
         // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???
         foreach ($question_list as $questionInfo) {
@@ -397,13 +398,13 @@ class TestCategory
     }
 
     /**
-     * @param Exercise $exercise_obj
+     * @param Exercise $exercise
      * @return array
      */
-    public static function getListOfCategoriesForTest(Exercise $exercise_obj)
+    public static function getListOfCategoriesForTest(Exercise $exercise)
     {
         $result = array();
-        $categories = self::getListOfCategoriesIDForTestObject($exercise_obj);
+        $categories = self::getListOfCategoriesIDForTestObject($exercise);
         foreach ($categories as $cat_id) {
             $cat = new TestCategory();
             $cat = (array) $cat->getCategory($cat_id);
@@ -1011,19 +1012,19 @@ class TestCategory
 
     /**
      * Returns the category form.
-     * @param Exercise $exercise_obj
+     * @param Exercise $exercise
      * @return string
      */
-    public function returnCategoryForm(Exercise $exercise_obj)
+    public function returnCategoryForm(Exercise $exercise)
     {
-        $categories = $this->getListOfCategoriesForTest($exercise_obj);
-        $saved_categories = $exercise_obj->get_categories_in_exercise();
+        $categories = $this->getListOfCategoriesForTest($exercise);
+        $saved_categories = $exercise->get_categories_in_exercise();
         $return = null;
 
         if (!empty($categories)) {
-            $nbQuestionsTotal = $exercise_obj->getNumberQuestionExerciseCategory();
-            $exercise_obj->setCategoriesGrouping(true);
-            $real_question_count = count($exercise_obj->getQuestionList());
+            $nbQuestionsTotal = $exercise->getNumberQuestionExerciseCategory();
+            $exercise->setCategoriesGrouping(true);
+            $real_question_count = count($exercise->getQuestionList());
 
             $warning = null;
             if ($nbQuestionsTotal != $real_question_count) {

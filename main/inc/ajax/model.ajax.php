@@ -33,6 +33,7 @@ if (!in_array(
     $action,
     array(
         'get_exercise_results',
+        'get_exercise_results_report',
         'get_work_student_list_overview',
         'get_hotpotatoes_exercise_results',
         'get_work_teacher',
@@ -518,6 +519,19 @@ switch ($action) {
         $count = ExerciseLib::get_count_exam_results(
             $exercise_id,
             $whereCondition
+        );
+        break;
+    case 'get_exercise_results_report':
+        $exerciseId = $_REQUEST['exercise_id'];
+        $courseId = $_REQUEST['course_id'];
+        $startDate = Database::escape_string($_REQUEST['start_date']);
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $whereCondition .= " AND exe_date > '$startDate' ";
+        $count = ExerciseLib::get_count_exam_results(
+            $exerciseId,
+            $whereCondition,
+            $courseInfo['code'],
+            true
         );
         break;
     case 'get_hotpotatoes_exercise_results':
@@ -1145,6 +1159,43 @@ switch ($action) {
             $sord,
             $exercise_id,
             $whereCondition
+        );
+        break;
+    case 'get_exercise_results_report':
+        api_protect_admin_script();
+
+        // Used inside ExerciseLib::get_exam_results_data()
+        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path']."/document";
+
+        $columns = array(
+            'firstname',
+            'lastname',
+            'username',
+            'session',
+            'start_date',
+            'exe_date',
+            'score'
+        );
+        $categoryList = TestCategory::getListOfCategoriesIDForTest($exerciseId, $courseId);
+        if (!empty($categoryList)) {
+            foreach ($categoryList as $categoryInfo) {
+                $columns[] = 'category_'.$categoryInfo['id'];
+            }
+        }
+
+        $columns[] = 'actions';
+
+        $result = ExerciseLib::get_exam_results_data(
+            $start,
+            $limit,
+            $sidx,
+            $sord,
+            $exerciseId,
+            $whereCondition,
+            false,
+            $courseInfo['code'],
+            true,
+            true
         );
         break;
     case 'get_hotpotatoes_exercise_results':
@@ -1966,6 +2017,7 @@ $allowed_actions = array(
     'get_session_progress',
     'get_exercise_progress',
     'get_exercise_results',
+    'get_exercise_results_report',
     'get_work_student_list_overview',
     'get_hotpotatoes_exercise_results',
     'get_work_teacher',

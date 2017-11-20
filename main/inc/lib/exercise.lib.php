@@ -1508,9 +1508,12 @@ HOTSPOT;
      * Gets count of exam results
      * @param int $exerciseId
      * @param array $conditions
+     * @param string $courseCode
+     * @param bool $showSession
+     *
      * @return array
      */
-    public static function get_count_exam_results($exerciseId, $conditions)
+    public static function get_count_exam_results($exerciseId, $conditions, $courseCode = '', $showSession = false)
     {
         $count = self::get_exam_results_data(
             null,
@@ -1519,8 +1522,11 @@ HOTSPOT;
             null,
             $exerciseId,
             $conditions,
-            true
+            true,
+            $courseCode,
+            $showSession
         );
+
         return $count;
     }
 
@@ -1680,7 +1686,9 @@ HOTSPOT;
         $exercise_id,
         $extra_where_conditions = null,
         $get_count = false,
-        $courseCode = null
+        $courseCode = null,
+        $showSessionField = false,
+        $showExerciseCategories = false
     ) {
         //@todo replace all this globals
         global $documentPath, $filter;
@@ -1688,9 +1696,7 @@ HOTSPOT;
         $courseCode = empty($courseCode) ? api_get_course_id() : $courseCode;
         $courseInfo = api_get_course_info($courseCode);
         $course_id = $courseInfo['real_id'];
-        $sessionId = api_get_session_id();
         $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit(true) || api_is_drh() || api_is_student_boss();
-
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_GROUP_REL_USER = Database::get_course_table(TABLE_GROUP_USER);
@@ -1698,10 +1704,14 @@ HOTSPOT;
         $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $TBL_TRACK_HOTPOTATOES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
         $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-
-        $session_id_and = ' AND te.session_id = '.$sessionId.' ';
+        $sessionId = api_get_session_id();
+        $session_id_and = '';
+        $sessionCondition = '';
+        if (!$showSessionField) {
+            $session_id_and = " AND te.session_id = '.$sessionId ";
+            $sessionCondition = " AND  ttte.session_id = $sessionId";
+        }
         $exercise_id = intval($exercise_id);
-
         $exercise_where = '';
         if (!empty($exercise_id)) {
             $exercise_where .= ' AND te.exe_exo_id = '.$exercise_id.'  ';
@@ -1717,12 +1727,13 @@ HOTSPOT;
         $sql_inner_join_tbl_track_exercices = "
         (
             SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised
-            FROM $TBL_TRACK_EXERCICES ttte LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
+            FROM $TBL_TRACK_EXERCICES ttte 
+            LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
             ON (ttte.exe_id = tr.exe_id)
             WHERE
                 c_id = $course_id AND
-                exe_exo_id = $exercise_id AND
-                ttte.session_id = ".$sessionId."
+                exe_exo_id = $exercise_id 
+                $sessionCondition
         )";
 
         if ($is_allowedToEdit) {
@@ -1841,6 +1852,7 @@ HOTSPOT;
                     te.exe_weighting,
                     te.exe_date,
                     te.exe_id,
+                    te.session_id,
                     email as exemail,
                     te.start_date,
                     ce.expired_time,
@@ -1947,7 +1959,6 @@ HOTSPOT;
 
             $lp_list_obj = new LearnpathList(api_get_user_id());
             $lp_list = $lp_list_obj->get_flat_list();
-
             $oldIds = array_column($lp_list, 'lp_old_id', 'iid');
 
             if (is_array($results)) {
@@ -2108,12 +2119,12 @@ HOTSPOT;
                                     break;
                                 case 2: //finished but not marked as such
                                     $actions .= '<a href="exercise_report.php?'
-                                        . api_get_cidreq()
-                                        . '&exerciseId='
-                                        . $exercise_id
-                                        . '&a=close&id='
-                                        . $id
-                                        . '">'.
+                                        .api_get_cidreq()
+                                        .'&exerciseId='
+                                        .$exercise_id
+                                        .'&a=close&id='
+                                        .$id
+                                        .'">'.
                                         Display:: return_icon(
                                             'lock.png',
                                             get_lang('MarkAttemptAsClosed'),
@@ -2127,13 +2138,12 @@ HOTSPOT;
                                     );
                                     break;
                                 case 3: //still ongoing
-                                    $actions .= "".
-                                        Display:: return_icon(
-                                            'clock.png',
-                                            get_lang('AttemptStillOngoingPleaseWait'),
-                                            array(),
-                                            ICON_SIZE_SMALL
-                                        );
+                                    $actions .= Display:: return_icon(
+                                        'clock.png',
+                                        get_lang('AttemptStillOngoingPleaseWait'),
+                                        array(),
+                                        ICON_SIZE_SMALL
+                                    );
                                     $actions .= '';
                                     $revisedLabel = Display::label(
                                         get_lang('Ongoing'),
@@ -2158,9 +2168,8 @@ HOTSPOT;
                                     false
                                 );
                                 $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip='.$ip.'" target="_blank">'
-                                . Display::return_icon('info.png', $ip)
-                                .'</a>';
-
+                                    .Display::return_icon('info.png', $ip)
+                                    .'</a>';
 
                                 $recalculateUrl = api_get_path(WEB_CODE_PATH).'exercise/recalculate.php?'.
                                     api_get_cidreq().'&'.
@@ -2180,7 +2189,8 @@ HOTSPOT;
                                     ]
                                 );
 
-                                $delete_link = '<a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.intval($_GET['filter_by_user']).'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
+                                $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
+                                $delete_link = '<a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
                                 onclick="javascript:if(!confirm(\'' . sprintf(
                                     get_lang('DeleteAttempt'),
                                     $results[$i]['username'],
@@ -2201,7 +2211,6 @@ HOTSPOT;
                                 }
                                 $actions .= $delete_link;
                             }
-
                         } else {
                             $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?'.api_get_cidreq().'&id='.$results[$i]['exe_id'].'&id_session='.$sessionId;
                             $attempt_link = Display::url(
@@ -2215,10 +2224,84 @@ HOTSPOT;
                             $actions .= $attempt_link;
                         }
                         $actions .= '</div>';
-
-                        $results[$i]['id'] = $results[$i]['exe_id'];
+                        $exeId = $results[$i]['exe_id'];
+                        $results[$i]['id'] = $exeId;
 
                         if ($is_allowedToEdit) {
+                            $sessionName = '';
+                            if (!empty($results[$i]['session_id'])) {
+                                $sessionName = api_get_session_name($results[$i]['session_id']);
+                            }
+                            $objExercise = new Exercise($course_id);
+                            if ($showExerciseCategories) {
+                                $question_list = array();
+                                // Getting attempt info
+                                $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
+                                if (!empty($exercise_stat_info['data_tracking'])) {
+                                    $question_list = explode(',', $exercise_stat_info['data_tracking']);
+                                    if (!empty($question_list)) {
+                                        foreach ($question_list as $questionId) {
+                                            $objQuestionTmp = Question::read($questionId, $course_id);
+                                            // We're inside *one* question. Go through each possible answer for this question
+                                            $result = $objExercise->manage_answer(
+                                                $exeId,
+                                                $questionId,
+                                                null,
+                                                'exercise_result',
+                                                false,
+                                                false,
+                                                true,
+                                                false,
+                                                $objExercise->selectPropagateNeg(),
+                                                null,
+                                                true
+                                            );
+
+                                            $my_total_score = $result['score'];
+                                            $my_total_weight = $result['weight'];
+
+                                            // Category report
+                                            $category_was_added_for_this_test = false;
+                                            if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
+                                                if (!isset($category_list[$objQuestionTmp->category]['score'])) {
+                                                    $category_list[$objQuestionTmp->category]['score'] = 0;
+                                                }
+                                                if (!isset($category_list[$objQuestionTmp->category]['total'])) {
+                                                    $category_list[$objQuestionTmp->category]['total'] = 0;
+                                                }
+                                                $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
+                                                $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
+                                                $category_was_added_for_this_test = true;
+                                            }
+
+                                            if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
+                                                foreach ($objQuestionTmp->category_list as $category_id) {
+                                                    $category_list[$category_id]['score'] += $my_total_score;
+                                                    $category_list[$category_id]['total'] += $my_total_weight;
+                                                    $category_was_added_for_this_test = true;
+                                                }
+                                            }
+
+                                            // No category for this question!
+                                            if ($category_was_added_for_this_test == false) {
+                                                if (!isset($category_list['none']['score'])) {
+                                                    $category_list['none']['score'] = 0;
+                                                }
+                                                if (!isset($category_list['none']['total'])) {
+                                                    $category_list['none']['total'] = 0;
+                                                }
+
+                                                $category_list['none']['score'] += $my_total_score;
+                                                $category_list['none']['total'] += $my_total_weight;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            foreach ($category_list as $categoryId => $result) {
+                                $results[$i]['category_'.$categoryId] = self::show_score($result['score'], $result['total']);
+                            }
+                            $results[$i]['session'] = $sessionName;
                             $results[$i]['status'] = $revisedLabel;
                             $results[$i]['score'] = $score;
                             $results[$i]['lp'] = $lp_name;
@@ -4116,7 +4199,7 @@ EOT;
                 if ($show_results) {
                     $question_content .= '</div>';
                 }
-                if(!$show_only_score){
+                if (!$show_only_score) {
                     $exercise_content .= Display::div(Display::panel($question_content),array('class' => 'question-panel'));
                 }
             } // end foreach() block that loops over all questions

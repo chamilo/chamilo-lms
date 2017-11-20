@@ -19,19 +19,6 @@ $is_platform_admin = api_is_platform_admin();
 $is_drh = api_is_drh();
 $is_session_admin = api_is_session_admin();
 
-if ($exportCSV) {
-    if ($display == 'user') {
-        MySpace::export_tracking_user_overview();
-        exit;
-    } elseif ($display == 'session') {
-        MySpace::export_tracking_session_overview();
-        exit;
-    } elseif ($display == 'course') {
-        MySpace::export_tracking_course_overview();
-        exit;
-    }
-}
-
 $currentUrl = api_get_self();
 $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
 $defaults = [];
@@ -177,16 +164,47 @@ if ($form->validate()) {
     </script>
     <?php
 
-    echo '<script>$(function() {
-            jQuery("#'.$tableId.'").jqGrid("navGrid","#'.$tableId.'_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
-            jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{
-                   caption:"",
-                   title:"' . get_lang('ExportExcel').'",
-                   onClickButton : function () {
-                       jQuery("#'.$tableId.'").jqGrid("excelExport",{"url":"'.$url.'&export_format=xls"});
-                   }
+    echo '<script>
+        $(function() {
+            var myUrl = jQuery("#'.$tableId.'").jqGrid(\'getGridParam\', \'url\');
+            myUrl += "&export_format=xls&oper=excel";
+            var postData = jQuery("#'.$tableId.'").jqGrid(\'getGridParam\', \'postData\');
+            $.each(postData, function(key, value) {
+                myUrl += "&"+key+"="+encodeURIComponent(value);
             });
-        });</script>';
+            
+            $("#excel_export").attr("href", myUrl);
+            
+            jQuery("#'.$tableId.'").jqGrid(
+                "navGrid",
+                "#'.$tableId.'_pager",
+                {
+                    view:false, edit:false, add:false, del:false, search:false, excel:true
+                }
+            );
+            
+            jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{       
+               caption: "",
+               title:"' . get_lang('ExportExcel').'",
+               onClickButton : function() {
+                   jQuery("#'.$tableId.'").jqGrid(
+                    "excelExport",{
+                        "url":"'.$url.'&export_format=xls"
+                    }
+                );
+               }
+            });
+        });
+    </script>';
+    $items = [
+        [
+            'url' => '  ',
+            'url_attributes' => ['id' => 'excel_export'],
+            'content' => Display::return_icon('export_excel.png')
+        ]
+    ];
+
+    echo Display::actions($items);
 
     echo Display::grid_html('results');
 }

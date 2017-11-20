@@ -35,9 +35,17 @@ $tpl->assign('allow_drh_skills_management', api_get_setting('allow_hr_skills_man
 if ($isStudent) {
     $skills = $objSkill->getUserSkills($userId, true);
     $courseTempList = [];
+    $skillParents = [];
     foreach ($skills as $resultData) {
-        $courseId = $resultData['course_id'];
+        $parents = $objSkill->get_parents($resultData['id']);
+        foreach ($parents as $parentData) {
+            if ($parentData['id'] == 1 || $parentData['parent_id'] == 1) {
+                continue;
+            }
 
+            $skillParents[$parentData['id']][] = $resultData;
+        }
+        $courseId = $resultData['course_id'];
         if (!empty($courseId)) {
             if (isset($courseTempList[$courseId])) {
                 $courseInfo = $courseTempList[$courseId];
@@ -61,6 +69,35 @@ if ($isStudent) {
         }
         $tableRows[] = $tableRow;
     }
+
+    $table = new HTML_Table(['class' => 'table']);
+
+    if (!empty($skillParents)) {
+        $column = 0;
+        $skillAdded = [];
+        foreach ($skillParents as $parentId => $data) {
+            if (in_array($parentId, $skillAdded)) {
+                continue;
+            }
+            $parentInfo = $objSkill->getSkillInfo($parentId);
+            $table->setHeaderContents(0, $column, $parentInfo['name']);
+            $column++;
+
+            $row = 1;
+            foreach ($data as $skillData) {
+                $skillAdded[] = $skillData['id'];
+                $table->setCellContents(
+                    $row,
+                    0,
+                    $skillData['name']
+                );
+            }
+            $row++;
+        }
+    }
+
+    $tpl->assign('skill_table', $table->toHtml());
+
 
     $tplPath = 'skill/student_report.tpl';
 } elseif ($isStudentBoss) {

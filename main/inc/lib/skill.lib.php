@@ -996,7 +996,12 @@ class Skill extends Model
     {
         $userId = intval($userId);
         $sql = 'SELECT DISTINCT 
-                s.id, s.name, s.icon, u.id as issue, u.acquired_skill_at, u.course_id
+                    s.id, 
+                    s.name,
+                    s.icon, 
+                    u.id as issue, 
+                    u.acquired_skill_at, 
+                    u.course_id
                 FROM '.$this->table_skill_rel_user.' u
                 INNER JOIN '.$this->table.' s
                 ON u.skill_id = s.id

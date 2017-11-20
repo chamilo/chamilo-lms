@@ -31,6 +31,8 @@
         {% endfor %}
         </tbody>
     </table>
+
+    {{ skill_table }}
 {% else %}
     <div class="alert alert-info">
         {{ 'NoResults' | get_lang }}

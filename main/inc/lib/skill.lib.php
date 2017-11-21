@@ -1024,6 +1024,9 @@ class Skill extends Model
         if (!isset($params['parent_id'])) {
             $params['parent_id'] = 1;
         }
+
+        $params['gradebook_id'] = isset($params['gradebook_id']) ? $params['gradebook_id'] : [];
+
         $skillRelSkill = new SkillRelSkill();
         $skillRelGradebook = new SkillRelGradebook();
 
@@ -1971,9 +1974,9 @@ class Skill extends Model
         }
 
         $camelCase = 'SkillCode'.api_underscore_to_camel_case(
-                str_replace(' ', '_', $code)
-            );
+            str_replace(' ', '_', $code)
+        );
 
-        return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : '';
+        return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $code;
     }
 }

@@ -369,18 +369,17 @@ class TestCategory
 
     /**
      * Return the list of different categories NAME for a test
-     * @param int exercise id
+     * @param int $exerciseId
      * @param bool
      * @return array
      *
      * @author function rewrote by jmontoya
      */
-    public static function getListOfCategoriesNameForTest($exercise_id, $grouped_by_category = true)
+    public static function getListOfCategoriesNameForTest($exerciseId, $grouped_by_category = true)
     {
         $result = array();
         $categories = self::getListOfCategoriesIDForTest(
-            $exercise_id,
-            $grouped_by_category
+            $exerciseId
         );
 
         foreach ($categories as $catInfo) {

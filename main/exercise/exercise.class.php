@@ -619,8 +619,7 @@ class Exercise
                     FROM $TBL_EXERCICE_QUESTION e 
                     INNER JOIN $TBL_QUESTIONS  q
                     ON (e.question_id = q.id AND e.c_id = ".$this->course_id." )
-					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
-					";
+					WHERE e.exercice_id	= '".$this->id."' ";
 
             $orderCondition = "ORDER BY question_order";
 
@@ -715,7 +714,7 @@ class Exercise
                 ON (e.question_id = q.id AND e.c_id = q.c_id)
                 WHERE 
                     e.c_id = {$this->course_id} AND 
-                    e.exercice_id = ".Database::escape_string($this->id);
+                    e.exercice_id = ".$this->id;
         $result = Database::query($sql);
 
         $count = 0;
@@ -742,7 +741,7 @@ class Exercise
                 ON (e.question_id= q.id AND e.c_id = q.c_id)
                 WHERE 
                     e.c_id = {$this->course_id} AND 
-                    e.exercice_id = '".Database::escape_string($this->id)."'
+                    e.exercice_id = '".$this->id."'
                 ORDER BY q.question";
         $result = Database::query($sql);
         $list = array();
@@ -770,7 +769,7 @@ class Exercise
                 ON (e.question_id = q.id AND e.c_id = q.c_id)
                 WHERE
                   e.c_id = {$this->course_id} AND
-                  e.exercice_id	= ".Database::escape_string($this->id);
+                  e.exercice_id	= ".$this->id;
 
         $result = Database::query($sql);
         $count_question_orders = Database::num_rows($result);
@@ -782,7 +781,7 @@ class Exercise
                 ON (e.question_id = q.id AND e.c_id = q.c_id)
                 WHERE
                     e.c_id = {$this->course_id} AND
-                    e.exercice_id	= '".Database::escape_string($this->id)."'
+                    e.exercice_id = '".$this->id."'
                 ORDER BY question_order";
 
         $result = Database::query($sql);

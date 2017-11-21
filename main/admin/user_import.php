@@ -188,7 +188,7 @@ function save_data($users)
         foreach ($users as $user) {
             $user = complete_missing_data($user);
             $user['Status'] = api_status_key($user['Status']);
-            $user_id = UserManager :: create_user(
+            $user_id = UserManager::create_user(
                 $user['FirstName'],
                 $user['LastName'],
                 $user['Status'],

@@ -33,81 +33,9 @@ $tpl->assign('allow_skill_tool', api_get_setting('allow_skills_tool') === 'true'
 $tpl->assign('allow_drh_skills_management', api_get_setting('allow_hr_skills_management') === 'true');
 
 if ($isStudent) {
-    $skills = $objSkill->getUserSkills($userId, true);
-    $courseTempList = [];
-    $skillParents = [];
-    foreach ($skills as $resultData) {
-        $parents = $objSkill->get_parents($resultData['id']);
-
-        foreach ($parents as $parentData) {
-            if ($parentData['id'] == 1 || $parentData['parent_id'] == 1) {
-                continue;
-            }
-            $skillParents[$parentData['id']]['passed'] = in_array($parentData['id'], array_keys($skills));
-            $skillParents[$parentData['id']][] = $resultData;
-        }
-
-        $courseId = $resultData['course_id'];
-        if (!empty($courseId)) {
-            if (isset($courseTempList[$courseId])) {
-                $courseInfo = $courseTempList[$courseId];
-            } else {
-                $courseInfo = api_get_course_info_by_id($courseId);
-                $courseTempList[$courseId] = $courseInfo;
-            }
-        }
-
-        $tableRow = array(
-            'skill_badge' => $resultData['img_mini'],
-            'skill_name' => $resultData['name'],
-            'achieved_at' => api_get_local_time($resultData['acquired_skill_at']),
-            'course_image' => '',
-            'course_name' => ''
-        );
-
-        if (!empty($courseInfo)) {
-            $tableRow['course_image'] = $courseInfo['course_image_source'];
-            $tableRow['course_name'] = $courseInfo['title'];
-        }
-        $tableRows[] = $tableRow;
-    }
-
-    $table = new HTML_Table(['class' => 'table table-bordered']);
-    if (!empty($skillParents)) {
-        $column = 0;
-        $skillAdded = [];
-        foreach ($skillParents as $parentId => $data) {
-            if (in_array($parentId, $skillAdded)) {
-                continue;
-            }
-            $parentInfo = $objSkill->getSkillInfo($parentId);
-            $parentName = '';
-            if ($data['passed']) {
-                $parentName = $objSkill->processSkillList([$parentInfo], 'mini', false);
-            }
-            $table->setHeaderContents(0, $column, $parentName);
-            $row = 1;
-            $skillsToShow = [];
-            foreach ($data as $skillData) {
-                if ($skillData['id'] == $parentId) {
-                    continue;
-                }
-                if (empty($skillData['id'])) {
-                    continue;
-                }
-                $skillAdded[] = $skillData['id'];
-                $skillsToShow[] = $skillData;
-            }
-            $table->setCellContents(
-                $row,
-                $column,
-                $objSkill->processSkillList($skillsToShow, 'mini', false)
-            );
-            $row++;
-            $column++;
-        }
-    }
-    $tpl->assign('skill_table', $table->toHtml());
+    $result = $objSkill->getUserSkillsTable($userId);
+    $tableRows = $result['skills'];
+    $tpl->assign('skill_table', $result['table']);
     $tplPath = 'skill/student_report.tpl';
 } elseif ($isStudentBoss) {
     $selectedStudent = isset($_REQUEST['student']) ? intval($_REQUEST['student']) : 0;

@@ -562,18 +562,19 @@ class MessageManager
      * @author Christian Fasanando Flores
      * @param  int $parent_id
      * @param  int $receiver_user_id
-     * @param  int $message_id
+     * @param  int $messageId
      * @return void
      */
     public static function update_parent_ids_from_reply(
         $parent_id,
         $receiver_user_id,
-        $message_id
+        $messageId
     ) {
         $table = Database::get_main_table(TABLE_MESSAGE);
         $parent_id = intval($parent_id);
         $receiver_user_id = intval($receiver_user_id);
-        $message_id = intval($message_id);
+        $messageId = intval($messageId);
+
         // first get data from message id (parent)
         $sql = "SELECT * FROM $table WHERE id = '$parent_id'";
         $rs_message = Database::query($sql);
@@ -592,7 +593,7 @@ class MessageManager
 
         // update parent_id for other user receiver
         $sql = "UPDATE $table SET parent_id = ".$row['id']."
-                WHERE id = $message_id";
+                WHERE id = $messageId";
         Database::query($sql);
     }
 
@@ -610,7 +611,7 @@ class MessageManager
         $user_receiver_id = intval($user_receiver_id);
         $id = intval($id);
         $sql = "SELECT * FROM $table
-                WHERE id=".$id." AND msg_status <>".MESSAGE_STATUS_OUTBOX;
+                WHERE id = ".$id." AND msg_status <>".MESSAGE_STATUS_OUTBOX;
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -1071,34 +1072,34 @@ class MessageManager
      * @todo replace numbers with letters in the $row array pff...
      * @return string html with the message content
      */
-    public static function show_message_box($message_id, $source = 'inbox')
+    public static function showMessageBox($messageId, $source = 'inbox')
     {
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $message_id = intval($message_id);
+        $messageId = intval($messageId);
 
         if ($source == 'outbox') {
-            if (isset($message_id) && is_numeric($message_id)) {
+            if (isset($messageId) && is_numeric($messageId)) {
                 $query = "SELECT * FROM $table
                           WHERE
                             user_sender_id = ".api_get_user_id()." AND
-                            id = " . $message_id." AND
+                            id = ".$messageId." AND
                             msg_status = ".MESSAGE_STATUS_OUTBOX;
                 $result = Database::query($query);
             }
         } else {
-            if (is_numeric($message_id) && !empty($message_id)) {
+            if (is_numeric($messageId) && !empty($messageId)) {
                 $query = "UPDATE $table SET
                           msg_status = '".MESSAGE_STATUS_NEW."'
                           WHERE
                             user_receiver_id=" . api_get_user_id()." AND
-                            id='" . $message_id."'";
+                            id='" . $messageId."'";
                 Database::query($query);
 
                 $query = "SELECT * FROM $table
                           WHERE
                             msg_status<> ".MESSAGE_STATUS_OUTBOX." AND
                             user_receiver_id=".api_get_user_id()." AND
-                            id='" . $message_id."'";
+                            id='" . $messageId."'";
                 $result = Database::query($query);
             }
         }
@@ -1107,7 +1108,7 @@ class MessageManager
 
         // get file attachments by message id
         $files_attachments = self::get_links_message_attachment_files(
-            $message_id,
+            $messageId,
             $source
         );
 
@@ -1179,10 +1180,10 @@ class MessageManager
         } else {
             $message_content .= '<a href="inbox.php?'.$social_link.'">'.
                 Display::return_icon('back.png', get_lang('ReturnToInbox')).'</a> &nbsp';
-            $message_content .= '<a href="new_message.php?re_id='.$message_id.'&'.$social_link.'">'.
+            $message_content .= '<a href="new_message.php?re_id='.$messageId.'&'.$social_link.'">'.
                 Display::return_icon('message_reply.png', get_lang('ReplyToMessage')).'</a> &nbsp';
         }
-        $message_content .= '<a href="inbox.php?action=deleteone&id='.$message_id.'&'.$social_link.'" >'.
+        $message_content .= '<a href="inbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
             Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';
 
         $message_content .= '</div></td>
@@ -1338,10 +1339,10 @@ class MessageManager
      * @param $group_id
      * @param $topic_id
      * @param $is_member
-     * @param $message_id
+     * @param $messageId
      * @return string
      */
-    public static function display_message_for_group($group_id, $topic_id, $is_member, $message_id)
+    public static function display_message_for_group($group_id, $topic_id, $is_member, $messageId)
     {
         global $my_group_role;
         $main_message = self::get_message_by_id($topic_id);
@@ -1633,21 +1634,21 @@ class MessageManager
 
     /**
      * Get array of links (download) for message attachment files
-     * @param int $message_id
+     * @param int $messageId
      * @param string $type message list (inbox/outbox)
      * @return array
      */
-    public static function get_links_message_attachment_files($message_id, $type = '')
+    public static function get_links_message_attachment_files($messageId, $type = '')
     {
         $tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
-        $message_id = intval($message_id);
+        $messageId = intval($messageId);
 
         // get file attachments by message id
         $links_attach_file = array();
-        if (!empty($message_id)) {
+        if (!empty($messageId)) {
 
             $sql = "SELECT * FROM $tbl_message_attach
-                    WHERE message_id = '$message_id'";
+                    WHERE message_id = '$messageId'";
 
             $rs_file = Database::query($sql);
             if (Database::num_rows($rs_file) > 0) {
@@ -1669,16 +1670,16 @@ class MessageManager
 
     /**
      * Get message list by id
-     * @param int $message_id
+     * @param int $messageId
      * @return array
      */
-    public static function get_message_by_id($message_id)
+    public static function get_message_by_id($messageId)
     {
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $message_id = intval($message_id);
+        $messageId = intval($messageId);
         $sql = "SELECT * FROM $table
                 WHERE 
-                    id = '$message_id' AND 
+                    id = '$messageId' AND 
                     msg_status <> '".MESSAGE_STATUS_DELETED."' ";
         $res = Database::query($sql);
         $item = array();

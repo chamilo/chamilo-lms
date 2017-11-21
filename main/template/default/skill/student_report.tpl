@@ -32,7 +32,9 @@
         </tbody>
     </table>
 
-    {{ skill_table }}
+    {% if skill_table %}
+        {{ skill_table }}
+    {% endif %}
 {% else %}
     <div class="alert alert-info">
         {{ 'NoResults' | get_lang }}

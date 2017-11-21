@@ -5284,7 +5284,6 @@ class Tracking
             if (!empty($exercise_list)) {
                 $score = $weighting = $exe_id = 0;
                 foreach ($exercise_list as $exercices) {
-
                     $exercise_obj = new Exercise($course_info['real_id']);
                     $exercise_obj->read($exercices['id']);
                     $visible_return = $exercise_obj->is_visible();
@@ -6458,47 +6457,8 @@ class Tracking
         if (Skill::isAllow($userId, false) === false) {
             return '';
         }
-
-        $userId = intval($userId);
-        $courseId = intval($courseId);
-        $sessionId = intval($sessionId);
-
-        $filter = ['user' => $userId];
-        $filter['course'] = $courseId ?: null;
-        $filter['session'] = $sessionId ?: null;
-
-        $em = Database::getManager();
-        $skillsRelUser = $em->getRepository('ChamiloCoreBundle:SkillRelUser')->findBy($filter);
-
-        $html = '<div class="table-responsive">
-                <table class="table" id="skillList">
-                    <thead>
-                        <tr>
-                            <th>'.get_lang('AchievedSkills').'</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <tr><td>';
         $skillManager = new Skill();
-        if (count($skillsRelUser)) {
-            $skills = [];
-            foreach ($skillsRelUser as $userSkill) {
-                $skill = $skillManager->get($userSkill->getSkill()->getId());
-                $skill['url'] = api_get_path(WEB_PATH).'badge/'.$userSkill->getId().'/user/'.$userId;
-                $skills[] = $skill;
-            }
-            $html .= $skillManager->processSkillList($skills);
-
-        } else {
-            $html .= get_lang('WithoutAchievedSkills');
-        }
-
-        $html .= '</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>';
-
+        $html = $skillManager->getUserSkillsTable($userId, $courseId, $sessionId)['table'];
         return $html;
     }
 

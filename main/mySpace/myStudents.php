@@ -1588,7 +1588,6 @@ if (empty($details)) {
     </div>
 <?php
 } //end details
-
 echo Tracking::displayUserSkills(
     $user_info['user_id'],
     $courseInfo ? $courseInfo['real_id'] : 0,

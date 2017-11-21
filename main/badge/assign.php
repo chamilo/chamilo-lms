@@ -186,7 +186,9 @@ if (!empty($skillIdFromGet)) {
 
         if (isset($subSkillList[$counter+1])) {
             $nextSkill = $skillRepo->find($subSkillList[$counter+1]);
-            $formDefaultValues['sub_skill_id_'.($counter+1)] = $nextSkill->getId();
+            if ($nextSkill) {
+                $formDefaultValues['sub_skill_id_'.($counter+1)] = $nextSkill->getId();
+            }
         }
         $newSubSkillList[] = $subSkillId;
         $counter++;

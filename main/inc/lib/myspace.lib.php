@@ -616,7 +616,7 @@ class MySpace
         foreach ($all_datas as $row) {
             $table -> addRow($row, 'align="right"');
         }
-        $table -> display();
+        $table->display();
     }
 
     /**

@@ -13,13 +13,13 @@ api_protect_admin_script(true);
 api_protect_limit_for_session_admin();
 
 $form_sent = 0;
-$tbl_user                   = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_course                 = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_course_user            = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_session                = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_user           = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_session_course         = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 $tool_name = get_lang('ImportSessionListXMLCSV');
 
@@ -46,9 +46,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $session_counter = 0;
 
         if ($file_type == 'xml') {
-
             // XML
-
             // SimpleXML for PHP5 deals with various encodings, but how many they are, what are version issues, do we need to waste time with configuration options?
             // For avoiding complications we go some sort of "PHP4 way" - we convert the input xml-file into UTF-8 before passing it to the parser.
             // Instead of:

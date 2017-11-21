@@ -33,7 +33,11 @@ if (!empty($error_message)) {
     echo Display::return_message($error_message, 'normal', false);
 }
 
-$form = new FormValidator('import_sessions', 'post', api_get_self(), null, array('enctype' => 'multipart/form-data'));
+$form = new FormValidator(
+    'import_sessions',
+    'post', api_get_self(), null, array('enctype' => 'multipart/form-data')
+);
+
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $form->addElement('checkbox', 'remove_old_relationships', null, get_lang('RemoveOldRelationships'));
 //$form->addElement('checkbox', 'send_email', null, get_lang('SendMailToUsers'));

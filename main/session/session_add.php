@@ -155,7 +155,6 @@ $(function() {
             url: '".$url."',
             data: 'a=session_info&load_empty_extra_fields=true&session_id=' + sessionId,
             success: function(data) {
-                //console.log(data);
                 if (data.session_category_id > 0) {
                     $('#session_category').val(data.session_category_id);
                     $('#session_category').selectpicker('render');

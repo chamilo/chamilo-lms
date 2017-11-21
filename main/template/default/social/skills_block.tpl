@@ -33,20 +33,7 @@ jQuery(document).ready(function(){
         <div id="skillList" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
             <div class="panel-body">
                 {% if skills %}
-                    <div class="scrollbar-inner badges-sidebar">
-                        <ul class="list-unstyled list-badges">
-                            {% for skill in skills %}
-                                <li class="thumbnail">
-                                    <a href="{{ _p.web }}skill/{{ skill.id }}/user/{{ user_id }}" target="_blank">
-                                        <img title="{{ skill.name }}" class="img-responsive" src="{{ skill.icon }}" width="64" height="64" alt="{{ skill.name }}">
-                                        <div class="caption">
-                                            <p class="text-center">{{ skill.name }}</p>
-                                        </div>
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                    {{ skills }}
                 {% else %}
                     <p>{{ 'WithoutAchievedSkills'|get_lang }}</p>
                     <p>

@@ -58,7 +58,7 @@ if ($isStudent) {
         }
 
         $tableRow = array(
-            'skill_badge' => $resultData['icon_image'],
+            'skill_badge' => $resultData['img_mini'],
             'skill_name' => $resultData['name'],
             'achieved_at' => api_get_local_time($resultData['acquired_skill_at']),
             'course_image' => '',
@@ -72,8 +72,7 @@ if ($isStudent) {
         $tableRows[] = $tableRow;
     }
 
-    $table = new HTML_Table(['class' => 'table']);
-
+    $table = new HTML_Table(['class' => 'table table-bordered']);
     if (!empty($skillParents)) {
         $column = 0;
         $skillAdded = [];
@@ -84,7 +83,7 @@ if ($isStudent) {
             $parentInfo = $objSkill->getSkillInfo($parentId);
             $parentName = '';
             if ($data['passed']) {
-                $parentName = $parentInfo['name'];
+                $parentName = $objSkill->processSkillList([$parentInfo], 'mini', false);
             }
             $table->setHeaderContents(0, $column, $parentName);
             $row = 1;
@@ -93,13 +92,16 @@ if ($isStudent) {
                 if ($skillData['id'] == $parentId) {
                     continue;
                 }
+                if (empty($skillData['id'])) {
+                    continue;
+                }
                 $skillAdded[] = $skillData['id'];
-                $skillsToShow[] = $skillData['name'];
+                $skillsToShow[] = $skillData;
             }
             $table->setCellContents(
                 $row,
                 $column,
-                implode(' ', $skillsToShow)
+                $objSkill->processSkillList($skillsToShow, 'mini', false)
             );
             $row++;
             $column++;

@@ -456,12 +456,12 @@ class SkillRelGradebook extends Model
      */
     public function updateBySkill($params)
     {
-        $skill_info = $this->existsGradeBookSkill(
+        $skillInfo = $this->existsGradeBookSkill(
             $params['gradebook_id'],
             $params['skill_id']
         );
 
-        if ($skill_info) {
+        if ($skillInfo) {
             return;
         } else {
             $result = $this->save($params);
@@ -607,7 +607,6 @@ class Skill extends Model
       9 => array('#3a5988', '#3a5988', '#3a5988', '#3a5988'),
      10 => array('#393e64', '#393e64', '#393e64', '#393e64'),
     );*/
-
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_MAIN_SKILL);
@@ -629,9 +628,82 @@ class Skill extends Model
     public function get($id)
     {
         $result = parent::get($id);
-        $result['web_icon_path'] = api_get_path(WEB_UPLOAD_PATH).'badges/'.$result['icon'];
+        $path = api_get_path(WEB_UPLOAD_PATH).'badges/';
+
+        if (!empty($result['icon'])) {
+            $iconSmall = sprintf(
+                "%s-small.png",
+                sha1($result['name'])
+            );
+
+            $iconBig = sprintf(
+                "%s.png",
+                sha1($result['name'])
+            );
+
+            $iconMini = $path.$iconSmall;
+            $iconSmall = $path.$iconSmall;
+            $iconBig = $path.$iconBig;
+        } else {
+            $iconMini = Display::returnIconPath('badges-default.png', ICON_SIZE_MEDIUM);
+            $iconSmall = Display::returnIconPath('badges-default.png', ICON_SIZE_BIG);
+            $iconBig = Display::returnIconPath('badges-default.png', ICON_SIZE_HUGE);
+        }
+
+        $result['icon_big'] = $iconSmall;
+        $result['icon_small'] = $iconBig;
+        $result['icon_mini'] = $iconMini;
+
+        $result['img_mini'] = Display::img($iconBig, $result['name'], ['width' => ICON_SIZE_MEDIUM]);
+        $result['img_big'] = Display::img($iconBig, $result['name']);
+        $result['img_small'] = Display::img($iconSmall, $result['name']);
 
         return $result;
+    }
+
+    /**
+     * @param array $skills
+     * @param string $imageSize mini|small|big
+     * @param bool $addDivWrapper
+     * @return string
+     */
+    public function processSkillList($skills, $imageSize = '', $addDivWrapper = true)
+    {
+        if (empty($skills)) {
+            return '';
+        }
+
+        if (empty($imageSize)) {
+            $imageSize = 'img_small';
+        } else {
+            $imageSize = "img_$imageSize";
+        }
+
+        $html = '';
+        if ($addDivWrapper) {
+            $html = '<div class="scrollbar-inner badges-sidebar">';
+        }
+        $html .= '<ul class="list-unstyled list-badges">';
+        foreach ($skills as $skill) {
+            $html .= '<li class="thumbnail">';
+            $item = $skill[$imageSize];
+            $item .= '<div class="caption">
+                        <p class="text-center">'.$skill['name'].'</p>
+                      </div>';
+            if (isset($skill['url'])) {
+                $html .= Display::url($item, $skill['url'], ['target' => '_blank']);
+            } else {
+                $html .= $item;
+            }
+            $html .= '</li>';
+        }
+        $html .= '</ul>';
+
+        if ($addDivWrapper) {
+            $html .= '</div>';
+        }
+
+        return $html;
     }
 
     /**
@@ -640,13 +712,13 @@ class Skill extends Model
      */
     public function getSkillInfo($id)
     {
-        $skill_rel_skill = new SkillRelSkill();
-        $skill_info = $this->get($id);
-        if (!empty($skill_info)) {
-            $skill_info['extra'] = $skill_rel_skill->getSkillInfo($id);
-            $skill_info['gradebooks'] = self::getGradebooksBySkill($id);
+        $skillRelSkill = new SkillRelSkill();
+        $skillInfo = $this->get($id);
+        if (!empty($skillInfo)) {
+            $skillInfo['extra'] = $skillRelSkill->getSkillInfo($id);
+            $skillInfo['gradebooks'] = self::getGradebooksBySkill($id);
         }
-        return $skill_info;
+        return $skillInfo;
     }
 
     /**
@@ -725,11 +797,10 @@ class Skill extends Model
         $webPath = api_get_path(WEB_UPLOAD_PATH);
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                $skill_rel_skill = new SkillRelSkill();
-                $parents = $skill_rel_skill->getSkillParents($row['id']);
+                $skillRelSkill = new SkillRelSkill();
+                $parents = $skillRelSkill->getSkillParents($row['id']);
                 $row['level'] = count($parents) - 1;
                 $row['gradebooks'] = self::getGradebooksBySkill($row['id']);
-                $row['web_icon_path'] = $webPath.'badges/'.$row['icon'];
                 $skills[$row['id']] = $row;
             }
         }
@@ -992,7 +1063,7 @@ class Skill extends Model
      *
      * @return array
      */
-    public function getUserSkills($userId, $get_skill_data = false)
+    public function getUserSkills($userId, $getSkillData = false)
     {
         $userId = intval($userId);
         $sql = 'SELECT DISTINCT 
@@ -1010,46 +1081,20 @@ class Skill extends Model
         $result = Database::query($sql);
         $skills = Database::store_result($result, 'ASSOC');
         $uploadPath = api_get_path(WEB_UPLOAD_PATH);
-        $clean_skill = array();
-        $defaultIcon = Display::returnIconPath('badges-default.png', ICON_SIZE_BIG);
-
+        $skillList = array();
         if (!empty($skills)) {
             foreach ($skills as $skill) {
-                if ($get_skill_data) {
-                    $iconThumb = null;
-                    $iconPath = null;
-                    if (!empty($skill['icon'])) {
-                        $iconThumb = sprintf(
-                            "badges/%s-small.png",
-                            sha1($skill['name'])
-                        );
-
-                        $iconPath = sprintf(
-                            "badges/%s.png",
-                            sha1($skill['name'])
-                        );
-                        $skill['icon_image'] = Display::img($uploadPath.$iconThumb, $skill['name']);
-                        $skill['icon'] = $uploadPath.$iconThumb;
-                    } else {
-                        $iconImage = Display::return_icon('badges-default.png', $skill['name'], null, ICON_SIZE_BIG);
-                        $skill['icon_image'] = $iconImage;
-                        $skill['icon'] = $defaultIcon;
-                    }
-
-                    $clean_skill[$skill['id']] = array_merge(
-                        $skill,
-                        array(
-                            'web_icon_thumb_path' => $uploadPath.$iconThumb,
-                            'web_icon_path' => $uploadPath.$iconPath
-                        )
-                    );
+                if ($getSkillData) {
+                    $skillData = $this->get($skill['id']);
+                    $skillData['url'] = api_get_path(WEB_PATH).'badge/'.$skill['issue'].'/user/'.$userId;
+                    $skillList[$skill['id']] = array_merge($skill, $skillData);
                 } else {
-                    $clean_skill[$skill['id']] = $skill['id'];
+                    $skillList[$skill['id']] = $skill['id'];
                 }
             }
         }
 
-        return $clean_skill;
+        return $skillList;
     }
 
     /**
@@ -1086,12 +1131,12 @@ class Skill extends Model
                         'name' => get_lang('Root'),
                         'parent_id' => '0'
                     );
-                    $skill_info = $this->getSkillInfo($skill_id);
+                    $skillInfo = $this->getSkillInfo($skill_id);
 
                     // 2nd node
-                    $skills[$skill_id] = $skill_info;
+                    $skills[$skill_id] = $skillInfo;
                     // Uncomment code below to hide the searched skill
-                    $skills[$skill_id]['data']['parent_id'] = $skill_info['extra']['parent_id'];
+                    $skills[$skill_id]['data']['parent_id'] = $skillInfo['extra']['parent_id'];
                     $skills[$skill_id]['parent_id'] = 1;
                 }
             }

@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $issue = isset($_REQUEST['issue']) ? intval($_REQUEST['issue']) : 0;
+$userId = isset($_REQUEST['user']) ? intval($_REQUEST['user']) : 0;
 
 if (empty($issue)) {
     api_not_allowed(true);
@@ -24,9 +25,11 @@ $skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
 
 if (!$skillIssue) {
     Display::addFlash(
-        Display::return_message(get_lang('TheUserXNotYetAchievedTheSkillX'), 'error')
+        Display::return_message(
+            get_lang('SkillNotFound'),
+            'warning'
+        )
     );
-
     header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
@@ -36,7 +39,7 @@ $skill = $skillIssue->getSkill();
 
 if (!$user || !$skill) {
     Display::addFlash(
-        Display::return_message(get_lang('NoResults'), 'error')
+        Display::return_message(get_lang('NoResults'), 'warning')
     );
 
     header('Location: '.api_get_path(WEB_PATH));
@@ -215,12 +218,10 @@ if ($form->validate() && $allowComment) {
     exit;
 }
 
-$badgeInfoError = "";
-$personalBadge = "";
-
+$badgeInfoError = '';
+$personalBadge = '';
 if ($allowDownloadExport) {
     $backpack = 'https://backpack.openbadges.org/';
-
     $configBackpack = api_get_setting('openbadges_backpack');
 
     if (strcmp($backpack, $configBackpack) !== 0) {
@@ -261,7 +262,7 @@ if ($allowDownloadExport) {
         }
 
         if (!$badgeInfoError) {
-            $personalBadge = UserManager::getUserPathById($userId, "web");
+            $personalBadge = UserManager::getUserPathById($userId, 'web');
             $personalBadge = $personalBadge."badges/badge_".$skillRelUserId.".png";
         }
     }

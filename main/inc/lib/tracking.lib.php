@@ -6470,40 +6470,25 @@ class Tracking
         $em = Database::getManager();
         $skillsRelUser = $em->getRepository('ChamiloCoreBundle:SkillRelUser')->findBy($filter);
 
-        $html = '
-            <div class="table-responsive">
+        $html = '<div class="table-responsive">
                 <table class="table" id="skillList">
                     <thead>
                         <tr>
-                            <th>' . get_lang('AchievedSkills').'</th>
+                            <th>'.get_lang('AchievedSkills').'</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-        ';
-
+                    <tr><td>';
+        $skillManager = new Skill();
         if (count($skillsRelUser)) {
-            $html .= '<div class="scrollbar-inner badges-sidebar">
-                        <ul class="list-unstyled list-badges">
-            ';
-
+            $skills = [];
             foreach ($skillsRelUser as $userSkill) {
-                $skill = $userSkill->getSkill();
-
-                $html .= '<li class="thumbnail">
-                            <a href="' . api_get_path(WEB_PATH).'badge/'.$userSkill->getId().'/user/'.$userId.'" target="_blank">
-                                <img class="img-responsive" title="' . $skill->getName().'" src="'.$skill->getWebIconPath().'" width="64" height="64">
-                                <div class="caption">
-                                    <p class="text-center">' . $skill->getName().'</p>
-                                </div>
-                            </a>
-                        </li>
-                ';
+                $skill = $skillManager->get($userSkill->getSkill()->getId());
+                $skill['url'] = api_get_path(WEB_PATH).'badge/'.$userSkill->getId().'/user/'.$userId;
+                $skills[] = $skill;
             }
+            $html .= $skillManager->processSkillList($skills);
 
-            $html .= '</ul></div>
-            ';
         } else {
             $html .= get_lang('WithoutAchievedSkills');
         }
@@ -6512,8 +6497,7 @@ class Tracking
                         </tr>
                     </tbody>
                 </table>
-            </div>
-        ';
+            </div>';
 
         return $html;
     }

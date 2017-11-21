@@ -38,13 +38,15 @@ if ($isStudent) {
     $skillParents = [];
     foreach ($skills as $resultData) {
         $parents = $objSkill->get_parents($resultData['id']);
+
         foreach ($parents as $parentData) {
             if ($parentData['id'] == 1 || $parentData['parent_id'] == 1) {
                 continue;
             }
-
+            $skillParents[$parentData['id']]['passed'] = in_array($parentData['id'], array_keys($skills));
             $skillParents[$parentData['id']][] = $resultData;
         }
+
         $courseId = $resultData['course_id'];
         if (!empty($courseId)) {
             if (isset($courseTempList[$courseId])) {
@@ -80,25 +82,30 @@ if ($isStudent) {
                 continue;
             }
             $parentInfo = $objSkill->getSkillInfo($parentId);
-            $table->setHeaderContents(0, $column, $parentInfo['name']);
-            $column++;
-
-            $row = 1;
-            foreach ($data as $skillData) {
-                $skillAdded[] = $skillData['id'];
-                $table->setCellContents(
-                    $row,
-                    0,
-                    $skillData['name']
-                );
+            $parentName = '';
+            if ($data['passed']) {
+                $parentName = $parentInfo['name'];
             }
+            $table->setHeaderContents(0, $column, $parentName);
+            $row = 1;
+            $skillsToShow = [];
+            foreach ($data as $skillData) {
+                if ($skillData['id'] == $parentId) {
+                    continue;
+                }
+                $skillAdded[] = $skillData['id'];
+                $skillsToShow[] = $skillData['name'];
+            }
+            $table->setCellContents(
+                $row,
+                $column,
+                implode(' ', $skillsToShow)
+            );
             $row++;
+            $column++;
         }
     }
-
     $tpl->assign('skill_table', $table->toHtml());
-
-
     $tplPath = 'skill/student_report.tpl';
 } elseif ($isStudentBoss) {
     $selectedStudent = isset($_REQUEST['student']) ? intval($_REQUEST['student']) : 0;

@@ -1063,9 +1063,22 @@ class Skill extends Model
      *
      * @return array
      */
-    public function getUserSkills($userId, $getSkillData = false)
+    public function getUserSkills($userId, $getSkillData = false, $courseId = 0, $sessionId = 0)
     {
-        $userId = intval($userId);
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+
+        $courseCondition = '';
+        if (!empty($courseId)) {
+            $courseCondition = " AND course_id = $courseId ";
+        }
+
+        $sessionCondition = '';
+        if (!empty($sessionId)) {
+            $sessionCondition = " AND course_id = $sessionId ";
+        }
+
         $sql = 'SELECT DISTINCT 
                     s.id, 
                     s.name,
@@ -1076,7 +1089,8 @@ class Skill extends Model
                 FROM '.$this->table_skill_rel_user.' u
                 INNER JOIN '.$this->table.' s
                 ON u.skill_id = s.id
-                WHERE user_id = '.$userId;
+                WHERE 
+                    user_id = '.$userId.' '.$sessionCondition.' '.$courseCondition;
 
         $result = Database::query($sql);
         $skills = Database::store_result($result, 'ASSOC');
@@ -1095,6 +1109,125 @@ class Skill extends Model
         }
 
         return $skillList;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $courseId
+     * @param int $sessionId
+     *
+     * @return string
+     */
+    public function getUserSkillsTable($userId, $courseId = 0, $sessionId = 0)
+    {
+        $skills = $this->getUserSkills($userId, true, $courseId, $sessionId);
+
+        $courseTempList = [];
+        $skillParents = [];
+        $tableRows = [];
+        foreach ($skills as $resultData) {
+            $parents = $this->get_parents($resultData['id']);
+            foreach ($parents as $parentData) {
+                if ($parentData['id'] == 1 || $parentData['parent_id'] == 1) {
+                    continue;
+                }
+                $skillParents[$parentData['id']]['passed'] = in_array($parentData['id'], array_keys($skills));
+                $skillParents[$parentData['id']][] = $resultData;
+            }
+
+            $courseId = $resultData['course_id'];
+            if (!empty($courseId)) {
+                if (isset($courseTempList[$courseId])) {
+                    $courseInfo = $courseTempList[$courseId];
+                } else {
+                    $courseInfo = api_get_course_info_by_id($courseId);
+                    $courseTempList[$courseId] = $courseInfo;
+                }
+            }
+
+            $tableRow = array(
+                'skill_badge' => $resultData['img_mini'],
+                'skill_name' => $resultData['name'],
+                'achieved_at' => api_get_local_time($resultData['acquired_skill_at']),
+                'course_image' => '',
+                'course_name' => ''
+            );
+
+            if (!empty($courseInfo)) {
+                $tableRow['course_image'] = $courseInfo['course_image_source'];
+                $tableRow['course_name'] = $courseInfo['title'];
+            }
+            $tableRows[] = $tableRow;
+        }
+
+        $allowLevels = api_get_configuration_value('skill_levels_names');
+
+        $tableResult = '<div class="table-responsive">
+                <table class="table" id="skillList">
+                    <thead>
+                        <tr>
+                            <th>'.get_lang('AchievedSkills').'</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr><td>';
+        //$allowLevels = [];
+        if (!empty($skillParents)) {
+            if (empty($allowLevels)) {
+                $tableResult .= $this->processSkillList($skills);
+            } else {
+                $table = new HTML_Table(['class' => 'table table-bordered']);
+                if (!empty($skillParents)) {
+                    $column = 0;
+                    $skillAdded = [];
+                    foreach ($skillParents as $parentId => $data) {
+                        if (in_array($parentId, $skillAdded)) {
+                            continue;
+                        }
+                        $parentName = '';
+                        if ($data['passed']) {
+                            $parentInfo = $skills[$parentId];
+                            $parentName = $this->processSkillList([$parentInfo], 'mini', false);
+                        }
+                        $table->setHeaderContents(0, $column, $parentName);
+                        $row = 1;
+                        $skillsToShow = [];
+                        foreach ($data as $skillData) {
+                            if ($skillData['id'] == $parentId) {
+                                continue;
+                            }
+                            if (empty($skillData['id'])) {
+                                continue;
+                            }
+                            $skillAdded[] = $skillData['id'];
+                            $skillsToShow[] = $skillData;
+                        }
+                        $table->setCellContents(
+                            $row,
+                            $column,
+                            $this->processSkillList($skillsToShow, 'mini', false)
+                        );
+                        $row++;
+                        $column++;
+                    }
+                }
+                $tableResult .= $table->toHtml();
+            }
+        } else {
+            $tableResult .= get_lang('WithoutAchievedSkills');
+        }
+
+        $tableResult .= '</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>';
+
+
+        return [
+            'skills' => $tableRows,
+            'table' => $tableResult
+        ];
     }
 
     /**

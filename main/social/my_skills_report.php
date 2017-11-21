@@ -60,7 +60,7 @@ if ($isStudent) {
         $tableRow = array(
             'skill_badge' => $resultData['icon_image'],
             'skill_name' => $resultData['name'],
-            'achieved_at' => api_format_date($resultData['acquired_skill_at'], DATE_FORMAT_NUMBER),
+            'achieved_at' => api_get_local_time($resultData['acquired_skill_at']),
             'course_image' => '',
             'course_name' => ''
         );

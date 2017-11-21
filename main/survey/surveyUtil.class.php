@@ -2564,12 +2564,14 @@ class SurveyUtil
     public static function get_invitations($survey_code)
     {
         $course_id = api_get_course_int_id();
+        $sessionId = api_get_session_id();
         // Database table definition
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
 
         $sql = "SELECT * FROM $table_survey_invitation
 		        WHERE
 		            c_id = $course_id AND
+                    session_id = $sessionId AND
 		            survey_code = '".Database::escape_string($survey_code)."'";
         $result = Database::query($sql);
         $return = array();
@@ -3225,6 +3227,7 @@ class SurveyUtil
                 ON (
                     survey.code = survey_invitation.survey_code AND
                     survey.c_id = survey_invitation.c_id
+                    AND survey.session_id = survey_invitation.session_id
                 )
 				WHERE
                     survey_invitation.user = $user_id AND                    

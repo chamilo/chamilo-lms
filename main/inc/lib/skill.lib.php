@@ -619,8 +619,8 @@ class Skill extends Model
     {
         $result = parent::get($id);
         $result['web_icon_path'] = api_get_path(WEB_UPLOAD_PATH).'badges/'.$result['icon'];
-        $result['name'] = self::translate($result['name']);
-        $result['short_code'] = self::translate($result['short_code']);
+        $result['name'] = self::translateName($result['name']);
+        $result['short_code'] = self::translateCode($result['short_code']);
 
         return $result;
     }
@@ -664,8 +664,8 @@ class Skill extends Model
                 "badges/%s-small.png",
                 sha1($skill['name'])
             );
-            $skill['name'] = self::translate($skill['name']);
-            $skill['short_code'] = self::translate($skill['short_code']);
+            $skill['name'] = self::translateName($skill['name']);
+            $skill['short_code'] = self::translateCode($skill['short_code']);
         }
 
         return $skills;
@@ -718,8 +718,8 @@ class Skill extends Model
         $webPath = api_get_path(WEB_UPLOAD_PATH);
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                $row['name'] = self::translate($row['name']);
-                $row['short_code'] = self::translate($row['short_code']);
+                $row['name'] = self::translateName($row['name']);
+                $row['short_code'] = self::translateCode($row['short_code']);
                 $skill_rel_skill = new SkillRelSkill();
                 $parents = $skill_rel_skill->get_skill_parents($row['id']);
                 $row['level'] = count($parents) - 1;
@@ -1015,7 +1015,7 @@ class Skill extends Model
                             sha1($skill['name'])
                         );
                     }
-                    $skill['name'] = self::translate($skill['name']);
+                    $skill['name'] = self::translateName($skill['name']);
                     $clean_skill[$skill['id']] = array_merge(
                         $skill,
                         array(
@@ -1506,7 +1506,7 @@ class Skill extends Model
         $result = Database::query($sql);
 
         while ($row = Database::fetch_assoc($result)) {
-            $row['skill_name'] = self::translate($row['skill_name']);
+            $row['skill_name'] = self::translateName($row['skill_name']);
             $list[] = $row;
         }
 
@@ -1551,7 +1551,7 @@ class Skill extends Model
 
         $result = Database::query($sql);
         while ($row = Database::fetch_assoc($result)) {
-            $row['skill_name'] = self::translate($row['skill_name']);
+            $row['skill_name'] = self::translateName($row['skill_name']);
             $list[] = $row;
         }
 
@@ -1740,7 +1740,7 @@ class Skill extends Model
 
         foreach ($result as $item) {
             $skills[] = [
-                'name' => self::translate($item['name']),
+                'name' => self::translateName($item['name']),
                 'acquired_skill_at' => $item['acquired_skill_at']
             ];
         }
@@ -1752,12 +1752,25 @@ class Skill extends Model
      * @param string $name
      * @return string
      */
-    public static function translate($name)
+    public static function translateName($name)
     {
         $camelCase = 'Skill'.api_underscore_to_camel_case(
             str_replace(' ', '_', $name)
         );
 
         return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $name;
+    }
+
+    public static function translateCode($code)
+    {
+        if (empty($code)) {
+            return '';
+        }
+
+        $camelCase = 'SkillCode'.api_underscore_to_camel_case(
+                str_replace(' ', '_', $code)
+            );
+
+        return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : '';
     }
 }

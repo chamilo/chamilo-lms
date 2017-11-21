@@ -138,6 +138,7 @@ switch ($action) {
         echo $html;
         break;
     case 'get_skills_tree_json':
+        header('Content-Type: application/json');
         $userId = isset($_REQUEST['load_user']) && $_REQUEST['load_user'] == 1 ? api_get_user_id() : 0;
         $skill_id = isset($_REQUEST['skill_id']) ? intval($_REQUEST['skill_id']) : 0;
         $depth = isset($_REQUEST['main_depth']) ? intval($_REQUEST['main_depth']) : 2;

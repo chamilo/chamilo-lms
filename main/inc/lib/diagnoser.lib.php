@@ -452,6 +452,19 @@ class Diagnoser
             get_lang('UploadMaxFilesizeInfo')
         );
 
+        $setting = ini_get('upload_tmp_dir');
+        $status = self::STATUS_OK;
+        $array[] = $this->build_setting(
+            $status,
+            '[INI]',
+            'upload_tmp_dir',
+            'http://www.php.net/manual/en/ini.core.php#ini.upload_tmp_dir',
+            $setting,
+            '',
+            null,
+            get_lang('UploadTmpDirInfo')
+        );
+
         $setting = ini_get('variables_order');
         $req_setting = 'GPCS';
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;

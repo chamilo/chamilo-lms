@@ -1365,6 +1365,7 @@ class BuyCoursesPlugin extends Plugin
             'course_visual_code' => $course->getVisualCode(),
             'course_code' => $course->getCode(),
             'course_title' => $course->getTitle(),
+            'course_directory' => $course->getDirectory(),
             'course_visibility' => $course->getVisibility(),
             'visible' => false,
             'currency' => empty($defaultCurrency) ? null : $defaultCurrency['iso_code'],
@@ -1498,7 +1499,6 @@ class BuyCoursesPlugin extends Plugin
     public function registerItem(array $itemData)
     {
         $itemTable = Database::get_main_table(self::TABLE_ITEM);
-
         return Database::insert($itemTable, $itemData);
     }
 

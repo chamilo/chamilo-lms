@@ -86,4 +86,12 @@ if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
     $html .= Career::renderDiagram($careerInfo, $graph);
     $tpl->assign('content', $html);
     $tpl->display_one_col_template();
+} else {
+    api_not_allowed(
+        true,
+        Display::return_message(
+            sprintf(get_lang('CareerXDoesntHaveADiagram'), $careerInfo['name']),
+            'warning'
+        )
+    );
 }

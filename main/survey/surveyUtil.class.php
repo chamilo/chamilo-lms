@@ -3218,7 +3218,8 @@ class SurveyUtil
         echo '</thead>';
         echo '<tbody>';
 
-        $now = api_get_utc_datetime();
+        /** @var \DateTime $now */
+        $now = api_get_utc_datetime(null, false, true);
 
         $sql = "SELECT *
                 FROM $table_survey survey 
@@ -3231,8 +3232,8 @@ class SurveyUtil
                 )
 				WHERE
                     survey_invitation.user = $user_id AND                    
-                    survey.avail_from <= '".$now."' AND
-                    survey.avail_till >= '".$now."' AND
+                    survey.avail_from <= '".$now->format('Y-m-d')."' AND
+                    survey.avail_till >= '".$now->format('Y-m-d')."' AND
                     survey.c_id = $course_id AND
                     survey.session_id = $sessionId AND
                     survey_invitation.c_id = $course_id

@@ -93,7 +93,6 @@ class Certificate extends Model
             // Getting QR filename
             $file_info = pathinfo($path_certificate);
             $qr_code_filename = $this->certification_user_path.$file_info['filename'].'_qr.png';
-
             $content = $this->generateCustomCertificate();
 
             $my_new_content_html = str_replace(
@@ -407,6 +406,7 @@ class Certificate extends Model
      * @param int $cat_id category id
      * @param int $user_id user id
      * @param string $path_certificate the path name of the certificate
+     *
      */
     public function updateUserCertificateInfo(
         $cat_id,
@@ -672,14 +672,13 @@ class Certificate extends Model
 
         $skill = new Skill();
         $skills = $skill->getStudentSkills($this->user_id);
-        $time = Tracking::get_time_spent_on_the_platform($this->user_id);
-        $timeFormatted = api_time_to_hms($time);
+        $time = api_time_to_hms(Tracking::get_time_spent_on_the_platform($this->user_id));
 
         $tplContent = new Template(null, false, false, false, false, false);
 
         // variables for the default template
         $tplContent->assign('complete_name', $userInfo['complete_name']);
-        $tplContent->assign('time_in_platform', $timeFormatted);
+        $tplContent->assign('time_in_platform', $time);
         $tplContent->assign('certificate_generated_date', api_get_local_time($myCertificate['created_at']));
         $tplContent->assign('terms_validation_date', api_get_local_time($termsValidationDate));
 

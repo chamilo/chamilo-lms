@@ -6,16 +6,18 @@ use ChamiloSession as Session;
 /**
  * @package chamilo.main
  */
-
 define('CHAMILO_HOMEPAGE', true);
 define('CHAMILO_LOAD_WYSIWYG', false);
 
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore. */
 // Maybe we should change this into an api function? an example: CourseManager::unset();
 $cidReset = true;
-
 require_once 'main/inc/global.inc.php';
-//require_once 'main/auth/external_login/facebook.inc.php';
+
+$allow = api_get_configuration_value('plugin_redirection_enabled');
+if ($allow) {
+    RedirectionPlugin::redirectUser(api_get_user_id());
+}
 
 // The section (for the tabs).
 $this_section = SECTION_CAMPUS;
@@ -62,7 +64,6 @@ if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
 if (api_get_setting('allow_terms_conditions') === 'true') {
     Session::erase('term_and_condition');
 }
-
 //If we are not logged in and customapages activated
 if (!api_get_user_id() && CustomPages::enabled()) {
     if (Request::get('loggedout')) {
@@ -99,7 +100,7 @@ if (!empty($_POST['submitAuth'])) {
     }
 } else {
     // Only if login form was not sent because if the form is sent the user was already on the page.
-    Event::event_open();
+    Event::open();
 }
 
 if (api_get_setting('display_categories_on_homepage') === 'true') {
@@ -154,10 +155,6 @@ $controller->tpl->assign('navigation_course_links', $controller->return_navigati
 $controller->tpl->assign('notice_block', $controller->return_notice());
 //$controller->tpl->assign('main_navigation_block', $controller->return_navigation_links());
 $controller->tpl->assign('help_block', $controller->return_help());
-$controller->tpl->assign('total_users', UserManager::getCountActiveUsers());
-$controller->tpl->assign('total_courses', CourseManager::getCountOpenCourses());
-$controller->tpl->assign('total_exercises', CourseManager::getCountExercisesFromOpenCourse());
-
 
 if (api_is_platform_admin() || api_is_drh()) {
     $controller->tpl->assign('skills_block', $controller->returnSkillLinks());
@@ -177,5 +174,5 @@ if (isset($_GET['firstpage'])) {
 } else {
     api_delete_firstpage_parameter();
 }
-
+$controller->setGradeBookDependencyBar(api_get_user_id());
 $controller->tpl->display_two_col_template();

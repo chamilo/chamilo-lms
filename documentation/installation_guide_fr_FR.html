@@ -80,7 +80,7 @@
 
             Chamilo est un système de gestion de l'apprentissage (LMS) qui fonctionne
             principallement sur base d'un <span style="font-weight: bold;">serveur web (Apache 2.2+)</span>, de <span style="font-weight: bold;">MySQL 5.1+ ou de MariaDB 5+
-                (5 ou 10)</span> et de <span style="font-weight: bold;">PHP 5.5+</span> (le support de PHP 7 n'a pas été pleinement testé). <br />
+                (5 ou 10)</span> et de <span style="font-weight: bold;">PHP 5.5+</span> (7.1 recommandé). <br />
 
 
             <br />
@@ -145,17 +145,26 @@
                 <li>Activer le module "rewrite" d'Apache (en ligne de commande, faites simplement un "<i>sudo a2enmod rewrite</i>")</li>
                 <li>Configurer le VirtualHost d'Apache pour qu'il inclue le bloc suivant, ce qui permettra l'interprétation des fichiers .htaccess</li>
             </ul>
-            Pour Apache <=2.2:
+            Pour Apache <=2.2 (remplacez /var/www/chamilo par le chemin vers votre répertoire de Chamilo):
             <pre>
     &lt;Directory /&gt;
         AllowOverride All
         Order allow,deny
         allow from all
     &lt;/Directory&gt;
+    &lt;Directory /var/www/chamilo/&gt;
+        AllowOverride All
+        Order allow,deny
+        allow from all
+    &lt;/Directory&gt;
     </pre>
-            et pour Apache >=2.4:
-            <pre>
+    et pour Apache >=2.4:
+    <pre>
     &lt;Directory /&gt;
+        AllowOverride All
+        Require all granted
+    &lt;/Directory&gt;
+    &lt;Directory /var/www/chamilo/&gt;
         AllowOverride All
         Require all granted
     &lt;/Directory&gt;
@@ -276,7 +285,7 @@
             <ul>
                 <li>
                     Configurer les mails de Chamilo : la plupart des portails Chamilo utilisent les propriétés mail définies dans le fichier php.ini.
-                    Cependant si vous utilisez un serveur mail distinct, vous voudrez peut-être ajuster les propriétés mail 
+                    Cependant si vous utilisez un serveur mail distinct, vous voudrez peut-être ajuster les propriétés mail
                     dans <em>(chamilo folder)</em>/app/config/mail.conf.php
                 </li>
                 <li>Editez le fichier php.ini (sous Windows, il devrait se trouver dans
@@ -301,7 +310,7 @@
 
             <br />
             <p>
-                <strong>Important :</strong> 
+                <strong>Important :</strong>
                 Vous aurez besoin de définir votre <em>date.timezone</em> en fonction de votre fuseau horaire.
                 Par exemple si votre serveur se trouve dans la zone America/New_York, indiquez cette valeur pour
                 le paramètre date.timezone du fichier php.ini :
@@ -390,7 +399,7 @@
             Comme cette version est une version mineure de Chamilo par rapport à une
             quelconque version 1.11.*, les seuls pas à suivre sont:
             <ul>
-                <li> 
+                <li>
                     vérifier que vous n'avez pas créé une version modifiée d'une feuille de
                     style en utilisant un répertoire css existant <span class="text-muted">(si c'est le cas, elle sera
                         écrasée par la mise à jour. Gardez-en une copie que vous renommerez au

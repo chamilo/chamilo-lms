@@ -364,15 +364,19 @@ class Plugin
         // Check whether the language strings for the plugin have already been
         // loaded. If so, no need to load them again.
         if (is_null($this->strings)) {
-            global $language_interface;
+            $language_interface = api_get_interface_language();
             $root = api_get_path(SYS_PLUGIN_PATH);
             $plugin_name = $this->get_name();
 
             $interfaceLanguageId = api_get_language_id($language_interface);
+            if (empty($interfaceLanguageId)) {
+                $language_interface = api_get_setting('platformLanguage');
+                $interfaceLanguageId = api_get_language_id($language_interface);
+            }
             $interfaceLanguageInfo = api_get_language_info($interfaceLanguageId);
             $languageParentId = !empty($interfaceLanguageInfo['parent_id']) ? (int) $interfaceLanguageInfo['parent_id'] : 0;
 
-            //1. Loading english if exists
+            // 1. Loading english if exists
             $english_path = $root.$plugin_name."/lang/english.php";
 
             if (is_readable($english_path)) {
@@ -405,7 +409,6 @@ class Plugin
                 }
             }
         }
-
         if (isset($this->strings[$name])) {
             return $this->strings[$name];
         }
@@ -662,11 +665,9 @@ class Plugin
      * configuration should trigger the use of a callback method
      * @param array $values sent back from the course configuration script
      *
-     * @return void
      */
     public function course_settings_updated($values = array())
     {
-
     }
 
     /**
@@ -890,5 +891,30 @@ class Plugin
     public function performActionsAfterConfigure()
     {
         return $this;
+    }
+
+    /**
+     * Get the admin URL for the plugin if Plugin::isAdminPlugin is true
+     * @return string
+     */
+    public function getAdminUrl()
+    {
+        if (!$this->isAdminPlugin) {
+            return '';
+        }
+
+        $name = $this->get_name();
+        $sysPath = api_get_path(SYS_PLUGIN_PATH).$name;
+        $webPath = api_get_path(WEB_PLUGIN_PATH).$name;
+
+        if (file_exists("$sysPath/admin.php")) {
+            return "$webPath/admin.php";
+        }
+
+        if (file_exists("$sysPath/start.php")) {
+            return "$webPath/start.php";
+        }
+
+        return '';
     }
 }

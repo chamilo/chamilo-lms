@@ -1,4 +1,6 @@
 <?php
+/* For license terms, see /license.txt */
+
 /**
  * AzureActiveDirectory plugin class
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
@@ -39,9 +41,9 @@ class AzureActiveDirectory extends Plugin
     /**
      * Instance the plugin
      * @staticvar null $result
-     * @return Tour
+     * @return $this
      */
-    static function create()
+    public static function create()
     {
         static $result = null;
 

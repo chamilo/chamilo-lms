@@ -33,7 +33,7 @@
                                     {% if skill.icon is empty %}
                                         <img src="{{ 'badges-default.png' | icon(128) }}" width="50" height="50" alt="{{ skill.name }}">
                                     {% else %}
-                                        <img src="{{ skill.web_icon_path }}" width="50" height="50" alt="{{ skill.name }}">
+                                        <img src="{{ skill.icon_big }}" width="50" height="50" alt="{{ skill.name }}">
                                     {% endif %}
 
                                     {{ skill.name }}

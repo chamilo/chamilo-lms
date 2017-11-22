@@ -55,7 +55,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     // we add a user only if is a open group
     $user_join = intval($_GET['u']);
     //if i'm a moderator
-    if ($userGroup->is_group_moderator($group_id)) {
+    if ($userGroup->isGroupModerator($group_id)) {
         $userGroup->update_user_role($user_join, $group_id);
         Display::addFlash(Display::return_message(get_lang('UserAdded')));
     }
@@ -65,7 +65,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete') {
     // we add a user only if is a open group
     $user_join = intval($_GET['u']);
     //if i'm a moderator
-    if ($userGroup->is_group_moderator($group_id)) {
+    if ($userGroup->isGroupModerator($group_id)) {
         $userGroup->delete_user_rel_group($user_join, $group_id);
         Display::addFlash(Display::return_message(get_lang('UserDeleted')));
     }

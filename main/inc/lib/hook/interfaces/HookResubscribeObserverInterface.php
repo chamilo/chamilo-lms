@@ -12,7 +12,7 @@
 interface HookResubscribeObserverInterface extends HookObserverInterface
 {
     /**
-     * @param HookResubscribeObserverInterface $hook
+     * @param HookResubscribeEventInterface $hook
      *
      * @return int
      */

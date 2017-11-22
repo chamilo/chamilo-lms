@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	Index of the admin tools
-*
-*	@package chamilo.admin
-*/
+ * Index of the admin tools
+ *
+ * @package chamilo.admin
+ */
 
 // resetting the course id
 $cidReset = true;
@@ -53,8 +53,9 @@ if (count($output) > 0) {
     $result .= '<table>';
     foreach ($output as $line) {
         $result .= '<tr>';
-	    $result .= '<td class="filler-report-data-init">'.$line['line-init'].' </td><td class="filler-report-data">'.$line['line-info'].'</td>';
-	    $result .= '</tr>';
+        $result .= '<td class="filler-report-data-init">'.$line['line-init'].' </td>
+                    <td class="filler-report-data">'.$line['line-info'].'</td>';
+        $result .= '</tr>';
     }
     $result .= '</table>';
     $result .= '</div>';
@@ -63,11 +64,27 @@ if (count($output) > 0) {
 ?>
 <div id="datafiller" class="panel panel-default">
     <div class="panel-body">
-    <h4><?php echo Display::return_icon('bug.png', get_lang('DataFiller'), null, ICON_SIZE_MEDIUM).' '.get_lang('DataFiller')?></h4>
+    <h4><?php
+        echo Display::return_icon('bug.png', get_lang('DataFiller'), null, ICON_SIZE_MEDIUM).' '.get_lang('DataFiller');
+        ?>
+    </h4>
     <div class="description"><?php echo get_lang('ThisSectionIsOnlyVisibleOnSourceInstalls'); ?></div>
     <ul class="fillers">
-      <li><a href="filler.php?fill=users"><?php echo Display::return_icon('user.png', get_lang('FillUsers'), null, ICON_SIZE_SMALL).' '.get_lang('FillUsers'); ?></a></li>
-      <li><a href="filler.php?fill=courses"><?php echo Display::return_icon('new-course.png', get_lang('FillCourses'), null, ICON_SIZE_SMALL).' '.get_lang('FillCourses'); ?></a></li>
+      <li>
+          <a href="filler.php?fill=users">
+            <?php
+            echo Display::return_icon('user.png', get_lang('FillUsers'), null, ICON_SIZE_SMALL).
+                ' '.get_lang('FillUsers');
+            ?>
+          </a></li>
+      <li>
+          <a href="filler.php?fill=courses">
+          <?php
+          echo Display::return_icon('new-course.png', get_lang('FillCourses'), null, ICON_SIZE_SMALL).
+              ' '.get_lang('FillCourses');
+            ?>
+        </a>
+      </li>
     </ul>
     </div>
 </div>

@@ -4,8 +4,6 @@
  * @package chamilo.plugin.sepe
  */
 
-require_once 'sepe_plugin.class.php';
-
 $tableSepeCenter = Database::get_main_table(SepePlugin::TABLE_SEPE_CENTER);
 $tableSepeActions = Database::get_main_table(SepePlugin::TABLE_SEPE_ACTIONS);
 $tableSepeSpecialty = Database::get_main_table(SepePlugin::TABLE_SEPE_SPECIALTY);
@@ -78,7 +76,7 @@ function getCourseCode($actionId)
 {
     global $tableCourse;
     $courseId = getCourse($actionId);
-    $sql = "SELECT code FROM $tableCourse WHERE id = $courseId";    
+    $sql = "SELECT code FROM $tableCourse WHERE id = $courseId";
     $rs = Database::query($sql);
     $aux = Database::fetch_assoc($rs);
     return $aux['code'];
@@ -171,7 +169,7 @@ function list_tutor($specialtyId)
     return $row;
 }
 
-function getCentersList() 
+function getCentersList()
 {
     global $tableCenters;
     $sql = "SELECT * FROM $tableCenters;";
@@ -186,16 +184,16 @@ function getCentersList()
 function listTutorType($condition)
 {
     global $tableTutorCompany;
-       $sql = "SELECT * FROM $tableTutorCompany WHERE ".$condition." ORDER BY alias ASC, document_number ASC;";
+    $sql = "SELECT * FROM $tableTutorCompany WHERE ".$condition." ORDER BY alias ASC, document_number ASC;";
     $res = Database::query($sql);
     $aux = array();
     while ($row = Database::fetch_assoc($res)) {
         $tmp = array();
         $tmp['id'] = $row['id'];
         if (trim($row['alias']) != '') {
-            $tmp['alias'] = $row['alias'].' - '.$row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];    
+            $tmp['alias'] = $row['alias'].' - '.$row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];
         } else {
-            $tmp['alias'] = $row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];    
+            $tmp['alias'] = $row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];
         }
         $aux[] = $tmp;
     }
@@ -222,9 +220,9 @@ function getTutorsSpecialty($specialtyId)
             $tutor = array();
             $tutor['id'] = $row['id'];
             if (trim($row['firstname']) != '' || trim($row['lastname']) != '') {
-                $tutor['data'] = $row['firstname'].' '.$row['lastname'].' ('.$row['document_type'].' '.$row['document_number'].' '.$row['document_letter'].' )';    
+                $tutor['data'] = $row['firstname'].' '.$row['lastname'].' ('.$row['document_type'].' '.$row['document_number'].' '.$row['document_letter'].' )';
             } else {
-                $tutor['data'] = $row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];    
+                $tutor['data'] = $row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];
             }
             $aux[] = $tutor;
         }

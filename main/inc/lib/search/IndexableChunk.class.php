@@ -54,12 +54,21 @@ abstract class _IndexableChunk
     public $terms;
 
     /**
+     * Class constructor. Just generates an empty 'data' array attribute
+     */
+    public function __construct()
+    {
+        $this->data = array();
+    }
+
+    /**
      * Add a value to the indexed item
      * @param  string  Key
      * @param  string  Value
      * @return  void
      */
-    function addValue($key, $value) {
+    public function addValue($key, $value)
+    {
         $this->data[$key] = $value;
     }
 
@@ -68,7 +77,8 @@ abstract class _IndexableChunk
      * @param string Term
      * @param string Flag (one character)
      */
-    public function addTerm($term, $flag) {
+    public function addTerm($term, $flag)
+    {
         global $charset;
         if (strlen($flag) == 1) {
             $this->terms[] = array('name' => api_convert_encoding(stripslashes($term), 'UTF-8', $charset), 'flag' => $flag);
@@ -76,16 +86,10 @@ abstract class _IndexableChunk
     }
 
     /**
-     * Class constructor. Just generates an empty 'data' array attribute
-     */
-    function __construct() {
-        $this->data = array();
-    }
-
-    /**
      * Class desctructor. Unsets attributes.
      */
-    function __destruct() {
+    public function __destruct()
+    {
         unset($this->data);
         unset($this->terms);
     }
@@ -98,7 +102,6 @@ abstract class _IndexableChunk
  */
 class IndexableChunk extends _IndexableChunk
 {
-
     /**
      * Let add course id term
      */

@@ -64,7 +64,6 @@ $course_id = api_get_course_int_id();
 // We are getting all the information about the current forum and forum category.
 // Note pcool: I tried to use only one sql statement (and function) for this,
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
-
 $sql = "SELECT * FROM $table_posts posts 
         INNER JOIN $table_users users
         ON (posts.poster_id = users.user_id)

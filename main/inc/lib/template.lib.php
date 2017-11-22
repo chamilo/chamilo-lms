@@ -207,8 +207,6 @@ class Template
             $this->assign('language_form', api_display_language_form());
         }
 
-        $this->setLoginForm();
-
         // Chamilo plugins
         if ($this->show_header) {
             if ($this->load_plugins) {
@@ -446,14 +444,24 @@ class Template
     }
 
     /**
-     * If template not found in custom template folder, the default template
-     * will be used.
+     * Returns the sub-folder and filename for the given tpl file.
+     * If template not found in overrides/ or custom template folder, the
+     * default template will be used.
      * @param string $name
      *
      * @return string
      */
     public function get_template($name)
     {
+        // Check if the tpl file is present in the main/template/overrides/ dir
+        // Overrides is a special directory meant for temporary template
+        // customization. It must be taken into account before anything else
+        $file = api_get_path(SYS_CODE_PATH).'template/overrides/'.$name;
+        if (is_readable($file)) {
+            return 'overrides/'.$name;
+        }
+        // If a template folder has been manually defined, search for the right
+        // file, and if not found, go for the same file in the default template
         if ($this->templateFolder != 'default') {
             // Avoid missing template error, use the default file.
             $file = api_get_path(SYS_CODE_PATH).'template/'.$this->templateFolder.'/'.$name;
@@ -466,7 +474,9 @@ class Template
     }
 
     /**
-     * Set course parameters
+     * Prepare the _c array for template files. The _c array contains
+     * information about the current course
+     * @return void
      */
     private function set_course_parameters()
     {
@@ -494,7 +504,10 @@ class Template
     }
 
     /**
-     * Set user parameters
+     * Prepare the _u array for template files. The _u array contains
+     * information about the current user, as returned by
+     * api_get_user_info()
+     * @return void
      */
     private function set_user_parameters()
     {
@@ -518,9 +531,9 @@ class Template
     }
 
     /**
-     * Get theme dir
+     * Get CSS themes sub-directory
      * @param string $theme
-     * @return string
+     * @return string with a trailing slash, e.g. 'themes/chamilo_red/'
      */
     public static function getThemeDir($theme)
     {
@@ -537,10 +550,10 @@ class Template
         return $themeDir;
     }
 
-      /**
-         * Get the web paths
-         * @return array
-         */
+    /**
+     * Get an array of all the web paths available (e.g. 'web' => 'https://my.chamilo.site/')
+     * @return array
+     */
     private function getWebPaths()
     {
         return [
@@ -565,7 +578,9 @@ class Template
     }
 
     /**
-     * Set system parameters
+     * Set system parameters from api_get_configuration into _s array for use in TPLs
+     * Also fills the _p array from getWebPaths()
+     * @uses self::getWebPaths()
      */
     public function set_system_parameters()
     {
@@ -770,7 +785,7 @@ class Template
         }
 
         if (api_get_setting('include_asciimathml_script') == 'true') {
-            $bowerJsFiles[] = 'MathJax/MathJax.js?config=TeX-AMS_HTML';
+            $bowerJsFiles[] = 'MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML';
         }
 
         if ($isoCode != 'en') {
@@ -844,7 +859,6 @@ class Template
     {
         global $httpHeadXtra, $interbreadcrumb, $language_file, $_configuration, $this_section;
         $_course = api_get_course_info();
-        $help = $this->help;
         $nameTools = $this->title;
         $navigation = return_navigation_array();
         $this->menu_navigation = $navigation['menu_navigation'];
@@ -914,9 +928,9 @@ class Template
         $this->assign('title_string', $title_string);
 
         // Setting the theme and CSS files
-        $css = $this->setCssFiles();
+        $this->setCssFiles();
         $this->set_js_files();
-        $this->setCssCustomFiles($css);
+        $this->setCssCustomFiles();
 
         $browser = api_browser_support('check_browser');
         if ($browser[0] == 'Internet Explorer' && $browser[1] >= '11') {
@@ -1405,6 +1419,12 @@ class Template
                     break;
                 case 'account_inactive':
                     $message = get_lang('AccountInactive');
+
+                    if (api_get_setting('allow_registration') === 'confirmation') {
+                        $message = sprintf(
+                            get_lang('YourAccountIsInactiveBecauseYouDoesntConfirmItCheckYourEmailAndFollowTheInstructionsOrClickTheFollowingLinkXToReSendTheEmail'),
+                            Display::url(get_lang('ReSendConfirmationMail'), api_get_path(WEB_PATH) . 'main/auth/resend_confirmation_mail.php'));
+                    }
                     break;
                 case 'user_password_incorrect':
                     $message = get_lang('InvalidId');
@@ -1442,32 +1462,39 @@ class Template
             null,
             FormValidator::LAYOUT_BOX_NO_LABEL
         );
-
+        $params = [
+            'id' => 'login',
+            'autofocus' => 'autofocus',
+            'icon' => 'user fa-fw',
+            'placeholder' => get_lang('UserName'),
+        ];
+        $browserAutoCapitalize= false;
+        // Avoid showing the autocapitalize option if the browser doesn't
+        // support it: this attribute is against the HTML5 standard
+        if (api_browser_support('autocapitalize')) {
+            $browserAutoCapitalize = false;
+            $params['autocapitalize'] = 'none';
+        }
         $form->addText(
             'login',
             get_lang('UserName'),
             true,
-            array(
-                'id' => 'login',
-                'autofocus' => 'autofocus',
-                'icon' => 'user fa-fw',
-                'placeholder' => get_lang('UserName'),
-                'autocapitalize' => 'none'
-            )
+            $params
         );
-
+        $params = [
+            'id' => 'password',
+            'icon' => 'lock fa-fw',
+            'placeholder' => get_lang('Pass'),
+        ];
+        if ($browserAutoCapitalize) {
+            $params['autocapitalize'] = 'none';
+        }
         $form->addElement(
             'password',
             'password',
             get_lang('Pass'),
-            array(
-                'id' => 'password',
-                'icon' => 'lock fa-fw',
-                'placeholder' => get_lang('Pass'),
-                'autocapitalize' => 'none',
-            )
+            $params
         );
-
         // Captcha
         $captcha = api_get_setting('allow_captcha');
         $allowCaptcha = $captcha === 'true';
@@ -1526,7 +1553,7 @@ class Template
 
         $html = $form->returnForm();
         if (api_get_setting('openid_authentication') == 'true') {
-            include_once 'main/auth/openid/login.php';
+            include_once api_get_path(SYS_CODE_PATH).'auth/openid/login.php';
             $html .= '<div>'.openid_form().'</div>';
         }
 

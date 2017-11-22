@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * Global events controller class
+ * @deprecated to be removed in 2.x
  * @package chamilo.admin
  */
 $cidReset = true;
@@ -13,6 +14,9 @@ if (api_get_setting('activate_email_template') != 'true') {
 }
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
+$action_links = '';
+$tool_name = '';
+$message = '';
 
 switch ($action) {
     case 'show':

@@ -26,7 +26,7 @@ class GradingElectronicPlugin extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '0.7',
+            '0.8',
             'Angel Fernando Quiroz Campos, Julio Montoya',
             array(
                 'tool_enable' => 'boolean',

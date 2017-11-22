@@ -94,9 +94,9 @@ if (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse) {
         exit;
     }
 
-    Display :: display_header(get_lang('ToolSurvey'));
+    Display::display_header(get_lang('ToolSurvey'));
     SurveyUtil::handle_reporting_actions($survey_data, $people_filled);
-    Display :: display_footer();
+    Display::display_footer();
     exit;
 }
 
@@ -112,11 +112,11 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 
 // Breadcrumbs
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
     'name' => get_lang('SurveyList')
 );
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id,
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
     'name' => $urlname
 );
 
@@ -152,7 +152,7 @@ SurveyUtil::handle_reporting_actions($survey_data, $people_filled);
 
 // Actions bar
 echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'">'.
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq().'">'.
     Display::return_icon('back.png', get_lang('BackToSurvey'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 

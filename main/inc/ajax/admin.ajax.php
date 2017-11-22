@@ -3,7 +3,6 @@
 /**
  * Responses to AJAX calls
  */
-
 require_once __DIR__.'/../global.inc.php';
 
 api_protect_admin_script();
@@ -29,6 +28,8 @@ switch ($action) {
         }
         break;
     case 'version':
+        // Fix session block when loading admin/index.php and changing page
+        session_write_close();
         echo version_check();
         break;
     case 'get_extra_content':
@@ -122,12 +123,17 @@ function check_system_version()
         'verify' => false
     ];
 
-    $client = new GuzzleHttp\Client();
-    $res = $client->request('GET', $url, $options);
     $urlValidated = false;
-    if ($res->getStatusCode() == '200' || $res->getStatusCode() == '301') {
-        $urlValidated = true;
+
+    try {
+        $client = new GuzzleHttp\Client();
+        $res = $client->request('GET', $url, $options);
+        if ($res->getStatusCode() == '200' || $res->getStatusCode() == '301') {
+            $urlValidated = true;
+        }
+    } catch (Exception $e) {
     }
+
     // the chamilo version of your installation
     $system_version = trim(api_get_configuration_value('system_version'));
 

@@ -24,7 +24,7 @@
  *  
  *  ---------------------------------------------------------------------
  *  
- *  Copyright (c) 2012-2015 The MathJax Consortium
+ *  Copyright (c) 2012-2017 The MathJax Consortium
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -179,8 +179,6 @@
   };
   
   var navigator = {appName: "MathJax"};  // hide the true navigator object
-  
-  var i; // avoid global variable used in code below
   
 /******************************************************************
  *
@@ -382,12 +380,13 @@ function createMmlNode(t,frag) {
 }
 
 function newcommand(oldstr,newstr) {
-  AMsymbols = AMsymbols.concat([{input:oldstr, tag:"mo", output:newstr, 
-                                 tex:null, ttype:DEFINITION}]);
-  // ####  Added from Version 2.0.1 #### //
-  AMsymbols.sort(compareNames);
-  for (i=0; i<AMsymbols.length; i++) AMnames[i] = AMsymbols[i].input;
-  // ####  End of Addition #### //
+  AMsymbols.push({input:oldstr, tag:"mo", output:newstr, tex:null, ttype:DEFINITION});
+  refreshSymbols();
+}
+
+function newsymbol(symbolobj) {
+  AMsymbols.push(symbolobj);
+  refreshSymbols();
 }
 
 // character lists for Mozilla/Netscape fonts
@@ -457,6 +456,9 @@ var AMsymbols = [
 {input:"\\\\", tag:"mo", output:"\\",   tex:"backslash", ttype:CONST},
 {input:"setminus", tag:"mo", output:"\\", tex:null, ttype:CONST},
 {input:"xx", tag:"mo", output:"\u00D7", tex:"times", ttype:CONST},
+{input:"|><", tag:"mo", output:"\u22C9", tex:"ltimes", ttype:CONST},
+{input:"><|", tag:"mo", output:"\u22CA", tex:"rtimes", ttype:CONST},
+{input:"|><|", tag:"mo", output:"\u22C8", tex:"bowtie", ttype:CONST},
 {input:"-:", tag:"mo", output:"\u00F7", tex:"div", ttype:CONST},
 {input:"divide",   tag:"mo", output:"-:", tex:null, ttype:DEFINITION},
 {input:"@",  tag:"mo", output:"\u2218", tex:"circ", ttype:CONST},
@@ -544,11 +546,13 @@ var AMsymbols = [
 {input:"aleph", tag:"mo", output:"\u2135", tex:null, ttype:CONST},
 {input:"...",  tag:"mo", output:"...",    tex:"ldots", ttype:CONST},
 {input:":.",  tag:"mo", output:"\u2234",  tex:"therefore", ttype:CONST},
+{input:":'",  tag:"mo", output:"\u2235",  tex:"because", ttype:CONST},
 {input:"/_",  tag:"mo", output:"\u2220",  tex:"angle", ttype:CONST},
 {input:"/_\\",  tag:"mo", output:"\u25B3",  tex:"triangle", ttype:CONST},
 {input:"'",   tag:"mo", output:"\u2032",  tex:"prime", ttype:CONST},
 {input:"tilde", tag:"mover", output:"~", tex:null, ttype:UNARY, acc:true},
 {input:"\\ ",  tag:"mo", output:"\u00A0", tex:null, ttype:CONST},
+{input:"frown",  tag:"mo", output:"\u2322", tex:null, ttype:CONST},
 {input:"quad", tag:"mo", output:"\u00A0\u00A0", tex:null, ttype:CONST},
 {input:"qquad", tag:"mo", output:"\u00A0\u00A0\u00A0\u00A0", tex:null, ttype:CONST},
 {input:"cdots", tag:"mo", output:"\u22EF", tex:null, ttype:CONST},
@@ -623,6 +627,8 @@ var AMsymbols = [
 {input:"frac", tag:"mfrac", output:"/",    tex:null, ttype:BINARY},
 {input:"/",    tag:"mfrac", output:"/",    tex:null, ttype:INFIX},
 {input:"stackrel", tag:"mover", output:"stackrel", tex:null, ttype:BINARY},
+{input:"overset", tag:"mover", output:"stackrel", tex:null, ttype:BINARY},
+{input:"underset", tag:"munder", output:"stackrel", tex:null, ttype:BINARY},
 {input:"_",    tag:"msub",  output:"_",    tex:null, ttype:INFIX},
 {input:"^",    tag:"msup",  output:"^",    tex:null, ttype:INFIX},
 {input:"hat", tag:"mover", output:"\u005E", tex:null, ttype:UNARY, acc:true},
@@ -660,14 +666,15 @@ function compareNames(s1,s2) {
 var AMnames = []; //list of input symbols
 
 function initSymbols() {
-  var texsymbols = [], i;
-  for (i=0; i<AMsymbols.length; i++)
+  var i;
+  var symlen = AMsymbols.length;
+  for (i=0; i<symlen; i++) {
     if (AMsymbols[i].tex) {
-      texsymbols[texsymbols.length] = {input:AMsymbols[i].tex, 
+      AMsymbols.push({input:AMsymbols[i].tex, 
         tag:AMsymbols[i].tag, output:AMsymbols[i].output, ttype:AMsymbols[i].ttype,
-        acc:(AMsymbols[i].acc||false)};
+        acc:(AMsymbols[i].acc||false)});
     }
-  AMsymbols = AMsymbols.concat(texsymbols);
+  }
   refreshSymbols();
 }
 
@@ -678,8 +685,7 @@ function refreshSymbols(){
 }
 
 function define(oldstr,newstr) {
-  AMsymbols = AMsymbols.concat([{input:oldstr, tag:"mo", output:newstr, 
-                                 tex:null, ttype:DEFINITION}]);
+  AMsymbols.push({input:oldstr, tag:"mo", output:newstr, tex:null, ttype:DEFINITION});
   refreshSymbols(); // this may be a problem if many symbols are defined!
 }
 
@@ -929,7 +935,7 @@ function AMparseSexpr(str) { //parses str and returns [node,tailstr]
 	node.setAttribute("mathcolor",st);
 	return [node,result2[1]];
     }
-    if (symbol.input=="root" || symbol.input=="stackrel") 
+    if (symbol.input=="root" || symbol.output=="stackrel") 
       newFrag.appendChild(result2[0]);
     newFrag.appendChild(result[0]);
     if (symbol.input=="frac") newFrag.appendChild(result2[0]);
@@ -1057,8 +1063,10 @@ function AMparseExpr(str,rightbracket) {
   if (symbol.ttype == RIGHTBRACKET || symbol.ttype == LEFTRIGHT) {
 //    if (AMnestingDepth > 0) AMnestingDepth--;
     var len = newFrag.childNodes.length;
-    if (len>0 && newFrag.childNodes[len-1].nodeName == "mrow" ) { //matrix
-    	    //removed to allow row vectors: //&& len>1 && 
+    if (len>0 && newFrag.childNodes[len-1].nodeName == "mrow" 
+            && newFrag.childNodes[len-1].lastChild
+            && newFrag.childNodes[len-1].lastChild.firstChild ) { //matrix
+      	    //removed to allow row vectors: //&& len>1 && 
     	    //newFrag.childNodes[len-2].nodeName == "mo" &&
     	    //newFrag.childNodes[len-2].firstChild.nodeValue == ","
       var right = newFrag.childNodes[len-1].lastChild.firstChild.nodeValue;
@@ -1308,6 +1316,7 @@ else if(typeof window.attachEvent != 'undefined'){
 
 //expose some functions to outside
 asciimath.newcommand = newcommand;
+asciimath.newsymbol = newsymbol;
 asciimath.AMprocesssNode = AMprocessNode;
 asciimath.parseMath = parseMath;
 asciimath.translate = translate;
@@ -1401,6 +1410,7 @@ ASCIIMATH.Augment({
     
     define: define,
     newcommand: newcommand,
+    newsymbol: newsymbol,
     symbols: AMsymbols,
     names: AMnames,
         

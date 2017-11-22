@@ -5908,12 +5908,9 @@ $EndDateMustBeMoreThanStartDate = "De einddatum moet na de begindatum liggen";
 $ToAttend = "Bijwonen";
 $AllUsersAreAutomaticallyRegistered = "Alle gebruikers worden automatisch geregistreerd";
 $AssignCoach = "Maak coach";
-$chamilo = "Chamilo";
 $YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "Uw account op %s werd goedgekeurd door één van onze beheerders.";
-$php = "PHP";
 $Off = "uit";
-$webserver = "Webserver";
-$mysql = "MySQL";
+$WebServer = "Webserver";
 $NotInserted = "Niet ingevoegd";
 $StudentBoss = "Superieur (n+1)";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "U kan zich nu aanmelden bij %s door gebruik te maken van de login en het wachtwoord dat u hebt ingegeven.";
@@ -6804,6 +6801,7 @@ $LatestLoginInPlatform = "Meest recente toegang tot platform";
 $FirstLoginInPlatform = "Eerste toegang tot platform";
 $FirstLoginInCourse = "Eerste bezoek aan cursus";
 $GroupReporting = "Opvolging groep";
+$AreYouSureToDeleteJS = "Bent u zeker dat u wenst te verwijderen?";
 $XDays = "%s dagen";
 $SkillProfile = "Competentieprofiel";
 $AchievedSkills = "Gerealiseerde competenties";
@@ -6849,4 +6847,9 @@ $YourPasswordContainsSequences = "Uw wachtwoord bevat reeksen";
 $PasswordVeryWeak = "Heel zwak";
 $UserXHasBeenAssignedToBoss = "U bent toegewezen aan de student %s";
 $UserXHasBeenAssignedToBossWithUrlX = "U bent als tutor toegewezen aan student %s. U kunt zijn profiel bekijken van hier: %s";
+$AgendaAvailableInCourseX = "Voor module %s is jouw agenda beschikbaar.";
+$YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX = "<br />Je bent ingeschreven voor de module %s . Je kan de lesmomenten, lestijden en leslokalen in jouw agenda op de ELO terugvinden. <br />
+Indien je nog geen toegang hebt tot onze ELO, zal je bij de eerste les de nodige info ontvangen van jouw lesgever.<br /> <br />
+Het eerstvolgende moment dat voor deze module werd ingevuld is: <br />
+%s <br /> %s";
 ?>

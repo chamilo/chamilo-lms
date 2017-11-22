@@ -336,6 +336,7 @@ VALUES
 ('allow_registration','true','Yes'),
 ('allow_registration','false','No'),
 ('allow_registration','approval','AfterApproval'),
+('allow_registration','confirmation','MailConfirmation'),
 ('allow_registration_as_teacher','true','Yes'),
 ('allow_registration_as_teacher','false','No'),
 ('allow_lostpassword','true','Yes'),

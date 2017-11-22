@@ -1,13 +1,12 @@
 <?php
-/**
- * DependencyResolverInterface.php
- * publisher
- * Date: 18.04.14
- */
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\ThemeBundle\Util;
 
-
+/**
+ * Interface DependencyResolverInterface
+ * @package Chamilo\ThemeBundle\Util
+ */
 interface DependencyResolverInterface
 {
     /**

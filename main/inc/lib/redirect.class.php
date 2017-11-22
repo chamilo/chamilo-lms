@@ -71,6 +71,14 @@ class Redirect
             (isset($_REQUEST['sso_referer']) && !empty($_REQUEST['sso_referer']))
         ) {
             if (isset($user_id)) {
+                $allow = api_get_configuration_value('plugin_redirection_enabled');
+                if ($allow) {
+                    $allow = api_get_configuration_value('plugin_redirection_enabled');
+                    if ($allow) {
+                        RedirectionPlugin::redirectUser($user_id);
+                    }
+                }
+
                 // Make sure we use the appropriate role redirection in case one has been defined
                 $user_status = api_get_user_status($user_id);
                 switch ($user_status) {

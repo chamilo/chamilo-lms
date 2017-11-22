@@ -1,11 +1,8 @@
-/* -*- Mode: Javascript; indent-tabs-mode:nil; js-indent-level: 2 -*- */
-/* vim: set ts=2 et sw=2 tw=80: */
-
 /*************************************************************
  *
  *  MathJax/localization/br/MathMenu.js
  *
- *  Copyright (c) 2009-2015 The MathJax Consortium
+ *  Copyright (c) 2009-2016 The MathJax Consortium
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,9 +17,8 @@
  *  limitations under the License.
  *
  */
-
 MathJax.Localization.addTranslation("br","MathMenu",{
-        version: "2.5.0",
+        version: "2.7.2",
         isLoaded: true,
         strings: {
           Show: "Diskouez ar formulenn evel",
@@ -92,7 +88,10 @@ MathJax.Localization.addTranslation("br","MathMenu",{
           PercentScale: "Ar skeuliad a zlefe beza\u00F1 un dregantad (da skouer, 120 %%)",
           IE8warning: "Se a ziweredekay al la\u00F1ser hag ar arc'hwelio\u00F9 zouma\u00F1. En o flas avat e c'halli klika\u00F1 war ur bomm en ur boueza\u00F1 war ar bouton Alt\n evit kaout al la\u00F1ser MathjAX.",
           IE9warning: "Diweredekaet e vo al la\u00F1ser kemperzhel MathJax, met en e flas e c'hallot klika\u00F1 war ur bomm o terc'hel da boueza\u00F1 war ar bouton Alt evit kaout al la\u00F1ser MathJax.",
-          NoOriginalForm: "N'haller kaout furmad orin ebet"
+          NoOriginalForm: "N'haller kaout furmad orin ebet",
+          CloseAboutDialog: "Serri\u00F1 ar voest kendivizout A-zivout MathJax",
+          FastPreview: "Dalberzh prim",
+          InTabOrder: "Enlakaat an urzh an ivinello\u00F9"
         }
 });
 

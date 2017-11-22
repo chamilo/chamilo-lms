@@ -117,7 +117,7 @@ foreach ($userSkills as $index => $skillIssue) {
 
     if (!$profile) {
         $skillRelSkill = new SkillRelSkill();
-        $parents = $skillRelSkill->get_skill_parents($skillId);
+        $parents = $skillRelSkill->getSkillParents($skillId);
 
         krsort($parents);
 

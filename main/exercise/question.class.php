@@ -36,6 +36,7 @@ abstract class Question
     public $question_table_class = 'table table-striped';
     public $questionTypeWithFeedback;
     public $extra;
+    public $export = false;
     public static $questionTypes = array(
         UNIQUE_ANSWER => array('unique_answer.class.php', 'UniqueAnswer'),
         MULTIPLE_ANSWER => array('multiple_answer.class.php', 'MultipleAnswer'),
@@ -158,7 +159,7 @@ abstract class Question
                 $objQuestion->extra = $object->extra;
                 $objQuestion->course = $course_info;
                 $objQuestion->feedback = isset($object->feedback) ? $object->feedback : '';
-                $objQuestion->category = TestCategory::getCategoryForQuestion($id);
+                $objQuestion->category = TestCategory::getCategoryForQuestion($id, $course_id);
 
                 $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
                 $sql = "SELECT DISTINCT q.exercice_id
@@ -1121,9 +1122,6 @@ abstract class Question
             $res = Database::query($sql);
 
             if (Database::num_rows($res) > 0 || $addQs) {
-                require_once(api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php');
-                require_once(api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php');
-
                 $di = new ChamiloIndexer();
                 if ($addQs) {
                     $question_exercises = array((int) $exerciseId);

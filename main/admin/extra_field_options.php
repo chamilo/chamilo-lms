@@ -131,7 +131,7 @@ $(function() {
 // The header.
 Display::display_header($tool_name);
 
-echo Display::page_header($extra_field_info['display_text']);
+echo Display::page_header($extra_field_info['display_text'], $extra_field_info['variable'], 'h1');
 
 $obj = new ExtraFieldOption($extra_field->type);
 $obj->fieldId = $field_id;

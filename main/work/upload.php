@@ -88,6 +88,12 @@ setWorkUploadForm($form, $workInfo['allow_text_assignment']);
 $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'sec_token', $token);
 
+$allowRedirect = api_get_configuration_value('allow_redirect_to_main_page_after_work_upload');
+$urlToRedirect = '';
+if ($allowRedirect) {
+    $urlToRedirect = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq();
+}
+
 $succeed = false;
 if ($form->validate()) {
     if ($student_can_edit_in_session && $check) {
@@ -103,6 +109,13 @@ if ($form->validate()) {
             $_FILES['file'],
             api_get_configuration_value('assignment_prevent_duplicate_upload')
         );
+
+
+        if ($allowRedirect) {
+            header('Location: '.$urlToRedirect);
+            exit;
+        }
+
         $script = 'work_list.php';
         if ($is_allowed_to_edit) {
             $script = 'work_list_all.php';
@@ -133,7 +146,7 @@ if ($workInfo['allow_text_assignment'] == 1) {
     );
 
     $multipleForm = new FormValidator('post');
-    $multipleForm->addMultipleUpload($url);
+    $multipleForm->addMultipleUpload($url, $urlToRedirect);
 
     $tabs = Display::tabs(
         $headers,

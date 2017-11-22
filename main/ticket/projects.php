@@ -13,8 +13,6 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script(true);
-
-$libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
 
 $this_section = 'tickets';

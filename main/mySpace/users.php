@@ -122,13 +122,13 @@ function get_users($from, $limit, $column, $direction)
                 $courseInfo = api_get_course_info($course_code);
                 $courseId = $courseInfo['real_id'];
 
-                if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
-                    $avg_time_spent += Tracking :: get_time_spent_on_the_course($student_id, $courseId, $_GET['id_session']);
-                    $my_average = Tracking :: get_avg_student_score($student_id, $course_code);
+                if (CourseManager::is_user_subscribed_in_course($student_id, $course_code, true)) {
+                    $avg_time_spent += Tracking::get_time_spent_on_the_course($student_id, $courseId, $_GET['id_session']);
+                    $my_average = Tracking::get_avg_student_score($student_id, $course_code);
                     if (is_numeric($my_average)) {
                         $avg_student_score += $my_average;
                     }
-                    $avg_student_progress += Tracking :: get_avg_student_progress($student_id, $course_code);
+                    $avg_student_progress += Tracking::get_avg_student_progress($student_id, $course_code);
                     $nb_courses_student++;
                 }
             }
@@ -152,8 +152,8 @@ function get_users($from, $limit, $column, $direction)
             $row[] = $student_data['lastname'];
             $row[] = $student_data['firstname'];
         }
-        $string_date = Tracking :: get_last_connection_date($student_id, true);
-        $first_date = Tracking :: get_first_connection_date($student_id);
+        $string_date = Tracking::get_last_connection_date($student_id, true);
+        $first_date = Tracking::get_first_connection_date($student_id);
         $row[] = $first_date;
         $row[] = $string_date;
 

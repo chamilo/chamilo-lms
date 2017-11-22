@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * Definition of new system event types
+ * @deprecated to be removed in 2.x
  * @package chamilo.admin.events
  */
 

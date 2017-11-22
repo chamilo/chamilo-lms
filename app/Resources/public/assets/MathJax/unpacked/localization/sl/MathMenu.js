@@ -1,11 +1,8 @@
-/* -*- Mode: Javascript; indent-tabs-mode:nil; js-indent-level: 2 -*- */
-/* vim: set ts=2 et sw=2 tw=80: */
-
 /*************************************************************
  *
  *  MathJax/localization/sl/MathMenu.js
  *
- *  Copyright (c) 2009-2015 The MathJax Consortium
+ *  Copyright (c) 2009-2016 The MathJax Consortium
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,9 +17,8 @@
  *  limitations under the License.
  *
  */
-
 MathJax.Localization.addTranslation("sl","MathMenu",{
-        version: "2.5.0",
+        version: "2.7.2",
         isLoaded: true,
         strings: {
           Show: "Prika\u017Ei matematiko kot",
@@ -104,7 +100,8 @@ MathJax.Localization.addTranslation("sl","MathMenu",{
           IE9warning: "Kontekstni meni MathJax bo izklopljen, namesto tega pa lahko s klikom izraza ob dr\u017Eanju tipke Alt prikli\u010Dete meni MathJax.",
           NoOriginalForm: "Na razpolago ni nobena izvorna oblika",
           Close: "Zapri",
-          EqSource: "Vir ena\u010Dbe MathJax"
+          EqSource: "Vir ena\u010Dbe MathJax",
+          FastPreview: "Hitri predogled"
         }
 });
 

@@ -56,6 +56,7 @@ switch ($action) {
         exit;
         break;
     case 'disable':
+        /** @var \Chamilo\CoreBundle\Entity\Skill $skill */
         $skill = $entityManager->find('ChamiloCoreBundle:Skill', $skillId);
 
         if (is_null($skill)) {
@@ -77,12 +78,12 @@ switch ($action) {
             $entityManager->persist($skill);
 
             $skillObj = new Skill();
-            $childrens = $skillObj->get_children($skill->getId());
+            $children = $skillObj->getChildren($skill->getId());
 
-            foreach ($childrens as $children) {
+            foreach ($children as $child) {
                 $skill = $entityManager->find(
                     'ChamiloCoreBundle:Skill',
-                    $children['id']
+                    $child['id']
                 );
 
                 if (empty($skill)) {
@@ -91,7 +92,6 @@ switch ($action) {
 
                 $skill->setStatus(0);
                 $skill->setUpdatedAt($updatedAt);
-
                 $entityManager->persist($skill);
             }
 
@@ -109,7 +109,7 @@ switch ($action) {
         exit;
         break;
     case 'list':
-        //no break
+        // no break
     default:
         $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
@@ -118,40 +118,44 @@ switch ($action) {
                 'add.png',
                 get_lang('CreateSkill'),
                 null,
-                ICON_SIZE_MEDIUM),
+                ICON_SIZE_MEDIUM
+            ),
             api_get_path(WEB_CODE_PATH).'admin/skill_create.php',
             ['title' => get_lang('CreateSkill')]
-            );
+        );
 
         $toolbar .= Display::url(
             Display::return_icon(
                 'wheel_skill.png',
                 get_lang('SkillsWheel'),
                 null,
-                ICON_SIZE_MEDIUM),
+                ICON_SIZE_MEDIUM
+            ),
             api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php',
             ['title' => get_lang('SkillsWheel')]
-            );
+        );
 
         $toolbar .= Display::url(
             Display::return_icon(
                 'edit-skill.png',
                 get_lang('BadgesManagement'),
                 null,
-                ICON_SIZE_MEDIUM),
+                ICON_SIZE_MEDIUM
+            ),
             api_get_path(WEB_CODE_PATH).'admin/skill_badge_list.php',
             ['title' => get_lang('BadgesManagement')]
-            );
+        );
 
         $toolbar .= Display::url(
             Display::return_icon(
                 'import_csv.png',
                 get_lang('ImportSkillsListCSV'),
                 null,
-                ICON_SIZE_MEDIUM),
+                ICON_SIZE_MEDIUM
+            ),
             api_get_path(WEB_CODE_PATH).'admin/skills_import.php',
             ['title' => get_lang('ImportSkillsListCSV')]
-            );
+        );
 
         $extraField = new ExtraField('skill');
         $arrayVals = $extraField->get_handler_field_info_by_tags('tags');

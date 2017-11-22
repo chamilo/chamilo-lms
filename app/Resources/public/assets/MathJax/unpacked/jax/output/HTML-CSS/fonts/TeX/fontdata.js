@@ -10,7 +10,7 @@
  *
  *  ---------------------------------------------------------------------
  *  
- *  Copyright (c) 2009-2015 The MathJax Consortium
+ *  Copyright (c) 2009-2017 The MathJax Consortium
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@
  */
 
 (function (HTMLCSS,MML,AJAX) {
-  var VERSION = "2.5.0";
+  var VERSION = "2.7.2";
   
   var MAIN   = "MathJax_Main",
       BOLD   = "MathJax_Main-bold",
@@ -37,8 +37,8 @@
       SIZE3  = "MathJax_Size3",
       SIZE4  = "MathJax_Size4";
   var H = "H", V = "V", EXTRAH = {load:"extra", dir:H}, EXTRAV = {load:"extra", dir:V};
-  var ARROWREP = [0x2212,MAIN,0,0,0,0,.1];   // add depth for arrow extender
-  var DARROWREP = [0x3D,MAIN,0,0,0,0,.1];    // add depth for arrow extender
+  var ARROWREP = [0x2212,MAIN,0,0,0,-.31,-.31];  // remove extra height/depth added below
+  var DARROWREP = [0x3D,MAIN,0,0,0,0,.1];        // add depth for arrow extender
 
   HTMLCSS.Augment({
     FONTDATA: {
@@ -78,6 +78,7 @@
                    remap: {0x391:0x41, 0x392:0x42, 0x395:0x45, 0x396:0x5A, 0x397:0x48,
                            0x399:0x49, 0x39A:0x4B, 0x39C:0x4D, 0x39D:0x4E, 0x39F:0x4F,
                            0x3A1:0x50, 0x3A4:0x54, 0x3A7:0x58,
+                           0x2016:0x2225,
                            0x2216:[0x2216,"-TeX-variant"],  // \smallsetminus
                            0x210F:[0x210F,"-TeX-variant"],  // \hbar
                            0x2032:[0x27,"sans-serif-italic"],  // HACK: a smaller prime
@@ -87,6 +88,7 @@
                    remap: {0x391:0x41, 0x392:0x42, 0x395:0x45, 0x396:0x5A, 0x397:0x48,
                            0x399:0x49, 0x39A:0x4B, 0x39C:0x4D, 0x39D:0x4E, 0x39F:0x4F,
                            0x3A1:0x50, 0x3A4:0x54, 0x3A7:0x58, 0x29F8:[0x002F,"bold-italic"],
+                           0x2016:0x2225,
                            0x219A:"\u2190\u0338", 0x219B:"\u2192\u0338", 0x21AE:"\u2194\u0338",
                            0x21CD:"\u21D0\u0338", 0x21CE:"\u21D4\u0338", 0x21CF:"\u21D2\u0338",
                            0x2204:"\u2203\u0338", 0x2224:"\u2223\u0338", 0x2226:"\u2225\u0338",
@@ -150,6 +152,7 @@
       RULECHAR: 0x2212,
       
       REMAP: {
+        0xA: 0x20,                      // newline
         0x203E: 0x2C9,                  // overline
         0x20D0: 0x21BC, 0x20D1: 0x21C0, // combining left and right harpoons
         0x20D6: 0x2190, 0x20E1: 0x2194, // combining left arrow and lef-right arrow
@@ -161,6 +164,7 @@
         0xB7: 0x22C5,                   // center dot
         0x2B9: 0x2032,                  // prime,
         0x3D2: 0x3A5,                   // Upsilon
+        0x2206: 0x394,                  // increment
         0x2015: 0x2014, 0x2017: 0x5F,   // horizontal bars
         0x2022: 0x2219, 0x2044: 0x2F,   // bullet, fraction slash
         0x2305: 0x22BC, 0x2306: 0x2A5E, // barwedge, doublebarwedge
@@ -368,6 +372,10 @@
         {
           dir: H, HW: [[.333+.25,MAIN],[.555+.25,SIZE1],[1+.33,SIZE2],[1.443+.33,SIZE3],[1.887,SIZE4]]
         },
+        0x2013: // en-dash
+        {
+          dir: H, HW: [[.5,MAIN]], stretch: {rep:[0x2013,MAIN]}
+        },
         0x2016: // vertical arrow extension
         {
           dir: V, HW: [[.602,SIZE1],[1,MAIN,null,0x2225]], stretch: {ext:[0x2225,MAIN]}
@@ -426,7 +434,7 @@
         },
         0x2212: // horizontal line
         {
-          dir: H, HW: [[.778,MAIN]], stretch: {rep:[0x2212,MAIN]}
+          dir: H, HW: [[.5,MAIN,0,0x2013]], stretch: {rep:ARROWREP}
         },
         0x221A: // \surd
         {
@@ -510,21 +518,23 @@
         },
         0x002D: {alias: 0x2212, dir:H}, // minus
         0x005E: {alias: 0x02C6, dir:H}, // wide hat
-        0x005F: {alias: 0x2212, dir:H}, // low line
+        0x005F: {alias: 0x2013, dir:H}, // low line
         0x007E: {alias: 0x02DC, dir:H}, // wide tilde
         0x02C9: {alias: 0x00AF, dir:H}, // macron
         0x0302: {alias: 0x02C6, dir:H}, // wide hat
         0x0303: {alias: 0x02DC, dir:H}, // wide tilde
         0x030C: {alias: 0x02C7, dir:H}, // wide caron
-        0x0332: {alias: 0x2212, dir:H}, // combining low line
-        0x2015: {alias: 0x2212, dir:H}, // horizontal line
-        0x2017: {alias: 0x2212, dir:H}, // horizontal line
+        0x0332: {alias: 0x2013, dir:H}, // combining low line
+        0x2014: {alias: 0x2013, dir:H}, // em-dash
+        0x2015: {alias: 0x2013, dir:H}, // horizontal line
+        0x2017: {alias: 0x2013, dir:H}, // horizontal line
         0x203E: {alias: 0x00AF, dir:H}, // overline
+        0x20D7: {alias: 0x2192, dir:H}, // combinining over right arrow (vector arrow)
         0x2215: {alias: 0x002F, dir:V}, // division slash
         0x2329: {alias: 0x27E8, dir:V}, // langle
         0x232A: {alias: 0x27E9, dir:V}, // rangle
-        0x23AF: {alias: 0x2212, dir:H}, // horizontal line extension
-        0x2500: {alias: 0x2212, dir:H}, // horizontal line
+        0x23AF: {alias: 0x2013, dir:H}, // horizontal line extension
+        0x2500: {alias: 0x2013, dir:H}, // horizontal line
         0x2758: {alias: 0x2223, dir:V}, // vertical separator
         0x3008: {alias: 0x27E8, dir:V}, // langle
         0x3009: {alias: 0x27E9, dir:V}, // rangle
@@ -570,6 +580,9 @@
         0x295F: EXTRAH, // rightwards harpoon with barb down from bar
         0x2960: EXTRAV, // up harpoon with barb left from bar
         0x2961: EXTRAV, // down harpoon with barb left from bar
+        0x2312: {alias: 0x23DC, dir:H}, // arc
+        0x2322: {alias: 0x23DC, dir:H}, // frown
+        0x2323: {alias: 0x23DD, dir:H}, // smile
         0x27F5: {alias: 0x2190, dir:H}, // long left arrow
         0x27F6: {alias: 0x2192, dir:H}, // long right arrow
         0x27F7: {alias: 0x2194, dir:H}, // long left-right arrow
@@ -1559,15 +1572,17 @@
     0xE154: [120,0,400,-10,410]        // stix-oblique open face capital letter A
   };
 
-  HTMLCSS.FONTDATA.FONTS['MathJax_Main'][0x22EE][0] += 400;  // adjust height for \vdots
-  HTMLCSS.FONTDATA.FONTS['MathJax_Main'][0x22F1][0] += 700;  // adjust height for \ddots
-  HTMLCSS.FONTDATA.FONTS['MathJax_Size4'][0xE154][0] += 200;  // adjust height for brace extender
-  HTMLCSS.FONTDATA.FONTS['MathJax_Size4'][0xE154][1] += 200;  // adjust depth for brace extender
-  HTMLCSS.FONTDATA.FONTS['MathJax_Main'][0x2245][2] -= 222; // fix error in character's right bearing
-  HTMLCSS.FONTDATA.FONTS['MathJax_Main'][0x2245][5] = {rfix:-222}; // fix error in character's right bearing
+  HTMLCSS.FONTDATA.FONTS[MAIN][0x2212][0] = HTMLCSS.FONTDATA.FONTS[MAIN][0x002B][0]; // minus is sized as plus
+  HTMLCSS.FONTDATA.FONTS[MAIN][0x2212][1] = HTMLCSS.FONTDATA.FONTS[MAIN][0x002B][1]; // minus is sized as plus
+  HTMLCSS.FONTDATA.FONTS[MAIN][0x22EE][0] += 400;  // adjust height for \vdots
+  HTMLCSS.FONTDATA.FONTS[MAIN][0x22F1][0] += 700;  // adjust height for \ddots
+  HTMLCSS.FONTDATA.FONTS[SIZE4][0xE154][0] += 200;  // adjust height for brace extender
+  HTMLCSS.FONTDATA.FONTS[SIZE4][0xE154][1] += 200;  // adjust depth for brace extender
+  HTMLCSS.FONTDATA.FONTS[MAIN][0x2245][2] -= 222; // fix error in character's right bearing
+  HTMLCSS.FONTDATA.FONTS[MAIN][0x2245][5] = {rfix:-222}; // fix error in character's right bearing
   MathJax.Hub.Register.LoadHook(HTMLCSS.fontDir+"/Main/Bold/MathOperators.js",function () {
-    HTMLCSS.FONTDATA.FONTS['MathJax_Main-bold'][0x2245][2] -= 106; // fix error in character's right bearing
-    HTMLCSS.FONTDATA.FONTS['MathJax_Main-bold'][0x2245][5] = {rfix:-106}; // fix error in character's right bearing
+    HTMLCSS.FONTDATA.FONTS[BOLD][0x2245][2] -= 106; // fix error in character's right bearing
+    HTMLCSS.FONTDATA.FONTS[BOLD][0x2245][5] = {rfix:-106}; // fix error in character's right bearing
   });
   MathJax.Hub.Register.LoadHook(HTMLCSS.fontDir+"/Typewriter/Regular/BasicLatin.js",function () {
     HTMLCSS.FONTDATA.FONTS['MathJax_Typewriter'][0x20][2] += 275;       // fix error in character width
@@ -1577,7 +1592,7 @@
   //
   //  Add some spacing characters (more will come later)
   //
-  MathJax.Hub.Insert(HTMLCSS.FONTDATA.FONTS['MathJax_Main'],{
+  MathJax.Hub.Insert(HTMLCSS.FONTDATA.FONTS[MAIN],{
     0xEEE0: [0,0,-575,0,0,{space:1}],
     0xEEE1: [0,0,-300,0,0,{space:1}],
     0xEEE8: [0,0,25,0,0,{space:1}]

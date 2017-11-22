@@ -16,10 +16,11 @@ api_block_anonymous_users();
 
 $export = isset($_GET['export']) ? $_GET['export'] : false;
 $sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : 0;
-$origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
+$origin = api_get_origin();
 $course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
 $courseInfo = api_get_course_info($course_code);
 $student_id = isset($_GET['student']) ? (int) $_GET['student'] : 0;
+$coachId = isset($_GET['id_coach']) ? (int) $_GET['id_coach'] : 0;
 $details = isset($_GET['details']) ? Security::remove_XSS($_GET['details']) : '';
 $currentUrl = api_get_self().'?student='.$student_id.'&course='.$course_code.'&id_session='.$sessionId.'&origin='.$origin.'&details='.$details;
 $allowMessages = api_get_configuration_value('private_messages_about_user');
@@ -130,13 +131,13 @@ if (!empty($details)) {
                     "url" => api_is_student_boss() ? "#" : "index.php",
                     "name" => get_lang('MySpace')
                 );
-                if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
+                if (!empty($coachId)) {
                     $interbreadcrumb[] = array(
-                        "url" => "student.php?id_coach=".Security::remove_XSS($_GET['id_coach']),
+                        "url" => "student.php?id_coach=".$coachId,
                         "name" => get_lang("CoachStudents")
                     );
                     $interbreadcrumb[] = array(
-                        "url" => "myStudents.php?student=".$student_id.'&id_coach='.Security::remove_XSS($_GET['id_coach']),
+                        "url" => "myStudents.php?student=".$student_id.'&id_coach='.$coachId,
                         "name" => get_lang("StudentDetails")
                     );
                 } else {
@@ -175,15 +176,15 @@ if (!empty($details)) {
             "url" => api_is_student_boss() ? "#" : "index.php",
             "name" => get_lang('MySpace')
         );
-        if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
+        if (!empty($coachId)) {
             if ($sessionId) {
                 $interbreadcrumb[] = array(
-                    "url" => "student.php?id_coach=".Security::remove_XSS($_GET['id_coach'])."&id_session=".$sessionId,
+                    "url" => "student.php?id_coach=".$coachId."&id_session=".$sessionId,
                     "name" => get_lang("CoachStudents")
                 );
             } else {
                 $interbreadcrumb[] = array(
-                    "url" => "student.php?id_coach=".Security::remove_XSS($_GET['id_coach']),
+                    "url" => "student.php?id_coach=".$coachId,
                     "name" => get_lang("CoachStudents")
                 );
             }

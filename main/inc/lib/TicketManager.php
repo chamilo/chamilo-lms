@@ -1123,11 +1123,23 @@ class TicketManager
             while ($row = Database::fetch_assoc($result)) {
                 $row['course'] = null;
                 $row['start_date_from_db'] = $row['start_date'];
-                $row['start_date'] = api_convert_and_format_date(api_get_local_time($row['start_date']), DATE_TIME_FORMAT_LONG, api_get_timezone());
+                $row['start_date'] = api_convert_and_format_date(
+                    api_get_local_time($row['start_date']),
+                    DATE_TIME_FORMAT_LONG,
+                    api_get_timezone()
+                );
                 $row['end_date_from_db'] = $row['end_date'];
-                $row['end_date'] = api_convert_and_format_date(api_get_local_time($row['end_date']), DATE_TIME_FORMAT_LONG, api_get_timezone());
+                $row['end_date'] = api_convert_and_format_date(
+                    api_get_local_time($row['end_date']),
+                    DATE_TIME_FORMAT_LONG,
+                    api_get_timezone()
+                );
                 $row['sys_lastedit_datetime_from_db'] = $row['sys_lastedit_datetime'];
-                $row['sys_lastedit_datetime'] = api_convert_and_format_date(api_get_local_time($row['sys_lastedit_datetime']), DATE_TIME_FORMAT_LONG, api_get_timezone());
+                $row['sys_lastedit_datetime'] = api_convert_and_format_date(
+                    api_get_local_time($row['sys_lastedit_datetime']),
+                    DATE_TIME_FORMAT_LONG,
+                    api_get_timezone()
+                );
                 $row['course_url'] = null;
                 if ($row['course_id'] != 0) {
                     $course = api_get_course_info_by_id($row['course_id']);
@@ -1314,9 +1326,9 @@ class TicketManager
     }
 
     /**
-     * @param $status_id
-     * @param $ticketId
-     * @param $userId
+     * @param int $status_id
+     * @param int $ticketId
+     * @param int $userId
      * @return bool
      */
     public static function update_ticket_status(
@@ -1433,7 +1445,7 @@ class TicketManager
     }
 
     /**
-     *
+     * @throws \Doctrine\DBAL\DBALException
      */
     public static function close_old_tickets()
     {
@@ -1680,10 +1692,12 @@ class TicketManager
                 $row['responsable'] = $row['responsable']['firstname'].' '.$row['responsable']['lastname'];
             }
             $row['sys_insert_datetime'] = api_format_date(
-                    $row['sys_insert_datetime'], '%d/%m/%y - %I:%M:%S %p'
+                $row['sys_insert_datetime'],
+                '%d/%m/%y - %I:%M:%S %p'
             );
             $row['sys_lastedit_datetime'] = api_format_date(
-                    $row['sys_lastedit_datetime'], '%d/%m/%y - %I:%M:%S %p'
+                $row['sys_lastedit_datetime'],
+                '%d/%m/%y - %I:%M:%S %p'
             );
             $row['category'] = utf8_decode($row['category']);
             $row['programa'] = utf8_decode($row['fullname']);

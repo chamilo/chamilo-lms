@@ -1,11 +1,8 @@
-/* -*- Mode: Javascript; indent-tabs-mode:nil; js-indent-level: 2 -*- */
-/* vim: set ts=2 et sw=2 tw=80: */
-
 /*************************************************************
  *
  *  MathJax/localization/it/MathMenu.js
  *
- *  Copyright (c) 2009-2015 The MathJax Consortium
+ *  Copyright (c) 2009-2016 The MathJax Consortium
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,9 +17,8 @@
  *  limitations under the License.
  *
  */
-
 MathJax.Localization.addTranslation("it","MathMenu",{
-        version: "2.5.0",
+        version: "2.7.2",
         isLoaded: true,
         strings: {
           Show: "Mostra formula come",
@@ -104,7 +100,11 @@ MathJax.Localization.addTranslation("it","MathMenu",{
           IE9warning: "Il menu contestuale di MathJax verr\u00E1 disabilitato, ma puoi sempre premere Alt-Click sopra una formula per accedervi comunque.",
           NoOriginalForm: "Modulo originale non disponibile",
           Close: "Chiudi",
-          EqSource: "Codice sorgente formula MathJax"
+          EqSource: "Codice sorgente formula MathJax",
+          CloseAboutDialog: "Chiudi finestra di informazioni su MathJax",
+          FastPreview: "Anteprima veloce",
+          AssistiveMML: "MathML ausiliario",
+          InTabOrder: "Includi nell'ordine di tabulazione"
         }
 });
 

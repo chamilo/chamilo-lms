@@ -1,12 +1,7 @@
 <?php
-/**
- * MessageListEvent.php
- * avanzu-admin
- * Date: 23.02.14
- */
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\ThemeBundle\Event;
-
 
 use Chamilo\ThemeBundle\Model\MessageInterface;
 
@@ -52,7 +47,6 @@ class MessageListEvent extends ThemeEvent
         $this->messages[] = $messageInterface;
 
         return $this;
-
     }
 
     /**
@@ -64,5 +58,4 @@ class MessageListEvent extends ThemeEvent
     {
         return $this->totalMessages == 0 ? sizeof($this->messages) : $this->totalMessages;
     }
-
 }

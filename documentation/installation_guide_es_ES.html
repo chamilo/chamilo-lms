@@ -86,8 +86,13 @@
 Chamilo puede ser instalado indiferentemente en servidores Windows, Linux, Mac OS X y UNIX. Sin embargo, nosotros recomendamos el uso de un servidor Linux para una óptima flexibilidad, control remoto y escalabilidad.
 </p>
 <p>
-Chamilo es fundamentalmente un LMS que se ejecuta con Apache (2.2+), MySQL 5.1+ (o MariaDB) y PHP 5.5+ (trilogía también llamada AMP).
+Chamilo es fundamentalmente un LMS que se ejecuta con:
 </p>
+<ul>
+    <li><span style="font-weight: bold;">Apache 2.2+</span></li>
+    <li><span style="font-weight: bold;">MySQL 5.1+ o MariaDB 5+</span></li>
+    <li><span style="font-weight: bold;">PHP 5.5+ (7.1 recomendado)</span></li>
+</ul>
 <p>
 Todo este software es software de código abierto y está disponible libremente.
 </p>
@@ -121,9 +126,14 @@ Nota:Esto se ha simplificado en gran medida desde la versión 1.9, ya que antes 
         <li>Activar el módulo "rewrite" de Apache (en línea de comando con "<i>sudo a2enmod rewrite</i>")</li>
         <li>Configurar el VirtualHost de Apache para que incluya el bloque siguiente, autorizando la interpretación de los archivos .htaccess</li>
     </ul>
-    Para Apache <=2.2:
+    Para Apache <=2.2 (remplace /var/www/chamilo/ por la ruta de su carpeta Chamilo en el servidor):
     <pre>
     &lt;Directory /&gt;
+        AllowOverride All
+        Order allow,deny
+        allow from all
+    &lt;/Directory&gt;
+    &lt;Directory /var/www/chamilo/&gt;
         AllowOverride All
         Order allow,deny
         allow from all
@@ -132,6 +142,10 @@ Nota:Esto se ha simplificado en gran medida desde la versión 1.9, ya que antes 
     y para Apache >=2.4:
     <pre>
     &lt;Directory /&gt;
+        AllowOverride All
+        Require all granted
+    &lt;/Directory&gt;
+    &lt;Directory /var/www/chamilo/&gt;
         AllowOverride All
         Require all granted
     &lt;/Directory&gt;

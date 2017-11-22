@@ -1,7 +1,8 @@
-In order to run behat tests locally with the right support for browser and JS environments under Linux, you will need to:
+In order to run behat tests locally with the right support for browser
+and JS environments under Linux, you will need to:
 
 - Download Selenium Standalone Server v3.*
- 
+
 http://www.seleniumhq.org/download/
 
 And run it with the following command:
@@ -12,16 +13,17 @@ java -jar /my-dir/selenium-server-standalone-3.1.0.jar
 
 - Download the Chrome driver, unzip and copy into /usr/bin
 
-Check the latest version at https://sites.google.com/a/chromium.org/chromedriver/downloads, then adapt the following command to the latest version:
+Check the latest version at https://sites.google.com/a/chromium.org/chromedriver/downloads,
+then adapt the following command to the latest version:
 
 ```
-cd /tmp && wget https://chromedriver.storage.googleapis.com/2.29/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/bin 
+cd /tmp && wget https://chromedriver.storage.googleapis.com/2.32/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/bin
 ```
 
 ### Chamilo configuration
 
 - An administrator user should be created with these parameters:
-    - Username "admin" 
+    - Username "admin"
     - Password "admin"
     - First name "John"
     - Last name "Doe"
@@ -43,7 +45,7 @@ To run all features:
 cd tests/behat
  ../../vendor/behat/behat/bin/behat -v
  ```
- 
+
 To run an specific feature:
 
 ```

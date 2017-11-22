@@ -158,13 +158,37 @@ class Database
         $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
 
         // Registering Constraints
-        AnnotationRegistry::registerAutoloadNamespace(
-            'Symfony\Component\Validator\Constraint',
-            $sysPath."vendor/symfony/symfony/src"
+        /*AnnotationRegistry::registerAutoloadNamespace(
+            'Symfony\Component',
+            $sysPath."vendor/"
+        );*/
+
+        AnnotationRegistry::registerLoader(
+            function ($class) use ($sysPath) {
+                $file = str_replace("\\", DIRECTORY_SEPARATOR, $class).".php";
+                $file = str_replace('Symfony/Component/Validator', '', $file);
+                $file = str_replace('Symfony\Component\Validator', '', $file);
+                $fileToInclude = $sysPath.'vendor/symfony/validator/'.$file;
+
+                if (file_exists($fileToInclude)) {
+                    // file exists makes sure that the loader fails silently
+                    require_once $fileToInclude;
+
+                    return true;
+                }
+
+                $fileToInclude = $sysPath.'vendor/symfony/validator/Constraints/'.$file;
+                if (file_exists($fileToInclude)) {
+                    // file exists makes sure that the loader fails silently
+                    require_once $fileToInclude;
+
+                    return true;
+                }
+            }
         );
 
         AnnotationRegistry::registerFile(
-            $sysPath."vendor/symfony/symfony/src/Symfony/Bridge/Doctrine/Validator/Constraints/UniqueEntity.php"
+            $sysPath."vendor/symfony/doctrine-bridge/Validator/Constraints/UniqueEntity.php"
         );
 
         // Registering gedmo extensions
@@ -409,7 +433,7 @@ class Database
      * @param array     $attributes
      * @param bool      $show_query
      *
-     * @return false|string
+     * @return false|int
      */
     public static function insert($table_name, $attributes, $show_query = false)
     {
@@ -432,7 +456,7 @@ class Database
             }
 
             if ($result) {
-                return self::getManager()->getConnection()->lastInsertId();
+                return (int) self::getManager()->getConnection()->lastInsertId();
             }
         }
 
@@ -506,6 +530,8 @@ class Database
      * @param array $conditions
      * @param string $type_result
      * @param string $option
+     * @param bool $debug
+     *
      * @return array
      */
     public static function select(
@@ -513,7 +539,8 @@ class Database
         $table_name,
         $conditions = array(),
         $type_result = 'all',
-        $option = 'ASSOC'
+        $option = 'ASSOC',
+        $debug = false
     ) {
         $conditions = self::parse_conditions($conditions);
 
@@ -529,6 +556,9 @@ class Database
         }
 
         $sql = "SELECT $clean_columns FROM $table_name $conditions";
+        if ($debug) {
+            var_dump($sql);
+        }
         $result = self::query($sql);
         $array = array();
 
@@ -682,7 +712,7 @@ class Database
      */
     public static function getDoctrineConfig($path)
     {
-        $isDevMode = true;
+        $isDevMode = true; // Forces doctrine to use ArrayCache instead of apc/xcache/memcache/redis
         $isSimpleMode = false; // related to annotations @Entity
         $cache = null;
         $path = !empty($path) ? $path : api_get_path(SYS_PATH);

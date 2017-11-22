@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
-use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\Tag;
+use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 
@@ -247,6 +247,10 @@ class ExtraFieldValue extends Model
                             $fileDir = UserManager::getUserPathById($params['item_id'], 'system');
                             $fileDirStored = UserManager::getUserPathById($params['item_id'], 'last');
                             break;
+                        case 'work':
+                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'work/';
+                            $fileDirStored = 'work/';
+                            break;
                     }
 
                     $fileName = ExtraField::FIELD_TYPE_FILE_IMAGE."_{$params['item_id']}.png";
@@ -287,6 +291,10 @@ class ExtraFieldValue extends Model
                         case 'user':
                             $fileDir = UserManager::getUserPathById($params['item_id'], 'system');
                             $fileDirStored = UserManager::getUserPathById($params['item_id'], 'last');
+                            break;
+                        case 'work':
+                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'work/';
+                            $fileDirStored = "work/";
                             break;
                     }
 
@@ -428,6 +436,8 @@ class ExtraFieldValue extends Model
                 case ExtraField::FIELD_TYPE_TEXTAREA:
                     break;
                 case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
+                    //no break
+                case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
                     if (is_array($value)) {
                         if (isset($value['extra_'.$extraFieldInfo['variable']]) &&
                             isset($value['extra_'.$extraFieldInfo['variable'].'_second'])
@@ -626,6 +636,31 @@ class ExtraFieldValue extends Model
                                 $result['value'] = $extra_field_option_result[0]['display_text'];
                             }
                             break;
+                        case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
+                            $options = explode('::', $result['value']);
+
+                            $field_option = new ExtraFieldOption($this->type);
+                            $result = $field_option->get($options[0]);
+
+                            if (!empty($result)) {
+                                $result['value'] = $result['display_text']
+                                    .'&rarr;'
+                                    .$options[1];
+                            }
+                            break;
+                        case ExtraField::FIELD_TYPE_TRIPLE_SELECT:
+                            $optionIds = explode(';', $result['value']);
+                            $optionValues = [];
+
+                            foreach ($optionIds as $optionId) {
+                                $objEfOption = new ExtraFieldOption('user');
+                                $optionInfo = $objEfOption->get($optionId);
+
+                                $optionValues[] = $optionInfo['display_text'];
+                            }
+
+                            $result['value'] = implode(' / ', $optionValues);
+                            break;
                     }
                 }
             }
@@ -722,6 +757,35 @@ class ExtraFieldValue extends Model
                             $result['value'] = $result['display_text'].' -> ';
                             $result['value'] .= $result_second['display_text'];
                         }
+                    }
+                }
+                if ($result['field_type'] == ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD) {
+                    if (!empty($result['value'])) {
+                        $options = explode('::', $result['value']);
+
+                        $field_option = new ExtraFieldOption($this->type);
+                        $result = $field_option->get($options[0]);
+
+                        if (!empty($result)) {
+                            $result['value'] = $result['display_text']
+                                .'&rarr;'
+                                .$options[1];
+                        }
+                    }
+                }
+                if ($result['field_type'] == ExtraField::FIELD_TYPE_TRIPLE_SELECT) {
+                    if (!empty($result['value'])) {
+                        $optionIds = explode(';', $result['value']);
+                        $optionValues = [];
+
+                        foreach ($optionIds as $optionId) {
+                            $objEfOption = new ExtraFieldOption('user');
+                            $optionInfo = $objEfOption->get($optionId);
+
+                            $optionValues[] = $optionInfo['display_text'];
+                        }
+
+                        $result['value'] = implode(' / ', $optionValues);
                     }
                 }
             }

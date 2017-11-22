@@ -312,7 +312,7 @@ class ExerciseShowFunctions
      * @param boolean $ans Whether to show the answer comment or not
      * @param bool $resultsDisabled
      * @param bool $showTotalScoreAndUserChoices
-     *
+     * @param bool $export
      * @return void
      */
     public static function display_unique_or_multiple_answer(
@@ -326,8 +326,21 @@ class ExerciseShowFunctions
         $questionId,
         $ans,
         $resultsDisabled,
-        $showTotalScoreAndUserChoices
+        $showTotalScoreAndUserChoices,
+        $export = false
     ) {
+        if ($export) {
+            $answer = strip_tags_blacklist($answer, ['title', 'head']);
+            // Fix answers that contains this tags
+            $tags = [
+                '<html>',
+                '</html>',
+                '<body>',
+                '</body>'
+            ];
+            $answer = str_replace($tags, '', $answer);
+        }
+
         $hide_expected_answer = false;
         if ($feedback_type == 0 && ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY)) {
             $hide_expected_answer = true;

@@ -109,11 +109,11 @@ function get_users($from, $limit, $column, $direction)
     }
 
     $all_datas = array();
-
+    $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php';
     foreach ($students as $student_data) {
         $student_id = $student_data['user_id'];
         if (isset($_GET['id_session'])) {
-            $courses = Tracking :: get_course_list_in_session_from_student($student_id, $_GET['id_session']);
+            $courses = Tracking::get_course_list_in_session_from_student($student_id, $_GET['id_session']);
         }
 
         $avg_time_spent = $avg_student_score = $avg_student_progress = 0;
@@ -123,12 +123,16 @@ function get_users($from, $limit, $column, $direction)
                 $courseInfo = api_get_course_info($course_code);
                 $courseId = $courseInfo['real_id'];
                 if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
-                    $avg_time_spent += Tracking :: get_time_spent_on_the_course($student_id, $courseId, $_GET['id_session']);
-                    $my_average = Tracking :: get_avg_student_score($student_id, $course_code);
+                    $avg_time_spent += Tracking::get_time_spent_on_the_course(
+                        $student_id,
+                        $courseId,
+                        $_GET['id_session']
+                    );
+                    $my_average = Tracking::get_avg_student_score($student_id, $course_code);
                     if (is_numeric($my_average)) {
                         $avg_student_score += $my_average;
                     }
-                    $avg_student_progress += Tracking :: get_avg_student_progress($student_id, $course_code);
+                    $avg_student_progress += Tracking::get_avg_student_progress($student_id, $course_code);
                     $nb_courses_student++;
                 }
             }
@@ -144,26 +148,29 @@ function get_users($from, $limit, $column, $direction)
             $avg_student_progress = null;
         }
 
+        $urlDetails = $url."?student=$student_id&origin=teacher_details";
+        if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
+            $urlDetails = $url."?student=$student_id&id_coach=$coach_id&id_session=$sessionId";
+        }
+
         $row = array();
         if ($is_western_name_order) {
-            $row[] = $student_data['firstname'];
-            $row[] = $student_data['lastname'];
+            $row[] = Display::url($student_data['firstname'], $urlDetails);
+            $row[] = Display::url($student_data['lastname'], $urlDetails);
         } else {
             $row[] = $student_data['lastname'];
             $row[] = $student_data['firstname'];
         }
-        $string_date = Tracking :: get_last_connection_date($student_id, true);
-        $first_date = Tracking :: get_first_connection_date($student_id);
+        $string_date = Tracking::get_last_connection_date($student_id, true);
+        $first_date = Tracking::get_first_connection_date($student_id);
         $row[] = $first_date;
         $row[] = $string_date;
 
-        if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
-            $detailsLink = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'&id_session='.$sessionId.'">
-				          '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>';
-        } else {
-            $detailsLink = '<a href="myStudents.php?student='.$student_id.'&origin=teacher_details">
-				            '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>';
-        }
+        $detailsLink = Display::url(
+            Display::return_icon('2rightarrow.png', get_lang('Details').' '.$student_data['username']),
+            $urlDetails,
+            ['id' => 'details_'.$student_data['username']]
+        );
         $row[] = $detailsLink;
         $all_datas[] = $row;
     }
@@ -180,11 +187,20 @@ $sort_by_first_name = api_sort_by_first_name();
 $actionsLeft = '';
 if (api_is_drh()) {
     $menu_items = array(
-        Display::url(Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH)."auth/my_progress.php"),
+        Display::url(
+            Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+        ),
         Display::url(Display::return_icon('user.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM), 'student.php'),
-        Display::url(Display::return_icon('teacher_na.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM), 'teachers.php'),
+        Display::url(
+            Display::return_icon('teacher_na.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM),
+            'teachers.php'
+        ),
         Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM), 'course.php'),
-        Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM), 'session.php'),
+        Display::url(
+            Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM),
+            'session.php'
+        ),
     );
 
     $nb_menu_items = count($menu_items);
@@ -205,7 +221,6 @@ $actionsRight .= Display::url(
     Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM),
     api_get_self().'?export=csv&keyword='.$keyword
 );
-
 
 $toolbar = Display::toolbarAction('toolbar-teachers', [$actionsLeft, $actionsRight]);
 

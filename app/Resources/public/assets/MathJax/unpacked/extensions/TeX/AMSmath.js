@@ -9,7 +9,7 @@
  *  
  *  ---------------------------------------------------------------------
  *  
- *  Copyright (c) 2009-2015 The MathJax Consortium
+ *  Copyright (c) 2009-2017 The MathJax Consortium
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
  */
 
 MathJax.Extension["TeX/AMSmath"] = {
-  version: "2.5.1",
+  version: "2.7.2",
   
   number: 0,        // current equation number
   startNumber: 0,   // current starting equation number (for when equation is restarted)
@@ -52,6 +52,14 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       {WW[i] = TEX.Parse.prototype.Em(W[i])}
     return WW.join(" ");
   };
+  
+  //
+  //  Get the URL of the page (for use with formatURL) when there
+  //  is a <base> element on the page.
+  //  
+  var baseURL = (document.getElementsByTagName("base").length === 0) ? "" :
+                String(document.location).replace(/#.*$/,"");
+
   
   /******************************************************************************/
   
@@ -94,11 +102,12 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       projlim:    ['NamedOp','proj&thinsp;lim'],
       varliminf:  ['Macro','\\mathop{\\underline{\\mmlToken{mi}{lim}}}'],
       varlimsup:  ['Macro','\\mathop{\\overline{\\mmlToken{mi}{lim}}}'],
-      varinjlim:  ['Macro','\\mathop{\\underrightarrow{\\mmlToken{mi}{lim}\\Rule{-1pt}{0pt}{1pt}}\\Rule{0pt}{0pt}{.45em}}'],
-      varprojlim: ['Macro','\\mathop{\\underleftarrow{\\mmlToken{mi}{lim}\\Rule{-1pt}{0pt}{1pt}}\\Rule{0pt}{0pt}{.45em}}'],
+      varinjlim:  ['Macro','\\mathop{\\underrightarrow{\\mmlToken{mi}{lim}}}'],
+      varprojlim: ['Macro','\\mathop{\\underleftarrow{\\mmlToken{mi}{lim}}}'],
       
       DeclareMathOperator: 'HandleDeclareOp',
       operatorname:        'HandleOperatorName',
+      SkipLimits:          'SkipLimits',
       
       genfrac:     'Genfrac',
       frac:       ['Genfrac',"","","",""],
@@ -133,21 +142,21 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       aligned:       ['AlignedAMSArray',null,null,null,'rlrlrlrlrlrl',COLS([0,2,0,2,0,2,0,2,0,2,0]),".5em",'D'],
       gathered:      ['AlignedAMSArray',null,null,null,'c',null,".5em",'D'],
 
-      subarray:      ['Array',null,null,null,null,COLS([0,0,0,0]),"0.1em",'S',1],
+      subarray:      ['Array',null,null,null,null,COLS([0]),"0.1em",'S',1],
       smallmatrix:   ['Array',null,null,null,'c',COLS([1/3]),".2em",'S',1],
       
       'equation':    ['EquationBegin','Equation',true],
       'equation*':   ['EquationBegin','EquationStar',false],
 
-      eqnarray:      ['AMSarray',null,true,true, 'rcl',MML.LENGTH.THICKMATHSPACE,".5em"],
-      'eqnarray*':   ['AMSarray',null,false,true,'rcl',MML.LENGTH.THICKMATHSPACE,".5em"]
+      eqnarray:      ['AMSarray',null,true,true, 'rcl',"0 "+MML.LENGTH.THICKMATHSPACE,".5em"],
+      'eqnarray*':   ['AMSarray',null,false,true,'rcl',"0 "+MML.LENGTH.THICKMATHSPACE,".5em"]
     },
     
     delimiter: {
-      '\\lvert':     ['2223',{texClass:MML.TEXCLASS.OPEN}],
-      '\\rvert':     ['2223',{texClass:MML.TEXCLASS.CLOSE}],
-      '\\lVert':     ['2225',{texClass:MML.TEXCLASS.OPEN}],
-      '\\rVert':     ['2225',{texClass:MML.TEXCLASS.CLOSE}]
+      '\\lvert':     ['007C',{texClass:MML.TEXCLASS.OPEN}],
+      '\\rvert':     ['007C',{texClass:MML.TEXCLASS.CLOSE}],
+      '\\lVert':     ['2016',{texClass:MML.TEXCLASS.OPEN}],
+      '\\rVert':     ['2016',{texClass:MML.TEXCLASS.CLOSE}]
     }
   },null,true);
     
@@ -202,7 +211,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       if (!ref) {ref = {tag:"???",id:""}; AMS.badref = !AMS.refUpdate}
       var tag = ref.tag; if (eqref) {tag = CONFIG.formatTag(tag)}
       this.Push(MML.mrow.apply(MML,this.InternalMath(tag)).With({
-        href:CONFIG.formatURL(ref.id), "class":"MathJax_ref"
+        href:CONFIG.formatURL(ref.id,baseURL), "class":"MathJax_ref"
       }));
     },
     
@@ -210,7 +219,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
      *  Handle \DeclareMathOperator
      */
     HandleDeclareOp: function (name) {
-      var limits = (this.GetStar() ? "" : "\\nolimits");
+      var limits = (this.GetStar() ? "" : "\\nolimits\\SkipLimits");
       var cs = this.trimSpaces(this.GetArgument(name));
       if (cs.charAt(0) == "\\") {cs = cs.substr(1)}
       var op = this.GetArgument(name);
@@ -219,19 +228,28 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     },
     
     HandleOperatorName: function (name) {
-      var limits = (this.GetStar() ? "" : "\\nolimits");
+      var limits = (this.GetStar() ? "" : "\\nolimits\\SkipLimits");
       var op = this.trimSpaces(this.GetArgument(name));
       op = op.replace(/\*/g,'\\text{*}').replace(/-/g,'\\text{-}');
       this.string = '\\mathop{\\rm '+op+'}'+limits+" "+this.string.slice(this.i);
       this.i = 0;
     },
     
+    SkipLimits: function (name) {
+      var c = this.GetNext(), i = this.i;
+      if (c === "\\" && ++this.i && this.GetCS() !== "limits") this.i = i;
+    },
+
     /*
      *  Record presence of \shoveleft and \shoveright
      */
     HandleShove: function (name,shove) {
       var top = this.stack.Top();
-      if (top.type !== "multline" || top.data.length) {
+      if (top.type !== "multline") {
+        TEX.Error(["CommandInMultline",
+                   "%1 can only appear within the multline environment",name]);
+      }
+      if (top.data.length) {
         TEX.Error(["CommandAtTheBeginingOfLine",
                    "%1 must come at the beginning of the line",name]);
       }
@@ -333,7 +351,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       while (n > 0) {align += "rl"; spacing.push("0em 0em"); n--}
       spacing = spacing.join(" ");
       if (taggable) {return this.AMSarray(begin,numbered,taggable,align,spacing)}
-      var array = this.Array.call(this,begin,null,null,align,spacing,".5em",'D');
+      var array = this.AMSarray(begin,numbered,taggable,align,spacing);
       return this.setArrayAlign(array,valign);
     },
     
@@ -400,7 +418,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     GetDelimiterArg: function (name) {
       var c = this.trimSpaces(this.GetArgument(name));
       if (c == "") return null;
-      if (TEXDEF.delimiter[c]) return c;
+      if (c in TEXDEF.delimiter) return c;
       TEX.Error(["MissingOrUnrecognizedDelim","Missing or unrecognized delimiter for %1",name]);
     },
     
@@ -535,7 +553,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       stack.global.tagged = !numbered && !stack.global.forcetag; // prevent automatic tagging in starred environments
     },
     EndEntry: function () {
-      if (this.row.length) {this.fixInitialMO(this.data)}
+      if (this.row.length % 2 === 1) {this.fixInitialMO(this.data)}
       this.row.push(MML.mtd.apply(MML,this.data));
       this.data = [];
     },
@@ -571,22 +589,8 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
           var def = {
             side: TEX.config.TagSide,
             minlabelspacing: TEX.config.TagIndent,
-            columnalign: mml.displayAlign,
             displaystyle: "inherit"   // replaced by TeX input jax Translate() function with actual value
           };
-          if (mml.displayAlign === MML.INDENTALIGN.LEFT) {
-            def.width = "100%";
-            if (mml.displayIndent !== "0") {
-              def.columnwidth = mml.displayIndent + " fit"; def.columnspacing = "0"
-              row = [row[0],MML.mtd(),row[1]];
-            }
-          } else if (mml.displayAlign === MML.INDENTALIGN.RIGHT) {
-            def.width = "100%";
-            if (mml.displayIndent !== "0") {
-              def.columnwidth = "fit "+mml.displayIndent; def.columnspacing = "0"
-              row[2] = MML.mtd();
-            }
-          }
           mml = MML.mtable(MML.mlabeledtr.apply(MML,row)).With(def);
         }
         return STACKITEM.mml(mml);
@@ -603,7 +607,9 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
   TEX.prefilterHooks.Add(function (data) {
     AMS.display = data.display;
     AMS.number = AMS.startNumber;  // reset equation numbers (in case the equation restarted)
-    AMS.eqlabels = AMS.eqIDs = {}; AMS.badref = false;
+    AMS.eqlabels = {};
+    AMS.eqIDs = {}; 
+    AMS.badref = false;
     if (AMS.refUpdate) {AMS.number = data.script.MathJax.startNumber}
   });
   TEX.postfilterHooks.Add(function (data) {
@@ -637,7 +643,10 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
   //
   TEX.resetEquationNumbers = function (n,keepLabels) {
     AMS.startNumber = (n || 0);
-    if (!keepLabels) {AMS.labels = AMS.IDs = {}}
+    if (!keepLabels) {
+      AMS.labels = {};
+      AMS.IDs = {};
+    }
   }
 
   /******************************************************************************/

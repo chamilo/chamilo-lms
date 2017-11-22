@@ -115,7 +115,6 @@ switch ($action) {
             // Setting the form elements
             $form->addElement('header', get_lang('TermEdit'));
             $form->addElement('hidden', 'glossary_id');
-            $form->addElement('text', 'name', get_lang('TermName'));
             if (api_get_configuration_value('save_titles_as_html')) {
                 $form->addHtmlEditor(
                     'name',
@@ -365,6 +364,9 @@ switch ($action) {
         Export::arrayToCsv($list, $filename);
         break;
     case 'export_to_pdf':
+        if (!api_is_allowed_to_edit(null, true)) {
+            api_not_allowed(true);
+        }
         GlossaryManager::export_to_pdf();
         break;
     case 'changeview':
@@ -372,8 +374,12 @@ switch ($action) {
             Session::write('glossary_view', $_GET['view']);
         } else {
             $view = Session::read('glossary_view');
+            $defaultView = api_get_configuration_value('default_glossary_view');
+            if (empty($defaultView)) {
+                $defaultView = 'table';
+            }
             if (empty($view)) {
-                Session::write('glossary_view', 'table');
+                Session::write('glossary_view', $defaultView);
             }
         }
         header('Location: '.$currentUrl);

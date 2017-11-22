@@ -116,8 +116,7 @@ function stripslashes(str) {
     str=str.replace(/\\0/g,'\0');
     return str;
 }
-function confirmation(name)
-{
+function confirmation(name) {
     name=stripslashes(name);
     if (confirm("<?php echo $suredel; ?> " + name + " ?"))
     {

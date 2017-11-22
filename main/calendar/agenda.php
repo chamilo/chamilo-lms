@@ -160,7 +160,7 @@ if ($allowToEdit) {
                 header("Location: $agendaUrl");
                 exit;
             } else {
-                $content = $form->return_form();
+                $content = $form->returnForm();
             }
             break;
         case 'edit':

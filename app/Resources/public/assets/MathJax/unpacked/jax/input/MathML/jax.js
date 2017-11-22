@@ -11,7 +11,7 @@
  *
  *  ---------------------------------------------------------------------
  *  
- *  Copyright (c) 2010-2015 The MathJax Consortium
+ *  Copyright (c) 2010-2017 The MathJax Consortium
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -76,7 +76,7 @@
       var mml, type = node.nodeName.toLowerCase().replace(/^[a-z]+:/,"");
       var match = (CLASS.match(/(^| )MJX-TeXAtom-([^ ]*)/));
       if (match) {
-        mml = this.TeXAtom(match[2]);
+        mml = this.TeXAtom(match[2],match[2] === "OP" && !CLASS.match(/MJX-fixedlimits/));
       } else if (!(MML[type] && MML[type].isa && MML[type].isa(MML.mbase))) {
         MathJax.Hub.signal.Post(["MathML Jax - unknown node type",type]);
         return MML.Error(_("UnknownNodeType","Unknown node type: %1",type));
@@ -88,9 +88,9 @@
       if (MATHML.config.useMathMLspacing) {mml.useMMLspacing = 0x08}
       return mml;
     },
-    TeXAtom: function (mclass) {
+    TeXAtom: function (mclass,movablelimits) {
       var mml = MML.TeXAtom().With({texClass:MML.TEXCLASS[mclass]});
-      if (mml.texClass === MML.TEXCLASS.OP) {mml.movesupsub = mml.movablelimits = true}
+      if (movablelimits) {mml.movesupsub = mml.movablelimits = true}
       return mml;
     },
     CheckClass: function (mml,CLASS) {
@@ -142,8 +142,15 @@
         value = this.filterAttribute(name,value);
         var defaults = (mml.type === "mstyle" ? MML.math.prototype.defaults : mml.defaults);
         if (value != null) {
-          if (value.toLowerCase() === "true") {value = true}
-            else if (value.toLowerCase() === "false") {value = false}
+          var val = value.toLowerCase();
+          if (val === "true" || val === "false") {
+            if (typeof (defaults[name]) === "boolean" || defaults[name] === MML.INHERIT ||
+               mml.type === "math" || mml.type === "mstyle" ||
+               (defaults[name] === MML.AUTO && 
+               (mml.defaultDef == null || typeof(mml.defaultDef[name]) === "boolean"))) {
+              value = (val === "true");
+            }
+          }
           if (defaults[name] != null || MML.copyAttributes[name])
             {mml[name] = value} else {mml.attr[name] = value}
           mml.attrNames.push(name);
@@ -282,7 +289,7 @@
       //
       //  Translate message if it is ["id","message",args]
       //
-      if (message instanceof Array) {message = _.apply(_,message)}
+      if (MathJax.Object.isArray(message)) {message = _.apply(_,message)}
       throw MathJax.Hub.Insert(Error(message),{mathmlError: true});
     },
     //
@@ -351,6 +358,8 @@
       MML.mspace.Augment({mmlSelfClosing: true});
       MML.none.Augment({mmlSelfClosing: true});
       MML.mprescripts.Augment({mmlSelfClosing:true});
+      MML.maligngroup.Augment({mmlSelfClosing:true});
+      MML.malignmark.Augment({mmlSelfClosing:true});
     }
   });
   

@@ -5,7 +5,6 @@ namespace Application\Migrations\Schema\V111;
 
 use Application\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
 
 /**
  * Class Version20160715122300
@@ -23,6 +22,8 @@ class Version20160715122300 extends AbstractMigrationChamilo
     {
         $this->addSql('ALTER TABLE c_student_publication CHANGE session_id session_id INT DEFAULT NULL');
         $this->addSql('UPDATE c_student_publication SET session_id = NULL WHERE session_id = 0');
+        // Fix not existing session id
+        $this->addSql('DELETE FROM c_student_publication WHERE session_id not in (SELECT id FROM session)');
         $this->addSql('ALTER TABLE c_student_publication ADD CONSTRAINT fk_session FOREIGN KEY (session_id) REFERENCES session (id)');
     }
 

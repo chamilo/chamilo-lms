@@ -14,20 +14,29 @@
  */
 /**
  * Includes a modified version of Git lib by Sebastian Bergmann of PHPUnit
+ * @usage php gitlog.php [-t|some-commit|-max20171001]
  * @see https://github.com/ywarnier/git
  */
 require 'php-git/src/Git.php';
 $repository = __DIR__.'/../..';
-$number = 500; //the number of commits to check (including minor)
+$number = 2000; //the number of commits to check (including minor)
 $formatHTML = true;
 $showDate = false;
 $endCommit = false;
+$isMaxDate = false;
 if (!empty($argv[1])) {
     if ($argv[1] == '-t') {
         $showDate = true;
+    } else if (substr($argv[1], 0, 4) == '-max') {
+        $isMaxDate = true;
+        $tempDate = substr($argv[1], 4);
+        $y = substr($tempDate, 0, 4);
+        $m = substr($tempDate, 4, 2);
+        $d = substr($tempDate, 6, 2);
+        $maxDate = new DateTime($y.'-'.$m.'-'.$d);
     } else {
         $endCommit = $argv[1];
-        echo "End commit has been defined as ".$endCommit.PHP_EOL;
+        echo "An initial commit has been defined as ".$endCommit.PHP_EOL;
     }
 }
 
@@ -37,8 +46,15 @@ echo "Log from branch: ".$git->getCurrentBranch().PHP_EOL;
 $logs = $git->getRevisions('DESC', $number);
 $i = 0;
 foreach ($logs as $log) {
+    $commitDate = $log['date']->format('Y-m-d');
     if ($showDate) {
-        echo $log['date']->format('Y-m-d H:i:s').' '.substr($log['sha1'],0,8).PHP_EOL;
+        echo $commitDate.' '.substr($log['sha1'],0,8).PHP_EOL;
+    }
+    if ($isMaxDate) {
+        // if the commit date is older than the max date, just forget about it
+        if ($log['date'] < $maxDate) {
+            continue;
+        }
     }
     // Check for Minor importance messages to ignore...
     if (strncasecmp($log['message'], 'Minor', 5) === 0) {
@@ -51,7 +67,10 @@ foreach ($logs as $log) {
         'Update language vars',
         'Update lang vars',
         'Merge',
-        'merge'
+        'merge',
+        'Scrutinizer Auto-Fixes',
+        'Update changelog',
+        'Fix PHP Warning'
     );
     foreach ($langMsg as $msg) {
         if (strpos($log['message'], $msg) === 0) {
@@ -108,7 +127,7 @@ foreach ($logs as $log) {
         $log['message'] = ucfirst($log['message']);
         $commitLink = '<a href="https://github.com/chamilo/chamilo-lms/commit/' . $log['sha1'] . '">' .
             substr($log['sha1'], 0, 8) . '</a>';
-        echo '<li>('.$commitLink.$issueLink.') '.$log['message'].'</li>'.PHP_EOL;
+        echo '<li>['.$commitDate.'] ('.$commitLink.$issueLink.') '.$log['message'].'</li>'.PHP_EOL;
     } else {
         $commitLink = substr($log['sha1'], 0, 8);
         echo '('.$commitLink.$issueLink.') '.$log['message'].''.PHP_EOL;

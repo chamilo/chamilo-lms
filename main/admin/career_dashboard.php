@@ -8,8 +8,6 @@
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
-$libpath = api_get_path(LIBRARY_PATH);
-
 api_protect_admin_script();
 
 $this_section = SECTION_PLATFORM_ADMIN;

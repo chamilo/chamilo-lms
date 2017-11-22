@@ -154,7 +154,6 @@ if (!empty($categoriesTempList)) {
 $userId = api_get_user_id();
 $userInfo = api_get_user_info();
 $lpIsShown = false;
-
 $filteredCategoryId = $action === 'view_category' && !empty($_GET['id']) ? intval($_GET['id']) : 0;
 
 if ($filteredCategoryId) {
@@ -524,8 +523,8 @@ foreach ($categories as $item) {
                                 ."&action=switch_attempt_mode&lp_id=$id"
                         );
                     }
-                    if ($details['seriousgame_mode'] == 0
-                        && $details['lp_prevent_reinit'] == 1
+                    if ($details['seriousgame_mode'] == 0 &&
+                        $details['lp_prevent_reinit'] == 1
                     ) {
                         // single mode | next = multiple
                         $dsp_reinit = Display::url(
@@ -537,8 +536,8 @@ foreach ($categories as $item) {
                                 ."&action=switch_attempt_mode&lp_id=$id"
                         );
                     }
-                    if ($details['seriousgame_mode'] == 0
-                        && $details['lp_prevent_reinit'] == 0
+                    if ($details['seriousgame_mode'] == 0 &&
+                        $details['lp_prevent_reinit'] == 0
                     ) {
                         // multiple mode | next = seriousgame
                         $dsp_reinit = Display::url(
@@ -685,8 +684,8 @@ foreach ($categories as $item) {
 
                 /* Auto launch LP code */
                 if (api_get_course_setting('enable_lp_auto_launch') == 1) {
-                    if ($details['autolaunch'] == 1
-                        && $autolaunch_exists == false
+                    if ($details['autolaunch'] == 1 &&
+                        $autolaunch_exists == false
                     ) {
                         $autolaunch_exists = true;
                         $lp_auto_launch_icon = Display::url(

@@ -42,10 +42,10 @@ class OpenMeetings
         // initialize video server settings from global settings
         $plugin = \OpenMeetingsPlugin::create();
 
-        $om_plugin = (bool) $plugin->get('tool_enable');
-        $om_host   = $plugin->get('host');
-        $om_user   = $plugin->get('user');
-        $om_pass   = $plugin->get('pass');
+        $om_plugin = (bool)$plugin->get('tool_enable');
+        $om_host = $plugin->get('host');
+        $om_user = $plugin->get('user');
+        $om_pass = $plugin->get('pass');
         $accessUrl = api_get_access_url($_configuration['access_url']);
         $this->externalType = substr($accessUrl['url'], strpos($accessUrl['url'], '://') + 3, -1);
         if (strcmp($this->externalType, 'localhost') == 0) {

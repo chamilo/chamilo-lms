@@ -98,7 +98,7 @@ function check_unzip() {
     }
 }
 
-function setFocus(){
+function setFocus() {
     $("#title_file").focus();
 }
 </script>';
@@ -202,9 +202,11 @@ if (!empty($_FILES)) {
     $redirectUrl = api_get_self().'?'.api_get_cidreq();
 
     if ($document_data) {
-        $redirectUrl .= '&'.http_build_query([
-            'id' => $document_data['iid']
-        ]);
+        $redirectUrl .= '&'.http_build_query(
+            [
+                'id' => $document_data['iid'],
+            ]
+        );
     }
 
     header("Location: $redirectUrl");
@@ -218,10 +220,12 @@ Display::display_header($nameTools, 'Doc');
 // Link back to the documents overview
 if ($is_certificate_mode) {
     $actions = '<a href="document.php?id='.$document_id.'&selectcat='.$selectcat.'&'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('CertificateOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('CertificateOverview'), '', ICON_SIZE_MEDIUM).
+        '</a>';
 } else {
     $actions = '<a href="document.php?id='.$document_id.'&'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).
+        '</a>';
 }
 
 // Link to create a folder
@@ -253,7 +257,9 @@ $form->addElement('hidden', 'id', $document_id);
 $form->addElement('hidden', 'curdirpath', $path);
 
 $course_quota = format_file_size(DocumentManager::get_course_quota() - DocumentManager::documents_total_space());
-$label = get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.get_lang('DocumentQuota').': '.$course_quota;
+$label =
+    get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.
+    get_lang('DocumentQuota').': '.$course_quota;
 
 $form->addElement('file', 'file', array(get_lang('File'), $label), 'style="width: 250px" id="user_upload"');
 $form->addElement('text', 'title', get_lang('Title'), array('id' => 'title_file'));
@@ -275,7 +281,12 @@ $form->addElement(
 if (api_get_setting('search_enabled') === 'true') {
     //TODO: include language file
     $supported_formats = get_lang('SupportedFormatsForIndex').': HTML, PDF, TXT, PDF, Postscript, MS Word, RTF, MS Power Point';
-    $form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument').'<div style="font-size: 80%" >'.$supported_formats.'</div>');
+    $form->addElement(
+        'checkbox',
+        'index_document',
+        '',
+        get_lang('SearchFeatureDoIndexDocument').'<div style="font-size: 80%" >'.$supported_formats.'</div>'
+    );
     $form->addElement('html', '<br /><div class="sub-form">');
     $form->addElement('html', '<div class="label">'.get_lang('SearchFeatureDocumentLanguage').'</div>');
     $form->addLabel(get_lang('Language'), api_get_languages_combo());

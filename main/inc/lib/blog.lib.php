@@ -307,7 +307,7 @@ class Blog
         Database::query($sql);
 
         // Delete from course homepage
-        $sql = "DELETE FROM $tbl_tool WHERE c_id = $course_id AND link = 'blog/blog.php?blog_id=$blog_id";
+        $sql = "DELETE FROM $tbl_tool WHERE c_id = $course_id AND link = 'blog/blog.php?blog_id=".$blog_id."'";
         Database::query($sql);
 
         //update item_property (delete)
@@ -327,7 +327,7 @@ class Blog
      * @param string $full_text The full text of the new post
      * @param string $file_comment The text of the comment (if any)
      * @param int $blog_id The internal blog ID
-     * @return void
+     * @return int
      */
     public static function createPost($title, $full_text, $file_comment, $blog_id)
     {
@@ -405,6 +405,7 @@ class Blog
             return $last_post_id;
         } else {
             echo Display::return_message(get_lang('UplNoFileUploaded'), 'error');
+            return 0;
         }
     }
 
@@ -855,11 +856,9 @@ class Blog
             if (Database::num_rows($result) > 0) {
                 $html .= '<ul>';
                 while ($mytask = Database::fetch_array($result)) {
-                    $html .= '<li><a href="blog.php?action=execute_task&blog_id='.$mytask['blog_id'].'&task_id='.stripslashes(
-                            $mytask['task_id']
-                        ).'" title="[Blog: '.stripslashes($mytask['blog_name']).'] '.get_lang(
-                            'ExecuteThisTask'
-                        ).'">'.stripslashes($mytask['title']).'</a></li>';
+                    $html .= '<li>
+                            <a href="blog.php?action=execute_task&blog_id='.$mytask['blog_id'].'&task_id='.intval($mytask['task_id']).'" title="[Blog: '.stripslashes($mytask['blog_name']).'] '.get_lang('ExecuteThisTask').'">'.
+                        stripslashes($mytask['title']).'</a></li>';
                 }
                 $html .= '<ul>';
             } else {
@@ -928,10 +927,10 @@ class Blog
      */
     public static function getSearchResults($blog_id, $query_string)
     {
-        $query_string = Database::escape_string($query_string);
         $query_string_parts = explode(' ', $query_string);
         $query_string = array();
         foreach ($query_string_parts as $query_part) {
+            $query_part = Database::escape_string($query_part);
             $query_string[] = " full_text LIKE '%".$query_part."%' OR title LIKE '%".$query_part."%' ";
         }
         $query_string = '('.implode('OR', $query_string).')';
@@ -956,18 +955,18 @@ class Blog
 
         $course_id = api_get_course_int_id();
         $blog_id = intval($blog_id);
-        $filter = Database::escape_string($filter);
         $max_number_of_posts = intval($max_number_of_posts);
-
         // Get posts and authors
         $sql = "SELECT post.*, user.lastname, user.firstname, user.username
                 FROM $tbl_blogs_posts post
                 INNER JOIN $tbl_users user
                 ON post.author_id = user.user_id
-                WHERE 	post.blog_id = $blog_id AND
-                        post.c_id = $course_id AND
-                        $filter
-                ORDER BY post_id DESC LIMIT 0, $max_number_of_posts";
+                WHERE 	
+                    post.blog_id = $blog_id AND
+                    post.c_id = $course_id AND
+                    $filter
+                ORDER BY post_id DESC 
+                LIMIT 0, $max_number_of_posts";
         $result = Database::query($sql);
 
         // Display
@@ -990,6 +989,7 @@ class Blog
                     $blog_id,
                     $blog_post['post_id']
                 );
+
                 // Prepare data
                 $article = [
                     'id_blog' => $blog_post['blog_id'],
@@ -1005,7 +1005,6 @@ class Blog
                     'n_comments' => $blog_post_comments['number_of_comments'],
                     'files' => $fileArray,
                     'score_ranking' => $scoreRanking
-
                 ];
 
                 $listArticle[] = $article;
@@ -1031,13 +1030,11 @@ class Blog
      */
     public static function getDailyResults($blog_id, $query_string)
     {
-        //$date_output = $query_string;
         $date = explode('-', $query_string);
-        $query_string = ' DAYOFMONTH(date_creation) ='.intval($date[2]).' AND MONTH(date_creation) ='.intval($date[1]).' AND YEAR(date_creation) ='.intval($date[0]);
-        // Put date in correct output format
-        //$date_output = api_format_date($date_output, DATE_FORMAT_LONG);
-        // Display the posts
-        //echo '<span class="blogpost_title">' . get_lang('PostsOf') . ': ' . $date_output . '</span>';
+        $query_string = ' 
+            DAYOFMONTH(date_creation) ='.intval($date[2]).' AND 
+            MONTH(date_creation) ='.intval($date[1]).' AND 
+            YEAR(date_creation) ='.intval($date[0]);
         $list = self::getPosts($blog_id, $query_string);
 
         return $list;
@@ -1277,7 +1274,7 @@ class Blog
      * @param int $blog_id
      * @param int $post_id
      * @param int $comment_id
-     * @return void
+     * @return string
      */
     public static function displayRatingCreateForm($type, $blog_id, $post_id, $comment_id = null)
     {
@@ -1329,7 +1326,15 @@ class Blog
                 $html .= '<div class="form-group">';
                 $html .= '<label class="col-sm-3 control-label">'.get_lang('RateThis').'</label>';
                 $html .= '<div class="col-sm-9">';
-                $html .= '<select  class="selectpicker" name="rating" onchange="document.forms[\'frm_rating_'.$type.'_'.$comment_id.'\'].submit()"><option value="">-</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><input type="hidden" name="action" value="view_post" /><input type="hidden" name="type" value="'.$type.'" /><input type="hidden" name="do" value="rate" /><input type="hidden" name="blog_id" value="'.$blog_id.'" /><input type="hidden" name="post_id" value="'.$post_id.'" /><input type="hidden" name="comment_id" value="'.$comment_id.'" />';
+                $html .= '<select  class="selectpicker" name="rating" onchange="document.forms[\'frm_rating_'.$type.'_'.$comment_id.'\'].submit()">';
+                $html .= '<option value="">-</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+                         </select>
+                         <input type="hidden" name="action" value="view_post" />
+                        <input type="hidden" name="type" value="'.$type.'" />
+                        <input type="hidden" name="do" value="rate" />
+                        <input type="hidden" name="blog_id" value="'.$blog_id.'" />
+                        <input type="hidden" name="post_id" value="'.$post_id.'" />
+                        <input type="hidden" name="comment_id" value="'.$comment_id.'" />';
                 $html .= '</div>';
                 $html .= '</div>';
                 $html .= '</form>';
@@ -1346,7 +1351,7 @@ class Blog
      * @param string $type
      * @param integer $blog_id
      * @param integer $item_id
-     * @return array
+     * @return float
      */
     public static function displayRating($type, $blog_id, $item_id)
     {
@@ -2006,7 +2011,7 @@ class Blog
             $style = 'style="background-color: #'.$color.'"';
             $return .= '<option value="'.$color.'" '.$style.' '.$selected.' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>';
         }
-        $return .= '			   </select>
+        $return .= '</select>
                           </td>
                         </tr>
                         <tr>

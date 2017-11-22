@@ -1367,27 +1367,17 @@ Display::display_footer();
 
 /**
  * Check whether this survey has ended. If so, display message and exit rhis script
+ * @param array $surveyData Survey data
  */
-function check_time_availability($surv_data)
+function check_time_availability($surveyData)
 {
-    $start_date = mktime(
-        0,
-        0,
-        0,
-        substr($surv_data['start_date'], 5, 2),
-        substr($surv_data['start_date'], 8, 2),
-        substr($surv_data['start_date'], 0, 4)
-    );
-    $end_date = mktime(
-        0,
-        0,
-        0,
-        substr($surv_data['end_date'], 5, 2),
-        substr($surv_data['end_date'], 8, 2),
-        substr($surv_data['end_date'], 0, 4)
-    );
-    $cur_date = time();
-    if ($cur_date < $start_date) {
+    $utcZone = new DateTimeZone('UTC');
+    $startDate = new DateTime($surveyData['start_date'], $utcZone);
+    $endDate = new DateTime($surveyData['end_date'], $utcZone);
+    $currentDate = new DateTime('now', $utcZone);
+    $currentDate->modify('today');
+
+    if ($currentDate < $startDate) {
         api_not_allowed(
             true,
             Display:: return_message(
@@ -1398,7 +1388,7 @@ function check_time_availability($surv_data)
         );
     }
 
-    if ($cur_date > $end_date) {
+    if ($currentDate > $endDate) {
         api_not_allowed(
             true,
             Display:: return_message(

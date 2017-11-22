@@ -657,6 +657,8 @@ class Skill extends Model
         $result['img_mini'] = Display::img($iconBig, $result['name'], ['width' => ICON_SIZE_MEDIUM]);
         $result['img_big'] = Display::img($iconBig, $result['name']);
         $result['img_small'] = Display::img($iconSmall, $result['name']);
+        $result['name'] = self::translateName($result['name']);
+        $result['short_code'] = self::translateCode($result['short_code']);
 
         return $result;
     }
@@ -734,20 +736,22 @@ class Skill extends Model
                 WHERE id IN ('$skill_list') ";
 
         $result = Database::query($sql);
-        $users  = Database::store_result($result, 'ASSOC');
+        $skills  = Database::store_result($result, 'ASSOC');
 
-        foreach ($users as &$user) {
-            if (!$user['icon']) {
+        foreach ($skills as &$skill) {
+            if (!$skill['icon']) {
                 continue;
             }
 
-            $user['icon_small'] = sprintf(
+            $skill['icon_small'] = sprintf(
                 "badges/%s-small.png",
-                sha1($user['name'])
+                sha1($skill['name'])
             );
+            $skill['name'] = self::translateName($skill['name']);
+            $skill['short_code'] = self::translateCode($skill['short_code']);
         }
 
-        return $users;
+        return $skills;
     }
 
     /**
@@ -797,6 +801,8 @@ class Skill extends Model
         $webPath = api_get_path(WEB_UPLOAD_PATH);
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
+                $row['name'] = self::translateName($row['name']);
+                $row['short_code'] = self::translateCode($row['short_code']);
                 $skillRelSkill = new SkillRelSkill();
                 $parents = $skillRelSkill->getSkillParents($row['id']);
                 $row['level'] = count($parents) - 1;
@@ -1018,6 +1024,9 @@ class Skill extends Model
         if (!isset($params['parent_id'])) {
             $params['parent_id'] = 1;
         }
+
+        $params['gradebook_id'] = isset($params['gradebook_id']) ? $params['gradebook_id'] : [];
+
         $skillRelSkill = new SkillRelSkill();
         $skillRelGradebook = new SkillRelGradebook();
 
@@ -1147,7 +1156,7 @@ class Skill extends Model
 
             $tableRow = array(
                 'skill_badge' => $resultData['img_mini'],
-                'skill_name' => $resultData['name'],
+                'skill_name' => Skill::translate($resultData['name']),
                 'achieved_at' => api_get_local_time($resultData['acquired_skill_at']),
                 'course_image' => '',
                 'course_name' => ''
@@ -1704,6 +1713,7 @@ class Skill extends Model
         $result = Database::query($sql);
 
         while ($row = Database::fetch_assoc($result)) {
+            $row['skill_name'] = self::translateName($row['skill_name']);
             $list[] = $row;
         }
 
@@ -1747,6 +1757,7 @@ class Skill extends Model
 
         $result = Database::query($sql);
         while ($row = Database::fetch_assoc($result)) {
+            $row['skill_name'] = self::translateName($row['skill_name']);
             $list[] = $row;
         }
 
@@ -1931,6 +1942,41 @@ class Skill extends Model
 
         $result = Database::query($sql);
 
-        return Database::store_result($result, 'ASSOC');
+        $skills = [];
+
+        foreach ($result as $item) {
+            $skills[] = [
+                'name' => self::translateName($item['name']),
+                'acquired_skill_at' => $item['acquired_skill_at']
+            ];
+        }
+
+        return $skills;
+    }
+
+    /**
+     * @param string $name
+     * @return string
+     */
+    public static function translateName($name)
+    {
+        $camelCase = 'Skill'.api_underscore_to_camel_case(
+            str_replace(' ', '_', $name)
+        );
+
+        return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $name;
+    }
+
+    public static function translateCode($code)
+    {
+        if (empty($code)) {
+            return '';
+        }
+
+        $camelCase = 'SkillCode'.api_underscore_to_camel_case(
+            str_replace(' ', '_', $code)
+        );
+
+        return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $code;
     }
 }

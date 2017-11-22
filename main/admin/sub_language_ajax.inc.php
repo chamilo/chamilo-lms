@@ -46,27 +46,39 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
         }
     }
 
-    if (isset($_REQUEST['redirect'], $_REQUEST['extra_field_type'])) {
-        Display::addFlash(
-            Display::return_message(get_lang('TheNewWordHasBeenAdded'), 'success')
-        );
+    if (isset($_REQUEST['redirect'])) {
+        $message = Display::return_message(get_lang('TheNewWordHasBeenAdded'), 'success');
 
-        $redirectUrl = api_get_path(WEB_CODE_PATH).'admin/extra_fields.php?type=';
-
-        switch ($_REQUEST['extra_field_type']) {
-            case ExtraField::USER_FIELD_TYPE:
-                $redirectUrl .= 'user';
-                break;
-            case ExtraField::COURSE_FIELD_TYPE:
-                $redirectUrl .= 'course';
-                break;
-            case ExtraField::SESSION_FIELD_TYPE:
-                $redirectUrl .= 'session';
-                break;
+        if (!empty($variables_with_problems)) {
+            Display::return_message(
+                $path_folder.' '.get_lang('IsNotWritable').'<br /> '.api_ucwords(get_lang('ErrorsFound'))
+                    .': <br />'.$variables_with_problems,
+                'error'
+            );
         }
 
-        header("Location: $redirectUrl");
-        exit;
+        Display::addFlash($message);
+
+        if (isset($_REQUEST['extra_field_type'])) {
+            $redirectUrl = api_get_path(WEB_CODE_PATH).'admin/extra_fields.php';
+
+            switch ($_REQUEST['extra_field_type']) {
+                case ExtraField::USER_FIELD_TYPE:
+                    header("Location: {$redirectUrl}?type=user");
+                    exit;
+                case ExtraField::COURSE_FIELD_TYPE:
+                    header("Location: {$redirectUrl}?type=course");
+                    exit;
+                case ExtraField::SESSION_FIELD_TYPE:
+                    header("Location: {$redirectUrl}?type=session");
+                    exit;
+            }
+        }
+
+        if (isset($_REQUEST['skill'])) {
+            header('Location: '.api_get_path(WEB_CODE_PATH).'admin/skill_list.php');
+            exit;
+        }
     }
 
     if (!empty($variables_with_problems)) {

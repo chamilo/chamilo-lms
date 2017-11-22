@@ -118,10 +118,19 @@ class Skill
     /**
      * Get name
      *
+     * @param bool $translated Optional. Get the name translated when is it exists in a sub-language. By default is true
      * @return string
      */
-    public function getName()
+    public function getName($translated = true)
     {
+        if ($translated) {
+            $camelCase = 'Skill'.api_underscore_to_camel_case(
+                str_replace(' ', '_', $this->name)
+            );
+
+            return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $this->name;
+        }
+
         return $this->name;
     }
 
@@ -141,10 +150,19 @@ class Skill
     /**
      * Get shortCode
      *
+     * @param bool $translated Optional. Get the code translated when is it exists in a sub-language. By default is true
      * @return string
      */
-    public function getShortCode()
+    public function getShortCode($translated = true)
     {
+        if ($translated && !empty($this->shortCode)) {
+            $camelCase = 'SkillCode'.api_underscore_to_camel_case(
+                str_replace(' ', '_', $this->shortCode)
+            );
+
+            return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $this->shortCode;
+        }
+
         return $this->shortCode;
     }
 

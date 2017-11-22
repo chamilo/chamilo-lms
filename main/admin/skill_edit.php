@@ -61,8 +61,16 @@ foreach ($allGradebooks as $gradebook) {
 /* Form */
 $editForm = new FormValidator('skill_edit');
 $editForm->addHeader(get_lang('SkillEdit'));
-$editForm->addText('name', get_lang('Name'), true, ['id' => 'name']);
-$editForm->addText('short_code', get_lang('ShortCode'), false, ['id' => 'short_code']);
+
+$translateNameUrl = api_get_path(WEB_CODE_PATH).'admin/skill_translate.php?'
+    .http_build_query(['skill' => $skillId, 'action' => 'name']);
+$translateCodeUrl = api_get_path(WEB_CODE_PATH).'admin/skill_translate.php?'
+    .http_build_query(['skill' => $skillId, 'action' => 'code']);
+$translateNameButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateNameUrl, 'language', 'link');
+$translateCodeButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateCodeUrl, 'language', 'link');
+
+$editForm->addText('name', [get_lang('Name'), $translateNameButton], true, ['id' => 'name']);
+$editForm->addText('short_code', [get_lang('ShortCode'), $translateCodeButton], false, ['id' => 'short_code']);
 $editForm->addSelect('parent_id', get_lang('Parent'), $skillList, ['id' => 'parent_id']);
 $editForm->addSelect(
     'gradebook_id',

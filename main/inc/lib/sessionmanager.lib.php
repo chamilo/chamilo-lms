@@ -5386,7 +5386,7 @@ class SessionManager
                         WHERE id = '$session_id'";
                 Database::query($sql);
 
-                self::addClassesByName($session_id, $classes);
+                self::addClassesByName($session_id, $classes, false);
             }
         }
 
@@ -5401,8 +5401,9 @@ class SessionManager
      * Add classes (by their names) to a session
      * @param int $sessionId
      * @param array $classesNames
+     * @param bool $deleteClassSessions Optional. Empty the session list for the usergroup (class)
      */
-    private static function addClassesByName($sessionId, $classesNames)
+    private static function addClassesByName($sessionId, $classesNames, $deleteClassSessions = true)
     {
         if (!$classesNames) {
             return;
@@ -5413,7 +5414,8 @@ class SessionManager
         foreach ($classesNames as $className) {
             $usergroup->subscribe_sessions_to_usergroup(
                 $usergroup->get_id_by_name($className),
-                [$sessionId]
+                [$sessionId],
+                $deleteClassSessions
             );
         }
     }

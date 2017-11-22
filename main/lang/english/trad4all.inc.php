@@ -8065,4 +8065,6 @@ $YourSessionTimeIsExpired = "Your session time is expired.";
 $StudentXHadEnoughSkillsToGetSkillXToAssignClickHereX = "Learner %s has enough sub-skill to get skill %s. To assign this skill it is possible to go here : %s";
 $ThisEmailWasSentViaCourseX = "This e-mail was sent via course %s";
 $ThisEmailWasSentViaCourseXInSessionX = "This e-mail was sent via course %s in session %s";
+$Diagram = "Diagram";
+$CareerXDoesntHaveADiagram = "Career %s doesn't have a diagram.";
 ?>

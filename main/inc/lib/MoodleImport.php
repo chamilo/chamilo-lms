@@ -237,7 +237,7 @@ class MoodleImport
 
                                         //Save normal question if NOT media
                                         if ($questionInstance->type != MEDIA_QUESTION) {
-                                            $questionInstance->save($exercise->id);
+                                            $questionInstance->save($exercise);
 
                                             // modify the exercise
                                             $exercise->addToList($questionInstance->id);
@@ -248,6 +248,7 @@ class MoodleImport
                                         $currentQuestion = $moduleValues['question_instances'][$index];
 
                                         $this->processAnswers(
+                                            $exercise,
                                             $questionList,
                                             $qType,
                                             $questionInstance,
@@ -659,14 +660,16 @@ class MoodleImport
     /**
      * Process Moodle Answers to Chamilo
      *
+     * @param Exercise $exercise
      * @param array $questionList
      * @param string $questionType
-     * @param object $questionInstance Question/Answer instance
+     * @param Question $questionInstance Question/Answer instance
      * @param array $currentQuestion
      * @param array $importedFiles
      * @return integer db response
      */
     public function processAnswers(
+        $exercise,
         $questionList,
         $questionType,
         $questionInstance,
@@ -691,7 +694,7 @@ class MoodleImport
                 $objAnswer->save();
                 // sets the total weighting of the question
                 $questionInstance->updateWeighting($questionWeighting);
-                $questionInstance->save();
+                $questionInstance->save($exercise);
 
                 return true;
                 break;
@@ -734,7 +737,7 @@ class MoodleImport
                 $questionInstance->updateDescription('');
                 // sets the total weighting of the question
                 $questionInstance->updateWeighting($questionWeighting);
-                $questionInstance->save();
+                $questionInstance->save($exercise);
                 $this->fixPathInText($importedFiles, $placeholder);
 
                 // saves the answers into the data base
@@ -771,7 +774,7 @@ class MoodleImport
 
                 // sets the total weighting of the question
                 $questionInstance->updateWeighting($questionWeighting);
-                $questionInstance->save();
+                $questionInstance->save($exercise);
                 // saves the answers into the database
                 $this->fixPathInText($importedFiles, $placeholder);
                 $objAnswer->createAnswer($placeholder, 0, '', 0, 1);
@@ -784,13 +787,13 @@ class MoodleImport
                 $questionWeighting = $currentQuestion['defaultmark'];
                 $questionInstance->updateWeighting($questionWeighting);
                 $questionInstance->updateDescription(get_lang('ThisQuestionIsNotSupportedYet'));
-                $questionInstance->save();
+                $questionInstance->save($exercise);
                 return false;
                 break;
             case 'essay':
                 $questionWeighting = $currentQuestion['defaultmark'];
                 $questionInstance->updateWeighting($questionWeighting);
-                $questionInstance->save();
+                $questionInstance->save($exercise);
                 return true;
                 break;
             case 'truefalse':
@@ -810,7 +813,7 @@ class MoodleImport
                 $objAnswer->save();
                 // sets the total weighting of the question
                 $questionInstance->updateWeighting($questionWeighting);
-                $questionInstance->save();
+                $questionInstance->save($exercise);
                 return false;
                 break;
             default:

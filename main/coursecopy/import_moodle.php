@@ -33,7 +33,7 @@ $interbreadcrumb[] = array(
     'name' => get_lang('Maintenance')
 );
 
-$form = new FormValidator('import_moodle');
+$form = new FormValidator('import_moodle', 'post', api_get_self().'?'.api_get_cidreq());
 $form->addFile('moodle_file', get_lang('MoodleFile'));
 $form->addButtonImport(get_lang('Import'));
 

@@ -113,6 +113,7 @@ class Exercise
         $this->endButton = 0;
         $this->scoreTypeModel = 0;
         $this->globalCategoryId = null;
+        $this->notifications = [];
 
         if (!empty($courseId)) {
             $course_info = api_get_course_info_by_id($courseId);
@@ -1707,8 +1708,11 @@ class Exercise
             $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
             if ($allow === true) {
                 $notifications = $this->getNotifications();
-                $notifications = implode(',', $notifications);
-                $params['notifications'] = $notifications;
+                $params['notifications'] = '';
+                if (!empty($notifications)) {
+                    $notifications = implode(',', $notifications);
+                    $params['notifications'] = $notifications;
+                }
             }
 
             $this->id = Database::insert($TBL_EXERCISES, $params);

@@ -4623,10 +4623,9 @@ class SessionManager
                 $session_category_id = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
                 $sessionDescription = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
                 $classes = isset($enreg['Classes']) ? explode('|', $enreg['Classes']) : [];
-
-                $extraParameters = null;
+                $extraParams = [];
                 if (!is_null($showDescription)) {
-                    $extraParameters .= ' , show_description = '.intval($showDescription);
+                    $extraParams['show_description'] = intval($showDescription);
                 }
 
                 $coachBefore = '';
@@ -4639,17 +4638,20 @@ class SessionManager
                     );
                     $date->sub($interval);
                     $coachBefore = $date->format('Y-m-d h:i');
+                    $coachAccessStartDate = $coachBefore;
                     $coachBefore = api_get_utc_datetime($coachBefore);
 
-                    $extraParameters .= " , coach_access_start_date = '$coachBefore'";
+                    //$extraParameters .= " , coach_access_start_date = '$coachBefore'";
+                    //$extraParams['coach_access_start_date'] = $coachBefore;
 
                     $date = new \DateTime($dateEnd);
                     $interval = new DateInterval('P'.$daysCoachAccessAfterBeginning.'D');
                     $date->add($interval);
                     $coachAfter = $date->format('Y-m-d h:i');
-
+                    $coachAccessEndDate = $coachAfter;
                     $coachAfter = api_get_utc_datetime($coachAfter);
-                    $extraParameters .= " , coach_access_end_date = '$coachAfter'";
+                    //$extraParameters .= " , coach_access_end_date = '$coachAfter'";
+                    //$extraParams['coach_access_end_date'] = $coachAfter;
                 }
 
                 $dateStart = api_get_utc_datetime($dateStart);
@@ -4659,14 +4661,15 @@ class SessionManager
                 $coachAccessStartDate = api_get_utc_datetime($coachAccessStartDate);
                 $coachAccessEndDate = api_get_utc_datetime($coachAccessEndDate);
 
-                $extraSessionParameters = null;
                 if (!empty($sessionDescription)) {
-                    $extraSessionParameters = " , description = '".Database::escape_string($sessionDescription)."'";
+                    $extraParams['description'] = $sessionDescription;
+                    //$extraSessionParameters = " , description = '".Database::escape_string($sessionDescription)."'";
                 }
 
-                $sessionCondition = '';
+                //$sessionCondition = '';
                 if (!empty($session_category_id)) {
-                    $sessionCondition = " , session_category_id = '$session_category_id' ";
+                    $extraParams['session_category_id'] = $session_category_id;
+                    //$sessionCondition = " , session_category_id = '$session_category_id' ";
                 }
 
                 // Searching a general coach.
@@ -4713,22 +4716,32 @@ class SessionManager
                         }
                     }
 
-                    // Creating the session.
-                    $sql = "INSERT IGNORE INTO $tbl_session SET
-                            name = '".Database::escape_string($session_name)."',
-                            id_coach = '$coach_id',
-                            access_start_date = '$dateStart',
-                            access_end_date = '$dateEnd',
-                            display_start_date = '$displayAccessStartDate',
-                            display_end_date = '$displayAccessEndDate',
-                            coach_access_start_date = '$coachAccessStartDate',
-                            coach_access_end_date = '$coachAccessEndDate',
-                            visibility = '$visibilityAfterExpirationPerSession',                            
-                            session_admin_id = ".$defaultUserId." 
-                            $sessionCondition $extraParameters $extraSessionParameters";
-                    Database::query($sql);
+                    $sessionParams = [
+                        'name' => $session_name,
+                        'id_coach' => $coach_id,
+                        'access_start_date' => $dateStart,
+                        'access_end_date' => $dateEnd,
+                        'display_start_date' => $displayAccessStartDate,
+                        'display_end_date' => $displayAccessEndDate,
+                        'coach_access_start_date' => $coachAccessStartDate,
+                        'coach_access_end_date' => $coachAccessEndDate,
+                        'visibility' => $visibilityAfterExpirationPerSession,
+                        'session_admin_id' => $defaultUserId
+                    ];
 
-                    $session_id = Database::insert_id();
+                    if (!empty($extraParams)) {
+                        $sessionParams = array_merge($sessionParams, $extraParams);
+                    }
+                    $session_id = Database::insert($tbl_session, $sessionParams);
+
+                    // Creating the session.
+                    /*$sql = "INSERT IGNORE INTO $tbl_session SET
+
+                            $sessionCondition
+                            $extraParameters
+                            $extraSessionParameters";
+                    Database::query($sql);
+                    $session_id = Database::insert_id();*/
                     if ($debug) {
                         if ($session_id) {
                             foreach ($enreg as $key => $value) {
@@ -4757,23 +4770,23 @@ class SessionManager
                     }
 
                     if ($my_session_result === false) {
-                        // Creating a session.
-                        $sql = "INSERT IGNORE INTO $tbl_session SET
-                                name = '$session_name',
-                                id_coach = '$coach_id',
-                                access_start_date = '$dateStart',
-                                access_end_date = '$dateEnd',
-                                display_start_date = '$displayAccessStartDate',
-                                display_end_date = '$displayAccessEndDate',
-                                coach_access_start_date = '$coachAccessStartDate',
-                                coach_access_end_date = '$coachAccessEndDate',
-                                visibility = '$visibilityAfterExpirationPerSession' 
-                                $extraParameters 
-                                $extraSessionParameters
-                                $sessionCondition
-                                ";
+                        $sessionParams = [
+                            'name' => $session_name,
+                            'id_coach' => $coach_id,
+                            'access_start_date' => $dateStart,
+                            'access_end_date' => $dateEnd,
+                            'display_start_date' => $displayAccessStartDate,
+                            'display_end_date' => $displayAccessEndDate,
+                            'coach_access_start_date' => $coachAccessStartDate,
+                            'coach_access_end_date' => $coachAccessEndDate,
+                            'visibility' => $visibilityAfterExpirationPerSession,
+                            'session_admin_id' => $defaultUserId
+                        ];
 
-                        Database::query($sql);
+                        if (!empty($extraParams)) {
+                            $sessionParams = array_merge($sessionParams, $extraParams);
+                        }
+                        Database::insert($tbl_session, $sessionParams);
 
                         // We get the last insert id.
                         $my_session_result = self::get_session_by_name($enreg['SessionName']);

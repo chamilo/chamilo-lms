@@ -1178,7 +1178,7 @@ class MessageManager
             $message_content .= '<a href="outbox.php?'.$social_link.'">'.
                 Display::return_icon('back.png', get_lang('ReturnToOutbox')).'</a> &nbsp';
         } else {
-            $message_content .= '<a href="inbox.php?'.$social_link.'">'.
+            /*$message_content .= '<a href="inbox.php?'.$social_link.'">'.
                 Display::return_icon('back.png', get_lang('ReturnToInbox')).'</a> &nbsp';
             */
             // Ofaj

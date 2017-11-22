@@ -2397,6 +2397,9 @@ class ImportCsv
             $this->logger->addInfo(count($data)." records found.");
             $values = [];
             foreach ($data as $row) {
+                if (empty($row)) {
+                    continue;
+                }
                 foreach ($row as $key => $value) {
                     $key = (string) trim($key);
                     // Remove utf8 bom

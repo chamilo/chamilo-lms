@@ -337,7 +337,7 @@ class Career extends Model
         // Read Connections column
         foreach ($list as $group => $subGroupList) {
             foreach ($subGroupList as $subGroupData) {
-                $columns = $subGroupData['columns'];
+                $columns = isset($subGroupData['columns']) ? $subGroupData['columns'] : [];
                 $showGroupLine = true;
                 if (count($columns) == 1) {
                     $showGroupLine = false;
@@ -471,13 +471,18 @@ class Career extends Model
         }
 
         foreach ($subGroupList as $subGroup => $subGroupData) {
-            $subGroupLabel = $subGroupData['label'];
-            $columnList = $subGroupData['columns'];
+            $subGroupLabel = isset($subGroupData['label']) ? $subGroupData['label'] : '';
+            $columnList = isset($subGroupData['columns']) ? $subGroupData['columns'] : [];
+
+            if (empty($columnList)) {
+                continue;
+            }
 
             $line = '';
             if (!empty($subGroup)) {
                 $line = 'border-style:solid;';
             }
+
             // padding:15px;
             $graphHtml .= '<div id="subgroup_'.$subGroup.'" class="career_subgroup" style="'.$line.' margin-bottom:20px; padding:15px; float:left; margin-left:0px; width:100%">';
             if (!empty($subGroupLabel)) {

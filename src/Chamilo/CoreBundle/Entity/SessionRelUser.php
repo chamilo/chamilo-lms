@@ -292,5 +292,4 @@ class SessionRelUser
 
         return $this;
     }
-
 }

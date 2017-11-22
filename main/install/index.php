@@ -19,6 +19,8 @@ use ChamiloSession as Session;
 
 ini_set('display_errors', '1');
 ini_set('log_errors', '1');
+ini_set('memory_limit', -1);
+ini_set('max_execution_time', 0);
 error_reporting(-1);
 
 require_once __DIR__.'/../../vendor/autoload.php';
@@ -212,7 +214,6 @@ if ($installType == 'update' && in_array($my_old_version, $update_from_version_8
         include $oldConfigPath;
     }
 }
-
 
 $session_lifetime = 360000;
 
@@ -730,8 +731,6 @@ if (@$_POST['step2']) {
     }
 
     if ($installType == 'update') {
-        remove_memory_and_time_limits();
-
         $manager = connectToDatabase(
             $dbHostForm,
             $dbUsernameForm,

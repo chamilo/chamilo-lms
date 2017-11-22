@@ -151,8 +151,6 @@ if ($user_info['user_id'] == api_get_user_id()) {
     $isSelfUser = false;
 }
 $userIsOnline = user_is_online($user_id);
-
-$libpath = api_get_path(LIBRARY_PATH);
 $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
 $socialAjaxUrl = api_get_path(WEB_AJAX_PATH).'social.ajax.php';
 $javascriptDir = api_get_path(LIBRARY_PATH).'javascript/';
@@ -369,7 +367,7 @@ if ($show_full_profile) {
             } else {
                 switch ($extraFieldInfo['field_type']) {
                     case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
-                        $id_options = explode(';', $data);
+                        $id_options = explode('::', $data);
                         $value_options = array();
                         // get option display text from user_field_options table
                         foreach ($id_options as $id_option) {
@@ -416,6 +414,34 @@ if ($show_full_profile) {
                             .'</a>';
                         $extra_information_value .= '<li class="list-group-item">'.$data.'</li>';
                         break;
+                    case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
+                        $parsedData = explode('::', $data);
+
+                        if (!$parsedData) {
+                            break;
+                        }
+
+                        $objEfOption = new ExtraFieldOption('user');
+                        $optionInfo = $objEfOption->get($parsedData[0]);
+
+                        $extra_information_value .= '<li class="list-group-item">'
+                            .$optionInfo['display_text'].': '
+                            .$parsedData[1].'</li>';
+                        break;
+                    case ExtraField::FIELD_TYPE_TRIPLE_SELECT:
+                        $optionIds = explode(';', $data);
+                        $optionValues = array();
+
+                        foreach ($optionIds as $optionId) {
+                            $objEfOption = new ExtraFieldOption('user');
+                            $optionInfo = $objEfOption->get($optionId);
+
+                            $optionValues[] = $optionInfo['display_text'];
+                        }
+                        $extra_information_value .= '<li class="list-group-item">'
+                            .ucfirst($extraFieldInfo['display_text']).': '
+                            .implode(' ', $optionValues).'</li>';
+                        break;
                     default:
                         $extra_information_value .= '<li class="list-group-item">'.ucfirst($extraFieldInfo['display_text']).': '.$data.'</li>';
                         break;
@@ -438,7 +464,6 @@ if ($show_full_profile) {
     }
 
     // If there are information to show Block Extra Information
-
     if (!empty($extra_information_value)) {
         $social_extra_info_block = $extra_information;
     }

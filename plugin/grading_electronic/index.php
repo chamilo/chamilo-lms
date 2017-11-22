@@ -12,5 +12,5 @@ if (!$gradingElectronic->isAllowed()) {
 }
 
 $_template['show'] = true;
-$_tempalte['plugin_title'] = $gradingElectronic->get_title();
+$_template['plugin_title'] = $gradingElectronic->get_title();
 $_template['form'] = $gradingElectronic->getForm();

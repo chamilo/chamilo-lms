@@ -14,8 +14,6 @@
  */
 require_once 'openoffice_document.class.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
-require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
 
 /**
  * @package chamilo.learnpath.openofficedocument
@@ -26,11 +24,11 @@ class OpenOfficeTextDocument extends OpenofficeDocument
 
     /**
      * Class constructor. Calls the parent class and initialises the local attribute split_steps
-     * @param	boolean	Whether to split steps (true) or make one large page (false)
-     * @param	string	Course code
-     * @param	integer	Resource ID
-     * @param	integer Creator user id
-     * @return	void
+     * @param    boolean    Whether to split steps (true) or make one large page (false)
+     * @param    string    Course code
+     * @param    integer    Resource ID
+     * @param    integer Creator user id
+     * @return    void
      */
     public function __construct(
         $split_steps = false,
@@ -44,8 +42,8 @@ class OpenOfficeTextDocument extends OpenofficeDocument
 
     /**
      * Gets html pages and compose them into a learning path
-     * @param	array	The files that will compose the generated learning path. Unused so far.
-     * @return	boolean	False if file does not exit. Nothing otherwise.
+     * @param    array    The files that will compose the generated learning path. Unused so far.
+     * @return    boolean    False if file does not exit. Nothing otherwise.
      */
     public function make_lp($files = array())
     {
@@ -105,9 +103,9 @@ class OpenOfficeTextDocument extends OpenofficeDocument
 
     /**
      * Manages dir/chapter splitting
-     * @param	string	Chapter header
-     * @param	string	Content
-     * @return	void
+     * @param    string    Chapter header
+     * @param    string    Content
+     * @return    void
      */
     public function dealPerChapter($header, $content)
     {
@@ -183,7 +181,14 @@ class OpenOfficeTextDocument extends OpenofficeDocument
                 $slide_name = strip_tags(nl2br($item_title));
                 $slide_name = str_replace(array("\r\n", "\r", "\n"), '', $slide_name);
                 $slide_name = api_html_entity_decode($slide_name, ENT_COMPAT, api_get_system_encoding());
-                $previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
+                $previous = learnpath::add_item(
+                    0,
+                    $previous,
+                    'document',
+                    $document_id,
+                    $slide_name,
+                    ''
+                );
                 if ($this->first_item == 0) {
                     $this->first_item = (int) $previous;
                 }
@@ -193,9 +198,9 @@ class OpenOfficeTextDocument extends OpenofficeDocument
 
     /**
      * Manages page splitting
-     * @param	string	Page header
-     * @param	string	Page body
-     * @return	void
+     * @param    string    Page header
+     * @param    string    Page body
+     * @return    void
      */
     public function dealPerPage($header, $body)
     {
@@ -243,7 +248,14 @@ class OpenOfficeTextDocument extends OpenofficeDocument
 
                 $infos = pathinfo($this->filepath);
                 $slide_name = 'Page '.str_repeat('0', 2 - strlen($key)).$key;
-                $previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
+                $previous = learnpath::add_item(
+                    0,
+                    $previous,
+                    'document',
+                    $document_id,
+                    $slide_name,
+                    ''
+                );
                 if ($this->first_item == 0) {
                     $this->first_item = (int) $previous;
                 }
@@ -279,7 +291,11 @@ class OpenOfficeTextDocument extends OpenofficeDocument
                     $xapian_data = array(
                         SE_COURSE_ID => $courseid,
                         SE_TOOL_ID => TOOL_LEARNPATH,
-                        SE_DATA => array('lp_id' => $lp_id, 'lp_item' => $previous, 'document_id' => $document_id),
+                        SE_DATA => array(
+                            'lp_id' => $lp_id,
+                            'lp_item' => $previous,
+                            'document_id' => $document_id
+                        ),
                         SE_USER => (int) api_get_user_id(),
                     );
                     $ic_slide->xapian_data = serialize($xapian_data);
@@ -291,7 +307,15 @@ class OpenOfficeTextDocument extends OpenofficeDocument
                         $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
                         $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, ref_id_second_level, search_did)
                                 VALUES (NULL , \'%s\', \'%s\', %s, %s, %s)';
-                        $sql = sprintf($sql, $tbl_se_ref, api_get_course_id(), TOOL_LEARNPATH, $lp_id, $previous, $did);
+                        $sql = sprintf(
+                            $sql,
+                            $tbl_se_ref,
+                            api_get_course_id(),
+                            TOOL_LEARNPATH,
+                            $lp_id,
+                            $previous,
+                            $did
+                        );
                         Database::query($sql);
                     }
                 }
@@ -301,7 +325,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument
 
     /**
      * Returns additional Java command parameters
-     * @return	string	The additional parameters to be used in the Java call
+     * @return    string    The additional parameters to be used in the Java call
      */
     public function add_command_parameters()
     {
@@ -310,9 +334,9 @@ class OpenOfficeTextDocument extends OpenofficeDocument
 
     /**
      * Formats a page content by reorganising the HTML code a little
-     * @param	string	Page header
-     * @param	string	Page content
-     * @return	string	Formatted page content
+     * @param    string    Page header
+     * @param    string    Page content
+     * @return    string    Formatted page content
      */
     public function format_page_content($header, $content)
     {
@@ -350,8 +374,16 @@ class OpenOfficeTextDocument extends OpenofficeDocument
                     $content = str_replace($images[0][$key], $picture_resized, $content);
                 }
             } elseif ($img_width > $max_width - 10) {
-                $picture_resized = str_ireplace('width='.$img_width, 'width="'.($max_width - 10).'"', $images[0][$key]);
-                $content = str_replace($images[0][$key], $picture_resized, $content);
+                $picture_resized = str_ireplace(
+                    'width='.$img_width,
+                    'width="'.($max_width - 10).'"',
+                    $images[0][$key]
+                );
+                $content = str_replace(
+                    $images[0][$key],
+                    $picture_resized,
+                    $content
+                );
             }
         }
 

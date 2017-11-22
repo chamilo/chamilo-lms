@@ -6,7 +6,7 @@
  * a list of users in the group, subscribe or unsubscribe option, tutors...
  *
  * @package chamilo.group
- * @todo	Display error message if no group ID specified
+ * @todo    Display error message if no group ID specified
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -23,13 +23,17 @@ require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
 $group_id = api_get_group_id();
 $user_id = api_get_user_id();
 $current_group = GroupManager::get_group_properties($group_id);
+$group_id = $current_group['iid'];
 if (empty($current_group)) {
     api_not_allowed(true);
 }
 
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('GroupSpace');
-$interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
+$interbreadcrumb[] = array(
+    'url' => 'group.php?'.api_get_cidreq(),
+    'name' => get_lang('Groups')
+);
 
 /*	Ensure all private groups // Juan Carlos Raña Trabado */
 
@@ -39,14 +43,13 @@ if (!GroupManager::userHasAccessToBrowse($user_id, $current_group, api_get_sessi
 }
 
 /*	Actions and Action links */
-
 /*
  * User wants to register in this group
  */
 if (!empty($_GET['selfReg']) &&
     GroupManager :: is_self_registration_allowed($user_id, $current_group)
 ) {
-    GroupManager :: subscribe_users($user_id, $current_group);
+    GroupManager::subscribe_users($user_id, $current_group);
     Display::addFlash(Display::return_message(get_lang('GroupNowMember'), 'normal'));
 }
 
@@ -71,8 +74,13 @@ Display::display_header(
 Display::display_introduction_section(TOOL_GROUP);
 
 echo '<div class="actions">';
-echo '<a href="group.php">'.
-    Display::return_icon('back.png', get_lang('BackToGroupList'), '', ICON_SIZE_MEDIUM).
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq().'">'.
+    Display::return_icon(
+        'back.png',
+        get_lang('BackToGroupList'),
+        '',
+        ICON_SIZE_MEDIUM
+    ).
     '</a>';
 
 /*
@@ -225,14 +233,18 @@ if (api_is_allowed_to_edit(false, true) ||
     $actions_array = array();
     // Link to the forum of this group
     $forums_of_groups = get_forums_of_group($current_group);
-
     if (is_array($forums_of_groups)) {
         if ($current_group['forum_state'] == GroupManager::TOOL_PUBLIC) {
             foreach ($forums_of_groups as $key => $value) {
                 if ($value['forum_group_public_private'] == 'public') {
                     $actions_array[] = array(
                         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?cidReq='.api_get_course_id().'&forum='.$value['forum_id'].'&gidReq='.Security::remove_XSS($current_group['id']).'&origin=group',
-                        'content' => Display::return_icon('forum.png', get_lang('GroupForum'), array(), ICON_SIZE_MEDIUM)
+                        'content' => Display::return_icon(
+                            'forum.png',
+                            get_lang('GroupForum'),
+                            array(),
+                            ICON_SIZE_MEDIUM
+                        ),
                     );
                 }
             }
@@ -511,7 +523,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
  */
 function email_filter($email)
 {
-    return Display :: encrypted_mailto_link($email, $email);
+    return Display::encrypted_mailto_link($email, $email);
 }
 
 /**

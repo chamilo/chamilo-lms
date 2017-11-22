@@ -8070,4 +8070,17 @@ $MailSubjectForwardShort = "Tr";
 $ForwardedMessage = "Mensaje transferido";
 $ForwardMessage = "Transferir mensaje";
 $MyCoursePageCategoryIntroduction = "A continuación encontrará una lista de categorías de cursos. Haga clic en una de ellas para ver los cursos que contiene.";
+$FeatureDisabledByAdministrator = "Funcionalidad desactivada por el administrador de la plataforma";
+$SubscribeUsersToLpCategory = "Suscribir usuarios a la categoría de lecciones";
+$SubscribeGroupsToLpCategory = "Suscribir grupos a la categoría de lecciones";
+$UserLpSubscriptionDescription = "Tenga en cuenta que si la inscripción de los usuarios en una categoría está disponible, entonces si ya ha suscrito a usuarios a la categoría, esta inuscripcion en la categoria sobrepasara la inscripción de los usuarios aquí en la leccion";
+$UserLpCategorySubscriptionDescription = "Tenga en cuenta que la inscripción de los usuarios en una categoría sobre pasa la inscripción de los usuarios en las lecciones";
+$FieldTypeSelectWithTextField = "Lista desplegable con campo de texto";
+$FieldTypeTripleSelect = "Campo de tipo selección triple";
+$DoubleValidationMessage = "Confirma que realmente deseas suscribirte a esta plataforma.";
+$AddText = "Añadir texto";
+$OralExpressionHelpText = "Cuando lanza la grabación, puede pausar cuando lo desee. Si no está satisfecho, grabese de nuevo. Esto sobrescribirá la versión anterior. Satisfecho? Para transmitir la grabación haga clic en \"Guardar el audio grabado\".";
+$BestScoreInLearningPath = "Mejor nota en las lecciones";
+$BestScoreNotInLearningPath = "Mejor nota fuera de lecciones";
+$StudentXHadEnoughSkillsToGetSkillXToAssignClickHereX = "El alumno %s tiene suficiente competencias secundarias para obtener la competencia %s. Para asignar esta competencia, es posible ir aquí : %s";
 ?>

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	@package chamilo.work
+ * @package chamilo.work
  **/
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -27,14 +27,12 @@ $curdirpath = '';
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = to_javascript_work();
 
-$_course = api_get_course_info();
-
 /*	Constants and variables */
 
 $tool_name = get_lang('StudentPublications');
 
 $item_id = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
-$origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
+$origin = api_get_origin();
 $course_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'];
 $base_work_dir = $course_dir.'/work';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
@@ -93,7 +91,9 @@ if (!empty($groupId)) {
     }
 } else {
     if ($origin != 'learnpath') {
-        if (isset($_GET['id']) && !empty($_GET['id']) || $display_upload_form || $action == 'settings' || $action == 'create_dir') {
+        if (isset($_GET['id']) &&
+            !empty($_GET['id']) || $display_upload_form || $action == 'settings' || $action == 'create_dir'
+        ) {
             $interbreadcrumb[] = array(
                 'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
                 'name' => get_lang('StudentPublications'),
@@ -123,6 +123,16 @@ if (!empty($groupId)) {
 
 // Stats
 Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+$groupId = api_get_group_id();
+$isTutor = false;
+if (!empty($groupId)) {
+    $groupInfo = GroupManager::get_group_properties($groupId);
+    $isTutor = GroupManager::is_tutor_of_group(
+        api_get_user_id(),
+        $groupInfo
+    );
+}
 
 $is_allowed_to_edit = api_is_allowed_to_edit();
 $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
@@ -160,8 +170,8 @@ switch ($action) {
         break;
     case 'add':
     case 'create_dir':
-        if (!$is_allowed_to_edit) {
-            api_not_allowed();
+        if (!($is_allowed_to_edit || $isTutor)) {
+            api_not_allowed(true);
         }
         $addUrl = api_get_path(WEB_CODE_PATH).'work/work.php?action=create_dir&'.api_get_cidreq();
         $form = new FormValidator(
@@ -169,7 +179,7 @@ switch ($action) {
             'post',
             $addUrl
         );
-        $form->addElement('header', get_lang('CreateAssignment'));
+        $form->addHeader(get_lang('CreateAssignment'));
         $form->addElement('hidden', 'action', 'add');
         // Set default values
         $defaults = !empty($_POST) ? $_POST : ['allow_text_assignment' => 2];
@@ -178,8 +188,9 @@ switch ($action) {
         $form->addButtonCreate(get_lang('CreateDirectory'));
 
         if ($form->validate()) {
+            $values = $form->getSubmitValues();
             $result = addDir(
-                $_POST,
+                $values,
                 $user_id,
                 $courseInfo,
                 $groupId,
@@ -345,7 +356,8 @@ switch ($action) {
             $content .= '</div>';
             $content .= '</div>';
             $content .= '<div id="student-list-work" style="display: none" class="table-responsive">';
-            $content .= '<div class="toolbar"><a id="closed-view-list" href="#"><em class="fa fa-times-circle"></em> '.get_lang('Close').'</a></div>';
+            $content .= '<div class="toolbar"><a id="closed-view-list" href="#">
+                         <em class="fa fa-times-circle"></em> '.get_lang('Close').'</a></div>';
             $content .= showStudentList($work_id);
             $content .= '</div>';
         } else {
@@ -354,14 +366,14 @@ switch ($action) {
         break;
 }
 
-Display :: display_header(null);
+Display::display_header(null);
 Display::display_introduction_section(TOOL_STUDENTPUBLICATION);
 
 if ($origin === 'learnpath') {
     echo '<div style="height:15px">&nbsp;</div>';
 }
 
-display_action_links($work_id, $curdirpath, $action);
+displayWorkActionLinks($work_id, $action, $isTutor);
 echo $content;
 
 Display::display_footer();

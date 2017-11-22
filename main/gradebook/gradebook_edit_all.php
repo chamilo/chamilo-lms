@@ -101,14 +101,23 @@ foreach ($links as &$row) {
     $item_weight = $row['weight'];
     $sql = 'SELECT * FROM '.GradebookUtils::get_table_type_course($row['type']).'
             WHERE c_id = '.$course_id.' AND '.$table_evaluated[$row['type']][2].' = '.$row['ref_id'];
+
     $result = Database::query($sql);
     $resource_name = Database::fetch_array($result);
 
     if (isset($resource_name['lp_type'])) {
         $resource_name = $resource_name[4];
     } else {
-        $resource_name = $resource_name[3];
+        switch ($row['type']) {
+            case LINK_EXERCISE:
+                $resource_name = $resource_name['title'];
+                break;
+            default:
+                $resource_name = $resource_name[3];
+                break;
+        }
     }
+
     $row['resource_name'] = $resource_name;
 
     // Update only if value changed
@@ -129,7 +138,7 @@ foreach ($links as &$row) {
             'info'
         ).' </td>';
     $output .= '<td>
-                    <input type="hidden" name="link_'.$row['id'].'" value="'.$resource_name.'" />
+                    <input type="hidden" name="link_'.$row['id'].'" value="1" />
                     <input size="10" type="text" name="link['.$row['id'].']" value="'.$item_weight.'"/>
                </td></tr>';
 }
@@ -152,11 +161,9 @@ foreach ($evaluations as $evaluationRow) {
 
     $output .= '<tr>
                 <td>'.GradebookUtils::build_type_icon_tag('evalnotempty').'</td>
-                <td>'.$evaluationRow['name'].' '.Display::label(
-            get_lang('Evaluation')
-        ).'</td>';
+                <td>'.$evaluationRow['name'].' '.Display::label(get_lang('Evaluation')).'</td>';
     $output .= '<td>
-                    <input type="hidden" name="eval_'.$evaluationRow['id'].'" value="'.$evaluationRow['name'].'" />
+                    <input type="hidden" name="eval_'.$evaluationRow['id'].'" value="1" />
                     <input type="text" size="10" name="evaluation['.$evaluationRow['id'].']" value="'.$item_weight.'"/>
                 </td></tr>';
 }

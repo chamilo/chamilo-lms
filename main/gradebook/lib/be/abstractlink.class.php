@@ -459,7 +459,7 @@ abstract class AbstractLink implements GradebookItem
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
         $dateobject = self::load($evaluationId, null, null, null, null);
-        $current_date_server = api_get_utc_datetime();
+        $now = api_get_utc_datetime();
         $arreval = get_object_vars($dateobject[0]);
         $description_log = isset($arreval['description']) ? $arreval['description'] : '';
         if (empty($nameLog)) {
@@ -478,7 +478,7 @@ abstract class AbstractLink implements GradebookItem
             'id_linkeval_log' => $arreval['id'],
             'name' => $name_log,
             'description' => $description_log,
-            'created_at' => $current_date_server,
+            'created_at' => $now,
             'weight' => $arreval['weight'],
             'visible' => $arreval['visible'],
             'type' => 'Link',
@@ -493,8 +493,8 @@ abstract class AbstractLink implements GradebookItem
     public function delete()
     {
         $this->delete_linked_data();
-        $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $sql = 'DELETE FROM '.$tbl_grade_links.'
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        $sql = 'DELETE FROM '.$table.'
                 WHERE id = '.intval($this->id);
         Database::query($sql);
     }
@@ -510,8 +510,8 @@ abstract class AbstractLink implements GradebookItem
         // links can only be moved to categories inside this course
         $targets = array();
         $level = 0;
-        $crscats = Category::load(null, null, $this->get_course_code(), 0);
-        foreach ($crscats as $cat) {
+        $categories = Category::load(null, null, $this->get_course_code(), 0);
+        foreach ($categories as $cat) {
             $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
             $targets = $this->addTargetSubcategories(
                 $targets,
@@ -525,7 +525,9 @@ abstract class AbstractLink implements GradebookItem
 
     /**
      * Internal function used by get_target_categories()
+     * @param array $targets
      * @param integer $level
+     * @param int $catid
      * @return array
      */
     private function addTargetSubcategories($targets, $level, $catid)

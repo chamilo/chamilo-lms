@@ -2,13 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	This script displays an area where teachers can edit the group properties and member list.
- *	Groups are also often called "teams" in the Dokeos code.
+ * This script displays an area where teachers can edit the group properties and member list.
+ * Groups are also often called "teams" in the Dokeos code.
  *
- *	@author various contributors
- *	@author Roan Embrechts (VUB), partial code cleanup, initial virtual course support
- *	@package chamilo.group
- *	@todo course admin functionality to create groups based on who is in which course (or class).
+ * @author various contributors
+ * @author Roan Embrechts (VUB), partial code cleanup, initial virtual course support
+ * @package chamilo.group
+ * @todo course admin functionality to create groups based on who is in which course (or class).
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -146,16 +146,16 @@ if (!empty($complete_user_list)) {
             }
 
             $name = api_get_person_name(
-                    $user['firstname'],
-                    $user['lastname']
-                ).' ('.$user['username'].')'.$officialCode;
+                $user['firstname'],
+                $user['lastname']
+            ).' ('.$user['username'].')'.$officialCode;
 
             if ($orderUserListByOfficialCode === 'true') {
                 $officialCode = !empty($user['official_code']) ? $user['official_code']." - " : '? - ';
                 $name = $officialCode.' '.api_get_person_name(
-                        $user['firstname'],
-                        $user['lastname']
-                    ).' ('.$user['username'].')';
+                    $user['firstname'],
+                    $user['lastname']
+                ).' ('.$user['username'].')';
             }
 
             $possible_users[$user['user_id']] = $name.$groupNameListToString;

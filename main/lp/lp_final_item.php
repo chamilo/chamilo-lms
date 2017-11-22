@@ -91,7 +91,10 @@ unset($currentItem);
 // If for some reason we consider the requirements haven't been completed yet,
 // show a prerequisites warning
 if ($accessGranted == false) {
-    echo Display::return_message(get_lang('LearnpathPrereqNotCompleted'), 'warning');
+    echo Display::return_message(
+        get_lang('LearnpathPrereqNotCompleted'),
+        'warning'
+    );
     $finalItemTemplate = '';
 } else {
     $catLoad = Category::load(
@@ -221,7 +224,6 @@ function generateLPFinalItemTemplate(
     );
 
     $finalItemTemplate = file_get_contents($documentInfo['absolute_path']);
-
     $finalItemTemplate = str_replace('((certificate))', $downloadCertificateLink, $finalItemTemplate);
     $finalItemTemplate = str_replace('((skill))', $badgeLink, $finalItemTemplate);
 

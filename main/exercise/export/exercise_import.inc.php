@@ -13,9 +13,7 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * Unzip the exercise in the temp folder
- * @param string The path of the temporary directory where the exercise was uploaded and unzipped
- * @param string
- * @param string $baseWorkDir
+ * @param string $baseWorkDir The path of the temporary directory where the exercise was uploaded and unzipped
  * @param string $uploadPath
  * @return bool
  */

@@ -22,6 +22,9 @@ $ns = api_get_path(WEB_PLUGIN_PATH)."sepe/ws/ProveedorCentroTFWS.wsdl";
 $wsdl = api_get_path(SYS_PLUGIN_PATH)."sepe/ws/ProveedorCentroTFWS.wsdl";
 $serviceUrl = api_get_path(WEB_PLUGIN_PATH).'sepe/ws/service.php';
 
+/**
+ * Class CustomServer
+ */
 class CustomServer extends Zend\Soap\Server
 {
     /**
@@ -88,7 +91,12 @@ function authenticate($WSUser, $WSKey)
     $tUser = Database::get_main_table(TABLE_MAIN_USER);
     $tApi = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
     $login = Database::escape_string($WSUser);
-    $sql = "SELECT u.user_id, u.status FROM $tUser u, $tApi a WHERE u.username='".$login."' and u.user_id = a.user_id AND a.api_service = 'dokeos' and a.api_key='".$WSKey."'";
+    $sql = "SELECT u.user_id, u.status FROM $tUser u, $tApi a 
+            WHERE 
+                u.username='".$login."' AND  
+                u.user_id = a.user_id AND 
+                a.api_service = 'dokeos' AND 
+                a.api_key='".$WSKey."'";
     $result = Database::query($sql);
 
     if (Database::num_rows($result) > 0) {

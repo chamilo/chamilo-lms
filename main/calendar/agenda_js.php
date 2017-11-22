@@ -57,7 +57,8 @@ if (!empty($group_id)) {
     $group_properties = GroupManager::get_group_properties($group_id);
     $is_group_tutor = GroupManager::is_tutor_of_group(
         api_get_user_id(),
-        $group_properties
+        $group_properties,
+        $courseId
     );
     $interbreadcrumb[] = array(
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
@@ -282,6 +283,18 @@ if ($agenda->type === 'course') {
 
 $tpl->assign('form_add', $form->returnForm());
 $tpl->assign('legend_list', api_get_configuration_value('agenda_legend'));
+
+$onHoverInfo = api_get_configuration_value('agenda_on_hover_info');
+if (!empty($onHoverInfo)) {
+    $options = $onHoverInfo['options'];
+} else {
+    $options = [
+        'comment' => true,
+        'description' => true,
+    ];
+}
+$tpl->assign('on_hover_info', $options);
+
 $templateName = $tpl->get_template('agenda/month.tpl');
 $content = $tpl->fetch($templateName);
 $tpl->assign('content', $content);

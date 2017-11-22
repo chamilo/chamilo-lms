@@ -8,7 +8,8 @@ forked it, between other reasons to provide support for PHP 7.
 
 To enable the profiler into Chamilo, you will need to do the following:
 - install the tideways-php library from https://tideways.io/profiler/downloads
-- add the following two lines to your Apache VirtualHost or (in a slightly different form) to your php.ini config (don't forget to update the path to your Chamilo root directory):
+- add the following two lines to your Apache VirtualHost or (in a slightly different form) to your php.ini config
+  (don't forget to update the path to your Chamilo root directory):
 ```
     php_value auto_prepend_file /var/www/chamilo/tests/xhprof/header.php
     php_value auto_append_file /var/www/chamilo/tests/xhprof/footer.php
@@ -22,4 +23,6 @@ To enable the profiler into Chamilo, you will need to do the following:
 
 ## Using XHProf
 
-Once you've done all the above, reload any Chamilo page. You should now see a little link at the bottom left of the page (under the footer). Click the link to see the details of the page load as seen by the profiler.
+Once you've done all the above, reload any Chamilo page.
+You should now see a little link at the bottom left of the page (under the footer).
+Click the link to see the details of the page load as seen by the profiler.

@@ -49,8 +49,7 @@ class Chat extends Model
 
     /**
     * Set user chat status
-    * @param int 0 if disconnected, 1 if connected
-    * @param integer $status
+    * @param int $status 0 if disconnected, 1 if connected
      *
     * @return void
     */
@@ -63,6 +62,12 @@ class Chat extends Model
         );
     }
 
+    /**
+     * @param int $currentUserId
+     * @param int $userId
+     * @param bool $latestMessages
+     * @return array
+     */
     public function getLatestChat($currentUserId, $userId, $latestMessages)
     {
         $items = self::getPreviousMessages(
@@ -260,20 +265,6 @@ class Chat extends Model
             unset($_SESSION['tsChatBoxes'][$fromUserId]);
 
             foreach ($rows as $chat) {
-                /*$chat['message'] = Security::remove_XSS($chat['message']);
-                $item = array(
-                    's' => '0',
-                    'f' => $fromUserId,
-                    'm' => $chat['message'],
-                    'username' => $user_info['complete_name'],
-                    'date' => api_strtotime($chat['sent'], 'UTC'),
-                    'id' => $chat['id']
-                );
-                $items[$fromUserId]['items'][] = $item;
-                $items[$fromUserId]['total_messages'] = $count;
-                $items[$fromUserId]['user_info']['user_name'] = $user_info['complete_name'];
-                $items[$fromUserId]['user_info']['online'] = $user_info['user_is_online'];
-                $items[$fromUserId]['user_info']['avatar'] = $user_info['avatar_small'];*/
                 $_SESSION['openChatBoxes'][$fromUserId] = api_strtotime($chat['sent'], 'UTC');
             }
 
@@ -293,8 +284,8 @@ class Chat extends Model
         }
 
         if (!empty($_SESSION['openChatBoxes'])) {
-            foreach ($_SESSION['openChatBoxes'] as $user_id => $time) {
-                if (!isset($_SESSION['tsChatBoxes'][$user_id])) {
+            foreach ($_SESSION['openChatBoxes'] as $userId => $time) {
+                if (!isset($_SESSION['tsChatBoxes'][$userId])) {
                     $now = time() - $time;
                     $time = api_convert_and_format_date($time, DATE_TIME_FORMAT_SHORT_TIME_FIRST);
                     $message = sprintf(get_lang('SentAtX'), $time);
@@ -302,14 +293,14 @@ class Chat extends Model
                     if ($now > 180) {
                         $item = array(
                             's' => '2',
-                            'f' => $user_id,
+                            'f' => $userId,
                             'm' => $message
                         );
 
-                        if (isset($_SESSION['chatHistory'][$user_id])) {
-                            $_SESSION['chatHistory'][$user_id]['items'][] = $item;
+                        if (isset($_SESSION['chatHistory'][$userId])) {
+                            $_SESSION['chatHistory'][$userId]['items'][] = $item;
                         }
-                        $_SESSION['tsChatBoxes'][$user_id] = 1;
+                        $_SESSION['tsChatBoxes'][$userId] = 1;
                     }
                 }
             }
@@ -324,29 +315,13 @@ class Chat extends Model
     }
 
     /**
-    * Returns an array of messages inside a chat session with a specific user
-    * @param int The ID of the user with whom the current user is chatting
-    * @return array Messages list
-    */
-    public function box_session($user_id)
-    {
-        $items = array();
-        if (isset($_SESSION['chatHistory'][$user_id])) {
-            $items = $_SESSION['chatHistory'][$user_id];
-        }
-
-        return $items;
-    }
-
-    /**
      * Saves into session the fact that a chat window exists with the given user
      * @param int The ID of the user with whom the current user is chatting
-     * @param integer $user_id
-     * @return void
+     * @param integer $userId
      */
-    public function save_window($user_id)
+    public function saveWindow($userId)
     {
-        $this->window_list[$user_id] = true;
+        $this->window_list[$userId] = true;
         Session::write('window_list', $this->window_list);
     }
 
@@ -375,7 +350,7 @@ class Chat extends Model
         if ($user_friend_relation == USER_RELATION_TYPE_FRIEND) {
             $now = api_get_utc_datetime();
             $user_info = api_get_user_info($to_user_id, true);
-            $this->save_window($to_user_id);
+            $this->saveWindow($to_user_id);
             $_SESSION['openChatBoxes'][$to_user_id] = $now;
 
             if ($sanitize) {
@@ -440,7 +415,7 @@ class Chat extends Model
      * Filter chat messages to avoid XSS or other JS
      * @param string $text Unfiltered message
      *
-     * @return string Filtered mssage
+     * @return string Filtered message
      */
     public function sanitize($text)
     {
@@ -482,7 +457,7 @@ class Chat extends Model
     /**
      * @return bool
      */
-    public function is_chat_blocked_by_exercises()
+    public function isChatBlockedByExercises()
     {
         $currentExercises = Session::read('current_exercises');
         if (!empty($currentExercises)) {

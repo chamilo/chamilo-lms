@@ -155,7 +155,7 @@ class Skill
      */
     public function getShortCode($translated = true)
     {
-        if ($translated) {
+        if ($translated && !empty($this->shortCode)) {
             $camelCase = 'SkillCode'.api_underscore_to_camel_case(
                 str_replace(' ', '_', $this->shortCode)
             );

@@ -33,6 +33,7 @@ $skillTable = Database::get_main_table(TABLE_MAIN_SKILL);
 $skillRelUserTable = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
 $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
 $tableRows = array();
+$objSkill = new Skill();
 $tpl = new Template(get_lang('Skills'));
 $tplPath = null;
 
@@ -40,45 +41,9 @@ $tpl->assign('allow_skill_tool', api_get_setting('allow_skills_tool') === 'true'
 $tpl->assign('allow_drh_skills_management', api_get_setting('allow_hr_skills_management') === 'true');
 
 if ($isStudent) {
-    $sql = "SELECT s.name, sru.acquired_skill_at, c.title, c.directory
-            FROM $skillTable s
-            INNER JOIN $skillRelUserTable sru
-            ON s.id = sru.skill_id
-            LEFT JOIN $courseTable c
-            ON sru.course_id = c.id
-            WHERE sru.user_id = $userId";
-    $result = Database::query($sql);
-    while ($resultData = Database::fetch_assoc($result)) {
-        $tableRow = array(
-            'skillName' => Skill::translate($resultData['name']),
-            'achievedAt' => api_format_date($resultData['acquired_skill_at'], DATE_FORMAT_NUMBER),
-            'courseImage' => Display::return_icon(
-                'course.png',
-                null,
-                null,
-                ICON_SIZE_MEDIUM,
-                null,
-                true
-            ),
-            'courseName' => $resultData['title']
-        );
-
-        $imageSysPath = sprintf("%s%s/course-pic.png", api_get_path(SYS_COURSE_PATH), $resultData['directory']);
-
-        if (file_exists($imageSysPath)) {
-            $thumbSysPath = sprintf("%s%s/course-pic32.png", api_get_path(SYS_COURSE_PATH), $resultData['directory']);
-            $thumbWebPath = sprintf("%s%s/course-pic32.png", api_get_path(WEB_COURSE_PATH), $resultData['directory']);
-
-            if (!file_exists($thumbSysPath)) {
-                $courseImageThumb = new Image($imageSysPath);
-                $courseImageThumb->resize(32);
-                $courseImageThumb->send_image($thumbSysPath);
-            }
-            $tableRow['courseImage'] = $thumbWebPath;
-        }
-        $tableRows[] = $tableRow;
-    }
-
+    $result = $objSkill->getUserSkillsTable($userId);
+    $tableRows = $result['skills'];
+    $tpl->assign('skill_table', $result['table']);
     $tplPath = 'skill/student_report.tpl';
 } elseif ($isStudentBoss) {
     $selectedStudent = isset($_REQUEST['student']) ? intval($_REQUEST['student']) : 0;
@@ -104,7 +69,7 @@ if ($isStudent) {
         while ($resultData = Database::fetch_assoc($result)) {
             $tableRow = array(
                 'completeName' => $followedStudents[$selectedStudent]['completeName'],
-                'skillName' => Skill::translate($resultData['name']),
+                'skillName' => Skill::translateName($resultData['name']),
                 'achievedAt' => api_format_date($resultData['acquired_skill_at'], DATE_FORMAT_NUMBER),
                 'courseImage' => Display::return_icon(
                     'course.png',
@@ -151,8 +116,6 @@ if ($isStudent) {
 
     $tableRows = array();
     $reportTitle = null;
-
-    $objSkill = new Skill();
     $skills = $objSkill->get_all();
 
     switch ($action) {

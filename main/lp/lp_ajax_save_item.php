@@ -368,6 +368,8 @@ function save_item(
                 }
                 $myLPI->set_time($time, 'scorm');
             }
+        } else {
+            $myLPI->current_stop_time = time();
         }
 
         if (isset($suspend) && $suspend != '' && $suspend != 'undefined') {

@@ -300,5 +300,4 @@ class PersonalAgenda
 
         return $this;
     }
-
 }

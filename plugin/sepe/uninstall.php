@@ -6,8 +6,6 @@
  * the global database and the courses tables
  * @package chamilo.plugin.sepe
  */
-/**
- * Queries
- */
+
 require_once __DIR__.'/config.php';
 SepePlugin::create()->uninstall();

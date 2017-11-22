@@ -1,11 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \ChamiloSession as Session;
+
 /**
  *    This script displays a specialty tutors edit form.
  */
 
-use \ChamiloSession as Session;
 require_once '../config.php';
 
 $course_plugin = 'sepe';
@@ -153,6 +154,7 @@ if (!empty($_POST)) {
         }
         session_write_close();
         header("Location: specialty-action-edit.php?new_specialty=0&specialty_id=".$specialtyId."&action_id=".$actionId);
+        exit;
     } else {
         $actionId = intval($_POST['action_id']);
         $newTutor = intval($_POST['new_tutor']);
@@ -163,6 +165,7 @@ if (!empty($_POST)) {
         $_SESSION['sepe_message_error'] = $plugin->get_lang('ProblemToken');
         session_write_close();
         header("Location: specialty-tutor-edit.php?new_tutor=".$newTutor."&specialty_id=".$specialtyId."&tutor_id=".$specialtyTutorId."&action_id=".$actionId);
+        exit;
     }
 } else {
     $token = Security::get_token();
@@ -217,4 +220,5 @@ if (api_is_platform_admin()) {
     $tpl->display_one_col_template();
 } else {
     header('Location:'.api_get_path(WEB_PATH));
+    exit;
 }

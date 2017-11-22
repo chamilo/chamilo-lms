@@ -44,7 +44,7 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 
 // Breadcrumbs
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
     'name' => get_lang('SurveyList')
 );
 if (api_is_course_admin()) {
@@ -82,9 +82,11 @@ if (Database::num_rows($result) > 1) {
 
 // Invited / answered message
 if ($survey_data['invited'] > 0 && !isset($_POST['submit'])) {
-    $message  = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey_data['survey_id'].'">'.$survey_data['answered'].'</a> ';
+    $message  = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq().'">'.
+        $survey_data['answered'].'</a> ';
     $message .= get_lang('HaveAnswered').' ';
-    $message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['survey_id'].'">'.$survey_data['invited'].'</a> ';
+    $message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq().'">'.
+        $survey_data['invited'].'</a> ';
     $message .= get_lang('WereInvited');
     echo Display::return_message($message, 'normal', false);
 }
@@ -113,14 +115,6 @@ foreach ($complete_user_list as & $user) {
 }
 
 CourseManager::addUserGroupMultiSelect($form, array());
-
-/*$form->addElement(
-    'advmultiselect',
-    'course_users',
-    get_lang('CourseUsers'),
-    $possible_users,
-    'style="width: 250px; height: 200px;"'
-);*/
 
 // Additional users
 $form->addElement(
@@ -235,18 +229,9 @@ if ($form->validate()) {
     );
 
     // Updating the invited field in the survey table
-    SurveyUtil::update_count_invited($survey_data['code']);
-    $total_count = $count_course_users + $counter_additional_users;
-    $table_survey = Database::get_course_table(TABLE_SURVEY);
     // Counting the number of people that are invited
-    $sql = "SELECT * FROM $table_survey
-            WHERE
-                c_id = $course_id AND
-                code = '".Database::escape_string($survey_data['code'])."'
-            ";
-    $result = Database::query($sql);
-    $row = Database::fetch_array($result);
-    $total_invited = $row['invited'];
+    $total_invited = SurveyUtil::update_count_invited($survey_data['code']);
+    $total_count = $count_course_users + $counter_additional_users;
     if ($total_invited > 0) {
         $message  = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey_data['survey_id'].'">'.
             $survey_data['answered'].'</a> ';
@@ -274,4 +259,4 @@ if ($form->validate()) {
     $form->setDefaults($defaults);
     $form->display();
 }
-Display :: display_footer();
+Display::display_footer();

@@ -146,8 +146,7 @@ if (isset($_POST['formSent'])) {
             $sql = "SELECT DISTINCT c.code, sc.id, c_id
                     FROM $tbl_course c
                     INNER JOIN $tbl_session_course_user sc
-                        ON c.id = sc.c_id
-                        AND sc.session_id = '".$row['id']."'";
+                    ON c.id = sc.c_id AND sc.session_id = '".$row['id']."'";
 
             $rsCourses = Database::query($sql);
 

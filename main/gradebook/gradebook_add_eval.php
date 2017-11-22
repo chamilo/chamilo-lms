@@ -25,7 +25,7 @@ if (!empty($select_cat)) {
 }
 
 $form = new EvalForm(
-    EvalForm :: TYPE_ADD,
+    EvalForm::TYPE_ADD,
     $evaladd,
     null,
     'add_eval_form',

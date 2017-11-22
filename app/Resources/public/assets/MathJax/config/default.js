@@ -12,7 +12,7 @@
  *
  *  ---------------------------------------------------------------------
  *  
- *  Copyright (c) 2009-2015 The MathJax Consortium
+ *  Copyright (c) 2009-2017 The MathJax Consortium
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -240,12 +240,18 @@ MathJax.Hub.Config({
     ALT: false,          //    require Alt or Option?
     CMD: false,          //    require CMD?
     Shift: false,        //    require Shift?
+    discoverable: false, //  make math menu discoverable on hover?
     zscale: "200%",      //  the scaling factor for MathZoom
+    renderer: null,      //  set when Jax are loaded
     font: "Auto",        //  what font HTML-CSS should use
     context: "MathJax",  //  or "Browser" for pass-through to browser menu
+    locale: null,        //  the language to use for messages
     mpContext: false,    //  true means pass menu events to MathPlayer in IE
     mpMouse: false,      //  true means pass mouse events to MathPlayer in IE
     texHints: true,      //  include class names for TeXAtom elements
+    FastPreview: null,   //  use PreviewHTML output as preview?
+    assistiveMML: null,  //  include hidden MathML for screen readers?
+    inTabOrder: true,    //  set to true if math elements should be included in the tabindex
     semantics: false     //  add semantics tag with original form in MathML output
   },
   
@@ -544,7 +550,8 @@ MathJax.Hub.Config({
 //    formatTag:    function (n) {return '('+n+')'},        // format for \tag and \eqref
 //    formatID:     function (n) {return 'mjx-eqn-'+String(n).replace(/[:'"<>&]/g,"")},
 //                                                          // element ID to use for reference
-//    formatURL:    function (id) {return '#'+escape(id)},  // URL to use for references
+//    formatURL:    function (id,base) {return base+'#'+escape(id)},
+//                                                          // URL to use for references
       useLabelIds: true    // make element ID's use \label name rather than equation number
     },
 

@@ -15,8 +15,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script(true);
 
 $toolName = get_lang('Status');
-
-$libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
 
 $this_section = 'tickets';
@@ -141,7 +139,7 @@ function modify_filter($id, $params, $row)
         );
     }
 
-	return $result;
+    return $result;
 }
 
 $table->set_header(0, '', false);

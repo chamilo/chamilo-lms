@@ -6,7 +6,6 @@
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$libpath = api_get_path(LIBRARY_PATH);
 
 /**
  * Function to convert from ppt to png

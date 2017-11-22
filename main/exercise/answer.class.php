@@ -48,8 +48,9 @@ class Answer
      * @author Olivier Brouckaert
      * @param int $questionId that answers belong to
      * @param int $course_id
+     * @param Exercise $exercise
      */
-    public function __construct($questionId, $course_id = null)
+    public function __construct($questionId, $course_id = null, $exercise = null)
     {
         $this->questionId = intval($questionId);
         $this->answer = array();
@@ -72,10 +73,14 @@ class Answer
         $this->course = $courseInfo;
         $this->course_id = $courseInfo['real_id'];
 
-        // fills arrays
-        $objExercise = new Exercise($this->course_id);
-        $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
-        $objExercise->read($exerciseId);
+        if (empty($exercise)) {
+            // fills arrays
+            $objExercise = new Exercise($this->course_id);
+            $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
+            $objExercise->read($exerciseId);
+        } else {
+            $objExercise = $exercise;
+        }
 
         if ($objExercise->random_answers == '1' && $this->getQuestionType() != CALCULATED_ANSWER) {
             $this->readOrderedBy('rand()', ''); // randomize answers

@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.messages
 */
@@ -18,24 +19,12 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 if (api_get_setting('allow_message_tool') !== 'true') {
-    api_not_allowed();
+    api_not_allowed(true);
 }
+
+$allowSocial = api_get_setting('allow_social_tool') == 'true';
 
 $nameTools = api_xml_http_response_encode(get_lang('Messages'));
-/*	Constants and variables */
-
-$htmlHeadXtra[] = '
-<script>
-function validate(form, list) {
-    if(list.selectedIndex<0) {
-        alert("Please select someone to send the message to.")
-        return false
-    } else {
-        return true
-    }
-}
-
-</script>';
 
 $htmlHeadXtra[] = '<script>
 var counter_image = 1;
@@ -116,12 +105,11 @@ function manageForm($default, $select_from_user_list = null, $sent_to = null)
 {
     $group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
     $message_id = isset($_GET['message_id']) ? intval($_GET['message_id']) : null;
-    $param_f = isset($_GET['f']) && $_GET['f'] == 'social' ? 'social' : null;
 
     $form = new FormValidator(
         'compose_message',
         null,
-        api_get_self().'?f='.$param_f,
+        api_get_self(),
         null,
         array('enctype' => 'multipart/form-data')
     );
@@ -222,7 +210,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = null)
                 <div id="paths-description" class="form-group">
                     <label class="col-sm-4">'.get_lang('Description').'</label>
                     <div class="col-sm-8">
-                    <input id="file-descrtiption" style="width:100%;" type="text" name="legend[]" />
+                    <input id="file-descrtiption" class="form-control" type="text" name="legend[]" />
                     </div>
                 </div>
             </div>
@@ -319,10 +307,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = null)
     return $html;
 }
 
-$socialToolIsActive = isset($_GET['f']) && $_GET['f'] == 'social';
-
 /* MAIN SECTION */
-if ($socialToolIsActive) {
+if ($allowSocial) {
     $this_section = SECTION_SOCIAL;
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_PATH).'main/social/home.php',
@@ -336,6 +322,11 @@ if ($socialToolIsActive) {
     );
 }
 
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_PATH).'main/messages/inbox.php',
+    'name' => get_lang('Messages')
+);
+
 $group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
 $social_right_content = null;
 if ($group_id != 0) {
@@ -346,13 +337,9 @@ if ($group_id != 0) {
         Display::return_icon('message_new.png', api_xml_http_response_encode(get_lang('ComposeMessage'))).'</a>';
     $social_right_content .= '</div>';
 } else {
-    if ($socialToolIsActive) {
+    if ($allowSocial) {
     } else {
         $social_right_content .= '<div class=actions>';
-        if (api_get_setting('allow_social_tool') === 'true' && api_get_setting('allow_message_tool') === 'true') {
-            $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
-                Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
-        }
         if (api_get_setting('allow_message_tool') === 'true') {
             $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
                 Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';
@@ -366,9 +353,9 @@ if ($group_id != 0) {
 }
 
 // LEFT COLUMN
-$social_left_content = null;
-if (api_get_setting('allow_social_tool') == 'true') {
-    //Block Social Menu
+$social_left_content = '';
+if ($allowSocial) {
+    // Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('messages');
     $social_right_content .= '<div class="row">';
     $social_right_content .= '<div class="col-md-12">';
@@ -425,7 +412,8 @@ if (!isset($_POST['compose'])) {
         }
     }
 }
-if (api_get_setting('allow_social_tool') === 'true') {
+
+if ($allowSocial) {
     $social_right_content .= '</div>';
     $social_right_content .= '</div>';
 }
@@ -434,7 +422,7 @@ $tpl = new Template(get_lang('ComposeMessage'));
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 
-if (api_get_setting('allow_social_tool') === 'true') {
+if ($allowSocial) {
     $tpl->assign('social_menu_block', $social_menu_block);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('social/inbox.tpl');

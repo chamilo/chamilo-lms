@@ -188,12 +188,14 @@ class Version20160907150300 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
+        error_log('Version20160907150300');
         foreach ($this->names as $name) {
             if (!$schema->hasTable($name)) {
                 continue;
             }
-
-            $this->addSql("ALTER TABLE $name ENGINE=InnoDB");
+            $sql = "ALTER TABLE $name ENGINE=InnoDB";
+            $this->addSql($sql);
+            error_log($sql);
         }
     }
 

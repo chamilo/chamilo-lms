@@ -2,13 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *
- * @package chamilo.include.search
- */
-include_once __DIR__.'/../../../global.inc.php';
-require_once __DIR__.'/search_processor.class.php';
-
-/**
  * Process links before pass it to search listing scripts
  * @package chamilo.include.search
  */
@@ -41,7 +34,7 @@ class link_processor extends search_processor
         foreach ($this->links as $courseCode => $one_course_links) {
             $course_info = api_get_course_info($courseCode);
             $search_show_unlinked_results = (api_get_setting('search_show_unlinked_results') == 'true');
-            $course_visible_for_user = api_is_course_visible_for_user(NULL, $courseCode);
+            $course_visible_for_user = api_is_course_visible_for_user(null, $courseCode);
             // can view course?
             if ($course_visible_for_user || $search_show_unlinked_results) {
                 $result = NULL;

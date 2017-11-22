@@ -10,7 +10,9 @@ class IndexManager
     const VIEW_BY_SESSION = 1;
 
     // An instance of the template engine
-    public $tpl = false;
+    // No need to initialize because IndexManager is not static,
+    // and the constructor immediately instantiates a Template
+    public $tpl;
     public $name = '';
     public $home = '';
     public $default_home = 'home/';
@@ -165,7 +167,9 @@ class IndexManager
         $sql_result = Database::query($sql_query);
         while ($course = Database::fetch_array($sql_result)) {
             if (!$setting_show_also_closed_courses) {
-                if ((api_get_user_id() > 0 && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) || ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)) {
+                if ((api_get_user_id() > 0 && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) ||
+                    ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)
+                ) {
                     return true; //at least one open course
                 }
             } else {
@@ -593,7 +597,9 @@ class IndexManager
                     // If we do not show the closed courses
                     // we only show the courses that are open to the world (to everybody)
                     // and the courses that are open to the platform (if the current user is a registered user.
-                    if (($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) || ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)) {
+                    if (($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) ||
+                        ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)
+                    ) {
                         $courses_shown++;
                         $courses_list_string .= "<li>";
                         $courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">'.$course['title'].'</a><br />';
@@ -602,9 +608,11 @@ class IndexManager
                             $course_details[] = $course['visual_code'];
                         }
                         if (api_get_setting('display_teacher_in_courselist') === 'true') {
-                            $course_details[] = CourseManager::get_teacher_list_from_course_code_to_string($course['code']);
+                            $course_details[] = CourseManager::getTeacherListFromCourseCodeToString($course['code']);
                         }
-                        if (api_get_setting('show_different_course_language') === 'true' && $course['course_language'] != api_get_setting('platformLanguage')) {
+                        if (api_get_setting('show_different_course_language') === 'true' &&
+                            $course['course_language'] != api_get_setting('platformLanguage')
+                        ) {
                             $course_details[] = $course['course_language'];
                         }
                         $courses_list_string .= implode(' - ', $course_details);
@@ -649,13 +657,16 @@ class IndexManager
                             $course_details[] = $course['tutor_name'];
                         }
                     }
-                    if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] != api_get_setting('platformLanguage')) {
+                    if (api_get_setting('show_different_course_language') == 'true' &&
+                        $course['course_language'] != api_get_setting('platformLanguage')
+                    ) {
                         $course_details[] = $course['course_language'];
                     }
 
                     $courses_list_string .= implode(' - ', $course_details);
                     // We display a subscription link if:
-                    // 1. it is allowed to register for the course and if the course is not already in the courselist of the user and if the user is identiefied
+                    // 1. it is allowed to register for the course and if the course is not already in
+                    // the courselist of the user and if the user is identified
                     // 2.
                     if ($user_identified && !array_key_exists($course['code'], $courses_of_user)) {
                         if ($course['subscribe'] == '1') {
@@ -802,7 +813,8 @@ class IndexManager
             $search_content = '<form action="main/search/" method="post">
                 <div class="form-group">
                 <input type="text" id="query" class="form-control" name="query" value="" />
-                <button class="btn btn-default" type="submit" name="submit" value="'.$search_btn.'" />'.$search_btn.' </button>
+                <button class="btn btn-default" type="submit" name="submit" value="'.$search_btn.'" />'.
+                $search_btn.' </button>
                 </div></form>';
             $html .= self::show_right_block(get_lang('Search'), $search_content, 'search_block');
         }
@@ -1015,7 +1027,7 @@ class IndexManager
     }
 
     /**
-     * @return null|string
+     * @return array
      */
     public function return_course_block()
     {
@@ -1141,35 +1153,32 @@ class IndexManager
      * @param bool $showSessions
      * @param string $categoryCodeFilter
      * @param bool $useUserLanguageFilterIfAvailable
-     * @return string
+     * @param bool $loadHistory
+     * @return array
      */
     public function returnCoursesAndSessions(
         $user_id,
         $showSessions = true,
         $categoryCodeFilter = '',
-        $useUserLanguageFilterIfAvailable = true
+        $useUserLanguageFilterIfAvailable = true,
+        $loadHistory = false
     ) {
         $gameModeIsActive = api_get_setting('gamification_mode');
         $listCourse = '';
         $specialCourseList = '';
-        $load_history = isset($_GET['history']) && intval($_GET['history']) == 1 ? true : false;
-        $viewGridCourses = api_get_configuration_value('view_grid_courses') === true;
+        $viewGridCourses = api_get_configuration_value('view_grid_courses') === 'true';
         $showSimpleSessionInfo = api_get_configuration_value('show_simple_session_info');
 
         $coursesWithoutCategoryTemplate = '/user_portal/classic_courses_without_category.tpl';
         $coursesWithCategoryTemplate = '/user_portal/classic_courses_with_category.tpl';
         $showAllSessions = api_get_configuration_value('show_all_sessions_on_my_course_page') === true;
 
-        if ($showAllSessions) {
-            $session_categories = UserManager::get_sessions_by_category($user_id, false, true, true);
+        if ($loadHistory) {
+            // Load sessions in category in *history*
+            $session_categories = UserManager::get_sessions_by_category($user_id, true);
         } else {
-            if ($load_history) {
-                // Load sessions in category in *history*
-                $session_categories = UserManager::get_sessions_by_category($user_id, true);
-            } else {
-                // Load sessions in category
-                $session_categories = UserManager::get_sessions_by_category($user_id, false);
-            }
+            // Load sessions in category
+            $session_categories = UserManager::get_sessions_by_category($user_id, false);
         }
 
         $sessionCount = 0;
@@ -1180,6 +1189,7 @@ class IndexManager
         $studentInfo = api_get_configuration_value('course_student_info');
         $viewGrid = api_get_configuration_value('view_grid_courses');
 
+
         $studentInfoProgress = !empty($studentInfo['progress']) && $studentInfo['progress'] === true;
         $studentInfoScore = !empty($studentInfo['score']) && $studentInfo['score'] === true;
         $studentInfoCertificate = !empty($studentInfo['certificate']) && $studentInfo['certificate'] === true;
@@ -1188,7 +1198,7 @@ class IndexManager
         $coursesNotInCategoryCount = 0;
 
         // If we're not in the history view...
-        if (!isset($_GET['history'])) {
+        if ($loadHistory == false) {
             // Display special courses.
             $specialCourses = CourseManager::returnSpecialCourses(
                 $user_id,
@@ -1472,6 +1482,7 @@ class IndexManager
                                     } else {
                                         $allowed_time = api_strtotime($date_session_start);
                                     }
+
                                     $endSessionToTms = null;
                                     if (!isset($_GET['history'])) {
                                         if (!empty($date_session_end)) {
@@ -1512,6 +1523,7 @@ class IndexManager
                                 if ($session_now >= $allowed_time && $allowedEndTime) {
                                     // Read only and accessible.
                                     $atLeastOneCourseIsVisible = true;
+
                                     if (api_get_setting('hide_courses_in_sessions') == 'false') {
                                         $courseUserHtml = CourseManager::get_logged_user_course_html(
                                             $course,
@@ -1638,18 +1650,12 @@ class IndexManager
                                 }
 
                                 if ($gameModeIsActive) {
-                                    $params['stars'] = GamificationUtils::getSessionStars(
-                                        $params['id'],
-                                        $this->user_id
-                                    );
-                                    $params['progress'] = GamificationUtils::getSessionProgress(
-                                        $params['id'],
-                                        $this->user_id
-                                    );
-                                    $params['points'] = GamificationUtils::getSessionPoints(
-                                        $params['id'],
-                                        $this->user_id
-                                    );
+                                    $params['stars'] =
+                                        GamificationUtils::getSessionStars($params['id'], $this->user_id);
+                                    $params['progress'] = GamificationUtils::getSessionProgress($params['id'],
+                                        $this->user_id);
+                                    $params['points'] =
+                                        GamificationUtils::getSessionPoints($params['id'], $this->user_id);
                                 }
                                 $listSession[] = $params;
                                 $sessionCount++;
@@ -1768,7 +1774,7 @@ class IndexManager
 
                                     if ($viewGridCourses) {
                                         $html_sessions .= $this->tpl->fetch(
-                                            $this->tpl->get_template('user_portal/grid_session.tpl')
+                                            $this->tpl->get_template('/user_portal/grid_session.tpl')
                                         );
                                     } else {
                                         $html_sessions .= $this->tpl->fetch(
@@ -2353,5 +2359,146 @@ class IndexManager
 
             return false;
         });
+    }
+
+    /**
+     * Set grade book dependency progress bar see BT#13099
+     * @param $userId
+     *
+     * @return bool
+     */
+    public function setGradeBookDependencyBar($userId)
+    {
+        $allow = api_get_configuration_value('gradebook_dependency');
+
+        if (api_is_anonymous()) {
+            return false;
+        }
+
+        if ($allow) {
+            $courseAndSessions = $this->returnCoursesAndSessions(
+                $userId,
+                false,
+                '',
+                false,
+                false
+            );
+
+            $courseList = api_get_configuration_value('gradebook_dependency_mandatory_courses');
+            $courseList = isset($courseList['courses']) ? $courseList['courses'] : [];
+            $mandatoryCourse = [];
+            if (!empty($courseList)) {
+                foreach ($courseList as $courseId) {
+                    $courseInfo = api_get_course_info_by_id($courseId);
+                    $mandatoryCourse[] = $courseInfo['code'];
+                }
+            }
+
+            // @todo improve calls of course info
+            $subscribedCourses = !empty($courseAndSessions['courses']) ? $courseAndSessions['courses'] : [];
+            $mainCategoryList = [];
+            foreach ($subscribedCourses as $courseInfo) {
+                $courseCode = $courseInfo['code'];
+                $categories = Category::load(null, null, $courseCode);
+                /** @var Category $category */
+                $category = !empty($categories[0]) ? $categories[0] : [];
+                if (!empty($category)) {
+                    $mainCategoryList[] = $category;
+                }
+            }
+
+            $result20 = 0;
+            $result80 = 0;
+            $countCoursesPassedNoDependency = 0;
+            /** @var Category $category */
+            foreach ($mainCategoryList as $category) {
+                $userFinished = Category::userFinishedCourse(
+                    $userId,
+                    $category,
+                    true
+                );
+
+                if ($userFinished) {
+                    if (in_array($category->get_course_code(), $mandatoryCourse)) {
+                        if ($result20 < 20) {
+                            $result20 += 10;
+                        }
+                    } else {
+                        $countCoursesPassedNoDependency++;
+                        if ($result80 < 80) {
+                            $result80 += 10;
+                        }
+                    }
+                }
+            }
+
+            $finalResult = $result20 + $result80;
+
+            $gradeBookList = api_get_configuration_value('gradebook_badge_sidebar');
+            $gradeBookList = isset($gradeBookList['gradebooks']) ? $gradeBookList['gradebooks'] : [];
+            $badgeList = [];
+            foreach ($gradeBookList as $id) {
+                $categories = Category::load($id);
+                /** @var Category $category */
+                $category = !empty($categories[0]) ? $categories[0] : [];
+                $badgeList[$id]['name'] = $category->get_name();
+                $badgeList[$id]['finished'] = false;
+                $badgeList[$id]['skills'] = [];
+                if (!empty($category)) {
+                    $minToValidate = $category->getMinimumToValidate();
+                    $dependencies = $category->getCourseListDependency();
+                    $gradeBooksToValidateInDependence = $category->getGradeBooksToValidateInDependence();
+                    $countDependenciesPassed = 0;
+                    foreach ($dependencies as $courseId) {
+                        $courseInfo = api_get_course_info_by_id($courseId);
+                        $courseCode = $courseInfo['code'];
+                        $categories = Category::load(null, null, $courseCode);
+                        $subCategory = !empty($categories[0]) ? $categories[0] : null;
+                        if (!empty($subCategory)) {
+                            $score = Category::userFinishedCourse(
+                                $userId,
+                                $subCategory,
+                                true
+                            );
+                            if ($score) {
+                                $countDependenciesPassed++;
+                            }
+                        }
+                    }
+
+                    $userFinished =
+                        $countDependenciesPassed >= $gradeBooksToValidateInDependence &&
+                        $countCoursesPassedNoDependency >= $minToValidate
+                    ;
+
+                    if ($userFinished) {
+                        $badgeList[$id]['finished'] = true;
+                    }
+
+                    $objSkill = new Skill();
+                    $skills = $category->get_skills();
+                    $skillList = [];
+                    foreach ($skills as $skill) {
+                        $skillList[] = $objSkill->get($skill['id']);
+                    }
+                    $badgeList[$id]['skills'] = $skillList;
+                }
+            }
+
+            $this->tpl->assign(
+                'grade_book_sidebar',
+                true
+            );
+
+            $this->tpl->assign(
+                'grade_book_progress',
+                $finalResult
+            );
+            $this->tpl->assign('grade_book_badge_list', $badgeList);
+
+            return true;
+        }
+
+        return false;
     }
 }

@@ -61,7 +61,7 @@ if (!empty($_REQUEST['session_id'])) {
 if (empty($session_id)) {
     $session_id = key($my_session_list);
 }
-$form->setDefaults(array('session_id'=>$session_id));
+$form->setDefaults(array('session_id' => $session_id));
 $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
 if (!$export_to_xls) {
@@ -92,13 +92,13 @@ $course_average = $course_average_counter = array();
 
 $counter = 0;
 $main_result = array();
-//Getting course list
+// Getting course list
 foreach ($course_list as $current_course) {
     $course_info = api_get_course_info($current_course['code']);
     $_course = $course_info;
     $attempt_result = array();
 
-    //Getting LP list
+    // Getting LP list
     $list = new LearnpathList('', $current_course['code'], $session_id);
     $lp_list = $list->get_flat_list();
 
@@ -147,7 +147,6 @@ if (!empty($users) && is_array($users)) {
         $html_result .= "</td>";
 
         // Getting course list
-
         $counter = 0;
         $total_result_by_user = 0;
         foreach ($course_list as $current_course) {
@@ -180,7 +179,7 @@ if (!empty($users) && is_array($users)) {
             $total_average_score += $total_student;
             $total_average_score_count++;
         }
-        $string_date = Tracking :: get_last_connection_date($user['user_id'], true);
+        $string_date = Tracking::get_last_connection_date($user['user_id'], true);
         $html_result .= "<td>$total_student</td><td>$string_date</td></tr>";
     }
 
@@ -194,7 +193,7 @@ if (!empty($users) && is_array($users)) {
                 2
             );
         } else {
-            $average_per_course = '-';
+            $average_per_course = 0;
         }
         if (!empty($average_per_course)) {
             $counter++;
@@ -220,4 +219,4 @@ if (!$export_to_xls) {
     echo $html_result;
 }
 
-Display :: display_footer();
+Display::display_footer();

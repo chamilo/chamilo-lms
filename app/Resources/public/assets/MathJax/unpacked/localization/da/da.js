@@ -1,11 +1,8 @@
-/* -*- Mode: Javascript; indent-tabs-mode:nil; js-indent-level: 2 -*- */
-/* vim: set ts=2 et sw=2 tw=80: */
-
 /*************************************************************
  *
  *  MathJax/localization/da/da.js
  *
- *  Copyright (c) 2009-2015 The MathJax Consortium
+ *  Copyright (c) 2009-2016 The MathJax Consortium
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,14 +17,13 @@
  *  limitations under the License.
  *
  */
-
 MathJax.Localization.addTranslation("da",null,{
   menuTitle: "dansk",
-  version: "2.5.0",
+  version: "2.7.2",
   isLoaded: true,
   domains: {
     "_": {
-        version: "2.5.0",
+        version: "2.7.2",
         isLoaded: true,
         strings: {
           CookieConfig: "MathJax har fundet en cookie med brugerkonfiguration, der indeholder kode til at k\u00F8re. Vil du k\u00F8re det?\n\n(Du b\u00F8r trykke p\u00E5 Annuller, medmindre du oprettede cookien selv.)",
@@ -40,7 +36,8 @@ MathJax.Localization.addTranslation("da",null,{
           Processing: "Bearbejder",
           TypesetMath: "Ops\u00E6tter matematik: %1%%",
           Typesetting: "Ops\u00E6tter",
-          MathJaxNotSupported: "Din browser underst\u00F8tter ikke MathJax"
+          MathJaxNotSupported: "Din browser underst\u00F8tter ikke MathJax",
+          ErrorTips: "Tips til fejls\u00F8gning: brug %%1, inspicer %%2 i browserkonsollen"
         }
     },
     "FontWarnings": {},

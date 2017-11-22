@@ -30,7 +30,6 @@ function initializeReport($course_code)
     $weeksCount = Database::escape_string($weeksCount);
     Database::query("REPLACE INTO $table_semanas_curso (course_code , semanas) VALUES ('$course_code','$weeksCount')");
     if (intval($obj->cant) != $weeksCount) {
-
         if (intval($obj->cant) > $weeksCount) {
             $sql = "DELETE FROM $table_reporte_semanas
                     WHERE  week_id > $weeksCount AND course_code = '$course_code'";

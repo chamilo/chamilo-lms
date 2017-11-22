@@ -100,7 +100,7 @@ if (empty($document_data)) {
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
 
 //Call from
-$call_from_tool = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : null;
+$call_from_tool = api_get_origin();
 $slide_id = isset($_GET['origin_opt']) ? Security::remove_XSS($_GET['origin_opt']) : null;
 $file_name = $doc;
 $group_document = false;
@@ -440,7 +440,7 @@ if ($owner_id == api_get_user_id() ||
     $defaults['commentPath'] = $file;
     $defaults['renameTo'] = $file_name;
     $defaults['comment'] = $document_data['comment'];
-    $defaults['origin'] = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : null;
+    $defaults['origin'] = api_get_origin();
     $defaults['origin_opt'] = isset($_GET['origin_opt']) ? Security::remove_XSS($_GET['origin_opt']) : null;
 
     $form->setDefaults($defaults);

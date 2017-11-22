@@ -14,7 +14,6 @@ api_block_anonymous_users();
 
 $tool_name = get_lang('Ticket');
 
-$libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
 $htmlHeadXtra[] = '<script>
 function load_history_ticket(div_course, ticket_id) {

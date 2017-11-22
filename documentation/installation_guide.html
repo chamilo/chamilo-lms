@@ -78,7 +78,7 @@ Chamilo is mainly a LMS running (the so called <span style="font-weight: bold;">
 <ul>
 <li><span style="font-weight: bold;">Apache 2.2+</span></li>
 <li><span style="font-weight: bold;">MySQL 5.1+ or MariaDB 5+</span></li>
-<li><span style="font-weight: bold;">PHP 5.5+ (5.6 recommended for greater efficiency) (support for PHP7 seems OK but not evaluated on high load setups just yet)</span></li>
+<li><span style="font-weight: bold;">PHP 5.5+ (7.1 recommended for greater efficiency)</span></li>
 </ul>
 <br />
 All these pieces of software are free software and freely available. <br /><br />
@@ -112,9 +112,14 @@ only a specific database. Please refer to the MySQL or MariaDB documentation in 
         <li>Enable the "rewrite" module in Apache (on the command line, run "<i>sudo a2enmod rewrite</i>")</li>
         <li>Configure the Apache's VirtualHost for your Chamilo to include the following block, which will allow .htaccess files within Chamilo to be interpreted</li>
     </ul>
-    For Apache <=2.2:
+    For Apache <=2.2 (where /var/www/chamilo should be replaced by the path to your Chamilo install):
     <pre>
     &lt;Directory /&gt;
+        AllowOverride All
+        Order allow,deny
+        allow from all
+    &lt;/Directory&gt;
+    &lt;Directory /var/www/chamilo/&gt;
         AllowOverride All
         Order allow,deny
         allow from all
@@ -123,6 +128,10 @@ only a specific database. Please refer to the MySQL or MariaDB documentation in 
     and for Apache >=2.4:
     <pre>
     &lt;Directory /&gt;
+        AllowOverride All
+        Require all granted
+    &lt;/Directory&gt;
+    &lt;Directory /var/www/chamilo/&gt;
         AllowOverride All
         Require all granted
     &lt;/Directory&gt;

@@ -17,56 +17,63 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
- * @param   string  Current dir
  * @param   integer Whether to show tool options
  * @param   integer Whether to show upload form option
+ * @param bool $isTutor
  * @return  void
  */
-function display_action_links($id, $cur_dir_path, $action)
+function displayWorkActionLinks($id, $action, $isTutor)
 {
     $id = $my_back_id = intval($id);
     if ($action == 'list') {
         $my_back_id = 0;
     }
 
-    $display_output = '';
+    $output = '';
     $origin = api_get_origin();
 
     if (!empty($id)) {
-        $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_back_id.'">'.
-            Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).'</a>';
+        $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_back_id.'">'.
+            Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).
+            '</a>';
+    }
+
+
+    if (($isTutor || api_is_allowed_to_edit(null, true)) &&
+        $origin != 'learnpath'
+    ) {
+        // Create dir
+        if (empty($id)) {
+            $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=create_dir">';
+            $output .= Display::return_icon(
+                    'new_work.png',
+                    get_lang('CreateAssignment'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ).
+                '</a>';
+        }
     }
 
     if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
-        // Create dir
-        if (empty($id)) {
-            $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=create_dir">';
-            $display_output .= Display::return_icon(
-                'new_work.png',
-                get_lang('CreateAssignment'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).
-            '</a>';
-        }
         if (empty($id)) {
             // Options
-            $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=settings">';
-            $display_output .= Display::return_icon(
+            $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=settings">';
+            $output .= Display::return_icon(
                 'settings.png',
                 get_lang('EditToolOptions'),
                 '',
                 ICON_SIZE_MEDIUM
             ).'</a>';
         }
-        $display_output .= '<a id="open-view-list" href="#">'.
-        Display::return_icon(
-            'listwork.png',
-            get_lang('ViewStudents'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).
-        '</a>';
+        $output .= '<a id="open-view-list" href="#">'.
+            Display::return_icon(
+                'listwork.png',
+                get_lang('ViewStudents'),
+                '',
+                ICON_SIZE_MEDIUM
+            ).
+            '</a>';
 
     }
 
@@ -82,9 +89,9 @@ function display_action_links($id, $cur_dir_path, $action)
         }
     }
 
-    if ($display_output != '') {
+    if ($output != '') {
         echo '<div class="actions">';
-        echo $display_output;
+        echo $output;
         echo '</div>';
     }
 }
@@ -133,7 +140,7 @@ function settingsForm($defaults)
  *
  * @return array
  */
-function get_work_data_by_path($path, $courseId = null)
+function get_work_data_by_path($path, $courseId = 0)
 {
     $path = Database::escape_string($path);
     if (empty($courseId)) {
@@ -160,7 +167,7 @@ function get_work_data_by_path($path, $courseId = null)
  * @param int $sessionId
  * @return array
  */
-function get_work_data_by_id($id, $courseId = null, $sessionId = null)
+function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
 {
     $id = intval($id);
 
@@ -1338,9 +1345,7 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
     }
 
     $extra_conditions .= " AND parent_id  = ".$work_id."  ";
-
     $where_condition = null;
-
     if (!empty($notMeUserId)) {
         $where_condition .= " AND u.user_id <> ".intval($notMeUserId);
     }
@@ -1817,7 +1822,6 @@ function get_work_user_list_from_documents(
 
     $currentUserId = api_get_user_id();
     $work_data = get_work_data_by_id($workId);
-
     $qualificationExists = false;
 
     if (!empty($work_data['qualification']) && intval($work_data['qualification']) > 0) {
@@ -2380,7 +2384,7 @@ function send_reminder_users_without_publication($task_data)
     foreach ($list_users as $user) {
         $name_user = api_get_person_name($user[1], $user[0], null, PERSON_NAME_EMAIL_ADDRESS);
         $dear_line = get_lang('Dear')." ".api_get_person_name($user[1], $user[0]).", \n\n";
-        $body      = $dear_line.$content;
+        $body = $dear_line.$content;
         MessageManager::send_message($user[3], $subject, $body);
         $mails_sent_to[] = $name_user;
     }
@@ -2388,18 +2392,18 @@ function send_reminder_users_without_publication($task_data)
 }
 
 /**
- * @param int $courseId The course ID
  * @param int $workId The work ID
+ * @param int $courseId The course ID
  * @param int $sessionId Optional. The session ID
  */
-function sendEmailToDrhOnHomeworkCreation($courseId, $workId, $sessionId = 0)
+function sendEmailToDrhOnHomeworkCreation($workId, $courseId, $sessionId = 0)
 {
     $courseInfo = api_get_course_info_by_id($courseId);
     $assignment = get_work_assignment_by_id($workId, $courseId);
     $work = get_work_data_by_id($workId, $courseId, $sessionId);
     $workInfo = array_merge($assignment, $work);
 
-    if (empty($session_id)) {
+    if (empty($sessionId)) {
         $students = CourseManager::get_student_list_from_course_code($courseInfo['code']);
     } else {
         $students = CourseManager::get_student_list_from_course_code($courseInfo['code'], true, $sessionId);
@@ -2408,14 +2412,17 @@ function sendEmailToDrhOnHomeworkCreation($courseId, $workId, $sessionId = 0)
     $bodyView = new Template(null, false, false, false, false, false);
 
     foreach ($students as $student) {
-        $student['complete_name'] = api_get_person_name($student["firstname"], $student["lastname"]);
-        $hrms = UserManager::getDrhListFromUser($student['id']);
+        $studentInfo = api_get_user_info($student['user_id']);
+        if (empty($studentInfo)) {
+            continue;
+        }
 
+        $hrms = UserManager::getDrhListFromUser($student['id']);
         foreach ($hrms as $hrm) {
             $hrmName = api_get_person_name($hrm['firstname'], $hrm['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
 
             $bodyView->assign('hrm_name', $hrmName);
-            $bodyView->assign('student', $student);
+            $bodyView->assign('student', $studentInfo);
             $bodyView->assign('course', $courseInfo);
             $bodyView->assign('course_link', api_get_course_url($courseInfo['code'], $sessionId));
             $bodyView->assign('work', $workInfo);
@@ -2438,20 +2445,19 @@ function sendEmailToDrhOnHomeworkCreation($courseId, $workId, $sessionId = 0)
 /**
  * Sends an email to the students of a course when a homework is created
  *
- * @param int $courseId course_id
- * @param int $sessionId session_id
- * @param int $workId work_id
- *
+ * @param int $workId
+ * @param int $courseId
+ * @param int $sessionId
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  * @author Julio Montoya <gugli100@gmail.com> Adding session support - 2011
  */
-function sendEmailToStudentsOnHomeworkCreation($courseId, $sessionId = 0, $workId)
+function sendEmailToStudentsOnHomeworkCreation($workId, $courseId, $sessionId = 0)
 {
     $courseInfo = api_get_course_info_by_id($courseId);
     $courseCode = $courseInfo['code'];
     // Get the students of the course
-    if (empty($session_id)) {
+    if (empty($sessionId)) {
         $students = CourseManager::get_student_list_from_course_code($courseCode);
     } else {
         $students = CourseManager::get_student_list_from_course_code($courseCode, true, $sessionId);
@@ -2460,43 +2466,30 @@ function sendEmailToStudentsOnHomeworkCreation($courseId, $sessionId = 0, $workI
     $currentUser = api_get_user_info(api_get_user_id());
     if (!empty($students)) {
         foreach ($students as $student) {
-            $user_info = api_get_user_info($student["user_id"]);
-            if (!empty($user_info["mail"])) {
-                $name_user = api_get_person_name(
-                    $user_info["firstname"],
-                    $user_info["lastname"],
-                    null,
-                    PERSON_NAME_EMAIL_ADDRESS
-                );
-                $link = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId;
-                $emailbody = get_lang('Dear')." ".$name_user.",\n\n";
+            $user_info = api_get_user_info($student['user_id']);
+            if (!empty($user_info)) {
+                $link = api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$workId;
+                $emailbody = get_lang('Dear')." ".$user_info['complete_name'].",\n\n";
                 $emailbody .= get_lang('HomeworkHasBeenCreatedForTheCourse')." ".$courseCode.". "."\n\n".
                     '<a href="'.$link.'">'.get_lang('PleaseCheckHomeworkPage').'</a>';
-                $emailbody .= "\n\n".api_get_person_name($currentUser["firstname"], $currentUser["lastname"]);
+                $emailbody .= "\n\n".$currentUser['complete_name'];
 
                 $additionalParameters = array(
                     'smsType' => SmsPlugin::ASSIGNMENT_BEEN_CREATED_COURSE,
-                    'userId' => $student["user_id"],
+                    'userId' => $student['user_id'],
                     'courseTitle' => $courseCode,
                     'link' => $link
                 );
 
-                api_mail_html(
-                    $name_user,
-                    $user_info["mail"],
+                MessageManager::send_message_simple(
+                    $student['user_id'],
                     $emailsubject,
                     $emailbody,
-                    api_get_person_name(
-                        $currentUser["firstname"],
-                        $currentUser["lastname"],
-                        null,
-                        PERSON_NAME_EMAIL_ADDRESS
-                    ),
-                    $currentUser["mail"],
                     null,
-                    null,
-                    null,
-                    $additionalParameters
+                    false,
+                    false,
+                    $additionalParameters,
+                    false
                 );
             }
         }
@@ -2533,7 +2526,7 @@ function is_work_exist_by_url($url)
  * @param int $sessionId
  * @return bool
  */
-function user_is_author($itemId, $userId = null, $courseId = null, $sessionId = null)
+function user_is_author($itemId, $userId = null, $courseId = 0, $sessionId = 0)
 {
     if (empty($itemId)) {
         return false;
@@ -2549,7 +2542,6 @@ function user_is_author($itemId, $userId = null, $courseId = null, $sessionId = 
     if ($is_allowed_to_edit) {
         $isAuthor = true;
     } else {
-
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
@@ -2583,7 +2575,7 @@ function user_is_author($itemId, $userId = null, $courseId = null, $sessionId = 
  * @author cvargas
  * @author Julio Montoya <gugli100@gmail.com> Fixing query
  */
-function get_list_users_without_publication($task_id, $studentId = null)
+function get_list_users_without_publication($task_id, $studentId = 0)
 {
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -3444,6 +3436,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
         Display::addFlash(
             Display::return_message(get_lang('CommentAdded'))
         );
+
         $sql = "UPDATE $commentTable SET id = iid WHERE iid = $commentId";
         Database::query($sql);
     }
@@ -3466,12 +3459,17 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
         } else {
             $teachers = SessionManager::getCoachesByCourseSession(
                 $sessionId,
-                $courseInfo['code']
+                $courseInfo['real_id']
             );
 
             if (!empty($teachers)) {
                 $userIdListToSend = array_values($teachers);
             }
+        }
+
+        $sendNotification = api_get_course_setting('email_to_teachers_on_new_work_feedback', api_get_course_id());
+        if ($sendNotification != 1) {
+            $userIdListToSend = [];
         }
     }
 
@@ -3510,6 +3508,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
 
 /**
  * @param array $work
+ * @param array $workParent
  *
  * @return string
  */
@@ -3547,8 +3546,6 @@ function getWorkCommentForm($work, $workParent)
                     $work['qualification']
                 );
             }
-
-
             $form->addFile('file', get_lang('Correction'));
             $form->setDefaults(['qualification' => $work['qualification']]);
         }
@@ -3573,7 +3570,7 @@ function getWorkCommentForm($work, $workParent)
 
 /**
  * @param array $homework result of get_work_assignment_by_id()
- * @return string
+ * @return array
  */
 function getWorkDateValidationStatus($homework)
 {
@@ -3643,7 +3640,12 @@ function setWorkUploadForm($form, $uploadFormType = 0)
     switch ($uploadFormType) {
         case 0:
             // File and text.
-            $form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
+            $form->addElement(
+                'file',
+                'file',
+                get_lang('UploadADocument'),
+                'size="40" onchange="updateDocumentTitle(this.value)"'
+            );
             $form->addProgress();
             $form->addHtmlEditor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
             break;
@@ -3654,7 +3656,12 @@ function setWorkUploadForm($form, $uploadFormType = 0)
             break;
         case 2:
             // Only file.
-            $form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
+            $form->addElement(
+                'file',
+                'file',
+                get_lang('UploadADocument'),
+                'size="40" onchange="updateDocumentTitle(this.value)"'
+            );
             $form->addProgress();
             $form->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
             break;
@@ -3865,9 +3872,9 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
 /**
  * Check if the current uploaded work filename already exists in the current assement
  *
- * @param $filename
- * @param $workId
- * @return mixed
+ * @param string $filename
+ * @param int $workId
+ * @return array
  */
 function checkExistingWorkFileName($filename, $workId)
 {
@@ -4095,7 +4102,7 @@ function processWorkForm(
  * @param int $user_id
  * @param array $courseInfo
  * @param int $groupId
- * @param int $session_id
+ * @param int $sessionId
  * @return bool|int
  * @note $params can have the following elements, but should at least have the 2 first ones: (
  *       'new_dir' => 'some-name',
@@ -4105,7 +4112,7 @@ function processWorkForm(
  *       'allow_text_assignment' => 0/1/2,
  * @todo Rename createAssignment or createWork, or something like that
  */
-function addDir($formValues, $user_id, $courseInfo, $groupId, $session_id)
+function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
 {
     $em = Database::getManager();
 
@@ -4118,7 +4125,8 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $session_id)
         $groupInfo = GroupManager::get_group_properties($groupId);
         $groupIid = $groupInfo['iid'];
     }
-    $session = $em->find('ChamiloCoreBundle:Session', $session_id);
+    $sessionId = (int) $sessionId;
+    $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
 
     $base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
     $course_id = $courseInfo['real_id'];
@@ -4207,16 +4215,16 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $session_id)
     switch ($sendEmailAlert) {
         case 1:
             sendEmailToStudentsOnHomeworkCreation(
+                $workTable->getIid(),
                 $course_id,
-                $session ? $session->getId() : 0,
-                $workTable->getIid()
+                $sessionId
             );
             //no break
         case 2:
             sendEmailToDrhOnHomeworkCreation(
-                $course_id,
                 $workTable->getIid(),
-                $session ? $session->getId() : 0
+                $course_id,
+                $sessionId
             );
             break;
     }
@@ -4360,9 +4368,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
     $qualification = isset($params['qualification']) && !empty($params['qualification']) ? 1 : 0;
     $expiryDate = isset($params['enableExpiryDate']) && (int) $params['enableExpiryDate'] == 1 ? api_get_utc_datetime($params['expires_on']) : '';
     $endDate = isset($params['enableEndDate']) && (int) $params['enableEndDate'] == 1 ? api_get_utc_datetime($params['ends_on']) : '';
-
     $data = get_work_assignment_by_id($workId, $course_id);
-
     if (!empty($expiryDate)) {
         $expiryDateCondition = "expires_on = '".Database::escape_string($expiryDate)."', ";
     } else {
@@ -4506,14 +4512,14 @@ function deleteWorkItem($item_id, $courseInfo)
         )
     ) {
         // We found the current user is the author
-        $sql = "SELECT url, contains_file, user_id, session_id, parent_id FROM $work_table
+        $sql = "SELECT url, contains_file, user_id, session_id, parent_id 
+                FROM $work_table
                 WHERE c_id = $course_id AND id = $item_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $count = Database::num_rows($result);
 
         if ($count > 0) {
-
             // If the "considered_working_time" option is enabled, check
             // whether some time should be removed from track_e_course_access
             $consideredWorkingTime = api_get_configuration_value('considered_working_time');
@@ -4623,7 +4629,7 @@ function deleteWorkItem($item_id, $courseInfo)
  * @param integer $workId
  * @return FormValidator
  */
-function getFormWork($form, $defaults = array(), $workId = 0)
+function getFormWork($form, $defaults = [], $workId = 0)
 {
     $sessionId = api_get_session_id();
     if (!empty($defaults)) {
@@ -4716,8 +4722,8 @@ function getFormWork($form, $defaults = array(), $workId = 0)
     $form->addElement('select', 'allow_text_assignment', get_lang('DocumentType'), getUploadDocumentType());
 
     // Extra fields
-    $extra_field = new ExtraField('work');
-    $extra = $extra_field->addElements($form, $workId);
+    $extraField = new ExtraField('work');
+    $extra = $extraField->addElements($form, $workId);
 
     $htmlHeadXtra[] = '
         <script>
@@ -4750,6 +4756,7 @@ function getUploadDocumentType()
  * @param array $courseInfo
  * @param bool $showScore
  * @param bool $studentDeleteOwnPublication
+ * @return bool
  */
 function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
 {
@@ -4799,6 +4806,7 @@ function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
         ];
         Database::insert($table_course_setting, $params);
     }
+    return true;
 }
 
 /**
@@ -5231,8 +5239,8 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
 
                 if (Security::check_abs_path(
                     $full_file_name,
-                    api_get_path(SYS_COURSE_PATH).api_get_course_path().'/')
-                ) {
+                    api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'
+                )) {
                     Event::event_download($title);
 
                     return array(
@@ -5320,7 +5328,7 @@ function exportAllStudentWorkFromPublication(
 
     $courseCode = $courseInfo['code'];
     $header = get_lang('Course').': '.$courseInfo['title'];
-    $teachers = CourseManager::get_teacher_list_from_course_code_to_string(
+    $teachers = CourseManager::getTeacherListFromCourseCodeToString(
         $courseCode
     );
 
@@ -5612,4 +5620,24 @@ function deleteCorrection($courseInfo, $work)
             }
         }
     }
+}
+
+/**
+ * @param int $workId
+ * @return string
+ */
+function workGetExtraFieldData($workId)
+{
+    $sessionField = new ExtraField('work');
+    $extraFieldData = $sessionField->getDataAndFormattedValues($workId);
+    $result = '';
+    if (!empty($extraFieldData)) {
+        $result .= '<div class="well">';
+        foreach ($extraFieldData as $data) {
+            $result .= $data['text'].': <b>'.$data['value'].'</b>';
+        }
+        $result .= '</div>';
+    }
+
+    return $result;
 }

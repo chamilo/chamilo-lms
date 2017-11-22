@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Class Auth
@@ -56,7 +58,8 @@ class Auth
             $without_special_courses = ' AND course.id NOT IN ('.implode(',', $special_course_list).')';
         }
 
-        // Secondly we select the courses that are in a category (user_course_cat<>0) and sort these according to the sort of the category
+        // Secondly we select the courses that are in a category (user_course_cat<>0) and
+        // sort these according to the sort of the category
         $user_id = intval($user_id);
         $sql = "SELECT
                     course.code k,
@@ -601,8 +604,7 @@ class Auth
         $user_id = api_get_user_id();
         $all_course_information = CourseManager::get_course_information($course_code);
 
-        if (
-            $all_course_information['registration_code'] == '' ||
+        if ($all_course_information['registration_code'] == '' ||
             (
                 isset($_POST['course_registration_code']) &&
                 $_POST['course_registration_code'] == $all_course_information['registration_code']
@@ -676,7 +678,7 @@ class Auth
         $qb->innerJoin(
             'ChamiloCoreBundle:AccessUrlRelSession',
             'ars',
-            \Doctrine\ORM\Query\Expr\Join::WITH,
+            Join::WITH,
             's = ars.sessionId'
         );
 
@@ -760,25 +762,25 @@ SQL;
             ->innerJoin(
                 'ChamiloCoreBundle:SessionRelCourse',
                 'src',
-                \Doctrine\ORM\Query\Expr\Join::WITH,
+                Join::WITH,
                 's.id = src.session'
             )
             ->innerJoin(
                 'ChamiloCoreBundle:ExtraFieldRelTag',
                 'frt',
-                \Doctrine\ORM\Query\Expr\Join::WITH,
+                Join::WITH,
                 'src.course = frt.itemId'
             )
             ->innerJoin(
                 'ChamiloCoreBundle:Tag',
                 't',
-                \Doctrine\ORM\Query\Expr\Join::WITH,
+                Join::WITH,
                 'frt.tagId = t.id'
             )
             ->innerJoin(
                 'ChamiloCoreBundle:ExtraField',
                 'f',
-                \Doctrine\ORM\Query\Expr\Join::WITH,
+                Join::WITH,
                 'frt.fieldId = f.id'
             )
             ->where(
@@ -814,9 +816,9 @@ SQL;
     {
         $sessionsToBrowse = [];
 
-        $criteria = Doctrine\Common\Collections\Criteria::create()
+        $criteria = Criteria::create()
             ->where(
-                Doctrine\Common\Collections\Criteria::expr()->contains('name', $queryTerm)
+                Criteria::expr()->contains('name', $queryTerm)
             )
             ->setFirstResult($limit['start'])
             ->setMaxResults($limit['length']);

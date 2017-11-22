@@ -202,15 +202,22 @@ class MoodleImport
 
                                 // Ok, we got the Quiz and create it, now its time to add the Questions
                                 foreach ($moduleValues['question_instances'] as $index => $question) {
-                                    $questionsValues = $this->readMainQuestionsXml($questionsXml, $question['questionid']);
+                                    $questionsValues = $this->readMainQuestionsXml(
+                                        $questionsXml,
+                                        $question['questionid']
+                                    );
                                     $moduleValues['question_instances'][$index] = $questionsValues;
                                     // Set Question Type from Moodle XML element <qtype>
                                     $qType = $moduleValues['question_instances'][$index]['qtype'];
                                     // Add the matched chamilo question type to the array
                                     $moduleValues['question_instances'][$index]['chamilo_qtype'] = $this->matchMoodleChamiloQuestionTypes($qType);
-                                    $questionInstance = Question::getInstance($moduleValues['question_instances'][$index]['chamilo_qtype']);
+                                    $questionInstance = Question::getInstance(
+                                        $moduleValues['question_instances'][$index]['chamilo_qtype']
+                                    );
                                     if ($questionInstance) {
-                                        $questionInstance->updateTitle($moduleValues['question_instances'][$index]['name']);
+                                        $questionInstance->updateTitle(
+                                            $moduleValues['question_instances'][$index]['name']
+                                        );
                                         $questionText = $moduleValues['question_instances'][$index]['questiontext'];
 
                                         // Replace the path from @@PLUGINFILE@@ to a correct chamilo path
@@ -466,7 +473,9 @@ class MoodleImport
                         if (!$isThisItemThatIWant && $item->nodeName == 'contenthash') {
                             $currentItem['contenthash'] = $item->nodeValue;
                         }
-                        if ($item->nodeName == 'contextid' && intval($item->nodeValue) == intval($contextId) && !$isThisItemThatIWant) {
+                        if ($item->nodeName == 'contextid' &&
+                            intval($item->nodeValue) == intval($contextId) && !$isThisItemThatIWant
+                        ) {
                             $isThisItemThatIWant = true;
                             continue;
                         }
@@ -479,11 +488,15 @@ class MoodleImport
                             $currentItem['filesize'] = $item->nodeValue;
                         }
 
-                        if ($isThisItemThatIWant && $item->nodeName == 'mimetype' && $item->nodeValue == 'document/unknown') {
+                        if ($isThisItemThatIWant && $item->nodeName == 'mimetype' &&
+                            $item->nodeValue == 'document/unknown'
+                        ) {
                             break;
                         }
 
-                        if ($isThisItemThatIWant && $item->nodeName == 'mimetype' && $item->nodeValue !== 'document/unknown') {
+                        if ($isThisItemThatIWant && $item->nodeName == 'mimetype' &&
+                            $item->nodeValue !== 'document/unknown'
+                        ) {
                             $currentItem['mimetype'] = $item->nodeValue;
                             break 2;
                         }

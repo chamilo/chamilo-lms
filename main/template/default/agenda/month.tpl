@@ -393,9 +393,24 @@ $(document).ready(function() {
 		        }).removeData('qtip'); // this is an special hack to add multiple qtip in the same target
 		        */
             }
-            if (event.comment) {
+
+            var onHoverInfo = '';
+
+            {% if on_hover_info.description %}
+                if (event.description) {
+                    onHoverInfo = event.description;
+                }
+            {% endif %}
+
+            {% if on_hover_info.comment %}
+                if (event.comment) {
+                    onHoverInfo = onHoverInfo + event.comment;
+                }
+            {% endif %}
+
+            if (onHoverInfo) {
                 element.qtip({
-                    content: event.comment,
+                    content: onHoverInfo,
                     position: {
                         at: 'top center',
                         my: 'bottom center'

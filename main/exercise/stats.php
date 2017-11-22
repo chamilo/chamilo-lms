@@ -155,7 +155,7 @@ if (!empty($question_list)) {
                         $data[$id]['answer'] = $answer_item;
                         $data[$id]['correct'] = '-';
 
-                        $count = ExerciseLib::getNumberStudentsFillBlanksAnwserCount($question_id, $exercise_id);
+                        $count = ExerciseLib::getNumberStudentsFillBlanksAnswerCount($question_id, $exercise_id);
                         $count = isset($count[$counter]) ? $count[$counter] : 0;
 
                         $percentage = 0;

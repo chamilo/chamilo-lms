@@ -1,11 +1,8 @@
-/* -*- Mode: Javascript; indent-tabs-mode:nil; js-indent-level: 2 -*- */
-/* vim: set ts=2 et sw=2 tw=80: */
-
 /*************************************************************
  *
  *  MathJax/localization/oc/MathMenu.js
  *
- *  Copyright (c) 2009-2015 The MathJax Consortium
+ *  Copyright (c) 2009-2016 The MathJax Consortium
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,13 +17,12 @@
  *  limitations under the License.
  *
  */
-
 MathJax.Localization.addTranslation("oc","MathMenu",{
-        version: "2.5.0",
+        version: "2.7.2",
         isLoaded: true,
         strings: {
           Show: "Afichar jos la forma",
-          MathMLcode: "C\u00F2de MathML",
+          MathMLcode: "C\u00F2di MathML",
           OriginalMathML: "MathML d\u2019origina",
           TeXCommands: "Comandas TeX",
           AsciiMathInput: "entrada AsciiMathML",
@@ -84,7 +80,9 @@ MathJax.Localization.addTranslation("oc","MathMenu",{
           wofforotffonts: "poli\u00E7as woff o otf",
           eotffonts: "poli\u00E7as eot",
           svgfonts: "poli\u00E7as svg",
-          Close: "Tampar"
+          Close: "Tampar",
+          Scale: "Metre totes los maths a l\u2019escala\u2026",
+          CloseAboutDialog: "Tampar la b\u00F3stia de dial\u00F2g A prepaus de MathJax"
         }
 });
 

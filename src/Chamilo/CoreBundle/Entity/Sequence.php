@@ -148,6 +148,4 @@ class Sequence
     {
         return $this->name;
     }
-
-
 }

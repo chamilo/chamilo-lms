@@ -57,20 +57,15 @@ $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-// General parameters passed via POST/GET
-if ($debug) {
-    error_log('Entered exercise_result.php: '.print_r($_POST, 1));
-}
-
 if (empty($formSent)) {
     $formSent = isset($_REQUEST['formSent']) ? $_REQUEST['formSent'] : null;
 }
 if (empty($exerciseResult)) {
     $exerciseResult = Session::read('exerciseResult');
 }
-if (empty($questionId)) {
-    $questionId = isset($_REQUEST['questionId']) ? $_REQUEST['questionId'] : null;
-}
+
+$questionId = isset($_REQUEST['questionId']) ? $_REQUEST['questionId'] : null;
+
 if (empty($choice)) {
     $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
 }
@@ -86,12 +81,9 @@ if (empty($questionList)) {
 if (empty($objExercise)) {
     $objExercise = Session::read('objExercise');
 }
-if (empty($exeId)) {
-    $exeId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
-}
-if (empty($action)) {
-    $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
-}
+
+$exeId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
@@ -169,18 +161,25 @@ if ($allowRecordAudio && $allowTeacherCommentAudio) {
     $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 }
 
-$scoreJsCode = ExerciseLib::getJsCode();
-
-if ($origin != 'learnpath') {
-    Display::display_header('');
-} else {
-    $htmlHeadXtra[] = "
+if ($action != 'export') {
+    $scoreJsCode = ExerciseLib::getJsCode();
+    if ($origin != 'learnpath') {
+        Display::display_header('');
+    } else {
+        $htmlHeadXtra[] = "
     <style>
     body { background: none;}
     </style>
     ";
-    Display::display_reduced_header();
-}
+        Display::display_reduced_header();
+    }
+
+    echo Display::toolbarAction('toolbar', [
+        Display::url(
+            Display::return_icon('pdf.png', get_lang('Export')),
+            api_get_self().'?'.api_get_cidreq().'&id='.$id.'&action=export&'
+        )
+    ]);
 ?>
     <script>
         <?php echo $scoreJsCode; ?>
@@ -224,6 +223,8 @@ if ($origin != 'learnpath') {
         }
     </script>
 <?php
+}
+
 $show_results = true;
 $show_only_total_score = false;
 $showTotalScoreAndUserChoicesInLastAttempt = true;
@@ -285,9 +286,13 @@ if ($is_allowedToEdit && in_array($action, ['qualify', 'edit'])) {
     $show_results = true;
 }
 
+if ($action == 'export') {
+    ob_start();
+}
+
+$user_info = api_get_user_info($student_id);
 if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt) {
-    $user_info = api_get_user_info($student_id);
-    //Shows exercise header
+    // Shows exercise header
     echo $objExercise->show_exercise_result_header(
         $user_info,
         api_convert_and_format_date($exercise_date),
@@ -361,13 +366,15 @@ foreach ($questionList as $questionId) {
 }
 
 $counter = 1;
-$exercise_content = null;
+$exercise_content = '';
 $category_list = array();
 $useAdvancedEditor = true;
 
 if (!empty($maxEditors) && count($questionList) > $maxEditors) {
     $useAdvancedEditor = false;
 }
+
+$objExercise->export = $action === 'export';
 
 $countPendingQuestions = 0;
 foreach ($questionList as $questionId) {
@@ -702,7 +709,7 @@ foreach ($questionList as $questionId) {
         }
 
         $marksname = '';
-        if ($isFeedbackAllowed) {
+        if ($isFeedbackAllowed && $action != 'export') {
             $name = "fckdiv".$questionId;
             $marksname = "marksName".$questionId;
             if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION))) {
@@ -763,6 +770,7 @@ foreach ($questionList as $questionId) {
             $feedback_form->setDefaults($default);
             $feedback_form->display();
 
+
             echo '</div>';
 
             if ($allowRecordAudio && $allowTeacherCommentAudio) {
@@ -783,7 +791,7 @@ foreach ($questionList as $questionId) {
             }
         }
 
-        if ($is_allowedToEdit && $isFeedbackAllowed) {
+        if ($is_allowedToEdit && $isFeedbackAllowed && $action != 'export') {
             if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION))) {
                 $marksname = "marksName".$questionId;
                 $arrmarks[] = $questionId;
@@ -913,7 +921,8 @@ foreach ($questionList as $questionId) {
     $question_content = '<div class="question_row">';
 
     if ($show_results) {
-        //Shows question title an description
+        $objQuestionTmp->export = $action == 'export';
+        // Shows question title an description
         $question_content .= $objQuestionTmp->return_header(
             $objExercise,
             $counter,
@@ -926,7 +935,7 @@ foreach ($questionList as $questionId) {
     $exercise_content .= Display::panel($question_content);
 } // end of large foreach on questions
 
-$total_score_text = null;
+$total_score_text = '';
 
 //Total score
 if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
@@ -962,6 +971,30 @@ if (!empty($category_list) && ($show_results || $show_only_total_score || $showT
 echo $total_score_text;
 echo $exercise_content;
 echo $total_score_text;
+
+if ($action == 'export') {
+    $content = ob_get_clean();
+    // needed in order to mpdf to work
+    ob_clean();
+
+    $params = array(
+        'filename' => api_replace_dangerous_char(
+            $objExercise->name.' '.
+            $user_info['complete_name'].' '.
+            api_get_local_time()
+        ),
+        'course_code' => api_get_course_id(),
+        'session_info' => api_get_session_info(api_get_session_id()),
+        'course_info' => '',
+        'pdf_date' => '',
+        'show_real_course_teachers' => false,
+        'show_teacher_as_myself' => false,
+        'orientation' => 'P'
+    );
+    $pdf = new PDF('A4', $params['orientation'], $params);
+    $pdf->html_to_pdf_with_template($content, false, false, true);
+    exit;
+}
 
 if ($isFeedbackAllowed) {
     if (is_array($arrid) && is_array($arrmarks)) {

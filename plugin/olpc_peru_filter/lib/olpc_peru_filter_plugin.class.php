@@ -19,12 +19,14 @@ class OLPC_Peru_FilterPlugin extends Plugin
     public $course_settings_callback = true;
     public $error = '';
 
-    static function create() {
+    static function create()
+    {
         static $result = null;
         return $result ? $result : $result = new self();
     }
 
-    protected function __construct() {
+    protected function __construct()
+    {
         parent::__construct('0.1', 'Yannick Warnier, Aliosh Neira', array('tool_enable' => 'boolean'));
 
         $this->course_settings = array();
@@ -42,37 +44,44 @@ class OLPC_Peru_FilterPlugin extends Plugin
         }
     }
 
-    function install() {
+    public function install()
+    {
         //Installing course settings
         $this->install_course_fields_in_all_courses(false);
     }
 
-    function uninstall() {
+    public function uninstall()
+    {
         //Deleting course settings
         $this->uninstall_course_fields_in_all_courses($this->course_settings);
     }
+
     /**
      * Caller for the install_course_fields() function
      * @param int The course's integer ID
      * @param boolean Whether to add a tool link on the course homepage
      * @return void
      */
-    function course_install($course_id, $add_tool_link = true) {
+    public function course_install($course_id, $add_tool_link = true)
+    {
         //force ignoring the tools table insertion for this plugin
         $this->install_course_fields($course_id, false);
     }
 
-    function course_settings_updated($values = array()) {
+    public function course_settings_updated($values = array())
+    {
         if (!is_array($values) or count($values) == 0) {
             return false;
         }
         $this->set_blacklist_options($values['olpc_peru_filter_filter']);
     }
+
     /**
      * Get a list of options (checked and unchecked) for blacklists as coming
      * from the Squid files
      */
-    function get_blacklist_options() {
+    public function get_blacklist_options()
+    {
         $categories = $blacklists = array();
         if (!is_dir($this->blacklists_dir)) {
             $this->error = 'Could not find blacklists dir '.$this->blacklists_dir;
@@ -105,14 +114,20 @@ class OLPC_Peru_FilterPlugin extends Plugin
         }
         return $blacklists;
     }
+
     /**
      * Given an array of blacklist => 0/1, save the new blacklist file to disk
      * @param array Array of blacklists names
      * @return boolean False on error, True on success
      */
-    function set_blacklist_options($values) {
-        if (!is_array($values)) { return false; }
-        if (!is_writeable($this->blacklist_enabled_file)) { return false; }
+    public function set_blacklist_options($values)
+    {
+        if (!is_array($values)) {
+            return false;
+        }
+        if (!is_writeable($this->blacklist_enabled_file)) {
+            return false;
+        }
         $new_blacklist = '';
         foreach ($values as $k => $v) {
             if ($v) {

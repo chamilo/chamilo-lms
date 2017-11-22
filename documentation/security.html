@@ -85,6 +85,54 @@ This will prevent direct access to your settings and make it seem totally the sa
     <p>Don't hesitate to hire an experienced administrator to do that,
         it might be a bit more expensive now, but you'll be happy not to have to loose
         all of your data to a hacker who attacked your site.</p>
+    <p>Only the following directories have required (or optional) write 
+        permissions from the web server:<br />
+        <ul>
+          <li>app/cache/</li>
+          <li>app/courses/</li>
+          <li>app/home/</li>
+          <li>app/logs/</li>
+          <li>app/upload/</li>
+          <li>main/default_course_document/images/</li>
+          <li>main/lang/ (optional, only for sublanguages)</li>
+          <li>web/css/ (optional, only for switching CSS through the web)</li>
+        </ul>
+        <br />
+        Because these directories have "write by the web server" permissions,
+        it is important to prevent the execution of PHP scripts from those
+        directories (because a specially-crafted attack could end up allowing
+        the upload of a PHP script to one of these). To do that, taking into
+        account we authorize overrides through .htaccess, we need to set
+        something that a .htaccess file cannot revert, and we need to set it
+        for each of those directories. This can be done as follows inside
+        your VirtualHost definition in Apache (you'll have to translate it for
+        Nginx configueations), where "/var/www/URL/" is the path of your VirtualHost web root:<br />
+        <pre>
+  <Directory /var/www/URL/app/cache>
+    php_admin_value engine Off
+  </Directory>
+  <Directory /var/www/URL/app/courses>
+    php_admin_value engine Off
+  </Directory>
+  <Directory /var/www/URL/app/home>
+    php_admin_value engine Off
+  </Directory>
+  <Directory /var/www/URL/app/logs>
+    php_admin_value engine Off
+  </Directory>
+  <Directory /var/www/URL/app/upload>
+    php_admin_value engine Off
+  </Directory>
+  <Directory /var/www/URL/main/default_course_document/images>
+    php_admin_value engine Off
+  </Directory>
+  <Directory /var/www/URL/main/lang>
+    php_admin_value engine Off
+  </Directory>
+  <Directory /var/www/URL/web/css>
+    php_admin_value engine Off
+  </Directory>
+        </pre>
 
 
 <hr />

@@ -1695,6 +1695,11 @@ HOTSPOT;
 
         $courseCode = empty($courseCode) ? api_get_course_id() : $courseCode;
         $courseInfo = api_get_course_info($courseCode);
+
+        if (empty($courseInfo)) {
+            return [];
+        }
+
         $course_id = $courseInfo['real_id'];
         $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit(true) || api_is_drh() || api_is_student_boss();
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
@@ -1708,8 +1713,8 @@ HOTSPOT;
         $session_id_and = '';
         $sessionCondition = '';
         if (!$showSessionField) {
-            $session_id_and = " AND te.session_id = '.$sessionId ";
-            $sessionCondition = " AND  ttte.session_id = $sessionId";
+            $session_id_and = " AND te.session_id = $sessionId ";
+            $sessionCondition = " AND ttte.session_id = $sessionId";
         }
         $exercise_id = intval($exercise_id);
         $exercise_where = '';
@@ -1754,9 +1759,9 @@ HOTSPOT;
                         g.id as group_id
                     FROM $TBL_USER u
                     INNER JOIN $TBL_GROUP_REL_USER gru
-                    ON (gru.user_id = u.user_id AND gru.c_id=".$course_id.")
+                    ON (gru.user_id = u.user_id AND gru.c_id= $course_id )
                     INNER JOIN $TBL_GROUP g
-                    ON (gru.group_id = g.id AND g.c_id=".$course_id.")
+                    ON (gru.group_id = g.id AND g.c_id= $course_id )
                 )";
             }
 
@@ -1817,9 +1822,9 @@ HOTSPOT;
                     g.id as group_id
                 FROM $TBL_USER u
                 LEFT OUTER JOIN $TBL_GROUP_REL_USER gru
-                ON ( gru.user_id = u.user_id AND gru.c_id=".$course_id." )
+                ON ( gru.user_id = u.user_id AND gru.c_id= $course_id )
                 LEFT OUTER JOIN $TBL_GROUP g
-                ON (gru.group_id = g.id AND g.c_id = ".$course_id.")
+                ON (gru.group_id = g.id AND g.c_id = $course_id )
             )";
             }
 
@@ -1836,7 +1841,7 @@ HOTSPOT;
             }
 
             $sqlFromOption = " , $TBL_GROUP_REL_USER AS gru ";
-            $sqlWhereOption = "  AND gru.c_id = ".$course_id." AND gru.user_id = user.user_id ";
+            $sqlWhereOption = "  AND gru.c_id = $course_id AND gru.user_id = user.user_id ";
             $first_and_last_name = api_is_western_name_order() ? "firstname, lastname" : "lastname, firstname";
 
             if ($get_count) {
@@ -1875,9 +1880,9 @@ HOTSPOT;
                 INNER JOIN $sql_inner_join_tbl_user AS user
                 ON (user.user_id = exe_user_id)
                 WHERE
-                    te.c_id = ".$course_id." $session_id_and AND
-                    ce.active <>-1 AND 
-                    ce.c_id = ".$course_id."
+                    te.c_id = $course_id $session_id_and AND
+                    ce.active <> -1 AND 
+                    ce.c_id = $course_id
                     $exercise_where
                     $extra_where_conditions
                 ";
@@ -1903,7 +1908,7 @@ HOTSPOT;
                     $sqlFromOption
                 WHERE
                     user.user_id=tth.exe_user_id
-                    AND tth.c_id = ".$course_id."
+                    AND tth.c_id = $course_id
                     $hotpotatoe_where
                     $sqlWhereOption
                     AND user.status NOT IN(".api_get_users_status_ignored_in_reports('string').")
@@ -2226,7 +2231,7 @@ HOTSPOT;
                         $actions .= '</div>';
                         $exeId = $results[$i]['exe_id'];
                         $results[$i]['id'] = $exeId;
-
+                        $category_list = [];
                         if ($is_allowedToEdit) {
                             $sessionName = '';
                             if (!empty($results[$i]['session_id'])) {
@@ -2298,6 +2303,7 @@ HOTSPOT;
                                     }
                                 }
                             }
+
                             foreach ($category_list as $categoryId => $result) {
                                 $results[$i]['category_'.$categoryId] = self::show_score($result['score'], $result['total']);
                             }

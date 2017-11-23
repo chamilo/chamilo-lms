@@ -1166,19 +1166,24 @@ class IndexManager
         $gameModeIsActive = api_get_setting('gamification_mode');
         $listCourse = '';
         $specialCourseList = '';
+        $load_history = isset($_GET['history']) && intval($_GET['history']) == 1 ? true : false;
         $viewGridCourses = api_get_configuration_value('view_grid_courses') === 'true';
         $showSimpleSessionInfo = api_get_configuration_value('show_simple_session_info');
 
         $coursesWithoutCategoryTemplate = '/user_portal/classic_courses_without_category.tpl';
         $coursesWithCategoryTemplate = '/user_portal/classic_courses_with_category.tpl';
         $showAllSessions = api_get_configuration_value('show_all_sessions_on_my_course_page') === true;
-
-        if ($loadHistory) {
-            // Load sessions in category in *history*
-            $session_categories = UserManager::get_sessions_by_category($user_id, true);
+        // ofaj
+        if ($showAllSessions) {
+            $session_categories = UserManager::get_sessions_by_category($user_id, false, true, true);
         } else {
-            // Load sessions in category
-            $session_categories = UserManager::get_sessions_by_category($user_id, false);
+            if ($load_history) {
+                // Load sessions in category in *history*
+                $session_categories = UserManager::get_sessions_by_category($user_id, true);
+            } else {
+                // Load sessions in category
+                $session_categories = UserManager::get_sessions_by_category($user_id, false);
+            }
         }
 
         $sessionCount = 0;

@@ -1917,6 +1917,10 @@ HOTSPOT;
                     tth.exe_date DESC";
         }
 
+        if (empty($sql)) {
+            return false;
+        }
+
         if ($get_count) {
             $resx = Database::query($sql);
             $rowx = Database::fetch_row($resx, 'ASSOC');

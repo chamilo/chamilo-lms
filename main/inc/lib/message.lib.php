@@ -379,7 +379,7 @@ class MessageManager
                 $i = 0;
                 foreach ($file_attachments as $file_attach) {
                     if ($file_attach['error'] == 0) {
-                        self::save_message_attachment_file(
+                        self::saveMessageAttachmentFile(
                             $file_attach,
                             isset($file_comments[$i]) ? $file_comments[$i] : null,
                             $inbox_last_id,
@@ -413,7 +413,7 @@ class MessageManager
                     foreach ($file_attachments as $file_attach) {
                         if ($file_attach['error'] == 0) {
                             $comment = isset($file_comments[$o]) ? $file_comments[$o] : '';
-                            self::save_message_attachment_file(
+                            self::saveMessageAttachmentFile(
                                 $file_attach,
                                 $comment,
                                 $outbox_last_id,
@@ -676,7 +676,7 @@ class MessageManager
      * @param  int        sender user id (optional)
      * @param  int        group id (optional)
      */
-    public static function save_message_attachment_file(
+    public static function saveMessageAttachmentFile(
         $file_attach,
         $file_comment,
         $message_id,

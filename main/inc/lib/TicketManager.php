@@ -275,7 +275,7 @@ class TicketManager
      * @param string $subject
      * @param string $content
      * @param string $personalEmail
-     * @param $file_attachments
+     * @param array $fileAttachments
      * @param string $source
      * @param string $priority
      * @param string $status
@@ -292,7 +292,7 @@ class TicketManager
         $subject,
         $content,
         $personalEmail = '',
-        $file_attachments = [],
+        $fileAttachments = [],
         $source = '',
         $priority = '',
         $status = '',
@@ -397,9 +397,9 @@ class TicketManager
                 ));
             }
 
-            if (!empty($file_attachments)) {
+            if (!empty($fileAttachments)) {
                 $attachmentCount = 0;
-                foreach ($file_attachments as $attach) {
+                foreach ($fileAttachments as $attach) {
                     if (!empty($attach['tmp_name'])) {
                         $attachmentCount++;
                     }
@@ -409,7 +409,7 @@ class TicketManager
                         $ticketId,
                         '',
                         '',
-                        $file_attachments,
+                        $fileAttachments,
                         $currentUserId
                     );
                 }
@@ -613,7 +613,7 @@ class TicketManager
      * @param int $ticketId
      * @param string $subject
      * @param string $content
-     * @param array $file_attachments
+     * @param array $fileAttachments
      * @param int $userId
      * @param string $status
      * @param bool $sendConfirmation
@@ -624,7 +624,7 @@ class TicketManager
         $ticketId,
         $subject,
         $content,
-        $file_attachments,
+        $fileAttachments,
         $userId,
         $status = 'NOL',
         $sendConfirmation = false
@@ -670,10 +670,10 @@ class TicketManager
                     WHERE id = $ticketId ";
             Database::query($sql);
 
-            if (is_array($file_attachments)) {
-                foreach ($file_attachments as $file_attach) {
+            if (is_array($fileAttachments)) {
+                foreach ($fileAttachments as $file_attach) {
                     if ($file_attach['error'] == 0) {
-                        self::save_message_attachment_file(
+                        self::saveMessageAttachmentFile(
                             $file_attach,
                             $ticketId,
                             $messageId
@@ -697,7 +697,7 @@ class TicketManager
      * @param $message_id
      * @return array
      */
-    public static function save_message_attachment_file(
+    public static function saveMessageAttachmentFile(
         $file_attach,
         $ticketId,
         $message_id
@@ -717,45 +717,35 @@ class TicketManager
                 'error'
             );
         } else {
-            $new_file_name = uniqid('');
-            $path_attachment = api_get_path(SYS_ARCHIVE_PATH);
-            $path_message_attach = $path_attachment.'plugin_ticket_messageattch/';
-            if (!file_exists($path_message_attach)) {
-                @mkdir($path_message_attach, api_get_permissions_for_new_directories(), true);
-            }
-            $new_path = $path_message_attach.$new_file_name;
-            if (is_uploaded_file($file_attach['tmp_name'])) {
-                @copy($file_attach['tmp_name'], $new_path);
-            }
-            $safe_file_name = Database::escape_string($file_name);
-            $safe_new_file_name = Database::escape_string($new_file_name);
-            $sql = "INSERT INTO $table_support_message_attachments (
-                    filename,
-                    path,
-                    ticket_id,
-                    message_id,
-                    size,
-                    sys_insert_user_id,
-                    sys_insert_datetime,
-                    sys_lastedit_user_id,
-                    sys_lastedit_datetime
-                ) VALUES (
-                    '$safe_file_name',
-                    '$safe_new_file_name',
-                    '$ticketId',
-                    '$message_id',
-                    '".$file_attach['size']."',
-                    '$userId',
-                    '$now',
-                    '$userId',
-                    '$now'
-                )";
-            Database::query($sql);
+            $result = api_upload_file('ticket_attachment', $file_attach, $ticketId);
+            if ($result) {
+                $safe_file_name = Database::escape_string($new_file_name);
+                $safe_new_file_name = Database::escape_string($result['path_to_save']);
+                $sql = "INSERT INTO $table_support_message_attachments (
+                        filename,
+                        path,
+                        ticket_id,
+                        message_id,
+                        size,
+                        sys_insert_user_id,
+                        sys_insert_datetime,
+                        sys_lastedit_user_id,
+                        sys_lastedit_datetime
+                    ) VALUES (
+                        '$safe_file_name',
+                        '$safe_new_file_name',
+                        '$ticketId',
+                        '$message_id',
+                        '".$file_attach['size']."',
+                        '$userId',
+                        '$now',
+                        '$userId',
+                        '$now'
+                    )";
+                Database::query($sql);
 
-            return array(
-                'path' => $path_message_attach.$safe_new_file_name,
-                'filename' => $safe_file_name,
-            );
+                return true;
+            }
         }
     }
 
@@ -1089,6 +1079,23 @@ class TicketManager
     }
 
     /**
+     * @param int $id
+     * @return \Chamilo\TicketBundle\Entity\MessageAttachment
+     */
+    public static function getTicketMessageAttachment($id)
+    {
+        $id = (int) $id;
+        $em = Database::getManager();
+
+        $item = $em->getRepository('ChamiloTicketBundle:MessageAttachment')->find($id);
+        if ($item) {
+            return $item;
+        }
+
+        return false;
+    }
+
+    /**
      * @param int $ticketId
      * @return array
      */
@@ -1181,8 +1188,8 @@ class TicketManager
 
                 $result_attach = Database::query($sql);
                 while ($row2 = Database::fetch_assoc($result_attach)) {
-                    $archiveURL = $archiveURL = $webPath.'ticket/download.php?ticket_id='.$ticketId.'&file=';
-                    $row2['attachment_link'] = $attach_icon.'&nbsp;<a href="'.$archiveURL.$row2['path'].'&title='.$row2['filename'].'">'.$row2['filename'].'</a>&nbsp;('.$row2['size'].')';
+                    $archiveURL = $webPath.'ticket/download.php?ticket_id='.$ticketId.'&id='.$row2['id'];
+                    $row2['attachment_link'] = $attach_icon.'&nbsp;<a href="'.$archiveURL.'">'.$row2['filename'].'</a>&nbsp;('.$row2['size'].')';
                     $message['attachments'][] = $row2;
                 }
                 $ticket['messages'][] = $message;

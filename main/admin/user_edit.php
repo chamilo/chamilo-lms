@@ -314,16 +314,18 @@ $form->addElement('advmultiselect', 'student_boss', get_lang('StudentBoss'), $st
 
 // EXTRA FIELDS
 $extraField = new ExtraField('user');
+//ofaj
 $returnParams = $extraField->addElements(
     $form,
     $user_data['user_id'],
-    [],
-    false,
-    false,
-    [],
-    [],
-    true
+    [], //exclude
+    false, // filter
+    false, // tag as select
+    [], //show only fields
+    [], // order fields
+    [] // extra data
 );
+
 $jquery_ready_content = $returnParams['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function

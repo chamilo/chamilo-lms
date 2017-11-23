@@ -523,9 +523,21 @@ switch ($action) {
         break;
     case 'get_exercise_results_report':
         $exerciseId = $_REQUEST['exercise_id'];
-        $courseId = $_REQUEST['course_id'];
+        $courseId = isset($_REQUEST['course_id']) ? $_REQUEST['course_id'] : 0;
+        if (!empty($courseId)) {
+            $courseInfo = api_get_course_info_by_id($courseId);
+        } else {
+            $courseCode = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : '';
+            if (!empty($courseCode)) {
+                $courseInfo = api_get_course_info($courseCode);
+            }
+        }
+
+        if (empty($courseInfo)) {
+            exit;
+        }
+
         $startDate = Database::escape_string($_REQUEST['start_date']);
-        $courseInfo = api_get_course_info_by_id($courseId);
         $whereCondition .= " AND exe_date > '$startDate' ";
         $count = ExerciseLib::get_count_exam_results(
             $exerciseId,

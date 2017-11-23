@@ -24,12 +24,14 @@ class MoodleImport
 
         if (is_file($file) && is_readable($file)) {
             $package = new PclZip($file);
-            $packageContent = $package->listContent();
             $mainFileKey = 0;
-            foreach ($packageContent as $index => $value) {
-                if ($value['filename'] == 'moodle_backup.xml') {
-                    $mainFileKey = $index;
-                    break;
+            $packageContent = $package->listContent();
+            if (!empty($packageContent)) {
+                foreach ($packageContent as $index => $value) {
+                    if ($value['filename'] == 'moodle_backup.xml') {
+                        $mainFileKey = $index;
+                        break;
+                    }
                 }
             }
 

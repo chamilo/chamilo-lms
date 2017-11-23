@@ -1640,7 +1640,14 @@ blockquote p {
         display: none;
     }
 }
-
+@media (min-width: 644px) and (max-width: 746px) {
+    .partners {
+	text-align: center;
+    }
+    footer #footer_right {
+	text-align: center;
+    }
+}
 /* Landscape phone to portrait tablet */
 @media (min-width: 480px) and (max-width: 641px) {
     .navbar-nav li a {

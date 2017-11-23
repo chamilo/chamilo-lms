@@ -25,7 +25,6 @@ $defaults = [];
 $defaults['start_date'] = isset($_GET['start_date']) ? Security::remove_XSS($_GET['start_date']) : '';
 $defaults['course_id'] = $courseId;
 
-
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = '<script>
 $(document).ready( function() {
@@ -40,8 +39,6 @@ $(document).ready( function() {
 });
 </script>';
 
-Display::display_header($nameTools);
-
 $form = new FormValidator('exercise', 'get');
 $form->addDatePicker('start_date', get_lang('StartDate'));
 if (empty($courseId)) {
@@ -55,36 +52,41 @@ if (empty($courseId)) {
     );
 } else {
     $courseInfo = api_get_course_info_by_id($courseId);
-    $form->addHidden('course_id', $courseId);
-    $form->addLabel(get_lang('Course'), $courseInfo['name']);
-    $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
-        $courseInfo,
-        0,
-        $courseId,
-        true
-    );
+    if (!empty($courseInfo)) {
+        $form->addHidden('course_id', $courseId);
+        $form->addLabel(get_lang('Course'), $courseInfo['name']);
+        $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
+            $courseInfo,
+            0,
+            $courseId,
+            true
+        );
 
-    if (!empty($exerciseList)) {
-        $options = [];
-        foreach ($exerciseList as $exercise) {
-            $options[$exercise['id']] = $exercise['title'];
+        if (!empty($exerciseList)) {
+            $options = [];
+            foreach ($exerciseList as $exercise) {
+                $options[$exercise['id']] = $exercise['title'];
+            }
+            $form->addSelect('exercise_id', get_lang('Exercises'), $options);
+        } else {
+            $form->addLabel(get_lang('Exercises'), Display::return_message(get_lang('NoExercises')));
         }
-        $form->addSelect('exercise_id', get_lang('Exercises'), $options);
     } else {
-        $form->addLabel(get_lang('Exercises'), Display::return_message(get_lang('NoExercises')));
+        Display::addFlash(Display::return_message(get_lang('CourseDoesNotExist'), 'warning'));
     }
 }
 
 $form->setDefaults($defaults);
 $form->addButtonSearch(get_lang('Search'));
 
+Display::display_header($nameTools);
 $form->display();
 
-if ($form->validate()) {
+if ($form->validate() && !empty($courseInfo)) {
     $values = $form->getSubmitValues();
-    $exerciseId = $values['exercise_id'];
+    $exerciseId = isset($values['exercise_id']) ? $values['exercise_id'] : 0;
     $startDate = Security::remove_XSS($values['start_date']);
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results_report&exercise_id='.$exerciseId.'&course_id='.$courseId.'&start_date='.$startDate;
+    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results_report&exercise_id='.$exerciseId.'&start_date='.$startDate.'&cidReq='.$courseInfo['code'];
 
     $categoryList = TestCategory::getListOfCategoriesIDForTest($exerciseId, $courseId);
     $columns = array(
@@ -205,7 +207,6 @@ if ($form->validate()) {
     ];
 
     echo Display::actions($items);
-
     echo Display::grid_html('results');
 }
 

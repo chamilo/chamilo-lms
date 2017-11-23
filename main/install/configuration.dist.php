@@ -583,7 +583,7 @@ $_configuration['score_grade_model'] = [
 // 3 = Session link will make course list foldable
 //$_configuration['courses_list_session_title_link'] = 1;
 // New grid view the list of courses
-//$_configuration['view_grid_courses'] = 'true';
+//$_configuration['view_grid_courses'] = true;
 // Show courses grouped by categories when $_configuration['view_grid_courses'] is enabled
 //$_configuration['view_grid_courses_grouped_categories_in_sessions'] = true;
 // Load course notifications in user_portal.php using ajax

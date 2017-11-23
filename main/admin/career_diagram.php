@@ -55,7 +55,7 @@ $interbreadcrumb[] = array(
     'name' => get_lang('Careers'),
 );
 
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = isset($_GET['action']) ? $_GET['action'] : '';
 $check = Security::check_token('request');
 $token = Security::get_token();
 
@@ -79,19 +79,39 @@ $item = $extraFieldValue->get_values_by_handler_and_field_variable(
     false
 );
 
+// Check urls
+$itemUrls = $extraFieldValue->get_values_by_handler_and_field_variable(
+    $careerId,
+    'career_urls',
+    false,
+    false,
+    false
+);
+
+$urlToString = '';
+if (!empty($itemUrls) && !empty($itemUrls['value'])) {
+    $urls = explode(',', $itemUrls['value']);
+    $urlToString = '&nbsp;&nbsp;';
+    if (!empty($urls)) {
+        foreach ($urls as $urlData) {
+            $urlData = explode('@', $urlData);
+            $urlToString .= Display::url($urlData[0], $urlData[1]).'&nbsp;';
+        }
+    }
+}
+
+$tpl = new Template(get_lang('Diagram'));
 if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
+    $html = Display::page_subheader2($careerInfo['name'].$urlToString);
     $graph = unserialize($item['value']);
-    $tpl = new Template(get_lang('Diagram'));
-    $html = Display::page_subheader2($careerInfo['name']);
     $html .= Career::renderDiagram($careerInfo, $graph);
     $tpl->assign('content', $html);
-    $tpl->display_one_col_template();
 } else {
-    api_not_allowed(
-        true,
+    Display::addFlash(
         Display::return_message(
-            sprintf(get_lang('CareerXDoesntHaveADiagram'), $careerInfo['name']),
-            'warning'
-        )
-    );
+        sprintf(get_lang('CareerXDoesntHaveADiagram'), $careerInfo['name']),
+        'warning'
+    ));
 }
+
+$tpl->display_one_col_template();

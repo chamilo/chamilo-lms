@@ -151,6 +151,7 @@ class Career extends Model
         if (!empty($defaults['updated_at'])) {
             $defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);
         }
+
         $form->setDefaults($defaults);
 
         // Setting the rules
@@ -308,7 +309,6 @@ class Career extends Model
         /** @var Vertex $vertex */
         foreach ($graph->getVertices() as $vertex) {
             $group = $vertex->getAttribute('Group');
-
             $groupData = explode(':', $group);
             $group = $groupData[0];
             $groupLabel = isset($groupData[1]) ? $groupData[1] : '';

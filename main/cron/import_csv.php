@@ -42,6 +42,7 @@ class ImportCsv
         'user' => 'external_user_id',
         'calendar_event' => 'external_calendar_event_id',
         'career' => 'external_career_id',
+        'career_urls' => 'career_urls',
         'career_diagram' => 'career_diagram',
     );
     public $defaultAdminId = 1;
@@ -335,6 +336,15 @@ class ImportCsv
                 'field_type' => ExtraField::FIELD_TYPE_TEXTAREA,
                 'variable' => $this->extraFieldIdNameList['career_diagram'],
                 'display_text' => 'Career diagram',
+            )
+        );
+
+        $extraField->save(
+            array(
+                'visible_to_self' => 1,
+                'field_type' => ExtraField::FIELD_TYPE_TEXTAREA,
+                'variable' => $this->extraFieldIdNameList['career_urls'],
+                'display_text' => 'Career urls',
             )
         );
     }
@@ -2347,6 +2357,20 @@ class ImportCsv
                             'extra_'.$extraFieldName => $itemId,
                         ];
                         $extraFieldValue->saveFieldValues($params);
+
+                        $links = isset($row['HLinks']) ? $row['HLinks'] : [];
+                        if (!empty($links)) {
+                            $extraFieldUrlName = $this->extraFieldIdNameList['career_urls'];
+                            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
+                                $extraFieldUrlName
+                            );
+
+                            $params = [
+                                'item_id' => $careerId,
+                                'extra_'.$extraFieldUrlName => $itemId,
+                            ];
+                            $extraFieldValue->saveFieldValues($params);
+                        }
                     }
                 } else {
                     if (isset($item['item_id'])) {
@@ -2355,6 +2379,20 @@ class ImportCsv
                             'name' => $row['CareerName']
                         ];
                         $career->update($params);
+                        $links = isset($row['HLinks']) ? $row['HLinks'] : [];
+
+                        if (!empty($links)) {
+                            $extraFieldUrlName = $this->extraFieldIdNameList['career_urls'];
+                            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
+                                $extraFieldUrlName
+                            );
+
+                            $params = [
+                                'item_id' => $item['item_id'],
+                                'extra_'.$extraFieldUrlName => $links
+                            ];
+                            $extraFieldValue->saveFieldValues($params);
+                        }
                     }
                 }
             }
@@ -2510,7 +2548,6 @@ class ImportCsv
                         $parentList = explode(',', $row['DependedOn']);
                         foreach ($parentList as $parentId) {
                             $parentId = (int) $parentId;
-                            echo $parentId.PHP_EOL;
                             if ($graph->hasVertex($parentId)) {
                                 /** @var Vertex $parent */
                                 $parent = $graph->getVertex($parentId);

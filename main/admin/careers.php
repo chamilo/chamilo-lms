@@ -151,7 +151,7 @@ switch ($action) {
         break;
     case 'edit':
         // Action handling: Editing
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
+        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
         $form = $career->return_form($url, 'edit');
 
         // The validation or display

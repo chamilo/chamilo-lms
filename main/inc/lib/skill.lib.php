@@ -1156,7 +1156,7 @@ class Skill extends Model
 
             $tableRow = array(
                 'skill_badge' => $resultData['img_mini'],
-                'skill_name' => Skill::translate($resultData['name']),
+                'skill_name' => Skill::translateName($resultData['name']),
                 'achieved_at' => api_get_local_time($resultData['acquired_skill_at']),
                 'course_image' => '',
                 'course_name' => ''

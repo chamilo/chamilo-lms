@@ -5872,7 +5872,8 @@ class learnpath
                     $url,
                     array(
                         'class' => 'ajax moved',
-                        'data-title' => $title_cut
+                        'data-title' => $title,
+                        'title' => $title
                     )
                 );
             }
@@ -6043,7 +6044,8 @@ class learnpath
                             array(
                                 'target' => '_blank',
                                 'class' => 'btn btn-default',
-                                'data-title' => $arrLP[$i]['title']
+                                'data-title' => $arrLP[$i]['title'],
+                                'title' => $arrLP[$i]['title']
                             )
                         );
                         break;
@@ -6073,6 +6075,7 @@ class learnpath
                             [
                                 'class' => $class,
                                 'data-title' => $arrLP[$i]['title'],
+                                'title' => $arrLP[$i]['title'],
                                 'target' => $target
                             ]
                         );

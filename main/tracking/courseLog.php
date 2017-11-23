@@ -338,8 +338,8 @@ if (!empty($coaches)) {
     $html .= $coaches;
 }
 
-if (api_is_platform_admin(true) ||
-    api_is_session_general_coach()
+if (!api_get_configuration_value('hide_reporting_session_list') &&
+    (api_is_platform_admin(true) || api_is_session_general_coach())
 ) {
     $sessionList = SessionManager::get_session_by_course($courseInfo['real_id']);
 

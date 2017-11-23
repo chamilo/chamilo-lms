@@ -13,6 +13,7 @@ $page = intval($_REQUEST['page']); //page
 $limit = intval($_REQUEST['rows']); //quantity of rows
 $sidx = $_REQUEST['sidx']; //index (field) to filter
 $sord = $_REQUEST['sord']; //asc or desc
+$exportFilename = isset($_REQUEST['export_filename']) ? $_REQUEST['export_filename'] : '';
 
 if (strpos(strtolower($sidx), 'asc') !== false) {
     $sidx = str_replace(array('asc', ','), '', $sidx);
@@ -2077,22 +2078,25 @@ if (in_array($action, $allowed_actions)) {
             }
             $j++;
         }
+        $fileName = !empty($action) ? $action : 'company_report';
+        if (!empty($exportFilename)) {
+            $fileName = $exportFilename;
+        }
+
         switch ($exportFormat) {
             case 'xls':
                 //TODO add date if exists
-                $file_name = (!empty($action)) ? $action : 'company_report';
                 $browser = new Browser();
                 if ($browser->getPlatform() == Browser::PLATFORM_WINDOWS) {
-                    Export::export_table_xls_html($array, $file_name, 'ISO-8859-15');
+                    Export::export_table_xls_html($array, $fileName, 'ISO-8859-15');
                 } else {
-                    Export::export_table_xls_html($array, $file_name);
+                    Export::export_table_xls_html($array, $fileName);
                 }
                 break;
             case 'csv':
             default:
                 //TODO add date if exists
-                $file_name = (!empty($action)) ? $action : 'company_report';
-                Export::arrayToCsv($array, $file_name);
+                Export::arrayToCsv($array, $fileName);
                 break;
         }
         exit;

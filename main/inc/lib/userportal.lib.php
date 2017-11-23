@@ -1167,7 +1167,7 @@ class IndexManager
         $listCourse = '';
         $specialCourseList = '';
         $load_history = isset($_GET['history']) && intval($_GET['history']) == 1 ? true : false;
-        $viewGridCourses = api_get_configuration_value('view_grid_courses') === 'true';
+        $viewGridCourses = api_get_configuration_value('view_grid_courses') === true;
         $showSimpleSessionInfo = api_get_configuration_value('show_simple_session_info');
 
         $coursesWithoutCategoryTemplate = '/user_portal/classic_courses_without_category.tpl';
@@ -1193,7 +1193,6 @@ class IndexManager
         // courses list
         $studentInfo = api_get_configuration_value('course_student_info');
         $viewGrid = api_get_configuration_value('view_grid_courses');
-
 
         $studentInfoProgress = !empty($studentInfo['progress']) && $studentInfo['progress'] === true;
         $studentInfoScore = !empty($studentInfo['score']) && $studentInfo['score'] === true;
@@ -1300,7 +1299,7 @@ class IndexManager
                                     $courses['in_category'][$key1]['student_info']['certificate'] = null;
                                     $isCertificateAvailable = $category[0]->is_certificate_available($user_id);
                                     if (isset($category[0])) {
-                                        if ($viewGrid == 'true') {
+                                        if ($viewGrid) {
                                             if ($isCertificateAvailable) {
                                                 $courses['in_category'][$key1]['student_info']['certificate'] = get_lang('Yes');
                                             } else {
@@ -1358,7 +1357,7 @@ class IndexManager
 
                             if (isset($category[0])) {
                                 $certificateAvailable = $category[0]->is_certificate_available($user_id);
-                                if ($viewGrid == 'true') {
+                                if ($viewGrid) {
                                     if ($certificateAvailable) {
                                         $courses['not_category'][$key]['student_info']['certificate'] = get_lang('Yes');
                                     } else {

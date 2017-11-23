@@ -1173,7 +1173,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 ) {
                     $redirect = false;
                 }
-                if ($redirect) {
+                if ($redirect && !api_is_platform_admin())  {
                     $url = api_get_path(WEB_CODE_PATH).'auth/inscription.php';
                     header("Location:".$url);
                     exit;

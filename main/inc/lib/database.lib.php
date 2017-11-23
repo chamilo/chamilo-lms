@@ -156,39 +156,15 @@ class Database
         $params['charset'] = 'utf8';
         $entityManager = EntityManager::create($params, $config);
         $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
-
+        // ofaj
         // Registering Constraints
-        /*AnnotationRegistry::registerAutoloadNamespace(
-            'Symfony\Component',
-            $sysPath."vendor/"
-        );*/
-
-        AnnotationRegistry::registerLoader(
-            function ($class) use ($sysPath) {
-                $file = str_replace("\\", DIRECTORY_SEPARATOR, $class).".php";
-                $file = str_replace('Symfony/Component/Validator', '', $file);
-                $file = str_replace('Symfony\Component\Validator', '', $file);
-                $fileToInclude = $sysPath.'vendor/symfony/validator/'.$file;
-
-                if (file_exists($fileToInclude)) {
-                    // file exists makes sure that the loader fails silently
-                    require_once $fileToInclude;
-
-                    return true;
-                }
-
-                $fileToInclude = $sysPath.'vendor/symfony/validator/Constraints/'.$file;
-                if (file_exists($fileToInclude)) {
-                    // file exists makes sure that the loader fails silently
-                    require_once $fileToInclude;
-
-                    return true;
-                }
-            }
+        AnnotationRegistry::registerAutoloadNamespace(
+            'Symfony\Component\Validator\Constraint',
+            $sysPath."vendor/symfony/symfony/src"
         );
 
         AnnotationRegistry::registerFile(
-            $sysPath."vendor/symfony/doctrine-bridge/Validator/Constraints/UniqueEntity.php"
+            $sysPath."vendor/symfony/symfony/src/Symfony/Bridge/Doctrine/Validator/Constraints/UniqueEntity.php"
         );
 
         // Registering gedmo extensions

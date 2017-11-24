@@ -255,7 +255,7 @@ class SkillRelSkill extends Model
         $order = ''
     ) {
         $skill_id = (int) $skill_id;
-        $sql = 'SELECT parent.* FROM '.$this->tableSkill.' skill
+        $sql = 'SELECT skill.* FROM '.$this->tableSkill.' skill
                 INNER JOIN '.$this->table.' parent
                 ON parent.id = skill.id
                 WHERE parent_id = '.$skill_id.'
@@ -276,11 +276,11 @@ class SkillRelSkill extends Model
 
         if (!empty($skills)) {
             foreach ($skills as &$skill) {
-                $skill['data'] = $skill_obj->get($skill['skill_id']);
+                $skill['data'] = $skill_obj->get($skill['id']);
                 if (isset($skill['data']) && !empty($skill['data'])) {
                     if (!empty($done_skills)) {
                         $skill['data']['passed'] = 0;
-                        if (in_array($skill['skill_id'], $done_skills)) {
+                        if (in_array($skill['id'], $done_skills)) {
                             $skill['data']['passed'] = 1;
                         }
                     }

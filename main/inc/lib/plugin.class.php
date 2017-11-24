@@ -730,7 +730,7 @@ class Plugin
             'comment' => $url,
             'subkeytext' => $subkeytext,
             'access_url' => 1,
-            'access_url_changeable' => 0,
+            'access_url_changeable' => 1,
             'access_url_locked' => 0
         );
         $resp = Database::insert('settings_current', $attributes);

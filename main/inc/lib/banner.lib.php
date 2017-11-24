@@ -49,8 +49,7 @@ function get_tabs($courseId = null)
     $navigation['mycourses']['icon'] = 'my-course.png';
 
     // My Profile
-    $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH)
-        .'auth/profile.php'
+    $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'
         .(!empty($courseInfo['path']) ? '?coursePath='.$courseInfo['path'].'&amp;courseCode='.$courseInfo['official_code'] : '');
     $navigation['myprofile']['title'] = get_lang('ModifyProfile');
     $navigation['myprofile']['key'] = 'profile';
@@ -152,16 +151,16 @@ function get_tabs($courseId = null)
  */
 function getCustomTabs()
 {
+    $urlId = api_get_current_access_url_id();
     $tableSettingsCurrent = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $sql = "SELECT * FROM $tableSettingsCurrent
             WHERE 
                 variable = 'show_tabs' AND
-                subkey like 'custom_tab_%'";
+                subkey LIKE 'custom_tab_%' AND access_url = $urlId ";
     $result = Database::query($sql);
     $customTabs = array();
     while ($row = Database::fetch_assoc($result)) {
         $shouldAdd = true;
-
         if (strpos($row['subkey'], Plugin::TAB_FILTER_NO_STUDENT) !== false && api_is_student()) {
             $shouldAdd = false;
         } elseif (strpos($row['subkey'], Plugin::TAB_FILTER_ONLY_STUDENT) !== false && !api_is_student()) {
@@ -350,7 +349,6 @@ function return_navigation_array()
             if (!empty($result) && $result['selected_value'] === 'installed') {
                 // Students
                 $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php';
-
                 if (api_is_platform_admin() || api_is_drh() || api_is_teacher()) {
                     $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/my_students.php';
                 }
@@ -372,19 +370,16 @@ function return_navigation_array()
 
         // Custom tabs
         $customTabs = getCustomTabs();
-
         if (!empty($customTabs)) {
             foreach ($customTabs as $tab) {
                 if (api_get_setting($tab['variable'], $tab['subkey']) == 'true' &&
                     isset($possible_tabs[$tab['subkey']])
                 ) {
-                    $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH)
-                        .$possible_tabs[$tab['subkey']]['url'];
+                    $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH).$possible_tabs[$tab['subkey']]['url'];
                     $navigation[$tab['subkey']] = $possible_tabs[$tab['subkey']];
                 } else {
                     if (isset($possible_tabs[$tab['subkey']])) {
-                        $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH)
-                            .$possible_tabs[$tab['subkey']]['url'];
+                        $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH).$possible_tabs[$tab['subkey']]['url'];
                         $menu_navigation[$tab['subkey']] = $possible_tabs[$tab['subkey']];
                     }
                 }

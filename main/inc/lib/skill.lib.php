@@ -1906,6 +1906,13 @@ class Skill extends Model
             if (api_is_platform_admin()) {
                 return true;
             }
+            // ofaj
+            if (api_is_student_boss() && !empty($currentUserId)) {
+                $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $currentUserId);
+                if ($isBoss) {
+                    return true;
+                }
+            }
             $allow = api_get_configuration_value('allow_private_skills');
             if ($allow === true) {
                 if (api_is_teacher()) {

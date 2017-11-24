@@ -273,7 +273,7 @@ if ($form->validate()) {
     // Send email depending of children_auto_threshold
     $skillRelSkill = new SkillRelSkill();
     $skillModel = new \Skill();
-    $parents = $skillRelSkill->get_skill_parents($values['skill']);
+    $parents = $skillRelSkill->getSkillParents($values['skill']);
     $extraFieldValue = new ExtraFieldValue('skill');
     foreach ($parents as $parentInfo) {
         $parentId = $parentInfo['id'];
@@ -312,9 +312,6 @@ if ($form->validate()) {
             }
         }
     }
-
-
-
 
     Display::addFlash(
         Display::return_message(

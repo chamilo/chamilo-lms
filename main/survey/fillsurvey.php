@@ -1371,10 +1371,10 @@ Display::display_footer();
  */
 function check_time_availability($surveyData)
 {
-    $utcZone = new DateTimeZone('UTC');
-    $startDate = new DateTime($surveyData['start_date'], $utcZone);
-    $endDate = new DateTime($surveyData['end_date'], $utcZone);
-    $currentDate = new DateTime('now', $utcZone);
+    $userTimeZone = new DateTimeZone(api_get_timezone());
+    $startDate = new DateTime($surveyData['start_date'], $userTimeZone);
+    $endDate = new DateTime($surveyData['end_date'], $userTimeZone);
+    $currentDate = new DateTime('now', $userTimeZone);
     $currentDate->modify('today');
 
     if ($currentDate < $startDate) {

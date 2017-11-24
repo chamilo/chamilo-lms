@@ -83,8 +83,10 @@ class Career extends Model
         $html = '<div class="actions" style="margin-bottom:20px">';
         $html .= '<a href="career_dashboard.php">'.
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-        $html .= '<a href="'.api_get_self().'?action=add">'.
-                Display::return_icon('new_career.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
+        if (api_is_platform_admin()) {
+            $html .= '<a href="'.api_get_self().'?action=add">'.
+                    Display::return_icon('new_career.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
+        }
         $html .= '</div>';
         $html .= Display::grid_html('careers');
 

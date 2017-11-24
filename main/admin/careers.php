@@ -44,8 +44,6 @@ if ($action == 'add') {
     $tool_name = get_lang('Careers');
 }
 
-
-
 //jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_careers';
 

@@ -1383,7 +1383,8 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         'hr_dept_id',
         'expiration_date',
         'last_login',
-        'user_is_online'
+        'user_is_online',
+        'profile_completed'
     );
 
     if (api_get_setting('extended_profile') === 'true') {

@@ -1192,23 +1192,23 @@ class MessageManager
                 '&nbsp;'.
                 Display::url(
                     Display::returnFontAwesomeIcon('reply', 2),
-                    $newMessageLink.'?re_id='.$message_id,
+                    $newMessageLink.'?re_id='.$messageId,
                     ['title' => get_lang('ReplyToMessage') ]
                 ).
                 '&nbsp;&nbsp;'.
                 Display::url(
                     Display::returnFontAwesomeIcon('share', 2),
-                    $newMessageLink.'?forward_id='.$message_id,
+                    $newMessageLink.'?forward_id='.$messageId,
                     ['title' => get_lang('ForwardMessage') ]
                 );
-            /*$message_content .= '<a href="new_message.php?re_id='.$message_id.'&'.$social_link.'">'.
+            /*$message_content .= '<a href="new_message.php?re_id='.$messageId.'&'.$social_link.'">'.
                 Display::return_icon('message_reply.png', get_lang('ReplyToMessage')).'</a> &nbsp';*/
         }
 
-        $message_content .=  '&nbsp;&nbsp;<a title="'.addslashes(get_lang('DeleteMessage')).'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" href="inbox.php?action=deleteone&id='.$message_id.'">'.
+        $message_content .=  '&nbsp;&nbsp;<a title="'.addslashes(get_lang('DeleteMessage')).'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" href="inbox.php?action=deleteone&id='.$messageId.'">'.
                 Display::returnFontAwesomeIcon('trash', 2).'</a>';
 
-        /*$message_content .= '<a href="inbox.php?action=deleteone&id='.$message_id.'&'.$social_link.'" >'.
+        /*$message_content .= '<a href="inbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
             Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';*/
 
         $message_content .= '</div></td>

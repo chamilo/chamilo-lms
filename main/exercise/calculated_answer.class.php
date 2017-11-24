@@ -236,7 +236,7 @@ class CalculatedAnswer extends Question
                     // Attach formula
                     $auxAnswer .= " [".$result."]@@".$formula;
                 }
-                $this->save();
+                $this->save($exercise);
                 $objAnswer = new Answer($this->id);
                 $objAnswer->createAnswer($auxAnswer, 1, '', $this->weighting, '');
                 $objAnswer->position = array();

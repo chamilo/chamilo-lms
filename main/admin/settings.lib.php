@@ -1406,7 +1406,9 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     $row['category'] = 0;
                 }
                 if (isset($settings_by_access_list[$row['variable']]) &&
-                    is_array($settings_by_access_list[$row['variable']][$row['subkey']][$row['category']])) {
+                    isset($settings_by_access_list[$row['variable']][$row['subkey']]) &&
+                    is_array($settings_by_access_list[$row['variable']][$row['subkey']][$row['category']])
+                ) {
                     // We are sure that the other site have a selected value.
                     if ($settings_by_access_list[$row['variable']][$row['subkey']][$row['category']]['selected_value'] != '') {
                         $row['selected_value'] = $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']]['selected_value'];

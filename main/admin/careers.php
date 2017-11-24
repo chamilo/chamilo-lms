@@ -12,9 +12,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+$allowCareer = api_get_configuration_value('allow_session_admin_read_careers');
+api_protect_admin_script($allowCareer);
 
-//Add the JS needed to use the jqgrid
+// Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
@@ -43,8 +44,7 @@ if ($action == 'add') {
     $tool_name = get_lang('Careers');
 }
 
-// The header.
-Display::display_header($tool_name);
+
 
 //jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_careers';
@@ -87,38 +87,32 @@ if ($allow) {
     $diagramLink = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/career_diagram.php?id=\'+options.rowId+\'">'.get_lang('Diagram').'</a>';
 }
 
-//With this function we can add actions to the jgrid (edit, delete, etc)
-$action_links = 'function action_formatter(cellvalue, options, rowObject) {
-    return \'<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
-    $diagramLink.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
-    '\';
-}';
-?>
-<script>
-$(function() {
-<?php
-    // grid definition see the $career->display() function
-    echo Display::grid_js(
-        'careers',
-        $url,
-        $columns,
-        $column_model,
-        $extra_params,
-        array(),
-        $action_links,
-        true
-    );
-?>
-});
-</script>
-<?php
+// With this function we can add actions to the jgrid (edit, delete, etc)
+if (api_is_platform_admin()) {
+    $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
+        return \'<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
+            $diagramLink.
+            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
+            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
+            '\';
+    }';
+} else {
+    $actionLinks = "function action_formatter(cellvalue, options, rowObject) {
+        return '".$diagramLink."';
+    }";
+}
+
+
 $career = new Career();
+$content = '';
+
+$listUrl = api_get_self();
 
 // Action handling: Add
 switch ($action) {
     case 'add':
+        api_protect_admin_script();
+
         if (api_get_session_id() != 0 &&
             !api_is_allowed_to_session_edit(false, true)
         ) {
@@ -126,30 +120,34 @@ switch ($action) {
         }
         Session::write('notebook_view', 'creation_date');
 
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
+        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
         $form = $career->return_form($url, 'add');
 
         // The validation or display
         if ($form->validate()) {
             if ($check) {
                 $values = $form->exportValues();
-                $res    = $career->save($values);
+                $res = $career->save($values);
                 if ($res) {
-                    echo Display::return_message(get_lang('ItemAdded'), 'confirmation');
+                    Display::addFlash(
+                        Display::return_message(get_lang('ItemAdded'), 'confirmation')
+                    );
                 }
             }
-            $career->display();
+            header('Location: '.$listUrl);
+            exit;
         } else {
-            echo '<div class="actions">';
-            echo '<a href="'.api_get_self().'">'.
+            $content .= '<div class="actions">';
+            $content .= '<a href="'.api_get_self().'">'.
                 Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-            echo '</div>';
+            $content .= '</div>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
-            $form->display();
+            $content .= $form->returnForm();
         }
         break;
     case 'edit':
+        api_protect_admin_script();
         // Action handling: Editing
         $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
         $form = $career->return_form($url, 'edit');
@@ -162,56 +160,98 @@ switch ($action) {
                 $old_status = $career->get_status($values['id']);
                 $res = $career->update($values);
                 if ($res) {
-                    echo Display::return_message(get_lang('CareerUpdated'), 'confirmation');
+                    Display::addFlash(
+                        Display::return_message(get_lang('CareerUpdated'), 'confirmation')
+                    );
                     if ($values['status'] && !$old_status) {
-                        echo Display::return_message(
-                            sprintf(get_lang('CareerXUnarchived'), $values['name']),
-                            'confirmation',
-                            false
+                        Display::addFlash(
+                            Display::return_message(
+                                sprintf(get_lang('CareerXUnarchived'), $values['name']),
+                                'confirmation',
+                                false
+                            )
                         );
                     } elseif (!$values['status'] && $old_status) {
-                        echo Display::return_message(
-                            sprintf(get_lang('CareerXArchived'), $values['name']),
-                            'confirmation',
-                            false
+                        Display::addFlash(
+                            Display::return_message(
+                                sprintf(get_lang('CareerXArchived'), $values['name']),
+                                'confirmation',
+                                false
+                            )
                         );
                     }
                 }
             }
-            $career->display();
+            header('Location: '.$listUrl);
+            exit;
         } else {
-            echo '<div class="actions">';
-            echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-            echo '</div>';
+            $content .= '<div class="actions">';
+            $content .= '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+            $content .= '</div>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
-            $form->display();
+            $content .= $form->returnForm();
         }
         break;
     case 'delete':
+        api_protect_admin_script();
         // Action handling: delete
         if ($check) {
             $res = $career->delete($_GET['id']);
             if ($res) {
-                echo Display::return_message(get_lang('ItemDeleted'), 'confirmation');
+                Display::addFlash(
+                    Display::return_message(get_lang('ItemDeleted'), 'confirmation')
+                );
             }
         }
-        $career->display();
+        header('Location: '.$listUrl);
+        exit;
         break;
     case 'copy':
+        api_protect_admin_script();
         if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
-            api_not_allowed();
+            api_not_allowed(true);
         }
         if ($check) {
             $res = $career->copy($_GET['id'], true); //copy career and promotions inside
             if ($res) {
-                echo Display::return_message(get_lang('ItemCopied'), 'confirmation');
+                Display::addFlash(
+                    Display::return_message(get_lang('ItemCopied'), 'confirmation')
+                );
             }
         }
-        $career->display();
+
+        header('Location: '.$listUrl);
+        exit;
         break;
     default:
-        $career->display();
+        $content = $career->display();
         break;
 }
-Display :: display_footer();
+
+// The header.
+Display::display_header($tool_name);
+
+?>
+<script>
+    $(function() {
+        <?php
+        // grid definition see the $career->display() function
+        echo Display::grid_js(
+            'careers',
+            $url,
+            $columns,
+            $column_model,
+            $extra_params,
+            array(),
+            $actionLinks,
+            true
+        );
+        ?>
+    });
+</script>
+<?php
+
+echo $content;
+
+Display::display_footer();

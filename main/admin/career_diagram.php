@@ -25,7 +25,8 @@ if (api_get_configuration_value('allow_career_diagram') == false) {
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+$allowCareer = api_get_configuration_value('allow_session_admin_read_careers');
+api_protect_admin_script($allowCareer);
 
 $htmlHeadXtra[] = api_get_js('jsplumb2.js');
 

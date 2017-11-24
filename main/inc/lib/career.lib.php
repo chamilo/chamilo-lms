@@ -75,17 +75,20 @@ class Career extends Model
     }
 
     /**
-     * Displays the title + grid
+     * Returns HTML the title + grid
+     * @return string
      */
     public function display()
     {
-        echo '<div class="actions" style="margin-bottom:20px">';
-        echo '<a href="career_dashboard.php">'.
+        $html = '<div class="actions" style="margin-bottom:20px">';
+        $html .= '<a href="career_dashboard.php">'.
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-        echo '<a href="'.api_get_self().'?action=add">'.
+        $html .= '<a href="'.api_get_self().'?action=add">'.
                 Display::return_icon('new_career.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
-        echo '</div>';
-        echo Display::grid_html('careers');
+        $html .= '</div>';
+        $html .= Display::grid_html('careers');
+
+        return $html;
     }
 
     /**

@@ -691,3 +691,6 @@ $_configuration['gradebook_badge_sidebar'] = [
 ];*/
 // Hide the session list in Reporting tool. Useful when a course has too many sessions.
 //$_configuration['hide_reporting_session_list'] = false;
+
+// Allow session admin to read careers
+//$_configuration['allow_session_admin_read_careers'] = true;

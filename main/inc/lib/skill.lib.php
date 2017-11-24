@@ -1907,8 +1907,8 @@ class Skill extends Model
                 return true;
             }
             // ofaj
-            if (api_is_student_boss() && !empty($currentUserId)) {
-                $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $currentUserId);
+            if (api_is_student_boss()) {
+                $isBoss = UserManager::userIsBossOfStudent($currentUserId, $studentId);
                 if ($isBoss) {
                     return true;
                 }

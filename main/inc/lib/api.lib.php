@@ -5346,7 +5346,9 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
     $var = Database::escape_string($var);
     $value = Database::escape_string($value);
     $access_url = (int) $access_url;
-    if (empty($access_url)) { $access_url = 1; }
+    if (empty($access_url)) {
+        $access_url = 1;
+    }
     $select = "SELECT id FROM $t_settings WHERE variable = '$var' ";
     if (!empty($subvar)) {
         $subvar = Database::escape_string($subvar);
@@ -5361,6 +5363,7 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
     } else {
         $select .= " AND access_url = 1 ";
     }
+
     $res = Database::query($select);
     if (Database::num_rows($res) > 0) {
         // Found item for this access_url.

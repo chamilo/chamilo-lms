@@ -283,7 +283,7 @@ if ($form->validate()) {
         if (!empty($data) && !empty($data['value'])) {
             // Search X children
             $requiredSkills = $data['value'];
-            $children = $skillRelSkill->get_children($parentId);
+            $children = $skillRelSkill->getChildren($parentId);
             $counter = 0;
             foreach ($children as $child) {
                 if ($skillModel->userHasSkill($userId, $child['id'])) {

@@ -269,14 +269,16 @@ if ($form->validate()) {
 
     $entityManager->persist($skillUser);
     $entityManager->flush();
+
     // ofaj
     // Send email depending of children_auto_threshold
     $skillRelSkill = new SkillRelSkill();
     $skillModel = new \Skill();
-    $parents = $skillRelSkill->getSkillParents($values['skill']);
+    $parents = $skillModel->getDirectParents($skillToProcess);
+
     $extraFieldValue = new ExtraFieldValue('skill');
     foreach ($parents as $parentInfo) {
-        $parentId = $parentInfo['id'];
+        $parentId = $parentInfo['skill_id'];
         $parentData = $skillModel->get($parentId);
 
         $data = $extraFieldValue->get_values_by_handler_and_field_variable($parentId, 'children_auto_threshold');
@@ -290,6 +292,7 @@ if ($form->validate()) {
                     $counter++;
                 }
             }
+
             if ($counter >= $requiredSkills) {
                 $bossList = UserManager::getStudentBossList($userId);
                 if (!empty($bossList)) {
@@ -311,6 +314,7 @@ if ($form->validate()) {
                         );
                     }
                 }
+                break;
             }
         }
     }

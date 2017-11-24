@@ -200,7 +200,7 @@ class SkillRelSkill extends Model
      */
     public function getSkillParents($skill_id, $add_child_info = true)
     {
-        $skill_id = intval($skill_id);
+        $skill_id = (int) $skill_id;
         $sql = 'SELECT child.* FROM '.$this->table.' child
                 LEFT JOIN '.$this->table.' parent
                 ON child.parent_id = parent.skill_id
@@ -895,7 +895,7 @@ class Skill extends Model
     /**
      * All direct parents
      * @param int $skillId
-     * @return int
+     * @return array
      */
     public function getDirectParents($skillId)
     {

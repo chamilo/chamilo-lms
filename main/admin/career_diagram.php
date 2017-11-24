@@ -96,17 +96,21 @@ if (!empty($itemUrls) && !empty($itemUrls['value'])) {
     if (!empty($urls)) {
         foreach ($urls as $urlData) {
             $urlData = explode('@', $urlData);
-            $urlToString .= Display::url($urlData[0], $urlData[1]).'&nbsp;';
+            if (isset($urlData[1])) {
+                $urlToString .= Display::url($urlData[0], $urlData[1]).'&nbsp;';
+            } else {
+                $urlToString .= $urlData[0].'&nbsp;';
+            }
         }
     }
 }
 
 $tpl = new Template(get_lang('Diagram'));
+$html = Display::page_subheader2($careerInfo['name'].$urlToString);
 if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
-    $html = Display::page_subheader2($careerInfo['name'].$urlToString);
     $graph = unserialize($item['value']);
     $html .= Career::renderDiagram($careerInfo, $graph);
-    $tpl->assign('content', $html);
+
 } else {
     Display::addFlash(
         Display::return_message(
@@ -114,5 +118,5 @@ if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
         'warning'
     ));
 }
-
+$tpl->assign('content', $html);
 $tpl->display_one_col_template();

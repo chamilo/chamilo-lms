@@ -154,8 +154,7 @@ class CalculatedAnswer extends Question
             $notationListButton
         );
 
-        $form->addElement('label', null, get_lang('FormulaExample'));
-        $form->addElement('text', 'formula', get_lang('Formula'), array('id' => 'formula'));
+        $form->addElement('text', 'formula', [get_lang('Formula'), get_lang('FormulaExample')], array('id' => 'formula'));
         $form->addRule('formula', get_lang('GiveFormula'), 'required');
 
         $form->addElement('text', 'weighting', get_lang('Weighting'), array('id' => 'weighting'));

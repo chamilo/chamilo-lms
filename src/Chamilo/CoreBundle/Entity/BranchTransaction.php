@@ -411,8 +411,4 @@ class BranchTransaction
 
         return $this;
     }
-
-
-
-
 }

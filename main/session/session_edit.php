@@ -11,7 +11,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
-
 $formSent = 0;
 
 // Crop picture plugin for session images

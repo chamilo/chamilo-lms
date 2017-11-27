@@ -131,5 +131,4 @@ class UsergroupRelUser
     {
         return $this->relationType;
     }
-
 }

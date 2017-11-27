@@ -787,6 +787,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                         }
                     } else {
                         // Redirect to the subscription form
+                        Session::write('loginFailed', '1');
                         header(
                             'Location: '.api_get_path(WEB_CODE_PATH)
                             .'auth/inscription.php?username='.$res['openid.sreg.nickname']
@@ -794,7 +795,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                             .'&openid='.$res['openid.identity']
                             .'&openid_msg=idnotfound'
                         );
-                        Session::write('loginFailed', '1');
                         exit;
                         //$loginFailed = true;
                     }
@@ -888,7 +888,8 @@ if (isset($uidReset) && $uidReset) {
             Session::write('is_platformAdmin', $is_platformAdmin);
             Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
         } else {
-            header('location:'.api_get_path(WEB_PATH));
+            header('Location:'.api_get_path(WEB_PATH));
+            exit;
             //exit("WARNING UNDEFINED UID !! ");
         }
     } else {
@@ -906,6 +907,7 @@ if (isset($uidReset) && $uidReset) {
     $is_allowedCreateCourse = isset($_SESSION['is_allowedCreateCourse']) ? $_SESSION['is_allowedCreateCourse'] : false;
 }
 
+$logoutCourseCalled = false;
 if (!isset($_SESSION['login_as'])) {
     $save_course_access = true;
     $_course = Session::read('_course');
@@ -915,6 +917,7 @@ if (!isset($_SESSION['login_as'])) {
         if (isset($_dont_save_user_course_access) && $_dont_save_user_course_access == true) {
             $save_course_access = false;
         } else {
+            $logoutCourseCalled = true;
             Event::courseLogout($logoutInfo);
         }
     }
@@ -964,23 +967,24 @@ if (isset($cidReset) && $cidReset) {
                 Session::erase('_gid');
             }
 
-            if (!isset($_SESSION['login_as'])) {
-                //Course login
-                if (isset($_user['user_id'])) {
-                    Event::eventCourseLogin(
-                        api_get_course_int_id(),
-                        api_get_user_id(),
-                        api_get_session_id()
-                    );
-                }
+            // Course login
+            if (isset($_user['user_id'])) {
+                Event::eventCourseLogin(
+                    api_get_course_int_id(),
+                    api_get_user_id(),
+                    api_get_session_id()
+                );
             }
         } else {
             //exit("WARNING UNDEFINED CID !! ");
-            header('location:'.api_get_path(WEB_PATH));
+            header('Location:'.api_get_path(WEB_PATH));
+            exit;
         }
     } else {
         // Leave a logout time in the track_e_course_access table if we were in a course
-        Event::courseLogout($logoutInfo);
+        if ($logoutCourseCalled == false) {
+            Event::courseLogout($logoutInfo);
+        }
         Session::erase('_cid');
         Session::erase('_real_cid');
         Session::erase('_course');
@@ -1169,7 +1173,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 ) {
                     $redirect = false;
                 }
-                if ($redirect) {
+                if ($redirect && !api_is_platform_admin())  {
                     $url = api_get_path(WEB_CODE_PATH).'auth/inscription.php';
                     header("Location:".$url);
                     exit;

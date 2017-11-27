@@ -57,7 +57,7 @@ if ($form->validate()) {
 
     if ($session->getCourses()->count() == count($values['courses_to_avoid'])) {
         Display::addFlash(Display::return_message(get_lang('MaybeYouWantToDeleteThisUserFromSession')));
-        header('Location: session_course_user.php?id_session=' . $id_session . '&id_user=' . $id_user);
+        header('Location: session_course_user.php?id_session='.$id_session.'&id_user='.$id_user);
         exit;
     }
 

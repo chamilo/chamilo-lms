@@ -62,7 +62,7 @@ foreach ($mandatoryList as $courseMandatoryId) {
 $totalDependencies = count($dependencies);
 $min = $categoryObj->getMinimumToValidate();
 $gradeBooksToValidateInDependence = $categoryObj->getGradeBooksToValidateInDependence();
-$userResult  = [];
+$userResult = [];
 
 $dependencyList = [];
 foreach ($dependencies as $courseId) {
@@ -152,8 +152,6 @@ foreach ($dependencyList as $courseId => $courseInfo) {
         $userResult[$userId]['result_dependencies'][$courseCode] = $result;
         $userResult[$userId]['user_info'] = $userInfo;
 
-        //var_dump("$courseCode : $result");
-
         if (in_array($courseId, $mandatoryList)) {
             if ($userResult[$userId]['result_mandatory_20'] < 20 && $result) {
                 $userResult[$userId]['result_mandatory_20'] += 10;
@@ -161,7 +159,6 @@ foreach ($dependencyList as $courseId => $courseInfo) {
         } else {
             if ($userResult[$userId]['result_not_mandatory_80'] < 80 && $result) {
                 $userResult[$userId]['result_not_mandatory_80'] += 10;
-                //var_dump($userResult[$userId]['result_80'] );
             }
         }
     }
@@ -189,7 +186,6 @@ $tpl->assign(
         [1, 4]
     )
 );
-
 
 $tpl->assign('mandatory_courses', $mandatoryListCompleteList);
 $tpl->assign('min_to_validate', $min);

@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -123,5 +124,4 @@ class ExtraFieldRelTag
     {
         return $this->id;
     }
-
 }

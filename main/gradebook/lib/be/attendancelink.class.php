@@ -267,11 +267,6 @@ class AttendanceLink extends AbstractLink
         return ($number[0] != 0);
     }
 
-    public function get_test_id()
-    {
-        return 'DEBUG:ID';
-    }
-
     public function get_link()
     {
         //it was extracts the attendance id

@@ -9,7 +9,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $xajax = new xajax();
-$xajax->registerFunction(array('search_users', 'Accessurledituserstourl', 'search_users'));
+$xajax->registerFunction(array('search_users', 'AccessUrlEditUsersToUrl', 'search_users'));
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;

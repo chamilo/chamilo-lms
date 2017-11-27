@@ -74,7 +74,7 @@
                                                 <img src="{{ 'teacher.png'|icon(16) }}" width="16" height="16">
                                                 {% for coach in item.coaches %}
                                                     {{ loop.index > 1 ? ' | ' }}
-                                                    <a href="{{ _p.web_ajax ~ 'user_manager.ajax.php?' ~ {'a': 'get_user_popup', 'user_id': coach.user_id}|url_encode() }}"
+                                                    <a href="{{ _p.web_ajax ~ 'user_manager.ajax.php?' ~ {'a': 'get_user_popup', 'user_id': coach.user_id, 'session_id': row.id, 'course_id': item.real_id }|url_encode() }}"
                                                        data-title="{{ coach.full_name }}" class="ajax">
                                                         {{ coach.firstname }}, {{ coach.lastname }}
                                                     </a>

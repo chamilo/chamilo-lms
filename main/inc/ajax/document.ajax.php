@@ -43,7 +43,9 @@ switch ($action) {
             } else {
                 exit;
             }
-        } elseif ($is_allowed_to_edit || DocumentManager::is_my_shared_folder(api_get_user_id(), $_POST['curdirpath'], api_get_session_id())) {
+        } elseif ($is_allowed_to_edit ||
+            DocumentManager::is_my_shared_folder(api_get_user_id(), $_POST['curdirpath'], api_get_session_id())
+        ) {
             // ??
         } else {
             // No course admin and no group member...
@@ -92,7 +94,7 @@ switch ($action) {
                 $result = DocumentManager::upload_document(
                     $globalFile,
                     $currentDirectory,
-                    $file['name'],
+                    '',
                     '', // comment
                     $unzip,
                     $defaultFileExistsOption,

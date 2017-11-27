@@ -2,13 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *
- * @package chamilo.include.search
- */
-include_once __DIR__.'/../../../global.inc.php';
-require_once __DIR__.'/search_processor.class.php';
-
-/**
  * Process documents before pass it to search listing scripts
  * @package chamilo.include.search
  */
@@ -24,7 +17,7 @@ class document_processor extends search_processor
         $results = array();
         foreach ($this->rows as $row_val) {
             $search_show_unlinked_results = (api_get_setting('search_show_unlinked_results') == 'true');
-            $course_visible_for_user = api_is_course_visible_for_user(NULL, $row_val['courseid']);
+            $course_visible_for_user = api_is_course_visible_for_user(null, $row_val['courseid']);
             // can view course?
             if ($course_visible_for_user || $search_show_unlinked_results) {
                 // is visible?

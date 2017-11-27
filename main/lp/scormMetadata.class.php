@@ -24,7 +24,8 @@ class scormMetadata
      * is built using the element given as a parameter, expecting it to be a <metadata> element pointer from the
      * DOM parser.
      * @param	string	Type of creation required. Can be 'db' or 'manifest' (default)
-     * @param	mixed	Depending on the type, can be the DB ID of the learnpath item or the pointer to the <metadata> element in the imsmanifest.xml file
+     * @param	mixed	Depending on the type, can be the DB ID of the learnpath item or
+     * the pointer to the <metadata> element in the imsmanifest.xml file
      */
     public function __construct($type = 'manifest', &$element)
     {

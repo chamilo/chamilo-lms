@@ -160,7 +160,7 @@ $documentTree = DocumentManager::get_document_preview(
     api_get_session_id(),
     false,
     '',
-    urlencode('lp_controller.php?action=add_audio&lp_id='.$lp->get_id().'&id='.$lp_item_id),
+    api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=add_audio&lp_id='.$lp->get_id().'&id='.$lp_item_id,
     false,
     true
     //$folderId = false

@@ -31,10 +31,10 @@
                 </div>
                 <div class="description">
                     <h4 class="title">
-                            <a title="{{ item.title}}" href="{{ item.course_public_url }}">{{ item.title}}</a>
+                            {{ item.title }}
                     </h4>
                     <div class="ranking">
-                        {{ item.rating_html }}
+<!--                        {{ item.rating_html }} -->
                     </div>
                     <div class="toolbar">
                         <div class="btn-group" role="group">

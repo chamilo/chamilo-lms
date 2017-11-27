@@ -355,21 +355,34 @@ class GlossaryManager
     }
 
     /**
+     * @return string
+     */
+    public static function getGlossaryView()
+    {
+        $view = Session::read('glossary_view');
+        if (empty($view)) {
+            $defaultView = api_get_configuration_value('default_glossary_view');
+            if (empty($defaultView)) {
+                $defaultView = 'table';
+            }
+            return $defaultView;
+        } else {
+            return $view;
+        }
+    }
+
+    /**
      * This is the main function that displays the list or the table with all
      * the glossary terms
-     * @param  string  View ('table' or 'list'). Optional parameter.
      * Defaults to 'table' and prefers glossary_view from the session by default.
      *
      * @return string
      */
-    public static function display_glossary($view = 'table')
+    public static function display_glossary()
     {
         // This function should always be called with the corresponding
         // parameter for view type. Meanwhile, use this cheap trick.
-        $view = Session::read('glossary_view');
-        if (empty($view)) {
-            Session::write('glossary_view', $view);
-        }
+        $view = self::getGlossaryView();
         // action links
         //echo '<div class="actions">';
         $actionsLeft = '';
@@ -378,15 +391,20 @@ class GlossaryManager
                 Display::return_icon('new_glossary_term.png', get_lang('TermAddNew'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
-        $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export">'.
-            Display::return_icon('export_csv.png', get_lang('ExportGlossaryAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
+        if (!api_is_anonymous()) {
+            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export">'.
+                Display::return_icon('export_csv.png', get_lang('ExportGlossaryAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
+        }
+
         if (api_is_allowed_to_edit(null, true)) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=import">'.
                 Display::return_icon('import_csv.png', get_lang('ImportGlossary'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
-        $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export_to_pdf">'.
-            Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+        if (!api_is_anonymous()) {
+            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export_to_pdf">'.
+                Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+        }
 
         if (($view == 'table') || (!isset($view))) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=list">'.
@@ -396,10 +414,12 @@ class GlossaryManager
                 Display::return_icon('view_text.png', get_lang('TableView'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
-        $actionsLeft .= Display::url(
-            Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), [], ICON_SIZE_MEDIUM),
-            api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents'])
-        );
+        if (!api_is_anonymous()) {
+            $actionsLeft .= Display::url(
+                Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), [], ICON_SIZE_MEDIUM),
+                api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents'])
+            );
+        }
 
         /* BUILD SEARCH FORM */
         $form = new FormValidator(
@@ -515,7 +535,7 @@ class GlossaryManager
         $direction
     ) {
         $_user = api_get_user_info();
-        $view = Session::read('glossary_view');
+        $view = self::getGlossaryView();
 
         // Database table definition
         $t_glossary = Database::get_course_table(TABLE_GLOSSARY);

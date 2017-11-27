@@ -150,7 +150,9 @@ $options[0] = get_lang('SelectAnOption');
 ksort($options);
 $form->addElement('select', 'status', get_lang('SelectRole'), $options, array('onclick' => 'changeStatus(this)'));
 
-$checks = $app['orm.em']->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')->findBy(array('fieldId' => $field_id, 'roleId' => $roleId));
+$checks = $app['orm.em']->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')->findBy(
+    array('fieldId' => $field_id, 'roleId' => $roleId)
+);
 $includedFields = array();
 if (!empty($checks)) {
     foreach ($checks as $availableField) {
@@ -215,7 +217,7 @@ if ($form->validate()) {
 
                 if ($value == 1) {
                     if (empty($extraFieldOptionRelFieldOption)) {
-                        $extraFieldOptionRelFieldOption = new \ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption();
+                        $extraFieldOptionRelFieldOption = new \Chamilo\CoreBundle\Entity\ExtraFieldOptionRelFieldOption();
                         $extraFieldOptionRelFieldOption->setFieldId($field_id);
                         $extraFieldOptionRelFieldOption->setFieldOptionId($subItemId);
                         $extraFieldOptionRelFieldOption->setRelatedFieldOptionId($id);
@@ -223,7 +225,6 @@ if ($form->validate()) {
                         $app['orm.ems']['db_write']->persist($extraFieldOptionRelFieldOption);
                     }
                 } else {
-
                     if ($extraFieldOptionRelFieldOption) {
                         $app['orm.ems']['db_write']->remove($extraFieldOptionRelFieldOption);
                     }

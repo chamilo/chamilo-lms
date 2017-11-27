@@ -682,6 +682,18 @@ class bbb
                     )
                 );
             }
+
+            if ($this->isGlobalConferencePerUserEnabled()) {
+                 $conditions = array(
+                     'where' => array(
+                         'c_id = ? AND session_id = ? AND user_id = ?' => array(
+                             $courseId,
+                             $sessionId,
+                             $this->userId
+                         ),
+                     ),
+                 );
+            }
         }
 
         if ($this->isGlobalConferencePerUserEnabled()) {

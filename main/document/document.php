@@ -455,7 +455,7 @@ switch ($action) {
                 if (!isset($_GET['copy'])) {
                     Display::addFlash(Display::return_message($message, 'warning', false));
                 }
-                if ($_GET['copy'] === 'yes') {
+                if (isset($_GET['copy']) && $_GET['copy'] === 'yes') {
                     if (!copy($file, $copyfile)) {
                         Display::addFlash(Display::return_message(get_lang('CopyFailed'), 'error'));
                     } else {
@@ -738,7 +738,7 @@ $tool_visibility = $tool_row['visibility'];*/
 
 $htmlHeadXtra[] = '<script>
 function confirmation (name) {
-    if (confirm(" '.get_lang('AreYouSureToDeleteJS').' "+ name + " ?")) {
+    if (confirm(" '.addslashes(get_lang('AreYouSureToDeleteJS')).' "+ name + " ?")) {
         return true;
     } else {
         return false;

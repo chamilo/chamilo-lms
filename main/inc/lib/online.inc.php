@@ -22,10 +22,10 @@ use ChamiloSession as Session;
 
 function LoginCheck($uid)
 {
-    $_course = api_get_course_info();
     $uid = (int) $uid;
-    $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     if (!empty($uid)) {
+        $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+        $_course = api_get_course_info();
         $user_ip = '';
         if (!empty($_SERVER['REMOTE_ADDR'])) {
             $user_ip = Database::escape_string(api_get_real_ip());
@@ -151,11 +151,23 @@ function online_logout($user_id = null, $logout_redirect = false)
         }
     }
 
+    // After logout redirect to
+    $url = api_get_path(WEB_PATH).'index.php';
+
+    if ($logout_redirect && api_get_plugin_setting('azure_active_directory', 'enable') == 'true') {
+        $activeDirectoryPlugin = AzureActiveDirectory::create();
+        $azureLogout = $activeDirectoryPlugin->getUrl(AzureActiveDirectory::URL_TYPE_SIGNOUT);
+        if (!empty($azureLogout)) {
+            $url = $azureLogout;
+        }
+    }
+
     CourseChatUtils::exitChat($user_id);
     session_regenerate_id();
     Session::destroy();
+
     if ($logout_redirect) {
-        header("Location: ".api_get_path(WEB_PATH)."index.php");
+        header("Location: ".$url);
         exit;
     }
 }

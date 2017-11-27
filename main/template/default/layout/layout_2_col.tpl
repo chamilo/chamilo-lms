@@ -162,9 +162,9 @@
                                             <div class="badge_sidebar">
                                             {% for skill in badge.skills %}
                                                 {% if badge.finished %}
-                                                    <img class="badge_sidebar_image " src = "{{ skill.web_icon_path }}" />
+                                                    <img class="badge_sidebar_image " src ="{{ skill.icon_big }}" />
                                                 {% else %}
-                                                    <img class="badge_sidebar_image badge_sidebar_image_transparency" src = "{{ skill.web_icon_path }}" />
+                                                    <img class="badge_sidebar_image badge_sidebar_image_transparency" src = "{{ skill.icon_big }}" />
                                                 {% endif %}
                                                 <div class="badge_sidebar_title">
                                                 {{ skill.name }}

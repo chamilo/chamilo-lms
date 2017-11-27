@@ -41,22 +41,23 @@ class CustomPages
     /**
      * If enabled display a custom page and exist. Otherwise log error and returns.
      *
-     * @param string $page_name
-     * @param array $content used to path data to the custom page
+     * @param string $pageName
+     * @param array $content used to pass data to the custom page
+     * @return bool False if custom pages is not enabled or file could not be found. Void otherwise.
      */
-    public static function display($page_name, $content = array())
+    public static function display($pageName, $content = array())
     {
         if (!self::enabled()) {
             return false;
         }
 
-        $file = self::path($page_name.'.php');
+        $file = self::path($pageName.'.php');
+        // Only include file if it exists, otherwise do nothing
         if (file_exists($file)) {
             include($file);
-            exit;
-        } else {
-            error_log('CustomPages::displayPage : could not read file '.$file);
+            exit; //finish the execution here - do not return
         }
+        return false;
     }
 
     /**
@@ -64,7 +65,7 @@ class CustomPages
      *
      * @param int $url_id
      *
-     * @return string
+     * @return array
      */
     public static function getURLImages($url_id = null)
     {

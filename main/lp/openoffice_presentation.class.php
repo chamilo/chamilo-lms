@@ -16,8 +16,6 @@
 require_once 'openoffice_document.class.php';
 
 if (api_get_setting('search_enabled') == 'true') {
-    require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
-    require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
     require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 }
 

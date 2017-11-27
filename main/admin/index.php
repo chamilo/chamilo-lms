@@ -251,6 +251,7 @@ if (api_is_platform_admin()) {
     /* Event settings */
 
     if (api_get_setting('activate_email_template') == 'true') {
+        // @deprecated to be removed in 2.x
         $items[] = array('url' => 'event_controller.php?action=listing', 'label' => get_lang('EventMessageManagement'));
     }
 
@@ -353,7 +354,12 @@ if (api_is_platform_admin()) {
     $blocks['settings']['label'] = api_ucfirst(get_lang('System'));
     $blocks['settings']['class'] = 'block-admin-settings';
 
-    $items = array();
+    $items = [];
+    $items[] = array(
+        'url' => 'archive_cleanup.php',
+        'label' => get_lang('ArchiveDirCleanup')
+    );
+
     $items[] = array(
         'url' => 'special_exports.php',
         'label' => get_lang('SpecialExports')
@@ -369,10 +375,6 @@ if (api_is_platform_admin()) {
         );
     }
 
-    $items[] = array(
-        'url' => 'archive_cleanup.php',
-        'label' => get_lang('ArchiveDirCleanup')
-    );
     $items[] = array(
         'url' => 'resource_sequence.php',
         'label' => get_lang('ResourcesSequencing')
@@ -482,13 +484,7 @@ if (api_is_platform_admin()) {
     if (isset($_plugins['menu_administrator']) &&
         count($_plugins['menu_administrator']) > 0
     ) {
-        $menuAdministratorItems = [];
-
-        $plugin_obj = new AppPlugin();
-        $items = array();
-        foreach ($_plugins['menu_administrator'] as $pluginName) {
-            $menuAdministratorItems[] = $pluginName;
-        }
+        $menuAdministratorItems = $_plugins['menu_administrator'];
 
         if ($menuAdministratorItems) {
             $blocks['plugins']['icon'] = Display::return_icon(
@@ -498,49 +494,31 @@ if (api_is_platform_admin()) {
                 ICON_SIZE_MEDIUM,
                 false
             );
-            $blocks['plugins']['label'] = api_ucfirst(get_lang('Plugins'));
+            $blocks['plugins']['label'] = get_lang('Plugins');
             $blocks['plugins']['class'] = 'block-admin-platform';
             $blocks['plugins']['editable'] = true;
 
             $plugin_obj = new AppPlugin();
             $items = array();
 
-            foreach ($menuAdministratorItems as $plugin_name) {
-                $plugin_info = $plugin_obj->getPluginInfo($plugin_name);
+            foreach ($menuAdministratorItems as $pluginName) {
+                $pluginInfo = $plugin_obj->getPluginInfo($pluginName, true);
+                /** @var \Plugin $plugin */
+                $plugin = $pluginInfo['obj'];
+                $pluginUrl = $plugin->getAdminUrl();
 
-                if ($plugin_info['is_admin_plugin'] === false) {
+                if (empty($pluginUrl)) {
                     continue;
                 }
 
-                if ($plugin_info['is_admin_plugin']) {
-                    $itemUrl = '/admin.php';
-                } elseif ($plugin_info['is_admin_plugin']) {
-                    $itemUrl = '/start.php';
-                }
-
-                $itemUrl = $pluginName.'/start.php';
-
-                if (file_exists(api_get_path(SYS_PLUGIN_PATH).$itemUrl)) {
-                    $items[] = array(
-                        'url' => api_get_path(WEB_PLUGIN_PATH).$itemUrl,
-                        'label' => $plugin_info['title']
-                    );
-
-                    continue;
-                }
-
-                $itemUrl = $pluginName.'/admin.php';
-
-                if (file_exists(api_get_path(SYS_PLUGIN_PATH).$itemUrl)) {
-                    $items[] = array(
-                        'url' => api_get_path(WEB_PLUGIN_PATH).$itemUrl,
-                        'label' => $plugin_info['title']
-                    );
-                }
+                $items[] = array(
+                    'url' => $pluginUrl,
+                    'label' => $pluginInfo['title']
+                );
             }
 
             $blocks['plugins']['items'] = $items;
-            $blocks['plugins']['extra'] = null;
+            $blocks['plugins']['extra'] = '';
         }
     }
 

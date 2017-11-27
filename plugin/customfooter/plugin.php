@@ -1,8 +1,7 @@
 <?php
 /**
- * This script is a configuration file for the delivery tools plugin.
- * You can use it as a master for other platform plugins (course plugins are slightly different).
- * These settings will be used in the administration interface for plugins (Chamilo configuration settings->Plugins)
+ * This plugin allows you to configure a footer note to plug some additional features. In a way, it works a bit like
+ * any block plugin to be added in a region
  * @package chamilo.plugin
  * @author Julio Montoya <gugli100@gmail.com>
  */

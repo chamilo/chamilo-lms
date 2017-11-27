@@ -3,6 +3,7 @@
 
 /**
  * Events' configuration
+ * @deprecated to be removed in 2.x
  * Used to configure each event and to link them to functions the event'll fire.
  * The flow is like the following :
  * 1. somewhere in the application an event is fired

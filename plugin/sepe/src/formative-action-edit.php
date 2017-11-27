@@ -1,10 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \ChamiloSession as Session;
+
 /**
  *    This script displays a formative action edit form.
  */
-use \ChamiloSession as Session;
 require_once '../config.php';
 
 $course_plugin = 'sepe';
@@ -163,7 +164,7 @@ if (api_is_platform_admin()) {
         $templateName = $plugin->get_lang('formativeActionEdit');
         $tpl = new Template($templateName);
         $tpl->assign('info', $info);
-        if ($info['start_date'] != "0000-00-00" && $info['start_date'] != NULL) {
+        if ($info['start_date'] != "0000-00-00" && $info['start_date'] != null) {
             $tpl->assign('day_start', date("j", strtotime($info['start_date'])));
             $tpl->assign('month_start', date("n", strtotime($info['start_date'])));
             $tpl->assign('year_start', date("Y", strtotime($info['start_date'])));
@@ -173,7 +174,7 @@ if (api_is_platform_admin()) {
         } else {
             $yearStart = date("Y");
         }
-        if ($info['end_date'] != "0000-00-00" && $info['end_date'] != NULL) {
+        if ($info['end_date'] != "0000-00-00" && $info['end_date'] != null) {
             $tpl->assign('day_end', date("j", strtotime($info['end_date'])));
             $tpl->assign('month_end', date("n", strtotime($info['end_date'])));
             $tpl->assign('year_end', date("Y", strtotime($info['end_date'])));
@@ -216,4 +217,5 @@ if (api_is_platform_admin()) {
     $tpl->display_one_col_template();
 } else {
     header('Location:'.api_get_path(WEB_PATH));
+    exit;
 }

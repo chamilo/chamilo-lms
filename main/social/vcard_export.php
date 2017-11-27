@@ -22,12 +22,15 @@ if (isset($_REQUEST['userId'])) {
 // Return User Info to vCard Export
 $userInfo = api_get_user_info($userId, true, false, true);
 
+if (empty($userInfo)) {
+    api_not_allowed(true);
+}
+
 // Pre-Loaded User Info
 $language = get_lang('Language').': '.$userInfo['language'];
 
 // Instance the vCard Class
 $vcard = new VCard();
-
 // Adding the User Info to the vCard
 $vcard->addName($userInfo['firstname'], $userInfo['lastname']);
 

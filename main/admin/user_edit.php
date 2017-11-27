@@ -76,8 +76,6 @@ if ($geolocalization) {
 
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
-
-$libpath = api_get_path(LIBRARY_PATH);
 $noPHP_SELF = true;
 $tool_name = get_lang('ModifyUserInfo');
 
@@ -316,16 +314,18 @@ $form->addElement('advmultiselect', 'student_boss', get_lang('StudentBoss'), $st
 
 // EXTRA FIELDS
 $extraField = new ExtraField('user');
+//ofaj
 $returnParams = $extraField->addElements(
     $form,
     $user_data['user_id'],
-    [],
-    false,
-    false,
-    [],
-    [],
-    true
+    [], //exclude
+    false, // filter
+    false, // tag as select
+    [], //show only fields
+    [], // order fields
+    [] // extra data
 );
+
 $jquery_ready_content = $returnParams['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
@@ -480,7 +480,28 @@ if ($error_drh) {
     Display::addFlash(Display::return_message(get_lang('StatusCanNotBeChangedToHumanResourcesManager'), 'error'));
 }
 
-$content = null;
+$actions = [
+    Display::url(
+        Display::return_icon(
+            'info.png',
+            get_lang('Information'),
+            array(),
+            ICON_SIZE_MEDIUM
+        ),
+        api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$user_id
+    ),
+    Display::url(
+        Display::return_icon(
+            'login_as.png',
+            get_lang('LoginAs'),
+            [],
+            ICON_SIZE_MEDIUM
+        ),
+        api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession()
+    )
+];
+
+$content = Display::toolbarAction('toolbar-user-information', [implode(PHP_EOL, $actions)]);
 
 $bigImage = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_BIG);
 $normalImage = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL);

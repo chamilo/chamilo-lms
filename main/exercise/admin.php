@@ -446,6 +446,7 @@ if ($newQuestion || $editQuestion) {
             echo '<div class="main-question">';
             echo Display::div($objQuestion->selectTitle(), array('class' => 'question_title'));
             ExerciseLib::showQuestion(
+                $objExercise,
                 $editQuestion,
                 false,
                 null,
@@ -454,7 +455,6 @@ if ($newQuestion || $editQuestion) {
                 true,
                 false,
                 true,
-                $objExercise->feedback_type,
                 true
             );
             echo '</div>';

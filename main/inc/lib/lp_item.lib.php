@@ -34,6 +34,11 @@ class LpItem
     public $search_did = 0;
     public $audio = '';
 
+    /**
+     * LpItem constructor.
+     * @param int $in_c_id
+     * @param int $in_id
+     */
     public function __construct($in_c_id = 0, $in_id = 0)
     {
         if ($in_c_id > 0 && $in_id > 0) {

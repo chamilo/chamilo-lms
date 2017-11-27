@@ -49,7 +49,6 @@ $usersInfo = [];
 
 if ($session) {
     $sessionCourses = $session->getCourses();
-
     foreach ($sessionCourses as $sessionCourse) {
         /** @var Course $course */
         $course = $sessionCourse->getCourse();
@@ -109,7 +108,8 @@ if ($session) {
             }
 
             $usersInfo[$user->getId()][$course->getId().'_last_sent_date'] = api_get_local_time(
-                $lastPublication->getSentDate()->getTimestamp());
+                $lastPublication->getSentDate()->getTimestamp()
+            );
         }
     }
 }
@@ -143,7 +143,6 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
             Export::arrayToCsv($dataToExport, $fileName);
             break;
     }
-
     exit;
 }
 

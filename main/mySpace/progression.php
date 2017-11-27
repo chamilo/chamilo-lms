@@ -3,6 +3,7 @@
 /**
  * Progress report
  * @package chamilo.reporting
+ * @deprecated seems there's no link to this page
  * Created on 28 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
 

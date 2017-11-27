@@ -1,4 +1,6 @@
 <?php
+/* See license terms in /license.txt */
+
 /**
  * This file is part of global info block plugin for dashboard,
  * it should be required inside the dashboard controller for
@@ -7,9 +9,6 @@
  * @author Yannick Warnier
  */
 
-/**
- * required files for getting data
- */
 
 /**
  * This class is used like controller for this global info block plugin
@@ -20,7 +19,6 @@
  */
 class BlockGlobalInfo extends Block
 {
-
     private $user_id;
     private $courses;
     private $path;
@@ -28,6 +26,7 @@ class BlockGlobalInfo extends Block
 
     /**
      * Constructor
+     * @param int $user_id
      */
     public function __construct($user_id)
     {
@@ -124,7 +123,7 @@ class BlockGlobalInfo extends Block
      * Get global information data
      * @return array
      */
-    function get_global_information_data()
+    public function get_global_information_data()
     {
         // Two-dimensional array with data about the system
         $path = api_get_path(WEB_CODE_PATH);

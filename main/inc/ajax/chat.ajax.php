@@ -13,11 +13,11 @@ if (api_get_setting('allow_global_chat') == 'false') {
     exit;
 }
 
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
-
 if (api_is_anonymous()) {
     exit;
 }
+
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 // Course Chat
 if ($action == 'preview') {
@@ -37,10 +37,10 @@ if (!isset($_SESSION['openChatBoxes'])) {
 }
 
 $chat = new Chat();
-if (chat::disableChat()) {
+if (Chat::disableChat()) {
     exit;
 }
-if ($chat->is_chat_blocked_by_exercises()) {
+if ($chat->isChatBlockedByExercises()) {
     // Disconnecting the user
     $chat->setUserStatus(0);
     exit;

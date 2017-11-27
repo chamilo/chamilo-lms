@@ -185,4 +185,3 @@ class SessionCategory
         return $this->accessUrlId;
     }
 }
-

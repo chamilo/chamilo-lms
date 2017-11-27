@@ -37,14 +37,13 @@ $kernel->terminate($request, $response);*/
 
 require_once __DIR__.'/../app/AppKernel.php';
 //require_once __DIR__.'/legacy.php';
-
-//$request = Request::createFromGlobals();
+$request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals(
+    'host_with_path_by_locale'
+);
 
 $kernel = new AppKernel('dev', true);
 $kernel->loadClassCache();
-$request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals(
-    'host_with_path'
-);
+
 $response = $kernel->handle($request);
 $response->send();
 $kernel->terminate($request, $response);

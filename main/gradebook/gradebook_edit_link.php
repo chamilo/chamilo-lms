@@ -43,7 +43,7 @@ if ($session_id == 0) {
 }
 
 $form = new LinkAddEditForm(
-    LinkAddEditForm :: TYPE_EDIT,
+    LinkAddEditForm::TYPE_EDIT,
     $cats,
     null,
     $link,

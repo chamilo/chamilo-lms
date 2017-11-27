@@ -72,7 +72,7 @@ Session::erase('exerciseResult');
 Session::erase('firstTime');
 
 //General POST/GET/SESSION/COOKIES parameters recovery
-$origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : null;
+$origin = api_get_origin();
 $choice = isset($_REQUEST['choice']) ? Security::remove_XSS($_REQUEST['choice']) : null;
 
 $hpchoice = isset($_REQUEST['hpchoice']) ? Security::remove_XSS($_REQUEST['hpchoice']) : null;

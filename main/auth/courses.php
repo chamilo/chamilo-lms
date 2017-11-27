@@ -192,6 +192,8 @@ switch ($action) {
             $searchTerm,
             isset($_POST['category_code']) ? $_POST['category_code'] : ''
         );
+        header('Location: '.api_get_self());
+        exit;
         break;
     case 'createcoursecategory':
         $courses_controller->categories_list($action);

@@ -311,15 +311,13 @@ class ForumThreadLink extends AbstractLink
     public function is_valid_link()
     {
         $sql = 'SELECT count(id) from '.$this->get_forum_thread_table().'
-                WHERE c_id = '.$this->course_id.' AND thread_id = '.$this->get_ref_id().' AND session_id='.api_get_session_id().'';
+                WHERE 
+                    c_id = '.$this->course_id.' AND 
+                    thread_id = '.$this->get_ref_id().' AND 
+                    session_id='.api_get_session_id();
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
         return ($number[0] != 0);
-    }
-
-    public function get_test_id()
-    {
-        return 'DEBUG:ID';
     }
 
     public function get_link()
@@ -327,7 +325,10 @@ class ForumThreadLink extends AbstractLink
         $sessionId = api_get_session_id();
         //it was extracts the forum id
         $sql = 'SELECT * FROM '.$this->get_forum_thread_table()."
-                WHERE c_id = '.$this->course_id.' AND thread_id = '".$this->get_ref_id()."' AND session_id = ".$sessionId."";
+                WHERE
+                    c_id = '.$this->course_id.' AND 
+                    thread_id = '".$this->get_ref_id()."' AND 
+                    session_id = $sessionId ";
         $result = Database::query($sql);
         $row    = Database::fetch_array($result, 'ASSOC');
         $forum_id = $row['forum_id'];
@@ -347,7 +348,10 @@ class ForumThreadLink extends AbstractLink
 
         if (!isset($this->exercise_data)) {
             $sql = 'SELECT * FROM '.$this->get_forum_thread_table().'
-                    WHERE c_id = '.$this->course_id.' AND  thread_id = '.$this->get_ref_id().' AND '.$session_condition;
+                    WHERE 
+                        c_id = '.$this->course_id.' AND  
+                        thread_id = '.$this->get_ref_id().' AND 
+                        '.$session_condition;
             $query = Database::query($sql);
             $this->exercise_data = Database::fetch_array($query);
         }

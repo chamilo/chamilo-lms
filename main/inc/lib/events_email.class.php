@@ -3,6 +3,7 @@
 
 /**
  * Class EventsMail
+ * @deprecated to be removed in 2.x
  * manages the e-mail sending action when a event requires it
  */
 class EventsMail

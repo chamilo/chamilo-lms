@@ -11,7 +11,7 @@
  *
  * @package chamilo.include
  * @todo remove the code that displays the button that links to the install page
- * 		but use a redirect immediately. By doing so the $alreadyInstalled variable can be removed.
+ * but use a redirect immediately. By doing so the $alreadyInstalled variable can be removed.
  *
  */
 
@@ -207,16 +207,7 @@ $charset = 'UTF-8';
 \Patchwork\Utf8\Bootup::initAll();
 
 // Start session after the internationalization library has been initialized.
-ChamiloSession::instance()->start($alreadyInstalled);
-
-// Remove quotes added by PHP  - get_magic_quotes_gpc() is deprecated in PHP 5 see #2970
-
-if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
-    array_walk_recursive_limited($_GET, 'stripslashes', true);
-    array_walk_recursive_limited($_POST, 'stripslashes', true);
-    array_walk_recursive_limited($_COOKIE, 'stripslashes', true);
-    array_walk_recursive_limited($_REQUEST, 'stripslashes', true);
-}
+ChamiloSession::start($alreadyInstalled);
 
 // access_url == 1 is the default chamilo location
 if ($_configuration['access_url'] != 1) {
@@ -286,14 +277,18 @@ foreach ($result as & $row) {
     if (isset($_setting[$key]) && is_string($_setting[$key])) {
         $_setting[$key] = array();
     }
-    $_setting[$key][] = $row['selected_value'];
-    $_plugins[$key][] = $row['selected_value'];
+    if ($row['subkey'] == null) {
+        $_setting[$key][] = $row['selected_value'];
+        $_plugins[$key][] = $row['selected_value'];
+    } else {
+        $_setting[$key][$row['subkey']] = $row['selected_value'];
+        $_plugins[$key][$row['subkey']] = $row['selected_value'];
+    }
 }
 
 // Error reporting settings.
 if (api_get_setting('server_type') == 'test') {
     ini_set('display_errors', '1');
-    ini_set('log_errors', '1');
     ini_set('html_errors', '1');
     error_reporting(-1);
 
@@ -303,6 +298,8 @@ if (api_get_setting('server_type') == 'test') {
 } else {
     error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 }
+
+ini_set('log_errors', '1');
 
 // Load allowed tag definitions for kses and/or HTMLPurifier.
 require_once $libraryPath.'formvalidator/Rule/allowed_tags.inc.php';
@@ -334,7 +331,6 @@ foreach ($configurationFiles as $file) {
         require_once $file;
     }
 }
-
 
 /*  LOAD LANGUAGE FILES SECTION */
 
@@ -578,12 +574,10 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
 
 // ===== end "who is logged in?" module section =====
 
-//Update of the logout_date field in the table track_e_login
+// Update of the logout_date field in the table track_e_login
 // (needed for the calculation of the total connection time)
-
 if (!isset($_SESSION['login_as']) && isset($_user)) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
-
     $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
     $sql = "SELECT login_id, login_date
             FROM $tbl_track_login
@@ -594,6 +588,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
 
     $q_last_connection = Database::query($sql);
     if (Database::num_rows($q_last_connection) > 0) {
+        $now = api_get_utc_datetime();
         $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
 
         // is the latest logout_date still relevant?
@@ -601,17 +596,17 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
                 WHERE login_id = $i_id_last_connection";
         $q_logout_date = Database::query($sql);
         $res_logout_date = convert_sql_date(Database::result($q_logout_date, 0, 'logout_date'));
+        $lifeTime = api_get_configuration_value('session_lifetime');
 
-        if ($res_logout_date < time() - $_configuration['session_lifetime']) {
+        if ($res_logout_date < time() - $lifeTime) {
             // it isn't, we should create a fresh entry
             Event::eventLogin($_user['user_id']);
             // now that it's created, we can get its ID and carry on
-            $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
+        } else {
+            $sql = "UPDATE $tbl_track_login SET logout_date = '$now'
+                    WHERE login_id = '$i_id_last_connection'";
+            Database::query($sql);
         }
-        $now = api_get_utc_datetime(time());
-        $sql = "UPDATE $tbl_track_login SET logout_date = '$now'
-                WHERE login_id='$i_id_last_connection'";
-        Database::query($sql);
 
         $tableUser = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "UPDATE $tableUser SET last_login = '$now'
@@ -642,4 +637,3 @@ if (empty($default_quota)) {
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 // Forcing PclZip library to use a custom temporary folder.
 define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
-

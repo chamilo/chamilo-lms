@@ -30,7 +30,7 @@ $objSkill = new Skill();
 $objGradebook = new Gradebook();
 
 if ($skillParentId > 0) {
-    $skillParentInfo = $objSkill->get_skill_info($skillParentId);
+    $skillParentInfo = $objSkill->getSkillInfo($skillParentId);
 
     $formDefaultValues = [
         'parent_id' => $skillParentInfo['id'],
@@ -107,13 +107,11 @@ if ($createForm->validate()) {
     $extraFieldValue->saveFieldValues($skillValues);
 
     if ($created) {
-        Session::write(
-            'message',
+        Display::addFlash(
             Display::return_message(get_lang('TheSkillHasBeenCreated'), 'success')
         );
     } else {
-        Session::write(
-            'message',
+        Display::addFlash(
             Display::return_message(get_lang('CannotCreateSkill'), 'error')
         );
     }
@@ -122,7 +120,6 @@ if ($createForm->validate()) {
     exit;
 }
 
-/* view */
 $tpl = new Template(get_lang('CreateSkill'));
 $tpl->assign('content', $createForm->returnForm());
 $tpl->display_one_col_template();

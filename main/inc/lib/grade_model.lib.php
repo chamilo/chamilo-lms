@@ -55,8 +55,10 @@ class GradeModel extends Model
     {
 		// action links
 		echo '<div class="actions" style="margin-bottom:20px">';
-        echo '<a href="grade_models.php">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-		echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="grade_models.php">'.
+                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+		echo '<a href="'.api_get_self().'?action=add">'.
+                Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
 		echo '</div>';
         echo Display::grid_html('grade_model');
 	}

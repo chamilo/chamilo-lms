@@ -16,12 +16,6 @@ $this_section = SECTION_COURSES;
 /* ACCESS RIGHTS  */
 // notice for unauthorized people.
 api_protect_course_script(true);
-
-if ($debug > 0) {
-    error_log('Entered exercise_result.php: '.print_r($_POST, 1));
-}
-
-// general parameters passed via POST/GET
 $origin = api_get_origin();
 
 if (empty($learnpath_id)) {
@@ -89,7 +83,7 @@ if ($time_control) {
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
-    $htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
+    $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
 }
 
 $exe_id = 0;
@@ -138,7 +132,7 @@ if ($time_control) {
 
 echo Display::div('', array('id'=>'message'));
 echo '<script>
-    lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
+    var lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
 
     function final_submit() {
         //Normal inputs
@@ -209,7 +203,6 @@ $counter = 0;
 foreach ($question_list as $questionId) {
     // destruction of the Question object
     unset($objQuestionTmp);
-
     // creates a temporary Question object
     $objQuestionTmp = Question:: read($questionId);
     $quesId = $objQuestionTmp->selectId();

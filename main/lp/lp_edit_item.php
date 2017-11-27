@@ -166,7 +166,9 @@ $res_doc = Database::query($sql_doc);
 $path_file = Database::result($res_doc, 0, 0);
 $path_parts = pathinfo($path_file);
 
-if (Database::num_rows($res_doc) > 0 && $path_parts['extension'] == 'html') {
+if (Database::num_rows($res_doc) > 0 &&
+    isset($path_parts['extension']) && $path_parts['extension'] == 'html'
+) {
     echo $_SESSION['oLP']->return_new_tree();
 
     // Show the template list

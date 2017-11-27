@@ -60,7 +60,9 @@ if (Security::check_token('post') && (
     Security::clear_token();
 
     $error = false;
-    if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
+    if (isset($_POST['action']) &&
+        $_POST['action'] == 'course_select_form'
+    ) {
         // Partial backup here we recover the documents posted
         // This gets $_POST['course']. Beware that when using Suhosin,
         // the post.max_value_length limit might get in the way of the
@@ -282,7 +284,6 @@ if (Security::check_token('post') && (
     $token = Security::get_token();
     $form->addElement('hidden', 'sec_token');
     $form->setConstants(array('sec_token' => $token));
-
     $form->display();
 }
 

@@ -14,7 +14,7 @@ class HTML_QuickForm_Rule_DateCompare extends HTML_QuickForm_Rule_Compare
      *
      * @return boolean true if the 2 given dates match the operator
      */
-    function validate($values, $operator = null)
+    public function validate($values, $operator = null)
     {
         return api_strtotime($values[0]) < api_strtotime($values[1]);
     }

@@ -13,8 +13,10 @@ class ImsLtiPlugin extends Plugin
 {
     const TABLE_TOOL = 'plugin_msi_lti_tool';
 
+    public $isAdminPlugin = true;
+
     /**
-     * Class cronstructor
+     * Class constructor
      */
     protected function __construct()
     {
@@ -29,7 +31,7 @@ class ImsLtiPlugin extends Plugin
     /**
      * Get the class instance
      * @staticvar MsiLtiPlugin $result
-     * @return MsiLtiPlugin
+     * @return ImsLtiPlugin
      */
     public static function create()
     {
@@ -177,7 +179,7 @@ class ImsLtiPlugin extends Plugin
         $text = $this->get_lang('ImsLtiDescription');
         $text .= sprintf(
             $this->get_lang('ManageToolButton'),
-            api_get_path(WEB_PLUGIN_PATH).'ims_lti/list.php'
+            api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php'
         );
 
         return $text;

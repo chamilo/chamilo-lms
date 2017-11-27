@@ -304,6 +304,22 @@ $allowed_tags_student['embed']['allowscriptaccess'] = array();
 //$allowed_tags_student['embed']['bgcolor'] = array();
 //$allowed_tags_student['embed']['pluginspage'] = array();
 
+
+// embed
+$allowed_tags_student['video'] = array();
+$allowed_tags_student['video']['height'] = array();
+$allowed_tags_student['video']['width'] = array();
+$allowed_tags_student['video']['type'] = array();
+$allowed_tags_student['video']['poster'] = array();
+$allowed_tags_student['video']['preload'] = array();
+$allowed_tags_student['video']['src'] = array();
+$allowed_tags_student['video']['controls'] = array();
+$allowed_tags_student['video']['id'] = array();
+
+$allowed_tags_student['source'] = array();
+$allowed_tags_student['source']['type'] = array();
+$allowed_tags_student['source']['src'] = array();
+
 // font
 $allowed_tags_student['font'] = array();
 $allowed_tags_student['font']['face'] = array();

@@ -942,7 +942,7 @@ if ($modifyAnswers) {
                         $renderer->setElementTemplate($element_template);
 
                         $form->setDefaults(array('comment['.$i.']' => $commentValue));
-                        $return = $form->return_form();
+                        $return = $form->returnForm();
                         ?>
                         <td colspan="2" align="left"><?php echo $return; ?></td>
                     <?php } ?>

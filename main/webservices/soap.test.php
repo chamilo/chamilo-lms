@@ -4,9 +4,7 @@
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  * @package chamilo.webservices
  */
-/**
- * Init
- */
+
 exit; //remove to enable
 // Include the necessary files, assuming this script is located in main/lp/ or something like that
 require_once __DIR__.'/../inc/global.inc.php';

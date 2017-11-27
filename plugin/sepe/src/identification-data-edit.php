@@ -1,10 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \ChamiloSession as Session;
+
 /**
  * This script displays a data center edit form.
  */
-use \ChamiloSession as Session;
 
 require_once '../config.php';
 $plugin = SepePlugin::create();
@@ -20,7 +21,7 @@ if (!empty($_POST)) {
         $phone = Database::escape_string(trim($_POST['phone']));
         $mail = Database::escape_string(trim($_POST['mail']));
         $id = intval($_POST['id']);
-        
+
         if (checkIdentificationData()) {
             $sql = "UPDATE $tableSepeCenter SET 
                         center_origin = '".$centerOrigin."', 
@@ -30,7 +31,7 @@ if (!empty($_POST)) {
                         tracking_url = '".$trackingUrl."', 
                         phone = '".$phone."', 
                         mail = '".$mail."' 
-                    WHERE id = $id";    
+                    WHERE id = $id";
         } else {
             $sql = "INSERT INTO $tableSepeCenter (
                         id, 
@@ -90,4 +91,5 @@ if (api_is_platform_admin()) {
     $tpl->display_one_col_template();
 } else {
     header('Location:'.api_get_path(WEB_PATH));
+    exit;
 }

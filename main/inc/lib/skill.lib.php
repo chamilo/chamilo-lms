@@ -895,7 +895,7 @@ class Skill extends Model
     /**
      * All direct parents
      * @param int $skillId
-     * @return int
+     * @return array
      */
     public function getDirectParents($skillId)
     {
@@ -1888,7 +1888,7 @@ class Skill extends Model
     {
         $allowTool = api_get_setting('allow_skills_tool');
 
-        if ($allowTool == 'true') {
+        if ($allowTool === 'true') {
             return true;
         }
 
@@ -1906,6 +1906,14 @@ class Skill extends Model
             if (api_is_platform_admin()) {
                 return true;
             }
+
+            if (api_is_student_boss()) {
+                $isBoss = UserManager::userIsBossOfStudent($currentUserId, $studentId);
+                if ($isBoss) {
+                    return true;
+                }
+            }
+
             $allow = api_get_configuration_value('allow_private_skills');
             if ($allow === true) {
                 if (api_is_teacher()) {

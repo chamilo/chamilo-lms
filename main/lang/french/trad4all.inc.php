@@ -7669,8 +7669,7 @@ $LegalAccepted = "Accord légal accepté";
 $LoadTermConditionsSectionTitle = "Charger la section de termes et conditions";
 $LoadTermConditionsSectionDescription = "L'accord légal apparaîtra au moment du login ou lorsque l'apprenant entre dans le cours.";
 $SendTermsSubject = "Votre contrat d'apprentissage est déjà signé.";
-$SendTermsDescriptionToUrlX = "Bonjour,
-Votre tuteur vous a envoyé votre contrat d'apprentissage. Vous pouvez le signer en suivant l'URL suivante: %s";
+$SendTermsDescriptionToUrlX = "Bonjour, Votre tuteur vous a envoyé votre contrat d'apprentissage. Vous pouvez le signer en suivant l'URL suivante: %s";
 $UserXSignedTheAgreement = "L'utilisateur %s a signé le contrat d'apprentissage.";
 $UserXSignedTheAgreementTheY = "L'utilisateur %s a signé son contrat d'apprentissage le %s.";
 $ShowTermsIfProfileCompletedTitle = "Contrat d'apprentissage bloqué par la complétude du profil";

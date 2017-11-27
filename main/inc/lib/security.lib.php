@@ -315,6 +315,7 @@ class Security
                 $config->set('Filter.Custom', array(new AllowIframes()));
             }
 
+
             // Shows _target attribute in anchors
             $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
 
@@ -354,6 +355,39 @@ class Security
                 'news' => true,
                 'data' => true,
             ));
+
+            // Allow <video> tag
+            //$config->set('HTML.Doctype', 'HTML 4.01 Transitional');
+            $config->set('HTML.SafeIframe', true);
+
+            // Set some HTML5 properties
+            $config->set('HTML.DefinitionID', 'html5-definitions'); // unqiue id
+            $config->set('HTML.DefinitionRev', 1);
+            if ($def = $config->maybeGetRawHTMLDefinition()) {
+                // http://developers.whatwg.org/the-video-element.html#the-video-element
+                $def->addElement(
+                    'video',
+                    'Block',
+                    'Optional: (source, Flow) | (Flow, source) | Flow',
+                    'Common',
+                    array(
+                        'src'      => 'URI',
+                        'type'     => 'Text',
+                        'width'    => 'Length',
+                        'height'   => 'Length',
+                        'poster'   => 'URI',
+                        'preload'  => 'Enum#auto,metadata,none',
+                        'controls' => 'Bool',
+                    )
+                );
+                $def->addElement(
+                    'source',
+                    'Block',
+                    'Flow',
+                    'Common',
+                    array('src' => 'URI', 'type' => 'Text',)
+                );
+            }
 
             $purifier[$user_status] = new HTMLPurifier($config);
         }

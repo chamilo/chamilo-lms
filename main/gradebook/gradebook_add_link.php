@@ -62,7 +62,7 @@ if (isset($typeSelected) && $typeSelected != '0') {
     $url = api_get_self().'?selectcat='.$selectCat.'&typeselected='.$typeSelected.'&course_code='.$courseCode.'&'.api_get_cidreq();
 
     $addform = new LinkAddEditForm(
-        LinkAddEditForm :: TYPE_ADD,
+        LinkAddEditForm::TYPE_ADD,
         $all_categories,
         $typeSelected,
         null,

@@ -1,11 +1,8 @@
-/* -*- Mode: Javascript; indent-tabs-mode:nil; js-indent-level: 2 -*- */
-/* vim: set ts=2 et sw=2 tw=80: */
-
 /*************************************************************
  *
  *  MathJax/localization/pt-br/TeX.js
  *
- *  Copyright (c) 2009-2015 The MathJax Consortium
+ *  Copyright (c) 2009-2016 The MathJax Consortium
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,9 +17,8 @@
  *  limitations under the License.
  *
  */
-
 MathJax.Localization.addTranslation("pt-br","TeX",{
-        version: "2.5.0",
+        version: "2.7.2",
         isLoaded: true,
         strings: {
           ExtraOpenMissingClose: "Sobrou uma chave de abertura ou faltou uma de fechamento",
@@ -71,7 +67,7 @@ MathJax.Localization.addTranslation("pt-br","TeX",{
           CommandAtTheBeginingOfLine: "%1 deve vir no in\u00EDcio da linha",
           IllegalAlign: "Foi especificado um alinhamento ilegal em %1",
           BadMathStyleFor: "Estilo de f\u00F3rmulas matem\u00E1ticas ruim para %1",
-          PositiveIntegerArg: "O argumento para %1 deve ser um inteiro positivo",
+          PositiveIntegerArg: "O argumento para %1 deve ser um numero inteiro positivo",
           ErroneousNestingEq: "Aninhamento incorreto de estruturas de equa\u00E7\u00F5es",
           MultlineRowsOneCol: "As linhas do ambiente %1 devem ter apenas uma coluna",
           MultipleBBoxProperty: "%1 foi especificado duas vezes em %2",
@@ -92,7 +88,7 @@ MathJax.Localization.addTranslation("pt-br","TeX",{
           MissingCS: "%1 deve ser seguido por uma sequ\u00EAncia de controle",
           CantUseHash2: "Uso ilegal de # em um modelo para %1",
           SequentialParam: "Os par\u00E2metros para %1 devem ser numerados sequencialmente",
-          MissingReplacementString: "Faltou a string de substitui\u00E7\u00E3o para a defini\u00E7\u00E3o de %1",
+          MissingReplacementString: "Faltou a linha de substitui\u00E7\u00E3o para a defini\u00E7\u00E3o de %1",
           MismatchUseDef: "O uso de %1 n\u00E3o est\u00E1 de acordo com sua defini\u00E7\u00E3o",
           RunawayArgument: "Argumento extra para %1?",
           NoClosingDelim: "N\u00E3o foi encontrado um delimitador de fechamento para %1"

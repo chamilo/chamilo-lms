@@ -30,8 +30,7 @@ if ($bbb->isGlobalConference()) {
     api_protect_course_script(true);
 }
 
-$message = null;
-
+$message = '';
 if ($conferenceManager) {
     switch ($action) {
         case 'add_to_calendar':
@@ -76,6 +75,7 @@ if ($conferenceManager) {
 
             Display::addFlash($message);
             header('Location: '.$bbb->getListingUrl());
+            exit;
             break;
         case 'end':
             $bbb->endMeeting($_GET['id']);

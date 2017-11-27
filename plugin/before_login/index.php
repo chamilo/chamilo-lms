@@ -41,7 +41,7 @@ if (api_is_anonymous()) {
     $form->addElement('html', $option1);
     $form->addElement('checkbox', 'left', null, get_lang('Yes'));
     $form->addElement('button', 'submit', get_lang('Confirm'), array('class' => 'btn btn-primary'));
-    $formHtml = $form->return_form();
+    $formHtml = $form->returnForm();
     if ($form->validate()) {
         $result = $form->getSubmitValues();
         if (isset($result['left']) && $result['left']) {
@@ -62,7 +62,7 @@ if (api_is_anonymous()) {
         $form2->addElement('html', $option2);
         $form2->addElement('checkbox', 'right', null, get_lang('Yes'));
         $form2->addElement('button', 'submit', get_lang('Send'));
-        $formHtml2 = $form2->return_form();
+        $formHtml2 = $form2->returnForm();
 
         if ($form2->validate()) {
             $result = $form2->getSubmitValues();

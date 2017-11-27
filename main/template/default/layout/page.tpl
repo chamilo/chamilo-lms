@@ -56,8 +56,10 @@
 	</section>
 
     {% if show_footer == true %}
-	{% include template ~ "/layout/page_footer.tpl" %}
+	    {% include template ~ "/layout/page_footer.tpl" %}
     {% endif %}
+
+    {% include template ~ '/layout/footer.js.tpl' %}
     </div>
   </body>
 </html>

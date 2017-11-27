@@ -1,6 +1,5 @@
 {% if course_list is not empty %}
-    <h1 class="page-header">{{ "Courses"|get_lang }}</h1>
-
+    <h2 class="page-header">{{ "Courses"|get_lang }}</h2>
     <div class="table-responsive">
         <table class="table table-hover table-striped">
             <thead>
@@ -30,8 +29,7 @@
 {% endif %}
 
 {% if session_list is not empty %}
-    <h1 class="page-header">{{ "Sessions"|get_lang }}</h1>
-
+    <h2 class="page-header">{{ "Sessions"|get_lang }}</h2>
     <div class="table-responsive">
         <table class="table table-hover table-striped">
             <thead>

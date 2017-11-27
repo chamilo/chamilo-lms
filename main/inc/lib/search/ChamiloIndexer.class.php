@@ -5,7 +5,6 @@
  * @package chamilo.include.search
  */
 require_once __DIR__.'/../../global.inc.php';
-include_once 'xapian/XapianIndexer.class.php';
 
 /**
  * Class wrapper

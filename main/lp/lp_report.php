@@ -16,6 +16,8 @@ if (!$isAllowedToEdit) {
 $lpTable = Database::get_course_table(TABLE_LP_MAIN);
 
 $lpId = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : false;
+$export = isset($_GET['export']) ? true : false;
+
 if (empty($lpId)) {
     api_not_allowed(true);
 }
@@ -85,7 +87,7 @@ if (!empty($users)) {
         $lpLastConnection = Tracking::get_last_connection_time_in_lp(
             $user['user_id'],
             $courseCode,
-            array($lpId),
+            $lpId,
             $sessionId
         );
 
@@ -105,6 +107,8 @@ if (!empty($users)) {
             'lp_last_connection' => $lpLastConnection
         ];
     }
+} else {
+    Display::addFlash(Display::return_message(get_lang('NoUserAdded'), 'warning'));
 }
 
 // View
@@ -123,12 +127,26 @@ $actions = Display::url(
     api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq()
 );
 
+
+if (!empty($users)) {
+    $actions .= Display::url(
+        Display::return_icon(
+            'pdf.png',
+            get_lang('ExportToPdf'),
+            array(),
+            ICON_SIZE_MEDIUM
+        ),
+        api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=report&export=pdf&lp_id='.$lpId
+    );
+}
+
 $template = new Template(get_lang('StudentScore'));
 $template->assign('user_list', $userList);
 $template->assign('session_id', api_get_session_id());
 $template->assign('course_code', api_get_course_id());
 $template->assign('lp_id', $lpId);
 $template->assign('show_email', $showEmail === 'true');
+$template->assign('export', (int) $export);
 
 $layout = $template->get_template('learnpath/report.tpl');
 
@@ -137,5 +155,25 @@ $template->assign(
     'actions',
     Display::toolbarAction('lp_actions', [$actions])
 );
-$template->assign('content', $template->fetch($layout));
+
+$result = $template->fetch($layout);
+$template->assign('content', $result);
+
+
+if ($export) {
+    $pdfParams = array(
+        'filename' => get_lang('StudentScore').'_'.api_get_local_time(),
+        //'pdf_title' => $title,
+        //'course_code' => $course_code
+    );
+    $pdf = new PDF('A4', 'P', $pdfParams);
+    $pdf->html_to_pdf_with_template(
+        $result,
+        false,
+        false,
+        true
+    );
+    exit;
+}
+
 $template->display_one_col_template();

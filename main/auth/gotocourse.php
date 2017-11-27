@@ -27,17 +27,31 @@ if (isset($_GET['firstpage'])) {
     $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
     $action = str_replace('&amp;', '&', $action);
     $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));
+    $params = [
+        'placeholder' => get_lang('UserName')
+    ];
+    // Avoid showing the autocapitalize option if the browser doesn't
+    // support it: this attribute is against the HTML5 standard
+    if (api_browser_support('autocapitalize')) {
+        $params['autocapitalize'] = 'none';
+    }
     $form->addElement(
         'text',
         'login',
         null,
-        array('placeholder' => get_lang('UserName'), 'autocapitalize' => 'none')
+        $params
     );
+    $params = [
+        'placeholder' => get_lang('Password')
+    ];
+    if (api_browser_support('autocapitalize')) {
+        $params['autocapitalize'] = 'none';
+    }
     $form->addElement(
         'password',
         'password',
         null,
-        array('placeholder' => get_lang('Password'), 'autocapitalize' => 'none')
+        $params
     );
     $form->addButtonNext(get_lang('LoginEnter'), 'submitAuth');
     // see same text in main_api.lib.php function api_not_allowed

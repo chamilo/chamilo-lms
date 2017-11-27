@@ -28,8 +28,8 @@ class scormResource
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormResource
      * object from database records or from the DOM element given as parameter
-     * @param	string	Type of construction needed ('db' or 'manifest', default = 'manifest')
-     * @param	mixed	Depending on the type given, DB id for the lp_item or reference to the DOM element
+     * @param    string    Type of construction needed ('db' or 'manifest', default = 'manifest')
+     * @param    mixed    Depending on the type given, DB id for the lp_item or reference to the DOM element
      */
     public function __construct($type = 'manifest', &$element)
     {
@@ -105,7 +105,7 @@ class scormResource
 
     /**
      * Path getter
-     * @return	string	Path for this resource
+     * @return    string    Path for this resource
      */
     public function get_path()
     {
@@ -118,7 +118,7 @@ class scormResource
 
     /**
      * Scorm type getter
-     * @return	string	generally 'asset' or 'sco' as these are the only two values defined in SCORM 1.2
+     * @return    string    generally 'asset' or 'sco' as these are the only two values defined in SCORM 1.2
      */
     public function get_scorm_type()
     {

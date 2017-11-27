@@ -1,11 +1,8 @@
-/* -*- Mode: Javascript; indent-tabs-mode:nil; js-indent-level: 2 -*- */
-/* vim: set ts=2 et sw=2 tw=80: */
-
 /*************************************************************
  *
  *  MathJax/localization/es/HelpDialog.js
  *
- *  Copyright (c) 2009-2015 The MathJax Consortium
+ *  Copyright (c) 2009-2016 The MathJax Consortium
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,9 +17,8 @@
  *  limitations under the License.
  *
  */
-
 MathJax.Localization.addTranslation("es","HelpDialog",{
-        version: "2.5.0",
+        version: "2.7.2",
         isLoaded: true,
         strings: {
           Help: "Ayuda de MathJax",
@@ -34,7 +30,8 @@ MathJax.Localization.addTranslation("es","HelpDialog",{
           Language: "*Idioma* permite seleccionar el idioma utilizado por MathJax para sus men\u00FAs y mensajes de advertencia.",
           Zoom: "*Zoom*: Si est\u00E1s teniendo dificultad para leer una ecuaci\u00F3n, MathJax puede ampliarla para ayudarte a verla mejor.",
           Accessibilty: "*Accesibilidad*: MathJax funcionar\u00E1 autom\u00E1ticamente con los lectores de pantalla para hacer accesible a las personas con discapacidad visual.",
-          Fonts: "*Tipos de letra*: MathJax utiliza determinados tipos de letra matem\u00E1ticas si est\u00E1n instalados en tu ordenador. De lo contrario, utilizar\u00E1 tipos de letra en web. Aunque no es necesario, los tipos de letra instalados localmente aumentar\u00E1 la velocidad de composici\u00F3n tipogr\u00E1fica. Sugerimos instalar los tipos de letra [STIX](%1)."
+          Fonts: "*Tipos de letra*: MathJax utiliza determinados tipos de letra matem\u00E1ticas si est\u00E1n instalados en tu ordenador. De lo contrario, utilizar\u00E1 tipos de letra en web. Aunque no es necesario, los tipos de letra instalados localmente aumentar\u00E1 la velocidad de composici\u00F3n tipogr\u00E1fica. Sugerimos instalar los tipos de letra [STIX](%1).",
+          CloseDialog: "Cerrar el di\u00E1logo de ayuda"
         }
 });
 

@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
 use Symfony\Component\Filesystem\Filesystem;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\SystemTemplate;
@@ -127,6 +128,7 @@ function handleExtensions()
  */
 function handlePlugins()
 {
+    Session::erase('plugin_data');
     $plugin_obj = new AppPlugin();
     $token = Security::get_token();
     if (isset($_POST['submit_plugins'])) {
@@ -238,8 +240,9 @@ function handlePlugins()
     echo '</table>';
 
     echo '<div class="form-actions bottom_actions">';
-    echo '<button class="btn btn-success" type="submit" name="submit_plugins">'.
-            get_lang('EnablePlugins').'</button>';
+    echo '<button class="btn btn-primary" type="submit" name="submit_plugins">';
+    echo '<i class="fa fa-check" aria-hidden="true"></i> ';
+    echo  get_lang('EnablePlugins').'</button>';
     echo '</div>';
     echo '</form>';
 }
@@ -353,7 +356,7 @@ function handleStylesheets()
     $url = api_get_path(WEB_CSS_PATH).'/'.$themeDir.'/images/';
     $logoFileName = 'header-logo.png';
     $newLogoFileName = 'header-logo-custom'.api_get_current_access_url_id().'.png';
-    $webPlatformLogoPath = ChamiloApi::getWebPlatformLogoPath($selected);
+    $webPlatformLogoPath = ChamiloApi::getPlatformLogoPath($selected);
 
     $logoForm = new FormValidator(
         'logo_upload',

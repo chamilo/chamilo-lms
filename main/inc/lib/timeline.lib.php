@@ -25,13 +25,17 @@ class Timeline extends Model
     );
     public $is_course_model = true;
 
-	public function __construct()
+    /**
+     * Timeline constructor.
+     */
+    public function __construct()
     {
         $this->table = Database::get_course_table(TABLE_TIMELINE);
-	}
+    }
 
     /**
      * Get the count of elements
+     * @return int
      */
     public function get_count()
     {
@@ -68,17 +72,20 @@ class Timeline extends Model
     /**
      * Displays the title + grid
      */
-	public function listing()
+    public function listing()
     {
-		// action links
-		$html = '<div class="actions">';
-        //$html .= '<a href="career_dashboard.php">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
-		$html .= '<a href="'.api_get_self().'?action=add">'.Display::return_icon('add.png', get_lang('Add'), '', '32').'</a>';
-		$html .= '</div>';
+        // action links
+        $html = '<div class="actions">';
+        $html .= '<a href="'.api_get_self().'?action=add">'.
+            Display::return_icon('add.png', get_lang('Add'), '', '32').'</a>';
+        $html .= '</div>';
         $html .= Display::grid_html('timelines');
         return $html;
-	}
+    }
 
+    /**
+     * @return array
+     */
     public function get_status_list()
     {
         return array(
@@ -125,10 +132,10 @@ class Timeline extends Model
         $defaults = $this->get($id);
 
         /*if (!empty($defaults['created_at'])) {
-        	$defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
+            $defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
         }
         if (!empty($defaults['updated_at'])) {
-        	$defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);
+            $defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);
         }*/
         $form->setDefaults($defaults);
 
@@ -213,17 +220,28 @@ class Timeline extends Model
         return $id;
     }
 
+    /**
+     * @param int $id
+     */
     public function delete($id)
     {
         parent::delete($id);
         //event_system(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
     }
 
+    /**
+     * @param int $id
+     * @return string
+     */
     public function get_url($id)
     {
         return api_get_path(WEB_AJAX_PATH).'timeline.ajax.php?a=get_timeline_content&id='.intval($id);
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
     public function get_timeline_content($id)
     {
         $timeline = array();
@@ -257,10 +275,11 @@ class Timeline extends Model
         }
         unset($item['end_date']);
         // Assets
-        $item['asset'] = array('media'     => $item['media'],
-                                'credit'    => $item['media_credit'],
-                                'caption'   => $item['media_caption'],
-         );
+        $item['asset'] = array(
+            'media' => $item['media'],
+            'credit' => $item['media_credit'],
+            'caption' => $item['media_caption'],
+        );
 
         //Cleaning items
         unset($item['id']);

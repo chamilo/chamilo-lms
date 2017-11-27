@@ -1,11 +1,8 @@
-/* -*- Mode: Javascript; indent-tabs-mode:nil; js-indent-level: 2 -*- */
-/* vim: set ts=2 et sw=2 tw=80: */
-
 /*************************************************************
  *
  *  MathJax/localization/en/HelpDialog.js
  *
- *  Copyright (c) 2009-2015 The MathJax Consortium
+ *  Copyright (c) 2009-2016 The MathJax Consortium
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,9 +17,8 @@
  *  limitations under the License.
  *
  */
-
 MathJax.Localization.addTranslation("en","HelpDialog",{
-        version: "2.5.0",
+        version: "2.7.2",
         isLoaded: true,
         strings: {
           Help: "MathJax Help",
@@ -34,7 +30,8 @@ MathJax.Localization.addTranslation("en","HelpDialog",{
           Language: "*Language* lets you select the language used by MathJax for its menus and warning messages.",
           Zoom: "*Math zoom*: If you are having difficulty reading an equation, MathJax can enlarge it to help you see it better.",
           Accessibilty: "*Accessibility*: MathJax will automatically work with screen readers to make mathematics accessible to the visually impaired.",
-          Fonts: "*Fonts*: MathJax will use certain math fonts if they are installed on your computer; otherwise, it will use web-based fonts. Although not required, locally installed fonts will speed up typesetting. We suggest installing the [STIX fonts](%1)."
+          Fonts: "*Fonts*: MathJax will use certain math fonts if they are installed on your computer; otherwise, it will use web-based fonts. Although not required, locally installed fonts will speed up typesetting. We suggest installing the [STIX fonts](%1).",
+          CloseDialog: "Close help dialog"
         }
 });
 

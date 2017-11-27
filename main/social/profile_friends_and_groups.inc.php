@@ -17,7 +17,6 @@ if (api_get_setting('allow_social_tool') != 'true') {
 
 $views = array('friends', 'mygroups');
 $user_id = intval($_GET['user_id']);
-
 $userGroup = new UserGroup();
 
 if (isset($_GET['view']) && in_array($_GET['view'], $views)) {

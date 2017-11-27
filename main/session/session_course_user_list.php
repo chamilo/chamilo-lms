@@ -88,7 +88,6 @@ switch ($action) {
         break;
 }
 
-
 $limit = 20;
 $from = $page * $limit;
 $is_western_name_order = api_is_western_name_order();
@@ -117,7 +116,6 @@ $nbr_results = sizeof($users);
 
 $tool_name = get_lang('Session').': '.$session_name.' - '.get_lang('Course').': '.$course_title;
 
-//$interbreadcrumb[] = array("url" => "index.php","name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array("url" => "session_list.php", "name" => get_lang('SessionList'));
 $interbreadcrumb[] = array(
     'url' => "resume_session.php?id_session=".$id_session,
@@ -125,7 +123,6 @@ $interbreadcrumb[] = array(
 );
 
 Display::display_header($tool_name);
-
 echo Display::page_header($tool_name);
 ?>
     <form method="post"

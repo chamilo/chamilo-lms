@@ -211,10 +211,11 @@ if ($refresh == 1) {
     // If refresh is set, we regenerate the oLP object from the database (kind of flush).
     Session::erase('refresh');
     $myrefresh = 1;
-    if ($debug > 0) error_log('New LP - Refresh asked', 0);
 }
 
-if ($debug > 0) error_log('New LP - Passed refresh check', 0);
+if ($debug > 0) {
+    error_log('New LP - $myrefresh: '.$myrefresh);
+}
 
 if (!empty($_REQUEST['dialog_box'])) {
     $dialog_box = stripslashes(urldecode($_REQUEST['dialog_box']));
@@ -231,10 +232,13 @@ if (!empty($lpObject)) {
         if ($myrefresh == 1 ||
             empty($oLP->cc) ||
             $oLP->cc != api_get_course_id() ||
-            $oLP->lp_view_session_id != $session_id ||
-            $oLP->scorm_debug == '1'
+            $oLP->lp_view_session_id != $session_id
         ) {
-            if ($debug > 0) error_log('New LP - Course has changed, discard lp object', 0);
+            if ($debug > 0) {
+                error_log('New LP - Course has changed, discard lp object');
+                error_log('New LP - $oLP->lp_view_session_id: '.$oLP->lp_view_session_id);
+                error_log('New LP - $oLP->cc: '.$oLP->cc);
+            }
             if ($myrefresh == 1) {
                 $myrefresh_id = $oLP->get_id();
             }
@@ -277,8 +281,6 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                 if ($debug > 0) error_log('New LP - found row - type '.$type.' - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                 switch ($type) {
                     case 1:
-                        if ($debug > 0) error_log('New LP - found row - type dokeos - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
-
                         $oLP = new learnpath(api_get_course_id(), $lp_id, api_get_user_id());
                         if ($oLP !== false) {
                             $lp_found = true;
@@ -287,7 +289,6 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         }
                         break;
                     case 2:
-                        if ($debug > 0) error_log('New LP - found row - type scorm - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                         $oLP = new scorm(api_get_course_id(), $lp_id, api_get_user_id());
                         if ($oLP !== false) {
                             $lp_found = true;
@@ -296,7 +297,6 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         }
                         break;
                     case 3:
-                        if ($debug > 0) error_log('New LP - found row - type aicc - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                         $oLP = new aicc(api_get_course_id(), $lp_id, api_get_user_id());
                         if ($oLP !== false) {
                             $lp_found = true;
@@ -305,7 +305,6 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         }
                         break;
                     default:
-                        if ($debug > 0) error_log('New LP - found row - type other - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                         $oLP = new learnpath(api_get_course_id(), $lp_id, api_get_user_id());
                         if ($oLP !== false) {
                             $lp_found = true;
@@ -353,10 +352,10 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
     }
 }
 
-$action = (!empty($_REQUEST['action']) ? $_REQUEST['action'] : '');
+$action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
 // format title to be displayed correctly if QUIZ
-$post_title = "";
+$post_title = '';
 if (isset($_POST['title'])) {
     $post_title = Security::remove_XSS($_POST['title']);
     if (isset($_POST['type']) &&
@@ -371,6 +370,10 @@ if (isset($_POST['title'])) {
 $redirectTo = '';
 if ($debug > 0) {
     error_log('New LP - action "'.$action.'" triggered');
+    if (!$lp_found) {
+        //check if the learnpath ID was defined, otherwise send back to list
+        error_log('New LP - No learnpath given');
+    }
 }
 
 switch ($action) {
@@ -379,10 +382,7 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
-            //check if the learnpath ID was defined, otherwise send back to list
-            if ($debug > 0) {
-                error_log('New LP - No learnpath given for add item', 0);
-            }
+            // Check if the learnpath ID was defined, otherwise send back to list
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
@@ -390,7 +390,7 @@ switch ($action) {
             if (isset($_POST['submit_button']) && !empty($post_title)) {
                 // If a title was submitted:
 
-                //Updating the lp.modified_on
+                // Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
 
                 if (isset($_SESSION['post_time']) && $_SESSION['post_time'] == $_POST['post_time']) {
@@ -437,7 +437,8 @@ switch ($action) {
                             $prerequisites
                         );
                     } else {
-                        // For all other item types than documents, load the item using the item type and path rather than its ID.
+                        // For all other item types than documents,
+                        // load the item using the item type and path rather than its ID.
                         $new_item_id = $_SESSION['oLP']->add_item(
                             $parent,
                             $previous,
@@ -469,10 +470,7 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
-            //check if the learnpath ID was defined, otherwise send back to list
-            if ($debug > 0) {
-                error_log('New LP - No learnpath given for add audio', 0);
-            }
+            // Check if the learnpath ID was defined, otherwise send back to list
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
@@ -539,6 +537,7 @@ switch ($action) {
         }
         if (isset($_REQUEST['id'])) {
             learnpath::deleteCategory($_REQUEST['id']);
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
         }
         require 'lp_list.php';
         break;
@@ -608,7 +607,6 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for admin_view', 0);
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
@@ -621,10 +619,8 @@ switch ($action) {
                 api_not_allowed(true);
             }
             if (!$lp_found) {
-                error_log('New LP - No learnpath given for set_autolaunch', 0);
                 require 'lp_list.php';
-            }
-            else {
+            } else {
                 $_SESSION['oLP']->set_autolaunch($_GET['lp_id'], $_GET['status']);
                 require 'lp_list.php';
                 exit;
@@ -636,7 +632,6 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for build', 0);
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
@@ -651,7 +646,6 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for edit item', 0);
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
@@ -705,7 +699,6 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for edit item prereq', 0);
             require 'lp_list.php';
         } else {
             if (isset($_POST['submit_button'])) {
@@ -737,7 +730,6 @@ switch ($action) {
         }
 
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for move item', 0);
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
@@ -773,7 +765,7 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for view item', 0); require 'lp_list.php';
+            require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
             require 'lp_view_item.php';
@@ -800,7 +792,6 @@ switch ($action) {
         }
 
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for copy', 0);
             require 'lp_list.php';
         } else {
             $_SESSION['oLP']->copy();
@@ -816,7 +807,6 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for export', 0);
             require 'lp_list.php';
         } else {
             $_SESSION['oLP']->scorm_export();
@@ -833,7 +823,6 @@ switch ($action) {
         }
 
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for export_to_pdf', 0);
             require 'lp_list.php';
         } else {
             $result = $_SESSION['oLP']->scorm_export_to_pdf($_GET['lp_id']);
@@ -848,7 +837,6 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for delete', 0);
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
@@ -874,7 +862,6 @@ switch ($action) {
         }
 
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for visibility', 0);
             require 'lp_list.php';
         } else {
             learnpath::toggle_visibility($_REQUEST['lp_id'], $_REQUEST['new_status']);
@@ -895,7 +882,6 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for publish', 0);
             require 'lp_list.php';
         } else {
             learnpath::toggle_publish($_REQUEST['lp_id'], $_REQUEST['new_status']);
@@ -908,7 +894,6 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for publish', 0);
             require 'lp_list.php';
         } else {
             learnpath::move_up($_REQUEST['lp_id'], $_REQUEST['category_id']);
@@ -922,7 +907,6 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for publish', 0);
             require 'lp_list.php';
         } else {
             learnpath::move_down($_REQUEST['lp_id'], $_REQUEST['category_id']);
@@ -936,7 +920,6 @@ switch ($action) {
         }
 
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for edit', 0);
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
@@ -948,7 +931,6 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for edit', 0);
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
@@ -1065,7 +1047,6 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for add sub item', 0);
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
@@ -1083,7 +1064,6 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for delete item', 0);
             require 'lp_list.php';
         } else {
             if (!empty($_REQUEST['id'])) {
@@ -1096,7 +1076,6 @@ switch ($action) {
         break;
     case 'restart':
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for restart', 0);
             require 'lp_list.php';
         } else {
             $_SESSION['oLP']->restart();
@@ -1105,7 +1084,6 @@ switch ($action) {
         break;
     case 'last':
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for last', 0);
             require 'lp_list.php';
         } else {
             $_SESSION['oLP']->last();
@@ -1114,7 +1092,6 @@ switch ($action) {
         break;
     case 'first':
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for first', 0);
             require 'lp_list.php';
         } else {
             $_SESSION['oLP']->first();
@@ -1123,7 +1100,6 @@ switch ($action) {
         break;
     case 'next':
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for next', 0);
             require 'lp_list.php';
         } else {
             $_SESSION['oLP']->next();
@@ -1132,7 +1108,6 @@ switch ($action) {
         break;
     case 'previous':
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for previous', 0);
             require 'lp_list.php';
         } else {
             $_SESSION['oLP']->previous();
@@ -1142,21 +1117,25 @@ switch ($action) {
     case 'content':
         if ($debug > 0) error_log('New LP - Item id is '.intval($_GET['item_id']), 0);
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for content', 0);
             require 'lp_list.php';
         } else {
-            if ($debug > 0) error_log('New LP - save_last()', 0);
+            if ($debug > 0) {
+                error_log('New LP - save_last()', 0);
+            }
             $_SESSION['oLP']->save_last();
-            if ($debug > 0) error_log('New LP - set_current_item()', 0);
+            if ($debug > 0) {
+                error_log('New LP - set_current_item()', 0);
+            }
             $_SESSION['oLP']->set_current_item($_GET['item_id']);
-            if ($debug > 0) error_log('New LP - start_current_item()', 0);
+            if ($debug > 0) {
+                error_log('New LP - start_current_item()', 0);
+            }
             $_SESSION['oLP']->start_current_item();
             require 'lp_content.php';
         }
         break;
     case 'view':
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for view', 0);
             require 'lp_list.php';
         } else {
             if ($debug > 0) {error_log('New LP - Trying to set current item to '.$_REQUEST['item_id'], 0); }
@@ -1168,7 +1147,6 @@ switch ($action) {
         break;
     case 'save':
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for save', 0);
             require 'lp_list.php';
         } else {
             $_SESSION['oLP']->save_item();
@@ -1177,7 +1155,6 @@ switch ($action) {
         break;
     case 'stats':
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for stats', 0);
             require 'lp_list.php';
         } else {
             $_SESSION['oLP']->save_current();
@@ -1201,7 +1178,7 @@ switch ($action) {
         } elseif ($mode == 'embedded') {
             $_SESSION['oLP']->mode = 'embedded';
         } elseif ($mode == 'embedframe') {
-        	$_SESSION['oLP']->mode = 'embedframe';
+            $_SESSION['oLP']->mode = 'embedframe';
         } elseif ($mode == 'impress') {
             $_SESSION['oLP']->mode = 'impress';
         }
@@ -1209,7 +1186,6 @@ switch ($action) {
         break;
     case 'switch_view_mode':
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for switch', 0);
             require 'lp_list.php';
         }
         if (Security::check_token('get')) {
@@ -1220,35 +1196,24 @@ switch ($action) {
         break;
     case 'switch_force_commit':
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for switch', 0);
             require 'lp_list.php';
         }
         Session::write('refresh', 1);
         $_SESSION['oLP']->update_default_scorm_commit();
         require 'lp_list.php';
         break;
-    /* Those 2 switches have been replaced by switc_attempt_mode switch
-    case 'switch_reinit':
-        if (!$lp_found) { error_log('New LP - No learnpath given for switch', 0); require 'lp_list.php'; }
-        $_SESSION['refresh'] = 1;
-        $_SESSION['oLP']->update_reinit();
-		require 'lp_list.php';
-		break;
-	case 'switch_seriousgame_mode':
-		if(!$lp_found){ error_log('New LP - No learnpath given for switch',0); require 'lp_list.php'; }
-		$_SESSION['refresh'] = 1;
-		$_SESSION['oLP']->set_seriousgame_mode();
-		require 'lp_list.php';
-		break;
-     */
-	case 'switch_attempt_mode':
-		if (!$lp_found) { error_log('New LP - No learnpath given for switch', 0); require 'lp_list.php'; }
+    case 'switch_attempt_mode':
+        if (!$lp_found) {
+            require 'lp_list.php';
+        }
         Session::write('refresh', 1);
-		$_SESSION['oLP']->switch_attempt_mode();
+        $_SESSION['oLP']->switch_attempt_mode();
         require 'lp_list.php';
         break;
     case 'switch_scorm_debug':
-        if (!$lp_found) { error_log('New LP - No learnpath given for switch', 0); require 'lp_list.php'; }
+        if (!$lp_found) {
+            require 'lp_list.php';
+        }
         Session::write('refresh', 1);
         $_SESSION['oLP']->update_scorm_debug();
         require 'lp_list.php';
@@ -1256,18 +1221,16 @@ switch ($action) {
     case 'intro_cmdAdd':
         // Add introduction section page.
         break;
-    case 'js_api_refresh':
-        if (!$lp_found) { error_log('New LP - No learnpath given for js_api_refresh', 0); require 'lp_message.php'; }
-        if (isset($_REQUEST['item_id'])) {
-            $htmlHeadXtra[] = $_SESSION['oLP']->get_js_info($_REQUEST['item_id']);
-        }
-        require 'lp_message.php';
-        break;
     case 'return_to_course_homepage':
-        if (!$lp_found) { error_log('New LP - No learnpath given for stats', 0); require 'lp_list.php'; }
-        else {
+        if (!$lp_found) {
+            require 'lp_list.php';
+        } else {
             $_SESSION['oLP']->save_current();
             $_SESSION['oLP']->save_last();
+            if ($debug > 0) {
+                error_log('New LP - save_current()');
+                error_log('New LP - save_last()');
+            }
             $url = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php?id_session='.api_get_session_id();
             $redirectTo = isset($_GET['redirectTo']) ? $_GET['redirectTo'] : '';
             switch ($redirectTo) {
@@ -1290,10 +1253,11 @@ switch ($action) {
         break;
     case 'impress':
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for view', 0);
             require 'lp_list.php';
         } else {
-            if ($debug > 0) {error_log('New LP - Trying to impress this LP item to '.$_REQUEST['item_id'], 0); }
+            if ($debug > 0) {
+                error_log('New LP - Trying to impress this LP item to '.$_REQUEST['item_id'], 0);
+            }
             if (!empty($_REQUEST['item_id'])) {
                 $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
             }
@@ -1312,14 +1276,13 @@ switch ($action) {
         Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
         header('Location: '.$url);
         break;
-    case 'toggle_seriousgame': //activate/deactive seriousgame_mode
+    case 'toggle_seriousgame':
+        // activate/deactive seriousgame_mode
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
 
         if (!$lp_found) {
-            error_log('New LP - No learnpath given for visibility');
-
             require 'lp_list.php';
         }
 

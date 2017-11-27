@@ -65,37 +65,47 @@ class ChamiloApi
 
     /**
      * Get the platform logo path
-     * @return null|string
+     * @param string $theme
+     * @param bool $getSysPath
+     * @return string
      */
-    public static function getWebPlatformLogoPath($theme = '')
+    public static function getPlatformLogoPath($theme = '', $getSysPath = false)
     {
         $theme = empty($theme) ? api_get_visual_theme() : $theme;
         $accessUrlId = api_get_current_access_url_id();
         $themeDir = \Template::getThemeDir($theme);
-        $customLogoPath = "$themeDir/images/header-logo-custom$accessUrlId.png";
+        $customLogoPath = $themeDir."images/header-logo-custom$accessUrlId.png";
 
         if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPath")) {
+            if ($getSysPath) {
+                return api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPath";
+            }
             return api_get_path(WEB_CSS_PATH).$customLogoPath;
         }
 
-        $originalLogoPath = "$themeDir/images/header-logo.png";
+        $originalLogoPath = $themeDir."images/header-logo.png";
 
         if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPath)) {
+            if ($getSysPath) {
+                return api_get_path(SYS_CSS_PATH).$originalLogoPath;
+            }
             return api_get_path(WEB_CSS_PATH).$originalLogoPath;
         }
 
-        return null;
+        return '';
     }
 
     /**
      * Get the platform logo.
      * Return a <img> if the logo image exists. Otherwise return a <h2> with the institution name.
+     * @param string $theme
      * @param array $imageAttributes Optional.
+     * @param bool $getSysPath
      * @return string
      */
-    public static function getPlatformLogo($theme = '', $imageAttributes = [])
+    public static function getPlatformLogo($theme = '', $imageAttributes = [], $getSysPath = false)
     {
-        $logoPath = self::getWebPlatformLogoPath($theme);
+        $logoPath = self::getPlatformLogoPath($theme, $getSysPath);
         $institution = api_get_setting('Institution');
         $institutionUrl = api_get_setting('InstitutionUrl');
         $siteName = api_get_setting('siteName');

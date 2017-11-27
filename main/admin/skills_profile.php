@@ -47,7 +47,6 @@ if ($form->validate()) {
         $skills = array_filter($skills);
         $skills = array_unique($skills);
         Session::write('skills', $skills);
-
     } else {
         $skills = Session::read('skills', []);
     }
@@ -57,8 +56,7 @@ if ($form->validate()) {
 
 $user_list = array();
 $count_skills = count($skills);
-
-$users = $skill_rel_user->get_user_by_skills($skills);
+$users = $skill_rel_user->getUserBySkills($skills);
 
 if (!empty($users)) {
     foreach ($users as $user) {
@@ -109,7 +107,7 @@ if (!empty($skills)) {
     }
 }
 
-$total_skills_to_search = $skill->get_skills_info($total_skills_to_search);
+$total_skills_to_search = $skill->getSkillsInfo($total_skills_to_search);
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
 
@@ -126,8 +124,8 @@ switch ($action) {
         break;
     case 'load_profile':
         $skill_profile = new SkillRelProfile();
-        $skills = $skill_profile->get_skills_by_profile($id);
-        $total_skills_to_search = $skill->get_skills_info($skills);
+        $skills = $skill_profile->getSkillsByProfile($id);
+        $total_skills_to_search = $skill->getSkillsInfo($skills);
         break;
 }
 

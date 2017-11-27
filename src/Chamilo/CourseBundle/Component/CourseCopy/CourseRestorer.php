@@ -2178,7 +2178,10 @@ class CourseRestorer
                             break;
                         case FILE_OVERWRITE:
                             // get category from source
-                            $destinationCategoryId = TestCategory::get_category_id_for_title($title, $destinationCourseId);
+                            $destinationCategoryId = TestCategory::get_category_id_for_title(
+                                $title,
+                                $destinationCourseId
+                            );
                             if ($destinationCategoryId) {
                                 $my_cat = new TestCategory();
                                 $my_cat = $my_cat->getCategory($destinationCategoryId, $destinationCourseId);
@@ -2335,7 +2338,8 @@ class CourseRestorer
                             }
                             break;
                         case FILE_OVERWRITE:
-                            // Delete the existing survey with the same code and language and import the one of the source course
+                            // Delete the existing survey with the same code and language and
+                            // import the one of the source course
                             // getting the information of the survey (used for when the survey is shared)
 
                             $sql = "SELECT * FROM $table_sur
@@ -2347,9 +2351,17 @@ class CourseRestorer
 
                             // if the survey is shared => also delete the shared content
                             if (isset($survey_data['survey_share']) && is_numeric($survey_data['survey_share'])) {
-                                SurveyManager::delete_survey($survey_data['survey_share'], true, $this->destination_course_id);
+                                SurveyManager::delete_survey(
+                                    $survey_data['survey_share'],
+                                    true,
+                                    $this->destination_course_id
+                                );
                             }
-                            SurveyManager::delete_survey($survey_data['survey_id'], false, $this->destination_course_id);
+                            SurveyManager::delete_survey(
+                                $survey_data['survey_id'],
+                                false,
+                                $this->destination_course_id
+                            );
 
                             // Insert the new source survey
                             $new_id = Database::insert($table_sur, $params);
@@ -2542,10 +2554,18 @@ class CourseRestorer
 
                 // Adding the author's image
                 if (!empty($lp->preview_image)) {
-                    $new_filename = uniqid('').substr($lp->preview_image, strlen($lp->preview_image) - 7,
-                            strlen($lp->preview_image));
-                    if (file_exists($origin_path.$lp->preview_image) && !is_dir($origin_path.$lp->preview_image)) {
-                        $copy_result = copy($origin_path.$lp->preview_image, $destination_path.$new_filename);
+                    $new_filename = uniqid('').substr(
+                        $lp->preview_image,
+                        strlen($lp->preview_image) - 7,
+                        strlen($lp->preview_image)
+                    );
+                    if (file_exists($origin_path.$lp->preview_image) &&
+                        !is_dir($origin_path.$lp->preview_image)
+                    ) {
+                        $copy_result = copy(
+                            $origin_path.$lp->preview_image,
+                            $destination_path.$new_filename
+                        );
                         if ($copy_result) {
                             $lp->preview_image = $new_filename;
                         } else {
@@ -2623,7 +2643,7 @@ class CourseRestorer
                         $params = [
                             'c_id' => $this->destination_course_id,
                             'name' => self::DBUTF8($lp->name),
-                            'link' => 'lp/lp_controller.php?action=view&lp_id=$new_lp_id&id_session='.$session_id,
+                            'link' => "lp/lp_controller.php?action=view&lp_id=$new_lp_id&id_session=$session_id",
                             'image' => 'scormbuilder.gif',
                             'visibility' => '0',
                             'admin' => '0',
@@ -2869,9 +2889,16 @@ class CourseRestorer
                     }
                 }
 
-                $sql = 'SELECT sa.id, sa.expires_on,sa.ends_on,sa.add_to_calendar, sa.enable_qualification, sa.publication_id
+                $sql = 'SELECT 
+                          sa.id, 
+                          sa.expires_on,
+                          sa.ends_on,
+                          sa.add_to_calendar, 
+                          sa.enable_qualification, 
+                          sa.publication_id
                         FROM '.$work_assignment_table.' sa
-                        INNER JOIN '.$work_table.' sp ON sa.publication_id=sp.id
+                        INNER JOIN '.$work_table.' sp 
+                        ON sa.publication_id=sp.id
                         WHERE
                             sp.c_id = '.$this->course_origin_id.' AND
                             sa.c_id = '.$this->course_origin_id.' AND
@@ -3298,15 +3325,6 @@ class CourseRestorer
                         }
                         break;
                     case FILE_OVERWRITE:
-                        // Creating folder.
-                        $workData = get_work_data_by_path(
-                            $path,
-                            $this->destination_course_info['real_id']
-                        );
-                        break;
-                    case FILE_RENAME:
-                        $obj->params['new_dir'] = $obj->params['title'];
-
                         if (!empty($this->course_origin_id)) {
                             $sql = 'SELECT * FROM '.$table_work_assignment.'
                                     WHERE
@@ -3325,32 +3343,41 @@ class CourseRestorer
                             $obj->params['ends_on'] = $row['ends_on'];
                             $obj->params['enable_qualification'] = $row['enable_qualification'];
                             $obj->params['add_to_calendar'] = !empty($row['add_to_calendar']) ? 1 : 0;
-
-                            if (empty($workData)) {
-                                addDir(
-                                    $obj->params,
-                                    api_get_user_id(),
-                                    $this->destination_course_info,
-                                    0,
-                                    $sessionId
-                                );
-                            } else {
-                                $workId = $workData['iid'];
-                                updateWork(
-                                    $workId,
-                                    $obj->params,
-                                    $this->destination_course_info,
-                                    $sessionId
-                                );
-                                updatePublicationAssignment(
-                                    $workId,
-                                    $obj->params,
-                                    $this->destination_course_info,
-                                    0
-                                );
-                            }
                         }
+                        //No break
+                    case FILE_RENAME:
+                        $workData = get_work_data_by_path(
+                            $path,
+                            $this->destination_course_info['real_id']
+                        );
                         break;
+                }
+
+                $obj->params['work_title'] = $obj->params['title'];
+                $obj->params['new_dir'] = $obj->params['title'];
+
+                if (empty($workData)) {
+                    addDir(
+                        $obj->params,
+                        api_get_user_id(),
+                        $this->destination_course_info,
+                        0,
+                        $sessionId
+                    );
+                } else {
+                    $workId = $workData['iid'];
+                    updateWork(
+                        $workId,
+                        $obj->params,
+                        $this->destination_course_info,
+                        $sessionId
+                    );
+                    updatePublicationAssignment(
+                        $workId,
+                        $obj->params,
+                        $this->destination_course_info,
+                        0
+                    );
                 }
             }
         }

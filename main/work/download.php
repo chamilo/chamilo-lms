@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	This file is responsible for  passing requested documents to the browser.
- *	Html files are parsed to fix a few problems with URLs,
- *	but this code will hopefully be replaced soon by an Apache URL
- *	rewrite mechanism.
+ * This file is responsible for  passing requested documents to the browser.
+ * Html files are parsed to fix a few problems with URLs,
+ * but this code will hopefully be replaced soon by an Apache URL
+ * rewrite mechanism.
  *
- *	@package chamilo.work
+ * @package chamilo.work
  */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once 'work.lib.php';

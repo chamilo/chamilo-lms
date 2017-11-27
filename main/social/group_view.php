@@ -172,9 +172,10 @@ if (!$is_group_member && $group_info['visibility'] == GROUP_PERMISSION_CLOSED) {
 
 if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
     if (!$is_group_member) {
-        if (!in_array($role,
-            array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER, GROUP_USER_PERMISSION_PENDING_INVITATION))
-        ) {
+        if (!in_array(
+            $role,
+            array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER, GROUP_USER_PERMISSION_PENDING_INVITATION)
+        )) {
             $social_right_content .= '<div class="group-tool">';
             $social_right_content .= '<div class="pull-right">';
             $social_right_content .= '<a class="btn btn-default btn-sm" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
@@ -253,7 +254,7 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
             $member_content .= Display::url(
                 Display::returnFontAwesomeIcon('pencil').' '.get_lang('EditMembersList'),
                 'group_members.php?id='.$group_id,
-                    array('class'=>'btn btn-default btn-sm', 'title' => get_lang('EditMembersList'))
+                array('class' => 'btn btn-default btn-sm', 'title' => get_lang('EditMembersList'))
             );
             $member_content .= '</div>';
             $member_content .= '</div>';
@@ -262,9 +263,10 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
         $member_content .= '<div class="row">';
         foreach ($members as $member) {
             // if is a member
-            if (in_array($member['relation_type'],
-                array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR))
-            ) {
+            if (in_array(
+                $member['relation_type'],
+                array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR)
+            )) {
                 //add icons
                 if ($member['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
                     $icon = Display::return_icon('social_group_admin.png', get_lang('Admin'));
@@ -302,8 +304,7 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
             GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,
             GROUP_USER_PERMISSION_PENDING_INVITATION,
         )
-    )
-    ) {
+    )) {
         $social_right_content .= '<a class="btn" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a>';
     } elseif ($role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
         $social_right_content .= '<a class="btn" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('YouHaveBeenInvitedJoinNow').'</a>';

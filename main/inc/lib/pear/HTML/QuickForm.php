@@ -548,8 +548,8 @@ class HTML_QuickForm extends HTML_Common
     public function &addElement($element)
     {
         if (is_object($element) && is_subclass_of($element, 'html_quickform_element')) {
-           $elementObject = &$element;
-           $elementObject->onQuickFormEvent('updateValue', null, $this);
+            $elementObject = &$element;
+            $elementObject->onQuickFormEvent('updateValue', null, $this);
         } else {
             $args = func_get_args();
             $elementObject =& $this->_loadElement('addElement', $element, array_slice($args, 1));
@@ -589,6 +589,9 @@ class HTML_QuickForm extends HTML_Common
         return $elementObject;
     }
 
+    /**
+     * @return array
+     */
     public function getElements()
     {
         return $this->_elements;

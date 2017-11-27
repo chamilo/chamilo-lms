@@ -1,11 +1,8 @@
-/* -*- Mode: Javascript; indent-tabs-mode:nil; js-indent-level: 2 -*- */
-/* vim: set ts=2 et sw=2 tw=80: */
-
 /*************************************************************
  *
  *  MathJax/localization/fr/TeX.js
  *
- *  Copyright (c) 2009-2015 The MathJax Consortium
+ *  Copyright (c) 2009-2016 The MathJax Consortium
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,16 +17,15 @@
  *  limitations under the License.
  *
  */
-
 MathJax.Localization.addTranslation("fr","TeX",{
-        version: "2.5.0",
+        version: "2.7.2",
         isLoaded: true,
         strings: {
-          ExtraOpenMissingClose: "Accolade ouvrante non attendue ou accolade fermante manquante",
-          ExtraCloseMissingOpen: "Accolade fermante non attendue ou accolade ouvrante manquante",
+          ExtraOpenMissingClose: "Accolade ouvrante superflue ou accolade fermante manquante",
+          ExtraCloseMissingOpen: "Accolade fermante superflue ou accolade ouvrante manquante",
           MissingLeftExtraRight: "Commande \\left manquante ou commande \\right superflue",
           MissingScript: "Argument en exposant ou en indice manquant",
-          ExtraLeftMissingRight: "Commande \\left inattendue ou commande \\right manquante",
+          ExtraLeftMissingRight: "Commande \\left superflue ou commande \\right manquante",
           Misplaced: "Mauvaise position pour la commande %1",
           MissingOpenForSub: "Accolade ouvrante manquante pour le script en indice",
           MissingOpenForSup: "Accolade ouvrante manquante pour le script en exposant",
@@ -38,7 +34,7 @@ MathJax.Localization.addTranslation("fr","TeX",{
           EnvMissingEnd: "\\end{%1} manquant",
           MissingBoxFor: "Boite manquante pour la commande %1",
           MissingCloseBrace: "Accolade fermante manquante",
-          UndefinedControlSequence: "Commande %1 non d\u00E9finie",
+          UndefinedControlSequence: "S\u00E9quence de contr\u00F4le %1 non d\u00E9finie",
           DoubleExponent: "Double exposant : utilisez des accolades pour clarifier",
           DoubleSubscripts: "Double indice : utilisez des accolades pour clarifier",
           DoubleExponentPrime: "Un prime entra\u00EEne un double exposant : utilisez des accolades pour clarifier",
@@ -58,21 +54,21 @@ MathJax.Localization.addTranslation("fr","TeX",{
           BracketMustBeDimension: "L'argument entre crochets de la commande %1 doit \u00EAtre une dimension",
           InvalidEnv: "Nom d'environnement '%1' non valide",
           UnknownEnv: "Environnement '%1' inconnu",
-          ExtraCloseLooking: "Accolade fermante inattendue lors de la recherche de %1",
+          ExtraCloseLooking: "Accolade fermante superflue lors de la recherche de %1",
           MissingCloseBracket: "Impossible de trouver ']' pour l'argument de la commande %1",
           MissingOrUnrecognizedDelim: "D\u00E9limiteur manquant ou non reconnu pour la commande %1",
-          MissingDimOrUnits: "Dimension ou unit\u00E9 manquante pour la commande %1",
+          MissingDimOrUnits: "Dimension ou unit\u00E9s manquantes pour la commande %1",
           TokenNotFoundForCommand: "Impossible de trouver %1 pour la commande %2",
-          MathNotTerminated: "Expression math\u00E9matique non termin\u00E9e \u00E0 l'int\u00E9rieur de cette boite de texte",
+          MathNotTerminated: "Expression math\u00E9matique non termin\u00E9e \u00E0 l'int\u00E9rieur de la boite de texte",
           IllegalMacroParam: "Param\u00E8tre de r\u00E9f\u00E9rence de macro non autoris\u00E9",
           MaxBufferSize: "Taille maximale du tampon interne de MathJax d\u00E9pass\u00E9e; y a-t-il un appel de macro r\u00E9cursif ?",
           CommandNotAllowedInEnv: "La commande %1 n'est pas autoris\u00E9e \u00E0 l'int\u00E9rieur de l'environnement %2",
-          MultipleLabel: "\u00C9tiquette '%1' d\u00E9j\u00E0 d\u00E9finie",
+          MultipleLabel: "Multiple d\u00E9finition de l'\u00E9tiquette '%1'",
           CommandAtTheBeginingOfLine: "La commande %1 doit \u00EAtre plac\u00E9e en d\u00E9but de ligne",
           IllegalAlign: "Alignement non autoris\u00E9 pour la commande %1",
           BadMathStyleFor: "Style math\u00E9matique non valide pour la commande %1",
-          PositiveIntegerArg: "L'argument de la commande %1 doit \u00EAtre un entier strictement positif",
-          ErroneousNestingEq: "Emboitement incorrect des structures d'\u00E9quation",
+          PositiveIntegerArg: "L'argument de la commande %1 doit \u00EAtre un entier positif",
+          ErroneousNestingEq: "Embrication incorrecte des structures d'\u00E9quations",
           MultlineRowsOneCol: "Les rang\u00E9es au sein de l\u2019environnement %1 doivent avoir exactement une colonne",
           MultipleBBoxProperty: "La propri\u00E9t\u00E9 %1 est sp\u00E9cifi\u00E9e deux fois dans la commande %2",
           InvalidBBoxProperty: "La valeur '%1' ne semble pas \u00EAtre une couleur, une dimension de marge int\u00E9rieure ou un style.",
@@ -92,7 +88,7 @@ MathJax.Localization.addTranslation("fr","TeX",{
           MissingCS: "%1 doit \u00EAtre suivi d'une s\u00E9quence de contr\u00F4le",
           CantUseHash2: "Usage du caract\u00E8re # non autoris\u00E9 dans le mod\u00E8le pour la s\u00E9quence de contr\u00F4le %1",
           SequentialParam: "Les param\u00E8tres de la s\u00E9quence de contr\u00F4le %1 doivent \u00EAtre \u00E9num\u00E9r\u00E9s de fa\u00E7on s\u00E9quentielle",
-          MissingReplacementString: "Chaine de caract\u00E8re de remplacement manquante pour la d\u00E9finition %1",
+          MissingReplacementString: "Texte de remplacement manquant pour la d\u00E9finition %1",
           MismatchUseDef: "L\u2019utilisation de la commande %1 ne correspond pas \u00E0 sa d\u00E9finition",
           RunawayArgument: "Argument non termin\u00E9 pour la commande %1?",
           NoClosingDelim: "Impossible de trouver le d\u00E9limiteur fermant pour la commande %1"

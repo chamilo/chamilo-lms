@@ -171,6 +171,7 @@ function get_number_of_users()
  * @param   int     Number of users to get
  * @param   int     Column to sort on
  * @param   string  Order (ASC,DESC)
+ * @return array
  * @see SortableTable#get_table_data($from)
  */
 function get_user_data($from, $number_of_items, $column, $direction)
@@ -291,8 +292,9 @@ if (isset($_POST['report'])) {
 
     if ($start_date != '' || $end_date != '') {
         $sql .= " HAVING ";
-        if ($start_date != '')
+        if ($start_date != '') {
             $sql .= "  access_date >= '$start_date'   ";
+        }
         if ($end_date != '') {
             $sql = ($start_date == '') ? $sql : ($sql." AND ");
             $sql .= "  access_date <= '$end_date'   ";

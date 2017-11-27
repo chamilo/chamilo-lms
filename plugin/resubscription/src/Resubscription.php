@@ -9,7 +9,6 @@
  */
 class Resubscription extends Plugin implements HookPluginInterface
 {
-
     /**
      * Class constructor
      */
@@ -74,5 +73,4 @@ class Resubscription extends Plugin implements HookPluginInterface
         $hook = HookResubscription::create();
         HookResubscribe::create()->detach($hook);
     }
-
 }

@@ -341,6 +341,15 @@ $_configuration['tracking_columns'] = [
         'score' => true,
         'best_score' => true,
         'last_connection' => true,
+    ],
+    'my_progress_courses' => [
+        'course_title' => true,
+        'time_spent' => true,
+        'progress' => true,
+        'best_score_in_lp' => true,
+        'best_score_not_in_lp' => true,
+        'latest_login' => true,
+        'details' => true
     ]
 ];
 */
@@ -621,6 +630,12 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Hide base course announcements when entering a group.
 //$_configuration['hide_base_course_announcements_in_group'] = false;
 
+// Disable delete all announcements button
+//$_configuration['disable_delete_all_announcements'] = false;
+
+// Default glossary view "table" or "list"
+//$_configuration['default_glossary_view'] = 'table';
+
 // Allow or block user subcriptions to a lp/lp category
 /*$_configuration['lp_subscription_settings'] = [
     'options' => [
@@ -643,3 +658,37 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Allow multiple anon users see BT#13324
 //$_configuration['max_anonymous_users'] = 0;
 
+// Send email notification to admin when a user is created
+//$_configuration['send_notification_when_user_added'] = ['admins' => [1] ];
+
+// Hide email content forcing using to click in a link to visit the portal to check the message
+//$_configuration['messages_hide_mail_content'] = false;
+// If you install plugin redirection you need to change to true
+//$_configuration['plugin_redirection_enabled'] = false;
+// Customize on hover agenda view. Show agenda comment and/or description
+/*$_configuration['agenda_on_hover_info'] = [
+    'options' => [
+        'comment' => true,
+        'description' => true,
+    ]
+];*/
+// Disable jquery, jquery-ui libs added in the learning path view
+//$_configuration['disable_js_in_lp_view'] = true;
+// Show all sessions (old, current, future) in my course page
+//$_configuration['show_all_sessions_on_my_course_page'] = true;
+// Redirect to home tool after uploading a student publication or a adding a comment
+//$_configuration['allow_redirect_to_main_page_after_work_upload'] = false;
+// Empty the session student list when subscribing multiple users
+//$_configuration['session_multiple_subscription_students_list_avoid_emptying'] = false;
+// Disable the option to set course coach in session when editing course
+//$_configuration['disabled_edit_session_coaches_course_editing_course'] = false;
+// Show sender's email when receiving email notifications.
+//$_configuration['show_user_email_in_notification'] = false;
+// Set skill levels name, then later it will be parsed using get_lang BT#13586
+/*$_configuration['skill_levels_names'] = [
+    'levels' => [
+        1 => 'Skills',
+        2 => 'Capability',
+        3 => 'Dimension',
+    ]
+];*/

@@ -88,7 +88,10 @@ if ($origin == 'group') {
     );
     $interbreadcrumb[] = array('url' => 'javascript: void (0);', 'name' => get_lang('EditPost'));
 } else {
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq(), 'name' => $nameTools);
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq(),
+        'name' => $nameTools,
+    );
     $interbreadcrumb[] = array(
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&'.api_get_cidreq(),
         'name' => prepare4display($current_forum_category['cat_title'])

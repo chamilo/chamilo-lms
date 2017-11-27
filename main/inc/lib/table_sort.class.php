@@ -278,8 +278,12 @@ class TableSort
     {
         $is_image = true;
         foreach ($data as $index => & $row) {
-            $is_image &= strlen(trim(strip_tags($row[$column], '<img>'))) > 0; // at least one img-tag
-            $is_image &= strlen(trim(strip_tags($row[$column]))) == 0; // and no text outside attribute-values
+            if (isset($row[$column])) {
+                // at least one img-tag
+                $is_image &= strlen(trim(strip_tags($row[$column], '<img>'))) > 0;
+                // and no text outside attribute-values
+                $is_image &= strlen(trim(strip_tags($row[$column]))) == 0;
+            }
             if (!$is_image) {
                 break;
             }

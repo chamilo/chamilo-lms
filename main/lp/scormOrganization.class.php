@@ -19,10 +19,11 @@ class scormOrganization
     public $metadata;
 
     /**
-     * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormOrganization
+     * Class constructor. Depending of the type of construction called ('db' or 'manifest'),
+     * will create a scormOrganization
      * object from database records or from the DOM element given as parameter
-     * @param	string	Type of construction needed ('db' or 'manifest', default = 'manifest')
-     * @param	mixed	Depending on the type given, DB id for the lp_item or reference to the DOM element
+     * @param    string    Type of construction needed ('db' or 'manifest', default = 'manifest')
+     * @param    mixed    Depending on the type given, DB id for the lp_item or reference to the DOM element
      */
     public function __construct($type = 'manifest', &$element, $scorm_charset = 'UTF-8')
     {
@@ -34,7 +35,8 @@ class scormOrganization
                     return false;
                 case 'manifest': // Do the same as the default.
                 default:
-                    //if ($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function.
+                    // if ($first_item->type == XML_ELEMENT_NODE)
+                    // this is already check prior to the call to this function.
                     $children = $element->childNodes;
                     foreach ($children as $child) {
                         switch ($child->nodeType) {
@@ -51,7 +53,8 @@ class scormOrganization
                                         break;
                                     case 'metadata':
                                         $this->metadata = new scormMetadata(
-                                            'manifest', $child
+                                            'manifest',
+                                            $child
                                         );
                                         break;
                                     case 'title':
@@ -99,7 +102,8 @@ class scormOrganization
 
     /**
      * Get a flat list of items in the organization
-     * @return	array	Array containing an ordered list of all items with their level and all information related to each item
+     * @return    array    Array containing an ordered list of all items with
+     * their level and all information related to each item
      */
     public function get_flat_items_list()
     {
@@ -117,7 +121,7 @@ class scormOrganization
 
     /**
      * Name getter
-     * @return	string	Name or empty string
+     * @return    string    Name or empty string
      */
     public function get_name()
     {
@@ -130,7 +134,7 @@ class scormOrganization
 
     /**
      * Reference identifier getter
-     * @return	string	Identifier or empty string
+     * @return    string    Identifier or empty string
      */
     public function get_ref()
     {
@@ -143,7 +147,7 @@ class scormOrganization
 
     /**
      * Sets the title element
-     * @param	string	$title New title to set
+     * @param    string $title New title to set
      */
     public function set_name($title)
     {

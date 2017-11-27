@@ -146,5 +146,4 @@ class SessionRelCourse
     {
         $this->position = $position;
     }
-
 }

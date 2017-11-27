@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	Interface for assigning courses to Human Resources Manager
-*	@package chamilo.admin
-*/
+ * Interface for assigning courses to Human Resources Manager
+ * @package chamilo.admin
+ */
 // resetting the course id
 $cidReset = true;
 

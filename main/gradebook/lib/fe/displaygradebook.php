@@ -62,7 +62,7 @@ class DisplayGradebook
         $scoredisplay = ScoreDisplay::instance();
         $student_score = '';
         $average = '';
-        if (($evalobj->has_results())) {
+        if ($evalobj->has_results()) {
             // TODO this check needed ?
             $score = $evalobj->calc_score();
             if ($score != null) {
@@ -74,7 +74,7 @@ class DisplayGradebook
                 );
             }
         }
-        $description = "";
+        $description = '';
         if (!$evalobj->get_description() == '') {
             $description = get_lang('Description').' :<b> '.$evalobj->get_description().'</b><br>';
         }
@@ -242,14 +242,17 @@ class DisplayGradebook
      * Displays the header for the gradebook containing the navigation tree and links
      * @param Category $catobj
      * @param int $showtree '1' will show the browse tree and naviation buttons
+     * @param $selectcat
      * @param boolean $is_course_admin
      * @param boolean $is_platform_admin
-     * @param boolean Whether to show or not the link to add a new qualification
+     * @param bool $simple_search_form
+     * @param boolean $show_add_qualification Whether to show or not the link to add a new qualification
      * (we hide it in case of the course-embedded tool where we have only one
-     * calification per course or session)
-     * @param boolean Whether to show or not the link to add a new item inside
+     * per course or session)
+     * @param boolean $show_add_link Whether to show or not the link to add a new item inside
      * the qualification (we hide it in case of the course-embedded tool
-     * where we have only one calification per course or session)
+     * where we have only one qualification per course or session)
+     * @param array $certificateLinkInfo
      * @return void Everything is printed on screen upon closing
      */
     public static function header(
@@ -261,7 +264,7 @@ class DisplayGradebook
         $simple_search_form,
         $show_add_qualification = true,
         $show_add_link = true,
-        $certificateLinkInfo = null
+        $certificateLinkInfo = []
     ) {
         $userId = api_get_user_id();
         $courseId = api_get_course_int_id();
@@ -284,7 +287,6 @@ class DisplayGradebook
         $message_resource = $objcat->show_message_resource_delete($course_id);
         $grade_model_id = $catobj->get_grade_model_id();
         $header = null;
-
         if (isset($catobj) && !empty($catobj)) {
             $categories = Category::load(
                 null,
@@ -314,22 +316,23 @@ class DisplayGradebook
                 if (!empty($score)) {
                     $divide = $score[1] == 0 ? 1 : $score[1];
                     $item_value = $score[0] / $divide * $item->get_weight();
-                    $item_value_total += $item_value;
+                    $item_value_total += $scoredisplay->format_score($item_value);
                 }
             }
 
             $item_total = $main_weight;
             $total_score = array($item_value_total, $item_total);
             $scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
+
             if ((!$catobj->get_id() == '0') && (!isset($_GET['studentoverview'])) && (!isset($_GET['search']))) {
-                $aditionalButtons = null;
+                $additionalButtons = null;
                 if (!empty($certificateLinkInfo)) {
-                    $aditionalButtons .= '<div class="btn-group pull-right">';
-                    $aditionalButtons .= isset($certificateLinkInfo['certificate_link']) ? $certificateLinkInfo['certificate_link'] : '';
-                    $aditionalButtons .= isset($certificateLinkInfo['badge_link']) ? $certificateLinkInfo['badge_link'] : '';
-                    $aditionalButtons .= '</div>';
+                    $additionalButtons .= '<div class="btn-group pull-right">';
+                    $additionalButtons .= isset($certificateLinkInfo['certificate_link']) ? $certificateLinkInfo['certificate_link'] : '';
+                    $additionalButtons .= isset($certificateLinkInfo['badge_link']) ? $certificateLinkInfo['badge_link'] : '';
+                    $additionalButtons .= '</div>';
                 }
-                $scoreinfo .= '<strong>'.sprintf(get_lang('TotalX'), $scorecourse_display.$aditionalButtons).'</strong>';
+                $scoreinfo .= '<strong>'.sprintf(get_lang('TotalX'), $scorecourse_display.$additionalButtons).'</strong>';
 
             }
             echo Display::return_message($scoreinfo, 'normal', false);
@@ -503,14 +506,14 @@ class DisplayGradebook
             $weight = intval($catobj->get_weight()) > 0 ? $catobj->get_weight() : 0;
             $weight = '<strong>'.get_lang('TotalWeight').' : </strong>'.$weight;
 
-            $min_certification = (intval($catobj->getCertificateMinScore() > 0) ? $catobj->getCertificateMinScore() : 0);
+            $min_certification = intval($catobj->getCertificateMinScore() > 0) ? $catobj->getCertificateMinScore() : 0;
             $min_certification = get_lang('CertificateMinScore').' : '.$min_certification;
             $edit_icon = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&amp;cidReq='.$catobj->get_course_code().'&id_session='.$catobj->get_session_id().'">'.
                 Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
-            //$msg = Display::tag('h3', $weight.' - '.$min_certification);
+
             $msg = $weight.' - '.$min_certification.$edit_icon;
             //@todo show description
-            $description = (($catobj->get_description() == "" || is_null($catobj->get_description())) ? '' : '<strong>'.get_lang('GradebookDescriptionLog').'</strong>'.': '.$catobj->get_description());
+            $description = (($catobj->get_description() == '' || is_null($catobj->get_description())) ? '' : '<strong>'.get_lang('GradebookDescriptionLog').'</strong>'.': '.$catobj->get_description());
             echo Display::return_message($msg, 'normal', false);
             if (!empty($description)) {
                 echo Display::div($description, array());

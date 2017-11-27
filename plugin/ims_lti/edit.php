@@ -20,7 +20,7 @@ if (empty($tool)) {
         Display::return_message($plugin->get_lang('NoTool'), 'error')
     );
 
-    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/list.php');
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
     exit;
 }
 
@@ -58,7 +58,7 @@ if ($form->validate()) {
         Display::return_message($plugin->get_lang('ToolEdited'), 'success')
     );
 
-    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/list.php');
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
     exit;
 }
 

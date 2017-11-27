@@ -4,8 +4,6 @@
  * Search widget. Shows the search screen contents.
  * @package chamilo.include.search
  */
-
-require_once __DIR__.'/IndexableChunk.class.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 /**
@@ -303,12 +301,13 @@ function display_search_form($action, $show_thesaurus, $sf_terms, $op)
             break;
         case 'normal':
         default:
-        $form = search_widget_normal_form(
-            $action,
-            $show_thesaurus,
-            $sf_terms,
-            $op
-        );
+            $form = search_widget_normal_form(
+                $action,
+                $show_thesaurus,
+                $sf_terms,
+                $op
+            );
+            break;
     }
 
     // show built form

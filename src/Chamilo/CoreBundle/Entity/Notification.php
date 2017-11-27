@@ -8,7 +8,16 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Notification
  *
- * @ORM\Table(name="notification", indexes={@ORM\Index(name="mail_notify_sent_index", columns={"sent_at"}), @ORM\Index(name="mail_notify_freq_index", columns={"sent_at", "send_freq", "created_at"})})
+ * @ORM\Table(
+ *     name="notification",
+ *     indexes={
+ *          @ORM\Index(name="mail_notify_sent_index", columns={"sent_at"}),
+ *          @ORM\Index(
+ *              name="mail_notify_freq_index",
+ *              columns={"sent_at", "send_freq", "created_at"}
+ *          )
+ *     }
+ * )
  * @ORM\Entity
  */
 class Notification

@@ -734,7 +734,7 @@
                         </div>
                         <p class="openbadges-text">{{'BadgePreview' | get_lang }}</p>
                         <div class="openbadges-img {{ skill.icon ? '' : 'hide' }}" id="badge-container">
-                            <img id="badge-preview" class="img-responsive" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon ? skill.web_icon_path : '' }}">
+                            <img id="badge-preview" class="img-responsive" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon_big }}">
                         </div>
                     </div>
                 </div>

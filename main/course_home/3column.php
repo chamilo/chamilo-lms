@@ -18,6 +18,9 @@ $restore = isset($_GET['restore']) && $_GET['restore'] === 'yes' ? 'yes' : null;
 $id = isset($_GET['id']) ? intval($_GET['id']) : null;
 $TBL_ACCUEIL = Database::get_course_table(TABLE_TOOL_LIST);
 $course_id = api_get_course_int_id();
+$remove = isset($remove) ? $remove : false;
+$destroy = isset($destroy) ? $destroy : false;
+$askDelete = isset($askDelete) ? $askDelete : false;
 
 // WORK with data post askable by admin of course
 if (api_is_allowed_to_edit(null, true)) {

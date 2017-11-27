@@ -93,7 +93,6 @@ class Certificate extends Model
             // Getting QR filename
             $file_info = pathinfo($path_certificate);
             $qr_code_filename = $this->certification_user_path.$file_info['filename'].'_qr.png';
-
             $content = $this->generateCustomCertificate();
 
             $my_new_content_html = str_replace(

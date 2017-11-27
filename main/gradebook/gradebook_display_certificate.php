@@ -32,12 +32,12 @@ if (!api_is_allowed_to_edit() && !api_is_student_boss()) {
     api_not_allowed(true);
 }
 
-$cat_id = isset($_GET['cat_id']) ? (int) $_GET['cat_id'] : null;
+$categoryId = isset($_GET['cat_id']) ? (int) $_GET['cat_id'] : 0;
 $action = isset($_GET['action']) && $_GET['action'] ? $_GET['action'] : null;
 $filterOfficialCode = isset($_POST['filter']) ? Security::remove_XSS($_POST['filter']) : null;
 $filterOfficialCodeGet = isset($_GET['filter']) ? Security::remove_XSS($_GET['filter']) : null;
 
-$url = api_get_self().'?'.api_get_cidreq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
+$url = api_get_self().'?'.api_get_cidreq().'&cat_id='.$categoryId.'&filter='.$filterOfficialCode;
 $courseInfo = api_get_course_info();
 
 $filter = api_get_setting('certificate_filter_by_official_code');
@@ -50,7 +50,7 @@ if ($filter === 'true') {
     $form = new FormValidator(
         'official_code_filter',
         'POST',
-        api_get_self().'?'.api_get_cidreq().'&cat_id='.$cat_id
+        api_get_self().'?'.api_get_cidreq().'&cat_id='.$categoryId
     );
     $form->addElement('select', 'filter', get_lang('OfficialCode'), $options);
     $form->addButton('submit', get_lang('Submit'));
@@ -59,21 +59,21 @@ if ($filter === 'true') {
     if ($form->validate()) {
         $officialCode = $form->getSubmitValue('filter');
         if ($officialCode == 'all') {
-            $certificate_list = GradebookUtils::get_list_users_certificates($cat_id);
+            $certificate_list = GradebookUtils::get_list_users_certificates($categoryId);
         } else {
             $userList = UserManager::getUsersByOfficialCode($officialCode);
             if (!empty($userList)) {
                 $certificate_list = GradebookUtils::get_list_users_certificates(
-                    $cat_id,
+                    $categoryId,
                     $userList
                 );
             }
         }
     } else {
-        $certificate_list = GradebookUtils::get_list_users_certificates($cat_id);
+        $certificate_list = GradebookUtils::get_list_users_certificates($categoryId);
     }
 } else {
-    $certificate_list = GradebookUtils::get_list_users_certificates($cat_id);
+    $certificate_list = GradebookUtils::get_list_users_certificates($categoryId);
 }
 
 $content = '';
@@ -93,7 +93,7 @@ switch ($action) {
                 }
                 $list = GradebookUtils::get_list_gradebook_certificates_by_user_id(
                     $value['user_id'],
-                    $cat_id
+                    $categoryId
                 );
 
                 foreach ($list as $valueCertificate) {
@@ -137,7 +137,7 @@ switch ($action) {
             }
         }
 
-        Category::exportAllCertificates($cat_id, $userList);
+        Category::exportAllCertificates($categoryId, $userList);
         break;
     case 'generate_all_certificates':
         $userList = CourseManager::get_user_list_from_course_code(
@@ -150,12 +150,12 @@ switch ($action) {
                 if ($userInfo['status'] == INVITEE) {
                     continue;
                 }
-                Category::generateUserCertificate($cat_id, $userInfo['user_id']);
+                Category::generateUserCertificate($categoryId, $userInfo['user_id']);
             }
         }
         break;
     case 'delete_all_certificates':
-        Category::deleteAllCertificates($cat_id);
+        Category::deleteAllCertificates($categoryId);
         break;
 }
 
@@ -190,7 +190,7 @@ if (!empty($content)) {
 }
 
 //@todo replace all this code with something like get_total_weight()
-$cats = Category::load($cat_id, null, null, null, null, null, false);
+$cats = Category::load($categoryId, null, null, null, null, null, false);
 
 if (!empty($cats)) {
     //with this fix the teacher only can view 1 gradebook
@@ -286,7 +286,7 @@ if (count($certificate_list) == 0) {
 
         $list = GradebookUtils::get_list_gradebook_certificates_by_user_id(
             $value['user_id'],
-            $cat_id
+            $categoryId
         );
         foreach ($list as $valueCertificate) {
             echo '<tr>';
@@ -300,7 +300,7 @@ if (count($certificate_list) == 0) {
                 array('target' => '_blank', 'class' => 'btn btn-default')
             );
             echo $certificates;
-            echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&'.api_get_cidreq().'&action=delete&cat_id='.$cat_id.'&certificate_id='.$valueCertificate['id'].'">
+            echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&'.api_get_cidreq().'&action=delete&cat_id='.$categoryId.'&certificate_id='.$valueCertificate['id'].'">
                     '.Display::return_icon('delete.png', get_lang('Delete')).'
                   </a>';
             echo '</td></tr>';

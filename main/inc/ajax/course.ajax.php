@@ -293,6 +293,15 @@ switch ($action) {
 
         echo json_encode($courses);
         break;
+    case 'course_logout':
+        $logoutInfo = [
+            'uid' => api_get_user_id(),
+            'cid' => api_get_course_int_id(),
+            'sid' => api_get_session_id()
+        ];
+        $result = (int) Event::courseLogout($logoutInfo);
+        echo $result;
+        break;
     default:
         echo '';
 }

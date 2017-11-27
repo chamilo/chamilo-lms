@@ -205,7 +205,6 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  *
  * So far only use for unzip_uploaded_document function.
  * If no output wanted on success, set to false.
- * @param string $comment
  * @return string path of the saved file
  */
 function handle_uploaded_document(
@@ -1121,6 +1120,16 @@ function unzip_uploaded_document(
 function clean_up_files_in_zip($p_event, &$p_header)
 {
     $originalStoredFileName = $p_header['stored_filename'];
+    $baseName = basename($originalStoredFileName);
+    // Skip files
+    $skipFiles = [
+        '__MACOSX',
+        '.Thumbs.db',
+        'Thumbs.db',
+    ];
+    if (in_array($baseName, $skipFiles)) {
+        return 0;
+    }
     $modifiedStoredFileName = clean_up_path($originalStoredFileName);
     $p_header['filename'] = str_replace($originalStoredFileName, $modifiedStoredFileName, $p_header['filename']);
 
@@ -1215,14 +1224,14 @@ function filter_extension(&$filename)
 /**
  * Adds a new document to the database
  *
- * @param array $_course
+ * @param array $courseInfo
  * @param string $path
- * @param string $filetype
- * @param int $filesize
+ * @param string $fileType
+ * @param int $fileSize
  * @param string $title
  * @param string $comment
  * @param int $readonly
- * @param bool $save_visibility
+ * @param bool $saveVisibility
  * @param int $group_id group.id
  * @param int $session_id Session ID, if any
  * @param int $userId creator id
@@ -1230,14 +1239,14 @@ function filter_extension(&$filename)
  * @return int id if inserted document
  */
 function add_document(
-    $_course,
+    $courseInfo,
     $path,
-    $filetype,
-    $filesize,
+    $fileType,
+    $fileSize,
     $title,
     $comment = null,
     $readonly = 0,
-    $save_visibility = true,
+    $saveVisibility = true,
     $group_id = null,
     $session_id = 0,
     $userId = 0
@@ -1246,30 +1255,29 @@ function add_document(
     $userId = empty($userId) ? api_get_user_id() : $userId;
 
     $readonly = intval($readonly);
-    $c_id = $_course['real_id'];
-    $table_document = Database::get_course_table(TABLE_DOCUMENT);
-
+    $c_id = $courseInfo['real_id'];
     $params = [
         'c_id' => $c_id,
         'path' => $path,
-        'filetype' => $filetype,
-        'size' => $filesize,
+        'filetype' => $fileType,
+        'size' => $fileSize,
         'title' => $title,
         'comment' => $comment,
         'readonly' => $readonly,
         'session_id' => $session_id,
     ];
-    $documentId = Database::insert($table_document, $params);
+    $table = Database::get_course_table(TABLE_DOCUMENT);
+    $documentId = Database::insert($table, $params);
     if ($documentId) {
-        $sql = "UPDATE $table_document SET id = iid WHERE iid = $documentId";
+        $sql = "UPDATE $table SET id = iid WHERE iid = $documentId";
         Database::query($sql);
 
-        if ($save_visibility) {
+        if ($saveVisibility) {
             api_set_default_visibility(
                 $documentId,
                 TOOL_DOCUMENT,
                 $group_id,
-                $_course,
+                $courseInfo,
                 $session_id,
                 $userId
             );
@@ -1508,8 +1516,8 @@ function create_unexisting_directory(
     $to_user_id,
     $base_work_dir,
     $desired_dir_name,
-    $title = null,
-    $visibility = null,
+    $title = '',
+    $visibility = '',
     $generateNewNameIfExists = false
 ) {
     $course_id = $_course['real_id'];
@@ -1568,7 +1576,6 @@ function create_unexisting_directory(
         );
 
         if ($result) {
-
             // Check if pathname already exists inside document table
             $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
             $sql = "SELECT id, path FROM $tbl_document
@@ -1904,7 +1911,7 @@ function add_all_documents_in_folder_to_database(
                     if ($documentId) {
                         $newFolderData = DocumentManager::get_document_data_by_id(
                             $documentId,
-                            $courseInfo,
+                            $courseInfo['code'],
                             false,
                             $sessionId
                         );

@@ -1,9 +1,5 @@
 <?php
-/**
- * SidebarController.php
- * avanzu-admin
- * Date: 23.02.14
- */
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\ThemeBundle\Controller;
 

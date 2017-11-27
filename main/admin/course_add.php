@@ -87,7 +87,6 @@ if ($countCategories >= 100) {
     );
 }
 
-
 $form->addRule(
     'visual_code',
     get_lang('Max'),

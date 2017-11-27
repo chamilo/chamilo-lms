@@ -260,11 +260,11 @@ if (isset($_GET['deletelink'])) {
         $filter_confirm_msg = false;
     }
 }
-$course_to_crsind = isset ($course_to_crsind) ? $course_to_crsind : '';
+$course_to_crsind = isset($course_to_crsind) ? $course_to_crsind : '';
 if ($course_to_crsind && !isset($_GET['confirm'])) {
     GradebookUtils::block_students();
     if (!isset($_GET['movecat']) && !isset($_GET['moveeval'])) {
-        die ('Error: movecat or moveeval not defined');
+        api_not_allowed(true);
     }
     $button = '<form name="confirm"
                  method="post"
@@ -608,11 +608,9 @@ $gradebooktable = new GradebookTable(
     $alllink,
     $addparams
 );
-if (((empty($allcat)) && (empty($alleval)) && (empty ($alllink)) && (!$is_platform_admin) &&
-        ($is_course_admin) &&
-        (!isset($_GET['selectcat']))
-    ) &&
-    api_is_course_tutor()
+
+if (empty($allcat) && empty($alleval) && empty($alllink) &&
+    !$is_platform_admin && $is_course_admin && !isset($_GET['selectcat']) && api_is_course_tutor()
 ) {
     echo Display::return_message(
         get_lang('GradebookWelcomeMessage').

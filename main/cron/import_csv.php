@@ -1150,11 +1150,12 @@ class ImportCsv
 
                     $emailBody = get_lang('Dear').' ((user_firstname)) <br />'.
                         sprintf(
-                        get_lang('YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX'),
-                        $courseTitle,
-                        $date,
-                        $event['comment']
-                    );
+                            get_lang('YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX'),
+                            $courseTitle,
+                            $date,
+                            $event['comment']
+                        )
+                    ;
 
                     $subject = sprintf(
                         get_lang('AgendaAvailableInCourseX'),
@@ -1162,8 +1163,8 @@ class ImportCsv
                     );
 
                     $coaches = SessionManager::getCoachesByCourseSession(
-                        $courseInfo['real_id'],
-                        $event['session_id']
+                        $event['session_id'],
+                        $courseInfo['real_id']
                     );
 
                     // Search if an announcement exists:
@@ -1221,34 +1222,78 @@ class ImportCsv
                         $report['mail_not_sent_because_date']++;
                     }
                 }
+
                 $content = '';
                 if ($update && isset($item['item_id'])) {
-                    //the event already exists, just update
-                    $eventResult = $agenda->editEvent(
-                        $item['item_id'],
-                        $event['start'],
-                        $event['end'],
-                        false,
-                        $event['title'],
-                        $content,
-                        array('everyone'), // $usersToSend
-                        array(), //$attachmentArray = array(),
-                        [], //$attachmentCommentList
-                        $eventComment,
-                        $color,
-                        false,
-                        false,
-                        $this->defaultAdminId
-                    );
+                    $eventInfo = $agenda->get_event($item['item_id']);
+                    if (empty($eventInfo)) {
+                        // Means that agenda external id exists but the event doesn't exist
+                        $this->logger->addInfo("external event id exists: $externalEventId");
+                        $this->logger->addInfo("but Chamilo event don't exists: ".$item['item_id']);
 
-                    if ($eventResult !== false) {
-                        $this->logger->addInfo(
-                            "Event updated #".$item['item_id']." External cal Id: (".$externalEventId.") $info"
+                        $eventId = $agenda->addEvent(
+                            $event['start'],
+                            $event['end'],
+                            false,
+                            $event['title'],
+                            $content,
+                            array('everyone'), // $usersToSend
+                            false, //$addAsAnnouncement = false
+                            null, //  $parentEventId
+                            array(), //$attachmentArray = array(),
+                            [], //$attachmentCommentList
+                            $eventComment,
+                            $color
                         );
+
+                        if (!empty($eventId)) {
+                            $this->logger->addInfo("Chamilo event created: ".$eventId);
+                            $values = $extraFieldValue->get_values_by_handler_and_field_id(
+                                $item['item_id'],
+                                $extraFieldInfo['id']
+                            );
+
+                            foreach ($values as $extraFieldValueItem) {
+                                $params = [
+                                    'id' => $extraFieldValueItem['id'],
+                                    'item_id' => $eventId
+                                ];
+                                $extraFieldValue->update($params);
+                                $this->logger->addInfo(
+                                    'Updating calendar extra field  #'.$extraFieldValueItem['id'].' new item_id: '.$eventId.' old item_id: '.$item['item_id']
+                                );
+                            }
+                        } else {
+                            $this->logger->addInfo("Error while creating event external id: $externalEventId");
+                        }
                     } else {
-                        $this->logger->addInfo(
-                            "Error while updating event with external id: $externalEventId"
+                        // The event already exists, just update
+                        $eventResult = $agenda->editEvent(
+                            $item['item_id'],
+                            $event['start'],
+                            $event['end'],
+                            false,
+                            $event['title'],
+                            $content,
+                            array('everyone'), // $usersToSend
+                            array(), //$attachmentArray = array(),
+                            [], //$attachmentCommentList
+                            $eventComment,
+                            $color,
+                            false,
+                            false,
+                            $this->defaultAdminId
                         );
+
+                        if ($eventResult !== false) {
+                            $this->logger->addInfo(
+                                "Event updated #".$item['item_id']." External cal Id: (".$externalEventId.") $info"
+                            );
+                        } else {
+                            $this->logger->addInfo(
+                                "Error while updating event with external id: $externalEventId"
+                            );
+                        }
                     }
                 } else {
                     // New event. Create it.
@@ -2416,6 +2461,7 @@ class ImportCsv
                     $arrow = $row['DrawArrowFrom'];
                     $subGroup = $row['SubGroup'];
                     $connections = $row['Connections'];
+                    $linkedElement = isset($row['LinkedElement']) ? $row['LinkedElement'] : null;
 
                     if ($graph->hasVertex($currentCourseId)) {
                         // Avoid double insertion
@@ -2430,6 +2476,7 @@ class ImportCsv
                         $current->setAttribute('DrawArrowFrom', $arrow);
                         $current->setAttribute('SubGroup', $subGroup);
                         $current->setAttribute('Connections', $connections);
+                        $current->setAttribute('LinkedElement', $linkedElement);
 
                         //$current->setAttribute('graphviz.color', 'blue');
                         $current->setAttribute('graphviz.shape', 'box');

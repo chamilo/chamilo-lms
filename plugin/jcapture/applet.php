@@ -1,46 +1,42 @@
-<?php 
+<?php
 
-	//fix for Opera XMLHttpRequests
-	if (!count($_POST) && $HTTP_RAW_POST_DATA) {
-	  parse_str($HTTP_RAW_POST_DATA, $_POST);
-	}
-	
-	if (!defined('DOKU_INC')) define('DOKU_INC', __DIR__.'/../../../');
-	require_once(DOKU_INC.'inc/init.php');
-	require_once(DOKU_INC.'inc/common.php');
-	require_once(DOKU_INC.'inc/pageutils.php');
-	require_once(DOKU_INC.'inc/auth.php');
-	//close sesseion
-	session_write_close();
-	
-	header('Content-Type: text/html; charset=utf-8');
-	
-	$hostName = "http".($_SERVER['HTTPS'] ? 's' : null).'://'.$_SERVER['HTTP_HOST']; 
-	
-	$imageFormat = "PNG";
+//fix for Opera XMLHttpRequests
+if (!count($_POST) && $HTTP_RAW_POST_DATA) {
+    parse_str($HTTP_RAW_POST_DATA, $_POST);
+}
 
-	$cookies;
-	foreach (array_keys($_COOKIE) as $cookieName) {
-		$cookies .= bin2hex($cookieName)."=".bin2hex($_COOKIE[$cookieName]).";";
-	} 
-	
-	$pageName = $_GET["pageName"];
-	$edid = $_GET["edid"];
+if (!defined('DOKU_INC')) {
+    define('DOKU_INC', __DIR__.'/../../../');
+}
+require_once(DOKU_INC.'inc/init.php');
+require_once(DOKU_INC.'inc/common.php');
+require_once(DOKU_INC.'inc/pageutils.php');
+require_once(DOKU_INC.'inc/auth.php');
+//close sesseion
+session_write_close();
+header('Content-Type: text/html; charset=utf-8');
+$hostName = "http".($_SERVER['HTTPS'] ? 's' : null).'://'.$_SERVER['HTTP_HOST'];
+$imageFormat = "PNG";
+$cookies;
+foreach (array_keys($_COOKIE) as $cookieName) {
+    $cookies .= bin2hex($cookieName)."=".bin2hex($_COOKIE[$cookieName]).";";
+}
+
+$pageName = $_GET["pageName"];
+$edid = $_GET["edid"];
 ?>
-
-<script language="JavaScript" type="text/javascript"><!--
+<script language="JavaScript" type="text/javascript">
     var _info = navigator.userAgent;
     var _ns = false;
     var _ns6 = false;
     var _ie = (_info.indexOf("MSIE") > 0 && _info.indexOf("Win") > 0 && _info.indexOf("Windows 3.1") < 0);
-//--></script>
-    <comment>
-        <script language="JavaScript" type="text/javascript"><!--
-        var _ns = (navigator.appName.indexOf("Netscape") >= 0 && ((_info.indexOf("Win") > 0 && _info.indexOf("Win16") < 0 && java.lang.System.getProperty("os.version").indexOf("3.5") < 0) || (_info.indexOf("Sun") > 0) || (_info.indexOf("Linux") > 0) || (_info.indexOf("AIX") > 0) || (_info.indexOf("OS/2") > 0) || (_info.indexOf("IRIX") > 0)));
-        var _ns6 = ((_ns == true) && (_info.indexOf("Mozilla/5") >= 0));
-//--></script>
-    </comment>
-
+</script>
+<comment>
+    <script language="JavaScript" type="text/javascript">
+    var _ns = (navigator.appName.indexOf("Netscape") >= 0 && ((_info.indexOf("Win") > 0 && _info.indexOf("Win16") < 0 && java.lang.System.getProperty("os.version").indexOf("3.5") < 0) || (_info.indexOf("Sun") > 0) || (_info.indexOf("Linux") > 0) || (_info.indexOf("AIX") > 0) || (_info.indexOf("OS/2") > 0) || (_info.indexOf("IRIX") > 0)));
+    var _ns6 = ((_ns == true) && (_info.indexOf("Mozilla/5") >= 0));
+    </script>
+</comment>
 <script language="JavaScript" type="text/javascript"><!--
     if (_ie == true) document.writeln('<object classid="clsid:CAFEEFAC-0017-0000-0020-ABCDEFFEDCBA" NAME = "jCapture"  WIDTH = "1" HEIGHT = "1" codebase="http://java.sun.com/update/1.7.0/jinstall-1_7_0-windows-i586.cab#Version=7,0,0,0"><xmp>');
     else if (_ns == true && _ns6 == false) document.writeln('<embed ' +

@@ -1,5 +1,6 @@
 <?php
 /* For license terms, see /license.txt */
+
 /**
  * Index of the Sepe plugin
  */

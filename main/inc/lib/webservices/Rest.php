@@ -203,7 +203,7 @@ class Rest extends WebService
         foreach ($courses as $courseId) {
             /** @var Course $course */
             $course = Database::getManager()->find('ChamiloCoreBundle:Course', $courseId['real_id']);
-            $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course->getCode());
+            $teachers = CourseManager::getTeacherListFromCourseCodeToString($course->getCode());
 
             $data[] = [
                 'id' => $course->getId(),
@@ -224,7 +224,7 @@ class Rest extends WebService
      */
     public function getCourseInfo()
     {
-        $teachers = CourseManager::get_teacher_list_from_course_code_to_string($this->course->getCode());
+        $teachers = CourseManager::getTeacherListFromCourseCodeToString($this->course->getCode());
         $tools = CourseHome::get_tools_category(
             TOOL_STUDENT_VIEW,
             $this->course->getId(),
@@ -239,7 +239,7 @@ class Rest extends WebService
             'urlPicture' => $this->course->getPicturePath(true),
             'teachers' => $teachers,
             'tools' => array_map(
-                function($tool) {
+                function ($tool) {
                     return ['type' => $tool['name']];
                 },
                 $tools

@@ -12,10 +12,10 @@ api_block_anonymous_users();
 $eval = Evaluation :: load($_GET['selecteval']);
 if ($eval[0]->get_category_id() < 0) {
     // if category id is negative, then the evaluation's origin is a link
-    $link = LinkFactory :: get_evaluation_link($eval[0]->get_id());
-    $currentcat = Category :: load($link->get_category_id());
+    $link = LinkFactory::get_evaluation_link($eval[0]->get_id());
+    $currentcat = Category::load($link->get_category_id());
 } else {
-    $currentcat = Category :: load($eval[0]->get_category_id());
+    $currentcat = Category::load($eval[0]->get_category_id());
 }
 
 $interbreadcrumb[] = array(
@@ -25,11 +25,11 @@ $interbreadcrumb[] = array(
 
 if (api_is_allowed_to_edit()) {
     $interbreadcrumb[] = array(
-        'url' => 'gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq(),
+        'url' => 'gradebook_view_result.php?selecteval='.intval($_GET['selecteval']).'&'.api_get_cidreq(),
         'name' => get_lang('ViewResult')
     );
 }
-$displayscore = ScoreDisplay :: instance();
+$displayScore = ScoreDisplay::instance();
 
 Display::display_header(get_lang('EvaluationStatistics'));
 DisplayGradebook::display_header_result(
@@ -40,9 +40,9 @@ DisplayGradebook::display_header_result(
 );
 
 //Bad, Regular, Good  - User definitions
-$displays = $displayscore->get_custom_score_display_settings();
+$displays = $displayScore->get_custom_score_display_settings();
 
-if (!$displayscore->is_custom() || empty($displays)) {
+if (!$displayScore->is_custom() || empty($displays)) {
     if (api_is_platform_admin() || api_is_course_admin()) {
         echo Display::return_message(get_lang('PleaseEnableScoringSystem'), 'error', false);
     }
@@ -57,7 +57,7 @@ if (!$displayscore->is_custom() || empty($displays)) {
     foreach ($allresults as $result) {
         $score = $result->get_score();
         if (isset($score)) {
-            $display = $displayscore->display_score(
+            $display = $displayScore->display_score(
                 array($score, $eval[0]->get_max()),
                 SCORE_CUSTOM,
                 SCORE_ONLY_CUSTOM,
@@ -69,9 +69,7 @@ if (!$displayscore->is_custom() || empty($displays)) {
     }
 
     $keys = array_keys($nr_items);
-
     // find the region with the most scores, this is 100% of the bar
-
     $highest_ratio = 0;
     foreach ($keys as $key) {
         if ($nr_items[$key] > $highest_ratio) {

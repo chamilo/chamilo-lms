@@ -9,7 +9,7 @@
  *
  *  ---------------------------------------------------------------------
  *  
- *  Copyright (c) 2010-2015 The MathJax Consortium
+ *  Copyright (c) 2010-2017 The MathJax Consortium
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,23 +25,26 @@
  */
 
 MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
-  var VERSION = "2.5.0";
+  var VERSION = "2.7.2";
   var MML = MathJax.ElementJax.mml,
       HTMLCSS = MathJax.OutputJax["HTML-CSS"];
   
   MML.ms.Augment({
     toHTML: function (span) {
       span = this.HTMLhandleSize(this.HTMLcreateSpan(span));
-      var values = this.getValues("lquote","rquote");
-      var text = this.data.join("");  // FIXME:  handle mglyph?
-      this.HTMLhandleVariant(span,this.HTMLgetVariant(),values.lquote+text+values.rquote);
+      var values = this.getValues("lquote","rquote","mathvariant");
+      if (!this.hasValue("lquote") || values.lquote === '"') values.lquote = "\u201C";
+      if (!this.hasValue("rquote") || values.rquote === '"') values.rquote = "\u201D";
+      if (values.lquote === "\u201C" && values.mathvariant === "monospace") values.lquote = '"';
+      if (values.rquote === "\u201D" && values.mathvariant === "monospace") values.rquote = '"';
+      var text = values.lquote+this.data.join("")+values.rquote;  // FIXME:  handle mglyph?
+      this.HTMLhandleVariant(span,this.HTMLgetVariant(),text);
       this.HTMLhandleSpace(span);
       this.HTMLhandleColor(span);
       this.HTMLhandleDir(span);
       return span;
     }
   });
-  MML.ms.prototype.defaults.mathvariant = 'monospace';
   
   MathJax.Hub.Startup.signal.Post("HTML-CSS ms Ready");
   MathJax.Ajax.loadComplete(HTMLCSS.autoloadDir+"/ms.js");

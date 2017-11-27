@@ -7995,4 +7995,16 @@ $ForwardedMessage = "Message transféré";
 $ForwardMessage = "Transférer message";
 $MyCoursePageCategoryIntroduction = "Vous trouverez ci-dessous la liste des catégories de cours.
 Cliquez sur l'une pour voir la liste des cours qu'elle contient.";
+$FeatureDisabledByAdministrator = "Fonctionnalité désactivée par l'administrateur";
+$SubscribeUsersToLpCategory = "Inscrire les utilisateurs à la catégorie";
+$SubscribeGroupsToLpCategory = "Inscrire des groupes à la catégorie";
+$UserLpSubscriptionDescription = "Notez que si l'inscription des utilisateurs dans une catégorie est disponible, alors si vous avez déjà abonné l'utilisateur à la catégorie, elle annulera l'inscription des utilisateurs ici dans le parcours";
+$UserLpCategorySubscriptionDescription = "Notez que l'inscription des utilisateurs dans une catégorie annulera l'inscription des utilisateurs dans les parcours";
+$FieldTypeSelectWithTextField = "Sélecteur avec des champs texte";
+$FieldTypeTripleSelect = "Triple sélecteur";
+$DoubleValidationMessage = "Vous confirmez que vous souhaitez vraiment vous inscrire à cette plateforme.";
+$AddText = "Ajouter un texte";
+$OralExpressionHelpText = "Lors de l’enregistrement, tu peux faire une pause dès que tu le souhaites. Si tu n’es pas satisfait, enregistre-toi à nouveau. Cela écrasera la version précédente. Satisfait ? Pour transmettre l’enregistrement clique sur « Sauvegarder l’audio enregistré ».";
+$BestScoreInLearningPath = "Meilleur score parcours";
+$BestScoreNotInLearningPath = "Meilleur score hors-parcours";
 ?>

@@ -78,15 +78,15 @@ if ($course_validation_feature) {
         $titular = $form->addText('tutor_name', get_lang('Professor'), null, array('size' => '60', 'disabled' => 'disabled'));
 
         // Description of the requested course.
-        $form->addElement('textarea', 'description', get_lang('Description'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
+        $form->addElement('textarea', 'description', get_lang('Description'));
         $form->addRule('description', get_lang('ThisFieldIsRequired'), 'required');
 
         // Objectives of the requested course.
-        $form->addElement('textarea', 'objetives', get_lang('Objectives'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
+        $form->addElement('textarea', 'objetives', get_lang('Objectives'));
         $form->addRule('objetives', get_lang('ThisFieldIsRequired'), 'required');
 
         // Target audience of the requested course.
-        $form->addElement('textarea', 'target_audience', get_lang('TargetAudience'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
+        $form->addElement('textarea', 'target_audience', get_lang('TargetAudience'));
         $form->addRule('target_audience', get_lang('ThisFieldIsRequired'), 'required');
 
         // Course language.
@@ -325,21 +325,28 @@ Display :: display_header($tool_name);
 
 if (!$course_validation_feature) {
     // Disabled course validation feature - show nothing after the error message.
-    Display :: display_footer();
+    Display::display_footer();
     exit;
 }
 
 // The action bar.
 echo '<div class="actions">';
-echo '<a href="course_list.php">'.Display::return_icon('courses.gif', get_lang('CourseList')).get_lang('CourseList').'</a>';
-echo '<a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests')).get_lang('ReviewCourseRequests').'</a>';
-echo '<a href="course_request_accepted.php">'.Display::return_icon('course_request_accepted.gif', get_lang('AcceptedCourseRequests')).get_lang('AcceptedCourseRequests').'</a>';
-echo '<a href="course_request_rejected.php">'.Display::return_icon('course_request_rejected.gif', get_lang('RejectedCourseRequests')).get_lang('RejectedCourseRequests').'</a>';
+echo '<a href="course_list.php">'.
+    Display::return_icon('courses.gif', get_lang('CourseList')).get_lang('CourseList').'</a>';
+echo '<a href="course_request_review.php">'.
+    Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests')).get_lang('ReviewCourseRequests').
+    '</a>';
+echo '<a href="course_request_accepted.php">'.
+    Display::return_icon('course_request_accepted.gif', get_lang('AcceptedCourseRequests')).get_lang('AcceptedCourseRequests').
+    '</a>';
+echo '<a href="course_request_rejected.php">'.
+    Display::return_icon('course_request_rejected.gif', get_lang('RejectedCourseRequests')).get_lang('RejectedCourseRequests').
+    '</a>';
 echo '</div>';
 
 if (!is_array($course_request_info)) {
     // Not accessible database record - show the error message and the action bar.
-    Display :: display_footer();
+    Display::display_footer();
     exit;
 }
 
@@ -347,4 +354,4 @@ if (!is_array($course_request_info)) {
 $form->display();
 
 // The footer.
-Display :: display_footer();
+Display::display_footer();

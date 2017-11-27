@@ -6,12 +6,11 @@
 class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
 {
     /**
-    * Class constructor
-    *
-    * @param string $text   raw HTML to add
-    * @access public
-    * @return void
-    */
+     * Class constructor
+     *
+     * @param string $name
+     * @param string $label
+     */
     public function __construct($name = '', $label = '')
     {
         if (empty($label)) {

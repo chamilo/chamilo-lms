@@ -1,4 +1,10 @@
+OLPC Peru plugin
+===
+
 ## English
+
+This plugin is scheduled for deprecation. As far as we understand, the OLPC project in Peru is not being maintained in a relevant way anymore.
+This plugin being only an integration to the specific context of OLPC *XS servers* in Peru (rules to integrate with Squid to filter content), and this XS server not supporting PHP 5.6 (which is now a requirement for Chamilo) we do not feel it has the usefulness that would justify its maintenance in Chamilo.
 
 This plugin will create administration settings to configure the content 
 filtering on OLPC Peru's XS servers (uses Squid).

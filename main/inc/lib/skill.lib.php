@@ -869,7 +869,7 @@ class Skill extends Model
         $skillRelSkill = new SkillRelSkill();
         $children = $skillRelSkill->getChildren($skillId);
         foreach ($children as $child) {
-            $subChildren = $this->getAllChildren($child['skill_id']);
+            $subChildren = $this->getAllChildren($child['id']);
         }
 
         if (!empty($subChildren)) {
@@ -1354,7 +1354,7 @@ class Skill extends Model
             foreach ($family as $main_family_id => $family_items) {
                 if (!empty($family_items)) {
                     foreach ($family_items as $item) {
-                        $new_family_array[$item['skill_id']] = $family_id;
+                        $new_family_array[$item['id']] = $family_id;
                     }
                 }
                 $new_family_array[$main_family_id] = $family_id;

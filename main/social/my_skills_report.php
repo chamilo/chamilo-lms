@@ -38,7 +38,7 @@ if ($isStudent) {
     $tpl->assign('skill_table', $result['table']);
     $tplPath = 'skill/student_report.tpl';
 } elseif ($isStudentBoss) {
-    $selectedStudent = isset($_REQUEST['student']) ? intval($_REQUEST['student']) : 0;
+    $selectedStudent = isset($_REQUEST['student']) ? (int) $_REQUEST['student'] : 0;
     $tableRows = array();
     $followedStudents = UserManager::getUsersFollowedByStudentBoss($userId);
 
@@ -60,10 +60,10 @@ if ($isStudent) {
 
         while ($resultData = Database::fetch_assoc($result)) {
             $tableRow = array(
-                'completeName' => $followedStudents[$selectedStudent]['completeName'],
-                'skillName' => Skill::translateName($resultData['name']),
-                'achievedAt' => api_format_date($resultData['acquired_skill_at'], DATE_FORMAT_NUMBER),
-                'courseImage' => Display::return_icon(
+                'complete_name' => $followedStudents[$selectedStudent]['completeName'],
+                'skill_name' => Skill::translateName($resultData['name']),
+                'achieved_at' => api_format_date($resultData['acquired_skill_at'], DATE_FORMAT_NUMBER),
+                'course_image' => Display::return_icon(
                     'course.png',
                     null,
                     null,
@@ -71,7 +71,7 @@ if ($isStudent) {
                     null,
                     true
                 ),
-                'courseName' => $resultData['title']
+                'course_name' => $resultData['title']
             );
 
             $imageSysPath = sprintf("%s%s/course-pic.png", api_get_path(SYS_COURSE_PATH), $resultData['directory']);
@@ -92,8 +92,8 @@ if ($isStudent) {
     }
 
     $tplPath = 'skill/student_boss_report.tpl';
-    $tpl->assign('followedStudents', $followedStudents);
-    $tpl->assign('selectedStudent', $selectedStudent);
+    $tpl->assign('followed_students', $followedStudents);
+    $tpl->assign('selected_student', $selectedStudent);
 } elseif ($isDRH) {
     $selectedCourse = isset($_REQUEST['course']) ? intval($_REQUEST['course']) : null;
     $selectedSkill = isset($_REQUEST['skill']) ? intval($_REQUEST['skill']) : 0;
@@ -144,9 +144,9 @@ if ($isStudent) {
     }
 
     foreach ($tableRows as &$row) {
-        $row['completeName'] = api_get_person_name($row['firstname'], $row['lastname']);
-        $row['achievedAt'] = api_format_date($row['acquired_skill_at'], DATE_FORMAT_NUMBER);
-        $row['courseImage'] = Display::return_icon(
+        $row['complete_name'] = api_get_person_name($row['firstname'], $row['lastname']);
+        $row['achieved_at'] = api_format_date($row['acquired_skill_at'], DATE_FORMAT_NUMBER);
+        $row['course_image'] = Display::return_icon(
             'course.png',
             null,
             null,
@@ -167,20 +167,22 @@ if ($isStudent) {
                 $courseImageThumb->send_image($thumbSysPath);
             }
 
-            $row['courseImage'] = $thumbWebPath;
+            $row['course_image'] = $thumbWebPath;
         }
     }
 
     $tplPath = 'skill/drh_report.tpl';
-
     $tpl->assign('action', $action);
     $tpl->assign('courses', $courses);
     $tpl->assign('skills', $skills);
-    $tpl->assign('selectedCourse', $selectedCourse);
-    $tpl->assign('selectedSkill', $selectedSkill);
-    $tpl->assign('reportTitle', $reportTitle);
+    $tpl->assign('selected_course', $selectedCourse);
+    $tpl->assign('selected_skill', $selectedSkill);
+    $tpl->assign('report_title', $reportTitle);
 }
 
+if (empty($tableRows)) {
+    Display::addFlash(Display::return_message(get_lang('NoResults')));
+}
 $tpl->assign('rows', $tableRows);
 $templateName = $tpl->get_template($tplPath);
 $contentTemplate = $tpl->fetch($templateName);

@@ -1010,7 +1010,6 @@ abstract class Question
             if ($exercise->questionFeedbackEnabled) {
                 $params['feedback'] = $this->feedback;
             }
-
             $this->id = Database::insert($TBL_QUESTIONS, $params);
 
             if ($this->id) {

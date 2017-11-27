@@ -827,7 +827,7 @@ if ($form->validate()) {
                 );
 
                 $bossList = UserManager::getStudentBossList($user_id);
-                if ($bossList) {
+                if (!empty($bossList)) {
                     $bossList = array_column($bossList, 'boss_id');
                     $currentUserInfo = api_get_user_info($user_id);
                     foreach ($bossList as $bossId) {

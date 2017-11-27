@@ -285,7 +285,12 @@ if (!$user_data['platform_admin']) {
     $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
     $group = array();
     $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
-    $group[] = $form->createElement('DateTimePicker', 'expiration_date', null, array('onchange' => 'javascript: enable_expiration_date();'));
+    $group[] = $form->createElement(
+        'DateTimePicker',
+        'expiration_date',
+        null,
+        array('onchange' => 'javascript: enable_expiration_date();')
+    );
     $form->addGroup($group, 'max_member_group', null, null, false);
 
     // Active account or inactive account
@@ -305,7 +310,7 @@ if ($studentBoss) {
     }
 }
 
-if ($studentBossList) {
+if (!empty($studentBossList)) {
     $studentBossList = array_column($studentBossList, 'boss_id');
 }
 

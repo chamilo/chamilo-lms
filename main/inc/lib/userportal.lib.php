@@ -1013,7 +1013,6 @@ class IndexManager
         // Main navigation section.
         // Tabs that are deactivated are added here.
         if (!empty($this->tpl->menu_navigation)) {
-            //$content = '<ul class="nav nav-pills nav-stacked">';
             foreach ($this->tpl->menu_navigation as $section => $navigation_info) {
                 $items [] = [
                     'icon' => null,

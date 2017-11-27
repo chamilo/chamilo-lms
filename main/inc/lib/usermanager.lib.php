@@ -5393,11 +5393,11 @@ class UserManager
     /**
      * Get the boss user ID from a followed user id
      * @param $userId
-     * @return bool
+     * @return array
      */
     public static function getStudentBossList($userId)
     {
-        $userId = intval($userId);
+        $userId = (int) $userId;
         if ($userId > 0) {
             $userRelTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
             $result = Database::select(
@@ -5410,14 +5410,13 @@ class UserManager
                             USER_RELATION_TYPE_BOSS,
                         )
                     )
-                ),
-                'all'
+                )
             );
 
             return $result;
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -5430,7 +5429,7 @@ class UserManager
     {
         $result = false;
         $bossList = self::getStudentBossList($studentId);
-        if ($bossList) {
+        if (!empty($bossList)) {
             $bossList = array_column($bossList, 'boss_id');
             if (in_array($bossId, $bossList)) {
                 $result = true;

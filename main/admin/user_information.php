@@ -125,7 +125,7 @@ if (api_is_platform_admin()) {
 
 $studentBossList = UserManager::getStudentBossList($userId);
 $studentBossListToString = '';
-if ($studentBossList) {
+if (!empty($studentBossList)) {
     $table = new HTML_Table(array('class' => 'data_table'));
     $table->setHeaderContents(0, 0, get_lang('User'));
     $csvContent[] = [get_lang('StudentBoss')];

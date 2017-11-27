@@ -270,6 +270,54 @@ if ($form->validate()) {
     $entityManager->persist($skillUser);
     $entityManager->flush();
 
+    // Send email depending of children_auto_threshold
+    $skillRelSkill = new SkillRelSkill();
+    $skillModel = new \Skill();
+    $parents = $skillModel->getDirectParents($skillToProcess);
+
+    $extraFieldValue = new ExtraFieldValue('skill');
+    foreach ($parents as $parentInfo) {
+        $parentId = $parentInfo['skill_id'];
+        $parentData = $skillModel->get($parentId);
+
+        $data = $extraFieldValue->get_values_by_handler_and_field_variable($parentId, 'children_auto_threshold');
+        if (!empty($data) && !empty($data['value'])) {
+            // Search X children
+            $requiredSkills = $data['value'];
+            $children = $skillRelSkill->getChildren($parentId);
+            $counter = 0;
+            foreach ($children as $child) {
+                if ($skillModel->userHasSkill($userId, $child['id'])) {
+                    $counter++;
+                }
+            }
+
+            if ($counter >= $requiredSkills) {
+                $bossList = UserManager::getStudentBossList($userId);
+                if (!empty($bossList)) {
+                    Display::addFlash(Display::return_message(get_lang('MessageSent')));
+                    $url = api_get_path(WEB_CODE_PATH).'badge/assign.php?user='.$userId.'&id='.$parentId;
+                    $link = Display::url($url, $url);
+                    $subject = get_lang("StudentHadEnoughSkills");
+                    $message = sprintf(
+                        get_lang("StudentXHadEnoughSkillsToGetSkillXToAssignClickHereX"),
+                        $user->getCompleteName(),
+                        $parentData['name'],
+                        $link
+                    );
+                    foreach ($bossList as $boss) {
+                        MessageManager::send_message_simple(
+                            $boss['boss_id'],
+                            $subject,
+                            $message
+                        );
+                    }
+                }
+                break;
+            }
+        }
+    }
+
     Display::addFlash(
         Display::return_message(
             sprintf(

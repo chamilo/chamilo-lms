@@ -3179,7 +3179,9 @@ class learnpath
                 }
                 $listParent[] =  $subtree;
             }
-            if (!in_array($subtree['type'], $dirTypes) && $subtree['parent'] == null ) {
+            if (!in_array($subtree['type'], $dirTypes) &&
+                ((isset($subtree['parent']) && $subtree['parent'] == null) || !isset($subtree['parent']))
+            ) {
                 $classStatus = [
                     'not attempted' => 'scorm_not_attempted',
                     'incomplete' => 'scorm_not_attempted',

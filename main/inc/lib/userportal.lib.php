@@ -1867,7 +1867,7 @@ class IndexManager
             'courses' => $courseCompleteList,
             'sessions' => $session_categories,
             // Ofaj
-            'html' => trim($specialCourseList.$sessions_with_no_category.$sessions_with_category),
+            'html' => trim($specialCourseList.$sessions_with_no_category.$sessions_with_category.$listCourse),
             'session_count' => $sessionCount,
             'course_count' => $courseCount
         ];

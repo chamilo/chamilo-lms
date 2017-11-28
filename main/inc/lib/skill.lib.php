@@ -1138,61 +1138,27 @@ class Skill extends Model
         return $skillList;
     }
 
-    public function checkParents($skills, $skillParents = [])
-    {
-        foreach ($skills as $resultData) {
-            if (isset($resultData['data'])) {
-                $resultData['id'] = $resultData['data']['id'];
-            }
-            if (isset($resultData['skill_id']) && empty($resultData['skill_id'])) {
-                break;
-            }
-            $parents = $this->get_parents($resultData['id']);
-            var_dump($parents);
-            if (!empty($parents)) {
-                $skillParents[$resultData['id']][] = $this->checkParents($parents, $skillParents);
-                var_dump($skillParents);
-                exit;
-                foreach ($parents as $parentData) {
-                    //$skillParents[$parentData['id']]['passed'] = in_array($parentData['id'], array_keys($skills));
-                   // $skillParents[$parentData['parent_id']][$parentData['id']][$resultData['id']][] = $resultData;
-                }
-
-                foreach ($parents as $parent) {
-                  //  $parents = $this->get_parents($parent['parent_id']);
-                    //$skillParents[$parent['parent_id']] = $this->checkParents($parents, $skillParents);
-                }
-            } else {
-
-            }
-        }
-
-        return $skillParents;
-    }
-
     /**
      * @param Vertex $vertex
      * @return string
      */
     public function processVertex(Vertex $vertex)
     {
-        $subTable = '<table class="table table-bordered">';
+        $subTable = '<div>';
         foreach ($vertex->getVerticesEdgeTo() as $subVertex) {
             $data = $subVertex->getAttribute('graphviz.data');
             $label = $this->processSkillList([$data], 'mini', false);
 
-            $subTable .= '<tr >';
-            $subTable .= '<td >';
+            $subTable .= '<div style="float:left; margin-right:5px">';
             $subTable .= $label;
             $subTable .= $this->processVertex($subVertex);
-            $subTable .= '</td>';
-            $subTable .= '</tr >';
+
+            $subTable .= '</div >';
         }
 
-        $subTable .= '</table >';
+        $subTable .= '</div>';
 
         return $subTable;
-
     }
 
     /**
@@ -1245,9 +1211,9 @@ class Skill extends Model
             $tableRows[] = $tableRow;
         }
         $allowLevels = api_get_configuration_value('skill_levels_names');
-
+//id="skillList"
         $tableResult = '<div class="table-responsive">
-                <table class="table" id="skillList">
+                <table class="table" >
                     <thead>
                         <tr>
                             <th>'.get_lang('AchievedSkills').'</th>

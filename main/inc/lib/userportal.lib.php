@@ -1852,9 +1852,12 @@ class IndexManager
                 $this->tpl->assign('remove_session_url', api_get_configuration_value('remove_session_url'));
 
                 if ($viewGridCourses) {
-                    $sessions_with_no_category = $this->tpl->fetch(
+                    // ofaj
+                    $sessions_with_no_category = '<h4>'. get_lang('MyCourses').'</h4><hr />';
+                    $sessions_with_no_category .= $this->tpl->fetch(
                         $this->tpl->get_template('/user_portal/grid_session.tpl')
                     );
+
                 } else {
                     $sessions_with_no_category = $this->tpl->fetch(
                         $this->tpl->get_template('user_portal/classic_session.tpl')

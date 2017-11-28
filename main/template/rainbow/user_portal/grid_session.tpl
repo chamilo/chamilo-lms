@@ -43,10 +43,6 @@
 {#</div>#}
 {#{% else %}#}
 
-{% if not session is empty %}
-<h4>{{ 'MyCourses' | get_lang }}</h4>
-<hr />
-{% endif %}
 <div class="grid-courses">
     <div class="row">
     {% for item in session %}

@@ -3022,6 +3022,7 @@ class learnpath
                 'type' => $this->items[$item_id]->get_type(),
                 'description' => $this->items[$item_id]->get_description(),
                 'path' => $this->items[$item_id]->get_path(),
+                'parent' => $this->items[$item_id]->get_parent(),
             );
         }
         if ($this->debug > 2) {
@@ -3179,9 +3180,7 @@ class learnpath
                 }
                 $listParent[] =  $subtree;
             }
-            if (!in_array($subtree['type'], $dirTypes) &&
-                ((isset($subtree['parent']) && $subtree['parent'] == null) || !isset($subtree['parent']))
-            ) {
+            if (!in_array($subtree['type'], $dirTypes) && $subtree['parent'] == null) {
                 $classStatus = [
                     'not attempted' => 'scorm_not_attempted',
                     'incomplete' => 'scorm_not_attempted',

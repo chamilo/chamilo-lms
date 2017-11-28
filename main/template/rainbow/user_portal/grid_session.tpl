@@ -42,9 +42,15 @@
     {#</div>#}
 {#</div>#}
 {#{% else %}#}
+
+{% if not session is empty %}
+<h4>{{ 'MyCourses' | get_lang }}</h4>
+<hr />
+{% endif %}
 <div class="grid-courses">
     <div class="row">
     {% for item in session %}
+
         <div class="col-xs-12 col-sm-6 col-md-4">
             <div class="items session {{ item.is_old ? 'old_session' : '' }} {{ item.is_future ? 'future_session' : '' }} ">
                 <div class="image">

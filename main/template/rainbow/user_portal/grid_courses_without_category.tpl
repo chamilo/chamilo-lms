@@ -71,6 +71,3 @@
         </div>
     </div>
 {% endif %}
-
-<h4>{{ 'MyCourses' | get_lang }}</h4>
-<hr />

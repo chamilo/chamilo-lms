@@ -1153,7 +1153,8 @@ class Skill extends Model
             $passed = in_array($data['id'], array_keys($skills));
             $transparency = '';
             if ($passed === false) {
-                $transparency = 'opacity: 0.4';
+                // @todo use css class
+                $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
             }
             $subTable .= '<div style="float:left; margin-right:5px; ">';
             $subTable .= '<div style="'.$transparency.'">';
@@ -1273,7 +1274,8 @@ class Skill extends Model
                     $passed = in_array($data['id'], array_keys($skills));
                     $transparency = '';
                     if ($passed === false) {
-                        $transparency = 'opacity: 0.4';
+                        // @todo use a css class
+                        $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
                     }
 
                     $table .= '<td >';

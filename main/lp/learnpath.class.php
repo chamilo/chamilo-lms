@@ -3022,6 +3022,7 @@ class learnpath
                 'type' => $this->items[$item_id]->get_type(),
                 'description' => $this->items[$item_id]->get_description(),
                 'path' => $this->items[$item_id]->get_path(),
+
             );
         }
         if ($this->debug > 2) {

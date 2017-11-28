@@ -1853,7 +1853,10 @@ class IndexManager
 
                 if ($viewGridCourses) {
                     // ofaj
-                    $sessions_with_no_category = '<h4>'. get_lang('MyCourses').'</h4><hr />';
+                    $sessions_with_no_category = '';
+                    if (!empty($listSession)) {
+                        $sessions_with_no_category .= '<h4>'. get_lang('MyCourses').'</h4><hr />';
+                    }
                     $sessions_with_no_category .= $this->tpl->fetch(
                         $this->tpl->get_template('/user_portal/grid_session.tpl')
                     );

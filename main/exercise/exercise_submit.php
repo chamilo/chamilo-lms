@@ -37,6 +37,7 @@ $debug = false;
 api_protect_course_script(true);
 $origin = api_get_origin();
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
+$courseId = api_get_course_int_id();
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 
 $showGlossary = in_array($glossaryExtraTools, array('true', 'exercise', 'exercise_and_lp'));
@@ -110,7 +111,7 @@ if (api_is_allowed_to_edit(null, true) &&
 $exerciseInSession = Session::read('objExercise');
 if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSession->id != $_GET['exerciseId'])) {
     // Construction of Exercise
-    $objExercise = new Exercise();
+    $objExercise = new Exercise($courseId);
     Session::write('firstTime', true);
     if ($debug) {
         error_log('1. Setting the $objExercise variable');
@@ -467,7 +468,7 @@ if ($debug) {
 if ($reminder == 2 && empty($myRemindList)) {
     if ($debug) {
         error_log("6.2 calling the exercise_reminder.php ");
-    };
+    }
     header('Location: exercise_reminder.php?'.$params);
     exit;
 }
@@ -598,8 +599,8 @@ if ($formSent && isset($_POST)) {
 
     //Only for hotspot
     if (!isset($choice) && isset($_REQUEST['hidden_hotspot_id'])) {
-        $hotspot_id = (int) ($_REQUEST['hidden_hotspot_id']);
-        $choice     = array($hotspot_id => '');
+        $hotspot_id = (int) $_REQUEST['hidden_hotspot_id'];
+        $choice = array($hotspot_id => '');
     }
 
     // if the user has answered at least one question
@@ -729,8 +730,8 @@ if (is_null($current_question)) {
 }
 
 if ($question_count != 0) {
-    if (($objExercise->type == ALL_ON_ONE_PAGE ||
-        $current_question > $question_count)
+    if ($objExercise->type == ALL_ON_ONE_PAGE ||
+        $current_question > $question_count
     ) {
         if (api_is_allowed_to_session_edit()) {
             // goes to the script that will show the result of the exercise

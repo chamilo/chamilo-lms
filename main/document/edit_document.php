@@ -28,6 +28,7 @@ use ChamiloSession as Session;
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
+require_once '../inc/lib/urlUtils.lib.php';
 
 $groupRights = Session::read('group_member_with_upload_rights');
 
@@ -91,6 +92,7 @@ if (isset($_GET['id'])) {
     $dir_original = $dir;
     $doc = basename($file);
     $readonly = $document_data['readonly'];
+    $file_type = $document_data['filetype'];
 }
 
 if (empty($document_data)) {
@@ -213,16 +215,30 @@ if (isset($_POST['comment'])) {
     }
 
     if (!empty($document_id)) {
-        $params = [
-            'comment' => $comment,
-            'title' => $title,
-        ];
-        Database::update(
-            $dbTable,
-            $params,
-            ['c_id = ? AND id = ?' => [$course_id, $document_id]]
-        );
-        Display::addFlash(Display::return_message(get_lang('fileModified')));
+        $linkExists = false;
+        if ($file_type == 'link') {
+            $linkExists = DocumentManager::cloudLinkExists($course_info, $file, $_POST['comment']);
+        }
+        
+        if (!$linkExists || $linkExists == $document_id) {
+            $params = [
+                'comment' => $comment,
+                'title' => $title,
+            ];
+            Database::update(
+                $dbTable,
+                $params,
+                ['c_id = ? AND id = ?' => [$course_id, $document_id]]
+            );
+            
+            if ($file_type != 'link') {
+                Display::addFlash(Display::return_message(get_lang('fileModified')));
+            } else {
+                Display::addFlash(Display::return_message(get_lang('CloudLinkModified')));
+            }
+        } else {
+            Display::addFlash(Display::return_message(get_lang('UrlAlreadyExists'), 'warning'));
+        }
     }
 }
 
@@ -245,7 +261,9 @@ if ($is_allowed_to_edit) {
         if (empty($filename)) {
             Display::addFlash(Display::return_message(get_lang('NoFileName'), 'warning'));
         } else {
-            $file_size = filesize($document_data['absolute_path']);
+            if ($file_type != 'link') {
+                $file_size = filesize($document_data['absolute_path']);
+            }
 
             if ($read_only_flag == 0) {
                 if (!empty($content)) {
@@ -380,9 +398,10 @@ if ($owner_id == api_get_user_id() ||
     $form->addElement('hidden', 'showedit');
     $form->addElement('hidden', 'origin');
     $form->addElement('hidden', 'origin_opt');
+    $key_label_title = ($file_type != 'link' ? 'Title' : 'LinkName');
     $form->addText(
         'title',
-        get_lang('Title'),
+        get_lang($key_label_title),
         true,
         array('cols-size' => [2, 10, 0], 'autofocus')
     );
@@ -412,24 +431,54 @@ if ($owner_id == api_get_user_id() ||
         }
     }
 
-    if (!$group_document && !DocumentManager::is_my_shared_folder(api_get_user_id(), $currentDirPath, $sessionId)) {
-        // Updated on field
-        $display_date = date_to_str_ago($last_edit_date).
-            ' <span class="dropbox_date">'.api_format_date(api_get_local_time($last_edit_date)).'</span>';
-        $form->addElement('static', null, get_lang('UpdatedOn'), $display_date);
+    if ($file_type != 'link') {
+        if (!$group_document && !DocumentManager::is_my_shared_folder(api_get_user_id(), $currentDirPath, $sessionId)) {
+            // Updated on field
+            $display_date = date_to_str_ago($last_edit_date).
+                ' <span class="dropbox_date">'.api_format_date(api_get_local_time($last_edit_date)).'</span>';
+            $form->addElement('static', null, get_lang('UpdatedOn'), $display_date);
+        }
     }
 
-    $form->addElement('textarea', 'comment', get_lang('Comment'), ['cols-size' => [2, 10, 0]]);
+    if ($file_type == 'link') {
+        // URLs in whitelist
+        $urlWL = URLUtils::getFileHostingsWL();
+        sort($urlWL);
+        $urlWLRegEx = '/(\/\/|\.)('.implode('|', $urlWL).')/i'; //Matches any of the whitelisted urls preceded by // or .
+        $urlWLText = "\n\t* ".implode("\n\t* ", $urlWL);
+        $urlWLHTML = "<ul><li>".implode("</li><li>", $urlWL)."</li></ul>";
+        $form->addText('comment', get_lang('Url'));
+        $form->addElement('static', 'info', '', '<span class="text-primary" data-toggle="tooltip" title="'.$urlWLHTML.'">'.get_lang('ValidDomainsList').' <span class="glyphicon glyphicon-question-sign"></span></span>');
+    } else {
+        $form->addElement('textarea', 'comment', get_lang('Comment'), ['cols-size' => [2, 10, 0]]);
+    }
 
-    if ($owner_id == api_get_user_id() || api_is_platform_admin()) {
-        $checked = & $form->addElement('checkbox', 'readonly', null, get_lang('ReadOnly'));
-        if ($readonly == 1) {
-            $checked->setChecked(true);
+    if ($file_type != 'link') {
+        if ($owner_id == api_get_user_id() || api_is_platform_admin()) {
+            $checked = & $form->addElement('checkbox', 'readonly', null, get_lang('ReadOnly'));
+            if ($readonly == 1) {
+                $checked->setChecked(true);
+            }
         }
+    }
+
+    if ($file_type == 'link') {
+        $form->addRule('title', get_lang('PleaseEnterCloudLinkName'), 'required', null, 'client');
+        $form->addRule('title', get_lang('PleaseEnterCloudLinkName'), 'required', null, 'server');
+        $form->addRule('comment', get_lang('langGiveURL'), 'required', null, 'client');
+        $form->addRule('comment', get_lang('langGiveURL'), 'required', null, 'server');
+        // Good formed url pattern (must have the protocol)
+        $urlRegEx = URLUtils::getWellformedUrlRegex();
+        $form->addRule('comment', get_lang('MalformedUrl'), 'regex', $urlRegEx, 'client');
+        $form->addRule('comment', get_lang('MalformedUrl'), 'regex', $urlRegEx, 'server');
+        $form->addRule('comment', get_lang('NotValidDomain').$urlWLText,'regex', $urlWLRegEx, 'client');
+        $form->addRule('comment', get_lang('NotValidDomain').$urlWLHTML,'regex', $urlWLRegEx, 'server');
     }
 
     if ($is_certificate_mode) {
         $form->addButtonUpdate(get_lang('SaveCertificate'));
+    } elseif ($file_type == 'link') {
+        $form->addButtonUpdate(get_lang('SaveLink'));
     } else {
         $form->addButtonUpdate(get_lang('SaveDocument'));
     }
@@ -473,20 +522,38 @@ if ($owner_id == api_get_user_id() ||
     if ($extension == 'svg' && !api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
         echo Display::return_message(get_lang('BrowserDontSupportsSVG'), 'warning');
     }
-    // HTML-editor
-    echo '<div class="page-create">
-            <div class="row" style="overflow:hidden">
-            <div id="template_col" class="col-md-3">
-                <div class="panel panel-default">
-                <div class="panel-body">
-                    <div id="frmModel" class="items-templates scrollbar-light"></div>
+    if ($file_type != 'link') {
+        // HTML-editor
+        echo '<div class="page-create">
+                <div class="row" style="overflow:hidden">
+                <div id="template_col" class="col-md-3">
+                    <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="frmModel" class="items-templates scrollbar-light"></div>
+                    </div>
+                    </div>
                 </div>
+                <div id="doc_form" class="col-md-9">
+                    '.$form->returnForm().'
                 </div>
-            </div>
-            <div id="doc_form" class="col-md-9">
-                '.$form->returnForm().'
-            </div>
-          </div></div>';
+            </div></div>';
+    } else {
+        // Add tooltip and correctly parse its inner HTML
+        echo '<script>
+        $(document).ready(function() {
+            $("[data-toggle=\'tooltip\']").tooltip(
+                {
+                    content: 
+                        function() {
+                            return $(this).attr("title");
+                        }
+                }
+            );
+        });
+        </script>';
+
+        echo $form->return_form();
+    }
 }
 
 Display::display_footer();

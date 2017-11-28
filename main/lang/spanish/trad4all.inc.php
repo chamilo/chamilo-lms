@@ -8081,4 +8081,20 @@ $OralExpressionHelpText = "Cuando lanza la grabación, puede pausar cuando lo de
 $BestScoreInLearningPath = "Mejor nota en las lecciones";
 $BestScoreNotInLearningPath = "Mejor nota fuera de lecciones";
 $StudentXHadEnoughSkillsToGetSkillXToAssignClickHereX = "El alumno %s tiene suficiente competencias secundarias para obtener la competencia %s. Para asignar esta competencia, es posible ir aquí : %s";
+
+// Cloud files in documents strings
+$enable_add_file_link_title = 'Permitir añadir enlaces a ficheros en la nube';
+$enable_add_file_link_comment = 'Herramienta para añadir enlaces a ficheros situados en sitios de almacenamiento externo (Dropbox, Google Drive, etc...) en Documentos.';
+$UrlAlreadyExists = "Ya existe una URL igual en este directorio.";
+$ErrorAddCloudLink = "Se produjo un error añadiendo el enlace al fichero en la nube.";
+$AddCloudLink = "Añadir enlace a un fichero en la nube";
+$CloudLinkDeleted = "Enlace a fichero en la nube eliminado.";
+$CloudLinkMoved = "Enlace a fichero en la nube movido.";
+$CloudLinkDeleteError = "Error al eliminar el enlace al fichero en la nube.";
+$CloudLinkAdded = "Enlace a fichero en la nube añadido.";
+$PleaseEnterCloudLinkName = "Por favor, introduzca un nombre para el enlace al fichero en la nube.";
+$MalformedUrl = "Formato del campo URL no válido. Ejemplo del formato esperado: http://dropbox.com/sh/loremipsum/loremipsum?dl=0";
+$CloudLinkModified = "Enlace a fichero en la nube modificado.";
+$NotValidDomain = "Dominio no válido. Debe de ser uno de los siguientes:";
+$ValidDomainsList = "Lista de dominios válidos";
 ?>

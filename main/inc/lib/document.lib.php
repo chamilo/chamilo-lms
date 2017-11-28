@@ -5351,7 +5351,7 @@ class DocumentManager
 
         // Get the title or the basename depending on what we're using
         if ($document_data['title'] != '') {
-            $title = $document_data['title'];
+            $title = htmlspecialchars($document_data['title']);
         } else {
             $title = basename($document_data['path']);
         }
@@ -5406,6 +5406,12 @@ class DocumentManager
         $tooltip_title = $title;
 
         $tooltip_title_alt = $tooltip_title;
+
+        if ($filetype == 'link') {
+            $tooltip_title_alt = $title;
+            $url = $document_data['comment'].'" target="_blank';
+        }
+
         if ($path == '/shared_folder') {
             $tooltip_title_alt = get_lang('UserFolders');
         } elseif (strstr($path, 'shared_folder_session_')) {
@@ -5655,6 +5661,9 @@ class DocumentManager
         if ($type == 'file') {
             $icon = choose_image($basename);
             $basename = substr(strrchr($basename, '.'), 1);
+        } elseif ($type == 'link') {
+            $icon = 'clouddoc.png';
+            $basename = 'Cloud link';
         } else {
             if ($path == '/shared_folder') {
                 $icon = 'folder_users.png';
@@ -5992,11 +6001,19 @@ class DocumentManager
         $is_read_only = $document_data['readonly'];
         $path = $document_data['path'];
 
-        $parent_id = self::get_document_id(
-            api_get_course_info(),
-            dirname($path),
-            0
-        );
+        if ($type == 'link') {
+            $parent_id = self::get_document_id(
+                api_get_course_info(),
+                rtrim($path,'/'),
+                0
+            );
+        } else {
+            $parent_id = self::get_document_id(
+                api_get_course_info(),
+                dirname($path),
+                0
+            );
+        }
 
         if (empty($parent_id) && !empty($sessionId)) {
             $parent_id = self::get_document_id(
@@ -6683,5 +6700,114 @@ class DocumentManager
         }
 
         return $result;
+    }
+
+    /**
+     * Adds a cloud link to the database
+     *
+     * @author - Aquilino Blanco Cores <aqblanco@gmail.com>
+     * @param array $_course
+     * @param string $path
+     * @param string $url
+     * @return int id of document or 0 if already exists or there was a problem creating it
+     */
+    public static function addCloudLink($_course, $path, $url, $name)
+    {
+        require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
+        $file_path = $path;
+        if (!self::cloudLinkExists($_course, $path, $url)) {
+            $doc_id = add_document($_course, $file_path, "link", 0, $name, $url);
+            if ($doc_id) {
+                // Update document item_property
+                api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), api_get_group_id(), api_get_user_id(), null, null, api_get_session_id());
+            }
+    
+            // If the file is in a folder, we need to update all parent folders
+            item_property_update_on_folder($_course, $file_path, api_get_user_id());
+    
+            return $doc_id;
+        } else {
+            return 0;
+        }
+    }
+ 
+    /**
+     * Deletes a cloud link from the database
+     *
+     * @author - Aquilino Blanco Cores <aqblanco@gmail.com>
+     * @param array $_course
+     * @param string $id
+     * @param string $url
+     * @return boolean true if success / false if an error occurred
+     */
+    public static function deleteCloudLink($_course, $id)
+    {
+ 
+        if (empty($id)) {
+            return false;
+        }
+ 
+        $document_id = $id;
+ 
+        $file_deleted_from_db = false;
+ 
+        if ($document_id) {
+            self::deleteDocumentFromDb($document_id, array(),  0, true);
+            //checking
+            $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+            $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE id = $document_id";
+            $result = Database::query($sql);
+            $exists = Database::num_rows($result) > 0;
+            $file_deleted_from_db = !$exists ;
+        }
+
+        return $file_deleted_from_db;
+    }
+ 
+    /**
+     * Gets the id of a cloud link with a given path
+     *
+     * @author - Aquilino Blanco Cores <aqblanco@gmail.com>
+     * @param array $_course
+     * @param string $path
+     * @param string $url
+     * @return int id of link / false if no link found
+     * @deprecated
+     */
+    public static function getCloudLinkId($_course, $path, $url)
+    {
+        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+        $course_id = $_course['real_id'];
+        $path = Database::escape_string($path);
+
+        if (substr($path, -1) != '/') {
+            // Add final slash to path if not present
+            $path .= '/';
+        }
+            
+        if (!empty($course_id) && !empty($path)) {
+            $sql = "SELECT id FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND path LIKE BINARY '$path' AND comment = '$url' AND filetype = 'link' LIMIT 1";
+            $result = Database::query($sql);
+            if ($result && Database::num_rows($result)) {
+                $row = Database::fetch_array($result);
+                return intval($row[0]);
+            }
+        }
+        return false;
+    }
+ 
+    /**
+     * Checks if a cloud link exists
+     *
+     * @author - Aquilino Blanco Cores <aqblanco@gmail.com>
+     * @param array $_course
+     * @param string $path
+     * @param string $url
+     * @return boolean true if it exists false in other case
+     */
+    public static function cloudLinkExists($_course, $path, $url)
+    {
+        $exists = self::getCloudLinkId($_course, $path, $url);
+        return $exists;
     }
 }

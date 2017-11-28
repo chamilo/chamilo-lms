@@ -1961,3 +1961,11 @@ INSERT INTO settings_current (variable, type, category, selected_value, title, c
 VALUES ('allow_download_documents_by_api_key', 'radio', 'WebServices', 'false', 'AllowDownloadDocumentsByApiKeyTitle', 'AllowDownloadDocumentsByApiKeyComment', '', NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_download_documents_by_api_key', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_download_documents_by_api_key', 'false', 'No');
+
+-- Cloud File Links
+INSERT INTO `settings_options` (`variable`, `value`, `display_text`) VALUES
+('enable_add_file_link', 'true', 'Yes'),
+('enable_add_file_link', 'false', 'No');
+
+INSERT INTO `settings_current` (`variable`, `subkey`, `type`, `category`, `selected_value`, `title`, `comment`, `scope`, `subkeytext`, `access_url`, `access_url_changeable`, `access_url_locked`) VALUES
+('enable_add_file_link', NULL, 'radio', 'Tools', 'false', 'enable_add_file_link_title', 'enable_add_file_link_comment', NULL, NULL, 1, 0, 0);

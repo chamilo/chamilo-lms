@@ -252,14 +252,19 @@ switch ($action) {
 
                 // Check whether the document is in the database.
                 if (!empty($documentInfo)) {
-                    $deleteDocument = DocumentManager::delete_document(
-                        $courseInfo,
-                        null,
-                        $base_work_dir,
-                        $sessionId,
-                        $_GET['deleteid'],
-                        $groupIid
-                    );
+                    if ($documentInfo['filetype'] != 'link') {
+                        $deleteDocument = DocumentManager::delete_document(
+                            $courseInfo,
+                            null,
+                            $base_work_dir,
+                            $sessionId,
+                            $_GET['deleteid'],
+                            $groupIid
+                        );
+                    } else {
+                        // Cloud Links
+                        $deleteDocument = DocumentManager::deleteCloudLink($_course, $_GET['deleteid']);
+                    }
 
                     if ($deleteDocument) {
                         $certificateId = isset($_GET['delete_certificate_id']) ? $_GET['delete_certificate_id'] : null;
@@ -267,10 +272,24 @@ switch ($action) {
                             api_get_course_id(),
                             $certificateId
                         );
-                        Display::addFlash(Display::return_message(
-                            get_lang('DocDeleted').': '.$documentInfo['title'],
-                            'success'
-                        ));
+                        if ($documentInfo['filetype'] != 'link') {
+                            Display::addFlash(Display::return_message(
+                                get_lang('DocDeleted').': '.$documentInfo['title'],
+                                'success'
+                            ));
+                        } else {
+                            if ($documentInfo['filetype'] != 'link') {
+                                Display::addFlash(Display::return_message(
+                                    get_lang('CloudLinkDeleted').': '.$data['title'],
+                                    'success'
+                                ));
+                            } else {
+                                Display::addFlash(Display::return_message(
+                                    get_lang('CloudLinkDeleteError').': '.$data['title'],
+                                    'error'
+                                ));
+                            }
+                        }
                     } else {
                         Display::addFlash(Display::return_message(get_lang('DocDeleteError'), 'warning'));
                     }
@@ -574,6 +593,11 @@ if (isset($document_id) && empty($action)) {
 
     if ($document_data) {
         $parent_id = $document_data['parent_id'];
+        // Hack in order to clean the document id in case of false positive from links
+        if ($document_data['filetype'] == 'link') {
+            $document_id = null;
+        }
+
         $visibility = DocumentManager::check_visibility_tree(
             $document_id,
             api_get_course_id(),
@@ -582,7 +606,7 @@ if (isset($document_id) && empty($action)) {
             $groupIid
         );
 
-        if (!empty($document_data['filetype']) && $document_data['filetype'] == 'file') {
+        if (!empty($document_data['filetype']) && $document_data['filetype'] == 'file' || $document_data['filetype'] == "link") {
             if ($visibility && api_is_allowed_to_session_edit()) {
                 $url = api_get_path(WEB_COURSE_PATH).
                     $courseInfo['path'].'/document'.$document_data['path'].'?'
@@ -898,10 +922,13 @@ if (empty($document_data['parents'])) {
             'name' => $document_data['title'],
         );
     } else {
-        $interbreadcrumb[] = array(
-            'url' => '#',
-            'name' => $document_data['title']
-        );
+        // Hack in order to not add the document to the breadcrumb in case it is a link
+        if ($document_data['filetype'] != 'link') {
+            $interbreadcrumb[] = array(
+                'url' => '#',
+                'name' => $document_data['title']
+            );
+        }
     }
 } else {
     $counter = 0;
@@ -1110,68 +1137,96 @@ if ($isAllowedToEdit || $group_member_with_upload_rights ||
 
         // Security fix: make sure they can't move files that are not in the document table
         if (!empty($document_to_move)) {
-            $real_path_target = $base_work_dir.$moveTo.'/'.basename($document_to_move['path']);
-            $fileExist = false;
-            if (file_exists($real_path_target)) {
-                $fileExist = true;
-            }
-            if (move($base_work_dir.$document_to_move['path'], $base_work_dir.$moveTo)) {
-                DocumentManager::updateDbInfo(
-                    'update',
-                    $document_to_move['path'],
-                    $moveTo.'/'.basename($document_to_move['path'])
-                );
-
-                //update database item property
-                $doc_id = $_POST['move_file'];
-                if (is_dir($real_path_target)) {
-                    api_item_property_update(
-                        $courseInfo,
-                        TOOL_DOCUMENT,
-                        $doc_id,
-                        'FolderMoved',
-                        api_get_user_id(),
-                        $group_properties,
-                        null,
-                        null,
-                        null,
-                        $sessionId
-                    );
-                    Display::addFlash(Display::return_message(get_lang('DirMv'), 'confirmation'));
-                } elseif (is_file($real_path_target)) {
-                    api_item_property_update(
-                        $courseInfo,
-                        TOOL_DOCUMENT,
-                        $doc_id,
-                        'DocumentMoved',
-                        api_get_user_id(),
-                        $group_properties,
-                        null,
-                        null,
-                        null,
-                        $sessionId
-                    );
+            if ($document_to_move['filetype'] == 'link') {
+                $real_path_target = $base_work_dir.$_POST['move_to'].'/';
+                if (!DocumentManager::cloudLinkExists($_course, $_POST['move_to'], $document_to_move['comment'])) {
+                    $doc_id = $_POST['move_file'];
+            
+                    DocumentManager::updateDBInfoCloudLink($document_to_move['path'], $_POST['move_to'].'/', $doc_id);
+            
+                    //update database item property
+                    api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FileMoved', api_get_user_id(), $to_group_id, null, null, null, $session_id);
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('DocMv'),
-                            'confirmation'
+                            get_lang('CloudLinkMoved'),
+                            'success'
+                        )
+                    );
+                } else {
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('UrlAlreadyExists'),
+                            'error'
                         )
                     );
                 }
-
                 // Set the current path
                 $curdirpath = $_POST['move_to'];
                 $curdirpathurl = urlencode($_POST['move_to']);
             } else {
-                if ($fileExist) {
+                $real_path_target = $base_work_dir.$moveTo.'/'.basename($document_to_move['path']);
+                $fileExist = false;
+                if (file_exists($real_path_target)) {
+                    $fileExist = true;
+                }
+                if (move($base_work_dir.$document_to_move['path'], $base_work_dir.$moveTo)) {
+                    DocumentManager::updateDbInfo(
+                        'update',
+                        $document_to_move['path'],
+                        $moveTo.'/'.basename($document_to_move['path'])
+                    );
+
+                    //update database item property
+                    $doc_id = $_POST['move_file'];
                     if (is_dir($real_path_target)) {
-                        $message = Display::return_message(get_lang('DirExists'), 'error');
+                        api_item_property_update(
+                            $courseInfo,
+                            TOOL_DOCUMENT,
+                            $doc_id,
+                            'FolderMoved',
+                            api_get_user_id(),
+                            $group_properties,
+                            null,
+                            null,
+                            null,
+                            $sessionId
+                        );
+                        Display::addFlash(Display::return_message(get_lang('DirMv'), 'confirmation'));
                     } elseif (is_file($real_path_target)) {
-                        $message = Display::return_message(get_lang('FileExists'), 'v');
+                        api_item_property_update(
+                            $courseInfo,
+                            TOOL_DOCUMENT,
+                            $doc_id,
+                            'DocumentMoved',
+                            api_get_user_id(),
+                            $group_properties,
+                            null,
+                            null,
+                            null,
+                            $sessionId
+                        );
+                        Display::addFlash(
+                            Display::return_message(
+                                get_lang('DocMv'),
+                                'confirmation'
+                            )
+                        );
                     }
-                    Display::addFlash($message);
+
+                    // Set the current path
+                    $curdirpath = $_POST['move_to'];
+                    $curdirpathurl = urlencode($_POST['move_to']);
                 } else {
-                    Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
+                    if ($fileExist) {
+                        if (is_dir($real_path_target)) {
+                            $message = Display::return_message(get_lang('DirExists'), 'error');
+                        } elseif (is_file($real_path_target)) {
+                            $message = Display::return_message(get_lang('FileExists'), 'v');
+                        }
+                        Display::addFlash($message);
+                    } else {
+                        Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
+                    }
                 }
             }
         } else {
@@ -1275,20 +1330,35 @@ if ($isAllowedToEdit ||
                             }
                             $readonlyAlreadyChecked = true;
                         }
-
-                        $deleteDocument = DocumentManager::delete_document(
-                            $courseInfo,
-                            null,
-                            $base_work_dir,
-                            $sessionId,
-                            $documentId,
-                            $groupIid
-                        );
-                        if (!empty($deleteDocument)) {
-                            $messages .= Display::return_message(
-                                get_lang('DocDeleted').': '.$data['title'],
-                                'confirmation'
+                        if ($data['filetype'] != 'link') {
+                            // Files and folders
+                            $deleteDocument = DocumentManager::delete_document(
+                                $courseInfo,
+                                null,
+                                $base_work_dir,
+                                $sessionId,
+                                $documentId,
+                                $groupIid
                             );
+                            if (!empty($deleteDocument)) {
+                                $messages .= Display::return_message(
+                                    get_lang('DocDeleted').': '.$data['title'],
+                                    'confirmation'
+                                );
+                            }
+                        } else {
+                            // Cloud Links
+                            if (DocumentManager::deleteCloudLink($_course, $documentId)) {
+                                $messages .= Display::return_message(
+                                    get_lang('CloudLinkDeleted'),
+                                    'confirmation'
+                                );
+                            } else {
+                                $messages .= Display::return_message(
+                                    get_lang('CloudLinkDeleteError'),
+                                    'error'
+                                );
+                            }
                         }
                         break;
                 }
@@ -1741,6 +1811,14 @@ if ($isAllowedToEdit ||
             api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id='.$document_id.'&createdir=1'
         );
     }
+
+    // "Add cloud link" icon
+    if (api_get_setting('enable_add_file_link') == 'true') {
+        $actionsLeft .= Display::url(
+            Display::return_icon('clouddoc_new.png', get_lang('AddCloudLink'), '', ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'document/add_link.php?'.api_get_cidreq().'&id='.$document_id
+        );
+    }
 }
 require 'document_slideshow.inc.php';
 if (!isset($_GET['keyword'])) {
@@ -1843,6 +1921,11 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
                         .get_lang('Owner').': '.UserManager::getUserProfileLink($userInfo)
                         .'</div>';
                 }
+            }
+
+            // Hack in order to avoid the download icon appearing on cloud links
+            if ($document_data['filetype'] == 'link') {
+                $size = 0;
             }
 
             // Icons (clickable)

@@ -799,6 +799,7 @@ class UserGroup extends Model
         $current_list = self::get_users_by_usergroup($usergroup_id);
         $course_list = self::get_courses_by_usergroup($usergroup_id);
         $session_list = self::get_sessions_by_usergroup($usergroup_id);
+        $session_list =  array_filter($session_list);
         $relationType = (int) $relationType;
 
         $delete_items = [];

@@ -40,6 +40,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/jmontoyaa/PHPWord"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/chamilo/pclzip"
         }
     ],
     "require": {
@@ -109,7 +113,7 @@
         "facebook/php-sdk-v4": "~5.0",
         "kigkonsult/icalcreator": "2.22.5",
         "essence/essence": "2.6.1",
-        "pclzip/pclzip": "2.8.2",
+        "chamilo/pclzip": "v2.8.3",
         "chamilo/chash": "dev-master",
         "ircmaxell/random-lib": "^1.2",
         "ocramius/proxy-manager": "~1.0|2.0.*",

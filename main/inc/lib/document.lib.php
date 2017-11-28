@@ -353,6 +353,11 @@ class DocumentManager
             header('Content-Description: '.$filename);
             header('Content-Transfer-Encoding: binary');
 
+            if (function_exists('ob_end_clean')) {
+                // Use ob_end_clean() to avoid weird buffering situations where file is sent broken/incomplete for download
+                ob_end_clean();
+            }
+
             $res = fopen($full_file_name, 'r');
             fpassthru($res);
 
@@ -414,6 +419,11 @@ class DocumentManager
                 );
                 echo $content;
             } else {
+                if (function_exists('ob_end_clean')) {
+                    // Use ob_end_clean() to avoid weird buffering situations where file is sent broken/incomplete for download
+                    ob_end_clean();
+                }
+
                 readfile($full_file_name);
             }
 

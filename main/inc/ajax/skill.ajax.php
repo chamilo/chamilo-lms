@@ -10,11 +10,11 @@ $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 
 api_block_anonymous_users();
 
-Skill::isAllow();
+Skill::isAllow(api_get_user_id());
 
 $skill = new Skill();
 $gradebook = new Gradebook();
-$skill_gradebook = new SkillRelGradebook();
+$skillGradeBook = new SkillRelGradebook();
 $userId = api_get_user_id();
 
 switch ($action) {
@@ -285,12 +285,12 @@ switch ($action) {
     case 'remove_skill':
         if (api_is_platform_admin() || api_is_drh()) {
             if (!empty($_REQUEST['skill_id']) && !empty($_REQUEST['gradebook_id'])) {
-                $skill_item = $skill_gradebook->getSkillInfo(
+                $skill_item = $skillGradeBook->getSkillInfo(
                     $_REQUEST['skill_id'],
                     $_REQUEST['gradebook_id']
                 );
                 if (!empty($skill_item)) {
-                    $skill_gradebook->delete($skill_item['id']);
+                    $skillGradeBook->delete($skill_item['id']);
                     echo 1;
                 } else {
                     echo 0;

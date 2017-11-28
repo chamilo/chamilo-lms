@@ -3,6 +3,7 @@
 
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\UserBundle\Entity\Repository\UserRepository;
+use Fhaculty\Graph\Vertex;
 
 /**
  * Class SkillProfile
@@ -97,7 +98,7 @@ class SkillProfile extends Model
         Database::delete(
             $this->table_rel_profile,
             array(
-                'profile_id' => $id
+                'profile_id' => $id,
             )
         );
 
@@ -222,15 +223,15 @@ class SkillRelSkill extends Model
     }
 
     /**
-     * @param int $skill_id
+     * @param int $skillId
      * @return array
      */
-    public function getDirectParents($skill_id)
+    public function getDirectParents($skillId)
     {
-        $skill_id = intval($skill_id);
+        $skillId = (int) $skillId;
         $sql = 'SELECT parent_id as skill_id 
                 FROM '.$this->table.'
-                WHERE skill_id = '.$skill_id.' ';
+                WHERE skill_id = '.$skillId.' ';
         $result = Database::query($sql);
         $skill = Database::store_result($result, 'ASSOC');
         $skill = isset($skill[0]) ? $skill[0] : null;
@@ -324,9 +325,9 @@ class SkillRelSkill extends Model
                 'where' => array(
                     'skill_id = ? AND parent_id = ?' => array(
                         $skill_id,
-                        $parent_id
-                    )
-                )
+                        $parent_id,
+                    ),
+                ),
             )
         );
 
@@ -365,9 +366,9 @@ class SkillRelGradebook extends Model
                 'where' => array(
                     'gradebook_id = ? AND skill_id = ?' => array(
                         $gradebookId,
-                        $skillId
-                    )
-                )
+                        $skillId,
+                    ),
+                ),
             )
         );
         if (!empty($result)) {
@@ -391,9 +392,9 @@ class SkillRelGradebook extends Model
                 'where' => array(
                     'skill_id = ? AND gradebook_id = ? ' => array(
                         $skill_id,
-                        $gradebookId
-                    )
-                )
+                        $gradebookId,
+                    ),
+                ),
             ),
             'first'
         );
@@ -443,7 +444,7 @@ class SkillRelGradebook extends Model
             foreach ($gradebooks_to_add as $gradebook_id) {
                 $attributes = array(
                     'skill_id' => $skill_id,
-                    'gradebook_id' => $gradebook_id
+                    'gradebook_id' => $gradebook_id,
                 );
                 $this->save($attributes);
             }
@@ -532,7 +533,7 @@ class SkillRelUser extends Model
         $courseId = intval($courseId);
         $sessionId = $sessionId ? intval($sessionId) : null;
         $whereConditions = array(
-            'user_id = ? ' => intval($userId)
+            'user_id = ? ' => intval($userId),
         );
 
         if ($courseId > 0) {
@@ -544,7 +545,7 @@ class SkillRelUser extends Model
             'skill_id',
             $this->table,
             array(
-                'where' => $whereConditions
+                'where' => $whereConditions,
             ),
             'all'
         );
@@ -566,12 +567,12 @@ class SkillRelUser extends Model
                 intval($userId),
                 intval($skillId),
                 intval($courseId),
-                $sessionId ? intval($sessionId) : null
-            )
+                $sessionId ? intval($sessionId) : null,
+            ),
         );
 
         return Database::select('*', $this->table, array(
-            'where' => $where
+            'where' => $where,
         ), 'first');
     }
 
@@ -589,7 +590,7 @@ class Skill extends Model
         'access_url_id',
         'short_code',
         'icon',
-        'criteria'
+        'criteria',
     );
     public $required = array('name');
 
@@ -628,6 +629,10 @@ class Skill extends Model
     public function get($id)
     {
         $result = parent::get($id);
+        if (empty($result)) {
+            return [];
+        }
+
         $path = api_get_path(WEB_UPLOAD_PATH).'badges/';
 
         if (!empty($result['icon'])) {
@@ -653,7 +658,6 @@ class Skill extends Model
         $result['icon_big'] = $iconSmall;
         $result['icon_small'] = $iconBig;
         $result['icon_mini'] = $iconMini;
-
         $result['img_mini'] = Display::img($iconBig, $result['name'], ['width' => ICON_SIZE_MEDIUM]);
         $result['img_big'] = Display::img($iconBig, $result['name']);
         $result['img_small'] = Display::img($iconSmall, $result['name']);
@@ -687,6 +691,9 @@ class Skill extends Model
         }
         $html .= '<ul class="list-unstyled list-badges">';
         foreach ($skills as $skill) {
+            if (isset($skill['data'])) {
+                $skill = $skill['data'];
+            }
             $html .= '<li class="thumbnail">';
             $item = $skill[$imageSize];
             $item .= '<div class="caption">
@@ -869,7 +876,7 @@ class Skill extends Model
         $skillRelSkill = new SkillRelSkill();
         $children = $skillRelSkill->getChildren($skillId);
         foreach ($children as $child) {
-            $subChildren = $this->getAllChildren($child['skill_id']);
+            $subChildren = $this->getAllChildren($child['id']);
         }
 
         if (!empty($subChildren)) {
@@ -887,7 +894,7 @@ class Skill extends Model
         $skillRelSkill = new SkillRelSkill();
         $skills = $skillRelSkill->getSkillParents($skillId, true);
         foreach ($skills as &$skill) {
-            $skill['data'] = self::get($skill['skill_id']);
+            $skill['data'] = $this->get($skill['skill_id']);
         }
         return $skills;
     }
@@ -901,12 +908,22 @@ class Skill extends Model
     {
         $skillRelSkill = new SkillRelSkill();
         $skills = $skillRelSkill->getDirectParents($skillId, true);
-        foreach ($skills as &$skill) {
-            $skill['data'] = self::get($skill['skill_id']);
-            $skill_info2 = $skillRelSkill->getSkillInfo($skill['skill_id']);
-            $skill['data']['parent_id'] = $skill_info2['parent_id'];
+        if (!empty($skills)) {
+            foreach ($skills as &$skill) {
+                $skillData = $this->get($skill['skill_id']);
+                if (empty($skillData)) {
+                    continue;
+                }
+                $skill['data'] = $skillData;
+                $skill_info2 = $skillRelSkill->getSkillInfo($skill['skill_id']);
+                $parentId = isset($skill_info2['parent_id']) ? isset($skill_info2['parent_id']) : 0;
+                $skill['data']['parent_id'] = $parentId;
+            }
+
+            return $skills;
         }
-        return $skills;
+
+        return [];
     }
 
     /**
@@ -989,7 +1006,7 @@ class Skill extends Model
                         'skill_id' => $skill_gradebook['skill_id'],
                         'acquired_skill_at' => api_get_utc_datetime(),
                         'course_id' => intval($courseId),
-                        'session_id' => $sessionId ? intval($sessionId) : null
+                        'session_id' => $sessionId ? intval($sessionId) : null,
                     );
 
                     $skill_rel_user->save($params);
@@ -1068,7 +1085,9 @@ class Skill extends Model
      * Get user's skills
      *
      * @param int $userId User's id
-     * @param bool $get_skill_data
+     * @param bool $getSkillData
+     * @param int $courseId
+     * @param int $sessionId
      *
      * @return array
      */
@@ -1103,7 +1122,6 @@ class Skill extends Model
 
         $result = Database::query($sql);
         $skills = Database::store_result($result, 'ASSOC');
-        $uploadPath = api_get_path(WEB_UPLOAD_PATH);
         $skillList = array();
         if (!empty($skills)) {
             foreach ($skills as $skill) {
@@ -1121,6 +1139,29 @@ class Skill extends Model
     }
 
     /**
+     * @param Vertex $vertex
+     * @return string
+     */
+    public function processVertex(Vertex $vertex)
+    {
+        $subTable = '<div>';
+        foreach ($vertex->getVerticesEdgeTo() as $subVertex) {
+            $data = $subVertex->getAttribute('graphviz.data');
+            $label = $this->processSkillList([$data], 'mini', false);
+
+            $subTable .= '<div style="float:left; margin-right:5px">';
+            $subTable .= $label;
+            $subTable .= $this->processVertex($subVertex);
+
+            $subTable .= '</div >';
+        }
+
+        $subTable .= '</div>';
+
+        return $subTable;
+    }
+
+    /**
      * @param int $userId
      * @param int $courseId
      * @param int $sessionId
@@ -1132,18 +1173,19 @@ class Skill extends Model
         $skills = $this->getUserSkills($userId, true, $courseId, $sessionId);
 
         $courseTempList = [];
-        $skillParents = [];
         $tableRows = [];
+
+        //$skillParents = $this->checkParents($skills);
+        $skillParents = [];
         foreach ($skills as $resultData) {
             $parents = $this->get_parents($resultData['id']);
             foreach ($parents as $parentData) {
-                if ($parentData['id'] == 1 || $parentData['parent_id'] == 1) {
-                    continue;
-                }
-                $skillParents[$parentData['id']]['passed'] = in_array($parentData['id'], array_keys($skills));
-                $skillParents[$parentData['id']][] = $resultData;
+                $parentData['passed'] = in_array($parentData['id'], array_keys($skills));
+                $skillParents[$resultData['id']][$parentData['id']] = $parentData;
             }
+        }
 
+        foreach ($skills as $resultData) {
             $courseId = $resultData['course_id'];
             if (!empty($courseId)) {
                 if (isset($courseTempList[$courseId])) {
@@ -1156,10 +1198,10 @@ class Skill extends Model
 
             $tableRow = array(
                 'skill_badge' => $resultData['img_mini'],
-                'skill_name' => Skill::translateName($resultData['name']),
+                'skill_name' => self::translateName($resultData['name']),
                 'achieved_at' => api_get_local_time($resultData['acquired_skill_at']),
                 'course_image' => '',
-                'course_name' => ''
+                'course_name' => '',
             );
 
             if (!empty($courseInfo)) {
@@ -1168,11 +1210,10 @@ class Skill extends Model
             }
             $tableRows[] = $tableRow;
         }
-
         $allowLevels = api_get_configuration_value('skill_levels_names');
-
+//id="skillList"
         $tableResult = '<div class="table-responsive">
-                <table class="table" id="skillList">
+                <table class="table" >
                     <thead>
                         <tr>
                             <th>'.get_lang('AchievedSkills').'</th>
@@ -1180,47 +1221,55 @@ class Skill extends Model
                     </thead>
                     <tbody>
                     <tr><td>';
-        //$allowLevels = [];
+
         if (!empty($skillParents)) {
             if (empty($allowLevels)) {
                 $tableResult .= $this->processSkillList($skills);
             } else {
-                $table = new HTML_Table(['class' => 'table table-bordered']);
-                if (!empty($skillParents)) {
-                    $column = 0;
-                    $skillAdded = [];
-                    foreach ($skillParents as $parentId => $data) {
-                        if (in_array($parentId, $skillAdded)) {
-                            continue;
+                $graph = new \Fhaculty\Graph\Graph();
+                $graph->setAttribute('graphviz.graph.rankdir', 'LR');
+                foreach ($skillParents as $skillId => $parentList) {
+                    $old = null;
+                    foreach ($parentList as $parent) {
+                        if ($graph->hasVertex($parent['id'])) {
+                            $current = $graph->getVertex($parent['id']);
+                        } else {
+                            $current = $graph->createVertex($parent['id']);
+                            $current->setAttribute('graphviz.data', $parent['data']);
                         }
-                        $parentName = '';
-                        if ($data['passed']) {
-                            $parentInfo = $skills[$parentId];
-                            $parentName = $this->processSkillList([$parentInfo], 'mini', false);
-                        }
-                        $table->setHeaderContents(0, $column, $parentName);
-                        $row = 1;
-                        $skillsToShow = [];
-                        foreach ($data as $skillData) {
-                            if ($skillData['id'] == $parentId) {
-                                continue;
+
+                        if (!empty($old)) {
+                            if ($graph->hasVertex($old['id'])) {
+                                $nextVertex = $graph->getVertex($old['id']);
+                            } else {
+                                $nextVertex = $graph->createVertex($old['id']);
+                                $nextVertex->setAttribute('graphviz.data', $old['data']);
                             }
-                            if (empty($skillData['id'])) {
-                                continue;
+
+                            if (!$nextVertex->hasEdgeTo($current)) {
+                                $nextVertex->createEdgeTo($current);
                             }
-                            $skillAdded[] = $skillData['id'];
-                            $skillsToShow[] = $skillData;
                         }
-                        $table->setCellContents(
-                            $row,
-                            $column,
-                            $this->processSkillList($skillsToShow, 'mini', false)
-                        );
-                        $row++;
-                        $column++;
+
+                        $old = $parent;
                     }
                 }
-                $tableResult .= $table->toHtml();
+
+                $table = '<table class ="table table-bordered">';
+                $root = $graph->getVertex(1);
+                $table .= '<tr>';
+                /** @var \Fhaculty\Graph\Vertex $vertex */
+                foreach ($root->getVerticesEdgeTo() as $vertex) {
+                    $data = $vertex->getAttribute('graphviz.data');
+                    $label = $this->processSkillList([$data], 'mini', false);
+
+                    $table .= '<td >';
+                    $table .= $label;
+                    $table .= $this->processVertex($vertex);
+                    $table .= '</td>';
+                }
+                $table .= '</tr></table>';
+                $tableResult .= $table;
             }
         } else {
             $tableResult .= get_lang('WithoutAchievedSkills');
@@ -1235,7 +1284,7 @@ class Skill extends Model
 
         return [
             'skills' => $tableRows,
-            'table' => $tableResult
+            'table' => $tableResult,
         ];
     }
 
@@ -1271,7 +1320,7 @@ class Skill extends Model
                     $skills[1] = array(
                         'id' => '1',
                         'name' => get_lang('Root'),
-                        'parent_id' => '0'
+                        'parent_id' => '0',
                     );
                     $skillInfo = $this->getSkillInfo($skill_id);
 
@@ -1354,7 +1403,7 @@ class Skill extends Model
             foreach ($family as $main_family_id => $family_items) {
                 if (!empty($family_items)) {
                     foreach ($family_items as $item) {
-                        $new_family_array[$item['skill_id']] = $family_id;
+                        $new_family_array[$item['id']] = $family_id;
                     }
                 }
                 $new_family_array[$main_family_id] = $family_id;
@@ -1368,7 +1417,6 @@ class Skill extends Model
                 $flat_array[$skill_id] = $skills[$skill_id];
             } else {
                 // Moving node to the children index of their parents
-
                 foreach ($skills as $my_skill_id => &$skill) {
                     if (isset($new_family_array[$skill['id']])) {
                         $skill['data']['family_id'] = $new_family_array[$skill['id']];
@@ -1382,7 +1430,7 @@ class Skill extends Model
                 'name' => get_lang('SkillRootName'),
                 'id' => 'root',
                 'children' => $refs['root']['children'],
-                'data' => array()
+                'data' => array(),
             );
         }
 
@@ -1423,7 +1471,7 @@ class Skill extends Model
                 }
                 $simple_tree[] = array(
                     'name' => $element['name'],
-                    'children' => $children
+                    'children' => $children,
                 );
             }
         }
@@ -1612,7 +1660,7 @@ class Skill extends Model
 
         $whereConditions = array(
             'user_id = ? ' => intval($userId),
-            'AND skill_id = ? ' => intval($skillId)
+            'AND skill_id = ? ' => intval($skillId),
         );
 
         if ($courseId > 0) {
@@ -1624,7 +1672,7 @@ class Skill extends Model
             'COUNT(1) AS qty',
             $this->table_skill_rel_user,
             array(
-                'where' => $whereConditions
+                'where' => $whereConditions,
             ),
             'first'
         );
@@ -1658,8 +1706,8 @@ class Skill extends Model
             $skillRelProfileTable,
             array(
                 'where' => array(
-                    'skill_id = ?' => $id
-                )
+                    'skill_id = ?' => $id,
+                ),
             ),
             'first'
         );
@@ -1955,7 +2003,7 @@ class Skill extends Model
         foreach ($result as $item) {
             $skills[] = [
                 'name' => self::translateName($item['name']),
-                'acquired_skill_at' => $item['acquired_skill_at']
+                'acquired_skill_at' => $item['acquired_skill_at'],
             ];
         }
 
@@ -1975,6 +2023,10 @@ class Skill extends Model
         return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $name;
     }
 
+    /**
+     * @param string $code
+     * @return mixed|string
+     */
     public static function translateCode($code)
     {
         if (empty($code)) {

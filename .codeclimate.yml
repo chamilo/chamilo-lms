@@ -8,7 +8,8 @@ engines:
   phpcodesniffer:
     enabled: true
     config:
-    standard: "PSR1,PSR2"
+      standard: "PSR1,PSR2"
+      file_extensions: "php"
     checks:
       PSR1 Classes ClassDeclaration MissingNamespace:
         enabled: false

@@ -1467,20 +1467,16 @@ class Display
                     c_id = $course_id AND
                     access_user_id = '$user_id' AND
                     access_session_id ='".$sessionId."'
-                ORDER BY access_date ASC 
+                ORDER BY access_date DESC 
                 LIMIT 1
                 ";
         $result = Database::query($sql);
-        $oldestTrackDate = $oldestTrackDateOrig = '3000-01-01 00:00:00';
+
+        // latest date by default is the creation date
+        $latestDate = $courseInfo['creation_date'];
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
-            $oldestTrackDate = $row['access_date'];
-        }
-
-        if ($oldestTrackDate == $oldestTrackDateOrig) {
-            // if there was no connexion to the course ever, then take the
-            // course creation date as a reference
-            $oldestTrackDate = $courseInfo['creation_date'];
+            $latestDate = $row['access_date'];
         }
 
         $sessionCondition = api_get_session_condition(
@@ -1523,7 +1519,7 @@ class Display
                             lastedit_type NOT LIKE '%Deleted%' AND
                             lastedit_type NOT LIKE '%deleted%' AND
                             lastedit_type NOT LIKE '%DocumentInvisible%' AND
-                            lastedit_date > '$oldestTrackDate' AND
+                            lastedit_date > '$latestDate' AND
                             lastedit_user_id != $user_id $sessionCondition AND
                             visibility != 2 AND
                             (to_user_id IN ('$user_id', '0') OR to_user_id IS NULL) AND
@@ -1531,6 +1527,7 @@ class Display
                         ORDER BY lastedit_date DESC
                         LIMIT 1";
                 $result = Database::query($sql);
+
                 $latestChange = Database::fetch_array($result, 'ASSOC');
 
                 if ($latestChange) {

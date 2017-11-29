@@ -41,7 +41,7 @@ class ExerciseLib
         $show_comment = false,
         $show_answers = false
     ) {
-        $course_id = api_get_course_int_id();
+        $course_id = empty($exercise->course_id) ? api_get_course_int_id() : $exercise->course_id;
         $course = api_get_course_info_by_id($course_id);
         // Change false to true in the following line to enable answer hinting
         $debug_mark_answer = $show_answers;

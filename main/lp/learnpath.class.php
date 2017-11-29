@@ -3022,6 +3022,7 @@ class learnpath
                 'type' => $this->items[$item_id]->get_type(),
                 'description' => $this->items[$item_id]->get_description(),
                 'path' => $this->items[$item_id]->get_path(),
+                'parent' => $this->items[$item_id]->get_parent(),
             );
         }
         if ($this->debug > 2) {
@@ -3248,6 +3249,7 @@ class learnpath
 
         foreach ($tree as $subtree) {
             $subtree['tree'] = null;
+
             if (!in_array($subtree['type'], $dirTypes) && $subtree['parent'] == $id ) {
                 if ($subtree['id'] == $this->current) {
                     $subtree['current'] = 'active';

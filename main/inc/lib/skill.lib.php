@@ -4,6 +4,7 @@
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\UserBundle\Entity\Repository\UserRepository;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Graph;
 
 /**
  * Class SkillProfile
@@ -1142,16 +1143,25 @@ class Skill extends Model
      * @param Vertex $vertex
      * @return string
      */
-    public function processVertex(Vertex $vertex)
+    public function processVertex(Vertex $vertex, $skills = [])
     {
         $subTable = '<div>';
         foreach ($vertex->getVerticesEdgeTo() as $subVertex) {
             $data = $subVertex->getAttribute('graphviz.data');
             $label = $this->processSkillList([$data], 'mini', false);
 
-            $subTable .= '<div style="float:left; margin-right:5px">';
+            $passed = in_array($data['id'], array_keys($skills));
+            $transparency = '';
+            if ($passed === false) {
+                // @todo use css class
+                $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
+            }
+            $subTable .= '<div style="float:left; margin-right:5px; ">';
+            $subTable .= '<div style="'.$transparency.'">';
             $subTable .= $label;
-            $subTable .= $this->processVertex($subVertex);
+
+            $subTable .= '</div >';
+            $subTable .= $this->processVertex($subVertex, $skills);
 
             $subTable .= '</div >';
         }
@@ -1174,8 +1184,6 @@ class Skill extends Model
 
         $courseTempList = [];
         $tableRows = [];
-
-        //$skillParents = $this->checkParents($skills);
         $skillParents = [];
         foreach ($skills as $resultData) {
             $parents = $this->get_parents($resultData['id']);
@@ -1212,7 +1220,7 @@ class Skill extends Model
         }
         $allowLevels = api_get_configuration_value('skill_levels_names');
 //id="skillList"
-        $tableResult = '<div class="table-responsive">
+        $tableResult = '<div class="table-responsive" >
                 <table class="table" >
                     <thead>
                         <tr>
@@ -1226,7 +1234,7 @@ class Skill extends Model
             if (empty($allowLevels)) {
                 $tableResult .= $this->processSkillList($skills);
             } else {
-                $graph = new \Fhaculty\Graph\Graph();
+                $graph = new Graph();
                 $graph->setAttribute('graphviz.graph.rankdir', 'LR');
                 foreach ($skillParents as $skillId => $parentList) {
                     $old = null;
@@ -1250,22 +1258,33 @@ class Skill extends Model
                                 $nextVertex->createEdgeTo($current);
                             }
                         }
-
                         $old = $parent;
                     }
                 }
 
                 $table = '<table class ="table table-bordered">';
+                // Getting "root" vertex
                 $root = $graph->getVertex(1);
                 $table .= '<tr>';
-                /** @var \Fhaculty\Graph\Vertex $vertex */
+                /** @var Vertex $vertex */
                 foreach ($root->getVerticesEdgeTo() as $vertex) {
                     $data = $vertex->getAttribute('graphviz.data');
                     $label = $this->processSkillList([$data], 'mini', false);
 
+                    $passed = in_array($data['id'], array_keys($skills));
+                    $transparency = '';
+                    if ($passed === false) {
+                        // @todo use a css class
+                        $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
+                    }
+
                     $table .= '<td >';
+
+                    $table .= '<div style="'.$transparency.'">';
                     $table .= $label;
-                    $table .= $this->processVertex($vertex);
+
+                    $table .= '</div>';
+                    $table .= $this->processVertex($vertex, $skills);
                     $table .= '</td>';
                 }
                 $table .= '</tr></table>';

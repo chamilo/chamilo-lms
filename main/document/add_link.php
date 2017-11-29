@@ -14,8 +14,11 @@ require_once '../inc/global.inc.php';
 // Including additional libraries
 require_once '../inc/lib/document.lib.php';
 require_once '../inc/lib/urlUtils.lib.php';
- 
-if (api_get_setting('enable_add_file_link') == 'false') {
+
+global $_configuration;
+$fileLinkEnabled = $_configuration['enable_add_file_link'];
+
+if (!$fileLinkEnabled) {
     api_not_allowed(true);
 }
  

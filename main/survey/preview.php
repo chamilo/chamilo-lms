@@ -60,7 +60,6 @@ if (empty($survey_data)) {
         true,
         Display::return_message(get_lang('InvallidSurvey'), 'error', false)
     );
-    exit;
 }
 
 $urlname = strip_tags($survey_data['title']);
@@ -86,7 +85,7 @@ if ($surveyAnonymous == 0 && api_is_anonymous()) {
     }
 }
 // Header
-Display :: display_header(get_lang('SurveyPreview'));
+Display::display_header(get_lang('SurveyPreview'));
 
 // We exit here is the first or last question is a pagebreak (which causes errors)
 SurveyUtil::check_first_last_question($survey_id, false);
@@ -98,7 +97,6 @@ if (api_is_course_admin() ||
 ) {
     // Survey information
     echo '<div class="page-header"><h2>'.$survey_data['survey_title'].'</h2></div>';
-
     if (!empty($survey_data['survey_subtitle'])) {
         echo '<div id="survey_subtitle">'.$survey_data['survey_subtitle'].'</div>';
     }
@@ -193,8 +191,8 @@ if (api_is_course_admin() ||
     $sql = "SELECT * FROM $table_survey_question
             WHERE
                 c_id = $course_id AND
-                type='".Database::escape_string('pagebreak')."' AND
-                survey_id='".$survey_id."'";
+                type = '".Database::escape_string('pagebreak')."' AND
+                survey_id = '".$survey_id."'";
     $result = Database::query($sql);
     $numberofpages = Database::num_rows($result) + 1;
 
@@ -271,4 +269,4 @@ if (api_is_course_admin() ||
     echo Display::return_message(get_lang('NotAllowed'), 'error', false);
 }
 
-Display :: display_footer();
+Display::display_footer();

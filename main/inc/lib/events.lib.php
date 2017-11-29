@@ -144,7 +144,7 @@ class Event
      *
      *  $tool can take this values :
      *  Links, Calendar, Document, Announcements,
-     *  Group, Video, Works, Users, Exercices, Course Desc
+     *  Group, Video, Works, Users, Exercises, Course Desc
      *  ...
      *  Values can be added if new modules are created (15char max)
      *  I encourage to use $nameTool as $tool when calling this function
@@ -152,21 +152,27 @@ class Event
      * Functionality for "what's new" notification is added by Toon Van Hoecke
      * @return bool
      */
-    public static function event_access_tool($tool, $id_session = 0)
+    public static function event_access_tool($tool)
     {
+        $tool = Database::escape_string($tool);
+
         if (empty($tool)) {
             return false;
         }
-        $TABLETRACK_ACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-        //for "what's new" notification
-        $TABLETRACK_LASTACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 
         $_course = api_get_course_info();
         $courseId = api_get_course_int_id();
-        $id_session = api_get_session_id();
-        $tool = Database::escape_string($tool);
+        $sessionId = api_get_session_id();
         $reallyNow = api_get_utc_datetime();
         $user_id = api_get_user_id();
+
+        if (empty($_course)) {
+            return false;
+        }
+
+        $tableAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+        //for "what's new" notification
+        $tableLastAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 
         // record information
         // only if user comes from the course $_cid
@@ -177,6 +183,7 @@ class Event
         $pos = isset($_SERVER['HTTP_REFERER']) ? strpos(strtolower($_SERVER['HTTP_REFERER']), strtolower(api_get_path(WEB_COURSE_PATH).$coursePath)) : false;
         // added for "what's new" notification
         $pos2 = isset($_SERVER['HTTP_REFERER']) ? strpos(strtolower($_SERVER['HTTP_REFERER']), strtolower(api_get_path(WEB_PATH)."index")) : false;
+
         // end "what's new" notification
         if ($pos !== false || $pos2 !== false) {
             $params = [
@@ -184,25 +191,31 @@ class Event
                 'c_id' => $courseId,
                 'access_tool' => $tool,
                 'access_date' => $reallyNow,
-                'access_session_id' => $id_session,
+                'access_session_id' => $sessionId,
                 'user_ip' => api_get_real_ip()
             ];
-            Database::insert($TABLETRACK_ACCESS, $params);
+            Database::insert($tableAccess, $params);
         }
 
         // "what's new" notification
-        $sql = "UPDATE $TABLETRACK_LASTACCESS
+        $sql = "UPDATE $tableLastAccess
                 SET access_date = '$reallyNow'
                 WHERE 
                     access_user_id = ".$user_id." AND 
                     c_id = '".$courseId."' AND 
                     access_tool = '".$tool."' AND 
-                    access_session_id=".$id_session;
+                    access_session_id=".$sessionId;
         $result = Database::query($sql);
+
         if (Database::affected_rows($result) == 0) {
-            $sql = "INSERT INTO $TABLETRACK_LASTACCESS (access_user_id, c_id, access_tool, access_date, access_session_id)
-                    VALUES (".$user_id.", '".$courseId."' , '$tool', '$reallyNow', $id_session)";
-            Database::query($sql);
+            $params = [
+                'access_user_id' => $user_id,
+                'c_id' => $courseId,
+                'access_tool' => $tool,
+                'access_date' => $reallyNow,
+                'access_session_id' => $sessionId
+            ];
+            Database::insert($tableLastAccess, $params);
         }
         return true;
     }

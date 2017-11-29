@@ -4224,7 +4224,7 @@ function api_get_track_item_property_history($tool, $ref)
  * @param int $session_id
  * @param int $groupId
  *
- * @return array Array with all fields from c_item_property, empty array if not found or false if course could not be found
+ * @return array with all fields from c_item_property, empty array if not found or false if course could not be found
  */
 function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0, $groupId = 0)
 {
@@ -4397,9 +4397,6 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
         $html .= '</div>';
     }
 
-    //$html .= '<noscript><input type="submit" name="user_select_language" value="'.get_lang('Ok').'" /></noscript>';
-    //$html .= '</form>';
-
     return $html;
 }
 
@@ -4546,24 +4543,25 @@ function api_get_language_from_type($lang_type)
     switch ($lang_type) {
         case 'platform_lang':
             $temp_lang = api_get_setting('platformLanguage');
-            if (!empty($temp_lang))
+            if (!empty($temp_lang)) {
                 $return = $temp_lang;
+            }
             break;
         case 'user_profil_lang':
             $_user = api_get_user_info();
-
-            if (isset($_user['language']) && !empty($_user['language']))
+            if (isset($_user['language']) && !empty($_user['language'])) {
                 $return = $_user['language'];
+            }
             break;
         case 'user_selected_lang':
-            if (isset($_SESSION['user_language_choice']) && !empty($_SESSION['user_language_choice']))
+            if (isset($_SESSION['user_language_choice']) && !empty($_SESSION['user_language_choice'])) {
                 $return = $_SESSION['user_language_choice'];
+            }
             break;
         case 'course_lang':
             global $_course;
             $cidReq = null;
             if (empty($_course)) {
-
                 // Code modified because the local.inc.php file it's declarated after this work
                 // causing the function api_get_course_info() returns a null value
                 $cidReq = isset($_GET["cidReq"]) ? Database::escape_string($_GET["cidReq"]) : null;
@@ -4589,7 +4587,7 @@ function api_get_language_from_type($lang_type)
             break;
         default:
             $return = false;
-        break;
+            break;
     }
 
     return $return;

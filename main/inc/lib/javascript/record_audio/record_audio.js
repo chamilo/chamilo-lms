@@ -5,6 +5,7 @@ window.RecordAudio = (function () {
 
         var mediaConstraints = {audio: true},
             recordRTC = null,
+            txtName = $('#audio-title-rtc'),
             btnStart = $(rtcInfo.btnStartId),
             btnPause = $(rtcInfo.btnPauseId),
             btnPlay = $(rtcInfo.btnPlayId),
@@ -14,7 +15,7 @@ window.RecordAudio = (function () {
 
         btnStart.on('click', function () {
             if (!fileName) {
-                fileName = $('#audio-title-rtc').val();
+                fileName = txtName.val();
 
                 if (!$.trim(fileName)) {
                     return;
@@ -30,7 +31,7 @@ window.RecordAudio = (function () {
                 });
                 recordRTC.startRecording();
 
-                $('#audio-title-rtc').prop('readonly', true);
+                txtName.prop('readonly', true);
                 btnSave.prop('disabled', true).addClass('hidden');
                 btnStop.prop('disabled', false).removeClass('hidden');
                 btnStart.prop('disabled', true).addClass('hidden');
@@ -110,7 +111,7 @@ window.RecordAudio = (function () {
             formData.append('audio_dir', rtcInfo.directory);
 
             $.ajax({
-                url: _p.web_ajax + 'record_audio_rtc.ajax.php',
+                url: _p.web_ajax + 'record_audio_rtc.ajax.php?tool=' + (!!txtName.length ? 'document' : 'exercise'),
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -122,23 +123,19 @@ window.RecordAudio = (function () {
                     btnStop.prop('disabled', true);
                     btnSave.prop('disabled', true).text(btnSave.data('loadingtext'));
                 }
-            }).done(function (fileUrl) {
-                if (!fileUrl) {
+            }).done(function (response) {
+                if (!!txtName.length) {
+                    window.location.reload();
                     return;
                 }
 
-                if ($('#audio-title-rtc').length) {
-                    $('#audio-title-rtc').prop('readonly', false);
-
-                    window.location.reload();
-                }
-            }).fail(function () {
-                alert(btnSave.data('errortext'));
+                $(response.message).insertAfter($(rtcInfo.blockId).find('.well'));
             }).always(function () {
                 btnSave.prop('disabled', true).addClass('hidden').html(btnSaveText);
                 btnStop.prop('disabled', true).addClass('hidden');
                 btnPause.prop('disabled', true).addClass('hidden');
                 btnStart.prop('disabled', false).removeClass('hidden');
+                txtName.prop('readonly', false);
             });
         });
     }

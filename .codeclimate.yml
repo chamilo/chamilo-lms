@@ -1,4 +1,4 @@
-engines:
+plugins:
   fixme:
     enabled: true
     config:
@@ -17,15 +17,9 @@ engines:
         enabled: false
 
   duplication:
-    enabled: false
+    enabled: true
 
-ratings:
-  paths:
-  - '**.php'
-  - '**.js'
-  - '**.css'
-
-exclude_paths:
+exclude_patterns:
 - cli-config.php
 - app/cache/
 - app/logs/

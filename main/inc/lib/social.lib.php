@@ -2130,7 +2130,7 @@ class SocialManager extends UserManager
      */
     public static function getSkillBlock($userId)
     {
-        if (Skill::isAllow($userId, false) === false) {
+        if (Skill::isAllowed($userId, false) === false) {
             return '';
         }
 

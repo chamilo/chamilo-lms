@@ -10,7 +10,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 $userId = api_get_user_id();
-Skill::isAllow($userId);
+Skill::isAllowed($userId);
 
 $isStudent = api_is_student();
 $isStudentBoss = api_is_student_boss();

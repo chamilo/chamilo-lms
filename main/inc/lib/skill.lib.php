@@ -1917,7 +1917,7 @@ class Skill extends Model
      *
      * @return bool
      */
-    public static function isAllow($studentId = 0, $blockPage = true)
+    public static function isAllowed($studentId = 0, $blockPage = true)
     {
         if (self::isToolAvailable()) {
             if (api_is_platform_admin()) {

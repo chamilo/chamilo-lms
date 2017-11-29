@@ -14,7 +14,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-Skill::isAllow();
+Skill::isAllowed();
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 $skillId = isset($_GET['id']) ? intval($_GET['id']) : 0;

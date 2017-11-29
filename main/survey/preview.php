@@ -219,7 +219,7 @@ if (api_is_course_admin() ||
             /** @var survey_question $display */
             $display = new $ch_type;
             $form->addHtml('<div class="survey_question '.$ch_type.'">');
-            $form->addHtml('<h5 class="title">'.$question['question_id'].'. '.strip_tags($question['survey_question']).'</h5>');
+            $form->addHtml('<h5 class="title">'.$key.'. '.strip_tags($question['survey_question']).'</h5>');
             $display->render($form, $question);
             $form->addHtml('</div>');
         }

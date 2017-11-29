@@ -1466,19 +1466,19 @@ class Display
                 WHERE
                     c_id = $course_id AND
                     access_user_id = '$user_id' AND
-                    access_session_id ='".$sessionId."'";
-        $resLastTrackInCourse = Database::query($sql);
-
+                    access_session_id ='".$sessionId."'
+                ORDER BY access_date ASC 
+                LIMIT 1
+                ";
+        $result = Database::query($sql);
         $oldestTrackDate = $oldestTrackDateOrig = '3000-01-01 00:00:00';
-        while ($lastTrackInCourse = Database::fetch_array($resLastTrackInCourse)) {
-            $lastTrackInCourseDate[$lastTrackInCourse['access_tool']] = $lastTrackInCourse['access_date'];
-            if ($oldestTrackDate > $lastTrackInCourse['access_date']) {
-                $oldestTrackDate = $lastTrackInCourse['access_date'];
-            }
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result, 'ASSOC');
+            $oldestTrackDate = $row['access_date'];
         }
 
         if ($oldestTrackDate == $oldestTrackDateOrig) {
-            //if there was no connexion to the course ever, then take the
+            // if there was no connexion to the course ever, then take the
             // course creation date as a reference
             $oldestTrackDate = $courseInfo['creation_date'];
         }
@@ -1509,15 +1509,17 @@ class Display
             foreach ($tools as $tool) {
                 $toolName = $tool['name'];
                 // Fix to get student publications
-                if ($toolName == 'student_publication') {
-                    $toolName = 'work';
+                $toolCondition = " tool = '$toolName' AND ";
+                if ($toolName == 'student_publication' || $toolName == 'work') {
+                    $toolCondition = " (tool = 'work' OR tool = 'student_publication') AND ";
                 }
+
                 $toolName = addslashes(Database::escape_string($toolName));
 
                 $sql = "SELECT * FROM $tool_edit_table 
                         WHERE
                             c_id = $course_id AND
-                            tool = '$toolName' AND
+                            $toolCondition
                             lastedit_type NOT LIKE '%Deleted%' AND
                             lastedit_type NOT LIKE '%deleted%' AND
                             lastedit_type NOT LIKE '%DocumentInvisible%' AND
@@ -1529,7 +1531,8 @@ class Display
                         ORDER BY lastedit_date DESC
                         LIMIT 1";
                 $result = Database::query($sql);
-                $latestChange = Database::fetch_array($result);
+                $latestChange = Database::fetch_array($result, 'ASSOC');
+
                 if ($latestChange) {
                     $latestChange['link'] = $tool['link'];
                     $latestChange['image'] = $tool['image'];

@@ -1211,8 +1211,6 @@ if (isset($questions) && is_array($questions)) {
         $form->addHtml('<div class="survey_question '.$ch_type.'">');
         //$form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
         $form->addHtml('<h5 class="title">'.$question['sort'].'. '.strip_tags($question['survey_question']).'</h5>');
-        //$form->addHtml($question['survey_question']);
-
         $userAnswerData = SurveyUtil::get_answers_of_question_by_user($question['survey_id'], $question['question_id']);
         $finalAnswer = null;
 

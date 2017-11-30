@@ -2356,21 +2356,17 @@ class ImportCsv
                             'item_id' => $careerId,
                             'extra_'.$extraFieldName => $itemId,
                         ];
-                        $extraFieldValue->saveFieldValues($params);
-
                         $links = isset($row['HLinks']) ? $row['HLinks'] : [];
                         if (!empty($links)) {
                             $extraFieldUrlName = $this->extraFieldIdNameList['career_urls'];
                             $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
                                 $extraFieldUrlName
                             );
-
-                            $params = [
-                                'item_id' => $careerId,
-                                'extra_'.$extraFieldUrlName => $itemId,
-                            ];
-                            $extraFieldValue->saveFieldValues($params);
+                            if (!empty($extraFieldInfo)) {
+                                $params['extra_'.$extraFieldUrlName] = $links;
+                            }
                         }
+                        $extraFieldValue->saveFieldValues($params);
                     }
                 } else {
                     if (isset($item['item_id'])) {
@@ -2386,12 +2382,14 @@ class ImportCsv
                             $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
                                 $extraFieldUrlName
                             );
-
-                            $params = [
-                                'item_id' => $item['item_id'],
-                                'extra_'.$extraFieldUrlName => $links
-                            ];
-                            $extraFieldValue->saveFieldValues($params);
+                            if (!empty($extraFieldInfo)) {
+                                $params = [
+                                    'item_id' => $item['item_id'],
+                                    'extra_'.$extraFieldName => $itemId,
+                                    'extra_'.$extraFieldUrlName => $links
+                                ];
+                                $extraFieldValue->saveFieldValues($params);
+                            }
                         }
                     }
                 }
@@ -2495,14 +2493,14 @@ class ImportCsv
 
                     $currentCourseId = (int) $row['CourseId'];
                     $name = $row['CourseName'];
-                    $color = $row['DefinedColor'];
                     $notes = $row['Notes'];
                     $groupValue = $row['Group'];
                     $rowValue = $row['Row'];
-                    $arrow = $row['DrawArrowFrom'];
-                    $subGroup = $row['SubGroup'];
-                    $connections = $row['Connections'];
-                    $linkedElement = isset($row['LinkedElement']) ? $row['LinkedElement'] : null;
+                    $color = isset($row['DefinedColor']) ? $row['DefinedColor'] : '';
+                    $arrow = isset($row['DrawArrowFrom']) ? $row['DrawArrowFrom'] : '';
+                    $subGroup = isset($row['SubGroup']) ? $row['SubGroup'] : '';
+                    $connections = isset($row['Connections']) ? $row['Connections'] : '';
+                    $linkedElement = isset($row['LinkedElement']) ? $row['LinkedElement'] : '';
 
                     if ($graph->hasVertex($currentCourseId)) {
                         // Avoid double insertion

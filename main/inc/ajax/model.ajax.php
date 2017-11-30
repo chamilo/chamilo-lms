@@ -1,16 +1,28 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 //@todo this could be integrated in the inc/lib/model.lib.php + try to clean this file
 require_once __DIR__.'/../global.inc.php';
 
 $libpath = api_get_path(LIBRARY_PATH);
 
 // 1. Setting variables needed by jqgrid
-
 $action = $_GET['a'];
-$page = intval($_REQUEST['page']); //page
-$limit = intval($_REQUEST['rows']); //quantity of rows
+$page = (int) $_REQUEST['page']; //page
+$limit = (int) $_REQUEST['rows']; //quantity of rows
+
+// Makes max row persistence after refreshing the grid
+$savedRows = Session::read('max_rows_'.$action);
+if (empty($savedRows)) {
+    Session::write('max_rows_'.$action, $limit);
+} else {
+    if ($limit != $savedRows) {
+        Session::write('max_rows_'.$action, $limit);
+    }
+}
+
 $sidx = $_REQUEST['sidx']; //index (field) to filter
 $sord = $_REQUEST['sord']; //asc or desc
 $exportFilename = isset($_REQUEST['export_filename']) ? $_REQUEST['export_filename'] : '';

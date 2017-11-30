@@ -26,7 +26,12 @@ include_once $libpath.'specific_fields_manager.lib.php';
 $form = new FormValidator('add_field', 'post', '', '', null, false);
 $renderer = & $form->defaultRenderer();
 $renderer->setCustomElementTemplate('<span>{element}</span> ');
-$form->addElement('static', 'search_advanced_link', null, '<a href="specific_fields_add.php">'.Display::return_icon('fieldadd.gif').get_lang('AddSpecificSearchField').'</a>');
+$form->addElement(
+    'static',
+    'search_advanced_link',
+    null,
+    '<a href="specific_fields_add.php">'.Display::return_icon('fieldadd.gif').get_lang('AddSpecificSearchField').'</a>'
+);
 
 // Create a sortable table with specific fields data
 $column_show = array(1, 1, 1);
@@ -51,8 +56,10 @@ $table->set_column_filter(3, 'edit_filter');
 function edit_filter($id, $url_params, $row)
 {
     global $charset;
-    $return = '<a href="specific_fields_add.php?action=edit&field_id='.$row[0].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-    $return .= ' <a href="'.api_get_self().'?action=delete&field_id='.$row[0].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+    $return = '<a href="specific_fields_add.php?action=edit&field_id='.$row[0].'">'.
+        Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+    $return .= ' <a href="'.api_get_self().'?action=delete&field_id='.$row[0].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;">'.
+        Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
     return $return;
 }
 
@@ -61,8 +68,6 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
     header('Location: specific_fields.php?message='.get_lang('FieldRemoved'));
     exit;
 }
-
-// Start output
 
 // Displaying the header
 Display::display_header(get_lang('SpecificSearchFields'));

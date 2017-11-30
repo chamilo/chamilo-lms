@@ -1302,10 +1302,25 @@ class Display
         if (!empty($extra_params['rowList'])) {
             $obj->rowList = $extra_params['rowList'];
         }
-        //Sets how many records we want to view in the grid
+
+        // Sets how many records we want to view in the grid
         $obj->rowNum = 20;
         if (!empty($extra_params['rowNum'])) {
             $obj->rowNum = $extra_params['rowNum'];
+        } else {
+            // Try to load max rows from Session
+            $urlInfo = parse_url($url);
+            if (isset($urlInfo['query'])) {
+                parse_str($urlInfo['query'], $query);
+                if (isset($query['a'])) {
+                    $action = $query['a'];
+                    // This value is set in model.ajax.php
+                    $savedRows = Session::read('max_rows_'.$action);
+                    if (!empty($savedRows)) {
+                        $obj->rowNum = $savedRows;
+                    }
+                }
+            }
         }
 
         if (!empty($extra_params['viewrecords'])) {

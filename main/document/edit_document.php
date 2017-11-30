@@ -431,12 +431,17 @@ if ($owner_id == api_get_user_id() ||
         }
     }
 
+
     if ($file_type != 'link') {
         if (!$group_document && !DocumentManager::is_my_shared_folder(api_get_user_id(), $currentDirPath, $sessionId)) {
-            // Updated on field
-            $display_date = date_to_str_ago($last_edit_date).
-                ' <span class="dropbox_date">'.api_format_date(api_get_local_time($last_edit_date)).'</span>';
-            $form->addElement('static', null, get_lang('UpdatedOn'), $display_date);
+            $form->addLabel(get_lang('UpdatedOn'), Display::dateToStringAgoAndLongDate($last_edit_date));
+        }
+
+        if (!empty($document_info['insert_user_id'])) {
+            $insertByUserInfo = api_get_user_info($document_info['insert_user_id']);
+            if (!empty($insertByUserInfo)) {
+                $form->addLabel(get_lang('Author'), $insertByUserInfo['complete_name_with_message_link']);
+            }
         }
     }
 

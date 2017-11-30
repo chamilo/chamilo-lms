@@ -223,9 +223,6 @@ class ExtraField extends Model
             case 'filter':
                 $sidx = 'e.filter';
                 break;
-            case 'display_text':
-                $sidx = 'e.fieldType';
-                break;
         }
         $em = Database::getManager();
         $query = $em->getRepository('ChamiloCoreBundle:ExtraField')->createQueryBuilder('e');
@@ -236,7 +233,6 @@ class ExtraField extends Model
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        //echo $query->getQuery()->getSQL();
         return $query->getQuery()->getArrayResult();
     }
 

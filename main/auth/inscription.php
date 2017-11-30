@@ -804,7 +804,7 @@ if ($form->validate()) {
                 unset($user_id);
 
                 Display::display_header(get_lang('ConfirmationForNewAccount', null, $values['language']));
-                echo Display::page_header(get_lang('YouNeedToConfirmYourAccountViaEmailToAccessPlatform', null, $values['language']));
+                echo Display::page_header(get_lang('YouNeedConfirmYourAccountViaEmailToAccessThePlatform', null, $values['language']));
                 echo $content;
                 Display::display_footer();
                 exit;

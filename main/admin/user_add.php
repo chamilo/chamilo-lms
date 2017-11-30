@@ -249,12 +249,12 @@ $form->addPasswordRule('password', 'password');
 $form->addGroupRule('password', get_lang('EnterPassword'), 'required', null, 1);
 
 if ($checkPass) {
-    $passwordStrengthLabels = '
+    $strengthLabels = '
         <div id="password-verdict"></div>
         <div id="password-errors"></div>
         <div id="password_progress" style="display:none"></div>
     ';
-    $form->addElement('label', null, $passwordStrengthLabels);
+    $form->addElement('label', null, $strengthLabels);
 }
 
 // Status

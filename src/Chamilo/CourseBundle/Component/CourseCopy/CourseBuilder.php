@@ -913,6 +913,9 @@ class CourseBuilder
 
         $sql = 'SELECT * FROM '.$table_survey.'
                 WHERE c_id = '.$courseId.' '.$sessionCondition;
+        if ($id_list) {
+            $sql .= " AND iid IN (".implode(', ', $id_list).")";
+        }
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
             $survey = new Survey(

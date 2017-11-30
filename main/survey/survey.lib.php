@@ -95,6 +95,11 @@ class SurveyManager
             return false;
         }
         $course_info = api_get_course_info($course_code);
+
+        if (empty($course_info)) {
+            return false;
+        }
+
         $session_condition = api_get_session_condition($session_id, true, true);
 
         $sql = "SELECT * FROM $table_survey
@@ -135,7 +140,7 @@ class SurveyManager
         } else {
             $my_course_id = api_get_course_id();
         }
-        $my_course_info = api_get_course_info($my_course_id);
+        $courseInfo = api_get_course_info($my_course_id);
         $table_survey = Database::get_course_table(TABLE_SURVEY);
 
         if ($shared != 0) {
@@ -143,10 +148,13 @@ class SurveyManager
             $sql = "SELECT * FROM $table_survey
                     WHERE survey_id='".intval($survey_id)."' ";
         } else {
+            if (empty($courseInfo)) {
+                return [];
+            }
             $sql = "SELECT * FROM $table_survey
 		            WHERE
 		                survey_id='".intval($survey_id)."' AND
-		                c_id = ".$my_course_info['real_id'];
+		                c_id = ".$courseInfo['real_id'];
         }
 
         $result = Database::query($sql);
@@ -515,9 +523,6 @@ class SurveyManager
         } else {
             // Delete everything of the gradebook for this $linkId
             GradebookUtils::remove_resource_from_course_gradebook($gradebook_link_id);
-
-            //comenting this line to correctly return the function msg
-            //exit;
         }
 
         return $return;

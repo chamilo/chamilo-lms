@@ -11,7 +11,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_MYPROFILE;
 
 api_block_anonymous_users();
-Skill::isAllow(api_get_user_id());
+Skill::isAllowed(api_get_user_id());
 
 //Adds the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();

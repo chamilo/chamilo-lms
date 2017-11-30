@@ -4368,7 +4368,7 @@ class CourseManager
                 'session_category_id' => $session_category_id
             );
 
-            if (Skill::isAllow($user_id, false)) {
+            if (Skill::isAllowed($user_id, false)) {
                 $em = Database::getManager();
                 $objUser = $em->find('ChamiloUserBundle:User', $user_id);
                 $objCourse = $em->find('ChamiloCoreBundle:Course', $course['real_id']);

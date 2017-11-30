@@ -164,11 +164,6 @@ class Display
         echo '</body></html>';
     }
 
-    public static function page()
-    {
-        return new Page();
-    }
-
     /**
      * Displays the tool introduction of a tool.
      *
@@ -176,7 +171,7 @@ class Display
      * @param string $tool These are the constants that are used for indicating the tools.
      * @param array $editor_config Optional configuration settings for the online editor.
      * return: $tool return a string array list with the "define" in main_api.lib
-     * @return html code for adding an introduction
+     * @return string html code for adding an introduction
      */
     public static function display_introduction_section(
         $tool,
@@ -194,7 +189,6 @@ class Display
         $tool,
         $editor_config = null
     ) {
-        $is_allowed_to_edit = api_is_allowed_to_edit();
         $moduleId = $tool;
         if (api_get_setting('enable_tool_introduction') == 'true' || $tool == TOOL_COURSE_HOMEPAGE) {
             $introduction_section = null;
@@ -234,7 +228,6 @@ class Display
         $form_actions = array(),
         $style = 'table'
     ) {
-        global $origin;
         $column = isset($sorting_options['column']) ? $sorting_options['column'] : 0;
         $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
         $table = new SortableTableFromArray($content, $column, $default_items_per_page);
@@ -370,7 +363,6 @@ class Display
     ) {
         $column = 0;
         $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
-
         $table = new SortableTableFromArray($content, $column, $default_items_per_page, $name);
         $table->total_number_of_items = intval($elementCount);
         if (is_array($query_vars)) {
@@ -687,18 +679,18 @@ class Display
 
     /**
      * Prints an <option>-list with all letters (A-Z).
-     * @param char $selected_letter The letter that should be selected
+     * @param string $selected_letter The letter that should be selected
      * @todo This is English language specific implementation.
      * It should be adapted for the other languages.
      * @return string
      */
-    public static function get_alphabet_options($selected_letter = '')
+    public static function get_alphabet_options($selectedLetter = '')
     {
         $result = '';
         for ($i = 65; $i <= 90; $i++) {
             $letter = chr($i);
             $result .= '<option value="'.$letter.'"';
-            if ($selected_letter == $letter) {
+            if ($selectedLetter == $letter) {
                 $result .= ' selected="selected"';
             }
             $result .= '>'.$letter.'</option>';
@@ -1201,7 +1193,7 @@ class Display
     /**
      * In order to display a grid using jqgrid you have to:
      * @example
-     * After your Display::display_header function you have to add the nex javascript code:     *
+     * After your Display::display_header function you have to add the nex javascript code:
      * <script>
      *   echo Display::grid_js('my_grid_name', $url,$columns, $column_model, $extra_params,array());
      *   // for more information of this function check the grid_js() function
@@ -1242,10 +1234,12 @@ class Display
      *
      * @param   string $div_id div id
      * @param   string $url url where the jqgrid will ask for data (if datatype = json)
-     * @param   array $column_names Visible columns (you should use get_lang). An array in which we place the names of the columns.
+     * @param   array $column_names Visible columns (you should use get_lang).
+     * An array in which we place the names of the columns.
      *                    This is the text that appears in the head of the grid (Header layer).
      *                    Example: colname   {name:'date',     index:'date',   width:120, align:'right'},
-     * @param   array $column_model the column model :  Array which describes the parameters of the columns.This is the most important part of the grid.
+     * @param   array $column_model the column model :  Array which describes the parameters of the columns.
+     * This is the most important part of the grid.
      *                    For a full description of all valid values see colModel API. See the url above.
      * @param   array $extra_params extra parameters
      * @param   array $data data that will be loaded
@@ -1274,7 +1268,6 @@ class Display
         //This line should only be used/modified in case of having characters
         // encoding problems - see #6159
         //$column_names = array_map("utf8_encode", $column_names);
-
         $obj->colNames = $column_names;
         $obj->colModel = $column_model;
         $obj->pager = '#'.$div_id.'_pager';
@@ -1436,25 +1429,25 @@ class Display
      * if the user never entered the course before, he will not see notification
      * icons. This function takes session ID into account (if any) and only shows
      * the corresponding notifications.
-     * @param array $course_info Course information array, containing at least elements 'db' and 'k'
+     * @param array $courseInfo Course information array, containing at least elements 'db' and 'k'
      * @param bool $loadAjax
      * @return string   The HTML link to be shown next to the course
      */
-    public static function show_notification($course_info, $loadAjax = true)
+    public static function show_notification($courseInfo, $loadAjax = true)
     {
-        if (empty($course_info)) {
+        if (empty($courseInfo)) {
             return '';
         }
 
         $t_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
         $tool_edit_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $course_code = Database::escape_string($course_info['code']);
+        $course_code = Database::escape_string($courseInfo['code']);
 
         $user_id = api_get_user_id();
-        $course_id = (int) $course_info['real_id'];
-        $sessionId = (int) $course_info['id_session'];
-        $status = (int) $course_info['status'];
+        $course_id = (int) $courseInfo['real_id'];
+        $sessionId = (int) $courseInfo['id_session'];
+        $status = (int) $courseInfo['status'];
 
         $loadNotificationsByAjax = api_get_configuration_value('user_portal_load_notification_by_ajax');
 
@@ -1473,21 +1466,17 @@ class Display
                 WHERE
                     c_id = $course_id AND
                     access_user_id = '$user_id' AND
-                    access_session_id ='".$sessionId."'";
-        $resLastTrackInCourse = Database::query($sql);
+                    access_session_id ='".$sessionId."'
+                ORDER BY access_date DESC 
+                LIMIT 1
+                ";
+        $result = Database::query($sql);
 
-        $oldestTrackDate = $oldestTrackDateOrig = '3000-01-01 00:00:00';
-        while ($lastTrackInCourse = Database::fetch_array($resLastTrackInCourse)) {
-            $lastTrackInCourseDate[$lastTrackInCourse['access_tool']] = $lastTrackInCourse['access_date'];
-            if ($oldestTrackDate > $lastTrackInCourse['access_date']) {
-                $oldestTrackDate = $lastTrackInCourse['access_date'];
-            }
-        }
-
-        if ($oldestTrackDate == $oldestTrackDateOrig) {
-            //if there was no connexion to the course ever, then take the
-            // course creation date as a reference
-            $oldestTrackDate = $course_info['creation_date'];
+        // latest date by default is the creation date
+        $latestDate = $courseInfo['creation_date'];
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result, 'ASSOC');
+            $latestDate = $row['access_date'];
         }
 
         $sessionCondition = api_get_session_condition(
@@ -1509,26 +1498,28 @@ class Display
         $result = Database::query($sql);
         $tools = Database::store_result($result);
 
-        $group_ids = GroupManager::get_group_ids($course_info['real_id'], $user_id);
+        $group_ids = GroupManager::get_group_ids($courseInfo['real_id'], $user_id);
         $group_ids[] = 0; //add group 'everyone'
         $notifications = array();
         if ($tools) {
             foreach ($tools as $tool) {
                 $toolName = $tool['name'];
                 // Fix to get student publications
-                if ($toolName == 'student_publication') {
-                    $toolName = 'work';
+                $toolCondition = " tool = '$toolName' AND ";
+                if ($toolName == 'student_publication' || $toolName == 'work') {
+                    $toolCondition = " (tool = 'work' OR tool = 'student_publication') AND ";
                 }
+
                 $toolName = addslashes(Database::escape_string($toolName));
 
                 $sql = "SELECT * FROM $tool_edit_table 
                         WHERE
                             c_id = $course_id AND
-                            tool = '$toolName' AND
+                            $toolCondition
                             lastedit_type NOT LIKE '%Deleted%' AND
                             lastedit_type NOT LIKE '%deleted%' AND
                             lastedit_type NOT LIKE '%DocumentInvisible%' AND
-                            lastedit_date > '$oldestTrackDate' AND
+                            lastedit_date > '$latestDate' AND
                             lastedit_user_id != $user_id $sessionCondition AND
                             visibility != 2 AND
                             (to_user_id IN ('$user_id', '0') OR to_user_id IS NULL) AND
@@ -1536,7 +1527,9 @@ class Display
                         ORDER BY lastedit_date DESC
                         LIMIT 1";
                 $result = Database::query($sql);
-                $latestChange = Database::fetch_array($result);
+
+                $latestChange = Database::fetch_array($result, 'ASSOC');
+
                 if ($latestChange) {
                     $latestChange['link'] = $tool['link'];
                     $latestChange['image'] = $tool['image'];

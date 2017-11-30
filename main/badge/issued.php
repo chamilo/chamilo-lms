@@ -46,7 +46,7 @@ if (!$user || !$skill) {
     exit;
 }
 
-Skill::isAllow($user->getId());
+Skill::isAllowed($user->getId());
 
 $userInfo = [
     'id' => $user->getId(),

@@ -32,7 +32,7 @@ use Chamilo\CourseBundle\Entity\CToolIntro;
 
 $em = Database::getManager();
 $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
-$intro_editAllowed = $is_allowed_to_edit;
+$intro_editAllowed = $is_allowed_to_edit = api_is_allowed_to_edit();
 $session_id = api_get_session_id();
 
 $introduction_section = '';

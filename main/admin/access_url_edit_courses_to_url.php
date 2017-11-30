@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.admin
  * @author Julio Montoya <gugli100@gmail.com>
@@ -142,11 +143,13 @@ if ($ajax_search) {
 }
 
 if ($add_type == 'multiple') {
-    $link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique&access_url_id='.$access_url_id.'">'.get_lang('SessionAddTypeUnique').'</a>';
+    $link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique&access_url_id='.$access_url_id.'">'.
+        get_lang('SessionAddTypeUnique').'</a>';
     $link_add_type_multiple = get_lang('SessionAddTypeMultiple');
 } else {
     $link_add_type_unique = get_lang('SessionAddTypeUnique');
-    $link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple&access_url_id='.$access_url_id.'">'.get_lang('SessionAddTypeMultiple').'</a>';
+    $link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple&access_url_id='.$access_url_id.'">'.
+        get_lang('SessionAddTypeMultiple').'</a>';
 }
 $url_list = UrlManager::get_url_data();
 ?>
@@ -291,10 +294,10 @@ $url_list = UrlManager::get_url_data();
     }
 
     function mysort(a, b) {
-        if(a.text.toLowerCase() > b.text.toLowerCase()){
+        if (a.text.toLowerCase() > b.text.toLowerCase()){
             return 1;
         }
-        if(a.text.toLowerCase() < b.text.toLowerCase()){
+        if (a.text.toLowerCase() < b.text.toLowerCase()){
             return -1;
         }
         return 0;

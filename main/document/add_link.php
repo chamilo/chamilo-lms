@@ -15,8 +15,7 @@ require_once '../inc/global.inc.php';
 require_once '../inc/lib/document.lib.php';
 require_once '../inc/lib/urlUtils.lib.php';
 
-global $_configuration;
-$fileLinkEnabled = $_configuration['enable_add_file_link'];
+$fileLinkEnabled = api_get_configuration_value('enable_add_file_link');
 
 if (!$fileLinkEnabled) {
     api_not_allowed(true);

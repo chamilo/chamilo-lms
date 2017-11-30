@@ -1813,8 +1813,7 @@ if ($isAllowedToEdit ||
     }
 
     // "Add cloud link" icon
-    global $_configuration;
-    $fileLinkEnabled = $_configuration['enable_add_file_link'];
+    $fileLinkEnabled = api_get_configuration_value('enable_add_file_link');
     if ($fileLinkEnabled) {
         $actionsLeft .= Display::url(
             Display::return_icon('clouddoc_new.png', get_lang('AddCloudLink'), '', ICON_SIZE_MEDIUM),

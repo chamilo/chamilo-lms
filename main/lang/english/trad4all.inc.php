@@ -8067,4 +8067,11 @@ $ThisEmailWasSentViaCourseX = "This e-mail was sent via course %s";
 $ThisEmailWasSentViaCourseXInSessionX = "This e-mail was sent via course %s in session %s";
 $Diagram = "Diagram";
 $CareerXDoesntHaveADiagram = "Career %s doesn't have a diagram.";
+$ExerciseCategoryAllSessionsReport = "Exercise report by category for all sessions";
+$MailConfirmation = "Activate account by confirmation email";
+$RegistrationConfirmation = "Registration confirmation";
+$AccountNotConfirmed = "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email";
+$RegistrationConfirmationEmailMessage = "To complete your platform registration you need confirm your account by clicking the following link";
+$ConfirmationForNewAccount = "Confirmation for new account";
+$YouNeedConfirmYourAccountViaEmailToAccessThePlatform = "You need confirm your account via email to access the platform";
 ?>

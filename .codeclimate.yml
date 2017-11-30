@@ -1,3 +1,8 @@
+version: "2"
+  checks:
+    file-lines:
+      enabled: false
+
 plugins:
   fixme:
     enabled: true
@@ -5,6 +10,7 @@ plugins:
       strings:
       - FIXME
       - BUG
+
   phpcodesniffer:
     enabled: true
     config:
@@ -15,6 +21,14 @@ plugins:
         enabled: false
       PSR1 Files SideEffects FoundWithSymbols:
         enabled: false
+
+  phpmd:
+      enabled: true
+      config:
+        file_extensions: "php"
+
+  sonar-php:
+    enabled: true
 
   duplication:
     enabled: true

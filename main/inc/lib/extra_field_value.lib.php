@@ -788,7 +788,6 @@ class ExtraFieldValue extends Model
             // (erroneously) be more than one row for an item
             $sql .= ' DESC';
         }
-
         $result = Database::query($sql);
         if ($result !== false && Database::num_rows($result)) {
             if ($all) {

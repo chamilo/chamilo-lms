@@ -800,8 +800,14 @@ class GroupManager
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             while ($group = Database::fetch_object($res)) {
-                $groupInfo = self::get_group_properties($group->iid, true);
+                // Delete all groups in category
+                /*$groupInfo = self::get_group_properties($group->iid, true);
                 self::delete_groups($groupInfo, $course_code);
+                */
+                // Set the category to NULL to avoid losing groups in sessions.
+                $sql = "UPDATE $table_group SET category_id = NULL WHERE iid = ".$group->iid;
+                Database::query($sql);
+
             }
         }
         $sql = "DELETE FROM $table_group_cat

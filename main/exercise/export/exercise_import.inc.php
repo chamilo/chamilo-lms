@@ -66,7 +66,6 @@ function import_exercise($file)
     global $resourcesLinks;
 
     $baseWorkDir = api_get_path(SYS_ARCHIVE_PATH).'qti2/';
-
     if (!is_dir($baseWorkDir)) {
         mkdir($baseWorkDir, api_get_permissions_for_new_directories(), true);
     }
@@ -506,6 +505,7 @@ function startElementQti2($parser, $name, $attributes)
             break;
         case 'EXTENDEDTEXTINTERACTION':
             $exercise_info['question'][$current_question_ident]['type'] = FREE_ANSWER;
+            $exercise_info['question'][$current_question_ident]['description'] = '';
             break;
         case 'SIMPLEMATCHSET':
             if (!isset($current_match_set)) {
@@ -599,7 +599,11 @@ function endElementQti2($parser, $name)
             if ($exercise_info['question'][$current_question_ident]['type'] == FIB) {
                 $exercise_info['question'][$current_question_ident]['response_text'] = $current_question_item_body;
             } else {
-                $exercise_info['question'][$current_question_ident]['statement'] = $current_question_item_body;
+                if ($exercise_info['question'][$current_question_ident]['type'] == FREE_ANSWER) {
+                    $exercise_info['question'][$current_question_ident]['description'] = $current_question_item_body;
+                } else {
+                    $exercise_info['question'][$current_question_ident]['statement'] = $current_question_item_body;
+                }
             }
             break;
     }

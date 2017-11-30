@@ -38,7 +38,7 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install google-chrome-stable
   # Get Chrome driver
-  - wget https://chromedriver.storage.googleapis.com/2.32/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/bin
+  - wget https://chromedriver.storage.googleapis.com/2.33/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/bin
   # Setup display for Selenium
   - sh -e /etc/init.d/xvfb start
   - export DISPLAY=:99.0

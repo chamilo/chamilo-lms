@@ -6814,9 +6814,18 @@ input.form-control[type="color"] {
     .grid-courses .col-sm-6:nth-child(2n+1) {
         clear: left;
     }
-    .form-inline .survey_question .input-group label{
-        display: none;
+
+
+    .survey_question.ch_yesno .input-group .radio-vertical {
+        margin-left: 10px;
+        cursor: pointer;
     }
+
+    .survey_question.ch_yesno .input-group label {
+        font-weight: normal;
+    }
+
+
     .form-inline .survey_question.ch_score .input-group label{
         display: block;
         width: 100%;

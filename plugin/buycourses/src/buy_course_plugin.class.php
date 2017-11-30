@@ -73,7 +73,7 @@ class BuyCoursesPlugin extends Plugin
                 Alex Aragón - BeezNest (Design icons and css styles) <br/>
                 Imanol Losada - BeezNest (introduction of sessions purchase) <br/>
                 Angel Fernando Quiroz Campos - BeezNest (cleanup and new reports) <br/>
-                José Loguercio Silva - BeezNest (Payouts and buy Services)
+                José Loguercio Silva - BeezNest (Payouts and buy Services) <br/>
                 Julio Montoya
             ",
             array(
@@ -201,7 +201,6 @@ class BuyCoursesPlugin extends Plugin
     public function returnBuyCourseButton($productId, $productType)
     {
         $url = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.intval($productId).'&t='.$productType;
-
         $html = '<a class="btn btn-success btn-sm" title="'.$this->get_lang('Buy').'" href="'.$url.'">'.
             Display::returnFontAwesomeIcon('fa fa-shopping-cart').'</a>';
 

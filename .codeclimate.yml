@@ -1,7 +1,7 @@
 version: "2"
-  checks:
-    file-lines:
-      enabled: false
+checks:
+  file-lines:
+    enabled: false
 
 plugins:
   fixme:
@@ -23,9 +23,9 @@ plugins:
         enabled: false
 
   phpmd:
-      enabled: true
-      config:
-        file_extensions: "php"
+    enabled: true
+    config:
+      file_extensions: "php"
 
   sonar-php:
     enabled: true

@@ -8,13 +8,13 @@ addons:
         - libapache2-mod-fastcgi
         - libappindicator1
         - fonts-liberation
+    chrome: stable
 
 services:
     - mysql
 
 sudo: required
 dist: trusty
-
 cache:
   directories:
     - $HOME/.composer/cache/files
@@ -36,14 +36,14 @@ before_install:
   # Fix travis error https://github.com/travis-ci/travis-ci/issues/8607
   - sudo rm -vf /etc/apt/sources.list.d/*riak*
   # Get Chrome
-  - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-  - sudo apt-get update
-  - sudo apt-get install google-chrome-stable
+  #- wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+  #- sudo apt-get update
+  #- sudo apt-get install google-chrome-stable
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   # Get Chrome driver
-  - wget https://chromedriver.storage.googleapis.com/2.33/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/bin
-  # Setup display for Selenium
-  - sh -e /etc/init.d/xvfb start
-  - export DISPLAY=:99.0
+  #- wget https://chromedriver.storage.googleapis.com/2.33/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
+  #- sudo mv chromedriver /usr/bin
+  #- sudo chmod +x /usr/bin/chromedriver
   # Get Selenium
   - wget http://selenium-release.storage.googleapis.com/3.7/selenium-server-standalone-3.7.1.jar
   # Check java
@@ -51,7 +51,7 @@ before_install:
   - sudo apt-get install oracle-java8-installer
   - java -version
   #- java -jar selenium-server-standalone-3.7.1.jar -log selenium.log > /dev/null &
-  - java -jar -Dwebdriver.chrome.driver="/usr/bin/chromedriver" selenium-server-standalone-3.7.1.jar -log selenium.log  > /dev/null &
+  - java -jar selenium-server-standalone-3.7.1.jar -log selenium.log  > /dev/null &
   - nohup bash -c "webdriver-manager start 2>&1 &"
   - sleep 10
 
@@ -93,7 +93,15 @@ before_install:
   - sudo service apache2 restart
   - curl $VHOST_URL
 
+before_script:
+  # Setup display for Selenium
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 3
+
 script:
+  - whereis google-chrome-stable
+  - whereis chromedriver
   - cd tests/behat
   - pwd
   - sudo cat /var/log/apache2/$VHOST_URL-error.log

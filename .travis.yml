@@ -8,15 +8,13 @@ addons:
         - libapache2-mod-fastcgi
         - libappindicator1
         - fonts-liberation
+    chrome: stable
 
 services:
     - mysql
 
 sudo: required
 dist: trusty
-addons:
-  chrome: stable
-
 cache:
   directories:
     - $HOME/.composer/cache/files

@@ -50,7 +50,8 @@ before_install:
   - java -version
   - sudo apt-get install oracle-java8-installer
   - java -version
-  - java -jar selenium-server-standalone-3.7.1.jar -log selenium.log > /dev/null &
+  #- java -jar selenium-server-standalone-3.7.1.jar -log selenium.log > /dev/null &
+  - java -jar -Dwebdriver.chrome.driver="/usr/bin/chromedriver" selenium-server-standalone-3.7.1.jar -log selenium.log  > /dev/null &
   - nohup bash -c "webdriver-manager start 2>&1 &"
   - sleep 10
 

@@ -211,6 +211,7 @@ function import_exercise($file)
             if (!empty($question_array['description'])) {
                 $description .= $question_array['description'];
             }
+
             $question->updateDescription($description);
             $question->save($exercise);
 
@@ -264,7 +265,6 @@ function import_exercise($file)
             $question->save($exercise);
             $answer->save();
         }
-
         // delete the temp dir where the exercise was unzipped
         my_delete($baseWorkDir.$uploadPath);
 
@@ -316,8 +316,7 @@ function qti_parse_file($exercisePath, $file, $questionFile)
         $qtiMainVersion = $qtiVersion[1];
     }
 
-    //used global variable start values declaration :
-
+    //used global variable start values declaration:
     $record_item_body = false;
     $non_HTML_tag_to_avoid = array(
         "SIMPLECHOICE",
@@ -338,6 +337,7 @@ function qti_parse_file($exercisePath, $file, $questionFile)
     $question_format_supported = true;
     $xml_parser = xml_parser_create();
     xml_parser_set_option($xml_parser, XML_OPTION_SKIP_WHITE, false);
+
     if ($qtiMainVersion == 1) {
         xml_set_element_handler(
             $xml_parser,
@@ -353,6 +353,7 @@ function qti_parse_file($exercisePath, $file, $questionFile)
         );
         xml_set_character_data_handler($xml_parser, 'elementDataQti2');
     }
+
     if (!xml_parse($xml_parser, $data, feof($fp))) {
         // if reading of the xml file in not successful :
         // set errorFound, set error msg, break while statement
@@ -600,7 +601,10 @@ function endElementQti2($parser, $name)
                 $exercise_info['question'][$current_question_ident]['response_text'] = $current_question_item_body;
             } else {
                 if ($exercise_info['question'][$current_question_ident]['type'] == FREE_ANSWER) {
-                    $exercise_info['question'][$current_question_ident]['description'] = $current_question_item_body;
+                    $current_question_item_body = trim($current_question_item_body);
+                    if (!empty($current_question_item_body)) {
+                        $exercise_info['question'][$current_question_ident]['description'] = $current_question_item_body;
+                    }
                 } else {
                     $exercise_info['question'][$current_question_ident]['statement'] = $current_question_item_body;
                 }
@@ -647,11 +651,15 @@ function elementDataQti2($parser, $data)
     }
 
     //treat the record of the full content of itembody tag (needed for question statment and/or FIB text:
+
     if ($record_item_body && (!in_array($current_element, $non_HTML_tag_to_avoid))) {
         $current_question_item_body .= $data;
     }
 
     switch ($current_element) {
+        case 'EXTENDEDTEXTINTERACTION':
+            $exercise_info['question'][$current_question_ident]['description'] .= $data;
+            break;
         case 'SIMPLECHOICE':
             if (!isset($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'])) {
                 $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'] = trim($data);

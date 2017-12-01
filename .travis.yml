@@ -41,17 +41,21 @@ before_install:
   #- sudo apt-get install google-chrome-stable
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   # Get Chrome driver
-  #- wget https://chromedriver.storage.googleapis.com/2.33/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
-  #- sudo mv chromedriver /usr/bin
-  #- sudo chmod +x /usr/bin/chromedriver
+  - wget https://chromedriver.storage.googleapis.com/2.32/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
+  - sudo mv chromedriver /usr/bin
+  - sudo chmod +x /usr/bin/chromedriver
+  # Setup display for Selenium
+  - sh -e /etc/init.d/xvfb start
+  - export DISPLAY=:99.0
+  - sleep 3
   # Get Selenium
-  - wget http://selenium-release.storage.googleapis.com/3.7/selenium-server-standalone-3.7.1.jar
+  - wget http://selenium-release.storage.googleapis.com/3.1/selenium-server-standalone-3.1.0.jar
   # Check java
   - java -version
   - sudo apt-get install oracle-java8-installer
   - java -version
   #- java -jar selenium-server-standalone-3.7.1.jar -log selenium.log > /dev/null &
-  - java -jar selenium-server-standalone-3.7.1.jar -log selenium.log  > /dev/null &
+  - java -jar selenium-server-standalone-3.1.0.jar -log selenium.log  > /dev/null &
   - nohup bash -c "webdriver-manager start 2>&1 &"
   - sleep 10
 
@@ -92,12 +96,6 @@ before_install:
   - sudo chmod +x /home/travis/build
   - sudo service apache2 restart
   - curl $VHOST_URL
-
-before_script:
-  # Setup display for Selenium
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - sleep 3
 
 script:
   - whereis google-chrome-stable

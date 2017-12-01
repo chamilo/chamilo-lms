@@ -38,7 +38,7 @@ $skillUserRepo = $entityManager->getRepository('ChamiloCoreBundle:SkillRelUser')
 
 $levels = api_get_configuration_value('skill_levels_names');
 
-$skillsOptions = [];
+$skillsOptions = ['' => get_lang('Select')];
 $acquiredLevel = [];
 $formDefaultValues = [];
 

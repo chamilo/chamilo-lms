@@ -5673,7 +5673,7 @@ class DocumentManager
             $basename = substr(strrchr($basename, '.'), 1);
         } elseif ($type == 'link') {
             $icon = 'clouddoc.png';
-            $basename = 'Cloud link';
+            $basename = get_lang('CloudFileLink');
         } else {
             if ($path == '/shared_folder') {
                 $icon = 'folder_users.png';
@@ -6757,7 +6757,7 @@ class DocumentManager
             return false;
         }
  
-        $document_id = $id;
+        $document_id = intval($id);
  
         $file_deleted_from_db = false;
  
@@ -6781,13 +6781,12 @@ class DocumentManager
      * @param array $_course
      * @param string $path
      * @param string $url
-     * @return int id of link / false if no link found
-     * @deprecated
+     * @return int link's id / false if no link found
      */
     public static function getCloudLinkId($_course, $path, $url)
     {
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $course_id = $_course['real_id'];
+        $course_id = int_val($_course['real_id']);
         $path = Database::escape_string($path);
 
         if (substr($path, -1) != '/') {

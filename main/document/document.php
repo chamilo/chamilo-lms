@@ -128,6 +128,7 @@ DocumentManager::create_directory_certificate_in_course($courseInfo);
 $dbl_click_id = 0;
 $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
 $moveTo = isset($_POST['move_to']) ? Security::remove_XSS($_POST['move_to']) : null;
+$moveFile = isset($_POST['move_file']) && is_int($_POST['move_file']) ? $_POST['move_file'] : null;
 
 /* 	Constants and variables */
 $userId = api_get_user_id();
@@ -606,7 +607,7 @@ if (isset($document_id) && empty($action)) {
             $groupIid
         );
 
-        if (!empty($document_data['filetype']) && $document_data['filetype'] == 'file' || $document_data['filetype'] == "link") {
+        if (!empty($document_data['filetype']) && $document_data['filetype'] == 'file' || $document_data['filetype'] == 'link') {
             if ($visibility && api_is_allowed_to_session_edit()) {
                 $url = api_get_path(WEB_COURSE_PATH).
                     $courseInfo['path'].'/document'.$document_data['path'].'?'
@@ -1114,9 +1115,9 @@ if ($isAllowedToEdit || $group_member_with_upload_rights ||
         }
     }
 
-    if (!empty($moveTo) && isset($_POST['move_file'])) {
+    if (!empty($moveTo) && isset($moveFile)) {
         if (!$isAllowedToEdit) {
-            if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), $_POST['move_file'])) {
+            if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), $moveFile)) {
                 api_not_allowed(true);
             }
         }
@@ -1129,7 +1130,7 @@ if ($isAllowedToEdit || $group_member_with_upload_rights ||
 
         // Get the document data from the ID
         $document_to_move = DocumentManager::get_document_data_by_id(
-            $_POST['move_file'],
+            $moveFile,
             api_get_course_id(),
             false,
             $sessionId
@@ -1138,11 +1139,10 @@ if ($isAllowedToEdit || $group_member_with_upload_rights ||
         // Security fix: make sure they can't move files that are not in the document table
         if (!empty($document_to_move)) {
             if ($document_to_move['filetype'] == 'link') {
-                $real_path_target = $base_work_dir.$_POST['move_to'].'/';
-                if (!DocumentManager::cloudLinkExists($_course, $_POST['move_to'], $document_to_move['comment'])) {
-                    $doc_id = $_POST['move_file'];
-            
-                    DocumentManager::updateDBInfoCloudLink($document_to_move['path'], $_POST['move_to'].'/', $doc_id);
+                $real_path_target = $base_work_dir.$moveTo.'/';
+                if (!DocumentManager::cloudLinkExists($_course, $moveTo, $document_to_move['comment'])) {
+                    $doc_id = $moveFile;
+                    DocumentManager::updateDBInfoCloudLink($document_to_move['path'], $moveTo.'/', $doc_id);
             
                     //update database item property
                     api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FileMoved', api_get_user_id(), $to_group_id, null, null, null, $session_id);
@@ -1161,8 +1161,8 @@ if ($isAllowedToEdit || $group_member_with_upload_rights ||
                     );
                 }
                 // Set the current path
-                $curdirpath = $_POST['move_to'];
-                $curdirpathurl = urlencode($_POST['move_to']);
+                $curdirpath = $moveTo;
+                $curdirpathurl = urlencode($moveTo);
             } else {
                 $real_path_target = $base_work_dir.$moveTo.'/'.basename($document_to_move['path']);
                 $fileExist = false;
@@ -1177,7 +1177,7 @@ if ($isAllowedToEdit || $group_member_with_upload_rights ||
                     );
 
                     //update database item property
-                    $doc_id = $_POST['move_file'];
+                    $doc_id = $moveFile;
                     if (is_dir($real_path_target)) {
                         api_item_property_update(
                             $courseInfo,
@@ -1214,8 +1214,8 @@ if ($isAllowedToEdit || $group_member_with_upload_rights ||
                     }
 
                     // Set the current path
-                    $curdirpath = $_POST['move_to'];
-                    $curdirpathurl = urlencode($_POST['move_to']);
+                    $curdirpath = $moveTo;
+                    $curdirpathurl = urlencode($moveTo);
                 } else {
                     if ($fileExist) {
                         if (is_dir($real_path_target)) {

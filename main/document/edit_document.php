@@ -28,7 +28,7 @@ use ChamiloSession as Session;
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-require_once '../inc/lib/urlUtils.lib.php';
+require_once __DIR__.'/../inc/lib/urlUtils.lib.php';
 
 $groupRights = Session::read('group_member_with_upload_rights');
 
@@ -469,8 +469,8 @@ if ($owner_id == api_get_user_id() ||
     if ($file_type == 'link') {
         $form->addRule('title', get_lang('PleaseEnterCloudLinkName'), 'required', null, 'client');
         $form->addRule('title', get_lang('PleaseEnterCloudLinkName'), 'required', null, 'server');
-        $form->addRule('comment', get_lang('langGiveURL'), 'required', null, 'client');
-        $form->addRule('comment', get_lang('langGiveURL'), 'required', null, 'server');
+        $form->addRule('comment', get_lang('PleaseEnterURL'), 'required', null, 'client');
+        $form->addRule('comment', get_lang('PleaseEnterURL'), 'required', null, 'server');
         // Well formed url pattern (must have the protocol)
         $urlRegEx = URLUtils::getWellformedUrlRegex();
         $form->addRule('comment', get_lang('MalformedUrl'), 'regex', $urlRegEx, 'client');

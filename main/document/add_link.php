@@ -9,11 +9,11 @@
  */
  
 // Including the global initialization file
-require_once '../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
  
 // Including additional libraries
-require_once '../inc/lib/document.lib.php';
-require_once '../inc/lib/urlUtils.lib.php';
+require_once __DIR__.'/../inc/lib/document.lib.php';
+require_once __DIR__.'/../inc/lib/urlUtils.lib.php';
 
 $fileLinkEnabled = api_get_configuration_value('enable_add_file_link');
 
@@ -26,6 +26,10 @@ $course_info = api_get_course_info();
 if (empty($course_info)) {
     api_not_allowed(true);
 }
+
+if ($is_certificate_mode) {
+    api_not_allowed(true);
+}
  
 $document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true);
 if (empty($document_data)) {
@@ -34,7 +38,7 @@ if (empty($document_data)) {
 } else {
     if ($document_data['filetype'] == 'folder') {
         $document_id    = $document_data['id'];
-        $path           = $document_data['path']."/";
+        $path           = $document_data['path'].'/';
         $parent_id      = DocumentManager::get_document_id(api_get_course_info(), dirname($path));
     }
 }
@@ -62,18 +66,14 @@ if (api_get_group_id()) {
 } else { // No course admin and no group member...
     api_not_allowed(true);
 }
- 
+
 // Group docs can only be uploaded in the group directory
 if ($to_group_id != 0 && $path == '/') {
     $path = $group_properties['directory'] . "/";
 }
  
 // Breadcrumbs
-if ($is_certificate_mode) {
-    $interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
-} else {
-    $interbreadcrumb[] = array('url' => './document.php?id='.$document_id.$req_gid, 'name'=> get_lang('Documents'));
-}
+$interbreadcrumb[] = array('url' => './document.php?id='.$document_id.$req_gid, 'name'=> get_lang('Documents'));
  
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {
@@ -102,11 +102,7 @@ Display::display_header($nameTools, 'Doc');
 // Actions
 echo '<div class="actions">';
 // Link back to the documents overview
-if ($is_certificate_mode) {
-    echo '<a href="document.php?id='.$document_id.'&selectcat=' . $selectcat.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('CertificateOverview'), '', ICON_SIZE_MEDIUM).'</a>';
-} else {
-    echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
-}
+echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
  
 // Form to select directory
@@ -115,13 +111,12 @@ $folders = DocumentManager::get_all_document_folders(
     $groupIid,
     $is_allowed_to_edit
 );
-if (!$is_certificate_mode) {
-    echo DocumentManager::build_directory_selector(
-        $folders,
-        $document_id,
-        (isset($group_properties['directory']) ? $group_properties['directory'] : array())
-    );
-}
+
+echo DocumentManager::build_directory_selector(
+    $folders,
+    $document_id,
+    (isset($group_properties['directory']) ? $group_properties['directory'] : array())
+);
  
 $action = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
  
@@ -142,8 +137,8 @@ $form->addButtonSend(get_lang('AddCloudLink'), 'submitDocument');
  
 $form->addRule('name', get_lang('PleaseEnterCloudLinkName'), 'required', null, 'client');
 $form->addRule('name', get_lang('PleaseEnterCloudLinkName'), 'required', null, 'server');
-$form->addRule('url', get_lang('langGiveURL'), 'required', null, 'client');
-$form->addRule('url', get_lang('langGiveURL'), 'required', null, 'server');
+$form->addRule('url', get_lang('PleaseEnterURL'), 'required', null, 'client');
+$form->addRule('url', get_lang('PleaseEnterURL'), 'required', null, 'server');
 // Well formed url pattern (must have the protocol)
 $urlRegEx = URLUtils::getWellformedUrlRegex();
 $form->addRule('url', get_lang('MalformedUrl'), 'regex', $urlRegEx, 'client');

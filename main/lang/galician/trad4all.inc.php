@@ -7297,8 +7297,9 @@ $StudentPublicationSelectionForGradebookTitle = "Tarefas consideradas para avali
 $StudentPublicationSelectionForGradebookComment = "Na ferramenta de tarefas, os estudantes poden subir máis dun arquivo. No caso de haber máis dun arquivo do mesmo estudante para unha soa tarefa, cal destes debe ser considerado para a nota nas avaluacións? Isto depende da súa metodoloxía. Seleccione 'primeiro' para poñer o acento sobre a atención ao detalle (como entregar a tempo e o traballo finalizado a primeira vez). Use 'último' para poner o acento sobre o traballo colaborativo e a adaptabilidade.";
 
 // Cloud files in documents strings
-$enable_add_file_link_title = 'Permitir engadir enlaces a ficheiros na nube';
-$enable_add_file_link_comment = 'Ferramenta para engadir enlaces a ficheiros situados en sitios de almacenamento externo (Dropbox, Google Drive, etc...) en Documentos.';
+$CloudFileLink = "Enlace a ficheiro na nube";
+$enable_add_file_link_title = "Permitir engadir enlaces a ficheiros na nube";
+$enable_add_file_link_comment = "Ferramenta para engadir enlaces a ficheiros situados en sitios de almacenamento externo (Dropbox, Google Drive, etc...) en Documentos.";
 $UrlAlreadyExists = "Xa existe unha URL igual neste directorio.";
 $ErrorAddLink = "Produciuse un erro engadindo o enlace.";
 $AddCloudLink = "Engadir enlace a un ficheiro na nube";
@@ -7307,6 +7308,7 @@ $CloudLinkMoved = "Enlace a ficheiro na nube movido.";
 $CloudLinkDeleteError = "Erro ao eliminar o enlace ao ficheiro na nube.";
 $CloudLinkAdded = "Enlace a ficheiro na nube engadido.";
 $PleaseEnterCloudLinkName = "Por favor, introduza un nome para o enlace ao ficheiro na nube.";
+$PleaseEnterURL = "Por favor, introduza a URL do ficheiro na nube.";
 $MalformedUrl = "Formato do campo URL non válido. Exemplo do formato esperado: http://dropbox.com/sh/loremipsum/loremipsum?dl=0";
 $CloudLinkModified = "Enlace a ficheiro na nube modificado.";
 $NotValidDomain = "Dominio non válido. Debe ser un dos seguintes:";

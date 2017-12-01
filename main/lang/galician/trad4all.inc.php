@@ -7295,8 +7295,6 @@ $CourseImagesInCoursesListTitle = "Iconas de cursos personalizados";
 $CourseImagesInCoursesListComment = "Usar as imaxes de cursos como iconas nas listas de cursos (no canto da icona verde por defecto)";
 $StudentPublicationSelectionForGradebookTitle = "Tarefas consideradas para avaliación";
 $StudentPublicationSelectionForGradebookComment = "Na ferramenta de tarefas, os estudantes poden subir máis dun arquivo. No caso de haber máis dun arquivo do mesmo estudante para unha soa tarefa, cal destes debe ser considerado para a nota nas avaluacións? Isto depende da súa metodoloxía. Seleccione 'primeiro' para poñer o acento sobre a atención ao detalle (como entregar a tempo e o traballo finalizado a primeira vez). Use 'último' para poner o acento sobre o traballo colaborativo e a adaptabilidade.";
-
-// Cloud files in documents strings
 $CloudFileLink = "Enlace a ficheiro na nube";
 $enable_add_file_link_title = "Permitir engadir enlaces a ficheiros na nube";
 $enable_add_file_link_comment = "Ferramenta para engadir enlaces a ficheiros situados en sitios de almacenamento externo (Dropbox, Google Drive, etc...) en Documentos.";

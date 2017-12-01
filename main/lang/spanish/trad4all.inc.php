@@ -8080,9 +8080,13 @@ $AddText = "Añadir texto";
 $OralExpressionHelpText = "Cuando lanza la grabación, puede pausar cuando lo desee. Si no está satisfecho, grabese de nuevo. Esto sobrescribirá la versión anterior. Satisfecho? Para transmitir la grabación haga clic en \"Guardar el audio grabado\".";
 $BestScoreInLearningPath = "Mejor nota en las lecciones";
 $BestScoreNotInLearningPath = "Mejor nota fuera de lecciones";
+$ReSendConfirmationMail = "Volver a enviar el correo electrónico de confirmación";
+$UserConfirmedNowYouCanLogInThePlatform = "Usuario confirmado. Ahora puede iniciar sesión en la plataforma.";
+$AgendaAvailableInCourseX = "Agenda disponible en el curso %s";
+$YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX = "Usted ha sido inscrito al curso %s. La fecha de inicio es %s y %s";
+$EmailToTeachersWhenNewWorkFeedback = "Enviar correo electrónico a los profesores sobre los nuevos comentarios de la tarea.";
+$YourSessionTimeIsExpired = "Su tiempo de sesión ha expirado.";
 $StudentXHadEnoughSkillsToGetSkillXToAssignClickHereX = "El alumno %s tiene suficiente competencias secundarias para obtener la competencia %s. Para asignar esta competencia, es posible ir aquí : %s";
-
-// Cloud files in documents strings
 $CloudFileLink = "Enlace a fichero en la nube";
 $enable_add_file_link_title = 'Permitir añadir enlaces a ficheros en la nube';
 $enable_add_file_link_comment = 'Herramienta para añadir enlaces a ficheros situados en sitios de almacenamiento externo (Dropbox, Google Drive, etc...) en Documentos.';
@@ -8099,4 +8103,15 @@ $MalformedUrl = "Formato del campo URL no válido. Ejemplo del formato esperado:
 $CloudLinkModified = "Enlace a fichero en la nube modificado.";
 $NotValidDomain = "Dominio no válido. Debe de ser uno de los siguientes:";
 $ValidDomainsList = "Lista de dominios válidos";
+$ThisEmailWasSentViaCourseX = "Este correo electrónico fue enviado a través del curso %s";
+$ThisEmailWasSentViaCourseXInSessionX = "Este correo electrónico fue enviado a través del curso %s en la sesión %s";
+$Diagram = "Diagrama";
+$CareerXDoesntHaveADiagram = "La carrera %s no tiene un diagrama.";
+$ExerciseCategoryAllSessionsReport = "Informe de ejercicio por categoria en todas las sesiones";
+$MailConfirmation = "Activar cuenta por correo electrónico de confirmación";
+$RegistrationConfirmation = "Confirmación de registro";
+$AccountNotConfirmed = "Su cuenta está inactiva porque aún no la ha confirmado. Revise su correo electrónico y siga las instrucciones o haga click en el siguiente enlace para volver a enviar el correo electrónico de confirmación.";
+$RegistrationConfirmationEmailMessage = "Para completar su registro en la plataforma, necesita confirmar su cuenta haciendo click en el siguiente enlace";
+$ConfirmationForNewAccount = "Confirmación de nueva cuenta";
+$YouNeedConfirmYourAccountViaEmailToAccessThePlatform = "Usted necesita confirmar su cuenta por correo electrónico para acceder a la plataforma";
 ?>

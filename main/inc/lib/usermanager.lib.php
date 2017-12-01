@@ -5738,10 +5738,9 @@ SQL;
 
         $url = api_get_path(WEB_CODE_PATH).'auth/user_mail_confirmation.php?token='.$uniqueId;
         $mailSubject = get_lang('RegistrationConfirmation');
-        $mailBody = sprintf(
-            get_lang('ToCompleteYourPlatformRegistrationYouNeedToConfirmYourAccountByClickingTheFollowingLinkX'),
-            $url
-        );
+        $mailBody = get_lang('RegistrationConfirmationEmailMessage')
+            .PHP_EOL
+            .Display::url($url, $url);
 
         api_mail_html(
             $user->getCompleteName(),

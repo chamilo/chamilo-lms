@@ -1403,9 +1403,9 @@ class Template
                     $message = get_lang('AccountInactive');
 
                     if (api_get_setting('allow_registration') === 'confirmation') {
-                        $message = sprintf(
-                            get_lang('YourAccountIsInactiveBecauseYouDoesntConfirmItCheckYourEmailAndFollowTheInstructionsOrClickTheFollowingLinkXToReSendTheEmail'),
-                            Display::url(get_lang('ReSendConfirmationMail'), api_get_path(WEB_PATH) . 'main/auth/resend_confirmation_mail.php'));
+                        $message = get_lang('AccountNotConfirmed')
+                            .PHP_EOL
+                            .Display::url(get_lang('ReSendConfirmationMail'), api_get_path(WEB_PATH) . 'main/auth/resend_confirmation_mail.php');
                     }
                     break;
                 case 'user_password_incorrect':

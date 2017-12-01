@@ -27,6 +27,13 @@ plugins:
     config:
       file_extensions: "php"
 
+    checks:
+      Naming/LongVariable:
+        enabled: false
+
+      Controversial/Superglobals:
+        enabled: false
+
   sonar-php:
     enabled: true
 

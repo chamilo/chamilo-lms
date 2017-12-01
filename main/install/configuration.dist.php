@@ -696,3 +696,8 @@ $_configuration['gradebook_badge_sidebar'] = [
 //$_configuration['allow_session_admin_read_careers'] = true;
 
 $_configuration['enable_add_file_link'] = true;
+
+// Add user activation by confirmation email
+// This option prevents the new user to login in the platform if your account is not confirmed via email
+// You need add a new option called "confirmation" to the registration settings
+//INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation')

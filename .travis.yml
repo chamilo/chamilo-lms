@@ -33,6 +33,8 @@ env:
     - CHAMILO_VERSION=1.11.x
 
 before_install:
+  # Fix travis error https://github.com/travis-ci/travis-ci/issues/8607
+  - sudo rm -vf /etc/apt/sources.list.d/*riak*
   # Get Chrome
   - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
   - sudo apt-get update
@@ -92,9 +94,12 @@ before_install:
 
 script:
   - cd tests/behat
-  - travis_wait 60 ../../vendor/behat/behat/bin/behat -v
+  - pwd
   - sudo cat /var/log/apache2/$VHOST_URL-error.log
   - sudo cat /var/log/apache2/$VHOST_URL-access.log
+  - ../../vendor/behat/behat/bin/behat -v features/accessCompanyReports.feature
+  - travis_wait 60 ../../vendor/behat/behat/bin/behat -v
+
 
 # configure notifications (email, IRC, campfire etc)
 notifications:

@@ -8067,20 +8067,12 @@ $ThisEmailWasSentViaCourseX = "This e-mail was sent via course %s";
 $ThisEmailWasSentViaCourseXInSessionX = "This e-mail was sent via course %s in session %s";
 $Diagram = "Diagram";
 $CareerXDoesntHaveADiagram = "Career %s doesn't have a diagram.";
+$ExerciseCategoryAllSessionsReport = "Exercise report by category for all sessions";
+$MailConfirmation = "Activate account by confirmation email";
+$RegistrationConfirmation = "Registration confirmation";
+$AccountNotConfirmed = "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email";
+$RegistrationConfirmationEmailMessage = "To complete your platform registration you need confirm your account by clicking the following link";
+$ConfirmationForNewAccount = "Confirmation for new account";
+$YouNeedConfirmYourAccountViaEmailToAccessThePlatform = "You need confirm your account via email to access the platform";
 
-// Cloud files in documents strings
-$enable_add_file_link_title = 'Enable adding cloud files links';
-$enable_add_file_link_comment = 'Tool for adding cloud files\' links from external storage sites (Dropbox, Google Drive...) at Documents.';
-$UrlAlreadyExists = "It already exists one equal URL in this folder.";
-$ErrorAddLink = "There was an error adding the link.";
-$AddCloudLink = "Add cloud file link";
-$CloudLinkDeleted = "Cloud file link deleted.";
-$CloudLinkMoved = "Cloud file link moved.";
-$CloudLinkDeleteError = "Error deleting cloud file link.";
-$CloudLinkAdded = "Cloud file link added.";
-$PleaseEnterCloudLinkName = "Please, enter a name for the cloud file link.";
-$MalformedUrl = "URL field format not valid. Expected format example: http://dropbox.com/sh/loremipsum/loremipsum?dl=0";
-$CloudLinkModified = "Cloud file link modified.";
-$NotValidDomain = "Not valid domain. It must be one of these:";
-$ValidDomainsList = "Valid domain list";
 ?>

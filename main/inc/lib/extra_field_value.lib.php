@@ -240,7 +240,7 @@ class ExtraFieldValue extends Model
                         mkdir($fileDir, $dirPermissions, true);
                     }
 
-                    if ($value['error'] == 0) {
+                    if (isset($value['error']) && $value['error'] == 0) {
                         //Crop the image to adjust 16:9 ratio
                         $crop = new Image($value['tmp_name']);
                         $crop->crop($params['extra_'.$field_variable.'_crop_result']);
@@ -283,7 +283,7 @@ class ExtraFieldValue extends Model
                         mkdir($fileDir, $dirPermissions, true);
                     }
 
-                    if ($value['error'] == 0) {
+                    if (isset($value['error']) && $value['error'] == 0) {
                         moveUploadedFile($value, $fileDir.$fileName);
 
                         $new_params = array(

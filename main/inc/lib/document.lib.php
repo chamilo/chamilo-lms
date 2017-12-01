@@ -6757,21 +6757,21 @@ class DocumentManager
             return false;
         }
  
-        $document_id = intval($id);
+        $documentId = (int) $id;
  
-        $file_deleted_from_db = false;
+        $fileDeletedFromDb = false;
  
         if ($document_id) {
-            self::deleteDocumentFromDb($document_id, array(),  0, true);
+            self::deleteDocumentFromDb($documentId, array(), 0, true);
             //checking
             $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-            $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE id = $document_id";
+            $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE id = $documentId";
             $result = Database::query($sql);
             $exists = Database::num_rows($result) > 0;
-            $file_deleted_from_db = !$exists ;
+            $fileDeletedFromDb = !$exists ;
         }
 
-        return $file_deleted_from_db;
+        return $fileDeletedFromDb;
     }
  
     /**
@@ -6786,7 +6786,7 @@ class DocumentManager
     public static function getCloudLinkId($_course, $path, $url)
     {
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $course_id = int_val($_course['real_id']);
+        $courseId = (int) $_course['real_id'];
         $path = Database::escape_string($path);
 
         if (substr($path, -1) != '/') {
@@ -6794,8 +6794,8 @@ class DocumentManager
             $path .= '/';
         }
             
-        if (!empty($course_id) && !empty($path)) {
-            $sql = "SELECT id FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND path LIKE BINARY '$path' AND comment = '$url' AND filetype = 'link' LIMIT 1";
+        if (!empty($courseId) && !empty($path)) {
+            $sql = "SELECT id FROM $TABLE_DOCUMENT WHERE c_id = $courseId AND path LIKE BINARY '$path' AND comment = '$url' AND filetype = 'link' LIMIT 1";
             $result = Database::query($sql);
             if ($result && Database::num_rows($result)) {
                 $row = Database::fetch_array($result);

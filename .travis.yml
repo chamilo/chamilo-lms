@@ -41,9 +41,9 @@ before_install:
   #- sudo apt-get install google-chrome-stable
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   # Get Chrome driver
-  #- wget https://chromedriver.storage.googleapis.com/2.33/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
-  #- sudo mv chromedriver /usr/bin
-  #- sudo chmod +x /usr/bin/chromedriver
+  - wget https://chromedriver.storage.googleapis.com/2.33/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
+  - sudo mv chromedriver /usr/bin
+  - sudo chmod +x /usr/bin/chromedriver
   # Get Selenium
   - wget http://selenium-release.storage.googleapis.com/3.8/selenium-server-standalone-3.8.0.jar
   # Check java

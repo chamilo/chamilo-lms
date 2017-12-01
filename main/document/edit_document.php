@@ -452,7 +452,7 @@ if ($owner_id == api_get_user_id() ||
         $urlWLText = "\n\t* ".implode("\n\t* ", $urlWL);
         $urlWLHTML = "<ul><li>".implode("</li><li>", $urlWL)."</li></ul>";
         $form->addText('comment', get_lang('Url'));
-        $form->addElement('static', 'info', '', '<span class="text-primary" data-toggle="tooltip" title="'.$urlWLHTML.'">'.get_lang('ValidDomainsList').' <span class="glyphicon glyphicon-question-sign"></span></span>');
+        $form->addElement('static', 'info', '', '<span class="text-primary" data-toggle="tooltip" title="'.$urlWLHTML.'">'.get_lang('ValidDomainList').' <span class="glyphicon glyphicon-question-sign"></span></span>');
     } else {
         $form->addElement('textarea', 'comment', get_lang('Comment'), ['cols-size' => [2, 10, 0]]);
     }
@@ -473,8 +473,8 @@ if ($owner_id == api_get_user_id() ||
         $form->addRule('comment', get_lang('PleaseEnterURL'), 'required', null, 'server');
         // Well formed url pattern (must have the protocol)
         $urlRegEx = URLUtils::getWellformedUrlRegex();
-        $form->addRule('comment', get_lang('MalformedUrl'), 'regex', $urlRegEx, 'client');
-        $form->addRule('comment', get_lang('MalformedUrl'), 'regex', $urlRegEx, 'server');
+        $form->addRule('comment', get_lang('NotValidURL'), 'regex', $urlRegEx, 'client');
+        $form->addRule('comment', get_lang('NotValidURL'), 'regex', $urlRegEx, 'server');
         $form->addRule('comment', get_lang('NotValidDomain').$urlWLText,'regex', $urlWLRegEx, 'client');
         $form->addRule('comment', get_lang('NotValidDomain').$urlWLHTML,'regex', $urlWLRegEx, 'server');
     }

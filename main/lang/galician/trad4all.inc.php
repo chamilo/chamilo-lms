@@ -7307,8 +7307,8 @@ $CloudLinkDeleteError = "Erro ao eliminar o enlace ao ficheiro na nube.";
 $CloudLinkAdded = "Enlace a ficheiro na nube engadido.";
 $PleaseEnterCloudLinkName = "Por favor, introduza un nome para o enlace ao ficheiro na nube.";
 $PleaseEnterURL = "Por favor, introduza a URL do ficheiro na nube.";
-$MalformedUrl = "Formato do campo URL non válido. Exemplo do formato esperado: http://dropbox.com/sh/loremipsum/loremipsum?dl=0";
+$NotValidURL = "Formato do campo URL non válido. Exemplo do formato esperado: http://dropbox.com/sh/loremipsum/loremipsum?dl=0";
 $CloudLinkModified = "Enlace a ficheiro na nube modificado.";
 $NotValidDomain = "Dominio non válido. Debe ser un dos seguintes:";
-$ValidDomainsList = "Lista de dominios válidos";
+$ValidDomainList = "Lista de dominios válidos";
 ?>

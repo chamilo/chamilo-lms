@@ -132,7 +132,7 @@ $form->addElement('hidden', 'linkid', $document_id);
 $form->addElement('hidden', 'curdirpath', $path);
 $form->addElement('text', 'name', get_lang('LinkName'), array('id' => 'name_link'));
 $form->addElement('text', 'url', get_lang('Url'), array('id' => 'url_link'));
-$form->addElement('static', 'info', '', '<span class="text-primary" data-toggle="tooltip" title="'.$urlWLHTML.'">'.get_lang('ValidDomainsList').' <span class="glyphicon glyphicon-question-sign"></span></span>');
+$form->addElement('static', 'info', '', '<span class="text-primary" data-toggle="tooltip" title="'.$urlWLHTML.'">'.get_lang('ValidDomainList').' <span class="glyphicon glyphicon-question-sign"></span></span>');
 $form->addButtonSend(get_lang('AddCloudLink'), 'submitDocument');
  
 $form->addRule('name', get_lang('PleaseEnterCloudLinkName'), 'required', null, 'client');
@@ -141,8 +141,8 @@ $form->addRule('url', get_lang('PleaseEnterURL'), 'required', null, 'client');
 $form->addRule('url', get_lang('PleaseEnterURL'), 'required', null, 'server');
 // Well formed url pattern (must have the protocol)
 $urlRegEx = URLUtils::getWellformedUrlRegex();
-$form->addRule('url', get_lang('MalformedUrl'), 'regex', $urlRegEx, 'client');
-$form->addRule('url', get_lang('MalformedUrl'), 'regex', $urlRegEx, 'server');
+$form->addRule('url', get_lang('NotValidURL'), 'regex', $urlRegEx, 'client');
+$form->addRule('url', get_lang('NotValidURL'), 'regex', $urlRegEx, 'server');
 $form->addRule('url', get_lang('NotValidDomain').$urlWLText, 'regex', $urlWLRegEx, 'client');
 $form->addRule('url', get_lang('NotValidDomain').$urlWLHTML, 'regex', $urlWLRegEx, 'server');
  

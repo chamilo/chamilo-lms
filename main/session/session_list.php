@@ -338,9 +338,11 @@ if (api_is_platform_admin()) {
 }
 
 if ($list_type == 'complete') {
-    echo '<a href="'.api_get_self().'?list_type=simple">'.Display::return_icon('view_remove.png', get_lang('Simple'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_self().'?list_type=simple">'.
+        Display::return_icon('view_remove.png', get_lang('Simple'), '', ICON_SIZE_MEDIUM).'</a>';
 } else {
-    echo '<a href="'.api_get_self().'?list_type=complete">'.Display::return_icon('view_text.png', get_lang('Complete'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_self().'?list_type=complete">'.
+        Display::return_icon('view_text.png', get_lang('Complete'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 echo $actions;

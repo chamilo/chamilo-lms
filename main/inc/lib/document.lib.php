@@ -5395,7 +5395,7 @@ class DocumentManager
             $ext = strtolower($ext[sizeof($ext) - 1]);
 
             // HTML-files an some other types are shown in a frameset by default.
-            $is_browser_viewable_file = self::is_browser_viewable($ext);
+            $is_browser_viewable_file = self::isBrowserViewable($ext);
 
             if ($is_browser_viewable_file) {
                 if ($ext == 'pdf' || in_array($ext, $webODFList)) {

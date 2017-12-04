@@ -3653,7 +3653,7 @@ function setWorkUploadForm($form, $uploadFormType = 0)
     $form->addElement('hidden', 'active', 1);
     $form->addElement('hidden', 'accepted', 1);
     $form->addElement('text', 'title', get_lang('Title'), array('id' => 'file_upload'));
-    $form->addElement('text', 'extension', 'entension', array('id' => 'file_extension', 'readonly' => 'readonly'));
+    $form->addElement('text', 'extension', get_lang('FileExtension'), array('id' => 'file_extension', 'readonly' => 'readonly'));
     $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
     switch ($uploadFormType) {

@@ -214,4 +214,21 @@ class ChamiloApi
 
         return $requestedWith === 'XMLHttpRequest';
     }
+
+    /**
+     * Get a variable name for language file from a text
+     * @param string $text
+     * @param string $prefix
+     * @return string
+     */
+    public static function getLanguageVar($text, $prefix = '')
+    {
+        $text = api_replace_dangerous_char($text);
+        $text = str_replace(['-', ' '], '_', $text);
+        $text = preg_replace('/\_{1,}/', '_', $text);
+        //$text = str_replace('_', '', $text);
+        $text = api_underscore_to_camel_case($text);
+
+        return $prefix.$text;
+    }
 }

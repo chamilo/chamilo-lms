@@ -3,6 +3,7 @@
 
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\UserBundle\Entity\Repository\UserRepository;
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * Class SkillProfile
@@ -1967,11 +1968,9 @@ class Skill extends Model
      */
     public static function translateName($name)
     {
-        $camelCase = 'Skill'.api_underscore_to_camel_case(
-            str_replace(' ', '_', $name)
-        );
+        $variable = ChamiloApi::getLanguageVar($name, 'Skill');
 
-        return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $name;
+        return isset($GLOBALS[$variable]) ? $GLOBALS[$variable] : $name;
     }
 
     public static function translateCode($code)
@@ -1980,10 +1979,8 @@ class Skill extends Model
             return '';
         }
 
-        $camelCase = 'SkillCode'.api_underscore_to_camel_case(
-            str_replace(' ', '_', $code)
-        );
+        $variable = ChamiloApi::getLanguageVar($code, 'SkillCode');
 
-        return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $code;
+        return isset($GLOBALS[$variable]) ? $GLOBALS[$variable] : $code;
     }
 }

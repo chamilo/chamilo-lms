@@ -1374,22 +1374,6 @@ function item_property_update_on_folder($_course, $path, $user_id)
 }
 
 /**
- * Returns the directory depth of the file.
- *
- * @author	Olivier Cauberghe <olivier.cauberghe@ugent.be>
- * @param	path+filename eg: /main/document/document.php
- * @return	The directory depth
- */
-function get_levels($filename)
-{
-    $levels = explode('/', $filename);
-    if (empty($levels[count($levels) - 1])) {
-        unset($levels[count($levels) - 1]);
-    }
-    return count($levels);
-}
-
-/**
  * Adds file to document table in database
  * deprecated: use file_set_default_settings instead
  *
@@ -1756,31 +1740,6 @@ function replace_img_path_in_html_file($original_img_path, $new_img_path, $html_
 
     if (!fwrite($fp, $new_html_content)) {
         return;
-    }
-}
-
-/**
- * Creates a file containing an html redirection to a given url
- *
- * @author Hugues Peeters <hugues.peeters@claroline.net>
- * @param string $file_path
- * @param string $url
- * @return void
- */
-function create_link_file($file_path, $url)
-{
-    $file_content = '<html>'
-        .'<head>'
-        .'<meta http-equiv="refresh" content="1;url='.$url.'">'
-        .'</head>'
-        .'<body>'
-        .'</body>'
-        .'</html>';
-    if (file_exists($file_path)) {
-        if (!($fp = fopen($file_path, 'w'))) {
-            return false;
-        }
-        return fwrite($fp, $file_content);
     }
 }
 

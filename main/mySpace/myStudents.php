@@ -557,7 +557,7 @@ $userGroups = $userGroupManager->getNameListByUser(
         <tbody>
         <tr>
             <td><?php echo get_lang('Name'); ?></td>
-            <td><?php echo $user_info['complete_name']; ?></td>
+            <td><?php echo $user_info['complete_name_with_message_link']; ?></td>
         </tr>
         <tr>
             <td><?php echo get_lang('Email'); ?></td>
@@ -599,7 +599,8 @@ $userGroups = $userGroupManager->getNameListByUser(
                         'origin' => $origin,
                         'cidReq' => $course_code,
                         'id_session' => $sessionId
-                    ])
+                    ]),
+                    ['class' => 'btn btn-default']
                 );
                 ?>
                 </td>

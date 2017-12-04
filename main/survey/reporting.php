@@ -13,7 +13,6 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
-$cidReq = api_get_cidreq();
 $survey_id = intval($_GET['survey_id']);
 $userId = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
 $survey_data = SurveyManager::get_survey($survey_id);
@@ -22,8 +21,11 @@ $survey_data = SurveyManager::get_survey($survey_id);
 /**
  * @todo use Export::arrayToCsv($data, $filename = 'export')
  */
-if (isset($_POST['export_report']) && $_POST['export_report']) {
-    switch ($_POST['export_format']) {
+
+$exportReport = isset($_REQUEST['export_report']) ? $_REQUEST['export_report'] : '';
+$format = isset($_REQUEST['export_format']) ? $_REQUEST['export_format'] : '';
+if (!empty($exportReport) && !empty($format)) {
+    switch ($format) {
         case 'xls':
             $filename = 'survey_results_'.$survey_id.'.xlsx';
             $data = SurveyUtil::export_complete_report_xls(
@@ -150,20 +152,13 @@ Display::display_header($tool_name, 'Survey');
 // Action handling
 SurveyUtil::handle_reporting_actions($survey_data, $people_filled);
 
-// Actions bar
-echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq().'">'.
-    Display::return_icon('back.png', get_lang('BackToSurvey'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
-
 // Content
 if (!isset($_GET['action']) ||
     isset($_GET['action']) &&
     $_GET['action'] == 'overview'
 ) {
-    $myweb_survey_id = $survey_id;
     $html = null;
-    $url = api_get_path(WEB_CODE_PATH).'survey/reporting.php?';
+    $url = api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&';
 
     $html .= '<div class="survey-reports">';
     $html .= '<div class="list-group">';
@@ -174,7 +169,7 @@ if (!isset($_GET['action']) ||
             null,
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('QuestionsOverallReport').'</h4><p>'.get_lang('QuestionsOverallReportDetail').'</p>',
-        $url.'action=questionreport&survey_id='.$survey_id.'&'.$cidReq.'&single_page=1',
+        $url.'action=questionreport&survey_id='.$survey_id.'&single_page=1',
         array('class' => 'list-group-item')
     );
 
@@ -185,7 +180,7 @@ if (!isset($_GET['action']) ||
             null,
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('DetailedReportByQuestion').'</h4><p>'.get_lang('DetailedReportByQuestionDetail').'</p>',
-        $url.'action=questionreport&survey_id='.$survey_id.'&'.$cidReq,
+        $url.'action=questionreport&survey_id='.$survey_id,
         array('class' => 'list-group-item')
     );
 
@@ -196,7 +191,7 @@ if (!isset($_GET['action']) ||
             null,
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('DetailedReportByUser').'</h4><p>'.get_lang('DetailedReportByUserDetail').'</p>',
-        $url.'action=userreport&survey_id='.$survey_id.'&'.$cidReq,
+        $url.'action=userreport&survey_id='.$survey_id,
         array('class' => 'list-group-item')
     );
 
@@ -207,7 +202,7 @@ if (!isset($_GET['action']) ||
             null,
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('ComparativeReport').'</h4><p>'.get_lang('ComparativeReportDetail').'</p>',
-        $url.'action=comparativereport&survey_id='.$survey_id.'&'.$cidReq,
+        $url.'action=comparativereport&survey_id='.$survey_id,
         array('class' => 'list-group-item')
     );
 
@@ -218,7 +213,7 @@ if (!isset($_GET['action']) ||
             null,
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('CompleteReport').'</h4><p>'.get_lang('CompleteReportDetail').'</p>',
-        $url.'action=completereport&survey_id='.$survey_id.'&'.$cidReq,
+        $url.'action=completereport&survey_id='.$survey_id,
         array('class' => 'list-group-item')
     );
 
@@ -228,4 +223,4 @@ if (!isset($_GET['action']) ||
     echo $html;
 }
 
-Display :: display_footer();
+Display::display_footer();

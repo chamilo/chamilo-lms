@@ -314,27 +314,3 @@ function getextension($filename)
     $bouts = explode('.', $filename);
     return array(array_pop($bouts), implode('.', $bouts));
 }
-
-/**
- * Calculation size of a directory
- *
- * @returns integer size
- * @param    string $root path of dir to measure
- * @param    boolean $recursive if true , include subdirectory in total
- */
-function dirsize($root, $recursive = true)
-{
-    $dir = @opendir($root);
-    $size = 0;
-    while ($file = @readdir($dir)) {
-        if (!in_array($file, array('.', '..'))) {
-            if (is_dir($root.'/'.$file)) {
-                $size += $recursive ? dirsize($root.'/'.$file) : 0;
-            } else {
-                $size += @filesize($root.'/'.$file);
-            }
-        }
-    }
-    @closedir($dir);
-    return $size;
-}

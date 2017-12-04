@@ -312,7 +312,7 @@ if ($session_id) {
 $teacherList = CourseManager::getTeacherListFromCourseCodeToString(
     $courseInfo['code'],
     ',',
-    false,
+    true,
     true
 );
 
@@ -322,7 +322,7 @@ if (!empty($session_id)) {
         $session_id,
         $courseInfo['real_id'],
         ',',
-        false,
+        true,
         true
     );
 }
@@ -540,6 +540,7 @@ if (count($a_students) > 0) {
 } else {
     $html .= Display::return_message(get_lang('NoUsersInCourse'), 'warning', true);
 }
+
 echo Display::panel($html, $titleSession);
 // Send the csv file if asked.
 if ($export_csv) {

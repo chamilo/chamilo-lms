@@ -80,11 +80,11 @@ class LpItem
     /**
      * Update in database
      */
-    public function update_in_bdd()
+    public function update()
     {
-        $item_view_table = Database::get_course_table(TABLE_LP_ITEM);
+        $table = Database::get_course_table(TABLE_LP_ITEM);
         if ($this->c_id > 0 && $this->id > 0) {
-            $sql = "UPDATE $item_view_table SET
+            $sql = "UPDATE $table SET
                         lp_id = '".intval($this->lp_id)."' ,
                         item_type = '".Database::escape_string($this->item_type)."' ,
                         ref = '".Database::escape_string($this->ref)."' ,

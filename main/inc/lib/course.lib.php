@@ -2025,10 +2025,10 @@ class CourseManager
                 if ($orderList === true) {
                     $html .= '<ul class="user-teacher">';
                     foreach ($list as $teacher) {
-                        $html .= Display::tag(
-                            'li',
-                            Display::return_icon('teacher.png', $teacher, null, ICON_SIZE_TINY).' '.$teacher
-                        );
+                        $html .= '<li>';
+                        $html .= Display::return_icon('teacher.png', '', null, ICON_SIZE_TINY);
+                        $html .= ' '.$teacher;
+                        $html .= '</li>';
                     }
                     $html .= '</ul>';
                 } else {

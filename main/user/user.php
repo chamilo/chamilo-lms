@@ -604,7 +604,7 @@ if (api_is_allowed_to_edit(null, true)) {
         Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM).'</a> ';
 
     if ($canEditUsers) {
-        $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import">'.
+        $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import&type='.$type.'">'.
             Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'), [], ICON_SIZE_MEDIUM).'</a> ';
     }
 

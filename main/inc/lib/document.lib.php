@@ -6357,7 +6357,7 @@ class DocumentManager
      * @param string $file_extension    The filename extension of the document (it must be in lower case).
      * @return bool                     Returns TRUE or FALSE.
      */
-    public static function is_browser_viewable($file_extension)
+    public static function isBrowserViewable($file_extension)
     {
         static $allowed_extensions = array(
             'htm', 'html', 'xhtml',
@@ -6369,7 +6369,7 @@ class DocumentManager
         );
 
         /*
-          //TODO: make a admin swich to strict mode
+          //TODO: make a admin switch to strict mode
           1. global default $allowed_extensions only: 'htm', 'html', 'xhtml', 'gif', 'jpg', 'jpeg', 'png', 'bmp', 'txt', 'log'
           if (in_array($file_extension, $allowed_extensions)) { // Assignment + a logical check.
           return true;
@@ -6540,9 +6540,6 @@ class DocumentManager
      */
     public static function downloadAllDeletedDocument($courseInfo, $sessionId)
     {
-        // Zip library for creation of the zip file.
-        require api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
-
         $files = self::getDeletedDocuments($courseInfo, $sessionId);
 
         if (empty($files)) {
@@ -6648,9 +6645,9 @@ class DocumentManager
     {
         $dbTable = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = api_get_course_int_id();
+        $old_path = Database::escape_string($old_path);
         switch ($action) {
             case 'delete':
-                $old_path = Database::escape_string($old_path);
                 $query = "DELETE FROM $dbTable
                           WHERE
                             c_id = $course_id AND
@@ -6713,6 +6710,7 @@ class DocumentManager
     }
 
     /**
+<<<<<<< HEAD
      * Adds a cloud link to the database
      *
      * @author - Aquilino Blanco Cores <aqblanco@gmail.com>
@@ -6818,5 +6816,55 @@ class DocumentManager
     {
         $exists = self::getCloudLinkId($_course, $path, $url);
         return $exists;
+=======
+     * Calculates the total size of a directory by adding the sizes (that
+     * are stored in the database) of all files & folders in this directory.
+     *
+     * @param    string $path
+     * @param    boolean $can_see_invisible
+     * @return    int Total size
+     */
+    public function getTotalFolderSize($path, $can_see_invisible = false)
+    {
+        $table_itemproperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $table_document = Database::get_course_table(TABLE_DOCUMENT);
+        $tool_document = TOOL_DOCUMENT;
+
+        $course_id = api_get_course_int_id();
+        $session_id = api_get_session_id();
+        $session_condition = api_get_session_condition(
+            $session_id,
+            true,
+            true,
+            'props.session_id'
+        );
+
+        $path = Database::escape_string($path);
+        $visibility_rule = ' props.visibility '.($can_see_invisible ? '<> 2' : '= 1');
+
+        $sql = "SELECT SUM(table1.size) FROM (
+                SELECT props.ref, size
+                FROM $table_itemproperty AS props 
+                INNER JOIN $table_document AS docs
+                ON (docs.id = props.ref AND docs.c_id = props.c_id)
+                WHERE
+                    docs.c_id = $course_id AND                    
+                    docs.path LIKE '$path/%' AND
+                    props.c_id = $course_id AND
+                    props.tool = '$tool_document' AND
+                    $visibility_rule
+                    $session_condition
+                GROUP BY ref
+            ) as table1";
+
+        $result = Database::query($sql);
+        if ($result && Database::num_rows($result) != 0) {
+            $row = Database::fetch_row($result);
+
+            return $row[0] == null ? 0 : $row[0];
+        } else {
+            return 0;
+        }
+>>>>>>> f393780aad92ccdcd6ed72b1a6309879d5e559d9
     }
 }

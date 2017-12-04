@@ -275,15 +275,15 @@ class Connector
     public function getOperations()
     {
         //https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options-2.1
-        $opts = array(
+        $opts = [
             //'debug' => true,
-            'bind' => array(
-                'upload rm' => array($this, 'manageCommands')
-            )
-        );
+            'bind' => [
+                'upload rm mkdir' => array($this, 'manageCommands')
+            ],
+            'sessionCloseEarlier' => false
+        ];
 
         $this->setDrivers();
-
         $opts['roots'] = $this->getRoots();
 
         return $opts;
@@ -340,6 +340,7 @@ class Connector
     public function manageCommands($cmd, $result, $args, $elFinder)
     {
         $cmd = ucfirst($cmd);
+
         $cmd = 'after'.$cmd;
 /*
         if (isset($args['target'])) {

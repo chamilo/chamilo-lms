@@ -9538,7 +9538,7 @@ class learnpath
                 $tmp_obj_exercice = new Exercise($course_id);
                 $tmp_obj_exercice->read($tmp_obj_lp_item->path);
                 $tmp_obj_lp_item->max_score = $tmp_obj_exercice->get_max_score();
-                $tmp_obj_lp_item->update_in_bdd();
+                $tmp_obj_lp_item->update();
                 $item['max_score'] = $tmp_obj_lp_item->max_score;
 
                 $return .= '<td>';

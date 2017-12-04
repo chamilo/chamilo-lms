@@ -4105,7 +4105,7 @@ function processWorkForm(
         if ($showFlashMessage) {
             Display::addFlash(
                 Display::return_message(
-                    $message ? $message : get_lang('IsNotPosibleSaveTheDocument'),
+                    $message ? $message : get_lang('ImpossibleToSaveTheDocument'),
                     'error'
                 )
             );

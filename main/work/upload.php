@@ -125,7 +125,7 @@ if ($form->validate()) {
     } else {
         // Bad token or can't add works
         Display::addFlash(
-            Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error')
+            Display::return_message(get_lang('ImpossibleToSaveTheDocument'), 'error')
         );
     }
 }

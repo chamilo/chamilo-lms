@@ -25,7 +25,7 @@ switch ($action) {
         );
 
         // Displaying the quota
-        echo DocumentManager::display_simple_quota(
+        echo DocumentManager::displaySimpleQuota(
             $course_quota,
             $already_consumed_space_course
         );

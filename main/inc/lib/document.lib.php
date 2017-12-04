@@ -6696,11 +6696,11 @@ class DocumentManager
      * Calculates the total size of a directory by adding the sizes (that
      * are stored in the database) of all files & folders in this directory.
      *
-     * @param    string $path
-     * @param    boolean $can_see_invisible
-     * @return    int Total size
+     * @param string $path
+     * @param boolean $can_see_invisible
+     * @return int Total size
      */
-    public function getTotalFolderSize($path, $can_see_invisible = false)
+    public static function getTotalFolderSize($path, $can_see_invisible = false)
     {
         $table_itemproperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $table_document = Database::get_course_table(TABLE_DOCUMENT);
@@ -6714,6 +6714,10 @@ class DocumentManager
             true,
             'props.session_id'
         );
+
+        if (empty($course_id)) {
+            return 0;
+        }
 
         $path = Database::escape_string($path);
         $visibility_rule = ' props.visibility '.($can_see_invisible ? '<> 2' : '= 1');

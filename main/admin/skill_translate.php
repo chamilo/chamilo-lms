@@ -4,6 +4,7 @@
 use \Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\Language;
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 $cidReset = true;
 
@@ -24,13 +25,15 @@ if (isset($_GET['skill'])) {
     $skill = $em->find('ChamiloCoreBundle:Skill', intval($_GET['skill']));
 
     if ($action === 'name') {
-        $variableLanguage = '$Skill'.api_underscore_to_camel_case(
-            str_replace(' ', '_', $skill->getName(false))
+        $variableLanguage = ChamiloApi::getLanguageVar(
+            $skill->getName(false),
+            'Skill'
         );
         $originalName = $skill->getName(false);
     } elseif ($action === 'code') {
-        $variableLanguage = '$SkillCode'.api_underscore_to_camel_case(
-            str_replace(' ', '_', $skill->getShortCode(false))
+        $variableLanguage = ChamiloApi::getLanguageVar(
+            $skill->getShortCode(false),
+            'SkillCode'
         );
         $originalName = $skill->getShortCode(false);
     }
@@ -82,7 +85,7 @@ if ($languageId) {
 }
 
 $form->setDefaults([
-    'variable_language' => $variableLanguage,
+    'variable_language' => '$'.$variableLanguage,
     'original_name' => $originalName,
     'sub_language' => $languageId,
     'new_language' => $action === 'code' ? $skill->getShortCode() : $skill->getName()

@@ -69,13 +69,17 @@
         <tr>
             <td>{{ 'Career' | get_lang}}</td>
             <td>
-                <a href="{{ _p.web_main }}admin/career_dashboard.php?filter={{ promotion.career.id }}&submit=&_qf__filter_form=">{{ promotion.career.name }}</a>
+                <a href="{{ _p.web_main }}admin/career_dashboard.php?filter={{ promotion.career.id }}&submit=&_qf__filter_form=">
+                    {{ promotion.career.name }}
+                </a>
             </td>
         </tr>
         <tr>
             <td>{{ 'Promotion' | get_lang}}</td>
             <td>
-                <a href="{{ _p.web_main }}admin/promotions.php?action=edit&id={{ promotion.id }}">{{ promotion.name }}</a>
+                <a href="{{ _p.web_main }}admin/promotions.php?action=edit&id={{ promotion.id }}">
+                    {{ promotion.name }}
+                </a>
             </td>
         </tr>
     {% endif %}

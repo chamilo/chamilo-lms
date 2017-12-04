@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\SkillBundle\Entity\Profile;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -124,11 +125,9 @@ class Skill
     public function getName($translated = true)
     {
         if ($translated) {
-            $camelCase = 'Skill'.api_underscore_to_camel_case(
-                str_replace(' ', '_', $this->name)
-            );
+            $variable = ChamiloApi::getLanguageVar($this->name, 'Skill');
 
-            return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $this->name;
+            return isset($GLOBALS[$variable]) ? $GLOBALS[$variable] : $this->name;
         }
 
         return $this->name;
@@ -156,11 +155,9 @@ class Skill
     public function getShortCode($translated = true)
     {
         if ($translated && !empty($this->shortCode)) {
-            $camelCase = 'SkillCode'.api_underscore_to_camel_case(
-                str_replace(' ', '_', $this->shortCode)
-            );
+            $variable = ChamiloApi::getLanguageVar($this->shortCode, 'SkillCode');
 
-            return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $this->shortCode;
+            return isset($GLOBALS[$variable]) ? $GLOBALS[$variable] : $this->shortCode;
         }
 
         return $this->shortCode;

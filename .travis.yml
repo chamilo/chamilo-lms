@@ -102,10 +102,9 @@ script:
   - whereis chromedriver
   - cd tests/behat
   - pwd
-  - sudo cat /var/log/apache2/$VHOST_URL-error.log
-  - sudo cat /var/log/apache2/$VHOST_URL-access.log
-  - ../../vendor/behat/behat/bin/behat -v features/accessCompanyReports.feature
-  - travis_wait 60 ../../vendor/behat/behat/bin/behat -v
+  - travis_wait 45 ../../vendor/behat/behat/bin/behat -v
+  # - sudo cat /var/log/apache2/$VHOST_URL-error.log
+  # - sudo cat /var/log/apache2/$VHOST_URL-access.log
 
 
 # configure notifications (email, IRC, campfire etc)

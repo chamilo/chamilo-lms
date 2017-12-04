@@ -1150,18 +1150,36 @@ function count_dir($path_dir, $recurse)
 function to_javascript_work()
 {
     $js = '<script>
+ 
         function updateDocumentTitle(value) {
             var temp = value.indexOf("/");
+            
             //linux path
-            if(temp!=-1){
-                var temp=value.split("/");
+            if(temp != -1){
+                temp=value.split("/");
             } else {
-                var temp=value.split("\\\");
+                temp=value.split("\\\");
             }
-            document.getElementById("file_upload").value=temp[temp.length-1];
+            
+            var fullFilename = temp[temp.length - 1];
+            var baseFilename = fullFilename;
+            
+            // get file extension
+            var fileExtension = "";
+            if (fullFilename.match(/\..+/)) {
+                fileInfo = fullFilename.match(/(.*)\.([^.]+)$/);
+                if (fileInfo.length > 1) {
+                    fileExtension = "."+fileInfo[fileInfo.length - 1];
+                    baseFilename = fileInfo[fileInfo.length - 2];
+                }
+            }
+            
+            document.getElementById("file_upload").value = baseFilename;
+            document.getElementById("file_extension").value = fileExtension;
+            
             $("#contains_file_id").attr("value", 1);
         }
-
+ 
         function checkDate(month, day, year) {
           var monthLength =
             new Array(31,28,31,30,31,30,31,31,30,31,30,31);
@@ -3635,6 +3653,7 @@ function setWorkUploadForm($form, $uploadFormType = 0)
     $form->addElement('hidden', 'active', 1);
     $form->addElement('hidden', 'accepted', 1);
     $form->addElement('text', 'title', get_lang('Title'), array('id' => 'file_upload'));
+    $form->addElement('text', 'extension', get_lang('FileExtension'), array('id' => 'file_extension', 'readonly' => 'readonly'));
     $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
     switch ($uploadFormType) {
@@ -3917,7 +3936,7 @@ function processWorkForm(
     $sessionId = intval($sessionId);
     $userId = intval($userId);
 
-    $title = $values['title'];
+    $title = $values['title'].$values['extension'];
     $description = $values['description'];
     $contains_file = isset($values['contains_file']) && !empty($values['contains_file']) ? intval($values['contains_file']) : 0;
 

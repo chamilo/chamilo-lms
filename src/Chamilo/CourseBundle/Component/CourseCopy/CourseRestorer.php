@@ -1280,7 +1280,7 @@ class CourseRestorer
             $link_table = Database::get_course_table(TABLE_LINK);
             $resources = $this->course->resources;
 
-            foreach ($resources[RESOURCE_LINK] as $id => $link) {
+            foreach ($resources[RESOURCE_LINK] as $oldLinkId => $link) {
                 $cat_id = $this->restore_link_category(
                     $link->category_id,
                     $session_id
@@ -1289,7 +1289,7 @@ class CourseRestorer
                         FROM $link_table
                         WHERE
                             c_id = ".$this->destination_course_id." AND
-                            category_id='" . intval($cat_id)."'";
+                            category_id='".intval($cat_id)."'";
                 $result = Database::query($sql);
                 list($max_order) = Database::fetch_array($result);
 
@@ -1321,10 +1321,10 @@ class CourseRestorer
                         api_get_user_id()
                     );
 
-                    if (!isset($this->course->resources[RESOURCE_LINK][$id])) {
-                        $this->course->resources[RESOURCE_LINK][$id] = new stdClass();
+                    if (!isset($this->course->resources[RESOURCE_LINK][$oldLinkId])) {
+                        $this->course->resources[RESOURCE_LINK][$oldLinkId] = new stdClass();
                     }
-                    $this->course->resources[RESOURCE_LINK][$id]->destination_id = $id;
+                    $this->course->resources[RESOURCE_LINK][$oldLinkId]->destination_id = $id;
                 }
             }
         }
@@ -2151,7 +2151,7 @@ class CourseRestorer
     {
         $destinationCourseId = $this->destination_course_info['real_id'];
         // Let's restore the categories
-        $categoryOldVsNewList = array(); // used to build the quiz_question_rel_category table
+        $categoryOldVsNewList = []; // used to build the quiz_question_rel_category table
         if ($this->course->has_resources(RESOURCE_TEST_CATEGORY)) {
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_TEST_CATEGORY] as $id => $courseCopyTestCategory) {
@@ -2635,7 +2635,6 @@ class CourseRestorer
                 if ($new_lp_id) {
                     // The following only makes sense if a new LP was
                     // created in the destination course
-
                     $sql = "UPDATE $table_main SET id = iid WHERE iid = $new_lp_id";
                     Database::query($sql);
 
@@ -2684,13 +2683,13 @@ class CourseRestorer
                         $session_id
                     );
 
-                    $new_item_ids = array();
-                    $parent_item_ids = array();
-                    $previous_item_ids = array();
-                    $next_item_ids = array();
-                    $old_prerequisite = array();
-                    $old_refs = array();
-                    $prerequisite_ids = array();
+                    $new_item_ids = [];
+                    $parent_item_ids = [];
+                    $previous_item_ids = [];
+                    $next_item_ids = [];
+                    $old_prerequisite = [];
+                    $old_refs = [];
+                    $prerequisite_ids = [];
 
                     foreach ($lp->get_items() as $index => $item) {
                         // we set the ref code here and then we update in a for loop
@@ -2713,9 +2712,9 @@ class CourseRestorer
                             'lp_id' => self::DBUTF8($new_lp_id),
                             'item_type' => self::DBUTF8($item['item_type']),
                             'ref' => self::DBUTF8($ref),
+                            'path' => self::DBUTF8($path),
                             'title' => self::DBUTF8($item['title']),
                             'description' => self::DBUTF8($item['description']),
-                            'path' => self::DBUTF8($path),
                             'min_score' => self::DBUTF8($item['min_score']),
                             'max_score' => self::DBUTF8($item['max_score']),
                             'mastery_score' => self::DBUTF8($item['mastery_score']),
@@ -2807,7 +2806,7 @@ class CourseRestorer
                             $next_new_id = $new_item_ids[$next_item_old_id];
                         }
                         $sql = "UPDATE ".$table_item." SET next_item_id = '".$next_new_id."'
-                                WHERE c_id = " . $this->destination_course_id." AND id = '".$new_item_id."'";
+                                WHERE c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
                         Database::query($sql);
                     }
 
@@ -2817,7 +2816,7 @@ class CourseRestorer
                             $prerequisite_new_id = $new_item_ids[$prerequisite_old_id];
                         }
                         $sql = "UPDATE ".$table_item." SET prerequisite = '".$prerequisite_new_id."'
-                                WHERE c_id = " . $this->destination_course_id." AND id = '".$new_item_id."'";
+                                WHERE c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
                         Database::query($sql);
                     }
                     $this->course->resources[RESOURCE_LEARNPATH][$id]->destination_id = $new_lp_id;
@@ -3313,7 +3312,7 @@ class CourseRestorer
                 $path = $obj->params['url'];
                 $path = '/'.str_replace('/', '', substr($path, 1));
 
-                $workData = array();
+                $workData = [];
                 switch ($this->file_option) {
                     case FILE_SKIP:
                         $workData = get_work_data_by_path(

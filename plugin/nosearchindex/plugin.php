@@ -24,7 +24,7 @@ if ($isPlatformAdmin) {
 
     $form = $plugin_info['settings_form'];
 
-    if ($form->validate()) {
+    if ($form && $form->validate()) {
         $values = $form->getSubmitValues();
         $contents = file_get_contents($originalFile);
         $extraContentFile = api_get_home_path().'header_extra_content.txt';

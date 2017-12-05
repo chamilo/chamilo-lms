@@ -395,7 +395,7 @@ class IndexManager
             ];
         }
 
-        if (Skill::isAllow(0, false)) {
+        if (Skill::isAllowed(0, false)) {
             $items[] = [
                 'icon' => Display::return_icon('skill-badges.png', get_lang('MySkills')),
                 'link' => api_get_path(WEB_CODE_PATH).'social/my_skills_report.php',

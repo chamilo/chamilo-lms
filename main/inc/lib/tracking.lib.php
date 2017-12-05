@@ -6454,7 +6454,7 @@ class Tracking
      */
     public static function displayUserSkills($userId, $courseId = 0, $sessionId = 0)
     {
-        if (Skill::isAllow($userId, false) === false) {
+        if (Skill::isAllowed($userId, false) === false) {
             return '';
         }
         $skillManager = new Skill();

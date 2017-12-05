@@ -21,7 +21,7 @@ if (empty($userId)) {
     api_not_allowed(true);
 }
 
-SkillManager::isAllow($userId);
+SkillManager::isAllowed($userId);
 
 $user = api_get_user_entity($userId);
 

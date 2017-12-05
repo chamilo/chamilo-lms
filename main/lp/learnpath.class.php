@@ -12294,9 +12294,12 @@ EOD;
         $origin = 'learnpath'
     ) {
         $session_id = api_get_session_id();
+        $course_info = api_get_course_info_by_id($course_id);
+
         $learningPathId = intval($learningPathId);
         $id_in_path = intval($id_in_path);
         $lpViewId = intval($lpViewId);
+
         $em = Database::getManager();
         $lpItemRepo = $em->getRepository('ChamiloCourseBundle:CLpItem');
         /** @var CLpItem $rowItem */
@@ -12310,7 +12313,6 @@ EOD;
             return -1;
         }
 
-        $course_info = api_get_course_info_by_id($course_id);
         $course_code = $course_info['code'];
         $type = $rowItem->getItemType();
         $id = empty($rowItem->getPath()) ? '0' : $rowItem->getPath();
@@ -12326,9 +12328,11 @@ EOD;
             case TOOL_ANNOUNCEMENT:
                 return $main_dir_path.'announcements/announcements.php?ann_id='.$id.'&'.$extraParams;
             case TOOL_LINK:
-                $linkInfo = Link::get_link_info($id);
-
-                return $linkInfo['url'];
+                $linkInfo = Link::getLinkInfo($id);
+                if (isset($linkInfo['url'])) {
+                    return $linkInfo['url'];
+                }
+                return '';
             case TOOL_QUIZ:
                 if (empty($id)) {
                     return '';

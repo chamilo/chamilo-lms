@@ -5121,7 +5121,7 @@ class DocumentManager
 
         // Get the title or the basename depending on what we're using
         if ($document_data['title'] != '') {
-            $title = htmlspecialchars($document_data['title']);
+            $title = $document_data['title'];
         } else {
             $title = basename($document_data['path']);
         }

@@ -275,42 +275,12 @@ class DocumentManager
     }
 
     /**
-     * @param string
-     * @param string
-     * @return true if the user is allowed to see the document, false otherwise
-     * @author Sergio A Kessler, first version
-     * @author Roan Embrechts, bugfix
-     * @todo not only check if a file is visible, but also check if the user is allowed to see the file??
-     */
-    public static function file_visible_to_user($this_course, $doc_url)
-    {
-        $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
-        if ($is_allowed_to_edit) {
-            return true;
-        } else {
-            $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
-            $tbl_item_property = $this_course.'item_property';
-            $doc_url = Database::escape_string($doc_url);
-            $query = "SELECT 1 FROM $tbl_document AS docs,$tbl_item_property AS props
-                      WHERE
-                            props.tool = 'document' AND
-                            docs.id=props.ref AND
-                            props.visibility <> '1' AND
-                            docs.path = '$doc_url'";
-            $result = Database::query($query);
-
-            return Database::num_rows($result) == 0;
-        }
-    }
-
-    /**
      * This function streams a file to the client
      *
      * @param string $full_file_name
      * @param boolean $forced
      * @param string $name
-     * @param string $fixLinksHttpToHttps change file content from http to https
+     * @param bool $fixLinksHttpToHttps change file content from http to https
      *
      * @return false if file doesn't exist, true if stream succeeded
      */
@@ -427,85 +397,6 @@ class DocumentManager
                 readfile($full_file_name);
             }
 
-            return true;
-        }
-    }
-
-    /**
-     * This function streams a string to the client for download.
-     * You have to ensure that the calling script then stops processing (exit();)
-     * otherwise it may cause subsequent use of the page to want to download
-     * other pages in php rather than interpreting them.
-     *
-     * @param string $full_string The string contents
-     * @param boolean $forced Whether "save" mode is forced (or opening directly authorized)
-     * @param string $name The name of the file in the end (including extension)
-     *
-     * @return false if file doesn't exist, true if stream succeeded
-     */
-    public static function string_send_for_download($full_string, $forced = false, $name = '')
-    {
-        $filename = $name;
-        $len = strlen($full_string);
-
-        if ($forced) {
-            //force the browser to save the file instead of opening it
-
-            header('Content-type: application/octet-stream');
-            //header('Content-Type: application/force-download');
-            header('Content-length: '.$len);
-            if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT'])) {
-                header('Content-Disposition: filename= '.$filename);
-            } else {
-                header('Content-Disposition: attachment; filename= '.$filename);
-            }
-            if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
-                header('Pragma: ');
-                header('Cache-Control: ');
-                header('Cache-Control: public'); // IE cannot download from sessions without a cache
-            }
-            header('Content-Description: '.$filename);
-            header('Content-transfer-encoding: binary');
-            echo $full_string;
-
-            return true;
-            //You have to ensure that the calling script then stops processing (exit();)
-            //otherwise it may cause subsequent use of the page to want to download
-            //other pages in php rather than interpreting them.
-        } else {
-            //no forced download, just let the browser decide what to do according to the mimetype
-
-            $content_type = self::file_get_mime_type($filename);
-            header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
-            header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
-            header('Cache-Control: no-cache, must-revalidate');
-            header('Pragma: no-cache');
-            switch ($content_type) {
-                case 'text/html':
-                    $encoding = @api_detect_encoding_html($full_string);
-                    if (!empty($encoding)) {
-                        $content_type .= '; charset='.$encoding;
-                    }
-                    break;
-                case 'text/plain':
-                    $encoding = @api_detect_encoding(strip_tags($full_string));
-                    if (!empty($encoding)) {
-                        $content_type .= '; charset='.$encoding;
-                    }
-                    break;
-            }
-            header('Content-type: '.$content_type);
-            header('Content-Length: '.$len);
-            $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-            if (strpos($user_agent, 'msie')) {
-                header('Content-Disposition: ; filename= '.$filename);
-            } else {
-                header('Content-Disposition: inline; filename= '.$filename);
-            }
-            echo($full_string);
-            //You have to ensure that the calling script then stops processing (exit();)
-            //otherwise it may cause subsequent use of the page to want to download
-            //other pages in php rather than interpreting them.
             return true;
         }
     }
@@ -1058,16 +949,19 @@ class DocumentManager
     /**
      * This check if a document is a folder or not
      * @param array  $_course
-     * @param int    $document_id of the item
+     * @param int    $id document id
      * @return boolean true/false
      * */
-    public static function is_folder($_course, $document_id)
+    public static function is_folder($_course, $id)
     {
-        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+        $table = Database::get_course_table(TABLE_DOCUMENT);
+        if (empty($_course)) {
+            return false;
+        }
         $course_id = $_course['real_id'];
-        $document_id = intval($document_id);
-        $sql = "SELECT filetype FROM $TABLE_DOCUMENT
-                WHERE c_id = $course_id AND id= $document_id";
+        $id = (int) $id;
+        $sql = "SELECT filetype FROM $table
+                WHERE c_id = $course_id AND id= $id";
         $result = Database::fetch_array(Database::query($sql), 'ASSOC');
 
         return $result['filetype'] == 'folder';
@@ -1283,7 +1177,6 @@ class DocumentManager
                 $file_deleted_from_disk = true;
             } else {
                 // Set visibility to 2 and rename file/folder to xxx_DELETED_#id (soft delete)
-
                 if (is_file($base_work_dir.$path) || is_dir($base_work_dir.$path)) {
                     if (rename($base_work_dir.$path, $base_work_dir.$new_path)) {
                         $new_path = Database::escape_string($new_path);
@@ -1798,6 +1691,7 @@ class DocumentManager
 
     /**
      * Allow attach a certificate to a course
+     * @todo move to certificate.lib.php
      * @param string $course_id
      * @param int $document_id
      * @param int $session_id
@@ -1825,6 +1719,7 @@ class DocumentManager
 
     /**
      * get the document id of default certificate
+     * @todo move to certificate.lib.php
      * @param string $course_id
      * @param int $session_id
      *
@@ -2135,6 +2030,7 @@ class DocumentManager
     /**
      * Get the document id of the directory certificate
      * @return int The document id of the directory certificate
+     * @todo move to certificate.lib.php
      */
     public static function get_document_id_of_directory_certificate()
     {
@@ -2149,6 +2045,7 @@ class DocumentManager
 
     /**
      * Check if a directory given is for certificate
+     * @todo move to certificate.lib.php
      * @param string $dir path of directory
      * @return bool  true if is a certificate or false otherwise
      */
@@ -2260,7 +2157,11 @@ class DocumentManager
 
                             if ($attr == 'value') {
                                 if (strpos($source, 'mp3file')) {
-                                    $files_list[] = array(substr($source, 0, strpos($source, '.swf') + 4), 'local', 'abs');
+                                    $files_list[] = array(
+                                        substr($source, 0, strpos($source, '.swf') + 4),
+                                        'local',
+                                        'abs',
+                                    );
                                     $mp3file = substr($source, strpos($source, 'mp3file=') + 8);
                                     if (substr($mp3file, 0, 1) == '/') {
                                         $files_list[] = array($mp3file, 'local', 'abs');
@@ -2300,7 +2201,12 @@ class DocumentManager
                                         if (strpos($second_part, api_get_path(WEB_PATH)) !== false) {
                                             //we found the current portal url
                                             $files_list[] = array($second_part, 'local', 'url');
-                                            $in_files_list[] = self::get_resources_from_source_html($second_part, true, TOOL_DOCUMENT, $recursivity + 1);
+                                            $in_files_list[] = self::get_resources_from_source_html(
+                                                $second_part,
+                                                true,
+                                                TOOL_DOCUMENT,
+                                                $recursivity + 1
+                                            );
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
@@ -2312,7 +2218,12 @@ class DocumentManager
                                         if (substr($second_part, 0, 1) === '/') {
                                             //link starts with a /, making it absolute (relative to DocumentRoot)
                                             $files_list[] = array($second_part, 'local', 'abs');
-                                            $in_files_list[] = self::get_resources_from_source_html($second_part, true, TOOL_DOCUMENT, $recursivity + 1);
+                                            $in_files_list[] = self::get_resources_from_source_html(
+                                                $second_part,
+                                                true,
+                                                TOOL_DOCUMENT,
+                                                $recursivity + 1
+                                            );
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
@@ -2326,7 +2237,12 @@ class DocumentManager
                                                 $dir = dirname($abs_path).'/';
                                             }
                                             $new_abs_path = realpath($dir.$second_part);
-                                            $in_files_list[] = self::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity + 1);
+                                            $in_files_list[] = self::get_resources_from_source_html(
+                                                $new_abs_path,
+                                                true,
+                                                TOOL_DOCUMENT,
+                                                $recursivity + 1
+                                            );
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
@@ -2358,7 +2274,12 @@ class DocumentManager
                                         if (strpos($source, api_get_path(WEB_PATH)) !== false) {
                                             //we found the current portal url
                                             $files_list[] = array($source, 'local', 'url');
-                                            $in_files_list[] = self::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity + 1);
+                                            $in_files_list[] = self::get_resources_from_source_html(
+                                                $source,
+                                                true,
+                                                TOOL_DOCUMENT,
+                                                $recursivity + 1
+                                            );
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
@@ -2380,14 +2301,20 @@ class DocumentManager
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
-                                        } elseif (strstr($source, '..') === 0) { //link is relative but going back in the hierarchy
+                                        } elseif (strstr($source, '..') === 0) {
+                                            //link is relative but going back in the hierarchy
                                             $files_list[] = array($source, 'local', 'rel');
                                             $dir = '';
                                             if (!empty($abs_path)) {
                                                 $dir = dirname($abs_path).'/';
                                             }
                                             $new_abs_path = realpath($dir.$source);
-                                            $in_files_list[] = self::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity + 1);
+                                            $in_files_list[] = self::get_resources_from_source_html(
+                                                $new_abs_path,
+                                                true,
+                                                TOOL_DOCUMENT,
+                                                $recursivity + 1
+                                            );
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
@@ -2402,7 +2329,12 @@ class DocumentManager
                                                 $dir = dirname($abs_path).'/';
                                             }
                                             $new_abs_path = realpath($dir.$source);
-                                            $in_files_list[] = self::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity + 1);
+                                            $in_files_list[] = self::get_resources_from_source_html(
+                                                $new_abs_path,
+                                                true,
+                                                TOOL_DOCUMENT,
+                                                $recursivity + 1
+                                            );
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
@@ -2413,7 +2345,12 @@ class DocumentManager
                                 if (strpos($source, api_get_path(WEB_PATH)) !== false) {
                                     //we found the current portal url
                                     $files_list[] = array($source, 'local', 'url');
-                                    $in_files_list[] = self::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity + 1);
+                                    $in_files_list[] = self::get_resources_from_source_html(
+                                        $source,
+                                        true,
+                                        TOOL_DOCUMENT,
+                                        $recursivity + 1
+                                    );
                                     if (count($in_files_list) > 0) {
                                         $files_list = array_merge($files_list, $in_files_list);
                                     }
@@ -2426,7 +2363,12 @@ class DocumentManager
                                 if (substr($source, 0, 1) === '/') {
                                     //link starts with a /, making it absolute (relative to DocumentRoot)
                                     $files_list[] = array($source, 'local', 'abs');
-                                    $in_files_list[] = self::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity + 1);
+                                    $in_files_list[] = self::get_resources_from_source_html(
+                                        $source,
+                                        true,
+                                        TOOL_DOCUMENT,
+                                        $recursivity + 1
+                                    );
                                     if (count($in_files_list) > 0) {
                                         $files_list = array_merge($files_list, $in_files_list);
                                     }
@@ -2751,140 +2693,6 @@ class DocumentManager
     }
 
     /**
-     * Replace urls inside content html when moving a file
-     * @todo this code is only called in document.php but is commented
-     * @param string     content html
-     * @param string     origin
-     * @param string     destination
-     * @return string    new content html with replaced urls or return false if content is not a string
-     */
-    public function replace_urls_inside_content_html_when_moving_file($file_name, $original_path, $destiny_path)
-    {
-        if (substr($original_path, strlen($original_path) - 1, strlen($original_path)) == '/') {
-            $original = $original_path.$file_name;
-        } else {
-            $original = $original_path.'/'.$file_name;
-        }
-        if (substr($destiny_path, strlen($destiny_path) - 1, strlen($destiny_path)) == '/') {
-            $destination = $destiny_path.$file_name;
-        } else {
-            $destination = $destiny_path.'/'.$file_name;
-        }
-        $original_count = count(explode('/', $original));
-        $destination_count = count(explode('/', $destination));
-        if ($original_count == $destination_count) {
-            //Nothing to change
-            return true;
-        }
-        if ($original_count > $destination_count) {
-            $mode = 'outside';
-        } else {
-            $mode = 'inside';
-        }
-        //We do not select the $original_path becayse the file was already moved
-        $content_html = file_get_contents($destiny_path.'/'.$file_name);
-        $destination_file = $destiny_path.'/'.$file_name;
-        $pre_original = strstr($original_path, 'document');
-        $pre_destin = strstr($destiny_path, 'document');
-        $pre_original = substr($pre_original, 8, strlen($pre_original));
-        $pre_destin = substr($pre_destin, 8, strlen($pre_destin));
-
-        $levels = count(explode('/', $pre_destin)) - 1;
-        $link_to_add = '';
-        for ($i = 1; $i <= $levels; $i++) {
-            $link_to_add .= '../';
-        }
-
-        if ($pre_original == '/') {
-            $pre_original = '';
-        }
-
-        if ($pre_destin == '/') {
-            $pre_destin = '';
-        }
-
-        if ($pre_original != '') {
-            $pre_original = '..'.$pre_original.'/';
-        }
-
-        if ($pre_destin != '') {
-            $pre_destin = '..'.$pre_destin.'/';
-        }
-
-        $levels = explode('/', $pre_original);
-        $count_pre_destination_levels = 0;
-        foreach ($levels as $item) {
-            if (!empty($item) && $item != '..') {
-                $count_pre_destination_levels++;
-            }
-        }
-        $count_pre_destination_levels--;
-        //$count_pre_destination_levels = count() - 3;
-        if ($count_pre_destination_levels == 0) {
-            $count_pre_destination_levels = 1;
-        }
-        //echo '$count_pre_destination_levels '. $count_pre_destination_levels;
-        $pre_remove = '';
-        for ($i = 1; $i <= $count_pre_destination_levels; $i++) {
-            $pre_remove .= '..\/';
-        }
-
-        $orig_source_html = self::get_resources_from_source_html($content_html);
-
-        foreach ($orig_source_html as $source) {
-
-            // get information about source url
-            $real_orig_url = $source[0]; // url
-            $scope_url = $source[1]; // scope (local, remote)
-            $type_url = $source[2]; // tyle (rel, abs, url)
-            // Get path and query from origin url
-            $orig_parse_url = parse_url($real_orig_url);
-            $real_orig_path = $orig_parse_url['path'];
-            $real_orig_query = $orig_parse_url['query'];
-
-            // Replace origin course code by destination course code from origin url query
-            /*
-              $dest_url_query = '';
-              if (!empty($real_orig_query)) {
-              $dest_url_query = '?'.$real_orig_query;
-              if (strpos($dest_url_query,$origin_course_code) !== false) {
-              $dest_url_query = str_replace($origin_course_code, $destination_course_code, $dest_url_query);
-              }
-              } */
-
-            if ($scope_url == 'local') {
-                if ($type_url == 'abs' || $type_url == 'rel') {
-                    $document_file = strstr($real_orig_path, 'document');
-                    if (strpos($real_orig_path, $document_file) !== false) {
-                        echo 'continue1';
-                        continue;
-                    } else {
-                        $real_orig_url_temp = '';
-                        if ($mode == 'inside') {
-                            $real_orig_url_temp = str_replace('../', '', $real_orig_url);
-                            $destination_url = $link_to_add.$real_orig_url_temp;
-                        } else {
-                            $real_orig_url_temp = $real_orig_url;
-
-                            $destination_url = preg_replace("/".$pre_remove."/", '', $real_orig_url, 1);
-                        }
-                        if ($real_orig_url == $destination_url) {
-                            //echo 'continue2';
-                            continue;
-                        }
-                        $content_html = str_replace($real_orig_url, $destination_url, $content_html);
-                    }
-                } else {
-                    echo 'continue3';
-                    continue;
-                }
-            }
-        }
-        $return = file_put_contents($destination, $content_html);
-        return $return;
-    }
-
-    /**
      * Export document to PDF
      *
      * @param int $document_id
@@ -3189,58 +2997,11 @@ class DocumentManager
     }
 
     /**
-     *  Here we count 1 Kilobyte = 1024 Bytes, 1 Megabyte = 1048576 Bytes
-     */
-    public static function display_quota($course_quota, $already_consumed_space)
-    {
-        $course_quota_m = round($course_quota / 1048576);
-        $already_consumed_space_m = round($already_consumed_space / 1048576);
-
-        $message = get_lang('MaximumAllowedQuota').' <strong>'.$course_quota_m.' megabyte</strong>.<br />';
-        $message .= get_lang('CourseCurrentlyUses').' <strong>'.$already_consumed_space_m.' megabyte</strong>.<br />';
-
-        $percentage = round(($already_consumed_space / $course_quota * 100), 1);
-
-        $other_percentage = $percentage < 100 ? 100 - $percentage : 0;
-
-        // Decide where to place percentage in graph
-        if ($percentage >= 50) {
-            $text_in_filled = '&nbsp;'.$other_percentage.'%';
-            $text_in_unfilled = '';
-        } else {
-            $text_in_unfilled = '&nbsp;'.$other_percentage.'%';
-            $text_in_filled = '';
-        }
-
-        // Decide the background colour of the graph
-        if ($percentage < 65) {
-            $colour = '#00BB00'; // Safe - green
-        } elseif ($percentage < 90) {
-            $colour = '#ffd400'; // Filling up - yelloworange
-        } else {
-            $colour = '#DD0000'; // Full - red
-        }
-
-        // This is used for the table width: a table of only 100 pixels looks too small
-        $visual_percentage = 4 * $percentage;
-        $visual_other_percentage = 4 * $other_percentage;
-
-        $message .= get_lang('PercentageQuotaInUse').': <strong>'.$percentage.'%</strong>.<br />'.
-            get_lang('PercentageQuotaFree').': <strong>'.$other_percentage.'%</strong>.<br />';
-
-        $show_percentage = '&nbsp;'.$percentage.'%';
-        $message .= '<div style="width: 80%; text-align: center; -moz-border-radius: 5px 5px 5px 5px; border: 1px solid #aaa; background-image: url(\''.api_get_path(WEB_CODE_PATH).'css/'.api_get_visual_theme().'/images/bg-header4.png\');" class="document-quota-bar">'.
-            '<div style="width:'.$percentage.'%; background-color: #bbb; border-right:3px groove #bbb; -moz-border-radius:5px;">&nbsp;</div>'.
-            '<span style="margin-top: -15px; margin-left:-15px; position: absolute;font-weight:bold;">'.$show_percentage.'</span></div>';
-        echo $message;
-    }
-
-    /**
      * Display the document quota in a simple way
      *
      *  Here we count 1 Kilobyte = 1024 Bytes, 1 Megabyte = 1048576 Bytes
      */
-    public static function display_simple_quota($course_quota, $already_consumed_space)
+    public static function displaySimpleQuota($course_quota, $already_consumed_space)
     {
         $course_quota_m = round($course_quota / 1048576);
         $already_consumed_space_m = round($already_consumed_space / 1048576, 2);
@@ -3518,7 +3279,6 @@ class DocumentManager
                 }
 
                 $folderId = (int) $folderId;
-
                 $folderCondition = " AND
                     docs.id <> $folderId AND
                     docs.path LIKE '".$cleanedPath."/%'
@@ -4856,7 +4616,7 @@ class DocumentManager
 
     /**
      * Generate a default certificate for a courses
-     *
+     * @todo move to certificate lib
      * @global string $css CSS directory
      * @global string $img_dir image directory
      * @global string $default_course_dir Course directory
@@ -6299,7 +6059,7 @@ class DocumentManager
 
     /**
      * Checks whether the user is into any user shared folder
-     * @param string $curdirpath
+     * @param string $path
      * @param int $current_session_id
      * @return bool Return true when user is in any user shared folder
      */

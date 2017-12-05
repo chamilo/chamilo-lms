@@ -167,7 +167,6 @@ if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['
     unlink($temp_zip_file);
     unlink($temp_xml_file);
     rmdir($temp_zip_dir);
-    //DocumentManager::string_send_for_download($export,true,'qti2export_q'.$_GET['questionId'].'.xml');
     exit; //otherwise following clicks may become buggy
 }
 

@@ -317,8 +317,7 @@ class SurveyUtil
 
         // Actions bar
         echo '<div class="actions">';
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq()
-            .'">'.
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ReportingOverview'), '', ICON_SIZE_MEDIUM)
             .'</a>';
         if (isset($_GET['user'])) {
@@ -851,7 +850,7 @@ class SurveyUtil
 
         // Actions bar
         echo '<div class="actions">';
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'">'
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'
             .Display::return_icon(
                 'back.png',
                 get_lang('BackTo').' '.get_lang('ReportingOverview'),

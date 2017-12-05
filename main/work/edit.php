@@ -273,7 +273,7 @@ if ($form->validate()) {
         Security::clear_token();
     } else {
         // Bad token or can't add works
-        Display::addFlash(Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error'));
+        Display::addFlash(Display::return_message(get_lang('ImpossibleToSaveTheDocument'), 'error'));
     }
 
     $script = 'work_list.php';

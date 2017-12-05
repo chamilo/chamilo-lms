@@ -90,7 +90,7 @@ Chamilo es fundamentalmente un LMS que se ejecuta con:
 </p>
 <ul>
     <li><span style="font-weight: bold;">Apache 2.2+</span></li>
-    <li><span style="font-weight: bold;">MySQL 5.1+ o MariaDB 5+</span></li>
+    <li><span style="font-weight: bold;">MySQL 5.6+ o MariaDB 5+</span></li>
     <li><span style="font-weight: bold;">PHP 5.5+ (7.1 recomendado)</span></li>
 </ul>
 <p>
@@ -726,15 +726,28 @@ por ejemplo. El efecto debería ser inmediato.
   charset utf-8;
 
   location @rewrite{
+    rewrite ^certificates/$ certificates/index.php last;
+    rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
+    rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
     # Alternatively, you can choose to give direct access to all SCORM files, which is much faster but less secure
     # rewrite "^/courses/([^/]+)/scorm/(.*)$" /app/courses/$1/scorm/$2 break;
+
     rewrite "^/courses/([^/]+)/document/certificates/(.*)$" /app/courses/$1/document/certificates/$2 last;
     rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
+    rewrite ^/courses/([^/]+)/upload/([^/]+)/(.*)$ /main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 last;
     rewrite ^/courses/([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 last;
-    rewrite ^/courses/([^/]+)/upload/(.*)$ /app/courses/$1/upload/$2 last;
-    rewrite ^/main/upload/users/(.*)/(.*)/my_files/(.*)$ /app/upload/users/$1/$2/my_files/$3 last;
-    try_files $uri /index.php;
+    rewrite ^/courses/([^/]+)/(.*)$ /app/courses/$1/$2 last;
+    rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
+    rewrite ^/badge/(\d+) /main/badge/issued.php?issue=$1 last;
+    rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
+    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
+    rewrite ^/main/exercice/(.*)$ /main/exercise/$1 last;
+    rewrite ^/main/newscorm/(.*)$ /main/lp/$1 last;
+    rewrite ^/service/(\d+)$ /plugin/buycourses/src/service_information.php?service_id=$1 last;
+    rewrite "^/main/upload/users/(.*)/(.*)/my_files/(.*)$" /app/upload/users/$1/$2/my_files/$3 last;
+
+    try_files $uri /index.php$is_args$args;
     break;
   }
 

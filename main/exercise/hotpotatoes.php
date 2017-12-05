@@ -27,7 +27,7 @@ if (api_is_in_gradebook()) {
 }
 // The breadcrumbs.
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH).'.exercise/exercise.php?'.api_get_cidreq(),
+    'url' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq(),
     'name' => get_lang('Exercises')
 );
 

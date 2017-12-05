@@ -73,6 +73,7 @@ if (isset($_POST['save_audio'])) {
     //Updating the lp.modified_on
     $_SESSION['oLP']->set_modified_on();
 
+    $lp_items_to_remove_audio = [];
     // Deleting the audio fragments.
     foreach ($_POST as $key => $value) {
         if (substr($key, 0, 9) == 'removemp3') {

@@ -1742,7 +1742,9 @@ class IndexManager
                                                 $session_id,
                                                 'session_course_item'
                                             );
-                                            $html_courses_session[] = $c[1];
+                                            if (isset($c[1])) {
+                                                $html_courses_session[] = $c[1];
+                                            }
                                         }
                                         $count_courses_session++;
                                         $count++;
@@ -1775,10 +1777,10 @@ class IndexManager
                                     }
 
                                     $this->tpl->assign('session', $sessionParams);
-
                                     if ($viewGridCourses) {
+                                        // Ofaj
                                         $html_sessions .= $this->tpl->fetch(
-                                            $this->tpl->get_template('/user_portal/grid_session.tpl')
+                                            $this->tpl->get_template('user_portal/grid_session_category.tpl')
                                         );
                                     } else {
                                         $html_sessions .= $this->tpl->fetch(
@@ -1796,7 +1798,8 @@ class IndexManager
                                 'title' => $session_category['session_category']['name'],
                                 'show_actions' => api_is_platform_admin(),
                                 'subtitle' => '',
-                                'sessions' => $html_sessions
+                                // Ofaj
+                                'sessions' => '<div class="grid-courses"><div class="row">'.$html_sessions.'</div></div>'
                             );
 
                             $session_category_start_date = $session_category['session_category']['date_start'];

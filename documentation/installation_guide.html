@@ -107,8 +107,7 @@ only a specific database. Please refer to the MySQL or MariaDB documentation in 
     before creating it again. This is explained in some detail in <a href="https://github.com/chamilo/chamilo-lms/issues/2172">this issue report</a></span><br />
 
 <h3><span style="font-weight: bold;">Apache's redirects</span></h3>
-    <p>
-        Since version 1.10, Chamilo requires the web server to be able to deal with redirects. This is now very common within web platforms (be them CMS, LMS, ERP, etc) and allows them, between other things, to use URLs in an efficient and user-friendly manner.<br />
+    Since version 1.10, Chamilo requires the web server to be able to deal with redirects. This is now very common within web platforms (be them CMS, LMS, ERP, etc) and allows them, between other things, to use URLs in an efficient and user-friendly manner.<br />
         If you don't use Apache as a web server, go to section "Rewrite configurations" at the end of this document.<br />
         If you do use Apache, configuring redirects is done in two small steps:
     <ul>
@@ -141,7 +140,6 @@ only a specific database. Please refer to the MySQL or MariaDB documentation in 
     </pre>
     <br />
     Once configured (and maybe this has already been done by your hosting provider), you can simply restart the web server to enable the change.
-    </p>
 
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Installation of Chamilo LMS</span></h2>
@@ -562,14 +560,13 @@ that criteria</li>
     <li>mail is used as the email field in Chamilo</li>
 </ul>
 
-
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="9._WIRIS_mathematical_formulas"></a>Mathematical formulas with WIRIS</h2>
+<h2><a name="9._WIRIS_mathematical_formulas"></a>7. Mathematical formulas with WIRIS</h2>
 <p>Installing this plugin you get WIRIS editor and WIRIS CAS. <br/>
 This activation will not be completed unless you have previously downloaded the <a href="http://www.wiris.com/plugins/ckeditor/download" target="_blank">PHP plugin for CKeditor WIRIS</a> and unzipped its contents into the main/inc/lib/ckeditor/editor/plugins/ckeditor_wiris/ directory. <br/>This is necessary because Wiris is proprietary software and its services are <a href="http://www.wiris.com/store/who-pays" target="_blank">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by configuration.ini.default Chamilo file.</p>
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="10._Xapian_fulltext_indexing"></a>Full-text indexation with Xapian</h2>
+<h2><a name="10._Xapian_fulltext_indexing"></a>8. Full-text indexation with Xapian</h2>
 <p>
 <em>Note</em>: This step will require a dedicated server or a virtual dedicated server as the packages involved are not available on most shared hosting solutions.<br />
 On Debian or Ubuntu 10.04 and superior, you will simply need to install the php5-xapian package and restart your web server:
@@ -577,7 +574,7 @@ On Debian or Ubuntu 10.04 and superior, you will simply need to install the php5
 sudo apt-get install php5-xapian
 sudo /etc/init.d/apache2 restart
 </pre>
-
+<p>
 Then go to your administration page -&gt; Configuration settings -&gt; Search
 and enable the search tool. Follow the recommendations on the page to get the
 complete indexing suite installed. Once you're done, all documents you import
@@ -588,7 +585,7 @@ Note: Xapian's licensing for the PHP extension is a bit different than what is n
 </p>
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="11._Chamilo_rapid_ppt_conversion"></a>Chamilo Rapid - PPT conversion system</h2>
+<h2><a name="11._Chamilo_rapid_ppt_conversion"></a>9. Chamilo Rapid - PPT conversion system</h2>
 <p>
 <em>Note</em>: This step will require a dedicated server or a virtual dedicated server as the packages involved are not available on most shared hosting solutions.<br />
 On Debian or Ubuntu 11.10 and superior, install LibreOffice v3 (or v4) and start it as a headless server:
@@ -609,10 +606,9 @@ sudo screen -r
 You can then go to your administration page -&gt; <i>Chamilo Rapid</i> and set the host to "localhost" and the port to "2002". Save. Go to your course, learning path tool and see the new icon appeared. Import your PPT. This should work.
 <em>Note</em>: Sometimes, this doesn't work out so easily. You can probably ask for the assistance of any system administrator around with a bit of Java and PHP experience, or you can always ask one of the Chamilo's Official Providers for assistance (ask for a guaranteed commercial contract). The above is *not* meant for production servers with a high load. You should get a real system administrator to look at it and develop init scripts, in a way that makes monitoring and relaunching feasable. If any sysadmin wants to contribute this, feel free to contribute it to Chamilo: send us an e-mail at info@chamilo.org.
 <em>Note</em>: If you use LibreOffice 4, please note that version 4.2 (available in Ubuntu 14.04) has demonstrated to be more successfull at converting documents than version 4.1, which tended to crash when sending a document for conversion.
-</p>
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="12._Setting_cron_up"></a>Setting chronological tasks</h2>
+<h2><a name="12._Setting_cron_up"></a>10. Setting chronological tasks</h2>
 <p>
 Since Chamilo 1.8.8, a few tasks need to be executed regularly in order to get
 the best out of your server resources. One of such tasks (and the only one
@@ -623,7 +619,7 @@ sent immediately, then you might not have the chance to receive them at your
 pace, once a day or even once a week. For cases like this you, as a Chamilo
 administrator, should setup a cron process on the server to check the queue of
 e-mails and send is timely.</p>
-<p>
+
 Setting up a cron task is easy and there are several ways to do it. We recommend
 you have a look at the <a href="http://drupal.org/cron">Drupal documentation
 for setting up cron</a> and define your own cron process as:
@@ -632,11 +628,10 @@ for setting up cron</a> and define your own cron process as:
 </pre>
 Make sure you have a look into run.php as maybe you want to change a few
 settings there.
-</p>
+
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="13._Changing_language_names_order"></a>Changing the language's firstname/lastname order</h2>
-<p>
+<h2><a name="13._Changing_language_names_order"></a>11. Changing the language's firstname/lastname order</h2>
 As Chamilo becomes more popular and crosses many borders now, it frequently happens that administrators want to re-order the firstname and lastname fields in tables, and also on which field it is sorted first.<br/><br />
 This can easily be modified by editing the app/config/configuration.php file, finding the following section, uncommenting the PHP lines and adapting it to your language:<br />
 <pre>// Custom name_order_conventions
@@ -651,12 +646,11 @@ $_configuration['name_order_conventions'] = array(
 </pre>
 <br />
 for example. The effect should be immediate.
-</p>
+<br />
 Please note that, although Chamilo allows you to define its position, the "title" field does not exist at this time, so no need to worry about it.
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="14._Improving_files_download"></a>Improving files download efficiency</h2>
-<p>
+<h2><a name="14._Improving_files_download"></a>12. Improving files download efficiency</h2>
 File download can be very slow when passing through a PHP script to control permissions. One solution to this
     is to use the X-Sendfile header, which depends on a module on the webserver. <a href="http://stackoverflow.com/a/3731639/1406662">Check http://stackoverflow.com/a/3731639/1406662 for more details on implementing Sendfile</a>.
 Chamilo LMS 1.9.8 (and following versions) supports the X-Sendfile headers, but requires a specific line of configuration to be
@@ -665,9 +659,8 @@ Chamilo LMS 1.9.8 (and following versions) supports the X-Sendfile headers, but 
 $_configuration['enable_x_sendfile_headers'] = true;
 </pre>
 If you have issues with files taking a long time to download, make sure you reconfigure your webserver and add this line. You should see an notable difference in download time.
-</p>
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="15._Videoconference"></a>Videoconference</h2>
+<h2><a name="15._Videoconference"></a>13. Videoconference</h2>
 <p>
   Chamilo supports the connection to two different videoconference servers: BigBlueButton (versions 0.81, 0.9 and 1.0) and OpenMeetings.<br />
   While BigBlueButton seem easier to install, more clearly documented and more
@@ -683,7 +676,7 @@ If you have issues with files taking a long time to download, make sure you reco
   This should make an additional "Videoconference" tool icon appear in every course.<br />
 </p>
 <hr style="width: 100%; height: 2px;" />
-    <h2><a name="16._Rewrite"></a>Rewrite</h2>
+    <h2><a name="16._Rewrite"></a>14. Rewrite</h2>
     <p>
     Chamilo LMS 1.10 is the first version to require the web server to allow redirections of requests (and so 1.11 does as well).<br />
     For Apache, this is done through enabling the Rewrite module and either allowing overrides (through .htaccess) or adding a specific configuration section to the VirtualHost defined for Apache.<br />
@@ -693,7 +686,6 @@ If you have issues with files taking a long time to download, make sure you reco
         given .htaccess files are interpreted on *every* request, while a configuration block in your VirtualHost
         section is compiled at configuration reload time.
     <h3>Apache + .htaccess</h3>
-    <p>
         To enable .htaccess on Apache, you just need to check 1 thing: In a &lt;Directory&gt; block of the root folder of Chamilo, ensure the following lines are present:
         <pre>
     &lt;Directory /&gt;
@@ -709,7 +701,6 @@ If you have issues with files taking a long time to download, make sure you reco
         Require all granted
     &lt;/Directory&gt;
     </pre>
-    </p>
     <h3>Apache RewriteRules</h3>
     <pre>
   &lt;LocationMatch "/.git*"&gt;
@@ -824,7 +815,7 @@ If you have issues with files taking a long time to download, make sure you reco
   }
     </pre>
     <h3>Apple on OS X servers</h3>
-    <p>
+    <div>
         Scott Steven reports that Apache on OS X requires specific actions<br />
         <ul>
             <li>First, make sure you have the .htaccess file present at the root of your Chamilo folder</li>
@@ -835,10 +826,10 @@ If you have issues with files taking a long time to download, make sure you reco
         /Library/Server/Web/Settings to update it manually.<br />
         You cannot, however, only allow .htaccess files in the main httpd.conf file, as OS X will override it with the
         domain-specific configuration file.
-    </p>
+    </div>
 
-    <h2><a name="17._Git_Upgrade"></a>Upgrading from Git</h2>
-    <p>If you have sufficient experience with Git and have installed your initial Chamilo portal
+    <h2><a name="17._Git_Upgrade"></a>15. Upgrading from Git</h2>
+    If you have sufficient experience with Git and have installed your initial Chamilo portal
         from the Git version, you might want to upgrade from 1.9.x to 1.11.x using Git directly.<br />
     Here are a few tips that might help you:<br />
     <ul>
@@ -851,7 +842,7 @@ If you have issues with files taking a long time to download, make sure you reco
     <li>Update composer: "composer update" (you might need to give a Github token here)</li>
     <li>Change permissions on folders app, web, main/lang and main/default_course_document/images</li>
     <li>Go to your portal install page (main/install/) and follow the upgrade procedure</li>
-</ul></p>
+</ul>
 <p>
   <br />
   <br />

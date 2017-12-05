@@ -1,6 +1,4 @@
 {% if not courses is empty %}
-    <h4>{{ 'Mytools' | get_lang }}</h4>
-    <hr />
     <div class="grid-courses">
         <div class="row">
             {% for item in courses %}

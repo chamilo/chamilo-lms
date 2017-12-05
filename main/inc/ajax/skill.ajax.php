@@ -10,7 +10,7 @@ $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 
 api_block_anonymous_users();
 
-Skill::isAllow(api_get_user_id());
+Skill::isAllowed(api_get_user_id());
 
 $skill = new Skill();
 $gradebook = new Gradebook();

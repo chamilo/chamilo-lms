@@ -14,7 +14,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script();
-Skill::isAllow();
+Skill::isAllowed();
 
 $this_section = SECTION_PLATFORM_ADMIN;
 

@@ -20,7 +20,7 @@ if (!$userId || !$skillId) {
     api_not_allowed(true);
 }
 
-Skill::isAllow($userId);
+Skill::isAllowed($userId);
 
 $em = Database::getManager();
 $user = $em->find('ChamiloUserBundle:User', $userId);

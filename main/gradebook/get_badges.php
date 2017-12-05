@@ -15,7 +15,7 @@ if (empty($userId)) {
     api_not_allowed(true);
 }
 
-Skill::isAllow($userId);
+Skill::isAllowed($userId);
 
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();

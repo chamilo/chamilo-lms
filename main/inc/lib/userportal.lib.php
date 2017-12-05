@@ -395,7 +395,7 @@ class IndexManager
             ];
         }
 
-        if (Skill::isAllow(0, false)) {
+        if (Skill::isAllowed(0, false)) {
             $items[] = [
                 'icon' => Display::return_icon('skill-badges.png', get_lang('MySkills')),
                 'link' => api_get_path(WEB_CODE_PATH).'social/my_skills_report.php',
@@ -1395,7 +1395,9 @@ class IndexManager
                     );
                 }
                 $this->tpl->assign('courses', $specialCourses);
-                $specialCourseList = $this->tpl->fetch(
+                // Ofaj
+                $specialCourseList = '<h4>'.get_lang('Mytools').'</h4><hr />';
+                $specialCourseList .= $this->tpl->fetch(
                     $this->tpl->get_template($coursesWithoutCategoryTemplate)
                 );
                 $courseCompleteList = array_merge($courseCompleteList, $specialCourses);
@@ -1426,6 +1428,8 @@ class IndexManager
                 $this->tpl->assign('categories', $courses['in_category']);
 
                 $listCourse = $this->tpl->fetch($this->tpl->get_template($coursesWithCategoryTemplate));
+                // ofaj
+                $listCourse .= '<h4>'.get_lang('MyCourses').'</h4><hr />';
                 $listCourse .= $this->tpl->fetch($this->tpl->get_template($coursesWithoutCategoryTemplate));
             }
 
@@ -1742,7 +1746,9 @@ class IndexManager
                                                 $session_id,
                                                 'session_course_item'
                                             );
-                                            $html_courses_session[] = $c[1];
+                                            if (isset($c[1])) {
+                                                $html_courses_session[] = $c[1];
+                                            }
                                         }
                                         $count_courses_session++;
                                         $count++;
@@ -1766,6 +1772,17 @@ class IndexManager
                                     $sessionParams[0]['is_old'] = $markAsOld;
                                     $sessionParams[0]['is_future'] = $markAsFuture;
 
+                                    $actions = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session_id;
+                                    // Ofaj fix see BT#12325 1 session has 1 course
+                                    $firstCourse = current($session['courses']);
+                                    if ($firstCourse && isset($firstCourse)) {
+                                        $firstCourseInfo = api_get_course_info_by_id($firstCourse['real_id']);
+                                        if ($firstCourseInfo) {
+                                            $actions = $firstCourseInfo['course_public_url'].'?id_session='.$session_id;
+                                        }
+                                    }
+
+                                    $sessionParams[0]['edit_actions'] = $actions;
                                     if ($showSimpleSessionInfo) {
                                         $sessionParams[0]['subtitle'] = self::getSimpleSessionDetails(
                                             $session_box['coach'],
@@ -1773,12 +1790,11 @@ class IndexManager
                                             isset($session_box['duration']) ? $session_box['duration'] : null
                                         );
                                     }
-
                                     $this->tpl->assign('session', $sessionParams);
-
                                     if ($viewGridCourses) {
+                                        // Ofaj
                                         $html_sessions .= $this->tpl->fetch(
-                                            $this->tpl->get_template('/user_portal/grid_session.tpl')
+                                            $this->tpl->get_template('user_portal/grid_session_category.tpl')
                                         );
                                     } else {
                                         $html_sessions .= $this->tpl->fetch(
@@ -1796,7 +1812,8 @@ class IndexManager
                                 'title' => $session_category['session_category']['name'],
                                 'show_actions' => api_is_platform_admin(),
                                 'subtitle' => '',
-                                'sessions' => $html_sessions
+                                // Ofaj
+                                'sessions' => '<div class="grid-courses"><div class="row">'.$html_sessions.'</div></div>'
                             );
 
                             $session_category_start_date = $session_category['session_category']['date_start'];

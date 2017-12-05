@@ -16,9 +16,7 @@
 User-Agent: *
 
 # Directories
-# ofaj
 
-Disallow: /
 Disallow: /app/
 Disallow: /bin/
 Disallow: /documentation/

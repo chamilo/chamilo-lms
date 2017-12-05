@@ -21,7 +21,7 @@ if (empty($userId)) {
     api_not_allowed(true);
 }
 
-SkillManager::isAllow($userId);
+SkillManager::isAllowed($userId);
 
 $user = api_get_user_entity($userId);
 
@@ -36,13 +36,13 @@ $skillRelSkill = $entityManager->getRepository('ChamiloCoreBundle:SkillRelSkill'
 $skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
 $skillUserRepo = $entityManager->getRepository('ChamiloCoreBundle:SkillRelUser');
 
-$levels = api_get_configuration_value('skill_levels_names');
+$skillLevels = api_get_configuration_value('skill_levels_names');
 
 $skillsOptions = ['' => get_lang('Select')];
 $acquiredLevel = [];
 $formDefaultValues = [];
 
-if (empty($levels)) {
+if (empty($skillLevels)) {
     $skills = $skillRepo->findBy([
         'status' => Skill::STATUS_ENABLED,
     ]);
@@ -134,9 +134,9 @@ $form->addHeader(get_lang('AssignSkill'));
 $form->addText('user_name', get_lang('UserName'), false);
 
 $levelName = get_lang('Skill');
-if (!empty($levels)) {
-    if (isset($levels['levels'][1])) {
-        $levelName = get_lang($levels['levels'][1]);
+if (!empty($skillLevels)) {
+    if (isset($skillLevels['levels'][1])) {
+        $levelName = get_lang($skillLevels['levels'][1]);
     }
 }
 
@@ -168,9 +168,9 @@ if (!empty($skillIdFromGet)) {
         }
 
         $levelName = get_lang('SubSkill');
-        if (!empty($levels)) {
-            if (isset($levels['levels'][$counter + 2])) {
-                $levelName = get_lang($levels['levels'][$counter + 2]);
+        if (!empty($skillLevels)) {
+            if (isset($skillLevels['levels'][$counter + 2])) {
+                $levelName = get_lang($skillLevels['levels'][$counter + 2]);
             }
         }
 

@@ -16,15 +16,17 @@
 User-Agent: *
 
 # Directories
-Disallow: /app/cache/
-Disallow: /app/logs/
-Disallow: /app/upload/
-Disallow: /app/courses/
+# ofaj
+
+Disallow: /
+Disallow: /app/
+Disallow: /bin/
 Disallow: /documentation/
 Disallow: /home/
 Disallow: /main/
 Disallow: /plugin/
 Disallow: /tests/
+Disallow: /vendor/
 
 # Files
 Disallow: /license.txt

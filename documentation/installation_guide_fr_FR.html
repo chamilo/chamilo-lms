@@ -123,7 +123,7 @@
 
             <h3><span style="font-weight: bold;">Serveurs de base de données MySQL ou MariaDB</span></h3>
 
-            Vous aurez besoin d'un login et d'un mot de passe pour gérer et créer une base
+            Vous aurez besoin d'un login et d'un mot de passe pour gérer et <em>supprimer+créer</em> une base
             de données. Généralement, la configuration par défaut sur des ordinateurs
             locaux est de permettre la connexion comme utilisateur root avec un mot de passe
             vide. Il est FORTEMENT RECOMMANDÉ de modifier le mot de passe et de définir un
@@ -135,9 +135,14 @@
                 Les versions de Chamilo antérieures à la 1.9.0 nécessitaient de choisir entre une installation sur plusieurs bases
                 et une installation obsolète sur une seule base. Ca a été clarifié et simplifié par l'usage d'une seule base de données.
             </span><br />
+            <span class="text-muted">Si vous ne disposez pas des permissions de suppression+création de la base de
+                données choisie, Chamilo ne pourra pas terminer l'installation car, pour éviter tout déchêt d'une
+                version antérieure de Chamilo ou d'un autre système, nous supprimons d'abord la base de données avant
+                de la recréer. C'est expliqué dans <a href="https://github.com/chamilo/chamilo-lms/issues/2172">un peu plus de détail dans cette demande</a></span><br />
+
 
             <h3><span style="font-weight: bold;">Redirections d'Apache</span></h3>
-            <p>
+            <div>
                 Depuis sa version 1.10, Chamilo exige que le serveur web puisse gérer les redirections. Il s'agit d'un pré-requis très commun de nos jours pour les applications web (autant CMS que LMS, ERP, etc) qui permet, entre autres, l'utilisation intelligente et user-friendly des URLs.<br />
                 Si vous utilisez un autre serveur web qu'Apache, dirigez-vous à la section "Configuration de la réécriture" en fin de ce document.<br />
                 Si vous utilisez Apache, la configuration des redirections se fait en deux étapes simples:
@@ -171,7 +176,7 @@
     </pre>
             <br />
             Une fois configurée cette partie (qui est peut-être déjà mise en place par votre fournisseur d'hébergement), il suffit de redémarrer le serveur web pour activer la modification.
-            </p>
+            </div>
 
             <hr style="width: 100%; height: 2px;" />
             <h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Installation de Chamilo LMS</span></h2>
@@ -291,7 +296,7 @@
                 <li>Editez le fichier php.ini (sous Windows, il devrait se trouver dans
                     <span style="font-weight: bold;">C:\xampp\php\php.ini</span>,
                     et sous Debian ou Ubuntu (Linux) :
-                    <span syle="font-weight: bold;">/etc/php5/apache2/php.ini</span></li>
+                    <span style="font-weight: bold;">/etc/php5/apache2/php.ini</span></li>
                 <li>cherchez les mots contenant "_max" et augmentez les deux valeurs pour optimiser le serveur</li>
                 <li>nous recommandons les valeurs suivantes : </li>
             </ul>
@@ -626,7 +631,7 @@
 
             <hr style="width: 100%; height: 2px;" />
             <h2><a name="10._Xapian_fulltext_indexing"></a>Indexation full-text avec Xapian</h2>
-            <p>
+            <div>
                 <em>Note</em>: This step will require a dedicated server or a virtual dedicated server as the packages involved are not available on most shared hosting solutions.<br />
                 On Debian or Ubuntu 10.04 and superior, you will simply need to install the php5-xapian package and restart your web server:
             <pre>
@@ -640,14 +645,14 @@ sudo /etc/init.d/apache2 restart
             into your Chamilo portal in a recognized format will be indexed and searchable.
             Chamilo Administrators training (which you can ask any <a href="http://www.chamilo.org/en/providers">Chamilo's Official
                 Provider</a> for) include a full review of the full-text search feature.
-        </p>
+        </div>
         <p class="text-muted">
             Note: Xapian's licensing for the PHP extension is a bit different than what is necessary to enter the Debian repositories, so it has been excluded. You can, however, generate your own package by following the <a href="http://trac.xapian.org/wiki/FAQ/PHP%20Bindings%20Package">packaging instructions on Xapian's wiki</a>.
         </p>
 
         <hr style="width: 100%; height: 2px;" />
         <h2><a name="11._Chamilo_rapid_ppt_conversion"></a>Chamilo Rapide - Conversion de PPT</h2>
-        <p>
+        <div>
             <em>Note</em>: This step will require a dedicated server or a virtual dedicated server as the packages involved are not available on most shared hosting solutions.<br />
             On Debian or Ubuntu 11.10 and superior, install LibreOffice.org v3 and start it as a headless server:
         <pre>
@@ -656,7 +661,7 @@ sudo soffice -accept="socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" -headle
         </pre>
         Then go to your administration page -&gt; <i>Chamilo Rapid</i> and set the host to "localhost" and the port to "2002". Save. Go to your course, learning path tool and see the new icon appeared. Import your PPT. This should work.
         <em>Note</em>: Sometimes, this doesn't work out so easily. You can probably ask for the assistance of any system administrator around with a bit of Java and PHP experience, or you can always ask one of the Chamilo's Official Providers for assistance (ask for a guaranteed commercial contract).
-    </p>
+    </div>
 
     <hr style="width: 100%; height: 2px;" />
     <h2><a name="12._Setting_cron_up"></a>Configurer les tâches chronologiques</h2>
@@ -670,7 +675,7 @@ sudo soffice -accept="socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" -headle
         pace, once a day or even once a week. For cases like this you, as a Chamilo
         administrator, should setup a cron process on the server to check the queue of
         e-mails and send is timely.</p>
-    <p>
+    <div>
         Setting up a cron task is easy and there are several ways to do it. We recommend
         you have a look at the <a href="http://drupal.org/cron">Drupal documentation
             for setting up cron</a> and define your own cron process as:
@@ -679,11 +684,11 @@ sudo soffice -accept="socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" -headle
     </pre>
     Make sure you have a look into run.php as maybe you want to change a few
     settings there.
-</p>
+</div>
 
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="13._Changing_language_names_order"></a>Changer l'ordre nom/prénom des langues</h2>
-<p>
+<div>
     As Chamilo becomes more popular and crosses many borders now, it frequently happens that administrators want to re-order the firstname and lastname fields in tables, and also on which field it is sorted first.<br/><br />
     This can easily be modified by editing the app/config/configuration.php file, finding the following section, uncommenting the PHP lines and adapting it to your language:<br />
 <pre>// Custom name_order_conventions
@@ -696,11 +701,11 @@ $_configuration['name_order_conventions'] = array(
  'french' => array('format' => 'first_name last_name', 'sort_by' => 'last_name')
 );</pre><br />
 for example. The effect should be immediate.
-</p>
+</div>
 Please note that, although Chamilo allows you to define its position, the "title" field does not exist at this time, so no need to worry about it.
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="14._Improving_files_download"></a>Améliorer la performance des téléchargements de fichiers</h2>
-<p>
+<div>
     File download can be very slow when passing through a PHP script to control permissions. One solution to this
     is to use the X-Sendfile header, which depends on a module on the webserver. <a href="http://stackoverflow.com/a/3731639/1406662">Check http://stackoverflow.com/a/3731639/1406662 for more details on implementing Sendfile</a>.
     Chamilo LMS 1.9.8 (and following versions) supports the X-Sendfile headers, but requires a specific line of configuration to be
@@ -709,7 +714,7 @@ Please note that, although Chamilo allows you to define its position, the "title
 $_configuration['enable_x_sendfile_headers'] = true;
 </pre>
 If you have issues with files taking a long time to download, make sure you reconfigure your webserver and add this line. You should see an notable difference in download time.
-</p>
+</div>
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="15._Videoconference"></a>Vidéo-conférence</h2>
 <p>
@@ -737,7 +742,7 @@ If you have issues with files taking a long time to download, make sure you reco
     car les fichiers .htaccess sont interprêtés à *chaque* requête, alors qu'une section de configuration supplémentaire dans le Virtual Host
     est compilée uniquement lors du chargement du serveur.
 <h3>Apache + .htaccess</h3>
-<p>
+<div>
     Pour activer le .htaccess dans Apache, vous devez juste vérifier une chose : dans un tag &lt;Directory&gt; du dossier racine de Chamilo, vérifiez que les lignes suivantes sont présentes :
 <pre>
         AllowOverride All
@@ -749,7 +754,7 @@ ou, si vous travaillez avec Apache 2.4, la syntaxe est légèrement différente 
         AllowOverride All
         Require all granted
 </pre>
-</p>
+</div>
 <h3>Apache RewriteRules</h3>
 <pre>
   &lt;LocationMatch "/.git*"&gt;

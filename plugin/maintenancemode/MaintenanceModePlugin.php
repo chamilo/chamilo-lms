@@ -7,7 +7,7 @@
 class MaintenanceModePlugin extends Plugin
 {
     /**
-     * @return EditHtaccessPlugin
+     * @return $this
      */
     public static function create()
     {
@@ -16,9 +16,9 @@ class MaintenanceModePlugin extends Plugin
     }
 
     /**
-     *
+     * MaintenanceModePlugin constructor.
      */
-    protected function __construct()
+    public function __construct()
     {
         parent::__construct(
             '0.1',

@@ -1395,7 +1395,9 @@ class IndexManager
                     );
                 }
                 $this->tpl->assign('courses', $specialCourses);
-                $specialCourseList = $this->tpl->fetch(
+                // Ofaj
+                $specialCourseList = '<h4>'.get_lang('Mytools').'</h4><hr />';
+                $specialCourseList .= $this->tpl->fetch(
                     $this->tpl->get_template($coursesWithoutCategoryTemplate)
                 );
                 $courseCompleteList = array_merge($courseCompleteList, $specialCourses);
@@ -1426,6 +1428,8 @@ class IndexManager
                 $this->tpl->assign('categories', $courses['in_category']);
 
                 $listCourse = $this->tpl->fetch($this->tpl->get_template($coursesWithCategoryTemplate));
+                // ofaj
+                $listCourse .= '<h4>'.get_lang('MyCourses').'</h4><hr />';
                 $listCourse .= $this->tpl->fetch($this->tpl->get_template($coursesWithoutCategoryTemplate));
             }
 

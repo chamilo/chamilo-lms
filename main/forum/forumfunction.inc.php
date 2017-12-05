@@ -2486,7 +2486,7 @@ function updateThread($values)
     // Simple update + set gradebook values to null
     $params = [
         'thread_title' => $values['thread_title'],
-        'thread_sticky' => isset($values['thread_sticky'])
+        'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : 0
     ];
     $where = ['c_id = ? AND thread_id = ?' => [$courseId, $values['thread_id']]];
     Database::update($threadTable, $params, $where);
@@ -3010,9 +3010,9 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
     if (!empty($form_values)) {
         $defaults['post_title'] = prepare4display($form_values['post_title']);
         $defaults['post_text'] = prepare4display($form_values['post_text']);
-        $defaults['post_notification'] = strval(intval($form_values['post_notification']));
-        $defaults['thread_sticky'] = strval(intval($form_values['thread_sticky']));
-        $defaults['thread_peer_qualify'] = intval($form_values['thread_peer_qualify']);
+        $defaults['post_notification'] = (int) $form_values['post_notification'];
+        $defaults['thread_sticky'] = (int) $form_values['thread_sticky'];
+        $defaults['thread_peer_qualify'] = (int) $form_values['thread_peer_qualify'];
     } else {
         $defaults['thread_peer_qualify'] = 0;
     }
@@ -3722,7 +3722,7 @@ function store_edit_post($forumInfo, $values)
         // Simple edit
         $params = [
             'thread_title' => $values['post_title'],
-            'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : null,
+            'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : 0,
         ];
         $where = ['c_id = ? AND thread_id = ?' => [$course_id, $values['thread_id']]];
         Database::update($threadTable, $params, $where);

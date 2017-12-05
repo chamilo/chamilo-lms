@@ -718,6 +718,41 @@ class Skill extends Model
     }
 
     /**
+     * @param $skills
+     * @param string $imageSize
+     * @param string $style
+     * @return string
+     */
+    public function processSkillListSimple($skills, $imageSize = '', $style = '')
+    {
+        if (empty($skills)) {
+            return '';
+        }
+
+        if (empty($imageSize)) {
+            $imageSize = 'img_small';
+        } else {
+            $imageSize = "img_$imageSize";
+        }
+
+        $html = '';
+        foreach ($skills as $skill) {
+            if (isset($skill['data'])) {
+                $skill = $skill['data'];
+            }
+            $item = $skill[$imageSize];
+            $item .= $skill['name'];
+            if (isset($skill['url'])) {
+                $html .= Display::url($item, $skill['url'], ['target' => '_blank', 'style' => $style]);
+            } else {
+                $html .= Display::url($item, '#', ['target' => '_blank', 'style' => $style]);
+            }
+        }
+
+        return $html;
+    }
+
+    /**
      * @param int $id
      * @return array
      */
@@ -1109,17 +1144,17 @@ class Skill extends Model
             $sessionCondition = " AND course_id = $sessionId ";
         }
 
-        $sql = 'SELECT DISTINCT 
-                    s.id, 
+        $sql = 'SELECT DISTINCT
+                    s.id,
                     s.name,
-                    s.icon, 
-                    u.id as issue, 
-                    u.acquired_skill_at, 
+                    s.icon,
+                    u.id as issue,
+                    u.acquired_skill_at,
                     u.course_id
                 FROM '.$this->table_skill_rel_user.' u
                 INNER JOIN '.$this->table.' s
                 ON u.skill_id = s.id
-                WHERE 
+                WHERE
                     user_id = '.$userId.' '.$sessionCondition.' '.$courseCondition;
 
         $result = Database::query($sql);
@@ -1146,28 +1181,34 @@ class Skill extends Model
      */
     public function processVertex(Vertex $vertex, $skills = [])
     {
-        $subTable = '<div>';
-        foreach ($vertex->getVerticesEdgeTo() as $subVertex) {
-            $data = $subVertex->getAttribute('graphviz.data');
-            $label = $this->processSkillList([$data], 'mini', false);
+        $subTable = '';
+        if ($vertex->getVerticesEdgeTo()->count() > 0) {
+            $subTable .= '<ul>';
+            foreach ($vertex->getVerticesEdgeTo() as $subVertex) {
+                $data = $subVertex->getAttribute('graphviz.data');
 
-            $passed = in_array($data['id'], array_keys($skills));
-            $transparency = '';
-            if ($passed === false) {
-                // @todo use css class
-                $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
+                $passed = in_array($data['id'], array_keys($skills));
+                $transparency = '';
+                if ($passed === false) {
+                    // @todo use css class
+                    $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
+                }
+                $label = $this->processSkillListSimple([$data], 'mini', $transparency);
+
+                /*$subTable .= '<div style="float:left; margin-right:5px; ">';
+                $subTable .= '<div style="'.$transparency.'">';
+                $subTable .= $label;
+                $subTable .= '</div>';*/
+
+                $subTable .= '<li>'.$label;
+
+                $subTable .= $this->processVertex($subVertex, $skills);
+
+                $subTable .= '</li>';
             }
-            $subTable .= '<div style="float:left; margin-right:5px; ">';
-            $subTable .= '<div style="'.$transparency.'">';
-            $subTable .= $label;
 
-            $subTable .= '</div >';
-            $subTable .= $this->processVertex($subVertex, $skills);
-
-            $subTable .= '</div >';
+            $subTable .= '</ul>';
         }
-
-        $subTable .= '</div>';
 
         return $subTable;
     }
@@ -1177,7 +1218,7 @@ class Skill extends Model
      * @param int $courseId
      * @param int $sessionId
      *
-     * @return string
+     * @return array
      */
     public function getUserSkillsTable($userId, $courseId = 0, $sessionId = 0)
     {
@@ -1220,7 +1261,7 @@ class Skill extends Model
             $tableRows[] = $tableRow;
         }
         $allowLevels = api_get_configuration_value('skill_levels_names');
-//id="skillList"
+
         $tableResult = '<div class="table-responsive" >
                 <table class="table" >
                     <thead>
@@ -1233,7 +1274,7 @@ class Skill extends Model
 
         if (!empty($skillParents)) {
             if (empty($allowLevels)) {
-                $tableResult .= $this->processSkillList($skills);
+                $tableResult .= $this->processSkillListSimple($skills);
             } else {
                 $graph = new Graph();
                 $graph->setAttribute('graphviz.graph.rankdir', 'LR');
@@ -1270,7 +1311,6 @@ class Skill extends Model
                 /** @var Vertex $vertex */
                 foreach ($root->getVerticesEdgeTo() as $vertex) {
                     $data = $vertex->getAttribute('graphviz.data');
-                    $label = $this->processSkillList([$data], 'mini', false);
 
                     $passed = in_array($data['id'], array_keys($skills));
                     $transparency = '';
@@ -1279,13 +1319,14 @@ class Skill extends Model
                         $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
                     }
 
+                    $label = $this->processSkillListSimple([$data], 'mini', $transparency);
+
                     $table .= '<td >';
 
-                    $table .= '<div style="'.$transparency.'">';
-                    $table .= $label;
-
-                    $table .= '</div>';
+                    //$table .= '<div style="'.$transparency.'">';
+                    $table .= '<div class="organigrama"> <ul><li>'.$label;
                     $table .= $this->processVertex($vertex, $skills);
+                    $table .= '</ul></li></div>';
                     $table .= '</td>';
                 }
                 $table .= '</tr></table>';

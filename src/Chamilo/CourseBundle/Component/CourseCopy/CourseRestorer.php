@@ -1280,7 +1280,7 @@ class CourseRestorer
             $link_table = Database::get_course_table(TABLE_LINK);
             $resources = $this->course->resources;
 
-            foreach ($resources[RESOURCE_LINK] as $id => $link) {
+            foreach ($resources[RESOURCE_LINK] as $oldLinkId => $link) {
                 $cat_id = $this->restore_link_category(
                     $link->category_id,
                     $session_id
@@ -1289,7 +1289,7 @@ class CourseRestorer
                         FROM $link_table
                         WHERE
                             c_id = ".$this->destination_course_id." AND
-                            category_id='" . intval($cat_id)."'";
+                            category_id='".intval($cat_id)."'";
                 $result = Database::query($sql);
                 list($max_order) = Database::fetch_array($result);
 
@@ -1321,10 +1321,10 @@ class CourseRestorer
                         api_get_user_id()
                     );
 
-                    if (!isset($this->course->resources[RESOURCE_LINK][$id])) {
-                        $this->course->resources[RESOURCE_LINK][$id] = new stdClass();
+                    if (!isset($this->course->resources[RESOURCE_LINK][$oldLinkId])) {
+                        $this->course->resources[RESOURCE_LINK][$oldLinkId] = new stdClass();
                     }
-                    $this->course->resources[RESOURCE_LINK][$id]->destination_id = $id;
+                    $this->course->resources[RESOURCE_LINK][$oldLinkId]->destination_id = $id;
                 }
             }
         }
@@ -2151,7 +2151,7 @@ class CourseRestorer
     {
         $destinationCourseId = $this->destination_course_info['real_id'];
         // Let's restore the categories
-        $categoryOldVsNewList = array(); // used to build the quiz_question_rel_category table
+        $categoryOldVsNewList = []; // used to build the quiz_question_rel_category table
         if ($this->course->has_resources(RESOURCE_TEST_CATEGORY)) {
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_TEST_CATEGORY] as $id => $courseCopyTestCategory) {
@@ -2635,7 +2635,6 @@ class CourseRestorer
                 if ($new_lp_id) {
                     // The following only makes sense if a new LP was
                     // created in the destination course
-
                     $sql = "UPDATE $table_main SET id = iid WHERE iid = $new_lp_id";
                     Database::query($sql);
 
@@ -2684,13 +2683,13 @@ class CourseRestorer
                         $session_id
                     );
 
-                    $new_item_ids = array();
-                    $parent_item_ids = array();
-                    $previous_item_ids = array();
-                    $next_item_ids = array();
-                    $old_prerequisite = array();
-                    $old_refs = array();
-                    $prerequisite_ids = array();
+                    $new_item_ids = [];
+                    $parent_item_ids = [];
+                    $previous_item_ids = [];
+                    $next_item_ids = [];
+                    $old_prerequisite = [];
+                    $old_refs = [];
+                    $prerequisite_ids = [];
 
                     foreach ($lp->get_items() as $index => $item) {
                         // we set the ref code here and then we update in a for loop
@@ -2713,9 +2712,9 @@ class CourseRestorer
                             'lp_id' => self::DBUTF8($new_lp_id),
                             'item_type' => self::DBUTF8($item['item_type']),
                             'ref' => self::DBUTF8($ref),
+                            'path' => self::DBUTF8($path),
                             'title' => self::DBUTF8($item['title']),
                             'description' => self::DBUTF8($item['description']),
-                            'path' => self::DBUTF8($path),
                             'min_score' => self::DBUTF8($item['min_score']),
                             'max_score' => self::DBUTF8($item['max_score']),
                             'mastery_score' => self::DBUTF8($item['mastery_score']),
@@ -2807,7 +2806,7 @@ class CourseRestorer
                             $next_new_id = $new_item_ids[$next_item_old_id];
                         }
                         $sql = "UPDATE ".$table_item." SET next_item_id = '".$next_new_id."'
-                                WHERE c_id = " . $this->destination_course_id." AND id = '".$new_item_id."'";
+                                WHERE c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
                         Database::query($sql);
                     }
 
@@ -2817,7 +2816,7 @@ class CourseRestorer
                             $prerequisite_new_id = $new_item_ids[$prerequisite_old_id];
                         }
                         $sql = "UPDATE ".$table_item." SET prerequisite = '".$prerequisite_new_id."'
-                                WHERE c_id = " . $this->destination_course_id." AND id = '".$new_item_id."'";
+                                WHERE c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
                         Database::query($sql);
                     }
                     $this->course->resources[RESOURCE_LEARNPATH][$id]->destination_id = $new_lp_id;
@@ -2827,110 +2826,10 @@ class CourseRestorer
     }
 
     /**
-     * Restore works
-     * @deprecated use restore_works
-     *
-     */
-    public function restore_student_publication($sessionId = 0)
-    {
-        $sessionId = intval($sessionId);
-        $work_assignment_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-        $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-        $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-        // Query in student publication
-        $sql = 'SELECT * FROM '.$work_table.'
-                WHERE c_id = '.$this->course_origin_id.' AND filetype = "folder" AND active IN (0, 1) ';
-
-        $result = Database::query($sql);
-        $folders = Database::store_result($result, 'ASSOC');
-
-        foreach ($folders  as $folder) {
-            $old_id = $folder['id'];
-            unset($folder['id']);
-            $folder['c_id'] = $this->destination_course_id;
-            $folder['parent_id'] = 0;
-            $folder['session_id'] = $sessionId ? $sessionId : null;
-            $new_id = Database::insert($work_table, $folder);
-
-            if ($new_id) {
-                // query in item property
-                $sql = 'SELECT
-                            tool,
-                            insert_user_id,
-                            insert_date,
-                            lastedit_date,
-                            ref,
-                            lastedit_type,
-                            lastedit_user_id,
-                            to_group_id,
-                            to_user_id,
-                            visibility,
-                            start_visible,
-                            end_visible
-                        FROM '.$item_property_table.' ip
-                        INNER JOIN '.$work_table.' sp
-                        ON ip.ref=sp.id
-                        WHERE
-                            sp.c_id = '.$this->course_origin_id.' AND
-                            ip.c_id = '.$this->course_origin_id.' AND
-                            tool="work" AND sp.id = '.$old_id.'';
-
-                $result = Database::query($sql);
-                $sub_folders = Database::store_result($result, 'ASSOC');
-                foreach ($sub_folders  as $sub_folder) {
-                    $sub_folder['c_id'] = $this->destination_course_id;
-                    $sub_folder['ref'] = $new_id;
-                    $sub_folder['session_id'] = $sessionId ? $sessionId : null;
-                    $new_item_id = Database::insert($item_property_table, $sub_folder);
-                    if ($new_item_id) {
-                        $sql = "UPDATE $item_property_table SET id = iid WHERE iid = $new_item_id";
-                        Database::query($sql);
-                    }
-                }
-
-                $sql = 'SELECT 
-                          sa.id, 
-                          sa.expires_on,
-                          sa.ends_on,
-                          sa.add_to_calendar, 
-                          sa.enable_qualification, 
-                          sa.publication_id
-                        FROM '.$work_assignment_table.' sa
-                        INNER JOIN '.$work_table.' sp 
-                        ON sa.publication_id=sp.id
-                        WHERE
-                            sp.c_id = '.$this->course_origin_id.' AND
-                            sa.c_id = '.$this->course_origin_id.' AND
-                            filetype="folder" AND sp.id = '.$old_id.'';
-
-                $result = Database::query($sql);
-                $assing_list = Database::store_result($result, 'ASSOC');
-                foreach ($assing_list  as $assign) {
-                    $assign['c_id'] = $this->destination_course_id;
-                    $assign['id'] = $new_id;
-                    $assignmentId = Database::insert($work_assignment_table, $assign);
-
-                    if ($assignmentId) {
-                        $sql = "UPDATE $work_assignment_table SET id = iid WHERE iid = $assignmentId";
-                        Database::query($sql);
-                    }
-                }
-            }
-        }
-
-        $destination = '../..'.api_get_path(REL_COURSE_PATH).$this->course->destination_path.'/work/';
-        $origin = '../..'.api_get_path(REL_COURSE_PATH).$this->course->info['path'].'/work/';
-        self::allow_create_all_directory($origin, $destination, false);
-    }
-
-    /**
-    * copy all directory and sub directory
-    * @param string The path origin
-    * @param string The path destination
+    * Copy all directory and sub directory
+    * @param string $source The path origin
+    * @param string $dest The path destination
     * @param boolean Option Overwrite
-    * @param string $source
-    * @param string $dest
     * @return void
     * @deprecated
     */
@@ -3023,7 +2922,6 @@ class CourseRestorer
                 $params['glossary_id'] = 0;
                 $my_id = Database::insert($table_glossary, $params);
                 if ($my_id) {
-
                     $sql = "UPDATE $table_glossary SET glossary_id = iid WHERE iid = $my_id";
                     Database::query($sql);
 
@@ -3060,7 +2958,6 @@ class CourseRestorer
 
             foreach ($resources[RESOURCE_WIKI] as $id => $wiki) {
                 // the sql statement to insert the groups from the old course to the new course
-
                 // check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $wiki->content = DocumentManager::replaceUrlWithNewCourseCode(
                     $wiki->content,
@@ -3313,7 +3210,7 @@ class CourseRestorer
                 $path = $obj->params['url'];
                 $path = '/'.str_replace('/', '', substr($path, 1));
 
-                $workData = array();
+                $workData = [];
                 switch ($this->file_option) {
                     case FILE_SKIP:
                         $workData = get_work_data_by_path(

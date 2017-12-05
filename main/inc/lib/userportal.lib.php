@@ -1768,6 +1768,17 @@ class IndexManager
                                     $sessionParams[0]['is_old'] = $markAsOld;
                                     $sessionParams[0]['is_future'] = $markAsFuture;
 
+                                    $actions = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session_id;
+                                    // Ofaj fix see BT#12325 1 session has 1 course
+                                    $firstCourse = current($session['courses']);
+                                    if ($firstCourse && isset($firstCourse)) {
+                                        $firstCourseInfo = api_get_course_info_by_id($firstCourse['real_id']);
+                                        if ($firstCourseInfo) {
+                                            $actions = $firstCourseInfo['course_public_url'].'?id_session='.$session_id;
+                                        }
+                                    }
+
+                                    $sessionParams[0]['edit_actions'] = $actions;
                                     if ($showSimpleSessionInfo) {
                                         $sessionParams[0]['subtitle'] = self::getSimpleSessionDetails(
                                             $session_box['coach'],
@@ -1775,7 +1786,6 @@ class IndexManager
                                             isset($session_box['duration']) ? $session_box['duration'] : null
                                         );
                                     }
-
                                     $this->tpl->assign('session', $sessionParams);
                                     if ($viewGridCourses) {
                                         // Ofaj

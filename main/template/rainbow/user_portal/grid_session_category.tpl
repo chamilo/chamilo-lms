@@ -38,6 +38,7 @@
             <div class="description">
                 <h4 class="title">
                     <a href="{{ item.edit_actions }}">{{ item.title }}</a>
+
                 </h4>
                 <div>
                     <span><i class="fa fa-book" aria-hidden="true"></i> {{ item.num_courses }}</span>

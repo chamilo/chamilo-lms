@@ -741,7 +741,11 @@ class Skill extends Model
                 $skill = $skill['data'];
             }
             $item = $skill[$imageSize];
-            $item .= $skill['name'];
+            $name = $skill['name'];
+            if (!empty($skill['short_code'])) {
+                $name = $skill['short_code'];
+            }
+            $item .= $name;
             if (isset($skill['url'])) {
                 $html .= Display::url($item, $skill['url'], ['target' => '_blank', 'style' => $style]);
             } else {

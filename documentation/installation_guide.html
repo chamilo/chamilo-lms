@@ -96,12 +96,15 @@ For instance, on a Ubuntu server,&nbsp;use Shell or Synaptic following the
 <br />
 
 <h3><span style="font-weight: bold;">MySQL or MariaDB database server</span></h3>
-You will need a login and password allowing you to manage and create a database. Usually, the default configuration on local computers is
+    You will need a login and password allowing you to manage <em>and drop+create</em> a database. Usually, the default configuration on local computers is
 to allow you to connect as root with an empty password. It is <b>HIGHLY RECOMMENDED</b> to change the password and define a user with access to
 only a specific database. Please refer to the MySQL or MariaDB documentation in order to do this.<br />
 <br />
 <span class="text-muted">Chamilo versions prior to 1.9.0 required to choose between multiple databases and a deprecated single-database mode.
     This has been cleaned up and simplified to one single database.</span><br />
+<span class="text-muted">If you don't have create permissions for your database user, Chamilo will fail during
+    installation because, to maintain the database clear of any remains of other systems, it will try to drop it
+    before creating it again. This is explained in some detail in <a href="https://github.com/chamilo/chamilo-lms/issues/2172">this issue report</a></span><br />
 
 <h3><span style="font-weight: bold;">Apache's redirects</span></h3>
     <p>

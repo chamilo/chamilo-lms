@@ -123,7 +123,7 @@
 
             <h3><span style="font-weight: bold;">Serveurs de base de données MySQL ou MariaDB</span></h3>
 
-            Vous aurez besoin d'un login et d'un mot de passe pour gérer et créer une base
+            Vous aurez besoin d'un login et d'un mot de passe pour gérer et <em>supprimer+créer</em> une base
             de données. Généralement, la configuration par défaut sur des ordinateurs
             locaux est de permettre la connexion comme utilisateur root avec un mot de passe
             vide. Il est FORTEMENT RECOMMANDÉ de modifier le mot de passe et de définir un
@@ -135,6 +135,11 @@
                 Les versions de Chamilo antérieures à la 1.9.0 nécessitaient de choisir entre une installation sur plusieurs bases
                 et une installation obsolète sur une seule base. Ca a été clarifié et simplifié par l'usage d'une seule base de données.
             </span><br />
+            <span class="text-muted">Si vous ne disposez pas des permissions de suppression+création de la base de
+                données choisie, Chamilo ne pourra pas terminer l'installation car, pour éviter tout déchêt d'une
+                version antérieure de Chamilo ou d'un autre système, nous supprimons d'abord la base de données avant
+                de la recréer. C'est expliqué dans <a href="https://github.com/chamilo/chamilo-lms/issues/2172">un peu plus de détail dans cette demande</a></span><br />
+
 
             <h3><span style="font-weight: bold;">Redirections d'Apache</span></h3>
             <p>

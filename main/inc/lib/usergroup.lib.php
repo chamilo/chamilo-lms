@@ -1100,7 +1100,7 @@ class UserGroup extends Model
     /**
      * @inheritdoc
      */
-    public function update($values)
+    public function update($values, $showQuery = false)
     {
         $values['updated_on'] = api_get_utc_datetime();
         $values['group_type'] = isset($values['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
@@ -1120,7 +1120,7 @@ class UserGroup extends Model
             }
         }
 
-        parent::update($values);
+        parent::update($values, $showQuery);
 
         if (isset($values['delete_picture'])) {
             $this->delete_group_picture($values['id']);

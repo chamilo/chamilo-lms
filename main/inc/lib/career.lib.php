@@ -274,17 +274,15 @@ class Career extends Model
     }
 
     /**
-     * Update the career table with the given params
-     * @param array $params The field values to be set
-     * @return bool Returns true if the record could be updated, false otherwise
+     * @inheritdoc
      */
-    public function update($params)
+    public function update($params, $showQuery = false)
     {
         if (isset($params['description'])) {
             $params['description'] = Security::remove_XSS($params['description']);
         }
 
-        return parent::update($params);
+        return parent::update($params, $showQuery);
     }
 
     /**

@@ -924,11 +924,9 @@ class ExtraField extends Model
     }
 
     /**
-     * @param array $params
-     *
-     * @return bool|void
+     * @inheritdoc
      */
-    public function update($params)
+    public function update($params, $showQuery = false)
     {
         $params = self::clean_parameters($params);
         if (isset($params['id'])) {
@@ -937,10 +935,10 @@ class ExtraField extends Model
             if (empty($params['field_type'])) {
                 $params['field_type'] = $this->type;
             }
-            $field_option->save($params);
+            $field_option->save($params, $showQuery);
         }
 
-        parent::update($params);
+        parent::update($params, $showQuery);
     }
 
     /**

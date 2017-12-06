@@ -741,7 +741,12 @@ class Skill extends Model
                 $skill = $skill['data'];
             }
             $item = $skill[$imageSize];
-            $item .= $skill['name'];
+
+            $name = $skill['name'];
+            if (!empty($skill['short_code'])) {
+                $name = $skill['short_code'];
+            }
+            $item .= $name;
             if (isset($skill['url'])) {
                 $html .= Display::url($item, $skill['url'], ['target' => '_blank', 'style' => $style]);
             } else {
@@ -1249,6 +1254,7 @@ class Skill extends Model
             $tableRow = array(
                 'skill_badge' => $resultData['img_mini'],
                 'skill_name' => self::translateName($resultData['name']),
+                'short_code' => $resultData['short_code'],
                 'achieved_at' => api_get_local_time($resultData['acquired_skill_at']),
                 'course_image' => '',
                 'course_name' => '',

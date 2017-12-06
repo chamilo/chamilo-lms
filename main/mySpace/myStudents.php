@@ -229,7 +229,7 @@ switch ($action) {
     case 'send_legal':
         $currentUserInfo = api_get_user_info();
         $subject = get_lang('SendTermsSubject');
-        $linkLegal = api_get_path(WEB_PATH)."courses/FORUMDAIDE/index.php";
+        $linkLegal = api_get_path(WEB_PATH)."contrat.php";
         $content = sprintf(
             get_lang('SendTermsDescriptionToUrlX'),
             $user_info['firstname'],

@@ -2567,7 +2567,7 @@ class ImportCsv
                         'extra_'.$careerDiagramExtraFieldName => serialize($graph),
                         'extra_'.$extraFieldName => $id,
                     ];
-                    $extraFieldValue->saveFieldValues($params);
+                    $extraFieldValue->saveFieldValues($params, true);
                 }
             }
         }

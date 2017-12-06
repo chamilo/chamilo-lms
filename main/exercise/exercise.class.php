@@ -5727,10 +5727,12 @@ class Exercise
             return false;
         }
 
-
         $scoreLabel = '';
-        if ($sendEnd && api_get_configuration_value('send_score_in_exam_notification_mail_to_manager') == true) {
-            $scoreLabel = ExerciseLib::show_score($score, $weight, false, true);
+        if ($sendEnd &&
+            api_get_configuration_value('send_score_in_exam_notification_mail_to_manager') == true
+        ) {
+            $notificationPercentage = api_get_configuration_value('send_notification_score_in_percentage');
+            $scoreLabel = ExerciseLib::show_score($score, $weight, $notificationPercentage, true);
             $scoreLabel = "<tr>
                             <td>".get_lang('Score')."</td>
                             <td>&nbsp;$scoreLabel</td>

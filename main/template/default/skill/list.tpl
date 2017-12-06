@@ -42,19 +42,14 @@
             {% for skill in skills %}
                 <tr>
                     <td width="50">
-                        {% if skill.icon is empty %}
-                            <img src="{{ 'badges-default.png' | icon(32) }}" width="32" height="32" alt="{{ skill.name }}">
-                        {% else %}
-                            <img src="{{ skill.icon_small }}" width="32" height="32" alt="{{ skill.name }}">
-                        {% endif %}
-
+                        {{ skill.img_small }}
                     </td>
                     <td width="200">{{ skill.name }}</td>
                     <td class="text-center">{{ skill.short_code }}</td>
                     <td width="500">{{ skill.description }}</td>
                     <td class="text-right">
-                        <a href="{{ _p.web_main }}admin/skill_edit.php?id={{ skill.id }}" class="btn btn-primary btn-sm" title="{{ "Edit" | get_lang }}">
-                            <em class="fa fa-edit fa-fw"></em>
+                        <a href="{{ _p.web_main }}admin/skill_edit.php?id={{ skill.id }}" class="btn btn-default btn-sm" title="{{ "Edit" | get_lang }}">
+                            <em class="fa fa-pencil fa-fw"></em>
                         </a>
                         <a href="{{ _p.web_main }}admin/skill_create.php?parent={{ skill.id }}" class="btn btn-primary btn-sm" title="{{ "CreateChildSkill" | get_lang }}">
                             <em class="fa fa-plus fa-fw"></em>

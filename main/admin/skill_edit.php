@@ -36,6 +36,7 @@ $skillDefaultInfo = [
     'short_code' => $skillInfo['short_code'],
     'description' => $skillInfo['description'],
     'parent_id' => $skillInfo['extra']['parent_id'],
+    'criteria' => $skillInfo['criteria'],
     'gradebook_id' => []
 ];
 
@@ -79,6 +80,8 @@ $editForm->addSelect(
     ['id' => 'gradebook_id', 'multiple' => 'multiple', 'size' => 10]
 );
 $editForm->addTextarea('description', get_lang('Description'), ['id' => 'description', 'rows' => 7]);
+$editForm->addTextarea('criteria', get_lang('CriteriaToEarnTheBadge'), ['id' => 'criteria', 'rows' => 7]);
+
 // EXTRA FIELDS
 $extraField = new ExtraField('skill');
 $returnParams = $extraField->addElements($editForm, $skillId);
@@ -107,14 +110,18 @@ if ($editForm->validate()) {
     $extraFieldValue->saveFieldValues($skillValues);
 
     if ($updated) {
-        Session::write(
-            'message',
-            Display::return_message(get_lang('TheSkillHasBeenUpdated'), 'success')
+        Display::addFlash(
+            Display::return_message(
+                get_lang('TheSkillHasBeenUpdated'),
+                'success'
+            )
         );
     } else {
-        Session::write(
-            'message',
-            Display::return_message(get_lang('CannotUpdateSkill'), 'error')
+        Display::addFlash(
+            Display::return_message(
+                get_lang('CannotUpdateSkill'),
+                'error'
+            )
         );
     }
 

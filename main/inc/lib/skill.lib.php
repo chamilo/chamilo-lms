@@ -850,6 +850,12 @@ class Skill extends Model
         $webPath = api_get_path(WEB_UPLOAD_PATH);
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
+                $skillInfo = self::get($row['id']);
+
+                $row['img_mini'] = $skillInfo['img_mini'];
+                $row['img_big'] = $skillInfo['img_big'];
+                $row['img_small'] = $skillInfo['img_small'];
+
                 $row['name'] = self::translateName($row['name']);
                 $row['short_code'] = self::translateCode($row['short_code']);
                 $skillRelSkill = new SkillRelSkill();

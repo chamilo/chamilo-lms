@@ -18,12 +18,6 @@ Skill::isAllowed();
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$errorMessage = null;
-
-if (Session::has('errorMessage')) {
-    $errorMessage = Session::read('errorMessage');
-}
-
 $objSkill = new Skill();
 $skills = $objSkill->get_all();
 
@@ -50,7 +44,6 @@ $toolbar = Display::url(
 );
 
 $tpl = new Template(get_lang('Skills'));
-$tpl->assign('errorMessage', $errorMessage);
 $tpl->assign('skills', $skills);
 $templateName = $tpl->get_template('skill/badge_list.tpl');
 $contentTemplate = $tpl->fetch($templateName);
@@ -61,5 +54,3 @@ $tpl->assign(
 );
 $tpl->assign('content', $contentTemplate);
 $tpl->display_one_col_template();
-
-Session::erase('errorMessage');

@@ -42,47 +42,29 @@
 </script>
 <div class="col-md-12">
 
-    <div class="openbadges-tabs">
-        <ul class="nav nav-tabs">
-            <li>
-                <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
-            </li>
-            <li>
-                <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ "CurrentBadges" | get_lang }}</a>
-            </li>
-            <li class="active">
-                <a href="#">{{ 'Edit' | get_lang }}</a>
-            </li>
-        </ul>
-    </div>
+    <ul class="nav nav-tabs">
+        <li>
+            <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
+        </li>
+        <li>
+            <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ "CurrentBadges" | get_lang }}</a>
+        </li>
+        <li class="active">
+            <a href="#">{{ 'Edit' | get_lang }}</a>
+        </li>
+    </ul>
 
     <div class="tab-content">
         <div class="tab-pane active">
             <div class="openbadges-introduction">
                 <div class="row">
-                    <div class="col-md-12">
-                        <div class="block-edit">
-                            <div class="block-title">{{ 'SkillInfo' | get_lang }}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-md-9">
+                        <br />
                         <form action="{{ _p.web_self_query_vars }}" class="form-horizontal" method="post" enctype="multipart/form-data">
+                            <legend>
+                                {{ skill.name }}
+                            </legend>
                             <fieldset>
-
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label" for="name">{{ 'Name' | get_lang }}</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" name="name" id="name" class="form-control" value="{{ skill.name }}">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label" for="name">{{ 'Description' | get_lang }}</label>
-                                    <div class="col-sm-10">
-                                        <textarea name="description" id="description" class="form-control" rows="4">{{ skill.description }}</textarea>
-                                    </div>
-                                </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label" for="image">{{ 'Image' | get_lang }}</label>
                                     <div class="col-sm-10">
@@ -706,12 +688,6 @@
                                             <span>Label</span>
                                         </label>
                                     </template>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label" for="criteria">{{ 'CriteriaToEarnTheBadge' | get_lang }}</label>
-                                    <div class="col-sm-10">
-                                        <textarea name="criteria" id="criteria" class="form-control" rows="10">{{ skill.criteria }}</textarea>
-                                    </div>
                                 </div>
                             </fieldset>
                             <div class="form-group">

@@ -13,22 +13,33 @@ $isPlatformAdmin = api_is_platform_admin();
 $editFile = false;
 
 $file = api_get_path(SYS_PATH).'robots.txt';
+$originalFile = api_get_path(SYS_PATH).'robots.dist.txt';
+$extraContentFile = api_get_home_path().'header_extra_content.txt';
 
 if ($isPlatformAdmin) {
-    $originalFile = api_get_path(SYS_PATH).'robots.dist.txt';
-    $extraContentFile = api_get_home_path().'header_extra_content.txt';
-    if (!file_exists($originalFile)) {
-        copy($file, $originalFile);
-    }
-    if (!file_exists($extraContentFile)) {
-        file_put_contents($extraContentFile, '');
-    }
-
-    $originalContent = file_get_contents($originalFile);
     /** @var FormValidator $form */
     $form = $plugin_info['settings_form'];
 
     if ($form && $form->validate()) {
+        if (is_writable(api_get_path(SYS_PATH))) {
+            if (!file_exists($originalFile)) {
+                copy($file, $originalFile);
+            }
+        } else {
+            Display::addFlash(
+                Display::return_message(
+                    sprintf(
+                        $plugin->get_lang('CheckDirectoryPermissionsInX'),
+                        api_get_path(SYS_PATH)
+                    )
+                )
+            );
+        }
+
+        if (!file_exists($extraContentFile) && is_writable($extraContentFile)) {
+            file_put_contents($extraContentFile, '');
+        }
+
         $values = $form->getSubmitValues();
         $continue = false;
         if (is_readable($file) && is_writable($file) &&

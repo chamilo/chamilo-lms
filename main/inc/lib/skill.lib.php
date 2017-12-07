@@ -197,17 +197,17 @@ class SkillRelSkill extends Model
     }
 
     /**
-     * @param int $skill_id
+     * @param int $skillId
      * @param bool $add_child_info
      * @return array
      */
-    public function getSkillParents($skill_id, $add_child_info = true)
+    public function getSkillParents($skillId, $add_child_info = true)
     {
-        $skill_id = intval($skill_id);
+        $skillId = intval($skillId);
         $sql = 'SELECT child.* FROM '.$this->table.' child
                 LEFT JOIN '.$this->table.' parent
                 ON child.parent_id = parent.skill_id
-                WHERE child.skill_id = '.$skill_id.' ';
+                WHERE child.skill_id = '.$skillId.' ';
         $result = Database::query($sql);
         $skill = Database::store_result($result, 'ASSOC');
         $skill = isset($skill[0]) ? $skill[0] : null;
@@ -233,7 +233,7 @@ class SkillRelSkill extends Model
         $skillId = (int) $skillId;
         $sql = 'SELECT parent_id as skill_id 
                 FROM '.$this->table.'
-                WHERE skill_id = '.$skillId.' ';
+                WHERE skill_id = '.$skillId;
         $result = Database::query($sql);
         $skill = Database::store_result($result, 'ASSOC');
         $skill = isset($skill[0]) ? $skill[0] : null;
@@ -1095,23 +1095,26 @@ class Skill extends Model
         $skillRelSkill = new SkillRelSkill();
         $skillRelGradebook = new SkillRelGradebook();
 
-        //Saving name, description
+        // Saving name, description
         $this->update($params);
+        $skillId = $params['id'];
 
-        $skill_id = $params['id'];
-
-        if ($skill_id) {
-            //Saving skill_rel_skill (parent_id, relation_type)
-
+        if ($skillId) {
+            // Saving skill_rel_skill (parent_id, relation_type)
             if (!is_array($params['parent_id'])) {
                 $params['parent_id'] = array($params['parent_id']);
             }
 
+            // Cannot change parent of root
+            if ($skillId == 1) {
+                $params['parent_id'] = 0;
+            }
+
             foreach ($params['parent_id'] as $parent_id) {
-                $relation_exists = $skillRelSkill->relationExists($skill_id, $parent_id);
+                $relation_exists = $skillRelSkill->relationExists($skillId, $parent_id);
                 if (!$relation_exists) {
                     $attributes = array(
-                        'skill_id' => $skill_id,
+                        'skill_id' => $skillId,
                         'parent_id' => $parent_id,
                         'relation_type' => $params['relation_type'],
                         //'level'         => $params['level'],
@@ -1121,10 +1124,10 @@ class Skill extends Model
             }
 
             $skillRelGradebook->updateGradeBookListBySkill(
-                $skill_id,
+                $skillId,
                 $params['gradebook_id']
             );
-            return $skill_id;
+            return $skillId;
         }
         return null;
     }
@@ -2112,6 +2115,8 @@ class Skill extends Model
     /**
      * @param FormValidator $form
      * @param array $skillInfo
+     *
+     * @return array
      */
     public function setForm(FormValidator &$form, $skillInfo = [])
     {
@@ -2169,7 +2174,10 @@ class Skill extends Model
         $form->addText('name', [get_lang('Name'), $translateNameButton], true, ['id' => 'name']);
         $form->addText('short_code', [get_lang('ShortCode'), $translateCodeButton], false, ['id' => 'short_code']);
 
-        $form->addSelect('parent_id', get_lang('Parent'), $skillList, ['id' => 'parent_id']);
+        // Cannot change parent of root
+        if ($skillId != 1) {
+            $form->addSelect('parent_id', get_lang('Parent'), $skillList, ['id' => 'parent_id']);
+        }
 
         $form->addSelect(
             'gradebook_id',

@@ -32,9 +32,6 @@
                                 </td>
                                 <td>{{ skill.description }}</td>
                                 <td>
-                                    <a href="{{ _p.web_main }}admin/skill_edit.php?id={{ skill.id }}" class="btn btn-default btn-sm" title="{{ "Edit" | get_lang }}">
-                                        <em class="fa fa-pencil fa-fw"></em>
-                                    </a>
                                     <a href="{{ _p.web_main }}admin/skill_badge_create.php?id={{ skill.id }}" class="btn btn-primary btn-sm" title="{{ "CreateBadge" | get_lang }}">
                                         <em class="fa fa-shield fa-fw"></em>
                                     </a>

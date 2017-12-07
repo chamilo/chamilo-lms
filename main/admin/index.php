@@ -448,10 +448,10 @@ if (api_is_platform_admin()) {
             'url' => 'skills_gradebook.php',
             'label' => get_lang('SkillsAndGradebooks')
         );
-        $items[] = array(
+        /*$items[] = array(
             'url' => api_get_path(WEB_CODE_PATH).'admin/skill_badge.php',
             'label' => get_lang('Badges')
-        );
+        );*/
         $blocks['skills']['items'] = $items;
         $blocks['skills']['extra'] = null;
         $blocks['skills']['search_form'] = null;

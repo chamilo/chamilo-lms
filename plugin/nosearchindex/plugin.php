@@ -31,7 +31,8 @@ if ($isPlatformAdmin) {
                     sprintf(
                         $plugin->get_lang('CheckDirectoryPermissionsInX'),
                         api_get_path(SYS_PATH)
-                    )
+                    ),
+                    'warning'
                 )
             );
         }
@@ -41,14 +42,14 @@ if ($isPlatformAdmin) {
         }
 
         $values = $form->getSubmitValues();
+
         $continue = false;
-        if (is_readable($file) && is_writable($file) &&
+        if (file_exists($file) && is_readable($file) && is_writable($file) &&
             file_exists($originalFile) && is_readable($originalFile) && is_writable($originalFile) &&
             file_exists($extraContentFile) && is_readable($extraContentFile) && is_writable($extraContentFile)
         ) {
             $continue = true;
         }
-        $continue = false;
 
         if ($continue) {
             $contents = file_get_contents($originalFile);

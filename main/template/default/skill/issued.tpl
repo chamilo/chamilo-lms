@@ -102,26 +102,26 @@
                 </div>
                 <div class="panel-body">
                     {{ comment_form }}
-                    <hr>
-                    {% for comment in issue_info.comments %}
-                        <article class="media">
-                            <div class="media-body">
-                                <h4 class="media-heading">{{ comment.giver_complete_name }}</h4>
-                                <p><small>{{ comment.datetime }}</small></p>
-                                <p>{{ comment.text }}</p>
-                            </div>
-                            <div class="media-right text-right">
-                                <div style="width: 80px;">
-                                    {% if comment.value %}
-                                        <em class="fa fa-certificate fa-fw" aria-label="{{ 'AverageRating' }}"></em>
-                                        <span class="sr-only">{{ 'AverageRating' }}</span> {{ comment.value }}
-                                    {% endif %}
+                    {% if issue_info.comments %}
+                        <hr>
+                        {% for comment in issue_info.comments %}
+                            <article class="media">
+                                <div class="media-body">
+                                    <h4 class="media-heading">{{ comment.giver_complete_name }}</h4>
+                                    <p><small>{{ comment.datetime }}</small></p>
+                                    <p>{{ comment.text }}</p>
                                 </div>
-                            </div>
-                        </article>
-                    {% else %}
-                        <p>{{ 'WithoutComment'|get_lang }}</p>
-                    {% endfor %}
+                                <div class="media-right text-right">
+                                    <div style="width: 80px;">
+                                        {% if comment.value %}
+                                            <em class="fa fa-certificate fa-fw" aria-label="{{ 'AverageRating' }}"></em>
+                                            <span class="sr-only">{{ 'AverageRating' }}</span> {{ comment.value }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </article>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         {% else %}

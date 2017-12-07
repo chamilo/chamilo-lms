@@ -172,7 +172,7 @@ $formAcquiredLevel = new FormValidator('acquired_level');
 $formAcquiredLevel->addSelect('acquired_level', get_lang('AcquiredLevel'), $acquiredLevel);
 $formAcquiredLevel->addHidden('user', $skillIssue->getUser()->getId());
 $formAcquiredLevel->addHidden('issue', $skillIssue->getId());
-$formAcquiredLevel->addButtonSend(get_lang('Save'));
+$formAcquiredLevel->addButtonSave(get_lang('Save'));
 
 if ($formAcquiredLevel->validate() && $allowComment) {
     $values = $formAcquiredLevel->exportValues();

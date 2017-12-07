@@ -55,13 +55,19 @@
         <ul class="fa-ul">
             <li>
                 {% if issue_info.source_name %}
-                    <em class="fa-li fa fa-clock-o fa-fw"></em> {{ 'TimeXThroughCourseY'|get_lang|format(issue_info.datetime, issue_info.source_name) }}
+                    <em class="fa-li fa fa-clock-o fa-fw"></em>
+                    {{ 'TimeXThroughCourseY'|get_lang|format(issue_info.datetime, issue_info.source_name) }}
                 {% else %}
-                    <em class="fa-li fa fa-clock-o fa-fw"></em> {{ issue_info.datetime }}
+                    <em class="fa-li fa fa-clock-o fa-fw"></em>
+                    {{ issue_info.datetime }}
                 {% endif %}
                 {% if issue_info.argumentation %}
                     {% if issue_info.argumentation %}
-                        <b><p style="font-style: italic;">{{ 'UserXIndicated'|get_lang|format(issue_info.argumentation_author_name) }} </p></b>
+                        <b>
+                            <p style="font-style: italic;">
+                                {{ 'UserXIndicated'|get_lang|format(issue_info.argumentation_author_name) }}
+                            </p>
+                        </b>
                     {% endif %}
                     <p>{{ issue_info.argumentation }}</p>
                 {% endif %}
@@ -78,7 +84,8 @@
             <hr>
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <em class="fa fa-check-circle-o fa-fw" aria-hidden="true"></em> {{ 'ChangeAcquiredLevel'|get_lang }}
+                    <em class="fa fa-check-circle-o fa-fw" aria-hidden="true"></em>
+                    {{ 'ChangeAcquiredLevel'|get_lang }}
                 </div>
                 <div class="panel-body">
                     {{ acquired_level_form }}
@@ -87,9 +94,11 @@
             <hr>
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <em class="fa fa-comment-o fa-fw" aria-hidden="true"></em> {{ 'XComments'|get_lang|format(issue_info.comments|length) }}
+                    <em class="fa fa-comment-o fa-fw" aria-hidden="true"></em>
+                    {{ 'XComments'|get_lang|format(issue_info.comments|length) }}
                     /
-                    <em class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></em> {{ 'AverageRatingX'|get_lang|format(issue_info.feedback_average) }}
+                    <em class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></em>
+                    {{ 'AverageRatingX'|get_lang|format(issue_info.feedback_average) }}
                 </div>
                 <div class="panel-body">
                     {{ comment_form }}
@@ -118,9 +127,11 @@
         {% else %}
             <hr>
             <p class="lead">
-                <em class="fa fa-comment-o fa-fw" aria-hidden="true"></em> {{ 'XComments'|get_lang|format(issue_info.comments|length) }}
+                <em class="fa fa-comment-o fa-fw" aria-hidden="true"></em>
+                {{ 'XComments'|get_lang|format(issue_info.comments|length) }}
                 /
-                <em class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></em> {{ 'AverageRatingX'|get_lang|format(issue_info.feedback_average) }}
+                <em class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></em>
+                {{ 'AverageRatingX'|get_lang|format(issue_info.feedback_average) }}
             </p>
         {% endif %}
     </div>
@@ -130,7 +141,6 @@
         $(document).on('ready', function () {
             $('#badge-export-button').on('click', function (e) {
                 e.preventDefault();
-
                 OpenBadges.issue({{ issue_info.badge_assertion|json_encode() }});
             });
         });

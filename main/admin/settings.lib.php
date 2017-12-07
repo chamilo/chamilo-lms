@@ -40,7 +40,6 @@ function handleRegions()
     }
 
     $plugin_obj = new AppPlugin();
-    $possible_plugins  = $plugin_obj->read_plugins_from_path();
     $installed_plugins = $plugin_obj->get_installed_plugins();
 
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
@@ -55,7 +54,6 @@ function handleRegions()
     echo '</tr>';
 
     /* We display all the possible plugins and the checkboxes */
-
     $plugin_region_list = array();
     $my_plugin_list = $plugin_obj->get_plugin_regions();
     foreach ($my_plugin_list as $plugin_item) {
@@ -81,9 +79,7 @@ function handleRegions()
             echo '<p>'.$plugin_info['comment'].'</p>';
             echo '</td><td>';
             $selected_plugins = $plugin_obj->get_areas_by_plugin($pluginName);
-
             $region_list = [];
-
             $isAdminPlugin = isset($plugin_info['is_admin_plugin']) && $plugin_info['is_admin_plugin'];
             $isCoursePlugin = isset($plugin_info['is_course_plugin']) && $plugin_info['is_course_plugin'];
 
@@ -97,6 +93,7 @@ function handleRegions()
                     $region_list['course_tool_plugin'] = 'course_tool_plugin';
                 }
             }
+
             echo Display::select(
                 'plugin_'.$pluginName.'[]',
                 $region_list,
@@ -660,10 +657,8 @@ function storeRegions()
 function storePlugins()
 {
     $appPlugin = new AppPlugin();
-
     // Get a list of all current 'Plugins' settings
     $plugin_list = $appPlugin->read_plugins_from_path();
-
     $installed_plugins = array();
 
     foreach ($plugin_list as $plugin) {

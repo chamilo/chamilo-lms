@@ -249,39 +249,8 @@ if (!empty($see_message_import)) {
     echo Display::return_message($see_message_import, 'normal');
 }
 
-$toolbar = Display::url(
-    Display::return_icon(
-        'list_badges.png',
-        get_lang('ManageSkills'),
-        null,
-        ICON_SIZE_MEDIUM
-    ),
-    api_get_path(WEB_CODE_PATH).'admin/skill_list.php'
-);
-
-$toolbar .= Display::url(
-    Display::return_icon(
-        'wheel_skill.png',
-        get_lang('SkillsWheel'),
-        null,
-        ICON_SIZE_MEDIUM
-    ),
-    api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php'
-);
-
-$toolbar .= Display::url(
-    Display::return_icon(
-        'edit-skill.png',
-        get_lang('BadgesManagement'),
-        null,
-        ICON_SIZE_MEDIUM
-    ),
-    api_get_path(WEB_CODE_PATH).'admin/skill_badge_list.php'
-);
-
-$actions = '<div class="actions">'.$toolbar.'</div>';
-
-echo $actions;
+$objSkill = new Skill();
+echo $objSkill->getToolBar();
 
 $form = new FormValidator('user_import', 'post', 'skills_import.php');
 $form->addElement('header', '', $tool_name);

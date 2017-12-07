@@ -1,7 +1,3 @@
-<legend>
-    <h1>{{ "ManageSkills" | get_lang }}</h1>
-</legend>
-
 {% if tags %}
     <div class="row">
         <div class="col-md-3" >

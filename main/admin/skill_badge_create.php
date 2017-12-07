@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     Display::addFlash(Display::return_message(get_lang('Updated')));
     $objSkill->update($params);
-    header('Location: '.api_get_path(WEB_CODE_PATH).'admin/skill_badge_list.php');
+    header('Location: '.api_get_path(WEB_CODE_PATH).'admin/skill_list.php');
     exit;
 }
 
@@ -94,29 +94,17 @@ $interbreadcrumb = array(
     array(
         'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
         'name' => get_lang('Administration')
-    ),
-    array(
-        'url' => api_get_path(WEB_CODE_PATH).'admin/skill_badge.php',
-        'name' => get_lang('Badges')
     )
 );
+$interbreadcrumb[] = array('url' => 'skill_list.php', 'name' => get_lang('ManageSkills'));
 
-$toolbar = Display::toolbarButton(
-    get_lang('ManageSkills'),
-    api_get_path(WEB_CODE_PATH).'admin/skill_list.php',
-    'list',
-    'primary',
-    ['title' => get_lang('ManageSkills')]
-);
+$toolbar = $objSkill->getToolBar();
+
 $tpl = new Template(get_lang('CreateBadge'));
 $tpl->assign('platformAdminEmail', api_get_setting('emailAdministrator'));
 $tpl->assign('skill', $skill);
 $tpl->assign('badge_studio', $badgeStudio);
 $templateName = $tpl->get_template('skill/badge_create.tpl');
 $contentTemplate = $tpl->fetch($templateName);
-$tpl->assign(
-    'actions',
-    Display::toolbarAction('toolbar', [$toolbar])
-);
-$tpl->assign('content', $contentTemplate);
+$tpl->assign('content', $toolbar.$contentTemplate);
 $tpl->display_one_col_template();

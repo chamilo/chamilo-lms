@@ -2108,4 +2108,108 @@ class Skill extends Model
 
         return isset($GLOBALS[$variable]) ? $GLOBALS[$variable] : $code;
     }
+
+    /**
+     * @param FormValidator $form
+     * @param array $skillInfo
+     */
+    public function setForm(FormValidator &$form, $skillInfo = [])
+    {
+        $allSkills = $this->get_all();
+        $objGradebook = new Gradebook();
+
+        $isAlreadyRootSkill = false;
+        foreach ($allSkills as $checkedSkill) {
+            if (intval($checkedSkill['parent_id']) > 0) {
+                $isAlreadyRootSkill = true;
+                break;
+            }
+        }
+
+        $skillList = $isAlreadyRootSkill ? [] : [0 => get_lang('None')];
+
+        foreach ($allSkills as $skill) {
+            if (isset($skillInfo['id']) && $skill['id'] == $skillInfo['id']) {
+                continue;
+            }
+
+            $skillList[$skill['id']] = $skill['name'];
+        }
+
+        $allGradeBooks = $objGradebook->find('all');
+
+        // This procedure is for check if there is already a Skill with no Parent (Root by default)
+        $gradeBookList = [];
+        foreach ($allGradeBooks as $gradebook) {
+            $gradeBookList[$gradebook['id']] = $gradebook['name'];
+        }
+
+        $translateUrl = api_get_path(WEB_CODE_PATH).'admin/skill_translate.php?';
+        $translateNameButton = '';
+        $translateCodeButton = '';
+        $skillId = null;
+        if (!empty($skillInfo)) {
+            $skillId = $skillInfo['id'];
+            $translateNameUrl = $translateUrl.http_build_query(['skill' => $skillId, 'action' => 'name']);
+            $translateCodeUrl = $translateUrl.http_build_query(['skill' => $skillId, 'action' => 'code']);
+            $translateNameButton = Display::toolbarButton(
+                get_lang('TranslateThisTerm'),
+                $translateNameUrl,
+                'language',
+                'link'
+            );
+            $translateCodeButton = Display::toolbarButton(
+                get_lang('TranslateThisTerm'),
+                $translateCodeUrl,
+                'language',
+                'link'
+            );
+        }
+
+        $form->addText('name', [get_lang('Name'), $translateNameButton], true, ['id' => 'name']);
+        $form->addText('short_code', [get_lang('ShortCode'), $translateCodeButton], false, ['id' => 'short_code']);
+
+        $form->addSelect('parent_id', get_lang('Parent'), $skillList, ['id' => 'parent_id']);
+
+        $form->addSelect(
+            'gradebook_id',
+            [get_lang('Gradebook'), get_lang('WithCertificate')],
+            $gradeBookList,
+            ['id' => 'gradebook_id', 'multiple' => 'multiple', 'size' => 10]
+        );
+        $form->addTextarea('description', get_lang('Description'), ['id' => 'description', 'rows' => 7]);
+        $form->addTextarea('criteria', get_lang('CriteriaToEarnTheBadge'), ['id' => 'criteria', 'rows' => 7]);
+
+        // EXTRA FIELDS
+        $extraField = new ExtraField('skill');
+        $returnParams = $extraField->addElements($form, $skillId);
+
+        if (empty($skillInfo)) {
+            $form->addButtonCreate(get_lang('Add'));
+        } else {
+            $form->addButtonUpdate(get_lang('Update'));
+        }
+        $form->addHidden('id', null);
+
+        return $returnParams;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToolBar()
+    {
+        $toolbar = Display::url(
+            Display::return_icon(
+                'back.png',
+                get_lang('ManageSkills'),
+                null,
+                ICON_SIZE_MEDIUM
+            ),
+            api_get_path(WEB_CODE_PATH).'admin/skill_list.php'
+        );
+        $actions = '<div class="actions">'.$toolbar.'</div>';
+
+        return $actions;
+    }
 }

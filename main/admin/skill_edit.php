@@ -27,7 +27,7 @@ $skillId = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 $objSkill = new Skill();
 $objGradebook = new Gradebook();
 $skillInfo = $objSkill->getSkillInfo($skillId);
-$allSkills = $objSkill->get_all();
+
 $allGradebooks = $objGradebook->find('all');
 
 $skillDefaultInfo = [
@@ -44,17 +44,7 @@ foreach ($skillInfo['gradebooks'] as $gradebook) {
     $skillDefaultInfo['gradebook_id'][] = $gradebook['id'];
 }
 
-$skillList = [0 => get_lang('None')];
 $gradebookList = [];
-
-foreach ($allSkills as $skill) {
-    if ($skill['id'] == $skillInfo['id']) {
-        continue;
-    }
-
-    $skillList[$skill['id']] = $skill['name'];
-}
-
 foreach ($allGradebooks as $gradebook) {
     $gradebookList[$gradebook['id']] = $gradebook['name'];
 }
@@ -62,29 +52,8 @@ foreach ($allGradebooks as $gradebook) {
 /* Form */
 $editForm = new FormValidator('skill_edit');
 $editForm->addHeader(get_lang('SkillEdit'));
+$returnParams = $objSkill->setForm($editForm, $skillInfo);
 
-$translateNameUrl = api_get_path(WEB_CODE_PATH).'admin/skill_translate.php?'
-    .http_build_query(['skill' => $skillId, 'action' => 'name']);
-$translateCodeUrl = api_get_path(WEB_CODE_PATH).'admin/skill_translate.php?'
-    .http_build_query(['skill' => $skillId, 'action' => 'code']);
-$translateNameButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateNameUrl, 'language', 'link');
-$translateCodeButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateCodeUrl, 'language', 'link');
-
-$editForm->addText('name', [get_lang('Name'), $translateNameButton], true, ['id' => 'name']);
-$editForm->addText('short_code', [get_lang('ShortCode'), $translateCodeButton], false, ['id' => 'short_code']);
-$editForm->addSelect('parent_id', get_lang('Parent'), $skillList, ['id' => 'parent_id']);
-$editForm->addSelect(
-    'gradebook_id',
-    [get_lang('Gradebook'), get_lang('WithCertificate')],
-    $gradebookList,
-    ['id' => 'gradebook_id', 'multiple' => 'multiple', 'size' => 10]
-);
-$editForm->addTextarea('description', get_lang('Description'), ['id' => 'description', 'rows' => 7]);
-$editForm->addTextarea('criteria', get_lang('CriteriaToEarnTheBadge'), ['id' => 'criteria', 'rows' => 7]);
-
-// EXTRA FIELDS
-$extraField = new ExtraField('skill');
-$returnParams = $extraField->addElements($editForm, $skillId);
 $jquery_ready_content = $returnParams['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load
@@ -97,11 +66,7 @@ if (!empty($jquery_ready_content)) {
     </script>';
 }
 
-$editForm->addButtonSave(get_lang('Save'));
-$editForm->addHidden('id', null);
-
 $editForm->setDefaults($skillDefaultInfo);
-
 if ($editForm->validate()) {
     $skillValues = $editForm->getSubmitValues();
     $updated = $objSkill->edit($skillValues);
@@ -129,7 +94,9 @@ if ($editForm->validate()) {
     exit;
 }
 
+$toolbar = $objSkill->getToolBar();
+
 /* view */
 $tpl = new Template(get_lang('SkillEdit'));
-$tpl->assign('content', $editForm->returnForm());
+$tpl->assign('content', $toolbar.$editForm->returnForm());
 $tpl->display_one_col_template();

@@ -15,7 +15,7 @@
                     <p>{{ issue_info.skill_description }}</p>
                 {% endif %}
                 {% if issue_info.skill_criteria %}
-                    <h3>{{ 'CriteriaToEarnTheBadge'|get_lang }}</h3>
+                    <h4>{{ 'CriteriaToEarnTheBadge'|get_lang }}</h4>
                     <p>{{ issue_info.skill_criteria }}</p>
                 {% endif %}
             </div>

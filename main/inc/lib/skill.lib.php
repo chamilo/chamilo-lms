@@ -657,9 +657,10 @@ class Skill extends Model
             $iconBig = Display::returnIconPath('badges-default.png', ICON_SIZE_HUGE);
         }
 
-        $result['icon_big'] = $iconSmall;
-        $result['icon_small'] = $iconBig;
         $result['icon_mini'] = $iconMini;
+        $result['icon_small'] = $iconSmall;
+        $result['icon_big'] = $iconBig;
+
         $result['img_mini'] = Display::img($iconBig, $result['name'], ['width' => ICON_SIZE_MEDIUM]);
         $result['img_big'] = Display::img($iconBig, $result['name']);
         $result['img_small'] = Display::img($iconSmall, $result['name']);

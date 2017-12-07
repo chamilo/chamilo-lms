@@ -682,6 +682,10 @@
         </form>
     </div>
     <div class="col-md-3">
+        <div class="openbadges-img" id="badge-container">
+            <img id="badge-preview" class="img-responsive" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon_big }}">
+        </div>
+
         <div class="create-openbadges">
             <button id="btn-open-designer" class="help-badges btn btn-primary btn-large btn-block" data-toggle="tooltip" data-placement="bottom" title="{{ 'DesignANewBadgeComment' | get_lang }}" type="button">
                 <em class="fa fa-pencil"></em> {{ 'DesignNewBadge' | get_lang }}
@@ -692,10 +696,7 @@
                 <em class="fa fa-cogs"></em> {{ 'DesignWithBadgeStudio' | get_lang }}
             </button>
         </div>
-        <p class="openbadges-text">{{'BadgePreview' | get_lang }}</p>
-        <div class="openbadges-img {{ skill.icon ? '' : 'hide' }}" id="badge-container">
-            <img id="badge-preview" class="img-responsive" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon_big }}">
-        </div>
+
     </div>
 </div>
 {{ badge_studio.script_js }}

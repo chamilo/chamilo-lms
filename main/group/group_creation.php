@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	@package chamilo.group
+ * @package chamilo.group
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
@@ -23,10 +23,19 @@ if (isset($_POST['action'])) {
     switch ($_POST['action']) {
         case 'create_groups':
             $groups = array();
+            $useOnlyFirstCategory = false;
+            $firstCategory = isset($_POST['group_0_category']) ? $_POST['group_0_category'] : 0;
+            if (isset($_POST['same_category']) && $_POST['same_category']) {
+                $useOnlyFirstCategory = true;
+            }
+            $group1['category'] = isset($_POST['group_'.$i.'_category']) ? $_POST['group_'.$i.'_category'] : null;
 
             for ($i = 0; $i < $_POST['number_of_groups']; $i++) {
                 $group1['name'] = empty($_POST['group_'.$i.'_name']) ? get_lang('Group').' '.$i : $_POST['group_'.$i.'_name'];
                 $group1['category'] = isset($_POST['group_'.$i.'_category']) ? $_POST['group_'.$i.'_category'] : null;
+                if ($useOnlyFirstCategory) {
+                    $group1['category'] = $firstCategory;
+                }
                 $group1['tutor'] = isset($_POST['group_'.$i.'_tutor']) ? $_POST['group_'.$i.'_tutor'] : null;
                 $group1['places'] = isset($_POST['group_'.$i.'_places']) ? $_POST['group_'.$i.'_places'] : null;
                 $groups[] = $group1;
@@ -91,13 +100,17 @@ if (isset($_POST['number_of_groups'])) {
     <script>
     var number_of_groups = <?php echo $number_of_groups; ?>;
     function switch_state(key) {
-        for( i=1; i<number_of_groups; i++) {
+        ref = document.getElementById(key+'_0');
+        for(i=1; i<number_of_groups; i++) {
+            var id = "#"+key+'_'+i;
             element = document.getElementById(key+'_'+i);
             element.disabled = !element.disabled;
             disabled = element.disabled;
+            $(id).prop('disabled', disabled);
+            $(id).prop('value', ref.value);
+            $(id).selectpicker('refresh');
         }
-        ref = document.getElementById(key+'_0');
-        if( disabled ) {
+        if (disabled) {
             ref.addEventListener("change", copy, false);
         } else {
             ref.removeEventListener("change", copy, false);
@@ -123,7 +136,7 @@ if (isset($_POST['number_of_groups'])) {
     <?php
 		}
 		$group_categories = GroupManager::get_categories();
-		$group_id = GroupManager :: get_number_of_groups() + 1;
+        $group_id = GroupManager:: get_number_of_groups() + 1;
 		$cat_options = [];
 		foreach ($group_categories as $index => $category) {
 			$cat_options[$category['id']] = $category['title'];

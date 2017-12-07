@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
  * Create skill form
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>

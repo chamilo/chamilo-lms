@@ -1200,7 +1200,6 @@ class Skill extends Model
             $subTable .= '<ul>';
             foreach ($vertex->getVerticesEdgeTo() as $subVertex) {
                 $data = $subVertex->getAttribute('graphviz.data');
-
                 $passed = in_array($data['id'], array_keys($skills));
                 $transparency = '';
                 if ($passed === false) {
@@ -1245,6 +1244,9 @@ class Skill extends Model
             $parents = $this->get_parents($resultData['id']);
             foreach ($parents as $parentData) {
                 $parentData['passed'] = in_array($parentData['id'], array_keys($skills));
+                if ($parentData['passed'] && isset($skills[$parentData['id']]['url'])) {
+                    $parentData['data']['url'] = $skills[$parentData['id']]['url'];
+                }
                 $skillParents[$resultData['id']][$parentData['id']] = $parentData;
             }
         }
